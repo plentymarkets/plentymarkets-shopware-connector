@@ -1,0 +1,18 @@
+# Numerous always-ignore extensions
+*.diff
+*.err
+*.orig
+*.log
+*.rej
+*.swp
+*~
+
+# OS or Editor
+.DS_Store
+Thumbs.db
+.cache
+.project
+.settings
+.externalToolBuilders
+.buildpath
+nbproject

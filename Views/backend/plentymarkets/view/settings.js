@@ -1,0 +1,276 @@
+// {namespace name=backend/Plentymarkets/view}
+// {block name=backend/Plentymarkets/view/Settings}
+Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
+
+	extend: 'Ext.form.Panel',
+
+	alias: 'widget.plentymarkets-view-settings',
+
+	title: '{s name=plentymarkets/view/settings/title}Einstellungen{/s}',
+
+	autoScroll: true,
+
+	cls: 'shopware-form',
+
+	layout: 'anchor',
+
+	border: false,
+
+	isBuilt: false,
+
+	stores: {},
+
+	defaults: {
+		anchor: '100%',
+		margin: 10
+	},
+
+	initComponent: function()
+	{
+		var me = this;
+
+		me.registerEvents();
+		me.callParent(arguments);
+	},
+
+	/**
+	 * Registers additional component events.
+	 */
+	registerEvents: function()
+	{
+		this.addEvents('save');
+	},
+
+	build: function()
+	{
+		var me = this;
+		if (me.isBuilt == true)
+		{
+			return;
+		}
+		me.setLoading(true);
+		Ext.create('Shopware.apps.Plentymarkets.store.settings.Batch').load(function(data)
+		{
+			data = data[0]
+			me.stores.warehouses = data.getWarehouses();
+			me.stores.producers = data.getProducers();
+			me.stores.multishops = data.getMultishops();
+			me.stores.orderStatus = data.getOrderStatus();
+			me.stores.orderReferrer = data.getOrderReferrer();
+
+			me.add(me.getFieldSets())
+			me.addDocked(me.createToolbar());
+			me.loadRecord(me.settings);
+			me.isBuilt = true;
+			me.setLoading(false);
+		});
+	},
+
+	/**
+	 * Creates the grid toolbar for the favorite grid
+	 *
+	 * @return Ext.toolbar.Toolbar
+	 */
+	createToolbar: function()
+	{
+		var me = this;
+
+		return Ext.create('Ext.toolbar.Toolbar', {
+			cls: 'shopware-toolbar',
+			dock: 'bottom',
+			ui: 'shopware-ui',
+			items: ['->', {
+				xtype: 'button',
+				text: '{s name=plentymarkets/view/settings/button/save}Speichern{/s}',
+				cls: 'primary',
+				handler: function()
+				{
+					me.fireEvent('save', me);
+				}
+			}]
+		});
+	},
+
+	getFieldSets: function()
+	{
+		var me = this;
+
+		return [{
+			xtype: 'fieldset',
+			title: 'Import Artikelstammdaten',
+			layout: 'anchor',
+			defaults: {
+				labelWidth: 155,
+				anchor: '100%'
+			},
+			items: [{
+				xtype: 'combo',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemWarehouseID}plentymarkets Lager{/s}',
+				name: 'ItemWarehouseID',
+				store: me.stores.warehouses,
+				supportText: 'Welches Lager soll für die aktualisierung der Warenbestände verwendet werden?',
+				queryMode: 'local',
+				displayField: 'name',
+				valueField: 'id',
+				allowBlank: false,
+				editable: false
+			}, {
+				xtype: 'combo',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/WebstoreID}Mandant (Shop){/s}',
+				name: 'WebstoreID',
+				store: me.stores.multishops,
+				supportText: 'Stellen Sie hier eine Verknüfung zu dem in plentymarkets konfigurierten shopware-System her.',
+				queryMode: 'local',
+				displayField: 'name',
+				valueField: 'id',
+				allowBlank: false,
+				editable: false
+			}, {
+				xtype: 'combo',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemProducerID}Hersteller{/s}',
+				name: 'ItemProducerID',
+				store: me.stores.producers,
+				supportText: 'Welcher Hersteller soll den Artikeln zugeordnet werden, wenn bei plentymarkets keiner zugerordnet ist.',
+				queryMode: 'local',
+				displayField: 'name',
+				valueField: 'id',
+				allowBlank: false,
+				editable: false
+			}
+
+			]
+		}, {
+			xtype: 'fieldset',
+			title: 'Export Aufträge',
+			layout: 'anchor',
+			defaults: {
+				labelWidth: 155,
+				anchor: '100%'
+			},
+			items: [{
+				xtype: 'combo',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/OrderMarking1}Markierung{/s}',
+				name: 'OrderMarking1',
+				store: Ext.create('Shopware.apps.Plentymarkets.store.OrderMarking'),
+				supportText: 'Wenn die exportierten Aufträge eine Markierung erhalten sollen, können Sie das hier einstellen.',
+				queryMode: 'local',
+				displayField: 'name',
+				valueField: 'id',
+				allowBlank: true,
+				listConfig: {
+					getInnerTpl: function(displayField)
+					{
+						return '{literal}<span style="padding: -3px; display: inline-block; width: 16px; height: 16px; margin-right: 3px;" class="plenty-OrderMarking-{id}"></span> {' + displayField + '}{/literal}';
+					}
+				},
+				editable: false
+			}, {
+				xtype: 'combo',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/OrderReferrerID}Auftragsherkunft{/s}',
+				name: 'OrderReferrerID',
+				store: me.stores.orderReferrer,
+				supportText: 'Stellen Sie hier ein, welche Herkunft den exportierten Aufträgen zugeordnet werden soll.',
+				queryMode: 'local',
+				displayField: 'name',
+				valueField: 'id',
+				allowBlank: true,
+				editable: false
+			}, {
+				xtype: 'combo',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/OrderPaidStatusID}Status bezahlt{/s}',
+				name: 'OrderPaidStatusID',
+				store: Ext.create('Shopware.apps.Base.store.PaymentStatus').load(),
+				supportText: 'Aufträge die dieses Status erreichen, werden bei plenty als bezahlt markiert und der Zahlungseingang gebucht.',
+				queryMode: 'local',
+				displayField: 'description',
+				valueField: 'id',
+				allowBlank: false,
+				editable: false
+			}
+
+			]
+		}, {
+			xtype: 'fieldset',
+			title: 'Warenausgang',
+			layout: 'anchor',
+			defaults: {
+				labelWidth: 155,
+				anchor: '100%'
+			},
+			items: [{
+				xtype: 'combo',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/OutgoingItemsID}Warenausgang{/s}',
+				name: 'OutgoingItemsID',
+				id: 'OutgoingItemsID',
+				emptyText: '---',
+				store: Ext.create('Shopware.apps.Plentymarkets.store.outgoing_items.OutgoingItems').load(),
+				supportText: 'Wann wurde der Warenausgang gebucht',
+				queryMode: 'local',
+				displayField: 'name',
+				valueField: 'id',
+				allowBlank: true,
+				editable: false,
+				listeners: {
+					select: function(box)
+					{
+						if (box.getValue() > 0)
+						{
+							Ext.getCmp('OutgoingItemsOrderStatus').setValue(0);
+							Ext.getCmp('OutgoingItemsOrderStatus').applyEmptyText();
+						}
+					}
+				}
+			}, {
+				xtype: 'combo',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/OutgoingItemsOrderStatus}Auftragsstatus{/s}',
+				name: 'OutgoingItemsOrderStatus',
+				id: 'OutgoingItemsOrderStatus',
+				emptyText: '---',
+				store: me.stores.orderStatus,
+				supportText: 'Aufträge, die in plentymarkets dieses Stauts haben, werden in shopware als erledigt markiert.',
+				queryMode: 'local',
+				displayField: 'name',
+				valueField: 'status',
+				allowBlank: true,
+				editable: false,
+				listeners: {
+					select: function(box)
+					{
+						if (box.getValue() > 0)
+						{
+							Ext.getCmp('OutgoingItemsID').setValue(0);
+							Ext.getCmp('OutgoingItemsID').applyEmptyText();
+						}
+					}
+				}
+			}, {
+				xtype: 'combo',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/OutgoingItemsIntervalID}Abfrageintervall{/s}',
+				name: 'OutgoingItemsIntervalID',
+				store: Ext.create('Shopware.apps.Plentymarkets.store.outgoing_items.Interval').load(),
+				// supportText: 'Wie oft sollen das geprüft werden?',
+				queryMode: 'local',
+				displayField: 'name',
+				valueField: 'id',
+				allowBlank: false,
+				editable: false
+			}, {
+				xtype: 'combo',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/OutgoingItemsShopwareOrderStatusID}Shopware Auftragsstatus{/s}',
+				name: 'OutgoingItemsShopwareOrderStatusID',
+				store: Ext.create('Shopware.apps.Base.store.OrderStatus').load(),
+				emptyText: '---',
+				// supportText: 'Wie oft sollen das geprüft werden?',
+				queryMode: 'local',
+				displayField: 'description',
+				valueField: 'id',
+				allowBlank: false,
+				editable: false
+			}
+
+			]
+		}];
+	}
+
+});
+// {/block}
