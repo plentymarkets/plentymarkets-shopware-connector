@@ -83,7 +83,7 @@ class PlentymarketsImportEntityItemImage
 
 			if ($Response_GetItemsImages->Success == false)
 			{
-				PlentymarketsLogger::getInstance()->error('Import:Item:Image', 'Got negative success from GetItemsImages for plentymarktes itemId ' . $this->PLENTY_itemId);
+				PlentymarketsLogger::getInstance()->error('Sync:Item:Image', 'Got negative success from GetItemsImages for plentymarktes itemId ' . $this->PLENTY_itemId);
 				continue;
 			}
 

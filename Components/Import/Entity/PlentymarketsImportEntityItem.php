@@ -395,7 +395,7 @@ class PlentymarketsImportEntityItem
 			$filterGroupId = $group->getId();
 
 			PlentymarketsMappingController::addPropertyGroup($filterGroupId, $groupId);
-			PlentymarketsLogger::getInstance()->message('Import:Item', 'The property group ' . $ItemProperty->PropertyGroupFrontendName . ' has been created');
+			PlentymarketsLogger::getInstance()->message('Sync:Item', 'The property group ' . $ItemProperty->PropertyGroupFrontendName . ' has been created');
 		}
 		// Properties
 
@@ -424,13 +424,13 @@ class PlentymarketsImportEntityItem
 				{
 					Shopware()->Models()->persist($Option);
 					Shopware()->Models()->flush();
-					PlentymarketsLogger::getInstance()->message('Import:Item', 'The property ' . $ItemProperty->PropertyName . ' has been created');
+					PlentymarketsLogger::getInstance()->message('Sync:Item', 'The property ' . $ItemProperty->PropertyName . ' has been created');
 				}
 				catch (Exception $e)
 				{
 					//
-					PlentymarketsLogger::getInstance()->error('Import:Item', 'The property ' . $ItemProperty->PropertyName . ' could not be created');
-					PlentymarketsLogger::getInstance()->error('Import:Item', $e->getMessage());
+					PlentymarketsLogger::getInstance()->error('Sync:Item', 'The property ' . $ItemProperty->PropertyName . ' could not be created');
+					PlentymarketsLogger::getInstance()->error('Sync:Item', $e->getMessage());
 				}
 
 				if (!isset($group))
@@ -608,7 +608,7 @@ class PlentymarketsImportEntityItem
 				$VariantController->map($article);
 
 				// Log
-				PlentymarketsLogger::getInstance()->message('Import:Item', 'Variants updated: ' . $numberOfVariantsUpdated);
+				PlentymarketsLogger::getInstance()->message('Sync:Item', 'Variants updated: ' . $numberOfVariantsUpdated);
 			}
 			else
 			{
@@ -643,7 +643,7 @@ class PlentymarketsImportEntityItem
 					$SHOPWARE_itemID = $Article->getId();
 
 					// Log
-					PlentymarketsLogger::getInstance()->message('Import:Item', 'Item "' . $this->data['name'] . '" created with number ' . $data['mainDetail']['number']);
+					PlentymarketsLogger::getInstance()->message('Sync:Item', 'Item "' . $this->data['name'] . '" created with number ' . $data['mainDetail']['number']);
 
 					// Mapping speichern
 					PlentymarketsMappingController::addItem($Article->getId(), $this->ItemBase->ItemID);
@@ -658,7 +658,7 @@ class PlentymarketsImportEntityItem
 					// Wenn kein Mapping für die GruppenId vorhanden ist, muss diese über ein extra Aufruf vorher erstellt werden
 					// Wenn kein Mapping für ItemProperties->item->PropertyGroupID, dann muss sie abgerufen werden
 
-					// PlentymarketsLogger::getInstance()->message('Import:Item', '$mainDetailId: ' . $mainDetailId);
+					// PlentymarketsLogger::getInstance()->message('Sync:Item', '$mainDetailId: ' . $mainDetailId);
 				}
 
 				else
@@ -674,7 +674,7 @@ class PlentymarketsImportEntityItem
 
 					// Anlegen
 					$Article = $ArticleResource->create($data);
-					PlentymarketsLogger::getInstance()->message('Import:Item', 'Variant base item "' . $this->data['name'] . '" created with number ' . $data['mainDetail']['number']);
+					PlentymarketsLogger::getInstance()->message('Sync:Item', 'Variant base item "' . $this->data['name'] . '" created with number ' . $data['mainDetail']['number']);
 
 					//
 					$SHOPWARE_itemID = $Article->getId();
@@ -709,7 +709,7 @@ class PlentymarketsImportEntityItem
 						'variants' => array_values($this->variants)
 					);
 
-					PlentymarketsLogger::getInstance()->message('Import:Item:Variant', 'Starting to create variants for item "' . $this->data['name'] . '" (' . $data['mainDetail']['number'] . ')');
+					PlentymarketsLogger::getInstance()->message('Sync:Item:Variant', 'Starting to create variants for item "' . $this->data['name'] . '" (' . $data['mainDetail']['number'] . ')');
 
 					$Article = $ArticleResource->update($id, $updateArticle);
 
@@ -725,7 +725,7 @@ class PlentymarketsImportEntityItem
 
 					$VariantController->map($ArticleResource->getOne($id));
 
-					PlentymarketsLogger::getInstance()->message('Import:Item:Variant', 'Variants created for item "' . $this->data['name'] . '" (' . $data['mainDetail']['number'] . ')');
+					PlentymarketsLogger::getInstance()->message('Sync:Item:Variant', 'Variants created for item "' . $this->data['name'] . '" (' . $data['mainDetail']['number'] . ')');
 				}
 
 				// Bilder
@@ -734,11 +734,11 @@ class PlentymarketsImportEntityItem
 			}
 			catch (Shopware\Components\Api\Exception\OrmException $E)
 			{
-				PlentymarketsLogger::getInstance()->error('Import:Item', 'Item could not be created: ' . $E->getMessage());
+				PlentymarketsLogger::getInstance()->error('Sync:Item', 'Item could not be created: ' . $E->getMessage());
 			}
 			catch (Exception $E)
 			{
-				PlentymarketsLogger::getInstance()->error('Import:Item', 'Item could not be created: ' . $this->data['name']);
+				PlentymarketsLogger::getInstance()->error('Sync:Item', 'Item could not be created: ' . $this->data['name']);
 			}
 		}
 
@@ -748,7 +748,7 @@ class PlentymarketsImportEntityItem
 		if (array_key_exists('supplier', $this->data))
 		{
 			// dann das mapping speichern
-			PlentymarketsLogger::getInstance()->message('Import:Item', 'Producer created: ' . $Article->getSupplier()
+			PlentymarketsLogger::getInstance()->message('Sync:Item', 'Producer created: ' . $Article->getSupplier()
 				->getName());
 			PlentymarketsMappingController::addProducer($Article->getSupplier()->getId(), $this->ItemBase->ProducerID);
 		}

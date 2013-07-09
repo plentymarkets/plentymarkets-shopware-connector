@@ -64,7 +64,7 @@ class PlentymarketsImportEntityItemLinked
 
 		if ($Response_GetLinkedItems->Success == false)
 		{
-			PlentymarketsLogger::getInstance()->error('Import:Item:Linked', 'Got negative success from GetLinkedItems for plentymarkets itemId '. $this->PLENTY_itemId);
+			PlentymarketsLogger::getInstance()->error('Sync:Item:Linked', 'Got negative success from GetLinkedItems for plentymarkets itemId '. $this->PLENTY_itemId);
 			return;
 		}
 

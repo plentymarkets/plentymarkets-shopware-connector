@@ -53,13 +53,13 @@ class PlentymarketsExportEntityIncomingPayment
 		$plentyOrder = $Result->fetchObject();
 		if (!is_object($plentyOrder) || (integer) $plentyOrder->plentyOrderId <= 0)
 		{
-			PlentymarketsLogger::getInstance()->error('Export:Order:Payment', 'The incoming payment could not be booked in plentymarkets because the sales order (' . $this->order['id'] . ') was not yet exported to plentymarkets.');
+			PlentymarketsLogger::getInstance()->error('Sync:Order:Payment', 'The incoming payment could not be booked in plentymarkets because the sales order (' . $this->order['id'] . ') was not yet exported to plentymarkets.');
 			throw new Exception();
 		}
 
 		if ((integer) $plentyOrder->plentyOrderPaidTimestamp > 0)
 		{
-			PlentymarketsLogger::getInstance()->error('Export:Order:Payment', 'The incoming payment of the sales order ' . $this->order['id'] . ' has already been exported to plentymarkets.');
+			PlentymarketsLogger::getInstance()->error('Sync:Order:Payment', 'The incoming payment of the sales order ' . $this->order['id'] . ' has already been exported to plentymarkets.');
 			throw new Exception();
 		}
 
@@ -108,7 +108,7 @@ class PlentymarketsExportEntityIncomingPayment
 		// Check for success
 		if ($Response_AddIncomingPayments->Success)
 		{
-			PlentymarketsLogger::getInstance()->message('Export:Order:Payment', 'The incoming payment of the sales order ' . $this->order['id'] . ' was booked in plentymarkets.');
+			PlentymarketsLogger::getInstance()->message('Sync:Order:Payment', 'The incoming payment of the sales order ' . $this->order['id'] . ' was booked in plentymarkets.');
 			Shopware()->Db()->query('
 					UPDATE plenty_order
 						SET
@@ -121,7 +121,7 @@ class PlentymarketsExportEntityIncomingPayment
 		}
 		else
 		{
-			PlentymarketsLogger::getInstance()->error('Export:Order:Payment', 'The incoming payment of the sales order ' . $this->order['id'] . ' was not booked in plentymarkets.');
+			PlentymarketsLogger::getInstance()->error('Sync:Order:Payment', 'The incoming payment of the sales order ' . $this->order['id'] . ' was not booked in plentymarkets.');
 		}
 	}
 }
