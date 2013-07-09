@@ -69,21 +69,23 @@ class PlentymarketsExportEntityItemCategory
 		{
 			$Category instanceof Shopware\Models\Category\Category;
 
-			if ($Category->getLevel() == 0)
+			if (is_null($Category->getPath()))
 			{
 				continue;
 			}
 
-			if (array_key_exists($Category->getLevel(), $this->PLENTY_nameAndLevel2ID) && array_key_exists($Category->getName(), $this->PLENTY_nameAndLevel2ID[$Category->getLevel()]))
+			$level = count(explode('|', $Category->getPath())) - 2;
+
+			if (array_key_exists($level, $this->PLENTY_nameAndLevel2ID) && array_key_exists($Category->getName(), $this->PLENTY_nameAndLevel2ID[$level]))
 			{
-				$categoryIdAdded = $this->PLENTY_nameAndLevel2ID[$Category->getLevel()][$Category->getName()];
+				$categoryIdAdded = $this->PLENTY_nameAndLevel2ID[$level][$Category->getName()];
 			}
 
 			else
 			{
 				$Request_AddItemCategory = new PlentySoapRequest_AddItemCategory();
 				$Request_AddItemCategory->Lang = 'de';
-				$Request_AddItemCategory->Level = $Category->getLevel();
+				$Request_AddItemCategory->Level = $level;
 				$Request_AddItemCategory->MetaDescription = $Category->getMetaDescription();
 				$Request_AddItemCategory->MetaKeywords = $Category->getMetaKeywords();
 				$Request_AddItemCategory->MetaTitle = $Category->getCmsHeadline();
@@ -100,14 +102,20 @@ class PlentymarketsExportEntityItemCategory
 
 	protected function buildMapping()
 	{
+		$CategoryResource = new \Shopware\Components\Api\Resource\Category();
 		foreach (Shopware()->Models()
 			->getRepository('Shopware\Models\Category\Category')
 			->findBy(array(
-			'blog' => 0,
-			'level' => 1
+			'blog' => 0
 		)) as $Category)
 		{
 			$Category instanceof Shopware\Models\Category\Category;
+
+			$level = count(explode('|', $Category->getPath())) - 2;
+			if ($level != 1)
+			{
+				continue;
+			}
 
 			$path = array(
 				$this->mappingShopwareID2PlentyID[$Category->getId()]
