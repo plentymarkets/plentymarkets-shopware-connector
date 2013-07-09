@@ -239,23 +239,26 @@ class PlentymarketsExportController
 
 		$ItemsToLink = array();
 
-		do
+		if (count($Items))
 		{
-			$Item = array_pop($Items);
-			$PlentymarketsExportEntityItem = new PlentymarketsExportEntityItem($Item);
-
-			if ($PlentymarketsExportEntityItem->export())
+			do
 			{
-				$ItemsToLink[] = $Item;
-			}
-		}
-		while (count($Items));
+				$Item = array_pop($Items);
+				$PlentymarketsExportEntityItem = new PlentymarketsExportEntityItem($Item);
 
-		// Crosselling
-		foreach ($ItemsToLink as $Item)
-		{
-			$PlentymarketsExportEntityItem = new PlentymarketsExportEntityItemLinked($Item);
-			$PlentymarketsExportEntityItem->link();
+				if ($PlentymarketsExportEntityItem->export())
+				{
+					$ItemsToLink[] = $Item;
+				}
+			}
+			while (count($Items));
+
+			// Crosselling
+			foreach ($ItemsToLink as $Item)
+			{
+				$PlentymarketsExportEntityItem = new PlentymarketsExportEntityItemLinked($Item);
+				$PlentymarketsExportEntityItem->link();
+			}
 		}
 
 		// Set running
