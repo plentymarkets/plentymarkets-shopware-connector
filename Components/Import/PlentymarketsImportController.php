@@ -222,19 +222,19 @@ class PlentymarketsImportController
 		$Request_SearchOrders->Page = 0;
 
 		$timestamp = PlentymarketsConfig::getInstance()->getImportOrderLastUpdateTimestamp(0);
-		PlentymarketsLogger::getInstance()->message('Sync:Order', 'LastUpdate: ' . date('r', $timestamp));
+		PlentymarketsLogger::getInstance()->message('Sync:Order:OutgoingItems', 'LastUpdate: ' . date('r', $timestamp));
 
 		if (PlentymarketsConfig::getInstance()->getOutgoingItemsOrderStatus(0))
 		{
 			$Request_SearchOrders->LastUpdateFrom = $timestamp; // int
 			$Request_SearchOrders->OrderStatus = (float) PlentymarketsConfig::getInstance()->getOutgoingItemsOrderStatus(); // float
-			PlentymarketsLogger::getInstance()->message('Sync:Order', 'Mode: Status (' . $Request_SearchOrders->OrderStatus . ')');
+			PlentymarketsLogger::getInstance()->message('Sync:Order:OutgoingItems', 'Mode: Status (' . $Request_SearchOrders->OrderStatus . ')');
 		}
 
 		else
 		{
 			$Request_SearchOrders->OrderCompletedFrom = $timestamp; // int
-			PlentymarketsLogger::getInstance()->message('Sync:Order', 'Mode: Outgoing items');
+			PlentymarketsLogger::getInstance()->message('Sync:Order:OutgoingItems', 'Mode: Outgoing items');
 		}
 
 		// Helper
@@ -251,15 +251,15 @@ class PlentymarketsImportController
 			//
 			$pages = max($Response_SearchOrders->Pages, 1);
 
-			PlentymarketsLogger::getInstance()->message('Sync:Order', 'Page: ' . ($Request_SearchOrders->Page + 1) . '/' . $pages);
+			PlentymarketsLogger::getInstance()->message('Sync:Order:OutgoingItems', 'Page: ' . ($Request_SearchOrders->Page + 1) . '/' . $pages);
 
 			if ($Response_SearchOrders->Success == false)
 			{
-				PlentymarketsLogger::getInstance()->error('Sync:Order', 'failed');
+				PlentymarketsLogger::getInstance()->error('Sync:Order:OutgoingItems', 'failed');
 				break;
 			}
 
-			PlentymarketsLogger::getInstance()->message('Sync:Order', 'Received ' . count($Response_SearchOrders->Orders->item) . ' items');
+			PlentymarketsLogger::getInstance()->message('Sync:Order:OutgoingItems', 'Received ' . count($Response_SearchOrders->Orders->item) . ' items');
 
 			// Jeden Artikel in Shopware "importieren"
 			foreach ($Response_SearchOrders->Orders->item as $Order)
@@ -271,26 +271,26 @@ class PlentymarketsImportController
 					$orderId = $Order->ExternalOrderID;
 					if (strstr($orderId, 'Swag/') === false)
 					{
-						PlentymarketsLogger::getInstance()->error('Sync:Order', 'The sales order with the external order id ' . $Order->ExternalOrderID . ' could not be updated because it isn\'t a shopware order');
+						PlentymarketsLogger::getInstance()->error('Sync:Order:OutgoingItems', 'The sales order with the external order id ' . $Order->ExternalOrderID . ' could not be updated because it isn\'t a shopware order');
 						continue;
 					}
 
 					$SHOPWARE_orderId = PlentymarketsUtils::getShopwareIDFromExternalOrderID($orderId);
 					if ($SHOPWARE_orderId <= 0)
 					{
-						PlentymarketsLogger::getInstance()->error('Sync:Order', 'The sales order with the external order id ' . $Order->ExternalOrderID . ' could not be updated');
+						PlentymarketsLogger::getInstance()->error('Sync:Order:OutgoingItems', 'The sales order with the external order id ' . $Order->ExternalOrderID . ' could not be updated');
 						continue;
 					}
 
 					$orderModule->setOrderStatus($SHOPWARE_orderId, $orderStatus, false, 'plentymarkets');
-					PlentymarketsLogger::getInstance()->message('Sync:Order', 'The sales order with the id ' . $orderId . ' has been marked sent.');
+					PlentymarketsLogger::getInstance()->message('Sync:Order:OutgoingItems', 'The sales order with the id ' . $orderId . ' has been marked sent.');
 
 					++$numberOfOrdersUpdated;
 				}
 				catch (Exception $E)
 				{
-					PlentymarketsLogger::getInstance()->error('Sync:Order', 'The sales order with the external order id ' . $Order->ExternalOrderID . ' could not be updated');
-					PlentymarketsLogger::getInstance()->error('Sync:Order', $E->getMessage());
+					PlentymarketsLogger::getInstance()->error('Sync:Order:OutgoingItems', 'The sales order with the external order id ' . $Order->ExternalOrderID . ' could not be updated');
+					PlentymarketsLogger::getInstance()->error('Sync:Order:OutgoingItems', $E->getMessage());
 				}
 			}
 		}
@@ -299,7 +299,7 @@ class PlentymarketsImportController
 		while (++$Request_SearchOrders->Page < $Response_SearchOrders->Pages);
 
 		//
-		PlentymarketsLogger::getInstance()->message('Sync:Order', $numberOfOrdersUpdated . ' sales orders have been marked as sent');
+		PlentymarketsLogger::getInstance()->message('Sync:Order:OutgoingItems', $numberOfOrdersUpdated . ' sales orders have been marked as sent');
 		PlentymarketsConfig::getInstance()->setImportOrderLastUpdateTimestamp($timestamp);
 	}
 

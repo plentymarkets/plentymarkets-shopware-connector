@@ -254,12 +254,12 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 			{
 
 				PlentymarketsExportController::getInstance()->restart($params['ExportEntityName']);
-				PlentymarketsLogger::getInstance()->message('Inital Export', 'Re-Announced export of ' . $params['ExportEntityName']);
+				PlentymarketsLogger::getInstance()->message('Export:Initial:' . ucfirst($params['ExportEntityName']), 'Re-Announced');
 			}
 			else
 			{
 				PlentymarketsExportController::getInstance()->announce($params['ExportEntityName']);
-				PlentymarketsLogger::getInstance()->message('Initial Export', 'Announced export of ' . $params['ExportEntityName']);
+				PlentymarketsLogger::getInstance()->message('Export:Initial:' . ucfirst($params['ExportEntityName']), 'Announced');
 			}
 
 			$success = true;
@@ -270,7 +270,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 			$success = false;
 			$message = $E->getMessage();
 
-			PlentymarketsLogger::getInstance()->error('Initial Export', 'Announcement export of ' . $params['ExportEntityName'] . ' failed: ' . $message);
+			PlentymarketsLogger::getInstance()->error('Export:Initial:' . ucfirst($params['ExportEntityName']), 'Announcement failed: ' . $message);
 		}
 
 		$settings = $this->getExportStatusList();

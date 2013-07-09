@@ -306,6 +306,8 @@ class PlentymarketsExportEntityOrder
 
 	protected function setSuccess($plentyOrderID, $plentyOrderStatus)
 	{
+		PlentymarketsLogger::getInstance()->message('Export:Order', 'The sales order with the id ' . $this->order['id'] . ' has been created in plentymakets (id: ' . $plentyOrderID . ', status: ' . $plentyOrderStatus . ')');
+
 		Shopware()->Db()
 			->prepare('
 			UPDATE plenty_order
