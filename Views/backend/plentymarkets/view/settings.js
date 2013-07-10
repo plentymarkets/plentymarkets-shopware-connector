@@ -39,6 +39,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 	registerEvents: function()
 	{
 		this.addEvents('save');
+		this.addEvents('refresh');
 	},
 
 	build: function()
@@ -48,8 +49,9 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 		{
 			return;
 		}
+		me.store = Ext.create('Shopware.apps.Plentymarkets.store.settings.Batch');
 		me.setLoading(true);
-		Ext.create('Shopware.apps.Plentymarkets.store.settings.Batch').load(function(data)
+		me.store.load(function(data)
 		{
 			data = data[0]
 			me.stores.warehouses = data.getWarehouses();
@@ -63,6 +65,29 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 			me.loadRecord(me.settings);
 			me.isBuilt = true;
 			me.setLoading(false);
+		});
+	},
+
+	loadStores: function()
+	{
+		var me = this;
+		me.setLoading(true);
+		me.store.load({
+			params: {
+				refresh: true
+			},
+			callback: function(data)
+			{
+				data = data[0]
+				me.stores.warehouses.loadData(data.getWarehouses());
+				me.stores.producers.loadData(data.getProducers());
+				me.stores.multishops.loadData(data.getMultishops());
+				me.stores.orderStatus.loadData(data.getOrderStatus());
+				me.stores.orderReferrer.loadData(data.getOrderReferrer());
+
+				me.loadRecord(me.settings);
+				me.setLoading(false);
+			}
 		});
 	},
 
@@ -80,6 +105,14 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 			dock: 'bottom',
 			ui: 'shopware-ui',
 			items: ['->', {
+				xtype: 'button',
+				text: '{s name=plentymarkets/view/settings/button/refresh}plentymarkets Daten neu abrufen{/s}',
+				cls: 'secondary',
+				handler: function()
+				{
+					me.fireEvent('refresh', me);
+				}
+			}, {
 				xtype: 'button',
 				text: '{s name=plentymarkets/view/settings/button/save}Speichern{/s}',
 				cls: 'primary',

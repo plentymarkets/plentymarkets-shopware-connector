@@ -11,6 +11,7 @@ Ext.define('Shopware.apps.Plentymarkets.controller.Settings', {
 		me.control({
 			'plentymarkets-view-settings': {
 				save: me.onSave,
+				refresh: me.onRefresh
 			},
 			'plentymarkets-view-api': {
 				save: me.onSave,
@@ -62,6 +63,11 @@ Ext.define('Shopware.apps.Plentymarkets.controller.Settings', {
 				view.main.setTabAvailability();
 			}
 		});
+	},
+
+	onRefresh: function(view)
+	{
+		view.loadStores();
 	},
 
 	onSave: function(view)

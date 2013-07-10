@@ -70,6 +70,14 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	{
 		require_once __DIR__ . '/../../Components/Import/PlentymarketsImportController.php';
 
+		if ($this->Request()->get('refresh', false) == true)
+		{
+			PlentymarketsConfig::getInstance()->setMiscOrderStatusLastImport(0);
+			PlentymarketsConfig::getInstance()->setMiscWarehousesLastImport(0);
+			PlentymarketsConfig::getInstance()->setMiscSalesOrderReferrerLastImport(0);
+			PlentymarketsConfig::getInstance()->setMiscMultishopsLastImport(0);
+		}
+
 		$orderStatusList = PlentymarketsImportController::getOrderStatusList();
 		$orderStatusList[0] = array(
 			'status' => 0,
