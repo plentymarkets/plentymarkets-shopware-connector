@@ -1,5 +1,8 @@
 ![plentymarkets Logo](http://www.plentymarkets.eu/layout/pm/images/logo/plentymarkets-logo.jpg)
-# plentymarkets shopware Connector
+# plentymarkets shopware connector
+
+- **License**: AGPL v3
+- **Github Repository**: <https://github.com/plentymarkets/plentymarkets-shopware-connector>
 
 ## Einleitung
 
@@ -45,18 +48,18 @@ extrahiert werden. Folgende Verzeichnisstruktur sollte danach vorhanden sein:
 Anschließend kann das Plugin über den Plugin Manager installiert werden. Der Nachteil an dieser Variante ist, dass sie den Prozess immer wiederholen müssen, sobald es eine Änderung am Plugin gegeben hat.
 
 #### Klonen des Repositories
-Eine komfortablere Variante ist das klonen des Repositories mittels git. Hierfür muss git auf Ihrem Server installiert sein. Weitere Informationen dazu finden sie auf [der Hompage](http://git-scm.com/) von git.
+Eine komfortablere Variante ist das Klonen des Repositories mittels git. Hierfür muss git auf ihrem Server installiert sein. Weitere Informationen dazu finden sie auf [der Hompage](http://git-scm.com/) von git.
 
-Das Repository muss im Verzeichnis
+Das Repository muss in dieses Verzeichnis geklont werden:
 
 	/Pfad/zu/shopware/engine/shopware/Plugins/Local/Backend
 	
-geklont werden. Gehen Sie dazu wie folgt vor:
+Gehen Sie dazu wie folgt vor:
 
 	cd /Pfad/zu/shopware/engine/shopware/Plugins/Local/Backend
 	git clone https://github.com/plentymarkets/plentymarkets-shopware-connector.git Plentymarkets
 	
-Das klonen beginnt:
+Das Klonen beginnt:
 
 	Cloning into 'Plentymarkets'...
 	remote: Counting objects: 853, done.
