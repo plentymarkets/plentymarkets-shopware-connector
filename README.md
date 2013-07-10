@@ -24,11 +24,13 @@ Eine dauerhafte Wartung dieses Plugins auf zukünftige plentymarkets SOAP API Ve
 
 ## Installation
 ### Systemvoraussetzungen
-Für das Plugin sind min. **plentymarkets 5.0** und **shopware 4.1** nötig. Innerhalb von shopware muss das **Cron** Plugin installiert und aktiviert sein.
+Für das Plugin sind min. **plentymarkets 5.0** und **shopware 4.1** nötig. Innerhalb von shopware muss das **Cron** Plugin installiert und aktiviert sein. Das Cron Plugin ist es­sen­zi­ell für den Datenaustausch.
+
+Im shopware System muss min. 1 Hersteller vorhanden sein.
 
 ### Installation via github
 #### Herunterladen als Archiv
-Sie können den Quellcode als Archiv direkt und ohne Anmeldung von github herunterladen. Hierfür ist auf Ihrem Server keine Installtion von git erforderlich. Das Archiv muss anschließend in das Verzeichnis
+Sie können den Quellcode als zip-Archiv direkt und ohne Anmeldung von github herunterladen. Hierfür ist auf Ihrem Server keine Installtion von git erforderlich. Das Archiv muss anschließend in das Verzeichnis
 	
 	/Pfad/zu/shopware/engine/shopware/Plugins/Local/Backend/Plentymarkets
 	
@@ -52,11 +54,11 @@ Eine komfortablere Variante ist das Klonen des Repositories mittels git. Hierfü
 
 Das Repository muss in dieses Verzeichnis geklont werden:
 
-	/Pfad/zu/shopware/engine/shopware/Plugins/Local/Backend
+	/Pfad/zu/shopware/engine/Shopware/Plugins/Local/Backend
 	
 Gehen Sie dazu wie folgt vor:
 
-	cd /Pfad/zu/shopware/engine/shopware/Plugins/Local/Backend
+	cd /Pfad/zu/shopware/engine/Shopware/Plugins/Local/Backend
 	git clone https://github.com/plentymarkets/plentymarkets-shopware-connector.git Plentymarkets
 	
 Das Klonen beginnt:
@@ -68,7 +70,12 @@ Das Klonen beginnt:
 	Receiving objects: 100% (853/853), 200.64 KiB | 302 KiB/s, done.
 	Resolving deltas: 100% (430/430), done.
 	
-Anschließend kann das Plugin über den Plugin Manager installiert werden. Sie haben nun den aktuellen Stand des Plugins installiert.
+Anschließend kann das Plugin über den Plugin Manager installiert werden. Sie haben nun den aktuellen Stand des Plugins installiert. Um den Stand zu aktualisieren, gehen sie in das entsprechende verzeichnis, und führen den folgenden Befehl aus:
+
+	cd /Pfad/zu/shopware/engine/Shopware/Plugins/Local/Backend/Plentymarkets
+	git pull origin master
+	
+Das Plugin muss jetzt ggf. Über den Plugin Manager aktualisiert werden.
 
 ### Installation aus dem Community Store
 Nach der Pilotphase kann das Plugin auch aus dem shopware Community Store installiert werden.
@@ -89,23 +96,29 @@ Nach der Installation und Aktivierung des Plugins über den Plugin Manager müss
 #### Verbindung zu plentymarkets herstellen
 Geben Sie unter dem Menüpunkt **API** die URL Ihres System sowie die Zugangsdaten des Benutzers ein, mit dem die Kommunikation stattfinden soll. Sie können die Verbindung prüfen, im dem Sie auf den entsprechenden Button *Zugangsdaten testen* klicken.
 
-Nach dem Speichern von korekten Daten, werden die weiteren Reiter **Einstellungen**, **Mapping** und **Datenaustausch** aktiviert. Sobald keine Verbindung zu plentymarkets hergestellt werden kann, werden diese Reiter und jegliche Kommunikation automatisch deaktiviert!
+**Achtung:** Das Speichern impliziert ein Testen der Zugangsdaten. Sowohl die *Zugangsdaten testen* Funktionalität als auch das Speichern führen dazu, dass der SOAP Call GetAuthentificationToken aufgerufen wird. Dieser Call ist pro Tag und Benutzer auf 30 Anfrgen limitiert! Sollen sie also wiederholt diese Funktionen nutzen, kann es sein, dass das Abrufen des Tokens bis zum Ende des Tages gesperrt wird.
+
+Nach dem Speichern von korrekten Daten, werden die weiteren Reiter **Einstellungen**, **Mapping** und **Datenaustausch** aktiviert. Sobald keine Verbindung zu plentymarkets hergestellt werden kann, werden diese Reiter und jegliche Kommunikation automatisch deaktiviert!
 
 #### Einstellungen
-Pflicht (ohne diese kein Datenaustausch)
+Bitte nehmen sie hier wichtige Einstellungen vor, ohne die der Datenaustausch nicht stattfinden kann. Diese Einstellungen *müssen* gemacht werden.
 
- * Mandant
- * Lager
- * Hersteller
- * Herkunft
- * Status: bezhalt
- * Status: versendet
- * Warenausgang (Art)
- * Warenausgang (Intervall)
+Die Daten, die von plentymarkets geladen werden, werden für einen Tag gespeichert.
+
+ * Mandant (Zuordnung zu Ihrem shopware-System innerhalb von plentymarkets)
+ * Lager (Datenquelle für den Warenbestandsabgleich)
+ * Hersteller (In shopware erforderlich, in plentymarkets optional)
+ * Herkunft (Zuordnung der Aufträge zu einer Herkunft)
+ * Status: bezahlt (shopware Status der signalisiert, dass der Auftrag komplett bezahlt ist. Löst das Buchen des Zahlungseinganges bei plentymarkets aus)
+ * Status: versendet (shopware Status der gesetzt wird, wenn bei einem Auftag innerhalb von plentymarkets der Warenausgang gebucht wird)
+ * Warenausgang (Definiert die Bedingung mit der "versendete" Aufträge aus plentymarkets abgerufen werden)
+ * Warenausgang (Intervall der Auftragssynchronisation)
 
 
 #### Mapping
-Für alle Daten, die nicht automatisch gemappt werden können, müssen sie die Verknüpfung manuel herstellen. **Wichtig:** Es müssen alle Datensätze gemappt werden! Außerdem kann jedem Datensatz von shopware genau ein Datensatz von plentymarktes zugeordner werden und andersrum. D.h. eine Mehrfachverwendung ist nicht möglich.
+Für alle Daten, die nicht automatisch gemappt werden können, müssen Sie die Verknüpfung manuel herstellen.
+
+**Wichtig:** Es müssen alle Datensätze gemappt werden! Jedem Datensatz von shopware kann genau genau ein Datensatz von plentymarktes zugeordner werden und andersrum (1:1 Verknüpfung). D.h. eine Mehrfachverwendung ist nicht möglich.
 
 Wenn das Mapping nicht vollständig abgeschlossen ist oder im laufenden Betrieb weitere Datensätze innerhalb von shopware erstellt werden, die manuell gemappt werden müssen, wird der gesamte Datenaustausch deaktiviert. Auf der Startseite des Plugins werden Sie auf diesen Umstand hingewiesen.
 
@@ -126,14 +139,17 @@ Die Zahlungsarten werden den Aufträgen zugeordnet.
 … sind zu hoch.
 
 ##### Versandarten
+Das Mapping der Versandarten dient dazu, um die volle Funktionalität von plentymarkets' Fullfilment nutzen zu können. … 
 
 ##### Länder
-Die Länder werden den Anschriften (Rechnung- / Liefer-) zugeordnet. Kundendaten werden nur zu plentymarkets exportiert. Von daher ist es nicht erforderlich, alle plentymarkets-Länder zu mappen.
+Die Länder werden den Anschriften (Rechnung- / Liefer-) zugeordnet. Kundendaten werden nur zu plentymarkets exportiert. Von daher ist es nicht erforderlich, alle plentymarkets-Länder in Ihrem shopware System anzulegen.
 
 ## Datenaustausch
 Das Mapping für die Daten aus der Synchronisierung wird automatisch vorgenommen. 
 
-**Achtung:** Der Datenaustauch darf nur gestartet weden, wenn alle unter Einrichtung genannten Punkte abgeschlossen sein!
+**Achtung:** Der Datenaustauch darf (bzw. kann) nur gestartet weden, wenn alle unter Einrichtung genannten Punkte abgeschlossen sein! Sobald einer der erforderlichen Schritte nur (noch) teilweise abgeschlossen ist, wird der Datenaustausch automatisch deaktiviert. Sofern alle Probleme behoben sind, wird der Datenaustausch wieder aktiviert.
+
+Wenn der Datenaustausch von Ihnen manuell dekativiert worden ist, wird der niemals automatisch aktiviert.
 
 ### Initialer Export zu plentymarkets
 Alle Artikeldaten aus Ihrem shopware System müssen zu plentymarkets exportiert werden.
@@ -143,29 +159,32 @@ Alle Artikeldaten aus Ihrem shopware System müssen zu plentymarkets exportiert 
 Die Artikelstammdaten werden stündlich abgeglichen. Der Abgleich beinhaltet folgende Bereiche:
 
 
-
+#### Varianten
+Varianten können keine Merkmale haben!
 
 #### Preise
+Plentymarkets erlaubt nur eine Preisstaffelung bis zu eine Tiefe von 6 Staffelungen.
  * erstes PriceSet
- * max 6 Staffelungen
+
  * nur für Shopkunden mit INdex EK
 
 #### Warenbestände
-Die Warenbestände werden alle 15 Minuten inkrementell abgeglichen. Alle Warenbestände von Stammartikeln und Varianten, die sich seit dem letzten Abgleich geändert haben, werden innerhalb von shopware angeglichen.
+Die Warenbestände werden alle 15 Minuten inkrementell abgeglichen. Alle Warenbestände von Stammartikeln und Varianten, die sich seit dem letzten Abgleich geändert haben, werden abgerufen und im shopware System angepasst.
 
-Sie können entweder ein bestimmes Lager als Quelle für die Warenbestände festlegen, oder das *virtuelle Gesamtlager* verwenden. Die Artikel in shopware erhalten dann den Warenbestand kumuliert aus allen vorhandenen Lagern.
+Sie können entweder ein bestimmes Lager als Quelle für die Warenbestände festlegen, oder das *virtuelle Gesamtlager* verwenden. Die Artikel in shopware erhalten dann den kumulierten Warenbestand  aus allen vorhandenen Lagern.
+
+In shopware wird immer der netto-Warenbestand von plentymarktes gebucht.
 
 #### Aufträge
 Aufträge, die in shopware erstellt werden, werden alle 15 Minuten inkl. der Kundendaten nach plentymarkets exportiert. Die Versandkosten werden übernommen.
 
-Wenn der Warenausgang in plentymarkets bebucht wird, wird der Auftag in shopware in den entsprechenden Status gesetzt. Sie können entweder einstellen, dass der Auftrag in plentymarkets einen bestimmen Status erreichen muss, um als Abgeschlossen zu gelten, oder ob es reicht, wenn der Warenausgang gebucht worden ist. Dieser Vorhang findet jede halbe Stunde statt.
+Wenn der Warenausgang in plentymarkets bebucht wird, wird der Auftag in shopware in den von Ihnren eingestellten Status gesetzt. Sie können entweder einstellen, dass der Auftrag in plentymarkets einen bestimmen Status erreichen muss, um als Abgeschlossen zu gelten, oder ob es reicht, wenn der Warenausgang gebucht worden ist. Dieser Vorhang findet jede halbe Stunde statt.
 
 Wenn ein Auftrag in shopware einen bestimmten Zahlungsstatus erreicht, wird in plentymarkets ein Zahlungseingang über den gesamten Rechnungsbetrag gebucht. Die Zahlungsart wird entsprechend der Einstellunge gesetzt. Dieser Vorhang findet stündlich statt.
 
-**Achtung:** In plentymarkets kann ein Kunde nur eine Rechnungsadresse hinterlegen. Wenn ein und der selbe Kunde in shopware einen Auftrag mit unterschiedlichen Rechnungsadressen anlegt, wird er bei plentymarkets als neuer Kunde geführt.
+**Achtung:** In plentymarkets kann ein Kunde nur eine Rechnungsadresse hinterlegen. Wenn ein und der selbe Kunde in shopware einen Auftrag mit unterschiedlichen Rechnungsadressen anlegt, wird er bei plentymarkets als neuer Kunde mit eigener ID geführt.
 
 ## Log
-
 Im Log erhalten Sie Auskunft über den Datentransfer. Jeder getätigte SOAP Call wird hier inkl. dessen Status (erfolgreich oder nicht) aufgeführt. Darüber hinaus erhalten Sie informationen, wenn bestimmte Datensätze angelegt worden sind oder bei der Verarbeitung Fehler aufgetreten sind. Es Wird generell zwischen Meldung und Fehler entschieden.
 
 Jede Meldung (und jeder Fehler) hat ein bestimmtes Präfix. Dieses kennzeichnet grob, welcher Prozess verantworlich ist. ES gibt die folgenden Präfixe:
@@ -185,3 +204,10 @@ Jede Meldung (und jeder Fehler) hat ein bestimmtes Präfix. Dieses kennzeichnet 
 * Sync:Item:Variant
 * Sync:Order:OutgoingItems
 * Sync:Order:Payment
+
+### Meldungen
+Bei den Meldungen handelt es sich um Informationen und Positive Rückmeldungen.
+
+### Fehler
+* unerwaretet Fehler
+* 
