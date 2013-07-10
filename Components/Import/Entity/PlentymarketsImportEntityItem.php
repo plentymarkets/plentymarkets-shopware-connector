@@ -271,15 +271,14 @@ class PlentymarketsImportEntityItem
 	protected function setDetails()
 	{
 		$active = $this->ItemBase->Availability->Inactive == 0 && $this->ItemBase->Availability->Webshop == 1;
-
 		$base = array(
 			'active' => $active,
 			'ean' => $this->ItemBase->EAN1,
-			'minPurchase' => def($this->ItemBase->Availability->MinimumSalesOrderQuantity),
-			'purchaseSteps' => def($this->ItemBase->Availability->IntervalSalesOrderQuantity),
-			'maxPurchase' => def($this->ItemBase->Availability->MaximumSalesOrderQuantity),
-			'purchaseUnit' => def($this->ItemBase->PriceSet->Lot),
-			'referenceUnit' => def($this->ItemBase->PriceSet->PackagingUnit),
+			'minPurchase' => null,
+			'purchaseSteps' => null,
+			'maxPurchase' => null,
+			'purchaseUnit' => null,
+			'referenceUnit' => null,
 			'packUnit' => trim($this->ItemBase->PriceSet->Unit1),
 			'releaseDate' => ($this->ItemBase->Published == 0 ? null : date('c', $this->ItemBase->Published)),
 			'weight' => null,
@@ -309,6 +308,31 @@ class PlentymarketsImportEntityItem
 				'attr20' => $this->ItemBase->FreeTextFields->Free20
 			)
 		);
+
+		if ($this->ItemBase->Availability->MinimumSalesOrderQuantity > 0)
+		{
+			$base['minPurchase'] = $this->ItemBase->Availability->MinimumSalesOrderQuantity;
+		}
+
+		if ($this->ItemBase->Availability->IntervalSalesOrderQuantity > 0)
+		{
+			$base['purchaseSteps'] = $this->ItemBase->Availability->IntervalSalesOrderQuantity;
+		}
+
+		if ($this->ItemBase->Availability->MaximumSalesOrderQuantity > 0)
+		{
+			$base['maxPurchase'] = $this->ItemBase->Availability->MaximumSalesOrderQuantity;
+		}
+
+		if ($this->ItemBase->Availability->Lot > 0)
+		{
+			$base['purchaseUnit'] = $this->ItemBase->Availability->Lot;
+		}
+
+		if ($this->ItemBase->Availability->PackagingUnit > 0)
+		{
+			$base['referenceUnit'] = $this->ItemBase->Availability->PackagingUnit;
+		}
 
 		if ($this->ItemBase->PriceSet->WeightInGramm > 0)
 		{
