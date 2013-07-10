@@ -1,4 +1,5 @@
-# plentymarkets Shopware Connector
+![plentymarkets Logo](http://www.plentymarkets.eu/layout/pm/images/logo/plentymarkets-logo.jpg)
+# plentymarkets shopware Connector
 
 ## Einleitung
 
@@ -20,19 +21,19 @@ Eine dauerhafte Wartung dieses Plugins auf zukünftige plentymarkets SOAP API Ve
 
 ## Installation
 ### Systemvoraussetzungen
-Für das Plugin sind min. **plentymarkets 5.0** und **Shopware 4.1** nötig. Innerhalb von Shopware muss das **Cron** Plugin installiert und aktiviert sein.
+Für das Plugin sind min. **plentymarkets 5.0** und **shopware 4.1** nötig. Innerhalb von shopware muss das **Cron** Plugin installiert und aktiviert sein.
 
 ### Installation via github
 #### Herunterladen als Archiv
 Sie können den Quellcode als Archiv direkt und ohne Anmeldung von github herunterladen. Hierfür ist auf Ihrem Server keine Installtion von git erforderlich. Das Archiv muss anschließend in das Verzeichnis
 	
-	/Pfad/zu/shopware/engine/Shopware/Plugins/Local/Backend/Plentymarkets
+	/Pfad/zu/shopware/engine/shopware/Plugins/Local/Backend/Plentymarkets
 	
 extrahiert werden. Folgende Verzeichnisstruktur sollte danach vorhanden sein:
 
 	+-shopware/
   		+-engine/
-    		+-Shopware/
+    		+-shopware/
       			+-Plugins/
         			+-Local/
           				+-Backend/
@@ -48,11 +49,11 @@ Eine komfortablere Variante ist das klonen des Repositories mittels git. Hierfü
 
 Das Repository muss im Verzeichnis
 
-	/Pfad/zu/shopware/engine/Shopware/Plugins/Local/Backend
+	/Pfad/zu/shopware/engine/shopware/Plugins/Local/Backend
 	
 geklont werden. Gehen Sie dazu wie folgt vor:
 
-	cd /Pfad/zu/shopware/engine/Shopware/Plugins/Local/Backend
+	cd /Pfad/zu/shopware/engine/shopware/Plugins/Local/Backend
 	git clone https://github.com/plentymarkets/plentymarkets-shopware-connector.git Plentymarkets
 	
 Das klonen beginnt:
@@ -67,20 +68,20 @@ Das klonen beginnt:
 Anschließend kann das Plugin über den Plugin Manager installiert werden. Sie haben nun den aktuellen Stand des Plugins installiert.
 
 ### Installation aus dem Community Store
-Nach der Pilotphase kann das Plugin auch aus dem Shopware Community Store installiert werden.
+Nach der Pilotphase kann das Plugin auch aus dem shopware Community Store installiert werden.
 
 ## Einrichtung
 ### plentymarkets
 Folgende Schritt müssen *vor* der Einrichtung des Plugins innerhalb Ihres plentymarkets System vorgenommen werden.
 #### Mandant anlegen
 #### Benutzer anlegen
-Legen Sie unter **Einstellungen » Grundeinstellungen » Benutzer » Konten** einen neuen Benutzer an. Dieser Benutzer wird für die Kommunikation zwischen plentymarkets und Shopware über die SOAP API verwendet. Definieren Sie den Benutzer deshlab am besten vom Typ **API**.
+Legen Sie unter **Einstellungen » Grundeinstellungen » Benutzer » Konten** einen neuen Benutzer an. Dieser Benutzer wird für die Kommunikation zwischen plentymarkets und shopware über die SOAP API verwendet. Definieren Sie den Benutzer deshlab am besten vom Typ **API**.
 
 #### Auftragsherkunft (optional)
 #### Freitextfelder (optional)
 
-### Shopware
-Nach der Installation und Aktivierung des Plugins über den Plugin Manager müssen sie den Shop-Cache leeren und das Shopware-Fenster neu laden, damit der Menüpunkt **Einstellungen » plentymarkets** erscheint. **Achtung:** Bitte unbedingt an folgende Schritte halten!
+### shopware
+Nach der Installation und Aktivierung des Plugins über den Plugin Manager müssen sie den Shop-Cache leeren und das shopware-Fenster neu laden, damit der Menüpunkt **Einstellungen » plentymarkets** erscheint. **Achtung:** Bitte unbedingt an folgende Schritte halten!
 
 #### Verbindung zu plentymarkets herstellen
 Geben Sie unter dem Menüpunkt **API** die URL Ihres System sowie die Zugangsdaten des Benutzers ein, mit dem die Kommunikation stattfinden soll. Sie können die Verbindung prüfen, im dem Sie auf den entsprechenden Button *Zugangsdaten testen* klicken.
@@ -103,13 +104,13 @@ Pflicht (ohne diese kein Datenaustausch)
 #### Mapping
 Für alle Daten, die nicht automatisch gemappt werden können, müssen sie die Verknüpfung manuel herstellen. **Wichtig:** Es müssen alle Datensätze gemappt werden! Außerdem kann jedem Datensatz von shopware genau ein Datensatz von plentymarktes zugeordner werden und andersrum. D.h. eine Mehrfachverwendung ist nicht möglich.
 
-Wenn das Mapping nicht vollständig abgeschlossen ist oder im laufenden Betrieb weitere Datensätze innerhalb von Shopware erstellt werden, die manuell gemappt werden müssen, wird der gesamte Datenaustausch deaktiviert. Auf der Startseite des Plugins werden Sie auf diesen Umstand hingewiesen.
+Wenn das Mapping nicht vollständig abgeschlossen ist oder im laufenden Betrieb weitere Datensätze innerhalb von shopware erstellt werden, die manuell gemappt werden müssen, wird der gesamte Datenaustausch deaktiviert. Auf der Startseite des Plugins werden Sie auf diesen Umstand hingewiesen.
 
 ##### Währungen
-Die Währungen werden Aufträgen zugeordnet, die von shopware zu plentymarkets exportiert werden. Da Aufträge nicht von plentymarkets zu shopware exportiert werden, ist es nicht erforderlich, alle Währungen von plentymarkets auch in Ihrem Shopware System anzulegen.
+Die Währungen werden Aufträgen zugeordnet, die von shopware zu plentymarkets exportiert werden. Da Aufträge nicht von plentymarkets zu shopware exportiert werden, ist es nicht erforderlich, alle Währungen von plentymarkets auch in Ihrem shopware System anzulegen.
 
 ##### Einheiten
-Die Einheiten sind den Artikeln zugeordnet. Da der Abgleich in beide Richtungen stattfindet, macht es Sinn, allen Einheiten, die sie bei plentymarkets verwenden auch bei Shopware anzulegen. Wenn eine Einheit innerhalb von shopware nicht zugeordnet werden kann, wird dem Artikel keine Einheit definiert.
+Die Einheiten sind den Artikeln zugeordnet. Da der Abgleich in beide Richtungen stattfindet, macht es Sinn, allen Einheiten, die sie bei plentymarkets verwenden auch bei shopware anzulegen. Wenn eine Einheit innerhalb von shopware nicht zugeordnet werden kann, wird dem Artikel keine Einheit definiert.
 
 ##### Zahlungsarten
 Die Zahlungsarten werden den Aufträgen zugeordnet.
@@ -132,7 +133,7 @@ Das Mapping für die Daten aus der Synchronisierung wird automatisch vorgenommen
 **Achtung:** Der Datenaustauch darf nur gestartet weden, wenn alle unter Einrichtung genannten Punkte abgeschlossen sein!
 
 ### Initialer Export zu plentymarkets
-Alle Artikeldaten aus Ihrem Shopware System müssen zu plentymarkets exportiert werden.
+Alle Artikeldaten aus Ihrem shopware System müssen zu plentymarkets exportiert werden.
 
 ### Synchronisation
 #### Artikelstammdaten
@@ -164,7 +165,7 @@ Wenn ein Auftrag in shopware einen bestimmten Zahlungsstatus erreicht, wird in p
 
 Im Log erhalten Sie Auskunft über den Datentransfer. Jeder getätigte SOAP Call wird hier inkl. dessen Status (erfolgreich oder nicht) aufgeführt. Darüber hinaus erhalten Sie informationen, wenn bestimmte Datensätze angelegt worden sind oder bei der Verarbeitung Fehler aufgetreten sind. Es Wird generell zwischen Meldung und Fehler entschieden.
 
-Jede Meldung (und jeder Fehler) hat ein bestimmtes Präfix. Dieses kennzeichnet grob, in welcher Prozess verantworlich ist. ES gibt die folgenden Präfixe:
+Jede Meldung (und jeder Fehler) hat ein bestimmtes Präfix. Dieses kennzeichnet grob, welcher Prozess verantworlich ist. ES gibt die folgenden Präfixe:
 
 * Export:Initial:<Entität>
 * Export:Item
