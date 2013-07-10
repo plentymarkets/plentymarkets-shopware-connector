@@ -265,12 +265,8 @@ class PlentymarketsExportController
 			->findAll();
 
 		$ItemsToLink = array();
-
-		if (count($Items))
-		{
-			do
+		foreach ($Items as $Item)
 			{
-				$Item = array_pop($Items);
 				$PlentymarketsExportEntityItem = new PlentymarketsExportEntityItem($Item);
 
 				if ($PlentymarketsExportEntityItem->export())
@@ -278,7 +274,6 @@ class PlentymarketsExportController
 					$ItemsToLink[] = $Item;
 				}
 			}
-			while (count($Items));
 
 			// Crosselling
 			foreach ($ItemsToLink as $Item)
@@ -286,7 +281,6 @@ class PlentymarketsExportController
 				$PlentymarketsExportEntityItem = new PlentymarketsExportEntityItemLinked($Item);
 				$PlentymarketsExportEntityItem->link();
 			}
-		}
 
 		// Set running
 		$this->Config->setItemExportTimestampFinished(time());
