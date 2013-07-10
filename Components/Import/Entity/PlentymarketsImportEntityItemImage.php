@@ -111,10 +111,10 @@ class PlentymarketsImportEntityItemImage
 		if (count($images))
 		{
 			//
-// 			$ArticleResource = \Shopware\Components\Api\Manager::getResource('Article');
-// 			$ArticleResource->update($this->SHOPWARE_itemId, array(
-// 				'images' => $images
-// 			));
+			$ArticleResource = \Shopware\Components\Api\Manager::getResource('Article');
+			$ArticleResource->update($this->SHOPWARE_itemId, array(
+				'images' => $images
+			));
 		}
 	}
 }

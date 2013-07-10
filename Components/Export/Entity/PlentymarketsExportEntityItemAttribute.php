@@ -52,12 +52,12 @@ class PlentymarketsExportEntityItemAttribute
 		$Response_GetItemAttributes = PlentymarketsSoapClient::getInstance()->GetItemAttributes($Request_GetItemAttributes);
 		foreach ($Response_GetItemAttributes->Attributes->item as $Attribute)
 		{
-			$this->PLENTY_name2ID[$Attribute->BackendName] = $Attribute->Id;
+			$this->PLENTY_name2ID[$Attribute->FrontendName] = $Attribute->Id;
 
 			$this->PLENTY_idAndValueName2ID[$Attribute->Id] = array();
 			foreach ($Attribute->Values->item as $AttributeValue)
 			{
-				$this->PLENTY_idAndValueName2ID[$Attribute->Id][$AttributeValue->BackendName] = $AttributeValue->ValueId;
+				$this->PLENTY_idAndValueName2ID[$Attribute->Id][$AttributeValue->FrontendName] = $AttributeValue->ValueId;
 			}
 		}
 	}
@@ -100,9 +100,12 @@ class PlentymarketsExportEntityItemAttribute
 			{
 				$AttributeValue instanceof Shopware\Models\Article\Configurator\Option;
 
-				if (array_key_exists($attributeIdAdded, $this->PLENTY_idAndValueName2ID) && array_key_exists($AttributeValue->getName(), $this->PLENTY_idAndValueName2ID[$attributeIdAdded]))
+				// Workaround
+				$checkname = str_replace(',', '.', $AttributeValue->getName());
+
+				if (array_key_exists($attributeIdAdded, $this->PLENTY_idAndValueName2ID) && array_key_exists($checkname, $this->PLENTY_idAndValueName2ID[$attributeIdAdded]))
 				{
-					PlentymarketsMappingController::addAttributeOption($AttributeValue->getId(), $this->PLENTY_idAndValueName2ID[$attributeIdAdded][$AttributeValue->getName()]);
+					PlentymarketsMappingController::addAttributeOption($AttributeValue->getId(), $this->PLENTY_idAndValueName2ID[$attributeIdAdded][$checkname]);
 				}
 				else
 				{

@@ -151,7 +151,7 @@ class PlentymarketsExportEntityCustomer
 		if ($Response_AddCustomers->ResponseMessages->item[0]->Code == 100 || $Response_AddCustomers->ResponseMessages->item[0]->Code == 200)
 		{
 			$this->PLENTY_customerID = (integer) $Response_AddCustomers->ResponseMessages->item[0]->SuccessMessages->item[0]->Value;
-			PlentymarketsMappingController::addCustomer($this->customer['id'], $this->PLENTY_customerID);
+			PlentymarketsMappingController::addCustomer($this->billingAddress['id'], $this->PLENTY_customerID);
 		}
 	}
 
