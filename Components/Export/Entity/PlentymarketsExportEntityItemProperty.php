@@ -26,11 +26,11 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/GetPropertiesListGroup.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/GetPropertiesListPropertie.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapRequest/GetPropertiesList.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapRequest/AddPropertyGroup.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapRequest/AddProperty.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/GetPropertiesListGroup.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/GetPropertiesListPropertie.php';
+require_once PY_SOAP . 'Models/PlentySoapRequest/GetPropertiesList.php';
+require_once PY_SOAP . 'Models/PlentySoapRequest/AddPropertyGroup.php';
+require_once PY_SOAP . 'Models/PlentySoapRequest/AddProperty.php';
 
 /**
  *

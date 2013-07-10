@@ -251,8 +251,8 @@ class PlentymarketsExportController
 	 */
 	protected function exportItems()
 	{
-		require_once __DIR__ . '/Entity/PlentymarketsExportEntityItem.php';
-		require_once __DIR__ . '/Entity/PlentymarketsExportEntityItemLinked.php';
+		require_once PY_COMPONENTS . 'Export/Entity/PlentymarketsExportEntityItem.php';
+		require_once PY_COMPONENTS . 'Export/Entity/PlentymarketsExportEntityItemLinked.php';
 
 		// Set running
 		$this->Config->setItemExportStatus('running');
@@ -266,21 +266,21 @@ class PlentymarketsExportController
 
 		$ItemsToLink = array();
 		foreach ($Items as $Item)
-			{
-				$PlentymarketsExportEntityItem = new PlentymarketsExportEntityItem($Item);
+		{
+			$PlentymarketsExportEntityItem = new PlentymarketsExportEntityItem($Item);
 
-				if ($PlentymarketsExportEntityItem->export())
-				{
-					$ItemsToLink[] = $Item;
-				}
-			}
-
-			// Crosselling
-			foreach ($ItemsToLink as $Item)
+			if ($PlentymarketsExportEntityItem->export())
 			{
-				$PlentymarketsExportEntityItem = new PlentymarketsExportEntityItemLinked($Item);
-				$PlentymarketsExportEntityItem->link();
+				$ItemsToLink[] = $Item;
 			}
+		}
+
+		// Crosselling
+		foreach ($ItemsToLink as $Item)
+		{
+			$PlentymarketsExportEntityItem = new PlentymarketsExportEntityItemLinked($Item);
+			$PlentymarketsExportEntityItem->link();
+		}
 
 		// Set running
 		$this->Config->setItemExportTimestampFinished(time());
@@ -292,7 +292,8 @@ class PlentymarketsExportController
 	 */
 	public function exportIncomingPayments()
 	{
-		require_once __DIR__ . '/Entity/PlentymarketsExportEntityIncomingPayment.php';
+		require_once PY_COMPONENTS . 'Export/Entity/PlentymarketsExportEntityIncomingPayment.php';
+
 		// Set running
 		$this->Config->setItemIncomingPaymentExportStatus('running');
 
@@ -349,7 +350,7 @@ class PlentymarketsExportController
 	 */
 	protected function _exportOrderById($orderID)
 	{
-		require_once __DIR__ . '/Entity/PlentymarketsExportEntityOrder.php';
+		require_once PY_COMPONENTS . 'Export/Entity/PlentymarketsExportEntityOrder.php';
 
 		$PlentymarketsExportEntityOrder = new PlentymarketsExportEntityOrder($orderID);
 		$PlentymarketsExportEntityOrder->export();
@@ -368,7 +369,7 @@ class PlentymarketsExportController
 
 		$class = sprintf('PlentymarketsExportEntity%s', $entity);
 
-		require_once __DIR__ . '/Entity/' . $class . '.php';
+		require_once PY_COMPONENTS . 'Export/Entity/' . $class . '.php';
 
 		// Set running
 		$methodStatus = sprintf('set%sExportStatus', $entity);

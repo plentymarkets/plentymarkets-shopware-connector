@@ -74,7 +74,7 @@ class PlentymarketsMappingController
 		$classname = sprintf('PlentymarketsMappingEntity%s', $matches[2]);
 
 		//
-		require_once __DIR__ . '/Entity/' . $classname . '.php';
+		require_once PY_COMPONENTS . 'Mapping/Entity/' . $classname . '.php';
 
 		//
 		$Instance = $classname::getInstance();

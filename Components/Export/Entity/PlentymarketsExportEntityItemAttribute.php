@@ -26,12 +26,12 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/GetItemAttributesAttribute.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/GetItemAttributesAttributeValue.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapRequest/GetItemAttributes.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/AddItemAttribute.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/AddItemAttributeValue.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapRequest/AddItemAttribute.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/GetItemAttributesAttribute.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/GetItemAttributesAttributeValue.php';
+require_once PY_SOAP . 'Models/PlentySoapRequest/GetItemAttributes.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/AddItemAttribute.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/AddItemAttributeValue.php';
+require_once PY_SOAP . 'Models/PlentySoapRequest/AddItemAttribute.php';
 
 /**
  *

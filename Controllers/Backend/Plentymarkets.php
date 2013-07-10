@@ -26,10 +26,10 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once __DIR__ . '/../../Components/Config/PlentymarketsConfig.php';
-require_once __DIR__ . '/../../Components/Utils/PlentymarketsLogger.php';
-require_once __DIR__ . '/../../Components/Utils/PlentymarketsUtils.php';
-require_once __DIR__ . '/../../Components/Soap/Client/PlentymarketsSoapClient.php';
+require_once PY_COMPONENTS . 'Config/PlentymarketsConfig.php';
+require_once PY_COMPONENTS . 'Utils/PlentymarketsLogger.php';
+require_once PY_COMPONENTS . 'Utils/PlentymarketsUtils.php';
+require_once PY_COMPONENTS . 'Soap/Client/PlentymarketsSoapClient.php';
 
 /**
  *
@@ -95,7 +95,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	 */
 	public function getSettingsStoresAction()
 	{
-		require_once __DIR__ . '/../../Components/Import/PlentymarketsImportController.php';
+		require_once PY_COMPONENTS . 'Import/PlentymarketsImportController.php';
 
 		if ($this->Request()->get('refresh', false) == true)
 		{
@@ -250,7 +250,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 
 		$method = sprintf('delete%sByShopwareID', $entity);
 
-		require_once __DIR__ . '/../../Components/Mapping/PlentymarketsMappingController.php';
+		require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingController.php';
 
 		// Delete the mapping for this shopware id
 		call_user_func(array(
@@ -281,7 +281,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	{
 		$params = $this->Request()->getParams();
 
-		require_once __DIR__ . '/../../Components/Export/PlentymarketsExportController.php';
+		require_once PY_COMPONENTS . 'Export/PlentymarketsExportController.php';
 
 		try
 		{
@@ -377,7 +377,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	 */
 	public function getPlentyMappingDataAction()
 	{
-		require_once __DIR__ . '/../../Components/Import/PlentymarketsImportController.php';
+		require_once PY_COMPONENTS . 'Import/PlentymarketsImportController.php';
 
 		$forceReload = $this->Request()->get('force', false);
 
@@ -436,8 +436,8 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	 */
 	public function getMappingDataAction()
 	{
-		require_once __DIR__ . '/../../Components/Import/PlentymarketsImportController.php';
-		require_once __DIR__ . '/../../Components/Mapping/PlentymarketsMappingController.php';
+		require_once PY_COMPONENTS . 'Import/PlentymarketsImportController.php';
+		require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingController.php';
 
 		$map = $this->Request()->getParam('map');
 
@@ -705,7 +705,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	 */
 	public function getMappingStatusAction()
 	{
-		require_once __DIR__ . '/../../Components/Mapping/PlentymarketsMappingController.php';
+		require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingController.php';
 		$this->View()->assign(array(
 			'success' => true,
 			'data' => array_values(PlentymarketsMappingController::getStatusList())
@@ -716,7 +716,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	 */
 	public function getWarehouseListAction()
 	{
-		require_once __DIR__ . '/../../Components/Import/PlentymarketsImportController.php';
+		require_once PY_COMPONENTS . 'Import/PlentymarketsImportController.php';
 
 		$this->View()->assign(array(
 			'success' => true,
@@ -728,7 +728,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	 */
 	public function getOrderStatusListAction()
 	{
-		require_once __DIR__ . '/../../Components/Import/PlentymarketsImportController.php';
+		require_once PY_COMPONENTS . 'Import/PlentymarketsImportController.php';
 
 		$values = PlentymarketsImportController::getOrderStatusList();
 		$values[0] = array(
@@ -758,7 +758,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	 */
 	public function getMultishopListAction()
 	{
-		require_once __DIR__ . '/../../Components/Import/PlentymarketsImportController.php';
+		require_once PY_COMPONENTS . 'Import/PlentymarketsImportController.php';
 
 		$this->View()->assign(array(
 			'success' => true,

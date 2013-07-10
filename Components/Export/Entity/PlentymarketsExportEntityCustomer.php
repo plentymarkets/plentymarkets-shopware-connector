@@ -26,12 +26,12 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/AddCustomersCustomer.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/CustomerBankData.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/CustomerFreeTestFields.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapRequest/AddCustomers.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/AddCustomerDeliveryAddressesCustomer.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapRequest/AddCustomerDeliveryAddresses.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/AddCustomersCustomer.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/CustomerBankData.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/CustomerFreeTestFields.php';
+require_once PY_SOAP . 'Models/PlentySoapRequest/AddCustomers.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/AddCustomerDeliveryAddressesCustomer.php';
+require_once PY_SOAP . 'Models/PlentySoapRequest/AddCustomerDeliveryAddresses.php';
 
 /**
  *

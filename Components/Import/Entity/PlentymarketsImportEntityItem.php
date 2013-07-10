@@ -26,25 +26,19 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/Attribute.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/AttributeValue.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/AttributeValueSet.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapRequestObject/GetAttributeValueSets.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapRequest/GetAttributeValueSets.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/Attribute.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/AttributeValue.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/AttributeValueSet.php';
+require_once PY_SOAP . 'Models/PlentySoapRequestObject/GetAttributeValueSets.php';
+require_once PY_SOAP . 'Models/PlentySoapRequest/GetAttributeValueSets.php';
+require_once PY_COMPONENTS . 'Import/PlentymarketsVariantController.php';
+require_once PY_COMPONENTS . 'Import/Entity/PlentymarketsImportEntityItemPrice.php';
+require_once PY_COMPONENTS . 'Import/Entity/PlentymarketsImportEntityItemImage.php';
 
-function def($value, $default = null, $ref = 0)
-{
-	if ($value <= $ref)
-	{
-		return $default;
-	}
-	return $value;
-}
-
-require_once __DIR__ . '/../PlentymarketsVariantController.php';
-require_once __DIR__ . '/PlentymarketsImportEntityItemPrice.php';
-require_once __DIR__ . '/PlentymarketsImportEntityItemImage.php';
-
+/**
+ *
+ * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
+ */
 class PlentymarketsImportEntityItem
 {
 

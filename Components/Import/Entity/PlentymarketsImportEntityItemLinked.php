@@ -26,8 +26,8 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/GetLinkedItems.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapRequest/GetLinkedItems.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/GetLinkedItems.php';
+require_once PY_SOAP . 'Models/PlentySoapRequest/GetLinkedItems.php';
 
 /**
  *

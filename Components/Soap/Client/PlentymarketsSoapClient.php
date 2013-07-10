@@ -28,8 +28,8 @@
 
 
 // Dependencies
-require_once __DIR__ . '/../Models/PlentySoapResponseMessage.php';
-require_once __DIR__ . '/../Models/PlentySoapResponseSubMessage.php';
+require_once PY_SOAP . 'Models/PlentySoapResponseMessage.php';
+require_once PY_SOAP . 'Models/PlentySoapResponseSubMessage.php';
 
 /**
  *
@@ -76,7 +76,7 @@ class PlentymarketsSoapClient extends SoapClient
 		else
 		{
 			// Load the request model
-			require_once __DIR__ . '/../Models/PlentySoapRequest/GetAuthentificationToken.php';
+			require_once PY_SOAP . 'Models/PlentySoapRequest/GetAuthentificationToken.php';
 
 			// Authentication
 			$Request_GetAuthentificationToken = new PlentySoapRequest_GetAuthentificationToken();
@@ -198,7 +198,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _AddAuction(PlentySoapRequest_AddAuction $Request_AddAuction)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/AddAuction.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/AddAuction.php';
 		return parent::__soapCall('AddAuction', array(
 			$Request_AddAuction
 		));
@@ -211,7 +211,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _AddClientOrder(PlentySoapRequest_AddClientOrder $Request_AddClientOrder)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/AddClientOrder.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/AddClientOrder.php';
 		return parent::__soapCall('AddClientOrder', array(
 			$Request_AddClientOrder
 		));
@@ -224,7 +224,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _AddCustomerDeliveryAddresses(PlentySoapRequest_AddCustomerDeliveryAddresses $Request_AddCustomerDeliveryAddresses)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/AddCustomerDeliveryAddresses.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/AddCustomerDeliveryAddresses.php';
 		return parent::__soapCall('AddCustomerDeliveryAddresses', array(
 			$Request_AddCustomerDeliveryAddresses
 		));
@@ -237,7 +237,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _AddCustomerNote(PlentySoapRequest_AddCustomerNote $Request_AddCustomerNote)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/AddCustomerNote.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/AddCustomerNote.php';
 		return parent::__soapCall('AddCustomerNote', array(
 			$Request_AddCustomerNote
 		));
@@ -250,7 +250,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _AddCustomers(PlentySoapRequest_AddCustomers $Request_AddCustomers)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/AddCustomers.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/AddCustomers.php';
 		return parent::__soapCall('AddCustomers', array(
 			$Request_AddCustomers
 		));
@@ -263,7 +263,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _AddDeliveryOrder(PlentySoapRequest_AddDeliveryOrder $Request_AddDeliveryOrder)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/AddDeliveryOrder.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/AddDeliveryOrder.php';
 		return parent::__soapCall('AddDeliveryOrder', array(
 			$Request_AddDeliveryOrder
 		));
@@ -276,7 +276,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _AddEmailTemplates(PlentySoapRequest_AddEmailTemplates $Request_AddEmailTemplates)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/AddEmailTemplates.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/AddEmailTemplates.php';
 		return parent::__soapCall('AddEmailTemplates', array(
 			$Request_AddEmailTemplates
 		));
@@ -289,7 +289,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _AddIncomingPayments(PlentySoapRequest_AddIncomingPayments $Request_AddIncomingPayments)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/AddIncomingPayments.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/AddIncomingPayments.php';
 		return parent::__soapCall('AddIncomingPayments', array(
 			$Request_AddIncomingPayments
 		));
@@ -302,7 +302,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _AddItemAttribute(PlentySoapRequest_AddItemAttribute $Request_AddItemAttribute)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/AddItemAttribute.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/AddItemAttribute.php';
 		return parent::__soapCall('AddItemAttribute', array(
 			$Request_AddItemAttribute
 		));
@@ -315,7 +315,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _AddItemAttributeValueSets(PlentySoapRequest_AddItemAttributeValueSets $Request_AddItemAttributeValueSets)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/AddItemAttributeValueSets.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/AddItemAttributeValueSets.php';
 		return parent::__soapCall('AddItemAttributeValueSets', array(
 			$Request_AddItemAttributeValueSets
 		));
@@ -328,7 +328,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _AddItemCategory(PlentySoapRequest_AddItemCategory $Request_AddItemCategory)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/AddItemCategory.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/AddItemCategory.php';
 		return parent::__soapCall('AddItemCategory', array(
 			$Request_AddItemCategory
 		));
@@ -341,7 +341,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _AddItemMediaFile(PlentySoapRequest_AddItemMediaFile $Request_AddItemMediaFile)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/AddItemMediaFile.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/AddItemMediaFile.php';
 		return parent::__soapCall('AddItemMediaFile', array(
 			$Request_AddItemMediaFile
 		));
@@ -354,7 +354,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _AddItemsBase(PlentySoapRequest_AddItemsBase $Request_AddItemsBase)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/AddItemsBase.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/AddItemsBase.php';
 		return parent::__soapCall('AddItemsBase', array(
 			$Request_AddItemsBase
 		));
@@ -367,7 +367,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _AddItemsImage(PlentySoapRequest_AddItemsImage $Request_AddItemsImage)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/AddItemsImage.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/AddItemsImage.php';
 		return parent::__soapCall('AddItemsImage', array(
 			$Request_AddItemsImage
 		));
@@ -380,7 +380,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _AddItemsToBundle(PlentySoapRequest_AddItemsToBundle $Request_AddItemsToBundle)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/AddItemsToBundle.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/AddItemsToBundle.php';
 		return parent::__soapCall('AddItemsToBundle', array(
 			$Request_AddItemsToBundle
 		));
@@ -393,7 +393,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _AddLinkedItems(PlentySoapRequest_AddLinkedItems $Request_AddLinkedItems)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/AddLinkedItems.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/AddLinkedItems.php';
 		return parent::__soapCall('AddLinkedItems', array(
 			$Request_AddLinkedItems
 		));
@@ -406,7 +406,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _AddOrderItems(PlentySoapRequest_AddOrderItems $Request_AddOrderItems)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/AddOrderItems.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/AddOrderItems.php';
 		return parent::__soapCall('AddOrderItems', array(
 			$Request_AddOrderItems
 		));
@@ -419,7 +419,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _AddOrderStatusHistory(PlentySoapRequest_AddOrderStatusHistory $Request_AddOrderStatusHistory)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/AddOrderStatusHistory.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/AddOrderStatusHistory.php';
 		return parent::__soapCall('AddOrderStatusHistory', array(
 			$Request_AddOrderStatusHistory
 		));
@@ -432,7 +432,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _AddOrders(PlentySoapRequest_AddOrders $Request_AddOrders)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/AddOrders.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/AddOrders.php';
 		return parent::__soapCall('AddOrders', array(
 			$Request_AddOrders
 		));
@@ -445,7 +445,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _AddOrdersInvoice(PlentySoapRequest_AddOrdersInvoice $Request_AddOrdersInvoice)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/AddOrdersInvoice.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/AddOrdersInvoice.php';
 		return parent::__soapCall('AddOrdersInvoice', array(
 			$Request_AddOrdersInvoice
 		));
@@ -458,7 +458,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _AddOrdersPackageNumber(PlentySoapRequest_AddOrdersPackageNumber $Request_AddOrdersPackageNumber)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/AddOrdersPackageNumber.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/AddOrdersPackageNumber.php';
 		return parent::__soapCall('AddOrdersPackageNumber', array(
 			$Request_AddOrdersPackageNumber
 		));
@@ -471,7 +471,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _AddProperty(PlentySoapRequest_AddProperty $Request_AddProperty)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/AddProperty.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/AddProperty.php';
 		return parent::__soapCall('AddProperty', array(
 			$Request_AddProperty
 		));
@@ -484,7 +484,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _AddPropertyGroup(PlentySoapRequest_AddPropertyGroup $Request_AddPropertyGroup)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/AddPropertyGroup.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/AddPropertyGroup.php';
 		return parent::__soapCall('AddPropertyGroup', array(
 			$Request_AddPropertyGroup
 		));
@@ -497,7 +497,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _AddPropertyToItem(PlentySoapRequest_AddPropertyToItem $Request_AddPropertyToItem)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/AddPropertyToItem.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/AddPropertyToItem.php';
 		return parent::__soapCall('AddPropertyToItem', array(
 			$Request_AddPropertyToItem
 		));
@@ -510,7 +510,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _AddReorder(PlentySoapRequest_AddReorder $Request_AddReorder)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/AddReorder.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/AddReorder.php';
 		return parent::__soapCall('AddReorder', array(
 			$Request_AddReorder
 		));
@@ -523,7 +523,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _AddShippingProfile(PlentySoapRequest_AddShippingProfile $Request_AddShippingProfile)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/AddShippingProfile.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/AddShippingProfile.php';
 		return parent::__soapCall('AddShippingProfile', array(
 			$Request_AddShippingProfile
 		));
@@ -536,7 +536,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _AddTicket(PlentySoapRequest_AddTicket $Request_AddTicket)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/AddTicket.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/AddTicket.php';
 		return parent::__soapCall('AddTicket', array(
 			$Request_AddTicket
 		));
@@ -549,7 +549,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _AddTicketLeafe(PlentySoapRequest_AddTicketLeafe $Request_AddTicketLeafe)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/AddTicketLeafe.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/AddTicketLeafe.php';
 		return parent::__soapCall('AddTicketLeafe', array(
 			$Request_AddTicketLeafe
 		));
@@ -562,7 +562,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _DeleteEmailTemplates(PlentySoapRequest_DeleteEmailTemplates $Request_DeleteEmailTemplates)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/DeleteEmailTemplates.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/DeleteEmailTemplates.php';
 		return parent::__soapCall('DeleteEmailTemplates', array(
 			$Request_DeleteEmailTemplates
 		));
@@ -575,7 +575,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _DeleteItemAttribute(PlentySoapRequest_DeleteItemAttribute $Request_DeleteItemAttribute)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/DeleteItemAttribute.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/DeleteItemAttribute.php';
 		return parent::__soapCall('DeleteItemAttribute', array(
 			$Request_DeleteItemAttribute
 		));
@@ -588,7 +588,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _DeleteItemMediaFile(PlentySoapRequest_DeleteItemMediaFile $Request_DeleteItemMediaFile)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/DeleteItemMediaFile.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/DeleteItemMediaFile.php';
 		return parent::__soapCall('DeleteItemMediaFile', array(
 			$Request_DeleteItemMediaFile
 		));
@@ -601,7 +601,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _DeleteItems(PlentySoapRequest_DeleteItems $Request_DeleteItems)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/DeleteItems.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/DeleteItems.php';
 		return parent::__soapCall('DeleteItems', array(
 			$Request_DeleteItems
 		));
@@ -614,7 +614,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _DeleteItemsImages(PlentySoapRequest_DeleteItemsImages $Request_DeleteItemsImages)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/DeleteItemsImages.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/DeleteItemsImages.php';
 		return parent::__soapCall('DeleteItemsImages', array(
 			$Request_DeleteItemsImages
 		));
@@ -627,7 +627,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _DeleteItemsSuppliers(PlentySoapRequest_DeleteItemsSuppliers $Request_DeleteItemsSuppliers)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/DeleteItemsSuppliers.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/DeleteItemsSuppliers.php';
 		return parent::__soapCall('DeleteItemsSuppliers', array(
 			$Request_DeleteItemsSuppliers
 		));
@@ -640,7 +640,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _DeleteLinkedItems(PlentySoapRequest_DeleteLinkedItems $Request_DeleteLinkedItems)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/DeleteLinkedItems.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/DeleteLinkedItems.php';
 		return parent::__soapCall('DeleteLinkedItems', array(
 			$Request_DeleteLinkedItems
 		));
@@ -653,7 +653,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _DeleteOrderPackageNumber(PlentySoapRequest_DeleteOrderPackageNumber $Request_DeleteOrderPackageNumber)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/DeleteOrderPackageNumber.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/DeleteOrderPackageNumber.php';
 		return parent::__soapCall('DeleteOrderPackageNumber', array(
 			$Request_DeleteOrderPackageNumber
 		));
@@ -666,7 +666,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _DeletePriceSets(PlentySoapRequest_DeletePriceSets $Request_DeletePriceSets)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/DeletePriceSets.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/DeletePriceSets.php';
 		return parent::__soapCall('DeletePriceSets', array(
 			$Request_DeletePriceSets
 		));
@@ -679,7 +679,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _DeleteProperty(PlentySoapRequest_DeleteProperty $Request_DeleteProperty)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/DeleteProperty.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/DeleteProperty.php';
 		return parent::__soapCall('DeleteProperty', array(
 			$Request_DeleteProperty
 		));
@@ -692,7 +692,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _DeletePropertyGroup(PlentySoapRequest_DeletePropertyGroup $Request_DeletePropertyGroup)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/DeletePropertyGroup.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/DeletePropertyGroup.php';
 		return parent::__soapCall('DeletePropertyGroup', array(
 			$Request_DeletePropertyGroup
 		));
@@ -705,7 +705,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _DeleteReorder(PlentySoapRequest_DeleteReorder $Request_DeleteReorder)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/DeleteReorder.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/DeleteReorder.php';
 		return parent::__soapCall('DeleteReorder', array(
 			$Request_DeleteReorder
 		));
@@ -718,7 +718,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetAttributeValueSets(PlentySoapRequest_GetAttributeValueSets $Request_GetAttributeValueSets)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetAttributeValueSets.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetAttributeValueSets.php';
 		return parent::__soapCall('GetAttributeValueSets', array(
 			$Request_GetAttributeValueSets
 		));
@@ -731,7 +731,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetAuctionMarketsShopCategories(PlentySoapRequest_GetAuctionMarketsShopCategories $Request_GetAuctionMarketsShopCategories)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetAuctionMarketsShopCategories.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetAuctionMarketsShopCategories.php';
 		return parent::__soapCall('GetAuctionMarketsShopCategories', array(
 			$Request_GetAuctionMarketsShopCategories
 		));
@@ -744,7 +744,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetAuctions(PlentySoapRequest_GetAuctions $Request_GetAuctions)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetAuctions.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetAuctions.php';
 		return parent::__soapCall('GetAuctions', array(
 			$Request_GetAuctions
 		));
@@ -757,7 +757,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetAuthentificationToken(PlentySoapRequest_GetAuthentificationToken $Request_GetAuthentificationToken)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetAuthentificationToken.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetAuthentificationToken.php';
 		return parent::__soapCall('GetAuthentificationToken', array(
 			$Request_GetAuthentificationToken
 		));
@@ -770,7 +770,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetCategoryMappingForMarket(PlentySoapRequest_GetCategoryMappingForMarket $Request_GetCategoryMappingForMarket)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetCategoryMappingForMarket.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetCategoryMappingForMarket.php';
 		return parent::__soapCall('GetCategoryMappingForMarket', array(
 			$Request_GetCategoryMappingForMarket
 		));
@@ -783,7 +783,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetContentPage(PlentySoapRequest_GetContentPage $Request_GetContentPage)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetContentPage.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetContentPage.php';
 		return parent::__soapCall('GetContentPage', array(
 			$Request_GetContentPage
 		));
@@ -796,7 +796,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetCountriesOfDelivery(PlentySoapRequest_GetCountriesOfDelivery $Request_GetCountriesOfDelivery)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetCountriesOfDelivery.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetCountriesOfDelivery.php';
 		return parent::__soapCall('GetCountriesOfDelivery', array(
 			$Request_GetCountriesOfDelivery
 		));
@@ -809,7 +809,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetCurrentStocks(PlentySoapRequest_GetCurrentStocks $Request_GetCurrentStocks)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetCurrentStocks.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetCurrentStocks.php';
 		return parent::__soapCall('GetCurrentStocks', array(
 			$Request_GetCurrentStocks
 		));
@@ -822,7 +822,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetCurrentStocks4Marketplace(PlentySoapRequest_GetCurrentStocks4Marketplace $Request_GetCurrentStocks4Marketplace)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetCurrentStocks4Marketplace.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetCurrentStocks4Marketplace.php';
 		return parent::__soapCall('GetCurrentStocks4Marketplace', array(
 			$Request_GetCurrentStocks4Marketplace
 		));
@@ -834,7 +834,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetCustomerClasses()
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetCustomerClasses.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetCustomerClasses.php';
 		return parent::__soapCall('GetCustomerClasses', array());
 	}
 
@@ -845,7 +845,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetCustomerDeliveryAddresses(PlentySoapRequest_GetCustomerDeliveryAddresses $Request_GetCustomerDeliveryAddresses)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetCustomerDeliveryAddresses.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetCustomerDeliveryAddresses.php';
 		return parent::__soapCall('GetCustomerDeliveryAddresses', array(
 			$Request_GetCustomerDeliveryAddresses
 		));
@@ -858,7 +858,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetCustomerNotes(PlentySoapRequest_GetCustomerNotes $Request_GetCustomerNotes)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetCustomerNotes.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetCustomerNotes.php';
 		return parent::__soapCall('GetCustomerNotes', array(
 			$Request_GetCustomerNotes
 		));
@@ -871,7 +871,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetCustomerOrderOverviewLink(PlentySoapRequest_GetCustomerOrderOverviewLink $Request_GetCustomerOrderOverviewLink)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetCustomerOrderOverviewLink.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetCustomerOrderOverviewLink.php';
 		return parent::__soapCall('GetCustomerOrderOverviewLink', array(
 			$Request_GetCustomerOrderOverviewLink
 		));
@@ -884,7 +884,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetCustomerOrders(PlentySoapRequest_GetCustomerOrders $Request_GetCustomerOrders)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetCustomerOrders.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetCustomerOrders.php';
 		return parent::__soapCall('GetCustomerOrders', array(
 			$Request_GetCustomerOrders
 		));
@@ -897,7 +897,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetCustomers(PlentySoapRequest_GetCustomers $Request_GetCustomers)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetCustomers.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetCustomers.php';
 		return parent::__soapCall('GetCustomers', array(
 			$Request_GetCustomers
 		));
@@ -909,7 +909,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetDefaultAttributeTypeForMarket()
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetDefaultAttributeTypeForMarket.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetDefaultAttributeTypeForMarket.php';
 		return parent::__soapCall('GetDefaultAttributeTypeForMarket', array());
 	}
 
@@ -920,7 +920,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetDynamicExport(PlentySoapRequest_GetDynamicExport $Request_GetDynamicExport)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetDynamicExport.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetDynamicExport.php';
 		return parent::__soapCall('GetDynamicExport', array(
 			$Request_GetDynamicExport
 		));
@@ -932,7 +932,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetDynamicFormats()
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetDynamicFormats.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetDynamicFormats.php';
 		return parent::__soapCall('GetDynamicFormats', array());
 	}
 
@@ -942,7 +942,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetDynamicImportStack()
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetDynamicImportStack.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetDynamicImportStack.php';
 		return parent::__soapCall('GetDynamicImportStack', array());
 	}
 
@@ -953,7 +953,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetEbayItemVariations(PlentySoapRequest_GetEbayItemVariations $Request_GetEbayItemVariations)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetEbayItemVariations.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetEbayItemVariations.php';
 		return parent::__soapCall('GetEbayItemVariations', array(
 			$Request_GetEbayItemVariations
 		));
@@ -966,7 +966,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetEmailTemplate(PlentySoapRequest_GetEmailTemplate $Request_GetEmailTemplate)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetEmailTemplate.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetEmailTemplate.php';
 		return parent::__soapCall('GetEmailTemplate', array(
 			$Request_GetEmailTemplate
 		));
@@ -979,7 +979,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetEmailTemplates(PlentySoapRequest_GetEmailTemplates $Request_GetEmailTemplates)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetEmailTemplates.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetEmailTemplates.php';
 		return parent::__soapCall('GetEmailTemplates', array(
 			$Request_GetEmailTemplates
 		));
@@ -992,7 +992,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetIncomingPayments(PlentySoapRequest_GetIncomingPayments $Request_GetIncomingPayments)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetIncomingPayments.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetIncomingPayments.php';
 		return parent::__soapCall('GetIncomingPayments', array(
 			$Request_GetIncomingPayments
 		));
@@ -1005,7 +1005,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetItemAttributes(PlentySoapRequest_GetItemAttributes $Request_GetItemAttributes)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetItemAttributes.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetItemAttributes.php';
 		return parent::__soapCall('GetItemAttributes', array(
 			$Request_GetItemAttributes
 		));
@@ -1017,7 +1017,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetItemAvailabilityConfig()
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetItemAvailabilityConfig.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetItemAvailabilityConfig.php';
 		return parent::__soapCall('GetItemAvailabilityConfig', array());
 	}
 
@@ -1028,7 +1028,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetItemBundles(PlentySoapRequest_GetItemBundles $Request_GetItemBundles)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetItemBundles.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetItemBundles.php';
 		return parent::__soapCall('GetItemBundles', array(
 			$Request_GetItemBundles
 		));
@@ -1041,7 +1041,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetItemCategoryCatalog(PlentySoapRequest_GetItemCategoryCatalog $Request_GetItemCategoryCatalog)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetItemCategoryCatalog.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetItemCategoryCatalog.php';
 		return parent::__soapCall('GetItemCategoryCatalog', array(
 			$Request_GetItemCategoryCatalog
 		));
@@ -1054,7 +1054,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetItemCategoryCatalogBase(PlentySoapRequest_GetItemCategoryCatalogBase $Request_GetItemCategoryCatalogBase)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetItemCategoryCatalogBase.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetItemCategoryCatalogBase.php';
 		return parent::__soapCall('GetItemCategoryCatalogBase', array(
 			$Request_GetItemCategoryCatalogBase
 		));
@@ -1067,7 +1067,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetItemCategoryTree(PlentySoapRequest_GetItemCategoryTree $Request_GetItemCategoryTree)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetItemCategoryTree.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetItemCategoryTree.php';
 		return parent::__soapCall('GetItemCategoryTree', array(
 			$Request_GetItemCategoryTree
 		));
@@ -1080,7 +1080,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetItemsBase(PlentySoapRequest_GetItemsBase $Request_GetItemsBase)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetItemsBase.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetItemsBase.php';
 		return parent::__soapCall('GetItemsBase', array(
 			$Request_GetItemsBase
 		));
@@ -1093,7 +1093,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetItemsImages(PlentySoapRequest_GetItemsImages $Request_GetItemsImages)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetItemsImages.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetItemsImages.php';
 		return parent::__soapCall('GetItemsImages', array(
 			$Request_GetItemsImages
 		));
@@ -1106,7 +1106,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetItemsPreviewLink(PlentySoapRequest_GetItemsPreviewLink $Request_GetItemsPreviewLink)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetItemsPreviewLink.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetItemsPreviewLink.php';
 		return parent::__soapCall('GetItemsPreviewLink', array(
 			$Request_GetItemsPreviewLink
 		));
@@ -1119,7 +1119,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetItemsPriceLists(PlentySoapRequest_GetItemsPriceLists $Request_GetItemsPriceLists)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetItemsPriceLists.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetItemsPriceLists.php';
 		return parent::__soapCall('GetItemsPriceLists', array(
 			$Request_GetItemsPriceLists
 		));
@@ -1132,7 +1132,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetItemsPriceUpdate(PlentySoapRequest_GetItemsPriceUpdate $Request_GetItemsPriceUpdate)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetItemsPriceUpdate.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetItemsPriceUpdate.php';
 		return parent::__soapCall('GetItemsPriceUpdate', array(
 			$Request_GetItemsPriceUpdate
 		));
@@ -1145,7 +1145,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetItemsPropertiesList(PlentySoapRequest_GetItemsPropertiesList $Request_GetItemsPropertiesList)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetItemsPropertiesList.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetItemsPropertiesList.php';
 		return parent::__soapCall('GetItemsPropertiesList', array(
 			$Request_GetItemsPropertiesList
 		));
@@ -1157,7 +1157,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetItemsReturnStatus()
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetItemsReturnStatus.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetItemsReturnStatus.php';
 		return parent::__soapCall('GetItemsReturnStatus', array());
 	}
 
@@ -1168,7 +1168,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetItemsSearchData(PlentySoapRequest_GetItemsSearchData $Request_GetItemsSearchData)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetItemsSearchData.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetItemsSearchData.php';
 		return parent::__soapCall('GetItemsSearchData', array(
 			$Request_GetItemsSearchData
 		));
@@ -1181,7 +1181,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetItemsStock(PlentySoapRequest_GetItemsStock $Request_GetItemsStock)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetItemsStock.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetItemsStock.php';
 		return parent::__soapCall('GetItemsStock', array(
 			$Request_GetItemsStock
 		));
@@ -1194,7 +1194,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetItemsStockSearch(PlentySoapRequest_GetItemsStockSearch $Request_GetItemsStockSearch)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetItemsStockSearch.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetItemsStockSearch.php';
 		return parent::__soapCall('GetItemsStockSearch', array(
 			$Request_GetItemsStockSearch
 		));
@@ -1207,7 +1207,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetItemsSuppliers(PlentySoapRequest_GetItemsSuppliers $Request_GetItemsSuppliers)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetItemsSuppliers.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetItemsSuppliers.php';
 		return parent::__soapCall('GetItemsSuppliers', array(
 			$Request_GetItemsSuppliers
 		));
@@ -1220,7 +1220,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetItemsTexts(PlentySoapRequest_GetItemsTexts $Request_GetItemsTexts)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetItemsTexts.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetItemsTexts.php';
 		return parent::__soapCall('GetItemsTexts', array(
 			$Request_GetItemsTexts
 		));
@@ -1233,7 +1233,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetItemsVariantImages(PlentySoapRequest_GetItemsVariantImages $Request_GetItemsVariantImages)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetItemsVariantImages.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetItemsVariantImages.php';
 		return parent::__soapCall('GetItemsVariantImages', array(
 			$Request_GetItemsVariantImages
 		));
@@ -1246,7 +1246,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetItemsVariantsAvailable(PlentySoapRequest_GetItemsVariantsAvailable $Request_GetItemsVariantsAvailable)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetItemsVariantsAvailable.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetItemsVariantsAvailable.php';
 		return parent::__soapCall('GetItemsVariantsAvailable', array(
 			$Request_GetItemsVariantsAvailable
 		));
@@ -1259,7 +1259,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetItemsWarehouseSettings(PlentySoapRequest_GetItemsWarehouseSettings $Request_GetItemsWarehouseSettings)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetItemsWarehouseSettings.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetItemsWarehouseSettings.php';
 		return parent::__soapCall('GetItemsWarehouseSettings', array(
 			$Request_GetItemsWarehouseSettings
 		));
@@ -1272,7 +1272,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetLegalInformation(PlentySoapRequest_GetLegalInformation $Request_GetLegalInformation)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetLegalInformation.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetLegalInformation.php';
 		return parent::__soapCall('GetLegalInformation', array(
 			$Request_GetLegalInformation
 		));
@@ -1284,7 +1284,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetLinkPriceColumnToReferrer()
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetLinkPriceColumnToReferrer.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetLinkPriceColumnToReferrer.php';
 		return parent::__soapCall('GetLinkPriceColumnToReferrer', array());
 	}
 
@@ -1295,7 +1295,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetLinkedItems(PlentySoapRequest_GetLinkedItems $Request_GetLinkedItems)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetLinkedItems.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetLinkedItems.php';
 		return parent::__soapCall('GetLinkedItems', array(
 			$Request_GetLinkedItems
 		));
@@ -1308,7 +1308,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetMarketItemNumbers(PlentySoapRequest_GetMarketItemNumbers $Request_GetMarketItemNumbers)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetMarketItemNumbers.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetMarketItemNumbers.php';
 		return parent::__soapCall('GetMarketItemNumbers', array(
 			$Request_GetMarketItemNumbers
 		));
@@ -1321,7 +1321,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetMarketplaceTransactions(PlentySoapRequest_GetMarketplaceTransactions $Request_GetMarketplaceTransactions)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetMarketplaceTransactions.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetMarketplaceTransactions.php';
 		return parent::__soapCall('GetMarketplaceTransactions', array(
 			$Request_GetMarketplaceTransactions
 		));
@@ -1334,7 +1334,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetMeasureUnitConfig(PlentySoapRequest_GetMeasureUnitConfig $Request_GetMeasureUnitConfig)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetMeasureUnitConfig.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetMeasureUnitConfig.php';
 		return parent::__soapCall('GetMeasureUnitConfig', array(
 			$Request_GetMeasureUnitConfig
 		));
@@ -1347,7 +1347,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetMethodOfPayments(PlentySoapRequest_GetMethodOfPayments $Request_GetMethodOfPayments)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetMethodOfPayments.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetMethodOfPayments.php';
 		return parent::__soapCall('GetMethodOfPayments', array(
 			$Request_GetMethodOfPayments
 		));
@@ -1359,7 +1359,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetMultiShops()
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetMultiShops.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetMultiShops.php';
 		return parent::__soapCall('GetMultiShops', array());
 	}
 
@@ -1370,7 +1370,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetOrderCheckout(PlentySoapRequest_GetOrderCheckout $Request_GetOrderCheckout)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetOrderCheckout.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetOrderCheckout.php';
 		return parent::__soapCall('GetOrderCheckout', array(
 			$Request_GetOrderCheckout
 		));
@@ -1383,7 +1383,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetOrderStatusHistory(PlentySoapRequest_GetOrderStatusHistory $Request_GetOrderStatusHistory)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetOrderStatusHistory.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetOrderStatusHistory.php';
 		return parent::__soapCall('GetOrderStatusHistory', array(
 			$Request_GetOrderStatusHistory
 		));
@@ -1396,7 +1396,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetOrderStatusList(PlentySoapRequest_GetOrderStatusList $Request_GetOrderStatusList)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetOrderStatusList.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetOrderStatusList.php';
 		return parent::__soapCall('GetOrderStatusList', array(
 			$Request_GetOrderStatusList
 		));
@@ -1409,7 +1409,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetOrdersCreditNoteDocumentURLs(PlentySoapRequest_GetOrdersCreditNoteDocumentURLs $Request_GetOrdersCreditNoteDocumentURLs)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetOrdersCreditNoteDocumentURLs.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetOrdersCreditNoteDocumentURLs.php';
 		return parent::__soapCall('GetOrdersCreditNoteDocumentURLs', array(
 			$Request_GetOrdersCreditNoteDocumentURLs
 		));
@@ -1422,7 +1422,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetOrdersDeliveryNoteDocumentURLs(PlentySoapRequest_GetOrdersDeliveryNoteDocumentURLs $Request_GetOrdersDeliveryNoteDocumentURLs)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetOrdersDeliveryNoteDocumentURLs.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetOrdersDeliveryNoteDocumentURLs.php';
 		return parent::__soapCall('GetOrdersDeliveryNoteDocumentURLs', array(
 			$Request_GetOrdersDeliveryNoteDocumentURLs
 		));
@@ -1435,7 +1435,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetOrdersDunningLetterDocumentURLs(PlentySoapRequest_GetOrdersDunningLetterDocumentURLs $Request_GetOrdersDunningLetterDocumentURLs)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetOrdersDunningLetterDocumentURLs.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetOrdersDunningLetterDocumentURLs.php';
 		return parent::__soapCall('GetOrdersDunningLetterDocumentURLs', array(
 			$Request_GetOrdersDunningLetterDocumentURLs
 		));
@@ -1448,7 +1448,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetOrdersInvoiceDocumentURLs(PlentySoapRequest_GetOrdersInvoiceDocumentURLs $Request_GetOrdersInvoiceDocumentURLs)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetOrdersInvoiceDocumentURLs.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetOrdersInvoiceDocumentURLs.php';
 		return parent::__soapCall('GetOrdersInvoiceDocumentURLs', array(
 			$Request_GetOrdersInvoiceDocumentURLs
 		));
@@ -1461,7 +1461,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetOrdersOfferDocumentURLs(PlentySoapRequest_GetOrdersOfferDocumentURLs $Request_GetOrdersOfferDocumentURLs)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetOrdersOfferDocumentURLs.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetOrdersOfferDocumentURLs.php';
 		return parent::__soapCall('GetOrdersOfferDocumentURLs', array(
 			$Request_GetOrdersOfferDocumentURLs
 		));
@@ -1474,7 +1474,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetOrdersOrderConfirmationDocumentURLs(PlentySoapRequest_GetOrdersOrderConfirmationDocumentURLs $Request_GetOrdersOrderConfirmationDocumentURLs)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetOrdersOrderConfirmationDocumentURLs.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetOrdersOrderConfirmationDocumentURLs.php';
 		return parent::__soapCall('GetOrdersOrderConfirmationDocumentURLs', array(
 			$Request_GetOrdersOrderConfirmationDocumentURLs
 		));
@@ -1487,7 +1487,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetOrdersPaymentInformation(PlentySoapRequest_GetOrdersPaymentInformation $Request_GetOrdersPaymentInformation)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetOrdersPaymentInformation.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetOrdersPaymentInformation.php';
 		return parent::__soapCall('GetOrdersPaymentInformation', array(
 			$Request_GetOrdersPaymentInformation
 		));
@@ -1500,7 +1500,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetOrdersShipmentNumbers(PlentySoapRequest_GetOrdersShipmentNumbers $Request_GetOrdersShipmentNumbers)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetOrdersShipmentNumbers.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetOrdersShipmentNumbers.php';
 		return parent::__soapCall('GetOrdersShipmentNumbers', array(
 			$Request_GetOrdersShipmentNumbers
 		));
@@ -1512,7 +1512,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetPlentyMarketsVersion()
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetPlentyMarketsVersion.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetPlentyMarketsVersion.php';
 		return parent::__soapCall('GetPlentyMarketsVersion', array());
 	}
 
@@ -1522,7 +1522,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetProducers()
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetProducers.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetProducers.php';
 		return parent::__soapCall('GetProducers', array());
 	}
 
@@ -1533,7 +1533,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetProperties(PlentySoapRequest_GetProperties $Request_GetProperties)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetProperties.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetProperties.php';
 		return parent::__soapCall('GetProperties', array(
 			$Request_GetProperties
 		));
@@ -1546,7 +1546,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetPropertiesList(PlentySoapRequest_GetPropertiesList $Request_GetPropertiesList)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetPropertiesList.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetPropertiesList.php';
 		return parent::__soapCall('GetPropertiesList', array(
 			$Request_GetPropertiesList
 		));
@@ -1559,7 +1559,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetPropertyGroups(PlentySoapRequest_GetPropertyGroups $Request_GetPropertyGroups)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetPropertyGroups.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetPropertyGroups.php';
 		return parent::__soapCall('GetPropertyGroups', array(
 			$Request_GetPropertyGroups
 		));
@@ -1571,7 +1571,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetReasonsForReturn()
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetReasonsForReturn.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetReasonsForReturn.php';
 		return parent::__soapCall('GetReasonsForReturn', array());
 	}
 
@@ -1582,7 +1582,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetReorder(PlentySoapRequest_GetReorder $Request_GetReorder)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetReorder.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetReorder.php';
 		return parent::__soapCall('GetReorder', array(
 			$Request_GetReorder
 		));
@@ -1595,7 +1595,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetReturns(PlentySoapRequest_GetReturns $Request_GetReturns)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetReturns.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetReturns.php';
 		return parent::__soapCall('GetReturns', array(
 			$Request_GetReturns
 		));
@@ -1607,7 +1607,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetSalesOrderReferrer()
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetSalesOrderReferrer.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetSalesOrderReferrer.php';
 		return parent::__soapCall('GetSalesOrderReferrer', array());
 	}
 
@@ -1617,7 +1617,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetServerTime()
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetServerTime.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetServerTime.php';
 		return parent::__soapCall('GetServerTime', array());
 	}
 
@@ -1628,7 +1628,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetShippingProfiles(PlentySoapRequest_GetShippingProfiles $Request_GetShippingProfiles)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetShippingProfiles.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetShippingProfiles.php';
 		return parent::__soapCall('GetShippingProfiles', array(
 			$Request_GetShippingProfiles
 		));
@@ -1640,7 +1640,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetShippingServiceProvider()
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetShippingServiceProvider.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetShippingServiceProvider.php';
 		return parent::__soapCall('GetShippingServiceProvider', array());
 	}
 
@@ -1651,7 +1651,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetStockMovements(PlentySoapRequest_GetStockMovements $Request_GetStockMovements)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetStockMovements.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetStockMovements.php';
 		return parent::__soapCall('GetStockMovements', array(
 			$Request_GetStockMovements
 		));
@@ -1664,7 +1664,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetTermsAndCancellation(PlentySoapRequest_GetTermsAndCancellation $Request_GetTermsAndCancellation)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetTermsAndCancellation.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetTermsAndCancellation.php';
 		return parent::__soapCall('GetTermsAndCancellation', array(
 			$Request_GetTermsAndCancellation
 		));
@@ -1676,7 +1676,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetVATConfig()
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetVATConfig.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetVATConfig.php';
 		return parent::__soapCall('GetVATConfig', array());
 	}
 
@@ -1687,7 +1687,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetWarehouseItem(PlentySoapRequest_GetWarehouseItem $Request_GetWarehouseItem)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetWarehouseItem.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetWarehouseItem.php';
 		return parent::__soapCall('GetWarehouseItem', array(
 			$Request_GetWarehouseItem
 		));
@@ -1700,7 +1700,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetWarehouseList(PlentySoapRequest_GetWarehouseList $Request_GetWarehouseList)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetWarehouseList.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetWarehouseList.php';
 		return parent::__soapCall('GetWarehouseList', array(
 			$Request_GetWarehouseList
 		));
@@ -1713,7 +1713,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetWarehouseStorageLocation(PlentySoapRequest_GetWarehouseStorageLocation $Request_GetWarehouseStorageLocation)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetWarehouseStorageLocation.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetWarehouseStorageLocation.php';
 		return parent::__soapCall('GetWarehouseStorageLocation', array(
 			$Request_GetWarehouseStorageLocation
 		));
@@ -1726,7 +1726,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _GetWebshopSettings(PlentySoapRequest_GetWebshopSettings $Request_GetWebshopSettings)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/GetWebshopSettings.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/GetWebshopSettings.php';
 		return parent::__soapCall('GetWebshopSettings', array(
 			$Request_GetWebshopSettings
 		));
@@ -1739,7 +1739,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _RemoveItemsFromBundle(PlentySoapRequest_RemoveItemsFromBundle $Request_RemoveItemsFromBundle)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/RemoveItemsFromBundle.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/RemoveItemsFromBundle.php';
 		return parent::__soapCall('RemoveItemsFromBundle', array(
 			$Request_RemoveItemsFromBundle
 		));
@@ -1752,7 +1752,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _RemovePropertyFromItem(PlentySoapRequest_RemovePropertyFromItem $Request_RemovePropertyFromItem)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/RemovePropertyFromItem.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/RemovePropertyFromItem.php';
 		return parent::__soapCall('RemovePropertyFromItem', array(
 			$Request_RemovePropertyFromItem
 		));
@@ -1765,7 +1765,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SearchItemsSKU(PlentySoapRequest_SearchItemsSKU $Request_SearchItemsSKU)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SearchItemsSKU.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SearchItemsSKU.php';
 		return parent::__soapCall('SearchItemsSKU', array(
 			$Request_SearchItemsSKU
 		));
@@ -1778,7 +1778,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SearchOrders(PlentySoapRequest_SearchOrders $Request_SearchOrders)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SearchOrders.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SearchOrders.php';
 		return parent::__soapCall('SearchOrders', array(
 			$Request_SearchOrders
 		));
@@ -1791,7 +1791,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SetAttributeValueSetsDetails(PlentySoapRequest_SetAttributeValueSetsDetails $Request_SetAttributeValueSetsDetails)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SetAttributeValueSetsDetails.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SetAttributeValueSetsDetails.php';
 		return parent::__soapCall('SetAttributeValueSetsDetails', array(
 			$Request_SetAttributeValueSetsDetails
 		));
@@ -1804,7 +1804,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SetAuctionStartTimestamp(PlentySoapRequest_SetAuctionStartTimestamp $Request_SetAuctionStartTimestamp)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SetAuctionStartTimestamp.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SetAuctionStartTimestamp.php';
 		return parent::__soapCall('SetAuctionStartTimestamp', array(
 			$Request_SetAuctionStartTimestamp
 		));
@@ -1817,7 +1817,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SetBackPostOutgoingItems(PlentySoapRequest_SetBackPostOutgoingItems $Request_SetBackPostOutgoingItems)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SetBackPostOutgoingItems.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SetBackPostOutgoingItems.php';
 		return parent::__soapCall('SetBackPostOutgoingItems', array(
 			$Request_SetBackPostOutgoingItems
 		));
@@ -1830,7 +1830,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SetBankCreditCardData(PlentySoapRequest_SetBankCreditCardData $Request_SetBankCreditCardData)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SetBankCreditCardData.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SetBankCreditCardData.php';
 		return parent::__soapCall('SetBankCreditCardData', array(
 			$Request_SetBankCreditCardData
 		));
@@ -1843,7 +1843,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SetBookOutgoingItems(PlentySoapRequest_SetBookOutgoingItems $Request_SetBookOutgoingItems)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SetBookOutgoingItems.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SetBookOutgoingItems.php';
 		return parent::__soapCall('SetBookOutgoingItems', array(
 			$Request_SetBookOutgoingItems
 		));
@@ -1856,7 +1856,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SetContentPage(PlentySoapRequest_SetContentPage $Request_SetContentPage)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SetContentPage.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SetContentPage.php';
 		return parent::__soapCall('SetContentPage', array(
 			$Request_SetContentPage
 		));
@@ -1869,7 +1869,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SetCurrentStocks(PlentySoapRequest_SetCurrentStocks $Request_SetCurrentStocks)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SetCurrentStocks.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SetCurrentStocks.php';
 		return parent::__soapCall('SetCurrentStocks', array(
 			$Request_SetCurrentStocks
 		));
@@ -1882,7 +1882,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SetCustomerDeliveryAddresses(PlentySoapRequest_SetCustomerDeliveryAddresses $Request_SetCustomerDeliveryAddresses)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SetCustomerDeliveryAddresses.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SetCustomerDeliveryAddresses.php';
 		return parent::__soapCall('SetCustomerDeliveryAddresses', array(
 			$Request_SetCustomerDeliveryAddresses
 		));
@@ -1895,7 +1895,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SetCustomers(PlentySoapRequest_SetCustomers $Request_SetCustomers)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SetCustomers.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SetCustomers.php';
 		return parent::__soapCall('SetCustomers', array(
 			$Request_SetCustomers
 		));
@@ -1908,7 +1908,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SetDynamicImport(PlentySoapRequest_SetDynamicImport $Request_SetDynamicImport)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SetDynamicImport.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SetDynamicImport.php';
 		return parent::__soapCall('SetDynamicImport', array(
 			$Request_SetDynamicImport
 		));
@@ -1921,7 +1921,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SetEmailTemplates(PlentySoapRequest_SetEmailTemplates $Request_SetEmailTemplates)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SetEmailTemplates.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SetEmailTemplates.php';
 		return parent::__soapCall('SetEmailTemplates', array(
 			$Request_SetEmailTemplates
 		));
@@ -1934,7 +1934,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SetIncomingStocks(PlentySoapRequest_SetIncomingStocks $Request_SetIncomingStocks)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SetIncomingStocks.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SetIncomingStocks.php';
 		return parent::__soapCall('SetIncomingStocks', array(
 			$Request_SetIncomingStocks
 		));
@@ -1947,7 +1947,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SetItemsAvailability(PlentySoapRequest_SetItemsAvailability $Request_SetItemsAvailability)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SetItemsAvailability.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SetItemsAvailability.php';
 		return parent::__soapCall('SetItemsAvailability', array(
 			$Request_SetItemsAvailability
 		));
@@ -1960,7 +1960,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SetItemsBase(PlentySoapRequest_SetItemsBase $Request_SetItemsBase)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SetItemsBase.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SetItemsBase.php';
 		return parent::__soapCall('SetItemsBase', array(
 			$Request_SetItemsBase
 		));
@@ -1973,7 +1973,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SetItemsCategories(PlentySoapRequest_SetItemsCategories $Request_SetItemsCategories)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SetItemsCategories.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SetItemsCategories.php';
 		return parent::__soapCall('SetItemsCategories', array(
 			$Request_SetItemsCategories
 		));
@@ -1986,7 +1986,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SetItemsFreeTextFields(PlentySoapRequest_SetItemsFreeTextFields $Request_SetItemsFreeTextFields)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SetItemsFreeTextFields.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SetItemsFreeTextFields.php';
 		return parent::__soapCall('SetItemsFreeTextFields', array(
 			$Request_SetItemsFreeTextFields
 		));
@@ -1999,7 +1999,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SetItemsPurchasePrice(PlentySoapRequest_SetItemsPurchasePrice $Request_SetItemsPurchasePrice)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SetItemsPurchasePrice.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SetItemsPurchasePrice.php';
 		return parent::__soapCall('SetItemsPurchasePrice', array(
 			$Request_SetItemsPurchasePrice
 		));
@@ -2012,7 +2012,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SetItemsSuppliers(PlentySoapRequest_SetItemsSuppliers $Request_SetItemsSuppliers)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SetItemsSuppliers.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SetItemsSuppliers.php';
 		return parent::__soapCall('SetItemsSuppliers', array(
 			$Request_SetItemsSuppliers
 		));
@@ -2025,7 +2025,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SetItemsTexts(PlentySoapRequest_SetItemsTexts $Request_SetItemsTexts)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SetItemsTexts.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SetItemsTexts.php';
 		return parent::__soapCall('SetItemsTexts', array(
 			$Request_SetItemsTexts
 		));
@@ -2038,7 +2038,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SetItemsWarehouseSettings(PlentySoapRequest_SetItemsWarehouseSettings $Request_SetItemsWarehouseSettings)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SetItemsWarehouseSettings.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SetItemsWarehouseSettings.php';
 		return parent::__soapCall('SetItemsWarehouseSettings', array(
 			$Request_SetItemsWarehouseSettings
 		));
@@ -2051,7 +2051,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SetLegalInformation(PlentySoapRequest_SetLegalInformation $Request_SetLegalInformation)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SetLegalInformation.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SetLegalInformation.php';
 		return parent::__soapCall('SetLegalInformation', array(
 			$Request_SetLegalInformation
 		));
@@ -2064,7 +2064,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SetMarketItemNumbers(PlentySoapRequest_SetMarketItemNumbers $Request_SetMarketItemNumbers)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SetMarketItemNumbers.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SetMarketItemNumbers.php';
 		return parent::__soapCall('SetMarketItemNumbers', array(
 			$Request_SetMarketItemNumbers
 		));
@@ -2077,7 +2077,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SetOrderItems(PlentySoapRequest_SetOrderItems $Request_SetOrderItems)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SetOrderItems.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SetOrderItems.php';
 		return parent::__soapCall('SetOrderItems', array(
 			$Request_SetOrderItems
 		));
@@ -2090,7 +2090,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SetOrderItemsQuantity(PlentySoapRequest_SetOrderItemsQuantity $Request_SetOrderItemsQuantity)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SetOrderItemsQuantity.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SetOrderItemsQuantity.php';
 		return parent::__soapCall('SetOrderItemsQuantity', array(
 			$Request_SetOrderItemsQuantity
 		));
@@ -2103,7 +2103,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SetOrderStatus(PlentySoapRequest_SetOrderStatus $Request_SetOrderStatus)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SetOrderStatus.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SetOrderStatus.php';
 		return parent::__soapCall('SetOrderStatus', array(
 			$Request_SetOrderStatus
 		));
@@ -2116,7 +2116,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SetOrdersHead(PlentySoapRequest_SetOrdersHead $Request_SetOrdersHead)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SetOrdersHead.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SetOrdersHead.php';
 		return parent::__soapCall('SetOrdersHead', array(
 			$Request_SetOrdersHead
 		));
@@ -2129,7 +2129,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SetPriceSets(PlentySoapRequest_SetPriceSets $Request_SetPriceSets)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SetPriceSets.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SetPriceSets.php';
 		return parent::__soapCall('SetPriceSets', array(
 			$Request_SetPriceSets
 		));
@@ -2142,7 +2142,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SetProducers(PlentySoapRequest_SetProducers $Request_SetProducers)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SetProducers.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SetProducers.php';
 		return parent::__soapCall('SetProducers', array(
 			$Request_SetProducers
 		));
@@ -2155,7 +2155,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SetReturns(PlentySoapRequest_SetReturns $Request_SetReturns)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SetReturns.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SetReturns.php';
 		return parent::__soapCall('SetReturns', array(
 			$Request_SetReturns
 		));
@@ -2168,7 +2168,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SetShipmentRegistration(PlentySoapRequest_SetShipmentRegistration $Request_SetShipmentRegistration)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SetShipmentRegistration.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SetShipmentRegistration.php';
 		return parent::__soapCall('SetShipmentRegistration', array(
 			$Request_SetShipmentRegistration
 		));
@@ -2181,7 +2181,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SetStocksTransfer(PlentySoapRequest_SetStocksTransfer $Request_SetStocksTransfer)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SetStocksTransfer.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SetStocksTransfer.php';
 		return parent::__soapCall('SetStocksTransfer', array(
 			$Request_SetStocksTransfer
 		));
@@ -2194,7 +2194,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SetTermsAndCancellation(PlentySoapRequest_SetTermsAndCancellation $Request_SetTermsAndCancellation)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SetTermsAndCancellation.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SetTermsAndCancellation.php';
 		return parent::__soapCall('SetTermsAndCancellation', array(
 			$Request_SetTermsAndCancellation
 		));
@@ -2207,7 +2207,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SetWarehouse(PlentySoapRequest_SetWarehouse $Request_SetWarehouse)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SetWarehouse.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SetWarehouse.php';
 		return parent::__soapCall('SetWarehouse', array(
 			$Request_SetWarehouse
 		));
@@ -2220,7 +2220,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function _SetWarranty(PlentySoapRequest_SetWarranty $Request_SetWarranty)
 	{
-		require_once __DIR__ . '/../Models/PlentySoapResponse/SetWarranty.php';
+		require_once PY_SOAP . 'Models/PlentySoapResponse/SetWarranty.php';
 		return parent::__soapCall('SetWarranty', array(
 			$Request_SetWarranty
 		));

@@ -26,9 +26,9 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/Producer.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapRequest/SetProducers.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/GetProducers.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/Producer.php';
+require_once PY_SOAP . 'Models/PlentySoapRequest/SetProducers.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/GetProducers.php';
 
 /**
  *

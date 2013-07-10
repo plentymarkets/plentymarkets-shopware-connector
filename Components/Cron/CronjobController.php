@@ -26,12 +26,12 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once __DIR__ . '/../Config/PlentymarketsConfig.php';
-require_once __DIR__ . '/../Mapping/PlentymarketsMappingController.php';
-require_once __DIR__ . '/../Soap/Client/PlentymarketsSoapClient.php';
-require_once __DIR__ . '/../Utils/PlentymarketsUtils.php';
-require_once __DIR__ . '/../Import/PlentymarketsImportController.php';
-require_once __DIR__ . '/../Export/PlentymarketsExportController.php';
+require_once PY_SOAP . 'Client/PlentymarketsSoapClient.php';
+require_once PY_COMPONENTS . 'Config/PlentymarketsConfig.php';
+require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingController.php';
+require_once PY_COMPONENTS . 'Utils/PlentymarketsUtils.php';
+require_once PY_COMPONENTS . 'Import/PlentymarketsImportController.php';
+require_once PY_COMPONENTS . 'Export/PlentymarketsExportController.php';
 
 /**
  *

@@ -26,8 +26,13 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once __DIR__ . '/Components/Utils/PlentymarketsLogger.php';
-require_once __DIR__ . '/Components/Cron/CronjobController.php';
+define('PY_BASE', __DIR__ . DIRECTORY_SEPARATOR);
+define('PY_COMPONENTS', PY_BASE . 'Components' . DIRECTORY_SEPARATOR);
+define('PY_SOAP', PY_COMPONENTS . 'Soap' . DIRECTORY_SEPARATOR);
+define('PY_CONTROLLERS', PY_BASE . 'Controllers' . DIRECTORY_SEPARATOR);
+
+require_once PY_COMPONENTS . 'Utils/PlentymarketsLogger.php';
+require_once PY_COMPONENTS . 'Cron/CronjobController.php';
 
 class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
@@ -618,31 +623,28 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
      * @param Enlight_Event_EventArgs $args
      * @return string
      */
-    public function onGetControllerPathFrontend(Enlight_Event_EventArgs $args)
-    {
-        return __DIR__ . '/Controllers/Frontend/Plentymarkets.php';
-    }
-
-    /**
-     * Returns the path to a backend controller for an event.
-     *
-     * @param Enlight_Event_EventArgs $args
-     * @return string
-     */
     public function onGetControllerPathBackend(Enlight_Event_EventArgs $args)
     {
     	$this->Application()->Template()->addTemplateDir(
             $this->Path() . 'Views/', 'plentymarkets'
         );
 
-        return dirname(__FILE__) . '/Controllers/Backend/Plentymarkets.php';
+        return PY_CONTROLLERS . 'Backend/Plentymarkets.php';
     }
 
+    /**
+     *
+     * @return string
+     */
     public function getLabel()
     {
     	return 'plentymarkets';
     }
 
+    /**
+     *
+     * @return string
+     */
     public function getVersion()
     {
     	return '0.0.2';

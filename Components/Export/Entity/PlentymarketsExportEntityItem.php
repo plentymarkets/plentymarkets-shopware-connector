@@ -26,34 +26,33 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/AddItemsBaseItemBase.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/Integer.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/ItemAttributeValueSet.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/ItemAvailability.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/ItemCategory.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/ItemFreeTextFields.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/ItemOthers.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/ItemPriceSet.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/ItemProperty.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/ItemStock.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/ItemSupplier.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/ItemTexts.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/String.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapRequest/AddItemsBase.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/FileBase64Encoded.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/ItemImage.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapRequest/AddItemsImage.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/AddPropertyToItem.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapRequest/AddPropertyToItem.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/AddItemAttributeVariationList.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/AttributeVariantion.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/Integer.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapRequest/AddItemAttributeValueSets.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/SetAttributeValueSetsDetails.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapRequest/SetAttributeValueSetsDetails.php';
-
-require_once __DIR__ . '/../../Utils/PlentymarketsUtils.php';
-require_once __DIR__ . '/../../Mapping/PlentymarketsMappingController.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/AddItemsBaseItemBase.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/Integer.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/ItemAttributeValueSet.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/ItemAvailability.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/ItemCategory.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/ItemFreeTextFields.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/ItemOthers.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/ItemPriceSet.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/ItemProperty.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/ItemStock.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/ItemSupplier.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/ItemTexts.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/String.php';
+require_once PY_SOAP . 'Models/PlentySoapRequest/AddItemsBase.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/FileBase64Encoded.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/ItemImage.php';
+require_once PY_SOAP . 'Models/PlentySoapRequest/AddItemsImage.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/AddPropertyToItem.php';
+require_once PY_SOAP . 'Models/PlentySoapRequest/AddPropertyToItem.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/AddItemAttributeVariationList.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/AttributeVariantion.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/Integer.php';
+require_once PY_SOAP . 'Models/PlentySoapRequest/AddItemAttributeValueSets.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/SetAttributeValueSetsDetails.php';
+require_once PY_SOAP . 'Models/PlentySoapRequest/SetAttributeValueSetsDetails.php';
+require_once PY_COMPONENTS . 'Utils/PlentymarketsUtils.php';
+require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingController.php';
 
 /**
  *

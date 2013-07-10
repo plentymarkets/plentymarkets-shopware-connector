@@ -26,7 +26,7 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once __DIR__ . '/../Exception/PlentymarketsMappingExceptionNotExistant.php';
+require_once PY_COMPONENTS . 'Mapping/Exception/PlentymarketsMappingExceptionNotExistant.php';
 
 /**
  *

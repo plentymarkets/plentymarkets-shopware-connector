@@ -26,9 +26,9 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/GetItemCategoryCatalogBase.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapRequest/GetItemCategoryCatalogBase.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapRequest/AddItemCategory.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/GetItemCategoryCatalogBase.php';
+require_once PY_SOAP . 'Models/PlentySoapRequest/GetItemCategoryCatalogBase.php';
+require_once PY_SOAP . 'Models/PlentySoapRequest/AddItemCategory.php';
 
 /**
  *

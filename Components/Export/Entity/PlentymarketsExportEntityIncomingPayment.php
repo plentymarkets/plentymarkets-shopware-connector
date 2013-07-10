@@ -26,8 +26,8 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once __DIR__ . '/../../Soap/Models/PlentySoapObject/AddIncomingPayments.php';
-require_once __DIR__ . '/../../Soap/Models/PlentySoapRequest/AddIncomingPayments.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/AddIncomingPayments.php';
+require_once PY_SOAP . 'Models/PlentySoapRequest/AddIncomingPayments.php';
 
 /**
  *
