@@ -82,16 +82,64 @@ Nach der Pilotphase kann das Plugin auch aus dem shopware Community Store instal
 
 ## Einrichtung
 ### plentymarkets
-Folgende Schritt müssen *vor* der Einrichtung des Plugins innerhalb Ihres plentymarkets System vorgenommen werden.
+Folgende Schritt müssen *vor* der Einrichtung des Plugins innerhalb des plentymarkets Systems vorgenommen werden.
+
 #### Mandant anlegen
+JG
+
 #### Benutzer anlegen
 Legen Sie unter **Einstellungen » Grundeinstellungen » Benutzer » Konten** einen neuen Benutzer an. Dieser Benutzer wird für die Kommunikation zwischen plentymarkets und shopware über die SOAP API verwendet. Definieren Sie den Benutzer deshlab am besten vom Typ **API**.
 
+Folgende Calls werden vom Plugin genutzt:
+
+* AddCustomerDeliveryAddresses
+* AddCustomers
+* AddIncomingPayments
+* AddItemAttribute
+* AddItemAttributeValueSets
+* AddItemCategory
+* AddItemsBase
+* AddItemsImage
+* AddLinkedItems
+* AddOrders
+* AddProperty
+* AddPropertyGroup
+* AddPropertyToItem
+* GetAttributeValueSets
+* GetCurrentStocks
+* GetItemAttributes
+* GetItemCategoryCatalogBase
+* GetItemsBase
+* GetItemsImages
+* GetItemsPriceUpdate
+* GetLinkedItems
+* GetMethodOfPayments
+* GetMultiShops
+* GetOrderStatusList
+* GetPlentyMarketsVersion
+* GetProducers
+* GetPropertiesList
+* GetSalesOrderReferrer
+* GetShippingProfiles
+* GetShippingServiceProvider
+* GetVATConfig
+* GetWarehouseList
+* SearchOrders
+* SetAttributeValueSetsDetails
+* SetProducers
+
+Wenn die Berechtigungen manuell vergeben werden, muss sichergestellt sein, dass der Benutzer **alle** o. g. Calls ausführen darf. Ansonsten kann es zu unerwartetem Verhalten sowohl im shopware als auch im plentymarkets System kommen.
+
 #### Auftragsherkunft (optional)
+Soll den von shopware zu plentymarkets expotierten Aufträgen eine individuelle Herkunft zugeordnet werden, muss diese in plentymarkets unter **Einstellungen » Aufträge » Auftragsherkunft** angelegt werden.
+
 #### Freitextfelder (optional)
+Um die Freitextfelder/Attribute der Artikel aus shopware zu übernehmen, müssen diese in plentymarkets unter **Einstellungen » Artikel » Freitextfelder** definiert werden.
 
 ### shopware
-Nach der Installation und Aktivierung des Plugins über den Plugin Manager müssen sie den Shop-Cache leeren und das shopware-Fenster neu laden, damit der Menüpunkt **Einstellungen » plentymarkets** erscheint. **Achtung:** Bitte unbedingt an folgende Schritte halten!
+Nach der Installation und Aktivierung des Plugins über den Plugin Manager müssen sie den Shop-Cache leeren und das shopware-Fenster neu laden, damit der Menüpunkt **Einstellungen » plentymarkets** erscheint.
+
+**Wichtig:** Damit das Plugin ordnungsgemäß arbeiten kann, müssen die folgenden Schritte genau eingehalten werden.
 
 #### Verbindung zu plentymarkets herstellen
 Geben Sie unter dem Menüpunkt **API** die URL Ihres System sowie die Zugangsdaten des Benutzers ein, mit dem die Kommunikation stattfinden soll. Sie können die Verbindung prüfen, im dem Sie auf den entsprechenden Button *Zugangsdaten testen* klicken.
@@ -164,8 +212,8 @@ Varianten können keine Merkmale haben!
 
 #### Preise
 Plentymarkets erlaubt nur eine Preisstaffelung bis zu eine Tiefe von 6 Staffelungen.
- * erstes PriceSet
 
+ * erstes PriceSet
  * nur für Shopkunden mit INdex EK
 
 #### Warenbestände
