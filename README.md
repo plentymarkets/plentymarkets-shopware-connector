@@ -128,7 +128,7 @@ Folgende Calls werden vom Plugin genutzt:
 * SetAttributeValueSetsDetails
 * SetProducers
 
-Wenn die Berechtigungen manuell vergeben werden, muss sichergestellt sein, dass der Benutzer **alle** o. g. Calls ausführen darf. Ansonsten kann es sowohl im shopware- als auch im plentymarkets System zu unerwartetem Verhalten kommen.
+Wenn die Berechtigungen manuell vergeben werden, muss sichergestellt sein, dass der Benutzer **alle** o. g. Calls ausführen darf. Ansonsten kann es sowohl im shopware- als auch im plentymarkets-System zu unerwartetem Verhalten kommen.
 
 #### Auftragsherkunft (optional)
 Soll den von shopware zu plentymarkets exportierten Aufträgen eine individuelle Herkunft zugeordnet werden, muss diese zuvor in plentymarkets unter **Einstellungen » Aufträge » Auftragsherkunft** angelegt werden.
