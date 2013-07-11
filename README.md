@@ -6,31 +6,31 @@
 
 ## Einleitung
 
-Dieses shopware-Plugin ermöglicht die optimale Verbindung zwischen shopware und plentymarkets. Plentymarkets übernimmt dabei die führende Rolle in der Haltung ihrer Daten.
+Dieses shopware-Plugin ermöglicht die optimale Verbindung zwischen shopware und plentymarkets. plentymarkets übernimmt dabei die führende Rolle in der Haltung der gesamten Daten des jeweiligen Nutzers.
 
-Sofern sie aktuell bereits shopware einsetzen ist die Verlagerung  der Daten auf plentymarkets recht einfach möglich, da hierzu ein eigener Prozess in diesem Plugin integriert wurde. Damit ist eine vollständige Datenübernahme u.a. der Artikelstammdaten, Aufträge oder Kundendaten von shopware zu plentymarkets möglich. Nach der Übertragung erfolgt die weitere Bearbeitung oder Pflege dieser Daten in plentymarkets.
+Für Kunden, die aktuell bereits shopware einsetzen, ist die Überführung der Daten hin zu plentymarkets recht einfach möglich, da hierzu ein eigener Prozess in das Plugin integriert wurde. Damit ist eine vollständige Datenübernahme, u.a. der Artikelstammdaten, Aufträge oder Kundendaten, von shopware zu plentymarkets möglich. Nach der Übertragung erfolgt die weitere Bearbeitung und Pflege dieser Daten in plentymarkets.
 
-Damit diese Daten in beiden System synchron gehalten werden können, nimmt das Plugin in bestimmten zeitlichen Intervallen ein Datenaustausch zwischen beiden Systemen vor. Hierbei werden beispielsweise neue Aufträge von shopware an plentymarkets übertragen oder Warenbestandsänderungen von plentymarkets zu shopware sofern es bei einem der angeschlossenen Marktplätze zu einem Verkauf und somit einer Warenbestandsänderung kam.
+Damit die Daten in beiden Systemen synchron gehalten werden, nimmt das Plugin in bestimmten zeitlichen Intervallen einen Datenaustausch zwischen den beiden Systemen vor. Hierbei werden beispielsweise neue Aufträge von shopware an plentymarkets übertragen oder Warenbestandsänderungen von plentymarkets an shopware gemeldet, sofern es bei einem der angeschlossenen Marktplätze zu einem Verkauf und somit zu einer Warenbestandsänderung kam.
 
-Dieses Plugin wird innerhalb von shopware installiert. Der Datenaustausch zwischen dem Plugin und plentymarkets erfolgt über die plentymarkets SOAP API. Ein Wechsel der plentymarkets Version ist somit unabhängig von einem Plugin-Update möglich, sofern die neue plentymarkets Version die SOAP API Version des installierten Plugins noch unterstützt. Im Regelfall werden plentymarkets SOAP Versionen für 12 Monate gewartet. Nach Ablauf dieser Zeit muss somit ein Wechsel auf die aktuelle Plugin-Version erfolgen. Nach aktueller Planung wird dieses Plugin dauerhaft kostenlos angeboten werden.
+Das Plugin wird innerhalb von shopware installiert. Der Datenaustausch zwischen dem Plugin und plentymarkets erfolgt über die plentymarkets SOAP API. Ein Wechsel der plentymarkets-Version ist somit unabhängig von einem Plugin-Update möglich, sofern die neue plentymarkets-Version die SOAP API-Version des installierten Plugins noch unterstützt. Im Regelfall werden SOAP-Versionen von plentymarkets für 12 Monate gewartet. Nach Ablauf dieser Zeit muss somit ein Wechsel auf die aktuelle Plugin-Version erfolgen. Nach aktueller Planung wird das Plugin dauerhaft kostenlos angeboten werden.
 
 ## Weiterentwicklung & Pflege
 
-Sofern sie Funktionen vermissen: kein Problem! Der vollständige Programmcode ist offen über github verfügbar. Wenn sie eigene Erweiterungen vornehmen möchten, erstellen sie ein Fork unseres Repositories.
+Für Anwender, die spezielle Funktionen vermissen, ist der vollständige Programmcode offen über github verfügbar. Um eigene Erweiterungen vorzunehmen, muss ein Fork unseres Repositories erstellt werden.
 
-Wenn sie allgemeingültige Erweiterungen oder Korrekturen vornehmen möchten, senden sie uns einfach einen commit mit ihren Änderungen. Wir prüfen diese und übernehmen ihre Änderungen nach einer erfolgreichen Prüfung.
+Des Weiteren besteht die Möglichkeit, Vorschläge für allgemeingültige Erweiterungen oder Korrekturen per commit an plentymarkets zu senden. Wir prüfen diese und übernehmen die Änderungsempfehlungen nach einer erfolgreichen Prüfung.
 
-Eine dauerhafte Wartung dieses Plugins auf zukünftige plentymarkets SOAP API Versionen wird nach deren Freigabe zeitnah durch unser Entwicklerteam vorgenommen. Individuelle Erweiterung dieses Plugins können wir im Rahmen von Enterprise-Projekten vornehmen. In allen Anderen Fällen sind individuelle Erweiterungen auch über die von uns empfohlenen shopware-Agenturen möglich.
+Eine dauerhafte Wartung des Plugins auf zukünftige plentymarkets SOAP API-Versionen wird nach deren Freigabe zeitnah durch unser Entwicklerteam vorgenommen. Individuelle Erweiterungen dieses Plugins können wir im Rahmen von Enterprise-Projekten vornehmen. In allen anderen Fällen sind individuelle Erweiterungen auch über die von uns empfohlenen shopware-Agenturen möglich.
 
 ## Installation
 ### Systemvoraussetzungen
-Für das Plugin sind min. **plentymarkets 5.0** und **shopware 4.1** nötig. Innerhalb von shopware muss das **Cron** Plugin installiert und aktiviert sein. Das Cron Plugin ist es­sen­zi­ell für den Datenaustausch.
+Für das Plugin sind mindestens **plentymarkets 5.0** und **shopware 4.1** nötig. Innerhalb von shopware muss das **Cron** Plugin installiert und aktiviert sein. Das Cron Plugin ist es­sen­zi­ell für den Datenaustausch.
 
-Im shopware System muss min. 1 Hersteller vorhanden sein.
+Im shopware-System muss mindestens ein Hersteller vorhanden sein.
 
 ### Installation via github
 #### Herunterladen als Archiv
-Sie können den Quellcode als zip-Archiv direkt und ohne Anmeldung von github herunterladen. Hierfür ist auf Ihrem Server keine Installtion von git erforderlich. Das Archiv muss anschließend in das Verzeichnis
+Der Quellcode kann direkt und ohne Anmeldung als zip-Archiv von github heruntergeladen werden. Hierfür ist auf Ihrem Server keine Installtion von git erforderlich. Das Archiv muss anschließend in das Verzeichnis
 	
 	/Pfad/zu/shopware/engine/shopware/Plugins/Local/Backend/Plentymarkets
 	
@@ -47,12 +47,12 @@ extrahiert werden. Folgende Verzeichnisstruktur sollte danach vorhanden sein:
               					+-Controllers/
               					+-Views/
 
-Anschließend kann das Plugin über den Plugin Manager installiert werden. Der Nachteil an dieser Variante ist, dass sie den Prozess immer wiederholen müssen, sobald es eine Änderung am Plugin gegeben hat.
+Anschließend kann das Plugin über den Plugin Manager installiert werden. Der Nachteil an dieser Variante ist, dass der Prozess immer wiederholt werden muss, sobald es eine Änderung am Plugin gegeben hat.
 
 #### Klonen des Repositories
-Eine komfortablere Variante ist das Klonen des Repositories mittels git. Hierfür muss git auf ihrem Server installiert sein. Weitere Informationen dazu finden sie auf [der Hompage](http://git-scm.com/) von git.
+Eine komfortablere Variante ist das Klonen des Repositorys mittels git. Hierfür muss git auf dem entsprechenden Server installiert sein. Weitere Informationen dazu finden sie auf [der Hompage](http://git-scm.com/) von git.
 
-Das Repository muss in dieses Verzeichnis geklont werden:
+Das Repository muss in folgendes Verzeichnis geklont werden:
 
 	/Pfad/zu/shopware/engine/Shopware/Plugins/Local/Backend
 	
@@ -70,25 +70,25 @@ Das Klonen beginnt:
 	Receiving objects: 100% (853/853), 200.64 KiB | 302 KiB/s, done.
 	Resolving deltas: 100% (430/430), done.
 	
-Anschließend kann das Plugin über den Plugin Manager installiert werden. Sie haben nun den aktuellen Stand des Plugins installiert. Um den Stand zu aktualisieren, gehen sie in das entsprechende verzeichnis, und führen den folgenden Befehl aus:
+Anschließend kann das Plugin über den Plugin Manager installiert werden. Daraufhin ist der aktuelle Stand des Plugins installiert. Um später eine Aktualisierung durchzuführen, muss in dem entsprechenden Verzeichnis der folgende Befehl ausgeführt werden:
 
 	cd /Pfad/zu/shopware/engine/Shopware/Plugins/Local/Backend/Plentymarkets
 	git pull origin master
 	
-Das Plugin muss jetzt ggf. Über den Plugin Manager aktualisiert werden.
+Das Plugin muss jetzt ggf. über den Plugin Manager aktualisiert werden.
 
 ### Installation aus dem Community Store
 Nach der Pilotphase kann das Plugin auch aus dem shopware Community Store installiert werden.
 
 ## Einrichtung
 ### plentymarkets
-Folgende Schritt müssen *vor* der Einrichtung des Plugins innerhalb des plentymarkets Systems vorgenommen werden.
+Folgende Schritte müssen *vor* der Einrichtung des Plugins innerhalb des plentymarkets-Systems ausgeführt werden.
 
 #### Mandant anlegen
 JG
 
 #### Benutzer anlegen
-Legen Sie unter **Einstellungen » Grundeinstellungen » Benutzer » Konten** einen neuen Benutzer an. Dieser Benutzer wird für die Kommunikation zwischen plentymarkets und shopware über die SOAP API verwendet. Definieren Sie den Benutzer deshlab am besten vom Typ **API**.
+Legen Sie unter **Einstellungen » Grundeinstellungen » Benutzer » Konten** einen neuen Benutzer an. Dieser Benutzer wird für die Kommunikation zwischen plentymarkets und shopware über die SOAP API verwendet. Nutzen Sie für den Benutzer deshlab am besten die Typ-Bezeichnung **API**.
 
 Folgende Calls werden vom Plugin genutzt:
 
@@ -128,23 +128,23 @@ Folgende Calls werden vom Plugin genutzt:
 * SetAttributeValueSetsDetails
 * SetProducers
 
-Wenn die Berechtigungen manuell vergeben werden, muss sichergestellt sein, dass der Benutzer **alle** o. g. Calls ausführen darf. Ansonsten kann es zu unerwartetem Verhalten sowohl im shopware als auch im plentymarkets System kommen.
+Wenn die Berechtigungen manuell vergeben werden, muss sichergestellt sein, dass der Benutzer **alle** o. g. Calls ausführen darf. Ansonsten kann es sowohl im shopware- als auch im plentymarkets System zu unerwartetem Verhalten kommen.
 
 #### Auftragsherkunft (optional)
-Soll den von shopware zu plentymarkets expotierten Aufträgen eine individuelle Herkunft zugeordnet werden, muss diese in plentymarkets unter **Einstellungen » Aufträge » Auftragsherkunft** angelegt werden.
+Soll den von shopware zu plentymarkets exportierten Aufträgen eine individuelle Herkunft zugeordnet werden, muss diese zuvor in plentymarkets unter **Einstellungen » Aufträge » Auftragsherkunft** angelegt werden.
 
 #### Freitextfelder (optional)
 Um die Freitextfelder/Attribute der Artikel aus shopware zu übernehmen, müssen diese in plentymarkets unter **Einstellungen » Artikel » Freitextfelder** definiert werden.
 
 ### shopware
-Nach der Installation und Aktivierung des Plugins über den Plugin Manager müssen sie den Shop-Cache leeren und das shopware-Fenster neu laden, damit der Menüpunkt **Einstellungen » plentymarkets** erscheint.
+Nach der Installation und Aktivierung des Plugins über den Plugin Manager muss der Shop-Cache geleert und das shopware-Fenster neu geladen werden, damit der Menüpunkt **Einstellungen » plentymarkets** erscheint.
 
 **Wichtig:** Damit das Plugin ordnungsgemäß arbeiten kann, müssen die folgenden Schritte genau eingehalten werden.
 
 #### Verbindung zu plentymarkets herstellen
 Geben Sie unter dem Menüpunkt **API** die URL Ihres System sowie die Zugangsdaten des Benutzers ein, mit dem die Kommunikation stattfinden soll. Sie können die Verbindung prüfen, im dem Sie auf den entsprechenden Button *Zugangsdaten testen* klicken.
 
-**Achtung:** Das Speichern impliziert ein Testen der Zugangsdaten. Sowohl die *Zugangsdaten testen* Funktionalität als auch das Speichern führen dazu, dass der SOAP Call GetAuthentificationToken aufgerufen wird. Dieser Call ist pro Tag und Benutzer auf 30 Anfrgen limitiert! Sollen sie also wiederholt diese Funktionen nutzen, kann es sein, dass das Abrufen des Tokens bis zum Ende des Tages gesperrt wird.
+**Achtung:** Das Speichern impliziert ein Testen der Zugangsdaten. Sowohl die Funktion *Zugangsdaten testen* als auch das Speichern führen dazu, dass der SOAP Call GetAuthentificationToken aufgerufen wird. Dieser Call ist auf 30 Anfrgen pro Tag und Benutzer limitiert! Werden diese Funktionen wiederholt genutzt, kann es sein, dass das Abrufen des Tokens bis zum Ende des Tages gesperrt wird.
 
 Nach dem Speichern von korrekten Daten, werden die weiteren Reiter **Einstellungen**, **Mapping** und **Datenaustausch** aktiviert. Sobald keine Verbindung zu plentymarkets hergestellt werden kann, werden diese Reiter und jegliche Kommunikation automatisch deaktiviert!
 
