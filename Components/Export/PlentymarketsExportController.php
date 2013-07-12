@@ -170,6 +170,11 @@ class PlentymarketsExportController
 				case 'Item':
 					$this->exportItems();
 					break;
+
+				// Customers
+				case 'Customer':
+					$this->exportCustomers();
+					break;
 			}
 
 			PlentymarketsLogger::getInstance()->message('Export:Initial:' . ucfirst($entity), 'Done!');
@@ -244,6 +249,36 @@ class PlentymarketsExportController
 		}
 
 		$this->Config->setIsExportRunning(0);
+	}
+
+	/**
+	 * Export the items
+	 */
+	protected function exportCustomers()
+	{
+		require_once PY_COMPONENTS . 'Export/Entity/PlentymarketsExportEntityCustomer.php';
+
+		// Set running
+		$this->Config->setCustomerExportStatus('running');
+
+		// Start
+		$this->Config->setCustomerExportTimestampStart(time());
+
+		$Customers = Shopware()->Models()
+			->getRepository('Shopware\Models\Customer\Customer')
+			->findAll();
+
+		foreach ($Customers as $Customer)
+		{
+			$Customer instanceof Shopware\Models\Customer\Customer;
+
+			$PlentymarketsExportEntityItem = new PlentymarketsExportEntityCustomer($Customer);
+			$PlentymarketsExportEntityItem->export();
+		}
+
+		// Set running
+		$this->Config->setCustomerExportTimestampFinished(time());
+		$this->Config->setCustomerExportStatus('success');
 	}
 
 	/**

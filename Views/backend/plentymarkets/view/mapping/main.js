@@ -31,6 +31,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Main', {
 		names['VAT'] = 'Steuersätze';
 		names['ShippingProfile'] = 'Versandarten';
 		names['MethodOfPayment'] = 'Zahlungsarten';
+		names['CustomerClass'] = 'Kundengruppen';
 
 		Ext.create('Shopware.apps.Plentymarkets.store.mapping.Status').load(function(records)
 		{

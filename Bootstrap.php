@@ -492,7 +492,7 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
 			'plenty_mapping_category' => array('id', 's_categories'),
 			'plenty_mapping_country' => array('id', 's_core_countries'),
 			'plenty_mapping_currency' => array('currency', 's_core_currencies'),
-			'plenty_mapping_customer' => array('id', 's_user'),
+			'plenty_mapping_customer' => array('id', 's_order_billingaddress'),
 			'plenty_mapping_item' => array('id', 's_articles'),
 			'plenty_mapping_item_variant' => array('id', 's_articles_details'),
 			'plenty_mapping_measure_unit' => array('id', 's_core_units'),

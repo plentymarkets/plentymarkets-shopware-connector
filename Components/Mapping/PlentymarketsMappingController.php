@@ -110,6 +110,10 @@ class PlentymarketsMappingController
 				's_core_tax',
 				'vat'
 			),
+			'CustomerClass' => array(
+				's_core_customergroups',
+				'customer_class'
+			),
 			'ShippingProfile' => array(
 				's_premium_dispatch',
 				'shipping_profile'

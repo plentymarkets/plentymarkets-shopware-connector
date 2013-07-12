@@ -133,12 +133,31 @@ class PlentymarketsExportEntityOrder
 	 */
 	protected function exportCustomer()
 	{
-		//
-		$PlentymarketsExportEntityCustomer = new PlentymarketsExportEntityCustomer($this->order['customer'], $this->order['billing'], $this->order['shipping']);
-		$PlentymarketsExportEntityCustomer->export();
+		$Customer = Shopware()->Models()
+			->getRepository('Shopware\Models\Customer\Customer')
+			->find($this->order['customer']['id']);
+
+		$Billing = Shopware()->Models()
+			->getRepository('Shopware\Models\Order\Billing')
+			->find($this->order['billing']['id']);
+
+		if (!is_null($this->order['shipping']))
+		{
+			$Shipping = Shopware()->Models()
+				->getRepository('Shopware\Models\Order\Shipping')
+				->find($this->order['shipping']['id']);
+		}
+		else
+		{
+			$Shipping = null;
+		}
 
 		//
-		$this->PLENTY_customerID = $PlentymarketsExportEntityCustomer->getPlentyCustomerID();
+		$PlentymarketsExportEntityOrderCustomer = new PlentymarketsExportEntityCustomer($Customer, $Billing, $Shipping);
+		$PlentymarketsExportEntityOrderCustomer->export();
+
+		//
+		$this->PLENTY_customerID = $PlentymarketsExportEntityOrderCustomer->getPlentyCustomerID();
 
 		// Customer could not be created
 		if ((integer) $this->PLENTY_customerID <= 0)
@@ -151,7 +170,7 @@ class PlentymarketsExportEntityOrder
 		}
 
 		//
-		$this->PLENTY_addressDispatchID = $PlentymarketsExportEntityCustomer->getPlentyAddressDispatchID();
+		$this->PLENTY_addressDispatchID = $PlentymarketsExportEntityOrderCustomer->getPlentyAddressDispatchID();
 
 		// success
 		return true;

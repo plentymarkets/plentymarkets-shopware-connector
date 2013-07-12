@@ -418,6 +418,34 @@ class PlentymarketsImportController
 	 *
 	 * @return array
 	 */
+	public static function getCustomerClassList()
+	{
+		$timestamp = PlentymarketsConfig::getInstance()->getMiscCustomerClassLastImport(0);
+		if (date("dmY") == date('dmY', $timestamp))
+		{
+			return unserialize(PlentymarketsConfig::getInstance()->getMiscCustomerClassSerialized());
+		}
+
+		// Do the request
+		$Response_GetCustomerClassList = PlentymarketsSoapClient::getInstance()->GetCustomerClasses();
+
+		$customerClassList = array();
+		foreach ($Response_GetCustomerClassList->CustomerClasses->item as $CustomerClass)
+		{
+			$CustomerClass instanceof PlentySoapObject_GetCustomerClasses;
+			$customerClassList[$CustomerClass->CustomerClassID] = array('id' => $CustomerClass->CustomerClassID, 'name' => $CustomerClass->CustomerClassName);
+		}
+
+		PlentymarketsConfig::getInstance()->setMiscCustomerClassLastImport(time());
+		PlentymarketsConfig::getInstance()->setMiscCustomerClassSerialized(serialize($customerClassList));
+
+		return $customerClassList;
+	}
+
+	/**
+	 *
+	 * @return array
+	 */
 	public static function getWarehouses()
 	{
 		$timestamp = PlentymarketsConfig::getInstance()->getMiscWarehousesLastImport(0);

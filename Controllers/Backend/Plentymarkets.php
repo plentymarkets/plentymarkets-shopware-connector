@@ -182,6 +182,8 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		$Config->setOutgoingItemsOrderStatus($this->Request()->OutgoingItemsOrderStatus);
 		$Config->setOutgoingItemsID($this->Request()->OutgoingItemsID);
 		$Config->setOutgoingItemsShopwareOrderStatusID($this->Request()->OutgoingItemsShopwareOrderStatusID);
+		$Config->setIncomingPaymentShopwarePaymentFullStatusID($this->Request()->IncomingPaymentShopwarePaymentFullStatusID);
+		$Config->setIncomingPaymentShopwarePaymentPartialStatusID($this->Request()->IncomingPaymentShopwarePaymentPartialStatusID);
 		$Config->setWebstoreID((string) $this->Request()->WebstoreID);
 
 		//
@@ -330,7 +332,8 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 			'ItemAttribute',
 			'ItemProperty',
 			'ItemProducer',
-			'Item'
+			'Item',
+			'Customer',
 		);
 
 		$settings = array(
@@ -425,6 +428,16 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 
 				$data = PlentymarketsImportController::getMethodsOfPayment();
 				break;
+
+			case 'CustomerClass':
+
+				if ($forceReload)
+				{
+					PlentymarketsConfig::getInstance()->setMiscCustomerClassLastImport(0);
+				}
+
+				$data = PlentymarketsImportController::getCustomerClassList();
+				break;
 		}
 
 		$this->View()->assign(array(
@@ -465,6 +478,32 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 					{
 						$row['plentyName'] = $plentyVat[$row['plentyID']]['name'];
 					}
+				}
+
+				break;
+
+			case 'CustomerClass':
+
+				// s_core_tax
+				$rows = Shopware()->Db()
+					->query('
+					SELECT
+							C.id, description AS name,
+							IFNULL(PMC.plentyID, -1) plentyID
+						FROM s_core_customergroups C
+						LEFT JOIN plenty_mapping_customer_class PMC
+							ON PMC.shopwareID = C.id
+						ORDER BY C.tax
+				')
+					->fetchAll();
+
+				$plentyVat = PlentymarketsImportController::getCustomerClassList();
+				foreach ($rows as &$row)
+				{
+// 					if ($row['plentyID'] >= 0)
+// 					{
+						$row['plentyName'] = $plentyVat[$row['plentyID']]['name'];
+// 					}
 				}
 
 				break;

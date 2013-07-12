@@ -32,6 +32,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.dx.Initial', {
 			ItemProperty: 'Eigenschaften/Merkmale',
 			ItemProducer: 'Hersteller',
 			Item: 'Artikel',
+			Customer: 'Kunden',
 		};
 
 		me.store = Ext.create('Shopware.apps.Plentymarkets.store.Export').load();

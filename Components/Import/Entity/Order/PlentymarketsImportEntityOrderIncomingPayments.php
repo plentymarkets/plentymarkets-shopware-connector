@@ -85,5 +85,16 @@ class PlentymarketsImportEntityOrderIncomingPayments extends PlentymarketsImport
 		}
 
 		self::$OrderModule->setPaymentStatus($shopwareOrderId, $paymentStatus, false, 'plentymarkets');
+
+		Shopware()->Db()->query('
+			UPDATE plenty_order
+				SET
+					plentyOrderPaidStatus = 1,
+					plentyOrderPaidTimestamp = NOW()
+				WHERE shopwareId = ?
+		', array(
+				$this->order['id']
+		));
+
 	}
 }
