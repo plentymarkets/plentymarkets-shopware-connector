@@ -22,8 +22,8 @@
  * trademark license. Therefore any rights, titles and interests in the
  * above trademarks remain entirely with the trademark owners.
  *
- * @copyright  Copyright (c) 2013, plentymarkets GmbH (http://www.plentymarkets.com)
- * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
+ * @copyright Copyright (c) 2013, plentymarkets GmbH (http://www.plentymarkets.com)
+ * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
 require_once PY_SOAP . 'Models/PlentySoapObject/Integer.php';
@@ -66,6 +66,9 @@ require_once PY_SOAP . 'Models/PlentySoapResponseObject/GetItemsPriceUpdate.php'
 require_once PY_COMPONENTS . 'Import/Entity/PlentymarketsImportEntityItem.php';
 require_once PY_COMPONENTS . 'Import/Entity/PlentymarketsImportEntityItemLinked.php';
 require_once PY_COMPONENTS . 'Import/Entity/PlentymarketsImportEntityItemStock.php';
+require_once PY_COMPONENTS . 'Import/Entity/Order/PlentymarketsImportEntityOrderAbstract.php';
+require_once PY_COMPONENTS . 'Import/Entity/Order/PlentymarketsImportEntityOrderIncomingPayments.php';
+require_once PY_COMPONENTS . 'Import/Entity/Order/PlentymarketsImportEntityOrderOutgoingItems.php';
 
 class PlentymarketsImportController
 {
@@ -177,6 +180,7 @@ class PlentymarketsImportController
 
 		// Warenbestände abrufen (für ein bestimmtes Lager, oder -1)
 
+
 		PlentymarketsLogger::getInstance()->message('Sync:Item:Price', 'LastUpdate: ' . date('r', PlentymarketsConfig::getInstance()->getImportItemPriceLastUpdateTimestamp(time())));
 		$timestamp = PlentymarketsConfig::getInstance()->getImportItemPriceLastUpdateTimestamp(time());
 		$now = time();
@@ -235,100 +239,16 @@ class PlentymarketsImportController
 	 */
 	public static function importOrders()
 	{
-		$Request_SearchOrders = new PlentySoapRequest_SearchOrders();
-		$Request_SearchOrders->GetIncomingPayments = false; // boolean
-		$Request_SearchOrders->GetOrderCustomerAddress = false; // boolean
-		$Request_SearchOrders->GetOrderDeliveryAddress = false; // boolean
-		$Request_SearchOrders->GetOrderDocumentNumbers = false; // boolean
-		$Request_SearchOrders->GetOrderInfo = false; // boolean
-		$Request_SearchOrders->GetParcelService = false; // boolean
-		$Request_SearchOrders->GetSalesOrderProperties = false; // boolean
-		$Request_SearchOrders->WebstoreID = PlentymarketsConfig::getInstance()->getWebstoreID(); // int
-		$Request_SearchOrders->OrderType = 'order'; // string
-		$Request_SearchOrders->Page = 0;
+		$PlentymarketsImportEntityOrderIncomingPayments = new PlentymarketsImportEntityOrderIncomingPayments();
+		$PlentymarketsImportEntityOrderIncomingPayments->import();
 
-		$timestamp = PlentymarketsConfig::getInstance()->getImportOrderLastUpdateTimestamp(0);
-		PlentymarketsLogger::getInstance()->message('Sync:Order:OutgoingItems', 'LastUpdate: ' . date('r', $timestamp));
-
-		if (PlentymarketsConfig::getInstance()->getOutgoingItemsOrderStatus(0))
-		{
-			$Request_SearchOrders->LastUpdateFrom = $timestamp; // int
-			$Request_SearchOrders->OrderStatus = (float) PlentymarketsConfig::getInstance()->getOutgoingItemsOrderStatus(); // float
-			PlentymarketsLogger::getInstance()->message('Sync:Order:OutgoingItems', 'Mode: Status (' . $Request_SearchOrders->OrderStatus . ')');
-		}
-
-		else
-		{
-			$Request_SearchOrders->OrderCompletedFrom = $timestamp; // int
-			PlentymarketsLogger::getInstance()->message('Sync:Order:OutgoingItems', 'Mode: Outgoing items');
-		}
-
-		// Helper
-		$timestamp = time();
-		$numberOfOrdersUpdated = 0;
-		$OrderResource = \Shopware\Components\Api\Manager::getResource('Order');
-		$orderModule = Shopware()->Modules()->Order();
-		$orderStatus = PlentymarketsConfig::getInstance()->getOutgoingItemsShopwareOrderStatusID(7);
-
-		do
-		{
-			$Response_SearchOrders = PlentymarketsSoapClient::getInstance()->SearchOrders($Request_SearchOrders);
-
-			//
-			$pages = max($Response_SearchOrders->Pages, 1);
-
-			PlentymarketsLogger::getInstance()->message('Sync:Order:OutgoingItems', 'Page: ' . ($Request_SearchOrders->Page + 1) . '/' . $pages);
-
-			if ($Response_SearchOrders->Success == false)
-			{
-				PlentymarketsLogger::getInstance()->error('Sync:Order:OutgoingItems', 'failed');
-				break;
-			}
-
-			PlentymarketsLogger::getInstance()->message('Sync:Order:OutgoingItems', 'Received ' . count($Response_SearchOrders->Orders->item) . ' items');
-
-			// Jeden Artikel in Shopware "importieren"
-			foreach ($Response_SearchOrders->Orders->item as $Order)
-			{
-				$Order = $Order->OrderHead;
-				$Order instanceof PlentySoapObject_OrderHead;
-				try
-				{
-					$orderId = $Order->ExternalOrderID;
-					if (strstr($orderId, 'Swag/') === false)
-					{
-						PlentymarketsLogger::getInstance()->error('Sync:Order:OutgoingItems', 'The sales order with the external order id ' . $Order->ExternalOrderID . ' could not be updated because it isn\'t a shopware order');
-						continue;
-					}
-
-					$SHOPWARE_orderId = PlentymarketsUtils::getShopwareIDFromExternalOrderID($orderId);
-					if ($SHOPWARE_orderId <= 0)
-					{
-						PlentymarketsLogger::getInstance()->error('Sync:Order:OutgoingItems', 'The sales order with the external order id ' . $Order->ExternalOrderID . ' could not be updated');
-						continue;
-					}
-
-					$orderModule->setOrderStatus($SHOPWARE_orderId, $orderStatus, false, 'plentymarkets');
-					PlentymarketsLogger::getInstance()->message('Sync:Order:OutgoingItems', 'The sales order with the id ' . $orderId . ' has been marked sent.');
-
-					++$numberOfOrdersUpdated;
-				}
-				catch (Exception $E)
-				{
-					PlentymarketsLogger::getInstance()->error('Sync:Order:OutgoingItems', 'The sales order with the external order id ' . $Order->ExternalOrderID . ' could not be updated');
-					PlentymarketsLogger::getInstance()->error('Sync:Order:OutgoingItems', $E->getMessage());
-				}
-			}
-		}
-
-		// Until all pages are received
-		while (++$Request_SearchOrders->Page < $Response_SearchOrders->Pages);
-
-		//
-		PlentymarketsLogger::getInstance()->message('Sync:Order:OutgoingItems', $numberOfOrdersUpdated . ' sales orders have been marked as sent');
-		PlentymarketsConfig::getInstance()->setImportOrderLastUpdateTimestamp($timestamp);
+		$PlentymarketsImportEntityOrderOutgoingItems = new PlentymarketsImportEntityOrderOutgoingItems();
+		$PlentymarketsImportEntityOrderOutgoingItems->import();
 	}
 
+	/**
+	 * Updates orders
+	 */
 	/**
 	 * Update stocks
 	 */
@@ -338,6 +258,7 @@ class PlentymarketsImportController
 		$Request_GetCurrentStocks->LastUpdate = PlentymarketsConfig::getInstance()->getImportItemStockLastUpdateTimestamp(-1); // int
 		$Request_GetCurrentStocks->Page = 0;
 		$Request_GetCurrentStocks->WarehouseID = PlentymarketsConfig::getInstance()->getItemWarehouseID(0); // int
+
 
 		PlentymarketsLogger::getInstance()->message('Sync:Item:Stock', 'LastUpdate: ' . date('r', PlentymarketsConfig::getInstance()->getImportItemStockLastUpdateTimestamp(-1)));
 		PlentymarketsLogger::getInstance()->message('Sync:Item:Stock', 'WarehouseId: ' . PlentymarketsConfig::getInstance()->getItemWarehouseID(0));
@@ -393,6 +314,7 @@ class PlentymarketsImportController
 
 	/**
 	 * Fetches the methods of payments
+	 *
 	 * @return array
 	 */
 	public static function getMethodsOfPayment()
@@ -574,6 +496,7 @@ class PlentymarketsImportController
 		$Request_GetShippingProfiles = new PlentySoapRequest_GetShippingProfiles();
 		$Request_GetShippingProfiles->GetShippingCharges = false; // boolean
 		$Request_GetShippingProfiles->ShippingProfileID = null; // int
+
 
 		$providers = array();
 

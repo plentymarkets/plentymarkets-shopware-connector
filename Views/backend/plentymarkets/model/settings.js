@@ -82,6 +82,12 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		type: 'integer',
 		'default': 7
 	}, {
+		name: 'IncomingPaymentShopwarePaymentFullStatusID',
+		type: 'integer',
+	}, {
+		name: 'IncomingPaymentShopwarePaymentPartialStatusID',
+		type: 'integer',
+	}, {
 		name: 'OrderPaidStatusID',
 		type: 'integer',
 		'default': 12

@@ -154,6 +154,8 @@ class PlentymarketsUtils
 			!is_null($Config->getOrderPaidStatusID()) &&
 			!is_null($Config->getOutgoingItemsID()) &&
 			!is_null($Config->getOutgoingItemsShopwareOrderStatusID()) &&
+			!is_null($Config->getIncomingPaymentShopwarePaymentFullStatusID()) &&
+			!is_null($Config->getIncomingPaymentShopwarePaymentPartialStatusID()) &&
 			!is_null($Config->getWebstoreID())
 		);
 

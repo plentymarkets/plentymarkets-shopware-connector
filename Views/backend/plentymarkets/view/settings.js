@@ -292,7 +292,6 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/OutgoingItemsIntervalID}Abfrageintervall{/s}',
 				name: 'OutgoingItemsIntervalID',
 				store: Ext.create('Shopware.apps.Plentymarkets.store.outgoing_items.Interval').load(),
-				// supportText: 'Wie oft sollen das geprüft werden?',
 				queryMode: 'local',
 				displayField: 'name',
 				valueField: 'id',
@@ -304,7 +303,39 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 				name: 'OutgoingItemsShopwareOrderStatusID',
 				store: Ext.create('Shopware.apps.Base.store.OrderStatus').load(),
 				emptyText: '---',
-				// supportText: 'Wie oft sollen das geprüft werden?',
+				queryMode: 'local',
+				displayField: 'description',
+				valueField: 'id',
+				allowBlank: false,
+				editable: false
+			}
+
+			]
+		}, {
+			xtype: 'fieldset',
+			title: 'Zahlungseingang bei plentymarkets',
+			layout: 'anchor',
+			defaults: {
+				labelWidth: 155,
+				anchor: '100%'
+			},
+			items: [{
+				xtype: 'combo',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/IncomingPaymentShopwarePaymentFullStatusID}shopware Zahlungsstatus (komplett bezhalt){/s}',
+				name: 'IncomingPaymentShopwarePaymentFullStatusID',
+				store: Ext.create('Shopware.apps.Base.store.PaymentStatus').load(),
+				emptyText: '---',
+				queryMode: 'local',
+				displayField: 'description',
+				valueField: 'id',
+				allowBlank: false,
+				editable: false
+			}, {
+				xtype: 'combo',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/IncomingPaymentShopwarePaymentPartialStatusID}shopware Zahlungsstatus (teilweise bezhalt){/s}',
+				name: 'IncomingPaymentShopwarePaymentPartialStatusID',
+				store: Ext.create('Shopware.apps.Base.store.PaymentStatus').load(),
+				emptyText: '---',
 				queryMode: 'local',
 				displayField: 'description',
 				valueField: 'id',
