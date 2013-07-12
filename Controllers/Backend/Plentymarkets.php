@@ -174,6 +174,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 
 		// Item
 		$Config->setItemWarehouseID((string) $this->Request()->ItemWarehouseID);
+		$Config->setItemWarehousePercentage((string) $this->Request()->ItemWarehousePercentage);
 		$Config->setItemProducerID($this->Request()->ItemProducerID);
 		$Config->setOrderMarking1($this->Request()->OrderMarking1);
 		$Config->setOrderReferrerID((string) $this->Request()->OrderReferrerID);

@@ -148,6 +148,17 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 				allowBlank: false,
 				editable: false
 			}, {
+				xtype: 'slider',
+				increment: 1,
+				minValue: 0,
+				maxValue: 100,
+				value: 90,
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/Warenbestandspuffer}Warenbestandspuffer{/s}',
+				name: 'ItemWarehousePercentage',
+				supportText: 'Wieviel Prozent des netto-Warenbestandes sollen in shopware gebucht werden?',
+				allowBlank: false,
+				editable: false
+			}, {
 				xtype: 'combo',
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/WebstoreID}Mandant (Shop){/s}',
 				name: 'WebstoreID',

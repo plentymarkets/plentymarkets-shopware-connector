@@ -28,7 +28,7 @@
 
 
 /**
- * 
+ *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  *
  */
@@ -37,19 +37,26 @@ class PlentymarketsImportEntityItemStock
 
 	/**
 	 *
-	 * @param integer $itemDetailsID        	
-	 * @param float $stock        	
+	 * @param integer $itemDetailsID
+	 * @param float $stock
 	 */
 	public static function update($itemDetailsID, $stock)
 	{
 		$Detail = Shopware()->Models()
 			->getRepository('Shopware\Models\Article\Detail')
 			->find($itemDetailsID);
-		
+
+		$itemWarehousePercentage = PlentymarketsConfig::getInstance()->getItemWarehousePercentage(100);
+
+		if ($itemWarehousePercentage > 100 || $itemWarehousePercentage <= 0)
+		{
+			$itemWarehousePercentage = 100;
+		}
+
 		$Detail->fromArray(array(
-			'inStock' => $stock
+			'inStock' => ceil($stock / 100 * $itemWarehousePercentage)
 		));
-		
+
 		Shopware()->Models()->persist($Detail);
 		Shopware()->Models()->flush();
 	}

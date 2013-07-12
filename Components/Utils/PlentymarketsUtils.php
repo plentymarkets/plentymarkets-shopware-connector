@@ -147,6 +147,7 @@ class PlentymarketsUtils
 		// Check whether all settings are set properly
 		$settingsStatus = (
 			!is_null($Config->getOutgoingItemsIntervalID()) &&
+			!is_null($Config->getItemWarehousePercentage()) &&
 			!is_null($Config->getItemWarehouseID()) &&
 			!is_null($Config->getItemProducerID()) &&
 			!is_null($Config->getOrderReferrerID()) &&
