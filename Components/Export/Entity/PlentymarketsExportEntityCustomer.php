@@ -149,7 +149,8 @@ class PlentymarketsExportEntityCustomer
 		$Object_AddCustomersCustomer->Company = $this->BillingAddress->getCompany();
 		$Object_AddCustomersCustomer->CountryID = $this->getBillingCountryID(); // int
 		$Object_AddCustomersCustomer->CustomerNumber = $this->getCustomerNumber(); // string
-		$Object_AddCustomersCustomer->CustomerClass = PlentymarketsMappingController::getCustomerClassByShopwareID($this->Customer->getGroup()->getId());
+		// Bug in shopware - $this->Customer->getGroup()->getId() always returns 0
+		// $Object_AddCustomersCustomer->CustomerClass = PlentymarketsMappingController::getCustomerClassByShopwareID($this->Customer->getGroup()->getId());
 		$Object_AddCustomersCustomer->CustomerSince = $this->Customer->getFirstLogin()->getTimestamp(); // int
 		$Object_AddCustomersCustomer->Email = $this->Customer->getEmail(); // string
 		$Object_AddCustomersCustomer->ExternalCustomerID = PlentymarketsUtils::getExternalCustomerID($this->Customer->getId()); // string
