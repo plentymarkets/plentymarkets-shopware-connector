@@ -123,7 +123,11 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 				'producers' => Shopware()->Db()
 					->fetchAll('
 						SELECT id, name FROM s_articles_supplier ORDER BY name
-			')
+					'),
+				'categories' => Shopware()->Db()
+					->fetchAll('
+						SELECT id, description AS name FROM s_categories WHERE parent IS NOT NULL AND path IS NULL
+					')
 			)
 		));
 	}
@@ -174,6 +178,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 
 		// Item
 		$Config->setItemWarehouseID((string) $this->Request()->ItemWarehouseID);
+		$Config->setItemCategoryRootID((string) $this->Request()->ItemCategoryRootID);
 		$Config->setItemWarehousePercentage((string) $this->Request()->ItemWarehousePercentage);
 		$Config->setItemProducerID($this->Request()->ItemProducerID);
 		$Config->setOrderMarking1($this->Request()->OrderMarking1);

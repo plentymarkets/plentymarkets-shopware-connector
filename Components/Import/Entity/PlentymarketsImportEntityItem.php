@@ -191,7 +191,7 @@ class PlentymarketsImportEntityItem
 	 */
 	protected function setCategories()
 	{
-		$parentId = 1;
+		$parentId = PlentymarketsConfig::getInstance()->getItemCategoryRootID(3);
 		$CategoryRepository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
 
 		// Kategorien
@@ -786,8 +786,6 @@ class PlentymarketsImportEntityItem
 				PlentymarketsLogger::getInstance()->error('Sync:Item', 'Item could not be created: ' . $this->data['name']);
 			}
 		}
-
-		$ArticleResource->flush();
 
 		// Der Hersteller ist neu angelegt worden
 		if (array_key_exists('supplier', $this->data))

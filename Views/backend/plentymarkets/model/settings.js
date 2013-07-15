@@ -54,6 +54,9 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		name: 'ItemWarehouseID',
 		type: 'integer'
 	}, {
+		name: 'ItemCategoryRootID',
+		type: 'integer'
+	}, {
 		name: 'ItemWarehousePercentage',
 		type: 'integer'
 	}, {

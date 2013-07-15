@@ -49,8 +49,8 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 		{
 			return;
 		}
-		me.store = Ext.create('Shopware.apps.Plentymarkets.store.settings.Batch');
 		me.setLoading(true);
+		me.store = Ext.create('Shopware.apps.Plentymarkets.store.settings.Batch');
 		me.store.load(function(data)
 		{
 			data = data[0]
@@ -59,6 +59,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 			me.stores.multishops = data.getMultishops();
 			me.stores.orderStatus = data.getOrderStatus();
 			me.stores.orderReferrer = data.getOrderReferrer();
+			me.stores.categories = data.getCategories();
 
 			me.add(me.getFieldSets())
 			me.addDocked(me.createToolbar());
@@ -127,6 +128,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 	getFieldSets: function()
 	{
 		var me = this;
+		var paymentStatusStore = Ext.create('Shopware.apps.Base.store.PaymentStatus').load();
 
 		return [{
 			xtype: 'fieldset',
@@ -180,6 +182,17 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 				valueField: 'id',
 				allowBlank: false,
 				editable: false
+			}, {
+				xtype: 'combo',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemCategoryRootID}Kategorie Startknoten{/s}',
+				name: 'ItemCategoryRootID',
+				store: me.stores.categories,
+				supportText: '...',
+				queryMode: 'local',
+				displayField: 'name',
+				valueField: 'id',
+				allowBlank: false,
+				editable: false
 			}
 
 			]
@@ -223,7 +236,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 				xtype: 'combo',
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/OrderPaidStatusID}Status bezahlt{/s}',
 				name: 'OrderPaidStatusID',
-				store: Ext.create('Shopware.apps.Base.store.PaymentStatus').load(),
+				store: paymentStatusStore,
 				supportText: 'Aufträge die dieses Status erreichen, werden bei plenty als bezahlt markiert und der Zahlungseingang gebucht.',
 				queryMode: 'local',
 				displayField: 'description',
@@ -323,7 +336,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 				xtype: 'combo',
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/IncomingPaymentShopwarePaymentFullStatusID}shopware Zahlungsstatus (komplett bezhalt){/s}',
 				name: 'IncomingPaymentShopwarePaymentFullStatusID',
-				store: Ext.create('Shopware.apps.Base.store.PaymentStatus').load(),
+				store: paymentStatusStore,
 				emptyText: '---',
 				queryMode: 'local',
 				displayField: 'description',
@@ -334,7 +347,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 				xtype: 'combo',
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/IncomingPaymentShopwarePaymentPartialStatusID}shopware Zahlungsstatus (teilweise bezhalt){/s}',
 				name: 'IncomingPaymentShopwarePaymentPartialStatusID',
-				store: Ext.create('Shopware.apps.Base.store.PaymentStatus').load(),
+				store: paymentStatusStore,
 				emptyText: '---',
 				queryMode: 'local',
 				displayField: 'description',

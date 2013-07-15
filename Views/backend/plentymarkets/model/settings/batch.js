@@ -33,6 +33,11 @@ Ext.define('Shopware.apps.Plentymarkets.model.settings.Batch', {
 		model: 'Shopware.apps.Plentymarkets.model.Producer',
 		name: 'getProducers',
 		associationKey: 'producers'
+	}, {
+		type: 'hasMany',
+		model: 'Shopware.apps.Plentymarkets.model.Category',
+		name: 'getCategories',
+		associationKey: 'categories'
 	}]
 });
 // {/block}
