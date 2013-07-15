@@ -58,7 +58,8 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		type: 'integer'
 	}, {
 		name: 'ItemWarehousePercentage',
-		type: 'integer'
+		type: 'integer',
+		defaultValue: 90
 	}, {
 		name: 'ItemProducerID',
 		type: 'integer'
@@ -67,7 +68,8 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		type: 'integer'
 	}, {
 		name: 'OrderReferrerID',
-		type: 'integer'
+		type: 'integer',
+		defaultValue: 1
 	}, {
 		name: 'OrderMarking1',
 		type: 'integer'
@@ -82,18 +84,19 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		type: 'integer'
 	}, {
 		name: 'OutgoingItemsShopwareOrderStatusID',
-		type: 'integer',
-		'default': 7
+		type: 'integer'
 	}, {
 		name: 'IncomingPaymentShopwarePaymentFullStatusID',
 		type: 'integer',
+		defaultValue: 12
 	}, {
 		name: 'IncomingPaymentShopwarePaymentPartialStatusID',
 		type: 'integer',
+		defaultValue: 11
 	}, {
 		name: 'OrderPaidStatusID',
 		type: 'integer',
-		'default': 12
+		defaultValue: 12
 	},
 
 	],

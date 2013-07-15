@@ -187,7 +187,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemCategoryRootID}Kategorie Startknoten{/s}',
 				name: 'ItemCategoryRootID',
 				store: me.stores.categories,
-				supportText: '...',
+//				supportText: '...',
 				queryMode: 'local',
 				displayField: 'name',
 				valueField: 'id',

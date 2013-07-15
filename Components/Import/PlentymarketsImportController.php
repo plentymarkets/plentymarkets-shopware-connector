@@ -497,9 +497,16 @@ class PlentymarketsImportController
 		foreach ($Response_GetMultiShops->MultiShops->item as $Multishop)
 		{
 			$Multishop instanceof PlentySoapObject_GetMultiShops;
+
+			$name = $Multishop->MultiShopName;
+			if ($Multishop->MultiShopURL)
+			{
+				$name .= sprintf(' (%s)', $Multishop->MultiShopURL);
+			}
+
 			$multishops[$Multishop->MultiShopsID] = array(
 				'id' => $Multishop->MultiShopsID,
-				'name' => $Multishop->MultiShopName . ' (' . $Multishop->MultiShopURL . ')'
+				'name' => $name
 			);
 		}
 
