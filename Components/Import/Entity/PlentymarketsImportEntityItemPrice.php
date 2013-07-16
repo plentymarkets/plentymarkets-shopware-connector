@@ -80,6 +80,7 @@ class PlentymarketsImportEntityItemPrice
 	protected function getPrices()
 	{
 		$prices = array();
+		$customerGroupKey = PlentymarketsConfig::getInstance()->getDefaultCustomerGroupKey();
 
 		// Prices
 		if ($this->PLENTY_PriceSet->RebateLevelPrice6 > 0)
@@ -87,7 +88,7 @@ class PlentymarketsImportEntityItemPrice
 			$price = array(
 				'from' => 1,
 				'to' => $this->PLENTY_PriceSet->RebateLevelPrice6 - 1,
-				'customerGroupKey' => 'EK',
+				'customerGroupKey' => $customerGroupKey,
 				'price' => $this->PLENTY_PriceSet->Price,
 // 				'pseudoPrice' => $this->PLENTY_PriceSet->RRP,
 // 				'basePrice' => $this->PLENTY_PriceSet->PurchasePriceNet,
@@ -113,7 +114,7 @@ class PlentymarketsImportEntityItemPrice
 					}
 
 					$price = array(
-						'customerGroupKey' => 'EK',
+						'customerGroupKey' => $customerGroupKey,
 						'from' => $this->PLENTY_PriceSet->$rebateLevel,
 						'to' => $to,
 						'price' => $this->PLENTY_PriceSet->$price,
@@ -130,7 +131,7 @@ class PlentymarketsImportEntityItemPrice
 		else
 		{
 			$price = array(
-				'customerGroupKey' => 'EK',
+				'customerGroupKey' => $customerGroupKey,
 				'price' => $this->PLENTY_PriceSet->Price,
 				'pseudoPrice' => $this->PLENTY_PriceSet->RRP
 			);

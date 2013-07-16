@@ -59,6 +59,10 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		type: 'integer',
 		defaultValue: 3
 	}, {
+		name: 'DefaultCustomerGroupKey',
+		type: 'string',
+		defaultValue: 'EK'
+	}, {
 		name: 'ItemWarehousePercentage',
 		type: 'integer',
 		defaultValue: 90

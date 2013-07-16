@@ -350,7 +350,7 @@ class PlentymarketsExportEntityItem
 		$prices = array();
 		$ItemPrice = Shopware()->Models()->getRepository('Shopware\Models\Article\Price');
 		foreach ($ItemPrice->findBy(array(
-			'customerGroupKey' => 'EK',
+			'customerGroupKey' => PlentymarketsConfig::getInstance()->getDefaultCustomerGroupKey(),
 			'articleDetailsId' => $MainDetail->getId()
 		)) as $ItemPrice)
 		{

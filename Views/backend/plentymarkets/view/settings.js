@@ -193,6 +193,16 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 				valueField: 'id',
 				allowBlank: false,
 				editable: false
+			}, {
+				xtype: 'combo',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/DefaultCustomerGroupKey}Standard-Kundenklasse{/s}',
+				name: 'DefaultCustomerGroupKey',
+				store: Ext.create('Shopware.apps.Base.store.CustomerGroup').load(),
+				queryMode: 'local',
+				displayField: 'name',
+				valueField: 'key',
+				allowBlank: false,
+				editable: false
 			}
 
 			]

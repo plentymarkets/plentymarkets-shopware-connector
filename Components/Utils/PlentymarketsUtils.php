@@ -150,6 +150,7 @@ class PlentymarketsUtils
 			!is_null($Config->getItemWarehousePercentage()) &&
 			!is_null($Config->getItemWarehouseID()) &&
 			!is_null($Config->getItemCategoryRootID()) &&
+			!is_null($Config->getDefaultCustomerGroupKey()) &&
 			!is_null($Config->getItemProducerID()) &&
 			!is_null($Config->getOrderReferrerID()) &&
 			!is_null($Config->getOrderPaidStatusID()) &&
