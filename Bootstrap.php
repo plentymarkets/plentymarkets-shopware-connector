@@ -66,6 +66,7 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
 			'plenty_mapping_country',
 			'plenty_mapping_currency',
 			'plenty_mapping_customer',
+			'plenty_mapping_customer_class',
 			'plenty_mapping_item',
 			'plenty_mapping_item_variant',
 			'plenty_mapping_measure_unit',
@@ -186,6 +187,15 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
 			CREATE TABLE `plenty_mapping_customer` (
 			  `shopwareID` int(11) unsigned NOT NULL,
 			  `plentyID` int(11) unsigned NOT NULL,
+			  PRIMARY KEY (`shopwareID`,`plentyID`),
+			  UNIQUE KEY `plentyID` (`plentyID`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+		");
+
+		Shopware()->Db()->exec("
+			CREATE TABLE `plenty_mapping_customer_class` (
+			  `shopwareID` int(11) unsigned NOT NULL,
+			  `plentyID` int(11) NOT NULL,
 			  PRIMARY KEY (`shopwareID`,`plentyID`),
 			  UNIQUE KEY `plentyID` (`plentyID`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
