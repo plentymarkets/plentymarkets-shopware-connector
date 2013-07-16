@@ -52,10 +52,12 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 
 	{
 		name: 'ItemWarehouseID',
-		type: 'integer'
+		type: 'integer',
+		defaultValue: 0
 	}, {
 		name: 'ItemCategoryRootID',
-		type: 'integer'
+		type: 'integer',
+		defaultValue: 3
 	}, {
 		name: 'ItemWarehousePercentage',
 		type: 'integer',
@@ -84,7 +86,8 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		type: 'integer'
 	}, {
 		name: 'OutgoingItemsShopwareOrderStatusID',
-		type: 'integer'
+		type: 'integer',
+		defaultValue: 7
 	}, {
 		name: 'IncomingPaymentShopwarePaymentFullStatusID',
 		type: 'integer',
@@ -106,8 +109,8 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 
         api: {
         	read:   '{url action=readSettings}',
-            update: '{url action="saveSettings"}',
-            delete: '{url action="deleteSettings"}'
+            update: '{url action=saveSettings}',
+            delete: '{url action=deleteSettings}'
         },
 
 		reader: {
