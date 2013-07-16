@@ -153,15 +153,20 @@ Die Einstellungen in den im Folgenden genannten Bereichen *müssen* vorgenommen 
 
 Die Daten, die von plentymarkets geladen werden, werden für einen Tag gespeichert.
 
- * Mandant (Zuordnung zu Ihrem shopware-System innerhalb von plentymarkets)
- * Lager (Datenquelle für den Warenbestandsabgleich)
- * Hersteller (in shopware erforderlich, in plentymarkets optional)
- * Herkunft (Zuordnung der Aufträge zu einer Herkunft)
- * Status: bezahlt (shopware Status, der signalisiert, dass der Auftrag komplett bezahlt ist. Löst das Buchen des Zahlungseinganges bei plentymarkets aus)
- * Status: versendet (shopware Status, der gesetzt wird, wenn bei einem Auftrag innerhalb von plentymarkets der Warenausgang gebucht wird)
- * Warenausgang (definiert die Bedingung, mit der "versendete" Aufträge aus plentymarkets abgerufen werden)
- * Warenausgang (Intervall der Auftragssynchronisation)
-
+Einstellung | Erklärung
+----|------
+Mandant | Zuordnung zu Ihrem shopware-System innerhalb von plentymarkets  
+Lager | Datenquelle für den Warenbestandsabgleich  
+Hersteller | in shopware erforderlich, in plentymarkets optional 
+Herkunft | Zuordnung der Aufträge zu einer Herkunft 
+Status: bezahlt | shopware Status, der signalisiert, dass der Auftrag komplett bezahlt ist. Löst das Buchen des Zahlungseinganges bei plentymarkets aus 
+Status: versendet | shopware Status, der gesetzt wird, wenn bei einem Auftrag innerhalb von plentymarkets der Warenausgang gebucht wird 
+Warenausgang | definiert die Bedingung, mit der "versendete" Aufträge aus plentymarkets abgerufen werden 
+Warenausgang | Intervall der Auftragssynchronisation 
+Warenbestandspuffer | Prozentualer Anteil des netto-Warenbestandes der in shopware gebucht wird
+Kategorie Startknoten | Ausgangspunkt für den Export und den Abgleich der Kategorien. Diese Kategorie wird *nicht* bei plentymarkets gebucht. Neue plentymarkets Kategorien werden an diese angehangen.
+Zahlungseingang | Zahlungsstatus die Aufträgen zugeordnet werden, wenn sie innerhalb vom plentymarkets als *komplett bezhalt* oder *teilweise bezahlt* markiert sind
+Kundengruppe | Kundengruppe deren Preise abgeglichen werden
 
 #### Mapping
 Für alle Daten, die nicht automatisch gemappt werden können, muss die Verknüpfung manuell hergestellt werden.
@@ -181,13 +186,13 @@ Die Zahlungsarten werden den Aufträgen zugeordnet.
 
 **Wichtig:** Alle in plentymarkets mit einer Zahlungsart verbundenen Aktionen werden ausgeführt. Ist beispielsweise als Zahlungsart Rechnung ausgewählt, wird der Auftrag nach dem Import in plentymarkets automatisch in den Status 4 bzw. 5 gesetzt. Darüber hinaus werden alle Events, die ggf. konfiguriert sind, ausgeführt.
 
-**Achtung:** Die Zahlungsart *Vorkasse* kann derzeit in plentymarkets nicht als eigenständige Zahlungsart verwendet werden. Die entsprechenden Vorgänge werden über die Alternativen *Überweisung*, *HBCI* und *EBICS* abgedeckt.
+**Achtung:** Die Zahlungsart *Vorkasse* kann derzeit in plentymarkets nicht als eigenständige Zahlungsart gebucht werden. Die entsprechenden Vorgänge werden über die Alternativen *Überweisung*, *HBCI* und *EBICS* abgedeckt.
 
 ##### Steuersätze
 … sind zu hoch.
 
 ##### Versandarten
-Das Mapping der Versandarten dient dazu, die Funktionalitäten, die plentymarkets im Bereich Fulfillment bietet, vollumfänglich nutzen zu können. … 
+Das Mapping der Versandarten dient dazu, die Funktionalitäten, die plentymarkets im Bereich Fulfillment bietet, vollumfänglich nutzen zu können.
 
 ##### Länder
 Die Länder werden den Anschriften (Rechnung- / Liefer-) zugeordnet. Kundendaten werden nur zu plentymarkets exportiert. Aus diesem Grund ist es nicht erforderlich, alle plentymarkets-Länder im entsprechenden shopware-System anzulegen.
@@ -200,33 +205,87 @@ Das Mapping für die Daten aus der Synchronisierung wird automatisch vorgenommen
 Sollten Sie den Datenaustausch manuell deaktiviert haben, wird dieser niemals automatisch reaktiviert.
 
 ### Initialer Export zu plentymarkets
-Alle Artikeldaten aus Ihrem shopware-System müssen zu plentymarkets exportiert werden.
+Alle Artikeldaten aus Ihrem shopware-System müssen zu plentymarkets exportiert werden. Das Übernehmen der Kundendaten ist optional und kann auch nachträglich noch gestartet werden.
+
+Bevor Daten zu plentymarkets exportiert werden, werden die entsprechenden Daten einmalig abgerufen. Alle Datensätze die nun automatisch gemappt werden können, werden natürlich nicht erneut in plentymarkets angelegt. Das automatische Mapping findet nur bei **identischer** Schreibweise statt. D.h., dass *rot* nicht *Rot* zugeordnet wird.
+
+#### Kategorien
+Alle Kategorien, die unterhalb der als Startknoten definierten Kategorie liegen, werden zu plentymarkets exportiert. Es ist eine max. Tiefe von 6 Ebenen (exkl. des Startknotens, da diese nicht exportiert wird) möglich. Alles darüber hinaus kann bei plentymarkets nicht abgebildet werden.
+
+Eine Kategorie, die in shopware in der 3. Ebene ist, wird bei plentymarkets entsprechend als Kategorie der Ebene 3 angelegt. Und kann dann auch nur dort verwendet werden.
+
+**Achtung:** Es ist nicht zulässig, einem Artikel eine Kategorie zuzuordnen, die keine End-Kategorie ist (d.h. die Kategorie darf keine weiteren Unterkategorien haben).
+
+#### Konfigurator / Attribute
+Attribute und deren Werte werden zu plentymarkets übernommen.
+
+**Achtung:** Attributwerte dürfen keine Kommas enthalten. Diese werden durch einen Punkt ersetzt.
+
+#### Eigenschaften / Merkmale
+Die Funktion der plentymarkts' Bestellmerkmale wird nicht abgebildet, da sie in shopware nicht vorhanden ist. Die Eigenschaften bzw. Merkmale in shopware haben keinen *echten* Datentyp. Aus diesem Grund muss der Typ des Merkmales in plentymarkets **Text** sein. Anderfalls würde Werte wie z. B. *1,5 Liter* verloren gehen, wenn ein nummerischer Typ eingestellt wäre.
+
+Beim Import erstellte Merkmale werden vom Type **Text** erstellt und sind **keine** Bestellmerkmale. Die Werte von shopware werden nicht übernommen, da sie bei plentymarkets bei der Zuordnung zum Artikel hinterlegt werden.
+
+#### Hersteller
+Alle Hersteller die in shopware hinterlegt sind, werden zu plentymarkets übernommen.
+
+#### Artikel
+… 
+
+#### Kunden
+Der Export des Kundestammes ist optional und kann auch nachträglich durchgeführt werden. Es wird sowohl die Rechnungsanschrift als auch die Lieferanschrift übernommen.
 
 ### Synchronisation
-#### Artikelstammdaten
+
+Datensätze, die innerhalb von plentymarkets hinzugekommen sind, werden automatisch im shopware-System angelegt und gemappt. Das betrifft folgende Daten
+
+* Hersteller
+* Kategorien
+* Attribute (und Werte)
+* Eigenschaften / Merkmale
+* Artikel
+* Bilder
+
+**Wichtig:** Gelöschte Daten bleiben im shopware System bestehen!
+
+Andersrum werden in plentymarkets u.U. folgende Daten durch die Synchronisation angelegt:
+
+* Kunden und Lieferanschriften
+* Aufträge
+
+#### Artikel
 Die Artikelstammdaten werden stündlich abgeglichen. Der Abgleich beinhaltet folgende Bereiche:
 
+##### Stammdaten
+Die Funktion der plentymarkts' Bestellmerkmale wird nicht abgebildet, da sie in shopware nicht vorhanden ist. Zusätzlich kann einem Artikel in shopware nur genau eine Merkmal/Eigenschaftgruppe zugeordnet werden.
 
-#### Varianten
-Varianten können keine Merkmale haben!
+##### Varianten
+Der Abgleich der Varianten entspricht der Funktionalität **Standarddaten übernehmen**. D.h. alle Varianten werden mit dem Hauptartikel abgeglichen. Lediglich die Preise, die Artikelnummer und die EAN werden pro Variante gespeichert.
 
-#### Preise
-plentymarkets erlaubt eine Preisstaffelung bis zu einer Maximalanzahl von 6 Staffelungen.
+**Hinweis:** Bei einer Änderung an einer Variante oder einem Stammartikel werden immer sowohl der Stammartikel als auch alle Varianten synchronisiert.
 
- * erstes PriceSet
- * nur für Shopkunden mit INdex EK
+##### Preise
+plentymarkets erlaubt eine Preisstaffelung bis zu einer Maximalanzahl von 6 Staffelungen. Varianten innerhalb von plentymarkets haben keine eigenen Preise; ebenso ist die Grundpreisberechnung vom Hauptartikel abhängig. Die Preise der Varianten ergeben sich aus den Preisen des Hauptartikels und den Aufpreisen der Attributwerte. Der sich daraus errechnete Preis wird für die Varianten innerhalb von shopware übernommen (inkl. Staffelung).
 
-#### Warenbestände
+Es wird lediglich das erste in plentymarkets angelegte Preisset mit den Preisen für die unter Einstellungen eingestellte Kundengruppe synchronisiert. Einkaufpreise werden nicht übertragen.
+
+##### Bilder
+
+
+##### Ähnliche Artikel & Zubehör (Cross-Selling)
+Die Verknüpfungen zwischen Artikeln der Typen *ähnlicher Artikel* und *Zubehör* werden zu shopware übernommen. Alle anderen Typen werden ignoriert, da diese nicht von shopware unterstützt werden.
+
+##### Warenbestände
 Die Warenbestände werden alle 15 Minuten inkrementell abgeglichen. Alle Warenbestände von Stammartikeln und Varianten, die sich seit dem letzten Abgleich geändert haben, werden abgerufen und im shopware-System entsprechend angepasst.
 
 Sie können entweder ein bestimmtes Lager als Quelle für die Warenbestände festlegen, oder das *virtuelle Gesamtlager* verwenden. Die Artikel erhalten in shopware dann den kumulierten Warenbestand aus allen vorhandenen Lagern.
 
-In shopware wird immer der Netto-Warenbestand von plentymarktes gebucht.
+In shopware wird immer der Netto-Warenbestand von plentymarktes gebucht. Dieser wird jedoch reduziert, wenn Sie unter eintellungen den Warenbestandspuffer eingestellt haben (bzw. wenn der Wert kleiner als 100% ist). Dies dient zum Vermeiden von Überverkäufen, da die Warenbestände nicht immer aktuelle sein können.
 
 #### Aufträge
 Aufträge, die in shopware erstellt werden, werden alle 15 Minuten inkl. der Kundendaten nach plentymarkets exportiert. Die Versandkosten werden dabei mit übernommen.
 
-Wenn der Warenausgang in plentymarkets gebucht wird, wird der Auftrag in shopware in den von Ihnen definierten Status gesetzt. Es kann entweder festgelegt werden, dass der Auftrag in plentymarkets einen bestimmen Status erreichen muss, um als abgeschlossen zu gelten, oder dass es reicht, wenn der Warenausgang gebucht worden ist. Dieser Abgleich findet einmal pro halber Stunde statt.
+Wenn der Warenausgang in plentymarkets gebucht wird, wird der Auftrag in shopware in den von Ihnen definierten Status gesetzt. Es kann entweder festgelegt werden, dass der Auftrag in plentymarkets einen bestimmen Status erreichen muss, um als abgeschlossen zu gelten, oder dass es reicht, wenn der Warenausgang gebucht worden ist. Dieser Abgleich findet einmal pro halber Stunde statt. Zusätzlich werden Zahlungen, die innerhlab von plentymarkets gebucht werden, zu shopware synchronisiert. Der Status für bezahlte und nur teilweise bezahlte Aufträge wird entsprechend der Einstellungen gesetzt.
 
 Wenn ein Auftrag in shopware einen bestimmten Zahlungsstatus erreicht, wird in plentymarkets ein Zahlungseingang über den gesamten Rechnungsbetrag gebucht. Die Zahlungsart wird entsprechend der Einstellungen gesetzt. Dieser Vorgang findet stündlich statt.
 
@@ -237,25 +296,28 @@ Im Log erhalten Sie Auskunft über den Datentransfer. Jeder getätigte SOAP Call
 
 Jede Meldung (und jeder Fehler) hat ein bestimmtes Präfix. Dieses kennzeichnet grundsätzlich, welcher Prozess verantwortlich ist. Es gibt die folgenden Präfixe:
 
-* Export:Initial:<Entität>
-* Export:Item
-* Export:Item:Image
-* Export:Item:Variant
-* Export:Order
-* Soap:Auth
-* Soap:Call
-* Sync:Item
-* Sync:Item:Image
-* Sync:Item:Linked
-* Sync:Item:Price
-* Sync:Item:Stock
-* Sync:Item:Variant
-* Sync:Order:OutgoingItems
-* Sync:Order:Payment
+Präfix | Erklärung | Richtung 
+-------|-----------|---------
+Export:Initial:<Entität> | Initialer Export | →  plentymarkets
+Export:Item | Initialer Export der Artikel | →  plentymarkets
+Export:Item:Image | Bilder während des Exports der Artikel | →  plentymarkets
+Export:Item:Variant | Varianten  während des Exports der Artikel | →  plentymarkets
+Export:Order | Export von neuen Aufträgen zu plentymarkets | →  plentymarkets
+Soap:Auth | Autentifizierung mit der SOAP Schnittstelle | →  plentymarkets
+Soap:Call | Information ob ein SOAP Call erfolgreich gewesen ist | →  plentymarkets
+Sync:Item | Sychronisation der Artikel | →  shopware
+Sync:Item:Image | Sychronisation der Artikelbilder | →  shopware
+Sync:Item:Linked | Sychronisation der Artikelverknüpfungen | →  shopware
+Sync:Item:Price | Sychronisation der Preise | →  shopware
+Sync:Item:Stock | Sychronisation der Warenbestände | →  shopware
+Sync:Item:Variant | Sychronisation der Varianten | →  shopware
+Sync:Order:OutgoingItems | Sychronisation der Zahlungseingänge| plentymarkets ↔ shopware
+Sync:Order:IncomingPayment | Sychronisation des Warenausganges |→  shopware
 
 ### Meldungen
-Bei Meldungen handelt es sich um Informationen und positive Rückmeldungen.
+Bei Meldungen handelt es sich um normale Informationen und positive Rückmeldungen.
 
 ### Fehler
+
 * unerwartete Fehler
 * 

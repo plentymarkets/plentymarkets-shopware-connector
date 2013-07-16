@@ -46,7 +46,7 @@ class PlentymarketsImportEntityOrderIncomingPayments extends PlentymarketsImport
 	 *
 	 * @var string
 	 */
-	protected static $action = 'IncomingPayments';
+	protected static $action = 'IncomingPayment';
 
 	public function prepare()
 	{
