@@ -205,7 +205,7 @@ class PlentymarketsImportController
 					// Base item
 					if (preg_match('/\d+\-\d+\-0/', $ItemsPriceUpdate->SKU))
 					{
-						$sku = explode($ItemsPriceUpdate->SKU);
+						$sku = explode('-', $ItemsPriceUpdate->SKU);
 						$itemID = PlentymarketsMappingController::getItemByPlentyID($sku[0]);
 						$PlentymarketsImportEntityItemPrice = new PlentymarketsImportEntityItemPrice($ItemsPriceUpdate);
 						$PlentymarketsImportEntityItemPrice->update($itemID);
