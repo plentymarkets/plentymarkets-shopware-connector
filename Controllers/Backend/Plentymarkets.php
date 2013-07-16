@@ -30,6 +30,9 @@ require_once PY_COMPONENTS . 'Config/PlentymarketsConfig.php';
 require_once PY_COMPONENTS . 'Utils/PlentymarketsLogger.php';
 require_once PY_COMPONENTS . 'Utils/PlentymarketsUtils.php';
 require_once PY_COMPONENTS . 'Soap/Client/PlentymarketsSoapClient.php';
+require_once PY_COMPONENTS . 'Import/PlentymarketsImportController.php';
+require_once PY_COMPONENTS . 'Export/PlentymarketsExportController.php';
+require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingController.php';
 
 /**
  *
@@ -95,8 +98,6 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	 */
 	public function getSettingsStoresAction()
 	{
-		require_once PY_COMPONENTS . 'Import/PlentymarketsImportController.php';
-
 		if ($this->Request()->get('refresh', false) == true)
 		{
 			PlentymarketsConfig::getInstance()->setMiscOrderStatusLastImport(0);
@@ -116,10 +117,10 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		$this->View()->assign(array(
 			'success' => true,
 			'data' => array(
-				'warehouses' => array_values(PlentymarketsImportController::getWarehouses()),
+				'warehouses' => array_values(PlentymarketsImportController::getWarehouseList()),
 				'orderReferrer' => array_values(PlentymarketsImportController::getOrderReferrerList()),
 				'orderStatus' => array_values($orderStatusList),
-				'multishops' => array_values(PlentymarketsImportController::getMultishops()),
+				'multishops' => array_values(PlentymarketsImportController::getStoreList()),
 				'producers' => Shopware()->Db()
 					->fetchAll('
 						SELECT id, name FROM s_articles_supplier ORDER BY name
@@ -259,8 +260,6 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 
 		$method = sprintf('delete%sByShopwareID', $entity);
 
-		require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingController.php';
-
 		// Delete the mapping for this shopware id
 		call_user_func(array(
 			'PlentymarketsMappingController',
@@ -289,8 +288,6 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	public function handleExportAction()
 	{
 		$params = $this->Request()->getParams();
-
-		require_once PY_COMPONENTS . 'Export/PlentymarketsExportController.php';
 
 		try
 		{
@@ -387,8 +384,6 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	 */
 	public function getPlentyMappingDataAction()
 	{
-		require_once PY_COMPONENTS . 'Import/PlentymarketsImportController.php';
-
 		$forceReload = $this->Request()->get('force', false);
 
 		switch ($this->Request()->map)
@@ -412,7 +407,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 					PlentymarketsConfig::getInstance()->setMiscVatLastImport(0);
 				}
 
-				$data = PlentymarketsImportController::getVat();
+				$data = PlentymarketsImportController::getVatList();
 				break;
 
 			case 'ShippingProfile':
@@ -422,7 +417,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 					PlentymarketsConfig::getInstance()->setMiscShippingProfilesLastImport(0);
 				}
 
-				$data = PlentymarketsImportController::getShippingProfiles();
+				$data = PlentymarketsImportController::getShippingProfileList();
 				break;
 
 			case 'MethodOfPayment':
@@ -432,7 +427,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 					PlentymarketsConfig::getInstance()->setMiscMethodsOfPaymentLastImport(0);
 				}
 
-				$data = PlentymarketsImportController::getMethodsOfPayment();
+				$data = PlentymarketsImportController::getMethodOfPaymentList();
 				break;
 
 			case 'CustomerClass':
@@ -456,274 +451,44 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	 */
 	public function getMappingDataAction()
 	{
-		require_once PY_COMPONENTS . 'Import/PlentymarketsImportController.php';
-		require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingController.php';
+		require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingDataController.php';
 
 		$map = $this->Request()->getParam('map');
 
 		switch ($map)
 		{
 			case 'VAT':
-				// s_core_tax
-				$rows = Shopware()->Db()
-					->query('
-					SELECT
-							C.id, CONCAT(C.tax, " %") name,
-							IFNULL(PMC.plentyID, -1) plentyID
-						FROM s_core_tax C
-						LEFT JOIN plenty_mapping_vat PMC
-							ON PMC.shopwareID = C.id
-						ORDER BY C.tax
-				')
-					->fetchAll();
-
-				$plentyVat = PlentymarketsImportController::getVat();
-				foreach ($rows as &$row)
-				{
-					if ($row['plentyID'] >= 0)
-					{
-						$row['plentyName'] = $plentyVat[$row['plentyID']]['name'];
-					}
-				}
-
+				$rows = PlentymarketsMappingDataController::getVat();
 				break;
 
 			case 'CustomerClass':
-
-				// s_core_tax
-				$rows = Shopware()->Db()
-					->query('
-					SELECT
-							C.id, description AS name,
-							IFNULL(PMC.plentyID, -1) plentyID
-						FROM s_core_customergroups C
-						LEFT JOIN plenty_mapping_customer_class PMC
-							ON PMC.shopwareID = C.id
-						ORDER BY C.tax
-				')
-					->fetchAll();
-
-				$plentyVat = PlentymarketsImportController::getCustomerClassList();
-				foreach ($rows as &$row)
-				{
-// 					if ($row['plentyID'] >= 0)
-// 					{
-						$row['plentyName'] = $plentyVat[$row['plentyID']]['name'];
-// 					}
-				}
-
+				$rows = PlentymarketsMappingDataController::getCustomerClass();
 				break;
 
 			case 'MethodOfPayment':
-				// s_core_tax
-				$rows = Shopware()->Db()
-					->query('
-					SELECT
-							C.id, C.description name,
-							IFNULL(PMC.plentyID, -1) plentyID
-						FROM s_core_paymentmeans C
-						LEFT JOIN plenty_mapping_method_of_payment PMC
-							ON PMC.shopwareID = C.id
-						ORDER BY C.name
-				')
-					->fetchAll();
-
-				$plentyShipping = PlentymarketsImportController::getMethodsOfPayment();
-				foreach ($rows as &$row)
-				{
-					if ($row['plentyID'] >= 0)
-					{
-						$row['plentyName'] = $plentyShipping[$row['plentyID']]['name'];
-					}
-					else if ($this->Request()->get('auto', false))
-					{
-						foreach ($plentyShipping as $plentyData)
-						{
-							$distance = levenshtein($row['name'], $plentyData['name']);
-							if ($distance <= 2 || strstr($plentyData['name'], $row['name']))
-							{
-								$row['plentyName'] = $plentyData['name'];
-								$row['plentyID'] = $plentyData['id'];
-								PlentymarketsMappingController::addMethodOfPayment($row['id'], $plentyData['id']);
-
-								if ($distance == 0)
-								{
-									break;
-								}
-							}
-						}
-					}
-					else
-					{
-						$row['plentyName'] = '';
-					}
-				}
-
+				$rows = PlentymarketsMappingDataController::getMethodOfPayment();
 				break;
 
 			case 'ShippingProfile':
-				// s_core_tax
-				$rows = Shopware()->Db()
-					->query('
-					SELECT
-							C.id, C.name name,
-							IFNULL(PMC.plentyID, 0) plentyID
-						FROM s_premium_dispatch C
-						LEFT JOIN plenty_mapping_shipping_profile PMC
-							ON PMC.shopwareID = C.id
-						ORDER BY C.name
-				')
-					->fetchAll();
-
-				$plentyShipping = PlentymarketsImportController::getShippingProfiles();
-
-				foreach ($rows as &$row)
-				{
-					if ($row['plentyID'])
-					{
-						$row['plentyName'] = $plentyShipping[$row['plentyID']]['name'];
-					}
-					else if ($this->Request()->get('auto', false))
-					{
-						foreach ($plentyShipping as $plentyData)
-						{
-							$distance = levenshtein($row['name'], $plentyData['name']);
-							if ($distance <= 2 || strstr($plentyData['name'], $row['name']))
-							{
-								$row['plentyName'] = $plentyData['name'];
-								$row['plentyID'] = $plentyData['id'];
-								PlentymarketsMappingController::addShippingProfile($row['id'], $plentyData['id']);
-
-								if ($distance == 0)
-								{
-									break;
-								}
-							}
-						}
-					}
-					else
-					{
-						$row['plentyName'] = '';
-					}
-				}
-
+				$rows = PlentymarketsMappingDataController::getShippingProfile();
 				break;
 
 			case 'Country':
-				$rows = Shopware()->Db()
-					->query('
-					SELECT
-							C.id, C.countryname name,
-							IFNULL(PMC.plentyID, 0) plentyID
-						FROM s_core_countries C
-						LEFT JOIN plenty_mapping_country PMC
-							ON PMC.shopwareID = C.id
-						ORDER BY C.countryname
-				')
-					->fetchAll();
-
-				$plentyCountries = PlentymarketsConfig::getInstance()->getMiscCountries();
-
-				foreach ($rows as &$row)
-				{
-					if ($row['plentyID'])
-					{
-						$row['plentyName'] = $plentyCountries[$row['plentyID']]['name'];
-					}
-					else if ($this->Request()->get('auto', false))
-					{
-						foreach ($plentyCountries as $plentyData)
-						{
-							$distance = levenshtein($row['name'], $plentyData['name']);
-							if ($distance <= 2 || strstr($plentyData['name'], $row['name']))
-							{
-								$row['plentyName'] = $plentyData['name'];
-								$row['plentyID'] = $plentyData['id'];
-								PlentymarketsMappingController::addCountry($row['id'], $plentyData['id']);
-
-								if ($distance == 0)
-								{
-									break;
-								}
-							}
-						}
-					}
-					else
-					{
-						$row['plentyName'] = '';
-					}
-				}
-
+				$rows = PlentymarketsMappingDataController::getCountry();
 				break;
 
 			case 'Currency':
-				$rows = Shopware()->Db()
-					->query('
-					SELECT
-							C.currency id, C.name,
-							IFNULL(PMC.plentyID, 0) plentyID
-						FROM s_core_currencies C
-						LEFT JOIN plenty_mapping_currency PMC
-							ON PMC.shopwareID = C.currency
-						ORDER BY C.name
-				')
-					->fetchAll();
-
-				$plentyCurrencies = PlentymarketsConfig::getInstance()->getMiscCurrenciesSorted();
-
-				foreach ($rows as &$row)
-				{
-					if ($row['plentyID'])
-					{
-						$row['plentyName'] = $plentyCurrencies[$row['plentyID']]['name'];
-					}
-					else if ($this->Request()->get('auto', false))
-					{
-						foreach ($plentyCurrencies as $plentyData)
-						{
-							$distance = levenshtein($row['id'], $plentyData['name']);
-							if ($distance == 0)
-							{
-								$row['plentyName'] = $plentyData['name'];
-								$row['plentyID'] = $plentyData['id'];
-								PlentymarketsMappingController::addCurrency($row['id'], $plentyData['id']);
-							}
-						}
-					}
-					else
-					{
-						$row['plentyName'] = '';
-					}
-				}
-
+				$rows = PlentymarketsMappingDataController::getCurrency();
 				break;
 
 			case 'MeasureUnit':
-				$rows = Shopware()->Db()
-					->query('
-					SELECT
-							C.id, CONCAT(C.description, " (", C.unit, ")") name,
-							IFNULL(PMC.plentyID, 0) plentyID
-						FROM s_core_units C
-						LEFT JOIN plenty_mapping_measure_unit PMC
-							ON PMC.shopwareID = C.id
-						ORDER BY C.description
-				')
-					->fetchAll();
-
-				$plentyMU = PlentymarketsConfig::getInstance()->getItemMeasureUnits();
-
-				foreach ($rows as &$row)
-				{
-					$row['plentyName'] = $plentyMU[$row['plentyID']]['name'];
-				}
-
+				$rows = PlentymarketsMappingDataController::getMeasureUnit();
 				break;
 		}
 
 		foreach ($rows as $position => &$row)
 		{
-			$row["position"] = $position;
+			$row['position'] = $position;
 		}
 
 		$this->View()->assign(array(
@@ -751,7 +516,6 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	 */
 	public function getMappingStatusAction()
 	{
-		require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingController.php';
 		$this->View()->assign(array(
 			'success' => true,
 			'data' => array_values(PlentymarketsMappingController::getStatusList())
@@ -762,11 +526,9 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	 */
 	public function getWarehouseListAction()
 	{
-		require_once PY_COMPONENTS . 'Import/PlentymarketsImportController.php';
-
 		$this->View()->assign(array(
 			'success' => true,
-			'data' => array_values(PlentymarketsImportController::getWarehouses())
+			'data' => array_values(PlentymarketsImportController::getWarehouseList())
 		));
 	}
 
@@ -774,8 +536,6 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	 */
 	public function getOrderStatusListAction()
 	{
-		require_once PY_COMPONENTS . 'Import/PlentymarketsImportController.php';
-
 		$values = PlentymarketsImportController::getOrderStatusList();
 		$values[0] = array(
 			'status' => 0,
@@ -804,11 +564,9 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	 */
 	public function getMultishopListAction()
 	{
-		require_once PY_COMPONENTS . 'Import/PlentymarketsImportController.php';
-
 		$this->View()->assign(array(
 			'success' => true,
-			'data' => array_values(PlentymarketsImportController::getMultishops())
+			'data' => array_values(PlentymarketsImportController::getStoreList())
 		));
 	}
 

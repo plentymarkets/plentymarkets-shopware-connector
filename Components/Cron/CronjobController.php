@@ -253,7 +253,7 @@ class PlentymarketsCronjobController
 
 		try
 		{
-			PlentymarketsImportController::getItemsBase();
+			PlentymarketsImportController::importItems();
 			$this->Config->setImportItemStatus(1);
 			$this->Config->setImportItemError('');
 		}

@@ -76,23 +76,23 @@ class PlentymarketsImportController
 	/**
 	 * Reads the items of plentymarkets that have changed
 	 */
-	public static function getItemsBase()
+	public static function importItems()
 	{
 		$Request_GetItemsBase = new PlentySoapRequest_GetItemsBase();
-		$Request_GetItemsBase->GetAttributeValueSets = true; // boolean
-		$Request_GetItemsBase->GetCategories = true; // boolean
-		$Request_GetItemsBase->GetCategoryNames = true; // boolean
-		$Request_GetItemsBase->GetItemAttributeMarkup = true; // boolean
-		$Request_GetItemsBase->GetItemOthers = true; // boolean
-		$Request_GetItemsBase->GetItemProperties = true; // boolean
-		$Request_GetItemsBase->GetItemSuppliers = false; // boolean
-		$Request_GetItemsBase->GetItemURL = 0; // int
-		$Request_GetItemsBase->GetLongDescription = true; // boolean
-		$Request_GetItemsBase->GetMetaDescription = false; // boolean
-		$Request_GetItemsBase->GetShortDescription = true; // boolean
-		$Request_GetItemsBase->GetTechnicalData = false; // boolean
+		$Request_GetItemsBase->GetAttributeValueSets = true;
+		$Request_GetItemsBase->GetCategories = true;
+		$Request_GetItemsBase->GetCategoryNames = true;
+		$Request_GetItemsBase->GetItemAttributeMarkup = true;
+		$Request_GetItemsBase->GetItemOthers = true;
+		$Request_GetItemsBase->GetItemProperties = true;
+		$Request_GetItemsBase->GetItemSuppliers = false;
+		$Request_GetItemsBase->GetItemURL = 0;
+		$Request_GetItemsBase->GetLongDescription = true;
+		$Request_GetItemsBase->GetMetaDescription = false;
+		$Request_GetItemsBase->GetShortDescription = true;
+		$Request_GetItemsBase->GetTechnicalData = false;
 		$Request_GetItemsBase->WebstoreID = PlentymarketsConfig::getInstance()->getWebstoreID(0);
-		$Request_GetItemsBase->Lang = 'de'; // string
+		$Request_GetItemsBase->Lang = 'de';
 		$Request_GetItemsBase->LastUpdateFrom = PlentymarketsConfig::getInstance()->getImportItemLastUpdateTimestamp(0);
 		$Request_GetItemsBase->Page = 0;
 
@@ -143,6 +143,8 @@ class PlentymarketsImportController
 				{
 					PlentymarketsLogger::getInstance()->error('Sync:Item', 'Item with the plentymarkets item id ' . $ItemBase->ItemID . ' could not be importet');
 					PlentymarketsLogger::getInstance()->error('Sync:Item', $E->getMessage());
+					// PlentymarketsLogger::getInstance()->error('Sync:Item', get_class($E) . ' - File: '. $E->getFile() . ' - Line: '. $E->getLine());
+					// PlentymarketsLogger::getInstance()->error('Sync:Item', $E->getTraceAsString());
 				}
 			}
 		}
@@ -178,15 +180,12 @@ class PlentymarketsImportController
 		// Dependencies
 		$numberOfPricesUpdates = 0;
 
-		// Warenbestände abrufen (für ein bestimmtes Lager, oder -1)
-
-
 		PlentymarketsLogger::getInstance()->message('Sync:Item:Price', 'LastUpdate: ' . date('r', PlentymarketsConfig::getInstance()->getImportItemPriceLastUpdateTimestamp(time())));
 		$timestamp = PlentymarketsConfig::getInstance()->getImportItemPriceLastUpdateTimestamp(time());
 		$now = time();
 
 		$Request_GetItemsPriceUpdate = new PlentySoapRequest_GetItemsPriceUpdate();
-		$Request_GetItemsPriceUpdate->LastUpdateFrom = $timestamp; // int
+		$Request_GetItemsPriceUpdate->LastUpdateFrom = $timestamp;
 		$Request_GetItemsPriceUpdate->Page = 0;
 
 		do
@@ -255,10 +254,9 @@ class PlentymarketsImportController
 	public static function importItemStocks()
 	{
 		$Request_GetCurrentStocks = new PlentySoapRequest_GetCurrentStocks();
-		$Request_GetCurrentStocks->LastUpdate = PlentymarketsConfig::getInstance()->getImportItemStockLastUpdateTimestamp(-1); // int
+		$Request_GetCurrentStocks->LastUpdate = PlentymarketsConfig::getInstance()->getImportItemStockLastUpdateTimestamp(-1);
 		$Request_GetCurrentStocks->Page = 0;
-		$Request_GetCurrentStocks->WarehouseID = PlentymarketsConfig::getInstance()->getItemWarehouseID(0); // int
-
+		$Request_GetCurrentStocks->WarehouseID = PlentymarketsConfig::getInstance()->getItemWarehouseID(0);
 
 		PlentymarketsLogger::getInstance()->message('Sync:Item:Stock', 'LastUpdate: ' . date('r', PlentymarketsConfig::getInstance()->getImportItemStockLastUpdateTimestamp(-1)));
 		PlentymarketsLogger::getInstance()->message('Sync:Item:Stock', 'WarehouseId: ' . PlentymarketsConfig::getInstance()->getItemWarehouseID(0));
@@ -317,10 +315,10 @@ class PlentymarketsImportController
 	 *
 	 * @return array
 	 */
-	public static function getMethodsOfPayment()
+	public static function getMethodOfPaymentList()
 	{
 		$timestamp = PlentymarketsConfig::getInstance()->getMiscMethodsOfPaymentLastImport(0);
-		if (date("dmY") == date('dmY', $timestamp))
+		if (date('dmY') == date('dmY', $timestamp))
 		{
 			return unserialize(PlentymarketsConfig::getInstance()->getMiscMethodsOfPaymentSerialized());
 		}
@@ -354,7 +352,7 @@ class PlentymarketsImportController
 	public static function getOrderStatusList()
 	{
 		$timestamp = PlentymarketsConfig::getInstance()->getMiscOrderStatusLastImport(0);
-		if (date("dmY") == date('dmY', $timestamp))
+		if (date('dmY') == date('dmY', $timestamp))
 		{
 			return unserialize(PlentymarketsConfig::getInstance()->getMiscOrderStatusSerialized());
 		}
@@ -390,7 +388,7 @@ class PlentymarketsImportController
 	public static function getOrderReferrerList()
 	{
 		$timestamp = PlentymarketsConfig::getInstance()->getMiscSalesOrderReferrerLastImport(0);
-		if (date("dmY") == date('dmY', $timestamp))
+		if (date('dmY') == date('dmY', $timestamp))
 		{
 			return unserialize(PlentymarketsConfig::getInstance()->getMiscSalesOrderReferrerSerialized());
 		}
@@ -421,7 +419,7 @@ class PlentymarketsImportController
 	public static function getCustomerClassList()
 	{
 		$timestamp = PlentymarketsConfig::getInstance()->getMiscCustomerClassLastImport(0);
-		if (date("dmY") == date('dmY', $timestamp))
+		if (date('dmY') == date('dmY', $timestamp))
 		{
 			return unserialize(PlentymarketsConfig::getInstance()->getMiscCustomerClassSerialized());
 		}
@@ -446,10 +444,10 @@ class PlentymarketsImportController
 	 *
 	 * @return array
 	 */
-	public static function getWarehouses()
+	public static function getWarehouseList()
 	{
 		$timestamp = PlentymarketsConfig::getInstance()->getMiscWarehousesLastImport(0);
-		if (date("dmY") == date('dmY', $timestamp))
+		if (date('dmY') == date('dmY', $timestamp))
 		{
 			return unserialize(PlentymarketsConfig::getInstance()->getMiscWarehousesSerialized());
 		}
@@ -463,6 +461,7 @@ class PlentymarketsImportController
 				'name' => 'virtuelles Gesamtlager'
 			)
 		);
+
 		foreach ($Response_GetWarehouseList->WarehouseList->item as $Warehouse)
 		{
 			$Warehouse instanceof PlentySoapObject_GetWarehouseList;
@@ -482,10 +481,10 @@ class PlentymarketsImportController
 	 *
 	 * @return array
 	 */
-	public static function getMultishops()
+	public static function getStoreList()
 	{
 		$timestamp = PlentymarketsConfig::getInstance()->getMiscMultishopsLastImport(0);
-		if (date("dmY") == date('dmY', $timestamp))
+		if (date('dmY') == date('dmY', $timestamp))
 		{
 			return unserialize(PlentymarketsConfig::getInstance()->getMiscMultishopsSerialized());
 		}
@@ -520,17 +519,17 @@ class PlentymarketsImportController
 	 *
 	 * @return array
 	 */
-	public static function getShippingProfiles()
+	public static function getShippingProfileList()
 	{
 		$timestamp = PlentymarketsConfig::getInstance()->getMiscShippingProfilesLastImport(0);
-		if (date("dmY") == date('dmY', $timestamp))
+		if (date('dmY') == date('dmY', $timestamp))
 		{
 			return unserialize(PlentymarketsConfig::getInstance()->getMiscShippingProfilesSerialized());
 		}
 
 		$Request_GetShippingProfiles = new PlentySoapRequest_GetShippingProfiles();
-		$Request_GetShippingProfiles->GetShippingCharges = false; // boolean
-		$Request_GetShippingProfiles->ShippingProfileID = null; // int
+		$Request_GetShippingProfiles->GetShippingCharges = false;
+		$Request_GetShippingProfiles->ShippingProfileID = null;
 
 
 		$providers = array();
@@ -566,10 +565,10 @@ class PlentymarketsImportController
 	 *
 	 * @return array
 	 */
-	public static function getVat()
+	public static function getVatList()
 	{
 		$timestamp = PlentymarketsConfig::getInstance()->getMiscVatLastImport(0);
-		if (date("dmY") == date('dmY', $timestamp))
+		if (date('dmY') == date('dmY', $timestamp))
 		{
 			return unserialize(PlentymarketsConfig::getInstance()->getMiscVatSerialized());
 		}
