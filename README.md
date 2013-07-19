@@ -255,7 +255,7 @@ Sollten Sie den Datenaustausch manuell deaktiviert haben, wird dieser niemals au
 
 Der Datenauschtausch von shopware zu plentymarkets muss manuell gestartet werden. Der Import der Daten aus dem plentymarkets System findet automatisch statt, sobald der Datenaustausch aktiviert worden ist.
 
-**Wichtig: ** Es werden alle Artikel mit shopware abgeglichen, die unter **Artikel bearbeiten » Verfügbar » Mandant (Shop)** dem entsprechenden Shop zugeordnet sind. 
+**Wichtig:** Es werden alle Artikel mit shopware abgeglichen, die unter **Artikel bearbeiten » Verfügbar » Mandant (Shop)** dem entsprechenden Shop zugeordnet sind. 
 
 ### Initialer Export zu plentymarkets
 Alle Artikeldaten aus Ihrem shopware-System müssen zu plentymarkets exportiert werden. Das Übernehmen der Kundendaten ist optional und kann auch nachträglich noch gestartet werden.
@@ -373,12 +373,12 @@ MwSt | MwSt. | entsprechend des Mappings
 ##### Bilder
 Die Bilder werden in der shopware Medienbibliothek angelegt und dann dem Artikel zugeordnet.
 
-**Achtung: ** Bei einer Änderung an einem Artikel werden alle Bilder gelöscht und neu hinzugefügt.
+**Achtung:** Bei einer Änderung an einem Artikel werden alle Bilder gelöscht und neu hinzugefügt.
 
 ##### Ähnliche Artikel & Zubehör (Cross-Selling)
 Die Verknüpfungen zwischen Artikeln der Typen *ähnlicher Artikel* und *Zubehör* werden zu shopware übernommen. Alle anderen Typen werden ignoriert, da diese nicht von shopware unterstützt werden.
 
-**Achtung: ** Bei einer Änderung an einem Artikel werden alle Verknüpfungen neu hergestellt.
+**Achtung:** Bei einer Änderung an einem Artikel werden alle Verknüpfungen neu hergestellt.
 
 ##### Warenbestände
 Die Warenbestände werden alle 15 Minuten inkrementell abgeglichen. Alle Warenbestände von Stammartikeln und Varianten, die sich seit dem letzten Abgleich geändert haben, werden abgerufen und im shopware-System entsprechend angepasst.
