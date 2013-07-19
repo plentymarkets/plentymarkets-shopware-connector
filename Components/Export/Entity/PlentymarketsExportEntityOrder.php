@@ -224,7 +224,7 @@ class PlentymarketsExportEntityOrder
 		$Object_OrderHead->IsNetto = false; // boolean
 		$Object_OrderHead->Marking1ID = PlentymarketsConfig::getInstance()->getOrderMarking1(0); // int
 		$Object_OrderHead->MethodOfPaymentID = $methodOfPaymentId; // int
-		$Object_OrderHead->WebstoreID = PlentymarketsConfig::getInstance()->getWebstoreID(0); // int
+		$Object_OrderHead->StoreID = PlentymarketsConfig::getInstance()->getStoreID(0); // int
 
 		// $Object_OrderHead->OrderStatus = 3; // float
 		$Object_OrderHead->OrderTimestamp = $this->order['orderTime']->getTimestamp(); // int

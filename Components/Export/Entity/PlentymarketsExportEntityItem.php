@@ -157,10 +157,10 @@ class PlentymarketsExportEntityItem
 			$Object_AddItemsBaseItemBase->Categories[] = $Object_ItemCategory;
 		}
 
-		$Object_AddItemsBaseItemBase->WebstoreIDs = array();
+		$Object_AddItemsBaseItemBase->StoreIDs = array();
 		$Object_Integer = new PlentySoapObject_Integer();
-		$Object_Integer->intValue = PlentymarketsConfig::getInstance()->getWebstoreID(); // int
-		$Object_AddItemsBaseItemBase->WebstoreIDs[] = $Object_Integer;
+		$Object_Integer->intValue = PlentymarketsConfig::getInstance()->getStoreID(); // int
+		$Object_AddItemsBaseItemBase->StoreIDs[] = $Object_Integer;
 
 		$Request_AddItemsBase->BaseItems[] = $Object_AddItemsBaseItemBase;
 

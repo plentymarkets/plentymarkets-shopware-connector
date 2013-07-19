@@ -100,7 +100,7 @@ class PlentySoapObject_AddClientOrderOrderHead
 	/**
 	 * @var int
 	 */
-	public $WebstoreID;
+	public $StoreID;
 	
 	/**
 	 * @var int

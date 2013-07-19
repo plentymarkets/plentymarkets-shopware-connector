@@ -66,7 +66,7 @@ abstract class PlentymarketsImportEntityOrderAbstract
 		$this->Request_SearchOrders->GetOrderInfo = false; // boolean
 		$this->Request_SearchOrders->GetParcelService = false; // boolean
 		$this->Request_SearchOrders->GetSalesOrderProperties = false; // boolean
-		$this->Request_SearchOrders->WebstoreID = PlentymarketsConfig::getInstance()->getWebstoreID(); // int
+		$this->Request_SearchOrders->StoreID = PlentymarketsConfig::getInstance()->getStoreID(); // int
 		$this->Request_SearchOrders->OrderType = 'order'; // string
 		$this->Request_SearchOrders->Page = 0;
 

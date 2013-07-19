@@ -45,5 +45,5 @@ class PlentySoapObject_SetItemsCategoriesCategory
 	/**
 	 * @var int
 	 */
-	public $WebstoreID;
+	public $StoreID;
 }

@@ -50,7 +50,7 @@ class PlentySoapObject_GetTermsAndCancellation
 	/**
 	 * @var int
 	 */
-	public $WebstoreID;
+	public $StoreID;
 	
 	/**
 	 * @var string

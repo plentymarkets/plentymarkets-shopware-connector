@@ -110,7 +110,7 @@ class PlentySoapObject_OrderHead
 	/**
 	 * @var int
 	 */
-	public $WebstoreID;
+	public $StoreID;
 	
 	/**
 	 * @var PlentySoapObject_OrderDocumentNumbers

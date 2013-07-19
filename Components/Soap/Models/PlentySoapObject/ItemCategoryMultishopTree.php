@@ -40,5 +40,5 @@ class PlentySoapObject_ItemCategoryMultishopTree
 	/**
 	 * @var int
 	 */
-	public $WebstoreID;
+	public $StoreID;
 }

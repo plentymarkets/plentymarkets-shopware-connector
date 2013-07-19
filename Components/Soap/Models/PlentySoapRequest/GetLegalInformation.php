@@ -40,5 +40,5 @@ class PlentySoapRequest_GetLegalInformation
 	/**
 	 * @var int
 	 */
-	public $WebstoreID;
+	public $StoreID;
 }

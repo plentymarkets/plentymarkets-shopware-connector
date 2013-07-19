@@ -100,7 +100,7 @@ class PlentySoapRequest_GetCustomers
 	/**
 	 * @var int
 	 */
-	public $WebstoreID;
+	public $StoreID;
 	
 	/**
 	 * @var int

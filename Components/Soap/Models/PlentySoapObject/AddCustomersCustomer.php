@@ -195,7 +195,7 @@ class PlentySoapObject_AddCustomersCustomer
 	/**
 	 * @var int
 	 */
-	public $WebstoreID;
+	public $StoreID;
 	
 	/**
 	 * @var int

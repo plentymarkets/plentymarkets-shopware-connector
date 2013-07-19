@@ -250,7 +250,7 @@ class PlentySoapRequest_GetItemsBase
 	/**
 	 * @var int
 	 */
-	public $WebstoreID;
+	public $StoreID;
 
 	/**
 	 * @var int

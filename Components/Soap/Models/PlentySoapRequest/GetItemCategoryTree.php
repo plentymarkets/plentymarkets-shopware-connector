@@ -50,5 +50,5 @@ class PlentySoapRequest_GetItemCategoryTree
 	/**
 	 * @var int
 	 */
-	public $WebstoreID;
+	public $StoreID;
 }

@@ -75,7 +75,7 @@ class PlentySoapObject_SetOrdersHead
 	/**
 	 * @var int
 	 */
-	public $WebstoreID;
+	public $StoreID;
 	
 	/**
 	 * @var int

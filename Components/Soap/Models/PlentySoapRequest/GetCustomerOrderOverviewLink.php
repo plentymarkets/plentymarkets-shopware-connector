@@ -35,7 +35,7 @@ class PlentySoapRequest_GetCustomerOrderOverviewLink
 	/**
 	 * @var int
 	 */
-	public $WebstoreID;
+	public $StoreID;
 	
 	/**
 	 * @var int

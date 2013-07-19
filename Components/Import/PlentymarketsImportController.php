@@ -91,13 +91,13 @@ class PlentymarketsImportController
 		$Request_GetItemsBase->GetMetaDescription = false;
 		$Request_GetItemsBase->GetShortDescription = true;
 		$Request_GetItemsBase->GetTechnicalData = false;
-		$Request_GetItemsBase->WebstoreID = PlentymarketsConfig::getInstance()->getWebstoreID(0);
+		$Request_GetItemsBase->StoreID = PlentymarketsConfig::getInstance()->getStoreID(0);
 		$Request_GetItemsBase->Lang = 'de';
 		$Request_GetItemsBase->LastUpdateFrom = PlentymarketsConfig::getInstance()->getImportItemLastUpdateTimestamp(0);
 		$Request_GetItemsBase->Page = 0;
 
 		PlentymarketsLogger::getInstance()->message('Sync:Item', 'LastUpdate: ' . date('r', PlentymarketsConfig::getInstance()->getImportItemLastUpdateTimestamp(0)));
-		PlentymarketsLogger::getInstance()->message('Sync:Item', 'WebstoreID: ' . $Request_GetItemsBase->WebstoreID);
+		PlentymarketsLogger::getInstance()->message('Sync:Item', 'StoreID: ' . $Request_GetItemsBase->StoreID);
 		$lastUpdateTimestamp = time();
 
 		$numberOfItemsUpdated = 0;

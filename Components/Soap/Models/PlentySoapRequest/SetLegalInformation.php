@@ -50,7 +50,7 @@ class PlentySoapRequest_SetLegalInformation
 	/**
 	 * @var string
 	 */
-	public $WebstoreID;
+	public $StoreID;
 	
 	/**
 	 * @var string
