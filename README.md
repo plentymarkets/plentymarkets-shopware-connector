@@ -324,7 +324,7 @@ shopware | plentymarkets | Anmerkung
 Aktiv | Inaktiv/Sichtbarkeit Webshop | Der Artikel wird aktiv gesetzt, wenn er bei plentymarkets nicht inaktiv ist, und der Artikel im Webshob sichtbar ist
 Artikelnummer | Nr. | Wird generiert, wenn bei plentymarkets nicht vorhanden
 Artikel hervorheben | Shop-Aktion | Nur der plentymarkets Wert *Top-Artikel* bewirkt, dass der Artikel hervorgehoben wird
-– | Externe ID | Zusammengesetzt aus *Swag/* und der Id des shopware Artikels
+n/a | Externe ID | Zusammengesetzt aus *Swag/* und der Id des shopware Artikels
 Hersteller | Hersteller | Ist der Hersteller nicht vorhanden, wird er angelegt
 EAN | EAN 1 | –
 Gewicht (in KG) | Gewicht (Brutto) | Das Gewicht wird von gramm (plentymarkets) in kg umgerechnet
@@ -345,7 +345,7 @@ Mindestabnahme | Mindest-Bestellmenge
 Maximalabnahme| Maximale Bestellmenge
 Staffelung | Intervall-Bestellmenge
 Erscheinungsdatum | Erscheinungsdatum
-– | Verfügbar bis
+? | Verfügbar bis
 
 ##### Varianten
 Der Abgleich der Varianten entspricht der Funktionalität **Standarddaten übernehmen**. D.h. alle Varianten werden mit dem Hauptartikel abgeglichen. Lediglich die Preise, die Artikelnummer und die EAN werden pro Variante gespeichert.
