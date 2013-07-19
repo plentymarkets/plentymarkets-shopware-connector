@@ -241,6 +241,8 @@ Die Zahlungsarten werden den Aufträgen zugeordnet.
 ##### Versandarten
 Das Mapping der Versandarten dient dazu, die Funktionalitäten, die plentymarkets im Bereich Fulfillment bietet, vollumfänglich nutzen zu können.
 
+JG
+
 ##### Länder
 Die Länder werden den Anschriften (Rechnung- / Liefer-) zugeordnet. Kundendaten werden nur zu plentymarkets exportiert. Aus diesem Grund ist es nicht erforderlich, alle plentymarkets-Länder im entsprechenden shopware-System anzulegen.
 
@@ -250,6 +252,10 @@ Das Mapping für die Daten aus der Synchronisierung wird automatisch vorgenommen
 **Achtung:** Der Datenaustauch darf (bzw. kann) nur gestartet werden, wenn alle unter Einrichtung genannten Punkte abgeschlossen sind! Sobald einer der erforderlichen Schritte noch nicht oder nur teilweise abgeschlossen ist, wird der Datenaustausch automatisch deaktiviert. Sobald alle Schritte abgeschlossen sind, wird der Datenaustausch wieder aktiviert.
 
 Sollten Sie den Datenaustausch manuell deaktiviert haben, wird dieser niemals automatisch reaktiviert.
+
+Der Datenauschtausch von shopware zu plentymarkets muss manuell gestartet werden. Der Import der Daten aus dem plentymarkets System findet automatisch statt, sobald der Datenaustausch aktiviert worden ist.
+
+**Wichtig: ** Es werden alle Artikel mit shopware abgeglichen, die unter **Artikel bearbeiten » Verfügbar » Mandant (Shop)** dem entsprechenden Shop zugeordnet sind. 
 
 ### Initialer Export zu plentymarkets
 Alle Artikeldaten aus Ihrem shopware-System müssen zu plentymarkets exportiert werden. Das Übernehmen der Kundendaten ist optional und kann auch nachträglich noch gestartet werden.
@@ -277,14 +283,13 @@ Beim Import erstellte Merkmale werden vom Type **Text** erstellt und sind **kein
 Alle Hersteller die in shopware hinterlegt sind, werden zu plentymarkets übernommen.
 
 #### Artikel
-… 
+Alle Artikel, die aus dem shopware System in das plentymarkets System exportiert werden, werden automatisch mit dem entsprechenden Mandandten verknüpft.
 
 #### Kunden
-Der Export des Kundestammes ist optional und kann auch nachträglich durchgeführt werden. Es wird sowohl die Rechnungsanschrift als auch die Lieferanschrift übernommen.
+Der Export des Kundestammes ist optional und kann auch auch nachträglich durchgeführt werden. Es wird sowohl die Rechnungsanschrift als auch die Lieferanschrift übernommen.
 
 ### Synchronisation
-
-Datensätze, die innerhalb von plentymarkets hinzugekommen sind, werden automatisch im shopware-System angelegt und gemappt. Das betrifft folgende Daten
+Datensätze, die innerhalb von plentymarkets hinzugekommen sind, werden automatisch im shopware-System angelegt und gemappt. Das betrifft die folgenden Daten:
 
 * Hersteller
 * Kategorien
@@ -293,18 +298,54 @@ Datensätze, die innerhalb von plentymarkets hinzugekommen sind, werden automati
 * Artikel
 * Bilder
 
-**Wichtig:** Gelöschte Daten bleiben im shopware System bestehen!
+**Wichtig:** Gelöschte Daten bleiben im shopware System bestehen! Eine Aktualisierung dieser Daten (insbesondere der Bezeichnungen) folgt.
 
-Andersrum werden in plentymarkets u.U. folgende Daten durch die Synchronisation angelegt:
+Andersrum werden in plentymarkets u. U. folgende Daten durch die Synchronisation angelegt:
 
 * Kunden und Lieferanschriften
 * Aufträge
+* Zahlungseingänge
 
 #### Artikel
+Es werden alle Artikel mit shopware abgeglichen, die unter **Artikel bearbeiten » Verfügbar » Mandant (Shop)** dem entsprechenden Shop zugeordnet sind.
+Alle Artikel, die von shopware importiert worden sind, werden beim ersten Abgleich ignortiert (eine entsprechende Meldung wird im Log vermerkt).
+
+**Hintergrund:** Es werden alle Artikel abgeglichen, die sich seit dem letzten Abgleich geändert haben. Der erste Abgleich – nach der aktivierung des Datenabgleiches – fragt **alle** Datensätze ab (bzw. alle, die sich seit bestehen des System geändert haben). Da die von shopware importierten Artikel natürlich *geändert* worden sind, werden als solche von der SOAP Schnittstelle ausgeliefert. Der erste Abgleich ignoriert diese Datensätze dann.
+
 Die Artikelstammdaten werden stündlich abgeglichen. Der Abgleich beinhaltet folgende Bereiche:
 
 ##### Stammdaten
 Die Funktion der plentymarkts' Bestellmerkmale wird nicht abgebildet, da sie in shopware nicht vorhanden ist. Zusätzlich kann einem Artikel in shopware nur genau eine Merkmal/Eigenschaftgruppe zugeordnet werden.
+
+Die Artikelnummer wird nach dem Erstellen nicht mehr Synchronisiert. Eine Artikelnummer ist kein Pflichtfeld eines plentymarkets Artikels und muss auch nicht eindeutig sein. Da einem shopware-Artikel jedoch zwingend eine eindeutige Nummer zugeordnet werden muss, wird im Falle einer nicht eindeutigen Nummer eine fortlaufende Nummer vergeben. Das würde bei der nächsten Aktualisierung eines solchen Artikels erneut zu einer neuen Nummer führen.
+
+shopware | plentymarkets | Anmerkung
+- |
+Aktiv | Inaktiv/Sichtbarkeit Webshop | Der Artikel wird aktiv gesetzt, wenn er bei plentymarkets nicht inaktiv ist, und der Artikel im Webshob sichtbar ist
+Artikelnummer | Nr. | Wird generiert, wenn bei plentymarkets nicht vorhanden
+Artikel hervorheben | Shop-Aktion | Nur der plentymarkets Wert *Top-Artikel* bewirkt, dass der Artikel hervorgehoben wird
+– | Externe ID | Zusammengesetzt aus *Swag/* und der Id des shopware Artikels
+Hersteller | Hersteller | Ist der Hersteller nicht vorhanden, wird er angelegt
+EAN | EAN 1 | –
+Gewicht (in KG) | Gewicht (Brutto) | Das Gewicht wird von gramm (plentymarkets) in kg umgerechnet
+Maßeinheit | Einheit | Wird ensprechend gemappt. Ist die Einheit in shopware nicht vorhanden, wird keine zugeprdnet.
+Inhalt | Inhalt | Beide System runden auf die 4. Nachkommastelle
+Grundeinheit | VPE | plentymarkets arbietet hier nur mit ganzen Zahlen – shopware mit 3 Nachkommastellen
+Verpackungseinheit | Einheit 1 | –
+Breite | Breite | –
+Höhe | Höhe | –
+Länge | Länge | –
+Artikel-Bezeichnung | Name 1 | –
+Name | Name 1 | –
+Beschreibung | Artikeltext | –
+Kurzbeschreibung | Vorschautext | –
+Keywords | Keywords | –
+zuletzt bearbeitet | – | Wird mit dem Zeiutpunkt der letzten Änderung am plentymarkets Artikel abgeglichen
+Mindestabnahme | Mindest-Bestellmenge
+Maximalabnahme| Maximale Bestellmenge
+Staffelung | Intervall-Bestellmenge
+Erscheinungsdatum | Erscheinungsdatum
+– | Verfügbar bis
 
 ##### Varianten
 Der Abgleich der Varianten entspricht der Funktionalität **Standarddaten übernehmen**. D.h. alle Varianten werden mit dem Hauptartikel abgeglichen. Lediglich die Preise, die Artikelnummer und die EAN werden pro Variante gespeichert.
@@ -315,6 +356,12 @@ Der Abgleich der Varianten entspricht der Funktionalität **Standarddaten übern
 plentymarkets erlaubt eine Preisstaffelung bis zu einer Maximalanzahl von 6 Staffelungen. Varianten innerhalb von plentymarkets haben keine eigenen Preise; ebenso ist die Grundpreisberechnung vom Hauptartikel abhängig. Die Preise der Varianten ergeben sich aus den Preisen des Hauptartikels und den Aufpreisen der Attributwerte. Der sich daraus errechnete Preis wird für die Varianten innerhalb von shopware übernommen (inkl. Staffelung).
 
 Es wird lediglich das erste in plentymarkets angelegte Preisset mit den Preisen für die unter Einstellungen eingestellte Kundengruppe synchronisiert. Einkaufpreise werden nicht übertragen.
+
+shopware | plentymarkets | Anmerkung
+- |
+Preis | Preis | Sofern nur der Preis angegeben ist, entspricht das bei shopware 1 - beliebig.
+Staffelung | Preise 6 - 11 / Preis X ab Menge | Wird entsprechend als Staffelung angelegt
+MwSt | MwSt. | entsprechend des Mappings
 
 ##### Bilder
 
