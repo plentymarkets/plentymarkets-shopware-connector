@@ -70,7 +70,7 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		name: 'ItemProducerID',
 		type: 'integer'
 	}, {
-		name: 'WebstoreID',
+		name: 'StoreID',
 		type: 'integer'
 	}, {
 		name: 'OrderReferrerID',

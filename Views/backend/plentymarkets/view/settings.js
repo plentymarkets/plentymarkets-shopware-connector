@@ -159,8 +159,8 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 				name: 'ItemWarehousePercentage',
 				supportText: 'Wieviel Prozent des netto-Warenbestandes sollen in shopware gebucht werden?',
 			}, {
-				fieldLabel: '{s name=plentymarkets/view/settings/textfield/WebstoreID}Mandant (Shop){/s}',
-				name: 'WebstoreID',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/StoreID}Mandant (Shop){/s}',
+				name: 'StoreID',
 				store: me.stores.multishops,
 				supportText: 'Stellen Sie hier eine Verknüfung zu dem in plentymarkets konfigurierten shopware-System her.'
 			}, {
