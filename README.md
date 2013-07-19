@@ -321,8 +321,8 @@ Die Artikelnummer wird nach dem Erstellen nicht mehr Synchronisiert. Eine Artike
 
 shopware | plentymarkets | Anmerkung
 ---------|---------------|----------
-Aktiv | Inaktiv/Sichtbarkeit Webshop | Der Artikel wird aktiv gesetzt, wenn er bei plentymarkets nicht inaktiv ist, und der Artikel im Webshob sichtbar ist
-Artikelnummer | Nr. | Wird generiert, wenn bei plentymarkets nicht vorhanden
+Aktiv | Verfügbar » Inaktiv/Sichtbarkeit Webshop | Der Artikel wird aktiv gesetzt, wenn er bei plentymarkets nicht inaktiv ist, und der Artikel im Webshob sichtbar ist
+Artikelnummer | Nr. | Wird generiert, wenn bei plentymarkets nicht vorhanden, oder bereits vergeben
 Artikel hervorheben | Shop-Aktion | Nur der plentymarkets Wert *Top-Artikel* bewirkt, dass der Artikel hervorgehoben wird
 n/a | Externe ID | Zusammengesetzt aus *Swag/* und der Id des shopware Artikels
 Hersteller | Hersteller | Ist der Hersteller nicht vorhanden, wird er angelegt
@@ -335,27 +335,34 @@ Verpackungseinheit | Einheit 1 | –
 Breite | Breite | –
 Höhe | Höhe | –
 Länge | Länge | –
-Artikel-Bezeichnung | Name 1 | –
-Name | Name 1 | –
-Beschreibung | Artikeltext | –
-Kurzbeschreibung | Vorschautext | –
-Keywords | Keywords | –
+Artikel-Bezeichnung | Texte » Name 1 | –
+Beschreibung | Texte » Artikeltext | –
+Kurzbeschreibung | Texte » Vorschautext | –
+Keywords | Texte » Keywords | –
 zuletzt bearbeitet | – | Wird mit dem Zeiutpunkt der letzten Änderung am plentymarkets Artikel abgeglichen
-Mindestabnahme | Mindest-Bestellmenge
-Maximalabnahme| Maximale Bestellmenge
-Staffelung | Intervall-Bestellmenge
+Mindestabnahme | Verfügbar » Mindest-Bestellmenge
+Maximalabnahme| Verfügbar » Maximale Bestellmenge
+Staffelung | Verfügbar » Intervall-Bestellmenge
+Abverkauf | Bestand » Beschränkung | Wird gesetzt, wenn die Verkäufe auf den Netto-Warenbestand beschränkt sind
 Erscheinungsdatum | Erscheinungsdatum
 ? | Verfügbar bis
+Zusatzfelder 1-20 | Felder 1-20 | 
 
 ##### Varianten
 Der Abgleich der Varianten entspricht der Funktionalität **Standarddaten übernehmen**. D.h. alle Varianten werden mit dem Hauptartikel abgeglichen. Lediglich die Preise, die Artikelnummer und die EAN werden pro Variante gespeichert.
 
 **Hinweis:** Bei einer Änderung an einer Variante oder einem Stammartikel werden immer sowohl der Stammartikel als auch alle Varianten synchronisiert.
 
+shopware | plentymarkets | Anmerkung
+---------|---------------|----------
+Artikelnummer | Variantennummer | Wird generiert, wenn bei plentymarkets nicht vorhanden, oder bereits vergeben
+EAN | EAN 1 | –
+
+
 ##### Preise
 plentymarkets erlaubt eine Preisstaffelung bis zu einer Maximalanzahl von 6 Staffelungen. Varianten innerhalb von plentymarkets haben keine eigenen Preise; ebenso ist die Grundpreisberechnung vom Hauptartikel abhängig. Die Preise der Varianten ergeben sich aus den Preisen des Hauptartikels und den Aufpreisen der Attributwerte. Der sich daraus errechnete Preis wird für die Varianten innerhalb von shopware übernommen (inkl. Staffelung).
 
-Es wird lediglich das erste in plentymarkets angelegte Preisset mit den Preisen für die unter Einstellungen eingestellte Kundengruppe synchronisiert. Einkaufpreise werden nicht übertragen.
+Es wird lediglich das erste in plentymarkets angelegte Preisset mit den Preisen für die unter Einstellungen eingestellte Kundengruppe synchronisiert. Einkaufspreise werden nicht übertragen.
 
 shopware | plentymarkets | Anmerkung
 ---------|---------------|----------
@@ -364,17 +371,21 @@ Staffelung | Preise 6 - 11 / Preis X ab Menge | Wird entsprechend als Staffelung
 MwSt | MwSt. | entsprechend des Mappings
 
 ##### Bilder
+Die Bilder werden in der shopware Medienbibliothek angelegt und dann dem Artikel zugeordnet.
 
+**Achtung: ** Bei einer Änderung an einem Artikel werden alle Bilder gelöscht und neu hinzugefügt.
 
 ##### Ähnliche Artikel & Zubehör (Cross-Selling)
 Die Verknüpfungen zwischen Artikeln der Typen *ähnlicher Artikel* und *Zubehör* werden zu shopware übernommen. Alle anderen Typen werden ignoriert, da diese nicht von shopware unterstützt werden.
+
+**Achtung: ** Bei einer Änderung an einem Artikel werden alle Verknüpfungen neu hergestellt.
 
 ##### Warenbestände
 Die Warenbestände werden alle 15 Minuten inkrementell abgeglichen. Alle Warenbestände von Stammartikeln und Varianten, die sich seit dem letzten Abgleich geändert haben, werden abgerufen und im shopware-System entsprechend angepasst.
 
 Sie können entweder ein bestimmtes Lager als Quelle für die Warenbestände festlegen, oder das *virtuelle Gesamtlager* verwenden. Die Artikel erhalten in shopware dann den kumulierten Warenbestand aus allen vorhandenen Lagern.
 
-In shopware wird immer der Netto-Warenbestand von plentymarktes gebucht. Dieser wird jedoch reduziert, wenn Sie unter eintellungen den Warenbestandspuffer eingestellt haben (bzw. wenn der Wert kleiner als 100% ist). Dies dient zum Vermeiden von Überverkäufen, da die Warenbestände nicht immer aktuelle sein können.
+In shopware wird immer der Netto-Warenbestand von plentymarktes gebucht. Dieser wird jedoch reduziert, wenn Sie unter Eintellungen den Warenbestandspuffer eingestellt haben (bzw. wenn der Wert kleiner als 100% ist). Dies dient zum Vermeiden von Überverkäufen, da die Warenbestände nicht immer aktuelle sein können.
 
 #### Aufträge
 Aufträge, die in shopware erstellt werden, werden alle 15 Minuten inkl. der Kundendaten nach plentymarkets exportiert. Die Versandkosten werden dabei mit übernommen.
