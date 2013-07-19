@@ -305,7 +305,7 @@ class PlentymarketsMappingDataController
 				')
 			->fetchAll();
 
-		$plentyVat = PlentymarketsImportController::getVat();
+		$plentyVat = PlentymarketsImportController::getVatList();
 		foreach ($rows as &$row)
 		{
 			if ($row['plentyID'] >= 0)
