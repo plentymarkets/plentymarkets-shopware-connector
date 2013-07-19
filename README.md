@@ -320,7 +320,7 @@ Die Funktion der plentymarkts' Bestellmerkmale wird nicht abgebildet, da sie in 
 Die Artikelnummer wird nach dem Erstellen nicht mehr Synchronisiert. Eine Artikelnummer ist kein Pflichtfeld eines plentymarkets Artikels und muss auch nicht eindeutig sein. Da einem shopware-Artikel jedoch zwingend eine eindeutige Nummer zugeordnet werden muss, wird im Falle einer nicht eindeutigen Nummer eine fortlaufende Nummer vergeben. Das würde bei der nächsten Aktualisierung eines solchen Artikels erneut zu einer neuen Nummer führen.
 
 shopware | plentymarkets | Anmerkung
-- |
+---------|---------------|----------
 Aktiv | Inaktiv/Sichtbarkeit Webshop | Der Artikel wird aktiv gesetzt, wenn er bei plentymarkets nicht inaktiv ist, und der Artikel im Webshob sichtbar ist
 Artikelnummer | Nr. | Wird generiert, wenn bei plentymarkets nicht vorhanden
 Artikel hervorheben | Shop-Aktion | Nur der plentymarkets Wert *Top-Artikel* bewirkt, dass der Artikel hervorgehoben wird
@@ -358,7 +358,7 @@ plentymarkets erlaubt eine Preisstaffelung bis zu einer Maximalanzahl von 6 Staf
 Es wird lediglich das erste in plentymarkets angelegte Preisset mit den Preisen für die unter Einstellungen eingestellte Kundengruppe synchronisiert. Einkaufpreise werden nicht übertragen.
 
 shopware | plentymarkets | Anmerkung
-- |
+---------|---------------|----------
 Preis | Preis | Sofern nur der Preis angegeben ist, entspricht das bei shopware 1 - beliebig.
 Staffelung | Preise 6 - 11 / Preis X ab Menge | Wird entsprechend als Staffelung angelegt
 MwSt | MwSt. | entsprechend des Mappings
