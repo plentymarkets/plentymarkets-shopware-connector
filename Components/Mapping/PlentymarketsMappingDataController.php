@@ -35,8 +35,22 @@ require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingController.php';
  */
 class PlentymarketsMappingDataController
 {
+	/**
+	 *
+	 * @var bool
+	 */
+	protected $auto = false;
 
-	public static function getCountry()
+	/**
+	 *
+	 * @param auto $auto
+	 */
+	public function __construct($auto)
+	{
+		$this->auto = $auto;
+	}
+
+	public function getCountry()
 	{
 		$rows = Shopware()->Db()
 			->query('
@@ -58,7 +72,7 @@ class PlentymarketsMappingDataController
 			{
 				$row['plentyName'] = $plentyCountries[$row['plentyID']]['name'];
 			}
-			else if ($this->Request()->get('auto', false))
+			else if ($this->auto)
 			{
 				foreach ($plentyCountries as $plentyData)
 				{
@@ -85,7 +99,7 @@ class PlentymarketsMappingDataController
 		return $rows;
 	}
 
-	public static function getCurrency()
+	public function getCurrency()
 	{
 		$rows = Shopware()->Db()
 			->query('
@@ -107,7 +121,7 @@ class PlentymarketsMappingDataController
 			{
 				$row['plentyName'] = $plentyCurrencies[$row['plentyID']]['name'];
 			}
-			else if ($this->Request()->get('auto', false))
+			else if ($this->auto)
 			{
 				foreach ($plentyCurrencies as $plentyData)
 				{
@@ -129,7 +143,7 @@ class PlentymarketsMappingDataController
 		return $rows;
 	}
 
-	public static function getCustomerClass()
+	public function getCustomerClass()
 	{
 		$rows = Shopware()->Db()
 			->query('
@@ -154,7 +168,7 @@ class PlentymarketsMappingDataController
 		return $rows;
 	}
 
-	public static function getMeasureUnit()
+	public function getMeasureUnit()
 	{
 		$rows = Shopware()->Db()
 			->query('
@@ -178,7 +192,7 @@ class PlentymarketsMappingDataController
 		return $rows;
 	}
 
-	public static function getMethodOfPayment()
+	public function getMethodOfPayment()
 	{
 		// s_core_tax
 		$rows = Shopware()->Db()
@@ -200,7 +214,7 @@ class PlentymarketsMappingDataController
 			{
 				$row['plentyName'] = $plentyShipping[$row['plentyID']]['name'];
 			}
-			else if ($this->Request()->get('auto', false))
+			else if ($this->auto)
 			{
 				foreach ($plentyShipping as $plentyData)
 				{
@@ -227,7 +241,7 @@ class PlentymarketsMappingDataController
 		return $rows;
 	}
 
-	public static function getShippingProfile()
+	public function getShippingProfile()
 	{
 		// s_core_tax
 		$rows = Shopware()->Db()
@@ -250,7 +264,7 @@ class PlentymarketsMappingDataController
 			{
 				$row['plentyName'] = $plentyShipping[$row['plentyID']]['name'];
 			}
-			else if ($this->Request()->get('auto', false))
+			else if ($this->auto)
 			{
 				foreach ($plentyShipping as $plentyData)
 				{
@@ -277,7 +291,7 @@ class PlentymarketsMappingDataController
 		return $rows;
 	}
 
-	public static function getVat()
+	public function getVat()
 	{
 		$rows = Shopware()->Db()
 			->query('

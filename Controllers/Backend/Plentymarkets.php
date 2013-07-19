@@ -454,35 +454,36 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingDataController.php';
 
 		$map = $this->Request()->getParam('map');
+		$DataController = new PlentymarketsMappingDataController($this->Request()->getParam('auto', false));
 
 		switch ($map)
 		{
 			case 'VAT':
-				$rows = PlentymarketsMappingDataController::getVat();
+				$rows = $DataController->getVat();
 				break;
 
 			case 'CustomerClass':
-				$rows = PlentymarketsMappingDataController::getCustomerClass();
+				$rows = $DataController->getCustomerClass();
 				break;
 
 			case 'MethodOfPayment':
-				$rows = PlentymarketsMappingDataController::getMethodOfPayment();
+				$rows = $DataController->getMethodOfPayment();
 				break;
 
 			case 'ShippingProfile':
-				$rows = PlentymarketsMappingDataController::getShippingProfile();
+				$rows = $DataController->getShippingProfile();
 				break;
 
 			case 'Country':
-				$rows = PlentymarketsMappingDataController::getCountry();
+				$rows = $DataController->getCountry();
 				break;
 
 			case 'Currency':
-				$rows = PlentymarketsMappingDataController::getCurrency();
+				$rows = $DataController->getCurrency();
 				break;
 
 			case 'MeasureUnit':
-				$rows = PlentymarketsMappingDataController::getMeasureUnit();
+				$rows = $DataController->getMeasureUnit();
 				break;
 		}
 
