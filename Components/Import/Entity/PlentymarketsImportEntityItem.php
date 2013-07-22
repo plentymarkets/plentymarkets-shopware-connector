@@ -161,7 +161,7 @@ class PlentymarketsImportEntityItem
 			'lastStock' => ($this->ItemBase->Stock->Limitation == 1),
 			'changed' => date('c', $this->ItemBase->LastUpdate),
 			'availableTo' => null, // wird unten gesetzt
-			'active' => $this->ItemBase->Availability->Inactive == 0,
+			'active' => $this->ItemBase->Availability->Inactive == 0 && $this->ItemBase->Availability->Webshop == 1,
 			'taxId' => $this->getTaxId()
 		);
 
