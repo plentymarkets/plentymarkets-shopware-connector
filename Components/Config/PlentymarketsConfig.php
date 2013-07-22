@@ -73,9 +73,9 @@ class PlentymarketsConfig
 		if (strpos($name, 'get') === 0)
 		{
 			$key = substr($name, 3);
-			if (!array_key_exists($key, $this->config))
+			if (!isset($this->config[$key]))
 			{
-				if (array_key_exists(0, $args))
+				if (isset($args[0]))
 				{
 					return $args[0];
 				}
@@ -90,12 +90,15 @@ class PlentymarketsConfig
 		else if (strpos($name, 'set') === 0)
 		{
 			$key = substr($name, 3);
-			if (!array_key_exists(0, $args))
+			
+			if (!isset($args[0]))
 			{
 				return;
 			}
+			
+			$value = (string) $args[0];
 
-			if ($this->config[$key] == $args[0])
+			if ($this->config[$key] == $value)
 			{
 				return;
 			}
@@ -108,11 +111,11 @@ class PlentymarketsConfig
 						`value` = ?
 			', array(
 				$key,
-				$args[0]
+				$value
 			));
 
 			// Update the instance cache
-			$this->config[$key] = $args[0];
+			$this->config[$key] = $value;
 		}
 	}
 	

@@ -178,20 +178,20 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		}
 
 		// Item
-		$Config->setItemWarehouseID((string) $this->Request()->ItemWarehouseID);
-		$Config->setItemCategoryRootID((string) $this->Request()->ItemCategoryRootID);
-		$Config->setDefaultCustomerGroupKey((string) $this->Request()->DefaultCustomerGroupKey);
-		$Config->setItemWarehousePercentage((string) $this->Request()->ItemWarehousePercentage);
+		$Config->setItemWarehouseID($this->Request()->ItemWarehouseID);
+		$Config->setItemCategoryRootID($this->Request()->ItemCategoryRootID);
+		$Config->setDefaultCustomerGroupKey($this->Request()->DefaultCustomerGroupKey);
+		$Config->setItemWarehousePercentage($this->Request()->ItemWarehousePercentage);
 		$Config->setItemProducerID($this->Request()->ItemProducerID);
 		$Config->setOrderMarking1($this->Request()->OrderMarking1);
-		$Config->setOrderReferrerID((string) $this->Request()->OrderReferrerID);
+		$Config->setOrderReferrerID($this->Request()->OrderReferrerID);
 		$Config->setOrderPaidStatusID($this->Request()->OrderPaidStatusID);
 		$Config->setOutgoingItemsOrderStatus($this->Request()->OutgoingItemsOrderStatus);
 		$Config->setOutgoingItemsID($this->Request()->OutgoingItemsID);
 		$Config->setOutgoingItemsShopwareOrderStatusID($this->Request()->OutgoingItemsShopwareOrderStatusID);
 		$Config->setIncomingPaymentShopwarePaymentFullStatusID($this->Request()->IncomingPaymentShopwarePaymentFullStatusID);
 		$Config->setIncomingPaymentShopwarePaymentPartialStatusID($this->Request()->IncomingPaymentShopwarePaymentPartialStatusID);
-		$Config->setStoreID((string) $this->Request()->StoreID);
+		$Config->setStoreID($this->Request()->StoreID);
 
 		//
 		if ($Config->getOutgoingItemsIntervalID() != $this->Request()->OutgoingItemsIntervalID)
