@@ -399,7 +399,7 @@ class PlentymarketsImportEntityItem
 	/**
 	 *
 	 */
-	public function setProperties()
+	protected function setProperties()
 	{
 		if (is_null($this->ItemBase->ItemProperties))
 		{
@@ -699,12 +699,6 @@ class PlentymarketsImportEntityItem
 					// Preise
 					$PlentymarketsImportEntityItemPrice = new PlentymarketsImportEntityItemPrice($this->ItemBase->PriceSet);
 					$PlentymarketsImportEntityItemPrice->update($Article->getId());
-
-					// Merkmale
-					// Wenn kein Mapping für die GruppenId vorhanden ist, muss diese über ein extra Aufruf vorher erstellt werden
-					// Wenn kein Mapping für ItemProperties->item->PropertyGroupID, dann muss sie abgerufen werden
-
-					// PlentymarketsLogger::getInstance()->message('Sync:Item', '$mainDetailId: ' . $mainDetailId);
 				}
 
 				else
@@ -778,22 +772,17 @@ class PlentymarketsImportEntityItem
 				$PlentymarketsImportEntityItemImage = new PlentymarketsImportEntityItemImage($this->ItemBase->ItemID, $SHOPWARE_itemID);
 				$PlentymarketsImportEntityItemImage->image();
 			}
-			catch (Shopware\Components\Api\Exception\OrmException $E)
-			{
-				PlentymarketsLogger::getInstance()->error('Sync:Item', 'Item could not be created: ' . $E->getMessage());
-			}
 			catch (Exception $E)
 			{
 				PlentymarketsLogger::getInstance()->error('Sync:Item', 'Item could not be created: ' . $this->data['name']);
+				PlentymarketsLogger::getInstance()->error('Sync:Item', get_class($E) . ': ' . $E->getMessage());
 			}
 		}
 
 		// Der Hersteller ist neu angelegt worden
-		if (array_key_exists('supplier', $this->data))
+		if ($Article instanceof \Shopware\Models\Article\Article && array_key_exists('supplier', $this->data))
 		{
-			// dann das mapping speichern
-			PlentymarketsLogger::getInstance()->message('Sync:Item', 'Producer created: ' . $Article->getSupplier()
-				->getName());
+			PlentymarketsLogger::getInstance()->message('Sync:Item', 'Producer created: ' . $Article->getSupplier()->getName());
 			PlentymarketsMappingController::addProducer($Article->getSupplier()->getId(), $this->ItemBase->ProducerID);
 		}
 	}
