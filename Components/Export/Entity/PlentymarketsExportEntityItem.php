@@ -235,6 +235,7 @@ class PlentymarketsExportEntityItem
 			$Object_FileBase64Encoded->FileEnding = $Image->getExtension(); // string
 			$Object_FileBase64Encoded->FileName = $Image->getPath(); // string
 			$Object_ItemImage->ImageData = $Object_FileBase64Encoded;
+			$Object_ItemImage->Position = $Image->getPosition();
 
 			$Request_AddItemsImage->Image = $Object_ItemImage;
 			$Request_AddItemsImage->ItemID = $this->PLENTY_itemID;
