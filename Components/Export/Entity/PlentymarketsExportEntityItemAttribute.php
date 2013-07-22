@@ -79,12 +79,12 @@ class PlentymarketsExportEntityItemAttribute
 		$Response_GetItemAttributes = PlentymarketsSoapClient::getInstance()->GetItemAttributes($Request_GetItemAttributes);
 		foreach ($Response_GetItemAttributes->Attributes->item as $Attribute)
 		{
-			$this->PLENTY_name2ID[$Attribute->FrontendName] = $Attribute->Id;
+			$this->PLENTY_name2ID[strtolower($Attribute->FrontendName)] = $Attribute->Id;
 
 			$this->PLENTY_idAndValueName2ID[$Attribute->Id] = array();
 			foreach ($Attribute->Values->item as $AttributeValue)
 			{
-				$this->PLENTY_idAndValueName2ID[$Attribute->Id][$AttributeValue->FrontendName] = $AttributeValue->ValueId;
+				$this->PLENTY_idAndValueName2ID[$Attribute->Id][strtolower($AttributeValue->FrontendName)] = $AttributeValue->ValueId;
 			}
 		}
 	}
@@ -99,10 +99,11 @@ class PlentymarketsExportEntityItemAttribute
 			->findAll() as $Attribute)
 		{
 			$Attribute instanceof Shopware\Models\Article\Configurator\Group;
-
-			if (array_key_exists($Attribute->getName(), $this->PLENTY_name2ID))
+			$checknameAttribute = strtolower($Attribute->getName());
+			
+			if (array_key_exists($checknameAttribute, $this->PLENTY_name2ID))
 			{
-				$attributeIdAdded = $this->PLENTY_name2ID[$Attribute->getName()];
+				$attributeIdAdded = $this->PLENTY_name2ID[$checknameAttribute];
 			}
 
 			else
@@ -128,11 +129,11 @@ class PlentymarketsExportEntityItemAttribute
 				$AttributeValue instanceof Shopware\Models\Article\Configurator\Option;
 
 				// Workaround
-				$checkname = str_replace(',', '.', $AttributeValue->getName());
+				$checknameValue = strtolower(str_replace(',', '.', $AttributeValue->getName()));
 
-				if (array_key_exists($attributeIdAdded, $this->PLENTY_idAndValueName2ID) && array_key_exists($checkname, $this->PLENTY_idAndValueName2ID[$attributeIdAdded]))
+				if (array_key_exists($attributeIdAdded, $this->PLENTY_idAndValueName2ID) && array_key_exists($checknameValue, $this->PLENTY_idAndValueName2ID[$attributeIdAdded]))
 				{
-					PlentymarketsMappingController::addAttributeOption($AttributeValue->getId(), $this->PLENTY_idAndValueName2ID[$attributeIdAdded][$checkname]);
+					PlentymarketsMappingController::addAttributeOption($AttributeValue->getId(), $this->PLENTY_idAndValueName2ID[$attributeIdAdded][$checknameValue]);
 				}
 				else
 				{
