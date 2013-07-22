@@ -238,6 +238,9 @@ Die Zahlungsarten werden den Aufträgen zugeordnet.
 ##### Steuersätze
 … sind zu hoch.
 
+##### Kundengruppen
+Sofern hier die plentymarkets Kundenklassen *Standard-Endkunden* und/oder *Standard-Firmenkunden* nicht auftauchen, müssen diese in plentymarktes unter **Einstellungen » Kunden » Kundenklassen** einmalig abgespeichert werden.
+
 ##### Versandarten
 Das Mapping der Versandarten dient dazu, die Funktionalitäten, die plentymarkets im Bereich Fulfillment bietet, vollumfänglich nutzen zu können.
 
