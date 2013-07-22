@@ -43,12 +43,38 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
      */
     public function install()
     {
+		// Check for the corrent versions
+		if (!$this->assertRequiredPluginsPresent(array('Cron')))
+		{
+			return array(
+				'success' => false,
+				'message' => 'Bitte installieren und aktivieren sie das Cron-Plugin'
+			);
+		}
+    	
+    	if (!$this->assertVersionGreaterThen('4.1'))
+    	{
+    		return array(
+				'success' => false,
+				'message' => 'Das plentymarkets-Plugin benötigt min. shopware 4.1'
+			);
+    	}
+    	
         $this->createDatabase();
         $this->createEvents();
         $this->createMenu();
         $this->registerCronjobs();
 
         return true;
+    }
+    
+    /**
+     * 
+     * @see Shopware_Components_Plugin_Bootstrap::update()
+     */
+    public function update($version)
+    {
+    	return true;
     }
 
 	/**
