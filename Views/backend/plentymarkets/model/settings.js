@@ -84,10 +84,12 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		type: 'float'
 	}, {
 		name: 'OutgoingItemsID',
-		type: 'integer'
+		type: 'integer',
+		defaultValue: 1
 	}, {
 		name: 'OutgoingItemsIntervalID',
-		type: 'integer'
+		type: 'integer',
+		defaultValue: 3
 	}, {
 		name: 'OutgoingItemsShopwareOrderStatusID',
 		type: 'integer',
