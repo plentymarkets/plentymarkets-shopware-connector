@@ -115,8 +115,8 @@ class PlentymarketsUtils
 
 		try
 		{
-			$Response = PlentymarketsSoapClient::getInstance()->GetPlentyMarketsVersion();
-			PlentymarketsConfig::getInstance()->setPlentymarketsVersion($Response->PlentyVersion);
+			$Response = PlentymarketsSoapClient::getInstance()->GetServerTime();
+			PlentymarketsConfig::getInstance()->setPlentymarketsVersion('5.000');
 			PlentymarketsConfig::getInstance()->setApiLastStatusTimestamp(time());
 			PlentymarketsConfig::getInstance()->setApiStatus(2);
 
