@@ -18,7 +18,8 @@ Ext.define('Shopware.apps.Plentymarkets.view.log.Grid', {
 		};
 
 		me.store = Ext.create('Shopware.apps.Plentymarkets.store.Log');
-
+		me.store.getProxy().setExtraParam('type', me.type)
+		
 		me.dockedItems = [{
 			xtype: 'pagingtoolbar',
 			store: me.store,
@@ -29,11 +30,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.log.Grid', {
 		me.listeners = {
 			activate: function()
 			{
-				me.store.load({
-					params: {
-						type: me.type
-					}
-				});
+				me.store.load();
 			}
 		};
 
