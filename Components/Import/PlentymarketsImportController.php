@@ -431,7 +431,15 @@ class PlentymarketsImportController
 		foreach ($Response_GetCustomerClassList->CustomerClasses->item as $CustomerClass)
 		{
 			$CustomerClass instanceof PlentySoapObject_GetCustomerClasses;
-			$customerClassList[$CustomerClass->CustomerClassID] = array('id' => $CustomerClass->CustomerClassID, 'name' => $CustomerClass->CustomerClassName);
+			// Skip "Visible to everyone"
+			if ($CustomerClass->CustomerClassID == 0)
+			{
+				continue;
+			}
+			$customerClassList[$CustomerClass->CustomerClassID] = array(
+				'id' => $CustomerClass->CustomerClassID,
+				'name' => $CustomerClass->CustomerClassName
+			);
 		}
 
 		PlentymarketsConfig::getInstance()->setMiscCustomerClassLastImport(time());
