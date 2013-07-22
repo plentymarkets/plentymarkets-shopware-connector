@@ -149,7 +149,7 @@ class PlentymarketsMappingDataController
 			->query('
 					SELECT
 							C.id, description AS name,
-							IFNULL(PMC.plentyID, -1) plentyID
+							IFNULL(PMC.plentyID, -99) plentyID
 						FROM s_core_customergroups C
 						LEFT JOIN plenty_mapping_customer_class PMC
 							ON PMC.shopwareID = C.id
@@ -174,6 +174,7 @@ class PlentymarketsMappingDataController
 			->query('
 					SELECT
 							C.id, CONCAT(C.description, " (", C.unit, ")") name,
+							C.description, C.unit,
 							IFNULL(PMC.plentyID, 0) plentyID
 						FROM s_core_units C
 						LEFT JOIN plenty_mapping_measure_unit PMC
@@ -186,7 +187,42 @@ class PlentymarketsMappingDataController
 
 		foreach ($rows as &$row)
 		{
-			$row['plentyName'] = $plentyMU[$row['plentyID']]['name'];
+			if ($row['plentyID'])
+			{
+				$row['plentyName'] = $plentyMU[$row['plentyID']]['name'];
+			}
+			else if ($this->auto)
+			{
+				$plentyUnits = PlentymarketsConfig::getInstance()->getItemMeasureUnits();
+				foreach ($plentyUnits as $plentyData)
+				{
+					preg_match('/(.*?) \((.*?)\)/', $plentyData['name'], $matches);
+					
+					if (!is_array($matches))
+					{
+						$name = $plentyData['name'];
+						$unit = '';
+					}
+					else
+					{
+						list($match, $name, $unit) = $matches;
+					}
+					
+					$distance = levenshtein($row['description'], $name);
+					
+					if ($row['unit'] == $unit || $distance <= 2)
+					{
+						$row['plentyName'] = $plentyData['name'];
+						$row['plentyID'] = $plentyData['id'];
+						PlentymarketsMappingController::addMeasureUnit($row['id'], $plentyData['id']);
+						break;
+					}
+				}
+			}
+			else
+			{
+				$row['plentyName'] = '';
+			}
 		}
 
 		return $rows;
@@ -297,6 +333,7 @@ class PlentymarketsMappingDataController
 			->query('
 					SELECT
 							C.id, CONCAT(C.tax, " %") name,
+							C.tax,
 							IFNULL(PMC.plentyID, -1) plentyID
 						FROM s_core_tax C
 						LEFT JOIN plenty_mapping_vat PMC
@@ -311,6 +348,21 @@ class PlentymarketsMappingDataController
 			if ($row['plentyID'] >= 0)
 			{
 				$row['plentyName'] = $plentyVat[$row['plentyID']]['name'];
+			}
+			else if ($this->auto)
+			{
+				$plentyVat = PlentymarketsImportController::getVatList();
+				foreach ($plentyVat as $plentyData)
+				{
+					list($name, $percent) = explode(' ', $plentyData['name']);
+					if ((float) $row['tax'] == (float) $name)
+					{
+						$row['plentyName'] = $plentyData['name'];
+						$row['plentyID'] = $plentyData['id'];
+						PlentymarketsMappingController::addVat($row['id'], $plentyData['id']);
+						break;
+					}
+				}
 			}
 		}
 
