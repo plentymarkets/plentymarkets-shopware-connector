@@ -115,6 +115,29 @@ class PlentymarketsConfig
 			$this->config[$key] = $args[0];
 		}
 	}
+	
+	/**
+	 * 
+	 * @return boolean
+	 */
+	public function isComplete()
+	{
+		return (
+			!is_null($this->getOutgoingItemsIntervalID()) &&
+			!is_null($this->getItemWarehousePercentage()) &&
+			!is_null($this->getItemWarehouseID()) &&
+			!is_null($this->getItemCategoryRootID()) &&
+			!is_null($this->getDefaultCustomerGroupKey()) &&
+			!is_null($this->getItemProducerID()) &&
+			!is_null($this->getOrderReferrerID()) &&
+			!is_null($this->getOrderPaidStatusID()) &&
+			!is_null($this->getOutgoingItemsID()) &&
+			!is_null($this->getOutgoingItemsShopwareOrderStatusID()) &&
+			!is_null($this->getIncomingPaymentShopwarePaymentFullStatusID()) &&
+			!is_null($this->getIncomingPaymentShopwarePaymentPartialStatusID()) &&
+			!is_null($this->getStoreID())
+		);
+	}
 
 	/**
 	 * Shortcut for item mesure units

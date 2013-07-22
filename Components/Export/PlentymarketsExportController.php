@@ -39,6 +39,18 @@ class PlentymarketsExportController
 	 * @var PlentymarketsExportController
 	 */
 	protected static $Instance;
+	
+	/**
+	 * The order in which the exports have to be carries out
+	 * @var array
+	 */
+	protected static $order = array(
+		'ItemCategory',
+		'ItemAttribute',
+		'ItemProperty',
+		'ItemProducer',
+		'Item'
+	);
 
 	/**
 	 *
@@ -56,7 +68,13 @@ class PlentymarketsExportController
 	 *
 	 * @var boolean
 	 */
-	protected $isSuccessFul = true;
+	protected $isComplete = true;
+	
+	/**
+	 * 
+	 * @var boolean
+	 */
+	protected $mayRun = false;
 
 	/**
 	 */
@@ -67,22 +85,25 @@ class PlentymarketsExportController
 
 		// Check whether a process is running
 		$this->isRunning = (boolean) $this->Config->getIsExportRunning(false);
+		
+		// Check wheter settings and mapping are done
+		$this->mayRun = PlentymarketsMappingController::isComplete() && $this->Config->isComplete();
 
-		// Check whether every export is finished successfully
-		$this->isSuccessFul = $this->isSuccessFul && ($this->Config->getItemCategoryExportStatus('open') == 'success');
-		$this->isSuccessFul = $this->isSuccessFul && ($this->Config->getItemAttributeExportStatus('open') == 'success');
-		$this->isSuccessFul = $this->isSuccessFul && ($this->Config->getItemPropertyExportStatus('open') == 'success');
-		$this->isSuccessFul = $this->isSuccessFul && ($this->Config->getItemProducerExportStatus('open') == 'success');
-		$this->isSuccessFul = $this->isSuccessFul && ($this->Config->getItemExportStatus('open') == 'success');
+		// Check whether every export is finished Completely
+		$this->isComplete = $this->isComplete && ($this->Config->getItemCategoryExportStatus('open') == 'success');
+		$this->isComplete = $this->isComplete && ($this->Config->getItemAttributeExportStatus('open') == 'success');
+		$this->isComplete = $this->isComplete && ($this->Config->getItemPropertyExportStatus('open') == 'success');
+		$this->isComplete = $this->isComplete && ($this->Config->getItemProducerExportStatus('open') == 'success');
+		$this->isComplete = $this->isComplete && ($this->Config->getItemExportStatus('open') == 'success');
 	}
 
 	/**
 	 *
 	 * @return boolean
 	 */
-	public function isSuccessFul()
+	public function isComplete()
 	{
-		return $this->isSuccessFul;
+		return $this->isComplete;
 	}
 
 	/**
@@ -118,6 +139,23 @@ class PlentymarketsExportController
 			throw new \Exception('Another export is waiting to be carried out');
 		}
 
+		// Check whether settings and mapping is complete
+		if ($this->mayRun == false)
+		{
+			throw new \Exception('Either the mapping or the settings are not finished');
+		}
+		
+		// Check whether or not the order is correct
+		$index = array_search($entity, self::$order);
+		if ($index > 0)
+		{
+			$previous = self::$order[$index - 1];
+			if (!$this->isSuccessfullyFinished($previous))
+			{
+				throw new \Exception('The previous entity "'. $previous .'" is not finished successfully');
+			}
+		}
+		
 		//
 		$this->Config->setExportEntityPending($entity);
 
@@ -137,6 +175,12 @@ class PlentymarketsExportController
 		if ($this->isRunning == true)
 		{
 			throw new \Exception('Another export is running at this very moment');
+		}
+		
+		// Check whether settings and mapping is complete
+		if ($this->mayRun == false)
+		{
+			throw new \Exception('Either the mapping or the settings are not finished');
 		}
 
 		$entity = $this->Config->getExportEntityPending(false);
@@ -163,7 +207,7 @@ class PlentymarketsExportController
 				case 'ItemProducer':
 				case 'ItemCategory':
 				case 'ItemAttribute':
-					$this->_export($entity);
+					$this->exportEntity($entity);
 					break;
 
 				// Items
@@ -211,13 +255,6 @@ class PlentymarketsExportController
 	 */
 	public function exportOrders()
 	{
-		if ($this->isRunning == true)
-		{
-			throw new \Exception('Another export is running at this very moment');
-		}
-
-		$this->Config->setIsExportRunning(1);
-
 		// Get all the orders, that are not yet exported to plentymarkets
 		$Result = Shopware()->Db()->query('
 			SELECT
@@ -240,15 +277,13 @@ class PlentymarketsExportController
 
 			try
 			{
-				$this->_exportOrderById($Order->shopwareId);
+				$this->exportOrderById($Order->shopwareId);
 			}
 			catch (Exception $e)
 			{
 				$this->Config->setOrderExportLastErrorMessage($e->getMessage());
 			}
 		}
-
-		$this->Config->setIsExportRunning(0);
 	}
 
 	/**
@@ -367,23 +402,23 @@ class PlentymarketsExportController
 		$this->Config->setItemIncomingPaymentExportLastUpdate($now);
 		$this->Config->setItemIncomingPaymentExportStatus('success');
 	}
-
+	
 	/**
-	 *
+	 * 
 	 * @param string $entity
 	 * @return boolean
 	 */
 	protected function isSuccessfullyFinished($entity)
 	{
 		$method = sprintf('get%sExportStatus', $entity);
-		return $this->Config->$method('…') == 'success';
+		return $this->Config->$method() == 'success';
 	}
 
 	/**
 	 *
 	 * @param integer $orderID
 	 */
-	protected function _exportOrderById($orderID)
+	protected function exportOrderById($orderID)
 	{
 		require_once PY_COMPONENTS . 'Export/Entity/PlentymarketsExportEntityOrder.php';
 
@@ -395,13 +430,8 @@ class PlentymarketsExportController
 	 *
 	 * @param string $entity
 	 */
-	protected function _export($entity)
+	protected function exportEntity($entity)
 	{
-		if ($this->isSuccessfullyFinished($entity))
-		{
-			return;
-		}
-
 		$class = sprintf('PlentymarketsExportEntity%s', $entity);
 
 		require_once PY_COMPONENTS . 'Export/Entity/' . $class . '.php';

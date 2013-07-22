@@ -142,24 +142,8 @@ class PlentymarketsUtils
 		$Config = PlentymarketsConfig::getInstance();
 
 		$mappingStatus = PlentymarketsMappingController::isComplete();
-		$exportStatus = PlentymarketsExportController::getInstance()->isSuccessFul();
-
-		// Check whether all settings are set properly
-		$settingsStatus = (
-			!is_null($Config->getOutgoingItemsIntervalID()) &&
-			!is_null($Config->getItemWarehousePercentage()) &&
-			!is_null($Config->getItemWarehouseID()) &&
-			!is_null($Config->getItemCategoryRootID()) &&
-			!is_null($Config->getDefaultCustomerGroupKey()) &&
-			!is_null($Config->getItemProducerID()) &&
-			!is_null($Config->getOrderReferrerID()) &&
-			!is_null($Config->getOrderPaidStatusID()) &&
-			!is_null($Config->getOutgoingItemsID()) &&
-			!is_null($Config->getOutgoingItemsShopwareOrderStatusID()) &&
-			!is_null($Config->getIncomingPaymentShopwarePaymentFullStatusID()) &&
-			!is_null($Config->getIncomingPaymentShopwarePaymentPartialStatusID()) &&
-			!is_null($Config->getStoreID())
-		);
+		$exportStatus = PlentymarketsExportController::getInstance()->isComplete();
+		$settingsStatus = $Config->isComplete();
 
 		//
 		$mayDatex = $mappingStatus && $exportStatus && $settingsStatus;

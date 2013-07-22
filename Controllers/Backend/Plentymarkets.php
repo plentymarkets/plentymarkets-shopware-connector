@@ -310,6 +310,12 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		{
 			$success = false;
 			$message = $E->getMessage();
+			
+			$method = sprintf('set%sExportStatus', $params['ExportEntityName']);
+			PlentymarketsConfig::getInstance()->$method('error');
+			
+			$method = sprintf('set%sExportLastErrorMessage', $params['ExportEntityName']);
+			PlentymarketsConfig::getInstance()->$method($E->getMessage());
 
 			PlentymarketsLogger::getInstance()->error('Export:Initial:' . ucfirst($params['ExportEntityName']), 'Announcement failed: ' . $message);
 		}
