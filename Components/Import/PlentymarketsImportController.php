@@ -328,13 +328,30 @@ class PlentymarketsImportController
 
 		// Do the request
 		$Response_GetMethodOfPayments = PlentymarketsSoapClient::getInstance()->GetMethodOfPayments($Request_GetMethodOfPayments);
-
+		
+		// The call wasn't successful
+		if (!$Response_GetMethodOfPayments->Success)
+		{
+			// Write to log
+			PlentymarketsLogger::getInstance()->error('Import:MethodOfPayment', 'Methods of payment could not be retrieved');
+				
+			// Old data should be available
+			if ($timestamp != 0)
+			{
+				return unserialize(PlentymarketsConfig::getInstance()->getMiscMethodsOfPaymentSerialized());
+			}
+				
+			// Otherwise return an empty array
+			return array();
+		}
+		
+		// Prepare data
 		$methodOfPayments = array();
 		foreach ($Response_GetMethodOfPayments->MethodOfPayment->item as $MethodOfPayment)
 		{
 			$MethodOfPayment instanceof PlentySoapObject_GetMethodOfPayments;
 			$methodOfPayments[$MethodOfPayment->MethodOfPaymentID] = array(
-				'id' => $MethodOfPayment->MethodOfPaymentID,
+				'id' => (integer) $MethodOfPayment->MethodOfPaymentID,
 				'name' => $MethodOfPayment->Name
 			);
 		}
@@ -363,6 +380,23 @@ class PlentymarketsImportController
 		// Do the request
 		$Response_GetOrderStatusList = PlentymarketsSoapClient::getInstance()->GetOrderStatusList($Request_GetOrderStatusList);
 
+		// The call wasn't successful
+		if (!$Response_GetOrderStatusList->Success)
+		{
+			// Write to log
+			PlentymarketsLogger::getInstance()->error('Import:Order:Status', 'Sales order statuses could not be retrieved');
+		
+			// Old data should be available
+			if ($timestamp != 0)
+			{
+				return unserialize(PlentymarketsConfig::getInstance()->getMiscOrderStatusSerialized());
+			}
+		
+			// Otherwise return an empty array
+			return array();
+		}
+		
+		// Prepare data
 		$orderStatusList = array();
 		foreach ($Response_GetOrderStatusList->OrderStatus->item as $OrderStatus)
 		{
@@ -396,6 +430,23 @@ class PlentymarketsImportController
 		// Do the request
 		$Response_GetSalesOrderReferrerList = PlentymarketsSoapClient::getInstance()->GetSalesOrderReferrer();
 
+		// The call wasn't successful
+		if (!$Response_GetSalesOrderReferrerList->Success)
+		{
+			// Write to log
+			PlentymarketsLogger::getInstance()->error('Import:Order:Referrer', 'Sales order referrer could not be retrieved');
+		
+			// Old data should be available
+			if ($timestamp != 0)
+			{
+				return unserialize(PlentymarketsConfig::getInstance()->getMiscSalesOrderReferrerSerialized());
+			}
+		
+			// Otherwise return an empty array
+			return array();
+		}
+		
+		// Prepare data
 		$salesOrderReferrerList = array();
 		foreach ($Response_GetSalesOrderReferrerList->SalesOrderReferrers->item as $SalesOrderReferrer)
 		{
@@ -426,18 +477,37 @@ class PlentymarketsImportController
 
 		// Do the request
 		$Response_GetCustomerClassList = PlentymarketsSoapClient::getInstance()->GetCustomerClasses();
+		
+		// The call wasn't successful
+		if (!$Response_GetCustomerClassList->Success)
+		{
+			// Write to log
+			PlentymarketsLogger::getInstance()->error('Import:Customer:Class', 'Customer classes could not be retrieved');
+			
+			// Old data should be available
+			if ($timestamp != 0)
+			{
+				return unserialize(PlentymarketsConfig::getInstance()->getMiscCustomerClassSerialized());
+			}
+			
+			// Otherwise return an empty array
+			return array();
+		}
 
+		// Prepare data
 		$customerClassList = array();
 		foreach ($Response_GetCustomerClassList->CustomerClasses->item as $CustomerClass)
 		{
 			$CustomerClass instanceof PlentySoapObject_GetCustomerClasses;
+			
 			// Skip "Visible to everyone"
 			if ($CustomerClass->CustomerClassID == 0)
 			{
 				continue;
 			}
+			
 			$customerClassList[$CustomerClass->CustomerClassID] = array(
-				'id' => $CustomerClass->CustomerClassID,
+				'id' => (integer) $CustomerClass->CustomerClassID,
 				'name' => $CustomerClass->CustomerClassName
 			);
 		}
@@ -463,6 +533,23 @@ class PlentymarketsImportController
 		// Do the request
 		$Response_GetWarehouseList = PlentymarketsSoapClient::getInstance()->GetWarehouseList(new PlentySoapRequest_GetWarehouseList());
 
+		// The call wasn't successful
+		if (!$Response_GetWarehouseList->Success)
+		{
+			// Write to log
+			PlentymarketsLogger::getInstance()->error('Import:Item:Warehouse', 'Warehouses could not be retrieved');
+		
+			// Old data should be available
+			if ($timestamp != 0)
+			{
+				return unserialize(PlentymarketsConfig::getInstance()->getMiscWarehousesSerialized());
+			}
+		
+			// Otherwise return an empty array
+			return array();
+		}
+		
+		// Prepare data
 		$warehouses = array(
 			array(
 				'id' => 0,
@@ -474,7 +561,7 @@ class PlentymarketsImportController
 		{
 			$Warehouse instanceof PlentySoapObject_GetWarehouseList;
 			$warehouses[$Warehouse->WarehouseID] = array(
-				'id' => $Warehouse->WarehouseID,
+				'id' => (integer) $Warehouse->WarehouseID,
 				'name' => $Warehouse->Name
 			);
 		}
@@ -500,6 +587,23 @@ class PlentymarketsImportController
 		// Do the request
 		$Response_GetMultiShops = PlentymarketsSoapClient::getInstance()->GetMultiShops();
 
+		// The call wasn't successful
+		if (!$Response_GetMultiShops->Success)
+		{
+			// Write to log
+			PlentymarketsLogger::getInstance()->error('Import:Store', 'Stores could not be retrieved');
+		
+			// Old data should be available
+			if ($timestamp != 0)
+			{
+				return unserialize(PlentymarketsConfig::getInstance()->getMiscMultishopsSerialized());
+			}
+		
+			// Otherwise return an empty array
+			return array();
+		}
+		
+		// Prepare data
 		$multishops = array();
 		foreach ($Response_GetMultiShops->MultiShops->item as $Multishop)
 		{
@@ -583,6 +687,23 @@ class PlentymarketsImportController
 
 		$Response_GetVATConfig = PlentymarketsSoapClient::getInstance()->GetVATConfig();
 
+		// The call wasn't successful
+		if (!$Response_GetVATConfig->Success)
+		{
+			// Write to log
+			PlentymarketsLogger::getInstance()->error('Import:VAT', 'VAT could not be retrieved');
+		
+			// Old data should be available
+			if ($timestamp != 0)
+			{
+				return unserialize(PlentymarketsConfig::getInstance()->getMiscVatSerialized());
+			}
+		
+			// Otherwise return an empty array
+			return array();
+		}
+		
+		// Prepare data
 		$vat = array();
 		foreach ($Response_GetVATConfig->DefaultVAT->item as $VAT)
 		{
