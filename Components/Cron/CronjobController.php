@@ -133,10 +133,10 @@ class PlentymarketsCronjobController
 	public function runOrderExport(Shopware_Components_Cron_CronJob $Job)
 	{
 		// Check whether the timelimit is undershot
-		if ($Job->getJob()->getEnd()->getTimestamp() + 600 > time())
-		{
-			return;
-		}
+// 		if ($Job->getJob()->getEnd()->getTimestamp() + 600 > time())
+// 		{
+// 			return;
+// 		}
 
 		$this->Config->setExportOrderLastRunTimestamp(time());
 		$this->Config->setExportOrderNextRunTimestamp(time() + $Job->getJob()->getInterval());
