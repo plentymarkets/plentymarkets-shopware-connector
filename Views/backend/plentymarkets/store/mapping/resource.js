@@ -27,7 +27,7 @@ Ext.define('Shopware.apps.Plentymarkets.store.mapping.Resource', {
 		id: "MethodOfPayment",
 		name: "Zahlungsarten"
 	}, {
-		id: "VAT",
+		id: "Vat",
 		name: "Steuern"
 	}, {
 		id: "ShippingProfile",

@@ -28,7 +28,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Main', {
 		names['Currency'] = 'Währungen';
 		names['Country'] = 'Länder';
 		names['MeasureUnit'] = 'Einheiten';
-		names['VAT'] = 'Steuersätze';
+		names['Vat'] = 'Steuersätze';
 		names['ShippingProfile'] = 'Versandarten';
 		names['MethodOfPayment'] = 'Zahlungsarten';
 		names['CustomerClass'] = 'Kundengruppen';

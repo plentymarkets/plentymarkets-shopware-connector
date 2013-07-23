@@ -406,7 +406,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 				$data = PlentymarketsConfig::getInstance()->getItemMeasureUnits();
 				break;
 
-			case 'VAT':
+			case 'Vat':
 
 				if ($forceReload)
 				{
@@ -464,7 +464,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 
 		switch ($map)
 		{
-			case 'VAT':
+			case 'Vat':
 				$rows = $DataController->getVat();
 				break;
 

@@ -106,7 +106,7 @@ class PlentymarketsMappingController
 				's_core_paymentmeans',
 				'method_of_payment'
 			),
-			'VAT' => array(
+			'Vat' => array(
 				's_core_tax',
 				'vat'
 			),
