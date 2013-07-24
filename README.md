@@ -196,9 +196,9 @@ Geben Sie unter dem Menüpunkt **API** die URL Ihres System sowie die Zugangsdat
 Nach dem Speichern von korrekten Daten, werden die weiteren Reiter **Einstellungen**, **Mapping** und **Datenaustausch** aktiviert. Sobald keine Verbindung zu plentymarkets hergestellt werden kann, werden diese Reiter und jegliche Kommunikation automatisch deaktiviert!
 
 #### Einstellungen
-Die Einstellungen in den im Folgenden genannten Bereichen *müssen* vorgenommen werden, da ohne sie der Datenaustausch nicht stattfinden kann.
+Die Einstellungen in den im Folgenden genannten Bereichen *müssen* vorgenommen werden, da ohne sie der Datenaustausch nicht stattfinden kann. Es wird eine Fehlermeldung erzeugt, wenn ein Datenaustausch gestartet werden soll, und die folgenden Einstellungen nicht gesetzt sind.
 
-Die Daten, die von plentymarkets geladen werden, werden für einen Tag gespeichert.
+Die Daten, die von plentymarkets geladen werden, werden für einen Tag gespeichert. Sie können jedoch über den entsprechenden Button erneut abgefragt werden. **Achtung:** Manche der zu Grunde liegenden Calls sind auf eine bestimmte Anzahl (i.d.R. 30/Tag/User) begrenzt!
 
 Einstellung | Erklärung
 ----|------
@@ -395,9 +395,11 @@ Aufträge, die in shopware erstellt werden, werden alle 15 Minuten inkl. der Kun
 
 Wenn der Warenausgang in plentymarkets gebucht wird, wird der Auftrag in shopware in den von Ihnen definierten Status gesetzt. Es kann entweder festgelegt werden, dass der Auftrag in plentymarkets einen bestimmen Status erreichen muss, um als abgeschlossen zu gelten, oder dass es reicht, wenn der Warenausgang gebucht worden ist. Dieser Abgleich findet einmal pro halber Stunde statt. Zusätzlich werden Zahlungen, die innerhlab von plentymarkets gebucht werden, zu shopware synchronisiert. Der Status für bezahlte und nur teilweise bezahlte Aufträge wird entsprechend der Einstellungen gesetzt.
 
-Wenn ein Auftrag in shopware einen bestimmten Zahlungsstatus erreicht, wird in plentymarkets ein Zahlungseingang über den gesamten Rechnungsbetrag gebucht. Die Zahlungsart wird entsprechend der Einstellungen gesetzt. Dieser Vorgang findet stündlich statt.
+Wenn ein Auftrag in shopwareden eingestellten Zahlungsstatus erreicht, wird in plentymarkets ein Zahlungseingang über den gesamten Rechnungsbetrag gebucht. Die Zahlungsart wird entsprechend der Einstellungen gesetzt. Dieser Vorgang findet stündlich statt.
 
 **Achtung:** In plentymarkets kann ein Kunde nur eine Rechnungsadresse hinterlegen. Wenn ein und der selbe Kunde in shopware einen Auftrag mit abweichender Rechnungsadresse anlegt, wird er bei plentymarkets als neuer Kunde mit eigener ID geführt.
+
+Artikelpositionen 
 
 ## Log
 Im Log erhalten Sie Auskunft über den Datentransfer. Jeder getätigte SOAP Call wird hier inkl. dessen Status (erfolgreich oder nicht) aufgeführt. Darüber hinaus erhalten Sie Informationen, wenn bestimmte Datensätze angelegt wurden oder bei der Verarbeitung Fehler aufgetreten sind. Es wird hier generell zwischen Meldung und Fehler unterschieden.
@@ -411,6 +413,13 @@ Export:Item | Initialer Export der Artikel | →  plentymarkets
 Export:Item:Image | Bilder während des Exports der Artikel | →  plentymarkets
 Export:Item:Variant | Varianten  während des Exports der Artikel | →  plentymarkets
 Export:Order | Export von neuen Aufträgen zu plentymarkets | →  plentymarkets
+Import:MethodOfPayment | Abfrage der Zahlungsarten | →  shopware
+Import:Order:Status | Abfrage der Auftragsstatus | →  shopware
+Import:Order:Referrer | Abfrage der Auftragsherkünfte | →  shopware
+Import:Customer:Class | Abfrage der Kundenklassen | →  shopware
+Import:Item:Warehouse | Abfrage der Lager | →  shopware
+Import:Store | Abfrage der Mandanten (Shops) | →  shopware
+Import:VAT | Abfrage der Steuersätze | →  shopware
 Soap:Auth | Autentifizierung mit der SOAP Schnittstelle | →  plentymarkets
 Soap:Call | Information ob ein SOAP Call erfolgreich gewesen ist | →  plentymarkets
 Sync:Item | Sychronisation der Artikel | →  shopware
@@ -426,6 +435,31 @@ Sync:Order:IncomingPayment | Sychronisation des Warenausganges |→  shopware
 Bei Meldungen handelt es sich um normale Informationen und positive Rückmeldungen.
 
 ### Fehler
+Sofern keine expliziete Fehlermeldung erscheint, wird idR. im darauffolgenen Eintrag im Log die Fehlermeldung des darunterliegenden Systems weitergegeben.
 
-* unerwartete Fehler
-* 
+Präfix | Meldung | Erklärung
+-------|---------|----------
+Cron:Export | Meldung | Wärend der Durchführung eines Cron Prozesses ist es zu einem unerwarteten Fehler gekommen. Der Fehler führt idR. dazu, das der Cron-Job deaktiviert wird.
+Export:Initial:<Entität> | Announcement failed: `<REASON>` | Das Vormerken eines initialen Exportes ist fehlgeschlagen. Dies kann dadurch kommen, dass bereits ein Export läuft, vorgemekrt ist oder die Reihenfolge nicht eingehalten wird
+Export:Initial:<Entität> | Fehlermeldung
+Export:Item | ItemId `<ID>`: Item could not be exported | Der Artikel konnte nicht zu plentymarkets exportiert werden
+Export:Item | ItemId `<ID>`: Skipping category with id `<CATEGOTY ID>` | Die Kategorie wird nicht exportiert, da sie entweder keine End-Kategorie (sondern ein Order) ist oder nicht unterhalb des ausgewählten Startknotens liegt
+Export:Item:Image | ItemId `<ID>`: Skipping image with id `<IMAGE ID>` | Das Bild wird nicht exportiert
+Export:Item:Image | ItemId `<ID>`: Skipping image with id `<IMAGE ID>` because there is no media associated | Das Bild ist fehlerhaft und wird nicht exportiert
+Export:Item:Variant | ItemId `<ID>`: Skipping corrut variant with id `<VARIANT ID>` | Die Variante bzw. das Konfigurator-Set ist fehlerhaft
+Import:Customer:Class | Customer classes could not be retrieved | Vermutlich ist das Call-Limit erreicht
+Import:Item:Warehouse | Warehouses could not be retrieved | Vermutlich ist das Call-Limit erreicht
+Import:MethodOfPayment | Methods of payment could not be retrieved | Vermutlich ist das Call-Limit erreicht
+Import:Order:Referrer | Sales order referrer could not be retrieved | Vermutlich ist das Call-Limit erreicht
+Import:Order:Status | Sales order statuses could not be retrieved | Vermutlich ist das Call-Limit erreicht
+Import:Store | Stores could not be retrieved | Vermutlich ist das Call-Limit erreicht
+Import:VAT | VAT could not be retrieved | Vermutlich ist das Call-Limit erreicht
+Sync:Item | Item could not be created: `<Name>` | Der Artikel konnte nicht in shopware erstellt werden
+Sync:Item | Item with the plentymarkets item id `<ID>` could not be updated | Der Artikel konnte nicht in shopware aktualisiert werden
+Sync:Item | The property `<PropertyName>` could not be created | Die Eigenschaft konnte nicht erstellt werden
+Sync:Item:Image | Got negative success from GetItemsImages for plentymarktes itemId `<ID>` | Die Bilder für den Artikel konnen nicht abgerufen werden
+Sync:Item:Linked | Got negative success from GetLinkedItems for plentymarkets itemId `<ID>` | Die verknüpften Artikel konnten nicht abgerufen werden
+Sync:Item:Linked | Item linker for the item with the plentymarkets item id `<ID>` failed | Das Verknüpfen der Atikel ist fehlgeschlagen
+Sync:Order:IncomingPayment | The incoming payment could not be booked in plentymarkets because the sales order (`<ID>`) was not yet exported to plentymarkets | Der Zahlungseingang konnt nicht exportiert werden, da der Auftrag noch nicht in plentymarkets existiert
+Sync:Order:IncomingPayment | The incoming payment of the sales order `<ID>` has already been exported to plentymarkets | Der Auftrag wurde bei plentymarkets als bezahlt markiert
+Sync:Order:IncomingPayment | The incoming payment of the sales order `<ID>` was not booked in plentymarkets | Der Zahlungseingang konnt nicht gebucht werden

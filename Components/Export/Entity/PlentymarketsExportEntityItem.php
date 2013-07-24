@@ -148,7 +148,7 @@ class PlentymarketsExportEntityItem
 			}
 			catch (PlentymarketsMappingExceptionNotExistant $E)
 			{
-				PlentymarketsLogger::getInstance()->error('Export:Item', 'ItemId ' . $Item->getId() . ': Skipping corrupt (non-leaf) category with id ' . $Category->getId());
+				PlentymarketsLogger::getInstance()->error('Export:Item', 'ItemId ' . $Item->getId() . ': Skipping category with id ' . $Category->getId());
 				continue;
 			}
 
@@ -221,7 +221,8 @@ class PlentymarketsExportEntityItem
 			}
 			catch (Exception $E)
 			{
-				PlentymarketsLogger::getInstance()->error('Export:Item:Image', 'ItemId ' . $this->SHOPWARE_Article->getId() . ': Skipping image with id ' . $Image->getId() . ' because: ' . $E->getMessage());
+				PlentymarketsLogger::getInstance()->error('Export:Item:Image', 'ItemId ' . $this->SHOPWARE_Article->getId() . ': Skipping image with id ' . $Image->getId());
+				PlentymarketsLogger::getInstance()->error('Export:Item:Image', $E->getMessage());
 				continue;
 			}
 
