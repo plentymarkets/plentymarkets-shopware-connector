@@ -93,7 +93,7 @@ class PlentymarketsImportEntityOrderIncomingPayments extends PlentymarketsImport
 					plentyOrderPaidTimestamp = NOW()
 				WHERE shopwareId = ?
 		', array(
-				$this->order['id']
+				$shopwareOrderId
 		));
 
 	}

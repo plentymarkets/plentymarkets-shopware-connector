@@ -83,8 +83,7 @@ class PlentymarketsExportEntityIncomingPayment
 			PlentymarketsLogger::getInstance()->error('Sync:Order:IncomingPayment', 'The incoming payment could not be booked in plentymarkets because the sales order (' . $this->order['id'] . ') was not yet exported to plentymarkets.');
 			throw new Exception();
 		}
-
-		if ((integer) $plentyOrder->plentyOrderPaidTimestamp > 0)
+		if (!is_null($plentyOrder->plentyOrderPaidTimestamp))
 		{
 			PlentymarketsLogger::getInstance()->error('Sync:Order:IncomingPayment', 'The incoming payment of the sales order ' . $this->order['id'] . ' has already been exported to plentymarkets.');
 			throw new Exception();
