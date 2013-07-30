@@ -40,7 +40,15 @@ Ext.define('Shopware.apps.Plentymarkets.view.Api', {
 	build: function()
 	{
 		var me = this;
-		me.add(me.getFieldSets())
+		var children = me.items ? me.items.items : [];
+		if(children.length > 0)
+		{
+			// FieldSets already added. Do nothing
+		}
+		else
+		{
+			me.add(me.getFieldSets());
+		}
 		me.loadRecord(me.settings);
 	},
 
