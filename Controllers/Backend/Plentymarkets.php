@@ -35,16 +35,16 @@ require_once PY_COMPONENTS . 'Export/PlentymarketsExportController.php';
 require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingController.php';
 
 /**
- *
+ * This class is a main plentymarkets backend action controller. This controller processes all kinds of backend actions 
+ * of the plentymarkets plugin like saving the settings or loading different kinds of data.
+ *  
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Backend_ExtJs
 {
 
 	/**
-	 * Returns the status of the continous data exchange
-	 *
-	 * @return array
+	 * Loads the status of the continous data exchange
 	 */
 	public function getDxContinuousAction()
 	{
@@ -79,9 +79,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	}
 
 	/**
-	 * Returns the settings
-	 *
-	 * @return array
+	 * Loads the settings
 	 */
 	public function getSettingsListAction()
 	{
@@ -95,6 +93,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	}
 
 	/**
+	 * Loads stores settings
 	 */
 	public function getSettingsStoresAction()
 	{
@@ -249,8 +248,6 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 
 	/**
 	 * Saves one mapping row
-	 *
-	 * @return array
 	 */
 	public function saveMappingAction()
 	{
@@ -281,9 +278,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	}
 
 	/**
-	 * Annonces an export
-	 *
-	 * @return array
+	 * Announces an export
 	 */
 	public function handleExportAction()
 	{
@@ -377,6 +372,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	}
 
 	/**
+	 * Loads the export status list
 	 */
 	public function getExportStatusListAction()
 	{
@@ -387,6 +383,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	}
 
 	/**
+	 * Loads the plenty mapping data
 	 */
 	public function getPlentyMappingDataAction()
 	{
@@ -454,6 +451,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	}
 
 	/**
+	 * Loads the mapping data
 	 */
 	public function getMappingDataAction()
 	{
@@ -506,6 +504,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	}
 
 	/**
+	 * Loads the log data
 	 */
 	public function getLogAction()
 	{
@@ -520,6 +519,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	}
 
 	/**
+	 * Loads the status data
 	 */
 	public function getMappingStatusAction()
 	{
@@ -530,6 +530,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	}
 
 	/**
+	 * Loads the warehouse list data
 	 */
 	public function getWarehouseListAction()
 	{
@@ -540,6 +541,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	}
 
 	/**
+	 * Loads the order status list data
 	 */
 	public function getOrderStatusListAction()
 	{
@@ -558,6 +560,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	}
 
 	/**
+	 * Loads the referrer list data
 	 */
 	public function getReferrerListAction()
 	{
@@ -568,6 +571,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	}
 
 	/**
+	 * Loads the multishop list data
 	 */
 	public function getMultishopListAction()
 	{
@@ -578,6 +582,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	}
 
 	/**
+	 * Loads the producer list data
 	 */
 	public function getProducerListAction()
 	{
@@ -591,6 +596,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	}
 
 	/**
+	 * Checks the entered credentials data
 	 */
 	public function testApiCredentialsAction()
 	{

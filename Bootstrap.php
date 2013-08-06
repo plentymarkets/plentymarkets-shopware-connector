@@ -34,6 +34,12 @@ define('PY_CONTROLLERS', PY_BASE . 'Controllers' . DIRECTORY_SEPARATOR);
 require_once PY_COMPONENTS . 'Utils/PlentymarketsLogger.php';
 require_once PY_COMPONENTS . 'Cron/CronjobController.php';
 
+/**
+ * This class is called first when starting the plentymarkets plugin. It initializes and cleans all important data.
+ * It also provides cronjob functionality for an initial execution of the plentymarkets plugin.
+ * 
+ * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
+ */
 class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
     /**
@@ -43,12 +49,12 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
      */
     public function install()
     {
-		// Check for the corrent versions
+		// Check for the current versions
 		if (!$this->assertRequiredPluginsPresent(array('Cron')))
 		{
 			return array(
 				'success' => false,
-				'message' => 'Bitte installieren und aktivieren sie das Cron-Plugin'
+				'message' => 'Bitte installieren und aktivieren Sie das Cron-Plugin'
 			);
 		}
     	
@@ -69,6 +75,7 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
     }
     
     /**
+     * Update plugin method
      * 
      * @see Shopware_Components_Plugin_Bootstrap::update()
      */
@@ -78,6 +85,7 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
     }
 
 	/**
+	 * Uninstall plugin method
 	 *
 	 * @see Shopware_Components_Plugin_Bootstrap::uninstall()
 	 */
@@ -116,7 +124,8 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
 	}
 
 	/**
-	 *
+	 * Returns capabilities
+	 * 
 	 * @see Shopware_Components_Plugin_Bootstrap::getCapabilities()
 	 */
 	public function getCapabilities()
@@ -353,6 +362,11 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
 
     }
 
+    /**
+     * Dispatches the backend index on post event.
+     * 
+     * @param Enlight_Event_EventArgs $arguments
+     */
     public function onPostDispatchBackendIndex(Enlight_Event_EventArgs $arguments)
     {
     	$request = $arguments->getSubject()->Request();
@@ -372,7 +386,7 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
     }
 
     /**
-     * Register all cronjobs
+     * Registers all cronjobs
      */
     protected function registerCronjobs()
     {
@@ -485,6 +499,7 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
 
 
     /**
+     * Cleans database tabels on first execution of plentymarkets plugin.
      *
      * @param Shopware_Components_Cron_CronJob $Job
      */
@@ -521,6 +536,7 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
 	}
 
 	/**
+	 * Runs the order export cronjob.
 	 *
 	 * @param Shopware_Components_Cron_CronJob $Job
 	 */
@@ -530,6 +546,7 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
     }
 
     /**
+     * Runs the order incoming payment export cronjob.
      *
      * @param Shopware_Components_Cron_CronJob $Job
      */
@@ -539,6 +556,7 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
     }
 
     /**
+     * Runs the order import cronjob.
      *
      * @param Shopware_Components_Cron_CronJob $Job
      */
@@ -548,6 +566,7 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
     }
 
     /**
+     * Runs the export cronjob.
      *
      * @param Shopware_Components_Cron_CronJob $Job
      */
@@ -557,6 +576,7 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
     }
 
     /**
+     * Runs the item import cronjob.
      *
      * @param Shopware_Components_Cron_CronJob $Job
      */
@@ -566,6 +586,7 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
     }
 
     /**
+     * Runs the item price import cronjob.
      *
      * @param Shopware_Components_Cron_CronJob $Job
      */
@@ -575,7 +596,8 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
     }
 
     /**
-     *
+     * Runs the item stock import cronjob.
+     * 
      * @param Shopware_Components_Cron_CronJob $Job
      */
     public function onRunItemStockImportCron(Shopware_Components_Cron_CronJob $Job)
@@ -637,6 +659,7 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
     }
 
     /**
+     * Returns label string.
      *
      * @return string
      */
@@ -646,7 +669,8 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
     }
 
     /**
-     *
+     * Returns version string.
+     * 
      * @return string
      */
     public function getVersion()
