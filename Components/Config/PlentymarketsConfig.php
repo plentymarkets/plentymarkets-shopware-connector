@@ -28,6 +28,9 @@
 
 
 /**
+ * The class PlentymarketsConfig enables setting and getting config data on the basis of PHPs "magic methods" functionality.
+ * In this way it is possible to do all the data mapping by using all needed SOAP-calls. To get more information on PHPs 
+ * magic methods please have a look at it's documentation: http://php.net/manual/en/language.oop5.magic.php
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
@@ -35,18 +38,21 @@ class PlentymarketsConfig
 {
 
 	/**
-	 *
+	 * Config data array.
+	 * 
 	 * @var array
 	 */
 	protected $config = array();
 
 	/**
+	 * PlentymarketsConfig object data.
 	 *
 	 * @var PlentymarketsConfig
 	 */
 	protected static $Instance;
 
 	/**
+	 * Constructor, which loads all key value pairs of config data from database to prepare the config data array.
 	 */
 	public function __construct()
 	{
@@ -63,6 +69,8 @@ class PlentymarketsConfig
 	}
 
 	/**
+	 * __call overloads methods to get or set different config data.
+	 * In case of setting data, the data in database as well as the data in instance cache will be updated.
 	 *
 	 * @param string $name
 	 * @param array $args
@@ -120,6 +128,7 @@ class PlentymarketsConfig
 	}
 	
 	/**
+	 * Checks if all important data is complete.
 	 * 
 	 * @return boolean
 	 */
@@ -143,7 +152,7 @@ class PlentymarketsConfig
 	}
 
 	/**
-	 * Shortcut for item mesure units
+	 * Shortcut for item mesure units.
 	 *
 	 * @return array
 	 */
@@ -153,6 +162,7 @@ class PlentymarketsConfig
 	}
 
 	/**
+	 * Returns an sorted array of countries.
 	 *
 	 * @return array
 	 */
@@ -168,6 +178,7 @@ class PlentymarketsConfig
 	}
 
 	/**
+	 * Returns an sorted array of currencies.
 	 *
 	 * @return array
 	 */
@@ -188,6 +199,7 @@ class PlentymarketsConfig
 	}
 
 	/**
+	 * Returns an array of countries. 
 	 *
 	 * @return array
 	 */
@@ -197,6 +209,7 @@ class PlentymarketsConfig
 	}
 
 	/**
+	 * Returns an array of order referrers.
 	 *
 	 * @return array
 	 */
@@ -206,6 +219,8 @@ class PlentymarketsConfig
 	}
 
 	/**
+	 * If an instance of PlentymarketsConfig exists, it returns this instance.
+	 * Else it creates a new instance of PlentymarketsConfig.
 	 *
 	 * @return PlentymarketsConfig
 	 */
@@ -219,6 +234,7 @@ class PlentymarketsConfig
 	}
 
 	/**
+	 * Returns array of the config data.
 	 *
 	 * @return array
 	 */

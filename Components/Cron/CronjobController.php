@@ -34,6 +34,7 @@ require_once PY_COMPONENTS . 'Import/PlentymarketsImportController.php';
 require_once PY_COMPONENTS . 'Export/PlentymarketsExportController.php';
 
 /**
+ * The class CronjobController provides all methods for data import and export.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
@@ -41,67 +42,77 @@ class PlentymarketsCronjobController
 {
 
 	/**
+	 * INTERVAL_IMPORT_ITEM is a constant parameter, which is needed to register a new cronjob.
 	 *
 	 * @var integer
 	 */
 	CONST INTERVAL_IMPORT_ITEM = 3600;
 
 	/**
+	 * INTERVAL_IMPORT_ITEM_PRICE is a constant parameter, which is needed to register a new cronjob.
 	 *
 	 * @var integer
 	 */
 	CONST INTERVAL_IMPORT_ITEM_PRICE = 3600;
 
 	/**
+	 * INTERVAL_IMPORT_ITEM_STOCK is a constant parameter, which is needed to register a new cronjob.
 	 *
 	 * @var integer
 	 */
 	CONST INTERVAL_IMPORT_ITEM_STOCK = 900;
 
 	/**
+	 * INTERVAL_IMPORT_ORDER is a constant parameter, which is needed to register a new cronjob.
 	 *
 	 * @var integer
 	 */
 	CONST INTERVAL_IMPORT_ORDER = 3600;
 
 	/**
+	 * INTERVAL_EXPORT is a constant parameter, which is needed to register a new cronjob.
 	 *
 	 * @var integer
 	 */
 	CONST INTERVAL_EXPORT = 300;
 
 	/**
+	 * INTERVAL_EXPORT_ORDER is a constant parameter, which is needed to register a new cronjob.
 	 *
 	 * @var integer
 	 */
 	CONST INTERVAL_EXPORT_ORDER = 900;
 
 	/**
+	 * INTERVAL_EXPORT_ORDER_INCOMING_PAYMENT is a constant parameter, which is needed to register a new cronjob.
 	 *
 	 * @var integer
 	 */
 	CONST INTERVAL_EXPORT_ORDER_INCOMING_PAYMENT = 1800;
 
 	/**
+	 * PlentymarketsCronjobController object data.
 	 *
 	 * @var PlentymarketsCronjobController
 	 */
 	protected static $Instance;
 
 	/**
+	 * Indicates whether a cronjob may run or not.
 	 *
 	 * @var boolean
 	 */
 	protected $mayRun = true;
 
 	/**
+	 * PlentymarketsConfig object data.
 	 *
 	 * @var PlentymarketsConfig
 	 */
 	protected $Config;
 
 	/**
-	 * Checks whether any cronjob may run
+	 * Checks whether any cronjob may run or not.
 	 */
 	protected function __construct()
 	{
@@ -113,6 +124,8 @@ class PlentymarketsCronjobController
 	}
 
 	/**
+	 * If an instance of PlentymarketsCronjobController exists, it returns this instance.
+	 * Else it creates a new instance of PlentymarketsCronjobController.
 	 *
 	 * @return PlentymarketsCronjobController
 	 */
@@ -126,7 +139,7 @@ class PlentymarketsCronjobController
 	}
 
 	/**
-	 * Order Export
+	 * Runs the order export cronjob.
 	 *
 	 * @param Shopware_Components_Cron_CronJob $Job
 	 */
@@ -161,7 +174,7 @@ class PlentymarketsCronjobController
 	}
 
 	/**
-	 * Order Incoming Item Export
+	 * Runs the order incoming item export cronjob.
 	 *
 	 * @param Shopware_Components_Cron_CronJob $Job
 	 */
@@ -190,7 +203,7 @@ class PlentymarketsCronjobController
 	}
 
 	/**
-	 * Order Import
+	 * Runs the order import cronjob.
 	 *
 	 * @param Shopware_Components_Cron_CronJob $Job
 	 */
@@ -219,7 +232,7 @@ class PlentymarketsCronjobController
 	}
 
 	/**
-	 * Export
+	 * Runs the export cronjob.
 	 *
 	 * @param Shopware_Components_Cron_CronJob $Job
 	 */
@@ -236,7 +249,7 @@ class PlentymarketsCronjobController
 	}
 
 	/**
-	 * Item Import
+	 * Runs the item import cronjob.
 	 *
 	 * @param Shopware_Components_Cron_CronJob $Job
 	 */
@@ -265,7 +278,7 @@ class PlentymarketsCronjobController
 	}
 
 	/**
-	 * Item Price Import
+	 * Runs the item price import cronjob.
 	 *
 	 * @param Shopware_Components_Cron_CronJob $Job
 	 */
@@ -294,7 +307,7 @@ class PlentymarketsCronjobController
 	}
 
 	/**
-	 * Item Stock Import
+	 * Runs the item stock import cronjob.
 	 *
 	 * @param Shopware_Components_Cron_CronJob $Job
 	 */
