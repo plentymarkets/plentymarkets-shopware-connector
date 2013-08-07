@@ -26,8 +26,9 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
+ * The class PlentymarketsExportController does the actual export for different cronjobs e.g. in the class PlentymarketsCronjobController.
+ * It uses the different export entities in /Export/Entity, for example PlentymarketsExportEntityCustomer.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
@@ -35,13 +36,14 @@ class PlentymarketsExportController
 {
 
 	/**
+	 * PlentymarketsExportController object data.
 	 *
 	 * @var PlentymarketsExportController
 	 */
 	protected static $Instance;
 	
 	/**
-	 * The order in which the exports have to be carries out
+	 * This array defines the order in which the exports have to be carried out.
 	 * @var array
 	 */
 	protected static $order = array(
@@ -53,30 +55,35 @@ class PlentymarketsExportController
 	);
 
 	/**
+	 * PlentymarketsConfig object data.
 	 *
 	 * @var PlentymarketsConfig
 	 */
 	protected $Config;
 
 	/**
+	 * Indicates whether an export process is running.
 	 *
 	 * @var boolean
 	 */
 	protected $isRunning = false;
 
 	/**
+	 * Indicates whether every export is finished completely.
 	 *
 	 * @var boolean
 	 */
 	protected $isComplete = true;
 	
 	/**
+	 * Indicates whether an export may run or not.
 	 * 
 	 * @var boolean
 	 */
 	protected $mayRun = false;
 
 	/**
+	 * Prepares config data and checks different conditions like finished mapping.
 	 */
 	protected function __construct()
 	{
@@ -86,10 +93,10 @@ class PlentymarketsExportController
 		// Check whether a process is running
 		$this->isRunning = (boolean) $this->Config->getIsExportRunning(false);
 		
-		// Check wheter settings and mapping are done
+		// Check whether settings and mapping are done
 		$this->mayRun = PlentymarketsMappingController::isComplete() && $this->Config->isComplete();
 
-		// Check whether every export is finished Completely
+		// Check whether every export is finished completely
 		$this->isComplete = $this->isComplete && ($this->Config->getItemCategoryExportStatus('open') == 'success');
 		$this->isComplete = $this->isComplete && ($this->Config->getItemAttributeExportStatus('open') == 'success');
 		$this->isComplete = $this->isComplete && ($this->Config->getItemPropertyExportStatus('open') == 'success');
@@ -98,7 +105,8 @@ class PlentymarketsExportController
 	}
 
 	/**
-	 *
+	 * The returned value indicates whether the settings and mapping are done.
+	 * 
 	 * @return boolean
 	 */
 	public function isComplete()
@@ -107,6 +115,7 @@ class PlentymarketsExportController
 	}
 
 	/**
+	 * 
 	 *
 	 * @param string $entity
 	 */
@@ -116,6 +125,8 @@ class PlentymarketsExportController
 	}
 
 	/**
+	 * This method checks different export states like if an other export is running at the moment, or
+	 * an export has already announced. In case of complied conditions the actual export gets the state "pending".
 	 *
 	 * @param string $entity
 	 * @throws \Exception
@@ -164,9 +175,7 @@ class PlentymarketsExportController
 	}
 
 	/**
-	 * Start the pending export.
-	 *
-	 * Called from a cronjob!
+	 * Starts the actual pending export.
 	 *
 	 * @throws \Exception
 	 */
@@ -239,6 +248,8 @@ class PlentymarketsExportController
 	}
 
 	/**
+	 * If an instance of PlentymarketsExportController exists, it returns this instance.
+	 * Else it creates a new instance of PlentymarketsExportController.
 	 *
 	 * @return PlentymarketsExportController
 	 */
@@ -252,6 +263,8 @@ class PlentymarketsExportController
 	}
 
 	/**
+	 * Exports all orders, which are not yet exported to plentymarkets and customers to make sure,
+	 * that the corresponding customers exist.
 	 */
 	public function exportOrders()
 	{
@@ -287,7 +300,7 @@ class PlentymarketsExportController
 	}
 
 	/**
-	 * Export the items
+	 * Exports customer and delivery address items data.
 	 */
 	protected function exportCustomers()
 	{
@@ -317,7 +330,7 @@ class PlentymarketsExportController
 	}
 
 	/**
-	 * Export the items
+	 * Exports images, variants, properties item data and items base to make sure, that the corresponding items data exist.
 	 */
 	protected function exportItems()
 	{
@@ -358,7 +371,7 @@ class PlentymarketsExportController
 	}
 
 	/**
-	 *
+	 * Exports incoming payments data.
 	 */
 	public function exportIncomingPayments()
 	{
@@ -404,6 +417,7 @@ class PlentymarketsExportController
 	}
 	
 	/**
+	 * Checks whether an export has successfully finished.
 	 * 
 	 * @param string $entity
 	 * @return boolean
@@ -415,6 +429,7 @@ class PlentymarketsExportController
 	}
 
 	/**
+	 * Exports order by id.
 	 *
 	 * @param integer $orderID
 	 */
@@ -427,6 +442,7 @@ class PlentymarketsExportController
 	}
 
 	/**
+	 * Exports one Entity.
 	 *
 	 * @param string $entity
 	 */

@@ -30,8 +30,9 @@
 /**
  * The class PlentymarketsConfig enables setting and getting config data on the basis of PHPs "magic methods" functionality.
  * In this way it is possible to do all the data mapping by using all needed SOAP-calls. To get more information on PHPs 
- * magic methods please have a look at it's documentation: http://php.net/manual/en/language.oop5.magic.php
- *
+ * magic methods please have a look at it's documentation.
+ * 
+ * @link http://php.net/manual/en/language.oop5.magic.php
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 class PlentymarketsConfig
