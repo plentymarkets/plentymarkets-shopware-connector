@@ -70,6 +70,12 @@ require_once PY_COMPONENTS . 'Import/Entity/Order/PlentymarketsImportEntityOrder
 require_once PY_COMPONENTS . 'Import/Entity/Order/PlentymarketsImportEntityOrderIncomingPayments.php';
 require_once PY_COMPONENTS . 'Import/Entity/Order/PlentymarketsImportEntityOrderOutgoingItems.php';
 
+/**
+ * The class PlentymarketsImportController does the actual import for different cronjobs e.g. in the class PlentymarketsCronjobController.
+ * It uses the different import entities in /Import/Entity respectively in /Import/Entity/Order, for example PlentymarketsImportEntityItem.
+ * 
+ * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
+ */
 class PlentymarketsImportController
 {
 
