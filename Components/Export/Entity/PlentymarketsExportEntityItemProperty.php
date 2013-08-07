@@ -33,6 +33,9 @@ require_once PY_SOAP . 'Models/PlentySoapRequest/AddPropertyGroup.php';
 require_once PY_SOAP . 'Models/PlentySoapRequest/AddProperty.php';
 
 /**
+ * PlentymarketsExportEntityItemProperty provides the actual items export funcionality. Like the other export 
+ * entities this class is called in PlentymarketsExportController.
+ * The data export takes place based on plentymarkets SOAP-calls.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */

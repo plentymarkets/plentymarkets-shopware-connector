@@ -34,6 +34,10 @@ require_once PY_SOAP . 'Models/PlentySoapRequest/AddCustomers.php';
 require_once PY_SOAP . 'Models/PlentySoapRequest/AddCustomerDeliveryAddresses.php';
 
 /**
+ * PlentymarketsExportEntityCustomer provides the actual customer export funcionality. Like the other export 
+ * entities this class is called in PlentymarketsExportController. It is important to deliver the correct customer 
+ * model to the constructor method of this class, which you can find at \Shopware\Models\Customer\Customer.
+ * The data export takes place based on plentymarkets SOAP-calls.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
