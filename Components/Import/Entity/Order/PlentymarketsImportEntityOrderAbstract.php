@@ -23,8 +23,8 @@
  */
 
 /**
- * PlentymarketsImportEntityOrderAbstract bequeaths order import method, which are used in the entities PlentymarketsImportEntityOrderIncomingPayments
- * and PlentymarketsImportEntityOrderOutgoingItems. The data export takes place based on plentymarkets SOAP-calls.
+ * PlentymarketsImportEntityOrderAbstract bequeaths order import methods, which are used in the entities PlentymarketsImportEntityOrderIncomingPayments
+ * and PlentymarketsImportEntityOrderOutgoingItems. The data import takes place based on plentymarkets SOAP-calls.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */

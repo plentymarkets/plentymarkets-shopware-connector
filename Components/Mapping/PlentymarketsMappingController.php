@@ -28,6 +28,9 @@
 
 
 /**
+ * The PlentymarketsMappingController does the actual data mapping. Therefore it uses the corresponding
+ * mapping entity classes like PlentymarketsMappingEntityCustomer in /Mapping/Entity. This class is called
+ * in the most classes of the plentymarkets plugin.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */

@@ -29,6 +29,9 @@
 require_once PY_COMPONENTS . 'Mapping/Entity/PlentymarketsMappingEntityAbstract.php';
 
 /**
+ * PlentymarketsMappingEntityMeasureUnit provides the actual measure unit mapping funcionality. 
+ * Like the other mapping entities this class is called in PlentymarketsMappingController. This entity
+ * inherits the most methods from the entity class PlentymarketsMappingEntityAbstract.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */

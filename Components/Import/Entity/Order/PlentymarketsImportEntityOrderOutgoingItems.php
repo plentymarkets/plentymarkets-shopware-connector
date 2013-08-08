@@ -28,7 +28,7 @@ require_once __DIR__ . '/PlentymarketsImportEntityOrderAbstract.php';
  * PlentymarketsImportEntityOrderOutgoingItems provides the actual order outgoing items import funcionality. 
  * Like the other import entities this class is called in PlentymarketsImportController. It inherits some methods
  * from the entity class PlentymarketsImportEntityOrderAbstract. 
- * The data export takes place based on plentymarkets SOAP-calls.
+ * The data import takes place based on plentymarkets SOAP-calls.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */

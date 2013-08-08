@@ -31,7 +31,7 @@
  * PlentymarketsImportEntityItemPrice provides the actual item price import funcionality. Like the other import
  * entities this class is called in PlentymarketsImportController. It is important to deliver the correct price set 
  * data object PlentySoapObject_ItemPriceSet to the constructor method of this class. The second parameter "$markup" is optional.
- * The data export takes place based on plentymarkets SOAP-calls.
+ * The data import takes place based on plentymarkets SOAP-calls.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */

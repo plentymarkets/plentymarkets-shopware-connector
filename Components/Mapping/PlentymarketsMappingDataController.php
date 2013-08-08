@@ -30,7 +30,10 @@ require_once PY_COMPONENTS . 'Import/PlentymarketsImportController.php';
 require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingController.php';
 
 /**
- *
+ * The PlentymarketsMappingDataController is the main controller for mapping issues. This class is called
+ * in the class Shopware_Controllers_Backend_Plentymarkets and it uses the class PlentymarketsMappingController
+ * for different data operations. This class returns the different mapping data.
+ * 
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 class PlentymarketsMappingDataController

@@ -39,7 +39,7 @@ require_once PY_COMPONENTS . 'Import/Entity/PlentymarketsImportEntityItemImage.p
  * PlentymarketsImportEntityItem provides the actual item import funcionality. Like the other import
  * entities this class is called in PlentymarketsImportController. It is important to deliver the correct PlentySoapObject_ItemBase 
  * object to the constructor method of this class.
- * The data export takes place based on plentymarkets SOAP-calls.
+ * The data import takes place based on plentymarkets SOAP-calls.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */

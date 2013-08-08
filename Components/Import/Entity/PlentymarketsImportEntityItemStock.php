@@ -30,7 +30,7 @@
 /**
  * PlentymarketsImportEntityItemStock provides the actual item stock import funcionality. Like the other import
  * entities this class is called in PlentymarketsImportController.
- * The data export takes place based on plentymarkets SOAP-calls.
+ * The data import takes place based on plentymarkets SOAP-calls.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  *
