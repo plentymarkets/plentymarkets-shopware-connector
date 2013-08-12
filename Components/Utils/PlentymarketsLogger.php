@@ -27,6 +27,13 @@
  */
 
 
+/**
+ * The main functionality of this class is to log error messages or other messages. Both error messages and other messages are
+ * defined in two groups, soap log messages and all other messages. This class is used in the most classes of the plentymarkets
+ * plugin.
+ * 
+ * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
+ */
 class PlentymarketsLogger
 {
 
