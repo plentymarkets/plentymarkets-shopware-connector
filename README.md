@@ -131,8 +131,14 @@ Nach der Pilotphase kann das Plugin auch aus dem shopware Community Store instal
 ### plentymarkets
 Folgende Schritte müssen *vor* der Einrichtung des Plugins innerhalb des plentymarkets-Systems ausgeführt werden.
 
-#### Mandant anlegen
-JG
+#### Mandant (Shop) anlegen
+In plentymarkets muss ein besonderer **Mandant (Shop)** angelegt werden. Ein Mandant (Shop) dient in plentymarkets dazu, verschiedene Einstellungen gesondert pro Mandant definieren zu können. So müssen Artikelstammdaten im Shop für jeden Mandant (Shop) aktiviert werden (dies geht auch per Gruppenfunktion im Bereich der Artikelsuche). Weiterhin können pro Mandant (Shop) andere E-Mail-Vorlagen versendet werden oder auch das Layout für Rechnung und Lieferscheine getrennt abgelegt werden.
+
+Einen neuen Mandant (Shop) für shopware legen Sie in Ihrem plentymarkets System in diesem Bereich an:
+**Einstellungen » Mandant (Shop) » Neuer externer Shop**
+
+Sie müssen hier lediglich einen Namen eingeben und bei Typ die Auswahl shopware vornehmen.
+Nachdem Sie den Mandant (Shop) erfolgreich angelegt haben, können Sie diesen Mandant (Shop) direkt innerhalb des shopware Plugins im Bereich Einstellungen auswählen.
 
 #### Benutzer anlegen
 Legen Sie unter **Einstellungen » Grundeinstellungen » Benutzer » Konten** einen neuen Benutzer an. Dieser Benutzer wird für die Kommunikation zwischen plentymarkets und shopware über die SOAP API verwendet. Nutzen Sie für den Benutzer deshalb am besten die Typ-Bezeichnung **API**.
