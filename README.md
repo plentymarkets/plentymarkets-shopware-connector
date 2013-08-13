@@ -75,6 +75,20 @@ Für das Plugin sind mindestens **plentymarkets 5.0** und **shopware 4.1** nöti
 
 Im shopware-System muss mindestens ein Hersteller vorhanden sein.
 
+#### PHP
+
+Besonders für den automatischen Datenabgleich via Cron werden ausreichende System-Ressourcen benötigt. Es muss daher sichergestellt sein, dass PHP-Prozesse ausreichend lang laufen und genügend Speicher verbrauchen dürfen. Im Testbetrieb haben wir für PHP-Prozesse, welche per Shell (CLI) ausgeführt werden, diese Eckdaten verwendet:
+
+	max_execution_time = 800
+	max_input_time = 500
+	memory_limit = 2048M
+
+Ändern Sie diese Angaben in der korrekten php.ini-Datei. Diese finden Sie in per Shell im Standardfall an der folgenden Position
+
+	/etc/php5/cli/php.ini
+
+Grundsätzlich sollten Änderungen an Konfigurationsdateien nur von Ihrem Systemadministrator vorgenommen werden.
+
 ### Installation via github
 #### Herunterladen als Archiv
 Der Quellcode kann direkt und ohne Anmeldung als zip-Archiv von github heruntergeladen werden. Hierfür ist auf Ihrem Server keine Installation von git erforderlich. Das Archiv muss anschließend in das Verzeichnis
