@@ -157,7 +157,8 @@ Nachdem Sie den Mandant (Shop) erfolgreich angelegt haben, können Sie diesen Ma
 #### Benutzer anlegen
 Legen Sie unter **Einstellungen » Grundeinstellungen » Benutzer » Konten** einen neuen Benutzer an. Dieser Benutzer wird für die Kommunikation zwischen plentymarkets und shopware über die SOAP API verwendet. Nutzen Sie für den Benutzer deshalb am besten die Typ-Bezeichnung **API**.
 
-Folgende Calls werden vom Plugin genutzt:
+Die folgende SOAP-Calls werden vom Plugin genutzt und müssen für somit auch für den Benutzer aktiviert werden.
+Fehlen einzelne Berechtigungen, kann der Datenabgleich zwischen plentymarkets und shopware nicht vollständig ablaufen und es kann zu einem Datenverlust kommen.
 
 * AddCustomerDeliveryAddresses
 * AddCustomers
@@ -195,13 +196,20 @@ Folgende Calls werden vom Plugin genutzt:
 * SetAttributeValueSetsDetails
 * SetProducers
 
-Wenn die Berechtigungen manuell vergeben werden, muss sichergestellt sein, dass der Benutzer **alle** o. g. Calls ausführen darf. Ansonsten kann es sowohl im shopware- als auch im plentymarkets-System zu unerwartetem Verhalten kommen.
+Auf der folgenden Seite erfahren Sie, wie Sie die Berechtigungen in plentymarkets einrichten können:
+http://man.plentymarkets.eu/einstellungen/grundeinstellungen/benutzer/benutzer-bearbeiten/
 
 #### Auftragsherkunft (optional)
 Soll den von shopware zu plentymarkets exportierten Aufträgen eine individuelle Herkunft zugeordnet werden, muss diese zuvor in plentymarkets unter **Einstellungen » Aufträge » Auftragsherkunft** angelegt werden.
 
+Weitere Informationen zur Auftragsherkunft finden Sie auf dieser Seite:
+http://man.plentymarkets.eu/einstellungen/auftraege/auftragsherkunft/
+
 #### Freitextfelder (optional)
 Um die Freitextfelder/Attribute der Artikel aus shopware zu übernehmen, müssen diese in plentymarkets unter **Einstellungen » Artikel » Freitextfelder** definiert werden.
+
+Weitere Informationen zu Freitextfeldern finden Sie auf dieser Seite:
+http://man.plentymarkets.eu/einstellungen/artikel/freitextfelder/
 
 ### shopware
 Nach der Installation und Aktivierung des Plugins über den Plugin Manager muss der Shop-Cache geleert und das shopware-Fenster neu geladen werden, damit der Menüpunkt **Einstellungen » plentymarkets** erscheint.
@@ -245,6 +253,7 @@ Wenn das Mapping nicht vollständig abgeschlossen ist oder im laufenden Betrieb 
 ##### Währungen
 Die Währungen werden Aufträgen zugeordnet, die von shopware zu plentymarkets exportiert werden. 
 Da Aufträge nicht von plentymarkets zu shopware exportiert werden, ist es nicht erforderlich, alle Währungen aus plentymarkets auch im shopware-System anzulegen.
+
 Weitere Informationen zu Währungen in plentymarkets finden Sie hier: http://man.plentymarkets.eu/einstellungen/auftraege/zahlung/waehrungen/
 
 ##### Einheiten
@@ -256,6 +265,9 @@ Die Zahlungsarten werden den Aufträgen zugeordnet.
 **Wichtig:** Alle in plentymarkets mit einer Zahlungsart verbundenen Aktionen werden ausgeführt. Ist beispielsweise als Zahlungsart Rechnung ausgewählt, wird der Auftrag nach dem Import in plentymarkets automatisch in den Status 4 bzw. 5 gesetzt. Darüber hinaus werden alle Events, die ggf. konfiguriert sind, ausgeführt.
 
 **Achtung:** Die Zahlungsart *Vorkasse* kann derzeit in plentymarkets nicht als eigenständige Zahlungsart gebucht werden. Die entsprechenden Vorgänge werden über die Alternativen *Überweisung*, *HBCI* und *EBICS* abgedeckt.
+
+Wie Sie Zahlungsarten in plentymarekts einrichten, finden Sie auf dieser Seite:
+http://man.plentymarkets.eu/einstellungen/auftraege/zahlung/zahlungsarten/
 
 ##### Steuersätze
 In diesem Bereich müssen die Umsatzsteuersätze von shopware mit den Umsatzsteuersätze von plentymarkets verknüpft werden. Umsatzsteuersätze in plentymarkets werden in dem Bereich **Einstellungen » Aufträge » Buchhaltung** verwaltet. 
@@ -277,6 +289,9 @@ http://man.plentymarkets.eu/auftraege/versand/versand-center/
 
 ##### Länder
 Die Länder werden den Anschriften (Rechnung- / Liefer-) zugeordnet. Kundendaten werden nur zu plentymarkets exportiert. Aus diesem Grund ist es nicht erforderlich, alle plentymarkets-Länder im entsprechenden shopware-System anzulegen.
+
+Wie Sie Lieferländer in plentymarkets aktivieren können finden Sie hier:
+http://man.plentymarkets.eu/einstellungen/auftraege/versand/versandoptionen/lieferlaender/
 
 ## Datenaustausch
 Das Mapping für die Daten aus der Synchronisierung wird automatisch vorgenommen. 
