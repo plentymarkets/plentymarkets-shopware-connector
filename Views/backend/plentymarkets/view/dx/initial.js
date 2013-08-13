@@ -1,5 +1,13 @@
 // {namespace name=backend/Plentymarkets/view}
 // {block name=backend/Plentymarkets/view/dx/Initial}
+
+/**
+ * The initial view builds the graphical elements and loads the data of the initial data export.
+ * It shows for example the status of resources, which have to be exported, the start time and the finishing time data exports.
+ * It is extended by the Ext grid panel "Ext.grid.Panel".
+ * 
+ * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
+ */
 Ext.define('Shopware.apps.Plentymarkets.view.dx.Initial', {
 
 	extend: 'Ext.grid.Panel',

@@ -2,7 +2,7 @@
 // {block name=backend/Plentymarkets/model/Multishop}
 
 /**
- * The multishop data model defines the different data fields for multishops and
+ * This data model class defines the different data fields for shops and
  * is extended by the Ext data model "Ext.data.Model".
  * 
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>

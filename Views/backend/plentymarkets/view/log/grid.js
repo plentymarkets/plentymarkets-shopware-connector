@@ -1,5 +1,12 @@
 // {namespace name=backend/Plentymarkets/view}
 // {block name=backend/Plentymarkets/view/log/Grid}
+
+/**
+ * The grid view builds the graphical grid elements and loads the logged data like export messages, or SOAP-Call information.
+ * It is extended by the Ext grid panel "Ext.grid.Panel".
+ * 
+ * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
+ */
 Ext.define('Shopware.apps.Plentymarkets.view.log.Grid', {
 
 	extend: 'Ext.grid.Panel',
