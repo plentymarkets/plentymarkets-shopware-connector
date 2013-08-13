@@ -229,7 +229,9 @@ Für alle Daten, die nicht automatisch gemappt werden können, muss die Verknüp
 Wenn das Mapping nicht vollständig abgeschlossen ist oder im laufenden Betrieb weitere Datensätze innerhalb von shopware erstellt werden, die manuell gemappt werden müssen, wird der gesamte Datenaustausch deaktiviert. Auf der Startseite des Plugins wird der Nutzer auf diesen Umstand hingewiesen.
 
 ##### Währungen
-Die Währungen werden Aufträgen zugeordnet, die von shopware zu plentymarkets exportiert werden. Da Aufträge nicht von plentymarkets zu shopware exportiert werden, ist es nicht erforderlich, alle Währungen aus plentymarkets auch im shopware-System anzulegen.
+Die Währungen werden Aufträgen zugeordnet, die von shopware zu plentymarkets exportiert werden. 
+Da Aufträge nicht von plentymarkets zu shopware exportiert werden, ist es nicht erforderlich, alle Währungen aus plentymarkets auch im shopware-System anzulegen.
+Weitere Informationen zu Währungen in plentymarkets finden Sie hier: http://man.plentymarkets.eu/einstellungen/auftraege/zahlung/waehrungen/
 
 ##### Einheiten
 Die Einheiten sind den Artikeln zugeordnet. Da der Abgleich in beide Richtungen stattfindet, macht es Sinn, alle Einheiten, die in plentymarkets verwendet werden, auch bei shopware anzulegen. Wenn eine Einheit innerhalb von shopware nicht zugeordnet werden kann, wird für den Artikel keine Einheit definiert.
@@ -242,10 +244,11 @@ Die Zahlungsarten werden den Aufträgen zugeordnet.
 **Achtung:** Die Zahlungsart *Vorkasse* kann derzeit in plentymarkets nicht als eigenständige Zahlungsart gebucht werden. Die entsprechenden Vorgänge werden über die Alternativen *Überweisung*, *HBCI* und *EBICS* abgedeckt.
 
 ##### Steuersätze
-… sind zu hoch.
+In diesem Bereich müssen die Umsatzsteuersätze von shopware mit den Umsatzsteuersätze von plentymarkets verknüpft werden. Umsatzsteuersätze in plentymarkets werden in dem Bereich **Einstellungen » Aufträge » Buchhaltung** verwaltet. 
+Weitere Hilfe dazu: http://man.plentymarkets.eu/einstellungen/auftraege/buchhaltung/
 
 ##### Kundengruppen
-Sofern hier die plentymarkets Kundenklassen *Standard-Endkunden* und/oder *Standard-Firmenkunden* nicht auftauchen, müssen diese in plentymarktes unter **Einstellungen » Kunden » Kundenklassen** einmalig abgespeichert werden.
+Sofern hier die plentymarkets Standard-Kundenklassen *Standard-Endkunden* und/oder *Standard-Firmenkunden* nicht auftauchen, müssen diese in plentymarktes unter **Einstellungen » Kunden » Kundenklassen** einmalig abgespeichert werden.
 
 ##### Versandarten
 Das Mapping der Versandarten dient dazu, die Funktionalitäten, die plentymarkets im Bereich Fulfillment bietet, vollumfänglich nutzen zu können.
