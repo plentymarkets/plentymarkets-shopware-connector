@@ -16,7 +16,7 @@
 		- [Installation aus dem Community Store](#installation-aus-dem-community-store)
 	- [Einrichtung](#einrichtung)
 		- [plentymarkets](#plentymarkets)
-			- [Mandant anlegen](#mandant-anlegen)
+			- [Mandant (Shop) anlegen](#mandant-shop-anlegen)
 			- [Benutzer anlegen](#benutzer-anlegen)
 			- [Auftragsherkunft (optional)](#auftragsherkunft-optional)
 			- [Freitextfelder (optional)](#freitextfelder-optional)
@@ -250,7 +250,13 @@ Sofern hier die plentymarkets Kundenklassen *Standard-Endkunden* und/oder *Stand
 ##### Versandarten
 Das Mapping der Versandarten dient dazu, die Funktionalitäten, die plentymarkets im Bereich Fulfillment bietet, vollumfänglich nutzen zu können.
 
-JG
+Auf der folgenden Handbuchseite erfahren Sie, wie Sie Versandoptionen in plentymarkets einrichten können:
+http://man.plentymarkets.eu/einstellungen/auftraege/versand/versandoptionen/
+
+Erst durch die korrekte Einrichtung der Versandoptionen und das entsprechende Mapping von Bestellungen, welche über shopware zu plentymarkets gelangen, können Sie das Versand-Center sinnvoll nutzen. Das Versand-Center ist für die Anmeldung von Sendungen und der Generierung von Versand-Etiketten nötig.
+
+Informationen zum plentymarkets Versand-Center finden Sie hier:
+http://man.plentymarkets.eu/auftraege/versand/versand-center/
 
 ##### Länder
 Die Länder werden den Anschriften (Rechnung- / Liefer-) zugeordnet. Kundendaten werden nur zu plentymarkets exportiert. Aus diesem Grund ist es nicht erforderlich, alle plentymarkets-Länder im entsprechenden shopware-System anzulegen.
