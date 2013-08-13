@@ -1,5 +1,12 @@
 // {namespace name=backend/Plentymarkets/model}
 // {block name=backend/Plentymarkets/model/mapping/Shopware}
+
+/**
+ * The shopware data model defines the different data fields for data mapping on the side of shopware and
+ * is extended by the Ext data model "Ext.data.Model".
+ * 
+ * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
+ */
 Ext.define('Shopware.apps.Plentymarkets.model.mapping.Shopware', {
 	extend: 'Ext.data.Model',
 
