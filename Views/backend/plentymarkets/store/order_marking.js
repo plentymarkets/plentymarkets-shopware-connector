@@ -1,5 +1,13 @@
 // {namespace name=backend/Plentymarkets/store}
 // {block name=backend/Plentymarkets/store/OrderMarking}
+
+/**
+ * The order marking store is used to autoload the order marking data. Therfore it
+ * defines 31 data rows with serial numbers. It is extended by the Ext data store "Ext.data.Store". 
+ * With Ext stores you can handle model data like adding, getting and removing models in a defined store.
+ * 
+ * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
+ */
 Ext.define('Shopware.apps.Plentymarkets.store.OrderMarking', {
 	extend: 'Ext.data.Store',
 
