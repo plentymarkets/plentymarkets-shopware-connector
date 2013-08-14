@@ -330,7 +330,7 @@ class PlentymarketsImportController
 		}
 
 		$Request_GetMethodOfPayments = new PlentySoapRequest_GetMethodOfPayments();
-		$Request_GetMethodOfPayments->ActivMethodOfPayments = false;
+		$Request_GetMethodOfPayments->ActivMethodOfPayments = true;
 
 		// Do the request
 		$Response_GetMethodOfPayments = PlentymarketsSoapClient::getInstance()->GetMethodOfPayments($Request_GetMethodOfPayments);
