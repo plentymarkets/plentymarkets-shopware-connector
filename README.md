@@ -232,8 +232,8 @@ Die Daten, die von plentymarkets geladen werden, werden für einen Tag gespeiche
 
 Einstellung | Erklärung
 ----|------
-plentymarkets Lager | Datenquelle für den Warenbestandsabgleich.  
-Warenbestandspuffer | Prozentualer Anteil des netto-Warenbestandes des gewählten Lagers, welcher an shopware übertragen wird.
+plentymarkets Lager | Datenquelle für den Warenbestandsabgleich  
+Warenbestandspuffer | Prozentualer Anteil des netto-Warenbestandes des gewählten Lagers, welche an shopware übertragen wird.
 Mandant (Shop) | Das aktuelle shopware-System muss mit einem plentymarkets Mandant (Shop) verknüpft werden. Ein solcher *Mandant (Shop)* kann in plentymarkets über **Einstellungen » Mandant (Shop) » Neuer externer Shop** angelegt werden. 
 Hersteller | Sofern bei Artikeln in plentymarkets kein Hersteller zugeordnet wurde, wird dieser Hersteller in shopware mit den betreffenden Artikeln verknüpft.
 Kategorie Startknoten | Ausgangspunkt für den Export und den Abgleich der Kategorien. Diese Kategorie selbst wird *nicht* bei plentymarkets angelegt. Neue Kategorien in plentymarkets werden an diese Kategorie angehangen.
@@ -245,7 +245,7 @@ Einstellung | Erklärung
 ----|------
 Markierung | Sofern hier eine Auswahl getroffen wird, werden neue Aufträge von shopware an plentymarkets exportiert und dabei mit dieser Markierung versehen. 
 Auftragsherkunft | Die hier ausgewählte Auftragsherkunft erhalten Aufträge von shopware in plentymarkets. In plentymarkets kann dazu eine eigene Auftragsherkunft angelegt werden.
-Status bezahlt | shopware Status, der signalisiert, dass der Auftrag komplett bezahlt ist. Löst das Buchen des Zahlungseinganges bei plentymarkets aus. 
+Status bezahlt | shopware Status, der signalisiert, dass der Auftrag komplett bezahlt ist. Löst das Buchen des Zahlungseinganges bei plentymarkets aus 
 
 ##### Warenausgang
 
@@ -253,7 +253,7 @@ Einstellung | Erklärung
 ----|------
 Warenausgang | Aufträge welche diese Regel erfüllen, werden von plentymarkets abgerufen, um die folgenden Statusänderungen in shopware zu bewirken.
 Auftragsstatus | Erreicht ein Auftrag in plentymarkets diesen Auftragsstatus, gilt dieser als versendet.
-Abfrageintervall | Zeitintervall für den Datenabgleich der Auftragsdaten. 
+Abfrageintervall | Zeitintervall für den Datenabgleich der Auftragsdaten 
 shopware Auftragsstatus | Dieser Auftragsstatus wird gesetzt, wenn in plentymarkets der Warenausgang gebucht wurde.
 
 ##### Zahlungseingang bei plentymarkets
@@ -280,11 +280,12 @@ Weitere Informationen zu Währungen in plentymarkets finden Sie hier: http://man
 Die Einheiten sind den Artikeln zugeordnet. Da der Abgleich in beide Richtungen stattfindet, macht es Sinn, alle Einheiten, die in plentymarkets verwendet werden, auch bei shopware anzulegen. Wenn eine Einheit innerhalb von shopware nicht zugeordnet werden kann, wird für den Artikel keine Einheit definiert.
 
 ##### Zahlungsarten
-Die Zahlungsarten werden den Aufträgen zugeordnet.
+In diesem Bereich müssen alle aktivierten Zahlungsarten in shopware mit einer entsprechenden Zahlungsart in plentymarkets verknüpft werden.
+Sie sollten vor dem Mapping die Zahlungsarten deaktivieren, welche Sie nicht verwenden möchten. Nur wenn alle Zahlungsarten zugeordnet wurden, wird der Datenabgleich funktionieren.
 
-**Wichtig:** Alle in plentymarkets mit einer Zahlungsart verbundenen Aktionen werden ausgeführt. Ist beispielsweise als Zahlungsart Rechnung ausgewählt, wird der Auftrag nach dem Import in plentymarkets automatisch in den Status 4 bzw. 5 gesetzt. Darüber hinaus werden alle Events, die ggf. konfiguriert sind, ausgeführt.
+**Wichtig:** Alle in plentymarkets für eine Zahlungsart eingerichteten Aktionen werden auch bei Aufträgen von shopware ausgeführt. Ist beispielsweise als Zahlungsart Rechnung ausgewählt, wird der Auftrag nach dem Import in plentymarkets automatisch in den Status 4 bzw. 5 gesetzt. 
 
-**Achtung:** Die Zahlungsart *Vorkasse* kann derzeit in plentymarkets nicht als eigenständige Zahlungsart gebucht werden. Die entsprechenden Vorgänge werden über die Alternativen *Überweisung*, *HBCI* und *EBICS* abgedeckt.
+**Achtung:** Bei Aufträgen mit der Zahlungsart *Vorkasse* wird nach der Zahlungseingangsbuchung ein Wechsel der Zahlungsart auf den tatsächlichen Zahlungsvorgang durchgeführt. In plentymarkets ändert sich somit die Zahlungsart dieser Aufträge nach dem Zahlungseingang auf HBCI oder EBICS, wenn beispielsweise ein automatischer Bankkonto-Abgleich aktiviert wurde.
 
 Wie Sie Zahlungsarten in plentymarekts einrichten, finden Sie auf dieser Seite:
 http://man.plentymarkets.eu/einstellungen/auftraege/zahlung/zahlungsarten/
