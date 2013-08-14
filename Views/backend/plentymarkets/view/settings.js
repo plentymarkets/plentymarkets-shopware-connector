@@ -158,7 +158,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemWarehouseID}plentymarkets Lager{/s}',
 				name: 'ItemWarehouseID',
 				store: me.stores.warehouses,
-				supportText: 'Welches Lager soll für die Aktualisierung der Warenbestände verwendet werden?'
+				supportText: 'Datenquelle für den Warenbestandsabgleich.'
 			}, {
 				xtype: 'slider',
 				increment: 1,
@@ -166,26 +166,28 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 				maxValue: 100,
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/Warenbestandspuffer}Warenbestandspuffer{/s}',
 				name: 'ItemWarehousePercentage',
-				supportText: 'Wieviel Prozent des netto-Warenbestandes sollen in shopware gebucht werden?',
+				supportText: 'Prozentualer Anteil des netto-Warenbestandes des gewählten Lagers, welcher an shopware übertragen wird.',
 			}, {
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/StoreID}Mandant (Shop){/s}',
 				name: 'StoreID',
 				store: me.stores.multishops,
-				supportText: 'Stellen Sie hier eine Verknüfung zu dem in plentymarkets konfigurierten shopware-System her.'
+				supportText: 'Das aktuelle shopware-System muss mit einem plentymarkets Mandant (Shop) verknüpft werden. Ein solcher Mandant (Shop) kann in plentymarkets über Einstellungen » Mandant (Shop) » Neuer externer Shop angelegt werden.'
 			}, {
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemProducerID}Hersteller{/s}',
 				name: 'ItemProducerID',
 				store: me.stores.producers,
-				supportText: 'Welcher Hersteller soll den Artikeln zugeordnet werden, wenn bei plentymarkets keiner zugerordnet ist.'
+				supportText: 'Sofern bei Artikeln in plentymarkets kein Hersteller zugeordnet wurde, wird dieser Hersteller in shopware mit den betreffenden Artikeln verknüpft.'
 			}, {
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemCategoryRootID}Kategorie Startknoten{/s}',
 				name: 'ItemCategoryRootID',
-				store: me.stores.categories
+				store: me.stores.categories,
+				supportText: 'Ausgangspunkt für den Export und den Abgleich der Kategorien. Diese Kategorie selbst wird nicht bei plentymarkets angelegt. Neue Kategorien in plentymarkets werden an diese Kategorie angehangen.'
 			}, {
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/DefaultCustomerGroupKey}Standard-Kundenklasse{/s}',
 				name: 'DefaultCustomerGroupKey',
 				store: Ext.create('Shopware.apps.Base.store.CustomerGroup').load(),
-				valueField: 'key'
+				valueField: 'key',
+				supportText: 'Kundenklasse deren Preise von plentymarkerts zu shopware übertragen werden.'
 			}
 
 			]
@@ -208,7 +210,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/OrderMarking1}Markierung{/s}',
 				name: 'OrderMarking1',
 				store: Ext.create('Shopware.apps.Plentymarkets.store.OrderMarking'),
-				supportText: 'Wenn die exportierten Aufträge eine Markierung erhalten sollen, können Sie das hier einstellen.',
+				supportText: 'Sofern hier eine Auswahl getroffen wird, werden neue Aufträge von shopware an plentymarkets exportiert und dabei mit dieser Markierung versehen.',
 				allowBlank: true,
 				listConfig: {
 					getInnerTpl: function(displayField)
@@ -220,13 +222,13 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/OrderReferrerID}Auftragsherkunft{/s}',
 				name: 'OrderReferrerID',
 				store: me.stores.orderReferrer,
-				supportText: 'Stellen Sie hier ein, welche Herkunft den exportierten Aufträgen zugeordnet werden soll.',
+				supportText: 'Die hier ausgewählte Auftragsherkunft erhalten Aufträge von shopware in plentymarkets. In plentymarkets kann dazu eine eigene Auftragsherkunft angelegt werden.',
 				allowBlank: true
 			}, {
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/OrderPaidStatusID}Status bezahlt{/s}',
 				name: 'OrderPaidStatusID',
 				store: paymentStatusStore,
-				supportText: 'Aufträge die dieses Status erreichen, werden bei plenty als bezahlt markiert und der Zahlungseingang gebucht.',
+				supportText: 'shopware Status, der signalisiert, dass der Auftrag komplett bezahlt ist. Löst das Buchen des Zahlungseinganges bei plentymarkets aus.',
 				displayField: 'description',
 			}
 
@@ -251,7 +253,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 				name: 'OutgoingItemsID',
 				id: 'OutgoingItemsID',
 				store: Ext.create('Shopware.apps.Plentymarkets.store.outgoing_items.OutgoingItems').load(),
-				supportText: 'Wann wurde der Warenausgang gebucht',
+				supportText: 'Aufträge welche diese Regel erfüllen, werden von plentymarkets abgerufen, um die folgenden Statusänderungen in shopware zu bewirken.',
 				allowBlank: true,
 				listeners: {
 					select: function(box)
@@ -268,7 +270,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 				name: 'OutgoingItemsOrderStatus',
 				id: 'OutgoingItemsOrderStatus',
 				store: me.stores.orderStatus,
-				supportText: 'Aufträge, die in plentymarkets dieses Stauts haben, werden in shopware als erledigt markiert.',
+				supportText: 'Erreicht ein Auftrag in plentymarkets diesen Auftragsstatus, gilt dieser als versendet.',
 				valueField: 'status',
 				allowBlank: true,
 				listeners: {
@@ -285,11 +287,13 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/OutgoingItemsIntervalID}Abfrageintervall{/s}',
 				name: 'OutgoingItemsIntervalID',
 				store: Ext.create('Shopware.apps.Plentymarkets.store.outgoing_items.Interval').load(),
+				supportText: 'Zeitintervall für den Datenabgleich der Auftragsdaten.'
 			}, {
-				fieldLabel: '{s name=plentymarkets/view/settings/textfield/OutgoingItemsShopwareOrderStatusID}Shopware Auftragsstatus{/s}',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/OutgoingItemsShopwareOrderStatusID}shopware Auftragsstatus{/s}',
 				name: 'OutgoingItemsShopwareOrderStatusID',
 				store: Ext.create('Shopware.apps.Base.store.OrderStatus').load(),
 				displayField: 'description',
+				supportText: 'Dieser Auftragsstatus wird gesetzt, wenn in plentymarkets der Warenausgang gebucht wurde.'
 			}
 
 			]
@@ -312,12 +316,14 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 				xtype: 'combo',
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/IncomingPaymentShopwarePaymentFullStatusID}shopware Zahlungsstatus (komplett bezahlt){/s}',
 				name: 'IncomingPaymentShopwarePaymentFullStatusID',
-				store: paymentStatusStore
+				store: paymentStatusStore,
+				supportText: 'Zahlungsstatus, welche Aufträge erhalten, wenn diese innerhalb vom plentymarkets als komplett bezahlt markiert werden.'
 			}, {
 				xtype: 'combo',
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/IncomingPaymentShopwarePaymentPartialStatusID}shopware Zahlungsstatus (teilweise bezahlt){/s}',
 				name: 'IncomingPaymentShopwarePaymentPartialStatusID',
-				store: paymentStatusStore
+				store: paymentStatusStore,
+				supportText: 'Zahlungsstatus, welche Aufträge erhalten, wenn diese innerhalb vom plentymarkets als teilweise bezahlt markiert werden.'
 			}
 
 			]
