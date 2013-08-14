@@ -310,12 +310,12 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 			},
 			items: [{
 				xtype: 'combo',
-				fieldLabel: '{s name=plentymarkets/view/settings/textfield/IncomingPaymentShopwarePaymentFullStatusID}shopware Zahlungsstatus (komplett bezhalt){/s}',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/IncomingPaymentShopwarePaymentFullStatusID}shopware Zahlungsstatus (komplett bezahlt){/s}',
 				name: 'IncomingPaymentShopwarePaymentFullStatusID',
 				store: paymentStatusStore
 			}, {
 				xtype: 'combo',
-				fieldLabel: '{s name=plentymarkets/view/settings/textfield/IncomingPaymentShopwarePaymentPartialStatusID}shopware Zahlungsstatus (teilweise bezhalt){/s}',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/IncomingPaymentShopwarePaymentPartialStatusID}shopware Zahlungsstatus (teilweise bezahlt){/s}',
 				name: 'IncomingPaymentShopwarePaymentPartialStatusID',
 				store: paymentStatusStore
 			}

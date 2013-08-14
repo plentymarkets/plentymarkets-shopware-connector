@@ -321,14 +321,14 @@ Sobald einer der erforderlichen Schritte noch nicht oder nur teilweise abgeschlo
 
 Sollten Sie den Datenaustausch manuell deaktiviert haben, wird dieser niemals automatisch reaktiviert.
 
-Der Datenauschtausch von shopware zu plentymarkets muss manuell gestartet werden. Der Import der Daten aus dem plentymarkets System findet automatisch statt, sobald der Datenaustausch aktiviert worden ist.
+Der Datenaustausch von shopware zu plentymarkets muss manuell gestartet werden. Der Import der Daten aus dem plentymarkets System findet automatisch statt, sobald der Datenaustausch aktiviert worden ist.
 
 **Wichtig:** Es werden alle Artikel mit shopware abgeglichen, die unter **Artikel bearbeiten » Verfügbar » Mandant (Shop)** dem entsprechenden Shop zugeordnet sind. 
 
 ### Initialer Export zu plentymarkets
 Alle Artikeldaten aus Ihrem shopware-System müssen zu plentymarkets exportiert werden. Das Übernehmen der Kundendaten ist optional und kann auch nachträglich noch gestartet werden.
 
-Bevor Daten zu plentymarkets exportiert werden, werden die entsprechenden Daten einmalig abgerufen. Alle Datensätze die nun automatisch gemappt werden können, werden natürlich nicht erneut in plentymarkets angelegt. Das automatische Mapping findet nur bei **identischer** Schreibweise statt. D.h., dass *rot* nicht *Rot* zugeordnet wird.
+Bevor Daten zu plentymarkets exportiert werden, werden die entsprechenden Daten einmalig abgerufen. Alle Datensätze die nun automatisch gemappt werden können, werden natürlich nicht erneut in plentymarkets angelegt. Das automatische Mapping findet nur bei **identischer** Schreibweise statt. D.h. *rot* wird nicht *Rot* zugeordnet.
 
 #### Kategorien
 Alle Kategorien, die unterhalb der als Startknoten definierten Kategorie liegen, werden zu plentymarkets exportiert. Es ist eine max. Tiefe von 6 Ebenen (exkl. des Startknotens, da diese nicht exportiert wird) möglich. Alles darüber hinaus kann bei plentymarkets nicht abgebildet werden.
@@ -460,7 +460,7 @@ Aufträge, die in shopware erstellt werden, werden alle 15 Minuten inkl. der Kun
 
 Wenn der Warenausgang in plentymarkets gebucht wird, wird der Auftrag in shopware in den von Ihnen definierten Status gesetzt. Es kann entweder festgelegt werden, dass der Auftrag in plentymarkets einen bestimmen Status erreichen muss, um als abgeschlossen zu gelten, oder dass es reicht, wenn der Warenausgang gebucht worden ist. Dieser Abgleich findet einmal pro halber Stunde statt. Zusätzlich werden Zahlungen, die innerhlab von plentymarkets gebucht werden, zu shopware synchronisiert. Der Status für bezahlte und nur teilweise bezahlte Aufträge wird entsprechend der Einstellungen gesetzt.
 
-Wenn ein Auftrag in shopwareden eingestellten Zahlungsstatus erreicht, wird in plentymarkets ein Zahlungseingang über den gesamten Rechnungsbetrag gebucht. Die Zahlungsart wird entsprechend der Einstellungen gesetzt. Dieser Vorgang findet stündlich statt.
+Wenn ein Auftrag in shopware den eingestellten Zahlungsstatus erreicht, wird in plentymarkets ein Zahlungseingang über den gesamten Rechnungsbetrag gebucht. Die Zahlungsart wird entsprechend der Einstellungen gesetzt. Dieser Vorgang findet stündlich statt.
 
 **Achtung:** In plentymarkets kann ein Kunde nur eine Rechnungsadresse hinterlegen. Wenn ein und der selbe Kunde in shopware einen Auftrag mit abweichender Rechnungsadresse anlegt, wird er bei plentymarkets als neuer Kunde mit eigener ID geführt.
 
