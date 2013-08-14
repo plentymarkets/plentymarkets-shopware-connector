@@ -30,6 +30,7 @@
 				- [Steuersätze](#steuersätze)
 				- [Versandarten](#versandarten)
 				- [Länder](#länder)
+				- [Cron](#cron)
 	- [Datenaustausch](#datenaustausch)
 		- [Initialer Export zu plentymarkets](#initialer-export-zu-plentymarkets)
 			- [Kategorien](#kategorien)
@@ -293,10 +294,31 @@ Die Länder werden den Anschriften (Rechnung- / Liefer-) zugeordnet. Kundendaten
 Wie Sie Lieferländer in plentymarkets aktivieren können finden Sie hier:
 http://man.plentymarkets.eu/einstellungen/auftraege/versand/versandoptionen/lieferlaender/
 
+##### Cron
+Der permanente Datenabgleich zwischen plentymarkets und shopware wird per Cronjob gesteuert. Dafür ist ein shopware-Plugin mit dem Namen *Cron* nötig. Dieses muss vorher installiert und konfiguriert werden. Beachten Sie dazu die Anleitung für dieses Plugin.
+
+Die Ausführung des shopware-Cron-Prozesses muss über die zentrale crontab erfolgen. Sie erreichen diese über die folgenden Shell-Befehle:
+
+    sudo su
+    crontab -e
+
+Gemäß der Anleitung des shopware-Plugins *Cron* erfolgt die Ausführung über eine Befehlskette nach dem folgenden Schema:
+
+     cd /pfad/zumShop && /usr/bin/php shopware.php /backend/cron
+
+Testen Sie die Ausführung dieses Befehls per Shell und übertragen Sie diesen erst dann in die crontab, wenn die Ausführung fehlerfrei funktioniert.
+
+Im Standardfall sollte der Pfad */usr/bin/php* korrekt sein und auf PHP in Version 5.x verweisen. Bei manchen Providern kann dieser Pfad abweichen (z.B. */usr/bin/php5* oder */usr/bin/php53*).
+
+Der crontab-Eintrag mit einer Ausführung alle 15 Minuten würde demnach diesem Schema folgen:
+
+     */15 * * * * cd /pfad/zumShop && /usr/bin/php shopware.php /backend/cron
+
 ## Datenaustausch
 Das Mapping für die Daten aus der Synchronisierung wird automatisch vorgenommen. 
 
-**Achtung:** Der Datenaustauch darf (bzw. kann) nur gestartet werden, wenn alle unter Einrichtung genannten Punkte abgeschlossen sind! Sobald einer der erforderlichen Schritte noch nicht oder nur teilweise abgeschlossen ist, wird der Datenaustausch automatisch deaktiviert. Sobald alle Schritte abgeschlossen sind, wird der Datenaustausch wieder aktiviert.
+**Achtung:** Der Datenaustauch darf (bzw. kann) nur gestartet werden, wenn alle unter Einrichtung genannten Punkte abgeschlossen sind. 
+Sobald einer der erforderlichen Schritte noch nicht oder nur teilweise abgeschlossen ist, wird der Datenaustausch automatisch deaktiviert. Sobald alle Schritte abgeschlossen sind, wird der Datenaustausch wieder aktiviert.
 
 Sollten Sie den Datenaustausch manuell deaktiviert haben, wird dieser niemals automatisch reaktiviert.
 
