@@ -242,6 +242,7 @@ class PlentymarketsMappingDataController
 						FROM s_core_paymentmeans C
 						LEFT JOIN plenty_mapping_method_of_payment PMC
 							ON PMC.shopwareID = C.id
+						WHERE active = 1
 						ORDER BY C.name
 				')
 			->fetchAll();
