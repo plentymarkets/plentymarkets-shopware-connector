@@ -72,9 +72,8 @@ Eine dauerhafte Wartung des Plugins auf zukünftige plentymarkets SOAP API-Versi
 
 ## Installation
 ### Systemvoraussetzungen
-Für das Plugin sind mindestens **plentymarkets 5.0** und **shopware 4.1** nötig. Innerhalb von shopware muss das **Cron** Plugin installiert und aktiviert sein. Das Cron Plugin ist es­sen­zi­ell für den Datenaustausch.
-
-Im shopware-System muss mindestens ein Hersteller vorhanden sein.
+Dieses Plugin benötigt **plentymarkets 5.0** und **shopware 4.1**. Innerhalb von shopware muss das Plugin **Cron** installiert und aktiviert sein. Die Einrichtung dieses Plugins ist [hier](#cron) beschrieben.
+Weiterhin muss in shopware mindestens ein Hersteller vorhanden sein.
 
 #### PHP
 
