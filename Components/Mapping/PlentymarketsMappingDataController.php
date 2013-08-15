@@ -246,10 +246,17 @@ class PlentymarketsMappingDataController
 						ORDER BY C.name
 				')
 			->fetchAll();
-
+		
+		
 		$plentyShipping = PlentymarketsImportController::getMethodOfPaymentList();
+		
+		$where = 'shopwareID NOT IN (';
+		
+		$methodOfPaymentShopwareIDs = array();
 		foreach ($rows as &$row)
 		{
+			$methodOfPaymentShopwareIDs[] = $row['id'];
+			
 			if ($row['plentyID'] >= 0)
 			{
 				$row['plentyName'] = $plentyShipping[$row['plentyID']]['name'];
@@ -277,6 +284,12 @@ class PlentymarketsMappingDataController
 				$row['plentyName'] = '';
 			}
 		}
+		
+		if(!empty($methodOfPaymentShopwareIDs))
+		{
+			$where .= implode(',', $methodOfPaymentShopwareIDs).')';
+			$affectedRows = Shopware()->Db()->delete('plenty_mapping_method_of_payment', $where);
+		}
 
 		return $rows;
 	}
@@ -292,14 +305,20 @@ class PlentymarketsMappingDataController
 						FROM s_premium_dispatch C
 						LEFT JOIN plenty_mapping_shipping_profile PMC
 							ON PMC.shopwareID = C.id
+						WHERE active = 1
 						ORDER BY C.name
 				')
 			->fetchAll();
 
 		$plentyShipping = PlentymarketsImportController::getShippingProfileList();
+		
+		$where = 'shopwareID NOT IN (';
 
+		$shippingProfileShopwareIDs = array();
 		foreach ($rows as &$row)
 		{
+			$shippingProfileShopwareIDs[] = $row['id'];
+			
 			if ($row['plentyID'])
 			{
 				$row['plentyName'] = $plentyShipping[$row['plentyID']]['name'];
@@ -327,6 +346,12 @@ class PlentymarketsMappingDataController
 				$row['plentyName'] = '';
 			}
 		}
+		
+		if(!empty($shippingProfileShopwareIDs))
+		{
+			$where .= implode(',', $shippingProfileShopwareIDs).')';
+			$affectedRows = Shopware()->Db()->delete('plenty_mapping_shipping_profile', $where);
+		}
 
 		return $rows;
 	}
@@ -347,8 +372,14 @@ class PlentymarketsMappingDataController
 			->fetchAll();
 
 		$plentyVat = PlentymarketsImportController::getVatList();
+		
+		$where = 'shopwareID NOT IN (';
+		
+		$vatShopwareIDs = array();
 		foreach ($rows as &$row)
 		{
+			$vatShopwareIDs[] = $row['id'];
+			
 			if ($row['plentyID'] >= 0)
 			{
 				$row['plentyName'] = $plentyVat[$row['plentyID']]['name'];
@@ -368,6 +399,12 @@ class PlentymarketsMappingDataController
 					}
 				}
 			}
+		}
+		
+		if(!empty($vatShopwareIDs))
+		{
+			$where .= implode(',', $vatShopwareIDs).')';
+			$affectedRows = Shopware()->Db()->delete('plenty_mapping_vat', $where);
 		}
 
 		return $rows;

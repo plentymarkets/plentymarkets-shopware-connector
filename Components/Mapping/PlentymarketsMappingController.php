@@ -133,16 +133,23 @@ class PlentymarketsMappingController
 		{
 
 			$id = isset($tables[2]) ? $tables[2] : 'id';
-
+			
+			$whereActive = '';
+			if($tables[0] == 's_core_paymentmeans' ||
+				$tables[0] == 's_premium_dispatch')
+			{
+				$whereActive = ' AND active = 1';
+			}
+			
 			$Statement = Shopware()->Db()->prepare('
 				SELECT
 						COUNT(*) open
 					FROM ' . $tables[0] . '
 					WHERE ' . $id . ' NOT IN (
 						SELECT shopwareId
-						FROM plenty_mapping_' . $tables[1] . '
-					);
-			');
+						FROM plenty_mapping_' . $tables[1].'
+					)'.$whereActive.';'
+			);
 
 			$Statement->execute();
 

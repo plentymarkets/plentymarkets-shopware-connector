@@ -260,8 +260,8 @@ shopware Auftragsstatus | Dieser Auftragsstatus wird gesetzt, wenn in plentymark
 
 Einstellung | Erklärung
 ----|------
-shopware Zahlungsstatus (komplett bezahlt) | Zahlungsstatus, welche Aufträge erhalten, wenn diese innerhalb vom plentymarkets als *komplett bezahlt* markiert werden.
-shopware Zahlungsstatus (teilweise bezahlt) | Zahlungsstatus, welche Aufträge erhalten, wenn diese innerhalb vom plentymarkets als *teilweise bezahlt* markiert werden.
+shopware Zahlungsstatus (komplett bezahlt) | Zahlungsstatus, welche Aufträge erhalten, wenn diese innerhalb von plentymarkets als *komplett bezahlt* markiert werden.
+shopware Zahlungsstatus (teilweise bezahlt) | Zahlungsstatus, welche Aufträge erhalten, wenn diese innerhalb von plentymarkets als *teilweise bezahlt* markiert werden.
 
 #### Mapping
 Für alle Daten, die nicht automatisch gemappt werden können, muss die Verknüpfung manuell hergestellt werden.

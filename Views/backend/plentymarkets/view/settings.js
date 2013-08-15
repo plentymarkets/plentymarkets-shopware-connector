@@ -317,13 +317,13 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/IncomingPaymentShopwarePaymentFullStatusID}shopware Zahlungsstatus (komplett bezahlt){/s}',
 				name: 'IncomingPaymentShopwarePaymentFullStatusID',
 				store: paymentStatusStore,
-				supportText: 'Zahlungsstatus, welche Aufträge erhalten, wenn diese innerhalb vom plentymarkets als komplett bezahlt markiert werden.'
+				supportText: 'Zahlungsstatus, welche Aufträge erhalten, wenn diese innerhalb von plentymarkets als komplett bezahlt markiert werden.'
 			}, {
 				xtype: 'combo',
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/IncomingPaymentShopwarePaymentPartialStatusID}shopware Zahlungsstatus (teilweise bezahlt){/s}',
 				name: 'IncomingPaymentShopwarePaymentPartialStatusID',
 				store: paymentStatusStore,
-				supportText: 'Zahlungsstatus, welche Aufträge erhalten, wenn diese innerhalb vom plentymarkets als teilweise bezahlt markiert werden.'
+				supportText: 'Zahlungsstatus, welche Aufträge erhalten, wenn diese innerhalb von plentymarkets als teilweise bezahlt markiert werden.'
 			}
 
 			]

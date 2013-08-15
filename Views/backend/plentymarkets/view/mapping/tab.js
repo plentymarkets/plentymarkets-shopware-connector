@@ -36,6 +36,18 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Tab', {
 		me.listeners = {
 			activate: function()
 			{
+				me.setLoading(true);
+				me.stores.plentymarkets.load({
+					params: {
+						map: me.entity,
+						force: true
+					},
+					callback: function()
+					{
+						me.setLoading(false);
+					}
+				});
+				
 				me.reload();
 			}
 		};
