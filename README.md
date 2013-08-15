@@ -233,7 +233,7 @@ Die Daten, die von plentymarkets geladen werden, werden für einen Tag gespeiche
 Einstellung | Erklärung
 ----|------
 plentymarkets Lager | Datenquelle für den Warenbestandsabgleich  
-Warenbestandspuffer | Prozentualer Anteil des netto-Warenbestandes des gewählten Lagers, welche an shopware übertragen wird.
+Warenbestandspuffer | Prozentualer Anteil des netto-Warenbestandes des gewählten Lagers, welcher an shopware übertragen wird.
 Mandant (Shop) | Das aktuelle shopware-System muss mit einem plentymarkets Mandant (Shop) verknüpft werden. Ein solcher *Mandant (Shop)* kann in plentymarkets über **Einstellungen » Mandant (Shop) » Neuer externer Shop** angelegt werden. 
 Hersteller | Sofern bei Artikeln in plentymarkets kein Hersteller zugeordnet wurde, wird dieser Hersteller in shopware mit den betreffenden Artikeln verknüpft.
 Kategorie Startknoten | Ausgangspunkt für den Export und den Abgleich der Kategorien. Diese Kategorie selbst wird *nicht* bei plentymarkets angelegt. Neue Kategorien in plentymarkets werden an diese Kategorie angehangen.
@@ -245,7 +245,7 @@ Einstellung | Erklärung
 ----|------
 Markierung | Sofern hier eine Auswahl getroffen wird, werden neue Aufträge von shopware an plentymarkets exportiert und dabei mit dieser Markierung versehen. 
 Auftragsherkunft | Die hier ausgewählte Auftragsherkunft erhalten Aufträge von shopware in plentymarkets. In plentymarkets kann dazu eine eigene Auftragsherkunft angelegt werden.
-Status bezahlt | shopware Status, der signalisiert, dass der Auftrag komplett bezahlt ist. Löst das Buchen des Zahlungseinganges bei plentymarkets aus 
+Status bezahlt | shopware Status, der signalisiert, dass der Auftrag komplett bezahlt ist. Löst das Buchen des Zahlungseinganges bei plentymarkets aus.
 
 ##### Warenausgang
 
@@ -260,8 +260,8 @@ shopware Auftragsstatus | Dieser Auftragsstatus wird gesetzt, wenn in plentymark
 
 Einstellung | Erklärung
 ----|------
-shopware Zahlungsstatus (komplett bezahlt) | Zahlungsstatus, welche Aufträge erhalten, wenn diese innerhalb von plentymarkets als *komplett bezahlt* markiert werden.
-shopware Zahlungsstatus (teilweise bezahlt) | Zahlungsstatus, welche Aufträge erhalten, wenn diese innerhalb von plentymarkets als *teilweise bezahlt* markiert werden.
+shopware Zahlungsstatus (komplett bezahlt) | Zahlungsstatus, welchen Aufträge erhalten, wenn diese innerhalb von plentymarkets als *komplett bezahlt* markiert werden.
+shopware Zahlungsstatus (teilweise bezahlt) | Zahlungsstatus, welchen Aufträge erhalten, wenn diese innerhalb von plentymarkets als *teilweise bezahlt* markiert werden.
 
 #### Mapping
 Für alle Daten, die nicht automatisch gemappt werden können, muss die Verknüpfung manuell hergestellt werden.
