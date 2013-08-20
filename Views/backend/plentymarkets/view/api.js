@@ -1,5 +1,12 @@
 // {namespace name=backend/Plentymarkets/view}
 // {block name=backend/Plentymarkets/view/Api}
+
+/**
+ * The api view builds the graphical elements like labels and textfields. It shows the three rows "URL", 
+ * "Benutzername" and "Passwort". It is extended by the Ext form panel "Ext.form.Panel".
+ * 
+ * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
+ */
 Ext.define('Shopware.apps.Plentymarkets.view.Api', {
 
 	extend: 'Ext.form.Panel',

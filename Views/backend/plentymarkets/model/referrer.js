@@ -1,5 +1,12 @@
 // {namespace name=backend/Plentymarkets/model}
 // {block name=backend/Plentymarkets/model/Referrer}
+
+/**
+ * The referrer data model defines the different data fields for a referrer and
+ * is extended by the Ext data model "Ext.data.Model".
+ * 
+ * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
+ */
 Ext.define('Shopware.apps.Plentymarkets.model.Referrer', {
 
 	extend: 'Ext.data.Model',

@@ -30,7 +30,11 @@ require_once PY_SOAP . 'Models/PlentySoapObject/GetLinkedItems.php';
 require_once PY_SOAP . 'Models/PlentySoapRequest/GetLinkedItems.php';
 
 /**
- *
+ * PlentymarketsImportEntityItemLinked provides the actual linked items import funcionality. Like the other import
+ * entities this class is called in PlentymarketsImportController. It is important to deliver at least a plenty item ID or
+ * a shopware item ID to the constructor method of this class.
+ * The data import takes place based on plentymarkets SOAP-calls.
+ * 
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 class PlentymarketsImportEntityItemLinked

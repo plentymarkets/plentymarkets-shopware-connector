@@ -31,6 +31,10 @@ require_once PY_SOAP . 'Models/PlentySoapObject/ItemImage.php';
 require_once PY_SOAP . 'Models/PlentySoapRequest/GetItemsImages.php';
 
 /**
+ * PlentymarketsImportEntityItemImage provides the actual item image import funcionality. Like the other import
+ * entities this class is called in PlentymarketsImportController. It is important to deliver at least a plenty item ID or
+ * a shopware item ID to the constructor method of this class.
+ * The data import takes place based on plentymarkets SOAP-calls.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */

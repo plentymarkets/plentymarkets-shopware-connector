@@ -30,6 +30,10 @@ require_once PY_SOAP . 'Models/PlentySoapObject/AddIncomingPayments.php';
 require_once PY_SOAP . 'Models/PlentySoapRequest/AddIncomingPayments.php';
 
 /**
+ * PlentymarketsExportEntityIncomingPayment provides the actual incoming payments export funcionality. Like the other export 
+ * entities this class is called in PlentymarketsExportController. It is important to deliver a valid order ID
+ * to the constructor method of this class.
+ * The data export takes place based on plentymarkets SOAP-calls.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */

@@ -16,7 +16,7 @@
 		- [Installation aus dem Community Store](#installation-aus-dem-community-store)
 	- [Einrichtung](#einrichtung)
 		- [plentymarkets](#plentymarkets)
-			- [Mandant anlegen](#mandant-anlegen)
+			- [Mandant (Shop) anlegen](#mandant-shop-anlegen)
 			- [Benutzer anlegen](#benutzer-anlegen)
 			- [Auftragsherkunft (optional)](#auftragsherkunft-optional)
 			- [Freitextfelder (optional)](#freitextfelder-optional)
@@ -24,12 +24,13 @@
 			- [Verbindung zu plentymarkets herstellen](#verbindung-zu-plentymarkets-herstellen)
 			- [Einstellungen](#einstellungen)
 			- [Mapping](#mapping)
-				- [Währungen](#whrungen)
+				- [Währungen](#währungen)
 				- [Einheiten](#einheiten)
 				- [Zahlungsarten](#zahlungsarten)
-				- [Steuersätze](#steuerstze)
+				- [Steuersätze](#steuersätze)
 				- [Versandarten](#versandarten)
-				- [Länder](#lnder)
+				- [Länder](#länder)
+				- [Cron](#cron)
 	- [Datenaustausch](#datenaustausch)
 		- [Initialer Export zu plentymarkets](#initialer-export-zu-plentymarkets)
 			- [Kategorien](#kategorien)
@@ -44,9 +45,9 @@
 				- [Varianten](#varianten)
 				- [Preise](#preise)
 				- [Bilder](#bilder)
-				- [Ähnliche Artikel & Zubehör (Cross-Selling)](#hnliche-artikel--zubehr-cross-selling)
-				- [Warenbestände](#warenbestnde)
-			- [Aufträge](#auftrge)
+				- [Ähnliche Artikel & Zubehör (Cross-Selling)](#Ähnliche-artikel--zubehör-cross-selling)
+				- [Warenbestände](#warenbestände)
+			- [Aufträge](#aufträge)
 	- [Log](#log)
 		- [Meldungen](#meldungen)
 		- [Fehler](#fehler)
@@ -71,9 +72,22 @@ Eine dauerhafte Wartung des Plugins auf zukünftige plentymarkets SOAP API-Versi
 
 ## Installation
 ### Systemvoraussetzungen
-Für das Plugin sind mindestens **plentymarkets 5.0** und **shopware 4.1** nötig. Innerhalb von shopware muss das **Cron** Plugin installiert und aktiviert sein. Das Cron Plugin ist es­sen­zi­ell für den Datenaustausch.
+Dieses Plugin benötigt **plentymarkets 5.0** und **shopware 4.1**. Innerhalb von shopware muss das Plugin **Cron** installiert und aktiviert sein. Die Einrichtung dieses Plugins ist [hier](#cron) beschrieben.
+Weiterhin muss in shopware mindestens ein Hersteller vorhanden sein.
 
-Im shopware-System muss mindestens ein Hersteller vorhanden sein.
+#### PHP
+
+Besonders für den automatischen Datenabgleich via Cron werden ausreichende System-Ressourcen benötigt. Es muss daher sichergestellt sein, dass PHP-Prozesse ausreichend lang laufen und genügend Speicher verbrauchen dürfen. Im Testbetrieb haben wir für PHP-Prozesse, welche per Shell (CLI) ausgeführt werden, diese Eckdaten verwendet:
+
+	max_execution_time = 800
+	max_input_time = 500
+	memory_limit = 2048M
+
+Ändern Sie diese Angaben in der korrekten php.ini-Datei. Diese finden Sie in per Shell im Standardfall an der folgenden Position
+
+	/etc/php5/cli/php.ini
+
+Grundsätzlich sollten Änderungen an Konfigurationsdateien nur von Ihrem Systemadministrator vorgenommen werden.
 
 ### Installation via github
 #### Herunterladen als Archiv
@@ -131,13 +145,20 @@ Nach der Pilotphase kann das Plugin auch aus dem shopware Community Store instal
 ### plentymarkets
 Folgende Schritte müssen *vor* der Einrichtung des Plugins innerhalb des plentymarkets-Systems ausgeführt werden.
 
-#### Mandant anlegen
-JG
+#### Mandant (Shop) anlegen
+In plentymarkets muss ein besonderer **Mandant (Shop)** angelegt werden. Ein Mandant (Shop) dient in plentymarkets dazu, verschiedene Einstellungen gesondert pro Mandant definieren zu können. So müssen Artikelstammdaten im Shop für jeden Mandant (Shop) aktiviert werden (dies geht auch per Gruppenfunktion im Bereich der Artikelsuche). Weiterhin können pro Mandant (Shop) andere E-Mail-Vorlagen versendet werden oder auch das Layout für Rechnung und Lieferscheine getrennt abgelegt werden.
+
+Einen neuen Mandant (Shop) für shopware legen Sie in Ihrem plentymarkets System in diesem Bereich an:
+**Einstellungen » Mandant (Shop) » Neuer externer Shop**
+
+Sie müssen hier lediglich einen Namen eingeben und bei Typ die Auswahl shopware vornehmen.
+Nachdem Sie den Mandant (Shop) erfolgreich angelegt haben, können Sie diesen Mandant (Shop) direkt innerhalb des shopware Plugins im Bereich Einstellungen auswählen.
 
 #### Benutzer anlegen
 Legen Sie unter **Einstellungen » Grundeinstellungen » Benutzer » Konten** einen neuen Benutzer an. Dieser Benutzer wird für die Kommunikation zwischen plentymarkets und shopware über die SOAP API verwendet. Nutzen Sie für den Benutzer deshalb am besten die Typ-Bezeichnung **API**.
 
-Folgende Calls werden vom Plugin genutzt:
+Die folgende SOAP-Calls werden vom Plugin genutzt und müssen für somit auch für den Benutzer aktiviert werden.
+Fehlen einzelne Berechtigungen, kann der Datenabgleich zwischen plentymarkets und shopware nicht vollständig ablaufen und es kann zu einem Datenverlust kommen.
 
 * AddCustomerDeliveryAddresses
 * AddCustomers
@@ -175,13 +196,20 @@ Folgende Calls werden vom Plugin genutzt:
 * SetAttributeValueSetsDetails
 * SetProducers
 
-Wenn die Berechtigungen manuell vergeben werden, muss sichergestellt sein, dass der Benutzer **alle** o. g. Calls ausführen darf. Ansonsten kann es sowohl im shopware- als auch im plentymarkets-System zu unerwartetem Verhalten kommen.
+Auf der folgenden Seite erfahren Sie, wie Sie die Berechtigungen in plentymarkets einrichten können:
+http://man.plentymarkets.eu/einstellungen/grundeinstellungen/benutzer/benutzer-bearbeiten/
 
 #### Auftragsherkunft (optional)
 Soll den von shopware zu plentymarkets exportierten Aufträgen eine individuelle Herkunft zugeordnet werden, muss diese zuvor in plentymarkets unter **Einstellungen » Aufträge » Auftragsherkunft** angelegt werden.
 
+Weitere Informationen zur Auftragsherkunft finden Sie auf dieser Seite:
+http://man.plentymarkets.eu/einstellungen/auftraege/auftragsherkunft/
+
 #### Freitextfelder (optional)
 Um die Freitextfelder/Attribute der Artikel aus shopware zu übernehmen, müssen diese in plentymarkets unter **Einstellungen » Artikel » Freitextfelder** definiert werden.
+
+Weitere Informationen zu Freitextfeldern finden Sie auf dieser Seite:
+http://man.plentymarkets.eu/einstellungen/artikel/freitextfelder/
 
 ### shopware
 Nach der Installation und Aktivierung des Plugins über den Plugin Manager muss der Shop-Cache geleert und das shopware-Fenster neu geladen werden, damit der Menüpunkt **Einstellungen » plentymarkets** erscheint.
@@ -200,20 +228,40 @@ Die Einstellungen in den im Folgenden genannten Bereichen *müssen* vorgenommen 
 
 Die Daten, die von plentymarkets geladen werden, werden für einen Tag gespeichert. Sie können jedoch über den entsprechenden Button erneut abgefragt werden. **Achtung:** Manche der zu Grunde liegenden Calls sind auf eine bestimmte Anzahl (i.d.R. 30/Tag/User) begrenzt!
 
+##### Import Artikelstammdaten
+
 Einstellung | Erklärung
 ----|------
-Mandant | Zuordnung zu Ihrem shopware-System innerhalb von plentymarkets  
-Lager | Datenquelle für den Warenbestandsabgleich  
-Hersteller | in shopware erforderlich, in plentymarkets optional 
-Herkunft | Zuordnung der Aufträge zu einer Herkunft 
-Status: bezahlt | shopware Status, der signalisiert, dass der Auftrag komplett bezahlt ist. Löst das Buchen des Zahlungseinganges bei plentymarkets aus 
-Status: versendet | shopware Status, der gesetzt wird, wenn bei einem Auftrag innerhalb von plentymarkets der Warenausgang gebucht wird 
-Warenausgang | definiert die Bedingung, mit der "versendete" Aufträge aus plentymarkets abgerufen werden 
-Warenausgang | Intervall der Auftragssynchronisation 
-Warenbestandspuffer | Prozentualer Anteil des netto-Warenbestandes der in shopware gebucht wird
-Kategorie Startknoten | Ausgangspunkt für den Export und den Abgleich der Kategorien. Diese Kategorie wird *nicht* bei plentymarkets gebucht. Neue plentymarkets Kategorien werden an diese angehangen.
-Zahlungseingang | Zahlungsstatus die Aufträgen zugeordnet werden, wenn sie innerhalb vom plentymarkets als *komplett bezhalt* oder *teilweise bezahlt* markiert sind
-Kundengruppe | Kundengruppe deren Preise abgeglichen werden
+plentymarkets Lager | Datenquelle für den Warenbestandsabgleich  
+Warenbestandspuffer | Prozentualer Anteil des netto-Warenbestandes des gewählten Lagers, welcher an shopware übertragen wird.
+Mandant (Shop) | Das aktuelle shopware-System muss mit einem plentymarkets Mandant (Shop) verknüpft werden. Ein solcher *Mandant (Shop)* kann in plentymarkets über **Einstellungen » Mandant (Shop) » Neuer externer Shop** angelegt werden. 
+Hersteller | Sofern bei Artikeln in plentymarkets kein Hersteller zugeordnet wurde, wird dieser Hersteller in shopware mit den betreffenden Artikeln verknüpft.
+Kategorie Startknoten | Ausgangspunkt für den Export und den Abgleich der Kategorien. Diese Kategorie selbst wird *nicht* bei plentymarkets angelegt. Neue Kategorien in plentymarkets werden an diese Kategorie angehangen.
+Standard-Kundenklasse | Kundenklasse deren Preise von plentymarkerts zu shopware übertragen werden.
+
+##### Export Aufträge
+
+Einstellung | Erklärung
+----|------
+Markierung | Sofern hier eine Auswahl getroffen wird, werden neue Aufträge von shopware an plentymarkets exportiert und dabei mit dieser Markierung versehen. 
+Auftragsherkunft | Die hier ausgewählte Auftragsherkunft erhalten Aufträge von shopware in plentymarkets. In plentymarkets kann dazu eine eigene Auftragsherkunft angelegt werden.
+Status bezahlt | shopware Status, der signalisiert, dass der Auftrag komplett bezahlt ist. Löst das Buchen des Zahlungseinganges bei plentymarkets aus.
+
+##### Warenausgang
+
+Einstellung | Erklärung
+----|------
+Warenausgang | Aufträge welche diese Regel erfüllen, werden von plentymarkets abgerufen, um die folgenden Statusänderungen in shopware zu bewirken.
+Auftragsstatus | Erreicht ein Auftrag in plentymarkets diesen Auftragsstatus, gilt dieser als versendet.
+Abfrageintervall | Zeitintervall für den Datenabgleich der Auftragsdaten 
+shopware Auftragsstatus | Dieser Auftragsstatus wird gesetzt, wenn in plentymarkets der Warenausgang gebucht wurde.
+
+##### Zahlungseingang bei plentymarkets
+
+Einstellung | Erklärung
+----|------
+shopware Zahlungsstatus (komplett bezahlt) | Zahlungsstatus, welchen Aufträge erhalten, wenn diese innerhalb von plentymarkets als *komplett bezahlt* markiert werden.
+shopware Zahlungsstatus (teilweise bezahlt) | Zahlungsstatus, welchen Aufträge erhalten, wenn diese innerhalb von plentymarkets als *teilweise bezahlt* markiert werden.
 
 #### Mapping
 Für alle Daten, die nicht automatisch gemappt werden können, muss die Verknüpfung manuell hergestellt werden.
@@ -223,36 +271,74 @@ Für alle Daten, die nicht automatisch gemappt werden können, muss die Verknüp
 Wenn das Mapping nicht vollständig abgeschlossen ist oder im laufenden Betrieb weitere Datensätze innerhalb von shopware erstellt werden, die manuell gemappt werden müssen, wird der gesamte Datenaustausch deaktiviert. Auf der Startseite des Plugins wird der Nutzer auf diesen Umstand hingewiesen.
 
 ##### Währungen
-Die Währungen werden Aufträgen zugeordnet, die von shopware zu plentymarkets exportiert werden. Da Aufträge nicht von plentymarkets zu shopware exportiert werden, ist es nicht erforderlich, alle Währungen aus plentymarkets auch im shopware-System anzulegen.
+Die Währungen werden Aufträgen zugeordnet, die von shopware zu plentymarkets exportiert werden. 
+Da Aufträge nicht von plentymarkets zu shopware exportiert werden, ist es nicht erforderlich, alle Währungen aus plentymarkets auch im shopware-System anzulegen.
+
+Weitere Informationen zu Währungen in plentymarkets finden Sie hier: http://man.plentymarkets.eu/einstellungen/auftraege/zahlung/waehrungen/
 
 ##### Einheiten
 Die Einheiten sind den Artikeln zugeordnet. Da der Abgleich in beide Richtungen stattfindet, macht es Sinn, alle Einheiten, die in plentymarkets verwendet werden, auch bei shopware anzulegen. Wenn eine Einheit innerhalb von shopware nicht zugeordnet werden kann, wird für den Artikel keine Einheit definiert.
 
 ##### Zahlungsarten
-Die Zahlungsarten werden den Aufträgen zugeordnet.
+In diesem Bereich müssen alle aktivierten Zahlungsarten in shopware mit einer entsprechenden Zahlungsart in plentymarkets verknüpft werden.
+Sie sollten vor dem Mapping die Zahlungsarten deaktivieren, welche Sie nicht verwenden möchten. Nur wenn alle Zahlungsarten zugeordnet wurden, wird der Datenabgleich funktionieren.
 
-**Wichtig:** Alle in plentymarkets mit einer Zahlungsart verbundenen Aktionen werden ausgeführt. Ist beispielsweise als Zahlungsart Rechnung ausgewählt, wird der Auftrag nach dem Import in plentymarkets automatisch in den Status 4 bzw. 5 gesetzt. Darüber hinaus werden alle Events, die ggf. konfiguriert sind, ausgeführt.
+**Wichtig:** Alle in plentymarkets für eine Zahlungsart eingerichteten Aktionen werden auch bei Aufträgen von shopware ausgeführt. Ist beispielsweise als Zahlungsart Rechnung ausgewählt, wird der Auftrag nach dem Import in plentymarkets automatisch in den Status 4 bzw. 5 gesetzt. 
 
-**Achtung:** Die Zahlungsart *Vorkasse* kann derzeit in plentymarkets nicht als eigenständige Zahlungsart gebucht werden. Die entsprechenden Vorgänge werden über die Alternativen *Überweisung*, *HBCI* und *EBICS* abgedeckt.
+**Achtung:** Bei Aufträgen mit der Zahlungsart *Vorkasse* wird nach der Zahlungseingangsbuchung ein Wechsel der Zahlungsart auf den tatsächlichen Zahlungsvorgang durchgeführt. In plentymarkets ändert sich somit die Zahlungsart dieser Aufträge nach dem Zahlungseingang auf HBCI oder EBICS, wenn beispielsweise ein automatischer Bankkonto-Abgleich aktiviert wurde.
+
+Wie Sie Zahlungsarten in plentymarekts einrichten, finden Sie auf dieser Seite:
+http://man.plentymarkets.eu/einstellungen/auftraege/zahlung/zahlungsarten/
 
 ##### Steuersätze
-… sind zu hoch.
+In diesem Bereich müssen die Umsatzsteuersätze von shopware mit den Umsatzsteuersätze von plentymarkets verknüpft werden. Umsatzsteuersätze in plentymarkets werden in dem Bereich **Einstellungen » Aufträge » Buchhaltung** verwaltet. 
+Weitere Hilfe dazu: http://man.plentymarkets.eu/einstellungen/auftraege/buchhaltung/
 
 ##### Kundengruppen
-Sofern hier die plentymarkets Kundenklassen *Standard-Endkunden* und/oder *Standard-Firmenkunden* nicht auftauchen, müssen diese in plentymarktes unter **Einstellungen » Kunden » Kundenklassen** einmalig abgespeichert werden.
+Sofern hier die plentymarkets Standard-Kundenklassen *Standard-Endkunden* und/oder *Standard-Firmenkunden* nicht auftauchen, müssen diese in plentymarktes unter **Einstellungen » Kunden » Kundenklassen** einmalig abgespeichert werden.
 
 ##### Versandarten
 Das Mapping der Versandarten dient dazu, die Funktionalitäten, die plentymarkets im Bereich Fulfillment bietet, vollumfänglich nutzen zu können.
 
-JG
+Auf der folgenden Handbuchseite erfahren Sie, wie Sie Versandoptionen in plentymarkets einrichten können:
+http://man.plentymarkets.eu/einstellungen/auftraege/versand/versandoptionen/
+
+Erst durch die korrekte Einrichtung der Versandoptionen und das entsprechende Mapping von Bestellungen, welche über shopware zu plentymarkets gelangen, können Sie das Versand-Center sinnvoll nutzen. Das Versand-Center ist für die Anmeldung von Sendungen und der Generierung von Versand-Etiketten nötig.
+
+Informationen zum plentymarkets Versand-Center finden Sie hier:
+http://man.plentymarkets.eu/auftraege/versand/versand-center/
 
 ##### Länder
 Die Länder werden den Anschriften (Rechnung- / Liefer-) zugeordnet. Kundendaten werden nur zu plentymarkets exportiert. Aus diesem Grund ist es nicht erforderlich, alle plentymarkets-Länder im entsprechenden shopware-System anzulegen.
 
+Wie Sie Lieferländer in plentymarkets aktivieren können finden Sie hier:
+http://man.plentymarkets.eu/einstellungen/auftraege/versand/versandoptionen/lieferlaender/
+
+##### Cron
+Der permanente Datenabgleich zwischen plentymarkets und shopware wird per Cronjob gesteuert. Dafür ist ein shopware-Plugin mit dem Namen *Cron* nötig. Dieses muss vorher installiert und konfiguriert werden. Beachten Sie dazu die Anleitung für dieses Plugin.
+
+Die Ausführung des shopware-Cron-Prozesses muss über die zentrale crontab erfolgen. Sie erreichen diese über die folgenden Shell-Befehle:
+
+    sudo su
+    crontab -e
+
+Gemäß der Anleitung des shopware-Plugins *Cron* erfolgt die Ausführung über eine Befehlskette nach dem folgenden Schema:
+
+     cd /pfad/zumShop && /usr/bin/php shopware.php /backend/cron
+
+Testen Sie die Ausführung dieses Befehls per Shell und übertragen Sie diesen erst dann in die crontab, wenn die Ausführung fehlerfrei funktioniert.
+
+Im Standardfall sollte der Pfad */usr/bin/php* korrekt sein und auf PHP in Version 5.x verweisen. Bei manchen Providern kann dieser Pfad abweichen (z.B. */usr/bin/php5* oder */usr/bin/php53*).
+
+Der crontab-Eintrag mit einer Ausführung alle 15 Minuten würde demnach diesem Schema folgen:
+
+     */15 * * * * cd /pfad/zumShop && /usr/bin/php shopware.php /backend/cron
+
 ## Datenaustausch
 Das Mapping für die Daten aus der Synchronisierung wird automatisch vorgenommen. 
 
-**Achtung:** Der Datenaustauch darf (bzw. kann) nur gestartet werden, wenn alle unter Einrichtung genannten Punkte abgeschlossen sind! Sobald einer der erforderlichen Schritte noch nicht oder nur teilweise abgeschlossen ist, wird der Datenaustausch automatisch deaktiviert. Sobald alle Schritte abgeschlossen sind, wird der Datenaustausch wieder aktiviert.
+**Achtung:** Der Datenaustauch darf (bzw. kann) nur gestartet werden, wenn alle unter Einrichtung genannten Punkte abgeschlossen sind. 
+Sobald einer der erforderlichen Schritte noch nicht oder nur teilweise abgeschlossen ist, wird der Datenaustausch automatisch deaktiviert. Sobald alle Schritte abgeschlossen sind, wird der Datenaustausch wieder aktiviert.
 
 Sollten Sie den Datenaustausch manuell deaktiviert haben, wird dieser niemals automatisch reaktiviert.
 

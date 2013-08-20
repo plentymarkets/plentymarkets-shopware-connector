@@ -1,5 +1,12 @@
 // {namespace name=backend/Plentymarkets/model}
 // {block name=backend/Plentymarkets/model/settings/Batch}
+
+/**
+ * The batch data model associates a model with a function name and an association key and
+ * is extended by the Ext data model "Ext.data.Model".
+ * 
+ * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
+ */
 Ext.define('Shopware.apps.Plentymarkets.model.settings.Batch', {
 
 	extend: 'Ext.data.Model',

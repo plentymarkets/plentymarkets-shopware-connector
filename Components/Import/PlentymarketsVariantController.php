@@ -28,6 +28,9 @@
 
 
 /**
+ * The PlentymarketsVariantController class is used in the entity class PlentymarketsImportEntityItem
+ * to process the variants data. It is important to deliver the correct object PlentySoapObject_ItemBase
+ * to the contructor method.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */

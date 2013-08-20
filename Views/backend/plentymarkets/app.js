@@ -1,5 +1,14 @@
 // {namespace name=backend/Plentymarkets}
 // {block name=backend/Plentymarkets/application}
+
+/**
+ * The class app defines the structure of the javascript classes, which are grouped as follows:
+ * controllers, views, stores and models. The views build the graphical content and handle events.
+ * The stores act as a data exchange layer between the views and the models. The models are well-defined
+ * data structures, which are used for data exchange. And finally the controllers manage all processes.
+ * 
+ * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
+ */
 Ext.define('Shopware.apps.Plentymarkets', {
 
 	name: 'Shopware.apps.Plentymarkets',

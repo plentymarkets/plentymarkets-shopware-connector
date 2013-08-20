@@ -32,6 +32,9 @@ require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingController.php';
 require_once PY_COMPONENTS . 'Export/PlentymarketsExportController.php';
 
 /**
+ * The class PlentymarketsUtils contains different useful methods. The get-methods of this class are used
+ * in some export and import entity classes. And the check-methods are used in the controllers PlentymarketsCronjobController
+ * and Shopware_Controllers_Backend_Plentymarkets.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */

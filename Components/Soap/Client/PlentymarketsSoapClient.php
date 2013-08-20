@@ -32,6 +32,9 @@ require_once PY_SOAP . 'Models/PlentySoapResponseMessage.php';
 require_once PY_SOAP . 'Models/PlentySoapResponseSubMessage.php';
 
 /**
+ * The class PlentymarketsSoapClient is used in most classes of the plentymarkets plugin. It provides all
+ * needed SOAP-Calls for cronjobs, exports, imports and controllers in the newest version 110.
+ * SOAP-Calls are used for data communication between a plentymarkets backend system and a client.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */

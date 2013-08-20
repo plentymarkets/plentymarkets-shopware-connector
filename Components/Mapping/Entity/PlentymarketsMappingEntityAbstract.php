@@ -29,6 +29,7 @@
 require_once PY_COMPONENTS . 'Mapping/Exception/PlentymarketsMappingExceptionNotExistant.php';
 
 /**
+ * PlentymarketsMappingEntityAbstract bequeaths mapping methods, which are used in all mapping entities.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */

@@ -1,5 +1,13 @@
 // {namespace name=backend/Plentymarkets/view}
 // {block name=backend/Plentymarkets/view/dx/Continuous}
+
+/**
+ * The continuous view builds the graphical elements and loads the data of the continuous data exchange.
+ * It shows for example the activity status, the last export time and the next planed export time of orders.
+ * It is extended by the Ext form panel "Ext.form.Panel".
+ * 
+ * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
+ */
 Ext.define('Shopware.apps.Plentymarkets.view.dx.Continuous', {
 
 	extend: 'Ext.form.Panel',

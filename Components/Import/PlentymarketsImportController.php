@@ -70,6 +70,12 @@ require_once PY_COMPONENTS . 'Import/Entity/Order/PlentymarketsImportEntityOrder
 require_once PY_COMPONENTS . 'Import/Entity/Order/PlentymarketsImportEntityOrderIncomingPayments.php';
 require_once PY_COMPONENTS . 'Import/Entity/Order/PlentymarketsImportEntityOrderOutgoingItems.php';
 
+/**
+ * The class PlentymarketsImportController does the actual import for different cronjobs e.g. in the class PlentymarketsCronjobController.
+ * It uses the different import entities in /Import/Entity respectively in /Import/Entity/Order, for example PlentymarketsImportEntityItem.
+ * 
+ * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
+ */
 class PlentymarketsImportController
 {
 
@@ -324,7 +330,7 @@ class PlentymarketsImportController
 		}
 
 		$Request_GetMethodOfPayments = new PlentySoapRequest_GetMethodOfPayments();
-		$Request_GetMethodOfPayments->ActivMethodOfPayments = false;
+		$Request_GetMethodOfPayments->ActivMethodOfPayments = true;
 
 		// Do the request
 		$Response_GetMethodOfPayments = PlentymarketsSoapClient::getInstance()->GetMethodOfPayments($Request_GetMethodOfPayments);
@@ -345,8 +351,11 @@ class PlentymarketsImportController
 			return array();
 		}
 		
+		$where = 'plentyID NOT IN (';
+		
 		// Prepare data
 		$methodOfPayments = array();
+		$methodOfPaymentsIDs = array();
 		foreach ($Response_GetMethodOfPayments->MethodOfPayment->item as $MethodOfPayment)
 		{
 			$MethodOfPayment instanceof PlentySoapObject_GetMethodOfPayments;
@@ -354,7 +363,14 @@ class PlentymarketsImportController
 				'id' => (integer) $MethodOfPayment->MethodOfPaymentID,
 				'name' => $MethodOfPayment->Name
 			);
+			
+			$methodOfPaymentsIDs[] = $MethodOfPayment->MethodOfPaymentID;
 		}
+		
+		$where .= implode(',', $methodOfPaymentsIDs).')';
+		
+		// Delete non active plentymarkets MOPs from mapping table:
+		$affectedRows = Shopware()->Db()->delete('plenty_mapping_method_of_payment', $where);	
 
 		PlentymarketsConfig::getInstance()->setMiscMethodsOfPaymentLastImport(time());
 		PlentymarketsConfig::getInstance()->setMiscMethodsOfPaymentSerialized(serialize($methodOfPayments));
@@ -494,8 +510,11 @@ class PlentymarketsImportController
 			return array();
 		}
 
+		$where = 'plentyID NOT IN (';
+		
 		// Prepare data
 		$customerClassList = array();
+		$customerClassIDs = array();
 		foreach ($Response_GetCustomerClassList->CustomerClasses->item as $CustomerClass)
 		{
 			$CustomerClass instanceof PlentySoapObject_GetCustomerClasses;
@@ -510,7 +529,14 @@ class PlentymarketsImportController
 				'id' => (integer) $CustomerClass->CustomerClassID,
 				'name' => $CustomerClass->CustomerClassName
 			);
+			
+			$customerClassIDs[] = $CustomerClass->CustomerClassID;
 		}
+		
+		$where .= implode(',', $customerClassIDs).')';
+		
+		// Delete non active plentymarkets customer classes from mapping table:
+		$affectedRows = Shopware()->Db()->delete('plenty_mapping_customer_class', $where);
 
 		PlentymarketsConfig::getInstance()->setMiscCustomerClassLastImport(time());
 		PlentymarketsConfig::getInstance()->setMiscCustomerClassSerialized(serialize($customerClassList));
@@ -643,8 +669,10 @@ class PlentymarketsImportController
 		$Request_GetShippingProfiles->GetShippingCharges = false;
 		$Request_GetShippingProfiles->ShippingProfileID = null;
 
+		$where = 'plentyID NOT IN (';
 
 		$providers = array();
+		$shippingProfilesIDs = array();
 
 		//
 		$Response_GetShippingServiceProvider = PlentymarketsSoapClient::getInstance()->GetShippingServiceProvider();
@@ -665,7 +693,14 @@ class PlentymarketsImportController
 				'id' => $ShippingProfile->ShippingProfileID,
 				'name' => '[' . $providers[$ShippingProfile->ShippingServiceProviderID] . '] ' . $ShippingProfile->BackendName
 			);
+			
+			$shippingProfilesIDs[] = $ShippingProfile->ShippingProfileID;
 		}
+		
+		$where .= implode(',', $shippingProfilesIDs).')';
+		
+		// Delete non active plentymarkets shipping profiles from mapping table:
+		$affectedRows = Shopware()->Db()->delete('plenty_mapping_shipping_profile', $where);
 
 		PlentymarketsConfig::getInstance()->setMiscShippingProfilesLastImport(time());
 		PlentymarketsConfig::getInstance()->setMiscShippingProfilesSerialized(serialize($shippingProfiles));
@@ -703,8 +738,11 @@ class PlentymarketsImportController
 			return array();
 		}
 		
+		$where = 'plentyID NOT IN (';
+		
 		// Prepare data
 		$vat = array();
+		$vatIDs = array();
 		foreach ($Response_GetVATConfig->DefaultVAT->item as $VAT)
 		{
 			$VAT instanceof PlentySoapObject_GetVATConfig;
@@ -718,7 +756,14 @@ class PlentymarketsImportController
 				'id' => $VAT->InternalVATID,
 				'name' => $VAT->VATValue . ' %'
 			);
+			
+			$vatIDs[] = $VAT->InternalVATID;
 		}
+		
+		$where .= implode(',', $vatIDs).')';
+		
+		// Delete non active plentymarkets VATs from mapping table:
+		$affectedRows = Shopware()->Db()->delete('plenty_mapping_vat', $where);
 
 		PlentymarketsConfig::getInstance()->setMiscVatLastImport(time());
 		PlentymarketsConfig::getInstance()->setMiscVatSerialized(serialize($vat));

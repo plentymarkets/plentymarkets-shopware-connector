@@ -31,6 +31,9 @@ require_once PY_SOAP . 'Models/PlentySoapRequest/GetItemCategoryCatalogBase.php'
 require_once PY_SOAP . 'Models/PlentySoapRequest/AddItemCategory.php';
 
 /**
+ * PlentymarketsExportEntityItemCategory provides the actual items export funcionality. Like the other export 
+ * entities this class is called in PlentymarketsExportController.
+ * The data export takes place based on plentymarkets SOAP-calls.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
