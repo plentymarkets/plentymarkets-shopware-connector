@@ -109,7 +109,7 @@ class PlentymarketsExportEntityIncomingPayment
 		$Object_AddIncomingPayments->Amount = $this->order['invoiceAmount'];
 		$Object_AddIncomingPayments->Currency = PlentymarketsMappingController::getCurrencyByShopwareID($this->order['currency']);
 		$Object_AddIncomingPayments->CustomerEmail = $this->order['customer']['email'];
-		$Object_AddIncomingPayments->CustomerID = PlentymarketsMappingController::getCustomerByShopwareID($this->order['customerId']);
+		$Object_AddIncomingPayments->CustomerID = PlentymarketsMappingController::getCustomerByShopwareID($this->order['billing']['id']);
 		$Object_AddIncomingPayments->CustomerName = $this->order['billing']['firstName'] . ' ' . $this->order['billing']['lastName'];
 		$Object_AddIncomingPayments->MethodOfPaymentID = PlentymarketsMappingController::getMethodOfPaymentByShopwareID($this->order['paymentId']);
 		$Object_AddIncomingPayments->OrderID = $this->plentyOrder->plentyOrderId;
