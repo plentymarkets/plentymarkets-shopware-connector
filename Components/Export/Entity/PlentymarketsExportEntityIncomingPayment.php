@@ -69,6 +69,7 @@ class PlentymarketsExportEntityIncomingPayment
 		}
 		catch (\Shopware\Components\Api\Exception\NotFoundException $E)
 		{
+			PlentymarketsLogger::getInstance()->error('Sync:Order:IncomingPayment', 'The incoming payment could not be booked in plentymarkets because the shopware sales order (' . $orderID . ') wasn\'t found.');
 			throw new Exception();
 		}
 
