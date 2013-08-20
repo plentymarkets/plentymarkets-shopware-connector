@@ -275,9 +275,17 @@ class PlentymarketsExportEntityOrder
 				$sku = null;
 			}
 
+			
+			// Gutschein
+			if ($item['mode'] == 2)
+			{
+				$itemId = -1;
+			}
+			
 			$Object_OrderItem = new PlentySoapObject_OrderItem();
 			$Object_OrderItem->ExternalOrderItemID = $item['articleNumber']; // string
 			$Object_OrderItem->ItemID = $itemId; // int
+			$Object_OrderItem->ReferrerID = $Object_OrderHead->ReferrerID;
 			$Object_OrderItem->ItemText = $item['articleName']; // string
 			$Object_OrderItem->Price = $item['price']; // float
 			$Object_OrderItem->Quantity = $item['quantity']; // float

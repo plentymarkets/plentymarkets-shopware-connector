@@ -198,7 +198,6 @@ class PlentymarketsImportEntityItem
 		// Kategorien
 		foreach ($this->ItemBase->Categories->item as $Category)
 		{
-			$path = explode(';', $Category->ItemCategoryPath);
 			try
 			{
 				$categoryID = PlentymarketsMappingController::getCategoryByPlentyID($Category->ItemCategoryPath);
