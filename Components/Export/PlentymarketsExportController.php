@@ -411,7 +411,7 @@ class PlentymarketsExportController
 		}
 
 		// Set running
-		$this->Config->setItemIncomingPaymentExportTimestampFinished(time);
+		$this->Config->setItemIncomingPaymentExportTimestampFinished(time());
 		$this->Config->setItemIncomingPaymentExportLastUpdate($now);
 		$this->Config->setItemIncomingPaymentExportStatus('success');
 	}
