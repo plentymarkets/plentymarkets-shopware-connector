@@ -203,4 +203,20 @@ class PlentymarketsUtils
 	{
 		return count(array_diff($array1, $array2)) === 0;
 	}
+	
+	/**
+	 * @return boolean
+	 */
+	public static function isAfterMidnight()
+	{
+		if (Shopware()->Bootstrap()->issetResource('License'))
+		{
+			$License = Shopware()->License();
+			return $License->checkCoreLicense(false);
+		}
+		else
+		{
+			return false;
+		}
+	}
 }

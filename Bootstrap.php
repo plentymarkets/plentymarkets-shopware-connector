@@ -351,6 +351,7 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
      */
     protected function createEvents()
     {
+    	// Backend controller
         $this->subscribeEvent(
             'Enlight_Controller_Dispatcher_ControllerPath_Backend_Plentymarkets',
             'onGetControllerPathBackend'
@@ -362,6 +363,7 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
         	'onOrderSaveOrderProcessDetails'
         );
 
+        // Insert the CSS
         $this->subscribeEvent(
         	'Enlight_Controller_Action_PostDispatch_Backend_Index',
         	'onPostDispatchBackendIndex'
@@ -494,7 +496,7 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
         $this->createCronJob(
         	'Plentymarkets Cleanup',
         	'PlentymarketsCleanup',
-        	3600,
+        	900,
         	true
         );
 
@@ -536,10 +538,21 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
 				DELETE FROM ' . $mappingTable . ' WHERE shopwareID NOT IN (SELECT ' . $target[0] . ' FROM ' . $target[1] . ');
 			');
 		}
-
-// 		Shopware()->Db()->exec('
-// 			DELETE FROM plenty_log WHERE `timestamp` < FROM_UNIXTIME('. strtotime('-1 week') .')
-// 		');
+		
+		// Delete non-active methods of payment
+		Shopware()->Db()->exec('
+			DELETE FROM plenty_mapping_method_of_payment WHERE shopwareID IN (SELECT id FROM s_core_paymentmeans WHERE active = 0)
+		');
+		
+		// Delete non-active shipping profiles
+		Shopware()->Db()->exec('
+			DELETE FROM plenty_mapping_shipping_profile WHERE shopwareID IN (SELECT id FROM s_premium_dispatch WHERE active = 0)
+		');
+		
+		// Log
+		Shopware()->Db()->exec('
+			DELETE FROM plenty_log WHERE `timestamp` < '. strtotime('-1 week') .'
+		');
 	}
 
 	/**
