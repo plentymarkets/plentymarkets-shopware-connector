@@ -352,11 +352,6 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
     protected function createEvents()
     {
         $this->subscribeEvent(
-            'Enlight_Controller_Dispatcher_ControllerPath_Frontend_Plentymarkets',
-            'onGetControllerPathFrontend'
-        );
-
-        $this->subscribeEvent(
             'Enlight_Controller_Dispatcher_ControllerPath_Backend_Plentymarkets',
             'onGetControllerPathBackend'
         );
