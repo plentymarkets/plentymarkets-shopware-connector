@@ -206,7 +206,7 @@ class PlentymarketsExportEntityOrder
 		}
 
 		// Shipping costs
-		$shippingCosts = $this->order['invoiceShipping'] > 0 ? $this->order['invoiceShipping'] : null;
+		$shippingCosts = $this->order['invoiceShipping'] >= 0 ? $this->order['invoiceShipping'] : null;
 
 		// Build the Request
 		$Request_AddOrders = new PlentySoapRequest_AddOrders();
