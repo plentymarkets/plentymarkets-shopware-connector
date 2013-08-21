@@ -22,6 +22,8 @@ Ext.define('Shopware.apps.Plentymarkets.view.Api', {
 	layout: 'anchor',
 
 	border: false,
+	
+	isBuilt: false,
 
 	defaults: {
 		anchor: '100%',
@@ -47,15 +49,13 @@ Ext.define('Shopware.apps.Plentymarkets.view.Api', {
 	build: function()
 	{
 		var me = this;
-		var children = me.items ? me.items.items : [];
-		if(children.length > 0)
-		{
-			// FieldSets already added. Do nothing
-		}
-		else
+
+		if (!me.isBuilt)
 		{
 			me.add(me.getFieldSets());
+			me.isBuilt = true;
 		}
+
 		me.loadRecord(me.settings);
 	},
 
