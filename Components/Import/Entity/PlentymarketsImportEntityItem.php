@@ -196,12 +196,12 @@ class PlentymarketsImportEntityItem
 	 */
 	protected function setCategories()
 	{
-		$parentId = PlentymarketsConfig::getInstance()->getItemCategoryRootID(3);
 		$CategoryRepository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
 
-		// Kategorien
+		// Categories
 		foreach ($this->ItemBase->Categories->item as $Category)
 		{
+			
 			try
 			{
 				$categoryID = PlentymarketsMappingController::getCategoryByPlentyID($Category->ItemCategoryPath);
@@ -213,8 +213,10 @@ class PlentymarketsImportEntityItem
 			// Kategorie ist noch nicht vorhanden
 			catch (PlentymarketsMappingExceptionNotExistant $E)
 			{
-				// Prüfen, ob es ein Teilbaum ist..
+				// Root category id
+				$parentId = PlentymarketsConfig::getInstance()->getItemCategoryRootID();
 
+				// Split path into single names
 				$categoryPathNames = explode(';', $Category->ItemCategoryPathNames);
 
 				foreach ($categoryPathNames as $categoryName)
