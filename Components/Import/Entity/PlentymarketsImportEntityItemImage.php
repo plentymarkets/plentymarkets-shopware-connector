@@ -127,7 +127,8 @@ class PlentymarketsImportEntityItemImage
 					$Image instanceof PlentySoapObject_ItemImage;
 					$images[] = array(
 						'link' => $Image->ImageURL,
-						'position' => $Image->Position
+						'position' => $Image->Position,
+						'main' => 2
 					);
 				}
 			}
@@ -141,6 +142,18 @@ class PlentymarketsImportEntityItemImage
 
 		if (count($images))
 		{
+			// Sort by position to determine the main image
+			usort($images, function ($a, $b) {
+				if ($a['position'] == $b['position'])
+				{
+					return 0;
+				}
+				return ($a['position'] < $b['position']) ? -1 : 1;
+			});
+			
+			// Set the first one as main image
+			$images[0]['main'] = 1;
+			
 			//
 			$ArticleResource = \Shopware\Components\Api\Manager::getResource('Article');
 			$ArticleResource->update($this->SHOPWARE_itemId, array(

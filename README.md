@@ -466,7 +466,7 @@ Staffelung | Preise 6 - 11 / Preis X ab Menge | Wird entsprechend als Staffelung
 MwSt | MwSt. | entsprechend des Mappings
 
 ##### Bilder
-Die Bilder werden in der shopware Medienbibliothek angelegt und dann dem Artikel zugeordnet.
+Die Bilder werden in der shopware Medienbibliothek angelegt und dann dem Artikel zugeordnet. Das Bild, welches bei plentymarkets die niedrigste Position hat, wird bei shopware als Vorschaubild definiert.
 
 **Achtung:** Bei einer Änderung an einem Artikel werden alle Bilder gelöscht und neu hinzugefügt.
 
