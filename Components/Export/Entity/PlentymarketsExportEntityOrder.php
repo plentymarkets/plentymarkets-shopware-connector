@@ -220,28 +220,39 @@ class PlentymarketsExportEntityOrder
 		$Object_OrderHead->CustomerID = $this->PLENTY_customerID; // int
 		$Object_OrderHead->DeliveryAddressID = $this->PLENTY_addressDispatchID; // int
 		$Object_OrderHead->DoneTimestamp = null; // string
-		$Object_OrderHead->DunningLevel = null; // int
-		$Object_OrderHead->EbaySellerAccount = null; // string
-		$Object_OrderHead->EstimatedTimeOfShipment = null; // string
 		$Object_OrderHead->ExchangeRatio = null; // float
 		$Object_OrderHead->ExternalOrderID = PlentymarketsUtils::getExternalCustomerID($this->order['id']); // string
 		$Object_OrderHead->IsNetto = false; // boolean
 		$Object_OrderHead->Marking1ID = PlentymarketsConfig::getInstance()->getOrderMarking1(0); // int
 		$Object_OrderHead->MethodOfPaymentID = $methodOfPaymentId; // int
 		$Object_OrderHead->StoreID = PlentymarketsConfig::getInstance()->getStoreID(0); // int
-
-		// $Object_OrderHead->OrderStatus = 3; // float
 		$Object_OrderHead->OrderTimestamp = $this->order['orderTime']->getTimestamp(); // int
 		$Object_OrderHead->OrderType = 'order'; // string
-		$Object_OrderHead->PackageNumber = null; // string
-
-
-		$Object_OrderHead->ParentOrderID = null; // int
-		$Object_OrderHead->ReferrerID = PlentymarketsConfig::getInstance()->getOrderReferrerID(0); // int
 		$Object_OrderHead->ResponsibleID = PlentymarketsConfig::getInstance()->getOrderUserID(null); // int
 		$Object_OrderHead->ShippingCosts = $shippingCosts; // float
 		$Object_OrderHead->ShippingMethodID = $parcelServiceID; // int
 		$Object_OrderHead->ShippingProfileID = $parcelServicePresetID; // int
+
+		// Referrer
+		if ($this->order['partnerId'] > 0)
+		{
+			try
+			{
+				$referrerId = PlentymarketsMappingController::getReferrerByShopwareID($this->order['partnerId']);
+			}
+			catch (PlentymarketsMappingExceptionNotExistant $E)
+			{
+				$referrerId = PlentymarketsConfig::getInstance()->getOrderReferrerID(0);
+			}
+		}
+		else
+		{
+			$referrerId = PlentymarketsConfig::getInstance()->getOrderReferrerID(0);
+		}
+		
+		$Object_OrderHead->ReferrerID = $referrerId;
+		
+		
 		$Object_Order->OrderHead = $Object_OrderHead;
 
 		$Object_Order->OrderItems = array();

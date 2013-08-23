@@ -320,7 +320,15 @@ Die Länder werden den Anschriften (Rechnung- / Liefer-) zugeordnet. Kundendaten
 Wie Sie Lieferländer in plentymarkets aktivieren können finden Sie hier:
 http://man.plentymarkets.eu/einstellungen/auftraege/versand/versandoptionen/lieferlaender/
 
-##### Cron
+##### Partner / Auftragsherkunft
+Die in shopware eingetragenen Partner können den plentymarkets Auftragsherkünften zugeordnet werden. Dieses ist vor allem sinnvoll, wenn die Artikel über die shopware Exportfunktion zu Preisportalen exportiert werden.
+
+**Wichtig:** Dieses Mapping muss nicht vollständig durchgeführt werden. D.h. es muss nicht jedem Partner eine Auftragsherkunft zugeordnet sein. Fehlt eine solche Zuordnung, wird die in den Einstellungen des Connectors definierte Auftragsherkunft genommen.
+
+Wie Sie eigene Auftragsherkünfte in plentymarkets anlegen, erfahren Sie hier:
+http://man.plentymarkets.eu/einstellungen/auftraege/auftragsherkunft/#4
+
+#### Cron
 Der permanente Datenabgleich zwischen plentymarkets und shopware wird per Cronjob gesteuert. Dafür ist ein shopware-Plugin mit dem Namen *Cron* nötig. Dieses muss vorher installiert und konfiguriert werden. Beachten Sie dazu die Anleitung für dieses Plugin.
 
 Die Ausführung des shopware-Cron-Prozesses muss über die zentrale crontab erfolgen. Sie erreichen diese über die folgenden Shell-Befehle:

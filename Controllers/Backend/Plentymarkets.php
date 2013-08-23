@@ -413,6 +413,10 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 				$data = PlentymarketsImportController::getVatList();
 				break;
 
+			case 'Referrer':
+				$data = PlentymarketsImportController::getOrderReferrerList();
+				break;
+
 			case 'ShippingProfile':
 
 				if ($forceReload)
@@ -472,6 +476,10 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 
 			case 'MethodOfPayment':
 				$rows = $DataController->getMethodOfPayment();
+				break;
+
+			case 'Referrer':
+				$rows = $DataController->getReferrer();
 				break;
 
 			case 'ShippingProfile':

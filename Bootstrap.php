@@ -93,6 +93,19 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
 	  		");
     	}
     	
+    	if ($version < 2)
+    	{
+    		// Add new mapping table
+    		Shopware()->Db()->exec("
+				CREATE TABLE `plenty_mapping_referrer` (
+				  `shopwareID` int(11) unsigned NOT NULL,
+				  `plentyID` int(11) unsigned NOT NULL,
+				  PRIMARY KEY (`shopwareID`,`plentyID`),
+				  UNIQUE KEY `plentyID` (`plentyID`)
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+			");
+    	}
+    	
     	return true;
     }
 
@@ -120,6 +133,7 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
 			'plenty_mapping_producer',
 			'plenty_mapping_property',
 			'plenty_mapping_property_group',
+			'plenty_mapping_referrer',
 			'plenty_mapping_shipping_profile',
 			'plenty_mapping_vat',
 			'plenty_order'
@@ -304,6 +318,15 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
 
 		Shopware()->Db()->exec("
 			CREATE TABLE `plenty_mapping_property_group` (
+			  `shopwareID` int(11) unsigned NOT NULL,
+			  `plentyID` int(11) unsigned NOT NULL,
+			  PRIMARY KEY (`shopwareID`,`plentyID`),
+			  UNIQUE KEY `plentyID` (`plentyID`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+		");
+
+		Shopware()->Db()->exec("
+			CREATE TABLE `plenty_mapping_referrer` (
 			  `shopwareID` int(11) unsigned NOT NULL,
 			  `plentyID` int(11) unsigned NOT NULL,
 			  PRIMARY KEY (`shopwareID`,`plentyID`),
@@ -528,6 +551,7 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
 			'plenty_mapping_producer' => array('id', 's_articles_supplier'),
 			'plenty_mapping_property' => array('id', 's_filter_options'),
 			'plenty_mapping_property_group' => array('id', 's_filter'),
+			'plenty_mapping_referrer' => array('id', 's_emarketing_partner'),
 			'plenty_mapping_shipping_profile' => array('id', 's_premium_dispatch'),
 			'plenty_mapping_vat' => array('id', 's_core_tax')
 		);
@@ -547,6 +571,11 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
 		// Delete non-active shipping profiles
 		Shopware()->Db()->exec('
 			DELETE FROM plenty_mapping_shipping_profile WHERE shopwareID IN (SELECT id FROM s_premium_dispatch WHERE active = 0)
+		');
+		
+		// Delete non-active partners/referrers
+		Shopware()->Db()->exec('
+			DELETE FROM plenty_mapping_referrer WHERE shopwareID IN (SELECT id FROM s_emarketing_partner WHERE active = 0)
 		');
 		
 		// Log
@@ -695,7 +724,7 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
      */
     public function getVersion()
     {
-    	return '1';
+    	return '2';
     }
 
     /**

@@ -159,6 +159,12 @@ class PlentymarketsMappingController
 			);
 		}
 
+		// static since the mapping is not mandatory
+		$status['Referrer'] = array(
+			'name' => 'Referrer',
+			'open' => 0
+		);
+		
 		return $status;
 	}
 

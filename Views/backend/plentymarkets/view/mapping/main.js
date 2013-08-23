@@ -40,6 +40,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Main', {
 		names['ShippingProfile'] = 'Versandarten';
 		names['MethodOfPayment'] = 'Zahlungsarten';
 		names['CustomerClass'] = 'Kundengruppen';
+		names['Referrer'] = 'Partner';
 
 		Ext.create('Shopware.apps.Plentymarkets.store.mapping.Status').load(function(records)
 		{

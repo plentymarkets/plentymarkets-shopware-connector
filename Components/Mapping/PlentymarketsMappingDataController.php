@@ -281,6 +281,57 @@ class PlentymarketsMappingDataController
 		return $rows;
 	}
 
+	public function getReferrer()
+	{
+		// s_core_tax
+		$rows = Shopware()->Db()
+			->query('
+					SELECT
+							C.id, C.company name,
+							IFNULL(PMC.plentyID, 0) plentyID
+						FROM s_emarketing_partner C
+						LEFT JOIN plenty_mapping_referrer PMC
+							ON PMC.shopwareID = C.id
+						WHERE active = 1
+						ORDER BY C.company
+			')
+			->fetchAll();
+
+		$referrer = PlentymarketsImportController::getOrderReferrerList();
+		
+		foreach ($rows as &$row)
+		{
+			if ($row['plentyID'])
+			{
+				$row['plentyName'] = $referrer[$row['plentyID']]['name'];
+			}
+			else if ($this->auto)
+			{
+				foreach ($referrer as $plentyData)
+				{
+					$distance = levenshtein($row['name'], $plentyData['name']);
+					if ($distance <= 2 || strstr($plentyData['name'], $row['name']))
+					{
+						$row['plentyName'] = $plentyData['name'];
+						$row['plentyID'] = $plentyData['id'];
+						PlentymarketsMappingController::addReferrer($row['id'], $plentyData['id']);
+
+						if ($distance == 0)
+						{
+							break;
+						}
+					}
+				}
+			}
+			else
+			{
+				$row['plentyName'] = '';
+			}
+		}
+		
+		return $rows;
+	}
+
 	public function getShippingProfile()
 	{
 		// s_core_tax
