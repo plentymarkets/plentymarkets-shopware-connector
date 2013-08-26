@@ -32,6 +32,7 @@ require_once PY_SOAP . 'Models/PlentySoapObject/AttributeValueSet.php';
 require_once PY_SOAP . 'Models/PlentySoapRequestObject/GetAttributeValueSets.php';
 require_once PY_SOAP . 'Models/PlentySoapRequest/GetAttributeValueSets.php';
 require_once PY_COMPONENTS . 'Import/PlentymarketsVariantController.php';
+require_once PY_COMPONENTS . 'Import/PlentymarketsImportItemStockStack.php';
 require_once PY_COMPONENTS . 'Import/Entity/PlentymarketsImportEntityItemPrice.php';
 require_once PY_COMPONENTS . 'Import/Entity/PlentymarketsImportEntityItemImage.php';
 
@@ -701,6 +702,9 @@ class PlentymarketsImportEntityItem
 
 					// Mapping speichern
 					PlentymarketsMappingController::addItem($Article->getId(), $this->ItemBase->ItemID);
+					
+					// Stock stack
+					PlentymarketsImportItemStockStack::getInstance()->add($this->ItemBase->ItemID);
 
 					// Media
 
@@ -764,7 +768,10 @@ class PlentymarketsImportEntityItem
 					// Mapping für die Varianten
 					foreach ($Article->getDetails() as $detail)
 					{
-						PlentymarketsMappingController::addItemVariant($detail->getId(), $number2sku[$detail->getNumber()]);
+						// Save mapping and add the variant to the stock stack
+						$sku = $number2sku[$detail->getNumber()];
+						PlentymarketsMappingController::addItemVariant($detail->getId(), $sku);
+						PlentymarketsImportItemStockStack::getInstance()->add($sku);
 
 						// Preise
 						$PlentymarketsImportEntityItemPrice = new PlentymarketsImportEntityItemPrice($this->ItemBase->PriceSet, $number2markup[$detail->getNumber()]);

@@ -176,6 +176,17 @@ class PlentymarketsImportController
 
 		PlentymarketsLogger::getInstance()->message('Sync:Item', $numberOfItemsUpdated . ' items have been updated');
 		PlentymarketsConfig::getInstance()->setImportItemLastUpdateTimestamp($lastUpdateTimestamp);
+
+		try
+		{
+			// Stock stack
+			PlentymarketsImportItemStockStack::getInstance()->import();
+		}
+		catch (Exception $E)
+		{
+			PlentymarketsLogger::getInstance()->error('Sync:Item:Stock', 'PlentymarketsImportItemStockStack failed');
+			PlentymarketsLogger::getInstance()->error('Sync:Item:Stock', $E->getMessage());
+		}
 	}
 
 	/**
@@ -293,7 +304,7 @@ class PlentymarketsImportController
 						$Detail = Shopware()->Models()
 							->getRepository('Shopware\Models\Article\Detail')
 							->findOneBy(array(
-							'articleId' => $itemID
+								'articleId' => $itemID
 						));
 
 						$itemDetailsID = $Detail->getId();
@@ -303,7 +314,11 @@ class PlentymarketsImportController
 						continue;
 					}
 				}
+				
+				// Book
 				PlentymarketsImportEntityItemStock::update($itemDetailsID, $CurrentStock->NetStock);
+				
+				// Count
 				++$numberOfStocksUpdated;
 			}
 		}
