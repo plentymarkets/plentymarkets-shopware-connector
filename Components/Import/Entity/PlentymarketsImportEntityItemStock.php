@@ -55,9 +55,15 @@ class PlentymarketsImportEntityItemStock
 		{
 			$itemWarehousePercentage = 100;
 		}
+		
+		if ($stock > 0)
+		{
+			// At least one
+			$stock = max(1, ceil($stock / 100 * $itemWarehousePercentage));
+		}
 
 		$Detail->fromArray(array(
-			'inStock' => ceil($stock / 100 * $itemWarehousePercentage)
+			'inStock' => $stock
 		));
 
 		Shopware()->Models()->persist($Detail);
