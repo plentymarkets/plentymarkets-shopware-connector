@@ -514,13 +514,16 @@ class PlentymarketsImportEntityItem
 				// Mapping speichern
 				PlentymarketsMappingController::addProperty($filterGroupId . ';' . $optionId, $ItemProperty->PropertyID);
 			}
-
-			$this->data['propertyValues'][] = array(
-				'option' => array(
-					'id' => $optionId
-				),
-				'value' => $ItemProperty->PropertyValue
-			);
+			
+			if (!empty($ItemProperty->PropertyValue))
+			{
+				$this->data['propertyValues'][] = array(
+					'option' => array(
+						'id' => $optionId
+					),
+					'value' => $ItemProperty->PropertyValue
+				);
+			}
 		}
 	}
 
