@@ -36,7 +36,7 @@
 			- [Kundengruppen](#kundengruppen)
 			- [Versandarten](#versandarten)
 			- [Länder](#l%C3%A4nder)
-			- [Cron](#cron)
+		- [Cron](#cron)
 - [Datenaustausch](#datenaustausch)
 	- [Initialer Export zu plentymarkets](#initialer-export-zu-plentymarkets)
 		- [Kategorien](#kategorien)
@@ -488,7 +488,7 @@ Die Warenbestände werden alle 15 Minuten inkrementell abgeglichen. Alle Warenbe
 
 Sie können entweder ein bestimmtes Lager als Quelle für die Warenbestände festlegen, oder das *virtuelle Gesamtlager* verwenden. Die Artikel erhalten in shopware dann den kumulierten Warenbestand aus allen vorhandenen Lagern.
 
-In shopware wird immer der Netto-Warenbestand von plentymarktes gebucht. Dieser wird jedoch reduziert, wenn Sie unter Eintellungen den Warenbestandspuffer eingestellt haben (bzw. wenn der Wert kleiner als 100% ist). Dies dient zum Vermeiden von Überverkäufen, da die Warenbestände nicht immer aktuelle sein können.
+In shopware wird immer der Netto-Warenbestand von plentymarktes gebucht. Dieser wird jedoch reduziert, wenn Sie unter Eintellungen den Warenbestandspuffer eingestellt haben (bzw. wenn der Wert kleiner als 100% ist). Dies dient zum Vermeiden von Überverkäufen, da die Warenbestände nicht immer aktuell sein können. Sofern ein positiver Warenbestand verfügbar ist, wird jedoch immer min. 1 gebucht.
 
 #### Aufträge
 Aufträge, die in shopware erstellt werden, werden alle 15 Minuten inkl. der Kundendaten nach plentymarkets exportiert. Die Versandkosten werden dabei mit übernommen.
