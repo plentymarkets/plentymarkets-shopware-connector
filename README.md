@@ -85,8 +85,8 @@ Weiterhin muss in shopware mindestens ein Hersteller vorhanden sein.
 
 Besonders für den automatischen Datenabgleich via Cron werden ausreichende System-Ressourcen benötigt. Es muss daher sichergestellt sein, dass PHP-Prozesse ausreichend lang laufen und genügend Speicher verbrauchen dürfen. Im Testbetrieb haben wir für PHP-Prozesse, welche per Shell (CLI) ausgeführt werden, diese Eckdaten verwendet:
 
-	max_execution_time = 800
-	max_input_time = 500
+	max_execution_time = 3600
+	max_input_time = 1080
 	memory_limit = 2048M
 
 Ändern Sie diese Angaben in der korrekten php.ini-Datei. Diese finden Sie in per Shell im Standardfall an der folgenden Position
@@ -94,6 +94,17 @@ Besonders für den automatischen Datenabgleich via Cron werden ausreichende Syst
 	/etc/php5/cli/php.ini
 
 Grundsätzlich sollten Änderungen an Konfigurationsdateien nur von Ihrem Systemadministrator vorgenommen werden.
+
+#### Apache & mod_fcgid
+
+Wenn Sie das Modul **mod_fcgid** des **Apache** Webservers nutzen (und die Cronjobs über den Browser starten), müssen Sie dort ebenfalls die Laufzeit wie folgt erhöhen:
+
+	<IfModule mod_fcgid.c>
+		FcgidIOTimeout 3600
+	</IfModule>
+
+Weitere Information dazu finden Sie in der Dokumentation des Modules unter [httpd.apache.org](http://httpd.apache.org/mod_fcgid/mod/mod_fcgid.html). Grundsätzlich sollten Änderungen an Konfigurationsdateien nur von Ihrem Systemadministrator vorgenommen werden.
+	
 
 ### Installation via github
 #### Herunterladen als Archiv
