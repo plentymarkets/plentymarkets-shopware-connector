@@ -311,18 +311,30 @@ class PlentymarketsExportController
 
 		// Start
 		$this->Config->setCustomerExportTimestampStart(time());
+		
+		// Repository
+		$Repository = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer');
+		
+		// Chunk configuration
+		$chunk = 0;
+		$size = 1000;
 
-		$Customers = Shopware()->Models()
-			->getRepository('Shopware\Models\Customer\Customer')
-			->findAll();
+		do {
+			
+			PlentymarketsLogger::getInstance()->message('Export:Initial:Customer', 'Chunk: '. ($chunk + 1));
+			$Customers = $Repository->findBy(array(), null, $size, $chunk * $size);
 
-		foreach ($Customers as $Customer)
-		{
-			$Customer instanceof Shopware\Models\Customer\Customer;
-
-			$PlentymarketsExportEntityItem = new PlentymarketsExportEntityCustomer($Customer);
-			$PlentymarketsExportEntityItem->export();
-		}
+			foreach ($Customers as $Customer)
+			{
+				$Customer instanceof Shopware\Models\Customer\Customer;
+	
+				$PlentymarketsExportEntityItem = new PlentymarketsExportEntityCustomer($Customer);
+				$PlentymarketsExportEntityItem->export();
+			}
+			
+			++$chunk;
+			
+		} while (!empty($Customers) && count($Customers) == $size);
 
 		// Set running
 		$this->Config->setCustomerExportTimestampFinished(time());
