@@ -141,6 +141,22 @@ class PlentymarketsCronjobController
 	}
 	
 	/**
+	 * Runs the cleanup cronjob.
+	 *
+	 * @param Shopware_Components_Cron_CronJob $Job
+	 */
+	public function runCleanup(Shopware_Components_Cron_CronJob $Job)
+	{
+		if (!$this->mayRun)
+		{
+			return;
+		}
+		
+		$PlentymarketsGarbageCollector = new PlentymarketsGarbageCollector();
+		$PlentymarketsGarbageCollector->cleanup();
+	}
+	
+	/**
 	 * Runs the item cleanup cronjob.
 	 *
 	 * @param Shopware_Components_Cron_CronJob $Job

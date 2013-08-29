@@ -2,6 +2,13 @@
 # plentymarkets shopware connector
 ## Changelog
 
+### Version 3 (2013-08-29)
+* Feature: Item cleanup was added
+* Update: Customer export is split into groups of 1000 customers
+* Update: Stock is updated immediatly after a new item was imported
+* Fix: Item import with empty property values
+* Fix: The stock is at least set to 1 if there is any stock
+
 ### Version 2 (2013-08-23)
 * Feature: shopware partners can be mapped to plentymarkets order referrers
 * Update: Cleanup routine deletes mapping for inactive data records

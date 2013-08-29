@@ -21,6 +21,58 @@ class PlentymarketsGarbageCollector
 	const ITEM_ACTION_DELETE = 2;
 	
 	/**
+	 * Global Cleanup
+	 */
+	public function cleanup()
+	{
+		$dirty = array(
+			'plenty_mapping_attribute_group' => array('id', 's_article_configurator_groups'),
+			'plenty_mapping_attribute_option' => array('id', 's_article_configurator_options'),
+			'plenty_mapping_category' => array('id', 's_categories'),
+			'plenty_mapping_country' => array('id', 's_core_countries'),
+			'plenty_mapping_currency' => array('currency', 's_core_currencies'),
+			'plenty_mapping_customer' => array('id', 's_order_billingaddress'),
+			'plenty_mapping_item' => array('id', 's_articles'),
+			'plenty_mapping_item_variant' => array('id', 's_articles_details'),
+			'plenty_mapping_measure_unit' => array('id', 's_core_units'),
+			'plenty_mapping_method_of_payment' => array('id', 's_core_paymentmeans'),
+			'plenty_mapping_producer' => array('id', 's_articles_supplier'),
+			'plenty_mapping_property' => array('id', 's_filter_options'),
+			'plenty_mapping_property_group' => array('id', 's_filter'),
+			'plenty_mapping_referrer' => array('id', 's_emarketing_partner'),
+			'plenty_mapping_shipping_profile' => array('id', 's_premium_dispatch'),
+			'plenty_mapping_vat' => array('id', 's_core_tax')
+		);
+		
+		foreach ($dirty as $mappingTable => $target)
+		{
+			Shopware()->Db()->exec('
+				DELETE FROM ' . $mappingTable . ' WHERE shopwareID NOT IN (SELECT ' . $target[0] . ' FROM ' . $target[1] . ');
+			');
+		}
+		
+		// Delete non-active methods of payment
+		Shopware()->Db()->exec('
+			DELETE FROM plenty_mapping_method_of_payment WHERE shopwareID IN (SELECT id FROM s_core_paymentmeans WHERE active = 0)
+		');
+		
+		// Delete non-active shipping profiles
+		Shopware()->Db()->exec('
+			DELETE FROM plenty_mapping_shipping_profile WHERE shopwareID IN (SELECT id FROM s_premium_dispatch WHERE active = 0)
+		');
+		
+		// Delete non-active partners/referrers
+		Shopware()->Db()->exec('
+			DELETE FROM plenty_mapping_referrer WHERE shopwareID IN (SELECT id FROM s_emarketing_partner WHERE active = 0)
+		');
+		
+		// Log
+		Shopware()->Db()->exec('
+			DELETE FROM plenty_log WHERE `timestamp` < '. strtotime('-1 month') .'
+		');
+	}
+	
+	/**
 	 * Either deletes or deactivates all shopware item that
 	 * are not associated with the store id configured. 
 	 */
