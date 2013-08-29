@@ -580,7 +580,7 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
 		
 		// Log
 		Shopware()->Db()->exec('
-			DELETE FROM plenty_log WHERE `timestamp` < '. strtotime('-1 week') .'
+			DELETE FROM plenty_log WHERE `timestamp` < '. strtotime('-1 month') .'
 		');
 	}
 
