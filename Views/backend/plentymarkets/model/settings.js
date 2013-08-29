@@ -66,6 +66,10 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		type: 'integer',
 		defaultValue: 3
 	}, {
+		name: 'ItemCleanupActionID',
+		type: 'integer',
+		defaultValue: 1
+	}, {
 		name: 'DefaultCustomerGroupKey',
 		type: 'string',
 		defaultValue: 'EK'

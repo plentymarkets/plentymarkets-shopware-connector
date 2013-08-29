@@ -30,6 +30,7 @@ require_once PY_SOAP . 'Client/PlentymarketsSoapClient.php';
 require_once PY_COMPONENTS . 'Config/PlentymarketsConfig.php';
 require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingController.php';
 require_once PY_COMPONENTS . 'Utils/PlentymarketsUtils.php';
+require_once PY_COMPONENTS . 'Utils/PlentymarketsGarbageCollector.php';
 require_once PY_COMPONENTS . 'Import/PlentymarketsImportController.php';
 require_once PY_COMPONENTS . 'Export/PlentymarketsExportController.php';
 
@@ -138,6 +139,26 @@ class PlentymarketsCronjobController
 		}
 		return self::$Instance;
 	}
+	
+	/**
+	 * Runs the item cleanup cronjob.
+	 *
+	 * @param Shopware_Components_Cron_CronJob $Job
+	 */
+	public function runItemCleanup(Shopware_Components_Cron_CronJob $Job)
+	{
+		if (!$this->mayRun)
+		{
+			return;
+		}
+		
+		PlentymarketsLogger::getInstance()->message('Cleanup:Item', 'Starting');
+		
+		$PlentymarketsGarbageCollector = new PlentymarketsGarbageCollector();
+		$PlentymarketsGarbageCollector->pruneItems();
+		
+		PlentymarketsLogger::getInstance()->message('Cleanup:Item', 'Finished');
+	}
 
 	/**
 	 * Runs the order export cronjob.
@@ -146,12 +167,6 @@ class PlentymarketsCronjobController
 	 */
 	public function runOrderExport(Shopware_Components_Cron_CronJob $Job)
 	{
-		// Check whether the timelimit is undershot
-// 		if ($Job->getJob()->getEnd()->getTimestamp() + 600 > time())
-// 		{
-// 			return;
-// 		}
-
 		$this->Config->setExportOrderLastRunTimestamp(time());
 		$this->Config->setExportOrderNextRunTimestamp(time() + $Job->getJob()->getInterval());
 

@@ -195,6 +195,7 @@ Fehlen einzelne Berechtigungen, kann der Datenabgleich zwischen plentymarkets un
 * GetItemAttributes
 * GetItemCategoryCatalogBase
 * GetItemsBase
+* GetItemsByStoreID
 * GetItemsImages
 * GetItemsPriceUpdate
 * GetLinkedItems
@@ -255,6 +256,7 @@ Mandant (Shop) | Das aktuelle shopware-System muss mit einem plentymarkets Manda
 Hersteller | Sofern bei Artikeln in plentymarkets kein Hersteller zugeordnet wurde, wird dieser Hersteller in shopware mit den betreffenden Artikeln verknüpft.
 Kategorie Startknoten | Ausgangspunkt für den Export und den Abgleich der Kategorien. Diese Kategorie selbst wird *nicht* bei plentymarkets angelegt. Neue Kategorien in plentymarkets werden an diese Kategorie angehangen.
 Standard-Kundenklasse | Kundenklasse deren Preise von plentymarkerts zu shopware übertragen werden.
+Bereinigen | Aktion die ausgeführt wird, wenn die Mandantenzuordnung bei plentymarkets gelöst wird oder kein Mapping für den Artikel vorhanden ist.
 
 ##### Export Aufträge
 
@@ -519,6 +521,7 @@ Jede Meldung (und jeder Fehler) hat ein bestimmtes Präfix. Dieses kennzeichnet 
 
 Präfix | Erklärung | Richtung 
 -------|-----------|---------
+Cleanup:Item | Bereinigung der Artikel | →  shopware
 Export:Initial:<Entität> | Initialer Export | →  plentymarkets
 Export:Item | Initialer Export der Artikel | →  plentymarkets
 Export:Item:Image | Bilder während des Exports der Artikel | →  plentymarkets
@@ -550,6 +553,7 @@ Sofern keine expliziete Fehlermeldung erscheint, wird idR. im darauffolgenen Ein
 
 Präfix | Meldung | Erklärung
 -------|---------|----------
+Cleanup:Item | Meldung | Ein Artikel kann nicht deaktiviert werden
 Cron:Export | Meldung | Wärend der Durchführung eines Cron Prozesses ist es zu einem unerwarteten Fehler gekommen. Der Fehler führt idR. dazu, das der Cron-Job deaktiviert wird.
 Export:Initial:<Entität> | Announcement failed: `<REASON>` | Das Vormerken eines initialen Exportes ist fehlgeschlagen. Dies kann dadurch kommen, dass bereits ein Export läuft, vorgemekrt ist oder die Reihenfolge nicht eingehalten wird
 Export:Initial:<Entität> | Fehlermeldung

@@ -53,6 +53,7 @@ Ext.define('Shopware.apps.Plentymarkets', {
 	    'Producer',
 	    'Referrer',
 	    'settings.Batch',
+	    'settings.ItemCleanupAction',
 	    'Settings',
 	    'Warehouse'
 	],

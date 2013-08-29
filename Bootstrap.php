@@ -106,6 +106,17 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
 			");
     	}
     	
+    	if ($version < 3)
+    	{
+    		// Add a new cron event
+    		$this->addItemCleanupCronEvent();
+    		
+    		// Add the default setting
+    		Shopware()->Db()->exec("
+				INSERT IGNORE INTO `plenty_config` (`key`, `value`) VALUES ('ItemCleanupActionID', '1')
+	  		");
+    	}
+    	
     	return true;
     }
 
@@ -515,7 +526,7 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
         	'onRunExportCron'
         );
 
-        // Cleanup
+        // Cleanup (global)
         $this->createCronJob(
         	'Plentymarkets Cleanup',
         	'PlentymarketsCleanup',
@@ -527,9 +538,39 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
         	'Shopware_CronJob_PlentymarketsCleanup',
         	'onRunCleanupCron'
         );
+        
+        // Cleanup (items)
+        $this->addItemCleanupCronEvent();
     }
 
+    /**
+     * Adds the cron event to clean up the items
+     */
+    private function addItemCleanupCronEvent()
+    {
+    	$this->createCronJob(
+    		'Plentymarkets Item Cleanup',
+    		'PlentymarketsItemCleanup',
+    		43200, // 12 hours
+    		true
+    	);
+    	
+    	$this->subscribeEvent(
+    		'Shopware_CronJob_PlentymarketsItemCleanup',
+    		'onRunItemCleanupCron'
+    	);
+    }
 
+    /**
+     * Cleans the items.
+     *
+     * @param Shopware_Components_Cron_CronJob $Job
+     */
+	public function onRunItemCleanupCron(Shopware_Components_Cron_CronJob $Job)
+	{
+		PlentymarketsCronjobController::getInstance()->runItemCleanup($Job);
+	}
+	
     /**
      * Cleans database tabels on first execution of plentymarkets plugin.
      *

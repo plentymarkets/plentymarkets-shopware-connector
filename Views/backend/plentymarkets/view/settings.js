@@ -188,6 +188,11 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 				store: Ext.create('Shopware.apps.Base.store.CustomerGroup').load(),
 				valueField: 'key',
 				supportText: 'Kundenklasse deren Preise von plentymarkerts zu shopware übertragen werden.'
+			}, {
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemCleanupActionID}Bereinigen{/s}',
+				name: 'ItemCleanupActionID',
+				store: Ext.create('Shopware.apps.Plentymarkets.store.settings.ItemCleanupAction').load(),
+				supportText: 'Aktion die ausgeführt wird, wenn die Mandantenzuordnung bei plentymarkets gelöst wird oder kein Mapping für den Artikel vorhanden ist.'
 			}
 
 			]
