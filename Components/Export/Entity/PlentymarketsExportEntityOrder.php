@@ -223,9 +223,9 @@ class PlentymarketsExportEntityOrder
 		$Object_OrderHead->ExchangeRatio = null; // float
 		$Object_OrderHead->ExternalOrderID = PlentymarketsUtils::getExternalCustomerID($this->order['id']); // string
 		$Object_OrderHead->IsNetto = false; // boolean
-		$Object_OrderHead->Marking1ID = PlentymarketsConfig::getInstance()->getOrderMarking1(0); // int
+		$Object_OrderHead->Marking1ID = PlentymarketsConfig::getInstance()->getOrderMarking1(null); // int
 		$Object_OrderHead->MethodOfPaymentID = $methodOfPaymentId; // int
-		$Object_OrderHead->StoreID = PlentymarketsConfig::getInstance()->getStoreID(0); // int
+		$Object_OrderHead->StoreID = PlentymarketsConfig::getInstance()->getStoreID(); // int
 		$Object_OrderHead->OrderTimestamp = $this->order['orderTime']->getTimestamp(); // int
 		$Object_OrderHead->OrderType = 'order'; // string
 		$Object_OrderHead->ResponsibleID = PlentymarketsConfig::getInstance()->getOrderUserID(null); // int
@@ -242,12 +242,12 @@ class PlentymarketsExportEntityOrder
 			}
 			catch (PlentymarketsMappingExceptionNotExistant $E)
 			{
-				$referrerId = PlentymarketsConfig::getInstance()->getOrderReferrerID(0);
+				$referrerId = PlentymarketsConfig::getInstance()->getOrderReferrerID();
 			}
 		}
 		else
 		{
-			$referrerId = PlentymarketsConfig::getInstance()->getOrderReferrerID(0);
+			$referrerId = PlentymarketsConfig::getInstance()->getOrderReferrerID();
 		}
 		
 		$Object_OrderHead->ReferrerID = $referrerId;

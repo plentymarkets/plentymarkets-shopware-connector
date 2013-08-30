@@ -55,7 +55,10 @@ class PlentymarketsImportEntityOrderIncomingPayments extends PlentymarketsImport
 	public function prepare()
 	{
 		$timestamp = PlentymarketsConfig::getInstance()->getImportOrderIncomingPaymentsLastUpdateTimestamp(0);
-		$this->log('LastUpdate: ' . date('r', $timestamp));
+		if ($timestamp > 0)
+		{
+			$this->log('LastUpdate: ' . date('r', $timestamp));
+		}
 
 		$this->Request_SearchOrders->OrderPaidFrom = $timestamp;
 

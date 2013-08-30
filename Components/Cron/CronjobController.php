@@ -120,7 +120,7 @@ class PlentymarketsCronjobController
 	{
 		// Check whether any cronjob my be executed due to api status
 		$this->mayRun = PlentymarketsUtils::checkDxStatus()
-						&& PlentymarketsConfig::getInstance()->getMayDatexActual(0);
+						&& PlentymarketsConfig::getInstance()->getMayDatexActual(false);
 
 		$this->Config = PlentymarketsConfig::getInstance();
 	}

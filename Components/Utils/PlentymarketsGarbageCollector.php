@@ -118,7 +118,7 @@ class PlentymarketsGarbageCollector
 		while (++$Request_GetItemsByStoreID->Page < $Response_GetItemsByStoreID->Pages);
 		
 		// Get the action
-		$actionId = PlentymarketsConfig::getInstance()->getItemCleanupActionID(1);
+		$actionId = PlentymarketsConfig::getInstance()->getItemCleanupActionID(self::ITEM_ACTION_DEACTIVATE);
 		
 		$where = '';
 		if ($actionId == self::ITEM_ACTION_DEACTIVATE)
