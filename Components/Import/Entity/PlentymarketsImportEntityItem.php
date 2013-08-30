@@ -532,11 +532,9 @@ class PlentymarketsImportEntityItem
 	{
 		$this->setData();
 		$this->setDetails();
-		$this->setCategories();
 		$this->setProperties();
 
 		$data = $this->data;
-		$data['categories'] = $this->categories;
 		$mainDetailId = -1;
 
 		$ArticleResource = \Shopware\Components\Api\Manager::getResource('Article');
@@ -546,6 +544,13 @@ class PlentymarketsImportEntityItem
 		{
 			// Ein ganz normaler Artikel
 			$SHOPWARE_itemID = PlentymarketsMappingController::getItemByPlentyID($this->ItemBase->ItemID);
+			
+			// Should the categories be  synchronized
+			if (PlentymarketsConfig::getInstance()->getItemCategorySyncActionID(IMPORT_ITEM_CATEGORY_SYNC) == IMPORT_ITEM_CATEGORY_SYNC)
+			{
+				$this->setCategories();
+				$data['categories'] = $this->categories;
+			}
 
 			// Artikel aktualisieren
 			$Article = $ArticleResource->update($SHOPWARE_itemID, $data);
@@ -680,6 +685,9 @@ class PlentymarketsImportEntityItem
 		// Artikel muss importiert werden / Es ist kein Basisartikel
 		catch (PlentymarketsMappingExceptionNotExistant $E)
 		{
+			// Set the categories no matter what
+			$this->setCategories();
+			$data['categories'] = $this->categories;
 
 			try
 			{

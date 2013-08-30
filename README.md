@@ -255,6 +255,7 @@ Warenbestandspuffer | Prozentualer Anteil des netto-Warenbestandes des gewählte
 Mandant (Shop) | Das aktuelle shopware-System muss mit einem plentymarkets Mandant (Shop) verknüpft werden. Ein solcher *Mandant (Shop)* kann in plentymarkets über **Einstellungen » Mandant (Shop) » Neuer externer Shop** angelegt werden. 
 Hersteller | Sofern bei Artikeln in plentymarkets kein Hersteller zugeordnet wurde, wird dieser Hersteller in shopware mit den betreffenden Artikeln verknüpft.
 Kategorie Startknoten | Ausgangspunkt für den Export und den Abgleich der Kategorien. Diese Kategorie selbst wird *nicht* bei plentymarkets angelegt. Neue Kategorien in plentymarkets werden an diese Kategorie angehangen.
+Kategorien synchronisieren | Aktivieren, wenn die Kategorien von bestehenden Artikel synchronisiert werden sollen. Anderfalls werden Kategorien nicht bei der Synchronisation berücksichtigt. Bei neuen Artikeln werden die Kategorien immer synchronisiert.
 Standard-Kundenklasse | Kundenklasse deren Preise von plentymarkerts zu shopware übertragen werden.
 Bereinigen | Aktion die ausgeführt wird, wenn die Mandantenzuordnung bei plentymarkets gelöst wird oder kein Mapping für den Artikel vorhanden ist.
 

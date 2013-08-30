@@ -180,6 +180,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		$Config->setItemWarehouseID($this->Request()->ItemWarehouseID);
 		$Config->setItemCleanupActionID($this->Request()->ItemCleanupActionID);
 		$Config->setItemCategoryRootID($this->Request()->ItemCategoryRootID);
+		$Config->setItemCategorySyncActionID($this->Request()->ItemCategorySyncActionID == true ? IMPORT_ITEM_CATEGORY_SYNC : IMPORT_ITEM_CATEGORY_NO_SYNC);
 		$Config->setDefaultCustomerGroupKey($this->Request()->DefaultCustomerGroupKey);
 		$Config->setItemWarehousePercentage($this->Request()->ItemWarehousePercentage);
 		$Config->setItemProducerID($this->Request()->ItemProducerID);
