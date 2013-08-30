@@ -31,7 +31,7 @@ require_once PY_SOAP . 'Models/PlentySoapObject/AttributeValue.php';
 require_once PY_SOAP . 'Models/PlentySoapObject/AttributeValueSet.php';
 require_once PY_SOAP . 'Models/PlentySoapRequestObject/GetAttributeValueSets.php';
 require_once PY_SOAP . 'Models/PlentySoapRequest/GetAttributeValueSets.php';
-require_once PY_COMPONENTS . 'Import/PlentymarketsVariantController.php';
+require_once PY_COMPONENTS . 'Import/PlentymarketsImportItemVariantController.php';
 require_once PY_COMPONENTS . 'Import/PlentymarketsImportItemStockStack.php';
 require_once PY_COMPONENTS . 'Import/Entity/PlentymarketsImportEntityItemPrice.php';
 require_once PY_COMPONENTS . 'Import/Entity/PlentymarketsImportEntityItemImage.php';
@@ -572,7 +572,7 @@ class PlentymarketsImportEntityItem
 			if (count($this->variants))
 			{
 				//
-				$VariantController = new PlentymarketsVariantController($this->ItemBase);
+				$VariantController = new PlentymarketsImportItemVariantController($this->ItemBase);
 
 				// War der Artikel vorher schn eine Variante?
 				// Wenn nicht muss aus das Konfigurator set angelegt werden
@@ -742,7 +742,7 @@ class PlentymarketsImportEntityItem
 					// Mapping speichern
 					PlentymarketsMappingController::addItem($Article->getId(), $this->ItemBase->ItemID);
 
-					$VariantController = new PlentymarketsVariantController($this->ItemBase);
+					$VariantController = new PlentymarketsImportItemVariantController($this->ItemBase);
 
 					//
 					$variants = array();
