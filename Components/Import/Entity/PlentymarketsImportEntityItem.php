@@ -325,14 +325,14 @@ class PlentymarketsImportEntityItem
 			$base['maxPurchase'] = $this->ItemBase->Availability->MaximumSalesOrderQuantity;
 		}
 
-		if ($this->ItemBase->Availability->Lot > 0)
+		if ($this->ItemBase->PriceSet->Lot > 0)
 		{
-			$base['purchaseUnit'] = $this->ItemBase->Availability->Lot;
+			$base['purchaseUnit'] = $this->ItemBase->PriceSet->Lot;
 		}
 
-		if ($this->ItemBase->Availability->PackagingUnit > 0)
+		if ($this->ItemBase->PriceSet->PackagingUnit > 0)
 		{
-			$base['referenceUnit'] = $this->ItemBase->Availability->PackagingUnit;
+			$base['referenceUnit'] = $this->ItemBase->PriceSet->PackagingUnit;
 		}
 
 		if ($this->ItemBase->PriceSet->WeightInGramm > 0)
@@ -535,6 +535,8 @@ class PlentymarketsImportEntityItem
 		$this->setProperties();
 
 		$data = $this->data;
+		$data['mainDetail'] = $this->details;
+		
 		$mainDetailId = -1;
 
 		$ArticleResource = \Shopware\Components\Api\Manager::getResource('Article');
@@ -544,6 +546,9 @@ class PlentymarketsImportEntityItem
 		{
 			// Ein ganz normaler Artikel
 			$SHOPWARE_itemID = PlentymarketsMappingController::getItemByPlentyID($this->ItemBase->ItemID);
+
+			// Log
+			PlentymarketsLogger::getInstance()->message('Sync:Item', sprintf('Updating item (%u) %s', $SHOPWARE_itemID, $data['name']));
 			
 			// Should the categories be  synchronized
 			if (PlentymarketsConfig::getInstance()->getItemCategorySyncActionID(IMPORT_ITEM_CATEGORY_SYNC) == IMPORT_ITEM_CATEGORY_SYNC)
@@ -694,9 +699,7 @@ class PlentymarketsImportEntityItem
 				// Normaler ARtikel
 				if (!count($this->variants))
 				{
-					$data['mainDetail'] = $this->details;
-
-					// todo: sicherstellen, dass eine vernünftige Nummer vergeben wird
+					// todo: check the number
 					$data['mainDetail']['number'] = self::getUsableNumber($this->ItemBase->ItemNo);
 
 					// Anlegen
@@ -723,11 +726,6 @@ class PlentymarketsImportEntityItem
 
 				else
 				{
-					// Den Typ des Basisartikels auf 2 stellen,
-
-					// Basisartikel anlegen
-					$data['mainDetail'] = $this->details;
-
 					// Set the id of the first variant
 					$mainVariant = array_shift(array_values($this->variants));
 					$data['mainDetail']['number'] = $mainVariant['number'];
