@@ -225,7 +225,6 @@ class PlentymarketsExportEntityOrder
 		$Object_OrderHead->IsNetto = false; // boolean
 		$Object_OrderHead->Marking1ID = PlentymarketsConfig::getInstance()->getOrderMarking1(null); // int
 		$Object_OrderHead->MethodOfPaymentID = $methodOfPaymentId; // int
-		$Object_OrderHead->StoreID = PlentymarketsConfig::getInstance()->getStoreID(); // int
 		$Object_OrderHead->OrderTimestamp = $this->order['orderTime']->getTimestamp(); // int
 		$Object_OrderHead->OrderType = 'order'; // string
 		$Object_OrderHead->ResponsibleID = PlentymarketsConfig::getInstance()->getOrderUserID(null); // int
@@ -233,6 +232,15 @@ class PlentymarketsExportEntityOrder
 		$Object_OrderHead->ShippingMethodID = $parcelServiceID; // int
 		$Object_OrderHead->ShippingProfileID = $parcelServicePresetID; // int
 
+		
+		try
+		{
+			$Object_OrderHead->StoreID = PlentymarketsMappingController::getShopByShopwareID($this->order['shopId']);
+		}
+		catch(PlentymarketsMappingExceptionNotExistant $E)
+		{
+		}
+		
 		// Referrer
 		if ($this->order['partnerId'] > 0)
 		{

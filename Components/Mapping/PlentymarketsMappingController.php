@@ -124,6 +124,10 @@ class PlentymarketsMappingController
 			'Country' => array(
 				's_core_countries',
 				'country'
+			),
+			'Shop' => array(
+				's_core_shops',
+				'shop'
 			)
 		);
 
@@ -136,7 +140,8 @@ class PlentymarketsMappingController
 			
 			$whereActive = '';
 			if($tables[0] == 's_core_paymentmeans' ||
-				$tables[0] == 's_premium_dispatch')
+				$tables[0] == 's_premium_dispatch' ||
+				$tables[0] == 's_core_shops')
 			{
 				$whereActive = ' AND active = 1';
 			}

@@ -424,4 +424,50 @@ class PlentymarketsMappingDataController
 		
 		return $rows;
 	}
+	
+	public function getShops()
+	{
+		$rows = Shopware()->Db()
+			->query('
+					SELECT
+							C.id, C.name, C.`default`,
+							IFNULL(PMC.plentyID, -1) plentyID
+						FROM s_core_shops C
+						LEFT JOIN plenty_mapping_shop PMC
+							ON PMC.shopwareID = C.id
+						WHERE active = 1
+						ORDER BY C.name
+				')
+			->fetchAll();
+
+		$plentyStores = PlentymarketsImportController::getStoreList();
+		foreach ($rows as &$row)
+		{
+			if ($row['plentyID'] >= 0)
+			{
+				$row['plentyName'] = $plentyStores[$row['plentyID']]['name'];
+			}
+			else if ($this->auto)
+			{
+// 				foreach ($plentyStores as $plentyData)
+// 				{
+// 					list($name, $percent) = explode(' ', $plentyData['name']);
+// 					if ((float) $row['tax'] == (float) $name)
+// 					{
+// 						$row['plentyName'] = $plentyData['name'];
+// 						$row['plentyID'] = $plentyData['id'];
+// 						PlentymarketsMappingController::addVat($row['id'], $plentyData['id']);
+// 						break;
+// 					}
+// 				}
+			}
+			
+			if ($row['default'])
+			{
+				$row['name'] .= ' (Standard)';
+			}
+		}
+		
+		return $rows;
+	}
 }

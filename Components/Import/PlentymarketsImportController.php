@@ -63,6 +63,7 @@ require_once PY_SOAP . 'Models/PlentySoapRequest/GetOrderStatusList.php';
 require_once PY_SOAP . 'Models/PlentySoapRequest/SearchOrders.php';
 require_once PY_SOAP . 'Models/PlentySoapRequest/GetItemsPriceUpdate.php';
 require_once PY_SOAP . 'Models/PlentySoapResponseObject/GetItemsPriceUpdate.php';
+require_once PY_COMPONENTS . 'Import/PlentymarketsImportItemController.php';
 require_once PY_COMPONENTS . 'Import/Entity/PlentymarketsImportEntityItem.php';
 require_once PY_COMPONENTS . 'Import/Entity/PlentymarketsImportEntityItemLinked.php';
 require_once PY_COMPONENTS . 'Import/Entity/PlentymarketsImportEntityItemStock.php';
@@ -78,115 +79,15 @@ require_once PY_COMPONENTS . 'Import/Entity/Order/PlentymarketsImportEntityOrder
  */
 class PlentymarketsImportController
 {
-
+	
+	
 	/**
 	 * Reads the items of plentymarkets that have changed
 	 */
 	public static function importItems()
 	{
-		$Request_GetItemsBase = new PlentySoapRequest_GetItemsBase();
-		$Request_GetItemsBase->GetAttributeValueSets = true;
-		$Request_GetItemsBase->GetCategories = true;
-		$Request_GetItemsBase->GetCategoryNames = true;
-		$Request_GetItemsBase->GetItemAttributeMarkup = true;
-		$Request_GetItemsBase->GetItemOthers = true;
-		$Request_GetItemsBase->GetItemProperties = true;
-		$Request_GetItemsBase->GetItemSuppliers = false;
-		$Request_GetItemsBase->GetItemURL = 0;
-		$Request_GetItemsBase->GetLongDescription = true;
-		$Request_GetItemsBase->GetMetaDescription = false;
-		$Request_GetItemsBase->GetShortDescription = true;
-		$Request_GetItemsBase->GetTechnicalData = false;
-		$Request_GetItemsBase->StoreID = PlentymarketsConfig::getInstance()->getStoreID(0);
-		$Request_GetItemsBase->Lang = 'de';
-		$Request_GetItemsBase->LastUpdateFrom = PlentymarketsConfig::getInstance()->getImportItemLastUpdateTimestamp(0);
-		$Request_GetItemsBase->Page = 0;
-
-		PlentymarketsLogger::getInstance()->message('Sync:Item', 'LastUpdate: ' . date('r', PlentymarketsConfig::getInstance()->getImportItemLastUpdateTimestamp(0)));
-		PlentymarketsLogger::getInstance()->message('Sync:Item', 'StoreID: ' . $Request_GetItemsBase->StoreID);
-		$lastUpdateTimestamp = time();
-
-		$numberOfItemsUpdated = 0;
-		$itemIds = array();
-
-		do
-		{
-
-			// Do the request
-			$Response_GetItemsBase = PlentymarketsSoapClient::getInstance()->GetItemsBase($Request_GetItemsBase);
-
-			$pages = max($Response_GetItemsBase->Pages, 1);
-
-			PlentymarketsLogger::getInstance()->message('Sync:Item', 'Page: ' . ($Request_GetItemsBase->Page + 1) . '/' . $pages);
-
-			if ($Response_GetItemsBase->Success == false)
-			{
-				PlentymarketsLogger::getInstance()->error('Sync:Item', 'failed');
-				break;
-			}
-
-			PlentymarketsLogger::getInstance()->message('Sync:Item', 'Received ' . count($Response_GetItemsBase->ItemsBase->item) . ' items');
-
-			foreach ($Response_GetItemsBase->ItemsBase->item as $ItemBase)
-			{
-				try
-				{
-					// If this is the first run, ignore all SWAG items
-					if ($Request_GetItemsBase->LastUpdateFrom == 0 && preg_match('!^Swag/\d+$!', $ItemBase->ExternalItemID))
-					{
-						PlentymarketsLogger::getInstance()->message('Sync:Item', 'Skipping previously exportet item with the plentymarkets item id ' . $ItemBase->ItemID);
-						continue;
-					}
-
-					$Importuer = new PlentymarketsImportEntityItem($ItemBase);
-					$Importuer->import();
-
-					$itemIds[] = $ItemBase->ItemID;
-
-					++$numberOfItemsUpdated;
-				}
-				catch (Exception $E)
-				{
-					PlentymarketsLogger::getInstance()->error('Sync:Item', 'Item with the plentymarkets item id ' . $ItemBase->ItemID . ' could not be importet');
-					PlentymarketsLogger::getInstance()->error('Sync:Item', $E->getMessage());
-					// PlentymarketsLogger::getInstance()->error('Sync:Item', get_class($E) . ' - File: '. $E->getFile() . ' - Line: '. $E->getLine());
-					// PlentymarketsLogger::getInstance()->error('Sync:Item', $E->getTraceAsString());
-				}
-			}
-		}
-
-		// Until all pages are received
-		while (++$Request_GetItemsBase->Page < $Response_GetItemsBase->Pages);
-
-		// Crosselling
-		foreach ($itemIds as $itemId)
-		{
-			try
-			{
-				// Crosselling
-				$ItemLinker = new PlentymarketsImportEntityItemLinked($itemId);
-				$ItemLinker->link();
-			}
-			catch (Exception $E)
-			{
-				PlentymarketsLogger::getInstance()->error('Sync:Item:Linked', 'Item linker for the item with the plentymarkets item id ' . $ItemBase->ItemID . ' failed' . $E->getMessage());
-				PlentymarketsLogger::getInstance()->error('Sync:Item:Linked', $E->getMessage());
-			}
-		}
-
-		PlentymarketsLogger::getInstance()->message('Sync:Item', $numberOfItemsUpdated . ' items have been updated');
-		PlentymarketsConfig::getInstance()->setImportItemLastUpdateTimestamp($lastUpdateTimestamp);
-
-		try
-		{
-			// Stock stack
-			PlentymarketsImportItemStockStack::getInstance()->import();
-		}
-		catch (Exception $E)
-		{
-			PlentymarketsLogger::getInstance()->error('Sync:Item:Stock', 'PlentymarketsImportItemStockStack failed');
-			PlentymarketsLogger::getInstance()->error('Sync:Item:Stock', $E->getMessage());
-		}
+		$PlentymarketsImportItemController = new PlentymarketsImportItemController();
+		$PlentymarketsImportItemController->importItems();
 	}
 
 	/**

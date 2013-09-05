@@ -33,6 +33,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Main', {
 	{
 		var me = this, names = {};
 
+		names['Shop'] = 'Shops';
 		names['Currency'] = 'Währungen';
 		names['Country'] = 'Länder';
 		names['MeasureUnit'] = 'Einheiten';

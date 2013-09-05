@@ -51,6 +51,8 @@ require_once PY_SOAP . 'Models/PlentySoapObject/Integer.php';
 require_once PY_SOAP . 'Models/PlentySoapRequest/AddItemAttributeValueSets.php';
 require_once PY_SOAP . 'Models/PlentySoapObject/SetAttributeValueSetsDetails.php';
 require_once PY_SOAP . 'Models/PlentySoapRequest/SetAttributeValueSetsDetails.php';
+require_once PY_SOAP . 'Models/PlentySoapRequest/SetStoreCategories.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/SetStoreCategory.php';
 require_once PY_COMPONENTS . 'Utils/PlentymarketsUtils.php';
 require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingController.php';
 
@@ -82,6 +84,24 @@ class PlentymarketsExportEntityItem
 	 * @var integer
 	 */
 	protected $PLENTY_priceID;
+	
+	/**
+	 * 
+	 * @var array
+	 */
+	protected $categoryPaths2Activate = array();
+	
+	/**
+	 * 
+	 * @var array
+	 */
+	protected static $categoryPathsActivated = array();
+	
+	/**
+	 * 
+	 * @var array
+	 */
+	protected $storeIds = array();
 
 	/**
 	 *
@@ -142,6 +162,7 @@ class PlentymarketsExportEntityItem
 
 		//
 		$Object_AddItemsBaseItemBase->Categories = array();
+		$Object_AddItemsBaseItemBase->StoreIDs = array();
 
 		foreach ($Item->getCategories() as $Category)
 		{
@@ -155,16 +176,41 @@ class PlentymarketsExportEntityItem
 				PlentymarketsLogger::getInstance()->error('Export:Item', 'ItemId ' . $Item->getId() . ': Skipping category with id ' . $Category->getId());
 				continue;
 			}
-
+				
+			// Get the store for this category
+			$path = array_reverse(explode('|', $Category->getPath()));
+			$rootId = $path[1];
+			
+			$shop = Shopware()->Db()->fetchOne('SELECT id FROM s_core_shops WHERE category_id = '. $rootId);
+			$storeId = PlentymarketsMappingController::getShopByShopwareID($shop['id']);
+			
+			if (!isset($this->storeIds[$storeId]))
+			{
+				// Activate the item for this store
+				$Object_Integer = new PlentySoapObject_Integer();
+				$Object_Integer->intValue = $storeId;
+				$Object_AddItemsBaseItemBase->StoreIDs[] = $Object_Integer;
+				
+				// Cache
+				$this->storeIds[$storeId] = true;
+			}
+			
+			// Activate the category
 			$Object_ItemCategory = new PlentySoapObject_ItemCategory();
 			$Object_ItemCategory->ItemCategoryPath = $categoryPath; // string
 			$Object_AddItemsBaseItemBase->Categories[] = $Object_ItemCategory;
+			
+			if ($Category->getActive())
+			{
+				// Activate the category for this store
+				$this->categoryPaths2Activate[] = array(
+					'path' => $categoryPath,
+					'storeId' => $storeId
+				);
+			}
+			
 		}
 
-		$Object_AddItemsBaseItemBase->StoreIDs = array();
-		$Object_Integer = new PlentySoapObject_Integer();
-		$Object_Integer->intValue = PlentymarketsConfig::getInstance()->getStoreID(); // int
-		$Object_AddItemsBaseItemBase->StoreIDs[] = $Object_Integer;
 
 		$Request_AddItemsBase->BaseItems[] = $Object_AddItemsBaseItemBase;
 
@@ -201,6 +247,39 @@ class PlentymarketsExportEntityItem
 		}
 
 		return true;
+	}
+	
+	/**
+	 * Activates the categories of this item for the shop
+	 */
+	protected function activateCategories()
+	{
+		$Request_SetStoreCategories = new PlentySoapRequest_SetStoreCategories();
+		$Request_SetStoreCategories->StoreCategories = array();
+		
+		foreach ($this->categoryPaths2Activate as $path2Activate)
+		{
+			// Aleady been activated
+			if (isset(self::$categoryPathsActivated[$path2Activate['path']]) &&
+				isset(self::$categoryPathsActivated[$path2Activate['path']][$path2Activate['storeId']]))
+			{
+				continue;
+			}			
+			
+			$Object_SetStoreCategory = new PlentySoapObject_SetStoreCategory();
+			$Object_SetStoreCategory->Active = true;
+			$Object_SetStoreCategory->ItemCategoryPath = $path2Activate['path'];
+			$Object_SetStoreCategory->StoreID = $path2Activate['storeId'];
+			
+			// Cache + Request
+			self::$categoryPathsActivated[$path2Activate['path']][$path2Activate['storeId']] = true;
+			$Request_SetStoreCategories->StoreCategories[] = $Object_SetStoreCategory;
+		}
+		
+		if (!empty($Request_SetStoreCategories->StoreCategories))
+		{
+			$Response_SetStoreCategories = PlentymarketsSoapClient::getInstance()->SetStoreCategories($Request_SetStoreCategories);
+		}
 	}
 
 	/**
@@ -412,6 +491,7 @@ class PlentymarketsExportEntityItem
 		$this->exportImages();
 		$this->exportVariants();
 		$this->exportProperties();
+		$this->activateCategories();
 
 		return true;
 	}

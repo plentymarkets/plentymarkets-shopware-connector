@@ -52,6 +52,12 @@ class PlentymarketsImportEntityItem
 	 * @var PlentySoapObject_ItemBase
 	 */
 	protected $ItemBase;
+	
+	/**
+	 * 
+	 * @var Shopware\Models\Shop\Shop
+	 */
+	protected $Shop;
 
 	/**
 	 * The main data
@@ -82,15 +88,41 @@ class PlentymarketsImportEntityItem
 	 *
 	 * @var integer
 	 */
-	static $numbersCreated = 0;
+	protected static $numbersCreated = 0;
+	
+	/**
+	 * 
+	 * @var Shopware\Components\Api\Resource\Article
+	 */
+	protected static $ArticleApi;
+	
+	/**
+	 * 
+	 * @var Shopware\Components\Api\Resource\Variant
+	 */
+	protected static $VariantApi;
+	
+	/**
+	 * 
+	 * @var Shopware\Components\Api\Resource\Category
+	 */
+	protected static $CategoryApi;
+	
+	/**
+	 * 
+	 * @var Shopware\Models\Category\Repository
+	 */
+	protected static $CategoryRepository;
 
 	/**
 	 *
 	 * @param PlentySoapObject_ItemBase $ItemBase
+	 * @param Shopware\Models\Shop\Shop $Shop
 	 */
-	public function __construct($ItemBase)
+	public function __construct($ItemBase, Shopware\Models\Shop\Shop $Shop)
 	{
 		$this->ItemBase = $ItemBase;
+		$this->Shop = $Shop;
 	}
 
 	/**
@@ -153,7 +185,7 @@ class PlentymarketsImportEntityItem
 	}
 
 	/**
-	 *
+	 * Sets the base item's data – not the details'
 	 */
 	protected function setData()
 	{
@@ -165,7 +197,7 @@ class PlentymarketsImportEntityItem
 			'highlight' => ($this->ItemBase->WebShopSpecial == 3),
 			'lastStock' => ($this->ItemBase->Stock->Limitation == 1),
 			'changed' => date('c', $this->ItemBase->LastUpdate),
-			'availableTo' => null, // wird unten gesetzt
+			'availableTo' => null,
 			'active' => $this->ItemBase->Availability->Inactive == 0 && $this->ItemBase->Availability->Webshop == 1,
 			'taxId' => $this->getTaxId()
 		);
@@ -193,16 +225,23 @@ class PlentymarketsImportEntityItem
 	}
 
 	/**
-	 *
+	 * Sets the categories. Non-existing categories will be created immediatly.
 	 */
 	protected function setCategories()
 	{
-		$CategoryRepository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
+		if (is_null(self::$CategoryApi))
+		{
+			self::$CategoryApi = Shopware\Components\Api\Manager::getResource('Category');
+		}
+		
+		if (is_null(self::$CategoryRepository))
+		{
+			self::$CategoryRepository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
+		}
 
 		// Categories
 		foreach ($this->ItemBase->Categories->item as $Category)
 		{
-			
 			try
 			{
 				$categoryID = PlentymarketsMappingController::getCategoryByPlentyID($Category->ItemCategoryPath);
@@ -215,19 +254,19 @@ class PlentymarketsImportEntityItem
 			catch (PlentymarketsMappingExceptionNotExistant $E)
 			{
 				// Root category id
-				$parentId = PlentymarketsConfig::getInstance()->getItemCategoryRootID();
-
+				$parentId = $this->Shop->getCategory()->getId();
+				
 				// Split path into single names
 				$categoryPathNames = explode(';', $Category->ItemCategoryPathNames);
 
 				foreach ($categoryPathNames as $categoryName)
 				{
-					$CategoryFound = $CategoryRepository->findOneBy(array(
+					$CategoryFound = self::$CategoryRepository->findOneBy(array(
 						'name' => $categoryName,
 						'parentId' => $parentId
 					));
 
-					if ($CategoryFound instanceof \Shopware\Models\Category\Category)
+					if ($CategoryFound instanceof Shopware\Models\Category\Category)
 					{
 						$parentId = $CategoryFound->getId();
 						$path[] = $parentId;
@@ -238,20 +277,9 @@ class PlentymarketsImportEntityItem
 						$params['name'] = $categoryName;
 						$params['parentId'] = $parentId;
 
-						//todo: Shopware\Components\Api\Resource\Category;
-						$CategoryModel = new \Shopware\Models\Category\Category();
-						$CategoryModel->fromArray(array(
-							'name' => $categoryName
-						));
-
-						$parent = $CategoryRepository->find($params['parentId']);
-						$CategoryModel->setParent($parent);
-
 						try
 						{
-							$Manager = Shopware()->Models();
-							$Manager->persist($CategoryModel);
-							$Manager->flush();
+							$CategoryModel = self::$CategoryApi->create($params);
 						}
 						catch (Exception $e)
 						{
@@ -269,6 +297,9 @@ class PlentymarketsImportEntityItem
 		}
 	}
 
+	/**
+	 * Set the details
+	 */
 	protected function setDetails()
 	{
 		$active = $this->ItemBase->Availability->Inactive == 0 && $this->ItemBase->Availability->Webshop == 1;
@@ -392,7 +423,6 @@ class PlentymarketsImportEntityItem
 				$details['ean'] = $AttributeValueSet->EAN;
 
 				//
-				$details['X_plentyVariantId'] = $AttributeValueSet->AttributeValueSetID;
 				$details['X_plentySku'] = $sku;
 
 				$this->variants[$AttributeValueSet->AttributeValueSetID] = $details;
@@ -466,7 +496,7 @@ class PlentymarketsImportEntityItem
 			catch (PlentymarketsMappingExceptionNotExistant $E)
 			{
 
-				$Option = new \Shopware\Models\Property\Option();
+				$Option = new Shopware\Models\Property\Option();
 				$Option->fromArray(array(
 					'name' => $ItemProperty->PropertyName,
 					'filterable' => 1
@@ -516,6 +546,7 @@ class PlentymarketsImportEntityItem
 				PlentymarketsMappingController::addProperty($filterGroupId . ';' . $optionId, $ItemProperty->PropertyID);
 			}
 			
+			// Shopware cannot handle empty values
 			if (!empty($ItemProperty->PropertyValue))
 			{
 				$this->data['propertyValues'][] = array(
@@ -525,6 +556,40 @@ class PlentymarketsImportEntityItem
 					'value' => $ItemProperty->PropertyValue
 				);
 			}
+		}
+	}
+	
+	/**
+	 * Just update the categories
+	 * 
+	 * This method is called, if the item has already been updated though another store
+	 */
+	public function importCategories()
+	{
+		$this->setCategories();
+		
+		$ArticleResource = self::getArticleApi();
+		
+		$SHOPWARE_itemID = PlentymarketsMappingController::getItemByPlentyID($this->ItemBase->ItemID);
+		$article = $ArticleResource->getOne($SHOPWARE_itemID);
+		
+		$data = array(
+			'categories' => $article['categories']
+		);
+		
+		foreach ($this->categories as $category)
+		{
+			if (isset($article['categories'][$category['id']]))
+			{
+				continue;
+			}
+			$data['categories'][$category['id']] = $category;
+		}
+		 
+		if (count($data['categories']) != count($article['categories']))
+		{
+			var_dump($data);
+			$ArticleResource->update($SHOPWARE_itemID, $data);
 		}
 	}
 
@@ -539,28 +604,28 @@ class PlentymarketsImportEntityItem
 		
 		$mainDetailId = -1;
 
-		$ArticleResource = \Shopware\Components\Api\Manager::getResource('Article');
-		$VariantResource = \Shopware\Components\Api\Manager::getResource('Variant');
+		$ArticleResource = self::getArticleApi();
+		$VariantResource = self::getVariantApi();
 
 		try
 		{
-			// Ein ganz normaler Artikel
+			// If a mappings exists, it's a regular item
 			$SHOPWARE_itemID = PlentymarketsMappingController::getItemByPlentyID($this->ItemBase->ItemID);
 
 			// Log
 			PlentymarketsLogger::getInstance()->message('Sync:Item', sprintf('Updating item (%u) %s', $SHOPWARE_itemID, $data['name']));
 			
-			// Should the categories be  synchronized
+			// Should the categories be synchronized?
 			if (PlentymarketsConfig::getInstance()->getItemCategorySyncActionID(IMPORT_ITEM_CATEGORY_SYNC) == IMPORT_ITEM_CATEGORY_SYNC)
 			{
 				$this->setCategories();
 				$data['categories'] = $this->categories;
 			}
 
-			// Artikel aktualisieren
+			// Update the item
 			$Article = $ArticleResource->update($SHOPWARE_itemID, $data);
 
-			// Für die Preise
+			// Remember the main detail's id (to set the prices)
 			$mainDetailId = $Article->getMainDetail()->getId();
 
 			//
@@ -592,8 +657,6 @@ class PlentymarketsImportEntityItem
 					// Variante ist bereits vorhanden
 					if (array_key_exists('id', $variant))
 					{
-						// $ShopwareVariant = $VariantResource->getOne($variant['id']);
-						// $variant
 						++$numberOfVariantsUpdated;
 						$keep['ids'][] = $variant['id'];
 						$variants[] = $variant;
@@ -801,7 +864,7 @@ class PlentymarketsImportEntityItem
 		}
 
 		// Der Hersteller ist neu angelegt worden
-		if ($Article instanceof \Shopware\Models\Article\Article && array_key_exists('supplier', $this->data))
+		if ($Article instanceof Shopware\Models\Article\Article && array_key_exists('supplier', $this->data))
 		{
 			PlentymarketsLogger::getInstance()->message('Sync:Item', 'Producer created: ' . $Article->getSupplier()->getName());
 			PlentymarketsMappingController::addProducer($Article->getSupplier()->getId(), $this->ItemBase->ProducerID);
@@ -821,5 +884,33 @@ class PlentymarketsImportEntityItem
 		}
 
 		return $taxID;
+	}
+	
+	/**
+	 * 
+	 * @return \Shopware\Components\Api\Resource\Article
+	 */
+	protected static function getArticleApi()
+	{
+		if (is_null(self::$ArticleApi))
+		{
+			self::$ArticleApi = Shopware\Components\Api\Manager::getResource('Article');
+		}
+		
+		return self::$ArticleApi;
+	}
+	
+	/**
+	 * 
+	 * @return \Shopware\Components\Api\Resource\Variant
+	 */
+	protected static function getVariantApi()
+	{
+		if (is_null(self::$VariantApi))
+		{
+			self::$VariantApi = Shopware\Components\Api\Manager::getResource('Variant');
+		}
+		
+		return self::$VariantApi;
 	}
 }

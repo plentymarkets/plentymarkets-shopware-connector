@@ -448,6 +448,16 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 
 				$data = PlentymarketsImportController::getCustomerClassList();
 				break;
+				
+			case 'Shop':
+
+				if ($forceReload)
+				{
+					PlentymarketsConfig::getInstance()->setMiscMultishopsLastImport(0);
+				}
+
+				$data = PlentymarketsImportController::getStoreList();
+				break;
 		}
 
 		$this->View()->assign(array(
@@ -494,6 +504,10 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 
 			case 'Currency':
 				$rows = $DataController->getCurrency();
+				break;
+				
+			case 'Shop':
+				$rows = $DataController->getShops();
 				break;
 
 			case 'MeasureUnit':
