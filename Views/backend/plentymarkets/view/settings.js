@@ -339,6 +339,29 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 			}
 
 			]
+		}, {
+			xtype: 'fieldset',
+			title: 'Initialer Export',
+			layout: 'anchor',
+			items: [{
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/InitialExportChunkSize}Paketgröße{/s}',
+				name: 'InitialExportChunkSize',
+				id: 'InitialExportChunkSize',
+				store: new Ext.data.ArrayStore({
+					fields: ['size'],
+					data: [[100], [250], [500], [1000], [2500], [5000]]
+				}),
+				supportText: 'Legen Sie fest, wie viele Datensätze pro Durchlauf exportiert werden. Diese Einstellunge betrifft Aktikel, Kunden und Attribute.',
+				labelWidth: 155,
+				xtype: 'combo',
+				emptyText: '---',
+				queryMode: 'local',
+				anchor: '100%',
+				displayField: 'size',
+				valueField: 'size',
+				allowBlank: false,
+				editable: true
+			}]
 		}];
 	}
 
