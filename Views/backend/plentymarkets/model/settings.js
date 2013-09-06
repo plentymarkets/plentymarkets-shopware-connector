@@ -62,10 +62,6 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		type: 'integer',
 		defaultValue: 0
 	}, {
-		name: 'ItemCategoryRootID',
-		type: 'integer',
-		defaultValue: 3
-	}, {
 		name: 'ItemCategorySyncActionID',
 		type: 'integer',
 		defaultValue: 1
@@ -83,9 +79,6 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		defaultValue: 90
 	}, {
 		name: 'ItemProducerID',
-		type: 'integer'
-	}, {
-		name: 'StoreID',
 		type: 'integer'
 	}, {
 		name: 'OrderReferrerID',

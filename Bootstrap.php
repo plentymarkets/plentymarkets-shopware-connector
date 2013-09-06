@@ -149,6 +149,7 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
 			'plenty_mapping_property_group',
 			'plenty_mapping_referrer',
 			'plenty_mapping_shipping_profile',
+			'plenty_mapping_shop',
 			'plenty_mapping_vat',
 			'plenty_order'
 		);

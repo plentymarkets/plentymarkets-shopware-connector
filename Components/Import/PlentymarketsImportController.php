@@ -172,7 +172,7 @@ class PlentymarketsImportController
 	public static function importItemStocks()
 	{
 		$Request_GetCurrentStocks = new PlentySoapRequest_GetCurrentStocks();
-		$Request_GetCurrentStocks->LastUpdate = PlentymarketsConfig::getInstance()->getImportItemStockLastUpdateTimestamp(-1);
+		$Request_GetCurrentStocks->LastUpdate = PlentymarketsConfig::getInstance()->getImportItemStockLastUpdateTimestamp(0);
 		$Request_GetCurrentStocks->Page = 0;
 		$Request_GetCurrentStocks->WarehouseID = PlentymarketsConfig::getInstance()->getItemWarehouseID(0);
 
@@ -449,10 +449,13 @@ class PlentymarketsImportController
 			$customerClassIDs[] = $CustomerClass->CustomerClassID;
 		}
 		
-		$where .= implode(',', $customerClassIDs).')';
-		
-		// Delete non active plentymarkets customer classes from mapping table:
-		$affectedRows = Shopware()->Db()->delete('plenty_mapping_customer_class', $where);
+		if (!empty($customerClassIDs))
+		{
+			$where .= implode(',', $customerClassIDs).')';
+			
+			// Delete non active plentymarkets customer classes from mapping table:
+			$affectedRows = Shopware()->Db()->delete('plenty_mapping_customer_class', $where);
+		}
 
 		PlentymarketsConfig::getInstance()->setMiscCustomerClassLastImport(time());
 		PlentymarketsConfig::getInstance()->setMiscCustomerClassSerialized(serialize($customerClassList));

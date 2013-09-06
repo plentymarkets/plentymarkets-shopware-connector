@@ -123,10 +123,6 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 				'producers' => Shopware()->Db()
 					->fetchAll('
 						SELECT id, name FROM s_articles_supplier ORDER BY name
-					'),
-				'categories' => Shopware()->Db()
-					->fetchAll('
-						SELECT id, description AS name FROM s_categories WHERE parent IS NOT NULL AND path IS NULL
 					')
 			)
 		));
@@ -192,7 +188,6 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		$Config->setOutgoingItemsShopwareOrderStatusID($this->Request()->OutgoingItemsShopwareOrderStatusID);
 		$Config->setIncomingPaymentShopwarePaymentFullStatusID($this->Request()->IncomingPaymentShopwarePaymentFullStatusID);
 		$Config->setIncomingPaymentShopwarePaymentPartialStatusID($this->Request()->IncomingPaymentShopwarePaymentPartialStatusID);
-		$Config->setStoreID($this->Request()->StoreID);
 		$Config->setInitialExportChunkSize(max($this->Request()->InitialExportChunkSize, 1));
 
 		//

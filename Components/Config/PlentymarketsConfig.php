@@ -140,7 +140,6 @@ class PlentymarketsConfig
 			!is_null($this->getItemWarehousePercentage()) &&
 			!is_null($this->getItemWarehouseID()) &&
 			!is_null($this->getItemCleanupActionID()) &&
-			!is_null($this->getItemCategoryRootID()) &&
 			!is_null($this->getDefaultCustomerGroupKey()) &&
 			!is_null($this->getItemProducerID()) &&
 			!is_null($this->getOrderReferrerID()) &&
@@ -148,8 +147,7 @@ class PlentymarketsConfig
 			!is_null($this->getOutgoingItemsID()) &&
 			!is_null($this->getOutgoingItemsShopwareOrderStatusID()) &&
 			!is_null($this->getIncomingPaymentShopwarePaymentFullStatusID()) &&
-			!is_null($this->getIncomingPaymentShopwarePaymentPartialStatusID()) &&
-			!is_null($this->getStoreID())
+			!is_null($this->getIncomingPaymentShopwarePaymentPartialStatusID())
 		);
 	}
 

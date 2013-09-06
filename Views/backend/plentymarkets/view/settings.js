@@ -68,7 +68,6 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 			me.stores.multishops = data.getMultishops();
 			me.stores.orderStatus = data.getOrderStatus();
 			me.stores.orderReferrer = data.getOrderReferrer();
-			me.stores.categories = data.getCategories();
 
 			me.add(me.getFieldSets())
 			me.addDocked(me.createToolbar());
@@ -168,20 +167,10 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 				name: 'ItemWarehousePercentage',
 				supportText: 'Prozentualer Anteil des netto-Warenbestandes des gewählten Lagers, welcher an shopware übertragen wird.',
 			}, {
-				fieldLabel: '{s name=plentymarkets/view/settings/textfield/StoreID}Mandant (Shop){/s}',
-				name: 'StoreID',
-				store: me.stores.multishops,
-				supportText: 'Das aktuelle shopware-System muss mit einem plentymarkets Mandant (Shop) verknüpft werden. Ein solcher Mandant (Shop) kann in plentymarkets über Einstellungen » Mandant (Shop) » Neuer externer Shop angelegt werden.'
-			}, {
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemProducerID}Hersteller{/s}',
 				name: 'ItemProducerID',
 				store: me.stores.producers,
 				supportText: 'Sofern bei Artikeln in plentymarkets kein Hersteller zugeordnet wurde, wird dieser Hersteller in shopware mit den betreffenden Artikeln verknüpft.'
-			}, {
-				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemCategoryRootID}Kategorie Startknoten{/s}',
-				name: 'ItemCategoryRootID',
-				store: me.stores.categories,
-				supportText: 'Ausgangspunkt für den Export und den Abgleich der Kategorien. Diese Kategorie selbst wird nicht bei plentymarkets angelegt. Neue Kategorien in plentymarkets werden an diese Kategorie angehangen.'
 			}, {
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemCategorySyncActionID}Kategorien synchronisieren{/s}',
 				name: 'ItemCategorySyncActionID',

@@ -41,6 +41,7 @@ class PlentymarketsGarbageCollector
 			'plenty_mapping_property_group' => array('id', 's_filter'),
 			'plenty_mapping_referrer' => array('id', 's_emarketing_partner'),
 			'plenty_mapping_shipping_profile' => array('id', 's_premium_dispatch'),
+			'plenty_mapping_shop' => array('id', 's_core_shops'),
 			'plenty_mapping_vat' => array('id', 's_core_tax')
 		);
 		
@@ -59,6 +60,11 @@ class PlentymarketsGarbageCollector
 		// Delete non-active shipping profiles
 		Shopware()->Db()->exec('
 			DELETE FROM plenty_mapping_shipping_profile WHERE shopwareID IN (SELECT id FROM s_premium_dispatch WHERE active = 0)
+		');
+		
+		// Delete non-active shops
+		Shopware()->Db()->exec('
+			DELETE FROM plenty_mapping_shop WHERE shopwareID IN (SELECT id FROM s_core_shops WHERE active = 0)
 		');
 		
 		// Delete non-active partners/referrers

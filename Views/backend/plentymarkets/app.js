@@ -59,7 +59,6 @@ Ext.define('Shopware.apps.Plentymarkets', {
 	],
 
 	models: [
-	    'Category',
 	    'dx.Continuous',
 	    'Export',
 	    'Log',
