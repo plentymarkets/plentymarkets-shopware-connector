@@ -165,6 +165,7 @@ class PlentymarketsImportItemController
 					}
 					else
 					{
+						//
 						$Importuer->import();
 						
 						// Mark this item as done
@@ -184,7 +185,6 @@ class PlentymarketsImportItemController
 		
 		// Until all pages are received
 		while (++$Request_GetItemsBase->Page < $Response_GetItemsBase->Pages);
-		
 		
 	}
 	

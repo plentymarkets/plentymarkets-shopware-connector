@@ -51,7 +51,7 @@ class PlentymarketsExportEntityItemCategory
 	 * @var arrray
 	 */
 	protected $PLENTY_nameAndLevel2ID = array();
-
+	
 	/**
 	 * Build the index and export the missing data to plentymarkets
 	 */
@@ -111,13 +111,6 @@ class PlentymarketsExportEntityItemCategory
 			$path = array_filter(explode('|', $Category->getPath()));
 			$level = count($path);
 
-			// Only export, if the category's root is the selected one
-			// second last
-			if (end($path) != $categoryRootId)
-			{
-				continue;
-			}
-
 			if (array_key_exists($level, $this->PLENTY_nameAndLevel2ID) && array_key_exists($Category->getName(), $this->PLENTY_nameAndLevel2ID[$level]))
 			{
 				$categoryIdAdded = $this->PLENTY_nameAndLevel2ID[$level][$Category->getName()];
@@ -147,122 +140,132 @@ class PlentymarketsExportEntityItemCategory
 	{
 		$CategoryResource = new \Shopware\Components\Api\Resource\Category();
 
-		$Category = Shopware()->Models()
+		$Categories = Shopware()->Models()
 			->getRepository('Shopware\Models\Category\Category')
-			->find(PlentymarketsConfig::getInstance()->getItemCategoryRootID());
+			->findBy(array('path' => null));
 
-		$Category instanceof Shopware\Models\Category\Category;
-
-		// plentymarkets path
-		$path = array();
-
-		//
-		$children1 = $Category->getChildren();
-
-		// plentymarkets level 1
-		foreach ($children1 as $Child2)
+		foreach ($Categories as $Category)
 		{
-			$Child2 instanceof Shopware\Models\Category\Category;
-			if ($Child2->getBlog())
+			
+			$Category instanceof Shopware\Models\Category\Category;
+
+			// No root category
+			if (!$Category->getParentId())
 			{
 				continue;
 			}
-
-			$path[0] = $this->mappingShopwareID2PlentyID[$Child2->getId()];
-
+			
+			// plentymarkets path
+			$path = array();
+	
 			//
-			$children2 = $Child2->getChildren();
-
-			if (count($children2))
+			$children1 = $Category->getChildren();
+	
+			// plentymarkets level 1
+			foreach ($children1 as $Child2)
 			{
-				// plentymarkets level 2
-				foreach ($children2 as $Child3)
+				$Child2 instanceof Shopware\Models\Category\Category;
+				if ($Child2->getBlog())
 				{
-					$Child3 instanceof Shopware\Models\Category\Category;
-
-					$path[1] = $this->mappingShopwareID2PlentyID[$Child3->getId()];
-
-					//
-					$children3 = $Child3->getChildren();
-
-					if (count($children3))
-					{
-						// plentymarkets level 3
-						foreach ($children3 as $Child4)
-						{
-							$Child4 instanceof Shopware\Models\Category\Category;
-
-							$path[2] = $this->mappingShopwareID2PlentyID[$Child4->getId()];
-
-							//
-							$children4 = $Child4->getChildren();
-
-							if (count($children4))
-							{
-								// plentymarkets level 4
-								foreach ($children4 as $Child5)
-								{
-									$Child5 instanceof Shopware\Models\Category\Category;
-
-									$path[3] = $this->mappingShopwareID2PlentyID[$Child5->getId()];
-
-									//
-									$children5 = $Child5->getChildren();
-
-									if (count($children5))
-									{
-										// plentymarkets level 5
-										foreach ($children5 as $Child6)
-										{
-											$Child6 instanceof Shopware\Models\Category\Category;
-
-											$path[4] = $this->mappingShopwareID2PlentyID[$Child6->getId()];
-
-
-											$children6 = $Child6->getChildren();
-											if (count($children6))
-											{
-												foreach ($children6 as $Child7)
-												{
-													$Child7 instanceof Shopware\Models\Category\Category;
-													$path[5] = $this->mappingShopwareID2PlentyID[$Child7->getId()];
-
-													PlentymarketsMappingController::addCategory($Child7->getId(), implode(';', $path));
-												}
-											}
-											else
-											{
-												unset($path[5]);
-												PlentymarketsMappingController::addCategory($Child6->getId(), implode(';', $path));
-											}
-
-										}
-									} // 6
-									else
-									{
-										unset($path[5], $path[4]);
-										PlentymarketsMappingController::addCategory($Child5->getId(), implode(';', $path));
-									}
-								}
-							} // 5
-							else
-							{
-								unset($path[5], $path[4], $path[3]);
-								PlentymarketsMappingController::addCategory($Child4->getId(), implode(';', $path));
-							}
-						}
-					} // 4
-					else
-					{
-						unset($path[5], $path[4], $path[3], $path[2]);
-						PlentymarketsMappingController::addCategory($Child3->getId(), implode(';', $path));
-					}
+					continue;
 				}
-			} // 3
-			else
-			{
-				unset($path[5], $path[4], $path[3], $path[2], $path[1]);
-				PlentymarketsMappingController::addCategory($Child2->getId(), implode(';', $path));
+	
+				$path[0] = $this->mappingShopwareID2PlentyID[$Child2->getId()];
+	
+				//
+				$children2 = $Child2->getChildren();
+	
+				if (count($children2))
+				{
+					// plentymarkets level 2
+					foreach ($children2 as $Child3)
+					{
+						$Child3 instanceof Shopware\Models\Category\Category;
+	
+						$path[1] = $this->mappingShopwareID2PlentyID[$Child3->getId()];
+	
+						//
+						$children3 = $Child3->getChildren();
+	
+						if (count($children3))
+						{
+							// plentymarkets level 3
+							foreach ($children3 as $Child4)
+							{
+								$Child4 instanceof Shopware\Models\Category\Category;
+	
+								$path[2] = $this->mappingShopwareID2PlentyID[$Child4->getId()];
+	
+								//
+								$children4 = $Child4->getChildren();
+	
+								if (count($children4))
+								{
+									// plentymarkets level 4
+									foreach ($children4 as $Child5)
+									{
+										$Child5 instanceof Shopware\Models\Category\Category;
+	
+										$path[3] = $this->mappingShopwareID2PlentyID[$Child5->getId()];
+	
+										//
+										$children5 = $Child5->getChildren();
+	
+										if (count($children5))
+										{
+											// plentymarkets level 5
+											foreach ($children5 as $Child6)
+											{
+												$Child6 instanceof Shopware\Models\Category\Category;
+	
+												$path[4] = $this->mappingShopwareID2PlentyID[$Child6->getId()];
+	
+	
+												$children6 = $Child6->getChildren();
+												if (count($children6))
+												{
+													foreach ($children6 as $Child7)
+													{
+														$Child7 instanceof Shopware\Models\Category\Category;
+														$path[5] = $this->mappingShopwareID2PlentyID[$Child7->getId()];
+	
+														PlentymarketsMappingController::addCategory($Child7->getId(), implode(';', $path));
+													}
+												}
+												else
+												{
+													unset($path[5]);
+													PlentymarketsMappingController::addCategory($Child6->getId(), implode(';', $path));
+												}
+	
+											}
+										} // 6
+										else
+										{
+											unset($path[5], $path[4]);
+											PlentymarketsMappingController::addCategory($Child5->getId(), implode(';', $path));
+										}
+									}
+								} // 5
+								else
+								{
+									unset($path[5], $path[4], $path[3]);
+									PlentymarketsMappingController::addCategory($Child4->getId(), implode(';', $path));
+								}
+							}
+						} // 4
+						else
+						{
+							unset($path[5], $path[4], $path[3], $path[2]);
+							PlentymarketsMappingController::addCategory($Child3->getId(), implode(';', $path));
+						}
+					}
+				} // 3
+				else
+				{
+					unset($path[5], $path[4], $path[3], $path[2], $path[1]);
+					PlentymarketsMappingController::addCategory($Child2->getId(), implode(';', $path));
+				}
 			}
 		}
 	}

@@ -33,6 +33,7 @@ require_once PY_SOAP . 'Models/PlentySoapRequestObject/GetAttributeValueSets.php
 require_once PY_SOAP . 'Models/PlentySoapRequest/GetAttributeValueSets.php';
 require_once PY_COMPONENTS . 'Import/PlentymarketsImportItemVariantController.php';
 require_once PY_COMPONENTS . 'Import/PlentymarketsImportItemStockStack.php';
+require_once PY_COMPONENTS . 'Import/PlentymarketsImportItemHelper.php';
 require_once PY_COMPONENTS . 'Import/Entity/PlentymarketsImportEntityItemPrice.php';
 require_once PY_COMPONENTS . 'Import/Entity/PlentymarketsImportEntityItemImage.php';
 
@@ -83,12 +84,6 @@ class PlentymarketsImportEntityItem
 	 * @var array
 	 */
 	protected $categories = array();
-
-	/**
-	 *
-	 * @var integer
-	 */
-	protected static $numbersCreated = 0;
 	
 	/**
 	 * 
@@ -123,65 +118,6 @@ class PlentymarketsImportEntityItem
 	{
 		$this->ItemBase = $ItemBase;
 		$this->Shop = $Shop;
-	}
-
-	/**
-	 *
-	 * @param integer $number
-	 * @return boolean
-	 */
-	public static function itemNumberExists($number)
-	{
-		$detail = Shopware()->Models()
-			->getRepository('Shopware\Models\Article\Detail')
-			->findOneBy(array(
-			'number' => $number
-		));
-
-		return !empty($detail);
-	}
-
-	/**
-	 *
-	 * @return string
-	 */
-	public static function getItemNumber()
-	{
-		$prefix = Shopware()->Config()->backendAutoOrderNumberPrefix;
-
-		$sql = "SELECT number FROM s_order_number WHERE name = 'articleordernumber'";
-		$number = Shopware()->Db()->fetchOne($sql);
-		$number += self::$numbersCreated;
-
-		do
-		{
-			++$number;
-			++self::$numbersCreated;
-
-			$sql = "SELECT id FROM s_articles_details WHERE ordernumber LIKE ?";
-			$hit = Shopware()->Db()->fetchOne($sql, $prefix . $number);
-		}
-		while ($hit);
-
-		Shopware()->Db()->query("UPDATE s_order_number SET number = ? WHERE name = 'articleordernumber'", array(
-			$number
-		));
-
-		return $prefix . $number;
-	}
-
-	/**
-	 *
-	 * @param string $number
-	 * @return string
-	 */
-	public static function getUsableNumber($number)
-	{
-		if (!empty($number) && !self::itemNumberExists($number))
-		{
-			return $number;
-		}
-		return self::getItemNumber();
 	}
 
 	/**
@@ -225,85 +161,12 @@ class PlentymarketsImportEntityItem
 	}
 
 	/**
-	 * Sets the categories. Non-existing categories will be created immediatly.
-	 */
-	protected function setCategories()
-	{
-		if (is_null(self::$CategoryApi))
-		{
-			self::$CategoryApi = Shopware\Components\Api\Manager::getResource('Category');
-		}
-		
-		if (is_null(self::$CategoryRepository))
-		{
-			self::$CategoryRepository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
-		}
-
-		// Categories
-		foreach ($this->ItemBase->Categories->item as $Category)
-		{
-			try
-			{
-				$categoryID = PlentymarketsMappingController::getCategoryByPlentyID($Category->ItemCategoryPath);
-				$this->categories[] = array(
-					'id' => $categoryID
-				);
-			}
-
-			// Kategorie ist noch nicht vorhanden
-			catch (PlentymarketsMappingExceptionNotExistant $E)
-			{
-				// Root category id
-				$parentId = $this->Shop->getCategory()->getId();
-				
-				// Split path into single names
-				$categoryPathNames = explode(';', $Category->ItemCategoryPathNames);
-
-				foreach ($categoryPathNames as $categoryName)
-				{
-					$CategoryFound = self::$CategoryRepository->findOneBy(array(
-						'name' => $categoryName,
-						'parentId' => $parentId
-					));
-
-					if ($CategoryFound instanceof Shopware\Models\Category\Category)
-					{
-						$parentId = $CategoryFound->getId();
-						$path[] = $parentId;
-					}
-					else
-					{
-						$params = array();
-						$params['name'] = $categoryName;
-						$params['parentId'] = $parentId;
-
-						try
-						{
-							$CategoryModel = self::$CategoryApi->create($params);
-						}
-						catch (Exception $e)
-						{
-						}
-
-						$parentId = $CategoryModel->getId();
-					}
-				}
-
-				PlentymarketsMappingController::addCategory($parentId, $Category->ItemCategoryPath);
-				$this->categories[] = array(
-					'id' => $parentId
-				);
-			}
-		}
-	}
-
-	/**
 	 * Set the details
 	 */
 	protected function setDetails()
 	{
 		$active = $this->ItemBase->Availability->Inactive == 0 && $this->ItemBase->Availability->Webshop == 1;
-		$base = array(
+		$details = array(
 			'active' => $active,
 			'ean' => $this->ItemBase->EAN1,
 			'minPurchase' => null,
@@ -343,93 +206,182 @@ class PlentymarketsImportEntityItem
 
 		if ($this->ItemBase->Availability->MinimumSalesOrderQuantity > 0)
 		{
-			$base['minPurchase'] = $this->ItemBase->Availability->MinimumSalesOrderQuantity;
+			$details['minPurchase'] = $this->ItemBase->Availability->MinimumSalesOrderQuantity;
 		}
 
 		if ($this->ItemBase->Availability->IntervalSalesOrderQuantity > 0)
 		{
-			$base['purchaseSteps'] = $this->ItemBase->Availability->IntervalSalesOrderQuantity;
+			$details['purchaseSteps'] = $this->ItemBase->Availability->IntervalSalesOrderQuantity;
 		}
 
 		if ($this->ItemBase->Availability->MaximumSalesOrderQuantity > 0)
 		{
-			$base['maxPurchase'] = $this->ItemBase->Availability->MaximumSalesOrderQuantity;
+			$details['maxPurchase'] = $this->ItemBase->Availability->MaximumSalesOrderQuantity;
 		}
 
 		if ($this->ItemBase->PriceSet->Lot > 0)
 		{
-			$base['purchaseUnit'] = $this->ItemBase->PriceSet->Lot;
+			$details['purchaseUnit'] = $this->ItemBase->PriceSet->Lot;
 		}
 
 		if ($this->ItemBase->PriceSet->PackagingUnit > 0)
 		{
-			$base['referenceUnit'] = $this->ItemBase->PriceSet->PackagingUnit;
+			$details['referenceUnit'] = $this->ItemBase->PriceSet->PackagingUnit;
 		}
 
 		if ($this->ItemBase->PriceSet->WeightInGramm > 0)
 		{
-			$base['weight'] = $this->ItemBase->PriceSet->WeightInGramm / 1000;
+			$details['weight'] = $this->ItemBase->PriceSet->WeightInGramm / 1000;
 		}
 
 		if ($this->ItemBase->PriceSet->WidthInMM > 0)
 		{
-			$base['width'] = $this->ItemBase->PriceSet->WidthInMM / 100;
+			$details['width'] = $this->ItemBase->PriceSet->WidthInMM / 100;
 		}
 
 		if ($this->ItemBase->PriceSet->LengthInMM > 0)
 		{
-			$base['len'] = $this->ItemBase->PriceSet->LengthInMM / 100;
+			$details['len'] = $this->ItemBase->PriceSet->LengthInMM / 100;
 		}
 
 		if ($this->ItemBase->PriceSet->HeightInMM > 0)
 		{
-			$base['height'] = $this->ItemBase->PriceSet->HeightInMM / 100;
+			$details['height'] = $this->ItemBase->PriceSet->HeightInMM / 100;
 		}
 
 		if (strlen($this->ItemBase->PriceSet->Unit))
 		{
 			try
 			{
-				$base['unitId'] = PlentymarketsMappingController::getMeasureUnitByPlentyID($this->ItemBase->PriceSet->Unit);
+				$details['unitId'] = PlentymarketsMappingController::getMeasureUnitByPlentyID($this->ItemBase->PriceSet->Unit);
 			}
 			catch (PlentymarketsMappingExceptionNotExistant $E)
 			{
-				$base['unitId'] = null;
+				$details['unitId'] = null;
 			}
 		}
 
-		if (!is_null($this->ItemBase->AttributeValueSets))
+		$this->details = $details;
+	}
+	
+	/**
+	 * Sets the variant details
+	 */
+	protected function setVariants()
+	{
+		// No variants
+		if (is_null($this->ItemBase->AttributeValueSets))
 		{
-			foreach ($this->ItemBase->AttributeValueSets->item as $AttributeValueSet)
+			return;
+		}
+		
+		foreach ($this->ItemBase->AttributeValueSets->item as $AttributeValueSet)
+		{
+			$AttributeValueSet instanceof PlentySoapObject_ItemAttributeValueSet;
+			
+			// Copy the base details
+			$details = $this->data;
+			
+			// SKU
+			$sku = sprintf('%s-%s-%s', $this->ItemBase->ItemID, $AttributeValueSet->PriceID, $AttributeValueSet->AttributeValueSetID);
+	
+			try
 			{
-				$AttributeValueSet instanceof PlentySoapObject_ItemAttributeValueSet;
-
-				$details = $base;
-				$sku = sprintf('%s-%s-%s', $this->ItemBase->ItemID, $AttributeValueSet->PriceID, $AttributeValueSet->AttributeValueSetID);
-
-				try
+				// Set the details id
+				$details['id'] = PlentymarketsMappingController::getItemVariantByPlentyID($sku);
+			}
+			catch (PlentymarketsMappingExceptionNotExistant $e)
+			{
+				// Get a new number
+				$details['number'] = PlentymarketsImportItemHelper::getUsableNumber($AttributeValueSet->ColliNo);
+			}
+	
+			$details['additionaltext'] = $AttributeValueSet->AttributeValueSetName;
+			$details['ean'] = $AttributeValueSet->EAN;
+			$details['X_plentySku'] = $sku;
+	
+			$this->variants[$AttributeValueSet->AttributeValueSetID] = $details;
+		}
+	}
+	
+	/**
+	 * Sets the categories. Non-existing categories will be created immediatly.
+	 */
+	protected function setCategories()
+	{
+		// No categories
+		if (is_null($this->ItemBase->Categories))
+		{
+			return;
+		}
+	
+		if (is_null(self::$CategoryApi))
+		{
+			self::$CategoryApi = Shopware\Components\Api\Manager::getResource('Category');
+		}
+	
+		if (is_null(self::$CategoryRepository))
+		{
+			self::$CategoryRepository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
+		}
+	
+		// Categories
+		foreach ($this->ItemBase->Categories->item as $Category)
+		{
+			try
+			{
+				$categoryID = PlentymarketsMappingController::getCategoryByPlentyID($Category->ItemCategoryPath);
+				$this->categories[] = array(
+					'id' => $categoryID
+				);
+			}
+	
+			// Category dies not yet exist
+			catch (PlentymarketsMappingExceptionNotExistant $E)
+			{
+				// Root category id (out of the shop)
+				$parentId = $this->Shop->getCategory()->getId();
+	
+				// Split path into single names
+				$categoryPathNames = explode(';', $Category->ItemCategoryPathNames);
+	
+				foreach ($categoryPathNames as $categoryName)
 				{
-					// Set the details id
-					$details['id'] = PlentymarketsMappingController::getItemVariantByPlentyID($sku);
+					$CategoryFound = self::$CategoryRepository->findOneBy(array(
+						'name' => $categoryName,
+						'parentId' => $parentId
+					));
+	
+					if ($CategoryFound instanceof Shopware\Models\Category\Category)
+					{
+						$parentId = $CategoryFound->getId();
+						$path[] = $parentId;
+					}
+					else
+					{
+						$params = array();
+						$params['name'] = $categoryName;
+						$params['parentId'] = $parentId;
+	
+						try
+						{
+							$CategoryModel = self::$CategoryApi->create($params);
+						}
+						catch (Exception $e)
+						{
+						}
+	
+						$parentId = $CategoryModel->getId();
+					}
 				}
-				catch (PlentymarketsMappingExceptionNotExistant $e)
-				{
-					// neue nummer
-					$details['number'] = self::getUsableNumber($AttributeValueSet->ColliNo);
-				}
-
-				// $details['isMain'] = $isMain;
-				$details['additionaltext'] = $AttributeValueSet->AttributeValueSetName;
-				$details['ean'] = $AttributeValueSet->EAN;
-
-				//
-				$details['X_plentySku'] = $sku;
-
-				$this->variants[$AttributeValueSet->AttributeValueSetID] = $details;
+	
+				// Add mapping and save into the object
+				PlentymarketsMappingController::addCategory($parentId, $Category->ItemCategoryPath);
+				$this->categories[] = array(
+					'id' => $parentId
+				);
 			}
 		}
-
-		$this->details = $base;
 	}
 
 	/**
@@ -437,6 +389,7 @@ class PlentymarketsImportEntityItem
 	 */
 	protected function setProperties()
 	{
+		// No properties
 		if (is_null($this->ItemBase->ItemProperties))
 		{
 			return;
@@ -588,7 +541,6 @@ class PlentymarketsImportEntityItem
 		 
 		if (count($data['categories']) != count($article['categories']))
 		{
-			var_dump($data);
 			$ArticleResource->update($SHOPWARE_itemID, $data);
 		}
 	}
@@ -597,6 +549,7 @@ class PlentymarketsImportEntityItem
 	{
 		$this->setData();
 		$this->setDetails();
+		$this->setVariants();
 		$this->setProperties();
 
 		$data = $this->data;
@@ -763,7 +716,7 @@ class PlentymarketsImportEntityItem
 				if (!count($this->variants))
 				{
 					// todo: check the number
-					$data['mainDetail']['number'] = self::getUsableNumber($this->ItemBase->ItemNo);
+					$data['mainDetail']['number'] = PlentymarketsImportItemHelper::getUsableNumber($this->ItemBase->ItemNo);
 
 					// Anlegen
 					$Article = $ArticleResource->create($data);
