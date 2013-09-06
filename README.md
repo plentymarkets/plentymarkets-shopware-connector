@@ -285,6 +285,11 @@ Einstellung | Erklärung
 shopware Zahlungsstatus (komplett bezahlt) | Zahlungsstatus, welchen Aufträge erhalten, wenn diese innerhalb von plentymarkets als *komplett bezahlt* markiert werden.
 shopware Zahlungsstatus (teilweise bezahlt) | Zahlungsstatus, welchen Aufträge erhalten, wenn diese innerhalb von plentymarkets als *teilweise bezahlt* markiert werden.
 
+##### Initialer Export
+Einstellung | Erklärung
+----|------
+Paketgröße | Legen Sie fest, wie viele Datensätze pro Durchlauf exportiert werden. Diese Einstellunge betrifft Aktikel, Kunden und Attribute. Je mehr Leistung der Server hat bzw. je höher die o.g. PHP-Einstellungen gesetzt sind desto höher kann dieser Wert sein. Für den eigentlichen Export und die Dauer des Exports ist der Wert weitestgehend unmaßgeblich.
+
 #### Mapping
 Für alle Daten, die nicht automatisch gemappt werden können, muss die Verknüpfung manuell hergestellt werden.
 

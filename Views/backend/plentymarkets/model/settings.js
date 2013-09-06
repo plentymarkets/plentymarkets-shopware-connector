@@ -122,6 +122,12 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		type: 'integer',
 		defaultValue: 12
 	},
+	
+	{
+		name: 'InitialExportChunkSize',
+		type: 'integer',
+		defaultValue: 250
+	},
 
 	],
 

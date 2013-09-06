@@ -99,20 +99,6 @@ class PlentymarketsExportEntityItem
 	protected function exportItemBase()
 	{
 		$Item = $this->SHOPWARE_Article;
-
-		try
-		{
-			// If there is a plenty id for this shopware id,
-			// the item has already been exported to plentymarkets
-			PlentymarketsMappingController::getItemByShopwareID($Item->getId());
-
-			// Exit
-			return false;
-		}
-		catch (PlentymarketsMappingExceptionNotExistant $E)
-		{
-		}
-
 		$Item instanceof \Shopware\Models\Article\Article;
 
 		$Request_AddItemsBase = new PlentySoapRequest_AddItemsBase();
