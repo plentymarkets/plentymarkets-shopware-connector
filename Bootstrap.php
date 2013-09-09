@@ -750,7 +750,7 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
      */
     public function getVersion()
     {
-    	return '3';
+    	return '4';
     }
 
     /**
