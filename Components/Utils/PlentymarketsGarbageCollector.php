@@ -91,37 +91,53 @@ class PlentymarketsGarbageCollector
 				ENGINE = MEMORY;
 		');
 		
-		// Get the data from plentymarkets
-		$Request_GetItemsByStoreID = new PlentySoapRequest_GetItemsByStoreID();
-		$Request_GetItemsByStoreID->Page = 0;
-		$Request_GetItemsByStoreID->StoreID = PlentymarketsConfig::getInstance()->getStoreID();
-			
-		do {
-			
-			// Do the request
-			$Response_GetItemsByStoreID = PlentymarketsSoapClient::getInstance()->GetItemsByStoreID($Request_GetItemsByStoreID);
+		
 
-			$itemIds = array();
-			foreach ($Response_GetItemsByStoreID->Items->item as $ItemByStoreID)
-			{
-				$itemIds[] = $ItemByStoreID->intValue;
+		// Get the data from plentymarkets (for every mapped shop)
+		$shopIds = Shopware()->Db()->fetchAll('
+			SELECT plentyID FROM plenty_mapping_shop
+		');
+		
+		foreach ($shopIds as $shopId)
+		{
+			
+			$Request_GetItemsByStoreID = new PlentySoapRequest_GetItemsByStoreID();
+			$Request_GetItemsByStoreID->Page = 0;
+			$Request_GetItemsByStoreID->StoreID = $shopId['plentyID'];
+				
+			do {
+				
+				// Do the request
+				$Response_GetItemsByStoreID = PlentymarketsSoapClient::getInstance()->GetItemsByStoreID($Request_GetItemsByStoreID);
+	
+				$itemIds = array();
+				foreach ($Response_GetItemsByStoreID->Items->item as $ItemByStoreID)
+				{
+					$itemIds[] = $ItemByStoreID->intValue;
+				}
+				
+				if (empty($itemIds))
+				{
+					break;
+				}
+				
+				// Build the sql statement
+				$itemsIdsSql = implode(', ', array_map(function ($itemId)
+				{
+					return sprintf('(%u)', $itemId);
+				}, $itemIds));
+				
+				// Fill the table
+				Shopware()->Db()->exec('
+					INSERT IGNORE INTO plenty_cleanup_item VALUES ' . $itemsIdsSql . '
+				');
+			
 			}
 			
-			// Build the sql statement
-			$itemsIdsSql = implode(', ', array_map(function ($itemId)
-			{
-				return sprintf('(%u)', $itemId);
-			}, $itemIds));
-			
-			// Fill the table
-			Shopware()->Db()->exec('
-				INSERT INTO plenty_cleanup_item VALUES ' . $itemsIdsSql . '
-			');
+			// Until all pages are received
+			while (++$Request_GetItemsByStoreID->Page < $Response_GetItemsByStoreID->Pages);
 		
 		}
-		
-		// Until all pages are received
-		while (++$Request_GetItemsByStoreID->Page < $Response_GetItemsByStoreID->Pages);
 		
 		// Get the action
 		$actionId = PlentymarketsConfig::getInstance()->getItemCleanupActionID(self::ITEM_ACTION_DEACTIVATE);
@@ -209,8 +225,16 @@ class PlentymarketsGarbageCollector
 			
 			else if ($actionId == self::ITEM_ACTION_DELETE)
 			{
-				$ArticleResource->delete($item['id']);
-				PlentymarketsLogger::getInstance()->message('Cleanup:Item', 'Deleting the item with the id ' . $item['id']);
+				try
+				{
+					$ArticleResource->delete($item['id']);
+					PlentymarketsLogger::getInstance()->message('Cleanup:Item', 'Deleting the item with the id ' . $item['id']);
+				}
+				catch (Exception $e)
+				{
+					PlentymarketsLogger::getInstance()->error('Cleanup:Item', 'The item with the id ' . $item['id'] . ' could not be deleted');
+					PlentymarketsLogger::getInstance()->error('Cleanup:Item', get_class($e) . ': ' . $e->getMessage());
+				}
 			}
 				
 		}
