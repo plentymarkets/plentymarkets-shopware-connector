@@ -44,6 +44,6 @@ class PlentymarketsMappingEntityShop extends PlentymarketsMappingEntityAbstract
 	 */
 	protected function getName()
 	{
-		return 'plenty_mapping_Shop';
+		return 'plenty_mapping_shop';
 	}
 }
