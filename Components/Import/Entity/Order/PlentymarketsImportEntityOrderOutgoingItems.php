@@ -38,7 +38,7 @@ class PlentymarketsImportEntityOrderOutgoingItems extends PlentymarketsImportEnt
 	 *
 	 * @var integer
 	 */
-	protected $orderStatus;
+	protected static $orderStatus;
 
 	/**
 	 *
@@ -46,30 +46,33 @@ class PlentymarketsImportEntityOrderOutgoingItems extends PlentymarketsImportEnt
 	 */
 	protected static $action = 'OutgoingItems';
 
+	/**
+	 * 
+	 * @see PlentymarketsImportEntityOrderAbstract::prepare()
+	 */
 	public function prepare()
 	{
+		if (is_null(self::$orderStatus))
+		{
+			self::$orderStatus = PlentymarketsConfig::getInstance()->getOutgoingItemsShopwareOrderStatusID(7);
+		}
+		
 		$timestamp = PlentymarketsConfig::getInstance()->getImportOrderOutgoingItemsLastUpdateTimestamp(0);
+		
 		$this->log('LastUpdate: ' . date('r', $timestamp));
 
 		if (PlentymarketsConfig::getInstance()->getOutgoingItemsOrderStatus(0))
 		{
-			$this->Request_SearchOrders->LastUpdateFrom = $timestamp; // int
-			$this->Request_SearchOrders->OrderStatus = (float) PlentymarketsConfig::getInstance()->getOutgoingItemsOrderStatus(); // float
+			$this->Request_SearchOrders->LastUpdateFrom = $timestamp;
+			$this->Request_SearchOrders->OrderStatus = (float) PlentymarketsConfig::getInstance()->getOutgoingItemsOrderStatus();
 			$this->log('Mode: Status (' . $this->Request_SearchOrders->OrderStatus . ')');
 		}
 
 		else
 		{
-			$this->Request_SearchOrders->OrderCompletedFrom = $timestamp; // int
+			$this->Request_SearchOrders->OrderCompletedFrom = $timestamp;
 			$this->log('Mode: Outgoing items booked');
 		}
-
-		$this->orderStatus = PlentymarketsConfig::getInstance()->getOutgoingItemsShopwareOrderStatusID(7);
-	}
-
-	public function finish()
-	{
-		PlentymarketsConfig::getInstance()->setImportOrderOutgoingItemsLastUpdateTimestamp($this->timestamp);
 	}
 
 	/**
@@ -79,6 +82,6 @@ class PlentymarketsImportEntityOrderOutgoingItems extends PlentymarketsImportEnt
 	 */
 	public function handle($shopwareOrderId, $Order)
 	{
-		self::$OrderModule->setOrderStatus($shopwareOrderId, $this->orderStatus, false, 'plentymarkets');
+		self::$OrderModule->setOrderStatus($shopwareOrderId, self::$orderStatus, false, 'plentymarkets');
 	}
 }

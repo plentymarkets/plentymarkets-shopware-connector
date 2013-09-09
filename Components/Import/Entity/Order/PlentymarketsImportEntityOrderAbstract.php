@@ -50,16 +50,13 @@ abstract class PlentymarketsImportEntityOrderAbstract
 	protected $Request_SearchOrders;
 
 	/**
-	 *
-	 * @var integer
+	 * 
+	 * @param integer $storeId plentymarkets mandant id
 	 */
-	protected $timestamp;
-
-	/**
-	 *
-	 */
-	public function __construct()
+	public function __construct($storeId)
 	{
+		$this->log('plentymarkets StoreId: '. $storeId);
+		
 		$this->Request_SearchOrders = new PlentySoapRequest_SearchOrders();
 		$this->Request_SearchOrders->GetIncomingPayments = false; // boolean
 		$this->Request_SearchOrders->GetOrderCustomerAddress = false; // boolean
@@ -68,11 +65,9 @@ abstract class PlentymarketsImportEntityOrderAbstract
 		$this->Request_SearchOrders->GetOrderInfo = false; // boolean
 		$this->Request_SearchOrders->GetParcelService = false; // boolean
 		$this->Request_SearchOrders->GetSalesOrderProperties = false; // boolean
-		$this->Request_SearchOrders->StoreID = PlentymarketsConfig::getInstance()->getStoreID(); // int
+		$this->Request_SearchOrders->StoreID = $storeId; // int
 		$this->Request_SearchOrders->OrderType = 'order'; // string
 		$this->Request_SearchOrders->Page = 0;
-
-		$this->timestamp = time();
 
 		//
 		if (is_null(self::$OrderModule))
@@ -81,9 +76,10 @@ abstract class PlentymarketsImportEntityOrderAbstract
 		}
 	}
 
+	/**
+	 * 
+	 */
 	abstract public function prepare();
-
-	abstract public function finish();
 
 	/**
 	 *
@@ -107,6 +103,7 @@ abstract class PlentymarketsImportEntityOrderAbstract
 	 */
 	public function import()
 	{
+		//
 		$this->prepare();
 
 		// Helper
@@ -169,7 +166,5 @@ abstract class PlentymarketsImportEntityOrderAbstract
 		//
 		$this->log($numberOfOrdersUpdated . ' sales orders have been updated.');
 
-		//
-		$this->finish();
 	}
 }

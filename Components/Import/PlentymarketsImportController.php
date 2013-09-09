@@ -156,11 +156,25 @@ class PlentymarketsImportController
 	 */
 	public static function importOrders()
 	{
-		$PlentymarketsImportEntityOrderIncomingPayments = new PlentymarketsImportEntityOrderIncomingPayments();
-		$PlentymarketsImportEntityOrderIncomingPayments->import();
-
-		$PlentymarketsImportEntityOrderOutgoingItems = new PlentymarketsImportEntityOrderOutgoingItems();
-		$PlentymarketsImportEntityOrderOutgoingItems->import();
+		// Starttimestamp
+		$timestsamp = time();
+		
+		// Get the data from plentymarkets (for every mapped shop)
+		$shopIds = Shopware()->Db()->fetchAll('
+			SELECT plentyID FROM plenty_mapping_shop
+		');
+		
+		foreach ($shopIds as $shopId)
+		{
+			$PlentymarketsImportEntityOrderIncomingPayments = new PlentymarketsImportEntityOrderIncomingPayments($shopId['plentyID']);
+			$PlentymarketsImportEntityOrderIncomingPayments->import();
+	
+			$PlentymarketsImportEntityOrderOutgoingItems = new PlentymarketsImportEntityOrderOutgoingItems($shopId['plentyID']);
+			$PlentymarketsImportEntityOrderOutgoingItems->import();
+		}
+		
+		PlentymarketsConfig::getInstance()->setImportOrderIncomingPaymentsLastUpdateTimestamp($timestsamp);
+		PlentymarketsConfig::getInstance()->setImportOrderOutgoingItemsLastUpdateTimestamp($timestsamp);
 	}
 
 	/**
