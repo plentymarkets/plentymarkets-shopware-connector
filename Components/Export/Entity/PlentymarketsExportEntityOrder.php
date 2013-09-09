@@ -202,6 +202,7 @@ class PlentymarketsExportEntityOrder
 		}
 		catch (PlentymarketsMappingExceptionNotExistant $E)
 		{
+			PlentymarketsLogger::getInstance()->error('Export:Order', 'Cannot export the order ' . $this->order['id'] . ' because there is no mapping for this method of payment.');
 			return $this->setError(self::CODE_ERROR_MOP);
 		}
 
