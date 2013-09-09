@@ -219,4 +219,31 @@ class PlentymarketsUtils
 			return false;
 		}
 	}
+	
+	/**
+	 * 
+	 * @var array
+	 */
+	protected static $categoryId2ShopId = array();
+
+	/**
+	 * 
+	 * @param integer $categoryId
+	 * @return array
+	 */
+	public static function getShopIdByCategoryRootId($categoryId)
+	{
+		if (!isset(self::$categoryId2ShopId[$categoryId]))
+		{
+			$shopIds = array();
+			$shops = Shopware()->Db()->fetchAll('SELECT id FROM s_core_shops WHERE category_id = ' . $categoryId);
+			foreach ($shops as $shop)
+			{
+				$shopIds[] = $shop['id'];
+			}
+			self::$categoryId2ShopId[$categoryId] = $shopIds;
+		}
+		
+		return self::$categoryId2ShopId[$categoryId];
+	}
 }

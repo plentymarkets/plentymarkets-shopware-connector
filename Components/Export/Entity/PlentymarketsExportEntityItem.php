@@ -167,34 +167,38 @@ class PlentymarketsExportEntityItem
 			$path = array_reverse(explode('|', $Category->getPath()));
 			$rootId = $path[1];
 			
-			$shop = Shopware()->Db()->fetchOne('SELECT id FROM s_core_shops WHERE category_id = '. $rootId);
-			$storeId = PlentymarketsMappingController::getShopByShopwareID($shop['id']);
+			$shops = PlentymarketsUtils::getShopIdByCategoryRootId($rootId);
 			
-			if (!isset($this->storeIds[$storeId]))
+			foreach ($shops as $shopId)
 			{
-				// Activate the item for this store
-				$Object_Integer = new PlentySoapObject_Integer();
-				$Object_Integer->intValue = $storeId;
-				$Object_AddItemsBaseItemBase->StoreIDs[] = $Object_Integer;
+				$storeId = PlentymarketsMappingController::getShopByShopwareID($shopId);
 				
-				// Cache
-				$this->storeIds[$storeId] = true;
+				if (!isset($this->storeIds[$storeId]))
+				{
+					// Activate the item for this store
+					$Object_Integer = new PlentySoapObject_Integer();
+					$Object_Integer->intValue = $storeId;
+					$Object_AddItemsBaseItemBase->StoreIDs[] = $Object_Integer;
+					
+					// Cache
+					$this->storeIds[$storeId] = true;
+				}
+
+				if ($Category->getActive())
+				{
+					// Activate the category for this store
+					$this->categoryPaths2Activate[] = array(
+						'path' => $categoryPath,
+						'storeId' => $storeId
+					);
+				}
 			}
 			
 			// Activate the category
 			$Object_ItemCategory = new PlentySoapObject_ItemCategory();
 			$Object_ItemCategory->ItemCategoryPath = $categoryPath; // string
 			$Object_AddItemsBaseItemBase->Categories[] = $Object_ItemCategory;
-			
-			if ($Category->getActive())
-			{
-				// Activate the category for this store
-				$this->categoryPaths2Activate[] = array(
-					'path' => $categoryPath,
-					'storeId' => $storeId
-				);
-			}
-			
+		
 		}
 
 
