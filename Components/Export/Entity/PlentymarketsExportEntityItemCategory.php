@@ -91,8 +91,16 @@ class PlentymarketsExportEntityItemCategory
 	 */
 	protected function doExport()
 	{
-		$categoryRootId = PlentymarketsConfig::getInstance()->getItemCategoryRootID();
-
+		// Only export the categories bond to a shop
+		$ShopRepository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+		$ShopsActive = $ShopRepository->findBy(array('active' => 1), array('default' => 'DESC'));
+		
+		$categoryRootIds = array();
+		foreach ($ShopsActive as $Shop)
+		{
+			$categoryRootIds[] = $Shop->getCategory()->getId();
+		}
+		
 		foreach (Shopware()->Models()
 			->getRepository('Shopware\Models\Category\Category')
 			->findBy(array(
@@ -106,9 +114,19 @@ class PlentymarketsExportEntityItemCategory
 			{
 				continue;
 			}
-
+			
 			//
 			$path = array_filter(explode('|', $Category->getPath()));
+			
+			// Check whether this category is connected to a shop
+			$rootId = end($path);
+			if (!in_array($rootId, $categoryRootIds))
+			{
+				PlentymarketsLogger::getInstance()->message('Export:Initial:Category', 'Skipping category '. $Category->getName() . ' ('. $Category->getId() .') since it is not connected to a shop.');
+				continue;
+			}
+			
+			// Count the level
 			$level = count($path);
 
 			if (array_key_exists($level, $this->PLENTY_nameAndLevel2ID) && array_key_exists($Category->getName(), $this->PLENTY_nameAndLevel2ID[$level]))
