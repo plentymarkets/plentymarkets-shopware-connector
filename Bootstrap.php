@@ -120,6 +120,22 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
 	  		");
     	}
     	
+    	if ($version < 4)
+    	{
+    		// Add a new cron event
+    		$this->addItemCleanupCronEvent();
+    		
+    		// Add the default setting
+    		Shopware()->Db()->exec("
+				CREATE TABLE `plenty_mapping_shop` (
+				  `shopwareID` int(11) unsigned NOT NULL,
+				  `plentyID` int(11) unsigned NOT NULL,
+				  PRIMARY KEY (`shopwareID`,`plentyID`),
+				  UNIQUE KEY `plentyID` (`plentyID`)
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	  		");
+    	}
+    	
     	return true;
     }
 
@@ -353,6 +369,15 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
 			CREATE TABLE `plenty_mapping_shipping_profile` (
 			  `shopwareID` int(11) unsigned NOT NULL,
 			  `plentyID` varchar(255) NOT NULL DEFAULT '',
+			  PRIMARY KEY (`shopwareID`,`plentyID`),
+			  UNIQUE KEY `plentyID` (`plentyID`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+		");
+
+		Shopware()->Db()->exec("
+			CREATE TABLE `plenty_mapping_shop` (
+			  `shopwareID` int(11) unsigned NOT NULL,
+			  `plentyID` int(11) unsigned NOT NULL,
 			  PRIMARY KEY (`shopwareID`,`plentyID`),
 			  UNIQUE KEY `plentyID` (`plentyID`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;

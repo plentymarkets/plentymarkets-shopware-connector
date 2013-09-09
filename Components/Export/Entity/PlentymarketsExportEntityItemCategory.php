@@ -96,9 +96,17 @@ class PlentymarketsExportEntityItemCategory
 		$ShopsActive = $ShopRepository->findBy(array('active' => 1), array('default' => 'DESC'));
 		
 		$categoryRootIds = array();
+		$additionalLanguages = array();
 		foreach ($ShopsActive as $Shop)
 		{
+			$Shop instanceof Shopware\Models\Shop\Shop;
 			$categoryRootIds[] = $Shop->getCategory()->getId();
+			
+			$language = substr($Shop->getLocale()->getLocale(), 0, 2);
+			if (!in_array($language, $additionalLanguages) && $language != 'de')
+			{
+				$additionalLanguages[] = $language;
+			}
 		}
 		
 		foreach (Shopware()->Models()
@@ -129,6 +137,7 @@ class PlentymarketsExportEntityItemCategory
 			// Count the level
 			$level = count($path);
 
+			// Looking for a German category
 			if (array_key_exists($level, $this->PLENTY_nameAndLevel2ID) && array_key_exists($Category->getName(), $this->PLENTY_nameAndLevel2ID[$level]))
 			{
 				$categoryIdAdded = $this->PLENTY_nameAndLevel2ID[$level][$Category->getName()];
@@ -148,6 +157,25 @@ class PlentymarketsExportEntityItemCategory
 
 				$Response_AddItemCategory = PlentymarketsSoapClient::getInstance()->AddItemCategory($Request_AddItemCategory);
 				$categoryIdAdded = (integer) $Response_AddItemCategory->ResponseMessages->item[0]->SuccessMessages->item[0]->Value;
+			}
+			
+			// Fill the translation for each category
+			if (!empty($additionalLanguages))
+			{
+				foreach ($additionalLanguages as $additionalLanguage)
+				{
+					$Request_AddItemCategory = new PlentySoapRequest_AddItemCategory();
+					$Request_AddItemCategory->Level = $level;
+					$Request_AddItemCategory->CatID = $categoryIdAdded;
+					$Request_AddItemCategory->Lang = $additionalLanguage;
+					$Request_AddItemCategory->MetaDescription = $Category->getMetaDescription();
+					$Request_AddItemCategory->MetaKeywords = $Category->getMetaKeywords();
+					$Request_AddItemCategory->MetaTitle = $Category->getCmsHeadline();
+					$Request_AddItemCategory->Name = $Category->getName();
+					$Request_AddItemCategory->Text = $Category->getCmsText();
+					
+					PlentymarketsSoapClient::getInstance()->AddItemCategory($Request_AddItemCategory);
+				}
 			}
 
 			$this->mappingShopwareID2PlentyID[$Category->getId()] = $categoryIdAdded;
