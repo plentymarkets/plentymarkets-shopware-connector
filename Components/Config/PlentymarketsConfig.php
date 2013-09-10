@@ -142,7 +142,7 @@ class PlentymarketsConfig
 			!is_null($this->getItemCleanupActionID()) &&
 			!is_null($this->getItemCategoryRootID()) &&
 			!is_null($this->getDefaultCustomerGroupKey()) &&
-			!is_null($this->getItemProducerID()) &&
+			(!is_null($this->getItemProducerID()) && $this->getItemProducerID() > 0) &&
 			!is_null($this->getOrderReferrerID()) &&
 			!is_null($this->getOrderPaidStatusID()) &&
 			!is_null($this->getOutgoingItemsID()) &&
