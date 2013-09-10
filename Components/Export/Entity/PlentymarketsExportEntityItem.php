@@ -115,7 +115,10 @@ class PlentymarketsExportEntityItem
 		}
 
 		$Object_AddItemsBaseItemBase->ExternalItemID = PlentymarketsUtils::getExternalItemID($Item->getId());
-		$Object_AddItemsBaseItemBase->ProducerID = PlentymarketsMappingController::getProducerByShopwareID($Item->getSupplier()->getId());
+		if ($Item->getSupplier() instanceof Shopware\Models\Article\Supplier)
+		{
+			$Object_AddItemsBaseItemBase->ProducerID = PlentymarketsMappingController::getProducerByShopwareID($Item->getSupplier()->getId());
+		}
 		$Object_AddItemsBaseItemBase->EAN1 = $ItemDetails->getEan();
 		$Object_AddItemsBaseItemBase->VATInternalID = PlentymarketsMappingController::getVatByShopwareID($Item->getTax()->getId());
 		$Object_AddItemsBaseItemBase->ItemNo = $ItemDetails->getNumber();
