@@ -337,7 +337,7 @@ class PlentymarketsExportEntityItem
 		$Object_ItemPriceSet->WeightInGramm = $MainDetail->getWeight() * 1000;
 		$Object_ItemPriceSet->WidthInMM = $MainDetail->getWidth() * 100; // int
 
-		if ($Unit instanceof \Shopware\Models\Article\Unit)
+		if ($Unit instanceof \Shopware\Models\Article\Unit && $Unit->getId() > 0)
 		{
 			$Object_ItemPriceSet->Unit = PlentymarketsMappingController::getMeasureUnitByShopwareID($Unit->getId()); // string
 		}

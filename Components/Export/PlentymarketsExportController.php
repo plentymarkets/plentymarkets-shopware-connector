@@ -432,6 +432,11 @@ class PlentymarketsExportController
 		// Set running
 		$this->Config->setItemExportTimestampFinished(time());
 		$this->Config->setItemExportStatus('success');
+		
+		// Reset values
+		$this->Config->setImportItemLastUpdateTimestamp(0);
+		$this->Config->setImportItemPriceLastUpdateTimestamp(0);
+		$this->Config->setImportItemStockLastUpdateTimestamp(0);
 	}
 
 	/**
