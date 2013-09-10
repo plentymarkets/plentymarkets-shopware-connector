@@ -48,6 +48,12 @@ class PlentymarketsLogger
 	 * @var integer
 	 */
 	const TYPE_MESSAGE = 2;
+	
+	/**
+	 * 
+	 * @var string
+	 */
+	const PREFIX_UPDATE = 'Update';
 
 	/**
 	 *

@@ -31,6 +31,8 @@ define('PY_COMPONENTS', PY_BASE . 'Components' . DIRECTORY_SEPARATOR);
 define('PY_SOAP', PY_COMPONENTS . 'Soap' . DIRECTORY_SEPARATOR);
 define('PY_CONTROLLERS', PY_BASE . 'Controllers' . DIRECTORY_SEPARATOR);
 
+require_once PY_COMPONENTS . 'Config/PlentymarketsConfig.php';
+require_once PY_COMPONENTS . 'Utils/PlentymarketsUtils.php';
 require_once PY_COMPONENTS . 'Utils/PlentymarketsLogger.php';
 require_once PY_COMPONENTS . 'Cron/CronjobController.php';
 
@@ -84,33 +86,41 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
      */
     public function update($version)
     {
-    	$version = (integer) $version;
+    	$Logger = PlentymarketsLogger::getInstance();
     	
-    	if ($version < 1)
+    	if ($version == '1.3.0')
     	{
     		// Delete the uniq index of the customer mapping
-    		Shopware()->Db()->exec("
-				ALTER TABLE `plenty_mapping_customer`
-					DROP INDEX `plentyID`,
-					COMMENT = 'This table may only be used to retrieve the plentymarkets customer id with a shopware order billing address id.'
-	  		");
-    	}
-    	
-    	if ($version < 2)
-    	{
-    		// Add new mapping table
-    		Shopware()->Db()->exec("
-				CREATE TABLE `plenty_mapping_referrer` (
-				  `shopwareID` int(11) unsigned NOT NULL,
-				  `plentyID` int(11) unsigned NOT NULL,
-				  PRIMARY KEY (`shopwareID`,`plentyID`),
-				  UNIQUE KEY `plentyID` (`plentyID`)
-				) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-			");
-    	}
-    	
-    	if ($version < 3)
-    	{
+    		try
+    		{
+	    		Shopware()->Db()->exec("
+					ALTER TABLE `plenty_mapping_customer`
+						DROP INDEX `plentyID`,
+						COMMENT = 'This table may only be used to retrieve the plentymarkets customer id with a shopware order billing address id.'
+		  		");
+    		}
+    		catch (Exception $E)
+    		{
+    			$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'DROP INDEX `plentyID` already carried out');
+    		}
+
+    		try
+    		{
+	    		// Add new mapping table
+	    		Shopware()->Db()->exec("
+					CREATE TABLE `plenty_mapping_referrer` (
+					  `shopwareID` int(11) unsigned NOT NULL,
+					  `plentyID` int(11) unsigned NOT NULL,
+					  PRIMARY KEY (`shopwareID`,`plentyID`),
+					  UNIQUE KEY `plentyID` (`plentyID`)
+					) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+				");
+	    	}
+	    	catch (Exception $E)
+	    	{
+	    		$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'CREATE TABLE `plenty_mapping_referrer` already carried out');
+    		}
+    		
     		// Add a new cron event
     		$this->addItemCleanupCronEvent();
     		
@@ -118,22 +128,23 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
     		Shopware()->Db()->exec("
 				INSERT IGNORE INTO `plenty_config` (`key`, `value`) VALUES ('ItemCleanupActionID', '1')
 	  		");
-    	}
-    	
-    	if ($version < 4)
-    	{
-    		// Add a new cron event
-    		$this->addItemCleanupCronEvent();
     		
-    		// Add the default setting
-    		Shopware()->Db()->exec("
-				CREATE TABLE `plenty_mapping_shop` (
-				  `shopwareID` int(11) unsigned NOT NULL,
-				  `plentyID` int(11) unsigned NOT NULL,
-				  PRIMARY KEY (`shopwareID`,`plentyID`),
-				  UNIQUE KEY `plentyID` (`plentyID`)
-				) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-	  		");
+    		try
+    		{
+	    		// Add the default setting
+	    		Shopware()->Db()->exec("
+					CREATE TABLE `plenty_mapping_shop` (
+					  `shopwareID` int(11) unsigned NOT NULL,
+					  `plentyID` int(11) unsigned NOT NULL,
+					  PRIMARY KEY (`shopwareID`,`plentyID`),
+					  UNIQUE KEY `plentyID` (`plentyID`)
+					) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+		  		");
+	    	}
+	    	catch (Exception $E)
+	    	{
+	    		$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'CREATE TABLE `plenty_mapping_shop` already carried out');
+    		}
     	}
     	
     	return true;
@@ -176,6 +187,10 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
 				DROP TABLE IF EXISTS `'. $table .'`
 			');
 		}
+		
+		Shopware()->Db()->query('
+			DELETE FROM s_crontab WHERE `action` LIKE "%Plentymarkets%"
+		');
 
 		return true;
 	}
@@ -280,8 +295,7 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
 			CREATE TABLE `plenty_mapping_customer` (
 			  `shopwareID` int(11) unsigned NOT NULL,
 			  `plentyID` int(11) unsigned NOT NULL,
-			  PRIMARY KEY (`shopwareID`,`plentyID`),
-			  UNIQUE KEY `plentyID` (`plentyID`)
+			  PRIMARY KEY (`shopwareID`,`plentyID`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 		");
 
@@ -466,7 +480,7 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
         // Export Orders
         $this->createCronJob(
         	'Plentymarkets Order Export',
-        	'PlentymarketsOrderExportCron',
+        	'Shopware_CronJob_PlentymarketsOrderExportCron',
         	PlentymarketsCronjobController::INTERVAL_EXPORT_ORDER,
         	true
         );
@@ -479,7 +493,7 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
         // Export Orders
         $this->createCronJob(
         	'Plentymarkets Order Incoming Payment Export',
-        	'PlentymarketsOrderIncomingPaymentExportCron',
+        	'Shopware_CronJob_PlentymarketsOrderIncomingPaymentExportCron',
         	PlentymarketsCronjobController::INTERVAL_EXPORT_ORDER_INCOMING_PAYMENT,
         	true
         );
@@ -492,7 +506,7 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
         // Item Import
         $this->createCronJob(
         	'Plentymarkets Item Import',
-        	'PlentymarketsItemImportCron',
+        	'Shopware_CronJob_PlentymarketsItemImportCron',
         	PlentymarketsCronjobController::INTERVAL_IMPORT_ITEM,
         	true
         );
@@ -506,7 +520,7 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
         // Item Price Import
         $this->createCronJob(
         	'Plentymarkets Item Price Import',
-        	'PlentymarketsItemPriceImportCron',
+        	'Shopware_CronJob_PlentymarketsItemPriceImportCron',
         	PlentymarketsCronjobController::INTERVAL_IMPORT_ITEM_PRICE,
         	true
         );
@@ -519,7 +533,7 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
         // Item Stock Import
         $this->createCronJob(
         	'Plentymarkets Item Stock Import',
-        	'PlentymarketsItemPriceStockCron',
+        	'Shopware_CronJob_PlentymarketsItemPriceStockCron',
         	PlentymarketsCronjobController::INTERVAL_IMPORT_ITEM_STOCK,
         	true
         );
@@ -532,7 +546,7 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
         // Order Import
         $this->createCronJob(
         	'Plentymarkets Order Import',
-        	'PlentymarketsOrderImportCron',
+        	'Shopware_CronJob_PlentymarketsOrderImportCron',
         	PlentymarketsCronjobController::INTERVAL_IMPORT_ORDER,
         	true
         );
@@ -545,7 +559,7 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
         // Export
         $this->createCronJob(
         	'Plentymarkets Export',
-        	'PlentymarketsExportCron',
+        	'Shopware_CronJob_PlentymarketsExportCron',
         	PlentymarketsCronjobController::INTERVAL_EXPORT,
         	true
         );
@@ -558,13 +572,13 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
         // Cleanup (global)
         $this->createCronJob(
         	'Plentymarkets Cleanup',
-        	'PlentymarketsCleanup',
+        	'Shopware_CronJob_PlentymarketsCleanupCron',
         	900,
         	true
         );
 
         $this->subscribeEvent(
-        	'Shopware_CronJob_PlentymarketsCleanup',
+        	'Shopware_CronJob_PlentymarketsCleanupCron',
         	'onRunCleanupCron'
         );
         
@@ -577,17 +591,23 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
      */
     private function addItemCleanupCronEvent()
     {
-    	$this->createCronJob(
-    		'Plentymarkets Item Cleanup',
-    		'PlentymarketsItemCleanup',
-    		43200, // 12 hours
-    		true
-    	);
-    	
-    	$this->subscribeEvent(
-    		'Shopware_CronJob_PlentymarketsItemCleanup',
-    		'onRunItemCleanupCron'
-    	);
+    	try
+    	{
+	    	$this->createCronJob(
+	    		'Plentymarkets Item Cleanup',
+	    		'Shopware_CronJob_PlentymarketsItemCleanup',
+	    		43200, // 12 hours
+	    		false
+	    	);
+	    	
+	    	$this->subscribeEvent(
+	    		'Shopware_CronJob_PlentymarketsItemCleanup',
+	    		'onRunItemCleanupCron'
+	    	);
+    	}
+    	catch (Exception $E)
+    	{
+    	}
     }
 
     /**
@@ -726,6 +746,20 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
      */
     public function onGetControllerPathBackend(Enlight_Event_EventArgs $args)
     {
+    	// Version fix
+    	if (!PlentymarketsConfig::getInstance()->getIsVersionFixed())
+    	{
+    		// Log
+    		PlentymarketsLogger::getInstance()->message(PlentymarketsLogger::PREFIX_UPDATE, 'Plugin id '. $this->getId());
+    		PlentymarketsLogger::getInstance()->message(PlentymarketsLogger::PREFIX_UPDATE, 'Setting the version of the connector to 1.3.0');
+    		
+    		// Update the version in the database
+    		Shopware()->Db()->query('UPDATE s_core_plugins SET version = "1.3.0" WHERE name = "Plentymarkets" AND id = '. $this->getId());
+    		
+    		// Set the trigger
+    		PlentymarketsConfig::getInstance()->setIsVersionFixed(time());
+    	}
+    	
     	$this->Application()->Template()->addTemplateDir(
             $this->Path() . 'Views/', 'plentymarkets'
         );
@@ -750,7 +784,7 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
      */
     public function getVersion()
     {
-    	return '4';
+    	return '1.4.0';
     }
 
     /**
