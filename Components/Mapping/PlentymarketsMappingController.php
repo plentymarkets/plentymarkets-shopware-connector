@@ -156,12 +156,21 @@ class PlentymarketsMappingController
 					)'.$whereActive.';'
 			);
 
-			$Statement->execute();
-
-			$status[$resource] = array(
-				'name' => $resource,
-				'open' => (integer) $Statement->fetchObject()->open
-			);
+			try {
+				$Statement->execute();
+	
+				$status[$resource] = array(
+					'name' => $resource,
+					'open' => (integer) $Statement->fetchObject()->open
+				);
+			}
+			catch (Exception $E)
+			{
+				$status[$resource] = array(
+					'name' => $resource,
+					'open' => 1
+				);
+			}
 		}
 
 		// static since the mapping is not mandatory

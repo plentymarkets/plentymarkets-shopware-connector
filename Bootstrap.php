@@ -75,6 +75,9 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
         $this->createEvents();
         $this->createMenu();
         $this->registerCronjobs();
+        
+        // Version is already okay
+        PlentymarketsConfig::getInstance()->setIsVersionFixed(time());
 
         return true;
     }
@@ -755,6 +758,9 @@ class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Componen
     		
     		// Update the version in the database
     		Shopware()->Db()->query('UPDATE s_core_plugins SET version = "1.3.0" WHERE name = "Plentymarkets" AND id = '. $this->getId());
+    		
+    		// Drop the item cleanup cronjob
+    		Shopware()->Db()->query('DELETE FROM s_crontab WHERE name = "Plentymarkets Item Cleanup" AND pluginID = '. $this->getId());
     		
     		// Set the trigger
     		PlentymarketsConfig::getInstance()->setIsVersionFixed(time());
