@@ -449,17 +449,6 @@ class PlentymarketsMappingDataController
 			}
 			else if ($this->auto)
 			{
-// 				foreach ($plentyStores as $plentyData)
-// 				{
-// 					list($name, $percent) = explode(' ', $plentyData['name']);
-// 					if ((float) $row['tax'] == (float) $name)
-// 					{
-// 						$row['plentyName'] = $plentyData['name'];
-// 						$row['plentyID'] = $plentyData['id'];
-// 						PlentymarketsMappingController::addVat($row['id'], $plentyData['id']);
-// 						break;
-// 					}
-// 				}
 			}
 			
 			if ($row['default'])
