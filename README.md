@@ -160,18 +160,33 @@ Das Plugin muss jetzt ggf. über den Plugin Manager aktualisiert werden.
 ### Installation aus dem Community Store
 Nach der Pilotphase kann das Plugin auch aus dem shopware Community Store installiert werden.
 
+## Update auf Version 1.4.0
+Mit Version 1.4.0 werden die Subshops von shopware Unterstützt. Bitte sichern Sie vor dem Update Ihre Daten! Nach dem Update müssen die Subshops auf plentymarkets Mandanten gemappt werden (Mapping » Shops). Der Datenaustausch wird solange automatisch deaktiviert, bis das Mapping vollständig ist.
+
+Sofern für die Kommunikation mit plentymarkets ein Benutzer mit Rechten auf die einzalnen Calls verwendet wird, müssen diese Berechtigungen um `SetStoreCategories` erweitert werden.
+
+Sofern keine Subshops genutzt werden, müssen keine weiteren Schritte unternommen werden. Um die volle Funktionalität zu erreichen, ist es erforderlich, die Kategorien und die Artikel erneut zu plentymarkets exportieren. Bereits exportierte Artikel müssen aus plentymarkets gelöscht und neu vom Plugin angelegt werden.
+
+Gehen Sie dazu wie folgt vor:
+
+1. Deaktivieren Sie den Datenaustausch auf der Startseite des Plugins.
+2. Löschen Sie alle Artikel in plentymarkets, die durch das Plugin angelegt worden sind. Sie können hier die Filterfunktion in Kombination mit der Gruppenfunktion nutzen.
+3. **Leeren** Sie auf dem Server, wo ihr shopware System läuft, in der Datenbank die Tabellen `plenty_mapping_item` und `plenty_mapping_item_variant`.
+4. Exportieren sie zuerst die Kategorien und anschließend die Artikel neu (Datenaustausch » Initialer Export)
+5. Aktivieren Sie den Datenaustausch
+
 ## Einrichtung
 ### plentymarkets
 Folgende Schritte müssen *vor* der Einrichtung des Plugins innerhalb des plentymarkets-Systems ausgeführt werden.
 
 #### Mandant (Shop) anlegen
-In plentymarkets muss ein besonderer **Mandant (Shop)** angelegt werden. Ein Mandant (Shop) dient in plentymarkets dazu, verschiedene Einstellungen gesondert pro Mandant definieren zu können. So müssen Artikelstammdaten im Shop für jeden Mandant (Shop) aktiviert werden (dies geht auch per Gruppenfunktion im Bereich der Artikelsuche). Weiterhin können pro Mandant (Shop) andere E-Mail-Vorlagen versendet werden oder auch das Layout für Rechnung und Lieferscheine getrennt abgelegt werden.
+In plentymarkets müssen besondere **Mandanten (Shops)** angelegt werden. Ein Mandant (Shop) dient in plentymarkets dazu, verschiedene Einstellungen gesondert pro Mandant definieren zu können. So müssen Artikelstammdaten im Shop für jeden Mandant (Shop) aktiviert werden (dies geht auch per Gruppenfunktion im Bereich der Artikelsuche). Weiterhin können pro Mandant (Shop) andere E-Mail-Vorlagen versendet werden oder auch das Layout für Rechnung und Lieferscheine getrennt abgelegt werden.
 
 Einen neuen Mandant (Shop) für shopware legen Sie in Ihrem plentymarkets System in diesem Bereich an:
 **Einstellungen » Mandant (Shop) » Neuer externer Shop**
 
 Sie müssen hier lediglich einen Namen eingeben und bei Typ die Auswahl shopware vornehmen.
-Nachdem Sie den Mandant (Shop) erfolgreich angelegt haben, können Sie diesen Mandant (Shop) direkt innerhalb des shopware Plugins im Bereich Einstellungen auswählen.
+Nachdem Sie den Mandant (Shop) erfolgreich angelegt haben, können Sie diesen Mandant (Shop) direkt innerhalb des shopware Plugins im Bereich Einstellungen auswählen. Bitte legen Sie für jeden aktiven Subshop einen Mandanten in plentymarkets an.
 
 #### Benutzer anlegen
 Legen Sie unter **Einstellungen » Grundeinstellungen » Benutzer » Konten** einen neuen Benutzer an. Dieser Benutzer wird für die Kommunikation zwischen plentymarkets und shopware über die SOAP API verwendet. Nutzen Sie für den Benutzer deshalb am besten die Typ-Bezeichnung **API**.
@@ -215,6 +230,7 @@ Fehlen einzelne Berechtigungen, kann der Datenabgleich zwischen plentymarkets un
 * SearchOrders
 * SetAttributeValueSetsDetails
 * SetProducers
+* SetStoreCategories
 
 Auf der folgenden Seite erfahren Sie, wie Sie die Berechtigungen in plentymarkets einrichten können:
 http://man.plentymarkets.eu/einstellungen/grundeinstellungen/benutzer/benutzer-bearbeiten/
@@ -254,9 +270,7 @@ Einstellung | Erklärung
 ----|------
 plentymarkets Lager | Datenquelle für den Warenbestandsabgleich  
 Warenbestandspuffer | Prozentualer Anteil des netto-Warenbestandes des gewählten Lagers, welcher an shopware übertragen wird.
-Mandant (Shop) | Das aktuelle shopware-System muss mit einem plentymarkets Mandant (Shop) verknüpft werden. Ein solcher *Mandant (Shop)* kann in plentymarkets über **Einstellungen » Mandant (Shop) » Neuer externer Shop** angelegt werden. 
 Hersteller | Sofern bei Artikeln in plentymarkets kein Hersteller zugeordnet wurde, wird dieser Hersteller in shopware mit den betreffenden Artikeln verknüpft.
-Kategorie Startknoten | Ausgangspunkt für den Export und den Abgleich der Kategorien. Diese Kategorie selbst wird *nicht* bei plentymarkets angelegt. Neue Kategorien in plentymarkets werden an diese Kategorie angehangen.
 Kategorien synchronisieren | Aktivieren, wenn die Kategorien von bestehenden Artikel synchronisiert werden sollen. Anderfalls werden Kategorien nicht bei der Synchronisation berücksichtigt. Bei neuen Artikeln werden die Kategorien immer synchronisiert.
 Standard-Kundenklasse | Kundenklasse deren Preise von plentymarkerts zu shopware übertragen werden.
 Bereinigen | Aktion die ausgeführt wird, wenn die Mandantenzuordnung bei plentymarkets gelöst wird oder kein Mapping für den Artikel vorhanden ist.
@@ -341,6 +355,9 @@ Die Länder werden den Anschriften (Rechnung- / Liefer-) zugeordnet. Kundendaten
 Wie Sie Lieferländer in plentymarkets aktivieren können finden Sie hier:
 http://man.plentymarkets.eu/einstellungen/auftraege/versand/versandoptionen/lieferlaender/
 
+##### Shops
+Alle aktiven Shops müssen auf einen Mandanten gemappt werden. Diese Verknüfung dient dazu, den Artikel auch bei plentymarkets richtig zuordnen zu können und die entsprechenden Kategorien für den Mandantan zu aktivieren.
+
 ##### Partner / Auftragsherkunft
 Die in shopware eingetragenen Partner können den plentymarkets Auftragsherkünften zugeordnet werden. Dieses ist vor allem sinnvoll, wenn die Artikel über die shopware Exportfunktion zu Preisportalen exportiert werden.
 
@@ -387,7 +404,7 @@ Alle Artikeldaten aus Ihrem shopware-System müssen zu plentymarkets exportiert 
 Bevor Daten zu plentymarkets exportiert werden, werden die entsprechenden Daten einmalig abgerufen. Alle Datensätze die nun automatisch gemappt werden können, werden natürlich nicht erneut in plentymarkets angelegt. Das automatische Mapping findet nur bei **identischer** Schreibweise statt. D.h., dass *rot* nicht *Rot* zugeordnet wird.
 
 #### Kategorien
-Alle Kategorien, die unterhalb der als Startknoten definierten Kategorie liegen, werden zu plentymarkets exportiert. Es ist eine max. Tiefe von 6 Ebenen (exkl. des Startknotens, da diese nicht exportiert wird) möglich. Alles darüber hinaus kann bei plentymarkets nicht abgebildet werden.
+Alle Kategorien, die einen Shop zugeordnet sind, werden zu plentymarkets exportiert. Es ist eine max. Tiefe von 6 Ebenen (exkl. des Startknotens, da diese nicht exportiert wird) möglich. Alles darüber hinaus kann bei plentymarkets nicht abgebildet werden.
 
 Eine Kategorie, die in shopware in der 3. Ebene ist, wird bei plentymarkets entsprechend als Kategorie der Ebene 3 angelegt. Und kann dann auch nur dort verwendet werden.
 
