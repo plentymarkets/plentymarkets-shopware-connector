@@ -135,6 +135,11 @@ class PlentymarketsExportEntityCustomer
 	 */
 	protected function exportCustomer()
 	{
+		if (is_null($this->BillingAddress))
+		{
+			return;
+		}
+		
 		try
 		{
 			$this->PLENTY_customerID = PlentymarketsMappingController::getCustomerByShopwareID($this->BillingAddress->getId());
