@@ -16,6 +16,7 @@
 		- [Herunterladen als Archiv](#herunterladen-als-archiv)
 		- [Klonen des Repositories](#klonen-des-repositories)
 	- [Installation aus dem Community Store](#installation-aus-dem-community-store)
+- [Update auf Version 1.4.0](#update-auf-version-140)
 - [Einrichtung](#einrichtung)
 	- [plentymarkets](#plentymarkets)
 		- [Mandant (Shop) anlegen](#mandant-shop-anlegen)
@@ -161,9 +162,11 @@ Das Plugin muss jetzt ggf. über den Plugin Manager aktualisiert werden.
 Nach der Pilotphase kann das Plugin auch aus dem shopware Community Store installiert werden.
 
 ## Update auf Version 1.4.0
+Dieser Abschnitt ist nur relevant, wenn Sie bereits eine Version des Plugins installiert haben.
+
 Mit Version 1.4.0 werden die Subshops von shopware Unterstützt. Bitte sichern Sie vor dem Update Ihre Daten! Nach dem Update müssen die Subshops auf plentymarkets Mandanten gemappt werden (Mapping » Shops). Der Datenaustausch wird solange automatisch deaktiviert, bis das Mapping vollständig ist.
 
-Sofern für die Kommunikation mit plentymarkets ein Benutzer mit Rechten auf die einzalnen Calls verwendet wird, müssen diese Berechtigungen um `SetStoreCategories` erweitert werden.
+Falls für die Kommunikation mit plentymarkets ein Benutzer mit Rechten auf die einzalnen Calls verwendet wird, müssen diese Berechtigungen um `SetStoreCategories` erweitert werden.
 
 Sofern keine Subshops genutzt werden, müssen keine weiteren Schritte unternommen werden. Um die volle Funktionalität zu erreichen, ist es erforderlich, die Kategorien und die Artikel erneut zu plentymarkets exportieren. Bereits exportierte Artikel müssen aus plentymarkets gelöscht und neu vom Plugin angelegt werden.
 
