@@ -113,17 +113,17 @@ Weitere Information dazu finden Sie in der Dokumentation des Modules unter [http
 #### Herunterladen als Archiv
 Der Quellcode kann direkt und ohne Anmeldung als zip-Archiv von github heruntergeladen werden. Hierfür ist auf Ihrem Server keine Installation von git erforderlich. Das Archiv muss anschließend in das Verzeichnis
 	
-	/Pfad/zu/shopware/engine/shopware/Plugins/Local/Backend/Plentymarkets
+	/Pfad/zu/shopware/engine/Shopware/Plugins/Local/Backend/PlentyConnector
 	
 extrahiert werden. Folgende Verzeichnisstruktur sollte danach vorhanden sein:
 
 	+-shopware/
   		+-engine/
-    		+-shopware/
+    		+-Shopware/
       			+-Plugins/
         			+-Local/
           				+-Backend/
-            				+-Plentymarkets/
+            				+-PlentyConnector/
               					+-Components/
               					+-Controllers/
               					+-Views/
@@ -140,11 +140,11 @@ Das Repository muss in folgendes Verzeichnis geklont werden:
 Gehen Sie dazu wie folgt vor:
 
 	cd /Pfad/zu/shopware/engine/Shopware/Plugins/Local/Backend
-	git clone https://github.com/plentymarkets/plentymarkets-shopware-connector.git Plentymarkets
+	git clone https://github.com/plentymarkets/plentymarkets-shopware-connector.git PlentyConnector
 	
 Das Klonen beginnt:
 
-	Cloning into 'Plentymarkets'...
+	Cloning into 'PlentyConnector'...
 	remote: Counting objects: 853, done.
 	remote: Compressing objects: 100% (413/413), done.
 	remote: Total 853 (delta 430), reused 853 (delta 430)
@@ -153,7 +153,7 @@ Das Klonen beginnt:
 	
 Anschließend kann das Plugin über den Plugin Manager installiert werden. Daraufhin ist der aktuelle Stand des Plugins installiert. Um später eine Aktualisierung durchzuführen, muss in dem entsprechenden Verzeichnis der folgende Befehl ausgeführt werden:
 
-	cd /Pfad/zu/shopware/engine/Shopware/Plugins/Local/Backend/Plentymarkets
+	cd /Pfad/zu/shopware/engine/Shopware/Plugins/Local/Backend/PlentyConnector
 	git pull origin master
 	
 Das Plugin muss jetzt ggf. über den Plugin Manager aktualisiert werden.

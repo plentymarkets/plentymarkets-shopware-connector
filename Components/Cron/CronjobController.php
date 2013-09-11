@@ -36,7 +36,7 @@ require_once PY_COMPONENTS . 'Export/PlentymarketsExportController.php';
 
 /**
  * The class CronjobController provides all methods for data import and export. CronjobController is used in
- * Shopware_Plugins_Backend_Plentymarkets_Bootstrap to register and run different cronjobs.
+ * Shopware_Plugins_Backend_PlentyConnector_Bootstrap to register and run different cronjobs.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */

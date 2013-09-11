@@ -45,7 +45,7 @@ define('IMPORT_ITEM_CATEGORY_NO_SYNC', 0);
  * 
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
-class Shopware_Plugins_Backend_Plentymarkets_Bootstrap extends Shopware_Components_Plugin_Bootstrap
+class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
     /**
      * Installs the plugin
