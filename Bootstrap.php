@@ -76,9 +76,6 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
         $this->createMenu();
         $this->registerCronjobs();
         
-        // Version is already okay
-        PlentymarketsConfig::getInstance()->setIsVersionFixed(time());
-
         return true;
     }
     
@@ -749,23 +746,6 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
      */
     public function onGetControllerPathBackend(Enlight_Event_EventArgs $args)
     {
-    	// Version fix
-    	if (!PlentymarketsConfig::getInstance()->getIsVersionFixed())
-    	{
-    		// Log
-    		PlentymarketsLogger::getInstance()->message(PlentymarketsLogger::PREFIX_UPDATE, 'Plugin id '. $this->getId());
-    		PlentymarketsLogger::getInstance()->message(PlentymarketsLogger::PREFIX_UPDATE, 'Setting the version of the connector to 1.3.0');
-    		
-    		// Update the version in the database
-    		Shopware()->Db()->query('UPDATE s_core_plugins SET version = "1.3.0" WHERE name = "Plentymarkets" AND id = '. $this->getId());
-    		
-    		// Drop the item cleanup cronjob
-    		Shopware()->Db()->query('DELETE FROM s_crontab WHERE name = "Plentymarkets Item Cleanup" AND pluginID = '. $this->getId());
-    		
-    		// Set the trigger
-    		PlentymarketsConfig::getInstance()->setIsVersionFixed(time());
-    	}
-    	
     	$this->Application()->Template()->addTemplateDir(
             $this->Path() . 'Views/', 'plentymarkets'
         );
