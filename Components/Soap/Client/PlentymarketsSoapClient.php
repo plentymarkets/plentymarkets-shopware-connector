@@ -48,6 +48,7 @@ class PlentymarketsSoapClient extends SoapClient
 	protected static $Instance;
 
 	/**
+	 * Constructor method
 	 *
 	 * @param string $wsdl
 	 * @param string $username
@@ -134,6 +135,11 @@ class PlentymarketsSoapClient extends SoapClient
 		$this->__setSoapHeaders(new SoapHeader($wsdl, 'verifyingToken', new SoapVar($authentication, SOAP_ENC_OBJECT)));
 	}
 
+	/**
+	 * Performes a SOAP call
+	 * 
+	 * @see SoapClient::__call()
+	 */
 	public function __call($call, $args)
 	{
 		try
@@ -164,6 +170,7 @@ class PlentymarketsSoapClient extends SoapClient
 	}
 
 	/**
+	 * Returns an instance
 	 *
 	 * @param string $wsdl
 	 * @param string $username
@@ -182,6 +189,7 @@ class PlentymarketsSoapClient extends SoapClient
 	}
 
 	/**
+	 * Returns a dummy instance
 	 *
 	 * @param string $wsdl
 	 * @param string $username

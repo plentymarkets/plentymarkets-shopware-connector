@@ -68,6 +68,7 @@ class PlentymarketsLogger
 	protected static $Instance = null;
 
 	/**
+	 * Create the insert statement
 	 */
 	public function __construct()
 	{
@@ -84,6 +85,7 @@ class PlentymarketsLogger
 	}
 
 	/**
+	 * Returns an instance
 	 *
 	 * @return PlentymarketsLogger
 	 */
@@ -97,6 +99,7 @@ class PlentymarketsLogger
 	}
 
 	/**
+	 * Returns a page of the log
 	 *
 	 * @param unknown $start
 	 * @param unknown $limit
@@ -135,6 +138,7 @@ class PlentymarketsLogger
 	}
 
 	/**
+	 * Create a new log entry
 	 *
 	 * @param integer $type
 	 * @param string $identifier
@@ -151,17 +155,32 @@ class PlentymarketsLogger
 		));
 	}
 
+	/**
+	 * Logs a soap call
+	 * 
+	 * @param unknown $call
+	 * @param unknown $request
+	 * @param unknown $response
+	 */
 	public function callMessage($call, $request, $response)
 	{
 		$this->log(self::TYPE_MESSAGE, 'Soap:Call', $call . ' success'/*, $request, $response*/);
 	}
 
+	/**
+	 * Logs a soap call error
+	 * 
+	 * @param unknown $call
+	 * @param unknown $request
+	 * @param unknown $response
+	 */
 	public function callError($call, $request, $response)
 	{
 		$this->log(self::TYPE_ERROR, 'Soap:Call', $call . ' failed'/*, $request, $response*/);
 	}
 
 	/**
+	 * Log an error message
 	 *
 	 * @param string $identifier
 	 * @param string $message
@@ -172,6 +191,7 @@ class PlentymarketsLogger
 	}
 
 	/**
+	 * Logs a new message
 	 *
 	 * @param string $identifier
 	 * @param string $message

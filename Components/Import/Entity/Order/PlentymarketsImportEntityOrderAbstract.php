@@ -50,6 +50,7 @@ abstract class PlentymarketsImportEntityOrderAbstract
 	protected $Request_SearchOrders;
 
 	/**
+	 * Initialized the base search SOAP object
 	 * 
 	 * @param integer $storeId plentymarkets mandant id
 	 */
@@ -77,11 +78,12 @@ abstract class PlentymarketsImportEntityOrderAbstract
 	}
 
 	/**
-	 * 
+	 * Prepares further information
 	 */
 	abstract public function prepare();
 
 	/**
+	 * Handles the acutual import
 	 *
 	 * @param integer $shopwareOrderId
 	 * @param PlentySoapObject_OrderHead $Order
@@ -89,6 +91,7 @@ abstract class PlentymarketsImportEntityOrderAbstract
 	abstract public function handle($shopwareOrderId, $Order);
 
 	/**
+	 * Internal logging method
 	 *
 	 * @param string $message
 	 * @param string $type
@@ -99,6 +102,7 @@ abstract class PlentymarketsImportEntityOrderAbstract
 	}
 
 	/**
+	 * Public import handler method
 	 *
 	 */
 	public function import()

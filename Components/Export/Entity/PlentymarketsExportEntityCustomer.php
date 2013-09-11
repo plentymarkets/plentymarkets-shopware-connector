@@ -69,6 +69,7 @@ class PlentymarketsExportEntityCustomer
 	);
 
 	/**
+	 * Constructor method
 	 *
 	 * @param unknown $Customer
 	 * @param string $BillingAddress
@@ -93,6 +94,7 @@ class PlentymarketsExportEntityCustomer
 	}
 
 	/**
+	 * Returns the form of address to use with the plentymarkets SOAP API
 	 *
 	 * @param string $key
 	 * @return integer
@@ -107,6 +109,7 @@ class PlentymarketsExportEntityCustomer
 	}
 
 	/**
+	 * Returns the country id to use with the plentymarkets SOAP API
 	 *
 	 * @param integer $countryID
 	 * @return integer null
@@ -124,6 +127,7 @@ class PlentymarketsExportEntityCustomer
 	}
 
 	/**
+	 * Exports the customer and the delivery address
 	 */
 	public function export()
 	{
@@ -132,6 +136,7 @@ class PlentymarketsExportEntityCustomer
 	}
 
 	/**
+	 * Exports the customer
 	 */
 	protected function exportCustomer()
 	{
@@ -201,6 +206,7 @@ class PlentymarketsExportEntityCustomer
 	}
 
 	/**
+	 * Exports the delivery address
 	 */
 	protected function exportDeliveryAddress()
 	{
@@ -240,6 +246,7 @@ class PlentymarketsExportEntityCustomer
 	}
 
 	/**
+	 * Returns a usable customer number
 	 *
 	 * @return string
 	 */
@@ -256,6 +263,7 @@ class PlentymarketsExportEntityCustomer
 	}
 
 	/**
+	 * Returns the country id for the billing address
 	 *
 	 * @return integer
 	 */
@@ -272,6 +280,7 @@ class PlentymarketsExportEntityCustomer
 	}
 
 	/**
+	 * Returns the country id for the delivery address
 	 *
 	 * @return integer
 	 */
@@ -288,6 +297,7 @@ class PlentymarketsExportEntityCustomer
 	}
 
 	/**
+	 * Returns the form of address for the billing address
 	 *
 	 * @return integer
 	 */
@@ -297,6 +307,7 @@ class PlentymarketsExportEntityCustomer
 	}
 
 	/**
+	 * Returns the form of address for the delivery address
 	 *
 	 * @return integer
 	 */
@@ -306,6 +317,7 @@ class PlentymarketsExportEntityCustomer
 	}
 
 	/**
+	 * Returns the plentymarkets customer id
 	 *
 	 * @return integer
 	 */
@@ -315,6 +327,7 @@ class PlentymarketsExportEntityCustomer
 	}
 
 	/**
+	 * Returns the plentymarkes address dispatch id
 	 *
 	 * @return integer|null
 	 */

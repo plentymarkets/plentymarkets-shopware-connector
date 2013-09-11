@@ -121,7 +121,7 @@ class PlentymarketsExportController
 	}
 
 	/**
-	 * 
+	 * Re-announces an export
 	 *
 	 * @param string $entity
 	 */

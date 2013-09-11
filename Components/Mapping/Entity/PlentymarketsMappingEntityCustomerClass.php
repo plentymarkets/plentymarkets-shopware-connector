@@ -39,8 +39,9 @@ class PlentymarketsMappingEntityCustomerClass extends PlentymarketsMappingEntity
 {
 
 	/**
-	 *
-	 * @see PlentymarketsMappingEntityAbstract::getName()
+	 * Returns the name of the database table
+	 * 
+	 * @return string
 	 */
 	protected function getName()
 	{

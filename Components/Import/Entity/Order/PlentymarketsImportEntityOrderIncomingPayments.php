@@ -53,6 +53,8 @@ class PlentymarketsImportEntityOrderIncomingPayments extends PlentymarketsImport
 	protected static $action = 'IncomingPayment';
 
 	/**
+	 * Prepares the soap orders SOAP object
+	 * 
 	 * @see PlentymarketsImportEntityOrderAbstract::prepare()
 	 */
 	public function prepare()
@@ -77,6 +79,7 @@ class PlentymarketsImportEntityOrderIncomingPayments extends PlentymarketsImport
 	}
 
 	/**
+	 * Handles the actual import
 	 *
 	 * @param integer $shopwareOrderId
 	 * @param PlentySoapObject_OrderHead $Order

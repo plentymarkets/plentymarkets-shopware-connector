@@ -93,6 +93,7 @@ class PlentymarketsExportEntityOrder
 	protected $PLENTY_addressDispatchID;
 
 	/**
+	 * Constructor method
 	 *
 	 * @param unknown $orderID
 	 */
@@ -364,6 +365,11 @@ class PlentymarketsExportEntityOrder
 		// outgoing items?
 	}
 
+	/**
+	 * Writes an error code into the database
+	 * 
+	 * @param integer $code
+	 */
 	protected function setError($code)
 	{
 		Shopware()->Db()
@@ -381,6 +387,12 @@ class PlentymarketsExportEntityOrder
 		));
 	}
 
+	/**
+	 * Writes the plenty order id and the status into the database
+	 * 
+	 * @param integer $plentyOrderID
+	 * @param flaot $plentyOrderStatus
+	 */
 	protected function setSuccess($plentyOrderID, $plentyOrderStatus)
 	{
 		PlentymarketsLogger::getInstance()->message('Export:Order', 'The sales order with the id ' . $this->order['id'] . ' has been created in plentymakets (id: ' . $plentyOrderID . ', status: ' . $plentyOrderStatus . ')');

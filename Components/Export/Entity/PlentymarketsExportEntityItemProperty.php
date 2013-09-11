@@ -55,7 +55,7 @@ class PlentymarketsExportEntityItemProperty
 	protected $PLENTY_groupIDValueName2ID = array();
 
 	/**
-	 *
+	 * Created an index of the plentymarkets data and exports the missing
 	 */
 	public function export()
 	{
@@ -100,7 +100,7 @@ class PlentymarketsExportEntityItemProperty
 	}
 
 	/**
-	 * Export the missin properties
+	 * Export the missing properties
 	 */
 	protected function doExport()
 	{

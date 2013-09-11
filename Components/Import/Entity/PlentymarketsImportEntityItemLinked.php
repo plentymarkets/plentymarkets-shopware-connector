@@ -53,6 +53,7 @@ class PlentymarketsImportEntityItemLinked
 	protected $SHOPWARE_itemId;
 
 	/**
+	 * Contructor method
 	 *
 	 * @param integer $PLENTY_itemId
 	 * @param integer $SHOPWARE_itemId
@@ -71,6 +72,8 @@ class PlentymarketsImportEntityItemLinked
 	}
 
 	/**
+	 * Deletes all linkes items
+	 * 
 	 */
 	public function purge()
 	{
@@ -79,6 +82,7 @@ class PlentymarketsImportEntityItemLinked
 	}
 
 	/**
+	 * Retrieves the linked items from plentymarkets and links them
 	 */
 	public function link()
 	{

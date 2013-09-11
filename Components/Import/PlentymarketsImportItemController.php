@@ -103,6 +103,11 @@ class PlentymarketsImportItemController
 	protected $itemIdsDone = array();
 	
 	
+	/**
+	 * imports the item for the given shop
+	 * 
+	 * @param unknown $Shop
+	 */
 	public function importItemsDefaultShop($Shop)
 	{
 		$Request_GetItemsBase = new PlentySoapRequest_GetItemsBase();
@@ -188,6 +193,9 @@ class PlentymarketsImportItemController
 		
 	}
 	
+	/**
+	 * Finalizes the import
+	 */
 	protected function finish()
 	{
 		// Crosselling
@@ -222,7 +230,7 @@ class PlentymarketsImportItemController
 	}
 	
 	/**
-	 * 
+	 *  Gets the last update timestamp and saves the current time
 	 */
 	public function __construct()
 	{

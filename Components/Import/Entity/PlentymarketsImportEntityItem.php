@@ -110,6 +110,7 @@ class PlentymarketsImportEntityItem
 	protected static $CategoryRepository;
 
 	/**
+	 * Constructor method
 	 *
 	 * @param PlentySoapObject_ItemBase $ItemBase
 	 * @param Shopware\Models\Shop\Shop $Shop
@@ -161,7 +162,7 @@ class PlentymarketsImportEntityItem
 	}
 
 	/**
-	 * Set the details
+	 * Set the base details
 	 */
 	protected function setDetails()
 	{
@@ -385,7 +386,7 @@ class PlentymarketsImportEntityItem
 	}
 
 	/**
-	 *
+	 * Set the item's properties
 	 */
 	protected function setProperties()
 	{
@@ -545,6 +546,9 @@ class PlentymarketsImportEntityItem
 		}
 	}
 
+	/**
+	 * Handles the whole import
+	 */
 	public function import()
 	{
 		$this->setData();
@@ -824,6 +828,11 @@ class PlentymarketsImportEntityItem
 		}
 	}
 
+	/**
+	 * Returns the shopware tax id
+	 * 
+	 * @return intger
+	 */
 	protected function getTaxId()
 	{
 		try
@@ -840,6 +849,7 @@ class PlentymarketsImportEntityItem
 	}
 	
 	/**
+	 * Returns the Atricle resource
 	 * 
 	 * @return \Shopware\Components\Api\Resource\Article
 	 */
@@ -854,6 +864,7 @@ class PlentymarketsImportEntityItem
 	}
 	
 	/**
+	 * Returns the Variant resource
 	 * 
 	 * @return \Shopware\Components\Api\Resource\Variant
 	 */

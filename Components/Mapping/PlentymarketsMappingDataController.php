@@ -45,6 +45,7 @@ class PlentymarketsMappingDataController
 	protected $auto = false;
 
 	/**
+	 * Constructor method
 	 *
 	 * @param auto $auto
 	 */
@@ -53,6 +54,11 @@ class PlentymarketsMappingDataController
 		$this->auto = $auto;
 	}
 
+	/**
+	 * Get the mapping data: country
+	 * 
+	 * @return array
+	 */
 	public function getCountry()
 	{
 		$rows = Shopware()->Db()
@@ -102,6 +108,11 @@ class PlentymarketsMappingDataController
 		return $rows;
 	}
 
+	/**
+	 * Get the mapping data: currency
+	 *
+	 * @return array
+	 */
 	public function getCurrency()
 	{
 		$rows = Shopware()->Db()
@@ -146,6 +157,11 @@ class PlentymarketsMappingDataController
 		return $rows;
 	}
 
+	/**
+	 * Get the mapping data: customer classes
+	 *
+	 * @return array
+	 */
 	public function getCustomerClass()
 	{
 		$rows = Shopware()->Db()
@@ -171,6 +187,11 @@ class PlentymarketsMappingDataController
 		return $rows;
 	}
 
+	/**
+	 * Get the mapping data: measure units
+	 *
+	 * @return array
+	 */
 	public function getMeasureUnit()
 	{
 		$rows = Shopware()->Db()
@@ -231,6 +252,11 @@ class PlentymarketsMappingDataController
 		return $rows;
 	}
 
+	/**
+	 * Get the mapping data: methods of payment
+	 *
+	 * @return array
+	 */
 	public function getMethodOfPayment()
 	{
 		// s_core_tax
@@ -281,6 +307,11 @@ class PlentymarketsMappingDataController
 		return $rows;
 	}
 
+	/**
+	 * Get the mapping data: referrer
+	 *
+	 * @return array
+	 */
 	public function getReferrer()
 	{
 		// s_core_tax
@@ -332,6 +363,11 @@ class PlentymarketsMappingDataController
 		return $rows;
 	}
 
+	/**
+	 * Get the mapping data: shipping profile
+	 *
+	 * @return array
+	 */
 	public function getShippingProfile()
 	{
 		// s_core_tax
@@ -383,6 +419,11 @@ class PlentymarketsMappingDataController
 		return $rows;
 	}
 
+	/**
+	 * Get the mapping data: vat
+	 *
+	 * @return array
+	 */
 	public function getVat()
 	{
 		$rows = Shopware()->Db()
@@ -425,6 +466,11 @@ class PlentymarketsMappingDataController
 		return $rows;
 	}
 	
+	/**
+	 * Get the mapping data: shops
+	 *
+	 * @return array
+	 */
 	public function getShops()
 	{
 		$rows = Shopware()->Db()

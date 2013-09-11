@@ -51,7 +51,7 @@ class PlentymarketsImportItemStockStack
 	protected $stack = array();
 	
 	/**
-	 * Singleton
+	 * Singleton: returns an instance
 	 * 
 	 * @return PlentymarketsImportItemStockStack
 	 */

@@ -152,7 +152,7 @@ class PlentymarketsImportController
 	}
 
 	/**
-	 * Updates orders
+	 * Updates the orders for each shop
 	 */
 	public static function importOrders()
 	{
@@ -178,10 +178,7 @@ class PlentymarketsImportController
 	}
 
 	/**
-	 * Updates orders
-	 */
-	/**
-	 * Update stocks
+	 * Updates the item stocks
 	 */
 	public static function importItemStocks()
 	{
@@ -309,6 +306,7 @@ class PlentymarketsImportController
 	}
 
 	/**
+	 * Retrieves the order status list from plentymarkets
 	 *
 	 * @return array
 	 */
@@ -362,6 +360,7 @@ class PlentymarketsImportController
 	}
 
 	/**
+	 * Retrieves the order referrer list
 	 *
 	 * @return array
 	 */
@@ -410,6 +409,7 @@ class PlentymarketsImportController
 	}
 
 	/**
+	 * Retrieves the customer classes
 	 *
 	 * @return array
 	 */
@@ -478,6 +478,7 @@ class PlentymarketsImportController
 	}
 
 	/**
+	 * Retrieves the warehouses
 	 *
 	 * @return array
 	 */
@@ -532,6 +533,7 @@ class PlentymarketsImportController
 	}
 
 	/**
+	 * Retrieves the stores
 	 *
 	 * @return array
 	 */
@@ -587,6 +589,7 @@ class PlentymarketsImportController
 	}
 
 	/**
+	 * Retrieves the shipping profiles
 	 *
 	 * @return array
 	 */
@@ -642,6 +645,7 @@ class PlentymarketsImportController
 	}
 
 	/**
+	 * Retrieves the vat list
 	 *
 	 * @return array
 	 */

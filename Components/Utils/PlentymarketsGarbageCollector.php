@@ -21,7 +21,7 @@ class PlentymarketsGarbageCollector
 	const ITEM_ACTION_DELETE = 2;
 	
 	/**
-	 * Global Cleanup
+	 * Global cleanup of the mapped data
 	 */
 	public function cleanup()
 	{

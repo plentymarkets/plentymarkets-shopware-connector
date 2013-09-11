@@ -39,6 +39,7 @@ class PlentymarketsImportEntityItemStock
 {
 
 	/**
+	 * Updated the stock for the given item
 	 *
 	 * @param integer $itemDetailsID
 	 * @param float $stock

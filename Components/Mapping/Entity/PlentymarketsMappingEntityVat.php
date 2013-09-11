@@ -39,6 +39,7 @@ class PlentymarketsMappingEntityVat extends PlentymarketsMappingEntityAbstract
 {
 
 	/**
+	 * Initiales the mapping data
 	 *
 	 * @see PlentymarketsMappingEntityAbstract::init()
 	 */
@@ -49,8 +50,9 @@ class PlentymarketsMappingEntityVat extends PlentymarketsMappingEntityAbstract
 	}
 
 	/**
-	 *
-	 * @see PlentymarketsMappingEntityAbstract::getName()
+	 * Returns the name of the database table
+	 * 
+	 * @return string
 	 */
 	protected function getName()
 	{

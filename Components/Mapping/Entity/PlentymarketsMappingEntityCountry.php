@@ -39,8 +39,9 @@ class PlentymarketsMappingEntityCountry extends PlentymarketsMappingEntityAbstra
 {
 
 	/**
-	 *
-	 * @see PlentymarketsMappingEntityAbstract::getName()
+	 * Returns the name of the database table
+	 * 
+	 * @return string
 	 */
 	protected function getName()
 	{

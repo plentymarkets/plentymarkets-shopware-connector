@@ -55,6 +55,7 @@ class PlentymarketsExportEntityIncomingPayment
 	protected $plentyOrder = array();
 
 	/**
+	 * Constructor method
 	 *
 	 * @param integer $orderID Shopware order id
 	 * @throws Exception
@@ -98,7 +99,7 @@ class PlentymarketsExportEntityIncomingPayment
 	}
 
 	/**
-	 *
+	 * Books the incoming payment
 	 */
 	public function book()
 	{

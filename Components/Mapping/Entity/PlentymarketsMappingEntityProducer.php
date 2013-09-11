@@ -39,8 +39,9 @@ class PlentymarketsMappingEntityProducer extends PlentymarketsMappingEntityAbstr
 {
 
 	/**
-	 *
-	 * @see PlentymarketsMappingEntityAbstract::getName()
+	 * Returns the name of the database table
+	 * 
+	 * @return string
 	 */
 	protected function getName()
 	{

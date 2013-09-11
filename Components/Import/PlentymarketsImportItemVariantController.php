@@ -95,6 +95,7 @@ class PlentymarketsImportItemVariantController
 	);
 
 	/**
+	 * Constructor method
 	 *
 	 * @param PlentySoapObject_ItemBase $ItemBase
 	 */
@@ -249,6 +250,7 @@ class PlentymarketsImportItemVariantController
 	}
 
 	/**
+	 * Returns an array of configurator options for the use with the shopware REST API
 	 *
 	 * @param integer $variantId
 	 * @return array
@@ -259,6 +261,7 @@ class PlentymarketsImportItemVariantController
 	}
 
 	/**
+	 * Return the markup for a variant
 	 *
 	 * @param integer $variantId
 	 * @return array
@@ -269,6 +272,7 @@ class PlentymarketsImportItemVariantController
 	}
 
 	/**
+	 * Returns an array of configurator groups for the use with the shopware REST API
 	 *
 	 * @return array
 	 */

@@ -38,6 +38,7 @@ class PlentymarketsMappingController
 {
 
 	/**
+	 * Dispatches a method call to the actual mapping class
 	 *
 	 * @param string $name
 	 * @param array $arguments
@@ -90,6 +91,7 @@ class PlentymarketsMappingController
 	}
 
 	/**
+	 * Returns the status of each entity
 	 *
 	 * @return array
 	 */
@@ -183,6 +185,7 @@ class PlentymarketsMappingController
 	}
 
 	/**
+	 * Returns the status of a single entity
 	 *
 	 * @param string $entity
 	 * @return array

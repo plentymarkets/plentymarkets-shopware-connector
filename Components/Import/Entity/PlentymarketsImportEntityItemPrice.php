@@ -50,6 +50,7 @@ class PlentymarketsImportEntityItemPrice
 	protected $PLENTY_markup = 0;
 
 	/**
+	 * Constructor method
 	 *
 	 * @param PlentySoapObject_ItemPriceSet $PriceSet
 	 * @param float $markup
@@ -63,7 +64,7 @@ class PlentymarketsImportEntityItemPrice
 	}
 
 	/**
-	 *
+	 * Prepared the plentymarkets price set for further use
 	 */
 	protected function prepare()
 	{
@@ -78,6 +79,7 @@ class PlentymarketsImportEntityItemPrice
 	}
 
 	/**
+	 * Returns a price array for the shopware REST api
 	 *
 	 * @return array
 	 */
@@ -151,6 +153,7 @@ class PlentymarketsImportEntityItemPrice
 	}
 
 	/**
+	 * Update the prices for a base item
 	 *
 	 * @param integer $itemId
 	 */
@@ -167,6 +170,7 @@ class PlentymarketsImportEntityItemPrice
 	}
 
 	/**
+	 * Update the prices for a variant
 	 *
 	 * @param integer $detailId
 	 */

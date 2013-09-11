@@ -47,6 +47,7 @@ class PlentymarketsImportEntityOrderOutgoingItems extends PlentymarketsImportEnt
 	protected static $action = 'OutgoingItems';
 
 	/**
+	 * Prepares the search orders SOAP object
 	 * 
 	 * @see PlentymarketsImportEntityOrderAbstract::prepare()
 	 */
@@ -76,6 +77,7 @@ class PlentymarketsImportEntityOrderOutgoingItems extends PlentymarketsImportEnt
 	}
 
 	/**
+	 * Handles the actual import
 	 *
 	 * @param integer $shopwareOrderId
 	 * @param PlentySoapObject_OrderHead $Order

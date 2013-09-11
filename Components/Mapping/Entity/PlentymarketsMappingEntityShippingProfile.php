@@ -38,8 +38,9 @@ require_once PY_COMPONENTS . 'Mapping/Entity/PlentymarketsMappingEntityAbstract.
 class PlentymarketsMappingEntityShippingProfile extends PlentymarketsMappingEntityAbstract
 {
 	/**
-	 *
-	 * @see PlentymarketsMappingEntityAbstract::getName()
+	 * Returns the name of the database table
+	 * 
+	 * @return string
 	 */
 	protected function getName()
 	{

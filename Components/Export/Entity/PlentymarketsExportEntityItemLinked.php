@@ -47,6 +47,7 @@ class PlentymarketsExportEntityItemLinked
 	protected $SHOPWARE_Article;
 
 	/**
+	 * Constructor method
 	 *
 	 * @param Shopware\Models\Article\Article $Article
 	 */
@@ -56,7 +57,7 @@ class PlentymarketsExportEntityItemLinked
 	}
 
 	/**
-	 *
+	 * Links the items (similar/accessory)
 	 */
 	public function link()
 	{

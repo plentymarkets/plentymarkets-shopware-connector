@@ -60,6 +60,7 @@ class PlentymarketsUtils
 	const EXTERNAL_ORDER_ID_FORMAT = 'Swag/%u';
 
 	/**
+	 * Generates an external item id
 	 *
 	 * @param integer $shopwareID
 	 * @return string
@@ -70,6 +71,7 @@ class PlentymarketsUtils
 	}
 
 	/**
+	 * Generates an external customer id
 	 *
 	 * @param integer $shopwareID
 	 * @return string
@@ -80,6 +82,7 @@ class PlentymarketsUtils
 	}
 
 	/**
+	 * Returns a shopware id from an external plentymarkets id
 	 *
 	 * @param string $externalItemID
 	 * @return integer
@@ -91,6 +94,7 @@ class PlentymarketsUtils
 	}
 
 	/**
+	 * Returns a shopware id from an external plentymarkets id
 	 *
 	 * @param string $externalItemID
 	 * @return integer
@@ -182,6 +186,7 @@ class PlentymarketsUtils
 	}
 
 	/**
+	 * Checks the data exchange status
 	 *
 	 * @see checkMappingAndExportStatus()
 	 * @see checkApiConnectionStatus
@@ -205,6 +210,8 @@ class PlentymarketsUtils
 	}
 	
 	/**
+	 * Checks whether it's after midnight
+	 * 
 	 * @return boolean
 	 */
 	public static function isAfterMidnight()
@@ -227,6 +234,7 @@ class PlentymarketsUtils
 	protected static $categoryId2ShopId = array();
 
 	/**
+	 * Returns an array with shop id for the given category id
 	 * 
 	 * @param integer $categoryId
 	 * @return array

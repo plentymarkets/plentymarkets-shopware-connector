@@ -79,12 +79,14 @@ abstract class PlentymarketsMappingEntityAbstract
 	protected static $Instances;
 
 	/**
+	 * protected constructor!
 	 */
 	protected function __construct()
 	{
 	}
 
 	/**
+	 * Initializes the statements
 	 */
 	protected function init()
 	{
@@ -114,6 +116,7 @@ abstract class PlentymarketsMappingEntityAbstract
 	}
 
 	/**
+	 * Initialized the mapping data
 	 */
 	protected function initData()
 	{
@@ -129,18 +132,21 @@ abstract class PlentymarketsMappingEntityAbstract
 	}
 
 	/**
+	 * No cloning is allowed
 	 */
 	protected function __clone()
 	{
 	}
 
 	/**
-	 *
+	 * Returns the name of the database table
+	 * 
 	 * @return string
 	 */
 	abstract protected function getName();
 
 	/**
+	 * Returns an Instance
 	 *
 	 * @return PlentymarketsMappingEntityAbstract
 	 */
@@ -156,6 +162,8 @@ abstract class PlentymarketsMappingEntityAbstract
 	}
 
 	/**
+	 * 
+	 * Returns the mapping value for the plentymarkets id
 	 *
 	 * @param integer $plentyID
 	 * @throws PlentymarketsMappingExceptionNotExistant
@@ -189,6 +197,7 @@ abstract class PlentymarketsMappingEntityAbstract
 	}
 
 	/**
+	 * Returns the mapping value for the shopware id
 	 *
 	 * @param $shopwareID $plentyID
 	 * @throws PlentymarketsMappingExceptionNotExistant
@@ -217,6 +226,7 @@ abstract class PlentymarketsMappingEntityAbstract
 	}
 
 	/**
+	 * Delete a mapping by a shopware id
 	 *
 	 * @param integer $shopwareID
 	 * @throws PlentymarketsMappingExceptionNotExistant
@@ -235,6 +245,7 @@ abstract class PlentymarketsMappingEntityAbstract
 	}
 
 	/**
+	 * Adds a mapping to the database and the internal cache
 	 *
 	 * @param integer $shopwareID
 	 * @param integer $plentyID
@@ -276,6 +287,7 @@ abstract class PlentymarketsMappingEntityAbstract
 	}
 
 	/**
+	 * Writes a mapping into the internal cache
 	 *
 	 * @param integer $shopwareID
 	 * @param integer $plentyID

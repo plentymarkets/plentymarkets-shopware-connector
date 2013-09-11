@@ -104,6 +104,7 @@ class PlentymarketsExportEntityItem
 	protected $storeIds = array();
 
 	/**
+	 * Constructor method
 	 *
 	 * @param Shopware\Models\Article\Article $Article
 	 */
@@ -113,6 +114,7 @@ class PlentymarketsExportEntityItem
 	}
 
 	/**
+	 * Exports the base item
 	 *
 	 * @return boolean
 	 */
@@ -276,6 +278,7 @@ class PlentymarketsExportEntityItem
 	}
 
 	/**
+	 * Exports the images of the item
 	 */
 	protected function exportImages()
 	{
@@ -323,6 +326,7 @@ class PlentymarketsExportEntityItem
 	}
 
 	/**
+	 * Generetes the item availability SOAP object
 	 *
 	 * @return PlentySoapObject_ItemAvailability
 	 */
@@ -342,6 +346,7 @@ class PlentymarketsExportEntityItem
 	}
 
 	/**
+	 * Genereated the item test SOAP object
 	 *
 	 * @return PlentySoapObject_ItemTexts
 	 */
@@ -359,6 +364,7 @@ class PlentymarketsExportEntityItem
 	}
 
 	/**
+	 * Generated the item free text SOAP object
 	 *
 	 * @return PlentySoapObject_ItemFreeTextFields
 	 */
@@ -398,6 +404,7 @@ class PlentymarketsExportEntityItem
 	}
 
 	/**
+	 * Generates the item price SOAP object
 	 *
 	 * @return PlentySoapObject_ItemPriceSet
 	 */
@@ -474,6 +481,9 @@ class PlentymarketsExportEntityItem
 	}
 
 	/**
+	 * Manages the export
+	 * 
+	 * @return boolean
 	 */
 	public function export()
 	{
@@ -490,6 +500,7 @@ class PlentymarketsExportEntityItem
 	}
 
 	/**
+	 * Exports the item properties
 	 */
 	protected function exportProperties()
 	{
@@ -524,6 +535,9 @@ class PlentymarketsExportEntityItem
 		$Response_AddPropertyToItem = PlentymarketsSoapClient::getInstance()->AddPropertyToItem($Request_AddPropertyToItem);
 	}
 
+	/**
+	 * Exports the item variants
+	 */
 	protected function exportVariants()
 	{
 

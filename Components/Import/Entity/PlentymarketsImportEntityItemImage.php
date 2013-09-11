@@ -54,6 +54,7 @@ class PlentymarketsImportEntityItemImage
 	protected $SHOPWARE_itemId;
 
 	/**
+	 * Constructor method
 	 *
 	 * @param integer $PLENTY_itemId
 	 * @param integer $SHOPWARE_itemId
@@ -72,6 +73,7 @@ class PlentymarketsImportEntityItemImage
 	}
 
 	/**
+	 * Deletes all existing images of the item
 	 */
 	public function purge()
 	{
@@ -96,6 +98,8 @@ class PlentymarketsImportEntityItemImage
 	}
 
 	/**
+	 * Retrieves the images from plentymarkets and adds them to the item
+	 * @return number
 	 */
 	public function image()
 	{

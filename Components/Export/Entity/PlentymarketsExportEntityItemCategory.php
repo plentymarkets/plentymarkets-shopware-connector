@@ -182,6 +182,9 @@ class PlentymarketsExportEntityItemCategory
 		}
 	}
 
+	/**
+	 * Generates the mapping
+	 */
 	protected function buildMapping()
 	{
 		$CategoryResource = new \Shopware\Components\Api\Resource\Category();
