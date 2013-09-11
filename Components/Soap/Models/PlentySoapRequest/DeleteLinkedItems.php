@@ -28,6 +28,7 @@
 
 
 /**
+ * I am a generated class and am required for communicating with plentymarkets.
  */
 class PlentySoapRequest_DeleteLinkedItems
 {
