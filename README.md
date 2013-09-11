@@ -107,9 +107,13 @@ Wenn Sie das Modul **mod_fcgid** des **Apache** Webservers nutzen (und die Cronj
 	</IfModule>
 
 Weitere Information dazu finden Sie in der Dokumentation des Modules unter [httpd.apache.org](http://httpd.apache.org/mod_fcgid/mod/mod_fcgid.html). Grundsätzlich sollten Änderungen an Konfigurationsdateien nur von Ihrem Systemadministrator vorgenommen werden.
-	
+
+### Installation aus dem Community Store
+Das Plugin kann direkt über den Comminity Store bezogen werden. Es ist dort unter dem Namen `PlentyConnector` verfügbar. Diese Art der Installation wird empfohlen.
 
 ### Installation via github
+Die Installation via github wird nicht für den produktiven Einsatz empfohlen sondern sollte nur genutzt werden, wenn Änderungen am Plugin vorgenommen werden sollen.
+
 #### Herunterladen als Archiv
 Der Quellcode kann direkt und ohne Anmeldung als zip-Archiv von github heruntergeladen werden. Hierfür ist auf Ihrem Server keine Installation von git erforderlich. Das Archiv muss anschließend in das Verzeichnis
 	
@@ -158,25 +162,35 @@ Anschließend kann das Plugin über den Plugin Manager installiert werden. Darau
 	
 Das Plugin muss jetzt ggf. über den Plugin Manager aktualisiert werden.
 
-### Installation aus dem Community Store
-Nach der Pilotphase kann das Plugin auch aus dem shopware Community Store installiert werden.
 
 ## Update auf Version 1.4.0
-Dieser Abschnitt ist nur relevant, wenn Sie bereits eine Version des Plugins installiert haben.
+Dieser Abschnitt ist nur relevant, wenn Sie bereits eine Version des Plugins installiert haben. **Bitte sichern Sie vor dem Update Ihre Daten!**
 
-Mit Version 1.4.0 werden die Subshops von shopware Unterstützt. Bitte sichern Sie vor dem Update Ihre Daten! Nach dem Update müssen die Subshops auf plentymarkets Mandanten gemappt werden (Mapping » Shops). Der Datenaustausch wird solange automatisch deaktiviert, bis das Mapping vollständig ist.
+**Achtung:** Mit Version 1.4.0 ändert sich der Name des Plugins. Daraus resultiert eine Umstrukturierung des Quellcodes. Die bisher installierte Version ist mit dieser **nicht** kompatibel. Außerdem ist das Plugin nun über den Community Store verfügbar und sollte auch aus diesem installiert werden.
 
-Falls für die Kommunikation mit plentymarkets ein Benutzer mit Rechten auf die einzalnen Calls verwendet wird, müssen diese Berechtigungen um `SetStoreCategories` erweitert werden.
+**Achtung:** Falls für die Kommunikation mit plentymarkets ein Benutzer mit Rechten auf die einzelnen Calls verwendet wird, müssen diese Berechtigungen um `SetStoreCategories` erweitert werden.
+
+### Umstellung von github auf Community Store
+Damit das Plugin aus dem Community Store bezogen werden kann, muss die von github installierte Version vollständig deinstalliert werden. Die Daten der bisheringen Installation können jedoch übernommen werden.
+
+1. Alle Datenbanktabellen mit dem Präfix `plenty_` müssen inkl. Daten exportiert/gesichert werden
+2. Das Plugin über den Plugin Manager deinstallieren **und** löschen
+3. Neuinstallation des Plugins aus dem Community Store
+4. Daten der Tabellen wiederherstellen
+
+### Nutzung von Subshops
+
+Seit Version 1.4.0 werden die Subshops von shopware Unterstützt. Nach dem Update müssen die Subshops auf plentymarkets Mandanten gemappt werden (Mapping » Shops). Der Datenaustausch wird solange automatisch deaktiviert, bis das Mapping vollständig ist.
 
 Sofern keine Subshops genutzt werden, müssen keine weiteren Schritte unternommen werden. Um die volle Funktionalität zu erreichen, ist es erforderlich, die Kategorien und die Artikel erneut zu plentymarkets exportieren. Bereits exportierte Artikel müssen aus plentymarkets gelöscht und neu vom Plugin angelegt werden.
 
 Gehen Sie dazu wie folgt vor:
 
-1. Deaktivieren Sie den Datenaustausch auf der Startseite des Plugins.
+1. Deaktivieren Sie den Datenaustausch mit plentymarkets auf der Startseite des Plugins
 2. Löschen Sie alle Artikel in plentymarkets, die durch das Plugin angelegt worden sind. Sie können hier die Filterfunktion in Kombination mit der Gruppenfunktion nutzen.
 3. **Leeren** Sie auf dem Server, wo ihr shopware System läuft, in der Datenbank die Tabellen `plenty_mapping_item` und `plenty_mapping_item_variant`.
 4. Exportieren sie zuerst die Kategorien und anschließend die Artikel neu (Datenaustausch » Initialer Export)
-5. Aktivieren Sie den Datenaustausch
+5. Aktivieren Sie den Datenaustausch mit plentymarkets auf der Startseite des Plugins
 
 ## Einrichtung
 ### plentymarkets
