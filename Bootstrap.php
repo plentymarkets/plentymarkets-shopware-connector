@@ -188,10 +188,6 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 			');
 		}
 		
-		Shopware()->Db()->query('
-			DELETE FROM s_crontab WHERE `action` LIKE "%Plentymarkets%"
-		');
-
 		return true;
 	}
 
