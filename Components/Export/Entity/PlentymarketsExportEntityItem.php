@@ -308,7 +308,7 @@ class PlentymarketsExportEntityItem
 			$Request_AddItemsImage = new PlentySoapRequest_AddItemsImage();
 
 			$Object_ItemImage = new PlentySoapObject_ItemImage();
-			$Object_ItemImage->Availability = null; // i
+			$Object_ItemImage->Availability = 1;
 
 			$Object_FileBase64Encoded = new PlentySoapObject_FileBase64Encoded();
 			$Object_FileBase64Encoded->FileData = base64_encode(file_get_contents($fullpath)); // base64Binary
