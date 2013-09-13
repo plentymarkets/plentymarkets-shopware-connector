@@ -522,7 +522,15 @@ class PlentymarketsExportEntityItem
 
 			$PropertyOption = $PropertyValue->getOption();
 
-			$PLENTY_propertyID = PlentymarketsMappingController::getPropertyByShopwareID($PropertyGroup->getId() . ';' . $PropertyOption->getId());
+			try
+			{
+				$PLENTY_propertyID = PlentymarketsMappingController::getPropertyByShopwareID($PropertyGroup->getId() . ';' . $PropertyOption->getId());
+			}
+			catch (PlentymarketsMappingExceptionNotExistant $E)
+			{
+				PlentymarketsLogger::getInstance()->error('Export:Initial:Item:Property', 'Cannot connect property' . $PropertyGroup->getName() . ' (' . $PropertyGroup->getId() . ') / ' . $PropertyOption->getName() . ' (' . $PropertyOption->getId() . ') with the item ' . $this->SHOPWARE_Article->getId());
+				continue;
+			}
 
 			$Object_AddPropertyToItem = new PlentySoapObject_AddPropertyToItem();
 			$Object_AddPropertyToItem->ItemId = $this->PLENTY_itemID; // int
