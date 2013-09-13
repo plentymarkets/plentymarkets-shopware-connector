@@ -342,6 +342,9 @@ class PlentymarketsImportEntityItem
 			{
 				// Root category id (out of the shop)
 				$parentId = $this->Shop->getCategory()->getId();
+				
+				// Trigger to indiate an error while creating new category
+				$addError = false;
 	
 				// Split path into single names
 				$categoryPathNames = explode(';', $Category->ItemCategoryPathNames);
@@ -366,21 +369,38 @@ class PlentymarketsImportEntityItem
 	
 						try
 						{
+							// Create
 							$CategoryModel = self::$CategoryApi->create($params);
+							
+							// Log
+							PlentymarketsLogger::getInstance()->message('Sync:Item:Category', 'Added category "' . $categoryName . '" with parentId ' . $parentId);
+							
+							// Id to connect with the item
+							$parentId = $CategoryModel->getId();
 						}
-						catch (Exception $e)
+						catch (Exception $E)
 						{
+							// Log
+							PlentymarketsLogger::getInstance()->error('Sync:Item:Category', 'Cannot create category "' . $categoryName . '" with parentId ' . $parentId);
+							PlentymarketsLogger::getInstance()->error('Sync:Item:Category', $E->getMessage());
+							
+							// Set the trigger - the category will not be connected with the item
+							$addError = true;
 						}
 	
-						$parentId = $CategoryModel->getId();
 					}
 				}
 	
-				// Add mapping and save into the object
-				PlentymarketsMappingController::addCategory($parentId, $Category->ItemCategoryPath);
-				$this->categories[] = array(
-					'id' => $parentId
-				);
+				// Only create a mapping and connect the cateory to the item,
+				// of nothing went wrong during creation
+				if (!$addError)
+				{
+					// Add mapping and save into the object
+					PlentymarketsMappingController::addCategory($parentId, $Category->ItemCategoryPath);
+					$this->categories[] = array(
+						'id' => $parentId
+					);
+				}
 			}
 		}
 	}
