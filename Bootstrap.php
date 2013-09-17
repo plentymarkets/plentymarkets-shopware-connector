@@ -147,6 +147,21 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
     		}
     	}
     	
+    	// -- v1.4.4 --
+		try
+		{
+			// Drop unused columns from the log
+			Shopware()->Db()->exec("
+				ALTER TABLE `plenty_log`
+					DROP `request`,
+					DROP `response`;
+			");
+		}
+		catch (Exception $E)
+		{
+			$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'ALTER TABLE `plenty_log` (drop unused columns from the log) already carried out');
+		}
+		
     	return true;
     }
 
@@ -235,8 +250,6 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 			  `identifier` varchar(100) NOT NULL DEFAULT '',
 			  `type` tinyint(4) unsigned NOT NULL,
 			  `message` text NOT NULL,
-			  `request` text NOT NULL,
-			  `response` text NOT NULL,
 			  PRIMARY KEY (`id`),
 			  KEY `type` (`type`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -766,7 +779,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
      */
     public function getVersion()
     {
-    	return '1.4.3';
+    	return '1.4.4';
     }
 
     /**
