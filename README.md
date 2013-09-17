@@ -61,6 +61,7 @@
 			- [Ähnliche Artikel & Zubehör (Cross-Selling)](#%C3%84hnliche-artikel--zubeh%C3%B6r-cross-selling)
 			- [Warenbestände](#warenbest%C3%A4nde)
 		- [Aufträge](#auftr%C3%A4ge)
+		- [Zahlungsarten](#zahlungsarten)
 - [Log](#log)
 	- [Meldungen](#meldungen)
 	- [Fehler](#fehler)
