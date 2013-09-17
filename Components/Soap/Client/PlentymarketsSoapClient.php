@@ -130,9 +130,9 @@ class PlentymarketsSoapClient extends SoapClient
 			'UserID' => $userID,
 			'Token' => $token
 		);
-
+		
 		//
-		$this->__setSoapHeaders(new SoapHeader($wsdl, 'verifyingToken', new SoapVar($authentication, SOAP_ENC_OBJECT)));
+		$this->__setSoapHeaders(new SoapHeader(substr($wsdl, 0, -4), 'verifyingToken', new SoapVar($authentication, SOAP_ENC_OBJECT)));
 	}
 
 	/**
@@ -156,14 +156,18 @@ class PlentymarketsSoapClient extends SoapClient
 		catch (Exception $E)
 		{
 		}
-
-		if ($Response->Success == true)
+		
+		if (isset($Response->Success) && $Response->Success == true)
 		{
-			PlentymarketsLogger::getInstance()->callMessage($call, $this->__getLastRequest(), $this->__getLastResponse());
+			PlentymarketsLogger::getInstance()->message('Soap:Call', $call . ' success');
 		}
 		else
 		{
-			PlentymarketsLogger::getInstance()->callError($call, $this->__getLastRequest(), $this->__getLastResponse());
+			PlentymarketsLogger::getInstance()->error('Soap:Call', $call . ' failed');
+			if (isset($E) && $E instanceof Exception)
+			{
+				PlentymarketsLogger::getInstance()->error('Soap:Call', $E->getMessage());
+			}
 		}
 
 		return $Response;

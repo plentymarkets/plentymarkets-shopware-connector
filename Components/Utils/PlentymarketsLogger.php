@@ -78,9 +78,7 @@ class PlentymarketsLogger
 					`timestamp` = ' . time() . ',
 					type = ?,
 					identifier = ?,
-					message = ?,
-					request = ?,
-					response = ?
+					message = ?
 		');
 	}
 
@@ -144,39 +142,13 @@ class PlentymarketsLogger
 	 * @param string $identifier
 	 * @param string $message
 	 */
-	protected function log($type, $identifier, $message, $request='', $response='')
+	protected function log($type, $identifier, $message)
 	{
 		$this->StatementInsert->execute(array(
 			$type,
 			$identifier,
-			$message,
-			$request,
-			$response
+			$message
 		));
-	}
-
-	/**
-	 * Logs a soap call
-	 * 
-	 * @param unknown $call
-	 * @param unknown $request
-	 * @param unknown $response
-	 */
-	public function callMessage($call, $request, $response)
-	{
-		$this->log(self::TYPE_MESSAGE, 'Soap:Call', $call . ' success'/*, $request, $response*/);
-	}
-
-	/**
-	 * Logs a soap call error
-	 * 
-	 * @param unknown $call
-	 * @param unknown $request
-	 * @param unknown $response
-	 */
-	public function callError($call, $request, $response)
-	{
-		$this->log(self::TYPE_ERROR, 'Soap:Call', $call . ' failed'/*, $request, $response*/);
 	}
 
 	/**
