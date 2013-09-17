@@ -264,6 +264,43 @@ class PlentymarketsExportEntityOrder
 		
 		
 		$Object_Order->OrderHead = $Object_OrderHead;
+		
+		
+		$Object_OrderHead->OrderInfos = array();
+		
+		if (!empty($this->order['internalComment']))
+		{
+			$Object_OrderInfo = new PlentySoapObject_OrderInfo();
+			$Object_OrderInfo->Info = $this->order['internalComment']; // string
+			$Object_OrderInfo->InfoCustomer = 0; // int
+			$Object_OrderInfo->InfoDate = $this->order['orderTime']->getTimestamp(); // int
+			$Object_OrderInfo->InfoID = null; // int
+			$Object_OrderInfo->InfoUser = null; // int
+			$Object_OrderHead->OrderInfos[] = $Object_OrderInfo;
+		}
+		
+		if (!empty($this->order['customerComment']))
+		{
+			$Object_OrderInfo = new PlentySoapObject_OrderInfo();
+			$Object_OrderInfo->Info = $this->order['customerComment']; // string
+			$Object_OrderInfo->InfoCustomer = 1; // int
+			$Object_OrderInfo->InfoDate = $this->order['orderTime']->getTimestamp(); // int
+			$Object_OrderInfo->InfoID = null; // int
+			$Object_OrderInfo->InfoUser = null; // int
+			$Object_OrderHead->OrderInfos[] = $Object_OrderInfo;
+		}
+		
+		if (!empty($this->order['comment']))
+		{
+			$Object_OrderInfo = new PlentySoapObject_OrderInfo();
+			$Object_OrderInfo->Info = $this->order['comment']; // string
+			$Object_OrderInfo->InfoCustomer = 1; // int
+			$Object_OrderInfo->InfoDate = $this->order['orderTime']->getTimestamp(); // int
+			$Object_OrderInfo->InfoID = null; // int
+			$Object_OrderInfo->InfoUser = null; // int
+			$Object_OrderHead->OrderInfos[] = $Object_OrderInfo;
+		}
+		
 
 		$Object_Order->OrderItems = array();
 
