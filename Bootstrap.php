@@ -39,6 +39,8 @@ require_once PY_COMPONENTS . 'Cron/CronjobController.php';
 define('IMPORT_ITEM_CATEGORY_SYNC', 1);
 define('IMPORT_ITEM_CATEGORY_NO_SYNC', 0);
 
+define('MOP_DEBIT', 3);
+
 /**
  * This class is called first when starting the plentymarkets plugin. It initializes and cleans all important data.
  * It also provides cronjob functionality for an initial execution of the plentymarkets plugin.

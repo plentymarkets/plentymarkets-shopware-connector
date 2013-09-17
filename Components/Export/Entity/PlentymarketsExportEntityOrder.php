@@ -262,46 +262,52 @@ class PlentymarketsExportEntityOrder
 		
 		$Object_OrderHead->ReferrerID = $referrerId;
 		
-		
 		$Object_Order->OrderHead = $Object_OrderHead;
 		
-		
 		$Object_OrderHead->OrderInfos = array();
+		
+		// Debit data
+		if (isset($this->order['customer']['debit']['accountHolder']) && $Object_OrderHead->MethodOfPaymentID == MOP_DEBIT)
+		{
+			$info  = 'Account holder: '. $this->order['customer']['debit']['accountHolder'] . chr(10);
+			$info .= 'Bank name: '. $this->order['customer']['debit']['bankName'] . chr(10);
+			$info .= 'Bank code: '. $this->order['customer']['debit']['bankCode'] . chr(10);
+			$info .= 'Account number: '. $this->order['customer']['debit']['account'] . chr(10);
+			
+			$Object_OrderInfo = new PlentySoapObject_OrderInfo();
+			$Object_OrderInfo->Info = $info;
+			$Object_OrderInfo->InfoCustomer = 0;
+			$Object_OrderInfo->InfoDate = $this->order['orderTime']->getTimestamp();
+			$Object_OrderHead->OrderInfos[] = $Object_OrderInfo;
+		}
 		
 		if (!empty($this->order['internalComment']))
 		{
 			$Object_OrderInfo = new PlentySoapObject_OrderInfo();
-			$Object_OrderInfo->Info = $this->order['internalComment']; // string
-			$Object_OrderInfo->InfoCustomer = 0; // int
-			$Object_OrderInfo->InfoDate = $this->order['orderTime']->getTimestamp(); // int
-			$Object_OrderInfo->InfoID = null; // int
-			$Object_OrderInfo->InfoUser = null; // int
+			$Object_OrderInfo->Info = $this->order['internalComment'];
+			$Object_OrderInfo->InfoCustomer = 0;
+			$Object_OrderInfo->InfoDate = $this->order['orderTime']->getTimestamp();
 			$Object_OrderHead->OrderInfos[] = $Object_OrderInfo;
 		}
 		
 		if (!empty($this->order['customerComment']))
 		{
 			$Object_OrderInfo = new PlentySoapObject_OrderInfo();
-			$Object_OrderInfo->Info = $this->order['customerComment']; // string
-			$Object_OrderInfo->InfoCustomer = 1; // int
-			$Object_OrderInfo->InfoDate = $this->order['orderTime']->getTimestamp(); // int
-			$Object_OrderInfo->InfoID = null; // int
-			$Object_OrderInfo->InfoUser = null; // int
+			$Object_OrderInfo->Info = $this->order['customerComment'];
+			$Object_OrderInfo->InfoCustomer = 1;
+			$Object_OrderInfo->InfoDate = $this->order['orderTime']->getTimestamp();
 			$Object_OrderHead->OrderInfos[] = $Object_OrderInfo;
 		}
 		
 		if (!empty($this->order['comment']))
 		{
 			$Object_OrderInfo = new PlentySoapObject_OrderInfo();
-			$Object_OrderInfo->Info = $this->order['comment']; // string
-			$Object_OrderInfo->InfoCustomer = 1; // int
-			$Object_OrderInfo->InfoDate = $this->order['orderTime']->getTimestamp(); // int
-			$Object_OrderInfo->InfoID = null; // int
-			$Object_OrderInfo->InfoUser = null; // int
+			$Object_OrderInfo->Info = $this->order['comment'];
+			$Object_OrderInfo->InfoCustomer = 1;
+			$Object_OrderInfo->InfoDate = $this->order['orderTime']->getTimestamp();
 			$Object_OrderHead->OrderInfos[] = $Object_OrderInfo;
 		}
 		
-
 		$Object_Order->OrderItems = array();
 
 		foreach ($this->order['details'] as $item)
