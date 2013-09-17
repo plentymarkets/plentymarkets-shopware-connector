@@ -565,6 +565,14 @@ Wenn ein Auftrag in shopwareden eingestellten Zahlungsstatus erreicht, wird in p
 
 Artikelpositionen 
 
+#### Zahlungsarten
+
+Zahlungsart | Author | Version | Bemerkung
+------------|--------|---------|----------
+PAYONE | derksen mediaopt GmbH | 2.0.4 | Versandbestätigung / Gutschrift/Retoure
+BillSAFE |shopware AG | 2.0.2 | Versandbestätigung / Retoure/Storno
+
+
 ## Log
 Im Log erhalten Sie Auskunft über den Datentransfer. Jeder getätigte SOAP Call wird hier inkl. dessen Status (erfolgreich oder nicht) aufgeführt. Darüber hinaus erhalten Sie Informationen, wenn bestimmte Datensätze angelegt wurden oder bei der Verarbeitung Fehler aufgetreten sind. Es wird hier generell zwischen Meldung und Fehler unterschieden.
 
