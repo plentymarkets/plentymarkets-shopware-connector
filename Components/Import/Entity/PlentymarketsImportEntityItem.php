@@ -421,7 +421,18 @@ class PlentymarketsImportEntityItem
 		foreach ($this->ItemBase->ItemProperties->item as $ItemProperty)
 		{
 			$ItemProperty instanceof PlentySoapObject_ItemProperty;
+			if (is_null($ItemProperty->PropertyGroupID))
+			{
+				PlentymarketsLogger::getInstance()->error('Sync:Item', 'The property ' . $ItemProperty->PropertyName . ' has been ignored since it is not assigned to any group (item id '. $this->ItemBase->ItemID .').');
+				continue;
+			}
 			$groups[$ItemProperty->PropertyGroupID][] = $ItemProperty;
+		}
+		
+		if (empty($groups))
+		{
+			PlentymarketsLogger::getInstance()->error('Sync:Item', 'No property group will be assigned to item id '. $this->ItemBase->ItemID .'.');
+			return;
 		}
 
 		$groupId = -1;
