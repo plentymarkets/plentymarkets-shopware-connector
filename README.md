@@ -265,6 +265,8 @@ http://man.plentymarkets.eu/einstellungen/auftraege/auftragsherkunft/
 #### Freitextfelder (optional)
 Um die Freitextfelder/Attribute der Artikel aus shopware zu übernehmen, müssen diese in plentymarkets unter **Einstellungen » Artikel » Freitextfelder** definiert werden.
 
+Es muss sichergestellt sein, dass die Datentypen in der shopware-Datenbank mit denen bei plentymarkets übereinstimmen.
+
 Weitere Informationen zu Freitextfeldern finden Sie auf dieser Seite:
 http://man.plentymarkets.eu/einstellungen/artikel/freitextfelder/
 
@@ -509,6 +511,9 @@ Abverkauf | Bestand » Beschränkung | Wird gesetzt, wenn die Verkäufe auf den 
 Erscheinungsdatum | Erscheinungsdatum
 ? | Verfügbar bis
 Zusatzfelder 1-20 | Felder 1-20 | 
+
+##### Merkmale
+Einem shopware-Artikel kann nur eine Merkmalgruppe zugeordnet werden. Merkmale ohne Gruppe können nicht übernommen werden.
 
 ##### Varianten
 Der Abgleich der Varianten entspricht der Funktionalität **Standarddaten übernehmen**. D.h. alle Varianten werden mit dem Hauptartikel abgeglichen. Lediglich die Preise, die Artikelnummer und die EAN werden pro Variante gespeichert.
