@@ -176,7 +176,14 @@ class PlentymarketsExportEntityItem
 			
 			foreach ($shops as $shopId)
 			{
-				$storeId = PlentymarketsMappingController::getShopByShopwareID($shopId);
+				try
+				{
+					$storeId = PlentymarketsMappingController::getShopByShopwareID($shopId);
+				}
+				catch (PlentymarketsMappingExceptionNotExistant $E)
+				{
+					continue;
+				}
 				
 				if (!isset($this->storeIds[$storeId]))
 				{
