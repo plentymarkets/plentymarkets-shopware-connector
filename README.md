@@ -448,7 +448,7 @@ Beim Import erstellte Merkmale werden vom Type **Text** erstellt und sind **kein
 Alle Hersteller die in shopware hinterlegt sind, werden zu plentymarkets übernommen.
 
 #### Artikel
-Alle Artikel, die aus dem shopware System in das plentymarkets System exportiert werden, werden automatisch mit dem entsprechenden Mandandten verknüpft.
+Alle Artikel, die aus dem shopware System in das plentymarkets System exportiert werden, werden automatisch mit dem entsprechenden Mandandten verknüpft. Warenbestände werden *nicht* zu plentymarkets übernommen.
 
 #### Kunden
 Der Export des Kundestammes ist optional und kann auch auch nachträglich durchgeführt werden. Es wird sowohl die Rechnungsanschrift als auch die Lieferanschrift übernommen.
