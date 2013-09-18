@@ -30,9 +30,6 @@ Ext.define('Shopware.apps.Plentymarkets.model.Log', {
 	}, {
 		name: 'message',
 		type: 'string'
-	}, {
-		name: 'longmessage',
-		type: 'string'
 	}],
 
 	proxy: {

@@ -104,23 +104,26 @@ class PlentymarketsLogger
 	 * @param number $type
 	 * @return multitype:NULL Ambigous <multitype:, multitype:mixed Ambigous <string, boolean, mixed> >
 	 */
-	public function get($start, $limit, $type = 0)
+	public function get($start, $limit, $type = 0, $filter = '')
 	{
-		if ($type == 0)
+		$where = 'WHERE 1';
+		
+		if ($type > 0)
 		{
-			$where = '';
+			$where .= ' AND type = ' . (integer) $type;
 		}
-		else
+		
+		if (strlen($filter) > 4)
 		{
-			$where = ' WHERE type = ' . (integer) $type;
+			$where .= ' AND identifier = "'. $filter .'"';
 		}
+		
 
 		$limit = ' LIMIT ' . $start . ', ' . $limit;
 
 		$Result = Shopware()->Db()->query('
 			SELECT
-					SQL_CALC_FOUND_ROWS *,
-					CONCAT("[", identifier, "] ", message) longmessage
+					SQL_CALC_FOUND_ROWS *
 				FROM plenty_log
 					' . $where . '
 				ORDER BY id DESC
@@ -133,6 +136,20 @@ class PlentymarketsLogger
 				SELECT FOUND_ROWS()
 			')->fetchColumn(0)
 		);
+	}
+	
+	/**
+	 * Returns all identifiers
+	 * @return array
+	 */
+	public function getIdentifierList()
+	{
+		return Shopware()->Db()->query('
+			SELECT
+					DISTINCT identifier
+				FROM plenty_log
+				ORDER BY identifier ASC
+		')->fetchAll();
 	}
 
 	/**

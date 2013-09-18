@@ -19,7 +19,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.log.Grid', {
 
 	initComponent: function()
 	{
-		var me = this, type = {
+		var me = this, filter, type = {
 			1: 'Error',
 			2: 'Message'
 		};
@@ -31,7 +31,27 @@ Ext.define('Shopware.apps.Plentymarkets.view.log.Grid', {
 			xtype: 'pagingtoolbar',
 			store: me.store,
 			dock: 'bottom',
-			displayInfo: true
+			displayInfo: true,
+			enableOverflow: true,
+			items: [
+			    {
+			    	xtype: 'combo',
+			    	store: Ext.create('Shopware.apps.Plentymarkets.store.log.Identifier'),
+			    	emptyText: '– Filter –',
+					anchor: '100%',
+					displayField: 'identifier',
+					valueField: 'identifier',
+					allowBlank: true,
+					editable: false,
+					listeners: {
+						change: function(field, newValue, oldValue)
+						{
+							me.store.getProxy().setExtraParam('filt0r', newValue);
+							me.store.load();
+						}
+					}
+			    }
+			]
 		}];
 
 		me.listeners = {
@@ -49,7 +69,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.log.Grid', {
 			header: 'Datum',
 			dataIndex: 'timestamp',
 			xtype: 'datecolumn',
-			format: 'Y-m-d H:i:sO',
+			format: 'Y-m-d H:i:s',
 			flex: 3,
 		}, {
 			header: 'Typ',
@@ -61,9 +81,13 @@ Ext.define('Shopware.apps.Plentymarkets.view.log.Grid', {
 				return type[value];
 			}
 		}, {
+			header: 'Aktion',
+			dataIndex: 'identifier',
+			flex: 4
+		}, {
 			header: 'Meldung',
-			dataIndex: 'longmessage',
-			flex: 9
+			dataIndex: 'message',
+			flex: 7
 		}];
 
 		me.callParent(arguments);

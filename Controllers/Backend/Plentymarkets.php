@@ -528,14 +528,28 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	 */
 	public function getLogAction()
 	{
-		$data = PlentymarketsLogger::getInstance()->get($this->Request()
-			->get('start', 0), $this->Request()
-			->get('limit', 50), $this->Request()
-			->get('type', 0));
+		
+		$data = PlentymarketsLogger::getInstance()->get(
+			$this->Request()->get('start', 0),
+			$this->Request()->get('limit', 50),
+			$this->Request()->get('type', 0),
+			$this->Request()->get('filt0r', '')
+		);
 
 		$data['success'] = true;
 
 		$this->View()->assign($data);
+	}
+
+	/**
+	 * Loads the log identifiers
+	 */
+	public function getLogIdentifierListAction()
+	{
+		$this->View()->assign(array(
+			'success' => true,
+			'data' => PlentymarketsLogger::getInstance()->getIdentifierList()
+		));
 	}
 
 	/**
