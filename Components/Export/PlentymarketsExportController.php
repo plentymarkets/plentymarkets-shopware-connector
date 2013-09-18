@@ -298,9 +298,10 @@ class PlentymarketsExportController
 			{
 				$this->exportOrderById($Order->shopwareId);
 			}
-			catch (Exception $e)
+			catch (Exception $E)
 			{
-				$this->Config->setOrderExportLastErrorMessage($e->getMessage());
+				PlentymarketsLogger::getInstance()->message('Export:Customer', $E->getMessage());
+				$this->Config->setOrderExportLastErrorMessage($E->getMessage());
 			}
 		}
 	}

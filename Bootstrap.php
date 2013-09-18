@@ -149,19 +149,53 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
     		}
     	}
     	
-    	// -- v1.4.4 --
-		try
+    	if ($version == '1.4.3')
+    	{
+			try
+			{
+				// Drop unused columns from the log
+				Shopware()->Db()->exec("
+					ALTER TABLE `plenty_log`
+						DROP `request`,
+						DROP `response`;
+				");
+			}
+			catch (Exception $E)
+			{
+				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'ALTER TABLE `plenty_log` (drop unused columns from the log) already carried out');
+			}
+    	}
+		
+		if ($version == '1.4.4')
 		{
-			// Drop unused columns from the log
+			try
+			{
+				Shopware()->Db()->exec("
+					CREATE TABLE `plenty_mapping_customer_billing_address` (
+					  `shopwareID` int(11) unsigned NOT NULL,
+					  `plentyID` int(11) unsigned NOT NULL,
+					  PRIMARY KEY (`shopwareID`,`plentyID`)
+					) ENGINE=InnoDB DEFAULT CHARSET=utf8
+				");
+				
+				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'CREATE TABLE `plenty_mapping_customer_billing_address` done');
+			}
+			catch (Exception $E)
+			{
+				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'CREATE TABLE `plenty_mapping_customer_billing_address` already carried out');
+			}
+			
 			Shopware()->Db()->exec("
-				ALTER TABLE `plenty_log`
-					DROP `request`,
-					DROP `response`;
+				TRUNCATE TABLE `plenty_mapping_customer`
 			");
-		}
-		catch (Exception $E)
-		{
-			$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'ALTER TABLE `plenty_log` (drop unused columns from the log) already carried out');
+			
+			$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'TRUNCATE TABLE `plenty_mapping_customer` done');
+			
+			Shopware()->Db()->exec("
+				DELETE FROM `plenty_config` WHERE `key` LIKE 'CustomerExport%'
+			");
+			
+			$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'DELETE FROM `plenty_config` done');
 		}
 		
     	return true;
@@ -183,6 +217,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 			'plenty_mapping_country',
 			'plenty_mapping_currency',
 			'plenty_mapping_customer',
+			'plenty_mapping_customer_billing_address',
 			'plenty_mapping_customer_class',
 			'plenty_mapping_item',
 			'plenty_mapping_item_variant',
@@ -304,6 +339,14 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 
 		Shopware()->Db()->exec("
 			CREATE TABLE `plenty_mapping_customer` (
+			  `shopwareID` int(11) unsigned NOT NULL,
+			  `plentyID` int(11) unsigned NOT NULL,
+			  PRIMARY KEY (`shopwareID`,`plentyID`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+		");
+		
+		Shopware()->Db()->exec("
+			CREATE TABLE `plenty_mapping_customer_billing_address` (
 			  `shopwareID` int(11) unsigned NOT NULL,
 			  `plentyID` int(11) unsigned NOT NULL,
 			  PRIMARY KEY (`shopwareID`,`plentyID`)
@@ -781,7 +824,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
      */
     public function getVersion()
     {
-    	return '1.4.4';
+    	return '1.4.5';
     }
 
     /**

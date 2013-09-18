@@ -49,7 +49,17 @@ class PlentymarketsExportEntityCustomer
 	 * @var \Shopware\Models\Customer\Customer
 	 */
 	protected $Customer;
+	
+	/**
+	 * 
+	 * @var unknown
+	 */
 	protected $BillingAddress;
+	
+	/**
+	 * 
+	 * @var unknown
+	 */
 	protected $ShippingAddress;
 
 	/**
@@ -64,7 +74,7 @@ class PlentymarketsExportEntityCustomer
 	 */
 	protected static $mappingFormOfAddress = array(
 		'mr' => 0,
-		'mrs' => 1,
+		'ms' => 1,
 		'company' => 2
 	);
 
@@ -83,11 +93,6 @@ class PlentymarketsExportEntityCustomer
 		{
 			$BillingAddress = $this->Customer->getBilling();
 		}
-
-// 		if ($ShippingAddress === null)
-// 		{
-// 			$ShippingAddress = $this->Customer->getShipping();
-// 		}
 
 		$this->BillingAddress = $BillingAddress;
 		$this->ShippingAddress = $ShippingAddress;
@@ -147,12 +152,27 @@ class PlentymarketsExportEntityCustomer
 		
 		try
 		{
-			$this->PLENTY_customerID = PlentymarketsMappingController::getCustomerByShopwareID($this->BillingAddress->getId());
-			return;
+			if ($this->BillingAddress instanceof \Shopware\Models\Customer\Billing)
+			{
+				$this->PLENTY_customerID = PlentymarketsMappingController::getCustomerBillingAddressByShopwareID($this->BillingAddress->getId());
+			}
+			else if ($this->BillingAddress instanceof \Shopware\Models\Order\Billing)
+			{
+				$this->PLENTY_customerID = PlentymarketsMappingController::getCustomerByShopwareID($this->BillingAddress->getId());
+			}
 		}
 		catch (PlentymarketsMappingExceptionNotExistant $E)
 		{
 		}
+		
+		// Already exported
+		if ($this->PLENTY_customerID)
+		{
+			return;
+		}
+		
+		// Logging
+		PlentymarketsLogger::getInstance()->message('Export:Customer', $this->Customer->getEmail() . ' (' . $this->getCustomerNumber() . ')');
 
 		$Request_AddCustomers = new PlentySoapRequest_AddCustomers();
 
@@ -163,8 +183,6 @@ class PlentymarketsExportEntityCustomer
 		$Object_AddCustomersCustomer->Company = $this->BillingAddress->getCompany();
 		$Object_AddCustomersCustomer->CountryID = $this->getBillingCountryID(); // int
 		$Object_AddCustomersCustomer->CustomerNumber = $this->getCustomerNumber(); // string
-		// Bug in shopware - $this->Customer->getGroup()->getId() always returns 0
-		// $Object_AddCustomersCustomer->CustomerClass = PlentymarketsMappingController::getCustomerClassByShopwareID($this->Customer->getGroup()->getId());
 		$Object_AddCustomersCustomer->CustomerSince = $this->Customer->getFirstLogin()->getTimestamp(); // int
 		$Object_AddCustomersCustomer->Email = $this->Customer->getEmail(); // string
 		$Object_AddCustomersCustomer->ExternalCustomerID = PlentymarketsUtils::getExternalCustomerID($this->Customer->getId()); // string
@@ -173,7 +191,6 @@ class PlentymarketsExportEntityCustomer
 		$Object_AddCustomersCustomer->FirstName = $this->BillingAddress->getFirstName();
 		$Object_AddCustomersCustomer->HouseNo = $this->BillingAddress->getStreetNumber();
 		$Object_AddCustomersCustomer->IsBlocked = !$this->Customer->getActive();
-		$Object_AddCustomersCustomer->Language = 'de';
 		$Object_AddCustomersCustomer->Newsletter = (integer) $this->Customer->getNewsletter();
 		$Object_AddCustomersCustomer->PayInvoice = true; // boolean
 		$Object_AddCustomersCustomer->Street = $this->BillingAddress->getStreet();
@@ -181,6 +198,30 @@ class PlentymarketsExportEntityCustomer
 		$Object_AddCustomersCustomer->Telephone = $this->BillingAddress->getPhone();
 		$Object_AddCustomersCustomer->VAT_ID = $this->BillingAddress->getVatId();
 		$Object_AddCustomersCustomer->ZIP = $this->BillingAddress->getZipCode();
+		
+		// Store id
+		try
+		{
+			$Object_AddCustomersCustomer->StoreID = PlentymarketsMappingController::getShopByShopwareID($this->Customer->getShop()->getId());
+		}
+		catch (PlentymarketsMappingExceptionNotExistant $E)
+		{
+		}
+
+		// Customer class
+		if ($this->Customer->getGroup()->getId() > 0)
+		{
+			try
+			{
+				$Object_AddCustomersCustomer->CustomerClass = PlentymarketsMappingController::getCustomerClassByShopwareID($this->Customer->getGroup()->getId());
+			}
+			catch (PlentymarketsMappingExceptionNotExistant $E)
+			{
+			}
+		}
+		
+		// todo: Language
+		$Object_AddCustomersCustomer->Language = $this->getLanguage();
 
 		if ($this->BillingAddress->getAttribute() != null)
 		{
@@ -201,7 +242,15 @@ class PlentymarketsExportEntityCustomer
 		if ($Response_AddCustomers->ResponseMessages->item[0]->Code == 100 || $Response_AddCustomers->ResponseMessages->item[0]->Code == 200)
 		{
 			$this->PLENTY_customerID = (integer) $Response_AddCustomers->ResponseMessages->item[0]->SuccessMessages->item[0]->Value;
-			PlentymarketsMappingController::addCustomer($this->BillingAddress->getId(), $this->PLENTY_customerID);
+			
+			if ($this->BillingAddress instanceof \Shopware\Models\Customer\Billing)
+			{
+				PlentymarketsMappingController::addCustomerBillingAddress($this->BillingAddress->getId(), $this->PLENTY_customerID);
+			}
+			else if ($this->BillingAddress instanceof \Shopware\Models\Order\Billing)
+			{
+				PlentymarketsMappingController::addCustomer($this->BillingAddress->getId(), $this->PLENTY_customerID);
+			}
 		}
 	}
 
@@ -230,7 +279,6 @@ class PlentymarketsExportEntityCustomer
 		$Object_AddCustomerDeliveryAddressesCustomer->CountryID = $this->getDeliveryCountryID(); // int
 		$Object_AddCustomerDeliveryAddressesCustomer->CustomerID = $this->PLENTY_customerID; // int
 		$Object_AddCustomerDeliveryAddressesCustomer->ExternalDeliveryAddressID = PlentymarketsUtils::getExternalCustomerID($this->ShippingAddress->getId()); // string
-// 		$Object_AddCustomerDeliveryAddressesCustomer->Fax = $this->ShippingAddress->getF
 		$Object_AddCustomerDeliveryAddressesCustomer->FirstName = $this->ShippingAddress->getFirstName();
 		$Object_AddCustomerDeliveryAddressesCustomer->FormOfAddress = $this->getDeliveryFormOfAddress(); // int
 		$Object_AddCustomerDeliveryAddressesCustomer->HouseNumber = $this->ShippingAddress->getStreetNumber();
@@ -276,6 +324,23 @@ class PlentymarketsExportEntityCustomer
 		else
 		{
 			return self::getCountryID($this->BillingAddress->getCountry()->getId());
+		}
+	}
+	
+	/**
+	 * Returns the country id for the billing address
+	 *
+	 * @return integer
+	 */
+	protected function getLanguage()
+	{
+		if (method_exists($this->BillingAddress, 'getCountryId'))
+		{
+			return strtolower(Shopware()->Models()->find('\Shopware\Models\Country\Country', $this->BillingAddress->getCountryId())->getIso());
+		}
+		else
+		{
+			return strtolower($this->BillingAddress->getCountry()->getIso());
 		}
 	}
 

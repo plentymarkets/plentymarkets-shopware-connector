@@ -110,8 +110,8 @@ class PlentymarketsExportEntityIncomingPayment
 		$Object_AddIncomingPayments->Amount = $this->order['invoiceAmount'];
 		$Object_AddIncomingPayments->Currency = PlentymarketsMappingController::getCurrencyByShopwareID($this->order['currency']);
 		$Object_AddIncomingPayments->CustomerEmail = $this->order['customer']['email'];
-		$Object_AddIncomingPayments->CustomerID = PlentymarketsMappingController::getCustomerByShopwareID($this->order['billing']['id']);
-		$Object_AddIncomingPayments->CustomerName = $this->order['billing']['firstName'] . ' ' . $this->order['billing']['lastName'];
+		$Object_AddIncomingPayments->CustomerID = $this->getCustomerId();
+		$Object_AddIncomingPayments->CustomerName = $this->getCustomerName();
 		$Object_AddIncomingPayments->MethodOfPaymentID = PlentymarketsMappingController::getMethodOfPaymentByShopwareID($this->order['paymentId']);
 		$Object_AddIncomingPayments->OrderID = $this->plentyOrder->plentyOrderId;
 		$Object_AddIncomingPayments->ReasonForPayment = sprintf('Shopware (OrderId: %u, CustomerId: %u)', $this->order['id'], $this->order['customerId']);
@@ -155,5 +155,45 @@ class PlentymarketsExportEntityIncomingPayment
 		{
 			PlentymarketsLogger::getInstance()->error('Sync:Order:IncomingPayment', 'The incoming payment of the sales order ' . $this->order['id'] . ' was not booked in plentymarkets.');
 		}
+	}
+
+	/**
+	 * Returns the plentymarkets customer id
+	 * 
+	 * @return integer
+	 */
+	protected function getCustomerId()
+	{
+		try
+		{
+			return PlentymarketsMappingController::getCustomerByShopwareID($this->order['billing']['id']);
+		}
+		catch (Exception $E)
+		{
+			// Customer needs to be re-exported
+			PlentymarketsLogger::getInstance()->message('Sync:Order:IncomingPayment', 'Re-exporting customer');
+		}
+		
+		// Get the data
+		$Customer = Shopware()->Models()->find('Shopware\Models\Customer\Customer', $this->order['customerId']);
+		$BillingAddress = Shopware()->Models()->find('Shopware\Models\Order\Billing', $this->order['billing']['id']);
+		
+		// Export
+		require_once PY_COMPONENTS . 'Export/Entity/PlentymarketsExportEntityCustomer.php';
+		$PlentymarketsExportEntityCustomer = new PlentymarketsExportEntityCustomer($Customer, $BillingAddress);
+		$PlentymarketsExportEntityCustomer->export();
+		
+		// Return the Id
+		return PlentymarketsMappingController::getCustomerByShopwareID($this->order['billing']['id']);
+	}
+
+	/**
+	 * Returns the full customer name
+	 * 
+	 * @return string
+	 */
+	protected function getCustomerName()
+	{
+		return sprintf('%s %s', $this->order['billing']['firstName'], $this->order['billing']['lastName']);
 	}
 }

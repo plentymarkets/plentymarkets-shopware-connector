@@ -138,19 +138,14 @@ class PlentymarketsExportEntityOrder
 	 */
 	protected function exportCustomer()
 	{
-		$Customer = Shopware()->Models()
-			->getRepository('Shopware\Models\Customer\Customer')
-			->find($this->order['customer']['id']);
-
-		$Billing = Shopware()->Models()
-			->getRepository('Shopware\Models\Order\Billing')
-			->find($this->order['billing']['id']);
+		PlentymarketsLogger::getInstance()->error('DEBUG', __METHOD__);
+		
+		$Customer = Shopware()->Models()->find('Shopware\Models\Customer\Customer', $this->order['customer']['id']);
+		$Billing = Shopware()->Models()->find('Shopware\Models\Order\Billing', $this->order['billing']['id']);
 
 		if (!is_null($this->order['shipping']))
 		{
-			$Shipping = Shopware()->Models()
-				->getRepository('Shopware\Models\Order\Shipping')
-				->find($this->order['shipping']['id']);
+			$Shipping = Shopware()->Models()->find('Shopware\Models\Order\Shipping', $this->order['shipping']['id']);
 		}
 		else
 		{
