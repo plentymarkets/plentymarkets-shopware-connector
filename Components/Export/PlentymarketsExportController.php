@@ -59,6 +59,28 @@ class PlentymarketsExportController
 		'ItemProducer',
 		'Item'
 	);
+	
+	/**
+	 * 
+	 * @var array
+	 */
+	protected static $mapping = array(
+		'ItemCategory' => 'plenty_mapping_category',
+		'ItemAttribute' => array(
+			'plenty_mapping_group',
+			'plenty_mapping_option',
+		),
+		'ItemProperty' => array(
+			'plenty_mapping_property',
+			'plenty_mapping_property_group',
+		),
+		'ItemProducer' => 'plenty_mapping_producer',
+		'Item' => array(
+			'plenty_mapping_item',
+			'plenty_mapping_item_variant',
+		),
+		'Customer' => 'plenty_mapping_customer_billing_address'
+	);
 
 	/**
 	 * PlentymarketsConfig object data.
@@ -128,6 +150,60 @@ class PlentymarketsExportController
 	public function restart($entity)
 	{
 		$this->announce($entity);
+	}
+
+	/**
+	 * Resets an export status
+	 *
+	 * @param string $entity
+	 */
+	public function reset($entity, $resetRunning=true)
+	{
+		// Reset running status
+		if ($resetRunning)
+		{
+			$this->Config->setExportEntityPending(false);
+			$this->Config->setIsExportRunning(0);
+		}
+		
+		$methodStatus = sprintf('set%sExportStatus', $entity);
+		$this->Config->$methodStatus('open');
+		
+		// Start
+		$methodStart = sprintf('set%sExportTimestampStart', $entity);
+		$this->Config->$methodStart('');
+		
+		// Finished
+		$methodStart = sprintf('set%sExportTimestampFinished', $entity);
+		$this->Config->$methodStart('');
+		
+		// Error
+		$methodError = sprintf('set%sExportLastErrorMessage', $entity);
+		$this->Config->$methodError('');
+	}
+	
+	/**
+	 * Erases an export status and the mapping
+	 *
+	 * @param string $entity
+	 */
+	public function erase($entity)
+	{
+		// Status
+		$this->reset($entity, false);
+		
+		// Delete Mapping
+		foreach ((array) self::$mapping[$entity] as $tableName)
+		{
+			try
+			{
+				Shopware()->Db()->delete($tableName);
+				PlentymarketsLogger::getInstance()->message('Export:Initial:' . $entity, 'Truncated table ' . $tableName);
+			}
+			catch (Exception $E)
+			{
+			}
+		}
 	}
 
 	/**

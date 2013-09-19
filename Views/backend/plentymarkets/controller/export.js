@@ -2,8 +2,10 @@
 // {block name=backend/Plentymarkets/controller/export}
 
 /**
- * The export controller handles all kinds of data export events. For example data, that has to be exported initialy
- * to plentymarkets, runs throw this export controller by eventhandling. It is extended by the Ext app controller "Ext.app.Controller".
+ * The export controller handles all kinds of data export events. For example
+ * data, that has to be exported initialy to plentymarkets, runs throw this
+ * export controller by eventhandling. It is extended by the Ext app controller
+ * "Ext.app.Controller".
  * 
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
@@ -28,7 +30,13 @@ Ext.define('Shopware.apps.Plentymarkets.controller.Export', {
 	handle: function(record, action)
 	{
 		record.set('ExportAction', action)
-		record.save();
+		record.save({
+			success: function (a, operation, c) {
+				Shopware.Notification.createGrowlMessage(
+					'Aktion ausgeführt', operation.request.scope.reader.jsonData["message"]
+				);
+			}
+		});
 	}
 
 });

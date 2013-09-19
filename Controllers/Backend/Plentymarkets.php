@@ -286,18 +286,34 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		{
 			if ($params['ExportAction'] == 'restart')
 			{
-
 				PlentymarketsExportController::getInstance()->restart($params['ExportEntityName']);
 				PlentymarketsLogger::getInstance()->message('Export:Initial:' . ucfirst($params['ExportEntityName']), 'Re-Announced');
+				
+				$message = 'Export erneut vorgemerkt';
 			}
-			else
+			else if ($params['ExportAction'] == 'reset')
+			{
+				PlentymarketsExportController::getInstance()->reset($params['ExportEntityName']);
+				PlentymarketsLogger::getInstance()->message('Export:Initial:' . ucfirst($params['ExportEntityName']), 'Resetted');
+				
+				$message = 'Export-Status zurückgesetzt';
+			}
+			else if ($params['ExportAction'] == 'erase')
+			{
+				PlentymarketsExportController::getInstance()->erase($params['ExportEntityName']);
+				PlentymarketsLogger::getInstance()->message('Export:Initial:' . ucfirst($params['ExportEntityName']), 'Completely erased');
+				
+				$message = 'Export komplett zurückgesetzt';
+			}
+			else if ($params['ExportAction'] == 'start')
 			{
 				PlentymarketsExportController::getInstance()->announce($params['ExportEntityName']);
 				PlentymarketsLogger::getInstance()->message('Export:Initial:' . ucfirst($params['ExportEntityName']), 'Announced');
+				
+				$message = 'Export vorgemerkt';
 			}
 
 			$success = true;
-			$message = 'Export vorgemerkt';
 		}
 		catch (\Exception $E)
 		{
