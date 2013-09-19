@@ -198,6 +198,20 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 			$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'DELETE FROM `plenty_config` done');
 		}
 		
+		if ($version == '1.4.5')
+		{
+			try
+			{
+				$this->addMappingCleanupCronEvent();
+				
+				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'addMappingCleanupCronEvent done');
+			}
+			catch (Exception $E)
+			{
+				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'addMappingCleanupCronEvent already carried out');
+			}
+		}
+		
     	return true;
     }
 
@@ -638,6 +652,9 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
         
         // Cleanup (items)
         $this->addItemCleanupCronEvent();
+        
+        // Cleanup (mapping)
+        $this->addMappingCleanupCronEvent();
     }
 
     /**
@@ -665,6 +682,30 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
     }
 
     /**
+     * Adds the cron event to clean up the items
+     */
+    private function addMappingCleanupCronEvent()
+    {
+    	try
+    	{
+	    	$this->createCronJob(
+	    		'Plentymarkets Mapping Cleanup',
+	    		'Shopware_CronJob_PlentymarketsMappingCleanup',
+	    		43200, // 12 hours
+	    		true
+	    	);
+	    	
+	    	$this->subscribeEvent(
+	    		'Shopware_CronJob_PlentymarketsMappingCleanup',
+	    		'onRunMappingCleanupCron'
+	    	);
+    	}
+    	catch (Exception $E)
+    	{
+    	}
+    }
+
+    /**
      * Cleans the items.
      *
      * @param Shopware_Components_Cron_CronJob $Job
@@ -672,6 +713,16 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 	public function onRunItemCleanupCron(Shopware_Components_Cron_CronJob $Job)
 	{
 		PlentymarketsCronjobController::getInstance()->runItemCleanup($Job);
+	}
+
+    /**
+     * Cleans the mapping.
+     *
+     * @param Shopware_Components_Cron_CronJob $Job
+     */
+	public function onRunMappingCleanupCron(Shopware_Components_Cron_CronJob $Job)
+	{
+		PlentymarketsCronjobController::getInstance()->runMappingCleanup($Job);
 	}
 	
     /**
@@ -824,7 +875,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
      */
     public function getVersion()
     {
-    	return '1.4.5';
+    	return '1.4.6';
     }
 
     /**

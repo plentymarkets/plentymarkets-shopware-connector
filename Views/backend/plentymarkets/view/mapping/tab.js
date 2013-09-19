@@ -32,23 +32,14 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Tab', {
 			shopware: Ext.create('Shopware.apps.Plentymarkets.store.mapping.Shopware'),
 			plentymarkets: Ext.create('Shopware.apps.Plentymarkets.store.mapping.Plentymarkets')
 		};
+		
+		me.stores.shopware.getProxy().setExtraParam('map', me.entity);
+		me.stores.plentymarkets.getProxy().setExtraParam('map', me.entity);
 
 		me.listeners = {
 			activate: function()
 			{
-				me.setLoading(true);
-				me.stores.plentymarkets.load({
-					params: {
-						map: me.entity,
-						force: true
-					},
-					callback: function()
-					{
-						me.setLoading(false);
-					}
-				});
-				
-				me.reload();
+				me.reload()
 			}
 		};
 
@@ -96,7 +87,6 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Tab', {
 				{
 					me.stores.shopware.load({
 						params: {
-							map: me.entity,
 							auto: true
 						}
 					});
@@ -110,11 +100,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Tab', {
 			cls: 'secondary',
 			handler: function()
 			{
-				me.stores.shopware.load({
-					params: {
-						map: me.entity
-					}
-				});
+				me.stores.shopware.load();
 			}
 		});
 
@@ -127,7 +113,6 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Tab', {
 				me.setLoading(true);
 				me.stores.plentymarkets.load({
 					params: {
-						map: me.entity,
 						force: true
 					},
 					callback: function()

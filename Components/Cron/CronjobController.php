@@ -175,6 +175,40 @@ class PlentymarketsCronjobController
 		
 		PlentymarketsLogger::getInstance()->message('Cleanup:Item', 'Finished');
 	}
+	
+	/**
+	 * Runs the mapping cleanup cronjob.
+	 *
+	 * @param Shopware_Components_Cron_CronJob $Job
+	 */
+	public function runMappingCleanup(Shopware_Components_Cron_CronJob $Job)
+	{
+		// Check the connection
+		if (!PlentymarketsUtils::checkApiConnectionStatus())
+		{
+			return;
+		}
+		
+		PlentymarketsLogger::getInstance()->message('Cleanup:Mapping', 'Starting');
+		
+		// Reset the timestamps
+		PlentymarketsConfig::getInstance()->setMiscCustomerClassLastImport(0);
+		PlentymarketsConfig::getInstance()->setMiscMethodsOfPaymentLastImport(0);
+		PlentymarketsConfig::getInstance()->setMiscSalesOrderReferrerLastImport(0);
+		PlentymarketsConfig::getInstance()->setMiscShippingProfilesLastImport(0);
+		PlentymarketsConfig::getInstance()->setMiscMultishopsLastImport(0);
+		PlentymarketsConfig::getInstance()->setMiscVatLastImport(0);
+		
+		// Get fresh data
+		PlentymarketsImportController::getCustomerClassList();
+		PlentymarketsImportController::getMethodOfPaymentList();
+		PlentymarketsImportController::getOrderReferrerList();
+		PlentymarketsImportController::getShippingProfileList();
+		PlentymarketsImportController::getStoreList();
+		PlentymarketsImportController::getVatList();
+		
+		PlentymarketsLogger::getInstance()->message('Cleanup:Mapping', 'Finished');
+	}
 
 	/**
 	 * Runs the order export cronjob.

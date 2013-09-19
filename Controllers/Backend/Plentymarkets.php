@@ -428,6 +428,12 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 				break;
 
 			case 'Referrer':
+				
+				if ($forceReload)
+				{
+					PlentymarketsConfig::getInstance()->setMiscSalesOrderReferrerLastImport(0);
+				}
+				
 				$data = PlentymarketsImportController::getOrderReferrerList();
 				break;
 
