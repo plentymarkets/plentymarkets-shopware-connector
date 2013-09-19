@@ -91,8 +91,6 @@ class PlentymarketsGarbageCollector
 				ENGINE = MEMORY;
 		');
 		
-		
-
 		// Get the data from plentymarkets (for every mapped shop)
 		$shopIds = Shopware()->Db()->fetchAll('
 			SELECT plentyID FROM plenty_mapping_shop
@@ -136,7 +134,6 @@ class PlentymarketsGarbageCollector
 			
 			// Until all pages are received
 			while (++$Request_GetItemsByStoreID->Page < $Response_GetItemsByStoreID->Pages);
-		
 		}
 		
 		// Get the action
