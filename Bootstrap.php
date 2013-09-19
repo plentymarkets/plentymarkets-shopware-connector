@@ -691,7 +691,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 	    	$this->createCronJob(
 	    		'Plentymarkets Mapping Cleanup',
 	    		'Shopware_CronJob_PlentymarketsMappingCleanup',
-	    		43200, // 12 hours
+	    		1800, // 0,5 hours
 	    		true
 	    	);
 	    	
