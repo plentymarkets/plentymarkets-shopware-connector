@@ -67,8 +67,8 @@ class PlentymarketsExportController
 	protected static $mapping = array(
 		'ItemCategory' => 'plenty_mapping_category',
 		'ItemAttribute' => array(
-			'plenty_mapping_group',
-			'plenty_mapping_option',
+			'plenty_mapping_attribute_group',
+			'plenty_mapping_attribute_option',
 		),
 		'ItemProperty' => array(
 			'plenty_mapping_property',
