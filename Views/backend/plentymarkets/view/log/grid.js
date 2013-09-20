@@ -87,7 +87,17 @@ Ext.define('Shopware.apps.Plentymarkets.view.log.Grid', {
 		}, {
 			header: 'Meldung',
 			dataIndex: 'message',
-			flex: 7
+			flex: 7,
+			listeners: {
+				click: function(a, b, c, d, e, record, g)
+				{
+					Ext.Msg.show({
+						title: '#' + record.get('id') + ' – ' + record.get('identifier'),
+						msg: Ext.util.Format.nl2br(record.get('message')),
+						buttons: Ext.Msg.OK,
+					});
+				}
+			}
 		}];
 
 		me.callParent(arguments);
