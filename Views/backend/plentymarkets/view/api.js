@@ -2,8 +2,9 @@
 // {block name=backend/Plentymarkets/view/Api}
 
 /**
- * The api view builds the graphical elements like labels and textfields. It shows the three rows "URL", 
- * "Benutzername" and "Passwort". It is extended by the Ext form panel "Ext.form.Panel".
+ * The api view builds the graphical elements like labels and textfields. It
+ * shows the three rows "URL", "Benutzername" and "Passwort". It is extended by
+ * the Ext form panel "Ext.form.Panel".
  * 
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
@@ -22,7 +23,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Api', {
 	layout: 'anchor',
 
 	border: false,
-	
+
 	isBuilt: false,
 
 	defaults: {
@@ -104,27 +105,65 @@ Ext.define('Shopware.apps.Plentymarkets.view.Api', {
 	{
 		var me = this;
 
-		return [{
-			xtype: 'textfield',
-			fieldLabel: '{s name=plentymarkets/view/settings/textfield/ApiWsdl}URL{/s}',
-			helpText: 'Die URL muss mit <b>http://</b> oder <b>https://</b> beginnen.',
-			supportText: 'Tragen Sie hier die URL Ihres plentymarkets-Systems ein. Sie finden diese Information in der plentymarkets-Administration unter <b>Einstellungen » plentyAPI-Daten » Host</b>.',
-			emptyText: 'http://www.ihr-plentymarkets-system.de/',
-			name: 'ApiWsdl',
-			allowBlank: false,
-		}, {
-			xtype: 'textfield',
-			fieldLabel: '{s name=plentymarkets/view/settings/textfield/ApiUsernamex}Benutzername{/s}',
-			supportText: 'Der Benutzer sollte vom Typ <b>API</b> sein und nur für shopware verwendert werden. Achtung: Der Benutzer wird in Ihrem plentymarkets System unter <b>Einstellungen » Benutzer</b> angelegt!',
-			name: 'ApiUsername',
-			allowBlank: false
-		}, {
-			xtype: 'textfield',
-			fieldLabel: '{s name=plentymarkets/view/settings/textfield/ApiPasswordx}Passwort{/s}',
-			supportText: 'Bitte vergeben Sie ein sicheres und starkes Passwort.',
-			name: 'ApiPassword',
-			allowBlank: false,
-			inputType: 'password'
+		return [
+
+		{
+			xtype: 'fieldset',
+			title: 'Zugangsdaten',
+			layout: 'anchor',
+			defaults: {
+				labelWidth: 155,
+				anchor: '100%',
+			},
+			items: [
+
+			{
+				xtype: 'textfield',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ApiWsdl}URL{/s}',
+				helpText: 'Die URL muss mit <b>http://</b> oder <b>https://</b> beginnen.',
+				supportText: 'Tragen Sie hier die URL Ihres plentymarkets-Systems ein. Sie finden diese Information in der plentymarkets-Administration unter <b>Einstellungen » plentyAPI-Daten » Host</b>.',
+				emptyText: 'http://www.ihr-plentymarkets-system.de/',
+				name: 'ApiWsdl',
+				allowBlank: false,
+			}, {
+				xtype: 'textfield',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ApiUsernamex}Benutzername{/s}',
+				supportText: 'Der Benutzer sollte vom Typ <b>API</b> sein und nur für shopware verwendert werden. Achtung: Der Benutzer wird in Ihrem plentymarkets System unter <b>Einstellungen » Benutzer</b> angelegt!',
+				name: 'ApiUsername',
+				allowBlank: false
+			}, {
+				xtype: 'textfield',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ApiPasswordx}Passwort{/s}',
+				supportText: 'Bitte vergeben Sie ein sicheres und starkes Passwort.',
+				name: 'ApiPassword',
+				allowBlank: false,
+				inputType: 'password'
+			}]
+		},
+
+		{
+			xtype: 'fieldset',
+			title: 'Erweiterte Einstellungen',
+			layout: 'anchor',
+			defaults: {
+				labelWidth: 155,
+				anchor: '100%',
+			},
+			items: [{
+				xtype: 'checkbox',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ApiUseGzipCompression}Anfragen komprimieren{/s}',
+				supportText: 'Aktivieren, wenn die SOAP Responses gzip komprimiert empfangen werden können.',
+				name: 'ApiUseGzipCompression',
+				inputValue: true,
+				uncheckedValue: false,
+			}, {
+				xtype: 'checkbox',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ApiLogHttpHeaders}Header Loggen{/s}',
+				supportText: 'Aktivieren, wenn die SOAP HTTP Header ins Log geschrieben werden sollen. Nur für das Debugging notwendig!',
+				name: 'ApiLogHttpHeaders',
+				inputValue: true,
+				uncheckedValue: false,
+			}]
 		}];
 	}
 

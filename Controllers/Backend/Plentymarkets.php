@@ -159,6 +159,8 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		$Config->setApiWsdl($wsdl);
 		$Config->setApiUsername($this->Request()->ApiUsername);
 		$Config->setApiPassword($this->Request()->ApiPassword);
+		$Config->setApiUseGzipCompression((integer) $this->Request()->ApiUseGzipCompression);
+		$Config->setApiLogHttpHeaders((integer) $this->Request()->ApiLogHttpHeaders);
 
 		$hash = md5($wsdl . $this->Request()->ApiUsername . $this->Request()->ApiPassword);
 		if ($apiUserHash != $hash)

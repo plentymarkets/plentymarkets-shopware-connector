@@ -46,6 +46,12 @@ class PlentymarketsSoapClient extends SoapClient
 	 * @var PlentymarketsSoapClient
 	 */
 	protected static $Instance;
+	
+	/**
+	 * 
+	 * @var PlentymarketsConfig
+	 */
+	protected $Config;
 
 	/**
 	 * Constructor method
@@ -57,25 +63,55 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	protected function __construct($wsdl, $username, $userpass, $dryrun = false)
 	{
+		// Set the connection timeout
+		if (function_exists('ini_set'))
+		{
+			ini_set('default_socket_timeout', 60);
+		}
+		
+		// Get the config
+		$this->Config = PlentymarketsConfig::getInstance();
+		
 		// Options
 		$options = array();
 		$options['features'] = SOAP_SINGLE_ELEMENT_ARRAYS;
 		$options['version'] = SOAP_1_2;
+		$options['encoding'] = 'utf-8';
+		$options['exceptions'] = true;
+		$options['trace'] = true;
+		$options['connection_timeout'] = 10;
+		
+		// PHP 5.4
+		// $options['keep_alive'] = false;
+
+		// Cache
 		if ($_SERVER['SERVER_ADDR'] != '127.0.0.1')
 		{
 			$options['cache_wsdl'] = WSDL_CACHE_NONE;
 		}
-		$options['exceptions'] = true;
-		$options['trace'] = true;
+		
+		// Compression
+		if ($this->Config->getApiUseGzipCompression(false))
+		{
+			$options['compression'] = SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP;
+		}
+		
+		// HTTP 1.0 to send "Connection: close"
+		$context = stream_context_create(array(
+			'http' => array(
+				'protocol_version' => 1.0
+			))
+		);
+		$options['stream_context'] = $context;
 
-		//
+		// Init the client
 		parent::__construct($wsdl, $options);
 
 		// Check whether auth cache exist and whether the file is from today
-		if (!$dryrun && date('Y-m-d', PlentymarketsConfig::getInstance()->getApiLastAuthTimestamp(0)) == date('Y-m-d'))
+		if (!$dryrun && date('Y-m-d', $this->Config->getApiLastAuthTimestamp(0)) == date('Y-m-d'))
 		{
-			$userID = PlentymarketsConfig::getInstance()->getApiUserID(-1);
-			$token = PlentymarketsConfig::getInstance()->getApiToken('unknown');
+			$userID = $this->Config->getApiUserID(-1);
+			$token = $this->Config->getApiToken('unknown');
 		}
 		else
 		{
@@ -96,9 +132,9 @@ class PlentymarketsSoapClient extends SoapClient
 
 				if (!$dryrun)
 				{
-					PlentymarketsConfig::getInstance()->setApiUserID($userID);
-					PlentymarketsConfig::getInstance()->setApiToken($token);
-					PlentymarketsConfig::getInstance()->setApiLastAuthTimestamp(time());
+					$this->Config->setApiUserID($userID);
+					$this->Config->setApiToken($token);
+					$this->Config->setApiLastAuthTimestamp(time());
 
 					// Log
 					PlentymarketsLogger::getInstance()->message('Soap:Auth', 'Received a new token');
@@ -131,8 +167,10 @@ class PlentymarketsSoapClient extends SoapClient
 			'Token' => $token
 		);
 		
-		//
-		$this->__setSoapHeaders(new SoapHeader(substr($wsdl, 0, -4), 'verifyingToken', new SoapVar($authentication, SOAP_ENC_OBJECT)));
+		// Add the authentication header
+		$this->__setSoapHeaders(
+			new SoapHeader(substr($wsdl, 0, -4), 'verifyingToken', new SoapVar($authentication, SOAP_ENC_OBJECT))
+		);
 	}
 
 	/**
@@ -169,24 +207,33 @@ class PlentymarketsSoapClient extends SoapClient
 				PlentymarketsLogger::getInstance()->error('Soap:Call', $E->getMessage());
 			}
 		}
+		
+		// Log the HTTP headers?
+		if ($this->Config->getApiLogHttpHeaders(false))
+		{
+			PlentymarketsLogger::getInstance()->message('Soap:Call:Header:Request', $this->__getLastRequestHeaders());
+			PlentymarketsLogger::getInstance()->message('Soap:Call:Header:Response', $this->__getLastResponseHeaders());
+		}
 
 		return $Response;
 	}
 
 	/**
 	 * Returns an instance
-	 *
-	 * @param string $wsdl
-	 * @param string $username
-	 * @param string $userpass
 	 * @return PlentymarketsSoapClient
 	 */
 	public static function getInstance()
 	{
 		if (!self::$Instance instanceof self)
 		{
+			// Confiug
 			$PlentymarketsConfig = PlentymarketsConfig::getInstance();
-			self::$Instance = new self($PlentymarketsConfig->getApiWsdl() . '/plenty/api/soap/version110/?xml', $PlentymarketsConfig->getApiUsername(), $PlentymarketsConfig->getApiPassword());
+			
+			// WSDL
+			$wsdl = $PlentymarketsConfig->getApiWsdl() . '/plenty/api/soap/version110/?xml';
+			
+			//
+			self::$Instance = new self($wsdl, $PlentymarketsConfig->getApiUsername(), $PlentymarketsConfig->getApiPassword());
 		}
 
 		return self::$Instance;

@@ -29,6 +29,14 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		name: 'ApiStatus',
 		type: 'integer'
 	}, {
+		name: 'ApiUseGzipCompression',
+		type: 'boolean',
+		defaultValue: false
+	}, {
+		name: 'ApiLogHttpHeaders',
+		type: 'boolean',
+		defaultValue: false
+	}, {
 		name: 'ApiLastAuthTimestamp',
 		type: 'integer'
 	}, {
