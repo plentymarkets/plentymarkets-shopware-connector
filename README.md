@@ -192,8 +192,8 @@ Sofern keine Subshops genutzt werden, müssen keine weiteren Schritte unternomme
 Gehen Sie dazu wie folgt vor:
 
 1. Deaktivieren Sie den Datenaustausch mit plentymarkets auf der Startseite des Plugins
-2. Löschen Sie alle Artikel in plentymarkets, die durch das Plugin angelegt worden sind. Sie können hier die Filterfunktion in Kombination mit der Gruppenfunktion nutzen.
-3. **Leeren** Sie auf dem Server, wo ihr shopware System läuft, in der Datenbank die Tabellen `plenty_mapping_item` und `plenty_mapping_item_variant`.
+2. Löschen Sie alle Artikel in plentymarkets, **die durch das Plugin angelegt worden sind.** Sie können hier die Filterfunktion in Kombination mit der Gruppenfunktion nutzen.
+3. Setzen Sie den Export der Kategorien und Artikel komplett zurück.
 4. Exportieren sie zuerst die Kategorien und anschließend die Artikel neu (Datenaustausch » Initialer Export)
 5. Aktivieren Sie den Datenaustausch mit plentymarkets auf der Startseite des Plugins
 
