@@ -115,7 +115,7 @@ class PlentymarketsLogger
 		
 		if (strlen($filter) > 4)
 		{
-			$where .= ' AND identifier = "'. $filter .'"';
+			$where .= ' AND identifier LIKE "'. $filter .'"';
 		}
 		
 

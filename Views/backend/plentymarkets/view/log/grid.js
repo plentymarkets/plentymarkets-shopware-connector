@@ -2,8 +2,9 @@
 // {block name=backend/Plentymarkets/view/log/Grid}
 
 /**
- * The grid view builds the graphical grid elements and loads the logged data like export messages, or SOAP-Call information.
- * It is extended by the Ext grid panel "Ext.grid.Panel".
+ * The grid view builds the graphical grid elements and loads the logged data
+ * like export messages, or SOAP-Call information. It is extended by the Ext
+ * grid panel "Ext.grid.Panel".
  * 
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
@@ -26,32 +27,51 @@ Ext.define('Shopware.apps.Plentymarkets.view.log.Grid', {
 
 		me.store = Ext.create('Shopware.apps.Plentymarkets.store.Log');
 		me.store.getProxy().setExtraParam('type', me.type)
-		
+
 		me.dockedItems = [{
 			xtype: 'pagingtoolbar',
 			store: me.store,
 			dock: 'bottom',
 			displayInfo: true,
 			enableOverflow: true,
-			items: [
-			    {
-			    	xtype: 'combo',
-			    	store: Ext.create('Shopware.apps.Plentymarkets.store.log.Identifier'),
-			    	emptyText: '– Filter –',
-					anchor: '100%',
-					displayField: 'identifier',
-					valueField: 'identifier',
-					allowBlank: true,
-					editable: false,
-					listeners: {
-						change: function(field, newValue, oldValue)
-						{
-							me.store.getProxy().setExtraParam('filt0r', newValue);
-							me.store.load();
-						}
+			items: ['->', {
+				xtype: 'combo',
+				id: 'combo-Plentymarkets-store-log-Identifier',
+				store: Ext.create('Shopware.apps.Plentymarkets.store.log.Identifier'),
+				emptyText: '– Filter –',
+				anchor: '100%',
+				displayField: 'identifier',
+				valueField: 'identifier',
+				allowBlank: true,
+				editable: true,
+				listeners: {
+					change: function(field, newValue, oldValue)
+					{
+						me.store.getProxy().setExtraParam('filt0r', newValue);
 					}
-			    }
-			]
+				}
+			}, {
+				xtype: 'button',
+				iconCls: 'plenty-log-filter-go',
+				listeners: {
+					click: function(field, newValue, oldValue)
+					{
+						me.store.load();
+					}
+				}
+			}, {
+				xtype: 'button',
+				iconCls: 'plenty-log-filter-reset',
+				listeners: {
+					click: function(field, newValue, oldValue)
+					{
+						Ext.getCmp('combo-Plentymarkets-store-log-Identifier').reset();
+						Ext.getCmp('combo-Plentymarkets-store-log-Identifier').clearValue();
+						me.store.getProxy().setExtraParam('filt0r', '');
+						me.store.load();
+					}
+				}
+			}]
 		}];
 
 		me.listeners = {
