@@ -70,11 +70,11 @@ class PlentymarketsExportEntityItemProducer
 	}
 
 	/**
-	 * Export the missind producers
+	 * Export the missing producers
 	 */
 	protected function doExport()
 	{
-
+		$producers = array();
 		$producerNameMappingShopware = array();
 		$supplierRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Supplier');
 
@@ -90,17 +90,31 @@ class PlentymarketsExportEntityItemProducer
 			}
 			else
 			{
+				// Request object
 				$Object_SetProducer->ProducerExternalName = $Supplier->getName();
 				$Object_SetProducer->ProducerName = $Supplier->getName();
 				$Object_SetProducer->ProducerHomepage = $Supplier->getLink();
-				$Request_SetProducers->Producers[] = $Object_SetProducer;
+				
+				// Export-array
+				$producers[] = $Object_SetProducer;
+				
+				// Save name and id for the mapping
 				$producerNameMappingShopware[$Supplier->getName()] = $Supplier->getId();
 			}
 		}
 
-		if (count($Request_SetProducers->Producers))
+		// Chunkify since the call can only handly 50 producers at a time
+		$chunks = array_chunk($producers, 50);
+		
+		foreach ($chunks as $chunk)
 		{
+			// Set the request
+			$Request_SetProducers->Producers = $chunk;
+			
+			// Do the call
 			$Response_SetProducers = PlentymarketsSoapClient::getInstance()->SetProducers($Request_SetProducers);
+			
+			// Create mapping
 			foreach ($Response_SetProducers->ResponseMessages->item as $ResponseMessage)
 			{
 				PlentymarketsMappingController::addProducer(
@@ -109,5 +123,6 @@ class PlentymarketsExportEntityItemProducer
 				);
 			}
 		}
+		
 	}
 }
