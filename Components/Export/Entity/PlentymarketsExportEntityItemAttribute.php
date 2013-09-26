@@ -79,12 +79,17 @@ class PlentymarketsExportEntityItemAttribute
 				$Object_AddItemAttribute->FrontendName = $Attribute->getName();
 				$Object_AddItemAttribute->Position = $Attribute->getPosition();
 				
-				$Request_AddItemAttribute->Attributes[] = $Object_AddItemAttribute;
-				$Response = PlentymarketsSoapClient::getInstance()->AddItemAttribute($Request_AddItemAttribute);
-				
-				$attributeIdAdded = (integer) $Response->ResponseMessages->item[0]->SuccessMessages->item[0]->Value;
-				
-				PlentymarketsMappingController::addAttributeGroup($Attribute->getId(), $attributeIdAdded);
+				try
+				{
+					$attributeIdAdded = PlentymarketsMappingController::getAttributeGroupByShopwareID($Attribute->getId());
+				}
+				catch (PlentymarketsMappingExceptionNotExistant $E)
+				{
+					$Request_AddItemAttribute->Attributes[] = $Object_AddItemAttribute;
+					$Response = PlentymarketsSoapClient::getInstance()->AddItemAttribute($Request_AddItemAttribute);
+					$attributeIdAdded = (integer) $Response->ResponseMessages->item[0]->SuccessMessages->item[0]->Value;
+					PlentymarketsMappingController::addAttributeGroup($Attribute->getId(), $attributeIdAdded);
+				}
 				
 				// Values
 				foreach ($Attribute->getOptions() as $AttributeValue)
@@ -103,15 +108,23 @@ class PlentymarketsExportEntityItemAttribute
 					
 					$Object_AddItemAttribute->Values[] = $Object_AddItemAttributeValue;
 					$Request_AddItemAttribute->Attributes[] = $Object_AddItemAttribute;
-					$Response = PlentymarketsSoapClient::getInstance()->AddItemAttribute($Request_AddItemAttribute);
 					
-					foreach ($Response->ResponseMessages->item[0]->SuccessMessages->item as $MessageItem)
+					try
 					{
-						if ($MessageItem->Key == 'AttributeValueID')
+						PlentymarketsMappingController::getAttributeOptionByShopwareID($AttributeValue->getId());
+					}
+					catch (PlentymarketsMappingExceptionNotExistant $E)
+					{
+						$Response = PlentymarketsSoapClient::getInstance()->AddItemAttribute($Request_AddItemAttribute);
+						foreach ($Response->ResponseMessages->item[0]->SuccessMessages->item as $MessageItem)
 						{
-							PlentymarketsMappingController::addAttributeOption($AttributeValue->getId(), $MessageItem->Value);
+							if ($MessageItem->Key == 'AttributeValueID')
+							{
+								PlentymarketsMappingController::addAttributeOption($AttributeValue->getId(), $MessageItem->Value);
+							}
 						}
 					}
+					
 				}
 			}
 			
