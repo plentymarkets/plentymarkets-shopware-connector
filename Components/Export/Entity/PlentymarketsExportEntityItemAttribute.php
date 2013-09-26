@@ -42,54 +42,12 @@ require_once PY_SOAP . 'Models/PlentySoapRequest/AddItemAttribute.php';
  */
 class PlentymarketsExportEntityItemAttribute
 {
-
-	/**
-	 *
-	 * @var array
-	 */
-	protected $mappingShopwareID2PlentyID = array();
-
-	/**
-	 *
-	 * @var array
-	 */
-	protected $PLENTY_name2ID = array();
-
-	/**
-	 *
-	 * @var array
-	 */
-	protected $PLENTY_idAndValueName2ID = array();
-
 	/**
 	 * Build the index and export the missing data to plentymarkets
 	 */
 	public function export()
 	{
-		$this->index();
 		$this->doExport();
-	}
-
-	/**
-	 * Build an index of the exising attributes
-	 */
-	protected function index()
-	{
-		$Request_GetItemAttributes = new PlentySoapRequest_GetItemAttributes();
-		$Request_GetItemAttributes->GetValues = true; // boolean
-
-		// Fetch the attributes form plentymarkets
-		$Response_GetItemAttributes = PlentymarketsSoapClient::getInstance()->GetItemAttributes($Request_GetItemAttributes);
-		foreach ($Response_GetItemAttributes->Attributes->item as $Attribute)
-		{
-			$this->PLENTY_name2ID[strtolower($Attribute->FrontendName)] = $Attribute->Id;
-
-			$this->PLENTY_idAndValueName2ID[$Attribute->Id] = array();
-			foreach ($Attribute->Values->item as $AttributeValue)
-			{
-				$this->PLENTY_idAndValueName2ID[$Attribute->Id][strtolower($AttributeValue->FrontendName)] = $AttributeValue->ValueId;
-			}
-		}
 	}
 
 	/**
@@ -112,65 +70,46 @@ class PlentymarketsExportEntityItemAttribute
 			foreach ($Groups as $Attribute)
 			{
 				$Attribute instanceof Shopware\Models\Article\Configurator\Group;
-				$checknameAttribute = strtolower($Attribute->getName());
 				
-				if (array_key_exists($checknameAttribute, $this->PLENTY_name2ID))
-				{
-					$attributeIdAdded = $this->PLENTY_name2ID[$checknameAttribute];
-				}
-	
-				else
-				{
-					$Request_AddItemAttribute = new PlentySoapRequest_AddItemAttribute();
-	
-					$Object_AddItemAttribute = new PlentySoapObject_AddItemAttribute();
-					$Object_AddItemAttribute->BackendName = $Attribute->getName();
-					$Object_AddItemAttribute->FrontendLang = 'de';
-					$Object_AddItemAttribute->FrontendName = $Attribute->getName();
-					$Object_AddItemAttribute->Position = $Attribute->getPosition();
-	
-					$Request_AddItemAttribute->Attributes[] = $Object_AddItemAttribute;
-					$Response = PlentymarketsSoapClient::getInstance()->AddItemAttribute($Request_AddItemAttribute);
-					$attributeIdAdded = (integer) $Response->ResponseMessages->item[0]->SuccessMessages->item[0]->Value;
-				}
-	
+				$Request_AddItemAttribute = new PlentySoapRequest_AddItemAttribute();
+				
+				$Object_AddItemAttribute = new PlentySoapObject_AddItemAttribute();
+				$Object_AddItemAttribute->BackendName = sprintf('%s (Sw %d)', $Attribute->getName(), $Attribute->getId());
+				$Object_AddItemAttribute->FrontendLang = 'de';
+				$Object_AddItemAttribute->FrontendName = $Attribute->getName();
+				$Object_AddItemAttribute->Position = $Attribute->getPosition();
+				
+				$Request_AddItemAttribute->Attributes[] = $Object_AddItemAttribute;
+				$Response = PlentymarketsSoapClient::getInstance()->AddItemAttribute($Request_AddItemAttribute);
+				
+				$attributeIdAdded = (integer) $Response->ResponseMessages->item[0]->SuccessMessages->item[0]->Value;
+				
 				PlentymarketsMappingController::addAttributeGroup($Attribute->getId(), $attributeIdAdded);
-	
+				
 				// Values
 				foreach ($Attribute->getOptions() as $AttributeValue)
 				{
 					$AttributeValue instanceof Shopware\Models\Article\Configurator\Option;
-	
-					// Workaround
-					$checknameValue = strtolower(str_replace(',', '.', $AttributeValue->getName()));
-	
-					if (array_key_exists($attributeIdAdded, $this->PLENTY_idAndValueName2ID) && array_key_exists($checknameValue, $this->PLENTY_idAndValueName2ID[$attributeIdAdded]))
+					
+					$Request_AddItemAttribute = new PlentySoapRequest_AddItemAttribute();
+					
+					$Object_AddItemAttribute = new PlentySoapObject_AddItemAttribute();
+					$Object_AddItemAttribute->Id = $attributeIdAdded;
+					
+					$Object_AddItemAttributeValue = new PlentySoapObject_AddItemAttributeValue();
+					$Object_AddItemAttributeValue->BackendName = sprintf('%s (Sw %d)', $AttributeValue->getName(), $AttributeValue->getId());
+					$Object_AddItemAttributeValue->FrontendName = $AttributeValue->getName();
+					$Object_AddItemAttributeValue->Position = $AttributeValue->getPosition();
+					
+					$Object_AddItemAttribute->Values[] = $Object_AddItemAttributeValue;
+					$Request_AddItemAttribute->Attributes[] = $Object_AddItemAttribute;
+					$Response = PlentymarketsSoapClient::getInstance()->AddItemAttribute($Request_AddItemAttribute);
+					
+					foreach ($Response->ResponseMessages->item[0]->SuccessMessages->item as $MessageItem)
 					{
-						PlentymarketsMappingController::addAttributeOption($AttributeValue->getId(), $this->PLENTY_idAndValueName2ID[$attributeIdAdded][$checknameValue]);
-					}
-					else
-					{
-	
-						$Request_AddItemAttribute = new PlentySoapRequest_AddItemAttribute();
-	
-						$Object_AddItemAttribute = new PlentySoapObject_AddItemAttribute();
-						$Object_AddItemAttribute->Id = $attributeIdAdded;
-	
-						$Object_AddItemAttributeValue = new PlentySoapObject_AddItemAttributeValue();
-						$Object_AddItemAttributeValue->BackendName = $AttributeValue->getName();
-						$Object_AddItemAttributeValue->FrontendName = $AttributeValue->getName();
-						$Object_AddItemAttributeValue->Position = $AttributeValue->getPosition();
-	
-						$Object_AddItemAttribute->Values[] = $Object_AddItemAttributeValue;
-						$Request_AddItemAttribute->Attributes[] = $Object_AddItemAttribute;
-						$Response = PlentymarketsSoapClient::getInstance()->AddItemAttribute($Request_AddItemAttribute);
-	
-						foreach ($Response->ResponseMessages->item[0]->SuccessMessages->item as $MessageItem)
+						if ($MessageItem->Key == 'AttributeValueID')
 						{
-							if ($MessageItem->Key == 'AttributeValueID')
-							{
-								PlentymarketsMappingController::addAttributeOption($AttributeValue->getId(), $MessageItem->Value);
-							}
+							PlentymarketsMappingController::addAttributeOption($AttributeValue->getId(), $MessageItem->Value);
 						}
 					}
 				}

@@ -277,11 +277,19 @@ Nach der Installation und Aktivierung des Plugins über den Plugin Manager muss 
 **Wichtig:** Damit das Plugin ordnungsgemäß arbeiten kann, müssen die folgenden Schritte genau eingehalten werden.
 
 #### Verbindung zu plentymarkets herstellen
+
+##### Zugansdaten
 Geben Sie unter dem Menüpunkt **API** die URL Ihres System sowie die Zugangsdaten des Benutzers ein, mit dem die Kommunikation stattfinden soll. Sie können die Verbindung prüfen, im dem Sie auf den entsprechenden Button *Zugangsdaten testen* klicken.
 
 **Achtung:** Das Speichern impliziert ein Testen der Zugangsdaten. Sowohl die Funktion *Zugangsdaten testen* als auch das Speichern führen dazu, dass der SOAP Call GetAuthentificationToken aufgerufen wird. Dieser Call ist auf 30 Anfragen pro Tag und Benutzer limitiert! Werden diese Funktionen wiederholt genutzt, kann es sein, dass das Abrufen des Tokens bis zum Ende des Tages gesperrt wird.
 
 Nach dem Speichern von korrekten Daten, werden die weiteren Reiter **Einstellungen**, **Mapping** und **Datenaustausch** aktiviert. Sobald keine Verbindung zu plentymarkets hergestellt werden kann, werden diese Reiter und jegliche Kommunikation automatisch deaktiviert!
+
+##### Erweiterte Einstellungen
+Einstellung | Erklärung
+----|------
+Anfragen komprimieren | Aktivieren, wenn die SOAP Responses gzip komprimiert empfangen werden können. Diese Einstellung sollte nur aktiviert werden, wenn sichergestellt ist, dass der Server gzip-Komprimierte Inhalte verarbeiten kann. Nähere Informationen hierzu sollten Sie vom Systemadministrator erhalten.
+Header Loggen | ktivieren, wenn die SOAP HTTP Header ins Log geschrieben werden sollen. Nur für das Debugging notwendig!  
 
 #### Einstellungen
 Die Einstellungen in den im Folgenden genannten Bereichen *müssen* vorgenommen werden, da ohne sie der Datenaustausch nicht stattfinden kann. Es wird eine Fehlermeldung erzeugt, wenn ein Datenaustausch gestartet werden soll, und die folgenden Einstellungen nicht gesetzt sind.
@@ -435,7 +443,7 @@ Eine Kategorie, die in shopware in der 3. Ebene ist, wird bei plentymarkets ents
 **Achtung:** Es ist nicht zulässig, einem Artikel eine Kategorie zuzuordnen, die keine End-Kategorie ist (d.h. die Kategorie darf keine weiteren Unterkategorien haben).
 
 #### Konfigurator / Attribute
-Attribute und deren Werte werden zu plentymarkets übernommen.
+Attribute und deren Werte werden zu plentymarkets übernommen. Die in plentymarkets vorhanden Attribute werden vorher *nicht* abgeglichen. Alle von shopware importierten Attribute und deren Werte haben bei der internen Bezeichnung das Suffix `(SW <ID>)`. `<ID>` steht für die ensprechende Id im shopware Shop.
 
 **Achtung:** Attributwerte dürfen keine Kommas enthalten. Diese werden durch einen Punkt ersetzt.
 
