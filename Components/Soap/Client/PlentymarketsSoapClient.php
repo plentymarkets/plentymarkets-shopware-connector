@@ -52,6 +52,42 @@ class PlentymarketsSoapClient extends SoapClient
 	 * @var PlentymarketsConfig
 	 */
 	protected $Config;
+	
+	/**
+	 * 
+	 * @var string
+	 */
+	protected $wsdl;
+	
+	/**
+	 * 
+	 * @var unknown
+	 */
+	protected $username;
+	
+	/**
+	 * 
+	 * @var string
+	 */
+	protected $userpass;
+	
+	/**
+	 * 
+	 * @var boolean
+	 */
+	protected $dryrun = false;
+	
+	/**
+	 * 
+	 * @var integer
+	 */
+	protected $userId;
+	
+	/**
+	 * 
+	 * @var string
+	 */
+	protected $userToken;
 
 	/**
 	 * Constructor method
@@ -71,6 +107,12 @@ class PlentymarketsSoapClient extends SoapClient
 		
 		// Get the config
 		$this->Config = PlentymarketsConfig::getInstance();
+		
+		//
+		$this->wsdl = $wsdl;
+		$this->username = $username;
+		$this->userpass = $userpass;
+		$this->dryrun = (bool) $dryrun;
 		
 		// Options
 		$options = array();
@@ -110,66 +152,81 @@ class PlentymarketsSoapClient extends SoapClient
 		// Check whether auth cache exist and whether the file is from today
 		if (!$dryrun && date('Y-m-d', $this->Config->getApiLastAuthTimestamp(0)) == date('Y-m-d'))
 		{
-			$userID = $this->Config->getApiUserID(-1);
-			$token = $this->Config->getApiToken('unknown');
+			// Get auth data from the config
+			$this->userId		= $this->Config->getApiUserID('');
+			$this->userToken	= $this->Config->getApiToken('');
+		}
+		
+		else
+		{
+			// Get a new token
+			$this->getToken();
+		}
+		
+		// Set the new token
+		$this->setSoapHeaders();
+	}
+
+	/**
+	 * Retrieves a new plentymarkets API token
+	 * 
+	 * @throws Exception
+	 */
+	private function getToken()
+	{
+		// Load the request model
+		require_once PY_SOAP . 'Models/PlentySoapRequest/GetAuthentificationToken.php';
+		
+		// Authentication
+		$Request_GetAuthentificationToken = new PlentySoapRequest_GetAuthentificationToken();
+		$Request_GetAuthentificationToken->Username = $this->username;
+		$Request_GetAuthentificationToken->Userpass = $this->userpass;
+		
+		$Response_GetAuthentificationToken = $this->GetAuthentificationToken($Request_GetAuthentificationToken);
+		
+		if ($Response_GetAuthentificationToken->Success == true)
+		{
+			$this->userId = $Response_GetAuthentificationToken->UserID;
+			$this->userToken = $Response_GetAuthentificationToken->Token;
+			
+			if (!$this->dryrun)
+			{
+				// Save the auth data
+				$this->Config->setApiUserID($this->userId);
+				$this->Config->setApiToken($this->userToken);
+				$this->Config->setApiLastAuthTimestamp(time());
+				
+				// Log
+				PlentymarketsLogger::getInstance()->message('Soap:Auth', 'Received a new token');
+			}
 		}
 		else
 		{
-			// Load the request model
-			require_once PY_SOAP . 'Models/PlentySoapRequest/GetAuthentificationToken.php';
-
-			// Authentication
-			$Request_GetAuthentificationToken = new PlentySoapRequest_GetAuthentificationToken();
-			$Request_GetAuthentificationToken->Username = $username;
-			$Request_GetAuthentificationToken->Userpass = $userpass;
-
-			$Response_GetAuthentificationToken = $this->GetAuthentificationToken($Request_GetAuthentificationToken);
-
-			if ($Response_GetAuthentificationToken->Success == true)
-			{
-				$userID = $Response_GetAuthentificationToken->UserID;
-				$token = $Response_GetAuthentificationToken->Token;
-
-				if (!$dryrun)
-				{
-					$this->Config->setApiUserID($userID);
-					$this->Config->setApiToken($token);
-					$this->Config->setApiLastAuthTimestamp(time());
-
-					// Log
-					PlentymarketsLogger::getInstance()->message('Soap:Auth', 'Received a new token');
-				}
-				else
-				{
-					// Log
-					PlentymarketsLogger::getInstance()->message('Soap:Auth', 'API credentials tested successully');
-				}
-			}
-			else
-			{
-				if (!$dryrun)
-				{
-					PlentymarketsLogger::getInstance()->message('Soap:Auth', 'Invalid API credentials');
-				}
-				else
-				{
-					PlentymarketsLogger::getInstance()->message('Soap:Auth', 'Invalid API credentials');
-				}
-
-				throw new Exception('Credentials invalid');
-
-			}
+			$this->userId = -1;
+			$this->userToken = '';
+			
+			// Log invalid api data
+			PlentymarketsLogger::getInstance()->message('Soap:Auth', 'Invalid API credentials');
+			
+			// Quit
+			throw new Exception('Invalid API credentials');
 		}
-
-		//
+	}
+	
+	/**
+	 * Sets the soap authentication header
+	 */
+	private function setSoapHeaders()
+	{
+		// Auth data
 		$authentication = array(
-			'UserID' => $userID,
-			'Token' => $token
+			'UserID' => $this->userId,
+			'Token' => $this->userToken
 		);
 		
 		// Add the authentication header
 		$this->__setSoapHeaders(
-			new SoapHeader(substr($wsdl, 0, -4), 'verifyingToken', new SoapVar($authentication, SOAP_ENC_OBJECT))
+			new SoapHeader(substr($this->wsdl, 0, -4), 'verifyingToken', new SoapVar($authentication, SOAP_ENC_OBJECT))
 		);
 	}
 
@@ -180,21 +237,51 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function __call($call, $args)
 	{
-		try
+		$retry = false;
+
+		do
 		{
-			if (count($args))
+			try
 			{
-				$Response = parent::__soapCall($call, array($args[0]));
+				if (count($args))
+				{
+					$Response = parent::__soapCall($call, array($args[0]));
+				}
+				else
+				{
+					$Response = parent::__soapCall($call, array());
+				}
+				
+				// Quit the loop on success
+				break;
 			}
-			else
+			catch (Exception $E)
 			{
-				$Response = parent::__soapCall($call, array());
+				// Try to get e new token
+				if ($E->getMessage() == 'Unauthorized Request - Invalid Token')
+				{
+					// Log the error
+					PlentymarketsLogger::getInstance()->error('Soap:Call', $call . ' failed: Unauthorized Request - Invalid Token');
+					
+					// Refresh the token
+					$this->getToken();
+					$this->setSoapHeaders();
+					
+					// If we already are in the re-run, quit
+					if ($retry)
+					{
+						break;
+					}
+					
+					// Unset the Error and try again
+					unset($E);
+					$retry = true;
+				}
 			}
 		}
-		catch (Exception $E)
-		{
-		}
+		while ($retry);
 		
+		// Log the call's success state
 		if (isset($Response->Success) && $Response->Success == true)
 		{
 			PlentymarketsLogger::getInstance()->message('Soap:Call', $call . ' success');
@@ -202,6 +289,10 @@ class PlentymarketsSoapClient extends SoapClient
 		else
 		{
 			PlentymarketsLogger::getInstance()->error('Soap:Call', $call . ' failed');
+			if (isset($Response) && $this->Config->getApiLogHttpHeaders(false))
+			{
+				PlentymarketsLogger::getInstance()->error('Soap:Call', var_export($Response, true));
+			}
 			if (isset($E) && $E instanceof Exception)
 			{
 				PlentymarketsLogger::getInstance()->error('Soap:Call', $E->getMessage());
