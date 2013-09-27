@@ -49,8 +49,6 @@ Ext.define('Shopware.apps.Plentymarkets', {
 	    'Multishop',
 	    'OrderMarking',
 	    'Orderstatus',
-	    'outgoing_items.Interval',
-	    'outgoing_items.OutgoingItems',
 	    'Producer',
 	    'Referrer',
 	    'settings.Batch',

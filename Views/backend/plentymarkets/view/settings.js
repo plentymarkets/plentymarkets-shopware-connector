@@ -253,7 +253,10 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/OutgoingItemsID}Warenausgang{/s}',
 				name: 'OutgoingItemsID',
 				id: 'OutgoingItemsID',
-				store: Ext.create('Shopware.apps.Plentymarkets.store.outgoing_items.OutgoingItems').load(),
+				store: new Ext.data.ArrayStore({
+					fields: ['id', 'name'],
+					data: [[0, '---'], [1, 'heute gebucht']]
+				}),
 				supportText: 'Aufträge welche diese Regel erfüllen, werden von plentymarkets abgerufen, um die folgenden Statusänderungen in shopware zu bewirken.',
 				allowBlank: true,
 				listeners: {
@@ -287,7 +290,10 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 			}, {
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/OutgoingItemsIntervalID}Abfrageintervall{/s}',
 				name: 'OutgoingItemsIntervalID',
-				store: Ext.create('Shopware.apps.Plentymarkets.store.outgoing_items.Interval').load(),
+				store: new Ext.data.ArrayStore({
+					fields: ['id', 'name'],
+					data: [[1, 'täglich, 12:00 Uhr'], [2, 'täglich, 18:00 Uhr'], [3, 'stündlich']]
+				}),
 				supportText: 'Zeitintervall für den Datenabgleich der Auftragsdaten.'
 			}, {
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/OutgoingItemsShopwareOrderStatusID}shopware Auftragsstatus{/s}',
