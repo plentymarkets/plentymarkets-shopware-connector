@@ -164,7 +164,7 @@ class PlentymarketsExportEntityItem
 			}
 			catch (PlentymarketsMappingExceptionNotExistant $E)
 			{
-				PlentymarketsLogger::getInstance()->error('Export:Item', 'ItemId ' . $Item->getId() . ': Skipping category with id ' . $Category->getId());
+				PlentymarketsLogger::getInstance()->error('Export:Initial:Item', 'ItemId ' . $Item->getId() . ': Skipping category with id ' . $Category->getId());
 				continue;
 			}
 				
@@ -239,12 +239,12 @@ class PlentymarketsExportEntityItem
 
 		if ($this->PLENTY_itemID && $this->PLENTY_priceID)
 		{
-			PlentymarketsLogger::getInstance()->message('Export:Item', 'ItemId ' . $Item->getId() . ': Item created (ItemId: ' . $this->PLENTY_itemID . ', PriceId: ' . $this->PLENTY_priceID . ')');
+			PlentymarketsLogger::getInstance()->message('Export:Initial:Item', 'ItemId ' . $Item->getId() . ': Item created (ItemId: ' . $this->PLENTY_itemID . ', PriceId: ' . $this->PLENTY_priceID . ')');
 			PlentymarketsMappingController::addItem($Item->getId(), $this->PLENTY_itemID);
 		}
 		else
 		{
-			PlentymarketsLogger::getInstance()->error('Export:Item', 'ItemId ' . $Item->getId() . ': Item could not be exported');
+			PlentymarketsLogger::getInstance()->error('Export:Initial:Item', 'ItemId ' . $Item->getId() . ': Item could not be exported');
 			throw new Exception('Did not recieve item ID and price ID');
 		}
 
@@ -296,7 +296,7 @@ class PlentymarketsExportEntityItem
 			$ImageMedia = $Image->getMedia();
 			if (is_null($ImageMedia))
 			{
-				PlentymarketsLogger::getInstance()->error('Export:Item:Image', 'ItemId ' . $this->SHOPWARE_Article->getId() . ': Skipping image with id ' . $Image->getId() . ' because there is no media associated');
+				PlentymarketsLogger::getInstance()->error('Export:Initial:Item:Image', 'ItemId ' . $this->SHOPWARE_Article->getId() . ': Skipping image with id ' . $Image->getId() . ' because there is no media associated');
 				continue;
 			}
 			$ImageMedia instanceof Shopware\Models\Media\Media;
@@ -307,8 +307,8 @@ class PlentymarketsExportEntityItem
 			}
 			catch (Exception $E)
 			{
-				PlentymarketsLogger::getInstance()->error('Export:Item:Image', 'ItemId ' . $this->SHOPWARE_Article->getId() . ': Skipping image with id ' . $Image->getId());
-				PlentymarketsLogger::getInstance()->error('Export:Item:Image', $E->getMessage());
+				PlentymarketsLogger::getInstance()->error('Export:Initial:Item:Image', 'ItemId ' . $this->SHOPWARE_Article->getId() . ': Skipping image with id ' . $Image->getId());
+				PlentymarketsLogger::getInstance()->error('Export:Initial:Item:Image', $E->getMessage());
 				continue;
 			}
 
@@ -649,7 +649,7 @@ class PlentymarketsExportEntityItem
 			}
 			catch (PlentymarketsMappingExceptionNotExistant $E)
 			{
-				PlentymarketsLogger::getInstance()->error('Export:Item:Variant', 'ItemId ' . $this->SHOPWARE_Article->getId() . ': Skipping corrupt variant with id ' . $ItemVariation->getId());
+				PlentymarketsLogger::getInstance()->error('Export:Initial:Item:Variant', 'ItemId ' . $this->SHOPWARE_Article->getId() . ': Skipping corrupt variant with id ' . $ItemVariation->getId());
 				continue;
 			}
 
