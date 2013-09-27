@@ -186,7 +186,6 @@ class PlentymarketsExportItemController
 			->from('Shopware\Models\Article\Article', 'item');
 
 		do {
-			
 			// Log the chunk
 			PlentymarketsLogger::getInstance()->message('Export:Initial:Item', 'Chunk: '. ($this->currentChunk + 1));
 			
@@ -198,6 +197,9 @@ class PlentymarketsExportItemController
 			// Get the items
 			$items = $QueryBuilder->getQuery()->getArrayResult();
 
+			//
+			$itemsAlreadyExported = 0;
+			
 			foreach ($items as $item)
 			{
 				try
@@ -205,6 +207,9 @@ class PlentymarketsExportItemController
 					// If there is a plenty id for this shopware id,
 					// the item has already been exported to plentymarkets
 					PlentymarketsMappingController::getItemByShopwareID($item['id']);
+					
+					//
+					++$itemsAlreadyExported;
 					
 					// already done
 					continue;
@@ -223,11 +228,21 @@ class PlentymarketsExportItemController
 			// Remember the chunk
 			$this->Config->setItemExportLastChunk($this->currentChunk);
 			
-			// Quit when the maximum number of chunks is reached
-			if ($this->maxChunks > 0 && ++$this->chunksDone >= $this->maxChunks)
+			if ($this->maxChunks > 0)
 			{
-				$this->toBeContinued = true;
-				break;
+				// Increase number of chunks if every item has already been exported
+				if ($itemsAlreadyExported == $this->sizeOfChunk)
+				{
+					++$this->maxChunks;
+					PlentymarketsLogger::getInstance()->message('Export:Initial:Item', 'Increasing number of chunks per run to '. $this->maxChunks .' since every item of chunk '. ($this->currentChunk + 1) .' has already been exported');
+				}
+				
+				// Quit when the maximum number of chunks is reached
+				if (++$this->chunksDone >= $this->maxChunks)
+				{
+					$this->toBeContinued = true;
+					break;
+				}
 			}
 			
 			// Next chunk
