@@ -649,7 +649,7 @@ class PlentymarketsExportEntityItem
 			}
 			catch (PlentymarketsMappingExceptionNotExistant $E)
 			{
-				PlentymarketsLogger::getInstance()->error('Export:Item:Variant', 'ItemId ' . $this->SHOPWARE_Article->getId() . ': Skipping corrut variant with id ' . $ItemVariation->getId());
+				PlentymarketsLogger::getInstance()->error('Export:Item:Variant', 'ItemId ' . $this->SHOPWARE_Article->getId() . ': Skipping corrupt variant with id ' . $ItemVariation->getId());
 				continue;
 			}
 
