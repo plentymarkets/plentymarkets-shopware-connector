@@ -41,6 +41,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.dx.Initial', {
 			ItemProperty: 'Eigenschaften/Merkmale',
 			ItemProducer: 'Hersteller',
 			Item: 'Artikel',
+			ItemCrossSelling: 'Cross-Selling',
 			Customer: 'Kunden',
 		};
 

@@ -354,6 +354,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 			'ItemProperty',
 			'ItemProducer',
 			'Item',
+			'ItemCrossSelling',
 			'Customer',
 		);
 

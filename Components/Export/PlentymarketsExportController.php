@@ -63,7 +63,8 @@ class PlentymarketsExportController
 		'ItemAttribute',
 		'ItemProperty',
 		'ItemProducer',
-		'Item'
+		'Item',
+		'ItemCrossSelling',
 	);
 	
 	/**
@@ -85,7 +86,8 @@ class PlentymarketsExportController
 			'plenty_mapping_item',
 			'plenty_mapping_item_variant',
 		),
-		'Customer' => 'plenty_mapping_customer_billing_address'
+		'Customer' => 'plenty_mapping_customer_billing_address',
+		'ItemCrossSelling' => array()
 	);
 
 	/**
@@ -136,6 +138,7 @@ class PlentymarketsExportController
 		$this->isComplete = $this->isComplete && ($this->Config->getItemPropertyExportStatus('open') == 'success');
 		$this->isComplete = $this->isComplete && ($this->Config->getItemProducerExportStatus('open') == 'success');
 		$this->isComplete = $this->isComplete && ($this->Config->getItemExportStatus('open') == 'success');
+		$this->isComplete = $this->isComplete && ($this->Config->getItemCrossSellingStatus('open') == 'success');
 	}
 
 	/**
@@ -312,6 +315,7 @@ class PlentymarketsExportController
 				case 'ItemProducer':
 				case 'ItemCategory':
 				case 'ItemAttribute':
+				case 'ItemCrossSelling':
 					$this->exportEntity($entity);
 					break;
 
