@@ -237,27 +237,23 @@ class PlentymarketsSoapClient extends SoapClient
 	 */
 	public function __call($call, $args)
 	{
-		$retry = false;
+		$retries = 0;
 
 		do
 		{
 			try
 			{
-				if (count($args))
-				{
-					$Response = parent::__soapCall($call, array($args[0]));
-				}
-				else
-				{
-					$Response = parent::__soapCall($call, array());
-				}
+				// Call
+				$Response = $this->doCall($call, $args);
 				
 				// Quit the loop on success
 				break;
 			}
 			catch (Exception $E)
 			{
-				// Try to get e new token
+				++$retries;
+				
+				// Try to get a new token
 				if ($E->getMessage() == 'Unauthorized Request - Invalid Token')
 				{
 					// Log the error
@@ -266,20 +262,16 @@ class PlentymarketsSoapClient extends SoapClient
 					// Refresh the token
 					$this->getToken();
 					$this->setSoapHeaders();
-					
-					// If we already are in the re-run, quit
-					if ($retry)
-					{
-						break;
-					}
-					
-					// Unset the Error and try again
-					unset($E);
-					$retry = true;
+				}
+				
+				else
+				{
+					PlentymarketsLogger::getInstance()->message('Soap:Call', $call . ' will wait 5 seconds and then try again ('. $retries .'/3)');
+					sleep(5);
 				}
 			}
 		}
-		while ($retry);
+		while ($retries <= 3);
 		
 		// Log the call's success state
 		if (isset($Response->Success) && $Response->Success == true)
@@ -308,6 +300,27 @@ class PlentymarketsSoapClient extends SoapClient
 
 		return $Response;
 	}
+	
+	/**
+	 * Wrapper for the actual soap call
+	 * 
+	 * @param string $call
+	 * @param array $args
+	 * @return mixed
+	 */
+	protected function doCall($call, $args)
+	{
+		if (count($args))
+		{
+			$Response = parent::__soapCall($call, array($args[0]));
+		}
+		else
+		{
+			$Response = parent::__soapCall($call, array());
+		}
+		
+		return $Response;
+	} 
 
 	/**
 	 * Returns an instance
