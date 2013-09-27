@@ -338,24 +338,35 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 			xtype: 'fieldset',
 			title: 'Initialer Export',
 			layout: 'anchor',
+			defaults: {
+				labelWidth: 155,
+				xtype: 'combo',
+				queryMode: 'local',
+				anchor: '100%',
+				displayField: 'name',
+				valueField: 'size',
+				allowBlank: false,
+				editable: true
+			},
 			items: [{
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/InitialExportChunkSize}Paketgröße{/s}',
 				name: 'InitialExportChunkSize',
 				id: 'InitialExportChunkSize',
 				store: new Ext.data.ArrayStore({
 					fields: ['size'],
-					data: [[100], [250], [500], [1000], [2500], [5000]]
+					data: [[10], [25], [50], [100], [250], [500], [1000], [2500], [5000]]
 				}),
-				supportText: 'Legen Sie fest, wie viele Datensätze pro Durchlauf exportiert werden. Diese Einstellunge betrifft Aktikel, Kunden und Attribute.',
-				labelWidth: 155,
-				xtype: 'combo',
-				emptyText: '---',
-				queryMode: 'local',
-				anchor: '100%',
 				displayField: 'size',
-				valueField: 'size',
-				allowBlank: false,
-				editable: true
+				supportText: 'Legen Sie fest, wie viele Datensätze pro Durchlauf exportiert werden. Diese Einstellung betrifft Aktikel, Kunden und Attribute.'
+			}, {
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/InitialExportChunksPerRun}Pakete pro Durchlauf{/s}',
+				name: 'InitialExportChunksPerRun',
+				id: 'InitialExportChunksPerRun',
+				store: new Ext.data.ArrayStore({
+					fields: ['size', 'name'],
+					data: [[-1, 'unendlich'], [2, '2'], [5, '5'], [10, '10'], [25, '25']]
+				}),
+				supportText: 'Legen Sie fest, wie viele Pakete pro Durchlauf des Cronjobs exportiert werden sollen. Diese Einstellung betrifft <strong>nur</strong> Aktikel.'
 			}]
 		}];
 	}

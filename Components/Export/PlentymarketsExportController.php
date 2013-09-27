@@ -39,6 +39,12 @@ class PlentymarketsExportController
 	 * 
 	 * @var integer
 	 */
+	const DEFAULT_CHUNKS_PER_RUN = -1;
+	
+	/**
+	 * 
+	 * @var integer
+	 */
 	const DEFAULT_CHUNK_SIZE = 250;
 
 	/**
@@ -149,6 +155,10 @@ class PlentymarketsExportController
 	 */
 	public function restart($entity)
 	{
+		// Last chunk
+		$methodLastChunk = sprintf('set%sExportLastChunk', $entity);
+		$this->Config->$methodLastChunk('');
+		
 		$this->announce($entity);
 	}
 
@@ -180,6 +190,10 @@ class PlentymarketsExportController
 		// Error
 		$methodError = sprintf('set%sExportLastErrorMessage', $entity);
 		$this->Config->$methodError('');
+		
+		// Last chunk
+		$methodLastChunk = sprintf('set%sExportLastChunk', $entity);
+		$this->Config->$methodLastChunk('');
 	}
 	
 	/**
@@ -429,91 +443,9 @@ class PlentymarketsExportController
 	 */
 	protected function exportItems()
 	{
-		require_once PY_COMPONENTS . 'Export/Entity/PlentymarketsExportEntityItem.php';
-		require_once PY_COMPONENTS . 'Export/Entity/PlentymarketsExportEntityItemLinked.php';
+		require_once PY_COMPONENTS . 'Export/PlentymarketsExportItemController.php';
 
-		// Set running
-		$this->Config->setItemExportStatus('running');
-
-		// Start
-		$this->Config->setItemExportTimestampStart(time());
-		
-		// Repository
-		$Repository = Shopware()->Models()->getRepository('Shopware\Models\Article\Article');
-		
-		// Chunk configuration
-		$chunk = 0;
-		$size = PlentymarketsConfig::getInstance()->getInitialExportChunkSize(self::DEFAULT_CHUNK_SIZE);
-		
-		// Cache for crosselling
-		$itemIdsToLink = array();
-		
-			
-		$QueryBuilder = Shopware()->Models()->createQueryBuilder();
-		$QueryBuilder
-			->select('item.id')
-			->from('Shopware\Models\Article\Article', 'item');
-
-		do {
-			
-			// Log the chunk
-			PlentymarketsLogger::getInstance()->message('Export:Initial:Item', 'Chunk: '. ($chunk + 1));
-			
-			// Set Limit and Offset
-			$QueryBuilder
-				->setFirstResult($chunk * $size)
-				->setMaxResults($size);
-			
-			// Get the items
-			$items = $QueryBuilder->getQuery()->getArrayResult();
-
-			foreach ($items as $item)
-			{
-
-				try
-				{
-					// If there is a plenty id for this shopware id,
-					// the item has already been exported to plentymarkets
-					PlentymarketsMappingController::getItemByShopwareID($item['id']);
-					
-					// already done
-					continue;
-				}
-				catch (PlentymarketsMappingExceptionNotExistant $E)
-				{
-				}
-				
-				$PlentymarketsExportEntityItem = new PlentymarketsExportEntityItem(
-					Shopware()->Models()->find('Shopware\Models\Article\Article', $item['id'])
-				);
-				
-				$PlentymarketsExportEntityItem->export();
-	
-				// Remember the it for the linker
-				$itemIdsToLink[] = $item['id'];
-			}
-			
-			++$chunk;
-			
-		} while (!empty($items) && count($items) == $size);
-
-		// Crosselling
-		foreach ($itemIdsToLink as $itemId)
-		{
-			$PlentymarketsExportEntityItem = new PlentymarketsExportEntityItemLinked(
-				Shopware()->Models()->find('Shopware\Models\Article\Article', $itemId)
-			);
-			$PlentymarketsExportEntityItem->link();
-		}
-
-		// Set running
-		$this->Config->setItemExportTimestampFinished(time());
-		$this->Config->setItemExportStatus('success');
-		
-		// Reset values
-		$this->Config->setImportItemLastUpdateTimestamp(0);
-		$this->Config->setImportItemPriceLastUpdateTimestamp(0);
-		$this->Config->setImportItemStockLastUpdateTimestamp(0);
+		PlentymarketsExportItemController::getInstance()->run();
 	}
 
 	/**

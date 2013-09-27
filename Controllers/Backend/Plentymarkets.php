@@ -191,6 +191,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		$Config->setIncomingPaymentShopwarePaymentFullStatusID($this->Request()->IncomingPaymentShopwarePaymentFullStatusID);
 		$Config->setIncomingPaymentShopwarePaymentPartialStatusID($this->Request()->IncomingPaymentShopwarePaymentPartialStatusID);
 		$Config->setInitialExportChunkSize(max($this->Request()->InitialExportChunkSize, 1));
+		$Config->setInitialExportChunksPerRun(max($this->Request()->InitialExportChunksPerRun, -1));
 
 		//
 		if ($Config->getOutgoingItemsIntervalID() != $this->Request()->OutgoingItemsIntervalID)
