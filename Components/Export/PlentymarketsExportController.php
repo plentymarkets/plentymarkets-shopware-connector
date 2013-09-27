@@ -138,7 +138,7 @@ class PlentymarketsExportController
 		$this->isComplete = $this->isComplete && ($this->Config->getItemPropertyExportStatus('open') == 'success');
 		$this->isComplete = $this->isComplete && ($this->Config->getItemProducerExportStatus('open') == 'success');
 		$this->isComplete = $this->isComplete && ($this->Config->getItemExportStatus('open') == 'success');
-		$this->isComplete = $this->isComplete && ($this->Config->getItemCrossSellingStatus('open') == 'success');
+		$this->isComplete = $this->isComplete && ($this->Config->getItemCrossSellingExportStatus('open') == 'success');
 	}
 
 	/**
