@@ -89,6 +89,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
     public function update($version)
     {
     	$Logger = PlentymarketsLogger::getInstance();
+    	$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'Previous version: ' . $version);
     	
     	if ($version == '1.3.0')
     	{
@@ -166,7 +167,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 			}
     	}
 		
-		if ($version == '1.4.4')
+		if (version_compare($version, '1.4.4') !== 1)
 		{
 			try
 			{
@@ -198,7 +199,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 			$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'DELETE FROM `plenty_config` done');
 		}
 		
-		if ($version == '1.4.5')
+		if (version_compare($version, '1.4.5') !== 1)
 		{
 			try
 			{
@@ -209,6 +210,18 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 			catch (Exception $E)
 			{
 				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'addMappingCleanupCronEvent already carried out');
+			}
+		}
+		
+		if (version_compare($version, '1.4.7') !== 1)
+		{
+			if (PlentymarketsConfig::getInstance()->getItemExportStatus() == 'success')
+			{
+				PlentymarketsConfig::getInstance()->setItemCrossSellingExportStatus('success');
+				PlentymarketsConfig::getInstance()->setItemCrossSellingExportTimestampStart(time());
+				PlentymarketsConfig::getInstance()->setItemCrossSellingExportTimestampFinished(time());
+				
+				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'Item cross selling export marked as done');
 			}
 		}
 		
@@ -875,7 +888,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
      */
     public function getVersion()
     {
-    	return '1.4.7';
+    	return '1.4.8';
     }
 
     /**
