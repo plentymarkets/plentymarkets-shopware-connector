@@ -75,7 +75,7 @@ class PlentymarketsLogger
 		$this->StatementInsert = Shopware()->Db()->prepare('
 			INSERT INTO plenty_log
 				SET
-					`timestamp` = ' . time() . ',
+					`timestamp` = UNIX_TIMESTAMP(),
 					type = ?,
 					identifier = ?,
 					message = ?
