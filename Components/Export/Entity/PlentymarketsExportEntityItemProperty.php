@@ -129,7 +129,11 @@ class PlentymarketsExportEntityItemProperty
 			}
 
 			PlentymarketsMappingController::addPropertyGroup($PropertyGroup->getId(), $groupIdAdded);
-			$this->PLENTY_groupIDValueName2ID[$groupIdAdded] = array();
+			
+			if (!isset($this->PLENTY_groupIDValueName2ID[$groupIdAdded]))
+			{
+				$this->PLENTY_groupIDValueName2ID[$groupIdAdded] = array();
+			}
 
 			$Request_AddProperty = new PlentySoapRequest_AddProperty();
 			$Request_AddProperty->PropertyGroupID = $groupIdAdded;
