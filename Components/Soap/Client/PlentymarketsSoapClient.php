@@ -40,6 +40,17 @@ require_once PY_SOAP . 'Models/PlentySoapResponseSubMessage.php';
  */
 class PlentymarketsSoapClient extends SoapClient
 {
+	/**
+	 * 
+	 * @var integer
+	 */
+	const NUMBER_OF_RETRIES_MAX = 3;
+	
+	/**
+	 * 
+	 * @var integer
+	 */
+	const NUMBER_OF_SECONDS_SLEEP = 5;
 
 	/**
 	 *
@@ -253,6 +264,9 @@ class PlentymarketsSoapClient extends SoapClient
 			{
 				++$retries;
 				
+				// Calculate seconds based on the number of retries
+				$seconds = self::NUMBER_OF_SECONDS_SLEEP * $retries;
+				
 				// Try to get a new token
 				if ($E->getMessage() == 'Unauthorized Request - Invalid Token')
 				{
@@ -266,12 +280,12 @@ class PlentymarketsSoapClient extends SoapClient
 				
 				else
 				{
-					PlentymarketsLogger::getInstance()->message('Soap:Call', $call . ' will wait 5 seconds and then try again ('. $retries .'/3)');
-					sleep(5);
+					PlentymarketsLogger::getInstance()->message('Soap:Call', $call . ' will wait ' . $seconds . ' seconds and then try again (' . $retries . '/' . self::NUMBER_OF_RETRIES_MAX . ')');
+					sleep($seconds);
 				}
 			}
 		}
-		while ($retries <= 3);
+		while ($retries <= self::NUMBER_OF_RETRIES_MAX);
 		
 		// Log the call's success state
 		if (isset($Response->Success) && $Response->Success == true)
