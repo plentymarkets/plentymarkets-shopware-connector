@@ -117,25 +117,42 @@ class PlentymarketsUtils
 			PlentymarketsConfig::getInstance()->setPlentymarketsVersion('–');
 			PlentymarketsConfig::getInstance()->setApiLastStatusTimestamp(time());
 			PlentymarketsConfig::getInstance()->setApiStatus(1);
+
 			return false;
 		}
 
 		try
 		{
 			$Response = PlentymarketsSoapClient::getInstance()->GetServerTime();
-			PlentymarketsConfig::getInstance()->setPlentymarketsVersion('5.000');
+			
+			// 
+			PlentymarketsConfig::getInstance()->setApiTimestampDeviation(time() - $Response->Timestamp);
 			PlentymarketsConfig::getInstance()->setApiLastStatusTimestamp(time());
 			PlentymarketsConfig::getInstance()->setApiStatus(2);
+			
+			// plenty version
+			self::checkPlentymarketsVersion();
 
 			return true;
 		}
 		catch (Exception $E)
 		{
-			PlentymarketsConfig::getInstance()->setPlentymarketsVersion('–');
+			PlentymarketsConfig::getInstance()->setApiTimestampDeviation(0);
 			PlentymarketsConfig::getInstance()->setApiLastStatusTimestamp(time());
 			PlentymarketsConfig::getInstance()->setApiStatus(1);
 
 			return false;
+		}
+	}
+	
+	public static function checkPlentymarketsVersion()
+	{
+		$timestamp = PlentymarketsConfig::getInstance()->getPlentymarketsVersionTimestamp(0);
+		if ($timestamp < strtotime('- 12 hours'))
+		{
+			$Response = PlentymarketsSoapClient::getInstance()->GetPlentymarketsVersion();
+			PlentymarketsConfig::getInstance()->setPlentymarketsVersion($Response->PlentyVersion);
+			PlentymarketsConfig::getInstance()->setPlentymarketsVersionTimestamp(time());
 		}
 	}
 

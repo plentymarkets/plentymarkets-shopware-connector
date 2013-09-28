@@ -2,8 +2,9 @@
 // {block name=backend/Plentymarkets/model/Settings}
 
 /**
- * The settings data model defines the different data fields for reading, saving, deleting settings data and
- * is extended by the Ext data model "Ext.data.Model".
+ * The settings data model defines the different data fields for reading,
+ * saving, deleting settings data and is extended by the Ext data model
+ * "Ext.data.Model".
  * 
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
@@ -43,6 +44,10 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		name: 'ApiLastStatusTimestamp',
 		type: 'date',
 		dateFormat: 'timestamp'
+	}, {
+		name: 'ApiTimestampDeviation',
+		type: 'integer',
+		defaultValue: 0
 	},
 
 	{
@@ -132,6 +137,11 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		name: 'InitialExportChunksPerRun',
 		type: 'integer',
 		defaultValue: -1
+	},
+	
+	{
+		name: 'ConnectorVersion',
+		type: 'string'
 	}
 
 	],

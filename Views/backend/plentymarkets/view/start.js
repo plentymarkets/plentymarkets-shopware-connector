@@ -2,10 +2,11 @@
 // {block name=backend/Plentymarkets/view/Start}
 
 /**
- * The settings view builds the graphical elements and loads all saved settings data.
- * It shows for example the chosen warhouse, the producer or the order status. The settings are differentiated
- * into four groups: "Import Artikelstammdaten", "Export Aufträge", "Warenausgang", "Zahlungseingang bei plentymarkets".
- * It is extended by the Ext form panel "Ext.form.Panel".
+ * The settings view builds the graphical elements and loads all saved settings
+ * data. It shows for example the chosen warhouse, the producer or the order
+ * status. The settings are differentiated into four groups: "Import
+ * Artikelstammdaten", "Export Aufträge", "Warenausgang", "Zahlungseingang bei
+ * plentymarkets". It is extended by the Ext form panel "Ext.form.Panel".
  * 
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
@@ -85,147 +86,199 @@ Ext.define('Shopware.apps.Plentymarkets.view.Start', {
 	build: function()
 	{
 		var me = this;
-		me.add([{
-			xtype: 'displayfield',
-			fieldLabel: '{s name=plentymarkets/view/settings/textfield/ApiStatus}API Status{/s}',
-			name: 'ApiStatus',
-			renderer: function(value, x, record)
-			{
-				// console.log(me.settings.get('ApiLastStatusTimestamp'))
-				if (value == 2)
-				{
-					return Ext.String.format('<span style="display: inline-block; height: 16px; width: 16px" class="sprite-tick"></span> geprüft am ' + Ext.util.Format.date(me.settings.get('ApiLastStatusTimestamp'), 'd.m.Y, H:i:s'));
-				}
-				else if (value == 1)
-				{
-					return '<b>Fehler bei der Authentifizierung</b> (geprüft am ' + Ext.util.Format.date(me.settings.get('ApiLastStatusTimestamp'), 'd.m.Y, H:i:s') + ')';
-				}
-				else
-				{
-					return 'Nicht konfiguriert';
-				}
-			}
-		}, {
-			xtype: 'displayfield',
-			fieldLabel: '{s name=plentymarkets/view/settings/textfield/ApiVersion}API Version{/s}',
-			value: '110'
-		}, {
-			xtype: 'displayfield',
-			fieldLabel: '{s name=plentymarkets/view/settings/textfield/PlentyVersion}plentymarkets Version{/s}',
-			name: 'PlentymarketsVersion'
-		}, {
-			xtype: 'fieldcontainer',
-			fieldLabel: '{s name=plentymarkets/view/settings/textfield/SettingsStatus}Einstellungen{/s}',
-			layout: 'hbox',
-			items: [{
-				xtype: 'displayfield',
-				name: 'IsSettingsFinished',
-				renderer: function(value)
-				{
-					if (value == "true")
-					{
-						return Ext.String.format('<div style="height: 16px; width: 16px" class="sprite-tick"></div>');
-						return '<b style="color: green">abgeschlossen</b>';
-					}
-					else
-					{
-						return Ext.String.format('<div style="height: 16px; width: 16px" class="sprite-cross"></div>')
-						return '<b style="color: red">unvollständig</b>';
-					}
-				}
-			}, {
-				xtype: 'splitter'
-			}, {
-				xtype: 'button',
-				text: 'Details öffnen',
-				cls: 'secondary small',
-				handler: function()
-				{
-					me.main.tabpanel.setActiveTab(2);
-				}
+		me.add([
 
-			}]
-		}, {
-			xtype: 'fieldcontainer',
-			fieldLabel: '{s name=plentymarkets/view/settings/textfield/MappingStatus}Mapping Status{/s}',
-			layout: 'hbox',
+		{
+			xtype: 'fieldset',
+			title: 'API',
+			defaults: {
+				anchor: '100%',
+				labelWidth: '33%'
+			},
 			items: [{
 				xtype: 'displayfield',
-				labelWidth: 300,
-				name: 'IsMappingFinished',
-				renderer: function(value)
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ApiConnectionStatus}Verbindung{/s}',
+				name: 'ApiStatus',
+				renderer: function(value, x, record)
 				{
-					if (value == "true")
+					if (value == 2)
 					{
-						return Ext.String.format('<span style="display: inline-block; height: 16px; width: 16px" class="sprite-tick"></span>');
-						return '<b style="color: green">abgeschlossen</b>';
+						return Ext.String.format('<div class="plenty-status plenty-status-ok"> geprüft am ' + Ext.util.Format.date(me.settings.get('ApiLastStatusTimestamp'), 'd.m.Y, H:i:s') + ' Uhr</div>');
+					}
+					else if (value == 1)
+					{
+						return Ext.String.format('<div class="plenty-status plenty-status-error"> geprüft am ' + Ext.util.Format.date(me.settings.get('ApiLastStatusTimestamp'), 'd.m.Y, H:i:s') + ' Uhr</div>');
+					}
+				}
+			}, {
+				xtype: 'displayfield',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ApiVersion}Version{/s}',
+				value: '110'
+			}, {
+				xtype: 'displayfield',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ApiTimestampDeviation}Abweichung{/s}',
+				name: 'ApiTimestampDeviation',
+				renderer: function(deviation)
+				{
+					if (me.settings.get('ApiStatus') != 2)
+					{
+						return Ext.String.format('<div class="plenty-status plenty-status-error"> keine Informationen</div>');
+					}
+					else if (deviation == 0)
+					{
+						return Ext.String.format('<div class="plenty-status plenty-status-ok"> keine Abweichung</div>');
+					}
+					else if (deviation > 0 && deviation < 15)
+					{
+						return Ext.String.format('<div class="plenty-status plenty-status-api-deviation-ahead"> ' + deviation + ' Sekunde(n)</div>');
+					}
+					else if (deviation < 0 && deviation > -15)
+					{
+						return Ext.String.format('<div class="plenty-status plenty-status-api-deviation-behind"> ' + Math.abs(deviation) + ' Sekunde(n)</div>');
 					}
 					else
 					{
-						return Ext.String.format('<div style="height: 16px; width: 16px" class="sprite-cross"></div>')
-						return '<b style="color: red">unvollständig</b>';
+						return Ext.String.format('<div class="plenty-status plenty-status-warning"> ' + Math.abs(deviation) + ' Sekunde(n)</div>');
 					}
-				}
-			}, {
-				xtype: 'splitter'
-			}, {
-				xtype: 'button',
-				text: 'Details öffnen',
-				cls: 'secondary small',
-				handler: function()
-				{
-					me.main.tabpanel.setActiveTab(4);
 				}
 			}]
 		}, {
-			xtype: 'fieldcontainer',
-			fieldLabel: '{s name=plentymarkets/view/settings/textfield/InitialExportStatus}Datenexport zu plentymarkets{/s}',
-			layout: 'hbox',
+			xtype: 'fieldset',
+			title: 'Versionen',
+			defaults: {
+				anchor: '100%',
+				labelWidth: '33%'
+			},
 			items: [{
 				xtype: 'displayfield',
-				name: 'IsExportFinished',
-				renderer: function(value)
-				{
-					if (value == "true")
-					{
-						return Ext.String.format('<div style="height: 16px; width: 16px" class="sprite-tick"></div>');
-						return '<b style="color: green">abgeschlossen</b>';
-					}
-					else
-					{
-						return Ext.String.format('<div style="height: 16px; width: 16px" class="sprite-cross"></div>')
-						return '<b style="color: red">unvollständig</b>';
-					}
-				}
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/PlentyVersion}plentymarkets Version{/s}',
+				name: 'PlentymarketsVersion'
 			}, {
-				xtype: 'splitter'
-			}, {
-				xtype: 'button',
-				text: 'Details öffnen',
-				cls: 'secondary small',
-				handler: function()
-				{
-					me.main.tabpanel.setActiveTab(3);
-				}
+				xtype: 'displayfield',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ConnectorVersion}Connector Version{/s}',
+				name: 'ConnectorVersion'
+			}]
+		}, {
+			xtype: 'fieldset',
+			title: 'Datenaustausch',
+			defaults: {
+				anchor: '100%',
+				labelWidth: '33%'
+			},
+			items: [{
+				xtype: 'fieldcontainer',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/SettingsStatus}Einstellungen{/s}',
+				layout: 'hbox',
+				items: [{
+					xtype: 'displayfield',
+					name: 'IsSettingsFinished',
+					renderer: function(value)
+					{
+						if (value == "true")
+						{
+							return Ext.String.format('<div style="height: 16px; width: 16px" class="sprite-tick"></div>');
+							return '<b style="color: green">abgeschlossen</b>';
+						}
+						else
+						{
+							return Ext.String.format('<div style="height: 16px; width: 16px" class="sprite-cross"></div>')
+							return '<b style="color: red">unvollständig</b>';
+						}
+					}
+				}, {
+					xtype: 'splitter'
+				}, {
+					xtype: 'button',
+					text: 'Details öffnen',
+					cls: 'secondary small',
+					handler: function()
+					{
+						me.main.tabpanel.setActiveTab(2);
+					}
 
-			}]
-		}, {
-			fieldLabel: '{s name=plentymarkets/view/settings/textfield/MayDatexUser}Datenaustausch mit plentymarkets{/s}',
-			allowBlank: true,
-			xtype: 'checkbox',
-			boxLabel: 'aktivieren',
-			name: 'MayDatexUser',
-			id: 'MayDatexUser',
-			checked: me.settings.get('MayDatexUser'),
-			disabled: !me.settings.get('MayDatex'),
-			inputValue: true,
-			uncheckedValue: false,
-			listeners: {
-				change: function(x, newValue, oldValue, eOpts)
-				{
-					me.fireEvent('save', me);
+				}]
+			}, {
+				xtype: 'fieldcontainer',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/MappingStatus}Mapping Status{/s}',
+				layout: 'hbox',
+				items: [{
+					xtype: 'displayfield',
+					labelWidth: 300,
+					name: 'IsMappingFinished',
+					renderer: function(value)
+					{
+						if (value == "true")
+						{
+							return Ext.String.format('<span style="display: inline-block; height: 16px; width: 16px" class="sprite-tick"></span>');
+							return '<b style="color: green">abgeschlossen</b>';
+						}
+						else
+						{
+							return Ext.String.format('<div style="height: 16px; width: 16px" class="sprite-cross"></div>')
+							return '<b style="color: red">unvollständig</b>';
+						}
+					}
+				}, {
+					xtype: 'splitter'
+				}, {
+					xtype: 'button',
+					text: 'Details öffnen',
+					cls: 'secondary small',
+					handler: function()
+					{
+						me.main.tabpanel.setActiveTab(4);
+					}
+				}]
+			}, {
+				xtype: 'fieldcontainer',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/InitialExportStatus}Datenexport zu plentymarkets{/s}',
+				layout: 'hbox',
+				items: [{
+					xtype: 'displayfield',
+					name: 'IsExportFinished',
+					renderer: function(value)
+					{
+						if (value == "true")
+						{
+							return Ext.String.format('<div style="height: 16px; width: 16px" class="sprite-tick"></div>');
+							return '<b style="color: green">abgeschlossen</b>';
+						}
+						else
+						{
+							return Ext.String.format('<div style="height: 16px; width: 16px" class="sprite-cross"></div>')
+							return '<b style="color: red">unvollständig</b>';
+						}
+					}
+				}, {
+					xtype: 'splitter'
+				}, {
+					xtype: 'button',
+					text: 'Details öffnen',
+					cls: 'secondary small',
+					handler: function()
+					{
+						me.main.tabpanel.setActiveTab(3);
+					}
+
+				}]
+			}, {
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/MayDatexUser}Datenaustausch mit plentymarkets{/s}',
+				allowBlank: true,
+				xtype: 'checkbox',
+				boxLabel: 'aktivieren',
+				name: 'MayDatexUser',
+				id: 'MayDatexUser',
+				checked: me.settings.get('MayDatexUser'),
+				disabled: !me.settings.get('MayDatex'),
+				inputValue: true,
+				uncheckedValue: false,
+				listeners: {
+					change: function(x, newValue, oldValue, eOpts)
+					{
+						me.fireEvent('save', me);
+					}
 				}
-			}
+			}]
 		}]);
 
 		//
