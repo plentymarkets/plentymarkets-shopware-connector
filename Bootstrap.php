@@ -225,6 +225,9 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 			}
 		}
 		
+		//
+		PlentymarketsConfig::getInstance()->setConnectorVersion($this->getVersion());
+		
     	return true;
     }
 
