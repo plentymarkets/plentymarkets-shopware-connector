@@ -78,6 +78,9 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
         $this->createMenu();
         $this->registerCronjobs();
         
+        //
+        PlentymarketsConfig::getInstance()->setConnectorVersion($this->getVersion());
+        
         return true;
     }
     
