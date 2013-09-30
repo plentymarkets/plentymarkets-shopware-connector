@@ -86,7 +86,8 @@ Eine dauerhafte Wartung des Plugins auf zukünftige plentymarkets SOAP API-Versi
 
 ## Installation
 ### Systemvoraussetzungen
-Dieses Plugin benötigt min. **plentymarkets 5.0** und **shopware 4.1 Professional Edition**. Innerhalb von shopware muss das Plugin **Cron** installiert und aktiviert sein. Die Einrichtung dieses Plugins ist [hier](#cron) beschrieben.
+Dieses Plugin benötigt min. **plentymarkets 5.0** und **shopware 4.1 Professional Edition**. Innerhalb von shopware muss das Plugin **Cron** installiert und aktiviert sein. Ein Root-Server mit vollem Zugriff auf alle Konfigurationsdateien
+(kein Managed-Server) ist zwingend erforderlich. Außerdem sollten Sie Erfahrung im Umgang mit Linux haben. Die Einrichtung dieses Plugins ist [hier](#cron) beschrieben.
 Weiterhin muss in shopware mindestens ein Hersteller vorhanden sein.
 
 Ein root-Server wird für den reibungslosen Datenaustausch vorrausgesetzt. Auf Managed-Servern oder bei anderen Hosting Angeboten ist es idR. nicht möglich, die erforderlichen Konfigurationen vorzunehmen und/oder die Cronjobs per Konsole zu starten.
