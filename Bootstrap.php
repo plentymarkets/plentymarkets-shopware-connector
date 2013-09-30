@@ -542,7 +542,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
     	$request = $arguments->getSubject()->Request();
 
     	$path = str_replace(Shopware()->DocPath(), '/', $this->Path());
-    	$path .= 'style.css';
+    	$path .= 'style.css?' . urlencode($this->getVersion());
 
     	if ($request->getActionName() == 'index')
     	{
