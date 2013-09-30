@@ -96,6 +96,8 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 
 				me.loadRecord(me.settings);
 				me.setLoading(false);
+				
+				Shopware.Notification.createGrowlMessage('Achtung', 'Bitte laden Sie das plentymarkets-Fenster neu!');
 			}
 		});
 	},

@@ -26,7 +26,7 @@ Ext.define('Shopware.apps.Plentymarkets.controller.Settings', {
 			},
 			'plentymarkets-view-start': {
 				save: me.onSave,
-				checkApi: me.onCheckApi
+				check: me.onCheck
 			}
 		});
 
@@ -58,16 +58,16 @@ Ext.define('Shopware.apps.Plentymarkets.controller.Settings', {
 		});
 	},
 
-	onCheckApi: function(view)
+	onCheck: function(view)
 	{
-		view.settings.save({
-			params: {
-				check: true
-			},
+		view.setLoading(true);
+		view.main.settingsStore.load({
 			callback: function(data, operation)
 			{
-				view.loadRecord(data);
+				view.settings = data[0];
+				view.loadRecord(data[0]);
 				view.main.setTabAvailability();
+				view.setLoading(false);
 			}
 		});
 	},
@@ -79,7 +79,7 @@ Ext.define('Shopware.apps.Plentymarkets.controller.Settings', {
 
 	onSave: function(view)
 	{
-
+		view.setLoading(true);
 		view.getForm().updateRecord(view.settings);
 		view.settings.save({
 			callback: function(data, operation)
@@ -90,7 +90,7 @@ Ext.define('Shopware.apps.Plentymarkets.controller.Settings', {
 					view.main.start.loadRecord(data);
 				}
 				view.main.setTabAvailability();
-
+				view.setLoading(false);
 				Shopware.Notification.createGrowlMessage('Einstellungen gespeichert', 'Die Einstellungen wurden gespeichert');
 			}
 		});

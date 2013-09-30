@@ -238,15 +238,6 @@ Ext.define('Shopware.apps.Plentymarkets.view.dx.Continuous', {
 		});
 
 		me.callParent(arguments);
-	},
-
-	/**
-	 * Registers additional component events.
-	 */
-	registerEvents: function()
-	{
-		this.addEvents('save', 'checkApi');
 	}
-
 });
 // {/block}

@@ -133,19 +133,6 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	 */
 	public function saveSettingsAction()
 	{
-		if ($this->Request()->get('check', false) == true)
-		{
-			// Check everything
-			PlentymarketsUtils::checkDxStatus();
-
-			$this->View()->assign(array(
-				'success' => true,
-				'data' => PlentymarketsConfig::getInstance()->getConfig()
-			));
-
-			return;
-		}
-
 		$Config = PlentymarketsConfig::getInstance();
 
 		// Previous Hash

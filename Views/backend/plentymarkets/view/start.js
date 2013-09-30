@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Start', {
 				text: 'Status prüfen',
 				handler: function()
 				{
-					me.fireEvent('checkApi', me)
+					me.fireEvent('check', me)
 				}
 			}, {
 				xtype: 'button',
@@ -67,7 +67,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Start', {
 		var me = this;
 		if (me.isBuilt)
 		{
-			me.fireEvent('checkApi', me)
+			me.fireEvent('check', me)
 		}
 		else
 		{
@@ -80,7 +80,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Start', {
 	 */
 	registerEvents: function()
 	{
-		this.addEvents('save', 'checkApi');
+		this.addEvents('save', 'check');
 	},
 
 	build: function()
@@ -99,7 +99,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Start', {
 				xtype: 'displayfield',
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ApiConnectionStatus}Verbindung{/s}',
 				name: 'ApiStatus',
-				renderer: function(value, x, record)
+				renderer: function(value)
 				{
 					if (value == 2)
 					{
@@ -118,6 +118,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Start', {
 				xtype: 'displayfield',
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ApiTimestampDeviation}Abweichung{/s}',
 				name: 'ApiTimestampDeviation',
+				helpText: 'Zeitliche Differenz in Sekunden zu plentymarkets',
 				renderer: function(deviation)
 				{
 					if (me.settings.get('ApiStatus') != 2)
@@ -176,17 +177,13 @@ Ext.define('Shopware.apps.Plentymarkets.view.Start', {
 					{
 						if (value == "true")
 						{
-							return Ext.String.format('<div style="height: 16px; width: 16px" class="sprite-tick"></div>');
-							return '<b style="color: green">abgeschlossen</b>';
+							return Ext.String.format('<div class="plenty-status plenty-status-ok">&nbsp;</div>');
 						}
 						else
 						{
-							return Ext.String.format('<div style="height: 16px; width: 16px" class="sprite-cross"></div>')
-							return '<b style="color: red">unvollständig</b>';
+							return Ext.String.format('<div class="plenty-status plenty-status-error">&nbsp;</div>');
 						}
 					}
-				}, {
-					xtype: 'splitter'
 				}, {
 					xtype: 'button',
 					text: 'Details öffnen',
@@ -209,17 +206,13 @@ Ext.define('Shopware.apps.Plentymarkets.view.Start', {
 					{
 						if (value == "true")
 						{
-							return Ext.String.format('<span style="display: inline-block; height: 16px; width: 16px" class="sprite-tick"></span>');
-							return '<b style="color: green">abgeschlossen</b>';
+							return Ext.String.format('<div class="plenty-status plenty-status-ok">&nbsp;</div>');
 						}
 						else
 						{
-							return Ext.String.format('<div style="height: 16px; width: 16px" class="sprite-cross"></div>')
-							return '<b style="color: red">unvollständig</b>';
+							return Ext.String.format('<div class="plenty-status plenty-status-error">&nbsp;</div>');
 						}
 					}
-				}, {
-					xtype: 'splitter'
 				}, {
 					xtype: 'button',
 					text: 'Details öffnen',
@@ -240,17 +233,13 @@ Ext.define('Shopware.apps.Plentymarkets.view.Start', {
 					{
 						if (value == "true")
 						{
-							return Ext.String.format('<div style="height: 16px; width: 16px" class="sprite-tick"></div>');
-							return '<b style="color: green">abgeschlossen</b>';
+							return Ext.String.format('<div class="plenty-status plenty-status-ok">&nbsp;</div>');
 						}
 						else
 						{
-							return Ext.String.format('<div style="height: 16px; width: 16px" class="sprite-cross"></div>')
-							return '<b style="color: red">unvollständig</b>';
+							return Ext.String.format('<div class="plenty-status plenty-status-error">&nbsp;</div>');
 						}
 					}
-				}, {
-					xtype: 'splitter'
 				}, {
 					xtype: 'button',
 					text: 'Details öffnen',
@@ -273,7 +262,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Start', {
 				inputValue: true,
 				uncheckedValue: false,
 				listeners: {
-					change: function(x, newValue, oldValue, eOpts)
+					change: function()
 					{
 						me.fireEvent('save', me);
 					}
