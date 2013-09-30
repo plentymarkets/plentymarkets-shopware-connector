@@ -114,7 +114,6 @@ class PlentymarketsExportEntityItemProperty
 			try
 			{
 				$groupIdAdded = PlentymarketsMappingController::getPropertyGroupByShopwareID($PropertyGroup->getId());
-				PlentymarketsLogger::getInstance()->message('DEBUG', __METHOD__);
 			}
 			catch (PlentymarketsMappingExceptionNotExistant $E)
 			{
