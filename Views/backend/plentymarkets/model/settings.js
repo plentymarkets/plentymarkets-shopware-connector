@@ -142,6 +142,27 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 	{
 		name: 'ConnectorVersion',
 		type: 'string'
+	},
+	
+	//
+	{
+		name: '_WebserverSoftware',
+		type: 'string'
+	}, {
+		name: '_WebserverSignature',
+		type: 'string'
+	}, {
+		name: '_PhpInterface',
+		type: 'string'
+	}, {
+		name: '_PhpVersion',
+		type: 'string'
+	}, {
+		name: '_PhpMemoryLimit',
+		type: 'string'
+	}, {
+		name: '_ApacheModules',
+		type: 'string'
 	}
 
 	],

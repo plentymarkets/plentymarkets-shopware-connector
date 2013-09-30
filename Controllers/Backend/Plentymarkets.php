@@ -85,10 +85,33 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	{
 		// Check the api, mapping and export status
 		PlentymarketsUtils::checkDxStatus();
+		
+		$config = PlentymarketsConfig::getInstance()->getConfig();
+		
+		$config['_WebserverSoftware'] = $_SERVER['SERVER_SOFTWARE'];
+		$config['_WebserverSignature'] = $_SERVER['SERVER_SIGNATURE'];
+		$config['_PhpInterface'] = $_SERVER['GATEWAY_INTERFACE'];
+		$config['_PhpVersion'] = PHP_VERSION;
+		$config['_PhpMemoryLimit'] = ini_get('memory_limit');
+		
+		if (function_exists('apache_get_modules'))
+		{
+			$modules = apache_get_modules();
+			$phpModules = array_filter($modules, function ($item)
+			{
+				return preg_match('/php|cgi/', $item);
+			});
+			sort($phpModules);
+			$config['_ApacheModules'] = join('/', $phpModules);
+		}
+		else
+		{
+			$config['_ApacheModules'] = '';
+		}
 
 		$this->View()->assign(array(
 			'success' => true,
-			'data' => PlentymarketsConfig::getInstance()->getConfig()
+			'data' => $config
 		));
 	}
 

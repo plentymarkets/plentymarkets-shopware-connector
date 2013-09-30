@@ -145,17 +145,57 @@ Ext.define('Shopware.apps.Plentymarkets.view.Start', {
 			}]
 		}, {
 			xtype: 'fieldset',
-			title: 'Versionen',
+			title: 'Umgebung',
+			collapsed: true,
+			collapsible: true,
 			defaults: {
 				anchor: '100%',
-				labelWidth: '33%'
+				labelWidth: '33%',
+				xtype: 'displayfield',
+				renderer: function(value)
+				{
+					return value || Ext.String.format('<div class="plenty-export-status plenty-export-status-open">&nbsp;</div>');
+				}
 			},
 			items: [{
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/_WebserverSoftware}Webserver Software{/s}',
+				name: '_WebserverSoftware'
+			}, {
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/_WebserverSignature}Webserver Signature{/s}',
+				name: '_WebserverSignature'
+			}, {
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/_ApacheModules}Apache Modules{/s}',
+				name: '_ApacheModules'
+			}, {
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/_PhpVersion}PHP Version{/s}',
+				name: '_PhpVersion'
+			}, {
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/_PhpInterface}PHP Interface{/s}',
+				name: '_PhpInterface'
+			}, {
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/_PhpMemoryLimit}PHP Memory Limit{/s}',
+				name: '_PhpMemoryLimit'
+			}
+
+			]
+		}, {
+			xtype: 'fieldset',
+			title: 'Versionen',
+			collapsed: true,
+			collapsible: true,
+			defaults: {
+				anchor: '100%',
+				labelWidth: '33%',
 				xtype: 'displayfield',
+				renderer: function(value)
+				{
+					return value || Ext.String.format('<div class="plenty-export-status plenty-export-status-open">&nbsp;</div>');
+				}
+			},
+			items: [{
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/PlentyVersion}plentymarkets Version{/s}',
 				name: 'PlentymarketsVersion'
 			}, {
-				xtype: 'displayfield',
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ConnectorVersion}Connector Version{/s}',
 				name: 'ConnectorVersion'
 			}]
