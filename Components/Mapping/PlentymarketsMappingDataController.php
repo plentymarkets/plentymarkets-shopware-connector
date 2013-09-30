@@ -61,6 +61,12 @@ class PlentymarketsMappingDataController
 	 */
 	public function getCountry()
 	{
+		$autodata = array(
+			'Großbritannien' => 'England',
+			'Slowakei' => 'Slowakische Republik',
+			'Rum&auml;nien' => 'Rumänien' 	
+		);
+		
 		$rows = Shopware()->Db()
 			->query('
 					SELECT
@@ -85,8 +91,17 @@ class PlentymarketsMappingDataController
 			{
 				foreach ($plentyCountries as $plentyData)
 				{
-					$distance = levenshtein($row['name'], $plentyData['name']);
-					if ($distance <= 2 || strstr($plentyData['name'], $row['name']))
+					if (isset($autodata[$row['name']]))
+					{
+						$shopwareName = $autodata[$row['name']];
+					}
+					else
+					{
+						$shopwareName = $row['name'];
+					}
+					
+					$distance = levenshtein($shopwareName, $plentyData['name']);
+					if ($distance <= 2 || strstr($plentyData['name'], $shopwareName))
 					{
 						$row['plentyName'] = $plentyData['name'];
 						$row['plentyID'] = $plentyData['id'];
