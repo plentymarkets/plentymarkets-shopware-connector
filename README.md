@@ -89,6 +89,8 @@ Eine dauerhafte Wartung des Plugins auf zukünftige plentymarkets SOAP API-Versi
 Dieses Plugin benötigt min. **plentymarkets 5.0** und **shopware 4.1 Professional Edition**. Innerhalb von shopware muss das Plugin **Cron** installiert und aktiviert sein. Die Einrichtung dieses Plugins ist [hier](#cron) beschrieben.
 Weiterhin muss in shopware mindestens ein Hersteller vorhanden sein.
 
+Ein root-Server wird für den reibungslosen Datenaustausch vorrausgesetzt. Auf Managed-Servern oder bei anderen Hosting Angeboten ist es idR. nicht möglich, die erforderlichen Konfigurationen vorzunehmen und/oder die Cronjobs per Konsole zu starten.
+
 #### PHP
 
 Besonders für den automatischen Datenabgleich via Cron werden ausreichende System-Ressourcen benötigt. Es muss daher sichergestellt sein, dass PHP-Prozesse ausreichend lang laufen und genügend Speicher verbrauchen dürfen. Im Testbetrieb haben wir für PHP-Prozesse, welche per Shell (CLI) ausgeführt werden, diese Eckdaten verwendet:
@@ -101,7 +103,7 @@ Besonders für den automatischen Datenabgleich via Cron werden ausreichende Syst
 
 	/etc/php5/cli/php.ini
 
-Grundsätzlich sollten Änderungen an Konfigurationsdateien nur von Ihrem Systemadministrator vorgenommen werden.
+Grundsätzlich sollten Änderungen an Konfigurationsdateien nur von Ihrem Systemadministrator vorgenommen werden. Diese Werte dienen als Richtwert und kann je nach Server und Datenmenge variieren.
 
 #### Apache & mod_fcgid
 
@@ -112,6 +114,28 @@ Wenn Sie das Modul **mod_fcgid** des **Apache** Webservers nutzen (und die Cronj
 	</IfModule>
 
 Weitere Information dazu finden Sie in der Dokumentation des Modules unter [httpd.apache.org](http://httpd.apache.org/mod_fcgid/mod/mod_fcgid.html). Grundsätzlich sollten Änderungen an Konfigurationsdateien nur von Ihrem Systemadministrator vorgenommen werden.
+
+#### Cron
+Der permanente Datenabgleich zwischen plentymarkets und shopware wird per Cronjob gesteuert. Dafür ist ein shopware-Plugin mit dem Namen *Cron* nötig. Dieses muss vorher installiert und konfiguriert werden. Beachten Sie dazu die Anleitung für dieses Plugin.
+
+Die Ausführung des shopware-Cron-Prozesses muss über die zentrale crontab erfolgen. Sie erreichen diese über die folgenden Shell-Befehle:
+
+    sudo -s
+    crontab -e
+
+Gemäß der Anleitung des shopware-Plugins *Cron* erfolgt die Ausführung über eine Befehlskette nach dem folgenden Schema:
+
+     cd /pfad/zumShop && /usr/bin/php shopware.php /backend/cron
+
+Testen Sie die Ausführung dieses Befehls per Shell und übertragen Sie diesen erst dann in die crontab, wenn die Ausführung fehlerfrei funktioniert.
+
+Im Standardfall sollte der Pfad */usr/bin/php* korrekt sein und auf PHP in Version 5.x verweisen. Bei manchen Providern kann dieser Pfad abweichen (z.B. */usr/bin/php5* oder */usr/bin/php53*).
+
+Der crontab-Eintrag mit einer Ausführung alle 15 Minuten würde demnach diesem Schema folgen:
+
+     */15 * * * * cd /pfad/zumShop && /usr/bin/php shopware.php /backend/cron
+     
+Es wird ausschließlich die Ausführung der Cronjobs per Konsole empfohlen. Der Aufruf über den Browser (`meinshop.de/backend/cron`) ist nicht für die Ausführung von derart komplexen Prozessen geeignet.
 
 ### Installation aus dem Community Store
 Das Plugin kann direkt über den Comminity Store bezogen werden. Es ist dort unter dem Namen `PlentyConnector` verfügbar. Diese Art der Installation wird empfohlen.
@@ -335,6 +359,7 @@ shopware Zahlungsstatus (teilweise bezahlt) | Zahlungsstatus, welchen Aufträge 
 Einstellung | Erklärung
 ----|------
 Paketgröße | Legen Sie fest, wie viele Datensätze pro Durchlauf exportiert werden. Diese Einstellunge betrifft Aktikel, Kunden und Attribute. Je mehr Leistung der Server hat bzw. je höher die o.g. PHP-Einstellungen gesetzt sind desto höher kann dieser Wert sein. Für den eigentlichen Export und die Dauer des Exports ist der Wert weitestgehend unmaßgeblich.
+Pakete pro Durchlauf | Legen Sie fest, wie viele Pakete pro Durchlauf des Cronjobs exportiert werden sollen. Diese Einstellung betrifft *nur* Aktikel. Nachdem die Pakete abgearbeitet sind, springt der Export automatisch wieder in den Status **wartend**. Bei der nächsten Ausführung des Cronjobs wird dann mit dem nächsten Paket weiter gemacht.
 
 #### Mapping
 Für alle Daten, die nicht automatisch gemappt werden können, muss die Verknüpfung manuell hergestellt werden.
@@ -398,26 +423,6 @@ Die in shopware eingetragenen Partner können den plentymarkets Auftragsherkünf
 Wie Sie eigene Auftragsherkünfte in plentymarkets anlegen, erfahren Sie hier:
 http://man.plentymarkets.eu/einstellungen/auftraege/auftragsherkunft/#4
 
-#### Cron
-Der permanente Datenabgleich zwischen plentymarkets und shopware wird per Cronjob gesteuert. Dafür ist ein shopware-Plugin mit dem Namen *Cron* nötig. Dieses muss vorher installiert und konfiguriert werden. Beachten Sie dazu die Anleitung für dieses Plugin.
-
-Die Ausführung des shopware-Cron-Prozesses muss über die zentrale crontab erfolgen. Sie erreichen diese über die folgenden Shell-Befehle:
-
-    sudo su
-    crontab -e
-
-Gemäß der Anleitung des shopware-Plugins *Cron* erfolgt die Ausführung über eine Befehlskette nach dem folgenden Schema:
-
-     cd /pfad/zumShop && /usr/bin/php shopware.php /backend/cron
-
-Testen Sie die Ausführung dieses Befehls per Shell und übertragen Sie diesen erst dann in die crontab, wenn die Ausführung fehlerfrei funktioniert.
-
-Im Standardfall sollte der Pfad */usr/bin/php* korrekt sein und auf PHP in Version 5.x verweisen. Bei manchen Providern kann dieser Pfad abweichen (z.B. */usr/bin/php5* oder */usr/bin/php53*).
-
-Der crontab-Eintrag mit einer Ausführung alle 15 Minuten würde demnach diesem Schema folgen:
-
-     */15 * * * * cd /pfad/zumShop && /usr/bin/php shopware.php /backend/cron
-
 ## Datenaustausch
 Das Mapping für die Daten aus der Synchronisierung wird automatisch vorgenommen. 
 
@@ -458,8 +463,11 @@ Alle Hersteller die in shopware hinterlegt sind, werden zu plentymarkets überno
 #### Artikel
 Alle Artikel, die aus dem shopware System in das plentymarkets System exportiert werden, werden automatisch mit dem entsprechenden Mandandten verknüpft. Warenbestände werden *nicht* zu plentymarkets übernommen.
 
+#### Cross-Selling
+Erstellt die Verknüpfung zwischen den Ähnlichen und den Zubehörartikel.
+
 #### Kunden
-Der Export des Kundestammes ist optional und kann auch auch nachträglich durchgeführt werden. Es wird sowohl die Rechnungsanschrift als auch die Lieferanschrift übernommen.
+Der Export des Kundestammes ist optional und kann auch auch nachträglich durchgeführt werden. Es wird sowohl die Standrad-Rechnungsanschrift als auch die Standrad-Lieferanschrift übernommen. Anschriften die an Aufträgen hinterlegt sind, werden *nicht* übernommen.
 
 ### Synchronisation
 Datensätze, die innerhalb von plentymarkets hinzugekommen sind, werden automatisch im shopware-System angelegt und gemappt. Das betrifft die folgenden Daten:
