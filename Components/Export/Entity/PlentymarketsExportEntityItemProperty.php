@@ -111,24 +111,31 @@ class PlentymarketsExportEntityItemProperty
 		foreach ($propertyGroupRepository->findAll() as $PropertyGroup)
 		{
 			$PropertyGroup instanceof Shopware\Models\Property\Group;
-
-			if (array_key_exists($PropertyGroup->getName(), $this->PLENTY_groupName2ID))
+			try
 			{
-				$groupIdAdded = $this->PLENTY_groupName2ID[$PropertyGroup->getName()];
+				$groupIdAdded = PlentymarketsMappingController::getPropertyGroupByShopwareID($PropertyGroup->getId());
+				PlentymarketsLogger::getInstance()->message('DEBUG', __METHOD__);
 			}
-			else
+			catch (PlentymarketsMappingExceptionNotExistant $E)
 			{
-				$Request_AddPropertyGroup = new PlentySoapRequest_AddPropertyGroup();
-				$Request_AddPropertyGroup->BackendName = $PropertyGroup->getName();
-				$Request_AddPropertyGroup->FrontendName = $PropertyGroup->getName();
-				$Request_AddPropertyGroup->Lang = 'de';
-				$Request_AddPropertyGroup->PropertyGroupID = 0;
+				if (array_key_exists($PropertyGroup->getName(), $this->PLENTY_groupName2ID))
+				{
+					$groupIdAdded = $this->PLENTY_groupName2ID[$PropertyGroup->getName()];
+				}
+				else
+				{
+					$Request_AddPropertyGroup = new PlentySoapRequest_AddPropertyGroup();
+					$Request_AddPropertyGroup->BackendName = $PropertyGroup->getName();
+					$Request_AddPropertyGroup->FrontendName = $PropertyGroup->getName();
+					$Request_AddPropertyGroup->Lang = 'de';
+					$Request_AddPropertyGroup->PropertyGroupID = 0;
 
-				$Response = PlentymarketsSoapClient::getInstance()->AddPropertyGroup($Request_AddPropertyGroup);
-				$groupIdAdded = (integer) $Response->ResponseMessages->item[0]->SuccessMessages->item[0]->Value;
+					$Response = PlentymarketsSoapClient::getInstance()->AddPropertyGroup($Request_AddPropertyGroup);
+					$groupIdAdded = (integer) $Response->ResponseMessages->item[0]->SuccessMessages->item[0]->Value;
+				}
+
+				PlentymarketsMappingController::addPropertyGroup($PropertyGroup->getId(), $groupIdAdded);
 			}
-
-			PlentymarketsMappingController::addPropertyGroup($PropertyGroup->getId(), $groupIdAdded);
 			
 			if (!isset($this->PLENTY_groupIDValueName2ID[$groupIdAdded]))
 			{
@@ -144,23 +151,31 @@ class PlentymarketsExportEntityItemProperty
 			{
 				$Property instanceof Shopware\Models\Property\Option;
 
-				// In plenty exisitert in dieser Gruppe bereits dieser Wert
-				if (array_key_exists($Property->getName(), $this->PLENTY_groupIDValueName2ID[$groupIdAdded]))
+				$shopwareID = $PropertyGroup->getId() . ';' . $Property->getId();
+
+				try
 				{
-					$propertyIdAdded = $this->PLENTY_groupIDValueName2ID[$groupIdAdded][$Property->getName()];
+					PlentymarketsMappingController::getPropertyByShopwareID($shopwareID);
 				}
-				else
+				catch (PlentymarketsMappingExceptionNotExistant $E)
 				{
-					$Request_AddProperty->PropertyFrontendName = $Property->getName();
-					$Request_AddProperty->PropertyBackendName = $Property->getName();
-					$Request_AddProperty->PropertyType = 'text';
+					if (array_key_exists($Property->getName(), $this->PLENTY_groupIDValueName2ID[$groupIdAdded]))
+					{
+						$propertyIdAdded = $this->PLENTY_groupIDValueName2ID[$groupIdAdded][$Property->getName()];
+					}
+					else
+					{
+						$Request_AddProperty->PropertyFrontendName = $Property->getName();
+						$Request_AddProperty->PropertyBackendName = $Property->getName();
+						$Request_AddProperty->PropertyType = 'text';
 
-					$Response_AddProperty = PlentymarketsSoapClient::getInstance()->AddProperty($Request_AddProperty);
+						$Response_AddProperty = PlentymarketsSoapClient::getInstance()->AddProperty($Request_AddProperty);
 
-					$propertyIdAdded = (integer) $Response_AddProperty->ResponseMessages->item[0]->SuccessMessages->item[0]->Value;
+						$propertyIdAdded = (integer) $Response_AddProperty->ResponseMessages->item[0]->SuccessMessages->item[0]->Value;
+					}
+
+					PlentymarketsMappingController::addProperty($shopwareID, $propertyIdAdded);
 				}
-
-				PlentymarketsMappingController::addProperty($PropertyGroup->getId() . ';' . $Property->getId(), $propertyIdAdded);
 			}
 		}
 	}
