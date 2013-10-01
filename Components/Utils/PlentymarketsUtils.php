@@ -145,6 +145,9 @@ class PlentymarketsUtils
 		}
 	}
 	
+	/**
+	 * Retrieves the plentymarkets version
+	 */
 	public static function checkPlentymarketsVersion()
 	{
 		$timestamp = PlentymarketsConfig::getInstance()->getPlentymarketsVersionTimestamp(0);
