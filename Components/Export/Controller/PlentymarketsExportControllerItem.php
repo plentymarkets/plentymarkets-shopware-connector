@@ -21,9 +21,9 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, titles and interests in the
  * above trademarks remain entirely with the trademark owners.
- *
- * @copyright  Copyright (c) 2013, plentymarkets GmbH (http://www.plentymarkets.com)
- * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
+ * 
+ * @copyright Copyright (c) 2013, plentymarkets GmbH (http://www.plentymarkets.com)
+ * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
 require_once PY_COMPONENTS . 'Export/PlentymarketsExportController.php';
@@ -31,51 +31,52 @@ require_once PY_COMPONENTS . 'Export/Entity/PlentymarketsExportEntityItem.php';
 
 /**
  * The class PlentymarketsExportControllerItem handles the item export.
- *
+ * 
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 class PlentymarketsExportControllerItem
 {
+
 	/**
 	 * PlentymarketsExportControllerItem object data.
-	 *
+	 * 
 	 * @var PlentymarketsExportControllerItem
 	 */
 	protected static $Instance;
-	
+
 	/**
 	 * PlentymarketsConfig object data.
-	 *
+	 * 
 	 * @var PlentymarketsConfig
 	 */
 	protected $Config;
-	
+
 	/**
-	 * 
+	 *
 	 * @var integer
 	 */
 	protected $currentChunk = 0;
-	
+
 	/**
-	 * 
+	 *
 	 * @var integer
 	 */
 	protected $maxChunks;
-	
+
 	/**
-	 * 
+	 *
 	 * @var integer
 	 */
 	protected $chunksDone = 0;
-	
+
 	/**
-	 * 
+	 *
 	 * @var integer
 	 */
 	protected $sizeOfChunk;
-	
+
 	/**
-	 * 
+	 *
 	 * @var boolean
 	 */
 	protected $toBeContinued = false;
@@ -87,11 +88,11 @@ class PlentymarketsExportControllerItem
 	{
 		// Config
 		$this->Config = PlentymarketsConfig::getInstance();
-
+		
 		// 
 		$this->configure();
 	}
-	
+
 	/**
 	 * Sets the current status
 	 */
@@ -102,7 +103,7 @@ class PlentymarketsExportControllerItem
 		{
 			$this->Config->setItemExportTimestampFinished(time());
 			$this->Config->setItemExportStatus('success');
-				
+			
 			// Reset values
 			$this->Config->setImportItemLastUpdateTimestamp(0);
 			$this->Config->setImportItemPriceLastUpdateTimestamp(0);
@@ -111,7 +112,7 @@ class PlentymarketsExportControllerItem
 		else
 		{
 			PlentymarketsLogger::getInstance()->message('Export:Initial:Item', 'Stopping. I will continue with the next run.');
-				
+			
 			$this->Config->setExportEntityPending('Item');
 			$this->Config->setItemExportStatus('pending');
 		}
@@ -120,7 +121,7 @@ class PlentymarketsExportControllerItem
 	/**
 	 * If an instance of PlentymarketsExportControllerItem exists, it returns this instance.
 	 * Else it creates a new instance of PlentymarketsExportController.
-	 *
+	 * 
 	 * @return PlentymarketsExportControllerItem
 	 */
 	public static function getInstance()
@@ -131,7 +132,7 @@ class PlentymarketsExportControllerItem
 		}
 		return self::$Instance;
 	}
-	
+
 	/**
 	 * Runs the actual export of the items
 	 */
@@ -152,7 +153,7 @@ class PlentymarketsExportControllerItem
 		// Finish
 		$this->destruct();
 	}
-	
+
 	/**
 	 * Configures the chunk settings
 	 */
@@ -173,7 +174,6 @@ class PlentymarketsExportControllerItem
 		$this->sizeOfChunk = (integer) PlentymarketsConfig::getInstance()->getInitialExportChunkSize(PlentymarketsExportController::DEFAULT_CHUNK_SIZE);
 	}
 
-
 	/**
 	 * Exports images, variants, properties item data and items base to make sure, that the corresponding items data exist.
 	 */
@@ -184,10 +184,11 @@ class PlentymarketsExportControllerItem
 		$QueryBuilder
 			->select('item.id')
 			->from('Shopware\Models\Article\Article', 'item');
-
-		do {
+		
+		do
+		{
 			// Log the chunk
-			PlentymarketsLogger::getInstance()->message('Export:Initial:Item', 'Chunk: '. ($this->currentChunk + 1));
+			PlentymarketsLogger::getInstance()->message('Export:Initial:Item', 'Chunk: ' . ($this->currentChunk + 1));
 			
 			// Set Limit and Offset
 			$QueryBuilder
@@ -196,7 +197,7 @@ class PlentymarketsExportControllerItem
 			
 			// Get the items
 			$items = $QueryBuilder->getQuery()->getArrayResult();
-
+			
 			//
 			$itemsAlreadyExported = 0;
 			
@@ -221,7 +222,7 @@ class PlentymarketsExportControllerItem
 				$PlentymarketsExportEntityItem = new PlentymarketsExportEntityItem(
 					Shopware()->Models()->find('Shopware\Models\Article\Article', $item['id'])
 				);
-					
+				
 				$PlentymarketsExportEntityItem->export();
 			}
 			
@@ -234,7 +235,9 @@ class PlentymarketsExportControllerItem
 				if ($itemsAlreadyExported == $this->sizeOfChunk)
 				{
 					++$this->maxChunks;
-					PlentymarketsLogger::getInstance()->message('Export:Initial:Item', 'Increasing number of chunks per run to '. $this->maxChunks .' since every item of chunk '. ($this->currentChunk + 1) .' has already been exported');
+					PlentymarketsLogger::getInstance()->message(
+						'Export:Initial:Item', 'Increasing number of chunks per run to ' . $this->maxChunks . ' since every item of chunk ' . ($this->currentChunk + 1) . ' has already been exported'
+					);
 				}
 				
 				// Quit when the maximum number of chunks is reached
@@ -247,7 +250,7 @@ class PlentymarketsExportControllerItem
 			
 			// Next chunk
 			++$this->currentChunk;
-			
-		} while (!empty($items) && count($items) == $this->sizeOfChunk);
+		}
+		while (!empty($items) && count($items) == $this->sizeOfChunk);
 	}
 }

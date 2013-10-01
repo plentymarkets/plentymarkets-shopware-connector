@@ -368,6 +368,8 @@ class PlentymarketsExportController
 	 */
 	public function exportOrders()
 	{
+		require_once PY_COMPONENTS . 'Export/Entity/PlentymarketsExportEntityOrder.php';
+		
 		// Get all the orders, that are not yet exported to plentymarkets
 		$Result = Shopware()->Db()->query('
 			SELECT
@@ -390,11 +392,12 @@ class PlentymarketsExportController
 
 			try
 			{
-				$this->exportOrderById($Order->shopwareId);
+				$PlentymarketsExportEntityOrder = new PlentymarketsExportEntityOrder($Order->shopwareId);
+				$PlentymarketsExportEntityOrder->export();
 			}
 			catch (Exception $E)
 			{
-				PlentymarketsLogger::getInstance()->message('Export:Customer', $E->getMessage());
+				PlentymarketsLogger::getInstance()->message('Export:Order', $E->getMessage());
 				$this->Config->setOrderExportLastErrorMessage($E->getMessage());
 			}
 		}
@@ -405,41 +408,8 @@ class PlentymarketsExportController
 	 */
 	protected function exportCustomers()
 	{
-		require_once PY_COMPONENTS . 'Export/Entity/PlentymarketsExportEntityCustomer.php';
-
-		// Set running
-		$this->Config->setCustomerExportStatus('running');
-
-		// Start
-		$this->Config->setCustomerExportTimestampStart(time());
-		
-		// Repository
-		$Repository = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer');
-		
-		// Chunk configuration
-		$chunk = 0;
-		$size = PlentymarketsConfig::getInstance()->getInitialExportChunkSize(self::DEFAULT_CHUNK_SIZE);
-
-		do {
-			
-			PlentymarketsLogger::getInstance()->message('Export:Initial:Customer', 'Chunk: '. ($chunk + 1));
-			$Customers = $Repository->findBy(array(), null, $size, $chunk * $size);
-
-			foreach ($Customers as $Customer)
-			{
-				$Customer instanceof Shopware\Models\Customer\Customer;
-	
-				$PlentymarketsExportEntityItem = new PlentymarketsExportEntityCustomer($Customer);
-				$PlentymarketsExportEntityItem->export();
-			}
-			
-			++$chunk;
-			
-		} while (!empty($Customers) && count($Customers) == $size);
-
-		// Set running
-		$this->Config->setCustomerExportTimestampFinished(time());
-		$this->Config->setCustomerExportStatus('success');
+		require_once PY_COMPONENTS . 'Export/Controller/PlentymarketsExportControllerCustomer.php';
+		PlentymarketsExportControllerCustomer::getInstance()->run();
 	}
 
 	/**
@@ -507,19 +477,6 @@ class PlentymarketsExportController
 	{
 		$method = sprintf('get%sExportStatus', $entity);
 		return $this->Config->$method() == 'success';
-	}
-
-	/**
-	 * Exports order by id.
-	 *
-	 * @param integer $orderID
-	 */
-	protected function exportOrderById($orderID)
-	{
-		require_once PY_COMPONENTS . 'Export/Entity/PlentymarketsExportEntityOrder.php';
-
-		$PlentymarketsExportEntityOrder = new PlentymarketsExportEntityOrder($orderID);
-		$PlentymarketsExportEntityOrder->export();
 	}
 
 	/**
