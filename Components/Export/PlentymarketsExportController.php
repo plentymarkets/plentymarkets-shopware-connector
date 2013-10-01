@@ -447,9 +447,8 @@ class PlentymarketsExportController
 	 */
 	protected function exportItems()
 	{
-		require_once PY_COMPONENTS . 'Export/PlentymarketsExportItemController.php';
-
-		PlentymarketsExportItemController::getInstance()->run();
+		require_once PY_COMPONENTS . 'Export/Controller/PlentymarketsExportControllerItem.php';
+		PlentymarketsExportControllerItem::getInstance()->run();
 	}
 
 	/**

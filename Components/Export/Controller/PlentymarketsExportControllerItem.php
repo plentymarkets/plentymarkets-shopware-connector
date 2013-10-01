@@ -30,16 +30,16 @@ require_once PY_COMPONENTS . 'Export/PlentymarketsExportController.php';
 require_once PY_COMPONENTS . 'Export/Entity/PlentymarketsExportEntityItem.php';
 
 /**
- * The class PlentymarketsExportItemController handles the item export.
+ * The class PlentymarketsExportControllerItem handles the item export.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
-class PlentymarketsExportItemController
+class PlentymarketsExportControllerItem
 {
 	/**
-	 * PlentymarketsExportItemController object data.
+	 * PlentymarketsExportControllerItem object data.
 	 *
-	 * @var PlentymarketsExportItemController
+	 * @var PlentymarketsExportControllerItem
 	 */
 	protected static $Instance;
 	
@@ -118,10 +118,10 @@ class PlentymarketsExportItemController
 	}
 
 	/**
-	 * If an instance of PlentymarketsExportItemController exists, it returns this instance.
+	 * If an instance of PlentymarketsExportControllerItem exists, it returns this instance.
 	 * Else it creates a new instance of PlentymarketsExportController.
 	 *
-	 * @return PlentymarketsExportItemController
+	 * @return PlentymarketsExportControllerItem
 	 */
 	public static function getInstance()
 	{
