@@ -36,7 +36,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.log.Grid', {
 			enableOverflow: true,
 			items: ['->', {
 				xtype: 'combo',
-				id: 'combo-Plentymarkets-store-log-Identifier',
+				id: 'combo-Plentymarkets-store-log-Identifier-'+ me.type,
 				store: Ext.create('Shopware.apps.Plentymarkets.store.log.Identifier'),
 				emptyText: '– Filter –',
 				anchor: '100%',
@@ -65,8 +65,8 @@ Ext.define('Shopware.apps.Plentymarkets.view.log.Grid', {
 				listeners: {
 					click: function(field, newValue, oldValue)
 					{
-						Ext.getCmp('combo-Plentymarkets-store-log-Identifier').reset();
-						Ext.getCmp('combo-Plentymarkets-store-log-Identifier').clearValue();
+						Ext.getCmp('combo-Plentymarkets-store-log-Identifier'+ me.type).reset();
+						Ext.getCmp('combo-Plentymarkets-store-log-Identifier'+ me.type).clearValue();
 						me.store.getProxy().setExtraParam('filt0r', '');
 						me.store.load();
 					}
