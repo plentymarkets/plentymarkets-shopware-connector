@@ -92,7 +92,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
     public function update($version)
     {
     	$Logger = PlentymarketsLogger::getInstance();
-    	$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'Previous version: ' . $version);
+    	$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, $version . ' →  ' . $this->getVersion());
     	
     	if ($version == '1.3.0')
     	{
