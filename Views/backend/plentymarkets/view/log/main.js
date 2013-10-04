@@ -23,18 +23,22 @@ Ext.define('Shopware.apps.Plentymarkets.view.log.Main', {
 
 	initComponent: function()
 	{
-		var me = this;
+		var me = this,
+			storeIdentifier = Ext.create('Shopware.apps.Plentymarkets.store.log.Identifier');
 
 		me.items = [{
 			xtype: 'plentymarkets-view-log-grid',
+			storeIdentifier: storeIdentifier,
 			title: 'Alles',
 			type: 0
 		}, {
 			xtype: 'plentymarkets-view-log-grid',
+			storeIdentifier: storeIdentifier,
 			title: 'Nur Fehler',
 			type: 1
 		}, {
 			xtype: 'plentymarkets-view-log-grid',
+			storeIdentifier: storeIdentifier,
 			title: 'Nur Meldungen',
 			type: 2
 		}];
