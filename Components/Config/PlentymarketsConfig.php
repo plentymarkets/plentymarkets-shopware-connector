@@ -126,6 +126,23 @@ class PlentymarketsConfig
 			// Update the instance cache
 			$this->config[$key] = $value;
 		}
+		
+		else if (strpos($name, 'erase') === 0)
+		{
+			$key = substr($name, 5);
+			
+			// Clear cache
+			unset($this->config[$key]);
+
+			// Delete to database
+			Shopware()->Db()->query('
+				DELETE FROM plenty_config
+					WHERE
+						`key` = ?
+			', array(
+				$key
+			));
+		}
 	}
 	
 	/**
