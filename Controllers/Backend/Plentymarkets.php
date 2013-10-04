@@ -53,27 +53,78 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		$this->View()->assign(array(
 			'success' => true,
 			'data' => array(
-				'ExportOrderStatus' => $Config->getExportOrderStatus(0),
-				'ExportOrderError' => $Config->getExportOrderError(''),
-				'ExportOrderLastRunTimestamp' => $Config->getExportOrderLastRunTimestamp(0),
-				'ExportOrderNextRunTimestamp' => $Config->getExportOrderNextRunTimestamp(0),
-
-				'ImportItemStatus' => $Config->getImportItemStatus(0),
-				'ImportItemError' => $Config->getImportItemError(''),
-				'ImportItemLastUpdateTimestamp' => $Config->getImportItemLastUpdateTimestamp(0),
-				'ImportItemLastRunTimestamp' => $Config->getImportItemLastRunTimestamp(0),
-				'ImportItemNextRunTimestamp' => $Config->getImportItemNextRunTimestamp(0),
-
-				'ImportItemStockStatus' => $Config->getImportItemStockStatus(0),
-				'ImportItemStockError' => $Config->getImportItemStockError(''),
-				'ImportItemStockLastUpdateTimestamp' => $Config->getImportItemStockLastUpdateTimestamp(0),
-				'ImportItemStockLastRunTimestamp' => $Config->getImportItemStockLastRunTimestamp(0),
-				'ImportItemStockNextRunTimestamp' => $Config->getImportItemStockNextRunTimestamp(0),
-
-				'ImportItemPriceStatus' => $Config->getImportItemPriceStatus(0),
-				'ImportItemPriceError' => $Config->getImportItemPriceError(''),
-				'ImportItemPriceLastRunTimestamp' => $Config->getImportItemPriceLastRunTimestamp(0),
-				'ImportItemPriceNextRunTimestamp' => $Config->getImportItemPriceNextRunTimestamp(0)
+				
+				// Export
+				'export' => array(
+					array(
+						'Entity' => 'Order',
+						'Section' => 'Order',
+						'Status' => $Config->getExportOrderStatus(0),
+						'Error' => $Config->getExportOrderError(''),
+						'LastRunTimestamp' => $Config->getExportOrderLastRunTimestamp(0),
+						'NextRunTimestamp' => $Config->getExportOrderNextRunTimestamp(0),
+					),
+					array(
+						'Entity' => 'OrderIncomingPayment',
+						'Section' => 'Order',
+						'Status' => $Config->getExportOrderIncomingPaymentStatus(0),
+						'Error' => $Config->getExportOrderIncomingPaymentError(''),
+						'LastRunTimestamp' => $Config->getExportOrderIncomingPaymentLastRunTimestamp(0),
+						'NextRunTimestamp' => $Config->getExportOrderIncomingPaymentNextRunTimestamp(0),
+					)
+				),
+				
+				// Import
+				'import' => array(
+					array(
+						'Entity' => 'ItemStack',
+						'Section' => 'Item',
+						'Status' => $Config->getImportItemStackStatus(0),
+						'Error' => $Config->getImportItemStackError(''),
+						'LastRunTimestamp' => $Config->getImportItemStackLastRunTimestamp(0),
+						'NextRunTimestamp' => $Config->getImportItemStackNextRunTimestamp(0),
+					),
+					array(
+						'Entity' => 'Item',
+						'Section' => 'Item',
+						'Status' => $Config->getImportItemStatus(0),
+						'Error' => $Config->getImportItemError(''),
+						'LastRunTimestamp' => $Config->getImportItemLastRunTimestamp(0),
+						'NextRunTimestamp' => $Config->getImportItemNextRunTimestamp(0),
+					),
+					array(
+						'Entity' => 'ItemStock',
+						'Section' => 'Item',
+						'Status' => $Config->getImportItemStockStatus(0),
+						'Error' => $Config->getImportItemStockError(''),
+						'LastRunTimestamp' => $Config->getImportItemStockLastRunTimestamp(0),
+						'NextRunTimestamp' => $Config->getImportItemStockNextRunTimestamp(0),
+					),
+					array(
+						'Entity' => 'ItemPrice',
+						'Section' => 'Item',
+						'Status' => $Config->getImportItemPriceStatus(0),
+						'Error' => $Config->getImportItemPriceError(''),
+						'LastRunTimestamp' => $Config->getImportItemPriceLastRunTimestamp(0),
+						'NextRunTimestamp' => $Config->getImportItemPriceNextRunTimestamp(0)
+					),
+					array(
+						'Entity' => 'OrderIncomingPayment',
+						'Section' => 'Order',
+						'Status' => $Config->getImportOrderStatus(0),
+						'Error' => $Config->getImportOrderError(''),
+						'LastRunTimestamp' => $Config->getImportOrderLastRunTimestamp(0),
+						'NextRunTimestamp' => $Config->getImportOrderNextRunTimestamp(0),
+					),
+					array(
+						'Entity' => 'OrderOutgoingItems',
+						'Section' => 'Order',
+						'Status' => $Config->getImportOrderStatus(0),
+						'Error' => $Config->getImportOrderError(''),
+						'LastRunTimestamp' => $Config->getImportOrderLastRunTimestamp(0),
+						'NextRunTimestamp' => $Config->getImportOrderNextRunTimestamp(0),
+					)
+				)
 			)
 		));
 	}

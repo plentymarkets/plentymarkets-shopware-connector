@@ -19,9 +19,10 @@ Ext.define('Shopware.apps.Plentymarkets.view.dx.Initial', {
 
 	autoScroll: true,
 
-	cls: 'shopware-form',
+	cls: 'plenty-grid',
 
 	border: false,
+	
 
 	initComponent: function()
 	{
@@ -72,6 +73,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.dx.Initial', {
 		}, {
 			header: 'Status',
 			dataIndex: 'ExportStatus',
+			tdCls: 'plenty-td-icon',
 			flex: 1,
 			renderer: function(value, metaData, record, row, col, store, gridView)
 			{
@@ -98,7 +100,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.dx.Initial', {
 				}
 				else
 				{
-					return Ext.util.Format.date(value, 'd.m.Y, H:i:s');
+					return Ext.util.Format.date(value, 'd.m.Y, H:i:s') + ' Uhr';
 				}
 			}
 		}, {
@@ -114,7 +116,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.dx.Initial', {
 				}
 				else
 				{
-					return Ext.util.Format.date(value, 'd.m.Y, H:i:s');
+					return Ext.util.Format.date(value, 'd.m.Y, H:i:s') + ' Uhr';
 				}
 			}
 		}, {

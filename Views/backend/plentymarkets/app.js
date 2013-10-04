@@ -27,6 +27,7 @@ Ext.define('Shopware.apps.Plentymarkets', {
 	    'Api',
 	    'dx.Continuous',
 	    'dx.Initial',
+	    'dx.Grid',
 	    'Export',
 	    'log.Grid',
 	    'log.Main',
@@ -59,6 +60,7 @@ Ext.define('Shopware.apps.Plentymarkets', {
 
 	models: [
 	    'dx.Continuous',
+	    'dx.ContinuousRecord',
 	    'Export',
 	    'Log',
 	    'log.Identifier',
