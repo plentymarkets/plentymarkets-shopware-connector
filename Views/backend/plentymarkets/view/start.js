@@ -49,12 +49,17 @@ Ext.define('Shopware.apps.Plentymarkets.view.Start', {
 				text: 'Status prüfen',
 				handler: function()
 				{
-					me.fireEvent('check', me)
+					me.fireEvent('check', me);
 				}
 			}, {
 				xtype: 'button',
 				cls: 'primary',
-				text: 'plentymarkets Administration öffnen'
+				iconCls: 'plenty-icon-external',
+				text: 'plentymarkets Administration öffnen',
+				handler: function()
+				{
+					window.open(me.settings.get('ApiWsdl') + '/plenty/ui/admin.html');
+				}
 			}]
 		}];
 

@@ -22,16 +22,17 @@
  * trademark license. Therefore any rights, titles and interests in the
  * above trademarks remain entirely with the trademark owners.
  *
- * @copyright  Copyright (c) 2013, plentymarkets GmbH (http://www.plentymarkets.com)
- * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
+ * @copyright Copyright (c) 2013, plentymarkets GmbH (http://www.plentymarkets.com)
+ * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
 require_once PY_SOAP . 'Models/PlentySoapObject/GetLinkedItems.php';
 require_once PY_SOAP . 'Models/PlentySoapRequest/GetLinkedItems.php';
 
 /**
- * PlentymarketsImportEntityItemLinked provides the actual linked items import funcionality. Like the other import
- * entities this class is called in PlentymarketsImportController. It is important to deliver at least a plenty item ID or
+ * PlentymarketsImportEntityItemLinked provides the actual linked items import funcionality.
+ * Like the other import entities this class is called in PlentymarketsImportController.
+ * It is important to deliver at least a plenty item ID or
  * a shopware item ID to the constructor method of this class.
  * The data import takes place based on plentymarkets SOAP-calls.
  * 
@@ -44,41 +45,32 @@ class PlentymarketsImportEntityItemLinked
 	 *
 	 * @var integer
 	 */
-	protected $PLENTY_itemId;
-
-	/**
-	 *
-	 * @var integer
-	 */
 	protected $SHOPWARE_itemId;
 
 	/**
-	 * Contructor method
 	 *
-	 * @param integer $PLENTY_itemId
-	 * @param integer $SHOPWARE_itemId
+	 * @var PlentySoapObject_GetLinkedItems
 	 */
-	public function __construct($PLENTY_itemId, $SHOPWARE_itemId = null)
+	protected $LinkedItems;
+
+	/**
+	 *
+	 * @param integer $itemId        	
+	 * @param PlentySoapObject_GetLinkedItems $GetLinkedItems        	
+	 */
+	public function __construct($itemId, $GetLinkedItems)
 	{
-		$this->PLENTY_itemId = $PLENTY_itemId;
-		if (is_null($SHOPWARE_itemId))
-		{
-			$this->SHOPWARE_itemId = PlentymarketsMappingController::getItemByPlentyID($PLENTY_itemId);
-		}
-		else
-		{
-			$this->SHOPWARE_itemId = $SHOPWARE_itemId;
-		}
+		$this->SHOPWARE_itemId = $itemId;
+		$this->LinkedItems = $GetLinkedItems;
 	}
 
 	/**
 	 * Deletes all linkes items
-	 * 
 	 */
-	public function purge()
+	protected function purge()
 	{
-		Shopware()->Db()->query('DELETE FROM s_articles_relationships WHERE articleID = ' . (integer) $this->SHOPWARE_itemId);
-		Shopware()->Db()->query('DELETE FROM s_articles_similar WHERE articleID = ' . (integer) $this->SHOPWARE_itemId);
+		Shopware()->Db()->delete('s_articles_relationships', 'articleID = ' . (integer) $this->SHOPWARE_itemId);
+		Shopware()->Db()->delete('s_articles_similar', 'articleID = ' . (integer) $this->SHOPWARE_itemId);
 	}
 
 	/**
@@ -86,64 +78,43 @@ class PlentymarketsImportEntityItemLinked
 	 */
 	public function link()
 	{
-		$Request_GetLinkedItems = new PlentySoapRequest_GetLinkedItems();
-		$Request_GetLinkedItems->ItemsList = array();
-
-		$Object_GetLinkedItems = new PlentySoapObject_GetLinkedItems();
-		$Object_GetLinkedItems->ItemID = $this->PLENTY_itemId;
-		$Request_GetLinkedItems->ItemsList[] = $Object_GetLinkedItems;
-
-		// Do the request
-		$Response_GetLinkedItems = PlentymarketsSoapClient::getInstance()->GetLinkedItems($Request_GetLinkedItems);
-		$Response_GetLinkedItems instanceof PlentySoapResponse_GetLinkedItems;
-
-		if ($Response_GetLinkedItems->Success == false)
-		{
-			PlentymarketsLogger::getInstance()->error('Sync:Item:Linked', 'Got negative success from GetLinkedItems for plentymarkets itemId '. $this->PLENTY_itemId);
-			return;
-		}
-
 		// Cleanup
 		$this->purge();
-
-		foreach ($Response_GetLinkedItems->Items->item as $Items)
+		
+		foreach ($this->LinkedItems->item as $LinkedItem)
 		{
-			$Items instanceof PlentySoapResponseObject_GetLinkedItems;
-
-			foreach ($Items->LinkedItems->item as $LinkedItem)
+			$LinkedItem instanceof PlentySoapObject_GetLinkedItems;
+			
+			// Get the id
+			try
 			{
-				$LinkedItem instanceof PlentySoapObject_GetLinkedItems;
-
-				// Get the id
-				try
-				{
-					$SHOWWARE_linkedItemId = PlentymarketsMappingController::getItemByPlentyID($LinkedItem->ItemID);
-				}
-				catch (PlentymarketsMappingExceptionNotExistant $E)
-				{
-					continue;
-				}
-
-				if ($LinkedItem->Relationship == 'Accessory')
-				{
-					$table = 's_articles_relationships';
-				}
-				else if ($LinkedItem->Relationship == 'Similar')
-				{
-					$table = 's_articles_similar';
-				}
-				else
-				{
-					continue;
-				}
-
-				Shopware()->Db()->query('
-					INSERT INTO ' . $table . '
-						SET
-							articleID = ' . (integer) $this->SHOPWARE_itemId . ',
-							relatedarticle = ' . (integer) $SHOWWARE_linkedItemId . '
-				');
+				$SHOWWARE_linkedItemId = PlentymarketsMappingController::getItemByPlentyID($LinkedItem->ItemID);
 			}
+			catch (PlentymarketsMappingExceptionNotExistant $E)
+			{
+				continue;
+			}
+			
+			if ($LinkedItem->Relationship == 'Accessory')
+			{
+				$table = 's_articles_relationships';
+			}
+			else if ($LinkedItem->Relationship == 'Similar')
+			{
+				$table = 's_articles_similar';
+			}
+			else
+			{
+				continue;
+			}
+			
+			Shopware()->Db()->insert(
+				$table,
+				array(
+					'articleID' => (integer) $this->SHOPWARE_itemId,
+					'relatedarticle' => (integer) $SHOWWARE_linkedItemId
+				)
+			);
 		}
 	}
 }

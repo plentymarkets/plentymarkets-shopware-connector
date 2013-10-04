@@ -2,10 +2,11 @@
 // {block name=backend/Plentymarkets/view/Settings}
 
 /**
- * The settings view builds the graphical elements and loads all saved settings data.
- * It shows for example the chosen warehouse, the producer or the order status. The settings are differentiated
- * into four groups: "Import Artikelstammdaten", "Export Aufträge", "Warenausgang", "Zahlungseingang bei plentymarkets".
- * It is extended by the Ext form panel "Ext.form.Panel".
+ * The settings view builds the graphical elements and loads all saved settings
+ * data. It shows for example the chosen warehouse, the producer or the order
+ * status. The settings are differentiated into four groups: "Import
+ * Artikelstammdaten", "Export Aufträge", "Warenausgang", "Zahlungseingang bei
+ * plentymarkets". It is extended by the Ext form panel "Ext.form.Panel".
  * 
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
@@ -96,7 +97,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 
 				me.loadRecord(me.settings);
 				me.setLoading(false);
-				
+
 				Shopware.Notification.createGrowlMessage('Achtung', 'Bitte laden Sie das plentymarkets-Fenster neu!');
 			}
 		});
@@ -104,7 +105,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 
 	/**
 	 * Creates the grid toolbar for the favorite grid
-	 *
+	 * 
 	 * @return Ext.toolbar.Toolbar
 	 */
 	createToolbar: function()
@@ -359,7 +360,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 					data: [[10], [25], [50], [100], [250], [500], [1000], [2500], [5000]]
 				}),
 				displayField: 'size',
-				supportText: 'Legen Sie fest, wie viele Datensätze pro Durchlauf exportiert werden. Diese Einstellung betrifft Aktikel, Kunden und Attribute.'
+				supportText: 'Anzahl der Datensätze, die pro Durchlauf exportiert werden. Diese Einstellung betrifft Aktikel, Kunden und Attribute.'
 			}, {
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/InitialExportChunksPerRun}Pakete pro Durchlauf{/s}',
 				name: 'InitialExportChunksPerRun',
@@ -368,7 +369,32 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 					fields: ['size', 'name'],
 					data: [[-1, 'unendlich'], [2, '2'], [5, '5'], [10, '10'], [25, '25']]
 				}),
-				supportText: 'Legen Sie fest, wie viele Pakete pro Durchlauf des Cronjobs exportiert werden sollen. Diese Einstellung betrifft <strong>nur</strong> Aktikel.'
+				supportText: 'Anzahl der Datenpakete, die pro Durchlauf des Cronjobs exportiert werden sollen. Diese Einstellung betrifft <strong>nur</strong> Aktikel.'
+			}]
+		}, {
+			xtype: 'fieldset',
+			title: 'Synchronisierung',
+			layout: 'anchor',
+			defaults: {
+				labelWidth: 155,
+				xtype: 'combo',
+				queryMode: 'local',
+				anchor: '100%',
+				displayField: 'name',
+				valueField: 'size',
+				allowBlank: false,
+				editable: true
+			},
+			items: [{
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ImportItemChunkSize}Paketgröße (Artikel){/s}',
+				name: 'ImportItemChunkSize',
+				id: 'ImportItemChunkSize',
+				store: new Ext.data.ArrayStore({
+					fields: ['size'],
+					data: [[10], [25], [50], [100], [250], [500], [1000], [2500], [5000], [10000]]
+				}),
+				displayField: 'size',
+				supportText: 'Anzahl der Artikel, die pro Durchlauf der Synchronisierung von plentymarkets abgerufen werden.'
 			}]
 		}];
 	}

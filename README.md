@@ -362,8 +362,13 @@ shopware Zahlungsstatus (teilweise bezahlt) | Zahlungsstatus, welchen Aufträge 
 ##### Initialer Export
 Einstellung | Erklärung
 ----|------
-Paketgröße | Legen Sie fest, wie viele Datensätze pro Durchlauf exportiert werden. Diese Einstellunge betrifft Aktikel, Kunden und Attribute. Je mehr Leistung der Server hat bzw. je höher die o.g. PHP-Einstellungen gesetzt sind desto höher kann dieser Wert sein. Für den eigentlichen Export und die Dauer des Exports ist der Wert weitestgehend unmaßgeblich.
-Pakete pro Durchlauf | Legen Sie fest, wie viele Pakete pro Durchlauf des Cronjobs exportiert werden sollen. Diese Einstellung betrifft *nur* Aktikel. Nachdem die Pakete abgearbeitet sind, springt der Export automatisch wieder in den Status **wartend**. Bei der nächsten Ausführung des Cronjobs wird dann mit dem nächsten Paket weiter gemacht.
+Paketgröße | Anzahl der Datensätze, die pro Durchlauf exportiert werden. Diese Einstellunge betrifft Aktikel, Kunden und Attribute. Je mehr Leistung der Server hat bzw. je höher die o.g. PHP-Einstellungen gesetzt sind desto höher kann dieser Wert sein. Für den eigentlichen Export und die Dauer des Exports ist der Wert weitestgehend unmaßgeblich.
+Pakete pro Durchlauf | Anzahl der Pakete, die pro Durchlauf des Cronjobs exportiert werden sollen. Diese Einstellung betrifft *nur* Aktikel. Nachdem die Pakete abgearbeitet sind, springt der Export automatisch wieder in den Status **wartend**. Bei der nächsten Ausführung des Cronjobs wird dann mit dem nächsten Paket weiter gemacht.
+
+##### Synchronisierung
+Einstellung | Erklärung
+----|------
+Paketgröße (Artikel) | Anzahl der Artikel, die pro Durchlauf der Synchronisierung von plentymarkets abgerufen werden. **Achtung:** Je mehr Shops genutzt werden, desto mehr Daten werden pro Artikel abgerufen!
 
 #### Mapping
 Für alle Daten, die nicht automatisch gemappt werden können, muss die Verknüpfung manuell hergestellt werden.

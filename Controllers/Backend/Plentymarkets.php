@@ -49,7 +49,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	public function getDxContinuousAction()
 	{
 		$Config = PlentymarketsConfig::getInstance();
-
+		
 		$this->View()->assign(array(
 			'success' => true,
 			'data' => array(
@@ -252,6 +252,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		$Config->setIncomingPaymentShopwarePaymentFullStatusID($this->Request()->IncomingPaymentShopwarePaymentFullStatusID);
 		$Config->setIncomingPaymentShopwarePaymentPartialStatusID($this->Request()->IncomingPaymentShopwarePaymentPartialStatusID);
 		$Config->setInitialExportChunkSize(max($this->Request()->InitialExportChunkSize, 1));
+		$Config->setImportItemChunkSize(max($this->Request()->ImportItemChunkSize, 1));
 		$Config->setInitialExportChunksPerRun(max($this->Request()->InitialExportChunksPerRun, -1));
 
 		//

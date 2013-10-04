@@ -137,6 +137,10 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		name: 'InitialExportChunksPerRun',
 		type: 'integer',
 		defaultValue: -1
+	}, {
+		name: 'ImportItemChunkSize',
+		type: 'integer',
+		defaultValue: 250
 	},
 	
 	{

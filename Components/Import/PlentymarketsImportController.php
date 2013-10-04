@@ -63,7 +63,7 @@ require_once PY_SOAP . 'Models/PlentySoapRequest/GetOrderStatusList.php';
 require_once PY_SOAP . 'Models/PlentySoapRequest/SearchOrders.php';
 require_once PY_SOAP . 'Models/PlentySoapRequest/GetItemsPriceUpdate.php';
 require_once PY_SOAP . 'Models/PlentySoapResponseObject/GetItemsPriceUpdate.php';
-require_once PY_COMPONENTS . 'Import/PlentymarketsImportItemController.php';
+require_once PY_COMPONENTS . 'Import/Controller/PlentymarketsImportControllerItem.php';
 require_once PY_COMPONENTS . 'Import/Entity/PlentymarketsImportEntityItem.php';
 require_once PY_COMPONENTS . 'Import/Entity/PlentymarketsImportEntityItemLinked.php';
 require_once PY_COMPONENTS . 'Import/Entity/PlentymarketsImportEntityItemStock.php';
@@ -86,8 +86,8 @@ class PlentymarketsImportController
 	 */
 	public static function importItems()
 	{
-		$PlentymarketsImportItemController = new PlentymarketsImportItemController();
-		$PlentymarketsImportItemController->importItems();
+		$PlentymarketsImportControllerItem = new PlentymarketsImportControllerItem();
+		$PlentymarketsImportControllerItem->run();
 	}
 
 	/**
