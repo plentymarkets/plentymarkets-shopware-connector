@@ -32,6 +32,7 @@ require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingController.php';
 require_once PY_COMPONENTS . 'Utils/PlentymarketsUtils.php';
 require_once PY_COMPONENTS . 'Utils/PlentymarketsGarbageCollector.php';
 require_once PY_COMPONENTS . 'Import/PlentymarketsImportController.php';
+require_once PY_COMPONENTS . 'Import/Stack/PlentymarketsImportStackItem.php';
 require_once PY_COMPONENTS . 'Export/PlentymarketsExportController.php';
 
 /**
@@ -230,7 +231,7 @@ class PlentymarketsCronjobController
 		{
 			PlentymarketsExportController::getInstance()->exportOrders();
 			$this->Config->setExportOrderStatus(1);
-			$this->Config->setExportOrderError('');
+			$this->Config->eraseExportOrderError();
 		}
 		catch (Exception $E)
 		{
@@ -259,7 +260,7 @@ class PlentymarketsCronjobController
 		{
 			PlentymarketsExportController::getInstance()->exportIncomingPayments();
 			$this->Config->setExportOrderIncomingPaymentStatus(1);
-			$this->Config->setExportOrderIncomingPaymentError('');
+			$this->Config->eraseExportOrderIncomingPaymentError();
 		}
 		catch (Exception $E)
 		{
@@ -288,7 +289,7 @@ class PlentymarketsCronjobController
 		{
 			PlentymarketsImportController::importOrders();
 			$this->Config->setImportOrderStatus(1);
-			$this->Config->setImportOrderError('');
+			$this->Config->eraseImportOrderError();
 		}
 		catch (Exception $E)
 		{
@@ -334,12 +335,40 @@ class PlentymarketsCronjobController
 		{
 			PlentymarketsImportController::importItems();
 			$this->Config->setImportItemStatus(1);
-			$this->Config->setImportItemError('');
+			$this->Config->eraseImportItemError();
 		}
 		catch (Exception $E)
 		{
 			$this->Config->setImportItemStatus(2);
 			$this->Config->setImportItemError($E->getMessage());
+		}
+	}
+
+	/**
+	 * Runs the item import stack cronjob.
+	 *
+	 * @param Shopware_Components_Cron_CronJob $Job
+	 */
+	public function runItemImportStackUpdate(Shopware_Components_Cron_CronJob $Job)
+	{
+		$this->Config->setImportItemStackLastRunTimestamp(time());
+		$this->Config->setImportItemStackNextRunTimestamp(time() + $Job->getJob()->getInterval());
+		
+		if (!$this->mayRun)
+		{
+			return;
+		}
+
+		try
+		{
+			PlentymarketsImportStackItem::getInstance()->update();
+			$this->Config->setImportItemStackStatus(1);
+			$this->Config->eraseImportItemStackError();
+		}
+		catch (Exception $E)
+		{
+			$this->Config->setImportItemStackStatus(2);
+			$this->Config->setImportItemStackError($E->getMessage());
 		}
 	}
 
@@ -363,7 +392,7 @@ class PlentymarketsCronjobController
 		{
 			PlentymarketsImportController::importItemPrices();
 			$this->Config->setImportItemPriceStatus(1);
-			$this->Config->setImportItemPriceError('');
+			$this->Config->eraseImportItemPriceError();
 		}
 		catch (Exception $E)
 		{
@@ -392,7 +421,7 @@ class PlentymarketsCronjobController
 		{
 			PlentymarketsImportController::importItemStocks();
 			$this->Config->setImportItemStockStatus(1);
-			$this->Config->setImportItemStockError('');
+			$this->Config->eraseImportItemStockError();
 		}
 		catch (Exception $E)
 		{
