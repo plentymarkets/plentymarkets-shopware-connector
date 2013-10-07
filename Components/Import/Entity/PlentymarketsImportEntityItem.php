@@ -329,6 +329,12 @@ class PlentymarketsImportEntityItem
 		// Categories
 		foreach ($this->ItemBase->Categories->item as $Category)
 		{
+			// FIX: corrupt category within plenty
+			if ((integer) $Category->ItemCategoryID <= 0 || empty($Category->ItemCategoryPathNames))
+			{
+				continue;
+			}
+			
 			try
 			{
 				$categoryID = PlentymarketsMappingController::getCategoryByPlentyID($Category->ItemCategoryPath);
