@@ -19,8 +19,6 @@ Ext.define('Shopware.apps.Plentymarkets.view.dx.Continuous', {
 
 	autoScroll: true,
 
-	cls: 'shopware-form',
-
 	layout: 'anchor',
 
 	border: false,
@@ -37,33 +35,47 @@ Ext.define('Shopware.apps.Plentymarkets.view.dx.Continuous', {
 
 		var me = this;
 
-		if (!me.isBuilt)
-		{
-			me.stores = {};
-			me.store = Ext.create('Shopware.apps.Plentymarkets.store.dx.Continuous');
-			me.store.load(function(data)
+		me.listeners = {
+			activate: function()
 			{
-				data = data[0]
-
-				me.stores['import'] = Ext.create('Ext.data.Store', {
-					model: 'Shopware.apps.Plentymarkets.model.dx.ContinuousRecord',
-					data: data.raw.import,
-					groupField: 'Section'
-				});
-				
-				me.stores['export'] = Ext.create('Ext.data.Store', {
-					model: 'Shopware.apps.Plentymarkets.model.dx.ContinuousRecord',
-					data: data.raw['export'],
-					groupField: 'Section'
-				});
-
-				me.add(me.getView());
-				me.isBuilt = true;
-				me.setLoading(false);
-			});
-		}
+				if (!me.isBuilt)
+				{
+					me.build();
+				}
+			}
+		};
 
 		me.callParent(arguments);
+	},
+
+	build: function()
+	{
+		var me = this;
+		
+		me.setLoading(true);
+		me.stores = {};
+		me.store = Ext.create('Shopware.apps.Plentymarkets.store.dx.Continuous');
+		me.store.load(function(data)
+		{
+			data = data[0]
+
+			me.stores['import'] = Ext.create('Ext.data.Store', {
+				model: 'Shopware.apps.Plentymarkets.model.dx.ContinuousRecord',
+				data: data.raw.import,
+				groupField: 'Section'
+			});
+
+			me.stores['export'] = Ext.create('Ext.data.Store', {
+				model: 'Shopware.apps.Plentymarkets.model.dx.ContinuousRecord',
+				data: data.raw['export'],
+				groupField: 'Section'
+			});
+
+			me.add(me.getView());
+			me.isBuilt = true;
+			me.setLoading(false);
+		});
+		
 	},
 
 	getView: function()
@@ -72,13 +84,12 @@ Ext.define('Shopware.apps.Plentymarkets.view.dx.Continuous', {
 
 		return [
 
-		        {
-		        	xtype: 'plentymarkets-view-dx-grid',
-		        	title: '<b>Ausgehende Daten</b>',
-		        	iconCls: 'plenty-icon-dx-export',
-		        	store: me.stores['export'],
-		        },
 		{
+			xtype: 'plentymarkets-view-dx-grid',
+			title: '<b>Ausgehende Daten</b>',
+			iconCls: 'plenty-icon-dx-export',
+			store: me.stores['export'],
+		}, {
 			xtype: 'plentymarkets-view-dx-grid',
 			title: '<b>Eingehende Daten</b>',
 			iconCls: 'plenty-icon-dx-import',

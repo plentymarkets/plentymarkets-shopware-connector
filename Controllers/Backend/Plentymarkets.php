@@ -176,7 +176,6 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 			PlentymarketsConfig::getInstance()->setMiscOrderStatusLastImport(0);
 			PlentymarketsConfig::getInstance()->setMiscWarehousesLastImport(0);
 			PlentymarketsConfig::getInstance()->setMiscSalesOrderReferrerLastImport(0);
-			PlentymarketsConfig::getInstance()->setMiscMultishopsLastImport(0);
 		}
 
 		$orderStatusList = PlentymarketsImportController::getOrderStatusList();
@@ -193,7 +192,6 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 				'warehouses' => array_values(PlentymarketsImportController::getWarehouseList()),
 				'orderReferrer' => array_values(PlentymarketsImportController::getOrderReferrerList()),
 				'orderStatus' => array_values($orderStatusList),
-				'multishops' => array_values(PlentymarketsImportController::getStoreList()),
 				'producers' => Shopware()->Db()
 					->fetchAll('
 						SELECT id, name FROM s_articles_supplier ORDER BY name

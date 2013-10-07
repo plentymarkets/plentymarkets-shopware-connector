@@ -57,7 +57,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.dx.Initial', {
 				cls: 'secondary',
 				handler: function()
 				{
-					me.store.load()
+					me.store.load();
 				}
 			})]
 		})];

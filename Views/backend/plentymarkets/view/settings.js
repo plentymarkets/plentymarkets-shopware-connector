@@ -66,7 +66,6 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 			data = data[0]
 			me.stores.warehouses = data.getWarehouses();
 			me.stores.producers = data.getProducers();
-			me.stores.multishops = data.getMultishops();
 			me.stores.orderStatus = data.getOrderStatus();
 			me.stores.orderReferrer = data.getOrderReferrer();
 
@@ -89,16 +88,14 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 			callback: function(data)
 			{
 				data = data[0]
-				me.stores.warehouses.loadData(data.getWarehouses());
-				me.stores.producers.loadData(data.getProducers());
-				me.stores.multishops.loadData(data.getMultishops());
-				me.stores.orderStatus.loadData(data.getOrderStatus());
-				me.stores.orderReferrer.loadData(data.getOrderReferrer());
+
+				Ext.getCmp('plenty-ItemWarehouseID').bindStore(data.getWarehouses());
+				Ext.getCmp('plenty-ItemProducerID').bindStore(data.getProducers());
+				Ext.getCmp('plenty-OutgoingItemsOrderStatus').bindStore(data.getOrderStatus());
+				Ext.getCmp('plenty-OrderReferrerID').bindStore(data.getOrderReferrer());
 
 				me.loadRecord(me.settings);
 				me.setLoading(false);
-
-				Shopware.Notification.createGrowlMessage('Achtung', 'Bitte laden Sie das plentymarkets-Fenster neu!');
 			}
 		});
 	},
@@ -139,8 +136,9 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 	getFieldSets: function()
 	{
 		var me = this;
+		
 		var paymentStatusStore = Ext.create('Shopware.apps.Base.store.PaymentStatus').load();
-
+	
 		return [{
 			xtype: 'fieldset',
 			title: 'Import Artikelstammdaten',
@@ -159,6 +157,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 			items: [{
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemWarehouseID}plentymarkets Lager{/s}',
 				name: 'ItemWarehouseID',
+				id: 'plenty-ItemWarehouseID',
 				store: me.stores.warehouses,
 				supportText: 'Datenquelle für den Warenbestandsabgleich.'
 			}, {
@@ -172,6 +171,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 			}, {
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemProducerID}Hersteller{/s}',
 				name: 'ItemProducerID',
+				id: 'plenty-ItemProducerID',
 				store: me.stores.producers,
 				supportText: 'Sofern bei Artikeln in plentymarkets kein Hersteller zugeordnet wurde, wird dieser Hersteller in shopware mit den betreffenden Artikeln verknüpft.'
 			}, {
@@ -190,7 +190,10 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 			}, {
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemCleanupActionID}Bereinigen{/s}',
 				name: 'ItemCleanupActionID',
-				store: Ext.create('Shopware.apps.Plentymarkets.store.settings.ItemCleanupAction').load(),
+				store: new Ext.data.ArrayStore({
+					fields: ['id', 'name'],
+					data: [[1, 'Artikel deaktivieren'], [2, 'Artikel unwiederbringlich löschen']]
+				}),
 				supportText: 'Aktion die ausgeführt wird, wenn die Mandantenzuordnung bei plentymarkets gelöst wird oder kein Mapping für den Artikel vorhanden ist.'
 			}
 
@@ -225,6 +228,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 			}, {
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/OrderReferrerID}Auftragsherkunft{/s}',
 				name: 'OrderReferrerID',
+				id: 'plenty-OrderReferrerID',
 				store: me.stores.orderReferrer,
 				supportText: 'Die hier ausgewählte Auftragsherkunft erhalten Aufträge von shopware in plentymarkets. In plentymarkets kann dazu eine eigene Auftragsherkunft angelegt werden.',
 				allowBlank: true
@@ -267,15 +271,15 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 					{
 						if (box.getValue() > 0)
 						{
-							Ext.getCmp('OutgoingItemsOrderStatus').setValue(0);
-							Ext.getCmp('OutgoingItemsOrderStatus').applyEmptyText();
+							Ext.getCmp('plenty-OutgoingItemsOrderStatus').setValue(0);
+							Ext.getCmp('plenty-OutgoingItemsOrderStatus').applyEmptyText();
 						}
 					}
 				}
 			}, {
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/OutgoingItemsOrderStatus}Auftragsstatus{/s}',
 				name: 'OutgoingItemsOrderStatus',
-				id: 'OutgoingItemsOrderStatus',
+				id: 'plenty-OutgoingItemsOrderStatus',
 				store: me.stores.orderStatus,
 				supportText: 'Erreicht ein Auftrag in plentymarkets diesen Auftragsstatus, gilt dieser als versendet.',
 				valueField: 'status',
