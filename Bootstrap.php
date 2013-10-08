@@ -596,7 +596,9 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
     {
 		$request = $arguments->getSubject()->Request();
 		
-		$path = str_replace(array('Bootstrap.php',$_SERVER['DOCUMENT_ROOT']), array('style.css',''), __FILE__);
+		$path = str_replace('Bootstrap.php', 'style.css', __FILE__);
+		$path = preg_replace('!^(?:.*?)(/engine/Shopware.*?)$!', '$1', $path);
+		$path = str_replace('/shopware.php', '', $_SERVER['PHP_SELF']) . $path;
 		$path .= '?' . urlencode($this->getVersion());
 
     	if ($request->getActionName() == 'index')
