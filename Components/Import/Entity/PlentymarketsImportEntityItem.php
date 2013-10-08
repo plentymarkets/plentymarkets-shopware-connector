@@ -751,110 +751,102 @@ class PlentymarketsImportEntityItem
 			$this->setCategories();
 			$data['categories'] = $this->categories;
 
-			try
+			// Normaler ARtikel
+			if (!count($this->variants))
 			{
-				// Normaler ARtikel
-				if (!count($this->variants))
+				// todo: check the number
+				$data['mainDetail']['number'] = PlentymarketsImportItemHelper::getUsableNumber($this->ItemBase->ItemNo);
+
+				// Anlegen
+				$Article = $ArticleResource->create($data);
+
+				//
+				$SHOPWARE_itemID = $Article->getId();
+
+				// Log
+				PlentymarketsLogger::getInstance()->message('Sync:Item', 'Item "' . $this->data['name'] . '" created with number ' . $data['mainDetail']['number']);
+
+				// Mapping speichern
+				PlentymarketsMappingController::addItem($Article->getId(), $this->ItemBase->ItemID);
+				
+				// Stock stack
+				PlentymarketsImportItemStockStack::getInstance()->add($this->ItemBase->ItemID);
+
+				// Media
+
+				// Preise
+				$PlentymarketsImportEntityItemPrice = new PlentymarketsImportEntityItemPrice($this->ItemBase->PriceSet);
+				$PlentymarketsImportEntityItemPrice->update($Article->getId());
+			}
+
+			else
+			{
+				// Set the id of the first variant
+				$mainVariant = array_shift(array_values($this->variants));
+				$data['mainDetail']['number'] = $mainVariant['number'];
+
+				// Anlegen
+				$Article = $ArticleResource->create($data);
+				PlentymarketsLogger::getInstance()->message('Sync:Item', 'Variant base item "' . $this->data['name'] . '" created with number ' . $data['mainDetail']['number']);
+
+				//
+				$SHOPWARE_itemID = $Article->getId();
+
+				// Mapping speichern
+				PlentymarketsMappingController::addItem($Article->getId(), $this->ItemBase->ItemID);
+
+				$VariantController = new PlentymarketsImportItemVariantController($this->ItemBase);
+
+				//
+				$variants = array();
+				$number2markup = array();
+				$number2sku = array();
+
+				//
+				foreach ($this->variants as $variantId => &$variant)
 				{
-					// todo: check the number
-					$data['mainDetail']['number'] = PlentymarketsImportItemHelper::getUsableNumber($this->ItemBase->ItemNo);
+					$variant['configuratorOptions'] = $VariantController->getOptionsByVariantId($variantId);
+					$number2markup[$variant['number']] = $VariantController->getMarkupByVariantId($variantId);
+					$number2sku[$variant['number']] = $variant['X_plentySku'];
+				}
 
-					// Anlegen
-					$Article = $ArticleResource->create($data);
+				// Varianten
+				$id = $Article->getId();
 
-					//
-					$SHOPWARE_itemID = $Article->getId();
+				$updateArticle = array(
 
-					// Log
-					PlentymarketsLogger::getInstance()->message('Sync:Item', 'Item "' . $this->data['name'] . '" created with number ' . $data['mainDetail']['number']);
+					'configuratorSet' => array(
+						'groups' => $VariantController->getGroups()
+					),
 
-					// Mapping speichern
-					PlentymarketsMappingController::addItem($Article->getId(), $this->ItemBase->ItemID);
-					
-					// Stock stack
-					PlentymarketsImportItemStockStack::getInstance()->add($this->ItemBase->ItemID);
+					'variants' => array_values($this->variants)
+				);
 
-					// Media
+				PlentymarketsLogger::getInstance()->message('Sync:Item:Variant', 'Starting to create variants for item "' . $this->data['name'] . '" (' . $data['mainDetail']['number'] . ')');
+
+				$Article = $ArticleResource->update($id, $updateArticle);
+
+				// Mapping für die Varianten
+				foreach ($Article->getDetails() as $detail)
+				{
+					// Save mapping and add the variant to the stock stack
+					$sku = $number2sku[$detail->getNumber()];
+					PlentymarketsMappingController::addItemVariant($detail->getId(), $sku);
+					PlentymarketsImportItemStockStack::getInstance()->add($sku);
 
 					// Preise
-					$PlentymarketsImportEntityItemPrice = new PlentymarketsImportEntityItemPrice($this->ItemBase->PriceSet);
-					$PlentymarketsImportEntityItemPrice->update($Article->getId());
+					$PlentymarketsImportEntityItemPrice = new PlentymarketsImportEntityItemPrice($this->ItemBase->PriceSet, $number2markup[$detail->getNumber()]);
+					$PlentymarketsImportEntityItemPrice->updateVariant($detail->getId());
 				}
 
-				else
-				{
-					// Set the id of the first variant
-					$mainVariant = array_shift(array_values($this->variants));
-					$data['mainDetail']['number'] = $mainVariant['number'];
+				$VariantController->map($ArticleResource->getOne($id));
 
-					// Anlegen
-					$Article = $ArticleResource->create($data);
-					PlentymarketsLogger::getInstance()->message('Sync:Item', 'Variant base item "' . $this->data['name'] . '" created with number ' . $data['mainDetail']['number']);
-
-					//
-					$SHOPWARE_itemID = $Article->getId();
-
-					// Mapping speichern
-					PlentymarketsMappingController::addItem($Article->getId(), $this->ItemBase->ItemID);
-
-					$VariantController = new PlentymarketsImportItemVariantController($this->ItemBase);
-
-					//
-					$variants = array();
-					$number2markup = array();
-					$number2sku = array();
-
-					//
-					foreach ($this->variants as $variantId => &$variant)
-					{
-						$variant['configuratorOptions'] = $VariantController->getOptionsByVariantId($variantId);
-						$number2markup[$variant['number']] = $VariantController->getMarkupByVariantId($variantId);
-						$number2sku[$variant['number']] = $variant['X_plentySku'];
-					}
-
-					// Varianten
-					$id = $Article->getId();
-
-					$updateArticle = array(
-
-						'configuratorSet' => array(
-							'groups' => $VariantController->getGroups()
-						),
-
-						'variants' => array_values($this->variants)
-					);
-
-					PlentymarketsLogger::getInstance()->message('Sync:Item:Variant', 'Starting to create variants for item "' . $this->data['name'] . '" (' . $data['mainDetail']['number'] . ')');
-
-					$Article = $ArticleResource->update($id, $updateArticle);
-
-					// Mapping für die Varianten
-					foreach ($Article->getDetails() as $detail)
-					{
-						// Save mapping and add the variant to the stock stack
-						$sku = $number2sku[$detail->getNumber()];
-						PlentymarketsMappingController::addItemVariant($detail->getId(), $sku);
-						PlentymarketsImportItemStockStack::getInstance()->add($sku);
-
-						// Preise
-						$PlentymarketsImportEntityItemPrice = new PlentymarketsImportEntityItemPrice($this->ItemBase->PriceSet, $number2markup[$detail->getNumber()]);
-						$PlentymarketsImportEntityItemPrice->updateVariant($detail->getId());
-					}
-
-					$VariantController->map($ArticleResource->getOne($id));
-
-					PlentymarketsLogger::getInstance()->message('Sync:Item:Variant', 'Variants created for item "' . $this->data['name'] . '" (' . $data['mainDetail']['number'] . ')');
-				}
-
-				// Bilder
-				$PlentymarketsImportEntityItemImage = new PlentymarketsImportEntityItemImage($this->ItemBase->ItemID, $SHOPWARE_itemID);
-				$PlentymarketsImportEntityItemImage->image();
+				PlentymarketsLogger::getInstance()->message('Sync:Item:Variant', 'Variants created for item "' . $this->data['name'] . '" (' . $data['mainDetail']['number'] . ')');
 			}
-			catch (Exception $E)
-			{
-				PlentymarketsLogger::getInstance()->error('Sync:Item', 'Item could not be created: ' . $this->data['name']);
-				PlentymarketsLogger::getInstance()->error('Sync:Item', get_class($E) . ': ' . $E->getMessage());
-			}
+
+			// Bilder
+			$PlentymarketsImportEntityItemImage = new PlentymarketsImportEntityItemImage($this->ItemBase->ItemID, $SHOPWARE_itemID);
+			$PlentymarketsImportEntityItemImage->image();
 		}
 
 		// Der Hersteller ist neu angelegt worden

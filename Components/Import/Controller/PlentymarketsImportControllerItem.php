@@ -135,9 +135,20 @@ class PlentymarketsImportControllerItem
 			// Increment the item counter for the logging
 			++$this->numberOfItems;
 		}
+		catch (Shopware\Components\Api\Exception\ValidationException $E)
+		{
+			PlentymarketsLogger::getInstance()->error('Sync:Item', 'Item "'. $ItemBase->Texts->Name .'" ('. $ItemBase->ItemID .') could not be importet');
+			PlentymarketsLogger::getInstance()->error('Sync:Item', 'Shopware\Components\Api\Exception\ValidationException');
+			foreach ($E->getViolations() as $ConstraintViolation)
+			{
+				PlentymarketsLogger::getInstance()->error('Sync:Item', $ConstraintViolation->getMessage());
+			}
+		}
+		
 		catch (Exception $E)
 		{
 			PlentymarketsLogger::getInstance()->error('Sync:Item', 'Item "'. $ItemBase->Texts->Name .'" ('. $ItemBase->ItemID .') could not be importet');
+			PlentymarketsLogger::getInstance()->error('Sync:Item', get_class($E));
 			PlentymarketsLogger::getInstance()->error('Sync:Item', $E->getMessage());
 			
 			// Re-add the item to the stack
