@@ -27,11 +27,22 @@ Ext.define('Shopware.apps.Plentymarkets.controller.Export', {
 		me.callParent(arguments);
 	},
 
-	handle: function(record, action)
+	handle: function(record, action, view)
 	{
-		record.set('ExportAction', action)
 		record.save({
-			success: function (a, operation, c) {
+			params: {
+				doAction: action
+			},
+			success: function(a, operation, c)
+			{
+				view.store.load();
+				view.wizardStore.load({
+					callback: function(data)
+					{
+						view.wizard = data[0];
+						view.setToolbarText();
+					}
+				});
 				Shopware.Notification.createGrowlMessage(
 					'Aktion ausgeführt', operation.request.scope.reader.jsonData["message"]
 				);

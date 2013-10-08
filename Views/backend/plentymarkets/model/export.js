@@ -14,31 +14,34 @@ Ext.define('Shopware.apps.Plentymarkets.model.Export', {
 	fields: [
 	// {block name="backend/Plentymarkets/model/Export/fields"}{/block}
 	{
-		name: 'ExportStatus',
+		name: 'status',
 		type: 'string'
 	}, {
-		name: 'ExportTimestampStart',
+		name: 'start',
 		type: 'date',
 		dateFormat: 'timestamp'
 	}, {
-		name: 'ExportTimestampFinished',
+		name: 'finished',
 		type: 'date',
 		dateFormat: 'timestamp'
 	}, {
-		name: 'ExportLastErrorMessage',
+		name: 'error',
 		type: 'string'
 	}, {
-		name: 'ExportQuantity',
-		type: 'integer'
-	}, {
-		name: 'ExportEntityName',
+		name: 'name',
 		type: 'string'
 	}, {
-		name: 'ExportEntityDesription',
-		type: 'string'
+		name: 'mayAnnounce',
+		type: 'boolean'
 	}, {
-		name: 'ExportAction',
-		type: 'string'
+		name: 'mayReset',
+		type: 'boolean'
+	}, {
+		name: 'mayErase',
+		type: 'boolean'
+	}, {
+		name: 'needsDependency',
+		type: 'boolean'
 	}],
 
 	proxy: {

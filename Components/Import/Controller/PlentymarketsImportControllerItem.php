@@ -143,6 +143,9 @@ class PlentymarketsImportControllerItem
 			{
 				PlentymarketsLogger::getInstance()->error('Sync:Item', $ConstraintViolation->getMessage());
 			}
+			
+			// Re-add the item to the stack
+			PlentymarketsImportStackItem::getInstance()->addItem($ItemBase->ItemID, $storeId);
 		}
 		
 		catch (Exception $E)

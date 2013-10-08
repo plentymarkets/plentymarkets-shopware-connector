@@ -26,6 +26,9 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
+require_once PY_COMPONENTS . 'Export/PlentymarketsExportException.php';
+require_once PY_COMPONENTS . 'Export/Status/PlentymarketsExportStatusController.php';
+
 /**
  * The class PlentymarketsExportController does the actual export for different cronjobs e.g. in the class PlentymarketsCronjobController.
  * It uses the different export entities in /Export/Entity, for example PlentymarketsExportEntityCustomer.
@@ -53,19 +56,6 @@ class PlentymarketsExportController
 	 * @var PlentymarketsExportController
 	 */
 	protected static $Instance;
-	
-	/**
-	 * This array defines the order in which the exports have to be carried out.
-	 * @var array
-	 */
-	protected static $order = array(
-		'ItemCategory',
-		'ItemAttribute',
-		'ItemProperty',
-		'ItemProducer',
-		'Item',
-		'ItemCrossSelling',
-	);
 	
 	/**
 	 * 
@@ -96,6 +86,12 @@ class PlentymarketsExportController
 	 * @var PlentymarketsConfig
 	 */
 	protected $Config;
+	
+	/**
+	 * 
+	 * @var PlentymarketsExportStatusController
+	 */
+	protected $StatusController;
 
 	/**
 	 * Indicates whether an export process is running.
@@ -104,13 +100,6 @@ class PlentymarketsExportController
 	 */
 	protected $isRunning = false;
 
-	/**
-	 * Indicates whether every export is finished completely.
-	 *
-	 * @var boolean
-	 */
-	protected $isComplete = true;
-	
 	/**
 	 * Indicates whether an export may run or not.
 	 * 
@@ -125,20 +114,13 @@ class PlentymarketsExportController
 	{
 		//
 		$this->Config = PlentymarketsConfig::getInstance();
+		$this->StatusController = PlentymarketsExportStatusController::getInstance();
 
 		// Check whether a process is running
 		$this->isRunning = (boolean) $this->Config->getIsExportRunning(false);
 		
 		// Check whether settings and mapping are done
 		$this->mayRun = PlentymarketsMappingController::isComplete() && $this->Config->isComplete();
-
-		// Check whether every export is finished completely
-		$this->isComplete = $this->isComplete && ($this->Config->getItemCategoryExportStatus('open') == 'success');
-		$this->isComplete = $this->isComplete && ($this->Config->getItemAttributeExportStatus('open') == 'success');
-		$this->isComplete = $this->isComplete && ($this->Config->getItemPropertyExportStatus('open') == 'success');
-		$this->isComplete = $this->isComplete && ($this->Config->getItemProducerExportStatus('open') == 'success');
-		$this->isComplete = $this->isComplete && ($this->Config->getItemExportStatus('open') == 'success');
-		$this->isComplete = $this->isComplete && ($this->Config->getItemCrossSellingExportStatus('open') == 'success');
 	}
 
 	/**
@@ -148,22 +130,9 @@ class PlentymarketsExportController
 	 */
 	public function isComplete()
 	{
-		return $this->isComplete;
+		return $this->StatusController->isFinished();
 	}
 
-	/**
-	 * Re-announces an export
-	 *
-	 * @param string $entity
-	 */
-	public function restart($entity)
-	{
-		// Last chunk
-		$methodLastChunk = sprintf('set%sExportLastChunk', $entity);
-		$this->Config->$methodLastChunk('');
-		
-		$this->announce($entity);
-	}
 
 	/**
 	 * Resets an export status
@@ -184,19 +153,19 @@ class PlentymarketsExportController
 		
 		// Start
 		$methodStart = sprintf('set%sExportTimestampStart', $entity);
-		$this->Config->$methodStart('');
+		$this->Config->$methodStart(0);
 		
 		// Finished
 		$methodStart = sprintf('set%sExportTimestampFinished', $entity);
-		$this->Config->$methodStart('');
+		$this->Config->$methodStart(0);
 		
 		// Error
-		$methodError = sprintf('set%sExportLastErrorMessage', $entity);
-		$this->Config->$methodError('');
+		$methodError = sprintf('erase%sExportLastErrorMessage', $entity);
+		$this->Config->$methodError();
 		
 		// Last chunk
-		$methodLastChunk = sprintf('set%sExportLastChunk', $entity);
-		$this->Config->$methodLastChunk('');
+		$methodLastChunk = sprintf('erase%sExportLastChunk', $entity);
+		$this->Config->$methodLastChunk();
 	}
 	
 	/**
@@ -208,6 +177,10 @@ class PlentymarketsExportController
 	{
 		// Status
 		$this->reset($entity, false);
+		
+		// -1 is needed, so that the erase button is invisible
+		$methodStart = sprintf('erase%sExportTimestampStart', $entity);
+		$this->Config->$methodStart();
 		
 		// Delete Mapping
 		foreach ((array) self::$mapping[$entity] as $tableName)
@@ -228,42 +201,37 @@ class PlentymarketsExportController
 	 * an export has already announced. In case of complied conditions the actual export gets the state "pending".
 	 *
 	 * @param string $entity
-	 * @throws \Exception
+	 * @throws PlentymarketsExportException
 	 */
 	public function announce($entity)
 	{
 		if ($this->isRunning == true)
 		{
-			throw new \Exception('Another export is running at this very moment');
+			throw new PlentymarketsExportException('Another export is running at this very moment');
 		}
 
 		// Check whether another export is waiting to be executed
 		$waiting = $this->Config->getExportEntityPending(false);
 		if ($waiting == $entity)
 		{
-			throw new \Exception('The export of entity ' . $entity . ' has already announced');
+			throw new PlentymarketsExportException('The export of entity ' . $entity . ' has already announced');
 		}
 
 		if ($waiting != false)
 		{
-			throw new \Exception('Another export is waiting to be carried out');
+			throw new PlentymarketsExportException('Another export is waiting to be carried out');
 		}
 
 		// Check whether settings and mapping is complete
 		if ($this->mayRun == false)
 		{
-			throw new \Exception('Either the mapping or the settings are not finished');
+			throw new PlentymarketsExportException('Either the mapping or the settings are not finished');
 		}
 		
 		// Check whether or not the order is correct
-		$index = array_search($entity, self::$order);
-		if ($index > 0)
+		if (!$this->StatusController->mayAnnounceEntity($entity))
 		{
-			$previous = self::$order[$index - 1];
-			if (!$this->isSuccessfullyFinished($previous))
-			{
-				throw new \Exception('The previous entity "'. $previous .'" is not finished successfully');
-			}
+			throw new PlentymarketsExportException($entity . ' cannot be announced right now');
 		}
 		
 		//
@@ -276,19 +244,19 @@ class PlentymarketsExportController
 	/**
 	 * Starts the actual pending export.
 	 *
-	 * @throws \Exception
+	 * @throws PlentymarketsExportException
 	 */
 	public function export()
 	{
 		if ($this->isRunning == true)
 		{
-			throw new \Exception('Another export is running at this very moment');
+			throw new PlentymarketsExportException('Another export is running at this very moment');
 		}
 		
 		// Check whether settings and mapping is complete
 		if ($this->mayRun == false)
 		{
-			throw new \Exception('Either the mapping or the settings are not finished');
+			throw new PlentymarketsExportException('Either the mapping or the settings are not finished');
 		}
 
 		$entity = $this->Config->getExportEntityPending(false);
@@ -300,7 +268,7 @@ class PlentymarketsExportController
 		}
 
 		// Set the running flag
-		$this->Config->setExportEntityPending(false);
+		$this->Config->eraseExportEntityPending();
 		$this->Config->setIsExportRunning(1);
 
 		//
@@ -343,7 +311,7 @@ class PlentymarketsExportController
 			$method = sprintf('set%sExportStatus', $entity);
 			$this->Config->$method('error');
 		}
-
+		
 		$this->Config->setIsExportRunning(0);
 	}
 

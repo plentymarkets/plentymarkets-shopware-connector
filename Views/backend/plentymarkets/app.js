@@ -40,6 +40,7 @@ Ext.define('Shopware.apps.Plentymarkets', {
 
 	stores: [
 	    'dx.Continuous',
+	    'dx.Wizard',
 	    'Export',
 	    'Log',
 	    'log.Identifier',
@@ -60,6 +61,7 @@ Ext.define('Shopware.apps.Plentymarkets', {
 	models: [
 	    'dx.Continuous',
 	    'dx.ContinuousRecord',
+	    'dx.Wizard',
 	    'Export',
 	    'Log',
 	    'log.Identifier',

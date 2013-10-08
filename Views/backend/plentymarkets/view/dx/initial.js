@@ -17,12 +17,9 @@ Ext.define('Shopware.apps.Plentymarkets.view.dx.Initial', {
 
 	title: 'Initialer Export zu plentymarkets',
 
-	autoScroll: true,
-
 	cls: 'plenty-grid',
 
 	border: false,
-	
 
 	initComponent: function()
 	{
@@ -30,7 +27,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.dx.Initial', {
 
 		var status = {
 			open: 'offen',
-			pending: 'wartend',
+			pending: 'warte',
 			running: 'läuft',
 			success: 'fertig',
 			error: 'Fehler',
@@ -46,25 +43,64 @@ Ext.define('Shopware.apps.Plentymarkets.view.dx.Initial', {
 			Customer: 'Kunden',
 		};
 
+		me.wizardToolbar = Ext.create('Ext.toolbar.TextItem', {
+			text: 'asdf'
+		});
+		
 		me.store = Ext.create('Shopware.apps.Plentymarkets.store.Export').load();
+		me.wizardStore = Ext.create('Shopware.apps.Plentymarkets.store.dx.Wizard').load({
+			callback: function(data)
+			{
+				me.wizard = data[0];
+				me.setToolbarText();
+			}
+		});
+		
 
 		me.dockedItems = [Ext.create('Ext.toolbar.Toolbar', {
 			cls: 'shopware-toolbar',
 			dock: 'bottom',
 			ui: 'shopware-ui',
-			items: ['->', Ext.create('Ext.button.Button', {
-				text: '{s name=plentymarkets/view/export/button/reload}Neu laden{/s}',
+			items: [me.wizardToolbar,
+
+			'->', {
+				xtype: 'button',
+				text: '{s name=plentymarkets/view/export/button/ExportAuto}Automatischer Export{/s}',
 				cls: 'secondary',
+				iconCls: 'plenty-icon-wizard',
+				handler: function()
+				{
+					me.wizard.save({
+						params: {
+							activate: me.wizard.get('isActive') ? 'no' : 'yes' 
+						},
+						callback: function(data)
+						{
+							me.wizard = data;
+							me.setToolbarText();
+						}
+					});
+				}
+			}, Ext.create('Ext.button.Button', {
+				text: '{s name=plentymarkets/view/export/button/reload}Neu laden{/s}',
+				cls: 'primary',
 				handler: function()
 				{
 					me.store.load();
+					me.wizardStore.load({
+						callback: function(data)
+						{
+							me.wizard = data[0];
+							me.setToolbarText();
+						}
+					});
 				}
 			})]
 		})];
 
 		me.columns = [{
-			header: 'Resource',
-			dataIndex: 'ExportEntityName',
+			header: 'Daten',
+			dataIndex: 'name',
 			flex: 2,
 			renderer: function(value)
 			{
@@ -72,14 +108,14 @@ Ext.define('Shopware.apps.Plentymarkets.view.dx.Initial', {
 			}
 		}, {
 			header: 'Status',
-			dataIndex: 'ExportStatus',
+			dataIndex: 'status',
 			tdCls: 'plenty-td-icon',
 			flex: 1,
 			renderer: function(value, metaData, record, row, col, store, gridView)
 			{
 				if (value == 'error')
 				{
-					metaData.tdAttr = 'data-qtip="' + record.get('ExportLastErrorMessage') + '"';
+					metaData.tdAttr = 'data-qtip="' + record.get('error') + '"';
 				}
 				else if (value == 'pending')
 				{
@@ -88,36 +124,22 @@ Ext.define('Shopware.apps.Plentymarkets.view.dx.Initial', {
 				return '<div class="plenty-export-status plenty-export-status-' + value + '">' + status[value] + '</div>';
 			}
 		}, {
-			header: 'Start',
+			header: 'Gestartet',
 			xtype: 'datecolumn',
-			dataIndex: 'ExportTimestampStart',
+			dataIndex: 'start',
 			flex: 1.5,
 			renderer: function(value, x, record)
 			{
-				if (record.raw.ExportTimestampStart == -1)
-				{
-					return '–';
-				}
-				else
-				{
-					return Ext.util.Format.date(value, 'd.m.Y, H:i:s') + ' Uhr';
-				}
+				return record.raw.start <= 0 ? '–' : Ext.util.Format.date(value, 'd.m.Y, H:i:s') + ' Uhr';
 			}
 		}, {
-			header: 'Fertig',
+			header: 'Abgeschlossen',
 			xtype: 'datecolumn',
-			dataIndex: 'ExportTimestampFinished',
+			dataIndex: 'finished',
 			flex: 1.5,
 			renderer: function(value, x, record)
 			{
-				if (record.raw.ExportTimestampFinished == -1)
-				{
-					return '–';
-				}
-				else
-				{
-					return Ext.util.Format.date(value, 'd.m.Y, H:i:s') + ' Uhr';
-				}
+				return record.raw.finished <= 0 ? '–' : Ext.util.Format.date(value, 'd.m.Y, H:i:s') + ' Uhr';
 			}
 		}, {
 			header: 'Aktion',
@@ -126,108 +148,121 @@ Ext.define('Shopware.apps.Plentymarkets.view.dx.Initial', {
 			flex: 1,
 			items: [
 
-			// Start
+			// Info
 			{
-				iconCls: 'plenty-export-start',
-				tooltip: 'Vormerken',
+				iconCls: 'plenty-export-status-warning',
+				tooltip: 'Nicht alle vorhergehenden Exporte wurden erfolgreich abgeschlossen. Eine Ausführung ist deshlab nicht möglich.',
 				handler: function(grid, rowIndex, colIndex, item, eOpts, record)
 				{
-					me.fireEvent('handle', record, 'start');
-				},
+					var name = resourceNames[record.get('name')];
+					var message = 'Der Export <b>' + name + '</b> kann nicht vorgemerkt werden, da nicht alle vorhergehenden Exporte erfolgreich abgeschlossen wurden. ' + 'Es ist zwingend notwendig, dass alle Exporte, die vor ' + name + ' in der Liste stehen, erfolgreich abgeschlossen worden sind.';
 
+					Ext.Msg.alert('Hinweis', message);
+				},
 				getClass: function(value, metaData, record)
 				{
-					if (record.get('ExportStatus') != 'open')
+					if (!record.get('needsDependency'))
 					{
 						return Ext.baseCSSPrefix + 'hidden';
 					}
 				}
 			},
-			
+
+			// Start
+			{
+				iconCls: 'plenty-export-start',
+				tooltip: 'Für den Export vormerken',
+				handler: function(grid, rowIndex, colIndex, item, eOpts, record)
+				{
+					me.fireEvent('handle', record, 'start', me);
+				},
+				getClass: function(value, metaData, record)
+				{
+					if (!record.get('mayAnnounce'))
+					{
+						return Ext.baseCSSPrefix + 'hidden';
+					}
+				}
+			},
+
 			// Reset
 			{
 				iconCls: 'plenty-export-reset',
 				tooltip: 'Status zurücksetzen',
 				handler: function(grid, rowIndex, colIndex, item, eOpts, record)
 				{
-					var name = resourceNames[record.get('ExportEntityName')];
-					var message = 'Wenn Sie diese Aktion ausführen, wird der Status des Exportes (' + name + ') zurückgesetzt. '
-								+ 'Alle bereits gespeicherten Mapping-Informationen bleiben jedoch bestehen. '
-								+ 'Sofern der Prozess bereits läuft, wird dieser NICHT beendet! '
-								+ 'Möchten Sie fortfahren?';
+					var name = resourceNames[record.get('name')];
+					var message = 'Wenn Sie diese Aktion ausführen, wird der Status des Exportes <b>' + name + '</b> zurückgesetzt. ' + 'Alle bereits gespeicherten Mapping-Informationen bleiben jedoch bestehen. ' + 'Sofern der Prozess bereits läuft, wird dieser <b>nicht</b> beendet!<br><br>' + 'Möchten Sie fortfahren?';
 
 					Ext.Msg.confirm('Hinweis', message, function(button)
 					{
 						if (button === 'yes')
 						{
-							me.fireEvent('handle', record, 'reset');
+							me.fireEvent('handle', record, 'reset', me);
 						}
 					});
 				},
-
 				getClass: function(value, metaData, record)
 				{
-					if (record.get('ExportStatus') != 'running' && record.get('ExportStatus') != 'pending')
+					if (!record.get('mayReset'))
 					{
 						return Ext.baseCSSPrefix + 'hidden';
 					}
 				}
 			},
 
-			// Restart
-			{
-				iconCls: 'sprite-arrow-circle-double-135',
-				tooltip: 'Erneut vormerken',
-				handler: function(grid, rowIndex, colIndex, item, eOpts, record)
-				{
-					var name = resourceNames[record.get('ExportEntityName')];
-					var message = 'Wenn Sie diese Aktion ausführen, wird der Export (' + name + ') erneut zur Ausführung vorgemerkt. '
-								+ 'Alle bereits gespeicherten Mapping-Informationen bleiben jedoch bestehen. '
-								+ 'Möchten Sie fortfahren?';
-
-					Ext.Msg.confirm('Hinweis', message, function(button)
-					{
-						if (button === 'yes')
-						{
-							me.fireEvent('handle', record, 'restart');
-						}
-					});
-				},
-
-				getClass: function(value, metaData, record)
-				{
-					if (record.get('ExportStatus') != 'error' && record.get('ExportStatus') != 'success')
-					{
-						return Ext.baseCSSPrefix + 'hidden';
-					}
-				}
-			},
-
-			// Reset
+			// Erase
 			{
 				iconCls: 'plenty-export-erase',
 				tooltip: 'Komplett zurücksetzen',
 				handler: function(grid, rowIndex, colIndex, item, eOpts, record)
 				{
-					var name = resourceNames[record.get('ExportEntityName')];
-					var message = 'Wenn Sie diese Aktion ausführen, wird der Status des Exportes (' + name + ') zurückgesetzt '
-								+ 'und alle vorhandenen Mapping-Informationen werden gelöscht! ' 
-								+ 'Sie sollten dies nur tun, wenn Sie genau wissen, was sie tun! '
-								+ 'Im Anschluss gilt der Export als nie ausgeführt und ein erneuter Export ist notwendig. '
-								+ 'Möchten Sie trotzdem forfahren?';
+					var name = resourceNames[record.get('name')];
+					var message = 'Wenn Sie diese Aktion ausführen, wird der Status des Exportes <b>' + name + '</b> zurückgesetzt ' + 'und <b>alle vorhandenen Mapping-Informationen werden gelöscht</b>! ' + 'Sie sollten dies nur tun, wenn Sie genau wissen, was sie tun! ' + 'Im Anschluss gilt der Export als nie ausgeführt und <b>ein erneuter Export ist notwendig</b>.<br><br>' + 'Möchten Sie trotzdem forfahren?';
 
 					Ext.Msg.confirm('Achtung! Warnung!', message, function(button)
 					{
 						if (button === 'yes')
 						{
-							me.fireEvent('handle', record, 'erase');
+							Ext.Msg.confirm('+++ Achtung! Warnung! +++', 'Sind Sie wirklich ganz ganz sicher?', function(button)
+							{
+								if (button === 'yes')
+								{
+									me.fireEvent('handle', record, 'erase', me);
+								}
+							});
 						}
 					});
+				},
+				getClass: function(value, metaData, record)
+				{
+					if (!record.get('mayErase'))
+					{
+						return Ext.baseCSSPrefix + 'hidden';
+					}
 				}
 			}]
 		}];
 
 		me.callParent(arguments);
+	},
+	
+	setToolbarText: function()
+	{
+		var me = this;
+
+		if (me.wizard.get('isActive'))
+		{
+			me.wizardToolbar.setText('<div class="plenty-status plenty-icon-wizard-active">Automatischer Export ist aktiv</div>');
+		}
+		else if (!me.wizard.get('mayActivate'))
+		{
+			me.wizardToolbar.setText('<div class="plenty-status plenty-icon-wizard-off">Automatischer Export kann nicht aktiviert werden</div>');
+		}
+		else
+		{
+			me.wizardToolbar.setText('<div class="plenty-status plenty-icon-wizard-inactive">Automatischer Export ist nicht aktiv</div>');
+		}
 	}
 
 });

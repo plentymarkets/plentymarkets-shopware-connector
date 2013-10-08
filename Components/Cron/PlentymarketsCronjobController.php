@@ -308,6 +308,10 @@ class PlentymarketsCronjobController
 		try
 		{
 			PlentymarketsExportController::getInstance()->export();
+			
+			require_once PY_COMPONENTS . 'Export/PlentymarketsExportWizard.php';
+			$PlentymarketsExportWizard = PlentymarketsExportWizard::getInstance();
+			$PlentymarketsExportWizard->conjure();
 		}
 		catch (Exception $E)
 		{
