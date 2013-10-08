@@ -590,11 +590,9 @@ Aufträge, die in shopware erstellt werden, werden alle 15 Minuten inkl. der Kun
 
 Wenn der Warenausgang in plentymarkets gebucht wird, wird der Auftrag in shopware in den von Ihnen definierten Status gesetzt. Es kann entweder festgelegt werden, dass der Auftrag in plentymarkets einen bestimmen Status erreichen muss, um als abgeschlossen zu gelten, oder dass es reicht, wenn der Warenausgang gebucht worden ist. Dieser Abgleich findet einmal pro halber Stunde statt. Zusätzlich werden Zahlungen, die innerhlab von plentymarkets gebucht werden, zu shopware synchronisiert. Der Status für bezahlte und nur teilweise bezahlte Aufträge wird entsprechend der Einstellungen gesetzt.
 
-Wenn ein Auftrag in shopwareden eingestellten Zahlungsstatus erreicht, wird in plentymarkets ein Zahlungseingang über den gesamten Rechnungsbetrag gebucht. Die Zahlungsart wird entsprechend der Einstellungen gesetzt. Dieser Vorgang findet stündlich statt.
+Wenn ein Auftrag in shopware den eingestellten Zahlungsstatus erreicht, wird in plentymarkets ein Zahlungseingang über den gesamten Rechnungsbetrag gebucht. Die Zahlungsart wird entsprechend der Einstellungen gesetzt. Dieser Vorgang findet stündlich statt.
 
 **Achtung:** In plentymarkets kann ein Kunde nur eine Rechnungsadresse hinterlegen. Wenn ein und der selbe Kunde in shopware einen Auftrag mit abweichender Rechnungsadresse anlegt, wird er bei plentymarkets als neuer Kunde mit eigener ID geführt.
-
-Artikelpositionen 
 
 #### Zahlungsarten
 
