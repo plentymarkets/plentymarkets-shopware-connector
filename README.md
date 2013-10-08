@@ -265,6 +265,7 @@ Fehlen einzelne Berechtigungen, kann der Datenabgleich zwischen plentymarkets un
 * GetItemsByStoreID
 * GetItemsImages
 * GetItemsPriceUpdate
+* GetItemsUpdated (seit 1.4.9)
 * GetLinkedItems
 * GetMethodOfPayments
 * GetMultiShops
@@ -498,11 +499,15 @@ Andersrum werden in plentymarkets u. U. folgende Daten durch die Synchronisation
 
 #### Artikel
 Es werden alle Artikel mit shopware abgeglichen, die unter **Artikel bearbeiten » Verfügbar » Mandant (Shop)** dem entsprechenden Shop zugeordnet sind.
-Alle Artikel, die von shopware importiert worden sind, werden beim ersten Abgleich ignortiert (eine entsprechende Meldung wird im Log vermerkt).
+Alle Artikel, die von shopware importiert worden sind, werden beim ersten Abgleich ignortiert.
 
-**Hintergrund:** Es werden alle Artikel abgeglichen, die sich seit dem letzten Abgleich geändert haben. Der erste Abgleich – nach der aktivierung des Datenabgleiches – fragt **alle** Datensätze ab (bzw. alle, die sich seit bestehen des System geändert haben). Da die von shopware importierten Artikel natürlich *geändert* worden sind, werden als solche von der SOAP Schnittstelle ausgeliefert. Der erste Abgleich ignoriert diese Datensätze dann.
+**Hintergrund:** Es werden alle Artikel abgeglichen, die sich seit dem letzten Abgleich geändert haben. Der erste Abgleich – nach der aktivierung des Datenabgleiches – fragt **alle** Datensätze ab (bzw. alle, die sich seit bestehen des System geändert haben). Da die von shopware importierten Artikel natürlich *geändert* worden sind, werden sie als Solche von der SOAP Schnittstelle ausgeliefert. Der erste Abgleich ignoriert diese Datensätze dann.
 
-Die Artikelstammdaten werden stündlich abgeglichen. Der Abgleich beinhaltet folgende Bereiche:
+Die Artikelstammdaten werden zweistufig, in zwei von einander getrennten Prozessen, abgeglichen. Im ersten Schritt werden nur die IDs der gänderten Artikel, inkrementell seit dem letzten Abruf, abgerufen und an eine Warteschlange angehängt. 
+
+Diese Warteschlange wird im zweiten Schritt nach dem [FIFO](http://de.wikipedia.org/wiki/First_In_%E2%80%93_First_Out) Prinzip abgearbeitet. Das bedeutet, dass die Artikel, die zuerst hinzugefügt wurden, auch zuerst abgeglichen werden. Anschließend wird der Artikel aus der Warteschlange entfernt. Jeder Artikel ist nur *einmal* in dieser Warteschlange vorhanden. Die Position verändert sich (z.B. durch eine erneute Änderung am Artikel) nicht.
+
+Der zweite Prozess ruft dann die tatsächlichen Artikeldaten für die Artikel ab. Es werden pro Durchlauf max. so viele Artikel abgeglichen, wie unter **Einstellungen » Synchronisierung » Paketgröße (Artikel)** eingestellt ist.
 
 ##### Stammdaten
 Die Funktion der plentymarkts' Bestellmerkmale wird nicht abgebildet, da sie in shopware nicht vorhanden ist. Zusätzlich kann einem Artikel in shopware nur genau eine Merkmal/Eigenschaftgruppe zugeordnet werden.
@@ -593,10 +598,14 @@ Artikelpositionen
 
 #### Zahlungsarten
 
+Grundsätzlich werden Zahlungseingänge aller Zahlungsarten an plentymarkets weitergegeben. Die Zahlungseingänge werden mit der Zahlungsart gebucht, die unter **Mapping » Zahlungsarten** eingestellt ist. Es kann jedes Zahlungs-Plugin verwendet werden – jedoch können die erweiterten Payment-Funktionen von plentymarkets nicht gewärleistet werden.
+
+Die folgende Liste enthällt Plugins, bei denen die angegebenen erweiterten Funktionen von plentymarkets unterstützt werden. **Wichtig:** Diese Liste spiegelt lediglich die Plugins wider, die von plentymarkets getesten worden sind. 
+
 Zahlungsart | Author | Version | Bemerkung
 ------------|--------|---------|----------
-PAYONE | derksen mediaopt GmbH | 2.0.4 | Versandbestätigung / Gutschrift/Retoure
-BillSAFE |shopware AG | 2.0.2 | Versandbestätigung / Retoure/Storno
+PAYONE | derksen mediaopt GmbH | 2.0.4 | Versandbestätigung, Gutschrift, Retoure
+BillSAFE | shopware AG | 2.0.2 | Versandbestätigung, Storno, Retoure
 
 
 ## Log

@@ -112,9 +112,9 @@ class PlentymarketsUtils
 	 */
 	public static function checkApiConnectionStatus()
 	{
-		if (PlentymarketsConfig::getInstance()->getApiWsdl('') == '')
+		if (!PlentymarketsConfig::getInstance()->getApiWsdl())
 		{
-			PlentymarketsConfig::getInstance()->setPlentymarketsVersion('–');
+			PlentymarketsConfig::getInstance()->erasePlentymarketsVersion();
 			PlentymarketsConfig::getInstance()->setApiLastStatusTimestamp(time());
 			PlentymarketsConfig::getInstance()->setApiStatus(1);
 
