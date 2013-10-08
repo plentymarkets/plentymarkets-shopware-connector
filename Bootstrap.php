@@ -594,10 +594,10 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
      */
     public function onPostDispatchBackendIndex(Enlight_Event_EventArgs $arguments)
     {
-    	$request = $arguments->getSubject()->Request();
-
-    	$path = str_replace(Shopware()->DocPath(), '/', $this->Path());
-    	$path .= 'style.css?' . urlencode($this->getVersion());
+		$request = $arguments->getSubject()->Request();
+		
+		$path = str_replace(array('Bootstrap.php',$_SERVER['DOCUMENT_ROOT']), array('style.css',''), __FILE__);
+		$path .= '?' . urlencode($this->getVersion());
 
     	if ($request->getActionName() == 'index')
     	{
