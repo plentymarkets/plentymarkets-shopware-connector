@@ -602,6 +602,7 @@ Die folgende Liste enthällt Plugins, bei denen die angegebenen erweiterten Funk
 
 Zahlungsart | Author | Version | Bemerkung
 ------------|--------|---------|----------
+PayPal | shopware AG | 0.0.1 | Rückzahlung
 PAYONE | derksen mediaopt GmbH | 2.0.4 | Versandbestätigung, Gutschrift, Retoure
 BillSAFE | shopware AG | 2.0.2 | Versandbestätigung, Storno, Retoure
 
