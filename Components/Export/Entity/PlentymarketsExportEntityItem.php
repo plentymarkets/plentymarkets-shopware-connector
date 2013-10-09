@@ -57,7 +57,7 @@ require_once PY_COMPONENTS . 'Utils/PlentymarketsUtils.php';
 require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingController.php';
 
 /**
- * PlentymarketsExportEntityItem provides the actual items export funcionality. Like the other export 
+ * PlentymarketsExportEntityItem provides the actual items export funcionality. Like the other export
  * entities this class is called in PlentymarketsExportController. It is important to deliver the correct
  * article model to the constructor method of this class, which is \Shopware\Models\Article\Article.
  * The data export takes place based on plentymarkets SOAP-calls.
@@ -84,21 +84,21 @@ class PlentymarketsExportEntityItem
 	 * @var integer
 	 */
 	protected $PLENTY_priceID;
-	
+
 	/**
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $categoryPaths2Activate = array();
-	
+
 	/**
-	 * 
+	 *
 	 * @var array
 	 */
 	protected static $categoryPathsActivated = array();
-	
+
 	/**
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $storeIds = array();
@@ -128,6 +128,11 @@ class PlentymarketsExportEntityItem
 
 		$Object_AddItemsBaseItemBase = new PlentySoapObject_AddItemsBaseItemBase();
 		$ItemDetails = $Item->getMainDetail();
+
+		if (!$ItemDetails instanceof \Shopware\Models\Article\Detail)
+		{
+			throw new \Exception('Skipping corrupt item "' . $this->SHOPWARE_Article->getName() . '" (' . $this->SHOPWARE_Article->getId() . ') – no Article\Detail');
+		}
 
 		// Release date
 		$ReleaseDate = $ItemDetails->getReleaseDate();
@@ -167,13 +172,13 @@ class PlentymarketsExportEntityItem
 				PlentymarketsLogger::getInstance()->error('Export:Initial:Item', 'ItemId ' . $Item->getId() . ': Skipping category with id ' . $Category->getId());
 				continue;
 			}
-				
+
 			// Get the store for this category
 			$path = array_reverse(explode('|', $Category->getPath()));
 			$rootId = $path[1];
-			
+
 			$shops = PlentymarketsUtils::getShopIdByCategoryRootId($rootId);
-			
+
 			foreach ($shops as $shopId)
 			{
 				try
@@ -184,14 +189,14 @@ class PlentymarketsExportEntityItem
 				{
 					continue;
 				}
-				
+
 				if (!isset($this->storeIds[$storeId]))
 				{
 					// Activate the item for this store
 					$Object_Integer = new PlentySoapObject_Integer();
 					$Object_Integer->intValue = $storeId;
 					$Object_AddItemsBaseItemBase->StoreIDs[] = $Object_Integer;
-					
+
 					// Cache
 					$this->storeIds[$storeId] = true;
 				}
@@ -205,12 +210,12 @@ class PlentymarketsExportEntityItem
 					);
 				}
 			}
-			
+
 			// Activate the category
 			$Object_ItemCategory = new PlentySoapObject_ItemCategory();
 			$Object_ItemCategory->ItemCategoryPath = $categoryPath; // string
 			$Object_AddItemsBaseItemBase->Categories[] = $Object_ItemCategory;
-		
+
 		}
 
 
@@ -250,7 +255,7 @@ class PlentymarketsExportEntityItem
 
 		return true;
 	}
-	
+
 	/**
 	 * Activates the categories of this item for the shop
 	 */
@@ -258,7 +263,7 @@ class PlentymarketsExportEntityItem
 	{
 		$Request_SetStoreCategories = new PlentySoapRequest_SetStoreCategories();
 		$Request_SetStoreCategories->StoreCategories = array();
-		
+
 		foreach ($this->categoryPaths2Activate as $path2Activate)
 		{
 			// Aleady been activated
@@ -266,18 +271,18 @@ class PlentymarketsExportEntityItem
 				isset(self::$categoryPathsActivated[$path2Activate['path']][$path2Activate['storeId']]))
 			{
 				continue;
-			}			
-			
+			}
+
 			$Object_SetStoreCategory = new PlentySoapObject_SetStoreCategory();
 			$Object_SetStoreCategory->Active = true;
 			$Object_SetStoreCategory->ItemCategoryPath = $path2Activate['path'];
 			$Object_SetStoreCategory->StoreID = $path2Activate['storeId'];
-			
+
 			// Cache + Request
 			self::$categoryPathsActivated[$path2Activate['path']][$path2Activate['storeId']] = true;
 			$Request_SetStoreCategories->StoreCategories[] = $Object_SetStoreCategory;
 		}
-		
+
 		if (!empty($Request_SetStoreCategories->StoreCategories))
 		{
 			$Response_SetStoreCategories = PlentymarketsSoapClient::getInstance()->SetStoreCategories($Request_SetStoreCategories);
@@ -489,7 +494,7 @@ class PlentymarketsExportEntityItem
 
 	/**
 	 * Manages the export
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public function export()
