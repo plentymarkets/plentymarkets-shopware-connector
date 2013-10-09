@@ -301,7 +301,7 @@ class PlentymarketsSoapClient extends SoapClient
 			}
 			if (isset($E) && $E instanceof Exception)
 			{
-				PlentymarketsLogger::getInstance()->error('Soap:Call:Request', $this->__getLastRequest());
+				PlentymarketsLogger::getInstance()->error('Soap:Call:Request', htmlspecialchars($this->__getLastRequest()));
 				PlentymarketsLogger::getInstance()->error('Soap:Call', $E->getMessage());
 			}
 		}
