@@ -47,7 +47,7 @@ define('MOP_DEBIT', 3);
 /**
  * This class is called first when starting the plentymarkets plugin. It initializes and cleans all important data.
  * It also provides cronjob functionality for an initial execution of the plentymarkets plugin.
- * 
+ *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Components_Plugin_Bootstrap
@@ -67,7 +67,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 				'message' => 'Bitte installieren und aktivieren Sie das Cron-Plugin'
 			);
 		}
-    	
+
     	if (!$this->assertVersionGreaterThen('4.1'))
     	{
     		return array(
@@ -75,28 +75,28 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 				'message' => 'Das plentymarkets-Plugin benötigt min. shopware 4.1'
 			);
     	}
-    	
+
         $this->createDatabase();
         $this->createEvents();
         $this->createMenu();
         $this->registerCronjobs();
-        
+
         //
         PlentymarketsConfig::getInstance()->setConnectorVersion($this->getVersion());
-        
+
         return true;
     }
-    
+
     /**
      * Update plugin method
-     * 
+     *
      * @see Shopware_Components_Plugin_Bootstrap::update()
      */
     public function update($version)
     {
     	$Logger = PlentymarketsLogger::getInstance();
     	$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, $version . ' →  ' . $this->getVersion());
-    	
+
     	if ($version == '1.3.0')
     	{
     		// Delete the uniq index of the customer mapping
@@ -129,15 +129,15 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 	    	{
 	    		$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'CREATE TABLE `plenty_mapping_referrer` already carried out');
     		}
-    		
+
     		// Add a new cron event
     		$this->addItemCleanupCronEvent();
-    		
+
     		// Add the default setting
     		Shopware()->Db()->exec("
 				INSERT IGNORE INTO `plenty_config` (`key`, `value`) VALUES ('ItemCleanupActionID', '1')
 	  		");
-    		
+
     		try
     		{
 	    		// Add the default setting
@@ -155,7 +155,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 	    		$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'CREATE TABLE `plenty_mapping_shop` already carried out');
     		}
     	}
-    	
+
     	if ($version == '1.4.3')
     	{
 			try
@@ -172,7 +172,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'ALTER TABLE `plenty_log` (drop unused columns from the log) already carried out');
 			}
     	}
-		
+
 		if (version_compare($version, '1.4.4') !== 1)
 		{
 			try
@@ -184,33 +184,33 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 					  PRIMARY KEY (`shopwareID`,`plentyID`)
 					) ENGINE=InnoDB DEFAULT CHARSET=utf8
 				");
-				
+
 				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'CREATE TABLE `plenty_mapping_customer_billing_address` done');
 			}
 			catch (Exception $E)
 			{
 				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'CREATE TABLE `plenty_mapping_customer_billing_address` already carried out');
 			}
-			
+
 			Shopware()->Db()->exec("
 				TRUNCATE TABLE `plenty_mapping_customer`
 			");
-			
+
 			$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'TRUNCATE TABLE `plenty_mapping_customer` done');
-			
+
 			Shopware()->Db()->exec("
 				DELETE FROM `plenty_config` WHERE `key` LIKE 'CustomerExport%'
 			");
-			
+
 			$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'DELETE FROM `plenty_config` done');
 		}
-		
+
 		if (version_compare($version, '1.4.5') !== 1)
 		{
 			try
 			{
 				$this->addMappingCleanupCronEvent();
-				
+
 				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'addMappingCleanupCronEvent done');
 			}
 			catch (Exception $E)
@@ -218,7 +218,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'addMappingCleanupCronEvent already carried out');
 			}
 		}
-		
+
 		if (version_compare($version, '1.4.7') !== 1)
 		{
 			if (PlentymarketsConfig::getInstance()->getItemExportStatus() == 'success')
@@ -226,17 +226,17 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 				PlentymarketsConfig::getInstance()->setItemCrossSellingExportStatus('success');
 				PlentymarketsConfig::getInstance()->setItemCrossSellingExportTimestampStart(time());
 				PlentymarketsConfig::getInstance()->setItemCrossSellingExportTimestampFinished(time());
-				
+
 				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'Item cross selling export marked as done');
 			}
 		}
-		
+
 		if (version_compare($version, '1.4.8') !== 1)
 		{
 			$this->addItemImportStackCronEvent();
-			
-			$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'addMappingCleanupCronEvent done');
-			
+
+			$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'addItemImportStackCronEvent done');
+
 			try
 			{
 				Shopware()->Db()->exec("
@@ -248,14 +248,14 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 					  KEY `timestamp` (`timestamp`)
 					) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 				");
-				
+
 				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'CREATE TABLE `plenty_stack_item` done');
 			}
 			catch (Exception $E)
 			{
 				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'CREATE TABLE `plenty_stack_item` already carried out');
 			}
-			
+
 			try
 			{
 				Shopware()->Db()->exec("
@@ -263,7 +263,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 						SET `key` = 'ImportItemStackLastUpdateTimestamp'
 						WHERE `key` = 'ImportItemLastUpdateTimestamp'
 				");
-				
+
 				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'UPDATE plenty_config (ImportItemStackLastUpdateTimestamp) done');
 			}
 			catch (Exception $E)
@@ -271,10 +271,10 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'UPDATE plenty_config (ImportItemStackLastUpdateTimestamp) failed');
 			}
 		}
-		
+
 		//
 		PlentymarketsConfig::getInstance()->setConnectorVersion($this->getVersion());
-		
+
     	return true;
     }
 
@@ -317,13 +317,13 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 				DROP TABLE IF EXISTS `'. $table .'`
 			');
 		}
-		
+
 		return true;
 	}
 
 	/**
 	 * Returns capabilities
-	 * 
+	 *
 	 * @see Shopware_Components_Plugin_Bootstrap::getCapabilities()
 	 */
 	public function getCapabilities()
@@ -422,7 +422,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 			  PRIMARY KEY (`shopwareID`,`plentyID`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 		");
-		
+
 		Shopware()->Db()->exec("
 			CREATE TABLE `plenty_mapping_customer_billing_address` (
 			  `shopwareID` int(11) unsigned NOT NULL,
@@ -553,7 +553,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 			  UNIQUE KEY `plentyOrderId` (`plentyOrderId`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 		");
-		
+
 		Shopware()->Db()->exec("
 			CREATE TABLE `plenty_stack_item` (
 			  `itemId` int(11) unsigned NOT NULL,
@@ -592,13 +592,13 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 
     /**
      * Dispatches the backend index on post event.
-     * 
+     *
      * @param Enlight_Event_EventArgs $arguments
      */
     public function onPostDispatchBackendIndex(Enlight_Event_EventArgs $arguments)
     {
 		$request = $arguments->getSubject()->Request();
-		
+
 		$path = str_replace('Bootstrap.php', 'style.css', __FILE__);
 		$path = preg_replace('!^(?:.*?)(/engine/Shopware.*?)$!', '$1', $path);
 		$path = str_replace('/shopware.php', '', $_SERVER['PHP_SELF']) . $path;
@@ -725,13 +725,13 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
         	'Shopware_CronJob_PlentymarketsCleanupCron',
         	'onRunCleanupCron'
         );
-        
+
         // Cleanup (items)
         $this->addItemCleanupCronEvent();
-        
+
         // Cleanup (mapping)
         $this->addMappingCleanupCronEvent();
-        
+
         // Item import stack update
         $this->addItemImportStackCronEvent();
     }
@@ -749,7 +749,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 	    		43200, // 12 hours
 	    		false
 	    	);
-	    	
+
 	    	$this->subscribeEvent(
 	    		'Shopware_CronJob_PlentymarketsItemCleanup',
 	    		'onRunItemCleanupCron'
@@ -773,7 +773,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 	    		1800, // 0,5 hours
 	    		true
 	    	);
-	    	
+
 	    	$this->subscribeEvent(
 	    		'Shopware_CronJob_PlentymarketsMappingCleanup',
 	    		'onRunMappingCleanupCron'
@@ -783,7 +783,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
     	{
     	}
     }
-    
+
     /**
      * Adds the cron event to update the item import stack
      */
@@ -797,7 +797,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 	    		1800, // 0,5 hours
 	    		true
 	    	);
-	    	
+
 	    	$this->subscribeEvent(
 	    		'Shopware_CronJob_PlentymarketsItemImportStackUpdate',
 	    		'onRunItemImportStackUpdateCron'
@@ -827,7 +827,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 	{
 		PlentymarketsCronjobController::getInstance()->runMappingCleanup($Job);
 	}
-	
+
     /**
      * Cleans database tabels on first execution of plentymarkets plugin.
      *
@@ -910,7 +910,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 
     /**
      * Runs the item stock import cronjob.
-     * 
+     *
      * @param Shopware_Components_Cron_CronJob $Job
      */
     public function onRunItemStockImportCron(Shopware_Components_Cron_CronJob $Job)
@@ -983,7 +983,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 
     /**
      * Returns version string.
-     * 
+     *
      * @return string
      */
     public function getVersion()
