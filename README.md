@@ -305,7 +305,22 @@ Nach der Installation und Aktivierung des Plugins über den Plugin Manager muss 
 
 **Wichtig:** Damit das Plugin ordnungsgemäß arbeiten kann, müssen die folgenden Schritte genau eingehalten werden.
 
-#### Verbindung zu plentymarkets herstellen
+#### Startseite
+Auf der Startseite des Plugins finden sie wichtige Informationen über das Plugin und die Verbindung zu plentymarkets.
+
+##### API
+Information | Erklärung
+----|------
+Verbindung | Ziegt das Ergebnis und den Zeitpunkt der letzten Verbindungsprüfung.
+Abweichung | Die Anzahl der Sekunden, die die eigene Serverzeit von der plentymarkets-Serverzeit abweicht. Dieser wert sollte möglichst gering sein. Im besten Fall sollte *keine Abweichung* vorhanden sein. Durch Abweichungen kann es dazu kommen, dass Änderungen nicht an shopware weitergeben werden können.
+
+##### Umbegung
+Dieser Abschnitt enthällt Informationen über den Server, auf dem das shopware System installiert it. Er dient hauptsächlich der Analyse.
+
+##### Versionen
+In diesem Abschnitt sind alle relevanten Versionen der beteiligten Komponenten aufgeschlüsselt.
+
+#### API
 
 ##### Zugansdaten
 Geben Sie unter dem Menüpunkt **API** die URL Ihres System sowie die Zugangsdaten des Benutzers ein, mit dem die Kommunikation stattfinden soll. Sie können die Verbindung prüfen, im dem Sie auf den entsprechenden Button *Zugangsdaten testen* klicken.
@@ -318,7 +333,7 @@ Nach dem Speichern von korrekten Daten, werden die weiteren Reiter **Einstellung
 Einstellung | Erklärung
 ----|------
 Anfragen komprimieren | Aktivieren, wenn die SOAP Responses gzip komprimiert empfangen werden können. Diese Einstellung sollte nur aktiviert werden, wenn sichergestellt ist, dass der Server gzip-Komprimierte Inhalte verarbeiten kann. Nähere Informationen hierzu sollten Sie vom Systemadministrator erhalten.
-Header Loggen | ktivieren, wenn die SOAP HTTP Header ins Log geschrieben werden sollen. Nur für das Debugging notwendig!  
+Header Loggen | Aktivieren, wenn die SOAP HTTP Header ins Log geschrieben werden sollen. Nur für das Debugging notwendig!  
 
 #### Einstellungen
 Die Einstellungen in den im Folgenden genannten Bereichen *müssen* vorgenommen werden, da ohne sie der Datenaustausch nicht stattfinden kann. Es wird eine Fehlermeldung erzeugt, wenn ein Datenaustausch gestartet werden soll, und die folgenden Einstellungen nicht gesetzt sind.
@@ -333,6 +348,7 @@ plentymarkets Lager | Datenquelle für den Warenbestandsabgleich
 Warenbestandspuffer | Prozentualer Anteil des netto-Warenbestandes des gewählten Lagers, welcher an shopware übertragen wird.
 Hersteller | Sofern bei Artikeln in plentymarkets kein Hersteller zugeordnet wurde, wird dieser Hersteller in shopware mit den betreffenden Artikeln verknüpft.
 Kategorien synchronisieren | Aktivieren, wenn die Kategorien von bestehenden Artikel synchronisiert werden sollen. Anderfalls werden Kategorien nicht bei der Synchronisation berücksichtigt. Bei neuen Artikeln werden die Kategorien immer synchronisiert.
+Nummern übernehmen | Aktivieren, wenn die Artikelnummern von plentymarkets übernommen werden sollen. Wenn diese Einstellung aktiviert ist, werden Artikel ignoriert, deren Artikelnummer ungültig oder bereits in shopware vergeben ist. Weitere Information zur Artikelnummer gibt es [in der shopware-wiki](http://wiki.shopware.de/Artikelnummern-in-Shopware_detail_642.html).
 Standard-Kundenklasse | Kundenklasse deren Preise von plentymarkerts zu shopware übertragen werden.
 Bereinigen | Aktion die ausgeführt wird, wenn die Mandantenzuordnung bei plentymarkets gelöst wird oder kein Mapping für den Artikel vorhanden ist.
 
@@ -369,7 +385,7 @@ Pakete pro Durchlauf | Anzahl der Pakete, die pro Durchlauf des Cronjobs exporti
 ##### Synchronisierung
 Einstellung | Erklärung
 ----|------
-Paketgröße (Artikel) | Anzahl der Artikel, die pro Durchlauf der Synchronisierung von plentymarkets abgerufen werden. **Achtung:** Je mehr Shops genutzt werden, desto mehr Daten werden pro Artikel abgerufen!
+Paketgröße (Artikel) | Anzahl der Artikel, die pro Durchlauf der Synchronisierung von plentymarkets abgerufen werden. **Achtung:** Je mehr Shops und/oder Varianten genutzt werden, desto mehr Daten werden pro Artikel abgerufen!
 
 #### Mapping
 Für alle Daten, die nicht automatisch gemappt werden können, muss die Verknüpfung manuell hergestellt werden.
@@ -512,12 +528,11 @@ Der zweite Prozess ruft dann die tatsächlichen Artikeldaten für die Artikel ab
 ##### Stammdaten
 Die Funktion der plentymarkts' Bestellmerkmale wird nicht abgebildet, da sie in shopware nicht vorhanden ist. Zusätzlich kann einem Artikel in shopware nur genau eine Merkmal/Eigenschaftgruppe zugeordnet werden.
 
-Die Artikelnummer wird nach dem Erstellen nicht mehr Synchronisiert. Eine Artikelnummer ist kein Pflichtfeld eines plentymarkets Artikels und muss auch nicht eindeutig sein. Da einem shopware-Artikel jedoch zwingend eine eindeutige Nummer zugeordnet werden muss, wird im Falle einer nicht eindeutigen Nummer eine fortlaufende Nummer vergeben. Das würde bei der nächsten Aktualisierung eines solchen Artikels erneut zu einer neuen Nummer führen.
 
 shopware | plentymarkets | Anmerkung
 ---------|---------------|----------
 Aktiv | Verfügbar » Inaktiv/Sichtbarkeit Webshop | Der Artikel wird aktiv gesetzt, wenn er bei plentymarkets nicht inaktiv ist, und der Artikel im Webshob sichtbar ist
-Artikelnummer | Nr. | Wird generiert, wenn bei plentymarkets nicht vorhanden, oder bereits vergeben
+Artikelnummer | Nr. | –
 Artikel hervorheben | Shop-Aktion | Nur der plentymarkets Wert *Top-Artikel* bewirkt, dass der Artikel hervorgehoben wird
 n/a | Externe ID | Zusammengesetzt aus *Swag/* und der Id des shopware Artikels
 Hersteller | Hersteller | Ist der Hersteller nicht vorhanden, wird er angelegt

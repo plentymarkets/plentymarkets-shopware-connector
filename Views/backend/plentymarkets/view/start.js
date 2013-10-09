@@ -117,10 +117,6 @@ Ext.define('Shopware.apps.Plentymarkets.view.Start', {
 				}
 			}, {
 				xtype: 'displayfield',
-				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ApiVersion}Version{/s}',
-				value: '110'
-			}, {
-				xtype: 'displayfield',
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ApiTimestampDeviation}Abweichung{/s}',
 				name: 'ApiTimestampDeviation',
 				helpText: 'Zeitliche Differenz in Sekunden zu plentymarkets',
@@ -197,11 +193,15 @@ Ext.define('Shopware.apps.Plentymarkets.view.Start', {
 					return value || Ext.String.format('<div class="plenty-export-status plenty-export-status-open">&nbsp;</div>');
 				}
 			},
+
 			items: [{
-				fieldLabel: '{s name=plentymarkets/view/settings/textfield/PlentyVersion}plentymarkets Version{/s}',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/PlentyVersion149}plentymarkets{/s}',
 				name: 'PlentymarketsVersion'
 			}, {
-				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ConnectorVersion}Connector Version{/s}',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/PlentyApiVersion149}SOAP API{/s}',
+				value: '110'
+			}, {
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ConnectorVersion149}Connector{/s}',
 				name: 'ConnectorVersion'
 			}]
 		}, {
