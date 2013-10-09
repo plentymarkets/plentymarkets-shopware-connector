@@ -39,6 +39,9 @@ require_once PY_COMPONENTS . 'Cron/PlentymarketsCronjobController.php';
 define('IMPORT_ITEM_CATEGORY_SYNC', 1);
 define('IMPORT_ITEM_CATEGORY_NO_SYNC', 0);
 
+define('IMPORT_ITEM_NUMBER', 1);
+define('IMPORT_ITEM_NUMBER_NO', 0);
+
 define('MOP_DEBIT', 3);
 
 /**

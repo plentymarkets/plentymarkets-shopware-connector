@@ -79,6 +79,10 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		type: 'integer',
 		defaultValue: 1
 	}, {
+		name: 'ItemNumberImportActionID',
+		type: 'integer',
+		defaultValue: 1
+	}, {
 		name: 'ItemCleanupActionID',
 		type: 'integer',
 		defaultValue: 1
