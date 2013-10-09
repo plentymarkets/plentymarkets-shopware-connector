@@ -371,4 +371,15 @@ class PlentymarketsSoapClient extends SoapClient
 		return new self($wsdl, $username, $password, true);
 	}
 
+	/**
+	 * Removes control chars from the given string except tab and crln
+	 *
+	 * @param string $string
+	 * @return string
+	 */
+	public static function removeControlChars($string)
+	{
+		return preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', '', $string);
+	}
+
 }

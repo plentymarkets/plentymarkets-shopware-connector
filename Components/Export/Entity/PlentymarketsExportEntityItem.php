@@ -366,11 +366,11 @@ class PlentymarketsExportEntityItem
 	{
 		//
 		$Object_ItemTexts = new PlentySoapObject_ItemTexts();
-		$Object_ItemTexts->Keywords = $this->SHOPWARE_Article->getKeywords(); // string
+		$Object_ItemTexts->Keywords = PlentymarketsSoapClient::removeControlChars($this->SHOPWARE_Article->getKeywords()); // string
 		$Object_ItemTexts->Lang = 'de'; // string
-		$Object_ItemTexts->LongDescription = $this->SHOPWARE_Article->getDescriptionLong(); // string
-		$Object_ItemTexts->Name = $this->SHOPWARE_Article->getName(); // string
-		$Object_ItemTexts->ShortDescription = $this->SHOPWARE_Article->getDescription(); // string
+		$Object_ItemTexts->LongDescription = PlentymarketsSoapClient::removeControlChars($this->SHOPWARE_Article->getDescriptionLong()); // string
+		$Object_ItemTexts->Name = PlentymarketsSoapClient::removeControlChars($this->SHOPWARE_Article->getName()); // string
+		$Object_ItemTexts->ShortDescription = PlentymarketsSoapClient::removeControlChars($this->SHOPWARE_Article->getDescription()); // string
 
 		return $Object_ItemTexts;
 	}
