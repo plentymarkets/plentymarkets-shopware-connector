@@ -41,13 +41,13 @@ require_once PY_SOAP . 'Models/PlentySoapResponseSubMessage.php';
 class PlentymarketsSoapClient extends SoapClient
 {
 	/**
-	 * 
+	 *
 	 * @var integer
 	 */
 	const NUMBER_OF_RETRIES_MAX = 3;
-	
+
 	/**
-	 * 
+	 *
 	 * @var integer
 	 */
 	const NUMBER_OF_SECONDS_SLEEP = 5;
@@ -57,45 +57,45 @@ class PlentymarketsSoapClient extends SoapClient
 	 * @var PlentymarketsSoapClient
 	 */
 	protected static $Instance;
-	
+
 	/**
-	 * 
+	 *
 	 * @var PlentymarketsConfig
 	 */
 	protected $Config;
-	
+
 	/**
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $wsdl;
-	
+
 	/**
-	 * 
+	 *
 	 * @var unknown
 	 */
 	protected $username;
-	
+
 	/**
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $userpass;
-	
+
 	/**
-	 * 
+	 *
 	 * @var boolean
 	 */
 	protected $dryrun = false;
-	
+
 	/**
-	 * 
+	 *
 	 * @var integer
 	 */
 	protected $userId;
-	
+
 	/**
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $userToken;
@@ -115,16 +115,16 @@ class PlentymarketsSoapClient extends SoapClient
 		{
 			ini_set('default_socket_timeout', 60);
 		}
-		
+
 		// Get the config
 		$this->Config = PlentymarketsConfig::getInstance();
-		
+
 		//
 		$this->wsdl = $wsdl;
 		$this->username = $username;
 		$this->userpass = $userpass;
 		$this->dryrun = (bool) $dryrun;
-		
+
 		// Options
 		$options = array();
 		$options['features'] = SOAP_SINGLE_ELEMENT_ARRAYS;
@@ -133,7 +133,7 @@ class PlentymarketsSoapClient extends SoapClient
 		$options['exceptions'] = true;
 		$options['trace'] = true;
 		$options['connection_timeout'] = 10;
-		
+
 		// PHP 5.4
 		// $options['keep_alive'] = false;
 
@@ -142,13 +142,13 @@ class PlentymarketsSoapClient extends SoapClient
 		{
 			$options['cache_wsdl'] = WSDL_CACHE_NONE;
 		}
-		
+
 		// Compression
 		if ($this->Config->getApiUseGzipCompression(false))
 		{
 			$options['compression'] = SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP;
 		}
-		
+
 		// HTTP 1.0 to send "Connection: close"
 		$context = stream_context_create(array(
 			'http' => array(
@@ -167,46 +167,46 @@ class PlentymarketsSoapClient extends SoapClient
 			$this->userId		= $this->Config->getApiUserID('');
 			$this->userToken	= $this->Config->getApiToken('');
 		}
-		
+
 		else
 		{
 			// Get a new token
 			$this->getToken();
 		}
-		
+
 		// Set the new token
 		$this->setSoapHeaders();
 	}
 
 	/**
 	 * Retrieves a new plentymarkets API token
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	private function getToken()
 	{
 		// Load the request model
 		require_once PY_SOAP . 'Models/PlentySoapRequest/GetAuthentificationToken.php';
-		
+
 		// Authentication
 		$Request_GetAuthentificationToken = new PlentySoapRequest_GetAuthentificationToken();
 		$Request_GetAuthentificationToken->Username = $this->username;
 		$Request_GetAuthentificationToken->Userpass = $this->userpass;
-		
+
 		$Response_GetAuthentificationToken = $this->GetAuthentificationToken($Request_GetAuthentificationToken);
-		
+
 		if ($Response_GetAuthentificationToken->Success == true)
 		{
 			$this->userId = $Response_GetAuthentificationToken->UserID;
 			$this->userToken = $Response_GetAuthentificationToken->Token;
-			
+
 			if (!$this->dryrun)
 			{
 				// Save the auth data
 				$this->Config->setApiUserID($this->userId);
 				$this->Config->setApiToken($this->userToken);
 				$this->Config->setApiLastAuthTimestamp(time());
-				
+
 				// Log
 				PlentymarketsLogger::getInstance()->message('Soap:Auth', 'Received a new token');
 			}
@@ -215,15 +215,15 @@ class PlentymarketsSoapClient extends SoapClient
 		{
 			$this->userId = -1;
 			$this->userToken = '';
-			
+
 			// Log invalid api data
 			PlentymarketsLogger::getInstance()->message('Soap:Auth', 'Invalid API credentials');
-			
+
 			// Quit
 			throw new Exception('Invalid API credentials');
 		}
 	}
-	
+
 	/**
 	 * Sets the soap authentication header
 	 */
@@ -234,7 +234,7 @@ class PlentymarketsSoapClient extends SoapClient
 			'UserID' => $this->userId,
 			'Token' => $this->userToken
 		);
-		
+
 		// Add the authentication header
 		$this->__setSoapHeaders(
 			new SoapHeader(substr($this->wsdl, 0, -4), 'verifyingToken', new SoapVar($authentication, SOAP_ENC_OBJECT))
@@ -243,7 +243,7 @@ class PlentymarketsSoapClient extends SoapClient
 
 	/**
 	 * Performes a SOAP call
-	 * 
+	 *
 	 * @see SoapClient::__call()
 	 */
 	public function __call($call, $args)
@@ -256,28 +256,28 @@ class PlentymarketsSoapClient extends SoapClient
 			{
 				// Call
 				$Response = $this->doCall($call, $args);
-				
+
 				// Quit the loop on success
 				break;
 			}
 			catch (Exception $E)
 			{
 				++$retries;
-				
+
 				// Calculate seconds based on the number of retries
 				$seconds = self::NUMBER_OF_SECONDS_SLEEP * $retries;
-				
+
 				// Try to get a new token
 				if ($E->getMessage() == 'Unauthorized Request - Invalid Token')
 				{
 					// Log the error
 					PlentymarketsLogger::getInstance()->error('Soap:Call', $call . ' failed: Unauthorized Request - Invalid Token');
-					
+
 					// Refresh the token
 					$this->getToken();
 					$this->setSoapHeaders();
 				}
-				
+
 				else
 				{
 					PlentymarketsLogger::getInstance()->message('Soap:Call', $call . ' will wait ' . $seconds . ' seconds and then try again (' . $retries . '/' . self::NUMBER_OF_RETRIES_MAX . ')');
@@ -285,8 +285,8 @@ class PlentymarketsSoapClient extends SoapClient
 				}
 			}
 		}
-		while ($retries <= self::NUMBER_OF_RETRIES_MAX);
-		
+		while ($retries < self::NUMBER_OF_RETRIES_MAX);
+
 		// Log the call's success state
 		if (isset($Response->Success) && $Response->Success == true)
 		{
@@ -301,10 +301,11 @@ class PlentymarketsSoapClient extends SoapClient
 			}
 			if (isset($E) && $E instanceof Exception)
 			{
+				PlentymarketsLogger::getInstance()->error('Soap:Call:Request', $this->__getLastRequest());
 				PlentymarketsLogger::getInstance()->error('Soap:Call', $E->getMessage());
 			}
 		}
-		
+
 		// Log the HTTP headers?
 		if ($this->Config->getApiLogHttpHeaders(false))
 		{
@@ -314,10 +315,10 @@ class PlentymarketsSoapClient extends SoapClient
 
 		return $Response;
 	}
-	
+
 	/**
 	 * Wrapper for the actual soap call
-	 * 
+	 *
 	 * @param string $call
 	 * @param array $args
 	 * @return mixed
@@ -332,9 +333,9 @@ class PlentymarketsSoapClient extends SoapClient
 		{
 			$Response = parent::__soapCall($call, array());
 		}
-		
+
 		return $Response;
-	} 
+	}
 
 	/**
 	 * Returns an instance
@@ -346,10 +347,10 @@ class PlentymarketsSoapClient extends SoapClient
 		{
 			// Confiug
 			$PlentymarketsConfig = PlentymarketsConfig::getInstance();
-			
+
 			// WSDL
 			$wsdl = $PlentymarketsConfig->getApiWsdl() . '/plenty/api/soap/version110/?xml';
-			
+
 			//
 			self::$Instance = new self($wsdl, $PlentymarketsConfig->getApiUsername(), $PlentymarketsConfig->getApiPassword());
 		}
