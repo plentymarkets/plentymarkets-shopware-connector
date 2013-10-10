@@ -30,7 +30,7 @@ require_once PY_SOAP . 'Models/PlentySoapRequest/AddLinkedItems.php';
 require_once PY_SOAP . 'Models/PlentySoapObject/AddLinkedItems.php';
 
 /**
- * PlentymarketsExportEntityItemLinked provides the actual items export funcionality. Like the other export 
+ * PlentymarketsExportEntityItemLinked provides the actual items export funcionality. Like the other export
  * entities this class is called in PlentymarketsExportController. It is important to deliver the correct
  * article model to the constructor method of this class, which is \Shopware\Models\Article\Article.
  * The data export takes place based on plentymarkets SOAP-calls.
@@ -88,6 +88,6 @@ class PlentymarketsExportEntityItemLinked
 		$Request_AddLinkedItems->MainItemSKU = PlentymarketsMappingController::getItemByShopwareID($this->SHOPWARE_Article->getId()); // string
 
 		// Do the request
-		$Response_AddLinkedItems = PlentymarketsSoapClient::getInstance()->AddLinkedItems($Request_AddLinkedItems);
+		PlentymarketsSoapClient::getInstance()->AddLinkedItems($Request_AddLinkedItems);
 	}
 }

@@ -220,7 +220,7 @@ class PlentymarketsSoapClient extends SoapClient
 			PlentymarketsLogger::getInstance()->message('Soap:Auth', 'Invalid API credentials');
 
 			// Quit
-			throw new Exception('Invalid API credentials');
+			throw new \Exception('Invalid API credentials');
 		}
 	}
 

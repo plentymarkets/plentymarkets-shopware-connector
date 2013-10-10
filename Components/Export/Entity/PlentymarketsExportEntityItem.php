@@ -131,7 +131,7 @@ class PlentymarketsExportEntityItem
 
 		if (!$ItemDetails instanceof \Shopware\Models\Article\Detail)
 		{
-			throw new \Exception('Skipping corrupt item "' . $this->SHOPWARE_Article->getName() . '" (' . $this->SHOPWARE_Article->getId() . ') – no Article\Detail');
+			throw new \Exception('Item "' . $this->SHOPWARE_Article->getName() . '" (' . $this->SHOPWARE_Article->getId() . ') could not be exported (no Article\Detail)');
 		}
 
 		// Release date
@@ -225,9 +225,9 @@ class PlentymarketsExportEntityItem
 
 		$ResponseMessage = $Response_AddItemsBase->ResponseMessages->item[0];
 
-		if ($ResponseMessage->Code != 100)
+		if (!$Response_AddItemsBase->Success || $ResponseMessage->Code != 100)
 		{
-			throw new Exception('ItemBase error');
+			throw new \Exception('Item "' . $this->SHOPWARE_Article->getName() . '" (' . $this->SHOPWARE_Article->getId() . ') could not be exported (success/100)');
 		}
 
 		foreach ($ResponseMessage->SuccessMessages->item as $SubMessage)
@@ -249,11 +249,8 @@ class PlentymarketsExportEntityItem
 		}
 		else
 		{
-			PlentymarketsLogger::getInstance()->error('Export:Initial:Item', 'ItemId ' . $Item->getId() . ': Item could not be exported');
-			throw new Exception('Did not recieve item ID and price ID');
+			throw new \Exception('Item "' . $this->SHOPWARE_Article->getName() . '" (' . $this->SHOPWARE_Article->getId() . ') could not be exported (did not recieve item ID and price ID)');
 		}
-
-		return true;
 	}
 
 	/**
@@ -499,10 +496,7 @@ class PlentymarketsExportEntityItem
 	 */
 	public function export()
 	{
-		if (!$this->exportItemBase())
-		{
-			return false;
-		}
+		$this->exportItemBase();
 		$this->exportImages();
 		$this->exportVariants();
 		$this->exportProperties();
@@ -659,15 +653,13 @@ class PlentymarketsExportEntityItem
 			}
 
 			$Object_SetAttributeValueSetsDetails = new PlentySoapObject_SetAttributeValueSetsDetails();
-			// $Object_SetAttributeValueSetsDetails->ASIN = $ItemVariation->getActive(); // string
 			$Object_SetAttributeValueSetsDetails->Availability = $ItemVariation->getActive(); // int
 			$Object_SetAttributeValueSetsDetails->EAN1 = $ItemVariation->getEan(); // string
 			$Object_SetAttributeValueSetsDetails->MaxStock = null; // float
 			$Object_SetAttributeValueSetsDetails->PurchasePrice = null; // float
 			$Object_SetAttributeValueSetsDetails->SKU = $sku;
-			// $Object_SetAttributeValueSetsDetails->StockBuffer = $ItemVariation->get; // float
-
 			$Object_SetAttributeValueSetsDetails->Variantnumber = $ItemVariation->getNumber(); // string
+
 			$Request_SetAttributeValueSetsDetails->AttributeValueSetsDetails[] = $Object_SetAttributeValueSetsDetails;
 		}
 

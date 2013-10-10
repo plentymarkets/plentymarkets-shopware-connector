@@ -33,7 +33,7 @@ require_once PY_SOAP . 'Models/PlentySoapRequest/AddPropertyGroup.php';
 require_once PY_SOAP . 'Models/PlentySoapRequest/AddProperty.php';
 
 /**
- * PlentymarketsExportEntityItemProperty provides the actual items export funcionality. Like the other export 
+ * PlentymarketsExportEntityItemProperty provides the actual items export funcionality. Like the other export
  * entities this class is called in PlentymarketsExportController.
  * The data export takes place based on plentymarkets SOAP-calls.
  *
@@ -73,6 +73,11 @@ class PlentymarketsExportEntityItemProperty
 		$Request_GetPropertiesList->Lang = 'de'; // string
 
 		$Response_GetPropertiesList = PlentymarketsSoapClient::getInstance()->GetPropertiesList($Request_GetPropertiesList);
+
+		if (!$Response_GetPropertiesList->Success)
+		{
+			throw new \Exception('Cannot fetch PropertiesList');
+		}
 
 		foreach ($Response_GetPropertiesList->PropertyGroups->item as $PropertyGroup)
 		{
@@ -130,12 +135,18 @@ class PlentymarketsExportEntityItemProperty
 					$Request_AddPropertyGroup->PropertyGroupID = 0;
 
 					$Response = PlentymarketsSoapClient::getInstance()->AddPropertyGroup($Request_AddPropertyGroup);
+
+					if (!$Response->Success)
+					{
+						throw new \Exception('Cannot export property group "'. $Request_AddPropertyGroup->BackendName .'"');
+					}
+
 					$groupIdAdded = (integer) $Response->ResponseMessages->item[0]->SuccessMessages->item[0]->Value;
 				}
 
 				PlentymarketsMappingController::addPropertyGroup($PropertyGroup->getId(), $groupIdAdded);
 			}
-			
+
 			if (!isset($this->PLENTY_groupIDValueName2ID[$groupIdAdded]))
 			{
 				$this->PLENTY_groupIDValueName2ID[$groupIdAdded] = array();
@@ -169,6 +180,11 @@ class PlentymarketsExportEntityItemProperty
 						$Request_AddProperty->PropertyType = 'text';
 
 						$Response_AddProperty = PlentymarketsSoapClient::getInstance()->AddProperty($Request_AddProperty);
+
+						if (!$Response_AddProperty->Success)
+						{
+							throw new \Exception('Cannot export property "'. $Request_AddProperty->PropertyBackendName .'"');
+						}
 
 						$propertyIdAdded = (integer) $Response_AddProperty->ResponseMessages->item[0]->SuccessMessages->item[0]->Value;
 					}

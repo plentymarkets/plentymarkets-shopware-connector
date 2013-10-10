@@ -34,15 +34,15 @@
  */
 class PlentymarketsExportController
 {
-	
+
 	/**
-	 * 
+	 *
 	 * @var integer
 	 */
 	const DEFAULT_CHUNKS_PER_RUN = -1;
-	
+
 	/**
-	 * 
+	 *
 	 * @var integer
 	 */
 	const DEFAULT_CHUNK_SIZE = 250;
@@ -53,7 +53,7 @@ class PlentymarketsExportController
 	 * @var PlentymarketsExportController
 	 */
 	protected static $Instance;
-	
+
 	/**
 	 * This array defines the order in which the exports have to be carried out.
 	 * @var array
@@ -66,9 +66,9 @@ class PlentymarketsExportController
 		'Item',
 		'ItemCrossSelling',
 	);
-	
+
 	/**
-	 * 
+	 *
 	 * @var array
 	 */
 	protected static $mapping = array(
@@ -110,10 +110,10 @@ class PlentymarketsExportController
 	 * @var boolean
 	 */
 	protected $isComplete = true;
-	
+
 	/**
 	 * Indicates whether an export may run or not.
-	 * 
+	 *
 	 * @var boolean
 	 */
 	protected $mayRun = false;
@@ -128,7 +128,7 @@ class PlentymarketsExportController
 
 		// Check whether a process is running
 		$this->isRunning = (boolean) $this->Config->getIsExportRunning(false);
-		
+
 		// Check whether settings and mapping are done
 		$this->mayRun = PlentymarketsMappingController::isComplete() && $this->Config->isComplete();
 
@@ -143,7 +143,7 @@ class PlentymarketsExportController
 
 	/**
 	 * The returned value indicates whether the settings and mapping are done.
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public function isComplete()
@@ -161,7 +161,7 @@ class PlentymarketsExportController
 		// Last chunk
 		$methodLastChunk = sprintf('set%sExportLastChunk', $entity);
 		$this->Config->$methodLastChunk('');
-		
+
 		$this->announce($entity);
 	}
 
@@ -178,27 +178,27 @@ class PlentymarketsExportController
 			$this->Config->setExportEntityPending(false);
 			$this->Config->setIsExportRunning(0);
 		}
-		
+
 		$methodStatus = sprintf('set%sExportStatus', $entity);
 		$this->Config->$methodStatus('open');
-		
+
 		// Start
 		$methodStart = sprintf('set%sExportTimestampStart', $entity);
 		$this->Config->$methodStart('');
-		
+
 		// Finished
 		$methodStart = sprintf('set%sExportTimestampFinished', $entity);
 		$this->Config->$methodStart('');
-		
+
 		// Error
 		$methodError = sprintf('set%sExportLastErrorMessage', $entity);
 		$this->Config->$methodError('');
-		
+
 		// Last chunk
 		$methodLastChunk = sprintf('set%sExportLastChunk', $entity);
 		$this->Config->$methodLastChunk('');
 	}
-	
+
 	/**
 	 * Erases an export status and the mapping
 	 *
@@ -208,7 +208,7 @@ class PlentymarketsExportController
 	{
 		// Status
 		$this->reset($entity, false);
-		
+
 		// Delete Mapping
 		foreach ((array) self::$mapping[$entity] as $tableName)
 		{
@@ -254,7 +254,7 @@ class PlentymarketsExportController
 		{
 			throw new \Exception('Either the mapping or the settings are not finished');
 		}
-		
+
 		// Check whether or not the order is correct
 		$index = array_search($entity, self::$order);
 		if ($index > 0)
@@ -265,7 +265,7 @@ class PlentymarketsExportController
 				throw new \Exception('The previous entity "'. $previous .'" is not finished successfully');
 			}
 		}
-		
+
 		//
 		$this->Config->setExportEntityPending($entity);
 
@@ -284,7 +284,7 @@ class PlentymarketsExportController
 		{
 			throw new \Exception('Another export is running at this very moment');
 		}
-		
+
 		// Check whether settings and mapping is complete
 		if ($this->mayRun == false)
 		{
@@ -311,10 +311,10 @@ class PlentymarketsExportController
 			switch ($entity)
 			{
 				// Entities
-				case 'ItemProperty':
-				case 'ItemProducer':
 				case 'ItemCategory':
 				case 'ItemAttribute':
+				case 'ItemProperty':
+				case 'ItemProducer':
 				case 'ItemCrossSelling':
 					$this->exportEntity($entity);
 					break;
@@ -334,7 +334,6 @@ class PlentymarketsExportController
 		}
 		catch (Exception $E)
 		{
-			// PlentymarketsLogger::getInstance()->error('Export:Initial:' . ucfirst($entity), 'Exception ' . get_class($E) . ' on line' . $E->getLine() . ' in file: ' . $E->getFile());
 			PlentymarketsLogger::getInstance()->error('Export:Initial:' . ucfirst($entity), $E->getMessage());
 
 			$method = sprintf('set%sExportLastErrorMessage', $entity);
@@ -369,7 +368,7 @@ class PlentymarketsExportController
 	public function exportOrders()
 	{
 		require_once PY_COMPONENTS . 'Export/Entity/PlentymarketsExportEntityOrder.php';
-		
+
 		// Get all the orders, that are not yet exported to plentymarkets
 		$Result = Shopware()->Db()->query('
 			SELECT
@@ -466,10 +465,10 @@ class PlentymarketsExportController
 		$this->Config->setItemIncomingPaymentExportLastUpdate($now);
 		$this->Config->setItemIncomingPaymentExportStatus('success');
 	}
-	
+
 	/**
 	 * Checks whether an export has successfully finished.
-	 * 
+	 *
 	 * @param string $entity
 	 * @return boolean
 	 */

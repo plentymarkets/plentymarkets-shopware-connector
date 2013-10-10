@@ -66,12 +66,12 @@ class PlentymarketsMappingController
 			}
 			else
 			{
-				throw new Exception();
+				throw new \Exception();
 			}
 		}
 		else
 		{
-			throw new Exception();
+			throw new \Exception();
 		}
 
 		//
