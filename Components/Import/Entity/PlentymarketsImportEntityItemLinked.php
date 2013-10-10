@@ -35,7 +35,7 @@ require_once PY_SOAP . 'Models/PlentySoapRequest/GetLinkedItems.php';
  * It is important to deliver at least a plenty item ID or
  * a shopware item ID to the constructor method of this class.
  * The data import takes place based on plentymarkets SOAP-calls.
- * 
+ *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 class PlentymarketsImportEntityItemLinked
@@ -54,9 +54,10 @@ class PlentymarketsImportEntityItemLinked
 	protected $LinkedItems;
 
 	/**
+	 * I am the constructor
 	 *
-	 * @param integer $itemId        	
-	 * @param PlentySoapObject_GetLinkedItems $GetLinkedItems        	
+	 * @param integer $itemId
+	 * @param PlentySoapObject_GetLinkedItems $GetLinkedItems
 	 */
 	public function __construct($itemId, $GetLinkedItems)
 	{
@@ -80,11 +81,11 @@ class PlentymarketsImportEntityItemLinked
 	{
 		// Cleanup
 		$this->purge();
-		
+
 		foreach ($this->LinkedItems->item as $LinkedItem)
 		{
 			$LinkedItem instanceof PlentySoapObject_GetLinkedItems;
-			
+
 			// Get the id
 			try
 			{
@@ -94,7 +95,7 @@ class PlentymarketsImportEntityItemLinked
 			{
 				continue;
 			}
-			
+
 			if ($LinkedItem->Relationship == 'Accessory')
 			{
 				$table = 's_articles_relationships';
@@ -107,7 +108,7 @@ class PlentymarketsImportEntityItemLinked
 			{
 				continue;
 			}
-			
+
 			Shopware()->Db()->insert(
 				$table,
 				array(
