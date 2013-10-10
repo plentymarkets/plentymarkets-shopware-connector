@@ -390,26 +390,26 @@ class PlentymarketsExportEntityItem
 
 		if (!is_null($MainDetailAttribute))
 		{
-			$Object_ItemFreeTextFields->Free1 = $MainDetailAttribute->getAttr1(); // string
-			$Object_ItemFreeTextFields->Free2 = $MainDetailAttribute->getAttr2(); // string
-			$Object_ItemFreeTextFields->Free3 = $MainDetailAttribute->getAttr3(); // string
-			$Object_ItemFreeTextFields->Free4 = $MainDetailAttribute->getAttr4(); // string
-			$Object_ItemFreeTextFields->Free5 = $MainDetailAttribute->getAttr5(); // string
-			$Object_ItemFreeTextFields->Free6 = $MainDetailAttribute->getAttr6(); // string
-			$Object_ItemFreeTextFields->Free7 = $MainDetailAttribute->getAttr7(); // string
-			$Object_ItemFreeTextFields->Free8 = $MainDetailAttribute->getAttr8(); // string
-			$Object_ItemFreeTextFields->Free9 = $MainDetailAttribute->getAttr9(); // string
-			$Object_ItemFreeTextFields->Free10 = $MainDetailAttribute->getAttr10(); // string
-			$Object_ItemFreeTextFields->Free11 = $MainDetailAttribute->getAttr11(); // string
-			$Object_ItemFreeTextFields->Free12 = $MainDetailAttribute->getAttr12(); // string
-			$Object_ItemFreeTextFields->Free13 = $MainDetailAttribute->getAttr13(); // string
-			$Object_ItemFreeTextFields->Free14 = $MainDetailAttribute->getAttr14(); // string
-			$Object_ItemFreeTextFields->Free15 = $MainDetailAttribute->getAttr15(); // string
-			$Object_ItemFreeTextFields->Free16 = $MainDetailAttribute->getAttr16(); // string
-			$Object_ItemFreeTextFields->Free17 = $MainDetailAttribute->getAttr17(); // string
-			$Object_ItemFreeTextFields->Free18 = $MainDetailAttribute->getAttr18(); // string
-			$Object_ItemFreeTextFields->Free19 = $MainDetailAttribute->getAttr19(); // string
-			$Object_ItemFreeTextFields->Free20 = $MainDetailAttribute->getAttr20(); // string
+			$Object_ItemFreeTextFields->Free1 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr1()); // string
+			$Object_ItemFreeTextFields->Free2 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr2()); // string
+			$Object_ItemFreeTextFields->Free3 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr3()); // string
+			$Object_ItemFreeTextFields->Free4 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr4()); // string
+			$Object_ItemFreeTextFields->Free5 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr5()); // string
+			$Object_ItemFreeTextFields->Free6 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr6()); // string
+			$Object_ItemFreeTextFields->Free7 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr7()); // string
+			$Object_ItemFreeTextFields->Free8 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr8()); // string
+			$Object_ItemFreeTextFields->Free9 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr9()); // string
+			$Object_ItemFreeTextFields->Free10 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr10()); // string
+			$Object_ItemFreeTextFields->Free11 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr11()); // string
+			$Object_ItemFreeTextFields->Free12 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr12()); // string
+			$Object_ItemFreeTextFields->Free13 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr13()); // string
+			$Object_ItemFreeTextFields->Free14 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr14()); // string
+			$Object_ItemFreeTextFields->Free15 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr15()); // string
+			$Object_ItemFreeTextFields->Free16 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr16()); // string
+			$Object_ItemFreeTextFields->Free17 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr17()); // string
+			$Object_ItemFreeTextFields->Free18 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr18()); // string
+			$Object_ItemFreeTextFields->Free19 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr19()); // string
+			$Object_ItemFreeTextFields->Free20 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr20()); // string
 		}
 
 		return $Object_ItemFreeTextFields;
