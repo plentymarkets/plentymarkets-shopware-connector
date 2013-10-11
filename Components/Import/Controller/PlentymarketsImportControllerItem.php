@@ -220,11 +220,11 @@ class PlentymarketsImportControllerItem
 		$stackSize = count(PlentymarketsImportStackItem::getInstance());
 		if ($stackSize)
 		{
-			PlentymarketsLogger::getInstance()->message('Import:Stack:Item', $stackSize . ' items left in stack');
+			PlentymarketsLogger::getInstance()->message('Sync:Stack:Item', $stackSize . ' items left in stack');
 		}
 		else
 		{
-			PlentymarketsLogger::getInstance()->message('Import:Stack:Item', 'Stack is empty');
+			PlentymarketsLogger::getInstance()->message('Sync:Stack:Item', 'Stack is empty');
 		}
 
 		// Post processed

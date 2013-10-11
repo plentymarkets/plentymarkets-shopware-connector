@@ -109,7 +109,7 @@ class PlentymarketsImportStackItem implements Countable
 	 */
 	public function update()
 	{
-		PlentymarketsLogger::getInstance()->message('Import:Stack:Item', 'Starting update');
+		PlentymarketsLogger::getInstance()->message('Sync:Stack:Item', 'Starting update');
 
 		$ShopRepository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
 		$Shops = $ShopRepository->findBy(
@@ -168,8 +168,8 @@ class PlentymarketsImportStackItem implements Countable
 		PlentymarketsConfig::getInstance()->setImportItemStackLastUpdateTimestamp($timestamp);
 
 		// Log
-		PlentymarketsLogger::getInstance()->message('Import:Stack:Item', 'Added ' . count($itemIdsStacked) . ' items to the stack');
-		PlentymarketsLogger::getInstance()->message('Import:Stack:Item', 'Update finished');
+		PlentymarketsLogger::getInstance()->message('Sync:Stack:Item', 'Added ' . count($itemIdsStacked) . ' items to the stack');
+		PlentymarketsLogger::getInstance()->message('Sync:Stack:Item', 'Update finished');
 	}
 
 	/**
