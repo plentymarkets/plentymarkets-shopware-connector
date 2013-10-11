@@ -247,7 +247,7 @@ class PlentymarketsExportStatus implements PlentymarketsExportStatusInterface
 	}
 
 	/**
-	 * Sets the name
+	 * Sets the name of the export
 	 *
 	 * @param string $name
 	 */
@@ -257,7 +257,7 @@ class PlentymarketsExportStatus implements PlentymarketsExportStatusInterface
 	}
 
 	/**
-	 * Sets the status
+	 * Sets the status of the export
 	 *
 	 * @param string $status
 	 */
