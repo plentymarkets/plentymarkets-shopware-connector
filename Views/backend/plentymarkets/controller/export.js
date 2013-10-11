@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.Plentymarkets.controller.Export', {
 					callback: function(data)
 					{
 						view.wizard = data[0];
-						view.setToolbarText();
+						view.setWizard();
 					}
 				});
 				Shopware.Notification.createGrowlMessage(

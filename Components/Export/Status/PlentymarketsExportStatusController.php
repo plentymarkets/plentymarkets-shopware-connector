@@ -1,15 +1,58 @@
 <?php
+/**
+ * plentymarkets shopware connector
+ * Copyright © 2013 plentymarkets GmbH
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License, supplemented by an additional
+ * permission, and of our proprietary license can be found
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "plentymarkets" is a registered trademark of plentymarkets GmbH.
+ * "shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, titles and interests in the
+ * above trademarks remain entirely with the trademark owners.
+ *
+ * @copyright Copyright (c) 2013, plentymarkets GmbH (http://www.plentymarkets.com)
+ * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
+ */
 
+require_once PY_COMPONENTS . 'Export/PlentymarketsExportWizard.php';
 require_once PY_COMPONENTS . 'Export/Status/PlentymarketsExportStatusInterface.php';
 require_once PY_COMPONENTS . 'Export/Status/PlentymarketsExportStatus.php';
 require_once PY_COMPONENTS . 'Export/Status/PlentymarketsExportStatusDependency.php';
 
+/**
+ * Controlles the initial export status
+ *
+ * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
+ */
 class PlentymarketsExportStatusController
 {
+	/**
+	 *
+	 * @var PlentymarketsExportStatusController
+	 */
 	protected static $Instance;
 
+	/**
+	 *
+	 * @var array[PlentymarketsExportStatusInterface]
+	 */
 	protected $Status = array();
 
+	/**
+	 * I am the contructor
+	 */
 	protected function __construct()
 	{
 		// ItemCategory
@@ -47,6 +90,11 @@ class PlentymarketsExportStatusController
 		$this->add($Customer);
 	}
 
+	/**
+	 * I am the singleton method
+	 *
+	 * @return PlentymarketsExportStatusController
+	 */
 	public static function getInstance()
 	{
 		if (!self::$Instance instanceof self)
@@ -56,13 +104,24 @@ class PlentymarketsExportStatusController
 		return self::$Instance;
 	}
 
+	/**
+	 * Adds a status to the controller
+	 *
+	 * @param PlentymarketsExportStatusInterface $Status
+	 */
 	public function add(PlentymarketsExportStatusInterface $Status)
 	{
 		$this->Status[$Status->getName()] = $Status;
 	}
 
+	/**
+	 * Returns the overview for the use in the view
+	 *
+	 * @return array
+	 */
 	public function getOverview()
 	{
+		$wizardIsActive = PlentymarketsExportWizard::getInstance()->isActive();
 		$overview = array();
 
 		foreach ($this->Status as $position => $Status)
@@ -81,10 +140,10 @@ class PlentymarketsExportStatusController
 				'finished' => $Status->getFinished(),
 
 				// Flags
-				'mayAnnounce' => $this->mayAnnounce() && $Status->mayAnnounce(),
-				'mayReset' => $Status->mayReset(),
-				'mayErase' => $Status->mayErase(),
-				'needsDependency' => $Status->needsDependency() && !$Status->isFinished()
+				'mayAnnounce' => !$wizardIsActive && $this->mayAnnounce() && $Status->mayAnnounce(),
+				'mayReset' => !$wizardIsActive && $Status->mayReset(),
+				'mayErase' => !$wizardIsActive && $Status->mayErase(),
+				'needsDependency' => !$wizardIsActive && $Status->needsDependency() && !$Status->isFinished()
 			);
 		}
 
@@ -94,6 +153,7 @@ class PlentymarketsExportStatusController
 	/**
 	 * Returns the next entity to be announced
 	 *
+	 * @throws PlentymarketsExportStatusException if there is no announceable entity
 	 * @return PlentymarketsExportStatusInterface
 	 */
 	public function getNext()
@@ -108,8 +168,17 @@ class PlentymarketsExportStatusController
 		throw new PlentymarketsExportStatusException('No entity to announce');
 	}
 
+	/**
+	 * Checks whether an entity may be announced
+	 *
+	 * @return boolean
+	 */
 	public function mayAnnounce()
 	{
+		if ($this->isBroke())
+		{
+			return false;
+		}
 		foreach ($this->Status as $Status)
 		{
 			if ($Status->isBlocking())
@@ -120,11 +189,56 @@ class PlentymarketsExportStatusController
 		return true;
 	}
 
+	/**
+	 * Checks whether the specifies entity may be announced
+	 *
+	 * @param string $entity
+	 * @return boolean
+	 */
 	public function mayAnnounceEntity($entity)
 	{
 		return $this->mayAnnounce() && $this->Status[$entity]->mayAnnounce();
 	}
 
+	/**
+	 * Checks whether the whole export is blocked through an broke entity
+	 *
+	 * @return boolean
+	 */
+	public function isBroke()
+	{
+		foreach ($this->Status as $Status)
+		{
+			if ($Status->isBroke())
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Checks wheter on of the exports is waiting to be carried out
+	 *
+	 * @return boolean
+	 */
+	public function isWaiting()
+	{
+		foreach ($this->Status as $Status)
+		{
+			if ($Status->isWaiting())
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Checks wheter the mandatory exports are finished
+	 *
+	 * @return boolean
+	 */
 	public function isFinished()
 	{
 		foreach ($this->Status as $Status)

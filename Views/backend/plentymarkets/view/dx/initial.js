@@ -43,55 +43,52 @@ Ext.define('Shopware.apps.Plentymarkets.view.dx.Initial', {
 			Customer: 'Kunden',
 		};
 
-		me.wizardToolbar = Ext.create('Ext.toolbar.TextItem', {
-			text: 'asdf'
-		});
-		
+		me.wizardToolbar = Ext.create('Ext.toolbar.TextItem');
+
 		me.store = Ext.create('Shopware.apps.Plentymarkets.store.Export').load();
+		me.wizardButton = Ext.create('Ext.button.Button', {
+			text: '{s name=plentymarkets/view/export/button/ExportAuto}Automatischer Export{/s}',
+			cls: 'secondary',
+			iconCls: 'plenty-icon-wizard',
+			handler: function()
+			{
+				me.wizard.save({
+					params: {
+						activate: me.wizard.get('isActive') ? 'no' : 'yes'
+					},
+					callback: function(data)
+					{
+						me.wizard = data;
+						me.setWizard();
+						me.store.load();
+					}
+				});
+			}
+		});
+
 		me.wizardStore = Ext.create('Shopware.apps.Plentymarkets.store.dx.Wizard').load({
 			callback: function(data)
 			{
 				me.wizard = data[0];
-				me.setToolbarText();
+				me.setWizard();
 			}
 		});
-		
 
 		me.dockedItems = [Ext.create('Ext.toolbar.Toolbar', {
 			cls: 'shopware-toolbar',
 			dock: 'bottom',
 			ui: 'shopware-ui',
-			items: [me.wizardToolbar,
-
-			'->', {
-				xtype: 'button',
-				text: '{s name=plentymarkets/view/export/button/ExportAuto}Automatischer Export{/s}',
-				cls: 'secondary',
-				iconCls: 'plenty-icon-wizard',
-				handler: function()
-				{
-					me.wizard.save({
-						params: {
-							activate: me.wizard.get('isActive') ? 'no' : 'yes' 
-						},
-						callback: function(data)
-						{
-							me.wizard = data;
-							me.setToolbarText();
-						}
-					});
-				}
-			}, Ext.create('Ext.button.Button', {
+			items: [me.wizardButton, me.wizardToolbar, '->', Ext.create('Ext.button.Button', {
 				text: '{s name=plentymarkets/view/export/button/reload}Neu laden{/s}',
 				cls: 'primary',
 				handler: function()
 				{
-					me.store.load();
 					me.wizardStore.load({
 						callback: function(data)
 						{
 							me.wizard = data[0];
-							me.setToolbarText();
+							me.setWizard();
+							me.store.load();
 						}
 					});
 				}
@@ -142,11 +139,24 @@ Ext.define('Shopware.apps.Plentymarkets.view.dx.Initial', {
 				return record.raw.finished <= 0 ? '–' : Ext.util.Format.date(value, 'd.m.Y, H:i:s') + ' Uhr';
 			}
 		}, {
-			header: 'Aktion',
+			header: 'Aktion / Info',
 			xtype: 'actioncolumn',
 			hideable: false,
 			flex: 1,
 			items: [
+
+			// Info
+			{
+				iconCls: 'plenty-export-wizard',
+				tooltip: 'Der automatische Export ist aktiviert – es kann keine manuelle Aktion ausgeführt werden.',
+				getClass: function(value, metaData, record)
+				{
+					if (!me.wizard.get('isActive'))
+					{
+						return Ext.baseCSSPrefix + 'hidden';
+					}
+				}
+			},
 
 			// Info
 			{
@@ -246,22 +256,27 @@ Ext.define('Shopware.apps.Plentymarkets.view.dx.Initial', {
 
 		me.callParent(arguments);
 	},
-	
-	setToolbarText: function()
+
+	setWizard: function()
 	{
 		var me = this;
 
 		if (me.wizard.get('isActive'))
 		{
 			me.wizardToolbar.setText('<div class="plenty-status plenty-icon-wizard-active">Automatischer Export ist aktiv</div>');
+			me.wizardButton.setText('Automatischen Export deaktivieren');
+			me.wizardButton.setVisible(true);
 		}
 		else if (!me.wizard.get('mayActivate'))
 		{
+			me.wizardButton.setVisible(false);
 			me.wizardToolbar.setText('<div class="plenty-status plenty-icon-wizard-off">Automatischer Export kann nicht aktiviert werden</div>');
 		}
 		else
 		{
 			me.wizardToolbar.setText('<div class="plenty-status plenty-icon-wizard-inactive">Automatischer Export ist nicht aktiv</div>');
+			me.wizardButton.setText('Automatischen Export aktivieren');
+			me.wizardButton.setVisible(true);
 		}
 	}
 

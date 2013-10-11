@@ -1,27 +1,97 @@
 <?php
+/**
+ * plentymarkets shopware connector
+ * Copyright © 2013 plentymarkets GmbH
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License, supplemented by an additional
+ * permission, and of our proprietary license can be found
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "plentymarkets" is a registered trademark of plentymarkets GmbH.
+ * "shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, titles and interests in the
+ * above trademarks remain entirely with the trademark owners.
+ *
+ * @copyright Copyright (c) 2013, plentymarkets GmbH (http://www.plentymarkets.com)
+ * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
+ */
 
 require_once PY_COMPONENTS . 'Export/Status/PlentymarketsExportStatusInterface.php';
 
+/**
+ * Represents the status of an initial export
+ *
+ * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
+ */
 class PlentymarketsExportStatus implements PlentymarketsExportStatusInterface
 {
+
+	/**
+	 *
+	 * @var string
+	 */
 	const STATUS_OPEN = 'open';
+
+	/**
+	 *
+	 * @var string
+	 */
 	const STATUS_SUCCESS = 'success';
+
+	/**
+	 *
+	 * @var string
+	 */
 	const STATUS_PENDING = 'pending';
+
+	/**
+	 *
+	 * @var string
+	 */
 	const STATUS_ERROR = 'error';
+
+	/**
+	 *
+	 * @var string
+	 */
 	const STATUS_RUNNING = 'running';
 
+	/**
+	 *
+	 * @var string
+	 */
 	protected $name;
 
+	/**
+	 *
+	 * @var boolean
+	 */
 	protected $isOptional = false;
 
+	/**
+	 * I am the contructor
+	 *
+	 * @param string $name
+	 */
 	public function __construct($name)
 	{
 		$this->name = $name;
 	}
-	
+
 	/**
+	 * Checks whether the export is finished
 	 *
-	 * @see PlentymarketsExportStatusInterface::isFinished()
+	 * @return boolean
 	 */
 	public function isFinished()
 	{
@@ -29,8 +99,10 @@ class PlentymarketsExportStatus implements PlentymarketsExportStatusInterface
 	}
 
 	/**
+	 * Checks whether the export may be announced
 	 *
 	 * @see PlentymarketsExportStatusInterface::mayAnnounce()
+	 * @return boolean
 	 */
 	public function mayAnnounce()
 	{
@@ -38,8 +110,9 @@ class PlentymarketsExportStatus implements PlentymarketsExportStatusInterface
 	}
 
 	/**
+	 * Checks whether the export may be erased
 	 *
-	 * @see PlentymarketsExportStatusInterface::mayErase()
+	 * @return boolean
 	 */
 	public function mayErase()
 	{
@@ -47,8 +120,9 @@ class PlentymarketsExportStatus implements PlentymarketsExportStatusInterface
 	}
 
 	/**
+	 * Checks whether the export may be resetted
 	 *
-	 * @see PlentymarketsExportStatusInterface::mayReset()
+	 * @return boolean
 	 */
 	public function mayReset()
 	{
@@ -56,8 +130,10 @@ class PlentymarketsExportStatus implements PlentymarketsExportStatusInterface
 	}
 
 	/**
+	 * Checks whether the export depends on another export
 	 *
 	 * @see PlentymarketsExportStatusInterface::needsDependency()
+	 * @return boolean
 	 */
 	public function needsDependency()
 	{
@@ -65,6 +141,7 @@ class PlentymarketsExportStatus implements PlentymarketsExportStatusInterface
 	}
 
 	/**
+	 * Sets the export as optional
 	 */
 	public function setOptional()
 	{
@@ -72,8 +149,9 @@ class PlentymarketsExportStatus implements PlentymarketsExportStatusInterface
 	}
 
 	/**
+	 * Checks whether the export is blocked
 	 *
-	 * @see PlentymarketsExportStatusInterface::isBlocking()
+	 * @return boolean
 	 */
 	public function isBlocking()
 	{
@@ -81,8 +159,29 @@ class PlentymarketsExportStatus implements PlentymarketsExportStatusInterface
 	}
 
 	/**
+	 * Checks whether the export is broken
 	 *
-	 * @see PlentymarketsExportStatusInterface::isOptional()
+	 * @return boolean
+	 */
+	public function isBroke()
+	{
+		return $this->getStatus() == self::STATUS_ERROR;
+	}
+
+	/**
+	 * Checks whether the export is waiting
+	 *
+	 * @return boolean
+	 */
+	public function isWaiting()
+	{
+		return $this->getStatus() == self::STATUS_PENDING;
+	}
+
+	/**
+	 * Checks whether the export is optional
+	 *
+	 * @return boolean
 	 */
 	public function isOptional()
 	{
@@ -90,8 +189,9 @@ class PlentymarketsExportStatus implements PlentymarketsExportStatusInterface
 	}
 
 	/**
+	 * Returns the name of the export
 	 *
-	 * @return field_type
+	 * @return string
 	 */
 	public function getName()
 	{
@@ -99,8 +199,10 @@ class PlentymarketsExportStatus implements PlentymarketsExportStatusInterface
 	}
 
 	/**
+	 * Returns the status of the export
 	 *
-	 * @return field_type
+	 * @see PlentymarketsExportStatusInterface::getStatus()
+	 * @return string
 	 */
 	public function getStatus()
 	{
@@ -109,8 +211,10 @@ class PlentymarketsExportStatus implements PlentymarketsExportStatusInterface
 	}
 
 	/**
+	 * Returns the start timestmap
 	 *
-	 * @return number
+	 * @see PlentymarketsExportStatusInterface::getStart()
+	 * @return integer
 	 */
 	public function getStart()
 	{
@@ -119,8 +223,10 @@ class PlentymarketsExportStatus implements PlentymarketsExportStatusInterface
 	}
 
 	/**
+	 * Returns the finshed timestamp
 	 *
-	 * @return number
+	 * @see PlentymarketsExportStatusInterface::getFinished()
+	 * @return integer
 	 */
 	public function getFinished()
 	{
@@ -129,8 +235,10 @@ class PlentymarketsExportStatus implements PlentymarketsExportStatusInterface
 	}
 
 	/**
+	 * Returns the error message
 	 *
-	 * @return field_type
+	 * @see PlentymarketsExportStatusInterface::getError()
+	 * @return string
 	 */
 	public function getError()
 	{
@@ -139,8 +247,9 @@ class PlentymarketsExportStatus implements PlentymarketsExportStatusInterface
 	}
 
 	/**
+	 * Sets the name
 	 *
-	 * @param field_type $name        	
+	 * @param string $name
 	 */
 	public function setName($name)
 	{
@@ -148,8 +257,9 @@ class PlentymarketsExportStatus implements PlentymarketsExportStatusInterface
 	}
 
 	/**
+	 * Sets the status
 	 *
-	 * @param field_type $status        	
+	 * @param string $status
 	 */
 	public function setStatus($status)
 	{
@@ -158,8 +268,9 @@ class PlentymarketsExportStatus implements PlentymarketsExportStatusInterface
 	}
 
 	/**
+	 * Sets the start timestmamp
 	 *
-	 * @param number $start        	
+	 * @param integer $start
 	 */
 	public function setStart($start)
 	{
@@ -168,8 +279,9 @@ class PlentymarketsExportStatus implements PlentymarketsExportStatusInterface
 	}
 
 	/**
+	 * Sets the finished timestamp
 	 *
-	 * @param number $finished        	
+	 * @param integer $finished
 	 */
 	public function setFinished($finished)
 	{
@@ -178,8 +290,9 @@ class PlentymarketsExportStatus implements PlentymarketsExportStatusInterface
 	}
 
 	/**
+	 * Sets the error message
 	 *
-	 * @param field_type $error        	
+	 * @param string $error
 	 */
 	public function setError($error)
 	{

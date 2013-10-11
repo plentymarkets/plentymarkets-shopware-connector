@@ -32,6 +32,8 @@ require_once PY_COMPONENTS . 'Utils/PlentymarketsUtils.php';
 require_once PY_COMPONENTS . 'Soap/Client/PlentymarketsSoapClient.php';
 require_once PY_COMPONENTS . 'Import/PlentymarketsImportController.php';
 require_once PY_COMPONENTS . 'Export/PlentymarketsExportController.php';
+require_once PY_COMPONENTS . 'Export/PlentymarketsExportWizard.php';
+require_once PY_COMPONENTS . 'Export/Status/PlentymarketsExportStatusController.php';
 require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingController.php';
 
 /**
@@ -128,12 +130,15 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 			)
 		));
 	}
-	
+
+	/**
+	 * Returns the export wizard information
+	 */
 	public function getDxWizardAction()
 	{
 		require_once PY_COMPONENTS . 'Export/PlentymarketsExportWizard.php';
 		$Wizard = PlentymarketsExportWizard::getInstance();
-		
+
 		$this->View()->assign(array(
 			'success' => true,
 			'data' => array(
@@ -142,12 +147,15 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 			)
 		));
 	}
-	
+
+	/**
+	 * Activates or deativated the wizard
+	 */
 	public function setDxWizardAction()
 	{
 		require_once PY_COMPONENTS . 'Export/PlentymarketsExportWizard.php';
 		$Wizard = PlentymarketsExportWizard::getInstance();
-		
+
 		if ($this->Request()->get('activate', 'no') == 'yes')
 		{
 			if ($Wizard->mayActivate())
@@ -159,7 +167,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		{
 			$Wizard->deactivate();
 		}
-		
+
 		$this->View()->assign(array(
 			'success' => true,
 			'data' => array(
@@ -386,27 +394,35 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	{
 		$params = $this->Request()->getParams();
 
+		if (PlentymarketsExportWizard::getInstance()->isActive())
+		{
+			return $this->View()->assign(array(
+				'success' => true,
+				'message' => 'Aktion kann nicht ausgeführt werden, da der automatische Export aktiv ist'
+			));
+		}
+
 		try
 		{
 			if ($params['doAction'] == 'reset')
 			{
 				PlentymarketsExportController::getInstance()->reset($params['name']);
 				PlentymarketsLogger::getInstance()->message('Export:Initial:' . ucfirst($params['name']), 'Resetted');
-				
+
 				$message = 'Export-Status zurückgesetzt';
 			}
 			else if ($params['doAction'] == 'erase')
 			{
 				PlentymarketsExportController::getInstance()->erase($params['name']);
 				PlentymarketsLogger::getInstance()->message('Export:Initial:' . ucfirst($params['name']), 'Completely erased');
-				
+
 				$message = 'Export komplett zurückgesetzt';
 			}
 			else if ($params['doAction'] == 'start')
 			{
 				PlentymarketsExportController::getInstance()->announce($params['name']);
 				PlentymarketsLogger::getInstance()->message('Export:Initial:' . ucfirst($params['name']), 'Announced');
-				
+
 				$message = 'Export vorgemerkt';
 			}
 
@@ -416,10 +432,10 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		{
 			$success = false;
 			$message = $E->getMessage();
-			
+
 			$method = sprintf('set%sExportStatus', $params['name']);
 			PlentymarketsConfig::getInstance()->$method('error');
-			
+
 			$method = sprintf('set%sExportLastErrorMessage', $params['name']);
 			PlentymarketsConfig::getInstance()->$method($E->getMessage());
 
@@ -440,29 +456,9 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	 *
 	 * @return array
 	 */
-	public function getExportAction()
-	{
-		
-
-		require_once PY_COMPONENTS . 'Export/Status/PlentymarketsExportStatusController.php';
-		
-		$Controller = PlentymarketsExportStatusController::getInstance();
-		
-		
-		
-		var_dump($Controller);
-		var_dump($Controller->getOverview());
-	}
-	/**
-	 * Returns the status for each initial export entity
-	 *
-	 * @return array
-	 */
 	protected function getExportStatusList()
 	{
-		require_once PY_COMPONENTS . 'Export/Status/PlentymarketsExportStatusController.php';
-		$Controller = PlentymarketsExportStatusController::getInstance();
-		return $Controller->getOverview();
+		return PlentymarketsExportStatusController::getInstance()->getOverview();
 	}
 
 	/**

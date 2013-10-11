@@ -140,7 +140,7 @@ class PlentymarketsCronjobController
 		}
 		return self::$Instance;
 	}
-	
+
 	/**
 	 * Runs the cleanup cronjob.
 	 *
@@ -152,11 +152,11 @@ class PlentymarketsCronjobController
 		{
 			return;
 		}
-		
+
 		$PlentymarketsGarbageCollector = new PlentymarketsGarbageCollector();
 		$PlentymarketsGarbageCollector->cleanup();
 	}
-	
+
 	/**
 	 * Runs the item cleanup cronjob.
 	 *
@@ -168,15 +168,15 @@ class PlentymarketsCronjobController
 		{
 			return;
 		}
-		
+
 		PlentymarketsLogger::getInstance()->message('Cleanup:Item', 'Starting');
-		
+
 		$PlentymarketsGarbageCollector = new PlentymarketsGarbageCollector();
 		$PlentymarketsGarbageCollector->pruneItems();
-		
+
 		PlentymarketsLogger::getInstance()->message('Cleanup:Item', 'Finished');
 	}
-	
+
 	/**
 	 * Runs the mapping cleanup cronjob.
 	 *
@@ -189,9 +189,9 @@ class PlentymarketsCronjobController
 		{
 			return;
 		}
-		
+
 		PlentymarketsLogger::getInstance()->message('Cleanup:Mapping', 'Starting');
-		
+
 		// Reset the timestamps
 		PlentymarketsConfig::getInstance()->setMiscCustomerClassLastImport(0);
 		PlentymarketsConfig::getInstance()->setMiscMethodsOfPaymentLastImport(0);
@@ -199,7 +199,7 @@ class PlentymarketsCronjobController
 		PlentymarketsConfig::getInstance()->setMiscShippingProfilesLastImport(0);
 		PlentymarketsConfig::getInstance()->setMiscMultishopsLastImport(0);
 		PlentymarketsConfig::getInstance()->setMiscVatLastImport(0);
-		
+
 		// Get fresh data
 		PlentymarketsImportController::getCustomerClassList();
 		PlentymarketsImportController::getMethodOfPaymentList();
@@ -207,7 +207,7 @@ class PlentymarketsCronjobController
 		PlentymarketsImportController::getShippingProfileList();
 		PlentymarketsImportController::getStoreList();
 		PlentymarketsImportController::getVatList();
-		
+
 		PlentymarketsLogger::getInstance()->message('Cleanup:Mapping', 'Finished');
 	}
 
@@ -308,15 +308,15 @@ class PlentymarketsCronjobController
 		try
 		{
 			PlentymarketsExportController::getInstance()->export();
-			
-			require_once PY_COMPONENTS . 'Export/PlentymarketsExportWizard.php';
-			$PlentymarketsExportWizard = PlentymarketsExportWizard::getInstance();
-			$PlentymarketsExportWizard->conjure();
 		}
 		catch (Exception $E)
 		{
 			PlentymarketsLogger::getInstance()->error('Cron:Export', $E->getMessage());
 		}
+
+		require_once PY_COMPONENTS . 'Export/PlentymarketsExportWizard.php';
+		$PlentymarketsExportWizard = PlentymarketsExportWizard::getInstance();
+		$PlentymarketsExportWizard->conjure();
 	}
 
 	/**
@@ -357,7 +357,7 @@ class PlentymarketsCronjobController
 	{
 		$this->Config->setImportItemStackLastRunTimestamp(time());
 		$this->Config->setImportItemStackNextRunTimestamp(time() + $Job->getJob()->getInterval());
-		
+
 		if (!$this->mayRun)
 		{
 			return;
