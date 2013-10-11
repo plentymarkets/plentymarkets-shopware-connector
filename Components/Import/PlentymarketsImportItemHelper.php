@@ -28,7 +28,7 @@
 
 /**
  * Helperfuncttion for the item sync.
- * 
+ *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 class PlentymarketsImportItemHelper
@@ -39,24 +39,76 @@ class PlentymarketsImportItemHelper
 	 * @var integer
 	 */
 	protected static $numbersCreated = 0;
-	
+
 	/**
-	 * Checks whether the item numer is existant
+	 * Checks whether the item number is existant
 	 *
-	 * @param integer $number
+	 * @param string $number
 	 * @return boolean
 	 */
-	public static function itemNumberExists($number)
+	public static function isNumberExistant($number)
 	{
-		$detail = Shopware()->Models()
-		->getRepository('Shopware\Models\Article\Detail')
-		->findOneBy(array(
+		$filter = array(
 			'number' => $number
-		));
-	
+		);
+
+		$detail = Shopware()->Models()
+			->getRepository('Shopware\Models\Article\Detail')
+			->findOneBy($filter);
+
 		return !empty($detail);
 	}
-	
+
+	/**
+	 * Checks whether the item number is from the given item id
+	 *
+	 * @param string $number
+	 * @param integer $id
+	 * @return boolean
+	 */
+	public static function isNumberExistantItem($number, $id=null)
+	{
+		$filter = array(
+			'number' => $number
+		);
+
+		if ($id)
+		{
+			$filter['articleId'] = $id;
+		}
+
+		$detail = Shopware()->Models()
+			->getRepository('Shopware\Models\Article\Detail')
+			->findOneBy($filter);
+
+		return !empty($detail);
+	}
+
+	/**
+	 * Checks whether the item number is from the given detail
+	 *
+	 * @param string $number
+	 * @param integer $id
+	 * @return boolean
+	 */
+	public static function isNumberExistantVariant($number, $id=null)
+	{
+		$filter = array(
+			'number' => $number
+		);
+
+		if ($id)
+		{
+			$filter['id'] = $id;
+		}
+
+		$detail = Shopware()->Models()
+			->getRepository('Shopware\Models\Article\Detail')
+			->findOneBy($filter);
+
+		return !empty($detail);
+	}
+
 	/**
 	 * Returns a generated item number
 	 *
@@ -65,28 +117,28 @@ class PlentymarketsImportItemHelper
 	public static function getItemNumber()
 	{
 		$prefix = Shopware()->Config()->backendAutoOrderNumberPrefix;
-	
+
 		$sql = "SELECT number FROM s_order_number WHERE name = 'articleordernumber'";
 		$number = Shopware()->Db()->fetchOne($sql);
 		$number += self::$numbersCreated;
-	
+
 		do
 		{
 			++$number;
 			++self::$numbersCreated;
-	
+
 			$sql = "SELECT id FROM s_articles_details WHERE ordernumber LIKE ?";
 			$hit = Shopware()->Db()->fetchOne($sql, $prefix . $number);
 		}
 		while ($hit);
-	
+
 		Shopware()->Db()->query("UPDATE s_order_number SET number = ? WHERE name = 'articleordernumber'", array(
-		$number
+			$number
 		));
-	
+
 		return $prefix . $number;
 	}
-	
+
 	/**
 	 * Returns a usable item number
 	 *
@@ -95,10 +147,29 @@ class PlentymarketsImportItemHelper
 	 */
 	public static function getUsableNumber($number)
 	{
-		if (!empty($number) && !self::itemNumberExists($number))
+		if (!empty($number) && !self::isNumberExistant($number))
 		{
 			return $number;
 		}
 		return self::getItemNumber();
+	}
+
+	/**
+	 * Returns a usable item number
+	 *
+	 * @param string $number
+	 * @return string
+	 */
+	public static function isNumberValid($number)
+	{
+		if (strlen($number) < 4)
+		{
+			return false;
+		}
+		if (preg_match('/[^a-zA-Z0-9\.\-_]/', $number))
+		{
+			return false;
+		}
+		return true;
 	}
 }

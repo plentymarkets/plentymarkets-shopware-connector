@@ -29,28 +29,28 @@
 require_once PY_SOAP . 'Models/PlentySoapRequest/GetItemsUpdated.php';
 
 /**
- * 
- * 
+ * Handles the item import stack
+ *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 class PlentymarketsImportStackItem implements Countable
 {
 
 	/**
-	 * 
+	 *
 	 * @var PlentymarketsImportStackItem
 	 */
 	protected static $Instance;
-	
+
 	/**
-	 * 
+	 *
 	 * @var integer
 	 */
 	protected $size;
 
 	/**
 	 * I am a Singleton
-	 * 
+	 *
 	 * @return PlentymarketsImportStackItem
 	 */
 	public static function getInstance()
@@ -61,10 +61,10 @@ class PlentymarketsImportStackItem implements Countable
 		}
 		return self::$Instance;
 	}
-	
+
 	/**
 	 * Adds an item to the stack
-	 * 
+	 *
 	 * @param integer $itemId
 	 * @param integer $storeId
 	 */
@@ -89,7 +89,7 @@ class PlentymarketsImportStackItem implements Countable
 					FROM plenty_stack_item
 					WHERE itemId = '. $itemId .'
 			');
-		
+
 			// Add the store id
 			$storeIds = explode('|', $stackedItem['storeIds']);
 			if (!in_array($storeId, $storeIds))
@@ -109,39 +109,39 @@ class PlentymarketsImportStackItem implements Countable
 	 */
 	public function update()
 	{
-		PlentymarketsLogger::getInstance()->message('Import:Stack:Item', 'Starting update');
-		
+		PlentymarketsLogger::getInstance()->message('Sync:Stack:Item', 'Starting update');
+
 		$ShopRepository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
 		$Shops = $ShopRepository->findBy(
 			array('active' => 1),
 			array('default' => 'DESC')
 		);
-		
+
 		// Remember the time
 		$timestamp = time();
-		
+
 		$Request_GetItemsUpdated = new PlentySoapRequest_GetItemsUpdated();
 		$Request_GetItemsUpdated->LastUpdateFrom = PlentymarketsConfig::getInstance()->getImportItemStackLastUpdateTimestamp(0);
-		
+
 		// Cache to avaid duplicate inserts of the same id with multiple shops
 		$itemIdsStacked = array();
-		
+
 		foreach ($Shops as $Shop)
 		{
 			$Shop instanceof Shopware\Models\Shop\Shop;
-			
+
 			$Request_GetItemsUpdated->Page = 0;
 			$Request_GetItemsUpdated->StoreID = PlentymarketsMappingController::getShopByShopwareID($Shop->getId());
-				
+
 			do {
-					
+
 				// Do the request
 				$Response_GetItemsUpdated = PlentymarketsSoapClient::getInstance()->GetItemsUpdated($Request_GetItemsUpdated);
-			
+
 				foreach ((array) $Response_GetItemsUpdated->Items->item as $Object_Integer)
 				{
 					$itemId = $Object_Integer->intValue;
-					
+
 					// Skip existing items on the first run
 					if ($Request_GetItemsUpdated->LastUpdateFrom == 0)
 					{
@@ -154,27 +154,27 @@ class PlentymarketsImportStackItem implements Countable
 						{
 						}
 					}
-					
+
 					$this->addItem($itemId, $Request_GetItemsUpdated->StoreID);
 					$itemIdsStacked[$itemId] = true;
 				}
 			}
-			
+
 			// Until all pages are received
 			while (++$Request_GetItemsUpdated->Page < $Response_GetItemsUpdated->Pages);
 		}
-		
+
 		// Upcomming last update timestamp
 		PlentymarketsConfig::getInstance()->setImportItemStackLastUpdateTimestamp($timestamp);
-		
+
 		// Log
-		PlentymarketsLogger::getInstance()->message('Import:Stack:Item', 'Added ' . count($itemIdsStacked) . ' items to the stack');
-		PlentymarketsLogger::getInstance()->message('Import:Stack:Item', 'Update finished');
+		PlentymarketsLogger::getInstance()->message('Sync:Stack:Item', 'Added ' . count($itemIdsStacked) . ' items to the stack');
+		PlentymarketsLogger::getInstance()->message('Sync:Stack:Item', 'Update finished');
 	}
-	
+
 	/**
 	 * Returns a chunk of item ids
-	 * 
+	 *
 	 * @param integer $limit
 	 * @return array
 	 */
@@ -182,7 +182,7 @@ class PlentymarketsImportStackItem implements Countable
 	{
 		// Start a transaction
 		Shopware()->Db()->beginTransaction();
-		
+
 		// Select the "first in" items
 		$items = Shopware()->Db()->fetchAll('
 			SELECT itemId, storeIds
@@ -190,23 +190,23 @@ class PlentymarketsImportStackItem implements Countable
 				ORDER BY `timestamp` ASC, itemId ASC
 				LIMIT '. (integer) $limit .'
 		');
-		
+
 		// Delete 'em
 		Shopware()->Db()->exec('
 			DELETE FROM plenty_stack_item
 				ORDER BY `timestamp` ASC, itemId ASC
 				LIMIT '. (integer) $limit .'
 		');
-		
+
 		// Commit the transaction
 		Shopware()->Db()->commit();
-		
-		return $items;	
+
+		return $items;
 	}
-	
+
 	/**
 	 * Returns the number of items within the stack
-	 * 
+	 *
 	 * @see Countable::count()
 	 */
 	public function count()

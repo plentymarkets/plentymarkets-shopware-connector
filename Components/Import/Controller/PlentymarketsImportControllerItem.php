@@ -36,39 +36,39 @@ require_once PY_COMPONENTS . 'Import/Entity/PlentymarketsImportEntityItemStock.p
 /**
  * The class PlentymarketsImportController does the actual import for different cronjobs e.g. in the class PlentymarketsCronjobController.
  * It uses the different import entities in /Import/Entity respectively in /Import/Entity/Order, for example PlentymarketsImportEntityItem.
- * 
+ *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 class PlentymarketsImportControllerItem
 {
 	/**
-	 * 
+	 *
 	 * @var integer
 	 */
 	const DEFAULT_CHUNK_SIZE = 250;
-	
+
 	/**
-	 * 
+	 *
 	 * @var integer
 	 */
 	protected $numberOfItems = 0;
-	
+
 	/**
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $itemIdsDone = array();
 
 	/**
 	 * imports the item for the given shop
-	 * 
+	 *
 	 * @param unknown $Shop
 	 */
 	public function importItem($itemId, $storeId)
 	{
 		// Check whether the item has already been imported
 		$full = !isset($this->itemIdsDone[$itemId]);
-		
+
 		// Build the request
 		$Request_GetItemsBase = new PlentySoapRequest_GetItemsBase();
 		$Request_GetItemsBase->GetAttributeValueSets = $full;
@@ -86,7 +86,7 @@ class PlentymarketsImportControllerItem
 		$Request_GetItemsBase->StoreID = $storeId;
 		$Request_GetItemsBase->ItemID = $itemId;
 		$Request_GetItemsBase->Lang = 'de';
-		
+
 		// Do the request
 		$Response_GetItemsBase = PlentymarketsSoapClient::getInstance()->GetItemsBase($Request_GetItemsBase);
 
@@ -97,23 +97,23 @@ class PlentymarketsImportControllerItem
 			PlentymarketsImportStackItem::getInstance()->addItem($ItemBase->ItemID, $storeId);
 			return;
 		}
-	
+
 		// Item not found
 		if (!isset($Response_GetItemsBase->ItemsBase->item[0]))
 		{
 			return;
 		}
-		
-		// 
+
+		//
 		$ItemBase = $Response_GetItemsBase->ItemsBase->item[0];
-		
+
 		try
 		{
 			$shopId = PlentymarketsMappingController::getShopByPlentyID($storeId);
 			$Shop = Shopware()->Models()->find('Shopware\Models\Shop\Shop', $shopId);
-			
+
 			$Importuer = new PlentymarketsImportEntityItem($ItemBase, $Shop);
-			
+
 			// The item has already been updated
 			if (!$full)
 			{
@@ -124,10 +124,10 @@ class PlentymarketsImportControllerItem
 			{
 				// Do a full import
 				$Importuer->import();
-				
+
 				// Add it to the link controller
 				PlentymarketsImportControllerItemLinked::getInstance()->addItem($ItemBase->ItemID);
-				
+
 				// Mark this item as done
 				$this->itemIdsDone[$ItemBase->ItemID] = true;
 			}
@@ -135,30 +135,36 @@ class PlentymarketsImportControllerItem
 			// Increment the item counter for the logging
 			++$this->numberOfItems;
 		}
+
 		catch (Shopware\Components\Api\Exception\ValidationException $E)
 		{
-			PlentymarketsLogger::getInstance()->error('Sync:Item', 'Item "'. $ItemBase->Texts->Name .'" ('. $ItemBase->ItemID .') could not be importet');
-			PlentymarketsLogger::getInstance()->error('Sync:Item', 'Shopware\Components\Api\Exception\ValidationException');
+			PlentymarketsLogger::getInstance()->error('Sync:Item:Validation', 'Item "'. $ItemBase->Texts->Name .'" ('. $ItemBase->ItemID .') could not be importet');
 			foreach ($E->getViolations() as $ConstraintViolation)
 			{
-				PlentymarketsLogger::getInstance()->error('Sync:Item', $ConstraintViolation->getMessage());
+				PlentymarketsLogger::getInstance()->error('Sync:Item:Validation', $ConstraintViolation->getMessage());
+				PlentymarketsLogger::getInstance()->error('Sync:Item:Validation', $ConstraintViolation->getPropertyPath() . ': ' . $ConstraintViolation->getInvalidValue());
 			}
 			
 			// Re-add the item to the stack
 			PlentymarketsImportStackItem::getInstance()->addItem($ItemBase->ItemID, $storeId);
 		}
-		
+
+		catch (PlentymarketsImportItemException $E)
+		{
+			PlentymarketsLogger::getInstance()->error('Sync:Item:Number', $E->getMessage());
+		}
+
 		catch (Exception $E)
 		{
 			PlentymarketsLogger::getInstance()->error('Sync:Item', 'Item "'. $ItemBase->Texts->Name .'" ('. $ItemBase->ItemID .') could not be importet');
 			PlentymarketsLogger::getInstance()->error('Sync:Item', get_class($E));
 			PlentymarketsLogger::getInstance()->error('Sync:Item', $E->getMessage());
-			
+
 			// Re-add the item to the stack
 			PlentymarketsImportStackItem::getInstance()->addItem($ItemBase->ItemID, $storeId);
 		}
 	}
-	
+
 	/**
 	 * Finalizes the import
 	 */
@@ -174,7 +180,7 @@ class PlentymarketsImportControllerItem
 			PlentymarketsLogger::getInstance()->error('Sync:Item:Stock', 'PlentymarketsImportItemStockStack failed');
 			PlentymarketsLogger::getInstance()->error('Sync:Item:Stock', $E->getMessage());
 		}
-		
+
 		try
 		{
 			// Stock stack
@@ -186,7 +192,7 @@ class PlentymarketsImportControllerItem
 			PlentymarketsLogger::getInstance()->error('Sync:Item:Linked', $E->getMessage());
 		}
 	}
-	
+
 	/**
 	 * Reads the items of plentymarkets that have changed
 	 */
@@ -194,10 +200,10 @@ class PlentymarketsImportControllerItem
 	{
 		// Number of items
 		$chunkSize = PlentymarketsConfig::getInstance()->getImportItemChunkSize(self::DEFAULT_CHUNK_SIZE);
-		
+
 		// get the chunk out of the stack
 		$chunk = PlentymarketsImportStackItem::getInstance()->getChunk($chunkSize);
-		
+
 		// Import each item
 		foreach ($chunk as $item)
 		{
@@ -209,19 +215,19 @@ class PlentymarketsImportControllerItem
 				$this->importItem($item['itemId'], $storeId);
 			}
 		}
-		
+
 		// Log
 		PlentymarketsLogger::getInstance()->message('Sync:Item', $this->numberOfItems . ' items have been updated/created.');
-		
+
 		// Log stack information
 		$stackSize = count(PlentymarketsImportStackItem::getInstance());
 		if ($stackSize)
 		{
-			PlentymarketsLogger::getInstance()->message('Import:Stack:Item', $stackSize . ' items left in stack');
+			PlentymarketsLogger::getInstance()->message('Sync:Stack:Item', $stackSize . ' items left in stack');
 		}
 		else
 		{
-			PlentymarketsLogger::getInstance()->message('Import:Stack:Item', 'Stack is empty');
+			PlentymarketsLogger::getInstance()->message('Sync:Stack:Item', 'Stack is empty');
 		}
 
 		// Post processed

@@ -57,7 +57,7 @@ require_once PY_COMPONENTS . 'Utils/PlentymarketsUtils.php';
 require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingController.php';
 
 /**
- * PlentymarketsExportEntityItem provides the actual items export funcionality. Like the other export 
+ * PlentymarketsExportEntityItem provides the actual items export funcionality. Like the other export
  * entities this class is called in PlentymarketsExportController. It is important to deliver the correct
  * article model to the constructor method of this class, which is \Shopware\Models\Article\Article.
  * The data export takes place based on plentymarkets SOAP-calls.
@@ -84,21 +84,21 @@ class PlentymarketsExportEntityItem
 	 * @var integer
 	 */
 	protected $PLENTY_priceID;
-	
+
 	/**
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $categoryPaths2Activate = array();
-	
+
 	/**
-	 * 
+	 *
 	 * @var array
 	 */
 	protected static $categoryPathsActivated = array();
-	
+
 	/**
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $storeIds = array();
@@ -128,6 +128,11 @@ class PlentymarketsExportEntityItem
 
 		$Object_AddItemsBaseItemBase = new PlentySoapObject_AddItemsBaseItemBase();
 		$ItemDetails = $Item->getMainDetail();
+
+		if (!$ItemDetails instanceof \Shopware\Models\Article\Detail)
+		{
+			throw new \Exception('Item "' . $this->SHOPWARE_Article->getName() . '" (' . $this->SHOPWARE_Article->getId() . ') could not be exported (no Article\Detail)');
+		}
 
 		// Release date
 		$ReleaseDate = $ItemDetails->getReleaseDate();
@@ -167,13 +172,13 @@ class PlentymarketsExportEntityItem
 				PlentymarketsLogger::getInstance()->error('Export:Initial:Item', 'ItemId ' . $Item->getId() . ': Skipping category with id ' . $Category->getId());
 				continue;
 			}
-				
+
 			// Get the store for this category
 			$path = array_reverse(explode('|', $Category->getPath()));
 			$rootId = $path[1];
-			
+
 			$shops = PlentymarketsUtils::getShopIdByCategoryRootId($rootId);
-			
+
 			foreach ($shops as $shopId)
 			{
 				try
@@ -184,14 +189,14 @@ class PlentymarketsExportEntityItem
 				{
 					continue;
 				}
-				
+
 				if (!isset($this->storeIds[$storeId]))
 				{
 					// Activate the item for this store
 					$Object_Integer = new PlentySoapObject_Integer();
 					$Object_Integer->intValue = $storeId;
 					$Object_AddItemsBaseItemBase->StoreIDs[] = $Object_Integer;
-					
+
 					// Cache
 					$this->storeIds[$storeId] = true;
 				}
@@ -205,12 +210,12 @@ class PlentymarketsExportEntityItem
 					);
 				}
 			}
-			
+
 			// Activate the category
 			$Object_ItemCategory = new PlentySoapObject_ItemCategory();
 			$Object_ItemCategory->ItemCategoryPath = $categoryPath; // string
 			$Object_AddItemsBaseItemBase->Categories[] = $Object_ItemCategory;
-		
+
 		}
 
 
@@ -220,9 +225,9 @@ class PlentymarketsExportEntityItem
 
 		$ResponseMessage = $Response_AddItemsBase->ResponseMessages->item[0];
 
-		if ($ResponseMessage->Code != 100)
+		if (!$Response_AddItemsBase->Success || $ResponseMessage->Code != 100)
 		{
-			throw new Exception('ItemBase error');
+			throw new \Exception('Item "' . $this->SHOPWARE_Article->getName() . '" (' . $this->SHOPWARE_Article->getId() . ') could not be exported (success/100)');
 		}
 
 		foreach ($ResponseMessage->SuccessMessages->item as $SubMessage)
@@ -244,13 +249,10 @@ class PlentymarketsExportEntityItem
 		}
 		else
 		{
-			PlentymarketsLogger::getInstance()->error('Export:Initial:Item', 'ItemId ' . $Item->getId() . ': Item could not be exported');
-			throw new Exception('Did not recieve item ID and price ID');
+			throw new \Exception('Item "' . $this->SHOPWARE_Article->getName() . '" (' . $this->SHOPWARE_Article->getId() . ') could not be exported (did not recieve item ID and price ID)');
 		}
-
-		return true;
 	}
-	
+
 	/**
 	 * Activates the categories of this item for the shop
 	 */
@@ -258,7 +260,7 @@ class PlentymarketsExportEntityItem
 	{
 		$Request_SetStoreCategories = new PlentySoapRequest_SetStoreCategories();
 		$Request_SetStoreCategories->StoreCategories = array();
-		
+
 		foreach ($this->categoryPaths2Activate as $path2Activate)
 		{
 			// Aleady been activated
@@ -266,18 +268,18 @@ class PlentymarketsExportEntityItem
 				isset(self::$categoryPathsActivated[$path2Activate['path']][$path2Activate['storeId']]))
 			{
 				continue;
-			}			
-			
+			}
+
 			$Object_SetStoreCategory = new PlentySoapObject_SetStoreCategory();
 			$Object_SetStoreCategory->Active = true;
 			$Object_SetStoreCategory->ItemCategoryPath = $path2Activate['path'];
 			$Object_SetStoreCategory->StoreID = $path2Activate['storeId'];
-			
+
 			// Cache + Request
 			self::$categoryPathsActivated[$path2Activate['path']][$path2Activate['storeId']] = true;
 			$Request_SetStoreCategories->StoreCategories[] = $Object_SetStoreCategory;
 		}
-		
+
 		if (!empty($Request_SetStoreCategories->StoreCategories))
 		{
 			$Response_SetStoreCategories = PlentymarketsSoapClient::getInstance()->SetStoreCategories($Request_SetStoreCategories);
@@ -361,11 +363,11 @@ class PlentymarketsExportEntityItem
 	{
 		//
 		$Object_ItemTexts = new PlentySoapObject_ItemTexts();
-		$Object_ItemTexts->Keywords = $this->SHOPWARE_Article->getKeywords(); // string
+		$Object_ItemTexts->Keywords = PlentymarketsSoapClient::removeControlChars($this->SHOPWARE_Article->getKeywords()); // string
 		$Object_ItemTexts->Lang = 'de'; // string
-		$Object_ItemTexts->LongDescription = $this->SHOPWARE_Article->getDescriptionLong(); // string
-		$Object_ItemTexts->Name = $this->SHOPWARE_Article->getName(); // string
-		$Object_ItemTexts->ShortDescription = $this->SHOPWARE_Article->getDescription(); // string
+		$Object_ItemTexts->LongDescription = PlentymarketsSoapClient::removeControlChars($this->SHOPWARE_Article->getDescriptionLong()); // string
+		$Object_ItemTexts->Name = PlentymarketsSoapClient::removeControlChars($this->SHOPWARE_Article->getName()); // string
+		$Object_ItemTexts->ShortDescription = PlentymarketsSoapClient::removeControlChars($this->SHOPWARE_Article->getDescription()); // string
 
 		return $Object_ItemTexts;
 	}
@@ -385,26 +387,26 @@ class PlentymarketsExportEntityItem
 
 		if (!is_null($MainDetailAttribute))
 		{
-			$Object_ItemFreeTextFields->Free1 = $MainDetailAttribute->getAttr1(); // string
-			$Object_ItemFreeTextFields->Free2 = $MainDetailAttribute->getAttr2(); // string
-			$Object_ItemFreeTextFields->Free3 = $MainDetailAttribute->getAttr3(); // string
-			$Object_ItemFreeTextFields->Free4 = $MainDetailAttribute->getAttr4(); // string
-			$Object_ItemFreeTextFields->Free5 = $MainDetailAttribute->getAttr5(); // string
-			$Object_ItemFreeTextFields->Free6 = $MainDetailAttribute->getAttr6(); // string
-			$Object_ItemFreeTextFields->Free7 = $MainDetailAttribute->getAttr7(); // string
-			$Object_ItemFreeTextFields->Free8 = $MainDetailAttribute->getAttr8(); // string
-			$Object_ItemFreeTextFields->Free9 = $MainDetailAttribute->getAttr9(); // string
-			$Object_ItemFreeTextFields->Free10 = $MainDetailAttribute->getAttr10(); // string
-			$Object_ItemFreeTextFields->Free11 = $MainDetailAttribute->getAttr11(); // string
-			$Object_ItemFreeTextFields->Free12 = $MainDetailAttribute->getAttr12(); // string
-			$Object_ItemFreeTextFields->Free13 = $MainDetailAttribute->getAttr13(); // string
-			$Object_ItemFreeTextFields->Free14 = $MainDetailAttribute->getAttr14(); // string
-			$Object_ItemFreeTextFields->Free15 = $MainDetailAttribute->getAttr15(); // string
-			$Object_ItemFreeTextFields->Free16 = $MainDetailAttribute->getAttr16(); // string
-			$Object_ItemFreeTextFields->Free17 = $MainDetailAttribute->getAttr17(); // string
-			$Object_ItemFreeTextFields->Free18 = $MainDetailAttribute->getAttr18(); // string
-			$Object_ItemFreeTextFields->Free19 = $MainDetailAttribute->getAttr19(); // string
-			$Object_ItemFreeTextFields->Free20 = $MainDetailAttribute->getAttr20(); // string
+			$Object_ItemFreeTextFields->Free1 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr1()); // string
+			$Object_ItemFreeTextFields->Free2 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr2()); // string
+			$Object_ItemFreeTextFields->Free3 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr3()); // string
+			$Object_ItemFreeTextFields->Free4 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr4()); // string
+			$Object_ItemFreeTextFields->Free5 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr5()); // string
+			$Object_ItemFreeTextFields->Free6 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr6()); // string
+			$Object_ItemFreeTextFields->Free7 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr7()); // string
+			$Object_ItemFreeTextFields->Free8 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr8()); // string
+			$Object_ItemFreeTextFields->Free9 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr9()); // string
+			$Object_ItemFreeTextFields->Free10 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr10()); // string
+			$Object_ItemFreeTextFields->Free11 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr11()); // string
+			$Object_ItemFreeTextFields->Free12 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr12()); // string
+			$Object_ItemFreeTextFields->Free13 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr13()); // string
+			$Object_ItemFreeTextFields->Free14 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr14()); // string
+			$Object_ItemFreeTextFields->Free15 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr15()); // string
+			$Object_ItemFreeTextFields->Free16 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr16()); // string
+			$Object_ItemFreeTextFields->Free17 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr17()); // string
+			$Object_ItemFreeTextFields->Free18 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr18()); // string
+			$Object_ItemFreeTextFields->Free19 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr19()); // string
+			$Object_ItemFreeTextFields->Free20 = PlentymarketsSoapClient::removeControlChars($MainDetailAttribute->getAttr20()); // string
 		}
 
 		return $Object_ItemFreeTextFields;
@@ -489,15 +491,12 @@ class PlentymarketsExportEntityItem
 
 	/**
 	 * Manages the export
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public function export()
 	{
-		if (!$this->exportItemBase())
-		{
-			return false;
-		}
+		$this->exportItemBase();
 		$this->exportImages();
 		$this->exportVariants();
 		$this->exportProperties();
@@ -654,15 +653,13 @@ class PlentymarketsExportEntityItem
 			}
 
 			$Object_SetAttributeValueSetsDetails = new PlentySoapObject_SetAttributeValueSetsDetails();
-			// $Object_SetAttributeValueSetsDetails->ASIN = $ItemVariation->getActive(); // string
 			$Object_SetAttributeValueSetsDetails->Availability = $ItemVariation->getActive(); // int
 			$Object_SetAttributeValueSetsDetails->EAN1 = $ItemVariation->getEan(); // string
 			$Object_SetAttributeValueSetsDetails->MaxStock = null; // float
 			$Object_SetAttributeValueSetsDetails->PurchasePrice = null; // float
 			$Object_SetAttributeValueSetsDetails->SKU = $sku;
-			// $Object_SetAttributeValueSetsDetails->StockBuffer = $ItemVariation->get; // float
-
 			$Object_SetAttributeValueSetsDetails->Variantnumber = $ItemVariation->getNumber(); // string
+
 			$Request_SetAttributeValueSetsDetails->AttributeValueSetsDetails[] = $Object_SetAttributeValueSetsDetails;
 		}
 

@@ -31,7 +31,7 @@ require_once PY_SOAP . 'Models/PlentySoapRequest/GetItemCategoryCatalogBase.php'
 require_once PY_SOAP . 'Models/PlentySoapRequest/AddItemCategory.php';
 
 /**
- * PlentymarketsExportEntityItemCategory provides the actual items export funcionality. Like the other export 
+ * PlentymarketsExportEntityItemCategory provides the actual items export funcionality. Like the other export
  * entities this class is called in PlentymarketsExportController.
  * The data export takes place based on plentymarkets SOAP-calls.
  *
@@ -51,7 +51,7 @@ class PlentymarketsExportEntityItemCategory
 	 * @var arrray
 	 */
 	protected $PLENTY_nameAndLevel2ID = array();
-	
+
 	/**
 	 * Build the index and export the missing data to plentymarkets
 	 */
@@ -78,6 +78,12 @@ class PlentymarketsExportEntityItemCategory
 		do
 		{
 			$Response_GetItemCategoryCatalogBase = PlentymarketsSoapClient::getInstance()->GetItemCategoryCatalogBase($Request_GetItemCategoryCatalogBase);
+
+			if (!$Response_GetItemCategoryCatalogBase->Success)
+			{
+				throw new \Exception('Cannot fetch ItemCategoryCatalogBase page ' . $Request_GetItemCategoryCatalogBase->Page);
+			}
+
 			foreach ($Response_GetItemCategoryCatalogBase->Categories->item as $Category)
 			{
 				$this->PLENTY_nameAndLevel2ID[$Category->Level][$Category->Name] = $Category->CategoryID;
@@ -94,21 +100,21 @@ class PlentymarketsExportEntityItemCategory
 		// Only export the categories bond to a shop
 		$ShopRepository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
 		$ShopsActive = $ShopRepository->findBy(array('active' => 1), array('default' => 'DESC'));
-		
+
 		$categoryRootIds = array();
 		$additionalLanguages = array();
 		foreach ($ShopsActive as $Shop)
 		{
 			$Shop instanceof Shopware\Models\Shop\Shop;
 			$categoryRootIds[] = $Shop->getCategory()->getId();
-			
+
 			$language = substr($Shop->getLocale()->getLocale(), 0, 2);
 			if (!in_array($language, $additionalLanguages) && $language != 'de')
 			{
 				$additionalLanguages[] = $language;
 			}
 		}
-		
+
 		foreach (Shopware()->Models()
 			->getRepository('Shopware\Models\Category\Category')
 			->findBy(array(
@@ -122,10 +128,10 @@ class PlentymarketsExportEntityItemCategory
 			{
 				continue;
 			}
-			
+
 			//
 			$path = array_filter(explode('|', $Category->getPath()));
-			
+
 			// Check whether this category is connected to a shop
 			$rootId = end($path);
 			if (!in_array($rootId, $categoryRootIds))
@@ -133,7 +139,7 @@ class PlentymarketsExportEntityItemCategory
 				PlentymarketsLogger::getInstance()->message('Export:Initial:Category', 'Skipping category '. $Category->getName() . ' ('. $Category->getId() .') since it is not connected to a shop.');
 				continue;
 			}
-			
+
 			// Count the level
 			$level = count($path);
 
@@ -156,9 +162,15 @@ class PlentymarketsExportEntityItemCategory
 				$Request_AddItemCategory->Position = $Category->getPosition();
 
 				$Response_AddItemCategory = PlentymarketsSoapClient::getInstance()->AddItemCategory($Request_AddItemCategory);
+
+				if (!$Response_AddItemCategory->Success)
+				{
+					throw new \Exception('Cannot export category (de) "'. $Request_AddItemCategory->Name .'"');
+				}
+
 				$categoryIdAdded = (integer) $Response_AddItemCategory->ResponseMessages->item[0]->SuccessMessages->item[0]->Value;
 			}
-			
+
 			// Fill the translation for each category
 			if (!empty($additionalLanguages))
 			{
@@ -173,8 +185,13 @@ class PlentymarketsExportEntityItemCategory
 					$Request_AddItemCategory->MetaTitle = $Category->getCmsHeadline();
 					$Request_AddItemCategory->Name = $Category->getName();
 					$Request_AddItemCategory->Text = $Category->getCmsText();
-					
-					PlentymarketsSoapClient::getInstance()->AddItemCategory($Request_AddItemCategory);
+
+					$Response_AddItemCategory = PlentymarketsSoapClient::getInstance()->AddItemCategory($Request_AddItemCategory);
+
+					if (!$Response_AddItemCategory->Success)
+					{
+						throw new \Exception('Cannot export category ('. $additionalLanguage .') "'. $Request_AddItemCategory->Name .'"');
+					}
 				}
 			}
 
@@ -195,7 +212,7 @@ class PlentymarketsExportEntityItemCategory
 
 		foreach ($Categories as $Category)
 		{
-			
+
 			$Category instanceof Shopware\Models\Category\Category;
 
 			// No root category
@@ -203,13 +220,13 @@ class PlentymarketsExportEntityItemCategory
 			{
 				continue;
 			}
-			
+
 			// plentymarkets path
 			$path = array();
-	
+
 			//
 			$children1 = $Category->getChildren();
-	
+
 			// plentymarkets level 1
 			foreach ($children1 as $Child2)
 			{
@@ -218,58 +235,58 @@ class PlentymarketsExportEntityItemCategory
 				{
 					continue;
 				}
-	
+
 				$path[0] = $this->mappingShopwareID2PlentyID[$Child2->getId()];
-	
+
 				//
 				$children2 = $Child2->getChildren();
-	
+
 				if (count($children2))
 				{
 					// plentymarkets level 2
 					foreach ($children2 as $Child3)
 					{
 						$Child3 instanceof Shopware\Models\Category\Category;
-	
+
 						$path[1] = $this->mappingShopwareID2PlentyID[$Child3->getId()];
-	
+
 						//
 						$children3 = $Child3->getChildren();
-	
+
 						if (count($children3))
 						{
 							// plentymarkets level 3
 							foreach ($children3 as $Child4)
 							{
 								$Child4 instanceof Shopware\Models\Category\Category;
-	
+
 								$path[2] = $this->mappingShopwareID2PlentyID[$Child4->getId()];
-	
+
 								//
 								$children4 = $Child4->getChildren();
-	
+
 								if (count($children4))
 								{
 									// plentymarkets level 4
 									foreach ($children4 as $Child5)
 									{
 										$Child5 instanceof Shopware\Models\Category\Category;
-	
+
 										$path[3] = $this->mappingShopwareID2PlentyID[$Child5->getId()];
-	
+
 										//
 										$children5 = $Child5->getChildren();
-	
+
 										if (count($children5))
 										{
 											// plentymarkets level 5
 											foreach ($children5 as $Child6)
 											{
 												$Child6 instanceof Shopware\Models\Category\Category;
-	
+
 												$path[4] = $this->mappingShopwareID2PlentyID[$Child6->getId()];
-	
-	
+
+
 												$children6 = $Child6->getChildren();
 												if (count($children6))
 												{
@@ -277,7 +294,7 @@ class PlentymarketsExportEntityItemCategory
 													{
 														$Child7 instanceof Shopware\Models\Category\Category;
 														$path[5] = $this->mappingShopwareID2PlentyID[$Child7->getId()];
-	
+
 														PlentymarketsMappingController::addCategory($Child7->getId(), implode(';', $path));
 													}
 												}
@@ -286,7 +303,7 @@ class PlentymarketsExportEntityItemCategory
 													unset($path[5]);
 													PlentymarketsMappingController::addCategory($Child6->getId(), implode(';', $path));
 												}
-	
+
 											}
 										} // 6
 										else

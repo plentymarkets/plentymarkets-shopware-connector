@@ -31,7 +31,7 @@ require_once PY_SOAP . 'Models/PlentySoapRequest/SetProducers.php';
 require_once PY_SOAP . 'Models/PlentySoapObject/GetProducers.php';
 
 /**
- * PlentymarketsExportEntityItemProducer provides the actual items export funcionality. Like the other export 
+ * PlentymarketsExportEntityItemProducer provides the actual items export funcionality. Like the other export
  * entities this class is called in PlentymarketsExportController.
  * The data export takes place based on plentymarkets SOAP-calls.
  *
@@ -52,6 +52,11 @@ class PlentymarketsExportEntityItemProducer
 	protected function buildPlentyNameIndex()
 	{
 		$Response_GetProducers = PlentymarketsSoapClient::getInstance()->GetProducers();
+
+		if (!$Response_GetProducers->Success)
+		{
+			throw new \Exception('Cannot fetch Producers');
+		}
 
 		foreach ($Response_GetProducers->Producers->item as $Producer)
 		{
@@ -94,10 +99,10 @@ class PlentymarketsExportEntityItemProducer
 				$Object_SetProducer->ProducerExternalName = $Supplier->getName();
 				$Object_SetProducer->ProducerName = $Supplier->getName();
 				$Object_SetProducer->ProducerHomepage = $Supplier->getLink();
-				
+
 				// Export-array
 				$producers[] = $Object_SetProducer;
-				
+
 				// Save name and id for the mapping
 				$producerNameMappingShopware[$Supplier->getName()] = $Supplier->getId();
 			}
@@ -105,15 +110,15 @@ class PlentymarketsExportEntityItemProducer
 
 		// Chunkify since the call can only handly 50 producers at a time
 		$chunks = array_chunk($producers, 50);
-		
+
 		foreach ($chunks as $chunk)
 		{
 			// Set the request
 			$Request_SetProducers->Producers = $chunk;
-			
+
 			// Do the call
 			$Response_SetProducers = PlentymarketsSoapClient::getInstance()->SetProducers($Request_SetProducers);
-			
+
 			// Create mapping
 			foreach ($Response_SetProducers->ResponseMessages->item as $ResponseMessage)
 			{
@@ -123,6 +128,6 @@ class PlentymarketsExportEntityItemProducer
 				);
 			}
 		}
-		
+
 	}
 }

@@ -35,9 +35,9 @@ require_once PY_COMPONENTS . 'Export/PlentymarketsExportController.php';
 require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingController.php';
 
 /**
- * This class is a main plentymarkets backend action controller. This controller processes all kinds of backend actions 
+ * This class is a main plentymarkets backend action controller. This controller processes all kinds of backend actions
  * of the plentymarkets plugin like saving the settings or loading different kinds of data.
- *  
+ *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Backend_ExtJs
@@ -49,18 +49,18 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	public function getDxContinuousAction()
 	{
 		$Config = PlentymarketsConfig::getInstance();
-		
+
 		$this->View()->assign(array(
 			'success' => true,
 			'data' => array(
-				
+
 				// Export
 				'export' => array(
 					array(
 						'Entity' => 'Order',
 						'Section' => 'Order',
 						'Status' => $Config->getExportOrderStatus(0),
-						'Error' => $Config->getExportOrderError(''),
+						'Error' => htmlspecialchars($Config->getExportOrderError('')),
 						'LastRunTimestamp' => $Config->getExportOrderLastRunTimestamp(0),
 						'NextRunTimestamp' => $Config->getExportOrderNextRunTimestamp(0),
 					),
@@ -68,19 +68,19 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 						'Entity' => 'OrderIncomingPayment',
 						'Section' => 'Order',
 						'Status' => $Config->getExportOrderIncomingPaymentStatus(0),
-						'Error' => $Config->getExportOrderIncomingPaymentError(''),
+						'Error' => htmlspecialchars($Config->getExportOrderIncomingPaymentError('')),
 						'LastRunTimestamp' => $Config->getExportOrderIncomingPaymentLastRunTimestamp(0),
 						'NextRunTimestamp' => $Config->getExportOrderIncomingPaymentNextRunTimestamp(0),
 					)
 				),
-				
+
 				// Import
 				'import' => array(
 					array(
 						'Entity' => 'ItemStack',
 						'Section' => 'Item',
 						'Status' => $Config->getImportItemStackStatus(0),
-						'Error' => $Config->getImportItemStackError(''),
+						'Error' => htmlspecialchars($Config->getImportItemStackError('')),
 						'LastRunTimestamp' => $Config->getImportItemStackLastRunTimestamp(0),
 						'NextRunTimestamp' => $Config->getImportItemStackNextRunTimestamp(0),
 					),
@@ -88,7 +88,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 						'Entity' => 'Item',
 						'Section' => 'Item',
 						'Status' => $Config->getImportItemStatus(0),
-						'Error' => $Config->getImportItemError(''),
+						'Error' => htmlspecialchars($Config->getImportItemError('')),
 						'LastRunTimestamp' => $Config->getImportItemLastRunTimestamp(0),
 						'NextRunTimestamp' => $Config->getImportItemNextRunTimestamp(0),
 					),
@@ -96,7 +96,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 						'Entity' => 'ItemStock',
 						'Section' => 'Item',
 						'Status' => $Config->getImportItemStockStatus(0),
-						'Error' => $Config->getImportItemStockError(''),
+						'Error' => htmlspecialchars($Config->getImportItemStockError('')),
 						'LastRunTimestamp' => $Config->getImportItemStockLastRunTimestamp(0),
 						'NextRunTimestamp' => $Config->getImportItemStockNextRunTimestamp(0),
 					),
@@ -104,7 +104,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 						'Entity' => 'ItemPrice',
 						'Section' => 'Item',
 						'Status' => $Config->getImportItemPriceStatus(0),
-						'Error' => $Config->getImportItemPriceError(''),
+						'Error' => htmlspecialchars($Config->getImportItemPriceError('')),
 						'LastRunTimestamp' => $Config->getImportItemPriceLastRunTimestamp(0),
 						'NextRunTimestamp' => $Config->getImportItemPriceNextRunTimestamp(0)
 					),
@@ -112,7 +112,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 						'Entity' => 'OrderIncomingPayment',
 						'Section' => 'Order',
 						'Status' => $Config->getImportOrderStatus(0),
-						'Error' => $Config->getImportOrderError(''),
+						'Error' => htmlspecialchars($Config->getImportOrderError('')),
 						'LastRunTimestamp' => $Config->getImportOrderLastRunTimestamp(0),
 						'NextRunTimestamp' => $Config->getImportOrderNextRunTimestamp(0),
 					),
@@ -120,7 +120,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 						'Entity' => 'OrderOutgoingItems',
 						'Section' => 'Order',
 						'Status' => $Config->getImportOrderStatus(0),
-						'Error' => $Config->getImportOrderError(''),
+						'Error' => htmlspecialchars($Config->getImportOrderError('')),
 						'LastRunTimestamp' => $Config->getImportOrderLastRunTimestamp(0),
 						'NextRunTimestamp' => $Config->getImportOrderNextRunTimestamp(0),
 					)
@@ -176,15 +176,15 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	{
 		// Check the api, mapping and export status
 		PlentymarketsUtils::checkDxStatus();
-		
+
 		$config = PlentymarketsConfig::getInstance()->getConfig();
-		
+
 		$config['_WebserverSoftware'] = $_SERVER['SERVER_SOFTWARE'];
 		$config['_WebserverSignature'] = $_SERVER['SERVER_SIGNATURE'];
 		$config['_PhpInterface'] = $_SERVER['GATEWAY_INTERFACE'];
 		$config['_PhpVersion'] = PHP_VERSION;
 		$config['_PhpMemoryLimit'] = ini_get('memory_limit');
-		
+
 		if (function_exists('apache_get_modules'))
 		{
 			$modules = apache_get_modules();
@@ -278,6 +278,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		$Config->setItemCleanupActionID($this->Request()->ItemCleanupActionID);
 		$Config->setItemCategoryRootID($this->Request()->ItemCategoryRootID);
 		$Config->setItemCategorySyncActionID($this->Request()->ItemCategorySyncActionID == true ? IMPORT_ITEM_CATEGORY_SYNC : IMPORT_ITEM_CATEGORY_NO_SYNC);
+		$Config->setItemNumberImportActionID($this->Request()->ItemNumberImportActionID == true ? IMPORT_ITEM_NUMBER : IMPORT_ITEM_NUMBER_NO);
 		$Config->setDefaultCustomerGroupKey($this->Request()->DefaultCustomerGroupKey);
 		$Config->setItemWarehousePercentage($this->Request()->ItemWarehousePercentage);
 		$Config->setItemProducerID($this->Request()->ItemProducerID);
@@ -507,12 +508,12 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 				break;
 
 			case 'Referrer':
-				
+
 				if ($forceReload)
 				{
 					PlentymarketsConfig::getInstance()->setMiscSalesOrderReferrerLastImport(0);
 				}
-				
+
 				$data = PlentymarketsImportController::getOrderReferrerList();
 				break;
 
@@ -545,7 +546,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 
 				$data = PlentymarketsImportController::getCustomerClassList();
 				break;
-				
+
 			case 'Shop':
 
 				if ($forceReload)
@@ -602,7 +603,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 			case 'Currency':
 				$rows = $DataController->getCurrency();
 				break;
-				
+
 			case 'Shop':
 				$rows = $DataController->getShops();
 				break;
@@ -629,7 +630,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	 */
 	public function getLogAction()
 	{
-		
+
 		$data = PlentymarketsLogger::getInstance()->get(
 			$this->Request()->get('start', 0),
 			$this->Request()->get('limit', 50),

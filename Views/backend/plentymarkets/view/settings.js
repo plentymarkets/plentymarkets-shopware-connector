@@ -182,6 +182,13 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 				uncheckedValue: '0',
 				supportText: 'Aktivieren, wenn die Kategorien von bestehenden Artikel synchronisiert werden sollen. Anderfalls werden Kategorien nicht bei der Synchronisation berücksichtigt.'
 			}, {
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemNumberImportActionID}Nummern übernehmen{/s}',
+				name: 'ItemNumberImportActionID',
+				xtype: 'checkbox',
+				inputValue: 1,
+				uncheckedValue: '0',
+				supportText: 'Aktivieren, wenn die Artikelnummern von plentymarkets übernommen werden sollen.'
+			}, {
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/DefaultCustomerGroupKey}Standard-Kundenklasse{/s}',
 				name: 'DefaultCustomerGroupKey',
 				store: Ext.create('Shopware.apps.Base.store.CustomerGroup').load(),

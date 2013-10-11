@@ -31,6 +31,8 @@ require_once PY_SOAP . 'Models/PlentySoapObject/AttributeValue.php';
 require_once PY_SOAP . 'Models/PlentySoapObject/AttributeValueSet.php';
 require_once PY_SOAP . 'Models/PlentySoapRequestObject/GetAttributeValueSets.php';
 require_once PY_SOAP . 'Models/PlentySoapRequest/GetAttributeValueSets.php';
+require_once PY_COMPONENTS . 'Import/Exception/PlentymarketsImportItemException.php';
+require_once PY_COMPONENTS . 'Import/Exception/PlentymarketsImportItemVariantException.php';
 require_once PY_COMPONENTS . 'Import/PlentymarketsImportItemVariantController.php';
 require_once PY_COMPONENTS . 'Import/PlentymarketsImportItemStockStack.php';
 require_once PY_COMPONENTS . 'Import/PlentymarketsImportItemHelper.php';
@@ -39,7 +41,7 @@ require_once PY_COMPONENTS . 'Import/Entity/PlentymarketsImportEntityItemImage.p
 
 /**
  * PlentymarketsImportEntityItem provides the actual item import funcionality. Like the other import
- * entities this class is called in PlentymarketsImportController. It is important to deliver the correct PlentySoapObject_ItemBase 
+ * entities this class is called in PlentymarketsImportController. It is important to deliver the correct PlentySoapObject_ItemBase
  * object to the constructor method of this class.
  * The data import takes place based on plentymarkets SOAP-calls.
  *
@@ -53,9 +55,9 @@ class PlentymarketsImportEntityItem
 	 * @var PlentySoapObject_ItemBase
 	 */
 	protected $ItemBase;
-	
+
 	/**
-	 * 
+	 *
 	 * @var Shopware\Models\Shop\Shop
 	 */
 	protected $Shop;
@@ -84,27 +86,27 @@ class PlentymarketsImportEntityItem
 	 * @var array
 	 */
 	protected $categories = array();
-	
+
 	/**
-	 * 
+	 *
 	 * @var Shopware\Components\Api\Resource\Article
 	 */
 	protected static $ArticleApi;
-	
+
 	/**
-	 * 
+	 *
 	 * @var Shopware\Components\Api\Resource\Variant
 	 */
 	protected static $VariantApi;
-	
+
 	/**
-	 * 
+	 *
 	 * @var Shopware\Components\Api\Resource\Category
 	 */
 	protected static $CategoryApi;
-	
+
 	/**
-	 * 
+	 *
 	 * @var Shopware\Models\Category\Repository
 	 */
 	protected static $CategoryRepository;
@@ -264,7 +266,7 @@ class PlentymarketsImportEntityItem
 
 		$this->details = $details;
 	}
-	
+
 	/**
 	 * Sets the variant details
 	 */
@@ -275,36 +277,79 @@ class PlentymarketsImportEntityItem
 		{
 			return;
 		}
-		
+
 		foreach ($this->ItemBase->AttributeValueSets->item as $AttributeValueSet)
 		{
 			$AttributeValueSet instanceof PlentySoapObject_ItemAttributeValueSet;
-			
+
 			// Copy the base details
 			$details = $this->data;
-			
+
 			// SKU
 			$sku = sprintf('%s-%s-%s', $this->ItemBase->ItemID, $AttributeValueSet->PriceID, $AttributeValueSet->AttributeValueSetID);
-	
+
 			try
 			{
 				// Set the details id
 				$details['id'] = PlentymarketsMappingController::getItemVariantByPlentyID($sku);
+
+				if (PlentymarketsConfig::getInstance()->getItemNumberImportActionID(IMPORT_ITEM_NUMBER) == IMPORT_ITEM_NUMBER)
+				{
+					// If this number does not belong to this item
+					if (!PlentymarketsImportItemHelper::isNumberExistantVariant($AttributeValueSet->ColliNo, $details['id']))
+					{
+						// and check if the number is valid
+						if (!PlentymarketsImportItemHelper::isNumberValid($AttributeValueSet->ColliNo))
+						{
+							throw new PlentymarketsImportItemException('Item variation number "' . $AttributeValueSet->ColliNo . '" of item "' . $this->data['name'] . '" (' . $this->ItemBase->ItemID . ') is invalid');
+						}
+
+						// check if the number is available anyway
+						if (PlentymarketsImportItemHelper::isNumberExistant($AttributeValueSet->ColliNo))
+						{
+							throw new PlentymarketsImportItemException('Item variation number "' . $AttributeValueSet->ColliNo . '" of item "' . $this->data['name'] . '" (' . $this->ItemBase->ItemID . ') is already in use');
+						}
+
+						// Use this number
+						$details['number'] = $AttributeValueSet->ColliNo;
+					}
+				}
 			}
 			catch (PlentymarketsMappingExceptionNotExistant $e)
 			{
-				// Get a new number
-				$details['number'] = PlentymarketsImportItemHelper::getUsableNumber($AttributeValueSet->ColliNo);
+				// Numbers should be synced
+				if (PlentymarketsConfig::getInstance()->getItemNumberImportActionID(IMPORT_ITEM_NUMBER) == IMPORT_ITEM_NUMBER)
+				{
+					// Nummer ist ungültig oder in Benutzung
+					if (!PlentymarketsImportItemHelper::isNumberValid($AttributeValueSet->ColliNo))
+					{
+						throw new PlentymarketsImportItemException('Item variation number "' . $AttributeValueSet->ColliNo . '" of item "' . $this->data['name'] . '" (' . $this->ItemBase->ItemID . ') is invalid');
+					}
+
+					if (PlentymarketsImportItemHelper::isNumberExistant($AttributeValueSet->ColliNo))
+					{
+						throw new PlentymarketsImportItemException('Item variation number "' . $AttributeValueSet->ColliNo . '" of item "' . $this->data['name'] . '" (' . $this->ItemBase->ItemID . ') is already in use');
+					}
+
+					// Use this number
+					$details['number'] = $AttributeValueSet->ColliNo;
+				}
+
+				else
+				{
+					// A new number is generated
+					$details['number'] = PlentymarketsImportItemHelper::getItemNumber();
+				}
 			}
-	
+
 			$details['additionaltext'] = $AttributeValueSet->AttributeValueSetName;
 			$details['ean'] = $AttributeValueSet->EAN;
 			$details['X_plentySku'] = $sku;
-	
+
 			$this->variants[$AttributeValueSet->AttributeValueSetID] = $details;
 		}
 	}
-	
+
 	/**
 	 * Sets the categories. Non-existing categories will be created immediatly.
 	 */
@@ -315,17 +360,17 @@ class PlentymarketsImportEntityItem
 		{
 			return;
 		}
-	
+
 		if (is_null(self::$CategoryApi))
 		{
 			self::$CategoryApi = Shopware\Components\Api\Manager::getResource('Category');
 		}
-	
+
 		if (is_null(self::$CategoryRepository))
 		{
 			self::$CategoryRepository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
 		}
-	
+
 		// Categories
 		foreach ($this->ItemBase->Categories->item as $Category)
 		{
@@ -334,7 +379,7 @@ class PlentymarketsImportEntityItem
 			{
 				continue;
 			}
-			
+
 			try
 			{
 				$categoryID = PlentymarketsMappingController::getCategoryByPlentyID($Category->ItemCategoryPath);
@@ -342,26 +387,26 @@ class PlentymarketsImportEntityItem
 					'id' => $categoryID
 				);
 			}
-	
+
 			// Category dies not yet exist
 			catch (PlentymarketsMappingExceptionNotExistant $E)
 			{
 				// Root category id (out of the shop)
 				$parentId = $this->Shop->getCategory()->getId();
-				
+
 				// Trigger to indiate an error while creating new category
 				$addError = false;
-	
+
 				// Split path into single names
 				$categoryPathNames = explode(';', $Category->ItemCategoryPathNames);
-	
+
 				foreach ($categoryPathNames as $categoryName)
 				{
 					$CategoryFound = self::$CategoryRepository->findOneBy(array(
 						'name' => $categoryName,
 						'parentId' => $parentId
 					));
-	
+
 					if ($CategoryFound instanceof Shopware\Models\Category\Category)
 					{
 						$parentId = $CategoryFound->getId();
@@ -372,15 +417,15 @@ class PlentymarketsImportEntityItem
 						$params = array();
 						$params['name'] = $categoryName;
 						$params['parentId'] = $parentId;
-	
+
 						try
 						{
 							// Create
 							$CategoryModel = self::$CategoryApi->create($params);
-							
+
 							// Log
 							PlentymarketsLogger::getInstance()->message('Sync:Item:Category', 'Added category "' . $categoryName . '" with parentId ' . $parentId);
-							
+
 							// Id to connect with the item
 							$parentId = $CategoryModel->getId();
 						}
@@ -389,14 +434,14 @@ class PlentymarketsImportEntityItem
 							// Log
 							PlentymarketsLogger::getInstance()->error('Sync:Item:Category', 'Cannot create category "' . $categoryName . '" with parentId ' . $parentId);
 							PlentymarketsLogger::getInstance()->error('Sync:Item:Category', $E->getMessage());
-							
+
 							// Set the trigger - the category will not be connected with the item
 							$addError = true;
 						}
-	
+
 					}
 				}
-	
+
 				// Only create a mapping and connect the cateory to the item,
 				// of nothing went wrong during creation
 				if (!$addError)
@@ -434,7 +479,7 @@ class PlentymarketsImportEntityItem
 			}
 			$groups[$ItemProperty->PropertyGroupID][] = $ItemProperty;
 		}
-		
+
 		if (empty($groups))
 		{
 			PlentymarketsLogger::getInstance()->error('Sync:Item', 'No property group will be assigned to item id '. $this->ItemBase->ItemID .'.');
@@ -536,7 +581,7 @@ class PlentymarketsImportEntityItem
 				// Mapping speichern
 				PlentymarketsMappingController::addProperty($filterGroupId . ';' . $optionId, $ItemProperty->PropertyID);
 			}
-			
+
 			// Shopware cannot handle empty values
 			if (!empty($ItemProperty->PropertyValue))
 			{
@@ -549,25 +594,25 @@ class PlentymarketsImportEntityItem
 			}
 		}
 	}
-	
+
 	/**
 	 * Just update the categories
-	 * 
+	 *
 	 * This method is called, if the item has already been updated though another store
 	 */
 	public function importCategories()
 	{
 		$this->setCategories();
-		
+
 		$ArticleResource = self::getArticleApi();
-		
+
 		$SHOPWARE_itemID = PlentymarketsMappingController::getItemByPlentyID($this->ItemBase->ItemID);
 		$article = $ArticleResource->getOne($SHOPWARE_itemID);
-		
+
 		$data = array(
 			'categories' => $article['categories']
 		);
-		
+
 		foreach ($this->categories as $category)
 		{
 			if (isset($article['categories'][$category['id']]))
@@ -576,7 +621,7 @@ class PlentymarketsImportEntityItem
 			}
 			$data['categories'][$category['id']] = $category;
 		}
-		 
+
 		if (count($data['categories']) != count($article['categories']))
 		{
 			$ArticleResource->update($SHOPWARE_itemID, $data);
@@ -595,7 +640,7 @@ class PlentymarketsImportEntityItem
 
 		$data = $this->data;
 		$data['mainDetail'] = $this->details;
-		
+
 		$mainDetailId = -1;
 
 		$ArticleResource = self::getArticleApi();
@@ -608,12 +653,36 @@ class PlentymarketsImportEntityItem
 
 			// Log
 			PlentymarketsLogger::getInstance()->message('Sync:Item', sprintf('Updating item (%u) %s', $SHOPWARE_itemID, $data['name']));
-			
+
 			// Should the categories be synchronized?
 			if (PlentymarketsConfig::getInstance()->getItemCategorySyncActionID(IMPORT_ITEM_CATEGORY_SYNC) == IMPORT_ITEM_CATEGORY_SYNC)
 			{
 				$this->setCategories();
 				$data['categories'] = $this->categories;
+			}
+
+			// Should the number be synchronized?
+			// This does only matter if there are no variants
+			if (PlentymarketsConfig::getInstance()->getItemNumberImportActionID(IMPORT_ITEM_NUMBER) == IMPORT_ITEM_NUMBER && !count($this->variants))
+			{
+				// If this number does not belong to this item
+				if (!PlentymarketsImportItemHelper::isNumberExistantItem($this->ItemBase->ItemNo, $SHOPWARE_itemID))
+				{
+					// and check if the number is valid
+					if (!PlentymarketsImportItemHelper::isNumberValid($this->ItemBase->ItemNo))
+					{
+						throw new PlentymarketsImportItemException('Item number "' . $this->ItemBase->ItemNo . '" of item "' . $this->data['name'] . '" (' . $this->ItemBase->ItemID . ') is invalid');
+					}
+
+					// check if the number is available anyway
+					if (PlentymarketsImportItemHelper::isNumberExistant($this->ItemBase->ItemNo))
+					{
+						throw new PlentymarketsImportItemException('Item number "' . $this->ItemBase->ItemNo . '" of item "' . $this->data['name'] . '" (' . $this->ItemBase->ItemID . ') is already in use');
+					}
+
+					// then update it
+					$data['mainDetail']['number'] = $this->ItemBase->ItemNo;
+				}
 			}
 
 			// Update the item
@@ -751,13 +820,34 @@ class PlentymarketsImportEntityItem
 			$this->setCategories();
 			$data['categories'] = $this->categories;
 
-			// Normaler ARtikel
+			// Regular item
 			if (!count($this->variants))
 			{
-				// todo: check the number
-				$data['mainDetail']['number'] = PlentymarketsImportItemHelper::getUsableNumber($this->ItemBase->ItemNo);
+				// Numbers should be synced
+				if (PlentymarketsConfig::getInstance()->getItemNumberImportActionID(IMPORT_ITEM_NUMBER) == IMPORT_ITEM_NUMBER)
+				{
+					// Nummer ist ungültig oder in Benutzung
+					if (!PlentymarketsImportItemHelper::isNumberValid($this->ItemBase->ItemNo))
+					{
+						throw new PlentymarketsImportItemException('Item number "' . $this->ItemBase->ItemNo . '" of item "' . $this->data['name'] . '" (' . $this->ItemBase->ItemID . ') is invalid');
+					}
 
-				// Anlegen
+					if (PlentymarketsImportItemHelper::isNumberExistant($this->ItemBase->ItemNo))
+					{
+						throw new PlentymarketsImportItemException('Item number "' . $this->ItemBase->ItemNo . '" of item "' . $this->data['name'] . '" (' . $this->ItemBase->ItemID . ') is already in use');
+					}
+
+					// Use this number
+					$data['mainDetail']['number'] = $this->ItemBase->ItemNo;
+				}
+
+				else
+				{
+					// A new number is generated
+					$data['mainDetail']['number'] = PlentymarketsImportItemHelper::getItemNumber();
+				}
+
+				// Create
 				$Article = $ArticleResource->create($data);
 
 				//
@@ -768,7 +858,7 @@ class PlentymarketsImportEntityItem
 
 				// Mapping speichern
 				PlentymarketsMappingController::addItem($Article->getId(), $this->ItemBase->ItemID);
-				
+
 				// Stock stack
 				PlentymarketsImportItemStockStack::getInstance()->add($this->ItemBase->ItemID);
 
@@ -859,7 +949,7 @@ class PlentymarketsImportEntityItem
 
 	/**
 	 * Returns the shopware tax id
-	 * 
+	 *
 	 * @return intger
 	 */
 	protected function getTaxId()
@@ -876,10 +966,10 @@ class PlentymarketsImportEntityItem
 
 		return $taxID;
 	}
-	
+
 	/**
 	 * Returns the Atricle resource
-	 * 
+	 *
 	 * @return \Shopware\Components\Api\Resource\Article
 	 */
 	protected static function getArticleApi()
@@ -888,13 +978,13 @@ class PlentymarketsImportEntityItem
 		{
 			self::$ArticleApi = Shopware\Components\Api\Manager::getResource('Article');
 		}
-		
+
 		return self::$ArticleApi;
 	}
-	
+
 	/**
 	 * Returns the Variant resource
-	 * 
+	 *
 	 * @return \Shopware\Components\Api\Resource\Variant
 	 */
 	protected static function getVariantApi()
@@ -903,7 +993,7 @@ class PlentymarketsImportEntityItem
 		{
 			self::$VariantApi = Shopware\Components\Api\Manager::getResource('Variant');
 		}
-		
+
 		return self::$VariantApi;
 	}
 }
