@@ -30,6 +30,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.dx.Initial', {
 			pending: 'warte',
 			running: 'läuft',
 			success: 'fertig',
+			stalled: 'verzögert',
 			error: 'Fehler',
 		};
 
@@ -118,6 +119,12 @@ Ext.define('Shopware.apps.Plentymarkets.view.dx.Initial', {
 				{
 					metaData.tdAttr = 'data-qtip="Warte auf die Ausführung der Cronjobs!"';
 				}
+				else if (value == 'running' && record.get('isOverdue'))
+				{
+					metaData.tdAttr = 'data-qtip="Es wurde seit mehr als 15 Minuten keine Aktion ausgeführt. Wahrscheinlich ist der Prozess abgebrochen."';
+					value = 'stalled';
+				}
+
 				return '<div class="plenty-export-status plenty-export-status-' + value + '">' + status[value] + '</div>';
 			}
 		}, {

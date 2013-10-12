@@ -143,6 +143,7 @@ class PlentymarketsExportStatusController
 				'mayAnnounce' => !$wizardIsActive && $this->mayAnnounce() && $Status->mayAnnounce(),
 				'mayReset' => !$wizardIsActive && $Status->mayReset(),
 				'mayErase' => !$wizardIsActive && $Status->mayErase(),
+				'isOverdue' => $Status->isOverdue(),
 				'needsDependency' => !$wizardIsActive && $Status->needsDependency() && !$Status->isFinished()
 			);
 		}

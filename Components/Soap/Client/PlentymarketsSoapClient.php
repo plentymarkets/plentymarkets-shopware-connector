@@ -101,6 +101,12 @@ class PlentymarketsSoapClient extends SoapClient
 	protected $userToken;
 
 	/**
+	 *
+	 * @var string
+	 */
+	protected $timestampConfigKey;
+
+	/**
 	 * Constructor method
 	 *
 	 * @param string $wsdl
@@ -291,6 +297,12 @@ class PlentymarketsSoapClient extends SoapClient
 		if (isset($Response->Success) && $Response->Success == true)
 		{
 			PlentymarketsLogger::getInstance()->message('Soap:Call', $call . ' success');
+
+			// Remember the timestamp
+			if (!empty($this->timestampConfigKey))
+			{
+				$this->Config->set($this->timestampConfigKey, time());
+			}
 		}
 		else
 		{
@@ -359,6 +371,24 @@ class PlentymarketsSoapClient extends SoapClient
 	}
 
 	/**
+	 *
+	 * @return string
+	 */
+	public function getTimestampConfigKey()
+	{
+		return $this->timestampConfigKey;
+	}
+
+	/**
+	 *
+	 * @param string $timestampConfigKey
+	 */
+	public function setTimestampConfigKey($timestampConfigKey)
+	{
+		$this->timestampConfigKey = (string) $timestampConfigKey;
+	}
+
+	/**
 	 * Returns a dummy instance
 	 *
 	 * @param string $wsdl
@@ -381,5 +411,4 @@ class PlentymarketsSoapClient extends SoapClient
 	{
 		return preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', '', $string);
 	}
-
 }

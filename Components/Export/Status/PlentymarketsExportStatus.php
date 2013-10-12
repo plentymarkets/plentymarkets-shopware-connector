@@ -68,6 +68,12 @@ class PlentymarketsExportStatus implements PlentymarketsExportStatusInterface
 
 	/**
 	 *
+	 * @var integer
+	 */
+	const SECONDS_OVERDUE = 900;
+
+	/**
+	 *
 	 * @var string
 	 */
 	protected $name;
@@ -186,6 +192,28 @@ class PlentymarketsExportStatus implements PlentymarketsExportStatusInterface
 	public function isOptional()
 	{
 		return $this->isOptional;
+	}
+
+	/**
+	 * Checks whether the next call is overdue
+	 *
+	 * @return boolean
+	 */
+	public function isOverdue()
+	{
+		if ($this->getStatus() != self::STATUS_RUNNING)
+		{
+			return false;
+		}
+
+		$lastCallTimestamp = (integer) PlentymarketsConfig::getInstance()->getInitialExportLastCallTimestamp();
+
+		if ($lastCallTimestamp == 0)
+		{
+			return false;
+		}
+
+		return $lastCallTimestamp < (time() - self::SECONDS_OVERDUE);
 	}
 
 	/**

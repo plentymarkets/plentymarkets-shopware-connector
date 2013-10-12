@@ -29,9 +29,9 @@
 
 /**
  * The class PlentymarketsConfig enables setting and getting config data on the basis of PHPs "magic methods" functionality.
- * In this way it is possible to do all the data mapping by using all needed SOAP-calls. To get more information on PHPs 
+ * In this way it is possible to do all the data mapping by using all needed SOAP-calls. To get more information on PHPs
  * magic methods please have a look at it's documentation.
- * 
+ *
  * @link http://php.net/manual/en/language.oop5.magic.php
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
@@ -40,7 +40,7 @@ class PlentymarketsConfig
 
 	/**
 	 * Config data array.
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $config = array();
@@ -82,72 +82,93 @@ class PlentymarketsConfig
 		if (strpos($name, 'get') === 0)
 		{
 			$key = substr($name, 3);
-			if (!isset($this->config[$key]))
-			{
-				if (isset($args[0]))
-				{
-					return $args[0];
-				}
-				return null;
-			}
-			else
-			{
-				return $this->config[$key];
-			}
+			return $this->get($key, $args[0] ?: null);
 		}
 
 		else if (strpos($name, 'set') === 0)
 		{
 			$key = substr($name, 3);
-			
+
 			if (!isset($args[0]))
 			{
 				return;
 			}
-			
+
 			$value = (string) $args[0];
 
-			if ($this->config[$key] == $value)
-			{
-				return;
-			}
+			$this->set($key, $value);
+		}
 
-			// Save to database
-			Shopware()->Db()->query('
+		else if (strpos($name, 'erase') === 0)
+		{
+			$key = substr($name, 5);
+			$this->erase($key);
+		}
+	}
+
+	public function erase($key)
+	{
+		// Clear cache
+		unset($this->config[$key]);
+
+		// Delete to database
+		Shopware()->Db()->query('
+				DELETE FROM plenty_config
+					WHERE
+						`key` = ?
+			', array(
+					$key
+		));
+	}
+
+	/**
+	 *
+	 * @param string $key
+	 * @param mixed $default
+	 * @return mixed
+	 */
+	public function get($key, $default=null)
+	{
+		if (!isset($this->config[$key]))
+		{
+			return $default;
+		}
+		else
+		{
+			return $this->config[$key];
+		}
+	}
+
+	/**
+	 *
+	 * @param string $key
+	 * @param mixed $value
+	 */
+	public function set($key, $value)
+	{
+		if ($this->config[$key] == $value)
+		{
+			return;
+		}
+
+		// Save to database
+		Shopware()->Db()->query('
 				REPLACE INTO plenty_config
 					SET
 						`key` = ?,
 						`value` = ?
 			', array(
-				$key,
-				$value
-			));
+					$key,
+					$value
+		));
 
-			// Update the instance cache
-			$this->config[$key] = $value;
-		}
-		
-		else if (strpos($name, 'erase') === 0)
-		{
-			$key = substr($name, 5);
-			
-			// Clear cache
-			unset($this->config[$key]);
-
-			// Delete to database
-			Shopware()->Db()->query('
-				DELETE FROM plenty_config
-					WHERE
-						`key` = ?
-			', array(
-				$key
-			));
-		}
+		// Update the instance cache
+		$this->config[$key] = $value;
 	}
-	
+
 	/**
 	 * Checks if all important data is complete.
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public function isComplete()
@@ -216,7 +237,7 @@ class PlentymarketsConfig
 	}
 
 	/**
-	 * Returns an array of countries. 
+	 * Returns an array of countries.
 	 *
 	 * @return array
 	 */

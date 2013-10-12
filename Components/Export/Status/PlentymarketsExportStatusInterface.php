@@ -62,6 +62,11 @@ interface PlentymarketsExportStatusInterface
 	/**
 	 * Interface method
 	 */
+	public function isOverdue();
+
+	/**
+	 * Interface method
+	 */
 	public function mayAnnounce();
 
 	/**

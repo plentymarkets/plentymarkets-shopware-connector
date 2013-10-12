@@ -40,6 +40,9 @@ Ext.define('Shopware.apps.Plentymarkets.model.Export', {
 		name: 'mayErase',
 		type: 'boolean'
 	}, {
+		name: 'isOverdue',
+		type: 'boolean'
+	}, {
 		name: 'needsDependency',
 		type: 'boolean'
 	}],

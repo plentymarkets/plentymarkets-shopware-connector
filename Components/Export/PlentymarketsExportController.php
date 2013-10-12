@@ -239,6 +239,9 @@ class PlentymarketsExportController
 
 		$method = sprintf('set%sExportStatus', $entity);
 		$this->Config->$method('pending');
+
+		//
+		$this->Config->eraseInitialExportLastCallTimestamp();
 	}
 
 	/**
@@ -267,9 +270,12 @@ class PlentymarketsExportController
 			return;
 		}
 
-		// Set the running flag
+		// Set the running flag and delete the last call timestmap
 		$this->Config->eraseExportEntityPending();
 		$this->Config->setIsExportRunning(1);
+		$this->Config->eraseInitialExportLastCallTimestamp();
+
+		PlentymarketsSoapClient::getInstance()->setTimestampConfigKey('InitialExportLastCallTimestamp');
 
 		//
 		PlentymarketsLogger::getInstance()->message('Export:Initial:' . ucfirst($entity), 'Starting');
@@ -311,6 +317,7 @@ class PlentymarketsExportController
 			$this->Config->$method('error');
 		}
 		
+		PlentymarketsSoapClient::getInstance()->setTimestampConfigKey(null);
 		$this->Config->setIsExportRunning(0);
 	}
 
@@ -395,9 +402,6 @@ class PlentymarketsExportController
 	{
 		require_once PY_COMPONENTS . 'Export/Entity/PlentymarketsExportEntityIncomingPayment.php';
 
-		// Set running
-		$this->Config->setItemIncomingPaymentExportStatus('running');
-
 		// Start
 		$this->Config->setItemIncomingPaymentExportStart(time());
 
@@ -431,7 +435,6 @@ class PlentymarketsExportController
 		// Set running
 		$this->Config->setItemIncomingPaymentExportTimestampFinished(time());
 		$this->Config->setItemIncomingPaymentExportLastUpdate($now);
-		$this->Config->setItemIncomingPaymentExportStatus('success');
 	}
 
 	/**
