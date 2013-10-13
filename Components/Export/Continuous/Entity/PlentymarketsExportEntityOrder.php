@@ -36,11 +36,12 @@ require_once PY_SOAP . 'Models/PlentySoapObject/OrderItem.php';
 require_once PY_SOAP . 'Models/PlentySoapObject/SalesOrderProperty.php';
 require_once PY_SOAP . 'Models/PlentySoapObject/String.php';
 require_once PY_SOAP . 'Models/PlentySoapRequest/AddOrders.php';
+require_once PY_COMPONENTS . 'Export/PlentymarketsExportEntityException.php';
 require_once PY_COMPONENTS . 'Export/Entity/PlentymarketsExportEntityCustomer.php';
-require_once PY_COMPONENTS . 'Export/Entity/PlentymarketsExportEntityIncomingPayment.php';
+require_once PY_COMPONENTS . 'Export/Continuous/Entity/PlentymarketsExportEntityOrderIncomingPayment.php';
 
 /**
- * PlentymarketsExportEntityOrder provides the actual items export funcionality. Like the other export 
+ * PlentymarketsExportEntityOrder provides the actual items export funcionality. Like the other export
  * entities this class is called in PlentymarketsExportController. It is important to deliver valid
  * order ID to the constructor method of this class.
  * The data export takes place based on plentymarkets SOAP-calls.
@@ -124,10 +125,7 @@ class PlentymarketsExportEntityOrder
 	 */
 	public function export()
 	{
-		if (!$this->exportCustomer())
-		{
-			return;
-		}
+		$this->exportCustomer();
 		$this->exportOrder();
 	}
 
@@ -138,8 +136,6 @@ class PlentymarketsExportEntityOrder
 	 */
 	protected function exportCustomer()
 	{
-		PlentymarketsLogger::getInstance()->error('DEBUG', __METHOD__);
-		
 		$Customer = Shopware()->Models()->find('Shopware\Models\Customer\Customer', $this->order['customer']['id']);
 		$Billing = Shopware()->Models()->find('Shopware\Models\Order\Billing', $this->order['billing']['id']);
 
@@ -165,15 +161,12 @@ class PlentymarketsExportEntityOrder
 			// Save the error
 			$this->setError(self::CODE_ERROR_CUSTOMER);
 
-			// abort
-			return false;
+			// Quit
+			throw new PlentymarketsExportEntityException('Cannot export the order ' . $this->order['id'] . ' because the customer could not be exported');
 		}
 
 		//
 		$this->PLENTY_addressDispatchID = $PlentymarketsExportEntityOrderCustomer->getPlentyAddressDispatchID();
-
-		// success
-		return true;
 	}
 
 	/**
@@ -198,8 +191,11 @@ class PlentymarketsExportEntityOrder
 		}
 		catch (PlentymarketsMappingExceptionNotExistant $E)
 		{
-			PlentymarketsLogger::getInstance()->error('Export:Order', 'Cannot export the order ' . $this->order['id'] . ' because there is no mapping for this method of payment.');
-			return $this->setError(self::CODE_ERROR_MOP);
+			// Save the error
+			$this->setError(self::CODE_ERROR_MOP);
+
+			// Quit
+			throw new PlentymarketsExportEntityException('Cannot export the order ' . $this->order['id'] . ' because there is no mapping for this method of payment.');
 		}
 
 		// Shipping costs
@@ -229,7 +225,7 @@ class PlentymarketsExportEntityOrder
 		$Object_OrderHead->ShippingMethodID = $parcelServiceID; // int
 		$Object_OrderHead->ShippingProfileID = $parcelServicePresetID; // int
 
-		
+
 		try
 		{
 			$Object_OrderHead->StoreID = PlentymarketsMappingController::getShopByShopwareID($this->order['shopId']);
@@ -237,7 +233,7 @@ class PlentymarketsExportEntityOrder
 		catch(PlentymarketsMappingExceptionNotExistant $E)
 		{
 		}
-		
+
 		// Referrer
 		if ($this->order['partnerId'] > 0)
 		{
@@ -254,13 +250,13 @@ class PlentymarketsExportEntityOrder
 		{
 			$referrerId = PlentymarketsConfig::getInstance()->getOrderReferrerID();
 		}
-		
+
 		$Object_OrderHead->ReferrerID = $referrerId;
-		
+
 		$Object_Order->OrderHead = $Object_OrderHead;
-		
+
 		$Object_OrderHead->OrderInfos = array();
-		
+
 		// Debit data
 		if (isset($this->order['customer']['debit']['accountHolder']) && $Object_OrderHead->MethodOfPaymentID == MOP_DEBIT)
 		{
@@ -268,14 +264,14 @@ class PlentymarketsExportEntityOrder
 			$info .= 'Bank name: '. $this->order['customer']['debit']['bankName'] . chr(10);
 			$info .= 'Bank code: '. $this->order['customer']['debit']['bankCode'] . chr(10);
 			$info .= 'Account number: '. $this->order['customer']['debit']['account'] . chr(10);
-			
+
 			$Object_OrderInfo = new PlentySoapObject_OrderInfo();
 			$Object_OrderInfo->Info = $info;
 			$Object_OrderInfo->InfoCustomer = 0;
 			$Object_OrderInfo->InfoDate = $this->order['orderTime']->getTimestamp();
 			$Object_OrderHead->OrderInfos[] = $Object_OrderInfo;
 		}
-		
+
 		if (!empty($this->order['internalComment']))
 		{
 			$Object_OrderInfo = new PlentySoapObject_OrderInfo();
@@ -284,7 +280,7 @@ class PlentymarketsExportEntityOrder
 			$Object_OrderInfo->InfoDate = $this->order['orderTime']->getTimestamp();
 			$Object_OrderHead->OrderInfos[] = $Object_OrderInfo;
 		}
-		
+
 		if (!empty($this->order['customerComment']))
 		{
 			$Object_OrderInfo = new PlentySoapObject_OrderInfo();
@@ -293,7 +289,7 @@ class PlentymarketsExportEntityOrder
 			$Object_OrderInfo->InfoDate = $this->order['orderTime']->getTimestamp();
 			$Object_OrderHead->OrderInfos[] = $Object_OrderInfo;
 		}
-		
+
 		if (!empty($this->order['comment']))
 		{
 			$Object_OrderInfo = new PlentySoapObject_OrderInfo();
@@ -302,7 +298,7 @@ class PlentymarketsExportEntityOrder
 			$Object_OrderInfo->InfoDate = $this->order['orderTime']->getTimestamp();
 			$Object_OrderHead->OrderInfos[] = $Object_OrderInfo;
 		}
-		
+
 		$Object_Order->OrderItems = array();
 
 		foreach ($this->order['details'] as $item)
@@ -338,13 +334,13 @@ class PlentymarketsExportEntityOrder
 				$sku = null;
 			}
 
-			
+
 			// Gutschein
 			if ($item['mode'] == 2)
 			{
 				$itemId = -1;
 			}
-			
+
 			$Object_OrderItem = new PlentySoapObject_OrderItem();
 			$Object_OrderItem->ExternalOrderItemID = $item['articleNumber']; // string
 			$Object_OrderItem->ItemID = $itemId; // int
@@ -363,6 +359,11 @@ class PlentymarketsExportEntityOrder
 
 		// Do the request
 		$Response_AddOrders = PlentymarketsSoapClient::getInstance()->AddOrders($Request_AddOrders);
+
+		if (!$Response_AddOrders->Success)
+		{
+			throw new PlentymarketsExportEntityException('Cannot export the order ' . $this->order['id'] . ' (the SOAP call was not successful)');
+		}
 
 		//
 		$plentyOrderID = null;
@@ -386,26 +387,23 @@ class PlentymarketsExportEntityOrder
 		{
 			$this->setSuccess($plentyOrderID, $plentyOrderStatus);
 		}
+		else
+		{
+			throw new PlentymarketsExportEntityException('Cannot export the order ' . $this->order['id'] . ' (did not retrieve order id or order status repectively)');
+		}
 
 		// Directly book the incomming payment
 		if ($this->order['paymentStatus']['id'] == PlentymarketsConfig::getInstance()->getOrderPaidStatusID(12))
 		{
-			try
-			{
-				$IncomingPayment = new PlentymarketsExportEntityIncomingPayment($this->order['id']);
-				$IncomingPayment->book();
-			}
-			catch (Exception $e)
-			{
-			}
+			// May throw an exception
+			$IncomingPayment = new PlentymarketsExportEntityOrderIncomingPayment($this->order['id']);
+			$IncomingPayment->book();
 		}
-
-		// outgoing items?
 	}
 
 	/**
 	 * Writes an error code into the database
-	 * 
+	 *
 	 * @param integer $code
 	 */
 	protected function setError($code)
@@ -427,7 +425,7 @@ class PlentymarketsExportEntityOrder
 
 	/**
 	 * Writes the plenty order id and the status into the database
-	 * 
+	 *
 	 * @param integer $plentyOrderID
 	 * @param flaot $plentyOrderStatus
 	 */

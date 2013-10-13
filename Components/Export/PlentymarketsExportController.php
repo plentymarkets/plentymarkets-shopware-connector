@@ -58,7 +58,7 @@ class PlentymarketsExportController
 	protected static $Instance;
 
 	/**
-	 * 
+	 *
 	 * @var array
 	 */
 	protected static $mapping = array(
@@ -86,9 +86,9 @@ class PlentymarketsExportController
 	 * @var PlentymarketsConfig
 	 */
 	protected $Config;
-	
+
 	/**
-	 * 
+	 *
 	 * @var PlentymarketsExportStatusController
 	 */
 	protected $StatusController;
@@ -99,7 +99,7 @@ class PlentymarketsExportController
 	 * @var boolean
 	 */
 	protected $isRunning = false;
-	
+
 	/**
 	 * Indicates whether an export may run or not.
 	 *
@@ -154,15 +154,15 @@ class PlentymarketsExportController
 		// Start
 		$methodStart = sprintf('set%sExportTimestampStart', $entity);
 		$this->Config->$methodStart(0);
-		
+
 		// Finished
 		$methodStart = sprintf('set%sExportTimestampFinished', $entity);
 		$this->Config->$methodStart(0);
-		
+
 		// Error
 		$methodError = sprintf('erase%sExportLastErrorMessage', $entity);
 		$this->Config->$methodError();
-		
+
 		// Last chunk
 		$methodLastChunk = sprintf('erase%sExportLastChunk', $entity);
 		$this->Config->$methodLastChunk();
@@ -177,11 +177,11 @@ class PlentymarketsExportController
 	{
 		// Status
 		$this->reset($entity, false);
-		
+
 		// -1 is needed, so that the erase button is invisible
 		$methodStart = sprintf('erase%sExportTimestampStart', $entity);
 		$this->Config->$methodStart();
-		
+
 		// Delete Mapping
 		foreach ((array) self::$mapping[$entity] as $tableName)
 		{
@@ -278,7 +278,7 @@ class PlentymarketsExportController
 		PlentymarketsSoapClient::getInstance()->setTimestampConfigKey('InitialExportLastCallTimestamp');
 
 		//
-		PlentymarketsLogger::getInstance()->message('Export:Initial:' . ucfirst($entity), 'Starting');
+		PlentymarketsLogger::getInstance()->message('Export:Initial:' . $entity, 'Starting');
 
 		try
 		{
@@ -304,11 +304,11 @@ class PlentymarketsExportController
 					break;
 			}
 
-			PlentymarketsLogger::getInstance()->message('Export:Initial:' . ucfirst($entity), 'Done!');
+			PlentymarketsLogger::getInstance()->message('Export:Initial:' . $entity, 'Done!');
 		}
 		catch (Exception $E)
 		{
-			PlentymarketsLogger::getInstance()->error('Export:Initial:' . ucfirst($entity), $E->getMessage());
+			PlentymarketsLogger::getInstance()->error('Export:Initial:' . $entity, $E->getMessage());
 
 			$method = sprintf('set%sExportLastErrorMessage', $entity);
 			$this->Config->$method($E->getMessage());
@@ -316,7 +316,7 @@ class PlentymarketsExportController
 			$method = sprintf('set%sExportStatus', $entity);
 			$this->Config->$method('error');
 		}
-		
+
 		PlentymarketsSoapClient::getInstance()->setTimestampConfigKey(null);
 		$this->Config->setIsExportRunning(0);
 	}
@@ -337,47 +337,6 @@ class PlentymarketsExportController
 	}
 
 	/**
-	 * Exports all orders, which are not yet exported to plentymarkets and customers to make sure,
-	 * that the corresponding customers exist.
-	 */
-	public function exportOrders()
-	{
-		require_once PY_COMPONENTS . 'Export/Entity/PlentymarketsExportEntityOrder.php';
-
-		// Get all the orders, that are not yet exported to plentymarkets
-		$Result = Shopware()->Db()->query('
-			SELECT
-					shopwareId, numberOfTries, timestampLastTry
-				FROM plenty_order
-				WHERE plentyOrderId IS NULL
-		');
-
-		while (($Order = $Result->fetchObject()) && is_object($Order))
-		{
-			if ($Order->numberOfTries > 1000)
-			{
-				continue;
-			}
-
-			if (!is_null($Order->timestampLastTry) && $Order->timestampLastTry < time() - (60 * 15))
-			{
-				continue;
-			}
-
-			try
-			{
-				$PlentymarketsExportEntityOrder = new PlentymarketsExportEntityOrder($Order->shopwareId);
-				$PlentymarketsExportEntityOrder->export();
-			}
-			catch (Exception $E)
-			{
-				PlentymarketsLogger::getInstance()->message('Export:Order', $E->getMessage());
-				$this->Config->setOrderExportLastErrorMessage($E->getMessage());
-			}
-		}
-	}
-
-	/**
 	 * Exports customer and delivery address items data.
 	 */
 	protected function exportCustomers()
@@ -393,60 +352,6 @@ class PlentymarketsExportController
 	{
 		require_once PY_COMPONENTS . 'Export/Controller/PlentymarketsExportControllerItem.php';
 		PlentymarketsExportControllerItem::getInstance()->run();
-	}
-
-	/**
-	 * Exports incoming payments data.
-	 */
-	public function exportIncomingPayments()
-	{
-		require_once PY_COMPONENTS . 'Export/Entity/PlentymarketsExportEntityIncomingPayment.php';
-
-		// Start
-		$this->Config->setItemIncomingPaymentExportStart(time());
-
-		$now = time();
-		$lastUpdateTimestamp = date('Y-m-d H:i:s', $this->Config->getItemIncomingPaymentExportLastUpdate(time()));
-		$status = $this->Config->getOrderPaidStatusID(12);
-
-		$Result = Shopware()->Db()->query('
-			SELECT
-					DISTINCT orderID
-				FROM s_order_history
-					JOIN plenty_order ON shopwareId = orderID
-				WHERE
-					change_date > \'' . $lastUpdateTimestamp . '\' AND
-					payment_status_id = ' . $status . ' AND
-					IFNULL(plentyOrderPaidStatus, 0) != 1
-		');
-
-		while (($order = $Result->fetchObject()) && is_object($order))
-		{
-			try
-			{
-				$ExportEntityIncomingPayment = new PlentymarketsExportEntityIncomingPayment($order->orderID);
-				$ExportEntityIncomingPayment->book();
-			}
-			catch (Exception $e)
-			{
-			}
-		}
-
-		// Set running
-		$this->Config->setItemIncomingPaymentExportTimestampFinished(time());
-		$this->Config->setItemIncomingPaymentExportLastUpdate($now);
-	}
-
-	/**
-	 * Checks whether an export has successfully finished.
-	 *
-	 * @param string $entity
-	 * @return boolean
-	 */
-	protected function isSuccessfullyFinished($entity)
-	{
-		$method = sprintf('get%sExportStatus', $entity);
-		return $this->Config->$method() == 'success';
 	}
 
 	/**

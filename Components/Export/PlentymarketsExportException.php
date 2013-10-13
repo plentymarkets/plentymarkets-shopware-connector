@@ -27,10 +27,10 @@
  */
 
 /**
- * Exception thrown during the export
+ * Thrown if a complete export fails
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
-class PlentymarketsExportException extends \Exception
+class PlentymarketsExportException extends Exception
 {
 }

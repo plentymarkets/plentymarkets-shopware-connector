@@ -34,6 +34,7 @@ require_once PY_COMPONENTS . 'Utils/PlentymarketsGarbageCollector.php';
 require_once PY_COMPONENTS . 'Import/PlentymarketsImportController.php';
 require_once PY_COMPONENTS . 'Import/Stack/PlentymarketsImportStackItem.php';
 require_once PY_COMPONENTS . 'Export/PlentymarketsExportController.php';
+require_once PY_COMPONENTS . 'Export/Continuous/PlentymarketsExportContinuousController.php';
 
 /**
  * The class CronjobController provides all methods for data import and export. CronjobController is used in
@@ -229,7 +230,7 @@ class PlentymarketsCronjobController
 
 		try
 		{
-			PlentymarketsExportController::getInstance()->exportOrders();
+			PlentymarketsExportContinuousController::getInstance()->run('Order');
 			$this->Config->setExportOrderStatus(1);
 			$this->Config->eraseExportOrderError();
 		}
@@ -258,7 +259,7 @@ class PlentymarketsCronjobController
 
 		try
 		{
-			PlentymarketsExportController::getInstance()->exportIncomingPayments();
+			PlentymarketsExportContinuousController::getInstance()->run('OrderIncomingPayment');
 			$this->Config->setExportOrderIncomingPaymentStatus(1);
 			$this->Config->eraseExportOrderIncomingPaymentError();
 		}
