@@ -27,8 +27,7 @@
  */
 
 /**
- * The class PlentymarketsExportContinuousController does the actual export for different cronjobs e.g. in the class PlentymarketsCronjobController.
- * It uses the different export entities in /Export/Entity, for example PlentymarketsExportEntityCustomer.
+ * The class PlentymarketsExportContinuousController handles the continuous expots.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
@@ -57,7 +56,6 @@ class PlentymarketsExportContinuousController
 		$this->Config = PlentymarketsConfig::getInstance();
 	}
 
-
 	/**
 	 * If an instance of PlentymarketsExportContinuousController exists, it returns this instance.
 	 * Else it creates a new instance of PlentymarketsExportController.
@@ -73,6 +71,11 @@ class PlentymarketsExportContinuousController
 		return self::$Instance;
 	}
 
+	/**
+	 * Runs an export for the given entity
+	 *
+	 * @param string $entity
+	 */
 	public function run($entity)
 	{
 		$class = sprintf('PlentymarketsExportContinuousController%s', $entity);
