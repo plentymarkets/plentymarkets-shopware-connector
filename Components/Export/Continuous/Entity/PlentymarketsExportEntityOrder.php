@@ -220,7 +220,7 @@ class PlentymarketsExportEntityOrder
 		$Object_OrderHead->DeliveryAddressID = $this->PLENTY_addressDispatchID; // int
 		$Object_OrderHead->DoneTimestamp = null; // string
 		$Object_OrderHead->ExchangeRatio = null; // float
-		$Object_OrderHead->ExternalOrderID = PlentymarketsUtils::getExternalCustomerID($this->order['id']); // string
+		$Object_OrderHead->ExternalOrderID = sprintf('Swag/%d/%s', $this->order['id'], $this->order['number']); // string
 		$Object_OrderHead->IsNetto = false; // boolean
 		$Object_OrderHead->Marking1ID = PlentymarketsConfig::getInstance()->getOrderMarking1(null); // int
 		$Object_OrderHead->MethodOfPaymentID = $methodOfPaymentId; // int
