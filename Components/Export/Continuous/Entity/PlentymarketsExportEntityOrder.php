@@ -71,6 +71,12 @@ class PlentymarketsExportEntityOrder
 
 	/**
 	 *
+	 * @var integer
+	 */
+	const CODE_ERROR_SOAP = 8;
+
+	/**
+	 *
 	 * @var PDOStatement
 	 */
 	protected static $StatementGetSKU = null;
@@ -362,6 +368,8 @@ class PlentymarketsExportEntityOrder
 
 		if (!$Response_AddOrders->Success)
 		{
+			// Set the error end quit
+			$this->setError(self::CODE_ERROR_SOAP);
 			throw new PlentymarketsExportEntityException('Cannot export the order ' . $this->order['id'] . ' (the SOAP call was not successful)');
 		}
 
@@ -389,7 +397,9 @@ class PlentymarketsExportEntityOrder
 		}
 		else
 		{
-			throw new PlentymarketsExportEntityException('Cannot export the order ' . $this->order['id'] . ' (did not retrieve order id or order status repectively)');
+			// Set the error end quit
+			$this->setError(self::CODE_ERROR_SOAP);
+			throw new PlentymarketsExportEntityException('Cannot export the order ' . $this->order['id'] . ' (did not retrieve order id or order status respectively)');
 		}
 
 		// Directly book the incomming payment
