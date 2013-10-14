@@ -70,7 +70,7 @@ class PlentymarketsConfig
 	}
 
 	/**
-	 * __call overloads methods to get or set different config data.
+	 * __call overloads methods to get, set or erase different config data.
 	 * In case of setting data, the data in database as well as the data in instance cache will be updated.
 	 *
 	 * @param string $name
@@ -106,6 +106,11 @@ class PlentymarketsConfig
 		}
 	}
 
+	/**
+	 * Erases the given key from the config
+	 *
+	 * @param unknown $key
+	 */
 	public function erase($key)
 	{
 		// Clear cache
@@ -122,6 +127,8 @@ class PlentymarketsConfig
 	}
 
 	/**
+	 * Returns the value of the given key
+	 * or the default value, if the key does not exist
 	 *
 	 * @param string $key
 	 * @param mixed $default
@@ -140,6 +147,7 @@ class PlentymarketsConfig
 	}
 
 	/**
+	 * Sets the konfig key to the given value
 	 *
 	 * @param string $key
 	 * @param mixed $value

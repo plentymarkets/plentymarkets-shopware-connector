@@ -371,6 +371,7 @@ class PlentymarketsSoapClient extends SoapClient
 	}
 
 	/**
+	 * gets the timestamp config key
 	 *
 	 * @return string
 	 */
@@ -380,6 +381,7 @@ class PlentymarketsSoapClient extends SoapClient
 	}
 
 	/**
+	 * Sets the timestamp config key
 	 *
 	 * @param string $timestampConfigKey
 	 */
