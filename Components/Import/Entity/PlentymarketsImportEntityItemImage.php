@@ -118,7 +118,7 @@ class PlentymarketsImportEntityItemImage
 
 			if ($Response_GetItemsImages->Success == false)
 			{
-				PlentymarketsLogger::getInstance()->error('Sync:Item:Image', 'Got negative success from GetItemsImages for plentymarktes itemId ' . $this->PLENTY_itemId);
+				PlentymarketsLogger::getInstance()->error('Sync:Item:Image', 'The images for the plentymarkets item id »' . $this->PLENTY_itemId . '« could not be retrieved', 3200);
 				continue;
 			}
 
@@ -154,10 +154,10 @@ class PlentymarketsImportEntityItemImage
 				}
 				return ($a['position'] < $b['position']) ? -1 : 1;
 			});
-			
+
 			// Set the first one as main image
 			$images[0]['main'] = 1;
-			
+
 			//
 			$ArticleResource = \Shopware\Components\Api\Manager::getResource('Article');
 			$ArticleResource->update($this->SHOPWARE_itemId, array(

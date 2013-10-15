@@ -138,25 +138,25 @@ class PlentymarketsImportControllerItem
 
 		catch (Shopware\Components\Api\Exception\ValidationException $E)
 		{
-			PlentymarketsLogger::getInstance()->error('Sync:Item:Validation', 'Item "'. $ItemBase->Texts->Name .'" ('. $ItemBase->ItemID .') could not be importet');
+			PlentymarketsLogger::getInstance()->error('Sync:Item:Validation', 'The item »'. $ItemBase->Texts->Name .'" with the id »'. $ItemBase->ItemID .'« could not be imported', 3010);
 			foreach ($E->getViolations() as $ConstraintViolation)
 			{
 				PlentymarketsLogger::getInstance()->error('Sync:Item:Validation', $ConstraintViolation->getMessage());
 				PlentymarketsLogger::getInstance()->error('Sync:Item:Validation', $ConstraintViolation->getPropertyPath() . ': ' . $ConstraintViolation->getInvalidValue());
 			}
-			
+
 			// Re-add the item to the stack
 			PlentymarketsImportStackItem::getInstance()->addItem($ItemBase->ItemID, $storeId);
 		}
 
-		catch (PlentymarketsImportItemException $E)
+		catch (PlentymarketsImportItemNumberException $E)
 		{
-			PlentymarketsLogger::getInstance()->error('Sync:Item:Number', $E->getMessage());
+			PlentymarketsLogger::getInstance()->error('Sync:Item:Number', $E->getMessage(), $E->getCode());
 		}
 
 		catch (Exception $E)
 		{
-			PlentymarketsLogger::getInstance()->error('Sync:Item', 'Item "'. $ItemBase->Texts->Name .'" ('. $ItemBase->ItemID .') could not be importet');
+			PlentymarketsLogger::getInstance()->error('Sync:Item', 'The item »'. $ItemBase->Texts->Name .'" with the id »'. $ItemBase->ItemID .'« could not be imported', 3000);
 			PlentymarketsLogger::getInstance()->error('Sync:Item', get_class($E));
 			PlentymarketsLogger::getInstance()->error('Sync:Item', $E->getMessage());
 
@@ -221,13 +221,17 @@ class PlentymarketsImportControllerItem
 
 		// Log stack information
 		$stackSize = count(PlentymarketsImportStackItem::getInstance());
-		if ($stackSize)
+		if ($stackSize == 1)
 		{
-			PlentymarketsLogger::getInstance()->message('Sync:Stack:Item', $stackSize . ' items left in stack');
+			PlentymarketsLogger::getInstance()->message('Sync:Stack:Item', '1 item left in the stack');
+		}
+		else if ($stackSize > 1)
+		{
+			PlentymarketsLogger::getInstance()->message('Sync:Stack:Item', $stackSize . ' items left in the stack');
 		}
 		else
 		{
-			PlentymarketsLogger::getInstance()->message('Sync:Stack:Item', 'Stack is empty');
+			PlentymarketsLogger::getInstance()->message('Sync:Stack:Item', 'The stack is empty');
 		}
 
 		// Post processed

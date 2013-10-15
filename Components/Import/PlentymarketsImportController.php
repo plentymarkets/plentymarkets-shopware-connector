@@ -74,13 +74,13 @@ require_once PY_COMPONENTS . 'Import/Entity/Order/PlentymarketsImportEntityOrder
 /**
  * The class PlentymarketsImportController does the actual import for different cronjobs e.g. in the class PlentymarketsCronjobController.
  * It uses the different import entities in /Import/Entity respectively in /Import/Entity/Order, for example PlentymarketsImportEntityItem.
- * 
+ *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 class PlentymarketsImportController
 {
-	
-	
+
+
 	/**
 	 * Reads the items of plentymarkets that have changed
 	 */
@@ -158,21 +158,21 @@ class PlentymarketsImportController
 	{
 		// Starttimestamp
 		$timestsamp = time();
-		
+
 		// Get the data from plentymarkets (for every mapped shop)
 		$shopIds = Shopware()->Db()->fetchAll('
 			SELECT plentyID FROM plenty_mapping_shop
 		');
-		
+
 		foreach ($shopIds as $shopId)
 		{
 			$PlentymarketsImportEntityOrderIncomingPayments = new PlentymarketsImportEntityOrderIncomingPayments($shopId['plentyID']);
 			$PlentymarketsImportEntityOrderIncomingPayments->import();
-	
+
 			$PlentymarketsImportEntityOrderOutgoingItems = new PlentymarketsImportEntityOrderOutgoingItems($shopId['plentyID']);
 			$PlentymarketsImportEntityOrderOutgoingItems->import();
 		}
-		
+
 		PlentymarketsConfig::getInstance()->setImportOrderIncomingPaymentsLastUpdateTimestamp($timestsamp);
 		PlentymarketsConfig::getInstance()->setImportOrderOutgoingItemsLastUpdateTimestamp($timestsamp);
 	}
@@ -226,10 +226,10 @@ class PlentymarketsImportController
 						continue;
 					}
 				}
-				
+
 				// Book
 				PlentymarketsImportEntityItemStock::update($itemDetailsID, $CurrentStock->NetStock);
-				
+
 				// Count
 				++$numberOfStocksUpdated;
 			}
@@ -261,18 +261,18 @@ class PlentymarketsImportController
 
 		// Do the request
 		$Response_GetMethodOfPayments = PlentymarketsSoapClient::getInstance()->GetMethodOfPayments($Request_GetMethodOfPayments);
-		
+
 		// The call wasn't successful
 		if (!$Response_GetMethodOfPayments->Success)
 		{
 			// Write to log
-			PlentymarketsLogger::getInstance()->error('Import:MethodOfPayment', 'Methods of payment could not be retrieved');
-			
+			PlentymarketsLogger::getInstance()->error('Import:MethodOfPayment', 'Methods of payment could not be retrieved', 1510);
+
 			// Return old data
 			return unserialize(PlentymarketsConfig::getInstance()->getMiscMethodsOfPaymentSerialized('a:0:{}'));
 		}
-		
-		
+
+
 		// Prepare data
 		$methodOfPayments = array();
 		foreach ($Response_GetMethodOfPayments->MethodOfPayment->item as $MethodOfPayment)
@@ -283,18 +283,18 @@ class PlentymarketsImportController
 				'name' => $MethodOfPayment->Name
 			);
 		}
-		
+
 		// Delete non active plentymarkets MOPs from mapping table:
 		if (count($methodOfPayments))
 		{
 			$where = 'plentyID NOT IN (' . implode(',', array_keys($methodOfPayments)) . ')';
-			Shopware()->Db()->delete('plenty_mapping_method_of_payment', $where);	
+			Shopware()->Db()->delete('plenty_mapping_method_of_payment', $where);
 		}
 		else
 		{
-			Shopware()->Db()->delete('plenty_mapping_method_of_payment');	
+			Shopware()->Db()->delete('plenty_mapping_method_of_payment');
 		}
-		
+
 		PlentymarketsConfig::getInstance()->setMiscMethodsOfPaymentLastImport(time());
 		PlentymarketsConfig::getInstance()->setMiscMethodsOfPaymentSerialized(serialize($methodOfPayments));
 
@@ -324,12 +324,12 @@ class PlentymarketsImportController
 		if (!$Response_GetOrderStatusList->Success)
 		{
 			// Write to log
-			PlentymarketsLogger::getInstance()->error('Import:Order:Status', 'Sales order statuses could not be retrieved');
-			
+			PlentymarketsLogger::getInstance()->error('Import:Order:Status', 'Sales order statuses could not be retrieved', 1511);
+
 			// Return old data
 			return unserialize(PlentymarketsConfig::getInstance()->getMiscOrderStatusSerialized('a:0:{}'));
 		}
-		
+
 		// Prepare data
 		$orderStatusList = array();
 		foreach ($Response_GetOrderStatusList->OrderStatus->item as $OrderStatus)
@@ -369,12 +369,12 @@ class PlentymarketsImportController
 		if (!$Response_GetSalesOrderReferrerList->Success)
 		{
 			// Log
-			PlentymarketsLogger::getInstance()->error('Import:Order:Referrer', 'Sales order referrer could not be retrieved');
-			
+			PlentymarketsLogger::getInstance()->error('Import:Order:Referrer', 'Sales order referrer could not be retrieved', 1512);
+
 			// Return old data
 			return unserialize(PlentymarketsConfig::getInstance()->getMiscSalesOrderReferrerSerialized('a:0:{}'));
 		}
-		
+
 		// Prepare data
 		$salesOrderReferrerList = array();
 		foreach ($Response_GetSalesOrderReferrerList->SalesOrderReferrers->item as $SalesOrderReferrer)
@@ -407,35 +407,35 @@ class PlentymarketsImportController
 
 		// Do the request
 		$Response_GetCustomerClassList = PlentymarketsSoapClient::getInstance()->GetCustomerClasses();
-		
+
 		// The call wasn't successful
 		if (!$Response_GetCustomerClassList->Success)
 		{
 			// Write to log
-			PlentymarketsLogger::getInstance()->error('Import:Customer:Class', 'Customer classes could not be retrieved');
-			
+			PlentymarketsLogger::getInstance()->error('Import:Customer:Class', 'Customer classes could not be retrieved', 1513);
+
 			// Return old data
 			return unserialize(PlentymarketsConfig::getInstance()->getMiscCustomerClassSerialized('a:0:{}'));
 		}
-		
+
 		// Prepare data
 		$customerClassList = array();
 		foreach ($Response_GetCustomerClassList->CustomerClasses->item as $CustomerClass)
 		{
 			$CustomerClass instanceof PlentySoapObject_GetCustomerClasses;
-			
+
 			// Skip "Visible to everyone"
 			if ($CustomerClass->CustomerClassID == 0)
 			{
 				continue;
 			}
-			
+
 			$customerClassList[$CustomerClass->CustomerClassID] = array(
 				'id' => (integer) $CustomerClass->CustomerClassID,
 				'name' => $CustomerClass->CustomerClassName
 			);
 		}
-		
+
 		// Delete non active plentymarkets customer classes from mapping table:
 		if (count($customerClassList))
 		{
@@ -473,12 +473,12 @@ class PlentymarketsImportController
 		if (!$Response_GetWarehouseList->Success)
 		{
 			// Write to log
-			PlentymarketsLogger::getInstance()->error('Import:Item:Warehouse', 'Warehouses could not be retrieved');
+			PlentymarketsLogger::getInstance()->error('Import:Item:Warehouse', 'Warehouses could not be retrieved', 1514);
 
 			// Return old data
 			return unserialize(PlentymarketsConfig::getInstance()->getMiscWarehousesSerialized('a:0:{}'));
 		}
-		
+
 		// Prepare data
 		$warehouses = array(
 			array(
@@ -522,12 +522,12 @@ class PlentymarketsImportController
 		if (!$Response_GetMultiShops->Success)
 		{
 			// Write to log
-			PlentymarketsLogger::getInstance()->error('Import:Store', 'Stores could not be retrieved');
-			
+			PlentymarketsLogger::getInstance()->error('Import:Store', 'Stores could not be retrieved', 1515);
+
 			// Return old data
 			return unserialize(PlentymarketsConfig::getInstance()->getMiscMultishopsSerialized('a:0:{}'));
 		}
-		
+
 		// Prepare data
 		$multishops = array();
 		foreach ($Response_GetMultiShops->MultiShops->item as $Multishop)
@@ -571,17 +571,17 @@ class PlentymarketsImportController
 
 		//
 		$Response_GetShippingServiceProvider = PlentymarketsSoapClient::getInstance()->GetShippingServiceProvider();
-		
+
 		// The call wasn't successful
 		if (!$Response_GetShippingServiceProvider->Success)
 		{
 			// Write to log
-			PlentymarketsLogger::getInstance()->error('Import:ShippingProfile', 'Shipping providers could not be retrieved');
-			
+			PlentymarketsLogger::getInstance()->error('Import:ShippingProfile', 'Shipping providers could not be retrieved', 1516);
+
 			// Return old data
 			return unserialize(PlentymarketsConfig::getInstance()->getMiscShippingProfilesSerialized('a:0:{}'));
 		}
-		
+
 		// Prepeare providers
 		$providers = array();
 		foreach ($Response_GetShippingServiceProvider->ShippingServiceProvider->item as $ShippingServiceProvider)
@@ -597,12 +597,12 @@ class PlentymarketsImportController
 		if (!$Response_GetShippingProfiles->Success)
 		{
 			// Write to log
-			PlentymarketsLogger::getInstance()->error('Import:ShippingProfile', 'Shipping profiles could not be retrieved');
-		
+			PlentymarketsLogger::getInstance()->error('Import:ShippingProfile', 'Shipping profiles could not be retrieved', 1517);
+
 			// Return old data
 			return unserialize(PlentymarketsConfig::getInstance()->getMiscShippingProfilesSerialized('a:0:{}'));
 		}
-		
+
 		$shippingProfiles = array();
 		foreach ($Response_GetShippingProfiles->ShippingProfiles->item as $ShippingProfile)
 		{
@@ -612,7 +612,7 @@ class PlentymarketsImportController
 				'name' => '[' . $providers[$ShippingProfile->ShippingServiceProviderID] . '] ' . $ShippingProfile->BackendName
 			);
 		}
-		
+
 		// Delete non active plentymarkets shipping profiles from mapping table:
 		if (count($shippingProfiles))
 		{
@@ -649,12 +649,12 @@ class PlentymarketsImportController
 		if (!$Response_GetVATConfig->Success)
 		{
 			// Write to log
-			PlentymarketsLogger::getInstance()->error('Import:VAT', 'VAT could not be retrieved');
-		
+			PlentymarketsLogger::getInstance()->error('Import:VAT', 'VAT could not be retrieved', 1518);
+
 			// Return old data
 			return unserialize(PlentymarketsConfig::getInstance()->getMiscVatSerialized('a:0:{}'));
 		}
-		
+
 		// Prepare data
 		$vat = array();
 		foreach ($Response_GetVATConfig->DefaultVAT->item as $VAT)
@@ -671,7 +671,7 @@ class PlentymarketsImportController
 				'name' => $VAT->VATValue . ' %'
 			);
 		}
-		
+
 		// Delete non active plentymarkets VATs from mapping table:
 		if (count($vat))
 		{
