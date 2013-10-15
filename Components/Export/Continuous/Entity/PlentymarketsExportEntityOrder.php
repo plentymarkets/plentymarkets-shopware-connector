@@ -166,7 +166,7 @@ class PlentymarketsExportEntityOrder
 			$this->setError(self::CODE_ERROR_CUSTOMER);
 
 			// Throw another exception
-			throw new PlentymarketsExportEntityException('The order with the number »' . $this->order['number'] . ' could not be exported (' . $E->getMessage() . ')', 4100);
+			throw new PlentymarketsExportEntityException('The order with the number »' . $this->order['number'] . '« could not be exported (' . $E->getMessage() . ')', 4100);
 		}
 
 		//
@@ -200,7 +200,7 @@ class PlentymarketsExportEntityOrder
 			$this->setError(self::CODE_ERROR_MOP);
 
 			// Quit
-			throw new PlentymarketsExportEntityException('The order with the number »' . $this->order['number'] . ' could not be exported (no mapping for method of payment)', 4030);
+			throw new PlentymarketsExportEntityException('The order with the number »' . $this->order['number'] . '« could not be exported (no mapping for method of payment)', 4030);
 		}
 
 		// Shipping costs
@@ -369,7 +369,7 @@ class PlentymarketsExportEntityOrder
 		{
 			// Set the error end quit
 			$this->setError(self::CODE_ERROR_SOAP);
-			throw new PlentymarketsExportEntityException('The order with the number »' . $this->order['number'] . ' could not be exported', 4010);
+			throw new PlentymarketsExportEntityException('The order with the number »' . $this->order['number'] . '« could not be exported', 4010);
 		}
 
 		//
@@ -398,7 +398,7 @@ class PlentymarketsExportEntityOrder
 		{
 			// Set the error end quit
 			$this->setError(self::CODE_ERROR_SOAP);
-			throw new PlentymarketsExportEntityException('The order with the number »' . $this->order['number'] . ' could not be exported (no order id or order status respectively)', 4020);
+			throw new PlentymarketsExportEntityException('The order with the number »' . $this->order['number'] . '« could not be exported (no order id or order status respectively)', 4020);
 		}
 
 		// Directly book the incomming payment
@@ -440,7 +440,7 @@ class PlentymarketsExportEntityOrder
 	 */
 	protected function setSuccess($plentyOrderID, $plentyOrderStatus)
 	{
-		PlentymarketsLogger::getInstance()->message('Export:Order', 'The sales order with the id ' . $this->order['id'] . ' has been created in plentymakets (id: ' . $plentyOrderID . ', status: ' . $plentyOrderStatus . ')');
+		PlentymarketsLogger::getInstance()->message('Export:Order', 'The sales order with the number  »' . $this->order['number'] . '« has been created in plentymakets (id: ' . $plentyOrderID . ', status: ' . $plentyOrderStatus . ')');
 
 		Shopware()->Db()
 			->prepare('
