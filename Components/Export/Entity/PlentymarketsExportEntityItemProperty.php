@@ -177,6 +177,8 @@ class PlentymarketsExportEntityItemProperty
 					{
 						$Request_AddProperty->PropertyFrontendName = $Property->getName();
 						$Request_AddProperty->PropertyBackendName = $Property->getName();
+						$Request_AddProperty->ShowOnItemPage = 1;
+						$Request_AddProperty->ShowInItemList = 1;
 						$Request_AddProperty->PropertyType = 'text';
 
 						$Response_AddProperty = PlentymarketsSoapClient::getInstance()->AddProperty($Request_AddProperty);
