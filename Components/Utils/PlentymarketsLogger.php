@@ -31,7 +31,7 @@
  * The main functionality of this class is to log error messages or other messages. Both error messages and other messages are
  * defined in two groups, soap log messages and all other messages. This class is used in the most classes of the plentymarkets
  * plugin.
- * 
+ *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 class PlentymarketsLogger
@@ -48,9 +48,9 @@ class PlentymarketsLogger
 	 * @var integer
 	 */
 	const TYPE_MESSAGE = 2;
-	
+
 	/**
-	 * 
+	 *
 	 * @var string
 	 */
 	const PREFIX_UPDATE = 'Update';
@@ -78,7 +78,8 @@ class PlentymarketsLogger
 					`timestamp` = UNIX_TIMESTAMP(),
 					type = ?,
 					identifier = ?,
-					message = ?
+					message = ?,
+					code = ?
 		');
 	}
 
@@ -107,17 +108,17 @@ class PlentymarketsLogger
 	public function get($start, $limit, $type = 0, $filter = '')
 	{
 		$where = 'WHERE 1';
-		
+
 		if ($type > 0)
 		{
 			$where .= ' AND type = ' . (integer) $type;
 		}
-		
+
 		if (strlen($filter) > 4)
 		{
 			$where .= ' AND identifier LIKE "'. $filter .'"';
 		}
-		
+
 
 		$limit = ' LIMIT ' . $start . ', ' . $limit;
 
@@ -137,7 +138,7 @@ class PlentymarketsLogger
 			')->fetchColumn(0)
 		);
 	}
-	
+
 	/**
 	 * Returns all identifiers
 	 * @return array
@@ -158,13 +159,21 @@ class PlentymarketsLogger
 	 * @param integer $type
 	 * @param string $identifier
 	 * @param string $message
+	 * @param integer $code
 	 */
-	protected function log($type, $identifier, $message)
+	protected function log($type, $identifier, $message, $code=null)
 	{
+		if (is_array($message))
+		{
+			$format = array_shift($message);
+			$message = vsprintf($format, $message);
+		}
+
 		$this->StatementInsert->execute(array(
 			$type,
 			$identifier,
-			$message
+			$message,
+			$code
 		));
 	}
 
@@ -173,10 +182,11 @@ class PlentymarketsLogger
 	 *
 	 * @param string $identifier
 	 * @param string $message
+	 * @param integer $code
 	 */
-	public function error($identifier, $message)
+	public function error($identifier, $message, $code=1000)
 	{
-		$this->log(self::TYPE_ERROR, $identifier, $message);
+		$this->log(self::TYPE_ERROR, $identifier, $message, $code);
 	}
 
 	/**
