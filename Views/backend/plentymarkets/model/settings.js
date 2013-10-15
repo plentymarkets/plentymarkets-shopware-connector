@@ -30,6 +30,10 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		name: 'ApiStatus',
 		type: 'integer'
 	}, {
+		name: 'ApiIgnoreGetServerTime',
+		type: 'boolean',
+		defaultValue: false
+	}, {
 		name: 'ApiUseGzipCompression',
 		type: 'boolean',
 		defaultValue: false

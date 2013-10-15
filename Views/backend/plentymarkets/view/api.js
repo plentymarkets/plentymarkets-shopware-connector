@@ -151,6 +151,13 @@ Ext.define('Shopware.apps.Plentymarkets.view.Api', {
 			},
 			items: [{
 				xtype: 'checkbox',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ApiIgnoreGetServerTime}GetServerTime nicht loggen{/s}',
+				supportText: 'Aktivieren, wenn der SOAP Call GetServerTime nicht geloggt werden soll.',
+				name: 'ApiIgnoreGetServerTime',
+				inputValue: true,
+				uncheckedValue: false,
+			}, {
+				xtype: 'checkbox',
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ApiUseGzipCompression}Anfragen komprimieren{/s}',
 				supportText: 'Aktivieren, wenn die SOAP Responses gzip komprimiert empfangen werden können.',
 				name: 'ApiUseGzipCompression',

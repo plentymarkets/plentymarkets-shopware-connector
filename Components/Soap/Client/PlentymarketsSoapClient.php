@@ -296,7 +296,17 @@ class PlentymarketsSoapClient extends SoapClient
 		// Log the call's success state
 		if (isset($Response->Success) && $Response->Success == true)
 		{
-			PlentymarketsLogger::getInstance()->message('Soap:Call', $call . ' success');
+			if ($call == 'GetServerTime')
+			{
+				if (!$this->Config->getApiIgnoreGetServerTime())
+				{
+					PlentymarketsLogger::getInstance()->message('Soap:Call', 'GetServerTime success');
+				}
+			}
+			else
+			{
+				PlentymarketsLogger::getInstance()->message('Soap:Call', $call . ' success');
+			}
 
 			// Remember the timestamp
 			if (!empty($this->timestampConfigKey))
