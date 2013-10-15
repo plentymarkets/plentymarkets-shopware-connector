@@ -128,12 +128,12 @@ class PlentymarketsExportWizard
 		}
 		catch (PlentymarketsExportException $E)
 		{
-			PlentymarketsLogger::getInstance()->error('Export:Initial:Wizard', $E->getMessage());
+			PlentymarketsLogger::getInstance()->error('Export:Initial:Wizard', $E->getMessage(), $E->getCode());
 			$this->deactivate();
 		}
 		catch (PlentymarketsExportStatusException $E)
 		{
-			PlentymarketsLogger::getInstance()->error('Export:Initial:Wizard', 'No entity to announce');
+			PlentymarketsLogger::getInstance()->error('Export:Initial:Wizard', $E->getMessage(), $E->getCode());
 			$this->deactivate();
 		}
 	}
