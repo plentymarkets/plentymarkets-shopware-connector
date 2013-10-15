@@ -3,23 +3,23 @@ require_once PY_SOAP . 'Models/PlentySoapRequest/GetItemsByStoreID.php';
 
 /**
  * Responsible for all clean up processes
- * 
+ *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 class PlentymarketsGarbageCollector
 {
 	/**
-	 * 
+	 *
 	 * @var integer
 	 */
 	const ITEM_ACTION_DEACTIVATE = 1;
-	
+
 	/**
-	 * 
+	 *
 	 * @var integer
 	 */
 	const ITEM_ACTION_DELETE = 2;
-	
+
 	/**
 	 * Global cleanup of the mapped data
 	 */
@@ -44,43 +44,43 @@ class PlentymarketsGarbageCollector
 			'plenty_mapping_shop' => array('id', 's_core_shops'),
 			'plenty_mapping_vat' => array('id', 's_core_tax')
 		);
-		
+
 		foreach ($dirty as $mappingTable => $target)
 		{
 			Shopware()->Db()->exec('
 				DELETE FROM ' . $mappingTable . ' WHERE shopwareID NOT IN (SELECT ' . $target[0] . ' FROM ' . $target[1] . ');
 			');
 		}
-		
+
 		// Delete non-active methods of payment
 		Shopware()->Db()->exec('
 			DELETE FROM plenty_mapping_method_of_payment WHERE shopwareID IN (SELECT id FROM s_core_paymentmeans WHERE active = 0)
 		');
-		
+
 		// Delete non-active shipping profiles
 		Shopware()->Db()->exec('
 			DELETE FROM plenty_mapping_shipping_profile WHERE shopwareID IN (SELECT id FROM s_premium_dispatch WHERE active = 0)
 		');
-		
+
 		// Delete non-active shops
 		Shopware()->Db()->exec('
 			DELETE FROM plenty_mapping_shop WHERE shopwareID IN (SELECT id FROM s_core_shops WHERE active = 0)
 		');
-		
+
 		// Delete non-active partners/referrers
 		Shopware()->Db()->exec('
 			DELETE FROM plenty_mapping_referrer WHERE shopwareID IN (SELECT id FROM s_emarketing_partner WHERE active = 0)
 		');
-		
+
 		// Log
 		Shopware()->Db()->exec('
 			DELETE FROM plenty_log WHERE `timestamp` < '. strtotime('-1 month') .'
 		');
 	}
-	
+
 	/**
 	 * Either deletes or deactivates all shopware item that
-	 * are not associated with the store id configured. 
+	 * are not associated with the store id configured.
 	 */
 	public function pruneItems()
 	{
@@ -90,61 +90,61 @@ class PlentymarketsGarbageCollector
 				(itemId INT UNSIGNED, INDEX (itemId))
 				ENGINE = MEMORY;
 		');
-		
+
 		// Get the data from plentymarkets (for every mapped shop)
 		$shopIds = Shopware()->Db()->fetchAll('
 			SELECT plentyID FROM plenty_mapping_shop
 		');
-		
+
 		foreach ($shopIds as $shopId)
 		{
-			
+
 			$Request_GetItemsByStoreID = new PlentySoapRequest_GetItemsByStoreID();
 			$Request_GetItemsByStoreID->Page = 0;
 			$Request_GetItemsByStoreID->StoreID = $shopId['plentyID'];
-				
+
 			do {
-				
+
 				// Do the request
 				$Response_GetItemsByStoreID = PlentymarketsSoapClient::getInstance()->GetItemsByStoreID($Request_GetItemsByStoreID);
-	
+
 				$itemIds = array();
 				foreach ($Response_GetItemsByStoreID->Items->item as $ItemByStoreID)
 				{
 					$itemIds[] = $ItemByStoreID->intValue;
 				}
-				
+
 				if (empty($itemIds))
 				{
 					break;
 				}
-				
+
 				// Build the sql statement
 				$itemsIdsSql = implode(', ', array_map(function ($itemId)
 				{
 					return sprintf('(%u)', $itemId);
 				}, $itemIds));
-				
+
 				// Fill the table
 				Shopware()->Db()->exec('
 					INSERT IGNORE INTO plenty_cleanup_item VALUES ' . $itemsIdsSql . '
 				');
-			
+
 			}
-			
+
 			// Until all pages are received
 			while (++$Request_GetItemsByStoreID->Page < $Response_GetItemsByStoreID->Pages);
 		}
-		
+
 		// Get the action
 		$actionId = PlentymarketsConfig::getInstance()->getItemCleanupActionID(self::ITEM_ACTION_DEACTIVATE);
-		
+
 		$where = '';
 		if ($actionId == self::ITEM_ACTION_DEACTIVATE)
 		{
 			$where = ' AND s_articles.active = 1';
 		}
-		
+
 		// Get all items, that are neither in the cleanup nor the mapping table
 		$Result = Shopware()->Db()->fetchAll('
 			SELECT
@@ -156,10 +156,10 @@ class PlentymarketsGarbageCollector
 							FROM plenty_cleanup_item pci
 							LEFT JOIN plenty_mapping_item pmi ON pmi.plentyID = pci.itemId
 							WHERE pmi.shopwareID IS NOT NULL
-					
+
 					) '. $where .'
 		');
-		
+
 		//
 		$ArticleResource = \Shopware\Components\Api\Manager::getResource('Article');
 
@@ -169,7 +169,7 @@ class PlentymarketsGarbageCollector
 			if ($actionId == self::ITEM_ACTION_DEACTIVATE)
 			{
 				$itemData = $ArticleResource->getOne($item['id']);
-				
+
 				// Variant
 				if (isset($itemData['details']) && !empty($itemData['details']))
 				{
@@ -178,14 +178,14 @@ class PlentymarketsGarbageCollector
 					{
 						continue;
 					}
-					
+
 					$update = array(
 						'mainDetail' => array(
 							'active' => 0
 						),
 						'variants' => array()
 					);
-					
+
 					foreach ($itemData['details'] as $variant)
 					{
 						$update['variants'][] = array(
@@ -194,7 +194,7 @@ class PlentymarketsGarbageCollector
 						);
 					}
 				}
-				
+
 				// Base item
 				else
 				{
@@ -203,7 +203,7 @@ class PlentymarketsGarbageCollector
 					{
 						continue;
 					}
-					
+
 					$update = array(
 						'active' => false
 					);
@@ -211,31 +211,29 @@ class PlentymarketsGarbageCollector
 				try
 				{
 					$ArticleResource->update($item['id'], $update);
-					PlentymarketsLogger::getInstance()->message('Cleanup:Item', 'Deactivating the item with the id ' . $item['id']);
+					PlentymarketsLogger::getInstance()->message('Cleanup:Item', 'The item with the number »' . $itemData['mainDetail']['number'] . '« will be deactivated');
 				}
-				catch (Exception $e)
+				catch (Exception $E)
 				{
-					PlentymarketsLogger::getInstance()->error('Cleanup:Item', 'The item with the id ' . $item['id'] . ' could not be deactivated');
-					PlentymarketsLogger::getInstance()->error('Cleanup:Item', get_class($e) . ': ' . $e->getMessage());
+					PlentymarketsLogger::getInstance()->error('Cleanup:Item', 'The item with the number »' . $itemData['mainDetail']['number'] . '« could not be deactivated (' . $E->getMessage() . ')', 1410);
 				}
 			}
-			
+
 			else if ($actionId == self::ITEM_ACTION_DELETE)
 			{
 				try
 				{
 					$ArticleResource->delete($item['id']);
-					PlentymarketsLogger::getInstance()->message('Cleanup:Item', 'Deleting the item with the id ' . $item['id']);
+					PlentymarketsLogger::getInstance()->message('Cleanup:Item', 'The item with the number »' . $itemData['mainDetail']['number'] . '« will be deleted');
 				}
 				catch (Exception $e)
 				{
-					PlentymarketsLogger::getInstance()->error('Cleanup:Item', 'The item with the id ' . $item['id'] . ' could not be deleted');
-					PlentymarketsLogger::getInstance()->error('Cleanup:Item', get_class($e) . ': ' . $e->getMessage());
+					PlentymarketsLogger::getInstance()->error('Cleanup:Item', 'The item with the number »' . $itemData['mainDetail']['number'] . '« could not be deleted (' . $E->getMessage() . ')', 1420);
 				}
 			}
-				
+
 		}
-		
+
 		// Delete the temporary table
 		Shopware()->Db()->exec('
 			DROP TEMPORARY TABLE plenty_cleanup_item

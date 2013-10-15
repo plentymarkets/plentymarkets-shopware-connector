@@ -277,7 +277,7 @@ class PlentymarketsSoapClient extends SoapClient
 				if ($E->getMessage() == 'Unauthorized Request - Invalid Token')
 				{
 					// Log the error
-					PlentymarketsLogger::getInstance()->error('Soap:Call', $call . ' failed: Unauthorized Request - Invalid Token');
+					PlentymarketsLogger::getInstance()->error('Soap:Call', $call . ' failed: Unauthorized Request - Invalid Token', 1110);
 
 					// Refresh the token
 					$this->getToken();
@@ -316,7 +316,7 @@ class PlentymarketsSoapClient extends SoapClient
 		}
 		else
 		{
-			PlentymarketsLogger::getInstance()->error('Soap:Call', $call . ' failed');
+			PlentymarketsLogger::getInstance()->error('Soap:Call', $call . ' failed', 1100);
 			if (isset($Response) && $this->Config->getApiLogHttpHeaders(false))
 			{
 				PlentymarketsLogger::getInstance()->error('Soap:Call', var_export($Response, true));
