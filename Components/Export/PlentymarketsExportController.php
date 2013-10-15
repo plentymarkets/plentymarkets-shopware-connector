@@ -289,8 +289,11 @@ class PlentymarketsExportController
 				case 'ItemAttribute':
 				case 'ItemProperty':
 				case 'ItemProducer':
-				case 'ItemCrossSelling':
 					$this->exportEntity($entity);
+					break;
+
+				case 'ItemCrossSelling':
+					$this->exportItemCrossSelling();
 					break;
 
 				// Items
@@ -352,6 +355,23 @@ class PlentymarketsExportController
 	{
 		require_once PY_COMPONENTS . 'Export/Controller/PlentymarketsExportControllerItem.php';
 		PlentymarketsExportControllerItem::getInstance()->run();
+	}
+
+	/**
+	 * Linkes all the items together
+	 */
+	protected function exportItemCrossSelling()
+	{
+		// Set running and start
+		$this->Config->setItemCrossSellingExportStatus('running');
+		$this->Config->setItemCrossSellingExportTimestampStart(time());
+
+		require_once PY_COMPONENTS . 'Export/Controller/PlentymarketsExportControllerItemCrossSelling.php';
+		PlentymarketsExportControllerItemCrossSelling::getInstance()->run();
+
+		// Finished
+		$this->Config->setItemCrossSellingExportTimestampFinished(time());
+		$this->Config->setItemCrossSellingExportStatus('success');
 	}
 
 	/**
