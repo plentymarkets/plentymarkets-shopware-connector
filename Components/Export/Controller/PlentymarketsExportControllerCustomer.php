@@ -21,7 +21,7 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, titles and interests in the
  * above trademarks remain entirely with the trademark owners.
- * 
+ *
  * @copyright Copyright (c) 2013, plentymarkets GmbH (http://www.plentymarkets.com)
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
@@ -31,7 +31,7 @@ require_once PY_COMPONENTS . 'Export/Entity/PlentymarketsExportEntityCustomer.ph
 
 /**
  * The class PlentymarketsExportControllerCustomer handles the item export.
- * 
+ *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 class PlentymarketsExportControllerCustomer
@@ -39,14 +39,14 @@ class PlentymarketsExportControllerCustomer
 
 	/**
 	 * PlentymarketsExportControllerCustomer object data.
-	 * 
+	 *
 	 * @var PlentymarketsExportControllerCustomer
 	 */
 	protected static $Instance;
 
 	/**
 	 * PlentymarketsConfig object data.
-	 * 
+	 *
 	 * @var PlentymarketsConfig
 	 */
 	protected $Config;
@@ -64,7 +64,7 @@ class PlentymarketsExportControllerCustomer
 	{
 		// Config
 		$this->Config = PlentymarketsConfig::getInstance();
-		
+
 		// Configure
 		$this->configure();
 	}
@@ -82,7 +82,7 @@ class PlentymarketsExportControllerCustomer
 	/**
 	 * If an instance of PlentymarketsExportControllerCustomer exists, it returns this instance.
 	 * Else it creates a new instance of PlentymarketsExportController.
-	 * 
+	 *
 	 * @return PlentymarketsExportControllerCustomer
 	 */
 	public static function getInstance()
@@ -101,13 +101,13 @@ class PlentymarketsExportControllerCustomer
 	{
 		// Set running
 		$this->Config->setCustomerExportStatus('running');
-		
+
 		// Start timestamp
 		$this->Config->setCustomerExportTimestampStart(time());
-		
+
 		// Export
 		$this->export();
-		
+
 		// Finish
 		$this->destruct();
 	}
@@ -128,24 +128,31 @@ class PlentymarketsExportControllerCustomer
 	{
 		// Repository
 		$Repository = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer');
-		
+
 		// Chunk configuration
 		$chunk = 0;
-		
+
 		do
 		{
-			
+
 			PlentymarketsLogger::getInstance()->message('Export:Initial:Customer', 'Chunk: ' . ($chunk + 1));
 			$Customers = $Repository->findBy(array(), null, $this->sizeOfChunk, $chunk * $this->sizeOfChunk);
-			
+
 			foreach ($Customers as $Customer)
 			{
 				$Customer instanceof Shopware\Models\Customer\Customer;
-				
-				$PlentymarketsExportEntityItem = new PlentymarketsExportEntityCustomer($Customer);
-				$PlentymarketsExportEntityItem->export();
+
+				try
+				{
+					$PlentymarketsExportEntityItem = new PlentymarketsExportEntityCustomer($Customer);
+					$PlentymarketsExportEntityItem->export();
+				}
+				catch (PlentymarketsExportEntityException $E)
+				{
+					PlentymarketsLogger::getInstance()->error('Export:Initial:Customer', $E->getMessage(), $E->getCode());
+				}
 			}
-			
+
 			++$chunk;
 		}
 		while (!empty($Customers) && count($Customers) == $this->sizeOfChunk);

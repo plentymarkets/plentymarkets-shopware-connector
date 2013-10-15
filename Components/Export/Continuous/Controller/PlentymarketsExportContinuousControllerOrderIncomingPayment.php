@@ -68,7 +68,7 @@ class PlentymarketsExportContinuousControllerOrderIncomingPayment
 			}
 			catch (PlentymarketsExportEntityException $E)
 			{
-				PlentymarketsLogger::getInstance()->error('Sync:Order:IncomingPayment', $E->getMessage());
+				PlentymarketsLogger::getInstance()->error('Sync:Order:IncomingPayment', $E->getMessage(), $E->getCode());
 			}
 		}
 

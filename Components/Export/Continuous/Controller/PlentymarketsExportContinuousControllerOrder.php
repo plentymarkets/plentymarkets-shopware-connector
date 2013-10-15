@@ -68,7 +68,7 @@ class PlentymarketsExportContinuousControllerOrder
 			}
 			catch (PlentymarketsExportEntityException $E)
 			{
-				PlentymarketsLogger::getInstance()->error('Export:Order', $E->getMessage());
+				PlentymarketsLogger::getInstance()->error('Export:Order', $E->getMessage(), $E->getCode());
 			}
 		}
 	}

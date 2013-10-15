@@ -155,23 +155,22 @@ class PlentymarketsExportEntityOrder
 		}
 
 		//
-		$PlentymarketsExportEntityOrderCustomer = new PlentymarketsExportEntityCustomer($Customer, $Billing, $Shipping);
-		$PlentymarketsExportEntityOrderCustomer->export();
-
-		//
-		$this->PLENTY_customerID = $PlentymarketsExportEntityOrderCustomer->getPlentyCustomerID();
-
-		// Customer could not be created
-		if ((integer) $this->PLENTY_customerID <= 0)
+		try
+		{
+			$PlentymarketsExportEntityOrderCustomer = new PlentymarketsExportEntityCustomer($Customer, $Billing, $Shipping);
+			$PlentymarketsExportEntityOrderCustomer->export();
+		}
+		catch (PlentymarketsExportEntityException $E)
 		{
 			// Save the error
 			$this->setError(self::CODE_ERROR_CUSTOMER);
 
-			// Quit
-			throw new PlentymarketsExportEntityException('Cannot export the order ' . $this->order['id'] . ' because the customer could not be exported');
+			// Throw another exception
+			throw new PlentymarketsExportEntityException('The order with the number »' . $this->order['number'] . ' could not be exported (' . $E->getMessage() . ')', 4100);
 		}
 
 		//
+		$this->PLENTY_customerID = $PlentymarketsExportEntityOrderCustomer->getPlentyCustomerID();
 		$this->PLENTY_addressDispatchID = $PlentymarketsExportEntityOrderCustomer->getPlentyAddressDispatchID();
 	}
 
@@ -201,7 +200,7 @@ class PlentymarketsExportEntityOrder
 			$this->setError(self::CODE_ERROR_MOP);
 
 			// Quit
-			throw new PlentymarketsExportEntityException('Cannot export the order ' . $this->order['id'] . ' because there is no mapping for this method of payment.');
+			throw new PlentymarketsExportEntityException('The order with the number »' . $this->order['number'] . ' could not be exported (no mapping for method of payment)', 4030);
 		}
 
 		// Shipping costs
@@ -370,7 +369,7 @@ class PlentymarketsExportEntityOrder
 		{
 			// Set the error end quit
 			$this->setError(self::CODE_ERROR_SOAP);
-			throw new PlentymarketsExportEntityException('Cannot export the order ' . $this->order['id'] . ' (the SOAP call was not successful)');
+			throw new PlentymarketsExportEntityException('The order with the number »' . $this->order['number'] . ' could not be exported', 4010);
 		}
 
 		//
@@ -399,7 +398,7 @@ class PlentymarketsExportEntityOrder
 		{
 			// Set the error end quit
 			$this->setError(self::CODE_ERROR_SOAP);
-			throw new PlentymarketsExportEntityException('Cannot export the order ' . $this->order['id'] . ' (did not retrieve order id or order status respectively)');
+			throw new PlentymarketsExportEntityException('The order with the number »' . $this->order['number'] . ' could not be exported (no order id or order status respectively)', 4020);
 		}
 
 		// Directly book the incomming payment

@@ -28,6 +28,7 @@
 
 require_once PY_SOAP . 'Models/PlentySoapObject/AddIncomingPayments.php';
 require_once PY_SOAP . 'Models/PlentySoapRequest/AddIncomingPayments.php';
+require_once PY_COMPONENTS . 'Export/Entity/PlentymarketsExportEntityCustomer.php';
 require_once PY_COMPONENTS . 'Export/PlentymarketsExportEntityException.php';
 
 /**
@@ -71,7 +72,7 @@ class PlentymarketsExportEntityOrderIncomingPayment
 		}
 		catch (\Shopware\Components\Api\Exception\NotFoundException $E)
 		{
-			throw new PlentymarketsExportEntityException('The incoming payment could not be booked in plentymarkets because the shopware sales order (' . $orderID . ') wasn\'t found.');
+			throw new PlentymarketsExportEntityException('The incoming payment of the order with the id »' . $orderID . '« could not be booked (order not found)', 4110);
 		}
 
 		$Result = Shopware()->Db()->query('
@@ -86,11 +87,11 @@ class PlentymarketsExportEntityOrderIncomingPayment
 		$plentyOrder = $Result->fetchObject();
 		if (!is_object($plentyOrder) || (integer) $plentyOrder->plentyOrderId <= 0)
 		{
-			throw new PlentymarketsExportEntityException('The incoming payment could not be booked in plentymarkets because the sales order (' . $this->order['id'] . ') was not yet exported to plentymarkets.');
+			throw new PlentymarketsExportEntityException('The incoming payment of the order with the number »' . $this->order['number'] . '« could not be booked (order was not yet exported)', 4120);
 		}
 		if (!is_null($plentyOrder->plentyOrderPaidTimestamp))
 		{
-			throw new PlentymarketsExportEntityException('The incoming payment of the sales order ' . $this->order['id'] . ' has already been exported to plentymarkets.');
+			throw new PlentymarketsExportEntityException('The incoming payment of the order with the number »' . $this->order['number'] . '« could not be booked (has already been exported)', 4130);
 		}
 
 		$this->plentyOrder = $plentyOrder;
@@ -138,7 +139,7 @@ class PlentymarketsExportEntityOrderIncomingPayment
 		// Check for success
 		if ($Response_AddIncomingPayments->Success)
 		{
-			PlentymarketsLogger::getInstance()->message('Sync:Order:IncomingPayment', 'The incoming payment of the sales order ' . $this->order['id'] . ' was booked in plentymarkets.');
+			PlentymarketsLogger::getInstance()->message('Sync:Order:IncomingPayment', 'The incoming payment of the order with the number »' . $this->order['number'] . '« was booked');
 			Shopware()->Db()->query('
 					UPDATE plenty_order
 						SET
@@ -151,7 +152,7 @@ class PlentymarketsExportEntityOrderIncomingPayment
 		}
 		else
 		{
-			throw new PlentymarketsExportEntityException('The incoming payment of the sales order ' . $this->order['id'] . ' was not booked in plentymarkets.');
+			throw new PlentymarketsExportEntityException('The incoming payment of the order with the number »' . $this->order['number'] . '« could not be booked', 4140);
 		}
 	}
 
@@ -176,20 +177,18 @@ class PlentymarketsExportEntityOrderIncomingPayment
 		$Customer = Shopware()->Models()->find('Shopware\Models\Customer\Customer', $this->order['customerId']);
 		$BillingAddress = Shopware()->Models()->find('Shopware\Models\Order\Billing', $this->order['billing']['id']);
 
-		// Export
-		require_once PY_COMPONENTS . 'Export/Entity/PlentymarketsExportEntityCustomer.php';
-		$PlentymarketsExportEntityCustomer = new PlentymarketsExportEntityCustomer($Customer, $BillingAddress);
-		$PlentymarketsExportEntityCustomer->export();
-
-		// Workaround - Exception should come directly from the above export
 		try
+		// Export
 		{
-			return PlentymarketsMappingController::getCustomerByShopwareID($this->order['billing']['id']);
+			$PlentymarketsExportEntityCustomer = new PlentymarketsExportEntityCustomer($Customer, $BillingAddress);
+			$PlentymarketsExportEntityCustomer->export();
 		}
-		catch (PlentymarketsMappingExceptionNotExistant $E)
+		catch (PlentymarketsExportEntityException $E)
 		{
-			throw new PlentymarketsExportEntityException('The incoming payment of the sales order ' . $this->order['id'] . ' was not booked in plentymarkets because the customer id mapping is missing');
+			throw new PlentymarketsExportEntityException('The incoming payment of the order with the number »' . $this->order['number'] . '« could not be booked (' . $E->getMessage() . ')', 4150);
 		}
+
+		return PlentymarketsMappingController::getCustomerByShopwareID($this->order['billing']['id']);
 	}
 
 	/**

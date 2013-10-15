@@ -32,10 +32,11 @@ require_once PY_SOAP . 'Models/PlentySoapObject/CustomerFreeTestFields.php';
 require_once PY_SOAP . 'Models/PlentySoapObject/AddCustomerDeliveryAddressesCustomer.php';
 require_once PY_SOAP . 'Models/PlentySoapRequest/AddCustomers.php';
 require_once PY_SOAP . 'Models/PlentySoapRequest/AddCustomerDeliveryAddresses.php';
+require_once PY_COMPONENTS . 'Export/PlentymarketsExportEntityException.php';
 
 /**
- * PlentymarketsExportEntityCustomer provides the actual customer export funcionality. Like the other export 
- * entities this class is called in PlentymarketsExportController. It is important to deliver the correct customer 
+ * PlentymarketsExportEntityCustomer provides the actual customer export funcionality. Like the other export
+ * entities this class is called in PlentymarketsExportController. It is important to deliver the correct customer
  * model to the constructor method of this class, which you can find at \Shopware\Models\Customer\Customer.
  * The data export takes place based on plentymarkets SOAP-calls.
  *
@@ -49,15 +50,15 @@ class PlentymarketsExportEntityCustomer
 	 * @var \Shopware\Models\Customer\Customer
 	 */
 	protected $Customer;
-	
+
 	/**
-	 * 
+	 *
 	 * @var unknown
 	 */
 	protected $BillingAddress;
-	
+
 	/**
-	 * 
+	 *
 	 * @var unknown
 	 */
 	protected $ShippingAddress;
@@ -147,9 +148,9 @@ class PlentymarketsExportEntityCustomer
 	{
 		if (is_null($this->BillingAddress))
 		{
-			return;
+			throw new PlentymarketsExportEntityException('The customer with the email address »' . $this->Customer->getEmail() . '« could not be exported (no billing address)', 2100);
 		}
-		
+
 		try
 		{
 			if ($this->BillingAddress instanceof \Shopware\Models\Customer\Billing)
@@ -160,19 +161,16 @@ class PlentymarketsExportEntityCustomer
 			{
 				$this->PLENTY_customerID = PlentymarketsMappingController::getCustomerByShopwareID($this->BillingAddress->getId());
 			}
+
+			// Already exported
+			return;
 		}
 		catch (PlentymarketsMappingExceptionNotExistant $E)
 		{
 		}
-		
-		// Already exported
-		if ($this->PLENTY_customerID)
-		{
-			return;
-		}
-		
+
 		// Logging
-		PlentymarketsLogger::getInstance()->message('Export:Customer', $this->Customer->getEmail() . ' (' . $this->getCustomerNumber() . ')');
+		PlentymarketsLogger::getInstance()->message('Export:Customer', 'Export of the customer with the number »' . $this->getCustomerNumber() . '«');
 
 		$Request_AddCustomers = new PlentySoapRequest_AddCustomers();
 
@@ -198,7 +196,7 @@ class PlentymarketsExportEntityCustomer
 		$Object_AddCustomersCustomer->Telephone = $this->BillingAddress->getPhone();
 		$Object_AddCustomersCustomer->VAT_ID = $this->BillingAddress->getVatId();
 		$Object_AddCustomersCustomer->ZIP = $this->BillingAddress->getZipCode();
-		
+
 		// Store id
 		try
 		{
@@ -219,8 +217,8 @@ class PlentymarketsExportEntityCustomer
 			{
 			}
 		}
-		
-		// todo: Language
+
+		// Language
 		$Object_AddCustomersCustomer->Language = $this->getLanguage();
 
 		if ($this->BillingAddress->getAttribute() != null)
@@ -239,10 +237,15 @@ class PlentymarketsExportEntityCustomer
 
 		$Response_AddCustomers = PlentymarketsSoapClient::getInstance()->AddCustomers($Request_AddCustomers);
 
+		if (!$Response_AddCustomers->Success)
+		{
+			throw new PlentymarketsExportEntityException('The customer with the number »' . $this->getCustomerNumber() . '« could not be exported', 2110);
+		}
+
 		if ($Response_AddCustomers->ResponseMessages->item[0]->Code == 100 || $Response_AddCustomers->ResponseMessages->item[0]->Code == 200)
 		{
 			$this->PLENTY_customerID = (integer) $Response_AddCustomers->ResponseMessages->item[0]->SuccessMessages->item[0]->Value;
-			
+
 			if ($this->BillingAddress instanceof \Shopware\Models\Customer\Billing)
 			{
 				PlentymarketsMappingController::addCustomerBillingAddress($this->BillingAddress->getId(), $this->PLENTY_customerID);
@@ -290,6 +293,11 @@ class PlentymarketsExportEntityCustomer
 
 		$Response_AddCustomerDeliveryAddresses = PlentymarketsSoapClient::getInstance()->AddCustomerDeliveryAddresses($Request_AddCustomerDeliveryAddresses);
 
+		if (!$Response_AddCustomerDeliveryAddresses->Success)
+		{
+			throw new PlentymarketsExportEntityException('The delivery address of the customer with the number »' . $this->getCustomerNumber() . '« could not be exported', 2120);
+		}
+
 		$this->PLENTY_addressDispatchID = (integer) $Response_AddCustomerDeliveryAddresses->ResponseMessages->item[0]->SuccessMessages->item[0]->Value;
 	}
 
@@ -326,7 +334,7 @@ class PlentymarketsExportEntityCustomer
 			return self::getCountryID($this->BillingAddress->getCountry()->getId());
 		}
 	}
-	
+
 	/**
 	 * Returns the country id for the billing address
 	 *
