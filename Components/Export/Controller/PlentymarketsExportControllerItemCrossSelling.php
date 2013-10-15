@@ -29,21 +29,44 @@
 require_once PY_COMPONENTS . 'Export/Entity/PlentymarketsExportEntityItemLinked.php';
 
 /**
- * PlentymarketsExportEntityItemCrossSelling handles the export of the cross selling
+ * PlentymarketsExportControllerItemCrossSelling handles the export of the cross selling
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
-class PlentymarketsExportEntityItemCrossSelling
+class PlentymarketsExportControllerItemCrossSelling
 {
+
 	/**
-	 * Build the index and export the missing data to plentymarkets
+	 * PlentymarketsExportControllerItemCrossSelling object data.
+	 *
+	 * @var PlentymarketsExportControllerItemCrossSelling
 	 */
-	public function export()
+	protected static $Instance;
+
+	/**
+	 * If an instance of PlentymarketsExportControllerItemCrossSelling exists, it returns this instance.
+	 * Else it creates a new instance of PlentymarketsExportControllerItemCrossSelling.
+	 *
+	 * @return PlentymarketsExportControllerItemCrossSelling
+	 */
+	public static function getInstance()
+	{
+		if (!self::$Instance instanceof self)
+		{
+			self::$Instance = new self();
+		}
+		return self::$Instance;
+	}
+
+	/**
+	 * Links all the items together
+	 */
+	public function run()
 	{
 		$itemsToLink = Shopware()->Db()->fetchAll('
 			SELECT shopwareID FROM plenty_mapping_item
 		');
-		
+
 		// Crosselling
 		foreach ($itemsToLink as $item)
 		{
