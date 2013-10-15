@@ -29,6 +29,7 @@
 require_once PY_SOAP . 'Models/PlentySoapObject/Producer.php';
 require_once PY_SOAP . 'Models/PlentySoapRequest/SetProducers.php';
 require_once PY_SOAP . 'Models/PlentySoapObject/GetProducers.php';
+require_once PY_COMPONENTS . 'Export/PlentymarketsExportException.php';
 
 /**
  * PlentymarketsExportEntityItemProducer provides the actual items export funcionality. Like the other export
@@ -55,7 +56,7 @@ class PlentymarketsExportEntityItemProducer
 
 		if (!$Response_GetProducers->Success)
 		{
-			throw new \Exception('Cannot fetch Producers');
+			throw new PlentymarketsExportException('The item producers could not be retrieved', 2930);
 		}
 
 		foreach ($Response_GetProducers->Producers->item as $Producer)

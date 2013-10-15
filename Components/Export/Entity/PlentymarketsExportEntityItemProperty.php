@@ -31,6 +31,7 @@ require_once PY_SOAP . 'Models/PlentySoapObject/GetPropertiesListPropertie.php';
 require_once PY_SOAP . 'Models/PlentySoapRequest/GetPropertiesList.php';
 require_once PY_SOAP . 'Models/PlentySoapRequest/AddPropertyGroup.php';
 require_once PY_SOAP . 'Models/PlentySoapRequest/AddProperty.php';
+require_once PY_COMPONENTS . 'Export/PlentymarketsExportException.php';
 
 /**
  * PlentymarketsExportEntityItemProperty provides the actual items export funcionality. Like the other export
@@ -76,7 +77,7 @@ class PlentymarketsExportEntityItemProperty
 
 		if (!$Response_GetPropertiesList->Success)
 		{
-			throw new \Exception('Cannot fetch PropertiesList');
+			throw new PlentymarketsExportException('The item properties could not be retrieved', 2940);
 		}
 
 		foreach ($Response_GetPropertiesList->PropertyGroups->item as $PropertyGroup)
@@ -138,7 +139,7 @@ class PlentymarketsExportEntityItemProperty
 
 					if (!$Response->Success)
 					{
-						throw new \Exception('Cannot export property group "'. $Request_AddPropertyGroup->BackendName .'"');
+						throw new PlentymarketsExportException('The item property group »'. $Request_AddPropertyGroup->BackendName .'« could not be exported', 2941);
 					}
 
 					$groupIdAdded = (integer) $Response->ResponseMessages->item[0]->SuccessMessages->item[0]->Value;
@@ -185,7 +186,7 @@ class PlentymarketsExportEntityItemProperty
 
 						if (!$Response_AddProperty->Success)
 						{
-							throw new \Exception('Cannot export property "'. $Request_AddProperty->PropertyBackendName .'"');
+							throw new PlentymarketsExportException('The item property »'. $Request_AddProperty->PropertyBackendName .'« could not be created', 2942);
 						}
 
 						$propertyIdAdded = (integer) $Response_AddProperty->ResponseMessages->item[0]->SuccessMessages->item[0]->Value;

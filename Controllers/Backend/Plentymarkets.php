@@ -429,7 +429,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 
 			$success = true;
 		}
-		catch (\Exception $E)
+		catch (PlentymarketsExportException $E)
 		{
 			$success = false;
 			$message = $E->getMessage();
@@ -438,9 +438,9 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 			PlentymarketsConfig::getInstance()->$method('error');
 
 			$method = sprintf('set%sExportLastErrorMessage', $params['name']);
-			PlentymarketsConfig::getInstance()->$method($E->getMessage());
+			PlentymarketsConfig::getInstance()->$method($message);
 
-			PlentymarketsLogger::getInstance()->error('Export:Initial:' . ucfirst($params['name']), 'Announcement failed: ' . $message);
+			PlentymarketsLogger::getInstance()->error('Export:Initial:' . ucfirst($params['name']), $message, $E->getCode());
 		}
 
 		$settings = $this->getExportStatusList();

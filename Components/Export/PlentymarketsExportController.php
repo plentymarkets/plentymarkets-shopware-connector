@@ -207,31 +207,31 @@ class PlentymarketsExportController
 	{
 		if ($this->isRunning == true)
 		{
-			throw new PlentymarketsExportException('Another export is running at this very moment');
+			throw new PlentymarketsExportException('Another export is running at this very moment', 2510);
 		}
 
 		// Check whether another export is waiting to be executed
 		$waiting = $this->Config->getExportEntityPending(false);
 		if ($waiting == $entity)
 		{
-			throw new PlentymarketsExportException('The export of entity ' . $entity . ' has already announced');
+			throw new PlentymarketsExportException('The export has already been announced', 2530);
 		}
 
 		if ($waiting != false)
 		{
-			throw new PlentymarketsExportException('Another export is waiting to be carried out');
+			throw new PlentymarketsExportException('Another export is waiting to be carried out', 2540);
 		}
 
 		// Check whether settings and mapping is complete
 		if ($this->mayRun == false)
 		{
-			throw new PlentymarketsExportException('Either the mapping or the settings are not finished');
+			throw new PlentymarketsExportException('Either the mapping or the settings is not finished', 2520);
 		}
 
 		// Check whether or not the order is correct
 		if (!$this->StatusController->mayAnnounceEntity($entity))
 		{
-			throw new PlentymarketsExportException($entity . ' cannot be announced right now');
+			throw new PlentymarketsExportException('The announcement could not be performed right now', 2550);
 		}
 
 		//
@@ -253,13 +253,13 @@ class PlentymarketsExportController
 	{
 		if ($this->isRunning == true)
 		{
-			throw new PlentymarketsExportException('Another export is running at this very moment');
+			throw new PlentymarketsExportException('Another export is running at this very moment', 2510);
 		}
 
 		// Check whether settings and mapping is complete
 		if ($this->mayRun == false)
 		{
-			throw new PlentymarketsExportException('Either the mapping or the settings are not finished');
+			throw new PlentymarketsExportException('Either the mapping or the settings is not finished', 2520);
 		}
 
 		$entity = $this->Config->getExportEntityPending(false);
@@ -306,9 +306,9 @@ class PlentymarketsExportController
 
 			PlentymarketsLogger::getInstance()->message('Export:Initial:' . $entity, 'Done!');
 		}
-		catch (Exception $E)
+		catch (PlentymarketsExportException $E)
 		{
-			PlentymarketsLogger::getInstance()->error('Export:Initial:' . $entity, $E->getMessage());
+			PlentymarketsLogger::getInstance()->error('Export:Initial:' . $entity, $E->getMessage(), $E->getCode());
 
 			$method = sprintf('set%sExportLastErrorMessage', $entity);
 			$this->Config->$method($E->getMessage());

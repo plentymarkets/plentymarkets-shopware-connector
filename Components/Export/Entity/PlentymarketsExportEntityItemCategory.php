@@ -29,6 +29,7 @@
 require_once PY_SOAP . 'Models/PlentySoapObject/GetItemCategoryCatalogBase.php';
 require_once PY_SOAP . 'Models/PlentySoapRequest/GetItemCategoryCatalogBase.php';
 require_once PY_SOAP . 'Models/PlentySoapRequest/AddItemCategory.php';
+require_once PY_COMPONENTS . 'Export/PlentymarketsExportException.php';
 
 /**
  * PlentymarketsExportEntityItemCategory provides the actual items export funcionality. Like the other export
@@ -81,7 +82,7 @@ class PlentymarketsExportEntityItemCategory
 
 			if (!$Response_GetItemCategoryCatalogBase->Success)
 			{
-				throw new \Exception('Cannot fetch ItemCategoryCatalogBase page ' . $Request_GetItemCategoryCatalogBase->Page);
+				throw new PlentymarketsExportException('The item category catalog page »'. $Request_GetItemCategoryCatalogBase->Page .'« could not be retrieved', 2920);
 			}
 
 			foreach ($Response_GetItemCategoryCatalogBase->Categories->item as $Category)
@@ -136,7 +137,7 @@ class PlentymarketsExportEntityItemCategory
 			$rootId = end($path);
 			if (!in_array($rootId, $categoryRootIds))
 			{
-				PlentymarketsLogger::getInstance()->message('Export:Initial:Category', 'Skipping category '. $Category->getName() . ' ('. $Category->getId() .') since it is not connected to a shop.');
+				PlentymarketsLogger::getInstance()->error('Export:Initial:Category', 'The item category »'. $Category->getName() . '« with the id »'. $Category->getId() .'« will be skipped (not connected to a shop)', 2921);
 				continue;
 			}
 
@@ -165,7 +166,7 @@ class PlentymarketsExportEntityItemCategory
 
 				if (!$Response_AddItemCategory->Success)
 				{
-					throw new \Exception('Cannot export category (de) "'. $Request_AddItemCategory->Name .'"');
+					throw new PlentymarketsExportException('The item category »'. $Request_AddItemCategory->Name .'« could not be exported', 2922);
 				}
 
 				$categoryIdAdded = (integer) $Response_AddItemCategory->ResponseMessages->item[0]->SuccessMessages->item[0]->Value;
@@ -190,7 +191,7 @@ class PlentymarketsExportEntityItemCategory
 
 					if (!$Response_AddItemCategory->Success)
 					{
-						throw new \Exception('Cannot export category ('. $additionalLanguage .') "'. $Request_AddItemCategory->Name .'"');
+						throw new PlentymarketsExportException('The item category »'. $Request_AddItemCategory->Name .'« could not be exported', 2923);
 					}
 				}
 			}

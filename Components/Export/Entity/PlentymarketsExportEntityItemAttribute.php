@@ -32,6 +32,7 @@ require_once PY_SOAP . 'Models/PlentySoapRequest/GetItemAttributes.php';
 require_once PY_SOAP . 'Models/PlentySoapObject/AddItemAttribute.php';
 require_once PY_SOAP . 'Models/PlentySoapObject/AddItemAttributeValue.php';
 require_once PY_SOAP . 'Models/PlentySoapRequest/AddItemAttribute.php';
+require_once PY_COMPONENTS . 'Export/PlentymarketsExportException.php';
 
 /**
  * PlentymarketsExportEntityItemAttribute provides the actual items export funcionality. Like the other export
@@ -74,7 +75,7 @@ class PlentymarketsExportEntityItemAttribute
 
 		if (!$Response_GetItemAttributes->Success)
 		{
-			throw new \Exception('Cannot fetch ItemAttributes');
+			throw new PlentymarketsExportException('The item attributes could not be retrieved', 2910);
 		}
 
 		foreach ($Response_GetItemAttributes->Attributes->item as $Attribute)
@@ -144,7 +145,7 @@ class PlentymarketsExportEntityItemAttribute
 
 						if (!$Response->Success)
 						{
-							throw new \Exception('Cannot export attribute "'. $Object_AddItemAttribute->BackendName .'"');
+							throw new PlentymarketsExportException('The item attribute »'. $Object_AddItemAttribute->BackendName .'« could not be created', 2911);
 						}
 
 						$attributeIdAdded = (integer) $Response->ResponseMessages->item[0]->SuccessMessages->item[0]->Value;
@@ -191,7 +192,7 @@ class PlentymarketsExportEntityItemAttribute
 
 							if (!$Response->Success)
 							{
-								throw new \Exception('Cannot export attribute option "' . $Object_AddItemAttributeValue->BackendName . '"');
+								throw new PlentymarketsExportException('The item attribute option »'. $Object_AddItemAttributeValue->BackendName .'« could not be created', 2912);
 							}
 
 							foreach ($Response->ResponseMessages->item[0]->SuccessMessages->item as $MessageItem)

@@ -54,6 +54,7 @@ require_once PY_SOAP . 'Models/PlentySoapRequest/SetAttributeValueSetsDetails.ph
 require_once PY_SOAP . 'Models/PlentySoapRequest/SetStoreCategories.php';
 require_once PY_SOAP . 'Models/PlentySoapObject/SetStoreCategory.php';
 require_once PY_COMPONENTS . 'Utils/PlentymarketsUtils.php';
+require_once PY_COMPONENTS . 'Export/PlentymarketsExportException.php';
 require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingController.php';
 
 /**
@@ -131,7 +132,7 @@ class PlentymarketsExportEntityItem
 
 		if (!$ItemDetails instanceof \Shopware\Models\Article\Detail)
 		{
-			throw new \Exception('Item "' . $this->SHOPWARE_Article->getName() . '" (' . $this->SHOPWARE_Article->getId() . ') could not be exported (no Article\Detail)');
+			throw new PlentymarketsExportException('The item »' . $this->SHOPWARE_Article->getName() . '« with the id »' . $this->SHOPWARE_Article->getId() . '« could not be exported (no main detail)', 2810);
 		}
 
 		// Release date
@@ -169,7 +170,7 @@ class PlentymarketsExportEntityItem
 			}
 			catch (PlentymarketsMappingExceptionNotExistant $E)
 			{
-				PlentymarketsLogger::getInstance()->error('Export:Initial:Item', 'ItemId ' . $Item->getId() . ': Skipping category with id ' . $Category->getId());
+				PlentymarketsLogger::getInstance()->error('Export:Initial:Item', 'The category »' . $Category->getName() . '« with the id »' . $Category->getId() . '« will not be assigned to the item with the number »' . $ItemDetails->getNumber() . '«', 2820);
 				continue;
 			}
 
@@ -227,7 +228,7 @@ class PlentymarketsExportEntityItem
 
 		if (!$Response_AddItemsBase->Success || $ResponseMessage->Code != 100)
 		{
-			throw new \Exception('Item "' . $this->SHOPWARE_Article->getName() . '" (' . $this->SHOPWARE_Article->getId() . ') could not be exported (success/100)');
+			throw new PlentymarketsExportException('The item with the number »' . $ItemDetails->getNumber() . '« could not be exported', 2800);
 		}
 
 		foreach ($ResponseMessage->SuccessMessages->item as $SubMessage)
@@ -244,12 +245,12 @@ class PlentymarketsExportEntityItem
 
 		if ($this->PLENTY_itemID && $this->PLENTY_priceID)
 		{
-			PlentymarketsLogger::getInstance()->message('Export:Initial:Item', 'ItemId ' . $Item->getId() . ': Item created (ItemId: ' . $this->PLENTY_itemID . ', PriceId: ' . $this->PLENTY_priceID . ')');
+			PlentymarketsLogger::getInstance()->message('Export:Initial:Item', 'The item with the number »' . $ItemDetails->getNumber() . '« has been created (ItemId: ' . $this->PLENTY_itemID . ', PriceId: ' . $this->PLENTY_priceID . ')');
 			PlentymarketsMappingController::addItem($Item->getId(), $this->PLENTY_itemID);
 		}
 		else
 		{
-			throw new \Exception('Item "' . $this->SHOPWARE_Article->getName() . '" (' . $this->SHOPWARE_Article->getId() . ') could not be exported (did not recieve item ID and price ID)');
+			throw new PlentymarketsExportException('The item with the number »' . $ItemDetails->getNumber() . '« could not be exported (no item ID and price ID respectively)', 2830);
 		}
 	}
 
@@ -298,7 +299,7 @@ class PlentymarketsExportEntityItem
 			$ImageMedia = $Image->getMedia();
 			if (is_null($ImageMedia))
 			{
-				PlentymarketsLogger::getInstance()->error('Export:Initial:Item:Image', 'ItemId ' . $this->SHOPWARE_Article->getId() . ': Skipping image with id ' . $Image->getId() . ' because there is no media associated');
+				PlentymarketsLogger::getInstance()->error('Export:Initial:Item:Image', 'The image with the id »' . $Image->getId() . '« could not be added to the item with the number »' . $this->SHOPWARE_Article->getMainDetail()->getNumber(). '« (no media associated)', 2850);
 				continue;
 			}
 			$ImageMedia instanceof Shopware\Models\Media\Media;
@@ -309,8 +310,7 @@ class PlentymarketsExportEntityItem
 			}
 			catch (Exception $E)
 			{
-				PlentymarketsLogger::getInstance()->error('Export:Initial:Item:Image', 'ItemId ' . $this->SHOPWARE_Article->getId() . ': Skipping image with id ' . $Image->getId());
-				PlentymarketsLogger::getInstance()->error('Export:Initial:Item:Image', $E->getMessage());
+				PlentymarketsLogger::getInstance()->error('Export:Initial:Item:Image', 'The image with the id »' . $Image->getId() . '« could not be added to the item with the number »' . $this->SHOPWARE_Article->getMainDetail()->getNumber() . '« (' . $E->getMessage() . ')', 2860);
 				continue;
 			}
 
@@ -534,7 +534,7 @@ class PlentymarketsExportEntityItem
 			}
 			catch (PlentymarketsMappingExceptionNotExistant $E)
 			{
-				PlentymarketsLogger::getInstance()->error('Export:Initial:Item:Property', 'Cannot connect property' . $PropertyGroup->getName() . ' (' . $PropertyGroup->getId() . ') / ' . $PropertyOption->getName() . ' (' . $PropertyOption->getId() . ') with the item ' . $this->SHOPWARE_Article->getId());
+				PlentymarketsLogger::getInstance()->error('Export:Initial:Item:Property', 'The property »' . $PropertyGroup->getName() . ' → ' . $PropertyOption->getName() .'« could not be added to the item with the number »' . $this->SHOPWARE_Article->getMainDetail()->getNumber() . '«', 2870);
 				continue;
 			}
 
@@ -648,8 +648,7 @@ class PlentymarketsExportEntityItem
 			}
 			catch (PlentymarketsMappingExceptionNotExistant $E)
 			{
-				PlentymarketsLogger::getInstance()->error('Export:Initial:Item:Variant', 'ItemId ' . $this->SHOPWARE_Article->getId() . ': Skipping corrupt variant with id ' . $ItemVariation->getId());
-				continue;
+				throw new PlentymarketsExportException('The item variation with the number »' . $ItemVariation->getNumber() . '« could not be created (corrupt data)', 2880);
 			}
 
 			$Object_SetAttributeValueSetsDetails = new PlentySoapObject_SetAttributeValueSetsDetails();
