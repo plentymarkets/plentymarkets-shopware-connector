@@ -169,12 +169,18 @@ class PlentymarketsLogger
 			$message = vsprintf($format, $message);
 		}
 
-		$this->StatementInsert->execute(array(
-			$type,
-			$identifier,
-			$message,
-			$code
-		));
+		try
+		{
+			$this->StatementInsert->execute(array(
+				$type,
+				$identifier,
+				$message,
+				$code
+			));
+		}
+		catch (Exception $E)
+		{
+		}
 	}
 
 	/**
