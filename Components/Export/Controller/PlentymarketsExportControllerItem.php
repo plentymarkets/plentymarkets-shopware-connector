@@ -216,6 +216,11 @@ class PlentymarketsExportControllerItem
 		while (!empty($items) && count($items) == $this->sizeOfChunk);
 	}
 
+	/**
+	 * Checks whether the export is finshed
+	 *
+	 * @return boolean
+	 */
 	public function isFinished()
 	{
 		return !$this->toBeContinued;
