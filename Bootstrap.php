@@ -272,6 +272,22 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 			}
 		}
 
+		if (version_compare($version, '1.4.12') !== 1)
+		{
+			try
+			{
+				Shopware()->Db()->exec("
+					ALTER TABLE `plenty_log` ADD `code` INT  UNSIGNED  NULL  DEFAULT NULL  AFTER `message`;
+				");
+
+				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'ALTER TABLE `plenty_log` ADD `code` done');
+			}
+			catch (Exception $E)
+			{
+				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'ALTER TABLE `plenty_log` ADD `code` already carried out');
+			}
+		}
+
 		//
 		PlentymarketsConfig::getInstance()->setConnectorVersion($this->getVersion());
 
@@ -365,6 +381,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 			  `identifier` varchar(100) NOT NULL DEFAULT '',
 			  `type` tinyint(4) unsigned NOT NULL,
 			  `message` text NOT NULL,
+			  `code` int(10) unsigned DEFAULT NULL,
 			  PRIMARY KEY (`id`),
 			  KEY `type` (`type`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;

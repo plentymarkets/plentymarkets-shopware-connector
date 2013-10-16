@@ -25,6 +25,9 @@ Ext.define('Shopware.apps.Plentymarkets.model.Log', {
 		name: 'type',
 		type: 'integer'
 	}, {
+		name: 'code',
+		type: 'integer'
+	}, {
 		name: 'identifier',
 		type: 'string'
 	}, {
