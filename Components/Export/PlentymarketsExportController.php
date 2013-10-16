@@ -270,9 +270,12 @@ class PlentymarketsExportController
 			return;
 		}
 
+		//
+		$Status = $this->StatusController->getEntity($entity);
+
 		// Set the running flag and delete the last call timestmap
-		$this->Config->eraseExportEntityPending();
 		$this->Config->setIsExportRunning(1);
+		$this->Config->eraseExportEntityPending();
 		$this->Config->eraseInitialExportLastCallTimestamp();
 
 		PlentymarketsSoapClient::getInstance()->setTimestampConfigKey('InitialExportLastCallTimestamp');
@@ -313,11 +316,7 @@ class PlentymarketsExportController
 		{
 			PlentymarketsLogger::getInstance()->error('Export:Initial:' . $entity, $E->getMessage(), $E->getCode());
 
-			$method = sprintf('set%sExportLastErrorMessage', $entity);
-			$this->Config->$method($E->getMessage());
-
-			$method = sprintf('set%sExportStatus', $entity);
-			$this->Config->$method('error');
+			$Status->setError($E->getMessage());
 		}
 
 		PlentymarketsSoapClient::getInstance()->setTimestampConfigKey(null);

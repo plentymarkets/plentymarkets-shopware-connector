@@ -324,6 +324,8 @@ class PlentymarketsExportStatus implements PlentymarketsExportStatusInterface
 	 */
 	public function setError($error)
 	{
+		$this->setStatus(self::STATUS_ERROR);
+
 		$method = sprintf('set%sExportLastErrorMessage', $this->name);
 		PlentymarketsConfig::getInstance()->$method($error);
 	}

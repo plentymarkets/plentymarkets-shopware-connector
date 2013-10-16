@@ -152,6 +152,17 @@ class PlentymarketsExportStatusController
 	}
 
 	/**
+	 * Returns an entity
+	 *
+	 * @param string $entity
+	 * @return PlentymarketsExportStatusInterface
+	 */
+	public function getEntity($entity)
+	{
+		return $this->Status[$entity];
+	}
+
+	/**
 	 * Returns the next entity to be announced
 	 *
 	 * @throws PlentymarketsExportStatusException if there is no announceable entity
