@@ -36,14 +36,6 @@ require_once PY_COMPONENTS . 'Export/Entity/PlentymarketsExportEntityCustomer.ph
  */
 class PlentymarketsExportControllerCustomer
 {
-
-	/**
-	 * PlentymarketsExportControllerCustomer object data.
-	 *
-	 * @var PlentymarketsExportControllerCustomer
-	 */
-	protected static $Instance;
-
 	/**
 	 * PlentymarketsConfig object data.
 	 *
@@ -60,7 +52,7 @@ class PlentymarketsExportControllerCustomer
 	/**
 	 * Prepares config data and checks different conditions like finished mapping.
 	 */
-	protected function __construct()
+	public function __construct()
 	{
 		// Config
 		$this->Config = PlentymarketsConfig::getInstance();
@@ -70,46 +62,12 @@ class PlentymarketsExportControllerCustomer
 	}
 
 	/**
-	 * Sets the current status
-	 */
-	protected function destruct()
-	{
-		// Set success
-		$this->Config->setCustomerExportTimestampFinished(time());
-		$this->Config->setCustomerExportStatus('success');
-	}
-
-	/**
-	 * If an instance of PlentymarketsExportControllerCustomer exists, it returns this instance.
-	 * Else it creates a new instance of PlentymarketsExportController.
-	 *
-	 * @return PlentymarketsExportControllerCustomer
-	 */
-	public static function getInstance()
-	{
-		if (!self::$Instance instanceof self)
-		{
-			self::$Instance = new self();
-		}
-		return self::$Instance;
-	}
-
-	/**
 	 * Runs the actual export of the items
 	 */
 	public function run()
 	{
-		// Set running
-		$this->Config->setCustomerExportStatus('running');
-
-		// Start timestamp
-		$this->Config->setCustomerExportTimestampStart(time());
-
 		// Export
 		$this->export();
-
-		// Finish
-		$this->destruct();
 	}
 
 	/**
@@ -119,6 +77,16 @@ class PlentymarketsExportControllerCustomer
 	{
 		// Items per chunk
 		$this->sizeOfChunk = (integer) PlentymarketsConfig::getInstance()->getInitialExportChunkSize(PlentymarketsExportController::DEFAULT_CHUNK_SIZE);
+	}
+
+	/**
+	 * Checks whether the export is finshed
+	 *
+	 * @return boolean
+	 */
+	public function isFinished()
+	{
+		return true;
 	}
 
 	/**

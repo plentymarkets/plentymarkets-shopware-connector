@@ -37,28 +37,6 @@ class PlentymarketsExportControllerItemCrossSelling
 {
 
 	/**
-	 * PlentymarketsExportControllerItemCrossSelling object data.
-	 *
-	 * @var PlentymarketsExportControllerItemCrossSelling
-	 */
-	protected static $Instance;
-
-	/**
-	 * If an instance of PlentymarketsExportControllerItemCrossSelling exists, it returns this instance.
-	 * Else it creates a new instance of PlentymarketsExportControllerItemCrossSelling.
-	 *
-	 * @return PlentymarketsExportControllerItemCrossSelling
-	 */
-	public static function getInstance()
-	{
-		if (!self::$Instance instanceof self)
-		{
-			self::$Instance = new self();
-		}
-		return self::$Instance;
-	}
-
-	/**
 	 * Links all the items together
 	 */
 	public function run()
@@ -75,6 +53,11 @@ class PlentymarketsExportControllerItemCrossSelling
 			);
 			$PlentymarketsExportEntityItem->link();
 		}
+	}
+
+	public function isFinished()
+	{
+		return true;
 	}
 
 }

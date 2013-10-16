@@ -32,13 +32,13 @@ require_once PY_SOAP . 'Models/PlentySoapRequest/AddItemCategory.php';
 require_once PY_COMPONENTS . 'Export/PlentymarketsExportException.php';
 
 /**
- * PlentymarketsExportEntityItemCategory provides the actual items export funcionality. Like the other export
+ * PlentymarketsExportControllerItemCategory provides the actual items export funcionality. Like the other export
  * entities this class is called in PlentymarketsExportController.
  * The data export takes place based on plentymarkets SOAP-calls.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
-class PlentymarketsExportEntityItemCategory
+class PlentymarketsExportControllerItemCategory
 {
 
 	/**
@@ -56,7 +56,7 @@ class PlentymarketsExportEntityItemCategory
 	/**
 	 * Build the index and export the missing data to plentymarkets
 	 */
-	public function export()
+	public function run()
 	{
 		$this->buildPlentyNameAndLevelIndex();
 		$this->doExport();
@@ -335,5 +335,15 @@ class PlentymarketsExportEntityItemCategory
 				}
 			}
 		}
+	}
+
+	/**
+	 * Checks whether the export is finshed
+	 *
+	 * @return boolean
+	 */
+	public function isFinished()
+	{
+		return true;
 	}
 }

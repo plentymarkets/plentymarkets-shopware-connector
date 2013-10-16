@@ -34,13 +34,13 @@ require_once PY_SOAP . 'Models/PlentySoapRequest/AddProperty.php';
 require_once PY_COMPONENTS . 'Export/PlentymarketsExportException.php';
 
 /**
- * PlentymarketsExportEntityItemProperty provides the actual items export funcionality. Like the other export
+ * PlentymarketsExportControllerItemProperty provides the actual items export funcionality. Like the other export
  * entities this class is called in PlentymarketsExportController.
  * The data export takes place based on plentymarkets SOAP-calls.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
-class PlentymarketsExportEntityItemProperty
+class PlentymarketsExportControllerItemProperty
 {
 
 	/**
@@ -58,7 +58,7 @@ class PlentymarketsExportEntityItemProperty
 	/**
 	 * Created an index of the plentymarkets data and exports the missing
 	 */
-	public function export()
+	public function run()
 	{
 		$this->buildPlentyIndex();
 		$this->doExport();
@@ -196,5 +196,15 @@ class PlentymarketsExportEntityItemProperty
 				}
 			}
 		}
+	}
+
+	/**
+	 * Checks whether the export is finshed
+	 *
+	 * @return boolean
+	 */
+	public function isFinished()
+	{
+		return true;
 	}
 }

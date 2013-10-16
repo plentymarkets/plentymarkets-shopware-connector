@@ -27,6 +27,7 @@
  */
 
 require_once PY_COMPONENTS . 'Export/PlentymarketsExportException.php';
+require_once PY_COMPONENTS . 'Export/Status/PlentymarketsExportStatus.php';
 require_once PY_COMPONENTS . 'Export/Status/PlentymarketsExportStatusController.php';
 
 /**
@@ -237,10 +238,11 @@ class PlentymarketsExportController
 		//
 		$this->Config->setExportEntityPending($entity);
 
+		//
 		$method = sprintf('set%sExportStatus', $entity);
 		$this->Config->$method('pending');
 
-		//
+		// Erase the timestamp of the latest export call
 		$this->Config->eraseInitialExportLastCallTimestamp();
 	}
 
@@ -262,6 +264,7 @@ class PlentymarketsExportController
 			throw new PlentymarketsExportException('Either the mapping or the settings is not finished', 2520);
 		}
 
+		// Get the pending entity
 		$entity = $this->Config->getExportEntityPending(false);
 
 		if ($entity == false)
@@ -270,56 +273,73 @@ class PlentymarketsExportController
 			return;
 		}
 
-		//
-		$Status = $this->StatusController->getEntity($entity);
-
-		// Set the running flag and delete the last call timestmap
+		// Set the running flag and delete the last call timestmap and the pending entity
 		$this->Config->setIsExportRunning(1);
 		$this->Config->eraseExportEntityPending();
 		$this->Config->eraseInitialExportLastCallTimestamp();
 
+		// Configure the SOAP client to log the timestamp of the calls from now on
 		PlentymarketsSoapClient::getInstance()->setTimestampConfigKey('InitialExportLastCallTimestamp');
 
-		//
+		// Log the start
 		PlentymarketsLogger::getInstance()->message('Export:Initial:' . $entity, 'Starting');
+
+		// Get the entity status object
+		$Status = $this->StatusController->getEntity($entity);
+
+		// Set running
+		$Status->setStatus(PlentymarketsExportStatus::STATUS_RUNNING);
+
+		// Set the start timestamp if that hasn't already been done
+		if ((integer) $Status->getStart() <= 0)
+		{
+			$Status->setStart(time());
+		}
 
 		try
 		{
-			switch ($entity)
+			// Get the controller
+			$class = sprintf('PlentymarketsExportController%s', $entity);
+			require_once PY_COMPONENTS . 'Export/Controller/'. $class .'.php';
+
+			// and run it
+			$Instance = new $class();
+			$Instance->run();
+
+			// Log that we are done
+			PlentymarketsLogger::getInstance()->message('Export:Initial:' . $entity, 'Done!');
+
+			// If the export is finished
+			if ($Instance->isFinished())
 			{
-				// Entities
-				case 'ItemCategory':
-				case 'ItemAttribute':
-				case 'ItemProperty':
-				case 'ItemProducer':
-					$this->exportEntity($entity);
-					break;
-
-				case 'ItemCrossSelling':
-					$this->exportItemCrossSelling();
-					break;
-
-				// Items
-				case 'Item':
-					$this->exportItems();
-					break;
-
-				// Customers
-				case 'Customer':
-					$this->exportCustomers();
-					break;
+				// set the success status and the finished timestamp
+				$Status->setStatus(PlentymarketsExportStatus::STATUS_SUCCESS);
+				$Status->setFinished(time());
+			}
+			else
+			{
+				// otherwise re-announce the entity for the next run
+				$this->Config->setExportEntityPending($Status->getName());
+				$Status->setStatus(PlentymarketsExportStatus::STATUS_PENDING);
 			}
 
-			PlentymarketsLogger::getInstance()->message('Export:Initial:' . $entity, 'Done!');
 		}
+
+		// On error
 		catch (PlentymarketsExportException $E)
 		{
+			// Log and save the error
 			PlentymarketsLogger::getInstance()->error('Export:Initial:' . $entity, $E->getMessage(), $E->getCode());
-
 			$Status->setError($E->getMessage());
 		}
 
+		// Reconfigure the soap client
 		PlentymarketsSoapClient::getInstance()->setTimestampConfigKey(null);
+
+		// Erase the timestamp of the latest export call
+		$this->Config->eraseInitialExportLastCallTimestamp();
+
+		// Reset the running flag
 		$this->Config->setIsExportRunning(0);
 	}
 
@@ -336,70 +356,5 @@ class PlentymarketsExportController
 			self::$Instance = new self();
 		}
 		return self::$Instance;
-	}
-
-	/**
-	 * Exports customer and delivery address items data.
-	 */
-	protected function exportCustomers()
-	{
-		require_once PY_COMPONENTS . 'Export/Controller/PlentymarketsExportControllerCustomer.php';
-		PlentymarketsExportControllerCustomer::getInstance()->run();
-	}
-
-	/**
-	 * Exports images, variants, properties item data and items base to make sure, that the corresponding items data exist.
-	 */
-	protected function exportItems()
-	{
-		require_once PY_COMPONENTS . 'Export/Controller/PlentymarketsExportControllerItem.php';
-		PlentymarketsExportControllerItem::getInstance()->run();
-	}
-
-	/**
-	 * Linkes all the items together
-	 */
-	protected function exportItemCrossSelling()
-	{
-		// Set running and start
-		$this->Config->setItemCrossSellingExportStatus('running');
-		$this->Config->setItemCrossSellingExportTimestampStart(time());
-
-		require_once PY_COMPONENTS . 'Export/Controller/PlentymarketsExportControllerItemCrossSelling.php';
-		PlentymarketsExportControllerItemCrossSelling::getInstance()->run();
-
-		// Finished
-		$this->Config->setItemCrossSellingExportTimestampFinished(time());
-		$this->Config->setItemCrossSellingExportStatus('success');
-	}
-
-	/**
-	 * Exports one Entity.
-	 *
-	 * @param string $entity
-	 */
-	protected function exportEntity($entity)
-	{
-		$class = sprintf('PlentymarketsExportEntity%s', $entity);
-
-		require_once PY_COMPONENTS . 'Export/Entity/' . $class . '.php';
-
-		// Set running
-		$methodStatus = sprintf('set%sExportStatus', $entity);
-		$this->Config->$methodStatus('running');
-
-		// Start
-		$methodStart = sprintf('set%sExportTimestampStart', $entity);
-		$this->Config->$methodStart(time());
-
-		// Run the export
-		$PlentymarketsExport = new $class();
-		$PlentymarketsExport->export();
-
-		// Finished
-		$methodStart = sprintf('set%sExportTimestampFinished', $entity);
-		$this->Config->$methodStart(time());
-
-		$this->Config->$methodStatus('success');
 	}
 }

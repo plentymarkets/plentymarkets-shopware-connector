@@ -32,13 +32,13 @@ require_once PY_SOAP . 'Models/PlentySoapObject/GetProducers.php';
 require_once PY_COMPONENTS . 'Export/PlentymarketsExportException.php';
 
 /**
- * PlentymarketsExportEntityItemProducer provides the actual items export funcionality. Like the other export
+ * PlentymarketsExportControllerItemProducer provides the actual items export funcionality. Like the other export
  * entities this class is called in PlentymarketsExportController.
  * The data export takes place based on plentymarkets SOAP-calls.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
-class PlentymarketsExportEntityItemProducer
+class PlentymarketsExportControllerItemProducer
 {
 
 	/**
@@ -68,7 +68,7 @@ class PlentymarketsExportEntityItemProducer
 	/**
 	 * Build the index and start the export
 	 */
-	public function export()
+	public function run()
 	{
 		// Index first
 		$this->buildPlentyNameIndex();
@@ -129,6 +129,15 @@ class PlentymarketsExportEntityItemProducer
 				);
 			}
 		}
+	}
 
+	/**
+	 * Checks whether the export is finshed
+	 *
+	 * @return boolean
+	 */
+	public function isFinished()
+	{
+		return true;
 	}
 }
