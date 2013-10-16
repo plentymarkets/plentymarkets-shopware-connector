@@ -177,7 +177,7 @@ class PlentymarketsExportStatusController
 				return $Status;
 			}
 		}
-		throw new PlentymarketsExportStatusException('No entity to announce', 2800);
+		throw new PlentymarketsExportStatusException('No entity to announce', 2010);
 	}
 
 	/**

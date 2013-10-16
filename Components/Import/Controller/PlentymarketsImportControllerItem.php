@@ -138,7 +138,7 @@ class PlentymarketsImportControllerItem
 
 		catch (Shopware\Components\Api\Exception\ValidationException $E)
 		{
-			PlentymarketsLogger::getInstance()->error('Sync:Item:Validation', 'The item »'. $ItemBase->Texts->Name .'" with the id »'. $ItemBase->ItemID .'« could not be imported', 3010);
+			PlentymarketsLogger::getInstance()->error('Sync:Item:Validation', 'The item »'. $ItemBase->Texts->Name .'« with the id »'. $ItemBase->ItemID .'« could not be imported', 3010);
 			foreach ($E->getViolations() as $ConstraintViolation)
 			{
 				PlentymarketsLogger::getInstance()->error('Sync:Item:Validation', $ConstraintViolation->getMessage());
@@ -156,7 +156,7 @@ class PlentymarketsImportControllerItem
 
 		catch (Exception $E)
 		{
-			PlentymarketsLogger::getInstance()->error('Sync:Item', 'The item »'. $ItemBase->Texts->Name .'" with the id »'. $ItemBase->ItemID .'« could not be imported', 3000);
+			PlentymarketsLogger::getInstance()->error('Sync:Item', 'The item »'. $ItemBase->Texts->Name .'« with the id »'. $ItemBase->ItemID .'« could not be imported', 3000);
 			PlentymarketsLogger::getInstance()->error('Sync:Item', get_class($E));
 			PlentymarketsLogger::getInstance()->error('Sync:Item', $E->getMessage());
 

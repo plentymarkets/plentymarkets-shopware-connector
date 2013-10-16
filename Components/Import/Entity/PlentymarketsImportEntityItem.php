@@ -302,13 +302,13 @@ class PlentymarketsImportEntityItem
 						// and check if the number is valid
 						if (!PlentymarketsImportItemHelper::isNumberValid($AttributeValueSet->ColliNo))
 						{
-							throw new PlentymarketsImportItemNumberException('The item variation number »' . $AttributeValueSet->ColliNo . '« of item »' . $this->data['name'] . '« (' . $this->ItemBase->ItemID . ') is invalid', 3110);
+							throw new PlentymarketsImportItemNumberException('The item variation number »' . $AttributeValueSet->ColliNo . '« of item »' . $this->data['name'] . '« with the id »' . $this->ItemBase->ItemID . '« is invalid', 3110);
 						}
 
 						// check if the number is available anyway
 						if (PlentymarketsImportItemHelper::isNumberExistant($AttributeValueSet->ColliNo))
 						{
-							throw new PlentymarketsImportItemNumberException('The item variation number »' . $AttributeValueSet->ColliNo . '« of item »' . $this->data['name'] . '« (' . $this->ItemBase->ItemID . ') is already in use', 3111);
+							throw new PlentymarketsImportItemNumberException('The item variation number »' . $AttributeValueSet->ColliNo . '« of item »' . $this->data['name'] . '« with the id »' . $this->ItemBase->ItemID . '« is already in use', 3111);
 						}
 
 						// Use this number
@@ -324,12 +324,12 @@ class PlentymarketsImportEntityItem
 					// Nummer ist ungültig oder in Benutzung
 					if (!PlentymarketsImportItemHelper::isNumberValid($AttributeValueSet->ColliNo))
 					{
-						throw new PlentymarketsImportItemNumberException('The item variation number »' . $AttributeValueSet->ColliNo . '« of item »' . $this->data['name'] . '« (' . $this->ItemBase->ItemID . ') is invalid', 3110);
+						throw new PlentymarketsImportItemNumberException('The item variation number »' . $AttributeValueSet->ColliNo . '« of item »' . $this->data['name'] . '« with the id »' . $this->ItemBase->ItemID . '« is invalid', 3110);
 					}
 
 					if (PlentymarketsImportItemHelper::isNumberExistant($AttributeValueSet->ColliNo))
 					{
-						throw new PlentymarketsImportItemNumberException('The item variation number »' . $AttributeValueSet->ColliNo . '« of item »' . $this->data['name'] . '« (' . $this->ItemBase->ItemID . ') is already in use', 3111);
+						throw new PlentymarketsImportItemNumberException('The item variation number »' . $AttributeValueSet->ColliNo . '« of item »' . $this->data['name'] . '« with the id »' . $this->ItemBase->ItemID . '« is already in use', 3111);
 					}
 
 					// Use this number
@@ -475,12 +475,12 @@ class PlentymarketsImportEntityItem
 
 			if (is_null($ItemProperty->PropertyGroupID))
 			{
-				PlentymarketsLogger::getInstance()->error('Sync:Item', 'The property ' . $ItemProperty->PropertyName . ' has been ignored since it is not assigned to any group (item id '. $this->ItemBase->ItemID .')', 3410);
+				PlentymarketsLogger::getInstance()->error('Sync:Item', 'The property »' . $ItemProperty->PropertyName . '« will not be assigned to the item »' . $this->data['name'] . '« with the id »' . $this->ItemBase->ItemID . '« (not assigned to any group)', 3410);
 			}
 
 			else if (!$ItemProperty->ShowOnItemPageInWebshop)
 			{
-				PlentymarketsLogger::getInstance()->error('Sync:Item', 'The property ' . $ItemProperty->PropertyName . ' has been ignored since it must not be shown on the item page (item id '. $this->ItemBase->ItemID .')', 3420);
+				PlentymarketsLogger::getInstance()->error('Sync:Item', 'The property »' . $ItemProperty->PropertyName . '« will not be assigned to the item »' . $this->data['name'] . '« with the id »' . $this->ItemBase->ItemID . '« (may not be shown on item page)', 3420);
 			}
 
 			else
@@ -491,7 +491,7 @@ class PlentymarketsImportEntityItem
 
 		if (empty($groups))
 		{
-			PlentymarketsLogger::getInstance()->error('Sync:Item', 'No property group will be assigned to item with the id '. $this->ItemBase->ItemID, 3430);
+			PlentymarketsLogger::getInstance()->error('Sync:Item', 'No property group will be assigned to the item »' . $this->data['name'] . '« with the id »' . $this->ItemBase->ItemID . '«', 3430);
 			return;
 		}
 
@@ -522,7 +522,7 @@ class PlentymarketsImportEntityItem
 			$filterGroupId = $group->getId();
 
 			PlentymarketsMappingController::addPropertyGroup($filterGroupId, $groupId);
-			PlentymarketsLogger::getInstance()->message('Sync:Item', 'The property group ' . $ItemProperty->PropertyGroupFrontendName . ' has been created');
+			PlentymarketsLogger::getInstance()->message('Sync:Item', 'The property group »' . $ItemProperty->PropertyGroupFrontendName . '« has been created');
 		}
 		// Properties
 
@@ -551,12 +551,12 @@ class PlentymarketsImportEntityItem
 				{
 					Shopware()->Models()->persist($Option);
 					Shopware()->Models()->flush();
-					PlentymarketsLogger::getInstance()->message('Sync:Item', 'The property ' . $ItemProperty->PropertyName . ' has been created');
+					PlentymarketsLogger::getInstance()->message('Sync:Item', 'The property »' . $ItemProperty->PropertyName . '« has been created');
 				}
 				catch (Exception $E)
 				{
 					//
-					PlentymarketsLogger::getInstance()->error('Sync:Item', 'The property ' . $ItemProperty->PropertyName . ' could not be created ('. $E->getMessage() .')', 3440);
+					PlentymarketsLogger::getInstance()->error('Sync:Item', 'The property »' . $ItemProperty->PropertyName . '« could not be created ('. $E->getMessage() .')', 3440);
 				}
 
 				if (!isset($group))
@@ -679,13 +679,13 @@ class PlentymarketsImportEntityItem
 					// and check if the number is valid
 					if (!PlentymarketsImportItemHelper::isNumberValid($this->ItemBase->ItemNo))
 					{
-						throw new PlentymarketsImportItemNumberException('The item number »' . $this->ItemBase->ItemNo . '« of item »' . $this->data['name'] . '« (' . $this->ItemBase->ItemID . ') is invalid', 3120);
+						throw new PlentymarketsImportItemNumberException('The item number »' . $this->ItemBase->ItemNo . '« of item »' . $this->data['name'] . '« with the id »' . $this->ItemBase->ItemID . '« is invalid', 3120);
 					}
 
 					// check if the number is available anyway
 					if (PlentymarketsImportItemHelper::isNumberExistant($this->ItemBase->ItemNo))
 					{
-						throw new PlentymarketsImportItemNumberException('The item number »' . $this->ItemBase->ItemNo . '« of item »' . $this->data['name'] . '« (' . $this->ItemBase->ItemID . ') is already in use', 3121);
+						throw new PlentymarketsImportItemNumberException('The item number »' . $this->ItemBase->ItemNo . '« of item »' . $this->data['name'] . '« with the id »' . $this->ItemBase->ItemID . '« is already in use', 3121);
 					}
 
 					// then update it
@@ -837,12 +837,12 @@ class PlentymarketsImportEntityItem
 					// Nummer ist ungültig oder in Benutzung
 					if (!PlentymarketsImportItemHelper::isNumberValid($this->ItemBase->ItemNo))
 					{
-						throw new PlentymarketsImportItemNumberException('The item number »' . $this->ItemBase->ItemNo . '« of item »' . $this->data['name'] . '« (' . $this->ItemBase->ItemID . ') is invalid', 3120);
+						throw new PlentymarketsImportItemNumberException('The item number »' . $this->ItemBase->ItemNo . '« of item »' . $this->data['name'] . '« with the id »' . $this->ItemBase->ItemID . '« is invalid', 3120);
 					}
 
 					if (PlentymarketsImportItemHelper::isNumberExistant($this->ItemBase->ItemNo))
 					{
-						throw new PlentymarketsImportItemNumberException('The item number »' . $this->ItemBase->ItemNo . '« of item »' . $this->data['name'] . '« (' . $this->ItemBase->ItemID . ') is already in use', 3121);
+						throw new PlentymarketsImportItemNumberException('The item number »' . $this->ItemBase->ItemNo . '« of item »' . $this->data['name'] . '« with the id »' . $this->ItemBase->ItemID . '« is already in use', 3121);
 					}
 
 					// Use this number
@@ -862,7 +862,7 @@ class PlentymarketsImportEntityItem
 				$SHOPWARE_itemID = $Article->getId();
 
 				// Log
-				PlentymarketsLogger::getInstance()->message('Sync:Item', 'Item »' . $this->data['name'] . '« created with number ' . $data['mainDetail']['number']);
+				PlentymarketsLogger::getInstance()->message('Sync:Item', 'Item »' . $this->data['name'] . '« created with number »' . $data['mainDetail']['number'] . '«');
 
 				// Mapping speichern
 				PlentymarketsMappingController::addItem($Article->getId(), $this->ItemBase->ItemID);
