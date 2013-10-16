@@ -226,7 +226,7 @@ class PlentymarketsGarbageCollector
 					$ArticleResource->delete($item['id']);
 					PlentymarketsLogger::getInstance()->message('Cleanup:Item', 'The item with the number »' . $itemData['mainDetail']['number'] . '« will be deleted');
 				}
-				catch (Exception $e)
+				catch (Exception $E)
 				{
 					PlentymarketsLogger::getInstance()->error('Cleanup:Item', 'The item with the number »' . $itemData['mainDetail']['number'] . '« could not be deleted (' . $E->getMessage() . ')', 1420);
 				}
