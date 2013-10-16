@@ -55,6 +55,11 @@ class PlentymarketsExportControllerItemCrossSelling
 		}
 	}
 
+	/**
+	 * Checks whether the export is finshed
+	 *
+	 * @return boolean
+	 */
 	public function isFinished()
 	{
 		return true;
