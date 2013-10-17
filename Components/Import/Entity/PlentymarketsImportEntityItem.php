@@ -824,8 +824,11 @@ class PlentymarketsImportEntityItem
 			}
 
 			// Bilder
-			$PlentymarketsImportEntityItemImage = new PlentymarketsImportEntityItemImage($this->ItemBase->ItemID, $SHOPWARE_itemID);
-			$PlentymarketsImportEntityItemImage->image();
+			if (PlentymarketsConfig::getInstance()->getItemImageSyncActionID(IMPORT_ITEM_IMAGE_SYNC) == IMPORT_ITEM_IMAGE_SYNC)
+			{
+				$PlentymarketsImportEntityItemImage = new PlentymarketsImportEntityItemImage($this->ItemBase->ItemID, $SHOPWARE_itemID);
+				$PlentymarketsImportEntityItemImage->image();
+			}
 		}
 
 		// Artikel muss importiert werden / Es ist kein Basisartikel
