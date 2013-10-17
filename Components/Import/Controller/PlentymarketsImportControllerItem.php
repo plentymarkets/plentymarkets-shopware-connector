@@ -30,6 +30,7 @@ require_once PY_SOAP . 'Models/PlentySoapObject/ItemBase.php';
 require_once PY_SOAP . 'Models/PlentySoapRequest/GetItemsBase.php';
 require_once PY_COMPONENTS . 'Import/Stack/PlentymarketsImportStackItem.php';
 require_once PY_COMPONENTS . 'Import/Controller/PlentymarketsImportControllerItemLinked.php';
+require_once PY_COMPONENTS . 'Import/Exception/PlentymarketsImportException.php';
 require_once PY_COMPONENTS . 'Import/Entity/PlentymarketsImportEntityItem.php';
 require_once PY_COMPONENTS . 'Import/Entity/PlentymarketsImportEntityItemStock.php';
 
@@ -149,6 +150,7 @@ class PlentymarketsImportControllerItem
 		catch (Shopware\Components\Api\Exception\OrmException $E)
 		{
 			PlentymarketsLogger::getInstance()->error('Sync:Item:Orm', 'The item »'. $ItemBase->Texts->Name .'« with the id »'. $ItemBase->ItemID .'« could not be imported ('. $E->getMessage() .')', 3020);
+			throw new PlentymarketsImportException('The item import will be stopped (internal database error)', 3021);
 		}
 
 		catch (PlentymarketsImportItemNumberException $E)
@@ -204,15 +206,37 @@ class PlentymarketsImportControllerItem
 		$chunk = PlentymarketsImportStackItem::getInstance()->getChunk($chunkSize);
 
 		// Import each item
-		foreach ($chunk as $item)
+		try
 		{
-			// for each assigned store
-			$storeIds = explode('|', $item['storeIds']);
-			foreach ($storeIds as $storeId)
+			while (($item = array_shift($chunk)) && is_array($item))
 			{
-				// Import the item
-				$this->importItem($item['itemId'], $storeId);
+				// for each assigned store
+				$storeIds = explode('|', $item['storeIds']);
+				foreach ($storeIds as $storeId)
+				{
+					// Import the item
+					$this->importItem($item['itemId'], $storeId);
+				}
 			}
+		}
+
+		catch (PlentymarketsImportException $E)
+		{
+			PlentymarketsLogger::getInstance()->error('Sync:Item', $E->getMessage(), $E->getCode());
+
+			// return to the stack
+			foreach ($chunk as $item)
+			{
+				// for each assigned store
+				$storeIds = explode('|', $item['storeIds']);
+				foreach ($storeIds as $storeId)
+				{
+					// Import the item
+					PlentymarketsImportStackItem::getInstance()->addItem($item['itemId'], $storeId);
+				}
+			}
+
+			PlentymarketsLogger::getInstance()->message('Sync:Stack:Item', 'Returned ' . count($chunk) . ' items to the stack');
 		}
 
 		// Log
