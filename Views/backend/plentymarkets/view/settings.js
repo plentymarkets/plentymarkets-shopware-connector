@@ -175,6 +175,13 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 				store: me.stores.producers,
 				supportText: 'Sofern bei Artikeln in plentymarkets kein Hersteller zugeordnet wurde, wird dieser Hersteller in shopware mit den betreffenden Artikeln verknüpft.'
 			}, {
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemImageSyncActionID}Bilder synchronisieren{/s}',
+				name: 'ItemImageSyncActionID',
+				xtype: 'checkbox',
+				inputValue: 1,
+				uncheckedValue: '0',
+				supportText: 'Aktivieren, wenn die Bilder von bestehenden Artikel synchronisiert werden sollen. Anderfalls werden Bilder nicht bei der Synchronisation berücksichtigt.'
+			}, {
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemCategorySyncActionID}Kategorien synchronisieren{/s}',
 				name: 'ItemCategorySyncActionID',
 				xtype: 'checkbox',

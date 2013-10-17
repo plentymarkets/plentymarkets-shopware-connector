@@ -36,6 +36,9 @@ require_once PY_COMPONENTS . 'Utils/PlentymarketsUtils.php';
 require_once PY_COMPONENTS . 'Utils/PlentymarketsLogger.php';
 require_once PY_COMPONENTS . 'Cron/PlentymarketsCronjobController.php';
 
+define('IMPORT_ITEM_IMAGE_SYNC', 1);
+define('IMPORT_ITEM_IMAGE_NO_SYNC', 0);
+
 define('IMPORT_ITEM_CATEGORY_SYNC', 1);
 define('IMPORT_ITEM_CATEGORY_NO_SYNC', 0);
 
