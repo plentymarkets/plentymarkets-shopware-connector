@@ -149,24 +149,7 @@ class PlentymarketsExportController
 			$this->Config->setIsExportRunning(0);
 		}
 
-		$methodStatus = sprintf('set%sExportStatus', $entity);
-		$this->Config->$methodStatus('open');
-
-		// Start
-		$methodStart = sprintf('set%sExportTimestampStart', $entity);
-		$this->Config->$methodStart(0);
-
-		// Finished
-		$methodStart = sprintf('set%sExportTimestampFinished', $entity);
-		$this->Config->$methodStart(0);
-
-		// Error
-		$methodError = sprintf('erase%sExportLastErrorMessage', $entity);
-		$this->Config->$methodError();
-
-		// Last chunk
-		$methodLastChunk = sprintf('erase%sExportLastChunk', $entity);
-		$this->Config->$methodLastChunk();
+		$this->StatusController->getEntity($entity)->reset();
 	}
 
 	/**
@@ -176,12 +159,8 @@ class PlentymarketsExportController
 	 */
 	public function erase($entity)
 	{
-		// Status
-		$this->reset($entity, false);
-
-		// -1 is needed, so that the erase button is invisible
-		$methodStart = sprintf('erase%sExportTimestampStart', $entity);
-		$this->Config->$methodStart();
+		// Erase
+		$this->StatusController->getEntity($entity)->erase();
 
 		// Delete Mapping
 		foreach ((array) self::$mapping[$entity] as $tableName)
@@ -235,15 +214,14 @@ class PlentymarketsExportController
 			throw new PlentymarketsExportException('The announcement could not be performed right now', 2550);
 		}
 
-		//
+		// Set the pending entity
 		$this->Config->setExportEntityPending($entity);
-
-		//
-		$method = sprintf('set%sExportStatus', $entity);
-		$this->Config->$method('pending');
 
 		// Erase the timestamp of the latest export call
 		$this->Config->eraseInitialExportLastCallTimestamp();
+
+		// Announce
+		$this->StatusController->getEntity($entity)->announce();
 	}
 
 	/**
@@ -267,9 +245,9 @@ class PlentymarketsExportController
 		// Get the pending entity
 		$entity = $this->Config->getExportEntityPending(false);
 
+		// No exception.. or the log will ne spammed
 		if ($entity == false)
 		{
-			// No exception.. or the log will ne spammed
 			return;
 		}
 

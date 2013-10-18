@@ -27,7 +27,6 @@
  */
 
 require_once PY_COMPONENTS . 'Export/PlentymarketsExportWizard.php';
-require_once PY_COMPONENTS . 'Export/Status/PlentymarketsExportStatusInterface.php';
 require_once PY_COMPONENTS . 'Export/Status/PlentymarketsExportStatus.php';
 require_once PY_COMPONENTS . 'Export/Status/PlentymarketsExportStatusDependency.php';
 
@@ -46,7 +45,7 @@ class PlentymarketsExportStatusController
 
 	/**
 	 *
-	 * @var array[PlentymarketsExportStatusInterface]
+	 * @var array[PlentymarketsExportStatus]
 	 */
 	protected $Status = array();
 
@@ -107,9 +106,9 @@ class PlentymarketsExportStatusController
 	/**
 	 * Adds a status to the controller
 	 *
-	 * @param PlentymarketsExportStatusInterface $Status
+	 * @param PlentymarketsExportStatus $Status
 	 */
-	public function add(PlentymarketsExportStatusInterface $Status)
+	public function add(PlentymarketsExportStatus $Status)
 	{
 		$this->Status[$Status->getName()] = $Status;
 	}
@@ -126,7 +125,7 @@ class PlentymarketsExportStatusController
 
 		foreach ($this->Status as $position => $Status)
 		{
-			$Status instanceof PlentymarketsExportStatusInterface;
+			$Status instanceof PlentymarketsExportStatus;
 
 			$overview[$Status->getName()] = array(
 				// Position
@@ -155,7 +154,7 @@ class PlentymarketsExportStatusController
 	 * Returns an entity
 	 *
 	 * @param string $entity
-	 * @return PlentymarketsExportStatusInterface
+	 * @return PlentymarketsExportStatus
 	 */
 	public function getEntity($entity)
 	{
@@ -166,7 +165,7 @@ class PlentymarketsExportStatusController
 	 * Returns the next entity to be announced
 	 *
 	 * @throws PlentymarketsExportStatusException if there is no announceable entity
-	 * @return PlentymarketsExportStatusInterface
+	 * @return PlentymarketsExportStatus
 	 */
 	public function getNext()
 	{

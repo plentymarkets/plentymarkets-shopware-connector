@@ -26,14 +26,12 @@
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once PY_COMPONENTS . 'Export/Status/PlentymarketsExportStatusInterface.php';
-
 /**
  * Represents the status of an initial export
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
-class PlentymarketsExportStatus implements PlentymarketsExportStatusInterface
+class PlentymarketsExportStatus
 {
 
 	/**
@@ -107,7 +105,6 @@ class PlentymarketsExportStatus implements PlentymarketsExportStatusInterface
 	/**
 	 * Checks whether the export may be announced
 	 *
-	 * @see PlentymarketsExportStatusInterface::mayAnnounce()
 	 * @return boolean
 	 */
 	public function mayAnnounce()
@@ -138,7 +135,6 @@ class PlentymarketsExportStatus implements PlentymarketsExportStatusInterface
 	/**
 	 * Checks whether the export depends on another export
 	 *
-	 * @see PlentymarketsExportStatusInterface::needsDependency()
 	 * @return boolean
 	 */
 	public function needsDependency()
@@ -229,7 +225,6 @@ class PlentymarketsExportStatus implements PlentymarketsExportStatusInterface
 	/**
 	 * Returns the status of the export
 	 *
-	 * @see PlentymarketsExportStatusInterface::getStatus()
 	 * @return string
 	 */
 	public function getStatus()
@@ -241,7 +236,6 @@ class PlentymarketsExportStatus implements PlentymarketsExportStatusInterface
 	/**
 	 * Returns the start timestmap
 	 *
-	 * @see PlentymarketsExportStatusInterface::getStart()
 	 * @return integer
 	 */
 	public function getStart()
@@ -253,7 +247,6 @@ class PlentymarketsExportStatus implements PlentymarketsExportStatusInterface
 	/**
 	 * Returns the finshed timestamp
 	 *
-	 * @see PlentymarketsExportStatusInterface::getFinished()
 	 * @return integer
 	 */
 	public function getFinished()
@@ -265,7 +258,6 @@ class PlentymarketsExportStatus implements PlentymarketsExportStatusInterface
 	/**
 	 * Returns the error message
 	 *
-	 * @see PlentymarketsExportStatusInterface::getError()
 	 * @return string
 	 */
 	public function getError()
@@ -322,11 +314,52 @@ class PlentymarketsExportStatus implements PlentymarketsExportStatusInterface
 	 *
 	 * @param string $error
 	 */
-	public function setError($error)
+	public function setError($error=null)
 	{
-		$this->setStatus(self::STATUS_ERROR);
+		if ($error)
+		{
+			// Automatically set the status
+			$this->setStatus(self::STATUS_ERROR);
 
-		$method = sprintf('set%sExportLastErrorMessage', $this->name);
-		PlentymarketsConfig::getInstance()->$method($error);
+			$method = sprintf('set%sExportLastErrorMessage', $this->name);
+			PlentymarketsConfig::getInstance()->$method($error);
+		}
+		else
+		{
+			$method = sprintf('erase%sExportLastErrorMessage', $this->name);
+			PlentymarketsConfig::getInstance()->$method();
+		}
+	}
+
+	/**
+	 * Announces the export
+	 */
+	public function announce()
+	{
+		$this->setStatus(self::STATUS_PENDING);
+	}
+
+	/**
+	 * Resets the status of the export
+	 */
+	public function reset()
+	{
+		$this->setStatus(self::STATUS_OPEN);
+		$this->setStart(0);
+		$this->setFinished(0);
+		$this->setError();
+
+		// Last chunk
+		$key = sprintf('%sExportLastChunk', $this->getName());
+		PlentymarketsConfig::getInstance()->erase($key);
+	}
+
+	/**
+	 * Erases the status of the export
+	 */
+	public function erase()
+	{
+		$this->reset();
+		$this->setStart(-1);
 	}
 }

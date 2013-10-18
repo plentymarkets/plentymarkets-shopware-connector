@@ -38,14 +38,13 @@ class PlentymarketsExportStatusDependency extends PlentymarketsExportStatus
 
 	/**
 	 *
-	 * @var PlentymarketsExportStatusInterface
+	 * @var PlentymarketsExportStatus
 	 */
 	protected $Dependency;
 
 	/**
 	 * Checks whether the export may be announced
 	 *
-	 * @see PlentymarketsExportStatusInterface::mayAnnounce()
 	 * @return boolean
 	 */
 	public function mayAnnounce()
@@ -56,7 +55,6 @@ class PlentymarketsExportStatusDependency extends PlentymarketsExportStatus
 	/**
 	 * Checks whether the export depends on another export
 	 *
-	 * @see PlentymarketsExportStatusInterface::needsDependency()
 	 * @return boolean
 	 */
 	public function needsDependency()
@@ -67,7 +65,7 @@ class PlentymarketsExportStatusDependency extends PlentymarketsExportStatus
 	/**
 	 * Returns the dependency
 	 *
-	 * @return PlentymarketsExportStatusInterface
+	 * @return PlentymarketsExportStatus
 	 */
 	public function getDependency()
 	{
@@ -77,9 +75,9 @@ class PlentymarketsExportStatusDependency extends PlentymarketsExportStatus
 	/**
 	 * Sets the dependency
 	 *
-	 * @param PlentymarketsExportStatusInterface $Dependency
+	 * @param PlentymarketsExportStatus $Dependency
 	 */
-	public function setDependency(PlentymarketsExportStatusInterface $Dependency)
+	public function setDependency(PlentymarketsExportStatus $Dependency)
 	{
 		$this->Dependency = $Dependency;
 	}
