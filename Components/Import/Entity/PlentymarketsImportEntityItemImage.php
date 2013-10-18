@@ -129,6 +129,13 @@ class PlentymarketsImportEntityItemImage
 				foreach ($ImagesImages->Images->item as $Image)
 				{
 					$Image instanceof PlentySoapObject_ItemImage;
+
+					// Skip the image if it should not be shown
+					if ($Image->Availability != 1 && $Image->Availability != 2)
+					{
+						continue;
+					}
+
 					$images[] = array(
 						'link' => $Image->ImageURL,
 						'position' => $Image->Position,
