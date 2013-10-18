@@ -648,7 +648,8 @@ class PlentymarketsExportEntityItem
 			}
 			catch (PlentymarketsMappingExceptionNotExistant $E)
 			{
-				throw new PlentymarketsExportException('The item variation with the number »' . $ItemVariation->getNumber() . '« could not be created (corrupt data)', 2880);
+				PlentymarketsLogger::getInstance()->error('Export:Initial:Item:Variant', 'The item variation with the number »' . $ItemVariation->getNumber() . '« could not be created (corrupt data)', 2880);
+				continue;
 			}
 
 			$Object_SetAttributeValueSetsDetails = new PlentySoapObject_SetAttributeValueSetsDetails();
