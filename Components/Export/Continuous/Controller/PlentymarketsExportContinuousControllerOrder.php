@@ -56,7 +56,7 @@ class PlentymarketsExportContinuousControllerOrder
 				continue;
 			}
 
-			if (!is_null($Order->timestampLastTry) && $Order->timestampLastTry < time() - (60 * 15))
+			if (!is_null($Order->timestampLastTry) && strtotime($Order->timestampLastTry) < time() - (60 * 15))
 			{
 				continue;
 			}
