@@ -295,6 +295,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		$Config->setOrderMarking1($this->Request()->OrderMarking1);
 		$Config->setOrderReferrerID($this->Request()->OrderReferrerID);
 		$Config->setOrderPaidStatusID($this->Request()->OrderPaidStatusID);
+		$Config->setOrderItemTextSyncActionID($this->Request()->OrderItemTextSyncActionID == true ? EXPORT_ORDER_ITEM_TEXT_SYNC : EXPORT_ORDER_ITEM_TEXT_SYNC_NO);
 		$Config->setOutgoingItemsOrderStatus($this->Request()->OutgoingItemsOrderStatus);
 		$Config->setOutgoingItemsID($this->Request()->OutgoingItemsID);
 		$Config->setOutgoingItemsShopwareOrderStatusID($this->Request()->OutgoingItemsShopwareOrderStatusID);

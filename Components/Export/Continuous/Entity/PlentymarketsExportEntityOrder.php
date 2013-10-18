@@ -315,30 +315,45 @@ class PlentymarketsExportEntityOrder
 			// Fetch the item
 			$sw_OrderItem = self::$StatementGetSKU->fetchObject();
 
+			// Variant
 			try
 			{
-				// Variant
-				if ($sw_OrderItem->kind == 2)
-				{
-					$itemId = null;
-					$sku = PlentymarketsMappingController::getItemVariantByShopwareID($sw_OrderItem->detailsID);
-				}
+				$itemId = null;
+				$sku = PlentymarketsMappingController::getItemVariantByShopwareID($sw_OrderItem->detailsID);
+			}
 
+			catch (PlentymarketsMappingExceptionNotExistant $E)
+			{
 				// Base item
-				else
+				try
 				{
 					$itemId = PlentymarketsMappingController::getItemByShopwareID($sw_OrderItem->articleID);
 					$sku = null;
 				}
+
+				// Unknown item
+				catch (PlentymarketsMappingExceptionNotExistant $E)
+				{
+					$itemId = -2;
+					$sku = null;
+
+					// Mandatory because there will be no mapping to any item
+					$itemText = $item['articleName'];
+				}
 			}
 
-			// neither one
-			catch (PlentymarketsMappingExceptionNotExistant $E)
+			//
+			if ($itemId > 0 || !empty($sku))
 			{
-				$itemId = -2;
-				$sku = null;
+				if (PlentymarketsConfig::getInstance()->getOrderItemTextSyncActionID(EXPORT_ORDER_ITEM_TEXT_SYNC) == EXPORT_ORDER_ITEM_TEXT_SYNC)
+				{
+					$itemText = $item['articleName'];
+				}
+				else
+				{
+					$itemText = null;
+				}
 			}
-
 
 			// Gutschein
 			if ($item['mode'] == 2)
@@ -350,7 +365,7 @@ class PlentymarketsExportEntityOrder
 			$Object_OrderItem->ExternalOrderItemID = $item['articleNumber']; // string
 			$Object_OrderItem->ItemID = $itemId; // int
 			$Object_OrderItem->ReferrerID = $Object_OrderHead->ReferrerID;
-			$Object_OrderItem->ItemText = $item['articleName']; // string
+			$Object_OrderItem->ItemText = $itemText; // string
 			$Object_OrderItem->Price = $item['price']; // float
 			$Object_OrderItem->Quantity = $item['quantity']; // float
 			$Object_OrderItem->SKU = $sku; // string

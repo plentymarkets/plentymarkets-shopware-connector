@@ -252,6 +252,13 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 				store: paymentStatusStore,
 				supportText: 'shopware Status, der signalisiert, dass der Auftrag komplett bezahlt ist. Löst das Buchen des Zahlungseinganges bei plentymarkets aus.',
 				displayField: 'description',
+			}, {
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/OrderItemTextSyncActionID}Artikelbezeichnung übernehmen{/s}',
+				name: 'OrderItemTextSyncActionID',
+				xtype: 'checkbox',
+				inputValue: 1,
+				uncheckedValue: '0',
+				supportText: 'Aktivieren, wenn die Bezeichnung der Artikel zu plentymarkets übertragen werden sollen. Anderfalls wird die in plentymarkets hinterlegte Bezeichnung verwendet.'
 			}
 
 			]
