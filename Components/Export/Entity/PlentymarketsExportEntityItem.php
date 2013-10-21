@@ -135,11 +135,19 @@ class PlentymarketsExportEntityItem
 			throw new PlentymarketsExportException('The item »' . $this->SHOPWARE_Article->getName() . '« with the id »' . $this->SHOPWARE_Article->getId() . '« could not be exported (no main detail)', 2810);
 		}
 
-		// Debug
-		PlentymarketsLogger::getInstance()->message('DEBUG', 'The item »' . $this->SHOPWARE_Article->getName() . '« with the id »' . $this->SHOPWARE_Article->getId() . '« will be exported');
+		try
+		{
+			// Release date
+			$ReleaseDate = $ItemDetails->getReleaseDate();
+		}
 
-		// Release date
-		$ReleaseDate = $ItemDetails->getReleaseDate();
+		// May cras – when the relation is in the database but the actual data record is missing
+		catch (Doctrine\ORM\EntityNotFoundException $E)
+		{
+			throw new PlentymarketsExportException('The item »' . $this->SHOPWARE_Article->getName() . '« with the id »' . $this->SHOPWARE_Article->getId() . '« could not be exported (missing main detail)', 2811);
+		}
+
+		// Set the release date
 		if ($ReleaseDate instanceof \DateTime)
 		{
 			$Object_AddItemsBaseItemBase->Published = $ReleaseDate->getTimestamp();
