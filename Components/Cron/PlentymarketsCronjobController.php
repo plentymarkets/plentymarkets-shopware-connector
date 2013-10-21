@@ -317,6 +317,8 @@ class PlentymarketsCronjobController
 		catch (Exception $E)
 		{
 			PlentymarketsLogger::getInstance()->error('Cron:Export', $E->getMessage(), 1000);
+			PlentymarketsLogger::getInstance()->error('Cron:Export', get_class($E), 1000);
+			PlentymarketsLogger::getInstance()->error('Cron:Export', $E->getTraceAsString(), 1000);
 		}
 
 		require_once PY_COMPONENTS . 'Export/PlentymarketsExportWizard.php';
