@@ -369,8 +369,7 @@ class PlentymarketsExportEntityOrder
 			$Object_OrderItem->Price = $item['price']; // float
 			$Object_OrderItem->Quantity = $item['quantity']; // float
 			$Object_OrderItem->SKU = $sku; // string
-
-			$Object_OrderItem->VAT = null; // float
+			$Object_OrderItem->VAT = $item['taxRate']; // float
 			$Object_OrderItem->WarehouseID = null; // int
 			$Object_Order->OrderItems[] = $Object_OrderItem;
 		}
