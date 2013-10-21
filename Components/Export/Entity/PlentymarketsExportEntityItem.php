@@ -135,6 +135,9 @@ class PlentymarketsExportEntityItem
 			throw new PlentymarketsExportException('The item »' . $this->SHOPWARE_Article->getName() . '« with the id »' . $this->SHOPWARE_Article->getId() . '« could not be exported (no main detail)', 2810);
 		}
 
+		// Debug
+		PlentymarketsLogger::getInstance()->message('DEBUG', 'The item »' . $this->SHOPWARE_Article->getName() . '« with the id »' . $this->SHOPWARE_Article->getId() . '« will be exported');
+
 		// Release date
 		$ReleaseDate = $ItemDetails->getReleaseDate();
 		if ($ReleaseDate instanceof \DateTime)
