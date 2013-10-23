@@ -26,6 +26,8 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
+require_once PY_COMPONENTS . 'Utils/PlentymarketsGarbageCollector.php';
+require_once PY_COMPONENTS . 'Utils/DataIntegrity/PlentymarketsDataIntegrityController.php';
 require_once PY_COMPONENTS . 'Export/PlentymarketsExportException.php';
 require_once PY_COMPONENTS . 'Export/Status/PlentymarketsExportStatus.php';
 require_once PY_COMPONENTS . 'Export/Status/PlentymarketsExportStatusController.php';
@@ -120,8 +122,24 @@ class PlentymarketsExportController
 		// Check whether a process is running
 		$this->isRunning = (boolean) $this->Config->getIsExportRunning(false);
 
+		// If the export is not complete
+		if (!$this->isComplete())
+		{
+			// the garbage collector will run
+			PlentymarketsGarbageCollector::getInstance()->run(PlentymarketsGarbageCollector::ACTION_MAPPING);
+		}
+
 		// Check whether settings and mapping are done
-		$this->mayRun = PlentymarketsMappingController::isComplete() && $this->Config->isComplete();
+		$this->mayRun = (
+			// Setting
+			PlentymarketsMappingController::isComplete() &&
+
+			// Configuration
+			$this->Config->isComplete() &&
+
+			// Data integrity
+			PlentymarketsDataIntegrityController::getInstance()->isValid()
+		);
 	}
 
 	/**

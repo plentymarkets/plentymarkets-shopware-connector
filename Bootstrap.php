@@ -294,6 +294,11 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 			}
 		}
 
+		if (version_compare($version, '1.4.14') !== 1)
+		{
+			$this->addLogCleanupCronEvent();
+		}
+
 		//
 		PlentymarketsConfig::getInstance()->setConnectorVersion($this->getVersion());
 
@@ -757,6 +762,33 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 
         // Item import stack update
         $this->addItemImportStackCronEvent();
+
+        // Cleanup (log)
+        $this->addLogCleanupCronEvent();
+    }
+
+    /**
+     * Adds the cron event to clean up the items
+     */
+    private function addLogCleanupCronEvent()
+    {
+    	try
+    	{
+	    	$this->createCronJob(
+	    		'Plentymarkets Log Cleanup',
+	    		'Shopware_CronJob_PlentymarketsLogCleanup',
+	    		604800, // 1 week
+	    		true
+	    	);
+
+	    	$this->subscribeEvent(
+	    		'Shopware_CronJob_PlentymarketsLogCleanup',
+	    		'onRunLogCleanupCron'
+	    	);
+    	}
+    	catch (Exception $E)
+    	{
+    	}
     }
 
     /**
@@ -830,6 +862,16 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
     	{
     	}
     }
+
+    /**
+     * Cleans the items.
+     *
+     * @param Shopware_Components_Cron_CronJob $Job
+     */
+	public function onRunLogCleanupCron(Shopware_Components_Cron_CronJob $Job)
+	{
+		PlentymarketsCronjobController::getInstance()->runLogCleanup($Job);
+	}
 
     /**
      * Cleans the items.
@@ -1011,7 +1053,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
      */
     public function getVersion()
     {
-    	return '1.4.14';
+    	return '1.4.15';
     }
 
     /**

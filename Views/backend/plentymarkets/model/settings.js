@@ -56,22 +56,32 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 
 	{
 		name: 'IsSettingsFinished',
-		type: 'bool'
+		type: 'bool',
+		defaultValue: false
 	}, {
 		name: 'IsExportFinished',
-		type: 'bool'
+		type: 'bool',
+		defaultValue: false
+	}, {
+		name: 'IsDataIntegrityValid',
+		type: 'bool',
+		defaultValue: false
 	}, {
 		name: 'IsMappingFinished',
-		type: 'bool'
+		type: 'bool',
+		defaultValue: false
 	}, {
 		name: 'MayDatex',
-		type: 'bool'
+		type: 'bool',
+		defaultValue: false
 	}, {
 		name: 'MayDatexUser',
-		type: 'bool'
+		type: 'bool',
+		defaultValue: false
 	}, {
 		name: 'MayDatexActual',
-		type: 'bool'
+		type: 'bool',
+		defaultValue: false
 	},
 
 	{

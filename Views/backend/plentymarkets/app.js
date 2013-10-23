@@ -25,6 +25,8 @@ Ext.define('Shopware.apps.Plentymarkets', {
 
 	views: [
 	    'Api',
+	    'data.Grid',
+	    'data.Main',
 	    'dx.Continuous',
 	    'dx.Initial',
 	    'dx.Grid',
@@ -39,6 +41,7 @@ Ext.define('Shopware.apps.Plentymarkets', {
 	],
 
 	stores: [
+	    'data.Status',
 	    'dx.Continuous',
 	    'dx.Wizard',
 	    'Export',
@@ -59,6 +62,8 @@ Ext.define('Shopware.apps.Plentymarkets', {
 	],
 
 	models: [
+	    'data.Status',
+	    'data.Field',
 	    'dx.Continuous',
 	    'dx.ContinuousRecord',
 	    'dx.Wizard',

@@ -8,6 +8,19 @@ require_once PY_SOAP . 'Models/PlentySoapRequest/GetItemsByStoreID.php';
  */
 class PlentymarketsGarbageCollector
 {
+
+	/**
+	 *
+	 * @var boolean
+	 */
+	protected $isRunning = false;
+
+	/**
+	 *
+	 * @var PlentymarketsGarbageCollector
+	 */
+	protected static $Instance;
+
 	/**
 	 *
 	 * @var integer
@@ -21,9 +34,82 @@ class PlentymarketsGarbageCollector
 	const ITEM_ACTION_DELETE = 2;
 
 	/**
+	 *
+	 * @var integer
+	 */
+	const ACTION_MAPPING = 1;
+
+	/**
+	 *
+	 * @var integer
+	 */
+	const ACTION_PRUNE_ITEMS = 2;
+
+	/**
+	 *
+	 * @var integer
+	 */
+	const ACTION_LOG = 3;
+
+	/**
+	 * Protected constructor to prevent direct creation
+	 */
+	protected function __construct()
+	{
+	}
+
+	/**
+	 * I am the singleton method
+	 *
+	 * @return PlentymarketsGarbageCollector
+	 */
+	public static function getInstance()
+	{
+		if (!self::$Instance instanceof self)
+		{
+			self::$Instance = new self();
+		}
+		return self::$Instance;
+	}
+
+	/**
+	 * Runs some cleanup action
+	 *
+	 * @param string $action
+	 */
+	public function run($action)
+	{
+		// Quit if a process is running
+		if ($this->isRunning)
+		{
+			return;
+		}
+
+		// Trigger running flag
+		$this->isRunning = true;
+
+		switch ($action)
+		{
+			case self::ACTION_MAPPING:
+				$this->cleanup();
+				break;
+
+			case self::ACTION_PRUNE_ITEMS:
+				$this->pruneItems();
+				break;
+
+			case self::ACTION_LOG:
+				$this->cleanupLog();
+				break;
+		}
+
+		$this->isRunning = false;
+	}
+
+	/**
 	 * Global cleanup of the mapped data
 	 */
-	public function cleanup()
+	protected function cleanup()
 	{
 		$dirty = array(
 			'plenty_mapping_attribute_group' => array('id', 's_article_configurator_groups'),
@@ -32,6 +118,8 @@ class PlentymarketsGarbageCollector
 			'plenty_mapping_country' => array('id', 's_core_countries'),
 			'plenty_mapping_currency' => array('currency', 's_core_currencies'),
 			'plenty_mapping_customer' => array('id', 's_order_billingaddress'),
+			'plenty_mapping_customer_billing_address' => array('id', 's_user_billingaddress'),
+			'plenty_mapping_customer_class' => array('id', 's_core_customergroups'),
 			'plenty_mapping_item' => array('id', 's_articles'),
 			'plenty_mapping_item_variant' => array('id', 's_articles_details'),
 			'plenty_mapping_measure_unit' => array('id', 's_core_units'),
@@ -71,18 +159,13 @@ class PlentymarketsGarbageCollector
 		Shopware()->Db()->exec('
 			DELETE FROM plenty_mapping_referrer WHERE shopwareID IN (SELECT id FROM s_emarketing_partner WHERE active = 0)
 		');
-
-		// Log
-		Shopware()->Db()->exec('
-			DELETE FROM plenty_log WHERE `timestamp` < '. strtotime('-1 month') .'
-		');
 	}
 
 	/**
 	 * Either deletes or deactivates all shopware item that
 	 * are not associated with the store id configured.
 	 */
-	public function pruneItems()
+	protected function pruneItems()
 	{
 		// Create a temporary table
 		Shopware()->Db()->exec('
@@ -237,6 +320,17 @@ class PlentymarketsGarbageCollector
 		// Delete the temporary table
 		Shopware()->Db()->exec('
 			DROP TEMPORARY TABLE plenty_cleanup_item
+		');
+	}
+
+	/**
+	 * Cleanup of the log table
+	 */
+	protected function cleanupLog()
+	{
+		// Log
+		Shopware()->Db()->exec('
+			DELETE FROM plenty_log WHERE `timestamp` < '. strtotime('-1 month') .'
 		');
 	}
 }

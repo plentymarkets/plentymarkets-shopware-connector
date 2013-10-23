@@ -269,6 +269,34 @@ Ext.define('Shopware.apps.Plentymarkets.view.Start', {
 				}]
 			}, {
 				xtype: 'fieldcontainer',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/DataIntegrityStatus}Datenintegrität{/s}',
+				layout: 'hbox',
+				items: [{
+					xtype: 'displayfield',
+					name: 'IsDataIntegrityValid',
+					renderer: function(value)
+					{
+						if (value == "true")
+						{
+							return Ext.String.format('<div class="plenty-status plenty-status-ok">&nbsp;</div>');
+						}
+						else
+						{
+							return Ext.String.format('<div class="plenty-status plenty-status-error">&nbsp;</div>');
+						}
+					}
+				}/*, {
+					xtype: 'button',
+					text: 'Details öffnen',
+					cls: 'secondary small',
+					handler: function()
+					{
+						me.main.tabpanel.setActiveTab(3);
+					}
+				
+				}*/]
+			}, {
+				xtype: 'fieldcontainer',
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/InitialExportStatus}Datenexport zu plentymarkets{/s}',
 				layout: 'hbox',
 				items: [{

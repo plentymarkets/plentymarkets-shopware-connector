@@ -154,8 +154,28 @@ class PlentymarketsCronjobController
 			return;
 		}
 
-		$PlentymarketsGarbageCollector = new PlentymarketsGarbageCollector();
-		$PlentymarketsGarbageCollector->cleanup();
+		$PlentymarketsGarbageCollector = PlentymarketsGarbageCollector::getInstance();
+		$PlentymarketsGarbageCollector->run(PlentymarketsGarbageCollector::ACTION_MAPPING);
+	}
+
+	/**
+	 * Runs the item cleanup cronjob.
+	 *
+	 * @param Shopware_Components_Cron_CronJob $Job
+	 */
+	public function runLogCleanup(Shopware_Components_Cron_CronJob $Job)
+	{
+		if (!$this->mayRun)
+		{
+			return;
+		}
+
+		PlentymarketsLogger::getInstance()->message('Cleanup:Log', 'Starting');
+
+		$PlentymarketsGarbageCollector = PlentymarketsGarbageCollector::getInstance();
+		$PlentymarketsGarbageCollector->run(PlentymarketsGarbageCollector::ACTION_LOG);
+
+		PlentymarketsLogger::getInstance()->message('Cleanup:Log', 'Finished');
 	}
 
 	/**
@@ -172,8 +192,8 @@ class PlentymarketsCronjobController
 
 		PlentymarketsLogger::getInstance()->message('Cleanup:Item', 'Starting');
 
-		$PlentymarketsGarbageCollector = new PlentymarketsGarbageCollector();
-		$PlentymarketsGarbageCollector->pruneItems();
+		$PlentymarketsGarbageCollector = PlentymarketsGarbageCollector::getInstance();
+		$PlentymarketsGarbageCollector->run(PlentymarketsGarbageCollector::ACTION_PRUNE_ITEMS);
 
 		PlentymarketsLogger::getInstance()->message('Cleanup:Item', 'Finished');
 	}

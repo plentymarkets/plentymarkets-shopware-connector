@@ -2,9 +2,10 @@
 // {block name=backend/Plentymarkets/view/Main}
 
 /**
- * The main view builds the main tab panel which contains the five tabs: start, api, settings, export, mapping and log.
- * This view also provides a function for setting the tab availability triggered by events.
- * It is extended by the Enlight app window "Enlight.app.Window".
+ * The main view builds the main tab panel which contains the five tabs: start,
+ * api, settings, export, mapping and log. This view also provides a function
+ * for setting the tab availability triggered by events. It is extended by the
+ * Enlight app window "Enlight.app.Window".
  * 
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
@@ -52,12 +53,17 @@ Ext.define('Shopware.apps.Plentymarkets.view.Main', {
 		});
 		me.sf.on('activate', me.sf.build);
 
+		me.di = Ext.widget('plentymarkets-view-data-main', {
+			main: me
+		});
+		me.di.on('activate', me.di.build);
+
 		me.tabpanel = Ext.create('Ext.tab.Panel', {
 			items: [me.start, me.api, me.sf, {
 				xtype: 'plentymarkets-view-export',
 			}, {
 				xtype: 'plentymarkets-view-mapping-main'
-			}, {
+			}, me.di, {
 				xtype: 'plentymarkets-view-log-main'
 			}]
 

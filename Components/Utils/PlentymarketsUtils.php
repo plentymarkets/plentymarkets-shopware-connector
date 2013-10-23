@@ -30,6 +30,7 @@ require_once PY_SOAP . 'Client/PlentymarketsSoapClient.php';
 require_once PY_COMPONENTS . 'Config/PlentymarketsConfig.php';
 require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingController.php';
 require_once PY_COMPONENTS . 'Export/PlentymarketsExportController.php';
+require_once PY_COMPONENTS . 'Utils/DataIntegrity/PlentymarketsDataIntegrityController.php';
 
 /**
  * The class PlentymarketsUtils contains different useful methods. The get-methods of this class are used
@@ -124,12 +125,12 @@ class PlentymarketsUtils
 		try
 		{
 			$Response = PlentymarketsSoapClient::getInstance()->GetServerTime();
-			
-			// 
+
+			//
 			PlentymarketsConfig::getInstance()->setApiTimestampDeviation(time() - $Response->Timestamp);
 			PlentymarketsConfig::getInstance()->setApiLastStatusTimestamp(time());
 			PlentymarketsConfig::getInstance()->setApiStatus(2);
-			
+
 			// plenty version
 			self::checkPlentymarketsVersion();
 
@@ -144,7 +145,7 @@ class PlentymarketsUtils
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Retrieves the plentymarkets version
 	 */
@@ -171,9 +172,10 @@ class PlentymarketsUtils
 		$mappingStatus = PlentymarketsMappingController::isComplete();
 		$exportStatus = PlentymarketsExportController::getInstance()->isComplete();
 		$settingsStatus = $Config->isComplete();
+		$dataIntegrityStatus = PlentymarketsDataIntegrityController::getInstance()->isValid();
 
 		//
-		$mayDatex = $mappingStatus && $exportStatus && $settingsStatus;
+		$mayDatex = $mappingStatus && $exportStatus && $settingsStatus && $dataIntegrityStatus;
 
 		// Den Status für den Datenaustausch ggf. deaktivieren
 		if (!$mayDatex)
@@ -198,6 +200,7 @@ class PlentymarketsUtils
 			}
 		}
 
+		$Config->setIsDataIntegrityValid((integer) $dataIntegrityStatus);
 		$Config->setIsSettingsFinished((integer) $settingsStatus);
 		$Config->setIsExportFinished((integer) $exportStatus);
 		$Config->setIsMappingFinished((integer) $mappingStatus);
@@ -228,10 +231,10 @@ class PlentymarketsUtils
 	{
 		return count(array_diff($array1, $array2)) === 0;
 	}
-	
+
 	/**
 	 * Checks whether it's after midnight
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public static function isAfterMidnight()
@@ -246,16 +249,16 @@ class PlentymarketsUtils
 			return false;
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @var array
 	 */
 	protected static $categoryId2ShopId = array();
 
 	/**
 	 * Returns an array with shop id for the given category id
-	 * 
+	 *
 	 * @param integer $categoryId
 	 * @return array
 	 */
@@ -271,7 +274,7 @@ class PlentymarketsUtils
 			}
 			self::$categoryId2ShopId[$categoryId] = $shopIds;
 		}
-		
+
 		return self::$categoryId2ShopId[$categoryId];
 	}
 }
