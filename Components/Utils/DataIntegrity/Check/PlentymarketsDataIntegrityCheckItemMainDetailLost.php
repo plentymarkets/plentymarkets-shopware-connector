@@ -1,14 +1,15 @@
 <?php
 
+require_once PY_COMPONENTS . 'Import/PlentymarketsImportItemHelper.php';
 require_once PY_COMPONENTS . 'Utils/DataIntegrity/PlentymarketsDataIntegrityCheckInterface.php';
 
 
-class PlentymarketsDataIntegrityCheckItemMainDetail implements PlentymarketsDataIntegrityCheckInterface
+class PlentymarketsDataIntegrityCheckItemMainDetailLost implements PlentymarketsDataIntegrityCheckInterface
 {
 
 	public function getName()
 	{
-		return 'ItemMainDetail';
+		return 'ItemMainDetailLost';
 	}
 
 	public function isValid()
@@ -24,6 +25,33 @@ class PlentymarketsDataIntegrityCheckItemMainDetail implements PlentymarketsData
 				ORDER BY a.id
 				LIMIT ' . $start . ', ' . $offset . '
 		')->fetchAll();
+	}
+
+	public function deleteInvalidData($start, $offset)
+	{
+		foreach ($this->getInvalidData($start, $offset) as $data)
+		{
+			try
+			{
+				$Item = Shopware()->Models()->find('\Shopware\Models\Article\Article', $data['itemId']);
+				Shopware()->Models()->remove($Item);
+			}
+			catch (Exception $E)
+			{
+				PlentymarketsLogger::getInstance()->error(__LINE__ . __METHOD__, $E->getMessage());
+				try
+				{
+					// Try to delete through the API
+					$Resource = Shopware\Components\Api\Manager::getResource('Article');
+					$Resource->delete($data['itemId']);
+				}
+				catch (Exception $E)
+				{
+					PlentymarketsLogger::getInstance()->error(__LINE__ . __METHOD__, $E->getMessage());
+				}
+			}
+		}
+		Shopware()->Models()->flush();
 	}
 
 	public function getFields()

@@ -60,10 +60,10 @@ Ext.define('Shopware.apps.Plentymarkets.view.Main', {
 
 		me.tabpanel = Ext.create('Ext.tab.Panel', {
 			items: [me.start, me.api, me.sf, {
-				xtype: 'plentymarkets-view-export',
-			}, {
-				xtype: 'plentymarkets-view-mapping-main'
+				xtype: 'plentymarkets-view-mapping-main',
 			}, me.di, {
+				xtype: 'plentymarkets-view-export'
+			}, {
 				xtype: 'plentymarkets-view-log-main'
 			}]
 

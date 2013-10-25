@@ -26,7 +26,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.data.Main', {
 	{
 		var me = this;
 		me.storeStatus = Ext.create('Shopware.apps.Plentymarkets.store.data.Status');
-//		me.items = [];
+		// me.items = [];
 		/*
 		 * me.items = [{ xtype: 'plentymarkets-view-data-grid', storeIdentifier:
 		 * storeIdentifier, title: 'Alles', type: 0 }, { xtype:
@@ -41,20 +41,36 @@ Ext.define('Shopware.apps.Plentymarkets.view.data.Main', {
 
 	build: function()
 	{
-		var me = this;
+		var me = this, i;
+
+		me.setLoading(true);
+		
+		var title = {
+			ItemMainDetailLost: 'Verlorene Details',
+			ItemOrphaned: 'Verlorener Artikel',
+			ItemVariationGroupMultiple: 'Varianten/Attribute/Mehrfachzuordnung',
+			ItemVariationOptionLost: 'Verlorene Attributeoptionen'
+		};
+		
+		for (i = 0; i < me.items.length; i++)
+		{
+			me.remove(me.items.getAt(i));
+		}
+
 		me.storeStatus.load(function(data)
 		{
 			Ext.Array.each(data, function(record)
 			{
 				me.add({
 					xtype: 'plentymarkets-view-data-grid',
-					title: record.get('name'),
+					title: title[record.get('name')],
 					type: record.get('name'),
 					fields: record.getFields()
 				});
 			});
+			me.setLoading(false);
 		});
-		console.log('foobar')
+		
 	}
 
 });

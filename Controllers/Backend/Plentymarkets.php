@@ -56,6 +56,21 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		var_dump(PlentymarketsDataIntegrityController::getInstance()->getCheck('ItemVariationOptionLost')->getInvalidData(0, 25));
 	}
 
+	public function deleteDataIntegrityInvalidDataAction()
+	{
+		require_once PY_COMPONENTS . 'Utils/DataIntegrity/PlentymarketsDataIntegrityController.php';
+
+		$Check = PlentymarketsDataIntegrityController::getInstance()->getCheck($this->Request()->get('type'));
+		$Check->deleteInvalidData(
+			$this->Request()->get('start'),
+			$this->Request()->get('limit')
+		);
+
+		$this->View()->assign(array(
+			'success' => true
+		));
+	}
+
 	public function getDataIntegrityInvalidListAction()
 	{
 

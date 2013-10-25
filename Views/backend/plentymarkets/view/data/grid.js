@@ -18,7 +18,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.data.Grid', {
 
 	border: false,
 
-		forceFit: true,
+	forceFit: true,
 
 	initComponent: function()
 	{
@@ -42,7 +42,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.data.Grid', {
 			me.columns.push({
 				header: item.get('description'),
 				dataIndex: item.get('name'),
-//				flex: 1
+			// flex: 1
 			});
 		});
 		// console.log(me.type);
@@ -50,11 +50,14 @@ Ext.define('Shopware.apps.Plentymarkets.view.data.Grid', {
 
 		Ext.define('PlentyDataStore' + me.type, {
 			extend: 'Ext.data.Store',
+			autoLoad: true,
+			pageSize: 25,
 			model: 'PlentyDataModel' + me.type,
 			proxy: {
 				type: 'ajax',
 				api: {
-					read: '/backend/Plentymarkets/getDataIntegrityInvalidDataList'
+					read: '/backend/Plentymarkets/getDataIntegrityInvalidDataList',
+					update: '/backend/Plentymarkets/deleteDataIntegrityInvalidData'
 				},
 				reader: {
 					type: 'json',
@@ -64,52 +67,38 @@ Ext.define('Shopware.apps.Plentymarkets.view.data.Grid', {
 			}
 		});
 
-		var store = Ext.create('PlentyDataStore' + me.type)
-//		console.log(store);
-		store.getProxy().setExtraParam('type', me.type)
-		// store.load();
+		me.store = Ext.create('PlentyDataStore' + me.type)
+		me.store.getProxy().setExtraParam('type', me.type)
 
-		// me.model =
-		// console.log(me.columns)
-		// me.store = Ext.create('Shopware.apps.Plentymarkets.store.Log');
-		// me.store.getProxy().setExtraParam('type', 1/*me.type*/)
-		me.store = store;
-		me.store.load()
-
-		me.dockedItems = [{
-			xtype: 'pagingtoolbar',
+		me.bbar = new Ext.PagingToolbar({
 			store: me.store,
 			dock: 'bottom',
 			displayInfo: true,
 			enableOverflow: true,
-		/*
-		 * items: ['->', { xtype: 'combo', id:
-		 * 'combo-Plentymarkets-store-data-Identifier-' + me.type, store:
-		 * me.storeIdentifier, emptyText: '– Filter –', anchor: '100%',
-		 * displayField: 'identifier', valueField: 'identifier', allowBlank:
-		 * true, editable: true, listeners: { change: function(field, newValue,
-		 * oldValue) { me.store.getProxy().setExtraParam('filt0r', newValue); } } }, {
-		 * xtype: 'button', iconCls: 'plenty-data-filter-go', listeners: {
-		 * click: function(field, newValue, oldValue) { me.store.load(); } } }, {
-		 * xtype: 'button', iconCls: 'plenty-data-filter-reset', listeners: {
-		 * click: function(field, newValue, oldValue) {
-		 * Ext.getCmp('combo-Plentymarkets-store-data-Identifier-' +
-		 * me.type).reset();
-		 * Ext.getCmp('combo-Plentymarkets-store-data-Identifier-' +
-		 * me.type).clearValue(); me.store.getProxy().setExtraParam('filt0r',
-		 * ''); me.store.load(); } } }]
-		 */
-		}];
-
+			items: ['->', {
+				xtype: 'button',
+				text: 'Diese Seite bereinigen',
+				listeners: {
+					click: function(field, newValue, oldValue)
+					{
+						me.setLoading(true);
+						// me.store.load();
+						me.store.update({
+							params: {
+								start: (me.store.currentPage - 1) * me.store.pageSize,
+								limit: me.store.pageSize
+							},
+							callback: function (data)
+							{
+								me.setLoading(false);
+								me.store.load()
+							}
+						});
+					}
+				}
+			}]
+		});
 		
-
-		// me.listeners = {
-		// activate: function()
-		// {
-		// me.store.load();
-		// }
-		// };
-
 		me.callParent(arguments);
 	}
 

@@ -1,5 +1,6 @@
 <?php
-require_once PY_COMPONENTS . 'Utils/DataIntegrity/Check/PlentymarketsDataIntegrityCheckItemMainDetail.php';
+require_once PY_COMPONENTS . 'Utils/DataIntegrity/Check/PlentymarketsDataIntegrityCheckItemMainDetailLost.php';
+require_once PY_COMPONENTS . 'Utils/DataIntegrity/Check/PlentymarketsDataIntegrityCheckItemOrphaned.php';
 require_once PY_COMPONENTS . 'Utils/DataIntegrity/Check/PlentymarketsDataIntegrityCheckItemVariationGroupMultiple.php';
 require_once PY_COMPONENTS . 'Utils/DataIntegrity/Check/PlentymarketsDataIntegrityCheckItemVariationOptionLost.php';
 
@@ -23,7 +24,8 @@ class PlentymarketsDataIntegrityController
 	 */
 	protected function __construct()
 	{
-		$this->add(new PlentymarketsDataIntegrityCheckItemMainDetail());
+		$this->add(new PlentymarketsDataIntegrityCheckItemMainDetailLost());
+		$this->add(new PlentymarketsDataIntegrityCheckItemOrphaned());
 		$this->add(new PlentymarketsDataIntegrityCheckItemVariationGroupMultiple());
 		$this->add(new PlentymarketsDataIntegrityCheckItemVariationOptionLost());
 	}

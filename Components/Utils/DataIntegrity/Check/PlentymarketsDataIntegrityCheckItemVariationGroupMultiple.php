@@ -18,7 +18,7 @@ class PlentymarketsDataIntegrityCheckItemVariationGroupMultiple implements Plent
 	public function getInvalidData($start, $offset)
 	{
 		return Shopware()->Db()->query('
-			SELECT SQL_CALC_FOUND_ROWS a.name, ad.ordernumber, article_id detailsId, count(*) - 1 diff, co.group_id groupId, a.id itemId, co.name `option`, cg.name `group`
+			SELECT SQL_CALC_FOUND_ROWS a.name, ad.ordernumber, article_id detailsId, count(*) - 1 diff, co.group_id groupId, a.id itemId, GROUP_CONCAT(cor.option_id SEPARATOR "|") optionIds, GROUP_CONCAT(co.name SEPARATOR ", ") `option`, cg.name `group`
 				FROM s_article_configurator_option_relations  cor
 				LEFT JOIN s_article_configurator_options co ON co.id = cor.option_id
 				LEFT JOIN s_article_configurator_groups cg ON cg.id = co.group_id
@@ -31,6 +31,35 @@ class PlentymarketsDataIntegrityCheckItemVariationGroupMultiple implements Plent
 		')->fetchAll();
 	}
 
+	public function deleteInvalidData($start, $offset)
+	{
+		foreach ($this->getInvalidData($start, $offset) as $data)
+		{
+			try
+			{
+				$Item = Shopware()->Models()->find('\Shopware\Models\Article\Detail', $data['detailsId']);
+				Shopware()->Models()->remove($Item);
+			}
+			catch (Exception $E)
+			{
+				PlentymarketsLogger::getInstance()->error(__LINE__ . __METHOD__, $E->getMessage());
+				foreach (explode('|', $data['optionIds']) as $optionId)
+				{
+					Shopware()->Db()->query('
+						DELETE FROM s_article_configurator_option_relations
+							WHERE
+								article_id = ? AND
+								option_id = ?
+							LIMIT 1
+					', array(
+						$data['detailsId'],
+						$optionId
+					));
+				}
+			}
+		}
+		Shopware()->Models()->flush();
+	}
 
 	public function getFields()
 	{
@@ -46,13 +75,18 @@ class PlentymarketsDataIntegrityCheckItemVariationGroupMultiple implements Plent
 				'type' => 'string'
 			),
 			array(
-				'name' => 'detailsId',
-				'description' => 'detailsId',
-				'type' => 'int'
+				'name' => 'option',
+				'description' => 'option',
+				'type' => 'string'
 			),
 			array(
-				'name' => 'diff',
-				'description' => 'diff',
+				'name' => 'group',
+				'description' => 'group',
+				'type' => 'string'
+			),
+			array(
+				'name' => 'detailsId',
+				'description' => 'detailsId',
 				'type' => 'int'
 			),
 			array(
@@ -64,16 +98,6 @@ class PlentymarketsDataIntegrityCheckItemVariationGroupMultiple implements Plent
 				'name' => 'itemId',
 				'description' => 'itemId',
 				'type' => 'int'
-			),
-			array(
-				'name' => 'option',
-				'description' => 'option',
-				'type' => 'string'
-			),
-			array(
-				'name' => 'group',
-				'description' => 'group',
-				'type' => 'string'
 			),
 		);
 	}

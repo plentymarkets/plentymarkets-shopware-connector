@@ -4,6 +4,7 @@ interface PlentymarketsDataIntegrityCheckInterface
 {
 	public function getName();
 	public function getInvalidData($start, $offset);
+	public function deleteInvalidData($start, $offset);
 	public function getTotal();
 	public function getFields();
 

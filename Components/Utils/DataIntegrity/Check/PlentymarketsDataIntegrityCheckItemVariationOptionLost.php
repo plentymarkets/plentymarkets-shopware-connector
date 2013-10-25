@@ -31,6 +31,41 @@ class PlentymarketsDataIntegrityCheckItemVariationOptionLost implements Plentyma
 		')->fetchAll();
 	}
 
+	public function deleteInvalidData($start, $offset)
+	{
+		foreach ($this->getInvalidData($start, $offset) as $data)
+		{
+			// Item detail still available
+			if (!empty($data['ordernumber']))
+			{
+				try
+				{
+					$Detail = Shopware()->Models()->find('\Shopware\Models\Article\Detail', $data['detailsId']);
+					Shopware()->Models()->remove($Detail);
+				}
+				catch (Exception $E)
+				{
+				}
+			}
+
+			// delete only the relation
+			else
+			{
+				Shopware()->Db()->query('
+					DELETE FROM s_article_configurator_option_relations
+						WHERE
+							article_id = ? AND
+							option_id = ?
+						LIMIT 1
+				', array(
+					$data['detailsId'],
+					$data['optionId']
+				));
+			}
+		}
+		Shopware()->Models()->flush();
+	}
+
 
 	public function getFields()
 	{
