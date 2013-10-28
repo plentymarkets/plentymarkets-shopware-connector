@@ -90,7 +90,6 @@ class PlentymarketsDataIntegrityCheckItemMainDetailLost implements Plentymarkets
 			}
 			catch (Exception $E)
 			{
-				PlentymarketsLogger::getInstance()->error(__LINE__ . __METHOD__, $E->getMessage());
 				try
 				{
 					// Try to delete through the API
@@ -99,7 +98,6 @@ class PlentymarketsDataIntegrityCheckItemMainDetailLost implements Plentymarkets
 				}
 				catch (Exception $E)
 				{
-					PlentymarketsLogger::getInstance()->error(__LINE__ . __METHOD__, $E->getMessage());
 				}
 			}
 		}

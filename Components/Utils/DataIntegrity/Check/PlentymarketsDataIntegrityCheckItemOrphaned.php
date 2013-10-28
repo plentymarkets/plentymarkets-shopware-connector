@@ -92,7 +92,6 @@ class PlentymarketsDataIntegrityCheckItemOrphaned implements PlentymarketsDataIn
 			}
 			catch (Exception $E)
 			{
-				PlentymarketsLogger::getInstance()->error(__LINE__ . __METHOD__, $E->getMessage());
 			}
 		}
 		Shopware()->Models()->flush();
