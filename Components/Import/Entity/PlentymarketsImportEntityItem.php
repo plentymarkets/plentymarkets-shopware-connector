@@ -279,6 +279,9 @@ class PlentymarketsImportEntityItem
 			return;
 		}
 
+		// Internal number cache
+		$numbersUsed = array();
+
 		foreach ($this->ItemBase->AttributeValueSets->item as $AttributeValueSet)
 		{
 			$AttributeValueSet instanceof PlentySoapObject_ItemAttributeValueSet;
@@ -315,8 +318,17 @@ class PlentymarketsImportEntityItem
 							throw new PlentymarketsImportItemNumberException('The item variation number »' . $number . '« of item »' . $this->data['name'] . '« with the id »' . $this->ItemBase->ItemID . '« is already in use', 3111);
 						}
 
+						// check if the number is in the internal cache
+						if (isset($numbersUsed[$number]))
+						{
+							throw new PlentymarketsImportItemNumberException('The item variation number »' . $number . '« of item »' . $this->data['name'] . '« with the id »' . $this->ItemBase->ItemID . '« would be assigned twice', 3112);
+						}
+
 						// Use this number
 						$details['number'] = $number;
+
+						// Cache the number
+						$numbersUsed[$number] = true;
 					}
 				}
 			}
@@ -331,13 +343,23 @@ class PlentymarketsImportEntityItem
 						throw new PlentymarketsImportItemNumberException('The item variation number »' . $number . '« of item »' . $this->data['name'] . '« with the id »' . $this->ItemBase->ItemID . '« is invalid', 3110);
 					}
 
+					// check if the number is available
 					if (PlentymarketsImportItemHelper::isNumberExistant($number))
 					{
 						throw new PlentymarketsImportItemNumberException('The item variation number »' . $number . '« of item »' . $this->data['name'] . '« with the id »' . $this->ItemBase->ItemID . '« is already in use', 3111);
 					}
 
+					// check if the number is in the internal cache
+					if (isset($numbersUsed[$number]))
+					{
+						throw new PlentymarketsImportItemNumberException('The item variation number »' . $number . '« of item »' . $this->data['name'] . '« with the id »' . $this->ItemBase->ItemID . '« would be assigned twice', 3112);
+					}
+
 					// Use this number
 					$details['number'] = $number;
+
+					// Cache the number
+					$numbersUsed[$number] = true;
 				}
 
 				else
