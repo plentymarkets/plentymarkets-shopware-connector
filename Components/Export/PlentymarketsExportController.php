@@ -135,10 +135,10 @@ class PlentymarketsExportController
 			PlentymarketsMappingController::isComplete() &&
 
 			// Configuration
-			$this->Config->isComplete() &&
+			$this->Config->isComplete()/* &&
 
 			// Data integrity
-			PlentymarketsDataIntegrityController::getInstance()->isValid()
+			PlentymarketsDataIntegrityController::getInstance()->isValid()*/
 		);
 	}
 

@@ -22,20 +22,12 @@ Ext.define('Shopware.apps.Plentymarkets.view.data.Main', {
 
 	border: false,
 
+	isBuilt: false,
+
 	initComponent: function()
 	{
 		var me = this;
 		me.storeStatus = Ext.create('Shopware.apps.Plentymarkets.store.data.Status');
-		// me.items = [];
-		/*
-		 * me.items = [{ xtype: 'plentymarkets-view-data-grid', storeIdentifier:
-		 * storeIdentifier, title: 'Alles', type: 0 }, { xtype:
-		 * 'plentymarkets-view-data-grid', storeIdentifier: storeIdentifier,
-		 * title: 'Nur Fehler', type: 1 }, { xtype:
-		 * 'plentymarkets-view-data-grid', storeIdentifier: storeIdentifier,
-		 * title: 'Nur Meldungen', type: 2 }]
-		 */;
-
 		me.callParent(arguments);
 	},
 
@@ -43,19 +35,19 @@ Ext.define('Shopware.apps.Plentymarkets.view.data.Main', {
 	{
 		var me = this, i;
 
+		if (me.isBuilt)
+		{
+			return;
+		}
+
 		me.setLoading(true);
-		
+
 		var title = {
 			ItemMainDetailLost: 'Verlorene Details',
-			ItemOrphaned: 'Verlorener Artikel',
+			ItemOrphaned: 'Verlorene Artikel',
 			ItemVariationGroupMultiple: 'Varianten/Attribute/Mehrfachzuordnung',
-			ItemVariationOptionLost: 'Verlorene Attributeoptionen'
+			ItemVariationOptionLost: 'Verlorene Attribut-Optionen'
 		};
-		
-		for (i = 0; i < me.items.length; i++)
-		{
-			me.remove(me.items.getAt(i));
-		}
 
 		me.storeStatus.load(function(data)
 		{
@@ -65,12 +57,14 @@ Ext.define('Shopware.apps.Plentymarkets.view.data.Main', {
 					xtype: 'plentymarkets-view-data-grid',
 					title: title[record.get('name')],
 					type: record.get('name'),
-					fields: record.getFields()
+					fields: record.getFields(),
+					emptyText: 'Die Daten sind okay!'
 				});
 			});
 			me.setLoading(false);
 		});
 		
+		me.isBuilt = true;
 	}
 
 });

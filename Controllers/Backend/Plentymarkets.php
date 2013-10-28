@@ -44,18 +44,9 @@ require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingController.php';
  */
 class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Backend_ExtJs
 {
-
-	public function aAction()
-	{
-
-		require_once PY_COMPONENTS . 'Utils/DataIntegrity/PlentymarketsDataIntegrityController.php';
-		var_dump(PlentymarketsDataIntegrityController::getInstance()->isValid());
-		var_dump(PlentymarketsDataIntegrityController::getInstance()->getInvalidChecks());
-		var_dump(PlentymarketsDataIntegrityController::getInstance()->getCheck('ItemMainDetail')->getInvalidData(0, 25));
-		var_dump(PlentymarketsDataIntegrityController::getInstance()->getCheck('ItemDetailMissing')->getInvalidData(0, 25));
-		var_dump(PlentymarketsDataIntegrityController::getInstance()->getCheck('ItemVariationOptionLost')->getInvalidData(0, 25));
-	}
-
+	/**
+	 * Deleted a page of corrupt data
+	 */
 	public function deleteDataIntegrityInvalidDataAction()
 	{
 		require_once PY_COMPONENTS . 'Utils/DataIntegrity/PlentymarketsDataIntegrityController.php';
@@ -71,11 +62,14 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		));
 	}
 
+	/**
+	 * Returns the list of integrity checks
+	 */
 	public function getDataIntegrityInvalidListAction()
 	{
-
 		require_once PY_COMPONENTS . 'Utils/DataIntegrity/PlentymarketsDataIntegrityController.php';
-		$Checks = PlentymarketsDataIntegrityController::getInstance()->getInvalidChecks();
+
+		$Checks = PlentymarketsDataIntegrityController::getInstance()->getChecks();
 		$data = array();
 		foreach ($Checks as $Check)
 		{
@@ -84,12 +78,16 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 				'fields' => $Check->getFields()
 			);
 		}
+
 		$this->View()->assign(array(
 			'success' => true,
 			'data' => $data
 		));
 	}
 
+	/**
+	 * Returns a list of invalid data records
+	 */
 	public function getDataIntegrityInvalidDataListAction()
 	{
 

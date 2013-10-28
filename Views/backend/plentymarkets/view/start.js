@@ -264,7 +264,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Start', {
 					cls: 'secondary small',
 					handler: function()
 					{
-						me.main.tabpanel.setActiveTab(4);
+						me.main.tabpanel.setActiveTab(3);
 					}
 				}]
 			}, {
@@ -282,19 +282,18 @@ Ext.define('Shopware.apps.Plentymarkets.view.Start', {
 						}
 						else
 						{
-							return Ext.String.format('<div class="plenty-status plenty-status-warning">Ein zuverlässiger Datenaustausch ist nicht möglich!</div>');
+							return Ext.String.format('<div class="plenty-status plenty-status-warning">&nbsp;</div>');
 						}
 					}
-				}/*, {
+				},{
 					xtype: 'button',
 					text: 'Details öffnen',
 					cls: 'secondary small',
 					handler: function()
 					{
-						me.main.tabpanel.setActiveTab(3);
+						me.main.tabpanel.setActiveTab(4);
 					}
-				
-				}*/]
+				}]
 			}, {
 				xtype: 'fieldcontainer',
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/InitialExportStatus}Datenexport zu plentymarkets{/s}',
@@ -319,7 +318,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Start', {
 					cls: 'secondary small',
 					handler: function()
 					{
-						me.main.tabpanel.setActiveTab(3);
+						me.main.tabpanel.setActiveTab(5);
 					}
 
 				}]

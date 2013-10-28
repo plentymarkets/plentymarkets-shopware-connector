@@ -19,6 +19,9 @@ Ext.define('Shopware.apps.Plentymarkets.view.data.Grid', {
 	border: false,
 
 	forceFit: true,
+	viewConfig: {
+		deferEmptyText: false
+	},
 
 	initComponent: function()
 	{
@@ -33,7 +36,6 @@ Ext.define('Shopware.apps.Plentymarkets.view.data.Grid', {
 		// console.log(me.fields);
 		me.fields.each(function(item, index, totalItems)
 		{
-			console.dir(item)
 			model.fields.push({
 				name: item.get('name'),
 				type: item.get('type')
@@ -41,11 +43,10 @@ Ext.define('Shopware.apps.Plentymarkets.view.data.Grid', {
 
 			me.columns.push({
 				header: item.get('description'),
-				dataIndex: item.get('name'),
-			// flex: 1
+				dataIndex: item.get('name')
 			});
 		});
-		// console.log(me.type);
+
 		Ext.define('PlentyDataModel' + me.type, model);
 
 		Ext.define('PlentyDataStore' + me.type, {
@@ -56,8 +57,8 @@ Ext.define('Shopware.apps.Plentymarkets.view.data.Grid', {
 			proxy: {
 				type: 'ajax',
 				api: {
-					read: '/backend/Plentymarkets/getDataIntegrityInvalidDataList',
-					update: '/backend/Plentymarkets/deleteDataIntegrityInvalidData'
+					read: '{url action=getDataIntegrityInvalidDataList}',
+					update: '{url action=deleteDataIntegrityInvalidData}'
 				},
 				reader: {
 					type: 'json',
@@ -71,34 +72,44 @@ Ext.define('Shopware.apps.Plentymarkets.view.data.Grid', {
 		me.store.getProxy().setExtraParam('type', me.type)
 
 		me.bbar = new Ext.PagingToolbar({
+			cls: 'shopware-toolbar',
 			store: me.store,
 			dock: 'bottom',
 			displayInfo: true,
 			enableOverflow: true,
 			items: ['->', {
 				xtype: 'button',
+				cls: 'secondary',
+				iconCls: 'plenty-status plenty-icon-broom',
 				text: 'Diese Seite bereinigen',
 				listeners: {
 					click: function(field, newValue, oldValue)
 					{
-						me.setLoading(true);
-						// me.store.load();
-						me.store.update({
-							params: {
-								start: (me.store.currentPage - 1) * me.store.pageSize,
-								limit: me.store.pageSize
-							},
-							callback: function (data)
+						var message = 'Es handelt sich hierbei um ein experimentelles Feature. Die angezeigten Datensätze und Verknüpfungen auf dieser Seite werden gelöscht!<br><br>Trotzdem forfahren?';
+
+						Ext.Msg.confirm('Achtung!', message, function(button)
+						{
+							if (button === 'yes')
 							{
-								me.setLoading(false);
-								me.store.load()
+								me.setLoading(true);
+								me.store.update({
+									params: {
+										start: (me.store.currentPage - 1) * me.store.pageSize,
+										limit: me.store.pageSize
+									},
+									callback: function(data)
+									{
+										me.setLoading(false);
+										me.store.load()
+									}
+								});
 							}
 						});
 					}
 				}
 			}]
 		});
-		
+
 		me.callParent(arguments);
 	}
 
