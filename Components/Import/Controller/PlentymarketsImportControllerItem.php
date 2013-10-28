@@ -150,6 +150,7 @@ class PlentymarketsImportControllerItem
 		catch (Shopware\Components\Api\Exception\OrmException $E)
 		{
 			PlentymarketsLogger::getInstance()->error('Sync:Item:Orm', 'The item »'. $ItemBase->Texts->Name .'« with the id »'. $ItemBase->ItemID .'« could not be imported ('. $E->getMessage() .')', 3020);
+			PlentymarketsLogger::getInstance()->error('Sync:Item:Orm', $E->getTraceAsString(), 1000);
 			throw new PlentymarketsImportException('The item import will be stopped (internal database error)', 3021);
 		}
 
