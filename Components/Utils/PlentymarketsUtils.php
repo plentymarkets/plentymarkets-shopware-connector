@@ -175,7 +175,7 @@ class PlentymarketsUtils
 		$dataIntegrityStatus = PlentymarketsDataIntegrityController::getInstance()->isValid();
 
 		//
-		$mayDatex = $mappingStatus && $exportStatus && $settingsStatus && $dataIntegrityStatus;
+		$mayDatex = $mappingStatus && $exportStatus && $settingsStatus/* && $dataIntegrityStatus*/;
 
 		// Den Status für den Datenaustausch ggf. deaktivieren
 		if (!$mayDatex)
