@@ -80,12 +80,12 @@ Ext.define('Shopware.apps.Plentymarkets.view.data.Grid', {
 			items: ['->', {
 				xtype: 'button',
 				cls: 'secondary',
-				iconCls: 'plenty-status plenty-icon-broom',
+				iconCls: 'plenty-icon-broom',
 				text: 'Diese Seite bereinigen',
 				listeners: {
 					click: function(field, newValue, oldValue)
 					{
-						var message = 'Es handelt sich hierbei um ein experimentelles Feature. Die angezeigten Datensätze und Verknüpfungen auf dieser Seite werden gelöscht!<br><br>Trotzdem forfahren?';
+						var message = 'Es handelt sich hierbei um ein experimentelles Feature. Die angezeigten Datensätze und Verknüpfungen auf dieser Seite werden gelöscht! Sie sollten die Daten vorher sichern! <br><br>Trotzdem forfahren?';
 
 						Ext.Msg.confirm('Achtung!', message, function(button)
 						{
