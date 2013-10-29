@@ -149,11 +149,6 @@ class PlentymarketsCronjobController
 	 */
 	public function runCleanup(Shopware_Components_Cron_CronJob $Job)
 	{
-		if (!$this->mayRun)
-		{
-			return;
-		}
-
 		$PlentymarketsGarbageCollector = PlentymarketsGarbageCollector::getInstance();
 		$PlentymarketsGarbageCollector->run(PlentymarketsGarbageCollector::ACTION_MAPPING);
 	}
@@ -165,11 +160,6 @@ class PlentymarketsCronjobController
 	 */
 	public function runLogCleanup(Shopware_Components_Cron_CronJob $Job)
 	{
-		if (!$this->mayRun)
-		{
-			return;
-		}
-
 		PlentymarketsLogger::getInstance()->message('Cleanup:Log', 'Starting');
 
 		$PlentymarketsGarbageCollector = PlentymarketsGarbageCollector::getInstance();
