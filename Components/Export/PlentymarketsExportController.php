@@ -130,16 +130,7 @@ class PlentymarketsExportController
 		}
 
 		// Check whether settings and mapping are done
-		$this->mayRun = (
-			// Setting
-			PlentymarketsMappingController::isComplete() &&
-
-			// Configuration
-			$this->Config->isComplete()/* &&
-
-			// Data integrity
-			PlentymarketsDataIntegrityController::getInstance()->isValid()*/
-		);
+		$this->mayRun = PlentymarketsStatus::getInstance()->mayExport();
 	}
 
 	/**
