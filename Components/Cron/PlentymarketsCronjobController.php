@@ -377,6 +377,7 @@ class PlentymarketsCronjobController
 
 		if (!$this->mayRun)
 		{
+			$this->Config->setImportItemStackStatus(0);
 			return;
 		}
 
