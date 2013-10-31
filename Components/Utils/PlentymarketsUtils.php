@@ -107,46 +107,6 @@ class PlentymarketsUtils
 	}
 
 	/**
-	 * Checks whether a connection can be made with the plentymarkets SOAP interface.
-	 *
-	 * @return boolean
-	 */
-	public static function checkApiConnectionStatus()
-	{
-		if (!PlentymarketsConfig::getInstance()->getApiWsdl())
-		{
-			PlentymarketsConfig::getInstance()->erasePlentymarketsVersion();
-			PlentymarketsConfig::getInstance()->setApiLastStatusTimestamp(time());
-			PlentymarketsConfig::getInstance()->setApiStatus(1);
-
-			return false;
-		}
-
-		try
-		{
-			$Response = PlentymarketsSoapClient::getInstance()->GetServerTime();
-
-			//
-			PlentymarketsConfig::getInstance()->setApiTimestampDeviation(time() - $Response->Timestamp);
-			PlentymarketsConfig::getInstance()->setApiLastStatusTimestamp(time());
-			PlentymarketsConfig::getInstance()->setApiStatus(2);
-
-			// plenty version
-			self::checkPlentymarketsVersion();
-
-			return true;
-		}
-		catch (Exception $E)
-		{
-			PlentymarketsConfig::getInstance()->setApiTimestampDeviation(0);
-			PlentymarketsConfig::getInstance()->setApiLastStatusTimestamp(time());
-			PlentymarketsConfig::getInstance()->setApiStatus(1);
-
-			return false;
-		}
-	}
-
-	/**
 	 * Retrieves the plentymarkets version
 	 */
 	public static function checkPlentymarketsVersion()
@@ -158,66 +118,6 @@ class PlentymarketsUtils
 			PlentymarketsConfig::getInstance()->setPlentymarketsVersion($Response->PlentyVersion);
 			PlentymarketsConfig::getInstance()->setPlentymarketsVersionTimestamp(time());
 		}
-	}
-
-	/**
-	 * Checks whether the mapping and initial export are complete and whether the settings were saved.
-	 *
-	 * @return boolean
-	 */
-	public static function checkMappingAndExportStatus()
-	{
-		$Config = PlentymarketsConfig::getInstance();
-
-		$mappingStatus = PlentymarketsMappingController::isComplete();
-		$exportStatus = PlentymarketsExportController::getInstance()->isComplete();
-		$settingsStatus = $Config->isComplete();
-		$dataIntegrityStatus = PlentymarketsDataIntegrityController::getInstance()->isValid();
-
-		//
-		$mayDatex = $mappingStatus && $exportStatus && $settingsStatus/* && $dataIntegrityStatus*/;
-
-		// Den Status für den Datenaustausch ggf. deaktivieren
-		if (!$mayDatex)
-		{
-			// Deaktivieren, wenn er aktiv ist
-			// User bleibt bestehen
-			$Config->setMayDatex(0);
-			$Config->setMayDatexActual(0);
-		}
-
-		// Aktivieren, sofern der User das wünscht (Display)
-		else
-		{
-			$Config->setMayDatex(1);
-			if ($Config->getMayDatexUser(0))
-			{
-				$Config->setMayDatexActual(1);
-			}
-			else
-			{
-				$Config->setMayDatexActual(0);
-			}
-		}
-
-		$Config->setIsDataIntegrityValid((integer) $dataIntegrityStatus);
-		$Config->setIsSettingsFinished((integer) $settingsStatus);
-		$Config->setIsExportFinished((integer) $exportStatus);
-		$Config->setIsMappingFinished((integer) $mappingStatus);
-
-		return $mayDatex;
-	}
-
-	/**
-	 * Checks the data exchange status
-	 *
-	 * @see checkMappingAndExportStatus()
-	 * @see checkApiConnectionStatus
-	 * @return boolean
-	 */
-	public static function checkDxStatus()
-	{
-		return self::checkApiConnectionStatus() && self::checkMappingAndExportStatus();
 	}
 
 	/**

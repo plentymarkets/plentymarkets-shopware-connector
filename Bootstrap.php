@@ -33,6 +33,7 @@ define('PY_CONTROLLERS', PY_BASE . 'Controllers' . DIRECTORY_SEPARATOR);
 
 require_once PY_COMPONENTS . 'Config/PlentymarketsConfig.php';
 require_once PY_COMPONENTS . 'Utils/PlentymarketsUtils.php';
+require_once PY_COMPONENTS . 'Utils/PlentymarketsStatus.php';
 require_once PY_COMPONENTS . 'Utils/PlentymarketsLogger.php';
 require_once PY_COMPONENTS . 'Cron/PlentymarketsCronjobController.php';
 
