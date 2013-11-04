@@ -218,6 +218,20 @@ class PlentymarketsGarbageCollector
 				// Do the request
 				$Response_GetItemsByStoreID = PlentymarketsSoapClient::getInstance()->GetItemsByStoreID($Request_GetItemsByStoreID);
 
+				// Call failed
+				if (is_null($Response_GetItemsByStoreID) || !property_exists($Response_GetItemsByStoreID, 'Items'))
+				{
+					// Log
+					PlentymarketsLogger::getInstance()->error('Cleanup:Item', 'Aborting. GetItemsByStoreID apparently failed');
+
+					// Delete the temporary table
+					Shopware()->Db()->exec('
+						DROP TEMPORARY TABLE plenty_cleanup_item
+					');
+
+					return;
+				}
+
 				$itemIds = array();
 				foreach ($Response_GetItemsByStoreID->Items->item as $ItemByStoreID)
 				{
