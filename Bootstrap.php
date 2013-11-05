@@ -52,6 +52,33 @@ define('EXPORT_ORDER_ITEM_TEXT_SYNC_NO', 0);
 define('MOP_DEBIT', 3);
 
 /**
+ *
+ * @return PlentymarketsConfig
+ */
+function PyConf()
+{
+	return PlentymarketsConfig::getInstance();
+}
+
+/**
+ *
+ * @return PlentymarketsLogger
+ */
+function PyLog()
+{
+	return PlentymarketsLogger::getInstance();
+}
+
+/**
+ *
+ * @return PlentymarketsStatus
+ */
+function PyStatus()
+{
+	return PlentymarketsStatus::getInstance();
+}
+
+/**
  * This class is called first when starting the plentymarkets plugin. It initializes and cleans all important data.
  * It also provides cronjob functionality for an initial execution of the plentymarkets plugin.
  *
