@@ -37,6 +37,96 @@
  */
 class PlentymarketsImportEntityItemStock
 {
+	/**
+	 *
+	 * @var PlentymarketsImportEntityItemStock
+	 */
+	protected static $Instance;
+
+	/**
+	 *
+	 * @var integer
+	 */
+	protected $itemWarehousePercentage;
+
+	/**
+	 *
+	 * @var integer
+	 */
+	protected $numberOfStocksUpdated = 0;
+
+	/**
+	 * I am the constructor
+	 */
+	protected function __construct()
+	{
+		$itemWarehousePercentage = PlentymarketsConfig::getInstance()->getItemWarehousePercentage(100);
+
+		if ($itemWarehousePercentage > 100 || $itemWarehousePercentage <= 0)
+		{
+			$itemWarehousePercentage = 100;
+		}
+
+		$this->itemWarehousePercentage = $itemWarehousePercentage;
+	}
+
+	/**
+	 * I am the singleton method
+	 *
+	 * @return PlentymarketsImportEntityItemStock
+	 */
+	public static function getInstance()
+	{
+		if (!self::$Instance instanceof self)
+		{
+			self::$Instance = new self();
+		}
+		return self::$Instance;
+	}
+
+	/**
+	 * Updates the stock for the given PlentySoapObject_GetCurrentStocks object
+	 *
+	 * @param PlentySoapObject_GetCurrentStocks $CurrentStock
+	 */
+	public function update($CurrentStock)
+	{
+		try
+		{
+			// Master item
+			if (preg_match('/\d+\-\d+\-0/', $CurrentStock->SKU))
+			{
+				$parts = explode('-', $CurrentStock->SKU);
+
+				$itemId = PlentymarketsMappingController::getItemByPlentyID((integer) $parts[0]);
+				$Item = Shopware()->Models()->find('Shopware\Models\Article\Article', $itemId);
+
+				// Book
+				$this->updateByDetail($Item->getMainDetail(), $CurrentStock->NetStock);
+			}
+
+			// Variant
+			else
+			{
+				$itemDetailId = PlentymarketsMappingController::getItemVariantByPlentyID($CurrentStock->SKU);
+
+				// Book
+				$this->updateById($itemDetailId, $CurrentStock->NetStock);
+			}
+		}
+
+		// Item does not exists
+		catch (PlentymarketsMappingExceptionNotExistant $E)
+		{
+		}
+
+		// Something went wrong
+		catch (Exception $E)
+		{
+			PlentymarketsLogger::getInstance()->error('Sync:Item:Stock', 'The stock of the item detail with the id »' . $itemDetailId . '« could not be updated (' . $E->getMessage() . ')', 3510);
+		}
+	}
+
 
 	/**
 	 * Updates the stock for the given item detail id
@@ -44,7 +134,7 @@ class PlentymarketsImportEntityItemStock
 	 * @param integer $itemDetailId
 	 * @param float $stock
 	 */
-	public static function update($itemDetailId, $stock)
+	protected function updateById($itemDetailId, $stock)
 	{
 		// Get the detail
 		$Detail = Shopware()->Models()->find('Shopware\Models\Article\Detail', $itemDetailId);
@@ -55,7 +145,7 @@ class PlentymarketsImportEntityItemStock
 		}
 		else
 		{
-			self::updateByDetail($Detail, $stock);
+			$this->updateByDetail($Detail, $stock);
 		}
 	}
 
@@ -65,19 +155,12 @@ class PlentymarketsImportEntityItemStock
 	 * @param Shopware\Models\Article\Detail $Detail
 	 * @param float $stock
 	 */
-	public static function updateByDetail(Shopware\Models\Article\Detail $Detail, $stock)
+	protected function updateByDetail(Shopware\Models\Article\Detail $Detail, $stock)
 	{
-		$itemWarehousePercentage = PlentymarketsConfig::getInstance()->getItemWarehousePercentage(100);
-
-		if ($itemWarehousePercentage > 100 || $itemWarehousePercentage <= 0)
-		{
-			$itemWarehousePercentage = 100;
-		}
-
 		if ($stock > 0)
 		{
 			// At least one
-			$stock = max(1, ceil($stock / 100 * $itemWarehousePercentage));
+			$stock = max(1, ceil($stock / 100 * $this->itemWarehousePercentage));
 		}
 
 		// Remember the last stock (for the log message)
