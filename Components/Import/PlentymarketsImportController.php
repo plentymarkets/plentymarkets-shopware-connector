@@ -183,11 +183,11 @@ class PlentymarketsImportController
 	public static function importItemStocks()
 	{
 		$Request_GetCurrentStocks = new PlentySoapRequest_GetCurrentStocks();
-		$Request_GetCurrentStocks->LastUpdate = PlentymarketsConfig::getInstance()->getImportItemStockLastUpdateTimestamp(0);
+		$Request_GetCurrentStocks->LastUpdate = (integer) PlentymarketsConfig::getInstance()->getImportItemStockLastUpdateTimestamp(0);
 		$Request_GetCurrentStocks->Page = 0;
 		$Request_GetCurrentStocks->WarehouseID = PlentymarketsConfig::getInstance()->getItemWarehouseID(0);
 
-		PlentymarketsLogger::getInstance()->message('Sync:Item:Stock', 'LastUpdate: ' . date('r', PlentymarketsConfig::getInstance()->getImportItemStockLastUpdateTimestamp(-1)));
+		PlentymarketsLogger::getInstance()->message('Sync:Item:Stock', 'LastUpdate: ' . date('r', PlentymarketsConfig::getInstance()->getImportItemStockLastUpdateTimestamp(0)));
 		PlentymarketsLogger::getInstance()->message('Sync:Item:Stock', 'WarehouseId: ' . PlentymarketsConfig::getInstance()->getItemWarehouseID(0));
 
 		// Helper
