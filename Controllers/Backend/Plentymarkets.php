@@ -514,6 +514,30 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	}
 
 	/**
+	 * Resets a last update timestamp of an entity
+	 */
+	public function resetImportTimestampAction()
+	{
+		$entity = $this->Request()->get('entity');
+
+		if (in_array($entity, array('ItemStack', 'ItemPrice', 'ItemStock')))
+		{
+			PlentymarketsConfig::getInstance()->erase('Import' . $entity . 'LastUpdateTimestamp');
+			PlentymarketsLogger::getInstance()->message('Sync:Reset', $entity . ' resetted');
+		}
+
+		// Cleanup the mapping – whatsoever
+		PlentymarketsGarbageCollector::getInstance()->run(
+			PlentymarketsGarbageCollector::ACTION_MAPPING
+		);
+
+		$this->View()->assign(array(
+			'success' => true,
+			'data' => $entity
+		));
+	}
+
+	/**
 	 * Returns the status for each initial export entity
 	 *
 	 * @return array
