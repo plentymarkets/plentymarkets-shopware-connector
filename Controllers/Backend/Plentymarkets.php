@@ -49,12 +49,18 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	 */
 	public function deleteDataIntegrityInvalidDataAction()
 	{
+		require_once PY_COMPONENTS . 'Utils/PlentymarketsGarbageCollector.php';
 		require_once PY_COMPONENTS . 'Utils/DataIntegrity/PlentymarketsDataIntegrityController.php';
 
 		$Check = PlentymarketsDataIntegrityController::getInstance()->getCheck($this->Request()->get('type'));
 		$Check->deleteInvalidData(
 			$this->Request()->get('start'),
 			$this->Request()->get('limit')
+		);
+
+		// Cleanup
+		PlentymarketsGarbageCollector::getInstance()->run(
+			PlentymarketsGarbageCollector::ACTION_MAPPING
 		);
 
 		$this->View()->assign(array(
