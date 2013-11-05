@@ -82,9 +82,10 @@ class PlentymarketsImportEntityItemStock
 
 		// Remember the last stock (for the log message)
 		$previousStock = $Detail->getInStock();
+		$diff = $stock - $previousStock;
 
 		// Nothing to to
-		if ($previousStock == $stock)
+		if ($previousStock == $stock || $diff == 0)
 		{
 			return;
 		}
@@ -97,7 +98,6 @@ class PlentymarketsImportEntityItemStock
 		Shopware()->Models()->flush();
 
 		// Log
-		$diff = $stock - $previousStock;
 		if ($diff > 0)
 		{
 			$diff = '+'. $diff;
