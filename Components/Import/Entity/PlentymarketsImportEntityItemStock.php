@@ -39,35 +39,69 @@ class PlentymarketsImportEntityItemStock
 {
 
 	/**
-	 * Updated the stock for the given item
+	 * Updates the stock for the given item detail id
 	 *
-	 * @param integer $itemDetailsID
+	 * @param integer $itemDetailId
 	 * @param float $stock
 	 */
-	public static function update($itemDetailsID, $stock)
+	public static function update($itemDetailId, $stock)
 	{
-		$Detail = Shopware()->Models()
-			->getRepository('Shopware\Models\Article\Detail')
-			->find($itemDetailsID);
+		// Get the detail
+		$Detail = Shopware()->Models()->find('Shopware\Models\Article\Detail', $itemDetailId);
 
+		if (!$Detail instanceof Shopware\Models\Article\Detail)
+		{
+			PlentymarketsLogger::getInstance()->error('Sync:Item:Stock', 'The stock of the item detail with the id »'. $itemDetailId .'« could not be updated (detail corrupt)', 3511);
+		}
+		else
+		{
+			self::updateByDetail($Detail, $stock);
+		}
+	}
+
+	/**
+	 * Updates the stock for the given item detail
+	 *
+	 * @param Shopware\Models\Article\Detail $Detail
+	 * @param float $stock
+	 */
+	public static function updateByDetail(Shopware\Models\Article\Detail $Detail, $stock)
+	{
 		$itemWarehousePercentage = PlentymarketsConfig::getInstance()->getItemWarehousePercentage(100);
 
 		if ($itemWarehousePercentage > 100 || $itemWarehousePercentage <= 0)
 		{
 			$itemWarehousePercentage = 100;
 		}
-		
+
 		if ($stock > 0)
 		{
 			// At least one
 			$stock = max(1, ceil($stock / 100 * $itemWarehousePercentage));
 		}
 
-		$Detail->fromArray(array(
-			'inStock' => $stock
-		));
+		// Remember the last stock (for the log message)
+		$previousStock = $Detail->getInStock();
 
+		// Nothing to to
+		if ($previousStock == $stock)
+		{
+			return;
+		}
+
+		// Set the stock
+		$Detail->setInStock($stock);
+
+		// And save it
 		Shopware()->Models()->persist($Detail);
 		Shopware()->Models()->flush();
+
+		// Log
+		$diff = $stock - $previousStock;
+		if ($diff > 0)
+		{
+			$diff = '+'. $diff;
+		}
+		PlentymarketsLogger::getInstance()->message('Sync:Item:Stock', 'The stock of the item »'. $Detail->getArticle()->getName() .'« with the number »'. $Detail->getNumber() .'« has been rebooked to '. $stock .' ('. $diff .')');
 	}
 }

@@ -205,4 +205,14 @@ class PlentymarketsLogger
 	{
 		$this->log(self::TYPE_MESSAGE, $identifier, $message);
 	}
+
+	/**
+	 * Logs a debug message
+	 *
+	 * @param string $message
+	 */
+	public function debug($message)
+	{
+		$this->message('DEBUG', $message);
+	}
 }
