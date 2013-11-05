@@ -90,7 +90,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Main', {
 
 		items.get(2).setDisabled(statusToSet);
 		items.get(3).setDisabled(statusToSet);
-		items.get(4).setDisabled(statusToSet);
+		items.get(5).setDisabled(statusToSet);
 	}
 
 });
