@@ -49,12 +49,18 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	 */
 	public function deleteDataIntegrityInvalidDataAction()
 	{
+		require_once PY_COMPONENTS . 'Utils/PlentymarketsGarbageCollector.php';
 		require_once PY_COMPONENTS . 'Utils/DataIntegrity/PlentymarketsDataIntegrityController.php';
 
 		$Check = PlentymarketsDataIntegrityController::getInstance()->getCheck($this->Request()->get('type'));
 		$Check->deleteInvalidData(
 			$this->Request()->get('start'),
 			$this->Request()->get('limit')
+		);
+
+		// Cleanup
+		PlentymarketsGarbageCollector::getInstance()->run(
+			PlentymarketsGarbageCollector::ACTION_MAPPING
 		);
 
 		$this->View()->assign(array(
@@ -510,6 +516,30 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 			'success' => $success,
 			'message' => $message,
 			'data' => $settings[$params['name']]
+		));
+	}
+
+	/**
+	 * Resets a last update timestamp of an entity
+	 */
+	public function resetImportTimestampAction()
+	{
+		$entity = $this->Request()->get('entity');
+
+		if (in_array($entity, array('ItemStack', 'ItemPrice', 'ItemStock')))
+		{
+			PlentymarketsConfig::getInstance()->erase('Import' . $entity . 'LastUpdateTimestamp');
+			PlentymarketsLogger::getInstance()->message('Sync:Reset', $entity . ' resetted');
+		}
+
+		// Cleanup the mapping – whatsoever
+		PlentymarketsGarbageCollector::getInstance()->run(
+			PlentymarketsGarbageCollector::ACTION_MAPPING
+		);
+
+		$this->View()->assign(array(
+			'success' => true,
+			'data' => $entity
 		));
 	}
 

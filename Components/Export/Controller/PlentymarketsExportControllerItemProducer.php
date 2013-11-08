@@ -120,6 +120,12 @@ class PlentymarketsExportControllerItemProducer
 			// Do the call
 			$Response_SetProducers = PlentymarketsSoapClient::getInstance()->SetProducers($Request_SetProducers);
 
+			//
+			if (!$Response_SetProducers->Success)
+			{
+				throw new PlentymarketsExportException('The item producers could not be created', 2931);
+			}
+
 			// Create mapping
 			foreach ($Response_SetProducers->ResponseMessages->item as $ResponseMessage)
 			{

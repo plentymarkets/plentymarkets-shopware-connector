@@ -120,8 +120,11 @@ class PlentymarketsImportStackItem implements Countable
 		// Remember the time
 		$timestamp = time();
 
+		// Is this the first run?
+		$firstBlood = (integer) PlentymarketsConfig::getInstance()->getImportItemStackFirstRunTimestamp() == 0;
+
 		$Request_GetItemsUpdated = new PlentySoapRequest_GetItemsUpdated();
-		$Request_GetItemsUpdated->LastUpdateFrom = PlentymarketsConfig::getInstance()->getImportItemStackLastUpdateTimestamp(0);
+		$Request_GetItemsUpdated->LastUpdateFrom = (integer) PlentymarketsConfig::getInstance()->getImportItemStackLastUpdateTimestamp();
 
 		// Cache to avaid duplicate inserts of the same id with multiple shops
 		$itemIdsStacked = array();
@@ -143,7 +146,7 @@ class PlentymarketsImportStackItem implements Countable
 					$itemId = $Object_Integer->intValue;
 
 					// Skip existing items on the first run
-					if ($Request_GetItemsUpdated->LastUpdateFrom == 0)
+					if ($Request_GetItemsUpdated->LastUpdateFrom == 0 && $firstBlood)
 					{
 						try
 						{
@@ -167,8 +170,26 @@ class PlentymarketsImportStackItem implements Countable
 		// Upcomming last update timestamp
 		PlentymarketsConfig::getInstance()->setImportItemStackLastUpdateTimestamp($timestamp);
 
+		if ($firstBlood)
+		{
+			// Remember your very first time :)
+			PlentymarketsConfig::getInstance()->setImportItemStackFirstRunTimestamp(time());
+		}
+
 		// Log
-		PlentymarketsLogger::getInstance()->message('Sync:Stack:Item', 'Added ' . count($itemIdsStacked) . ' items to the stack');
+		$numberOfItemsStacked = count($itemIdsStacked);
+		if (!$numberOfItemsStacked)
+		{
+			PlentymarketsLogger::getInstance()->message('Sync:Stack:Item', 'No item has been added to the stack');
+		}
+		else if ($numberOfItemsStacked == 1)
+		{
+			PlentymarketsLogger::getInstance()->message('Sync:Stack:Item', '1 item has been added to the stack');
+		}
+		else
+		{
+			PlentymarketsLogger::getInstance()->message('Sync:Stack:Item', count($itemIdsStacked) . ' items have been added to the stack');
+		}
 		PlentymarketsLogger::getInstance()->message('Sync:Stack:Item', 'Update finished');
 	}
 

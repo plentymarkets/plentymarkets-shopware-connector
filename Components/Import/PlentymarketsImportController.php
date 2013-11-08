@@ -183,16 +183,16 @@ class PlentymarketsImportController
 	public static function importItemStocks()
 	{
 		$Request_GetCurrentStocks = new PlentySoapRequest_GetCurrentStocks();
-		$Request_GetCurrentStocks->LastUpdate = PlentymarketsConfig::getInstance()->getImportItemStockLastUpdateTimestamp(0);
+		$Request_GetCurrentStocks->LastUpdate = (integer) PlentymarketsConfig::getInstance()->getImportItemStockLastUpdateTimestamp(0);
 		$Request_GetCurrentStocks->Page = 0;
 		$Request_GetCurrentStocks->WarehouseID = PlentymarketsConfig::getInstance()->getItemWarehouseID(0);
 
-		PlentymarketsLogger::getInstance()->message('Sync:Item:Stock', 'LastUpdate: ' . date('r', PlentymarketsConfig::getInstance()->getImportItemStockLastUpdateTimestamp(-1)));
+		PlentymarketsLogger::getInstance()->message('Sync:Item:Stock', 'LastUpdate: ' . date('r', PlentymarketsConfig::getInstance()->getImportItemStockLastUpdateTimestamp(0)));
 		PlentymarketsLogger::getInstance()->message('Sync:Item:Stock', 'WarehouseId: ' . PlentymarketsConfig::getInstance()->getItemWarehouseID(0));
 
 		// Helper
 		$timestamp = time();
-		$numberOfStocksUpdated = 0;
+		$ImportEntityItemStock = PlentymarketsImportEntityItemStock::getInstance();
 
 		do
 		{
@@ -200,46 +200,13 @@ class PlentymarketsImportController
 
 			foreach ($Response_GetCurrentStocks->CurrentStocks->item as $CurrentStock)
 			{
-				$CurrentStock instanceof PlentySoapObject_GetCurrentStocks;
-				try
-				{
-					// Variant
-					$itemDetailsID = PlentymarketsMappingController::getItemVariantByPlentyID($CurrentStock->SKU);
-				}
-				catch (PlentymarketsMappingExceptionNotExistant $E)
-				{
-					// Master item
-					$parts = explode('-', $CurrentStock->SKU);
-					try
-					{
-						$itemID = PlentymarketsMappingController::getItemByPlentyID($parts[0]);
-						$Detail = Shopware()->Models()
-							->getRepository('Shopware\Models\Article\Detail')
-							->findOneBy(array(
-								'articleId' => $itemID
-						));
-
-						$itemDetailsID = $Detail->getId();
-					}
-					catch (PlentymarketsMappingExceptionNotExistant $E)
-					{
-						continue;
-					}
-				}
-
-				// Book
-				PlentymarketsImportEntityItemStock::update($itemDetailsID, $CurrentStock->NetStock);
-
-				// Count
-				++$numberOfStocksUpdated;
+				$ImportEntityItemStock->update($CurrentStock);
 			}
 		}
 
 		// Until all pages are received
 		while (++$Request_GetCurrentStocks->Page < $Response_GetCurrentStocks->Pages);
 
-		//
-		PlentymarketsLogger::getInstance()->message('Sync:Item:Stock', $numberOfStocksUpdated . ' stocks have been updated');
 		PlentymarketsConfig::getInstance()->setImportItemStockLastUpdateTimestamp($timestamp);
 	}
 

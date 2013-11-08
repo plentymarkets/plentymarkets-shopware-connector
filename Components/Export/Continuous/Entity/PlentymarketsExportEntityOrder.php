@@ -182,12 +182,11 @@ class PlentymarketsExportEntityOrder
 		// Mapping für Versand
 		try
 		{
-			list ($parcelServicePresetID, $parcelServiceID) = explode(';', PlentymarketsMappingController::getShippingProfileByShopwareID($this->order['dispatchId']));
+			$parcelServicePresetID = PlentymarketsMappingController::getShippingProfileByShopwareID($this->order['dispatchId']);
 		}
 		catch (PlentymarketsMappingExceptionNotExistant $E)
 		{
 			$parcelServicePresetID = null;
-			$parcelServiceID = null;
 		}
 
 		try
@@ -227,7 +226,6 @@ class PlentymarketsExportEntityOrder
 		$Object_OrderHead->OrderType = 'order'; // string
 		$Object_OrderHead->ResponsibleID = PlentymarketsConfig::getInstance()->getOrderUserID(null); // int
 		$Object_OrderHead->ShippingCosts = $shippingCosts; // float
-		$Object_OrderHead->ShippingMethodID = $parcelServiceID; // int
 		$Object_OrderHead->ShippingProfileID = $parcelServicePresetID; // int
 
 
