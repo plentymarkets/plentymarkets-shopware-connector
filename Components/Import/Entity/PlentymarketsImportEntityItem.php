@@ -1003,8 +1003,7 @@ class PlentymarketsImportEntityItem
 		}
 		catch (PlentymarketsMappingExceptionNotExistant $E)
 		{
-			// Retry
-			$taxID = PlentymarketsMappingController::getVatByPlentyID($this->ItemBase->VATInternalID);
+			throw new PlentymarketsImportItemException('The item »'. $this->ItemBase->Texts->Name .'« with the id »'. $this->ItemBase->ItemID .'« could not be imported (no valid vat/tax)', 3030);
 		}
 
 		return $taxID;

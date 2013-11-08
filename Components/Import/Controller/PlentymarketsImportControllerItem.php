@@ -159,6 +159,11 @@ class PlentymarketsImportControllerItem
 			PlentymarketsLogger::getInstance()->error('Sync:Item:Number', $E->getMessage(), $E->getCode());
 		}
 
+		catch (PlentymarketsImportItemException $E)
+		{
+			PlentymarketsLogger::getInstance()->error('Sync:Item:Number', $E->getMessage(), $E->getCode());
+		}
+
 		catch (Exception $E)
 		{
 			PlentymarketsLogger::getInstance()->error('Sync:Item', 'The item »'. $ItemBase->Texts->Name .'« with the id »'. $ItemBase->ItemID .'« could not be imported', 3000);
