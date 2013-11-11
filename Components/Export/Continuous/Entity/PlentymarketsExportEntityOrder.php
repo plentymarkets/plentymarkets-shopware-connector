@@ -113,6 +113,7 @@ class PlentymarketsExportEntityOrder
 		}
 		catch (\Shopware\Components\Api\Exception\NotFoundException $E)
 		{
+			throw new PlentymarketsExportEntityException('The order with the id »' . $orderID . '« could not be exported (not found)', 4040);
 		}
 
 		if (is_null(self::$StatementGetSKU))
