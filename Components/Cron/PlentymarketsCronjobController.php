@@ -248,6 +248,7 @@ class PlentymarketsCronjobController
 		{
 			$this->Config->setExportOrderStatus(2);
 			$this->Config->setExportOrderError($E->getMessage());
+			PlentymarketsLogger::getInstance()->error('Export:Order', $E->getTraceAsString());
 		}
 	}
 
@@ -277,6 +278,7 @@ class PlentymarketsCronjobController
 		{
 			$this->Config->setExportOrderIncomingPaymentStatus(2);
 			$this->Config->setExportOrderIncomingPaymentError($E->getMessage());
+			PlentymarketsLogger::getInstance()->error('Export:Order:Sync:Order:IncomingPayment', $E->getTraceAsString());
 		}
 	}
 
