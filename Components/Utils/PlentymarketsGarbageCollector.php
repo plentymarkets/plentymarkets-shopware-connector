@@ -186,6 +186,11 @@ class PlentymarketsGarbageCollector
 		Shopware()->Db()->exec('
 			DELETE FROM plenty_mapping_referrer WHERE shopwareID IN (SELECT id FROM s_emarketing_partner WHERE active = 0)
 		');
+
+		// Delete no-longer-existant-orders
+		Shopware()->Db()->exec('
+			DELETE FROM plenty_order WHERE shopwareId NOT IN (SELECT id FROM s_order)
+		');
 	}
 
 	/**
