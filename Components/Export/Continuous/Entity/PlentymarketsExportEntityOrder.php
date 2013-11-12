@@ -77,15 +77,9 @@ class PlentymarketsExportEntityOrder
 
 	/**
 	 *
-	 * @var PDOStatement
+	 * @var \Shopware\Models\Order\Order
 	 */
-	protected static $StatementGetSKU = null;
-
-	/**
-	 *
-	 * @var array
-	 */
-	protected $order;
+	protected $Order;
 
 	/**
 	 *
@@ -106,24 +100,11 @@ class PlentymarketsExportEntityOrder
 	 */
 	public function __construct($orderID)
 	{
-		$OrderResource = \Shopware\Components\Api\Manager::getResource('Order');
-		try
-		{
-			$this->order = $OrderResource->getOne($orderID);
-		}
-		catch (\Shopware\Components\Api\Exception\NotFoundException $E)
+		$this->Order = Shopware()->Models()->find('Shopware\Models\Order\Order', $orderID);
+
+		if (is_null($this->Order))
 		{
 			throw new PlentymarketsExportEntityException('The order with the id »' . $orderID . '« could not be exported (not found)', 4040);
-		}
-
-		if (is_null(self::$StatementGetSKU))
-		{
-			self::$StatementGetSKU = Shopware()->Db()->prepare('
-				SELECT kind, id detailsID, articleID
-					FROM s_articles_details
-					WHERE ordernumber = ?
-					LIMIT 1
-			');
 		}
 	}
 
@@ -138,22 +119,12 @@ class PlentymarketsExportEntityOrder
 
 	/**
 	 * Export the customer
-	 *
-	 * @return boolean
 	 */
 	protected function exportCustomer()
 	{
-		$Customer = Shopware()->Models()->find('Shopware\Models\Customer\Customer', $this->order['customer']['id']);
-		$Billing = Shopware()->Models()->find('Shopware\Models\Order\Billing', $this->order['billing']['id']);
-
-		if (!is_null($this->order['shipping']))
-		{
-			$Shipping = Shopware()->Models()->find('Shopware\Models\Order\Shipping', $this->order['shipping']['id']);
-		}
-		else
-		{
-			$Shipping = null;
-		}
+		$Customer = $this->Order->getCustomer();
+		$Billing = $this->Order->getBilling();
+		$Shipping = $this->Order->getShipping();
 
 		//
 		try
@@ -167,7 +138,7 @@ class PlentymarketsExportEntityOrder
 			$this->setError(self::CODE_ERROR_CUSTOMER);
 
 			// Throw another exception
-			throw new PlentymarketsExportEntityException('The order with the number »' . $this->order['number'] . '« could not be exported (' . $E->getMessage() . ')', 4100);
+			throw new PlentymarketsExportEntityException('The order with the number »' . $this->Order->getNumber() . '« could not be exported (' . $E->getMessage() . ')', 4100);
 		}
 
 		//
@@ -180,32 +151,6 @@ class PlentymarketsExportEntityOrder
 	 */
 	protected function exportOrder()
 	{
-		// Mapping für Versand
-		try
-		{
-			$parcelServicePresetID = PlentymarketsMappingController::getShippingProfileByShopwareID($this->order['dispatchId']);
-		}
-		catch (PlentymarketsMappingExceptionNotExistant $E)
-		{
-			$parcelServicePresetID = null;
-		}
-
-		try
-		{
-			$methodOfPaymentId = PlentymarketsMappingController::getMethodOfPaymentByShopwareID($this->order['payment']['id']);
-		}
-		catch (PlentymarketsMappingExceptionNotExistant $E)
-		{
-			// Save the error
-			$this->setError(self::CODE_ERROR_MOP);
-
-			// Quit
-			throw new PlentymarketsExportEntityException('The order with the number »' . $this->order['number'] . '« could not be exported (no mapping for method of payment)', 4030);
-		}
-
-		// Shipping costs
-		$shippingCosts = $this->order['invoiceShipping'] >= 0 ? $this->order['invoiceShipping'] : null;
-
 		// Build the Request
 		$Request_AddOrders = new PlentySoapRequest_AddOrders();
 		$Request_AddOrders->Orders = array();
@@ -213,112 +158,90 @@ class PlentymarketsExportEntityOrder
 		//
 		$Object_Order = new PlentySoapObject_Order();
 
+		// Order head
 		$Object_OrderHead = new PlentySoapObject_OrderHead();
-		$Object_OrderHead->Currency = PlentymarketsMappingController::getCurrencyByShopwareID($this->order['currency']);
-		$Object_OrderHead->CustomerID = $this->PLENTY_customerID; // int
-		$Object_OrderHead->DeliveryAddressID = $this->PLENTY_addressDispatchID; // int
-		$Object_OrderHead->DoneTimestamp = null; // string
-		$Object_OrderHead->ExchangeRatio = null; // float
-		$Object_OrderHead->ExternalOrderID = sprintf('Swag/%d/%s', $this->order['id'], $this->order['number']); // string
-		$Object_OrderHead->IsNetto = false; // boolean
-		$Object_OrderHead->Marking1ID = PlentymarketsConfig::getInstance()->getOrderMarking1(null); // int
-		$Object_OrderHead->MethodOfPaymentID = $methodOfPaymentId; // int
-		$Object_OrderHead->OrderTimestamp = $this->order['orderTime']->getTimestamp(); // int
-		$Object_OrderHead->OrderType = 'order'; // string
-		$Object_OrderHead->ResponsibleID = PlentymarketsConfig::getInstance()->getOrderUserID(null); // int
-		$Object_OrderHead->ShippingCosts = $shippingCosts; // float
-		$Object_OrderHead->ShippingProfileID = $parcelServicePresetID; // int
-
-
-		try
-		{
-			$Object_OrderHead->StoreID = PlentymarketsMappingController::getShopByShopwareID($this->order['shopId']);
-		}
-		catch(PlentymarketsMappingExceptionNotExistant $E)
-		{
-		}
-
-		// Referrer
-		if ($this->order['partnerId'] > 0)
-		{
-			try
-			{
-				$referrerId = PlentymarketsMappingController::getReferrerByShopwareID($this->order['partnerId']);
-			}
-			catch (PlentymarketsMappingExceptionNotExistant $E)
-			{
-				$referrerId = PlentymarketsConfig::getInstance()->getOrderReferrerID();
-			}
-		}
-		else
-		{
-			$referrerId = PlentymarketsConfig::getInstance()->getOrderReferrerID();
-		}
-
-		$Object_OrderHead->ReferrerID = $referrerId;
+		$Object_OrderHead->Currency = PlentymarketsMappingController::getCurrencyByShopwareID($this->Order->getCurrency());
+		$Object_OrderHead->CustomerID = $this->PLENTY_customerID;
+		$Object_OrderHead->DeliveryAddressID = $this->PLENTY_addressDispatchID;
+		$Object_OrderHead->ExternalOrderID = sprintf('Swag/%d/%s', $this->Order->getId(), $this->Order->getNumber());
+		$Object_OrderHead->IsNetto = false;
+		$Object_OrderHead->Marking1ID = PlentymarketsConfig::getInstance()->getOrderMarking1(null);
+		$Object_OrderHead->MethodOfPaymentID = $this->getMethodOfPaymentId();
+		$Object_OrderHead->OrderTimestamp = $this->getOrderTimestamp();
+		$Object_OrderHead->OrderType = 'order';
+		$Object_OrderHead->ResponsibleID = PlentymarketsConfig::getInstance()->getOrderUserID(null);
+		$Object_OrderHead->ShippingCosts = $this->getShippingCosts();
+		$Object_OrderHead->ShippingProfileID = $this->getParcelServicePresetId();
+		$Object_OrderHead->StoreID = $this->getShopId();
+		$Object_OrderHead->ReferrerID = $this->getReferrerId();
 
 		$Object_Order->OrderHead = $Object_OrderHead;
 
+		// Order infos
 		$Object_OrderHead->OrderInfos = array();
 
-		// Debit data
-		if (isset($this->order['customer']['debit']['accountHolder']) && $Object_OrderHead->MethodOfPaymentID == MOP_DEBIT)
+		if ($Object_OrderHead->MethodOfPaymentID == MOP_DEBIT)
 		{
-			$info  = 'Account holder: '. $this->order['customer']['debit']['accountHolder'] . chr(10);
-			$info .= 'Bank name: '. $this->order['customer']['debit']['bankName'] . chr(10);
-			$info .= 'Bank code: '. $this->order['customer']['debit']['bankCode'] . chr(10);
-			$info .= 'Account number: '. $this->order['customer']['debit']['account'] . chr(10);
+			$Customer = $this->Order->getCustomer();
 
+			if ($Customer)
+			{
+				$Debit = $Customer->getDebit();
+
+				if ($Debit && $Debit->getAccountHolder())
+				{
+					$info  = 'Account holder: '. $Debit->getAccountHolder() . chr(10);
+					$info .= 'Bank name: '. $Debit->getBankName() . chr(10);
+					$info .= 'Bank code: '. $Debit->getBankCode() . chr(10);
+					$info .= 'Account number: '. $Debit->getAccount() . chr(10);
+
+					$Object_OrderInfo = new PlentySoapObject_OrderInfo();
+					$Object_OrderInfo->Info = $info;
+					$Object_OrderInfo->InfoCustomer = 0;
+					$Object_OrderInfo->InfoDate = $this->getOrderTimestamp();
+					$Object_OrderHead->OrderInfos[] = $Object_OrderInfo;
+				}
+			}
+		}
+
+		if ($this->Order->getInternalComment())
+		{
 			$Object_OrderInfo = new PlentySoapObject_OrderInfo();
-			$Object_OrderInfo->Info = $info;
+			$Object_OrderInfo->Info = $this->Order->getInternalComment();
 			$Object_OrderInfo->InfoCustomer = 0;
-			$Object_OrderInfo->InfoDate = $this->order['orderTime']->getTimestamp();
+			$Object_OrderInfo->InfoDate = $this->getOrderTimestamp();
 			$Object_OrderHead->OrderInfos[] = $Object_OrderInfo;
 		}
 
-		if (!empty($this->order['internalComment']))
+		if ($this->Order->getCustomerComment())
 		{
 			$Object_OrderInfo = new PlentySoapObject_OrderInfo();
-			$Object_OrderInfo->Info = $this->order['internalComment'];
-			$Object_OrderInfo->InfoCustomer = 0;
-			$Object_OrderInfo->InfoDate = $this->order['orderTime']->getTimestamp();
-			$Object_OrderHead->OrderInfos[] = $Object_OrderInfo;
-		}
-
-		if (!empty($this->order['customerComment']))
-		{
-			$Object_OrderInfo = new PlentySoapObject_OrderInfo();
-			$Object_OrderInfo->Info = $this->order['customerComment'];
+			$Object_OrderInfo->Info = $this->Order->getCustomerComment();
 			$Object_OrderInfo->InfoCustomer = 1;
-			$Object_OrderInfo->InfoDate = $this->order['orderTime']->getTimestamp();
+			$Object_OrderInfo->InfoDate = $this->getOrderTimestamp();
 			$Object_OrderHead->OrderInfos[] = $Object_OrderInfo;
 		}
 
-		if (!empty($this->order['comment']))
+		if ($this->Order->getComment())
 		{
 			$Object_OrderInfo = new PlentySoapObject_OrderInfo();
-			$Object_OrderInfo->Info = $this->order['comment'];
+			$Object_OrderInfo->Info = $this->Order->getComment();
 			$Object_OrderInfo->InfoCustomer = 1;
-			$Object_OrderInfo->InfoDate = $this->order['orderTime']->getTimestamp();
+			$Object_OrderInfo->InfoDate = $this->getOrderTimestamp();
 			$Object_OrderHead->OrderInfos[] = $Object_OrderInfo;
 		}
 
 		$Object_Order->OrderItems = array();
 
-		foreach ($this->order['details'] as $item)
+		foreach ($this->Order->getDetails() as $Item)
 		{
-			self::$StatementGetSKU->execute(array(
-				$item['articleNumber']
-			));
-
-			// Fetch the item
-			$sw_OrderItem = self::$StatementGetSKU->fetchObject();
+			$Item instanceof Shopware\Models\Order\Detail;
 
 			// Variant
 			try
 			{
 				$itemId = null;
-				$sku = PlentymarketsMappingController::getItemVariantByShopwareID($sw_OrderItem->detailsID);
+				$sku = PlentymarketsMappingController::getItemVariantByShopwareID($Item->getId());
 			}
 
 			catch (PlentymarketsMappingExceptionNotExistant $E)
@@ -326,7 +249,7 @@ class PlentymarketsExportEntityOrder
 				// Base item
 				try
 				{
-					$itemId = PlentymarketsMappingController::getItemByShopwareID($sw_OrderItem->articleID);
+					$itemId = PlentymarketsMappingController::getItemByShopwareID($Item->getArticleId());
 					$sku = null;
 				}
 
@@ -337,7 +260,7 @@ class PlentymarketsExportEntityOrder
 					$sku = null;
 
 					// Mandatory because there will be no mapping to any item
-					$itemText = $item['articleName'];
+					$itemText = $Item->getArticleName();
 				}
 			}
 
@@ -346,7 +269,7 @@ class PlentymarketsExportEntityOrder
 			{
 				if (PlentymarketsConfig::getInstance()->getOrderItemTextSyncActionID(EXPORT_ORDER_ITEM_TEXT_SYNC) == EXPORT_ORDER_ITEM_TEXT_SYNC)
 				{
-					$itemText = $item['articleName'];
+					$itemText = $Item->getArticleName();
 				}
 				else
 				{
@@ -355,21 +278,27 @@ class PlentymarketsExportEntityOrder
 			}
 
 			// Gutschein
-			if ($item['mode'] == 2)
+			if ($Item->getMode() == 2)
 			{
 				$itemId = -1;
 			}
 
+			// Todo:
+			else if ($Item->getMode() == 4)
+			{
+				// Payment markup
+			}
+
 			$Object_OrderItem = new PlentySoapObject_OrderItem();
-			$Object_OrderItem->ExternalOrderItemID = $item['articleNumber']; // string
-			$Object_OrderItem->ItemID = $itemId; // int
+			$Object_OrderItem->ExternalOrderItemID = $Item->getNumber();
+			$Object_OrderItem->ItemID = $itemId;
 			$Object_OrderItem->ReferrerID = $Object_OrderHead->ReferrerID;
-			$Object_OrderItem->ItemText = $itemText; // string
-			$Object_OrderItem->Price = $item['price']; // float
-			$Object_OrderItem->Quantity = $item['quantity']; // float
-			$Object_OrderItem->SKU = $sku; // string
-			$Object_OrderItem->VAT = $item['taxRate']; // float
-			$Object_OrderItem->WarehouseID = null; // int
+			$Object_OrderItem->ItemText = $itemText;
+			$Object_OrderItem->Price = $Item->getPrice();
+			$Object_OrderItem->Quantity = $Item->getQuantity();
+			$Object_OrderItem->SKU = $sku;
+			$Object_OrderItem->VAT = $Item->getTaxRate();
+
 			$Object_Order->OrderItems[] = $Object_OrderItem;
 		}
 
@@ -382,7 +311,7 @@ class PlentymarketsExportEntityOrder
 		{
 			// Set the error end quit
 			$this->setError(self::CODE_ERROR_SOAP);
-			throw new PlentymarketsExportEntityException('The order with the number »' . $this->order['number'] . '« could not be exported', 4010);
+			throw new PlentymarketsExportEntityException('The order with the number »' . $this->Order->getNumber() . '« could not be exported', 4010);
 		}
 
 		//
@@ -411,16 +340,148 @@ class PlentymarketsExportEntityOrder
 		{
 			// Set the error end quit
 			$this->setError(self::CODE_ERROR_SOAP);
-			throw new PlentymarketsExportEntityException('The order with the number »' . $this->order['number'] . '« could not be exported (no order id or order status respectively)', 4020);
+			throw new PlentymarketsExportEntityException('The order with the number »' . $this->Order->getNumber() . '« could not be exported (no order id or order status respectively)', 4020);
 		}
 
 		// Directly book the incomming payment
-		if ($this->order['paymentStatus']['id'] == PlentymarketsConfig::getInstance()->getOrderPaidStatusID(12))
+		if ($this->Order->getPaymentStatus() && $this->Order->getPaymentStatus()->getId() == PlentymarketsConfig::getInstance()->getOrderPaidStatusID(12))
 		{
 			// May throw an exception
-			$IncomingPayment = new PlentymarketsExportEntityOrderIncomingPayment($this->order['id']);
+			$IncomingPayment = new PlentymarketsExportEntityOrderIncomingPayment($this->Order->getId());
 			$IncomingPayment->book();
 		}
+	}
+
+	/**
+	 * Returns the order timestamp or the current timestamp if there is no order timestmap
+	 *
+	 * @return integer
+	 */
+	protected function getOrderTimestamp()
+	{
+		$OrderTime = $this->Order->getOrderTime();
+		if ($OrderTime)
+		{
+			return $OrderTime->getTimestamp();
+		}
+		else
+		{
+			return time();
+		}
+	}
+
+	/**
+	 * Returns the parcel service preset id or null if there is neither mapping nor dispatch
+	 *
+	 * @return integer|null
+	 */
+	protected function getParcelServicePresetId()
+	{
+		// Sub-objects
+		$Dispatch = $this->Order->getDispatch();
+
+		// Shipping
+		if ($Dispatch)
+		{
+			try
+			{
+				return PlentymarketsMappingController::getShippingProfileByShopwareID($Dispatch->getId());
+			}
+			catch (PlentymarketsMappingExceptionNotExistant $E)
+			{
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the method of payment id
+	 *
+	 * @throws PlentymarketsExportEntityException if there is no mapping
+	 */
+	protected function getMethodOfPaymentId()
+	{
+		// Sub-objects
+		$Payment = $this->Order->getPayment();
+
+		// Payment
+		if ($Payment)
+		{
+			try
+			{
+				return PlentymarketsMappingController::getMethodOfPaymentByShopwareID($Payment->getId());
+			}
+			catch (PlentymarketsMappingExceptionNotExistant $E)
+			{
+			}
+		}
+
+		// Save the error
+		$this->setError(self::CODE_ERROR_MOP);
+
+		// Exit
+		throw new PlentymarketsExportEntityException('The order with the number »' . $this->Order->getNumber() . '« could not be exported (no mapping for method of payment)', 4030);
+	}
+
+	/**
+	 * Returns the order referrer id
+	 *
+	 * @return integer
+	 */
+	protected function getReferrerId()
+	{
+		// Sub-objects
+		$Partner = $this->Order->getPartner();
+
+		// Referrer
+		if ($Partner)
+		{
+			try
+			{
+				$referrerId = PlentymarketsMappingController::getReferrerByShopwareID($Partner->getId());
+			}
+			catch (PlentymarketsMappingExceptionNotExistant $E)
+			{
+			}
+		}
+
+		return isset($referrerId) ? $referrerId : PlentymarketsConfig::getInstance()->getOrderReferrerID();
+	}
+
+	/**
+	 * Returns the shipping costs or null
+	 *
+	 * @return integer|null
+	 */
+	protected function getShippingCosts()
+	{
+		return $this->Order->getInvoiceShipping() >= 0 ? $this->Order->getInvoiceShipping() : null;
+	}
+
+	/**
+	 * Returns the shop id or null
+	 *
+	 * @return integer|null
+	 */
+	protected function getShopId()
+	{
+		// Sub-objects
+		$Shop = $this->Order->getShop();
+
+		// Shop
+		if ($Shop)
+		{
+			try
+			{
+				return PlentymarketsMappingController::getShopByShopwareID($Shop->getId());
+			}
+			catch (PlentymarketsMappingExceptionNotExistant $E)
+			{
+			}
+		}
+
+		return null;
 	}
 
 	/**
@@ -441,7 +502,7 @@ class PlentymarketsExportEntityOrder
 		')
 			->execute(array(
 			$code,
-			$this->order['id']
+			$this->Order->getId()
 		));
 	}
 
@@ -453,7 +514,7 @@ class PlentymarketsExportEntityOrder
 	 */
 	protected function setSuccess($plentyOrderID, $plentyOrderStatus)
 	{
-		PlentymarketsLogger::getInstance()->message('Export:Order', 'The sales order with the number  »' . $this->order['number'] . '« has been created in plentymakets (id: ' . $plentyOrderID . ', status: ' . $plentyOrderStatus . ')');
+		PlentymarketsLogger::getInstance()->message('Export:Order', 'The sales order with the number  »' . $this->Order->getId() . '« has been created in plentymakets (id: ' . $plentyOrderID . ', status: ' . $plentyOrderStatus . ')');
 
 		Shopware()->Db()
 			->prepare('
@@ -470,7 +531,7 @@ class PlentymarketsExportEntityOrder
 			->execute(array(
 			$plentyOrderID,
 			$plentyOrderStatus,
-			$this->order['id']
+			$this->Order->getId()
 		));
 	}
 }
