@@ -282,12 +282,15 @@ class PlentymarketsImportEntityItem
 		// Internal number cache
 		$numbersUsed = array();
 
+		$detailBase = $this->details + $this->data;
+		unset($detailBase['attribute']);
+
 		foreach ($this->ItemBase->AttributeValueSets->item as $AttributeValueSet)
 		{
 			$AttributeValueSet instanceof PlentySoapObject_ItemAttributeValueSet;
 
 			// Copy the base details
-			$details = $this->data;
+			$details = $detailBase;
 
 			// SKU
 			$sku = sprintf('%s-%s-%s', $this->ItemBase->ItemID, $AttributeValueSet->PriceID, $AttributeValueSet->AttributeValueSetID);
