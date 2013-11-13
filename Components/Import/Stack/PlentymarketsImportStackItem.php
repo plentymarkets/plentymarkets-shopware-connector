@@ -91,7 +91,8 @@ class PlentymarketsImportStackItem implements Countable
 			');
 
 			// Add the store id
-			$storeIds = explode('|', $stackedItem['storeIds']);
+			$storeIds = explode('|', $stackedItem);
+
 			if (!in_array($storeId, $storeIds))
 			{
 				$storeIds[] = $storeId;
