@@ -89,6 +89,9 @@ class PlentymarketsImportItemAssociateController
 			$entity = array_shift($associates);
 		}
 
+		// Increase the intervall
+		$this->cronJobInterval *= count(self::$associates);
+
 		$this->runEntity($entity);
 	}
 
@@ -110,7 +113,6 @@ class PlentymarketsImportItemAssociateController
 	 */
 	protected function runEntity($entity)
 	{
-		$entity = 'Producer';
 		$timestamp = time();
 
 		PyConf()->set(sprintf('ImportItem%sLastRunTimestamp', $entity), time());
@@ -140,11 +142,8 @@ class PlentymarketsImportItemAssociateController
 		}
 		else
 		{
-
 			PyConf()->set(sprintf('ImportItem%sStatus', $entity), 0);
 		}
-
-
 
 		PyConf()->setImportItemAssociateLastEnity($entity);
 	}

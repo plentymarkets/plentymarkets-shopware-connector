@@ -371,6 +371,19 @@ class PlentymarketsCronjobController
 	}
 
 	/**
+	 * Runs the item import cronjob.
+	 *
+	 * @param Shopware_Components_Cron_CronJob $Job
+	 */
+	public function runItemAssociateImport(Shopware_Components_Cron_CronJob $Job)
+	{
+		require_once PY_COMPONENTS . 'Import/PlentymarketsImportItemAssociateController.php';
+
+		$PlentymarketsImportItemAssociateController = new PlentymarketsImportItemAssociateController();
+		$PlentymarketsImportItemAssociateController->run($Job->getJob()->getInterval());
+	}
+
+	/**
 	 * Runs the item import stack cronjob.
 	 *
 	 * @param Shopware_Components_Cron_CronJob $Job

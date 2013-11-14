@@ -327,6 +327,11 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 			$this->addLogCleanupCronEvent();
 		}
 
+		if (version_compare($version, '1.4.18') !== 1)
+		{
+			$this->addItemAssociateUpdateCronEvent();
+		}
+
 		//
 		PlentymarketsConfig::getInstance()->setConnectorVersion($this->getVersion());
 
@@ -793,6 +798,33 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 
         // Cleanup (log)
         $this->addLogCleanupCronEvent();
+
+        // Item associate update
+        $this->addItemAssociateUpdateCronEvent();
+    }
+
+    /**
+     * Adds the cron event to sync the item assicoate date
+     */
+    private function addItemAssociateUpdateCronEvent()
+    {
+    	try
+    	{
+	    	$this->createCronJob(
+	    		'Plentymarkets Item Associate Import',
+	    		'Shopware_CronJob_PlentymarketsItemAssociateImport',
+	    		7200, // 2 hours
+	    		true
+	    	);
+
+	    	$this->subscribeEvent(
+	    		'Shopware_CronJob_PlentymarketsItemAssociateImport',
+	    		'onRunItemAssociateImportCron'
+	    	);
+    	}
+    	catch (Exception $E)
+    	{
+    	}
     }
 
     /**
@@ -892,7 +924,17 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
     }
 
     /**
-     * Cleans the items.
+     * Imports item associate date
+     *
+     * @param Shopware_Components_Cron_CronJob $Job
+     */
+	public function onRunItemAssociateImportCron(Shopware_Components_Cron_CronJob $Job)
+	{
+		PlentymarketsCronjobController::getInstance()->runItemAssociateImport($Job);
+	}
+
+    /**
+     * Cleans the log.
      *
      * @param Shopware_Components_Cron_CronJob $Job
      */
@@ -1081,7 +1123,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
      */
     public function getVersion()
     {
-    	return '1.4.18';
+    	return '1.4.19';
     }
 
     /**
