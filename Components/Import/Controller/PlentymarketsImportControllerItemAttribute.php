@@ -23,6 +23,11 @@ class PlentymarketsImportControllerItemAttribute
 		$Response_GetItemAttributes = PlentymarketsSoapClient::getInstance()->GetItemAttributes($Request_GetItemAttributes);
 		$Response_GetItemAttributes instanceof PlentySoapResponse_GetItemAttributes;
 
+		if (!$Response_GetItemAttributes->Success)
+		{
+			return;
+		}
+
 		foreach ($Response_GetItemAttributes->Attributes->item as $Attribute)
 		{
 			$PlentymarketsImportEntityItemAttribute = new PlentymarketsImportEntityItemAttribute($Attribute);
