@@ -30,6 +30,7 @@
 // Dependencies
 require_once PY_SOAP . 'Models/PlentySoapResponseMessage.php';
 require_once PY_SOAP . 'Models/PlentySoapResponseSubMessage.php';
+require_once PY_SOAP . 'PlentymarketsSoapConnectionException.php';
 
 /**
  * The class PlentymarketsSoapClient is used in most classes of the plentymarkets plugin. It provides all
@@ -51,6 +52,12 @@ class PlentymarketsSoapClient extends SoapClient
 	 * @var integer
 	 */
 	const NUMBER_OF_SECONDS_SLEEP = 5;
+
+	/**
+	 *
+	 * @var integer
+	 */
+	const NUMBER_OF_SECONDS_SLEEP_CONNECTION = 1;
 
 	/**
 	 *
@@ -164,7 +171,27 @@ class PlentymarketsSoapClient extends SoapClient
 		$options['stream_context'] = $context;
 
 		// Init the client
-		parent::__construct($wsdl, $options);
+		$retries = 0;
+		do
+		{
+			try
+			{
+				@parent::__construct($wsdl, $options);
+				break;
+			}
+			catch (SoapFault $E)
+			{
+				++$retries;
+
+				if ($retries == 3)
+				{
+					throw new PlentymarketsSoapConnectionException();
+				}
+
+				sleep($retries * self::NUMBER_OF_SECONDS_SLEEP_CONNECTION);
+			}
+		}
+		while ($retries < self::NUMBER_OF_RETRIES_MAX);
 
 		// Check whether auth cache exist and whether the file is from today
 		if (!$dryrun && date('Y-m-d', $this->Config->getApiLastAuthTimestamp(0)) == date('Y-m-d'))
