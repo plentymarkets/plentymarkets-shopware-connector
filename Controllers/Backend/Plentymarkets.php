@@ -31,6 +31,7 @@ require_once PY_COMPONENTS . 'Utils/PlentymarketsLogger.php';
 require_once PY_COMPONENTS . 'Utils/PlentymarketsUtils.php';
 require_once PY_COMPONENTS . 'Soap/Client/PlentymarketsSoapClient.php';
 require_once PY_COMPONENTS . 'Import/PlentymarketsImportController.php';
+require_once PY_COMPONENTS . 'Import/PlentymarketsImportItemAssociateController.php';
 require_once PY_COMPONENTS . 'Export/PlentymarketsExportController.php';
 require_once PY_COMPONENTS . 'Export/PlentymarketsExportWizard.php';
 require_once PY_COMPONENTS . 'Export/Status/PlentymarketsExportStatusController.php';
@@ -354,6 +355,11 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		$Config->setItemImageSyncActionID($this->Request()->ItemImageSyncActionID == true ? IMPORT_ITEM_IMAGE_SYNC : IMPORT_ITEM_IMAGE_NO_SYNC);
 		$Config->setItemCategorySyncActionID($this->Request()->ItemCategorySyncActionID == true ? IMPORT_ITEM_CATEGORY_SYNC : IMPORT_ITEM_CATEGORY_NO_SYNC);
 		$Config->setItemNumberImportActionID($this->Request()->ItemNumberImportActionID == true ? IMPORT_ITEM_NUMBER : IMPORT_ITEM_NUMBER_NO);
+		$Config->setItemAssociateImportActionID(
+			$this->Request()->ItemAssociateImportActionID == PlentymarketsImportItemAssociateController::ACTION_DETACHED
+				? PlentymarketsImportItemAssociateController::ACTION_DETACHED
+				: PlentymarketsImportItemAssociateController::ACTION_CHAINED
+		);
 		$Config->setDefaultCustomerGroupKey($this->Request()->DefaultCustomerGroupKey);
 		$Config->setItemWarehousePercentage($this->Request()->ItemWarehousePercentage);
 		$Config->setItemProducerID($this->Request()->ItemProducerID);

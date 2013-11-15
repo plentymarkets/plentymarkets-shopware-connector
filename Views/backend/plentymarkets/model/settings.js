@@ -105,6 +105,10 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		type: 'integer',
 		defaultValue: 1
 	}, {
+		name: 'ItemAssociateImportActionID',
+		type: 'integer',
+		defaultValue: 1
+	}, {
 		name: 'DefaultCustomerGroupKey',
 		type: 'string',
 		defaultValue: 'EK'
