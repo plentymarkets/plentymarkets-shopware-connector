@@ -29,7 +29,7 @@
 
 /**
  * PlentymarketsImportEntityItemPrice provides the actual item price import funcionality. Like the other import
- * entities this class is called in PlentymarketsImportController. It is important to deliver the correct price set 
+ * entities this class is called in PlentymarketsImportController. It is important to deliver the correct price set
  * data object PlentySoapObject_ItemPriceSet to the constructor method of this class. The second parameter "$markup" is optional.
  * The data import takes place based on plentymarkets SOAP-calls.
  *
@@ -96,8 +96,6 @@ class PlentymarketsImportEntityItemPrice
 				'to' => $this->PLENTY_PriceSet->RebateLevelPrice6 - 1,
 				'customerGroupKey' => $customerGroupKey,
 				'price' => $this->PLENTY_PriceSet->Price,
-// 				'pseudoPrice' => $this->PLENTY_PriceSet->RRP,
-// 				'basePrice' => $this->PLENTY_PriceSet->PurchasePriceNet,
 				'percent' => 0
 			);
 			$prices[] = $price;
@@ -176,9 +174,12 @@ class PlentymarketsImportEntityItemPrice
 	 */
 	public function updateVariant($detailId)
 	{
-		$Detail = Shopware()->Models()
-			->getRepository('Shopware\Models\Article\Detail')
-			->find($detailId);
+		$Detail = Shopware()->Models()->find('Shopware\Models\Article\Detail', $detailId);
+
+		if (!$Detail instanceof Shopware\Models\Article\Detail)
+		{
+			return PlentymarketsLogger::getInstance()->error('Sync:Item:Price', 'The price of the item detail with the id »'. $detailId .'« could not be updated (item corrupt)', 3610);
+		}
 
 		$Article = $Detail->getArticle();
 
