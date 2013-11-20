@@ -289,62 +289,50 @@ class PlentymarketsGarbageCollector
 					) '. $where .'
 		');
 
-		//
-		$ArticleResource = \Shopware\Components\Api\Manager::getResource('Article');
-
 		// Handle the items
 		foreach ($Result as $item)
 		{
+			$Item = Shopware()->Models()->find('Shopware\Models\Article\Article', $item['id']);
+			$Item instanceof Shopware\Models\Article\Article;
+
+			if (!$Item)
+			{
+				continue;
+			}
+
 			if ($actionId == self::ITEM_ACTION_DEACTIVATE)
 			{
-				$itemData = $ArticleResource->getOne($item['id']);
-
-				// Variant
-				if (isset($itemData['details']) && !empty($itemData['details']))
+				if ($Item->getActive())
 				{
-					// Skip if already deactivated
-					if (isset($itemData['mainDetail']['active']) && !$itemData['mainDetail']['active'])
-					{
-						continue;
-					}
+					$Item->setActive(false);
+				}
 
-					$update = array(
-						'mainDetail' => array(
-							'active' => 0
-						),
-						'variants' => array()
-					);
+				foreach ($Item->getDetails() as $Detail)
+				{
+					$Detail instanceof Shopware\Models\Article\Detail;
 
-					foreach ($itemData['details'] as $variant)
+					if ($Detail->getActive())
 					{
-						$update['variants'][] = array(
-							'id' => $variant['id'],
-							'active' => 0
-						);
+						$Detail->setActive(false);
+						if ($Detail->getAdditionalText())
+						{
+							PlentymarketsLogger::getInstance()->message('Cleanup:Item', 'The item variant »' . $Item->getName() . ' (' . $Detail->getAdditionalText() . ')« with the number »' . $Detail->getNumber() . '« will be deactivated');
+						}
+						else
+						{
+							PlentymarketsLogger::getInstance()->message('Cleanup:Item', 'The item »' . $Item->getName() . ' with the number »' . $Detail->getNumber() . '« will be deactivated');
+						}
 					}
 				}
 
-				// Base item
-				else
-				{
-					// Skip if already deactivated
-					if (isset($itemData['active']) && !$itemData['active'])
-					{
-						continue;
-					}
-
-					$update = array(
-						'active' => false
-					);
-				}
 				try
 				{
-					$ArticleResource->update($item['id'], $update);
-					PlentymarketsLogger::getInstance()->message('Cleanup:Item', 'The item with the number »' . $itemData['mainDetail']['number'] . '« will be deactivated');
+					Shopware()->Models()->persist($Item);
+					Shopware()->Models()->flush();
 				}
 				catch (Exception $E)
 				{
-					PlentymarketsLogger::getInstance()->error('Cleanup:Item', 'The item with the number »' . $itemData['mainDetail']['number'] . '« could not be deactivated (' . $E->getMessage() . ')', 1410);
+					PlentymarketsLogger::getInstance()->error('Cleanup:Item', 'The item »' . $Item->getName() . '« could not be completely deactivated (' . $E->getMessage() . ')', 1420);
 				}
 			}
 
@@ -352,15 +340,16 @@ class PlentymarketsGarbageCollector
 			{
 				try
 				{
-					$ArticleResource->delete($item['id']);
-					PlentymarketsLogger::getInstance()->message('Cleanup:Item', 'The item with the number »' . $itemData['mainDetail']['number'] . '« will be deleted');
+					$Resource = Shopware\Components\Api\Manager::getResource('Article');
+					$Resource->delete($Item->getId());
+
+					PlentymarketsLogger::getInstance()->message('Cleanup:Item', 'The item »' . $Item->getName() . '« with the number »' . $Item->getMainDetail()->getNumber() . '« has been deleted');
 				}
 				catch (Exception $E)
 				{
-					PlentymarketsLogger::getInstance()->error('Cleanup:Item', 'The item with the number »' . $itemData['mainDetail']['number'] . '« could not be deleted (' . $E->getMessage() . ')', 1420);
+					PlentymarketsLogger::getInstance()->error('Cleanup:Item', 'The item »' . $Item->getName() . '« with the number »' . $Item->getMainDetail()->getNumber() . '« could not be deleted (' . $E->getMessage() . ')', 1420);
 				}
 			}
-
 		}
 
 		// Delete the temporary table
