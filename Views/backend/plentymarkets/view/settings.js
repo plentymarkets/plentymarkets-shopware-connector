@@ -210,13 +210,13 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 				}),
 				supportText: 'Aktion die ausgeführt wird, wenn die Mandantenzuordnung bei plentymarkets gelöst wird oder kein Mapping für den Artikel vorhanden ist.'
 			}, {
-				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemAssociateImportActionID}Zugehörige Daten{/s}',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemAssociateImportActionID}Zugehörige Daten synchronisieren{/s}',
 				name: 'ItemAssociateImportActionID',
 				store: new Ext.data.ArrayStore({
 					fields: ['id', 'name'],
 					data: [[1, 'Eins pro Durchlauf'], [2, 'Alle, bei jedem Duchlauf']]
 				}),
-				supportText: 'Zugehörige Daten sind Kategorien, Attribute, Merkmale/Eigenschaften und Hersteller. Legen Sie fest, ob pro Durchlauf alle Datan abgeglichen werden sollen, oder nur eine der genannten.'
+				supportText: 'Zugehörige Daten sind Kategorien, Attribute, Merkmale/Eigenschaften und Hersteller. Legen Sie fest, ob pro Durchlauf alle Daten abgeglichen werden sollen, oder nur eine der genannten.'
 			}
 
 			]
