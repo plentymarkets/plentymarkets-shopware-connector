@@ -101,13 +101,6 @@ class PlentymarketsCronjobController
 	protected static $Instance;
 
 	/**
-	 * Indicates whether a cronjob may run or not.
-	 *
-	 * @var boolean
-	 */
-	protected $maySync = true;
-
-	/**
 	 *
 	 * @var PlentymarketsStatus
 	 */
@@ -126,9 +119,7 @@ class PlentymarketsCronjobController
 	protected function __construct()
 	{
 		// Check whether any cronjob my be executed due to api status
-// 		$this->maySync = PlentymarketsStatus::getInstance()->maySynchronize();
 		$this->Status = PlentymarketsStatus::getInstance();
-
 		$this->Config = PlentymarketsConfig::getInstance();
 	}
 
