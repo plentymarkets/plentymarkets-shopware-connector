@@ -340,8 +340,9 @@ class PlentymarketsGarbageCollector
 			{
 				try
 				{
-					Shopware()->Models()->remove($Item);
-					Shopware()->Models()->flush();
+					$Resource = Shopware\Components\Api\Manager::getResource('Article');
+					$Resource->delete($Item->getId());
+
 					PlentymarketsLogger::getInstance()->message('Cleanup:Item', 'The item »' . $Item->getName() . '« with the number »' . $Item->getMainDetail()->getNumber() . '« has been deleted');
 				}
 				catch (Exception $E)
