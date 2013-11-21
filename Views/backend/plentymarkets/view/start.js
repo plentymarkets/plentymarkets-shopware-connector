@@ -282,7 +282,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Start', {
 						}
 						else
 						{
-							return Ext.String.format('<div class="plenty-status plenty-status-warning">&nbsp;</div>');
+							return Ext.String.format('<div class="plenty-status plenty-status-error">&nbsp;</div>');
 						}
 					}
 				},{
