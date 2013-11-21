@@ -33,6 +33,7 @@ define('PY_CONTROLLERS', PY_BASE . 'Controllers' . DIRECTORY_SEPARATOR);
 
 require_once PY_COMPONENTS . 'Config/PlentymarketsConfig.php';
 require_once PY_COMPONENTS . 'Utils/PlentymarketsUtils.php';
+require_once PY_COMPONENTS . 'Utils/PlentymarketsStatus.php';
 require_once PY_COMPONENTS . 'Utils/PlentymarketsLogger.php';
 require_once PY_COMPONENTS . 'Cron/PlentymarketsCronjobController.php';
 
@@ -49,6 +50,33 @@ define('EXPORT_ORDER_ITEM_TEXT_SYNC', 1);
 define('EXPORT_ORDER_ITEM_TEXT_SYNC_NO', 0);
 
 define('MOP_DEBIT', 3);
+
+/**
+ *
+ * @return PlentymarketsConfig
+ */
+function PyConf()
+{
+	return PlentymarketsConfig::getInstance();
+}
+
+/**
+ *
+ * @return PlentymarketsLogger
+ */
+function PyLog()
+{
+	return PlentymarketsLogger::getInstance();
+}
+
+/**
+ *
+ * @return PlentymarketsStatus
+ */
+function PyStatus()
+{
+	return PlentymarketsStatus::getInstance();
+}
 
 /**
  * This class is called first when starting the plentymarkets plugin. It initializes and cleans all important data.
@@ -297,6 +325,11 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 		if (version_compare($version, '1.4.14') !== 1)
 		{
 			$this->addLogCleanupCronEvent();
+		}
+
+		if (version_compare($version, '1.4.18') !== 1)
+		{
+			$this->addItemAssociateUpdateCronEvent();
 		}
 
 		//
@@ -765,6 +798,33 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 
         // Cleanup (log)
         $this->addLogCleanupCronEvent();
+
+        // Item associate update
+        $this->addItemAssociateUpdateCronEvent();
+    }
+
+    /**
+     * Adds the cron event to sync the item assicoate date
+     */
+    private function addItemAssociateUpdateCronEvent()
+    {
+    	try
+    	{
+	    	$this->createCronJob(
+	    		'Plentymarkets Item Associate Import',
+	    		'Shopware_CronJob_PlentymarketsItemAssociateImport',
+	    		7200, // 2 hours
+	    		true
+	    	);
+
+	    	$this->subscribeEvent(
+	    		'Shopware_CronJob_PlentymarketsItemAssociateImport',
+	    		'onRunItemAssociateImportCron'
+	    	);
+    	}
+    	catch (Exception $E)
+    	{
+    	}
     }
 
     /**
@@ -864,7 +924,17 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
     }
 
     /**
-     * Cleans the items.
+     * Imports item associate date
+     *
+     * @param Shopware_Components_Cron_CronJob $Job
+     */
+	public function onRunItemAssociateImportCron(Shopware_Components_Cron_CronJob $Job)
+	{
+		PlentymarketsCronjobController::getInstance()->runItemAssociateImport($Job);
+	}
+
+    /**
+     * Cleans the log.
      *
      * @param Shopware_Components_Cron_CronJob $Job
      */
@@ -1053,7 +1123,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
      */
     public function getVersion()
     {
-    	return '1.4.18';
+    	return '1.4.19';
     }
 
     /**

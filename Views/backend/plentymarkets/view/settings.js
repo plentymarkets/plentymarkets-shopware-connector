@@ -141,7 +141,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 	
 		return [{
 			xtype: 'fieldset',
-			title: 'Import Artikelstammdaten',
+			title: 'Import Artikeldaten',
 			layout: 'anchor',
 			defaults: {
 				labelWidth: 155,
@@ -209,6 +209,14 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 					data: [[1, 'Artikel deaktivieren'], [2, 'Artikel unwiederbringlich löschen']]
 				}),
 				supportText: 'Aktion die ausgeführt wird, wenn die Mandantenzuordnung bei plentymarkets gelöst wird oder kein Mapping für den Artikel vorhanden ist.'
+			}, {
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemAssociateImportActionID}Zugehörige Daten synchronisieren{/s}',
+				name: 'ItemAssociateImportActionID',
+				store: new Ext.data.ArrayStore({
+					fields: ['id', 'name'],
+					data: [[1, 'Eins pro Durchlauf'], [2, 'Alle, bei jedem Duchlauf']]
+				}),
+				supportText: 'Zugehörige Daten sind Kategorien, Attribute, Merkmale/Eigenschaften und Hersteller. Legen Sie fest, ob pro Durchlauf alle Daten abgeglichen werden sollen, oder nur eine der genannten.'
 			}
 
 			]
@@ -420,6 +428,13 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 				}),
 				displayField: 'size',
 				supportText: 'Anzahl der Artikel, die pro Durchlauf der Synchronisierung von plentymarkets abgerufen werden.'
+			}, {
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/MayLogUsageData}Nutzungsdaten loggen{/s}',
+				name: 'MayLogUsageData',
+				id: 'MayLogUsageData',
+				xtype: 'checkbox',
+				inputValue: 1,
+				uncheckedValue: '0'
 			}]
 		}];
 	}

@@ -29,7 +29,6 @@
 require_once PY_SOAP . 'Client/PlentymarketsSoapClient.php';
 require_once PY_COMPONENTS . 'Config/PlentymarketsConfig.php';
 require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingController.php';
-require_once PY_COMPONENTS . 'Utils/PlentymarketsUtils.php';
 require_once PY_COMPONENTS . 'Utils/PlentymarketsGarbageCollector.php';
 require_once PY_COMPONENTS . 'Import/PlentymarketsImportController.php';
 require_once PY_COMPONENTS . 'Import/Stack/PlentymarketsImportStackItem.php';
@@ -102,11 +101,10 @@ class PlentymarketsCronjobController
 	protected static $Instance;
 
 	/**
-	 * Indicates whether a cronjob may run or not.
 	 *
-	 * @var boolean
+	 * @var PlentymarketsStatus
 	 */
-	protected $mayRun = true;
+	protected $Status;
 
 	/**
 	 * PlentymarketsConfig object data.
@@ -121,9 +119,7 @@ class PlentymarketsCronjobController
 	protected function __construct()
 	{
 		// Check whether any cronjob my be executed due to api status
-		$this->mayRun = PlentymarketsUtils::checkDxStatus()
-						&& PlentymarketsConfig::getInstance()->getMayDatexActual(false);
-
+		$this->Status = PlentymarketsStatus::getInstance();
 		$this->Config = PlentymarketsConfig::getInstance();
 	}
 
@@ -175,7 +171,7 @@ class PlentymarketsCronjobController
 	 */
 	public function runItemCleanup(Shopware_Components_Cron_CronJob $Job)
 	{
-		if (!$this->mayRun)
+		if (!$this->Status->maySynchronize())
 		{
 			return;
 		}
@@ -196,7 +192,7 @@ class PlentymarketsCronjobController
 	public function runMappingCleanup(Shopware_Components_Cron_CronJob $Job)
 	{
 		// Check the connection
-		if (!PlentymarketsUtils::checkApiConnectionStatus())
+		if (!$this->Status->mayImport())
 		{
 			return;
 		}
@@ -232,7 +228,7 @@ class PlentymarketsCronjobController
 		$this->Config->setExportOrderLastRunTimestamp(time());
 		$this->Config->setExportOrderNextRunTimestamp(time() + $Job->getJob()->getInterval());
 
-		if (!$this->mayRun)
+		if (!$this->Status->maySynchronize())
 		{
 			$this->Config->setExportOrderStatus(0);
 			return;
@@ -261,7 +257,7 @@ class PlentymarketsCronjobController
 		$this->Config->setExportOrderIncomingPaymentLastRunTimestamp(time());
 		$this->Config->setExportOrderIncomingPaymentNextRunTimestamp(time() + $Job->getJob()->getInterval());
 
-		if (!$this->mayRun)
+		if (!$this->Status->maySynchronize())
 		{
 			$this->Config->setExportOrderIncomingPaymentStatus(0);
 			return;
@@ -290,7 +286,7 @@ class PlentymarketsCronjobController
 		$this->Config->setImportOrderLastRunTimestamp(time());
 		$this->Config->setImportOrderNextRunTimestamp(time() + $Job->getJob()->getInterval());
 
-		if (!$this->mayRun)
+		if (!$this->Status->maySynchronize())
 		{
 			$this->Config->setImportOrderStatus(0);
 			return;
@@ -346,7 +342,7 @@ class PlentymarketsCronjobController
 		$this->Config->setImportItemLastRunTimestamp(time());
 		$this->Config->setImportItemNextRunTimestamp(time() + $Job->getJob()->getInterval());
 
-		if (!$this->mayRun)
+		if (!$this->Status->maySynchronize())
 		{
 			$this->Config->setImportItemStatus(0);
 			return;
@@ -366,6 +362,19 @@ class PlentymarketsCronjobController
 	}
 
 	/**
+	 * Runs the item import cronjob.
+	 *
+	 * @param Shopware_Components_Cron_CronJob $Job
+	 */
+	public function runItemAssociateImport(Shopware_Components_Cron_CronJob $Job)
+	{
+		require_once PY_COMPONENTS . 'Import/PlentymarketsImportItemAssociateController.php';
+
+		$PlentymarketsImportItemAssociateController = new PlentymarketsImportItemAssociateController();
+		$PlentymarketsImportItemAssociateController->run($Job->getJob()->getInterval());
+	}
+
+	/**
 	 * Runs the item import stack cronjob.
 	 *
 	 * @param Shopware_Components_Cron_CronJob $Job
@@ -375,7 +384,7 @@ class PlentymarketsCronjobController
 		$this->Config->setImportItemStackLastRunTimestamp(time());
 		$this->Config->setImportItemStackNextRunTimestamp(time() + $Job->getJob()->getInterval());
 
-		if (!$this->mayRun)
+		if (!$this->Status->maySynchronize())
 		{
 			$this->Config->setImportItemStackStatus(0);
 			return;
@@ -404,7 +413,7 @@ class PlentymarketsCronjobController
 		$this->Config->setImportItemPriceLastRunTimestamp(time());
 		$this->Config->setImportItemPriceNextRunTimestamp(time() + $Job->getJob()->getInterval());
 
-		if (!$this->mayRun)
+		if (!$this->Status->maySynchronize())
 		{
 			$this->Config->setImportItemPriceStatus(0);
 			return;
@@ -433,7 +442,7 @@ class PlentymarketsCronjobController
 		$this->Config->setImportItemStockLastRunTimestamp(time());
 		$this->Config->setImportItemStockNextRunTimestamp(time() + $Job->getJob()->getInterval());
 
-		if (!$this->mayRun)
+		if (!$this->Status->maySynchronize())
 		{
 			$this->Config->setImportItemStockStatus(0);
 			return;

@@ -215,4 +215,32 @@ class PlentymarketsLogger
 	{
 		$this->message('DEBUG', $message);
 	}
+
+	/**
+	 * Logs the usage data
+	 */
+	public function usage()
+	{
+		// Quit if the usage may not be logged
+		if (!PlentymarketsConfig::getInstance()->getMayLogUsageData(false))
+		{
+			return;
+		}
+
+		// Collect data
+		$memoryUsage = PlentymarketsUtils::convertBytes(memory_get_usage());
+		$memoryUsageReal = PlentymarketsUtils::convertBytes(memory_get_usage(true));
+		$memoryLimit = ini_get('memory_limit');
+		$runtime = ini_get('max_execution_time');
+		$numberOfCalls = PlentymarketsSoapClient::getInstance()->getNumberOfCalls();
+
+		// Generate message
+		$message = sprintf(
+			'Memory: %s (%s) / (%s) – Calls: %s',
+			$memoryUsageReal, $memoryUsage, $memoryLimit, $numberOfCalls
+		);
+
+		// And save to the log
+		$this->message('Usage data', $message);
+	}
 }

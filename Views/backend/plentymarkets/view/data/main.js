@@ -43,10 +43,11 @@ Ext.define('Shopware.apps.Plentymarkets.view.data.Main', {
 		me.setLoading(true);
 
 		var title = {
-			ItemMainDetailLost: 'Verlorene Details',
-			ItemOrphaned: 'Verlorene Artikel',
-			ItemVariationGroupMultiple: 'Varianten/Attribute/Mehrfachzuordnung',
-			ItemVariationOptionLost: 'Verlorene Attribut-Optionen'
+			ItemMainDetailLost: '† Details',
+			ItemOrphaned: '† Artikel',
+			ItemVariationGroupMultiple: 'Attribute/Mehrfachzuordnung',
+			ItemVariationOptionNotInSet: 'Optionen ≠ Set',
+			ItemVariationOptionLost: '† Attribut-Optionen'
 		};
 
 		me.storeStatus.load(function(data)
