@@ -114,6 +114,12 @@ class PlentymarketsSoapClient extends SoapClient
 	protected $timestampConfigKey;
 
 	/**
+	 *
+	 * @var integer
+	 */
+	protected $numberOfCalls = 0;
+
+	/**
 	 * Constructor method
 	 *
 	 * @param string $wsdl
@@ -362,6 +368,8 @@ class PlentymarketsSoapClient extends SoapClient
 			PlentymarketsLogger::getInstance()->message('Soap:Call:Header:Response', $this->__getLastResponseHeaders());
 		}
 
+		++$this->numberOfCalls;
+
 		return $Response;
 	}
 
@@ -450,4 +458,23 @@ class PlentymarketsSoapClient extends SoapClient
 	{
 		return preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', '', $string);
 	}
+
+	/**
+	 *
+	 * @return integer
+	 */
+	public function getNumberOfCalls()
+	{
+		return $this->numberOfCalls;
+	}
+
+	/**
+	 *
+	 * @param integer $numberOfCalls
+	 */
+	public function setNumberOfCalls($numberOfCalls)
+	{
+		$this->numberOfCalls = $numberOfCalls;
+	}
+
 }
