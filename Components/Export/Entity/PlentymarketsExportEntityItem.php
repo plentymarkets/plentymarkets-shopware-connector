@@ -53,6 +53,8 @@ require_once PY_SOAP . 'Models/PlentySoapObject/SetAttributeValueSetsDetails.php
 require_once PY_SOAP . 'Models/PlentySoapRequest/SetAttributeValueSetsDetails.php';
 require_once PY_SOAP . 'Models/PlentySoapRequest/SetStoreCategories.php';
 require_once PY_SOAP . 'Models/PlentySoapObject/SetStoreCategory.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/DeleteItems.php';
+require_once PY_SOAP . 'Models/PlentySoapRequest/DeleteItems.php';
 require_once PY_COMPONENTS . 'Utils/PlentymarketsUtils.php';
 require_once PY_COMPONENTS . 'Export/PlentymarketsExportException.php';
 require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingController.php';
@@ -631,6 +633,11 @@ class PlentymarketsExportEntityItem
 				continue;
 			}
 
+			if (!is_null($ResponseMessage->ErrorMessages))
+			{
+				continue;
+			}
+
 			$PLENTY_attributeValueIDs = array_map('intval', explode(';', $ResponseMessage->IdentificationValue));
 			$PLENTY_variantID = (integer) $ResponseMessage->SuccessMessages->item[0]->Value;
 
@@ -659,6 +666,10 @@ class PlentymarketsExportEntityItem
 			}
 			catch (PlentymarketsMappingExceptionNotExistant $E)
 			{
+				// Roll back the item
+				$this->rollback();
+
+				// and quit
 				throw new PlentymarketsExportException('The item variation with the number »' . $ItemVariation->getNumber() . '« could not be created (corrupt data)', 2880);
 			}
 
@@ -675,5 +686,31 @@ class PlentymarketsExportEntityItem
 
 		// Do the request
 		$Response_SetAttributeValueSetsDetails = PlentymarketsSoapClient::getInstance()->SetAttributeValueSetsDetails($Request_SetAttributeValueSetsDetails);
+	}
+
+	/**
+	 * Rolls back the item (delete all mappings and the item in plentymarkets)
+	 */
+	protected function rollback()
+	{
+		// Delete the item in plentymarktes
+		$Request_DeleteItems = new PlentySoapRequest_DeleteItems();
+		$Request_DeleteItems->DeleteItems = array();
+
+		$Object_DeleteItems = new PlentySoapObject_DeleteItems();
+		$Object_DeleteItems->ItemID = $this->PLENTY_itemID;
+		$Request_DeleteItems->DeleteItems[] = $Object_DeleteItems;
+
+		PlentymarketsSoapClient::getInstance()->DeleteItems($Request_DeleteItems);
+		PlentymarketsLogger::getInstance()->message('Export:Initial:Item', 'The item with the id »' . $this->PLENTY_itemID . '« has been deleted in plentymarkets');
+
+		// Delete the mapping for the main item
+		PlentymarketsMappingController::deleteItemByShopwareID($this->SHOPWARE_Article->getId());
+
+		// And for the details
+		foreach ($this->SHOPWARE_Article->getDetails() as $ItemVariation)
+		{
+			PlentymarketsMappingController::deleteItemVariantByShopwareID($ItemVariation->getId());
+		}
 	}
 }
