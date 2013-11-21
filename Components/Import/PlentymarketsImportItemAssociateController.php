@@ -118,7 +118,7 @@ class PlentymarketsImportItemAssociateController
 		PyConf()->set(sprintf('ImportItem%sLastRunTimestamp', $entity), time());
 		PyConf()->set(sprintf('ImportItem%sNextRunTimestamp', $entity), time() + $this->cronJobInterval);
 
-		if (true || PyStatus()->maySynchronize())
+		if (PyStatus()->maySynchronize())
 		{
 			PyLog()->message('Sync:Item:' . $entity, 'Starting');
 			try

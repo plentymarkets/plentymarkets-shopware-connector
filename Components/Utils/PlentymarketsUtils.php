@@ -152,6 +152,17 @@ class PlentymarketsUtils
 
 	/**
 	 *
+	 * @param integer $size
+	 * @return string
+	 */
+	public static function convertBytes($size)
+	{
+		$unit = array('b', 'kb', 'mb', 'gb', 'tb', 'pb');
+		return @round($size / pow(1024, ($i = floor(log($size, 1024)))), 2) . ' ' . $unit[$i];
+	}
+
+	/**
+	 *
 	 * @var array
 	 */
 	protected static $categoryId2ShopId = array();

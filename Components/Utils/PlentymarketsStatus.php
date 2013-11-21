@@ -15,6 +15,12 @@ class PlentymarketsStatus
 
 	protected $connectionTimestamp = 0;
 
+	protected $isCliWarningLogged = false;
+
+	protected $isRuntimeWarningLogged = false;
+
+	protected $isLicenseWarningLogged = false;
+
 	public static function getInstance()
 	{
 		if (!self::$Instance instanceof self)
@@ -117,7 +123,7 @@ class PlentymarketsStatus
 		);
 	}
 
-	public function maySynchronize()
+	public function maySynchronize($checkExtended=true)
 	{
 		// Export has basically the same needs
 		$mayExport = $this->mayExport();
@@ -126,10 +132,31 @@ class PlentymarketsStatus
 		$isExportFinished = $this->isExportFinished();
 
 		// useless, so far, bit the integrity needs to be checked
-		$this->isDataIntegrityValid();
+		$isDataIntegrityValid = $this->isDataIntegrityValid();
 
-		// May synchron
-		$maySynchronize = $mayExport && $isExportFinished;
+// 		// Check the license
+// 		if (Shopware()->Bootstrap()->issetResource('License'))
+// 		{
+// 			$License = Shopware()->License();
+// 			$isLicenseValid = $License->checkCoreLicense(false);
+// 			if (!$isLicenseValid && !$this->isLicenseWarningLogged)
+// 			{
+// 				PlentymarketsLogger::getInstance()->error('System:License', 'The shopware license that is used is invalid or has expired.', 1010);
+// 				$this->isLicenseWarningLogged = true;
+// 			}
+// 		}
+// 		else
+// 		{
+// 			$isLicenseValid = false;
+// 			if (!$this->isLicenseWarningLogged)
+// 			{
+// 				PlentymarketsLogger::getInstance()->error('System:License', 'The license mananger is not installed. Therefore, it is not possible to check the license.', 1011);
+// 				$this->isLicenseWarningLogged = true;
+// 			}
+// 		}
+
+		// May Synchronize
+		$maySynchronize = $mayExport && $isExportFinished && $isDataIntegrityValid/* && $isLicenseValid*/;
 
 		// User settings
 		$mayDatexActual = PlentymarketsConfig::getInstance()->getMayDatexUser(0);
@@ -150,6 +177,36 @@ class PlentymarketsStatus
 			PlentymarketsConfig::getInstance()->setMayDatexActual($mayDatexActual);
 		}
 
-		return $maySynchronize && $mayDatexActual;
+		// status vars
+		$isCli = true;
+		$mayRunUnlimited = true;
+
+		// do some extended checks whether the sync may be started
+		if ($checkExtended && !isset($_GET['overruleExtendedChecks']))
+		{
+			// Check the cli
+			if (php_sapi_name() != 'cli')
+			{
+				$isCli = false;
+				if (!$this->isCliWarningLogged)
+				{
+					PlentymarketsLogger::getInstance()->error('System:PHP', 'The synchronizing processes have to be started with the PHP-CLI (command line interface).', 1001);
+					$this->isCliWarningLogged = true;
+				}
+			}
+
+			// Check the runtime
+			if (ini_get('max_execution_time') > 0)
+			{
+				$mayRunUnlimited = false;
+				if (!$this->isRuntimeWarningLogged)
+				{
+					PlentymarketsLogger::getInstance()->error('System:PHP', 'The synchronizing processes have to be started with unlimited runtime.', 1002);
+					$this->isRuntimeWarningLogged = true;
+				}
+			}
+		}
+
+		return $maySynchronize && $mayDatexActual && $isCli && $mayRunUnlimited;
 	}
 }

@@ -249,7 +249,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	public function getSettingsListAction()
 	{
 		// Check the api, mapping and export status
-		PlentymarketsStatus::getInstance()->maySynchronize();
+		PlentymarketsStatus::getInstance()->maySynchronize(false);
 
 		$config = PlentymarketsConfig::getInstance()->getConfig();
 
@@ -409,7 +409,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		}
 
 		// Check dx status
-		PlentymarketsStatus::getInstance()->maySynchronize();
+		PlentymarketsStatus::getInstance()->maySynchronize(false);
 
 		// User settings of the data exchange
 		$Config->setMayDatexUser((integer) ($this->Request()->MayDatexUser == true));
