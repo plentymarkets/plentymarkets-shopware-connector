@@ -180,6 +180,13 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 	
 	//
 	{
+		name: 'MayLogUsageData',
+		type: 'boolean',
+		defaultValue: false
+	},
+	
+	//
+	{
 		name: '_WebserverSoftware',
 		type: 'string'
 	}, {

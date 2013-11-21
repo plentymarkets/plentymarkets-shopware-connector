@@ -375,6 +375,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		$Config->setInitialExportChunkSize(max($this->Request()->InitialExportChunkSize, 1));
 		$Config->setImportItemChunkSize(max($this->Request()->ImportItemChunkSize, 1));
 		$Config->setInitialExportChunksPerRun(max($this->Request()->InitialExportChunksPerRun, -1));
+		$Config->setMayLogUsageData($this->Request()->MayLogUsageData == true ? 1 : 0);
 
 		//
 		if ($Config->getOutgoingItemsIntervalID() != $this->Request()->OutgoingItemsIntervalID)

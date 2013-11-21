@@ -135,6 +135,9 @@ class PlentymarketsImportControllerItem
 
 			// Increment the item counter for the logging
 			++$this->numberOfItems;
+
+			// Log the usage data
+			PyLog()->usage();
 		}
 
 		catch (Shopware\Components\Api\Exception\ValidationException $E)

@@ -428,6 +428,13 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 				}),
 				displayField: 'size',
 				supportText: 'Anzahl der Artikel, die pro Durchlauf der Synchronisierung von plentymarkets abgerufen werden.'
+			}, {
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/MayLogUsageData}Nutzungsdaten loggen{/s}',
+				name: 'MayLogUsageData',
+				id: 'MayLogUsageData',
+				xtype: 'checkbox',
+				inputValue: 1,
+				uncheckedValue: '0'
 			}]
 		}];
 	}
