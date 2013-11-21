@@ -119,7 +119,10 @@ class PlentymarketsStatus
 			$this->isSettingsFinished() &&
 
 			// Mapping is okay
-			$this->isMappingFinished()
+			$this->isMappingFinished()  &&
+
+			// Data is fine
+			$this->isDataIntegrityValid()
 		);
 	}
 
@@ -130,9 +133,6 @@ class PlentymarketsStatus
 
 		// Export is okay
 		$isExportFinished = $this->isExportFinished();
-
-		// useless, so far, bit the integrity needs to be checked
-		$isDataIntegrityValid = $this->isDataIntegrityValid();
 
 // 		// Check the license
 // 		if (Shopware()->Bootstrap()->issetResource('License'))
@@ -156,7 +156,7 @@ class PlentymarketsStatus
 // 		}
 
 		// May Synchronize
-		$maySynchronize = $mayExport && $isExportFinished && $isDataIntegrityValid/* && $isLicenseValid*/;
+		$maySynchronize = $mayExport && $isExportFinished/* && $isLicenseValid*/;
 
 		// User settings
 		$mayDatexActual = PlentymarketsConfig::getInstance()->getMayDatexUser(0);

@@ -214,7 +214,7 @@ class PlentymarketsExportController
 		// Check whether settings and mapping is complete
 		if ($this->mayRun == false)
 		{
-			throw new PlentymarketsExportException('Either the mapping or the settings is not finished', 2520);
+			throw new PlentymarketsExportException('Either the mapping or the settings is not finished or the data integrity is not valid', 2520);
 		}
 
 		// Check whether or not the order is correct
@@ -248,7 +248,7 @@ class PlentymarketsExportController
 		// Check whether settings and mapping is complete
 		if ($this->mayRun == false)
 		{
-			throw new PlentymarketsExportException('Either the mapping or the settings is not finished', 2520);
+			throw new PlentymarketsExportException('Either the mapping or the settings is not finished or the data integrity is not valid', 2520);
 		}
 
 		// Get the pending entity
