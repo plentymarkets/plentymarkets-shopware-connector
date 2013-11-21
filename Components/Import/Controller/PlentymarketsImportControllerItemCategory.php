@@ -7,7 +7,7 @@ class PlentymarketsImportControllerItemCategory
 	public function __construct()
 	{
 		Shopware()->Db()->exec('
-			CREATE TABLE IF NOT EXISTS `plenty_category` (
+			CREATE TEMPORARY TABLE `plenty_category` (
 			  `plentyId` int(11) unsigned NOT NULL,
 			  `plentyPath` varchar(255) NOT NULL DEFAULT "",
 			  `shopwareId` int(11) unsigned NOT NULL,
@@ -15,15 +15,6 @@ class PlentymarketsImportControllerItemCategory
 			  KEY (`plentyId`)
 			) ENGINE=MEMORY
 		');
-// 		Shopware()->Db()->exec('
-// 			CREATE TEMPORARY TABLE `plenty_category` (
-// 			  `plentyId` int(11) unsigned NOT NULL,
-// 			  `plentyPath` varchar(255) NOT NULL DEFAULT "",
-// 			  `shopwareId` int(11) unsigned NOT NULL,
-//			  `size` tinyint(4) unsigned NOT NULL,
-// 			  KEY (`plentyId`)
-// 			) ENGINE=MEMORY
-// 		');
 
 		$Handle = Shopware()->Db()->query('
 			SELECT * FROM plenty_mapping_category
@@ -48,9 +39,9 @@ class PlentymarketsImportControllerItemCategory
 
 	public function __destruct()
 	{
-// 		Shopware()->Db()->exec('
-// 			DROP TEMPORARY TABLE `plenty_category`
-// 		');
+		Shopware()->Db()->exec('
+			DROP TEMPORARY TABLE `plenty_category`
+		');
 	}
 
 	public function run($lastUpdateTimestamp)
