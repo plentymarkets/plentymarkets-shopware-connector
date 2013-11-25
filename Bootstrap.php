@@ -52,6 +52,7 @@ define('EXPORT_ORDER_ITEM_TEXT_SYNC_NO', 0);
 define('MOP_DEBIT', 3);
 
 /**
+ * Shortcut for PlentymarketsConfig::getInstance()
  *
  * @return PlentymarketsConfig
  */
@@ -61,6 +62,7 @@ function PyConf()
 }
 
 /**
+ * Shortcut for PlentymarketsLogger::getInstance()
  *
  * @return PlentymarketsLogger
  */
@@ -70,6 +72,7 @@ function PyLog()
 }
 
 /**
+ * Shortcut for PlentymarketsStatus::getInstance()
  *
  * @return PlentymarketsStatus
  */

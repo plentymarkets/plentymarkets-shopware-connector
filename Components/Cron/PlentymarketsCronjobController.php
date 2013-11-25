@@ -368,6 +368,11 @@ class PlentymarketsCronjobController
 	 */
 	public function runItemAssociateImport(Shopware_Components_Cron_CronJob $Job)
 	{
+		if (!$this->Status->maySynchronize())
+		{
+			return;
+		}
+
 		require_once PY_COMPONENTS . 'Import/PlentymarketsImportItemAssociateController.php';
 
 		$PlentymarketsImportItemAssociateController = new PlentymarketsImportItemAssociateController();

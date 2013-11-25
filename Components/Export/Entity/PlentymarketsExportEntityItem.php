@@ -633,6 +633,7 @@ class PlentymarketsExportEntityItem
 				continue;
 			}
 
+			// If there is an error message, go ahead
 			if (!is_null($ResponseMessage->ErrorMessages))
 			{
 				continue;
