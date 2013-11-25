@@ -82,13 +82,28 @@ class PlentymarketsExportEntityCustomer
 	/**
 	 * Constructor method
 	 *
-	 * @param unknown $Customer
+	 * @param \Shopware\Models\Customer\Customer $Customer
 	 * @param string $BillingAddress
 	 * @param string $ShippingAddress
 	 */
 	public function __construct($Customer, $BillingAddress=null, $ShippingAddress=null)
 	{
 		$this->Customer = $Customer;
+
+		// Try to load the customer
+		try
+		{
+			$this->Customer->getEmail();
+		}
+		catch (Exception $E)
+		{
+			throw new PlentymarketsExportEntityException('The customer no longer exists', 2101);
+		}
+
+		if (!$this->Customer->getFirstLogin() instanceof DateTime)
+		{
+			throw new PlentymarketsExportEntityException('The customer no longer exists', 2102);
+		}
 
 		if ($BillingAddress === null)
 		{
