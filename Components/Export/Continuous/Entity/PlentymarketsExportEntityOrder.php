@@ -94,6 +94,12 @@ class PlentymarketsExportEntityOrder
 	protected $PLENTY_addressDispatchID;
 
 	/**
+	 *
+	 * @var Shopware\Components\Api\Resource\Variant
+	 */
+	protected static $VariantApi;
+
+	/**
 	 * Constructor method
 	 *
 	 * @param unknown $orderID
@@ -151,6 +157,8 @@ class PlentymarketsExportEntityOrder
 	 */
 	protected function exportOrder()
 	{
+		$VariantResource = self::getVariantApi();
+
 		// Build the Request
 		$Request_AddOrders = new PlentySoapRequest_AddOrders();
 		$Request_AddOrders->Orders = array();
@@ -241,7 +249,19 @@ class PlentymarketsExportEntityOrder
 			try
 			{
 				$itemId = null;
-				$sku = PlentymarketsMappingController::getItemVariantByShopwareID($Item->getId());
+
+				try
+				{
+					// get the dtail id by the order number
+					$articleDetailID = $VariantResource->getIdFromNumber($Item->getArticleNumber());
+				}
+				catch (Exception $E)
+				{
+					$articleDetailID = -1;
+				}
+
+				// get the sku from the detail id
+				$sku = PlentymarketsMappingController::getItemVariantByShopwareID($articleDetailID);
 			}
 
 			catch (PlentymarketsMappingExceptionNotExistant $E)
@@ -533,5 +553,20 @@ class PlentymarketsExportEntityOrder
 			$plentyOrderStatus,
 			$this->Order->getId()
 		));
+	}
+
+	/**
+	 * Returns the Variant resource
+	 *
+	 * @return \Shopware\Components\Api\Resource\Variant
+	 */
+	protected static function getVariantApi()
+	{
+		if (is_null(self::$VariantApi))
+		{
+			self::$VariantApi = Shopware\Components\Api\Manager::getResource('Variant');
+		}
+
+		return self::$VariantApi;
 	}
 }
