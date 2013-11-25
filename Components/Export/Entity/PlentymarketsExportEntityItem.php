@@ -596,7 +596,7 @@ class PlentymarketsExportEntityItem
 		}
 
 		// Run the calls
-		foreach (array_chunk($objectsActivateVariations, 100) as $activateVariations)
+		foreach (array_chunk($objectsActivateVariations, 50) as $activateVariations)
 		{
 			$Request_AddItemAttributeValueSets->ActivateVariations = $activateVariations;
 			PlentymarketsSoapClient::getInstance()->AddItemAttributeValueSets($Request_AddItemAttributeValueSets);
@@ -637,7 +637,7 @@ class PlentymarketsExportEntityItem
 			$objectsAddAttributeValueSets[] = $Object_AddItemAttributeVariationList;
 		}
 
-		foreach (array_chunk($objectsAddAttributeValueSets, 100) as $addAttributeValueSets)
+		foreach (array_chunk($objectsAddAttributeValueSets, 50) as $addAttributeValueSets)
 		{
 			// Complete the request
 			$Request_AddItemAttributeValueSets->AddAttributeValueSets = $addAttributeValueSets;
