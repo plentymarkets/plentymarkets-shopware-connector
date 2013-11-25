@@ -453,8 +453,11 @@ class PlentymarketsImportEntityItem
 							// Create
 							$CategoryModel = self::$CategoryApi->create($params);
 
+							// Parent
+							$parentCategoryName = $CategoryModel->getParent()->getName();
+
 							// Log
-							PlentymarketsLogger::getInstance()->message('Sync:Item:Category', 'Added category »' . $categoryName . '« with parentId ' . $parentId);
+							PlentymarketsLogger::getInstance()->message('Sync:Item:Category', 'The category »' . $categoryName . '« has been created beneath the category »' . $parentCategoryName . '«');
 
 							// Id to connect with the item
 							$parentId = $CategoryModel->getId();
@@ -688,8 +691,6 @@ class PlentymarketsImportEntityItem
 			// If a mappings exists, it's a regular item
 			$SHOPWARE_itemID = PlentymarketsMappingController::getItemByPlentyID($this->ItemBase->ItemID);
 
-			// Log
-			PlentymarketsLogger::getInstance()->message('Sync:Item', sprintf('Updating item (%u) %s', $SHOPWARE_itemID, $data['name']));
 
 			// Should the categories be synchronized?
 			if (PlentymarketsConfig::getInstance()->getItemCategorySyncActionID(IMPORT_ITEM_CATEGORY_SYNC) == IMPORT_ITEM_CATEGORY_SYNC)
@@ -727,6 +728,9 @@ class PlentymarketsImportEntityItem
 
 			// Update the item
 			$Article = $ArticleResource->update($SHOPWARE_itemID, $data);
+
+			// Log
+			PlentymarketsLogger::getInstance()->message('Sync:Item', sprintf('The item »%s« with the number »%s« has been updated', $data['name'], $number));
 
 			// Remember the main detail's id (to set the prices)
 			$mainDetailId = $Article->getMainDetail()->getId();
@@ -839,7 +843,14 @@ class PlentymarketsImportEntityItem
 				$VariantController->map($article);
 
 				// Log
-				PlentymarketsLogger::getInstance()->message('Sync:Item', 'Variants updated: ' . $numberOfVariantsUpdated);
+				if ($numberOfVariantsUpdated > 1)
+				{
+					PlentymarketsLogger::getInstance()->message('Sync:Item', $numberOfVariantsUpdated . ' Variants have been updated');
+				}
+				else
+				{
+					PlentymarketsLogger::getInstance()->message('Sync:Item', '1 Variant has been updated');
+				}
 			}
 			else
 			{
@@ -900,7 +911,7 @@ class PlentymarketsImportEntityItem
 				$SHOPWARE_itemID = $Article->getId();
 
 				// Log
-				PlentymarketsLogger::getInstance()->message('Sync:Item', 'Item »' . $this->data['name'] . '« created with number »' . $data['mainDetail']['number'] . '«');
+				PlentymarketsLogger::getInstance()->message('Sync:Item', 'The item »' . $this->data['name'] . '« has been created with the number »' . $data['mainDetail']['number'] . '«');
 
 				// Mapping speichern
 				PlentymarketsMappingController::addItem($Article->getId(), $this->ItemBase->ItemID);
@@ -923,7 +934,7 @@ class PlentymarketsImportEntityItem
 
 				// Anlegen
 				$Article = $ArticleResource->create($data);
-				PlentymarketsLogger::getInstance()->message('Sync:Item', 'Variant base item »' . $this->data['name'] . '« created with number ' . $data['mainDetail']['number']);
+				PlentymarketsLogger::getInstance()->message('Sync:Item', 'The variant base item »' . $this->data['name'] . '« has been created created with the number »' . $data['mainDetail']['number'] . '«');
 
 				//
 				$SHOPWARE_itemID = $Article->getId();
@@ -958,7 +969,7 @@ class PlentymarketsImportEntityItem
 					'variants' => array_values($this->variants)
 				);
 
-				PlentymarketsLogger::getInstance()->message('Sync:Item:Variant', 'Starting to create variants for item »' . $this->data['name'] . '« (' . $data['mainDetail']['number'] . ')');
+				PlentymarketsLogger::getInstance()->message('Sync:Item:Variant', 'Starting to create variants for the item »' . $this->data['name'] . '« with the number »' . $data['mainDetail']['number'] . '«');
 
 				$Article = $ArticleResource->update($id, $updateArticle);
 
@@ -977,7 +988,7 @@ class PlentymarketsImportEntityItem
 
 				$VariantController->map($ArticleResource->getOne($id));
 
-				PlentymarketsLogger::getInstance()->message('Sync:Item:Variant', 'Variants created for item »' . $this->data['name'] . '« (' . $data['mainDetail']['number'] . ')');
+				PlentymarketsLogger::getInstance()->message('Sync:Item:Variant', 'Variants created successfully');
 			}
 
 			// Bilder
@@ -988,7 +999,7 @@ class PlentymarketsImportEntityItem
 		// Der Hersteller ist neu angelegt worden
 		if ($Article instanceof Shopware\Models\Article\Article && array_key_exists('supplier', $this->data))
 		{
-			PlentymarketsLogger::getInstance()->message('Sync:Item', 'Producer created: ' . $Article->getSupplier()->getName());
+			PlentymarketsLogger::getInstance()->message('Sync:Item', 'The producer »' . $Article->getSupplier()->getName() . '« has been created');
 			PlentymarketsMappingController::addProducer($Article->getSupplier()->getId(), $this->ItemBase->ProducerID);
 		}
 	}
