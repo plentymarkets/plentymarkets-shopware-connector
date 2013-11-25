@@ -567,7 +567,6 @@ class PlentymarketsExportEntityItem
 	 */
 	protected function exportVariants()
 	{
-
 		// Verknüpfung mit den Attribut(-werten)
 		$ConfiguratorSet = $this->SHOPWARE_Article->getConfiguratorSet();
 		if (!$ConfiguratorSet instanceof Shopware\Models\Article\Configurator\Set)
@@ -575,10 +574,12 @@ class PlentymarketsExportEntityItem
 			return;
 		}
 
+		// Active the attribute values at the item --------------------------------------------------------------------
+		$objectsActivateVariations = array();
+
 		$Request_AddItemAttributeValueSets = new PlentySoapRequest_AddItemAttributeValueSets();
 		$Request_AddItemAttributeValueSets->ItemID = $this->PLENTY_itemID; // int
 		$Request_AddItemAttributeValueSets->ActivateVariations = array();
-		$Request_AddItemAttributeValueSets->AddAttributeValueSets = array();
 
 		// Attribut-Werte zuordnen
 		foreach ($ConfiguratorSet->getOptions() as $ConfiguratorOption)
@@ -591,10 +592,23 @@ class PlentymarketsExportEntityItem
 			$Object_AttributeVariantion = new PlentySoapObject_AttributeVariantion();
 			$Object_AttributeVariantion->AttributeID = $PLENTY_attributeID; // int
 			$Object_AttributeVariantion->AttributeValueID = $PLENTY_attributeValueID; // int
-			$Request_AddItemAttributeValueSets->ActivateVariations[] = $Object_AttributeVariantion;
+			$objectsActivateVariations[] = $Object_AttributeVariantion;
 		}
 
+		// Run the calls
+		foreach (array_chunk($objectsActivateVariations, 100) as $activateVariations)
+		{
+			$Request_AddItemAttributeValueSets->ActivateVariations = $activateVariations;
+			PlentymarketsSoapClient::getInstance()->AddItemAttributeValueSets($Request_AddItemAttributeValueSets);
+		}
+
+		// generate the attribute value sets --------------------------------------------------------------------------
+		$objectsAddAttributeValueSets = array();
 		$cacheAttributeValueSets = array();
+
+		$Request_AddItemAttributeValueSets = new PlentySoapRequest_AddItemAttributeValueSets();
+		$Request_AddItemAttributeValueSets->ItemID = $this->PLENTY_itemID; // int
+		$Request_AddItemAttributeValueSets->AddAttributeValueSets = array();
 
 		$Details = $this->SHOPWARE_Article->getDetails();
 
@@ -620,40 +634,49 @@ class PlentymarketsExportEntityItem
 				$Object_AddItemAttributeVariationList->AttributeValueIDs[] = $Object_Integer;
 			}
 
-			$Request_AddItemAttributeValueSets->AddAttributeValueSets[] = $Object_AddItemAttributeVariationList;
+			$objectsAddAttributeValueSets[] = $Object_AddItemAttributeVariationList;
 		}
 
-		$Response_AddItemAttributeValueSets = PlentymarketsSoapClient::getInstance()->AddItemAttributeValueSets($Request_AddItemAttributeValueSets);
-
-		// Matching der Varianten
-		foreach ($Response_AddItemAttributeValueSets->ResponseMessages->item as $ResponseMessage)
+		foreach (array_chunk($objectsAddAttributeValueSets, 100) as $addAttributeValueSets)
 		{
-			if ($ResponseMessage->IdentificationKey != 'AttributeValueIDs')
+			// Complete the request
+			$Request_AddItemAttributeValueSets->AddAttributeValueSets = $addAttributeValueSets;
+
+			// and go for it
+			$Response_AddItemAttributeValueSets = PlentymarketsSoapClient::getInstance()->AddItemAttributeValueSets($Request_AddItemAttributeValueSets);
+
+			// Matching der Varianten
+			foreach ($Response_AddItemAttributeValueSets->ResponseMessages->item as $ResponseMessage)
 			{
-				continue;
-			}
-
-			// If there is an error message, go ahead
-			if (!is_null($ResponseMessage->ErrorMessages))
-			{
-				continue;
-			}
-
-			$PLENTY_attributeValueIDs = array_map('intval', explode(';', $ResponseMessage->IdentificationValue));
-			$PLENTY_variantID = (integer) $ResponseMessage->SuccessMessages->item[0]->Value;
-
-			foreach ($cacheAttributeValueSets as $SHOPWARE_variantID => $attributeValueIDs)
-			{
-
-				if (PlentymarketsUtils::arraysAreEqual($attributeValueIDs, $PLENTY_attributeValueIDs))
+				if ($ResponseMessage->IdentificationKey != 'AttributeValueIDs')
 				{
-					PlentymarketsMappingController::addItemVariant($SHOPWARE_variantID, sprintf('%s-%s-%s', $this->PLENTY_itemID, $this->PLENTY_priceID, $PLENTY_variantID));
-					break;
+					continue;
+				}
+
+				// If there is an error message, go ahead
+				if (!is_null($ResponseMessage->ErrorMessages))
+				{
+					continue;
+				}
+
+				$PLENTY_attributeValueIDs = array_map('intval', explode(';', $ResponseMessage->IdentificationValue));
+				$PLENTY_variantID = (integer) $ResponseMessage->SuccessMessages->item[0]->Value;
+
+				foreach ($cacheAttributeValueSets as $SHOPWARE_variantID => $attributeValueIDs)
+				{
+					if (PlentymarketsUtils::arraysAreEqual($attributeValueIDs, $PLENTY_attributeValueIDs))
+					{
+						PlentymarketsMappingController::addItemVariant($SHOPWARE_variantID, sprintf('%s-%s-%s', $this->PLENTY_itemID, $this->PLENTY_priceID, $PLENTY_variantID));
+						break;
+					}
 				}
 			}
 		}
 
-		//
+		// Set the variation details ----------------------------------------------------------------------------------
+		$objectsAttributeValueSetsDetails = array();
+
+		// start the request
 		$Request_SetAttributeValueSetsDetails = new PlentySoapRequest_SetAttributeValueSetsDetails();
 		$Request_SetAttributeValueSetsDetails->AttributeValueSetsDetails = array();
 
@@ -682,11 +705,14 @@ class PlentymarketsExportEntityItem
 			$Object_SetAttributeValueSetsDetails->SKU = $sku;
 			$Object_SetAttributeValueSetsDetails->Variantnumber = $ItemVariation->getNumber(); // string
 
-			$Request_SetAttributeValueSetsDetails->AttributeValueSetsDetails[] = $Object_SetAttributeValueSetsDetails;
+			$objectsAttributeValueSetsDetails[] = $Object_SetAttributeValueSetsDetails;
 		}
 
-		// Do the request
-		$Response_SetAttributeValueSetsDetails = PlentymarketsSoapClient::getInstance()->SetAttributeValueSetsDetails($Request_SetAttributeValueSetsDetails);
+		foreach (array_chunk($objectsAttributeValueSetsDetails, 50) as $attributeValueSetsDetails)
+		{
+			$Request_SetAttributeValueSetsDetails->AttributeValueSetsDetails = $attributeValueSetsDetails;
+			PlentymarketsSoapClient::getInstance()->SetAttributeValueSetsDetails($Request_SetAttributeValueSetsDetails);
+		}
 	}
 
 	/**
