@@ -50,12 +50,6 @@ class PlentymarketsImportControllerItem
 
 	/**
 	 *
-	 * @var integer
-	 */
-	protected $numberOfItems = 0;
-
-	/**
-	 *
 	 * @var array
 	 */
 	protected $itemIdsDone = array();
@@ -132,9 +126,6 @@ class PlentymarketsImportControllerItem
 				// Mark this item as done
 				$this->itemIdsDone[$ItemBase->ItemID] = true;
 			}
-
-			// Increment the item counter for the logging
-			++$this->numberOfItems;
 
 			// Log the usage data
 			PyLog()->usage();
@@ -248,8 +239,21 @@ class PlentymarketsImportControllerItem
 			PlentymarketsLogger::getInstance()->message('Sync:Stack:Item', 'Returned ' . count($chunk) . ' items to the stack');
 		}
 
+		$numberOfItems = count($this->itemIdsDone);
+
 		// Log
-		PlentymarketsLogger::getInstance()->message('Sync:Item', $this->numberOfItems . ' items have been updated/created.');
+		if ($numberOfItems == 0)
+		{
+			PlentymarketsLogger::getInstance()->message('Sync:Item', 'No item has been updated or created.');
+		}
+		else if ($numberOfItems == 1)
+		{
+			PlentymarketsLogger::getInstance()->message('Sync:Item', '1 item has been updated or created.');
+		}
+		else
+		{
+			PlentymarketsLogger::getInstance()->message('Sync:Item', $numberOfItems . ' items have been updated or created.');
+		}
 
 		// Log stack information
 		$stackSize = count(PlentymarketsImportStackItem::getInstance());
