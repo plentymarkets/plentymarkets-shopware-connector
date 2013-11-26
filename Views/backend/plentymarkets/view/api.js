@@ -158,6 +158,13 @@ Ext.define('Shopware.apps.Plentymarkets.view.Api', {
 				uncheckedValue: false,
 			}, {
 				xtype: 'checkbox',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ApiHideCallsInLog}Soap Calls im Log ausblenden{/s}',
+				supportText: 'Aktivieren, wenn die SOAP Calls im Log ausgeblendet werden sollen.',
+				name: 'ApiHideCallsInLog',
+				inputValue: true,
+				uncheckedValue: false,
+			}, {
+				xtype: 'checkbox',
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ApiUseGzipCompression}Anfragen komprimieren{/s}',
 				supportText: 'Aktivieren, wenn die SOAP Responses gzip komprimiert empfangen werden können.',
 				name: 'ApiUseGzipCompression',

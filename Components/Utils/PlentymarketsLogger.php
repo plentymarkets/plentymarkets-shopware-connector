@@ -119,6 +119,10 @@ class PlentymarketsLogger
 			$where .= ' AND identifier LIKE "'. $filter .'"';
 		}
 
+		if (PyConf()->getApiHideCallsInLog(false))
+		{
+			$where .= ' AND identifier != "Soap:Call"';
+		}
 
 		$limit = ' LIMIT ' . $start . ', ' . $limit;
 

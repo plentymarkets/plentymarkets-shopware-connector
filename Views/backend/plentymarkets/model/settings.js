@@ -42,6 +42,10 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		type: 'boolean',
 		defaultValue: false
 	}, {
+		name: 'ApiHideCallsInLog',
+		type: 'boolean',
+		defaultValue: false
+	}, {
 		name: 'ApiLastAuthTimestamp',
 		type: 'integer'
 	}, {
