@@ -295,7 +295,10 @@ class PlentymarketsStatus
 				if (!$this->isCliWarningLogged)
 				{
 					PlentymarketsLogger::getInstance()->error('System:PHP', 'The synchronizing processes have to be started with the PHP-CLI (command line interface). You are using »' . $sapi . '«.', 1001);
-					PlentymarketsLogger::getInstance()->error('System:PHP', 'The prozess is handled through »' . $_ENV['_'] . '«.', 1001);
+					if (isset($_ENV['_']))
+					{
+						PlentymarketsLogger::getInstance()->error('System:PHP', 'The prozess is handled through »' . $_ENV['_'] . '«.', 1001);
+					}
 					if (isset($_SERVER['HTTP_REFERER']))
 					{
 						PlentymarketsLogger::getInstance()->error('System:PHP', 'The prozess is called through »' . $_SERVER['HTTP_REFERER'] . '«.', 1001);
