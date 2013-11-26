@@ -151,6 +151,7 @@ class PlentymarketsUtils
 	}
 
 	/**
+	 * Returns a human readable size
 	 *
 	 * @param integer $size
 	 * @return string

@@ -460,6 +460,7 @@ class PlentymarketsSoapClient extends SoapClient
 	}
 
 	/**
+	 * Returns the number of calls
 	 *
 	 * @return integer
 	 */
@@ -469,6 +470,7 @@ class PlentymarketsSoapClient extends SoapClient
 	}
 
 	/**
+	 * Sets the number of calls
 	 *
 	 * @param integer $numberOfCalls
 	 */

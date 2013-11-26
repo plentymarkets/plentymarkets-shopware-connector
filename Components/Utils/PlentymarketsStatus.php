@@ -284,8 +284,11 @@ class PlentymarketsStatus
 		$isCli = true;
 		$mayRunUnlimited = true;
 
+		// Skip the checks - if you know what you are doing :)
+		$skipChecks = isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'] == 'overruleExtendedChecks';
+
 		// do some extended checks whether the sync may be started
-		if ($checkExtended && !isset($_GET['overruleExtendedChecks']))
+		if ($checkExtended && !$skipChecks)
 		{
 			// Check the cli
 			$sapi = php_sapi_name();

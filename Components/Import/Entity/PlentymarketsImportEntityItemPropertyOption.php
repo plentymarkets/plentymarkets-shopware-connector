@@ -41,6 +41,7 @@ class PlentymarketsImportEntityItemPropertyOption
 	protected $Option;
 
 	/**
+	 * I am the contructor
 	 *
 	 * @param PlentySoapObject_Property $Group
 	 */

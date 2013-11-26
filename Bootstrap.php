@@ -937,7 +937,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 	}
 
     /**
-     * Cleans the log.
+     * Cleans up the log.
      *
      * @param Shopware_Components_Cron_CronJob $Job
      */

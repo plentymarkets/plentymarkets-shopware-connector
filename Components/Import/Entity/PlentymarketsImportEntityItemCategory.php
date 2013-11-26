@@ -40,6 +40,7 @@ class PlentymarketsImportEntityItemCategory
 	protected $Category;
 
 	/**
+	 * I am the contructor
 	 *
 	 * @param PlentySoapObject_GetItemCategoryCatalogBase $Category
 	 */
