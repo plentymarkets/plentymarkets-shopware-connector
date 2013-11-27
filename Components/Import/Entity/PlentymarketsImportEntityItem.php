@@ -699,12 +699,13 @@ class PlentymarketsImportEntityItem
 				$data['categories'] = $this->categories;
 			}
 
+			// strip whitespaces
+			$number = trim($this->ItemBase->ItemNo);
+
 			// Should the number be synchronized?
 			// This does only matter if there are no variants
 			if (PlentymarketsConfig::getInstance()->getItemNumberImportActionID(IMPORT_ITEM_NUMBER) == IMPORT_ITEM_NUMBER && !count($this->variants))
 			{
-				// strip whitespaces
-				$number = trim($this->ItemBase->ItemNo);
 
 				// If this number does not belong to this item
 				if (!PlentymarketsImportItemHelper::isNumberExistantItem($number, $SHOPWARE_itemID))
