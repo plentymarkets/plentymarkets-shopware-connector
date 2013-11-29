@@ -115,6 +115,14 @@ class PlentymarketsExportEntityOrder
 	}
 
 	/**
+	 * Flushes everything to /dev/null
+	 */
+	public function __destruct()
+	{
+		Shopware()->Models()->clear();
+	}
+
+	/**
 	 * Exports the customer and the order respectively
 	 */
 	public function export()
