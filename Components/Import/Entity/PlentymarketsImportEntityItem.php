@@ -78,7 +78,7 @@ class PlentymarketsImportEntityItem
 
 	/**
 	 *
-	 * @var unknown
+	 * @var array
 	 */
 	protected $variants = array();
 
@@ -283,6 +283,7 @@ class PlentymarketsImportEntityItem
 		$numbersUsed = array();
 
 		$detailBase = $this->details + $this->data;
+		unset($detailBase['id']);
 		unset($detailBase['attribute']);
 
 		foreach ($this->ItemBase->AttributeValueSets->item as $AttributeValueSet)
@@ -736,9 +737,9 @@ class PlentymarketsImportEntityItem
 			// Remember the main detail's id (to set the prices)
 			$mainDetailId = $Article->getMainDetail()->getId();
 
-			//
+			// Variants that will be commited to the API
 			$variants = array();
-			$variantsToBe = array();
+
 			$update = array();
 			$number2sku = array();
 			$keep = array(
@@ -752,48 +753,42 @@ class PlentymarketsImportEntityItem
 				//
 				$VariantController = new PlentymarketsImportItemVariantController($this->ItemBase);
 
-				// War der Artikel vorher schn eine Variante?
-				// Wenn nicht muss aus das Konfigurator set angelegt werden
+				// Counter
 				$numberOfVariantsUpdated = 0;
 				$numberOfVariantsCreated = 0;
+				$numberOfVariantsDeleted = 0;
 
 				foreach ($this->variants as $variantId => $variant)
 				{
 					// Markup
 					$variant['X_plentyMarkup'] = $VariantController->getMarkupByVariantId($variantId);
 
-					// Variante ist bereits vorhanden
+					// If the variant has an id, it is already created and mapped soo we just keep it
 					if (array_key_exists('id', $variant))
 					{
 						++$numberOfVariantsUpdated;
 						$keep['ids'][] = $variant['id'];
-						$variants[] = $variant;
 					}
 
-					// Variante muss erstellt werden
+					// otherwise the variant needs to be created
 					else
 					{
 						++$numberOfVariantsCreated;
-						$variantsToBe[$variantId] = $variant;
+						$variant['configuratorOptions'] = $VariantController->getOptionsByVariantId($variantId);
 						$keep['numbers'][] = $variant['number'];
 
-						// Nur die neuen kommen da rein.
+						// Internal mapping of the variant number to some plenty information
 						$number2sku[$variant['number']] = $variant['X_plentySku'];
 						$number2markup[$variant['number']] = $variant['X_plentyMarkup'];
 					}
+
+					$variants[] = $variant;
 				}
 
+				// If a new variant will be created
 				if ($numberOfVariantsCreated)
 				{
-					foreach ($variantsToBe as $variantId => $variant)
-					{
-						$variant['configuratorOptions'] = $VariantController->getOptionsByVariantId($variantId);
-
-						// Anhängen
-						$variants[] = $variant;
-					}
-
-					// Set muss ggf. aktualisiert werden
+					// the configurator set has to be adapted
 					$update['configuratorSet'] = array(
 						'groups' => $VariantController->getGroups()
 					);
@@ -811,46 +806,84 @@ class PlentymarketsImportEntityItem
 				}
 
 				$update['variants'] = $variants;
+
+				// Check if the main detail will be deleted
+				if (!in_array($mainDetailId, $keep['ids']))
+				{
+					// If the main detail is not needed anymore, delete it right away
+					// Otherwise it will be a dead data record. The main details are not
+					// returned from the API->getOne call. Only the "real" main detail.
+					$VariantResource->delete($mainDetailId);
+					PlentymarketsMappingController::deleteItemVariantByShopwareID($mainDetailId);
+
+					++$numberOfVariantsDeleted;
+
+					// Promote the first variante to be the main detail
+					$update['variants'][0]['isMain'] = true;
+				}
+
 				$ArticleResource->update($SHOPWARE_itemID, $update);
 				$article = $ArticleResource->getOne($SHOPWARE_itemID);
+
+				// Add the main detail
+				$article['details'][] = $article['mainDetail'];
 
 				// Mapping für die Varianten
 				foreach ($article['details'] as $detail)
 				{
-					// Muss gelöscht werden -- Achtung!! MainDetail muss ggf. neu gesetzt werden
+					// If the variant is not needed anymore - delete it
 					if (!in_array($detail['number'], $keep['numbers']) && !in_array($detail['id'], $keep['ids']))
 					{
-						//
-						$VariantResource->deleteByNumber($detail['number']);
-
-						// Mapping löschen
+						++$numberOfVariantsDeleted;
+						$VariantResource->delete($detail['id']);
 						PlentymarketsMappingController::deleteItemVariantByShopwareID($detail['id']);
-						continue;
 					}
 
-					// Alles nur für die neuen. aktualsiert sind sie schon, preise macht der andere prozess
-					if (!array_key_exists($detail['number'], $number2sku))
+					// If the variant was just created
+					else if (isset($number2sku[$detail['number']]))
 					{
-						continue;
+						// Add the mapping
+						PlentymarketsMappingController::addItemVariant($detail['id'], $number2sku[$detail['number']]);
+
+						// And update the prices
+						$PlentymarketsImportEntityItemPrice = new PlentymarketsImportEntityItemPrice($this->ItemBase->PriceSet, $number2markup[$detail['number']]);
+						$PlentymarketsImportEntityItemPrice->updateVariant($detail['id']);
 					}
-
-					PlentymarketsMappingController::addItemVariant($detail['id'], $number2sku[$detail['number']]);
-
-					// Preise
-					$PlentymarketsImportEntityItemPrice = new PlentymarketsImportEntityItemPrice($this->ItemBase->PriceSet, $number2markup[$detail['number']]);
-					$PlentymarketsImportEntityItemPrice->updateVariant($detail['id']);
 				}
 
 				$VariantController->map($article);
 
+				$messages = array();
+
 				// Log
-				if ($numberOfVariantsUpdated > 1)
+				if ($numberOfVariantsUpdated == 1)
 				{
-					PlentymarketsLogger::getInstance()->message('Sync:Item', $numberOfVariantsUpdated . ' Variants have been updated');
+					$messages[] = '1 variant has been updated';
 				}
-				else
+				else if ($numberOfVariantsUpdated > 1)
 				{
-					PlentymarketsLogger::getInstance()->message('Sync:Item', '1 Variant has been updated');
+					$messages[] = $numberOfVariantsUpdated . ' variants have been updated';
+				}
+				if ($numberOfVariantsCreated == 1)
+				{
+					$messages[] = '1 variant has been created';
+				}
+				else if ($numberOfVariantsCreated > 1)
+				{
+					$messages[] = $numberOfVariantsCreated . ' variants have been created';
+				}
+				if ($numberOfVariantsDeleted == 1)
+				{
+					$messages[] = '1 variant has been deleted';
+				}
+				else if ($numberOfVariantsDeleted > 1)
+				{
+					$messages[] = $numberOfVariantsDeleted . ' variants have been deleted';
+				}
+
+				if ($messages)
+				{
+					PlentymarketsLogger::getInstance()->message('Sync:Item', implode(', ', $messages));
 				}
 			}
 			else
