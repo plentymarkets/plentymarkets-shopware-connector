@@ -240,17 +240,17 @@ class PlentymarketsImportEntityItem
 
 		if ($this->ItemBase->PriceSet->WidthInMM > 0)
 		{
-			$details['width'] = $this->ItemBase->PriceSet->WidthInMM / 100;
+			$details['width'] = $this->ItemBase->PriceSet->WidthInMM / 10;
 		}
 
 		if ($this->ItemBase->PriceSet->LengthInMM > 0)
 		{
-			$details['len'] = $this->ItemBase->PriceSet->LengthInMM / 100;
+			$details['len'] = $this->ItemBase->PriceSet->LengthInMM / 10;
 		}
 
 		if ($this->ItemBase->PriceSet->HeightInMM > 0)
 		{
-			$details['height'] = $this->ItemBase->PriceSet->HeightInMM / 100;
+			$details['height'] = $this->ItemBase->PriceSet->HeightInMM / 10;
 		}
 
 		if (strlen($this->ItemBase->PriceSet->Unit))
