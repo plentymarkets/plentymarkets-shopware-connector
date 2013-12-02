@@ -202,6 +202,9 @@ class PlentymarketsImportController
 			{
 				$ImportEntityItemStock->update($CurrentStock);
 			}
+
+			// Clear the models to avoid buffer overflows
+			Shopware()->Models()->clear();
 		}
 
 		// Until all pages are received
