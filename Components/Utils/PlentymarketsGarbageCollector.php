@@ -152,7 +152,6 @@ class PlentymarketsGarbageCollector
 			'plenty_mapping_measure_unit' => array('id', 's_core_units'),
 			'plenty_mapping_method_of_payment' => array('id', 's_core_paymentmeans'),
 			'plenty_mapping_producer' => array('id', 's_articles_supplier'),
-			'plenty_mapping_property' => array('id', 's_filter_options'),
 			'plenty_mapping_property_group' => array('id', 's_filter'),
 			'plenty_mapping_referrer' => array('id', 's_emarketing_partner'),
 			'plenty_mapping_shipping_profile' => array('id', 's_premium_dispatch'),
@@ -190,6 +189,11 @@ class PlentymarketsGarbageCollector
 		// Delete no-longer-existant-orders
 		Shopware()->Db()->exec('
 			DELETE FROM plenty_order WHERE shopwareId NOT IN (SELECT id FROM s_order)
+		');
+
+		// Delete properties
+		Shopware()->Db()->exec('
+			DELETE FROM plenty_mapping_property WHERE shopwareID NOT IN (SELECT CONCAT(groupID, ";", optionID) FROM s_filter_relations)
 		');
 	}
 
