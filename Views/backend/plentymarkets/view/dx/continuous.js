@@ -45,68 +45,6 @@ Ext.define('Shopware.apps.Plentymarkets.view.dx.Continuous', {
 			}
 		};
 
-		me.bbar = Ext.create('Ext.toolbar.Toolbar', {
-			cls: 'shopware-toolbar',
-			dock: 'bottom',
-			ui: 'shopware-ui',
-			items: [{
-				xtype: 'combo',
-				id: 'combo-Plentymarkets-store-dx-continuous-actionId',
-				store: new Ext.data.ArrayStore({
-					fields: ['id', 'name'],
-					data: [['ItemStack', 'Artikel'], ['ItemStock', 'Warenbestände'], ['ItemPrice', 'Preise']]
-				}),
-				emptyText: '– Daten auswählen –',
-				anchor: '100%',
-				displayField: 'name',
-				valueField: 'id',
-				allowBlank: true,
-				editable: false
-			}, Ext.create('Ext.button.Button', {
-				text: '{s name=plentymarkets/view/dx/continous/button/resetTimestamp}vollständig abrufen{/s}',
-				cls: 'secondary',
-				handler: function()
-				{
-					var snippet = {
-						ItemStack: 'Artikel',
-						ItemStock: 'Warenbestände',
-						ItemPrice: 'Prise'
-					};
-
-					var entity = Ext.getCmp('combo-Plentymarkets-store-dx-continuous-actionId').getValue();
-					Ext.getCmp('combo-Plentymarkets-store-dx-continuous-actionId').reset();
-					Ext.getCmp('combo-Plentymarkets-store-dx-continuous-actionId').clearValue();
-
-					if (entity)
-					{
-						var name = snippet[entity];
-						var message = 'Wenn Sie diese Aktion ausführen, werden alle <b>' + name + '</b> bei der <b>nächsten Ausführung</b> des entsprechenden Prozesses komplett neu abgerufen (also <b>nicht</b> sofort). Je nach Datenmenge kann das sehr lange dauern!<br><br>Möchten Sie fortfahren?';
-					}
-					else
-					{
-						var message = 'Soll das Mapping sofort bereinigt werden?'
-					}
-
-					Ext.Msg.confirm('Achtung', message, function(button)
-					{
-						if (button === 'yes')
-						{
-							Ext.Ajax.request({
-								url: '{url action=resetImportTimestamp}',
-								callback: function(options, success, xhr)
-								{
-									Shopware.Notification.createGrowlMessage('Aktion ausgeführt', 'Die Aktion wurde ausgeführt');
-								},
-								jsonData: Ext.encode({
-									entity: entity
-								})
-							});
-						}
-					});
-				}
-			})]
-		});
-
 		me.callParent(arguments);
 	},
 

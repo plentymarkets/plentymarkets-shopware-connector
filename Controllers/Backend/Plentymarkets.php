@@ -46,6 +46,35 @@ require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingController.php';
 class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Backend_ExtJs
 {
 	/**
+	 * Runs an cleanup action
+	 */
+	public function cleanupAction()
+	{
+		require_once PY_COMPONENTS . 'Utils/PlentymarketsGarbageCollector.php';
+
+		switch ($this->Request()->get('entity'))
+		{
+			case PlentymarketsGarbageCollector::ACTION_PROPERTIES:
+				PlentymarketsGarbageCollector::getInstance()->run(
+					PlentymarketsGarbageCollector::ACTION_PROPERTIES
+				);
+				break;
+
+			case PlentymarketsGarbageCollector::ACTION_MAPPING:
+				PlentymarketsGarbageCollector::getInstance()->run(
+					PlentymarketsGarbageCollector::ACTION_MAPPING
+				);
+				break;
+
+		}
+
+		$this->View()->assign(array(
+			'success' => true
+		));
+	}
+
+
+	/**
 	 * Deleted a page of corrupt data
 	 */
 	public function deleteDataIntegrityInvalidDataAction()

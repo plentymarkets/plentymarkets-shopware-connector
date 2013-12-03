@@ -79,6 +79,12 @@ class PlentymarketsGarbageCollector
 	const ACTION_LOG = 3;
 
 	/**
+	 *
+	 * @var integer
+	 */
+	const ACTION_PROPERTIES = 4;
+
+	/**
 	 * Protected constructor to prevent direct creation
 	 */
 	protected function __construct()
@@ -127,6 +133,10 @@ class PlentymarketsGarbageCollector
 
 			case self::ACTION_LOG:
 				$this->cleanupLog();
+				break;
+
+			case self::ACTION_PROPERTIES:
+				$this->cleanupProperties();
 				break;
 		}
 
@@ -371,5 +381,54 @@ class PlentymarketsGarbageCollector
 		Shopware()->Db()->exec('
 			DELETE FROM plenty_log WHERE `timestamp` < '. strtotime('-1 month') .'
 		');
+	}
+
+	/**
+	 * Deleted all unused and unmapped properties
+	 */
+	protected function cleanupProperties()
+	{
+		// Get all useless properties
+		$options = Shopware()->Db()->fetchAll('
+			SELECT
+					DISTINCT sfr.optionID optionId, sfo.name
+				FROM s_filter_relations sfr
+				JOIN s_filter_options sfo ON sfo.id = sfr.optionID
+				WHERE CONCAT(sfr.groupID, ";", sfr.optionID) NOT IN (
+					SELECT shopwareID FROM plenty_mapping_property
+				)
+		');
+
+		foreach ($options as $option)
+		{
+			PyLog()->message('Cleanup:Property', 'The unmapped property »' . $option['name'] . '« and all it\'s values have been deleted');
+
+			Shopware()->Db()->delete('s_filter_options', 'id = ' . $option['optionId']);
+			Shopware()->Db()->delete('s_filter_relations', 'optionID = ' . $option['optionId']);
+		}
+
+		// Get all unused properties
+		$options = Shopware()->Db()->fetchAll('
+			SELECT
+					id optionId, `name`
+				FROM s_filter_options
+				WHERE id NOT IN (
+					SELECT optionID FROM s_filter_relations
+				)
+		');
+
+		foreach ($options as $option)
+		{
+			PyLog()->message('Cleanup:Property', 'The unused property »' . $option['name'] . '« and all it\'s values have been deleted');
+
+			Shopware()->Db()->delete('s_filter_options', 'id = ' . $option['optionId']);
+		}
+
+		// Delete all useless values and their relations with the items
+		Shopware()->Db()->delete('s_filter_values', 'optionID NOT IN (SELECT id FROM s_filter_options)');
+		Shopware()->Db()->delete('s_filter_articles', 'valueID NOT IN (SELECT id FROM s_filter_values)');
+
+		// Cleanup
+		$this->cleanup();
 	}
 }

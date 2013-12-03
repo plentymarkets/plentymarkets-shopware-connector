@@ -64,6 +64,8 @@ Ext.define('Shopware.apps.Plentymarkets.view.Main', {
 			}, me.di, {
 				xtype: 'plentymarkets-view-export'
 			}, {
+				xtype: 'plentymarkets-view-misc'
+			}, {
 				xtype: 'plentymarkets-view-log-main'
 			}]
 
