@@ -547,21 +547,33 @@ class PlentymarketsImportEntityItem
 		}
 		catch (PlentymarketsMappingExceptionNotExistant $E)
 		{
-			// Gruppe erstellen
-			$PropertyGroupResource = Shopware\Components\Api\Manager::getResource('PropertyGroup');
-			$group = $PropertyGroupResource->create(array(
+			// Create the group
+			$GroupAdded = Shopware\Components\Api\Manager::getResource('PropertyGroup')->create(array(
 				'name' => $ItemProperty->PropertyGroupFrontendName
 			));
-			$filterGroupId = $group->getId();
 
+			// Get the new id
+			$filterGroupId = $GroupAdded->getId();
+
+			// Write the mapping and the log
 			PlentymarketsMappingController::addPropertyGroup($filterGroupId, $groupId);
 			PlentymarketsLogger::getInstance()->message('Sync:Item', 'The property group »' . $ItemProperty->PropertyGroupFrontendName . '« has been created');
 		}
-		// Properties
 
+		// Load the group consistently
+		$Group = Shopware()->Models()->find('Shopware\Models\Property\Group', $filterGroupId);
+		$Group instanceof Shopware\Models\Property\Group;
+
+		if (!$Group)
+		{
+			throw new PlentymarketsImportItemException('The property group with the id »' . $filterGroupId . '« could not be loaded', 3441);
+		}
+
+		// Update the data of this item
 		$this->data['filterGroupId'] = $filterGroupId;
 		$this->data['propertyValues'] = array();
 
+		// Properties
 		foreach ($groups[$groupId] as $ItemProperty)
 		{
 			$ItemProperty instanceof PlentySoapObject_ItemProperty;
@@ -580,46 +592,28 @@ class PlentymarketsImportEntityItem
 					'filterable' => 1
 				));
 
+				// Persist the objects
+				Shopware()->Models()->persist($Group);
+				Shopware()->Models()->persist($Option);
+
+				// Add the option to the group
+				$Group->addOption($Option);
+
 				try
 				{
-					Shopware()->Models()->persist($Option);
+					// And flush everything
 					Shopware()->Models()->flush();
-					PlentymarketsLogger::getInstance()->message('Sync:Item', 'The property »' . $ItemProperty->PropertyName . '« has been created');
+					PlentymarketsLogger::getInstance()->message('Sync:Item', 'The property »' . $ItemProperty->PropertyName . '« has been created and added to the group »' . $Group->getName() . '«');
 				}
 				catch (Exception $E)
 				{
-					//
-					PlentymarketsLogger::getInstance()->error('Sync:Item', 'The property »' . $ItemProperty->PropertyName . '« could not be created ('. $E->getMessage() .')', 3440);
+					throw new PlentymarketsImportItemException('The property »' . $ItemProperty->PropertyName . '« could not be created ('. $E->getMessage() .')', 3440);
 				}
 
-				if (!isset($group))
-				{
-					/* @var $group Group */
-					$group = Shopware()->Models()
-						->getRepository('Shopware\Models\Property\Group')
-						->find($filterGroupId);
-				}
+				//
+				$optionId = $Option->getId();
 
-				if (!$group)
-				{
-					PlentymarketsLogger::getInstance()->message(__METHOD__, 'cannot load group with id : ' . $filterGroupId);
-					return;
-				}
-
-				$group->addOption($Option);
-
-				try
-				{
-					Shopware()->Models()->flush();
-				}
-				catch (\Exception $e)
-				{
-				}
-
-				$option = Shopware()->Models()->toArray($Option);
-				$optionId = $option['id'];
-
-				// Mapping speichern
+				// Save the mapping
 				PlentymarketsMappingController::addProperty($filterGroupId . ';' . $optionId, $ItemProperty->PropertyID);
 			}
 
@@ -700,13 +694,12 @@ class PlentymarketsImportEntityItem
 				$data['categories'] = $this->categories;
 			}
 
-			// strip whitespaces
-			$number = trim($this->ItemBase->ItemNo);
-
 			// Should the number be synchronized?
 			// This does only matter if there are no variants
 			if (PlentymarketsConfig::getInstance()->getItemNumberImportActionID(IMPORT_ITEM_NUMBER) == IMPORT_ITEM_NUMBER && !count($this->variants))
 			{
+				// strip whitespaces
+				$number = trim($this->ItemBase->ItemNo);
 
 				// If this number does not belong to this item
 				if (!PlentymarketsImportItemHelper::isNumberExistantItem($number, $SHOPWARE_itemID))
@@ -732,7 +725,7 @@ class PlentymarketsImportEntityItem
 			$Article = $ArticleResource->update($SHOPWARE_itemID, $data);
 
 			// Log
-			PlentymarketsLogger::getInstance()->message('Sync:Item', sprintf('The item »%s« with the number »%s« has been updated', $data['name'], $number));
+			PlentymarketsLogger::getInstance()->message('Sync:Item', sprintf('The item »%s« with the number »%s« has been updated', $data['name'], $Article->getMainDetail()->getNumber()));
 
 			// Remember the main detail's id (to set the prices)
 			$mainDetailId = $Article->getMainDetail()->getId();
