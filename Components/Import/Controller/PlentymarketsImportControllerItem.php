@@ -102,6 +102,13 @@ class PlentymarketsImportControllerItem
 		//
 		$ItemBase = $Response_GetItemsBase->ItemsBase->item[0];
 
+		// Skip bundles
+		if ($ItemBase->BundleType == 'bundle')
+		{
+			PlentymarketsLogger::getInstance()->message('Sync:Item', 'The item »' . $ItemBase->Texts->Name . '« will be skipped (bundle)');
+			return;
+		}
+
 		try
 		{
 			$shopId = PlentymarketsMappingController::getShopByPlentyID($storeId);
