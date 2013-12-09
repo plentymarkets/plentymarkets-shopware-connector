@@ -181,7 +181,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Misc', {
 							if (button === 'yes')
 							{
 								Ext.Ajax.request({
-									url: '{url action=cleanup}',
+									url: '{url action=runCleanupAction}',
 									callback: function(options, success, xhr)
 									{
 										Shopware.Notification.createGrowlMessage('Aktion ausgeführt', 'Das Mapping wurde bereinigt');
@@ -211,7 +211,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Misc', {
 							if (button === 'yes')
 							{
 								Ext.Ajax.request({
-									url: '{url action=cleanup}',
+									url: '{url action=runCleanupAction}',
 									callback: function(options, success, xhr)
 									{
 										Shopware.Notification.createGrowlMessage('Aktion ausgeführt', 'Die Eigenschaften/Merkmale wurden bereinigt');

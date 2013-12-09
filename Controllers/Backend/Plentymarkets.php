@@ -48,7 +48,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	/**
 	 * Runs an cleanup action
 	 */
-	public function cleanupAction()
+	public function runCleanupActionAction()
 	{
 		require_once PY_COMPONENTS . 'Utils/PlentymarketsGarbageCollector.php';
 
