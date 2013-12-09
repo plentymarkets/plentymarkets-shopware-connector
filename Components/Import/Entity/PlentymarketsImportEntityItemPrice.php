@@ -135,10 +135,21 @@ class PlentymarketsImportEntityItemPrice
 		else
 		{
 			$price = array(
-				'customerGroupKey' => $customerGroupKey,
-				'price' => $this->PLENTY_PriceSet->Price,
-				'pseudoPrice' => $this->PLENTY_PriceSet->RRP
+				'customerGroupKey' => $customerGroupKey
 			);
+
+			// Reliably available starting in SOAP 111
+			if (isset($this->PLENTY_PriceSet->Price) && !is_null($this->PLENTY_PriceSet->Price))
+			{
+				$price['price'] = $this->PLENTY_PriceSet->Price;
+			}
+
+			// Reliably available starting in SOAP 111
+			if (isset($this->PLENTY_PriceSet->RRP) && !is_null($this->PLENTY_PriceSet->RRP))
+			{
+				$price['pseudoPrice'] = $this->PLENTY_PriceSet->RRP;
+			}
+
 			$prices[] = $price;
 		}
 
