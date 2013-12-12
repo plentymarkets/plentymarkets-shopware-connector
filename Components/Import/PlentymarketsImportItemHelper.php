@@ -155,18 +155,18 @@ class PlentymarketsImportItemHelper
 	}
 
 	/**
-	 * Returns a usable item number
+	 * Checks whether the number is valid
 	 *
 	 * @param string $number
-	 * @return string
+	 * @return boolean
 	 */
 	public static function isNumberValid($number)
 	{
-		if (strlen($number) < 4)
+		if (strlen($number) < 3 || strlen($number) > 40)
 		{
 			return false;
 		}
-		if (preg_match('/[^a-zA-Z0-9\.\-_]/', $number))
+		if (preg_match('/[^a-zA-Z0-9\.\-_ ]/', $number))
 		{
 			return false;
 		}
