@@ -267,8 +267,35 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 				inputValue: 1,
 				uncheckedValue: '0',
 				supportText: 'Aktivieren, wenn die Bezeichnung der Artikel zu plentymarkets übertragen werden sollen. Anderfalls wird die in plentymarkets hinterlegte Bezeichnung verwendet.'
-			}
-
+			}, {
+                xtype: 'textfield',
+                fieldLabel: '{s name=plentymarkets/view/settings/textfield/CustomerDefaultStreet}Standard-Straße{/s}',
+                emptyText: 'z. B. keine Straße',
+                supportText: 'Dieser Wert wird bei Kunden als Straße exportiert, wenn diese nicht angegeben worden ist.',
+                name: 'CustomerDefaultStreet',
+                allowBlank: true
+            }, {
+                xtype: 'textfield',
+                fieldLabel: '{s name=plentymarkets/view/settings/textfield/CustomerDefaultHouseNumber}Standard-Hausnr.{/s}',
+                emptyText: 'z. B. keine Hausnummer',
+                supportText: 'Dieser Wert wird bei Kunden als Hausnummer exportiert, wenn diese nicht angegeben worden ist.',
+                name: 'CustomerDefaultHouseNumber',
+                allowBlank: true
+            }, {
+                xtype: 'textfield',
+                fieldLabel: '{s name=plentymarkets/view/settings/textfield/CustomerDefaultCity}Standard-Stadt{/s}',
+                emptyText: 'z. B. keine Stadt',
+                supportText: 'Dieser Wert wird bei Kunden als Stadt exportiert, wenn diese nicht angegeben worden ist.',
+                name: 'CustomerDefaultCity',
+                allowBlank: true
+            }, {
+                xtype: 'textfield',
+                fieldLabel: '{s name=plentymarkets/view/settings/textfield/CustomerDefaultZipcode}Standard-PLZ{/s}',
+                emptyText: 'z. B. keine PLZ',
+                supportText: 'Dieser Wert wird bei Kunden als PLZ exportiert, wenn diese nicht angegeben worden ist.',
+                name: 'CustomerDefaultZipcode',
+                allowBlank: true
+            }
 			]
 		}, {
 			xtype: 'fieldset',

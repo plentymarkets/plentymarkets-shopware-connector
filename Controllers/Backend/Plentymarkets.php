@@ -407,6 +407,12 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		$Config->setInitialExportChunksPerRun(max($this->Request()->InitialExportChunksPerRun, -1));
 		$Config->setMayLogUsageData($this->Request()->MayLogUsageData == true ? 1 : 0);
 
+		// Customer default values
+		$Config->setCustomerDefaultCity($this->Request()->CustomerDefaultCity);
+		$Config->setCustomerDefaultHouseNumber($this->Request()->CustomerDefaultHouseNumber);
+		$Config->setCustomerDefaultStreet($this->Request()->CustomerDefaultStreet);
+		$Config->setCustomerDefaultZipcode($this->Request()->CustomerDefaultZipcode);
+
 		//
 		if ($Config->getOutgoingItemsIntervalID() != $this->Request()->OutgoingItemsIntervalID)
 		{

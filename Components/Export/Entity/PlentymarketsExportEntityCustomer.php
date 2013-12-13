@@ -187,12 +187,38 @@ class PlentymarketsExportEntityCustomer
 		// Logging
 		PlentymarketsLogger::getInstance()->message('Export:Customer', 'Export of the customer with the number »' . $this->getCustomerNumber() . '«');
 
+		$city = trim($this->BillingAddress->getCity());
+		$number = trim($this->BillingAddress->getStreetNumber());
+		$street = trim($this->BillingAddress->getStreet());
+		$zip = trim($this->BillingAddress->getZipCode());
+
+		if (empty($city))
+		{
+			$city = PlentymarketsConfig::getInstance()->get('CustomerDefaultCity');
+		}
+
+		if ($number == '')
+		{
+			$number = PlentymarketsConfig::getInstance()->get('CustomerDefaultHouseNumber');
+		}
+
+		if (empty($street))
+		{
+			$street = PlentymarketsConfig::getInstance()->get('CustomerDefaultStreet');
+		}
+
+		if ($zip == '')
+		{
+			$zip = PlentymarketsConfig::getInstance()->get('CustomerDefaultZipcode');
+		}
+
+
 		$Request_AddCustomers = new PlentySoapRequest_AddCustomers();
 
 		$Request_AddCustomers->Customers = array();
 
 		$Object_AddCustomersCustomer = new PlentySoapObject_AddCustomersCustomer();
-		$Object_AddCustomersCustomer->City = $this->BillingAddress->getCity();
+		$Object_AddCustomersCustomer->City = $city;
 		$Object_AddCustomersCustomer->Company = $this->BillingAddress->getCompany();
 		$Object_AddCustomersCustomer->CountryID = $this->getBillingCountryID(); // int
 		$Object_AddCustomersCustomer->CustomerNumber = $this->getCustomerNumber(); // string
@@ -202,15 +228,15 @@ class PlentymarketsExportEntityCustomer
 		$Object_AddCustomersCustomer->FormOfAddress = $this->getBillingFormOfAddress(); // string
 		$Object_AddCustomersCustomer->Fax = $this->BillingAddress->getFax();
 		$Object_AddCustomersCustomer->FirstName = $this->BillingAddress->getFirstName();
-		$Object_AddCustomersCustomer->HouseNo = $this->BillingAddress->getStreetNumber();
+		$Object_AddCustomersCustomer->HouseNo = $number;
 		$Object_AddCustomersCustomer->IsBlocked = !$this->Customer->getActive();
 		$Object_AddCustomersCustomer->Newsletter = (integer) $this->Customer->getNewsletter();
 		$Object_AddCustomersCustomer->PayInvoice = true; // boolean
-		$Object_AddCustomersCustomer->Street = $this->BillingAddress->getStreet();
+		$Object_AddCustomersCustomer->Street = $street;
 		$Object_AddCustomersCustomer->Surname = $this->BillingAddress->getLastName();
 		$Object_AddCustomersCustomer->Telephone = $this->BillingAddress->getPhone();
 		$Object_AddCustomersCustomer->VAT_ID = $this->BillingAddress->getVatId();
-		$Object_AddCustomersCustomer->ZIP = $this->BillingAddress->getZipCode();
+		$Object_AddCustomersCustomer->ZIP = $zip;
 
 		// Store id
 		try
@@ -287,22 +313,47 @@ class PlentymarketsExportEntityCustomer
 			return;
 		}
 
+		$city = trim($this->ShippingAddress->getCity());
+		$number = trim($this->ShippingAddress->getStreetNumber());
+		$street = trim($this->ShippingAddress->getStreet());
+		$zip = trim($this->ShippingAddress->getZipCode());
+
+		if (empty($city))
+		{
+			$city = PlentymarketsConfig::getInstance()->get('CustomerDefaultCity');
+		}
+
+		if ($number == '')
+		{
+			$number = PlentymarketsConfig::getInstance()->get('CustomerDefaultHouseNumber');
+		}
+
+		if (empty($street))
+		{
+			$street = PlentymarketsConfig::getInstance()->get('CustomerDefaultStreet');
+		}
+
+		if ($zip == '')
+		{
+			$zip = PlentymarketsConfig::getInstance()->get('CustomerDefaultZipcode');
+		}
+
 		$Request_AddCustomerDeliveryAddresses = new PlentySoapRequest_AddCustomerDeliveryAddresses();
 
 		$Request_AddCustomerDeliveryAddresses->DeliveryAddresses = array();
 		$Object_AddCustomerDeliveryAddressesCustomer = new PlentySoapObject_AddCustomerDeliveryAddressesCustomer();
 		$Object_AddCustomerDeliveryAddressesCustomer->AdditionalName = null; // string
-		$Object_AddCustomerDeliveryAddressesCustomer->City = $this->ShippingAddress->getCity();
+		$Object_AddCustomerDeliveryAddressesCustomer->City = $city;
 		$Object_AddCustomerDeliveryAddressesCustomer->Company = $this->ShippingAddress->getCompany();
 		$Object_AddCustomerDeliveryAddressesCustomer->CountryID = $this->getDeliveryCountryID(); // int
 		$Object_AddCustomerDeliveryAddressesCustomer->CustomerID = $this->PLENTY_customerID; // int
 		$Object_AddCustomerDeliveryAddressesCustomer->ExternalDeliveryAddressID = PlentymarketsUtils::getExternalCustomerID($this->ShippingAddress->getId()); // string
 		$Object_AddCustomerDeliveryAddressesCustomer->FirstName = $this->ShippingAddress->getFirstName();
 		$Object_AddCustomerDeliveryAddressesCustomer->FormOfAddress = $this->getDeliveryFormOfAddress(); // int
-		$Object_AddCustomerDeliveryAddressesCustomer->HouseNumber = $this->ShippingAddress->getStreetNumber();
-		$Object_AddCustomerDeliveryAddressesCustomer->Street = $this->ShippingAddress->getStreet();
+		$Object_AddCustomerDeliveryAddressesCustomer->HouseNumber = $number;
+		$Object_AddCustomerDeliveryAddressesCustomer->Street = $street;
 		$Object_AddCustomerDeliveryAddressesCustomer->Surname = $this->ShippingAddress->getLastName();
-		$Object_AddCustomerDeliveryAddressesCustomer->ZIP = $this->ShippingAddress->getZipCode();
+		$Object_AddCustomerDeliveryAddressesCustomer->ZIP = $zip;
 
 		$Request_AddCustomerDeliveryAddresses->DeliveryAddresses[] = $Object_AddCustomerDeliveryAddressesCustomer;
 

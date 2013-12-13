@@ -162,7 +162,21 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		type: 'integer',
 		defaultValue: 1
 	},
-	
+
+    {
+		name: 'CustomerDefaultCity',
+		type: 'string'
+	}, {
+		name: 'CustomerDefaultHouseNumber',
+		type: 'string'
+	}, {
+		name: 'CustomerDefaultStreet',
+		type: 'string'
+	}, {
+		name: 'CustomerDefaultZipcode',
+		type: 'string'
+	},
+
 	{
 		name: 'InitialExportChunkSize',
 		type: 'integer',

@@ -241,7 +241,7 @@ class PlentymarketsStatus
 			$isLicenseValid = $License->checkCoreLicense(false);
 			if (!$isLicenseValid && !$this->isLicenseWarningLogged)
 			{
-				PlentymarketsLogger::getInstance()->error('System:License', 'The shopware license that is used is invalid or has expired.', 1010);
+				PlentymarketsLogger::getInstance()->error('System:License', 'The shopware license that is used is invalid or has expired. No synchronization will be performed.', 1010);
 				$this->isLicenseWarningLogged = true;
 			}
 		}
@@ -250,13 +250,10 @@ class PlentymarketsStatus
 			$isLicenseValid = false;
 			if (!$this->isLicenseWarningLogged)
 			{
-				PlentymarketsLogger::getInstance()->error('System:License', 'The license mananger is not installed. Therefore, it is not possible to check the license.', 1011);
+				PlentymarketsLogger::getInstance()->error('System:License', 'The license mananger is not installed. Therefore, it is not possible to check the license. No synchronization will be performed.', 1011);
 				$this->isLicenseWarningLogged = true;
 			}
 		}
-
-		//
-		$isLicenseValid = true;
 
 		// May Synchronize
 		$maySynchronize = $mayExport && $isExportFinished && $isLicenseValid;
