@@ -26,30 +26,34 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * I am a generated class and am required for communicating with plentymarkets.
  */
 class PlentySoapObject_GetMultiShops
 {
-	
+
 	/**
 	 * @var int
 	 */
 	public $ItemPriceColumn;
-	
+
 	/**
 	 * @var string
 	 */
 	public $MultiShopName;
-	
+
 	/**
 	 * @var string
 	 */
 	public $MultiShopURL;
-	
+
 	/**
 	 * @var int
 	 */
 	public $MultiShopsID;
+
+	/**
+	 * @var string
+	 */
+	public $MultiShopType;
 }

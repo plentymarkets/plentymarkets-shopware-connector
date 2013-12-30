@@ -504,6 +504,11 @@ class PlentymarketsImportController
 		{
 			$Multishop instanceof PlentySoapObject_GetMultiShops;
 
+			if ($Multishop->MultiShopType != 'shopware')
+			{
+				continue;
+			}
+
 			$name = $Multishop->MultiShopName;
 			if ($Multishop->MultiShopURL)
 			{
