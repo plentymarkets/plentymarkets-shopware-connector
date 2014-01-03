@@ -189,4 +189,29 @@ class PlentymarketsUtils
 
 		return self::$categoryId2ShopId[$categoryId];
 	}
+
+	/**
+	 * Registers the bundle custom modules
+	 *
+	 * @throws Exception
+	 */
+	public static function registerBundleModules()
+	{
+		$plugin = Shopware()->Db()->fetchAssoc('
+			SELECT
+					source, namespace
+				FROM s_core_plugins
+				WHERE name = "SwagBundle"
+		');
+
+		if (!$plugin)
+		{
+			throw new Exception('SwagBundle is not installed');
+		}
+
+		Shopware()->Loader()->registerNamespace(
+			'Shopware\CustomModels',
+			Shopware()->AppPath() . '/Plugins/'. $plugin['source'] .'/'. $plugin['namespace'] .'/SwagBundle/Models/'
+		);
+	}
 }
