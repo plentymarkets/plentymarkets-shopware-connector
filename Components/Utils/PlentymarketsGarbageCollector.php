@@ -27,6 +27,7 @@
  */
 
 require_once PY_SOAP . 'Models/PlentySoapRequest/GetItemsByStoreID.php';
+require_once PY_SOAP . 'Models/PlentySoapRequest/GetItemBundles.php';
 
 /**
  * Responsible for all clean up processes
@@ -76,6 +77,12 @@ class PlentymarketsGarbageCollector
 	 *
 	 * @var integer
 	 */
+	const ACTION_PRUNE_ITEM_BUNDLES = 5;
+
+	/**
+	 *
+	 * @var integer
+	 */
 	const ACTION_LOG = 3;
 
 	/**
@@ -102,6 +109,7 @@ class PlentymarketsGarbageCollector
 		{
 			self::$Instance = new self();
 		}
+
 		return self::$Instance;
 	}
 
@@ -129,6 +137,10 @@ class PlentymarketsGarbageCollector
 
 			case self::ACTION_PRUNE_ITEMS:
 				$this->pruneItems();
+				break;
+
+			case self::ACTION_PRUNE_ITEM_BUNDLES:
+				$this->pruneItemBundles();
 				break;
 
 			case self::ACTION_LOG:
@@ -232,7 +244,8 @@ class PlentymarketsGarbageCollector
 			$Request_GetItemsByStoreID->Page = 0;
 			$Request_GetItemsByStoreID->StoreID = $shopId['plentyID'];
 
-			do {
+			do
+			{
 
 				// Do the request
 				$Response_GetItemsByStoreID = PlentymarketsSoapClient::getInstance()->GetItemsByStoreID($Request_GetItemsByStoreID);
@@ -273,9 +286,7 @@ class PlentymarketsGarbageCollector
 					INSERT IGNORE INTO plenty_cleanup_item VALUES ' . $itemsIdsSql . '
 				');
 
-			}
-
-			// Until all pages are received
+			} // Until all pages are received
 			while (++$Request_GetItemsByStoreID->Page < $Response_GetItemsByStoreID->Pages);
 		}
 
@@ -300,14 +311,14 @@ class PlentymarketsGarbageCollector
 							LEFT JOIN plenty_mapping_item pmi ON pmi.plentyID = pci.itemId
 							WHERE pmi.shopwareID IS NOT NULL
 
-					) '. $where .'
+					) ' . $where . '
 		');
 
 		// Handle the items
 		foreach ($Result as $item)
 		{
+			/** @var $Item Shopware\Models\Article\Article */
 			$Item = Shopware()->Models()->find('Shopware\Models\Article\Article', $item['id']);
-			$Item instanceof Shopware\Models\Article\Article;
 
 			if (!$Item)
 			{
@@ -323,8 +334,7 @@ class PlentymarketsGarbageCollector
 
 				foreach ($Item->getDetails() as $Detail)
 				{
-					$Detail instanceof Shopware\Models\Article\Detail;
-
+					/** @var $Detail Shopware\Models\Article\Detail */
 					if ($Detail->getActive())
 					{
 						$Detail->setActive(false);
@@ -379,7 +389,7 @@ class PlentymarketsGarbageCollector
 	{
 		// Log
 		Shopware()->Db()->exec('
-			DELETE FROM plenty_log WHERE `timestamp` < '. strtotime('-1 month') .'
+			DELETE FROM plenty_log WHERE `timestamp` < ' . strtotime('-1 month') . '
 		');
 	}
 
@@ -430,5 +440,103 @@ class PlentymarketsGarbageCollector
 
 		// Cleanup
 		$this->cleanup();
+	}
+
+	/**
+	 * Prunes the item bundles
+	 */
+	protected function pruneItemBundles()
+	{
+		// Register the modules
+		PlentymarketsUtils::registerBundleModules();
+
+		// Create a temporary table
+		Shopware()->Db()->exec('
+			CREATE TEMPORARY TABLE IF NOT EXISTS plenty_cleanup_item_bundle
+				(bundleId INT UNSIGNED, INDEX (bundleId))
+				ENGINE = MEMORY;
+		');
+
+		// Get all bundles - regardless of store ids
+		$Request_GetItemBundles = new PlentySoapRequest_GetItemBundles();
+		$Request_GetItemBundles->LastUpdate = 0;
+		$Request_GetItemBundles->Page = 0;
+
+		do
+		{
+
+			/** @var $Response_GetItemsBase PlentySoapResponse_GetItemBundles */
+			$Response_GetItemBundles = PlentymarketsSoapClient::getInstance()->GetItemBundles($Request_GetItemBundles);
+
+			// Call failed
+			if (is_null($Response_GetItemBundles) || !property_exists($Response_GetItemBundles, 'ItemBundles'))
+			{
+				// Log
+				PlentymarketsLogger::getInstance()->error('Cleanup:Item:Bundle', 'Aborting. GetItemBundles apparently failed');
+
+				// Delete the temporary table
+				Shopware()->Db()->exec('
+					DROP TEMPORARY TABLE plenty_cleanup_item_bundle
+				');
+
+				return;
+			}
+
+			$bundleIds = array();
+
+			// Collect the bundle head ids
+			foreach ($Response_GetItemBundles->ItemBundles->item as $bundle)
+			{
+				/** @var $bundle PlentySoapObject_Bundle */
+				$plentyBundleHeadSku = explode('-', $bundle->SKU);
+				$plentyBundleHeadId = (integer) $plentyBundleHeadSku[0];
+
+				$bundleIds[] = $plentyBundleHeadId;
+			}
+
+			if (empty($bundleIds))
+			{
+				break;
+			}
+
+			// Build the sql statement
+			$bundleIdsSql = implode(', ', array_map(function ($itemId)
+			{
+				return sprintf('(%u)', $itemId);
+			}, $bundleIds));
+
+			// Fill the table
+			Shopware()->Db()->exec('
+				INSERT IGNORE INTO plenty_cleanup_item_bundle VALUES ' . $bundleIdsSql . '
+			');
+		} while (++$Request_GetItemBundles->Page < $Response_GetItemBundles->Pages);
+
+		// Get all shopware bundles which are no longer in plentymarkets
+		$bundles = Shopware()->Db()->fetchAll('
+			SELECT
+					id
+				FROM s_articles_bundles
+				WHERE
+					id NOT IN (
+						SELECT pmi.shopwareID
+							FROM plenty_cleanup_item_bundle pci
+							LEFT JOIN plenty_mapping_item_bundle pmi ON pmi.plentyID = pci.bundleId
+							WHERE pmi.shopwareID IS NOT NULL
+					)
+		');
+
+		// And delete them
+		foreach ($bundles as $bundle)
+		{
+			/** @var $bundle Shopware\CustomModels\Bundle\Bundle */
+			$bundle = Shopware()->Models()->find('Shopware\CustomModels\Bundle\Bundle', $bundle['id']);
+			Shopware()->Models()->remove($bundle);
+
+			// Log
+			PyLog()->message('Cleanup:Item:Bundle', 'The item bundle »' . $bundle->getName() . '« with the number »' . $bundle->getNumber() . '« has been deleted');
+		}
+
+		Shopware()->Models()->flush();
+		Shopware()->Db()->delete('plenty_mapping_item_bundle', 'shopwareID NOT IN (SELECT id FROM s_articles_bundles)');
 	}
 }
