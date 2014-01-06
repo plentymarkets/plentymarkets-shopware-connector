@@ -214,4 +214,16 @@ class PlentymarketsUtils
 			Shopware()->AppPath() . '/Plugins/'. $plugin['source'] .'/'. $plugin['namespace'] .'/SwagBundle/Models/'
 		);
 	}
+
+	/**
+	 * Returns the root category id
+	 *
+	 * @param \Shopware\Models\Category\Category $category
+	 * @return integer
+	 */
+	public static function getRootIdByCategory(Shopware\Models\Category\Category $category)
+	{
+		$path = array_reverse(explode('|', $category->getPath()));
+		return $path[1];
+	}
 }

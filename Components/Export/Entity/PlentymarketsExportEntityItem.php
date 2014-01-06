@@ -188,9 +188,7 @@ class PlentymarketsExportEntityItem
 			}
 
 			// Get the store for this category
-			$path = array_reverse(explode('|', $Category->getPath()));
-			$rootId = $path[1];
-
+			$rootId = PlentymarketsUtils::getRootIdByCategory($Category);
 			$shops = PlentymarketsUtils::getShopIdByCategoryRootId($rootId);
 
 			foreach ($shops as $shopId)

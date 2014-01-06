@@ -207,6 +207,11 @@ class PlentySoapObject_AddItemsBaseItemBase
 	 * @var PlentySoapObject_ItemTexts
 	 */
 	public $Texts;
+
+	/**
+	 * @var ArrayOfPlentysoapobject_integer
+	 */
+	public $StoreIDs;
 	
 	/**
 	 * @var int
