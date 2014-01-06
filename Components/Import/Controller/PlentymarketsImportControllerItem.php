@@ -57,7 +57,9 @@ class PlentymarketsImportControllerItem
 	/**
 	 * imports the item for the given shop
 	 *
-	 * @param unknown $Shop
+	 * @param integer $itemId
+	 * @param integer $storeId
+	 * @throws PlentymarketsImportException
 	 */
 	public function importItem($itemId, $storeId)
 	{
