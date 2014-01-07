@@ -249,7 +249,10 @@ abstract class PlentymarketsMappingEntityAbstract
 	 *
 	 * @param integer $shopwareID
 	 * @param integer $plentyID
+	 * @param bool $deleteShopwareFirst
 	 * @throws Exception
+	 * @throws Zend_Db_Statement_Exception
+	 * @return bool
 	 */
 	public function add($shopwareID, $plentyID, $deleteShopwareFirst = false)
 	{

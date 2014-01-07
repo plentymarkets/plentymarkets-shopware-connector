@@ -143,11 +143,11 @@ class PlentymarketsExportController
 		return $this->StatusController->isFinished();
 	}
 
-
 	/**
 	 * Resets an export status
 	 *
 	 * @param string $entity
+	 * @param bool $resetRunning
 	 */
 	public function reset($entity, $resetRunning=true)
 	{

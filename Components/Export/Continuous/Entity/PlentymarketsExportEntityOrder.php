@@ -41,7 +41,7 @@ require_once PY_COMPONENTS . 'Export/Entity/PlentymarketsExportEntityCustomer.ph
 require_once PY_COMPONENTS . 'Export/Continuous/Entity/PlentymarketsExportEntityOrderIncomingPayment.php';
 
 /**
- * PlentymarketsExportEntityOrder provides the actual items export funcionality. Like the other export
+ * PlentymarketsExportEntityOrder provides the actual items export functionality. Like the other export
  * entities this class is called in PlentymarketsExportController. It is important to deliver valid
  * order ID to the constructor method of this class.
  * The data export takes place based on plentymarkets SOAP-calls.
@@ -103,6 +103,7 @@ class PlentymarketsExportEntityOrder
 	 * Constructor method
 	 *
 	 * @param unknown $orderID
+	 * @throws PlentymarketsExportEntityException
 	 */
 	public function __construct($orderID)
 	{

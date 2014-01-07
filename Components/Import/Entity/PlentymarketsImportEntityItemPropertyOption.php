@@ -31,6 +31,8 @@
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
+
+/** @noinspection PhpDocSignatureInspection */
 class PlentymarketsImportEntityItemPropertyOption
 {
 
@@ -66,7 +68,8 @@ class PlentymarketsImportEntityItemPropertyOption
 			return;
 		}
 
-		list ($groupId, $optionId) = explode(';', $SHOPWARE_id);
+		$propertyParts = explode(';', $SHOPWARE_id);
+		$optionId = $propertyParts[1];
 
 		$Option = Shopware()->Models()->find('Shopware\Models\Property\Option', $optionId);
 		$Option instanceof Shopware\Models\Property\Option;

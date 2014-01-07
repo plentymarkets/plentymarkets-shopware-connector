@@ -29,7 +29,7 @@
 require_once PY_COMPONENTS . 'Mapping/Entity/PlentymarketsMappingEntityAbstract.php';
 
 /**
- * PlentymarketsMappingEntityCountry provides the actual country mapping funcionality. 
+ * PlentymarketsMappingEntityCountry provides the actual country mapping functionality.
  * Like the other mapping entities this class is called in PlentymarketsMappingController. This entity
  * inherits the most methods from the entity class PlentymarketsMappingEntityAbstract.
  *

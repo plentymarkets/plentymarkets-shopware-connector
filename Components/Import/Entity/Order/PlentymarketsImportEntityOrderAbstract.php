@@ -120,7 +120,7 @@ abstract class PlentymarketsImportEntityOrderAbstract
 			//
 			$pages = max($Response_SearchOrders->Pages, 1);
 
-			$this->log('Page: ' . ($Request_SearchOrders->Page + 1) . '/' . $pages);
+			$this->log('Page: ' . ($this->Request_SearchOrders->Page + 1) . '/' . $pages);
 
 			if ($Response_SearchOrders->Success == false)
 			{

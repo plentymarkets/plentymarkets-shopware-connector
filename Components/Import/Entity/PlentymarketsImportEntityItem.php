@@ -41,7 +41,7 @@ require_once PY_COMPONENTS . 'Import/Entity/PlentymarketsImportEntityItemPrice.p
 require_once PY_COMPONENTS . 'Import/Entity/PlentymarketsImportEntityItemImage.php';
 
 /**
- * PlentymarketsImportEntityItem provides the actual item import funcionality. Like the other import
+ * PlentymarketsImportEntityItem provides the actual item import functionality. Like the other import
  * entities this class is called in PlentymarketsImportController. It is important to deliver the correct PlentySoapObject_ItemBase
  * object to the constructor method of this class.
  * The data import takes place based on plentymarkets SOAP-calls.
@@ -581,7 +581,9 @@ class PlentymarketsImportEntityItem
 			// Mapping GroupId;ValueId -> ValueId
 			try
 			{
-				list ($unused, $optionId) = explode(';', PlentymarketsMappingController::getPropertyByPlentyID($ItemProperty->PropertyID));
+				$property = PlentymarketsMappingController::getPropertyByPlentyID($ItemProperty->PropertyID);
+				$propertyParts = explode(';', $property);
+				$optionId = $propertyParts[1];
 			}
 			catch (PlentymarketsMappingExceptionNotExistant $E)
 			{
@@ -1034,6 +1036,7 @@ class PlentymarketsImportEntityItem
 	/**
 	 * Returns the shopware tax id
 	 *
+	 * @throws PlentymarketsImportItemException
 	 * @return intger
 	 */
 	protected function getTaxId()

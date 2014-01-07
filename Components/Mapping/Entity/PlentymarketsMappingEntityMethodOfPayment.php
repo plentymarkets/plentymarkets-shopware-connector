@@ -29,7 +29,7 @@
 require_once PY_COMPONENTS . 'Mapping/Entity/PlentymarketsMappingEntityAbstract.php';
 
 /**
- * PlentymarketsMappingEntityMethodOfPayment provides the actual method of payment mapping funcionality. 
+ * PlentymarketsMappingEntityMethodOfPayment provides the actual method of payment mapping functionality.
  * Like the other mapping entities this class is called in PlentymarketsMappingController. This entity
  * inherits the most methods from the entity class PlentymarketsMappingEntityAbstract.
  *

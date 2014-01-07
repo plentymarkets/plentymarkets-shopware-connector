@@ -29,7 +29,7 @@
 require_once PY_COMPONENTS . 'Mapping/Entity/PlentymarketsMappingEntityAbstract.php';
 
 /**
- * PlentymarketsMappingEntityAttributeGroup provides the actual attribute group mapping funcionality. 
+ * PlentymarketsMappingEntityAttributeGroup provides the actual attribute group mapping functionality.
  * Like the other mapping entities this class is called in PlentymarketsMappingController. This entity
  * inherits the most methods from the entity class PlentymarketsMappingEntityAbstract.
  *

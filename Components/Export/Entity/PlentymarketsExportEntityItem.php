@@ -60,7 +60,7 @@ require_once PY_COMPONENTS . 'Export/PlentymarketsExportException.php';
 require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingController.php';
 
 /**
- * PlentymarketsExportEntityItem provides the actual items export funcionality. Like the other export
+ * PlentymarketsExportEntityItem provides the actual items export functionality. Like the other export
  * entities this class is called in PlentymarketsExportController. It is important to deliver the correct
  * article model to the constructor method of this class, which is \Shopware\Models\Article\Article.
  * The data export takes place based on plentymarkets SOAP-calls.
@@ -119,6 +119,7 @@ class PlentymarketsExportEntityItem
 	/**
 	 * Exports the base item
 	 *
+	 * @throws PlentymarketsExportException
 	 * @return boolean
 	 */
 	protected function exportItemBase()
@@ -294,7 +295,7 @@ class PlentymarketsExportEntityItem
 
 		if (!empty($Request_SetStoreCategories->StoreCategories))
 		{
-			$Response_SetStoreCategories = PlentymarketsSoapClient::getInstance()->SetStoreCategories($Request_SetStoreCategories);
+			PlentymarketsSoapClient::getInstance()->SetStoreCategories($Request_SetStoreCategories);
 		}
 	}
 
@@ -341,7 +342,7 @@ class PlentymarketsExportEntityItem
 			$Request_AddItemsImage->ItemID = $this->PLENTY_itemID;
 
 			// Do the request
-			$Response_AddItemsImage = PlentymarketsSoapClient::getInstance()->AddItemsImage($Request_AddItemsImage);
+			PlentymarketsSoapClient::getInstance()->AddItemsImage($Request_AddItemsImage);
 		}
 	}
 
@@ -557,7 +558,8 @@ class PlentymarketsExportEntityItem
 			$Object_AddPropertyToItem->PropertyItemValue = $PropertyValue->getValue(); // string
 			$Request_AddPropertyToItem->PropertyToItemList[] = $Object_AddPropertyToItem;
 		}
-		$Response_AddPropertyToItem = PlentymarketsSoapClient::getInstance()->AddPropertyToItem($Request_AddPropertyToItem);
+
+		PlentymarketsSoapClient::getInstance()->AddPropertyToItem($Request_AddPropertyToItem);
 	}
 
 	/**

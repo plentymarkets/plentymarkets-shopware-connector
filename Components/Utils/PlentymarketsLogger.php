@@ -100,10 +100,11 @@ class PlentymarketsLogger
 	/**
 	 * Returns a page of the log
 	 *
-	 * @param unknown $start
-	 * @param unknown $limit
-	 * @param number $type
-	 * @return multitype:NULL Ambigous <multitype:, multitype:mixed Ambigous <string, boolean, mixed> >
+	 * @param integer $start
+	 * @param integer $limit
+	 * @param int|number $type
+	 * @param string $filter
+	 * @return array
 	 */
 	public function get($start, $limit, $type = 0, $filter = '')
 	{
@@ -235,7 +236,6 @@ class PlentymarketsLogger
 		$memoryUsage = PlentymarketsUtils::convertBytes(memory_get_usage());
 		$memoryUsageReal = PlentymarketsUtils::convertBytes(memory_get_usage(true));
 		$memoryLimit = ini_get('memory_limit');
-		$runtime = ini_get('max_execution_time');
 		$numberOfCalls = PlentymarketsSoapClient::getInstance()->getNumberOfCalls();
 
 		// Generate message

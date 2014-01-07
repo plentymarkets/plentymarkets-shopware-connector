@@ -32,7 +32,7 @@ require_once PY_SOAP . 'Models/PlentySoapObject/GetProducers.php';
 require_once PY_COMPONENTS . 'Export/PlentymarketsExportException.php';
 
 /**
- * PlentymarketsExportControllerItemProducer provides the actual items export funcionality. Like the other export
+ * PlentymarketsExportControllerItemProducer provides the actual items export functionality. Like the other export
  * entities this class is called in PlentymarketsExportController.
  * The data export takes place based on plentymarkets SOAP-calls.
  *

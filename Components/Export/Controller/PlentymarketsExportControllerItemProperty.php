@@ -34,7 +34,7 @@ require_once PY_SOAP . 'Models/PlentySoapRequest/AddProperty.php';
 require_once PY_COMPONENTS . 'Export/PlentymarketsExportException.php';
 
 /**
- * PlentymarketsExportControllerItemProperty provides the actual items export funcionality. Like the other export
+ * PlentymarketsExportControllerItemProperty provides the actual items export functionality. Like the other export
  * entities this class is called in PlentymarketsExportController.
  * The data export takes place based on plentymarkets SOAP-calls.
  *
@@ -110,9 +110,6 @@ class PlentymarketsExportControllerItemProperty
 	 */
 	protected function doExport()
 	{
-		$mappingPropertyGroup = array();
-		$mappingPropertyValue = array();
-
 		$propertyGroupRepository = Shopware()->Models()->getRepository('Shopware\Models\Property\Group');
 		foreach ($propertyGroupRepository->findAll() as $PropertyGroup)
 		{

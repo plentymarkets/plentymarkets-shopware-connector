@@ -125,6 +125,8 @@ class PlentymarketsSoapClient extends SoapClient
 	 * @param string $wsdl
 	 * @param string $username
 	 * @param string $userpass
+	 * @param bool $dryrun
+	 * @throws PlentymarketsSoapConnectionException
 	 * @return PlentymarketsSoapClient
 	 */
 	protected function __construct($wsdl, $username, $userpass, $dryrun = false)
@@ -440,7 +442,8 @@ class PlentymarketsSoapClient extends SoapClient
 	 *
 	 * @param string $wsdl
 	 * @param string $username
-	 * @param string $userpass
+	 * @param $password
+	 * @internal param string $userpass
 	 * @return PlentymarketsSoapClient
 	 */
 	public static function getTestInstance($wsdl, $username, $password)

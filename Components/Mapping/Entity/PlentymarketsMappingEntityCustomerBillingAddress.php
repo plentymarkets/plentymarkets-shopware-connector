@@ -29,7 +29,7 @@
 require_once PY_COMPONENTS . 'Mapping/Entity/PlentymarketsMappingEntityAbstract.php';
 
 /**
- * PlentymarketsMappingEntityCustomerBillingAddress provides the actual customer mapping funcionality. 
+ * PlentymarketsMappingEntityCustomerBillingAddress provides the actual customer mapping functionality.
  * Like the other mapping entities this class is called in PlentymarketsMappingController. This entity
  * inherits the most methods from the entity class PlentymarketsMappingEntityAbstract.
  *

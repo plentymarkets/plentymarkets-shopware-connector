@@ -91,7 +91,7 @@ class PlentymarketsImportControllerItem
 		if ($Response_GetItemsBase->Success == false)
 		{
 			// Re-add the item to the stack and quit
-			PlentymarketsImportStackItem::getInstance()->addItem($ItemBase->ItemID, $storeId);
+			PlentymarketsImportStackItem::getInstance()->addItem($itemId, $storeId);
 			return;
 		}
 

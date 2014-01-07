@@ -111,7 +111,7 @@ class PlentymarketsImportController
 			$Response_GetItemsPriceUpdate = PlentymarketsSoapClient::getInstance()->GetItemsPriceUpdate($Request_GetItemsPriceUpdate);
 
 			$pages = max($Response_GetItemsPriceUpdate->Pages, 1);
-			PlentymarketsLogger::getInstance()->message('Sync:Item', 'Page: ' . ($Request_GetItemsPriceUpdate->Page + 1) . '/' . $pages);
+			PlentymarketsLogger::getInstance()->message('Sync:Item:Price', 'Page: ' . ($Request_GetItemsPriceUpdate->Page + 1) . '/' . $pages);
 
 			foreach ($Response_GetItemsPriceUpdate->ItemsPriceUpdate->item as $ItemsPriceUpdate)
 			{
@@ -148,7 +148,20 @@ class PlentymarketsImportController
 		while (++$Request_GetItemsPriceUpdate->Page < $Response_GetItemsPriceUpdate->Pages);
 
 		PlentymarketsConfig::getInstance()->setImportItemPriceLastUpdateTimestamp($now);
-		PlentymarketsLogger::getInstance()->message('Sync:Item:Price', $numberOfPricesUpdates . ' prices have been updated');
+
+		// Log
+		if ($numberOfPricesUpdates == 0)
+		{
+			PlentymarketsLogger::getInstance()->message('Sync:Item:Price', 'No price has been updated.');
+		}
+		else if ($numberOfPricesUpdates == 1)
+		{
+			PlentymarketsLogger::getInstance()->message('Sync:Item:Price', '1 price has been updated.');
+		}
+		else
+		{
+			PlentymarketsLogger::getInstance()->message('Sync:Item:Price', $numberOfPricesUpdates . ' prices have been updated.');
+		}
 	}
 
 	/**
@@ -157,7 +170,7 @@ class PlentymarketsImportController
 	public static function importOrders()
 	{
 		// Starttimestamp
-		$timestsamp = time();
+		$timestamp = time();
 
 		// Get the data from plentymarkets (for every mapped shop)
 		$shopIds = Shopware()->Db()->fetchAll('
@@ -173,8 +186,8 @@ class PlentymarketsImportController
 			$PlentymarketsImportEntityOrderOutgoingItems->import();
 		}
 
-		PlentymarketsConfig::getInstance()->setImportOrderIncomingPaymentsLastUpdateTimestamp($timestsamp);
-		PlentymarketsConfig::getInstance()->setImportOrderOutgoingItemsLastUpdateTimestamp($timestsamp);
+		PlentymarketsConfig::getInstance()->setImportOrderIncomingPaymentsLastUpdateTimestamp($timestamp);
+		PlentymarketsConfig::getInstance()->setImportOrderOutgoingItemsLastUpdateTimestamp($timestamp);
 	}
 
 	/**

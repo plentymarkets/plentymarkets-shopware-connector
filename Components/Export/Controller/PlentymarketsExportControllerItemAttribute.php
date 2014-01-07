@@ -35,7 +35,7 @@ require_once PY_SOAP . 'Models/PlentySoapRequest/AddItemAttribute.php';
 require_once PY_COMPONENTS . 'Export/PlentymarketsExportException.php';
 
 /**
- * PlentymarketsExportControllerItemAttribute provides the actual items export funcionality. Like the other export
+ * PlentymarketsExportControllerItemAttribute provides the actual items export functionality. Like the other export
  * entities this class is called in PlentymarketsExportController.
  * The data export takes place based on plentymarkets SOAP-calls.
  *
@@ -214,7 +214,7 @@ class PlentymarketsExportControllerItemAttribute
 	}
 
 	/**
-	 * Checks whether the export is finshed
+	 * Checks whether the export is finished
 	 *
 	 * @return boolean
 	 */

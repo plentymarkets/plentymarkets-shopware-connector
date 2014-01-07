@@ -132,7 +132,7 @@ class PlentymarketsExportControllerItem
 		// Max. number of chunks per run
 		$this->maxChunks = (integer) $this->Config->getInitialExportChunksPerRun(PlentymarketsExportController::DEFAULT_CHUNKS_PER_RUN);
 
-		// Items per chunki
+		// Items per chunk
 		$this->sizeOfChunk = (integer) PlentymarketsConfig::getInstance()->getInitialExportChunkSize(PlentymarketsExportController::DEFAULT_CHUNK_SIZE);
 	}
 

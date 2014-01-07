@@ -32,7 +32,7 @@ require_once PY_SOAP . 'Models/PlentySoapRequest/AddItemCategory.php';
 require_once PY_COMPONENTS . 'Export/PlentymarketsExportException.php';
 
 /**
- * PlentymarketsExportControllerItemCategory provides the actual items export funcionality. Like the other export
+ * PlentymarketsExportControllerItemCategory provides the actual items export functionality. Like the other export
  * entities this class is called in PlentymarketsExportController.
  * The data export takes place based on plentymarkets SOAP-calls.
  *
@@ -205,8 +205,6 @@ class PlentymarketsExportControllerItemCategory
 	 */
 	protected function buildMapping()
 	{
-		$CategoryResource = new \Shopware\Components\Api\Resource\Category();
-
 		$Categories = Shopware()->Models()
 			->getRepository('Shopware\Models\Category\Category')
 			->findBy(array('path' => null));

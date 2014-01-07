@@ -28,13 +28,15 @@
 
 
 /**
- * PlentymarketsImportEntityItemPrice provides the actual item price import funcionality. Like the other import
+ * PlentymarketsImportEntityItemPrice provides the actual item price import functionality. Like the other import
  * entities this class is called in PlentymarketsImportController. It is important to deliver the correct price set
  * data object PlentySoapObject_ItemPriceSet to the constructor method of this class. The second parameter "$markup" is optional.
  * The data import takes place based on plentymarkets SOAP-calls.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
+
+/** @noinspection PhpDocSignatureInspection */
 class PlentymarketsImportEntityItemPrice
 {
 	/**
@@ -197,7 +199,7 @@ class PlentymarketsImportEntityItemPrice
 		$ArticleResource = \Shopware\Components\Api\Manager::getResource('Article');
 
 		// Updaten
-		$Article = $ArticleResource->update($Article->getId(), array(
+		$ArticleResource->update($Article->getId(), array(
 			'variants' => array(
 				array(
 					'number' => $Detail->getNumber(),

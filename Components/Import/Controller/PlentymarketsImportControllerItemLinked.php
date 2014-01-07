@@ -85,8 +85,7 @@ class PlentymarketsImportControllerItemLinked
 
 	/**
 	 * Imports the linked items
-	 * 
-	 * @param unknown $Shop        	
+	 *
 	 */
 	public function run()
 	{
