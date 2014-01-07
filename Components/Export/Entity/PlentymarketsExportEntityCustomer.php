@@ -35,7 +35,7 @@ require_once PY_SOAP . 'Models/PlentySoapRequest/AddCustomerDeliveryAddresses.ph
 require_once PY_COMPONENTS . 'Export/PlentymarketsExportEntityException.php';
 
 /**
- * PlentymarketsExportEntityCustomer provides the actual customer export funcionality. Like the other export
+ * PlentymarketsExportEntityCustomer provides the actual customer export functionality. Like the other export
  * entities this class is called in PlentymarketsExportController. It is important to deliver the correct customer
  * model to the constructor method of this class, which you can find at \Shopware\Models\Customer\Customer.
  * The data export takes place based on plentymarkets SOAP-calls.
@@ -47,30 +47,6 @@ class PlentymarketsExportEntityCustomer
 
 	/**
 	 *
-	 * @var \Shopware\Models\Customer\Customer
-	 */
-	protected $Customer;
-
-	/**
-	 *
-	 * @var unknown
-	 */
-	protected $BillingAddress;
-
-	/**
-	 *
-	 * @var unknown
-	 */
-	protected $ShippingAddress;
-
-	/**
-	 *
-	 * @var integer
-	 */
-	protected $PLENTY_customerID;
-
-	/**
-	 *
 	 * @var array
 	 */
 	protected static $mappingFormOfAddress = array(
@@ -78,6 +54,26 @@ class PlentymarketsExportEntityCustomer
 		'ms' => 1,
 		'company' => 2
 	);
+	/**
+	 *
+	 * @var \Shopware\Models\Customer\Customer
+	 */
+	protected $Customer;
+	/**
+	 *
+	 * @var unknown
+	 */
+	protected $BillingAddress;
+	/**
+	 *
+	 * @var unknown
+	 */
+	protected $ShippingAddress;
+	/**
+	 *
+	 * @var integer
+	 */
+	protected $PLENTY_customerID;
 
 	/**
 	 * Constructor method
@@ -85,8 +81,9 @@ class PlentymarketsExportEntityCustomer
 	 * @param \Shopware\Models\Customer\Customer $Customer
 	 * @param string $BillingAddress
 	 * @param string $ShippingAddress
+	 * @throws PlentymarketsExportEntityException
 	 */
-	public function __construct($Customer, $BillingAddress=null, $ShippingAddress=null)
+	public function __construct($Customer, $BillingAddress = null, $ShippingAddress = null)
 	{
 		$this->Customer = $Customer;
 
@@ -112,39 +109,6 @@ class PlentymarketsExportEntityCustomer
 
 		$this->BillingAddress = $BillingAddress;
 		$this->ShippingAddress = $ShippingAddress;
-	}
-
-	/**
-	 * Returns the form of address to use with the plentymarkets SOAP API
-	 *
-	 * @param string $key
-	 * @return integer
-	 */
-	protected static function getFormOfAddress($key)
-	{
-		if (array_key_exists($key, self::$mappingFormOfAddress))
-		{
-			return self::$mappingFormOfAddress[$key];
-		}
-		return null;
-	}
-
-	/**
-	 * Returns the country id to use with the plentymarkets SOAP API
-	 *
-	 * @param integer $countryID
-	 * @return integer null
-	 */
-	protected static function getCountryID($countryID)
-	{
-		try
-		{
-			return PlentymarketsMappingController::getCountryByShopwareID($countryID);
-		}
-		catch (Exception $E)
-		{
-			return null;
-		}
 	}
 
 	/**
@@ -212,7 +176,6 @@ class PlentymarketsExportEntityCustomer
 			$zip = PlentymarketsConfig::getInstance()->get('CustomerDefaultZipcode');
 		}
 
-
 		$Request_AddCustomers = new PlentySoapRequest_AddCustomers();
 
 		$Request_AddCustomers->Customers = array();
@@ -221,6 +184,7 @@ class PlentymarketsExportEntityCustomer
 		$Object_AddCustomersCustomer->City = $city;
 		$Object_AddCustomersCustomer->Company = $this->BillingAddress->getCompany();
 		$Object_AddCustomersCustomer->CountryID = $this->getBillingCountryID(); // int
+		$Object_AddCustomersCustomer->CustomerClass = $this->getCustomerClassId();
 		$Object_AddCustomersCustomer->CustomerNumber = $this->getCustomerNumber(); // string
 		$Object_AddCustomersCustomer->CustomerSince = $this->Customer->getFirstLogin()->getTimestamp(); // int
 		$Object_AddCustomersCustomer->Email = $this->Customer->getEmail(); // string
@@ -299,6 +263,101 @@ class PlentymarketsExportEntityCustomer
 	}
 
 	/**
+	 * Returns a usable customer number
+	 *
+	 * @return string
+	 */
+	protected function getCustomerNumber()
+	{
+		if ($this->BillingAddress->getNumber() != '')
+		{
+			return $this->BillingAddress->getNumber();
+		}
+		else
+		{
+			return PlentymarketsUtils::getExternalCustomerID($this->Customer->getId());
+		}
+	}
+
+	/**
+	 * Returns the country id for the billing address
+	 *
+	 * @return integer
+	 */
+	protected function getBillingCountryID()
+	{
+		if (method_exists($this->BillingAddress, 'getCountryId'))
+		{
+			return self::getCountryID($this->BillingAddress->getCountryId());
+		}
+		else
+		{
+			return self::getCountryID($this->BillingAddress->getCountry()->getId());
+		}
+	}
+
+	/**
+	 * Returns the country id to use with the plentymarkets SOAP API
+	 *
+	 * @param integer $countryID
+	 * @return integer null
+	 */
+	protected static function getCountryID($countryID)
+	{
+		try
+		{
+			return PlentymarketsMappingController::getCountryByShopwareID($countryID);
+		}
+		catch (Exception $E)
+		{
+			return null;
+		}
+	}
+
+	/**
+	 * Returns the form of address for the billing address
+	 *
+	 * @return integer
+	 */
+	protected function getBillingFormOfAddress()
+	{
+		return self::getFormOfAddress($this->BillingAddress->getSalutation());
+	}
+
+	/**
+	 * Returns the form of address to use with the plentymarkets SOAP API
+	 *
+	 * @param string $key
+	 * @return integer
+	 */
+	protected static function getFormOfAddress($key)
+	{
+		if (array_key_exists($key, self::$mappingFormOfAddress))
+		{
+			return self::$mappingFormOfAddress[$key];
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the country id for the billing address
+	 *
+	 * @return integer
+	 */
+	protected function getLanguage()
+	{
+		if (method_exists($this->BillingAddress, 'getCountryId'))
+		{
+			return strtolower(Shopware()->Models()->find('\Shopware\Models\Country\Country', $this->BillingAddress->getCountryId())->getIso());
+		}
+		else
+		{
+			return strtolower($this->BillingAddress->getCountry()->getIso());
+		}
+	}
+
+	/**
 	 * Exports the delivery address
 	 */
 	protected function exportDeliveryAddress()
@@ -368,57 +427,6 @@ class PlentymarketsExportEntityCustomer
 	}
 
 	/**
-	 * Returns a usable customer number
-	 *
-	 * @return string
-	 */
-	protected function getCustomerNumber()
-	{
-		if ($this->BillingAddress->getNumber() != '')
-		{
-			return $this->BillingAddress->getNumber();
-		}
-		else
-		{
-			return PlentymarketsUtils::getExternalCustomerID($this->Customer->getId());
-		}
-	}
-
-	/**
-	 * Returns the country id for the billing address
-	 *
-	 * @return integer
-	 */
-	protected function getBillingCountryID()
-	{
-		if (method_exists($this->BillingAddress, 'getCountryId'))
-		{
-			return self::getCountryID($this->BillingAddress->getCountryId());
-		}
-		else
-		{
-			return self::getCountryID($this->BillingAddress->getCountry()->getId());
-		}
-	}
-
-	/**
-	 * Returns the country id for the billing address
-	 *
-	 * @return integer
-	 */
-	protected function getLanguage()
-	{
-		if (method_exists($this->BillingAddress, 'getCountryId'))
-		{
-			return strtolower(Shopware()->Models()->find('\Shopware\Models\Country\Country', $this->BillingAddress->getCountryId())->getIso());
-		}
-		else
-		{
-			return strtolower($this->BillingAddress->getCountry()->getIso());
-		}
-	}
-
-	/**
 	 * Returns the country id for the delivery address
 	 *
 	 * @return integer
@@ -433,16 +441,6 @@ class PlentymarketsExportEntityCustomer
 		{
 			return self::getCountryID($this->ShippingAddress->getCountry()->getId());
 		}
-	}
-
-	/**
-	 * Returns the form of address for the billing address
-	 *
-	 * @return integer
-	 */
-	protected function getBillingFormOfAddress()
-	{
-		return self::getFormOfAddress($this->BillingAddress->getSalutation());
 	}
 
 	/**
@@ -473,5 +471,23 @@ class PlentymarketsExportEntityCustomer
 	public function getPlentyAddressDispatchID()
 	{
 		return $this->PLENTY_addressDispatchID;
+	}
+
+	/**
+	 * Returns the customer class id
+	 *
+	 * @return integer|null
+	 */
+	protected function getCustomerClassId()
+	{
+		try
+		{
+			return PlentymarketsMappingController::getCustomerClassByShopwareID($this->Customer->getGroup()->getId());
+		}
+		catch (Exception $E)
+		{
+			PyLog()->debug($E->getMessage());
+			return null;
+		}
 	}
 }
