@@ -84,6 +84,11 @@ class PlentymarketsExportStatusController
 		$this->add($ItemCrossSelling);
 
 		// Customer
+		$Bundle = new PlentymarketsExportStatus('ItemBundle');
+		$Bundle->setOptional();
+		$this->add($Bundle);
+
+		// Customer
 		$Customer = new PlentymarketsExportStatus('Customer');
 		$Customer->setOptional();
 		$this->add($Customer);
