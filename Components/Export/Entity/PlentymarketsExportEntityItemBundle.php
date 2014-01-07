@@ -1,25 +1,77 @@
 <?php
+/**
+ * plentymarkets shopware connector
+ * Copyright © 2013 plentymarkets GmbH
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License, supplemented by an additional
+ * permission, and of our proprietary license can be found
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "plentymarkets" is a registered trademark of plentymarkets GmbH.
+ * "shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, titles and interests in the
+ * above trademarks remain entirely with the trademark owners.
+ *
+ * @copyright Copyright (c) 2013, plentymarkets GmbH (http://www.plentymarkets.com)
+ * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
+ */
+
+require_once PY_SOAP . 'Models/PlentySoapObject/AddItemsBaseItemBase.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/Integer.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/ItemAvailability.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/ItemCategory.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/ItemPriceSet.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/ItemTexts.php';
+require_once PY_SOAP . 'Models/PlentySoapRequest/AddItemsBase.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/Integer.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/AddBundle.php';
+require_once PY_SOAP . 'Models/PlentySoapObject/AddBundleItem.php';
+require_once PY_SOAP . 'Models/PlentySoapRequest/AddItemsToBundle.php';
 
 /**
- * Created by IntelliJ IDEA.
- * User: dbaechtle
- * Date: 03.01.14
- * Time: 13:29
+ * Exports an item bundle
  */
 class PlentymarketsExportEntityItemBundle
 {
 
+	/**
+	 * @var Shopware\CustomModels\Bundle\Bundle
+	 */
 	protected $SHOPWARE_bundle;
 
+	/**
+	 * @var array
+	 */
 	protected $PLENTY_bundleSkuList = array();
 
+	/**
+	 * @var integer
+	 */
 	protected $PLENTY_bundleHeadId;
 
+	/**
+	 * I am the constructor
+	 *
+	 * @param \Shopware\CustomModels\Bundle\Bundle $bundle
+	 */
 	public function __construct(Shopware\CustomModels\Bundle\Bundle $bundle)
 	{
 		$this->SHOPWARE_bundle = $bundle;
 	}
 
+	/**
+	 * Runs the actual export of the item bundle
+	 */
 	public function export()
 	{
 		$this->index();
@@ -27,6 +79,12 @@ class PlentymarketsExportEntityItemBundle
 		$this->exportItems();
 	}
 
+	/**
+	 * Builds an index of all items inside the bundle
+	 * and checks if all of these items are exported to plentymarkets
+	 *
+	 * @throws PlentymarketsExportEntityException
+	 */
 	protected function index()
 	{
 		/** @var $bundleArticle Shopware\CustomModels\Bundle\Article */
@@ -47,7 +105,7 @@ class PlentymarketsExportEntityItemBundle
 				}
 				catch (PlentymarketsMappingExceptionNotExistant $E)
 				{
-					throw new PlentymarketsExportEntityException('The item bundle xxx cannot be exported, (items missing in plenty)');
+					throw new PlentymarketsExportEntityException('The item bundle with the number »' . $this->SHOPWARE_bundle->getNumber() . '« can not be exported because not all of the items are available in plentymarkets.');
 				}
 			}
 			$quantity = $bundleArticle->getQuantity();
@@ -62,6 +120,11 @@ class PlentymarketsExportEntityItemBundle
 		}
 	}
 
+	/**
+	 * Exports the item bundle head item
+	 *
+	 * @throws PlentymarketsExportException
+	 */
 	protected function exportHead()
 	{
 		// The shopware item on which the bundle is based on
@@ -72,12 +135,12 @@ class PlentymarketsExportEntityItemBundle
 		// since that feature is not provided by plentymarkets
 		if ($shopwareBundleHeadIsVariant)
 		{
-			throw new Exception('not supported');
+			throw new PlentymarketsExportException('The item bundle with the number »' . $this->SHOPWARE_bundle->getNumber() . '« can not be exported because the master item is a variant.');
 		}
 
 		if ($this->SHOPWARE_bundle->getDiscountType() != 'abs')
 		{
-			throw new Exception('only absulute allowed');
+			throw new PlentymarketsExportException('The item bundle with the number »' . $this->SHOPWARE_bundle->getNumber() . '« can not be exported the discount type is not supported.');
 		}
 
 		// The shopware bundle head needs to be added as a plenty-bundle-item
@@ -207,7 +270,7 @@ class PlentymarketsExportEntityItemBundle
 
 		if (!$Response_AddItemsBase->Success || $ResponseMessage->Code != 100)
 		{
-			throw new PlentymarketsExportException('The bundle head with the number »' . $this->SHOPWARE_bundle->getNumber() . '« could not be exported', 2800);
+			throw new PlentymarketsExportException('The item bundle with the number »' . $this->SHOPWARE_bundle->getNumber() . '« could not be exported', 2800);
 		}
 
 		$PLENTY_priceID = null;
@@ -225,18 +288,20 @@ class PlentymarketsExportEntityItemBundle
 
 		if ($this->PLENTY_bundleHeadId && $PLENTY_priceID)
 		{
-			PlentymarketsLogger::getInstance()->message('Export:Initial:Item:Bundle', 'The bundle head with the number »' . $this->SHOPWARE_bundle->getNumber() . '« has been created (ItemId: ' . $this->PLENTY_bundleHeadId . ', PriceId: ' . $PLENTY_priceID . ')');
+			PlentymarketsLogger::getInstance()->message('Export:Initial:Item:Bundle', 'The item bundle with the number »' . $this->SHOPWARE_bundle->getNumber() . '« has been created with the id »' . $this->PLENTY_bundleHeadId . '«.');
 			PlentymarketsMappingController::addItemBundle($this->SHOPWARE_bundle->getId(), $this->PLENTY_bundleHeadId);
 		}
 		else
 		{
-			throw new PlentymarketsExportException('The bundle head with the number »' . $this->SHOPWARE_bundle->getNumber() . '« could not be exported (no item ID and price ID respectively)', 2830);
+			throw new PlentymarketsExportException('The item bundle with the number »' . $this->SHOPWARE_bundle->getNumber() . '« could not be exported', 2830);
 		}
 	}
 
 	/**
+	 * Exports the items of the bundle
+	 *
 	 * todo: max 50
-	 * todo: response auswerten
+	 * todo: analyse response
 	 */
 	protected function exportItems()
 	{
@@ -260,6 +325,6 @@ class PlentymarketsExportEntityItemBundle
 		PlentymarketsSoapClient::getInstance()->AddItemsToBundle($Request_AddItemsToBundle);
 
 		$numberAdded = count($Object_AddBundle->BundleItems);
-		PlentymarketsLogger::getInstance()->message('Export:Initial:Item:Bundle', $numberAdded . ' items have been added to the bundle with the number »' . $this->SHOPWARE_bundle->getNumber() . '«');
+		PlentymarketsLogger::getInstance()->message('Export:Initial:Item:Bundle', $numberAdded . ' items have been added to the item bundle with the number »' . $this->SHOPWARE_bundle->getNumber() . '«.');
 	}
-} 
+}

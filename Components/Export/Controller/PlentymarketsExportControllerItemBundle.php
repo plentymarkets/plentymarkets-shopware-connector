@@ -1,45 +1,70 @@
 <?php
 /**
- * Created by IntelliJ IDEA.
- * User: dbaechtle
- * Date: 03.01.14
- * Time: 13:25
+ * plentymarkets shopware connector
+ * Copyright © 2013 plentymarkets GmbH
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License, supplemented by an additional
+ * permission, and of our proprietary license can be found
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "plentymarkets" is a registered trademark of plentymarkets GmbH.
+ * "shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, titles and interests in the
+ * above trademarks remain entirely with the trademark owners.
+ *
+ * @copyright Copyright (c) 2013, plentymarkets GmbH (http://www.plentymarkets.com)
+ * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
-
-require_once PY_SOAP . 'Models/PlentySoapObject/AddItemsBaseItemBase.php';
-require_once PY_SOAP . 'Models/PlentySoapObject/Integer.php';
-require_once PY_SOAP . 'Models/PlentySoapObject/ItemAvailability.php';
-require_once PY_SOAP . 'Models/PlentySoapObject/ItemCategory.php';
-require_once PY_SOAP . 'Models/PlentySoapObject/ItemPriceSet.php';
-require_once PY_SOAP . 'Models/PlentySoapObject/ItemTexts.php';
-require_once PY_SOAP . 'Models/PlentySoapRequest/AddItemsBase.php';
-require_once PY_SOAP . 'Models/PlentySoapObject/Integer.php';
-require_once PY_SOAP . 'Models/PlentySoapObject/AddBundle.php';
-require_once PY_SOAP . 'Models/PlentySoapObject/AddBundleItem.php';
-require_once PY_SOAP . 'Models/PlentySoapRequest/AddItemsToBundle.php';
 
 require_once PY_COMPONENTS . 'Export/Entity/PlentymarketsExportEntityItemBundle.php';
 
-class PlentymarketsExportControllerItemBundle {
-
+/**
+ * Controller for the item bundles
+ *
+ * Class PlentymarketsExportControllerItemBundle
+ */
+class PlentymarketsExportControllerItemBundle
+{
+	/**
+	 * Registers the bundle modules
+	 */
 	public function __construct()
 	{
 		PlentymarketsUtils::registerBundleModules();
 	}
 
-	public function export()
+	/**
+	 * Runs the actual export
+	 */
+	public function run()
 	{
 		$repository = Shopware()->Models()->getRepository('Shopware\CustomModels\Bundle\Bundle');
 
-		/** @var $bundle Shopware\CustomModels\Bundle\Bundle*/
+		/** @var $bundle Shopware\CustomModels\Bundle\Bundle */
 		foreach ($repository->findAll() as $bundle)
 		{
-
-			$export = new PlentymarketsExportEntityItemBundle($bundle);
-			$export->export();
-
-
-
+			$exportEntityItemBundle = new PlentymarketsExportEntityItemBundle($bundle);
+			$exportEntityItemBundle->export();
 		}
 	}
-} 
+
+	/**
+	 * Checks whether the export is finished
+	 *
+	 * @return boolean
+	 */
+	public function isFinished()
+	{
+		return true;
+	}
+}
