@@ -245,7 +245,7 @@ class PlentymarketsExportEntityItemBundle
 
 		if ($isPriceFound && $price instanceof Shopware\CustomModels\Bundle\Price)
 		{
-			$Object_ItemPriceSet->Price = $price->getPrice(); // float
+			$Object_ItemPriceSet->Price = $price->getGrossPrice(); // float
 		}
 		else
 		{

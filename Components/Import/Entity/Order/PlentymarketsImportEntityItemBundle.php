@@ -3,20 +3,29 @@
 require_once PY_SOAP . 'Models/PlentySoapRequest/GetItemsBase.php';
 
 /**
- * Created by IntelliJ IDEA.
- * User: dbaechtle
- * Date: 06.01.14
- * Time: 11:52
+ * Imports a item bundle
+ *
+ * Class PlentymarketsImportEntityItemBundle
  */
 class PlentymarketsImportEntityItemBundle
 {
+	/**
+	 * @var array
+	 */
 	protected $SHOPWARE_bundleItemDetailList = array();
 
+	/**
+	 * @var PlentySoapObject_Bundle
+	 */
 	protected $PLENTY_bundle;
 
+	/**
+	 * @var integer
+	 */
 	protected $PLENTY_bundleHeadId;
 
 	/**
+	 * I am the constructor
 	 * @param PlentySoapObject_Bundle $PlentySoapObject_Bundle
 	 */
 	public function __construct($PlentySoapObject_Bundle)
@@ -24,12 +33,20 @@ class PlentymarketsImportEntityItemBundle
 		$this->PLENTY_bundle = $PlentySoapObject_Bundle;
 	}
 
+	/**
+	 * Public method to start the actual import
+	 */
 	public function import()
 	{
 		$this->index();
 		$this->importBundle();
 	}
 
+	/**
+	 * Builds an index and checks if all items are present
+	 *
+	 * @throws Exception
+	 */
 	protected function index()
 	{
 		$bundleHeadSku = explode('-', $this->PLENTY_bundle->SKU);
@@ -69,7 +86,7 @@ class PlentymarketsImportEntityItemBundle
 			}
 			catch (PlentymarketsMappingExceptionNotExistant $E)
 			{
-				throw new Exception('Bundle kann nicht verarbeitet werden, danicht alle Paketartikel in shopware vorhanden sind');
+				throw new Exception('The item bundle with SKU »' . $this->PLENTY_bundle->SKU . '« can not be imported. Not all of the items included in the bundle are available in shopware.');
 			}
 
 			$this->SHOPWARE_bundleItemDetailList[$detail->getId()] = array(
@@ -80,6 +97,11 @@ class PlentymarketsImportEntityItemBundle
 		}
 	}
 
+	/**
+	 * Imports the item bundle
+	 *
+	 * @throws Exception
+	 */
 	protected function importBundle()
 	{
 		/** @var $this ->PLENTY_bundle PlentySoapObject_Bundle */
@@ -106,7 +128,7 @@ class PlentymarketsImportEntityItemBundle
 
 		if ($Response_GetItemsBase->Success == false || !isset($Response_GetItemsBase->ItemsBase->item[0]))
 		{
-			throw new Exception('Plentymarkets bundle head kann nicht abgerufen werden');
+			throw new Exception('The item bundle with SKU »' . $this->PLENTY_bundle->SKU . '« can not be imported (SOAP call failed).');
 		}
 
 		/** @var $ItemBase PlentySoapObject_ItemBase */
@@ -130,8 +152,11 @@ class PlentymarketsImportEntityItemBundle
 				{
 					$shopwareBundleItemId = $this->getShopwareBundleItemId();
 
+					/** @var $Article Shopware\Models\Article\Article */
 					$Article = Shopware()->Models()->find('Shopware\Models\Article\Article', $shopwareBundleItemId);
-					PyLog()->message('Sync:Item:Bundle', 'The item x with the number x will be set as the new head of the bundle with the number ' . $Bundle->getNumber());
+					$mainDetail = $Article->getMainDetail();
+
+					PyLog()->message('Sync:Item:Bundle', 'The item »' . $Article->getName() . '« with the number »' . $mainDetail->getNumber() . '« is now the master item of the item bundle with the number »' . $Bundle->getNumber() . '«.');
 
 					$Bundle->setArticle($Article);
 				}
@@ -139,7 +164,7 @@ class PlentymarketsImportEntityItemBundle
 				{
 					PlentymarketsMappingController::deleteItemBundleByShopwareID($Bundle->getId());
 
-					PyLog()->message('Sync:Item:Bundle', 'Thje biind ewill be edeleld ' . $Bundle->getNumber());
+					PyLog()->message('Sync:Item:Bundle', 'The item bundle with the number »' . $Bundle->getNumber() . '« will be deleted because no item can be identified as the master item. The previous master item with the number »' . $Bundle->getArticle()->getMainDetail()->getNumber() . '« is no longer part of the item bundle.');
 
 					// Delete the bundle
 					Shopware()->Models()->remove($Bundle);
@@ -159,9 +184,11 @@ class PlentymarketsImportEntityItemBundle
 			$Bundle = new Shopware\CustomModels\Bundle\Bundle();
 			$shopwareBundleItemId = $this->getShopwareBundleItemId();
 
+			/** @var $Article Shopware\Models\Article\Article */
 			$Article = Shopware()->Models()->find('Shopware\Models\Article\Article', $shopwareBundleItemId);
+			$mainDetail = $Article->getMainDetail();
 
-			PyLog()->message('Sync:Item:Bundle', 'Using ' . $Article->getName() . ' as head of the bundle');
+			PyLog()->message('Sync:Item:Bundle', 'The item »' . $Article->getName() . '« with the number »' . $mainDetail->getNumber() . '« will be the master item of the item bundle with the number »' . $ItemBase->ItemNo . '«.');
 
 			// Set the stuff which needs to be set just one
 			$Bundle->setArticle($Article);
@@ -261,6 +288,9 @@ class PlentymarketsImportEntityItemBundle
 		// Set the bundle items
 		$Bundle->setArticles($items);
 
+		$newPrice = $ItemBase->PriceSet->Price;
+		$newPrice /= (100 + $ItemBase->PriceSet->VAT) / 100;
+
 		$isPriceFound = false;
 		$prices = array();
 		foreach ($Bundle->getPrices() as $price)
@@ -268,8 +298,7 @@ class PlentymarketsImportEntityItemBundle
 			/** @var $price Shopware\CustomModels\Bundle\Price */
 			if ($price->getCustomerGroup()->getKey() == $CG->getKey())
 			{
-				$price->setDisplayPrice($ItemBase->PriceSet->Price);
-				$price->setPrice($ItemBase->PriceSet->Price);
+				$price->setPrice($newPrice);
 				$isPriceFound = true;
 			}
 			$prices[] = $price;
@@ -280,8 +309,7 @@ class PlentymarketsImportEntityItemBundle
 			$Price = new Shopware\CustomModels\Bundle\Price();
 			$Price->setBundle($Bundle);
 			$Price->setCustomerGroup($CG);
-			$Price->setDisplayPrice($ItemBase->PriceSet->Price);
-			$Price->setPrice($ItemBase->PriceSet->Price);
+			$Price->setGrossPrice($ItemBase->PriceSet->Price);
 			$prices[] = $Price;
 			$Bundle->setPrices($prices);
 		}
@@ -338,7 +366,7 @@ class PlentymarketsImportEntityItemBundle
 		// nothing was found - the bundle cannot be (re-)created
 		if (!$shopwareBundleItemId)
 		{
-			throw new Exception('Keine nicht Variante abei');
+			throw new PlentymarketsImportException('The item bundle with the SKU »' . $this->PLENTY_bundle->SKU . '« could not be imported.');
 		}
 
 		return $shopwareBundleItemId;

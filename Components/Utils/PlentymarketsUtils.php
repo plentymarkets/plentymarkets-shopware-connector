@@ -197,9 +197,9 @@ class PlentymarketsUtils
 	 */
 	public static function registerBundleModules()
 	{
-		$plugin = Shopware()->Db()->fetchAssoc('
+		$plugin = Shopware()->Db()->fetchRow('
 			SELECT
-					source, namespace
+					source, namespace, id
 				FROM s_core_plugins
 				WHERE name = "SwagBundle"
 		');
@@ -209,10 +209,26 @@ class PlentymarketsUtils
 			throw new Exception('SwagBundle is not installed');
 		}
 
-		Shopware()->Loader()->registerNamespace(
-			'Shopware\CustomModels',
+		$path = realpath(
 			Shopware()->AppPath() . '/Plugins/'. $plugin['source'] .'/'. $plugin['namespace'] .'/SwagBundle/Models/'
 		);
+
+		if (!$path)
+		{
+			throw new Exception('SwagBundle is not installed properly');
+		}
+
+		$path .= DIRECTORY_SEPARATOR;
+
+		Shopware()->Loader()->registerNamespace(
+			'Shopware\CustomModels', $path,
+			Enlight_Loader::DEFAULT_SEPARATOR,
+			Enlight_Loader::DEFAULT_EXTENSION,
+			Enlight_Loader::POSITION_PREPEND
+		);
+
+		//$Loader = Shopware()->Loader();
+		//echo 1;
 	}
 
 	/**

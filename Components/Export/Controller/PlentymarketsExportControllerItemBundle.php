@@ -53,6 +53,16 @@ class PlentymarketsExportControllerItemBundle
 		/** @var $bundle Shopware\CustomModels\Bundle\Bundle */
 		foreach ($repository->findAll() as $bundle)
 		{
+			try
+			{
+				PlentymarketsMappingController::getItemBundleByShopwareID($bundle->getId());
+				continue;
+			}
+			catch (PlentymarketsMappingExceptionNotExistant $e)
+			{
+
+			}
+
 			$exportEntityItemBundle = new PlentymarketsExportEntityItemBundle($bundle);
 			$exportEntityItemBundle->export();
 		}

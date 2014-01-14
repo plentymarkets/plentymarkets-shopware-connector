@@ -37,10 +37,11 @@ Ext.define('Shopware.apps.Plentymarkets.view.dx.Initial', {
 		var resourceNames = {
 			ItemCategory: 'Kategorien',
 			ItemAttribute: 'Attribute',
-			ItemProperty: 'Eigenschaften/Merkmale',
+			ItemProperty: 'Eigenschaften (Merkmale)',
 			ItemProducer: 'Hersteller',
 			Item: 'Artikel',
 			ItemCrossSelling: 'Cross-Selling',
+			ItemBundle: 'Bundle (Artikelpakete)',
 			Customer: 'Kunden',
 		};
 

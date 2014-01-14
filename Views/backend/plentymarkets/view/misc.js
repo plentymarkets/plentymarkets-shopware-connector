@@ -92,7 +92,36 @@ Ext.define('Shopware.apps.Plentymarkets.view.Misc', {
 						});
 					}
 				}]
-			}, {
+			},
+                {
+                    xtype: 'fieldcontainer',
+                    fieldLabel: 'Alle Artikelpakete abgleichen',
+                    layout: 'hbox',
+                    items: [ {
+                    xtype: 'button',
+                    text: 'Vormerken',
+                    cls: 'secondary small',
+                    handler: function () {
+                        var message = 'Möchten Sie, dass alle Artikelpakete mit plentymarkets abgeglichen werden?<br><br>Bitte beachten Sie, dass der Abgleich erst mit der Ausführung des Cronjobs <b>Plentymarkets Item Bunde Import</b> und <b>nicht</b> unverzüglich beginnt. Der Abgleich aller Artkel kann sehr lange dauern und sehr viel Traffic verursachen!';
+
+                        Ext.Msg.confirm('Bestätigung erforderlich!', message, function (button) {
+                            if (button === 'yes') {
+                                Ext.Ajax.request({
+                                    url: '{url action=resetImportTimestamp}',
+                                    callback: function (options, success, xhr) {
+                                        Shopware.Notification.createGrowlMessage('Aktion ausgeführt', 'Der vollständige Artikelpaketabgleich wurde vorgemerkt');
+                                    },
+                                    jsonData: Ext.encode({
+                                        entity: 'ItemBundle'
+                                    })
+                                });
+                            }
+                        });
+                    }
+                }
+                    ]
+                }
+                , {
 				xtype: 'fieldcontainer',
 				fieldLabel: 'Alle Warenbestände abgleichen',
 				layout: 'hbox',

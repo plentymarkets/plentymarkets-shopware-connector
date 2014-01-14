@@ -31,6 +31,7 @@ require_once PY_COMPONENTS . 'Config/PlentymarketsConfig.php';
 require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingController.php';
 require_once PY_COMPONENTS . 'Utils/PlentymarketsGarbageCollector.php';
 require_once PY_COMPONENTS . 'Import/PlentymarketsImportController.php';
+require_once PY_COMPONENTS . 'Import/Controller/PlentymarketsImportControllerItemBundle.php';
 require_once PY_COMPONENTS . 'Import/Stack/PlentymarketsImportStackItem.php';
 require_once PY_COMPONENTS . 'Export/PlentymarketsExportController.php';
 require_once PY_COMPONENTS . 'Export/Continuous/PlentymarketsExportContinuousController.php';
@@ -464,5 +465,55 @@ class PlentymarketsCronjobController
 			$this->Config->setImportItemStockStatus(2);
 			$this->Config->setImportItemStockError($E->getMessage());
 		}
+	}
+
+	/**
+	 * Runs the item bundle import cronjob.
+	 *
+	 * @param Shopware_Components_Cron_CronJob $Job
+	 */
+	public function runItemBundleImport(Shopware_Components_Cron_CronJob $Job)
+	{
+		$this->Config->setImportItemBundleLastRunTimestamp(time());
+		$this->Config->setImportItemBundleNextRunTimestamp(time() + $Job->getJob()->getInterval());
+
+		if (!$this->Status->maySynchronize())
+		{
+			$this->Config->setImportItemBundleStatus(0);
+			return;
+		}
+
+		try
+		{
+			$a = new PlentymarketsImportControllerItemBundle();
+			$a->import();
+			$this->Config->setImportItemBundleStatus(1);
+			$this->Config->eraseImportItemBundleError();
+		}
+		catch (Exception $E)
+		{
+			$this->Config->setImportItemBundleStatus(2);
+			$this->Config->setImportItemBundleError($E->getMessage());
+		}
+	}
+
+	/**
+	 * Runs the item bundle cleanup cronjob.
+	 *
+	 * @param Shopware_Components_Cron_CronJob $Job
+	 */
+	public function runItemCleanupImport(Shopware_Components_Cron_CronJob $Job)
+	{
+		if (!$this->Status->maySynchronize())
+		{
+			return;
+		}
+
+		PlentymarketsLogger::getInstance()->message('Cleanup:Item:Bundle', 'Starting');
+
+		$PlentymarketsGarbageCollector = PlentymarketsGarbageCollector::getInstance();
+		$PlentymarketsGarbageCollector->run(PlentymarketsGarbageCollector::ACTION_PRUNE_ITEM_BUNDLES);
+
+		PlentymarketsLogger::getInstance()->message('Cleanup:Item:Bundle', 'Finished');
 	}
 }

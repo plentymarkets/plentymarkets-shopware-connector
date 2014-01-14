@@ -31,6 +31,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.dx.Grid', {
 		var snippet = {
 			Item: 'Stammdaten',
 			ItemStack: 'Stack',
+			ItemBundle: 'Bundle (Pakete)',
 			ItemStock: 'Warenbestände',
 			ItemPrice: 'Preise',
 			Order: 'Aufträge',

@@ -79,6 +79,7 @@ class PlentymarketsExportController
 			'plenty_mapping_item',
 			'plenty_mapping_item_variant',
 		),
+		'ItemBundle' => 'plenty_mapping_item_bundle',
 		'Customer' => 'plenty_mapping_customer_billing_address',
 		'ItemCrossSelling' => array()
 	);

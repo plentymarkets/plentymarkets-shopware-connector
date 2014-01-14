@@ -190,6 +190,14 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 						'NextRunTimestamp' => $Config->getImportItemNextRunTimestamp(0),
 					),
 					array(
+						'Entity' => 'ItemBundle',
+						'Section' => 'Item',
+						'Status' => $Config->getImportItemBundleStatus(0),
+						'Error' => htmlspecialchars($Config->getImportItemBundleError('')),
+						'LastRunTimestamp' => $Config->getImportItemBundleLastRunTimestamp(0),
+						'NextRunTimestamp' => $Config->getImportItemBundleNextRunTimestamp(0),
+					),
+					array(
 						'Entity' => 'ItemStock',
 						'Section' => 'Item',
 						'Status' => $Config->getImportItemStockStatus(0),
@@ -569,7 +577,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	{
 		$entity = $this->Request()->get('entity');
 
-		if (in_array($entity, array('ItemStack', 'ItemPrice', 'ItemStock')))
+		if (in_array($entity, array('ItemStack', 'ItemPrice', 'ItemStock', 'ItemBundle')))
 		{
 			PlentymarketsConfig::getInstance()->erase('Import' . $entity . 'LastUpdateTimestamp');
 			PlentymarketsLogger::getInstance()->message('Sync:Reset', $entity . ' resetted');

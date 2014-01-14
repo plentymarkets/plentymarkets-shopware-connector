@@ -239,6 +239,7 @@ class PlentymarketsStatus
 		{
 			$License = Shopware()->License();
 			$isLicenseValid = $License->checkCoreLicense(false);
+
 			if (!$isLicenseValid && !$this->isLicenseWarningLogged)
 			{
 				PlentymarketsLogger::getInstance()->error('System:License', 'The shopware license that is used is invalid or has expired. No synchronization will be performed.', 1010);
@@ -271,7 +272,7 @@ class PlentymarketsStatus
 
 		else
 		{
-			// Remember the setting and activate or deactive the sync
+			// Remember the setting and activate or deactivate the sync
 			// depending on the user's choice
 			PlentymarketsConfig::getInstance()->setMayDatex(1);
 			PlentymarketsConfig::getInstance()->setMayDatexActual($mayDatexActual);
@@ -297,11 +298,11 @@ class PlentymarketsStatus
 					PlentymarketsLogger::getInstance()->error('System:PHP', 'The synchronizing processes have to be started with the PHP-CLI (command line interface). You are using »' . $sapi . '«.', 1001);
 					if (isset($_ENV['_']))
 					{
-						PlentymarketsLogger::getInstance()->error('System:PHP', 'The prozess is handled through »' . $_ENV['_'] . '«.', 1001);
+						PlentymarketsLogger::getInstance()->error('System:PHP', 'The process is handled through »' . $_ENV['_'] . '«.', 1001);
 					}
 					if (isset($_SERVER['HTTP_REFERER']))
 					{
-						PlentymarketsLogger::getInstance()->error('System:PHP', 'The prozess is called through »' . $_SERVER['HTTP_REFERER'] . '«.', 1001);
+						PlentymarketsLogger::getInstance()->error('System:PHP', 'The process is called through »' . $_SERVER['HTTP_REFERER'] . '«.', 1001);
 					}
 					$this->isCliWarningLogged = true;
 				}
