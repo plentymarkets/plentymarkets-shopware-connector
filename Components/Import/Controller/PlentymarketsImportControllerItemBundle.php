@@ -76,9 +76,9 @@ class PlentymarketsImportControllerItemBundle
 					$PlentymarketsImportEntityItemBundle->import();
 					++$numberOfBundlesUpdated;
 				}
-				catch (Exception $e)
+				catch (PlentymarketsImportException $e)
 				{
-					PyLog()->error('Sync:Item:Bundle', $e->getMessage());
+					PyLog()->error('Sync:Item:Bundle', $e->getMessage(), $e->getCode());
 				}
 			}
 		} // Until all pages are received

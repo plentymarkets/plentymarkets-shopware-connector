@@ -171,6 +171,7 @@ class PlentymarketsGarbageCollector
 			'plenty_mapping_customer_class' => array('id', 's_core_customergroups'),
 			'plenty_mapping_item' => array('id', 's_articles'),
 			'plenty_mapping_item_variant' => array('id', 's_articles_details'),
+	//		'plenty_mapping_item_bundle' => array('id', 's_articles_bundles'),
 			'plenty_mapping_measure_unit' => array('id', 's_core_units'),
 			'plenty_mapping_method_of_payment' => array('id', 's_core_paymentmeans'),
 			'plenty_mapping_producer' => array('id', 's_articles_supplier'),
@@ -186,6 +187,16 @@ class PlentymarketsGarbageCollector
 			Shopware()->Db()->exec('
 				DELETE FROM ' . $mappingTable . ' WHERE shopwareID NOT IN (SELECT ' . $target[0] . ' FROM ' . $target[1] . ');
 			');
+		}
+
+		try
+		{
+			Shopware()->Db()->exec('
+				DELETE FROM plenty_mapping_item_bundle WHERE shopwareID NOT IN (SELECT id FROM s_articles_bundles);
+			');
+		}
+		catch (Exception $e)
+		{
 		}
 
 		// Delete non-active methods of payment

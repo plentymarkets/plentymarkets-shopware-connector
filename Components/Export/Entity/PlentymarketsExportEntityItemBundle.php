@@ -105,7 +105,7 @@ class PlentymarketsExportEntityItemBundle
 				}
 				catch (PlentymarketsMappingExceptionNotExistant $E)
 				{
-					throw new PlentymarketsExportEntityException('The item bundle with the number »' . $this->SHOPWARE_bundle->getNumber() . '« can not be exported because not all of the items are available in plentymarkets.');
+					throw new PlentymarketsExportEntityException('The item bundle with the number »' . $this->SHOPWARE_bundle->getNumber() . '« can not be exported because not all of the items are available in plentymarkets.', 2220);
 				}
 			}
 			$quantity = $bundleArticle->getQuantity();
@@ -135,12 +135,17 @@ class PlentymarketsExportEntityItemBundle
 		// since that feature is not provided by plentymarkets
 		if ($shopwareBundleHeadIsVariant)
 		{
-			throw new PlentymarketsExportException('The item bundle with the number »' . $this->SHOPWARE_bundle->getNumber() . '« can not be exported because the master item is a variant.');
+			throw new PlentymarketsExportException('The item bundle with the number »' . $this->SHOPWARE_bundle->getNumber() . '« can not be exported because the master item is a variant.', 2230);
 		}
 
 		if ($this->SHOPWARE_bundle->getDiscountType() != 'abs')
 		{
-			throw new PlentymarketsExportException('The item bundle with the number »' . $this->SHOPWARE_bundle->getNumber() . '« can not be exported the discount type is not supported.');
+			throw new PlentymarketsExportException('The item bundle with the number »' . $this->SHOPWARE_bundle->getNumber() . '« can not be exported because the discount type is not supported.', 2240);
+		}
+
+		if ($this->SHOPWARE_bundle->getType() != 1)
+		{
+			throw new PlentymarketsExportException('The item bundle with the number »' . $this->SHOPWARE_bundle->getNumber() . '« can not be exported because the bundle type is not supported.', 2250);
 		}
 
 		// The shopware bundle head needs to be added as a plenty-bundle-item
@@ -245,7 +250,11 @@ class PlentymarketsExportEntityItemBundle
 
 		if ($isPriceFound && $price instanceof Shopware\CustomModels\Bundle\Price)
 		{
-			$Object_ItemPriceSet->Price = $price->getGrossPrice(); // float
+			$tax = $this->SHOPWARE_bundle->getArticle()->getTax()->getTax();
+			$priceNet = $price->getPrice();
+			$price = $priceNet + ($priceNet / 100 * $tax);
+			$Object_ItemPriceSet->Price = $price;
+			$Object_ItemPriceSet->VAT = $tax;
 		}
 		else
 		{
@@ -254,6 +263,7 @@ class PlentymarketsExportEntityItemBundle
 			$Object_ItemPriceSet->Price = 1;
 		}
 		$Object_AddItemsBaseItemBase->PriceSet = $Object_ItemPriceSet;
+		$Object_AddItemsBaseItemBase->VATInternalID = PlentymarketsMappingController::getVatByShopwareID($this->SHOPWARE_bundle->getArticle()->getTax()->getId());
 
 		$Object_AddItemsBaseItemBase->ProducerID = PlentymarketsMappingController::getProducerByShopwareID($shopwareBundleHead->getSupplier()->getId());; // int
 		$Object_AddItemsBaseItemBase->Published = null; // int
@@ -270,7 +280,7 @@ class PlentymarketsExportEntityItemBundle
 
 		if (!$Response_AddItemsBase->Success || $ResponseMessage->Code != 100)
 		{
-			throw new PlentymarketsExportException('The item bundle with the number »' . $this->SHOPWARE_bundle->getNumber() . '« could not be exported', 2800);
+			throw new PlentymarketsExportException('The item bundle with the number »' . $this->SHOPWARE_bundle->getNumber() . '« could not be exported', 2210);
 		}
 
 		$PLENTY_priceID = null;
@@ -293,7 +303,7 @@ class PlentymarketsExportEntityItemBundle
 		}
 		else
 		{
-			throw new PlentymarketsExportException('The item bundle with the number »' . $this->SHOPWARE_bundle->getNumber() . '« could not be exported', 2830);
+			throw new PlentymarketsExportException('The item bundle with the number »' . $this->SHOPWARE_bundle->getNumber() . '« could not be exported', 2210);
 		}
 	}
 
