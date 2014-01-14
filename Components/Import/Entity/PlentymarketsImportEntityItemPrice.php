@@ -35,8 +35,6 @@
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
-
-/** @noinspection PhpDocSignatureInspection */
 class PlentymarketsImportEntityItemPrice
 {
 	/**
