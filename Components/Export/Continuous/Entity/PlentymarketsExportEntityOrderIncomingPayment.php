@@ -102,6 +102,13 @@ class PlentymarketsExportEntityOrderIncomingPayment
 	 */
 	public function book()
 	{
+		$methodOfPaymentId = PlentymarketsMappingController::getMethodOfPaymentByShopwareID($this->order['paymentId']);
+		if ($methodOfPaymentId == MOP_AMAZON_PAYMENT)
+		{
+			PlentymarketsLogger::getInstance()->message('Sync:Order:IncomingPayment', 'The incoming payment of the order with the number »' . $this->order['number'] . '« was ignored (Amazon Payment)');
+			return;
+		}
+
 		$Request_AddIncomingPayments = new PlentySoapRequest_AddIncomingPayments();
 
 		$Request_AddIncomingPayments->IncomingPayments = array();
@@ -111,7 +118,7 @@ class PlentymarketsExportEntityOrderIncomingPayment
 		$Object_AddIncomingPayments->CustomerEmail = $this->order['customer']['email'];
 		$Object_AddIncomingPayments->CustomerID = $this->getCustomerId();
 		$Object_AddIncomingPayments->CustomerName = $this->getCustomerName();
-		$Object_AddIncomingPayments->MethodOfPaymentID = PlentymarketsMappingController::getMethodOfPaymentByShopwareID($this->order['paymentId']);
+		$Object_AddIncomingPayments->MethodOfPaymentID = $methodOfPaymentId;
 		$Object_AddIncomingPayments->OrderID = $this->plentyOrder->plentyOrderId;
 		$Object_AddIncomingPayments->ReasonForPayment = sprintf('Shopware (OrderId: %u, CustomerId: %u)', $this->order['id'], $this->order['customerId']);
 

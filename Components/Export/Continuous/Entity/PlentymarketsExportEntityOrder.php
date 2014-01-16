@@ -175,12 +175,23 @@ class PlentymarketsExportEntityOrder
 		//
 		$Object_Order = new PlentySoapObject_Order();
 
+		//
+		$methodOfPayment = $this->getMethodOfPaymentId();
+		if ($methodOfPayment == MOP_AMAZON_PAYMENT)
+		{
+			$externalOrderID = sprintf('Swag/%d/%s/%s', $this->Order->getId(), $this->Order->getNumber(), $this->Order->getTransactionId());
+		}
+		else
+		{
+			$externalOrderID = sprintf('Swag/%d/%s', $this->Order->getId(), $this->Order->getNumber());
+		}
+
 		// Order head
 		$Object_OrderHead = new PlentySoapObject_OrderHead();
 		$Object_OrderHead->Currency = PlentymarketsMappingController::getCurrencyByShopwareID($this->Order->getCurrency());
 		$Object_OrderHead->CustomerID = $this->PLENTY_customerID;
 		$Object_OrderHead->DeliveryAddressID = $this->PLENTY_addressDispatchID;
-		$Object_OrderHead->ExternalOrderID = sprintf('Swag/%d/%s', $this->Order->getId(), $this->Order->getNumber());
+		$Object_OrderHead->ExternalOrderID = $externalOrderID;
 		$Object_OrderHead->IsNetto = false;
 		$Object_OrderHead->Marking1ID = PlentymarketsConfig::getInstance()->getOrderMarking1(null);
 		$Object_OrderHead->MethodOfPaymentID = $this->getMethodOfPaymentId();
