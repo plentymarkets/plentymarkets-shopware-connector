@@ -26,11 +26,10 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * The PlentymarketsImportItemVariantController class is used in the entity class PlentymarketsImportEntityItem
  * to process the variants data. It is important to deliver the correct object PlentySoapObject_ItemBase
- * to the contructor method.
+ * to the constructor method.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
@@ -86,6 +85,11 @@ class PlentymarketsImportItemVariantController
 	protected $valueId2markup = array();
 
 	/**
+	 * @var array
+	 */
+	protected $valueId2Markup = array();
+
+	/**
 	 *
 	 * @var array
 	 */
@@ -110,72 +114,75 @@ class PlentymarketsImportItemVariantController
 
 		//
 		$Request_GetAttributeValueSets = new PlentySoapRequest_GetAttributeValueSets();
-		$Request_GetAttributeValueSets->AttributeValueSets = array();
-
-		// Attribute Value Sets abfragen
-		foreach ($this->ItemBase->AttributeValueSets->item as $AttributeValueSet)
-		{
-			//
-			$this->variants[$AttributeValueSet->AttributeValueSetID] = array();
-
-			//
-			$RequestObject_GetAttributeValueSets = new PlentySoapRequestObject_GetAttributeValueSets();
-			$RequestObject_GetAttributeValueSets->AttributeValueSetID = $AttributeValueSet->AttributeValueSetID;
-			$RequestObject_GetAttributeValueSets->Lang = 'de';
-			$Request_GetAttributeValueSets->AttributeValueSets[] = $RequestObject_GetAttributeValueSets;
-		}
 
 		$valueIds = array();
-		$Response_GetAttributeValueSets = PlentymarketsSoapClient::getInstance()->GetAttributeValueSets($Request_GetAttributeValueSets);
-		foreach ($Response_GetAttributeValueSets->AttributeValueSets->item as $AttributeValueSet)
+
+		$chunks = array_chunk($this->ItemBase->AttributeValueSets->item, 50);
+
+		foreach ($chunks as $chunk)
 		{
-			$AttributeValueSet instanceof PlentySoapObject_AttributeValueSet;
+			$Request_GetAttributeValueSets->AttributeValueSets = array();
 
-			$this->variant2markup[$AttributeValueSet->AttributeValueSetID] = 0;
-
-			$options = array();
-
-			foreach ($AttributeValueSet->Attribute->item as $Attribute)
+			// Attribute Value Sets abfragen
+			foreach ($chunk as $AttributeValueSet)
 			{
-				$Attribute instanceof PlentySoapObject_Attribute;
+				//
+				$this->variants[$AttributeValueSet->AttributeValueSetID] = array();
 
 				//
-				if (!array_key_exists($Attribute->AttributeFrontendName, $this->groups))
+				$RequestObject_GetAttributeValueSets = new PlentySoapRequestObject_GetAttributeValueSets();
+				$RequestObject_GetAttributeValueSets->AttributeValueSetID = $AttributeValueSet->AttributeValueSetID;
+				$RequestObject_GetAttributeValueSets->Lang = 'de';
+				$Request_GetAttributeValueSets->AttributeValueSets[] = $RequestObject_GetAttributeValueSets;
+			}
+
+			$Response_GetAttributeValueSets = PlentymarketsSoapClient::getInstance()->GetAttributeValueSets($Request_GetAttributeValueSets);
+			foreach ($Response_GetAttributeValueSets->AttributeValueSets->item as $AttributeValueSet)
+			{
+				$AttributeValueSet instanceof PlentySoapObject_AttributeValueSet;
+
+				$this->variant2markup[$AttributeValueSet->AttributeValueSetID] = 0;
+
+				foreach ($AttributeValueSet->Attribute->item as $Attribute)
 				{
-					$this->groups[$Attribute->AttributeFrontendName] = array(
-						'name' => $Attribute->AttributeFrontendName,
-						'options' => array()
+					$Attribute instanceof PlentySoapObject_Attribute;
+
+					//
+					if (!array_key_exists($Attribute->AttributeFrontendName, $this->groups))
+					{
+						$this->groups[$Attribute->AttributeFrontendName] = array(
+							'name' => $Attribute->AttributeFrontendName,
+							'options' => array()
+						);
+
+						$this->groupId2optionName2plentyId[$Attribute->AttributeID] = array();
+						$this->groupName2plentyId[$Attribute->AttributeFrontendName] = $Attribute->AttributeID;
+					}
+
+					//
+					$this->configuratorOptions[$AttributeValueSet->AttributeValueSetID][] = array(
+						'group' => $Attribute->AttributeFrontendName,
+						'option' => $Attribute->AttributeValue->ValueFrontendName
 					);
 
-					$options[$Attribute->AttributeFrontendName] = array();
+					//
+					if (!in_array($Attribute->AttributeValue->ValueID, $valueIds))
+					{
+						$this->groups[$Attribute->AttributeFrontendName]['options'][] = array(
+							'name' => $Attribute->AttributeValue->ValueFrontendName
+						);
+						$this->groupId2optionName2plentyId[$Attribute->AttributeID][$Attribute->AttributeValue->ValueFrontendName] = $Attribute->AttributeValue->ValueID;
+						$valueIds[] = $Attribute->AttributeValue->ValueID;
+					}
 
-					$this->groupId2optionName2plentyId[$Attribute->AttributeID] = array();
-					$this->groupName2plentyId[$Attribute->AttributeFrontendName] = $Attribute->AttributeID;
-				}
-
-				//
-				$this->configuratorOptions[$AttributeValueSet->AttributeValueSetID][] = array(
-					'group' => $Attribute->AttributeFrontendName,
-					'option' => $Attribute->AttributeValue->ValueFrontendName
-				);
-
-				//
-				if (!in_array($Attribute->AttributeValue->ValueID, $valueIds))
-				{
-					$this->groups[$Attribute->AttributeFrontendName]['options'][] = array(
-						'name' => $Attribute->AttributeValue->ValueFrontendName
-					);
-					$this->groupId2optionName2plentyId[$Attribute->AttributeID][$Attribute->AttributeValue->ValueFrontendName] = $Attribute->AttributeValue->ValueID;
-					$valueIds[] = $Attribute->AttributeValue->ValueID;
-				}
-
-				if ($this->valueId2Markup[$Attribute->AttributeValue->ValueID])
-				{
-					$this->variant2markup[$AttributeValueSet->AttributeValueSetID] += $this->valueId2Markup[$Attribute->AttributeValue->ValueID];
-				}
-				else
-				{
-					$this->variant2markup[$AttributeValueSet->AttributeValueSetID] += (float) $Attribute->AttributeValue->Markup;
+					if ($this->valueId2Markup[$Attribute->AttributeValue->ValueID])
+					{
+						$this->variant2markup[$AttributeValueSet->AttributeValueSetID] += $this->valueId2Markup[$Attribute->AttributeValue->ValueID];
+					}
+					else
+					{
+						$this->variant2markup[$AttributeValueSet->AttributeValueSetID] += (float) $Attribute->AttributeValue->Markup;
+					}
 				}
 			}
 		}
