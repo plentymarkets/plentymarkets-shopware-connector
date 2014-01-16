@@ -42,4 +42,9 @@ class PlentySoapRequest_GetItemAttributes
 	 * @var boolean
 	 */
 	public $GetValues;
+
+	/**
+	 * @var string
+	 */
+	public $Lang;
 }

@@ -69,6 +69,7 @@ class PlentymarketsExportControllerItemAttribute
 	{
 		$Request_GetItemAttributes = new PlentySoapRequest_GetItemAttributes();
 		$Request_GetItemAttributes->GetValues = true; // boolean
+		$Request_GetItemAttributes->Lang = 'de';
 
 		// Fetch the attributes form plentymarkets
 		$Response_GetItemAttributes = PlentymarketsSoapClient::getInstance()->GetItemAttributes($Request_GetItemAttributes);
