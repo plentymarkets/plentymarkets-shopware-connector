@@ -85,9 +85,10 @@ class PlentymarketsExportControllerItemProducer
 		$supplierRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Supplier');
 
 		$Request_SetProducers = new PlentySoapRequest_SetProducers();
+
+		/** @var Shopware\Models\Article\Supplier $Supplier */
 		foreach ($supplierRepository->findAll() as $Supplier)
 		{
-			$Supplier instanceof Shopware\Models\Article\Supplier;
 			$Object_SetProducer = new PlentySoapObject_Producer();
 
 			if (array_key_exists($Supplier->getName(), $this->PLENTY_name2ID))

@@ -69,8 +69,8 @@ class PlentymarketsImportEntityItemPropertyOption
 		$propertyParts = explode(';', $SHOPWARE_id);
 		$optionId = $propertyParts[1];
 
+		/** @var Shopware\Models\Property\Option $Option */
 		$Option = Shopware()->Models()->find('Shopware\Models\Property\Option', $optionId);
-		$Option instanceof Shopware\Models\Property\Option;
 
 		// Set the new data
 		$Option->setName($this->Option->PropertyFrontendName);

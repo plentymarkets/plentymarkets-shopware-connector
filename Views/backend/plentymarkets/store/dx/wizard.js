@@ -24,8 +24,8 @@ Ext.define('Shopware.apps.Plentymarkets.store.dx.Wizard', {
 		},
 		reader: {
 			type: 'json',
-			root: 'data',
-		}
+			root: 'data'
+        }
 	}
 });
 // {/block}

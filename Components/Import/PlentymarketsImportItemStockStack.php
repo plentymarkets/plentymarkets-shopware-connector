@@ -123,10 +123,9 @@ class PlentymarketsImportItemStockStack
 			$Response_GetCurrentStocks = PlentymarketsSoapClient::getInstance()->GetCurrentStocks($Request_GetCurrentStocks);
 
 			// Process
+			/** @var PlentySoapObject_GetCurrentStocks $CurrentStock */
 			foreach ($Response_GetCurrentStocks->CurrentStocks->item as $CurrentStock)
 			{
-				$CurrentStock instanceof PlentySoapObject_GetCurrentStocks;
-
 				// Skip wrong warehouses
 				if ($CurrentStock->WarehouseID != $warehouseId)
 				{

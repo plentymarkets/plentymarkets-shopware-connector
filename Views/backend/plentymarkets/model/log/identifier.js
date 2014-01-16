@@ -17,7 +17,7 @@ Ext.define('Shopware.apps.Plentymarkets.model.log.Identifier', {
 	{
 		name: 'identifier',
 		type: 'string'
-	}],
+	}]
 
 });
 // {/block}

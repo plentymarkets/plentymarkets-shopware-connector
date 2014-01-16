@@ -31,8 +31,8 @@ Ext.define('Shopware.apps.Plentymarkets.view.dx.Initial', {
 			running: 'läuft',
 			success: 'fertig',
 			stalled: 'verzögert',
-			error: 'Fehler',
-		};
+			error: 'Fehler'
+        };
 
 		var resourceNames = {
 			ItemCategory: 'Kategorien',
@@ -42,8 +42,8 @@ Ext.define('Shopware.apps.Plentymarkets.view.dx.Initial', {
 			Item: 'Artikel',
 			ItemCrossSelling: 'Cross-Selling',
 			ItemBundle: 'Bundle (Artikelpakete)',
-			Customer: 'Kunden',
-		};
+			Customer: 'Kunden'
+        };
 
 		me.wizardToolbar = Ext.create('Ext.toolbar.TextItem');
 

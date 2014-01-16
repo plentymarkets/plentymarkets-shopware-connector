@@ -68,8 +68,8 @@ Ext.define('Shopware.apps.Plentymarkets.view.data.Grid', {
 			}
 		});
 
-		me.store = Ext.create('PlentyDataStore' + me.type)
-		me.store.getProxy().setExtraParam('type', me.type)
+		me.store = Ext.create('PlentyDataStore' + me.type);
+		me.store.getProxy().setExtraParam('type', me.type);
 
 		me.bbar = new Ext.PagingToolbar({
 			cls: 'shopware-toolbar',

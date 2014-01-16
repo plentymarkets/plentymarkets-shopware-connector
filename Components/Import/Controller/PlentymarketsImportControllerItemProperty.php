@@ -53,8 +53,8 @@ class PlentymarketsImportControllerItemProperty
 
 		do
 		{
+			/** @var PlentySoapResponse_GetPropertyGroups $Response_GetPropertyGroups */
 			$Response_GetPropertyGroups = PlentymarketsSoapClient::getInstance()->GetPropertyGroups($Request_GetPropertyGroups);
-			$Response_GetPropertyGroups instanceof PlentySoapResponse_GetPropertyGroups;
 
 			foreach ($Response_GetPropertyGroups->PropertyGroups->item as $Option)
 			{
@@ -71,8 +71,8 @@ class PlentymarketsImportControllerItemProperty
 
 		do
 		{
+			/** @var PlentySoapResponse_GetProperties $Response_GetProperties */
 			$Response_GetProperties = PlentymarketsSoapClient::getInstance()->GetProperties($Request_GetProperties);
-			$Response_GetProperties instanceof PlentySoapResponse_GetProperties;
 
 			foreach ($Response_GetProperties->Properties->item as $Option)
 			{

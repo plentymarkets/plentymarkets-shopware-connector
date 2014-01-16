@@ -261,10 +261,10 @@ class PlentymarketsExportEntityOrder
 
 		$Object_Order->OrderItems = array();
 
+
+		/** @var Shopware\Models\Order\Detail $Item */
 		foreach ($this->Order->getDetails() as $Item)
 		{
-			$Item instanceof Shopware\Models\Order\Detail;
-
 			// Variant
 			try
 			{
@@ -272,7 +272,7 @@ class PlentymarketsExportEntityOrder
 
 				try
 				{
-					// get the dtail id by the order number
+					// get the detail id by the order number
 					$articleDetailID = $VariantResource->getIdFromNumber($Item->getArticleNumber());
 				}
 				catch (Exception $E)
@@ -550,7 +550,7 @@ class PlentymarketsExportEntityOrder
 	 * Writes the plenty order id and the status into the database
 	 *
 	 * @param integer $plentyOrderID
-	 * @param flaot $plentyOrderStatus
+	 * @param float $plentyOrderStatus
 	 */
 	protected function setSuccess($plentyOrderID, $plentyOrderStatus)
 	{

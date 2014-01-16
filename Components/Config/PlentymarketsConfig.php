@@ -91,7 +91,7 @@ class PlentymarketsConfig
 
 			if (!isset($args[0]))
 			{
-				return;
+				return null;
 			}
 
 			$value = (string) $args[0];
@@ -109,7 +109,7 @@ class PlentymarketsConfig
 	/**
 	 * Erases the given key from the config
 	 *
-	 * @param unknown $key
+	 * @param string $key
 	 */
 	public function erase($key)
 	{

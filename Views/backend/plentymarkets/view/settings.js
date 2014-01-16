@@ -63,13 +63,13 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 		me.store = Ext.create('Shopware.apps.Plentymarkets.store.settings.Batch');
 		me.store.load(function(data)
 		{
-			data = data[0]
+			data = data[0];
 			me.stores.warehouses = data.getWarehouses();
 			me.stores.producers = data.getProducers();
 			me.stores.orderStatus = data.getOrderStatus();
 			me.stores.orderReferrer = data.getOrderReferrer();
 
-			me.add(me.getFieldSets())
+			me.add(me.getFieldSets());
 			me.addDocked(me.createToolbar());
 			me.loadRecord(me.settings);
 			me.isBuilt = true;
@@ -87,7 +87,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 			},
 			callback: function(data)
 			{
-				data = data[0]
+				data = data[0];
 
 				Ext.getCmp('plenty-ItemWarehouseID').bindStore(data.getWarehouses());
 				Ext.getCmp('plenty-ItemProducerID').bindStore(data.getProducers());
@@ -167,8 +167,8 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 				maxValue: 100,
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/Warenbestandspuffer}Warenbestandspuffer{/s}',
 				name: 'ItemWarehousePercentage',
-				supportText: 'Prozentualer Anteil des netto-Warenbestandes des gewählten Lagers, welcher an shopware übertragen wird.',
-			}, {
+				supportText: 'Prozentualer Anteil des netto-Warenbestandes des gewählten Lagers, welcher an shopware übertragen wird.'
+            }, {
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemProducerID}Hersteller{/s}',
 				name: 'ItemProducerID',
 				id: 'plenty-ItemProducerID',
@@ -259,8 +259,8 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 				name: 'OrderPaidStatusID',
 				store: paymentStatusStore,
 				supportText: 'shopware Status, der signalisiert, dass der Auftrag komplett bezahlt ist. Löst das Buchen des Zahlungseinganges bei plentymarkets aus.',
-				displayField: 'description',
-			}, {
+				displayField: 'description'
+            }, {
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/OrderItemTextSyncActionID}Artikelbezeichnung übernehmen{/s}',
 				name: 'OrderItemTextSyncActionID',
 				xtype: 'checkbox',

@@ -102,15 +102,12 @@ class PlentymarketsImportControllerItemLinked
 				$Request_GetLinkedItems->ItemsList[] = $Object_GetLinkedItems;
 			}
 			
-			// Do the request
+			/** @var PlentySoapResponse_GetLinkedItems $Response_GetLinkedItems */
 			$Response_GetLinkedItems = PlentymarketsSoapClient::getInstance()->GetLinkedItems($Request_GetLinkedItems);
-			$Response_GetLinkedItems instanceof PlentySoapResponse_GetLinkedItems;
-			
+
+			/** @var PlentySoapResponseObject_GetLinkedItems $Item */
 			foreach ($Response_GetLinkedItems->Items->item as $Item)
 			{
-				$Item instanceof PlentySoapResponseObject_GetLinkedItems;
-				
-				// weitergeben an den entity 
 				try
 				{
 					$SHOPWARE_itemId = PlentymarketsMappingController::getItemByPlentyID($Item->ItemID);

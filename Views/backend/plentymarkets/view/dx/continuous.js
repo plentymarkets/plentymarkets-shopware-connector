@@ -27,8 +27,8 @@ Ext.define('Shopware.apps.Plentymarkets.view.dx.Continuous', {
 
 	defaults: {
 		labelWidth: 155,
-		anchor: '100%',
-	},
+		anchor: '100%'
+    },
 
 	initComponent: function()
 	{
@@ -57,7 +57,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.dx.Continuous', {
 		me.store = Ext.create('Shopware.apps.Plentymarkets.store.dx.Continuous');
 		me.store.load(function(data)
 		{
-			data = data[0]
+			data = data[0];
 
 			me.stores['import'] = Ext.create('Ext.data.Store', {
 				model: 'Shopware.apps.Plentymarkets.model.dx.ContinuousRecord',
@@ -88,13 +88,13 @@ Ext.define('Shopware.apps.Plentymarkets.view.dx.Continuous', {
 			xtype: 'plentymarkets-view-dx-grid',
 			title: '<b>Ausgehende Daten</b>',
 			iconCls: 'plenty-icon-dx-export',
-			store: me.stores['export'],
-		}, {
+			store: me.stores['export']
+        }, {
 			xtype: 'plentymarkets-view-dx-grid',
 			title: '<b>Eingehende Daten</b>',
 			iconCls: 'plenty-icon-dx-import',
-			store: me.stores['import'],
-		}
+			store: me.stores['import']
+            }
 
 		];
 	}

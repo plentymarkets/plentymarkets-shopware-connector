@@ -65,8 +65,8 @@ class PlentymarketsImportEntityItemPropertyGroup
 			return;
 		}
 
+		/** @var Shopware\Models\Property\Group $Group */
 		$Group = Shopware()->Models()->find('Shopware\Models\Property\Group', $SHOPWARE_id);
-		$Group instanceof Shopware\Models\Property\Group;
 
 		// Set the new data
 		$Group->setName($this->Group->FrontendName);

@@ -112,9 +112,8 @@ class PlentymarketsImportEntityItemImage
 		do
 		{
 
-			// Do the request
+			/** @var PlentySoapResponse_GetItemsImages $Response_GetItemsImages */
 			$Response_GetItemsImages = PlentymarketsSoapClient::getInstance()->GetItemsImages($Request_GetItemsImages);
-			$Response_GetItemsImages instanceof PlentySoapResponse_GetItemsImages;
 
 			if ($Response_GetItemsImages->Success == false)
 			{
@@ -122,14 +121,14 @@ class PlentymarketsImportEntityItemImage
 				continue;
 			}
 
+			/**
+			 * @var PlentySoapObject_GetItemsImages $ImagesImages
+			 * @var PlentySoapObject_ItemImage $Image
+			 */
 			foreach ($Response_GetItemsImages->ItemsImages->item as $ImagesImages)
 			{
-				$ImagesImages instanceof PlentySoapObject_GetItemsImages;
-
 				foreach ($ImagesImages->Images->item as $Image)
 				{
-					$Image instanceof PlentySoapObject_ItemImage;
-
 					// Skip the image if it should not be shown
 					if ($Image->Availability != 1 && $Image->Availability != 2)
 					{

@@ -23,7 +23,7 @@ Ext.define('Shopware.apps.Plentymarkets.model.data.Field', {
 	}, {
 		name: 'type',
 		type: 'string'
-	}],
+	}]
 
 });
 // {/block}

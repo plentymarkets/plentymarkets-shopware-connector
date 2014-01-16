@@ -65,8 +65,8 @@ class PlentymarketsImportEntityItemProducer
 			return;
 		}
 
+		/** @var Shopware\Models\Article\Supplier $Supplier */
 		$Supplier = Shopware()->Models()->find('Shopware\Models\Article\Supplier', $SHOPWARE_id);
-		$Supplier instanceof Shopware\Models\Article\Supplier;
 
 		// Set the new data
 		$Supplier->setName($this->Producer->ProducerName);

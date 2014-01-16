@@ -286,10 +286,9 @@ class PlentymarketsImportEntityItem
 		unset($detailBase['id']);
 		unset($detailBase['attribute']);
 
+		/** @var PlentySoapObject_ItemAttributeValueSet $AttributeValueSet */
 		foreach ($this->ItemBase->AttributeValueSets->item as $AttributeValueSet)
 		{
-			$AttributeValueSet instanceof PlentySoapObject_ItemAttributeValueSet;
-
 			// Copy the base details
 			$details = $detailBase;
 
@@ -502,10 +501,9 @@ class PlentymarketsImportEntityItem
 
 		$groups = array();
 
+		/** @var PlentySoapObject_ItemProperty $ItemProperty */
 		foreach ($this->ItemBase->ItemProperties->item as $ItemProperty)
 		{
-			$ItemProperty instanceof PlentySoapObject_ItemProperty;
-
 			if (is_null($ItemProperty->PropertyGroupID))
 			{
 				PlentymarketsLogger::getInstance()->error('Sync:Item', 'The property »' . $ItemProperty->PropertyName . '« will not be assigned to the item »' . $this->data['name'] . '« with the id »' . $this->ItemBase->ItemID . '« (not assigned to any group)', 3410);
@@ -561,8 +559,8 @@ class PlentymarketsImportEntityItem
 		}
 
 		// Load the group consistently
+		/** @var Shopware\Models\Property\Group $Group */
 		$Group = Shopware()->Models()->find('Shopware\Models\Property\Group', $filterGroupId);
-		$Group instanceof Shopware\Models\Property\Group;
 
 		if (!$Group)
 		{
@@ -574,10 +572,9 @@ class PlentymarketsImportEntityItem
 		$this->data['propertyValues'] = array();
 
 		// Properties
+		/** @var PlentySoapObject_ItemProperty $ItemProperty */
 		foreach ($groups[$groupId] as $ItemProperty)
 		{
-			$ItemProperty instanceof PlentySoapObject_ItemProperty;
-
 			// Mapping GroupId;ValueId -> ValueId
 			try
 			{
@@ -1037,7 +1034,7 @@ class PlentymarketsImportEntityItem
 	 * Returns the shopware tax id
 	 *
 	 * @throws PlentymarketsImportItemException
-	 * @return intger
+	 * @return integer
 	 */
 	protected function getTaxId()
 	{

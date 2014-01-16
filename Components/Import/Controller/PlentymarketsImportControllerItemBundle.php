@@ -62,7 +62,7 @@ class PlentymarketsImportControllerItemBundle
 
 		do
 		{
-			/** @var $Response_GetItemBundles PlentySoapResponse_GetItemBundles */
+			/** @var PlentySoapResponse_GetItemBundles $Response_GetItemBundles */
 			$Response_GetItemBundles = PlentymarketsSoapClient::getInstance()->GetItemBundles($Request_GetItemBundles);
 
 			$pages = max($Response_GetItemBundles->Pages, 1);

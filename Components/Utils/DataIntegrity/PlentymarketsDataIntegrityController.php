@@ -91,7 +91,7 @@ class PlentymarketsDataIntegrityController
 	/**
 	 * Returns the checks
 	 *
-	 * @return multitype:PlentymarketsDataIntegrityCheckInterface
+	 * @return PlentymarketsDataIntegrityCheckInterface[]
 	 */
 	public function getChecks()
 	{

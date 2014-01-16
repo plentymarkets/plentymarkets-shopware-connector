@@ -12,8 +12,8 @@ Ext.define('Shopware.apps.Plentymarkets.store.Producer', {
 	proxy: {
 		type: 'ajax',
 		api: {
-			read: '{url action=getProducerList}',
-		},
+			read: '{url action=getProducerList}'
+        },
 		reader: {
 			type: 'json',
 			root: 'data'

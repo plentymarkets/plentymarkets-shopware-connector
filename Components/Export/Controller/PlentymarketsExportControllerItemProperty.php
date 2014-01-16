@@ -84,11 +84,11 @@ class PlentymarketsExportControllerItemProperty
 		{
 			$this->PLENTY_groupName2ID[$PropertyGroup->PropertyGroupName] = $PropertyGroup->PropertyGroupID;
 			$this->PLENTY_groupIDValueName2ID[$PropertyGroup->PropertyGroupID] = array();
+
+			/** @var PlentySoapObject_GetPropertiesListPropertie $PropertyValue */
 			foreach ($PropertyGroup->Properties->item as $PropertyValue)
 			{
-				$PropertyValue instanceof PlentySoapObject_GetPropertiesListPropertie;
-
-				// Bestellmerkmal
+				// Sales parameter
 				if ($PropertyValue->IsSalesOrderParam)
 				{
 					continue;
@@ -111,9 +111,10 @@ class PlentymarketsExportControllerItemProperty
 	protected function doExport()
 	{
 		$propertyGroupRepository = Shopware()->Models()->getRepository('Shopware\Models\Property\Group');
+
+		/** @var Shopware\Models\Property\Group $PropertyGroup */
 		foreach ($propertyGroupRepository->findAll() as $PropertyGroup)
 		{
-			$PropertyGroup instanceof Shopware\Models\Property\Group;
 			try
 			{
 				$groupIdAdded = PlentymarketsMappingController::getPropertyGroupByShopwareID($PropertyGroup->getId());
@@ -155,10 +156,9 @@ class PlentymarketsExportControllerItemProperty
 			$Request_AddProperty->PropertyID = 0;
 			$Request_AddProperty->Lang = 'de';
 
+			/** @var Shopware\Models\Property\Option $Property */
 			foreach ($PropertyGroup->getOptions() as $Property)
 			{
-				$Property instanceof Shopware\Models\Property\Option;
-
 				$shopwareID = $PropertyGroup->getId() . ';' . $Property->getId();
 
 				try

@@ -127,13 +127,12 @@ class PlentymarketsImportStackItem implements Countable
 		$Request_GetItemsUpdated = new PlentySoapRequest_GetItemsUpdated();
 		$Request_GetItemsUpdated->LastUpdateFrom = (integer) PlentymarketsConfig::getInstance()->getImportItemStackLastUpdateTimestamp();
 
-		// Cache to avaid duplicate inserts of the same id with multiple shops
+		// Cache to avoid duplicate inserts of the same id with multiple shops
 		$itemIdsStacked = array();
 
+		/** @var Shopware\Models\Shop\Shop $Shop */
 		foreach ($Shops as $Shop)
 		{
-			$Shop instanceof Shopware\Models\Shop\Shop;
-
 			$Request_GetItemsUpdated->Page = 0;
 			$Request_GetItemsUpdated->StoreID = PlentymarketsMappingController::getShopByShopwareID($Shop->getId());
 

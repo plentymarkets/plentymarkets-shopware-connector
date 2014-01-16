@@ -45,12 +45,12 @@ class PlentymarketsExportStatusController
 
 	/**
 	 *
-	 * @var array[PlentymarketsExportStatus]
+	 * @var PlentymarketsExportStatus[]
 	 */
 	protected $Status = array();
 
 	/**
-	 * I am the contructor
+	 * I am the constructor
 	 */
 	protected function __construct()
 	{
@@ -128,10 +128,9 @@ class PlentymarketsExportStatusController
 		$wizardIsActive = PlentymarketsExportWizard::getInstance()->isActive();
 		$overview = array();
 
+		/** @var PlentymarketsExportStatus $Status */
 		foreach ($this->Status as $position => $Status)
 		{
-			$Status instanceof PlentymarketsExportStatus;
-
 			$overview[$Status->getName()] = array(
 				// Position
 				'position' => $position,

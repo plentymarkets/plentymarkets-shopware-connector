@@ -59,16 +59,19 @@ class PlentymarketsExportEntityCustomer
 	 * @var \Shopware\Models\Customer\Customer
 	 */
 	protected $Customer;
+
 	/**
 	 *
 	 * @var unknown
 	 */
 	protected $BillingAddress;
+
 	/**
 	 *
 	 * @var unknown
 	 */
 	protected $ShippingAddress;
+
 	/**
 	 *
 	 * @var integer

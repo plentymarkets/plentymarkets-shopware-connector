@@ -113,10 +113,9 @@ class PlentymarketsImportController
 			$pages = max($Response_GetItemsPriceUpdate->Pages, 1);
 			PlentymarketsLogger::getInstance()->message('Sync:Item:Price', 'Page: ' . ($Request_GetItemsPriceUpdate->Page + 1) . '/' . $pages);
 
+			/** @var PlentySoapResponseObject_GetItemsPriceUpdate $ItemsPriceUpdate */
 			foreach ($Response_GetItemsPriceUpdate->ItemsPriceUpdate->item as $ItemsPriceUpdate)
 			{
-				$ItemsPriceUpdate instanceof PlentySoapResponseObject_GetItemsPriceUpdate;
-
 				try
 				{
 					// Base item
@@ -258,9 +257,10 @@ class PlentymarketsImportController
 
 		// Prepare data
 		$methodOfPayments = array();
+
+		/** @var PlentySoapObject_GetMethodOfPayments $MethodOfPayment */
 		foreach ($Response_GetMethodOfPayments->MethodOfPayment->item as $MethodOfPayment)
 		{
-			$MethodOfPayment instanceof PlentySoapObject_GetMethodOfPayments;
 			$methodOfPayments[$MethodOfPayment->MethodOfPaymentID] = array(
 				'id' => (integer) $MethodOfPayment->MethodOfPaymentID,
 				'name' => $MethodOfPayment->Name
@@ -315,9 +315,10 @@ class PlentymarketsImportController
 
 		// Prepare data
 		$orderStatusList = array();
+
+		/** @var PlentySoapObject_GetOrderStatus $OrderStatus */
 		foreach ($Response_GetOrderStatusList->OrderStatus->item as $OrderStatus)
 		{
-			$OrderStatus instanceof PlentySoapObject_GetOrderStatus;
 			$orderStatusList[(string) $OrderStatus->OrderStatus] = array(
 				'status' => (string) $OrderStatus->OrderStatus,
 				'name' => $OrderStatus->OrderStatusName
@@ -360,9 +361,10 @@ class PlentymarketsImportController
 
 		// Prepare data
 		$salesOrderReferrerList = array();
+
+		/** @var PlentySoapObject_GetSalesOrderReferrer $SalesOrderReferrer */
 		foreach ($Response_GetSalesOrderReferrerList->SalesOrderReferrers->item as $SalesOrderReferrer)
 		{
-			$SalesOrderReferrer instanceof PlentySoapObject_GetSalesOrderReferrer;
 			$salesOrderReferrerList[$SalesOrderReferrer->SalesOrderReferrerID] = array(
 				'id' => $SalesOrderReferrer->SalesOrderReferrerID,
 				'name' => $SalesOrderReferrer->Name
@@ -403,10 +405,10 @@ class PlentymarketsImportController
 
 		// Prepare data
 		$customerClassList = array();
+
+		/** @var PlentySoapObject_GetCustomerClasses $CustomerClass */
 		foreach ($Response_GetCustomerClassList->CustomerClasses->item as $CustomerClass)
 		{
-			$CustomerClass instanceof PlentySoapObject_GetCustomerClasses;
-
 			// Skip "Visible to everyone"
 			if ($CustomerClass->CustomerClassID == 0)
 			{
@@ -470,9 +472,9 @@ class PlentymarketsImportController
 			)
 		);
 
+		/** @var PlentySoapObject_GetWarehouseList $Warehouse */
 		foreach ($Response_GetWarehouseList->WarehouseList->item as $Warehouse)
 		{
-			$Warehouse instanceof PlentySoapObject_GetWarehouseList;
 			$warehouses[$Warehouse->WarehouseID] = array(
 				'id' => (integer) $Warehouse->WarehouseID,
 				'name' => $Warehouse->Name
@@ -513,10 +515,10 @@ class PlentymarketsImportController
 
 		// Prepare data
 		$multishops = array();
+
+		/** @var PlentySoapObject_GetMultiShops $Multishop */
 		foreach ($Response_GetMultiShops->MultiShops->item as $Multishop)
 		{
-			$Multishop instanceof PlentySoapObject_GetMultiShops;
-
 			if ($Multishop->MultiShopType != 'shopware')
 			{
 				continue;
@@ -570,11 +572,12 @@ class PlentymarketsImportController
 			return unserialize(PlentymarketsConfig::getInstance()->getMiscShippingProfilesSerialized('a:0:{}'));
 		}
 
-		// Prepeare providers
+		// Prepare providers
 		$providers = array();
+
+		/** @var PlentySoapObject_GetShippingServiceProvider $ShippingServiceProvider */
 		foreach ($Response_GetShippingServiceProvider->ShippingServiceProvider->item as $ShippingServiceProvider)
 		{
-			$ShippingServiceProvider instanceof PlentySoapObject_GetShippingServiceProvider;
 			$providers[$ShippingServiceProvider->ShippingServiceProviderID] = $ShippingServiceProvider->ShippingServiceProviderType;
 		}
 
@@ -592,9 +595,10 @@ class PlentymarketsImportController
 		}
 
 		$shippingProfiles = array();
+
+		/** @var PlentySoapObject_GetShippingProfiles $ShippingProfile */
 		foreach ($Response_GetShippingProfiles->ShippingProfiles->item as $ShippingProfile)
 		{
-			$ShippingProfile instanceof PlentySoapObject_GetShippingProfiles;
 			$shippingProfiles[$ShippingProfile->ShippingProfileID] = array(
 				'id' => $ShippingProfile->ShippingProfileID,
 				'name' => '[' . $providers[$ShippingProfile->ShippingServiceProviderID] . '] ' . $ShippingProfile->BackendName
@@ -645,10 +649,10 @@ class PlentymarketsImportController
 
 		// Prepare data
 		$vat = array();
+
+		/** @var PlentySoapObject_GetVATConfig $VAT */
 		foreach ($Response_GetVATConfig->DefaultVAT->item as $VAT)
 		{
-			$VAT instanceof PlentySoapObject_GetVATConfig;
-
 			if ($VAT->VATValue == 0)
 			{
 				continue;

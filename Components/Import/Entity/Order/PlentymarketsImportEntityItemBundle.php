@@ -55,7 +55,7 @@ class PlentymarketsImportEntityItemBundle
 		// Check whether all bundle items are present in shopware
 		foreach ($this->PLENTY_bundle->Items->item as $PlentySoapObject_BundleItem)
 		{
-			/** @var $PlentySoapObject_BundleItem PlentySoapObject_BundleItem */
+			/** @var PlentySoapObject_BundleItem $PlentySoapObject_BundleItem */
 			$bundleItemSku = explode('-', $PlentySoapObject_BundleItem->SKU);
 			$plentyBundleItemId = $bundleItemSku[0];
 
@@ -76,7 +76,7 @@ class PlentymarketsImportEntityItemBundle
 				{
 					$shopwareBundleItemId = PlentymarketsMappingController::getItemByPlentyID($plentyBundleItemId);
 
-					/** @var $shopwareItem Shopware\Models\Article\Article */
+					/** @var Shopware\Models\Article\Article $shopwareItem */
 					$shopwareItem = Shopware()->Models()->find('Shopware\Models\Article\Article', $shopwareBundleItemId);
 
 					// The detail is needed
@@ -104,7 +104,7 @@ class PlentymarketsImportEntityItemBundle
 	 */
 	protected function importBundle()
 	{
-		/** @var $this ->PLENTY_bundle PlentySoapObject_Bundle */
+		/** @var ->PLENTY_bundle $this PlentySoapObject_Bundle */
 
 		// Get the bundle head
 		$Request_GetItemsBase = new PlentySoapRequest_GetItemsBase();
@@ -123,7 +123,7 @@ class PlentymarketsImportEntityItemBundle
 		$Request_GetItemsBase->ItemID = $this->PLENTY_bundleHeadId;
 		$Request_GetItemsBase->Page = 0;
 
-		/** @var $Response_GetItemsBase PlentySoapResponse_GetItemsBase */
+		/** @var PlentySoapResponse_GetItemsBase $Response_GetItemsBase */
 		$Response_GetItemsBase = PlentymarketsSoapClient::getInstance()->GetItemsBase($Request_GetItemsBase);
 
 		if ($Response_GetItemsBase->Success == false || !isset($Response_GetItemsBase->ItemsBase->item[0]))
@@ -131,7 +131,7 @@ class PlentymarketsImportEntityItemBundle
 			throw new PlentymarketsImportException('The item bundle with SKU »' . $this->PLENTY_bundle->SKU . '« can not be imported (SOAP call failed).', 3701);
 		}
 
-		/** @var $ItemBase PlentySoapObject_ItemBase */
+		/** @var PlentySoapObject_ItemBase $ItemBase */
 		$ItemBase = $Response_GetItemsBase->ItemsBase->item[0];
 
 		try
@@ -139,7 +139,7 @@ class PlentymarketsImportEntityItemBundle
 			// Get the existing bundle
 			$shopwareBundleId = PlentymarketsMappingController::getItemBundleByPlentyID($this->PLENTY_bundleHeadId);
 
-			/** @var $Bundle Shopware\CustomModels\Bundle\Bundle */
+			/** @var Shopware\CustomModels\Bundle\Bundle $Bundle */
 			$Bundle = Shopware()->Models()->find('Shopware\CustomModels\Bundle\Bundle', $shopwareBundleId);
 
 			$currentShopwareBundleHeadItemDetailId = $Bundle->getArticle()->getMainDetail()->getId();
@@ -152,7 +152,7 @@ class PlentymarketsImportEntityItemBundle
 				{
 					$mainDetail = $this->getShopwareBundleItemDetail();
 
-					/** @var $Article Shopware\Models\Article\Article */
+					/** @var Shopware\Models\Article\Article $Article */
 					$Article = $mainDetail->getArticle();
 
 					PyLog()->message('Sync:Item:Bundle', 'The item »' . $Article->getName() . '« with the number »' . $mainDetail->getNumber() . '« is now the master item of the item bundle with the number »' . $Bundle->getNumber() . '«.');
@@ -183,7 +183,7 @@ class PlentymarketsImportEntityItemBundle
 			$Bundle = new Shopware\CustomModels\Bundle\Bundle();
 			$mainDetail = $this->getShopwareBundleItemDetail();
 
-			/** @var $Article Shopware\Models\Article\Article */
+			/** @var Shopware\Models\Article\Article $Article */
 			$Article = $mainDetail->getArticle();
 
 			PyLog()->message('Sync:Item:Bundle', 'The item »' . $Article->getName() . '« with the number »' . $mainDetail->getNumber() . '« will be the master item of the item bundle with the number »' . $ItemBase->ItemNo . '«.');
@@ -207,14 +207,14 @@ class PlentymarketsImportEntityItemBundle
 		$isActive = $ItemBase->Availability->Inactive == 0 && $ItemBase->Availability->Webshop == 1;
 		$Bundle->setActive($isActive);
 
-		/**@var $CG Shopware\Models\Customer\Group */
+		/**@var Shopware\Models\Customer\Group $CG */
 		$CG = $this->getCustomerGroup();
 
 		$shopwareBundleHeadItemId = $Bundle->getArticle()->getId();
 		$items = array();
 		foreach ($Bundle->getArticles() as $item)
 		{
-			/** @var $item Shopware\CustomModels\Bundle\Article */
+			/** @var Shopware\CustomModels\Bundle\Article $item */
 			$itemDetailId = $item->getArticleDetail()->getId();
 
 			// Not in the bundle or already done
@@ -255,7 +255,7 @@ class PlentymarketsImportEntityItemBundle
 		// Add all items, which aren't yet in the bundle
 		foreach ($this->SHOPWARE_bundleItemDetailList as $config)
 		{
-			/** @var $detail Shopware\Models\Article\Detail */
+			/** @var Shopware\Models\Article\Detail $detail */
 			$detail = $config['detail'];
 
 			// If the head is inside the bundle too, the amount needs to be reduced
@@ -293,7 +293,7 @@ class PlentymarketsImportEntityItemBundle
 		$prices = array();
 		foreach ($Bundle->getPrices() as $price)
 		{
-			/** @var $price Shopware\CustomModels\Bundle\Price */
+			/** @var Shopware\CustomModels\Bundle\Price $price */
 			if ($price->getCustomerGroup()->getKey() == $CG->getKey())
 			{
 				$price->setPrice($newPrice);

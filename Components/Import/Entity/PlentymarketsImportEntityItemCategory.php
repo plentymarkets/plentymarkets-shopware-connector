@@ -75,8 +75,8 @@ class PlentymarketsImportEntityItemCategory
 		$hit = false;
 
 		// Get the corresponding shopware leaf
+		/** @var Shopware\Models\Category\Category $Category */
 		$Category = Shopware()->Models()->find('Shopware\Models\Category\Category', $match['shopwareId']);
-		$Category instanceof Shopware\Models\Category\Category;
 
 		// If the shopware categoty wasn't found, something is terribly wrong
 		if (!$Category)

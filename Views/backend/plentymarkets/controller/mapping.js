@@ -14,7 +14,7 @@ Ext.define('Shopware.apps.Plentymarkets.controller.Mapping', {
 	{
 		var me = this;
 		me.callParent(arguments);
-	},
+	}
 
 });
 // {/block}

@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.log.Main', {
 		}];
 
 		me.callParent(arguments);
-	},
+	}
 
 });
 // {/block}

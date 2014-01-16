@@ -101,9 +101,8 @@ class PlentymarketsImportControllerItemCategory
 
 			do
 			{
-
+				/** @var PlentySoapResponse_GetItemCategoryCatalogBase $Response_GetItemCategoryCatalogBase */
 				$Response_GetItemCategoryCatalogBase = PlentymarketsSoapClient::getInstance()->GetItemCategoryCatalogBase($Request_GetItemCategoryCatalogBase);
-				$Response_GetItemCategoryCatalogBase instanceof PlentySoapResponse_GetItemCategoryCatalogBase;
 
 				foreach ($Response_GetItemCategoryCatalogBase->Categories->item as $Category)
 				{

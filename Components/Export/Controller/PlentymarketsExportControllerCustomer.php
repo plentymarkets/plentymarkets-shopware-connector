@@ -106,10 +106,9 @@ class PlentymarketsExportControllerCustomer
 			PlentymarketsLogger::getInstance()->message('Export:Initial:Customer', 'Chunk: ' . ($chunk + 1));
 			$Customers = $Repository->findBy(array(), null, $this->sizeOfChunk, $chunk * $this->sizeOfChunk);
 
+			/** @var Shopware\Models\Customer\Customer $Customer */
 			foreach ($Customers as $Customer)
 			{
-				$Customer instanceof Shopware\Models\Customer\Customer;
-
 				try
 				{
 					$PlentymarketsExportEntityItem = new PlentymarketsExportEntityCustomer($Customer);

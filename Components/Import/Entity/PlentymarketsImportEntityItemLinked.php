@@ -82,10 +82,9 @@ class PlentymarketsImportEntityItemLinked
 		// Cleanup
 		$this->purge();
 
+		/** @var PlentySoapObject_GetLinkedItems $LinkedItem */
 		foreach ($this->LinkedItems->item as $LinkedItem)
 		{
-			$LinkedItem instanceof PlentySoapObject_GetLinkedItems;
-
 			// Get the id
 			try
 			{

@@ -17,8 +17,8 @@ Ext.define('Shopware.apps.Plentymarkets.store.Export', {
 		api: {
 			read: '{url action=getExportStatusList}',
 			create: '{url action=handleExport}',
-			update: '{url action=handleExport}',
-		},
+			update: '{url action=handleExport}'
+        },
 		reader: {
 			type: 'json',
 			root: 'data'

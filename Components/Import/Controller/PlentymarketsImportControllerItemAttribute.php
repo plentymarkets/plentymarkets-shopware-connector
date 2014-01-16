@@ -48,8 +48,8 @@ class PlentymarketsImportControllerItemAttribute
 		$Request_GetItemAttributes->GetValues = true;
 		$Request_GetItemAttributes->LastUpdateFrom = $lastUpdateTimestamp;
 
+		/** @var PlentySoapResponse_GetItemAttributes $Response_GetItemAttributes */
 		$Response_GetItemAttributes = PlentymarketsSoapClient::getInstance()->GetItemAttributes($Request_GetItemAttributes);
-		$Response_GetItemAttributes instanceof PlentySoapResponse_GetItemAttributes;
 
 		if (!$Response_GetItemAttributes->Success)
 		{

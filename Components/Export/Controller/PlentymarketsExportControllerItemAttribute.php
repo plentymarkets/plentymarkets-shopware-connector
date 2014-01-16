@@ -117,10 +117,9 @@ class PlentymarketsExportControllerItemAttribute
 			PlentymarketsLogger::getInstance()->message('Export:Initial:Attribute', 'Chunk: '. ($chunk + 1));
 			$Groups = $Repository->findBy(array(), null, $size, $chunk * $size);
 
+			/** @var Shopware\Models\Article\Configurator\Group $Attribute */
 			foreach ($Groups as $Attribute)
 			{
-				$Attribute instanceof Shopware\Models\Article\Configurator\Group;
-
 				$Request_AddItemAttribute = new PlentySoapRequest_AddItemAttribute();
 
 				$Object_AddItemAttribute = new PlentySoapObject_AddItemAttribute();
@@ -157,10 +156,9 @@ class PlentymarketsExportControllerItemAttribute
 				}
 
 				// Values
+				/** @var Shopware\Models\Article\Configurator\Option $AttributeValue */
 				foreach ($Attribute->getOptions() as $AttributeValue)
 				{
-					$AttributeValue instanceof Shopware\Models\Article\Configurator\Option;
-
 					$Request_AddItemAttribute = new PlentySoapRequest_AddItemAttribute();
 
 					$Object_AddItemAttribute = new PlentySoapObject_AddItemAttribute();

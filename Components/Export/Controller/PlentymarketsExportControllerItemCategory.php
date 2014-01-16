@@ -49,7 +49,7 @@ class PlentymarketsExportControllerItemCategory
 
 	/**
 	 *
-	 * @var arrray
+	 * @var array
 	 */
 	protected $PLENTY_nameAndLevel2ID = array();
 
@@ -70,7 +70,7 @@ class PlentymarketsExportControllerItemCategory
 	 */
 	protected function buildPlentyNameAndLevelIndex()
 	{
-		// Fetch the category catalog from plentmakets
+		// Fetch the category catalog from plentymarkets
 		$Request_GetItemCategoryCatalogBase = new PlentySoapRequest_GetItemCategoryCatalogBase();
 		$Request_GetItemCategoryCatalogBase->Lang = 'de'; // string
 		$Request_GetItemCategoryCatalogBase->Level = null; // int
@@ -104,9 +104,10 @@ class PlentymarketsExportControllerItemCategory
 
 		$categoryRootIds = array();
 		$additionalLanguages = array();
+
+		/** @var Shopware\Models\Shop\Shop $Shop */
 		foreach ($ShopsActive as $Shop)
 		{
-			$Shop instanceof Shopware\Models\Shop\Shop;
 			$categoryRootIds[] = $Shop->getCategory()->getId();
 
 			$language = substr($Shop->getLocale()->getLocale(), 0, 2);
@@ -116,14 +117,13 @@ class PlentymarketsExportControllerItemCategory
 			}
 		}
 
+		/** @var Shopware\Models\Category\Category $Category */
 		foreach (Shopware()->Models()
 			->getRepository('Shopware\Models\Category\Category')
 			->findBy(array(
 			'blog' => 0
 		)) as $Category)
 		{
-			$Category instanceof Shopware\Models\Category\Category;
-
 			// Root
 			if (is_null($Category->getPath()))
 			{
@@ -209,11 +209,17 @@ class PlentymarketsExportControllerItemCategory
 			->getRepository('Shopware\Models\Category\Category')
 			->findBy(array('path' => null));
 
+		/**
+		 * @var Shopware\Models\Category\Category $Category
+		 * @var Shopware\Models\Category\Category $Child2
+		 * @var Shopware\Models\Category\Category $Child3
+		 * @var Shopware\Models\Category\Category $Child4
+		 * @var Shopware\Models\Category\Category $Child5
+		 * @var Shopware\Models\Category\Category $Child6
+		 * @var Shopware\Models\Category\Category $Child7
+		 */
 		foreach ($Categories as $Category)
 		{
-
-			$Category instanceof Shopware\Models\Category\Category;
-
 			// No root category
 			if (!$Category->getParentId())
 			{
@@ -229,7 +235,6 @@ class PlentymarketsExportControllerItemCategory
 			// plentymarkets level 1
 			foreach ($children1 as $Child2)
 			{
-				$Child2 instanceof Shopware\Models\Category\Category;
 				if ($Child2->getBlog())
 				{
 					continue;
@@ -245,8 +250,6 @@ class PlentymarketsExportControllerItemCategory
 					// plentymarkets level 2
 					foreach ($children2 as $Child3)
 					{
-						$Child3 instanceof Shopware\Models\Category\Category;
-
 						$path[1] = $this->mappingShopwareID2PlentyID[$Child3->getId()];
 
 						//
@@ -257,8 +260,6 @@ class PlentymarketsExportControllerItemCategory
 							// plentymarkets level 3
 							foreach ($children3 as $Child4)
 							{
-								$Child4 instanceof Shopware\Models\Category\Category;
-
 								$path[2] = $this->mappingShopwareID2PlentyID[$Child4->getId()];
 
 								//
@@ -269,8 +270,6 @@ class PlentymarketsExportControllerItemCategory
 									// plentymarkets level 4
 									foreach ($children4 as $Child5)
 									{
-										$Child5 instanceof Shopware\Models\Category\Category;
-
 										$path[3] = $this->mappingShopwareID2PlentyID[$Child5->getId()];
 
 										//
@@ -281,17 +280,13 @@ class PlentymarketsExportControllerItemCategory
 											// plentymarkets level 5
 											foreach ($children5 as $Child6)
 											{
-												$Child6 instanceof Shopware\Models\Category\Category;
-
 												$path[4] = $this->mappingShopwareID2PlentyID[$Child6->getId()];
-
 
 												$children6 = $Child6->getChildren();
 												if (count($children6))
 												{
 													foreach ($children6 as $Child7)
 													{
-														$Child7 instanceof Shopware\Models\Category\Category;
 														$path[5] = $this->mappingShopwareID2PlentyID[$Child7->getId()];
 
 														PlentymarketsMappingController::addCategory($Child7->getId(), implode(';', $path));
@@ -336,7 +331,7 @@ class PlentymarketsExportControllerItemCategory
 	}
 
 	/**
-	 * Checks whether the export is finshed
+	 * Checks whether the export is finished
 	 *
 	 * @return boolean
 	 */

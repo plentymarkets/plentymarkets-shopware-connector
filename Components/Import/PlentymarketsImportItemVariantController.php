@@ -137,16 +137,17 @@ class PlentymarketsImportItemVariantController
 			}
 
 			$Response_GetAttributeValueSets = PlentymarketsSoapClient::getInstance()->GetAttributeValueSets($Request_GetAttributeValueSets);
+
+			/**
+			 * @var PlentySoapObject_AttributeValueSet $AttributeValueSet
+			 * @var PlentySoapObject_Attribute $Attribute
+			 */
 			foreach ($Response_GetAttributeValueSets->AttributeValueSets->item as $AttributeValueSet)
 			{
-				$AttributeValueSet instanceof PlentySoapObject_AttributeValueSet;
-
 				$this->variant2markup[$AttributeValueSet->AttributeValueSetID] = 0;
 
 				foreach ($AttributeValueSet->Attribute->item as $Attribute)
 				{
-					$Attribute instanceof PlentySoapObject_Attribute;
-
 					//
 					if (!array_key_exists($Attribute->AttributeFrontendName, $this->groups))
 					{

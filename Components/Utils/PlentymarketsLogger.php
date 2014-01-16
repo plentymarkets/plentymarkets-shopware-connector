@@ -57,7 +57,7 @@ class PlentymarketsLogger
 
 	/**
 	 *
-	 * @var DB2Statement
+	 * @var \Doctrine\DBAL\Driver\IBMDB2\DB2Statement
 	 */
 	protected $StatementInsert = null;
 
@@ -186,6 +186,8 @@ class PlentymarketsLogger
 		catch (Exception $E)
 		{
 		}
+
+		return true;
 	}
 
 	/**
@@ -194,10 +196,11 @@ class PlentymarketsLogger
 	 * @param string $identifier
 	 * @param string $message
 	 * @param integer $code
+	 * @return bool
 	 */
 	public function error($identifier, $message, $code=1000)
 	{
-		$this->log(self::TYPE_ERROR, $identifier, $message, $code);
+		return $this->log(self::TYPE_ERROR, $identifier, $message, $code);
 	}
 
 	/**
@@ -205,20 +208,22 @@ class PlentymarketsLogger
 	 *
 	 * @param string $identifier
 	 * @param string $message
+	 * @return bool
 	 */
 	public function message($identifier, $message)
 	{
-		$this->log(self::TYPE_MESSAGE, $identifier, $message);
+		return $this->log(self::TYPE_MESSAGE, $identifier, $message);
 	}
 
 	/**
 	 * Logs a debug message
 	 *
 	 * @param string $message
+	 * @return bool
 	 */
 	public function debug($message)
 	{
-		$this->message('DEBUG', $message);
+		return $this->message('DEBUG', $message);
 	}
 
 	/**

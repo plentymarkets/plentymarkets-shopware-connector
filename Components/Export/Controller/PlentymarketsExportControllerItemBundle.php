@@ -50,7 +50,7 @@ class PlentymarketsExportControllerItemBundle
 	{
 		$repository = Shopware()->Models()->getRepository('Shopware\CustomModels\Bundle\Bundle');
 
-		/** @var $bundle Shopware\CustomModels\Bundle\Bundle */
+		/** @var Shopware\CustomModels\Bundle\Bundle $bundle */
 		foreach ($repository->findAll() as $bundle)
 		{
 			try

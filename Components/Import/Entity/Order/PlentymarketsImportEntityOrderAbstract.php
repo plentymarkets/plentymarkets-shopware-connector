@@ -130,11 +130,10 @@ abstract class PlentymarketsImportEntityOrderAbstract
 
 			$this->log('Received ' . count($Response_SearchOrders->Orders->item) . ' items');
 
-			// Jeden Artikel in Shopware "importieren"
 			foreach ($Response_SearchOrders->Orders->item as $Order)
 			{
+				/** @var PlentySoapObject_OrderHead $Order */
 				$Order = $Order->OrderHead;
-				$Order instanceof PlentySoapObject_OrderHead;
 				try
 				{
 					$orderId = $Order->ExternalOrderID;
@@ -165,7 +164,7 @@ abstract class PlentymarketsImportEntityOrderAbstract
 		}
 
 		// Until all pages are received
-		while (++$Request_SearchOrders->Page < $Response_SearchOrders->Pages);
+		while (++$this->Request_SearchOrders->Page < $Response_SearchOrders->Pages);
 
 		//
 		$this->log($numberOfOrdersUpdated . ' sales orders have been updated.');

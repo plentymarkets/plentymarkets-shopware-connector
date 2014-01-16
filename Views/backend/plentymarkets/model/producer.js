@@ -25,8 +25,8 @@ Ext.define('Shopware.apps.Plentymarkets.model.Producer', {
 		type: 'ajax',
 
 		api: {
-			read: '{url action="getProducerList"}',
-		},
+			read: '{url action="getProducerList"}'
+        },
 
 		reader: {
 			type: 'json',

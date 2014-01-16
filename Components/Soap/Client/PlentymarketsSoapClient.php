@@ -79,7 +79,7 @@ class PlentymarketsSoapClient extends SoapClient
 
 	/**
 	 *
-	 * @var unknown
+	 * @var string
 	 */
 	protected $username;
 

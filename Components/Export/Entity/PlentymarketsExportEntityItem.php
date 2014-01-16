@@ -125,7 +125,6 @@ class PlentymarketsExportEntityItem
 	protected function exportItemBase()
 	{
 		$Item = $this->SHOPWARE_Article;
-		$Item instanceof \Shopware\Models\Article\Article;
 
 		$Request_AddItemsBase = new PlentySoapRequest_AddItemsBase();
 		$Request_AddItemsBase->BaseItems = array();
@@ -175,9 +174,9 @@ class PlentymarketsExportEntityItem
 		$Object_AddItemsBaseItemBase->Categories = array();
 		$Object_AddItemsBaseItemBase->StoreIDs = array();
 
+		/** @var Shopware\Models\Category\Category $Category */
 		foreach ($Item->getCategories() as $Category)
 		{
-			$Category instanceof Shopware\Models\Category\Category;
 			try
 			{
 				$categoryPath = PlentymarketsMappingController::getCategoryByShopwareID($Category->getId());
@@ -304,17 +303,18 @@ class PlentymarketsExportEntityItem
 	 */
 	protected function exportImages()
 	{
+		/**
+		 * @var Shopware\Models\Article\Image $Image
+		 * @var Shopware\Models\Media\Media $ImageMedia
+		 */
 		foreach ($this->SHOPWARE_Article->getImages() as $Image)
 		{
-			$Image instanceof Shopware\Models\Article\Image;
-
 			$ImageMedia = $Image->getMedia();
 			if (is_null($ImageMedia))
 			{
 				PlentymarketsLogger::getInstance()->error('Export:Initial:Item:Image', 'The image with the id »' . $Image->getId() . '« could not be added to the item with the number »' . $this->SHOPWARE_Article->getMainDetail()->getNumber(). '« (no media associated)', 2850);
 				continue;
 			}
-			$ImageMedia instanceof Shopware\Models\Media\Media;
 
 			try
 			{
@@ -347,7 +347,7 @@ class PlentymarketsExportEntityItem
 	}
 
 	/**
-	 * Generetes the item availability SOAP object
+	 * Generates the item availability SOAP object
 	 *
 	 * @return PlentySoapObject_ItemAvailability
 	 */
@@ -455,13 +455,13 @@ class PlentymarketsExportEntityItem
 
 		$prices = array();
 		$ItemPrice = Shopware()->Models()->getRepository('Shopware\Models\Article\Price');
+
+		/** @var Shopware\Models\Article\Price $ItemPrice */
 		foreach ($ItemPrice->findBy(array(
 			'customerGroupKey' => PlentymarketsConfig::getInstance()->getDefaultCustomerGroupKey(),
 			'articleDetailsId' => $MainDetail->getId()
 		)) as $ItemPrice)
 		{
-			$ItemPrice instanceof Shopware\Models\Article\Price;
-
 			$price = array();
 			$price['to'] = $ItemPrice->getTo();
 			$price['price'] = $ItemPrice->getPrice() * ($Tax->getTax() + 100) / 100;
@@ -533,11 +533,10 @@ class PlentymarketsExportEntityItem
 		{
 			return;
 		}
+
+		/** @var Shopware\Models\Property\Value $PropertyValue */
 		foreach ($this->SHOPWARE_Article->getPropertyValues() as $PropertyValue)
 		{
-
-			$PropertyValue instanceof Shopware\Models\Property\Value;
-
 			$PropertyOption = $PropertyValue->getOption();
 
 			try
@@ -581,11 +580,9 @@ class PlentymarketsExportEntityItem
 		$Request_AddItemAttributeValueSets->ItemID = $this->PLENTY_itemID; // int
 		$Request_AddItemAttributeValueSets->ActivateVariations = array();
 
-		// Attribut-Werte zuordnen
+		/** @var Shopware\Models\Article\Configurator\Option $ConfiguratorOption */
 		foreach ($ConfiguratorSet->getOptions() as $ConfiguratorOption)
 		{
-			$ConfiguratorOption instanceof Shopware\Models\Article\Configurator\Option;
-
 			$PLENTY_attributeID = PlentymarketsMappingController::getAttributeGroupByShopwareID($ConfiguratorOption->getGroup()->getId());
 			$PLENTY_attributeValueID = PlentymarketsMappingController::getAttributeOptionByShopwareID($ConfiguratorOption->getId());
 
@@ -612,19 +609,18 @@ class PlentymarketsExportEntityItem
 
 		$Details = $this->SHOPWARE_Article->getDetails();
 
-		// Varianten erstellen
+		/**
+		 * @var Shopware\Models\Article\Detail $ItemVariation
+		 * @var Shopware\Models\Article\Configurator\Option $ConfiguratorOption
+		 */
 		foreach ($Details as $ItemVariation)
 		{
-			$ItemVariation instanceof Shopware\Models\Article\Detail;
-
 			$cacheAttributeValueSets[$ItemVariation->getId()] = array();
 
 			$Object_AddItemAttributeVariationList = new PlentySoapObject_AddItemAttributeVariationList();
 
 			foreach ($ItemVariation->getConfiguratorOptions() as $ConfiguratorOption)
 			{
-				$ConfiguratorOption instanceof Shopware\Models\Article\Configurator\Option;
-
 				$PLENTY_attributeValueID = PlentymarketsMappingController::getAttributeOptionByShopwareID($ConfiguratorOption->getId());
 
 				$cacheAttributeValueSets[$ItemVariation->getId()][] = $PLENTY_attributeValueID;
@@ -680,10 +676,9 @@ class PlentymarketsExportEntityItem
 		$Request_SetAttributeValueSetsDetails = new PlentySoapRequest_SetAttributeValueSetsDetails();
 		$Request_SetAttributeValueSetsDetails->AttributeValueSetsDetails = array();
 
-		// Varianten details
+		/** @var Shopware\Models\Article\Detail $ItemVariation */
 		foreach ($Details as $ItemVariation)
 		{
-			$ItemVariation instanceof Shopware\Models\Article\Detail;
 			try
 			{
 				$sku = PlentymarketsMappingController::getItemVariantByShopwareID($ItemVariation->getId());

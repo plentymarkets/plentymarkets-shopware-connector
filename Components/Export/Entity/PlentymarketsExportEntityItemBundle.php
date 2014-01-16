@@ -87,7 +87,7 @@ class PlentymarketsExportEntityItemBundle
 	 */
 	protected function index()
 	{
-		/** @var $bundleArticle Shopware\CustomModels\Bundle\Article */
+		/** @var Shopware\CustomModels\Bundle\Article $bundleArticle */
 		foreach ($this->SHOPWARE_bundle->getArticles() as $bundleArticle)
 		{
 			try
@@ -189,7 +189,7 @@ class PlentymarketsExportEntityItemBundle
 
 		foreach ($shopwareBundleHead->getCategories() as $category)
 		{
-			/** @var $category Shopware\Models\Category\Category */
+			/** @var Shopware\Models\Category\Category $category */
 			try
 			{
 				$categoryPath = PlentymarketsMappingController::getCategoryByShopwareID($category->getId());
@@ -240,7 +240,7 @@ class PlentymarketsExportEntityItemBundle
 		$isPriceFound = false;
 		foreach ($this->SHOPWARE_bundle->getPrices() as $price)
 		{
-			/** @var $price Shopware\CustomModels\Bundle\Price */
+			/** @var Shopware\CustomModels\Bundle\Price $price */
 			if ($price->getCustomerGroup()->getKey() == $defaultCustomerGroupKey)
 			{
 				$isPriceFound = true;

@@ -25,8 +25,8 @@ Ext.define('Shopware.apps.Plentymarkets.view.Export', {
 		me.items = [{
 			xtype: 'plentymarkets-view-dx-continuous'
 		}, {
-			xtype: 'plentymarkets-view-dx-initial',
-		}];
+			xtype: 'plentymarkets-view-dx-initial'
+        }];
 
 		me.callParent(arguments);
 	}

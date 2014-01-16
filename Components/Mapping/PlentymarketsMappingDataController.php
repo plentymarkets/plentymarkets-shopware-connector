@@ -47,7 +47,7 @@ class PlentymarketsMappingDataController
 	/**
 	 * Constructor method
 	 *
-	 * @param auto $auto
+	 * @param boolean $auto
 	 */
 	public function __construct($auto)
 	{

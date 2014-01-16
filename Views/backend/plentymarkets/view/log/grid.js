@@ -26,7 +26,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.log.Grid', {
 		};
 
 		me.store = Ext.create('Shopware.apps.Plentymarkets.store.Log');
-		me.store.getProxy().setExtraParam('type', me.type)
+		me.store.getProxy().setExtraParam('type', me.type);
 
 		me.dockedItems = [{
 			xtype: 'pagingtoolbar',
@@ -84,14 +84,14 @@ Ext.define('Shopware.apps.Plentymarkets.view.log.Grid', {
 		me.columns = [{
 			header: '#',
 			dataIndex: 'id',
-			flex: 1,
-		}, {
+			flex: 1
+        }, {
 			header: 'Datum',
 			dataIndex: 'timestamp',
 			xtype: 'datecolumn',
 			format: 'Y-m-d H:i:s',
-			flex: 3,
-		}, {
+			flex: 3
+        }, {
 			header: 'Typ',
 			dataIndex: 'type',
 			flex: 2,
@@ -122,8 +122,8 @@ Ext.define('Shopware.apps.Plentymarkets.view.log.Grid', {
 					Ext.Msg.show({
 						title: '#' + record.get('id') + ' – ' + record.get('identifier'),
 						msg: Ext.util.Format.nl2br(record.get('message')),
-						buttons: Ext.Msg.OK,
-					});
+						buttons: Ext.Msg.OK
+                    });
 				}
 			}
 		}];

@@ -328,7 +328,7 @@ class PlentymarketsGarbageCollector
 		// Handle the items
 		foreach ($Result as $item)
 		{
-			/** @var $Item Shopware\Models\Article\Article */
+			/** @var Shopware\Models\Article\Article $Item */
 			$Item = Shopware()->Models()->find('Shopware\Models\Article\Article', $item['id']);
 
 			if (!$Item)
@@ -345,7 +345,7 @@ class PlentymarketsGarbageCollector
 
 				foreach ($Item->getDetails() as $Detail)
 				{
-					/** @var $Detail Shopware\Models\Article\Detail */
+					/** @var Shopware\Models\Article\Detail $Detail */
 					if ($Detail->getActive())
 					{
 						$Detail->setActive(false);
@@ -476,7 +476,7 @@ class PlentymarketsGarbageCollector
 		do
 		{
 
-			/** @var $Response_GetItemsBase PlentySoapResponse_GetItemBundles */
+			/** @var PlentySoapResponse_GetItemBundles $Response_GetItemsBase */
 			$Response_GetItemBundles = PlentymarketsSoapClient::getInstance()->GetItemBundles($Request_GetItemBundles);
 
 			// Call failed
@@ -498,7 +498,7 @@ class PlentymarketsGarbageCollector
 			// Collect the bundle head ids
 			foreach ($Response_GetItemBundles->ItemBundles->item as $bundle)
 			{
-				/** @var $bundle PlentySoapObject_Bundle */
+				/** @var PlentySoapObject_Bundle $bundle */
 				$plentyBundleHeadSku = explode('-', $bundle->SKU);
 				$plentyBundleHeadId = (integer) $plentyBundleHeadSku[0];
 
@@ -539,7 +539,7 @@ class PlentymarketsGarbageCollector
 		// And delete them
 		foreach ($bundles as $bundle)
 		{
-			/** @var $bundle Shopware\CustomModels\Bundle\Bundle */
+			/** @var Shopware\CustomModels\Bundle\Bundle $bundle */
 			$bundle = Shopware()->Models()->find('Shopware\CustomModels\Bundle\Bundle', $bundle['id']);
 			Shopware()->Models()->remove($bundle);
 

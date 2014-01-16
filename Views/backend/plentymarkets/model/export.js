@@ -52,8 +52,8 @@ Ext.define('Shopware.apps.Plentymarkets.model.Export', {
 
 		api: {
 			create: '{url action=handleExport}',
-			update: '{url action=handleExport}',
-		},
+			update: '{url action=handleExport}'
+        },
 
 		reader: {
 			type: 'json',

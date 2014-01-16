@@ -92,8 +92,8 @@ class PlentymarketsImportEntityItemAttribute
 			return;
 		}
 
+		/** @var Shopware\Models\Article\Configurator\Group $Group */
 		$Group = Shopware()->Models()->find('Shopware\Models\Article\Configurator\Group', $SHOPWARE_attributeId);
-		$Group instanceof Shopware\Models\Article\Configurator\Group;
 
 		// Set the new data
 		$Group->setName($this->Attribute->FrontendName);
@@ -112,10 +112,12 @@ class PlentymarketsImportEntityItemAttribute
 			return;
 		}
 
+		/**
+		 * @var PlentySoapObject_GetItemAttributesAttributeValue $Value
+		 * @var Shopware\Models\Article\Configurator\Option $Option
+		 */
 		foreach ($this->Attribute->Values->item as $Value)
 		{
-			$Value instanceof PlentySoapObject_GetItemAttributesAttributeValue;
-
 			try
 			{
 				$SHOPWARE_optionId = PlentymarketsMappingController::getAttributeOptionByPlentyID($Value->ValueId);
@@ -127,7 +129,6 @@ class PlentymarketsImportEntityItemAttribute
 
 			foreach ($this->Group->getOptions() as $Option)
 			{
-				$Option instanceof Shopware\Models\Article\Configurator\Option;
 				if ($Option->getId() != $SHOPWARE_optionId)
 				{
 					continue;

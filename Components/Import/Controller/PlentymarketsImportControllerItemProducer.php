@@ -46,8 +46,8 @@ class PlentymarketsImportControllerItemProducer
 		$Request_GetProducers = new PlentySoapRequest_GetProducers();
 		$Request_GetProducers->LastUpdateFrom = $lastUpdateTimestamp;
 
+		/** @var PlentySoapResponse_GetProducers $Response_GetProducers */
 		$Response_GetProducers = PlentymarketsSoapClient::getInstance()->GetProducers($Request_GetProducers);
-		$Response_GetProducers instanceof PlentySoapResponse_GetProducers;
 
 		if (!$Response_GetProducers->Success)
 		{
