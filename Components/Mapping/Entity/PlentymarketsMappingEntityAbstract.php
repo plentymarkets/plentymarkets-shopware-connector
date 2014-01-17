@@ -74,7 +74,7 @@ abstract class PlentymarketsMappingEntityAbstract
 
 	/**
 	 *
-	 * @var array[PlentymarketsMappingEntityAbstract]
+	 * @var PlentymarketsMappingEntityAbstract[]
 	 */
 	protected static $Instances;
 

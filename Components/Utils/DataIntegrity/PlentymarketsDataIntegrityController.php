@@ -48,7 +48,7 @@ class PlentymarketsDataIntegrityController
 
 	/**
 	 *
-	 * @var array[PlentymarketsDataIntegrityCheckInterface]
+	 * @var PlentymarketsDataIntegrityCheckInterface[]
 	 */
 	protected $Checks = array();
 

@@ -46,7 +46,7 @@ class PlentymarketsImportItemStockStack
 
 	/**
 	 *
-	 * @var array[string|integer]
+	 * @var string|integer[]
 	 */
 	protected $stack = array();
 

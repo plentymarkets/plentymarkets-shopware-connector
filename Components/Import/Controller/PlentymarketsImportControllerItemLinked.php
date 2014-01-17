@@ -48,7 +48,7 @@ class PlentymarketsImportControllerItemLinked
 
 	/**
 	 *
-	 * @var array[integer]
+	 * @var integer[]
 	 */
 	protected $itemIds = array();
 
