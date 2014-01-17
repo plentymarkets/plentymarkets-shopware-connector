@@ -104,8 +104,6 @@ class PlentymarketsImportEntityItemBundle
 	 */
 	protected function importBundle()
 	{
-		/** @var ->PLENTY_bundle $this PlentySoapObject_Bundle */
-
 		// Get the bundle head
 		$Request_GetItemsBase = new PlentySoapRequest_GetItemsBase();
 		$Request_GetItemsBase->GetAttributeValueSets = false;

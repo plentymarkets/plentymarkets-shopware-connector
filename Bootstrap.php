@@ -1166,11 +1166,11 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
      */
     public function getVersion()
     {
-    	return '1.5.0';
+    	return '1.5.1';
     }
 
     /**
-     * Returns the informations of plugin as array.
+     * Returns the information of plugin as array.
      *
      * @return array
      */
@@ -1179,7 +1179,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
         return array(
 			'version' => $this->getVersion(),
 			'autor' => 'plentymarkets GmbH',
-			'copyright' => 'Copyright © 2013, plentymarkets GmbH',
+			'copyright' => 'Copyright © 2013-2014, plentymarkets GmbH',
 			'label' => $this->getLabel(),
 			'support' => 'http://www.plentymarkets.eu/service-support/',
 			'link' => 'http://man.plentymarkets.eu/tools/shopware-connector/'
