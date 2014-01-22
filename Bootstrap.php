@@ -325,7 +325,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 			'plenty_mapping_customer_billing_address',
 			'plenty_mapping_customer_class',
 			'plenty_mapping_item',
-			'plenty_mapping_bundle',
+			'plenty_mapping_item_bundle',
 			'plenty_mapping_item_variant',
 			'plenty_mapping_measure_unit',
 			'plenty_mapping_method_of_payment',
