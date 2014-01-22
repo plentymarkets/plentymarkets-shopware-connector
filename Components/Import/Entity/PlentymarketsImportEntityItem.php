@@ -829,18 +829,19 @@ class PlentymarketsImportEntityItem
 						++$numberOfVariantsDeleted;
 						$VariantResource->delete($detail['id']);
 						PlentymarketsMappingController::deleteItemVariantByShopwareID($detail['id']);
+						continue;
 					}
 
 					// If the variant was just created
-					else if (isset($number2sku[$detail['number']]))
+					if (isset($number2sku[$detail['number']]))
 					{
 						// Add the mapping
 						PlentymarketsMappingController::addItemVariant($detail['id'], $number2sku[$detail['number']]);
-
-						// And update the prices
-						$PlentymarketsImportEntityItemPrice = new PlentymarketsImportEntityItemPrice($this->ItemBase->PriceSet, $number2markup[$detail['number']]);
-						$PlentymarketsImportEntityItemPrice->updateVariant($detail['id']);
 					}
+
+					// Update the prices
+					$PlentymarketsImportEntityItemPrice = new PlentymarketsImportEntityItemPrice($this->ItemBase->PriceSet, $number2markup[$detail['number']]);
+					$PlentymarketsImportEntityItemPrice->updateVariant($detail['id']);
 				}
 
 				$VariantController->map($article);
