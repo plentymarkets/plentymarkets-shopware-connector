@@ -218,10 +218,10 @@ class PlentymarketsExportEntityOrder
 
 				if ($Debit && $Debit->getAccountHolder())
 				{
-					$info  = 'Account holder: '. $Debit->getAccountHolder() . chr(10);
-					$info .= 'Bank name: '. $Debit->getBankName() . chr(10);
-					$info .= 'Bank code: '. $Debit->getBankCode() . chr(10);
-					$info .= 'Account number: '. $Debit->getAccount() . chr(10);
+					$info = 'Account holder: ' . $Debit->getAccountHolder() . chr(10);
+					$info .= 'Bank name: ' . $Debit->getBankName() . chr(10);
+					$info .= 'Bank code: ' . $Debit->getBankCode() . chr(10);
+					$info .= 'Account number: ' . $Debit->getAccount() . chr(10);
 
 					$Object_OrderInfo = new PlentySoapObject_OrderInfo();
 					$Object_OrderInfo->Info = $info;
@@ -261,7 +261,6 @@ class PlentymarketsExportEntityOrder
 
 		$Object_Order->OrderItems = array();
 
-
 		/** @var Shopware\Models\Order\Detail $Item */
 		foreach ($this->Order->getDetails() as $Item)
 		{
@@ -293,7 +292,7 @@ class PlentymarketsExportEntityOrder
 					$sku = null;
 				}
 
-				// Unknown item
+					// Unknown item
 				catch (PlentymarketsMappingExceptionNotExistant $E)
 				{
 					$itemId = -2;
@@ -317,20 +316,51 @@ class PlentymarketsExportEntityOrder
 				}
 			}
 
-			// Gutschein
+			// Coupon
 			if ($Item->getMode() == 2)
 			{
 				$itemId = -1;
+				$rowType = 'Coupon';
 			}
 
-			// Todo:
-			else if ($Item->getMode() == 4)
+			// surcharge for method of payment
+			else
 			{
-				// Payment markup
+				$discountNumber = Shopware()->Config()->get('discountnumber');
+				$surchargeNumber = Shopware()->Config()->get('surchargenumber');
+				$paymentSurchargeNumber = Shopware()->Config()->get('paymentsurchargenumber');
+				$paymentSurchargeAbsoluteNumber = Shopware()->Config()->get('paymentSurchargeAbsoluteNumber');
+				$shippingDiscountNumber = Shopware()->Config()->get('shippingdiscountnumber');
+
+				$number = $Item->getArticleNumber();
+
+				switch ($number)
+				{
+					case $paymentSurchargeNumber:
+					case $paymentSurchargeAbsoluteNumber:
+						$rowType = 'SurchargeForPaymentMethod';
+						break;
+
+					case $discountNumber:
+						$rowType = 'Discount';
+						break;
+
+					case $surchargeNumber:
+						$rowType = 'Surcharge';
+						break;
+
+					case $shippingDiscountNumber:
+						$rowType = 'SurchargeForShippingMethod';
+						break;
+
+					default:
+						$rowType = 'Default';
+						break;
+				}
 			}
 
 			$Object_OrderItem = new PlentySoapObject_OrderItem();
-			$Object_OrderItem->ExternalOrderItemID = $Item->getNumber();
+			$Object_OrderItem->ExternalOrderItemID = $number;
 			$Object_OrderItem->ItemID = $itemId;
 			$Object_OrderItem->ReferrerID = $Object_OrderHead->ReferrerID;
 			$Object_OrderItem->ItemText = $itemText;
@@ -338,6 +368,7 @@ class PlentymarketsExportEntityOrder
 			$Object_OrderItem->Quantity = $Item->getQuantity();
 			$Object_OrderItem->SKU = $sku;
 			$Object_OrderItem->VAT = $Item->getTaxRate();
+			$Object_OrderItem->RowType = $rowType;
 
 			$Object_Order->OrderItems[] = $Object_OrderItem;
 		}
@@ -541,9 +572,9 @@ class PlentymarketsExportEntityOrder
 				WHERE shopwareId = ?
 		')
 			->execute(array(
-			$code,
-			$this->Order->getId()
-		));
+				$code,
+				$this->Order->getId()
+			));
 	}
 
 	/**
@@ -569,10 +600,10 @@ class PlentymarketsExportEntityOrder
 				WHERE shopwareId = ?
 		')
 			->execute(array(
-			$plentyOrderID,
-			$plentyOrderStatus,
-			$this->Order->getId()
-		));
+				$plentyOrderID,
+				$plentyOrderStatus,
+				$this->Order->getId()
+			));
 	}
 
 	/**

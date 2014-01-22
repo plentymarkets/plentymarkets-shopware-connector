@@ -122,4 +122,9 @@ class PlentySoapObject_OrderItem
 	 * @var int
 	 */
 	public $WarehouseID;
+
+	/**
+	 * @var string
+	 */
+	public $RowType;
 }
