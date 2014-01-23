@@ -771,8 +771,9 @@ class PlentymarketsImportEntityItem
 
 						// Internal mapping of the variant number to some plenty information
 						$number2sku[$variant['number']] = $variant['X_plentySku'];
-						$number2markup[$variant['number']] = $variant['X_plentyMarkup'];
 					}
+					
+					$number2markup[$variant['number']] = $variant['X_plentyMarkup'];
 
 					$variants[] = $variant;
 				}
