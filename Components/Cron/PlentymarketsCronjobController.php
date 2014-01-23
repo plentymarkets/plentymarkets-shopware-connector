@@ -502,7 +502,7 @@ class PlentymarketsCronjobController
 	 *
 	 * @param Shopware_Components_Cron_CronJob $Job
 	 */
-	public function runItemCleanupImport(Shopware_Components_Cron_CronJob $Job)
+	public function runItemBundleCleanup(Shopware_Components_Cron_CronJob $Job)
 	{
 		if (!$this->Status->maySynchronize())
 		{
