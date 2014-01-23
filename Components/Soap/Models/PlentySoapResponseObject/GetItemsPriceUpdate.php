@@ -137,4 +137,14 @@ class PlentySoapResponseObject_GetItemsPriceUpdate
 	 * @var string
 	 */
 	public $SKU;
+
+	/**
+	 * @var float
+	 */
+	public $VAT;
+
+	/**
+	 * @var float
+	 */
+	public $RRP;
 }
