@@ -775,6 +775,8 @@ class PlentymarketsImportEntityItem
 					
 					$number2markup[$variant['number']] = $variant['X_plentyMarkup'];
 
+                                        $number2markup[$variant['number']] = $variant['X_plentyMarkup'];
+
 					$variants[] = $variant;
 				}
 
