@@ -192,7 +192,7 @@ class PlentymarketsExportEntityOrder
 		$Object_OrderHead->CustomerID = $this->PLENTY_customerID;
 		$Object_OrderHead->DeliveryAddressID = $this->PLENTY_addressDispatchID;
 		$Object_OrderHead->ExternalOrderID = $externalOrderID;
-		$Object_OrderHead->IsNetto = false;
+		$Object_OrderHead->IsNetto = ($this->Order->getNet()) ? true : false;
 		$Object_OrderHead->Marking1ID = PlentymarketsConfig::getInstance()->getOrderMarking1(null);
 		$Object_OrderHead->MethodOfPaymentID = $this->getMethodOfPaymentId();
 		$Object_OrderHead->OrderTimestamp = $this->getOrderTimestamp();
@@ -367,7 +367,7 @@ class PlentymarketsExportEntityOrder
 			$Object_OrderItem->Price = $Item->getPrice();
 			$Object_OrderItem->Quantity = $Item->getQuantity();
 			$Object_OrderItem->SKU = $sku;
-			$Object_OrderItem->VAT = $Item->getTaxRate();
+			$Object_OrderItem->VAT = ($this->Order->getNet()) ? 0 : $Item->getTaxRate();
 			$Object_OrderItem->RowType = $rowType;
 
 			$Object_Order->OrderItems[] = $Object_OrderItem;
