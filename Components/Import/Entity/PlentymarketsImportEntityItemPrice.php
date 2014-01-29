@@ -182,6 +182,7 @@ class PlentymarketsImportEntityItemPrice
 	 * Update the prices for a variant
 	 *
 	 * @param integer $detailId
+	 * @return bool
 	 */
 	public function updateVariant($detailId)
 	{

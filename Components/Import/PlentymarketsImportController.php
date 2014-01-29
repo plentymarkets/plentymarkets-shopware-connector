@@ -543,6 +543,47 @@ class PlentymarketsImportController
 	}
 
 	/**
+	 * Retrieves the availability config
+	 *
+	 * @return array
+	 */
+	public static function getItemAvailability()
+	{
+		$timestamp = PlentymarketsConfig::getInstance()->getItemAvailabilityLastImport(0);
+		if (date('dmY') == date('dmY', $timestamp))
+		{
+			return unserialize(PlentymarketsConfig::getInstance()->getItemAvailabilitySerialized());
+		}
+
+		/** @var PlentySoapResponse_GetItemAvailabilityConfig $Response_GetItemAvailabilityConfig */
+		$Response_GetItemAvailabilityConfig = PlentymarketsSoapClient::getInstance()->GetItemAvailabilityConfig();
+
+		// The call wasn't successful
+		if (!$Response_GetItemAvailabilityConfig->Success)
+		{
+			// Write to log
+			PlentymarketsLogger::getInstance()->error('Import:Item:Availability', 'Item availability could not be retrieved', 1518);
+
+			// Return old data
+			return unserialize(PlentymarketsConfig::getInstance()->getItemAvailabilitySerialized('a:0:{}'));
+		}
+
+		// Prepare data
+		$availability = array();
+
+		/** @var PlentySoapObject_GetItemAvailabilityConfig $Config */
+		foreach ($Response_GetItemAvailabilityConfig->AvailabilityConfigs->item as $Config)
+		{
+			$availability[$Config->AvailabilityID] = (integer) $Config->AverageDeliveryTime;
+		}
+
+		PlentymarketsConfig::getInstance()->setItemAvailabilityLastImport(time());
+		PlentymarketsConfig::getInstance()->setItemAvailabilitySerialized(serialize($availability));
+
+		return $availability;
+	}
+
+	/**
 	 * Retrieves the shipping profiles
 	 *
 	 * @return array

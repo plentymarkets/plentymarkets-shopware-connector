@@ -169,7 +169,13 @@ class PlentymarketsImportEntityItem
 	 */
 	protected function setDetails()
 	{
+		// Shipping time
+		$availability = PlentymarketsImportController::getItemAvailability();
+		$shippingTime = isset($availability[$this->ItemBase->Availability->AvailabilityID]) ? $availability[$this->ItemBase->Availability->AvailabilityID] : null;
+
+		// Active
 		$active = $this->ItemBase->Availability->Inactive == 0 && $this->ItemBase->Availability->Webshop == 1;
+
 		$details = array(
 			'active' => $active,
 			'ean' => $this->ItemBase->EAN1,
@@ -178,6 +184,7 @@ class PlentymarketsImportEntityItem
 			'maxPurchase' => null,
 			'purchaseUnit' => null,
 			'referenceUnit' => null,
+			'shippingtime' => $shippingTime,
 			'packUnit' => trim($this->ItemBase->PriceSet->Unit1),
 			'releaseDate' => ($this->ItemBase->Published == 0 ? null : date('c', $this->ItemBase->Published)),
 			'weight' => null,
