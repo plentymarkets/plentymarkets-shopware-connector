@@ -425,13 +425,13 @@ class PlentymarketsImportEntityItem
 				);
 			}
 
-			// Category dies not yet exist
+			// Category does not yet exist
 			catch (PlentymarketsMappingExceptionNotExistant $E)
 			{
 				// Root category id (out of the shop)
 				$parentId = $this->Shop->getCategory()->getId();
 
-				// Trigger to indiate an error while creating new category
+				// Trigger to indicate an error while creating new category
 				$addError = false;
 
 				// Split path into single names
