@@ -554,7 +554,6 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 			CREATE TABLE `plenty_mapping_shipping_profile` (
 			  `shopwareID` int(11) unsigned NOT NULL,
 			  `plentyID` varchar(255) NOT NULL DEFAULT '',
-			  PRIMARY KEY (`shopwareID`,`plentyID`),
 			  UNIQUE KEY `plentyID` (`plentyID`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 		");
