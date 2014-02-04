@@ -341,6 +341,26 @@ class PlentymarketsExportEntityItem
 			$Request_AddItemsImage->Image = $Object_ItemImage;
 			$Request_AddItemsImage->ItemID = $this->PLENTY_itemID;
 
+			$mappings = $Image->getMappings();
+			if (count($mappings))
+			{
+				/** @var Shopware\Models\Article\Image\Mapping $mapping */
+				$mapping = $mappings->first();
+				$rules = $mapping->getRules();
+
+				if (count($rules))
+				{
+					/** @var Shopware\Models\Article\Image\Rule $rule */
+					$rule = $rules->first();
+
+					$option = $rule->getOption();
+					$group = $option->getGroup();
+
+					$Request_AddItemsImage->ItemAttributeID = PlentymarketsMappingController::getAttributeGroupByShopwareID($group->getId());
+					$Request_AddItemsImage->ItemAttributeValueID = PlentymarketsMappingController::getAttributeOptionByShopwareID($option->getId());
+				}
+			}
+
 			// Do the request
 			PlentymarketsSoapClient::getInstance()->AddItemsImage($Request_AddItemsImage);
 		}
