@@ -784,14 +784,10 @@ class PlentymarketsImportEntityItem
 					$variants[] = $variant;
 				}
 
-				// If a new variant will be created
-				if ($numberOfVariantsCreated)
-				{
-					// the configurator set has to be adapted
-					$update['configuratorSet'] = array(
-						'groups' => $VariantController->getGroups()
-					);
-				}
+				// The configurator set has to be adapted
+				$update['configuratorSet'] = array(
+					'groups' => $VariantController->getGroups()
+				);
 
 				// Varianten löschen, wenn nicht eine aktualisiert worden ist
 				if ($numberOfVariantsUpdated == 0)
