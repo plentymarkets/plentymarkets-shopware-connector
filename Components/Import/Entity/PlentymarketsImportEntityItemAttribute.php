@@ -124,7 +124,7 @@ class PlentymarketsImportEntityItemAttribute
 			}
 			catch (PlentymarketsMappingExceptionNotExistant $E)
 			{
-				return;
+				continue;
 			}
 
 			foreach ($this->Group->getOptions() as $Option)
