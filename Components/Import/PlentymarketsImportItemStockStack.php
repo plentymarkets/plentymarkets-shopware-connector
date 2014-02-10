@@ -26,10 +26,6 @@
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once PY_SOAP . 'Models/PlentySoapObject/GetCurrentStocks.php';
-require_once PY_SOAP . 'Models/PlentySoapRequestObject/GetCurrentStocks.php';
-require_once PY_SOAP . 'Models/PlentySoapRequest/GetCurrentStocks.php';
-require_once PY_COMPONENTS . 'Import/Entity/PlentymarketsImportEntityItemStock.php';
 
 /**
  * This is a stack of SKUs to retrieve the stocks after the import of the items.

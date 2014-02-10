@@ -26,7 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once PY_COMPONENTS . 'Mapping/Entity/PlentymarketsMappingEntityAbstract.php';
 
 /**
  * PlentymarketsMappingEntityMeasureUnit provides the actual measure unit mapping functionality.

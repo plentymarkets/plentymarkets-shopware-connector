@@ -151,7 +151,6 @@ class PlentymarketsImportItemAssociateController
 			try
 			{
 				$controller = sprintf('PlentymarketsImportControllerItem%s', $entity);
-				require_once PY_COMPONENTS . 'Import/Controller/' . $controller . '.php';
 
 				$Controller = new $controller();
 				$Controller->run((integer) PyConf()->get(sprintf('ImportItem%sLastUpdateTimestamp', $entity)));

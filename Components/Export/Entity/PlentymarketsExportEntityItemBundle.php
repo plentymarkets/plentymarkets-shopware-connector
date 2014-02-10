@@ -26,17 +26,6 @@
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once PY_SOAP . 'Models/PlentySoapObject/AddItemsBaseItemBase.php';
-require_once PY_SOAP . 'Models/PlentySoapObject/Integer.php';
-require_once PY_SOAP . 'Models/PlentySoapObject/ItemAvailability.php';
-require_once PY_SOAP . 'Models/PlentySoapObject/ItemCategory.php';
-require_once PY_SOAP . 'Models/PlentySoapObject/ItemPriceSet.php';
-require_once PY_SOAP . 'Models/PlentySoapObject/ItemTexts.php';
-require_once PY_SOAP . 'Models/PlentySoapRequest/AddItemsBase.php';
-require_once PY_SOAP . 'Models/PlentySoapObject/Integer.php';
-require_once PY_SOAP . 'Models/PlentySoapObject/AddBundle.php';
-require_once PY_SOAP . 'Models/PlentySoapObject/AddBundleItem.php';
-require_once PY_SOAP . 'Models/PlentySoapRequest/AddItemsToBundle.php';
 
 /**
  * Exports an item bundle

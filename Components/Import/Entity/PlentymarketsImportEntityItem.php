@@ -26,19 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once PY_SOAP . 'Models/PlentySoapObject/Attribute.php';
-require_once PY_SOAP . 'Models/PlentySoapObject/AttributeValue.php';
-require_once PY_SOAP . 'Models/PlentySoapObject/AttributeValueSet.php';
-require_once PY_SOAP . 'Models/PlentySoapRequestObject/GetAttributeValueSets.php';
-require_once PY_SOAP . 'Models/PlentySoapRequest/GetAttributeValueSets.php';
-require_once PY_COMPONENTS . 'Import/Exception/PlentymarketsImportItemException.php';
-require_once PY_COMPONENTS . 'Import/Exception/PlentymarketsImportItemNumberException.php';
-require_once PY_COMPONENTS . 'Import/Exception/PlentymarketsImportItemVariantException.php';
-require_once PY_COMPONENTS . 'Import/PlentymarketsImportItemVariantController.php';
-require_once PY_COMPONENTS . 'Import/PlentymarketsImportItemStockStack.php';
-require_once PY_COMPONENTS . 'Import/PlentymarketsImportItemHelper.php';
-require_once PY_COMPONENTS . 'Import/Entity/PlentymarketsImportEntityItemPrice.php';
-require_once PY_COMPONENTS . 'Import/Entity/PlentymarketsImportEntityItemImage.php';
 
 /**
  * PlentymarketsImportEntityItem provides the actual item import functionality. Like the other import

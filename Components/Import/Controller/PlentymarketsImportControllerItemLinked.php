@@ -26,9 +26,6 @@
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once PY_SOAP . 'Models/PlentySoapObject/GetLinkedItems.php';
-require_once PY_SOAP . 'Models/PlentySoapRequest/GetLinkedItems.php';
-require_once PY_COMPONENTS . 'Import/Entity/PlentymarketsImportEntityItemLinked.php';
 
 /**
  * The class PlentymarketsImportController does the actual import for different cronjobs e.g.

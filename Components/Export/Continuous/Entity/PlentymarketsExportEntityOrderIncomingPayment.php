@@ -26,10 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once PY_SOAP . 'Models/PlentySoapObject/AddIncomingPayments.php';
-require_once PY_SOAP . 'Models/PlentySoapRequest/AddIncomingPayments.php';
-require_once PY_COMPONENTS . 'Export/Entity/PlentymarketsExportEntityCustomer.php';
-require_once PY_COMPONENTS . 'Export/PlentymarketsExportEntityException.php';
 
 /**
  * PlentymarketsExportEntityOrderIncomingPayment provides the actual incoming payments export functionality. Like the other export

@@ -26,7 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once PY_COMPONENTS . 'Export/Continuous/Entity/PlentymarketsExportEntityOrderIncomingPayment.php';
 
 /**
  * Handles the export of the incoming payments

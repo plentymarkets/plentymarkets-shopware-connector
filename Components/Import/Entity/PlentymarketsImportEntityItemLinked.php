@@ -26,8 +26,6 @@
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once PY_SOAP . 'Models/PlentySoapObject/GetLinkedItems.php';
-require_once PY_SOAP . 'Models/PlentySoapRequest/GetLinkedItems.php';
 
 /**
  * PlentymarketsImportEntityItemLinked provides the actual linked items import functionality.

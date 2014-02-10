@@ -26,11 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once PY_SOAP . 'Client/PlentymarketsSoapClient.php';
-require_once PY_COMPONENTS . 'Config/PlentymarketsConfig.php';
-require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingController.php';
-require_once PY_COMPONENTS . 'Export/PlentymarketsExportController.php';
-require_once PY_COMPONENTS . 'Utils/DataIntegrity/PlentymarketsDataIntegrityController.php';
 
 /**
  * Determines the status of the plugin regarding to the communication with plenty

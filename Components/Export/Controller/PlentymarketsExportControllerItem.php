@@ -26,8 +26,6 @@
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once PY_COMPONENTS . 'Export/PlentymarketsExportController.php';
-require_once PY_COMPONENTS . 'Export/Entity/PlentymarketsExportEntityItem.php';
 
 /**
  * The class PlentymarketsExportControllerItem handles the item export.

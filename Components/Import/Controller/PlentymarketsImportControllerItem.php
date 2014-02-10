@@ -26,13 +26,6 @@
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once PY_SOAP . 'Models/PlentySoapObject/ItemBase.php';
-require_once PY_SOAP . 'Models/PlentySoapRequest/GetItemsBase.php';
-require_once PY_COMPONENTS . 'Import/Stack/PlentymarketsImportStackItem.php';
-require_once PY_COMPONENTS . 'Import/Controller/PlentymarketsImportControllerItemLinked.php';
-require_once PY_COMPONENTS . 'Import/Exception/PlentymarketsImportException.php';
-require_once PY_COMPONENTS . 'Import/Entity/PlentymarketsImportEntityItem.php';
-require_once PY_COMPONENTS . 'Import/Entity/PlentymarketsImportEntityItemStock.php';
 
 /**
  * The class PlentymarketsImportController does the actual import for different cronjobs e.g. in the class PlentymarketsCronjobController.

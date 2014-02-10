@@ -26,8 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once PY_SOAP . 'Models/PlentySoapRequest/GetItemsByStoreID.php';
-require_once PY_SOAP . 'Models/PlentySoapRequest/GetItemBundles.php';
 
 /**
  * Responsible for all clean up processes

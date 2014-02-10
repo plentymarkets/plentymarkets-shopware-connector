@@ -28,9 +28,6 @@
 
 
 // Dependencies
-require_once PY_SOAP . 'Models/PlentySoapResponseMessage.php';
-require_once PY_SOAP . 'Models/PlentySoapResponseSubMessage.php';
-require_once PY_SOAP . 'PlentymarketsSoapConnectionException.php';
 
 /**
  * The class PlentymarketsSoapClient is used in most classes of the plentymarkets plugin. It provides all
@@ -227,7 +224,6 @@ class PlentymarketsSoapClient extends SoapClient
 	private function getToken()
 	{
 		// Load the request model
-		require_once PY_SOAP . 'Models/PlentySoapRequest/GetAuthentificationToken.php';
 
 		// Authentication
 		$Request_GetAuthentificationToken = new PlentySoapRequest_GetAuthentificationToken();

@@ -26,16 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once PY_COMPONENTS . 'Config/PlentymarketsConfig.php';
-require_once PY_COMPONENTS . 'Utils/PlentymarketsLogger.php';
-require_once PY_COMPONENTS . 'Utils/PlentymarketsUtils.php';
-require_once PY_COMPONENTS . 'Soap/Client/PlentymarketsSoapClient.php';
-require_once PY_COMPONENTS . 'Import/PlentymarketsImportController.php';
-require_once PY_COMPONENTS . 'Import/PlentymarketsImportItemAssociateController.php';
-require_once PY_COMPONENTS . 'Export/PlentymarketsExportController.php';
-require_once PY_COMPONENTS . 'Export/PlentymarketsExportWizard.php';
-require_once PY_COMPONENTS . 'Export/Status/PlentymarketsExportStatusController.php';
-require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingController.php';
 
 /**
  * This class is a main plentymarkets backend action controller. This controller processes all kinds of backend actions
@@ -50,7 +40,6 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	 */
 	public function runCleanupActionAction()
 	{
-		require_once PY_COMPONENTS . 'Utils/PlentymarketsGarbageCollector.php';
 
 		switch ($this->Request()->get('entity'))
 		{
@@ -79,8 +68,6 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	 */
 	public function deleteDataIntegrityInvalidDataAction()
 	{
-		require_once PY_COMPONENTS . 'Utils/PlentymarketsGarbageCollector.php';
-		require_once PY_COMPONENTS . 'Utils/DataIntegrity/PlentymarketsDataIntegrityController.php';
 
 		$Check = PlentymarketsDataIntegrityController::getInstance()->getCheck($this->Request()->get('type'));
 		$Check->deleteInvalidData(
@@ -103,7 +90,6 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	 */
 	public function getDataIntegrityInvalidListAction()
 	{
-		require_once PY_COMPONENTS . 'Utils/DataIntegrity/PlentymarketsDataIntegrityController.php';
 
 		$Checks = PlentymarketsDataIntegrityController::getInstance()->getChecks();
 		$data = array();
@@ -127,7 +113,6 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	public function getDataIntegrityInvalidDataListAction()
 	{
 
-		require_once PY_COMPONENTS . 'Utils/DataIntegrity/PlentymarketsDataIntegrityController.php';
 		$Check = PlentymarketsDataIntegrityController::getInstance()->getCheck($this->Request()->get('type'));
 
 		$this->View()->assign(array(
@@ -239,7 +224,6 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	 */
 	public function getDxWizardAction()
 	{
-		require_once PY_COMPONENTS . 'Export/PlentymarketsExportWizard.php';
 		$Wizard = PlentymarketsExportWizard::getInstance();
 
 		$this->View()->assign(array(
@@ -256,7 +240,6 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	 */
 	public function setDxWizardAction()
 	{
-		require_once PY_COMPONENTS . 'Export/PlentymarketsExportWizard.php';
 		$Wizard = PlentymarketsExportWizard::getInstance();
 
 		if ($this->Request()->get('activate', 'no') == 'yes')
@@ -708,7 +691,6 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	 */
 	public function getMappingDataAction()
 	{
-		require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingDataController.php';
 
 		$map = $this->Request()->getParam('map');
 		$DataController = new PlentymarketsMappingDataController($this->Request()->getParam('auto', false));

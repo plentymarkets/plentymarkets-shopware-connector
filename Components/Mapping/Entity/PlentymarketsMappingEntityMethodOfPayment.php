@@ -26,7 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once PY_COMPONENTS . 'Mapping/Entity/PlentymarketsMappingEntityAbstract.php';
 
 /**
  * PlentymarketsMappingEntityMethodOfPayment provides the actual method of payment mapping functionality.

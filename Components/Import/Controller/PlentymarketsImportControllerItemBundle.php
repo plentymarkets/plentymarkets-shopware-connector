@@ -26,8 +26,6 @@
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once PY_COMPONENTS . 'Import/Entity/Order/PlentymarketsImportEntityItemBundle.php';
-require_once PY_SOAP . 'Models/PlentySoapRequest/GetItemBundles.php';
 
 /**
  * Controller of the item bundles

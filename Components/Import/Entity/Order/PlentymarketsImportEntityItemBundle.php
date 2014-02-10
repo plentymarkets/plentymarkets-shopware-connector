@@ -1,6 +1,5 @@
 <?php
 
-require_once PY_SOAP . 'Models/PlentySoapRequest/GetItemsBase.php';
 
 /**
  * Imports a item bundle

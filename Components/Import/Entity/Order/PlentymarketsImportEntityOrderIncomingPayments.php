@@ -22,7 +22,6 @@
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once __DIR__ . '/PlentymarketsImportEntityOrderAbstract.php';
 
 /**
  * PlentymarketsImportEntityOrderIncomingPayments provides the actual order incoming payments import functionality.

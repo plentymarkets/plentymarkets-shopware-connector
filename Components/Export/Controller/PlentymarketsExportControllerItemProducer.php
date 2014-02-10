@@ -26,10 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once PY_SOAP . 'Models/PlentySoapObject/Producer.php';
-require_once PY_SOAP . 'Models/PlentySoapRequest/SetProducers.php';
-require_once PY_SOAP . 'Models/PlentySoapObject/GetProducers.php';
-require_once PY_COMPONENTS . 'Export/PlentymarketsExportException.php';
 
 /**
  * PlentymarketsExportControllerItemProducer provides the actual items export functionality. Like the other export

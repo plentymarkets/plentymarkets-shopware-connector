@@ -26,11 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once PY_SOAP . 'Models/PlentySoapObject/GetItemsImages.php';
-require_once PY_SOAP . 'Models/PlentySoapObject/ItemImage.php';
-require_once PY_SOAP . 'Models/PlentySoapRequest/GetItemsImages.php';
-require_once PY_SOAP . 'Models/PlentySoapRequest/GetItemsVariantImages.php';
-require_once PY_SOAP . 'Models/PlentySoapRequestObject/GetItemsVariantImages.php';
 
 /**
  * PlentymarketsImportEntityItemImage provides the actual item image import functionality. Like the other import

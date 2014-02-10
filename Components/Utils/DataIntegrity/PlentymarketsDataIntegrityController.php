@@ -26,11 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once PY_COMPONENTS . 'Utils/DataIntegrity/Check/PlentymarketsDataIntegrityCheckItemMainDetailLost.php';
-require_once PY_COMPONENTS . 'Utils/DataIntegrity/Check/PlentymarketsDataIntegrityCheckItemOrphaned.php';
-require_once PY_COMPONENTS . 'Utils/DataIntegrity/Check/PlentymarketsDataIntegrityCheckItemVariationGroupMultiple.php';
-require_once PY_COMPONENTS . 'Utils/DataIntegrity/Check/PlentymarketsDataIntegrityCheckItemVariationOptionNotInSet.php';
-require_once PY_COMPONENTS . 'Utils/DataIntegrity/Check/PlentymarketsDataIntegrityCheckItemVariationOptionLost.php';
 
 /**
  * Data integrity conroller class

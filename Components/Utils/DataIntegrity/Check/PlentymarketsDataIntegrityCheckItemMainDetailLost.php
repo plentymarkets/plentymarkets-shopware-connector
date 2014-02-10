@@ -26,8 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once PY_COMPONENTS . 'Import/PlentymarketsImportItemHelper.php';
-require_once PY_COMPONENTS . 'Utils/DataIntegrity/PlentymarketsDataIntegrityCheckInterface.php';
 
 /**
  * Checks for items with non-existant main details

@@ -26,13 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once PY_SOAP . 'Models/PlentySoapObject/GetItemAttributesAttribute.php';
-require_once PY_SOAP . 'Models/PlentySoapObject/GetItemAttributesAttributeValue.php';
-require_once PY_SOAP . 'Models/PlentySoapRequest/GetItemAttributes.php';
-require_once PY_SOAP . 'Models/PlentySoapObject/AddItemAttribute.php';
-require_once PY_SOAP . 'Models/PlentySoapObject/AddItemAttributeValue.php';
-require_once PY_SOAP . 'Models/PlentySoapRequest/AddItemAttribute.php';
-require_once PY_COMPONENTS . 'Export/PlentymarketsExportException.php';
 
 /**
  * PlentymarketsExportControllerItemAttribute provides the actual items export functionality. Like the other export

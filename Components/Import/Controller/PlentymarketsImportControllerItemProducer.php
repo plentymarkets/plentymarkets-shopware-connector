@@ -26,8 +26,6 @@
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once PY_SOAP . 'Models/PlentySoapRequest/GetProducers.php';
-require_once PY_COMPONENTS . 'Import/Entity/PlentymarketsImportEntityItemProducer.php';
 
 /**
  * Imports the item producers

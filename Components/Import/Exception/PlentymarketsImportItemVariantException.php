@@ -26,7 +26,6 @@
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once __DIR__ . '/PlentymarketsImportItemException.php';
 
 /**
  * Plentymarkets Import Exception

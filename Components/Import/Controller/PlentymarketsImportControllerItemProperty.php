@@ -26,10 +26,6 @@
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once PY_SOAP . 'Models/PlentySoapRequest/GetPropertyGroups.php';
-require_once PY_SOAP . 'Models/PlentySoapRequest/GetProperties.php';
-require_once PY_COMPONENTS . 'Import/Entity/PlentymarketsImportEntityItemPropertyGroup.php';
-require_once PY_COMPONENTS . 'Import/Entity/PlentymarketsImportEntityItemPropertyOption.php';
 
 /**
  * Imports the item properties

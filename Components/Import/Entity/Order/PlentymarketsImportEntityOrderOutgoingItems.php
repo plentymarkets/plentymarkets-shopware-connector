@@ -22,7 +22,6 @@
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once __DIR__ . '/PlentymarketsImportEntityOrderAbstract.php';
 
 /**
  * PlentymarketsImportEntityOrderOutgoingItems provides the actual order outgoing items import functionality.

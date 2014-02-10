@@ -26,8 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once PY_COMPONENTS . 'Import/PlentymarketsImportController.php';
-require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingController.php';
 
 /**
  * The PlentymarketsMappingDataController is the main controller for mapping issues. This class is called

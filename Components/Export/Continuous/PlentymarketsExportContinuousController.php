@@ -79,7 +79,6 @@ class PlentymarketsExportContinuousController
 	public function run($entity)
 	{
 		$class = sprintf('PlentymarketsExportContinuousController%s', $entity);
-		require_once PY_COMPONENTS . 'Export/Continuous/Controller/'.$class.'.php';
 		$Controller = new $class;
 		$Controller->run();
 	}

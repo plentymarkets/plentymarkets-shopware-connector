@@ -26,7 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once PY_COMPONENTS . 'Export/Entity/PlentymarketsExportEntityItemLinked.php';
 
 /**
  * PlentymarketsExportControllerItemCrossSelling handles the export of the cross selling

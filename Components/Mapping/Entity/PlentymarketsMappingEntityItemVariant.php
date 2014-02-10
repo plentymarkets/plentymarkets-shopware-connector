@@ -26,7 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once PY_COMPONENTS . 'Mapping/Entity/PlentymarketsMappingEntityAbstract.php';
 
 /**
  * PlentymarketsMappingEntityItemVariant provides the actual item variant mapping functionality.

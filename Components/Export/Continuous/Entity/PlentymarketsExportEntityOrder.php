@@ -26,19 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once PY_SOAP . 'Models/PlentySoapObject/DeliveryAddress.php';
-require_once PY_SOAP . 'Models/PlentySoapObject/Order.php';
-require_once PY_SOAP . 'Models/PlentySoapObject/OrderDocumentNumbers.php';
-require_once PY_SOAP . 'Models/PlentySoapObject/OrderHead.php';
-require_once PY_SOAP . 'Models/PlentySoapObject/OrderIncomingPayment.php';
-require_once PY_SOAP . 'Models/PlentySoapObject/OrderInfo.php';
-require_once PY_SOAP . 'Models/PlentySoapObject/OrderItem.php';
-require_once PY_SOAP . 'Models/PlentySoapObject/SalesOrderProperty.php';
-require_once PY_SOAP . 'Models/PlentySoapObject/String.php';
-require_once PY_SOAP . 'Models/PlentySoapRequest/AddOrders.php';
-require_once PY_COMPONENTS . 'Export/PlentymarketsExportEntityException.php';
-require_once PY_COMPONENTS . 'Export/Entity/PlentymarketsExportEntityCustomer.php';
-require_once PY_COMPONENTS . 'Export/Continuous/Entity/PlentymarketsExportEntityOrderIncomingPayment.php';
 
 /**
  * PlentymarketsExportEntityOrder provides the actual items export functionality. Like the other export

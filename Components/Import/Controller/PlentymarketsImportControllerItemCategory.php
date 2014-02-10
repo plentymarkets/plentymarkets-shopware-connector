@@ -26,8 +26,6 @@
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once PY_SOAP . 'Models/PlentySoapRequest/GetItemCategoryCatalogBase.php';
-require_once PY_COMPONENTS . 'Import/Entity/PlentymarketsImportEntityItemCategory.php';
 
 /**
  * Imports the item categories

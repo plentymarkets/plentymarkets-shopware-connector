@@ -26,15 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once PY_SOAP . 'Client/PlentymarketsSoapClient.php';
-require_once PY_COMPONENTS . 'Config/PlentymarketsConfig.php';
-require_once PY_COMPONENTS . 'Mapping/PlentymarketsMappingController.php';
-require_once PY_COMPONENTS . 'Utils/PlentymarketsGarbageCollector.php';
-require_once PY_COMPONENTS . 'Import/PlentymarketsImportController.php';
-require_once PY_COMPONENTS . 'Import/Controller/PlentymarketsImportControllerItemBundle.php';
-require_once PY_COMPONENTS . 'Import/Stack/PlentymarketsImportStackItem.php';
-require_once PY_COMPONENTS . 'Export/PlentymarketsExportController.php';
-require_once PY_COMPONENTS . 'Export/Continuous/PlentymarketsExportContinuousController.php';
 
 /**
  * The class CronjobController provides all methods for data import and export. CronjobController is used in
@@ -328,7 +319,6 @@ class PlentymarketsCronjobController
 			PlentymarketsLogger::getInstance()->error('Cron:Export', $E->getTraceAsString(), 1000);
 		}
 
-		require_once PY_COMPONENTS . 'Export/PlentymarketsExportWizard.php';
 		$PlentymarketsExportWizard = PlentymarketsExportWizard::getInstance();
 		$PlentymarketsExportWizard->conjure();
 	}
@@ -374,7 +364,6 @@ class PlentymarketsCronjobController
 			return;
 		}
 
-		require_once PY_COMPONENTS . 'Import/PlentymarketsImportItemAssociateController.php';
 
 		$PlentymarketsImportItemAssociateController = new PlentymarketsImportItemAssociateController();
 		$PlentymarketsImportItemAssociateController->run($Job->getJob()->getInterval());

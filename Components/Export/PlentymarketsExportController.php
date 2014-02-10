@@ -26,11 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once PY_COMPONENTS . 'Utils/PlentymarketsGarbageCollector.php';
-require_once PY_COMPONENTS . 'Utils/DataIntegrity/PlentymarketsDataIntegrityController.php';
-require_once PY_COMPONENTS . 'Export/PlentymarketsExportException.php';
-require_once PY_COMPONENTS . 'Export/Status/PlentymarketsExportStatus.php';
-require_once PY_COMPONENTS . 'Export/Status/PlentymarketsExportStatusController.php';
 
 /**
  * The class PlentymarketsExportController does the actual export for different cronjobs e.g. in the class PlentymarketsCronjobController.
@@ -288,7 +283,6 @@ class PlentymarketsExportController
 		{
 			// Get the controller
 			$class = sprintf('PlentymarketsExportController%s', $entity);
-			require_once PY_COMPONENTS . 'Export/Controller/'. $class .'.php';
 
 			// and run it
 			$Instance = new $class();

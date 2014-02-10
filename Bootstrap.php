@@ -31,11 +31,8 @@ define('PY_COMPONENTS', PY_BASE . 'Components' . DIRECTORY_SEPARATOR);
 define('PY_SOAP', PY_COMPONENTS . 'Soap' . DIRECTORY_SEPARATOR);
 define('PY_CONTROLLERS', PY_BASE . 'Controllers' . DIRECTORY_SEPARATOR);
 
-require_once PY_COMPONENTS . 'Config/PlentymarketsConfig.php';
-require_once PY_COMPONENTS . 'Utils/PlentymarketsUtils.php';
-require_once PY_COMPONENTS . 'Utils/PlentymarketsStatus.php';
-require_once PY_COMPONENTS . 'Utils/PlentymarketsLogger.php';
-require_once PY_COMPONENTS . 'Cron/PlentymarketsCronjobController.php';
+require_once PY_COMPONENTS . 'Utils/PlentymarketsAutoloader.php';
+PlentymarketsAutoloader::register();
 
 define('IMPORT_ITEM_IMAGE_SYNC', 1);
 define('IMPORT_ITEM_IMAGE_NO_SYNC', 0);

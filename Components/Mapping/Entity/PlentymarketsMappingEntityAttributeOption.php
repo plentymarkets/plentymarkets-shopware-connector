@@ -26,7 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once PY_COMPONENTS . 'Mapping/Entity/PlentymarketsMappingEntityAbstract.php';
 
 /**
  * PlentymarketsMappingEntityAttributeOption provides the actual attribute option mapping functionality.

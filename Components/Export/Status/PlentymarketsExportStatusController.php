@@ -26,9 +26,6 @@
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once PY_COMPONENTS . 'Export/PlentymarketsExportWizard.php';
-require_once PY_COMPONENTS . 'Export/Status/PlentymarketsExportStatus.php';
-require_once PY_COMPONENTS . 'Export/Status/PlentymarketsExportStatusDependency.php';
 
 /**
  * Controlles the initial export status

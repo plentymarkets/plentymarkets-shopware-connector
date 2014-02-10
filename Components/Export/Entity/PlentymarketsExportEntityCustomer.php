@@ -26,13 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-require_once PY_SOAP . 'Models/PlentySoapObject/AddCustomersCustomer.php';
-require_once PY_SOAP . 'Models/PlentySoapObject/CustomerBankData.php';
-require_once PY_SOAP . 'Models/PlentySoapObject/CustomerFreeTestFields.php';
-require_once PY_SOAP . 'Models/PlentySoapObject/AddCustomerDeliveryAddressesCustomer.php';
-require_once PY_SOAP . 'Models/PlentySoapRequest/AddCustomers.php';
-require_once PY_SOAP . 'Models/PlentySoapRequest/AddCustomerDeliveryAddresses.php';
-require_once PY_COMPONENTS . 'Export/PlentymarketsExportEntityException.php';
 
 /**
  * PlentymarketsExportEntityCustomer provides the actual customer export functionality. Like the other export
