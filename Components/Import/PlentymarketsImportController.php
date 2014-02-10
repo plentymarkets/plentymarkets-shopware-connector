@@ -51,7 +51,6 @@ class PlentymarketsImportController
 	 */
 	public static function importItemPrices()
 	{
-		// Dependencies
 		$numberOfPricesUpdates = 0;
 
 		PlentymarketsLogger::getInstance()->message('Sync:Item:Price', 'LastUpdate: ' . date('r', PlentymarketsConfig::getInstance()->getImportItemPriceLastUpdateTimestamp(time())));

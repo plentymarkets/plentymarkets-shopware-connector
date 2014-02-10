@@ -27,7 +27,6 @@
  */
 
 
-// Dependencies
 
 /**
  * The class PlentymarketsSoapClient is used in most classes of the plentymarkets plugin. It provides all
