@@ -31,8 +31,8 @@ define('PY_COMPONENTS', PY_BASE . 'Components' . DIRECTORY_SEPARATOR);
 define('PY_SOAP', PY_COMPONENTS . 'Soap' . DIRECTORY_SEPARATOR);
 define('PY_CONTROLLERS', PY_BASE . 'Controllers' . DIRECTORY_SEPARATOR);
 
-require_once PY_COMPONENTS . 'Utils/PlentymarketsAutoloader.php';
-PlentymarketsAutoloader::register();
+require_once PY_COMPONENTS . 'Utils/PlentymarketsAutoLoader.php';
+PlentymarketsAutoLoader::register();
 
 define('IMPORT_ITEM_IMAGE_SYNC', 1);
 define('IMPORT_ITEM_IMAGE_NO_SYNC', 0);
