@@ -26,7 +26,6 @@
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * PlentymarketsImportEntityItemLinked provides the actual linked items import functionality.
  * Like the other import entities this class is called in PlentymarketsImportController.
@@ -59,17 +58,33 @@ class PlentymarketsImportEntityItemLinked
 	 */
 	public function __construct($itemId, $GetLinkedItems)
 	{
-		$this->SHOPWARE_itemId = $itemId;
+		$this->SHOPWARE_itemId = (integer) $itemId;
 		$this->LinkedItems = $GetLinkedItems;
 	}
 
 	/**
-	 * Deletes all linkes items
+	 * Deletes all linked items
 	 */
 	protected function purge()
 	{
-		Shopware()->Db()->delete('s_articles_relationships', 'articleID = ' . (integer) $this->SHOPWARE_itemId);
-		Shopware()->Db()->delete('s_articles_similar', 'articleID = ' . (integer) $this->SHOPWARE_itemId);
+		Shopware()->Db()->delete('s_articles_relationships', 'articleID = ' . $this->SHOPWARE_itemId);
+		Shopware()->Db()->delete('s_articles_similar', 'articleID = ' . $this->SHOPWARE_itemId);
+	}
+
+	/**
+	 * Deletes the view counter for non existent links
+	 */
+	protected function purgeViews()
+	{
+		Shopware()->Db()->exec('
+			DELETE FROM
+					s_articles_similar_shown_ro
+				WHERE
+					article_id = ' . $this->SHOPWARE_itemId . ' AND
+					related_article_id NOT IN (
+						SELECT relatedarticle FROM s_articles_similar WHERE articleID = ' . $this->SHOPWARE_itemId . '
+					)
+		');
 	}
 
 	/**
@@ -114,5 +129,7 @@ class PlentymarketsImportEntityItemLinked
 				)
 			);
 		}
+
+		$this->purgeViews();
 	}
 }
