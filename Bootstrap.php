@@ -1163,7 +1163,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
      */
     public function getVersion()
     {
-    	return '1.5.4';
+    	return '1.5.5';
     }
 
     /**
