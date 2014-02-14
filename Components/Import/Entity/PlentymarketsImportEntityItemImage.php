@@ -191,6 +191,14 @@ class PlentymarketsImportEntityItemImage
 		foreach ($article->getImages() as $image)
 		{
 			$media = $image->getMedia();
+
+			// Generate the thumbnails
+			if (version_compare('4.2', Shopware::VERSION) != 1)
+			{
+				$manager = Shopware()->Container()->get('thumbnail_manager');
+				$manager->createMediaThumbnail($media, array(), true);
+			}
+
 			$name = $media->getFile()->getFilename();
 
 			if (isset($plentyImageName2Id[$name]))
