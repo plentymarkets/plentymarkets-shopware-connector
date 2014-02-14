@@ -111,7 +111,7 @@ class PlentymarketsExportEntityItem
 			$ReleaseDate = $ItemDetails->getReleaseDate();
 		}
 
-		// May cras – when the relation is in the database but the actual data record is missing
+		// May crash – when the relation is in the database but the actual data record is missing
 		catch (Doctrine\ORM\EntityNotFoundException $E)
 		{
 			throw new PlentymarketsExportException('The item »' . $this->SHOPWARE_Article->getName() . '« with the id »' . $this->SHOPWARE_Article->getId() . '« could not be exported (missing main detail)', 2811);
