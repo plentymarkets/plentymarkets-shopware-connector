@@ -820,4 +820,4 @@
   'PlentySoapResponse_SetWarranty' => '../../Components/Soap/Models/PlentySoapResponse/SetWarranty.php',
   'Shopware_Controllers_Backend_Plentymarkets' => '../../Controllers/Backend/Plentymarkets.php',
   'Shopware_Plugins_Backend_PlentyConnector_Bootstrap' => '../../Bootstrap.php',
-); 
+);
