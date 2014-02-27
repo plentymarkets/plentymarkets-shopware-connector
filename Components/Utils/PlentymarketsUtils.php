@@ -26,7 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * The class PlentymarketsUtils contains different useful methods. The get-methods of this class are used
  * in some export and import entity classes. And the check-methods are used in the controllers PlentymarketsCronjobController
@@ -86,6 +85,7 @@ class PlentymarketsUtils
 	public static function getShopwareIDFromExternalItemID($externalItemID)
 	{
 		list ($shopwareID) = sscanf($externalItemID, self::EXTERNAL_ITEM_ID_FORMAT);
+
 		return (integer) $shopwareID;
 	}
 
@@ -98,6 +98,7 @@ class PlentymarketsUtils
 	public static function getShopwareIDFromExternalOrderID($externalItemID)
 	{
 		list ($shopwareID) = sscanf($externalItemID, self::EXTERNAL_ORDER_ID_FORMAT);
+
 		return (integer) $shopwareID;
 	}
 
@@ -137,6 +138,7 @@ class PlentymarketsUtils
 		if (Shopware()->Bootstrap()->issetResource('License'))
 		{
 			$License = Shopware()->License();
+
 			return $License->checkCoreLicense(false);
 		}
 		else
@@ -154,6 +156,7 @@ class PlentymarketsUtils
 	public static function convertBytes($size)
 	{
 		$unit = array('b', 'kb', 'mb', 'gb', 'tb', 'pb');
+
 		return @round($size / pow(1024, ($i = floor(log($size, 1024)))), 2) . ' ' . $unit[$i];
 	}
 
@@ -205,7 +208,7 @@ class PlentymarketsUtils
 		}
 
 		$path = realpath(
-			Shopware()->AppPath() . '/Plugins/'. $plugin['source'] .'/'. $plugin['namespace'] .'/SwagBundle/Models/'
+			Shopware()->AppPath() . '/Plugins/' . $plugin['source'] . '/' . $plugin['namespace'] . '/SwagBundle/Models/'
 		);
 
 		if (!$path)
@@ -235,6 +238,32 @@ class PlentymarketsUtils
 	public static function getRootIdByCategory(Shopware\Models\Category\Category $category)
 	{
 		$path = array_reverse(explode('|', $category->getPath()));
+
 		return $path[1];
+	}
+
+	/**
+	 * @var null|array
+	 */
+	protected static $availability = null;
+
+	/**
+	 * Returns the shipping time
+	 *
+	 * @param $availabilityId
+	 * @return integer|null
+	 */
+	public static function getShippingTimeByAvailabilityId($availabilityId)
+	{
+		if ((integer) $availabilityId <= 0)
+		{
+			return null;
+		}
+		if (!is_array(self::$availability))
+		{
+			self::$availability = PlentymarketsImportController::getItemAvailability();
+		}
+
+		return isset(self::$availability[$availabilityId]) ? self::$availability[$availabilityId] : null;
 	}
 }

@@ -157,8 +157,7 @@ class PlentymarketsImportEntityItem
 	protected function setDetails()
 	{
 		// Shipping time
-		$availability = PlentymarketsImportController::getItemAvailability();
-		$shippingTime = isset($availability[$this->ItemBase->Availability->AvailabilityID]) ? $availability[$this->ItemBase->Availability->AvailabilityID] : null;
+		$shippingTime = PlentymarketsUtils::getShippingTimeByAvailabilityId($this->ItemBase->Availability->AvailabilityID);
 
 		// Active
 		$active = $this->ItemBase->Availability->Inactive == 0 && $this->ItemBase->Availability->Webshop == 1;
@@ -366,6 +365,12 @@ class PlentymarketsImportEntityItem
 				}
 			}
 
+			$shippingTime = PlentymarketsUtils::getShippingTimeByAvailabilityId($AttributeValueSet->Availability);
+			if ($shippingTime)
+			{
+				$details['shippingtime'] = $shippingTime;
+			}
+
 			$details['additionaltext'] = $AttributeValueSet->AttributeValueSetName;
 			$details['ean'] = $AttributeValueSet->EAN;
 			$details['X_plentySku'] = $sku;
@@ -375,7 +380,7 @@ class PlentymarketsImportEntityItem
 	}
 
 	/**
-	 * Sets the categories. Non-existing categories will be created immediatly.
+	 * Sets the categories. Non-existing categories will be created immediately.
 	 */
 	protected function setCategories()
 	{
