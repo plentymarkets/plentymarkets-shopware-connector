@@ -195,6 +195,13 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
 				inputValue: 1,
 				uncheckedValue: '0',
 				supportText: 'Aktivieren, wenn die Artikelnummern von plentymarkets übernommen werden sollen.'
+            }, {
+                fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemBundleHeadActionID}Artikelpaket-Artikel erstellen{/s}',
+                name: 'ItemBundleHeadActionID',
+                xtype: 'checkbox',
+                inputValue: 1,
+                uncheckedValue: '0',
+                supportText: 'Aktivieren, wenn die Artikelpaket-Artikel (das eigentliche Paket) von plentymarkets als normaler Artikel in shopware angelegt werden soll. Dies ist <b>nicht</b> die Synchronisierung der Bundles!'
 			}, {
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/DefaultCustomerGroupKey}Standard-Kundenklasse{/s}',
 				name: 'DefaultCustomerGroupKey',

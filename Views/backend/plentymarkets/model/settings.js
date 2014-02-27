@@ -105,6 +105,10 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		type: 'integer',
 		defaultValue: 1
 	}, {
+		name: 'ItemBundleHeadActionID',
+		type: 'integer',
+		defaultValue: 0
+	}, {
 		name: 'ItemCleanupActionID',
 		type: 'integer',
 		defaultValue: 1

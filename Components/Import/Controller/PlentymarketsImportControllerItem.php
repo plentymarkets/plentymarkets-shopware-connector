@@ -98,7 +98,7 @@ class PlentymarketsImportControllerItem
 		$ItemBase = $Response_GetItemsBase->ItemsBase->item[0];
 
 		// Skip bundles
-		if ($ItemBase->BundleType == 'bundle')
+		if ($ItemBase->BundleType == 'bundle' && PlentymarketsConfig::getInstance()->getItemBundleHeadActionID(IMPORT_ITEM_BUNDLE_HEAD_NO) == IMPORT_ITEM_BUNDLE_HEAD_NO)
 		{
 			PlentymarketsLogger::getInstance()->message('Sync:Item', 'The item »' . $ItemBase->Texts->Name . '« will be skipped (bundle)');
 			return;
