@@ -649,16 +649,13 @@ class PlentymarketsImportController
 		/** @var PlentySoapObject_GetVATConfig $VAT */
 		foreach ($Response_GetVATConfig->DefaultVAT->item as $VAT)
 		{
-			if ($VAT->VATValue == 0)
-			{
-				continue;
-			}
-
 			$vat[$VAT->InternalVATID] = array(
 				'id' => $VAT->InternalVATID,
-				'name' => $VAT->VATValue . ' %'
+				'name' => $VAT->VATValue . ' % (ID ' . $VAT->InternalVATID . ')'
 			);
 		}
+
+		ksort($vat);
 
 		// Delete non active plentymarkets VATs from mapping table:
 		if (count($vat))
