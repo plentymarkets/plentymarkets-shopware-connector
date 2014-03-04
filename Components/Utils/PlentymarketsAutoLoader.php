@@ -63,8 +63,9 @@ class PlentymarketsAutoLoader
 	/**
 	 * Registers the auto loader
 	 */
-	public function register()
+	public static function register()
 	{
-		spl_autoload_register(array($this, 'load'));
+		$loader = new self();
+		spl_autoload_register(array($loader, 'load'));
 	}
 }
