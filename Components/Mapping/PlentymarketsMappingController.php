@@ -45,7 +45,7 @@ class PlentymarketsMappingController
 	 * @throws Exception
 	 * @return mixed
 	 */
-	public function __callStatic($name, $arguments)
+	public static function __callStatic($name, $arguments)
 	{
 		$matches = array();
 		preg_match('/(add|get|delete)([A-Z][a-zA-Z]*?)(?:By(Shopware|Plenty)ID)?$/', $name, $matches);
