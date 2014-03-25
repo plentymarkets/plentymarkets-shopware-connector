@@ -85,11 +85,6 @@ class PlentymarketsImportItemVariantController
 	protected $valueId2markup = array();
 
 	/**
-	 * @var array
-	 */
-	protected $valueId2Markup = array();
-
-	/**
 	 *
 	 * @var array
 	 */
@@ -109,7 +104,8 @@ class PlentymarketsImportItemVariantController
 
 		foreach ($this->ItemBase->ItemAttributeMarkup->item as $ItemAttributeMarkup)
 		{
-			$this->valueId2Markup[$ItemAttributeMarkup->ValueID] = (float) $ItemAttributeMarkup->Markup;
+			// May be percentage or flat rate surcharge
+			$this->valueId2markup[$ItemAttributeMarkup->ValueID] = (float) $ItemAttributeMarkup->Markup;
 		}
 
 		//
@@ -176,13 +172,23 @@ class PlentymarketsImportItemVariantController
 						$valueIds[] = $Attribute->AttributeValue->ValueID;
 					}
 
-					if ($this->valueId2Markup[$Attribute->AttributeValue->ValueID])
+					if ($this->valueId2markup[$Attribute->AttributeValue->ValueID])
 					{
-						$this->variant2markup[$AttributeValueSet->AttributeValueSetID] += $this->valueId2Markup[$Attribute->AttributeValue->ValueID];
+						$markup = $this->valueId2markup[$Attribute->AttributeValue->ValueID];
 					}
 					else
 					{
-						$this->variant2markup[$AttributeValueSet->AttributeValueSetID] += (float) $Attribute->AttributeValue->Markup;
+						$markup = (float) $Attribute->AttributeValue->Markup;
+					}
+
+					if ($markup)
+					{
+						if ($Attribute->MarkupPercental == 1)
+						{
+							$markup = $this->ItemBase->PriceSet->Price / 100 * $markup;
+						}
+
+						$this->variant2markup[$AttributeValueSet->AttributeValueSetID] += $markup;
 					}
 				}
 			}

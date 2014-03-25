@@ -749,10 +749,13 @@ class PlentymarketsImportEntityItem
 				$numberOfVariantsCreated = 0;
 				$numberOfVariantsDeleted = 0;
 
+				//
+				$number2markup = array();
+
 				foreach ($this->variants as $variantId => $variant)
 				{
 					// Markup
-					$variant['X_plentyMarkup'] = $VariantController->getMarkupByVariantId($variantId);
+					$number2markup[$variant['number']] = $VariantController->getMarkupByVariantId($variantId);
 
 					// If the variant has an id, it is already created and mapped soo we just keep it
 					if (array_key_exists('id', $variant))
@@ -770,7 +773,7 @@ class PlentymarketsImportEntityItem
 
 						// Internal mapping of the variant number to some plenty information
 						$number2sku[$variant['number']] = $variant['X_plentySku'];
-						$number2markup[$variant['number']] = $variant['X_plentyMarkup'];
+
 					}
 
 					$variants[] = $variant;
@@ -781,7 +784,7 @@ class PlentymarketsImportEntityItem
 					'groups' => $VariantController->getGroups()
 				);
 
-				// Varianten löschen, wenn nicht eine aktualisiert worden ist
+				// Delete all variants
 				if ($numberOfVariantsUpdated == 0)
 				{
 					$Article = $ArticleResource->update($SHOPWARE_itemID, array(
@@ -815,7 +818,7 @@ class PlentymarketsImportEntityItem
 				// Add the main detail
 				$article['details'][] = $article['mainDetail'];
 
-				// Mapping für die Varianten
+				// Mapping for the variants
 				foreach ($article['details'] as $detail)
 				{
 					// If the variant is not needed anymore - delete it
