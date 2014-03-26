@@ -199,7 +199,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Start', {
 				name: 'PlentymarketsVersion'
 			}, {
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/PlentyApiVersion149}SOAP API{/s}',
-				value: '110'
+				value: '111'
 			}, {
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ConnectorVersion149}Connector{/s}',
 				name: 'ConnectorVersion'
