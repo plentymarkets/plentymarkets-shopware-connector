@@ -35,14 +35,14 @@ class PlentymarketsImportEntityItemCategory
 {
 	/**
 	 *
-	 * @var PlentySoapObject_GetItemCategoryCatalogBase
+	 * @var PlentySoapObject_GetItemCategoryCatalog
 	 */
 	protected $Category;
 
 	/**
 	 * I am the contructor
 	 *
-	 * @param PlentySoapObject_GetItemCategoryCatalogBase $Category
+	 * @param PlentySoapObject_GetItemCategoryCatalog $Category
 	 */
 	public function __construct($Category)
 	{
@@ -64,7 +64,7 @@ class PlentymarketsImportEntityItemCategory
 				LIMIT 1
 		');
 
-		// If there is not match, the categoty ain't used in shopware
+		// If there is not match, the category ain't used in shopware
 		if (!$match)
 		{
 			return PyLog()->message('Sync:Item:Attribute', 'Skipping the category »' . $this->Category->Name . '« (unused)');
@@ -78,7 +78,7 @@ class PlentymarketsImportEntityItemCategory
 		/** @var Shopware\Models\Category\Category $Category */
 		$Category = Shopware()->Models()->find('Shopware\Models\Category\Category', $match['shopwareId']);
 
-		// If the shopware categoty wasn't found, something is terribly wrong
+		// If the shopware category wasn't found, something is terribly wrong
 		if (!$Category)
 		{
 			return PyLog()->message('Sync:Item:Attribute', 'Skipping the category »' . $this->Category->Name . '« (not found)');
@@ -97,17 +97,18 @@ class PlentymarketsImportEntityItemCategory
 			$Category = $Category->getParent();
 		}
 
-		// If no shopware categoty was found, again something is terribly wrong
+		// If no shopware category was found, again something is terribly wrong
 		if (!$hit)
 		{
 			return PyLog()->message('Sync:Item:Attribute', 'Skipping the category »' . $this->Category->Name . '« (none found)');
 		}
 
 		// Update the category only if the name's changed
-		if ($Category->getName() != $this->Category->Name)
+		if ($Category->getName() != $this->Category->Name || $Category->getPosition() != $this->Category->Position)
 		{
 			PyLog()->message('Sync:Item:Attribute', 'Updating the category »' . $this->Category->Name . '«');
 			$Category->setName($this->Category->Name);
+			$Category->setPosition($this->Category->Position);
 
 			Shopware()->Models()->persist($Category);
 			Shopware()->Models()->flush();

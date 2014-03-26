@@ -47,4 +47,9 @@ class PlentySoapRequest_GetItemCategoryCatalog
 	 * @var int
 	 */
 	public $Page;
+
+	/**
+	 * @var int
+	 */
+	public $LastUpdateFrom;
 }

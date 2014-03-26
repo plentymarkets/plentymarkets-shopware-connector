@@ -26,7 +26,6 @@
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * Imports the item categories
  *
@@ -87,30 +86,22 @@ class PlentymarketsImportControllerItemCategory
 	 */
 	public function run($lastUpdateTimestamp)
 	{
-		$Request_GetItemCategoryCatalogBase = new PlentySoapRequest_GetItemCategoryCatalogBase();
-		$Request_GetItemCategoryCatalogBase->Lang = 'de';
-		$Request_GetItemCategoryCatalogBase->LastUpdateFrom = $lastUpdateTimestamp;
-		$Request_GetItemCategoryCatalogBase->Level = 1;
+		$Request_GetItemCategoryCatalog = new PlentySoapRequest_GetItemCategoryCatalog();
+		$Request_GetItemCategoryCatalog->Lang = 'de';
+		$Request_GetItemCategoryCatalog->LastUpdateFrom = $lastUpdateTimestamp;
+
+		$Request_GetItemCategoryCatalog->Page = 0;
 
 		do
 		{
+			/** @var PlentySoapResponse_GetItemCategoryCatalog $Response_GetItemCategoryCatalog */
+			$Response_GetItemCategoryCatalog = PlentymarketsSoapClient::getInstance()->GetItemCategoryCatalog($Request_GetItemCategoryCatalog);
 
-			$Request_GetItemCategoryCatalogBase->Page = 0;
-
-			do
+			foreach ($Response_GetItemCategoryCatalog->Categories->item as $Category)
 			{
-				/** @var PlentySoapResponse_GetItemCategoryCatalogBase $Response_GetItemCategoryCatalogBase */
-				$Response_GetItemCategoryCatalogBase = PlentymarketsSoapClient::getInstance()->GetItemCategoryCatalogBase($Request_GetItemCategoryCatalogBase);
-
-				foreach ($Response_GetItemCategoryCatalogBase->Categories->item as $Category)
-				{
-					$PlentymarketsImportEntityItemCategory = new PlentymarketsImportEntityItemCategory($Category);
-					$PlentymarketsImportEntityItemCategory->import();
-				}
+				$PlentymarketsImportEntityItemCategory = new PlentymarketsImportEntityItemCategory($Category);
+				$PlentymarketsImportEntityItemCategory->import();
 			}
-
-			while (++$Request_GetItemCategoryCatalogBase->Page < $Response_GetItemCategoryCatalogBase->Pages);
-		}
-		while (++$Request_GetItemCategoryCatalogBase->Level <= 6);
+		} while (++$Request_GetItemCategoryCatalog->Page < $Response_GetItemCategoryCatalog->Pages);
 	}
 }
