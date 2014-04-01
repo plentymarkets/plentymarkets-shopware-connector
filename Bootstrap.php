@@ -50,6 +50,7 @@ define('EXPORT_ORDER_ITEM_TEXT_SYNC', 1);
 define('EXPORT_ORDER_ITEM_TEXT_SYNC_NO', 0);
 
 define('MOP_DEBIT', 3);
+define('MOP_SHOPGATE', 20);
 define('MOP_AMAZON_PAYMENT', 40);
 
 /**
@@ -1166,7 +1167,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
      */
     public function getVersion()
     {
-    	return '1.5.6';
+    	return '1.5.7';
     }
 
     /**

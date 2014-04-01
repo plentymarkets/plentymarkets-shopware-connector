@@ -56,6 +56,7 @@ Ext.define('Shopware.apps.Plentymarkets', {
 	    'OrderMarking',
 	    'Orderstatus',
 	    'Producer',
+	    'Payment',
 	    'Referrer',
 	    'settings.Batch',
 	    'Settings',
@@ -80,7 +81,8 @@ Ext.define('Shopware.apps.Plentymarkets', {
 	    'Referrer',
 	    'settings.Batch',
 	    'Settings',
-	    'Warehouse'
+	    'Warehouse',
+        'Payment',
 	],
 
 	launch: function()

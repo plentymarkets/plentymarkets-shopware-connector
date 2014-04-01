@@ -294,6 +294,16 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 			$config['_ApacheModules'] = '';
 		}
 
+		if (isset($config['OrderShopgateMOPIDs']))
+		{
+			$orderShopgateMOPIDs = explode('|', $config['OrderShopgateMOPIDs']);
+			$config['OrderShopgateMOPIDs'] = array_map('intval', $orderShopgateMOPIDs);
+		}
+		else
+		{
+			$config['OrderShopgateMOPIDs'] = array();
+		}
+
 		$this->View()->assign(array(
 			'success' => true,
 			'data' => $config
@@ -329,7 +339,11 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 				'producers' => Shopware()->Db()
 					->fetchAll('
 						SELECT id, name FROM s_articles_supplier ORDER BY name
-					')
+					'),
+				'payments' => Shopware()->Db()
+					->fetchAll('
+					SELECT id, description as name FROM s_core_paymentmeans WHERE active = 0 ORDER BY name
+				')
 			)
 		));
 	}
@@ -388,6 +402,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		$Config->setOrderMarking1($this->Request()->OrderMarking1);
 		$Config->setOrderReferrerID($this->Request()->OrderReferrerID);
 		$Config->setOrderPaidStatusID($this->Request()->OrderPaidStatusID);
+		$Config->setOrderShopgateMOPIDs(implode('|', $this->Request()->OrderShopgateMOPIDs));
 		$Config->setOrderItemTextSyncActionID($this->Request()->OrderItemTextSyncActionID == true ? EXPORT_ORDER_ITEM_TEXT_SYNC : EXPORT_ORDER_ITEM_TEXT_SYNC_NO);
 		$Config->setOutgoingItemsOrderStatus($this->Request()->OutgoingItemsOrderStatus);
 		$Config->setOutgoingItemsID($this->Request()->OutgoingItemsID);

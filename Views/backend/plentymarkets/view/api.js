@@ -121,14 +121,14 @@ Ext.define('Shopware.apps.Plentymarkets.view.Api', {
 				xtype: 'textfield',
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ApiWsdl}URL{/s}',
 				helpText: 'Die URL muss mit <b>http://</b> oder <b>https://</b> beginnen.',
-				supportText: 'Tragen Sie hier die URL Ihres plentymarkets-Systems ein. Sie finden diese Information in der plentymarkets-Administration unter <b>Einstellungen » plentyAPI-Daten » Host</b>.',
+				supportText: 'Tragen Sie hier die URL Ihres plentymarkets-Systems ein. Sie finden diese Information in der plentymarkets-Administration unter <b>Einstellungen » Grundeinstellungen » API-Daten » Host</b>.',
 				emptyText: 'http://www.ihr-plentymarkets-system.de/',
 				name: 'ApiWsdl',
 				allowBlank: false
             }, {
 				xtype: 'textfield',
 				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ApiUsernamex}Benutzername{/s}',
-				supportText: 'Der Benutzer sollte vom Typ <b>API</b> sein und nur für shopware verwendert werden. Achtung: Der Benutzer wird in Ihrem plentymarkets System unter <b>Einstellungen » Benutzer</b> angelegt!',
+				supportText: 'Der Benutzer sollte vom Typ <b>API</b> sein und nur für shopware verwendert werden. Achtung: Der Benutzer wird in Ihrem plentymarkets System unter <b>Einstellungen » Grundeinstellungen » Benutzer » Konten</b> angelegt!',
 				name: 'ApiUsername',
 				allowBlank: false
 			}, {

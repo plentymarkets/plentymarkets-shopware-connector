@@ -36,6 +36,11 @@ Ext.define('Shopware.apps.Plentymarkets.model.settings.Batch', {
 		name: 'getMultishops',
 		associationKey: 'multishops'
 	}, {
+        type: 'hasMany',
+		model: 'Shopware.apps.Plentymarkets.model.Payment',
+		name: 'getPayments',
+		associationKey: 'payments'
+	}, {
 		type: 'hasMany',
 		model: 'Shopware.apps.Plentymarkets.model.Producer',
 		name: 'getProducers',

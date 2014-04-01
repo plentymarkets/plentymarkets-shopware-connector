@@ -474,6 +474,11 @@ class PlentymarketsExportEntityOrder
 			}
 			catch (PlentymarketsMappingExceptionNotExistant $E)
 			{
+				$shopgateIds = explode('|', PyConf()->get('OrderShopgateMOPIDs', ''));
+				if (in_array($Payment->getId(), $shopgateIds))
+				{
+					return MOP_SHOPGATE;
+				}
 			}
 		}
 
