@@ -348,15 +348,25 @@ class PlentymarketsExportEntityOrder
 				}
 			}
 
+			if ($isOrderNet)
+			{
+				// Calculate the gross amount (needed by plentymakets even though it is a net sales order)
+				$itemPrice = $Item->getPrice() * ((100 + (float) $Item->getTaxRate()) / 100);
+			}
+			else
+			{
+				$itemPrice = $Item->getPrice();
+			}
+
 			$Object_OrderItem = new PlentySoapObject_OrderItem();
 			$Object_OrderItem->ExternalOrderItemID = $number;
 			$Object_OrderItem->ItemID = $itemId;
 			$Object_OrderItem->ReferrerID = $Object_OrderHead->ReferrerID;
 			$Object_OrderItem->ItemText = $itemText;
-			$Object_OrderItem->Price = $Item->getPrice();
+			$Object_OrderItem->Price = $itemPrice;
 			$Object_OrderItem->Quantity = $Item->getQuantity();
 			$Object_OrderItem->SKU = $sku;
-			$Object_OrderItem->VAT = $isOrderNet ? 0 : $Item->getTaxRate();
+			$Object_OrderItem->VAT = $Item->getTaxRate();
 			$Object_OrderItem->RowType = $rowType;
 
 			$Object_Order->OrderItems[] = $Object_OrderItem;
