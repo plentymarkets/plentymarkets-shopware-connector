@@ -315,13 +315,20 @@ class PlentymarketsExportEntityOrder
 			// surcharge for method of payment
 			else
 			{
+				$number = $Item->getArticleNumber();
+
+				// PAYONE fix
+				if ($number == 'SHIPPING' && !$Object_OrderHead->ShippingCosts)
+				{
+					$Object_OrderHead->ShippingCosts = $Item->getPrice();
+					continue;
+				}
+
 				$discountNumber = Shopware()->Config()->get('discountnumber');
 				$surchargeNumber = Shopware()->Config()->get('surchargenumber');
 				$paymentSurchargeNumber = Shopware()->Config()->get('paymentsurchargenumber');
 				$paymentSurchargeAbsoluteNumber = Shopware()->Config()->get('paymentSurchargeAbsoluteNumber');
 				$shippingDiscountNumber = Shopware()->Config()->get('shippingdiscountnumber');
-
-				$number = $Item->getArticleNumber();
 
 				switch ($number)
 				{
