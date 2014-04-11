@@ -173,7 +173,7 @@ class PlentymarketsExportEntityOrder
 			$externalOrderID = sprintf('Swag/%d/%s', $this->Order->getId(), $this->Order->getNumber());
 		}
 
-		$isOrderNet = (boolean) $this->Order->getNet();
+		$isOrderNet = (boolean) $this->Order->getNet() || (boolean) $this->Order->getTaxFree();
 
 		// Order head
 		$Object_OrderHead = new PlentySoapObject_OrderHead();
@@ -538,7 +538,50 @@ class PlentymarketsExportEntityOrder
 	 */
 	protected function getShippingCosts()
 	{
-		return $this->Order->getInvoiceShipping() >= 0 ? $this->Order->getInvoiceShipping() : null;
+		$isOrderNet = (boolean) $this->Order->getNet() || (boolean) $this->Order->getTaxFree();
+
+		if ($this->Order->getInvoiceShipping() >= 0)
+		{
+			if (!$isOrderNet)
+			{
+				return $this->Order->getInvoiceShipping();
+			}
+
+			else
+			{
+				$taxRate = 0;
+
+				// Use the highest tax rate
+				if ($this->Order->getDispatch()->getTaxCalculation() == 0)
+				{
+					/** @var $detail Shopware\Models\Order\Detail */
+					foreach ($this->Order->getDetails() as $detail)
+					{
+						$taxRate = max($taxRate, $detail->getTaxRate());
+					}
+				}
+				else
+				{
+					$tax = Shopware()->Models()->find('Shopware\Models\Tax\Tax', $this->Order->getDispatch()->getTaxCalculation());
+					if ($tax instanceof Shopware\Models\Tax\Tax)
+					{
+						$taxRate = $tax->getTax();
+					}
+				}
+
+				if (!$taxRate)
+				{
+					return $this->Order->getDispatch()->getTaxCalculation();
+				}
+				else
+				{
+					return $this->Order->getInvoiceShipping() * ((100 + $taxRate) / 100);
+				}
+			}
+		}
+
+		return null;
+
 	}
 
 	/**
