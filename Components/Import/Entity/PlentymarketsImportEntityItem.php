@@ -749,13 +749,13 @@ class PlentymarketsImportEntityItem
 				$numberOfVariantsCreated = 0;
 				$numberOfVariantsDeleted = 0;
 
-				//
-				$number2markup = array();
-
 				foreach ($this->variants as $variantId => $variant)
 				{
-					// Markup
-					$number2markup[$variant['number']] = $VariantController->getMarkupByVariantId($variantId);
+					// Directly add the prices
+					$PlentymarketsImportEntityItemPrice = new PlentymarketsImportEntityItemPrice(
+						$this->ItemBase->PriceSet, $VariantController->getMarkupByVariantId($variantId)
+					);
+					$variant['prices'] = $PlentymarketsImportEntityItemPrice->getPrices();
 
 					// If the variant has an id, it is already created and mapped soo we just keep it
 					if (array_key_exists('id', $variant))
@@ -768,12 +768,13 @@ class PlentymarketsImportEntityItem
 					else
 					{
 						++$numberOfVariantsCreated;
+
 						$variant['configuratorOptions'] = $VariantController->getOptionsByVariantId($variantId);
+
 						$keep['numbers'][] = $variant['number'];
 
 						// Internal mapping of the variant number to some plenty information
 						$number2sku[$variant['number']] = $variant['X_plentySku'];
-
 					}
 
 					$variants[] = $variant;
@@ -834,10 +835,6 @@ class PlentymarketsImportEntityItem
 					{
 						// Add the mapping
 						PlentymarketsMappingController::addItemVariant($detail['id'], $number2sku[$detail['number']]);
-
-						// And update the prices
-						$PlentymarketsImportEntityItemPrice = new PlentymarketsImportEntityItemPrice($this->ItemBase->PriceSet, $number2markup[$detail['number']]);
-						$PlentymarketsImportEntityItemPrice->updateVariant($detail['id']);
 					}
 				}
 
@@ -969,15 +966,17 @@ class PlentymarketsImportEntityItem
 				$VariantController = new PlentymarketsImportItemVariantController($this->ItemBase);
 
 				//
-				$variants = array();
-				$number2markup = array();
 				$number2sku = array();
 
 				//
 				foreach ($this->variants as $variantId => &$variant)
 				{
 					$variant['configuratorOptions'] = $VariantController->getOptionsByVariantId($variantId);
-					$number2markup[$variant['number']] = $VariantController->getMarkupByVariantId($variantId);
+
+					// Prices
+					$PlentymarketsImportEntityItemPrice = new PlentymarketsImportEntityItemPrice($this->ItemBase->PriceSet, $VariantController->getMarkupByVariantId($variantId));
+					$variant['prices'] = $PlentymarketsImportEntityItemPrice->getPrices();
+
 					$number2sku[$variant['number']] = $variant['X_plentySku'];
 				}
 
@@ -997,17 +996,13 @@ class PlentymarketsImportEntityItem
 
 				$Article = $ArticleResource->update($id, $updateArticle);
 
-				// Mapping für die Varianten
+				/**@var Shopware\Models\Article\Detail $detail */
 				foreach ($Article->getDetails() as $detail)
 				{
 					// Save mapping and add the variant to the stock stack
 					$sku = $number2sku[$detail->getNumber()];
 					PlentymarketsMappingController::addItemVariant($detail->getId(), $sku);
 					PlentymarketsImportItemStockStack::getInstance()->add($sku);
-
-					// Preise
-					$PlentymarketsImportEntityItemPrice = new PlentymarketsImportEntityItemPrice($this->ItemBase->PriceSet, $number2markup[$detail->getNumber()]);
-					$PlentymarketsImportEntityItemPrice->updateVariant($detail->getId());
 				}
 
 				$VariantController->map($ArticleResource->getOne($id));

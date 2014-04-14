@@ -83,7 +83,7 @@ class PlentymarketsImportEntityItemPrice
 	 *
 	 * @return array
 	 */
-	protected function getPrices()
+	public function getPrices()
 	{
 		$prices = array();
 		$customerGroupKey = PlentymarketsConfig::getInstance()->getDefaultCustomerGroupKey();
