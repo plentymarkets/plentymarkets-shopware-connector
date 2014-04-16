@@ -202,6 +202,7 @@ class PlentymarketsExportEntityCustomer
 		try
 		{
 			$Object_AddCustomersCustomer->StoreID = PlentymarketsMappingController::getShopByShopwareID($this->Customer->getShop()->getId());
+			$Object_AddCustomersCustomer->Language = strtolower(substr($this->Customer->getShop()->getLocale()->getLocale(), 0, 2));
 		}
 		catch (PlentymarketsMappingExceptionNotExistant $E)
 		{
@@ -218,9 +219,6 @@ class PlentymarketsExportEntityCustomer
 			{
 			}
 		}
-
-		// Language
-		$Object_AddCustomersCustomer->Language = $this->getLanguage();
 
 		if ($this->BillingAddress->getAttribute() != null)
 		{
@@ -334,23 +332,6 @@ class PlentymarketsExportEntityCustomer
 		}
 
 		return null;
-	}
-
-	/**
-	 * Returns the country id for the billing address
-	 *
-	 * @return integer
-	 */
-	protected function getLanguage()
-	{
-		if (method_exists($this->BillingAddress, 'getCountryId'))
-		{
-			return strtolower(Shopware()->Models()->find('\Shopware\Models\Country\Country', $this->BillingAddress->getCountryId())->getIso());
-		}
-		else
-		{
-			return strtolower($this->BillingAddress->getCountry()->getIso());
-		}
 	}
 
 	/**
