@@ -145,7 +145,8 @@ class PlentymarketsImportEntityItemPrice
 			}
 
 			// Reliably available starting in SOAP 111
-			if (isset($this->PLENTY_PriceSet->RRP) && !is_null($this->PLENTY_PriceSet->RRP))
+            // check whether the RRP is higher than price to prevent ugly display
+			if (isset($this->PLENTY_PriceSet->RRP) && !is_null($this->PLENTY_PriceSet->RRP) && isset($price['price']) && ($this->PLENTY_PriceSet->RRP > $price['price']))
 			{
 				$price['pseudoPrice'] = $this->PLENTY_PriceSet->RRP;
 			}
