@@ -61,7 +61,43 @@ Ext.define('Shopware.apps.Plentymarkets.view.Misc', {
 				labelWidth: '33%'
 			},
 			items: [
+                {
+                    xtype: 'fieldcontainer',
+                    fieldLabel: 'Artikel abgleichen',
+                    layout: 'hbox',
+                    items: [
+                        {
+                            xtype: 'textfield',
+                            fieldLabel: '',
+                            emptyText: 'plentymarkets Artikel ID',
+                            id: 'plenty-itemId',
+                            width: '50%',
+                            allowBlank: true
+                        },
+                        {
+                            xtype: 'button',
+                            text: 'Jetzt abgleichen',
+                            cls: 'primary small',
+                            handler: function () {
+                                var message = 'Möchten Sie, dass der Artikel mit der von Ihnen eingegeben plentymarkets Artikel ID sofort abgeglichen wird?';
 
+                                Ext.Msg.confirm('Bestätigung erforderlich!', message, function (button) {
+                                    if (button === 'yes') {
+                                        Ext.Ajax.request({
+                                            url: '{url action=syncItem}',
+                                            callback: function (options, success, xhr) {
+                                                Shopware.Notification.createGrowlMessage('Aktion ausgeführt', 'Der Artikel wurde aktualisiert');
+                                            },
+                                            jsonData: Ext.encode({
+                                                itemId: Ext.getCmp('plenty-itemId').value
+                                            })
+                                        });
+                                    }
+                                });
+                            }
+                        }
+                    ]
+                },
 			{
 				xtype: 'fieldcontainer',
 				fieldLabel: 'Alle Artikel abgleichen',
@@ -146,37 +182,6 @@ Ext.define('Shopware.apps.Plentymarkets.view.Misc', {
 									},
 									jsonData: Ext.encode({
 										entity: 'ItemStock'
-									})
-								});
-							}
-						});
-					}
-				}]
-			}, {
-				xtype: 'fieldcontainer',
-				fieldLabel: 'Alle Preise abgleichen',
-				layout: 'hbox',
-				items: [{
-					xtype: 'button',
-					text: 'Vormerken',
-					cls: 'secondary small',
-					handler: function()
-					{
-						//
-						var message = 'Möchten Sie, dass die Preise aller Artikel mit plentymarkets abgeglichen werden?<br><br>Bitte beachten Sie, dass der Abgleich erst mit der Ausführung des Cronjobs <b>Plentymarkets Item Price Import</b> und <b>nicht</b> unverzüglich beginnt. Der Abgleich aller Preise kann sehr lange dauern und sehr viel Traffic verursachen!';
-
-						Ext.Msg.confirm('Bestätigung erforderlich!', message, function(button)
-						{
-							if (button === 'yes')
-							{
-								Ext.Ajax.request({
-									url: '{url action=resetImportTimestamp}',
-									callback: function(options, success, xhr)
-									{
-										Shopware.Notification.createGrowlMessage('Aktion ausgeführt', 'Der Abgleich aller Preise wurde vorgemerkt');
-									},
-									jsonData: Ext.encode({
-										entity: 'ItemPrice'
 									})
 								});
 							}

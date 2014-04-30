@@ -892,4 +892,32 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 			'data' => $Client->GetServerTime()
 		));
 	}
+
+	public function syncItemAction()
+	{
+		$itemId = (integer) $this->Request()->get('itemId', 0);
+
+		if ($itemId)
+		{
+			// Controller
+			$controller = new PlentymarketsImportControllerItem();
+
+			// StoreIds
+			$stores = Shopware()->Db()->fetchAll('
+				SELECT plentyID FROM plenty_mapping_shop
+			');
+
+			try
+			{
+				foreach ($stores as $store)
+				{
+					$controller->importItem($itemId, $store['plentyID']);
+				}
+			}
+			catch (Exception $e)
+			{
+				PyLog()->error('Fix:Item:Price', $e->getMessage());
+			}
+		}
+	}
 }
