@@ -57,6 +57,7 @@ class PlentymarketsDataIntegrityController
 		$this->add(new PlentymarketsDataIntegrityCheckItemVariationGroupMultiple());
 		$this->add(new PlentymarketsDataIntegrityCheckItemVariationOptionNotInSet());
 		$this->add(new PlentymarketsDataIntegrityCheckItemVariationOptionLost());
+		$this->add(new PlentymarketsDataIntegrityCheckItemDetailPriceless());
 	}
 
 	/**
