@@ -193,11 +193,13 @@ class PlentymarketsImportEntityItemPrice
 			return PlentymarketsLogger::getInstance()->error('Sync:Item:Price', 'The price of the item detail with the id »'. $detailId .'« could not be updated (item corrupt)', 3610);
 		}
 
+		$currentPrice = $this->PLENTY_PriceSet->Price + $this->PLENTY_markup;
+
 		$Article = $Detail->getArticle();
 
 		$ArticleResource = \Shopware\Components\Api\Manager::getResource('Article');
 
-		// Updaten
+		// Update
 		$ArticleResource->update($Article->getId(), array(
 			'variants' => array(
 				array(
@@ -206,5 +208,9 @@ class PlentymarketsImportEntityItemPrice
 				)
 			)
 		));
+
+		PyLog()->message('Sync:Item:Price',
+			'The price of the variant with the number »' . $Detail->getNumber() . '« has been set to »' . money_format('%.2n', $currentPrice) . '«.'
+		);
 	}
 }
