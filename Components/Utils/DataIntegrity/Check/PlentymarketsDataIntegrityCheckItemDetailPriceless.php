@@ -82,11 +82,21 @@ class PlentymarketsDataIntegrityCheckItemDetailPriceless implements Plentymarket
 	 */
 	public function deleteInvalidData($start, $offset)
 	{
+		// Controller
+		$controller = new PlentymarketsImportControllerItem();
+
+		// StoreIds
+		$stores = Shopware()->Db()->fetchAll('
+			SELECT plentyID FROM plenty_mapping_shop
+		');
+
+		// Customer group
 		$customerGroupKey = PlentymarketsConfig::getInstance()->getDefaultCustomerGroupKey();
 		$customerGroupRepository = Shopware()->Models()->getRepository('Shopware\Models\Customer\Group');
 		$customerGroups = $customerGroupRepository->findBy(array('key' => $customerGroupKey));
 		$customerGroup = array_pop($customerGroups);
 
+		//
 		foreach ($this->getInvalidData($start, $offset) as $data)
 		{
 			PyLog()->message('Fix:Item:Price', 'Start of fixing corrupt prices of the item id ' . $data['itemId']);
@@ -94,7 +104,6 @@ class PlentymarketsDataIntegrityCheckItemDetailPriceless implements Plentymarket
 			// Search
 			foreach (explode(',', $data['detailIds']) as $detailId)
 			{
-
 				try
 				{
 					/** @var \Shopware\Models\Article\Detail $Detail */
@@ -109,7 +118,6 @@ class PlentymarketsDataIntegrityCheckItemDetailPriceless implements Plentymarket
 					$price->setCustomerGroup($customerGroup);
 
 					Shopware()->Models()->persist($price);
-
 				}
 				catch (Exception $E)
 				{
@@ -123,12 +131,13 @@ class PlentymarketsDataIntegrityCheckItemDetailPriceless implements Plentymarket
 
 			try
 			{
-				// Update the complete item from plenty
-				$controller = new PlentymarketsImportControllerItem();
-				$controller->importItem(
-					PlentymarketsMappingController::getItemByShopwareID($data['itemId']), 1
-				);
-
+				foreach ($stores as $store)
+				{
+					// Update the complete item from plenty
+					$controller->importItem(
+						PlentymarketsMappingController::getItemByShopwareID($data['itemId']), $store['plentyID']
+					);
+				}
 			}
 			catch (Exception $e)
 			{
