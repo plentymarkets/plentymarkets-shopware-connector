@@ -26,7 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * PlentymarketsExportEntityOrderIncomingPayment provides the actual incoming payments export functionality. Like the other export
  * entities this class is called in PlentymarketsExportController. It is important to deliver a valid order ID
@@ -105,6 +104,12 @@ class PlentymarketsExportEntityOrderIncomingPayment
 			return;
 		}
 
+		$transactionId = '';
+		if ($methodOfPaymentId == MOP_KLARNA || $methodOfPaymentId == MOP_KLARNACREDIT)
+		{
+			$transactionId = $this->getKlarnaTransactionId();
+		}
+
 		$Request_AddIncomingPayments = new PlentySoapRequest_AddIncomingPayments();
 
 		$Request_AddIncomingPayments->IncomingPayments = array();
@@ -118,7 +123,11 @@ class PlentymarketsExportEntityOrderIncomingPayment
 		$Object_AddIncomingPayments->OrderID = $this->plentyOrder->plentyOrderId;
 		$Object_AddIncomingPayments->ReasonForPayment = sprintf('Shopware (OrderId: %u, CustomerId: %u)', $this->order['id'], $this->order['customerId']);
 
-		if (empty($this->order['transactionId']))
+		if ($transactionId)
+		{
+			$Object_AddIncomingPayments->TransactionID = $transactionId;
+		}
+		else if (empty($this->order['transactionId']))
 		{
 			$Object_AddIncomingPayments->TransactionID = $Object_AddIncomingPayments->ReasonForPayment;
 		}
@@ -182,7 +191,7 @@ class PlentymarketsExportEntityOrderIncomingPayment
 		$BillingAddress = Shopware()->Models()->find('Shopware\Models\Order\Billing', $this->order['billing']['id']);
 
 		try
-		// Export
+			// Export
 		{
 			$PlentymarketsExportEntityCustomer = new PlentymarketsExportEntityCustomer($Customer, $BillingAddress);
 			$PlentymarketsExportEntityCustomer->export();
@@ -203,5 +212,44 @@ class PlentymarketsExportEntityOrderIncomingPayment
 	protected function getCustomerName()
 	{
 		return sprintf('%s %s', $this->order['billing']['firstName'], $this->order['billing']['lastName']);
+	}
+
+	/**
+	 * @return string
+	 */
+	protected function getKlarnaTransactionId()
+	{
+		$orderNumber = $this->order['number'];
+
+		try
+		{
+			// eid / shop_id
+			$multistore = Shopware()->Db()->query('
+				SELECT shop_id FROM Pi_klarna_payment_multistore WHERE order_number = ?
+			', array(
+				$orderNumber
+			))->fetchObject();
+
+			// pclass
+			$pclass = Shopware()->Db()->query('
+				SELECT pclassid FROM Pi_klarna_payment_pclass where ordernumber = ?
+			', array(
+				$orderNumber
+			))->fetchObject();
+
+			// Transaction ID
+			$order = Shopware()->Db()->query('
+				SELECT transactionid FROM Pi_klarna_payment_order_data WHERE order_number = ?
+			', array(
+				$orderNumber
+			))->fetchObject();
+		}
+
+		catch (Exception $e)
+		{
+			return '';
+		}
+
+		return sprintf('%s_%s_%s', $order->transactionid, $pclass->pclassid, $multistore->shop_id);
 	}
 }

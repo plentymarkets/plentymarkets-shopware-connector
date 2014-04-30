@@ -294,6 +294,16 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 			$config['_ApacheModules'] = '';
 		}
 
+		if (isset($config['OrderPaidStatusID']))
+		{
+			$orderPaidIDs = explode('|', $config['OrderPaidStatusID']);
+			$config['OrderPaidStatusID'] = array_map('intval', $orderPaidIDs);
+		}
+		else
+		{
+			$config['OrderPaidStatusID'] = array(12);
+		}
+
 		if (isset($config['OrderShopgateMOPIDs']))
 		{
 			$orderShopgateMOPIDs = explode('|', $config['OrderShopgateMOPIDs']);
@@ -401,7 +411,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		$Config->setItemProducerID($this->Request()->ItemProducerID);
 		$Config->setOrderMarking1($this->Request()->OrderMarking1);
 		$Config->setOrderReferrerID($this->Request()->OrderReferrerID);
-		$Config->setOrderPaidStatusID($this->Request()->OrderPaidStatusID);
+		$Config->setOrderPaidStatusID(implode('|', $this->Request()->OrderPaidStatusID));
 		$Config->setOrderShopgateMOPIDs(implode('|', $this->Request()->OrderShopgateMOPIDs));
 		$Config->setOrderItemTextSyncActionID($this->Request()->OrderItemTextSyncActionID == true ? EXPORT_ORDER_ITEM_TEXT_SYNC : EXPORT_ORDER_ITEM_TEXT_SYNC_NO);
 		$Config->setOutgoingItemsOrderStatus($this->Request()->OutgoingItemsOrderStatus);
@@ -468,9 +478,31 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 			$Config->setMayDatexActual(0);
 		}
 
+		$config = $Config->getConfig();
+
+		if (isset($config['OrderPaidStatusID']))
+		{
+			$orderPaidIDs = explode('|', $config['OrderPaidStatusID']);
+			$config['OrderPaidStatusID'] = array_map('intval', $orderPaidIDs);
+		}
+		else
+		{
+			$config['OrderPaidStatusID'] = array(12);
+		}
+
+		if (isset($config['OrderShopgateMOPIDs']))
+		{
+			$orderShopgateMOPIDs = explode('|', $config['OrderShopgateMOPIDs']);
+			$config['OrderShopgateMOPIDs'] = array_map('intval', $orderShopgateMOPIDs);
+		}
+		else
+		{
+			$config['OrderShopgateMOPIDs'] = array();
+		}
+
 		$this->View()->assign(array(
 			'success' => true,
-			'data' => $Config->getConfig()
+			'data' => $config
 		));
 	}
 

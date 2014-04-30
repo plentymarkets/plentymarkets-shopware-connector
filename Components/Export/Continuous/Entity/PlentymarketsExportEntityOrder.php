@@ -420,8 +420,10 @@ class PlentymarketsExportEntityOrder
 			throw new PlentymarketsExportEntityException('The order with the number »' . $this->Order->getNumber() . '« could not be exported (no order id or order status respectively)', 4020);
 		}
 
+		$paymentStatusPaid = explode('|', PlentymarketsConfig::getInstance()->getOrderPaidStatusID(12));
+
 		// Directly book the incoming payment
-		if ($this->Order->getPaymentStatus() && $this->Order->getPaymentStatus()->getId() == PlentymarketsConfig::getInstance()->getOrderPaidStatusID(12))
+		if ($this->Order->getPaymentStatus() && in_array($this->Order->getPaymentStatus()->getId(), $paymentStatusPaid))
 		{
 			// May throw an exception
 			$IncomingPayment = new PlentymarketsExportEntityOrderIncomingPayment($this->Order->getId());
