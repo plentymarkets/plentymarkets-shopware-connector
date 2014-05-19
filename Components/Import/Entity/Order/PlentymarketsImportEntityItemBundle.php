@@ -192,6 +192,11 @@ class PlentymarketsImportEntityItemBundle
 			$Bundle->setQuantity(0);
 			$Bundle->setCreated();
 			$Bundle->setSells(0);
+
+			if (method_exists($Bundle, 'setDisplayGlobal'))
+			{
+				$Bundle->setDisplayGlobal(true);
+			}
 		}
 
 		//
