@@ -103,5 +103,11 @@ class PlentymarketsImportControllerItemCategory
 				$PlentymarketsImportEntityItemCategory->import();
 			}
 		} while (++$Request_GetItemCategoryCatalog->Page < $Response_GetItemCategoryCatalog->Pages);
+
+		/** @var \Shopware\Components\Model\CategoryDenormalization $component */
+		$component = Shopware()->CategoryDenormalization();
+		$component->rebuildCategoryPath();
+		$component->removeAllAssignments();
+		$component->rebuildAllAssignments();
 	}
 }
