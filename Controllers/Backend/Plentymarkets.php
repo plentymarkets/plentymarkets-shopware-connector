@@ -468,9 +468,21 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 			$Config->setMayDatexActual(0);
 		}
 
+		$config = $Config->getConfig();
+
+		if (isset($config['OrderShopgateMOPIDs']))
+		{
+			$orderShopgateMOPIDs = explode('|', $config['OrderShopgateMOPIDs']);
+			$config['OrderShopgateMOPIDs'] = array_map('intval', $orderShopgateMOPIDs);
+		}
+		else
+		{
+			$config['OrderShopgateMOPIDs'] = array();
+		}
+
 		$this->View()->assign(array(
 			'success' => true,
-			'data' => $Config->getConfig()
+			'data' => $config
 		));
 	}
 
