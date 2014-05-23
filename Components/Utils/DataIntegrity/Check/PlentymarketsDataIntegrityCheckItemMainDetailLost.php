@@ -83,20 +83,17 @@ class PlentymarketsDataIntegrityCheckItemMainDetailLost implements Plentymarkets
 		{
 			try
 			{
+				/** @var \Shopware\Models\Article\Article $Item */
 				$Item = Shopware()->Models()->find('\Shopware\Models\Article\Article', $data['itemId']);
-				Shopware()->Models()->remove($Item);
+
+				$detail = new \Shopware\Models\Article\Detail();
+				$detail->setArticle($Item);
+				$Item->setMainDetail($detail);
+
+				Shopware()->Models()->persist($detail);
 			}
 			catch (Exception $E)
 			{
-				try
-				{
-					// Try to delete through the API
-					$Resource = Shopware\Components\Api\Manager::getResource('Article');
-					$Resource->delete($data['itemId']);
-				}
-				catch (Exception $E)
-				{
-				}
 			}
 		}
 		Shopware()->Models()->flush();
