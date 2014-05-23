@@ -110,12 +110,18 @@ class PlentymarketsImportEntityItemImage
 	 */
 	public function image()
 	{
-		$images = array();
-		$plentyImageName2Id = array();
+		$plentyId2ShopwareId = array();
+		$shopwareId2PlentyPosition = array();
 
 		$Request_GetItemsImages = new PlentySoapRequest_GetItemsImages();
 		$Request_GetItemsImages->Page = 0;
 		$Request_GetItemsImages->SKU = $this->PLENTY_itemId;
+
+		// Cleanup
+		$this->purge();
+
+		/** @var \Shopware\Components\Api\Resource\Media $mediaResource */
+		$mediaResource = \Shopware\Components\Api\Manager::getResource('Media');
 
 		do
 		{
@@ -142,70 +148,54 @@ class PlentymarketsImportEntityItemImage
 						continue;
 					}
 
-					$name = pathinfo($Image->ImageURL, PATHINFO_FILENAME);
-					$plentyImageName2Id[$name] = $Image->ImageID;
+					/** @var Shopware\Models\Media\Media $media */
+					$media = $mediaResource->internalCreateMediaByFileLink($Image->ImageURL);
 
-					$images[] = array(
-						'link' => $Image->ImageURL,
-						'position' => $Image->Position,
-						'main' => 2
-					);
+					$image = new \Shopware\Models\Article\Image();
+					$image->setMain(2);
+					$image->setMedia($media);
+					$image->setPath($media->getName());
+					$image->setExtension($media->getExtension());
+					$image->setDescription($media->getDescription());
+					$image->setPosition($Image->Position);
+
+					// Generate the thumbnails
+					if (version_compare('4.2', Shopware::VERSION) != 1)
+					{
+						$manager = Shopware()->Container()->get('thumbnail_manager');
+						$manager->createMediaThumbnail($media, array(), true);
+					}
+
+					Shopware()->Models()->persist($image);
+					Shopware()->Models()->flush();
+
+					$imageId = $image->getId();
+
+					$plentyId2ShopwareId[$Image->ImageID] = $imageId;
+					$shopwareId2PlentyPosition[$Image->Position] = $imageId;
+
+					Shopware()->DB()->query('
+						UPDATE s_articles_img
+							SET articleID = ?
+							WHERE id = ?
+					', array($this->SHOPWARE_itemId, $imageId));
 				}
 			}
 		} while (++$Request_GetItemsImages->Page < $Response_GetItemsImages->Pages);
 
-		// Cleanup
-		$this->purge();
-
-		if (!count($images))
+		if (!$shopwareId2PlentyPosition)
 		{
 			return;
 		}
-		// Sort by position to determine the main image
-		usort($images, function ($a, $b)
-		{
-			if ($a['position'] == $b['position'])
-			{
-				return 0;
-			}
 
-			return ($a['position'] < $b['position']) ? -1 : 1;
-		});
+		ksort($shopwareId2PlentyPosition);
+		$mainImageId = reset($shopwareId2PlentyPosition);
 
-		// Set the first one as main image
-		$images[0]['main'] = 1;
-
-		/**
-		 * @var Shopware\Models\Article\Article $article
-		 * @var \Shopware\Components\Api\Resource\Article $ArticleResource
-		 */
-		$ArticleResource = \Shopware\Components\Api\Manager::getResource('Article');
-		$article = $ArticleResource->update($this->SHOPWARE_itemId, array(
-			'images' => $images
-		));
-
-		/**
-		 * @var Shopware\Models\Article\Image $image
-		 * @var Shopware\Models\Media\Media $media
-		 */
-		foreach ($article->getImages() as $image)
-		{
-			$media = $image->getMedia();
-
-			// Generate the thumbnails
-			if (version_compare('4.2', Shopware::VERSION) != 1)
-			{
-				$manager = Shopware()->Container()->get('thumbnail_manager');
-				$manager->createMediaThumbnail($media, array(), true);
-			}
-
-			$name = $media->getFile()->getFilename();
-
-			if (isset($plentyImageName2Id[$name]))
-			{
-				$plentyImageId2shopware[$plentyImageName2Id[$name]] = $image->getId();
-			}
-		}
+		/** @var Shopware\Models\Article\Image $mainImage */
+		$mainImage = Shopware()->Models()->find('Shopware\Models\Article\Image', $mainImageId);
+		$mainImage->setMain(1);
+		Shopware()->Models()->persist($mainImage);
+		Shopware()->Models()->flush();
 
 		// Get the variant images
 		$Request_GetItemsVariantImages = new PlentySoapRequest_GetItemsVariantImages();
@@ -228,16 +218,17 @@ class PlentymarketsImportEntityItemImage
 			}
 			catch (PlentymarketsMappingExceptionNotExistant $e)
 			{
+				PyLog()->error('Sync:Item:Image', '');
 				continue;
 			}
 
-			if (!isset($plentyImageId2shopware[$GetItemsVariantImagesImage->ImageID]))
+			if (!isset($plentyId2ShopwareId[$GetItemsVariantImagesImage->ImageID]))
 			{
 				continue;
 			}
 
 			/** @var Shopware\Models\Article\Image $shopwareImage */
-			$shopwareImageId = $plentyImageId2shopware[$GetItemsVariantImagesImage->ImageID];
+			$shopwareImageId = $plentyId2ShopwareId[$GetItemsVariantImagesImage->ImageID];
 			$shopwareImage = Shopware()->Models()->find('Shopware\Models\Article\Image', $shopwareImageId);
 
 			$mapping = new Shopware\Models\Article\Image\Mapping();
@@ -248,18 +239,17 @@ class PlentymarketsImportEntityItemImage
 			$rule->setOption($shopwareOption);
 
 			$mapping->getRules()->add($rule);
-			$image->setMappings($mapping);
+			$shopwareImage->setMappings($mapping);
 
 			Shopware()->Models()->persist($mapping);
 
-			$sql = '
-					SELECT
-							d.id
-                		FROM s_articles_details d
-         					INNER JOIN s_article_configurator_option_relations alias16 ON alias16.option_id = ' . $shopwareOptionId . ' AND alias16.article_id = d.id
-        				WHERE d.articleID = ' . $this->SHOPWARE_itemId . '
-        		';
-			$details = Shopware()->Db()->fetchCol($sql);
+			$details = Shopware()->Db()->fetchCol('
+				SELECT
+						d.id
+					FROM s_articles_details d
+						INNER JOIN s_article_configurator_option_relations alias16 ON alias16.option_id = ' . $shopwareOptionId . ' AND alias16.article_id = d.id
+					WHERE d.articleID = ' . $this->SHOPWARE_itemId . '
+			');
 
 			foreach ($details as $detailId)
 			{
