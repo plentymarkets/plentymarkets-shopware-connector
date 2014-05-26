@@ -88,6 +88,13 @@ class PlentymarketsDataIntegrityCheckItemMainDetailLost implements Plentymarkets
 
 				$detail = new \Shopware\Models\Article\Detail();
 				$detail->setArticle($Item);
+
+				// Numbers should be synced
+				if (PlentymarketsConfig::getInstance()->getItemNumberImportActionID(IMPORT_ITEM_NUMBER) == IMPORT_ITEM_NUMBER_NO)
+				{
+					$detail->setNumber(PlentymarketsImportItemHelper::getItemNumber());
+				}
+
 				$Item->setMainDetail($detail);
 
 				Shopware()->Models()->persist($detail);
