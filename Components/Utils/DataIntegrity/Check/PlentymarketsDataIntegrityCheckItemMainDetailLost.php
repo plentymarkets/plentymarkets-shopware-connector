@@ -79,6 +79,14 @@ class PlentymarketsDataIntegrityCheckItemMainDetailLost implements Plentymarkets
 	 */
 	public function deleteInvalidData($start, $offset)
 	{
+		$setNumber = PlentymarketsConfig::getInstance()->getItemNumberImportActionID(IMPORT_ITEM_NUMBER) == IMPORT_ITEM_NUMBER_NO;
+
+		// Customer group
+		$customerGroupKey = PlentymarketsConfig::getInstance()->getDefaultCustomerGroupKey();
+		$customerGroupRepository = Shopware()->Models()->getRepository('Shopware\Models\Customer\Group');
+		$customerGroups = $customerGroupRepository->findBy(array('key' => $customerGroupKey));
+		$customerGroup = array_pop($customerGroups);
+
 		foreach ($this->getInvalidData($start, $offset) as $data)
 		{
 			try
@@ -90,13 +98,22 @@ class PlentymarketsDataIntegrityCheckItemMainDetailLost implements Plentymarkets
 				$detail->setArticle($Item);
 
 				// Numbers should be synced
-				if (PlentymarketsConfig::getInstance()->getItemNumberImportActionID(IMPORT_ITEM_NUMBER) == IMPORT_ITEM_NUMBER_NO)
+				if ($setNumber)
 				{
 					$detail->setNumber(PlentymarketsImportItemHelper::getItemNumber());
 				}
 
+				$price = new Shopware\Models\Article\Price();
+				$price->setFrom(1);
+				$price->setPrice(1);
+				$price->setPercent(0);
+				$price->setArticle($Item);
+				$price->setDetail($detail);
+				$price->setCustomerGroup($customerGroup);
+
 				$Item->setMainDetail($detail);
 
+				Shopware()->Models()->persist($price);
 				Shopware()->Models()->persist($detail);
 			}
 			catch (Exception $E)
