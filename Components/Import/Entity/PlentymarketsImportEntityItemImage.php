@@ -218,7 +218,6 @@ class PlentymarketsImportEntityItemImage
 			}
 			catch (PlentymarketsMappingExceptionNotExistant $e)
 			{
-				PyLog()->error('Sync:Item:Image', '');
 				continue;
 			}
 
