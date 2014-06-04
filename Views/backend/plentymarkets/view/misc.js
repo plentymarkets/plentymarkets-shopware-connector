@@ -98,6 +98,26 @@ Ext.define('Shopware.apps.Plentymarkets.view.Misc', {
                         }
                     ]
                 },
+                {
+                    xtype: 'fieldcontainer',
+                    fieldLabel: 'Detail ohne Nummer korrigieren',
+                    layout: 'hbox',
+                    items: [
+                        {
+                            xtype: 'button',
+                            text: 'ausführen',
+                            cls: 'secondary small',
+                            handler: function () {
+                                Ext.Ajax.request({
+                                    url: '{url action=fixEmptyItemDetailNumber}',
+                                    callback: function (options, success, xhr) {
+                                        Shopware.Notification.createGrowlMessage('Aktion ausgeführt', 'Die Aktion wurde ausgeführt');
+                                    }
+                                });
+                            }
+                        }
+                    ]
+                },
 			{
 				xtype: 'fieldcontainer',
 				fieldLabel: 'Alle Artikel abgleichen',

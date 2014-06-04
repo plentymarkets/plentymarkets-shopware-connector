@@ -932,4 +932,29 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 			}
 		}
 	}
+
+	/**
+	 *
+	 */
+	public function fixEmptyItemDetailNumberAction()
+	{
+		$articleRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
+
+		/** @var Shopware\Models\Article\Detail $detail */
+		$detail = $articleRepository->findOneBy(array('number' => ''));
+
+		if ($detail)
+		{
+			$number = PlentymarketsImportItemHelper::getItemNumber();
+			$detail->setNumber($number);
+			Shopware()->Models()->persist($detail);
+			Shopware()->Models()->flush();
+
+			PyLog()->message('Fix:Item:Detail:Number', 'The number of the item detail with the id »' . $detail->getId() . '« has been set to »' . $number . '«.');
+		}
+		else
+		{
+			PyLog()->message('Fix:Item:Detail:Number', 'No item without a number has been found');
+		}
+	}
 }

@@ -127,7 +127,7 @@ class PlentymarketsDataIntegrityCheckItemDetailPriceless implements Plentymarket
 
 			Shopware()->Models()->flush();
 
-			PyLog()->message('Fix:Item:Price', 'Finished with the fixing corrupt prices of the item id ' . $data['itemId']);
+			PyLog()->message('Fix:Item:Price', 'Finished with the fixing corrupt prices of the item id »' . $data['itemId'] . '«');
 
 			try
 			{
