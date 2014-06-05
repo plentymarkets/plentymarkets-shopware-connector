@@ -788,6 +788,7 @@ class PlentymarketsImportEntityItem
 				// Delete all variants
 				if ($numberOfVariantsUpdated == 0)
 				{
+					PyLog()->message('Sync:Item', 'All variants have been deleted');
 					$Article = $ArticleResource->update($SHOPWARE_itemID, array(
 						'configuratorSet' => array(
 							'groups' => array()
