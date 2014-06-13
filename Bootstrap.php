@@ -52,6 +52,8 @@ define('EXPORT_ORDER_ITEM_TEXT_SYNC_NO', 0);
 define('MOP_DEBIT', 3);
 define('MOP_SHOPGATE', 20);
 define('MOP_AMAZON_PAYMENT', 40);
+define('MOP_KLARNA', 1401);
+define('MOP_KLARNACREDIT', 1402);
 
 /**
  * Shortcut for PlentymarketsConfig::getInstance()

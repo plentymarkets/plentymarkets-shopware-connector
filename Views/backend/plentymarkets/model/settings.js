@@ -159,8 +159,8 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		defaultValue: 11
 	}, {
 		name: 'OrderPaidStatusID',
-		type: 'integer',
-		defaultValue: 12
+		type: 'auto',
+		defaultValue: [12]
     }, {
 		name: 'OrderShopgateMOPIDs',
 		type: 'auto',

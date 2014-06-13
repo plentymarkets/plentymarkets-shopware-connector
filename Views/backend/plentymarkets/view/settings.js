@@ -272,9 +272,13 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
                         allowBlank: true
                     },
                     {
+                        xtype: 'boxselect',
                         fieldLabel: '{s name=plentymarkets/view/settings/textfield/OrderPaidStatusID}Status bezahlt{/s}',
                         name: 'OrderPaidStatusID',
                         store: paymentStatusStore,
+                        id: 'plenty-OrderPaidStatusID',
+//                        value: me.settings.get('OrderPaidStatusID'),
+                        multiSelect: true,
                         supportText: 'shopware Status, der signalisiert, dass der Auftrag komplett bezahlt ist. Löst das Buchen des Zahlungseinganges bei plentymarkets aus.',
                         displayField: 'description'
                     },
@@ -282,10 +286,11 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
                         xtype: 'boxselect',
                         fieldLabel: '{s name=plentymarkets/view/settings/textfield/OrderShopgateMOPIDs}Shopgate Zahlungsart(en){/s}',
                         name: 'OrderShopgateMOPIDs',
+                        id: 'plenty-OrderShopgateMOPIDs',
                         store: me.stores.payments,
                         multiSelect: true,
                         allowBlank: true,
-                        value: me.settings.get('OrderShopgateMOPIDs'),
+//                        value: me.settings.get('OrderShopgateMOPIDs'),
                         supportText: 'Wählen Sie die Shopgate Zahlungsarten aus (<b>Mehrfachauswahl möglich</b>). Aufträge, die diese Zahlungsart haben, werden in plentymarkets mit der Zahlungsart "Shopgate" angelegt.'
                     },
                     {
