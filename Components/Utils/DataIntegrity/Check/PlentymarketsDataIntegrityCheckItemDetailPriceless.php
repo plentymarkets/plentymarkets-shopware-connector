@@ -26,13 +26,12 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * Checks for items with non-existant main details
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
-class PlentymarketsDataIntegrityCheckItemMainDetailLost implements PlentymarketsDataIntegrityCheckInterface
+class PlentymarketsDataIntegrityCheckItemDetailPriceless implements PlentymarketsDataIntegrityCheckInterface
 {
 	/**
 	 * Returns the name of the check
@@ -41,7 +40,7 @@ class PlentymarketsDataIntegrityCheckItemMainDetailLost implements Plentymarkets
 	 */
 	public function getName()
 	{
-		return 'ItemMainDetailLost';
+		return 'ItemDetailPriceless';
 	}
 
 	/**
@@ -51,7 +50,7 @@ class PlentymarketsDataIntegrityCheckItemMainDetailLost implements Plentymarkets
 	 */
 	public function isValid()
 	{
-		return count($this->getInvalidData(0, 1)) == 0;
+		return true; // count($this->getInvalidData(0, 1)) == 0;
 	}
 
 	/**
@@ -64,9 +63,13 @@ class PlentymarketsDataIntegrityCheckItemMainDetailLost implements Plentymarkets
 	public function getInvalidData($start, $offset)
 	{
 		return Shopware()->Db()->query('
-			SELECT SQL_CALC_FOUND_ROWS a.id itemId, a.name, main_detail_id mainDetailId FROM s_articles a
-				WHERE main_detail_id IS NULL OR main_detail_id NOT IN (SELECT id FROM s_articles_details)
-				ORDER BY a.id
+			SELECT
+					SQL_CALC_FOUND_ROWS articleID itemId, COUNT(*) quantity, GROUP_CONCAT(ordernumber) ordernumber,
+					GROUP_CONCAT(id) detailIds
+					FROM s_articles_details
+					WHERE id NOT IN (SELECT articledetailsID FROM s_articles_prices)
+				GROUP BY articleID
+				ORDER BY ordernumber, articleID
 				LIMIT ' . $start . ', ' . $offset . '
 		')->fetchAll();
 	}
@@ -79,43 +82,71 @@ class PlentymarketsDataIntegrityCheckItemMainDetailLost implements Plentymarkets
 	 */
 	public function deleteInvalidData($start, $offset)
 	{
+		// Controller
+		$controller = new PlentymarketsImportControllerItem();
+
+		// StoreIds
+		$stores = Shopware()->Db()->fetchAll('
+			SELECT plentyID FROM plenty_mapping_shop
+		');
+
 		// Customer group
 		$customerGroupKey = PlentymarketsConfig::getInstance()->getDefaultCustomerGroupKey();
 		$customerGroupRepository = Shopware()->Models()->getRepository('Shopware\Models\Customer\Group');
 		$customerGroups = $customerGroupRepository->findBy(array('key' => $customerGroupKey));
 		$customerGroup = array_pop($customerGroups);
 
+		//
 		foreach ($this->getInvalidData($start, $offset) as $data)
 		{
+			PyLog()->message('Fix:Item:Price', 'Start of fixing corrupt prices of the item id ' . $data['itemId']);
+
+			// Search
+			foreach (explode(',', $data['detailIds']) as $detailId)
+			{
+				try
+				{
+					/** @var \Shopware\Models\Article\Detail $Detail */
+					$Detail = Shopware()->Models()->find('\Shopware\Models\Article\Detail', $detailId);
+
+					$price = new Shopware\Models\Article\Price();
+					$price->setFrom(1);
+					$price->setPrice(1);
+					$price->setPercent(0);
+					$price->setArticle($Detail->getArticle());
+					$price->setDetail($Detail);
+					$price->setCustomerGroup($customerGroup);
+
+					Shopware()->Models()->persist($price);
+				}
+				catch (Exception $E)
+				{
+					PyLog()->debug($E->getMessage());
+				}
+			}
+
+			Shopware()->Models()->flush();
+
+			PyLog()->message('Fix:Item:Price', 'Finished with the fixing corrupt prices of the item id »' . $data['itemId'] . '«');
+
 			try
 			{
-				/** @var \Shopware\Models\Article\Article $Item */
-				$Item = Shopware()->Models()->find('\Shopware\Models\Article\Article', $data['itemId']);
-
-				$detail = new \Shopware\Models\Article\Detail();
-				$detail->setArticle($Item);
-
-				// The number will be changed by the sync process
-				$detail->setNumber(PlentymarketsImportItemHelper::getItemNumber());
-
-				$price = new Shopware\Models\Article\Price();
-				$price->setFrom(1);
-				$price->setPrice(1);
-				$price->setPercent(0);
-				$price->setArticle($Item);
-				$price->setDetail($detail);
-				$price->setCustomerGroup($customerGroup);
-
-				$Item->setMainDetail($detail);
-
-				Shopware()->Models()->persist($Item);
-				Shopware()->Models()->remove($Item);
+				foreach ($stores as $store)
+				{
+					// Update the complete item from plenty
+					$controller->importItem(
+						PlentymarketsMappingController::getItemByShopwareID($data['itemId']), $store['plentyID']
+					);
+				}
 			}
-			catch (Exception $E)
+			catch (Exception $e)
 			{
+				PyLog()->error('Fix:Item:Price', $e->getMessage());
 			}
+
+			// Stop after the first
+			break;
 		}
-		Shopware()->Models()->flush();
 	}
 
 	/**
@@ -132,15 +163,15 @@ class PlentymarketsDataIntegrityCheckItemMainDetailLost implements Plentymarkets
 				'type' => 'int'
 			),
 			array(
-				'name' => 'mainDetailId',
-				'description' => 'Detail ID',
+				'name' => 'quantity',
+				'description' => 'Anzahl',
 				'type' => 'int'
 			),
 			array(
-				'name' => 'name',
-				'description' => 'Bezeichnung',
+				'name' => 'ordernumber',
+				'description' => 'Nummer(n)',
 				'type' => 'string'
-			),
+			)
 		);
 	}
 

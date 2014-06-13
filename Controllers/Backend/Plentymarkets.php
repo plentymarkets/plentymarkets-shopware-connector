@@ -468,9 +468,21 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 			$Config->setMayDatexActual(0);
 		}
 
+		$config = $Config->getConfig();
+
+		if (isset($config['OrderShopgateMOPIDs']))
+		{
+			$orderShopgateMOPIDs = explode('|', $config['OrderShopgateMOPIDs']);
+			$config['OrderShopgateMOPIDs'] = array_map('intval', $orderShopgateMOPIDs);
+		}
+		else
+		{
+			$config['OrderShopgateMOPIDs'] = array();
+		}
+
 		$this->View()->assign(array(
 			'success' => true,
-			'data' => $Config->getConfig()
+			'data' => $config
 		));
 	}
 
@@ -891,5 +903,58 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 			'success' => true,
 			'data' => $Client->GetServerTime()
 		));
+	}
+
+	public function syncItemAction()
+	{
+		$itemId = (integer) $this->Request()->get('itemId', 0);
+
+		if ($itemId)
+		{
+			// Controller
+			$controller = new PlentymarketsImportControllerItem();
+
+			// StoreIds
+			$stores = Shopware()->Db()->fetchAll('
+				SELECT plentyID FROM plenty_mapping_shop
+			');
+
+			try
+			{
+				foreach ($stores as $store)
+				{
+					$controller->importItem($itemId, $store['plentyID']);
+				}
+			}
+			catch (Exception $e)
+			{
+				PyLog()->error('Fix:Item:Price', $e->getMessage());
+			}
+		}
+	}
+
+	/**
+	 *
+	 */
+	public function fixEmptyItemDetailNumberAction()
+	{
+		$articleRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
+
+		/** @var Shopware\Models\Article\Detail $detail */
+		$detail = $articleRepository->findOneBy(array('number' => ''));
+
+		if ($detail)
+		{
+			$number = PlentymarketsImportItemHelper::getItemNumber();
+			$detail->setNumber($number);
+			Shopware()->Models()->persist($detail);
+			Shopware()->Models()->flush();
+
+			PyLog()->message('Fix:Item:Detail:Number', 'The number of the item detail with the id »' . $detail->getId() . '« has been set to »' . $number . '«.');
+		}
+		else
+		{
+			PyLog()->message('Fix:Item:Detail:Number', 'No item without a number has been found');
+		}
 	}
 }

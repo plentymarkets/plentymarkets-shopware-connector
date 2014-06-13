@@ -40,7 +40,7 @@ class PlentymarketsImportEntityItemCategory
 	protected $Category;
 
 	/**
-	 * I am the contructor
+	 * I am the constructor
 	 *
 	 * @param PlentySoapObject_GetItemCategoryCatalog $Category
 	 */
@@ -67,7 +67,7 @@ class PlentymarketsImportEntityItemCategory
 		// If there is not match, the category ain't used in shopware
 		if (!$match)
 		{
-			return PyLog()->message('Sync:Item:Attribute', 'Skipping the category »' . $this->Category->Name . '« (unused)');
+			return PyLog()->message('Sync:Item:Category', 'Skipping the category »' . $this->Category->Name . '« (unused)');
 		}
 
 		// Helper
@@ -81,7 +81,7 @@ class PlentymarketsImportEntityItemCategory
 		// If the shopware category wasn't found, something is terribly wrong
 		if (!$Category)
 		{
-			return PyLog()->message('Sync:Item:Attribute', 'Skipping the category »' . $this->Category->Name . '« (not found)');
+			return PyLog()->message('Sync:Item:Category', 'Skipping the category »' . $this->Category->Name . '« (not found)');
 		}
 
 		// Walk through the plentymarkets path until the right one is found
@@ -100,13 +100,13 @@ class PlentymarketsImportEntityItemCategory
 		// If no shopware category was found, again something is terribly wrong
 		if (!$hit)
 		{
-			return PyLog()->message('Sync:Item:Attribute', 'Skipping the category »' . $this->Category->Name . '« (none found)');
+			return PyLog()->message('Sync:Item:Category', 'Skipping the category »' . $this->Category->Name . '« (none found)');
 		}
 
 		// Update the category only if the name's changed
 		if ($Category->getName() != $this->Category->Name || $Category->getPosition() != $this->Category->Position)
 		{
-			PyLog()->message('Sync:Item:Attribute', 'Updating the category »' . $this->Category->Name . '«');
+			PyLog()->message('Sync:Item:Category', 'Updating the category »' . $this->Category->Name . '«');
 			$Category->setName($this->Category->Name);
 			$Category->setPosition($this->Category->Position);
 

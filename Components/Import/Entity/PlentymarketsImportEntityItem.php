@@ -801,19 +801,35 @@ class PlentymarketsImportEntityItem
 				// Check if the main detail will be deleted
 				if (!in_array($mainDetailId, $keep['ids']))
 				{
-					// If the main detail is not needed anymore, delete it right away
-					// Otherwise it will be a dead data record. The main details are not
-					// returned from the API->getOne call. Only the "real" main detail.
-					$VariantResource->delete($mainDetailId);
-					PlentymarketsMappingController::deleteItemVariantByShopwareID($mainDetailId);
-
-					++$numberOfVariantsDeleted;
-
 					// Promote the first variante to be the main detail
 					$update['variants'][0]['isMain'] = true;
+					$deleteMainVariant = true;
+				}
+				else
+				{
+					$deleteMainVariant = false;
 				}
 
 				$ArticleResource->update($SHOPWARE_itemID, $update);
+
+				// Check if the main detail will be deleted
+				if ($deleteMainVariant)
+				{
+					// If the main detail is not needed anymore, delete it right away
+					// Otherwise it will be a dead data record. The main details are not
+					// returned from the API->getOne call. Only the "real" main detail.
+					Shopware()->Models()->remove(
+						Shopware()->Models()->find(
+							'Shopware\Models\Article\Detail', $mainDetailId
+						)
+					);
+					Shopware()->Models()->flush();
+
+					PlentymarketsMappingController::deleteItemVariantByShopwareID($mainDetailId);
+
+					++$numberOfVariantsDeleted;
+				}
+
 				$article = $ArticleResource->getOne($SHOPWARE_itemID);
 
 				// Add the main detail

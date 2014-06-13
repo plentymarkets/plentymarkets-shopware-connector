@@ -197,6 +197,7 @@
   'PlentymarketsDataIntegrityCheckItemVariationGroupMultiple' => '../../Components/Utils/DataIntegrity/Check/PlentymarketsDataIntegrityCheckItemVariationGroupMultiple.php',
   'PlentymarketsDataIntegrityCheckItemVariationOptionLost' => '../../Components/Utils/DataIntegrity/Check/PlentymarketsDataIntegrityCheckItemVariationOptionLost.php',
   'PlentymarketsDataIntegrityCheckItemVariationOptionNotInSet' => '../../Components/Utils/DataIntegrity/Check/PlentymarketsDataIntegrityCheckItemVariationOptionNotInSet.php',
+  'PlentymarketsDataIntegrityCheckItemDetailPriceless' => '../../Components/Utils/DataIntegrity/Check/PlentymarketsDataIntegrityCheckItemDetailPriceless.php',
   'PlentymarketsDataIntegrityController' => '../../Components/Utils/DataIntegrity/PlentymarketsDataIntegrityController.php',
   'PlentymarketsExportContinuousController' => '../../Components/Export/Continuous/PlentymarketsExportContinuousController.php',
   'PlentymarketsExportContinuousControllerOrder' => '../../Components/Export/Continuous/Controller/PlentymarketsExportContinuousControllerOrder.php',

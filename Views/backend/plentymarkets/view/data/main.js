@@ -45,6 +45,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.data.Main', {
 		var title = {
 			ItemMainDetailLost: '† Details',
 			ItemOrphaned: '† Artikel',
+            ItemDetailPriceless: '† Preise',
 			ItemVariationGroupMultiple: 'Attribute/Mehrfachzuordnung',
 			ItemVariationOptionNotInSet: 'Optionen ≠ Set',
 			ItemVariationOptionLost: '† Attribut-Optionen'
