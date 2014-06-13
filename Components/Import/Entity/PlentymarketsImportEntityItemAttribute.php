@@ -95,9 +95,17 @@ class PlentymarketsImportEntityItemAttribute
 		/** @var Shopware\Models\Article\Configurator\Group $Group */
 		$Group = Shopware()->Models()->find('Shopware\Models\Article\Configurator\Group', $SHOPWARE_attributeId);
 
-		// Set the new data
-		$Group->setName($this->Attribute->FrontendName);
-		$Group->setPosition($this->Attribute->Position);
+        // Set the new data
+        if (!is_null($this->Attribute->FrontendName)) {
+            $Group->setName($this->Attribute->FrontendName);
+        } elseif (!is_null($this->Attribute->BackendName)) {
+            // use backend-name if frontend-name doesn't exists
+            $Group->setName($this->Attribute->BackendName);
+        } else {
+            PyLog()->message('Sync:Item:Attribute', 'No valid name for the attribute with id »' . $this->Attribute->Id . '«');
+            return;
+        }
+        $Group->setPosition($this->Attribute->Position);
 
 		$this->Group = $Group;
 	}
@@ -134,8 +142,15 @@ class PlentymarketsImportEntityItemAttribute
 					continue;
 				}
 
-				$Option->setName($Value->FrontendName);
-				$Option->setPosition($Value->Position);
+                if (!is_null($Value->FrontendName)) {
+                    $Option->setName($Value->FrontendName);
+                } elseif (!is_null($Value->BackendName)) {
+                    // use backend-name if frontend-name doesn't exists
+                    $Option->setName($Value->BackendName);
+                } else {
+                    continue;
+                }
+                $Option->setPosition($Value->Position);
 			}
 		}
 	}
