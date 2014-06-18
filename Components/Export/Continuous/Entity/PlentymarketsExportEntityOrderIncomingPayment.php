@@ -215,6 +215,8 @@ class PlentymarketsExportEntityOrderIncomingPayment
 	}
 
 	/**
+	 * Returns the klarna transaction id
+	 *
 	 * @return string
 	 */
 	protected function getKlarnaTransactionId()

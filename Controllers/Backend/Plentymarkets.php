@@ -925,6 +925,9 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		));
 	}
 
+	/**
+	 * Syncs an item by it's plentymarkets id
+	 */
 	public function syncItemAction()
 	{
 		$itemId = (integer) $this->Request()->get('itemId', 0);
@@ -954,7 +957,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 	}
 
 	/**
-	 *
+	 * Fixes the item with an empty order number
 	 */
 	public function fixEmptyItemDetailNumberAction()
 	{
