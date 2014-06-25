@@ -1,7 +1,7 @@
 <?php
 /**
  * plentymarkets shopware connector
- * Copyright © 2013 plentymarkets GmbH
+ * Copyright © 2013-2014 plentymarkets GmbH
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,10 +22,9 @@
  * trademark license. Therefore any rights, titles and interests in the
  * above trademarks remain entirely with the trademark owners.
  *
- * @copyright  Copyright (c) 2013, plentymarkets GmbH (http://www.plentymarkets.com)
+ * @copyright  Copyright (c) 2014, plentymarkets GmbH (http://www.plentymarkets.com)
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
-
 
 /**
  * I am a generated class and am required for communicating with plentymarkets.
@@ -39,19 +38,9 @@ class PlentySoapObject_AddItemsBaseItemBase
 	public $ASIN;
 	
 	/**
-	 * @var ArrayOfPlentysoapobject_itemattributevalueset
-	 */
-	public $AttributeValueSets;
-	
-	/**
 	 * @var PlentySoapObject_ItemAvailability
 	 */
 	public $Availability;
-	
-	/**
-	 * @var string
-	 */
-	public $BundleType;
 	
 	/**
 	 * @var ArrayOfPlentysoapobject_itemcategory
@@ -91,11 +80,6 @@ class PlentySoapObject_AddItemsBaseItemBase
 	/**
 	 * @var string
 	 */
-	public $EbayEPID;
-	
-	/**
-	 * @var string
-	 */
 	public $ExternalItemID;
 	
 	/**
@@ -124,19 +108,9 @@ class PlentySoapObject_AddItemsBaseItemBase
 	public $ItemNo;
 	
 	/**
-	 * @var ArrayOfPlentysoapobject_itemproperty
-	 */
-	public $ItemProperties;
-	
-	/**
 	 * @var ArrayOfPlentysoapobject_itemsupplier
 	 */
 	public $ItemSuppliers;
-	
-	/**
-	 * @var string
-	 */
-	public $ItemURL;
 	
 	/**
 	 * @var int
@@ -199,19 +173,14 @@ class PlentySoapObject_AddItemsBaseItemBase
 	public $Stock;
 	
 	/**
-	 * @var int
+	 * @var ArrayOfPlentysoapobject_integer
 	 */
-	public $StorageLocation;
+	public $StoreIDs;
 	
 	/**
 	 * @var PlentySoapObject_ItemTexts
 	 */
 	public $Texts;
-
-	/**
-	 * @var ArrayOfPlentysoapobject_integer
-	 */
-	public $StoreIDs;
 	
 	/**
 	 * @var int

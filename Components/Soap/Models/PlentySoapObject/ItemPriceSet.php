@@ -1,7 +1,7 @@
 <?php
 /**
  * plentymarkets shopware connector
- * Copyright © 2013 plentymarkets GmbH
+ * Copyright © 2013-2014 plentymarkets GmbH
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,10 +22,9 @@
  * trademark license. Therefore any rights, titles and interests in the
  * above trademarks remain entirely with the trademark owners.
  *
- * @copyright  Copyright (c) 2013, plentymarkets GmbH (http://www.plentymarkets.com)
+ * @copyright  Copyright (c) 2014, plentymarkets GmbH (http://www.plentymarkets.com)
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
-
 
 /**
  * I am a generated class and am required for communicating with plentymarkets.
@@ -34,9 +33,34 @@ class PlentySoapObject_ItemPriceSet
 {
 	
 	/**
+	 * @var float
+	 */
+	public $BestOfferAutoAcceptancePrice;
+	
+	/**
+	 * @var float
+	 */
+	public $CarryingCosts;
+	
+	/**
 	 * @var int
 	 */
 	public $HeightInMM;
+	
+	/**
+	 * @var float
+	 */
+	public $InventoryCost;
+	
+	/**
+	 * @var float
+	 */
+	public $ItemShipping3;
+	
+	/**
+	 * @var float
+	 */
+	public $ItemShipping4;
 	
 	/**
 	 * @var int
@@ -47,6 +71,11 @@ class PlentySoapObject_ItemPriceSet
 	 * @var float
 	 */
 	public $Lot;
+	
+	/**
+	 * @var float
+	 */
+	public $OperatingCostsPercental;
 	
 	/**
 	 * @var int
@@ -174,9 +203,19 @@ class PlentySoapObject_ItemPriceSet
 	public $RebateLevelPrice9;
 	
 	/**
+	 * @var float
+	 */
+	public $ScoMinimumPrice;
+	
+	/**
 	 * @var int
 	 */
 	public $ShowOnly;
+	
+	/**
+	 * @var float
+	 */
+	public $TollPercental;
 	
 	/**
 	 * @var int

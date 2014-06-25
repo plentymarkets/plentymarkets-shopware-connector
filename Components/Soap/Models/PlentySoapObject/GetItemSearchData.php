@@ -1,7 +1,7 @@
 <?php
 /**
  * plentymarkets shopware connector
- * Copyright © 2013 plentymarkets GmbH
+ * Copyright © 2013-2014 plentymarkets GmbH
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,10 +22,9 @@
  * trademark license. Therefore any rights, titles and interests in the
  * above trademarks remain entirely with the trademark owners.
  *
- * @copyright  Copyright (c) 2013, plentymarkets GmbH (http://www.plentymarkets.com)
+ * @copyright  Copyright (c) 2014, plentymarkets GmbH (http://www.plentymarkets.com)
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
-
 
 /**
  * I am a generated class and am required for communicating with plentymarkets.
@@ -47,6 +46,11 @@ class PlentySoapObject_GetItemSearchData
 	 * @var ArrayOfPlentysoapobject_itemcategory
 	 */
 	public $Categories;
+	
+	/**
+	 * @var int
+	 */
+	public $CustomerClass;
 	
 	/**
 	 * @var string
@@ -84,6 +88,11 @@ class PlentySoapObject_GetItemSearchData
 	public $ItemId;
 	
 	/**
+	 * @var string
+	 */
+	public $ItemNo;
+	
+	/**
 	 * @var ArrayOfPlentysoapobject_itemsearchproperty
 	 */
 	public $ItemProperties;
@@ -99,6 +108,11 @@ class PlentySoapObject_GetItemSearchData
 	public $Keywords;
 	
 	/**
+	 * @var int
+	 */
+	public $Limitation;
+	
+	/**
 	 * @var string
 	 */
 	public $LongDescription;
@@ -107,6 +121,11 @@ class PlentySoapObject_GetItemSearchData
 	 * @var float
 	 */
 	public $Lot;
+	
+	/**
+	 * @var string
+	 */
+	public $Model;
 	
 	/**
 	 * @var string
@@ -141,7 +160,17 @@ class PlentySoapObject_GetItemSearchData
 	/**
 	 * @var string
 	 */
+	public $SalesRank;
+	
+	/**
+	 * @var string
+	 */
 	public $ShortDescription;
+	
+	/**
+	 * @var ArrayOfPlentysoapobject_integer
+	 */
+	public $StoreIDsList;
 	
 	/**
 	 * @var string
@@ -149,7 +178,7 @@ class PlentySoapObject_GetItemSearchData
 	public $TechnicalData;
 	
 	/**
-	 * @var float
+	 * @var string
 	 */
 	public $Unit;
 	

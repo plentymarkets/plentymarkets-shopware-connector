@@ -1,7 +1,7 @@
 <?php
 /**
  * plentymarkets shopware connector
- * Copyright © 2013 plentymarkets GmbH
+ * Copyright © 2013-2014 plentymarkets GmbH
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,10 +22,9 @@
  * trademark license. Therefore any rights, titles and interests in the
  * above trademarks remain entirely with the trademark owners.
  *
- * @copyright  Copyright (c) 2013, plentymarkets GmbH (http://www.plentymarkets.com)
+ * @copyright  Copyright (c) 2014, plentymarkets GmbH (http://www.plentymarkets.com)
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
-
 
 /**
  * I am a generated class and am required for communicating with plentymarkets.
@@ -34,9 +33,94 @@ class PlentySoapResponse_GetContentPage
 {
 	
 	/**
-	 * @var PlentySoapObject_ContentPage
+	 * @var int
 	 */
-	public $ContentPage;
+	public $CategoryID;
+	
+	/**
+	 * @var string
+	 */
+	public $Description;
+	
+	/**
+	 * @var string
+	 */
+	public $Description2;
+	
+	/**
+	 * @var int
+	 */
+	public $FullTextActive;
+	
+	/**
+	 * @var int
+	 */
+	public $Image;
+	
+	/**
+	 * @var int
+	 */
+	public $Image2;
+	
+	/**
+	 * @var string
+	 */
+	public $ItemListView;
+	
+	/**
+	 * @var string
+	 */
+	public $Lang;
+	
+	/**
+	 * @var int
+	 */
+	public $LastUpdateTimestamp;
+	
+	/**
+	 * @var string
+	 */
+	public $LastUpdateUser;
+	
+	/**
+	 * @var string
+	 */
+	public $MetaDescription;
+	
+	/**
+	 * @var string
+	 */
+	public $MetaKeywords;
+	
+	/**
+	 * @var string
+	 */
+	public $MetaTitle;
+	
+	/**
+	 * @var string
+	 */
+	public $Name;
+	
+	/**
+	 * @var string
+	 */
+	public $NameURL;
+	
+	/**
+	 * @var string
+	 */
+	public $PageView;
+	
+	/**
+	 * @var int
+	 */
+	public $PlaceholderTranslation;
+	
+	/**
+	 * @var int
+	 */
+	public $Position;
 	
 	/**
 	 * @var ArrayOfPlentysoapresponsemessage
@@ -44,7 +128,27 @@ class PlentySoapResponse_GetContentPage
 	public $ResponseMessages;
 	
 	/**
+	 * @var string
+	 */
+	public $ShortDescription;
+	
+	/**
+	 * @var int
+	 */
+	public $SingleItemView;
+	
+	/**
 	 * @var boolean
 	 */
 	public $Success;
+	
+	/**
+	 * @var int
+	 */
+	public $WebTemplateExist;
+	
+	/**
+	 * @var int
+	 */
+	public $WebstoreID;
 }

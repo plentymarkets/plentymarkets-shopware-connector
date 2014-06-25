@@ -1,7 +1,7 @@
 <?php
 /**
  * plentymarkets shopware connector
- * Copyright © 2013 plentymarkets GmbH
+ * Copyright © 2013-2014 plentymarkets GmbH
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,10 +22,9 @@
  * trademark license. Therefore any rights, titles and interests in the
  * above trademarks remain entirely with the trademark owners.
  *
- * @copyright  Copyright (c) 2013, plentymarkets GmbH (http://www.plentymarkets.com)
+ * @copyright  Copyright (c) 2014, plentymarkets GmbH (http://www.plentymarkets.com)
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
-
 
 /**
  * I am a generated class and am required for communicating with plentymarkets.
@@ -44,19 +43,9 @@ class PlentySoapObject_AddIncomingPayments
 	public $Currency;
 	
 	/**
-	 * @var string
-	 */
-	public $CustomerEmail;
-	
-	/**
 	 * @var int
 	 */
 	public $CustomerID;
-	
-	/**
-	 * @var string
-	 */
-	public $CustomerName;
 	
 	/**
 	 * @var int
@@ -67,6 +56,16 @@ class PlentySoapObject_AddIncomingPayments
 	 * @var int
 	 */
 	public $OrderID;
+	
+	/**
+	 * @var PlentySoapObject_AddIncomingPaymentInformation
+	 */
+	public $PaymentInformation;
+	
+	/**
+	 * @var PlentySoapObject_AddIncomingPaymentPayPal
+	 */
+	public $PaymentPayPal;
 	
 	/**
 	 * @var string
