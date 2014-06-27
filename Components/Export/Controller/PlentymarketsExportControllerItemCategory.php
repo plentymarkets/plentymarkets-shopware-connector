@@ -55,6 +55,7 @@ class PlentymarketsExportControllerItemCategory
 	public function run()
 	{
 		$this->buildPlentyNameAndLevelIndex();
+		return;
 		$this->doExport();
 		$this->buildMapping();
 	}
@@ -66,27 +67,52 @@ class PlentymarketsExportControllerItemCategory
 	 */
 	protected function buildPlentyNameAndLevelIndex()
 	{
-		// Fetch the category catalog from plentymarkets
-		$Request_GetItemCategoryCatalogBase = new PlentySoapRequest_GetItemCategoryCatalogBase();
-		$Request_GetItemCategoryCatalogBase->Lang = 'de'; // string
-		$Request_GetItemCategoryCatalogBase->Level = null; // int
-		$Request_GetItemCategoryCatalogBase->Page = 0;
+		$Request_GetItemCategoryTree = new PlentySoapRequest_GetItemCategoryTree();
+		$Request_GetItemCategoryTree->Lang = 'de';
+		$Request_GetItemCategoryTree->StoreID = 0;
+		$Request_GetItemCategoryTree->GetCategoryNames = true;
 
-		do
+		/** @var PlentySoapResponse_GetItemCategoryTree $Response_GetItemCategoryTree */
+		$Response_GetItemCategoryTree = PlentymarketsSoapClient::getInstance()->GetItemCategoryTree($Request_GetItemCategoryTree);
+
+		if (!$Response_GetItemCategoryTree->Success)
 		{
-			$Response_GetItemCategoryCatalogBase = PlentymarketsSoapClient::getInstance()->GetItemCategoryCatalogBase($Request_GetItemCategoryCatalogBase);
-
-			if (!$Response_GetItemCategoryCatalogBase->Success)
-			{
-				throw new PlentymarketsExportException('The item category catalog page »'. $Request_GetItemCategoryCatalogBase->Page .'« could not be retrieved', 2920);
-			}
-
-			foreach ($Response_GetItemCategoryCatalogBase->Categories->item as $Category)
-			{
-				$this->PLENTY_nameAndLevel2ID[$Category->Level][$Category->Name] = $Category->CategoryID;
-			}
+			throw new PlentymarketsExportException('The item category tree could not be retrieved', 2920);
 		}
-		while (++$Request_GetItemCategoryCatalogBase->Page < $Response_GetItemCategoryCatalogBase->Pages);
+
+		$this->PLENTY_nameAndLevel2ID = array('children' => array());
+
+		/** @var PlentySoapObject_ItemCategoryTreeNode $Category */
+		foreach ($Response_GetItemCategoryTree->MultishopTree->item[0]->CategoryTree->item as $Category)
+		{
+			$index = &$this->PLENTY_nameAndLevel2ID;
+			$categoryPath = explode(';', $Category->CategoryPath);
+			$categoryPathNames = explode(';', $Category->CategoryPathNames);
+			$branchId = 0;
+
+			foreach ($categoryPath as $n => $categoryId)
+			{
+				if ($categoryId == 0)
+				{
+					break;
+				}
+
+				$branchId = $categoryId;
+				$categoryName = $categoryPathNames[$n];
+				if (!isset($index['children'][$categoryName]))
+				{
+					$index['children'][$categoryName] = array(
+						'id' => $categoryId,
+						'children' => array()
+					);
+				}
+				$index = &$index['children'][$categoryName];
+			}
+
+			$index = array(
+				'id' => $branchId
+			);
+		}
 	}
 
 	/**
