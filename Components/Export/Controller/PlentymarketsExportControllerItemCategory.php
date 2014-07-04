@@ -64,7 +64,7 @@ class PlentymarketsExportControllerItemCategory
 		//return;
 		//$this->doExport();
 		//$this->buildMapping();
-		$this->importCategoriesFromPlenty(1);
+		$this->exportCategories2Plenty(1);
 	}
 
 	/**
@@ -362,7 +362,7 @@ class PlentymarketsExportControllerItemCategory
 		}
 	}
 	
-	private function getCatIdFromShopware($shopwareChildren, $plentyChild)
+	private function checkCatShopware2Plenty($shopwareChildren, $plentyChild)
 	{
 		if(!$plentyChild['children'])
 		{
@@ -373,9 +373,9 @@ class PlentymarketsExportControllerItemCategory
 		{	
 			$catExists = false;
 			
-			foreach($plentyChild['children'] as $name => $plentyChild1) 
+			foreach($shopwareChildren as $shopwareChild) 
 			{
-				foreach ($shopwareChildren as $shopwareChild) 
+				foreach ($plentyChild['children'] as $name => $plentyChild1) 
 				{
 					if ($name == $shopwareChild->getName()) 
 					{
@@ -391,26 +391,26 @@ class PlentymarketsExportControllerItemCategory
 				if(method_exists($shopwareChild, 'getParent')) 
 				{
 					$parent = $shopwareChild->getParent();
-					$catPath = $parent->getName() . ' -> ';
+					$catPath = utf8_decode($parent->getName()) . ' -> ';
 
 					while (!is_null($parent->getParentId())) {
 						$level++;
 						$parent = $parent->getParent();
-						$catPath .= $parent->getName() . ' -> ';
+						$catPath = substr_replace($catPath, utf8_decode($parent->getName()) . ' -> ',0,0);
 					}
 
 					if ($catExists == false) {
-						print_r('Categorie of level' . $level . ' ' . $name . ' was not found in shopware and must be created! Path : ' . substr($catPath, 0, -4) . chr(10));
+						print_r('Categorie of level' . $level . ' ' . utf8_decode($shopwareChild->getName()) . ' was not found in plenty and must be created! shopwarePath : ' . substr($catPath, 0, -4) . chr(10));
 
 					} else {
 						$catExists = false;
 
-						print_r('Categorie of level' . $level . ' ' . $name . ' with ID ' . $shopwareChild->getId() . ' was found in shopware. Path : ' . substr($catPath, 0, -4) . chr(10));
+						print_r('Categorie of level' . $level . ' ' . utf8_decode($shopwareChild->getName()) .' was found in plenty with ID '. $plentyChild1['id'].' . shopwarePath : ' . substr($catPath, 0, -4) . chr(10));
 
 						$shopwareChildren1 = $shopwareChild->getChildren();
 
-						// search for the next categories of plentymarkets in shopware
-						$this->getCatIdFromShopware($shopwareChildren1, $plentyChild1);
+						// search for the next categories of shopware in plentymarkets
+						$this->checkCatShopware2Plenty($shopwareChildren1, $plentyChild1);
 					}
 				}
 				
@@ -422,7 +422,7 @@ class PlentymarketsExportControllerItemCategory
 	/**
 	 * Import the missing categories from plentymarkets to shopware
 	 */
-	protected function importCategoriesFromPlenty($shopID)
+	protected function exportCategories2Plenty($shopID)
 	{
 		$shopwareCategories = Shopware()->Models()
 			->getRepository('Shopware\Models\Category\Category')
@@ -440,7 +440,7 @@ class PlentymarketsExportControllerItemCategory
 
 			$shopwareChildren1 = $shopwareCategories[$shopID]->getChildren();
 		
-			$this->getCatIdFromShopware($shopwareChildren1,$this->PLENTY_CategoryTree2ShopID);
+			$this->checkCatShopware2Plenty($shopwareChildren1,$this->PLENTY_CategoryTree2ShopID);
 		
 	}
 	
