@@ -74,61 +74,55 @@ class PlentymarketsExportControllerItemCategory
 	 */
 	protected function buildPlentyNameAndLevelIndex()
 	{
-		$storeIDs = Shopware()->Db()->query('SELECT * FROM plenty_mapping_shop');
+		$Request_GetItemCategoryTree = new PlentySoapRequest_GetItemCategoryTree();
+		$Request_GetItemCategoryTree->Lang = 'de';
+		$Request_GetItemCategoryTree->GetCategoryNames = true;
 
-		//$this->PLENTY_nameAndLevel2ID = array('children' => array());
-	
-		while(($storeID = $storeIDs->fetch()) && $storeID )
+		/** @var PlentySoapResponse_GetItemCategoryTree $Response_GetItemCategoryTree */
+		$Response_GetItemCategoryTree = PlentymarketsSoapClient::getInstance()->GetItemCategoryTree($Request_GetItemCategoryTree);
+
+		if (!$Response_GetItemCategoryTree->Success)
 		{
-			$Request_GetItemCategoryTree = new PlentySoapRequest_GetItemCategoryTree();
-			$Request_GetItemCategoryTree->Lang = 'de';
-			$Request_GetItemCategoryTree->StoreID = $storeID['plentyID'];
-			$Request_GetItemCategoryTree->GetCategoryNames = true;
+			throw new PlentymarketsExportException('The item category tree could not be retrieved', 2920);
+		}
 
-			/** @var PlentySoapResponse_GetItemCategoryTree $Response_GetItemCategoryTree */
-			$Response_GetItemCategoryTree = PlentymarketsSoapClient::getInstance()->GetItemCategoryTree($Request_GetItemCategoryTree);
+		$plenty_nameAndLevel2ID = array('children' => array());
 
-			if (!$Response_GetItemCategoryTree->Success)
+		/** @var PlentySoapObject_ItemCategoryTreeNode $Category */
+		foreach ($Response_GetItemCategoryTree->MultishopTree->item[0]->CategoryTree->item as $Category)
+		{
+			$index = &$plenty_nameAndLevel2ID;
+			$categoryPath = explode(';', $Category->CategoryPath);
+			$categoryPathNames = explode(';', $Category->CategoryPathNames);
+			$branchId = 0;
+
+			// Ist die kategorie aktiv?
+
+			foreach ($categoryPath as $n => $categoryId)
 			{
-				throw new PlentymarketsExportException('The item category tree could not be retrieved', 2920);
-			}
-
-			$plenty_nameAndLevel2ID = array('children' => array());
-
-			/** @var PlentySoapObject_ItemCategoryTreeNode $Category */
-			foreach ($Response_GetItemCategoryTree->MultishopTree->item[0]->CategoryTree->item as $Category)
-			{
-				$index = &$plenty_nameAndLevel2ID;
-				$categoryPath = explode(';', $Category->CategoryPath);
-				$categoryPathNames = explode(';', $Category->CategoryPathNames);
-				$branchId = 0;
-
-				foreach ($categoryPath as $n => $categoryId)
+				if ($categoryId == 0)
 				{
-					if ($categoryId == 0)
-					{
-						break;
-					}
-
-					$branchId = $categoryId;
-					$categoryName = $categoryPathNames[$n];
-					if (!isset($index['children'][$categoryName]))
-					{
-						$index['children'][$categoryName] = array(
-							'id' => $categoryId,
-							'children' => array()
-						);
-					}
-					$index = &$index['children'][$categoryName];
+					break;
 				}
 
-				$index = array(
-					'id' => $branchId
-				);
+				$branchId = $categoryId;
+				$categoryName = $categoryPathNames[$n];
+				if (!isset($index['children'][$categoryName]))
+				{
+					$index['children'][$categoryName] = array(
+						'id' => $categoryId,
+						'children' => array()
+					);
+				}
+				$index = &$index['children'][$categoryName];
 			}
 
-			$this->PLENTY_CategoryTree2ShopID[$storeID['plentyID']] = $plenty_nameAndLevel2ID;
+			$index = array(
+				'id' => $branchId
+			);
 		}
+
+		$this->PLENTY_CategoryTree2ShopID = $plenty_nameAndLevel2ID;
 	}
 
 	/**
@@ -372,6 +366,7 @@ class PlentymarketsExportControllerItemCategory
 	{
 		if(!$plentyChild['children'])
 		{
+			// Alle shopware kinder müssen in plenty angelegt werden
 			return;
 		}
 		else
@@ -385,6 +380,8 @@ class PlentymarketsExportControllerItemCategory
 					if ($name == $shopwareChild->getName()) 
 					{
 						$catExists = true;
+						// Mapping speichern
+						// $plentyChild1[id] = branchId --> $shopwareChild->getId()
 						break;
 					}
 				}
@@ -443,7 +440,7 @@ class PlentymarketsExportControllerItemCategory
 
 			$shopwareChildren1 = $shopwareCategories[$shopID]->getChildren();
 		
-			$this->getCatIdFromShopware($shopwareChildren1,$this->PLENTY_CategoryTree2ShopID[$shopID]);
+			$this->getCatIdFromShopware($shopwareChildren1,$this->PLENTY_CategoryTree2ShopID);
 		
 	}
 	
