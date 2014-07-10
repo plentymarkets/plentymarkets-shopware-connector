@@ -124,250 +124,151 @@ class PlentymarketsExportControllerItemCategory
 
 		$this->PLENTY_CategoryTree2ShopID = $plenty_nameAndLevel2ID;
 	}
-
-	/**
-	 * Export the missing categories to plentymarkets
-	 */
-	protected function doExport()
+	
+	private function runSoapCallForCategories($categoryName,$parentID,$level)
 	{
-		// Only export the categories bond to a shop
-		$ShopRepository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
-		$ShopsActive = $ShopRepository->findBy(array('active' => 1), array('default' => 'DESC'));
-
-		$categoryRootIds = array();
-		$additionalLanguages = array();
-
-		/** @var Shopware\Models\Shop\Shop $Shop */
-		foreach ($ShopsActive as $Shop)
+		$Request_SetCategories = new PlentySoapRequest_SetCategories();
+		
+		$Request_SetCategories->SetCategories = array();
+		
+		for($a = 0; $a < 1; ++$a)
 		{
-			$categoryRootIds[] = $Shop->getCategory()->getId();
+			$RequestObject_SetCategories = new PlentySoapRequestObject_SetCategories();
 
-			$language = substr($Shop->getLocale()->getLocale(), 0, 2);
-			if (!in_array($language, $additionalLanguages) && $language != 'de')
-			{
-				$additionalLanguages[] = $language;
-			}
+			$RequestObject_SetCategories->CategoryID = null; // int
+
+			$RequestObject_CreateCategory = new PlentySoapRequestObject_CreateCategory();
+			$RequestObject_CreateCategory->Description = null; // string
+			$RequestObject_CreateCategory->Description2 = null; // string
+			$RequestObject_CreateCategory->FulltextActive = null; // string
+			$RequestObject_CreateCategory->Image = null; // string
+			$RequestObject_CreateCategory->Image1Path = null; // string
+			$RequestObject_CreateCategory->Image2 = null; // string
+			$RequestObject_CreateCategory->Image2Path = null; // string
+			$RequestObject_CreateCategory->ItemListView = null; // string
+			$RequestObject_CreateCategory->Lang = 'de'; // string
+			$RequestObject_CreateCategory->LastUpdateTimestamp = null; // int
+			$RequestObject_CreateCategory->LastUpdateUser = null; // string
+			$RequestObject_CreateCategory->Level = $level; // int
+			$RequestObject_CreateCategory->MetaDescription = null; // string
+			$RequestObject_CreateCategory->MetaKeywords = null; // string
+			$RequestObject_CreateCategory->MetaTitle = null; // string
+			$RequestObject_CreateCategory->Name = $categoryName; // string
+			$RequestObject_CreateCategory->NameURL = null; // string
+			$RequestObject_CreateCategory->PageView = null; // string
+			$RequestObject_CreateCategory->PlaceholderTranslation = null; // string
+			$RequestObject_CreateCategory->Position = null; // int
+			$RequestObject_CreateCategory->PreviewPath = null; // string
+			$RequestObject_CreateCategory->RootPath = null; // string
+			$RequestObject_CreateCategory->ShortDescription = null; // string
+			$RequestObject_CreateCategory->SingleItemView = null; // string
+			$RequestObject_CreateCategory->WebTemplateExist = null; // string
+			$RequestObject_CreateCategory->WebstoreID = 1; // int
+			$RequestObject_CreateCategory->ParentCategoryID = $parentID; //int
+			
+			$RequestObject_SetCategories->CreateCategory = $RequestObject_CreateCategory;
+
+			$RequestObject_SetCategories->IdentificationValue = null; // string
+
+			$RequestObject_SetCategoryBase = new PlentySoapRequestObject_SetCategoryBase();
+			$RequestObject_SetCategoryBase->LinkList = null; // int
+			$RequestObject_SetCategoryBase->Right = null; // string
+			$RequestObject_SetCategoryBase->SiteMap = null; // int
+			$RequestObject_SetCategoryBase->Type = null; // string
+			$RequestObject_SetCategories->SetCategoryBase = $RequestObject_SetCategoryBase;
+
+			$RequestObject_SetCategories->SetLinkList = null; // int
+			$RequestObject_SetCategories->SetRight = null; // string
+			$RequestObject_SetCategories->SetType = null; // string
+			
+			$Request_SetCategories->SetCategories[] = $RequestObject_SetCategories;
+		}
+		
+		$Response_SetCategories = PlentymarketsSoapClient::getInstance()->SetCategories($Request_SetCategories);
+
+		if (!$Response_SetCategories->Success)
+		{
+		    //	throw new PlentymarketsExportException('The category could not be saved! ', 2920);
+			return;
+			
+		} else 
+		{
+			return $Response_SetCategories->Categories->item[0]->CategoryID;
 		}
 
-		/** @var Shopware\Models\Category\Category $Category */
-		foreach (Shopware()->Models()
-			->getRepository('Shopware\Models\Category\Category')
-			->findBy(array(
-			'blog' => 0
-		)) as $Category)
+	}
+	
+	private function getLevel($shChild)
+	{
+		$level = 0;
+
+		if (method_exists($shChild, 'getParent')) 
 		{
-			// Root
-			if (is_null($Category->getPath()))
+			$parent = $shChild->getParent();
+			
+			while (!is_null($parent->getParentId())) 
 			{
-				continue;
+				$level++;
+				$parent = $parent->getParent();
 			}
-
-			//
-			$path = array_filter(explode('|', $Category->getPath()));
-
-			// Check whether this category is connected to a shop
-			$rootId = end($path);
-			if (!in_array($rootId, $categoryRootIds))
-			{
-				PlentymarketsLogger::getInstance()->error('Export:Initial:Category', 'The item category »'. $Category->getName() . '« with the id »'. $Category->getId() .'« will be skipped (not connected to a shop)', 2921);
-				continue;
-			}
-
-			// Count the level
-			$level = count($path);
-
-			// Looking for a German category
-			if (array_key_exists($level, $this->PLENTY_nameAndLevel2ID) && array_key_exists($Category->getName(), $this->PLENTY_nameAndLevel2ID[$level]))
-			{
-				$categoryIdAdded = $this->PLENTY_nameAndLevel2ID[$level][$Category->getName()];
-			}
-
-			else
-			{
-				$Request_AddItemCategory = new PlentySoapRequest_AddItemCategory();
-				$Request_AddItemCategory->Lang = 'de';
-				$Request_AddItemCategory->Level = $level;
-				$Request_AddItemCategory->MetaDescription = $Category->getMetaDescription();
-				$Request_AddItemCategory->MetaKeywords = $Category->getMetaKeywords();
-				$Request_AddItemCategory->MetaTitle = $Category->getCmsHeadline();
-				$Request_AddItemCategory->Name = $Category->getName();
-				$Request_AddItemCategory->Text = $Category->getCmsText();
-				$Request_AddItemCategory->Position = $Category->getPosition();
-
-				$Response_AddItemCategory = PlentymarketsSoapClient::getInstance()->AddItemCategory($Request_AddItemCategory);
-
-				if (!$Response_AddItemCategory->Success)
-				{
-					throw new PlentymarketsExportException('The item category »'. $Request_AddItemCategory->Name .'« could not be exported', 2922);
-				}
-
-				$categoryIdAdded = (integer) $Response_AddItemCategory->ResponseMessages->item[0]->SuccessMessages->item[0]->Value;
-			}
-
-			// Fill the translation for each category
-			if (!empty($additionalLanguages))
-			{
-				foreach ($additionalLanguages as $additionalLanguage)
-				{
-					$Request_AddItemCategory = new PlentySoapRequest_AddItemCategory();
-					$Request_AddItemCategory->Level = $level;
-					$Request_AddItemCategory->CatID = $categoryIdAdded;
-					$Request_AddItemCategory->Lang = $additionalLanguage;
-					$Request_AddItemCategory->MetaDescription = $Category->getMetaDescription();
-					$Request_AddItemCategory->MetaKeywords = $Category->getMetaKeywords();
-					$Request_AddItemCategory->MetaTitle = $Category->getCmsHeadline();
-					$Request_AddItemCategory->Name = $Category->getName();
-					$Request_AddItemCategory->Text = $Category->getCmsText();
-
-					$Response_AddItemCategory = PlentymarketsSoapClient::getInstance()->AddItemCategory($Request_AddItemCategory);
-
-					if (!$Response_AddItemCategory->Success)
-					{
-						throw new PlentymarketsExportException('The item category »'. $Request_AddItemCategory->Name .'« could not be exported', 2923);
-					}
-				}
-			}
-
-			$this->mappingShopwareID2PlentyID[$Category->getId()] = $categoryIdAdded;
 		}
+		
+		return $level;
 	}
 
 	/**
-	 * Generates the mapping
+	 * Get the mapping data: plenty category ID
 	 */
-	protected function buildMapping()
+	public function getPlentyCatID($shopwareID)
 	{
-		$Categories = Shopware()->Models()
-			->getRepository('Shopware\Models\Category\Category')
-			->findBy(array('path' => null));
-
-		/**
-		 * @var Shopware\Models\Category\Category $Category
-		 * @var Shopware\Models\Category\Category $Child2
-		 * @var Shopware\Models\Category\Category $Child3
-		 * @var Shopware\Models\Category\Category $Child4
-		 * @var Shopware\Models\Category\Category $Child5
-		 * @var Shopware\Models\Category\Category $Child6
-		 * @var Shopware\Models\Category\Category $Child7
-		 */
-		foreach ($Categories as $Category)
-		{
-			// No root category
-			if (!$Category->getParentId())
-			{
-				continue;
-			}
-
-			// plentymarkets path
-			$path = array();
-
-			//
-			$children1 = $Category->getChildren();
-
-			// plentymarkets level 1
-			foreach ($children1 as $Child2)
-			{
-				if ($Child2->getBlog())
-				{
-					continue;
-				}
-
-				$path[0] = $this->mappingShopwareID2PlentyID[$Child2->getId()];
-
-				//
-				$children2 = $Child2->getChildren();
-
-				if (count($children2))
-				{
-					// plentymarkets level 2
-					foreach ($children2 as $Child3)
-					{
-						$path[1] = $this->mappingShopwareID2PlentyID[$Child3->getId()];
-
-						//
-						$children3 = $Child3->getChildren();
-
-						if (count($children3))
-						{
-							// plentymarkets level 3
-							foreach ($children3 as $Child4)
-							{
-								$path[2] = $this->mappingShopwareID2PlentyID[$Child4->getId()];
-
-								//
-								$children4 = $Child4->getChildren();
-
-								if (count($children4))
-								{
-									// plentymarkets level 4
-									foreach ($children4 as $Child5)
-									{
-										$path[3] = $this->mappingShopwareID2PlentyID[$Child5->getId()];
-
-										//
-										$children5 = $Child5->getChildren();
-
-										if (count($children5))
-										{
-											// plentymarkets level 5
-											foreach ($children5 as $Child6)
-											{
-												$path[4] = $this->mappingShopwareID2PlentyID[$Child6->getId()];
-
-												$children6 = $Child6->getChildren();
-												if (count($children6))
-												{
-													foreach ($children6 as $Child7)
-													{
-														$path[5] = $this->mappingShopwareID2PlentyID[$Child7->getId()];
-
-														PlentymarketsMappingController::addCategory($Child7->getId(), implode(';', $path));
-													}
-												}
-												else
-												{
-													unset($path[5]);
-													PlentymarketsMappingController::addCategory($Child6->getId(), implode(';', $path));
-												}
-
-											}
-										} // 6
-										else
-										{
-											unset($path[5], $path[4]);
-											PlentymarketsMappingController::addCategory($Child5->getId(), implode(';', $path));
-										}
-									}
-								} // 5
-								else
-								{
-									unset($path[5], $path[4], $path[3]);
-									PlentymarketsMappingController::addCategory($Child4->getId(), implode(';', $path));
-								}
-							}
-						} // 4
-						else
-						{
-							unset($path[5], $path[4], $path[3], $path[2]);
-							PlentymarketsMappingController::addCategory($Child3->getId(), implode(';', $path));
-						}
-					}
-				} // 3
-				else
-				{
-					unset($path[5], $path[4], $path[3], $path[2], $path[1]);
-					PlentymarketsMappingController::addCategory($Child2->getId(), implode(';', $path));
-				}
-			}
-		}
+		$row = Shopware()->Db()
+			->query('
+					SELECT plentyID
+						FROM plenty_mapping_category 
+						WHERE shopwareID = '. $shopwareID .' Limit 1'
+			)
+			->fetch();
+		
+		return intval($row['plentyID']);	
 	}
 	
 	private function checkCatShopware2Plenty($shopwareChildren, $plentyChild)
 	{
-		if(!$plentyChild['children'])
-		{
-			// Alle shopware kinder müssen in plenty angelegt werden
-			return;
+		
+		if(!$plentyChild['children'])   // All shopware children have to be saved in plenty 
+		{	
+			foreach($shopwareChildren as $shopwareChild)
+			{
+				$level = $this->getLevel($shopwareChild);
+	
+						if($level == 1)
+						{
+							$plentyParentID = null;
+							
+						} else
+						{
+							$plentyParentID = $this->getPlentyCatID($shopwareChild->getParentId());
+						}
+	
+				$plentyCatID = $this->runSoapCallForCategories($shopwareChild->getName(), $plentyParentID, $level);
+	
+				if(isset($plentyCatID))
+				{
+					PlentymarketsMappingController::addCategory($shopwareChild->getId(),$plentyCatID);
+
+					print_r('ParentID= '.$plentyParentID.' ; Level = ' . $level . ' ; Name = ' . utf8_decode($shopwareChild->getName()) . ' has been added in plenty. '.chr(10));
+
+					$shopwareChildren1 = $shopwareChild->getChildren();
+
+					// search for the next children of these categories from shopware to add them in plentymarkets
+					$this->checkCatShopware2Plenty($shopwareChildren1, $plentyChild);
+				
+				} else 
+				{
+					print_r('ParentID= '.$plentyParentID.' ; Level = ' . $level . ' ; Name = ' . utf8_decode($shopwareChild->getName()) . ' could not be added in plenty. '.chr(10));
+				}
+				
+			}
 		}
 		else
 		{	
@@ -380,47 +281,47 @@ class PlentymarketsExportControllerItemCategory
 					if ($name == $shopwareChild->getName()) 
 					{
 						$catExists = true;
-						// Mapping speichern
-						// $plentyChild1[id] = branchId --> $shopwareChild->getId()
+						// do mapping 
+						PlentymarketsMappingController::addCategory($shopwareChild->getId(),$plentyChild1['id']);
+						
 						break;
 					}
 				}
 
-				$level = 0;
+				$level = $this->getLevel($shopwareChild);
 				
-				if(method_exists($shopwareChild, 'getParent')) 
+				if ($catExists == false) 
 				{
-					$parent = $shopwareChild->getParent();
-					$catPath = utf8_decode($parent->getName()) . ' -> ';
-
-					while (!is_null($parent->getParentId())) {
-						$level++;
-						$parent = $parent->getParent();
-						$catPath = substr_replace($catPath, utf8_decode($parent->getName()) . ' -> ',0,0);
+					$parentID = null;
+					
+					if($level > 1)
+					{
+						$parentID = $this->getPlentyCatID($shopwareChild->getParentId());
 					}
-
-					if ($catExists == false) {
-						print_r('Categorie of level' . $level . ' ' . utf8_decode($shopwareChild->getName()) . ' was not found in plenty and must be created! shopwarePath : ' . substr($catPath, 0, -4) . chr(10));
-
-					} else {
-						$catExists = false;
-
-						print_r('Categorie of level' . $level . ' ' . utf8_decode($shopwareChild->getName()) .' was found in plenty with ID '. $plentyChild1['id'].' . shopwarePath : ' . substr($catPath, 0, -4) . chr(10));
-
-						$shopwareChildren1 = $shopwareChild->getChildren();
-
-						// search for the next categories of shopware in plentymarkets
-						$this->checkCatShopware2Plenty($shopwareChildren1, $plentyChild1);
-					}
-				}
+					
+					print_r('ParentID= '.$parentID.' ; Level = ' . $level . ' ; Name = ' . utf8_decode($shopwareChild->getName()) . ' has been added in plenty. '.chr(10));
+					
+					$plentyCatID =  $this->runSoapCallForCategories($shopwareChild->getName(), $parentID, $level);
 				
+					PlentymarketsMappingController::addCategory($shopwareChild->getId(),$plentyCatID);
+					
+				} else 
+				{
+					$catExists = false;
+				}
+
+					$shopwareChildren1 = $shopwareChild->getChildren();
+
+					// search for the next categories of shopware in plentymarkets
+					$this->checkCatShopware2Plenty($shopwareChildren1, $plentyChild1);	
 			}
+				
 		}
 	
 	}
 	
 	/**
-	 * Import the missing categories from plentymarkets to shopware
+	 * Export the missing categories from shopware to plenty
 	 */
 	protected function exportCategories2Plenty($shopID)
 	{

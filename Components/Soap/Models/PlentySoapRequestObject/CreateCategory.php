@@ -31,132 +31,127 @@
  */
 class PlentySoapRequestObject_CreateCategory
 {
-	
+
 	/**
 	 * @var string
 	 */
 	public $Description;
-	
+
 	/**
 	 * @var string
 	 */
 	public $Description2;
-	
+
 	/**
 	 * @var string
 	 */
 	public $FulltextActive;
-	
+
 	/**
 	 * @var string
 	 */
 	public $Image;
-	
+
 	/**
 	 * @var string
 	 */
 	public $Image1Path;
-	
+
 	/**
 	 * @var string
 	 */
 	public $Image2;
-	
+
 	/**
 	 * @var string
 	 */
 	public $Image2Path;
-	
+
 	/**
 	 * @var string
 	 */
 	public $ItemListView;
-	
+
 	/**
 	 * @var string
 	 */
 	public $Lang;
-	
-	/**
-	 * @var int
-	 */
-	public $LastUpdateTimestamp;
-	
-	/**
-	 * @var string
-	 */
-	public $LastUpdateUser;
-	
+
 	/**
 	 * @var int
 	 */
 	public $Level;
-	
+
 	/**
 	 * @var string
 	 */
 	public $MetaDescription;
-	
+
 	/**
 	 * @var string
 	 */
 	public $MetaKeywords;
-	
+
 	/**
 	 * @var string
 	 */
 	public $MetaTitle;
-	
+
 	/**
 	 * @var string
 	 */
 	public $Name;
-	
+
 	/**
 	 * @var string
 	 */
 	public $NameURL;
-	
+
 	/**
 	 * @var string
 	 */
 	public $PageView;
-	
+
+	/**
+	 * @var int
+	 */
+	public $ParentCategoryID;
+
 	/**
 	 * @var string
 	 */
 	public $PlaceholderTranslation;
-	
+
 	/**
 	 * @var int
 	 */
 	public $Position;
-	
+
 	/**
 	 * @var string
 	 */
 	public $PreviewPath;
-	
+
 	/**
 	 * @var string
 	 */
 	public $RootPath;
-	
+
 	/**
 	 * @var string
 	 */
 	public $ShortDescription;
-	
+
 	/**
 	 * @var string
 	 */
 	public $SingleItemView;
-	
+
 	/**
 	 * @var string
 	 */
 	public $WebTemplateExist;
-	
+
 	/**
 	 * @var int
 	 */
