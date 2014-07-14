@@ -411,7 +411,7 @@ class PlentymarketsImportEntityItem
 
 			try
 			{
-				$categoryID = PlentymarketsMappingController::getCategoryByPlentyID($Category->ItemCategoryPath);
+				$categoryID = PlentymarketsMappingController::getCategoryByPlentyID($Category->ItemCategoryID);
 				$this->categories[] = array(
 					'id' => $categoryID
 				);
@@ -478,7 +478,7 @@ class PlentymarketsImportEntityItem
 				if (!$addError)
 				{
 					// Add mapping and save into the object
-					PlentymarketsMappingController::addCategory($parentId, $Category->ItemCategoryPath);
+					PlentymarketsMappingController::addCategory($parentId, $Category->ItemCategoryID);
 					$this->categories[] = array(
 						'id' => $parentId
 					);
