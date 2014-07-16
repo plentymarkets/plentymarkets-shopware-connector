@@ -26,7 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * PlentymarketsMappingEntityCategory provides the actual category mapping functionality.
  * Like the other mapping entities this class is called in PlentymarketsMappingController. This entity
@@ -36,10 +35,66 @@
  */
 class PlentymarketsMappingEntityCategory extends PlentymarketsMappingEntityAbstract
 {
+	/**
+	 * @var string
+	 */
+	const DELIMITER = ';';
+
+	/**
+	 * @param integer $categoryId
+	 * @param integer $storeOrShopId
+	 * @return string
+	 */
+	public static function getIdentifier($categoryId, $storeOrShopId)
+	{
+		return $categoryId . self::DELIMITER . $storeOrShopId;
+	}
+
+	/**
+	 * @param integer $categoryId
+	 * @param integer $shopId
+	 * @return integer
+	 */
+	public static function getCategoryByShopwareID($categoryId, $shopId)
+	{
+		$category = PlentymarketsMappingController::getCategoryByShopwareID(
+			self::getIdentifier($categoryId, $shopId)
+		);
+		$parts = explode(self::DELIMITER, $category);
+		return (integer) $parts[0];
+	}
+
+	/**
+	 * @param integer $categoryId
+	 * @param integer $storeId
+	 * @return integer
+	 */
+	public static function getCategoryByPlentyID($categoryId, $storeId)
+	{
+		$category = PlentymarketsMappingController::getCategoryByPlentyID(
+			self::getIdentifier($categoryId, $storeId)
+		);
+		$parts = explode(self::DELIMITER, $category);
+		return (integer) $parts[0];
+	}
+
+	/**
+	 * @param integer $shopwareCategoryId
+	 * @param integer $shopId
+	 * @param integer $plentyCategoryId
+	 * @param integer $storeId
+	 */
+	public static function addCategory($shopwareCategoryId, $shopId, $plentyCategoryId, $storeId)
+	{
+		PlentymarketsMappingController::addCategory(
+			self::getIdentifier($shopwareCategoryId, $shopId),
+			self::getIdentifier($plentyCategoryId, $storeId)
+		);
+	}
 
 	/**
 	 * Returns the name of the database table
-	 * 
+	 *
 	 * @return string
 	 */
 	protected function getName()

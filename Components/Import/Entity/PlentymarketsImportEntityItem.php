@@ -51,6 +51,13 @@ class PlentymarketsImportEntityItem
 	protected $Shop;
 
 	/**
+	 * plentymarkets store id
+	 *
+	 * @var integer
+	 */
+	protected $storeId;
+
+	/**
 	 * The main data
 	 *
 	 * @var array
@@ -109,6 +116,7 @@ class PlentymarketsImportEntityItem
 	{
 		$this->ItemBase = $ItemBase;
 		$this->Shop = $Shop;
+		$this->storeId = PlentymarketsMappingController::getShopByShopwareID($Shop->getId());
 	}
 
 	/**
@@ -411,9 +419,9 @@ class PlentymarketsImportEntityItem
 
 			try
 			{
-				$categoryID = PlentymarketsMappingController::getCategoryByPlentyID($Category->ItemCategoryID);
+				$categoryId = PlentymarketsMappingEntityCategory::getCategoryByPlentyID($Category->ItemCategoryID, $this->storeId);
 				$this->categories[] = array(
-					'id' => $categoryID
+					'id' => $categoryId
 				);
 			}
 
@@ -473,12 +481,14 @@ class PlentymarketsImportEntityItem
 					}
 				}
 
-				// Only create a mapping and connect the cateory to the item,
+				// Only create a mapping and connect the category to the item,
 				// of nothing went wrong during creation
 				if (!$addError)
 				{
 					// Add mapping and save into the object
-					PlentymarketsMappingController::addCategory($parentId, $Category->ItemCategoryID);
+					PlentymarketsMappingEntityCategory::addCategory(
+						$parentId, $this->Shop->getId(), $Category->ItemCategoryID, $this->storeId
+					);
 					$this->categories[] = array(
 						'id' => $parentId
 					);

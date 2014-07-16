@@ -53,8 +53,8 @@ class PlentymarketsExportControllerItemCategory
 	 */
 	public function run()
 	{
-		$this->buildPlentyNameAndLevelIndex();
-		$this->exportCategories2Plenty(1);
+		$this->index();
+		$this->export();
 	}
 
 	/**
@@ -62,7 +62,7 @@ class PlentymarketsExportControllerItemCategory
 	 *
 	 * @todo language
 	 */
-	protected function buildPlentyNameAndLevelIndex()
+	protected function index()
 	{
 		$Request_GetItemCategoryTree = new PlentySoapRequest_GetItemCategoryTree();
 		$Request_GetItemCategoryTree->Lang = 'de';
@@ -119,11 +119,11 @@ class PlentymarketsExportControllerItemCategory
 
 		if ($level == 1)
 		{
-			$parentID = null;
+			$parentId = null;
 		}
 		else
 		{
-			$parentID = PlentymarketsMappingController::getCategoryByShopwareID($category->getParentId());
+			$parentId = PlentymarketsMappingEntityCategory::getCategoryByShopwareID($category->getParentId(), $storeId);
 		}
 
 		$Request_SetCategories = new PlentySoapRequest_SetCategories();
@@ -157,7 +157,7 @@ class PlentymarketsExportControllerItemCategory
 		$RequestObject_CreateCategory->SingleItemView = null; // string
 		$RequestObject_CreateCategory->WebTemplateExist = null; // string
 		$RequestObject_CreateCategory->WebstoreID = $storeId; // int
-		$RequestObject_CreateCategory->ParentCategoryID = $parentID; //int
+		$RequestObject_CreateCategory->ParentCategoryID = $parentId; //int
 
 		$RequestObject_SetCategories->CreateCategory = $RequestObject_CreateCategory;
 
@@ -171,27 +171,34 @@ class PlentymarketsExportControllerItemCategory
 		}
 		else
 		{
-			$categoryId = $Response_SetCategories->Categories->item[0]->CategoryID;
-			PlentymarketsMappingController::addCategory($category->getId(), $categoryId);
+			$categoryId = (integer) $Response_SetCategories->Categories->item[0]->CategoryID;
+			$shopId = PlentymarketsMappingController::getShopByPlentyID($storeId);
+			PlentymarketsMappingEntityCategory::addCategory(
+				$category->getId(), $shopId, $categoryId, $storeId
+			);
+			return $categoryId;
 		}
 
 	}
 
 	private function checkCatShopware2Plenty($shopwareCategories, $plentyTree, $storeId)
 	{
+		$shopId = PlentymarketsMappingController::getShopByPlentyID($storeId);
 
 		/** @var Shopware\Models\Category\Category $shopwareCategory */
 		foreach ($shopwareCategories as $shopwareCategory)
 		{
+			$export = true;
 			try
 			{
-				PlentymarketsMappingController::getCategoryByShopwareID($shopwareCategory->getId());
-				continue;
+				PlentymarketsMappingEntityCategory::getCategoryByShopwareID($shopwareCategory->getId(), $shopId);
+				$export = false;
 			}
 			catch (PlentymarketsMappingExceptionNotExistant $e)
 			{
 			}
 
+			$branchId = null;
 			$catExists = false;
 
 			if (!isset($plentyTree['children']))
@@ -205,14 +212,31 @@ class PlentymarketsExportControllerItemCategory
 				if ($name == $shopwareCategory->getName())
 				{
 					$catExists = true;
-					PlentymarketsMappingController::addCategory($shopwareCategory->getId(), $plentyChild1['id']);
+					$branchId = $plentyChild1['id'];
+					PlentymarketsMappingEntityCategory::addCategory(
+						$shopwareCategory->getId(), $shopId, $branchId, $storeId
+					);
 					break;
 				}
 			}
 
-			if ($catExists == false)
+			if ($catExists == false && $export)
 			{
-				$this->exportCategory($shopwareCategory, $storeId);
+				$branchId = $this->exportCategory($shopwareCategory, $storeId);
+			}
+
+			// Active the category
+			if ($storeId > 0 && $shopwareCategory->getActive() && $export)
+			{
+				$Request_SetStoreCategories = new PlentySoapRequest_SetStoreCategories();
+				$Request_SetStoreCategories->StoreCategories = array();
+
+				$Object_SetStoreCategory = new PlentySoapObject_SetStoreCategory();
+				$Object_SetStoreCategory->BranchID = $branchId;
+				$Object_SetStoreCategory->StoreID = $storeId;
+
+				$Request_SetStoreCategories->StoreCategories[] = $Object_SetStoreCategory;
+				PlentymarketsSoapClient::getInstance()->SetStoreCategories($Request_SetStoreCategories);
 			}
 
 			$shopwareChildren1 = $shopwareCategory->getChildren();
@@ -226,7 +250,7 @@ class PlentymarketsExportControllerItemCategory
 	/**
 	 * Export the missing categories from shopware to plenty
 	 */
-	protected function exportCategories2Plenty()
+	protected function export()
 	{
 		$shopwareCategories = Shopware()->Models()
 			->getRepository('Shopware\Models\Category\Category')
@@ -247,12 +271,11 @@ class PlentymarketsExportControllerItemCategory
 
 			if (!$shops)
 			{
-				$storeId = 0;
+				$shops = array(0);
 			}
-			else
-			{
-				$shopId = reset($shops);
 
+			foreach ($shops as $shopId)
+			{
 				try
 				{
 					$storeId = PlentymarketsMappingController::getShopByShopwareID($shopId);
@@ -261,9 +284,9 @@ class PlentymarketsExportControllerItemCategory
 				{
 					$storeId = 0;
 				}
-			}
 
-			$this->checkCatShopware2Plenty($shopwareCategory->getChildren(), $this->PLENTY_CategoryTree2ShopID, $storeId);
+				$this->checkCatShopware2Plenty($shopwareCategory->getChildren(), $this->PLENTY_CategoryTree2ShopID, $storeId);
+			}
 		}
 	}
 
