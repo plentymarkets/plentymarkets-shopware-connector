@@ -244,6 +244,7 @@ class PlentymarketsUtils
 			{
 				break;
 			}
+			$category = $parent;
 		}
 
 		return $category->getId();
