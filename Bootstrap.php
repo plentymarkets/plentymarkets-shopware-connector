@@ -303,6 +303,34 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 			$this->addItemBundleCronEvents();
 		}
 
+		if (version_compare($version, '1.6') !== 1)
+		{
+			try
+			{
+				PlentymarketsExportController::getInstance()->erase('ItemCategory');
+
+				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'PlentymarketsExportController::getInstance()->erase(\'ItemCategory\') done');
+			}
+			catch (Exception $E)
+			{
+				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'PlentymarketsExportController::getInstance()->erase(\'ItemCategory\') failed');
+			}
+
+			try
+			{
+				Shopware()->Db()->exec("
+					ALTER TABLE `plenty_mapping_category` CHANGE `shopwareID` `shopwareID` VARCHAR(255) NOT NULL DEFAULT '';
+				");
+
+				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'ALTER TABLE `plenty_mapping_category` done');
+			}
+			catch (Exception $E)
+			{
+				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'ALTER TABLE `plenty_mapping_category` failed');
+			}
+
+		}
+
 		//
 		PlentymarketsConfig::getInstance()->setConnectorVersion($this->getVersion());
 
@@ -423,7 +451,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 
 		Shopware()->Db()->exec("
 			CREATE TABLE `plenty_mapping_category` (
-			  `shopwareID` int(11) unsigned NOT NULL,
+			  `shopwareID` varchar(255) NOT NULL DEFAULT '',
 			  `plentyID` varchar(255) NOT NULL DEFAULT '',
 			  PRIMARY KEY (`shopwareID`,`plentyID`),
 			  UNIQUE KEY `plentyID` (`plentyID`)
@@ -1169,7 +1197,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
      */
     public function getVersion()
     {
-    	return '1.5.9';
+    	return '1.6.0';
     }
 
     /**
