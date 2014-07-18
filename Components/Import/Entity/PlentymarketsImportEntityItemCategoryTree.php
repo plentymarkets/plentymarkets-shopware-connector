@@ -157,7 +157,7 @@ class PlentymarketsImportEntityItemCategoryTree
 			for($i = 0; $i< count($this->plentyCategoryTree); $i++) 
 			{
 				if ($this->plentyCategoryTree[$i]['CategoryName'] != $shopwareCategoryTree[$i + 1]->getName() || 
-					(isset($shopwareCategoryTree[$i]) && $shopwareCategoryTree[$i +1]->getParentId != $shopwareCategoryTree[$i]->getId()))  // if the shopware tree is updated
+					(isset($shopwareCategoryTree[$i]) && $shopwareCategoryTree[$i +1]->getParentId() != $shopwareCategoryTree[$i]->getId()))  // if the shopware tree is updated
 				{
 					// category tree was in plenty changed and must be in shopware updated
 					// 1. check if the plenty category name with the same parentId exists in shopware
@@ -211,8 +211,7 @@ class PlentymarketsImportEntityItemCategoryTree
 					}
 					
 				}
-			}
-			
+			}			
 		}
 		 //  if plenty branch id was not found in shopware DB, create shopware category, change plenty_mapping_category	
 	} 
