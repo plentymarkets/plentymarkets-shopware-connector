@@ -113,7 +113,7 @@ class PlentymarketsExportControllerItemCategory
 		$this->PLENTY_CategoryTree2ShopID = $plenty_nameAndLevel2ID;
 	}
 
-	private function exportCategory(Shopware\Models\Category\Category $category, $storeId)
+	private function exportCategory(Shopware\Models\Category\Category $category, $storeId, $shopId)
 	{
 		$level = $category->getLevel() - 1;
 
@@ -123,7 +123,8 @@ class PlentymarketsExportControllerItemCategory
 		}
 		else
 		{
-			$parentId = PlentymarketsMappingEntityCategory::getCategoryByShopwareID($category->getParentId(), $storeId);
+			// store Id abrufen
+			$parentId = PlentymarketsMappingEntityCategory::getCategoryByShopwareID($category->getParentId(), $shopId);
 		}
 
 		$Request_SetCategories = new PlentySoapRequest_SetCategories();
@@ -222,7 +223,7 @@ class PlentymarketsExportControllerItemCategory
 
 			if ($catExists == false && $export)
 			{
-				$branchId = $this->exportCategory($shopwareCategory, $storeId);
+				$branchId = $this->exportCategory($shopwareCategory, $storeId, $shopId);
 			}
 
 			// Active the category
