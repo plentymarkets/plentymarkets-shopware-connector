@@ -184,7 +184,13 @@ class PlentymarketsExportControllerItemCategory
 
 	private function checkCatShopware2Plenty($shopwareCategories, $plentyTree, $storeId)
 	{
-		$shopId = PlentymarketsMappingController::getShopByPlentyID($storeId);
+		try{
+				$shopId = PlentymarketsMappingController::getShopByPlentyID($storeId);
+			}
+		catch (PlentymarketsMappingExceptionNotExistant $e)
+		{
+			PlentymarketsLogger::getInstance()->error('Cron:Export ', $e->getMessage(), 1000);
+		}
 
 		/** @var Shopware\Models\Category\Category $shopwareCategory */
 		foreach ($shopwareCategories as $shopwareCategory)
