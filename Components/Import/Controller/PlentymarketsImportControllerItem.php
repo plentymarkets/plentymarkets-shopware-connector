@@ -173,6 +173,12 @@ class PlentymarketsImportControllerItem
 	 */
 	protected function finish()
 	{
+		/** @var \Shopware\Components\Model\CategoryDenormalization $component */
+		$component = Shopware()->CategoryDenormalization();
+		$component->rebuildCategoryPath();
+		$component->removeAllAssignments();
+		$component->rebuildAllAssignments();
+
 		try
 		{
 			// Stock stack
