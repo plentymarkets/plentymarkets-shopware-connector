@@ -35,7 +35,7 @@ class PlentymarketsImportEntityItemCategoryTree
 {
 	/**
 	 *
-	 * @var array of Categories from Plenty 
+	 * @var array of Categories from Plenty
 	 */
 	protected $plentyCategoryTree;
 
@@ -54,7 +54,7 @@ class PlentymarketsImportEntityItemCategoryTree
 	/**
 	 * I am the constructor
 	 *
-	 * @param PlentySoapResponse_GetItemCategoryTree $CategoryTree
+	 * @param array $plentyCategoryTree
 	 */
 	public function __construct($plentyCategoryTree)
 	{
@@ -71,17 +71,21 @@ class PlentymarketsImportEntityItemCategoryTree
 		}
 
 	}
-	
+
 	private function updateMappingCategory($shCatId, $shShop, $plCatId, $plShop)
 	{
-		try {
-			Shopware()->Db()->exec('REPLACE INTO plenty_mapping_category (shopwareID, plentyID) VALUES("' . $shCatId . ';' . $shShop . '", 
+		try
+		{
+			Shopware()->Db()->exec('REPLACE INTO plenty_mapping_category (shopwareID, plentyID) VALUES("' . $shCatId . ';' . $shShop . '",
 						 																						  "' . $plCatId . ';' . $plShop . '")');
-		} catch (Exception $e) {
-			// for duplicate entry 
-			
+		}
+		catch (Exception $e)
+		{
+			// for duplicate entry
+
 		}
 	}
+
 	private function createShopwareCategory($params)
 	{
 		try
@@ -95,11 +99,12 @@ class PlentymarketsImportEntityItemCategoryTree
 		catch (Exception $E)
 		{
 			// Log
-			PlentymarketsLogger::getInstance()->error('Sync:Item:Category', 'The category »' . $params['name']. '« with the parentId »' . $params['parentId'] . '« could not be created (' . $E->getMessage() . ')', 3300);
+			PlentymarketsLogger::getInstance()->error('Sync:Item:Category', 'The category »' . $params['name'] . '« with the parentId »' . $params['parentId'] . '« could not be created (' . $E->getMessage() . ')', 3300);
 		}
-		
+
 		return $CategoryModel;
 	}
+
 	/**
 	 * Does the actual import
 	 */
@@ -108,70 +113,93 @@ class PlentymarketsImportEntityItemCategoryTree
 		// get the last category id from plenty tree and get it then from plenty_mapping_category
 		$plentyLastCategory = end($this->plentyCategoryTree);
 		$plentyBranchId = $plentyLastCategory['BranchId'];
-		
-		$rows = Shopware()->Db()->query('Select * from plenty_mapping_category');
+
+		$rows = Shopware()->Db()->query('SELECT * FROM plenty_mapping_category WHERE plentyID LIKE "' . $plentyBranchId . ';%"');
 		$rows->fetch();
-		$catFound = false;
-		
-		foreach($rows as $row)
+
+
+		foreach ($rows as $row)
 		{
-			$index = explode(';', $row['plentyID']);
+
+			$index = explode(PlentymarketsMappingEntityCategory::DELIMITER, $row['plentyID']);
 			$plentyCategoryId = $index[0];
 			$plentyShopId = $index[1];
-			
-			if($plentyCategoryId == $plentyBranchId)
-			{
-				$catFound = true;
-				break;
-			}
-		}
 
-		// if plenty branch id was found in shopware DB, get the shopware category tree and compare then both trees with each other 
-		if($catFound) 
-		{
 			$shopwareShopId = PlentymarketsMappingController::getShopByPlentyID($plentyShopId);
-			
-			$shopwareCategoryTree = array();
-			
-			$shopwareCategoryId = PlentymarketsMappingEntityCategory::getCategoryByPlentyID($plentyCategoryId, $plentyShopId);
-			
-			$shopwareCategory = self::$CategoryRepository->findOneBy(array('id' => $shopwareCategoryId));
 
-			if($shopwareCategory instanceof Shopware\Models\Category\Category)
+			$shopwareCategoryTree = array();
+
+			$shopwareCategoryId = PlentymarketsMappingEntityCategory::getCategoryByPlentyID($plentyCategoryId, $plentyShopId);
+
+			/** @var Shopware\Models\Category\Category $shopwareCategory */
+			$shopwareCategory = self::$CategoryRepository->find($shopwareCategoryId);
+			// $this->shopwareEndknoten = $shopwareCategory;
+
+			/** @var Shopware\Models\Article\Article $article */
+			foreach ($shopwareCategory->getAllArticles() as $article)
 			{
-				while($shopwareCategory->getParent())
+				$categoriesOld = $article->getCategories();
+				$categoriesNew = array();
+
+				/** @var Shopware\Models\Category\Category $categoryOld */
+				foreach ($categoriesOld as $categoryOld)
+				{
+					if ($categoryOld->getId() == $shopwareCategoryId)
+					{
+						continue;
+					}
+					$categoriesNew[] = $categoryOld;
+				}
+
+				// Neu angelegter endknoten hinzufügen
+				// $categoriesNew[] = $letzterAngelegterOderletzteGefundene;
+
+				$article->setCategories($categoriesNew);
+				Shopware()->Models()->persist($article);
+				Shopware()->Models()->flush();
+
+			}
+
+
+//$shopwareCategory->getAllArticles();
+
+			if ($shopwareCategory instanceof Shopware\Models\Category\Category)
+			{
+				while ($shopwareCategory->getParent())
 				{
 					$shopwareCategoryTree[] = $shopwareCategory;
 					$shopwareCategory = $shopwareCategory->getParent();
 				}
 			}
-			
-			// reverse the shopware category tree to beginn with the parent categories
+
+			// reverse the shopware category tree to begin with the parent categories
 			$shopwareCategoryTree = array_reverse($shopwareCategoryTree);
-			
+
 			$shopwareRootId = $shopwareCategoryTree[0]->getId();
-			// remove the first parent category ( e.g. 'Deutsch') 
+			// remove the first parent category ( e.g. 'Deutsch')
 			unset($shopwareCategoryTree[0]);
-			
-			// compare then both trees with each other 
-			for($i = 0; $i< count($this->plentyCategoryTree); $i++) 
+
+			// compare then both trees with each other
+			for ($i = 0; $i < count($this->plentyCategoryTree); $i++)
 			{
-				if(isset($shopwareCategoryTree[$i + 1]))
+				if (isset($shopwareCategoryTree[$i + 1]))
 				{
 					if ($this->plentyCategoryTree[$i]['CategoryName'] != $shopwareCategoryTree[$i + 1]->getName() ||
-						(isset($shopwareCategoryTree[$i]) && $shopwareCategoryTree[$i +1]->getParentId() != $shopwareCategoryTree[$i]->getId()))  // if the shopware tree is not updated
+						(isset($shopwareCategoryTree[$i]) && $shopwareCategoryTree[$i + 1]->getParentId() != $shopwareCategoryTree[$i]->getId())
+					) // if the shopware tree is not updated
 					{
 						// category tree was in plenty changed and must be in shopware updated
 						// 1. check if the plenty category name with the same parentId exists in shopware
-						if($i == 0) // if the first Category has been changed in plenty 
+						if ($i == 0) // if the first Category has been changed in plenty
 						{
 							$CategoryFound = self::$CategoryRepository->findOneBy(array('name' => $this->plentyCategoryTree[$i]['CategoryName'],
 								'parentId' => $shopwareRootId));
 
-						} else
+						}
+						else
 						{
 							$CategoryFound = self::$CategoryRepository->findOneBy(array('name' => $this->plentyCategoryTree[$i]['CategoryName'],
-								'parentId' => $shopwareCategoryTree[$i]->getId())); // parentId is at position $i, the actual shopware Category is at position $i+1 
+								'parentId' => $shopwareCategoryTree[$i]->getId())); // parentId is at position $i, the actual shopware Category is at position $i+1
 
 						}
 
@@ -180,7 +208,7 @@ class PlentymarketsImportEntityItemCategoryTree
 						{
 							$this->updateMappingCategory($CategoryFound->getId(), $shopwareShopId, $this->plentyCategoryTree[$i]['BranchId'], $plentyShopId);
 
-							$shopwareCategoryTree[$i+1] = $CategoryFound; // update shopwareCategoryTree
+							$shopwareCategoryTree[$i + 1] = $CategoryFound; // update shopwareCategoryTree
 
 						}
 						else // 3. if category doesn't exist, create shopware category and change plenty_mapping_category
@@ -188,7 +216,7 @@ class PlentymarketsImportEntityItemCategoryTree
 							$params = array();
 							$params['name'] = $this->plentyCategoryTree[$i]['CategoryName'];
 
-							if($i == 0)
+							if ($i == 0)
 							{
 								$params['parentId'] = $shopwareRootId;
 							}
@@ -199,11 +227,11 @@ class PlentymarketsImportEntityItemCategoryTree
 
 							$CategoryModel = $this->createShopwareCategory($params);
 
-							if($CategoryModel instanceof Shopware\Models\Category\Category)
+							if ($CategoryModel instanceof Shopware\Models\Category\Category)
 							{
-								$this->updateMappingCategory($CategoryModel->getId(), $shopwareShopId,  $this->plentyCategoryTree[$i]['BranchId'], $plentyShopId);
+								$this->updateMappingCategory($CategoryModel->getId(), $shopwareShopId, $this->plentyCategoryTree[$i]['BranchId'], $plentyShopId);
 
-								$shopwareCategoryTree[$i+1] = $CategoryModel;
+								$shopwareCategoryTree[$i + 1] = $CategoryModel;
 
 							}
 							else
@@ -222,11 +250,11 @@ class PlentymarketsImportEntityItemCategoryTree
 
 					$CategoryModel = $this->createShopwareCategory($params);
 
-					if($CategoryModel instanceof Shopware\Models\Category\Category)
+					if ($CategoryModel instanceof Shopware\Models\Category\Category)
 					{
-						$this->updateMappingCategory($CategoryModel->getId(), $shopwareShopId,  $this->plentyCategoryTree[$i]['BranchId'], $plentyShopId);
+						$this->updateMappingCategory($CategoryModel->getId(), $shopwareShopId, $this->plentyCategoryTree[$i]['BranchId'], $plentyShopId);
 
-						$shopwareCategoryTree[$i+1] = $CategoryModel;
+						$shopwareCategoryTree[$i + 1] = $CategoryModel;
 
 					}
 					else
@@ -235,8 +263,8 @@ class PlentymarketsImportEntityItemCategoryTree
 					}
 				}
 
-			}			
+			}
 		}
-		 //  if plenty branch id was not found in shopware DB, the category will be created automatically when an item of this category will be synchronized
-	} 
+
+	}
 }
