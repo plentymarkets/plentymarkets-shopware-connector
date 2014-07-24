@@ -399,7 +399,7 @@ class PlentymarketsSoapClient extends SoapClient
 	{
 		if (!self::$Instance instanceof self)
 		{
-			// Confiug
+			// Config
 			$PlentymarketsConfig = PlentymarketsConfig::getInstance();
 
 			// WSDL
