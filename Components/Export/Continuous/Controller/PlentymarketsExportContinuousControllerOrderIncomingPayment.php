@@ -61,7 +61,7 @@ class PlentymarketsExportContinuousControllerOrderIncomingPayment
 					JOIN plenty_order ON shopwareId = orderID
 				WHERE
 					change_date > \'' . $lastUpdateTimestamp . '\' AND
-					payment_status_id IN ' . implode(', ', $status) . ' AND
+					payment_status_id IN (' . implode(', ', $status) . ') AND
 					IFNULL(plentyOrderPaidStatus, 0) != 1
 		');
 
