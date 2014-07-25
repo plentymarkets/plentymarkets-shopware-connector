@@ -51,6 +51,12 @@ class PlentymarketsImportEntityItemCategoryTree
 	 */
 	protected static $CategoryApi;
 
+	/** @var Shopware\Models\Category\Category $shopwareCategory */
+	protected $shopwareLastOldNode;
+
+	/** @var Shopware\Models\Category\Category $shopwareCategory */
+	protected $shopwareLastNewNode;
+
 	/**
 	 * I am the constructor
 	 *
@@ -105,6 +111,42 @@ class PlentymarketsImportEntityItemCategoryTree
 		return $CategoryModel;
 	}
 
+	/** 
+	 * @var Shopware\Models\Category\Category $shOldCategory - old shopware category
+	 * @var Shopware\Models\Category\Category $shNewCategory - the last new shopware Category
+	*/
+	private function updateCategoryForArticles($shOldCategory, $shNewCategory)
+	{
+		/** @var Shopware\Models\Article\Article $article */
+		foreach ($shOldCategory->getAllArticles() as $article)
+		{
+			$categoriesOld = $article->getCategories();
+			$categoriesNew = array();
+
+			/** @var Shopware\Models\Category\Category $categoryOld */
+			foreach ($categoriesOld as $categoryOld)
+			{
+				if ($categoryOld->getId() == $shOldCategory->getId())
+				{
+					continue;
+				}
+				$categoriesNew[] = array('id' => $categoryOld->getId());
+			}
+
+			// Neu angelegter endknoten hinzufügen
+			$categoriesNew[] = array('id' => $shNewCategory->getId());
+
+			//$article->setCategories($categoriesNew);
+			//Shopware()->Models()->persist($article);
+			//Shopware()->Models()->flush();
+			
+			/** @var Shopware\Components\Api\Resource\Article */
+			$resource = Shopware\Components\Api\Manager::getResource('Article');
+			$resource->update($article->getId(), array('categories' => $categoriesNew));
+
+		}
+	}
+
 	/**
 	 * Does the actual import
 	 */
@@ -114,8 +156,8 @@ class PlentymarketsImportEntityItemCategoryTree
 		$plentyLastCategory = end($this->plentyCategoryTree);
 		$plentyBranchId = $plentyLastCategory['BranchId'];
 
-		$rows = Shopware()->Db()->query('SELECT * FROM plenty_mapping_category WHERE plentyID LIKE "' . $plentyBranchId . ';%"');
-		$rows->fetch();
+		$rows = Shopware()->Db()->fetchAll('SELECT * FROM plenty_mapping_category WHERE plentyID LIKE "'. $plentyBranchId .';%"');
+		//$rows->fetch();
 
 
 		foreach ($rows as $row)
@@ -133,32 +175,8 @@ class PlentymarketsImportEntityItemCategoryTree
 
 			/** @var Shopware\Models\Category\Category $shopwareCategory */
 			$shopwareCategory = self::$CategoryRepository->find($shopwareCategoryId);
-			// $this->shopwareEndknoten = $shopwareCategory;
-
-			/** @var Shopware\Models\Article\Article $article */
-			foreach ($shopwareCategory->getAllArticles() as $article)
-			{
-				$categoriesOld = $article->getCategories();
-				$categoriesNew = array();
-
-				/** @var Shopware\Models\Category\Category $categoryOld */
-				foreach ($categoriesOld as $categoryOld)
-				{
-					if ($categoryOld->getId() == $shopwareCategoryId)
-					{
-						continue;
-					}
-					$categoriesNew[] = $categoryOld;
-				}
-
-				// Neu angelegter endknoten hinzufügen
-				// $categoriesNew[] = $letzterAngelegterOderletzteGefundene;
-
-				$article->setCategories($categoriesNew);
-				Shopware()->Models()->persist($article);
-				Shopware()->Models()->flush();
-
-			}
+			
+			 $this->shopwareLastOldNode = $shopwareCategory;
 
 
 //$shopwareCategory->getAllArticles();
@@ -222,7 +240,7 @@ class PlentymarketsImportEntityItemCategoryTree
 							}
 							else
 							{
-								$params['parentId'] = $shopwareCategoryTree[$i]->getId(); // TODO testen ob parentId richtig ist
+								$params['parentId'] = $shopwareCategoryTree[$i]->getId(); 
 							}
 
 							$CategoryModel = $this->createShopwareCategory($params);
@@ -246,7 +264,7 @@ class PlentymarketsImportEntityItemCategoryTree
 				{
 					$params = array();
 					$params['name'] = $this->plentyCategoryTree[$i]['CategoryName'];
-					$params['parentId'] = $shopwareCategoryTree[$i]->getId(); // TODO testen ob parentId richtig ist
+					$params['parentId'] = $shopwareCategoryTree[$i]->getId(); 
 
 					$CategoryModel = $this->createShopwareCategory($params);
 
@@ -264,7 +282,14 @@ class PlentymarketsImportEntityItemCategoryTree
 				}
 
 			}
+			
+			// update all articles of the last shopware category, if the category id has been changed
+			$this->shopwareLastNewNode = array_pop($shopwareCategoryTree);
+			if($this->shopwareLastOldNode->getId() != $this->shopwareLastNewNode->getId())
+			{
+				$this->updateCategoryForArticles($this->shopwareLastOldNode, $this->shopwareLastNewNode);
+			}
 		}
 
-	}
+	} // if plentyBranchId was not found in plenty_mapping_category, the new plenty tree will be created by article update 
 }
