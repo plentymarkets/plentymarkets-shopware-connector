@@ -213,7 +213,7 @@ class PlentymarketsImportEntityItemCategoryTree
 							$this->updateMappingCategory($CategoryFound->getId(), $shopwareShopId, $this->plentyCategoryTree[$i]['BranchId'], $plentyShopId);
 
 							$shopwareCategoryTree[$i + 1] = $CategoryFound; // update shopwareCategoryTree
-							$shopwareCategoryTree = array_slice($shopwareCategoryTree, 0, $i + 1);
+							$shopwareCategoryTree = array_slice($shopwareCategoryTree, 0, $i + 1, true);
 
 						}
 						else // 3. if category doesn't exist, create shopware category and change plenty_mapping_category
@@ -229,7 +229,7 @@ class PlentymarketsImportEntityItemCategoryTree
 								$this->updateMappingCategory($CategoryModel->getId(), $shopwareShopId, $this->plentyCategoryTree[$i]['BranchId'], $plentyShopId);
 
 								$shopwareCategoryTree[$i + 1] = $CategoryModel;
-								$shopwareCategoryTree = array_slice($shopwareCategoryTree, 0, $i + 1);
+								$shopwareCategoryTree = array_slice($shopwareCategoryTree, 0, $i + 1, true);
 
 							}
 							else
@@ -245,16 +245,30 @@ class PlentymarketsImportEntityItemCategoryTree
 				{
 					$params = array();
 					$params['name'] = $this->plentyCategoryTree[$i]['CategoryName'];
-					$params['parentId'] = $shopwareCategoryTree[$i]->getId(); 
+					$params['parentId'] = $shopwareCategoryTree[$i]->getId();
 
-					$CategoryModel = $this->createShopwareCategory($params);
+					$categoryFound = self::$CategoryRepository->findOneBy(
+						array(
+							'name' => $params['name'],
+							'parentId' => $params['parentId']
+						)
+					);
 
-					if ($CategoryModel instanceof Shopware\Models\Category\Category)
+					if ($categoryFound instanceof Shopware\Models\Category\Category)
 					{
-						$this->updateMappingCategory($CategoryModel->getId(), $shopwareShopId, $this->plentyCategoryTree[$i]['BranchId'], $plentyShopId);
+						$categoryModel = $categoryFound;
+					}
+					else
+					{
+						$categoryModel = $this->createShopwareCategory($params);
+					}
+					
+					if ($categoryModel instanceof Shopware\Models\Category\Category)
+					{
+						$this->updateMappingCategory($categoryModel->getId(), $shopwareShopId, $this->plentyCategoryTree[$i]['BranchId'], $plentyShopId);
 
-						$shopwareCategoryTree[$i + 1] = $CategoryModel;
-						$shopwareCategoryTree = array_slice($shopwareCategoryTree, 0, $i + 1);
+						$shopwareCategoryTree[$i + 1] = $categoryModel;
+						$shopwareCategoryTree = array_slice($shopwareCategoryTree, 0, $i + 1, true);
 
 					}
 					else
