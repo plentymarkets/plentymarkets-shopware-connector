@@ -54,53 +54,30 @@ class PlentymarketsImportEntityItemCategory
 	 */
 	public function import()
 	{
-		$match = Shopware()->Db()->fetchRow('
-			SELECT
-					plentyPath,
-					shopwareId
-				FROM plenty_category
-				WHERE plentyId = '. (integer) $this->Category->CategoryID .'
-				ORDER BY size ASC
+		$row = Shopware()->Db()->fetchAll('
+			SELECT *
+				FROM plenty_mapping_category
+				WHERE plentyID LIKE "' . $this->Category->CategoryID . ';%"
 				LIMIT 1
 		');
 
-		// If there is not match, the category ain't used in shopware
-		if (!$match)
+		if (!$row)
 		{
-			return PyLog()->message('Sync:Item:Category', 'Skipping the category »' . $this->Category->Name . '« (unused)');
+			// PyLog()->message('Sync:Item:Category', 'Skipping the category »' . $this->Category->Name . '« (not found)');
+			return;
 		}
 
-		// Helper
-		$path = explode(';', $match['plentyPath']);
-		$hit = false;
+		$index = explode(PlentymarketsMappingEntityCategory::DELIMITER, $row[0]['shopwareID']);
+		$categoryId = $index[0];
 
-		// Get the corresponding shopware leaf
 		/** @var Shopware\Models\Category\Category $Category */
-		$Category = Shopware()->Models()->find('Shopware\Models\Category\Category', $match['shopwareId']);
+		$Category = Shopware()->Models()->find('Shopware\Models\Category\Category', $categoryId);
 
 		// If the shopware category wasn't found, something is terribly wrong
 		if (!$Category)
 		{
-			return PyLog()->message('Sync:Item:Category', 'Skipping the category »' . $this->Category->Name . '« (not found)');
-		}
-
-		// Walk through the plentymarkets path until the right one is found
-		while ($path)
-		{
-			if (array_pop($path) == $this->Category->CategoryID)
-			{
-				$hit = true;
-				break;
-			}
-
-			// If this one is not the correct on, get the next higher category
-			$Category = $Category->getParent();
-		}
-
-		// If no shopware category was found, again something is terribly wrong
-		if (!$hit)
-		{
-			return PyLog()->message('Sync:Item:Category', 'Skipping the category »' . $this->Category->Name . '« (none found)');
+			PyLog()->message('Sync:Item:Category', 'Skipping the category »' . $this->Category->Name . '« (not found)');
+			return;
 		}
 
 		// Update the category only if the name's changed

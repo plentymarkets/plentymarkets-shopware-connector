@@ -34,52 +34,6 @@
 class PlentymarketsImportControllerItemCategory
 {
 	/**
-	 * Create a temporary table with better data
-	 */
-	public function __construct()
-	{
-		Shopware()->Db()->exec('
-			CREATE TEMPORARY TABLE `plenty_category` (
-			  `plentyId` int(11) unsigned NOT NULL,
-			  `plentyPath` varchar(255) NOT NULL DEFAULT "",
-			  `shopwareId` int(11) unsigned NOT NULL,
-			  `size` tinyint(4) unsigned NOT NULL,
-			  KEY (`plentyId`)
-			) ENGINE=MEMORY
-		');
-
-		$Handle = Shopware()->Db()->query('
-			SELECT * FROM plenty_mapping_category
-		');
-
-		while (($row = $Handle->fetch()) && $row)
-		{
-			$plentyIds = explode(';', $row['plentyID']);
-
-			foreach ($plentyIds as $plentyId)
-			{
-				Shopware()->Db()->insert('plenty_category', array(
-					'plentyId' => $plentyId,
-					'plentyPath' => $row['plentyID'],
-					'shopwareId' => $row['shopwareID'],
-					'size' => count($plentyIds)
-				));
-			}
-		}
-
-	}
-
-	/**
-	 * Delete the helper table
-	 */
-	public function __destruct()
-	{
-		Shopware()->Db()->exec('
-			DROP TEMPORARY TABLE `plenty_category`
-		');
-	}
-
-	/**
 	 * Performs the actual import
 	 *
 	 * @param integer $lastUpdateTimestamp
