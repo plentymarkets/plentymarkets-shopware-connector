@@ -409,6 +409,7 @@ class PlentymarketsImportEntityItem
 		}
 
 		// Categories
+		/** @var PlentySoapObject_ItemCategory $Category */
 		foreach ($this->ItemBase->Categories->item as $Category)
 		{
 			// FIX: corrupt category within plenty
@@ -436,8 +437,9 @@ class PlentymarketsImportEntityItem
 
 				// Split path into single names
 				$categoryPathNames = explode(';', $Category->ItemCategoryPathNames);
+				$categoryPathIds = explode(';', $Category->ItemCategoryPath);
 
-				foreach ($categoryPathNames as $categoryName)
+				foreach ($categoryPathNames as $categoryIndex => $categoryName)
 				{
 					$CategoryFound = self::$CategoryRepository->findOneBy(array(
 						'name' => $categoryName,
@@ -459,6 +461,14 @@ class PlentymarketsImportEntityItem
 						{
 							// Create
 							$CategoryModel = self::$CategoryApi->create($params);
+
+							//
+							$plentyCategoryId = $categoryPathIds[$categoryIndex];
+
+							// Add mapping and save into the object
+							PlentymarketsMappingEntityCategory::addCategory(
+								$CategoryModel->getId(), $this->Shop->getId(), $plentyCategoryId, $this->storeId
+							);
 
 							// Parent
 							$parentCategoryName = $CategoryModel->getParent()->getName();
@@ -485,10 +495,6 @@ class PlentymarketsImportEntityItem
 				// of nothing went wrong during creation
 				if (!$addError)
 				{
-					// Add mapping and save into the object
-					PlentymarketsMappingEntityCategory::addCategory(
-						$parentId, $this->Shop->getId(), $Category->ItemCategoryID, $this->storeId
-					);
 					$this->categories[] = array(
 						'id' => $parentId
 					);
