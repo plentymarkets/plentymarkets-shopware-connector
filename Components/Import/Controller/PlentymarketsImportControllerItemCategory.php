@@ -58,6 +58,9 @@ class PlentymarketsImportControllerItemCategory
 			}
 		} while (++$Request_GetItemCategoryCatalog->Page < $Response_GetItemCategoryCatalog->Pages);
 
+		$importControllerItemCategoryTree = new PlentymarketsImportControllerItemCategoryTree();
+		$importControllerItemCategoryTree->run();
+
 		/** @var \Shopware\Components\Model\CategoryDenormalization $component */
 		$component = Shopware()->CategoryDenormalization();
 		$component->rebuildCategoryPath();

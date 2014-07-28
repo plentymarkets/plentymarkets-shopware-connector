@@ -429,74 +429,15 @@ class PlentymarketsImportEntityItem
 			// Category does not yet exist
 			catch (PlentymarketsMappingExceptionNotExistant $E)
 			{
-				// Root category id (out of the shop)
-				$parentId = $this->Shop->getCategory()->getId();
-
-				// Trigger to indicate an error while creating new category
-				$addError = false;
-
-				// Split path into single names
-				$categoryPathNames = explode(';', $Category->ItemCategoryPathNames);
-				$categoryPathIds = explode(';', $Category->ItemCategoryPath);
-
-				foreach ($categoryPathNames as $categoryIndex => $categoryName)
-				{
-					$CategoryFound = self::$CategoryRepository->findOneBy(array(
-						'name' => $categoryName,
-						'parentId' => $parentId
-					));
-
-					if ($CategoryFound instanceof Shopware\Models\Category\Category)
-					{
-						$parentId = $CategoryFound->getId();
-						$path[] = $parentId;
-					}
-					else
-					{
-						$params = array();
-						$params['name'] = $categoryName;
-						$params['parentId'] = $parentId;
-
-						try
-						{
-							// Create
-							$CategoryModel = self::$CategoryApi->create($params);
-
-							//
-							$plentyCategoryId = $categoryPathIds[$categoryIndex];
-
-							// Add mapping and save into the object
-							PlentymarketsMappingEntityCategory::addCategory(
-								$CategoryModel->getId(), $this->Shop->getId(), $plentyCategoryId, $this->storeId
-							);
-
-							// Parent
-							$parentCategoryName = $CategoryModel->getParent()->getName();
-
-							// Log
-							PlentymarketsLogger::getInstance()->message('Sync:Item:Category', 'The category »' . $categoryName . '« has been created beneath the category »' . $parentCategoryName . '«');
-
-							// Id to connect with the item
-							$parentId = $CategoryModel->getId();
-						}
-						catch (Exception $E)
-						{
-							// Log
-							PlentymarketsLogger::getInstance()->error('Sync:Item:Category', 'The category »' . $categoryName . '« with the parentId »' . $parentId . '« could not be created (' . $E->getMessage() . ')', 3300);
-
-							// Set the trigger - the category will not be connected with the item
-							$addError = true;
-						}
-
-					}
-				}
+				$importEntityItemCategoryTree = new PlentymarketsImportEntityItemCategoryTree($Category, $this->Shop->getId());
+				$categoryId = $importEntityItemCategoryTree->import();
 
 				// Only create a mapping and connect the category to the item,
 				// of nothing went wrong during creation
-				if (!$addError)
+				if ($categoryId)
 				{
 					$this->categories[] = array(
-						'id' => $parentId
+						'id' => $categoryId
 					);
 				}
 			}

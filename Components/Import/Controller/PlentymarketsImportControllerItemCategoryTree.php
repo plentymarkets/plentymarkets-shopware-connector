@@ -33,11 +33,28 @@
  */
 class PlentymarketsImportControllerItemCategoryTree
 {
+
+
 	/**
 	 *
 	 */
 	public function __construct()
 	{
+		Shopware()->Db()->query(
+			'DROP TABLE IF EXISTS plenty_mapping_category_old'
+		);
+
+		Shopware()->Db()->query(
+			'CREATE TABLE plenty_mapping_category_old LIKE plenty_mapping_category'
+		);
+
+		Shopware()->Db()->query(
+			'INSERT plenty_mapping_category_old SELECT * FROM plenty_mapping_category'
+		);
+
+		Shopware()->Db()->query(
+			'TRUNCATE TABLE plenty_mapping_category'
+		);
 	}
 
 	/**
@@ -45,61 +62,130 @@ class PlentymarketsImportControllerItemCategoryTree
 	 */
 	public function __destruct()
 	{
+		$mapping = array();
+
+		$oldMapping = Shopware()->Db()->fetchAll('
+			SELECT * FROM plenty_mapping_category_old
+		');
+
+		foreach ($oldMapping as $old)
+		{
+			$mapping[$old['plentyID']] = array(
+				'old' => $old['shopwareID']
+			);
+		}
+
+		$newMapping = Shopware()->Db()->fetchAll('
+			SELECT * FROM plenty_mapping_category
+		');
+
+		foreach ($newMapping as $new)
+		{
+			if (isset($mapping[$new['plentyID']]))
+			{
+				$mapping[$new['plentyID']]['new'] = $new['shopwareID'];
+			}
+			else
+			{
+				$mapping[$new['plentyID']] = array(
+					'new' => $new['shopwareID']
+				);
+			}
+
+		}
+
+		foreach ($mapping as $map)
+		{
+			// Completely new branch
+			if (!isset($map['old']))
+			{
+				continue;
+			}
+
+			// Deleted branch/category
+			if (!isset($map['new']))
+			{
+				$oldParts = explode(PlentymarketsMappingEntityCategory::DELIMITER, $map['old']);
+				$oldId = $oldParts[0];
+
+				Shopware()->Db()->query('
+					DELETE FROM s_articles_categories
+						WHERE categoryID = ?
+				', array($oldId));
+
+				continue;
+			}
+
+			if ($map['new'] != $map['old'])
+			{
+				$newParts = explode(PlentymarketsMappingEntityCategory::DELIMITER, $map['new']);
+				$newId = $newParts[0];
+
+				$oldParts = explode(PlentymarketsMappingEntityCategory::DELIMITER, $map['old']);
+				$oldId = $oldParts[0];
+
+				Shopware()->Db()->query('
+					UPDATE s_articles_categories
+						SET categoryID = ?
+						WHERE categoryID = ?
+				', array($newId, $oldId));
+
+
+			}
+		}
 	}
 
 	/**
 	 * Performs the actual import
 	 *
-	 * @param integer $lastUpdateTimestamp
+	 * @throws PlentymarketsExportException
 	 */
 	public function run()
 	{
-		// Get CategoryTree for store 0
-		$Request_GetItemCategoryTree = new PlentySoapRequest_GetItemCategoryTree();
-		$Request_GetItemCategoryTree->Lang = 'de';
-		$Request_GetItemCategoryTree->GetCategoryNames = true;
+		// Get the data from plentymarkets (for every mapped shop)
+		$shopIds = Shopware()->Db()->fetchAll('
+			SELECT plentyID FROM plenty_mapping_shop
+		');
 
-		$plentyCategoryTrees = array();
-
-		/** @var PlentySoapResponse_GetItemCategoryTree $Response_GetItemCategoryTree */
-		$Response_GetItemCategoryTree = PlentymarketsSoapClient::getInstance()->GetItemCategoryTree($Request_GetItemCategoryTree);
-		
-		// get all category trees from plenty
-		foreach ($Response_GetItemCategoryTree->MultishopTree->item[0]->CategoryTree->item as $Category) 
+		foreach ($shopIds as $shopId)
 		{
-			$index = array(
-				'CategoryPath' => $Category->CategoryPath,
-				'CategoryPathName' => $Category->CategoryPathNames);
+			$Request_GetItemCategoryTree = new PlentySoapRequest_GetItemCategoryTree();
+			$Request_GetItemCategoryTree->Lang = 'de';
+			$Request_GetItemCategoryTree->GetCategoryNames = true;
+			$Request_GetItemCategoryTree->StoreID = $shopId['plentyID'];
+			$Request_GetItemCategoryTree->GetAktivCategories = true;
 
-			$plentyCategoryTrees[] = $index;
-		}
+			/** @var PlentySoapResponse_GetItemCategoryTree $Response_GetItemCategoryTree */
+			$Response_GetItemCategoryTree = PlentymarketsSoapClient::getInstance()->GetItemCategoryTree($Request_GetItemCategoryTree);
 
-		// do import for each plenty category tree  
-		foreach ($plentyCategoryTrees as $tree) 
-		{
-			$categoryPath = explode(';', $tree['CategoryPath']);
-			$categoryPathNames = explode(';', $tree['CategoryPathName']);
-			$branchId = 0;
-			$plentyCategoryTree = array();
-			
-			foreach ($categoryPath as $n => $categoryId) 
+			if (!$Response_GetItemCategoryTree->Success)
 			{
-				if ($categoryId == 0) 
+				throw new PlentymarketsExportException('The item category tree could not be retrieved', 2920);
+			}
+
+			/** @var PlentySoapObject_ItemCategoryTreeNode $Category */
+			foreach ($Response_GetItemCategoryTree->MultishopTree->item[0]->CategoryTree->item as $Category)
+			{
+				$category = array();
+				$categoryPath = explode(';', $Category->CategoryPath);
+				$categoryPathNames = explode(';', $Category->CategoryPathNames);
+
+				foreach ($categoryPath as $n => $categoryId)
 				{
-					break;
+					if ($categoryId == 0)
+					{
+						break;
+					}
+
+					$category[] = array(
+						'branchId' => $categoryId,
+						'name' => $categoryPathNames[$n]
+					);
 				}
 
-				$categoryName = $categoryPathNames[$n];
-				$branchId = $categoryId;
-				$index = array(
-					'BranchId' => $branchId,
-					'CategoryName' => $categoryName);
-				
-				$plentyCategoryTree[] = $index;
+				$importEntityItemCategoryTree = new PlentymarketsImportEntityItemCategoryTree($category, $shopId['plentyID']);
+				$importEntityItemCategoryTree->import();
 			}
-			
-			$PlentymarketsImportEntityItemCategoryTree = new PlentymarketsImportEntityItemCategoryTree($plentyCategoryTree);
-			$PlentymarketsImportEntityItemCategoryTree->import();
 		}
 	}
 }
