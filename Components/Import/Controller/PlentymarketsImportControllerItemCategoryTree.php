@@ -166,24 +166,7 @@ class PlentymarketsImportControllerItemCategoryTree
 			/** @var PlentySoapObject_ItemCategoryTreeNode $Category */
 			foreach ($Response_GetItemCategoryTree->MultishopTree->item[0]->CategoryTree->item as $Category)
 			{
-				$category = array();
-				$categoryPath = explode(';', $Category->CategoryPath);
-				$categoryPathNames = explode(';', $Category->CategoryPathNames);
-
-				foreach ($categoryPath as $n => $categoryId)
-				{
-					if ($categoryId == 0)
-					{
-						break;
-					}
-
-					$category[] = array(
-						'branchId' => $categoryId,
-						'name' => $categoryPathNames[$n]
-					);
-				}
-
-				$importEntityItemCategoryTree = new PlentymarketsImportEntityItemCategoryTree($category, $shopId['plentyID']);
+				$importEntityItemCategoryTree = new PlentymarketsImportEntityItemCategoryTree($Category, $shopId['plentyID']);
 				$importEntityItemCategoryTree->import();
 			}
 		}
