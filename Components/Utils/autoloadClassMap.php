@@ -253,6 +253,7 @@
   'PlentymarketsImportItemHelper' => '../../Components/Import/PlentymarketsImportItemHelper.php',
   'PlentymarketsImportItemNumberException' => '../../Components/Import/Exception/PlentymarketsImportItemNumberException.php',
   'PlentymarketsImportItemStockStack' => '../../Components/Import/PlentymarketsImportItemStockStack.php',
+  'PlentymarketsImportItemImageThumbnailController' => '../../Components/Import/PlentymarketsImportItemImageThumbnailController.php',
   'PlentymarketsImportItemVariantController' => '../../Components/Import/PlentymarketsImportItemVariantController.php',
   'PlentymarketsImportItemVariantException' => '../../Components/Import/Exception/PlentymarketsImportItemVariantException.php',
   'PlentymarketsImportStackItem' => '../../Components/Import/Stack/PlentymarketsImportStackItem.php',

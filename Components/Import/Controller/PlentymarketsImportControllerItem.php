@@ -171,13 +171,16 @@ class PlentymarketsImportControllerItem
 	/**
 	 * Finalizes the import
 	 */
-	protected function finish()
+	public function finish()
 	{
-		/** @var \Shopware\Components\Model\CategoryDenormalization $component */
-		$component = Shopware()->CategoryDenormalization();
-		$component->rebuildCategoryPath();
-		$component->removeAllAssignments();
-		$component->rebuildAllAssignments();
+		if (count($this->itemIdsDone))
+		{
+			/** @var \Shopware\Components\Model\CategoryDenormalization $component */
+			$component = Shopware()->CategoryDenormalization();
+			$component->rebuildCategoryPath();
+			$component->removeAllAssignments();
+			$component->rebuildAllAssignments();
+		}
 
 		try
 		{
@@ -199,6 +202,17 @@ class PlentymarketsImportControllerItem
 		{
 			PlentymarketsLogger::getInstance()->error('Sync:Item:Linked', 'PlentymarketsImportControllerItemLinked failed');
 			PlentymarketsLogger::getInstance()->error('Sync:Item:Linked', $E->getMessage());
+		}
+
+		try
+		{
+			// Stock stack
+			PlentymarketsImportItemImageThumbnailController::getInstance()->generate();
+		}
+		catch (Exception $E)
+		{
+			PlentymarketsLogger::getInstance()->error('Sync:Item:Image', 'PlentymarketsImportItemImageThumbnailController failed');
+			PlentymarketsLogger::getInstance()->error('Sync:Item:Image', $E->getMessage());
 		}
 	}
 
