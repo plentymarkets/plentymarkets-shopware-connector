@@ -113,7 +113,7 @@ class PlentymarketsExportControllerItemCategory
 		$this->PLENTY_CategoryTree2ShopID = $plenty_nameAndLevel2ID;
 	}
 
-	private function exportCategory(Shopware\Models\Category\Category $category, $storeId, $shopId)
+	private function exportCategory(Shopware\Models\Category\Category $category, $storeId, $shopId, $categoryId = null)
 	{
 		$level = $category->getLevel() - 1;
 
@@ -131,6 +131,7 @@ class PlentymarketsExportControllerItemCategory
 		$Request_SetCategories->SetCategories = array();
 
 		$RequestObject_SetCategories = new PlentySoapRequestObject_SetCategories();
+		$RequestObject_SetCategories->CategoryID = $categoryId;
 
 		$RequestObject_CreateCategory = new PlentySoapRequestObject_CreateCategory();
 		$RequestObject_CreateCategory->Description = null; // string
@@ -200,18 +201,16 @@ class PlentymarketsExportControllerItemCategory
 				continue;
 			}
 
-			$export = true;
 			try
 			{
-				PlentymarketsMappingEntityCategory::getCategoryByShopwareID($shopwareCategory->getId(), $shopId);
-				$export = false;
+				$categoryId = PlentymarketsMappingEntityCategory::getCategoryByShopwareID($shopwareCategory->getId(), $shopId);
 			}
 			catch (PlentymarketsMappingExceptionNotExistant $e)
 			{
+				$categoryId = null;
 			}
 
 			$branchId = null;
-			$catExists = false;
 
 			if (!isset($plentyTree['children']))
 			{
@@ -223,8 +222,7 @@ class PlentymarketsExportControllerItemCategory
 			{
 				if ($name == $shopwareCategory->getName())
 				{
-					$catExists = true;
-					$branchId = $plentyChild1['id'];
+					$categoryId = $branchId = $plentyChild1['id'];
 					PlentymarketsMappingEntityCategory::addCategory(
 						$shopwareCategory->getId(), $shopId, $branchId, $storeId
 					);
@@ -232,13 +230,10 @@ class PlentymarketsExportControllerItemCategory
 				}
 			}
 
-			if ($catExists == false && $export)
-			{
-				$branchId = $this->exportCategory($shopwareCategory, $storeId, $shopId);
-			}
+			$branchId = $this->exportCategory($shopwareCategory, $storeId, $shopId, $categoryId);
 
 			// Active the category
-			if ($storeId > 0 && $shopwareCategory->getActive() && $export)
+			if ($storeId > 0 && $shopwareCategory->getActive())
 			{
 				$Request_SetStoreCategories = new PlentySoapRequest_SetStoreCategories();
 				$Request_SetStoreCategories->StoreCategories = array();
