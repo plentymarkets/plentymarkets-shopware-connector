@@ -195,6 +195,11 @@ class PlentymarketsExportControllerItemCategory
 		/** @var Shopware\Models\Category\Category $shopwareCategory */
 		foreach ($shopwareCategories as $shopwareCategory)
 		{
+			if ($shopwareCategory->getBlog())
+			{
+				continue;
+			}
+
 			$export = true;
 			try
 			{
