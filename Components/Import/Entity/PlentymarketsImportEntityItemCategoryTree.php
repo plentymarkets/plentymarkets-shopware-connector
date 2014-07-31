@@ -64,14 +64,27 @@ class PlentymarketsImportEntityItemCategoryTree
 	/**
 	 * I am the constructor
 	 *
-	 * @param PlentySoapObject_ItemCategoryTreeNode $categoryNode
+	 * @param PlentySoapObject_ItemCategoryTreeNode|PlentySoapObject_ItemCategory $categoryNode
 	 * @param integer $storeId
+	 * @throws Exception
 	 */
-	public function __construct(PlentySoapObject_ItemCategoryTreeNode $categoryNode, $storeId)
+	public function __construct($categoryNode, $storeId)
 	{
 		$category = array();
-		$categoryPath = explode(';', $categoryNode->CategoryPath);
-		$categoryPathNames = explode(';', $categoryNode->CategoryPathNames);
+		if ($categoryNode instanceof PlentySoapObject_ItemCategory)
+		{
+			$categoryPath = explode(';', $categoryNode->ItemCategoryPath);
+			$categoryPathNames = explode(';', $categoryNode->ItemCategoryPathNames);
+		}
+		else if ($categoryNode instanceof PlentySoapObject_ItemCategoryTreeNode)
+		{
+			$categoryPath = explode(';', $categoryNode->CategoryPath);
+			$categoryPathNames = explode(';', $categoryNode->CategoryPathNames);
+		}
+		else
+		{
+			throw new Exception();
+		}
 
 		foreach ($categoryPath as $n => $categoryId)
 		{
