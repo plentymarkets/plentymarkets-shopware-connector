@@ -71,12 +71,12 @@ class PlentymarketsImportEntityItemCategoryTree
 	public function __construct($categoryNode, $storeId)
 	{
 		$category = array();
-		if ($categoryNode instanceof PlentySoapObject_ItemCategory)
+		if (property_exists($categoryNode, 'ItemCategoryPath'))
 		{
 			$categoryPath = explode(';', $categoryNode->ItemCategoryPath);
 			$categoryPathNames = explode(';', $categoryNode->ItemCategoryPathNames);
 		}
-		else if ($categoryNode instanceof PlentySoapObject_ItemCategoryTreeNode)
+		else if (property_exists($categoryNode, 'ItemCategoryPath'))
 		{
 			$categoryPath = explode(';', $categoryNode->CategoryPath);
 			$categoryPathNames = explode(';', $categoryNode->CategoryPathNames);
