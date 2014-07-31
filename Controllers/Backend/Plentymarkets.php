@@ -965,6 +965,8 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 			{
 				PyLog()->error('Fix:Item:Price', $e->getMessage());
 			}
+
+			$controller->finish();
 		}
 	}
 

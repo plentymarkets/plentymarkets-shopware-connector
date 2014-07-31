@@ -96,6 +96,7 @@ class PlentymarketsImportEntityItemImage
 			}
 			catch (Exception $E)
 			{
+				PyLog()->error('Sync:Item:Image', 'The media resource with the id »' . $image['mediaId'] . '« of the item image »' . $image['description'] . '« could not be deleted (' . $E->getMessage() . ')');
 			}
 		}
 
@@ -162,8 +163,7 @@ class PlentymarketsImportEntityItemImage
 					// Generate the thumbnails
 					if (version_compare('4.2', Shopware::VERSION) != 1)
 					{
-						$manager = Shopware()->Container()->get('thumbnail_manager');
-						$manager->createMediaThumbnail($media, array(), true);
+						PlentymarketsImportItemImageThumbnailController::getInstance()->addMediaResource($media);
 					}
 
 					Shopware()->Models()->persist($image);
