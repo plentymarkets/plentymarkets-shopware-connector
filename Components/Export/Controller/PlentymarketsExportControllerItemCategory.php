@@ -272,6 +272,11 @@ class PlentymarketsExportControllerItemCategory
 				continue;
 			}
 
+			if ($shopwareCategory->getBlog())
+			{
+				continue;
+			}
+
 			// Get the store for this category
 			$rootId = PlentymarketsUtils::getRootIdByCategory($shopwareCategory);
 			$shops = PlentymarketsUtils::getShopIdByCategoryRootId($rootId);
