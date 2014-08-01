@@ -329,6 +329,8 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'ALTER TABLE `plenty_mapping_category` failed');
 			}
 
+
+			PyConf()->erase('PlentymarketsVersionTimestamp');
 		}
 
 		//
