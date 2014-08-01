@@ -45,6 +45,11 @@ class PlentymarketsImportItemImageThumbnailController
 	 */
 	public function generate()
 	{
+		if (!count($this->media))
+		{
+			return;
+		}
+
 		$manager = Shopware()->Container()->get('thumbnail_manager');
 		PyLog()->message('Sync:Item:Image:Thumbnail', 'Starting to generate thumbnails for ' . count($this->media) . ' media resources');
 		while ($media = array_pop($this->media))
