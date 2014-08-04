@@ -113,6 +113,16 @@ class PlentymarketsExportControllerItemCategory
 		$this->PLENTY_CategoryTree2ShopID = $plenty_nameAndLevel2ID;
 	}
 
+	/**
+	 * Creates the category in plentymarkets
+	 *
+	 * @param \Shopware\Models\Category\Category $category
+	 * @param $storeId
+	 * @param $shopId
+	 * @param null $categoryId
+	 * @return int|null
+	 * @throws PlentymarketsExportException
+	 */
 	private function exportCategory(Shopware\Models\Category\Category $category, $storeId, $shopId, $categoryId = null)
 	{
 		$level = $category->getLevel() - 1;
@@ -182,6 +192,13 @@ class PlentymarketsExportControllerItemCategory
 
 	}
 
+	/**
+	 * Exports the categories
+	 *
+	 * @param $shopwareCategories
+	 * @param $plentyTree
+	 * @param $storeId
+	 */
 	private function export($shopwareCategories, $plentyTree, $storeId)
 	{
 		try
@@ -203,11 +220,11 @@ class PlentymarketsExportControllerItemCategory
 
 			try
 			{
-				$categoryId = PlentymarketsMappingEntityCategory::getCategoryByShopwareID($shopwareCategory->getId(), $shopId);
+				PlentymarketsMappingEntityCategory::getCategoryByShopwareID($shopwareCategory->getId(), $shopId);
+				continue;
 			}
 			catch (PlentymarketsMappingExceptionNotExistant $e)
 			{
-				$categoryId = null;
 			}
 
 			$branchId = null;
@@ -222,7 +239,7 @@ class PlentymarketsExportControllerItemCategory
 			{
 				if ($name == $shopwareCategory->getName())
 				{
-					$categoryId = $branchId = $plentyChild1['id'];
+					$branchId = $plentyChild1['id'];
 					PlentymarketsMappingEntityCategory::addCategory(
 						$shopwareCategory->getId(), $shopId, $branchId, $storeId
 					);
@@ -230,7 +247,7 @@ class PlentymarketsExportControllerItemCategory
 				}
 			}
 
-			$branchId = $this->exportCategory($shopwareCategory, $storeId, $shopId, $categoryId);
+			$branchId = $this->exportCategory($shopwareCategory, $storeId, $shopId, $branchId);
 
 			// Active the category
 			if ($storeId > 0 && $shopwareCategory->getActive())

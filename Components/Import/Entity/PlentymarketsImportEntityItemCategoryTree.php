@@ -76,7 +76,7 @@ class PlentymarketsImportEntityItemCategoryTree
 			$categoryPath = explode(';', $categoryNode->ItemCategoryPath);
 			$categoryPathNames = explode(';', $categoryNode->ItemCategoryPathNames);
 		}
-		else if (property_exists($categoryNode, 'ItemCategoryPath'))
+		else if (property_exists($categoryNode, 'CategoryPath'))
 		{
 			$categoryPath = explode(';', $categoryNode->CategoryPath);
 			$categoryPathNames = explode(';', $categoryNode->CategoryPathNames);

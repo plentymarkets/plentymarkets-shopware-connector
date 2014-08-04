@@ -41,6 +41,8 @@ class PlentymarketsMappingEntityCategory extends PlentymarketsMappingEntityAbstr
 	const DELIMITER = ';';
 
 	/**
+	 * Returns the identifier
+	 *
 	 * @param integer $categoryId
 	 * @param integer $storeOrShopId
 	 * @return string
@@ -51,6 +53,8 @@ class PlentymarketsMappingEntityCategory extends PlentymarketsMappingEntityAbstr
 	}
 
 	/**
+	 * Returns the plentymarkets category id
+	 *
 	 * @param integer $categoryId
 	 * @param integer $shopId
 	 * @return integer
@@ -65,6 +69,8 @@ class PlentymarketsMappingEntityCategory extends PlentymarketsMappingEntityAbstr
 	}
 
 	/**
+	 * Returns the shopware category id
+	 *
 	 * @param integer $categoryId
 	 * @param integer $storeId
 	 * @return integer
@@ -79,6 +85,8 @@ class PlentymarketsMappingEntityCategory extends PlentymarketsMappingEntityAbstr
 	}
 
 	/**
+	 * Adds a category mapping
+	 *
 	 * @param integer $shopwareCategoryId
 	 * @param integer $shopId
 	 * @param integer $plentyCategoryId

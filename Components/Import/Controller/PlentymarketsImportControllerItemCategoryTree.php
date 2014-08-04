@@ -91,7 +91,6 @@ class PlentymarketsImportControllerItemCategoryTree
 					'new' => $new['shopwareID']
 				);
 			}
-
 		}
 
 		foreach ($mapping as $map)
@@ -129,8 +128,6 @@ class PlentymarketsImportControllerItemCategoryTree
 						SET categoryID = ?
 						WHERE categoryID = ?
 				', array($newId, $oldId));
-
-
 			}
 		}
 	}
