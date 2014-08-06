@@ -253,6 +253,9 @@ class PlentymarketsExportEntityOrder
 		/** @var Shopware\Models\Order\Detail $Item */
 		foreach ($this->Order->getDetails() as $Item)
 		{
+			$number = $Item->getArticleNumber();
+			$itemText = '';
+
 			// Variant
 			try
 			{
@@ -315,8 +318,6 @@ class PlentymarketsExportEntityOrder
 			// surcharge for method of payment
 			else
 			{
-				$number = $Item->getArticleNumber();
-
 				// PAYONE fix
 				if ($number == 'SHIPPING' && !$Object_OrderHead->ShippingCosts)
 				{
