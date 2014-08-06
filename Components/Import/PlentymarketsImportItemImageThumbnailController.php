@@ -1,6 +1,8 @@
 <?php
 
 /**
+ * class Plentymarkets Import Item Image Thumbnail Controller
+ *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 class PlentymarketsImportItemImageThumbnailController

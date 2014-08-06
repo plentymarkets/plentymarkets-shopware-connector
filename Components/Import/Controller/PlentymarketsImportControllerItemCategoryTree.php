@@ -36,7 +36,7 @@ class PlentymarketsImportControllerItemCategoryTree
 
 
 	/**
-	 *
+	 * prepare: copy the mapping table
 	 */
 	public function __construct()
 	{
@@ -58,7 +58,7 @@ class PlentymarketsImportControllerItemCategoryTree
 	}
 
 	/**
-	 *
+	 * Cleanup the old category tree
 	 */
 	public function __destruct()
 	{
