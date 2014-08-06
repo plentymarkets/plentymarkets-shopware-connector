@@ -112,6 +112,11 @@ class PlentymarketsImportControllerItemCategoryTree
 						WHERE categoryID = ?
 				', array($oldId));
 
+				Shopware()->Db()->query('
+					DELETE FROM s_categories
+						WHERE id = ?
+				', array($oldId));
+
 				continue;
 			}
 
@@ -128,6 +133,11 @@ class PlentymarketsImportControllerItemCategoryTree
 						SET categoryID = ?
 						WHERE categoryID = ?
 				', array($newId, $oldId));
+
+				Shopware()->Db()->query('
+					DELETE FROM s_categories
+						WHERE id = ?
+				', array($oldId));
 			}
 		}
 	}
