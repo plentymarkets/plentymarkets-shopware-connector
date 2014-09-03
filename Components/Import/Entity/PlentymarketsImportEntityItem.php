@@ -429,7 +429,7 @@ class PlentymarketsImportEntityItem
 			// Category does not yet exist
 			catch (PlentymarketsMappingExceptionNotExistant $E)
 			{
-				$importEntityItemCategoryTree = new PlentymarketsImportEntityItemCategoryTree($Category, $this->Shop->getId());
+				$importEntityItemCategoryTree = new PlentymarketsImportEntityItemCategoryTree($Category, $this->storeId);
 				$categoryId = $importEntityItemCategoryTree->import();
 
 				// Only create a mapping and connect the category to the item,
