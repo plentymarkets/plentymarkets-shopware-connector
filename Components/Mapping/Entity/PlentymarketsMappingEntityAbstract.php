@@ -299,4 +299,13 @@ abstract class PlentymarketsMappingEntityAbstract
 		$this->cacheByShopwareID[$shopwareID] = $plentyID;
 		$this->cacheByPlentyID[$plentyID] = $shopwareID;
 	}
+
+	/**
+	 * Clears the internal cache
+	 */
+	public function clearCache()
+	{
+		$this->cacheByShopwareID = array();
+		$this->cacheByPlentyID = array();
+	}
 }

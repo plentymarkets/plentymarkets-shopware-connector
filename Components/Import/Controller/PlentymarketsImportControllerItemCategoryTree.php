@@ -55,6 +55,9 @@ class PlentymarketsImportControllerItemCategoryTree
 		Shopware()->Db()->query(
 			'TRUNCATE TABLE plenty_mapping_category'
 		);
+
+		// Clear the mapping cache
+		PlentymarketsMappingController::clearCache('Category');
 	}
 
 	/**
