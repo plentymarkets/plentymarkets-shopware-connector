@@ -988,6 +988,18 @@ class PlentymarketsImportEntityItem
 			$PlentymarketsImportEntityItemImage->image();
 		}
 
+		// Rebuild category tree
+		if (count($this->categories))
+		{
+			/** @var \Shopware\Components\Model\CategoryDenormalization $component */
+			$component = Shopware()->CategoryDenormalization();
+			$component->removeArticleAssignmentments($SHOPWARE_itemID);
+			foreach ($this->categories as $category)
+			{
+				$component->addAssignment($SHOPWARE_itemID, $category['id']);
+			}
+		}
+
 		// Der Hersteller ist neu angelegt worden
 		if ($Article instanceof Shopware\Models\Article\Article && array_key_exists('supplier', $this->data))
 		{
