@@ -157,7 +157,7 @@ class PlentymarketsExportControllerItemCategory
 		$RequestObject_CreateCategory->MetaDescription = $category->getMetaDescription(); // string
 		$RequestObject_CreateCategory->MetaKeywords = $category->getMetaKeywords(); // string
 		$RequestObject_CreateCategory->MetaTitle = $category->getName(); // string
-		$RequestObject_CreateCategory->Name = $category->getName(); // string
+		$RequestObject_CreateCategory->Name = $category->getName() ? : 'Category ' . $category->getId(); // string
 		$RequestObject_CreateCategory->NameURL = null; // string
 		$RequestObject_CreateCategory->PageView = null; // string
 		$RequestObject_CreateCategory->PlaceholderTranslation = null; // string
