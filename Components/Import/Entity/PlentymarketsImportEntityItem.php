@@ -131,6 +131,7 @@ class PlentymarketsImportEntityItem
 			'keywords' => $this->ItemBase->Texts->Keywords,
 			'highlight' => ($this->ItemBase->WebShopSpecial == 3),
 			'lastStock' => ($this->ItemBase->Stock->Limitation == 1),
+			'added' => date('c', $this->ItemBase->Inserted),
 			'changed' => date('c', $this->ItemBase->LastUpdate),
 			'availableTo' => null,
 			'active' => $this->ItemBase->Availability->Inactive == 0 && $this->ItemBase->Availability->Webshop == 1,
