@@ -178,6 +178,19 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
                         supportText: 'Aktivieren, wenn die Bilder von bestehenden Artikel synchronisiert werden sollen. Anderfalls werden Bilder nicht bei der Synchronisation berücksichtigt.'
                     },
                     {
+                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemImageAltAttributeID}Bilder alternativ Text{/s}',
+                        name: 'ItemImageAltAttributeID',
+                        supportText: 'TODO',
+                        store: new Ext.data.ArrayStore({
+                            fields: ['id', 'name'],
+                            data: [
+                                [1, 'Attribut 1'],
+                                [2, 'Attribut 2'],
+                                [3, 'Attribut 3']
+                            ]
+                        })
+                    },
+                    {
                         fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemCategorySyncActionID}Kategorien synchronisieren{/s}',
                         name: 'ItemCategorySyncActionID',
                         xtype: 'checkbox',

@@ -96,7 +96,10 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		name: 'ItemImageSyncActionID',
 		type: 'integer',
 		defaultValue: 1
-	}, {
+	},{
+        name: 'ItemImageAltAttributeID',
+        type: 'integer'      
+    },{
 		name: 'ItemCategorySyncActionID',
 		type: 'integer',
 		defaultValue: 1
