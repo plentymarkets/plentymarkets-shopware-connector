@@ -171,6 +171,11 @@ class PlentymarketsExportEntityItem
 				}
 			}
 
+			if (!$plentyCategoryBranchId)
+			{
+				continue;
+			}
+
 			// Activate the category
 			$Object_ItemCategory = new PlentySoapObject_ItemCategory();
 			$Object_ItemCategory->ItemCategoryID = $plentyCategoryBranchId; // string
