@@ -108,6 +108,11 @@ class PlentymarketsExportEntityOrderIncomingPayment
 		if ($methodOfPaymentId == MOP_KLARNA || $methodOfPaymentId == MOP_KLARNACREDIT)
 		{
 			$transactionId = $this->getKlarnaTransactionId();
+			$reasonForPayment = '';
+		}
+		else
+		{
+			$reasonForPayment = sprintf('Shopware (OrderId: %u, CustomerId: %u)', $this->order['id'], $this->order['customerId']);
 		}
 
 		$Request_AddIncomingPayments = new PlentySoapRequest_AddIncomingPayments();
@@ -121,7 +126,7 @@ class PlentymarketsExportEntityOrderIncomingPayment
 		$Object_AddIncomingPayments->CustomerName = $this->getCustomerName();
 		$Object_AddIncomingPayments->MethodOfPaymentID = $methodOfPaymentId;
 		$Object_AddIncomingPayments->OrderID = $this->plentyOrder->plentyOrderId;
-		$Object_AddIncomingPayments->ReasonForPayment = sprintf('Shopware (OrderId: %u, CustomerId: %u)', $this->order['id'], $this->order['customerId']);
+		$Object_AddIncomingPayments->ReasonForPayment = $reasonForPayment;
 
 		if ($transactionId)
 		{
