@@ -29,11 +29,11 @@
 /**
  * I am a generated class and am required for communicating with plentymarkets.
  */
-class ArrayOfPlentysoapobject_addpropertyamazon
+class ArrayOfPlentysoapobject_setpropertyamazon
 {
 	
 	/**
-	 * @var PlentySoapObject_AddPropertyAmazon
+	 * @var PlentySoapObject_SetPropertyAmazon
 	 */
 	public $item;
 }

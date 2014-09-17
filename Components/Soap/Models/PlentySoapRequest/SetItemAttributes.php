@@ -29,16 +29,16 @@
 /**
  * I am a generated class and am required for communicating with plentymarkets.
  */
-class PlentySoapResponse_AddItemAttribute
+class PlentySoapRequest_SetItemAttributes
 {
 	
 	/**
-	 * @var ArrayOfPlentysoapresponsemessage
+	 * @var ArrayOfPlentysoapobject_setitemattribute
 	 */
-	public $ResponseMessages;
+	public $Attributes;
 	
 	/**
-	 * @var boolean
+	 * @var int
 	 */
-	public $Success;
+	public $CallItemsLimit;
 }

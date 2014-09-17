@@ -12,7 +12,7 @@ class PlentySoapRequestObject_SetItemImagesImage
 	/**
 	 * @var base64Binary
 	 */
-	public $ImageData;
+	public $ImageFileData;
 	
 	/**
 	 * @var string

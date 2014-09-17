@@ -3,6 +3,10 @@
 
 class PlentySoapRequest_SetItemImages
 {
+	/**
+	 * @var int
+	 */
+	public $CallItemsLimit;
 	
 	/**
 	 * @var ArrayOfPlentysoaprequestobject_setitemimagesimage

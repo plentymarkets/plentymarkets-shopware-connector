@@ -134,54 +134,79 @@ class PlentymarketsImportEntityItemImage
 				PlentymarketsLogger::getInstance()->error('Sync:Item:Image', 'The images for the plentymarkets item id »' . $this->PLENTY_itemId . '« could not be retrieved', 3200);
 				continue;
 			}
-
-			/**
-			 * @var PlentySoapObject_GetItemsImages $ImagesImages
-			 * @var PlentySoapObject_ItemImage $Image
-			 */
-			foreach ($Response_GetItemsImages->ItemsImages->item as $ImagesImages)
+			
+			/** @var $Image PlentySoapResponse_ObjectItemImage */
+			foreach ($Response_GetItemsImages->ItemsImages->item as $Image)
 			{
-				foreach ($ImagesImages->Images->item as $Image)
+				/** @var $reference PlentySoapResponse_ObjectGetItemImageReference */
+				foreach ($Image->References->item as $reference)
 				{
-					// Skip the image if it should not be shown
-					if ($Image->Availability != 1 && $Image->Availability != 2)
+					if($reference->ReferenceType == 'mandant')
 					{
-						continue;
+						try
+						{
+							if(PlentymarketsMappingController::getShopByPlentyID($reference->ReferenceValue) > 0)
+							{
+								$shopwareStoreId = PlentymarketsMappingController::getShopByPlentyID($reference->ReferenceValue);
+							}		
+						}
+						catch (PlentymarketsMappingExceptionNotExistant $E)
+						{
+							continue;
+						}
 					}
-
-					/** @var Shopware\Models\Media\Media $media */
-					$media = $mediaResource->internalCreateMediaByFileLink($Image->ImageURL);
-
-					$image = new \Shopware\Models\Article\Image();
-					$image->setMain(2);
-					$image->setMedia($media);
-					$image->setPath($media->getName());
-					$image->setExtension($media->getExtension());
-					$image->setDescription($media->getDescription());
-					$image->setPosition($Image->Position);
-
-					// Generate the thumbnails
-					if (version_compare('4.2', Shopware::VERSION) != 1)
-					{
-						PlentymarketsImportItemImageThumbnailController::getInstance()->addMediaResource($media);
-					}
-
-					Shopware()->Models()->persist($image);
-					Shopware()->Models()->flush();
-
-					$imageId = $image->getId();
-
-					$plentyId2ShopwareId[$Image->ImageID] = $imageId;
-					$shopwareId2PlentyPosition[$Image->Position] = $imageId;
-
-					Shopware()->DB()->query('
-						UPDATE s_articles_img
-							SET articleID = ?
-							WHERE id = ?
-					', array($this->SHOPWARE_itemId, $imageId));
 				}
+				// Skip the image if it should not be shown
+				if(!isset($shopwareStoreId))
+				{
+					continue;
+				}
+				
+				/** @var Shopware\Models\Media\Media $media */
+				$media = $mediaResource->internalCreateMediaByFileLink($Image->ImageURL);
+
+				$image = new \Shopware\Models\Article\Image();
+				$image->setMain(2);
+				$image->setMedia($media);
+				$image->setPath($media->getName());
+				$image->setExtension($media->getExtension());
+				$image->setDescription($Image->Names->item[0]->Name);
+
+				if(!is_null(PlentymarketsConfig::getInstance()->getItemImageAltAttributeID()) &&
+					PlentymarketsConfig::getInstance()->getItemImageAltAttributeID() > 0 &&
+					PlentymarketsConfig::getInstance()->getItemImageAltAttributeID() <= 3)   // attribute1, attribute2 or attribute3
+				{
+					// get the attribute number for alternative text from connector's settings
+					$plenty_attributeID = PlentymarketsConfig::getInstance()->getItemImageAltAttributeID();
+					// set the value for the attribute number 
+					$attribute = new \Shopware\Models\Attribute\ArticleImage();
+					$attribute->{setAttribute.($plenty_attributeID)}($Image->Names->item[0]->AlternativeText);
+					$image->setAttribute($attribute);
+				}
+							
+				$image->setPosition($Image->Position);
+
+				// Generate the thumbnails
+				if (version_compare('4.2', Shopware::VERSION) != 1)
+				{
+					PlentymarketsImportItemImageThumbnailController::getInstance()->addMediaResource($media);
+				}
+
+				Shopware()->Models()->persist($image);
+				Shopware()->Models()->flush();
+
+				$imageId = $image->getId();
+
+				$plentyId2ShopwareId[$Image->ImageID] = $imageId;
+				$shopwareId2PlentyPosition[$Image->Position] = $imageId;
+
+				Shopware()->DB()->query('
+					UPDATE s_articles_img
+						SET articleID = ?
+						WHERE id = ?
+				', array($this->SHOPWARE_itemId, $imageId));
 			}
-		} while (++$Request_GetItemsImages->Page < $Response_GetItemsImages->Pages);
+		} while (++$Request_GetItemsImages->Page < $Response_GetItemsImages->Pages); 
 
 		if (!$shopwareId2PlentyPosition)
 		{

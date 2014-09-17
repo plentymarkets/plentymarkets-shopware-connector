@@ -29,26 +29,16 @@
 /**
  * I am a generated class and am required for communicating with plentymarkets.
  */
-class PlentySoapObject_AddPropertyToItem
+class PlentySoapRequest_SetPropertyToItem
 {
 	
 	/**
 	 * @var int
 	 */
-	public $ItemId;
+	public $CallItemsLimit;
 	
 	/**
-	 * @var string
+	 * @var ArrayOfPlentysoapobject_setpropertytoitem
 	 */
-	public $Lang;
-	
-	/**
-	 * @var int
-	 */
-	public $PropertyId;
-	
-	/**
-	 * @var string
-	 */
-	public $PropertyItemValue;
+	public $PropertyToItemList;
 }

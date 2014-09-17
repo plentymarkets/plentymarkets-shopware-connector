@@ -29,88 +29,68 @@
 /**
  * I am a generated class and am required for communicating with plentymarkets.
  */
-class PlentySoapRequest_AddProperty
+class PlentySoapObject_SetItemAttribute
 {
 	
 	/**
-	 * @var ArrayOfPlentysoapobject_addpropertyamazon
-	 */
-	public $AmazonList;
-	
-	/**
 	 * @var int
 	 */
-	public $BeezUP;
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
+	public $AmazonVariation;
 	
 	/**
 	 * @var string
 	 */
-	public $Description;
-	
-	/**
-	 * @var int
-	 */
-	public $EbayLayout;
-	
-	/**
-	 * @var int
-	 */
-	public $EbayProperty;
+	public $BackendName;
 	
 	/**
 	 * @var string
 	 */
-	public $Home24Property;
-	
-	/**
-	 * @var int
-	 */
-	public $Idealo;
-	
-	/**
-	 * @var int
-	 */
-	public $Kauflux;
+	public $Contentpage;
 	
 	/**
 	 * @var string
 	 */
-	public $Lang;
+	public $FrontendLang;
+	
+	/**
+	 * @var string
+	 */
+	public $FrontendName;
+	
+	/**
+	 * @var int
+	 */
+	public $GoogleProductsVariation;
+	
+	/**
+	 * @var int
+	 */
+	public $Id;
+	
+	/**
+	 * @var boolean
+	 */
+	public $ImageAttribute;
 	
 	/**
 	 * @var float
 	 */
-	public $Markup;
+	public $MarkupPercental;
 	
 	/**
 	 * @var int
 	 */
-	public $NeckermannComponent;
+	public $NeckermannAttribute;
 	
 	/**
 	 * @var int
 	 */
-	public $NeckermannExternalComponent;
+	public $OttoVariation;
 	
 	/**
 	 * @var int
 	 */
-	public $NeckermannLogoId;
-	
-	/**
-	 * @var string
-	 */
-	public $Notice;
-	
-	/**
-	 * @var int
-	 */
-	public $OrderProperty;
+	public $PixmaniaAttribute;
 	
 	/**
 	 * @var int
@@ -118,72 +98,17 @@ class PlentySoapRequest_AddProperty
 	public $Position;
 	
 	/**
-	 * @var string
-	 */
-	public $PropertyBackendName;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_addpropertychoice
-	 */
-	public $PropertyChoice;
-	
-	/**
-	 * @var string
-	 */
-	public $PropertyFrontendName;
-	
-	/**
 	 * @var int
 	 */
-	public $PropertyGroupID;
+	public $ShopperellaVariation;
 	
 	/**
-	 * @var int
+	 * @var ArrayOfPlentysoapobject_setitemattributevalue
 	 */
-	public $PropertyID;
+	public $Values;
 	
 	/**
-	 * @var string
+	 * @var PlentySoapEnumeration_AddItemAttribute
 	 */
-	public $PropertyType;
-	
-	/**
-	 * @var string
-	 */
-	public $PropertyUnit;
-	
-	/**
-	 * @var int
-	 */
-	public $RicardoLayout;
-	
-	/**
-	 * @var int
-	 */
-	public $Searchable;
-	
-	/**
-	 * @var int
-	 */
-	public $ShopShare;
-	
-	/**
-	 * @var int
-	 */
-	public $ShowInItemList;
-	
-	/**
-	 * @var int
-	 */
-	public $ShowInPDF;
-	
-	/**
-	 * @var int
-	 */
-	public $ShowOnItemPage;
-	
-	/**
-	 * @var int
-	 */
-	public $Yatego;
+	public $ViewWebshop;
 }

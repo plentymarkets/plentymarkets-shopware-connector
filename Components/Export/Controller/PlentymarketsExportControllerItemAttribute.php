@@ -113,13 +113,13 @@ class PlentymarketsExportControllerItemAttribute
 			/** @var Shopware\Models\Article\Configurator\Group $Attribute */
 			foreach ($Groups as $Attribute)
 			{
-				$Request_AddItemAttribute = new PlentySoapRequest_AddItemAttribute();
+				$Request_SetItemAttributes = new PlentySoapRequest_SetItemAttributes();
 
-				$Object_AddItemAttribute = new PlentySoapObject_AddItemAttribute();
-				$Object_AddItemAttribute->BackendName = sprintf('%s (Sw %d)', $Attribute->getName(), $Attribute->getId());
-				$Object_AddItemAttribute->FrontendLang = 'de';
-				$Object_AddItemAttribute->FrontendName = $Attribute->getName();
-				$Object_AddItemAttribute->Position = $Attribute->getPosition();
+				$Object_SetItemAttribute = new PlentySoapObject_SetItemAttribute();
+				$Object_SetItemAttribute->BackendName = sprintf('%s (Sw %d)', $Attribute->getName(), $Attribute->getId());
+				$Object_SetItemAttribute->FrontendLang = 'de';
+				$Object_SetItemAttribute->FrontendName = $Attribute->getName();
+				$Object_SetItemAttribute->Position = $Attribute->getPosition();
 
 				try
 				{
@@ -127,18 +127,18 @@ class PlentymarketsExportControllerItemAttribute
 				}
 				catch (PlentymarketsMappingExceptionNotExistant $E)
 				{
-					if (isset($this->PLENTY_name2ID[strtolower($Object_AddItemAttribute->BackendName)]))
+					if (isset($this->PLENTY_name2ID[strtolower($Object_SetItemAttribute->BackendName)]))
 					{
-						$attributeIdAdded = $this->PLENTY_name2ID[strtolower($Object_AddItemAttribute->BackendName)];
+						$attributeIdAdded = $this->PLENTY_name2ID[strtolower($Object_SetItemAttribute->BackendName)];
 					}
 					else
 					{
-						$Request_AddItemAttribute->Attributes[] = $Object_AddItemAttribute;
-						$Response = PlentymarketsSoapClient::getInstance()->AddItemAttribute($Request_AddItemAttribute);
+						$Request_SetItemAttributes->Attributes[] = $Object_SetItemAttribute;
+						$Response = PlentymarketsSoapClient::getInstance()->SetItemAttributes($Request_SetItemAttributes);
 
 						if (!$Response->Success)
 						{
-							throw new PlentymarketsExportException('The item attribute »'. $Object_AddItemAttribute->BackendName .'« could not be created', 2911);
+							throw new PlentymarketsExportException('The item attribute »'. $Object_SetItemAttribute->BackendName .'« could not be created', 2911);
 						}
 
 						$attributeIdAdded = (integer) $Response->ResponseMessages->item[0]->SuccessMessages->item[0]->Value;
@@ -152,18 +152,18 @@ class PlentymarketsExportControllerItemAttribute
 				/** @var Shopware\Models\Article\Configurator\Option $AttributeValue */
 				foreach ($Attribute->getOptions() as $AttributeValue)
 				{
-					$Request_AddItemAttribute = new PlentySoapRequest_AddItemAttribute();
+					$Request_SetItemAttributes = new PlentySoapRequest_SetItemAttributes();
 
-					$Object_AddItemAttribute = new PlentySoapObject_AddItemAttribute();
-					$Object_AddItemAttribute->Id = $attributeIdAdded;
+					$Object_SetItemAttribute = new PlentySoapObject_SetItemAttribute();
+					$Object_SetItemAttribute->Id = $attributeIdAdded;
 
-					$Object_AddItemAttributeValue = new PlentySoapObject_AddItemAttributeValue();
-					$Object_AddItemAttributeValue->BackendName = sprintf('%s (Sw %d)', $AttributeValue->getName(), $AttributeValue->getId());
-					$Object_AddItemAttributeValue->FrontendName = $AttributeValue->getName();
-					$Object_AddItemAttributeValue->Position = $AttributeValue->getPosition();
+					$Object_SetItemAttributeValue = new PlentySoapObject_SetItemAttributeValue();
+					$Object_SetItemAttributeValue->BackendName = sprintf('%s (Sw %d)', $AttributeValue->getName(), $AttributeValue->getId());
+					$Object_SetItemAttributeValue->FrontendName = $AttributeValue->getName();
+					$Object_SetItemAttributeValue->Position = $AttributeValue->getPosition();
 
-					$Object_AddItemAttribute->Values[] = $Object_AddItemAttributeValue;
-					$Request_AddItemAttribute->Attributes[] = $Object_AddItemAttribute;
+					$Object_SetItemAttribute->Values[] = $Object_SetItemAttributeValue;
+					$Request_SetItemAttributes->Attributes[] = $Object_SetItemAttribute;
 
 					try
 					{
@@ -172,7 +172,7 @@ class PlentymarketsExportControllerItemAttribute
 					catch (PlentymarketsMappingExceptionNotExistant $E)
 					{
 						// Workaround
-						$checknameValue = strtolower(str_replace(',', '.', $Object_AddItemAttributeValue->BackendName));
+						$checknameValue = strtolower(str_replace(',', '.', $Object_SetItemAttributeValue->BackendName));
 
 						if (isset($this->PLENTY_idAndValueName2ID[$attributeIdAdded][$checknameValue]))
 						{
@@ -180,11 +180,11 @@ class PlentymarketsExportControllerItemAttribute
 						}
 						else
 						{
-							$Response = PlentymarketsSoapClient::getInstance()->AddItemAttribute($Request_AddItemAttribute);
+							$Response = PlentymarketsSoapClient::getInstance()->SetItemAttributes($Request_SetItemAttributes);
 
 							if (!$Response->Success)
 							{
-								throw new PlentymarketsExportException('The item attribute option »'. $Object_AddItemAttributeValue->BackendName .'« could not be created', 2912);
+								throw new PlentymarketsExportException('The item attribute option »'. $Object_SetItemAttributeValue->BackendName .'« could not be created', 2912);
 							}
 
 							foreach ($Response->ResponseMessages->item[0]->SuccessMessages->item as $MessageItem)

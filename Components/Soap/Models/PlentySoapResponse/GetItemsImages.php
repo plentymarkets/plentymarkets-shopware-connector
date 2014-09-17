@@ -1,11 +1,10 @@
 <?php
 
-
 class PlentySoapResponse_GetItemsImages
 {
 	
 	/**
-	 * @var ArrayOfPlentysoapobject_getitemsimages
+	 * @var ArrayOfPlentysoapresponse_objectitemimage
 	 */
 	public $ItemsImages;
 	

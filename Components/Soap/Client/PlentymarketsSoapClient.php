@@ -403,7 +403,7 @@ class PlentymarketsSoapClient extends SoapClient
 			$PlentymarketsConfig = PlentymarketsConfig::getInstance();
 
 			// WSDL
-			$wsdl = $PlentymarketsConfig->getApiWsdl() . '/plenty/api/soap/version112/?xml';
+			$wsdl = $PlentymarketsConfig->getApiWsdl() . '/plenty/api/soap/version113/?xml';
 
 			//
 			self::$Instance = new self($wsdl, $PlentymarketsConfig->getApiUsername(), $PlentymarketsConfig->getApiPassword());

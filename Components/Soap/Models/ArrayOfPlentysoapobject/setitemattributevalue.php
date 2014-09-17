@@ -29,41 +29,11 @@
 /**
  * I am a generated class and am required for communicating with plentymarkets.
  */
-class PlentySoapRequest_AddPropertyGroup
+class ArrayOfPlentysoapobject_setitemattributevalue
 {
 	
 	/**
-	 * @var string
+	 * @var PlentySoapObject_SetItemAttributeValue
 	 */
-	public $BackendName;
-	
-	/**
-	 * @var string
-	 */
-	public $Description;
-	
-	/**
-	 * @var string
-	 */
-	public $FrontendName;
-	
-	/**
-	 * @var int
-	 */
-	public $IsMarkupPercental;
-	
-	/**
-	 * @var string
-	 */
-	public $Lang;
-	
-	/**
-	 * @var int
-	 */
-	public $PropertyGroupID;
-	
-	/**
-	 * @var string
-	 */
-	public $PropertyGroupTyp;
+	public $item;
 }
