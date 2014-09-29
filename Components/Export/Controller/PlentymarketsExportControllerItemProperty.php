@@ -151,17 +151,17 @@ class PlentymarketsExportControllerItemProperty
 				$this->PLENTY_groupIDValueName2ID[$groupIdAdded] = array();
 			}
 
-			$Request_SetProperties = new PlentySoapRequest_SetProperties();
-			$Request_SetProperties->Properties = array();
-			
-			$Object_SetProperty = new PlentySoapObject_SetProperty();
-			$Object_SetProperty->PropertyGroupID = $groupIdAdded;
-			$Object_SetProperty->PropertyID = 0;
-			$Object_SetProperty->Lang = 'de';
-
 			/** @var Shopware\Models\Property\Option $Property */
 			foreach ($PropertyGroup->getOptions() as $Property)
 			{
+				$Request_SetProperties = new PlentySoapRequest_SetProperties();
+				$Request_SetProperties->Properties = array();
+
+				$Object_SetProperty = new PlentySoapObject_SetProperty();
+				$Object_SetProperty->PropertyGroupID = $groupIdAdded;
+				$Object_SetProperty->PropertyID = null;
+				$Object_SetProperty->Lang = 'de';
+
 				$shopwareID = $PropertyGroup->getId() . ';' . $Property->getId();
 
 				try
