@@ -390,6 +390,7 @@
 	'PlentymarketsSoapConnectionException' => '../../Components/Soap/PlentymarketsSoapConnectionException.php',
 	'PlentymarketsStatus' => '../../Components/Utils/PlentymarketsStatus.php',
 	'PlentymarketsUtils' => '../../Components/Utils/PlentymarketsUtils.php',
+	'PlentymarketsTranslation' => '../../Components/Utils/PlentymarketsTranslation.php',
 	'PlentySoapEnumeration_SetItemAttribute' => '../../Components/Soap/Models/PlentySoapEnumeration/SetItemAttribute.php',
 	'PlentySoapEnumeration_AddOrderDocument' => '../../Components/Soap/Models/PlentySoapEnumeration/AddOrderDocument.php',
 	'PlentySoapEnumeration_MarketItem' => '../../Components/Soap/Models/PlentySoapEnumeration/MarketItem.php',
