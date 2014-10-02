@@ -365,19 +365,39 @@ class PlentymarketsExportEntityItem
 	/**
 	 * Genereated the item test SOAP object
 	 *
-	 * @return PlentySoapObject_ItemTexts
+	 * @return PlentySoapObject_ItemTexts[]
 	 */
 	protected function getObjectTexts()
 	{
-		//
-		$Object_ItemTexts = new PlentySoapObject_ItemTexts();
-		$Object_ItemTexts->Keywords = PlentymarketsSoapClient::removeControlChars($this->SHOPWARE_Article->getKeywords()); // string
-		$Object_ItemTexts->Lang = 'de'; // string
-		$Object_ItemTexts->LongDescription = PlentymarketsSoapClient::removeControlChars($this->SHOPWARE_Article->getDescriptionLong()); // string
-		$Object_ItemTexts->Name = PlentymarketsSoapClient::removeControlChars($this->SHOPWARE_Article->getName()); // string
-		$Object_ItemTexts->ShortDescription = PlentymarketsSoapClient::removeControlChars($this->SHOPWARE_Article->getDescription()); // string
+		$requestItemTexts = array();
+		
+		$shopLanguages = PlentymarketsTranslation::getInstance()->getShopActiveLanguages(1);
+		
+		foreach($shopLanguages as $key => $language)
+		{
+			$Object_ItemTexts = new PlentySoapObject_ItemTexts();		
+			$Object_ItemTexts->Lang = PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($language['locale']); // string
+			
+			if($key == key(PlentymarketsTranslation::getInstance()->getShopMainLanguage(1)))
+			{
+				$Object_ItemTexts->Keywords = PlentymarketsSoapClient::removeControlChars($this->SHOPWARE_Article->getKeywords()); // string	
+				$Object_ItemTexts->LongDescription = PlentymarketsSoapClient::removeControlChars($this->SHOPWARE_Article->getDescriptionLong()); // string
+				$Object_ItemTexts->Name = PlentymarketsSoapClient::removeControlChars($this->SHOPWARE_Article->getName()); // string
+				$Object_ItemTexts->ShortDescription = PlentymarketsSoapClient::removeControlChars($this->SHOPWARE_Article->getDescription()); // string		
+			}
+			else
+			{
+				$translatedText =  PlentymarketsTranslation::getInstance()->getShopwareTranslation('article', $this->SHOPWARE_Article->getId(), $key);
+				$Object_ItemTexts->Keywords = PlentymarketsSoapClient::removeControlChars($translatedText['txtkeywords']);
+				$Object_ItemTexts->LongDescription = PlentymarketsSoapClient::removeControlChars($translatedText['txtshortdescription']);
+				$Object_ItemTexts->Name = PlentymarketsSoapClient::removeControlChars($translatedText['txtArtikel']);
+				$Object_ItemTexts->ShortDescription = PlentymarketsSoapClient::removeControlChars($translatedText['txtlangbeschreibung']);
+			}
 
-		return $Object_ItemTexts;
+			$requestItemTexts[] = $Object_ItemTexts;		
+		}	
+
+		return $requestItemTexts;
 	}
 
 	/**

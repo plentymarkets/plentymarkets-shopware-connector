@@ -42,36 +42,53 @@ class PlentymarketsTranslation
 		/** @var $shopRepository Shopware\Models\Shop\Shop */
 		$shopRepository = $shopRepositoryList->getActiveById($shopId);
 		
-		$mainLang = array( 'id' => $shopRepository->getLocale()->getId(), 
-							'language' => $shopRepository->getLocale()->getLanguage(),
-							'locale' => $shopRepository->getLocale()->getLocale());
+		$mainLang[$shopRepository->getLocale()->getId()] = array( 	'language' => $shopRepository->getLocale()->getLanguage(),
+																	'locale' => $shopRepository->getLocale()->getLocale());
 
 		return $mainLang;
 	}
 
 	/**
-	 * @description Get all active languages of the shop with id = shopId
+	 * @description Convert the langugae format for plenty (e.g en_GB  = en)
+	 * @param string $locale
+	 * @return string
+	 */
+	public static function getPlentyLocaleFormat($locale)
+	{
+		$parts = explode('_',$locale);
+		
+		return $parts[0];
+	}
+	
+	/**
+	 * @description Get all active languages (main language und all other activated languages) of the shop with id = shopId
 	 * @param int $shopId
 	 * @return array
 	 */
 	public static function getShopActiveLanguages($shopId)
 	{
+
+		// array for saving the languages of the shop
+		$activeLanguages = array();
+		
+		
+		// add the main language shop
+		$mainLang = PlentymarketsTranslation::getInstance()->getShopMainLanguage($shopId);
+		
+		$activeLanguages[key($mainLang)] = array_pop($mainLang);
 		
 		/** @var $shopRepositoryList Shopware\Models\Shop\Repository */
 		$shopRepositoryList = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
 		
 		// get all language shops of the shop with id = $shopId =>  find all shops where mainId = shopId 
 		$languageShops = $shopRepositoryList->findBy(array('mainId' => $shopId));
-		
-		// array for saving the languages of the shop
-		$activeLanguages = array();
 
 		/** @var $languageShop Shopware\Models\Shop\Shop */
 		foreach($languageShops as $languageShop)
-		{
-			$activeLanguages[] = array( 'id' => $languageShop->getLocale()->getId(),  // e.g id = 2
-										'language' => $languageShop->getLocale()->getLanguage(), // e.g language = Englisch
-										'locale' => $languageShop->getLocale()->getLocale());  // e.g locale = en_GB 
+		{	
+			// locale id = language id in shopware !! 
+			$activeLanguages[$languageShop->getLocale()->getId()] = array(	'language' => $languageShop->getLocale()->getLanguage(), // e.g language = Englisch
+																			'locale' => $languageShop->getLocale()->getLocale());  // e.g locale = en_GB 
 		}
 		
 		return $activeLanguages;
@@ -91,13 +108,42 @@ class PlentymarketsTranslation
 		/** @var  $locale Shopware\Models\Shop\Locale */
 		foreach($locales as $locale)
 		{
-			$languages[] = array( 'id' => $locale->getId(),
-								'language' => $locale->getLanguage(),
-								'locale' => $locale->getLocale());
+			$languages[$locale->getId()] = array('language' => $locale->getLanguage(),
+												'locale' => $locale->getLocale());
 		}
 		
 		return $languages;
 	
+	}
+
+	/**
+	 * @description Get the translation of the object
+	 * @param int $langId
+	 * @return int
+	 */
+	public static function getShopIDByLangID($langId)
+	{
+		/** @var $shopRepositoryList Shopware\Models\Shop\Repository */
+		$shopRepositoryList = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+
+		// get the language shop id 
+		/** @var $shop Shopware\Models\Shop\Shop */
+	//	$shop = $shopRepositoryList->findBy(array('locale' => $langId));
+		
+		try
+		{
+			$sql = 'SELECT id
+				FROM s_core_shops
+				WHERE locale_id ='. $langId;
+
+			$shopId = Shopware()->Db()->query($sql)->fetchAll();
+			
+		}catch (Exception $e)
+		{
+			$shopId = null;
+		}
+		
+		return $shopId[0]['id'];
 	}
 
 	/**
@@ -112,11 +158,14 @@ class PlentymarketsTranslation
 		/** @var $locale Shopware\Models\Translation\Translation */
 		$localeRepository = Shopware()->Models()->getRepository('Shopware\Models\Translation\Translation');
 		
+		$shopId = PlentymarketsTranslation::getInstance()->getShopIDByLangID($langId);
+		
 		try
 		{
-			$keyData = $localeRepository->findOneBy(array( 	'type' => 'article',
+			// in s_core_translation the objectlanguage = shopId !!!!! 
+			$keyData = $localeRepository->findOneBy(array( 	'type' => $type,
 															'key' => $objectId,
-															'localeId' => $langId));
+															'localeId' => $shopId)); // localeId = objectlanguage = shopId ONLY for this method, otherwise localeId = languageID (TB: s_core_locales )  !!!! 
 
 			$serializedTranslation = $keyData->getData();
 			$translation = unserialize( $serializedTranslation);
