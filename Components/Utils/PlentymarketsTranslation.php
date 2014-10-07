@@ -43,7 +43,8 @@ class PlentymarketsTranslation
 		$shopRepository = $shopRepositoryList->getActiveById($shopId);
 		
 		$mainLang[$shopRepository->getLocale()->getId()] = array( 	'language' => $shopRepository->getLocale()->getLanguage(),
-																	'locale' => $shopRepository->getLocale()->getLocale());
+																	'locale' => $shopRepository->getLocale()->getLocale(),
+																	'mainShopId' => NULL); // the main shop has no main shop Id => only language shops have a main shop ID !! TB: s_core_shops
 
 		return $mainLang;
 	}
@@ -88,10 +89,34 @@ class PlentymarketsTranslation
 		{	
 			// locale id = language id in shopware !! 
 			$activeLanguages[$languageShop->getLocale()->getId()] = array(	'language' => $languageShop->getLocale()->getLanguage(), // e.g language = Englisch
-																			'locale' => $languageShop->getLocale()->getLocale());  // e.g locale = en_GB 
+																			'locale' => $languageShop->getLocale()->getLocale(), // e.g locale = en_GB 
+																			'mainShopId' => $shopId);  
 		}
 		
 		return $activeLanguages;
+	}
+
+	/**
+	 * @description Get the language infos of the locale from shopware
+	 * @param string locale
+	 * @return array
+	 */
+	public static function getLanguageByLocale($locale)
+	{
+		/** @var $locales */
+		$locales = Shopware()->Models()->getRepository('Shopware\Models\Shop\Locale')->findBy(array('locale' => $locale));
+
+		$languages = array();
+
+		/** @var  $locale Shopware\Models\Shop\Locale */
+		foreach($locales as $locale)
+		{
+			$languages[$locale->getId()] = array(	'language' => $locale->getLanguage(),
+													'locale' => $locale->getLocale());
+		}
+
+		return $languages;
+
 	}
 	
 	/**
@@ -109,7 +134,7 @@ class PlentymarketsTranslation
 		foreach($locales as $locale)
 		{
 			$languages[$locale->getId()] = array('language' => $locale->getLanguage(),
-												'locale' => $locale->getLocale());
+												 'locale' => $locale->getLocale());
 		}
 		
 		return $languages;
@@ -119,14 +144,15 @@ class PlentymarketsTranslation
 	/**
 	 * @description Get the translation of the object
 	 * @param int $langId
+	 * @param int $mainId
 	 * @return int
 	 */
-	public static function getShopIDByLangID($langId)
+	public static function getLanguageShopID($langId, $mainId)
 	{
 		/** @var $shopRepositoryList Shopware\Models\Shop\Repository */
 		$shopRepositoryList = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
 
-		// get the language shop id 
+		// get the language shop id by language Id and main shop Id  
 		/** @var $shop Shopware\Models\Shop\Shop */
 	//	$shop = $shopRepositoryList->findBy(array('locale' => $langId));
 		
@@ -134,7 +160,8 @@ class PlentymarketsTranslation
 		{
 			$sql = 'SELECT id
 				FROM s_core_shops
-				WHERE locale_id ='. $langId;
+				WHERE locale_id ='. $langId . 
+				' AND main_id = '. $mainId;
 
 			$shopId = Shopware()->Db()->query($sql)->fetchAll();
 			
@@ -147,18 +174,20 @@ class PlentymarketsTranslation
 	}
 
 	/**
-	 * @description Get the translation of the object
+	 * @description Get the translation of the object from a language shop
+	 * @param int $mainShopId
 	 * @param string $type
 	 * @param int $objectId
 	 * @param int $langId
 	 * @return array
 	 */
-	public static function getShopwareTranslation($type, $objectId, $langId)
+	public static function getShopwareTranslation($mainShopId, $type, $objectId, $langId)
 	{
 		/** @var $locale Shopware\Models\Translation\Translation */
 		$localeRepository = Shopware()->Models()->getRepository('Shopware\Models\Translation\Translation');
 		
-		$shopId = PlentymarketsTranslation::getInstance()->getShopIDByLangID($langId);
+		// get the language shop Id
+		$shopId = PlentymarketsTranslation::getInstance()->getLanguageShopID($langId, $mainShopId);
 		
 		try
 		{
@@ -179,20 +208,16 @@ class PlentymarketsTranslation
 	}
 
 	/**
-	 * @description Set the translation for the object 
+	 * @description Set the translation for the object for the language shops
 	 * @param string $type
 	 * @param int $objectId
-	 * @param int $langId
+	 * @param int $languageShopId
 	 * @param array $data
-	 * @return bool
 	 */
-	public static function setShopwareTranslation($type, $objectId, $langId, $data)
+	public static function setShopwareTranslation($type, $objectId, $languageShopId, $data)
 	{
-		$success = false;
-		
-		/** @var $locale Shopware\Models\Translation\Translation */
-	//	$localeRepository = Shopware()->Models()->getRepository('Shopware\Models\Translation\Translation')->createQueryBuilder('translation')->getQuery()->getResult(); // get all rows from s_core_translation
-
+		// !!! objectlanguage = language shopId 
+		// !!! objectkey = object Id (e.g. article Id)
 		$sql = 'INSERT INTO `s_core_translations` (
 				`objecttype`, `objectdata`, `objectkey`, `objectlanguage`
 				) VALUES (
@@ -200,9 +225,8 @@ class PlentymarketsTranslation
 				) ON DUPLICATE KEY UPDATE `objectdata`=VALUES(`objectdata`);
 				';
 		
-		Shopware()->Db()->query($sql, array($type, serialize($data), $objectId, $langId));
+		 Shopware()->Db()->query($sql, array($type, serialize($data), $objectId, $languageShopId));
 
-		return $success;
 	}
 
 	

@@ -120,23 +120,49 @@ class PlentymarketsImportEntityItem
 	}
 
 	/**
+	 * @description Import the item texts only for language shops. The import for item texts for the main shop is done in the setData() method 
+	 * @param array $itemTexts 
+	 */
+	public function saveItemTextsTranslation($itemTexts)
+	{	
+		foreach ($itemTexts as $itemText) 
+		{
+			// if the language is not the main language
+			if(isset($itemText['languageShopId']))
+			{
+				// save the translation for the language shop
+
+				$swItemText = array('txtArtikel' => $itemText['texts']->Name,
+									'txtshortdescription' => $itemText['texts']->ShortDescription,
+									'txtlangbeschreibung' => $itemText['texts']->LongDescription,
+									'txtkeywords' => $itemText['texts']->ItemDescriptionKeywords);
+				
+				$swItemID = PlentymarketsMappingController::getItemByPlentyID($this->ItemBase->ItemID);
+
+				PlentymarketsTranslation::getInstance()->setShopwareTranslation('article', $swItemID, $itemText['languageShopId'], $swItemText);
+			}
+		}
+	}
+
+	/**
 	 * Sets the base item's data – not the details'
 	 */
 	protected function setData()
 	{
-		$this->data = array(
-			'name' => $this->ItemBase->Texts->Name,
-			'description' => $this->ItemBase->Texts->ShortDescription,
-			'descriptionLong' => $this->ItemBase->Texts->LongDescription,
-			'keywords' => $this->ItemBase->Texts->Keywords,
-			'highlight' => ($this->ItemBase->WebShopSpecial == 3),
-			'lastStock' => ($this->ItemBase->Stock->Limitation == 1),
-			'added' => date('c', $this->ItemBase->Inserted),
-			'changed' => date('c', $this->ItemBase->LastUpdate),
-			'availableTo' => null,
-			'active' => $this->ItemBase->Availability->Inactive == 0 && $this->ItemBase->Availability->Webshop == 1,
-			'taxId' => $this->getTaxId()
-		);
+		// save the item texts for the shop main language
+		$this->data = array();
+		$this->data['name'] = $this->ItemBase->Texts->Name;
+		$this->data['description'] = $this->ItemBase->Texts->ShortDescription;
+		$this->data['descriptionLong'] = $this->ItemBase->Texts->LongDescription;
+		$this->data['keywords'] = $this->ItemBase->Texts->Keywords;
+		
+		$this->data['highlight'] = ($this->ItemBase->WebShopSpecial == 3);
+		$this->data['lastStock'] = ($this->ItemBase->Stock->Limitation == 1);
+		$this->data['added'] = date('c', $this->ItemBase->Inserted);
+		$this->data['changed'] = date('c', $this->ItemBase->LastUpdate);
+		$this->data['availableTo'] = null;
+		$this->data['active'] = $this->ItemBase->Availability->Inactive == 0 && $this->ItemBase->Availability->Webshop == 1;
+		$this->data['taxId'] = $this->getTaxId();
 
 		if ($this->ItemBase->Availability->AvailableUntil > 0)
 		{

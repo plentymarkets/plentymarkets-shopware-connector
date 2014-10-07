@@ -75,7 +75,11 @@ class PlentymarketsImportControllerItem
 		$Request_GetItemsBase->GetTechnicalData = false;
 		$Request_GetItemsBase->StoreID = $storeId;
 		$Request_GetItemsBase->ItemID = $itemId;
-		$Request_GetItemsBase->Lang = 'de';
+		
+		// get the main language of the shop
+		$mainLang = array_values(PlentymarketsTranslation::getInstance()->getShopMainLanguage(PlentymarketsMappingController::getShopByPlentyID($storeId)));
+		// set the main language of the shop in soap request 
+		$Request_GetItemsBase->Lang = PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($mainLang[0]['locale']);
 
 		// Do the request
 		$Response_GetItemsBase = PlentymarketsSoapClient::getInstance()->GetItemsBase($Request_GetItemsBase);
@@ -103,7 +107,46 @@ class PlentymarketsImportControllerItem
 			PlentymarketsLogger::getInstance()->message('Sync:Item', 'The item »' . $ItemBase->Texts->Name . '« will be skipped (bundle)');
 			return;
 		}
+		
+		// get the item texts in all active languages
+		$itemTexts = array();
+		$shopId = PlentymarketsMappingController::getShopByPlentyID($storeId);
+		// get all active languages of the shop (from shopware)
+		$activeLanguages = PlentymarketsTranslation::getInstance()->getShopActiveLanguages($shopId);
+		
+		foreach($activeLanguages as $localeId => $language) 
+		{
+			$Request_GetItemsTexts = new PlentySoapRequest_GetItemsTexts();
+			$Request_GetItemsTexts->ItemsList = array();
+			
+			$Object_RequestItems = new PlentySoapObject_RequestItems();
+			$Object_RequestItems->ExternalItemNumer = null; // string
+			$Object_RequestItems->ItemId = $itemId; // string
+			$Object_RequestItems->ItemNumber = null; // string
+			$Object_RequestItems->Lang = PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($language['locale']); // string 
+			$Request_GetItemsTexts->ItemsList[] = $Object_RequestItems;
 
+			$Response_GetItemsTexts = PlentymarketsSoapClient::getInstance()->GetItemsTexts($Request_GetItemsTexts);
+
+			if (isset($Response_GetItemsTexts->ItemTexts->item[0])) 
+			{	
+				$itemText = array();
+				// save the language infos for the item texts
+				$itemText['locale'] = $language['locale'];
+				
+				// if mainShopId == null, then it is the main shop and no language shop
+				// each language shop has a mainShopId 
+				if(!is_null($language['mainShopId']))
+				{
+					$itemText['languageShopId'] = PlentymarketsTranslation::getInstance()->getLanguageShopID($localeId, $language['mainShopId']);
+				}
+							
+				$itemText['texts'] = $Response_GetItemsTexts->ItemTexts->item[0];
+				
+				$itemTexts[] = $itemText;
+			}
+		}
+		 		
 		try
 		{
 			$shopId = PlentymarketsMappingController::getShopByPlentyID($storeId);
@@ -121,6 +164,9 @@ class PlentymarketsImportControllerItem
 			{
 				// Do a full import
 				$Importuer->import();
+				
+				// Do the import for item texts translation 
+				$Importuer->saveItemTextsTranslation($itemTexts);
 
 				// Add it to the link controller
 				PlentymarketsImportControllerItemLinked::getInstance()->addItem($ItemBase->ItemID);
