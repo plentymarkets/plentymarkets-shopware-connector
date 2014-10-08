@@ -68,6 +68,55 @@ class PlentymarketsImportEntityItemAttribute
 	}
 
 	/**
+	 * Imports the attribute and the values translations for the language shops
+	 * @param $languageShopId int
+	 */
+	public function importTranslation($languageShopId)
+	{
+		try
+		{
+			$SHOPWARE_attributeId = PlentymarketsMappingController::getAttributeGroupByPlentyID($this->Attribute->Id);
+			PyLog()->message('Sync:Item:Attribute', 'Updating the attribute translation »' . $this->Attribute->FrontendName . '«');
+		}
+		catch (PlentymarketsMappingExceptionNotExistant $E)
+		{
+			PyLog()->message('Sync:Item:Attribute', 'Skipping the attribute translation »' . $this->Attribute->FrontendName. '«');
+			return;
+		}
+		
+		if(!is_null($this->Attribute->FrontendName))
+		{
+			// save the translation of the attribute
+			$attr_translationData = array('name' => $this->Attribute->FrontendName);
+
+			PlentymarketsTranslation::setShopwareTranslation('configuratorgroup', $SHOPWARE_attributeId, $languageShopId, $attr_translationData);
+
+			/**
+			 * @var PlentySoapObject_GetItemAttributesAttributeValue $plentyAttributeValue
+			 */
+			foreach($this->Attribute->Values->item as $plentyAttributeValue)
+			{
+				try
+				{
+					$SHOPWARE_optionId = PlentymarketsMappingController::getAttributeOptionByPlentyID($plentyAttributeValue->ValueId);
+				}
+				catch (PlentymarketsMappingExceptionNotExistant $E)
+				{
+					continue;
+				}
+
+				if(!is_null($plentyAttributeValue->FrontendName))
+				{
+					$attrValue_translationData = array('name' => $plentyAttributeValue->FrontendName);
+					
+					PlentymarketsTranslation::getInstance()->setShopwareTranslation('configuratoroption', $SHOPWARE_optionId, $languageShopId, $attrValue_translationData);
+				}
+			}
+		}
+		
+	}
+
+	/**
 	 * Imports the attribute and the values
 	 */
 	public function import()

@@ -49,15 +49,55 @@ class PlentymarketsImportControllerItemAttribute
 		/** @var PlentySoapResponse_GetItemAttributes $Response_GetItemAttributes */
 		$Response_GetItemAttributes = PlentymarketsSoapClient::getInstance()->GetItemAttributes($Request_GetItemAttributes);
 
-		if (!$Response_GetItemAttributes->Success)
-		{
+		if (!$Response_GetItemAttributes->Success) {
 			return;
 		}
 
-		foreach ($Response_GetItemAttributes->Attributes->item as $Attribute)
-		{
+		foreach ($Response_GetItemAttributes->Attributes->item as $Attribute) {
 			$PlentymarketsImportEntityItemAttribute = new PlentymarketsImportEntityItemAttribute($Attribute);
 			$PlentymarketsImportEntityItemAttribute->import();
+		}
+
+		// run import of attributes and attributes value translations
+		$mainShops = PlentymarketsUtils::getShopwareMainShops();
+
+		/** @var $mainShop Shopware\Models\Shop\Shop */
+		foreach ($mainShops as $mainShop) 
+		{
+			// get all active languages of the main shop
+			$activeLanguages = PlentymarketsTranslation::getInstance()->getShopActiveLanguages($mainShop->getId());
+
+			foreach ($activeLanguages as $key => $language)
+			{
+				$Request_GetItemAttributes = new PlentySoapRequest_GetItemAttributes();
+				$Request_GetItemAttributes->GetValues = true;
+				$Request_GetItemAttributes->LastUpdateFrom = $lastUpdateTimestamp;
+				$Request_GetItemAttributes->Lang = PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($language['locale']);
+
+				/** @var PlentySoapResponse_GetItemAttributes $Response_GetItemAttributes */
+				$Response_GetItemAttributes = PlentymarketsSoapClient::getInstance()->GetItemAttributes($Request_GetItemAttributes);
+
+				if ($Response_GetItemAttributes->Success) 
+				{
+					foreach ($Response_GetItemAttributes->Attributes->item as $Attribute) 
+					{
+						$PlentymarketsImportEntityItemAttribute = new PlentymarketsImportEntityItemAttribute($Attribute);
+						
+						// set the atrribute translations from plenty for the language shops 
+						if (!is_null($language['mainShopId']))
+						{
+							$languageShopID = PlentymarketsTranslation::getLanguageShopID($key, $language['mainShopId']);
+							$PlentymarketsImportEntityItemAttribute->importTranslation($languageShopID);
+						}
+						else
+						{
+							// import translations for the main shop languages
+							$PlentymarketsImportEntityItemAttribute->importTranslation($mainShop->getId());
+
+						}
+					}
+				}
+			}		
 		}
 	}
 }

@@ -28,7 +28,7 @@ class PlentymarketsTranslation
 		}
 		return self::$Instance;
 	}
-
+	
 	/**
 	 * @description Get the current language of the shop with id = shopId
 	 * @param int $shopId
@@ -183,11 +183,20 @@ class PlentymarketsTranslation
 	 */
 	public static function getShopwareTranslation($mainShopId, $type, $objectId, $langId)
 	{
+		$translation = null;
+		
 		/** @var $locale Shopware\Models\Translation\Translation */
 		$localeRepository = Shopware()->Models()->getRepository('Shopware\Models\Translation\Translation');
 		
-		// get the language shop Id
-		$shopId = PlentymarketsTranslation::getInstance()->getLanguageShopID($langId, $mainShopId);
+		if(!is_null(PlentymarketsTranslation::getInstance()->getLanguageShopID($langId, $mainShopId)))
+		{
+			// get the language shop Id
+			$shopId = PlentymarketsTranslation::getInstance()->getLanguageShopID($langId, $mainShopId);
+		}
+		else
+		{	// the shop id is the main shop id => try to get translation of the object for the main shop 
+			$shopId = $mainShopId;
+		}
 		
 		try
 		{
@@ -195,10 +204,13 @@ class PlentymarketsTranslation
 			$keyData = $localeRepository->findOneBy(array( 	'type' => $type,
 															'key' => $objectId,
 															'localeId' => $shopId)); // localeId = objectlanguage = shopId ONLY for this method, otherwise localeId = languageID (TB: s_core_locales )  !!!! 
-
-			$serializedTranslation = $keyData->getData();
-			$translation = unserialize( $serializedTranslation);
 			
+			if(method_exists($keyData, 'getData'))
+			{
+				$serializedTranslation = $keyData->getData();
+				$translation = unserialize( $serializedTranslation);
+			}
+					
 		}catch(Exception $e)
 		{
 			$translation = null;

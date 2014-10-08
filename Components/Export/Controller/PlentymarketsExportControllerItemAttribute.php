@@ -94,6 +94,104 @@ class PlentymarketsExportControllerItemAttribute
 	}
 
 	/**
+	 * @description Export the translation of the attributes values that are set for the language shops in shopware (TB: s_core_translation)
+	 * @param int $plentyAttributeID
+	 * @param int $shopwareAttributeValueID
+	 * @param int $plentyAttributeValueID
+	 */
+	private function exportAttributeValuesTranslations($plentyAttributeID, $shopwareAttributeValueID, $plentyAttributeValueID)
+	{
+		$mainShops = PlentymarketsUtils::getShopwareMainShops();
+		
+		$Request_SetItemAttributes = new PlentySoapRequest_SetItemAttributes();
+		
+		/** @var $mainShop Shopware\Models\Shop\Shop */
+		foreach($mainShops as $mainShop)
+		{
+			// get all active languages of the main shop
+			$activeLanguages = PlentymarketsTranslation::getInstance()->getShopActiveLanguages($mainShop->getId());
+
+			foreach($activeLanguages as $key => $language)
+			{
+				// export the atrribute value translations of the language shops and main shops
+			
+				// try to get translation
+				$attrValueTranslation = PlentymarketsTranslation::getInstance()->getShopwareTranslation($mainShop->getId(), 'configuratoroption', $shopwareAttributeValueID, $key);
+
+				// if the translation was found, do export
+				if(!is_null($attrValueTranslation) && isset($attrValueTranslation['name']))
+				{
+					$Object_SetItemAttribute = new PlentySoapObject_SetItemAttribute();
+					$Object_SetItemAttribute->Id = $plentyAttributeID;
+					$Object_SetItemAttribute->FrontendLang =  PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($language['locale']);
+					
+					$Object_SetItemAttributeValue = new PlentySoapObject_SetItemAttributeValue();
+					$Object_SetItemAttributeValue->ValueId = $plentyAttributeValueID;
+					$Object_SetItemAttributeValue->FrontendName = $attrValueTranslation['name'];
+					
+					$Object_SetItemAttribute->Values[] = $Object_SetItemAttributeValue;
+					$Request_SetItemAttributes->Attributes[] = $Object_SetItemAttribute;
+					
+				}
+			}	
+		}
+		
+		$Response = PlentymarketsSoapClient::getInstance()->SetItemAttributes($Request_SetItemAttributes);
+
+		if(!$Response->Success)
+		{
+			// throw exception
+		}
+	}
+	/**
+	 * @description Export the translation of the attributes and attributes values that are set for the language shops in shopware
+	 * @param int $shopwareAttributeID
+	 * @param int $plentyAttributeID
+	 */
+	private function exportAttributeTranslations($shopwareAttributeID, $plentyAttributeID)
+	{
+		$Request_SetItemAttributes = new PlentySoapRequest_SetItemAttributes();
+
+		$mainShops = PlentymarketsUtils::getShopwareMainShops();
+
+		/** @var $mainShop Shopware\Models\Shop\Shop */
+		foreach($mainShops as $mainShop)
+		{
+			$Request_SetItemAttributes = new PlentySoapRequest_SetItemAttributes();
+
+			// get all active languages of the main shop
+			$activeLanguages = PlentymarketsTranslation::getInstance()->getShopActiveLanguages($mainShop->getId());
+			
+			foreach($activeLanguages as $key => $language)
+			{
+				// export the atrribute translations of the language shops and main shops
+				
+				// try to get translation
+				$attrTranslation = PlentymarketsTranslation::getInstance()->getShopwareTranslation($mainShop->getId(), 'configuratorgroup', $shopwareAttributeID, $key);
+				
+				// if the translation was found, do export
+				if(!is_null($attrTranslation) && isset($attrTranslation['name']))
+				{
+					$Object_SetItemAttribute = new PlentySoapObject_SetItemAttribute();
+					$Object_SetItemAttribute->Id = $plentyAttributeID;
+					$Object_SetItemAttribute->FrontendLang = PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($language['locale']);
+					$Object_SetItemAttribute->FrontendName = $attrTranslation['name'];
+
+					$Request_SetItemAttributes->Attributes[] = $Object_SetItemAttribute;
+					
+				}
+			}
+		}
+
+		$Response = PlentymarketsSoapClient::getInstance()->SetItemAttributes($Request_SetItemAttributes);
+		
+		if(!$Response->Success)
+		{
+			// throw exception
+		}
+	}
+
+	/**
 	 * Export the missing attribtues to plentymarkets and save the mapping
 	 */
 	protected function doExport()
@@ -146,6 +244,10 @@ class PlentymarketsExportControllerItemAttribute
 
 					// Add the mapping
 					PlentymarketsMappingController::addAttributeGroup($Attribute->getId(), $attributeIdAdded);
+
+					$this->exportAttributeTranslations($Attribute->getId(),$attributeIdAdded);
+					
+					
 				}
 
 				// Values
@@ -192,6 +294,8 @@ class PlentymarketsExportControllerItemAttribute
 								if ($MessageItem->Key == 'AttributeValueID')
 								{
 									PlentymarketsMappingController::addAttributeOption($AttributeValue->getId(), $MessageItem->Value);
+									
+									$this->exportAttributeValuesTranslations($attributeIdAdded,$AttributeValue->getId(), $MessageItem->Value);
 								}
 							}
 						}
