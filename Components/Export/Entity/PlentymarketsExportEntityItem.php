@@ -540,6 +540,57 @@ class PlentymarketsExportEntityItem
 	}
 
 	/**
+	 * Export the property value translations of the main shops and language shops
+	 * @param int $shopware_propertyID
+	 * @param int $plenty_propertyID
+	 */
+	protected function exportPropertyValueTranslations($shopware_propertyID, $plenty_propertyID)
+	{
+		$Request_SetPropertiesToItem = new PlentySoapRequest_SetPropertiesToItem();
+		$Request_SetPropertiesToItem->PropertyToItemList = array();
+
+
+		$mainShops = PlentymarketsUtils::getShopwareMainShops();
+
+		/** @var $mainShop Shopware\Models\Shop\Shop */
+		foreach($mainShops as $mainShop)
+		{
+			// get all active languages of the main shop
+			$activeLanguages = PlentymarketsTranslation::getInstance()->getShopActiveLanguages($mainShop->getId());
+
+			foreach($activeLanguages as $key => $language)
+			{
+				// export the property value translations of the language shops and main shops
+
+				// try to get the property value translation
+				$propertyValueTranslation = PlentymarketsTranslation::getInstance()->getShopwareTranslation($mainShop->getId(), 'propertyvalue', $shopware_propertyID, $key);
+
+				// if the translation was found, do export
+				if(!is_null($propertyValueTranslation) && isset($propertyValueTranslation['optionValue']))
+				{
+					$Object_SetPropertyToItem = new PlentySoapObject_SetPropertyToItem();
+					$Object_SetPropertyToItem->ItemId = $this->PLENTY_itemID; // int
+					$Object_SetPropertyToItem->PropertyId = $plenty_propertyID;
+					$Object_SetPropertyToItem->Lang = PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($language['locale']);;
+					$Object_SetPropertyToItem->PropertyItemValue = $propertyValueTranslation['optionValue'];
+
+					$Request_SetPropertiesToItem->PropertyToItemList[] = $Object_SetPropertyToItem;
+				}
+			}
+		}
+
+		if(!empty($Request_SetPropertiesToItem->PropertyToItemList))
+		{
+			$Response_SetPropertiesToItem = PlentymarketsSoapClient::getInstance()->SetPropertiesToItem($Request_SetPropertiesToItem);
+
+			if(!$Response_SetPropertiesToItem)
+			{
+				// throw exception
+			}
+		}
+	}
+
+	/**
 	 * Exports the item properties
 	 */
 	protected function exportProperties()
@@ -577,6 +628,8 @@ class PlentymarketsExportEntityItem
 			$Object_SetPropertyToItem->PropertyId = $PLENTY_propertyID; // int
 			$Object_SetPropertyToItem->PropertyItemValue = $PropertyValue->getValue(); // string
 			$Request_SetPropertiesToItem->PropertyToItemList[] = $Object_SetPropertyToItem;
+
+			$this->exportPropertyValueTranslations($PropertyValue->getId(), $PLENTY_propertyID);
 		}
 
 		PlentymarketsSoapClient::getInstance()->SetPropertiesToItem($Request_SetPropertiesToItem);
