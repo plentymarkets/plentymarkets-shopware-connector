@@ -55,7 +55,7 @@ class PlentymarketsImportControllerItemProperty
 			foreach ($Response_GetPropertyGroups->PropertyGroups->item as $Option)
 			{
 				$PlentymarketsImportEntityItemPropertyGroup = new PlentymarketsImportEntityItemPropertyGroup($Option);
-				$PlentymarketsImportEntityItemPropertyGroup->import();
+				$PlentymarketsImportEntityItemPropertyGroup->import();	
 			}
 		}
 		while (++$Request_GetPropertyGroups->Page < $Response_GetPropertyGroups->Pages);
@@ -77,5 +77,87 @@ class PlentymarketsImportControllerItemProperty
 			}
 		}
 		while (++$Request_GetProperties->Page < $Response_GetProperties->Pages);
+
+		$this->runImportTranslations($lastUpdateTimestamp);
+	}
+
+	/**
+	 * Run import of property groups and property translations
+	 * @param int $lastUpdateTimestamp
+	 */
+	private function runImportTranslations($lastUpdateTimestamp)
+	{
+		$mainShops = PlentymarketsUtils::getShopwareMainShops();
+
+		/** @var $mainShop Shopware\Models\Shop\Shop */
+		foreach ($mainShops as $mainShop)
+		{
+			// get all active languages of the main shop
+			$activeLanguages = PlentymarketsTranslation::getInstance()->getShopActiveLanguages($mainShop->getId());
+
+			foreach ($activeLanguages as $key => $language)
+			{	
+				// import tanslation for property group
+				
+				$Request_GetPropertyGroups = new PlentySoapRequest_GetPropertyGroups();
+				$Request_GetPropertyGroups->Lang = PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($language['locale']);
+				$Request_GetPropertyGroups->LastUpdateFrom = $lastUpdateTimestamp;
+				$Request_GetPropertyGroups->Page = 0;
+
+				do
+				{
+					/** @var PlentySoapResponse_GetPropertyGroups $Response_GetPropertyGroups */
+					$Response_GetPropertyGroups = PlentymarketsSoapClient::getInstance()->GetPropertyGroups($Request_GetPropertyGroups);
+
+					foreach ($Response_GetPropertyGroups->PropertyGroups->item as $group)
+					{
+						$PlentymarketsImportEntityItemPropertyGroup = new PlentymarketsImportEntityItemPropertyGroup($group);
+						
+						// set the property group translations from plenty for the language shops 
+						if (!is_null($language['mainShopId']))
+						{
+							$languageShopID = PlentymarketsTranslation::getLanguageShopID($key, $language['mainShopId']);
+							$PlentymarketsImportEntityItemPropertyGroup->importPropertyGroupTranslation($languageShopID);
+						}
+						else
+						{
+							$PlentymarketsImportEntityItemPropertyGroup->importPropertyGroupTranslation($mainShop->getId());
+						}
+					}
+				}
+				while (++$Request_GetPropertyGroups->Page < $Response_GetPropertyGroups->Pages);
+
+				// import translation for properties
+				
+				$Request_GetProperties = new PlentySoapRequest_GetProperties();
+				$Request_GetProperties->Lang = PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($language['locale']);
+				$Request_GetProperties->LastUpdateFrom = $lastUpdateTimestamp;
+				$Request_GetProperties->Page = 0;
+
+				do
+				{
+					/** @var PlentySoapResponse_GetProperties $Response_GetProperties */
+					$Response_GetProperties = PlentymarketsSoapClient::getInstance()->GetProperties($Request_GetProperties);
+
+					foreach ($Response_GetProperties->Properties->item as $Option)
+					{
+						$PlentymarketsImportEntityItemPropertyOption = new PlentymarketsImportEntityItemPropertyOption($Option);
+
+						// set the property translations from plenty for the language shops 
+						if (!is_null($language['mainShopId']))
+						{
+							$languageShopID = PlentymarketsTranslation::getLanguageShopID($key, $language['mainShopId']);
+							$PlentymarketsImportEntityItemPropertyOption->importPropertyTranslation($languageShopID);
+						}
+						else
+						{	
+							// set the property translation for the main shop
+							$PlentymarketsImportEntityItemPropertyOption->importPropertyTranslation($mainShop->getId());
+						}
+					}
+				}
+				while (++$Request_GetProperties->Page < $Response_GetProperties->Pages);
+			}
+		}
 	}
 }

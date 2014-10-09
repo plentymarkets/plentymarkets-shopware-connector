@@ -135,12 +135,15 @@ class PlentymarketsExportControllerItemAttribute
 				}
 			}	
 		}
-		
-		$Response = PlentymarketsSoapClient::getInstance()->SetItemAttributes($Request_SetItemAttributes);
 
-		if(!$Response->Success)
+		if(!empty($Request_SetItemAttributes->Attributes))
 		{
-			// throw exception
+			$Response = PlentymarketsSoapClient::getInstance()->SetItemAttributes($Request_SetItemAttributes);
+
+			if(!$Response->Success)
+			{
+				// throw exception
+			}
 		}
 	}
 	/**
@@ -182,12 +185,15 @@ class PlentymarketsExportControllerItemAttribute
 				}
 			}
 		}
-
-		$Response = PlentymarketsSoapClient::getInstance()->SetItemAttributes($Request_SetItemAttributes);
 		
-		if(!$Response->Success)
+		if(!empty($Request_SetItemAttributes->Attributes))
 		{
-			// throw exception
+			$Response = PlentymarketsSoapClient::getInstance()->SetItemAttributes($Request_SetItemAttributes);
+
+			if(!$Response->Success)
+			{
+				// throw exception
+			}
 		}
 	}
 

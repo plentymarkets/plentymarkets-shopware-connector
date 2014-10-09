@@ -53,7 +53,8 @@ class PlentymarketsImportControllerItemAttribute
 			return;
 		}
 
-		foreach ($Response_GetItemAttributes->Attributes->item as $Attribute) {
+		foreach ($Response_GetItemAttributes->Attributes->item as $Attribute) 
+		{
 			$PlentymarketsImportEntityItemAttribute = new PlentymarketsImportEntityItemAttribute($Attribute);
 			$PlentymarketsImportEntityItemAttribute->import();
 		}

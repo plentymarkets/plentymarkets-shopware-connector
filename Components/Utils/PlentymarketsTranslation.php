@@ -194,7 +194,7 @@ class PlentymarketsTranslation
 			$shopId = PlentymarketsTranslation::getInstance()->getLanguageShopID($langId, $mainShopId);
 		}
 		else
-		{	// the shop id is the main shop id => try to get translation of the object for the main shop 
+		{	// the shop id is the main shop id => try to get translation of the object for the main shop (e.g attribute translation)
 			$shopId = $mainShopId;
 		}
 		

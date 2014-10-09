@@ -100,6 +100,107 @@ class PlentymarketsExportControllerItemProperty
 	}
 
 	/**
+	 * Export the property translations of the main shops and language shops
+	 * @param int $plenty_propertyGroupID
+	 * @param int $shopware_propertyID
+	 * @param int $plenty_propertyID
+	 */
+	protected function exportPropertyTranslations($plenty_propertyGroupID, $shopware_propertyID, $plenty_propertyID)
+	{
+		$Request_SetProperties = new PlentySoapRequest_SetProperties();
+
+		$Request_SetProperties->Properties = array();
+		
+		$mainShops = PlentymarketsUtils::getShopwareMainShops();
+
+		/** @var $mainShop Shopware\Models\Shop\Shop */
+		foreach($mainShops as $mainShop)
+		{
+			// get all active languages of the main shop
+			$activeLanguages = PlentymarketsTranslation::getInstance()->getShopActiveLanguages($mainShop->getId());
+
+			foreach($activeLanguages as $key => $language)
+			{
+				// export the property translations of the language shops and main shops
+
+				// try to get translation
+				$propertyTranslation = PlentymarketsTranslation::getInstance()->getShopwareTranslation($mainShop->getId(), 'propertyoption', $shopware_propertyID, $key);
+
+				// if the translation was found, do export
+				if(!is_null($propertyTranslation) && isset($propertyTranslation['optionName']))
+				{
+					$Object_SetProperty = new PlentySoapObject_SetProperty();
+					$Object_SetProperty->PropertyGroupID = $plenty_propertyGroupID;
+					$Object_SetProperty->PropertyID = $plenty_propertyID;
+					$Object_SetProperty->Lang = PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($language['locale']);;
+					$Object_SetProperty->PropertyFrontendName = $propertyTranslation['optionName'];
+
+					$Request_SetProperties->Properties[] = $Object_SetProperty;
+				}
+			}
+		}
+		
+		if(!empty($Request_SetProperties->Properties))
+		{
+			$Response_SetProperties = PlentymarketsSoapClient::getInstance()->SetProperties($Request_SetProperties);
+
+			if(!$Response_SetProperties->Success)
+			{
+				// throw exception
+			}
+		}	
+	}
+
+	/**
+	 * @param int $shopware_propertyID
+	 * @param int $plenty_propertyID
+	 */
+	protected function exportPropertyGroupTranslations($shopware_propertyID, $plenty_propertyID)
+	{
+		$Request_SetPropertyGroups = new PlentySoapRequest_SetPropertyGroups();
+
+		$Request_SetPropertyGroups->Properties = array();
+
+		$mainShops = PlentymarketsUtils::getShopwareMainShops();
+
+		/** @var $mainShop Shopware\Models\Shop\Shop */
+		foreach($mainShops as $mainShop)
+		{
+			// get all active languages of the main shop
+			$activeLanguages = PlentymarketsTranslation::getInstance()->getShopActiveLanguages($mainShop->getId());
+
+			foreach($activeLanguages as $key => $language)
+			{
+				// export the property group translations of the language shops and main shops
+
+				// try to get translation
+				$propertyGroupTranslation = PlentymarketsTranslation::getInstance()->getShopwareTranslation($mainShop->getId(), 'propertygroup', $shopware_propertyID, $key);
+
+				// if the translation was found, do export
+				if(!is_null($propertyGroupTranslation) && isset($propertyGroupTranslation['groupName']))
+				{
+					$Object_SetPropertyGroup = new PlentySoapObject_SetPropertyGroup();
+					$Object_SetPropertyGroup->PropertyGroupID = $plenty_propertyID;
+					$Object_SetPropertyGroup->Lang = PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($language['locale']);;
+					$Object_SetPropertyGroup->FrontendName = $propertyGroupTranslation['groupName'];
+
+					$Request_SetPropertyGroups->PropertyGroups[] = $Object_SetPropertyGroup;
+				}
+			}
+		}
+		
+		if(!empty($Request_SetPropertyGroups->PropertyGroups))
+		{
+			$Response = PlentymarketsSoapClient::getInstance()->SetPropertyGroups($Request_SetPropertyGroups);
+
+			if(!$Response->Success)
+			{
+				// throw exception
+			}
+		}
+	}
+	
+	/**
 	 * Export the missing properties
 	 */
 	protected function doExport()
@@ -144,6 +245,9 @@ class PlentymarketsExportControllerItemProperty
 				}
 
 				PlentymarketsMappingController::addPropertyGroup($PropertyGroup->getId(), $groupIdAdded);
+				
+				// do export for property group translation
+				$this->exportPropertyGroupTranslations($PropertyGroup->getId(), $groupIdAdded);
 			}
 
 			if (!isset($this->PLENTY_groupIDValueName2ID[$groupIdAdded]))
@@ -195,6 +299,8 @@ class PlentymarketsExportControllerItemProperty
 					}
 
 					PlentymarketsMappingController::addProperty($shopwareID, $propertyIdAdded);
+					
+					$this->exportPropertyTranslations($groupIdAdded, $Property->getId(), $propertyIdAdded);
 				}
 			}
 		}
