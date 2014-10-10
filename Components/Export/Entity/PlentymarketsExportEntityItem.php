@@ -214,6 +214,42 @@ class PlentymarketsExportEntityItem
 	}
 
 	/**
+	 * @param  int $shopware_ImageID 
+	 * @return array $titleTranslations
+	 */
+	private function getImageTitleTranslations($shopware_ImageID)
+	{
+		$titleTranslations = array();
+		
+		$mainShops = PlentymarketsUtils::getShopwareMainShops();
+
+		/** @var $mainShop Shopware\Models\Shop\Shop */
+		foreach($mainShops as $mainShop)
+		{
+			// get all active languages of the main shop
+			$activeLanguages = PlentymarketsTranslation::getInstance()->getShopActiveLanguages($mainShop->getId());
+
+			foreach($activeLanguages as $key => $language)
+			{
+				// get image title translations of the language shops and main shops
+
+				// try to get the image title translation
+				$imageTranslation = PlentymarketsTranslation::getInstance()->getShopwareTranslation($mainShop->getId(), 'articleimage', $shopware_ImageID, $key);
+
+				// if the translation was found, do export
+				if(!is_null($imageTranslation) && isset($imageTranslation['description']))
+				{
+					// key = plenty language; value = shopware image title
+					$titleTranslations[PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($language['locale'])] = $imageTranslation['description'];
+				}
+			}
+		}
+		
+		return $titleTranslations;
+
+	}
+	
+	/**
 	 * Exports the images of the item
 	 */
 	protected function exportImages()
@@ -292,6 +328,18 @@ class PlentymarketsExportEntityItem
 			$RequestObject_SetItemImagesImageName->Lang = 'de'; // string
 			$RequestObject_SetItemImagesImageName->Name = $Image->getDescription(); // string
 			$RequestObject_SetItemImagesImage->Names[] = $RequestObject_SetItemImagesImageName;
+
+			// export the image title translations 
+			$image_NameTranslations = $this->getImageTitleTranslations($Image->getId());
+			
+			foreach($image_NameTranslations as $lang => $titleTranslation)
+			{
+				$RequestObject_SetItemImagesImageName = new PlentySoapRequestObject_SetItemImagesImageName();
+				$RequestObject_SetItemImagesImageName->DeleteName = false; // boolean
+				$RequestObject_SetItemImagesImageName->Lang = $lang; // string
+				$RequestObject_SetItemImagesImageName->Name = $titleTranslation; // string
+				$RequestObject_SetItemImagesImage->Names[] = $RequestObject_SetItemImagesImageName;		
+			}
 			
 			// set the plenty store ids for references 
 			$RequestObject_SetItemImagesImage->References = array();
