@@ -558,6 +558,11 @@ class PlentymarketsImportEntityItem
 		/** @var PlentySoapObject_ItemProperty $ItemProperty */
 		foreach ($groups[$groupId] as $ItemProperty)
 		{
+			// import only property values in German language
+			if($ItemProperty->PropertyValueLang != 'de')
+			{
+				continue;
+			}
 			// Mapping GroupId;ValueId -> ValueId
 			try
 			{
@@ -567,6 +572,7 @@ class PlentymarketsImportEntityItem
 			}
 			catch (PlentymarketsMappingExceptionNotExistant $E)
 			{
+				// import the property
 
 				$Option = new Shopware\Models\Property\Option();
 				$Option->fromArray(array(
@@ -598,18 +604,103 @@ class PlentymarketsImportEntityItem
 				// Save the mapping
 				PlentymarketsMappingController::addProperty($filterGroupId . ';' . $optionId, $ItemProperty->PropertyID);
 			}
-
+			
 			// Shopware cannot handle empty values
 			if (!empty($ItemProperty->PropertyValue))
-			{
+			{	
 				$this->data['propertyValues'][] = array(
 					'option' => array(
 						'id' => $optionId
 					),
 					'value' => $ItemProperty->PropertyValue
-				);
-			}
+				);	
+			}			
 		}
+	}
+	
+
+	/**
+	 * Import all translation of the PropertyValue
+	 */
+	public function importItemPropertyValueTranslations()
+	{
+		// array with item properties only in German
+		$german_itemProperties = array_filter($this->ItemBase->ItemProperties->item, function($property){ return( $property->PropertyValueLang == 'de');});
+
+		// array with item properties only in german
+		$otherLang_itemProperties = array_filter($this->ItemBase->ItemProperties->item, function($property){ return( !($property->PropertyValueLang == 'de'));});
+		
+		// Properties in other languages as German
+		/** @var PlentySoapObject_ItemProperty $ItemProperty */
+		foreach ($otherLang_itemProperties as $ItemProperty)
+		{
+			// search for the german property value to get afterwards the shopware property value id from tb: s_filter_values
+			/** @var PlentySoapObject_ItemProperty $germanProperty */
+			foreach($german_itemProperties as $germanProperty)
+			{
+				if($germanProperty->PropertyID == $ItemProperty->PropertyID)
+				{
+					// the german Property is found
+					break; 
+				}
+			}
+			
+			// search for the shopware language shop
+			$shopId = null;
+			// get all active languages of the main shop
+			$activeLanguages = PlentymarketsTranslation::getInstance()->getShopActiveLanguages($this->Shop->getId());
+			
+			// search the language shop with the language equal as the property language 
+			foreach($activeLanguages as $localeId => $language)
+			{
+				if(PlentymarketsTranslation::getPlentyLocaleFormat($language['locale']) == $ItemProperty->PropertyValueLang)
+				{	
+					// if the founded shop is a language shop 
+					if(!is_null($language['mainShopId']))
+					{
+						$shopId = PlentymarketsTranslation::getInstance()->getLanguageShopID($localeId, $language['mainShopId']);
+					}
+					else
+					{	
+						// the main shop has the same language as the property 
+						$shopId = $this->Shop->getId();
+					}
+				}
+			}
+			
+			// if the language shop was found, save the property value for this language shop
+			if(!is_null($shopId))
+			{
+				// try to get the property value Id from TB : s_filter_values 
+				// !! in TB: s_filter_values the values are saved in the German language = $germanProperty->PropertyValue
+				try{
+
+					$shopware_property = PlentymarketsMappingController::getPropertyByPlentyID($ItemProperty->PropertyID);
+					$parts = explode(';',$shopware_property);
+					$shopware_propertyID = $parts[1];
+
+					$sql = 'SELECT id
+						FROM s_filter_values
+						WHERE optionID ='. $shopware_propertyID.' AND value LIKE "%'.$germanProperty->PropertyValue.'%"';
+
+					$response = Shopware()->Db()->query($sql)->fetchAll();
+
+					$shopware_propertyValueID = $response[0]['id'];
+
+					if(!is_null($shopware_propertyValueID))
+					{
+						// save the translation of the property 
+						$property_data = array('optionValue' => $ItemProperty->PropertyValue);
+
+						PlentymarketsTranslation::getInstance()->setShopwareTranslation('propertyvalue', $shopware_propertyValueID , $shopId, $property_data);
+					}
+
+				}catch(Exception $e)
+				{
+					// throw exception
+				}
+			}		
+		} 		
 	}
 
 	/**
@@ -708,7 +799,7 @@ class PlentymarketsImportEntityItem
 
 			// Log
 			PlentymarketsLogger::getInstance()->message('Sync:Item', sprintf('The item »%s« with the number »%s« has been updated', $data['name'], $Article->getMainDetail()->getNumber()));
-
+			
 			// Remember the main detail's id (to set the prices)
 			$mainDetailId = $Article->getMainDetail()->getId();
 

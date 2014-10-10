@@ -151,7 +151,7 @@ class PlentymarketsImportControllerItem
 		{
 			$shopId = PlentymarketsMappingController::getShopByPlentyID($storeId);
 			$Shop = Shopware()->Models()->find('Shopware\Models\Shop\Shop', $shopId);
-
+			
 			$Importuer = new PlentymarketsImportEntityItem($ItemBase, $Shop);
 
 			// The item has already been updated
@@ -167,6 +167,9 @@ class PlentymarketsImportControllerItem
 				
 				// Do the import for item texts translation 
 				$Importuer->saveItemTextsTranslation($itemTexts);
+				
+				// Do the import for the property value translations
+				$Importuer->importItemPropertyValueTranslations();
 
 				// Add it to the link controller
 				PlentymarketsImportControllerItemLinked::getInstance()->addItem($ItemBase->ItemID);
