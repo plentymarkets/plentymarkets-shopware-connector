@@ -77,10 +77,12 @@ class PlentymarketsImportControllerItem
 		$Request_GetItemsBase->ItemID = $itemId;
 		
 		// get the main language of the shop
-		$mainLang = array_values(PlentymarketsTranslation::getInstance()->getShopMainLanguage(PlentymarketsMappingController::getShopByPlentyID($storeId)));
+		//$mainLang = array_values(PlentymarketsTranslation::getInstance()->getShopMainLanguage(PlentymarketsMappingController::getShopByPlentyID($storeId)));
 		// set the main language of the shop in soap request 
-		$Request_GetItemsBase->Lang = PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($mainLang[0]['locale']);
+		//$Request_GetItemsBase->Lang = PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($mainLang[0]['locale']);
 
+		$Request_GetItemsBase->Lang = 'de';
+		
 		// Do the request
 		$Response_GetItemsBase = PlentymarketsSoapClient::getInstance()->GetItemsBase($Request_GetItemsBase);
 
@@ -139,6 +141,11 @@ class PlentymarketsImportControllerItem
 				if(!is_null($language['mainShopId']))
 				{
 					$itemText['languageShopId'] = PlentymarketsTranslation::getInstance()->getLanguageShopID($localeId, $language['mainShopId']);
+					
+				}elseif(PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($language['locale']) != 'de')
+				{
+					// set the language for the main shop if the main language is not German
+					$itemText['languageShopId'] = $shopId;
 				}
 							
 				$itemText['texts'] = $Response_GetItemsTexts->ItemTexts->item[0];

@@ -237,7 +237,10 @@ class PlentymarketsTranslation
 				) ON DUPLICATE KEY UPDATE `objectdata`=VALUES(`objectdata`);
 				';
 		
-		 Shopware()->Db()->query($sql, array($type, serialize($data), $objectId, $languageShopId));
+	 	 Shopware()->Db()->query($sql, array($type, serialize($data), $objectId, $languageShopId));
+		
+		Shopware\Components\Api\Manager::getResource('Translation')->flush();
+		
 
 	}
 

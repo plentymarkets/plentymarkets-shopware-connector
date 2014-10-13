@@ -120,32 +120,38 @@ class PlentymarketsImportEntityItemImage
 			 /** @var $plentyImageName  PlentySoapResponse_ObjectGetItemImageName */
 			 foreach($plenty_ImageNames as $plentyImageName)
 			 {
-				 // search the language shop with the language equal as the image name language
-				 if(PlentymarketsTranslation::getPlentyLocaleFormat($language['locale']) == $plentyImageName->Lang)
+				 if(!is_null($plentyImageName->Name) && strlen($plentyImageName->Name) > 0)
 				 {
-					 // if the founded shop is a language shop 
-					 if(!is_null($language['mainShopId']))
+					 // search the language shop with the language equal as the image name language
+					 if(PlentymarketsTranslation::getPlentyLocaleFormat($language['locale']) == $plentyImageName->Lang)
 					 {
-						 $shopId = PlentymarketsTranslation::getInstance()->getLanguageShopID($localeId, $language['mainShopId']);
-						
-					 }
-					 elseif(PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($language['locale']) != 'de')
-					 {
-						 // set the imagae title translation for the main shop that has the main language other as German
-						 $shopId = $shopware_storeID;
-					 }
-					 
-					 // if the language shop was found / set , save the image title translation for this language shop
-					 if(!is_null($shopId))
-					 {
-						 // save the translation of the plenty image title
-						 $image_data = array('description' => $plentyImageName->Name);
+						 $shopId = null;
 
-						 PlentymarketsTranslation::getInstance()->setShopwareTranslation('articleimage', $shopware_ImageID , $shopId, $image_data);
+						 // if the founded shop is a language shop 
+						 if(!is_null($language['mainShopId']))
+						 {
+							 $shopId = PlentymarketsTranslation::getInstance()->getLanguageShopID($localeId, $language['mainShopId']);
+
+						 }
+						 elseif(PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($language['locale']) != 'de')
+						 {
+							 // set the imagae title translation for the main shop that has the main language other as German
+							 $shopId = $shopware_storeID;
+						 }
+
+						 // if the language shop was found / set , save the image title translation for this language shop
+						 if(!is_null($shopId))
+						 {
+							 // save the translation of the plenty image title
+							 $image_data = array('description' => $plentyImageName->Name);
+
+							 PlentymarketsTranslation::getInstance()->setShopwareTranslation('articleimage', $shopware_ImageID , $shopId, $image_data);
+						 }
 					 }
-				 }				 
+				}				 
 			 }	
 		 }
+				 
 	 }
 	
 	/**
@@ -264,7 +270,7 @@ class PlentymarketsImportEntityItemImage
 					foreach($shopwareStoreIds as $shopwareStoreId) 
 					{
 						// import the image title translations for all active shops of the image
-						$this->importImageTitleTranslation($imageId, $Image->Names->item, $shopwareStoreId);
+					 	$this->importImageTitleTranslation($imageId, $Image->Names->item, $shopwareStoreId);
 					}
 
 					$plentyId2ShopwareId[$Image->ImageID] = $imageId;
@@ -274,8 +280,7 @@ class PlentymarketsImportEntityItemImage
 											UPDATE s_articles_img
 												SET articleID = ?
 												WHERE id = ?
-										', array($this->SHOPWARE_itemId, $imageId));
-					
+										', array($this->SHOPWARE_itemId, $imageId));					
 				}	
 			}
 		} while (++$Request_GetItemsImages->Page < $Response_GetItemsImages->Pages); 
