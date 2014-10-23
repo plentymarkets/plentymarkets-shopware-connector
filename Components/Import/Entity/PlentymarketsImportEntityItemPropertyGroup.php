@@ -69,8 +69,11 @@ class PlentymarketsImportEntityItemPropertyGroup
 		{
 			// save the translation of the property group
 			$properteryGroup_TranslationData = array('groupName' => $this->Group->FrontendName);
+			
+			$propertyParts = explode(';', $SHOPWARE_id);
+			$groupId = $propertyParts[0];
 
-			PlentymarketsTranslation::setShopwareTranslation('propertygroup', $SHOPWARE_id, $shopId, $properteryGroup_TranslationData);
+			PlentymarketsTranslation::setShopwareTranslation('propertygroup', $groupId, $shopId, $properteryGroup_TranslationData);
 		}
 	}
 

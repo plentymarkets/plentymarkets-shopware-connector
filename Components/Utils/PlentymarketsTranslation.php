@@ -28,6 +28,37 @@ class PlentymarketsTranslation
 		}
 		return self::$Instance;
 	}
+
+	/**
+	 * Check if the shop is the main shop
+	 * @param int $shopId
+	 * @return bool
+	 */
+	public static function isMainShop($shopId)
+	{
+		try
+		{
+			$sql = 'SELECT COUNT(*) AS "shopCount"
+				FROM s_core_shops
+				WHERE id ='. $shopId .
+				' AND main_id IS NULL';
+
+			$shopCount = Shopware()->Db()->query($sql)->fetchAll();
+
+		}catch (Exception $e)
+		{
+			$shopCount[0]['shopCount'] = null;
+		}
+
+		if($shopCount[0]['shopCount'] > 0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 	
 	/**
 	 * @description Get the current language of the shop with id = shopId
@@ -59,6 +90,33 @@ class PlentymarketsTranslation
 		$parts = explode('_',$locale);
 		
 		return $parts[0];
+	}
+
+	/**
+	 * Return the total number of the shop languages (main languages + nr of shop languages)
+	 * @param int $shopID
+	 * @return int
+	 */
+	public static function getShopLanguageCount($shopID)
+	{
+		/** @var $shopRepositoryList Shopware\Models\Shop\Repository */
+		$shopRepositoryList = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+
+		$languageShops = $shopRepositoryList->findBy(array('mainId' => $shopID));
+		
+		$count = 1; // the main language
+		
+		// if language shops are found
+		if(count($languageShops) > 0)
+		{	
+			// return the total number of shop languages (main language + nr of shop languages )
+			return $count + count($languageShops);
+		}
+		else
+		{	
+			// the shop has only one language (main language)
+			return $count;
+		}	
 	}
 	
 	/**
@@ -228,20 +286,26 @@ class PlentymarketsTranslation
 	 */
 	public static function setShopwareTranslation($type, $objectId, $languageShopId, $data)
 	{
-		// !!! objectlanguage = language shopId 
-		// !!! objectkey = object Id (e.g. article Id)
-		$sql = 'INSERT INTO `s_core_translations` (
+		try
+		{
+			// !!! objectlanguage = language shopId 
+			// !!! objectkey = object Id (e.g. article Id)
+			$sql = 'INSERT INTO `s_core_translations` (
 				`objecttype`, `objectdata`, `objectkey`, `objectlanguage`
 				) VALUES (
 				?, ?, ?, ?
 				) ON DUPLICATE KEY UPDATE `objectdata`=VALUES(`objectdata`);
 				';
-		
-	 	 Shopware()->Db()->query($sql, array($type, serialize($data), $objectId, $languageShopId));
-		
-		Shopware\Components\Api\Manager::getResource('Translation')->flush();
-		
 
+			Shopware()->Db()->query($sql, array($type, serialize($data), $objectId, $languageShopId));
+
+			Shopware\Components\Api\Manager::getResource('Translation')->flush();
+		}
+		catch(Shopware\Components\Api\Exception\OrmException $E)
+		{
+			PlentymarketsLogger::getInstance()->message('Sync:Translation', 'The translation type » ' . $type. ' «  for shopId » '. $languageShopId . '« has been imported with errors ('. $E->getMessage() .')', 3020);
+
+		}
 	}
 
 	

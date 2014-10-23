@@ -650,7 +650,7 @@ class PlentymarketsImportEntityItem
 			// get all active languages of the main shop
 			$activeLanguages = PlentymarketsTranslation::getInstance()->getShopActiveLanguages($this->Shop->getId());
 			
-			// search the language shop with the language equal as the property language 
+			// search the language shop with the language equal with the property language 
 			foreach($activeLanguages as $localeId => $language)
 			{
 				if(PlentymarketsTranslation::getPlentyLocaleFormat($language['locale']) == $ItemProperty->PropertyValueLang)
@@ -700,7 +700,7 @@ class PlentymarketsImportEntityItem
 					// throw exception
 				}
 			}		
-		} 		
+		}
 	}
 
 	/**

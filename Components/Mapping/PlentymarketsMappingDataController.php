@@ -494,7 +494,7 @@ class PlentymarketsMappingDataController
 						FROM s_core_shops C
 						LEFT JOIN plenty_mapping_shop PMC
 							ON PMC.shopwareID = C.id
-						WHERE active = 1 AND main_id IS NULL
+						WHERE active = 1 
 						ORDER BY C.name
 				')
 			->fetchAll();
