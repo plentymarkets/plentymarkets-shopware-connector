@@ -303,7 +303,7 @@ class PlentymarketsTranslation
 		}
 		catch(Shopware\Components\Api\Exception\OrmException $E)
 		{
-			PlentymarketsLogger::getInstance()->message('Sync:Translation', 'The translation type » ' . $type. ' «  for shopId » '. $languageShopId . '« has been imported with errors ('. $E->getMessage() .')', 3020);
+			PlentymarketsLogger::getInstance()->error('Sync:Translation', 'The translation type » ' . $type. ' «  for shopId » '. $languageShopId . '« has been imported with errors ('. $E->getMessage() .')', 3020);
 
 		}
 	}
