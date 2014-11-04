@@ -33,8 +33,6 @@
  */
 class PlentymarketsImportControllerItemCategoryTree
 {
-
-
 	/**
 	 * prepare: copy the mapping table
 	 */
@@ -63,7 +61,7 @@ class PlentymarketsImportControllerItemCategoryTree
 	/**
 	 * Cleanup the old category tree
 	 */
-	public function __destruct()
+	protected function rebuild()
 	{
 		$mapping = array();
 
@@ -170,7 +168,11 @@ class PlentymarketsImportControllerItemCategoryTree
 
 			if (!$Response_GetItemCategoryTree->Success)
 			{
-				throw new PlentymarketsExportException('The item category tree could not be retrieved', 2920);
+				Shopware()->Db()->query(
+					'INSERT plenty_mapping_category SELECT * FROM plenty_mapping_category_old'
+				);
+
+				throw new PlentymarketsImportException('The item category tree could not be retrieved', 2920);
 			}
 
 			/** @var PlentySoapObject_ItemCategoryTreeNode $Category */
@@ -180,5 +182,7 @@ class PlentymarketsImportControllerItemCategoryTree
 				$importEntityItemCategoryTree->import();
 			}
 		}
+
+		$this->rebuild();
 	}
 }
