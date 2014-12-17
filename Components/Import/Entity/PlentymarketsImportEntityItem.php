@@ -173,7 +173,7 @@ class PlentymarketsImportEntityItem
 	{
 		// save the item texts for the shop main language
 		$this->data = array();
-		$this->data['name'] = $this->ItemBase->Texts->Name;
+		$this->data['name'] = $this->ItemBase->Texts->Name3;
 		$this->data['description'] = $this->ItemBase->Texts->ShortDescription;
 		$this->data['descriptionLong'] = $this->ItemBase->Texts->LongDescription;
 		$this->data['keywords'] = $this->ItemBase->Texts->Keywords;
