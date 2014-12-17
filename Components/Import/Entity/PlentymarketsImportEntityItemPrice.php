@@ -141,7 +141,7 @@ class PlentymarketsImportEntityItemPrice
 			// Reliably available starting in SOAP 111
 			if (isset($this->PLENTY_PriceSet->Price) && !is_null($this->PLENTY_PriceSet->Price))
 			{
-				$price['price'] = $this->PLENTY_PriceSet->Price;
+				$price['price'] = $this->PLENTY_PriceSet->Price1;
 			}
 
 			if (isset($this->PLENTY_PriceSet->PurchasePriceNet) && !is_null($this->PLENTY_PriceSet->PurchasePriceNet))
