@@ -1,7 +1,7 @@
 <?php
 /**
  * plentymarkets shopware connector
- * Copyright © 2013 plentymarkets GmbH
+ * Copyright © 2013-2014 plentymarkets GmbH
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,10 +22,9 @@
  * trademark license. Therefore any rights, titles and interests in the
  * above trademarks remain entirely with the trademark owners.
  *
- * @copyright  Copyright (c) 2013, plentymarkets GmbH (http://www.plentymarkets.com)
+ * @copyright  Copyright (c) 2014, plentymarkets GmbH (http://www.plentymarkets.com)
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
-
 
 /**
  * I am a generated class and am required for communicating with plentymarkets.
@@ -36,12 +35,27 @@ class PlentySoapRequest_GetCurrentStocks4Marketplace
 	/**
 	 * @var int
 	 */
+	public $CallItemsLimit;
+	
+	/**
+	 * @var int
+	 */
+	public $CouchCommerce;
+	
+	/**
+	 * @var int
+	 */
 	public $Gimahhot;
 	
 	/**
 	 * @var int
 	 */
 	public $GoogleProducts;
+	
+	/**
+	 * @var int
+	 */
+	public $Grosshandel;
 	
 	/**
 	 * @var int
@@ -61,7 +75,17 @@ class PlentySoapRequest_GetCurrentStocks4Marketplace
 	/**
 	 * @var int
 	 */
+	public $Otto;
+	
+	/**
+	 * @var int
+	 */
 	public $Page;
+	
+	/**
+	 * @var int
+	 */
+	public $PlusDe;
 	
 	/**
 	 * @var int
@@ -87,6 +111,11 @@ class PlentySoapRequest_GetCurrentStocks4Marketplace
 	 * @var int
 	 */
 	public $Tradoria;
+	
+	/**
+	 * @var int
+	 */
+	public $Twenga;
 	
 	/**
 	 * @var int

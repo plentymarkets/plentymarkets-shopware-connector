@@ -51,6 +51,13 @@ class PlentymarketsImportEntityItem
 	protected $Shop;
 
 	/**
+	 * plentymarkets store id
+	 *
+	 * @var integer
+	 */
+	protected $storeId;
+
+	/**
 	 * The main data
 	 *
 	 * @var array
@@ -109,6 +116,7 @@ class PlentymarketsImportEntityItem
 	{
 		$this->ItemBase = $ItemBase;
 		$this->Shop = $Shop;
+		$this->storeId = PlentymarketsMappingController::getShopByShopwareID($Shop->getId());
 	}
 
 	/**
@@ -123,6 +131,7 @@ class PlentymarketsImportEntityItem
 			'keywords' => $this->ItemBase->Texts->Keywords,
 			'highlight' => ($this->ItemBase->WebShopSpecial == 3),
 			'lastStock' => ($this->ItemBase->Stock->Limitation == 1),
+			'added' => date('c', $this->ItemBase->Inserted),
 			'changed' => date('c', $this->ItemBase->LastUpdate),
 			'availableTo' => null,
 			'active' => $this->ItemBase->Availability->Inactive == 0 && $this->ItemBase->Availability->Webshop == 1,
@@ -401,6 +410,7 @@ class PlentymarketsImportEntityItem
 		}
 
 		// Categories
+		/** @var PlentySoapObject_ItemCategory $Category */
 		foreach ($this->ItemBase->Categories->item as $Category)
 		{
 			// FIX: corrupt category within plenty
@@ -411,76 +421,24 @@ class PlentymarketsImportEntityItem
 
 			try
 			{
-				$categoryID = PlentymarketsMappingController::getCategoryByPlentyID($Category->ItemCategoryPath);
+				$categoryId = PlentymarketsMappingEntityCategory::getCategoryByPlentyID($Category->ItemCategoryID, $this->storeId);
 				$this->categories[] = array(
-					'id' => $categoryID
+					'id' => $categoryId
 				);
 			}
 
 			// Category does not yet exist
 			catch (PlentymarketsMappingExceptionNotExistant $E)
 			{
-				// Root category id (out of the shop)
-				$parentId = $this->Shop->getCategory()->getId();
+				$importEntityItemCategoryTree = new PlentymarketsImportEntityItemCategoryTree($Category, $this->storeId);
+				$categoryId = $importEntityItemCategoryTree->import();
 
-				// Trigger to indicate an error while creating new category
-				$addError = false;
-
-				// Split path into single names
-				$categoryPathNames = explode(';', $Category->ItemCategoryPathNames);
-
-				foreach ($categoryPathNames as $categoryName)
-				{
-					$CategoryFound = self::$CategoryRepository->findOneBy(array(
-						'name' => $categoryName,
-						'parentId' => $parentId
-					));
-
-					if ($CategoryFound instanceof Shopware\Models\Category\Category)
-					{
-						$parentId = $CategoryFound->getId();
-						$path[] = $parentId;
-					}
-					else
-					{
-						$params = array();
-						$params['name'] = $categoryName;
-						$params['parentId'] = $parentId;
-
-						try
-						{
-							// Create
-							$CategoryModel = self::$CategoryApi->create($params);
-
-							// Parent
-							$parentCategoryName = $CategoryModel->getParent()->getName();
-
-							// Log
-							PlentymarketsLogger::getInstance()->message('Sync:Item:Category', 'The category »' . $categoryName . '« has been created beneath the category »' . $parentCategoryName . '«');
-
-							// Id to connect with the item
-							$parentId = $CategoryModel->getId();
-						}
-						catch (Exception $E)
-						{
-							// Log
-							PlentymarketsLogger::getInstance()->error('Sync:Item:Category', 'The category »' . $categoryName . '« with the parentId »' . $parentId . '« could not be created (' . $E->getMessage() . ')', 3300);
-
-							// Set the trigger - the category will not be connected with the item
-							$addError = true;
-						}
-
-					}
-				}
-
-				// Only create a mapping and connect the cateory to the item,
+				// Only create a mapping and connect the category to the item,
 				// of nothing went wrong during creation
-				if (!$addError)
+				if ($categoryId)
 				{
-					// Add mapping and save into the object
-					PlentymarketsMappingController::addCategory($parentId, $Category->ItemCategoryPath);
 					$this->categories[] = array(
-						'id' => $parentId
+						'id' => $categoryId
 					);
 				}
 			}
@@ -1029,6 +987,18 @@ class PlentymarketsImportEntityItem
 			// Bilder
 			$PlentymarketsImportEntityItemImage = new PlentymarketsImportEntityItemImage($this->ItemBase->ItemID, $SHOPWARE_itemID);
 			$PlentymarketsImportEntityItemImage->image();
+		}
+
+		// Rebuild category tree
+		if (count($this->categories))
+		{
+			/** @var \Shopware\Components\Model\CategoryDenormalization $component */
+			$component = Shopware()->CategoryDenormalization();
+			$component->removeArticleAssignmentments($SHOPWARE_itemID);
+			foreach ($this->categories as $category)
+			{
+				$component->addAssignment($SHOPWARE_itemID, $category['id']);
+			}
 		}
 
 		// Der Hersteller ist neu angelegt worden

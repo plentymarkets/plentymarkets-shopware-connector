@@ -52,6 +52,8 @@ define('EXPORT_ORDER_ITEM_TEXT_SYNC_NO', 0);
 define('MOP_DEBIT', 3);
 define('MOP_SHOPGATE', 20);
 define('MOP_AMAZON_PAYMENT', 40);
+define('MOP_KLARNA', 1401);
+define('MOP_KLARNACREDIT', 1402);
 
 /**
  * Shortcut for PlentymarketsConfig::getInstance()
@@ -301,6 +303,36 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 			$this->addItemBundleCronEvents();
 		}
 
+		if (version_compare($version, '1.6') !== 1)
+		{
+			try
+			{
+				PlentymarketsExportController::getInstance()->erase('ItemCategory');
+
+				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'PlentymarketsExportController::getInstance()->erase(\'ItemCategory\') done');
+			}
+			catch (Exception $E)
+			{
+				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'PlentymarketsExportController::getInstance()->erase(\'ItemCategory\') failed');
+			}
+
+			try
+			{
+				Shopware()->Db()->exec("
+					ALTER TABLE `plenty_mapping_category` CHANGE `shopwareID` `shopwareID` VARCHAR(255) NOT NULL DEFAULT '';
+				");
+
+				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'ALTER TABLE `plenty_mapping_category` done');
+			}
+			catch (Exception $E)
+			{
+				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'ALTER TABLE `plenty_mapping_category` failed');
+			}
+
+
+			PyConf()->erase('PlentymarketsVersionTimestamp');
+		}
+
 		//
 		PlentymarketsConfig::getInstance()->setConnectorVersion($this->getVersion());
 
@@ -421,7 +453,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 
 		Shopware()->Db()->exec("
 			CREATE TABLE `plenty_mapping_category` (
-			  `shopwareID` int(11) unsigned NOT NULL,
+			  `shopwareID` varchar(255) NOT NULL DEFAULT '',
 			  `plentyID` varchar(255) NOT NULL DEFAULT '',
 			  PRIMARY KEY (`shopwareID`,`plentyID`),
 			  UNIQUE KEY `plentyID` (`plentyID`)
@@ -1167,7 +1199,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
      */
     public function getVersion()
     {
-    	return '1.5.8';
+    	return '1.6.2';
     }
 
     /**

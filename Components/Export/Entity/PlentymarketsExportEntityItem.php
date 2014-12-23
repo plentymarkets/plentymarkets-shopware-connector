@@ -60,18 +60,6 @@ class PlentymarketsExportEntityItem
 	 *
 	 * @var array
 	 */
-	protected $categoryPaths2Activate = array();
-
-	/**
-	 *
-	 * @var array
-	 */
-	protected static $categoryPathsActivated = array();
-
-	/**
-	 *
-	 * @var array
-	 */
 	protected $storeIds = array();
 
 	/**
@@ -145,22 +133,23 @@ class PlentymarketsExportEntityItem
 		/** @var Shopware\Models\Category\Category $Category */
 		foreach ($Item->getCategories() as $Category)
 		{
-			try
-			{
-				$categoryPath = PlentymarketsMappingController::getCategoryByShopwareID($Category->getId());
-			}
-			catch (PlentymarketsMappingExceptionNotExistant $E)
-			{
-				PlentymarketsLogger::getInstance()->error('Export:Initial:Item', 'The category »' . $Category->getName() . '« with the id »' . $Category->getId() . '« will not be assigned to the item with the number »' . $ItemDetails->getNumber() . '«', 2820);
-				continue;
-			}
-
 			// Get the store for this category
 			$rootId = PlentymarketsUtils::getRootIdByCategory($Category);
 			$shops = PlentymarketsUtils::getShopIdByCategoryRootId($rootId);
+			$plentyCategoryBranchId = null;
 
 			foreach ($shops as $shopId)
 			{
+				try
+				{
+					$plentyCategoryBranchId = PlentymarketsMappingEntityCategory::getCategoryByShopwareID($Category->getId(), $shopId);
+				}
+				catch (PlentymarketsMappingExceptionNotExistant $E)
+				{
+					PlentymarketsLogger::getInstance()->error('Export:Initial:Item', 'The category »' . $Category->getName() . '« with the id »' . $Category->getId() . '« will not be assigned to the item with the number »' . $ItemDetails->getNumber() . '«', 2820);
+					continue;
+				}
+
 				try
 				{
 					$storeId = PlentymarketsMappingController::getShopByShopwareID($shopId);
@@ -180,24 +169,18 @@ class PlentymarketsExportEntityItem
 					// Cache
 					$this->storeIds[$storeId] = true;
 				}
+			}
 
-				if ($Category->getActive())
-				{
-					// Activate the category for this store
-					$this->categoryPaths2Activate[] = array(
-						'path' => $categoryPath,
-						'storeId' => $storeId
-					);
-				}
+			if (!$plentyCategoryBranchId)
+			{
+				continue;
 			}
 
 			// Activate the category
 			$Object_ItemCategory = new PlentySoapObject_ItemCategory();
-			$Object_ItemCategory->ItemCategoryPath = $categoryPath; // string
+			$Object_ItemCategory->ItemCategoryID = $plentyCategoryBranchId; // string
 			$Object_AddItemsBaseItemBase->Categories[] = $Object_ItemCategory;
-
 		}
-
 
 		$Request_AddItemsBase->BaseItems[] = $Object_AddItemsBaseItemBase;
 
@@ -230,39 +213,6 @@ class PlentymarketsExportEntityItem
 		else
 		{
 			throw new PlentymarketsExportException('The item with the number »' . $ItemDetails->getNumber() . '« could not be exported (no item ID and price ID respectively)', 2830);
-		}
-	}
-
-	/**
-	 * Activates the categories of this item for the shop
-	 */
-	protected function activateCategories()
-	{
-		$Request_SetStoreCategories = new PlentySoapRequest_SetStoreCategories();
-		$Request_SetStoreCategories->StoreCategories = array();
-
-		foreach ($this->categoryPaths2Activate as $path2Activate)
-		{
-			// Aleady been activated
-			if (isset(self::$categoryPathsActivated[$path2Activate['path']]) &&
-				isset(self::$categoryPathsActivated[$path2Activate['path']][$path2Activate['storeId']]))
-			{
-				continue;
-			}
-
-			$Object_SetStoreCategory = new PlentySoapObject_SetStoreCategory();
-			$Object_SetStoreCategory->Active = true;
-			$Object_SetStoreCategory->ItemCategoryPath = $path2Activate['path'];
-			$Object_SetStoreCategory->StoreID = $path2Activate['storeId'];
-
-			// Cache + Request
-			self::$categoryPathsActivated[$path2Activate['path']][$path2Activate['storeId']] = true;
-			$Request_SetStoreCategories->StoreCategories[] = $Object_SetStoreCategory;
-		}
-
-		if (!empty($Request_SetStoreCategories->StoreCategories))
-		{
-			PlentymarketsSoapClient::getInstance()->SetStoreCategories($Request_SetStoreCategories);
 		}
 	}
 
@@ -500,7 +450,6 @@ class PlentymarketsExportEntityItem
 		$this->exportImages();
 		$this->exportVariants();
 		$this->exportProperties();
-		$this->activateCategories();
 
 		return true;
 	}

@@ -202,7 +202,10 @@ class PlentymarketsImportItemVariantController
 	 */
 	public function map($article)
 	{
-		foreach ($article['details'] as $detail)
+		$details = $article['details'];
+		$details[] = $article['mainDetail'];
+
+		foreach ($details as $detail)
 		{
 			foreach ($detail['configuratorOptions'] as $option)
 			{

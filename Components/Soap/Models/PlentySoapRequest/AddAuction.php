@@ -1,7 +1,7 @@
 <?php
 /**
  * plentymarkets shopware connector
- * Copyright © 2013 plentymarkets GmbH
+ * Copyright © 2013-2014 plentymarkets GmbH
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,10 +22,9 @@
  * trademark license. Therefore any rights, titles and interests in the
  * above trademarks remain entirely with the trademark owners.
  *
- * @copyright  Copyright (c) 2013, plentymarkets GmbH (http://www.plentymarkets.com)
+ * @copyright  Copyright (c) 2014, plentymarkets GmbH (http://www.plentymarkets.com)
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
-
 
 /**
  * I am a generated class and am required for communicating with plentymarkets.
@@ -67,46 +66,6 @@ class PlentySoapRequest_AddAuction
 	 * @var int
 	 */
 	public $AutoSelling;
-	
-	/**
-	 * @var int
-	 */
-	public $AuvitoCategoryID1;
-	
-	/**
-	 * @var int
-	 */
-	public $AuvitoCategoryID2;
-	
-	/**
-	 * @var int
-	 */
-	public $AuvitoFSK18;
-	
-	/**
-	 * @var string
-	 */
-	public $AuvitoItemCondition;
-	
-	/**
-	 * @var string
-	 */
-	public $AuvitoListingEnhancements;
-	
-	/**
-	 * @var int
-	 */
-	public $AuvitoStorecategory;
-	
-	/**
-	 * @var int
-	 */
-	public $AuvitoTemplateID;
-	
-	/**
-	 * @var string
-	 */
-	public $Auvitouser;
 	
 	/**
 	 * @var int
@@ -162,6 +121,11 @@ class PlentySoapRequest_AddAuction
 	 * @var float
 	 */
 	public $EbayFee;
+	
+	/**
+	 * @var int
+	 */
+	public $EbayIntRateTable;
 	
 	/**
 	 * @var int
@@ -252,6 +216,11 @@ class PlentySoapRequest_AddAuction
 	 * @var string
 	 */
 	public $EbayListingEnhancements;
+	
+	/**
+	 * @var int
+	 */
+	public $EbayNatRateTable;
 	
 	/**
 	 * @var int
@@ -387,11 +356,6 @@ class PlentySoapRequest_AddAuction
 	 * @var string
 	 */
 	public $LastUpdate;
-	
-	/**
-	 * @var int
-	 */
-	public $ListAuvito;
 	
 	/**
 	 * @var int

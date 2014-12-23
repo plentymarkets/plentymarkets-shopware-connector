@@ -144,6 +144,11 @@ class PlentymarketsImportEntityItemPrice
 				$price['price'] = $this->PLENTY_PriceSet->Price;
 			}
 
+			if (isset($this->PLENTY_PriceSet->PurchasePriceNet) && !is_null($this->PLENTY_PriceSet->PurchasePriceNet))
+			{
+				$price['basePrice'] = $this->PLENTY_PriceSet->PurchasePriceNet;
+			}
+
 			// Reliably available starting in SOAP 111
             // check whether the RRP is higher than price to prevent ugly display
 			if (isset($this->PLENTY_PriceSet->RRP) && !is_null($this->PLENTY_PriceSet->RRP) && isset($price['price']) && ($this->PLENTY_PriceSet->RRP > $price['price']))

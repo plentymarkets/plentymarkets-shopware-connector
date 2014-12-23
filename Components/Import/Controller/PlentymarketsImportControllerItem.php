@@ -163,6 +163,7 @@ class PlentymarketsImportControllerItem
 		catch (Exception $E)
 		{
 			PlentymarketsLogger::getInstance()->error('Sync:Item', 'The item »'. $ItemBase->Texts->Name .'« with the id »'. $ItemBase->ItemID .'« could not be imported', 3000);
+			PlentymarketsLogger::getInstance()->error('Sync:Item', $E->getTraceAsString(), 1000);
 			PlentymarketsLogger::getInstance()->error('Sync:Item', get_class($E));
 			PlentymarketsLogger::getInstance()->error('Sync:Item', $E->getMessage());
 		}
@@ -171,7 +172,7 @@ class PlentymarketsImportControllerItem
 	/**
 	 * Finalizes the import
 	 */
-	protected function finish()
+	public function finish()
 	{
 		try
 		{
@@ -193,6 +194,17 @@ class PlentymarketsImportControllerItem
 		{
 			PlentymarketsLogger::getInstance()->error('Sync:Item:Linked', 'PlentymarketsImportControllerItemLinked failed');
 			PlentymarketsLogger::getInstance()->error('Sync:Item:Linked', $E->getMessage());
+		}
+
+		try
+		{
+			// Stock stack
+			PlentymarketsImportItemImageThumbnailController::getInstance()->generate();
+		}
+		catch (Exception $E)
+		{
+			PlentymarketsLogger::getInstance()->error('Sync:Item:Image', 'PlentymarketsImportItemImageThumbnailController failed');
+			PlentymarketsLogger::getInstance()->error('Sync:Item:Image', $E->getMessage());
 		}
 	}
 

@@ -90,6 +90,20 @@ class PlentymarketsMappingController
 	}
 
 	/**
+	 * Clears the internal cache
+	 *
+	 * @param $entity
+	 */
+	public static function clearCache($entity)
+	{
+		$className = sprintf('PlentymarketsMappingEntity%s', $entity);
+
+		/** @var PlentymarketsMappingEntityAbstract $Instance */
+		$Instance = $className::getInstance();
+		$Instance->clearCache();
+	}
+
+	/**
 	 * Returns the status of each entity
 	 *
 	 * @return array

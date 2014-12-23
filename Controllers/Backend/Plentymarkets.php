@@ -294,6 +294,16 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 			$config['_ApacheModules'] = '';
 		}
 
+		if (isset($config['OrderPaidStatusID']))
+		{
+			$orderPaidIDs = explode('|', $config['OrderPaidStatusID']);
+			$config['OrderPaidStatusID'] = array_map('intval', $orderPaidIDs);
+		}
+		else
+		{
+			$config['OrderPaidStatusID'] = array(12);
+		}
+
 		if (isset($config['OrderShopgateMOPIDs']))
 		{
 			$orderShopgateMOPIDs = explode('|', $config['OrderShopgateMOPIDs']);
@@ -401,7 +411,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		$Config->setItemProducerID($this->Request()->ItemProducerID);
 		$Config->setOrderMarking1($this->Request()->OrderMarking1);
 		$Config->setOrderReferrerID($this->Request()->OrderReferrerID);
-		$Config->setOrderPaidStatusID($this->Request()->OrderPaidStatusID);
+		$Config->setOrderPaidStatusID(implode('|', $this->Request()->OrderPaidStatusID));
 		$Config->setOrderShopgateMOPIDs(implode('|', $this->Request()->OrderShopgateMOPIDs));
 		$Config->setOrderItemTextSyncActionID($this->Request()->OrderItemTextSyncActionID == true ? EXPORT_ORDER_ITEM_TEXT_SYNC : EXPORT_ORDER_ITEM_TEXT_SYNC_NO);
 		$Config->setOutgoingItemsOrderStatus($this->Request()->OutgoingItemsOrderStatus);
@@ -469,6 +479,16 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		}
 
 		$config = $Config->getConfig();
+
+		if (isset($config['OrderPaidStatusID']))
+		{
+			$orderPaidIDs = explode('|', $config['OrderPaidStatusID']);
+			$config['OrderPaidStatusID'] = array_map('intval', $orderPaidIDs);
+		}
+		else
+		{
+			$config['OrderPaidStatusID'] = array(12);
+		}
 
 		if (isset($config['OrderShopgateMOPIDs']))
 		{
@@ -905,6 +925,9 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		));
 	}
 
+	/**
+	 * Syncs an item by it's plentymarkets id
+	 */
 	public function syncItemAction()
 	{
 		$itemId = (integer) $this->Request()->get('itemId', 0);
@@ -930,11 +953,13 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 			{
 				PyLog()->error('Fix:Item:Price', $e->getMessage());
 			}
+
+			$controller->finish();
 		}
 	}
 
 	/**
-	 *
+	 * Fixes the item with an empty order number
 	 */
 	public function fixEmptyItemDetailNumberAction()
 	{

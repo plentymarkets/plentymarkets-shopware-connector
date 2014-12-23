@@ -45,7 +45,14 @@ class PlentymarketsExportContinuousControllerOrderIncomingPayment
 
 		$now = time();
 		$lastUpdateTimestamp = date('Y-m-d H:i:s', PlentymarketsConfig::getInstance()->getItemIncomingPaymentExportLastUpdate(time()));
-		$status = PlentymarketsConfig::getInstance()->getOrderPaidStatusID(12);
+		$status = explode('|', PlentymarketsConfig::getInstance()->getOrderPaidStatusID(12));
+		$status = array_map('intval', $status);
+
+		if (!count($status))
+		{
+			$status = array(12);
+		}
+
 
 		$Result = Shopware()->Db()->query('
 			SELECT
@@ -54,7 +61,7 @@ class PlentymarketsExportContinuousControllerOrderIncomingPayment
 					JOIN plenty_order ON shopwareId = orderID
 				WHERE
 					change_date > \'' . $lastUpdateTimestamp . '\' AND
-					payment_status_id = ' . $status . ' AND
+					payment_status_id IN (' . implode(', ', $status) . ') AND
 					IFNULL(plentyOrderPaidStatus, 0) != 1
 		');
 

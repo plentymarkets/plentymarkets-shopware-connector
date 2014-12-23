@@ -237,9 +237,17 @@ class PlentymarketsUtils
 	 */
 	public static function getRootIdByCategory(Shopware\Models\Category\Category $category)
 	{
-		$path = array_reverse(explode('|', $category->getPath()));
+		while ($category->getParentId())
+		{
+			$parent = $category->getParent();
+			if ($parent->getLevel() == 0)
+			{
+				break;
+			}
+			$category = $parent;
+		}
 
-		return $path[1];
+		return $category->getId();
 	}
 
 	/**
