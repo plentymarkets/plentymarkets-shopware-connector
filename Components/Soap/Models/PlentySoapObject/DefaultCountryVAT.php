@@ -1,17 +1,13 @@
 <?php
 
-class PlentySoapObject_DeliveryCountryVAT
+
+class PlentySoapObject_DefaultCountryVAT
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CountryID;
 	
 	/**
 	 * @var ArrayOfPlentysoapobject_getvatconfig
 	 */
-	public $CountryVAT;
+	public $DefaultVAT;
 	
 	/**
 	 * @var string
