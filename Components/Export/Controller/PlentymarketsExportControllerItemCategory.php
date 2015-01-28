@@ -234,10 +234,12 @@ class PlentymarketsExportControllerItemCategory
 				$plentyTree['children'] = array();
 			}
 
+			$shopwareName = trim($shopwareCategory->getName());
+
 			/** @var array $plentyChild1 */
 			foreach ($plentyTree['children'] as $name => $plentyChild1)
 			{
-				if ($name == $shopwareCategory->getName())
+				if ($name == $shopwareName)
 				{
 					$branchId = $plentyChild1['id'];
 					PlentymarketsMappingEntityCategory::addCategory(
