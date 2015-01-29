@@ -57,11 +57,11 @@ class PlentymarketsImportEntityItemPropertyGroup
 		try
 		{
 			$SHOPWARE_id = PlentymarketsMappingController::getPropertyGroupByPlentyID($this->Group->PropertyGroupID);
-			PyLog()->message('Sync:Item:Producer', 'Updating the property group translation »' . $this->Group->FrontendName . '«');
+			PyLog()->message('Sync:Item:Property Group', 'Updating the property group translation »' . $this->Group->FrontendName . '«');
 		}
 		catch (PlentymarketsMappingExceptionNotExistant $E)
 		{
-			PyLog()->message('Sync:Item:Producer', 'Skipping the property group translation »' . $this->Group->FrontendName . '«');
+			PyLog()->message('Sync:Item:Property Group', 'Skipping the property group translation »' . $this->Group->FrontendName . '«');
 			return;
 		}
 

@@ -284,6 +284,7 @@ class PlentymarketsExportEntityItem
 			
 			$RequestObject_SetItemImagesImage->ImageFileName = $Image->getPath(); // string
 			$RequestObject_SetItemImagesImage->ImageFileData = base64_encode(file_get_contents($fullpath));
+			$RequestObject_SetItemImagesImage->ImageFileEnding = $Image->getExtension();
 			
 			$RequestObject_SetItemImagesImage->ImageID = null; // int
 			$RequestObject_SetItemImagesImage->ImageURL = null; // string
@@ -320,8 +321,13 @@ class PlentymarketsExportEntityItem
 			{
 				// get the attribute number for alternative text from connector's settings
 				$plenty_attributeID = PlentymarketsConfig::getInstance()->getItemImageAltAttributeID();
-				// set the value of the attribute as alternative text for the  image
-				$RequestObject_SetItemImagesImageName->AlternativeText = $Image->getAttribute()->{getAttribute.($plenty_attributeID)}() ; // string
+				
+				//check if the attribute value is set for the image
+				if(method_exists($Image->getAttribute(),'getAttribute'.$plenty_attributeID))
+				{
+					// set the value of the attribute as alternative text for the  image
+					$RequestObject_SetItemImagesImageName->AlternativeText = $Image->getAttribute()->{getAttribute.($plenty_attributeID)}() ; // string
+				}				
 			}
 			
 			$RequestObject_SetItemImagesImageName->DeleteName = false; // boolean
@@ -420,37 +426,53 @@ class PlentymarketsExportEntityItem
 	{
 		$requestItemTexts = array();
 		
-		foreach($this->storeIds as $storeId => $values)
+		// if the item is active for a shop => save the item descriptions into the shops languages
+		if(!empty($this->storeIds))
 		{
-			$mainShopId = PlentymarketsMappingController::getShopByPlentyID($storeId);
-			$shopLanguages = PlentymarketsTranslation::getInstance()->getShopActiveLanguages($mainShopId);
-
-			foreach($shopLanguages as $key => $language)
+			foreach($this->storeIds as $storeId => $values)
 			{
-				$Object_ItemTexts = new PlentySoapObject_ItemTexts();
-				$Object_ItemTexts->Lang = PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($language['locale']); // string
+				$mainShopId = PlentymarketsMappingController::getShopByPlentyID($storeId);
+				$shopLanguages = PlentymarketsTranslation::getInstance()->getShopActiveLanguages($mainShopId);
 
-				if($key == key(PlentymarketsTranslation::getInstance()->getShopMainLanguage($mainShopId)))
+				foreach($shopLanguages as $key => $language)
 				{
-					// set the article texts from the main shop
-					$Object_ItemTexts->Keywords = PlentymarketsSoapClient::removeControlChars($this->SHOPWARE_Article->getKeywords()); // string	
-					$Object_ItemTexts->LongDescription = PlentymarketsSoapClient::removeControlChars($this->SHOPWARE_Article->getDescriptionLong()); // string
-					$Object_ItemTexts->Name = PlentymarketsSoapClient::removeControlChars($this->SHOPWARE_Article->getName()); // string
-					$Object_ItemTexts->ShortDescription = PlentymarketsSoapClient::removeControlChars($this->SHOPWARE_Article->getDescription()); // string		
-				}
-				else
-				{
-					// set the article texts from the language shops 
-					$translatedText =  PlentymarketsTranslation::getInstance()->getShopwareTranslation($mainShopId, 'article', $this->SHOPWARE_Article->getId(), $key);
-					$Object_ItemTexts->Keywords = PlentymarketsSoapClient::removeControlChars($translatedText['txtkeywords']);
-					$Object_ItemTexts->ShortDescription = PlentymarketsSoapClient::removeControlChars($translatedText['txtshortdescription']);
-					$Object_ItemTexts->Name = PlentymarketsSoapClient::removeControlChars($translatedText['txtArtikel']);
-					$Object_ItemTexts->LongDescription = PlentymarketsSoapClient::removeControlChars($translatedText['txtlangbeschreibung']);
-				}
+					$Object_ItemTexts = new PlentySoapObject_ItemTexts();
+					$Object_ItemTexts->Lang = PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($language['locale']); // string
 
-				$requestItemTexts[] = $Object_ItemTexts;
+					if($key == key(PlentymarketsTranslation::getInstance()->getShopMainLanguage($mainShopId)))
+					{
+						// set the article texts from the main shop
+						$Object_ItemTexts->Keywords = PlentymarketsSoapClient::removeControlChars($this->SHOPWARE_Article->getKeywords()); // string	
+						$Object_ItemTexts->LongDescription = PlentymarketsSoapClient::removeControlChars($this->SHOPWARE_Article->getDescriptionLong()); // string
+						$Object_ItemTexts->Name = PlentymarketsSoapClient::removeControlChars($this->SHOPWARE_Article->getName()); // string
+						$Object_ItemTexts->ShortDescription = PlentymarketsSoapClient::removeControlChars($this->SHOPWARE_Article->getDescription()); // string		
+					}
+					else
+					{
+						// set the article texts from the language shops 
+						$translatedText =  PlentymarketsTranslation::getInstance()->getShopwareTranslation($mainShopId, 'article', $this->SHOPWARE_Article->getId(), $key);
+						$Object_ItemTexts->Keywords = PlentymarketsSoapClient::removeControlChars($translatedText['txtkeywords']);
+						$Object_ItemTexts->ShortDescription = PlentymarketsSoapClient::removeControlChars($translatedText['txtshortdescription']);
+						$Object_ItemTexts->Name = PlentymarketsSoapClient::removeControlChars($translatedText['txtArtikel']);
+						$Object_ItemTexts->LongDescription = PlentymarketsSoapClient::removeControlChars($translatedText['txtlangbeschreibung']);
+					}
+
+					$requestItemTexts[] = $Object_ItemTexts;
+				}
 			}
 		}
+		else
+		{
+			// save the item's description per default into German 
+			$Object_ItemTexts = new PlentySoapObject_ItemTexts();
+			$Object_ItemTexts->Lang = 'de'; // string
+			$Object_ItemTexts->Keywords = PlentymarketsSoapClient::removeControlChars($this->SHOPWARE_Article->getKeywords()); // string	
+			$Object_ItemTexts->LongDescription = PlentymarketsSoapClient::removeControlChars($this->SHOPWARE_Article->getDescriptionLong()); // string
+			$Object_ItemTexts->Name = PlentymarketsSoapClient::removeControlChars($this->SHOPWARE_Article->getName()); // string
+			$Object_ItemTexts->ShortDescription = PlentymarketsSoapClient::removeControlChars($this->SHOPWARE_Article->getDescription()); // string	
+
+			$requestItemTexts[] = $Object_ItemTexts;
+		}		
 		
 		return $requestItemTexts;
 	}

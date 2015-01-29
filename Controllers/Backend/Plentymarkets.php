@@ -35,11 +35,7 @@
  */
 class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Backend_ExtJs
 {
-	public function runImportTreeAction()
-	{
-		$plentyTree = new PlentymarketsImportControllerItemCategoryTree();
-		$plentyTree->run();
-	}
+	
 	/**
 	 * Runs an cleanup action
 	 */

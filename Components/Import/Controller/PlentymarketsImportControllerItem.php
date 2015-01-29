@@ -78,9 +78,9 @@ class PlentymarketsImportControllerItem
 		$Request_GetItemsBase->ItemID = $itemId;
 		
 		// get the main language of the shop
-		//$mainLang = array_values(PlentymarketsTranslation::getInstance()->getShopMainLanguage(PlentymarketsMappingController::getShopByPlentyID($storeId)));
+	//$mainLang = array_values(PlentymarketsTranslation::getInstance()->getShopMainLanguage(PlentymarketsMappingController::getShopByPlentyID($storeId)));
 		// set the main language of the shop in soap request 
-		//$Request_GetItemsBase->Lang = PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($mainLang[0]['locale']);
+	//$Request_GetItemsBase->Lang = PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($mainLang[0]['locale']);
 
 		$Request_GetItemsBase->Lang = 'de';
 		
@@ -200,7 +200,7 @@ class PlentymarketsImportControllerItem
 						// Do the import for item texts translation 
 						$Importuer->saveItemTextsTranslation($itemTexts);
 					}
-
+									
 					// Do the import for the property value translations
 					$Importuer->importItemPropertyValueTranslations();
 				}
