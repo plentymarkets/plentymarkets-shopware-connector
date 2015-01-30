@@ -430,6 +430,9 @@ class PlentymarketsExportEntityItem
 	protected function getObjectTexts()
 	{
 		$requestItemTexts = array();
+
+		//in this array we save all languages that already have a translation of the article description.
+		$languagesUsed = array();
 		
 		// if the item is active for a shop => save the item descriptions into the shops languages
 		if(!empty($this->storeIds))
@@ -441,9 +444,21 @@ class PlentymarketsExportEntityItem
 
 				foreach($shopLanguages as $key => $language)
 				{
+					$lang = PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($language['locale']);					
+					
+					if(in_array($lang, $languagesUsed))
+					{
+						//don't save twice the translation for a language 
+						continue;
+					}
+					else
+					{
+						// add the language into the used languages list
+						$languagesUsed[] = $lang;
+					}
+					
 					$Object_ItemTexts = new PlentySoapObject_ItemTexts();
-					$Object_ItemTexts->Lang = PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($language['locale']); // string
-
+					$Object_ItemTexts->Lang = $lang; // string
 					if($key == key(PlentymarketsTranslation::getInstance()->getShopMainLanguage($mainShopId)))
 					{
 						// set the article texts from the main shop
