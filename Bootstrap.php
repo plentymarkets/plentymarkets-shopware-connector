@@ -649,10 +649,10 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
         );
 
         // Order-Stack-Process
-        $this->subscribeEvent(
-        	'Shopware_Modules_Order_SaveOrder_ProcessDetails',
-        	'onOrderSaveOrderProcessDetails'
-        );
+	    $this->subscribeEvent(
+		    'Shopware_Models_Order_Order::postPersist',
+		    'onOrderSaveOrderProcessDetails'
+	    );
 
         // Insert the CSS
         $this->subscribeEvent(
@@ -1154,17 +1154,17 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
      */
     public function onOrderSaveOrderProcessDetails(Enlight_Event_EventArgs $arguments)
     {
-    	$OrderResoure = new \Shopware\Components\Api\Resource\Order();
-    	$OrderResoure->setManager(Shopware()->Models());
 
-    	$orderId = $OrderResoure->getIdFromNumber($arguments->getSubject()->sOrderNumber);
+	    $model   = $arguments->get('entity');
+	    $orderId = $model->getId();
 
-    	Shopware()->Db()->query('
-    		INSERT INTO plenty_order
-    			SET shopwareId = ?
-    	', array($orderId));
+	    Shopware()->Db()->query('
+          INSERT INTO plenty_order
+             SET shopwareId = ?
+       ', array($orderId));
 
-    	return true;
+	    return true;
+
     }
 
     /**
