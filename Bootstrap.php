@@ -1154,10 +1154,10 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
      */
     public function onOrderSaveOrderProcessDetails(Enlight_Event_EventArgs $arguments)
     {
-    	$OrderResoure = new \Shopware\Components\Api\Resource\Order();
-    	$OrderResoure->setManager(Shopware()->Models());
+    	$orderResource = new \Shopware\Components\Api\Resource\Order();
+    	$orderResource->setManager(Shopware()->Models());
 
-    	$orderId = $OrderResoure->getIdFromNumber($arguments->getSubject()->sOrderNumber);
+    	$orderId = $orderResource->getIdFromNumber($arguments->getSubject()->sOrderNumber);
 
     	Shopware()->Db()->query('
     		INSERT INTO plenty_order
