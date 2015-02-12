@@ -573,6 +573,11 @@ class PlentymarketsImportEntityItem
 				PlentymarketsMappingController::addProperty($filterGroupId . ';' . $optionId, $ItemProperty->PropertyID);
 			}
 
+			// Use SelectionName as PropertyValue for Merkmale-Typ "Auswahl"
+			if (empty($ItemProperty->PropertyValue) && !empty($ItemProperty->PropertySelectionName)) {
+				$ItemProperty->PropertyValue = $ItemProperty->PropertySelectionName;
+			}
+
 			// Shopware cannot handle empty values
 			if (!empty($ItemProperty->PropertyValue))
 			{
