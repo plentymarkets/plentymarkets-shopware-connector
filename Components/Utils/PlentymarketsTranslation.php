@@ -150,7 +150,10 @@ class PlentymarketsTranslation
 																			'locale' => $languageShop->getLocale()->getLocale(), // e.g locale = en_GB 
 																			'mainShopId' => $shopId);  
 		}
-		
+
+		//
+		Shopware()->Models()->clear();
+
 		return $activeLanguages;
 	}
 
