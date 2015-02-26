@@ -139,7 +139,7 @@ class PlentymarketsImportEntityItem
 				
 				$swItemID = PlentymarketsMappingController::getItemByPlentyID($this->ItemBase->ItemID);
 
-				PlentymarketsTranslation::getInstance()->setShopwareTranslation('article', $swItemID, $itemText['languageShopId'], $swItemText);
+				PlentymarketsTranslation::setShopwareTranslation('article', $swItemID, $itemText['languageShopId'], $swItemText);
 			}
 		}
 	}
@@ -648,7 +648,7 @@ class PlentymarketsImportEntityItem
 			// search for the shopware language shop
 			$shopId = null;
 			// get all active languages of the main shop
-			$activeLanguages = PlentymarketsTranslation::getInstance()->getShopActiveLanguages($this->Shop->getId());
+			$activeLanguages = PlentymarketsTranslation::getShopActiveLanguages($this->Shop->getId());
 			
 			// search the language shop with the language equal with the property language 
 			foreach($activeLanguages as $localeId => $language)
@@ -658,7 +658,7 @@ class PlentymarketsImportEntityItem
 					// if the founded shop is a language shop 
 					if(!is_null($language['mainShopId']))
 					{
-						$shopId = PlentymarketsTranslation::getInstance()->getLanguageShopID($localeId, $language['mainShopId']);
+						$shopId = PlentymarketsTranslation::getLanguageShopID($localeId, $language['mainShopId']);
 					}
 					else
 					{	
@@ -692,7 +692,7 @@ class PlentymarketsImportEntityItem
 						// save the translation of the property 
 						$property_data = array('optionValue' => $ItemProperty->PropertyValue);
 
-						PlentymarketsTranslation::getInstance()->setShopwareTranslation('propertyvalue', $shopware_propertyValueID , $shopId, $property_data);
+						PlentymarketsTranslation::setShopwareTranslation('propertyvalue', $shopware_propertyValueID , $shopId, $property_data);
 					}
 
 				}catch(Exception $e)

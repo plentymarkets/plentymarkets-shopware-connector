@@ -232,20 +232,20 @@ class PlentymarketsExportEntityItem
 		foreach($mainShops as $mainShop)
 		{
 			// get all active languages of the main shop
-			$activeLanguages = PlentymarketsTranslation::getInstance()->getShopActiveLanguages($mainShop->getId());
+			$activeLanguages = PlentymarketsTranslation::getShopActiveLanguages($mainShop->getId());
 
 			foreach($activeLanguages as $key => $language)
 			{
 				// get image title translations of the language shops and main shops
 
 				// try to get the image title translation
-				$imageTranslation = PlentymarketsTranslation::getInstance()->getShopwareTranslation($mainShop->getId(), 'articleimage', $shopware_ImageID, $key);
+				$imageTranslation = PlentymarketsTranslation::getShopwareTranslation($mainShop->getId(), 'articleimage', $shopware_ImageID, $key);
 
 				// if the translation was found, do export
 				if(!is_null($imageTranslation) && isset($imageTranslation['description']))
 				{
 					// key = plenty language; value = shopware image title
-					$titleTranslations[PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($language['locale'])] = $imageTranslation['description'];
+					$titleTranslations[PlentymarketsTranslation::getPlentyLocaleFormat($language['locale'])] = $imageTranslation['description'];
 				}
 			}
 		}
@@ -440,11 +440,11 @@ class PlentymarketsExportEntityItem
 			foreach($this->storeIds as $storeId => $values)
 			{
 				$mainShopId = PlentymarketsMappingController::getShopByPlentyID($storeId);
-				$shopLanguages = PlentymarketsTranslation::getInstance()->getShopActiveLanguages($mainShopId);
+				$shopLanguages = PlentymarketsTranslation::getShopActiveLanguages($mainShopId);
 
 				foreach($shopLanguages as $key => $language)
 				{
-					$lang = PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($language['locale']);					
+					$lang = PlentymarketsTranslation::getPlentyLocaleFormat($language['locale']);
 					
 					if(in_array($lang, $languagesUsed))
 					{
@@ -459,7 +459,7 @@ class PlentymarketsExportEntityItem
 					
 					$Object_ItemTexts = new PlentySoapObject_ItemTexts();
 					$Object_ItemTexts->Lang = $lang; // string
-					if($key == key(PlentymarketsTranslation::getInstance()->getShopMainLanguage($mainShopId)))
+					if($key == key(PlentymarketsTranslation::getShopMainLanguage($mainShopId)))
 					{
 						// set the article texts from the main shop
 						$Object_ItemTexts->Keywords = PlentymarketsSoapClient::removeControlChars($this->SHOPWARE_Article->getKeywords()); // string	
@@ -470,7 +470,7 @@ class PlentymarketsExportEntityItem
 					else
 					{
 						// set the article texts from the language shops 
-						$translatedText =  PlentymarketsTranslation::getInstance()->getShopwareTranslation($mainShopId, 'article', $this->SHOPWARE_Article->getId(), $key);
+						$translatedText =  PlentymarketsTranslation::getShopwareTranslation($mainShopId, 'article', $this->SHOPWARE_Article->getId(), $key);
 						$Object_ItemTexts->Keywords = PlentymarketsSoapClient::removeControlChars($translatedText['txtkeywords']);
 						$Object_ItemTexts->ShortDescription = PlentymarketsSoapClient::removeControlChars($translatedText['txtshortdescription']);
 						$Object_ItemTexts->Name = PlentymarketsSoapClient::removeControlChars($translatedText['txtArtikel']);
@@ -646,14 +646,14 @@ class PlentymarketsExportEntityItem
 		foreach($mainShops as $mainShop)
 		{
 			// get all active languages of the main shop
-			$activeLanguages = PlentymarketsTranslation::getInstance()->getShopActiveLanguages($mainShop->getId());
+			$activeLanguages = PlentymarketsTranslation::getShopActiveLanguages($mainShop->getId());
 
 			foreach($activeLanguages as $key => $language)
 			{
 				// export the property value translations of the language shops and main shops
 
 				// try to get the property value translation
-				$propertyValueTranslation = PlentymarketsTranslation::getInstance()->getShopwareTranslation($mainShop->getId(), 'propertyvalue', $shopware_propertyID, $key);
+				$propertyValueTranslation = PlentymarketsTranslation::getShopwareTranslation($mainShop->getId(), 'propertyvalue', $shopware_propertyID, $key);
 
 				// if the translation was found, do export
 				if(!is_null($propertyValueTranslation) && isset($propertyValueTranslation['optionValue']))
@@ -661,7 +661,7 @@ class PlentymarketsExportEntityItem
 					$Object_SetPropertyToItem = new PlentySoapObject_SetPropertyToItem();
 					$Object_SetPropertyToItem->ItemId = $this->PLENTY_itemID; // int
 					$Object_SetPropertyToItem->PropertyId = $plenty_propertyID;
-					$Object_SetPropertyToItem->Lang = PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($language['locale']);;
+					$Object_SetPropertyToItem->Lang = PlentymarketsTranslation::getPlentyLocaleFormat($language['locale']);;
 					$Object_SetPropertyToItem->PropertyItemValue = $propertyValueTranslation['optionValue'];
 
 					$Request_SetPropertiesToItem->PropertyToItemList[] = $Object_SetPropertyToItem;

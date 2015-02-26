@@ -116,10 +116,10 @@ class PlentymarketsImportControllerItem
 		$shopId = PlentymarketsMappingController::getShopByPlentyID($storeId);
 		
 		//if this is a main shop , get the item texts translation for its main language and its shop languages
-		if(PlentymarketsTranslation::getInstance()->isMainShop($shopId))
+		if(PlentymarketsTranslation::isMainShop($shopId))
 		{
 			// get all active languages of the shop (from shopware)
-			$activeLanguages = PlentymarketsTranslation::getInstance()->getShopActiveLanguages($shopId);
+			$activeLanguages = PlentymarketsTranslation::getShopActiveLanguages($shopId);
 
 			foreach($activeLanguages as $localeId => $language)
 			{
@@ -130,7 +130,7 @@ class PlentymarketsImportControllerItem
 				$Object_RequestItems->ExternalItemNumer = null; // string
 				$Object_RequestItems->ItemId = $itemId; // string
 				$Object_RequestItems->ItemNumber = null; // string
-				$Object_RequestItems->Lang = PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($language['locale']); // string 
+				$Object_RequestItems->Lang = PlentymarketsTranslation::getPlentyLocaleFormat($language['locale']); // string
 				$Request_GetItemsTexts->ItemsList[] = $Object_RequestItems;
 
 				$Response_GetItemsTexts = PlentymarketsSoapClient::getInstance()->GetItemsTexts($Request_GetItemsTexts);
@@ -145,9 +145,9 @@ class PlentymarketsImportControllerItem
 					// each language shop has a mainShopId 
 					if(!is_null($language['mainShopId']))
 					{
-						$itemText['languageShopId'] = PlentymarketsTranslation::getInstance()->getLanguageShopID($localeId, $language['mainShopId']);
+						$itemText['languageShopId'] = PlentymarketsTranslation::getLanguageShopID($localeId, $language['mainShopId']);
 
-					}elseif(PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($language['locale']) != 'de')
+					}elseif(PlentymarketsTranslation::getPlentyLocaleFormat($language['locale']) != 'de')
 					{
 						// set the language for the main shop if the main language is not German
 						$itemText['languageShopId'] = $shopId;
@@ -174,7 +174,7 @@ class PlentymarketsImportControllerItem
 				$Importuer->importCategories();
 
 				//if this is a main shop , import the translation for its main language and its shop languages
-				if(PlentymarketsTranslation::getInstance()->isMainShop($shopId))
+				if(PlentymarketsTranslation::isMainShop($shopId))
 				{
 					if (!empty($itemTexts)) 
 					{
@@ -193,7 +193,7 @@ class PlentymarketsImportControllerItem
 				$Importuer->import();
 
 				//if this is a main shop , import the translation for its main language and its shop languages
-				if(PlentymarketsTranslation::getInstance()->isMainShop($shopId))
+				if(PlentymarketsTranslation::isMainShop($shopId))
 				{
 					if (!empty($itemTexts))
 					{

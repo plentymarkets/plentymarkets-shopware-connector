@@ -9,27 +9,6 @@
 class PlentymarketsTranslation 
 {
 	/**
-	 *
-	 * @var PlentymarketsTranslation
-	 */
-	protected static $Instance;
-
-
-	/**
-	 * I am the singleton method
-	 *
-	 * @return PlentymarketsTranslation
-	 */
-	public static function getInstance()
-	{
-		if (!self::$Instance instanceof self)
-		{
-			self::$Instance = new self();
-		}
-		return self::$Instance;
-	}
-
-	/**
 	 * Check if the shop is the main shop
 	 * @param int $shopId
 	 * @return bool
@@ -132,7 +111,7 @@ class PlentymarketsTranslation
 		
 		
 		// add the main language shop
-		$mainLang = PlentymarketsTranslation::getInstance()->getShopMainLanguage($shopId);
+		$mainLang = self::getShopMainLanguage($shopId);
 		
 		$activeLanguages[key($mainLang)] = array_pop($mainLang);
 		
@@ -249,10 +228,10 @@ class PlentymarketsTranslation
 		/** @var $locale Shopware\Models\Translation\Translation */
 		$localeRepository = Shopware()->Models()->getRepository('Shopware\Models\Translation\Translation');
 		
-		if(!is_null(PlentymarketsTranslation::getInstance()->getLanguageShopID($langId, $mainShopId)))
+		if(!is_null(self::getLanguageShopID($langId, $mainShopId)))
 		{
 			// get the language shop Id
-			$shopId = PlentymarketsTranslation::getInstance()->getLanguageShopID($langId, $mainShopId);
+			$shopId = self::getLanguageShopID($langId, $mainShopId);
 		}
 		else
 		{	// the shop id is the main shop id => try to get translation of the object for the main shop (e.g attribute translation)

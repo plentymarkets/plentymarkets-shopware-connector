@@ -73,6 +73,11 @@ class PlentymarketsImportEntityItemAttribute
 	 */
 	public function importTranslation($languageShopId)
 	{
+		if(is_null($this->Attribute->FrontendName))
+		{
+			return;
+		}
+
 		try
 		{
 			$SHOPWARE_attributeId = PlentymarketsMappingController::getAttributeGroupByPlentyID($this->Attribute->Id);
@@ -80,40 +85,36 @@ class PlentymarketsImportEntityItemAttribute
 		}
 		catch (PlentymarketsMappingExceptionNotExistant $E)
 		{
-			PyLog()->message('Sync:Item:Attribute', 'Skipping the attribute translation »' . $this->Attribute->FrontendName. '«');
+			PyLog()->message('Sync:Item:Attribute', 'Skipping the attribute translation »' . $this->Attribute->FrontendName . '«');
 			return;
 		}
-		
-		if(!is_null($this->Attribute->FrontendName))
+
+		// save the translation of the attribute
+		$attr_translationData = array('name' => $this->Attribute->FrontendName);
+
+		PlentymarketsTranslation::setShopwareTranslation('configuratorgroup', $SHOPWARE_attributeId, $languageShopId, $attr_translationData);
+
+		/**
+		 * @var PlentySoapObject_GetItemAttributesAttributeValue $plentyAttributeValue
+		 */
+		foreach($this->Attribute->Values->item as $plentyAttributeValue)
 		{
-			// save the translation of the attribute
-			$attr_translationData = array('name' => $this->Attribute->FrontendName);
-
-			PlentymarketsTranslation::setShopwareTranslation('configuratorgroup', $SHOPWARE_attributeId, $languageShopId, $attr_translationData);
-
-			/**
-			 * @var PlentySoapObject_GetItemAttributesAttributeValue $plentyAttributeValue
-			 */
-			foreach($this->Attribute->Values->item as $plentyAttributeValue)
+			try
 			{
-				try
-				{
-					$SHOPWARE_optionId = PlentymarketsMappingController::getAttributeOptionByPlentyID($plentyAttributeValue->ValueId);
-				}
-				catch (PlentymarketsMappingExceptionNotExistant $E)
-				{
-					continue;
-				}
+				$SHOPWARE_optionId = PlentymarketsMappingController::getAttributeOptionByPlentyID($plentyAttributeValue->ValueId);
+			}
+			catch (PlentymarketsMappingExceptionNotExistant $E)
+			{
+				continue;
+			}
 
-				if(!is_null($plentyAttributeValue->FrontendName))
-				{
-					$attrValue_translationData = array('name' => $plentyAttributeValue->FrontendName);
-					
-					PlentymarketsTranslation::getInstance()->setShopwareTranslation('configuratoroption', $SHOPWARE_optionId, $languageShopId, $attrValue_translationData);
-				}
+			if (!is_null($plentyAttributeValue->FrontendName))
+			{
+				$attrValue_translationData = array('name' => $plentyAttributeValue->FrontendName);
+
+				PlentymarketsTranslation::setShopwareTranslation('configuratoroption', $SHOPWARE_optionId, $languageShopId, $attrValue_translationData);
 			}
 		}
-		
 	}
 
 	/**

@@ -113,7 +113,7 @@ class PlentymarketsImportEntityItemImage
 	private function importImageTitleTranslation($shopware_ImageID, $plenty_ImageNames, $shopware_storeID)
 	 {
 		 // get all active languages of the main shop
-		 $activeLanguages = PlentymarketsTranslation::getInstance()->getShopActiveLanguages($shopware_storeID);
+		 $activeLanguages = PlentymarketsTranslation::getShopActiveLanguages($shopware_storeID);
 
 		 foreach($activeLanguages as $localeId => $language)
 		 {
@@ -130,10 +130,10 @@ class PlentymarketsImportEntityItemImage
 						 // if the founded shop is a language shop 
 						 if(!is_null($language['mainShopId']))
 						 {
-							 $shopId = PlentymarketsTranslation::getInstance()->getLanguageShopID($localeId, $language['mainShopId']);
+							 $shopId = PlentymarketsTranslation::getLanguageShopID($localeId, $language['mainShopId']);
 
 						 }
-						 elseif(PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($language['locale']) != 'de')
+						 elseif(PlentymarketsTranslation::getPlentyLocaleFormat($language['locale']) != 'de')
 						 {
 							 // set the imagae title translation for the main shop that has the main language other as German
 							 $shopId = $shopware_storeID;
@@ -145,7 +145,7 @@ class PlentymarketsImportEntityItemImage
 							 // save the translation of the plenty image title
 							 $image_data = array('description' => $plentyImageName->Name);
 
-							 PlentymarketsTranslation::getInstance()->setShopwareTranslation('articleimage', $shopware_ImageID , $shopId, $image_data);
+							 PlentymarketsTranslation::setShopwareTranslation('articleimage', $shopware_ImageID , $shopId, $image_data);
 						 }
 					 }
 				}				 

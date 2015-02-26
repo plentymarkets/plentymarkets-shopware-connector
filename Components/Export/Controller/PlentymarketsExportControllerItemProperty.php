@@ -117,14 +117,14 @@ class PlentymarketsExportControllerItemProperty
 		foreach($mainShops as $mainShop)
 		{
 			// get all active languages of the main shop
-			$activeLanguages = PlentymarketsTranslation::getInstance()->getShopActiveLanguages($mainShop->getId());
+			$activeLanguages = PlentymarketsTranslation::getShopActiveLanguages($mainShop->getId());
 
 			foreach($activeLanguages as $key => $language)
 			{
 				// export the property translations of the language shops and main shops
 
 				// try to get translation
-				$propertyTranslation = PlentymarketsTranslation::getInstance()->getShopwareTranslation($mainShop->getId(), 'propertyoption', $shopware_propertyID, $key);
+				$propertyTranslation = PlentymarketsTranslation::getShopwareTranslation($mainShop->getId(), 'propertyoption', $shopware_propertyID, $key);
 
 				// if the translation was found, do export
 				if(!is_null($propertyTranslation) && isset($propertyTranslation['optionName']))
@@ -132,7 +132,7 @@ class PlentymarketsExportControllerItemProperty
 					$Object_SetProperty = new PlentySoapObject_SetProperty();
 					$Object_SetProperty->PropertyGroupID = $plenty_propertyGroupID;
 					$Object_SetProperty->PropertyID = $plenty_propertyID;
-					$Object_SetProperty->Lang = PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($language['locale']);;
+					$Object_SetProperty->Lang = PlentymarketsTranslation::getPlentyLocaleFormat($language['locale']);;
 					$Object_SetProperty->PropertyFrontendName = $propertyTranslation['optionName'];
 
 					$Request_SetProperties->Properties[] = $Object_SetProperty;
@@ -167,21 +167,21 @@ class PlentymarketsExportControllerItemProperty
 		foreach($mainShops as $mainShop)
 		{
 			// get all active languages of the main shop
-			$activeLanguages = PlentymarketsTranslation::getInstance()->getShopActiveLanguages($mainShop->getId());
+			$activeLanguages = PlentymarketsTranslation::getShopActiveLanguages($mainShop->getId());
 
 			foreach($activeLanguages as $key => $language)
 			{
 				// export the property group translations of the language shops and main shops
 
 				// try to get translation
-				$propertyGroupTranslation = PlentymarketsTranslation::getInstance()->getShopwareTranslation($mainShop->getId(), 'propertygroup', $shopware_propertyID, $key);
+				$propertyGroupTranslation = PlentymarketsTranslation::getShopwareTranslation($mainShop->getId(), 'propertygroup', $shopware_propertyID, $key);
 
 				// if the translation was found, do export
 				if(!is_null($propertyGroupTranslation) && isset($propertyGroupTranslation['groupName']))
 				{
 					$Object_SetPropertyGroup = new PlentySoapObject_SetPropertyGroup();
 					$Object_SetPropertyGroup->PropertyGroupID = $plenty_propertyID;
-					$Object_SetPropertyGroup->Lang = PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($language['locale']);;
+					$Object_SetPropertyGroup->Lang = PlentymarketsTranslation::getPlentyLocaleFormat($language['locale']);;
 					$Object_SetPropertyGroup->FrontendName = $propertyGroupTranslation['groupName'];
 
 					$Request_SetPropertyGroups->PropertyGroups[] = $Object_SetPropertyGroup;

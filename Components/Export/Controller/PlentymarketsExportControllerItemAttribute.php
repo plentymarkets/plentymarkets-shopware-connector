@@ -109,21 +109,21 @@ class PlentymarketsExportControllerItemAttribute
 		foreach($mainShops as $mainShop)
 		{
 			// get all active languages of the main shop
-			$activeLanguages = PlentymarketsTranslation::getInstance()->getShopActiveLanguages($mainShop->getId());
+			$activeLanguages = PlentymarketsTranslation::getShopActiveLanguages($mainShop->getId());
 
 			foreach($activeLanguages as $key => $language)
 			{
 				// export the atrribute value translations of the language shops and main shops
 			
 				// try to get translation
-				$attrValueTranslation = PlentymarketsTranslation::getInstance()->getShopwareTranslation($mainShop->getId(), 'configuratoroption', $shopwareAttributeValueID, $key);
+				$attrValueTranslation = PlentymarketsTranslation::getShopwareTranslation($mainShop->getId(), 'configuratoroption', $shopwareAttributeValueID, $key);
 
 				// if the translation was found, do export
 				if(!is_null($attrValueTranslation) && isset($attrValueTranslation['name']))
 				{
 					$Object_SetItemAttribute = new PlentySoapObject_SetItemAttribute();
 					$Object_SetItemAttribute->Id = $plentyAttributeID;
-					$Object_SetItemAttribute->FrontendLang =  PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($language['locale']);
+					$Object_SetItemAttribute->FrontendLang =  PlentymarketsTranslation::getPlentyLocaleFormat($language['locale']);
 					
 					$Object_SetItemAttributeValue = new PlentySoapObject_SetItemAttributeValue();
 					$Object_SetItemAttributeValue->ValueId = $plentyAttributeValueID;
@@ -163,21 +163,21 @@ class PlentymarketsExportControllerItemAttribute
 			$Request_SetItemAttributes = new PlentySoapRequest_SetItemAttributes();
 
 			// get all active languages of the main shop
-			$activeLanguages = PlentymarketsTranslation::getInstance()->getShopActiveLanguages($mainShop->getId());
+			$activeLanguages = PlentymarketsTranslation::getShopActiveLanguages($mainShop->getId());
 			
 			foreach($activeLanguages as $key => $language)
 			{
 				// export the atrribute translations of the language shops and main shops
 				
 				// try to get translation
-				$attrTranslation = PlentymarketsTranslation::getInstance()->getShopwareTranslation($mainShop->getId(), 'configuratorgroup', $shopwareAttributeID, $key);
+				$attrTranslation = PlentymarketsTranslation::getShopwareTranslation($mainShop->getId(), 'configuratorgroup', $shopwareAttributeID, $key);
 				
 				// if the translation was found, do export
 				if(!is_null($attrTranslation) && isset($attrTranslation['name']))
 				{
 					$Object_SetItemAttribute = new PlentySoapObject_SetItemAttribute();
 					$Object_SetItemAttribute->Id = $plentyAttributeID;
-					$Object_SetItemAttribute->FrontendLang = PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($language['locale']);
+					$Object_SetItemAttribute->FrontendLang = PlentymarketsTranslation::getPlentyLocaleFormat($language['locale']);
 					$Object_SetItemAttribute->FrontendName = $attrTranslation['name'];
 
 					$Request_SetItemAttributes->Attributes[] = $Object_SetItemAttribute;

@@ -93,14 +93,14 @@ class PlentymarketsImportControllerItemProperty
 		foreach ($mainShops as $mainShop)
 		{
 			// get all active languages of the main shop
-			$activeLanguages = PlentymarketsTranslation::getInstance()->getShopActiveLanguages($mainShop->getId());
+			$activeLanguages = PlentymarketsTranslation::getShopActiveLanguages($mainShop->getId());
 
 			foreach ($activeLanguages as $key => $language)
 			{	
 				// import tanslation for property group
 				
 				$Request_GetPropertyGroups = new PlentySoapRequest_GetPropertyGroups();
-				$Request_GetPropertyGroups->Lang = PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($language['locale']);
+				$Request_GetPropertyGroups->Lang = PlentymarketsTranslation::getPlentyLocaleFormat($language['locale']);
 				$Request_GetPropertyGroups->LastUpdateFrom = $lastUpdateTimestamp;
 				$Request_GetPropertyGroups->Page = 0;
 
@@ -130,7 +130,7 @@ class PlentymarketsImportControllerItemProperty
 				// import translation for properties
 				
 				$Request_GetProperties = new PlentySoapRequest_GetProperties();
-				$Request_GetProperties->Lang = PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($language['locale']);
+				$Request_GetProperties->Lang = PlentymarketsTranslation::getPlentyLocaleFormat($language['locale']);
 				$Request_GetProperties->LastUpdateFrom = $lastUpdateTimestamp;
 				$Request_GetProperties->Page = 0;
 

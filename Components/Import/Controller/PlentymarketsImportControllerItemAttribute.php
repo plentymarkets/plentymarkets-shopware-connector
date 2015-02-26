@@ -66,14 +66,14 @@ class PlentymarketsImportControllerItemAttribute
 		foreach ($mainShops as $mainShop) 
 		{
 			// get all active languages of the main shop
-			$activeLanguages = PlentymarketsTranslation::getInstance()->getShopActiveLanguages($mainShop->getId());
+			$activeLanguages = PlentymarketsTranslation::getShopActiveLanguages($mainShop->getId());
 
 			foreach ($activeLanguages as $key => $language)
 			{
 				$Request_GetItemAttributes = new PlentySoapRequest_GetItemAttributes();
 				$Request_GetItemAttributes->GetValues = true;
 				$Request_GetItemAttributes->LastUpdateFrom = $lastUpdateTimestamp;
-				$Request_GetItemAttributes->Lang = PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($language['locale']);
+				$Request_GetItemAttributes->Lang = PlentymarketsTranslation::getPlentyLocaleFormat($language['locale']);
 
 				/** @var PlentySoapResponse_GetItemAttributes $Response_GetItemAttributes */
 				$Response_GetItemAttributes = PlentymarketsSoapClient::getInstance()->GetItemAttributes($Request_GetItemAttributes);
