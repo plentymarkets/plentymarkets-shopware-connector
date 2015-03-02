@@ -43,6 +43,18 @@ define('IMPORT_ITEM_CATEGORY_NO_SYNC', 0);
 define('IMPORT_ITEM_NUMBER', 1);
 define('IMPORT_ITEM_NUMBER_NO', 0);
 
+define('IMPORT_ITEM_SHORTDESC', 1);
+define('IMPORT_ITEM_SHORTDESC_NO', 0);
+
+define('IMPORT_ITEM_LONGDESC', 1);
+define('IMPORT_ITEM_LONGDESC_NO', 0);
+
+define('IMPORT_ITEM_KEYWORDS', 1);
+define('IMPORT_ITEM_KEYWORDS_NO', 0);
+
+define('IMPORT_ITEM_FREETEXTS', 1);
+define('IMPORT_ITEM_FREETEXTS_NO', 0);
+
 define('IMPORT_ITEM_BUNDLE_HEAD', 1);
 define('IMPORT_ITEM_BUNDLE_HEAD_NO', 0);
 
@@ -109,11 +121,11 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 			);
 		}
 
-    	if (!$this->assertVersionGreaterThen('4.1'))
+    	if (!$this->assertVersionGreaterThen('4.3'))
     	{
     		return array(
 				'success' => false,
-				'message' => 'Das plentymarkets-Plugin benötigt min. shopware 4.1'
+				'message' => 'Das plentymarkets-Plugin benötigt min. shopware 4.3'
 			);
     	}
 
