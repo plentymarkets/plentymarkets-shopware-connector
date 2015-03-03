@@ -345,6 +345,16 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 			PyConf()->erase('PlentymarketsVersionTimestamp');
 		}
 
+		if (version_compare($version, '1.7') !== 1)
+		{
+			$this->subscribeEvent(
+				'Shopware_Models_Order_Order::postPersist',
+				'onOrderModelPostPersist'
+			);
+
+			$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'Shopware_Models_Order_Order::postPersist');
+		}
+
 		//
 		PlentymarketsConfig::getInstance()->setConnectorVersion($this->getVersion());
 
@@ -666,7 +676,12 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
         	'onOrderSaveOrderProcessDetails'
         );
 
-        // Insert the CSS
+//		$this->subscribeEvent(
+//			'Shopware_Models_Order_Order::postPersist',
+//			'onOrderModelPostPersist'
+//		);
+
+		// Insert the CSS
         $this->subscribeEvent(
         	'Enlight_Controller_Action_PostDispatch_Backend_Index',
         	'onPostDispatchBackendIndex'
@@ -1179,6 +1194,25 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
     	return true;
     }
 
+	/**
+     * Stores the id of the created order into the plenty_order table
+     *
+     * @param Enlight_Event_EventArgs $arguments
+     * @return boolean
+     */
+    public function onOrderModelPostPersist(Enlight_Event_EventArgs $arguments)
+    {
+		$model = $arguments->get('entity');
+		$orderId = $model->getId();
+
+		Shopware()->Db()->query('
+    		INSERT INTO plenty_order
+    			SET shopwareId = ?
+    	', array($orderId));
+
+		return true;
+    }
+
     /**
      * Returns the path to a backend controller for an event.
      *
@@ -1211,7 +1245,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
      */
     public function getVersion()
     {
-    	return '1.6.2';
+    	return '1.7.0';
     }
 
     /**
