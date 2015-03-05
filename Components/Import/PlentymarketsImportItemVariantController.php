@@ -147,10 +147,23 @@ class PlentymarketsImportItemVariantController
 					//
 					if (!array_key_exists($Attribute->AttributeFrontendName, $this->groups))
 					{
-						$this->groups[$Attribute->AttributeFrontendName] = array(
-							'name' => $Attribute->AttributeFrontendName,
-							'options' => array()
-						);
+						try
+						{
+							$attributeId = PlentymarketsMappingController::getAttributeGroupByPlentyID($Attribute->AttributeID);
+							$group = array(
+								'id' => $attributeId,
+								'options' => array()
+							);
+						}
+						catch (Exception $e)
+						{
+							$group = array(
+								'name' => $Attribute->AttributeFrontendName,
+								'options' => array()
+							);
+						}
+
+						$this->groups[$Attribute->AttributeFrontendName] = $group;
 
 						$this->groupId2optionName2plentyId[$Attribute->AttributeID] = array();
 						$this->groupName2plentyId[$Attribute->AttributeFrontendName] = $Attribute->AttributeID;
@@ -165,9 +178,21 @@ class PlentymarketsImportItemVariantController
 					//
 					if (!in_array($Attribute->AttributeValue->ValueID, $valueIds))
 					{
-						$this->groups[$Attribute->AttributeFrontendName]['options'][] = array(
-							'name' => $Attribute->AttributeValue->ValueFrontendName
-						);
+						try
+						{
+							$valueId = PlentymarketsMappingController::getAttributeOptionByPlentyID($Attribute->AttributeValue->ValueID);
+							$option = array(
+								'id' => $valueId
+							);
+						}
+						catch (Exception $e)
+						{
+							$option = array(
+								'name' => $Attribute->AttributeValue->ValueFrontendName
+							);
+						}
+
+						$this->groups[$Attribute->AttributeFrontendName]['options'][] = $option;
 						$this->groupId2optionName2plentyId[$Attribute->AttributeID][$Attribute->AttributeValue->ValueFrontendName] = $Attribute->AttributeValue->ValueID;
 						$valueIds[] = $Attribute->AttributeValue->ValueID;
 					}
