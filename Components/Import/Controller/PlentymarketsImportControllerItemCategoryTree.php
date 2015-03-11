@@ -157,8 +157,10 @@ class PlentymarketsImportControllerItemCategoryTree
 
 		foreach ($shopIds as $shopId)
 		{
+			$shopMainLanguage = PlentymarketsTranslation::getShopMainLanguage($shopId);
+			
 			$Request_GetItemCategoryTree = new PlentySoapRequest_GetItemCategoryTree();
-			$Request_GetItemCategoryTree->Lang = 'de';
+			$Request_GetItemCategoryTree->Lang = PlentymarketsTranslation::getPlentyLocaleFormat($shopMainLanguage[$shopId]['locale']);
 			$Request_GetItemCategoryTree->GetCategoryNames = true;
 			$Request_GetItemCategoryTree->StoreID = $shopId['plentyID'];
 			$Request_GetItemCategoryTree->GetAktivCategories = true;
