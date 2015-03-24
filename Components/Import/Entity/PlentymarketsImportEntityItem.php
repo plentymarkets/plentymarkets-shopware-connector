@@ -140,6 +140,28 @@ class PlentymarketsImportEntityItem
 				$swItemID = PlentymarketsMappingController::getItemByPlentyID($this->ItemBase->ItemID);
 
 				PlentymarketsTranslation::setShopwareTranslation('article', $swItemID, $itemText['languageShopId'], $swItemText);
+				
+				// save the translation in s_articles_translations, too
+				$sql = '
+                INSERT INTO `s_articles_translations` (
+                  articleID, languageID, name, keywords, description, description_long
+                ) VALUES (
+                  ?, ?, ?, ?, ?, ?
+                ) ON DUPLICATE KEY UPDATE
+                  name = VALUES(name),
+                  keywords = VALUES(keywords),
+                  description = VALUES(description),
+                  description_long = VALUES(description_long);
+            	';
+				
+				Shopware()->Db()->query($sql, array(
+					$swItemID,
+					$itemText['languageShopId'],
+					isset($swItemText['txtArtikel']) ? (string) $swItemText['txtArtikel'] : '',
+					($swItemText['txtkeywords']) ? (string) $swItemText['txtkeywords'] : '',
+					isset($swItemText['txtshortdescription']) ? (string) $swItemText['txtshortdescription'] : '',
+					isset($swItemText['txtlangbeschreibung']) ? (string) $swItemText['txtlangbeschreibung'] : ''
+				));
 			}
 		}
 	}
