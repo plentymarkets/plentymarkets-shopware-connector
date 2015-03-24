@@ -53,7 +53,7 @@ class PlentySoapRequest_GetReturns
 	public $Page;
 	
 	/**
-	 * @var int
+	 * @var float
 	 */
 	public $ReferrerID;
 	

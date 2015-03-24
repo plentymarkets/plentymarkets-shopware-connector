@@ -50,6 +50,34 @@ class PlentymarketsImportEntityItemPropertyGroup
 	}
 
 	/**
+	 * @param int $shopId
+	 */
+	public function importPropertyGroupTranslation($shopId)
+	{
+		try
+		{
+			$SHOPWARE_id = PlentymarketsMappingController::getPropertyGroupByPlentyID($this->Group->PropertyGroupID);
+			PyLog()->message('Sync:Item:Property Group', 'Updating the property group translation »' . $this->Group->FrontendName . '«');
+		}
+		catch (PlentymarketsMappingExceptionNotExistant $E)
+		{
+			PyLog()->message('Sync:Item:Property Group', 'Skipping the property group translation »' . $this->Group->FrontendName . '«');
+			return;
+		}
+
+		if(!is_null($this->Group->FrontendName))
+		{
+			// save the translation of the property group
+			$properteryGroup_TranslationData = array('groupName' => $this->Group->FrontendName);
+			
+			$propertyParts = explode(';', $SHOPWARE_id);
+			$groupId = $propertyParts[0];
+
+			PlentymarketsTranslation::setShopwareTranslation('propertygroup', $groupId, $shopId, $properteryGroup_TranslationData);
+		}
+	}
+
+	/**
 	 * Does the actual import
 	 */
 	public function import()

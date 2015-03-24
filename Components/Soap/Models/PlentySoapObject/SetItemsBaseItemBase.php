@@ -173,7 +173,7 @@ class PlentySoapObject_SetItemsBaseItemBase
 	public $StoreIDs;
 	
 	/**
-	 * @var PlentySoapObject_ItemTexts
+	 * @var PlentySoapObject_ItemTexts[]
 	 */
 	public $Texts;
 	

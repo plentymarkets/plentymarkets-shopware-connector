@@ -123,7 +123,7 @@ class PlentySoapObject_OrderItem
 	public $Quantity;
 	
 	/**
-	 * @var int
+	 * @var float
 	 */
 	public $ReferrerID;
 	

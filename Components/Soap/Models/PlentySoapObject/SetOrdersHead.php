@@ -113,7 +113,7 @@ class PlentySoapObject_SetOrdersHead
 	public $PaidTimestamp;
 	
 	/**
-	 * @var int
+	 * @var float
 	 */
 	public $ReferrerID;
 	

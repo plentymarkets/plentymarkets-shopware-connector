@@ -43,7 +43,7 @@ class PlentySoapRequest_GetItemsStockSearch
 	public $Page;
 	
 	/**
-	 * @var int
+	 * @var float
 	 */
 	public $ReferrerID;
 	

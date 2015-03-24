@@ -106,6 +106,55 @@ class PlentymarketsImportEntityItemImage
 	}
 
 	/**
+	 * @param $shopware_ImageID int
+	 * @param $plenty_ImageNames PlentySoapResponse_ObjectGetItemImageName[]
+	 * @param $shopware_storeID int
+	 */
+	private function importImageTitleTranslation($shopware_ImageID, $plenty_ImageNames, $shopware_storeID)
+	 {
+		 // get all active languages of the main shop
+		 $activeLanguages = PlentymarketsTranslation::getShopActiveLanguages($shopware_storeID);
+
+		 foreach($activeLanguages as $localeId => $language)
+		 {
+			 /** @var $plentyImageName  PlentySoapResponse_ObjectGetItemImageName */
+			 foreach($plenty_ImageNames as $plentyImageName)
+			 {
+				 if(!is_null($plentyImageName->Name) && strlen($plentyImageName->Name) > 0)
+				 {
+					 // search the language shop with the language equal as the image name language
+					 if(PlentymarketsTranslation::getPlentyLocaleFormat($language['locale']) == $plentyImageName->Lang)
+					 {
+						 $shopId = null;
+
+						 // if the founded shop is a language shop 
+						 if(!is_null($language['mainShopId']))
+						 {
+							 $shopId = PlentymarketsTranslation::getLanguageShopID($localeId, $language['mainShopId']);
+
+						 }
+						 elseif(PlentymarketsTranslation::getPlentyLocaleFormat($language['locale']) != 'de')
+						 {
+							 // set the imagae title translation for the main shop that has the main language other as German
+							 $shopId = $shopware_storeID;
+						 }
+
+						 // if the language shop was found / set , save the image title translation for this language shop
+						 if(!is_null($shopId))
+						 {
+							 // save the translation of the plenty image title
+							 $image_data = array('description' => $plentyImageName->Name);
+
+							 PlentymarketsTranslation::setShopwareTranslation('articleimage', $shopware_ImageID , $shopId, $image_data);
+						 }
+					 }
+				}				 
+			 }	
+		 }
+				 
+	 }
+	
+	/**
 	 * Retrieves the images from plentymarkets and adds them to the item
 	 * @return number
 	 */
@@ -134,21 +183,42 @@ class PlentymarketsImportEntityItemImage
 				PlentymarketsLogger::getInstance()->error('Sync:Item:Image', 'The images for the plentymarkets item id »' . $this->PLENTY_itemId . '« could not be retrieved', 3200);
 				continue;
 			}
-
-			/**
-			 * @var PlentySoapObject_GetItemsImages $ImagesImages
-			 * @var PlentySoapObject_ItemImage $Image
-			 */
-			foreach ($Response_GetItemsImages->ItemsImages->item as $ImagesImages)
+			
+			/** @var $Image PlentySoapResponse_ObjectItemImage */
+			foreach ($Response_GetItemsImages->ItemsImages->item as $Image)
 			{
-				foreach ($ImagesImages->Images->item as $Image)
+				$shopwareStoreIds = array();
+					
+				/** @var $reference PlentySoapResponse_ObjectGetItemImageReference */
+				foreach ($Image->References->item as $reference)
 				{
-					// Skip the image if it should not be shown
-					if ($Image->Availability != 1 && $Image->Availability != 2)
+					if($reference->ReferenceType == 'mandant')
 					{
-						continue;
+						try
+						{
+							if(PlentymarketsMappingController::getShopByPlentyID($reference->ReferenceValue) > 0)
+							{
+								$shopwareStoreId = PlentymarketsMappingController::getShopByPlentyID($reference->ReferenceValue);
+							}		
+						}
+						catch (PlentymarketsMappingExceptionNotExistant $E)
+						{
+							continue;
+						}
+						if(isset($shopwareStoreId))
+						{
+							$shopwareStoreIds[] = $shopwareStoreId;
+						}
 					}
-
+				}
+				
+				// Skip the image if it should not be shown
+				if(empty($shopwareStoreIds))
+				{
+					continue;
+				}
+				else
+				{
 					/** @var Shopware\Models\Media\Media $media */
 					$media = $mediaResource->internalCreateMediaByFileLink($Image->ImageURL);
 
@@ -157,7 +227,33 @@ class PlentymarketsImportEntityItemImage
 					$image->setMedia($media);
 					$image->setPath($media->getName());
 					$image->setExtension($media->getExtension());
-					$image->setDescription($media->getDescription());
+
+					// get the main language of the shop
+					//$mainLangData = array_values(PlentymarketsTranslation::getInstance()->getShopMainLanguage($shopwareStoreId));
+					//$mainLang = PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($mainLangData[0]['locale']);
+
+					/** @var $imageName PlentySoapResponse_ObjectGetItemImageName */
+					foreach($Image->Names->item as $imageName)
+					{
+						if( $imageName->Lang == 'de')
+						{
+							// set the image title in German
+							$image->setDescription($imageName->Name);
+						}
+					}
+
+					if(!is_null(PlentymarketsConfig::getInstance()->getItemImageAltAttributeID()) &&
+						PlentymarketsConfig::getInstance()->getItemImageAltAttributeID() > 0 &&
+						PlentymarketsConfig::getInstance()->getItemImageAltAttributeID() <= 3)   // attribute1, attribute2 or attribute3
+					{
+						// get the attribute number for alternative text from connector's settings
+						$plenty_attributeID = PlentymarketsConfig::getInstance()->getItemImageAltAttributeID();
+						// set the value for the attribute number 
+						$attribute = new \Shopware\Models\Attribute\ArticleImage();
+						$attribute->{setAttribute.($plenty_attributeID)}($Image->Names->item[0]->AlternativeText);
+						$image->setAttribute($attribute);
+					}
+
 					$image->setPosition($Image->Position);
 
 					// Generate the thumbnails
@@ -171,17 +267,23 @@ class PlentymarketsImportEntityItemImage
 
 					$imageId = $image->getId();
 
+					foreach($shopwareStoreIds as $shopwareStoreId) 
+					{
+						// import the image title translations for all active shops of the image
+					 	$this->importImageTitleTranslation($imageId, $Image->Names->item, $shopwareStoreId);
+					}
+
 					$plentyId2ShopwareId[$Image->ImageID] = $imageId;
 					$shopwareId2PlentyPosition[$Image->Position] = $imageId;
 
 					Shopware()->DB()->query('
-						UPDATE s_articles_img
-							SET articleID = ?
-							WHERE id = ?
-					', array($this->SHOPWARE_itemId, $imageId));
-				}
+											UPDATE s_articles_img
+												SET articleID = ?
+												WHERE id = ?
+										', array($this->SHOPWARE_itemId, $imageId));					
+				}	
 			}
-		} while (++$Request_GetItemsImages->Page < $Response_GetItemsImages->Pages);
+		} while (++$Request_GetItemsImages->Page < $Response_GetItemsImages->Pages); 
 
 		if (!$shopwareId2PlentyPosition)
 		{

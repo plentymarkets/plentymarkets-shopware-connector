@@ -631,6 +631,9 @@ class PlentymarketsImportController
 			return unserialize(PlentymarketsConfig::getInstance()->getMiscVatSerialized());
 		}
 
+		$Request_GetVatConfig = new PlentySoapRequest_GetVATConfig();
+		$Request_GetVatConfig->WebstoreID = null; // get the VAT Config from the standard shop
+
 		$Response_GetVATConfig = PlentymarketsSoapClient::getInstance()->GetVATConfig();
 
 		// The call wasn't successful
@@ -647,7 +650,7 @@ class PlentymarketsImportController
 		$vat = array();
 
 		/** @var PlentySoapObject_GetVATConfig $VAT */
-		foreach ($Response_GetVATConfig->DefaultVAT->item as $VAT)
+		foreach ($Response_GetVATConfig->DefaultVAT->item[0]->DefaultVAT->item as $VAT) // get the vat Config only from the first list
 		{
 			$vat[$VAT->InternalVATID] = array(
 				'id' => $VAT->InternalVATID,

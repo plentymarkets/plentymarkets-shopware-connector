@@ -163,7 +163,7 @@ class PlentySoapObject_OrderHead
 	public $PaymentStatus;
 	
 	/**
-	 * @var int
+	 * @var float
 	 */
 	public $ReferrerID;
 	

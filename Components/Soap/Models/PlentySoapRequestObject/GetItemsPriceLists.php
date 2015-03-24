@@ -38,7 +38,7 @@ class PlentySoapRequestObject_GetItemsPriceLists
 	public $ExternalItemID;
 	
 	/**
-	 * @var int
+	 * @var float
 	 */
 	public $Referrer;
 	

@@ -94,6 +94,110 @@ class PlentymarketsExportControllerItemAttribute
 	}
 
 	/**
+	 * @description Export the translation of the attributes values that are set for the language shops in shopware (TB: s_core_translation)
+	 * @param int $plentyAttributeID
+	 * @param int $shopwareAttributeValueID
+	 * @param int $plentyAttributeValueID
+	 */
+	private function exportAttributeValuesTranslations($plentyAttributeID, $shopwareAttributeValueID, $plentyAttributeValueID)
+	{
+		$mainShops = PlentymarketsUtils::getShopwareMainShops();
+		
+		$Request_SetItemAttributes = new PlentySoapRequest_SetItemAttributes();
+		
+		/** @var $mainShop Shopware\Models\Shop\Shop */
+		foreach($mainShops as $mainShop)
+		{
+			// get all active languages of the main shop
+			$activeLanguages = PlentymarketsTranslation::getShopActiveLanguages($mainShop->getId());
+
+			foreach($activeLanguages as $key => $language)
+			{
+				// export the atrribute value translations of the language shops and main shops
+			
+				// try to get translation
+				$attrValueTranslation = PlentymarketsTranslation::getShopwareTranslation($mainShop->getId(), 'configuratoroption', $shopwareAttributeValueID, $key);
+
+				// if the translation was found, do export
+				if(!is_null($attrValueTranslation) && isset($attrValueTranslation['name']))
+				{
+					$Object_SetItemAttribute = new PlentySoapObject_SetItemAttribute();
+					$Object_SetItemAttribute->Id = $plentyAttributeID;
+					$Object_SetItemAttribute->FrontendLang =  PlentymarketsTranslation::getPlentyLocaleFormat($language['locale']);
+					
+					$Object_SetItemAttributeValue = new PlentySoapObject_SetItemAttributeValue();
+					$Object_SetItemAttributeValue->ValueId = $plentyAttributeValueID;
+					$Object_SetItemAttributeValue->FrontendName = $attrValueTranslation['name'];
+					
+					$Object_SetItemAttribute->Values[] = $Object_SetItemAttributeValue;
+					$Request_SetItemAttributes->Attributes[] = $Object_SetItemAttribute;
+					
+				}
+			}	
+		}
+
+		if(!empty($Request_SetItemAttributes->Attributes))
+		{
+			$Response = PlentymarketsSoapClient::getInstance()->SetItemAttributes($Request_SetItemAttributes);
+
+			if(!$Response->Success)
+			{
+				// throw exception
+			}
+		}
+	}
+	/**
+	 * @description Export the translation of the attributes and attributes values that are set for the language shops in shopware
+	 * @param int $shopwareAttributeID
+	 * @param int $plentyAttributeID
+	 */
+	private function exportAttributeTranslations($shopwareAttributeID, $plentyAttributeID)
+	{
+		$Request_SetItemAttributes = new PlentySoapRequest_SetItemAttributes();
+
+		$mainShops = PlentymarketsUtils::getShopwareMainShops();
+
+		/** @var $mainShop Shopware\Models\Shop\Shop */
+		foreach($mainShops as $mainShop)
+		{
+			$Request_SetItemAttributes = new PlentySoapRequest_SetItemAttributes();
+
+			// get all active languages of the main shop
+			$activeLanguages = PlentymarketsTranslation::getShopActiveLanguages($mainShop->getId());
+			
+			foreach($activeLanguages as $key => $language)
+			{
+				// export the atrribute translations of the language shops and main shops
+				
+				// try to get translation
+				$attrTranslation = PlentymarketsTranslation::getShopwareTranslation($mainShop->getId(), 'configuratorgroup', $shopwareAttributeID, $key);
+				
+				// if the translation was found, do export
+				if(!is_null($attrTranslation) && isset($attrTranslation['name']))
+				{
+					$Object_SetItemAttribute = new PlentySoapObject_SetItemAttribute();
+					$Object_SetItemAttribute->Id = $plentyAttributeID;
+					$Object_SetItemAttribute->FrontendLang = PlentymarketsTranslation::getPlentyLocaleFormat($language['locale']);
+					$Object_SetItemAttribute->FrontendName = $attrTranslation['name'];
+
+					$Request_SetItemAttributes->Attributes[] = $Object_SetItemAttribute;
+					
+				}
+			}
+		}
+		
+		if(!empty($Request_SetItemAttributes->Attributes))
+		{
+			$Response = PlentymarketsSoapClient::getInstance()->SetItemAttributes($Request_SetItemAttributes);
+
+			if(!$Response->Success)
+			{
+				// throw exception
+			}
+		}
+	}
+
+	/**
 	 * Export the missing attribtues to plentymarkets and save the mapping
 	 */
 	protected function doExport()
@@ -113,13 +217,13 @@ class PlentymarketsExportControllerItemAttribute
 			/** @var Shopware\Models\Article\Configurator\Group $Attribute */
 			foreach ($Groups as $Attribute)
 			{
-				$Request_AddItemAttribute = new PlentySoapRequest_AddItemAttribute();
+				$Request_SetItemAttributes = new PlentySoapRequest_SetItemAttributes();
 
-				$Object_AddItemAttribute = new PlentySoapObject_AddItemAttribute();
-				$Object_AddItemAttribute->BackendName = sprintf('%s (Sw %d)', $Attribute->getName(), $Attribute->getId());
-				$Object_AddItemAttribute->FrontendLang = 'de';
-				$Object_AddItemAttribute->FrontendName = $Attribute->getName();
-				$Object_AddItemAttribute->Position = $Attribute->getPosition();
+				$Object_SetItemAttribute = new PlentySoapObject_SetItemAttribute();
+				$Object_SetItemAttribute->BackendName = sprintf('%s (Sw %d)', $Attribute->getName(), $Attribute->getId());
+				$Object_SetItemAttribute->FrontendLang = 'de';
+				$Object_SetItemAttribute->FrontendName = $Attribute->getName();
+				$Object_SetItemAttribute->Position = $Attribute->getPosition();
 
 				try
 				{
@@ -127,18 +231,18 @@ class PlentymarketsExportControllerItemAttribute
 				}
 				catch (PlentymarketsMappingExceptionNotExistant $E)
 				{
-					if (isset($this->PLENTY_name2ID[strtolower($Object_AddItemAttribute->BackendName)]))
+					if (isset($this->PLENTY_name2ID[strtolower($Object_SetItemAttribute->BackendName)]))
 					{
-						$attributeIdAdded = $this->PLENTY_name2ID[strtolower($Object_AddItemAttribute->BackendName)];
+						$attributeIdAdded = $this->PLENTY_name2ID[strtolower($Object_SetItemAttribute->BackendName)];
 					}
 					else
 					{
-						$Request_AddItemAttribute->Attributes[] = $Object_AddItemAttribute;
-						$Response = PlentymarketsSoapClient::getInstance()->AddItemAttribute($Request_AddItemAttribute);
+						$Request_SetItemAttributes->Attributes[] = $Object_SetItemAttribute;
+						$Response = PlentymarketsSoapClient::getInstance()->SetItemAttributes($Request_SetItemAttributes);
 
 						if (!$Response->Success)
 						{
-							throw new PlentymarketsExportException('The item attribute »'. $Object_AddItemAttribute->BackendName .'« could not be created', 2911);
+							throw new PlentymarketsExportException('The item attribute »'. $Object_SetItemAttribute->BackendName .'« could not be created', 2911);
 						}
 
 						$attributeIdAdded = (integer) $Response->ResponseMessages->item[0]->SuccessMessages->item[0]->Value;
@@ -146,24 +250,28 @@ class PlentymarketsExportControllerItemAttribute
 
 					// Add the mapping
 					PlentymarketsMappingController::addAttributeGroup($Attribute->getId(), $attributeIdAdded);
+
+					$this->exportAttributeTranslations($Attribute->getId(),$attributeIdAdded);
+					
+					
 				}
 
 				// Values
 				/** @var Shopware\Models\Article\Configurator\Option $AttributeValue */
 				foreach ($Attribute->getOptions() as $AttributeValue)
 				{
-					$Request_AddItemAttribute = new PlentySoapRequest_AddItemAttribute();
+					$Request_SetItemAttributes = new PlentySoapRequest_SetItemAttributes();
 
-					$Object_AddItemAttribute = new PlentySoapObject_AddItemAttribute();
-					$Object_AddItemAttribute->Id = $attributeIdAdded;
+					$Object_SetItemAttribute = new PlentySoapObject_SetItemAttribute();
+					$Object_SetItemAttribute->Id = $attributeIdAdded;
 
-					$Object_AddItemAttributeValue = new PlentySoapObject_AddItemAttributeValue();
-					$Object_AddItemAttributeValue->BackendName = sprintf('%s (Sw %d)', $AttributeValue->getName(), $AttributeValue->getId());
-					$Object_AddItemAttributeValue->FrontendName = $AttributeValue->getName();
-					$Object_AddItemAttributeValue->Position = $AttributeValue->getPosition();
+					$Object_SetItemAttributeValue = new PlentySoapObject_SetItemAttributeValue();
+					$Object_SetItemAttributeValue->BackendName = sprintf('%s (Sw %d)', $AttributeValue->getName(), $AttributeValue->getId());
+					$Object_SetItemAttributeValue->FrontendName = $AttributeValue->getName();
+					$Object_SetItemAttributeValue->Position = $AttributeValue->getPosition();
 
-					$Object_AddItemAttribute->Values[] = $Object_AddItemAttributeValue;
-					$Request_AddItemAttribute->Attributes[] = $Object_AddItemAttribute;
+					$Object_SetItemAttribute->Values[] = $Object_SetItemAttributeValue;
+					$Request_SetItemAttributes->Attributes[] = $Object_SetItemAttribute;
 
 					try
 					{
@@ -172,7 +280,7 @@ class PlentymarketsExportControllerItemAttribute
 					catch (PlentymarketsMappingExceptionNotExistant $E)
 					{
 						// Workaround
-						$checknameValue = strtolower(str_replace(',', '.', $Object_AddItemAttributeValue->BackendName));
+						$checknameValue = strtolower(str_replace(',', '.', $Object_SetItemAttributeValue->BackendName));
 
 						if (isset($this->PLENTY_idAndValueName2ID[$attributeIdAdded][$checknameValue]))
 						{
@@ -180,11 +288,11 @@ class PlentymarketsExportControllerItemAttribute
 						}
 						else
 						{
-							$Response = PlentymarketsSoapClient::getInstance()->AddItemAttribute($Request_AddItemAttribute);
+							$Response = PlentymarketsSoapClient::getInstance()->SetItemAttributes($Request_SetItemAttributes);
 
 							if (!$Response->Success)
 							{
-								throw new PlentymarketsExportException('The item attribute option »'. $Object_AddItemAttributeValue->BackendName .'« could not be created', 2912);
+								throw new PlentymarketsExportException('The item attribute option »'. $Object_SetItemAttributeValue->BackendName .'« could not be created', 2912);
 							}
 
 							foreach ($Response->ResponseMessages->item[0]->SuccessMessages->item as $MessageItem)
@@ -192,6 +300,8 @@ class PlentymarketsExportControllerItemAttribute
 								if ($MessageItem->Key == 'AttributeValueID')
 								{
 									PlentymarketsMappingController::addAttributeOption($AttributeValue->getId(), $MessageItem->Value);
+									
+									$this->exportAttributeValuesTranslations($attributeIdAdded,$AttributeValue->getId(), $MessageItem->Value);
 								}
 							}
 						}

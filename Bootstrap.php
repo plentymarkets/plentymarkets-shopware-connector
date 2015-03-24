@@ -587,7 +587,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 		Shopware()->Db()->exec("
 			CREATE TABLE `plenty_mapping_referrer` (
 			  `shopwareID` int(11) unsigned NOT NULL,
-			  `plentyID` int(11) unsigned NOT NULL,
+			  `plentyID` float(11) unsigned NOT NULL,
 			  PRIMARY KEY (`shopwareID`,`plentyID`),
 			  UNIQUE KEY `plentyID` (`plentyID`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;

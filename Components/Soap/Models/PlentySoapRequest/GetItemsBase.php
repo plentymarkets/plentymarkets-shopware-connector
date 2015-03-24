@@ -228,7 +228,7 @@ class PlentySoapRequest_GetItemsBase
 	public $ProducerID;
 	
 	/**
-	 * @var int
+	 * @var float
 	 */
 	public $Referrer;
 	
