@@ -399,9 +399,14 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		$Config->setItemCategoryRootID($this->Request()->ItemCategoryRootID);
 		$Config->setItemImageSyncActionID($this->Request()->ItemImageSyncActionID == true ? IMPORT_ITEM_IMAGE_SYNC : IMPORT_ITEM_IMAGE_NO_SYNC);
 		$Config->setItemCategorySyncActionID($this->Request()->ItemCategorySyncActionID == true ? IMPORT_ITEM_CATEGORY_SYNC : IMPORT_ITEM_CATEGORY_NO_SYNC);
-		$Config->setItemNumberImportActionID($this->Request()->ItemNumberImportActionID == true ? IMPORT_ITEM_NUMBER : IMPORT_ITEM_NUMBER_NO);
-		$Config->setItemBundleHeadActionID($this->Request()->ItemBundleHeadActionID == true ? IMPORT_ITEM_BUNDLE_HEAD : IMPORT_ITEM_BUNDLE_HEAD_NO);
-		$Config->setItemAssociateImportActionID(
+        $Config->setItemNumberImportActionID($this->Request()->ItemNumberImportActionID == true ? IMPORT_ITEM_NUMBER : IMPORT_ITEM_NUMBER_NO);
+        $Config->setItemShortDescriptionImportActionID($this->Request()->ItemShortDescriptionImportActionID == true ? IMPORT_ITEM_SHORTDESC : IMPORT_ITEM_SHORTDESC_NO);
+        $Config->setItemLongDescriptionImportActionID($this->Request()->ItemShortDescriptionImportActionID == true ? IMPORT_ITEM_LONGDESC : IMPORT_ITEM_LONGDESC_NO);
+        $Config->setItemKeywordsImportActionID($this->Request()->ItemKeywordsImportActionID == true ? IMPORT_ITEM_KEYWORDS : IMPORT_ITEM_KEYWORDS_NO);
+        $Config->setItemNameImportActionID($this->Request()->ItemNameImportActionID);
+        $Config->setItemFreetextsImportActionID($this->Request()->ItemFreetextsImportActionID == true ? IMPORT_ITEM_FREETEXTS : IMPORT_ITEM_FREETEXTS_NO);
+        $Config->setItemBundleHeadActionID($this->Request()->ItemBundleHeadActionID == true ? IMPORT_ITEM_BUNDLE_HEAD : IMPORT_ITEM_BUNDLE_HEAD_NO);
+        $Config->setItemAssociateImportActionID(
 			$this->Request()->ItemAssociateImportActionID == PlentymarketsImportItemAssociateController::ACTION_DETACHED
 				? PlentymarketsImportItemAssociateController::ACTION_DETACHED
 				: PlentymarketsImportItemAssociateController::ACTION_CHAINED
@@ -423,8 +428,9 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		$Config->setImportItemChunkSize(max($this->Request()->ImportItemChunkSize, 1));
 		$Config->setInitialExportChunksPerRun(max($this->Request()->InitialExportChunksPerRun, -1));
 		$Config->setMayLogUsageData($this->Request()->MayLogUsageData == true ? 1 : 0);
+        $Config->setMaySendMailAtMappingfail($this->Request()->MaySendMailAtMappingfail == true ? 1 : 0);
 
-		// Customer default values
+        // Customer default values
 		$Config->setCustomerDefaultCity($this->Request()->CustomerDefaultCity);
 		$Config->setCustomerDefaultHouseNumber($this->Request()->CustomerDefaultHouseNumber);
 		$Config->setCustomerDefaultStreet($this->Request()->CustomerDefaultStreet);
