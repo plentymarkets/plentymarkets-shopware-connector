@@ -274,4 +274,15 @@ class PlentymarketsUtils
 
 		return isset(self::$availability[$availabilityId]) ? self::$availability[$availabilityId] : null;
 	}
+	
+	public static function getShopwareMainShops()
+	{
+		/** @var $shopRepositoryList Shopware\Models\Shop\Repository */
+		$shopRepositoryList = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+		
+		$shops = $shopRepositoryList->queryBy(array('mainId' => NULL,
+											        'active = 1'))->getResult();
+		
+		return $shops;
+	}
 }

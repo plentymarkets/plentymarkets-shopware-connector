@@ -48,7 +48,7 @@ class PlentySoapRequest_GetDeliveryCharges
 	public $MethodOfPaymentID;
 	
 	/**
-	 * @var int
+	 * @var float
 	 */
 	public $ReferrerID;
 	

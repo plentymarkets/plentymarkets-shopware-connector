@@ -173,7 +173,7 @@ class PlentySoapRequest_SearchOrders
 	public $Page;
 	
 	/**
-	 * @var int
+	 * @var float
 	 */
 	public $ReferrerID;
 	

@@ -33,7 +33,7 @@ class PlentySoapRequest_GetCategoryMappingForMarket
 {
 	
 	/**
-	 * @var int
+	 * @var float
 	 */
 	public $MarketReferrer;
 }

@@ -43,7 +43,7 @@ class PlentySoapObject_GetSalesOrderReferrer
 	public $PriceColumn;
 	
 	/**
-	 * @var int
+	 * @var float
 	 */
 	public $SalesOrderReferrerID;
 }

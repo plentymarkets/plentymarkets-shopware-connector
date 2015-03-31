@@ -43,7 +43,7 @@ class PlentySoapObject_GetItemsDefaultShippingCost
 	public $MethodOfPaymentID;
 	
 	/**
-	 * @var int
+	 * @var float
 	 */
 	public $ReferrerID;
 	
