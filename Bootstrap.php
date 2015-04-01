@@ -341,6 +341,19 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 			);
 
 			$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'Shopware_Models_Order_Order::postPersist');
+
+			try
+			{
+				Shopware()->Db()->exec("
+					ALTER TABLE `plenty_mapping_referrer` CHANGE `plentyID` `plentyID` FLOAT(11)  UNSIGNED  NOT NULL;
+				");
+
+				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'ALTER TABLE `plenty_mapping_referrer` done');
+			}
+			catch (Exception $E)
+			{
+				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'ALTER TABLE `plenty_mapping_referrer` failed');
+			}
 		}
 
 		//
@@ -587,7 +600,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 		Shopware()->Db()->exec("
 			CREATE TABLE `plenty_mapping_referrer` (
 			  `shopwareID` int(11) unsigned NOT NULL,
-			  `plentyID` float(11) unsigned NOT NULL,
+			  `plentyID` float unsigned NOT NULL,
 			  PRIMARY KEY (`shopwareID`,`plentyID`),
 			  UNIQUE KEY `plentyID` (`plentyID`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
