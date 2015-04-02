@@ -243,7 +243,7 @@ class PlentymarketsTranslation
 			// in s_core_translation the objectlanguage = shopId !!!!! 
 			$keyData = $localeRepository->findOneBy(array( 	'type' => $type,
 															'key' => $objectId,
-															'localeId' => $shopId)); // localeId = objectlanguage = shopId ONLY for this method, otherwise localeId = languageID (TB: s_core_locales )  !!!! 
+															'shopId' => $shopId)); //  !!! objectlanguage = shopId 
 			
 			if(method_exists($keyData, 'getData'))
 			{
@@ -273,13 +273,13 @@ class PlentymarketsTranslation
 			// !!! objectlanguage = language shopId 
 			// !!! objectkey = object Id (e.g. article Id)
 			$sql = 'INSERT INTO `s_core_translations` (
-				`objecttype`, `objectdata`, `objectkey`, `objectlanguage`
+				`objecttype`, `objectdata`, `objectkey`, `objectlanguage`,  `dirty`
 				) VALUES (
-				?, ?, ?, ?
+				?, ?, ?, ?,?
 				) ON DUPLICATE KEY UPDATE `objectdata`=VALUES(`objectdata`);
 				';
 
-			Shopware()->Db()->query($sql, array($type, serialize($data), $objectId, $languageShopId));
+			Shopware()->Db()->query($sql, array($type, serialize($data), $objectId, $languageShopId, 1));
 
 			Shopware\Components\Api\Manager::getResource('Translation')->flush();
 		}
