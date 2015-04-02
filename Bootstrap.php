@@ -1259,7 +1259,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
         return array(
 			'version' => $this->getVersion(),
 			'autor' => 'plentymarkets GmbH',
-			'copyright' => 'Copyright © 2013-2014, plentymarkets GmbH',
+			'copyright' => 'Copyright © 2013-2015, plentymarkets GmbH',
 			'label' => $this->getLabel(),
 			'support' => 'http://www.plentymarkets.eu/service-support/',
 			'link' => 'http://man.plentymarkets.eu/tools/shopware-connector/'

@@ -180,7 +180,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
                     {
                         fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemImageAltAttributeID}Bilder alternativ Text{/s}',
                         name: 'ItemImageAltAttributeID',
-                        supportText: 'TODO',
+                        supportText: 'Wählen Sie das Bild-Attribut aus, in dem der Alternativ-Text steht.',
                         store: new Ext.data.ArrayStore({
                             fields: ['id', 'name'],
                             data: [
