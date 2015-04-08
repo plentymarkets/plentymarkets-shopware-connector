@@ -152,7 +152,17 @@ class PlentymarketsExportEntityCustomer
 		$street = trim($this->BillingAddress->getStreet());
 		$streetParts = explode(' ', $street);
 		$streetHouseNumber = end($streetParts);
-		$streetName = trim(strtok($street, $streetHouseNumber));
+		
+		if(ctype_digit($streetHouseNumber))
+		{
+			$streetName = trim(strtok($street, $streetHouseNumber));
+		}
+		else
+		{
+			$streetHouseNumber = '';
+			$streetName = $street;
+		}
+		
 		
 		
 		$zip = trim($this->BillingAddress->getZipCode());
@@ -347,7 +357,16 @@ class PlentymarketsExportEntityCustomer
 		$street = trim($this->ShippingAddress->getStreet());
 		$streetParts = explode(' ', $street);
 		$streetHouseNumber = end($streetParts);
-		$streetName = trim(strtok($street, $streetHouseNumber));
+
+		if(ctype_digit($streetHouseNumber))
+		{
+			$streetName = trim(strtok($street, $streetHouseNumber));
+		}
+		else
+		{
+			$streetHouseNumber = '';
+			$streetName = $street;
+		}
 		
 		$zip = trim($this->ShippingAddress->getZipCode());
 
