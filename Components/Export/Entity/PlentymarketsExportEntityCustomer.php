@@ -148,8 +148,13 @@ class PlentymarketsExportEntityCustomer
 		PlentymarketsLogger::getInstance()->message('Export:Customer', 'Export of the customer with the number »' . $this->getCustomerNumber() . '«');
 
 		$city = trim($this->BillingAddress->getCity());
-		$number = trim($this->BillingAddress->getStreetNumber());
+	
 		$street = trim($this->BillingAddress->getStreet());
+		$streetParts = explode(' ', $street);
+		$streetHouseNumber = end($streetParts);
+		$streetName = trim(strtok($street, $streetHouseNumber));
+		
+		
 		$zip = trim($this->BillingAddress->getZipCode());
 
 		if (empty($city))
@@ -157,14 +162,14 @@ class PlentymarketsExportEntityCustomer
 			$city = PlentymarketsConfig::getInstance()->get('CustomerDefaultCity');
 		}
 
-		if ($number == '')
+		if (!isset($streetHouseNumber) || $streetHouseNumber == '')
 		{
-			$number = PlentymarketsConfig::getInstance()->get('CustomerDefaultHouseNumber');
+			$streetHouseNumber = PlentymarketsConfig::getInstance()->get('CustomerDefaultHouseNumber');
 		}
 
-		if (empty($street))
+		if (!isset($streetName) || $streetName == '')
 		{
-			$street = PlentymarketsConfig::getInstance()->get('CustomerDefaultStreet');
+			$streetName = PlentymarketsConfig::getInstance()->get('CustomerDefaultStreet');
 		}
 
 		if ($zip == '')
@@ -188,11 +193,11 @@ class PlentymarketsExportEntityCustomer
 		$Object_SetCustomersCustomer->FormOfAddress = $this->getBillingFormOfAddress(); // string
 		$Object_SetCustomersCustomer->Fax = $this->BillingAddress->getFax();
 		$Object_SetCustomersCustomer->FirstName = $this->BillingAddress->getFirstName();
-		$Object_SetCustomersCustomer->HouseNo = $number;
+		$Object_SetCustomersCustomer->HouseNo = $streetHouseNumber;
 		$Object_SetCustomersCustomer->IsBlocked = !$this->Customer->getActive();
 		$Object_SetCustomersCustomer->Newsletter = (integer) $this->Customer->getNewsletter();
 		$Object_SetCustomersCustomer->PayInvoice = true; // boolean
-		$Object_SetCustomersCustomer->Street = $street;
+		$Object_SetCustomersCustomer->Street = $streetName;
 		$Object_SetCustomersCustomer->Surname = $this->BillingAddress->getLastName();
 		$Object_SetCustomersCustomer->Telephone = $this->BillingAddress->getPhone();
 		$Object_SetCustomersCustomer->VAT_ID = $this->BillingAddress->getVatId();
@@ -338,8 +343,12 @@ class PlentymarketsExportEntityCustomer
 		}
 
 		$city = trim($this->ShippingAddress->getCity());
-		$number = trim($this->ShippingAddress->getStreetNumber());
+		
 		$street = trim($this->ShippingAddress->getStreet());
+		$streetParts = explode(' ', $street);
+		$streetHouseNumber = end($streetParts);
+		$streetName = trim(strtok($street, $streetHouseNumber));
+		
 		$zip = trim($this->ShippingAddress->getZipCode());
 
 		if (empty($city))
@@ -347,14 +356,14 @@ class PlentymarketsExportEntityCustomer
 			$city = PlentymarketsConfig::getInstance()->get('CustomerDefaultCity');
 		}
 
-		if ($number == '')
+		if (!isset($streetHouseNumber) || $streetHouseNumber == '')
 		{
-			$number = PlentymarketsConfig::getInstance()->get('CustomerDefaultHouseNumber');
+			$streetHouseNumber = PlentymarketsConfig::getInstance()->get('CustomerDefaultHouseNumber');
 		}
 
-		if (empty($street))
+		if (!isset($streetName) || $streetName == '')
 		{
-			$street = PlentymarketsConfig::getInstance()->get('CustomerDefaultStreet');
+			$streetName = PlentymarketsConfig::getInstance()->get('CustomerDefaultStreet');
 		}
 
 		if ($zip == '')
@@ -374,8 +383,8 @@ class PlentymarketsExportEntityCustomer
 		$Object_SetCustomerDeliveryAddressesCustomer->ExternalDeliveryAddressID = PlentymarketsUtils::getExternalCustomerID($this->ShippingAddress->getId()); // string
 		$Object_SetCustomerDeliveryAddressesCustomer->FirstName = $this->ShippingAddress->getFirstName();
 		$Object_SetCustomerDeliveryAddressesCustomer->FormOfAddress = $this->getDeliveryFormOfAddress(); // int
-		$Object_SetCustomerDeliveryAddressesCustomer->HouseNumber = $number;
-		$Object_SetCustomerDeliveryAddressesCustomer->Street = $street;
+		$Object_SetCustomerDeliveryAddressesCustomer->HouseNumber = $streetHouseNumber;
+		$Object_SetCustomerDeliveryAddressesCustomer->Street = $streetName;
 		$Object_SetCustomerDeliveryAddressesCustomer->Surname = $this->ShippingAddress->getLastName();
 		$Object_SetCustomerDeliveryAddressesCustomer->ZIP = $zip;
 
