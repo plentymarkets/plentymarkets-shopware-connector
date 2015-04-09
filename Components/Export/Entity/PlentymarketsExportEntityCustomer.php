@@ -149,21 +149,26 @@ class PlentymarketsExportEntityCustomer
 
 		$city = trim($this->BillingAddress->getCity());
 	
-		$street = trim($this->BillingAddress->getStreet());
-		$streetParts = explode(' ', $street);
-		$streetHouseNumber = end($streetParts);
-		
-		if(ctype_digit($streetHouseNumber))
+		$street_arr = PlentymarketsUtils::extractStreetAndHouseNo($this->BillingAddress->getStreet());
+
+		if(isset($street_arr['street']) && strlen($street_arr['street']) > 0)
 		{
-			$streetName = trim(strtok($street, $streetHouseNumber));
+			$streetName = $street_arr['street'];
 		}
 		else
 		{
-			$streetHouseNumber = '';
-			$streetName = $street;
+			$streetName = trim($this->BillingAddress->getStreet());
 		}
-		
-		
+
+		if(isset($street_arr['houseNo']) && strlen($street_arr['houseNo']) > 0)
+		{
+			$streetHouseNumber = $street_arr['houseNo'];
+		}
+		else
+		{
+			//no house number was found in the street string
+			$streetHouseNumber = '';
+		}
 		
 		$zip = trim($this->BillingAddress->getZipCode());
 
@@ -354,18 +359,24 @@ class PlentymarketsExportEntityCustomer
 
 		$city = trim($this->ShippingAddress->getCity());
 		
-		$street = trim($this->ShippingAddress->getStreet());
-		$streetParts = explode(' ', $street);
-		$streetHouseNumber = end($streetParts);
-
-		if(ctype_digit($streetHouseNumber))
+		$street_arr = PlentymarketsUtils::extractStreetAndHouseNo($this->ShippingAddress->getStreet());
+		
+		if(isset($street_arr['street']) && strlen($street_arr['street']) > 0)
 		{
-			$streetName = trim(strtok($street, $streetHouseNumber));
+			$streetName = $street_arr['street'];
+		}
+		else
+		{
+			$streetName = trim($this->ShippingAddress->getStreet());
+		}
+
+		if(isset($street_arr['houseNo']) && strlen($street_arr['houseNo']) > 0)
+		{
+			$streetHouseNumber = $street_arr['houseNo'];
 		}
 		else
 		{
 			$streetHouseNumber = '';
-			$streetName = $street;
 		}
 		
 		$zip = trim($this->ShippingAddress->getZipCode());
@@ -483,4 +494,6 @@ class PlentymarketsExportEntityCustomer
 			return null;
 		}
 	}
+
+	
 }
