@@ -148,26 +148,38 @@ class PlentymarketsExportEntityCustomer
 		PlentymarketsLogger::getInstance()->message('Export:Customer', 'Export of the customer with the number »' . $this->getCustomerNumber() . '«');
 
 		$city = trim($this->BillingAddress->getCity());
-	
-		$street_arr = PlentymarketsUtils::extractStreetAndHouseNo($this->BillingAddress->getStreet());
+		
+		// check for shopware version 	
+		if(method_exists($this->BillingAddress, 'getStreetNumber'))
+		{
+			// shopware version 4
 
-		if(isset($street_arr['street']) && strlen($street_arr['street']) > 0)
-		{
-			$streetName = $street_arr['street'];
-		}
-		else
-		{
+			$streetHouseNumber = trim($this->BillingAddress->getStreetNumber());
 			$streetName = trim($this->BillingAddress->getStreet());
 		}
-
-		if(isset($street_arr['houseNo']) && strlen($street_arr['houseNo']) > 0)
-		{
-			$streetHouseNumber = $street_arr['houseNo'];
-		}
 		else
 		{
-			//no house number was found in the street string
-			$streetHouseNumber = '';
+			// shopware version 5
+			$street_arr = PlentymarketsUtils::extractStreetAndHouseNo($this->BillingAddress->getStreet());
+
+			if(isset($street_arr['street']) && strlen($street_arr['street']) > 0)
+			{
+				$streetName = $street_arr['street'];
+			}
+			else
+			{
+				$streetName = trim($this->BillingAddress->getStreet());
+			}
+
+			if(isset($street_arr['houseNo']) && strlen($street_arr['houseNo']) > 0)
+			{
+				$streetHouseNumber = $street_arr['houseNo'];
+			}
+			else
+			{
+				//no house number was found in the street string
+				$streetHouseNumber = '';
+			}
 		}
 		
 		$zip = trim($this->BillingAddress->getZipCode());
@@ -358,25 +370,38 @@ class PlentymarketsExportEntityCustomer
 		}
 
 		$city = trim($this->ShippingAddress->getCity());
-		
-		$street_arr = PlentymarketsUtils::extractStreetAndHouseNo($this->ShippingAddress->getStreet());
-		
-		if(isset($street_arr['street']) && strlen($street_arr['street']) > 0)
+
+		// check for shopware version 
+
+		if(method_exists($this->ShippingAddress, 'getStreetNumber'))
 		{
-			$streetName = $street_arr['street'];
-		}
-		else
-		{
+			// shopware version 4
+
+			$streetHouseNumber = trim($this->ShippingAddress->getStreetNumber());
 			$streetName = trim($this->ShippingAddress->getStreet());
 		}
-
-		if(isset($street_arr['houseNo']) && strlen($street_arr['houseNo']) > 0)
-		{
-			$streetHouseNumber = $street_arr['houseNo'];
-		}
 		else
 		{
-			$streetHouseNumber = '';
+			// shopware version 5
+			$street_arr = PlentymarketsUtils::extractStreetAndHouseNo($this->ShippingAddress->getStreet());
+
+			if(isset($street_arr['street']) && strlen($street_arr['street']) > 0)
+			{
+				$streetName = $street_arr['street'];
+			}
+			else
+			{
+				$streetName = trim($this->ShippingAddress->getStreet());
+			}
+
+			if(isset($street_arr['houseNo']) && strlen($street_arr['houseNo']) > 0)
+			{
+				$streetHouseNumber = $street_arr['houseNo'];
+			}
+			else
+			{
+				$streetHouseNumber = '';
+			}
 		}
 		
 		$zip = trim($this->ShippingAddress->getZipCode());
