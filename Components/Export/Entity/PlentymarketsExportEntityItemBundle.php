@@ -304,26 +304,27 @@ class PlentymarketsExportEntityItemBundle
 	 */
 	protected function exportItems()
 	{
-		$Request_AddItemsToBundle = new PlentySoapRequest_AddItemsToBundle();
-		$Request_AddItemsToBundle->Bundles = array();
+		$Request_SetItemsToBundle = new PlentySoapRequest_SetItemsToBundle();
+		$Request_SetItemsToBundle->Bundles = array();
 
-		$Object_AddBundle = new PlentySoapObject_AddBundle();
-		$Object_AddBundle->BundleItems = array();
+		$Object_SetBundle = new PlentySoapObject_SetBundle();
+		$Object_SetBundle->BundleItems = array();
 
 		foreach ($this->PLENTY_bundleSkuList as $sku => $quantity)
 		{
-			$Object_AddBundleItem = new PlentySoapObject_AddBundleItem();
-			$Object_AddBundleItem->ItemSKU = $sku;
-			$Object_AddBundleItem->Quantity = $quantity;
-			$Object_AddBundle->BundleItems[] = $Object_AddBundleItem;
+			$Object_SetBundleItem = new PlentySoapObject_SetBundleItem();
+			$Object_SetBundleItem->ItemSKU = $sku;
+			$Object_SetBundleItem->Quantity = $quantity;
+			$Object_SetBundleItem->deleteFromBundle = false;
+			$Object_SetBundle->BundleItems[] = $Object_SetBundleItem;
 		}
 
-		$Object_AddBundle->BundleSKU = $this->PLENTY_bundleHeadId; // string
-		$Request_AddItemsToBundle->Bundles[] = $Object_AddBundle;
+		$Object_SetBundle->BundleSKU = $this->PLENTY_bundleHeadId; // string
+		$Request_SetItemsToBundle->Bundles[] = $Object_SetBundle;
 
-		PlentymarketsSoapClient::getInstance()->AddItemsToBundle($Request_AddItemsToBundle);
+		PlentymarketsSoapClient::getInstance()->SetItemsToBundle($Request_SetItemsToBundle);
 
-		$numberAdded = count($Object_AddBundle->BundleItems);
+		$numberAdded = count($Object_SetBundle->BundleItems);
 		PlentymarketsLogger::getInstance()->message('Export:Initial:Item:Bundle', $numberAdded . ' items have been added to the item bundle with the number »' . $this->SHOPWARE_bundle->getNumber() . '«.');
 	}
 }
