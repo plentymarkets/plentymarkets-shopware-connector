@@ -163,9 +163,18 @@ class PlentymarketsImportControllerItem
 		try
 		{
 			$shopId = PlentymarketsMappingController::getShopByPlentyID($storeId);
+
+			/**
+			 * @var Shopware\Models\Shop\Shop $Shop
+			 */
 			$Shop = Shopware()->Models()->find('Shopware\Models\Shop\Shop', $shopId);
-			
-			$Importuer = new PlentymarketsImportEntityItem($ItemBase, $Shop);
+
+			/**
+			 * @var PlentymarketsImportEntityItem $Importuer
+			 */
+			$Importuer = Enlight_Class::Instance('PlentymarketsImportEntityItem');
+			$Importuer->setItemBase($ItemBase);
+			$Importuer->setShop($Shop);
 
 			// The item has already been updated
 			if (!$full)
