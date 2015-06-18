@@ -118,8 +118,8 @@ class PlentymarketsTranslation
 		/** @var $shopRepositoryList Shopware\Models\Shop\Repository */
 		$shopRepositoryList = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
 		
-		// get all language shops of the shop with id = $shopId =>  find all shops where mainId = shopId 
-		$languageShops = $shopRepositoryList->findBy(array('mainId' => $shopId));
+		// get all active language shops of the shop with id = $shopId =>  find all shops where mainId = shopId and active = 1
+		$languageShops = $shopRepositoryList->findBy(array('mainId' => $shopId, 'active' => 1));
 
 		/** @var $languageShop Shopware\Models\Shop\Shop */
 		foreach($languageShops as $languageShop)
