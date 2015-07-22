@@ -192,7 +192,7 @@ class PlentymarketsImportEntityItemImage
 				/** @var $reference PlentySoapResponse_ObjectGetItemImageReference */
 				foreach ($Image->References->item as $reference)
 				{
-					if($reference->ReferenceType == 'mandant')
+					if($reference->ReferenceType == 'Mandant')
 					{
 						try
 						{
