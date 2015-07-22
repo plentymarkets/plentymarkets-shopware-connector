@@ -240,10 +240,11 @@ class PlentymarketsTranslation
 		
 		try
 		{
+			// try saving the translation for shopware version 4 (findBy  localId)
 			// in s_core_translation the objectlanguage = shopId !!!!! 
 			$keyData = $localeRepository->findOneBy(array( 	'type' => $type,
 															'key' => $objectId,
-															'shopId' => $shopId)); //  !!! objectlanguage = shopId 
+															'localeId' => $shopId)); //  !!! localeId = objectlanguage = shopId 
 			
 			if(method_exists($keyData, 'getData'))
 			{
@@ -253,7 +254,25 @@ class PlentymarketsTranslation
 					
 		}catch(Exception $e)
 		{
-			$translation = null;
+			try
+			{
+				// try saving the translation for shopware version 5 (findBy  shopId)
+				
+				// in s_core_translation the objectlanguage = shopId !!!!! 
+				$keyData = $localeRepository->findOneBy(array( 	'type' => $type,
+																'key' => $objectId,
+																'shopId' => $shopId)); //  !!! objectlanguage = shopId 
+
+				if(method_exists($keyData, 'getData'))
+				{
+					$serializedTranslation = $keyData->getData();
+					$translation = unserialize( $serializedTranslation);
+				}
+				
+			}catch(Exception $e)
+			{
+				$translation = null;
+			}
 		}
 		
 		return $translation;
@@ -268,18 +287,64 @@ class PlentymarketsTranslation
 	 */
 	public static function setShopwareTranslation($type, $objectId, $languageShopId, $data)
 	{
+		$sw4_sql = null;
+		$sw5_sql = null;
+		
 		try
 		{
-			// !!! objectlanguage = language shopId 
-			// !!! objectkey = object Id (e.g. article Id)
-			$sql = 'INSERT INTO `s_core_translations` (
+			$sql = 'SHOW FULL COLUMNS FROM `s_core_translations`;';
+			
+			$Result = Shopware()->Db()->query($sql);
+
+			$lastColumn = array_pop($Result->fetchAll());
+			
+			if($lastColumn['Field'] == 'dirty')
+			{
+				// create sql query for saving the translation for shopware version 5
+
+				// !!! objectlanguage = language shopId 
+				// !!! objectkey = object Id (e.g. article Id)
+				$sw5_sql = 'INSERT INTO `s_core_translations` (
 				`objecttype`, `objectdata`, `objectkey`, `objectlanguage`,  `dirty`
 				) VALUES (
 				?, ?, ?, ?,?
 				) ON DUPLICATE KEY UPDATE `objectdata`=VALUES(`objectdata`);
 				';
+			}
+			elseif($lastColumn['Field'] == 'objectlanguage')
+			{
+				// create sql query for saving the translation for shopware version 4 
 
-			Shopware()->Db()->query($sql, array($type, serialize($data), $objectId, $languageShopId, 1));
+				// !!! objectkey = object Id (e.g. article Id)
+				$sw4_sql = 'INSERT INTO `s_core_translations` (
+				`objecttype`, `objectdata`, `objectkey`, `objectlanguage`
+				) VALUES (
+				?, ?, ?, ?
+				) ON DUPLICATE KEY UPDATE `objectdata`=VALUES(`objectdata`);
+				';
+			}
+		}catch(Exception $e)
+		{
+			PlentymarketsLogger::getInstance()->error('Sync:Translation', 'The translation could not be imported » shopware version » ('. $e->getMessage() .')', 3020);
+		}
+		
+		try
+		{
+			if(isset($sw5_sql))
+			{
+				// try saving the translation for shopware version 5
+				Shopware()->Db()->query($sw5_sql, array($type, serialize($data), $objectId, $languageShopId, 1));
+			}
+			elseif(isset($sw4_sql))
+			{
+				// try saving the translation for shopware version 4 
+				Shopware()->Db()->query($sw4_sql, array($type, serialize($data), $objectId, $languageShopId));
+			}
+			else
+			{
+				PlentymarketsLogger::getInstance()->error('Sync:Translation', 'The translation could not be imported » shopware version', 3020);
+				return;
+			}
 
 			Shopware\Components\Api\Manager::getResource('Translation')->flush();
 		}
