@@ -59,7 +59,7 @@ class PlentymarketsSoapClient extends SoapClient
 	 *
 	 * @var integer
 	 */
-	const SOAP_CALLS_LIMIT = 155;
+	const SOAP_CALLS_LIMIT = 140;
 
 	/**
 	 *
