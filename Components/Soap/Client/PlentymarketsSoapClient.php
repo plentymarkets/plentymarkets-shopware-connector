@@ -57,6 +57,12 @@ class PlentymarketsSoapClient extends SoapClient
 
 	/**
 	 *
+	 * @var integer
+	 */
+	const SOAP_CALLS_LIMIT = 140;
+
+	/**
+	 *
 	 * @var PlentymarketsSoapClient
 	 */
 	protected static $Instance;
@@ -116,6 +122,38 @@ class PlentymarketsSoapClient extends SoapClient
 	protected $numberOfCalls = 0;
 
 	/**
+	 *
+	 * @var integer
+	 */
+	protected $numberOfCallsPerMinute = 0;
+
+	/**
+	 *
+	 * @var integer
+	 */
+	protected $startTimestamp;
+
+
+	/**
+	 * @param $secs
+	 * @return array
+	 */
+	private function get_elapsedTime($secs)
+	{
+		$bit = array(
+			'year' => $secs / 31556926 % 12,
+			'weak' => $secs / 604800 % 52,
+			'day' => $secs / 86400 % 7,
+			'hour' => $secs / 3600 % 24,
+			'minute' => $secs / 60 % 60,
+			'second' => $secs % 60
+		);
+		
+		return $bit;
+		
+	} 
+
+	/**
 	 * Constructor method
 	 *
 	 * @param string $wsdl
@@ -141,6 +179,26 @@ class PlentymarketsSoapClient extends SoapClient
 		$this->username = $username;
 		$this->userpass = $userpass;
 		$this->dryrun = (bool) $dryrun;
+		
+		
+		if(is_null($this->Config->get('SOAPCallLastRunTimestamp')))
+		{
+			$this->startTimestamp = time();
+		}
+		else
+		{
+			$this->startTimestamp = (int)$this->Config->get('SOAPCallLastRunTimestamp');
+			$now = time();
+			$elapsedTime = $this->get_elapsedTime($now - $this->startTimestamp);
+			
+			// check if a minute has passed since the last soap call was run
+			if($elapsedTime['minute'] > 0)
+			{
+				//reset timestamp of the last soap call
+				$this->startTimestamp = time();
+			}
+		}
+		
 
 		// Options
 		$options = array();
@@ -213,6 +271,11 @@ class PlentymarketsSoapClient extends SoapClient
 
 		// Set the new token
 		$this->setSoapHeaders();
+	}
+	
+	function __destruct()
+	{
+		$this->Config->set('SOAPCallLastRunTimestamp', $this->startTimestamp);
 	}
 
 	/**
@@ -288,8 +351,34 @@ class PlentymarketsSoapClient extends SoapClient
 
 		do
 		{
+			$currentTime = time();
+			$elapsedTime = $this->get_elapsedTime($currentTime - $this->startTimestamp);
+			
+			// check if the limit of the soap calls is already reached within a minute
+			if($elapsedTime['minute'] == 0 && $this->numberOfCallsPerMinute >= PlentymarketsSoapClient::SOAP_CALLS_LIMIT)
+			{
+				do
+				{
+					//wait 10 seconds
+					sleep(10);
+					
+					$currentTime = time();
+					$elapsedTime = $this->get_elapsedTime($currentTime - $this->startTimestamp);
+					
+				}while($elapsedTime['minute'] == 0); // check if a minute has passed
+				
+				// reset the time of the last run soap call
+				$this->startTimestamp = time();
+				
+				// reset the number of soap calls per minute
+				$this->numberOfCallsPerMinute = 0;
+				
+			}
+			
 			try
 			{
+				$this->numberOfCallsPerMinute++;	
+				
 				// Call
 				$Response = $this->doCall($call, $args);
 
@@ -319,7 +408,7 @@ class PlentymarketsSoapClient extends SoapClient
 					PlentymarketsLogger::getInstance()->message('Soap:Call', $call . ' will wait ' . $seconds . ' seconds and then try again (' . $retries . '/' . self::NUMBER_OF_RETRIES_MAX . ')');
 					sleep($seconds);
 				}
-			}
+			}	
 		}
 		while ($retries < self::NUMBER_OF_RETRIES_MAX);
 
@@ -365,6 +454,12 @@ class PlentymarketsSoapClient extends SoapClient
 			PlentymarketsLogger::getInstance()->message('Soap:Call:Header:Response', $this->__getLastResponseHeaders());
 		}
 
+		// Remember the timestamp for soap calls number of any kind
+		if (!empty($this->soapCallsTimestampConfigKey))
+		{
+			$this->Config->set($this->soapCallsTimestampConfigKey, time());
+		}
+		
 		++$this->numberOfCalls;
 
 		return $Response;
