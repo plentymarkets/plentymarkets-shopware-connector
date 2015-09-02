@@ -203,6 +203,13 @@ class PlentymarketsExportEntityCustomer
 		{
 			$zip = PlentymarketsConfig::getInstance()->get('CustomerDefaultZipcode');
 		}
+		
+		$formOfAddress = $this->getBillingFormOfAddress();
+		
+		if(is_null($formOfAddress))
+		{
+			$formOfAddress = self::getFormOfAddress(PlentymarketsConfig::getInstance()->get('CustomerDefaultFormOfAddress'));
+		}
 
 		$Request_SetCustomers = new PlentySoapRequest_SetCustomers();
 
@@ -217,7 +224,7 @@ class PlentymarketsExportEntityCustomer
 		$Object_SetCustomersCustomer->CustomerSince = $this->Customer->getFirstLogin()->getTimestamp(); // int
 		$Object_SetCustomersCustomer->Email = $this->Customer->getEmail(); // string
 		$Object_SetCustomersCustomer->ExternalCustomerID = PlentymarketsUtils::getExternalCustomerID($this->Customer->getId()); // string
-		$Object_SetCustomersCustomer->FormOfAddress = $this->getBillingFormOfAddress(); // string
+		$Object_SetCustomersCustomer->FormOfAddress = $formOfAddress; //$this->getBillingFormOfAddress(); // string
 		$Object_SetCustomersCustomer->Fax = $this->BillingAddress->getFax();
 		$Object_SetCustomersCustomer->FirstName = $this->BillingAddress->getFirstName();
 		$Object_SetCustomersCustomer->HouseNo = $streetHouseNumber;

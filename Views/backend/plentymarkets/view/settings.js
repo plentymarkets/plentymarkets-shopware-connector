@@ -316,6 +316,14 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
                     },
                     {
                         xtype: 'textfield',
+                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/CustomerDefaultFormOfAddress}Standard-Anrede{/s}',
+                        emptyText: 'z. B. keine Anrede',
+                        supportText: 'Dieser Wert wird bei Kunden als Anrede exportiert, wenn diese nicht angegeben worden ist.',
+                        name: 'CustomerDefaultFormOfAddress',
+                        allowBlank: true
+                    },
+                    {
+                        xtype: 'textfield',
                         fieldLabel: '{s name=plentymarkets/view/settings/textfield/CustomerDefaultStreet}Standard-Straße{/s}',
                         emptyText: 'z. B. keine Straße',
                         supportText: 'Dieser Wert wird bei Kunden als Straße exportiert, wenn diese nicht angegeben worden ist.',
