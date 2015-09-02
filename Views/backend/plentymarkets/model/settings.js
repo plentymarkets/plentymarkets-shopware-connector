@@ -176,7 +176,8 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 
 	{
 		name: 'CustomerDefaultFormOfAddressID',
-		type: 'integer'
+		type: 'integer',
+		defaultValue: [0]
 	},
 
     {

@@ -208,7 +208,7 @@ class PlentymarketsExportEntityCustomer
 		
 		if(is_null($formOfAddress))
 		{
-			$formOfAddress = self::getFormOfAddress(PlentymarketsConfig::getInstance()->get('CustomerDefaultFormOfAddressID'));
+			$formOfAddress = PlentymarketsConfig::getInstance()->get('CustomerDefaultFormOfAddressID');
 		}
 
 		$Request_SetCustomers = new PlentySoapRequest_SetCustomers();

@@ -427,6 +427,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		$Config->setMayLogUsageData($this->Request()->MayLogUsageData == true ? 1 : 0);
 
 		// Customer default values
+		$Config->setCustomerDefaultFormOfAddressID($this->Request()->CustomerDefaultFormOfAddressID);
 		$Config->setCustomerDefaultCity($this->Request()->CustomerDefaultCity);
 		$Config->setCustomerDefaultHouseNumber($this->Request()->CustomerDefaultHouseNumber);
 		$Config->setCustomerDefaultStreet($this->Request()->CustomerDefaultStreet);
