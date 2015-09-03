@@ -224,7 +224,7 @@ class PlentymarketsExportEntityCustomer
 		$Object_SetCustomersCustomer->CustomerSince = $this->Customer->getFirstLogin()->getTimestamp(); // int
 		$Object_SetCustomersCustomer->Email = $this->Customer->getEmail(); // string
 		$Object_SetCustomersCustomer->ExternalCustomerID = PlentymarketsUtils::getExternalCustomerID($this->Customer->getId()); // string
-		$Object_SetCustomersCustomer->FormOfAddress = $formOfAddress; //$this->getBillingFormOfAddress(); // string
+		$Object_SetCustomersCustomer->FormOfAddress = (int)$formOfAddress; // int
 		$Object_SetCustomersCustomer->Fax = $this->BillingAddress->getFax();
 		$Object_SetCustomersCustomer->FirstName = $this->BillingAddress->getFirstName();
 		$Object_SetCustomersCustomer->HouseNo = $streetHouseNumber;
