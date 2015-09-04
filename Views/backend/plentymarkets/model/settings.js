@@ -174,6 +174,12 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		defaultValue: 1
 	},
 
+	{
+		name: 'CustomerDefaultFormOfAddressID',
+		type: 'integer',
+		defaultValue: [0]
+	},
+
     {
 		name: 'CustomerDefaultCity',
 		type: 'string'

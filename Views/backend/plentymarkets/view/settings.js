@@ -315,6 +315,19 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
                         supportText: 'Aktivieren, wenn die Bezeichnung der Artikel zu plentymarkets übertragen werden sollen. Anderfalls wird die in plentymarkets hinterlegte Bezeichnung verwendet.'
                     },
                     {
+                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/CustomerDefaultFormOfAddressID}Standard-Anrede{/s}',
+                        name: 'CustomerDefaultFormOfAddressID',
+                        supportText: 'Dieser Wert wird bei Kunden als Anrede exportiert, wenn diese nicht angegeben worden ist.',
+                        store: new Ext.data.ArrayStore({
+                            fields: ['id', 'name'],
+                            data: [
+                                [0, 'Herr'],
+                                [1, 'Frau'],
+                                [2, 'Firma']
+                            ]
+                        })
+                    },
+                    {
                         xtype: 'textfield',
                         fieldLabel: '{s name=plentymarkets/view/settings/textfield/CustomerDefaultStreet}Standard-Straße{/s}',
                         emptyText: 'z. B. keine Straße',
