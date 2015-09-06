@@ -24,10 +24,10 @@
 
 
 /**
- * PlentymarketsImportEntityOrderIncomingPayments provides the actual order incoming payments import functionality.
- * Like the other import entities this class is called in PlentymarketsImportController. It inherits some methods
- * from the entity class PlentymarketsImportEntityOrderAbstract. 
- * The data import takes place based on plentymarkets SOAP-calls.
+ * PlentymarketsImportEntityOrderIncomingPayments provides
+ *  -> the actual order incoming payments import functionality
+ *  -> status change in case of order reversal
+ *
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
@@ -58,7 +58,7 @@ class PlentymarketsImportEntityOrderIncomingPayments extends PlentymarketsImport
 
 	/**
 	 * Prepares the soap orders SOAP object
-	 * 
+	 *
 	 * @see PlentymarketsImportEntityOrderAbstract::prepare()
 	 */
 	public function prepare()
@@ -69,13 +69,13 @@ class PlentymarketsImportEntityOrderIncomingPayments extends PlentymarketsImport
 			$this->log('LastUpdate: ' . date('r', $timestamp));
 		}
 
-		$this->Request_SearchOrders->OrderPaidFrom = $timestamp;
+		$this->Request_SearchOrders->LastUpdateFrom = $timestamp;
 
 		if (is_null(self::$paymentStatusFull))
 		{
 			self::$paymentStatusFull = PlentymarketsConfig::getInstance()->getIncomingPaymentShopwarePaymentFullStatusID();
 		}
-		
+
 		if (is_null(self::$paymentStatusPartial))
 		{
 			self::$paymentStatusPartial = PlentymarketsConfig::getInstance()->getIncomingPaymentShopwarePaymentPartialStatusID();
@@ -95,6 +95,7 @@ class PlentymarketsImportEntityOrderIncomingPayments extends PlentymarketsImport
 	 */
 	public function handle($shopwareOrderId, $Order)
 	{
+		// Payment status
 		if ($Order->PaymentStatus == 1)
 		{
 			$paymentStatus = self::$paymentStatusFull;
@@ -119,10 +120,11 @@ class PlentymarketsImportEntityOrderIncomingPayments extends PlentymarketsImport
 						plentyOrderPaidTimestamp = NOW()
 					WHERE shopwareId = ?
 			', array(
-					$shopwareOrderId
-				));
+				$shopwareOrderId,
+			));
 		}
 
+		// Reversal
 		if ($Order->OrderStatus >= 8 && $Order->OrderStatus < 9)
 		{
 			self::$OrderModule->setOrderStatus($shopwareOrderId, self::$orderStatusReversal, false, 'plentymarkets');
