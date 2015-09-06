@@ -46,6 +46,11 @@ class PlentymarketsImportEntityOrderIncomingPayments extends PlentymarketsImport
 	protected static $paymentStatusPartial;
 
 	/**
+	 * @var integer
+	 */
+	protected static $orderStatusReversal;
+
+	/**
 	 *
 	 * @var string
 	 */
@@ -75,6 +80,11 @@ class PlentymarketsImportEntityOrderIncomingPayments extends PlentymarketsImport
 		{
 			self::$paymentStatusPartial = PlentymarketsConfig::getInstance()->getIncomingPaymentShopwarePaymentPartialStatusID();
 		}
+
+		if (is_null(self::$orderStatusReversal))
+		{
+			self::$orderStatusReversal = PlentymarketsConfig::getInstance()->getReversalShopwareOrderStatusID();
+		}
 	}
 
 	/**
@@ -95,20 +105,27 @@ class PlentymarketsImportEntityOrderIncomingPayments extends PlentymarketsImport
 		}
 		else
 		{
-			return;
+			$paymentStatus = -1;
 		}
 
-		self::$OrderModule->setPaymentStatus($shopwareOrderId, $paymentStatus, false, 'plentymarkets');
+		if ($paymentStatus > 0)
+		{
+			self::$OrderModule->setPaymentStatus($shopwareOrderId, $paymentStatus, false, 'plentymarkets');
 
-		Shopware()->Db()->query('
-			UPDATE plenty_order
-				SET
-					plentyOrderPaidStatus = 1,
-					plentyOrderPaidTimestamp = NOW()
-				WHERE shopwareId = ?
-		', array(
-				$shopwareOrderId
-		));
+			Shopware()->Db()->query('
+				UPDATE plenty_order
+					SET
+						plentyOrderPaidStatus = 1,
+						plentyOrderPaidTimestamp = NOW()
+					WHERE shopwareId = ?
+			', array(
+					$shopwareOrderId
+				));
+		}
 
+		if ($Order->OrderStatus >= 8 && $Order->OrderStatus < 9)
+		{
+			self::$OrderModule->setOrderStatus($shopwareOrderId, self::$orderStatusReversal, false, 'plentymarkets');
+		}
 	}
 }
