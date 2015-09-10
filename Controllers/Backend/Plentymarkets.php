@@ -730,6 +730,17 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 
 				$data = PlentymarketsImportController::getStoreList();
 				break;
+
+			case 'OrderStatus':
+			case 'PaymentStatus':
+
+				if ($forceReload)
+				{
+					PlentymarketsConfig::getInstance()->setMiscOrderStatusLastImport(0);
+				}
+
+				$data = PlentymarketsImportController::getOrderStatusList();
+				break;
 		}
 
 		$this->View()->assign(array(
@@ -783,6 +794,10 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 
 			case 'MeasureUnit':
 				$rows = $DataController->getMeasureUnit();
+				break;
+
+			case 'OrderStatus':
+				$rows = $DataController->getOrderStatus();
 				break;
 		}
 

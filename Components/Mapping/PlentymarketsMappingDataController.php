@@ -266,6 +266,40 @@ class PlentymarketsMappingDataController
 	}
 
 	/**
+	 * Get the mapping data: measure units
+	 *
+	 * @return array
+	 */
+	public function getOrderStatus()
+	{
+		$rows = Shopware()->Db()
+			->query('
+					SELECT id, description as `name`
+					FROM `s_core_states`
+					WHERE `group` = "state"
+					ORDER BY `position`;
+
+				')
+			->fetchAll();
+
+		$plentyMU = PlentymarketsConfig::getInstance()->getItemMeasureUnits();
+
+		foreach ($rows as &$row)
+		{
+			if ($row['plentyID'])
+			{
+				$row['plentyName'] = $plentyMU[$row['plentyID']]['name'];
+			}
+			else
+			{
+				$row['plentyName'] = '';
+			}
+		}
+
+		return $rows;
+	}
+
+	/**
 	 * Get the mapping data: methods of payment
 	 *
 	 * @return array

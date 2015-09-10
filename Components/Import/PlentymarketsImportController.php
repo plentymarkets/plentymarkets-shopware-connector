@@ -270,14 +270,28 @@ class PlentymarketsImportController
 
 		// Prepare data
 		$orderStatusList = array();
+		$purgeOrderStatusList = array();
 
 		/** @var PlentySoapObject_GetOrderStatus $OrderStatus */
 		foreach ($Response_GetOrderStatusList->OrderStatus->item as $OrderStatus)
 		{
+			$purgeOrderStatusList[] = sprintf('"%s"', $OrderStatus->OrderStatus);
 			$orderStatusList[(string) $OrderStatus->OrderStatus] = array(
 				'status' => (string) $OrderStatus->OrderStatus,
 				'name' => $OrderStatus->OrderStatusName
 			);
+		}
+
+		if ($purgeOrderStatusList)
+		{
+			$where = 'plentyID NOT IN (' . implode(',', $purgeOrderStatusList)	 . ')';
+			Shopware()->Db()->delete('plenty_mapping_payment_status', $where);
+			Shopware()->Db()->delete('plenty_mapping_order_status', $where);
+		}
+		else
+		{
+			Shopware()->Db()->delete('plenty_mapping_payment_status');
+			Shopware()->Db()->delete('plenty_mapping_order_status');
 		}
 
 		uksort($orderStatusList, 'strnatcmp');

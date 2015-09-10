@@ -474,7 +474,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
             },
             {
                 xtype: 'fieldset',
-                title: 'Stornierung bei plentymarkets',
+                title: 'Auftragsstatus',
                 layout: 'anchor',
                 defaults: {
                     labelWidth: 155,
@@ -484,7 +484,8 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
                     emptyText: '---',
                     displayField: 'description',
                     valueField: 'id',
-                    allowBlank: false,
+                    allowBlank: true,
+                    multiSelect: true,
                     editable: false
                 },
                 items: [

@@ -164,6 +164,8 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Tab', {
 	getColumns: function()
 	{
 		var me = this;
+		var multiSelect = (/(Order|Payment)Status/.test(me.entity));
+		var allowBlank = (/(Order|Payment)Status/.test(me.entity));
 
 		var columns = [{
 			header: '{s name=plentymarkets/view/mapping/header/shopware}Shopware{/s}',
@@ -180,8 +182,9 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Tab', {
 				autoSelect: true,
 				emptyText: '{s name=plentymarkets/view/mapping/choose}Bitte wählen{/s}',
 				id: 'selectedPlentyId' + me.entity,
-				allowBlank: false,
+				allowBlank: allowBlank,
 				editable: false,
+				multiSelect: multiSelect,
 				store: me.stores.plentymarkets,
 				displayField: 'name',
 				valueField: 'id'

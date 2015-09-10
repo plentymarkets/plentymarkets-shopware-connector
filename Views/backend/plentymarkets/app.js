@@ -35,6 +35,7 @@ Ext.define('Shopware.apps.Plentymarkets', {
 	    'log.Main',
 	    'Main',
 	    'mapping.Tab',
+	    'mapping.TabOrderStatus',
 	    'mapping.Main',
 	    'Misc',
 	    'Settings',

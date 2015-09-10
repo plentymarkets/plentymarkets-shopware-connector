@@ -197,6 +197,16 @@ class PlentymarketsMappingController
 			'name' => 'Referrer',
 			'open' => 0
 		);
+
+		$status['OrderStatus'] = array(
+			'name' => 'OrderStatus',
+			'open' => 0
+		);
+
+		/*$status['PaymentStatus'] = array(
+			'name' => 'PaymentStatus',
+			'open' => 0
+		);*/
 		
 		return $status;
 	}
