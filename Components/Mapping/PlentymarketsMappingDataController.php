@@ -265,30 +265,34 @@ class PlentymarketsMappingDataController
 		return $rows;
 	}
 
-	/**
-	 * Get the mapping data: measure units
-	 *
-	 * @return array
-	 */
-	public function getOrderStatus()
+	protected function getStatus($table, $group)
 	{
 		$rows = Shopware()->Db()
 			->query('
-					SELECT id, description as `name`
-					FROM `s_core_states`
-					WHERE `group` = "state"
-					ORDER BY `position`;
-
+					SELECT id, description as `name`, group_concat(pos.plentyID) plentyID
+					FROM `s_core_states` sws
+					left join '.$table.' pos
+					ON pos.`shopwareID` = sws.id
+					WHERE sws.`group` = "'.$group.'"
+					group by sws.id
+					ORDER BY sws.`position`
 				')
 			->fetchAll();
 
-		$plentyMU = PlentymarketsConfig::getInstance()->getItemMeasureUnits();
+		$plentyMU = PlentymarketsImportController::getOrderStatusList();
 
 		foreach ($rows as &$row)
 		{
 			if ($row['plentyID'])
 			{
-				$row['plentyName'] = $plentyMU[$row['plentyID']]['name'];
+				$plentyIds = explode(',', $row['plentyID']);
+				$names = array();
+				foreach ($plentyIds as $plentyId)
+				{
+					$plentyId = str_replace('.0', '', $plentyId);
+					$names[] = $plentyMU[$plentyId]['name'];
+				}
+				$row['plentyName'] = implode(', ', $names);
 			}
 			else
 			{
@@ -297,6 +301,26 @@ class PlentymarketsMappingDataController
 		}
 
 		return $rows;
+	}
+
+	/**
+	 * Get the mapping data: measure units
+	 *
+	 * @return array
+	 */
+	public function getOrderStatus()
+	{
+		return $this->getStatus('plenty_mapping_order_status', 'state');
+	}
+
+	/**
+	 * Get the mapping data: measure units
+	 *
+	 * @return array
+	 */
+	public function getPaymentStatus()
+	{
+		return $this->getStatus('plenty_mapping_payment_status', 'payment');
 	}
 
 	/**

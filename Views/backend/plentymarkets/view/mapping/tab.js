@@ -57,16 +57,16 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Tab', {
 			e.record.save({
 				params: {
 					entity: me.entity,
-					selectedPlentyId: Ext.getCmp('selectedPlentyId' + me.entity).getValue()
+					'selectedPlentyId[]': Ext.getCmp('selectedPlentyId' + me.entity).getValue()
 				},
 				success: function(data, b)
 				{
 					var response = Ext.decode(b.response.responseText);
 					me.status = response.data;
+					me.reload();
 				}
 			});
 			e.record.commit();
-			me.reload();
 		});
 
 		me.callParent(arguments);
@@ -77,7 +77,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Tab', {
 		var me = this, items = ['->'];
 		me.currentResource = null;
 
-		if (me.status.get('open') > 0)
+		if (me.status.get('open') > 0 && !/Status/.test(me.entity))
 		{
 			items.push({
 				xtype: 'button',

@@ -138,10 +138,14 @@ class PlentymarketsImportController
 
 			$PlentymarketsImportEntityOrderOutgoingItems = new PlentymarketsImportEntityOrderOutgoingItems($shopId['plentyID']);
 			$PlentymarketsImportEntityOrderOutgoingItems->import();
+
+			$PlentymarketsImportEntityOrderStatusChange = new PlentymarketsImportEntityOrderStatusChange($shopId['plentyID']);
+			$PlentymarketsImportEntityOrderStatusChange->import();
 		}
 
 		PlentymarketsConfig::getInstance()->setImportOrderIncomingPaymentsLastUpdateTimestamp($timestamp);
 		PlentymarketsConfig::getInstance()->setImportOrderOutgoingItemsLastUpdateTimestamp($timestamp);
+		PlentymarketsConfig::getInstance()->setImportOrderStatusChangeLastUpdateTimestamp($timestamp);
 	}
 
 	/**

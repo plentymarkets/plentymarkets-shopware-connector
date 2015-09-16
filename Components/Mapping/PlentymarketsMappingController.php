@@ -203,10 +203,10 @@ class PlentymarketsMappingController
 			'open' => 0
 		);
 
-		/*$status['PaymentStatus'] = array(
+		$status['PaymentStatus'] = array(
 			'name' => 'PaymentStatus',
 			'open' => 0
-		);*/
+		);
 		
 		return $status;
 	}

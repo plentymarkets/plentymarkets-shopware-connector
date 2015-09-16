@@ -192,7 +192,6 @@ class PlentymarketsConfig
 			!is_null($this->getOrderPaidStatusID()) &&
 			!is_null($this->getOutgoingItemsID()) &&
 			!is_null($this->getOutgoingItemsShopwareOrderStatusID()) &&
-			!is_null($this->getReversalShopwareOrderStatusID()) &&
 			!is_null($this->getIncomingPaymentShopwarePaymentFullStatusID()) &&
 			!is_null($this->getIncomingPaymentShopwarePaymentPartialStatusID())
 		);

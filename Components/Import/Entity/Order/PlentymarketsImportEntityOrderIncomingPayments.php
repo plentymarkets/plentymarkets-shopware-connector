@@ -25,9 +25,7 @@
 
 /**
  * PlentymarketsImportEntityOrderIncomingPayments provides
- *  -> the actual order incoming payments import functionality
- *  -> status change in case of order reversal
- *
+ * the actual order incoming payments import functionality
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
@@ -44,11 +42,6 @@ class PlentymarketsImportEntityOrderIncomingPayments extends PlentymarketsImport
 	 * @var integer
 	 */
 	protected static $paymentStatusPartial;
-
-	/**
-	 * @var integer
-	 */
-	protected static $orderStatusReversal;
 
 	/**
 	 *
@@ -69,7 +62,7 @@ class PlentymarketsImportEntityOrderIncomingPayments extends PlentymarketsImport
 			$this->log('LastUpdate: ' . date('r', $timestamp));
 		}
 
-		$this->Request_SearchOrders->LastUpdateFrom = $timestamp;
+		$this->Request_SearchOrders->OrderPaidFrom = $timestamp;
 
 		if (is_null(self::$paymentStatusFull))
 		{
@@ -79,11 +72,6 @@ class PlentymarketsImportEntityOrderIncomingPayments extends PlentymarketsImport
 		if (is_null(self::$paymentStatusPartial))
 		{
 			self::$paymentStatusPartial = PlentymarketsConfig::getInstance()->getIncomingPaymentShopwarePaymentPartialStatusID();
-		}
-
-		if (is_null(self::$orderStatusReversal))
-		{
-			self::$orderStatusReversal = PlentymarketsConfig::getInstance()->getReversalShopwareOrderStatusID();
 		}
 	}
 
@@ -122,12 +110,6 @@ class PlentymarketsImportEntityOrderIncomingPayments extends PlentymarketsImport
 			', array(
 				$shopwareOrderId,
 			));
-		}
-
-		// Reversal
-		if ($Order->OrderStatus >= 8 && $Order->OrderStatus < 9)
-		{
-			self::$OrderModule->setOrderStatus($shopwareOrderId, self::$orderStatusReversal, false, 'plentymarkets');
 		}
 	}
 }

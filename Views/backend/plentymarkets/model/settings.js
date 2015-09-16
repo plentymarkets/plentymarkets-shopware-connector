@@ -153,10 +153,6 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		type: 'integer',
 		defaultValue: 7
 	}, {
-		name: 'ReversalShopwareOrderStatusID',
-		type: 'integer',
-		defaultValue: 4
-	}, {
 		name: 'IncomingPaymentShopwarePaymentFullStatusID',
 		type: 'integer',
 		defaultValue: 12

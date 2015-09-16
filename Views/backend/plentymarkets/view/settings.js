@@ -474,33 +474,6 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
             },
             {
                 xtype: 'fieldset',
-                title: 'Auftragsstatus',
-                layout: 'anchor',
-                defaults: {
-                    labelWidth: 155,
-                    xtype: 'combo',
-                    queryMode: 'local',
-                    anchor: '100%',
-                    emptyText: '---',
-                    displayField: 'description',
-                    valueField: 'id',
-                    allowBlank: true,
-                    multiSelect: true,
-                    editable: false
-                },
-                items: [
-                    {
-                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/ReversalShopwareOrderStatusID}shopware Auftragsstatus{/s}',
-                        name: 'ReversalShopwareOrderStatusID',
-                        store: Ext.create('Shopware.apps.Base.store.OrderStatus').load(),
-                        displayField: 'description',
-                        supportText: 'Dieser Auftragsstatus wird gesetzt, wenn in plentymarkets der Auftrag storniert worden ist (sich also im Status 8 befindet). '
-                    }
-
-                ]
-            },
-            {
-                xtype: 'fieldset',
                 title: 'Initialer Export',
                 layout: 'anchor',
                 defaults: {

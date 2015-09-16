@@ -418,7 +418,6 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		$Config->setOrderItemTextSyncActionID($this->Request()->OrderItemTextSyncActionID == true ? EXPORT_ORDER_ITEM_TEXT_SYNC : EXPORT_ORDER_ITEM_TEXT_SYNC_NO);
 		$Config->setOutgoingItemsOrderStatus($this->Request()->OutgoingItemsOrderStatus);
 		$Config->setOutgoingItemsID($this->Request()->OutgoingItemsID);
-		$Config->setReversalShopwareOrderStatusID($this->Request()->ReversalShopwareOrderStatusID);
 		$Config->setOutgoingItemsShopwareOrderStatusID($this->Request()->OutgoingItemsShopwareOrderStatusID);
 		$Config->setIncomingPaymentShopwarePaymentFullStatusID($this->Request()->IncomingPaymentShopwarePaymentFullStatusID);
 		$Config->setIncomingPaymentShopwarePaymentPartialStatusID($this->Request()->IncomingPaymentShopwarePaymentPartialStatusID);
@@ -529,10 +528,21 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 
 		$method = sprintf('add%s', $entity);
 
-		call_user_func(array(
-			'PlentymarketsMappingController',
-			$method
-		), $params['id'], $params['selectedPlentyId']);
+		if (!is_array($params['selectedPlentyId']))
+		{
+			$params['selectedPlentyId'] = array($params['selectedPlentyId']);
+		}
+
+		foreach ($params['selectedPlentyId'] as $selectedPlentyId)
+		{
+			//$selectedPlentyId = sprintf("%.1f", (float)$selectedPlentyId);
+
+			call_user_func(array(
+				'PlentymarketsMappingController',
+				$method
+			), $params['id'], $selectedPlentyId);
+
+		}
 
 		// Neu schreiben
 		$this->View()->assign(array(
@@ -740,6 +750,10 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 				}
 
 				$data = PlentymarketsImportController::getOrderStatusList();
+				foreach ($data as &$d)
+				{
+					$d['id'] = $d['status'];
+				}
 				break;
 		}
 
@@ -798,6 +812,10 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 
 			case 'OrderStatus':
 				$rows = $DataController->getOrderStatus();
+				break;
+
+			case 'PaymentStatus':
+				$rows = $DataController->getPaymentStatus();
 				break;
 		}
 
