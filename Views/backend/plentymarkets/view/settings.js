@@ -378,6 +378,14 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
                 },
                 items: [
                     {
+                        fieldLabel: '{s name=plentymarkets/view/settings/checkbox/CheckOutgoingItems}Aktiv{/s}',
+                        name: 'CheckOutgoingItems',
+                        xtype: 'checkbox',
+                        inputValue: 1,
+                        uncheckedValue: '0',
+                        supportText: 'Deaktivieren Sie diese Funktion, um nur mit den Auftragsstatus zu arbeiten.'
+                    },
+                    {
                         fieldLabel: '{s name=plentymarkets/view/settings/textfield/OutgoingItemsID}Warenausgang{/s}',
                         name: 'OutgoingItemsID',
                         id: 'OutgoingItemsID',
@@ -455,6 +463,14 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
                     editable: false
                 },
                 items: [
+                    {
+                        fieldLabel: '{s name=plentymarkets/view/settings/checkbox/CheckIncomingPayment}Aktiv{/s}',
+                        name: 'CheckIncomingPayment',
+                        xtype: 'checkbox',
+                        inputValue: 1,
+                        uncheckedValue: '0',
+                        supportText: 'Deaktivieren Sie diese Funktion, um nur mit den Auftragsstatus zu arbeiten.'
+                    },
                     {
                         xtype: 'combo',
                         fieldLabel: '{s name=plentymarkets/view/settings/textfield/IncomingPaymentShopwarePaymentFullStatusID}shopware Zahlungsstatus (komplett bezahlt){/s}',

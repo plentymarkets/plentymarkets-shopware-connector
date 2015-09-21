@@ -172,9 +172,15 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		name: 'OrderItemTextSyncActionID',
 		type: 'integer',
 		defaultValue: 1
-	},
-
-	{
+	}, {
+		name: 'CheckOutgoingItems',
+		type: 'boolean',
+		defaultValue: false
+	}, {
+		name: 'CheckIncomingPayment',
+		type: 'boolean',
+		defaultValue: false
+	}, {
 		name: 'CustomerDefaultFormOfAddressID',
 		type: 'integer',
 		defaultValue: [0]

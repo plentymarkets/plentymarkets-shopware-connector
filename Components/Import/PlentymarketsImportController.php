@@ -126,6 +126,17 @@ class PlentymarketsImportController
 		// Starttimestamp
 		$timestamp = time();
 
+		// Ist ein Status-Mapping gesetzt?
+		$methodOfPayment = Shopware()->Db()->fetchAssoc('
+			SELECT 1 FROM plenty_mapping_payment_status
+		');
+
+		$order = Shopware()->Db()->fetchAssoc('
+			SELECT 1 FROM plenty_mapping_order_status
+		');
+
+		$checkStatus = $methodOfPayment || $order;
+
 		// Get the data from plentymarkets (for every mapped shop)
 		$shopIds = Shopware()->Db()->fetchAll('
 			SELECT plentyID FROM plenty_mapping_shop
@@ -133,14 +144,23 @@ class PlentymarketsImportController
 
 		foreach ($shopIds as $shopId)
 		{
-			$PlentymarketsImportEntityOrderIncomingPayments = new PlentymarketsImportEntityOrderIncomingPayments($shopId['plentyID']);
-			$PlentymarketsImportEntityOrderIncomingPayments->import();
+			if (PlentymarketsConfig::getInstance()->getCheckIncomingPayment(false))
+			{
+				$PlentymarketsImportEntityOrderIncomingPayments = new PlentymarketsImportEntityOrderIncomingPayments($shopId['plentyID']);
+				$PlentymarketsImportEntityOrderIncomingPayments->import();
+			}
 
-			$PlentymarketsImportEntityOrderOutgoingItems = new PlentymarketsImportEntityOrderOutgoingItems($shopId['plentyID']);
-			$PlentymarketsImportEntityOrderOutgoingItems->import();
+			if (PlentymarketsConfig::getInstance()->getCheckOutgoingItems(false))
+			{
+				$PlentymarketsImportEntityOrderOutgoingItems = new PlentymarketsImportEntityOrderOutgoingItems($shopId['plentyID']);
+				$PlentymarketsImportEntityOrderOutgoingItems->import();
+			}
 
-			$PlentymarketsImportEntityOrderStatusChange = new PlentymarketsImportEntityOrderStatusChange($shopId['plentyID']);
-			$PlentymarketsImportEntityOrderStatusChange->import();
+			if ($checkStatus)
+			{
+				$PlentymarketsImportEntityOrderStatusChange = new PlentymarketsImportEntityOrderStatusChange($shopId['plentyID']);
+				$PlentymarketsImportEntityOrderStatusChange->import();
+			}
 		}
 
 		PlentymarketsConfig::getInstance()->setImportOrderIncomingPaymentsLastUpdateTimestamp($timestamp);

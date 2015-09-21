@@ -417,8 +417,10 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		$Config->setOrderShopgateMOPIDs(implode('|', $this->Request()->OrderShopgateMOPIDs));
 		$Config->setOrderItemTextSyncActionID($this->Request()->OrderItemTextSyncActionID == true ? EXPORT_ORDER_ITEM_TEXT_SYNC : EXPORT_ORDER_ITEM_TEXT_SYNC_NO);
 		$Config->setOutgoingItemsOrderStatus($this->Request()->OutgoingItemsOrderStatus);
+		$Config->setCheckOutgoingItems($this->Request()->CheckOutgoingItems == true ? 1 : 0);
 		$Config->setOutgoingItemsID($this->Request()->OutgoingItemsID);
 		$Config->setOutgoingItemsShopwareOrderStatusID($this->Request()->OutgoingItemsShopwareOrderStatusID);
+		$Config->setCheckIncomingPayment($this->Request()->CheckIncomingPayment == true ? 1 : 0);
 		$Config->setIncomingPaymentShopwarePaymentFullStatusID($this->Request()->IncomingPaymentShopwarePaymentFullStatusID);
 		$Config->setIncomingPaymentShopwarePaymentPartialStatusID($this->Request()->IncomingPaymentShopwarePaymentPartialStatusID);
 		$Config->setInitialExportChunkSize(max($this->Request()->InitialExportChunkSize, 1));
