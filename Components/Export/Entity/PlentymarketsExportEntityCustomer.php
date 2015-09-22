@@ -433,6 +433,13 @@ class PlentymarketsExportEntityCustomer
 			$zip = PlentymarketsConfig::getInstance()->get('CustomerDefaultZipcode');
 		}
 
+		$formOfAddress = $this->getDeliveryFormOfAddress();
+
+		if(is_null($formOfAddress))
+		{
+			$formOfAddress = PlentymarketsConfig::getInstance()->get('CustomerDefaultFormOfAddressID');
+		}
+
 		$Request_SetCustomerDeliveryAddresses = new PlentySoapRequest_SetCustomerDeliveryAddresses();
 
 		$Request_SetCustomerDeliveryAddresses->DeliveryAddresses = array();
@@ -444,7 +451,7 @@ class PlentymarketsExportEntityCustomer
 		$Object_SetCustomerDeliveryAddressesCustomer->CustomerID = $this->PLENTY_customerID; // int
 		$Object_SetCustomerDeliveryAddressesCustomer->ExternalDeliveryAddressID = PlentymarketsUtils::getExternalCustomerID($this->ShippingAddress->getId()); // string
 		$Object_SetCustomerDeliveryAddressesCustomer->FirstName = $this->ShippingAddress->getFirstName();
-		$Object_SetCustomerDeliveryAddressesCustomer->FormOfAddress = $this->getDeliveryFormOfAddress(); // int
+		$Object_SetCustomerDeliveryAddressesCustomer->FormOfAddress = (int)$formOfAddress; // int
 		$Object_SetCustomerDeliveryAddressesCustomer->HouseNumber = $streetHouseNumber;
 		$Object_SetCustomerDeliveryAddressesCustomer->Street = $streetName;
 		$Object_SetCustomerDeliveryAddressesCustomer->Surname = $this->ShippingAddress->getLastName();
