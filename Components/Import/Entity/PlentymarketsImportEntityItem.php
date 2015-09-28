@@ -346,7 +346,8 @@ class PlentymarketsImportEntityItem
 			$sku = sprintf('%s-%s-%s', $this->ItemBase->ItemID, $AttributeValueSet->PriceID, $AttributeValueSet->AttributeValueSetID);
 
 			// Strip whitespaces
-			$number = trim($AttributeValueSet->ColliNo);
+			$variationNumberField = PyConf()->getItemVariationNumberSourceKey('ColliNo');
+			$number = trim($AttributeValueSet->{$variationNumberField});
 
 			try
 			{
@@ -580,11 +581,21 @@ class PlentymarketsImportEntityItem
 		/** @var PlentySoapObject_ItemProperty $ItemProperty */
 		foreach ($groups[$groupId] as $ItemProperty)
 		{
+			$isSelection = false;
+
+			// Use SelectionName as PropertyValue for Merkmale-Typ "Auswahl"
+			if (empty($ItemProperty->PropertyValue) && !empty($ItemProperty->PropertySelectionName))
+			{
+				$ItemProperty->PropertyValue = $ItemProperty->PropertySelectionName;
+				$isSelection = true;
+			}
+
 			// import only property values in German language
-			if($ItemProperty->PropertyValueLang != 'de')
+			if($ItemProperty->PropertyValueLang != 'de' && !$isSelection)
 			{
 				continue;
 			}
+
 			// Mapping GroupId;ValueId -> ValueId
 			try
 			{
@@ -625,11 +636,6 @@ class PlentymarketsImportEntityItem
 
 				// Save the mapping
 				PlentymarketsMappingController::addProperty($filterGroupId . ';' . $optionId, $ItemProperty->PropertyID);
-			}
-
-			// Use SelectionName as PropertyValue for Merkmale-Typ "Auswahl"
-			if (empty($ItemProperty->PropertyValue) && !empty($ItemProperty->PropertySelectionName)) {
-				$ItemProperty->PropertyValue = $ItemProperty->PropertySelectionName;
 			}
 
 			// Shopware cannot handle empty values
@@ -799,7 +805,8 @@ class PlentymarketsImportEntityItem
 			if (PlentymarketsConfig::getInstance()->getItemNumberImportActionID(IMPORT_ITEM_NUMBER) == IMPORT_ITEM_NUMBER && !count($this->variants))
 			{
 				// strip whitespaces
-				$number = trim($this->ItemBase->ItemNo);
+				$numberField = PyConf()->getItemNumberSourceKey('ItemNo');
+				$number = trim($this->ItemBase->{$numberField});
 
 				// If this number does not belong to this item
 				if (!PlentymarketsImportItemHelper::isNumberExistantItem($number, $SHOPWARE_itemID))
@@ -1020,7 +1027,8 @@ class PlentymarketsImportEntityItem
 				if (PlentymarketsConfig::getInstance()->getItemNumberImportActionID(IMPORT_ITEM_NUMBER) == IMPORT_ITEM_NUMBER)
 				{
 					// strip whitespaces
-					$number = trim($this->ItemBase->ItemNo);
+					$numberField = PyConf()->getItemNumberSourceKey('ItemNo');
+					$number = trim($this->ItemBase->{$numberField});
 
 					// Nummer ist ungültig oder in Benutzung
 					if (!PlentymarketsImportItemHelper::isNumberValid($number))

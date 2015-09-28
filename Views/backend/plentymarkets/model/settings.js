@@ -108,6 +108,14 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		type: 'integer',
 		defaultValue: 1
 	}, {
+		name: 'ItemNumberSourceKey',
+		type: 'string',
+		defaultValue: 'ItemNo'
+	}, {
+		name: 'ItemVariationNumberSourceKey',
+		type: 'string',
+		defaultValue: 'ColliNo'
+	}, {
 		name: 'ItemBundleHeadActionID',
 		type: 'integer',
 		defaultValue: 0

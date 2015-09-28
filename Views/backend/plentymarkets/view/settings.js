@@ -207,6 +207,36 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
                         supportText: 'Aktivieren, wenn die Artikelnummern von plentymarkets übernommen werden sollen.'
                     },
                     {
+                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemNumberSourceKey}Artikelnummer{/s}',
+                        name: 'ItemNumberSourceKey',
+                        supportText: 'Wählen Sie aus, welcher Wert von plentymarktes als Artikelnummer in Shopware verwendet werden soll.',
+                        store: new Ext.data.ArrayStore({
+                            fields: ['id', 'name'],
+                            data: [
+                                ['ItemNo', 'Artikelnummer'],
+                                ['EAN1', 'EAN 1'],
+                                ['EAN2', 'EAN 2'],
+                                ['EAN3', 'EAN 3'],
+                                ['EAN4', 'EAN 4']
+                            ]
+                        })
+                    },
+                    {
+                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemVariationNumberSourceKey}Variantennummer{/s}',
+                        name: 'ItemVariationNumberSourceKey',
+                        supportText: 'Wählen Sie aus, welcher Wert von plentymarktes als Variantennummer in Shopware verwendet werden soll.',
+                        store: new Ext.data.ArrayStore({
+                            fields: ['id', 'name'],
+                            data: [
+                                ['ColliNo', 'Variantennummer'],
+                                ['EAN', 'EAN 1'],
+                                ['EAN2', 'EAN 2'],
+                                ['EAN3', 'EAN 3'],
+                                ['EAN4', 'EAN 4']
+                            ]
+                        })
+                    },
+                    {
                         fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemBundleHeadActionID}Artikelpaket-Artikel erstellen{/s}',
                         name: 'ItemBundleHeadActionID',
                         xtype: 'checkbox',

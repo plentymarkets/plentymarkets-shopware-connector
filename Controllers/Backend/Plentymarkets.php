@@ -402,6 +402,8 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		$Config->setItemImageAltAttributeID($this->Request()->ItemImageAltAttributeID);
 		$Config->setItemCategorySyncActionID($this->Request()->ItemCategorySyncActionID == true ? IMPORT_ITEM_CATEGORY_SYNC : IMPORT_ITEM_CATEGORY_NO_SYNC);
 		$Config->setItemNumberImportActionID($this->Request()->ItemNumberImportActionID == true ? IMPORT_ITEM_NUMBER : IMPORT_ITEM_NUMBER_NO);
+		$Config->setItemNumberSourceKey($this->Request()->ItemNumberSourceKey);
+		$Config->setItemVariationNumberSourceKey($this->Request()->ItemVariationNumberSourceKey);
 		$Config->setItemBundleHeadActionID($this->Request()->ItemBundleHeadActionID == true ? IMPORT_ITEM_BUNDLE_HEAD : IMPORT_ITEM_BUNDLE_HEAD_NO);
 		$Config->setItemAssociateImportActionID(
 			$this->Request()->ItemAssociateImportActionID == PlentymarketsImportItemAssociateController::ACTION_DETACHED

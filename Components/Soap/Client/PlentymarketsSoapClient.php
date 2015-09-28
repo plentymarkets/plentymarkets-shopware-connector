@@ -301,19 +301,39 @@ class PlentymarketsSoapClient extends SoapClient
 			try
 			{
 				$headers = $this->__getLastResponseHeaders();
-				
-				preg_match('/X-Plenty-Soap-Calls-Left: (-?\d+)/', $headers, $matches);
-				$callsLeft = isset($matches[1]) ? (int) $matches[1] : -1;
-				
-				preg_match('/X-Plenty-Soap-Seconds-Left: (-?\d+)/', $headers, $matches);
-				$secondsLeft = isset($matches[1]) ? (int) $matches[1] : -1;
 
-				// check if the limit of the soap calls is already reached 
-				if ($callsLeft <= 1 && $secondsLeft > 0)
+				if ($headers)
 				{
-					sleep($secondsLeft);
+					preg_match('/X-Plenty-Soap-Calls-Left: (-?\d+)/', $headers, $matches);
+					$callsLeft = isset($matches[1]) ? (int) $matches[1] : -1;
+
+					preg_match('/X-Plenty-Soap-Seconds-Left: (-?\d+)/', $headers, $matches);
+					$secondsLeft = isset($matches[1]) ? (int) $matches[1] : -1;
+
+					if (!($callsLeft % 50))
+					{
+						PyLog()->message(
+							'Soap:CallLimit',
+							sprintf('Soap-Calls-Left: %d – Soap-Seconds-Left: %d', $callsLeft, $secondsLeft)
+						);
+					}
+
+					// check if the limit of the soap calls is already reached
+					if ($callsLeft != -1 && $callsLeft <= 10)
+					{
+						$sleep = $secondsLeft + 5;
+						PyLog()->message(
+							'Soap:CallLimit',
+							sprintf('Soap call limit reached. Waiting %d seconds.', $sleep)
+						);
+						sleep($sleep);
+						PyLog()->message(
+							'Soap:CallLimit',
+							sprintf('Waited %d seconds.', $sleep)
+						);
+					}
 				}
-				
+
 				// Call
 				$Response = $this->doCall($call, $args);
 

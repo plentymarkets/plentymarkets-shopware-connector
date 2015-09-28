@@ -195,11 +195,15 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 		{
 			PyConf()->setCheckIncomingPayment(1);
 			PyConf()->setCheckOutgoingItems(1);
+			PyConf()->setItemNumberSourceKey('ItemNo');
+			PyConf()->setItemVariationNumberSourceKey('ColliNo');
 			PlentymarketsConfig::getInstance()->setImportOrderStatusChangeLastUpdateTimestamp(time());
 
 			$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'setCheckIncomingPayment(1)');
 			$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'setCheckOutgoingItems(1)');
 			$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'setImportOrderStatusChangeLastUpdateTimestamp(time())');
+			$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, "setItemNumberSourceKey('ItemNo')");
+			$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, "setItemVariationNumberSourceKey('ColliNo')");
 
 			try
 			{
