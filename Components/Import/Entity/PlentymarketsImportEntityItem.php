@@ -891,7 +891,8 @@ class PlentymarketsImportEntityItem
 
 				// The configurator set has to be adapted
 				$update['configuratorSet'] = array(
-					'groups' => $VariantController->getGroups()
+					'groups' => $VariantController->getGroups(),
+					'type' => PlentymarketsConfig::getInstance()->getItemConfiguratorSetType(0),
 				);
 
 				// Delete all variants
@@ -1112,7 +1113,8 @@ class PlentymarketsImportEntityItem
 				$updateArticle = array(
 
 					'configuratorSet' => array(
-						'groups' => $VariantController->getGroups()
+						'groups' => $VariantController->getGroups(),
+						'type' => PlentymarketsConfig::getInstance()->getItemConfiguratorSetType(0),
 					),
 
 					'variants' => array_values($this->variants)
