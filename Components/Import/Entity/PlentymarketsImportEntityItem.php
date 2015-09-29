@@ -206,6 +206,17 @@ class PlentymarketsImportEntityItem
 				$this->data['supplierId'] = PlentymarketsConfig::getInstance()->getItemProducerID();
 			}
 		}
+
+        // Allow plugins to change the data
+        $this->data = Enlight()->Events()->filter(
+            'PlentyConnector_ImportEntityItem_AfterSetData',
+            $this->data,
+            array(
+                'subject' => $this,
+                'itembase' => $this->ItemBase,
+                'shop' => $this->Shop,
+            )
+        );
 	}
 
 	/**
@@ -314,6 +325,17 @@ class PlentymarketsImportEntityItem
 				$details['unitId'] = null;
 			}
 		}
+
+        // Allow plugins to change the details
+        $details = Enlight()->Events()->filter(
+            'PlentyConnector_ImportEntityItem_AfterSetDetails',
+            $details,
+            array(
+                'subject' => $this,
+                'itembase' => $this->ItemBase,
+                'shop' => $this->Shop,
+            )
+        );
 
 		$this->details = $details;
 	}
