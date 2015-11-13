@@ -173,10 +173,10 @@ class PlentymarketsImportEntityItem
 	{
 		// save the item texts for the shop main language
 		$this->data = array();
-		$this->data['name'] = $this->ItemBase->Texts->Name3;
-		$this->data['description'] = $this->ItemBase->Texts->ShortDescription;
-		$this->data['descriptionLong'] = $this->ItemBase->Texts->LongDescription;
-		$this->data['keywords'] = $this->ItemBase->Texts->Keywords;
+		$this->data['name'] = $this->getItemName($this->ItemBase->Texts);
+		$this->data['description'] = (PlentymarketsConfig::getInstance()->getItemShortDescriptionImportActionID(IMPORT_ITEM_SHORTDESC) == 1) ? $this->ItemBase->Texts->ShortDescription : '';
+		$this->data['descriptionLong'] = (PlentymarketsConfig::getInstance()->getItemLongDescriptionImportActionID(IMPORT_ITEM_LONGDESC) == 1) ? $this->ItemBase->Texts->LongDescription : '';
+		$this->data['keywords'] = (PlentymarketsConfig::getInstance()->getItemKeywordsImportActionID(IMPORT_ITEM_KEYWORDS) == 1) ? $this->ItemBase->Texts->Keywords : '';
 		
 		$this->data['highlight'] = ($this->ItemBase->WebShopSpecial == 3);
 		$this->data['lastStock'] = ($this->ItemBase->Stock->Limitation == 1);
@@ -217,6 +217,26 @@ class PlentymarketsImportEntityItem
                 'shop' => $this->Shop,
             )
         );
+	}
+
+	/**
+	 * Returns the item name
+	 *
+	 * @return string
+	 */
+	protected function getItemName($ItemTexts)
+	{
+		$useName = PlentymarketsConfig::getInstance()->getItemNameImportActionID(IMPORT_ITEM_NAME);
+
+		if($useName != 'Name')
+		{
+			if(!empty($ItemTexts->$useName))
+			{
+				return $ItemTexts->$useName;
+			}
+		}
+
+		return $ItemTexts->Name;
 	}
 
 	/**
