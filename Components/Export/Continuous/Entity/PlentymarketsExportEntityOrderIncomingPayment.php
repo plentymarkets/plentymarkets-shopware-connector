@@ -51,11 +51,6 @@ class PlentymarketsExportEntityOrderIncomingPayment
     protected $plentyOrder = array();
 
     /**
-     * @var Klarna
-     */
-    protected $klarnaService;
-
-    /**
      * Constructor method
      *
      * @param integer $orderID Shopware order id
@@ -86,11 +81,6 @@ class PlentymarketsExportEntityOrderIncomingPayment
         }
 
         $this->plentyOrder = $plentyOrder;
-
-        /**
-         * @var Klarna $klarna
-         */
-        $this->klarnaService = Shopware()->Container()->get('KlarnaService');
     }
 
     /**
@@ -221,20 +211,6 @@ class PlentymarketsExportEntityOrderIncomingPayment
     }
 
     /**
-     * @return int|null
-     */
-    private function getKlarnaPClass()
-    {
-        $pClasses = $this->klarnaService->getPClasses();
-
-        if (isset($pClasses[0])) {
-            return $pClasses[0];
-        }
-
-        return null;
-    }
-
-    /**
      * Returns the klarna transaction id
      *
      * @return string
@@ -259,20 +235,25 @@ class PlentymarketsExportEntityOrderIncomingPayment
 
                 return sprintf('%s_%s_%s', $order->transactionid, $pclass->pclassid, $multistore->shop_id);
             } elseif ($this->pluginExists('SwagPaymentKlarna') || $this->pluginExists('SwagPaymentKlarnaKpm')) {
+				/**
+				 * @var Klarna $klarnaService
+				 */
+				$klarnaService = Shopware()->Container()->get('KlarnaService');
+
                 if (!empty($this->order['languageIso'])) {
-                    $this->klarnaService->setLanguage($this->order['languageIso']);
+                    $klarnaService->setLanguage($this->order['languageIso']);
                 } else {
                     throw new Exception('order language missing');
                 }
 
                 if (!empty($this->order['billing']['country']['iso'])) {
-                    $this->klarnaService->setCountry($this->order['billing']['country']['iso']);
+                    $klarnaService->setCountry($this->order['billing']['country']['iso']);
                 } else {
                     throw new Exception('order country missing');
                 }
 
                 if (!empty($this->order['currency'])) {
-                    $this->klarnaService->setCurrency($this->order['currency']);
+                    $klarnaService->setCurrency($this->order['currency']);
                 } else {
                     throw new Exception('order currency missing');
                 }
@@ -280,7 +261,8 @@ class PlentymarketsExportEntityOrderIncomingPayment
                 /**
                  * @var KlarnaPClass $pclass
                  */
-                $pclass = $this->getKlarnaPClass();
+                $pclasses = $klarnaService->getPClasses();
+				$pclass = (isset($pclasses[0]) ? $pclasses[0] : null);
 
                 if (!empty($pclass)) {
                     if (isset($this->order['payment']['name']) && $this->order['payment']['name'] == 'klarna_invoice') {
