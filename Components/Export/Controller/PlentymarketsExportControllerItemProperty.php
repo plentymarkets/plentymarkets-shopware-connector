@@ -159,7 +159,7 @@ class PlentymarketsExportControllerItemProperty
 	{
 		$Request_SetPropertyGroups = new PlentySoapRequest_SetPropertyGroups();
 
-		$Request_SetPropertyGroups->Properties = array();
+		$Request_SetPropertyGroups->PropertyGroups = array();
 
 		$mainShops = PlentymarketsUtils::getShopwareMainShops();
 

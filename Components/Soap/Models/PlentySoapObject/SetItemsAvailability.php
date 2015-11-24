@@ -1,7 +1,8 @@
 <?php
+
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2014 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,7 +23,7 @@
  * trademark license. Therefore any rights, titles and interests in the
  * above trademarks remain entirely with the trademark owners.
  *
- * @copyright  Copyright (c) 2014, plentymarkets GmbH (http://www.plentymarkets.com)
+ * @copyright  Copyright (c) 2013-2015, plentymarkets GmbH (http://www.plentymarkets.com)
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
@@ -31,66 +32,6 @@
  */
 class PlentySoapObject_SetItemsAvailability
 {
-	
-	/**
-	 * @var int
-	 */
-	public $AmazonFBA;
-	
-	/**
-	 * @var string
-	 */
-	public $AmazonFEDAS;
-	
-	/**
-	 * @var boolean
-	 */
-	public $AmazonMultichannel;
-	
-	/**
-	 * @var boolean
-	 */
-	public $AmazonMultichannelCom;
-	
-	/**
-	 * @var boolean
-	 */
-	public $AmazonMultichannelDe;
-	
-	/**
-	 * @var boolean
-	 */
-	public $AmazonMultichannelEs;
-	
-	/**
-	 * @var boolean
-	 */
-	public $AmazonMultichannelFr;
-	
-	/**
-	 * @var boolean
-	 */
-	public $AmazonMultichannelIt;
-	
-	/**
-	 * @var boolean
-	 */
-	public $AmazonMultichannelUk;
-	
-	/**
-	 * @var int
-	 */
-	public $AmazonProduct;
-	
-	/**
-	 * @var int
-	 */
-	public $Availability;
-	
-	/**
-	 * @var int
-	 */
-	public $AvailableUntil;
 	
 	/**
 	 * @var int
@@ -113,39 +54,9 @@ class PlentySoapObject_SetItemsAvailability
 	public $ChangeNotAvailableNoStockVariant;
 	
 	/**
-	 * @var int
+	 * @var PlentySoapObject_ItemAvailability
 	 */
-	public $CouchCommerce;
-	
-	/**
-	 * @var int
-	 */
-	public $Gimahhot;
-	
-	/**
-	 * @var int
-	 */
-	public $GoogleBase;
-	
-	/**
-	 * @var int
-	 */
-	public $Grosshandel;
-	
-	/**
-	 * @var int
-	 */
-	public $Hitmeister;
-	
-	/**
-	 * @var int
-	 */
-	public $Inactive;
-	
-	/**
-	 * @var int
-	 */
-	public $IntervalSalesOrderQuantity;
+	public $ItemAvailability;
 	
 	/**
 	 * @var int
@@ -155,122 +66,12 @@ class PlentySoapObject_SetItemsAvailability
 	/**
 	 * @var int
 	 */
-	public $LaRedoute;
-	
-	/**
-	 * @var int
-	 */
-	public $Laary;
-	
-	/**
-	 * @var int
-	 */
 	public $Limitation;
 	
 	/**
 	 * @var int
 	 */
-	public $MaximumSalesOrderQuantity;
-	
-	/**
-	 * @var int
-	 */
-	public $MeinPaket;
-	
-	/**
-	 * @var int
-	 */
-	public $Mercateo;
-	
-	/**
-	 * @var int
-	 */
-	public $MinimumSalesOrderQuantity;
-	
-	/**
-	 * @var int
-	 */
-	public $Moebelprofi;
-	
-	/**
-	 * @var int
-	 */
-	public $Otto;
-	
-	/**
-	 * @var int
-	 */
-	public $PlusDe;
-	
-	/**
-	 * @var int
-	 */
 	public $Published;
-	
-	/**
-	 * @var int
-	 */
-	public $Rakuten;
-	
-	/**
-	 * @var int
-	 */
-	public $RakutenCategory;
-	
-	/**
-	 * @var int
-	 */
-	public $Restposten;
-	
-	/**
-	 * @var int
-	 */
-	public $ShopShare;
-	
-	/**
-	 * @var int
-	 */
-	public $Shopgate;
-	
-	/**
-	 * @var int
-	 */
-	public $Shopperella;
-	
-	/**
-	 * @var int
-	 */
-	public $SumoScout;
-	
-	/**
-	 * @var int
-	 */
-	public $Tracedelight;
-	
-	/**
-	 * @var int
-	 */
-	public $Tradoria;
-	
-	/**
-	 * @var int
-	 */
-	public $TradoriaCategory;
-	
-	/**
-	 * @var int
-	 */
-	public $Twenga;
-	
-	/**
-	 * @var int
-	 */
-	public $WebAPI;
-	
-	/**
-	 * @var int
-	 */
-	public $Webshop;
 	
 	/**
 	 * @var int
@@ -281,19 +82,4 @@ class PlentySoapObject_SetItemsAvailability
 	 * @var int
 	 */
 	public $WebshopVisiblePositiveStock;
-	
-	/**
-	 * @var int
-	 */
-	public $Yatego;
-	
-	/**
-	 * @var int
-	 */
-	public $Zalando;
-	
-	/**
-	 * @var int
-	 */
-	public $Zentralverkauf;
 }

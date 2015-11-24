@@ -1,7 +1,8 @@
 <?php
+
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2014 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,7 +23,7 @@
  * trademark license. Therefore any rights, titles and interests in the
  * above trademarks remain entirely with the trademark owners.
  *
- * @copyright  Copyright (c) 2014, plentymarkets GmbH (http://www.plentymarkets.com)
+ * @copyright  Copyright (c) 2013-2015, plentymarkets GmbH (http://www.plentymarkets.com)
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
@@ -73,6 +74,11 @@ class PlentySoapObject_SetItemAttribute
 	public $ImageAttribute;
 	
 	/**
+	 * @var int
+	 */
+	public $LaRedouteVariation;
+	
+	/**
 	 * @var float
 	 */
 	public $MarkupPercental;
@@ -80,7 +86,17 @@ class PlentySoapObject_SetItemAttribute
 	/**
 	 * @var int
 	 */
+	public $NeckermannAtEnterprise;
+	
+	/**
+	 * @var int
+	 */
 	public $NeckermannAttribute;
+	
+	/**
+	 * @var int
+	 */
+	public $NeckermannCrossDocking;
 	
 	/**
 	 * @var int
@@ -98,17 +114,12 @@ class PlentySoapObject_SetItemAttribute
 	public $Position;
 	
 	/**
-	 * @var int
-	 */
-	public $ShopperellaVariation;
-	
-	/**
 	 * @var ArrayOfPlentysoapobject_setitemattributevalue
 	 */
 	public $Values;
 	
 	/**
-	 * @var PlentySoapEnumeration_AddItemAttribute
+	 * @var string
 	 */
 	public $ViewWebshop;
 }
