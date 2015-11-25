@@ -143,6 +143,9 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		type: 'integer',
 		defaultValue: 1
 	}, {
+		name: 'OrderAdditionalCouponIdentifiers',
+		type: 'string'
+	}, {
 		name: 'OrderMarking1',
 		type: 'integer'
 	}, {

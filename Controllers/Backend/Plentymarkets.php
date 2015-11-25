@@ -414,6 +414,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		$Config->setItemWarehousePercentage($this->Request()->ItemWarehousePercentage);
 		$Config->setItemProducerID($this->Request()->ItemProducerID);
 		$Config->setOrderMarking1($this->Request()->OrderMarking1);
+		$Config->setOrderAdditionalCouponIdentifiers($this->Request()->OrderAdditionalCouponIdentifiers);
 		$Config->setOrderReferrerID($this->Request()->OrderReferrerID);
 		$Config->setOrderPaidStatusID(implode('|', $this->Request()->OrderPaidStatusID));
 		$Config->setOrderShopgateMOPIDs(implode('|', $this->Request()->OrderShopgateMOPIDs));

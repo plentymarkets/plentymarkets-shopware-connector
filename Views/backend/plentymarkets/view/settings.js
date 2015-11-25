@@ -305,6 +305,12 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
                                 return '{literal}<span style="padding: -3px; display: inline-block; width: 16px; height: 16px; margin-right: 3px;" class="plenty-OrderMarking-{id}"></span> {' + displayField + '}{/literal}';
                             }
                         }
+                    },{
+                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/OrderAdditionalCouponIdentifiers}Gutschein-Artikel{/s}',
+                        name: 'OrderAdditionalCouponIdentifiers',
+                        xtype: 'textfield',
+                        supportText: 'Artikelnummern, welche als Gutschein zu plentymarkets übertragen werden. Getrennt durch |.',
+                        allowBlank: true,
                     },
                     {
                         fieldLabel: '{s name=plentymarkets/view/settings/textfield/OrderReferrerID}Auftragsherkunft{/s}',

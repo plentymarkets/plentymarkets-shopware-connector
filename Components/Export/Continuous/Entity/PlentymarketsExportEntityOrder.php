@@ -349,6 +349,15 @@ class PlentymarketsExportEntityOrder
 				$rowType = 'Coupon';
 			}
 
+			// Additional coupon identifiers für 3rd party plugins
+			$couponIdentifiers = PyConf()->get('OrderAdditionalCouponIdentifiers', '');
+			$couponIdentifiers = explode('|', $couponIdentifiers);
+			if (in_array($number, $couponIdentifiers))
+			{
+				$itemId = -1;
+				$rowType = 'Coupon';
+			}
+
 			// surcharge for method of payment
 			else
 			{
