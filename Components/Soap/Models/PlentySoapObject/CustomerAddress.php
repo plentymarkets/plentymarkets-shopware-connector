@@ -32,117 +32,117 @@
  */
 class PlentySoapObject_CustomerAddress
 {
-	
+
 	/**
 	 * @var string
 	 */
 	public $AdditionalName;
-	
+
 	/**
 	 * @var string
 	 */
 	public $City;
-	
+
 	/**
 	 * @var string
 	 */
 	public $Company;
-	
+
 	/**
 	 * @var int
 	 */
 	public $CountryID;
-	
+
 	/**
 	 * @var string
 	 */
 	public $CountryISO2;
-	
+
 	/**
 	 * @var int
 	 */
 	public $CustomerID;
-	
+
 	/**
 	 * @var string
 	 */
 	public $CustomerNo;
-	
+
 	/**
 	 * @var string
 	 */
 	public $CustomerVATNumber;
-	
+
 	/**
 	 * @var string
 	 */
 	public $EbayName;
-	
+
 	/**
 	 * @var string
 	 */
 	public $Email;
-	
+
 	/**
 	 * @var string
 	 */
 	public $ExternalCustomerNo;
-	
+
 	/**
 	 * @var string
 	 */
 	public $Fax;
-	
+
 	/**
 	 * @var string
 	 */
 	public $FirstName;
-	
+
 	/**
 	 * @var int
 	 */
 	public $FormOfAddress;
-	
+
 	/**
 	 * @var string
 	 */
 	public $HouseNumber;
-	
+
 	/**
 	 * @var string
 	 */
 	public $Postident;
-	
+
 	/**
 	 * @var string
 	 */
 	public $State;
-	
+
 	/**
 	 * @var string
 	 */
 	public $StateISO;
-	
+
 	/**
 	 * @var string
 	 */
 	public $Street;
-	
+
 	/**
 	 * @var string
 	 */
 	public $Surname;
-	
+
 	/**
 	 * @var string
 	 */
 	public $Telephone;
-	
+
 	/**
 	 * @var string
 	 */
 	public $Title;
-	
+
 	/**
 	 * @var string
 	 */

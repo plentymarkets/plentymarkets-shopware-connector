@@ -32,27 +32,27 @@
  */
 class PlentySoapRequest_GetItemAttributes
 {
-	
+
 	/**
 	 * @var int
 	 */
 	public $AttributeID;
-	
+
 	/**
 	 * @var boolean
 	 */
 	public $GetValues;
-	
+
 	/**
 	 * @var string
 	 */
 	public $Lang;
-	
+
 	/**
 	 * @var int
 	 */
 	public $LastUpdateFrom;
-	
+
 	/**
 	 * @var int
 	 */
