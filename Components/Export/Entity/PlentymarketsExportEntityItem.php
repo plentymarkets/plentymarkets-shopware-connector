@@ -274,7 +274,7 @@ class PlentymarketsExportEntityItem
 
 			try
 			{
-				if(file_exists( Shopware()->DocPath() . $ImageMedia->getPath()))
+				if(version_compare(Shopware::VERSION, '5.1.0', '<'))
 				{
 					$fullpath = Shopware()->DocPath() . $ImageMedia->getPath();
 				}
