@@ -622,6 +622,13 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
                         xtype: 'checkbox',
                         inputValue: 1,
                         uncheckedValue: '0'
+                    },
+                    {
+                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/MaySendMailAtMappingfail}eMail bei Fehlern senden{/s}',
+                        name: 'MaySendMailAtMappingfail',
+                        id: 'MaySendMailAtMappingfail',
+                        xtype: 'checkbox',
+                        uncheckedValue: '0'
                     }
                 ]
             }

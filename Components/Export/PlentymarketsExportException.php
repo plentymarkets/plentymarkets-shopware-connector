@@ -33,4 +33,20 @@
  */
 class PlentymarketsExportException extends Exception
 {
+    public function __construct($message = "", $code = 0, Exception $previous = null) {
+        parent::__construct($message, $code, $previous);
+
+        // send mail to merchant in case of mapping-error
+        if ($code == 2520 && PlentymarketsConfig::getInstance()->getMaySendMailAtMappingfail(false)) {
+            $mail = Shopware()->Mail();
+            $mail->IsHTML(0);
+            $mail->From     = Shopware()->Config()->Mail;
+            $mail->FromName = Shopware()->Config()->Mail;
+            $mail->Subject  =  "plentyConnector: Fehler $code";
+            $mail->Body = "$message";
+            $mail->ClearAddresses();
+            $mail->AddAddress(Shopware()->Config()->Mail, '');
+            $mail->Send();
+        }
+    }
 }

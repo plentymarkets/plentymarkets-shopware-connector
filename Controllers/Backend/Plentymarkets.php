@@ -430,6 +430,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		$Config->setImportItemChunkSize(max($this->Request()->ImportItemChunkSize, 1));
 		$Config->setInitialExportChunksPerRun(max($this->Request()->InitialExportChunksPerRun, -1));
 		$Config->setMayLogUsageData($this->Request()->MayLogUsageData == true ? 1 : 0);
+		$Config->setMaySendMailAtMappingfail($this->Request()->MaySendMailAtMappingfail == true ? 1 : 0);
 
 		// Customer default values
 		$Config->setCustomerDefaultFormOfAddressID($this->Request()->CustomerDefaultFormOfAddressID);

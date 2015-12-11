@@ -236,6 +236,12 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		type: 'boolean',
 		defaultValue: false
 	},
+
+	{
+		name: 'MaySendMailAtMappingfail',
+		type: 'boolean',
+		defaultValue: false
+    },
 	
 	//
 	{
