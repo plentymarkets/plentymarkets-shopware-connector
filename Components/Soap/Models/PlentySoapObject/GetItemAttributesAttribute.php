@@ -1,7 +1,8 @@
 <?php
+
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2014 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,7 +23,7 @@
  * trademark license. Therefore any rights, titles and interests in the
  * above trademarks remain entirely with the trademark owners.
  *
- * @copyright  Copyright (c) 2014, plentymarkets GmbH (http://www.plentymarkets.com)
+ * @copyright  Copyright (c) 2013-2015, plentymarkets GmbH (http://www.plentymarkets.com)
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
@@ -31,72 +32,72 @@
  */
 class PlentySoapObject_GetItemAttributesAttribute
 {
-	
+
 	/**
 	 * @var int
 	 */
 	public $AmazonVariation;
-	
+
 	/**
 	 * @var string
 	 */
 	public $BackendName;
-	
+
 	/**
 	 * @var string
 	 */
 	public $Contentpage;
-	
+
 	/**
 	 * @var string
 	 */
 	public $FrontendName;
-	
+
 	/**
 	 * @var int
 	 */
 	public $GoogleProductsVariation;
-	
+
 	/**
 	 * @var int
 	 */
 	public $Id;
-	
+
 	/**
 	 * @var boolean
 	 */
 	public $ImageAttribute;
-	
+
 	/**
 	 * @var float
 	 */
 	public $MarkupPercental;
-	
+
 	/**
 	 * @var int
 	 */
 	public $NeckermannAttribute;
-	
+
 	/**
 	 * @var int
 	 */
 	public $OttoVariation;
-	
+
 	/**
 	 * @var int
 	 */
 	public $PixmaniaAttribute;
-	
+
 	/**
 	 * @var int
 	 */
 	public $Position;
-	
+
 	/**
 	 * @var int
 	 */
 	public $ShopperellaVariation;
-	
+
 	/**
 	 * @var ArrayOfPlentysoapobject_getitemattributesattributevalue
 	 */

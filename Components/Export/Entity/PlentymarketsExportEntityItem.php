@@ -274,7 +274,16 @@ class PlentymarketsExportEntityItem
 
 			try
 			{
-				$fullpath = Shopware()->DocPath() . $ImageMedia->getPath();
+				if(version_compare(Shopware::VERSION, '5.1.0', '<'))
+				{
+					$fullpath = Shopware()->DocPath() . $ImageMedia->getPath();
+				}
+				else
+				{
+					// shopware 5.1.1
+					$mediaService = Shopware()->Container()->get('shopware_media.media_service');
+					$fullpath = $mediaService->getUrl('media/image/' . $Image->getPath() . '.' . $Image->getExtension());
+				}
 			}
 			catch (Exception $E)
 			{
@@ -287,7 +296,7 @@ class PlentymarketsExportEntityItem
 			
 			$RequestObject_SetItemImagesImage = new PlentySoapRequestObject_SetItemImagesImage();
 			
-			$RequestObject_SetItemImagesImage->ImageFileName = $Image->getPath(); // string
+			$RequestObject_SetItemImagesImage->ImageFileName = $Image->getPath(); 
 			$RequestObject_SetItemImagesImage->ImageFileData = base64_encode(file_get_contents($fullpath));
 			$RequestObject_SetItemImagesImage->ImageFileEnding = $Image->getExtension();
 			

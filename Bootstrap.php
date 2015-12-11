@@ -55,6 +55,25 @@ define('MOP_AMAZON_PAYMENT', 40);
 define('MOP_KLARNA', 1401);
 define('MOP_KLARNACREDIT', 1402);
 
+//heidelpay
+define('MOP_HEIDELPAY_DD',1000);  // Direct Debit
+define('MOP_HEIDELPAY_PP',1020);  // Prepayment	PP
+define('MOP_HEIDELPAY_IV',1030);  // Invoice	IV
+define('MOP_HEIDELPAY_CC',1040);  // Credit Card	CC
+define('MOP_HEIDELPAY_DC',1050);  // Debit Card	DC
+define('MOP_HEIDELPAY_OT',1060);  // online Transfer
+define('MOP_HEIDELPAY_VA',1070);  // Virtual Account
+define('MOP_HEIDELPAY_UA',1080);  // User Account
+define('MOP_HEIDELPAY_SFT',1090); // Heidelpay Sofortüberweisung
+define('MOP_HEIDELPAY_TP',1091);  // Heidelpay T-Pay
+define('MOP_HEIDELPAY_GP',1092);  // Heidelpay Giropay
+define('MOP_HEIDELPAY_IDL',1093); // Heidelpay IDEAL
+define('MOP_HEIDELPAY_EPS',1094); // Heidelpay EPS
+define('MOP_HEIDELPAY_CB',1095); // Carte Bleue
+define('MOP_HEIDELPAY', 1096);
+
+
+
 /**
  * Shortcut for PlentymarketsConfig::getInstance()
  *

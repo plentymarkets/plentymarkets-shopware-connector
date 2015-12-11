@@ -1,7 +1,8 @@
 <?php
+
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2014 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,7 +23,7 @@
  * trademark license. Therefore any rights, titles and interests in the
  * above trademarks remain entirely with the trademark owners.
  *
- * @copyright  Copyright (c) 2014, plentymarkets GmbH (http://www.plentymarkets.com)
+ * @copyright  Copyright (c) 2013-2015, plentymarkets GmbH (http://www.plentymarkets.com)
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
@@ -35,7 +36,7 @@ class PlentySoapObject_OrdersPaymentInformation
 	/**
 	 * @var int
 	 */
-	public $ID;
+	public $MethodOfPayment;
 	
 	/**
 	 * @var int
@@ -55,12 +56,37 @@ class PlentySoapObject_OrdersPaymentInformation
 	/**
 	 * @var string
 	 */
+	public $PayPalTransactionItemTransactionID;
+	
+	/**
+	 * @var string
+	 */
 	public $PayPalTransactionREFID;
 	
 	/**
 	 * @var string
 	 */
-	public $PayPalTransactionStatus;
+	public $PayPalTransactionReceiverPayerId;
+	
+	/**
+	 * @var string
+	 */
+	public $PayPalTransactionType;
+	
+	/**
+	 * @var int
+	 */
+	public $PaymentID;
+	
+	/**
+	 * @var string
+	 */
+	public $PaymentStatus;
+	
+	/**
+	 * @var string
+	 */
+	public $ReferenceId;
 	
 	/**
 	 * @var float
@@ -68,7 +94,7 @@ class PlentySoapObject_OrdersPaymentInformation
 	public $TransactionAmount;
 	
 	/**
-	 * @var int
+	 * @var string
 	 */
 	public $TransactionAssignDate;
 	
@@ -80,12 +106,37 @@ class PlentySoapObject_OrdersPaymentInformation
 	/**
 	 * @var string
 	 */
-	public $TransactionCustomerBankAccount;
+	public $TransactionCustomerBankAccountBIC;
+	
+	/**
+	 * @var string
+	 */
+	public $TransactionCustomerBankAccountCountry;
+	
+	/**
+	 * @var string
+	 */
+	public $TransactionCustomerBankAccountHolder;
+	
+	/**
+	 * @var string
+	 */
+	public $TransactionCustomerBankAccountIBAN;
+	
+	/**
+	 * @var string
+	 */
+	public $TransactionCustomerBankAccountNumber;
 	
 	/**
 	 * @var string
 	 */
 	public $TransactionCustomerBankCode;
+	
+	/**
+	 * @var string
+	 */
+	public $TransactionCustomerBankName;
 	
 	/**
 	 * @var string
@@ -108,9 +159,14 @@ class PlentySoapObject_OrdersPaymentInformation
 	public $TransactionCustomerLastname;
 	
 	/**
+	 * @var string
+	 */
+	public $TransactionEntryDate;
+	
+	/**
 	 * @var float
 	 */
-	public $TransactionExcangeRatio;
+	public $TransactionExchangeRatio;
 	
 	/**
 	 * @var string
@@ -118,7 +174,7 @@ class PlentySoapObject_OrdersPaymentInformation
 	public $TransactionID;
 	
 	/**
-	 * @var int
+	 * @var string
 	 */
 	public $TransactionImportDate;
 	
