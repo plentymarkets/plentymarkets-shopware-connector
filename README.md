@@ -9,9 +9,9 @@ Verbinden Sie die plentymarkets Komplettlösung für Ihren Onlinehandel mit Foku
 
 ## So geht’s...
 
-Das Plugin steht im [shopware Community Store][1] direkt zum kostenlosen Download für Sie bereit. Für die Einrichtung Ihrer Shopware-Anbindung und, um eine dauerhaft reibungslose Synchronisation der Daten beider Systeme zu gewährleisten, sind einige wichtige Voraussetzungen zwingend erforderlich: 
+Das Plugin steht im [Shopware Community Store][1] direkt zum kostenlosen Download für Sie bereit. Für die Einrichtung Ihrer Shopware-Anbindung und, um eine dauerhaft reibungslose Synchronisation der Daten beider Systeme zu gewährleisten, sind einige wichtige Voraussetzungen zwingend erforderlich: 
 
-   [1]: http://store.shopware.de/PlentyConnector_detail_657.html
+   [1]: http://store.shopware.com/plenty00735/plentyconnector.html
 
 ### Systemvoraussetzungen
 
