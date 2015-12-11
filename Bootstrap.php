@@ -1152,7 +1152,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
      */
     public function getVersion()
     {
-    	return '1.7.4';
+    	return '1.8.0';
     }
 
     /**
@@ -1167,8 +1167,8 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 			'autor' => 'plentymarkets GmbH',
 			'copyright' => 'Copyright © 2013-2015, plentymarkets GmbH',
 			'label' => $this->getLabel(),
-			'support' => 'http://www.plentymarkets.eu/service-support/',
-			'link' => 'http://man.plentymarkets.eu/tools/shopware-connector/'
+			'support' => 'https://www.plentymarkets.eu/service/',
+			'link' => 'https://www.plentymarkets.eu/handbuch/tools/shopware-connector/'
 		);
     }
 
