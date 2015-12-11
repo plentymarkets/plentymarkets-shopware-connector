@@ -115,6 +115,25 @@ class PlentymarketsExportEntityOrderIncomingPayment
 			$reasonForPayment = sprintf('Shopware (OrderId: %u, CustomerId: %u)', $this->order['id'], $this->order['customerId']);
 		}
 
+		if(	$methodOfPaymentId == MOP_HEIDELPAY_DD ||
+			$methodOfPaymentId == MOP_HEIDELPAY_PP ||
+			$methodOfPaymentId == MOP_HEIDELPAY_CC ||
+			$methodOfPaymentId == MOP_HEIDELPAY_DC ||
+			$methodOfPaymentId == MOP_HEIDELPAY_OT ||
+			$methodOfPaymentId == MOP_HEIDELPAY_VA ||
+			$methodOfPaymentId == MOP_HEIDELPAY_UA ||
+			$methodOfPaymentId == MOP_HEIDELPAY_SFT ||
+			$methodOfPaymentId == MOP_HEIDELPAY_TP ||
+			$methodOfPaymentId == MOP_HEIDELPAY_GP ||
+			$methodOfPaymentId == MOP_HEIDELPAY_IDL ||
+			$methodOfPaymentId == MOP_HEIDELPAY_EPS ||
+			$methodOfPaymentId == MOP_HEIDELPAY_CB
+		)
+		{
+			$transactionId = $this->getHeidelpayUniqueId().';'.$this->order['transactionId'];
+
+		}
+
 		$Request_AddIncomingPayments = new PlentySoapRequest_AddIncomingPayments();
 
 		$Request_AddIncomingPayments->IncomingPayments = array();
@@ -258,5 +277,32 @@ class PlentymarketsExportEntityOrderIncomingPayment
 		}
 
 		return sprintf('%s_%s_%s', $order->transactionid, $pclass->pclassid, $multistore->shop_id);
+	}
+
+	/**
+	 * Returns the heidelpay unique ID which belongs to the transaction
+	 *
+	 * @return string
+	 */
+	protected function getHeidelpayUniqueId()
+	{
+		$transactionId = $this->order['transactionId'];
+
+		try
+		{
+			// unique ID of transaction 
+			$uniqueID = Shopware()->Db()->query('
+				SELECT uniqueid FROM s_plugin_hgw_transactions WHERE transactionid = ?
+			', array(
+				$transactionId
+			))->fetchObject();
+		}
+
+		catch (Exception $e)
+		{
+			return '';
+		}
+
+		return sprintf('%s',$uniqueID->uniqueid);
 	}
 }
