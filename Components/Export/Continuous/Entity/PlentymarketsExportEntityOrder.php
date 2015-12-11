@@ -115,8 +115,12 @@ class PlentymarketsExportEntityOrder
 	 */
 	public function export()
 	{
-		$this->exportCustomer();
-		$this->exportOrder();
+		// wait for completed payment in case of amazon payment to prevent destroyed addresses
+		$methodOfPayment = $this->getMethodOfPaymentId();
+		if ($methodOfPayment != MOP_AMAZON_PAYMENT || $this->Order->getPaymentStatus()->getId() == 12) {
+			$this->exportCustomer();
+			$this->exportOrder();
+		}
 	}
 
 	/**
