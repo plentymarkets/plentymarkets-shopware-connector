@@ -274,4 +274,61 @@ class PlentymarketsUtils
 
 		return isset(self::$availability[$availabilityId]) ? self::$availability[$availabilityId] : null;
 	}
+	
+	public static function getShopwareMainShops()
+	{
+		/** @var $shopRepositoryList Shopware\Models\Shop\Repository */
+		$shopRepositoryList = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+		
+		$shops = $shopRepositoryList->queryBy(array('mainId' => NULL,
+											        'active = 1'))->getResult();
+		
+		return $shops;
+	}
+
+	/**
+	 * @param $sStreet
+	 * @return array
+	 */
+	public static function extractStreetAndHouseNo($sStreet)
+	{
+		$reqex  = '/(?<ad>(.*?)[\D]{3}[\s,.])(?<no>';
+		$reqex .= '|[0-9]{1,3}[ a-zA-Z-\/\.]{0,6}'; // f.e. "Rosenstr. 14 "
+		$reqex .= '|[0-9]{1,3}[ a-zA-Z-\/\.]{1,6}[0-9]{1,3}[ a-zA-Z-\/\.]{0,6}[0-9]{0,3}[ a-zA-Z-\/\.]{0,6}[0-9]{0,3}'; // f.e. "Straße in Österreich 30/4/12.2"
+		$reqex .= ')$/';
+
+		$regexNo = '/^(?<no>';
+		$regexNo .= '[0-9]+\s*[a-zA-Z]?'; // f.e. "14 B", "14B"
+		$regexNo .= ')$/';
+
+		$reqex4foreign = '/^(?<no>[0-9]{1,4}([\D]{0,2}([\s]|[^a-zA-Z0-9])))(?<ad>([\D]+))$/';	// f.e. "16 Bellevue Road"
+
+		$sStreet = trim($sStreet);
+
+		if(preg_match($reqex, $sStreet, $machtes) > 0)
+		{
+			// house number is in street
+			$street         = trim($machtes['ad']);
+			$houseNo        = trim($machtes['no']);
+		}
+		else if(preg_match($regexNo,$sStreet,$machtes) > 0)
+		{
+			//only house number is given in steet (e.g "14B" , "14 B")
+			$street = '';
+			$houseNo= trim($machtes['no']);
+		}
+		else if(preg_match($reqex4foreign, $sStreet, $machtes) > 0)
+		{
+			// house number is in street - foreign address
+			$street         = trim($machtes['ad']);
+			$houseNo        = trim($machtes['no']);
+		}
+		else
+		{
+			$street = '';
+			$houseNo = '';
+		}
+
+		return array('street'=>$street,'houseNo'=>$houseNo);
+	}
 }

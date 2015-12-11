@@ -1,7 +1,8 @@
 <?php
+
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2014 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,7 +23,7 @@
  * trademark license. Therefore any rights, titles and interests in the
  * above trademarks remain entirely with the trademark owners.
  *
- * @copyright  Copyright (c) 2014, plentymarkets GmbH (http://www.plentymarkets.com)
+ * @copyright  Copyright (c) 2013-2015, plentymarkets GmbH (http://www.plentymarkets.com)
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
@@ -41,6 +42,16 @@ class PlentySoapObject_OrderItem
 	 * @var string
 	 */
 	public $Currency;
+	
+	/**
+	 * @var float
+	 */
+	public $CurrencyGross;
+	
+	/**
+	 * @var float
+	 */
+	public $CurrencyNet;
 	
 	/**
 	 * @var string
@@ -123,7 +134,7 @@ class PlentySoapObject_OrderItem
 	public $Quantity;
 	
 	/**
-	 * @var int
+	 * @var float
 	 */
 	public $ReferrerID;
 	
@@ -141,6 +152,11 @@ class PlentySoapObject_OrderItem
 	 * @var ArrayOfPlentysoapobject_salesorderproperty
 	 */
 	public $SalesOrderProperties;
+	
+	/**
+	 * @var ArrayOfPlentysoapobject_integer
+	 */
+	public $StorageLocationIDs;
 	
 	/**
 	 * @var float

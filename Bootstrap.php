@@ -55,6 +55,25 @@ define('MOP_AMAZON_PAYMENT', 40);
 define('MOP_KLARNA', 1401);
 define('MOP_KLARNACREDIT', 1402);
 
+//heidelpay
+define('MOP_HEIDELPAY_DD',1000);  // Direct Debit
+define('MOP_HEIDELPAY_PP',1020);  // Prepayment	PP
+define('MOP_HEIDELPAY_IV',1030);  // Invoice	IV
+define('MOP_HEIDELPAY_CC',1040);  // Credit Card	CC
+define('MOP_HEIDELPAY_DC',1050);  // Debit Card	DC
+define('MOP_HEIDELPAY_OT',1060);  // online Transfer
+define('MOP_HEIDELPAY_VA',1070);  // Virtual Account
+define('MOP_HEIDELPAY_UA',1080);  // User Account
+define('MOP_HEIDELPAY_SFT',1090); // Heidelpay Sofortüberweisung
+define('MOP_HEIDELPAY_TP',1091);  // Heidelpay T-Pay
+define('MOP_HEIDELPAY_GP',1092);  // Heidelpay Giropay
+define('MOP_HEIDELPAY_IDL',1093); // Heidelpay IDEAL
+define('MOP_HEIDELPAY_EPS',1094); // Heidelpay EPS
+define('MOP_HEIDELPAY_CB',1095); // Carte Bleue
+define('MOP_HEIDELPAY', 1096);
+
+
+
 /**
  * Shortcut for PlentymarketsConfig::getInstance()
  *
@@ -138,171 +157,6 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
     	$Logger = PlentymarketsLogger::getInstance();
     	$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, $version . ' →  ' . $this->getVersion());
 
-    	if ($version == '1.4.3')
-    	{
-			try
-			{
-				// Drop unused columns from the log
-				Shopware()->Db()->exec("
-					ALTER TABLE `plenty_log`
-						DROP `request`,
-						DROP `response`;
-				");
-			}
-			catch (Exception $E)
-			{
-				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'ALTER TABLE `plenty_log` (drop unused columns from the log) already carried out');
-			}
-    	}
-
-		if (version_compare($version, '1.4.4') !== 1)
-		{
-			try
-			{
-				Shopware()->Db()->exec("
-					CREATE TABLE `plenty_mapping_customer_billing_address` (
-					  `shopwareID` int(11) unsigned NOT NULL,
-					  `plentyID` int(11) unsigned NOT NULL,
-					  PRIMARY KEY (`shopwareID`,`plentyID`)
-					) ENGINE=InnoDB DEFAULT CHARSET=utf8
-				");
-
-				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'CREATE TABLE `plenty_mapping_customer_billing_address` done');
-			}
-			catch (Exception $E)
-			{
-				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'CREATE TABLE `plenty_mapping_customer_billing_address` already carried out');
-			}
-
-			Shopware()->Db()->exec("
-				TRUNCATE TABLE `plenty_mapping_customer`
-			");
-
-			$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'TRUNCATE TABLE `plenty_mapping_customer` done');
-
-			Shopware()->Db()->exec("
-				DELETE FROM `plenty_config` WHERE `key` LIKE 'CustomerExport%'
-			");
-
-			$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'DELETE FROM `plenty_config` done');
-		}
-
-		if (version_compare($version, '1.4.5') !== 1)
-		{
-			try
-			{
-				$this->addMappingCleanupCronEvent();
-
-				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'addMappingCleanupCronEvent done');
-			}
-			catch (Exception $E)
-			{
-				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'addMappingCleanupCronEvent already carried out');
-			}
-		}
-
-		if (version_compare($version, '1.4.7') !== 1)
-		{
-			if (PlentymarketsConfig::getInstance()->getItemExportStatus() == 'success')
-			{
-				PlentymarketsConfig::getInstance()->setItemCrossSellingExportStatus('success');
-				PlentymarketsConfig::getInstance()->setItemCrossSellingExportTimestampStart(time());
-				PlentymarketsConfig::getInstance()->setItemCrossSellingExportTimestampFinished(time());
-
-				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'Item cross selling export marked as done');
-			}
-		}
-
-		if (version_compare($version, '1.4.8') !== 1)
-		{
-			$this->addItemImportStackCronEvent();
-
-			$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'addItemImportStackCronEvent done');
-
-			try
-			{
-				Shopware()->Db()->exec("
-					CREATE TABLE `plenty_stack_item` (
-					  `itemId` int(11) unsigned NOT NULL,
-					  `timestamp` int(10) unsigned NOT NULL,
-					  `storeIds` text NOT NULL,
-					  PRIMARY KEY (`itemId`),
-					  KEY `timestamp` (`timestamp`)
-					) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-				");
-
-				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'CREATE TABLE `plenty_stack_item` done');
-			}
-			catch (Exception $E)
-			{
-				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'CREATE TABLE `plenty_stack_item` already carried out');
-			}
-
-			try
-			{
-				Shopware()->Db()->exec("
-					UPDATE plenty_config
-						SET `key` = 'ImportItemStackLastUpdateTimestamp'
-						WHERE `key` = 'ImportItemLastUpdateTimestamp'
-				");
-
-				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'UPDATE plenty_config (ImportItemStackLastUpdateTimestamp) done');
-			}
-			catch (Exception $E)
-			{
-				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'UPDATE plenty_config (ImportItemStackLastUpdateTimestamp) failed');
-			}
-		}
-
-		if (version_compare($version, '1.4.12') !== 1)
-		{
-			try
-			{
-				Shopware()->Db()->exec("
-					ALTER TABLE `plenty_log` ADD `code` INT  UNSIGNED  NULL  DEFAULT NULL  AFTER `message`;
-				");
-
-				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'ALTER TABLE `plenty_log` ADD `code` done');
-			}
-			catch (Exception $E)
-			{
-				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'ALTER TABLE `plenty_log` ADD `code` already carried out');
-			}
-		}
-
-		if (version_compare($version, '1.4.14') !== 1)
-		{
-			$this->addLogCleanupCronEvent();
-		}
-
-		if (version_compare($version, '1.4.18') !== 1)
-		{
-			$this->addItemAssociateUpdateCronEvent();
-		}
-
-		if (version_compare($version, '1.4.22') !== 1)
-		{
-			try
-			{
-				Shopware()->Db()->exec("
-					CREATE TABLE `plenty_mapping_item_bundle` (
-					  `shopwareID` int(11) unsigned NOT NULL,
-					  `plentyID` int(11) unsigned NOT NULL,
-					  PRIMARY KEY (`shopwareID`,`plentyID`),
-					  UNIQUE KEY `plentyID` (`plentyID`)
-					) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-				");
-
-				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'CREATE TABLE `plenty_mapping_item_bundle` done');
-			}
-			catch (Exception $E)
-			{
-				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'CREATE TABLE `plenty_mapping_item_bundle` failed');
-			}
-
-			$this->addItemBundleCronEvents();
-		}
-
 		if (version_compare($version, '1.6') !== 1)
 		{
 			try
@@ -331,6 +185,80 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 
 
 			PyConf()->erase('PlentymarketsVersionTimestamp');
+		}
+
+		if (version_compare($version, '1.7') !== 1)
+		{
+			$this->subscribeEvent(
+				'Shopware_Models_Order_Order::postPersist',
+				'onOrderModelPostPersist'
+			);
+
+			$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'Shopware_Models_Order_Order::postPersist');
+
+			try
+			{
+				Shopware()->Db()->exec("
+					ALTER TABLE `plenty_mapping_referrer` CHANGE `plentyID` `plentyID` FLOAT(11)  UNSIGNED  NOT NULL;
+				");
+
+				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'ALTER TABLE `plenty_mapping_referrer` done');
+			}
+			catch (Exception $E)
+			{
+				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'ALTER TABLE `plenty_mapping_referrer` failed');
+			}
+		}
+
+		if (version_compare($version, '1.7.4') !== 1)
+		{
+			PyConf()->setCheckIncomingPayment(1);
+			PyConf()->setCheckOutgoingItems(1);
+			PyConf()->setItemNumberSourceKey('ItemNo');
+			PyConf()->setItemVariationNumberSourceKey('ColliNo');
+			PlentymarketsConfig::getInstance()->setImportOrderStatusChangeLastUpdateTimestamp(time());
+
+			$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'setCheckIncomingPayment(1)');
+			$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'setCheckOutgoingItems(1)');
+			$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'setImportOrderStatusChangeLastUpdateTimestamp(time())');
+			$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, "setItemNumberSourceKey('ItemNo')");
+			$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, "setItemVariationNumberSourceKey('ColliNo')");
+
+			try
+			{
+				Shopware()->Db()->exec("
+					CREATE TABLE `plenty_mapping_order_status` (
+					  `shopwareID` int(11) NOT NULL,
+					  `plentyID` decimal(3,1) unsigned NOT NULL,
+					  PRIMARY KEY (`shopwareID`,`plentyID`),
+					  UNIQUE KEY `plentyID` (`plentyID`)
+					) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+				");
+
+				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'CREATE TABLE `plenty_mapping_order_status` done');
+			}
+			catch (Exception $E)
+			{
+				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'CREATE TABLE `plenty_mapping_order_status` failed');
+			}
+
+			try
+			{
+				Shopware()->Db()->exec("
+					CREATE TABLE `plenty_mapping_payment_status` (
+					  `shopwareID` int(11) NOT NULL,
+					  `plentyID` decimal(3,1) unsigned NOT NULL,
+					  PRIMARY KEY (`shopwareID`,`plentyID`),
+					  UNIQUE KEY `plentyID` (`plentyID`)
+					) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+				");
+
+				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'CREATE TABLE `plenty_mapping_payment_status` done');
+			}
+			catch (Exception $E)
+			{
+				$Logger->message(PlentymarketsLogger::PREFIX_UPDATE, 'CREATE TABLE `plenty_mapping_payment_status` failed');
+			}
 		}
 
 		//
@@ -370,7 +298,9 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 			'plenty_mapping_shop',
 			'plenty_mapping_vat',
 			'plenty_order',
-			'plenty_stack_item'
+			'plenty_stack_item',
+			'plenty_mapping_order_status',
+			'plenty_mapping_payment_status'
 		);
 
 		foreach ($tablesToDelete as $table)
@@ -577,7 +507,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 		Shopware()->Db()->exec("
 			CREATE TABLE `plenty_mapping_referrer` (
 			  `shopwareID` int(11) unsigned NOT NULL,
-			  `plentyID` int(11) unsigned NOT NULL,
+			  `plentyID` float unsigned NOT NULL,
 			  PRIMARY KEY (`shopwareID`,`plentyID`),
 			  UNIQUE KEY `plentyID` (`plentyID`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -635,6 +565,24 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 			  KEY `timestamp` (`timestamp`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 		");
+
+		Shopware()->Db()->exec("
+			CREATE TABLE `plenty_mapping_order_status` (
+			  `shopwareID` int(11) NOT NULL,
+			  `plentyID` decimal(3,1) unsigned NOT NULL,
+			  PRIMARY KEY (`shopwareID`,`plentyID`),
+			  UNIQUE KEY `plentyID` (`plentyID`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+		");
+
+		Shopware()->Db()->exec("
+			CREATE TABLE `plenty_mapping_payment_status` (
+			  `shopwareID` int(11) NOT NULL,
+			  `plentyID` decimal(3,1) unsigned NOT NULL,
+			  PRIMARY KEY (`shopwareID`,`plentyID`),
+			  UNIQUE KEY `plentyID` (`plentyID`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+		");
 	}
 
     /**
@@ -654,7 +602,12 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
         	'onOrderSaveOrderProcessDetails'
         );
 
-        // Insert the CSS
+//		$this->subscribeEvent(
+//			'Shopware_Models_Order_Order::postPersist',
+//			'onOrderModelPostPersist'
+//		);
+
+		// Insert the CSS
         $this->subscribeEvent(
         	'Enlight_Controller_Action_PostDispatch_Backend_Index',
         	'onPostDispatchBackendIndex'
@@ -1154,10 +1107,10 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
      */
     public function onOrderSaveOrderProcessDetails(Enlight_Event_EventArgs $arguments)
     {
-    	$OrderResoure = new \Shopware\Components\Api\Resource\Order();
-    	$OrderResoure->setManager(Shopware()->Models());
+    	$orderResource = new \Shopware\Components\Api\Resource\Order();
+    	$orderResource->setManager(Shopware()->Models());
 
-    	$orderId = $OrderResoure->getIdFromNumber($arguments->getSubject()->sOrderNumber);
+    	$orderId = $orderResource->getIdFromNumber($arguments->getSubject()->sOrderNumber);
 
     	Shopware()->Db()->query('
     		INSERT INTO plenty_order
@@ -1165,6 +1118,25 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
     	', array($orderId));
 
     	return true;
+    }
+
+	/**
+     * Stores the id of the created order into the plenty_order table
+     *
+     * @param Enlight_Event_EventArgs $arguments
+     * @return boolean
+     */
+    public function onOrderModelPostPersist(Enlight_Event_EventArgs $arguments)
+    {
+		$model = $arguments->get('entity');
+		$orderId = $model->getId();
+
+		Shopware()->Db()->query('
+    		INSERT INTO plenty_order
+    			SET shopwareId = ?
+    	', array($orderId));
+
+		return true;
     }
 
     /**
@@ -1199,7 +1171,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
      */
     public function getVersion()
     {
-    	return '1.6.2';
+    	return '1.8.0';
     }
 
     /**
@@ -1212,10 +1184,10 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
         return array(
 			'version' => $this->getVersion(),
 			'autor' => 'plentymarkets GmbH',
-			'copyright' => 'Copyright © 2013-2014, plentymarkets GmbH',
+			'copyright' => 'Copyright © 2013-2015, plentymarkets GmbH',
 			'label' => $this->getLabel(),
-			'support' => 'http://www.plentymarkets.eu/service-support/',
-			'link' => 'http://man.plentymarkets.eu/tools/shopware-connector/'
+			'support' => 'https://www.plentymarkets.eu/service/',
+			'link' => 'https://www.plentymarkets.eu/handbuch/tools/shopware-connector/'
 		);
     }
 

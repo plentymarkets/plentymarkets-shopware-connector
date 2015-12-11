@@ -35,6 +35,7 @@
  */
 class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Backend_ExtJs
 {
+	
 	/**
 	 * Runs an cleanup action
 	 */
@@ -398,8 +399,11 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		$Config->setItemCleanupActionID($this->Request()->ItemCleanupActionID);
 		$Config->setItemCategoryRootID($this->Request()->ItemCategoryRootID);
 		$Config->setItemImageSyncActionID($this->Request()->ItemImageSyncActionID == true ? IMPORT_ITEM_IMAGE_SYNC : IMPORT_ITEM_IMAGE_NO_SYNC);
+		$Config->setItemImageAltAttributeID($this->Request()->ItemImageAltAttributeID);
 		$Config->setItemCategorySyncActionID($this->Request()->ItemCategorySyncActionID == true ? IMPORT_ITEM_CATEGORY_SYNC : IMPORT_ITEM_CATEGORY_NO_SYNC);
 		$Config->setItemNumberImportActionID($this->Request()->ItemNumberImportActionID == true ? IMPORT_ITEM_NUMBER : IMPORT_ITEM_NUMBER_NO);
+		$Config->setItemNumberSourceKey($this->Request()->ItemNumberSourceKey);
+		$Config->setItemVariationNumberSourceKey($this->Request()->ItemVariationNumberSourceKey);
 		$Config->setItemBundleHeadActionID($this->Request()->ItemBundleHeadActionID == true ? IMPORT_ITEM_BUNDLE_HEAD : IMPORT_ITEM_BUNDLE_HEAD_NO);
 		$Config->setItemAssociateImportActionID(
 			$this->Request()->ItemAssociateImportActionID == PlentymarketsImportItemAssociateController::ACTION_DETACHED
@@ -410,13 +414,16 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		$Config->setItemWarehousePercentage($this->Request()->ItemWarehousePercentage);
 		$Config->setItemProducerID($this->Request()->ItemProducerID);
 		$Config->setOrderMarking1($this->Request()->OrderMarking1);
+		$Config->setOrderAdditionalCouponIdentifiers($this->Request()->OrderAdditionalCouponIdentifiers);
 		$Config->setOrderReferrerID($this->Request()->OrderReferrerID);
 		$Config->setOrderPaidStatusID(implode('|', $this->Request()->OrderPaidStatusID));
 		$Config->setOrderShopgateMOPIDs(implode('|', $this->Request()->OrderShopgateMOPIDs));
 		$Config->setOrderItemTextSyncActionID($this->Request()->OrderItemTextSyncActionID == true ? EXPORT_ORDER_ITEM_TEXT_SYNC : EXPORT_ORDER_ITEM_TEXT_SYNC_NO);
 		$Config->setOutgoingItemsOrderStatus($this->Request()->OutgoingItemsOrderStatus);
+		$Config->setCheckOutgoingItems($this->Request()->CheckOutgoingItems == true ? 1 : 0);
 		$Config->setOutgoingItemsID($this->Request()->OutgoingItemsID);
 		$Config->setOutgoingItemsShopwareOrderStatusID($this->Request()->OutgoingItemsShopwareOrderStatusID);
+		$Config->setCheckIncomingPayment($this->Request()->CheckIncomingPayment == true ? 1 : 0);
 		$Config->setIncomingPaymentShopwarePaymentFullStatusID($this->Request()->IncomingPaymentShopwarePaymentFullStatusID);
 		$Config->setIncomingPaymentShopwarePaymentPartialStatusID($this->Request()->IncomingPaymentShopwarePaymentPartialStatusID);
 		$Config->setInitialExportChunkSize(max($this->Request()->InitialExportChunkSize, 1));
@@ -425,6 +432,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		$Config->setMayLogUsageData($this->Request()->MayLogUsageData == true ? 1 : 0);
 
 		// Customer default values
+		$Config->setCustomerDefaultFormOfAddressID($this->Request()->CustomerDefaultFormOfAddressID);
 		$Config->setCustomerDefaultCity($this->Request()->CustomerDefaultCity);
 		$Config->setCustomerDefaultHouseNumber($this->Request()->CustomerDefaultHouseNumber);
 		$Config->setCustomerDefaultStreet($this->Request()->CustomerDefaultStreet);
@@ -525,10 +533,21 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 
 		$method = sprintf('add%s', $entity);
 
-		call_user_func(array(
-			'PlentymarketsMappingController',
-			$method
-		), $params['id'], $params['selectedPlentyId']);
+		if (!is_array($params['selectedPlentyId']))
+		{
+			$params['selectedPlentyId'] = array($params['selectedPlentyId']);
+		}
+
+		foreach ($params['selectedPlentyId'] as $selectedPlentyId)
+		{
+			//$selectedPlentyId = sprintf("%.1f", (float)$selectedPlentyId);
+
+			call_user_func(array(
+				'PlentymarketsMappingController',
+				$method
+			), $params['id'], $selectedPlentyId);
+
+		}
 
 		// Neu schreiben
 		$this->View()->assign(array(
@@ -726,6 +745,21 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 
 				$data = PlentymarketsImportController::getStoreList();
 				break;
+
+			case 'OrderStatus':
+			case 'PaymentStatus':
+
+				if ($forceReload)
+				{
+					PlentymarketsConfig::getInstance()->setMiscOrderStatusLastImport(0);
+				}
+
+				$data = PlentymarketsImportController::getOrderStatusList();
+				foreach ($data as &$d)
+				{
+					$d['id'] = $d['status'];
+				}
+				break;
 		}
 
 		$this->View()->assign(array(
@@ -779,6 +813,14 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 
 			case 'MeasureUnit':
 				$rows = $DataController->getMeasureUnit();
+				break;
+
+			case 'OrderStatus':
+				$rows = $DataController->getOrderStatus();
+				break;
+
+			case 'PaymentStatus':
+				$rows = $DataController->getPaymentStatus();
 				break;
 		}
 

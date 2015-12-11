@@ -59,33 +59,35 @@ class PlentymarketsExportEntityItemLinked
 	 */
 	public function link()
 	{
-		$Request_AddLinkedItems = new PlentySoapRequest_AddLinkedItems();
-		$Request_AddLinkedItems->CrosssellingList = array();
+		$Request_SetLinkedItems = new PlentySoapRequest_SetLinkedItems();
+		$Request_SetLinkedItems->CrosssellingList = array();
 
 		foreach ($this->SHOPWARE_Article->getSimilar() as $Similar)
 		{
-			$Object_AddLinkedItems = new PlentySoapObject_AddLinkedItems();
-			$Object_AddLinkedItems->Relationship = 'Similar'; // string
-			$Object_AddLinkedItems->CrossItemSKU = PlentymarketsMappingController::getItemByShopwareID($Similar->getId()); // string
-			$Request_AddLinkedItems->CrosssellingList[] = $Object_AddLinkedItems;
+			$Object_SetLinkedItems = new PlentySoapObject_SetLinkedItems();
+			$Object_SetLinkedItems->Relationship = 'Similar'; // string
+			$Object_SetLinkedItems->CrossItemSKU = PlentymarketsMappingController::getItemByShopwareID($Similar->getId()); // string
+			$Object_SetLinkedItems->deleteLink = false;
+			$Request_SetLinkedItems->CrosssellingList[] = $Object_SetLinkedItems;
 		}
 
 		foreach ($this->SHOPWARE_Article->getRelated() as $Related)
 		{
-			$Object_AddLinkedItems = new PlentySoapObject_AddLinkedItems();
-			$Object_AddLinkedItems->Relationship = 'Accessory'; // string
-			$Object_AddLinkedItems->CrossItemSKU = PlentymarketsMappingController::getItemByShopwareID($Related->getId());
-			$Request_AddLinkedItems->CrosssellingList[] = $Object_AddLinkedItems;
+			$Object_SetLinkedItems = new PlentySoapObject_SetLinkedItems();
+			$Object_SetLinkedItems->Relationship = 'Accessory'; // string
+			$Object_SetLinkedItems->CrossItemSKU = PlentymarketsMappingController::getItemByShopwareID($Related->getId());
+			$Object_SetLinkedItems->deleteLink = false;
+			$Request_SetLinkedItems->CrosssellingList[] = $Object_SetLinkedItems;
 		}
 
-		if (!count($Request_AddLinkedItems->CrosssellingList))
+		if (!count($Request_SetLinkedItems->CrosssellingList))
 		{
 			return;
 		}
 
-		$Request_AddLinkedItems->MainItemSKU = PlentymarketsMappingController::getItemByShopwareID($this->SHOPWARE_Article->getId()); // string
+		$Request_SetLinkedItems->MainItemSKU = PlentymarketsMappingController::getItemByShopwareID($this->SHOPWARE_Article->getId()); // string
 
 		// Do the request
-		PlentymarketsSoapClient::getInstance()->AddLinkedItems($Request_AddLinkedItems);
+		PlentymarketsSoapClient::getInstance()->SetLinkedItems($Request_SetLinkedItems);
 	}
 }

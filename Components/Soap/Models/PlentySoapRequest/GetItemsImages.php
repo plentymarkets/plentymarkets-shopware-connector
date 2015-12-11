@@ -1,7 +1,8 @@
 <?php
+
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2014 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,7 +23,7 @@
  * trademark license. Therefore any rights, titles and interests in the
  * above trademarks remain entirely with the trademark owners.
  *
- * @copyright  Copyright (c) 2014, plentymarkets GmbH (http://www.plentymarkets.com)
+ * @copyright  Copyright (c) 2013-2015, plentymarkets GmbH (http://www.plentymarkets.com)
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
@@ -35,62 +36,27 @@ class PlentySoapRequest_GetItemsImages
 	/**
 	 * @var int
 	 */
-	public $Availability;
-	
-	/**
-	 * @var int
-	 */
 	public $CallItemsLimit;
 	
 	/**
-	 * @var int
+	 * @var string
 	 */
-	public $CouchCommerce;
+	public $ImageType;
 	
 	/**
-	 * @var int
+	 * @var string
 	 */
-	public $Gimahhot;
+	public $Lang;
 	
 	/**
-	 * @var int
+	 * @var string
 	 */
-	public $GoogleProducts;
+	public $LastUpdateFrom;
 	
 	/**
-	 * @var int
+	 * @var string
 	 */
-	public $Grosshandel;
-	
-	/**
-	 * @var int
-	 */
-	public $Hitmeister;
-	
-	/**
-	 * @var int
-	 */
-	public $Laary;
-	
-	/**
-	 * @var int
-	 */
-	public $LastUpdate;
-	
-	/**
-	 * @var int
-	 */
-	public $Marking1ID;
-	
-	/**
-	 * @var int
-	 */
-	public $Marking2ID;
-	
-	/**
-	 * @var int
-	 */
-	public $Otto;
+	public $LastUpdateTo;
 	
 	/**
 	 * @var int
@@ -98,9 +64,14 @@ class PlentySoapRequest_GetItemsImages
 	public $Page;
 	
 	/**
+	 * @var string
+	 */
+	public $ReferenceType;
+	
+	/**
 	 * @var int
 	 */
-	public $PlusDe;
+	public $ReferenceValue;
 	
 	/**
 	 * @var string
@@ -108,47 +79,12 @@ class PlentySoapRequest_GetItemsImages
 	public $SKU;
 	
 	/**
-	 * @var int
+	 * @var string
 	 */
-	public $ShopShare;
+	public $UploadedFrom;
 	
 	/**
-	 * @var int
+	 * @var string
 	 */
-	public $Shopgate;
-	
-	/**
-	 * @var int
-	 */
-	public $Shopperella;
-	
-	/**
-	 * @var int
-	 */
-	public $SumoScout;
-	
-	/**
-	 * @var int
-	 */
-	public $Tradoria;
-	
-	/**
-	 * @var int
-	 */
-	public $Twenga;
-	
-	/**
-	 * @var int
-	 */
-	public $WebAPI;
-	
-	/**
-	 * @var int
-	 */
-	public $Webshop;
-	
-	/**
-	 * @var int
-	 */
-	public $Yatego;
+	public $UploadedTo;
 }

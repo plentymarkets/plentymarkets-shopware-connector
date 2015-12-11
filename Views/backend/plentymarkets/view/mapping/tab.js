@@ -57,16 +57,16 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Tab', {
 			e.record.save({
 				params: {
 					entity: me.entity,
-					selectedPlentyId: Ext.getCmp('selectedPlentyId' + me.entity).getValue()
+					'selectedPlentyId[]': Ext.getCmp('selectedPlentyId' + me.entity).getValue()
 				},
 				success: function(data, b)
 				{
 					var response = Ext.decode(b.response.responseText);
 					me.status = response.data;
+					me.reload();
 				}
 			});
 			e.record.commit();
-			me.reload();
 		});
 
 		me.callParent(arguments);
@@ -77,7 +77,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Tab', {
 		var me = this, items = ['->'];
 		me.currentResource = null;
 
-		if (me.status.get('open') > 0)
+		if (me.status.get('open') > 0 && !/Status/.test(me.entity))
 		{
 			items.push({
 				xtype: 'button',
@@ -164,6 +164,8 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Tab', {
 	getColumns: function()
 	{
 		var me = this;
+		var multiSelect = (/(Order|Payment)Status/.test(me.entity));
+		var allowBlank = (/(Order|Payment)Status/.test(me.entity));
 
 		var columns = [{
 			header: '{s name=plentymarkets/view/mapping/header/shopware}Shopware{/s}',
@@ -180,8 +182,9 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Tab', {
 				autoSelect: true,
 				emptyText: '{s name=plentymarkets/view/mapping/choose}Bitte wählen{/s}',
 				id: 'selectedPlentyId' + me.entity,
-				allowBlank: false,
+				allowBlank: allowBlank,
 				editable: false,
+				multiSelect: multiSelect,
 				store: me.stores.plentymarkets,
 				displayField: 'name',
 				valueField: 'id'

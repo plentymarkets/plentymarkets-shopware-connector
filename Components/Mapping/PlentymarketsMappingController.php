@@ -155,10 +155,14 @@ class PlentymarketsMappingController
 			
 			$whereActive = '';
 			if($tables[0] == 's_core_paymentmeans' ||
-				$tables[0] == 's_premium_dispatch' ||
-				$tables[0] == 's_core_shops')
+				$tables[0] == 's_premium_dispatch')
 			{
 				$whereActive = ' AND active = 1';
+			}
+			
+			if($tables[0] == 's_core_shops')
+			{
+				$whereActive = ' AND active = 1 AND main_id IS NULL ';
 			}
 			
 			$Statement = Shopware()->Db()->prepare('
@@ -191,6 +195,16 @@ class PlentymarketsMappingController
 		// static since the mapping is not mandatory
 		$status['Referrer'] = array(
 			'name' => 'Referrer',
+			'open' => 0
+		);
+
+		$status['OrderStatus'] = array(
+			'name' => 'OrderStatus',
+			'open' => 0
+		);
+
+		$status['PaymentStatus'] = array(
+			'name' => 'PaymentStatus',
 			'open' => 0
 		);
 		

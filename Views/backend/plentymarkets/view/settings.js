@@ -178,6 +178,19 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
                         supportText: 'Aktivieren, wenn die Bilder von bestehenden Artikel synchronisiert werden sollen. Anderfalls werden Bilder nicht bei der Synchronisation berücksichtigt.'
                     },
                     {
+                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemImageAltAttributeID}Bilder alternativ Text{/s}',
+                        name: 'ItemImageAltAttributeID',
+                        supportText: 'Wählen Sie das Bild-Attribut aus, in dem der Alternativ-Text steht.',
+                        store: new Ext.data.ArrayStore({
+                            fields: ['id', 'name'],
+                            data: [
+                                [1, 'Attribut 1'],
+                                [2, 'Attribut 2'],
+                                [3, 'Attribut 3']
+                            ]
+                        })
+                    },
+                    {
                         fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemCategorySyncActionID}Kategorien synchronisieren{/s}',
                         name: 'ItemCategorySyncActionID',
                         xtype: 'checkbox',
@@ -192,6 +205,36 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
                         inputValue: 1,
                         uncheckedValue: '0',
                         supportText: 'Aktivieren, wenn die Artikelnummern von plentymarkets übernommen werden sollen.'
+                    },
+                    {
+                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemNumberSourceKey}Artikelnummer{/s}',
+                        name: 'ItemNumberSourceKey',
+                        supportText: 'Wählen Sie aus, welcher Wert von plentymarktes als Artikelnummer in Shopware verwendet werden soll.',
+                        store: new Ext.data.ArrayStore({
+                            fields: ['id', 'name'],
+                            data: [
+                                ['ItemNo', 'Artikelnummer'],
+                                ['EAN1', 'EAN 1'],
+                                ['EAN2', 'EAN 2'],
+                                ['EAN3', 'EAN 3'],
+                                ['EAN4', 'EAN 4']
+                            ]
+                        })
+                    },
+                    {
+                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemVariationNumberSourceKey}Variantennummer{/s}',
+                        name: 'ItemVariationNumberSourceKey',
+                        supportText: 'Wählen Sie aus, welcher Wert von plentymarktes als Variantennummer in Shopware verwendet werden soll.',
+                        store: new Ext.data.ArrayStore({
+                            fields: ['id', 'name'],
+                            data: [
+                                ['ColliNo', 'Variantennummer'],
+                                ['EAN', 'EAN 1'],
+                                ['EAN2', 'EAN 2'],
+                                ['EAN3', 'EAN 3'],
+                                ['EAN4', 'EAN 4']
+                            ]
+                        })
                     },
                     {
                         fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemBundleHeadActionID}Artikelpaket-Artikel erstellen{/s}',
@@ -262,6 +305,12 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
                                 return '{literal}<span style="padding: -3px; display: inline-block; width: 16px; height: 16px; margin-right: 3px;" class="plenty-OrderMarking-{id}"></span> {' + displayField + '}{/literal}';
                             }
                         }
+                    },{
+                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/OrderAdditionalCouponIdentifiers}Gutschein-Artikel{/s}',
+                        name: 'OrderAdditionalCouponIdentifiers',
+                        xtype: 'textfield',
+                        supportText: 'Artikelnummern, welche als Gutschein zu plentymarkets übertragen werden. Getrennt durch |.',
+                        allowBlank: true,
                     },
                     {
                         fieldLabel: '{s name=plentymarkets/view/settings/textfield/OrderReferrerID}Auftragsherkunft{/s}',
@@ -300,6 +349,19 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
                         inputValue: 1,
                         uncheckedValue: '0',
                         supportText: 'Aktivieren, wenn die Bezeichnung der Artikel zu plentymarkets übertragen werden sollen. Anderfalls wird die in plentymarkets hinterlegte Bezeichnung verwendet.'
+                    },
+                    {
+                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/CustomerDefaultFormOfAddressID}Standard-Anrede{/s}',
+                        name: 'CustomerDefaultFormOfAddressID',
+                        supportText: 'Dieser Wert wird bei Kunden als Anrede exportiert, wenn diese nicht angegeben worden ist.',
+                        store: new Ext.data.ArrayStore({
+                            fields: ['id', 'name'],
+                            data: [
+                                [0, 'Herr'],
+                                [1, 'Frau'],
+                                [2, 'Firma']
+                            ]
+                        })
                     },
                     {
                         xtype: 'textfield',
@@ -351,6 +413,14 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
                     editable: false
                 },
                 items: [
+                    {
+                        fieldLabel: '{s name=plentymarkets/view/settings/checkbox/CheckOutgoingItems}Aktiv{/s}',
+                        name: 'CheckOutgoingItems',
+                        xtype: 'checkbox',
+                        inputValue: 1,
+                        uncheckedValue: '0',
+                        supportText: 'Deaktivieren Sie diese Funktion, um nur mit den Auftragsstatus zu arbeiten.'
+                    },
                     {
                         fieldLabel: '{s name=plentymarkets/view/settings/textfield/OutgoingItemsID}Warenausgang{/s}',
                         name: 'OutgoingItemsID',
@@ -429,6 +499,14 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
                     editable: false
                 },
                 items: [
+                    {
+                        fieldLabel: '{s name=plentymarkets/view/settings/checkbox/CheckIncomingPayment}Aktiv{/s}',
+                        name: 'CheckIncomingPayment',
+                        xtype: 'checkbox',
+                        inputValue: 1,
+                        uncheckedValue: '0',
+                        supportText: 'Deaktivieren Sie diese Funktion, um nur mit den Auftragsstatus zu arbeiten.'
+                    },
                     {
                         xtype: 'combo',
                         fieldLabel: '{s name=plentymarkets/view/settings/textfield/IncomingPaymentShopwarePaymentFullStatusID}shopware Zahlungsstatus (komplett bezahlt){/s}',

@@ -185,6 +185,8 @@ class PlentymarketsConfig
 			!is_null($this->getOutgoingItemsIntervalID()) &&
 			!is_null($this->getItemWarehousePercentage()) &&
 			!is_null($this->getItemWarehouseID()) &&
+			!is_null($this->getItemVariationNumberSourceKey()) &&
+			!is_null($this->getItemNumberSourceKey()) &&
 			!is_null($this->getItemCleanupActionID()) &&
 			!is_null($this->getDefaultCustomerGroupKey()) &&
 			(!is_null($this->getItemProducerID()) && $this->getItemProducerID() > 0) &&

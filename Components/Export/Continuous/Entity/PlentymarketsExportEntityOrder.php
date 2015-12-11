@@ -218,6 +218,40 @@ class PlentymarketsExportEntityOrder
 					$Object_OrderInfo->InfoDate = $this->getOrderTimestamp();
 					$Object_OrderHead->OrderInfos[] = $Object_OrderInfo;
 				}
+				
+				$PaymentInstances = $Customer->getPaymentInstances();
+				
+                                if ($PaymentInstances)
+                                {
+                                        foreach ($PaymentInstances as $PaymentInstance)
+                                        {
+                                                if ($this->Order->getId() === $PaymentInstance->getOrder()->getId())
+                                                {
+                                                        $Object_BankData = new PlentySoapObject_BankData();
+                                                        $Object_BankData->OwnerFirstname = $PaymentInstance->getFirstName();
+                                                        $Object_BankData->OwnerLastname = $PaymentInstance->getLastName();
+                                                        $Object_BankData->BankName = $PaymentInstance->getBankName();
+                                                        $Object_BankData->IBAN = $PaymentInstance->getIban();
+                                                        $Object_BankData->BIC = $PaymentInstance->getBic();
+                                                        
+                                                        $Object_SetBankCreditCardData = new PlentySoapObject_SetBankCreditCardData();
+                                                        $Object_SetBankCreditCardData->CustomerID = $this->PLENTY_customerID;
+                                                        $Object_SetBankCreditCardData->BankData = $Object_BankData;
+                                                        
+                                                        $Request_SetBankCreditCardData = new PlentySoapRequest_SetBankCreditCardData();
+                                                        $Request_SetBankCreditCardData->CustomerData[] = $Object_SetBankCreditCardData;
+                                                        
+                                                        $Response_SetBankCreditCardData = PlentymarketsSoapClient::getInstance()->SetBankCreditCardData($Request_SetBankCreditCardData);
+                                                        
+                                                        if (!$Response_SetBankCreditCardData->Success)
+                                                        {
+                                                                // Set the error end quit
+                                                                $this->setError(self::CODE_ERROR_SOAP);
+                                                                throw new PlentymarketsExportEntityException('The order with the number »' . $this->Order->getNumber() . '« could not be exported');
+                                                        }
+                                                }
+                                        }
+                                }
 			}
 		}
 
@@ -310,6 +344,15 @@ class PlentymarketsExportEntityOrder
 
 			// Coupon
 			if ($Item->getMode() == 2)
+			{
+				$itemId = -1;
+				$rowType = 'Coupon';
+			}
+
+			// Additional coupon identifiers für 3rd party plugins
+			$couponIdentifiers = PyConf()->get('OrderAdditionalCouponIdentifiers', '');
+			$couponIdentifiers = explode('|', $couponIdentifiers);
+			if (in_array($number, $couponIdentifiers))
 			{
 				$itemId = -1;
 				$rowType = 'Coupon';

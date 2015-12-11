@@ -64,7 +64,7 @@ class PlentymarketsImportControllerItemBundle
 			$Response_GetItemBundles = PlentymarketsSoapClient::getInstance()->GetItemBundles($Request_GetItemBundles);
 
 			$pages = max($Response_GetItemBundles->Pages, 1);
-			PlentymarketsLogger::getInstance()->message('Sync:Item:Bundle', 'Page: ' . ($Response_GetItemBundles->Page + 1) . '/' . $pages);
+			PlentymarketsLogger::getInstance()->message('Sync:Item:Bundle', 'Page: ' . ($Request_GetItemBundles->Page + 1) . '/' . $pages);
 
 			foreach ($Response_GetItemBundles->ItemBundles->item as $PlentySoapObject_Bundle)
 			{

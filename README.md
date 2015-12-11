@@ -2,7 +2,7 @@
 
 # Der plentymarkets-Shopware Connector
 
-- **License**: AGPL v3
+- **License**: GPL v3
 - **Github Repository**: <https://github.com/plentymarkets/plentymarkets-shopware-connector>
 
 Verbinden Sie die plentymarkets Komplettlösung für Ihren Onlinehandel mit Fokus auf Warenwirtschaft und Multi-Channel-Vertrieb bis zum Fulfillment mit den Frontendlösungen für Ihr individuelles Shopdesign von Shopware. Installieren Sie dafür das kostenlose Shopware-Plugin für Ihr plentymarkets-System und nutzen Sie beide Systeme mit allen Funktionen parallel. Nach einem initialen Export und Import beider Systeme werden alle Daten, je nach Vorkommen und Änderung im jeweiligen System, permanent über die SOAP-Schnittstelle synchronisiert. So sind die Daten in beiden Systemen immer auf dem neuesten Stand.

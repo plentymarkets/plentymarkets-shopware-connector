@@ -57,6 +57,12 @@ class PlentymarketsSoapClient extends SoapClient
 
 	/**
 	 *
+	 * @var integer
+	 */
+	const SOAP_CALLS_LIMIT = 140;
+
+	/**
+	 *
 	 * @var PlentymarketsSoapClient
 	 */
 	protected static $Instance;
@@ -214,6 +220,10 @@ class PlentymarketsSoapClient extends SoapClient
 		// Set the new token
 		$this->setSoapHeaders();
 	}
+	
+	function __destruct()
+	{
+	}
 
 	/**
 	 * Retrieves a new plentymarkets API token
@@ -287,9 +297,43 @@ class PlentymarketsSoapClient extends SoapClient
 		$retries = 0;
 
 		do
-		{
+		{	
 			try
 			{
+				$headers = $this->__getLastResponseHeaders();
+
+				if ($headers)
+				{
+					preg_match('/X-Plenty-Soap-Calls-Left: (-?\d+)/', $headers, $matches);
+					$callsLeft = isset($matches[1]) ? (int) $matches[1] : -1;
+
+					preg_match('/X-Plenty-Soap-Seconds-Left: (-?\d+)/', $headers, $matches);
+					$secondsLeft = isset($matches[1]) ? (int) $matches[1] : -1;
+
+					if (!($callsLeft % 50))
+					{
+						PyLog()->message(
+							'Soap:CallLimit',
+							sprintf('Soap-Calls-Left: %d – Soap-Seconds-Left: %d', $callsLeft, $secondsLeft)
+						);
+					}
+
+					// check if the limit of the soap calls is already reached
+					if ($callsLeft != -1 && $callsLeft <= 10)
+					{
+						$sleep = $secondsLeft + 5;
+						PyLog()->message(
+							'Soap:CallLimit',
+							sprintf('Soap call limit reached. Waiting %d seconds.', $sleep)
+						);
+						sleep($sleep);
+						PyLog()->message(
+							'Soap:CallLimit',
+							sprintf('Waited %d seconds.', $sleep)
+						);
+					}
+				}
+
 				// Call
 				$Response = $this->doCall($call, $args);
 
@@ -319,7 +363,7 @@ class PlentymarketsSoapClient extends SoapClient
 					PlentymarketsLogger::getInstance()->message('Soap:Call', $call . ' will wait ' . $seconds . ' seconds and then try again (' . $retries . '/' . self::NUMBER_OF_RETRIES_MAX . ')');
 					sleep($seconds);
 				}
-			}
+			}	
 		}
 		while ($retries < self::NUMBER_OF_RETRIES_MAX);
 
@@ -365,6 +409,12 @@ class PlentymarketsSoapClient extends SoapClient
 			PlentymarketsLogger::getInstance()->message('Soap:Call:Header:Response', $this->__getLastResponseHeaders());
 		}
 
+		// Remember the timestamp for soap calls number of any kind
+		if (!empty($this->soapCallsTimestampConfigKey))
+		{
+			$this->Config->set($this->soapCallsTimestampConfigKey, time());
+		}
+		
 		++$this->numberOfCalls;
 
 		return $Response;
@@ -403,7 +453,7 @@ class PlentymarketsSoapClient extends SoapClient
 			$PlentymarketsConfig = PlentymarketsConfig::getInstance();
 
 			// WSDL
-			$wsdl = $PlentymarketsConfig->getApiWsdl() . '/plenty/api/soap/version112/?xml';
+			$wsdl = $PlentymarketsConfig->getApiWsdl() . '/plenty/api/soap/version115/?xml';
 
 			//
 			self::$Instance = new self($wsdl, $PlentymarketsConfig->getApiUsername(), $PlentymarketsConfig->getApiPassword());

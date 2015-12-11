@@ -24,10 +24,8 @@
 
 
 /**
- * PlentymarketsImportEntityOrderIncomingPayments provides the actual order incoming payments import functionality.
- * Like the other import entities this class is called in PlentymarketsImportController. It inherits some methods
- * from the entity class PlentymarketsImportEntityOrderAbstract. 
- * The data import takes place based on plentymarkets SOAP-calls.
+ * PlentymarketsImportEntityOrderIncomingPayments provides
+ * the actual order incoming payments import functionality
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
@@ -53,7 +51,7 @@ class PlentymarketsImportEntityOrderIncomingPayments extends PlentymarketsImport
 
 	/**
 	 * Prepares the soap orders SOAP object
-	 * 
+	 *
 	 * @see PlentymarketsImportEntityOrderAbstract::prepare()
 	 */
 	public function prepare()
@@ -70,7 +68,7 @@ class PlentymarketsImportEntityOrderIncomingPayments extends PlentymarketsImport
 		{
 			self::$paymentStatusFull = PlentymarketsConfig::getInstance()->getIncomingPaymentShopwarePaymentFullStatusID();
 		}
-		
+
 		if (is_null(self::$paymentStatusPartial))
 		{
 			self::$paymentStatusPartial = PlentymarketsConfig::getInstance()->getIncomingPaymentShopwarePaymentPartialStatusID();
@@ -85,6 +83,7 @@ class PlentymarketsImportEntityOrderIncomingPayments extends PlentymarketsImport
 	 */
 	public function handle($shopwareOrderId, $Order)
 	{
+		// Payment status
 		if ($Order->PaymentStatus == 1)
 		{
 			$paymentStatus = self::$paymentStatusFull;
@@ -95,20 +94,22 @@ class PlentymarketsImportEntityOrderIncomingPayments extends PlentymarketsImport
 		}
 		else
 		{
-			return;
+			$paymentStatus = -1;
 		}
 
-		self::$OrderModule->setPaymentStatus($shopwareOrderId, $paymentStatus, false, 'plentymarkets');
+		if ($paymentStatus > 0)
+		{
+			self::$OrderModule->setPaymentStatus($shopwareOrderId, $paymentStatus, false, 'plentymarkets');
 
-		Shopware()->Db()->query('
-			UPDATE plenty_order
-				SET
-					plentyOrderPaidStatus = 1,
-					plentyOrderPaidTimestamp = NOW()
-				WHERE shopwareId = ?
-		', array(
-				$shopwareOrderId
-		));
-
+			Shopware()->Db()->query('
+				UPDATE plenty_order
+					SET
+						plentyOrderPaidStatus = 1,
+						plentyOrderPaidTimestamp = NOW()
+					WHERE shopwareId = ?
+			', array(
+				$shopwareOrderId,
+			));
+		}
 	}
 }

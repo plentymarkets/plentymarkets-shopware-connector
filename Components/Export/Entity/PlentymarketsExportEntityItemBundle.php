@@ -154,10 +154,10 @@ class PlentymarketsExportEntityItemBundle
 		}
 
 		// Create the bundle head
-		$Request_AddItemsBase = new PlentySoapRequest_AddItemsBase();
+		$Request_SetItemsBase = new PlentySoapRequest_SetItemsBase();
+		$Request_SetItemsBase->BaseItems = array();
 
-		$Request_AddItemsBase->BaseItems = array();
-		$Object_AddItemsBaseItemBase = new PlentySoapObject_AddItemsBaseItemBase();
+		$Object_SetItemsBaseItemBase = new PlentySoapObject_SetItemsBaseItemBase();
 
 		$Object_ItemAvailability = new PlentySoapObject_ItemAvailability();
 
@@ -170,11 +170,11 @@ class PlentymarketsExportEntityItemBundle
 		$Object_ItemAvailability->WebAPI = 1;
 		$Object_ItemAvailability->Inactive = (integer) $this->SHOPWARE_bundle->getActive();
 		$Object_ItemAvailability->Webshop = (integer) $this->SHOPWARE_bundle->getActive();
-		$Object_AddItemsBaseItemBase->Availability = $Object_ItemAvailability;
+		$Object_SetItemsBaseItemBase->Availability = $Object_ItemAvailability;
 
 		$storeIds = array();
-		$Object_AddItemsBaseItemBase->Categories = array();
-		$Object_AddItemsBaseItemBase->StoreIDs = array();
+		$Object_SetItemsBaseItemBase->Categories = array();
+		$Object_SetItemsBaseItemBase->StoreIDs = array();
 
 		foreach ($shopwareBundleHead->getCategories() as $category)
 		{
@@ -190,7 +190,7 @@ class PlentymarketsExportEntityItemBundle
 
 			$Object_ItemCategory = new PlentySoapObject_ItemCategory();
 			$Object_ItemCategory->ItemCategoryPath = $categoryPath; // string
-			$Object_AddItemsBaseItemBase->Categories[] = $Object_ItemCategory;
+			$Object_SetItemsBaseItemBase->Categories[] = $Object_ItemCategory;
 
 			// Get the store for this category
 			$rootId = PlentymarketsUtils::getRootIdByCategory($category);
@@ -212,7 +212,7 @@ class PlentymarketsExportEntityItemBundle
 					// Activate the item for this store
 					$Object_Integer = new PlentySoapObject_Integer();
 					$Object_Integer->intValue = $storeId;
-					$Object_AddItemsBaseItemBase->StoreIDs[] = $Object_Integer;
+					$Object_SetItemsBaseItemBase->StoreIDs[] = $Object_Integer;
 
 					// Cache
 					$storeIds[$storeId] = true;
@@ -220,8 +220,8 @@ class PlentymarketsExportEntityItemBundle
 			}
 		}
 
-		$Object_AddItemsBaseItemBase->ExternalItemID = 'Swag/Bundle/' . $this->SHOPWARE_bundle->getId(); // string
-		$Object_AddItemsBaseItemBase->ItemNo = $this->SHOPWARE_bundle->getNumber(); // string
+		$Object_SetItemsBaseItemBase->ExternalItemID = 'Swag/Bundle/' . $this->SHOPWARE_bundle->getId(); // string
+		$Object_SetItemsBaseItemBase->ItemNo = $this->SHOPWARE_bundle->getNumber(); // string
 
 		$Object_ItemPriceSet = new PlentySoapObject_ItemPriceSet();
 		$defaultCustomerGroupKey = PlentymarketsConfig::getInstance()->get('DefaultCustomerGroupKey');
@@ -251,23 +251,24 @@ class PlentymarketsExportEntityItemBundle
 			// Otherwise the re-import will crash
 			$Object_ItemPriceSet->Price = 1;
 		}
-		$Object_AddItemsBaseItemBase->PriceSet = $Object_ItemPriceSet;
-		$Object_AddItemsBaseItemBase->VATInternalID = PlentymarketsMappingController::getVatByShopwareID($this->SHOPWARE_bundle->getArticle()->getTax()->getId());
+		$Object_SetItemsBaseItemBase->PriceSet = $Object_ItemPriceSet;
+		$Object_SetItemsBaseItemBase->VATInternalID = PlentymarketsMappingController::getVatByShopwareID($this->SHOPWARE_bundle->getArticle()->getTax()->getId());
 
-		$Object_AddItemsBaseItemBase->ProducerID = PlentymarketsMappingController::getProducerByShopwareID($shopwareBundleHead->getSupplier()->getId());; // int
-		$Object_AddItemsBaseItemBase->Published = null; // int
+		$Object_SetItemsBaseItemBase->ProducerID = PlentymarketsMappingController::getProducerByShopwareID($shopwareBundleHead->getSupplier()->getId());; // int
+		$Object_SetItemsBaseItemBase->Published = null; // int
 
+		$Object_SetItemsBaseItemBase->Texts = array();
 		$Object_ItemTexts = new PlentySoapObject_ItemTexts();
 		$Object_ItemTexts->Name = $this->SHOPWARE_bundle->getName(); // string
-		$Object_AddItemsBaseItemBase->Texts = $Object_ItemTexts;
+		$Object_SetItemsBaseItemBase->Texts[] = $Object_ItemTexts;
 
-		$Request_AddItemsBase->BaseItems[] = $Object_AddItemsBaseItemBase;
+		$Request_SetItemsBase->BaseItems[] = $Object_SetItemsBaseItemBase;
 
-		$Response_AddItemsBase = PlentymarketsSoapClient::getInstance()->AddItemsBase($Request_AddItemsBase);
+		$Response_SetItemsBase = PlentymarketsSoapClient::getInstance()->SetItemsBase($Request_SetItemsBase);
 
-		$ResponseMessage = $Response_AddItemsBase->ResponseMessages->item[0];
+		$ResponseMessage = $Response_SetItemsBase->ResponseMessages->item[0];
 
-		if (!$Response_AddItemsBase->Success || $ResponseMessage->Code != 100)
+		if (!$Response_SetItemsBase->Success || $ResponseMessage->Code != 100)
 		{
 			throw new PlentymarketsExportException('The item bundle with the number »' . $this->SHOPWARE_bundle->getNumber() . '« could not be exported', 2210);
 		}
@@ -304,26 +305,27 @@ class PlentymarketsExportEntityItemBundle
 	 */
 	protected function exportItems()
 	{
-		$Request_AddItemsToBundle = new PlentySoapRequest_AddItemsToBundle();
-		$Request_AddItemsToBundle->Bundles = array();
+		$Request_SetItemsToBundle = new PlentySoapRequest_SetItemsToBundle();
+		$Request_SetItemsToBundle->Bundles = array();
 
-		$Object_AddBundle = new PlentySoapObject_AddBundle();
-		$Object_AddBundle->BundleItems = array();
+		$Object_SetBundle = new PlentySoapObject_SetBundle();
+		$Object_SetBundle->BundleItems = array();
 
 		foreach ($this->PLENTY_bundleSkuList as $sku => $quantity)
 		{
-			$Object_AddBundleItem = new PlentySoapObject_AddBundleItem();
-			$Object_AddBundleItem->ItemSKU = $sku;
-			$Object_AddBundleItem->Quantity = $quantity;
-			$Object_AddBundle->BundleItems[] = $Object_AddBundleItem;
+			$Object_SetBundleItem = new PlentySoapObject_SetBundleItem();
+			$Object_SetBundleItem->ItemSKU = $sku;
+			$Object_SetBundleItem->Quantity = $quantity;
+			$Object_SetBundleItem->deleteFromBundle = false;
+			$Object_SetBundle->BundleItems[] = $Object_SetBundleItem;
 		}
 
-		$Object_AddBundle->BundleSKU = $this->PLENTY_bundleHeadId; // string
-		$Request_AddItemsToBundle->Bundles[] = $Object_AddBundle;
+		$Object_SetBundle->BundleSKU = $this->PLENTY_bundleHeadId; // string
+		$Request_SetItemsToBundle->Bundles[] = $Object_SetBundle;
 
-		PlentymarketsSoapClient::getInstance()->AddItemsToBundle($Request_AddItemsToBundle);
+		PlentymarketsSoapClient::getInstance()->SetItemsToBundle($Request_SetItemsToBundle);
 
-		$numberAdded = count($Object_AddBundle->BundleItems);
+		$numberAdded = count($Object_SetBundle->BundleItems);
 		PlentymarketsLogger::getInstance()->message('Export:Initial:Item:Bundle', $numberAdded . ' items have been added to the item bundle with the number »' . $this->SHOPWARE_bundle->getNumber() . '«.');
 	}
 }

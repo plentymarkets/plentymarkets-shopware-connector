@@ -201,6 +201,7 @@ class PlentymarketsImportEntityItemBundle
 
 		//
 		$Bundle->setName($ItemBase->Texts->Name);
+		$Bundle->setShowName(0);
 		$Bundle->setNumber($ItemBase->ItemNo);
 
 		$isLimited = $ItemBase->Stock->Limitation == 1;

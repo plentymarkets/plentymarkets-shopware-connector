@@ -1,7 +1,8 @@
 <?php
+
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2014 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,7 +23,7 @@
  * trademark license. Therefore any rights, titles and interests in the
  * above trademarks remain entirely with the trademark owners.
  *
- * @copyright  Copyright (c) 2014, plentymarkets GmbH (http://www.plentymarkets.com)
+ * @copyright  Copyright (c) 2013-2015, plentymarkets GmbH (http://www.plentymarkets.com)
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
@@ -31,6 +32,11 @@
  */
 class PlentySoapObject_ItemAvailability
 {
+	
+	/**
+	 * @var int
+	 */
+	public $Allyouneeed;
 	
 	/**
 	 * @var int
@@ -95,7 +101,32 @@ class PlentySoapObject_ItemAvailability
 	/**
 	 * @var int
 	 */
+	public $Cdiscount;
+	
+	/**
+	 * @var int
+	 */
 	public $CouchCommerce;
+	
+	/**
+	 * @var int
+	 */
+	public $DaWanda;
+	
+	/**
+	 * @var int
+	 */
+	public $Flubit;
+	
+	/**
+	 * @var int
+	 */
+	public $Fruugo;
+	
+	/**
+	 * @var int
+	 */
+	public $GartenXXL;
 	
 	/**
 	 * @var int
@@ -111,6 +142,11 @@ class PlentySoapObject_ItemAvailability
 	 * @var int
 	 */
 	public $Grosshandel;
+	
+	/**
+	 * @var int
+	 */
+	public $Hertie;
 	
 	/**
 	 * @var int
@@ -135,17 +171,17 @@ class PlentySoapObject_ItemAvailability
 	/**
 	 * @var int
 	 */
+	public $LaRedoute;
+	
+	/**
+	 * @var int
+	 */
 	public $Laary;
 	
 	/**
 	 * @var int
 	 */
 	public $MaximumSalesOrderQuantity;
-	
-	/**
-	 * @var int
-	 */
-	public $MeinPaket;
 	
 	/**
 	 * @var int
@@ -160,12 +196,32 @@ class PlentySoapObject_ItemAvailability
 	/**
 	 * @var int
 	 */
-	public $Moebelprofi;
+	public $NeckermannAtCrossDocking;
+	
+	/**
+	 * @var string
+	 */
+	public $NeckermannAtCrossDockingProductType;
+	
+	/**
+	 * @var string
+	 */
+	public $NeckermannAtCrossDockingProvisionType;
 	
 	/**
 	 * @var int
 	 */
-	public $Neckermann;
+	public $NeckermannAtEnterprise;
+	
+	/**
+	 * @var string
+	 */
+	public $NeckermannAtEnterpriseProductType;
+	
+	/**
+	 * @var string
+	 */
+	public $NeckermannAtEnterpriseProvisionType;
 	
 	/**
 	 * @var int
@@ -175,12 +231,27 @@ class PlentySoapObject_ItemAvailability
 	/**
 	 * @var int
 	 */
+	public $Play;
+	
+	/**
+	 * @var int
+	 */
 	public $PlusDe;
 	
 	/**
 	 * @var int
 	 */
-	public $Quelle;
+	public $RakutenDe;
+	
+	/**
+	 * @var int
+	 */
+	public $RakutenDeCategory;
+	
+	/**
+	 * @var int
+	 */
+	public $RakutenUk;
 	
 	/**
 	 * @var int
@@ -190,17 +261,7 @@ class PlentySoapObject_ItemAvailability
 	/**
 	 * @var int
 	 */
-	public $ShopShare;
-	
-	/**
-	 * @var int
-	 */
 	public $Shopgate;
-	
-	/**
-	 * @var int
-	 */
-	public $Shopperella;
 	
 	/**
 	 * @var int
@@ -210,12 +271,7 @@ class PlentySoapObject_ItemAvailability
 	/**
 	 * @var int
 	 */
-	public $Tradoria;
-	
-	/**
-	 * @var int
-	 */
-	public $TradoriaCategory;
+	public $Tracdelight;
 	
 	/**
 	 * @var int
@@ -241,4 +297,9 @@ class PlentySoapObject_ItemAvailability
 	 * @var int
 	 */
 	public $Zalando;
+	
+	/**
+	 * @var int
+	 */
+	public $Zentralverkauf;
 }

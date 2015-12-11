@@ -126,6 +126,17 @@ class PlentymarketsImportController
 		// Starttimestamp
 		$timestamp = time();
 
+		// Ist ein Status-Mapping gesetzt?
+		$methodOfPayment = Shopware()->Db()->fetchAssoc('
+			SELECT 1 FROM plenty_mapping_payment_status
+		');
+
+		$order = Shopware()->Db()->fetchAssoc('
+			SELECT 1 FROM plenty_mapping_order_status
+		');
+
+		$checkStatus = $methodOfPayment || $order;
+
 		// Get the data from plentymarkets (for every mapped shop)
 		$shopIds = Shopware()->Db()->fetchAll('
 			SELECT plentyID FROM plenty_mapping_shop
@@ -133,15 +144,28 @@ class PlentymarketsImportController
 
 		foreach ($shopIds as $shopId)
 		{
-			$PlentymarketsImportEntityOrderIncomingPayments = new PlentymarketsImportEntityOrderIncomingPayments($shopId['plentyID']);
-			$PlentymarketsImportEntityOrderIncomingPayments->import();
+			if (PlentymarketsConfig::getInstance()->getCheckIncomingPayment(false))
+			{
+				$PlentymarketsImportEntityOrderIncomingPayments = new PlentymarketsImportEntityOrderIncomingPayments($shopId['plentyID']);
+				$PlentymarketsImportEntityOrderIncomingPayments->import();
+			}
 
-			$PlentymarketsImportEntityOrderOutgoingItems = new PlentymarketsImportEntityOrderOutgoingItems($shopId['plentyID']);
-			$PlentymarketsImportEntityOrderOutgoingItems->import();
+			if (PlentymarketsConfig::getInstance()->getCheckOutgoingItems(false))
+			{
+				$PlentymarketsImportEntityOrderOutgoingItems = new PlentymarketsImportEntityOrderOutgoingItems($shopId['plentyID']);
+				$PlentymarketsImportEntityOrderOutgoingItems->import();
+			}
+
+			if ($checkStatus)
+			{
+				$PlentymarketsImportEntityOrderStatusChange = new PlentymarketsImportEntityOrderStatusChange($shopId['plentyID']);
+				$PlentymarketsImportEntityOrderStatusChange->import();
+			}
 		}
 
 		PlentymarketsConfig::getInstance()->setImportOrderIncomingPaymentsLastUpdateTimestamp($timestamp);
 		PlentymarketsConfig::getInstance()->setImportOrderOutgoingItemsLastUpdateTimestamp($timestamp);
+		PlentymarketsConfig::getInstance()->setImportOrderStatusChangeLastUpdateTimestamp($timestamp);
 	}
 
 	/**
@@ -270,14 +294,28 @@ class PlentymarketsImportController
 
 		// Prepare data
 		$orderStatusList = array();
+		$purgeOrderStatusList = array();
 
 		/** @var PlentySoapObject_GetOrderStatus $OrderStatus */
 		foreach ($Response_GetOrderStatusList->OrderStatus->item as $OrderStatus)
 		{
+			$purgeOrderStatusList[] = sprintf('"%s"', $OrderStatus->OrderStatus);
 			$orderStatusList[(string) $OrderStatus->OrderStatus] = array(
 				'status' => (string) $OrderStatus->OrderStatus,
 				'name' => $OrderStatus->OrderStatusName
 			);
+		}
+
+		if ($purgeOrderStatusList)
+		{
+			$where = 'plentyID NOT IN (' . implode(',', $purgeOrderStatusList)	 . ')';
+			Shopware()->Db()->delete('plenty_mapping_payment_status', $where);
+			Shopware()->Db()->delete('plenty_mapping_order_status', $where);
+		}
+		else
+		{
+			Shopware()->Db()->delete('plenty_mapping_payment_status');
+			Shopware()->Db()->delete('plenty_mapping_order_status');
 		}
 
 		uksort($orderStatusList, 'strnatcmp');
@@ -631,6 +669,9 @@ class PlentymarketsImportController
 			return unserialize(PlentymarketsConfig::getInstance()->getMiscVatSerialized());
 		}
 
+		$Request_GetVatConfig = new PlentySoapRequest_GetVATConfig();
+		$Request_GetVatConfig->WebstoreID = null; // get the VAT Config from the standard shop
+
 		$Response_GetVATConfig = PlentymarketsSoapClient::getInstance()->GetVATConfig();
 
 		// The call wasn't successful
@@ -647,7 +688,7 @@ class PlentymarketsImportController
 		$vat = array();
 
 		/** @var PlentySoapObject_GetVATConfig $VAT */
-		foreach ($Response_GetVATConfig->DefaultVAT->item as $VAT)
+		foreach ($Response_GetVATConfig->DefaultVAT->item[0]->DefaultVAT->item as $VAT) // get the vat Config only from the first list
 		{
 			$vat[$VAT->InternalVATID] = array(
 				'id' => $VAT->InternalVATID,

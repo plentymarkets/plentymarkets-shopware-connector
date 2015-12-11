@@ -96,7 +96,10 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		name: 'ItemImageSyncActionID',
 		type: 'integer',
 		defaultValue: 1
-	}, {
+	},{
+        name: 'ItemImageAltAttributeID',
+        type: 'integer'      
+    },{
 		name: 'ItemCategorySyncActionID',
 		type: 'integer',
 		defaultValue: 1
@@ -104,6 +107,14 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		name: 'ItemNumberImportActionID',
 		type: 'integer',
 		defaultValue: 1
+	}, {
+		name: 'ItemNumberSourceKey',
+		type: 'string',
+		defaultValue: 'ItemNo'
+	}, {
+		name: 'ItemVariationNumberSourceKey',
+		type: 'string',
+		defaultValue: 'ColliNo'
 	}, {
 		name: 'ItemBundleHeadActionID',
 		type: 'integer',
@@ -131,6 +142,9 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		name: 'OrderReferrerID',
 		type: 'integer',
 		defaultValue: 1
+	}, {
+		name: 'OrderAdditionalCouponIdentifiers',
+		type: 'string'
 	}, {
 		name: 'OrderMarking1',
 		type: 'integer'
@@ -169,6 +183,18 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		name: 'OrderItemTextSyncActionID',
 		type: 'integer',
 		defaultValue: 1
+	}, {
+		name: 'CheckOutgoingItems',
+		type: 'boolean',
+		defaultValue: false
+	}, {
+		name: 'CheckIncomingPayment',
+		type: 'boolean',
+		defaultValue: false
+	}, {
+		name: 'CustomerDefaultFormOfAddressID',
+		type: 'integer',
+		defaultValue: [0]
 	},
 
     {

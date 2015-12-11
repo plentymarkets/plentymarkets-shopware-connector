@@ -44,6 +44,8 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Main', {
 		names['MethodOfPayment'] = 'Zahlungsarten';
 		names['CustomerClass'] = 'Kundengruppen';
 		names['Referrer'] = 'Partner';
+		names['OrderStatus'] = 'Auftragsstatus';
+		names['PaymentStatus'] = 'Zahlungsstatus';
 
 		me.listeners = {
 			activate: function()

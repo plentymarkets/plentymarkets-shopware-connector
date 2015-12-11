@@ -177,7 +177,9 @@ class PlentymarketsGarbageCollector
 			'plenty_mapping_referrer' => array('id', 's_emarketing_partner'),
 			'plenty_mapping_shipping_profile' => array('id', 's_premium_dispatch'),
 			'plenty_mapping_shop' => array('id', 's_core_shops'),
-			'plenty_mapping_vat' => array('id', 's_core_tax')
+			'plenty_mapping_vat' => array('id', 's_core_tax'),
+			'plenty_mapping_order_status' => array('id', 's_core_states'),
+			'plenty_mapping_payment_status' => array('id', 's_core_states'),
 		);
 
 		foreach ($dirty as $mappingTable => $target)

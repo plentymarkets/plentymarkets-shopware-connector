@@ -148,8 +148,40 @@ class PlentymarketsExportEntityCustomer
 		PlentymarketsLogger::getInstance()->message('Export:Customer', 'Export of the customer with the number »' . $this->getCustomerNumber() . '«');
 
 		$city = trim($this->BillingAddress->getCity());
-		$number = trim($this->BillingAddress->getStreetNumber());
-		$street = trim($this->BillingAddress->getStreet());
+		
+		// check for shopware version 	
+		if(method_exists($this->BillingAddress, 'getStreetNumber'))
+		{
+			// shopware version 4
+
+			$streetHouseNumber = trim($this->BillingAddress->getStreetNumber());
+			$streetName = trim($this->BillingAddress->getStreet());
+		}
+		else
+		{
+			// shopware version 5
+			$street_arr = PlentymarketsUtils::extractStreetAndHouseNo($this->BillingAddress->getStreet());
+
+			if(isset($street_arr['street']) && strlen($street_arr['street']) > 0)
+			{
+				$streetName = $street_arr['street'];
+			}
+			else
+			{
+				$streetName = trim($this->BillingAddress->getStreet());
+			}
+
+			if(isset($street_arr['houseNo']) && strlen($street_arr['houseNo']) > 0)
+			{
+				$streetHouseNumber = $street_arr['houseNo'];
+			}
+			else
+			{
+				//no house number was found in the street string
+				$streetHouseNumber = '';
+			}
+		}
+		
 		$zip = trim($this->BillingAddress->getZipCode());
 
 		if (empty($city))
@@ -157,52 +189,59 @@ class PlentymarketsExportEntityCustomer
 			$city = PlentymarketsConfig::getInstance()->get('CustomerDefaultCity');
 		}
 
-		if ($number == '')
+		if (!isset($streetHouseNumber) || $streetHouseNumber == '')
 		{
-			$number = PlentymarketsConfig::getInstance()->get('CustomerDefaultHouseNumber');
+			$streetHouseNumber = PlentymarketsConfig::getInstance()->get('CustomerDefaultHouseNumber');
 		}
 
-		if (empty($street))
+		if (!isset($streetName) || $streetName == '')
 		{
-			$street = PlentymarketsConfig::getInstance()->get('CustomerDefaultStreet');
+			$streetName = PlentymarketsConfig::getInstance()->get('CustomerDefaultStreet');
 		}
 
 		if ($zip == '')
 		{
 			$zip = PlentymarketsConfig::getInstance()->get('CustomerDefaultZipcode');
 		}
+		
+		$formOfAddress = $this->getBillingFormOfAddress();
+		
+		if(is_null($formOfAddress))
+		{
+			$formOfAddress = PlentymarketsConfig::getInstance()->get('CustomerDefaultFormOfAddressID');
+		}
 
-		$Request_AddCustomers = new PlentySoapRequest_AddCustomers();
+		$Request_SetCustomers = new PlentySoapRequest_SetCustomers();
 
-		$Request_AddCustomers->Customers = array();
+		$Request_SetCustomers->Customers = array();
 
-		$Object_AddCustomersCustomer = new PlentySoapObject_AddCustomersCustomer();
-		$Object_AddCustomersCustomer->City = $city;
-		$Object_AddCustomersCustomer->Company = $this->BillingAddress->getCompany();
-		$Object_AddCustomersCustomer->CountryID = $this->getBillingCountryID(); // int
-		$Object_AddCustomersCustomer->CustomerClass = $this->getCustomerClassId();
-		$Object_AddCustomersCustomer->CustomerNumber = $this->getCustomerNumber(); // string
-		$Object_AddCustomersCustomer->CustomerSince = $this->Customer->getFirstLogin()->getTimestamp(); // int
-		$Object_AddCustomersCustomer->Email = $this->Customer->getEmail(); // string
-		$Object_AddCustomersCustomer->ExternalCustomerID = PlentymarketsUtils::getExternalCustomerID($this->Customer->getId()); // string
-		$Object_AddCustomersCustomer->FormOfAddress = $this->getBillingFormOfAddress(); // string
-		$Object_AddCustomersCustomer->Fax = $this->BillingAddress->getFax();
-		$Object_AddCustomersCustomer->FirstName = $this->BillingAddress->getFirstName();
-		$Object_AddCustomersCustomer->HouseNo = $number;
-		$Object_AddCustomersCustomer->IsBlocked = !$this->Customer->getActive();
-		$Object_AddCustomersCustomer->Newsletter = (integer) $this->Customer->getNewsletter();
-		$Object_AddCustomersCustomer->PayInvoice = true; // boolean
-		$Object_AddCustomersCustomer->Street = $street;
-		$Object_AddCustomersCustomer->Surname = $this->BillingAddress->getLastName();
-		$Object_AddCustomersCustomer->Telephone = $this->BillingAddress->getPhone();
-		$Object_AddCustomersCustomer->VAT_ID = $this->BillingAddress->getVatId();
-		$Object_AddCustomersCustomer->ZIP = $zip;
+		$Object_SetCustomersCustomer = new PlentySoapObject_Customer();
+		$Object_SetCustomersCustomer->City = $city;
+		$Object_SetCustomersCustomer->Company = $this->BillingAddress->getCompany();
+		$Object_SetCustomersCustomer->CountryID = $this->getBillingCountryID(); // int
+		$Object_SetCustomersCustomer->CustomerClass = $this->getCustomerClassId();
+		$Object_SetCustomersCustomer->CustomerNumber = $this->getCustomerNumber(); // string
+		$Object_SetCustomersCustomer->CustomerSince = $this->Customer->getFirstLogin()->getTimestamp(); // int
+		$Object_SetCustomersCustomer->Email = $this->Customer->getEmail(); // string
+		$Object_SetCustomersCustomer->ExternalCustomerID = PlentymarketsUtils::getExternalCustomerID($this->Customer->getId()); // string
+		$Object_SetCustomersCustomer->FormOfAddress = (int)$formOfAddress; // int
+		$Object_SetCustomersCustomer->Fax = $this->BillingAddress->getFax();
+		$Object_SetCustomersCustomer->FirstName = $this->BillingAddress->getFirstName();
+		$Object_SetCustomersCustomer->HouseNo = $streetHouseNumber;
+		$Object_SetCustomersCustomer->IsBlocked = !$this->Customer->getActive();
+		$Object_SetCustomersCustomer->Newsletter = (integer) $this->Customer->getNewsletter();
+		$Object_SetCustomersCustomer->PayInvoice = true; // boolean
+		$Object_SetCustomersCustomer->Street = $streetName;
+		$Object_SetCustomersCustomer->Surname = $this->BillingAddress->getLastName();
+		$Object_SetCustomersCustomer->Telephone = $this->BillingAddress->getPhone();
+		$Object_SetCustomersCustomer->VAT_ID = $this->BillingAddress->getVatId();
+		$Object_SetCustomersCustomer->ZIP = $zip;
 
 		// Store id
 		try
 		{
-			$Object_AddCustomersCustomer->StoreID = PlentymarketsMappingController::getShopByShopwareID($this->Customer->getShop()->getId());
-			$Object_AddCustomersCustomer->Language = strtolower(substr($this->Customer->getShop()->getLocale()->getLocale(), 0, 2));
+			$Object_SetCustomersCustomer->StoreID = PlentymarketsMappingController::getShopByShopwareID($this->Customer->getShop()->getId());
+			$Object_SetCustomersCustomer->Language = strtolower(substr($this->Customer->getShop()->getLocale()->getLocale(), 0, 2));
 		}
 		catch (PlentymarketsMappingExceptionNotExistant $E)
 		{
@@ -213,37 +252,25 @@ class PlentymarketsExportEntityCustomer
 		{
 			try
 			{
-				$Object_AddCustomersCustomer->CustomerClass = PlentymarketsMappingController::getCustomerClassByShopwareID($this->Customer->getGroup()->getId());
+				$Object_SetCustomersCustomer->CustomerClass = PlentymarketsMappingController::getCustomerClassByShopwareID($this->Customer->getGroup()->getId());
 			}
 			catch (PlentymarketsMappingExceptionNotExistant $E)
 			{
 			}
 		}
 
-		if ($this->BillingAddress->getAttribute() != null)
-		{
-			$Object_CustomerFreeTestFields = new PlentySoapObject_CustomerFreeTestFields();
-			$Object_CustomerFreeTestFields->Free1 = $this->BillingAddress->getAttribute()->getText1();
-			$Object_CustomerFreeTestFields->Free2 = $this->BillingAddress->getAttribute()->getText2();
-			$Object_CustomerFreeTestFields->Free3 = $this->BillingAddress->getAttribute()->getText3();
-			$Object_CustomerFreeTestFields->Free4 = $this->BillingAddress->getAttribute()->getText4();
-			$Object_CustomerFreeTestFields->Free5 = $this->BillingAddress->getAttribute()->getText5();
-			$Object_CustomerFreeTestFields->Free6 = $this->BillingAddress->getAttribute()->getText6();
-			$Object_AddCustomersCustomer->FreeTextFields = $Object_CustomerFreeTestFields;
-		}
+		$Request_SetCustomers->Customers[] = $Object_SetCustomersCustomer;
 
-		$Request_AddCustomers->Customers[] = $Object_AddCustomersCustomer;
+		$Response_SetCustomers = PlentymarketsSoapClient::getInstance()->SetCustomers($Request_SetCustomers);
 
-		$Response_AddCustomers = PlentymarketsSoapClient::getInstance()->AddCustomers($Request_AddCustomers);
-
-		if (!$Response_AddCustomers->Success)
+		if (!$Response_SetCustomers->Success)
 		{
 			throw new PlentymarketsExportEntityException('The customer with the number »' . $this->getCustomerNumber() . '« could not be exported', 2110);
 		}
 
-		if ($Response_AddCustomers->ResponseMessages->item[0]->Code == 100 || $Response_AddCustomers->ResponseMessages->item[0]->Code == 200)
+		if ($Response_SetCustomers->ResponseMessages->item[0]->Code == 100 || $Response_SetCustomers->ResponseMessages->item[0]->Code == 200)
 		{
-			$this->PLENTY_customerID = (integer) $Response_AddCustomers->ResponseMessages->item[0]->SuccessMessages->item[0]->Value;
+			$this->PLENTY_customerID = (integer) $Response_SetCustomers->ResponseMessages->item[0]->SuccessMessages->item[0]->Value;
 
 			if ($this->BillingAddress instanceof \Shopware\Models\Customer\Billing)
 			{
@@ -350,8 +377,40 @@ class PlentymarketsExportEntityCustomer
 		}
 
 		$city = trim($this->ShippingAddress->getCity());
-		$number = trim($this->ShippingAddress->getStreetNumber());
-		$street = trim($this->ShippingAddress->getStreet());
+
+		// check for shopware version 
+
+		if(method_exists($this->ShippingAddress, 'getStreetNumber'))
+		{
+			// shopware version 4
+
+			$streetHouseNumber = trim($this->ShippingAddress->getStreetNumber());
+			$streetName = trim($this->ShippingAddress->getStreet());
+		}
+		else
+		{
+			// shopware version 5
+			$street_arr = PlentymarketsUtils::extractStreetAndHouseNo($this->ShippingAddress->getStreet());
+
+			if(isset($street_arr['street']) && strlen($street_arr['street']) > 0)
+			{
+				$streetName = $street_arr['street'];
+			}
+			else
+			{
+				$streetName = trim($this->ShippingAddress->getStreet());
+			}
+
+			if(isset($street_arr['houseNo']) && strlen($street_arr['houseNo']) > 0)
+			{
+				$streetHouseNumber = $street_arr['houseNo'];
+			}
+			else
+			{
+				$streetHouseNumber = '';
+			}
+		}
+		
 		$zip = trim($this->ShippingAddress->getZipCode());
 
 		if (empty($city))
@@ -359,14 +418,14 @@ class PlentymarketsExportEntityCustomer
 			$city = PlentymarketsConfig::getInstance()->get('CustomerDefaultCity');
 		}
 
-		if ($number == '')
+		if (!isset($streetHouseNumber) || $streetHouseNumber == '')
 		{
-			$number = PlentymarketsConfig::getInstance()->get('CustomerDefaultHouseNumber');
+			$streetHouseNumber = PlentymarketsConfig::getInstance()->get('CustomerDefaultHouseNumber');
 		}
 
-		if (empty($street))
+		if (!isset($streetName) || $streetName == '')
 		{
-			$street = PlentymarketsConfig::getInstance()->get('CustomerDefaultStreet');
+			$streetName = PlentymarketsConfig::getInstance()->get('CustomerDefaultStreet');
 		}
 
 		if ($zip == '')
@@ -374,33 +433,40 @@ class PlentymarketsExportEntityCustomer
 			$zip = PlentymarketsConfig::getInstance()->get('CustomerDefaultZipcode');
 		}
 
-		$Request_AddCustomerDeliveryAddresses = new PlentySoapRequest_AddCustomerDeliveryAddresses();
+		$formOfAddress = $this->getDeliveryFormOfAddress();
 
-		$Request_AddCustomerDeliveryAddresses->DeliveryAddresses = array();
-		$Object_AddCustomerDeliveryAddressesCustomer = new PlentySoapObject_AddCustomerDeliveryAddressesCustomer();
-		$Object_AddCustomerDeliveryAddressesCustomer->AdditionalName = null; // string
-		$Object_AddCustomerDeliveryAddressesCustomer->City = $city;
-		$Object_AddCustomerDeliveryAddressesCustomer->Company = $this->ShippingAddress->getCompany();
-		$Object_AddCustomerDeliveryAddressesCustomer->CountryID = $this->getDeliveryCountryID(); // int
-		$Object_AddCustomerDeliveryAddressesCustomer->CustomerID = $this->PLENTY_customerID; // int
-		$Object_AddCustomerDeliveryAddressesCustomer->ExternalDeliveryAddressID = PlentymarketsUtils::getExternalCustomerID($this->ShippingAddress->getId()); // string
-		$Object_AddCustomerDeliveryAddressesCustomer->FirstName = $this->ShippingAddress->getFirstName();
-		$Object_AddCustomerDeliveryAddressesCustomer->FormOfAddress = $this->getDeliveryFormOfAddress(); // int
-		$Object_AddCustomerDeliveryAddressesCustomer->HouseNumber = $number;
-		$Object_AddCustomerDeliveryAddressesCustomer->Street = $street;
-		$Object_AddCustomerDeliveryAddressesCustomer->Surname = $this->ShippingAddress->getLastName();
-		$Object_AddCustomerDeliveryAddressesCustomer->ZIP = $zip;
+		if(is_null($formOfAddress))
+		{
+			$formOfAddress = PlentymarketsConfig::getInstance()->get('CustomerDefaultFormOfAddressID');
+		}
 
-		$Request_AddCustomerDeliveryAddresses->DeliveryAddresses[] = $Object_AddCustomerDeliveryAddressesCustomer;
+		$Request_SetCustomerDeliveryAddresses = new PlentySoapRequest_SetCustomerDeliveryAddresses();
 
-		$Response_AddCustomerDeliveryAddresses = PlentymarketsSoapClient::getInstance()->AddCustomerDeliveryAddresses($Request_AddCustomerDeliveryAddresses);
+		$Request_SetCustomerDeliveryAddresses->DeliveryAddresses = array();
+		$Object_SetCustomerDeliveryAddressesCustomer = new PlentySoapRequest_ObjectSetCustomerDeliveryAddresses();
+		$Object_SetCustomerDeliveryAddressesCustomer->AdditionalName = null; // string
+		$Object_SetCustomerDeliveryAddressesCustomer->City = $city;
+		$Object_SetCustomerDeliveryAddressesCustomer->Company = $this->ShippingAddress->getCompany();
+		$Object_SetCustomerDeliveryAddressesCustomer->CountryID = $this->getDeliveryCountryID(); // int
+		$Object_SetCustomerDeliveryAddressesCustomer->CustomerID = $this->PLENTY_customerID; // int
+		$Object_SetCustomerDeliveryAddressesCustomer->ExternalDeliveryAddressID = PlentymarketsUtils::getExternalCustomerID($this->ShippingAddress->getId()); // string
+		$Object_SetCustomerDeliveryAddressesCustomer->FirstName = $this->ShippingAddress->getFirstName();
+		$Object_SetCustomerDeliveryAddressesCustomer->FormOfAddress = (int)$formOfAddress; // int
+		$Object_SetCustomerDeliveryAddressesCustomer->HouseNumber = $streetHouseNumber;
+		$Object_SetCustomerDeliveryAddressesCustomer->Street = $streetName;
+		$Object_SetCustomerDeliveryAddressesCustomer->Surname = $this->ShippingAddress->getLastName();
+		$Object_SetCustomerDeliveryAddressesCustomer->ZIP = $zip;
 
-		if (!$Response_AddCustomerDeliveryAddresses->Success)
+		$Request_SetCustomerDeliveryAddresses->DeliveryAddresses[] = $Object_SetCustomerDeliveryAddressesCustomer;
+
+		$Response_SetCustomerDeliveryAddresses = PlentymarketsSoapClient::getInstance()->SetCustomerDeliveryAddresses($Request_SetCustomerDeliveryAddresses);
+
+		if (!$Response_SetCustomerDeliveryAddresses->Success)
 		{
 			throw new PlentymarketsExportEntityException('The delivery address of the customer with the number »' . $this->getCustomerNumber() . '« could not be exported', 2120);
 		}
 
-		$this->PLENTY_addressDispatchID = (integer) $Response_AddCustomerDeliveryAddresses->ResponseMessages->item[0]->SuccessMessages->item[0]->Value;
+		$this->PLENTY_addressDispatchID = (integer) $Response_SetCustomerDeliveryAddresses->ResponseMessages->item[0]->SuccessMessages->item[0]->Value;
 	}
 
 	/**
@@ -467,4 +533,6 @@ class PlentymarketsExportEntityCustomer
 			return null;
 		}
 	}
+
+	
 }

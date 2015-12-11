@@ -1,7 +1,8 @@
 <?php
+
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2014 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,7 +23,7 @@
  * trademark license. Therefore any rights, titles and interests in the
  * above trademarks remain entirely with the trademark owners.
  *
- * @copyright  Copyright (c) 2014, plentymarkets GmbH (http://www.plentymarkets.com)
+ * @copyright  Copyright (c) 2013-2015, plentymarkets GmbH (http://www.plentymarkets.com)
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
@@ -35,15 +36,10 @@ class PlentySoapObject_GetListings
 	/**
 	 * @var string
 	 */
-	public $EndNow;
-	
-	/**
-	 * @var string
-	 */
 	public $EndTime;
 	
 	/**
-	 * @var int
+	 * @var string
 	 */
 	public $ExternalId;
 	
@@ -60,17 +56,7 @@ class PlentySoapObject_GetListings
 	/**
 	 * @var int
 	 */
-	public $Id;
-	
-	/**
-	 * @var string
-	 */
-	public $InsertByType;
-	
-	/**
-	 * @var int
-	 */
-	public $LastRevise;
+	public $ItemId;
 	
 	/**
 	 * @var string
@@ -80,12 +66,37 @@ class PlentySoapObject_GetListings
 	/**
 	 * @var int
 	 */
-	public $ListingMarketId;
+	public $ListingId;
 	
 	/**
 	 * @var string
 	 */
 	public $ListingTitle;
+	
+	/**
+	 * @var string
+	 */
+	public $ListingType;
+	
+	/**
+	 * @var int
+	 */
+	public $MarketId;
+	
+	/**
+	 * @var int
+	 */
+	public $MarketListingHistoryID;
+	
+	/**
+	 * @var int
+	 */
+	public $MarketListingID;
+	
+	/**
+	 * @var string
+	 */
+	public $MarketName;
 	
 	/**
 	 * @var float
@@ -113,19 +124,9 @@ class PlentySoapObject_GetListings
 	public $QuantitySold;
 	
 	/**
-	 * @var int
-	 */
-	public $QuantitySoldDelta;
-	
-	/**
 	 * @var string
 	 */
 	public $RelistedExternalId;
-	
-	/**
-	 * @var string
-	 */
-	public $ScoOffer;
 	
 	/**
 	 * @var string
@@ -136,19 +137,4 @@ class PlentySoapObject_GetListings
 	 * @var string
 	 */
 	public $Status;
-	
-	/**
-	 * @var string
-	 */
-	public $UpdateError;
-	
-	/**
-	 * @var string
-	 */
-	public $UseEps;
-	
-	/**
-	 * @var string
-	 */
-	public $Uuid;
 }
