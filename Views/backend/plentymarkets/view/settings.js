@@ -154,6 +154,20 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
                         supportText: 'Datenquelle für den Warenbestandsabgleich.'
                     },
                     {
+                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemConfiguratorSetType}Art des Konfigurators{/s}',
+                        name: 'ItemConfiguratorSetType',
+                        id: 'plenty-ItemConfiguratorSetType',
+                        store: new Ext.data.ArrayStore({
+                            fields: ['id', 'name'],
+                            data: [
+                                [0, 'Default'],
+                                [1, 'Auswahl'],
+                                [2, 'Bild']
+                            ]
+                        }),
+                        supportText: 'Wählen Sie das die Art des Konfigurators bei Varianten in Shopware aus.'
+                    },
+                    {
                         xtype: 'slider',
                         increment: 1,
                         minValue: 0,
