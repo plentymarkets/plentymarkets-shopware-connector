@@ -293,7 +293,7 @@ class PlentymarketsUtils
 	public static function extractStreetAndHouseNo($sStreet)
 	{
 		$reqex  = '/(?<ad>(.*?)[\D]{3}[\s,.])(?<no>';
-		$reqex .= '|[0-9]{1,3}[ a-zA-Z-\/\.]{0,6}'; // f.e. "Rosenstr. 14 "
+		$reqex .= '|[0-9]{1,4}[ a-zA-Z-\/\.]{0,6}'; // f.e. "Rosenstr. 14 "
 		$reqex .= '|[0-9]{1,3}[ a-zA-Z-\/\.]{1,6}[0-9]{1,3}[ a-zA-Z-\/\.]{0,6}[0-9]{0,3}[ a-zA-Z-\/\.]{0,6}[0-9]{0,3}'; // f.e. "Straße in Österreich 30/4/12.2"
 		$reqex .= ')$/';
 
