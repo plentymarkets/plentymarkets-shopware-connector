@@ -164,6 +164,17 @@ class PlentymarketsImportEntityItemPrice
 			$price['price'] += $this->PLENTY_markup;
 		}
 
+        // Allow plugins to change the data
+        $prices = Enlight()->Events()->filter(
+            'PlentyConnector_ImportEntityItemPrice_AfterGetPrice',
+            $prices,
+            array(
+                'subject' => $this,
+                'priceset' => $this->PLENTY_PriceSet,
+                'markup' => $this->PLENTY_markup,
+            )
+        );
+
 		return $prices;
 	}
 

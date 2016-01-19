@@ -206,6 +206,17 @@ class PlentymarketsImportEntityItem
 				$this->data['supplierId'] = PlentymarketsConfig::getInstance()->getItemProducerID();
 			}
 		}
+
+        // Allow plugins to change the data
+        $this->data = Enlight()->Events()->filter(
+            'PlentyConnector_ImportEntityItem_AfterSetData',
+            $this->data,
+            array(
+                'subject' => $this,
+                'itembase' => $this->ItemBase,
+                'shop' => $this->Shop,
+            )
+        );
 	}
 
 	/**
@@ -314,6 +325,17 @@ class PlentymarketsImportEntityItem
 				$details['unitId'] = null;
 			}
 		}
+
+        // Allow plugins to change the details
+        $details = Enlight()->Events()->filter(
+            'PlentyConnector_ImportEntityItem_AfterSetDetails',
+            $details,
+            array(
+                'subject' => $this,
+                'itembase' => $this->ItemBase,
+                'shop' => $this->Shop,
+            )
+        );
 
 		$this->details = $details;
 	}
@@ -891,7 +913,8 @@ class PlentymarketsImportEntityItem
 
 				// The configurator set has to be adapted
 				$update['configuratorSet'] = array(
-					'groups' => $VariantController->getGroups()
+					'groups' => $VariantController->getGroups(),
+					'type' => PlentymarketsConfig::getInstance()->getItemConfiguratorSetType(0),
 				);
 
 				// Delete all variants
@@ -1112,7 +1135,8 @@ class PlentymarketsImportEntityItem
 				$updateArticle = array(
 
 					'configuratorSet' => array(
-						'groups' => $VariantController->getGroups()
+						'groups' => $VariantController->getGroups(),
+						'type' => PlentymarketsConfig::getInstance()->getItemConfiguratorSetType(0),
 					),
 
 					'variants' => array_values($this->variants)
