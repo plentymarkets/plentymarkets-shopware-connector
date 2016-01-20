@@ -298,7 +298,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
                     },
                     {
                         fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemPriceImportActionID}Preis übernehmen{/s}',
-                        name: 'ItemNameImportActionID',
+                        name: 'ItemPriceImportActionID',
                         store: new Ext.data.ArrayStore({
                             fields: ['id', 'name'],
                             data: [
