@@ -168,7 +168,7 @@ class PlentymarketsImportItemHelper
 		}
 
 		if (version_compare(Shopware::VERSION, '5.0.2', '>=')) {
-			$regex = '/[^a-zA-Z0-9-_.]/';
+			$regex = '/[^a-zA-Z0-9\-\_\.]/';
 		} else {
 			$regex = '/[^a-zA-Z0-9\.\-_ \/]/';
 		}
