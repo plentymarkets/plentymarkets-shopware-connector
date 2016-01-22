@@ -35,7 +35,7 @@
  */
 class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Backend_ExtJs
 {
-	
+
 	/**
 	 * Runs an cleanup action
 	 */
@@ -396,7 +396,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 
 		// Item
 		$Config->setItemWarehouseID($this->Request()->ItemWarehouseID);
-        $Config->setItemConfiguratorSetType($this->Request()->ItemConfiguratorSetType);
+  	$Config->setItemConfiguratorSetType($this->Request()->ItemConfiguratorSetType);
 		$Config->setItemCleanupActionID($this->Request()->ItemCleanupActionID);
 		$Config->setItemCategoryRootID($this->Request()->ItemCategoryRootID);
 		$Config->setItemImageSyncActionID($this->Request()->ItemImageSyncActionID == true ? IMPORT_ITEM_IMAGE_SYNC : IMPORT_ITEM_IMAGE_NO_SYNC);

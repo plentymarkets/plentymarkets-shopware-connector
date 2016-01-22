@@ -314,7 +314,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
                                 ['Price9', 'Preis 9'],
                                 ['Price10', 'Preis 10'],
                                 ['Price11', 'Preis 11'],
-                                ['Price12', 'Preis 12'],
+                                ['Price12', 'Preis 12']
                             ]
                         }),
                         supportText: 'Preis aus plentymarkets wählen, der abgerufen werden soll.'
