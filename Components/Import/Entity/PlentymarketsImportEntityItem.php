@@ -230,9 +230,9 @@ class PlentymarketsImportEntityItem
 
 		if($useName != 'Name')
 		{
-			if(!empty($ItemTexts->$useName))
+			if(!empty($ItemTexts->{$useName}))
 			{
-				return $ItemTexts->$useName;
+				return $ItemTexts->{$useName};
 			}
 		}
 

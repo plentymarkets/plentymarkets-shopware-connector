@@ -189,9 +189,9 @@ class PlentymarketsImportEntityItemPrice
 
 		if($usePrice != 'Price')
 		{
-			if(!empty($ItemPrices->$usePrice))
+			if(!empty($ItemPrices->{$usePrice}))
 			{
-				return $ItemPrices->$usePrice;
+				return $ItemPrices->{$usePrice};
 			}
 		}
 
