@@ -239,6 +239,24 @@ class PlentymarketsExportEntityOrderIncomingPayment
 	}
 
 	/**
+	 * checks of a plugin is installed and active
+	 *
+	 * @param $name
+	 * @return bool
+	 */
+	protected function pluginExists($name)
+	{
+		$sql = 'SELECT 1 FROM s_core_plugins WHERE name = ? AND active = 1';
+		$test = Shopware()->Db()->fetchOne($sql, array($name));
+
+		if (empty($test)) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
 	 * Returns the klarna transaction id
 	 *
 	 * @return string
@@ -247,36 +265,70 @@ class PlentymarketsExportEntityOrderIncomingPayment
 	{
 		$orderNumber = $this->order['number'];
 
-		try
-		{
-			// eid / shop_id
-			$multistore = Shopware()->Db()->query('
-				SELECT shop_id FROM Pi_klarna_payment_multistore WHERE order_number = ?
-			', array(
-				$orderNumber
-			))->fetchObject();
+		try {
+			if ($this->pluginExists('PigmbhKlarnaPayment')) {
+				// eid / shop_id
+				$sql = 'SELECT shop_id FROM Pi_klarna_payment_multistore WHERE order_number = ?';
+				$multistore = Shopware()->Db()->query($sql, array($orderNumber))->fetchObject();
 
-			// pclass
-			$pclass = Shopware()->Db()->query('
-				SELECT pclassid FROM Pi_klarna_payment_pclass where ordernumber = ?
-			', array(
-				$orderNumber
-			))->fetchObject();
+				// pclass
+				$sql = 'SELECT pclassid FROM Pi_klarna_payment_pclass where ordernumber = ?';
+				$pclass = Shopware()->Db()->query($sql, array($orderNumber))->fetchObject();
 
-			// Transaction ID
-			$order = Shopware()->Db()->query('
-				SELECT transactionid FROM Pi_klarna_payment_order_data WHERE order_number = ?
-			', array(
-				$orderNumber
-			))->fetchObject();
+				// Transaction ID
+				$sql = 'SELECT transactionid FROM Pi_klarna_payment_order_data WHERE order_number = ?';
+				$order = Shopware()->Db()->query($sql, array($orderNumber))->fetchObject();
+
+				return sprintf('%s_%s_%s', $order->transactionid, $pclass->pclassid, $multistore->shop_id);
+			} elseif ($this->pluginExists('SwagPaymentKlarna') || $this->pluginExists('SwagPaymentKlarnaKpm')) {
+				/**
+				 * @var Klarna $klarnaService
+				 */
+				$klarnaService = Shopware()->Container()->get('KlarnaService');
+
+				if (!empty($this->order['languageIso'])) {
+					$klarnaService->setLanguage($this->order['languageIso']);
+				} else {
+					throw new Exception('order language missing');
+				}
+
+				if (!empty($this->order['billing']['country']['iso'])) {
+					$klarnaService->setCountry($this->order['billing']['country']['iso']);
+				} else {
+					throw new Exception('order country missing');
+				}
+
+				if (!empty($this->order['currency'])) {
+					$klarnaService->setCurrency($this->order['currency']);
+				} else {
+					throw new Exception('order currency missing');
+				}
+
+				/**
+				 * @var KlarnaPClass $pclass
+				 */
+				$pclasses = $klarnaService->getPClasses();
+				$pclass = (isset($pclasses[0]) ? $pclasses[0] : null);
+
+				if (!empty($pclass)) {
+					if (isset($this->order['payment']['name']) && $this->order['payment']['name'] == 'klarna_invoice') {
+						$classId = KlarnaPClass::INVOICE;
+					} else {
+						$classId = $pclass->getId();
+					}
+
+					return sprintf('%s_%s_%s', $this->order['transactionId'], $classId, $pclass->getEid());
+				} else {
+					throw new Exception('No compatible pclass found');
+				}
+			} else {
+				throw new Exception('No compatible Klarna payment plugin found');
+			}
+		} catch (Exception $e) {
+			PyLog()->error('Sync:Order:PaymentKlarna', $e->getMessage());
 		}
 
-		catch (Exception $e)
-		{
-			return '';
-		}
-
-		return sprintf('%s_%s_%s', $order->transactionid, $pclass->pclassid, $multistore->shop_id);
+		return '';
 	}
 
 	/**
@@ -290,7 +342,7 @@ class PlentymarketsExportEntityOrderIncomingPayment
 
 		try
 		{
-			// unique ID of transaction 
+			// unique ID of transaction
 			$uniqueID = Shopware()->Db()->query('
 				SELECT uniqueid FROM s_plugin_hgw_transactions WHERE transactionid = ?
 			', array(
