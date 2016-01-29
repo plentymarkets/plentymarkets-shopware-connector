@@ -101,13 +101,29 @@ class PlentymarketsImportControllerItem
 			return;
 		}
 
-		//
+		/**
+		 * @var PlentySoapObject_ItemBase $ItemBase
+		 */
 		$ItemBase = $Response_GetItemsBase->ItemsBase->item[0];
 
 		// Skip bundles
-		if ($ItemBase->BundleType == 'bundle' && PlentymarketsConfig::getInstance()->getItemBundleHeadActionID(IMPORT_ITEM_BUNDLE_HEAD_NO) == IMPORT_ITEM_BUNDLE_HEAD_NO)
-		{
+		$skipBundles = PlentymarketsConfig::getInstance()->getItemBundleHeadActionID(IMPORT_ITEM_BUNDLE_HEAD_NO) == IMPORT_ITEM_BUNDLE_HEAD_NO;
+
+		// Allow plugins to change the data
+		$skipBundles = Enlight()->Events()->filter(
+			'PlentyConnector_ImportControllerItem_FilterSkipBundles',
+			$skipBundles,
+			array(
+				'subject' => $this,
+				'itemid' => $itemId,
+				'storeid' => $storeId,
+				'itembase' => $ItemBase,
+			)
+		);
+
+		if ($ItemBase->BundleType == 'bundle' && $skipBundles) {
 			PlentymarketsLogger::getInstance()->message('Sync:Item', 'The item »' . $ItemBase->Texts->Name . '« will be skipped (bundle)');
+
 			return;
 		}
 		
