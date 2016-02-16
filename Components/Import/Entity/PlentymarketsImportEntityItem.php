@@ -208,7 +208,7 @@ class PlentymarketsImportEntityItem
 		}
 
         // Allow plugins to change the data
-        $this->data = Enlight()->Events()->filter(
+        $this->data = Shopware()->Events()->filter(
             'PlentyConnector_ImportEntityItem_AfterSetData',
             $this->data,
             array(
@@ -327,7 +327,7 @@ class PlentymarketsImportEntityItem
 		}
 
         // Allow plugins to change the details
-        $details = Enlight()->Events()->filter(
+        $details = Shopware()->Events()->filter(
             'PlentyConnector_ImportEntityItem_AfterSetDetails',
             $details,
             array(
@@ -1183,6 +1183,12 @@ class PlentymarketsImportEntityItem
 			PlentymarketsLogger::getInstance()->message('Sync:Item', 'The producer »' . $Article->getSupplier()->getName() . '« has been created');
 			PlentymarketsMappingController::addProducer($Article->getSupplier()->getId(), $this->ItemBase->ProducerID);
 		}
+
+		// Notify Plugins that the import for a simgle item is done
+		Shopware()->Events()->notify('PlentyConnector_ImportEntityItem_AfterImpoert', array(
+			'subject' => $this,
+			'itemid' => $SHOPWARE_itemID,
+		));
 	}
 
 	/**

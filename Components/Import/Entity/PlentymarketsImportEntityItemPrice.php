@@ -165,7 +165,7 @@ class PlentymarketsImportEntityItemPrice
 		}
 
         // Allow plugins to change the data
-        $prices = Enlight()->Events()->filter(
+        $prices = Shopware()->Events()->filter(
             'PlentyConnector_ImportEntityItemPrice_AfterGetPrice',
             $prices,
             array(

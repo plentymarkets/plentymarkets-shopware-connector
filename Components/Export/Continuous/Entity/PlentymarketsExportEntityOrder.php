@@ -425,6 +425,16 @@ class PlentymarketsExportEntityOrder
 
 		$Request_AddOrders->Orders[] = $Object_Order;
 
+		// Allow plugins to change the data
+		$Request_AddOrders = Enlight()->Events()->filter(
+			'PlentyConnector_ExportEntityOrder_BeforeAddOrders',
+			$Request_AddOrders,
+			array(
+				'subject' => $this,
+				'order' => $this->Order,
+			)
+		);
+
 		// Do the request
 		$Response_AddOrders = PlentymarketsSoapClient::getInstance()->AddOrders($Request_AddOrders);
 
