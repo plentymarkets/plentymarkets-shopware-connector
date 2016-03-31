@@ -232,7 +232,6 @@ class PlentymarketsImportEntityItem
 
 		$details = array(
 			'active' => $active,
-			'inStock' => 0,
 			'ean' => $this->ItemBase->EAN1,
 			'minPurchase' => null,
 			'purchaseSteps' => null,
@@ -1121,6 +1120,7 @@ class PlentymarketsImportEntityItem
 				//
 				foreach ($this->variants as $variantId => &$variant)
 				{
+					$variant['inStock'] = 0;
 					$variant['configuratorOptions'] = $VariantController->getOptionsByVariantId($variantId);
 
 					// Prices
