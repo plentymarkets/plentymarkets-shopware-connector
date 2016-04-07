@@ -303,6 +303,9 @@ class PlentymarketsImportEntityItemImage
 		$ArticleResource = \Shopware\Components\Api\Manager::getResource('Article');
 		$article = $ArticleResource->getOne($this->SHOPWARE_itemId);
 		
+		// Add the main detail
+		$article['details'][] = $article['mainDetail'];
+		
 		foreach($article['details'] as $detail)
 		{
 			Shopware()->Db()->query("DELETE FROM `s_articles_img` WHERE article_detail_id = ?", array($detail['id']));
