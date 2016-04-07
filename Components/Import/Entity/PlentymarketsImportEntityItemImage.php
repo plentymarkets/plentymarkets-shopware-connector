@@ -298,6 +298,15 @@ class PlentymarketsImportEntityItemImage
 		$mainImage->setMain(1);
 		Shopware()->Models()->persist($mainImage);
 		Shopware()->Models()->flush();
+		
+		// Delete all variant image mappings of the item
+		$ArticleResource = \Shopware\Components\Api\Manager::getResource('Article');
+		$article = $ArticleResource->getOne($this->SHOPWARE_itemId);
+		
+		foreach($article['details'] as $detail)
+		{
+			Shopware()->Db()->query("DELETE FROM `s_articles_img` WHERE article_detail_id = ?", array($detail['id']));
+		}
 
 		// Get the variant images
 		$Request_GetItemsVariantImages = new PlentySoapRequest_GetItemsVariantImages();
