@@ -407,7 +407,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		$Config->setItemVariationNumberSourceKey($this->Request()->ItemVariationNumberSourceKey);
 		$Config->setItemBundleHeadActionID($this->Request()->ItemBundleHeadActionID == true ? IMPORT_ITEM_BUNDLE_HEAD : IMPORT_ITEM_BUNDLE_HEAD_NO);
 		$Config->setItemShortDescriptionImportActionID($this->Request()->ItemShortDescriptionImportActionID == true ? IMPORT_ITEM_SHORTDESC : IMPORT_ITEM_SHORTDESC_NO);
-		$Config->setItemLongDescriptionImportActionID($this->Request()->ItemShortDescriptionImportActionID == true ? IMPORT_ITEM_LONGDESC : IMPORT_ITEM_LONGDESC_NO);
+		$Config->setItemLongDescriptionImportActionID($this->Request()->ItemLongDescriptionImportActionID == true ? IMPORT_ITEM_LONGDESC : IMPORT_ITEM_LONGDESC_NO);
 		$Config->setItemKeywordsImportActionID($this->Request()->ItemKeywordsImportActionID == true ? IMPORT_ITEM_KEYWORDS : IMPORT_ITEM_KEYWORDS_NO);
 		$Config->setItemNameImportActionID($this->Request()->ItemNameImportActionID);
 		$Config->setItemPriceImportActionID($this->Request()->ItemPriceImportActionID);
