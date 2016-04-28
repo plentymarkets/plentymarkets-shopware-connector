@@ -269,7 +269,7 @@ class PlentymarketsImportEntityItem
 
 			if (PlentymarketsConfig::getInstance()->getItemFreetextsImportActionID(IMPORT_ITEM_FREETEXTS) == 1)
 			{
-				$details['attribute'] => array(
+				$details['attribute'] = array(
 					'attr1' => $this->ItemBase->FreeTextFields->Free1,
 					'attr2' => $this->ItemBase->FreeTextFields->Free2,
 					'attr3' => $this->ItemBase->FreeTextFields->Free3,
