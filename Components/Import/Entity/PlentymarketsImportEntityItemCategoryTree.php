@@ -224,7 +224,7 @@ class PlentymarketsImportEntityItemCategoryTree
 	
 		$Request_GetItemCategoryCatalog = new PlentySoapRequest_GetItemCategoryCatalog();
 		$Request_GetItemCategoryCatalog->CategoryID = $categoryId;
-		$Request_GetItemCategoryCatalog->Lang = $this->plentyLang;
+		$Request_GetItemCategoryCatalog->Lang = $this->shopLang;
 		$Request_GetItemCategoryCatalog->StoreID = $this->storeId;
 
 		/** @var PlentySoapResponse_GetItemCategoryCatalog $Response_GetItemCategoryCatalog */
