@@ -152,7 +152,7 @@ class PlentymarketsImportControllerItemCategoryTree
 	{
 		// Get the data from plentymarkets (for every mapped shop)
 		$shopIds = Shopware()->Db()->fetchAll('
-			SELECT plentyID FROM plenty_mapping_shop
+			SELECT shopwareID, plentyID FROM plenty_mapping_shop
 		');
 
 		foreach ($shopIds as $shopId)
