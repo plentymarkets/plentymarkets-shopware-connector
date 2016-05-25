@@ -252,6 +252,74 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
                         })
                     },
                     {
+                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemNameImportActionID}Produktname übernehmen{/s}',
+                        name: 'ItemNameImportActionID',
+                        store: new Ext.data.ArrayStore({
+                            fields: ['id', 'name'],
+                            data: [
+                                ['Name', 'Name'],
+                                ['Name2', 'Name 2'],
+                                ['Name3', 'Name 3']
+                            ]
+                        }),
+                        supportText: 'Produktnamen aus plentymarkets wählen, welcher abgerufen werden soll.'
+                    },
+                    {
+                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemShortDescriptionImportActionID}Kurzbeschreibung übernehmen{/s}',
+                        name: 'ItemShortDescriptionImportActionID',
+                        xtype: 'checkbox',
+                        inputValue: 1,
+                        uncheckedValue: '0',
+                        supportText: 'Aktivieren, wenn die Kurzbeschreibung von plentymarkets übernommen werden soll.'
+                    },
+                    {
+                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemLongDescriptionImportActionID}Beschreibung übernehmen{/s}',
+                        name: 'ItemLongDescriptionImportActionID',
+                        xtype: 'checkbox',
+                        inputValue: 1,
+                        uncheckedValue: '0',
+                        supportText: 'Aktivieren, wenn die Produktbeschreibung von plentymarkets übernommen werden sollen.'
+                    },
+                    {
+                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemKeywordsImportActionID}Keywords übernehmen{/s}',
+                        name: 'ItemKeywordsImportActionID',
+                        xtype: 'checkbox',
+                        inputValue: 1,
+                        uncheckedValue: '0',
+                        supportText: 'Aktivieren, wenn die Keywords von plentymarkets übernommen werden sollen.'
+                    },
+                    {
+                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemFreetextsImportActionID}Freitextfelder übernehmen{/s}',
+                        name: 'ItemFreetextsImportActionID',
+                        xtype: 'checkbox',
+                        inputValue: 1,
+                        uncheckedValue: '0',
+                        supportText: 'Aktivieren, wenn die Freitextfelder von plentymarkets übernommen werden sollen.'
+                    },
+                    {
+                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemPriceImportActionID}Preis übernehmen{/s}',
+                        name: 'ItemPriceImportActionID',
+                        store: new Ext.data.ArrayStore({
+                            fields: ['id', 'name'],
+                            data: [
+                                ['Price', 'Preis'],
+                                ['Price1', 'Preis 1'],
+                                ['Price2', 'Preis 2'],
+                                ['Price3', 'Preis 3'],
+                                ['Price4', 'Preis 4'],
+                                ['Price5', 'Preis 5'],
+                                ['Price6', 'Preis 6'],
+                                ['Price7', 'Preis 7'],
+                                ['Price8', 'Preis 8'],
+                                ['Price9', 'Preis 9'],
+                                ['Price10', 'Preis 10'],
+                                ['Price11', 'Preis 11'],
+                                ['Price12', 'Preis 12']
+                            ]
+                        }),
+                        supportText: 'Preis aus plentymarkets wählen, der abgerufen werden soll.'
+                    },
+                    {
                         fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemBundleHeadActionID}Artikelpaket-Artikel erstellen{/s}',
                         name: 'ItemBundleHeadActionID',
                         xtype: 'checkbox',
