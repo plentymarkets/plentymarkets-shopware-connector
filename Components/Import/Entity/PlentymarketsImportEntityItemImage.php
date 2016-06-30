@@ -99,6 +99,15 @@ class PlentymarketsImportEntityItemImage
 				PyLog()->error('Sync:Item:Image', 'The media resource with the id »' . $image['mediaId'] . '« of the item image »' . $image['description'] . '« could not be deleted (' . $E->getMessage() . ')');
 			}
 		}
+		
+		// Delete all variant image mappings of the item		
+		// Add the main detail
+		$article['details'][] = $article['mainDetail'];
+		
+		foreach($article['details'] as $detail)
+		{
+			Shopware()->Db()->query("DELETE FROM `s_articles_img` WHERE article_detail_id = ?", array($detail['id']));
+		}
 
 		$ArticleResource->update($this->SHOPWARE_itemId, array(
 			'images' => array()
