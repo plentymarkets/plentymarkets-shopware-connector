@@ -152,12 +152,13 @@ class PlentymarketsImportControllerItemCategoryTree
 	{
 		// Get the data from plentymarkets (for every mapped shop)
 		$shopIds = Shopware()->Db()->fetchAll('
-			SELECT shopwareID, plentyID FROM plenty_mapping_shop
+			SELECT * FROM plenty_mapping_shop
 		');
 
 		foreach ($shopIds as $shopId)
 		{
-			$mainLang = array_values(PlentymarketsTranslation::getShopMainLanguage($shopId));
+			$mainShopId = PlentymarketsMappingController::getShopByPlentyID($shopId['plentyID']);
+			$mainLang = array_values(PlentymarketsTranslation::getShopMainLanguage($mainShopId));
 
 			$Request_GetItemCategoryTree = new PlentySoapRequest_GetItemCategoryTree();
 			$Request_GetItemCategoryTree->Lang = PlentymarketsTranslation::getPlentyLocaleFormat($mainLang[0]['locale']);
