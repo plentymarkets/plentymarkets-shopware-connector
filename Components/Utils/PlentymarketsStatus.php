@@ -229,37 +229,8 @@ class PlentymarketsStatus
 		// Export is okay
 		$isExportFinished = $this->isExportFinished();
 
-		// Look on my works, ye Mighty, and despair!'
-		$ozymandias = isset($_ENV['ozymandias']) || (isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'] == 'ozymandias');
-
-		// Check the license
-		if ($ozymandias)
-		{
-			$isLicenseValid = true;
-		}
-		else if (Shopware()->Bootstrap()->issetResource('License'))
-		{
-			$License = Shopware()->License();
-			$isLicenseValid = $License->checkCoreLicense(false);
-
-			if (!$isLicenseValid && !$this->isLicenseWarningLogged)
-			{
-				PlentymarketsLogger::getInstance()->error('System:License', 'The shopware license that is used is invalid or has expired. No synchronization will be performed.', 1010);
-				$this->isLicenseWarningLogged = true;
-			}
-		}
-		else
-		{
-			$isLicenseValid = false;
-			if (!$this->isLicenseWarningLogged)
-			{
-				PlentymarketsLogger::getInstance()->error('System:License', 'The license mananger is not installed. Therefore, it is not possible to check the license. No synchronization will be performed.', 1011);
-				$this->isLicenseWarningLogged = true;
-			}
-		}
-
 		// May Synchronize
-		$maySynchronize = $mayExport && $isExportFinished && $isLicenseValid;
+		$maySynchronize = $mayExport && $isExportFinished;
 
 		// User settings
 		$mayDatexActual = PlentymarketsConfig::getInstance()->getMayDatexUser(0);
