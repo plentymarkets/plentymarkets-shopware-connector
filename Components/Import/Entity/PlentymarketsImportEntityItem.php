@@ -1120,6 +1120,7 @@ class PlentymarketsImportEntityItem
 				//
 				foreach ($this->variants as $variantId => &$variant)
 				{
+					$variant['inStock'] = 0;
 					$variant['configuratorOptions'] = $VariantController->getOptionsByVariantId($variantId);
 
 					// Prices
