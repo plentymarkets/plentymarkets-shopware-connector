@@ -120,12 +120,12 @@ class PlentymarketsImportEntityItem
 	}
 
 	/**
-	 * @description Import the item texts only for language shops. The import for item texts for the main shop is done in the setData() method 
-	 * @param array $itemTexts 
+	 * @description Import the item texts only for language shops. The import for item texts for the main shop is done in the setData() method
+	 * @param array $itemTexts
 	 */
 	public function saveItemTextsTranslation($itemTexts)
-	{	
-		foreach ($itemTexts as $itemText) 
+	{
+		foreach ($itemTexts as $itemText)
 		{
 			// if the language is not the main language
 			if(isset($itemText['languageShopId']))
@@ -136,11 +136,11 @@ class PlentymarketsImportEntityItem
 									'txtshortdescription' => $itemText['texts']->ShortDescription,
 									'txtlangbeschreibung' => $itemText['texts']->LongDescription,
 									'txtkeywords' => $itemText['texts']->ItemDescriptionKeywords);
-				
+
 				$swItemID = PlentymarketsMappingController::getItemByPlentyID($this->ItemBase->ItemID);
 
 				PlentymarketsTranslation::setShopwareTranslation('article', $swItemID, $itemText['languageShopId'], $swItemText);
-				
+
 				// save the translation in s_articles_translations, too
 				$sql = '
                 		INSERT INTO `s_articles_translations` (
@@ -153,7 +153,7 @@ class PlentymarketsImportEntityItem
 		                  description = VALUES(description),
 		                  description_long = VALUES(description_long);
 		            	';
-				
+
 				Shopware()->Db()->query($sql, array(
 					$swItemID,
 					$itemText['languageShopId'],
@@ -177,7 +177,7 @@ class PlentymarketsImportEntityItem
 		$this->data['description'] = $this->ItemBase->Texts->ShortDescription;
 		$this->data['descriptionLong'] = $this->ItemBase->Texts->LongDescription;
 		$this->data['keywords'] = $this->ItemBase->Texts->Keywords;
-		
+
 		$this->data['highlight'] = ($this->ItemBase->WebShopSpecial == 3);
 		$this->data['lastStock'] = ($this->ItemBase->Stock->Limitation == 1);
 		$this->data['added'] = date('c', $this->ItemBase->Inserted);
@@ -662,17 +662,17 @@ class PlentymarketsImportEntityItem
 
 			// Shopware cannot handle empty values
 			if (!empty($ItemProperty->PropertyValue))
-			{	
+			{
 				$this->data['propertyValues'][] = array(
 					'option' => array(
 						'id' => $optionId
 					),
 					'value' => $ItemProperty->PropertyValue
-				);	
-			}			
+				);
+			}
 		}
 	}
-	
+
 
 	/**
 	 * Import all translation of the PropertyValue
@@ -684,7 +684,7 @@ class PlentymarketsImportEntityItem
 
 		// array with item properties only in german
 		$otherLang_itemProperties = array_filter($this->ItemBase->ItemProperties->item, function($property){ return( !($property->PropertyValueLang == 'de'));});
-		
+
 		// Properties in other languages as German
 		/** @var PlentySoapObject_ItemProperty $ItemProperty */
 		foreach ($otherLang_itemProperties as $ItemProperty)
@@ -696,37 +696,37 @@ class PlentymarketsImportEntityItem
 				if($germanProperty->PropertyID == $ItemProperty->PropertyID)
 				{
 					// the german Property is found
-					break; 
+					break;
 				}
 			}
-			
+
 			// search for the shopware language shop
 			$shopId = null;
 			// get all active languages of the main shop
 			$activeLanguages = PlentymarketsTranslation::getShopActiveLanguages($this->Shop->getId());
-			
-			// search the language shop with the language equal with the property language 
+
+			// search the language shop with the language equal with the property language
 			foreach($activeLanguages as $localeId => $language)
 			{
 				if(PlentymarketsTranslation::getPlentyLocaleFormat($language['locale']) == $ItemProperty->PropertyValueLang)
-				{	
-					// if the founded shop is a language shop 
+				{
+					// if the founded shop is a language shop
 					if(!is_null($language['mainShopId']))
 					{
 						$shopId = PlentymarketsTranslation::getLanguageShopID($localeId, $language['mainShopId']);
 					}
 					else
-					{	
-						// the main shop has the same language as the property 
+					{
+						// the main shop has the same language as the property
 						$shopId = $this->Shop->getId();
 					}
 				}
 			}
-			
+
 			// if the language shop was found, save the property value for this language shop
 			if(!is_null($shopId))
 			{
-				// try to get the property value Id from TB : s_filter_values 
+				// try to get the property value Id from TB : s_filter_values
 				// !! in TB: s_filter_values the values are saved in the German language = $germanProperty->PropertyValue
 				try{
 
@@ -744,7 +744,7 @@ class PlentymarketsImportEntityItem
 
 					if(!is_null($shopware_propertyValueID))
 					{
-						// save the translation of the property 
+						// save the translation of the property
 						$property_data = array('optionValue' => $ItemProperty->PropertyValue);
 
 						PlentymarketsTranslation::setShopwareTranslation('propertyvalue', $shopware_propertyValueID , $shopId, $property_data);
@@ -754,7 +754,7 @@ class PlentymarketsImportEntityItem
 				{
 					// throw exception
 				}
-			}		
+			}
 		}
 	}
 
@@ -855,7 +855,7 @@ class PlentymarketsImportEntityItem
 
 			// Log
 			PlentymarketsLogger::getInstance()->message('Sync:Item', sprintf('The item »%s« with the number »%s« has been updated', $data['name'], $Article->getMainDetail()->getNumber()));
-			
+
 			// Remember the main detail's id (to set the prices)
 			$mainDetailId = $Article->getMainDetail()->getId();
 
@@ -887,6 +887,7 @@ class PlentymarketsImportEntityItem
 						$this->ItemBase->PriceSet, $VariantController->getMarkupByVariantId($variantId)
 					);
 					$variant['prices'] = $PlentymarketsImportEntityItemPrice->getPrices();
+                    $variant['purchasePrice'] = $PlentymarketsImportEntityItemPrice->getPurchasePrice();
 
 					// If the variant has an id, it is already created and mapped soo we just keep it
 					if (array_key_exists('id', $variant))
@@ -1125,6 +1126,7 @@ class PlentymarketsImportEntityItem
 					// Prices
 					$PlentymarketsImportEntityItemPrice = new PlentymarketsImportEntityItemPrice($this->ItemBase->PriceSet, $VariantController->getMarkupByVariantId($variantId));
 					$variant['prices'] = $PlentymarketsImportEntityItemPrice->getPrices();
+                    $variant['purchasePrice'] = $PlentymarketsImportEntityItemPrice->getPurchasePrice();
 
 					$number2sku[$variant['number']] = $variant['X_plentySku'];
 				}

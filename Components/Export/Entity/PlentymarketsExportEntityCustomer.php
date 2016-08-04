@@ -55,13 +55,13 @@ class PlentymarketsExportEntityCustomer
 
 	/**
 	 *
-	 * @var unknown
+	 * @var \Shopware\Models\Order\Billing
 	 */
 	protected $BillingAddress;
 
 	/**
 	 *
-	 * @var unknown
+	 * @var \Shopware\Models\Order\Shipping
 	 */
 	protected $ShippingAddress;
 
@@ -148,8 +148,8 @@ class PlentymarketsExportEntityCustomer
 		PlentymarketsLogger::getInstance()->message('Export:Customer', 'Export of the customer with the number »' . $this->getCustomerNumber() . '«');
 
 		$city = trim($this->BillingAddress->getCity());
-		
-		// check for shopware version 	
+
+		// check for shopware version
 		if(method_exists($this->BillingAddress, 'getStreetNumber'))
 		{
 			// shopware version 4
@@ -181,7 +181,7 @@ class PlentymarketsExportEntityCustomer
 				$streetHouseNumber = '';
 			}
 		}
-		
+
 		$zip = trim($this->BillingAddress->getZipCode());
 
 		if (empty($city))
@@ -203,9 +203,9 @@ class PlentymarketsExportEntityCustomer
 		{
 			$zip = PlentymarketsConfig::getInstance()->get('CustomerDefaultZipcode');
 		}
-		
+
 		$formOfAddress = $this->getBillingFormOfAddress();
-		
+
 		if(is_null($formOfAddress))
 		{
 			$formOfAddress = PlentymarketsConfig::getInstance()->get('CustomerDefaultFormOfAddressID');
@@ -225,7 +225,11 @@ class PlentymarketsExportEntityCustomer
 		$Object_SetCustomersCustomer->Email = $this->Customer->getEmail(); // string
 		$Object_SetCustomersCustomer->ExternalCustomerID = PlentymarketsUtils::getExternalCustomerID($this->Customer->getId()); // string
 		$Object_SetCustomersCustomer->FormOfAddress = (int)$formOfAddress; // int
-		$Object_SetCustomersCustomer->Fax = $this->BillingAddress->getFax();
+
+        if ('___VERSION___' !== Shopware::VERSION && version_compare(Shopware::VERSION, '5.2', '<')) {
+		    $Object_SetCustomersCustomer->Fax = $this->BillingAddress->getFax();
+        }
+
 		$Object_SetCustomersCustomer->FirstName = $this->BillingAddress->getFirstName();
 		$Object_SetCustomersCustomer->HouseNo = $streetHouseNumber;
 		$Object_SetCustomersCustomer->IsBlocked = !$this->Customer->getActive();
@@ -378,7 +382,7 @@ class PlentymarketsExportEntityCustomer
 
 		$city = trim($this->ShippingAddress->getCity());
 
-		// check for shopware version 
+		// check for shopware version
 
 		if(method_exists($this->ShippingAddress, 'getStreetNumber'))
 		{
@@ -410,7 +414,7 @@ class PlentymarketsExportEntityCustomer
 				$streetHouseNumber = '';
 			}
 		}
-		
+
 		$zip = trim($this->ShippingAddress->getZipCode());
 
 		if (empty($city))
@@ -534,5 +538,5 @@ class PlentymarketsExportEntityCustomer
 		}
 	}
 
-	
+
 }

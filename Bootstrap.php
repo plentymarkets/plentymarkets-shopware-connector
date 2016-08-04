@@ -108,43 +108,100 @@ function PyStatus()
  * This class is called first when starting the plentymarkets plugin. It initializes and cleans all important data.
  * It also provides cronjob functionality for an initial execution of the plentymarkets plugin.
  *
- * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
+ * Class Shopware_Plugins_Backend_PlentyConnector_Bootstrap
  */
 class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
     /**
+     * Returns label string.
+     *
+     * @return string
+     */
+    public function getLabel()
+    {
+        return 'plentymarkets';
+    }
+
+    /**
+     * Returns version string.
+     *
+     * @return string
+     */
+    public function getVersion()
+    {
+        return '1.9.0';
+    }
+
+    /**
+     * Returns the information of plugin as array.
+     *
+     * @return array
+     */
+    public function getInfo()
+    {
+        return [
+            'version' => $this->getVersion(),
+            'autor' => 'plentymarkets GmbH',
+            'copyright' => 'Copyright © 2013-2015, plentymarkets GmbH',
+            'label' => $this->getLabel(),
+            'support' => 'https://www.plentymarkets.eu/service/',
+            'link' => 'https://www.plentymarkets.eu/handbuch/tools/shopware-connector/'
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getCapabilities()
+    {
+        return [
+            'install' => true,
+            'update' => true,
+            'enable' => true,
+            'secureUninstall' => false
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function getInvalidateCacheArray()
+    {
+        return array('backend');
+    }
+
+    /**
      * Installs the plugin
      *
-     * @return bool
+     * @return array
      */
     public function install()
     {
 		// Check for the current versions
-		if (!$this->assertRequiredPluginsPresent(array('Cron')))
-		{
-			return array(
+		if (!$this->assertRequiredPluginsPresent(array('Cron'))) {
+			return [
 				'success' => false,
 				'message' => 'Bitte installieren und aktivieren Sie das Cron-Plugin'
-			);
+            ];
 		}
 
-    	if (!$this->assertVersionGreaterThen('4.1'))
-    	{
-    		return array(
+    	if (!$this->assertMinimumVersion('4.1')) {
+    		return [
 				'success' => false,
-				'message' => 'Das plentymarkets-Plugin benötigt min. shopware 4.1'
-			);
+				'message' => 'Das plentymarkets-Plugin benötigt min. shopware 5.2'
+            ];
     	}
 
-        $this->createDatabase();
-        $this->createEvents();
         $this->createMenu();
+        $this->createEvents();
         $this->registerCronjobs();
+        $this->createDatabase();
 
-        //
         PlentymarketsConfig::getInstance()->setConnectorVersion($this->getVersion());
 
-        return true;
+        return [
+            'success' => true
+        ];
     }
 
     /**
@@ -267,14 +324,16 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
     	return true;
     }
 
-	/**
-	 * Uninstall plugin method
-	 *
-	 * @see Shopware_Components_Plugin_Bootstrap::uninstall()
-	 */
+    /**
+     * Uninstall plugin method
+     *
+     * @see Shopware_Components_Plugin_Bootstrap::uninstall()
+     *
+     * @return array
+     */
 	public function uninstall()
 	{
-		$tablesToDelete = array(
+		$tablesToDelete = [
 			'plenty_config',
 			'plenty_log',
 			'plenty_mapping_attribute_group',
@@ -301,7 +360,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 			'plenty_stack_item',
 			'plenty_mapping_order_status',
 			'plenty_mapping_payment_status'
-		);
+        ];
 
 		foreach ($tablesToDelete as $table)
 		{
@@ -310,23 +369,19 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 			');
 		}
 
-		return true;
+        return [
+            'success' => true,
+            'invalidateCache' => $this->getInvalidateCacheArray()
+        ];
 	}
 
-	/**
-	 * Returns capabilities
-	 *
-	 * @see Shopware_Components_Plugin_Bootstrap::getCapabilities()
-	 */
-	public function getCapabilities()
-	{
-		return array(
-			'uninstall' => true,
-			'install' => true,
-			'enable' => true,
-			'update' => true
-		);
-	}
+	public function enable()
+    {
+        return [
+            'success' => true,
+            'invalidateCache' => $this->getInvalidateCacheArray()
+        ];
+    }
 
 	/**
 	 * Creates all database tables
@@ -1087,7 +1142,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
      */
     protected function createMenu()
     {
-        $parent = $this->Menu()->findOneBy('label', 'Einstellungen');
+        $parent = $this->Menu()->findOneBy(['label' => 'Einstellungen']);
 
         $this->createMenuItem(array(
             'label' => 'plentymarkets',
@@ -1153,42 +1208,4 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 
         return PY_CONTROLLERS . 'Backend/Plentymarkets.php';
     }
-
-    /**
-     * Returns label string.
-     *
-     * @return string
-     */
-    public function getLabel()
-    {
-    	return 'plentymarkets';
-    }
-
-    /**
-     * Returns version string.
-     *
-     * @return string
-     */
-    public function getVersion()
-    {
-    	return '1.8.0';
-    }
-
-    /**
-     * Returns the information of plugin as array.
-     *
-     * @return array
-     */
-    public function getInfo()
-    {
-        return array(
-			'version' => $this->getVersion(),
-			'autor' => 'plentymarkets GmbH',
-			'copyright' => 'Copyright © 2013-2015, plentymarkets GmbH',
-			'label' => $this->getLabel(),
-			'support' => 'https://www.plentymarkets.eu/service/',
-			'link' => 'https://www.plentymarkets.eu/handbuch/tools/shopware-connector/'
-		);
-    }
-
 }

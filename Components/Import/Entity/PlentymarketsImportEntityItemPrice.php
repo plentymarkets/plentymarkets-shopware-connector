@@ -78,6 +78,18 @@ class PlentymarketsImportEntityItemPrice
 		}
 	}
 
+    /**
+     * @return float
+     */
+	public function getPurchasePrice()
+    {
+        if (isset($this->PLENTY_PriceSet->PurchasePriceNet) && null !== $this->PLENTY_PriceSet->PurchasePriceNet) {
+            return $this->PLENTY_PriceSet->PurchasePriceNet;
+        }
+
+        return 0.0;
+    }
+
 	/**
 	 * Returns a price array for the shopware REST api
 	 *
@@ -144,11 +156,6 @@ class PlentymarketsImportEntityItemPrice
 				$price['price'] = $this->PLENTY_PriceSet->Price;
 			}
 
-			if (isset($this->PLENTY_PriceSet->PurchasePriceNet) && !is_null($this->PLENTY_PriceSet->PurchasePriceNet))
-			{
-				$price['basePrice'] = $this->PLENTY_PriceSet->PurchasePriceNet;
-			}
-
 			// Reliably available starting in SOAP 111
             // check whether the RRP is higher than price to prevent ugly display
 			if (isset($this->PLENTY_PriceSet->RRP) && !is_null($this->PLENTY_PriceSet->RRP) && isset($price['price']) && ($this->PLENTY_PriceSet->RRP > $price['price']))
@@ -178,35 +185,50 @@ class PlentymarketsImportEntityItemPrice
 		return $prices;
 	}
 
-	/**
-	 * Update the prices for a base item
-	 *
-	 * @param integer $itemId
-	 */
+    /**
+     * Update the prices for a base item
+     *
+     * @param integer $itemId
+     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * @throws \Shopware\Components\Api\Exception\ValidationException
+     */
 	public function update($itemId)
 	{
+        /**
+         * @var \Shopware\Components\Api\Resource\Article $ArticleResource
+         */
 		$ArticleResource = \Shopware\Components\Api\Manager::getResource('Article');
 
 		// Updaten
-		$ArticleResource->Update($itemId, array(
+		$ArticleResource->update($itemId, array(
 			'mainDetail' => array(
-				'prices' => $this->getPrices()
+				'prices' => $this->getPrices(),
+                'purchasePrice' => $this->getPurchasePrice(),
 			)
 		));
 	}
 
-	/**
-	 * Update the prices for a variant
-	 *
-	 * @param integer $detailId
-	 * @return bool
-	 */
+    /**
+     * Update the prices for a variant
+     *
+     * @param integer $detailId
+     *
+     * @return bool
+     *
+     * @throws \Shopware\Components\Api\Exception\ValidationException
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\ORMInvalidArgumentException
+     * @throws \Doctrine\ORM\ORMException
+     */
 	public function updateVariant($detailId)
 	{
 		$Detail = Shopware()->Models()->find('Shopware\Models\Article\Detail', $detailId);
 
-		if (!$Detail instanceof Shopware\Models\Article\Detail)
-		{
+		if (!$Detail instanceof Shopware\Models\Article\Detail) {
 			return PlentymarketsLogger::getInstance()->error('Sync:Item:Price', 'The price of the item detail with the id »'. $detailId .'« could not be updated (item corrupt)', 3610);
 		}
 
@@ -214,6 +236,9 @@ class PlentymarketsImportEntityItemPrice
 
 		$Article = $Detail->getArticle();
 
+        /**
+         * @var \Shopware\Components\Api\Resource\Article $ArticleResource
+         */
 		$ArticleResource = \Shopware\Components\Api\Manager::getResource('Article');
 
 		// Update
@@ -221,7 +246,8 @@ class PlentymarketsImportEntityItemPrice
 			'variants' => array(
 				array(
 					'number' => $Detail->getNumber(),
-					'prices' => $this->getPrices()
+					'prices' => $this->getPrices(),
+                    'purchasePrice' => $this->getPurchasePrice(),
 				)
 			)
 		));

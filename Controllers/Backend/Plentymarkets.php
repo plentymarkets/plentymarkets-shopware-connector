@@ -33,9 +33,46 @@
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
-class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Backend_ExtJs implements \Shopware\Components\CSRFWhitelistAware
 {
-	
+    /**
+     * Returns a list with actions which should not be validated for CSRF protection
+     *
+     * @return string[]
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'runCleanupAction',
+            'deleteDataIntegrityInvalidData',
+            'getDataIntegrityInvalidList',
+            'getDataIntegrityInvalidDataList',
+            'getDxContinuous',
+            'getDxWizard',
+            'setDxWizard',
+            'getSettingsList',
+            'getSettingsStores',
+            'saveSettings',
+            'saveMapping',
+            'handleExport',
+            'resetImportTimestamp',
+            'getExportStatusList',
+            'getPlentyMappingData',
+            'getMappingData',
+            'getLog',
+            'getLogIdentifierList',
+            'getMappingStatus',
+            'getWarehouseList',
+            'getOrderStatusList',
+            'getReferrerList',
+            'getMultishopList',
+            'getProducerList',
+            'testApiCredentials',
+            'syncItem',
+            'fixEmptyItemDetailNumber'
+        ];
+    }
+
 	/**
 	 * Runs an cleanup action
 	 */
@@ -372,7 +409,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		// API
 		// Sanitize the Wsdl
 		$wsdlParts = parse_url($this->Request()->ApiWsdl);
-		$wsdl = sprintf('%s://%s', $wsdlParts['scheme'], $wsdlParts['host']);
+		$wsdl = sprintf('%s://%s:%s', $wsdlParts['scheme'], $wsdlParts['host'], $wsdlParts['port']);
 
 		$Config->setApiWsdl($wsdl);
 		$Config->setApiUsername($this->Request()->ApiUsername);

@@ -32,6 +32,8 @@
  * In this way it is possible to do all the data mapping by using all needed SOAP-calls. To get more information on PHPs
  * magic methods please have a look at it's documentation.
  *
+ * @method setConnectorVersion($version)
+ *
  * @link http://php.net/manual/en/language.oop5.magic.php
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
@@ -154,7 +156,7 @@ class PlentymarketsConfig
 	 */
 	public function set($key, $value)
 	{
-		if ($this->config[$key] == $value)
+		if (array_key_exists($key, $this->config) && $this->config[$key] == $value)
 		{
 			return;
 		}
