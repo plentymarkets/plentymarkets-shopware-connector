@@ -69,6 +69,15 @@ class PlentymarketsImportEntityItemLinked
 	{
 		Shopware()->Db()->delete('s_articles_relationships', 'articleID = ' . $this->SHOPWARE_itemId);
 		Shopware()->Db()->delete('s_articles_similar', 'articleID = ' . $this->SHOPWARE_itemId);
+
+		// Allow plugins to change the data
+        Shopware()->Events()->notify(
+			'PlentyConnector_ImportEntityItemLinked_AfterPurge',
+			array(
+				'subject' => $this,
+				'id' => $this->SHOPWARE_itemId,
+			)
+		);
 	}
 
 	/**
@@ -118,7 +127,20 @@ class PlentymarketsImportEntityItemLinked
 			}
 			else
 			{
-				continue;
+                // Allow plugins to handle the linked products on their own
+                $eventArgs = Shopware()->Events()->notify(
+                    'PlentyConnector_ImportEntityItemLinked_GetTable',
+                    array(
+                        'subject' => $this,
+                        'item' => $LinkedItem
+                    )
+                );
+
+                $table = $eventArgs->getReturn();
+
+				if (empty($table)) {
+					continue;
+				}
 			}
 
 			Shopware()->Db()->insert(
