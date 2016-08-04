@@ -166,10 +166,18 @@ class PlentymarketsImportItemHelper
 		{
 			return false;
 		}
-		if (preg_match('/[^a-zA-Z0-9\.\-_ \/]/', $number))
+
+		if (version_compare(Shopware::VERSION, '5.0.2', '>=')) {
+			$regex = '/[^a-zA-Z0-9\-\_\.]/';
+		} else {
+			$regex = '/[^a-zA-Z0-9\.\-_ \/]/';
+		}
+
+		if (preg_match($regex, $number))
 		{
 			return false;
 		}
+
 		return true;
 	}
 }
