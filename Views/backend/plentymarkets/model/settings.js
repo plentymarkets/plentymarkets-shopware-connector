@@ -128,6 +128,30 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		type: 'integer',
 		defaultValue: 1
 	}, {
+		name: 'ItemShortDescriptionImportActionID',
+		type: 'integer',
+		defaultValue: 1
+	}, {
+		name: 'ItemLongDescriptionImportActionID',
+		type: 'integer',
+		defaultValue: 1
+	}, {
+		name: 'ItemKeywordsImportActionID',
+		type: 'integer',
+		defaultValue: 1
+	}, {
+		name: 'ItemNameImportActionID',
+		type: 'string',
+		defaultValue: 'Name'
+	}, {
+		name: 'ItemPriceImportActionID',
+		type: 'string',
+		defaultValue: 'Price'
+	}, {
+		name: 'ItemFreetextsImportActionID',
+		type: 'integer',
+		defaultValue: 1
+	}, {
 		name: 'ItemAssociateImportActionID',
 		type: 'integer',
 		defaultValue: 1

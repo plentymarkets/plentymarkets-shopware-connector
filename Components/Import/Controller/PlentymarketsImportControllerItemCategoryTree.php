@@ -152,13 +152,16 @@ class PlentymarketsImportControllerItemCategoryTree
 	{
 		// Get the data from plentymarkets (for every mapped shop)
 		$shopIds = Shopware()->Db()->fetchAll('
-			SELECT plentyID FROM plenty_mapping_shop
+			SELECT * FROM plenty_mapping_shop
 		');
 
 		foreach ($shopIds as $shopId)
 		{
+			$mainShopId = PlentymarketsMappingController::getShopByPlentyID($shopId['plentyID']);
+			$mainLang = array_values(PlentymarketsTranslation::getShopMainLanguage($mainShopId));
+
 			$Request_GetItemCategoryTree = new PlentySoapRequest_GetItemCategoryTree();
-			$Request_GetItemCategoryTree->Lang = 'de';
+			$Request_GetItemCategoryTree->Lang = PlentymarketsTranslation::getPlentyLocaleFormat($mainLang[0]['locale']);
 			$Request_GetItemCategoryTree->GetCategoryNames = true;
 			$Request_GetItemCategoryTree->StoreID = $shopId['plentyID'];
 			$Request_GetItemCategoryTree->GetAktivCategories = true;
@@ -178,7 +181,7 @@ class PlentymarketsImportControllerItemCategoryTree
 			/** @var PlentySoapObject_ItemCategoryTreeNode $Category */
 			foreach ($Response_GetItemCategoryTree->MultishopTree->item[0]->CategoryTree->item as $Category)
 			{
-				$importEntityItemCategoryTree = new PlentymarketsImportEntityItemCategoryTree($Category, $shopId['plentyID']);
+				$importEntityItemCategoryTree = new PlentymarketsImportEntityItemCategoryTree($Category, $shopId['plentyID'], $Request_GetItemCategoryTree->Lang);
 				$importEntityItemCategoryTree->import();
 			}
 		}
