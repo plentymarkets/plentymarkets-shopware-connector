@@ -200,7 +200,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
             ];
 		}
 
-    	if (!$this->assertMinimumVersion('4.1')) {
+    	if (!$this->assertMinimumVersion('5.2')) {
     		return [
 				'success' => false,
 				'message' => 'Das plentymarkets-Plugin benötigt min. shopware 5.2'
