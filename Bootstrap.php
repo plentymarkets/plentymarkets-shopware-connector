@@ -333,7 +333,20 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
 			}
 		}
 
-		//
+        if (version_compare($version, '1.8.1', '<')) {
+            try {
+                $this->subscribeEvent(
+                    'Shopware_Models_Order_Order::postPersist',
+                    'onOrderModelPostPersist'
+                );
+            } catch (Exception $e) {
+                return array(
+                    'success' => false,
+                    'message' => $e->getMessage()
+                );
+            }
+        }
+
 		PlentymarketsConfig::getInstance()->setConnectorVersion($this->getVersion());
 
     	return true;
@@ -672,10 +685,10 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
         	'onOrderSaveOrderProcessDetails'
         );
 
-//		$this->subscribeEvent(
-//			'Shopware_Models_Order_Order::postPersist',
-//			'onOrderModelPostPersist'
-//		);
+		$this->subscribeEvent(
+			'Shopware_Models_Order_Order::postPersist',
+			'onOrderModelPostPersist'
+		);
 
 		// Insert the CSS
         $this->subscribeEvent(
