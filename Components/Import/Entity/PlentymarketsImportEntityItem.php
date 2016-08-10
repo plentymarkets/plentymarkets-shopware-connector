@@ -119,30 +119,30 @@ class PlentymarketsImportEntityItem
 		$this->storeId = PlentymarketsMappingController::getShopByShopwareID($Shop->getId());
 	}
 
-	/**
-	 * @description Import the item texts only for language shops. The import for item texts for the main shop is done in the setData() method
-	 * @param array $itemTexts
-	 */
-	public function saveItemTextsTranslation($itemTexts)
-	{
-		foreach ($itemTexts as $itemText)
-		{
-			// if the language is not the main language
-			if(isset($itemText['languageShopId']))
-			{
-				// save the translation for the language shop
+    /**
+     * @description Import the item texts only for language shops. The import for item texts for the main shop is done in the setData() method
+     * @param array $itemTexts
+     */
+    public function saveItemTextsTranslation($itemTexts)
+    {
+        foreach ($itemTexts as $itemText)
+        {
+            // if the language is not the main language
+            if(isset($itemText['languageShopId']))
+            {
+                // save the translation for the language shop
+                $swItemText = array();
+                $swItemText['txtArtikel'] = $this->getItemName($itemText['texts']);
+                $swItemText['txtshortdescription'] = (PlentymarketsConfig::getInstance()->getItemShortDescriptionImportActionID(IMPORT_ITEM_SHORTDESC) == 1) ? $itemText['texts']->ShortDescription : '';
+                $swItemText['txtlangbeschreibung'] = (PlentymarketsConfig::getInstance()->getItemLongDescriptionImportActionID(IMPORT_ITEM_LONGDESC) == 1) ? $itemText['texts']->LongDescription : '';
+                $swItemText['txtkeywords'] = (PlentymarketsConfig::getInstance()->getItemKeywordsImportActionID(IMPORT_ITEM_KEYWORDS) == 1) ? $itemText['texts']->ItemDescriptionKeywords : '';
 
-				$swItemText = array('txtArtikel' => $itemText['texts']->Name,
-									'txtshortdescription' => $itemText['texts']->ShortDescription,
-									'txtlangbeschreibung' => $itemText['texts']->LongDescription,
-									'txtkeywords' => $itemText['texts']->ItemDescriptionKeywords);
+                $swItemID = PlentymarketsMappingController::getItemByPlentyID($this->ItemBase->ItemID);
 
-				$swItemID = PlentymarketsMappingController::getItemByPlentyID($this->ItemBase->ItemID);
+                PlentymarketsTranslation::setShopwareTranslation('article', $swItemID, $itemText['languageShopId'], $swItemText);
 
-				PlentymarketsTranslation::setShopwareTranslation('article', $swItemID, $itemText['languageShopId'], $swItemText);
-
-				// save the translation in s_articles_translations, too
-				$sql = '
+                // save the translation in s_articles_translations, too
+                $sql = '
                 		INSERT INTO `s_articles_translations` (
 		                  articleID, languageID, name, keywords, description, description_long
 		                ) VALUES (
@@ -154,17 +154,17 @@ class PlentymarketsImportEntityItem
 		                  description_long = VALUES(description_long);
 		            	';
 
-				Shopware()->Db()->query($sql, array(
-					$swItemID,
-					$itemText['languageShopId'],
-					isset($swItemText['txtArtikel']) ? (string) $swItemText['txtArtikel'] : '',
-					($swItemText['txtkeywords']) ? (string) $swItemText['txtkeywords'] : '',
-					isset($swItemText['txtshortdescription']) ? (string) $swItemText['txtshortdescription'] : '',
-					isset($swItemText['txtlangbeschreibung']) ? (string) $swItemText['txtlangbeschreibung'] : ''
-				));
-			}
-		}
-	}
+                Shopware()->Db()->query($sql, array(
+                    $swItemID,
+                    $itemText['languageShopId'],
+                    isset($swItemText['txtArtikel']) ? (string) $swItemText['txtArtikel'] : '',
+                    ($swItemText['txtkeywords']) ? (string) $swItemText['txtkeywords'] : '',
+                    isset($swItemText['txtshortdescription']) ? (string) $swItemText['txtshortdescription'] : '',
+                    isset($swItemText['txtlangbeschreibung']) ? (string) $swItemText['txtlangbeschreibung'] : ''
+                ));
+            }
+        }
+    }
 
 	/**
 	 * Sets the base item's data – not the details'
@@ -172,13 +172,13 @@ class PlentymarketsImportEntityItem
 	protected function setData()
 	{
 		// save the item texts for the shop main language
-		$this->data = array();
-		$this->data['name'] = $this->ItemBase->Texts->Name;
-		$this->data['description'] = $this->ItemBase->Texts->ShortDescription;
-		$this->data['descriptionLong'] = $this->ItemBase->Texts->LongDescription;
-		$this->data['keywords'] = $this->ItemBase->Texts->Keywords;
+        $this->data = array();
+        $this->data['name'] = $this->getItemName($this->ItemBase->Texts);
+        $this->data['description'] = (PlentymarketsConfig::getInstance()->getItemShortDescriptionImportActionID(IMPORT_ITEM_SHORTDESC) == 1) ? $this->ItemBase->Texts->ShortDescription : '';
+        $this->data['descriptionLong'] = (PlentymarketsConfig::getInstance()->getItemLongDescriptionImportActionID(IMPORT_ITEM_LONGDESC) == 1) ? $this->ItemBase->Texts->LongDescription : '';
+        $this->data['keywords'] = (PlentymarketsConfig::getInstance()->getItemKeywordsImportActionID(IMPORT_ITEM_KEYWORDS) == 1) ? $this->ItemBase->Texts->Keywords : '';
 
-		$this->data['highlight'] = ($this->ItemBase->WebShopSpecial == 3);
+        $this->data['highlight'] = ($this->ItemBase->WebShopSpecial == 3);
 		$this->data['lastStock'] = ($this->ItemBase->Stock->Limitation == 1);
 		$this->data['added'] = date('c', $this->ItemBase->Inserted);
 		$this->data['changed'] = date('c', $this->ItemBase->LastUpdate);
@@ -220,6 +220,26 @@ class PlentymarketsImportEntityItem
 	}
 
 	/**
+	 * Returns the item name
+	 *
+	 * @return string
+	 */
+	protected function getItemName($ItemTexts)
+	{
+		$useName = PlentymarketsConfig::getInstance()->getItemNameImportActionID(IMPORT_ITEM_NAME);
+
+		if($useName != 'Name')
+		{
+			if(!empty($ItemTexts->{$useName}))
+			{
+				return $ItemTexts->{$useName};
+			}
+		}
+
+		return $ItemTexts->Name;
+	}
+
+	/**
 	 * Set the base details
 	 */
 	protected function setDetails()
@@ -245,29 +265,35 @@ class PlentymarketsImportEntityItem
 			'width' => null,
 			'len' => null,
 			'height' => null,
-			'attribute' => array(
-				'attr1' => $this->ItemBase->FreeTextFields->Free1,
-				'attr2' => $this->ItemBase->FreeTextFields->Free2,
-				'attr3' => $this->ItemBase->FreeTextFields->Free3,
-				'attr4' => $this->ItemBase->FreeTextFields->Free4,
-				'attr5' => $this->ItemBase->FreeTextFields->Free5,
-				'attr6' => $this->ItemBase->FreeTextFields->Free6,
-				'attr7' => $this->ItemBase->FreeTextFields->Free7,
-				'attr8' => $this->ItemBase->FreeTextFields->Free8,
-				'attr9' => $this->ItemBase->FreeTextFields->Free9,
-				'attr10' => $this->ItemBase->FreeTextFields->Free10,
-				'attr11' => $this->ItemBase->FreeTextFields->Free11,
-				'attr12' => $this->ItemBase->FreeTextFields->Free12,
-				'attr13' => $this->ItemBase->FreeTextFields->Free13,
-				'attr14' => $this->ItemBase->FreeTextFields->Free14,
-				'attr15' => $this->ItemBase->FreeTextFields->Free15,
-				'attr16' => $this->ItemBase->FreeTextFields->Free16,
-				'attr17' => $this->ItemBase->FreeTextFields->Free17,
-				'attr18' => $this->ItemBase->FreeTextFields->Free18,
-				'attr19' => $this->ItemBase->FreeTextFields->Free19,
-				'attr20' => $this->ItemBase->FreeTextFields->Free20
-			)
-		);
+			'attribute' => null
+        );
+
+        if (PlentymarketsConfig::getInstance()->getItemFreetextsImportActionID(IMPORT_ITEM_FREETEXTS) == 1)
+        {
+            $details['attribute'] = array(
+                'attr1' => $this->ItemBase->FreeTextFields->Free1,
+                'attr2' => $this->ItemBase->FreeTextFields->Free2,
+                'attr3' => $this->ItemBase->FreeTextFields->Free3,
+                'attr4' => $this->ItemBase->FreeTextFields->Free4,
+                'attr5' => $this->ItemBase->FreeTextFields->Free5,
+                'attr6' => $this->ItemBase->FreeTextFields->Free6,
+                'attr7' => $this->ItemBase->FreeTextFields->Free7,
+                'attr8' => $this->ItemBase->FreeTextFields->Free8,
+                'attr9' => $this->ItemBase->FreeTextFields->Free9,
+                'attr10' => $this->ItemBase->FreeTextFields->Free10,
+                'attr11' => $this->ItemBase->FreeTextFields->Free11,
+                'attr12' => $this->ItemBase->FreeTextFields->Free12,
+                'attr13' => $this->ItemBase->FreeTextFields->Free13,
+                'attr14' => $this->ItemBase->FreeTextFields->Free14,
+                'attr15' => $this->ItemBase->FreeTextFields->Free15,
+                'attr16' => $this->ItemBase->FreeTextFields->Free16,
+                'attr17' => $this->ItemBase->FreeTextFields->Free17,
+                'attr18' => $this->ItemBase->FreeTextFields->Free18,
+                'attr19' => $this->ItemBase->FreeTextFields->Free19,
+                'attr20' => $this->ItemBase->FreeTextFields->Free20
+            );
+        }
+
 
 		if ($this->ItemBase->Availability->MinimumSalesOrderQuantity > 0)
 		{
@@ -1121,6 +1147,7 @@ class PlentymarketsImportEntityItem
 				//
 				foreach ($this->variants as $variantId => &$variant)
 				{
+					$variant['inStock'] = 0;
 					$variant['configuratorOptions'] = $VariantController->getOptionsByVariantId($variantId);
 
 					// Prices

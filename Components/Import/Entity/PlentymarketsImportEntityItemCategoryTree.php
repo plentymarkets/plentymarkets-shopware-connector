@@ -48,6 +48,16 @@ class PlentymarketsImportEntityItemCategoryTree
 	 * @var integer
 	 */
 	protected $shopId;
+	
+	/**
+	 * @var string
+	 */
+	protected $categoryNodeLang;
+	
+	/**
+	 * @var string
+	 */
+	protected $shopLang;
 
 	/**
 	 *
@@ -68,7 +78,7 @@ class PlentymarketsImportEntityItemCategoryTree
 	 * @param integer $storeId
 	 * @throws Exception
 	 */
-	public function __construct($categoryNode, $storeId)
+	public function __construct($categoryNode, $storeId, $categoryNodeLang = 'de')
 	{
 		$category = array();
 		if (property_exists($categoryNode, 'ItemCategoryPath'))
@@ -102,6 +112,11 @@ class PlentymarketsImportEntityItemCategoryTree
 		$this->plentyCategoryBranch = $category;
 		$this->storeId = $storeId;
 		$this->shopId = PlentymarketsMappingController::getShopByPlentyID($storeId);
+		$this->categoryNodeLang = $categoryNodeLang;
+	
+		// get the main language of the shop set it temp
+		$mainLang = array_values(PlentymarketsTranslation::getShopMainLanguage($this->shopId));
+		$this->shopLang = PlentymarketsTranslation::getPlentyLocaleFormat($mainLang[0]['locale']);
 
 		if (is_null(self::$CategoryRepository))
 		{
@@ -127,7 +142,17 @@ class PlentymarketsImportEntityItemCategoryTree
 		{
 			$plentyCategoryId = $plentyCategory['branchId'];
 			$plentyCategoryName = $plentyCategory['name'];
-
+			
+			if($this->categoryNodeLang != $this->shopLang)
+			{
+				$plentyLocalCategoryName = $this->getLocalCategoryName($plentyCategoryId);
+				
+				if($plentyLocalCategoryName)
+				{
+					$plentyCategoryName = $plentyLocalCategoryName;
+				}
+			}		
+				
 			// Root category id (out of the shop)
 			$CategoryFound = self::$CategoryRepository->findOneBy(array(
 				'name' => $plentyCategoryName,
@@ -188,5 +213,36 @@ class PlentymarketsImportEntityItemCategoryTree
 		{
 			return $parentId;
 		}
+	}
+	
+	/*
+	 * Get the category name from Plenty
+	 */	
+	protected function getLocalCategoryName($categoryId)
+	{
+		$categoryName = false;
+	
+		$Request_GetItemCategoryCatalog = new PlentySoapRequest_GetItemCategoryCatalog();
+		$Request_GetItemCategoryCatalog->CategoryID = $categoryId;
+		$Request_GetItemCategoryCatalog->Lang = $this->shopLang;
+		$Request_GetItemCategoryCatalog->StoreID = $this->storeId;
+
+		/** @var PlentySoapResponse_GetItemCategoryCatalog $Response_GetItemCategoryCatalog */
+		$Response_GetItemCategoryCatalog = PlentymarketsSoapClient::getInstance()->GetItemCategoryCatalog($Request_GetItemCategoryCatalog);
+
+		if ($Response_GetItemCategoryCatalog->Success) 
+		{
+			if(is_object($Response_GetItemCategoryCatalog->Categories->item[0]))
+			{
+				$categoryName = $Response_GetItemCategoryCatalog->Categories->item[0]->Name;
+				
+				if(empty($categoryName))
+				{
+					$categoryName = false;
+				}
+			}
+		}		
+		
+		return $categoryName;
 	}
 }

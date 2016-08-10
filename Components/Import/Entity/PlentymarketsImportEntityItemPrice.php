@@ -153,7 +153,7 @@ class PlentymarketsImportEntityItemPrice
 			// Reliably available starting in SOAP 111
 			if (isset($this->PLENTY_PriceSet->Price) && !is_null($this->PLENTY_PriceSet->Price))
 			{
-				$price['price'] = $this->PLENTY_PriceSet->Price;
+				$price['price'] = $this->getItemPrice($this->PLENTY_PriceSet);
 			}
 
 			// Reliably available starting in SOAP 111
@@ -184,6 +184,26 @@ class PlentymarketsImportEntityItemPrice
 
 		return $prices;
 	}
+
+    /**
+     * Returns the item price
+     *
+     * @return double
+     */
+    protected function getItemPrice($ItemPrices)
+    {
+        $usePrice = PlentymarketsConfig::getInstance()->getItemPriceImportActionID(IMPORT_ITEM_PRICE);
+
+        if($usePrice != 'Price')
+        {
+            if(!empty($ItemPrices->{$usePrice}))
+            {
+                return $ItemPrices->{$usePrice};
+            }
+        }
+
+        return $ItemPrices->Price;
+    }
 
     /**
      * Update the prices for a base item
