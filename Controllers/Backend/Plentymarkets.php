@@ -409,7 +409,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 		// API
 		// Sanitize the Wsdl
 		$wsdlParts = parse_url($this->Request()->ApiWsdl);
-		$wsdl = sprintf('%s://%s:%s', $wsdlParts['scheme'], $wsdlParts['host'], $wsdlParts['port']);
+		$wsdl = sprintf('%s://%s', $wsdlParts['scheme'], $wsdlParts['host']);
 
 		$Config->setApiWsdl($wsdl);
 		$Config->setApiUsername($this->Request()->ApiUsername);
