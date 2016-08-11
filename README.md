@@ -16,15 +16,14 @@ Das Plugin steht im [Shopware Community Store][1] direkt zum kostenlosen Downloa
 ### Systemvoraussetzungen
 
   * mindestens plentymarkets-Version 5.0
-  * mindestens Shopware-Version 4.1 Professional Edition
-  * eine gültige Shopware Lizenz
+  * mindestens Shopware-Version 5.2
 
 ### Technische Voraussetzungen
 
   * Root Server mit Shell-Zugriff (FTP ist **nicht** ausreichend)
   * Zugriff auf alle Konfigurationsdateien (insbesondere der `php.ini`)
   * Zugriff auf die crontab (mehr dazu [hier][2]) 
-  * php-cli 5.4 Binary mit min. 1 Gb RAM und unbegrenzter Prozesslaufzeit (mehr dazu [hier][3]) 
+  * php-cli 5.6 Binary mit min. 1 Gb RAM und unbegrenzter Prozesslaufzeit (mehr dazu [hier][3]) 
 
    [2]: http://man.plentymarkets.eu/tools/shopware-connector/installation/#2-4
    [3]: http://man.plentymarkets.eu/tools/shopware-connector/installation/#2-1
