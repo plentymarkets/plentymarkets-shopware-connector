@@ -256,7 +256,7 @@ class PlentymarketsStatus
 		$mayRunUnlimited = true;
 
 		// do some extended checks whether the sync may be started
-		if ($checkExtended && !$ozymandias)
+		if ($checkExtended)
 		{
 			// Check the cli
 			$sapi = php_sapi_name();
