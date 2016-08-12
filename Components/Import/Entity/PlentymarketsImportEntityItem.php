@@ -451,7 +451,7 @@ class PlentymarketsImportEntityItem
 				$details['shippingtime'] = $shippingTime;
 			}
 
-			if(version_compare(Shopware::VERSION, '4.3.6', '<='))
+			if(version_compare(Shopware::VERSION, '5.0.0', '<'))
 			{
 				$details['additionaltext'] = $AttributeValueSet->AttributeValueSetName;
 			}
