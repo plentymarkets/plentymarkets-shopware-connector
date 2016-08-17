@@ -16,7 +16,7 @@ Das Plugin steht im [Shopware Community Store][1] direkt zum kostenlosen Downloa
 ### Systemvoraussetzungen
 
   * plentymarkets-Version 5.0 oder 6.0
-  * mindestens Shopware-Version 5.2 Professional Edition
+  * mindestens Shopware-Version 5.2
 
 ### Technische Voraussetzungen
 
