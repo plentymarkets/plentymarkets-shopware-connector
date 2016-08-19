@@ -81,6 +81,12 @@ class PlentymarketsImportEntityItem
 	 * @var array
 	 */
 	protected $categories = array();
+	
+	/**
+	 *
+	 * @var array
+	 */
+	protected $seoCategories = array();
 
 	/**
 	 *
@@ -519,6 +525,21 @@ class PlentymarketsImportEntityItem
 			{
 				continue;
 			}
+			
+			$categoryToStore = false;
+			
+			if(!empty($Category->ItemStandardCategory->item))
+			{
+				foreach($Category->ItemStandardCategory->item as $ItemStandardCategory)
+				{
+					if($ItemStandardCategory->intValue != $this->storeId)
+					{
+						continue;
+					}
+					
+					$categoryToStore = true;
+				}
+			}
 
 			try
 			{
@@ -526,6 +547,14 @@ class PlentymarketsImportEntityItem
 				$this->categories[] = array(
 					'id' => $categoryId
 				);
+				
+				if($categoryToStore)
+				{
+					$this->seoCategories[] = array(
+													'shopId' => $this->Shop->getId(),
+													'categoryId' => $categoryId
+												);
+				}
 			}
 
 			// Category does not yet exist
@@ -541,6 +570,14 @@ class PlentymarketsImportEntityItem
 					$this->categories[] = array(
 						'id' => $categoryId
 					);
+					
+					if($categoryToStore)
+					{
+						$this->seoCategories[] = array(
+														'shopId' => $this->Shop->getId(),
+														'categoryId' => $categoryId
+													);
+					}
 				}
 			}
 		}
@@ -814,6 +851,15 @@ class PlentymarketsImportEntityItem
 			}
 			$data['categories'][$category['id']] = $category;
 		}
+		
+		$SHOPWARE_itemID = PlentymarketsMappingController::getItemByPlentyID($this->ItemBase->ItemID);
+		
+		Shopware()->Db()->query("DELETE FROM s_articles_categories_seo WHERE shop_id = ? AND article_id = ?", array($this->Shop->getId(), $SHOPWARE_itemID));
+		
+		if(!empty($this->seoCategories))
+		{			
+			Shopware()->Db()->query("INSERT INTO s_articles_categories_seo (shop_id,article_id,category_id) VALUES(?,?,?)", array($this->Shop->getId(), $SHOPWARE_itemID, $this->seoCategories[0]['categoryId']));
+		}
 
 		if (count($data['categories']) != count($article['categories']))
 		{
@@ -850,6 +896,7 @@ class PlentymarketsImportEntityItem
 			{
 				$this->setCategories();
 				$data['categories'] = $this->categories;
+				$data['seoCategories'] = $this->seoCategories;
 			}
 
 			// Should the number be synchronized?
@@ -1073,6 +1120,7 @@ class PlentymarketsImportEntityItem
 			// Set the categories no matter what
 			$this->setCategories();
 			$data['categories'] = $this->categories;
+			$data['seoCategories'] = $this->seoCategories;
 
 			// Regular item
 			if (!count($this->variants))
