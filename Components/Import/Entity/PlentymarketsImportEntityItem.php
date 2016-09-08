@@ -81,7 +81,7 @@ class PlentymarketsImportEntityItem
 	 * @var array
 	 */
 	protected $categories = array();
-	
+
 	/**
 	 *
 	 * @var array
@@ -487,7 +487,7 @@ class PlentymarketsImportEntityItem
 			{
 				$details['additionaltext'] = $AttributeValueSet->AttributeValueSetName;
 			}
-			
+
 			$details['ean'] = $AttributeValueSet->EAN;
 			$details['X_plentySku'] = $sku;
 
@@ -525,9 +525,9 @@ class PlentymarketsImportEntityItem
 			{
 				continue;
 			}
-			
+
 			$categoryToStore = false;
-			
+
 			if(!empty($Category->ItemStandardCategory->item))
 			{
 				foreach($Category->ItemStandardCategory->item as $ItemStandardCategory)
@@ -536,7 +536,7 @@ class PlentymarketsImportEntityItem
 					{
 						continue;
 					}
-					
+
 					$categoryToStore = true;
 				}
 			}
@@ -547,7 +547,7 @@ class PlentymarketsImportEntityItem
 				$this->categories[] = array(
 					'id' => $categoryId
 				);
-				
+
 				if($categoryToStore)
 				{
 					$this->seoCategories[] = array(
@@ -570,7 +570,7 @@ class PlentymarketsImportEntityItem
 					$this->categories[] = array(
 						'id' => $categoryId
 					);
-					
+
 					if($categoryToStore)
 					{
 						$this->seoCategories[] = array(
@@ -851,13 +851,13 @@ class PlentymarketsImportEntityItem
 			}
 			$data['categories'][$category['id']] = $category;
 		}
-		
+
 		$SHOPWARE_itemID = PlentymarketsMappingController::getItemByPlentyID($this->ItemBase->ItemID);
-		
+
 		Shopware()->Db()->query("DELETE FROM s_articles_categories_seo WHERE shop_id = ? AND article_id = ?", array($this->Shop->getId(), $SHOPWARE_itemID));
-		
+
 		if(!empty($this->seoCategories))
-		{			
+		{
 			Shopware()->Db()->query("INSERT INTO s_articles_categories_seo (shop_id,article_id,category_id) VALUES(?,?,?)", array($this->Shop->getId(), $SHOPWARE_itemID, $this->seoCategories[0]['categoryId']));
 		}
 
@@ -961,10 +961,18 @@ class PlentymarketsImportEntityItem
 				{
 					// Directly add the prices
 					$PlentymarketsImportEntityItemPrice = new PlentymarketsImportEntityItemPrice(
-						$this->ItemBase->PriceSet, $VariantController->getMarkupByVariantId($variantId)
+						$this->ItemBase->PriceSet,
+                        $VariantController->getMarkupByVariantId($variantId),
+                        $VariantController->getReferencePriceByVaraintId($variantId)
 					);
+
 					$variant['prices'] = $PlentymarketsImportEntityItemPrice->getPrices();
-                    $variant['purchasePrice'] = $PlentymarketsImportEntityItemPrice->getPurchasePrice();
+                    $variant['purchasePrice'] = $VariantController->getPurchasePriceByVariantId($variantId);
+
+                    // use purchase price from main product instead
+                    if (empty($variant['purchasePrice'])) {
+                        $variant['purchasePrice'] = $PlentymarketsImportEntityItemPrice->getPurchasePrice();
+                    }
 
 					// If the variant has an id, it is already created and mapped soo we just keep it
 					if (array_key_exists('id', $variant))
@@ -1102,7 +1110,11 @@ class PlentymarketsImportEntityItem
 			else
 			{
 				// Preise eines Normalen Artikels aktualisieren
-				$PlentymarketsImportEntityItemPrice = new PlentymarketsImportEntityItemPrice($this->ItemBase->PriceSet);
+				$PlentymarketsImportEntityItemPrice = new PlentymarketsImportEntityItemPrice(
+				    $this->ItemBase->PriceSet,
+                    0.0,
+                    $this->ItemBase->PriceSet->RRP
+                );
 				$PlentymarketsImportEntityItemPrice->update($SHOPWARE_itemID);
 			}
 
@@ -1171,7 +1183,12 @@ class PlentymarketsImportEntityItem
 				// Media
 
 				// Preise
-				$PlentymarketsImportEntityItemPrice = new PlentymarketsImportEntityItemPrice($this->ItemBase->PriceSet);
+				$PlentymarketsImportEntityItemPrice = new PlentymarketsImportEntityItemPrice(
+				    $this->ItemBase->PriceSet,
+                    0.0,
+                    $this->ItemBase->PriceSet->RRP
+                );
+
 				$PlentymarketsImportEntityItemPrice->update($Article->getId());
 			}
 
@@ -1203,9 +1220,19 @@ class PlentymarketsImportEntityItem
 					$variant['configuratorOptions'] = $VariantController->getOptionsByVariantId($variantId);
 
 					// Prices
-					$PlentymarketsImportEntityItemPrice = new PlentymarketsImportEntityItemPrice($this->ItemBase->PriceSet, $VariantController->getMarkupByVariantId($variantId));
-					$variant['prices'] = $PlentymarketsImportEntityItemPrice->getPrices();
-                    $variant['purchasePrice'] = $PlentymarketsImportEntityItemPrice->getPurchasePrice();
+					$PlentymarketsImportEntityItemPrice = new PlentymarketsImportEntityItemPrice(
+					    $this->ItemBase->PriceSet,
+                        $VariantController->getMarkupByVariantId($variantId),
+                        $VariantController->getReferencePriceByVaraintId($variantId)
+                    );
+
+                    $variant['prices'] = $PlentymarketsImportEntityItemPrice->getPrices();
+                    $variant['purchasePrice'] = $VariantController->getPurchasePriceByVariantId($variantId);
+
+                    // use purchase price from main product instead
+                    if (empty($variant['purchasePrice'])) {
+                        $variant['purchasePrice'] = $PlentymarketsImportEntityItemPrice->getPurchasePrice();
+                    }
 
 					$number2sku[$variant['number']] = $variant['X_plentySku'];
 				}

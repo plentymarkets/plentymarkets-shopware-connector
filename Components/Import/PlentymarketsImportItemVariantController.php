@@ -88,18 +88,31 @@ class PlentymarketsImportItemVariantController
 	 *
 	 * @var array
 	 */
-	static $mapping = array(
+	public static $mapping = array(
 		'group' => array(),
 		'option' => array()
 	);
 
-	/**
+    /**
+     * @var array
+     */
+    protected $referencePrices;
+
+    /**
+     * @var
+     */
+    protected $purchasePrices;
+
+    /**
 	 * Constructor method
 	 *
 	 * @param PlentySoapObject_ItemBase $ItemBase
 	 */
 	public function __construct($ItemBase)
 	{
+	    $this->referencePrices = [];
+        $this->purchasePrices = [];
+
 		$this->ItemBase = $ItemBase;
 
 		foreach ($this->ItemBase->ItemAttributeMarkup->item as $ItemAttributeMarkup)
@@ -119,7 +132,11 @@ class PlentymarketsImportItemVariantController
 		{
 			$Request_GetAttributeValueSets->AttributeValueSets = array();
 
-			// Attribute Value Sets abfragen
+            /**
+             * Attribute Value Sets abfragen
+             *
+             * @var PlentySoapObject_ItemAttributeValueSet $AttributeValueSet
+             */
 			foreach ($chunk as $AttributeValueSet)
 			{
 				//
@@ -130,8 +147,17 @@ class PlentymarketsImportItemVariantController
 				$RequestObject_GetAttributeValueSets->AttributeValueSetID = $AttributeValueSet->AttributeValueSetID;
 				$RequestObject_GetAttributeValueSets->Lang = 'de';
 				$Request_GetAttributeValueSets->AttributeValueSets[] = $RequestObject_GetAttributeValueSets;
+
+                // Reference Price (UVP)
+                $this->referencePrices[$AttributeValueSet->AttributeValueSetID] = $AttributeValueSet->UVP;
+
+                // Purchase Price
+                $this->purchasePrices[$AttributeValueSet->AttributeValueSetID] = $AttributeValueSet->PurchasePrice;
 			}
 
+            /**
+             * @var PlentySoapResponse_GetAttributeValueSets $Response_GetAttributeValueSets
+             */
 			$Response_GetAttributeValueSets = PlentymarketsSoapClient::getInstance()->GetAttributeValueSets($Request_GetAttributeValueSets);
 
 			/**
@@ -140,7 +166,8 @@ class PlentymarketsImportItemVariantController
 			 */
 			foreach ($Response_GetAttributeValueSets->AttributeValueSets->item as $AttributeValueSet)
 			{
-				$this->variant2markup[$AttributeValueSet->AttributeValueSetID] = 0;
+                $this->referencePrices[$AttributeValueSet->AttributeValueSetID] = 0.0;
+				$this->variant2markup[$AttributeValueSet->AttributeValueSetID] = 0.0;
 
 				foreach ($AttributeValueSet->Attribute->item as $Attribute)
 				{
@@ -312,6 +339,26 @@ class PlentymarketsImportItemVariantController
 	{
 		return $this->variant2markup[$variantId];
 	}
+
+    /**
+     * @param $variantId
+     *
+     * @return float
+     */
+	public function getReferencePriceByVaraintId($variantId)
+    {
+        return $this->referencePrices[$variantId];
+    }
+
+    /**
+     * @param $variantId
+     *
+     * @return float
+     */
+    public function getPurchasePriceByVariantId($variantId)
+    {
+        return $this->purchasePrices[$variantId];
+    }
 
 	/**
 	 * Returns an array of configurator groups for the use with the shopware REST API
