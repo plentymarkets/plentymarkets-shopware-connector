@@ -163,8 +163,6 @@ class PlentymarketsImportEntityItemPrice
 				$price['price'] = $this->getItemPrice($this->PLENTY_PriceSet);
 			}
 
-            $referencePrice = 0.0;
-
             // if uvp is empty, try to load from the price set, which could be the main product
             if (empty($this->referencePrice)) {
                 $referencePrice = $this->PLENTY_PriceSet->RRP;
