@@ -69,6 +69,15 @@ class PlentymarketsImportEntityItemLinked
 	{
 		Shopware()->Db()->delete('s_articles_relationships', 'articleID = ' . $this->SHOPWARE_itemId);
 		Shopware()->Db()->delete('s_articles_similar', 'articleID = ' . $this->SHOPWARE_itemId);
+
+		// Allow plugins to change the data
+		Shopware()->Events()->notify(
+			'PlentyConnector_ImportEntityItemLinked_AfterPurge',
+			array(
+				'subject' => $this,
+				'id' => $this->SHOPWARE_itemId,
+			)
+		);
 	}
 
 	/**
@@ -108,6 +117,8 @@ class PlentymarketsImportEntityItemLinked
 				continue;
 			}
 
+			$table = '';
+
 			if ($LinkedItem->Relationship == 'Accessory')
 			{
 				$table = 's_articles_relationships';
@@ -118,7 +129,19 @@ class PlentymarketsImportEntityItemLinked
 			}
 			else
 			{
-				continue;
+				// Allow plugins to change the data
+				$table = Shopware()->Events()->filter(
+					'PlentyConnector_ImportEntityItemLinked_GetTable',
+					$table,
+					array(
+						'subject' => $this,
+						'item' => $LinkedItem
+					)
+				);
+
+				if (empty($table)) {
+                    continue;
+                }
 			}
 
 			Shopware()->Db()->insert(
