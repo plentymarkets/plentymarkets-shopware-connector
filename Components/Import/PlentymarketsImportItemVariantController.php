@@ -166,7 +166,6 @@ class PlentymarketsImportItemVariantController
 			 */
 			foreach ($Response_GetAttributeValueSets->AttributeValueSets->item as $AttributeValueSet)
 			{
-                $this->referencePrices[$AttributeValueSet->AttributeValueSetID] = 0.0;
 				$this->variant2markup[$AttributeValueSet->AttributeValueSetID] = 0.0;
 
 				foreach ($AttributeValueSet->Attribute->item as $Attribute)
