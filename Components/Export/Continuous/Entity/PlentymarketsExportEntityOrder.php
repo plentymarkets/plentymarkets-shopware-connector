@@ -357,7 +357,7 @@ class PlentymarketsExportEntityOrder
 			{
 				$itemId = -1;
 				$rowType = 'Coupon';
-				$itemText = $Item->getArticleName() . ': ' . $Item->getArticleNumber()
+				$itemText = $Item->getArticleName() . ': ' . $Item->getArticleNumber();
 			}
 
 			// surcharge for method of payment
