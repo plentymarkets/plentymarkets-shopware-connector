@@ -119,11 +119,11 @@ Ext.define('Shopware.apps.Plentymarkets.view.Api', {
 
 			{
 				xtype: 'textfield',
-				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ApiWsdl}URL{/s}',
+				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ApiUrl}URL{/s}',
 				helpText: 'Die URL muss mit <b>http://</b> oder <b>https://</b> beginnen.',
 				supportText: 'Tragen Sie hier die URL Ihres plentymarkets-Systems ein. Sie finden diese Information in der plentymarkets-Administration unter <b>Einstellungen » Grundeinstellungen » API-Daten » Host</b>.',
 				emptyText: 'http://www.ihr-plentymarkets-system.de/',
-				name: 'ApiWsdl',
+				name: 'ApiUrl',
 				allowBlank: false
             }, {
 				xtype: 'textfield',
@@ -139,45 +139,6 @@ Ext.define('Shopware.apps.Plentymarkets.view.Api', {
 				allowBlank: false,
 				inputType: 'password'
 			}]
-		},
-
-		{
-			xtype: 'fieldset',
-			title: 'Erweiterte Einstellungen',
-			layout: 'anchor',
-			defaults: {
-				labelWidth: 155,
-				anchor: '100%'
-            },
-			items: [{
-				xtype: 'checkbox',
-				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ApiIgnoreGetServerTime}GetServerTime nicht loggen{/s}',
-				supportText: 'Aktivieren, wenn der SOAP Call GetServerTime nicht geloggt werden soll.',
-				name: 'ApiIgnoreGetServerTime',
-				inputValue: true,
-				uncheckedValue: false
-            }, {
-				xtype: 'checkbox',
-				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ApiHideCallsInLog}Soap Calls im Log ausblenden{/s}',
-				supportText: 'Aktivieren, wenn die SOAP Calls im Log ausgeblendet werden sollen.',
-				name: 'ApiHideCallsInLog',
-				inputValue: true,
-				uncheckedValue: false
-            }, {
-				xtype: 'checkbox',
-				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ApiUseGzipCompression}Anfragen komprimieren{/s}',
-				supportText: 'Aktivieren, wenn die SOAP Responses gzip komprimiert empfangen werden können.',
-				name: 'ApiUseGzipCompression',
-				inputValue: true,
-				uncheckedValue: false
-            }, {
-				xtype: 'checkbox',
-				fieldLabel: '{s name=plentymarkets/view/settings/textfield/ApiLogHttpHeaders}Header Loggen{/s}',
-				supportText: 'Aktivieren, wenn die SOAP HTTP Header ins Log geschrieben werden sollen. Nur für das Debugging notwendig!',
-				name: 'ApiLogHttpHeaders',
-				inputValue: true,
-				uncheckedValue: false
-            }]
 		}];
 	}
 

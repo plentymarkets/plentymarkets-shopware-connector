@@ -1,0 +1,184 @@
+<?xml version="1.0" ?>
+
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <!-- parameters -->
+
+    <parameters>
+        <parameter key="ShopwareAdapter" type="constant">ShopwareAdapter\ShopwareAdapter::NAME</parameter>
+        <parameter key="PlentymarketsAdapter" type="constant">PlentymarketsAdapter\PlentymarketsAdapter::NAME</parameter>
+    </parameters>
+
+    <services>
+        <!-- container -->
+
+        <service id="plentyconnector.container" class="PlentyConnector\Container\Container">
+            <argument type="service" id="service_container"/>
+        </service>
+
+        <!-- logger -->
+
+        <service id="plentyconnector.logger.handler" class="Monolog\Handler\RotatingFileHandler" public="false">
+            <argument>%kernel.logs_dir%/plentyconnector_%kernel.environment%.log</argument>
+            <argument>14</argument>
+            <call method="pushProcessor">
+                <argument type="service" id="monolog.processor.uid"/>
+            </call>
+        </service>
+
+        <service id="plentyconnector.logger.psr3processor" class="Monolog\Processor\PsrLogMessageProcessor" public="false"/>
+
+        <service id="plentyconnector.logger" class="Shopware\Components\Logger">
+            <argument>plentyconnector</argument>
+            <call method="pushHandler">
+                <argument type="service" id="plentyconnector.logger.handler"/>
+            </call>
+            <call method="pushProcessor">
+                <argument type="service" id="plentyconnector.logger.psr3processor"/>
+            </call>
+        </service>
+
+        <!-- config -->
+
+        <service id="plentyconnector.config" class="PlentyConnector\Connector\Config\Config">
+            <argument type="service" id="models"/>
+        </service>
+
+        <!-- Connector -->
+
+        <service id="plentyconnector.connector" class="PlentyConnector\Connector\Connector">
+            <argument type="service" id="plentyconnector.query_bus"/>
+            <argument type="service" id="plentyconnector.command_bus"/>
+            <argument type="service" id="plentyconnector.event_bus"/>
+        </service>
+
+        <!-- Connector definitions -->
+
+        <service id="plentyconnector.manufacturer_connector_definition" class="PlentyConnector\Connector\Workflow\Definition">
+            <argument>%PlentymarketsAdapter%</argument>
+            <argument>%ShopwareAdapter%</argument>
+            <argument>Manufacturer</argument>
+
+            <tag name="plentyconnector.connector_definition"/>
+        </service>
+
+        <service id="plentyconnector.product_connector_definition" class="PlentyConnector\Connector\Workflow\Definition">
+            <argument>%PlentymarketsAdapter%</argument>
+            <argument>%ShopwareAdapter%</argument>
+            <argument>Product</argument>
+
+            <tag name="plentyconnector.connector_definition"/>
+        </service>
+
+        <!-- Mapping Service -->
+
+        <service id="plentyconnector.mapping_service" class="PlentyConnector\Connector\Mapping\MappingService">
+            <argument type="service" id="plentyconnector.identity_service"/>
+        </service>
+
+        <!-- Mapping definitions -->
+
+        <service id="plentyconnector.mapping_definition.payment_method" class="PlentyConnector\Connector\Workflow\Definition">
+            <argument>%PlentymarketsAdapter%</argument>
+            <argument>%ShopwareAdapter%</argument>
+            <argument>PaymentMethod</argument>
+
+            <tag name="plentyconnector.mapping_definition"/>
+        </service>
+
+        <!-- service -->
+
+        <service id="plentyconnector.import_manufacturer_service" class="PlentyConnector\Service\Manufacturer\ImportManufacturerService">
+            <argument type="service" id="plentyconnector.connector"/>
+        </service>
+
+        <service id="plentyconnector.import_stock_service" class="PlentyConnector\Service\Stock\ImportStockService">
+            <argument type="service" id="plentyconnector.connector"/>
+        </service>
+
+        <service id="plentyconnector.import_product_service" class="PlentyConnector\Service\Product\ImportProductService">
+            <argument type="service" id="plentyconnector.connector"/>
+        </service>
+
+        <!-- console
+
+        <service id="plentyconnector.console_command.import_manufacturer" class="PlentyConnector\Console\Command\ImportManufacturerCommand">
+            <argument type="service" id="plentyconnector.connector"/>
+
+            <tag name="console.command"/>
+        </service>
+
+        <service id="plentyconnector.console_command.import_stock" class="PlentyConnector\Console\Command\ImportStockCommand">
+            <argument type="service" id="plentyconnector.import_stock_service"/>
+
+            <tag name="console.command"/>
+        </service>
+
+        <service id="plentyconnector.console_command.test_command" class="PlentyConnector\Console\Command\TestCommand">
+            <argument type="service" id="plentmarkets_adapter.client"/>
+
+            <tag name="console.command"/>
+        </service>
+
+        <service id="plentyconnector.console_command.import_product" class="PlentyConnector\Console\Command\ImportProductCommand">
+            <argument type="service" id="plentyconnector.import_product_service"/>
+
+            <tag name="console.command"/>
+        </service>
+
+        -->
+
+        <!-- Identity -->
+
+        <service id="plentyconnector.identity_storage" class="PlentyConnector\Connector\Identity\Storage\DoctrineIdentityStorage">
+            <argument type="service" id="models"/>
+        </service>
+
+        <service id="plentyconnector.identity_service" class="PlentyConnector\Connector\Identity\IdentityService">
+            <argument type="service" id="plentyconnector.identity_storage"/>
+        </service>
+
+        <!-- Service Bus -->
+
+        <service id="plentyconnector.command_bus.command_handler_middleware" class="PlentyConnector\Connector\CommandBus\Middleware\CommandHandlerMiddleware"/>
+        <service id="plentyconnector.event_bus.event_handler_middleware" class="PlentyConnector\Connector\EventBus\Middleware\EventHandlerMiddleware"/>
+        <service id="plentyconnector.query_bus.query_handler_middleware" class="PlentyConnector\Connector\QueryBus\Middleware\QueryHandlerMiddleware"/>
+
+        <service id="plentyconnector.service_bus.class_name_formatter" class="League\Tactician\Logger\Formatter\ClassNameFormatter"/>
+
+        <service id="plentyconnector.service_bus.logger_middleware" class="League\Tactician\Logger\LoggerMiddleware">
+            <argument type="service" id="plentyconnector.service_bus.class_name_formatter"/>
+            <argument type="service" id="plentyconnector.logger"/>
+        </service>
+
+        <service id="plentyconnector.service_bus.doctrine_middleware" class="PlentyConnector\Connector\ServiceBus\Middleware\DoctrineMiddleware">
+            <argument type="service" id="models"/>
+        </service>
+
+        <service id="plentyconnector.service_bus_factory" class="PlentyConnector\Connector\ServiceBus\ServiceBusFactory"/>
+
+        <service id="plentyconnector.command_bus" class="PlentyConnector\Connector\ServiceBus\ServiceBus">
+            <factory service="plentyconnector.service_bus_factory" method="factory"/>
+
+            <argument type="service" id="plentyconnector.service_bus.logger_middleware"/>
+            <argument type="service" id="plentyconnector.service_bus.doctrine_middleware"/>
+            <argument type="service" id="plentyconnector.command_bus.command_handler_middleware"/>
+        </service>
+
+        <service id="plentyconnector.query_bus" class="PlentyConnector\Connector\ServiceBus\ServiceBus">
+            <factory service="plentyconnector.service_bus_factory" method="factory"/>
+
+            <argument type="service" id="plentyconnector.service_bus.logger_middleware"/>
+            <argument type="service" id="plentyconnector.query_bus.query_handler_middleware"/>
+        </service>
+
+        <service id="plentyconnector.event_bus" class="PlentyConnector\Connector\ServiceBus\ServiceBus">
+            <factory service="plentyconnector.service_bus_factory" method="factory"/>
+
+            <argument type="service" id="plentyconnector.service_bus.logger_middleware"/>
+            <argument type="service" id="plentyconnector.event_bus.event_handler_middleware"/>
+        </service>
+    </services>
+</container>

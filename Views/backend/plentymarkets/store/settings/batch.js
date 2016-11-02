@@ -18,12 +18,11 @@ Ext.define('Shopware.apps.Plentymarkets.store.settings.Batch', {
 
 		type: 'ajax',
 
-		url: '{url action=getSettingsStores}',
+		url: '{url action=getSettingsViewData}',
 
 		reader: {
 			type: 'json',
-			root: 'data',
-			totalProperty: 'total'
+			root: 'data'
 		}
 	}
 });

@@ -23,10 +23,6 @@ Ext.define('Shopware.apps.Plentymarkets.controller.Settings', {
 			'plentymarkets-view-api': {
 				save: me.onSave,
 				test: me.onTest
-			},
-			'plentymarkets-view-start': {
-				save: me.onSave,
-				check: me.onCheck
 			}
 		});
 
@@ -39,7 +35,7 @@ Ext.define('Shopware.apps.Plentymarkets.controller.Settings', {
 		Ext.Ajax.request({
 			url: '{url action=testApiCredentials}',
 			params: {
-				ApiWsdl: form.findField("ApiWsdl").getValue(),
+				ApiUrl: form.findField("ApiUrl").getValue(),
 				ApiUsername: form.findField("ApiUsername").getValue(),
 				ApiPassword: form.findField("ApiPassword").getValue()
 			},
@@ -58,20 +54,6 @@ Ext.define('Shopware.apps.Plentymarkets.controller.Settings', {
 		});
 	},
 
-	onCheck: function(view)
-	{
-		view.setLoading(true);
-		view.main.settingsStore.load({
-			callback: function(data, operation)
-			{
-				view.settings = data[0];
-				view.loadRecord(data[0]);
-				view.main.setTabAvailability();
-				view.setLoading(false);
-			}
-		});
-	},
-
 	onRefresh: function(view)
 	{
 		view.loadStores();
@@ -85,11 +67,7 @@ Ext.define('Shopware.apps.Plentymarkets.controller.Settings', {
 			callback: function(data, operation)
 			{
 				view.loadRecord(data);
-				if (view != view.main.start)
-				{
-					view.main.start.loadRecord(data);
-				}
-				view.main.setTabAvailability();
+				//view.main.setTabAvailability();
 				view.setLoading(false);
 				Shopware.Notification.createGrowlMessage('Einstellungen gespeichert', 'Die Einstellungen wurden gespeichert');
 			}

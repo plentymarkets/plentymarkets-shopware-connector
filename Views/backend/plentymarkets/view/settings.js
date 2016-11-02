@@ -3,7 +3,7 @@
 
 /**
  * The settings view builds the graphical elements and loads all saved settings
- * data. It shows for example the chosen warehouse, the producer or the order
+ * data. It shows for example the chosen warehouse, the manufacturer or the order
  * status. The settings are differentiated into four groups: "Import
  * Artikelstammdaten", "Export Aufträge", "Warenausgang", "Zahlungseingang bei
  * plentymarkets". It is extended by the Ext form panel "Ext.form.Panel".
@@ -59,11 +59,9 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
         me.store = Ext.create('Shopware.apps.Plentymarkets.store.settings.Batch');
         me.store.load(function (data) {
             data = data[0];
+            me.stores.manufacturers = data.getManufacturers();
             me.stores.warehouses = data.getWarehouses();
-            me.stores.producers = data.getProducers();
-            me.stores.orderStatus = data.getOrderStatus();
-            me.stores.orderReferrer = data.getOrderReferrer();
-            me.stores.payments = data.getPayments();
+            me.stores.orderReferrers = data.getOrderReferrers();
 
             me.add(me.getFieldSets());
             me.addDocked(me.createToolbar());
@@ -82,10 +80,9 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
             },
             callback: function (data) {
                 data = data[0];
+                Ext.getCmp('plenty-ItemManufacturerID').bindStore(data.getManufacturers());
+                Ext.getCmp('plenty-OrderReferrerID').bindStore(data.getOrderReferrers());
                 Ext.getCmp('plenty-ItemWarehouseID').bindStore(data.getWarehouses());
-                Ext.getCmp('plenty-ItemProducerID').bindStore(data.getProducers());
-                Ext.getCmp('plenty-OutgoingItemsOrderStatus').bindStore(data.getOrderStatus());
-                Ext.getCmp('plenty-OrderReferrerID').bindStore(data.getOrderReferrer());
 
                 me.loadRecord(me.settings);
 
@@ -168,59 +165,6 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
                         supportText: 'Wählen Sie das die Art des Konfigurators bei Varianten in Shopware aus.'
                     },
                     {
-                        xtype: 'slider',
-                        increment: 1,
-                        minValue: 0,
-                        maxValue: 100,
-                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/Warenbestandspuffer}Warenbestandspuffer{/s}',
-                        name: 'ItemWarehousePercentage',
-                        supportText: 'Prozentualer Anteil des netto-Warenbestandes des gewählten Lagers, welcher an shopware übertragen wird.'
-                    },
-                    {
-                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemProducerID}Hersteller{/s}',
-                        name: 'ItemProducerID',
-                        id: 'plenty-ItemProducerID',
-                        store: me.stores.producers,
-                        supportText: 'Sofern bei Artikeln in plentymarkets kein Hersteller zugeordnet wurde, wird dieser Hersteller in shopware mit den betreffenden Artikeln verknüpft.'
-                    },
-                    {
-                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemImageSyncActionID}Bilder synchronisieren{/s}',
-                        name: 'ItemImageSyncActionID',
-                        xtype: 'checkbox',
-                        inputValue: 1,
-                        uncheckedValue: '0',
-                        supportText: 'Aktivieren, wenn die Bilder von bestehenden Artikel synchronisiert werden sollen. Anderfalls werden Bilder nicht bei der Synchronisation berücksichtigt.'
-                    },
-                    {
-                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemImageAltAttributeID}Bilder alternativ Text{/s}',
-                        name: 'ItemImageAltAttributeID',
-                        supportText: 'Wählen Sie das Bild-Attribut aus, in dem der Alternativ-Text steht.',
-                        store: new Ext.data.ArrayStore({
-                            fields: ['id', 'name'],
-                            data: [
-                                [1, 'Attribut 1'],
-                                [2, 'Attribut 2'],
-                                [3, 'Attribut 3']
-                            ]
-                        })
-                    },
-                    {
-                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemCategorySyncActionID}Kategorien synchronisieren{/s}',
-                        name: 'ItemCategorySyncActionID',
-                        xtype: 'checkbox',
-                        inputValue: 1,
-                        uncheckedValue: '0',
-                        supportText: 'Aktivieren, wenn die Kategorien von bestehenden Artikel synchronisiert werden sollen. Anderfalls werden Kategorien nicht bei der Synchronisation berücksichtigt.'
-                    },
-                    {
-                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemNumberImportActionID}Nummern übernehmen{/s}',
-                        name: 'ItemNumberImportActionID',
-                        xtype: 'checkbox',
-                        inputValue: 1,
-                        uncheckedValue: '0',
-                        supportText: 'Aktivieren, wenn die Artikelnummern von plentymarkets übernommen werden sollen.'
-                    },
-                    {
                         fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemNumberSourceKey}Artikelnummer{/s}',
                         name: 'ItemNumberSourceKey',
                         supportText: 'Wählen Sie aus, welcher Wert von plentymarktes als Artikelnummer in Shopware verwendet werden soll.',
@@ -250,115 +194,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
                                 ['EAN4', 'EAN 4']
                             ]
                         })
-                    },
-                    {
-                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemNameImportActionID}Produktname übernehmen{/s}',
-                        name: 'ItemNameImportActionID',
-                        store: new Ext.data.ArrayStore({
-                            fields: ['id', 'name'],
-                            data: [
-                                ['Name', 'Name'],
-                                ['Name2', 'Name 2'],
-                                ['Name3', 'Name 3']
-                            ]
-                        }),
-                        supportText: 'Produktnamen aus plentymarkets wählen, welcher abgerufen werden soll.'
-                    },
-                    {
-                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemShortDescriptionImportActionID}Kurzbeschreibung übernehmen{/s}',
-                        name: 'ItemShortDescriptionImportActionID',
-                        xtype: 'checkbox',
-                        inputValue: 1,
-                        uncheckedValue: '0',
-                        supportText: 'Aktivieren, wenn die Kurzbeschreibung von plentymarkets übernommen werden soll.'
-                    },
-                    {
-                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemLongDescriptionImportActionID}Beschreibung übernehmen{/s}',
-                        name: 'ItemLongDescriptionImportActionID',
-                        xtype: 'checkbox',
-                        inputValue: 1,
-                        uncheckedValue: '0',
-                        supportText: 'Aktivieren, wenn die Produktbeschreibung von plentymarkets übernommen werden sollen.'
-                    },
-                    {
-                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemKeywordsImportActionID}Keywords übernehmen{/s}',
-                        name: 'ItemKeywordsImportActionID',
-                        xtype: 'checkbox',
-                        inputValue: 1,
-                        uncheckedValue: '0',
-                        supportText: 'Aktivieren, wenn die Keywords von plentymarkets übernommen werden sollen.'
-                    },
-                    {
-                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemFreetextsImportActionID}Freitextfelder übernehmen{/s}',
-                        name: 'ItemFreetextsImportActionID',
-                        xtype: 'checkbox',
-                        inputValue: 1,
-                        uncheckedValue: '0',
-                        supportText: 'Aktivieren, wenn die Freitextfelder von plentymarkets übernommen werden sollen.'
-                    },
-                    {
-                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemPriceImportActionID}Preis übernehmen{/s}',
-                        name: 'ItemPriceImportActionID',
-                        store: new Ext.data.ArrayStore({
-                            fields: ['id', 'name'],
-                            data: [
-                                ['Price', 'Preis'],
-                                ['Price1', 'Preis 1'],
-                                ['Price2', 'Preis 2'],
-                                ['Price3', 'Preis 3'],
-                                ['Price4', 'Preis 4'],
-                                ['Price5', 'Preis 5'],
-                                ['Price6', 'Preis 6'],
-                                ['Price7', 'Preis 7'],
-                                ['Price8', 'Preis 8'],
-                                ['Price9', 'Preis 9'],
-                                ['Price10', 'Preis 10'],
-                                ['Price11', 'Preis 11'],
-                                ['Price12', 'Preis 12']
-                            ]
-                        }),
-                        supportText: 'Preis aus plentymarkets wählen, der abgerufen werden soll.'
-                    },
-                    {
-                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemBundleHeadActionID}Artikelpaket-Artikel erstellen{/s}',
-                        name: 'ItemBundleHeadActionID',
-                        xtype: 'checkbox',
-                        inputValue: 1,
-                        uncheckedValue: '0',
-                        supportText: 'Aktivieren, wenn die Artikelpaket-Artikel (das eigentliche Paket) von plentymarkets als normaler Artikel in shopware angelegt werden soll. Dies ist <b>nicht</b> die Synchronisierung der Bundles!'
-                    },
-                    {
-                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/DefaultCustomerGroupKey}Standard-Kundenklasse{/s}',
-                        name: 'DefaultCustomerGroupKey',
-                        store: Ext.create('Shopware.apps.Base.store.CustomerGroup').load(),
-                        valueField: 'key',
-                        supportText: 'Kundenklasse deren Preise von plentymarkerts zu shopware übertragen werden.'
-                    },
-                    {
-                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemCleanupActionID}Bereinigen{/s}',
-                        name: 'ItemCleanupActionID',
-                        store: new Ext.data.ArrayStore({
-                            fields: ['id', 'name'],
-                            data: [
-                                [1, 'Artikel deaktivieren'],
-                                [2, 'Artikel unwiederbringlich löschen']
-                            ]
-                        }),
-                        supportText: 'Aktion die ausgeführt wird, wenn die Mandantenzuordnung bei plentymarkets gelöst wird oder kein Mapping für den Artikel vorhanden ist.'
-                    },
-                    {
-                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemAssociateImportActionID}Zugehörige Daten synchronisieren{/s}',
-                        name: 'ItemAssociateImportActionID',
-                        store: new Ext.data.ArrayStore({
-                            fields: ['id', 'name'],
-                            data: [
-                                [1, 'Eins pro Durchlauf'],
-                                [2, 'Alle, bei jedem Duchlauf']
-                            ]
-                        }),
-                        supportText: 'Zugehörige Daten sind Kategorien, Attribute, Merkmale/Eigenschaften und Hersteller. Legen Sie fest, ob pro Durchlauf alle Daten abgeglichen werden sollen, oder nur eine der genannten.'
                     }
-
                 ]
             },
             {
@@ -388,18 +224,12 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
                                 return '{literal}<span style="padding: -3px; display: inline-block; width: 16px; height: 16px; margin-right: 3px;" class="plenty-OrderMarking-{id}"></span> {' + displayField + '}{/literal}';
                             }
                         }
-                    },{
-                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/OrderAdditionalCouponIdentifiers}Gutschein-Artikel{/s}',
-                        name: 'OrderAdditionalCouponIdentifiers',
-                        xtype: 'textfield',
-                        supportText: 'Artikelnummern, welche als Gutschein zu plentymarkets übertragen werden. Getrennt durch |.',
-                        allowBlank: true,
                     },
                     {
                         fieldLabel: '{s name=plentymarkets/view/settings/textfield/OrderReferrerID}Auftragsherkunft{/s}',
                         name: 'OrderReferrerID',
                         id: 'plenty-OrderReferrerID',
-                        store: me.stores.orderReferrer,
+                        store: me.stores.orderReferrers,
                         supportText: 'Die hier ausgewählte Auftragsherkunft erhalten Aufträge von shopware in plentymarkets. In plentymarkets kann dazu eine eigene Auftragsherkunft angelegt werden.',
                         allowBlank: true
                     },
@@ -413,25 +243,31 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
                         multiSelect: true,
                         supportText: 'shopware Status, der signalisiert, dass der Auftrag komplett bezahlt ist. Löst das Buchen des Zahlungseinganges bei plentymarkets aus.',
                         displayField: 'description'
-                    },
+                    }
+                ]
+            },
+            {
+                xtype: 'fieldset',
+                title: 'Standard-Einträge',
+                layout: 'anchor',
+                defaults: {
+                    labelWidth: 155,
+                    xtype: 'combo',
+                    emptyText: '---',
+                    queryMode: 'local',
+                    anchor: '100%',
+                    displayField: 'name',
+                    valueField: 'id',
+                    allowBlank: false,
+                    editable: false
+                },
+                items: [
                     {
-                        xtype: 'boxselect',
-                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/OrderShopgateMOPIDs}Shopgate Zahlungsart(en){/s}',
-                        name: 'OrderShopgateMOPIDs',
-                        id: 'plenty-OrderShopgateMOPIDs',
-                        store: me.stores.payments,
-                        multiSelect: true,
-                        allowBlank: true,
-//                        value: me.settings.get('OrderShopgateMOPIDs'),
-                        supportText: 'Wählen Sie die Shopgate Zahlungsarten aus (<b>Mehrfachauswahl möglich</b>). Aufträge, die diese Zahlungsart haben, werden in plentymarkets mit der Zahlungsart "Shopgate" angelegt.'
-                    },
-                    {
-                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/OrderItemTextSyncActionID}Artikelbezeichnung übernehmen{/s}',
-                        name: 'OrderItemTextSyncActionID',
-                        xtype: 'checkbox',
-                        inputValue: 1,
-                        uncheckedValue: '0',
-                        supportText: 'Aktivieren, wenn die Bezeichnung der Artikel zu plentymarkets übertragen werden sollen. Anderfalls wird die in plentymarkets hinterlegte Bezeichnung verwendet.'
+                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/ItemManufacturerID}Hersteller{/s}',
+                        name: 'ItemManufacturerID',
+                        id: 'plenty-ItemManufacturerID',
+                        store: me.stores.manufacturers,
+                        supportText: 'Sofern bei Artikeln in plentymarkets kein Hersteller zugeordnet wurde, wird dieser Hersteller in shopware mit den betreffenden Artikeln verknüpft.'
                     },
                     {
                         fieldLabel: '{s name=plentymarkets/view/settings/textfield/CustomerDefaultFormOfAddressID}Standard-Anrede{/s}',
@@ -605,107 +441,6 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
                         supportText: 'Zahlungsstatus, welche Aufträge erhalten, wenn diese innerhalb von plentymarkets als teilweise bezahlt markiert werden.'
                     }
 
-                ]
-            },
-            {
-                xtype: 'fieldset',
-                title: 'Initialer Export',
-                layout: 'anchor',
-                defaults: {
-                    labelWidth: 155,
-                    xtype: 'combo',
-                    queryMode: 'local',
-                    anchor: '100%',
-                    displayField: 'name',
-                    valueField: 'size',
-                    allowBlank: false,
-                    editable: true
-                },
-                items: [
-                    {
-                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/InitialExportChunkSize}Paketgröße{/s}',
-                        name: 'InitialExportChunkSize',
-                        id: 'InitialExportChunkSize',
-                        store: new Ext.data.ArrayStore({
-                            fields: ['size'],
-                            data: [
-                                [10],
-                                [25],
-                                [50],
-                                [100],
-                                [250],
-                                [500],
-                                [1000],
-                                [2500],
-                                [5000]
-                            ]
-                        }),
-                        displayField: 'size',
-                        supportText: 'Anzahl der Datensätze, die pro Durchlauf exportiert werden. Diese Einstellung betrifft Aktikel, Kunden und Attribute.'
-                    },
-                    {
-                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/InitialExportChunksPerRun}Pakete pro Durchlauf{/s}',
-                        name: 'InitialExportChunksPerRun',
-                        id: 'InitialExportChunksPerRun',
-                        store: new Ext.data.ArrayStore({
-                            fields: ['size', 'name'],
-                            data: [
-                                [-1, 'unendlich'],
-                                [2, '2'],
-                                [5, '5'],
-                                [10, '10'],
-                                [25, '25']
-                            ]
-                        }),
-                        supportText: 'Anzahl der Datenpakete, die pro Durchlauf des Cronjobs exportiert werden sollen. Diese Einstellung betrifft <strong>nur</strong> Aktikel.'
-                    }
-                ]
-            },
-            {
-                xtype: 'fieldset',
-                title: 'Synchronisierung',
-                layout: 'anchor',
-                defaults: {
-                    labelWidth: 155,
-                    xtype: 'combo',
-                    queryMode: 'local',
-                    anchor: '100%',
-                    displayField: 'name',
-                    valueField: 'size',
-                    allowBlank: false,
-                    editable: true
-                },
-                items: [
-                    {
-                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/ImportItemChunkSize}Paketgröße (Artikel){/s}',
-                        name: 'ImportItemChunkSize',
-                        id: 'ImportItemChunkSize',
-                        store: new Ext.data.ArrayStore({
-                            fields: ['size'],
-                            data: [
-                                [10],
-                                [25],
-                                [50],
-                                [100],
-                                [250],
-                                [500],
-                                [1000],
-                                [2500],
-                                [5000],
-                                [10000]
-                            ]
-                        }),
-                        displayField: 'size',
-                        supportText: 'Anzahl der Artikel, die pro Durchlauf der Synchronisierung von plentymarkets abgerufen werden.'
-                    },
-                    {
-                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/MayLogUsageData}Nutzungsdaten loggen{/s}',
-                        name: 'MayLogUsageData',
-                        id: 'MayLogUsageData',
-                        xtype: 'checkbox',
-                        inputValue: 1,
-                        uncheckedValue: '0'
-                    }
                 ]
             }
         ];

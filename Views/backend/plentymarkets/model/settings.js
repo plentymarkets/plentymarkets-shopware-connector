@@ -18,7 +18,7 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		name: 'PlentymarketsVersion',
 		type: 'string'
 	}, {
-		name: 'ApiWsdl',
+		name: 'ApiUrl',
 		type: 'string'
 	}, {
 		name: 'ApiUsername',
@@ -125,30 +125,6 @@ Ext.define('Shopware.apps.Plentymarkets.model.Settings', {
 		defaultValue: 0
 	}, {
 		name: 'ItemCleanupActionID',
-		type: 'integer',
-		defaultValue: 1
-	}, {
-		name: 'ItemShortDescriptionImportActionID',
-		type: 'integer',
-		defaultValue: 1
-	}, {
-		name: 'ItemLongDescriptionImportActionID',
-		type: 'integer',
-		defaultValue: 1
-	}, {
-		name: 'ItemKeywordsImportActionID',
-		type: 'integer',
-		defaultValue: 1
-	}, {
-		name: 'ItemNameImportActionID',
-		type: 'string',
-		defaultValue: 'Name'
-	}, {
-		name: 'ItemPriceImportActionID',
-		type: 'string',
-		defaultValue: 'Price'
-	}, {
-		name: 'ItemFreetextsImportActionID',
 		type: 'integer',
 		defaultValue: 1
 	}, {

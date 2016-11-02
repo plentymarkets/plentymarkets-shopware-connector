@@ -1,0 +1,32 @@
+{
+    "name": "plentymarkets/shopware-connector",
+    "license": "GPL-3.0",
+    "type": "project",
+    "description": "Plentymarkets Shopware connector",
+    "keywords": [
+        "plenty",
+        "shopware",
+        "connector"
+    ],
+    "homepage": "https://github.com/plentymarkets/plentymarkets-shopware-connector",
+    "require": {
+        "viison/address-splitter": "dev-master",
+        "guzzlehttp/guzzle": "^6.2",
+        "league/tactician": "^1.0",
+        "league/tactician-logger": "^0.10.0",
+        "container-interop/container-interop": "^1.1",
+        "beberlei/assert": "^2.6",
+        "ramsey/uuid": "^3.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "PlentyConnector\\": "",
+            "PlentymarketsAdapter\\": "Adapter\\PlentymarketsAdapter",
+            "ShopwareAdapter\\": "Adapter\\ShopwareAdapter"
+        }
+    },
+    "scripts": {
+        "test": "phpunit -c tests/",
+        "test-unit": "phpunit -c tests/phpunit_unit.xml.dist"
+    }
+}

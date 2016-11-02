@@ -50,6 +50,8 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Main', {
 		me.listeners = {
 			activate: function()
 			{
+				// TODO
+				me.isBuilt = true;
 				if (!me.isBuilt)
 				{
 					me.setLoading(true);

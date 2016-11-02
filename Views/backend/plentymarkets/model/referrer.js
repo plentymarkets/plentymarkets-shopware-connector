@@ -19,16 +19,6 @@ Ext.define('Shopware.apps.Plentymarkets.model.Referrer', {
 	}, {
 		name: 'name',
 		type: 'string'
-	}],
-
-	proxy: {
-		type: 'ajax',
-
-		reader: {
-			type: 'json',
-			root: 'data'
-		}
-	}
-
+	}]
 });
 // {/block}

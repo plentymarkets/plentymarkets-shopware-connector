@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <!-- Adapter -->
+
+        <service id="local_shopware_adapter" class="ShopwareAdapter\ShopwareAdapter">
+            <tag name="plentyconnector.adapter"/>
+        </service>
+
+        <!-- Handlers -->
+
+        <service id="shopware_adapter.command_handler.import_manufacturer" class="ShopwareAdapter\CommandBus\Handler\ImportManufacturerCommandHandler">
+            <argument type="service" id="plentyconnector.identity_service"/>
+
+            <tag name="plentyconnector.commandhandler"/>
+        </service>
+
+        <service id="shopware_adapter.command_handler.import_stock" class="ShopwareAdapter\CommandBus\Handler\ImportStockCommandHandler">
+            <argument type="service" id="plentyconnector.identity_service"/>
+
+            <tag name="plentyconnector.commandhandler"/>
+        </service>
+    </services>
+</container>

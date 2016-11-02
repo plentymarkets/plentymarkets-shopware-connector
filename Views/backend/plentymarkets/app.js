@@ -19,70 +19,34 @@ Ext.define('Shopware.apps.Plentymarkets', {
 	controllers: [
 	    'Main',
 	    'Mapping',
-	    'Settings',
-	    'Export'
+	    'Settings'
 	],
 
 	views: [
 	    'Api',
-	    'data.Grid',
-	    'data.Main',
-	    'dx.Continuous',
-	    'dx.Initial',
-	    'dx.Grid',
-	    'Export',
-	    'log.Grid',
-	    'log.Main',
 	    'Main',
 	    'mapping.Tab',
 	    'mapping.Main',
 	    'Misc',
-	    'Settings',
-	    'Start'
+	    'Settings'
 	],
 
 	stores: [
-	    'data.Status',
-	    'dx.Continuous',
-	    'dx.Wizard',
-	    'Export',
-	    'Log',
-	    'log.Identifier',
-	    'mapping.Plentymarkets',
-	    'mapping.Resource',
-	    'mapping.Shopware',
-	    'mapping.Status',
-	    'Multishop',
-	    'OrderMarking',
-	    'Orderstatus',
-	    'Producer',
-	    'Payment',
-	    'Referrer',
-	    'settings.Batch',
-	    'Settings',
-	    'Warehouse'
+		'settings.Batch'
 	],
 
 	models: [
-	    'data.Status',
-	    'data.Field',
-	    'dx.Continuous',
-	    'dx.ContinuousRecord',
-	    'dx.Wizard',
-	    'Export',
-	    'Log',
-	    'log.Identifier',
 	    'mapping.Plentymarkets',
 	    'mapping.Shopware',
 	    'mapping.Status',
 	    'Multishop',
 	    'Orderstatus',
-	    'Producer',
+	    'Manufacturer',
 	    'Referrer',
 	    'settings.Batch',
 	    'Settings',
 	    'Warehouse',
-        'Payment',
+        'Payment'
 	],
 
 	launch: function()

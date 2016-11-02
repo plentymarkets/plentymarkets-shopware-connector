@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/5.2/engine/Shopware/Components/Plugin/schema/menu.xsd">
+    <entries>
+        <entry isRootMenu="true">
+            <name>Plentymarkets</name>
+            <label lang="en">Plentymarkets Shopware Connector</label>
+            <label lang="de">Plentymarkets Shopware Connector</label>
+            <controller>Plentymarkets</controller>
+            <action>index</action>
+            <class>sprite-metronome</class>
+        </entry>
+    </entries>
+</menu>

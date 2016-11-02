@@ -3,7 +3,7 @@
 
 /**
  * The settings view builds the graphical elements and loads all saved settings
- * data. It shows for example the chosen warhouse, the producer or the order
+ * data. It shows for example the chosen warhouse, the manufacturer or the order
  * status. The settings are differentiated into four groups: "Import
  * Artikelstammdaten", "Export Aufträge", "Warenausgang", "Zahlungseingang bei
  * plentymarkets". It is extended by the Ext form panel "Ext.form.Panel".

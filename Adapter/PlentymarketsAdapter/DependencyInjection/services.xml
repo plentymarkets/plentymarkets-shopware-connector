@@ -1,0 +1,61 @@
+<?xml version="1.0" ?>
+
+<!-- TODO: finalize handlers -->
+
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <!-- Adapter -->
+
+        <service id="remote_plentymarkets_adapter" class="PlentymarketsAdapter\PlentymarketsAdapter">
+            <tag name="plentyconnector.adapter"/>
+        </service>
+
+        <!-- Guzzle -->
+
+        <service id="plentymarkets_adapter.http_client" class="GuzzleHttp\Client"/>
+
+        <!-- Client -->
+
+        <service id="plentmarkets_adapter.client" class="PlentymarketsAdapter\Client\Client">
+            <argument type="service" id="plentymarkets_adapter.http_client"/>
+            <argument type="service" id="plentyconnector.config"/>
+        </service>
+
+        <!-- Response Parser -->
+
+        <service id="plentmarkets_adapter.response_parser" class="PlentymarketsAdapter\ResponseParser\ResponseParser">
+            <argument type="service" id="plentyconnector.identity_service"/>
+        </service>
+
+        <!-- Handlers -->
+
+        <service id="plentymarkets_adapter.query_handler.get_manufacturer" class="PlentymarketsAdapter\QueryBus\Handler\Manufacturer\GetManufacturerQueryHandler">
+            <argument type="service" id="plentmarkets_adapter.client"/>
+
+            <tag name="plentyconnector.queryhandler"/>
+        </service>
+
+        <service id="plentymarkets_adapter.query_handler.get_changed_manufacturer" class="PlentymarketsAdapter\QueryBus\Handler\Manufacturer\GetChangedManufacturerQueryHandler">
+            <argument type="service" id="plentmarkets_adapter.client"/>
+            <argument type="service" id="plentyconnector.config"/>
+            <argument type="service" id="plentmarkets_adapter.response_parser"/>
+            <argument type="service" id="plentyconnector.logger"/>
+
+            <tag name="plentyconnector.queryhandler"/>
+        </service>
+
+        <service id="plentymarkets_adapter.query_handler.get_stock" class="PlentymarketsAdapter\QueryBus\Handler\Stock\GetStockQueryHandler">
+            <argument type="service" id="plentmarkets_adapter.client"/>
+
+            <tag name="plentyconnector.queryhandler"/>
+        </service>
+
+        <service id="plentymarkets_adapter.query_handler.get_product" class="PlentymarketsAdapter\QueryBus\Handler\Product\GetProductsQueryHandler">
+            <argument type="service" id="plentmarkets_adapter.client"/>
+
+            <tag name="plentyconnector.queryhandler"/>
+        </service>
+    </services>
+</container>

@@ -17,34 +17,19 @@ Ext.define('Shopware.apps.Plentymarkets.model.settings.Batch', {
 
 	associations: [{
 		type: 'hasMany',
+		model: 'Shopware.apps.Plentymarkets.model.Manufacturer',
+		name: 'getManufacturers',
+		associationKey: 'manufacturers'
+	}, {
+		type: 'hasMany',
 		model: 'Shopware.apps.Plentymarkets.model.Warehouse',
 		name: 'getWarehouses',
 		associationKey: 'warehouses'
 	}, {
 		type: 'hasMany',
 		model: 'Shopware.apps.Plentymarkets.model.Referrer',
-		name: 'getOrderReferrer',
-		associationKey: 'orderReferrer'
-	}, {
-		type: 'hasMany',
-		model: 'Shopware.apps.Plentymarkets.model.Orderstatus',
-		name: 'getOrderStatus',
-		associationKey: 'orderStatus'
-	}, {
-		type: 'hasMany',
-		model: 'Shopware.apps.Plentymarkets.model.Multishop',
-		name: 'getMultishops',
-		associationKey: 'multishops'
-	}, {
-        type: 'hasMany',
-		model: 'Shopware.apps.Plentymarkets.model.Payment',
-		name: 'getPayments',
-		associationKey: 'payments'
-	}, {
-		type: 'hasMany',
-		model: 'Shopware.apps.Plentymarkets.model.Producer',
-		name: 'getProducers',
-		associationKey: 'producers'
+		name: 'getOrderReferrers',
+		associationKey: 'orderReferrers'
 	}]
 });
 // {/block}

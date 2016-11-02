@@ -35,11 +35,11 @@ Ext.define('Shopware.apps.Plentymarkets.view.Main', {
 	{
 		var me = this;
 
-		me.start = Ext.widget('plentymarkets-view-start', {
+		me.sf = Ext.widget('plentymarkets-view-settings', {
 			settings: me.settings,
 			main: me
 		});
-		me.start.on('activate', me.start.init);
+		me.sf.on('activate', me.sf.build);
 
 		me.api = Ext.widget('plentymarkets-view-api', {
 			settings: me.settings,
@@ -47,53 +47,15 @@ Ext.define('Shopware.apps.Plentymarkets.view.Main', {
 		});
 		me.api.on('activate', me.api.build);
 
-		me.sf = Ext.widget('plentymarkets-view-settings', {
-			settings: me.settings,
-			main: me
-		});
-		me.sf.on('activate', me.sf.build);
-
-		me.di = Ext.widget('plentymarkets-view-data-main', {
-			main: me
-		});
-		me.di.on('activate', me.di.build);
-
 		me.tabpanel = Ext.create('Ext.tab.Panel', {
-			items: [me.start, me.api, me.sf, {
+			items: [me.api, me.sf, {
 				xtype: 'plentymarkets-view-mapping-main'
-            }, me.di, {
-				xtype: 'plentymarkets-view-export'
-			}, {
+            }, {
 				xtype: 'plentymarkets-view-misc'
-			}, {
-				xtype: 'plentymarkets-view-log-main'
 			}]
-
 		});
 
 		me.add(me.tabpanel);
-		me.setTabAvailability();
-	},
-
-	setTabAvailability: function()
-	{
-		var me = this;
-		var items = me.tabpanel.getTabBar().items;
-		var statusToSet = me.settings.get('ApiStatus') != 2;
-
-		if (me.settings.get('MayDatex') == 1)
-		{
-			Ext.getCmp('MayDatexUser').enable();
-		}
-		else
-		{
-			Ext.getCmp('MayDatexUser').disable();
-		}
-
-		items.get(2).setDisabled(statusToSet);
-		items.get(3).setDisabled(statusToSet);
-		items.get(5).setDisabled(statusToSet);
 	}
-
 });
 // {/block}
