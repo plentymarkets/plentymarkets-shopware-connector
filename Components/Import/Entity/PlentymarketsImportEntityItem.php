@@ -81,7 +81,7 @@ class PlentymarketsImportEntityItem
 	 * @var array
 	 */
 	protected $categories = array();
-	
+
 	/**
 	 *
 	 * @var array
@@ -487,7 +487,7 @@ class PlentymarketsImportEntityItem
 			{
 				$details['additionaltext'] = $AttributeValueSet->AttributeValueSetName;
 			}
-			
+
 			$details['ean'] = $AttributeValueSet->EAN;
 			$details['X_plentySku'] = $sku;
 
@@ -525,9 +525,9 @@ class PlentymarketsImportEntityItem
 			{
 				continue;
 			}
-			
+
 			$categoryToStore = false;
-			
+
 			if(!empty($Category->ItemStandardCategory->item))
 			{
 				foreach($Category->ItemStandardCategory->item as $ItemStandardCategory)
@@ -536,7 +536,7 @@ class PlentymarketsImportEntityItem
 					{
 						continue;
 					}
-					
+
 					$categoryToStore = true;
 				}
 			}
@@ -547,7 +547,7 @@ class PlentymarketsImportEntityItem
 				$this->categories[] = array(
 					'id' => $categoryId
 				);
-				
+
 				if($categoryToStore)
 				{
 					$this->seoCategories[] = array(
@@ -570,7 +570,7 @@ class PlentymarketsImportEntityItem
 					$this->categories[] = array(
 						'id' => $categoryId
 					);
-					
+
 					if($categoryToStore)
 					{
 						$this->seoCategories[] = array(
@@ -851,13 +851,13 @@ class PlentymarketsImportEntityItem
 			}
 			$data['categories'][$category['id']] = $category;
 		}
-		
+
 		$SHOPWARE_itemID = PlentymarketsMappingController::getItemByPlentyID($this->ItemBase->ItemID);
-		
+
 		Shopware()->Db()->query("DELETE FROM s_articles_categories_seo WHERE shop_id = ? AND article_id = ?", array($this->Shop->getId(), $SHOPWARE_itemID));
-		
+
 		if(!empty($this->seoCategories))
-		{			
+		{
 			Shopware()->Db()->query("INSERT INTO s_articles_categories_seo (shop_id,article_id,category_id) VALUES(?,?,?)", array($this->Shop->getId(), $SHOPWARE_itemID, $this->seoCategories[0]['categoryId']));
 		}
 
@@ -1264,6 +1264,12 @@ class PlentymarketsImportEntityItem
 			PlentymarketsLogger::getInstance()->message('Sync:Item', 'The producer »' . $Article->getSupplier()->getName() . '« has been created');
 			PlentymarketsMappingController::addProducer($Article->getSupplier()->getId(), $this->ItemBase->ProducerID);
 		}
+
+        // Notify Plugins that the import for a simgle item is done
+        Shopware()->Events()->notify('PlentyConnector_ImportEntityItem_AfterImpoert', array(
+            'subject' => $this,
+            'itemid' => $SHOPWARE_itemID,
+        ));
 	}
 
 	/**

@@ -84,6 +84,17 @@ class PlentymarketsImportControllerItem
 
 		$Request_GetItemsBase->Lang = 'de';
 
+        // Allow plugins to change the data
+        $Request_GetItemsBase = Enlight()->Events()->filter(
+            'PlentyConnector_ImportControllerItem_AfterCreateGetItemBaseRequest',
+            $Request_GetItemsBase,
+            array(
+                'subject' => $this,
+                'itemid' => $itemId,
+                'storeid' => $storeId,
+            )
+        );
+
 		// Do the request
 		$Response_GetItemsBase = PlentymarketsSoapClient::getInstance()->GetItemsBase($Request_GetItemsBase);
 
