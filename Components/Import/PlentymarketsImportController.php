@@ -86,7 +86,11 @@ class PlentymarketsImportController
 					else
 					{
 						$itemDetailID = PlentymarketsMappingController::getItemVariantByPlentyID($ItemsPriceUpdate->SKU);
-						$PlentymarketsImportEntityItemPrice = new PlentymarketsImportEntityItemPrice($ItemsPriceUpdate, $ItemsPriceUpdate->Markup);
+						$PlentymarketsImportEntityItemPrice = new PlentymarketsImportEntityItemPrice(
+						    $ItemsPriceUpdate,
+                            $ItemsPriceUpdate->Markup,
+                            $ItemsPriceUpdate->RRP
+                        );
 						$PlentymarketsImportEntityItemPrice->updateVariant($itemDetailID);
 					}
 

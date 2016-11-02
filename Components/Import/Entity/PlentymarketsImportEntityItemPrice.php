@@ -47,18 +47,25 @@ class PlentymarketsImportEntityItemPrice
 	 *
 	 * @var float
 	 */
-	protected $PLENTY_markup = 0;
+	protected $PLENTY_markup = 0.0;
 
-	/**
-	 * Constructor method
-	 *
-	 * @param PlentySoapObject_ItemPriceSet $PriceSet
-	 * @param float $markup
-	 */
-	public function __construct($PriceSet, $markup = 0)
+    /**
+     * @var float
+     */
+    protected $referencePrice = 0.0;
+
+    /**
+     * Constructor method
+     *
+     * @param PlentySoapObject_ItemPriceSet $PriceSet
+     * @param float $markup
+     * @param float $referencePrice
+     */
+	public function __construct($PriceSet, $markup = 0.0, $referencePrice = 0.0)
 	{
 		$this->PLENTY_PriceSet = $PriceSet;
 		$this->PLENTY_markup = $markup;
+        $this->referencePrice = $referencePrice;
 
 		$this->prepare();
 	}
@@ -156,11 +163,18 @@ class PlentymarketsImportEntityItemPrice
 				$price['price'] = $this->getItemPrice($this->PLENTY_PriceSet);
 			}
 
+            // if uvp is empty, try to load from the price set, which could be the main product
+            if (empty($this->referencePrice)) {
+                $referencePrice = $this->PLENTY_PriceSet->RRP;
+            } else {
+                $referencePrice = $this->referencePrice;
+            }
+
 			// Reliably available starting in SOAP 111
             // check whether the RRP is higher than price to prevent ugly display
-			if (isset($this->PLENTY_PriceSet->RRP) && !is_null($this->PLENTY_PriceSet->RRP) && isset($price['price']) && ($this->PLENTY_PriceSet->RRP > $price['price']))
+			if (isset($referencePrice) && !is_null($referencePrice) && isset($price['price']) && ($referencePrice > $price['price']))
 			{
-				$price['pseudoPrice'] = $this->PLENTY_PriceSet->RRP;
+				$price['pseudoPrice'] = $referencePrice;
 			}
 
 			$prices[] = $price;
