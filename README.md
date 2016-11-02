@@ -47,12 +47,6 @@ Möchten Sie die Einrichtung und Verwaltung des Shopware-Connectors zu Ihrem ple
 
    [4]: http://man.plentymarkets.eu/tools/shopware-connector/installation/#2-4
 
-Natürlich nimmt auch unser plentymarkets-Support gerne die Einrichtung für Sie vor. Die Dienstleistung erfolgt auf Basis einer minutengenauen Abrechnung (ca. 90 min) und kann ausschließlich ab dem Volumentarif Professional 1.500 in Anspruch genommen werden und steht nur für Kunden ab dem Silber-Segment zur Verfügung. Beachten Sie bitte, dass hier ausschließlich die Einrichtung über den Browser übernommen wird und keine Serverleistungen/-arbeiten erbracht werden. Buchen Sie die Einrichtung Ihres Plugins direkt über dieses [Auftragsformular][5]. Eine vor Ort Beratung und genaue Projektplanung ist ab einem plentymarkets Professional Gold-Tarif buchbar. 
-
-   [5]: https://www.plentymarkets.eu/tpl/download/plentymarkets_Auftrag_Erweiterungen-Shopware.pdf
-
-Bitte beachten Sie, dass es unserem Support nicht möglich ist, Bronze-Kunden bei Problemen mit dem Shopware-Connector zu unterstützen.
-
 ## Shopware-Partneragenturen
 
 Um eine fachgerechte, fehlerfreie und reibungslose Verbindung zwischen plentymarkets und Shopware zu garantieren, empfehlen wir Ihnen dringend eine unserer [Shopware Partneragenturen][6] zu Ihrer Unterstützung zu beauftragen! Mit deren Hilfe können Sie schneller erfolgreich durchstarten. Neben der hilfreichen Betreuung bei der Einrichtung Ihres Shopware-Plugins finden Sie hier einen technisch versierten Spezialisten zur kompetenten Beratung bei Ihren Anliegen mit Shopware und plentymarkets, um Komplikationen bei der Einrichtung und Ihrer Arbeit mit dem Connector zu vermeiden. Auf diese Weise haben Sie kurze Beratungswege und nach Wunsch auch gleich einen Berater zu Ihrem Shopdesign in nur einem Ansprechpartner an Ihrer Seite. Sehen Sie sich direkt unsere Empfehlungen an: Hier finden auch Sie garantiert den für Ihre Ansprüche optimal spezialisierten Partner für eine erfolgreiche Anbindung. 
