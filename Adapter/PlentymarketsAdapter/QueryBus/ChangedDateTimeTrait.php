@@ -2,7 +2,7 @@
 
 namespace PlentymarketsAdapter\QueryBus;
 
-use PlentyConnector\Connector\Config\ConfigInterface;
+use PlentyConnector\Connector\Config\ConfigServiceInterface;
 
 /**
  * Class ChangedDateTimeTrait.
@@ -10,11 +10,11 @@ use PlentyConnector\Connector\Config\ConfigInterface;
 trait ChangedDateTimeTrait
 {
     /**
-     * @param ConfigInterface $config
+     * @param ConfigServiceInterface $config
      *
      * @return \DateTimeImmutable
      */
-    public function getChangedDateTime(ConfigInterface $config)
+    public function getChangedDateTime(ConfigServiceInterface $config)
     {
         $key = 'PlentymarketsAdapter.'.get_called_class().'DateTime';
 
@@ -27,9 +27,9 @@ trait ChangedDateTimeTrait
     }
 
     /**
-     * @param ConfigInterface $config
+     * @param ConfigServiceInterface $config
      */
-    public function setChangedDateTime(ConfigInterface $config)
+    public function setChangedDateTime(ConfigServiceInterface $config)
     {
         $key = 'PlentymarketsAdapter.'.get_called_class().'DateTime';
 

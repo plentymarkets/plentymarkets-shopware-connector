@@ -3,9 +3,9 @@
 namespace PlentyConnector\Connector\Config;
 
 /**
- * Interface ConfigInterface.
+ * Interface ConfigServiceInterface.
  */
-interface ConfigInterface
+interface ConfigServiceInterface
 {
     /**
      * Returns the given config element for that key. Default if it doenst exist.

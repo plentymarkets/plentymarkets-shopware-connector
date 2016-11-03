@@ -6,9 +6,9 @@ use PlentyConnector\Connector\Config\Model\Config as ConfigModel;
 use Shopware\Components\Model\ModelManager;
 
 /**
- * Class Config.
+ * Class ConfigService.
  */
-class Config implements ConfigInterface
+class ConfigService implements ConfigServiceInterface
 {
     /**
      * @var ModelManager

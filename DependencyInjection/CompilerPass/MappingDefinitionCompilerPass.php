@@ -19,11 +19,11 @@ class MappingDefinitionCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->has('plentyconnector.connector')) {
+        if (!$container->has('plentyconnector.mapping_service')) {
             return;
         }
 
-        $definition = $container->findDefinition('plentyconnector.connector');
+        $definition = $container->findDefinition('plentyconnector.mapping_service');
 
         $taggedServices = $container->findTaggedServiceIds('plentyconnector.mapping_definition');
 

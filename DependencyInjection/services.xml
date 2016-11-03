@@ -11,15 +11,10 @@
         <parameter key="PLENTYMARKETS_ADAPTER" type="constant">PlentymarketsAdapter\PlentymarketsAdapter::NAME</parameter>
 
         <parameter key="TRANSFEROBJECT_MANUFACTURER" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::MANUFACTURER</parameter>
+        <parameter key="TRANSFEROBJECT_PAYMENT_METHOD" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::PAYMENT_METHOD</parameter>
     </parameters>
 
     <services>
-        <!-- Container -->
-
-        <service id="plentyconnector.container" class="PlentyConnector\Container\Container">
-            <argument type="service" id="service_container"/>
-        </service>
-
         <!-- Logger -->
 
         <service id="plentyconnector.logger.handler" class="Monolog\Handler\RotatingFileHandler" public="false">
@@ -34,6 +29,7 @@
 
         <service id="plentyconnector.logger" class="Shopware\Components\Logger">
             <argument>plentyconnector</argument>
+
             <call method="pushHandler">
                 <argument type="service" id="plentyconnector.logger.handler"/>
             </call>
@@ -44,8 +40,15 @@
 
         <!-- Config -->
 
-        <service id="plentyconnector.config" class="PlentyConnector\Connector\Config\Config">
+        <service id="plentyconnector.config" class="PlentyConnector\Connector\Config\ConfigService">
             <argument type="service" id="models"/>
+        </service>
+
+        <!-- Subscriber -->
+        <service id="plentyconnector.subscriber.controller_path" class="PlentyConnector\Subscriber\ControllerPath">
+            <argument type="service" id="service_container" />
+
+            <tag name="shopware.event_subscriber" />
         </service>
 
         <!-- Connector -->
@@ -61,15 +64,7 @@
         <service id="plentyconnector.manufacturer_connector_definition" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
             <argument>%PLENTYMARKETS_ADAPTER%</argument>
             <argument>%SHOPWARE_ADAPTER%</argument>
-            <argument>Manufacturer</argument>
-
-            <tag name="plentyconnector.connector_definition"/>
-        </service>
-
-        <service id="plentyconnector.product_connector_definition" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
-            <argument>%PLENTYMARKETS_ADAPTER%</argument>
-            <argument>%SHOPWARE_ADAPTER%</argument>
-            <argument>Product</argument>
+            <argument>%TRANSFEROBJECT_MANUFACTURER%</argument>
 
             <tag name="plentyconnector.connector_definition"/>
         </service>
@@ -85,7 +80,7 @@
         <service id="plentyconnector.mapping_definition.payment_method" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
             <argument>%PLENTYMARKETS_ADAPTER%</argument>
             <argument>%SHOPWARE_ADAPTER%</argument>
-            <argument>PaymentMethod</argument>
+            <argument>%TRANSFEROBJECT_PAYMENT_METHOD%</argument>
 
             <tag name="plentyconnector.mapping_definition"/>
         </service>

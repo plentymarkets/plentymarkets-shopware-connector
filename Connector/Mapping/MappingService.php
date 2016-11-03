@@ -3,6 +3,7 @@
 namespace PlentyConnector\Connector\Mapping;
 
 use PlentyConnector\Connector\Identity\IdentityService;
+use PlentyConnector\Connector\TransferObject\Definition\DefinitionInterface;
 
 /**
  * Class MappingService.

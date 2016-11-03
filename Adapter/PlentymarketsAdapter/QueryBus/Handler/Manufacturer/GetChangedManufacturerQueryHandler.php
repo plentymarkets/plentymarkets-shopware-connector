@@ -3,7 +3,7 @@
 namespace PlentymarketsAdapter\QueryBus\Handler\Manufacturer;
 
 use Exception;
-use PlentyConnector\Connector\Config\ConfigInterface;
+use PlentyConnector\Connector\Config\ConfigServiceInterface;
 use PlentyConnector\Connector\QueryBus\Handler\QueryHandlerInterface;
 use PlentyConnector\Connector\QueryBus\Query\Manufacturer\GetChangedManufacturerQuery;
 use PlentyConnector\Connector\TransferObject\Manufacturer\ManufacturerInterface;
@@ -26,7 +26,7 @@ class GetChangedManufacturerQueryHandler implements QueryHandlerInterface
     private $client;
 
     /**
-     * @var ConfigInterface
+     * @var ConfigServiceInterface
      */
     private $config;
 
@@ -44,13 +44,13 @@ class GetChangedManufacturerQueryHandler implements QueryHandlerInterface
      * GetChangedManufacturerQueryHandler constructor.
      *
      * @param ClientInterface         $client
-     * @param ConfigInterface         $config
+     * @param ConfigServiceInterface  $config
      * @param ResponseParserInterface $responseMapper
      * @param LoggerInterface         $logger
      */
     public function __construct(
         ClientInterface $client,
-        ConfigInterface $config,
+        ConfigServiceInterface $config,
         ResponseParserInterface $responseMapper,
         LoggerInterface $logger
     ) {

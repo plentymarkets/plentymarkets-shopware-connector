@@ -4,7 +4,7 @@ namespace PlentymarketsAdapter\Client;
 
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\ClientException;
-use PlentyConnector\Connector\Config\Config;
+use PlentyConnector\Connector\Config\ConfigServiceInterface;
 use PlentymarketsAdapter\Client\Exception\InvalidCredentialsException;
 use PlentymarketsAdapter\Client\Iterator\Iterator;
 
@@ -21,7 +21,7 @@ class Client implements ClientInterface
     private $connection;
 
     /**
-     * @var Config
+     * @var ConfigServiceInterface
      */
     private $config;
 
@@ -39,9 +39,9 @@ class Client implements ClientInterface
      * Client constructor.
      *
      * @param GuzzleClient $connection
-     * @param Config $config
+     * @param ConfigServiceInterface $config
      */
-    public function __construct(GuzzleClient $connection, Config $config)
+    public function __construct(GuzzleClient $connection, ConfigServiceInterface $config)
     {
         $this->connection = $connection;
         $this->config = $config;
