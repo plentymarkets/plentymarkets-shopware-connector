@@ -21,7 +21,7 @@ class ControllerPath implements SubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            'Enlight_Controller_Dispatcher_ControllerPath_Frontend_Profiler' => 'onProfilerController'
+            'Enlight_Controller_Dispatcher_ControllerPath_Backend_Plentymarkets' => 'onControllerBackendPlentymarkets'
         ];
     }
 
@@ -36,7 +36,7 @@ class ControllerPath implements SubscriberInterface
     /**
      * @return string
      */
-    public function onProfilerController()
+    public function onControllerBackendPlentymarkets()
     {
         $basePath = $this->container->getParameter('plentyconnector.plugin_dir');
 
