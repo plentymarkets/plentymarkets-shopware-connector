@@ -3,9 +3,7 @@
 namespace PlentyConnector\Connector\TransferObject\PaymentMethod;
 
 /**
- * Interface PaymentMethodInterface
- *
- * @package PlentyConnector\Connector\TransferObject\PaymentMethod
+ * Interface PaymentMethodInterface.
  */
 interface PaymentMethodInterface extends TransferObjectInterface
 {

@@ -3,11 +3,8 @@
 namespace PlentyConnector\Connector\CommandBus;
 
 /**
- * Class CommandFactoryInterface
- *
- * @package PlentyConnector\Connector\QueryBus
+ * Class CommandFactoryInterface.
  */
 interface CommandFactoryInterface
 {
-
 }

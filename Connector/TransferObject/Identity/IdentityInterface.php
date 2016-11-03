@@ -5,9 +5,7 @@ namespace PlentyConnector\Connector\TransferObject\Identity;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
- * Interface IdentityInterface
- *
- * @package PlentyConnector\Connector\TransferObject\Identity
+ * Interface IdentityInterface.
  */
 interface IdentityInterface extends TransferObjectInterface
 {

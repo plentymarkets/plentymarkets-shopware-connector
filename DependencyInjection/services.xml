@@ -4,21 +4,23 @@
            xmlns="http://symfony.com/schema/dic/services"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <!-- parameters -->
+    <!-- Parameters -->
 
     <parameters>
-        <parameter key="ShopwareAdapter" type="constant">ShopwareAdapter\ShopwareAdapter::NAME</parameter>
-        <parameter key="PlentymarketsAdapter" type="constant">PlentymarketsAdapter\PlentymarketsAdapter::NAME</parameter>
+        <parameter key="SHOPWARE_ADAPTER" type="constant">ShopwareAdapter\ShopwareAdapter::NAME</parameter>
+        <parameter key="PLENTYMARKETS_ADAPTER" type="constant">PlentymarketsAdapter\PlentymarketsAdapter::NAME</parameter>
+
+        <parameter key="TRANSFEROBJECT_MANUFACTURER" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::MANUFACTURER</parameter>
     </parameters>
 
     <services>
-        <!-- container -->
+        <!-- Container -->
 
         <service id="plentyconnector.container" class="PlentyConnector\Container\Container">
             <argument type="service" id="service_container"/>
         </service>
 
-        <!-- logger -->
+        <!-- Logger -->
 
         <service id="plentyconnector.logger.handler" class="Monolog\Handler\RotatingFileHandler" public="false">
             <argument>%kernel.logs_dir%/plentyconnector_%kernel.environment%.log</argument>
@@ -40,7 +42,7 @@
             </call>
         </service>
 
-        <!-- config -->
+        <!-- Config -->
 
         <service id="plentyconnector.config" class="PlentyConnector\Connector\Config\Config">
             <argument type="service" id="models"/>
@@ -56,17 +58,17 @@
 
         <!-- Connector definitions -->
 
-        <service id="plentyconnector.manufacturer_connector_definition" class="PlentyConnector\Connector\Workflow\Definition">
-            <argument>%PlentymarketsAdapter%</argument>
-            <argument>%ShopwareAdapter%</argument>
+        <service id="plentyconnector.manufacturer_connector_definition" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
+            <argument>%PLENTYMARKETS_ADAPTER%</argument>
+            <argument>%SHOPWARE_ADAPTER%</argument>
             <argument>Manufacturer</argument>
 
             <tag name="plentyconnector.connector_definition"/>
         </service>
 
-        <service id="plentyconnector.product_connector_definition" class="PlentyConnector\Connector\Workflow\Definition">
-            <argument>%PlentymarketsAdapter%</argument>
-            <argument>%ShopwareAdapter%</argument>
+        <service id="plentyconnector.product_connector_definition" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
+            <argument>%PLENTYMARKETS_ADAPTER%</argument>
+            <argument>%SHOPWARE_ADAPTER%</argument>
             <argument>Product</argument>
 
             <tag name="plentyconnector.connector_definition"/>
@@ -80,29 +82,15 @@
 
         <!-- Mapping definitions -->
 
-        <service id="plentyconnector.mapping_definition.payment_method" class="PlentyConnector\Connector\Workflow\Definition">
-            <argument>%PlentymarketsAdapter%</argument>
-            <argument>%ShopwareAdapter%</argument>
+        <service id="plentyconnector.mapping_definition.payment_method" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
+            <argument>%PLENTYMARKETS_ADAPTER%</argument>
+            <argument>%SHOPWARE_ADAPTER%</argument>
             <argument>PaymentMethod</argument>
 
             <tag name="plentyconnector.mapping_definition"/>
         </service>
 
-        <!-- service -->
-
-        <service id="plentyconnector.import_manufacturer_service" class="PlentyConnector\Service\Manufacturer\ImportManufacturerService">
-            <argument type="service" id="plentyconnector.connector"/>
-        </service>
-
-        <service id="plentyconnector.import_stock_service" class="PlentyConnector\Service\Stock\ImportStockService">
-            <argument type="service" id="plentyconnector.connector"/>
-        </service>
-
-        <service id="plentyconnector.import_product_service" class="PlentyConnector\Service\Product\ImportProductService">
-            <argument type="service" id="plentyconnector.connector"/>
-        </service>
-
-        <!-- console
+        <!-- Console -->
 
         <service id="plentyconnector.console_command.import_manufacturer" class="PlentyConnector\Console\Command\ImportManufacturerCommand">
             <argument type="service" id="plentyconnector.connector"/>
@@ -110,27 +98,7 @@
             <tag name="console.command"/>
         </service>
 
-        <service id="plentyconnector.console_command.import_stock" class="PlentyConnector\Console\Command\ImportStockCommand">
-            <argument type="service" id="plentyconnector.import_stock_service"/>
-
-            <tag name="console.command"/>
-        </service>
-
-        <service id="plentyconnector.console_command.test_command" class="PlentyConnector\Console\Command\TestCommand">
-            <argument type="service" id="plentmarkets_adapter.client"/>
-
-            <tag name="console.command"/>
-        </service>
-
-        <service id="plentyconnector.console_command.import_product" class="PlentyConnector\Console\Command\ImportProductCommand">
-            <argument type="service" id="plentyconnector.import_product_service"/>
-
-            <tag name="console.command"/>
-        </service>
-
-        -->
-
-        <!-- Identity -->
+        <!-- Identity Service -->
 
         <service id="plentyconnector.identity_storage" class="PlentyConnector\Connector\Identity\Storage\DoctrineIdentityStorage">
             <argument type="service" id="models"/>
@@ -153,17 +121,12 @@
             <argument type="service" id="plentyconnector.logger"/>
         </service>
 
-        <service id="plentyconnector.service_bus.doctrine_middleware" class="PlentyConnector\Connector\ServiceBus\Middleware\DoctrineMiddleware">
-            <argument type="service" id="models"/>
-        </service>
-
         <service id="plentyconnector.service_bus_factory" class="PlentyConnector\Connector\ServiceBus\ServiceBusFactory"/>
 
         <service id="plentyconnector.command_bus" class="PlentyConnector\Connector\ServiceBus\ServiceBus">
             <factory service="plentyconnector.service_bus_factory" method="factory"/>
 
             <argument type="service" id="plentyconnector.service_bus.logger_middleware"/>
-            <argument type="service" id="plentyconnector.service_bus.doctrine_middleware"/>
             <argument type="service" id="plentyconnector.command_bus.command_handler_middleware"/>
         </service>
 

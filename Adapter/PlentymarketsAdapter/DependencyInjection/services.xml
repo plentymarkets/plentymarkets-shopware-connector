@@ -31,29 +31,11 @@
 
         <!-- Handlers -->
 
-        <service id="plentymarkets_adapter.query_handler.get_manufacturer" class="PlentymarketsAdapter\QueryBus\Handler\Manufacturer\GetManufacturerQueryHandler">
-            <argument type="service" id="plentmarkets_adapter.client"/>
-
-            <tag name="plentyconnector.queryhandler"/>
-        </service>
-
         <service id="plentymarkets_adapter.query_handler.get_changed_manufacturer" class="PlentymarketsAdapter\QueryBus\Handler\Manufacturer\GetChangedManufacturerQueryHandler">
             <argument type="service" id="plentmarkets_adapter.client"/>
             <argument type="service" id="plentyconnector.config"/>
             <argument type="service" id="plentmarkets_adapter.response_parser"/>
             <argument type="service" id="plentyconnector.logger"/>
-
-            <tag name="plentyconnector.queryhandler"/>
-        </service>
-
-        <service id="plentymarkets_adapter.query_handler.get_stock" class="PlentymarketsAdapter\QueryBus\Handler\Stock\GetStockQueryHandler">
-            <argument type="service" id="plentmarkets_adapter.client"/>
-
-            <tag name="plentyconnector.queryhandler"/>
-        </service>
-
-        <service id="plentymarkets_adapter.query_handler.get_product" class="PlentymarketsAdapter\QueryBus\Handler\Product\GetProductsQueryHandler">
-            <argument type="service" id="plentmarkets_adapter.client"/>
 
             <tag name="plentyconnector.queryhandler"/>
         </service>

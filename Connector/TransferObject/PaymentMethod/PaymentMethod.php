@@ -2,15 +2,15 @@
 
 namespace PlentyConnector\Connector\TransferObject\PaymentMethod;
 
+use PlentyConnector\Connector\TransferObject\TransferObjectType;
+
 /**
- * Class PaymentMethod
- *
- * @package PlentyConnector\Connector\TransferObject\PaymentMethod
+ * Class PaymentMethod.
  */
 class PaymentMethod implements PaymentMethodInterface
 {
     /**
-     * Identifier of the object
+     * Identifier of the object.
      *
      * @var string
      */
@@ -41,11 +41,11 @@ class PaymentMethod implements PaymentMethodInterface
      */
     public static function getType()
     {
-        return 'PaymentMethod';
+        return TransferObjectType::PAYMENT_METHOD;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function fromArray(array $params = [])
     {

@@ -8,9 +8,7 @@ use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Class DefinitionCompilerPass
- *
- * @package PlentyConnector\DependencyInjection\CompilerPass
+ * Class DefinitionCompilerPass.
  */
 class ConnectorDefinitionCompilerPass implements CompilerPassInterface
 {

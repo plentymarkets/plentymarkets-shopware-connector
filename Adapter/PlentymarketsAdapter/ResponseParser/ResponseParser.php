@@ -3,14 +3,13 @@
 namespace PlentymarketsAdapter\ResponseParser;
 
 use PlentyConnector\Connector\Identity\IdentityServiceInterface;
+use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
+use PlentymarketsAdapter\PlentymarketsAdapter;
 
 /**
- * TODO: finalize
- * TODO: create magic method to remove all *Array functions
+ * TODO: finalize.
  *
  * Class ResponseParser
- *
- * @package PlentymarketsAdapter\ResponseParser
  */
 class ResponseParser implements ResponseParserInterface
 {
@@ -30,12 +29,12 @@ class ResponseParser implements ResponseParserInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function parseManufacturer($entry)
     {
         $identity = $this->identityService->findOrCreateIdentity(
-            $entry['id'],
+            (string)$entry['id'],
             PlentymarketsAdapter::getName(),
             Manufacturer::getType()
         );
@@ -44,7 +43,7 @@ class ResponseParser implements ResponseParserInterface
             'identifier' => $identity->getObjectIdentifier(),
             'name' => $entry['name'],
             'logo' => !empty($entry['logo']) ? $entry['name'] : null,
-            'link' => !empty($entry['url']) ? $entry['name'] : null
+            'link' => !empty($entry['url']) ? $entry['name'] : null,
         ]);
 
         return $manufacturer;

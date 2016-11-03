@@ -11,9 +11,7 @@ use Shopware\Components\Api\Resource\Variant;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class ImportProductCommandHandler
- *
- * @package ShopwareAdapter\CommandBus\Handler
+ * Class ImportProductCommandHandler.
  */
 class ImportProductCommandHandler implements CommandHandlerInterface
 {
@@ -47,10 +45,10 @@ class ImportProductCommandHandler implements CommandHandlerInterface
      */
     public function supports($command)
     {
-        return (
+        return
             $command instanceof ImportProductCommand &&
             $command->getAdapterName() === ShopwareAdapter::getName()
-        );
+        ;
     }
 
     /**
@@ -75,7 +73,7 @@ class ImportProductCommandHandler implements CommandHandlerInterface
         $identity = $this->identityService->findIdentity([
             'objectIdentifier' => $product->getManufacturer()->getIdentifier(),
             'objectType' => Manufacturer::getType(),
-            'adapterName' => ShopwareAdapter::getName()
+            'adapterName' => ShopwareAdapter::getName(),
         ]);
 
         if (null !== $identity) {

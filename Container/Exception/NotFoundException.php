@@ -6,11 +6,8 @@ use Exception;
 use Interop\Container\Exception\NotFoundException as BaseException;
 
 /**
- * Class NotFoundException
- *
- * @package PlentyConnector\Container\Exception
+ * Class NotFoundException.
  */
 class NotFoundException extends Exception implements BaseException
 {
-
 }

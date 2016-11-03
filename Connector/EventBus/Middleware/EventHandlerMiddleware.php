@@ -7,9 +7,7 @@ use PlentyConnector\Connector\EventBus\Event\EventInterface;
 use PlentyConnector\Connector\EventBus\Handler\EventHandlerInterface;
 
 /**
- * Class EventHandlerMiddleware
- *
- * @package PlentyConnector\Connector\EventBus\Middleware
+ * Class EventHandlerMiddleware.
  */
 class EventHandlerMiddleware implements Middleware
 {
@@ -28,9 +26,7 @@ class EventHandlerMiddleware implements Middleware
 
     /**
      * @param EventInterface $event
-     * @param callable $next
-     *
-     * @return void
+     * @param callable       $next
      */
     public function execute($event, callable $next)
     {

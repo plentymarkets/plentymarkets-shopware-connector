@@ -8,12 +8,10 @@ use PlentyConnector\Connector\EventBus\Event\EventInterface;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
-use PlentyConnector\Connector\Workflow\DefinitionInterface;
+use PlentyConnector\Connector\TransferObject\Definition\DefinitionInterface;
 
 /**
- * Class Connector
- *
- * @package PlentyConnector\Connector
+ * Class Connector.
  */
 class Connector implements ConnectorInterface
 {
@@ -53,15 +51,14 @@ class Connector implements ConnectorInterface
         ServiceBusInterface $queryBus,
         ServiceBusInterface $commandBus,
         ServiceBusInterface $eventBus
-    )
-    {
+    ) {
         $this->queryBus = $queryBus;
         $this->commandBus = $commandBus;
         $this->eventBus = $eventBus;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function addAdapter(AdapterInterface $adapters)
     {
@@ -69,7 +66,7 @@ class Connector implements ConnectorInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function addDefinition(DefinitionInterface $definition)
     {
@@ -77,7 +74,7 @@ class Connector implements ConnectorInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function executeQuery(QueryInterface $query)
     {
@@ -85,7 +82,7 @@ class Connector implements ConnectorInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function executeEvent(EventInterface $event)
     {
@@ -106,7 +103,7 @@ class Connector implements ConnectorInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getDefinitions($type = null)
     {
@@ -115,14 +112,14 @@ class Connector implements ConnectorInterface
         }
 
         $definitions = array_filter($this->definitions, function (DefinitionInterface $definition) use ($type) {
-            return ($definition->getObjectType() === $type || null === $type);
+            return $definition->getObjectType() === $type || null === $type;
         });
 
         return $definitions;
     }
 
     /**
-     * TODO: finalize
+     * TODO: finalize.
      *
      * @param DefinitionInterface $definition
      */
@@ -135,7 +132,7 @@ class Connector implements ConnectorInterface
         );
 
         /**
-         * @var TransferObjectInterface[] $objects
+         * @var TransferObjectInterface[]
          */
         $objects = $this->queryBus->handle($query);
 
@@ -154,7 +151,7 @@ class Connector implements ConnectorInterface
             } catch (ObjectDoesNotExistInAdapterDomainException $exception) {
                 $this->handle(
                     $exception->getObjectType,
-                    Connector::SINGLE_OBJECT
+                    self::SINGLE_OBJECT
                 );
 
                 $this->executeCommand($command);
@@ -163,7 +160,7 @@ class Connector implements ConnectorInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function executeCommand(CommandInterface $command)
     {

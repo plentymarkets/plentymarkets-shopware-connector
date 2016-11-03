@@ -3,9 +3,7 @@
 namespace PlentyConnector\Connector\TransferObject\ShippingProfile;
 
 /**
- * Interface ShippingProfileInterface
- *
- * @package PlentyConnector\Connector\TransferObject\ShippingProfile
+ * Interface ShippingProfileInterface.
  */
 interface ShippingProfileInterface extends TransferObjectInterface
 {

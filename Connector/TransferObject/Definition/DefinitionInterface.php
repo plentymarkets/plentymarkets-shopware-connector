@@ -1,13 +1,13 @@
 <?php
 
-namespace PlentyConnector\Connector\Workflow;
+namespace PlentyConnector\Connector\TransferObject\Definition;
+
+use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
- * Interface DefinitionInterface
- *
- * @package PlentyConnector\Connector\Workflow
+ * Interface DefinitionInterface.
  */
-interface DefinitionInterface
+interface DefinitionInterface extends TransferObjectInterface
 {
     /**
      * @return string

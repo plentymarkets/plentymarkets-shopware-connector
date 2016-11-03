@@ -5,11 +5,8 @@ namespace PlentyConnector\Connector\Identity\Model;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * Class IdentityRepository
- *
- * @package PlentyConnector\Connector\Identity\Model
+ * Class IdentityRepository.
  */
 class IdentityRepository extends EntityRepository
 {
-
 }

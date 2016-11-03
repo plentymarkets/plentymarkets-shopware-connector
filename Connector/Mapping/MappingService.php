@@ -5,9 +5,7 @@ namespace PlentyConnector\Connector\Mapping;
 use PlentyConnector\Connector\Identity\IdentityService;
 
 /**
- * Class MappingService
- *
- * @package PlentyConnector\Connector\Mapping
+ * Class MappingService.
  */
 class MappingService implements MappingServiceInterface
 {
@@ -32,7 +30,7 @@ class MappingService implements MappingServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function addDefinition(DefinitionInterface $definition)
     {

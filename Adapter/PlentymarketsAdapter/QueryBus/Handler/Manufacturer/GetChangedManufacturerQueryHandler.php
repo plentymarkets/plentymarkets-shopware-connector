@@ -6,7 +6,6 @@ use Exception;
 use PlentyConnector\Connector\Config\ConfigInterface;
 use PlentyConnector\Connector\QueryBus\Handler\QueryHandlerInterface;
 use PlentyConnector\Connector\QueryBus\Query\Manufacturer\GetChangedManufacturerQuery;
-use PlentyConnector\Connector\QueryBus\Query\Manufacturer\GetManufacturersQuery;
 use PlentyConnector\Connector\TransferObject\Manufacturer\ManufacturerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
@@ -15,9 +14,7 @@ use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class GetChangedRemoteManufacturerQueryHandler
- *
- * @package PlentymarketsAdapter\QueryBus\Handler
+ * Class GetChangedRemoteManufacturerQueryHandler.
  */
 class GetChangedManufacturerQueryHandler implements QueryHandlerInterface
 {
@@ -46,18 +43,17 @@ class GetChangedManufacturerQueryHandler implements QueryHandlerInterface
     /**
      * GetChangedManufacturerQueryHandler constructor.
      *
-     * @param ClientInterface $client
-     * @param ConfigInterface $config
+     * @param ClientInterface         $client
+     * @param ConfigInterface         $config
      * @param ResponseParserInterface $responseMapper
-     * @param LoggerInterface $logger
+     * @param LoggerInterface         $logger
      */
     public function __construct(
         ClientInterface $client,
         ConfigInterface $config,
         ResponseParserInterface $responseMapper,
         LoggerInterface $logger
-    )
-    {
+    ) {
         $this->client = $client;
         $this->config = $config;
         $this->responseMapper = $responseMapper;
@@ -71,16 +67,18 @@ class GetChangedManufacturerQueryHandler implements QueryHandlerInterface
      */
     public function supports($event)
     {
-        return (
+        return
             $event instanceof GetChangedManufacturerQuery &&
             $event->getAdapterName() === PlentymarketsAdapter::getName()
-        );
+        ;
     }
 
     /**
      * @param GetRemoteManufacturerQuery $event
      *
      * @return ManufacturerInterface[]
+     *
+     * @throws \UnexpectedValueException
      */
     public function handle($event)
     {
@@ -97,7 +95,7 @@ class GetChangedManufacturerQueryHandler implements QueryHandlerInterface
             }
         }
 
-        if (null !== $result) {
+        if ([] !== $result) {
             $this->setChangedDateTime($this->config);
         }
 

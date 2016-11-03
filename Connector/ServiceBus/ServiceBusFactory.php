@@ -5,9 +5,7 @@ namespace PlentyConnector\Connector\ServiceBus;
 use League\Tactician\Middleware;
 
 /**
- * Class ServiceBusFactory
- *
- * @package PlentyConnector\Connector\CommandBus
+ * Class ServiceBusFactory.
  */
 class ServiceBusFactory
 {

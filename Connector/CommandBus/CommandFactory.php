@@ -2,11 +2,8 @@
 
 namespace PlentyConnector\Connector\CommandBus;
 
-
 /**
- * Class CommandFactoryInterface
- *
- * @package PlentyConnector\Connector\CommandBus
+ * Class CommandFactoryInterface.
  */
 class CommandFactory implements CommandFactoryInterface
 {

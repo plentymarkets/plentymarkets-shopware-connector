@@ -3,12 +3,10 @@
 namespace PlentyConnector\Connector\Config\Model;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class Config
+ * Class Config.
  *
- * @package PlentyConnector\Model\Config
  *
  * @ORM\Entity(repositoryClass="ConfigRepository")
  * @ORM\Table(name="plenty_config")
@@ -16,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Config
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id

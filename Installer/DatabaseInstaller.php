@@ -13,13 +13,10 @@ use Shopware\Components\Plugin\Context\UninstallContext;
 use Shopware\Components\Plugin\Context\UpdateContext;
 
 /**
- * Class Database
- *
- * @package PlentyConnector\Install
+ * Class Database.
  */
 class DatabaseInstaller implements InstallerInterface
 {
-
     /**
      * @var AbstractSchemaManager
      */
@@ -41,7 +38,7 @@ class DatabaseInstaller implements InstallerInterface
 
         $models = [
             Config::class,
-            Identity::class
+            Identity::class,
         ];
 
         foreach ($models as $model) {
@@ -50,7 +47,7 @@ class DatabaseInstaller implements InstallerInterface
     }
 
     /**
-     * @param InstallContext $context
+     * {@inheritdoc}
      */
     public function install(InstallContext $context)
     {
@@ -58,7 +55,7 @@ class DatabaseInstaller implements InstallerInterface
     }
 
     /**
-     * @param UpdateContext $context
+     * {@inheritdoc}
      */
     public function update(UpdateContext $context)
     {
@@ -66,7 +63,7 @@ class DatabaseInstaller implements InstallerInterface
     }
 
     /**
-     * @param UninstallContext $context
+     * {@inheritdoc}
      */
     public function uninstall(UninstallContext $context)
     {

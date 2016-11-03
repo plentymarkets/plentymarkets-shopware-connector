@@ -3,37 +3,36 @@
 namespace PlentyConnector\Connector\TransferObject\Identity;
 
 use Assert\Assertion;
+use PlentyConnector\Connector\TransferObject\TransferObjectType;
 
 /**
- * Class Identity
- *
- * @package PlentyConnector\Connector\TransferObject
+ * Class Identity.
  */
 class Identity implements IdentityInterface
 {
     /**
-     * Identifier of the object
+     * Identifier of the object.
      *
      * @var string
      */
     private $objectIdentifier;
 
     /**
-     * TransferObject type
+     * TransferObject type.
      *
      * @var string
      */
     private $objectType;
 
     /**
-     * Identifier inside the adapter domain
+     * Identifier inside the adapter domain.
      *
      * @var string
      */
     private $adapterIdentifier;
 
     /**
-     * Adapter name
+     * Adapter name.
      *
      * @var string
      */
@@ -61,11 +60,11 @@ class Identity implements IdentityInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function getType()
     {
-        return 'Identity';
+        return TransferObjectType::IDENTITY;
     }
 
     /**
@@ -84,7 +83,7 @@ class Identity implements IdentityInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getObjectIdentifier()
     {
@@ -92,7 +91,7 @@ class Identity implements IdentityInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getObjectType()
     {
@@ -100,7 +99,7 @@ class Identity implements IdentityInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getAdapterIdentifier()
     {
@@ -108,7 +107,7 @@ class Identity implements IdentityInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getAdapterName()
     {

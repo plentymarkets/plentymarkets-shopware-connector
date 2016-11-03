@@ -5,9 +5,7 @@ namespace PlentyConnector\Connector\EventBus\Handler;
 use PlentyConnector\Connector\EventBus\Event\EventInterface;
 
 /**
- * Interface EventHandlerInterface
- *
- * @package PlentyConnector\Connector\EventBus\Handler
+ * Interface EventHandlerInterface.
  */
 interface EventHandlerInterface
 {

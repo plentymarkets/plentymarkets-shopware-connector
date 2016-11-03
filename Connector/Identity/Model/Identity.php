@@ -2,12 +2,12 @@
 
 namespace PlentyConnector\Connector\Identity\Model;
 
-use Doctrine\ORM\Identity as ORM;
+use Doctrine\ORM\Mapping as ORM;
+use PlentyConnector\Connector\Identity\Model\IdentityRepository;
 
 /**
- * Class Identity
+ * Class Identity.
  *
- * @package PlentyConnector\Connector\Identity\Model
  *
  * @ORM\Entity(repositoryClass="IdentityRepository")
  * @ORM\Table(name="plenty_identity")
@@ -24,7 +24,7 @@ class Identity
     private $id;
 
     /**
-     * Identifier of the object
+     * Identifier of the object.
      *
      * @var string
      *
@@ -33,7 +33,7 @@ class Identity
     private $objectIdentifier;
 
     /**
-     * TransferObject type
+     * TransferObject type.
      *
      * @var string
      *
@@ -42,7 +42,7 @@ class Identity
     private $objectType;
 
     /**
-     * Identifier inside the adapter domain
+     * Identifier inside the adapter domain.
      *
      * @var string
      *
@@ -51,7 +51,7 @@ class Identity
     private $adapterIdentifier;
 
     /**
-     * Adapter name
+     * Adapter name.
      *
      * @var string
      *

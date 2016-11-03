@@ -7,9 +7,7 @@ use PlentyConnector\Container\Exception\NotFoundException;
 use Symfony\Component\DependencyInjection\ContainerInterface as BaseContainerInterface;
 
 /**
- * Class ShopwareContainer
- *
- * @package PlentyConnector\Container
+ * Class ShopwareContainer.
  */
 class Container implements ContainerInterface
 {
@@ -33,7 +31,7 @@ class Container implements ContainerInterface
      *
      * @param string $id Identifier of the entry to look for.
      *
-     * @throws NotFoundException  No entry was found for this identifier.
+     * @throws NotFoundException No entry was found for this identifier.
      *
      * @return mixed Entry.
      */
@@ -52,7 +50,7 @@ class Container implements ContainerInterface
      *
      * @param string $id Identifier of the entry to look for.
      *
-     * @return boolean
+     * @return bool
      */
     public function has($id)
     {

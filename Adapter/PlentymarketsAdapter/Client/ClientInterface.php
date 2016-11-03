@@ -4,22 +4,21 @@ namespace PlentymarketsAdapter\Client;
 
 use Exception;
 use GuzzleHttp\Exception\ClientException;
+use Iterator;
 use PlentymarketsAdapter\Client\Exception\InvalidCredentialsException;
-use PlentymarketsAdapter\Client\Iterator\Iterator;
+use UnexpectedValueException;
 
 /**
- * Interface ClientInterface
- *
- * @package PlentyConnector\Client
+ * Interface ClientInterface.
  */
 interface ClientInterface
 {
     /**
      * @param string $method
      * @param string $path
-     * @param array $criteria
-     * @param null $limit
-     * @param null $offset
+     * @param array  $criteria
+     * @param null   $limit
+     * @param null   $offset
      *
      * @return array
      *
@@ -34,6 +33,8 @@ interface ClientInterface
      * @param array $criteria
      *
      * @return Iterator
+     *
+     * @throws UnexpectedValueException
      */
     public function getIterator($path, array $criteria = []);
 }

@@ -5,9 +5,7 @@ namespace PlentyConnector\Connector\QueryBus\Query\Manufacturer;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 
 /**
- * Class GetManufacturerQuery
- *
- * @package PlentyConnector\Connector\QueryBus\Query\Manufacturer
+ * Class GetManufacturerQuery.
  */
 class GetManufacturerQuery implements QueryInterface
 {
@@ -40,7 +38,7 @@ class GetManufacturerQuery implements QueryInterface
     public function getPayload()
     {
         return [
-            'adapterName' => $this->adapterName
+            'adapterName' => $this->adapterName,
         ];
     }
 

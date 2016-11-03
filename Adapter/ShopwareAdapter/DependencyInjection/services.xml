@@ -17,11 +17,5 @@
 
             <tag name="plentyconnector.commandhandler"/>
         </service>
-
-        <service id="shopware_adapter.command_handler.import_stock" class="ShopwareAdapter\CommandBus\Handler\ImportStockCommandHandler">
-            <argument type="service" id="plentyconnector.identity_service"/>
-
-            <tag name="plentyconnector.commandhandler"/>
-        </service>
     </services>
 </container>

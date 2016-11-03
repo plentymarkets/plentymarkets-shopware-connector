@@ -6,12 +6,10 @@ use PlentyConnector\Adapter\AdapterInterface;
 use PlentyConnector\Connector\CommandBus\Command\CommandInterface;
 use PlentyConnector\Connector\EventBus\Event\EventInterface;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
-use PlentyConnector\Connector\Workflow\DefinitionInterface;
+use PlentyConnector\Connector\TransferObject\Definition\DefinitionInterface;
 
 /**
- * Interface ConnectorInterface
- *
- * @package PlentyConnector\Connector
+ * Interface ConnectorInterface.
  */
 interface ConnectorInterface
 {

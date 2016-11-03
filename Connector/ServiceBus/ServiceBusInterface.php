@@ -2,13 +2,8 @@
 
 namespace PlentyConnector\Connector\ServiceBus;
 
-use PlentyConnector\Connector\QueryBus\Response\ResponseCollection;
-use PlentyConnector\Connector\QueryBus\Response\ResponseItem;
-
 /**
- * Interface ServiceBusInterface
- *
- * @package PlentyConnector\Connector\ServiceBus
+ * Interface ServiceBusInterface.
  */
 interface ServiceBusInterface
 {

@@ -3,9 +3,7 @@
 namespace PlentyConnector\Connector\QueryBus\Query;
 
 /**
- * Class QueryInterface
- *
- * @package PlentyConnector\Connector\Connector\Query
+ * Class QueryInterface.
  */
 interface QueryInterface
 {

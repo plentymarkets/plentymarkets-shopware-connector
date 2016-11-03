@@ -7,7 +7,7 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use Shopware\Components\Api\Manager;
 
 /**
- * Class Shopware_Controllers_Backend_Plentymarkets
+ * Class Shopware_Controllers_Backend_Plentymarkets.
  */
 class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Backend_ExtJs
 {
@@ -37,7 +37,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
         $config->set('rest_password', $apiPassword);
 
         $this->View()->assign(array(
-            'success' => $success
+            'success' => $success,
         ));
     }
 
@@ -51,7 +51,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 
         $this->View()->assign(array(
             'success' => true,
-            'data' => $this->Request()->getParams()
+            'data' => $this->Request()->getParams(),
         ));
     }
 
@@ -66,17 +66,17 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 
         $this->View()->assign(array(
             'success' => true,
-            'data' => $data
+            'data' => $data,
         ));
     }
 
     /**
-     * Loads stores settings
+     * Loads stores settings.
      */
     public function getSettingsViewDataAction()
     {
         /**
-         * @var Shopware\Components\Api\Resource\Manufacturer $resource
+         * @var Shopware\Components\Api\Resource\Manufacturer
          */
         $resource = Manager::getResource('manufacturer');
         $manufacturers = $resource->getList(0, null)['data'];
@@ -100,8 +100,8 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
             'data' => array(
                 'manufacturers' => $manufacturers,
                 'warehouses' => [],
-                'orderReferrers' => []
-            )
+                'orderReferrers' => [],
+            ),
         ));
     }
 }

@@ -2,15 +2,15 @@
 
 namespace PlentyConnector\Connector\TransferObject\PaymentMethod;
 
+use PlentyConnector\Connector\TransferObject\TransferObjectType;
+
 /**
- * Class ShippingProfile
- *
- * @package PlentyConnector\Connector\TransferObject\ShippingProfile
+ * Class ShippingProfile.
  */
 class ShippingProfile implements ShippingProfileInterface
 {
     /**
-     * Identifier of the object
+     * Identifier of the object.
      *
      * @var string
      */
@@ -41,11 +41,11 @@ class ShippingProfile implements ShippingProfileInterface
      */
     public static function getType()
     {
-        return 'PaymentMethod';
+        return TransferObjectType::SHIPPING_PROFILE;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function fromArray(array $params = [])
     {

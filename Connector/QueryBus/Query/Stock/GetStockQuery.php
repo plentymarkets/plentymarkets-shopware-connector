@@ -5,9 +5,7 @@ namespace PlentyConnector\Connector\QueryBus\Query\Stock;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 
 /**
- * Class GetStockQuery
- *
- * @package PlentyConnector\Connector\QueryBus\Query\Stock
+ * Class GetStockQuery.
  */
 class GetStockQuery implements QueryInterface
 {
@@ -40,7 +38,7 @@ class GetStockQuery implements QueryInterface
     public function getPayload()
     {
         return [
-            'adapterName' => $this->adapterName
+            'adapterName' => $this->adapterName,
         ];
     }
 

@@ -3,11 +3,8 @@
 namespace PlentyConnector\Connector\EventBus\Event;
 
 /**
- * Class EventInterface
- *
- * @package PlentyConnector\Connector\Connector\Event
+ * Class EventInterface.
  */
 interface EventInterface
 {
-
 }

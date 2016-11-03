@@ -7,9 +7,7 @@ use PlentyConnector\Connector\CommandBus\Command\CommandInterface;
 use PlentyConnector\Connector\CommandBus\Handler\CommandHandlerInterface;
 
 /**
- * Class CommandHandlerMiddleware
- *
- * @package PlentyConnector\Connector\CommandBus\Middleware
+ * Class CommandHandlerMiddleware.
  */
 class CommandHandlerMiddleware implements Middleware
 {
@@ -28,7 +26,7 @@ class CommandHandlerMiddleware implements Middleware
 
     /**
      * @param CommandInterface $command
-     * @param callable $next
+     * @param callable         $next
      *
      * @return mixed
      *

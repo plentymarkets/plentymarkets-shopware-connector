@@ -3,14 +3,11 @@
 namespace PlentyConnector\Connector\QueryBus\Middleware;
 
 use League\Tactician\Middleware;
-use PlentyConnector\Connector\EventBus\Handler\HandlerInterface;
 use PlentyConnector\Connector\QueryBus\Handler\QueryHandlerInterface;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 
 /**
- * Class QueryHandlerMiddleware
- *
- * @package PlentyConnector\Connector\QueryBus\Middleware
+ * Class QueryHandlerMiddleware.
  */
 class QueryHandlerMiddleware implements Middleware
 {
@@ -29,7 +26,7 @@ class QueryHandlerMiddleware implements Middleware
 
     /**
      * @param QueryInterface $query
-     * @param callable $next
+     * @param callable       $next
      *
      * @return mixed
      */

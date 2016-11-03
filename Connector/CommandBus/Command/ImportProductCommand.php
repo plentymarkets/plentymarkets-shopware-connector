@@ -5,9 +5,7 @@ namespace PlentyConnector\Connector\CommandBus\Command;
 use PlentyConnector\Connector\TransferObject\Product;
 
 /**
- * Class ImportProductCommand
- *
- * @package PlentyConnector\Connector\CommandBus\Command
+ * Class ImportProductCommand.
  */
 class ImportProductCommand implements CommandInterface
 {
@@ -24,8 +22,8 @@ class ImportProductCommand implements CommandInterface
     /**
      * ImportLocalManufacturerCommand constructor.
      *
-     * @param Product $product the transferobject which will be handeled
-     * @param string $adapterName the classname of the target adapter
+     * @param Product $product     the transferobject which will be handeled
+     * @param string  $adapterName the classname of the target adapter
      */
     public function __construct(Product $product, $adapterName = '')
     {
@@ -56,7 +54,7 @@ class ImportProductCommand implements CommandInterface
     {
         return [
             'adapterName' => $this->adapterName,
-            'product' => $this->product
+            'product' => $this->product,
         ];
     }
 

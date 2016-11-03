@@ -5,11 +5,8 @@ namespace PlentyConnector\Connector\Config\Model;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * Class ConfigRepository
- *
- * @package PlentyConnector\Connector\Config\Model
+ * Class ConfigRepository.
  */
 class ConfigRepository extends EntityRepository
 {
-
 }

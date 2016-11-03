@@ -3,9 +3,7 @@
 namespace PlentyConnector\Connector\CommandBus\Command;
 
 /**
- * Class CommandInterface
- *
- * @package PlentyConnector\Connector\Connector\Command
+ * Class CommandInterface.
  */
 interface CommandInterface
 {

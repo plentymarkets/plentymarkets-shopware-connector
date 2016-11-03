@@ -4,11 +4,11 @@ namespace PlentyConnector\Connector\Identity;
 
 use Assert\Assertion;
 use PlentyConnector\Connector\Identity\Storage\IdentityStorageInterface;
+use PlentyConnector\Connector\TransferObject\Identity\Identity;
+use Ramsey\Uuid\Uuid;
 
 /**
- * Class IdentityService
- *
- * @package PlentyConnector\Connector\Identity
+ * Class IdentityService.
  */
 class IdentityService implements IdentityServiceInterface
 {
@@ -28,7 +28,7 @@ class IdentityService implements IdentityServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function findOrCreateIdentity($adapterIdentifier, $adapterName, $objectType)
     {
@@ -38,8 +38,8 @@ class IdentityService implements IdentityServiceInterface
 
         $Identity = $this->findIdentity([
             'objectType' => $objectType,
-            'adapterIdentifier' => (string)$adapterIdentifier,
-            'adapterName' => $adapterName
+            'adapterIdentifier' => $adapterIdentifier,
+            'adapterName' => $adapterName,
         ]);
 
         if (null === $Identity) {
@@ -48,7 +48,7 @@ class IdentityService implements IdentityServiceInterface
             $Identity = $this->createIdentity(
                 $objectIdentifier,
                 $objectType,
-                (string)$adapterIdentifier,
+                (string) $adapterIdentifier,
                 $adapterName
             );
         }
@@ -57,23 +57,23 @@ class IdentityService implements IdentityServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function findIdentity(array $criteria = [])
     {
         Assertion::isArray($criteria);
-        Assertion::allInArray($criteria, [
+        Assertion::allInArray(array_keys($criteria), [
             'objectIdentifier',
             'objectType',
             'adapterIdentifier',
-            'adapterName'
+            'adapterName',
         ]);
 
         return $this->storage->findBy($criteria);
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function createIdentity($objectIdentifier, $objectType, $adapterIdentifier, $adapterName)
     {

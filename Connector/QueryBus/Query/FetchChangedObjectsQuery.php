@@ -3,11 +3,9 @@
 namespace PlentyConnector\Connector\QueryBus\Query;
 
 /**
- * Class GetChangedObjectsQuery
- *
- * @package PlentyConnector\Connector\QueryBus\Query
+ * Class GetChangedObjectsQuery.
  */
-class GetChangedObjectsQuery implements QueryInterface
+class FetchChangedObjectsQuery implements QueryInterface
 {
     /**
      * @return array

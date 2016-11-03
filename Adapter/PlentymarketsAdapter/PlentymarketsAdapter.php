@@ -5,20 +5,17 @@ namespace PlentymarketsAdapter;
 use PlentyConnector\Adapter\AdapterInterface;
 
 /**
- * Class  PlentymarketsAdapter
- *
- * @package PlentymarketsAdapter
+ * Class  PlentymarketsAdapter.
  */
 class PlentymarketsAdapter implements AdapterInterface
 {
     const NAME = 'PlentymarketsAdapter';
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function getName()
     {
         return self::NAME;
     }
 }
-

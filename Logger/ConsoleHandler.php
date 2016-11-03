@@ -2,7 +2,7 @@
 
 namespace PlentyConnector\Logger;
 
-/*
+/**
  * This file is part of the Symfony package.
  *
  * (c) Fabien Potencier <fabien@symfony.com>
@@ -10,7 +10,6 @@ namespace PlentyConnector\Logger;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
@@ -59,10 +58,10 @@ class ConsoleHandler extends AbstractProcessingHandler implements EventSubscribe
     /**
      * Constructor.
      *
-     * @param OutputInterface|null $output The console output to use (the handler remains disabled when passing null
+     * @param OutputInterface|null $output            The console output to use (the handler remains disabled when passing null
      *                                                until the output is set, e.g. by using console events)
-     * @param bool $bubble Whether the messages that are handled can bubble up the stack
-     * @param array $verbosityLevelMap Array that maps the OutputInterface verbosity to a minimum logging
+     * @param bool                 $bubble            Whether the messages that are handled can bubble up the stack
+     * @param array                $verbosityLevelMap Array that maps the OutputInterface verbosity to a minimum logging
      *                                                level (leave empty to use the default mapping)
      */
     public function __construct(OutputInterface $output = null, $bubble = true, array $verbosityLevelMap = array())
@@ -177,7 +176,7 @@ class ConsoleHandler extends AbstractProcessingHandler implements EventSubscribe
     protected function write(array $record)
     {
         // at this point we've determined for sure that we want to output the record, so use the output's own verbosity
-        $this->output->write((string)$record['formatted'], false, $this->output->getVerbosity());
+        $this->output->write((string) $record['formatted'], false, $this->output->getVerbosity());
     }
 
     /**

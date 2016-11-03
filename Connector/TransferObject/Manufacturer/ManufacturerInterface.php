@@ -5,9 +5,7 @@ namespace PlentyConnector\Connector\TransferObject\Manufacturer;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
- * Interface ManufacturerInterface
- *
- * @package PlentyConnector\Connector\TransferObject\Manufacturer
+ * Interface ManufacturerInterface.
  */
 interface ManufacturerInterface extends TransferObjectInterface
 {

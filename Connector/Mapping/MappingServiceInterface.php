@@ -3,9 +3,7 @@
 namespace PlentyConnector\Connector\Mapping;
 
 /**
- * Interface MappingServiceInterface
- *
- * @package PlentyConnector\Connector\Mapping
+ * Interface MappingServiceInterface.
  */
 interface MappingServiceInterface
 {

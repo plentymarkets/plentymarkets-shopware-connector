@@ -2,15 +2,11 @@
 
 namespace PlentyConnector\Connector\ServiceBus;
 
-use League\Tactician\CommandBus as TacticianBus;
+use League\Tactician\CommandBus;
 
 /**
- * Class ServiceBus
- *
- * @package PlentyConnector\Connector\ServiceBus
+ * Class ServiceBus.
  */
-class ServiceBus extends TacticianBus implements ServiceBusInterface
+class ServiceBus extends CommandBus implements ServiceBusInterface
 {
-
 }
-

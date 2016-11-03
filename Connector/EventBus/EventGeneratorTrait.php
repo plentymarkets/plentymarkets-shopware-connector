@@ -5,9 +5,7 @@ namespace PlentyConnector\Connector\EventBus;
 use PlentyConnector\Connector\EventBus\Event\EventInterface;
 
 /**
- * Class GeneratorTrait
- *
- * @package PlentyConnector\Connector\EventBus
+ * Class GeneratorTrait.
  */
 trait EventGeneratorTrait
 {

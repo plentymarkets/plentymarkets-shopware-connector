@@ -5,9 +5,7 @@ namespace PlentyConnector\Connector\CommandBus\Handler;
 use PlentyConnector\Connector\CommandBus\Command\CommandInterface;
 
 /**
- * Interface CommandHandlerInterface
- *
- * @package PlentyConnector\Connector\CommandBus\Handler
+ * Interface CommandHandlerInterface.
  */
 interface CommandHandlerInterface
 {

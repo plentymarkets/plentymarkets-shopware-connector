@@ -3,9 +3,7 @@
 namespace PlentyConnector\Connector\QueryBus\Query;
 
 /**
- * Class GetObjectQuery
- *
- * @package PlentyConnector\Connector\QueryBus\Query
+ * Class GetObjectQuery.
  */
 class FetchObjectsQuery implements QueryInterface
 {

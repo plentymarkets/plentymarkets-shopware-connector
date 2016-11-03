@@ -5,12 +5,11 @@ namespace PlentyConnector\Connector\Identity\Storage;
 use Doctrine\ORM\EntityManagerInterface;
 use PlentyConnector\Connector\Identity\Model\Identity as IdentityModel;
 use PlentyConnector\Connector\Identity\Model\IdentityRepository;
+use PlentyConnector\Connector\TransferObject\Identity\Identity;
 use PlentyConnector\Connector\TransferObject\Identity\IdentityInterface;
 
 /**
- * Class DoctrineIdentityStorage
- *
- * @package PlentyConnector\Connector\Identity\Storage
+ * Class DoctrineIdentityStorage.
  */
 class DoctrineIdentityStorage implements IdentityStorageInterface
 {
@@ -43,7 +42,7 @@ class DoctrineIdentityStorage implements IdentityStorageInterface
     public function findBy(array $criteria = [])
     {
         /**
-         * @var IdentityModel $result
+         * @var IdentityModel
          */
         $result = $this->identityRepository->findOneBy($criteria);
 
@@ -54,7 +53,7 @@ class DoctrineIdentityStorage implements IdentityStorageInterface
                 'objectIdentifier' => $result->getObjectIdentifier(),
                 'objectType' => $result->getObjectType(),
                 'adapterIdentifier' => $result->getAdapterIdentifier(),
-                'adapterName' => $result->getAdapterName()
+                'adapterName' => $result->getAdapterName(),
             ]);
         }
 
@@ -78,7 +77,7 @@ class DoctrineIdentityStorage implements IdentityStorageInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function remove($adapterIdentifier, $adapterName)
     {

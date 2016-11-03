@@ -7,9 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Class QueryHandlerCompilerPass
- *
- * @package PlentyConnector\Container\CompilerPass
+ * Class QueryHandlerCompilerPass.
  */
 class QueryHandlerCompilerPass implements CompilerPassInterface
 {

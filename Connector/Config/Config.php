@@ -6,9 +6,7 @@ use PlentyConnector\Connector\Config\Model\Config as ConfigModel;
 use Shopware\Components\Model\ModelManager;
 
 /**
- * Class Config
- *
- * @package PlentyConnector\Connector\Config
+ * Class Config.
  */
 class Config implements ConfigInterface
 {
@@ -39,7 +37,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get($key, $default = null)
     {
@@ -48,7 +46,7 @@ class Config implements ConfigInterface
         }
 
         /**
-         * @var ConfigModel[] $elements
+         * @var ConfigModel[]
          */
         $elements = $this->repository->findAll();
 
@@ -64,26 +62,22 @@ class Config implements ConfigInterface
     }
 
     /**
-     * pre fill the whole existing config
+     * pre fill the whole existing config.
      */
     private function initialize()
     {
         /**
-         * @var ConfigModel[] $elements
+         * @var ConfigModel[]
          */
         $elements = $this->repository->findAll();
 
         foreach ($elements as $element) {
             $this->config[$element->getName()] = $element;
         }
-
-        $this->config['rest_url'] = 'http://arvatis-beta1.plenty-showcase.de';
-        $this->config['rest_username'] = 'py101';
-        $this->config['rest_password'] = '3a2o6N2uo8';
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\OptimisticLockException

@@ -9,16 +9,14 @@ use PlentymarketsAdapter\Client\Exception\InvalidCredentialsException;
 use PlentymarketsAdapter\Client\Iterator\Iterator;
 
 /**
- * RepsonseModifier example
+ * RepsonseModifier example.
  *
  * Class Client
- *
- * @package PlentyConnector\Adapter\Plentymarkets\Client
  */
 class Client implements ClientInterface
 {
     /**
-     * @var GuzzleClient $connection
+     * @var GuzzleClient
      */
     private $connection;
 
@@ -50,9 +48,9 @@ class Client implements ClientInterface
     }
 
     /**
-     * TODO: finalize Exceptions
+     * TODO: finalize Exceptions.
      *
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function request($method, $path, array $criteria = [], $limit = null, $offset = null)
     {
@@ -65,10 +63,11 @@ class Client implements ClientInterface
             'headers' => $this->getHeaders($path),
         ];
 
+        $params = $this->getParams($criteria, $limit, $offset);
         if ($method === 'GET') {
-            $options['query'] = $this->getParams($criteria, $limit, $offset);
+            $options['query'] = $params;
         } else {
-            $options['json'] = $this->getParams($criteria, $limit, $offset);
+            $options['json'] = $params;
         }
 
         try {
@@ -94,7 +93,8 @@ class Client implements ClientInterface
         if (!array_key_exists('entries', $result)) {
             $entries = $result;
         } else {
-            $entries = $result['entries'];
+            $sliceOffset = $offset - (($params['page'] - 1) * $params['itemsPerPage']);
+            $entries = array_slice($result['entries'], $sliceOffset, $limit >= 0 ? $limit : null);
         }
 
         return $entries;
@@ -145,7 +145,7 @@ class Client implements ClientInterface
     {
         $headers = [
             'Content-Type' => 'application/json',
-            'Accept' => 'application/x.plentymarkets.v1+json'
+            'Accept' => 'application/x.plentymarkets.v1+json',
         ];
 
         if ($path !== 'login') {
@@ -156,7 +156,7 @@ class Client implements ClientInterface
     }
 
     /**
-     * Adds the required parameters to the params array
+     * Adds the required parameters to the params array.
      *
      * @param array $criteria
      * @param null $limit
@@ -166,20 +166,26 @@ class Client implements ClientInterface
      */
     private function getParams(array $criteria = [], $limit = null, $offset = null)
     {
-        $page = ceil($offset / $limit);
+        $params = $criteria;
 
-        $params = [
-            'itemsPerPage' => null === $limit ? 0 : $limit,
-            'page' => $page,
-        ];
-
-        $params = array_merge($params, $criteria);
+        if ($limit > 0) {
+            // calculates the minimal number of items per page
+            $itemsPerPage = $limit;
+            while($itemsPerPage - ($offset % $itemsPerPage) < $limit) {
+                $itemsPerPage++;
+            }
+            $params['itemsPerPage'] = $itemsPerPage;
+            $params['page'] = ($offset - ($offset % $itemsPerPage)) / $itemsPerPage + 1;
+        } else {
+            // do not set 'itemsPerPage' to zero because behavior of the REST API is inconsistent
+            $params['page'] = 1;
+        }
 
         return $params;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getIterator($path, array $criteria = [])
     {

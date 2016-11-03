@@ -5,11 +5,8 @@ namespace PlentymarketsAdapter\Client\Exception;
 use Exception;
 
 /**
- * Class InvalidCredentialsException
- *
- * @package PlentyConnector\Adapter\Plentymarkets\Client\Exception
+ * Class InvalidCredentialsException.
  */
 class InvalidCredentialsException extends Exception
 {
-
 }

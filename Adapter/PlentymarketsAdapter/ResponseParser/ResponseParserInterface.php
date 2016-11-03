@@ -6,8 +6,6 @@ use PlentyConnector\Connector\TransferObject\Manufacturer\ManufacturerInterface;
 
 /**
  * Interface ResponseParserInterface
- *
- * @package PlentymarketsAdapter\ResponseParser
  */
 interface ResponseParserInterface
 {

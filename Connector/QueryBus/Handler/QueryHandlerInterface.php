@@ -5,9 +5,7 @@ namespace PlentyConnector\Connector\QueryBus\Handler;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 
 /**
- * Interface QueryHandlerInterface
- *
- * @package PlentyConnector\Connector\QueryBus\Handler
+ * Interface QueryHandlerInterface.
  */
 interface QueryHandlerInterface
 {

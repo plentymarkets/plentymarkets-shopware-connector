@@ -4,8 +4,10 @@ namespace PlentyConnector\Console\Command;
 
 use Exception;
 use PlentyConnector\Connector\Connector;
+use PlentyConnector\Connector\QueryBus\Query\Manufacturer\GetChangedManufacturerQuery;
 use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 use PlentyConnector\Logger\ConsoleHandler;
+use PlentymarketsAdapter\PlentymarketsAdapter;
 use Shopware\Commands\ShopwareCommand;
 use Shopware\Components\Logger;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,7 +15,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Command to manually import manufacturer
+ * Command to manually import manufacturer.
  */
 class ImportManufacturerCommand extends ShopwareCommand
 {
@@ -52,7 +54,7 @@ class ImportManufacturerCommand extends ShopwareCommand
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      *
      * @return int|null|void
@@ -64,14 +66,15 @@ class ImportManufacturerCommand extends ShopwareCommand
         $all = $input->getOption('all');
 
         /**
-         * @var Logger $logger
+         * @var Logger
          */
         $logger = $this->container->get('plentyconnector.logger');
         $logger->pushHandler(new ConsoleHandler($output));
 
-        try {
-            $this->connector->handle(Manufacturer::getType(), 'All');
+        $result = $this->connector->executeQuery(new GetChangedManufacturerQuery(PlentymarketsAdapter::getName()));
 
+        try {
+            //$this->connector->handle(Manufacturer::getType(), 'All');
         } catch (Exception $e) {
             $logger->error($e->getMessage());
         }

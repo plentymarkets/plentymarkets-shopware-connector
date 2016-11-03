@@ -2,7 +2,6 @@
 
 namespace ShopwareAdapter\CommandBus\Handler;
 
-use PlentyConnector\Connector\CommandBus\Command\ImportLocalManufacturerCommand;
 use PlentyConnector\Connector\CommandBus\Command\ImportManufacturerCommand;
 use PlentyConnector\Connector\CommandBus\Handler\CommandHandlerInterface;
 use PlentyConnector\Connector\EventBus\EventGeneratorTrait;
@@ -15,9 +14,7 @@ use Shopware\Models\Article\Supplier;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class ImportLocalManufacturerCommandHandler
- *
- * @package PlentyConnector\Connector\Connector\CommandHandler
+ * Class ImportLocalManufacturerCommandHandler.
  */
 class ImportManufacturerCommandHandler implements CommandHandlerInterface
 {
@@ -51,10 +48,10 @@ class ImportManufacturerCommandHandler implements CommandHandlerInterface
      */
     public function supports($command)
     {
-        return (
+        return
             $command instanceof ImportManufacturerCommand &&
             $command->getAdapterName() === ShopwareAdapter::getName()
-        );
+        ;
     }
 
     /**
@@ -78,14 +75,14 @@ class ImportManufacturerCommandHandler implements CommandHandlerInterface
 
         if (null !== $manufacturer->getLogo()) {
             $params['image'] = [
-                'link' => $manufacturer->getLogo()
+                'link' => $manufacturer->getLogo(),
             ];
         }
 
         $identity = $this->identityService->findIdentity([
             'objectIdentifier' => $manufacturer->getIdentifier(),
             'objectType' => Manufacturer::getType(),
-            'adapterName' => ShopwareAdapter::getName()
+            'adapterName' => ShopwareAdapter::getName(),
         ]);
 
         $createManufacturer = true;
@@ -97,7 +94,7 @@ class ImportManufacturerCommandHandler implements CommandHandlerInterface
                 $identity = $this->identityService->createIdentity(
                     $manufacturer->getIdentifier(),
                     Manufacturer::getType(),
-                    (string)$existingManufacturer->getId(),
+                    (string) $existingManufacturer->getId(),
                     ShopwareAdapter::getName()
                 );
 
@@ -113,7 +110,7 @@ class ImportManufacturerCommandHandler implements CommandHandlerInterface
             $this->identityService->createIdentity(
                 $manufacturer->getIdentifier(),
                 Manufacturer::getType(),
-                (string)$manufacturerModel->getId(),
+                (string) $manufacturerModel->getId(),
                 ShopwareAdapter::getName()
             );
         } else {
@@ -129,11 +126,11 @@ class ImportManufacturerCommandHandler implements CommandHandlerInterface
     private function findExistingManufacturer(ManufacturerInterface $manufacturer)
     {
         $result = $this->resource->getList(0, 1, [
-            'supplier.name' => $manufacturer->getName()
+            'supplier.name' => $manufacturer->getName(),
         ]);
 
         if (0 === count($result['data'])) {
-            return null;
+            return;
         }
 
         return array_shift($result['data']);

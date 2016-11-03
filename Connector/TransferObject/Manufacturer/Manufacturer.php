@@ -3,16 +3,15 @@
 namespace PlentyConnector\Connector\TransferObject\Manufacturer;
 
 use Assert\Assertion;
+use PlentyConnector\Connector\TransferObject\TransferObjectType;
 
 /**
- * Class TransferObjects
- *
- * @package PlentyConnector\Connector\TransferObject
+ * Class TransferObjects.
  */
 class Manufacturer implements ManufacturerInterface
 {
     /**
-     * Identifier of the object
+     * Identifier of the object.
      *
      * @var string
      */
@@ -59,11 +58,11 @@ class Manufacturer implements ManufacturerInterface
      */
     public static function getType()
     {
-        return 'Manufacturer';
+        return TransferObjectType::MANUFACTURER;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function fromArray(array $params = [])
     {

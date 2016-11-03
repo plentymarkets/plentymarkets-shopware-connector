@@ -5,16 +5,14 @@ namespace ShopwareAdapter;
 use PlentyConnector\Adapter\AdapterInterface;
 
 /**
- * Class ShopwareAdapter
- *
- * @package ShopwareAdapter
+ * Class ShopwareAdapter.
  */
 class ShopwareAdapter implements AdapterInterface
 {
     const NAME = 'ShopwareAdapter';
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function getName()
     {

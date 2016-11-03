@@ -3,17 +3,17 @@
 namespace PlentymarketsAdapter\Client\Iterator;
 
 use Assert\Assertion;
+use Iterator as BaseIterator;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentymarketsAdapter\Client\Client;
+use UnexpectedValueException;
 
 /**
- * TODO: test Iterator with limit 2
+ * TODO: test Iterator with limit 2.
  *
  * Class Iterator
- *
- * @package PlentymarketsAdapter\Iterator
  */
-class Iterator implements IteratorInterface
+class Iterator implements BaseIterator
 {
     /**
      * @var Client
@@ -28,7 +28,7 @@ class Iterator implements IteratorInterface
     /**
      * @var int
      */
-    private $limit = 2;
+    private $limit = 50;
 
     /**
      * @var int
@@ -54,9 +54,9 @@ class Iterator implements IteratorInterface
      * ResourceIterator constructor.
      *
      * @param Client $client
-     * @param array $criteria
+     * @param array  $criteria
      *
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
     public function __construct($path, Client $client, array $criteria = [])
     {
@@ -65,14 +65,12 @@ class Iterator implements IteratorInterface
         $this->client = $client;
         $this->criteria = $criteria;
         $this->path = $path;
-
-        $this->loadPage($criteria, $this->limit, 0);
     }
 
     /**
      * @param array $criteria
-     * @param int $limit
-     * @param int $offset
+     * @param int   $limit
+     * @param int   $offset
      */
     private function loadPage(array $criteria = [], $limit = 0, $offset = 0)
     {
@@ -84,7 +82,7 @@ class Iterator implements IteratorInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function current()
     {
@@ -92,17 +90,17 @@ class Iterator implements IteratorInterface
     }
 
     /**
-     * @inheritdoc
+     * TODO: needs bugfixing
      *
-     * @throws \UnexpectedValueException
+     * {@inheritdoc}
+     *
+     * @throws UnexpectedValueException
      */
     public function next()
     {
-        $currentIndex = $this->index;
+        ++$this->index;
 
-        $this->index++;
-
-        if ($currentIndex + 1 > $this->offset) {
+        if (!$this->valid()) {
             $this->offset += $this->limit;
 
             $this->loadPage($this->criteria, $this->limit, $this->offset);
@@ -110,7 +108,7 @@ class Iterator implements IteratorInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function key()
     {
@@ -118,7 +116,7 @@ class Iterator implements IteratorInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function valid()
     {
@@ -126,15 +124,15 @@ class Iterator implements IteratorInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
     public function rewind()
     {
         $this->loadPage($this->criteria, $this->limit, 0);
 
-        $this->offset = 10;
+        $this->offset = 0;
         $this->index = 0;
     }
 }
