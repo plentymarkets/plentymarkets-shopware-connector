@@ -41,7 +41,7 @@ class ControllerPath implements SubscriberInterface
         $basePath = $this->container->getParameter('plentyconnector.plugin_dir');
 
         $this->container->get('template')->addTemplateDir(
-            $basePath . '/Resources/views/'
+            $basePath . '/Views/'
         );
 
         return $basePath . '/Controllers/Backend/Profiler.php';
