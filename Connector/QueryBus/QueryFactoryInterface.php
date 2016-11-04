@@ -7,4 +7,8 @@ namespace PlentyConnector\Connector\QueryBus;
  */
 interface QueryFactoryInterface
 {
+    /**
+     * @return mixed
+     */
+    public function create();
 }

@@ -11,7 +11,6 @@
         <parameter key="PLENTYMARKETS_ADAPTER" type="constant">PlentymarketsAdapter\PlentymarketsAdapter::NAME</parameter>
 
         <parameter key="TRANSFEROBJECT_MANUFACTURER" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::MANUFACTURER</parameter>
-        <parameter key="TRANSFEROBJECT_PAYMENT_METHOD" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::PAYMENT_METHOD</parameter>
     </parameters>
 
     <services>
@@ -45,6 +44,7 @@
         </service>
 
         <!-- Subscriber -->
+
         <service id="plentyconnector.subscriber.controller_path" class="PlentyConnector\Subscriber\ControllerPath">
             <argument type="service" id="service_container" />
 
@@ -72,7 +72,8 @@
         <!-- Mapping Service -->
 
         <service id="plentyconnector.mapping_service" class="PlentyConnector\Connector\Mapping\MappingService">
-            <argument type="service" id="plentyconnector.identity_service"/>
+            <argument type="service" id="plentyconnector.query_factory"/>
+            <argument type="service" id="plentyconnector.query_bus"/>
         </service>
 
         <!-- Mapping definitions -->
@@ -102,6 +103,10 @@
         <service id="plentyconnector.identity_service" class="PlentyConnector\Connector\Identity\IdentityService">
             <argument type="service" id="plentyconnector.identity_storage"/>
         </service>
+
+        <!-- Query Factory -->
+
+        <service id="plentyconnector.query_factory" class="PlentyConnector\Connector\QueryBus\QueryFactory"/>
 
         <!-- Service Bus -->
 

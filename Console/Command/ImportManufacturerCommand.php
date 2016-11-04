@@ -4,6 +4,7 @@ namespace PlentyConnector\Console\Command;
 
 use Exception;
 use PlentyConnector\Connector\Connector;
+use PlentyConnector\Connector\Mapping\MappingServiceInterface;
 use PlentyConnector\Connector\QueryBus\Query\Manufacturer\GetChangedManufacturerQuery;
 use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 use PlentyConnector\Logger\ConsoleHandler;
@@ -71,7 +72,11 @@ class ImportManufacturerCommand extends ShopwareCommand
         $logger = $this->container->get('plentyconnector.logger');
         $logger->pushHandler(new ConsoleHandler($output));
 
-        $result = $this->connector->executeQuery(new GetChangedManufacturerQuery(PlentymarketsAdapter::getName()));
+        /**
+         * @var MappingServiceInterface $mappingService
+         */
+        $mappingService = Shopware()->Container()->get('plentyconnector.mapping_service');
+        $mappingService->getMappingInformation();
 
         try {
             //$this->connector->handle(Manufacturer::getType(), 'All');

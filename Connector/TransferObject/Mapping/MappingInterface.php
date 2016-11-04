@@ -29,4 +29,9 @@ interface MappingInterface extends TransferObjectInterface
      * @return MappedTransferObjectInterface[]
      */
     public function getDestinationTransferObjects();
+
+    /**
+     * @return boolean
+     */
+    public function isIsComplete();
 }

@@ -8,7 +8,7 @@ namespace PlentyConnector\Connector\Mapping;
 interface MappingServiceInterface
 {
     /**
-     * @return array
+     * @return MappingInterface[]
      */
     public function getMappingInformation();
 }
