@@ -6,6 +6,7 @@ use Exception;
 use PlentyConnector\Connector\Config\ConfigServiceInterface;
 use PlentyConnector\Connector\QueryBus\Handler\QueryHandlerInterface;
 use PlentyConnector\Connector\QueryBus\Query\Manufacturer\GetChangedManufacturerQuery;
+use PlentyConnector\Connector\QueryBus\Query\Manufacturer\GetManufacturerQuery;
 use PlentyConnector\Connector\TransferObject\Manufacturer\ManufacturerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
@@ -74,7 +75,7 @@ class GetChangedManufacturerQueryHandler implements QueryHandlerInterface
     }
 
     /**
-     * @param GetRemoteManufacturerQuery $event
+     * @param GetManufacturerQuery $event
      *
      * @return ManufacturerInterface[]
      *
