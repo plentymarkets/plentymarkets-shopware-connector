@@ -51,7 +51,7 @@ class Definition implements DefinitionInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public static function getType()
     {
@@ -59,9 +59,7 @@ class Definition implements DefinitionInterface
     }
 
     /**
-     * @param array $params
-     *
-     * @return self
+     * {@inheritdoc}
      */
     public static function fromArray(array $params = [])
     {
@@ -73,7 +71,7 @@ class Definition implements DefinitionInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getOriginAdapterName()
     {
@@ -81,7 +79,7 @@ class Definition implements DefinitionInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getDestinationAdapterName()
     {
@@ -89,7 +87,7 @@ class Definition implements DefinitionInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getObjectType()
     {

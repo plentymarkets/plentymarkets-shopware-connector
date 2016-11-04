@@ -54,7 +54,7 @@ class Manufacturer implements ManufacturerInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public static function getType()
     {
@@ -75,7 +75,7 @@ class Manufacturer implements ManufacturerInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getIdentifier()
     {
@@ -83,7 +83,7 @@ class Manufacturer implements ManufacturerInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -91,7 +91,7 @@ class Manufacturer implements ManufacturerInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getLogo()
     {
@@ -99,7 +99,7 @@ class Manufacturer implements ManufacturerInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getLink()
     {

@@ -68,9 +68,7 @@ class Identity implements IdentityInterface
     }
 
     /**
-     * @param array $params
-     *
-     * @return self
+     * {@inheritdoc}
      */
     public static function fromArray(array $params = [])
     {

@@ -37,7 +37,7 @@ class PaymentMethod implements PaymentMethodInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public static function getType()
     {
@@ -56,7 +56,7 @@ class PaymentMethod implements PaymentMethodInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getIdentifier()
     {
@@ -64,7 +64,7 @@ class PaymentMethod implements PaymentMethodInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getName()
     {

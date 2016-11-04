@@ -37,7 +37,7 @@ class ShippingProfile implements ShippingProfileInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public static function getType()
     {
@@ -56,7 +56,7 @@ class ShippingProfile implements ShippingProfileInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getIdentifier()
     {
@@ -64,7 +64,7 @@ class ShippingProfile implements ShippingProfileInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getName()
     {
