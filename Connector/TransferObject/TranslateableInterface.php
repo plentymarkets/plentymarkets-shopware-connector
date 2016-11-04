@@ -5,9 +5,9 @@ namespace PlentyConnector\Connector\TransferObject;
 use PlentyConnector\Connector\TransferObject\Translation\TranslationInterface;
 
 /**
- * Interface TranslateableTransferObject
+ * Interface TranslateableInterface
  */
-interface TranslateableTransferObject
+interface TranslateableInterface
 {
     /**
      * @param TranslationInterface $translation

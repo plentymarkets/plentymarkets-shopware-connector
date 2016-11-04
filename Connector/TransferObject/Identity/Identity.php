@@ -72,6 +72,13 @@ class Identity implements IdentityInterface
      */
     public static function fromArray(array $params = [])
     {
+        Assertion::allInArray(array_keys($params), [
+            'objectIdentifier',
+            'objectType',
+            'adapterIdentifier',
+            'adapterName',
+        ]);
+
         return new self(
             $params['objectIdentifier'],
             $params['objectType'],

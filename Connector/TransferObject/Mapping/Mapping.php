@@ -2,7 +2,8 @@
 
 namespace PlentyConnector\Connector\TransferObject\Mapping;
 
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
+use Assert\Assertion;
+use PlentyConnector\Connector\TransferObject\MappedTransferObjectInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectType;
 
 /**
@@ -18,7 +19,7 @@ class Mapping implements MappingInterface
     private $originAdapterName;
 
     /**
-     * @var TransferObjectInterface[]
+     * @var MappedTransferObjectInterface[]
      */
     private $originTransferObjects;
 
@@ -30,11 +31,35 @@ class Mapping implements MappingInterface
     private $destinationAdapterName;
 
     /**
-     * The TransferObject class name.
-     *
-     * @var string
+     * @var MappedTransferObjectInterface[]
      */
-    private $objectType;
+    private $destinationTransferObjects;
+
+    /**
+     * Mapping constructor.
+     *
+     * @param string $originAdapterName
+     * @param MappedTransferObjectInterface[] $originTransferObjects
+     * @param string $destinationAdapterName
+     * @param MappedTransferObjectInterface[] $destinationTransferObjects
+     */
+    public function __construct(
+        $originAdapterName,
+        array $originTransferObjects,
+        $destinationAdapterName,
+        array $destinationTransferObjects
+    ) {
+        Assertion::string($originAdapterName);
+        Assertion::allIsInstanceOf($originTransferObjects, MappedTransferObjectInterface::class);
+
+        Assertion::string($destinationAdapterName);
+        Assertion::allIsInstanceOf($destinationTransferObjects, MappedTransferObjectInterface::class);
+
+        $this->originAdapterName = $originAdapterName;
+        $this->originTransferObjects = $originTransferObjects;
+        $this->destinationAdapterName = $destinationAdapterName;
+        $this->destinationTransferObjects = $destinationTransferObjects;
+    }
 
     /**
      * @return string
@@ -45,12 +70,47 @@ class Mapping implements MappingInterface
     }
 
     /**
-     * @param array $params
-     *
-     * @return self
+     * {@inheritdoc}
      */
     public static function fromArray(array $params = [])
     {
-        // TODO: Implement fromArray() method.
+        return new self(
+            $params['originAdapterName'],
+            $params['originTransferObjects'],
+            $params['destinationAdapterName'],
+            $params['destinationTransferObjects']
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOriginAdapterName()
+    {
+        return $this->originAdapterName;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOriginTransferObjects()
+    {
+        return $this->originTransferObjects;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDestinationAdapterName()
+    {
+        return $this->destinationAdapterName;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDestinationTransferObjects()
+    {
+        return $this->destinationTransferObjects;
     }
 }

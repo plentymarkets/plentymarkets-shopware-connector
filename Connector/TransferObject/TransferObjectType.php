@@ -13,6 +13,7 @@ final class TransferObjectType
     const MAPPING = 'Mapping';
     const PAYMENT_METHOD = 'PaymentMethod';
     const SHIPPING_PROFILE = 'ShippingProfile';
+    const TRANSLATION = 'Translation';
 
     /**
      * @return array

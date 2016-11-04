@@ -1,7 +1,6 @@
 <?php
 
 namespace PlentyConnector\Connector\TransferObject\Definition;
-//namespace PlentyConnector\Connector\TransferObject\Definition;
 
 use Assert\Assertion;
 use PlentyConnector\Connector\TransferObject\TransferObjectType;
@@ -63,6 +62,12 @@ class Definition implements DefinitionInterface
      */
     public static function fromArray(array $params = [])
     {
+        Assertion::allInArray(array_keys($params), [
+            'originAdapterName',
+            'destinationAdapterName',
+            'objectType',
+        ]);
+
         return new self(
             $params['originAdapterName'],
             $params['destinationAdapterName'],

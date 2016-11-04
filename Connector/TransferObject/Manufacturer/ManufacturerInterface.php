@@ -2,12 +2,12 @@
 
 namespace PlentyConnector\Connector\TransferObject\Manufacturer;
 
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
+use PlentyConnector\Connector\TransferObject\NameableInterface;
 
 /**
  * Interface ManufacturerInterface.
  */
-interface ManufacturerInterface extends TransferObjectInterface
+interface ManufacturerInterface extends IdentifiedTransferObject
 {
     /**
      * @return string
