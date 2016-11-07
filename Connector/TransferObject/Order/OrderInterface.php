@@ -2,9 +2,7 @@
 
 namespace PlentyConnector\Connector\TransferObject\Order;
 
-use PlentyConnector\Connector\TransferObject\Dispatch;
-use PlentyConnector\Connector\TransferObject\Payment;
-use PlentyConnector\Connector\TransferObject\Shop;
+use PlentyConnector\Connector\TransferObject\OrderItem\OrderItemInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
@@ -21,6 +19,11 @@ interface OrderInterface extends TransferObjectInterface
      * @return string
      */
     public function getOrderNumber();
+
+    /**
+     * @return OrderItemInterface[]
+     */
+    public function getOrderItems();
 
     /**
      * @return string

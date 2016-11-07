@@ -78,10 +78,15 @@ class GetChangedOrderQueryHandler implements QueryHandlerInterface
         $orderResource = Manager::getResource('order');
         $orders = $orderResource->getList(0, null)['data'];
 
+        // ignore cancelled orders
+        $orders = array_filter($orders, function ($item) {
+            return $item['orderStatusId'] != -1;
+        });
+
         $result = [];
         foreach ($orders as $order) {
             try {
-                $result[] = $this->responseParser->parseOrder($order);
+                $result[] = $this->responseParser->parseOrder($orderResource->getOne($order['id']));
             } catch (Exception $e) {
                 $this->logger->error($e->getMessage());
             }

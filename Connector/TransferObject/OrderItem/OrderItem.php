@@ -2,11 +2,18 @@
 
 namespace PlentyConnector\Connector\TransferObject\OrderItem;
 
+use Assert\Assertion;
+
 /**
  * Class OrderItem
  */
 class OrderItem implements OrderItemInterface
 {
+    /**
+     * @var string
+     */
+    private $identifier;
+
     /**
      * @var int
      */
@@ -16,6 +23,38 @@ class OrderItem implements OrderItemInterface
      * @var string
      */
     private $productId;
+
+    /**
+     * @var string
+     */
+    private $variationId;
+
+    /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @var double
+     */
+    private $price;
+
+    public function __construct($identifier, $quantity, $productId, $variationId, $name, $price)
+    {
+        Assertion::uuid($identifier);
+        Assertion::integer($quantity);
+        Assertion::string($productId);
+        Assertion::string($variationId);
+        Assertion::string($name);
+        Assertion::numeric($price);
+
+        $this->identifier = $identifier;
+        $this->quantity = $quantity;
+        $this->productId = $productId;
+        $this->variationId = $variationId;
+        $this->name = $name;
+        $this->price = $price;
+    }
 
     /**
      * @return string
@@ -32,6 +71,13 @@ class OrderItem implements OrderItemInterface
      */
     public static function fromArray(array $params = [])
     {
-        return new self();
+        return new self(
+            $params['identifier'],
+            $params['quantity'],
+            $params['productId'],
+            $params['variationId'],
+            $params['name'],
+            $params['price']
+        );
     }
 }

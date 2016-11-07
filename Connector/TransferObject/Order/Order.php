@@ -3,6 +3,7 @@
 namespace PlentyConnector\Connector\TransferObject\Order;
 
 use Assert\Assertion;
+use PlentyConnector\Connector\TransferObject\OrderItem\OrderItemInterface;
 
 /**
  * Class Order.
@@ -20,6 +21,11 @@ class Order implements OrderInterface
      * @var string
      */
     private $orderNumber;
+
+    /**
+     * @var OrderItemInterface[]
+     */
+    private $orderItems;
 
     /**
      * @var string
@@ -51,17 +57,19 @@ class Order implements OrderInterface
      *
      * @param $identifier
      * @param $orderNumber
+     * @param $orderItems
      * @param $orderStatusId
      * @param $paymentStatusId
      * @param $paymentMethodId
      * @param $shippingProfileId
      * @param $shopId
      */
-    public function __construct($identifier, $orderNumber, $orderStatusId,
+    public function __construct($identifier, $orderNumber, $orderItems, $orderStatusId,
         $paymentStatusId, $paymentMethodId, $shippingProfileId, $shopId)
     {
         Assertion::uuid($identifier);
         Assertion::string($orderNumber);
+        Assertion::isArray($orderItems);
         Assertion::string($orderStatusId);
         Assertion::string($paymentStatusId);
         Assertion::string($paymentMethodId);
@@ -70,6 +78,7 @@ class Order implements OrderInterface
 
         $this->identifier = $identifier;
         $this->orderNumber = $orderNumber;
+        $this->orderItems = $orderItems;
         $this->orderStatusId = $orderStatusId;
         $this->paymentStatusId = $paymentStatusId;
         $this->paymentMethodId = $paymentMethodId;
@@ -95,6 +104,7 @@ class Order implements OrderInterface
         return new self(
             $params['identifier'],
             $params['orderNumber'],
+            $params['orderItems'],
             $params['orderStatusId'],
             $params['paymentStatusId'],
             $params['paymentMethodId'],
@@ -117,6 +127,14 @@ class Order implements OrderInterface
     public function getOrderNumber()
     {
         return $this->orderNumber;
+    }
+
+    /**
+     * @return OrderItemInterface[]
+     */
+    public function getOrderItems()
+    {
+        return $this->orderItems;
     }
 
     /**

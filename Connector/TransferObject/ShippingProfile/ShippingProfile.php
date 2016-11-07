@@ -1,6 +1,6 @@
 <?php
 
-namespace PlentyConnector\Connector\TransferObject\PaymentMethod;
+namespace PlentyConnector\Connector\TransferObject\ShippingProfile;
 
 use Assert\Assertion;
 use PlentyConnector\Connector\TransferObject\TransferObjectType;
