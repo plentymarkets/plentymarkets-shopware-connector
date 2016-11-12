@@ -3,7 +3,6 @@
 namespace ShopwareAdapter\QueryBus\Handler\Order;
 
 use Exception;
-use PlentyConnector\Connector\Config\ConfigInterface;
 use PlentyConnector\Connector\QueryBus\Handler\QueryHandlerInterface;
 use PlentyConnector\Connector\QueryBus\Query\Manufacturer\GetManufacturerQuery;
 use PlentyConnector\Connector\QueryBus\Query\Order\GetChangedOrderQuery;
@@ -20,11 +19,6 @@ use ShopwareAdapter\ShopwareAdapter;
 class GetChangedOrderQueryHandler implements QueryHandlerInterface
 {
     /**
-     * @var ConfigInterface
-     */
-    private $config;
-
-    /**
      * @var ResponseParserInterface
      */
     private $responseParser;
@@ -36,16 +30,13 @@ class GetChangedOrderQueryHandler implements QueryHandlerInterface
 
     /**
      * GetChangedOrderQueryHandler constructor.
-     * @param ConfigInterface $config
      * @param ResponseParserInterface $responseParser
      * @param LoggerInterface $logger
      */
     public function __construct(
-        ConfigInterface $config,
         ResponseParserInterface $responseParser,
         LoggerInterface $logger
     ) {
-        $this->config = $config;
         $this->responseParser = $responseParser;
         $this->logger = $logger;
     }

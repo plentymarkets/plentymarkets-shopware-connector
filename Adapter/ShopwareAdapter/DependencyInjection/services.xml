@@ -25,7 +25,6 @@
         </service>
 
         <service id="shopware_adapter.query_handler.get_changed_order" class="ShopwareAdapter\QueryBus\Handler\Order\GetChangedOrderQueryHandler">
-            <argument type="service" id="plentyconnector.config"/>
             <argument type="service" id="shopware_adapter.response_parser"/>
             <argument type="service" id="plentyconnector.logger"/>
 
