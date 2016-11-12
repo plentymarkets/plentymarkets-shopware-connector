@@ -2,17 +2,44 @@
 
 namespace PlentyConnector\Connector\TransferObject\PaymentStatus;
 
+use Assert\Assertion;
+use PlentyConnector\Connector\TransferObject\TransferObjectType;
+
 /**
  * Class PaymentStatus
  */
 class PaymentStatus implements PaymentStatusInterface
 {
     /**
+     * @var string
+     */
+    private $identifier;
+
+    /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * OrderStatus constructor.
+     *
+     * @param $identifier
+     */
+    public function __construct($identifier, $name)
+    {
+        Assertion::uuid($identifier);
+        Assertion::string($name);
+
+        $this->identifier = $identifier;
+        $this->name = $name;
+    }
+
+    /**
      * @return string
      */
     public static function getType()
     {
-        return 'PaymentStatus';
+        return TransferObjectType::PAYMENT_STATUS;
     }
 
     /**
@@ -22,6 +49,25 @@ class PaymentStatus implements PaymentStatusInterface
      */
     public static function fromArray(array $params = [])
     {
-        return new self();
+        return new self(
+            $params['identifier'],
+            $params['name']
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIdentifier()
+    {
+        return $this->identifier;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

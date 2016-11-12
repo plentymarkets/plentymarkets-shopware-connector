@@ -2,12 +2,12 @@
 
 namespace PlentyConnector\Connector\TransferObject\PaymentStatus;
 
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
+use PlentyConnector\Connector\TransferObject\MappedTransferObjectInterface;
 
 /**
  * Interface PaymentStatusInterface
  */
-interface PaymentStatusInterface extends TransferObjectInterface
+interface PaymentStatusInterface extends MappedTransferObjectInterface
 {
 
 }

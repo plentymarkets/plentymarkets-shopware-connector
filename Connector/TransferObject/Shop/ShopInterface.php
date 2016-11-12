@@ -2,12 +2,12 @@
 
 namespace PlentyConnector\Connector\TransferObject\Shop;
 
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
+use PlentyConnector\Connector\TransferObject\MappedTransferObjectInterface;
 
 /**
  * Interface ShopInterface
  */
-interface ShopInterface extends TransferObjectInterface
+interface ShopInterface extends MappedTransferObjectInterface
 {
 
 }
