@@ -29,16 +29,25 @@ class GetChangedOrderQueryHandler implements QueryHandlerInterface
     private $logger;
 
     /**
+     * @var Resource\Order
+     */
+    private $orderResource;
+
+    /**
      * GetChangedOrderQueryHandler constructor.
+     *
      * @param ResponseParserInterface $responseParser
      * @param LoggerInterface $logger
+     * @param Resource\Order $orderResource
      */
     public function __construct(
         ResponseParserInterface $responseParser,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        Resource\Order $orderResource
     ) {
         $this->responseParser = $responseParser;
         $this->logger = $logger;
+        $this->orderResource = $orderResource;
     }
 
     /**
@@ -63,11 +72,7 @@ class GetChangedOrderQueryHandler implements QueryHandlerInterface
      */
     public function handle($event)
     {
-        /**
-         * @var Resource\Order $orderResource
-         */
-        $orderResource = Manager::getResource('order');
-        $orders = $orderResource->getList(0, null)['data'];
+        $orders = $this->orderResource->getList(0, null)['data'];
 
         // ignore cancelled orders
         $orders = array_filter($orders, function ($item) {
@@ -77,7 +82,7 @@ class GetChangedOrderQueryHandler implements QueryHandlerInterface
         $result = [];
         foreach ($orders as $order) {
             try {
-                $result[] = $this->responseParser->parseOrder($orderResource->getOne($order['id']));
+                $result[] = $this->responseParser->parseOrder($this->orderResource->getOne($order['id']));
             } catch (Exception $e) {
                 $this->logger->error($e->getMessage());
             }
