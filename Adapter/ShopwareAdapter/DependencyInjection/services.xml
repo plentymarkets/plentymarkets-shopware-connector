@@ -16,6 +16,14 @@
             <argument type="service" id="plentyconnector.identity_service"/>
         </service>
 
+        <!-- Shopware API Resources -->
+        <service id="local_shopware_adapter.shopware_api_manager" class="Shopware\Components\Api\Manager"/>
+
+        <service id="local_shopware_adapter.shopware_order_resource" class="Shopware\Components\Api\Resource\Order">
+            <factory service="local_shopware_adapter.shopware_api_manager" method="getResource" />
+            <argument type="string">order</argument>
+        </service>
+
         <!-- Handlers -->
 
         <service id="shopware_adapter.command_handler.import_manufacturer" class="ShopwareAdapter\CommandBus\Handler\ImportManufacturerCommandHandler">
@@ -27,6 +35,7 @@
         <service id="shopware_adapter.query_handler.get_changed_order" class="ShopwareAdapter\QueryBus\Handler\Order\GetChangedOrderQueryHandler">
             <argument type="service" id="shopware_adapter.response_parser"/>
             <argument type="service" id="plentyconnector.logger"/>
+            <argument type="service" id="local_shopware_adapter.shopware_order_resource"/>
 
             <tag name="plentyconnector.queryhandler"/>
         </service>
