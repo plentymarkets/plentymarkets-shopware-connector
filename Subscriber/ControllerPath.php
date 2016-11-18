@@ -44,6 +44,6 @@ class ControllerPath implements SubscriberInterface
             $basePath . '/Views/'
         );
 
-        return $basePath . '/Controllers/Backend/Profiler.php';
+        return $basePath . '/Controllers/Backend/Plentymarkets.php';
     }
 }
