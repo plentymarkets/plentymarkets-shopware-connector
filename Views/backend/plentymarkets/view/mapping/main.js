@@ -50,26 +50,39 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Main', {
 		me.listeners = {
 			activate: function()
 			{
-				// TODO
-				me.isBuilt = true;
 				if (!me.isBuilt)
 				{
 					me.setLoading(true);
-					Ext.create('Shopware.apps.Plentymarkets.store.mapping.Status').load(function(records)
+					Ext.create('Shopware.apps.Plentymarkets.store.Mapping').load(function(records)
 					{
+
 						Ext.Array.each(records, function(record)
 						{
+							var mapping = record.data;
+							var tabName = "Unknown";
+
+							if (!!mapping.originTransferObjects &&
+								mapping.originTransferObjects.length > 0) {
+								tabName = mapping.originTransferObjects[0].type;
+							} else if (!!mapping.destinationTransferObjects &&
+								mapping.destinationTransferObjects.length > 0) {
+								tabName = mapping.destinationTransferObjects[0].type;
+							}
+
 							me.add({
 								xtype: 'plentymarkets-view-mapping-tab',
-								title: names[record.get('name')],
-								entity: record.get('name'),
-								status: record,
+								title: tabName,
+								mapping: mapping,
 								panel: me
 							});
 						});
 
-						me.setActiveTab(0);
-						me.getActiveTab().reload();
+						if (records.length > 0) {
+							me.setActiveTab(0);
+						} else {
+							// TODO no mapping found
+						}
+
 						me.setLoading(false);
 						me.isBuilt = true;
 					});
