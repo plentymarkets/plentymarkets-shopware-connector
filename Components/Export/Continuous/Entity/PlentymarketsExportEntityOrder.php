@@ -342,20 +342,11 @@ class PlentymarketsExportEntityOrder
 				}
 			}
 
-			// Coupon
-			if ($Item->getMode() == 2)
-			{
-				$itemId = -1;
-				$rowType = 'Coupon';
-				$itemText = $Item->getArticleName() . ': ' . $Item->getArticleNumber();
-			}
-
-			// Additional coupon identifiers für 3rd party plugins
+			// Coupon and additional coupon identifiers für 3rd party plugins
 			$couponIdentifiers = PyConf()->get('OrderAdditionalCouponIdentifiers', '');
 			$couponIdentifiers = explode('|', $couponIdentifiers);
-			if (in_array($number, $couponIdentifiers))
+			if ($Item->getMode() == 2 or in_array($number, $couponIdentifiers))
 			{
-				$itemId = -1;
 				$rowType = 'Coupon';
 				$itemText = $Item->getArticleName() . ': ' . $Item->getArticleNumber();
 			}
@@ -399,6 +390,11 @@ class PlentymarketsExportEntityOrder
 						$rowType = 'Default';
 						break;
 				}
+			}
+			
+			if ($rowType != 'Default')
+			{
+				$itemId = -1;
 			}
 
 			if ($isOrderNet)
