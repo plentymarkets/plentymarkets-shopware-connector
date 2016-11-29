@@ -109,6 +109,11 @@
 
         <service id="plentyconnector.query_factory" class="PlentyConnector\Connector\QueryBus\QueryFactory"/>
 
+        <!-- Query generator -->
+        <service id="plentyconnector.query_generator.manufacturer" class="PlentyConnector\Connector\QueryBus\QueryGenerator\ManufacturerQueryQueryGenerator">
+            <tag name="plentyconnector.query_generator" />
+        </service>
+
         <!-- Service Bus -->
 
         <service id="plentyconnector.command_bus.command_handler_middleware" class="PlentyConnector\Connector\CommandBus\Middleware\CommandHandlerMiddleware"/>

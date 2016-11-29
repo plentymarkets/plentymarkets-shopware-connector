@@ -6,6 +6,7 @@ use PlentyConnector\Adapter\AdapterInterface;
 use PlentyConnector\Connector\CommandBus\Command\CommandInterface;
 use PlentyConnector\Connector\EventBus\Event\EventInterface;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
+use PlentyConnector\Connector\QueryBus\QueryFactory;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\TransferObject\Definition\DefinitionInterface;
@@ -123,9 +124,9 @@ class Connector implements ConnectorInterface
      *
      * @param DefinitionInterface $definition
      */
-    private function handleDefinition(DefinitionInterface $definition)
+    private function handleDefinition(DefinitionInterface $definition, $queryType)
     {
-        $query = QueryFactory::create(
+        $query[] = QueryFactory::create(
             $definition->getOriginAdapterName(),
             $definition->getObjectType(),
             $queryType

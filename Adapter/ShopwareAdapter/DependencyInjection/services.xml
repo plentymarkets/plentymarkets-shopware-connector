@@ -37,7 +37,7 @@
             <argument type="service" id="plentyconnector.logger"/>
             <argument type="service" id="local_shopware_adapter.shopware_order_resource"/>
 
-            <tag name="plentyconnector.queryhandler"/>
+            <tag name="plentyconnector.query_handler"/>
         </service>
     </services>
 </container>

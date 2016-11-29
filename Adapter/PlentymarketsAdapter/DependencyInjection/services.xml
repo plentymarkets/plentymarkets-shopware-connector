@@ -31,13 +31,13 @@
 
         <!-- Handlers -->
 
-        <service id="plentymarkets_adapter.query_handler.get_changed_manufacturer" class="PlentymarketsAdapter\QueryBus\Handler\Manufacturer\GetChangedManufacturerQueryHandler">
+        <service id="plentymarkets_adapter.query_handler.fetch_changed_manufacturer" class="PlentymarketsAdapter\QueryBus\Handler\Manufacturer\FetchChangedManufacturerQueryHandler">
             <argument type="service" id="plentmarkets_adapter.client"/>
             <argument type="service" id="plentyconnector.config"/>
             <argument type="service" id="plentmarkets_adapter.response_parser"/>
             <argument type="service" id="plentyconnector.logger"/>
 
-            <tag name="plentyconnector.queryhandler"/>
+            <tag name="plentyconnector.query_handler"/>
         </service>
     </services>
 </container>

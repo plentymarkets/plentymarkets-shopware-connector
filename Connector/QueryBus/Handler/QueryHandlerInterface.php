@@ -14,7 +14,7 @@ interface QueryHandlerInterface
      *
      * @return bool
      */
-    public function supports($event);
+    public function supports(QueryInterface $event);
 
     /**
      * @param QueryInterface $event
@@ -23,5 +23,5 @@ interface QueryHandlerInterface
      *
      * @throws \Exception
      */
-    public function handle($event);
+    public function handle(QueryInterface $event);
 }

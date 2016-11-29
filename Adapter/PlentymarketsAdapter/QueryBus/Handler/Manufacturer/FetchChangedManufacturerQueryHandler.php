@@ -5,8 +5,8 @@ namespace PlentymarketsAdapter\QueryBus\Handler\Manufacturer;
 use Exception;
 use PlentyConnector\Connector\Config\ConfigServiceInterface;
 use PlentyConnector\Connector\QueryBus\Handler\QueryHandlerInterface;
-use PlentyConnector\Connector\QueryBus\Query\Manufacturer\GetChangedManufacturerQuery;
-use PlentyConnector\Connector\QueryBus\Query\Manufacturer\GetManufacturerQuery;
+use PlentyConnector\Connector\QueryBus\Query\Manufacturer\FetchChangedManufacturerQuery;
+use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\TransferObject\Manufacturer\ManufacturerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
@@ -17,7 +17,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Class GetChangedRemoteManufacturerQueryHandler.
  */
-class GetChangedManufacturerQueryHandler implements QueryHandlerInterface
+class FetchChangedManufacturerQueryHandler implements QueryHandlerInterface
 {
     use ChangedDateTimeTrait;
 
@@ -42,12 +42,12 @@ class GetChangedManufacturerQueryHandler implements QueryHandlerInterface
     private $logger;
 
     /**
-     * GetChangedManufacturerQueryHandler constructor.
+     * FetchChangedManufacturerQueryHandler constructor.
      *
-     * @param ClientInterface         $client
-     * @param ConfigServiceInterface  $config
+     * @param ClientInterface $client
+     * @param ConfigServiceInterface $config
      * @param ResponseParserInterface $responseMapper
-     * @param LoggerInterface         $logger
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ClientInterface $client,
@@ -62,26 +62,25 @@ class GetChangedManufacturerQueryHandler implements QueryHandlerInterface
     }
 
     /**
-     * @param GetChangedManufacturerQuery $event
+     * @param QueryInterface $event
      *
      * @return bool
      */
-    public function supports($event)
+    public function supports(QueryInterface $event)
     {
         return
-            $event instanceof GetChangedManufacturerQuery &&
-            $event->getAdapterName() === PlentymarketsAdapter::getName()
-        ;
+            $event instanceof FetchChangedManufacturerQuery &&
+            $event->getAdapterName() === PlentymarketsAdapter::getName();
     }
 
     /**
-     * @param GetManufacturerQuery $event
+     * @param QueryInterface $event
      *
      * @return ManufacturerInterface[]
      *
      * @throws \UnexpectedValueException
      */
-    public function handle($event)
+    public function handle(QueryInterface $event)
     {
         $criteria = [
             'lastUpdateTimestamp' => $this->getChangedDateTime($this->config),

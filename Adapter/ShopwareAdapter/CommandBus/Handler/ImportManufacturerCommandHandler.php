@@ -2,10 +2,12 @@
 
 namespace ShopwareAdapter\CommandBus\Handler;
 
+use PlentyConnector\Connector\CommandBus\Command\CommandInterface;
 use PlentyConnector\Connector\CommandBus\Command\ImportManufacturerCommand;
 use PlentyConnector\Connector\CommandBus\Handler\CommandHandlerInterface;
 use PlentyConnector\Connector\EventBus\EventGeneratorTrait;
 use PlentyConnector\Connector\Identity\IdentityServiceInterface;
+use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 use PlentyConnector\Connector\TransferObject\Manufacturer\ManufacturerInterface;
 use Shopware\Components\Api\Manager;
@@ -46,7 +48,7 @@ class ImportManufacturerCommandHandler implements CommandHandlerInterface
      *
      * @return bool
      */
-    public function supports($command)
+    public function supports(CommandInterface $command)
     {
         return
             $command instanceof ImportManufacturerCommand &&
@@ -61,7 +63,7 @@ class ImportManufacturerCommandHandler implements CommandHandlerInterface
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      */
-    public function handle($command)
+    public function handle(CommandInterface $command)
     {
         $manufacturer = $command->getManufacturer();
 

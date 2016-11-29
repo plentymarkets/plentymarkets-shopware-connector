@@ -5,7 +5,7 @@ namespace PlentyConnector\Console\Command;
 use Exception;
 use PlentyConnector\Connector\Connector;
 use PlentyConnector\Connector\Mapping\MappingServiceInterface;
-use PlentyConnector\Connector\QueryBus\Query\Manufacturer\GetChangedManufacturerQuery;
+use PlentyConnector\Connector\QueryBus\Query\Manufacturer\FetchChangedManufacturerQuery;
 use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 use PlentyConnector\Logger\ConsoleHandler;
 use PlentymarketsAdapter\PlentymarketsAdapter;

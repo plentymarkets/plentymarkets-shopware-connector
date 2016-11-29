@@ -4,8 +4,9 @@ namespace ShopwareAdapter\QueryBus\Handler\Order;
 
 use Exception;
 use PlentyConnector\Connector\QueryBus\Handler\QueryHandlerInterface;
-use PlentyConnector\Connector\QueryBus\Query\Manufacturer\GetManufacturerQuery;
+use PlentyConnector\Connector\QueryBus\Query\Manufacturer\FetchAllManufacturerQuery;
 use PlentyConnector\Connector\QueryBus\Query\Order\GetChangedOrderQuery;
+use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\TransferObject\Order\OrderInterface;
 use ShopwareAdapter\ResponseParser\ResponseParserInterface;
 use Psr\Log\LoggerInterface;
@@ -55,7 +56,7 @@ class GetChangedOrderQueryHandler implements QueryHandlerInterface
      *
      * @return bool
      */
-    public function supports($event)
+    public function supports(QueryInterface $event)
     {
         return
             $event instanceof GetChangedOrderQuery &&
@@ -64,13 +65,13 @@ class GetChangedOrderQueryHandler implements QueryHandlerInterface
     }
 
     /**
-     * @param GetManufacturerQuery $event
+     * @param QueryInterface $event
      *
      * @return OrderInterface[]
      *
      * @throws \UnexpectedValueException
      */
-    public function handle($event)
+    public function handle(QueryInterface $event)
     {
         $orders = $this->orderResource->getList(0, null)['data'];
 

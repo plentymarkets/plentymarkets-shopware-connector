@@ -24,7 +24,7 @@ class QueryHandlerCompilerPass implements CompilerPassInterface
 
         $definition = $container->findDefinition('plentyconnector.query_bus.query_handler_middleware');
 
-        $taggedServices = $container->findTaggedServiceIds('plentyconnector.queryhandler');
+        $taggedServices = $container->findTaggedServiceIds('plentyconnector.query_handler');
 
         foreach ($taggedServices as $id => $tags) {
             $definition->addMethodCall('addHandler', [new Reference($id)]);

@@ -1,13 +1,13 @@
 <?php
 
-namespace PlentyConnector\Connector\QueryBus\Query\Order;
+namespace PlentyConnector\Connector\QueryBus\Query\Manufacturer;
 
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 
 /**
- * Class GetChangedOrderQuery
+ * Class FetchChangedManufacturerQuery.
  */
-class GetChangedOrderQuery implements QueryInterface
+class FetchChangedManufacturerQuery implements QueryInterface
 {
     /**
      * @var string
