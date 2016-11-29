@@ -28,22 +28,24 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Tab', {
 	{
 		var me = this;
 
-		me.stores = {
-			shopware: Ext.create('Shopware.apps.Plentymarkets.store.mapping.Shopware'),
-			plentymarkets: Ext.create('Shopware.apps.Plentymarkets.store.mapping.Plentymarkets')
-		};
-		
-		me.stores.shopware.getProxy().setExtraParam('map', me.entity);
-		me.stores.plentymarkets.getProxy().setExtraParam('map', me.entity);
+		var destinationObjects = me.mapping.destinationTransferObjects;
 
-		me.listeners = {
-			activate: function()
-			{
-				me.reload()
-			}
-		};
-
-		me.store = me.stores.shopware;
+		me.store = Ext.create('Ext.data.Store', {
+			fields : ['identifier', 'name', 'originName', 'originIdentifier'],
+			data : destinationObjects.map(function(object) {
+				var origin = me.mapping.originTransferObjects.filter(function(originObject) {
+					return object.identifier == originObject.identifier;
+				});
+				var origName = (!!origin[0]) ? origin[0].name : "";
+				var origId = (!!origin[0]) ? origin[0].identifier : "";
+				return {
+					identifier: object.identifier,
+					name: object.name,
+					originName: origName,
+					originIdentifier: origId
+				};
+			})
+		});
 
 		me.columns = me.getColumns();
 
@@ -53,20 +55,15 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Tab', {
 
 		me.on('edit', function(editor, e)
 		{
-			// commit the changes right after editing finished
-			e.record.save({
-				params: {
-					entity: me.entity,
-					'selectedPlentyId[]': Ext.getCmp('selectedPlentyId' + me.entity).getValue()
-				},
-				success: function(data, b)
-				{
-					var response = Ext.decode(b.response.responseText);
-					me.status = response.data;
-					me.reload();
-				}
+			var mappedOrigin = me.mapping.originTransferObjects.find(function(object) {
+				return object.identifier == e.value[0];
 			});
-			e.record.commit();
+			e.record.beginEdit();
+			e.record.set('originName', mappedOrigin.name);
+			e.record.set('originIdentifier', mappedOrigin.identifier);
+			e.record.endEdit();
+
+			// TODO validate
 		});
 
 		me.callParent(arguments);
@@ -77,49 +74,97 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Tab', {
 		var me = this, items = ['->'];
 		me.currentResource = null;
 
-		if (me.status.get('open') > 0 && !/Status/.test(me.entity))
+		if (!me.mapping.isComplete)
 		{
 			items.push({
 				xtype: 'button',
 				text: 'Offene Datensätze automatisch zuordnen',
-				cls: 'primary',
+				cls: 'secondary',
 				handler: function()
 				{
-					me.stores.shopware.load({
-						params: {
-							auto: true
+					me.setLoading(true);
+					// TODO primitive implementation
+					// Better: graph matching with Sorted Winkler
+
+					var items = [];
+					me.store.each(function(object) {
+						items.push(object.data);
+					});
+					var unmatchedOriginObjects = me.mapping.originTransferObjects.filter(function(object) {
+						return -1 == items.findIndex(function (itemObject) {
+								return itemObject.originName == object.name;
+							});
+					});
+
+					var levensthein = function (a, b) {
+						var m = [], i, j, min = Math.min;
+						if (!(a && b)) return (b || a).length;
+						for (i = 0; i <= b.length; m[i] = [i++]);
+						for (j = 0; j <= a.length; m[0][j] = j++);
+						for (i = 1; i <= b.length; i++) {
+							for (j = 1; j <= a.length; j++) {
+								m[i][j] = b.charAt(i - 1) == a.charAt(j - 1)
+									? m[i - 1][j - 1]
+									: m[i][j] = min(
+									m[i - 1][j - 1] + 1,
+									min(m[i][j - 1] + 1, m[i - 1 ][j] + 1))
+							}
+						}
+						return m[b.length][a.length];
+					};
+
+					me.store.each(function (object) {
+						if (object.data.originName && object.data.originName.length > 0) {
+							return;
+						}
+						var match = unmatchedOriginObjects.find(function (originObject) {
+							return levensthein(originObject.name.toLowerCase(), object.data.name.toLowerCase()) < 3;
+						});
+
+						if (!!match) {
+							object.beginEdit();
+							object.set('originName', match.name);
+							object.endEdit();
 						}
 					});
+
+					me.setLoading(false);
 				}
 			})
 		}
 
 		items.push({
 			xtype: 'button',
-			text: 'Neu laden',
-			cls: 'secondary',
+			text: 'Speichern',
+			cls: 'primary',
 			handler: function()
 			{
-				me.stores.shopware.load();
-			}
-		});
-
-		items.push({
-			xtype: 'button',
-			text: 'plentymarkets-Datensätze erneut abrufen',
-			cls: 'secondary',
-			handler: function()
-			{
-				me.setLoading(true);
-				me.stores.plentymarkets.load({
-					params: {
-						force: true
-					},
-					callback: function()
-					{
-						me.setLoading(false);
+				// find changed mapping
+				var updatedItems = [];
+				me.store.each(function(object) {
+					if (object.data.identifier != object.data.originIdentifier) {
+						items.push(object.data);
 					}
 				});
+
+				Ext.create('Ext.data.Store', {
+					fields : ['identifier', 'name', 'originName', 'originIdentifier'],
+					data : destinationObjects.map(function(object) {
+						var origin = me.mapping.originTransferObjects.filter(function(originObject) {
+							return object.identifier == originObject.identifier;
+						});
+						var origName = (!!origin[0]) ? origin[0].name : "";
+						var origId = (!!origin[0]) ? origin[0].identifier : "";
+						return {
+							identifier: object.identifier,
+							name: object.name,
+							originName: origName,
+							originIdentifier: origId
+						};
+					})
+				});
+
+				// TODO store data
 			}
 		});
 
@@ -134,27 +179,11 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Tab', {
 
 	},
 
-	reload: function()
-	{
-		var me = this;
-		me.stores.shopware.load({
-			params: {
-				map: me.entity
-			}
-		});
-
-		me.stores.plentymarkets.load({
-			params: {
-				map: me.entity
-			}
-		});
-	},
-
 	createRowEditing: function()
 	{
 		var me = this;
 
-		me.rowEditing = Ext.create('Ext.grid.plugin.RowEditing', {
+		me.rowEditing = Ext.create('Ext.grid.plugin.CellEditing', {
 			clicksToEdit: 1
 		});
 
@@ -164,46 +193,48 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Tab', {
 	getColumns: function()
 	{
 		var me = this;
-		var multiSelect = (/(Order|Payment)Status/.test(me.entity));
-		var allowBlank = (/(Order|Payment)Status/.test(me.entity));
+
+		var originStore = Ext.create('Ext.data.Store', {
+			fields : ['identifier', 'name'],
+			data : me.mapping.originTransferObjects.map(function(object) {
+				return {
+					identifier: object.identifier,
+					name: object.name
+				};
+			})
+		});
+
+		var destination = me.mapping.destinationAdapterName;
+		var origin = me.mapping.originAdapterName;
 
 		var columns = [{
-			header: '{s name=plentymarkets/view/mapping/header/shopware}Shopware{/s}',
+			header: destination,
 			dataIndex: 'name',
 			flex: 1
 		}, {
-			header: '{s name=plentymarkets/view/mapping/header/plentymarkets}plentymarkets{/s}',
-			dataIndex: 'plentyName',
+			header: origin,
+			dataIndex: 'originName',
 			flex: 1.5,
-			field: {
+			editor: {
 				xtype: 'combo',
 				queryMode: 'local',
-				typeAhead: true,
 				autoSelect: true,
 				emptyText: '{s name=plentymarkets/view/mapping/choose}Bitte wählen{/s}',
-				id: 'selectedPlentyId' + me.entity,
-				allowBlank: allowBlank,
+				allowBlank: true,
 				editable: false,
-				multiSelect: multiSelect,
-				store: me.stores.plentymarkets,
+				store: originStore,
 				displayField: 'name',
-				valueField: 'id'
+				valueField: 'identifier',
+				multiSelect: true,
+				listeners : {
+					beforeselect : function(combo,record,index,opts) {
+						combo.setValue([]);
+					}
+				}
 			}
 		}];
 
 		return columns;
-	},
-
-	getPagingBar: function()
-	{
-		var me = this;
-
-		return Ext.create('Ext.toolbar.Paging', {
-			store: me.stores.shopware,
-			dock: 'bottom',
-			displayInfo: true
-		});
 	}
-
 });
 // {/block}

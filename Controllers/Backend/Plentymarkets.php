@@ -1,6 +1,6 @@
 <?php
 
-use PlentyConnector\Connector\QueryBus\Query\Manufacturer\FetchAllManufacturerQuery;
+use PlentyConnector\Connector\QueryBus\Query\Manufacturer\GetManufacturerQuery;
 use PlentyConnector\Infrastructure\QueryBus\Query\GetRemoteOrderReferrerQuery;
 use PlentyConnector\Infrastructure\QueryBus\Query\GetRemoteWarehouseQuery;
 use PlentymarketsAdapter\PlentymarketsAdapter;
@@ -103,5 +103,46 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
                 'orderReferrers' => [],
             ),
         ));
+    }
+
+    public function getMappingsAction()
+    {
+        /**
+         * @var MappingServiceInterface $mappingService
+         */
+        $mappingService = Shopware()->Container()->get('plentyconnector.mapping_service');
+        $mappingInformation = $mappingService->getMappingInformation();
+
+        $transferObjectMapping = function($object) {
+            /**
+             * @var MappedTransferObjectInterface $object
+             */
+            return [
+                'identifier' => $object->getIdentifier(),
+                'type' => $object::getType(),
+                'name' => $object->getName()
+            ];
+        };
+
+        $this->View()->assign([
+            'success' => true,
+            'data' => array_map(function($mapping) use ($transferObjectMapping) {
+                /**
+                 * @var MappingInterface $mapping
+                 */
+                return [
+                    'originAdapterName' => $mapping->getOriginAdapterName(),
+                    'destinationAdapterName' => $mapping->getDestinationAdapterName(),
+                    'originTransferObjects' => array_map($transferObjectMapping, $mapping->getOriginTransferObjects()),
+                    'destinationTransferObjects' => array_map($transferObjectMapping, $mapping->getDestinationTransferObjects()),
+                    'isComplete' => $mapping->isIsComplete()
+                ];
+            }, $mappingInformation)
+        ]);
+    }
+
+    public function updateIdentityAction()
+    {
+
     }
 }
