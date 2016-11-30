@@ -15,7 +15,7 @@ class GetChangedOrderQuery implements QueryInterface
     private $adapterName;
 
     /**
-     * FetchChangedManufacturerQuery constructor.
+     * FetchChangedManufacturersQuery constructor.
      *
      * @param string $adapterName
      */

@@ -4,7 +4,7 @@ namespace ShopwareAdapter\QueryBus\Handler\PaymentMethod;
 
 use Doctrine\ORM\EntityManagerInterface;
 use PlentyConnector\Connector\QueryBus\Handler\QueryHandlerInterface;
-use PlentyConnector\Connector\QueryBus\Query\PaymentMethod\FetchAllPaymentMethodQuery;
+use PlentyConnector\Connector\QueryBus\Query\PaymentMethod\FetchAllPaymentMethodsQuery;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use Psr\Log\LoggerInterface;
 use Shopware\Models\Payment\Payment;
@@ -13,9 +13,9 @@ use ShopwareAdapter\ResponseParser\ResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class FetchAllPaymentMethodHandler
+ * Class FetchAllPaymentMethodsHandler
  */
-class FetchAllPaymentMethodHandler implements QueryHandlerInterface
+class FetchAllPaymentMethodsHandler implements QueryHandlerInterface
 {
     /**
      * @var ResponseParserInterface
@@ -38,7 +38,7 @@ class FetchAllPaymentMethodHandler implements QueryHandlerInterface
     private $repository;
 
     /**
-     * FetchAllPaymentMethodHandler constructor.
+     * FetchAllPaymentMethodsHandler constructor.
      *
      * @param ResponseParserInterface $responseParser
      * @param LoggerInterface $logger
@@ -61,7 +61,7 @@ class FetchAllPaymentMethodHandler implements QueryHandlerInterface
     public function supports(QueryInterface $event)
     {
         return
-            $event instanceof FetchAllPaymentMethodQuery &&
+            $event instanceof FetchAllPaymentMethodsQuery &&
             $event->getAdapterName() === ShopwareAdapter::getName();
     }
 

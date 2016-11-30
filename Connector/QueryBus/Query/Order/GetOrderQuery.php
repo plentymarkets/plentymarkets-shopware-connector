@@ -15,7 +15,7 @@ class GetOrderQuery implements QueryInterface
     private $adapterName;
 
     /**
-     * FetchAllManufacturerQuery constructor.
+     * FetchAllManufacturersQuery constructor.
      *
      * @param string $adapterName
      */

@@ -5,7 +5,7 @@ namespace PlentymarketsAdapter\QueryBus\Handler\Manufacturer;
 use Exception;
 use PlentyConnector\Connector\Config\ConfigServiceInterface;
 use PlentyConnector\Connector\QueryBus\Handler\QueryHandlerInterface;
-use PlentyConnector\Connector\QueryBus\Query\Manufacturer\FetchChangedManufacturerQuery;
+use PlentyConnector\Connector\QueryBus\Query\Manufacturer\FetchChangedManufacturersQuery;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\TransferObject\Manufacturer\ManufacturerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
@@ -15,9 +15,9 @@ use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class GetChangedRemoteManufacturerQueryHandler.
+ * Class FetchChangedManufacturersQueryHandler.
  */
-class FetchChangedManufacturerQueryHandler implements QueryHandlerInterface
+class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
 {
     use ChangedDateTimeTrait;
 
@@ -42,7 +42,7 @@ class FetchChangedManufacturerQueryHandler implements QueryHandlerInterface
     private $logger;
 
     /**
-     * FetchChangedManufacturerQueryHandler constructor.
+     * FetchChangedManufacturersQueryHandler constructor.
      *
      * @param ClientInterface $client
      * @param ConfigServiceInterface $config
@@ -69,7 +69,7 @@ class FetchChangedManufacturerQueryHandler implements QueryHandlerInterface
     public function supports(QueryInterface $event)
     {
         return
-            $event instanceof FetchChangedManufacturerQuery &&
+            $event instanceof FetchChangedManufacturersQuery &&
             $event->getAdapterName() === PlentymarketsAdapter::getName();
     }
 

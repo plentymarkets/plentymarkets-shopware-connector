@@ -26,7 +26,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
         $queryBus = $this->container->get('plentyconnector.query_bus');
         try {
             // do sample request to check whether the credentials are valid
-            $queryBus->handle(new FetchAllManufacturerQuery(PlentymarketsAdapter::getName()));
+            $queryBus->handle(new FetchAllManufacturersQuery(PlentymarketsAdapter::getName()));
             $success = true;
         } catch (Exception $exception) {
             $success = false;

@@ -5,9 +5,9 @@ namespace PlentyConnector\Connector\QueryBus\Query\Manufacturer;
 use PlentyConnector\Connector\QueryBus\Query\FetchChangedQueryInterface;
 
 /**
- * Class FetchChangedManufacturerQuery.
+ * Class FetchChangedManufacturersQuery.
  */
-class FetchChangedManufacturerQuery implements FetchChangedQueryInterface
+class FetchChangedManufacturersQuery implements FetchChangedQueryInterface
 {
     /**
      * @var string
@@ -15,7 +15,7 @@ class FetchChangedManufacturerQuery implements FetchChangedQueryInterface
     private $adapterName;
 
     /**
-     * FetchChangedManufacturerQuery constructor.
+     * FetchChangedManufacturersQuery constructor.
      *
      * @param string $adapterName
      */

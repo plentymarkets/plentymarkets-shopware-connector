@@ -2,8 +2,8 @@
 
 namespace PlentyConnector\Connector\QueryBus\QueryGenerator\PaymentMethod;
 
-use PlentyConnector\Connector\QueryBus\Query\PaymentMethod\FetchAllPaymentMethodQuery;
-use PlentyConnector\Connector\QueryBus\Query\PaymentMethod\FetchChangedPaymentMethodQuery;
+use PlentyConnector\Connector\QueryBus\Query\PaymentMethod\FetchAllPaymentMethodsQuery;
+use PlentyConnector\Connector\QueryBus\Query\PaymentMethod\FetchChangedPaymentMethodsQuery;
 use PlentyConnector\Connector\QueryBus\Query\PaymentMethod\FetchPaymentMethodQuery;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\QueryGenerator\QueryGeneratorInterface;
@@ -31,7 +31,7 @@ class PaymentMethodQueryGenerator implements QueryGeneratorInterface
      */
     public function generateFetchChangedQuery($adapterName)
     {
-        return new FetchChangedPaymentMethodQuery($adapterName);
+        return new FetchChangedPaymentMethodsQuery($adapterName);
     }
 
     /**
@@ -41,7 +41,7 @@ class PaymentMethodQueryGenerator implements QueryGeneratorInterface
      */
     public function generateFetchAllQuery($adapterName)
     {
-        return new FetchAllPaymentMethodQuery($adapterName);
+        return new FetchAllPaymentMethodsQuery($adapterName);
     }
 
     /**

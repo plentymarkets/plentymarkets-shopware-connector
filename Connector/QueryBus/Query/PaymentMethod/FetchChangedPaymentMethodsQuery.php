@@ -2,12 +2,12 @@
 
 namespace PlentyConnector\Connector\QueryBus\Query\PaymentMethod;
 
-use PlentyConnector\Connector\QueryBus\Query\FetchAllQueryInterface;
+use PlentyConnector\Connector\QueryBus\Query\FetchChangedQueryInterface;
 
 /**
- * Class FetchAllPaymentMethodQuery.
+ * Class FetchChangedPaymentMethodsQuery.
  */
-class FetchAllPaymentMethodQuery implements FetchAllQueryInterface
+class FetchChangedPaymentMethodsQuery implements FetchChangedQueryInterface
 {
     /**
      * @var string
@@ -15,7 +15,7 @@ class FetchAllPaymentMethodQuery implements FetchAllQueryInterface
     private $adapterName;
 
     /**
-     * FetchAllPaymentMethodQuery constructor.
+     * FetchChangedPaymentMethodsQuery constructor.
      *
      * @param string $adapterName
      */

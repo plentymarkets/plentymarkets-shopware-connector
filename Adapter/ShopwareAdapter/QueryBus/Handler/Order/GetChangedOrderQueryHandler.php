@@ -4,14 +4,11 @@ namespace ShopwareAdapter\QueryBus\Handler\Order;
 
 use Exception;
 use PlentyConnector\Connector\QueryBus\Handler\QueryHandlerInterface;
-use PlentyConnector\Connector\QueryBus\Query\Manufacturer\FetchAllManufacturerQuery;
 use PlentyConnector\Connector\QueryBus\Query\Order\GetChangedOrderQuery;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
-use PlentyConnector\Connector\TransferObject\Order\OrderInterface;
-use ShopwareAdapter\ResponseParser\ResponseParserInterface;
 use Psr\Log\LoggerInterface;
-use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource;
+use ShopwareAdapter\ResponseParser\ResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**

@@ -3,7 +3,7 @@
 namespace PlentymarketsAdapter\QueryBus\Handler\PaymentMethod;
 
 use PlentyConnector\Connector\QueryBus\Handler\QueryHandlerInterface;
-use PlentyConnector\Connector\QueryBus\Query\PaymentMethod\FetchAllPaymentMethodQuery;
+use PlentyConnector\Connector\QueryBus\Query\PaymentMethod\FetchAllPaymentMethodsQuery;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
@@ -11,9 +11,9 @@ use Psr\Log\LoggerInterface;
 use ShopwareAdapter\ResponseParser\ResponseParserInterface;
 
 /**
- * Class FetchAllPaymentMethodHandler
+ * Class FetchAllPaymentMethodsHandler
  */
-class FetchAllPaymentMethodHandler implements QueryHandlerInterface
+class FetchAllPaymentMethodsHandler implements QueryHandlerInterface
 {
     /**
      * @var ClientInterface
@@ -31,7 +31,7 @@ class FetchAllPaymentMethodHandler implements QueryHandlerInterface
     private $logger;
 
     /**
-     * FetchAllPaymentMethodHandler constructor.
+     * FetchAllPaymentMethodsHandler constructor.
      *
      * @param ClientInterface $client
      * @param ResponseParserInterface $responseParser
@@ -53,7 +53,7 @@ class FetchAllPaymentMethodHandler implements QueryHandlerInterface
     public function supports(QueryInterface $event)
     {
         return
-            $event instanceof FetchAllPaymentMethodQuery &&
+            $event instanceof FetchAllPaymentMethodsQuery &&
             $event->getAdapterName() === PlentymarketsAdapter::getName();
     }
 
