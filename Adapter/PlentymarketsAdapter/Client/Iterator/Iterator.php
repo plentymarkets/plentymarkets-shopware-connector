@@ -76,6 +76,7 @@ class Iterator implements BaseIterator
     {
         $result = $this->client->request('GET', $this->path, $criteria, $limit, $offset);
 
+
         foreach ($result as $key => $item) {
             $this->page[$this->index + $key] = $item;
         }

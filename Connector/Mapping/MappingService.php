@@ -2,12 +2,13 @@
 
 namespace PlentyConnector\Connector\Mapping;
 
-use PlentyConnector\Connector\QueryBus\QueryFactoryInterface;
+use PlentyConnector\Connector\QueryBus\QueryFactory\QueryFactoryInterface;
+use PlentyConnector\Connector\QueryBus\QueryType;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use PlentyConnector\Connector\TransferObject\Definition\DefinitionInterface;
 use PlentyConnector\Connector\TransferObject\MappedTransferObjectInterface;
 use PlentyConnector\Connector\TransferObject\Mapping\Mapping;
-use PlentyConnector\Connector\TransferObject\Mapping\MappingInterface;
+use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
  * Class MappingService.
@@ -52,18 +53,44 @@ class MappingService implements MappingServiceInterface
     }
 
     /**
-     * @return MappingInterface[]
+     * {@inheritdoc}
      */
     public function getMappingInformation()
     {
         $result = [];
 
         foreach ($this->definitions as $definition) {
-            $originQuery = $this->queryFactory->create();
+            $originQuery = $this->queryFactory->create(
+                $definition->getOriginAdapterName(),
+                $definition->getObjectType(),
+                QueryType::ALL
+            );
+
             $originTransferObjects = $this->queryBus->handle($originQuery);
 
-            $destinationQuery = $this->queryFactory->create();
+            if (null === $originTransferObjects) {
+                // TODO handle failure
+            }
+
+            $originTransferObjects = array_filter($originTransferObjects, function(TransferObjectInterface $object) use ($definition) {
+                return $object::getType() === $definition->getObjectType() && is_subclass_of($object, MappedTransferObjectInterface::class);
+            });
+
+            $destinationQuery =$this->queryFactory->create(
+                $definition->getDestinationAdapterName(),
+                $definition->getObjectType(),
+                QueryType::ALL
+            );
+
             $destinationTransferObjects = $this->queryBus->handle($destinationQuery);
+
+            if (null === $destinationTransferObjects) {
+                // TODO handle failure
+            }
+
+            $destinationTransferObjects = array_filter($destinationTransferObjects, function(TransferObjectInterface $object) use ($definition) {
+                return $object::getType() === $definition->getObjectType() && is_subclass_of($object, MappedTransferObjectInterface::class);
+            });
 
             $result[] = Mapping::fromArray([
                 'originAdapterName' => $definition->getOriginAdapterName(),
@@ -78,26 +105,25 @@ class MappingService implements MappingServiceInterface
     }
 
     /**
-     * @param DefinitionInterface[] $originTransferObjects
-     * @param DefinitionInterface[] $destinationTransferObjects
+     * @param MappedTransferObjectInterface[] $originTransferObjects
+     * @param MappedTransferObjectInterface[] $destinationTransferObjects
      *
      * @return bool
      */
     private function isMappingComplete(array $originTransferObjects, array $destinationTransferObjects)
     {
-        $diff = array_udiff($originTransferObjects, $destinationTransferObjects,
-            function (
-                MappedTransferObjectInterface $originTransferObjects,
-                MappedTransferObjectInterface $destinationTransferObjects
-            ) {
-                if ($originTransferObjects->getIdentifier() === $destinationTransferObjects->getIdentifier()) {
-                    return 0;
+        $missingMapping = array_filter($destinationTransferObjects,
+            function(MappedTransferObjectInterface $object) use ($originTransferObjects) {
+                foreach ($originTransferObjects as $originTransferObject) {
+                    if ($object->getIdentifier() === $originTransferObject->getIdentifier()) {
+                        return true;
+                    }
                 }
 
-                return 1;
+                return false;
             }
         );
 
-        return (bool)$diff;
+        return !$missingMapping;
     }
 }

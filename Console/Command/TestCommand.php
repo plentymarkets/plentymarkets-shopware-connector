@@ -2,36 +2,32 @@
 
 namespace PlentyConnector\Console\Command;
 
-use Exception;
-use PlentyConnector\Connector\Connector;
-use PlentyConnector\Connector\Mapping\MappingServiceInterface;
 use PlentyConnector\Logger\ConsoleHandler;
+use PlentymarketsAdapter\Client\Client;
 use Shopware\Commands\ShopwareCommand;
-use Shopware\Components\Logger;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Command to manually import manufacturer.
+ * Class TestCommand
  */
-class ImportManufacturerCommand extends ShopwareCommand
+class TestCommand extends ShopwareCommand
 {
     /**
-     * @var Connector
+     * @var Client
      */
-    private $connector;
+    private $client;
 
     /**
      * HandleManufacturerCommand constructor.
      *
-     * @param Connector $connector
+     * @param Client $client
      *
      * @throws \Symfony\Component\Console\Exception\LogicException
      */
-    public function __construct(Connector $connector)
+    public function __construct(Client $client)
     {
-        $this->connector = $connector;
+        $this->client = $client;
 
         parent::__construct();
     }
@@ -41,14 +37,8 @@ class ImportManufacturerCommand extends ShopwareCommand
      */
     protected function configure()
     {
-        $this->setName('plentyconnector:import:manufacturer');
-        $this->setDescription('Import manufacturer');
-        $this->addOption(
-            'all',
-            null,
-            InputOption::VALUE_NONE,
-            'If set, import every manufacturer'
-        );
+        $this->setName('plentyconnector:test');
+        $this->setDescription('test');
     }
 
     /**
@@ -61,19 +51,29 @@ class ImportManufacturerCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $all = $input->getOption('all');
-
         /**
          * @var Logger
          */
         $logger = $this->container->get('plentyconnector.logger');
         $logger->pushHandler(new ConsoleHandler($output));
 
-        /**
-         * @var MappingServiceInterface $mappingService
-         */
-        $mappingService = Shopware()->Container()->get('plentyconnector.mapping_service');
-        var_dump($mappingService->getMappingInformation());
+        $routes = [
+            'payments/methods',
+            'stockmanagement/warehouses',
+            'orders/shipping/countries',
+            'orders/referrers',
+            'orders/statuses',
+            'orders/currencies',
+            'orders/shipping/presets',
+        ];
+
+        array_walk($routes, function($route) use ($output) {
+            $result = $this->client->request('GET', $route, [], 1, 0);
+
+            if (count($result) !== 1) {
+                $output->writeln($route);
+            }
+        });
 
         try {
             //$this->connector->handle(Manufacturer::getType(), 'All');

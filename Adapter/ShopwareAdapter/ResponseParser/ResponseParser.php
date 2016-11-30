@@ -11,6 +11,7 @@ use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod;
 use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
+use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\TransferObject\Variation\Variation;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Variant;
@@ -123,5 +124,15 @@ class ResponseParser implements ResponseParserInterface
         }
 
         return $identity;
+    }
+
+    /**
+     * @param array $entry
+     *
+     * @return TransferObjectInterface
+     */
+    public function parse(array $entry)
+    {
+        // TODO: Implement parse() method.
     }
 }

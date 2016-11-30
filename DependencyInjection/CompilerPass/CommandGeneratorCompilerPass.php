@@ -8,9 +8,9 @@ use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Class QueryGeneratorCompilerPass
+ * Class QueryGeneratorCompilerPassimplements
  */
-class QueryGeneratorCompilerPass implements CompilerPassInterface
+class CommandGeneratorCompilerPass implements CompilerPassInterface
 {
     /**
      * @param ContainerBuilder $container
@@ -19,13 +19,13 @@ class QueryGeneratorCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->has('plentyconnector.query_factory')) {
+        if (!$container->has('plentyconnector.command_factory')) {
             return;
         }
 
-        $definition = $container->findDefinition('plentyconnector.query_factory');
+        $definition = $container->findDefinition('plentyconnector.command_factory');
 
-        $taggedServices = $container->findTaggedServiceIds('plentyconnector.query_generator');
+        $taggedServices = $container->findTaggedServiceIds('plentyconnector.command_generator');
 
         foreach ($taggedServices as $id => $tags) {
             $definition->addMethodCall('addGenerator', [new Reference($id)]);

@@ -24,13 +24,6 @@ interface ConnectorInterface
     public function addDefinition(DefinitionInterface $definition);
 
     /**
-     * @param $type
-     *
-     * @return DefinitionInterface[]
-     */
-    public function getDefinitions($type = null);
-
-    /**
      * @param CommandInterface $command
      */
     public function executeCommand(CommandInterface $command);

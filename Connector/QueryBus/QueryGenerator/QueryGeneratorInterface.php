@@ -7,16 +7,16 @@ namespace PlentyConnector\Connector\QueryBus\QueryGenerator;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 
 /**
- * Interface GeneratorInterface
+ * Interface QueryGeneratorInterface
  */
 interface QueryGeneratorInterface
 {
     /**
-     * @param string $transferObjectName
+     * @param string $transferObjectType
      *
      * @return boolean
      */
-    public function supports($transferObjectName);
+    public function supports($transferObjectType);
 
     /**
      * @param string $adapterName

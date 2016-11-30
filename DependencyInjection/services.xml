@@ -58,6 +58,8 @@
             <argument type="service" id="plentyconnector.query_bus"/>
             <argument type="service" id="plentyconnector.command_bus"/>
             <argument type="service" id="plentyconnector.event_bus"/>
+            <argument type="service" id="plentyconnector.query_factory"/>
+            <argument type="service" id="plentyconnector.command_factory"/>
         </service>
 
         <!-- Connector definitions -->
@@ -95,6 +97,12 @@
             <tag name="console.command"/>
         </service>
 
+        <service id="plentyconnector.console_command.test" class="PlentyConnector\Console\Command\TestCommand">
+            <argument type="service" id="plentmarkets_adapter.client"/>
+
+            <tag name="console.command"/>
+        </service>
+
         <!-- Identity Service -->
 
         <service id="plentyconnector.identity_storage" class="PlentyConnector\Connector\Identity\Storage\DoctrineIdentityStorage">
@@ -107,11 +115,23 @@
 
         <!-- Query Factory -->
 
-        <service id="plentyconnector.query_factory" class="PlentyConnector\Connector\QueryBus\QueryFactory"/>
+        <service id="plentyconnector.query_factory" class="PlentyConnector\Connector\QueryBus\QueryFactory\QueryFactory"/>
 
         <!-- Query generator -->
-        <service id="plentyconnector.query_generator.manufacturer" class="PlentyConnector\Connector\QueryBus\QueryGenerator\ManufacturerQueryQueryGenerator">
+        <service id="plentyconnector.query_generator.manufacturer" class="PlentyConnector\Connector\QueryBus\QueryGenerator\Manufacturer\ManufacturerQueryGenerator">
             <tag name="plentyconnector.query_generator" />
+        </service>
+        <service id="plentyconnector.query_generator.payment_method" class="PlentyConnector\Connector\QueryBus\QueryGenerator\PaymentMethod\PaymentMethodQueryGenerator">
+            <tag name="plentyconnector.query_generator" />
+        </service>
+
+        <!-- Command Factory -->
+
+        <service id="plentyconnector.command_factory" class="PlentyConnector\Connector\CommandBus\CommandFactory\CommandFactory"/>
+
+        <!-- Command generator -->
+        <service id="plentyconnector.command_generator.manufacturer" class="PlentyConnector\Connector\CommandBus\CommandGenerator\Manufacturer\ManufacturerCommandGenerator">
+            <tag name="plentyconnector.command_generator" />
         </service>
 
         <!-- Service Bus -->

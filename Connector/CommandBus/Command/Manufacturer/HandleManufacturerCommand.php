@@ -2,15 +2,16 @@
 
 namespace PlentyConnector\Connector\CommandBus\Command;
 
-use PlentyConnector\Connector\TransferObject\Manufacturer\ManufacturerInterface;
+use PlentyConnector\Connector\CommandBus\Command\Manufacturer\HandleManufacturerCommandInterface;
+use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
- * Class ImportManufacturerCommand.
+ * Class HandleManufacturerCommand.
  */
-class ImportManufacturerCommand implements CommandInterface
+class HandleManufacturerCommand implements HandleManufacturerCommandInterface
 {
     /**
-     * @var ManufacturerInterface
+     * @var TransferObjectInterface
      */
     private $manufacturer;
 
@@ -22,17 +23,17 @@ class ImportManufacturerCommand implements CommandInterface
     /**
      * ImportLocalManufacturerCommand constructor.
      *
-     * @param ManufacturerInterface $manufacturer the transferobject which will be handeled
-     * @param string                $adapterName  the classname of the target adapter
+     * @param TransferObjectInterface $manufacturer the transferobject which will be handeled
+     * @param string                  $adapterName  the classname of the target adapter
      */
-    public function __construct(ManufacturerInterface $manufacturer, $adapterName = '')
+    public function __construct(TransferObjectInterface $manufacturer, $adapterName = '')
     {
         $this->manufacturer = $manufacturer;
         $this->adapterName = $adapterName;
     }
 
     /**
-     * @return ManufacturerInterface
+     * {@inheritdoc}
      */
     public function getManufacturer()
     {
@@ -40,7 +41,7 @@ class ImportManufacturerCommand implements CommandInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getAdapterName()
     {

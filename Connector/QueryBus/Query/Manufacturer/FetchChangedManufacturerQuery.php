@@ -2,12 +2,12 @@
 
 namespace PlentyConnector\Connector\QueryBus\Query\Manufacturer;
 
-use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
+use PlentyConnector\Connector\QueryBus\Query\FetchChangedQueryInterface;
 
 /**
  * Class FetchChangedManufacturerQuery.
  */
-class FetchChangedManufacturerQuery implements QueryInterface
+class FetchChangedManufacturerQuery implements FetchChangedQueryInterface
 {
     /**
      * @var string

@@ -2,7 +2,7 @@
 
 namespace ShopwareAdapter\ResponseParser;
 
-use PlentyConnector\Connector\TransferObject\Order\OrderInterface;
+use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
  * Interface ResponseParserInterface
@@ -10,9 +10,9 @@ use PlentyConnector\Connector\TransferObject\Order\OrderInterface;
 interface ResponseParserInterface
 {
     /**
-     * @param $entry
+     * @param array $entry
      *
-     * @return OrderInterface
+     * @return TransferObjectInterface
      */
-    public function parseOrder($entry);
+    public function parse(array $entry);
 }

@@ -24,7 +24,7 @@ class CommandHandlerCompilerPass implements CompilerPassInterface
 
         $definition = $container->findDefinition('plentyconnector.command_bus.command_handler_middleware');
 
-        $taggedServices = $container->findTaggedServiceIds('plentyconnector.commandhandler');
+        $taggedServices = $container->findTaggedServiceIds('plentyconnector.command_handler');
 
         foreach ($taggedServices as $id => $tags) {
             $definition->addMethodCall('addHandler', [new Reference($id)]);

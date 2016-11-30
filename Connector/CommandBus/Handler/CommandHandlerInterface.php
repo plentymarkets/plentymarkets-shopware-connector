@@ -14,10 +14,10 @@ interface CommandHandlerInterface
      *
      * @return bool
      */
-    public function supports($command);
+    public function supports(CommandInterface $command);
 
     /**
      * @param CommandInterface $command
      */
-    public function handle($command);
+    public function handle(CommandInterface $command);
 }

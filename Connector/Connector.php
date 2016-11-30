@@ -2,14 +2,17 @@
 
 namespace PlentyConnector\Connector;
 
+use Assert\Assertion;
 use PlentyConnector\Adapter\AdapterInterface;
 use PlentyConnector\Connector\CommandBus\Command\CommandInterface;
+use PlentyConnector\Connector\CommandBus\CommandFactory\CommandFactory;
 use PlentyConnector\Connector\EventBus\Event\EventInterface;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
-use PlentyConnector\Connector\QueryBus\QueryFactory;
+use PlentyConnector\Connector\QueryBus\QueryFactory\QueryFactory;
+use PlentyConnector\Connector\QueryBus\QueryType;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\TransferObject\Definition\DefinitionInterface;
+use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
  * Class Connector.
@@ -19,12 +22,12 @@ class Connector implements ConnectorInterface
     /**
      * @var AdapterInterface[]
      */
-    private $adapters;
+    private $adapters = [];
 
     /**
      * @var DefinitionInterface[]
      */
-    private $definitions;
+    private $definitions = [];
 
     /**
      * @var ServiceBusInterface
@@ -42,20 +45,36 @@ class Connector implements ConnectorInterface
     private $eventBus;
 
     /**
+     * @var QueryFactory
+     */
+    private $queryFactory;
+
+    /**
+     * @var CommandFactory
+     */
+    private $commandFactory;
+
+    /**
      * Connector constructor.
      *
      * @param ServiceBusInterface $queryBus
      * @param ServiceBusInterface $commandBus
      * @param ServiceBusInterface $eventBus
+     * @param QueryFactory $queryFactory
+     * @param CommandFactory $commandFactory
      */
     public function __construct(
         ServiceBusInterface $queryBus,
         ServiceBusInterface $commandBus,
-        ServiceBusInterface $eventBus
+        ServiceBusInterface $eventBus,
+        QueryFactory $queryFactory,
+        CommandFactory $commandFactory
     ) {
         $this->queryBus = $queryBus;
         $this->commandBus = $commandBus;
         $this->eventBus = $eventBus;
+        $this->queryFactory = $queryFactory;
+        $this->commandFactory = $commandFactory;
     }
 
     /**
@@ -96,19 +115,23 @@ class Connector implements ConnectorInterface
      */
     public function handle(ObjectTypeInterface $objectType, $queryType)
     {
+        Assertion::inArray($queryType, QueryType::getAllTypes());
+
         $definitions = $this->getDefinitions($objectType);
 
-        array_map(function (DefinitionInterface $definition) {
-            $this->handleDefinition($definition);
+        array_map(function (DefinitionInterface $definition) use ($queryType) {
+            $this->handleDefinition($definition, $queryType);
         }, $definitions);
     }
 
     /**
-     * {@inheritdoc}
+     * @param null $type
+     *
+     * @return DefinitionInterface[]
      */
-    public function getDefinitions($type = null)
+    private function getDefinitions($type = null)
     {
-        if (null === $this->definitions) {
+        if (null === count($this->definitions)) {
             return [];
         }
 
@@ -120,20 +143,19 @@ class Connector implements ConnectorInterface
     }
 
     /**
-     * TODO: finalize.
-     *
      * @param DefinitionInterface $definition
+     * @param $queryType
      */
     private function handleDefinition(DefinitionInterface $definition, $queryType)
     {
-        $query[] = QueryFactory::create(
+        $query = $this->queryFactory->create(
             $definition->getOriginAdapterName(),
             $definition->getObjectType(),
             $queryType
         );
 
         /**
-         * @var TransferObjectInterface[]
+         * @var TransferObjectInterface[] $objects
          */
         $objects = $this->queryBus->handle($query);
 
@@ -142,21 +164,23 @@ class Connector implements ConnectorInterface
         }
 
         foreach ($objects as $object) {
-            $command = CommandFactory::create(
-                $object,
-                $definition->getDestinationAdapterName()
-            );
+            $commands[] = $this->commandFactory->create($object, $definition->getDestinationAdapterName());
 
-            try {
-                $this->commandBus->handle($command);
-            } catch (ObjectDoesNotExistInAdapterDomainException $exception) {
-                $this->handle(
-                    $exception->getObjectType,
-                    self::SINGLE_OBJECT
-                );
+            array_walk($commands, function (CommandInterface $command) {
+                $this->handleCommand($command);
+            });
+        }
+    }
 
-                $this->executeCommand($command);
-            }
+    /**
+     * @param CommandInterface $command
+     */
+    private function handleCommand(CommandInterface $command)
+    {
+        try {
+            $this->commandBus->handle($command);
+        } catch (\Exception $exception) {
+            // TODO: finalize
         }
     }
 

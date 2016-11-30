@@ -1,26 +1,27 @@
 <?php
 
-namespace PlentyConnector\Connector\QueryBus\QueryGenerator;
+namespace PlentyConnector\Connector\QueryBus\QueryGenerator\Manufacturer;
 
 use PlentyConnector\Connector\QueryBus\Query\Manufacturer\FetchChangedManufacturerQuery;
 use PlentyConnector\Connector\QueryBus\Query\Manufacturer\FetchAllManufacturerQuery;
 use PlentyConnector\Connector\QueryBus\Query\Manufacturer\FetchManufacturerQuery;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
+use PlentyConnector\Connector\QueryBus\QueryGenerator\QueryGeneratorInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectType;
 
 /**
  * Class ManufacturerQueryGenerator
  */
-class ManufacturerQueryQueryGenerator implements QueryGeneratorInterface
+class ManufacturerQueryGenerator implements QueryGeneratorInterface
 {
     /**
-     * @param string $transferObjectName
+     * @param string $transferObjectType
      *
      * @return boolean
      */
-    public function supports($transferObjectName)
+    public function supports($transferObjectType)
     {
-        return $transferObjectName === TransferObjectType::MANUFACTURER;
+        return $transferObjectType === TransferObjectType::MANUFACTURER;
     }
 
     /**

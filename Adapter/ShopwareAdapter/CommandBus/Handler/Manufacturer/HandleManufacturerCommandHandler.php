@@ -1,13 +1,13 @@
 <?php
 
-namespace ShopwareAdapter\CommandBus\Handler;
+namespace ShopwareAdapter\CommandBus\Handler\Manufacturer;
 
 use PlentyConnector\Connector\CommandBus\Command\CommandInterface;
-use PlentyConnector\Connector\CommandBus\Command\ImportManufacturerCommand;
+use PlentyConnector\Connector\CommandBus\Command\HandleManufacturerCommand;
+use PlentyConnector\Connector\CommandBus\Command\Manufacturer\HandleManufacturerCommandInterface;
 use PlentyConnector\Connector\CommandBus\Handler\CommandHandlerInterface;
 use PlentyConnector\Connector\EventBus\EventGeneratorTrait;
 use PlentyConnector\Connector\Identity\IdentityServiceInterface;
-use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 use PlentyConnector\Connector\TransferObject\Manufacturer\ManufacturerInterface;
 use Shopware\Components\Api\Manager;
@@ -18,7 +18,7 @@ use ShopwareAdapter\ShopwareAdapter;
 /**
  * Class ImportLocalManufacturerCommandHandler.
  */
-class ImportManufacturerCommandHandler implements CommandHandlerInterface
+class HandleManufacturerCommandHandler implements CommandHandlerInterface
 {
     use EventGeneratorTrait;
 
@@ -44,20 +44,20 @@ class ImportManufacturerCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param ImportManufacturerCommand $command
+     * @param CommandInterface $command
      *
-     * @return bool
+     * @return boolean
      */
     public function supports(CommandInterface $command)
     {
         return
-            $command instanceof ImportManufacturerCommand &&
+            $command instanceof HandleManufacturerCommand &&
             $command->getAdapterName() === ShopwareAdapter::getName()
         ;
     }
 
     /**
-     * @param ImportManufacturerCommand $command
+     * @param CommandInterface $command
      *
      * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
@@ -65,6 +65,9 @@ class ImportManufacturerCommandHandler implements CommandHandlerInterface
      */
     public function handle(CommandInterface $command)
     {
+        /**
+         * @var HandleManufacturerCommandInterface $command
+         */
         $manufacturer = $command->getManufacturer();
 
         $params = [
@@ -96,7 +99,7 @@ class ImportManufacturerCommandHandler implements CommandHandlerInterface
                 $identity = $this->identityService->createIdentity(
                     $manufacturer->getIdentifier(),
                     Manufacturer::getType(),
-                    (string) $existingManufacturer->getId(),
+                    (string)$existingManufacturer->getId(),
                     ShopwareAdapter::getName()
                 );
 
@@ -112,7 +115,7 @@ class ImportManufacturerCommandHandler implements CommandHandlerInterface
             $this->identityService->createIdentity(
                 $manufacturer->getIdentifier(),
                 Manufacturer::getType(),
-                (string) $manufacturerModel->getId(),
+                (string)$manufacturerModel->getId(),
                 ShopwareAdapter::getName()
             );
         } else {
@@ -132,7 +135,7 @@ class ImportManufacturerCommandHandler implements CommandHandlerInterface
         ]);
 
         if (0 === count($result['data'])) {
-            return;
+            return null;
         }
 
         return array_shift($result['data']);

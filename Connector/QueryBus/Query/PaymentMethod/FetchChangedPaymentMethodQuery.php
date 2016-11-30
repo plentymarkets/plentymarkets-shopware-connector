@@ -1,13 +1,13 @@
 <?php
 
-namespace PlentyConnector\Connector\QueryBus\Query\Manufacturer;
+namespace PlentyConnector\Connector\QueryBus\Query\PaymentMethod;
 
-use PlentyConnector\Connector\QueryBus\Query\FetchAllQueryInterface;
+use PlentyConnector\Connector\QueryBus\Query\FetchChangedQueryInterface;
 
 /**
- * Class FetchAllManufacturerQuery.
+ * Class FetchChangedPaymentMethodQuery.
  */
-class FetchAllManufacturerQuery implements FetchAllQueryInterface
+class FetchChangedPaymentMethodQuery implements FetchChangedQueryInterface
 {
     /**
      * @var string
@@ -15,7 +15,7 @@ class FetchAllManufacturerQuery implements FetchAllQueryInterface
     private $adapterName;
 
     /**
-     * FetchAllManufacturerQuery constructor.
+     * FetchChangedPaymentMethodQuery constructor.
      *
      * @param string $adapterName
      */
