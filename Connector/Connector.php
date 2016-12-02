@@ -13,6 +13,7 @@ use PlentyConnector\Connector\QueryBus\QueryType;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use PlentyConnector\Connector\TransferObject\Definition\DefinitionInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
+use PlentyConnector\Connector\TransferObject\TransferObjectType;
 
 /**
  * Class Connector.
@@ -113,8 +114,9 @@ class Connector implements ConnectorInterface
      * @param $objectType
      * @param $queryType
      */
-    public function handle(ObjectTypeInterface $objectType, $queryType)
+    public function handle($objectType, $queryType)
     {
+        Assertion::inArray($objectType, TransferObjectType::getAllTypes());
         Assertion::inArray($queryType, QueryType::getAllTypes());
 
         $definitions = $this->getDefinitions($objectType);
@@ -164,11 +166,9 @@ class Connector implements ConnectorInterface
         }
 
         foreach ($objects as $object) {
-            $commands[] = $this->commandFactory->create($object, $definition->getDestinationAdapterName());
+            $command = $this->commandFactory->create($object, $definition->getDestinationAdapterName());
 
-            array_walk($commands, function (CommandInterface $command) {
-                $this->handleCommand($command);
-            });
+            $this->handleCommand($command);
         }
     }
 

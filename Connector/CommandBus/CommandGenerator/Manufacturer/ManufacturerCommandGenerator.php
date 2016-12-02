@@ -2,7 +2,7 @@
 
 namespace PlentyConnector\Connector\CommandBus\CommandGenerator\Manufacturer;
 
-use PlentyConnector\Connector\CommandBus\Command\HandleManufacturerCommand;
+use PlentyConnector\Connector\CommandBus\Command\Manufacturer\HandleManufacturerCommand;
 use PlentyConnector\Connector\CommandBus\CommandGenerator\CommandGeneratorInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectType;

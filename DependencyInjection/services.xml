@@ -14,6 +14,8 @@
         <parameter key="TRANSFEROBJECT_PAYMENT_METHOD" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::PAYMENT_METHOD</parameter>
     </parameters>
 
+    <!-- Services -->
+
     <services>
         <!-- Logger -->
 

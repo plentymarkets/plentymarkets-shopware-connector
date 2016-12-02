@@ -3,7 +3,6 @@
 namespace ShopwareAdapter\CommandBus\Handler\Manufacturer;
 
 use PlentyConnector\Connector\CommandBus\Command\CommandInterface;
-use PlentyConnector\Connector\CommandBus\Command\HandleManufacturerCommand;
 use PlentyConnector\Connector\CommandBus\Command\Manufacturer\HandleManufacturerCommandInterface;
 use PlentyConnector\Connector\CommandBus\Handler\CommandHandlerInterface;
 use PlentyConnector\Connector\EventBus\EventGeneratorTrait;
@@ -51,7 +50,7 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
     public function supports(CommandInterface $command)
     {
         return
-            $command instanceof HandleManufacturerCommand &&
+            $command instanceof HandleManufacturerCommandInterface &&
             $command->getAdapterName() === ShopwareAdapter::getName()
         ;
     }
@@ -99,7 +98,7 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
                 $identity = $this->identityService->createIdentity(
                     $manufacturer->getIdentifier(),
                     Manufacturer::getType(),
-                    (string)$existingManufacturer->getId(),
+                    (string)$existingManufacturer['id'],
                     ShopwareAdapter::getName()
                 );
 

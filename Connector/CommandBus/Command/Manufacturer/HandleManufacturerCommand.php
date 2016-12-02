@@ -1,8 +1,7 @@
 <?php
 
-namespace PlentyConnector\Connector\CommandBus\Command;
+namespace PlentyConnector\Connector\CommandBus\Command\Manufacturer;
 
-use PlentyConnector\Connector\CommandBus\Command\Manufacturer\HandleManufacturerCommandInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
