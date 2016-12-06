@@ -62,6 +62,8 @@ class Mapping implements MappingInterface
         Assertion::string($destinationAdapterName);
         Assertion::allIsInstanceOf($destinationTransferObjects, MappedTransferObjectInterface::class);
 
+        Assertion::boolean($isComplete);
+
         $this->originAdapterName = $originAdapterName;
         $this->originTransferObjects = $originTransferObjects;
         $this->destinationAdapterName = $destinationAdapterName;

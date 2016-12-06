@@ -2,12 +2,12 @@
 
 namespace PlentyConnector\Connector\QueryBus\Query\Manufacturer;
 
-use PlentyConnector\Connector\QueryBus\Query\FetchOneQueryInterface;
+use PlentyConnector\Connector\QueryBus\Query\FetchQueryInterface;
 
 /**
  * Class FetchManufacturerQuery
  */
-class FetchManufacturerQuery implements FetchOneQueryInterface
+class FetchManufacturerQuery implements FetchQueryInterface
 {
     /**
      * @var string
@@ -27,6 +27,8 @@ class FetchManufacturerQuery implements FetchOneQueryInterface
      */
     public function __construct($adapterName, $identifier)
     {
+        Assertion::uuid($identifier);
+
         $this->adapterName = $adapterName;
         $this->identifier = $identifier;
     }

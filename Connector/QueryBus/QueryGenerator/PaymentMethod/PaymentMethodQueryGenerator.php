@@ -15,9 +15,7 @@ use PlentyConnector\Connector\TransferObject\TransferObjectType;
 class PaymentMethodQueryGenerator implements QueryGeneratorInterface
 {
     /**
-     * @param string $transferObjectType
-     *
-     * @return boolean
+     * {@inheritdoc}
      */
     public function supports($transferObjectType)
     {
@@ -25,9 +23,7 @@ class PaymentMethodQueryGenerator implements QueryGeneratorInterface
     }
 
     /**
-     * @param string $adapterName
-     *
-     * @return QueryInterface
+     * {@inheritdoc}
      */
     public function generateFetchChangedQuery($adapterName)
     {
@@ -35,9 +31,7 @@ class PaymentMethodQueryGenerator implements QueryGeneratorInterface
     }
 
     /**
-     * @param string $adapterName
-     *
-     * @return QueryInterface
+     * {@inheritdoc}
      */
     public function generateFetchAllQuery($adapterName)
     {
@@ -45,10 +39,7 @@ class PaymentMethodQueryGenerator implements QueryGeneratorInterface
     }
 
     /**
-     * @param string $adapterName
-     * @param string $identifier
-     *
-     * @return QueryInterface
+     * {@inheritdoc}
      */
     public function generateFetchQuery($adapterName, $identifier)
     {

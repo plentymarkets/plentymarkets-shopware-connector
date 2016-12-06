@@ -2,12 +2,12 @@
 
 namespace PlentyConnector\Connector\QueryBus\Query\PaymentMethod;
 
-use PlentyConnector\Connector\QueryBus\Query\FetchOneQueryInterface;
+use PlentyConnector\Connector\QueryBus\Query\FetchQueryInterface;
 
 /**
  * Class FetchPaymentMethodQuery
  */
-class FetchPaymentMethodQuery implements FetchOneQueryInterface
+class FetchPaymentMethodQuery implements FetchQueryInterface
 {
     /**
      * @var string
@@ -27,6 +27,8 @@ class FetchPaymentMethodQuery implements FetchOneQueryInterface
      */
     public function __construct($adapterName, $identifier)
     {
+        Assertion::uuid($identifier);
+
         $this->adapterName = $adapterName;
         $this->identifier = $identifier;
     }
