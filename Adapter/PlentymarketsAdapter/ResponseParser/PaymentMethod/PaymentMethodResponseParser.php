@@ -4,6 +4,7 @@ namespace PlentymarketsAdapter\ResponseParser\PaymentMethod;
 
 use PlentyConnector\Connector\Identity\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod;
+use PlentymarketsAdapter\PlentymarketsAdapter;
 use ShopwareAdapter\ResponseParser\ResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
@@ -34,7 +35,7 @@ class PaymentMethodResponseParser implements ResponseParserInterface
     {
         $identity = $this->identityService->findOrCreateIdentity(
             (string)$entry['id'],
-            ShopwareAdapter::getName(),
+            PlentymarketsAdapter::getName(),
             PaymentMethod::getType()
         );
 
