@@ -9,7 +9,6 @@ use PlentyConnector\Connector\EventBus\EventGeneratorTrait;
 use PlentyConnector\Connector\Identity\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 use PlentyConnector\Connector\TransferObject\Manufacturer\ManufacturerInterface;
-use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Manufacturer as ManufacturerResource;
 use Shopware\Models\Article\Supplier;
 use ShopwareAdapter\ShopwareAdapter;
@@ -34,11 +33,12 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
     /**
      * ImportLocalManufacturerCommandHandler constructor.
      *
+     * @param ManufacturerResource $resource
      * @param IdentityServiceInterface $identityService
      */
-    public function __construct(IdentityServiceInterface $identityService)
+    public function __construct(ManufacturerResource $resource, IdentityServiceInterface $identityService)
     {
-        $this->resource = Manager::getResource('Manufacturer');
+        $this->resource = $resource;
         $this->identityService = $identityService;
     }
 

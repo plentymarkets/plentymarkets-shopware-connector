@@ -1,20 +1,20 @@
 <?php
 
-namespace ShopwareAdapter\QueryBus\Handler\PaymentMethod;
+namespace ShopwareAdapter\QueryBus\Handler\ShippingProfile;
 
 use Doctrine\ORM\EntityManagerInterface;
 use PlentyConnector\Connector\QueryBus\Handler\QueryHandlerInterface;
-use PlentyConnector\Connector\QueryBus\Query\PaymentMethod\FetchAllPaymentMethodsQuery;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
-use Shopware\Models\Payment\Payment;
-use Shopware\Models\Payment\Repository;
+use PlentyConnector\Connector\QueryBus\Query\ShippingProfile\FetchAllShippingProfilesQuery;
+use Shopware\Models\Dispatch\Dispatch;
+use Shopware\Models\Dispatch\Repository;
 use ShopwareAdapter\ResponseParser\ResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class FetchAllPaymentMethodsHandler
+ * Class FetchAllShippingProfilesHandler
  */
-class FetchAllPaymentMethodsHandler implements QueryHandlerInterface
+class FetchAllShippingProfilesHandler implements QueryHandlerInterface
 {
     /**
      * @var ResponseParserInterface
@@ -27,7 +27,7 @@ class FetchAllPaymentMethodsHandler implements QueryHandlerInterface
     private $repository;
 
     /**
-     * FetchAllPaymentMethodsHandler constructor.
+     * FetchAllShippingProfilesHandler constructor.
      *
      * @param ResponseParserInterface $responseParser
      * @param EntityManagerInterface $entityManager
@@ -37,7 +37,7 @@ class FetchAllPaymentMethodsHandler implements QueryHandlerInterface
         EntityManagerInterface $entityManager
     ) {
         $this->responseParser = $responseParser;
-        $this->repository = $entityManager->getRepository(Payment::class);
+        $this->repository = $entityManager->getRepository(Dispatch::class);
     }
 
     /**
@@ -46,7 +46,7 @@ class FetchAllPaymentMethodsHandler implements QueryHandlerInterface
     public function supports(QueryInterface $event)
     {
         return
-            $event instanceof FetchAllPaymentMethodsQuery &&
+            $event instanceof FetchAllShippingProfilesQuery &&
             $event->getAdapterName() === ShopwareAdapter::getName();
     }
 
@@ -57,13 +57,13 @@ class FetchAllPaymentMethodsHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $event)
     {
-        $query = $this->repository->getActivePaymentsQuery();
-        $paymentMethods = $query->getArrayResult();
+        $query = $this->repository->getListQuery();
+        $shippingProfiles = $query->getArrayResult();
 
-        $paymentMethods = array_map(function($paymentMethod) {
-            return $this->responseParser->parse($paymentMethod);
-        }, $paymentMethods);
+        $shippingProfiles = array_map(function($shippingProfile) {
+            return $this->responseParser->parse($shippingProfile);
+        }, $shippingProfiles);
 
-        return array_filter($paymentMethods);
+        return array_filter($shippingProfiles);
     }
 }

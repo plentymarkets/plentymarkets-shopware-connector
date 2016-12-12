@@ -1,6 +1,6 @@
 <?php
 
-namespace PlentymarketsAdapter\QueryBus\Handler\PaymentMethod;
+namespace PlentymarketsAdapter\QueryBus\Handler\ShippingProfile;
 
 use Exception;
 use PlentyConnector\Connector\QueryBus\Handler\QueryHandlerInterface;
@@ -12,9 +12,9 @@ use Psr\Log\LoggerInterface;
 use ShopwareAdapter\ResponseParser\ResponseParserInterface;
 
 /**
- * Class FetchAllPaymentMethodsHandler
+ * Class FetchAllShippingProfilesHandler
  */
-class FetchAllPaymentMethodsHandler implements QueryHandlerInterface
+class FetchAllShippingProfilesHandler implements QueryHandlerInterface
 {
     /**
      * @var ClientInterface
@@ -32,7 +32,7 @@ class FetchAllPaymentMethodsHandler implements QueryHandlerInterface
     private $logger;
 
     /**
-     * FetchAllPaymentMethodsHandler constructor.
+     * FetchAllShippingProfilesHandler constructor.
      *
      * @param ClientInterface $client
      * @param ResponseParserInterface $responseParser
@@ -63,12 +63,12 @@ class FetchAllPaymentMethodsHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $event)
     {
-        $paymentMethods = $this->client->request('GET', 'payments/methods');
+        $shippingProfiles = $this->client->request('GET', 'payments/methods');
 
-        $paymentMethods = array_map(function($paymentMethod) {
-            return $this->responseParser->parse($paymentMethod);
-        }, $paymentMethods);
+        $shippingProfiles = array_map(function($shippingProfile) {
+            return $this->responseParser->parse($shippingProfile);
+        }, $shippingProfiles);
 
-        return array_filter($paymentMethods);
+        return array_filter($shippingProfiles);
     }
 }

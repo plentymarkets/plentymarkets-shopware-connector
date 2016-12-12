@@ -12,6 +12,7 @@
 
         <parameter key="TRANSFEROBJECT_MANUFACTURER" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::MANUFACTURER</parameter>
         <parameter key="TRANSFEROBJECT_PAYMENT_METHOD" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::PAYMENT_METHOD</parameter>
+        <parameter key="TRANSFEROBJECT_SHIPPING_PROFILE" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::SHIPPING_PROFILE</parameter>
     </parameters>
 
     <!-- Services -->
@@ -91,6 +92,14 @@
             <tag name="plentyconnector.mapping_definition"/>
         </service>
 
+        <service id="plentyconnector.mapping_definition.shipping_profile" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
+            <argument>%PLENTYMARKETS_ADAPTER%</argument>
+            <argument>%SHOPWARE_ADAPTER%</argument>
+            <argument>%TRANSFEROBJECT_SHIPPING_PROFILE%</argument>
+
+            <tag name="plentyconnector.mapping_definition"/>
+        </service>
+
         <!-- Console -->
 
         <service id="plentyconnector.console_command.import_manufacturer" class="PlentyConnector\Console\Command\ImportManufacturerCommand">
@@ -123,7 +132,12 @@
         <service id="plentyconnector.query_generator.manufacturer" class="PlentyConnector\Connector\QueryBus\QueryGenerator\Manufacturer\ManufacturerQueryGenerator">
             <tag name="plentyconnector.query_generator" />
         </service>
+
         <service id="plentyconnector.query_generator.payment_method" class="PlentyConnector\Connector\QueryBus\QueryGenerator\PaymentMethod\PaymentMethodQueryGenerator">
+            <tag name="plentyconnector.query_generator" />
+        </service>
+
+        <service id="plentyconnector.query_generator.shipping_profile" class="PlentyConnector\Connector\QueryBus\QueryGenerator\ShippingProfile\ShippingProfileQueryGenerator">
             <tag name="plentyconnector.query_generator" />
         </service>
 

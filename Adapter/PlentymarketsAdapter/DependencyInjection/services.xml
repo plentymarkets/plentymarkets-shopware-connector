@@ -33,9 +33,13 @@
             <argument type="service" id="plentyconnector.identity_service"/>
         </service>
 
+        <service id="plentmarkets_adapter.response_parser.shipping_profile" class="PlentymarketsAdapter\ResponseParser\ShippingProfile\ShippingProfileResponseParser">
+            <argument type="service" id="plentyconnector.identity_service"/>
+        </service>
+
         <!-- Handlers -->
 
-        <service id="plentymarkets_adapter.query_handler.fetch_changed_manufacturer" class="PlentymarketsAdapter\QueryBus\Handler\Manufacturer\FetchChangedManufacturersQueryHandler">
+        <service id="plentymarkets_adapter.query_handler.fetch_changed_manufacturers" class="PlentymarketsAdapter\QueryBus\Handler\Manufacturer\FetchChangedManufacturersQueryHandler">
             <argument type="service" id="plentmarkets_adapter.client"/>
             <argument type="service" id="plentyconnector.config"/>
             <argument type="service" id="plentmarkets_adapter.response_parser"/>
@@ -44,7 +48,15 @@
             <tag name="plentyconnector.query_handler"/>
         </service>
 
-        <service id="plentymarkets_adapter.query_handler.fetch_all_payment_method" class="PlentymarketsAdapter\QueryBus\Handler\PaymentMethod\FetchAllPaymentMethodsHandler">
+        <service id="plentymarkets_adapter.query_handler.fetch_all_payment_methods" class="PlentymarketsAdapter\QueryBus\Handler\PaymentMethod\FetchAllPaymentMethodsHandler">
+            <argument type="service" id="plentmarkets_adapter.client"/>
+            <argument type="service" id="plentmarkets_adapter.response_parser.payment_method"/>
+            <argument type="service" id="plentyconnector.logger"/>
+
+            <tag name="plentyconnector.query_handler"/>
+        </service>
+
+        <service id="plentymarkets_adapter.query_handler.fetch_all_shipping_profiles" class="PlentymarketsAdapter\QueryBus\Handler\ShippingProfile\FetchAllShippingProfilesHandler">
             <argument type="service" id="plentmarkets_adapter.client"/>
             <argument type="service" id="plentmarkets_adapter.response_parser.payment_method"/>
             <argument type="service" id="plentyconnector.logger"/>

@@ -2,11 +2,11 @@
 
 namespace ShopwareAdapter\CommandBus\Handler;
 
-use PlentyConnector\Connector\CommandBus\Command\ImportProductCommand;
+use PlentyConnector\Connector\CommandBus\Command\CommandInterface;
 use PlentyConnector\Connector\CommandBus\Handler\CommandHandlerInterface;
 use PlentyConnector\Connector\Identity\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
-use PlentyConnector\Connector\TransferObject\Product;
+use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Variant;
 use ShopwareAdapter\ShopwareAdapter;
 
@@ -15,8 +15,6 @@ use ShopwareAdapter\ShopwareAdapter;
  */
 class ImportProductCommandHandler implements CommandHandlerInterface
 {
-    use EventGeneratorTrait;
-
     /**
      * @var Variant
      */
@@ -39,22 +37,21 @@ class ImportProductCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param ImportProductCommand $command
+     * @param CommandInterface $command
      *
      * @return bool
      */
-    public function supports($command)
+    public function supports(CommandInterface $command)
     {
         return
             $command instanceof ImportProductCommand &&
-            $command->getAdapterName() === ShopwareAdapter::getName()
-        ;
+            $command->getAdapterName() === ShopwareAdapter::getName();
     }
 
     /**
-     * @param ImportProductCommand $command
+     * @param CommandInterface $command
      */
-    public function handle($command)
+    public function handle(CommandInterface $command)
     {
         $product = $command->getProduct();
 
