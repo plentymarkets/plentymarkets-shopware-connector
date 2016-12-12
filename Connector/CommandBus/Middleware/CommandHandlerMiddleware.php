@@ -42,6 +42,10 @@ class CommandHandlerMiddleware implements Middleware
             return $handler->supports($command);
         });
 
+        if (null === $this->handlers) {
+            return $next($command);
+        }
+
         array_map(function (CommandHandlerInterface $handler) use ($command) {
             $handler->handle($command);
         }, $handlers);

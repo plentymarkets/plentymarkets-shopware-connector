@@ -2,8 +2,8 @@
 
 namespace PlentyConnector\Connector\CommandBus\CommandFactory;
 
+use PlentyConnector\Connector\CommandBus\Command\CommandInterface;
 use PlentyConnector\Connector\CommandBus\CommandGenerator\CommandGeneratorInterface;
-use PlentyConnector\Connector\TransferObject\Definition\DefinitionInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**

@@ -2,8 +2,8 @@
 
 namespace PlentyConnector\Connector\QueryBus\QueryFactory;
 
+use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\QueryGenerator\QueryGeneratorInterface;
-use PlentyConnector\Connector\TransferObject\Definition\DefinitionInterface;
 
 /**
  * Class QueryFactoryInterface.

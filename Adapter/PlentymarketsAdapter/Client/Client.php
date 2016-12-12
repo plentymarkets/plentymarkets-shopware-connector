@@ -4,6 +4,7 @@ namespace PlentymarketsAdapter\Client;
 
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 use PlentyConnector\Connector\Config\ConfigServiceInterface;
 use PlentymarketsAdapter\Client\Exception\InvalidCredentialsException;
 use PlentymarketsAdapter\Client\Iterator\Iterator;
@@ -16,7 +17,7 @@ use PlentymarketsAdapter\Client\Iterator\Iterator;
 class Client implements ClientInterface
 {
     /**
-     * @var GuzzleClient
+     * @var GuzzleClientInterface
      */
     private $connection;
 
@@ -26,12 +27,12 @@ class Client implements ClientInterface
     private $config;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $accessToken;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $refreshToken;
 
@@ -72,6 +73,17 @@ class Client implements ClientInterface
 
         try {
             $response = $this->connection->request($method, $path, $options);
+
+            $result = json_decode($response->getBody(), true);
+
+            if (!array_key_exists('entries', $result)) {
+                $entries = $result;
+            } else {
+                $sliceOffset = $offset - (($params['page'] - 1) * $params['itemsPerPage']);
+                $entries = array_slice($result['entries'], $sliceOffset, $limit >= 0 ? $limit : null);
+            }
+
+            return $entries;
         } catch (ClientException $exception) {
             if ($exception->hasResponse() && $exception->getResponse()->getStatusCode() === 401) {
                 if ($path === 'login') {
@@ -87,17 +99,6 @@ class Client implements ClientInterface
                 throw $exception;
             }
         }
-
-        $result = json_decode($response->getBody(), true);
-
-        if (!array_key_exists('entries', $result)) {
-            $entries = $result;
-        } else {
-            $sliceOffset = $offset - (($params['page'] - 1) * $params['itemsPerPage']);
-            $entries = array_slice($result['entries'], $sliceOffset, $limit >= 0 ? $limit : null);
-        }
-
-        return $entries;
     }
 
     /**

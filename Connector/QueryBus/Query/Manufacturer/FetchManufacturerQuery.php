@@ -2,6 +2,7 @@
 
 namespace PlentyConnector\Connector\QueryBus\Query\Manufacturer;
 
+use Assert\Assertion;
 use PlentyConnector\Connector\QueryBus\Query\FetchQueryInterface;
 
 /**

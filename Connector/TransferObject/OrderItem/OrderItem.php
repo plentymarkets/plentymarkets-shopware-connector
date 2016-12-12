@@ -39,6 +39,16 @@ class OrderItem implements OrderItemInterface
      */
     private $price;
 
+    /**
+     * OrderItem constructor.
+     *
+     * @param $identifier
+     * @param $quantity
+     * @param $productId
+     * @param $variationId
+     * @param $name
+     * @param $price
+     */
     public function __construct($identifier, $quantity, $productId, $variationId, $name, $price)
     {
         Assertion::uuid($identifier);

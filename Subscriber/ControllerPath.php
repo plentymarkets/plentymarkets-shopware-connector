@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class ControllerPath implements SubscriberInterface
 {
     /**
-     * @var \Interop\Container\ContainerInterface
+     * @var ContainerInterface
      */
     private $container;
 

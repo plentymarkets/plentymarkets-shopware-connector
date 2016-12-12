@@ -45,6 +45,10 @@ class Translation implements TranslationInterface
         Assertion::string($locale);
         Assertion::string($property);
         Assertion::string($value);
+
+        $this->locale = $locale;
+        $this->property = $property;
+        $this->value = $value;
     }
 
     /**

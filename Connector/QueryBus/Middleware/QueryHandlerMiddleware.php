@@ -32,6 +32,10 @@ class QueryHandlerMiddleware implements Middleware
      */
     public function execute($query, callable $next)
     {
+        if (null === $this->handlers) {
+            return $next($query);
+        }
+
         $handlers = array_filter($this->handlers, function (QueryHandlerInterface $handler) use ($query) {
             return $handler->supports($query);
         });

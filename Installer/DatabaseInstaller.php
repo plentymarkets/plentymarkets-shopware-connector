@@ -18,7 +18,7 @@ use Shopware\Components\Plugin\Context\UpdateContext;
 class DatabaseInstaller implements InstallerInterface
 {
     /**
-     * @var AbstractSchemaManager
+     * @var SchemaTool
      */
     private $schemaTool;
 

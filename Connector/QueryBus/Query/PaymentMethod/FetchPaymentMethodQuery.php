@@ -2,6 +2,7 @@
 
 namespace PlentyConnector\Connector\QueryBus\Query\PaymentMethod;
 
+use Assert\Assertion;
 use PlentyConnector\Connector\QueryBus\Query\FetchQueryInterface;
 
 /**
