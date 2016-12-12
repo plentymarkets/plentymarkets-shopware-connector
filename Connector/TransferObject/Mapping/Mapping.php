@@ -47,14 +47,12 @@ class Mapping implements MappingInterface
      * @param MappedTransferObjectInterface[] $originTransferObjects
      * @param string $destinationAdapterName
      * @param MappedTransferObjectInterface[] $destinationTransferObjects
-     * @param $isComplete bool
      */
     public function __construct(
         $originAdapterName,
         array $originTransferObjects,
         $destinationAdapterName,
-        array $destinationTransferObjects,
-        $isComplete
+        array $destinationTransferObjects
     ) {
         Assertion::string($originAdapterName);
         Assertion::allIsInstanceOf($originTransferObjects, MappedTransferObjectInterface::class);
@@ -62,13 +60,10 @@ class Mapping implements MappingInterface
         Assertion::string($destinationAdapterName);
         Assertion::allIsInstanceOf($destinationTransferObjects, MappedTransferObjectInterface::class);
 
-        Assertion::boolean($isComplete);
-
         $this->originAdapterName = $originAdapterName;
         $this->originTransferObjects = $originTransferObjects;
         $this->destinationAdapterName = $destinationAdapterName;
         $this->destinationTransferObjects = $destinationTransferObjects;
-        $this->isComplete = $isComplete;
     }
 
     /**
@@ -88,16 +83,14 @@ class Mapping implements MappingInterface
             'originAdapterName',
             'originTransferObjects',
             'destinationAdapterName',
-            'destinationTransferObjects',
-            'isComplete'
+            'destinationTransferObjects'
         ]);
 
         return new self(
             $params['originAdapterName'],
             $params['originTransferObjects'],
             $params['destinationAdapterName'],
-            $params['destinationTransferObjects'],
-            $params['isComplete']
+            $params['destinationTransferObjects']
         );
     }
 

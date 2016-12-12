@@ -69,7 +69,7 @@ class MappingService implements MappingServiceInterface
             $originTransferObjects = $this->queryBus->handle($originQuery);
 
             if (null === $originTransferObjects) {
-                // TODO handle failure
+                $originTransferObjects = [];
             }
 
             $originTransferObjects = array_filter($originTransferObjects, function(TransferObjectInterface $object) use ($definition) {
@@ -85,7 +85,7 @@ class MappingService implements MappingServiceInterface
             $destinationTransferObjects = $this->queryBus->handle($destinationQuery);
 
             if (null === $destinationTransferObjects) {
-                // TODO handle failure
+                $destinationTransferObjects = [];
             }
 
             $destinationTransferObjects = array_filter($destinationTransferObjects, function(TransferObjectInterface $object) use ($definition) {
@@ -96,34 +96,10 @@ class MappingService implements MappingServiceInterface
                 'originAdapterName' => $definition->getOriginAdapterName(),
                 'originTransferObjects' => $originTransferObjects,
                 'destinationAdapterName' => $definition->getDestinationAdapterName(),
-                'destinationTransferObjects' => $destinationTransferObjects,
-                'isComplete' => $this->isMappingComplete($originTransferObjects, $destinationTransferObjects),
+                'destinationTransferObjects' => $destinationTransferObjects
             ]);
         }
 
         return $result;
-    }
-
-    /**
-     * @param MappedTransferObjectInterface[] $originTransferObjects
-     * @param MappedTransferObjectInterface[] $destinationTransferObjects
-     *
-     * @return bool
-     */
-    private function isMappingComplete(array $originTransferObjects, array $destinationTransferObjects)
-    {
-        $missingMapping = array_filter($destinationTransferObjects,
-            function(MappedTransferObjectInterface $object) use ($originTransferObjects) {
-                foreach ($originTransferObjects as $originTransferObject) {
-                    if ($object->getIdentifier() === $originTransferObject->getIdentifier()) {
-                        return true;
-                    }
-                }
-
-                return false;
-            }
-        );
-
-        return !$missingMapping;
     }
 }
