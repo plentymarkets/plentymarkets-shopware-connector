@@ -67,10 +67,18 @@
 
         <!-- Connector definitions -->
 
-        <service id="plentyconnector.manufacturer_connector_definition" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
+        <service id="plentyconnector.connector_definition.manufacturer" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
             <argument>%PLENTYMARKETS_ADAPTER%</argument>
             <argument>%SHOPWARE_ADAPTER%</argument>
             <argument>%TRANSFEROBJECT_MANUFACTURER%</argument>
+
+            <tag name="plentyconnector.connector_definition"/>
+        </service>
+
+        <service id="plentyconnector.connector_definition.product" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
+            <argument>%PLENTYMARKETS_ADAPTER%</argument>
+            <argument>%SHOPWARE_ADAPTER%</argument>
+            <argument>%TRANSFEROBJECT_PRODUCT%</argument>
 
             <tag name="plentyconnector.connector_definition"/>
         </service>
@@ -102,17 +110,22 @@
 
         <!-- Console -->
 
-        <service id="plentyconnector.console_command.import_manufacturer" class="PlentyConnector\Console\Command\ImportManufacturerCommand">
+        <service id="plentyconnector.console.import_manufacturers_command" class="PlentyConnector\Console\Command\ImportManufacturersCommand">
             <argument type="service" id="plentyconnector.connector"/>
+            <argument type="service" id="plentyconnector.logger"/>
 
             <tag name="console.command"/>
         </service>
 
-        <service id="plentyconnector.console_command.test" class="PlentyConnector\Console\Command\TestCommand">
+        <service id="plentyconnector.console.test_command" class="PlentyConnector\Console\Command\TestCommand">
             <argument type="service" id="plentmarkets_adapter.client"/>
 
             <tag name="console.command"/>
         </service>
+
+        <!-- Output Handler -->
+
+        <service id="plentyconnector.console.output_handler" class="PlentyConnector\Console\OutputHandler\OutputHandler"/>
 
         <!-- Identity Service -->
 
