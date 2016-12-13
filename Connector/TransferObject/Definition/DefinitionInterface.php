@@ -23,4 +23,9 @@ interface DefinitionInterface extends TransferObjectInterface
      * @return string
      */
     public function getObjectType();
+
+    /**
+     * @return string
+     */
+    public function __toString();
 }

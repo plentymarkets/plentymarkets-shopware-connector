@@ -7,6 +7,7 @@ use PlentyConnector\Adapter\AdapterInterface;
 use PlentyConnector\Connector\CommandBus\Command\CommandInterface;
 use PlentyConnector\Connector\CommandBus\CommandFactory\CommandFactory;
 use PlentyConnector\Connector\EventBus\Event\EventInterface;
+use PlentyConnector\Connector\Exception\MissingQueryException;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\QueryFactory\QueryFactory;
 use PlentyConnector\Connector\QueryBus\QueryType;
@@ -14,6 +15,9 @@ use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use PlentyConnector\Connector\TransferObject\Definition\DefinitionInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectType;
+use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class Connector.
@@ -21,12 +25,12 @@ use PlentyConnector\Connector\TransferObject\TransferObjectType;
 class Connector implements ConnectorInterface
 {
     /**
-     * @var AdapterInterface[]
+     * @var AdapterInterface[]|null
      */
     private $adapters = [];
 
     /**
-     * @var DefinitionInterface[]
+     * @var DefinitionInterface[]|null
      */
     private $definitions = [];
 
@@ -147,6 +151,8 @@ class Connector implements ConnectorInterface
     /**
      * @param DefinitionInterface $definition
      * @param $queryType
+     *
+     * @throws MissingQueryException
      */
     private function handleDefinition(DefinitionInterface $definition, $queryType)
     {
@@ -155,6 +161,10 @@ class Connector implements ConnectorInterface
             $definition->getObjectType(),
             $queryType
         );
+
+        if (null === $query) {
+            throw MissingQueryException::fromDefinition($definition);
+        }
 
         /**
          * @var TransferObjectInterface[] $objects
@@ -165,11 +175,11 @@ class Connector implements ConnectorInterface
             $objects = [];
         }
 
-        foreach ($objects as $object) {
+        array_walk($objects, function(TransferObjectInterface $object) use ($definition) {
             $command = $this->commandFactory->create($object, $definition->getDestinationAdapterName());
 
             $this->handleCommand($command);
-        }
+        });
     }
 
     /**

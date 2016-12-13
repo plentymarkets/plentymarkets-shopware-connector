@@ -98,4 +98,12 @@ class Definition implements DefinitionInterface
     {
         return $this->objectType;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        return $this->objectType . ': ' . $this->originAdapterName . ' > ' . $this->destinationAdapterName;
+    }
 }
