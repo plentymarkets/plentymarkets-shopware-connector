@@ -15,9 +15,6 @@ use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use PlentyConnector\Connector\TransferObject\Definition\DefinitionInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectType;
-use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
-use Symfony\Component\Console\Helper\ProgressBar;
-use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class Connector.
@@ -115,25 +112,37 @@ class Connector implements ConnectorInterface
     }
 
     /**
-     * @param $objectType
-     * @param $queryType
+     * @param string $objectType
+     * @param int $queryType
+     * @param string|null $identifier
+     *
+     * @throws MissingQueryException
      */
-    public function handle($objectType, $queryType)
+    public function handle($objectType, $queryType, $identifier = null)
     {
         Assertion::inArray($objectType, TransferObjectType::getAllTypes());
         Assertion::inArray($queryType, QueryType::getAllTypes());
 
+        if ($queryType === QueryType::ONE) {
+            Assertion::notNull($identifier);
+            Assertion::uuid($identifier);
+        }
+
         $definitions = $this->getDefinitions($objectType);
 
-        array_map(function (DefinitionInterface $definition) use ($queryType) {
-            $this->handleDefinition($definition, $queryType);
+        if (null === $definitions) {
+            $definitions = [];
+        }
+
+        array_map(function (DefinitionInterface $definition) use ($queryType, $identifier) {
+            $this->handleDefinition($definition, $queryType, $identifier);
         }, $definitions);
     }
 
     /**
-     * @param null $type
+     * @param string|null $type
      *
-     * @return DefinitionInterface[]
+     * @return DefinitionInterface[]|null
      */
     private function getDefinitions($type = null)
     {
@@ -150,16 +159,18 @@ class Connector implements ConnectorInterface
 
     /**
      * @param DefinitionInterface $definition
-     * @param $queryType
+     * @param int $queryType
+     * @param string|null $identifier
      *
      * @throws MissingQueryException
      */
-    private function handleDefinition(DefinitionInterface $definition, $queryType)
+    private function handleDefinition(DefinitionInterface $definition, $queryType, $identifier = null)
     {
         $query = $this->queryFactory->create(
             $definition->getOriginAdapterName(),
             $definition->getObjectType(),
-            $queryType
+            $queryType,
+            $identifier
         );
 
         if (null === $query) {
@@ -175,7 +186,7 @@ class Connector implements ConnectorInterface
             $objects = [];
         }
 
-        array_walk($objects, function(TransferObjectInterface $object) use ($definition) {
+        array_walk($objects, function (TransferObjectInterface $object) use ($definition) {
             $command = $this->commandFactory->create($object, $definition->getDestinationAdapterName());
 
             $this->handleCommand($command);
