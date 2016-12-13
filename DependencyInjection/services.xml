@@ -156,7 +156,7 @@
         <service id="plentyconnector.event_bus.event_handler_middleware" class="PlentyConnector\Connector\EventBus\Middleware\EventHandlerMiddleware"/>
         <service id="plentyconnector.query_bus.query_handler_middleware" class="PlentyConnector\Connector\QueryBus\Middleware\QueryHandlerMiddleware"/>
 
-        <service id="plentyconnector.service_bus.class_name_formatter" class="League\Tactician\Logger\Formatter\ClassNameFormatter"/>
+        <service id="plentyconnector.service_bus.class_name_formatter" class="PlentyConnector\Logger\ClassNameFormatter"/>
 
         <service id="plentyconnector.service_bus.logger_middleware" class="League\Tactician\Logger\LoggerMiddleware">
             <argument type="service" id="plentyconnector.service_bus.class_name_formatter"/>
