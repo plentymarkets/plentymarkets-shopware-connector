@@ -4,6 +4,7 @@ namespace PlentyConnector\Connector\TransferObject\Product;
 
 use Assert\Assertion;
 use PlentyConnector\Connector\TransferObject\Manufacturer\ManufacturerInterface;
+use PlentyConnector\Connector\TransferObject\TransferObjectType;
 
 /**
  * Class Product.
@@ -58,7 +59,7 @@ class Product implements ProductInterface
      */
     public static function getType()
     {
-        return 'Product';
+        return TransferObjectType::PRODUCT;
     }
 
     /**

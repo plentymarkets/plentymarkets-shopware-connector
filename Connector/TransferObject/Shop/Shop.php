@@ -48,6 +48,11 @@ class Shop implements ShopInterface
      */
     public static function fromArray(array $params = [])
     {
+        Assertion::allInArray(array_keys($params), [
+            'identifier',
+            'name',
+        ]);
+
         return new self(
             $params['identifier'],
             $params['name']

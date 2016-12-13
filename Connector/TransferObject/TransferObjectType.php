@@ -14,9 +14,11 @@ final class TransferObjectType
     const ORDER_STATUS = 'OrderStatus';
     const PAYMENT_METHOD = 'PaymentMethod';
     const PAYMENT_STATUS = 'PaymentStatus';
+    const PRODUCT = 'Product';
     const SHIPPING_PROFILE = 'ShippingProfile';
     const SHOP = 'Shop';
     const TRANSLATION = 'Translation';
+    const MEDIA = 'Media';
 
     /**
      * @return array
