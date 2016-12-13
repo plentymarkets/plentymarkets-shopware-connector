@@ -19,7 +19,7 @@ interface QueryFactoryInterface
      * @param string $adapterName
      * @param string $objectType
      * @param string $queryType
-     * @param string $identifier
+     * @param string|null $identifier
      *
      * @return QueryInterface
      */

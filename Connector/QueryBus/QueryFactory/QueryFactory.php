@@ -30,9 +30,9 @@ class QueryFactory implements QueryFactoryInterface
      */
     public function create($adapterName, $objectType, $queryType, $identifier = null)
     {
-        Assertion::nullOrUuid($identifier);
-        Assertion::inArray($queryType, QueryType::getAllTypes());
+        Assertion::string($adapterName);
         Assertion::inArray($objectType, TransferObjectType::getAllTypes());
+        Assertion::inArray($queryType, QueryType::getAllTypes());
 
         if ($queryType === QueryType::ONE) {
             Assertion::notNull($identifier);
