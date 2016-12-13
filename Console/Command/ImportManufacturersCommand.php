@@ -5,9 +5,11 @@ namespace PlentyConnector\Console\Command;
 use Exception;
 use PlentyConnector\Connector\Connector;
 use PlentyConnector\Connector\QueryBus\QueryType;
+use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 use PlentyConnector\Logger\ConsoleHandler;
 use Shopware\Commands\ShopwareCommand;
 use Shopware\Components\Logger;
+use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -15,7 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Command to manually import manufacturer.
  */
-class ImportManufacturerCommand extends ShopwareCommand
+class ImportManufacturersCommand extends ShopwareCommand
 {
     /**
      * @var Connector
@@ -23,26 +25,31 @@ class ImportManufacturerCommand extends ShopwareCommand
     private $connector;
 
     /**
+     * @var Logger
+     */
+    private $logger;
+
+    /**
      * HandleManufacturerCommand constructor.
      *
      * @param Connector $connector
-     *
-     * @throws \Symfony\Component\Console\Exception\LogicException
+     * @param Logger $logger
      */
-    public function __construct(Connector $connector)
+    public function __construct(Connector $connector, Logger $logger)
     {
         $this->connector = $connector;
+        $this->logger = $logger;
 
         parent::__construct();
     }
 
     /**
-     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     protected function configure()
     {
-        $this->setName('plentyconnector:import:manufacturer');
-        $this->setDescription('Import manufacturer');
+        $this->setName('plentyconnector:import:manufacturers');
+        $this->setDescription('Import manufacturers');
         $this->addOption(
             'all',
             null,
@@ -63,18 +70,14 @@ class ImportManufacturerCommand extends ShopwareCommand
     {
         $all = (bool)$input->getOption('all');
 
-        /**
-         * @var Logger $logger
-         */
-        $logger = $this->container->get('plentyconnector.logger');
-        $logger->pushHandler(new ConsoleHandler($output));
+        $this->logger->pushHandler(new ConsoleHandler($output));
 
         try {
             $queryType = $all ? QueryType::ALL : QueryType::CHANGED;
 
             $this->connector->handle(Manufacturer::getType(), $queryType);
         } catch (Exception $e) {
-            $logger->error($e->getMessage());
+            $this->logger->error($e->getMessage());
         }
     }
 }
