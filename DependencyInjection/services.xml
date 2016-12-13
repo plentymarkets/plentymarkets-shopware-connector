@@ -75,14 +75,6 @@
             <tag name="plentyconnector.connector_definition"/>
         </service>
 
-        <service id="plentyconnector.connector_definition.product" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
-            <argument>%PLENTYMARKETS_ADAPTER%</argument>
-            <argument>%SHOPWARE_ADAPTER%</argument>
-            <argument>%TRANSFEROBJECT_PRODUCT%</argument>
-
-            <tag name="plentyconnector.connector_definition"/>
-        </service>
-
         <!-- Mapping Service -->
 
         <service id="plentyconnector.mapping_service" class="PlentyConnector\Connector\Mapping\MappingService">
