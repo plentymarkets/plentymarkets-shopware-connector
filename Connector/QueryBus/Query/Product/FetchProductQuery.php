@@ -2,12 +2,13 @@
 
 namespace PlentyConnector\Connector\QueryBus\Query\Product;
 
-use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
+use Assert\Assertion;
+use PlentyConnector\Connector\QueryBus\Query\FetchQueryInterface;
 
 /**
- * Class GetProductQuery.
+ * Class FetchProductQuery
  */
-class GetProductQuery implements QueryInterface
+class FetchProductQuery implements FetchQueryInterface
 {
     /**
      * @var string
@@ -15,13 +16,22 @@ class GetProductQuery implements QueryInterface
     private $adapterName;
 
     /**
-     * GetProductQuery constructor.
+     * @var string
+     */
+    private $identifier;
+
+    /**
+     * FetchProductQuery constructor.
      *
      * @param string $adapterName
+     * @param $identifier
      */
-    public function __construct($adapterName)
+    public function __construct($adapterName, $identifier)
     {
+        Assertion::uuid($identifier);
+
         $this->adapterName = $adapterName;
+        $this->identifier = $identifier;
     }
 
     /**
@@ -33,12 +43,21 @@ class GetProductQuery implements QueryInterface
     }
 
     /**
+     * @return string
+     */
+    public function getIdentifier()
+    {
+        return $this->identifier;
+    }
+
+    /**
      * @return array
      */
     public function getPayload()
     {
         return [
             'adapterName' => $this->adapterName,
+            'identifier' => $this->identifier,
         ];
     }
 
@@ -48,5 +67,6 @@ class GetProductQuery implements QueryInterface
     public function setPayload(array $payload = [])
     {
         $this->adapterName = $payload['adapterName'];
+        $this->identifier = $payload['identifier'];
     }
 }
