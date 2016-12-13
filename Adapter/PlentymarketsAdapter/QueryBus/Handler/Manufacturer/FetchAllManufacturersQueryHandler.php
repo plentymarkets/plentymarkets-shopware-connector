@@ -1,35 +1,24 @@
 <?php
 
-namespace PlentymarketsAdapter\QueryBus\Handler\Manufacturer;
+namespace PlentyConnector\Adapter\PlentymarketsAdapter\QueryBus\Handler\Manufacturer;
 
-use Exception;
-use PlentyConnector\Connector\Config\ConfigServiceInterface;
 use PlentyConnector\Connector\QueryBus\Handler\QueryHandlerInterface;
-use PlentyConnector\Connector\QueryBus\Query\Manufacturer\FetchChangedManufacturersQuery;
+use PlentyConnector\Connector\QueryBus\Query\Manufacturer\FetchAllManufacturersQuery;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
-use PlentyConnector\Connector\TransferObject\Manufacturer\ManufacturerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\QueryBus\ChangedDateTimeTrait;
 use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class FetchChangedManufacturersQueryHandler.
+ * Class FetchAllManufacturersQueryHandler
  */
-class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
+class FetchAllManufacturersQueryHandler implements QueryHandlerInterface
 {
-    use ChangedDateTimeTrait;
-
     /**
      * @var ClientInterface
      */
     private $client;
-
-    /**
-     * @var ConfigServiceInterface
-     */
-    private $config;
 
     /**
      * @var ResponseParserInterface
@@ -42,21 +31,18 @@ class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
     private $logger;
 
     /**
-     * FetchChangedManufacturersQueryHandler constructor.
+     * FetchAllManufacturersQueryHandler constructor.
      *
      * @param ClientInterface $client
-     * @param ConfigServiceInterface $config
      * @param ResponseParserInterface $responseMapper
      * @param LoggerInterface $logger
      */
     public function __construct(
         ClientInterface $client,
-        ConfigServiceInterface $config,
         ResponseParserInterface $responseMapper,
         LoggerInterface $logger
     ) {
         $this->client = $client;
-        $this->config = $config;
         $this->responseMapper = $responseMapper;
         $this->logger = $logger;
     }
@@ -68,7 +54,7 @@ class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $event)
     {
-        return $event instanceof FetchChangedManufacturersQuery &&
+        return $event instanceof FetchAllManufacturersQuery &&
             $event->getAdapterName() === PlentymarketsAdapter::getName();
     }
 
@@ -81,21 +67,13 @@ class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $event)
     {
-        $criteria = [
-            'lastUpdateTimestamp' => $this->getChangedDateTime($this->config),
-        ];
-
         $result = [];
-        foreach ($this->client->getIterator('items/manufacturers', $criteria) as $element) {
+        foreach ($this->client->getIterator('items/manufacturers') as $element) {
             try {
                 $result[] = $this->responseMapper->parse($element);
             } catch (Exception $e) {
                 $this->logger->error($e->getMessage());
             }
-        }
-
-        if ([] !== $result) {
-            $this->setChangedDateTime($this->config);
         }
 
         return $result;
