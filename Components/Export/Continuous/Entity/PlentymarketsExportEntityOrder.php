@@ -643,20 +643,23 @@ class PlentymarketsExportEntityOrder
 	 *
 	 * @return integer|null
 	 */
-	protected function getShopId()
-	{
+	protected function getShopId() {
 		// Sub-objects
+
+		$oLanguageShop = $this->Order->getLanguageSubShop();
 		$Shop = $this->Order->getShop();
 
 		// Shop
-		if ($Shop)
-		{
-			try
-			{
-				return PlentymarketsMappingController::getShopByShopwareID($Shop->getId());
-			}
-			catch (PlentymarketsMappingExceptionNotExistant $E)
-			{
+		if ($Shop || $oLanguageShop) {
+			try {
+
+				if ($Shop->getId() != $oLanguageShop->getId()) {
+					return PlentymarketsMappingController::getOrdersByShopwareID($oLanguageShop->getId());
+				} else {
+					return PlentymarketsMappingController::getOrdersByShopwareID($Shop->getId());
+				}
+
+			} catch (PlentymarketsMappingExceptionNotExistant $E) {
 			}
 		}
 
