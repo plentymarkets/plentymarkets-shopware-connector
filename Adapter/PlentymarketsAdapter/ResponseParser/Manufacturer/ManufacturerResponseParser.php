@@ -1,16 +1,16 @@
 <?php
 
-namespace PlentymarketsAdapter\ResponseParser\ShippingProfile;
+namespace PlentymarketsAdapter\ResponseParser\Manufacturer;
 
 use PlentyConnector\Connector\Identity\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
+use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 
 /**
- * Class ShippingProfileResponseParser
+ * Class ManufacturerResponseParser
  */
-class ShippingProfileResponseParser implements ResponseParserInterface
+class ManufacturerResponseParser implements ResponseParserInterface
 {
     /**
      * @var IdentityServiceInterface
@@ -18,7 +18,7 @@ class ShippingProfileResponseParser implements ResponseParserInterface
     private $identityService;
 
     /**
-     * ShippingProfileResponseParser constructor.
+     * ManufacturerResponseParser constructor.
      *
      * @param IdentityServiceInterface $identityService
      */
@@ -35,12 +35,14 @@ class ShippingProfileResponseParser implements ResponseParserInterface
         $identity = $this->identityService->findOrCreateIdentity(
             (string)$entry['id'],
             PlentymarketsAdapter::getName(),
-            ShippingProfile::getType()
+            Manufacturer::getType()
         );
 
-        return ShippingProfile::fromArray([
+        return Manufacturer::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
             'name' => $entry['name'],
+            'logo' => !empty($entry['logo']) ? $entry['name'] : null,
+            'link' => !empty($entry['url']) ? $entry['name'] : null,
         ]);
     }
 }

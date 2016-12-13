@@ -2,14 +2,12 @@
 
 namespace PlentymarketsAdapter\QueryBus\Handler\PaymentMethod;
 
-use Exception;
 use PlentyConnector\Connector\QueryBus\Handler\QueryHandlerInterface;
 use PlentyConnector\Connector\QueryBus\Query\PaymentMethod\FetchAllPaymentMethodsQuery;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use Psr\Log\LoggerInterface;
-use ShopwareAdapter\ResponseParser\ResponseParserInterface;
+use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 
 /**
  * Class FetchAllPaymentMethodsHandler
@@ -27,25 +25,17 @@ class FetchAllPaymentMethodsHandler implements QueryHandlerInterface
     private $responseParser;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * FetchAllPaymentMethodsHandler constructor.
      *
      * @param ClientInterface $client
      * @param ResponseParserInterface $responseParser
-     * @param LoggerInterface $logger
      */
     public function __construct(
         ClientInterface $client,
-        ResponseParserInterface $responseParser,
-        LoggerInterface $logger
+        ResponseParserInterface $responseParser
     ) {
         $this->client = $client;
         $this->responseParser = $responseParser;
-        $this->logger = $logger;
     }
 
     /**
@@ -53,8 +43,7 @@ class FetchAllPaymentMethodsHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $event)
     {
-        return
-            $event instanceof FetchAllPaymentMethodsQuery &&
+        return $event instanceof FetchAllPaymentMethodsQuery &&
             $event->getAdapterName() === PlentymarketsAdapter::getName();
     }
 
@@ -65,7 +54,7 @@ class FetchAllPaymentMethodsHandler implements QueryHandlerInterface
     {
         $paymentMethods = $this->client->request('GET', 'payments/methods');
 
-        $paymentMethods = array_map(function($paymentMethod) {
+        $paymentMethods = array_map(function ($paymentMethod) {
             return $this->responseParser->parse($paymentMethod);
         }, $paymentMethods);
 

@@ -5,8 +5,7 @@ namespace PlentymarketsAdapter\ResponseParser\PaymentMethod;
 use PlentyConnector\Connector\Identity\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use ShopwareAdapter\ResponseParser\ResponseParserInterface;
-use ShopwareAdapter\ShopwareAdapter;
+use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 
 /**
  * Class PaymentMethodResponseParser
