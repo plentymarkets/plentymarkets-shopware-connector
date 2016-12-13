@@ -3,8 +3,8 @@
 namespace PlentymarketsAdapter\Client;
 
 use GuzzleHttp\Client as GuzzleClient;
-use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\ClientInterface as GuzzleClientInterface;
+use GuzzleHttp\Exception\ClientException;
 use PlentyConnector\Connector\Config\ConfigServiceInterface;
 use PlentymarketsAdapter\Client\Exception\InvalidCredentialsException;
 use PlentymarketsAdapter\Client\Iterator\Iterator;
@@ -49,11 +49,11 @@ class Client implements ClientInterface
     }
 
     /**
-     * TODO: finalize Exceptions.
+     * TODO: simplify login handling
      *
      * {@inheritdoc}
      */
-    public function request($method, $path, array $criteria = [], $limit = null, $offset = null)
+    public function request($method, $path, array $params = [], $limit = null, $offset = null)
     {
         if ($this->isLoginRequired($path)) {
             $this->login();
@@ -64,11 +64,20 @@ class Client implements ClientInterface
             'headers' => $this->getHeaders($path),
         ];
 
-        $params = $this->getParams($criteria, $limit, $offset);
         if ($method === 'GET') {
             $options['query'] = $params;
         } else {
             $options['json'] = $params;
+        }
+
+        if (null !== $limit) {
+            $params['itemsPerPage'] = (int)$limit;
+        }
+
+        if (null !== $offset) {
+            $page = floor($offset / $limit);
+
+            $params['page'] = $page !== 0 ? $page : 1;
         }
 
         try {
@@ -92,7 +101,7 @@ class Client implements ClientInterface
                     // retry with fresh accessToken
                     $this->accessToken = null;
 
-                    return $this->request($method, $path, $criteria, $limit, $offset);
+                    return $this->request($method, $path, $params, $limit, $offset);
                 }
             } else {
                 // unknown exception, throw up
@@ -154,35 +163,6 @@ class Client implements ClientInterface
         }
 
         return $headers;
-    }
-
-    /**
-     * Adds the required parameters to the params array.
-     *
-     * @param array $criteria
-     * @param null $limit
-     * @param null $offset
-     *
-     * @return array the params array
-     */
-    private function getParams(array $criteria = [], $limit = null, $offset = null)
-    {
-        $params = $criteria;
-
-        if ($limit > 0) {
-            // calculates the minimal number of items per page
-            $itemsPerPage = $limit;
-            while($itemsPerPage - ($offset % $itemsPerPage) < $limit) {
-                $itemsPerPage++;
-            }
-            $params['itemsPerPage'] = $itemsPerPage;
-            $params['page'] = ($offset - ($offset % $itemsPerPage)) / $itemsPerPage + 1;
-        } else {
-            // do not set 'itemsPerPage' to zero because behavior of the REST API is inconsistent
-            $params['page'] = 1;
-        }
-
-        return $params;
     }
 
     /**

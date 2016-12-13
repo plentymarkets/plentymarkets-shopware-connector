@@ -53,6 +53,7 @@ class Iterator implements BaseIterator
     /**
      * ResourceIterator constructor.
      *
+     * @param string $path
      * @param Client $client
      * @param array  $criteria
      *
@@ -75,7 +76,6 @@ class Iterator implements BaseIterator
     private function loadPage(array $criteria = [], $limit = 0, $offset = 0)
     {
         $result = $this->client->request('GET', $this->path, $criteria, $limit, $offset);
-
 
         foreach ($result as $key => $item) {
             $this->page[$this->index + $key] = $item;
