@@ -14,7 +14,6 @@ use PlentymarketsAdapter\Client\Exception\InvalidCredentialsException;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 use Psr\Log\LoggerInterface;
-use ShopwareAdapter\ShopwareAdapter;
 use UnexpectedValueException;
 
 /**
@@ -87,7 +86,7 @@ class FetchManufacturerQueryHandler implements QueryHandlerInterface
         $identity = $this->identityService->findIdentity([
             'objectIdentifier' => $event->getIdentifier(),
             'objectType' => Manufacturer::getType(),
-            'adapterName' => ShopwareAdapter::getName(),
+            'adapterName' => PlentymarketsAdapter::getName(),
         ]);
 
         $element = $this->client->request('GET', 'items/manufacturers/' . $identity->getAdapterIdentifier());

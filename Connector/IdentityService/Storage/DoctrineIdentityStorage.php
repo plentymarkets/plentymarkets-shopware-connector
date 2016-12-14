@@ -79,11 +79,12 @@ class DoctrineIdentityStorage implements IdentityStorageInterface
     /**
      * {@inheritdoc}
      */
-    public function remove($adapterIdentifier, $adapterName)
+    public function remove($adapterIdentifier, $adapterName, $objectType)
     {
         $result = $this->identityRepository->findBy([
             'adapterIdentifier' => $adapterIdentifier,
             'adapterName' => $adapterName,
+            'objectType' => $objectType,
         ]);
 
         foreach ($result as $identity) {
