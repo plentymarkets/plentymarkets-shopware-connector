@@ -2,7 +2,7 @@
 
 namespace ShopwareAdapter\ResponseParser\ShippingProfile;
 
-use PlentyConnector\Connector\Identity\IdentityServiceInterface;
+use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 use ShopwareAdapter\ResponseParser\ResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;

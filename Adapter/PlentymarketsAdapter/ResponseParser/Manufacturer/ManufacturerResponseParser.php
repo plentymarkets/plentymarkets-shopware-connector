@@ -2,7 +2,7 @@
 
 namespace PlentymarketsAdapter\ResponseParser\Manufacturer;
 
-use PlentyConnector\Connector\Identity\IdentityServiceInterface;
+use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;

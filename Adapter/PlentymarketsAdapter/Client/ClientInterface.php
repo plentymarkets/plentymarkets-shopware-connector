@@ -5,6 +5,7 @@ namespace PlentymarketsAdapter\Client;
 use Exception;
 use GuzzleHttp\Exception\ClientException;
 use Iterator;
+use PlentyConnector\Adapter\PlentymarketsAdapter\Client\Exception\InvalidResponseException;
 use PlentymarketsAdapter\Client\Exception\InvalidCredentialsException;
 use UnexpectedValueException;
 
@@ -25,6 +26,7 @@ interface ClientInterface
      * @throws ClientException
      * @throws Exception
      * @throws InvalidCredentialsException
+     * @throws InvalidResponseException
      */
     public function request($method, $path, array $criteria = [], $limit = null, $offset = null);
 

@@ -5,7 +5,8 @@ namespace PlentymarketsAdapter\Client;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 use GuzzleHttp\Exception\ClientException;
-use PlentyConnector\Connector\Config\ConfigServiceInterface;
+use PlentyConnector\Adapter\PlentymarketsAdapter\Client\Exception\InvalidResponseException;
+use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentymarketsAdapter\Client\Exception\InvalidCredentialsException;
 use PlentymarketsAdapter\Client\Iterator\Iterator;
 
@@ -84,6 +85,10 @@ class Client implements ClientInterface
             $response = $this->connection->request($method, $path, $options);
 
             $result = json_decode($response->getBody(), true);
+
+            if (null === $result) {
+                throw InvalidResponseException::fromParams($method, $path, $options);
+            }
 
             if (!array_key_exists('entries', $result)) {
                 $entries = $result;

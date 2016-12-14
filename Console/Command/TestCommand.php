@@ -57,23 +57,8 @@ class TestCommand extends ShopwareCommand
         $logger = $this->container->get('plentyconnector.logger');
         $logger->pushHandler(new ConsoleHandler($output));
 
-        $routes = [
-            'payments/methods',
-            'stockmanagement/warehouses',
-            'orders/shipping/countries',
-            'orders/referrers',
-            'orders/statuses',
-            'orders/currencies',
-            'orders/shipping/presets',
-        ];
-
-        array_walk($routes, function($route) use ($output) {
-            $result = $this->client->request('GET', $route, [], 1, 0);
-
-            if (count($result) !== 1) {
-                $output->writeln($route);
-            }
-        });
+        $mapping = $this->container->get('plentyconnector.mapping_service');
+        $mapping->getMappingInformation();
 
         try {
             //$this->connector->handle(Manufacturer::getType(), 'All');

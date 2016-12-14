@@ -45,13 +45,13 @@
 
         <!-- Config -->
 
-        <service id="plentyconnector.config" class="PlentyConnector\Connector\Config\ConfigService">
+        <service id="plentyconnector.config" class="PlentyConnector\Connector\ConfigService\ConfigService">
             <argument type="service" id="models"/>
         </service>
 
         <!-- Subscriber -->
 
-        <service id="plentyconnector.subscriber.controller_path" class="PlentyConnector\Subscriber\ControllerPath">
+        <service id="plentyconnector.subscriber.controller_path" class="PlentyConnector\Subscriber\ControllerPathSubscriber">
             <argument type="service" id="service_container" />
 
             <tag name="shopware.event_subscriber" />
@@ -139,11 +139,11 @@
 
         <!-- Identity Service -->
 
-        <service id="plentyconnector.identity_storage" class="PlentyConnector\Connector\Identity\Storage\DoctrineIdentityStorage">
+        <service id="plentyconnector.identity_storage" class="PlentyConnector\Connector\IdentityService\Storage\DoctrineIdentityStorage">
             <argument type="service" id="models"/>
         </service>
 
-        <service id="plentyconnector.identity_service" class="PlentyConnector\Connector\Identity\IdentityService">
+        <service id="plentyconnector.identity_service" class="PlentyConnector\Connector\IdentityService\IdentityService">
             <argument type="service" id="plentyconnector.identity_storage"/>
         </service>
 
@@ -179,9 +179,9 @@
 
         <!-- Service Bus -->
 
-        <service id="plentyconnector.command_bus.command_handler_middleware" class="PlentyConnector\Connector\CommandBus\Middleware\CommandHandlerMiddleware"/>
+        <service id="plentyconnector.command_bus.command_handler_middleware" class="PlentyConnector\Connector\CommandBus\CommandHandlerMiddleware\CommandHandlerMiddleware"/>
         <service id="plentyconnector.event_bus.event_handler_middleware" class="PlentyConnector\Connector\EventBus\Middleware\EventHandlerMiddleware"/>
-        <service id="plentyconnector.query_bus.query_handler_middleware" class="PlentyConnector\Connector\QueryBus\Middleware\QueryHandlerMiddleware"/>
+        <service id="plentyconnector.query_bus.query_handler_middleware" class="PlentyConnector\Connector\QueryBus\QueryHandlerMiddleware\QueryHandlerMiddleware"/>
 
         <service id="plentyconnector.service_bus.class_name_formatter" class="PlentyConnector\Logger\ClassNameFormatter"/>
 

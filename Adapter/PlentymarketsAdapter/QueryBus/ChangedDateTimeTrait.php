@@ -2,7 +2,7 @@
 
 namespace PlentymarketsAdapter\QueryBus;
 
-use PlentyConnector\Connector\Config\ConfigServiceInterface;
+use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 
 /**
  * Class ChangedDateTimeTrait.

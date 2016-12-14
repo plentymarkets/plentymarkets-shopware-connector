@@ -43,7 +43,7 @@
 
         <!-- Manufacturer handlers -->
 
-        <service id="plentymarkets_adapter.query_handler.fetch_all_manufacturers" class="PlentyConnector\Adapter\PlentymarketsAdapter\QueryBus\Handler\Manufacturer\FetchAllManufacturersQueryHandler">
+        <service id="plentymarkets_adapter.query_handler.fetch_all_manufacturers" class="PlentymarketsAdapter\QueryBus\QueryHandler\Manufacturer\FetchAllManufacturersQueryHandler">
             <argument type="service" id="plentmarkets_adapter.client"/>
             <argument type="service" id="plentmarkets_adapter.response_parser.manufacturer"/>
             <argument type="service" id="plentyconnector.logger"/>
@@ -51,7 +51,7 @@
             <tag name="plentyconnector.query_handler"/>
         </service>
 
-        <service id="plentymarkets_adapter.query_handler.fetch_changed_manufacturers" class="PlentymarketsAdapter\QueryBus\Handler\Manufacturer\FetchChangedManufacturersQueryHandler">
+        <service id="plentymarkets_adapter.query_handler.fetch_changed_manufacturers" class="PlentymarketsAdapter\QueryBus\QueryHandler\Manufacturer\FetchChangedManufacturersQueryHandler">
             <argument type="service" id="plentmarkets_adapter.client"/>
             <argument type="service" id="plentyconnector.config"/>
             <argument type="service" id="plentmarkets_adapter.response_parser.manufacturer"/>
@@ -60,7 +60,7 @@
             <tag name="plentyconnector.query_handler"/>
         </service>
 
-        <service id="plentymarkets_adapter.query_handler.fetch_manufacturer" class="PlentyConnector\Adapter\PlentymarketsAdapter\QueryBus\Handler\Manufacturer\FetchManufacturerQueryHandler">
+        <service id="plentymarkets_adapter.query_handler.fetch_manufacturer" class="PlentymarketsAdapter\QueryBus\QueryHandler\Manufacturer\FetchManufacturerQueryHandler">
             <argument type="service" id="plentmarkets_adapter.client"/>
             <argument type="service" id="plentmarkets_adapter.response_parser.manufacturer"/>
             <argument type="service" id="plentyconnector.logger"/>
@@ -69,23 +69,23 @@
             <tag name="plentyconnector.query_handler"/>
         </service>
 
-        <!-- Mapping handlers -->
+        <!-- Mapping query handlers -->
 
-        <service id="plentymarkets_adapter.query_handler.fetch_all_payment_methods" class="PlentymarketsAdapter\QueryBus\Handler\PaymentMethod\FetchAllPaymentMethodsHandler">
+        <service id="plentymarkets_adapter.query_handler.fetch_all_payment_methods" class="PlentymarketsAdapter\QueryBus\QueryHandler\PaymentMethod\FetchAllPaymentMethodsHandler">
             <argument type="service" id="plentmarkets_adapter.client"/>
             <argument type="service" id="plentmarkets_adapter.response_parser.payment_method"/>
 
             <tag name="plentyconnector.query_handler"/>
         </service>
 
-        <service id="plentymarkets_adapter.query_handler.fetch_all_shipping_profiles" class="PlentymarketsAdapter\QueryBus\Handler\ShippingProfile\FetchAllShippingProfilesHandler">
+        <service id="plentymarkets_adapter.query_handler.fetch_all_shipping_profiles" class="PlentymarketsAdapter\QueryBus\QueryHandler\ShippingProfile\FetchAllShippingProfilesHandler">
             <argument type="service" id="plentmarkets_adapter.client"/>
             <argument type="service" id="plentmarkets_adapter.response_parser.shipping_profile"/>
 
             <tag name="plentyconnector.query_handler"/>
         </service>
 
-        <service id="plentymarkets_adapter.query_handler.fetch_all_shops" class="PlentymarketsAdapter\QueryBus\Handler\Shop\FetchAllShopsHandler">
+        <service id="plentymarkets_adapter.query_handler.fetch_all_shops" class="PlentymarketsAdapter\QueryBus\QueryHandler\Shop\FetchAllShopsHandler">
             <argument type="service" id="plentmarkets_adapter.client"/>
             <argument type="service" id="plentmarkets_adapter.response_parser.shop"/>
 

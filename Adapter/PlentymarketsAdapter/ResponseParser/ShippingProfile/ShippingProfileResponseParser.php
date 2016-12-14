@@ -2,7 +2,7 @@
 
 namespace PlentymarketsAdapter\ResponseParser\ShippingProfile;
 
-use PlentyConnector\Connector\Identity\IdentityServiceInterface;
+use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;

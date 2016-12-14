@@ -2,7 +2,7 @@
 
 namespace ShopwareAdapter\ResponseParser;
 
-use PlentyConnector\Connector\Identity\IdentityServiceInterface;
+use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Order\Order;
 use PlentyConnector\Connector\TransferObject\OrderItem\OrderItem;
 use PlentyConnector\Connector\TransferObject\OrderStatus\OrderStatus;

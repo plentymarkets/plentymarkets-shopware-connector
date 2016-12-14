@@ -26,6 +26,6 @@
     },
     "scripts": {
         "test": "phpunit -c tests/",
-        "test-unit": "phpunit -c tests/phpunit_unit.xml.dist"
+        "test-unit": "phpunit -c tests/phpunit_unit.xml"
     }
 }
