@@ -46,6 +46,45 @@ class ClassNameFormatter implements Formatter
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function logCommandReceived(LoggerInterface $logger, $command)
+    {
+        $message = $this->getRecievedMessage($command);
+        $payload = $this->getPayload($command);
+
+        $logger->log($this->commandReceivedLevel, $message, $payload);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function logCommandSucceeded(LoggerInterface $logger, $command, $returnValue)
+    {
+        $message = $this->getSucceededMessage($command);
+        $payload = $this->getPayload($command);
+
+        $logger->log($this->commandSucceededLevel, $message, $payload);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function logCommandFailed(LoggerInterface $logger, $command, Exception $e)
+    {
+        $message = $this->getFailedMessage($command);
+        $payload = $this->getPayload($command);
+
+        $payload = array_merge($payload, ['exception' => $e]);
+
+        $logger->log(
+            $this->commandFailedLevel,
+            $message,
+            $payload
+        );
+    }
+
+    /**
      * @param $command
      *
      * @return string
@@ -68,36 +107,60 @@ class ClassNameFormatter implements Formatter
     }
 
     /**
-     * {@inheritDoc}
+     * @param $command
+     *
+     * @return array
      */
-    public function logCommandReceived(LoggerInterface $logger, $command)
+    protected function getPayload($command)
     {
-        $type = $this->getType($command);
+        $noCommand = !($command instanceof CommandInterface);
+        $noQuery = !($command instanceof QueryInterface);
+        $noEvent = !($command instanceof EventInterface);
 
-        $logger->log($this->commandReceivedLevel, $type . ' received: ' . get_class($command), []);
+        if ($noCommand && $noQuery && $noEvent) {
+            return [];
+        }
+
+        return $command->getPayload();
     }
 
     /**
-     * {@inheritDoc}
+     * @param $command
+     *
+     * @return string
      */
-    public function logCommandSucceeded(LoggerInterface $logger, $command, $returnValue)
+    protected function getClassName($command)
     {
-        $type = $this->getType($command);
-
-        $logger->log($this->commandSucceededLevel, $type . ' succeeded: ' . get_class($command), []);
+        return substr(strrchr(get_class($command), '\\'), 1);
     }
 
     /**
-     * {@inheritDoc}
+     * @param $command
+     *
+     * @return string
      */
-    public function logCommandFailed(LoggerInterface $logger, $command, Exception $e)
+    private function getSucceededMessage($command)
     {
-        $type = $this->getType($command);
+        return $this->getType($command) . ' succeeded: ' . $this->getClassName($command);
+    }
 
-        $logger->log(
-            $this->commandFailedLevel,
-            $type . ' failed: ' . get_class($command),
-            ['exception' => $e]
-        );
+    /**
+     * @param $command
+     *
+     * @return string
+     */
+    private function getRecievedMessage($command)
+    {
+        return $this->getType($command) . ' received: ' . $this->getClassName($command);
+    }
+
+    /**
+     * @param $command
+     *
+     * @return string
+     */
+    private function getFailedMessage($command)
+    {
+        return $this->getType($command) . ' failed: ' . $this->getClassName($command);
     }
 }
