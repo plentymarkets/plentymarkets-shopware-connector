@@ -993,6 +993,10 @@ class PlentymarketsImportEntityItem
 						// Internal mapping of the variant number to some plenty information
 						$number2sku[$variant['number']] = $variant['X_plentySku'];
 					}
+					
+					$number2markup[$variant['number']] = $variant['X_plentyMarkup'];
+
+                                        $number2markup[$variant['number']] = $variant['X_plentyMarkup'];
 
 					$variants[] = $variant;
 				}
@@ -1062,14 +1066,19 @@ class PlentymarketsImportEntityItem
 						++$numberOfVariantsDeleted;
 						$VariantResource->delete($detail['id']);
 						PlentymarketsMappingController::deleteItemVariantByShopwareID($detail['id']);
+						continue;
 					}
 
 					// If the variant was just created
-					else if (isset($number2sku[$detail['number']]))
+					if (isset($number2sku[$detail['number']]))
 					{
 						// Add the mapping
 						PlentymarketsMappingController::addItemVariant($detail['id'], $number2sku[$detail['number']]);
 					}
+
+					// Update the prices
+					$PlentymarketsImportEntityItemPrice = new PlentymarketsImportEntityItemPrice($this->ItemBase->PriceSet, $number2markup[$detail['number']]);
+					$PlentymarketsImportEntityItemPrice->updateVariant($detail['id']);
 				}
 
 				$VariantController->map($article);
