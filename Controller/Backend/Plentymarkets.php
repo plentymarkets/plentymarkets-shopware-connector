@@ -7,7 +7,7 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use Shopware\Components\Api\Manager;
 
 /**
- * Class Shopware_Controllers_Backend_Plentymarkets.
+ * Class Shopware_Controller_Backend_Plentymarkets.
  */
 class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Backend_ExtJs
 {
