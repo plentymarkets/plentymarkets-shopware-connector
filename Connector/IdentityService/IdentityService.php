@@ -99,12 +99,14 @@ class IdentityService implements IdentityServiceInterface
     /**
      * @param $adapterIdentifier
      * @param $adapterName
+     * @param $objectType
      */
-    public function removeIdentity($adapterIdentifier, $adapterName)
+    public function removeIdentity($adapterIdentifier, $adapterName, $objectType)
     {
         Assertion::string($adapterIdentifier);
         Assertion::string($adapterName);
+        Assertion::string($objectType);
 
-        $this->storage->remove($adapterIdentifier, $adapterName);
+        $this->storage->remove($adapterIdentifier, $adapterName, $objectType);
     }
 }

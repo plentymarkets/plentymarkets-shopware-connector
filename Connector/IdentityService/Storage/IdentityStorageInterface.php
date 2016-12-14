@@ -24,6 +24,7 @@ interface IdentityStorageInterface
     /**
      * @param $adapterIdentifier
      * @param $adapterName
+     * @param $objectType
      */
-    public function remove($adapterIdentifier, $adapterName);
+    public function remove($adapterIdentifier, $adapterName, $objectType);
 }
