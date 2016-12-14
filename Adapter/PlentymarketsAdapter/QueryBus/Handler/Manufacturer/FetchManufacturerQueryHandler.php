@@ -2,6 +2,7 @@
 
 namespace PlentyConnector\Adapter\PlentymarketsAdapter\QueryBus\Handler\Manufacturer;
 
+use Exception;
 use PlentyConnector\Connector\Identity\IdentityServiceInterface;
 use PlentyConnector\Connector\QueryBus\Handler\QueryHandlerInterface;
 use PlentyConnector\Connector\QueryBus\Query\Manufacturer\FetchManufacturerQuery;
@@ -9,10 +10,12 @@ use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
+use PlentymarketsAdapter\Client\Exception\InvalidCredentialsException;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 use Psr\Log\LoggerInterface;
 use ShopwareAdapter\ShopwareAdapter;
+use UnexpectedValueException;
 
 /**
  * Class FetchManufacturerQueryHandler
@@ -75,7 +78,9 @@ class FetchManufacturerQueryHandler implements QueryHandlerInterface
      *
      * @return TransferObjectInterface
      *
-     * @throws \UnexpectedValueException
+     * @throws InvalidCredentialsException
+     * @throws Exception
+     * @throws UnexpectedValueException
      */
     public function handle(QueryInterface $event)
     {

@@ -7,12 +7,12 @@ use PlentyConnector\Connector\Config\ConfigServiceInterface;
 use PlentyConnector\Connector\QueryBus\Handler\QueryHandlerInterface;
 use PlentyConnector\Connector\QueryBus\Query\Manufacturer\FetchChangedManufacturersQuery;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
-use PlentyConnector\Connector\TransferObject\Manufacturer\ManufacturerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\QueryBus\ChangedDateTimeTrait;
 use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 use Psr\Log\LoggerInterface;
+use UnexpectedValueException;
 
 /**
  * Class FetchChangedManufacturersQueryHandler.
@@ -77,7 +77,7 @@ class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
      *
      * @return TransferObjectInterface[]
      *
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
     public function handle(QueryInterface $event)
     {

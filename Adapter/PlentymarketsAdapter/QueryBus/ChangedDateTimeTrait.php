@@ -12,7 +12,7 @@ trait ChangedDateTimeTrait
     /**
      * @param ConfigServiceInterface $config
      *
-     * @return \DateTimeImmutable
+     * @return string
      */
     public function getChangedDateTime(ConfigServiceInterface $config)
     {

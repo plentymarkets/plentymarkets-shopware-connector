@@ -9,6 +9,7 @@ use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 use Psr\Log\LoggerInterface;
+use UnexpectedValueException;
 
 /**
  * Class FetchAllManufacturersQueryHandler
@@ -63,7 +64,7 @@ class FetchAllManufacturersQueryHandler implements QueryHandlerInterface
      *
      * @return TransferObjectInterface[]
      *
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
     public function handle(QueryInterface $event)
     {
