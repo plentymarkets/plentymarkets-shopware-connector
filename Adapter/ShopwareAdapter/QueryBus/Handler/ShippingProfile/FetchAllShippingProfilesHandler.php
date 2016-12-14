@@ -45,8 +45,7 @@ class FetchAllShippingProfilesHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $event)
     {
-        return
-            $event instanceof FetchAllShippingProfilesQuery &&
+        return $event instanceof FetchAllShippingProfilesQuery &&
             $event->getAdapterName() === ShopwareAdapter::getName();
     }
 

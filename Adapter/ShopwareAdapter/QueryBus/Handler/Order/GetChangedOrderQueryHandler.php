@@ -53,8 +53,7 @@ class GetChangedOrderQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $event)
     {
-        return
-            $event instanceof GetChangedOrderQuery &&
+        return $event instanceof GetChangedOrderQuery &&
             $event->getAdapterName() === ShopwareAdapter::getName();
     }
 

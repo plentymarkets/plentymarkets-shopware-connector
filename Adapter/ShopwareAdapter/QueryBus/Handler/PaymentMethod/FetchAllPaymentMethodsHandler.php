@@ -45,8 +45,7 @@ class FetchAllPaymentMethodsHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $event)
     {
-        return
-            $event instanceof FetchAllPaymentMethodsQuery &&
+        return $event instanceof FetchAllPaymentMethodsQuery &&
             $event->getAdapterName() === ShopwareAdapter::getName();
     }
 
