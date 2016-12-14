@@ -113,11 +113,10 @@ class ClassNameFormatter implements Formatter
      */
     protected function getPayload($command)
     {
-        $noCommand = !($command instanceof CommandInterface);
-        $noQuery = !($command instanceof QueryInterface);
-        $noEvent = !($command instanceof EventInterface);
-
-        if ($noCommand && $noQuery && $noEvent) {
+        if (!($command instanceof CommandInterface)
+            && !($command instanceof QueryInterface)
+            && !($command instanceof EventInterface))
+        {
             return [];
         }
 

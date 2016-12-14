@@ -2,6 +2,7 @@
 
 namespace PlentyConnector\Connector\Mapping;
 
+use PlentyConnector\Connector\Exception\MissingQueryException;
 use PlentyConnector\Connector\TransferObject\Definition\DefinitionInterface;
 use PlentyConnector\Connector\TransferObject\Mapping\MappingInterface;
 
@@ -17,6 +18,8 @@ interface MappingServiceInterface
 
     /**
      * @return MappingInterface[]
+     *
+     * @throws MissingQueryException
      */
     public function getMappingInformation();
 }

@@ -12,7 +12,9 @@
 
         <parameter key="TRANSFEROBJECT_MANUFACTURER" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::MANUFACTURER</parameter>
         <parameter key="TRANSFEROBJECT_PAYMENT_METHOD" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::PAYMENT_METHOD</parameter>
+        <parameter key="TRANSFEROBJECT_PRODUCT" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::PRODUCT</parameter>
         <parameter key="TRANSFEROBJECT_SHIPPING_PROFILE" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::SHIPPING_PROFILE</parameter>
+        <parameter key="TRANSFEROBJECT_SHOP" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::SHOP</parameter>
     </parameters>
 
     <!-- Services -->
@@ -75,6 +77,14 @@
             <tag name="plentyconnector.connector_definition"/>
         </service>
 
+        <service id="plentyconnector.connector_definition.product" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
+            <argument>%PLENTYMARKETS_ADAPTER%</argument>
+            <argument>%SHOPWARE_ADAPTER%</argument>
+            <argument>%TRANSFEROBJECT_PRODUCT%</argument>
+
+            <tag name="plentyconnector.connector_definition"/>
+        </service>
+
         <!-- Mapping Service -->
 
         <service id="plentyconnector.mapping_service" class="PlentyConnector\Connector\Mapping\MappingService">
@@ -96,6 +106,14 @@
             <argument>%PLENTYMARKETS_ADAPTER%</argument>
             <argument>%SHOPWARE_ADAPTER%</argument>
             <argument>%TRANSFEROBJECT_SHIPPING_PROFILE%</argument>
+
+            <tag name="plentyconnector.mapping_definition"/>
+        </service>
+
+        <service id="plentyconnector.mapping_definition.shop" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
+            <argument>%PLENTYMARKETS_ADAPTER%</argument>
+            <argument>%SHOPWARE_ADAPTER%</argument>
+            <argument>%TRANSFEROBJECT_SHOP%</argument>
 
             <tag name="plentyconnector.mapping_definition"/>
         </service>
@@ -143,6 +161,10 @@
         </service>
 
         <service id="plentyconnector.query_generator.shipping_profile" class="PlentyConnector\Connector\QueryBus\QueryGenerator\ShippingProfile\ShippingProfileQueryGenerator">
+            <tag name="plentyconnector.query_generator" />
+        </service>
+
+        <service id="plentyconnector.query_generator.shop" class="PlentyConnector\Connector\QueryBus\QueryGenerator\Shop\ShopQueryGenerator">
             <tag name="plentyconnector.query_generator" />
         </service>
 

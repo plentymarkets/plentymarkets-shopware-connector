@@ -2,6 +2,7 @@
 
 namespace PlentyConnector\Connector\Mapping;
 
+use PlentyConnector\Connector\Exception\MissingQueryException;
 use PlentyConnector\Connector\QueryBus\QueryFactory\QueryFactoryInterface;
 use PlentyConnector\Connector\QueryBus\QueryType;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
@@ -66,6 +67,10 @@ class MappingService implements MappingServiceInterface
                 QueryType::ALL
             );
 
+            if (null === $originQuery) {
+                throw MissingQueryException::fromDefinition($definition);
+            }
+
             $originTransferObjects = $this->queryBus->handle($originQuery);
 
             if (null === $originTransferObjects) {
@@ -76,11 +81,15 @@ class MappingService implements MappingServiceInterface
                 return $object::getType() === $definition->getObjectType() && is_subclass_of($object, MappedTransferObjectInterface::class);
             });
 
-            $destinationQuery =$this->queryFactory->create(
+            $destinationQuery = $this->queryFactory->create(
                 $definition->getDestinationAdapterName(),
                 $definition->getObjectType(),
                 QueryType::ALL
             );
+
+            if (null === $destinationQuery) {
+                throw MissingQueryException::fromDefinition($destinationQuery);
+            }
 
             $destinationTransferObjects = $this->queryBus->handle($destinationQuery);
 

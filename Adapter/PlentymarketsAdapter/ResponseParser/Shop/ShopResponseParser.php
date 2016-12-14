@@ -1,17 +1,16 @@
 <?php
 
-namespace PlentymarketsAdapter\ResponseParser;
+namespace PlentymarketsAdapter\ResponseParser\Shop;
 
 use PlentyConnector\Connector\Identity\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
+use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentymarketsAdapter\PlentymarketsAdapter;
+use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 
 /**
- * TODO: finalize.
- *
- * Class ResponseParser
+ * Class ShopResponseParser
  */
-class ResponseParser implements ResponseParserInterface
+class ShopResponseParser implements ResponseParserInterface
 {
     /**
      * @var IdentityServiceInterface
@@ -19,7 +18,7 @@ class ResponseParser implements ResponseParserInterface
     private $identityService;
 
     /**
-     * ResponseParser constructor.
+     * ShopResponseParser constructor.
      *
      * @param IdentityServiceInterface $identityService
      */
@@ -31,21 +30,19 @@ class ResponseParser implements ResponseParserInterface
     /**
      * {@inheritdoc}
      */
-    public function parseManufacturer($entry)
+    public function parse(array $entry)
     {
         $identity = $this->identityService->findOrCreateIdentity(
-            (string)$entry['id'],
+            (string)$entry['storeIdentifier'],
             PlentymarketsAdapter::getName(),
-            Manufacturer::getType()
+            Shop::getType()
         );
 
-        $manufacturer = Manufacturer::fromArray([
+        $shop = Shop::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => $entry['name'],
-            'logo' => !empty($entry['logo']) ? $entry['name'] : null,
-            'link' => !empty($entry['url']) ? $entry['name'] : null,
+            'name' => empty($entry['name']) ? $entry['type'] : $entry['name']
         ]);
 
-        return $manufacturer;
+        return $shop;
     }
 }
