@@ -5,6 +5,7 @@ namespace PlentymarketsAdapter\QueryBus\Handler\ShippingProfile;
 use PlentyConnector\Connector\QueryBus\Handler\QueryHandlerInterface;
 use PlentyConnector\Connector\QueryBus\Query\PaymentMethod\FetchAllPaymentMethodsQuery;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
+use PlentyConnector\Connector\QueryBus\Query\ShippingProfile\FetchAllShippingProfilesQuery;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
@@ -43,7 +44,7 @@ class FetchAllShippingProfilesHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $event)
     {
-        return $event instanceof FetchAllPaymentMethodsQuery &&
+        return $event instanceof FetchAllShippingProfilesQuery &&
             $event->getAdapterName() === PlentymarketsAdapter::getName();
     }
 
@@ -52,7 +53,7 @@ class FetchAllShippingProfilesHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $event)
     {
-        $shippingProfiles = $this->client->request('GET', 'payments/methods');
+        $shippingProfiles = $this->client->request('GET', 'orders/shipping/presets');
 
         $shippingProfiles = array_map(function ($shippingProfile) {
             return $this->responseParser->parse($shippingProfile);
