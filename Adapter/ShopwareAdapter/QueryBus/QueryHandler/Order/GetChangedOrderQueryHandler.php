@@ -3,9 +3,9 @@
 namespace ShopwareAdapter\QueryBus\QueryHandler\Order;
 
 use Exception;
-use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use PlentyConnector\Connector\QueryBus\Query\Order\GetChangedOrderQuery;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
+use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use Psr\Log\LoggerInterface;
 use Shopware\Components\Api\Resource;
 use ShopwareAdapter\ResponseParser\ResponseParserInterface;
