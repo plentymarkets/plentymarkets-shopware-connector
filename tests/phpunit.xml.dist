@@ -2,7 +2,7 @@
 
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/5.5/phpunit.xsd"
-         bootstrap="../../../../tests/Functional/bootstrap.php"
+         bootstrap="./Integration/bootstrap.php"
          colors="true"
          beStrictAboutOutputDuringTests="true"
          beStrictAboutResourceUsageDuringSmallTests="true"

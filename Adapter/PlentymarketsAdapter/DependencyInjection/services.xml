@@ -1,26 +1,36 @@
 <?xml version="1.0" ?>
 
-<!-- TODO: finalize handlers -->
-
-<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xmlns="http://symfony.com/schema/dic/services"
-           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <!-- Adapter -->
 
-        <service id="remote_plentymarkets_adapter" class="PlentymarketsAdapter\PlentymarketsAdapter">
+        <service id="plentymarkets_adapter" class="PlentymarketsAdapter\PlentymarketsAdapter">
             <tag name="plentyconnector.adapter"/>
         </service>
 
         <!-- Guzzle -->
+        <service id="plentymarkets_adapter.http_client.handler" class="GuzzleHttp\Handler\CurlHandler">
+            <factory class="PlentymarketsAdapter\Client\Handler\HandlerFactory" method="factory"/>
+        </service>
 
-        <service id="plentymarkets_adapter.http_client" class="GuzzleHttp\Client"/>
+        <service id="plentymarkets_adapter.http_client.handler_stack" class="GuzzleHttp\HandlerStack">
+            <factory class="GuzzleHttp\HandlerStack" method="create" />
+
+            <argument type="service" id="plentymarkets_adapter.http_client.handler" />
+        </service>
+
+        <service id="plentymarkets_adapter.http_client" class="GuzzleHttp\Client">
+            <argument type="collection">
+                <argument key="handler" type="service" id="plentymarkets_adapter.http_client.handler_stack"/>
+            </argument>
+        </service>
 
         <!-- Client -->
 
         <service id="plentmarkets_adapter.client" class="PlentymarketsAdapter\Client\Client">
             <argument type="service" id="plentymarkets_adapter.http_client"/>
             <argument type="service" id="plentyconnector.config"/>
+            <argument>%kernel.environment%</argument>
         </service>
 
         <!-- Response Parser -->

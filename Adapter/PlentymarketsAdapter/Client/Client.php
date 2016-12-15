@@ -38,15 +38,22 @@ class Client implements ClientInterface
     private $refreshToken;
 
     /**
+     * @var string
+     */
+    private $environment;
+
+    /**
      * Client constructor.
      *
      * @param GuzzleClient $connection
      * @param ConfigServiceInterface $config
+     * @param $environment
      */
-    public function __construct(GuzzleClient $connection, ConfigServiceInterface $config)
+    public function __construct(GuzzleClient $connection, ConfigServiceInterface $config, $environment)
     {
         $this->connection = $connection;
         $this->config = $config;
+        $this->environment = $environment;
     }
 
     /**
@@ -122,6 +129,10 @@ class Client implements ClientInterface
      */
     private function isLoginRequired($path)
     {
+        if ($this->environment === 'testing') {
+            return false;
+        }
+
         return $path !== 'login' && null === $this->accessToken;
     }
 
