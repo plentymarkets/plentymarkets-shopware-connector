@@ -1,6 +1,6 @@
 <?php
 
-namespace PlentyConnector\Logger;
+namespace PlentyConnector\Connector\Logger;
 
 use Exception;
 use League\Tactician\Logger\Formatter\Formatter;

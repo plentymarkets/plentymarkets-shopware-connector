@@ -6,7 +6,7 @@ use Exception;
 use PlentyConnector\Connector\Connector;
 use PlentyConnector\Connector\QueryBus\QueryType;
 use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
-use PlentyConnector\Logger\ConsoleHandler;
+use PlentyConnector\Connector\Logger\ConsoleHandler;
 use Shopware\Commands\ShopwareCommand;
 use Shopware\Components\Logger;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
