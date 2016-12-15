@@ -17,9 +17,9 @@ interface ClientInterface
     /**
      * @param string $method
      * @param string $path
-     * @param array  $criteria
-     * @param null   $limit
-     * @param null   $offset
+     * @param array $criteria
+     * @param null $limit
+     * @param null $offset
      *
      * @return array
      *

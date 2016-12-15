@@ -64,9 +64,16 @@ class Order implements OrderInterface
      * @param $shippingProfileId
      * @param $shopId
      */
-    public function __construct($identifier, $orderNumber, $orderItems, $orderStatusId,
-        $paymentStatusId, $paymentMethodId, $shippingProfileId, $shopId)
-    {
+    public function __construct(
+        $identifier,
+        $orderNumber,
+        $orderItems,
+        $orderStatusId,
+        $paymentStatusId,
+        $paymentMethodId,
+        $shippingProfileId,
+        $shopId
+    ) {
         Assertion::uuid($identifier);
         Assertion::string($orderNumber);
         Assertion::isArray($orderItems);

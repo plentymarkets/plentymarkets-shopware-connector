@@ -57,31 +57,13 @@ class ClassNameFormatter implements Formatter
     }
 
     /**
-     * {@inheritDoc}
+     * @param $command
+     *
+     * @return string
      */
-    public function logCommandSucceeded(LoggerInterface $logger, $command, $returnValue)
+    private function getRecievedMessage($command)
     {
-        $message = $this->getSucceededMessage($command);
-        $payload = $this->getPayload($command);
-
-        $logger->log($this->commandSucceededLevel, $message, $payload);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function logCommandFailed(LoggerInterface $logger, $command, Exception $e)
-    {
-        $message = $this->getFailedMessage($command);
-        $payload = $this->getPayload($command);
-
-        $payload = array_merge($payload, ['exception' => $e]);
-
-        $logger->log(
-            $this->commandFailedLevel,
-            $message,
-            $payload
-        );
+        return $this->getType($command) . ' received: ' . $this->getClassName($command);
     }
 
     /**
@@ -109,14 +91,24 @@ class ClassNameFormatter implements Formatter
     /**
      * @param $command
      *
+     * @return string
+     */
+    protected function getClassName($command)
+    {
+        return substr(strrchr(get_class($command), '\\'), 1);
+    }
+
+    /**
+     * @param $command
+     *
      * @return array
      */
     protected function getPayload($command)
     {
         if (!($command instanceof CommandInterface)
             && !($command instanceof QueryInterface)
-            && !($command instanceof EventInterface))
-        {
+            && !($command instanceof EventInterface)
+        ) {
             return [];
         }
 
@@ -124,13 +116,14 @@ class ClassNameFormatter implements Formatter
     }
 
     /**
-     * @param $command
-     *
-     * @return string
+     * {@inheritDoc}
      */
-    protected function getClassName($command)
+    public function logCommandSucceeded(LoggerInterface $logger, $command, $returnValue)
     {
-        return substr(strrchr(get_class($command), '\\'), 1);
+        $message = $this->getSucceededMessage($command);
+        $payload = $this->getPayload($command);
+
+        $logger->log($this->commandSucceededLevel, $message, $payload);
     }
 
     /**
@@ -144,13 +137,20 @@ class ClassNameFormatter implements Formatter
     }
 
     /**
-     * @param $command
-     *
-     * @return string
+     * {@inheritDoc}
      */
-    private function getRecievedMessage($command)
+    public function logCommandFailed(LoggerInterface $logger, $command, Exception $e)
     {
-        return $this->getType($command) . ' received: ' . $this->getClassName($command);
+        $message = $this->getFailedMessage($command);
+        $payload = $this->getPayload($command);
+
+        $payload = array_merge($payload, ['exception' => $e]);
+
+        $logger->log(
+            $this->commandFailedLevel,
+            $message,
+            $payload
+        );
     }
 
     /**

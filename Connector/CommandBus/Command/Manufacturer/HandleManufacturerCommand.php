@@ -23,7 +23,7 @@ class HandleManufacturerCommand implements HandleManufacturerCommandInterface
      * ImportLocalManufacturerCommand constructor.
      *
      * @param TransferObjectInterface $manufacturer the transferobject which will be handeled
-     * @param string                  $adapterName  the classname of the target adapter
+     * @param string $adapterName the classname of the target adapter
      */
     public function __construct(TransferObjectInterface $manufacturer, $adapterName = '')
     {

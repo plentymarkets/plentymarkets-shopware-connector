@@ -48,7 +48,7 @@ class IdentityService implements IdentityServiceInterface
             $Identity = $this->createIdentity(
                 $objectIdentifier,
                 $objectType,
-                (string) $adapterIdentifier,
+                (string)$adapterIdentifier,
                 $adapterName
             );
         }

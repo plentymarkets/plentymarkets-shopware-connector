@@ -2,7 +2,6 @@
 
 namespace PlentyConnector\Installer;
 
-use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Tools\SchemaTool;
 use PlentyConnector\Connector\ConfigService\Model\Config;

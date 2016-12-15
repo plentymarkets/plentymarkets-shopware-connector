@@ -16,6 +16,14 @@ class ControllerPathSubscriber implements SubscriberInterface
     private $container;
 
     /**
+     * @param ContainerInterface $container
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
+    /**
      * @return array
      */
     public static function getSubscribedEvents()
@@ -23,14 +31,6 @@ class ControllerPathSubscriber implements SubscriberInterface
         return [
             'Enlight_Controller_Dispatcher_ControllerPath_Backend_Plentymarkets' => 'onControllerBackendPlentymarkets'
         ];
-    }
-
-    /**
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
     }
 
     /**

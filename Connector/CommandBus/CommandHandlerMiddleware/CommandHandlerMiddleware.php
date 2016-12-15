@@ -26,7 +26,7 @@ class CommandHandlerMiddleware implements Middleware
 
     /**
      * @param CommandInterface $command
-     * @param callable         $next
+     * @param callable $next
      *
      * @return mixed
      *

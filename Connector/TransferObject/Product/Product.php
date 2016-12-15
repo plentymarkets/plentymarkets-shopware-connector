@@ -36,9 +36,9 @@ class Product implements ProductInterface
     /**
      * Product constructor.
      *
-     * @param string                $identifier
-     * @param string                $name
-     * @param array                 $variants
+     * @param string $identifier
+     * @param string $name
+     * @param array $variants
      * @param ManufacturerInterface $manufacturer
      */
     public function __construct($identifier, $name, array $variants = [], ManufacturerInterface $manufacturer)

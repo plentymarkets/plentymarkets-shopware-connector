@@ -33,6 +33,7 @@ class Shop implements ShopInterface
         $this->identifier = $identifier;
         $this->name = $name;
     }
+
     /**
      * @return string
      */

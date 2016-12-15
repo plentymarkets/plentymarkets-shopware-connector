@@ -17,8 +17,12 @@ class ConsoleFormatter extends LineFormatter
     /**
      * {@inheritdoc}
      */
-    public function __construct($format = null, $dateFormat = null, $allowInlineLineBreaks = false, $ignoreEmptyContextAndExtra = true)
-    {
+    public function __construct(
+        $format = null,
+        $dateFormat = null,
+        $allowInlineLineBreaks = false,
+        $ignoreEmptyContextAndExtra = true
+    ) {
         parent::__construct($format, $dateFormat, $allowInlineLineBreaks, $ignoreEmptyContextAndExtra);
     }
 

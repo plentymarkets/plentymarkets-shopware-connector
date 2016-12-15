@@ -26,14 +26,6 @@ class Translation implements TranslationInterface
     private $value;
 
     /**
-     * {@inheritdoc}
-     */
-    public static function getType()
-    {
-        return TransferObjectType::TRANSLATION;
-    }
-
-    /**
      * Translation constructor.
      *
      * @param $locale
@@ -49,6 +41,14 @@ class Translation implements TranslationInterface
         $this->locale = $locale;
         $this->property = $property;
         $this->value = $value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getType()
+    {
+        return TransferObjectType::TRANSLATION;
     }
 
     /**
