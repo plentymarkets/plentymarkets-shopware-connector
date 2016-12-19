@@ -17,9 +17,11 @@ interface MappingServiceInterface
     public function addDefinition(DefinitionInterface $definition);
 
     /**
+     * @param null $objectType
+     *
      * @return MappingInterface[]
      *
      * @throws MissingQueryException
      */
-    public function getMappingInformation();
+    public function getMappingInformation($objectType = null);
 }
