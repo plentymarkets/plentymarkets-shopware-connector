@@ -36,9 +36,9 @@ class Mapping implements MappingInterface
     private $destinationTransferObjects;
 
     /**
-     * @var bool
+     * @var string
      */
-    private $isComplete;
+    private $objectType;
 
     /**
      * Mapping constructor.
@@ -47,12 +47,14 @@ class Mapping implements MappingInterface
      * @param MappedTransferObjectInterface[] $originTransferObjects
      * @param string $destinationAdapterName
      * @param MappedTransferObjectInterface[] $destinationTransferObjects
+     * @param string $objectType
      */
     public function __construct(
         $originAdapterName,
         array $originTransferObjects,
         $destinationAdapterName,
-        array $destinationTransferObjects
+        array $destinationTransferObjects,
+        $objectType
     ) {
         Assertion::string($originAdapterName);
         Assertion::allIsInstanceOf($originTransferObjects, MappedTransferObjectInterface::class);
@@ -60,10 +62,13 @@ class Mapping implements MappingInterface
         Assertion::string($destinationAdapterName);
         Assertion::allIsInstanceOf($destinationTransferObjects, MappedTransferObjectInterface::class);
 
+        Assertion::inArray($objectType, TransferObjectType::getAllTypes());
+
         $this->originAdapterName = $originAdapterName;
         $this->originTransferObjects = $originTransferObjects;
         $this->destinationAdapterName = $destinationAdapterName;
         $this->destinationTransferObjects = $destinationTransferObjects;
+        $this->objectType = $objectType;
     }
 
     /**
@@ -83,14 +88,16 @@ class Mapping implements MappingInterface
             'originAdapterName',
             'originTransferObjects',
             'destinationAdapterName',
-            'destinationTransferObjects'
+            'destinationTransferObjects',
+            'objectType'
         ]);
 
         return new self(
             $params['originAdapterName'],
             $params['originTransferObjects'],
             $params['destinationAdapterName'],
-            $params['destinationTransferObjects']
+            $params['destinationTransferObjects'],
+            $params['objectType']
         );
     }
 
@@ -129,8 +136,8 @@ class Mapping implements MappingInterface
     /**
      * {@inheritdoc}
      */
-    public function isIsComplete()
+    public function getObjectType()
     {
-        return $this->isComplete;
+        return $this->objectType;
     }
 }

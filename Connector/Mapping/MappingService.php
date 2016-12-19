@@ -111,12 +111,13 @@ class MappingService implements MappingServiceInterface
         $result = [];
         $definitions = $this->getDefinitions($objectType);
 
-        array_walk($definitions, function (DefinitionInterface $definition) use ($result) {
+        array_walk($definitions, function (DefinitionInterface $definition) use (&$result) {
             $result[] = Mapping::fromArray([
                 'originAdapterName' => $definition->getOriginAdapterName(),
                 'originTransferObjects' => $this->query($definition, $definition->getOriginAdapterName()),
                 'destinationAdapterName' => $definition->getDestinationAdapterName(),
                 'destinationTransferObjects' => $this->query($definition, $definition->getDestinationAdapterName()),
+                'objectType' => $definition->getObjectType()
             ]);
         });
 

@@ -31,7 +31,7 @@ interface MappingInterface extends TransferObjectInterface
     public function getDestinationTransferObjects();
 
     /**
-     * @return boolean
+     * @return string
      */
-    public function isIsComplete();
+    public function getObjectType();
 }

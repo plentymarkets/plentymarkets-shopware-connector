@@ -29,15 +29,15 @@ class FetchAllShippingProfilesHandler implements QueryHandlerInterface
     /**
      * FetchAllShippingProfilesHandler constructor.
      *
-     * @param ResponseParserInterface $responseParser
      * @param EntityManagerInterface $entityManager
+     * @param ResponseParserInterface $responseParser
      */
     public function __construct(
-        ResponseParserInterface $responseParser,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        ResponseParserInterface $responseParser
     ) {
-        $this->responseParser = $responseParser;
         $this->repository = $entityManager->getRepository(Dispatch::class);
+        $this->responseParser = $responseParser;
     }
 
     /**
@@ -57,11 +57,10 @@ class FetchAllShippingProfilesHandler implements QueryHandlerInterface
     public function handle(QueryInterface $event)
     {
         $query = $this->repository->getListQuery();
-        $shippingProfiles = $query->getArrayResult();
 
         $shippingProfiles = array_map(function($shippingProfile) {
             return $this->responseParser->parse($shippingProfile);
-        }, $shippingProfiles);
+        }, $query->getArrayResult());
 
         return array_filter($shippingProfiles);
     }

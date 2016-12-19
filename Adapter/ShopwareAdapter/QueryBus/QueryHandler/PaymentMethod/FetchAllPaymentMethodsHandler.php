@@ -29,15 +29,15 @@ class FetchAllPaymentMethodsHandler implements QueryHandlerInterface
     /**
      * FetchAllPaymentMethodsHandler constructor.
      *
-     * @param ResponseParserInterface $responseParser
      * @param EntityManagerInterface $entityManager
+     * @param ResponseParserInterface $responseParser
      */
     public function __construct(
-        ResponseParserInterface $responseParser,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        ResponseParserInterface $responseParser
     ) {
-        $this->responseParser = $responseParser;
         $this->repository = $entityManager->getRepository(Payment::class);
+        $this->responseParser = $responseParser;
     }
 
     /**
@@ -57,11 +57,10 @@ class FetchAllPaymentMethodsHandler implements QueryHandlerInterface
     public function handle(QueryInterface $event)
     {
         $query = $this->repository->getActivePaymentsQuery();
-        $paymentMethods = $query->getArrayResult();
 
         $paymentMethods = array_map(function($paymentMethod) {
             return $this->responseParser->parse($paymentMethod);
-        }, $paymentMethods);
+        }, $query->getArrayResult());
 
         return array_filter($paymentMethods);
     }

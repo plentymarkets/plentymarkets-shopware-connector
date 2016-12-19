@@ -14,7 +14,15 @@
             <argument type="service" id="plentyconnector.identity_service"/>
         </service>
 
+        <service id="shopware_adapter.response_parser.order_status" class="ShopwareAdapter\ResponseParser\OrderStatus\OrderStatusResponseParser">
+            <argument type="service" id="plentyconnector.identity_service"/>
+        </service>
+
         <service id="shopware_adapter.response_parser.payment_method" class="ShopwareAdapter\ResponseParser\PaymentMethod\PaymentMethodResponseParser">
+            <argument type="service" id="plentyconnector.identity_service"/>
+        </service>
+
+        <service id="shopware_adapter.response_parser.payment_status" class="ShopwareAdapter\ResponseParser\PaymentStatus\PaymentStatusResponseParser">
             <argument type="service" id="plentyconnector.identity_service"/>
         </service>
 
@@ -63,23 +71,37 @@
 
         <!-- Mapping query handlers -->
 
-        <service id="shopware_adapter.query_handler.fetch_all_payment_methods" class="ShopwareAdapter\QueryBus\QueryHandler\PaymentMethod\FetchAllPaymentMethodsHandler">
-            <argument type="service" id="shopware_adapter.response_parser.payment_method"/>
+        <service id="shopware_adapter.query_handler.fetch_all_order_statuses" class="ShopwareAdapter\QueryBus\QueryHandler\OrderStatus\FetchAllOrderStatusesHandler">
             <argument type="service" id="models"/>
+            <argument type="service" id="shopware_adapter.response_parser.order_status"/>
+
+            <tag name="plentyconnector.query_handler"/>
+        </service>
+
+        <service id="shopware_adapter.query_handler.fetch_all_payment_methods" class="ShopwareAdapter\QueryBus\QueryHandler\PaymentMethod\FetchAllPaymentMethodsHandler">
+            <argument type="service" id="models"/>
+            <argument type="service" id="shopware_adapter.response_parser.payment_method"/>
+
+            <tag name="plentyconnector.query_handler"/>
+        </service>
+
+        <service id="shopware_adapter.query_handler.fetch_all_payment_statuses" class="ShopwareAdapter\QueryBus\QueryHandler\PaymentStatus\FetchAllPaymentStatusesHandler">
+            <argument type="service" id="models"/>
+            <argument type="service" id="shopware_adapter.response_parser.payment_status"/>
 
             <tag name="plentyconnector.query_handler"/>
         </service>
 
         <service id="shopware_adapter.query_handler.fetch_all_shipping_profiles" class="ShopwareAdapter\QueryBus\QueryHandler\ShippingProfile\FetchAllShippingProfilesHandler">
-            <argument type="service" id="shopware_adapter.response_parser.payment_method"/>
             <argument type="service" id="models"/>
+            <argument type="service" id="shopware_adapter.response_parser.payment_method"/>
 
             <tag name="plentyconnector.query_handler"/>
         </service>
 
         <service id="shopware_adapter.query_handler.fetch_all_shops" class="ShopwareAdapter\QueryBus\QueryHandler\Shop\FetchAllShopsHandler">
-            <argument type="service" id="shopware_adapter.response_parser.shop"/>
             <argument type="service" id="models"/>
+            <argument type="service" id="shopware_adapter.response_parser.shop"/>
 
             <tag name="plentyconnector.query_handler"/>
         </service>
