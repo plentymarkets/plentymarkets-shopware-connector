@@ -52,11 +52,9 @@ class FetchAllShopsHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $event)
     {
-        $shops = $this->client->request('GET', 'webstores');
-
         $shops = array_map(function ($shop) {
             return $this->responseParser->parse($shop);
-        }, $shops);
+        }, $this->client->request('GET', 'webstores'));
 
         return array_filter($shops);
     }

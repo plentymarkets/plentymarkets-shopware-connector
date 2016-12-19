@@ -52,11 +52,9 @@ class FetchAllPaymentMethodsHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $event)
     {
-        $paymentMethods = $this->client->request('GET', 'payments/methods');
-
         $paymentMethods = array_map(function ($paymentMethod) {
             return $this->responseParser->parse($paymentMethod);
-        }, $paymentMethods);
+        }, $this->client->request('GET', 'payments/methods'));
 
         return array_filter($paymentMethods);
     }

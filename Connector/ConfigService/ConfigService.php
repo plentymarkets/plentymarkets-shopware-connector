@@ -95,7 +95,7 @@ class ConfigService implements ConfigServiceInterface
         }
 
         if ($value instanceof \DateTime || $value instanceof \DateTimeImmutable) {
-            $value = $value->format(\DateTime::ISO8601);
+            $value = $value->format(\DateTime::ATOM);
         }
 
         $this->config[$key]->setValue($value);

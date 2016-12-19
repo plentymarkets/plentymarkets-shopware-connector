@@ -11,7 +11,9 @@
         <parameter key="PLENTYMARKETS_ADAPTER" type="constant">PlentymarketsAdapter\PlentymarketsAdapter::NAME</parameter>
 
         <parameter key="TRANSFEROBJECT_MANUFACTURER" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::MANUFACTURER</parameter>
+        <parameter key="TRANSFEROBJECT_ORDER_STATUS" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::ORDER_STATUS</parameter>
         <parameter key="TRANSFEROBJECT_PAYMENT_METHOD" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::PAYMENT_METHOD</parameter>
+        <parameter key="TRANSFEROBJECT_PAYMENT_STATUS" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::PAYMENT_STATUS</parameter>
         <parameter key="TRANSFEROBJECT_PRODUCT" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::PRODUCT</parameter>
         <parameter key="TRANSFEROBJECT_SHIPPING_PROFILE" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::SHIPPING_PROFILE</parameter>
         <parameter key="TRANSFEROBJECT_SHOP" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::SHOP</parameter>
@@ -118,6 +120,22 @@
             <tag name="plentyconnector.mapping_definition"/>
         </service>
 
+        <service id="plentyconnector.mapping_definition.payment_status" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
+            <argument>%PLENTYMARKETS_ADAPTER%</argument>
+            <argument>%SHOPWARE_ADAPTER%</argument>
+            <argument>%TRANSFEROBJECT_PAYMENT_STATUS%</argument>
+
+            <tag name="plentyconnector.mapping_definition"/>
+        </service>
+
+        <service id="plentyconnector.mapping_definition.order_status" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
+            <argument>%PLENTYMARKETS_ADAPTER%</argument>
+            <argument>%SHOPWARE_ADAPTER%</argument>
+            <argument>%TRANSFEROBJECT_ORDER_STATUS%</argument>
+
+            <tag name="plentyconnector.mapping_definition"/>
+        </service>
+
         <!-- Console -->
 
         <service id="plentyconnector.console.import_manufacturers_command" class="PlentyConnector\Console\Command\ImportManufacturersCommand">
@@ -152,11 +170,20 @@
         <service id="plentyconnector.query_factory" class="PlentyConnector\Connector\QueryBus\QueryFactory\QueryFactory"/>
 
         <!-- Query generator -->
+
         <service id="plentyconnector.query_generator.manufacturer" class="PlentyConnector\Connector\QueryBus\QueryGenerator\Manufacturer\ManufacturerQueryGenerator">
             <tag name="plentyconnector.query_generator" />
         </service>
 
+        <service id="plentyconnector.query_generator.order_status" class="PlentyConnector\Connector\QueryBus\QueryGenerator\OrderStatus\OrderStatusQueryGenerator">
+            <tag name="plentyconnector.query_generator" />
+        </service>
+
         <service id="plentyconnector.query_generator.payment_method" class="PlentyConnector\Connector\QueryBus\QueryGenerator\PaymentMethod\PaymentMethodQueryGenerator">
+            <tag name="plentyconnector.query_generator" />
+        </service>
+
+        <service id="plentyconnector.query_generator.payment_status" class="PlentyConnector\Connector\QueryBus\QueryGenerator\PaymentStatus\PaymentStatusQueryGenerator">
             <tag name="plentyconnector.query_generator" />
         </service>
 

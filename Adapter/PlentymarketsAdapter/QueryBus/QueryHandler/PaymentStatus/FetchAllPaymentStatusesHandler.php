@@ -1,18 +1,18 @@
 <?php
 
-namespace PlentymarketsAdapter\QueryBus\QueryHandler\ShippingProfile;
+namespace PlentymarketsAdapter\QueryBus\QueryHandler\PaymentStatus;
 
+use PlentyConnector\Connector\QueryBus\Query\PaymentStatus\FetchAllPaymentStatusesQuery;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
-use PlentyConnector\Connector\QueryBus\Query\ShippingProfile\FetchAllShippingProfilesQuery;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 
 /**
- * Class FetchAllShippingProfilesHandler
+ * Class FetchAllPaymentStatusesHandler
  */
-class FetchAllShippingProfilesHandler implements QueryHandlerInterface
+class FetchAllPaymentStatusesHandler implements QueryHandlerInterface
 {
     /**
      * @var ClientInterface
@@ -25,7 +25,7 @@ class FetchAllShippingProfilesHandler implements QueryHandlerInterface
     private $responseParser;
 
     /**
-     * FetchAllShippingProfilesHandler constructor.
+     * FetchAllPaymentStatusesHandler constructor.
      *
      * @param ClientInterface $client
      * @param ResponseParserInterface $responseParser
@@ -43,7 +43,7 @@ class FetchAllShippingProfilesHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $event)
     {
-        return $event instanceof FetchAllShippingProfilesQuery &&
+        return $event instanceof FetchAllPaymentStatusesQuery &&
             $event->getAdapterName() === PlentymarketsAdapter::getName();
     }
 
@@ -52,10 +52,6 @@ class FetchAllShippingProfilesHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $event)
     {
-        $shippingProfiles = array_map(function ($shippingProfile) {
-            return $this->responseParser->parse($shippingProfile);
-        }, $this->client->request('GET', 'orders/shipping/presets'));
-
-        return array_filter($shippingProfiles);
+        // TODO: implement
     }
 }
