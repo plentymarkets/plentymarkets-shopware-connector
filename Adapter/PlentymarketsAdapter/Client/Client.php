@@ -97,14 +97,11 @@ class Client implements ClientInterface
                 throw InvalidResponseException::fromParams($method, $path, $options);
             }
 
-            if (!array_key_exists('entries', $result)) {
-                $entries = $result;
-            } else {
-                $sliceOffset = $offset - (($params['page'] - 1) * $params['itemsPerPage']);
-                $entries = array_slice($result['entries'], $sliceOffset, $limit >= 0 ? $limit : null);
+            if (array_key_exists('entries', $result)) {
+                $result = $result['entries'];
             }
 
-            return $entries;
+            return $result;
         } catch (ClientException $exception) {
             if ($exception->hasResponse() && $exception->getResponse()->getStatusCode() === 401) {
                 if ($path === 'login') {
