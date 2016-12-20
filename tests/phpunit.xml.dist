@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/5.5/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/5.7/phpunit.xsd"
          bootstrap="./Integration/bootstrap.php"
+         backupGlobals="false"
          colors="true"
+         beStrictAboutCoversAnnotation="true"
          beStrictAboutOutputDuringTests="true"
          beStrictAboutResourceUsageDuringSmallTests="true"
          beStrictAboutTestsThatDoNotTestAnything="true"
          beStrictAboutTodoAnnotatedTests="true"
          verbose="true">
-
     <testsuites>
-        <testsuite name="Shopware_AllTests">
+        <testsuite name="UnitAndIntegration">
             <directory>./Unit</directory>
             <directory>./Integration</directory>
         </testsuite>
