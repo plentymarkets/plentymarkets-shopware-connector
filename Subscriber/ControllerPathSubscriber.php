@@ -3,7 +3,11 @@
 namespace PlentyConnector\Subscriber;
 
 use Enlight\Event\SubscriberInterface;
+use Enlight_Event_EventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 /**
  * Class ControllerPath
@@ -34,14 +38,20 @@ class ControllerPathSubscriber implements SubscriberInterface
     }
 
     /**
+     * @param Enlight_Event_EventArgs $args
+     *
      * @return string
+     *
+     * @throws InvalidArgumentException
+     * @throws ServiceNotFoundException
+     * @throws ServiceCircularReferenceException
      */
-    public function onControllerBackendPlentymarkets()
+    public function onControllerBackendPlentymarkets(Enlight_Event_EventArgs $args)
     {
         $basePath = $this->container->getParameter('plentyconnector.plugin_dir');
 
         $this->container->get('template')->addTemplateDir(
-            $basePath . '/Views/'
+            $basePath . '/Resources/Views/'
         );
 
         return $basePath . '/Controller/Backend/Plentymarkets.php';
