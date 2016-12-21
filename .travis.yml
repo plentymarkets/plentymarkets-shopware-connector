@@ -44,3 +44,7 @@ matrix:
   allow_failures:
     - env: SHOPWARE_VERSION="5.3"
     - php: nightly
+
+notifications:
+  slack:
+    secure: RYu2D/DuaTjXoXL/uqGR7yHSfCV9d267sNiHbFUGec1LBWs77ZsaZq40pNHcscPv7Zk4TEbBiUfDAkKeAShkJX0DcYAm5SxwHgfNC2710PqoESEXrAJPb76CkZmO/Y9PVGENX8vy8D7CGO9BipCOjVv5HyRQ+p0sfQ8z5Th6oRs=
