@@ -17,6 +17,7 @@
         <parameter key="TRANSFEROBJECT_PRODUCT" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::PRODUCT</parameter>
         <parameter key="TRANSFEROBJECT_SHIPPING_PROFILE" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::SHIPPING_PROFILE</parameter>
         <parameter key="TRANSFEROBJECT_SHOP" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::SHOP</parameter>
+        <parameter key="TRANSFEROBJECT_UNIT" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::UNIT</parameter>
     </parameters>
 
     <!-- Services -->
@@ -136,6 +137,14 @@
             <tag name="plentyconnector.mapping_definition"/>
         </service>
 
+        <service id="plentyconnector.mapping_definition.unit" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
+            <argument>%PLENTYMARKETS_ADAPTER%</argument>
+            <argument>%SHOPWARE_ADAPTER%</argument>
+            <argument>%TRANSFEROBJECT_UNIT%</argument>
+
+            <tag name="plentyconnector.mapping_definition"/>
+        </service>
+
         <!-- Console -->
 
         <service id="plentyconnector.console.import_manufacturers_command" class="PlentyConnector\Console\Command\ImportManufacturersCommand">
@@ -192,6 +201,10 @@
         </service>
 
         <service id="plentyconnector.query_generator.shop" class="PlentyConnector\Connector\QueryBus\QueryGenerator\Shop\ShopQueryGenerator">
+            <tag name="plentyconnector.query_generator" />
+        </service>
+
+        <service id="plentyconnector.query_generator.unit" class="PlentyConnector\Connector\QueryBus\QueryGenerator\Unit\UnitQueryGenerator">
             <tag name="plentyconnector.query_generator" />
         </service>
 
