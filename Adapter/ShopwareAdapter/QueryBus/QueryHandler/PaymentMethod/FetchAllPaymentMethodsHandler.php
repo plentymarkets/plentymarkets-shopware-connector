@@ -17,14 +17,14 @@ use ShopwareAdapter\ShopwareAdapter;
 class FetchAllPaymentMethodsHandler implements QueryHandlerInterface
 {
     /**
-     * @var ResponseParserInterface
-     */
-    private $responseParser;
-
-    /**
      * @var Repository
      */
     private $repository;
+
+    /**
+     * @var ResponseParserInterface
+     */
+    private $responseParser;
 
     /**
      * FetchAllPaymentMethodsHandler constructor.

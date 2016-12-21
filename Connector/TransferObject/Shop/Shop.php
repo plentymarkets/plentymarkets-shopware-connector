@@ -23,7 +23,8 @@ class Shop implements ShopInterface
     /**
      * OrderStatus constructor.
      *
-     * @param $identifier
+     * @param string $identifier
+     * @param string $name
      */
     public function __construct($identifier, $name)
     {

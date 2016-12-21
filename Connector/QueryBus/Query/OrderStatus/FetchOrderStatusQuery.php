@@ -24,10 +24,11 @@ class FetchOrderStatusQuery implements FetchQueryInterface
      * FetchOrderStatusQuery constructor.
      *
      * @param string $adapterName
-     * @param $identifier
+     * @param string $identifier
      */
     public function __construct($adapterName, $identifier)
     {
+        Assertion::string($adapterName);
         Assertion::uuid($identifier);
 
         $this->adapterName = $adapterName;

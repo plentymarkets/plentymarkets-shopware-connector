@@ -2,6 +2,7 @@
 
 namespace PlentyConnector\Connector\QueryBus\Query\PaymentMethod;
 
+use Assert\Assertion;
 use PlentyConnector\Connector\QueryBus\Query\FetchAllQueryInterface;
 
 /**
@@ -21,6 +22,8 @@ class FetchAllPaymentMethodsQuery implements FetchAllQueryInterface
      */
     public function __construct($adapterName)
     {
+        Assertion::string($adapterName);
+
         $this->adapterName = $adapterName;
     }
 

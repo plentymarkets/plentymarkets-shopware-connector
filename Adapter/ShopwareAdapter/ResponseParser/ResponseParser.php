@@ -6,8 +6,8 @@ use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Order\Order;
 use PlentyConnector\Connector\TransferObject\OrderItem\OrderItem;
 use PlentyConnector\Connector\TransferObject\OrderStatus\OrderStatus;
-use PlentyConnector\Connector\TransferObject\PaymentStatus\PaymentStatus;
 use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod;
+use PlentyConnector\Connector\TransferObject\PaymentStatus\PaymentStatus;
 use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
@@ -54,7 +54,8 @@ class ResponseParser implements ResponseParserInterface
 
         $shopIdentity = $this->findIdentityOrThrow(Shop::getType(), (string)$entry['shopId']);
         $orderStatusIdentity = $this->findIdentityOrThrow(OrderStatus::getType(), (string)$entry['orderStatusId']);
-        $paymentStatusIdentity = $this->findIdentityOrThrow(PaymentStatus::getType(), (string)$entry['paymentStatusId']);
+        $paymentStatusIdentity = $this->findIdentityOrThrow(PaymentStatus::getType(),
+            (string)$entry['paymentStatusId']);
         $paymentMethodIdentity = $this->findIdentityOrThrow(PaymentMethod::getType(), (string)$entry['paymentId']);
         $shippingProfileIdentity = $this->findIdentityOrThrow(ShippingProfile::getType(), (string)$entry['dispatchId']);
 
@@ -72,7 +73,24 @@ class ResponseParser implements ResponseParserInterface
         return $order;
     }
 
-    public function parseOrderItem($entry) {
+    private function findIdentityOrThrow($objectType, $adapterIdentifier)
+    {
+        $identity = $this->identityService->findIdentity([
+            'objectType' => $objectType,
+            'adapterIdentifier' => $adapterIdentifier,
+            'adapterName' => ShopwareAdapter::getName(),
+        ]);
+
+        if ($identity === null) {
+            // TODO add proper exception
+            throw new \Exception();
+        }
+
+        return $identity;
+    }
+
+    public function parseOrderItem($entry)
+    {
         // entry mode
         // 0 : Product
         // 1 : Premium Product (Prämie)
@@ -109,21 +127,6 @@ class ResponseParser implements ResponseParserInterface
         ]);
 
         return $orderItem;
-    }
-
-    private function findIdentityOrThrow($objectType, $adapterIdentifier) {
-        $identity = $this->identityService->findIdentity([
-            'objectType' => $objectType,
-            'adapterIdentifier' => $adapterIdentifier,
-            'adapterName' => ShopwareAdapter::getName(),
-        ]);
-
-        if ($identity === null) {
-            // TODO add proper exception
-            throw new \Exception();
-        }
-
-        return $identity;
     }
 
     /**

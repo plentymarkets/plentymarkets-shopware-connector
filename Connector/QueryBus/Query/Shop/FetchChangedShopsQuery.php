@@ -2,6 +2,7 @@
 
 namespace PlentyConnector\Connector\QueryBus\Query\Shop;
 
+use Assert\Assertion;
 use PlentyConnector\Connector\QueryBus\Query\FetchChangedQueryInterface;
 
 /**
@@ -21,6 +22,8 @@ class FetchChangedShopsQuery implements FetchChangedQueryInterface
      */
     public function __construct($adapterName)
     {
+        Assertion::string($adapterName);
+
         $this->adapterName = $adapterName;
     }
 

@@ -2,6 +2,7 @@
 
 namespace PlentyConnector\Connector\QueryBus\Query\Product;
 
+use Assert\Assertion;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 
 /**
@@ -21,6 +22,8 @@ class FetchAllProductsQuery implements QueryInterface
      */
     public function __construct($adapterName)
     {
+        Assertion::string($adapterName);
+
         $this->adapterName = $adapterName;
     }
 

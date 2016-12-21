@@ -23,7 +23,8 @@ class OrderStatus implements OrderStatusInterface
     /**
      * OrderStatus constructor.
      *
-     * @param $identifier
+     * @param string $identifier
+     * @param string $name
      */
     public function __construct($identifier, $name)
     {
@@ -49,6 +50,11 @@ class OrderStatus implements OrderStatusInterface
      */
     public static function fromArray(array $params = [])
     {
+        Assertion::allInArray(array_keys($params), [
+            'identifier',
+            'name',
+        ]);
+
         return new self(
             $params['identifier'],
             $params['name']

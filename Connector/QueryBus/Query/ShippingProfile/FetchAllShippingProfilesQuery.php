@@ -2,6 +2,7 @@
 
 namespace PlentyConnector\Connector\QueryBus\Query\ShippingProfile;
 
+use Assert\Assertion;
 use PlentyConnector\Connector\QueryBus\Query\FetchAllQueryInterface;
 
 /**
@@ -21,6 +22,8 @@ class FetchAllShippingProfilesQuery implements FetchAllQueryInterface
      */
     public function __construct($adapterName)
     {
+        Assertion::string($adapterName);
+
         $this->adapterName = $adapterName;
     }
 

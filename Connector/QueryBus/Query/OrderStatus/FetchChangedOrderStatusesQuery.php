@@ -2,6 +2,7 @@
 
 namespace PlentyConnector\Connector\QueryBus\Query\OrderStatus;
 
+use Assert\Assertion;
 use PlentyConnector\Connector\QueryBus\Query\FetchChangedQueryInterface;
 
 /**
@@ -21,6 +22,8 @@ class FetchChangedOrderStatusesQuery implements FetchChangedQueryInterface
      */
     public function __construct($adapterName)
     {
+        Assertion::string($adapterName);
+
         $this->adapterName = $adapterName;
     }
 
