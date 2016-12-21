@@ -4,6 +4,7 @@ namespace PlentyConnector\Connector\QueryBus\QueryGenerator\Shop;
 
 use PlentyConnector\Connector\QueryBus\Query\Shop\FetchAllShopsQuery;
 use PlentyConnector\Connector\QueryBus\Query\Shop\FetchChangedShopsQuery;
+use PlentyConnector\Connector\QueryBus\Query\Shop\FetchShopQuery;
 use PlentyConnector\Connector\QueryBus\QueryGenerator\QueryGeneratorInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectType;
 
@@ -41,6 +42,6 @@ class ShopQueryGenerator implements QueryGeneratorInterface
      */
     public function generateFetchQuery($adapterName, $identifier)
     {
-        return new FetchChangedShopsQuery($adapterName, $identifier);
+        return new FetchShopQuery($adapterName, $identifier);
     }
 }
