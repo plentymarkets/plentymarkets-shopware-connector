@@ -48,10 +48,63 @@ class FetchAllPaymentStatusesHandler implements QueryHandlerInterface
     }
 
     /**
+     * @return array
+     */
+    private function getPaymentStatuses()
+    {
+        return [
+            [
+                'id' => 1,
+                'name' => 'Awaiting approval',
+            ],
+            [
+                'id' => 2,
+                'name' => 'Approved',
+            ],
+            [
+                'id' => 3,
+                'name' => 'Captured',
+            ],
+            [
+                'id' => 4,
+                'name' => 'Partially captured',
+            ],
+            [
+                'id' => 5,
+                'name' => 'Cancelled',
+            ],
+            [
+                'id' => 6,
+                'name' => 'Refused',
+            ],
+            [
+                'id' => 7,
+                'name' => 'Awaiting renewal',
+            ],
+            [
+                'id' => 8,
+                'name' => 'Expired',
+            ],
+            [
+                'id' => 9,
+                'name' => 'Refunded',
+            ],
+            [
+                'id' => 10,
+                'name' => 'Partially refunded',
+            ]
+        ];
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function handle(QueryInterface $event)
     {
-        // TODO: implement
+        $paymentStatuses = array_map(function ($status) {
+            return $this->responseParser->parse($status);
+        }, $this->getPaymentStatuses());
+
+        return array_filter($paymentStatuses);
     }
 }
