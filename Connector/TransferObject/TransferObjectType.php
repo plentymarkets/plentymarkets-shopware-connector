@@ -11,6 +11,7 @@ final class TransferObjectType
     const IDENTITY = 'Identity';
     const MANUFACTURER = 'Manufacturer';
     const MAPPING = 'Mapping';
+    const MEDIA = 'Media';
     const ORDER_STATUS = 'OrderStatus';
     const PAYMENT_METHOD = 'PaymentMethod';
     const PAYMENT_STATUS = 'PaymentStatus';
@@ -18,7 +19,7 @@ final class TransferObjectType
     const SHIPPING_PROFILE = 'ShippingProfile';
     const SHOP = 'Shop';
     const TRANSLATION = 'Translation';
-    const MEDIA = 'Media';
+    const UNIT = 'Unit';
 
     /**
      * @return array
