@@ -10,6 +10,7 @@
         <parameter key="SHOPWARE_ADAPTER" type="constant">ShopwareAdapter\ShopwareAdapter::NAME</parameter>
         <parameter key="PLENTYMARKETS_ADAPTER" type="constant">PlentymarketsAdapter\PlentymarketsAdapter::NAME</parameter>
 
+        <parameter key="TRANSFEROBJECT_CURRENCY" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::CURRENCY</parameter>
         <parameter key="TRANSFEROBJECT_MANUFACTURER" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::MANUFACTURER</parameter>
         <parameter key="TRANSFEROBJECT_ORDER_STATUS" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::ORDER_STATUS</parameter>
         <parameter key="TRANSFEROBJECT_PAYMENT_METHOD" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::PAYMENT_METHOD</parameter>
@@ -97,6 +98,14 @@
 
         <!-- Mapping definitions -->
 
+        <service id="plentyconnector.mapping_definition.currency" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
+            <argument>%PLENTYMARKETS_ADAPTER%</argument>
+            <argument>%SHOPWARE_ADAPTER%</argument>
+            <argument>%TRANSFEROBJECT_CURRENCY%</argument>
+
+            <tag name="plentyconnector.mapping_definition"/>
+        </service>
+
         <service id="plentyconnector.mapping_definition.payment_method" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
             <argument>%PLENTYMARKETS_ADAPTER%</argument>
             <argument>%SHOPWARE_ADAPTER%</argument>
@@ -179,6 +188,10 @@
         <service id="plentyconnector.query_factory" class="PlentyConnector\Connector\QueryBus\QueryFactory\QueryFactory"/>
 
         <!-- Query generator -->
+
+        <service id="plentyconnector.query_generator.currency" class="PlentyConnector\Connector\QueryBus\QueryGenerator\Currency\CurrencyQueryGenerator">
+            <tag name="plentyconnector.query_generator" />
+        </service>
 
         <service id="plentyconnector.query_generator.manufacturer" class="PlentyConnector\Connector\QueryBus\QueryGenerator\Manufacturer\ManufacturerQueryGenerator">
             <tag name="plentyconnector.query_generator" />
