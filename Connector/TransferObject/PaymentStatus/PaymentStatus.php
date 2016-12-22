@@ -21,7 +21,7 @@ class PaymentStatus implements PaymentStatusInterface
     private $name;
 
     /**
-     * OrderStatus constructor.
+     * PaymentStatus constructor.
      *
      * @param string $identifier
      * @param string $name
@@ -36,7 +36,7 @@ class PaymentStatus implements PaymentStatusInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public static function getType()
     {
@@ -44,9 +44,7 @@ class PaymentStatus implements PaymentStatusInterface
     }
 
     /**
-     * @param array $params
-     *
-     * @return self
+     * {@inheritdoc}
      */
     public static function fromArray(array $params = [])
     {

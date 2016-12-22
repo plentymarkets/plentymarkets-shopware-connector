@@ -51,6 +51,20 @@ class FetchAllUnitsHandler implements QueryHandlerInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function handle(QueryInterface $event)
+    {
+        $query = $this->createUnitsQuery();
+
+        $units = array_map(function ($unit) {
+            return $this->responseParser->parse($unit);
+        }, $query->getArrayResult());
+
+        return array_filter($units);
+    }
+
+    /**
      * @return Query
      */
     private function createUnitsQuery()
@@ -66,19 +80,5 @@ class FetchAllUnitsHandler implements QueryHandlerInterface
         $query->execute();
 
         return $query;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function handle(QueryInterface $event)
-    {
-        $query = $this->createUnitsQuery();
-
-        $units = array_map(function ($unit) {
-            return $this->responseParser->parse($unit);
-        }, $query->getArrayResult());
-
-        return array_filter($units);
     }
 }

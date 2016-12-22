@@ -3,9 +3,9 @@
 namespace ShopwareAdapter\QueryBus\QueryHandler\Shop;
 
 use Doctrine\ORM\EntityManagerInterface;
-use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\Query\Shop\FetchAllShopsQuery;
+use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use Shopware\Models\Dispatch\Repository;
 use Shopware\Models\Shop\Shop;
 use ShopwareAdapter\ResponseParser\ResponseParserInterface;
@@ -56,7 +56,7 @@ class FetchAllShopsHandler implements QueryHandlerInterface
     {
         $query = $this->repository->getListQuery(['active' => true], ['id' => 'ASC']);
 
-        $shops = array_map(function($shop) {
+        $shops = array_map(function ($shop) {
             return $this->responseParser->parse($shop);
         }, $query->getArrayResult());
 

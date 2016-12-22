@@ -36,7 +36,7 @@ class FetchAllManufacturersQuery implements FetchAllQueryInterface
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getPayload()
     {
@@ -46,7 +46,7 @@ class FetchAllManufacturersQuery implements FetchAllQueryInterface
     }
 
     /**
-     * @param array $payload
+     * {@inheritdoc}
      */
     public function setPayload(array $payload = [])
     {

@@ -33,7 +33,7 @@ class GetOrderQuery implements QueryInterface
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getPayload()
     {
@@ -43,7 +43,7 @@ class GetOrderQuery implements QueryInterface
     }
 
     /**
-     * @param array $payload
+     * {@inheritdoc}
      */
     public function setPayload(array $payload = [])
     {

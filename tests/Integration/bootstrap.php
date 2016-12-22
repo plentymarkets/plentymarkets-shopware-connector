@@ -15,46 +15,6 @@ require __DIR__ . '/../../../../../autoload.php';
 class TestKernel extends Kernel
 {
     /**
-     * @return string
-     */
-    protected function getConfigPath()
-    {
-        return __DIR__ . '/../../../../../tests/Functional/config.php';
-    }
-
-    /**
-     * @param ContainerBuilder $container
-     * @param $filename
-     *
-     * @throws Exception
-     */
-    private function loadFile(ContainerBuilder $container, $filename)
-    {
-        if (!is_file($filename)) {
-            return;
-        }
-
-        $loader = new XmlFileLoader(
-            $container,
-            new FileLocator()
-        );
-
-        $loader->load($filename);
-    }
-
-    /**
-     * @param ContainerBuilder $container
-     *
-     * @throws \Exception
-     */
-    protected function prepareContainer(ContainerBuilder $container)
-    {
-        parent::prepareContainer($container);
-
-        $this->loadFile($container, __DIR__ . '/DependencyInjection/services.xml');
-    }
-
-    /**
      * Static method to start boot kernel without leaving local scope in test helper
      *
      * @throws \Exception
@@ -76,6 +36,46 @@ class TestKernel extends Kernel
         $shop->registerResources();
 
         $_SERVER['HTTP_HOST'] = $shop->getHost();
+    }
+
+    /**
+     * @return string
+     */
+    protected function getConfigPath()
+    {
+        return __DIR__ . '/../../../../../tests/Functional/config.php';
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     *
+     * @throws \Exception
+     */
+    protected function prepareContainer(ContainerBuilder $container)
+    {
+        parent::prepareContainer($container);
+
+        $this->loadFile($container, __DIR__ . '/DependencyInjection/services.xml');
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param $filename
+     *
+     * @throws Exception
+     */
+    private function loadFile(ContainerBuilder $container, $filename)
+    {
+        if (!is_file($filename)) {
+            return;
+        }
+
+        $loader = new XmlFileLoader(
+            $container,
+            new FileLocator()
+        );
+
+        $loader->load($filename);
     }
 }
 

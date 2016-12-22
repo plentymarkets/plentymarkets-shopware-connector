@@ -36,7 +36,7 @@ class FetchChangedPaymentStatusesQuery implements FetchChangedQueryInterface
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getPayload()
     {
@@ -46,7 +46,7 @@ class FetchChangedPaymentStatusesQuery implements FetchChangedQueryInterface
     }
 
     /**
-     * @param array $payload
+     * {@inheritdoc}
      */
     public function setPayload(array $payload = [])
     {

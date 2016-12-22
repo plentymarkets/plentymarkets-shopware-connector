@@ -51,6 +51,20 @@ class FetchAllOrderStatusesHandler implements QueryHandlerInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function handle(QueryInterface $event)
+    {
+        $query = $this->createOrderStatusQuery();
+
+        $orderStatuses = array_map(function ($status) {
+            return $this->responseParser->parse($status);
+        }, $query->getArrayResult());
+
+        return array_filter($orderStatuses);
+    }
+
+    /**
      * @return Query
      */
     private function createOrderStatusQuery()
@@ -67,19 +81,5 @@ class FetchAllOrderStatusesHandler implements QueryHandlerInterface
         $query->execute();
 
         return $query;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function handle(QueryInterface $event)
-    {
-        $query = $this->createOrderStatusQuery();
-
-        $orderStatuses = array_map(function ($status) {
-            return $this->responseParser->parse($status);
-        }, $query->getArrayResult());
-
-        return array_filter($orderStatuses);
     }
 }

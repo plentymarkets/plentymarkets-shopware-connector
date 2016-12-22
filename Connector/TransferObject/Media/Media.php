@@ -19,16 +19,6 @@ class Media implements MediaInterface
     /**
      * @var string
      */
-    private $name;
-
-    /**
-     * @var string
-     */
-    private $alternativeName;
-
-    /**
-     * @var string
-     */
     private $link;
 
     /**
@@ -37,36 +27,23 @@ class Media implements MediaInterface
     private $hash;
 
     /**
-     * @var TranslationInterface[]
-     */
-    private $translations;
-
-    /**
      * Media constructor.
      *
      * @param string $identifier
-     * @param string $name
-     * @param string $alternativeName
      * @param string $link
-     * @param string $hash
+     * @param string|null $hash
      */
     public function __construct(
         $identifier,
-        $name,
-        $alternativeName,
         $link,
         $hash = null
     ) {
         Assertion::uuid($identifier);
-        Assertion::string($name);
-        Assertion::string($alternativeName);
         Assertion::url($link);
         Assertion::readable($link);
         Assertion::nullOrString($hash);
 
         $this->identifier = $identifier;
-        $this->name = $name;
-        $this->alternativeName = $alternativeName;
         $this->link = $link;
 
         if (null === $hash) {
@@ -85,9 +62,7 @@ class Media implements MediaInterface
     }
 
     /**
-     * @param array $params
-     *
-     * @return self
+     * {@inheritdoc}
      */
     public static function fromArray(array $params = [])
     {
@@ -105,43 +80,11 @@ class Media implements MediaInterface
     }
 
     /**
-     * @param TranslationInterface $translation
-     */
-    public function addTranslation(TranslationInterface $translation)
-    {
-        // TODO: Implement addTranslation() method.
-    }
-
-    /**
-     * @return TranslationInterface[]
-     */
-    public function getTranslations()
-    {
-        return $this->translations;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getIdentifier()
     {
         return $this->identifier;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAlternativeName()
-    {
-        return $this->alternativeName;
     }
 
     /**

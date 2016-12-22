@@ -94,7 +94,7 @@ class Order implements OrderInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public static function getType()
     {
@@ -102,9 +102,7 @@ class Order implements OrderInterface
     }
 
     /**
-     * @param array $params
-     *
-     * @return self
+     * {@inheritdoc}
      */
     public static function fromArray(array $params = [])
     {

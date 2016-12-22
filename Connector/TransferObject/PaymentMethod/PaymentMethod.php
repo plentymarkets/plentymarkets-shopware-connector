@@ -11,8 +11,6 @@ use PlentyConnector\Connector\TransferObject\TransferObjectType;
 class PaymentMethod implements PaymentMethodInterface
 {
     /**
-     * Identifier of the object.
-     *
      * @var string
      */
     private $identifer;
@@ -23,7 +21,7 @@ class PaymentMethod implements PaymentMethodInterface
     private $name;
 
     /**
-     * Manufacturer constructor.
+     * PaymentMethod constructor.
      *
      * @param string $identifier
      * @param string $name

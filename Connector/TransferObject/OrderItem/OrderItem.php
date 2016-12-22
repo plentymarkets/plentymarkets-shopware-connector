@@ -67,7 +67,7 @@ class OrderItem implements OrderItemInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public static function getType()
     {
@@ -75,9 +75,7 @@ class OrderItem implements OrderItemInterface
     }
 
     /**
-     * @param array $params
-     *
-     * @return self
+     * {@inheritdoc}
      */
     public static function fromArray(array $params = [])
     {

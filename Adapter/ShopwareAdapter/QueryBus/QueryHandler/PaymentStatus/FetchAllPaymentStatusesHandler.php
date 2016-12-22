@@ -51,6 +51,20 @@ class FetchAllPaymentStatusesHandler implements QueryHandlerInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function handle(QueryInterface $event)
+    {
+        $query = $this->createPaymentStatusQuery();
+
+        $paymentStatuses = array_map(function ($status) {
+            return $this->responseParser->parse($status);
+        }, $query->getArrayResult());
+
+        return array_filter($paymentStatuses);
+    }
+
+    /**
      * @return Query
      */
     private function createPaymentStatusQuery()
@@ -67,19 +81,5 @@ class FetchAllPaymentStatusesHandler implements QueryHandlerInterface
         $query->execute();
 
         return $query;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function handle(QueryInterface $event)
-    {
-        $query = $this->createPaymentStatusQuery();
-
-        $paymentStatuses = array_map(function ($status) {
-            return $this->responseParser->parse($status);
-        }, $query->getArrayResult());
-
-        return array_filter($paymentStatuses);
     }
 }

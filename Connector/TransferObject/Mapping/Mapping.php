@@ -72,7 +72,7 @@ class Mapping implements MappingInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public static function getType()
     {

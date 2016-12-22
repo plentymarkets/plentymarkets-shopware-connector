@@ -3,22 +3,16 @@
 namespace PlentyConnector\Connector\TransferObject\Media;
 
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
-use PlentyConnector\Connector\TransferObject\TranslateableInterface;
 
 /**
  * Interface
  */
-interface MediaInterface extends TransferObjectInterface, TranslateableInterface
+interface MediaInterface extends TransferObjectInterface
 {
     /**
      * @return string
      */
     public function getIdentifier();
-
-    /**
-     * @return string
-     */
-    public function getName();
 
     /**
      * @return string

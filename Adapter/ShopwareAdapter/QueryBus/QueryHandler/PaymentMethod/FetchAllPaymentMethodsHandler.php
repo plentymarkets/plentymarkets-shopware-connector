@@ -3,9 +3,9 @@
 namespace ShopwareAdapter\QueryBus\QueryHandler\PaymentMethod;
 
 use Doctrine\ORM\EntityManagerInterface;
-use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use PlentyConnector\Connector\QueryBus\Query\PaymentMethod\FetchAllPaymentMethodsQuery;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
+use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use Shopware\Models\Payment\Payment;
 use Shopware\Models\Payment\Repository;
 use ShopwareAdapter\ResponseParser\ResponseParserInterface;
@@ -58,7 +58,7 @@ class FetchAllPaymentMethodsHandler implements QueryHandlerInterface
     {
         $query = $this->repository->getActivePaymentsQuery();
 
-        $paymentMethods = array_map(function($paymentMethod) {
+        $paymentMethods = array_map(function ($paymentMethod) {
             return $this->responseParser->parse($paymentMethod);
         }, $query->getArrayResult());
 

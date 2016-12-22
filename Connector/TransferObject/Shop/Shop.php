@@ -21,7 +21,7 @@ class Shop implements ShopInterface
     private $name;
 
     /**
-     * OrderStatus constructor.
+     * Shop constructor.
      *
      * @param string $identifier
      * @param string $name
@@ -36,7 +36,7 @@ class Shop implements ShopInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public static function getType()
     {
@@ -44,9 +44,7 @@ class Shop implements ShopInterface
     }
 
     /**
-     * @param array $params
-     *
-     * @return self
+     * {@inheritdoc}
      */
     public static function fromArray(array $params = [])
     {

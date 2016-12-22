@@ -48,6 +48,18 @@ class FetchAllPaymentStatusesHandler implements QueryHandlerInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function handle(QueryInterface $event)
+    {
+        $paymentStatuses = array_map(function ($status) {
+            return $this->responseParser->parse($status);
+        }, $this->getPaymentStatuses());
+
+        return array_filter($paymentStatuses);
+    }
+
+    /**
      * @return array
      */
     private function getPaymentStatuses()
@@ -94,17 +106,5 @@ class FetchAllPaymentStatusesHandler implements QueryHandlerInterface
                 'name' => 'Partially refunded',
             ]
         ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function handle(QueryInterface $event)
-    {
-        $paymentStatuses = array_map(function ($status) {
-            return $this->responseParser->parse($status);
-        }, $this->getPaymentStatuses());
-
-        return array_filter($paymentStatuses);
     }
 }

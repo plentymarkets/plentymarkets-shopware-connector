@@ -23,7 +23,7 @@ class ShippingProfile implements ShippingProfileInterface
     private $name;
 
     /**
-     * Manufacturer constructor.
+     * ShippingProfile constructor.
      *
      * @param string $identifier
      * @param string $name

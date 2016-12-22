@@ -36,7 +36,7 @@ class FetchChangedProductsQuery implements QueryInterface
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getPayload()
     {
@@ -46,7 +46,7 @@ class FetchChangedProductsQuery implements QueryInterface
     }
 
     /**
-     * @param array $payload
+     * {@inheritdoc}
      */
     public function setPayload(array $payload = [])
     {

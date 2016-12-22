@@ -36,7 +36,7 @@ class OrderStatus implements OrderStatusInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public static function getType()
     {
@@ -44,9 +44,7 @@ class OrderStatus implements OrderStatusInterface
     }
 
     /**
-     * @param array $params
-     *
-     * @return self
+     * {@inheritdoc}
      */
     public static function fromArray(array $params = [])
     {

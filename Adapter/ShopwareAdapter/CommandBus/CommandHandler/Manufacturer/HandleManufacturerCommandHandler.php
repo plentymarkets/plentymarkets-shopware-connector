@@ -51,8 +51,7 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
     {
         return
             $command instanceof HandleManufacturerCommandInterface &&
-            $command->getAdapterName() === ShopwareAdapter::getName()
-        ;
+            $command->getAdapterName() === ShopwareAdapter::getName();
     }
 
     /**

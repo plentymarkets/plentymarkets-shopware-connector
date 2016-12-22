@@ -54,6 +54,27 @@ class MappingService implements MappingServiceInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getMappingInformation($objectType = null)
+    {
+        $result = [];
+        $definitions = $this->getDefinitions($objectType);
+
+        array_walk($definitions, function (DefinitionInterface $definition) use (&$result) {
+            $result[] = Mapping::fromArray([
+                'originAdapterName' => $definition->getOriginAdapterName(),
+                'originTransferObjects' => $this->query($definition, $definition->getOriginAdapterName()),
+                'destinationAdapterName' => $definition->getDestinationAdapterName(),
+                'destinationTransferObjects' => $this->query($definition, $definition->getDestinationAdapterName()),
+                'objectType' => $definition->getObjectType()
+            ]);
+        });
+
+        return $result;
+    }
+
+    /**
      * @param string|null $objectType
      *
      * @return DefinitionInterface[]|null
@@ -101,26 +122,5 @@ class MappingService implements MappingServiceInterface
             return $object::getType() === $definition->getObjectType()
                 && is_subclass_of($object, MappedTransferObjectInterface::class);
         });
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getMappingInformation($objectType = null)
-    {
-        $result = [];
-        $definitions = $this->getDefinitions($objectType);
-
-        array_walk($definitions, function (DefinitionInterface $definition) use (&$result) {
-            $result[] = Mapping::fromArray([
-                'originAdapterName' => $definition->getOriginAdapterName(),
-                'originTransferObjects' => $this->query($definition, $definition->getOriginAdapterName()),
-                'destinationAdapterName' => $definition->getDestinationAdapterName(),
-                'destinationTransferObjects' => $this->query($definition, $definition->getDestinationAdapterName()),
-                'objectType' => $definition->getObjectType()
-            ]);
-        });
-
-        return $result;
     }
 }

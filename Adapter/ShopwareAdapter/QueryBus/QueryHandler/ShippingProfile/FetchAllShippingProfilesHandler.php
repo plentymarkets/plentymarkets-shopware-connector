@@ -3,9 +3,9 @@
 namespace ShopwareAdapter\QueryBus\QueryHandler\ShippingProfile;
 
 use Doctrine\ORM\EntityManagerInterface;
-use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\Query\ShippingProfile\FetchAllShippingProfilesQuery;
+use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use Shopware\Models\Dispatch\Dispatch;
 use Shopware\Models\Dispatch\Repository;
 use ShopwareAdapter\ResponseParser\ResponseParserInterface;
@@ -58,7 +58,7 @@ class FetchAllShippingProfilesHandler implements QueryHandlerInterface
     {
         $query = $this->repository->getListQuery();
 
-        $shippingProfiles = array_map(function($shippingProfile) {
+        $shippingProfiles = array_map(function ($shippingProfile) {
             return $this->responseParser->parse($shippingProfile);
         }, $query->getArrayResult());
 

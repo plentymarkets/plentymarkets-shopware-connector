@@ -44,7 +44,7 @@ class FetchUnitQuery implements FetchQueryInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getIdentifier()
     {
@@ -52,7 +52,7 @@ class FetchUnitQuery implements FetchQueryInterface
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getPayload()
     {
@@ -63,7 +63,7 @@ class FetchUnitQuery implements FetchQueryInterface
     }
 
     /**
-     * @param array $payload
+     * {@inheritdoc}
      */
     public function setPayload(array $payload = [])
     {

@@ -36,7 +36,7 @@ class FetchChangedOrderStatusesQuery implements FetchChangedQueryInterface
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getPayload()
     {
@@ -46,7 +46,7 @@ class FetchChangedOrderStatusesQuery implements FetchChangedQueryInterface
     }
 
     /**
-     * @param array $payload
+     * {@inheritdoc}
      */
     public function setPayload(array $payload = [])
     {
