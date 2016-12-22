@@ -39,6 +39,10 @@
             <argument type="service" id="plentyconnector.identity_service"/>
         </service>
 
+        <service id="plentmarkets_adapter.response_parser.customer_group" class="PlentymarketsAdapter\ResponseParser\CustomerGroup\CustomerGroupResponseParser">
+            <argument type="service" id="plentyconnector.identity_service"/>
+        </service>
+
         <service id="plentmarkets_adapter.response_parser.manufacturer" class="PlentymarketsAdapter\ResponseParser\Manufacturer\ManufacturerResponseParser">
             <argument type="service" id="plentyconnector.identity_service"/>
         </service>
@@ -99,7 +103,13 @@
         <service id="plentymarkets_adapter.query_handler.fetch_all_currencies" class="PlentymarketsAdapter\QueryBus\QueryHandler\Currency\FetchAllCurrenciesHandler">
             <argument type="service" id="plentmarkets_adapter.client"/>
             <argument type="service" id="plentmarkets_adapter.response_parser.currency"/>
-            <argument type="service" id="plentyconnector.logger"/>
+
+            <tag name="plentyconnector.query_handler"/>
+        </service>
+
+        <service id="plentymarkets_adapter.query_handler.fetch_all_custoemr_groups" class="PlentymarketsAdapter\QueryBus\QueryHandler\CustomerGroup\FetchAllCustomerGroupsHandler">
+            <argument type="service" id="plentmarkets_adapter.client"/>
+            <argument type="service" id="plentmarkets_adapter.response_parser.customer_group"/>
 
             <tag name="plentyconnector.query_handler"/>
         </service>

@@ -8,6 +8,7 @@ namespace PlentyConnector\Connector\TransferObject;
 final class TransferObjectType
 {
     const CURRENCY = 'Currency';
+    const CUSTOMER_GROUP = 'CustomerGroup';
     const DEFINITION = 'Definition';
     const IDENTITY = 'Identity';
     const MANUFACTURER = 'Manufacturer';
