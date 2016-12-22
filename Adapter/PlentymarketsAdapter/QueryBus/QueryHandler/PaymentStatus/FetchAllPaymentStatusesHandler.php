@@ -15,11 +15,6 @@ use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 class FetchAllPaymentStatusesHandler implements QueryHandlerInterface
 {
     /**
-     * @var ClientInterface
-     */
-    private $client;
-
-    /**
      * @var ResponseParserInterface
      */
     private $responseParser;
@@ -27,14 +22,11 @@ class FetchAllPaymentStatusesHandler implements QueryHandlerInterface
     /**
      * FetchAllPaymentStatusesHandler constructor.
      *
-     * @param ClientInterface $client
      * @param ResponseParserInterface $responseParser
      */
     public function __construct(
-        ClientInterface $client,
         ResponseParserInterface $responseParser
     ) {
-        $this->client = $client;
         $this->responseParser = $responseParser;
     }
 
@@ -56,7 +48,7 @@ class FetchAllPaymentStatusesHandler implements QueryHandlerInterface
             return $this->responseParser->parse($status);
         }, $this->getPaymentStatuses());
 
-        return array_filter($paymentStatuses);
+        return $paymentStatuses;
     }
 
     /**

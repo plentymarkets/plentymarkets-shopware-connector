@@ -108,7 +108,6 @@
         </service>
 
         <service id="plentymarkets_adapter.query_handler.fetch_all_payment_statuses" class="PlentymarketsAdapter\QueryBus\QueryHandler\PaymentStatus\FetchAllPaymentStatusesHandler">
-            <argument type="service" id="plentmarkets_adapter.client"/>
             <argument type="service" id="plentmarkets_adapter.response_parser.payment_status"/>
 
             <tag name="plentyconnector.query_handler"/>
