@@ -3,6 +3,7 @@
 namespace PlentymarketsAdapter\QueryBus\QueryHandler\Manufacturer;
 
 use Exception;
+use PlentyConnector\Adapter\PlentymarketsAdapter\Client\Exception\InvalidResponseException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\QueryBus\Query\Manufacturer\FetchManufacturerQuery;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
@@ -32,11 +33,6 @@ class FetchManufacturerQueryHandler implements QueryHandlerInterface
     private $responseMapper;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @var IdentityServiceInterface
      */
     private $identityService;
@@ -46,18 +42,15 @@ class FetchManufacturerQueryHandler implements QueryHandlerInterface
      *
      * @param ClientInterface $client
      * @param ResponseParserInterface $responseMapper
-     * @param LoggerInterface $logger
      * @param IdentityServiceInterface $identityService
      */
     public function __construct(
         ClientInterface $client,
         ResponseParserInterface $responseMapper,
-        LoggerInterface $logger,
         IdentityServiceInterface $identityService
     ) {
         $this->client = $client;
         $this->responseMapper = $responseMapper;
-        $this->logger = $logger;
         $this->identityService = $identityService;
     }
 
@@ -77,6 +70,7 @@ class FetchManufacturerQueryHandler implements QueryHandlerInterface
      *
      * @return TransferObjectInterface
      *
+     * @throws InvalidResponseException
      * @throws InvalidCredentialsException
      * @throws Exception
      * @throws UnexpectedValueException
