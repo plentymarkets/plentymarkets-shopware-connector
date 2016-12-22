@@ -21,18 +21,28 @@ class Currency implements CurrencyInterface
     private $name;
 
     /**
+     * ISO 4217 based currency name
+     *
+     * @var string
+     */
+    private $currency;
+
+    /**
      * Currency constructor.
      *
      * @param string $identifier
      * @param string $name
+     * @param string $currency
      */
-    public function __construct($identifier, $name)
+    public function __construct($identifier, $name, $currency)
     {
         Assertion::uuid($identifier);
         Assertion::string($name);
+        Assertion::string($currency);
 
         $this->identifier = $identifier;
         $this->name = $name;
+        $this->currency = $currency;
     }
 
     /**
@@ -40,7 +50,7 @@ class Currency implements CurrencyInterface
      */
     public static function getType()
     {
-        return TransferObjectType::PAYMENT_STATUS;
+        return TransferObjectType::CURRENCY;
     }
 
     /**
@@ -51,11 +61,13 @@ class Currency implements CurrencyInterface
         Assertion::allInArray(array_keys($params), [
             'identifier',
             'name',
+            'currency'
         ]);
 
         return new self(
             $params['identifier'],
-            $params['name']
+            $params['name'],
+            $params['currency']
         );
     }
 
@@ -73,5 +85,13 @@ class Currency implements CurrencyInterface
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
     }
 }

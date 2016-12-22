@@ -14,6 +14,10 @@
             <argument type="service" id="plentyconnector.identity_service"/>
         </service>
 
+        <service id="shopware_adapter.response_parser.currency" class="ShopwareAdapter\ResponseParser\Currency\CurrencyResponseParser">
+            <argument type="service" id="plentyconnector.identity_service"/>
+        </service>
+
         <service id="shopware_adapter.response_parser.order_status" class="ShopwareAdapter\ResponseParser\OrderStatus\OrderStatusResponseParser">
             <argument type="service" id="plentyconnector.identity_service"/>
         </service>
@@ -74,6 +78,13 @@
         </service>
 
         <!-- Mapping query handlers -->
+
+        <service id="shopware_adapter.query_handler.fetch_all_order_currencies" class="ShopwareAdapter\QueryBus\QueryHandler\Currency\FetchAllCurrenciesHandler">
+            <argument type="service" id="models"/>
+            <argument type="service" id="shopware_adapter.response_parser.currency"/>
+
+            <tag name="plentyconnector.query_handler"/>
+        </service>
 
         <service id="shopware_adapter.query_handler.fetch_all_order_statuses" class="ShopwareAdapter\QueryBus\QueryHandler\OrderStatus\FetchAllOrderStatusesHandler">
             <argument type="service" id="models"/>

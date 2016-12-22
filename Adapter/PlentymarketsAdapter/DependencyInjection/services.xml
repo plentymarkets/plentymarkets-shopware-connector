@@ -35,6 +35,10 @@
 
         <!-- Response Parser -->
 
+        <service id="plentmarkets_adapter.response_parser.currency" class="PlentymarketsAdapter\ResponseParser\Currency\CurrencyResponseParser">
+            <argument type="service" id="plentyconnector.identity_service"/>
+        </service>
+
         <service id="plentmarkets_adapter.response_parser.manufacturer" class="PlentymarketsAdapter\ResponseParser\Manufacturer\ManufacturerResponseParser">
             <argument type="service" id="plentyconnector.identity_service"/>
         </service>
@@ -85,13 +89,20 @@
         <service id="plentymarkets_adapter.query_handler.fetch_manufacturer" class="PlentymarketsAdapter\QueryBus\QueryHandler\Manufacturer\FetchManufacturerQueryHandler">
             <argument type="service" id="plentmarkets_adapter.client"/>
             <argument type="service" id="plentmarkets_adapter.response_parser.manufacturer"/>
-            <argument type="service" id="plentyconnector.logger"/>
             <argument type="service" id="plentyconnector.identity_service"/>
 
             <tag name="plentyconnector.query_handler"/>
         </service>
 
         <!-- Mapping query handlers -->
+
+        <service id="plentymarkets_adapter.query_handler.fetch_all_currencies" class="PlentymarketsAdapter\QueryBus\QueryHandler\Currency\FetchAllCurrenciesHandler">
+            <argument type="service" id="plentmarkets_adapter.client"/>
+            <argument type="service" id="plentmarkets_adapter.response_parser.currency"/>
+            <argument type="service" id="plentyconnector.logger"/>
+
+            <tag name="plentyconnector.query_handler"/>
+        </service>
 
         <service id="plentymarkets_adapter.query_handler.fetch_all_order_statuses" class="PlentymarketsAdapter\QueryBus\QueryHandler\OrderStatus\FetchAllOrderStatusesHandler">
             <argument type="service" id="plentmarkets_adapter.client"/>
