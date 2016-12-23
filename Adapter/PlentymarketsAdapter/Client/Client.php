@@ -68,9 +68,9 @@ class Client implements ClientInterface
         }
 
         if (!array_key_exists('base_uri', $options)) {
-            $options['base_uri'] = $this->getBaseUri($options['base_uri']);
-        } else {
             $options['base_uri'] = $this->getBaseUri($this->config->get('rest_url'));
+        } else {
+            $options['base_uri'] = $this->getBaseUri($options['base_uri']);
         }
 
         if (!array_key_exists('headers', $options)) {
