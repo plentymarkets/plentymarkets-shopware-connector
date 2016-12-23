@@ -11,6 +11,7 @@
         <parameter key="PLENTYMARKETS_ADAPTER" type="constant">PlentymarketsAdapter\PlentymarketsAdapter::NAME</parameter>
 
         <parameter key="TRANSFEROBJECT_CURRENCY" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::CURRENCY</parameter>
+        <parameter key="TRANSFEROBJECT_CUSTOMER_GROUP" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::CUSTOMER_GROUP</parameter>
         <parameter key="TRANSFEROBJECT_MANUFACTURER" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::MANUFACTURER</parameter>
         <parameter key="TRANSFEROBJECT_ORDER_STATUS" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::ORDER_STATUS</parameter>
         <parameter key="TRANSFEROBJECT_PAYMENT_METHOD" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::PAYMENT_METHOD</parameter>
@@ -106,6 +107,14 @@
             <tag name="plentyconnector.mapping_definition"/>
         </service>
 
+        <service id="plentyconnector.mapping_definition.customer_group" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
+            <argument>%PLENTYMARKETS_ADAPTER%</argument>
+            <argument>%SHOPWARE_ADAPTER%</argument>
+            <argument>%TRANSFEROBJECT_CUSTOMER_GROUP%</argument>
+
+            <tag name="plentyconnector.mapping_definition"/>
+        </service>
+
         <service id="plentyconnector.mapping_definition.payment_method" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
             <argument>%PLENTYMARKETS_ADAPTER%</argument>
             <argument>%SHOPWARE_ADAPTER%</argument>
@@ -190,6 +199,10 @@
         <!-- Query generator -->
 
         <service id="plentyconnector.query_generator.currency" class="PlentyConnector\Connector\QueryBus\QueryGenerator\Currency\CurrencyQueryGenerator">
+            <tag name="plentyconnector.query_generator" />
+        </service>
+
+        <service id="plentyconnector.query_generator.customer_group" class="PlentyConnector\Connector\QueryBus\QueryGenerator\CustomerGroup\CustomerGroupQueryGenerator">
             <tag name="plentyconnector.query_generator" />
         </service>
 
