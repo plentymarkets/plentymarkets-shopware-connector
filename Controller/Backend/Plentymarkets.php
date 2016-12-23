@@ -1,9 +1,11 @@
 <?php
 
+use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
+use PlentyConnector\Connector\Mapping\MappingServiceInterface;
 use PlentyConnector\Connector\QueryBus\Query\Manufacturer\GetManufacturerQuery;
-use PlentyConnector\Infrastructure\QueryBus\Query\GetRemoteOrderReferrerQuery;
-use PlentyConnector\Infrastructure\QueryBus\Query\GetRemoteWarehouseQuery;
-use PlentymarketsAdapter\PlentymarketsAdapter;
+use PlentyConnector\Connector\TransferObject\MappedTransferObjectInterface;
+use PlentyConnector\Connector\TransferObject\Mapping\MappingInterface;
+use PlentymarketsAdapter\Client\ClientInterface;
 use Shopware\Components\Api\Manager;
 
 /**
@@ -11,38 +13,46 @@ use Shopware\Components\Api\Manager;
  */
 class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Backend_ExtJs
 {
+    /**
+     * @throws \Exception
+     */
     public function testApiCredentialsAction()
     {
-        $config = $this->container->get('plentyconnector.config');
+        /**
+         * @var ClientInterface $client
+         */
+        $client = $this->container->get('plentmarkets_adapter.client');
 
-        $apiUrl = $config->get('rest_url');
-        $apiUsername = $config->get('rest_username');
-        $apiPassword = $config->get('rest_password');
+        $params = [
+            'username' => $this->Request()->get('ApiUsername'),
+            'password' => $this->Request()->get('ApiPassword'),
+        ];
 
-        $config->set('rest_url', $this->Request()->get('ApiUrl'));
-        $config->set('rest_username', $this->Request()->get('ApiUsername'));
-        $config->set('rest_password', $this->Request()->get('ApiPassword'));
+        $options = [
+            'base_url' => $this->Request()->get('ApiUrl'),
+        ];
 
-        $queryBus = $this->container->get('plentyconnector.query_bus');
-        try {
-            // do sample request to check whether the credentials are valid
-            $queryBus->handle(new FetchAllManufacturersQuery(PlentymarketsAdapter::getName()));
+        $login = $client->request('POST', 'login', $params, null, null, $options);
+
+        $success = false;
+
+        if (isset($login['accessToken'])) {
             $success = true;
-        } catch (Exception $exception) {
-            $success = false;
         }
-
-        $config->set('rest_url', $apiUrl);
-        $config->set('rest_username', $apiUsername);
-        $config->set('rest_password', $apiPassword);
 
         $this->View()->assign(array(
             'success' => $success,
         ));
     }
 
+    /**
+     * @throws \Exception
+     */
     public function saveSettingsAction()
     {
+        /**
+         * @var ConfigServiceInterface $config
+         */
         $config = $this->container->get('plentyconnector.config');
 
         $config->set('rest_url', $this->Request()->get('ApiUrl'));
@@ -55,18 +65,20 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
         ));
     }
 
+    /**
+     * @throws \Exception
+     */
     public function getSettingsListAction()
     {
-        $data = array();
         $config = $this->container->get('plentyconnector.config');
-
-        $data['ApiUrl'] = $config->get('rest_url');
-        $data['ApiUsername'] = $config->get('rest_username');
-        $data['ApiPassword'] = $config->get('rest_password');
 
         $this->View()->assign(array(
             'success' => true,
-            'data' => $data,
+            'data' => [
+                'ApiUrl' => $config->get('rest_url'),
+                'ApiUsername' => $config->get('rest_username'),
+                'ApiPassword' => $config->get('rest_password'),
+            ],
         ));
     }
 
@@ -97,14 +109,17 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 
         $this->View()->assign(array(
             'success' => true,
-            'data' => array(
+            'data' => [
                 'manufacturers' => $manufacturers,
                 'warehouses' => [],
                 'orderReferrers' => [],
-            ),
+            ],
         ));
     }
 
+    /**
+     * @throws \Exception
+     */
     public function getMappingsAction()
     {
         /**
@@ -113,10 +128,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
         $mappingService = Shopware()->Container()->get('plentyconnector.mapping_service');
         $mappingInformation = $mappingService->getMappingInformation();
 
-        $transferObjectMapping = function($object) {
-            /**
-             * @var MappedTransferObjectInterface $object
-             */
+        $transferObjectMapping = function (MappedTransferObjectInterface $object) {
             return [
                 'identifier' => $object->getIdentifier(),
                 'type' => $object::getType(),
@@ -126,21 +138,21 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 
         $this->View()->assign([
             'success' => true,
-            'data' => array_map(function($mapping) use ($transferObjectMapping) {
-                /**
-                 * @var MappingInterface $mapping
-                 */
+            'data' => array_map(function (MappingInterface $mapping) use ($transferObjectMapping) {
                 return [
                     'originAdapterName' => $mapping->getOriginAdapterName(),
                     'destinationAdapterName' => $mapping->getDestinationAdapterName(),
                     'originTransferObjects' => array_map($transferObjectMapping, $mapping->getOriginTransferObjects()),
-                    'destinationTransferObjects' => array_map($transferObjectMapping, $mapping->getDestinationTransferObjects()),
-                    'isComplete' => $mapping->isIsComplete()
+                    'destinationTransferObjects' => array_map($transferObjectMapping,
+                        $mapping->getDestinationTransferObjects()),
                 ];
             }, $mappingInformation)
         ]);
     }
 
+    /**
+     *
+     */
     public function updateIdentityAction()
     {
 

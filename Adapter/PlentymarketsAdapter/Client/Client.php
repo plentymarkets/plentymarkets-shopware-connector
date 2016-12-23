@@ -61,16 +61,21 @@ class Client implements ClientInterface
      *
      * {@inheritdoc}
      */
-    public function request($method, $path, array $params = [], $limit = null, $offset = null)
+    public function request($method, $path, array $params = [], $limit = null, $offset = null, array $options = [])
     {
         if ($this->isLoginRequired($path)) {
             $this->login();
         }
 
-        $options = [
-            'base_uri' => $this->getBaseUri($this->config->get('rest_url')),
-            'headers' => $this->getHeaders($path),
-        ];
+        if (!array_key_exists('base_uri', $options)) {
+            $options['base_uri'] = $this->getBaseUri($options['base_uri']);
+        } else {
+            $options['base_uri'] = $this->getBaseUri($this->config->get('rest_url'));
+        }
+
+        if (!array_key_exists('headers', $options)) {
+            $options['headers'] = $this->getHeaders($path);
+        }
 
         if ($method === 'GET') {
             $options['query'] = $params;
@@ -104,14 +109,10 @@ class Client implements ClientInterface
             return $result;
         } catch (ClientException $exception) {
             if ($exception->hasResponse() && $exception->getResponse()->getStatusCode() === 401) {
-                if ($path === 'login') {
-                    throw new InvalidCredentialsException();
-                } else {
-                    // retry with fresh accessToken
-                    $this->accessToken = null;
+                // retry with fresh accessToken
+                $this->accessToken = null;
 
-                    return $this->request($method, $path, $params, $limit, $offset);
-                }
+                return $this->request($method, $path, $params, $limit, $offset);
             } else {
                 // unknown exception, throw up
                 throw $exception;

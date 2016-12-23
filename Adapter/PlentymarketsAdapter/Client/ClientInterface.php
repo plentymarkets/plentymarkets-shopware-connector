@@ -18,8 +18,9 @@ interface ClientInterface
      * @param string $method
      * @param string $path
      * @param array $criteria
-     * @param null $limit
-     * @param null $offset
+     * @param int|null $limit
+     * @param int|null $offset
+     * @param array $options
      *
      * @return array
      *
@@ -28,7 +29,7 @@ interface ClientInterface
      * @throws InvalidCredentialsException
      * @throws InvalidResponseException
      */
-    public function request($method, $path, array $criteria = [], $limit = null, $offset = null);
+    public function request($method, $path, array $criteria = [], $limit = null, $offset = null, array $options = []);
 
     /**
      * @param $path
