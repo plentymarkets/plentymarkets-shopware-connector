@@ -10,16 +10,16 @@
         <parameter key="SHOPWARE_ADAPTER" type="constant">ShopwareAdapter\ShopwareAdapter::NAME</parameter>
         <parameter key="PLENTYMARKETS_ADAPTER" type="constant">PlentymarketsAdapter\PlentymarketsAdapter::NAME</parameter>
 
-        <parameter key="TRANSFEROBJECT_CURRENCY" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::CURRENCY</parameter>
-        <parameter key="TRANSFEROBJECT_CUSTOMER_GROUP" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::CUSTOMER_GROUP</parameter>
-        <parameter key="TRANSFEROBJECT_MANUFACTURER" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::MANUFACTURER</parameter>
-        <parameter key="TRANSFEROBJECT_ORDER_STATUS" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::ORDER_STATUS</parameter>
-        <parameter key="TRANSFEROBJECT_PAYMENT_METHOD" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::PAYMENT_METHOD</parameter>
-        <parameter key="TRANSFEROBJECT_PAYMENT_STATUS" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::PAYMENT_STATUS</parameter>
-        <parameter key="TRANSFEROBJECT_PRODUCT" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::PRODUCT</parameter>
-        <parameter key="TRANSFEROBJECT_SHIPPING_PROFILE" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::SHIPPING_PROFILE</parameter>
-        <parameter key="TRANSFEROBJECT_SHOP" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::SHOP</parameter>
-        <parameter key="TRANSFEROBJECT_UNIT" type="constant">PlentyConnector\Connector\TransferObject\TransferObjectType::UNIT</parameter>
+        <parameter key="TRANSFEROBJECT_CURRENCY" type="constant">PlentyConnector\Connector\TransferObject\Currency\Currency::TYPE</parameter>
+        <parameter key="TRANSFEROBJECT_CUSTOMER_GROUP" type="constant">PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup::TYPE</parameter>
+        <parameter key="TRANSFEROBJECT_MANUFACTURER" type="constant">PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer::TYPE</parameter>
+        <parameter key="TRANSFEROBJECT_ORDER_STATUS" type="constant">PlentyConnector\Connector\TransferObject\OrderStatus\OrderStatus::TYPE</parameter>
+        <parameter key="TRANSFEROBJECT_PAYMENT_METHOD" type="constant">PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod::TYPE</parameter>
+        <parameter key="TRANSFEROBJECT_PAYMENT_STATUS" type="constant">PlentyConnector\Connector\TransferObject\PaymentStatus\PaymentStatus::TYPE</parameter>
+        <parameter key="TRANSFEROBJECT_PRODUCT" type="constant">PlentyConnector\Connector\TransferObject\Product\Product::TYPE</parameter>
+        <parameter key="TRANSFEROBJECT_SHIPPING_PROFILE" type="constant">PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile::TYPE</parameter>
+        <parameter key="TRANSFEROBJECT_SHOP" type="constant">PlentyConnector\Connector\TransferObject\Shop\Shop::TYPE</parameter>
+        <parameter key="TRANSFEROBJECT_UNIT" type="constant">PlentyConnector\Connector\TransferObject\Unit\Unit::TYPE</parameter>
     </parameters>
 
     <!-- Services -->
