@@ -9,6 +9,8 @@ use Assert\Assertion;
  */
 class OrderItem implements OrderItemInterface
 {
+    const TYPE = 'OrderItem';
+
     /**
      * @var string
      */
@@ -71,7 +73,7 @@ class OrderItem implements OrderItemInterface
      */
     public static function getType()
     {
-        return 'OrderItem';
+        return self::TYPE;
     }
 
     /**

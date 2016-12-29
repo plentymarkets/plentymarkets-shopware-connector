@@ -6,7 +6,7 @@ use PlentyConnector\Connector\QueryBus\Query\ShippingProfile\FetchAllShippingPro
 use PlentyConnector\Connector\QueryBus\Query\ShippingProfile\FetchChangedShippingProfilesQuery;
 use PlentyConnector\Connector\QueryBus\Query\ShippingProfile\FetchShippingProfileQuery;
 use PlentyConnector\Connector\QueryBus\QueryGenerator\QueryGeneratorInterface;
-use PlentyConnector\Connector\TransferObject\TransferObjectType;
+use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 
 /**
  * Class ShippingProfileQueryGenerator
@@ -18,7 +18,7 @@ class ShippingProfileQueryGenerator implements QueryGeneratorInterface
      */
     public function supports($transferObjectType)
     {
-        return $transferObjectType === TransferObjectType::SHIPPING_PROFILE;
+        return $transferObjectType === ShippingProfile::getType();
     }
 
     /**

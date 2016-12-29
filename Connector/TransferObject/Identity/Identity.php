@@ -3,13 +3,14 @@
 namespace PlentyConnector\Connector\TransferObject\Identity;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\TransferObjectType;
 
 /**
  * Class Identity.
  */
 class Identity implements IdentityInterface
 {
+    const TYPE = 'Identity';
+
     /**
      * Identifier of the object.
      *
@@ -64,7 +65,7 @@ class Identity implements IdentityInterface
      */
     public static function getType()
     {
-        return TransferObjectType::IDENTITY;
+        return self::TYPE;
     }
 
     /**

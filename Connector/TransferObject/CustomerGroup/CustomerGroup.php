@@ -3,13 +3,14 @@
 namespace PlentyConnector\Connector\TransferObject\CustomerGroup;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\TransferObjectType;
 
 /**
  * Class CustomerGroup
  */
 class CustomerGroup implements CustomerGroupInterface
 {
+    const TYPE = 'CustomerGroup';
+
     /**
      * @var string
      */
@@ -40,7 +41,7 @@ class CustomerGroup implements CustomerGroupInterface
      */
     public static function getType()
     {
-        return TransferObjectType::CUSTOMER_GROUP;
+        return self::TYPE;
     }
 
     /**

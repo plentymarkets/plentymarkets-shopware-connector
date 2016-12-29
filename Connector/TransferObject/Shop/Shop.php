@@ -3,13 +3,14 @@
 namespace PlentyConnector\Connector\TransferObject\Shop;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\TransferObjectType;
 
 /**
  * Class Shop
  */
 class Shop implements ShopInterface
 {
+    const TYPE = 'Shop';
+
     /**
      * @var string
      */
@@ -40,7 +41,7 @@ class Shop implements ShopInterface
      */
     public static function getType()
     {
-        return TransferObjectType::SHOP;
+        return 'Shop';
     }
 
     /**

@@ -6,7 +6,7 @@ use PlentyConnector\Connector\QueryBus\Query\PaymentMethod\FetchAllPaymentMethod
 use PlentyConnector\Connector\QueryBus\Query\PaymentMethod\FetchChangedPaymentMethodsQuery;
 use PlentyConnector\Connector\QueryBus\Query\PaymentMethod\FetchPaymentMethodQuery;
 use PlentyConnector\Connector\QueryBus\QueryGenerator\QueryGeneratorInterface;
-use PlentyConnector\Connector\TransferObject\TransferObjectType;
+use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod;
 
 /**
  * Class PaymentMethodQueryGenerator
@@ -18,7 +18,7 @@ class PaymentMethodQueryGenerator implements QueryGeneratorInterface
      */
     public function supports($transferObjectType)
     {
-        return $transferObjectType === TransferObjectType::PAYMENT_METHOD;
+        return $transferObjectType === PaymentMethod::getType();
     }
 
     /**

@@ -5,7 +5,6 @@ namespace PlentyConnector\Connector\QueryBus\QueryFactory;
 use Assert\Assertion;
 use PlentyConnector\Connector\QueryBus\QueryGenerator\QueryGeneratorInterface;
 use PlentyConnector\Connector\QueryBus\QueryType;
-use PlentyConnector\Connector\TransferObject\TransferObjectType;
 
 /**
  * Class QueryFactory.
@@ -32,7 +31,7 @@ class QueryFactory implements QueryFactoryInterface
     {
         Assertion::string($adapterName);
         Assertion::string($queryType);
-        Assertion::inArray($objectType, TransferObjectType::getAllTypes());
+        Assertion::string($objectType);
         Assertion::inArray($queryType, QueryType::getAllTypes());
 
         if ($queryType === QueryType::ONE) {

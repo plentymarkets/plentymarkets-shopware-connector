@@ -6,7 +6,7 @@ use PlentyConnector\Connector\QueryBus\Query\Unit\FetchAllUnitsQuery;
 use PlentyConnector\Connector\QueryBus\Query\Unit\FetchChangedUnitsQuery;
 use PlentyConnector\Connector\QueryBus\Query\Unit\FetchUnitQuery;
 use PlentyConnector\Connector\QueryBus\QueryGenerator\QueryGeneratorInterface;
-use PlentyConnector\Connector\TransferObject\TransferObjectType;
+use PlentyConnector\Connector\TransferObject\Unit\Unit;
 
 /**
  * Class UnitQueryGenerator
@@ -18,7 +18,7 @@ class UnitQueryGenerator implements QueryGeneratorInterface
      */
     public function supports($transferObjectType)
     {
-        return $transferObjectType === TransferObjectType::UNIT;
+        return $transferObjectType === Unit::getType();
     }
 
     /**

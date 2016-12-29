@@ -3,13 +3,14 @@
 namespace PlentyConnector\Connector\TransferObject\PaymentMethod;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\TransferObjectType;
 
 /**
  * Class PaymentMethod.
  */
 class PaymentMethod implements PaymentMethodInterface
 {
+    const TYPE = 'PaymentMethod';
+
     /**
      * @var string
      */
@@ -40,7 +41,7 @@ class PaymentMethod implements PaymentMethodInterface
      */
     public static function getType()
     {
-        return TransferObjectType::PAYMENT_METHOD;
+        return self::TYPE;
     }
 
     /**

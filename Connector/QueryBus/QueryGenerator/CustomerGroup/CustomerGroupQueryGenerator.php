@@ -6,7 +6,7 @@ use PlentyConnector\Connector\QueryBus\Query\CustomerGroup\FetchAllCustomerGroup
 use PlentyConnector\Connector\QueryBus\Query\CustomerGroup\FetchChangedCustomerGroupsQuery;
 use PlentyConnector\Connector\QueryBus\Query\CustomerGroup\FetchCustomerGroupQuery;
 use PlentyConnector\Connector\QueryBus\QueryGenerator\QueryGeneratorInterface;
-use PlentyConnector\Connector\TransferObject\TransferObjectType;
+use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
 
 /**
  * Class CustomerGroupQueryGenerator
@@ -18,7 +18,7 @@ class CustomerGroupQueryGenerator implements QueryGeneratorInterface
      */
     public function supports($transferObjectType)
     {
-        return $transferObjectType === TransferObjectType::CUSTOMER_GROUP;
+        return $transferObjectType === CustomerGroup::getType();
     }
 
     /**

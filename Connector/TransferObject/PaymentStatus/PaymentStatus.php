@@ -3,13 +3,14 @@
 namespace PlentyConnector\Connector\TransferObject\PaymentStatus;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\TransferObjectType;
 
 /**
  * Class PaymentStatus
  */
 class PaymentStatus implements PaymentStatusInterface
 {
+    const TYPE = 'PaymentStatus';
+
     /**
      * @var string
      */
@@ -40,7 +41,7 @@ class PaymentStatus implements PaymentStatusInterface
      */
     public static function getType()
     {
-        return TransferObjectType::PAYMENT_STATUS;
+        return self::TYPE;
     }
 
     /**

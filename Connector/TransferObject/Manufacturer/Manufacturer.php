@@ -3,13 +3,14 @@
 namespace PlentyConnector\Connector\TransferObject\Manufacturer;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\TransferObjectType;
 
 /**
  * Class TransferObjects.
  */
 class Manufacturer implements ManufacturerInterface
 {
+    const TYPE = 'Manufacturer';
+
     /**
      * Identifier of the object.
      *
@@ -58,7 +59,7 @@ class Manufacturer implements ManufacturerInterface
      */
     public static function getType()
     {
-        return TransferObjectType::MANUFACTURER;
+        return self::TYPE;
     }
 
     /**

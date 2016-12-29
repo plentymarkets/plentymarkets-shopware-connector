@@ -4,13 +4,14 @@ namespace PlentyConnector\Connector\TransferObject\Mapping;
 
 use Assert\Assertion;
 use PlentyConnector\Connector\TransferObject\MappedTransferObjectInterface;
-use PlentyConnector\Connector\TransferObject\TransferObjectType;
 
 /**
  * Class Mapping
  */
 class Mapping implements MappingInterface
 {
+    const TYPE = 'Mapping';
+
     /**
      * origin adapter name.
      *
@@ -62,7 +63,7 @@ class Mapping implements MappingInterface
         Assertion::string($destinationAdapterName);
         Assertion::allIsInstanceOf($destinationTransferObjects, MappedTransferObjectInterface::class);
 
-        Assertion::inArray($objectType, TransferObjectType::getAllTypes());
+        Assertion::string($objectType);
 
         $this->originAdapterName = $originAdapterName;
         $this->originTransferObjects = $originTransferObjects;
@@ -76,7 +77,7 @@ class Mapping implements MappingInterface
      */
     public static function getType()
     {
-        return TransferObjectType::MAPPING;
+        return self::TYPE;
     }
 
     /**

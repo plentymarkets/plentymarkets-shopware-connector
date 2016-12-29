@@ -6,7 +6,7 @@ use PlentyConnector\Connector\QueryBus\Query\Product\FetchAllProductsQuery;
 use PlentyConnector\Connector\QueryBus\Query\Product\FetchChangedProductsQuery;
 use PlentyConnector\Connector\QueryBus\Query\Product\FetchProductQuery;
 use PlentyConnector\Connector\QueryBus\QueryGenerator\QueryGeneratorInterface;
-use PlentyConnector\Connector\TransferObject\TransferObjectType;
+use PlentyConnector\Connector\TransferObject\Product\Product;
 
 /**
  * Class ProductQueryGenerator
@@ -18,7 +18,7 @@ class ProductQueryGenerator implements QueryGeneratorInterface
      */
     public function supports($transferObjectType)
     {
-        return $transferObjectType === TransferObjectType::PRODUCT;
+        return $transferObjectType === Product::getType();
     }
 
     /**

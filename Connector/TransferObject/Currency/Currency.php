@@ -3,13 +3,14 @@
 namespace PlentyConnector\Connector\TransferObject\Currency;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\TransferObjectType;
 
 /**
  * Class Currency
  */
 class Currency implements CurrencyInterface
 {
+    const TYPE = 'Customer';
+
     /**
      * @var string
      */
@@ -50,7 +51,7 @@ class Currency implements CurrencyInterface
      */
     public static function getType()
     {
-        return TransferObjectType::CURRENCY;
+        return self::TYPE;
     }
 
     /**

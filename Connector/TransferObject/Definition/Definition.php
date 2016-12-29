@@ -3,13 +3,14 @@
 namespace PlentyConnector\Connector\TransferObject\Definition;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\TransferObjectType;
 
 /**
  * Class Definition.
  */
 class Definition implements DefinitionInterface
 {
+    const TYPE = 'Definition';
+
     /**
      * origin adapter name.
      *
@@ -54,7 +55,7 @@ class Definition implements DefinitionInterface
      */
     public static function getType()
     {
-        return TransferObjectType::DEFINITION;
+        return self::TYPE;
     }
 
     /**

@@ -6,7 +6,7 @@ use PlentyConnector\Connector\QueryBus\Query\Currency\FetchAllCurrenciesQuery;
 use PlentyConnector\Connector\QueryBus\Query\Currency\FetchChangedCurrenciesQuery;
 use PlentyConnector\Connector\QueryBus\Query\Currency\FetchCurrencyQuery;
 use PlentyConnector\Connector\QueryBus\QueryGenerator\QueryGeneratorInterface;
-use PlentyConnector\Connector\TransferObject\TransferObjectType;
+use PlentyConnector\Connector\TransferObject\Currency\Currency;
 
 /**
  * Class CurrencyQueryGenerator
@@ -18,7 +18,7 @@ class CurrencyQueryGenerator implements QueryGeneratorInterface
      */
     public function supports($transferObjectType)
     {
-        return $transferObjectType === TransferObjectType::CURRENCY;
+        return $transferObjectType === Currency::getType();
     }
 
     /**

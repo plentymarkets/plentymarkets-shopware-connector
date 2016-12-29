@@ -3,13 +3,14 @@
 namespace PlentyConnector\Connector\TransferObject\Unit;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\TransferObjectType;
 
 /**
  * Class Unit
  */
 class Unit implements UnitInterface
 {
+    const TYPE = 'Unit';
+
     /**
      * @var string
      */
@@ -47,7 +48,7 @@ class Unit implements UnitInterface
      */
     public static function getType()
     {
-        return TransferObjectType::UNIT;
+        return self::TYPE;
     }
 
     /**

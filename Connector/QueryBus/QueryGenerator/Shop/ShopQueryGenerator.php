@@ -6,7 +6,7 @@ use PlentyConnector\Connector\QueryBus\Query\Shop\FetchAllShopsQuery;
 use PlentyConnector\Connector\QueryBus\Query\Shop\FetchChangedShopsQuery;
 use PlentyConnector\Connector\QueryBus\Query\Shop\FetchShopQuery;
 use PlentyConnector\Connector\QueryBus\QueryGenerator\QueryGeneratorInterface;
-use PlentyConnector\Connector\TransferObject\TransferObjectType;
+use PlentyConnector\Connector\TransferObject\Shop\Shop;
 
 /**
  * Class ShopQueryGenerator
@@ -18,7 +18,7 @@ class ShopQueryGenerator implements QueryGeneratorInterface
      */
     public function supports($transferObjectType)
     {
-        return $transferObjectType === TransferObjectType::SHOP;
+        return $transferObjectType === Shop::getType();
     }
 
     /**

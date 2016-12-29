@@ -6,7 +6,7 @@ use PlentyConnector\Connector\QueryBus\Query\OrderStatus\FetchAllOrderStatusesQu
 use PlentyConnector\Connector\QueryBus\Query\OrderStatus\FetchChangedOrderStatusesQuery;
 use PlentyConnector\Connector\QueryBus\Query\OrderStatus\FetchOrderStatusQuery;
 use PlentyConnector\Connector\QueryBus\QueryGenerator\QueryGeneratorInterface;
-use PlentyConnector\Connector\TransferObject\TransferObjectType;
+use PlentyConnector\Connector\TransferObject\OrderStatus\OrderStatus;
 
 /**
  * Class ManufacturerQueryGenerator
@@ -18,7 +18,7 @@ class OrderStatusQueryGenerator implements QueryGeneratorInterface
      */
     public function supports($transferObjectType)
     {
-        return $transferObjectType === TransferObjectType::ORDER_STATUS;
+        return $transferObjectType === OrderStatus::getType();
     }
 
     /**

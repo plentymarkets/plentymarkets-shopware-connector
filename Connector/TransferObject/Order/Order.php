@@ -10,6 +10,8 @@ use PlentyConnector\Connector\TransferObject\OrderItem\OrderItemInterface;
  */
 class Order implements OrderInterface
 {
+    const TYPE = 'Order';
+
     /**
      * Identifier of the object.
      *
@@ -98,7 +100,7 @@ class Order implements OrderInterface
      */
     public static function getType()
     {
-        return 'Order';
+        return self::TYPE;
     }
 
     /**

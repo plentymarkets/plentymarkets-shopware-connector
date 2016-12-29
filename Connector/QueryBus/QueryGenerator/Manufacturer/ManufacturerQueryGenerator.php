@@ -6,7 +6,7 @@ use PlentyConnector\Connector\QueryBus\Query\Manufacturer\FetchAllManufacturersQ
 use PlentyConnector\Connector\QueryBus\Query\Manufacturer\FetchChangedManufacturersQuery;
 use PlentyConnector\Connector\QueryBus\Query\Manufacturer\FetchManufacturerQuery;
 use PlentyConnector\Connector\QueryBus\QueryGenerator\QueryGeneratorInterface;
-use PlentyConnector\Connector\TransferObject\TransferObjectType;
+use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 
 /**
  * Class ManufacturerQueryGenerator
@@ -18,7 +18,7 @@ class ManufacturerQueryGenerator implements QueryGeneratorInterface
      */
     public function supports($transferObjectType)
     {
-        return $transferObjectType === TransferObjectType::MANUFACTURER;
+        return $transferObjectType === Manufacturer::getType();
     }
 
     /**

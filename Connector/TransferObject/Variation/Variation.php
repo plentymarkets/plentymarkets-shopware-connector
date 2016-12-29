@@ -9,6 +9,8 @@ use Assert\Assertion;
  */
 class Variation implements VariationInterface
 {
+    const TYPE = 'Variation';
+
     /**
      * Identifier of the object.
      *
@@ -41,7 +43,7 @@ class Variation implements VariationInterface
      */
     public static function getType()
     {
-        return 'Variation';
+        return self::TYPE;
     }
 
     /**

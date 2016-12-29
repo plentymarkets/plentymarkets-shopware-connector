@@ -5,8 +5,8 @@ namespace PlentyConnector\Connector\CommandBus\CommandGenerator\Manufacturer;
 use PlentyConnector\Connector\CommandBus\Command\Manufacturer\HandleManufacturerCommand;
 use PlentyConnector\Connector\CommandBus\Command\Manufacturer\RemoveManufacturerCommand;
 use PlentyConnector\Connector\CommandBus\CommandGenerator\CommandGeneratorInterface;
+use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
-use PlentyConnector\Connector\TransferObject\TransferObjectType;
 
 /**
  * Class ManufacturerCommandGenerator
@@ -18,7 +18,7 @@ class ManufacturerCommandGenerator implements CommandGeneratorInterface
      */
     public function supports($transferObjectType)
     {
-        return $transferObjectType === TransferObjectType::MANUFACTURER;
+        return $transferObjectType === Manufacturer::getType();
     }
 
     /**

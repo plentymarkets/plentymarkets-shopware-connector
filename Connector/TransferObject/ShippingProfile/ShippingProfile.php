@@ -3,13 +3,14 @@
 namespace PlentyConnector\Connector\TransferObject\ShippingProfile;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\TransferObjectType;
 
 /**
  * Class ShippingProfile.
  */
 class ShippingProfile implements ShippingProfileInterface
 {
+    const TYPE = 'ShippingProfile';
+
     /**
      * Identifier of the object.
      *
@@ -42,7 +43,7 @@ class ShippingProfile implements ShippingProfileInterface
      */
     public static function getType()
     {
-        return TransferObjectType::SHIPPING_PROFILE;
+        return self::TYPE;
     }
 
     /**

@@ -6,7 +6,7 @@ use PlentyConnector\Connector\QueryBus\Query\PaymentStatus\FetchAllPaymentStatus
 use PlentyConnector\Connector\QueryBus\Query\PaymentStatus\FetchChangedPaymentStatusesQuery;
 use PlentyConnector\Connector\QueryBus\Query\PaymentStatus\FetchPaymentStatusQuery;
 use PlentyConnector\Connector\QueryBus\QueryGenerator\QueryGeneratorInterface;
-use PlentyConnector\Connector\TransferObject\TransferObjectType;
+use PlentyConnector\Connector\TransferObject\PaymentStatus\PaymentStatus;
 
 /**
  * Class PaymentStatusQueryGenerator
@@ -18,7 +18,7 @@ class PaymentStatusQueryGenerator implements QueryGeneratorInterface
      */
     public function supports($transferObjectType)
     {
-        return $transferObjectType === TransferObjectType::PAYMENT_STATUS;
+        return $transferObjectType === PaymentStatus::getType();
     }
 
     /**

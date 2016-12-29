@@ -3,13 +3,14 @@
 namespace PlentyConnector\Connector\TransferObject\OrderStatus;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\TransferObjectType;
 
 /**
  * Class OrderStatus
  */
 class OrderStatus implements OrderStatusInterface
 {
+    const TYPE = 'OrderStatus';
+
     /**
      * @var string
      */
@@ -40,7 +41,7 @@ class OrderStatus implements OrderStatusInterface
      */
     public static function getType()
     {
-        return TransferObjectType::ORDER_STATUS;
+        return self::TYPE;
     }
 
     /**

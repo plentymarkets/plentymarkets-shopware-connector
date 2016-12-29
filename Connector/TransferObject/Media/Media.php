@@ -3,14 +3,14 @@
 namespace PlentyConnector\Connector\TransferObject\Media;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\TransferObjectType;
-use PlentyConnector\Connector\TransferObject\Translation\TranslationInterface;
 
 /**
  * Class Media
  */
 class Media implements MediaInterface
 {
+    const TYPE = 'Media';
+
     /**
      * @var string
      */
@@ -58,7 +58,7 @@ class Media implements MediaInterface
      */
     public static function getType()
     {
-        return TransferObjectType::MEDIA;
+        return self::TYPE;
     }
 
     /**

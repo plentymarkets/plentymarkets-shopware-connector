@@ -16,7 +16,6 @@ use PlentyConnector\Connector\QueryBus\QueryType;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use PlentyConnector\Connector\TransferObject\Definition\DefinitionInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
-use PlentyConnector\Connector\TransferObject\TransferObjectType;
 
 /**
  * TODO: error and exception handling
@@ -125,7 +124,7 @@ class Connector implements ConnectorInterface
      */
     public function handle($objectType, $queryType, $identifier = null)
     {
-        Assertion::inArray($objectType, TransferObjectType::getAllTypes());
+        Assertion::string($objectType);
         Assertion::inArray($queryType, QueryType::getAllTypes());
 
         if ($queryType === QueryType::ONE) {
