@@ -6,9 +6,9 @@ use InvalidArgumentException;
 use PlentyConnector\Connector\TransferObject\Definition\DefinitionInterface;
 
 /**
- * Class MissingQueryException
+ * Class MissingCommandException
  */
-class MissingQueryException extends InvalidArgumentException
+class MissingCommandException extends InvalidArgumentException
 {
     /**
      * @param DefinitionInterface $definition
@@ -17,7 +17,7 @@ class MissingQueryException extends InvalidArgumentException
      */
     public static function fromDefinition(DefinitionInterface $definition)
     {
-        $message = sprintf('No query could be generated for the current definition: %s', $definition) . "\n";
+        $message = sprintf('No command could be generated for the current definition: %s', $definition) . "\n";
 
         return new static($message);
     }

@@ -24,4 +24,12 @@ interface CommandGeneratorInterface
      * @return CommandInterface
      */
     public function generateHandleCommand(TransferObjectInterface $transferObject, $adapterName);
+
+    /**
+     * @param TransferObjectInterface $transferObject
+     * @param string $adapterName
+     *
+     * @return CommandInterface
+     */
+    public function generateRemoveCommand(TransferObjectInterface $transferObject, $adapterName);
 }

@@ -64,7 +64,14 @@
 
         <!-- Command handlers -->
 
-        <service id="shopware_adapter.command_handler.import_manufacturer" class="ShopwareAdapter\CommandBus\CommandHandler\Manufacturer\HandleManufacturerCommandHandler">
+        <service id="shopware_adapter.command_handler.handle_manufacturer" class="ShopwareAdapter\CommandBus\CommandHandler\Manufacturer\HandleManufacturerCommandHandler">
+            <argument type="service" id="shopware_adapter.shopware_resource.manufacturer"/>
+            <argument type="service" id="plentyconnector.identity_service"/>
+
+            <tag name="plentyconnector.command_handler"/>
+        </service>
+
+        <service id="shopware_adapter.command_handler.remove_manufacturer" class="ShopwareAdapter\CommandBus\CommandHandler\Manufacturer\RemoveManufacturerCommandHandler">
             <argument type="service" id="shopware_adapter.shopware_resource.manufacturer"/>
             <argument type="service" id="plentyconnector.identity_service"/>
 

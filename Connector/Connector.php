@@ -6,7 +6,9 @@ use Assert\Assertion;
 use PlentyConnector\Adapter\AdapterInterface;
 use PlentyConnector\Connector\CommandBus\Command\CommandInterface;
 use PlentyConnector\Connector\CommandBus\CommandFactory\CommandFactory;
+use PlentyConnector\Connector\CommandBus\CommandType;
 use PlentyConnector\Connector\EventBus\Event\EventInterface;
+use PlentyConnector\Connector\Exception\MissingCommandException;
 use PlentyConnector\Connector\Exception\MissingQueryException;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\QueryFactory\QueryFactory;
@@ -17,6 +19,8 @@ use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectType;
 
 /**
+ * TODO: error and exception handling
+ *
  * Class Connector.
  */
 class Connector implements ConnectorInterface
@@ -117,6 +121,7 @@ class Connector implements ConnectorInterface
      * @param string|null $identifier
      *
      * @throws MissingQueryException
+     * @throws MissingCommandException
      */
     public function handle($objectType, $queryType, $identifier = null)
     {
@@ -134,9 +139,9 @@ class Connector implements ConnectorInterface
             $definitions = [];
         }
 
-        array_map(function (DefinitionInterface $definition) use ($queryType, $identifier) {
+        array_walk($definitions, function (DefinitionInterface $definition) use ($queryType, $identifier) {
             $this->handleDefinition($definition, $queryType, $identifier);
-        }, $definitions);
+        });
     }
 
     /**
@@ -163,6 +168,7 @@ class Connector implements ConnectorInterface
      * @param string|null $identifier
      *
      * @throws MissingQueryException
+     * @throws MissingCommandException
      */
     private function handleDefinition(DefinitionInterface $definition, $queryType, $identifier = null)
     {
@@ -187,7 +193,15 @@ class Connector implements ConnectorInterface
         }
 
         array_walk($objects, function (TransferObjectInterface $object) use ($definition) {
-            $command = $this->commandFactory->create($object, $definition->getDestinationAdapterName());
+            $command = $this->commandFactory->create(
+                $object,
+                $definition->getDestinationAdapterName(),
+                CommandType::HANDLE
+            );
+
+            if (null === $command) {
+                throw MissingCommandException::fromDefinition($definition);
+            }
 
             $this->handleCommand($command);
         });

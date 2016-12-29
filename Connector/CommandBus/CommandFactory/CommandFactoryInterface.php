@@ -19,8 +19,9 @@ interface CommandFactoryInterface
     /**
      * @param TransferObjectInterface $object
      * @param string $adapterName
+     * @param string $commandType
      *
      * @return CommandInterface
      */
-    public function create(TransferObjectInterface $object, $adapterName);
+    public function create(TransferObjectInterface $object, $adapterName, $commandType);
 }

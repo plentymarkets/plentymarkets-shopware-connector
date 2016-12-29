@@ -6,9 +6,9 @@ use PlentyConnector\Connector\CommandBus\Command\CommandInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
- * Class HandleManufacturerCommand.
+ * Class RemoveManufacturerCommand.
  */
-class HandleManufacturerCommand implements CommandInterface
+class RemoveManufacturerCommand implements CommandInterface
 {
     /**
      * @var TransferObjectInterface

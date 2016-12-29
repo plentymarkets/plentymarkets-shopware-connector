@@ -3,6 +3,7 @@
 namespace PlentyConnector\Connector\CommandBus\CommandGenerator\Manufacturer;
 
 use PlentyConnector\Connector\CommandBus\Command\Manufacturer\HandleManufacturerCommand;
+use PlentyConnector\Connector\CommandBus\Command\Manufacturer\RemoveManufacturerCommand;
 use PlentyConnector\Connector\CommandBus\CommandGenerator\CommandGeneratorInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectType;
@@ -26,5 +27,13 @@ class ManufacturerCommandGenerator implements CommandGeneratorInterface
     public function generateHandleCommand(TransferObjectInterface $transferObject, $adapterName)
     {
         return new HandleManufacturerCommand($transferObject, $adapterName);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function generateRemoveCommand(TransferObjectInterface $transferObject, $adapterName)
+    {
+        return new RemoveManufacturerCommand($transferObject, $adapterName);
     }
 }

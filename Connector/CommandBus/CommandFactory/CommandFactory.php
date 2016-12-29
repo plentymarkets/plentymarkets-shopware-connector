@@ -2,7 +2,9 @@
 
 namespace PlentyConnector\Connector\CommandBus\CommandFactory;
 
+use Assert\Assertion;
 use PlentyConnector\Connector\CommandBus\CommandGenerator\CommandGeneratorInterface;
+use PlentyConnector\Connector\CommandBus\CommandType;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
@@ -26,8 +28,12 @@ class CommandFactory implements CommandFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function create(TransferObjectInterface $object, $adapterName)
+    public function create(TransferObjectInterface $object, $adapterName, $commandType)
     {
+        Assertion::string($adapterName);
+        Assertion::string($commandType);
+        Assertion::inArray($commandType, CommandType::getAllTypes());
+
         /**
          * @var CommandGeneratorInterface[] $generators
          */
@@ -43,6 +49,11 @@ class CommandFactory implements CommandFactoryInterface
             return null;
         }
 
-        return $generator->generateHandleCommand($object, $adapterName);
+        switch ($commandType) {
+            case CommandType::HANDLE:
+                return $generator->generateHandleCommand($object, $adapterName);
+            case CommandType::REMOVE:
+                return $generator->generateRemoveCommand($object, $adapterName);
+        }
     }
 }

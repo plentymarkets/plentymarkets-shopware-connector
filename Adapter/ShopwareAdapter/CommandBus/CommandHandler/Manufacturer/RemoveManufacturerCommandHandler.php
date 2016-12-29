@@ -3,7 +3,7 @@
 namespace ShopwareAdapter\CommandBus\CommandHandler\Manufacturer;
 
 use PlentyConnector\Connector\CommandBus\Command\CommandInterface;
-use PlentyConnector\Connector\CommandBus\Command\Manufacturer\HandleManufacturerCommand;
+use PlentyConnector\Connector\CommandBus\Command\Manufacturer\RemoveManufacturerCommand;
 use PlentyConnector\Connector\CommandBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\EventBus\EventGeneratorTrait;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
@@ -14,7 +14,7 @@ use ShopwareAdapter\ShopwareAdapter;
 /**
  * Class RemoveManufacturerCommandHandler.
  */
-class HandleManufacturerCommandHandler implements CommandHandlerInterface
+class RemoveManufacturerCommandHandler implements CommandHandlerInterface
 {
     use EventGeneratorTrait;
 
@@ -47,8 +47,7 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
      */
     public function supports(CommandInterface $command)
     {
-        return
-            $command instanceof HandleManufacturerCommand &&
+        return $command instanceof RemoveManufacturerCommand &&
             $command->getAdapterName() === ShopwareAdapter::getName();
     }
 
@@ -62,23 +61,9 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
     public function handle(CommandInterface $command)
     {
         /**
-         * @var HandleManufacturerCommand $command
+         * @var RemoveManufacturerCommand $command
          */
         $manufacturer = $command->getManufacturer();
-
-        $params = [
-            'name' => $manufacturer->getName(),
-        ];
-
-        if (null !== $manufacturer->getLink()) {
-            $params['link'] = $manufacturer->getLink();
-        }
-
-        if (null !== $manufacturer->getLogo()) {
-            $params['image'] = [
-                'link' => $manufacturer->getLogo(),
-            ];
-        }
 
         $identity = $this->identityService->findIdentity([
             'objectIdentifier' => $manufacturer->getIdentifier(),
@@ -86,17 +71,8 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
             'adapterName' => ShopwareAdapter::getName(),
         ]);
 
-        if (null === $identity) {
-            $manufacturerModel = $this->resource->create($params);
-
-            $this->identityService->createIdentity(
-                $manufacturer->getIdentifier(),
-                Manufacturer::getType(),
-                (string)$manufacturerModel->getId(),
-                ShopwareAdapter::getName()
-            );
-        } else {
-            $this->resource->update($identity->getAdapterIdentifier(), $params);
+        if (null !== $identity) {
+            $this->resource->delete($identity->getAdapterIdentifier());
         }
     }
 }
