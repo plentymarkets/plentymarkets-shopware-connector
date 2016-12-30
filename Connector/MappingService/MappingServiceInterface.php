@@ -1,6 +1,6 @@
 <?php
 
-namespace PlentyConnector\Connector\Mapping;
+namespace PlentyConnector\Connector\MappingService;
 
 use PlentyConnector\Connector\Exception\MissingQueryException;
 use PlentyConnector\Connector\TransferObject\Definition\DefinitionInterface;

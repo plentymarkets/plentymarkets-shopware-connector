@@ -1,7 +1,7 @@
 <?php
 
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
-use PlentyConnector\Connector\Mapping\MappingServiceInterface;
+use PlentyConnector\Connector\MappingService\MappingServiceInterface;
 use PlentyConnector\Connector\QueryBus\Query\Manufacturer\GetManufacturerQuery;
 use PlentyConnector\Connector\TransferObject\MappedTransferObjectInterface;
 use PlentyConnector\Connector\TransferObject\Mapping\MappingInterface;
@@ -32,12 +32,16 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
             'base_url' => $this->Request()->get('ApiUrl'),
         ];
 
-        $login = $client->request('POST', 'login', $params, null, null, $options);
-
         $success = false;
 
-        if (isset($login['accessToken'])) {
-            $success = true;
+        try {
+            $login = $client->request('POST', 'login', $params, null, null, $options);
+
+            if (isset($login['accessToken'])) {
+                $success = true;
+            }
+        } catch (Exception $e) {
+            // fail silently
         }
 
         $this->View()->assign(array(

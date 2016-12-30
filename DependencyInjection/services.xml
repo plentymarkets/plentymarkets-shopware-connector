@@ -25,6 +25,7 @@
     <!-- Services -->
 
     <services>
+
         <!-- Logger -->
 
         <service id="plentyconnector.logger.handler" class="Monolog\Handler\RotatingFileHandler" public="false">
@@ -92,7 +93,7 @@
 
         <!-- Mapping Service -->
 
-        <service id="plentyconnector.mapping_service" class="PlentyConnector\Connector\Mapping\MappingService">
+        <service id="plentyconnector.mapping_service" class="PlentyConnector\Connector\MappingService\MappingService">
             <argument type="service" id="plentyconnector.query_factory"/>
             <argument type="service" id="plentyconnector.query_bus"/>
         </service>
