@@ -3,6 +3,7 @@
 namespace PlentyConnector\Connector\CommandBus\Command\Manufacturer;
 
 use PlentyConnector\Connector\CommandBus\Command\CommandInterface;
+use PlentyConnector\Connector\TransferObject\Manufacturer\ManufacturerInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
@@ -11,7 +12,7 @@ use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 class RemoveManufacturerCommand implements CommandInterface
 {
     /**
-     * @var TransferObjectInterface
+     * @var ManufacturerInterface
      */
     private $manufacturer;
 
@@ -33,7 +34,7 @@ class RemoveManufacturerCommand implements CommandInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return ManufacturerInterface
      */
     public function getManufacturer()
     {

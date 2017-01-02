@@ -31,17 +31,14 @@ class CommandFactory implements CommandFactoryInterface
     public function create(TransferObjectInterface $object, $adapterName, $commandType)
     {
         Assertion::string($adapterName);
-        Assertion::string($commandType);
         Assertion::inArray($commandType, CommandType::getAllTypes());
 
         /**
          * @var CommandGeneratorInterface[] $generators
          */
-        $generators = array_filter($this->generators,
-            function (CommandGeneratorInterface $generator) use ($object) {
-                return $generator->supports($object->getType());
-            }
-        );
+        $generators = array_filter($this->generators, function (CommandGeneratorInterface $generator) use ($object) {
+            return $generator->supports($object->getType());
+        });
 
         $generator = array_shift($generators);
 

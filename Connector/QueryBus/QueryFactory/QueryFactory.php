@@ -30,23 +30,19 @@ class QueryFactory implements QueryFactoryInterface
     public function create($adapterName, $objectType, $queryType, $identifier = null)
     {
         Assertion::string($adapterName);
-        Assertion::string($queryType);
         Assertion::string($objectType);
         Assertion::inArray($queryType, QueryType::getAllTypes());
 
         if ($queryType === QueryType::ONE) {
-            Assertion::notNull($identifier);
             Assertion::uuid($identifier);
         }
 
         /**
          * @var QueryGeneratorInterface[] $generators
          */
-        $generators = array_filter($this->generators,
-            function (QueryGeneratorInterface $generator) use ($objectType) {
-                return $generator->supports($objectType);
-            }
-        );
+        $generators = array_filter($this->generators, function (QueryGeneratorInterface $generator) use ($objectType) {
+            return $generator->supports($objectType);
+        });
 
         $generator = array_shift($generators);
 
