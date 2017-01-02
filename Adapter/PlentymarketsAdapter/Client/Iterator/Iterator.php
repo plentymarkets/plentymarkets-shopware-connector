@@ -9,8 +9,6 @@ use PlentymarketsAdapter\Client\Client;
 use UnexpectedValueException;
 
 /**
- * TODO: test Iterator with limit 2.
- *
  * Class Iterator
  */
 class Iterator implements BaseIterator

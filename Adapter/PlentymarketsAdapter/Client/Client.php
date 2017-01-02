@@ -7,7 +7,6 @@ use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 use GuzzleHttp\Exception\ClientException;
 use PlentyConnector\Adapter\PlentymarketsAdapter\Client\Exception\InvalidResponseException;
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
-use PlentymarketsAdapter\Client\Exception\InvalidCredentialsException;
 use PlentymarketsAdapter\Client\Iterator\Iterator;
 
 /**
@@ -87,8 +86,9 @@ class Client implements ClientInterface
             $params['itemsPerPage'] = (int)$limit;
         }
 
+        $page = 1;
         if (null !== $offset) {
-            $page = floor($offset / $limit);
+            $page = (int)(floor($offset / $limit) + 1);
 
             $params['page'] = $page !== 0 ? $page : 1;
         }
@@ -102,6 +102,11 @@ class Client implements ClientInterface
                 throw InvalidResponseException::fromParams($method, $path, $options);
             }
 
+            // Hack to check if the right page is returned from the api
+            if (array_key_exists('page', $result) && $result['page'] !== $page) {
+                $result['entries'] = [];
+            }
+
             if (array_key_exists('entries', $result)) {
                 $result = $result['entries'];
             }
@@ -109,8 +114,7 @@ class Client implements ClientInterface
             return $result;
         } catch (ClientException $exception) {
             if ($exception->hasResponse() && $exception->getResponse()->getStatusCode() === 401) {
-                // retry with fresh accessToken
-                $this->accessToken = null;
+                $this->refreshLogin();
 
                 return $this->request($method, $path, $params, $limit, $offset);
             } else {
@@ -131,7 +135,15 @@ class Client implements ClientInterface
             return false;
         }
 
-        return $path !== 'login' && null === $this->accessToken;
+        if ($path === 'login') {
+            return false;
+        }
+
+        if (null !== $this->accessToken) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
