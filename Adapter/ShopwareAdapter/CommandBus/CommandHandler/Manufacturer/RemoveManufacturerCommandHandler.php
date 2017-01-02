@@ -65,14 +65,17 @@ class RemoveManufacturerCommandHandler implements CommandHandlerInterface
          */
         $manufacturer = $command->getManufacturer();
 
-        $identity = $this->identityService->findIdentity([
+        $identity = $this->identityService->findOneBy([
             'objectIdentifier' => $manufacturer->getIdentifier(),
             'objectType' => Manufacturer::getType(),
             'adapterName' => ShopwareAdapter::getName(),
         ]);
 
-        if (null !== $identity) {
-            $this->resource->delete($identity->getAdapterIdentifier());
+        if (null === $identity) {
+            return;
         }
+
+        $this->resource->delete($identity->getAdapterIdentifier());
+        $this->identityService->remove($identity);
     }
 }

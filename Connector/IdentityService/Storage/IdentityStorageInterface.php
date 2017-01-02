@@ -12,9 +12,16 @@ interface IdentityStorageInterface
     /**
      * @param array $criteria
      *
-     * @return IdentityInterface
+     * @return IdentityInterface|null
      */
     public function findBy(array $criteria = []);
+
+    /**
+     * @param array $criteria
+     *
+     * @return IdentityInterface[]|null
+     */
+    public function findOneBy(array $criteria = []);
 
     /**
      * @param IdentityInterface $identity
@@ -22,9 +29,7 @@ interface IdentityStorageInterface
     public function persist(IdentityInterface $identity);
 
     /**
-     * @param $adapterIdentifier
-     * @param $adapterName
-     * @param $objectType
+     * @param IdentityInterface $identity
      */
-    public function remove($adapterIdentifier, $adapterName, $objectType);
+    public function remove(IdentityInterface $identity);
 }

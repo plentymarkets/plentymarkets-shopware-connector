@@ -5,6 +5,7 @@ namespace PlentyConnector\Connector\IdentityService;
 use Assert\Assertion;
 use PlentyConnector\Connector\IdentityService\Storage\IdentityStorageInterface;
 use PlentyConnector\Connector\TransferObject\Identity\Identity;
+use PlentyConnector\Connector\TransferObject\Identity\IdentityInterface;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -30,22 +31,22 @@ class IdentityService implements IdentityServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function findOrCreateIdentity($adapterIdentifier, $adapterName, $objectType)
+    public function findOneOrCreate($adapterIdentifier, $adapterName, $objectType)
     {
         Assertion::string($adapterIdentifier);
         Assertion::string($adapterName);
         Assertion::string($objectType);
 
-        $Identity = $this->findIdentity([
+        $identity = $this->findOneBy([
             'objectType' => $objectType,
             'adapterIdentifier' => $adapterIdentifier,
             'adapterName' => $adapterName,
         ]);
 
-        if (null === $Identity) {
+        if (null === $identity) {
             $objectIdentifier = Uuid::uuid4()->toString();
 
-            $Identity = $this->createIdentity(
+            $identity = $this->create(
                 $objectIdentifier,
                 $objectType,
                 (string)$adapterIdentifier,
@@ -53,21 +54,25 @@ class IdentityService implements IdentityServiceInterface
             );
         }
 
-        return $Identity;
+        return $identity;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function findIdentity(array $criteria = [])
+    public function findOneBy(array $criteria = [])
     {
         Assertion::isArray($criteria);
-        Assertion::allInArray(array_keys($criteria), [
-            'objectIdentifier',
-            'objectType',
-            'adapterIdentifier',
-            'adapterName',
-        ]);
+
+        return $this->storage->findOneBy($criteria);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findby(array $criteria = [])
+    {
+        Assertion::isArray($criteria);
 
         return $this->storage->findBy($criteria);
     }
@@ -75,7 +80,7 @@ class IdentityService implements IdentityServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function createIdentity($objectIdentifier, $objectType, $adapterIdentifier, $adapterName)
+    public function create($objectIdentifier, $objectType, $adapterIdentifier, $adapterName)
     {
         Assertion::string($objectIdentifier);
         Assertion::string($objectType);
@@ -89,24 +94,18 @@ class IdentityService implements IdentityServiceInterface
             'adapterName'
         );
 
-        $Identity = Identity::fromArray($params);
+        $identity = Identity::fromArray($params);
 
-        $this->storage->persist($Identity);
+        $this->storage->persist($identity);
 
-        return $Identity;
+        return $identity;
     }
 
     /**
-     * @param $adapterIdentifier
-     * @param $adapterName
-     * @param $objectType
+     * {@inheritdoc}
      */
-    public function removeIdentity($adapterIdentifier, $adapterName, $objectType)
+    public function remove(IdentityInterface $identity)
     {
-        Assertion::string($adapterIdentifier);
-        Assertion::string($adapterName);
-        Assertion::string($objectType);
-
-        $this->storage->remove($adapterIdentifier, $adapterName, $objectType);
+        $this->storage->remove($identity);
     }
 }

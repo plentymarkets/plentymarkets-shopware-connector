@@ -12,9 +12,16 @@ interface IdentityServiceInterface
     /**
      * @param array $criteria
      *
-     * @return IdentityInterface
+     * @return IdentityInterface|null
      */
-    public function findIdentity(array $criteria = []);
+    public function findOneBy(array $criteria = []);
+
+    /**
+     * @param array $criteria
+     *
+     * @return IdentityInterface[]|null
+     */
+    public function findby(array $criteria = []);
 
     /**
      * @param string $objectIdentifier
@@ -24,7 +31,7 @@ interface IdentityServiceInterface
      *
      * @return IdentityInterface
      */
-    public function createIdentity($objectIdentifier, $objectType, $adapterIdentifier, $adapterName);
+    public function create($objectIdentifier, $objectType, $adapterIdentifier, $adapterName);
 
     /**
      * @param string $adapterIdentifier
@@ -33,5 +40,10 @@ interface IdentityServiceInterface
      *
      * @return IdentityInterface
      */
-    public function findOrCreateIdentity($adapterIdentifier, $adapterName, $objectType);
+    public function findOneOrCreate($adapterIdentifier, $adapterName, $objectType);
+
+    /**
+     * @param IdentityInterface $identity
+     */
+    public function remove(IdentityInterface $identity);
 }

@@ -7,6 +7,7 @@ use PlentyConnector\Connector\IdentityService\Model\Identity as IdentityModel;
 use PlentyConnector\Connector\IdentityService\Model\IdentityRepository;
 use PlentyConnector\Connector\TransferObject\Identity\Identity;
 use PlentyConnector\Connector\TransferObject\Identity\IdentityInterface;
+use Symfony\Component\Intl\Exception\NotImplementedException;
 
 /**
  * Class DoctrineIdentityStorage.
@@ -35,18 +36,16 @@ class DoctrineIdentityStorage implements IdentityStorageInterface
     }
 
     /**
-     * @param array $criteria
-     *
-     * @return IdentityInterface|null
+     * {@inheritdoc}
      */
-    public function findBy(array $criteria = [])
+    public function findOneBy(array $criteria = [])
     {
+        $identity = null;
+
         /**
          * @var IdentityModel
          */
         $result = $this->identityRepository->findOneBy($criteria);
-
-        $identity = null;
 
         if (null !== $result) {
             $identity = Identity::fromArray([
@@ -61,7 +60,20 @@ class DoctrineIdentityStorage implements IdentityStorageInterface
     }
 
     /**
-     * @param IdentityInterface $identity
+     * {@inheritdoc}
+     */
+    public function findBy(array $criteria = [])
+    {
+        /**
+         * @var IdentityModel[]
+         */
+        $result = $this->identityRepository->findBy($criteria);
+
+        throw new NotImplementedException("test");
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function persist(IdentityInterface $identity)
     {
@@ -79,18 +91,16 @@ class DoctrineIdentityStorage implements IdentityStorageInterface
     /**
      * {@inheritdoc}
      */
-    public function remove($adapterIdentifier, $adapterName, $objectType)
+    public function remove(IdentityInterface $identity)
     {
-        $result = $this->identityRepository->findBy([
-            'adapterIdentifier' => $adapterIdentifier,
-            'adapterName' => $adapterName,
-            'objectType' => $objectType,
+        $result = $this->identityRepository->findOneBy([
+            'adapterIdentifier' => $identity->getAdapterIdentifier(),
+            'adapterName' => $identity->getAdapterName(),
+            'objectIdentifier' => $identity->getObjectIdentifier(),
+            'objectType' => $identity->getObjectType(),
         ]);
 
-        foreach ($result as $identity) {
-            $this->entityManager->remove($identity);
-        }
-
+        $this->entityManager->remove($result);
         $this->entityManager->flush();
     }
 }

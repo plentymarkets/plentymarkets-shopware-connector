@@ -9,6 +9,7 @@
         </service>
 
         <!-- Guzzle -->
+
         <service id="plentymarkets_adapter.http_client.handler" class="GuzzleHttp\Handler\CurlHandler">
             <factory class="PlentymarketsAdapter\Client\Handler\HandlerFactory" method="factory"/>
         </service>
