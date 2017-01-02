@@ -91,6 +91,16 @@
             <tag name="plentyconnector.connector_definition"/>
         </service>
 
+        <!-- Cleanup Service -->
+
+        <service id="plentyconnector.cleanup_service" class="PlentyConnector\Connector\CleanupService\CleanupService">
+            <argument type="service" id="plentyconnector.query_bus"/>
+            <argument type="service" id="plentyconnector.command_bus"/>
+            <argument type="service" id="plentyconnector.query_factory"/>
+            <argument type="service" id="plentyconnector.command_factory"/>
+            <argument type="service" id="plentyconnector.identity_service"/>
+        </service>
+
         <!-- Mapping Service -->
 
         <service id="plentyconnector.mapping_service" class="PlentyConnector\Connector\MappingService\MappingService">
@@ -248,7 +258,7 @@
         <!-- Service Bus -->
 
         <service id="plentyconnector.command_bus.command_handler_middleware" class="PlentyConnector\Connector\CommandBus\CommandHandlerMiddleware\CommandHandlerMiddleware"/>
-        <service id="plentyconnector.event_bus.event_handler_middleware" class="PlentyConnector\Connector\EventBus\Middleware\EventHandlerMiddleware"/>
+        <service id="plentyconnector.event_bus.event_handler_middleware" class="PlentyConnector\Connector\EventBus\EventHandlerMiddleware\EventHandlerMiddleware"/>
         <service id="plentyconnector.query_bus.query_handler_middleware" class="PlentyConnector\Connector\QueryBus\QueryHandlerMiddleware\QueryHandlerMiddleware"/>
 
         <service id="plentyconnector.service_bus.class_name_formatter" class="PlentyConnector\Connector\Logger\ClassNameFormatter"/>

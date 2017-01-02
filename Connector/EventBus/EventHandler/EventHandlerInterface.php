@@ -1,6 +1,6 @@
 <?php
 
-namespace PlentyConnector\Connector\EventBus\Handler;
+namespace PlentyConnector\Connector\EventBus\EventHandler;
 
 use PlentyConnector\Connector\EventBus\Event\EventInterface;
 

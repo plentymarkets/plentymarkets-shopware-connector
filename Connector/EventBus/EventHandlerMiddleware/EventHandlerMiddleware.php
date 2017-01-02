@@ -1,10 +1,10 @@
 <?php
 
-namespace PlentyConnector\Connector\EventBus\Middleware;
+namespace PlentyConnector\Connector\EventBus\EventHandlerMiddleware;
 
 use League\Tactician\Middleware;
 use PlentyConnector\Connector\EventBus\Event\EventInterface;
-use PlentyConnector\Connector\EventBus\Handler\EventHandlerInterface;
+use PlentyConnector\Connector\EventBus\EventHandler\EventHandlerInterface;
 
 /**
  * Class EventHandlerMiddleware.
@@ -27,17 +27,23 @@ class EventHandlerMiddleware implements Middleware
     /**
      * @param EventInterface $event
      * @param callable $next
+     *
+     * @return mixed
      */
     public function execute($event, callable $next)
     {
+        if (null === $this->handlers) {
+            return $next($event);
+        }
+
         $handlers = array_filter($this->handlers, function (EventHandlerInterface $handler) use ($event) {
             return $handler->supports($event);
         });
 
-        array_map(function (EventHandlerInterface $handler) use ($event) {
+        array_walk($handlers, function (EventHandlerInterface $handler) use ($event) {
             $handler->handle($event);
-        }, $handlers);
+        });
 
-        $next($event);
+        return $next($event);
     }
 }
