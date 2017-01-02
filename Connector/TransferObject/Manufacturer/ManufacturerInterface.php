@@ -3,18 +3,13 @@
 namespace PlentyConnector\Connector\TransferObject\Manufacturer;
 
 use PlentyConnector\Connector\TransferObject\NameableInterface;
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
+use PlentyConnector\Connector\TransferObject\SynchronizedTransferObjectInterface;
 
 /**
  * Interface ManufacturerInterface.
  */
-interface ManufacturerInterface extends TransferObjectInterface
+interface ManufacturerInterface extends SynchronizedTransferObjectInterface
 {
-    /**
-     * @return string
-     */
-    public function getIdentifier();
-
     /**
      * @return string
      */
