@@ -4,6 +4,7 @@ namespace PlentyConnector;
 
 use Exception;
 use PlentyConnector\DependencyInjection\CompilerPass\AdapterCompilerPass;
+use PlentyConnector\DependencyInjection\CompilerPass\CleanupDefinitionCompilerPass;
 use PlentyConnector\DependencyInjection\CompilerPass\CommandGeneratorCompilerPass;
 use PlentyConnector\DependencyInjection\CompilerPass\CommandHandlerCompilerPass;
 use PlentyConnector\DependencyInjection\CompilerPass\ConnectorDefinitionCompilerPass;
@@ -13,9 +14,11 @@ use PlentyConnector\DependencyInjection\CompilerPass\ParameterCompilerPass;
 use PlentyConnector\DependencyInjection\CompilerPass\QueryGeneratorCompilerPass;
 use PlentyConnector\DependencyInjection\CompilerPass\QueryGeneratorCompilerPassimplements;
 use PlentyConnector\DependencyInjection\CompilerPass\QueryHandlerCompilerPass;
+use PlentyConnector\Installer\CronjobInstaller;
 use PlentyConnector\Installer\DatabaseInstaller;
 use Shopware\Components\Plugin;
 use Shopware\Components\Plugin\Context\InstallContext;
+use Shopware\Components\Plugin\Context\UninstallContext;
 use Shopware\Components\Plugin\Context\UpdateContext;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -44,6 +47,7 @@ class PlentyConnector extends Plugin
         $this->loadFile($container, __DIR__ . '/DependencyInjection/services.xml');
 
         $container->addCompilerPass(new AdapterCompilerPass());
+        $container->addCompilerPass(new CleanupDefinitionCompilerPass());
         $container->addCompilerPass(new CommandGeneratorCompilerPass());
         $container->addCompilerPass(new CommandHandlerCompilerPass());
         $container->addCompilerPass(new ConnectorDefinitionCompilerPass());
@@ -83,10 +87,10 @@ class PlentyConnector extends Plugin
      */
     public function install(InstallContext $context)
     {
-        /**
-         * @var DatabaseInstaller
-         */
         $databaseInstaller = new DatabaseInstaller($this->container->get('models'));
+        $databaseInstaller->install($context);
+
+        $databaseInstaller = new CronjobInstaller($this->container->get('dbal_connection'));
         $databaseInstaller->install($context);
 
         parent::install($context);
@@ -100,12 +104,29 @@ class PlentyConnector extends Plugin
      */
     public function update(UpdateContext $context)
     {
-        /**
-         * @var DatabaseInstaller
-         */
         $databaseInstaller = new DatabaseInstaller($this->container->get('models'));
         $databaseInstaller->update($context);
 
+        $databaseInstaller = new CronjobInstaller($this->container->get('dbal_connection'));
+        $databaseInstaller->update($context);
+
         parent::update($context);
+    }
+
+    /**
+     * @param UninstallContext $context
+     *
+     * @throws ServiceCircularReferenceException
+     * @throws ServiceNotFoundException
+     */
+    public function uninstall(UninstallContext $context)
+    {
+        $databaseInstaller = new DatabaseInstaller($this->container->get('models'));
+        $databaseInstaller->uninstall($context);
+
+        $databaseInstaller = new CronjobInstaller($this->container->get('dbal_connection'));
+        $databaseInstaller->uninstall($context);
+
+        parent::uninstall($context);
     }
 }
