@@ -2,6 +2,7 @@
 
 namespace PlentyConnector\Connector\MappingService;
 
+use Assert\Assertion;
 use PlentyConnector\Connector\Exception\MissingQueryException;
 use PlentyConnector\Connector\QueryBus\QueryFactory\QueryFactoryInterface;
 use PlentyConnector\Connector\QueryBus\QueryType;
@@ -58,6 +59,8 @@ class MappingService implements MappingServiceInterface
      */
     public function getMappingInformation($objectType = null)
     {
+        Assertion::nullOrString($objectType);
+
         $result = [];
         $definitions = $this->getDefinitions($objectType);
 
