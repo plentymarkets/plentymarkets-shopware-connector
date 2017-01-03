@@ -55,6 +55,10 @@ class FetchAllUnitsHandler implements QueryHandlerInterface
         $units = array_map(function ($unit) {
             $names = $this->client->request('GET', 'items/units/' . $unit['id'] . '/names');
 
+            if (!array_key_exists('name', $names)) {
+                $names = array_shift($names);
+            }
+
             $unit['name'] = $names['name'];
 
             return $this->responseParser->parse($unit);
