@@ -19,7 +19,7 @@ class NotFoundException extends Exception
     {
         $name = substr(strrchr(get_class($command), '\\'), 1);
 
-        $message = 'No handler was found for: ' . $name;
+        $message = 'No matching command handler found: ' . $name;
 
         return new self($message);
     }

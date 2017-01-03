@@ -19,7 +19,7 @@ class NotFoundException extends Exception
     {
         $name = substr(strrchr(get_class($query), '\\'), 1);
 
-        $message = 'No handler was found for: ' . $name;
+        $message = 'No matching query handler found: ' . $name;
 
         return new self($message);
     }
