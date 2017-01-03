@@ -5,6 +5,7 @@ namespace PlentyConnector\Connector\QueryBus\QueryHandlerMiddleware;
 use League\Tactician\Middleware;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\QueryBus\QueryHandlerMiddleware\Exception\NotFoundException;
 
 /**
  * Class QueryHandlerMiddleware.
@@ -29,6 +30,8 @@ class QueryHandlerMiddleware implements Middleware
      * @param callable $next
      *
      * @return mixed
+     *
+     * @throws NotFoundException
      */
     public function execute($query, callable $next)
     {
@@ -41,6 +44,10 @@ class QueryHandlerMiddleware implements Middleware
         });
 
         if (0 === count($handlers)) {
+            if ($query instanceof QueryInterface) {
+                throw NotFoundException::fromQuery($query);
+            }
+
             return $next($query);
         }
 

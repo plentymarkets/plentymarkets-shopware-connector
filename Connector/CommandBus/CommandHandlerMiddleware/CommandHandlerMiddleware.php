@@ -5,6 +5,7 @@ namespace PlentyConnector\Connector\CommandBus\CommandHandlerMiddleware;
 use League\Tactician\Middleware;
 use PlentyConnector\Connector\CommandBus\Command\CommandInterface;
 use PlentyConnector\Connector\CommandBus\CommandHandler\CommandHandlerInterface;
+use PlentyConnector\Connector\CommandBus\CommandHandlerMiddleware\Exception\NotFoundException;
 
 /**
  * Class CommandHandlerMiddleware.
@@ -30,7 +31,7 @@ class CommandHandlerMiddleware implements Middleware
      *
      * @return mixed
      *
-     * @throws NoHandlerException
+     * @throws NotFoundException
      */
     public function execute($command, callable $next)
     {
@@ -42,8 +43,12 @@ class CommandHandlerMiddleware implements Middleware
             return $handler->supports($command);
         });
 
-        if (null === $this->handlers) {
-            return $next($command);
+        if (0 === count($handlers)) {
+            if ($query instanceof CommandInterface) {
+                throw NotFoundException::fromCommand($command);
+            }
+
+            return $next($query);
         }
 
         array_map(function (CommandHandlerInterface $handler) use ($command) {
