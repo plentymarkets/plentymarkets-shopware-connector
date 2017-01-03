@@ -46,6 +46,10 @@
             <argument type="service" id="plentyconnector.identity_service"/>
         </service>
 
+        <service id="shopware_adapter.response_parser.vat_rate" class="ShopwareAdapter\ResponseParser\VatRate\VatRateResponseParser">
+            <argument type="service" id="plentyconnector.identity_service"/>
+        </service>
+
         <!-- Shopware API Resources -->
 
         <service id="shopware_adapter.shopware_api_manager" class="Shopware\Components\Api\Manager"/>
@@ -142,6 +146,13 @@
         <service id="shopware_adapter.query_handler.fetch_all_units" class="ShopwareAdapter\QueryBus\QueryHandler\Unit\FetchAllUnitsHandler">
             <argument type="service" id="models"/>
             <argument type="service" id="shopware_adapter.response_parser.shop"/>
+
+            <tag name="plentyconnector.query_handler"/>
+        </service>
+
+        <service id="shopware_adapter.query_handler.fetch_all_vat_rates" class="ShopwareAdapter\QueryBus\QueryHandler\VatRate\FetchAllVatRatesHandler">
+            <argument type="service" id="models"/>
+            <argument type="service" id="shopware_adapter.response_parser.vat_rate"/>
 
             <tag name="plentyconnector.query_handler"/>
         </service>
