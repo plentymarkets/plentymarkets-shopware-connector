@@ -1,18 +1,18 @@
 <?php
 
-namespace PlentymarketsAdapter\QueryBus\QueryHandler\ShippingProfile;
+namespace PlentymarketsAdapter\QueryBus\QueryHandler\VatRate;
 
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
-use PlentyConnector\Connector\QueryBus\Query\ShippingProfile\FetchAllShippingProfilesQuery;
+use PlentyConnector\Connector\QueryBus\Query\VatRate\FetchAllVatRatesQuery;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 
 /**
- * Class FetchAllShippingProfilesHandler
+ * Class FetchAllVatRatesQueryHandler
  */
-class FetchAllShippingProfilesHandler implements QueryHandlerInterface
+class FetchAllVatRatesQueryHandler implements QueryHandlerInterface
 {
     /**
      * @var ClientInterface
@@ -25,7 +25,7 @@ class FetchAllShippingProfilesHandler implements QueryHandlerInterface
     private $responseParser;
 
     /**
-     * FetchAllShippingProfilesHandler constructor.
+     * FetchAllVatRatesQueryHandler constructor.
      *
      * @param ClientInterface $client
      * @param ResponseParserInterface $responseParser
@@ -43,7 +43,7 @@ class FetchAllShippingProfilesHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $event)
     {
-        return $event instanceof FetchAllShippingProfilesQuery &&
+        return $event instanceof FetchAllVatRatesQuery &&
             $event->getAdapterName() === PlentymarketsAdapter::getName();
     }
 
@@ -52,10 +52,19 @@ class FetchAllShippingProfilesHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $event)
     {
-        $shippingProfiles = array_map(function ($shippingProfile) {
-            return $this->responseParser->parse($shippingProfile);
-        }, $this->client->request('GET', 'orders/shipping/presets'));
+        $vatRates = [];
+        $vatRatesByCountry = $this->client->request('GET', 'vat');
 
-        return array_filter($shippingProfiles);
+        foreach ($vatRatesByCountry as $countryVat) {
+            foreach ($countryVat['vatRates'] as $rate) {
+                $vatRates[$rate['id']] = $rate;
+            }
+        }
+
+        $vatRates = array_map(function($vatRate) {
+            return $this->responseParser->parse($vatRate);
+        }, $vatRates);
+
+        return array_filter($vatRates);
     }
 }

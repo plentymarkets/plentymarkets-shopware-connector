@@ -1,8 +1,8 @@
 <?php
 
-namespace PlentymarketsAdapter\QueryBus\QueryHandler\PaymentMethod;
+namespace PlentymarketsAdapter\QueryBus\QueryHandler\OrderStatus;
 
-use PlentyConnector\Connector\QueryBus\Query\PaymentMethod\FetchAllPaymentMethodsQuery;
+use PlentyConnector\Connector\QueryBus\Query\OrderStatus\FetchAllOrderStatusesQuery;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
@@ -10,9 +10,9 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 
 /**
- * Class FetchAllPaymentMethodsHandler
+ * Class FetchAllOrderStatusesQueryHandler
  */
-class FetchAllPaymentMethodsHandler implements QueryHandlerInterface
+class FetchAllOrderStatusesQueryHandler implements QueryHandlerInterface
 {
     /**
      * @var ClientInterface
@@ -25,7 +25,7 @@ class FetchAllPaymentMethodsHandler implements QueryHandlerInterface
     private $responseParser;
 
     /**
-     * FetchAllPaymentMethodsHandler constructor.
+     * FetchAllOrderStatusesQueryHandler constructor.
      *
      * @param ClientInterface $client
      * @param ResponseParserInterface $responseParser
@@ -43,7 +43,7 @@ class FetchAllPaymentMethodsHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $event)
     {
-        return $event instanceof FetchAllPaymentMethodsQuery &&
+        return $event instanceof FetchAllOrderStatusesQuery &&
             $event->getAdapterName() === PlentymarketsAdapter::getName();
     }
 
@@ -52,10 +52,10 @@ class FetchAllPaymentMethodsHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $event)
     {
-        $paymentMethods = array_map(function ($paymentMethod) {
-            return $this->responseParser->parse($paymentMethod);
-        }, $this->client->request('GET', 'payments/methods'));
+        $statusArray = array_map(function ($orderStatus) {
+            return $this->responseParser->parse($orderStatus);
+        }, $this->client->request('GET', 'orders/statuses', ['with' => 'names']));
 
-        return array_filter($paymentMethods);
+        return array_filter($statusArray);
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace PlentymarketsAdapter\QueryBus\QueryHandler\OrderStatus;
+namespace PlentymarketsAdapter\QueryBus\QueryHandler\Currency;
 
-use PlentyConnector\Connector\QueryBus\Query\OrderStatus\FetchAllOrderStatusesQuery;
+use PlentyConnector\Connector\QueryBus\Query\Currency\FetchAllCurrenciesQuery;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
@@ -10,9 +10,9 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 
 /**
- * Class FetchAllOrderStatusesHandler
+ * Class FetchAllCurrenciesQueryHandler
  */
-class FetchAllOrderStatusesHandler implements QueryHandlerInterface
+class FetchAllCurrenciesQueryHandler implements QueryHandlerInterface
 {
     /**
      * @var ClientInterface
@@ -25,7 +25,7 @@ class FetchAllOrderStatusesHandler implements QueryHandlerInterface
     private $responseParser;
 
     /**
-     * FetchAllOrderStatusesHandler constructor.
+     * FetchAllCurrenciesQueryHandler constructor.
      *
      * @param ClientInterface $client
      * @param ResponseParserInterface $responseParser
@@ -43,7 +43,7 @@ class FetchAllOrderStatusesHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $event)
     {
-        return $event instanceof FetchAllOrderStatusesQuery &&
+        return $event instanceof FetchAllCurrenciesQuery &&
             $event->getAdapterName() === PlentymarketsAdapter::getName();
     }
 
@@ -52,10 +52,10 @@ class FetchAllOrderStatusesHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $event)
     {
-        $statusArray = array_map(function ($orderStatus) {
-            return $this->responseParser->parse($orderStatus);
-        }, $this->client->request('GET', 'orders/statuses', ['with' => 'names']));
+        $currencies = array_map(function ($currency) {
+            return $this->responseParser->parse($currency);
+        }, $this->client->request('GET', 'orders/currencies'));
 
-        return array_filter($statusArray);
+        return array_filter($currencies);
     }
 }

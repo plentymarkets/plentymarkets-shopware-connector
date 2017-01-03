@@ -1,18 +1,18 @@
 <?php
 
-namespace PlentymarketsAdapter\QueryBus\QueryHandler\Shop;
+namespace PlentymarketsAdapter\QueryBus\QueryHandler\CustomerGroup;
 
+use PlentyConnector\Connector\QueryBus\Query\CustomerGroup\FetchAllCustomerGroupsQuery;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
-use PlentyConnector\Connector\QueryBus\Query\Shop\FetchAllShopsQuery;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 
 /**
- * Class FetchAllShopsHandler
+ * Class FetchAllCustomerGroupsQueryHandler
  */
-class FetchAllShopsHandler implements QueryHandlerInterface
+class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
 {
     /**
      * @var ClientInterface
@@ -25,7 +25,7 @@ class FetchAllShopsHandler implements QueryHandlerInterface
     private $responseParser;
 
     /**
-     * FetchAllShopsHandler constructor.
+     * FetchAllCustomerGroupsQueryHandler constructor.
      *
      * @param ClientInterface $client
      * @param ResponseParserInterface $responseParser
@@ -43,7 +43,7 @@ class FetchAllShopsHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $event)
     {
-        return $event instanceof FetchAllShopsQuery &&
+        return $event instanceof FetchAllCustomerGroupsQuery &&
             $event->getAdapterName() === PlentymarketsAdapter::getName();
     }
 
@@ -52,10 +52,13 @@ class FetchAllShopsHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $event)
     {
-        $shops = array_map(function ($shop) {
-            return $this->responseParser->parse($shop);
-        }, $this->client->request('GET', 'webstores'));
+        $customerGroups = [];
+        $response = $this->client->request('GET', 'accounts/contacts/classes');
 
-        return array_filter($shops);
+        foreach ($response as $id => $name) {
+            $customerGroups[] = $this->responseParser->parse(['id' => $id, 'name' => $name]);
+        }
+
+        return array_filter($customerGroups);
     }
 }

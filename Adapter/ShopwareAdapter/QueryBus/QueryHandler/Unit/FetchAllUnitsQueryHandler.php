@@ -1,21 +1,21 @@
 <?php
 
-namespace ShopwareAdapter\QueryBus\QueryHandler\VatRate;
+namespace ShopwareAdapter\QueryBus\QueryHandler\Unit;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
-use PlentyConnector\Connector\QueryBus\Query\VatRate\FetchAllVatRatesQuery;
+use PlentyConnector\Connector\QueryBus\Query\Unit\FetchAllUnitsQuery;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use Shopware\Components\Model\ModelRepository;
-use Shopware\Models\Tax\Tax;
+use Shopware\Models\Article\Unit;
 use ShopwareAdapter\ResponseParser\ResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class FetchAllVatRatesHandler
+ * Class FetchAllUnitsQueryHandler
  */
-class FetchAllVatRatesHandler implements QueryHandlerInterface
+class FetchAllUnitsQueryHandler implements QueryHandlerInterface
 {
     /**
      * @var ModelRepository
@@ -28,7 +28,7 @@ class FetchAllVatRatesHandler implements QueryHandlerInterface
     private $responseParser;
 
     /**
-     * FetchAllVatRatesHandler constructor.
+     * FetchAllUnitsQueryHandler constructor.
      *
      * @param EntityManagerInterface $entityManager
      * @param ResponseParserInterface $responseParser
@@ -37,7 +37,7 @@ class FetchAllVatRatesHandler implements QueryHandlerInterface
         EntityManagerInterface $entityManager,
         ResponseParserInterface $responseParser
     ) {
-        $this->repository = $entityManager->getRepository(Tax::class);
+        $this->repository = $entityManager->getRepository(Unit::class);
         $this->responseParser = $responseParser;
     }
 
@@ -46,7 +46,7 @@ class FetchAllVatRatesHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $event)
     {
-        return $event instanceof FetchAllVatRatesQuery &&
+        return $event instanceof FetchAllUnitsQuery &&
             $event->getAdapterName() === ShopwareAdapter::getName();
     }
 
@@ -55,25 +55,25 @@ class FetchAllVatRatesHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $event)
     {
-        $query = $this->createTaxQuery();
+        $query = $this->createUnitsQuery();
 
-        $vatRates = array_map(function ($vatRate) {
-            return $this->responseParser->parse($vatRate);
+        $units = array_map(function ($unit) {
+            return $this->responseParser->parse($unit);
         }, $query->getArrayResult());
 
-        return array_filter($vatRates);
+        return array_filter($units);
     }
 
     /**
      * @return Query
      */
-    private function createTaxQuery()
+    private function createUnitsQuery()
     {
-        $queryBuilder = $this->repository->createQueryBuilder('taxes');
+        $queryBuilder = $this->repository->createQueryBuilder('units');
         $queryBuilder->select([
-            'taxes.id as id',
-            'taxes.name as name',
-            'taxes.tax as tax',
+            'units.id as id',
+            'units.name as name',
+            'units.unit as unit',
         ]);
 
         $query = $queryBuilder->getQuery();

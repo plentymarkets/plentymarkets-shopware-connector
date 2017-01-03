@@ -9,9 +9,9 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 
 /**
- * Class FetchAllPaymentStatusesHandler
+ * Class FetchAllPaymentStatusesQueryHandler
  */
-class FetchAllPaymentStatusesHandler implements QueryHandlerInterface
+class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
 {
     /**
      * @var ResponseParserInterface
@@ -19,13 +19,12 @@ class FetchAllPaymentStatusesHandler implements QueryHandlerInterface
     private $responseParser;
 
     /**
-     * FetchAllPaymentStatusesHandler constructor.
+     * FetchAllPaymentStatusesQueryHandler constructor.
      *
      * @param ResponseParserInterface $responseParser
      */
-    public function __construct(
-        ResponseParserInterface $responseParser
-    ) {
+    public function __construct(ResponseParserInterface $responseParser)
+    {
         $this->responseParser = $responseParser;
     }
 

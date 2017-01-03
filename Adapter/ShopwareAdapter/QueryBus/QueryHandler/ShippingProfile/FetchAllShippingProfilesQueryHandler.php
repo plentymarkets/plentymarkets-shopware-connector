@@ -12,9 +12,9 @@ use ShopwareAdapter\ResponseParser\ResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class FetchAllShippingProfilesHandler
+ * Class FetchAllShippingProfilesQueryHandler
  */
-class FetchAllShippingProfilesHandler implements QueryHandlerInterface
+class FetchAllShippingProfilesQueryHandler implements QueryHandlerInterface
 {
     /**
      * @var Repository
@@ -27,7 +27,7 @@ class FetchAllShippingProfilesHandler implements QueryHandlerInterface
     private $responseParser;
 
     /**
-     * FetchAllShippingProfilesHandler constructor.
+     * FetchAllShippingProfilesQueryHandler constructor.
      *
      * @param EntityManagerInterface $entityManager
      * @param ResponseParserInterface $responseParser
@@ -50,8 +50,6 @@ class FetchAllShippingProfilesHandler implements QueryHandlerInterface
     }
 
     /**
-     * TODO: Refaktor the foreach loop
-     *
      * {@inheritdoc}
      */
     public function handle(QueryInterface $event)

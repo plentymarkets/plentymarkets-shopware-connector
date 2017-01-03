@@ -1,8 +1,8 @@
 <?php
 
-namespace PlentymarketsAdapter\QueryBus\QueryHandler\Currency;
+namespace PlentymarketsAdapter\QueryBus\QueryHandler\PaymentMethod;
 
-use PlentyConnector\Connector\QueryBus\Query\Currency\FetchAllCurrenciesQuery;
+use PlentyConnector\Connector\QueryBus\Query\PaymentMethod\FetchAllPaymentMethodsQuery;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
@@ -10,9 +10,9 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 
 /**
- * Class FetchAllCurrenciesHandler
+ * Class FetchAllPaymentMethodsQueryHandler
  */
-class FetchAllCurrenciesHandler implements QueryHandlerInterface
+class FetchAllPaymentMethodsQueryHandler implements QueryHandlerInterface
 {
     /**
      * @var ClientInterface
@@ -25,7 +25,7 @@ class FetchAllCurrenciesHandler implements QueryHandlerInterface
     private $responseParser;
 
     /**
-     * FetchAllCurrenciesHandler constructor.
+     * FetchAllPaymentMethodsQueryHandler constructor.
      *
      * @param ClientInterface $client
      * @param ResponseParserInterface $responseParser
@@ -43,7 +43,7 @@ class FetchAllCurrenciesHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $event)
     {
-        return $event instanceof FetchAllCurrenciesQuery &&
+        return $event instanceof FetchAllPaymentMethodsQuery &&
             $event->getAdapterName() === PlentymarketsAdapter::getName();
     }
 
@@ -52,10 +52,10 @@ class FetchAllCurrenciesHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $event)
     {
-        $currencies = array_map(function ($currency) {
-            return $this->responseParser->parse($currency);
-        }, $this->client->request('GET', 'orders/currencies'));
+        $paymentMethods = array_map(function ($paymentMethod) {
+            return $this->responseParser->parse($paymentMethod);
+        }, $this->client->request('GET', 'payments/methods'));
 
-        return array_filter($currencies);
+        return array_filter($paymentMethods);
     }
 }

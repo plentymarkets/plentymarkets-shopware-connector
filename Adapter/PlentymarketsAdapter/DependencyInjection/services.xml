@@ -105,62 +105,62 @@
 
         <!-- Mapping query handlers -->
 
-        <service id="plentymarkets_adapter.query_handler.fetch_all_currencies" class="PlentymarketsAdapter\QueryBus\QueryHandler\Currency\FetchAllCurrenciesHandler">
+        <service id="plentymarkets_adapter.query_handler.fetch_all_currencies" class="PlentymarketsAdapter\QueryBus\QueryHandler\Currency\FetchAllCurrenciesQueryHandler">
             <argument type="service" id="plentmarkets_adapter.client"/>
             <argument type="service" id="plentmarkets_adapter.response_parser.currency"/>
 
             <tag name="plentyconnector.query_handler"/>
         </service>
 
-        <service id="plentymarkets_adapter.query_handler.fetch_all_custoemr_groups" class="PlentymarketsAdapter\QueryBus\QueryHandler\CustomerGroup\FetchAllCustomerGroupsHandler">
+        <service id="plentymarkets_adapter.query_handler.fetch_all_custoemr_groups" class="PlentymarketsAdapter\QueryBus\QueryHandler\CustomerGroup\FetchAllCustomerGroupsQueryHandler">
             <argument type="service" id="plentmarkets_adapter.client"/>
             <argument type="service" id="plentmarkets_adapter.response_parser.customer_group"/>
 
             <tag name="plentyconnector.query_handler"/>
         </service>
 
-        <service id="plentymarkets_adapter.query_handler.fetch_all_order_statuses" class="PlentymarketsAdapter\QueryBus\QueryHandler\OrderStatus\FetchAllOrderStatusesHandler">
+        <service id="plentymarkets_adapter.query_handler.fetch_all_order_statuses" class="PlentymarketsAdapter\QueryBus\QueryHandler\OrderStatus\FetchAllOrderStatusesQueryHandler">
             <argument type="service" id="plentmarkets_adapter.client"/>
             <argument type="service" id="plentmarkets_adapter.response_parser.order_status"/>
 
             <tag name="plentyconnector.query_handler"/>
         </service>
 
-        <service id="plentymarkets_adapter.query_handler.fetch_all_payment_methods" class="PlentymarketsAdapter\QueryBus\QueryHandler\PaymentMethod\FetchAllPaymentMethodsHandler">
+        <service id="plentymarkets_adapter.query_handler.fetch_all_payment_methods" class="PlentymarketsAdapter\QueryBus\QueryHandler\PaymentMethod\FetchAllPaymentMethodsQueryHandler">
             <argument type="service" id="plentmarkets_adapter.client"/>
             <argument type="service" id="plentmarkets_adapter.response_parser.payment_method"/>
 
             <tag name="plentyconnector.query_handler"/>
         </service>
 
-        <service id="plentymarkets_adapter.query_handler.fetch_all_payment_statuses" class="PlentymarketsAdapter\QueryBus\QueryHandler\PaymentStatus\FetchAllPaymentStatusesHandler">
+        <service id="plentymarkets_adapter.query_handler.fetch_all_payment_statuses" class="PlentymarketsAdapter\QueryBus\QueryHandler\PaymentStatus\FetchAllPaymentStatusesQueryHandler">
             <argument type="service" id="plentmarkets_adapter.response_parser.payment_status"/>
 
             <tag name="plentyconnector.query_handler"/>
         </service>
 
-        <service id="plentymarkets_adapter.query_handler.fetch_all_shipping_profiles" class="PlentymarketsAdapter\QueryBus\QueryHandler\ShippingProfile\FetchAllShippingProfilesHandler">
+        <service id="plentymarkets_adapter.query_handler.fetch_all_shipping_profiles" class="PlentymarketsAdapter\QueryBus\QueryHandler\ShippingProfile\FetchAllShippingProfilesQueryHandler">
             <argument type="service" id="plentmarkets_adapter.client"/>
             <argument type="service" id="plentmarkets_adapter.response_parser.shipping_profile"/>
 
             <tag name="plentyconnector.query_handler"/>
         </service>
 
-        <service id="plentymarkets_adapter.query_handler.fetch_all_shops" class="PlentymarketsAdapter\QueryBus\QueryHandler\Shop\FetchAllShopsHandler">
+        <service id="plentymarkets_adapter.query_handler.fetch_all_shops" class="PlentymarketsAdapter\QueryBus\QueryHandler\Shop\FetchAllShopsQueryHandler">
             <argument type="service" id="plentmarkets_adapter.client"/>
             <argument type="service" id="plentmarkets_adapter.response_parser.shop"/>
 
             <tag name="plentyconnector.query_handler"/>
         </service>
 
-        <service id="plentymarkets_adapter.query_handler.fetch_all_units" class="PlentymarketsAdapter\QueryBus\QueryHandler\Unit\FetchAllUnitsHandler">
+        <service id="plentymarkets_adapter.query_handler.fetch_all_units" class="PlentymarketsAdapter\QueryBus\QueryHandler\Unit\FetchAllUnitsQueryHandler">
             <argument type="service" id="plentmarkets_adapter.client"/>
             <argument type="service" id="plentmarkets_adapter.response_parser.unit"/>
 
             <tag name="plentyconnector.query_handler"/>
         </service>
 
-        <service id="plentymarkets_adapter.query_handler.fetch_all_vat_rates" class="PlentymarketsAdapter\QueryBus\QueryHandler\VatRate\FetchAllVatRatesHandler">
+        <service id="plentymarkets_adapter.query_handler.fetch_all_vat_rates" class="PlentymarketsAdapter\QueryBus\QueryHandler\VatRate\FetchAllVatRatesQueryHandler">
             <argument type="service" id="plentmarkets_adapter.client"/>
             <argument type="service" id="plentmarkets_adapter.response_parser.vat_rate"/>
 

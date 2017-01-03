@@ -12,9 +12,9 @@ use ShopwareAdapter\ResponseParser\ResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class FetchAllPaymentMethodsHandler
+ * Class FetchAllPaymentMethodsQueryHandler
  */
-class FetchAllPaymentMethodsHandler implements QueryHandlerInterface
+class FetchAllPaymentMethodsQueryHandler implements QueryHandlerInterface
 {
     /**
      * @var Repository
@@ -27,7 +27,7 @@ class FetchAllPaymentMethodsHandler implements QueryHandlerInterface
     private $responseParser;
 
     /**
-     * FetchAllPaymentMethodsHandler constructor.
+     * FetchAllPaymentMethodsQueryHandler constructor.
      *
      * @param EntityManagerInterface $entityManager
      * @param ResponseParserInterface $responseParser
@@ -50,8 +50,6 @@ class FetchAllPaymentMethodsHandler implements QueryHandlerInterface
     }
 
     /**
-     * TODO: Refaktor the foreach loop
-     *
      * {@inheritdoc}
      */
     public function handle(QueryInterface $event)

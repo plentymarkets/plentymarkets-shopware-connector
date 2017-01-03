@@ -1,21 +1,21 @@
 <?php
 
-namespace ShopwareAdapter\QueryBus\QueryHandler\Currency;
+namespace ShopwareAdapter\QueryBus\QueryHandler\PaymentStatus;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query;
-use PlentyConnector\Connector\QueryBus\Query\Currency\FetchAllCurrenciesQuery;
+use PlentyConnector\Connector\QueryBus\Query\PaymentStatus\FetchAllPaymentStatusesQuery;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use Shopware\Components\Model\ModelRepository;
-use Shopware\Models\Shop\Currency;
+use Shopware\Models\Order\Status;
 use ShopwareAdapter\ResponseParser\ResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class FetchAllCurrenciesHandler
+ * Class FetchAllPaymentStatusesQueryHandler
  */
-class FetchAllCurrenciesHandler implements QueryHandlerInterface
+class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
 {
     /**
      * @var ModelRepository
@@ -28,16 +28,16 @@ class FetchAllCurrenciesHandler implements QueryHandlerInterface
     private $responseParser;
 
     /**
-     * FetchAllCurrenciesHandler constructor.
+     * FetchAllPaymentStatusesQueryHandler constructor.
      *
-     * @param EntityManagerInterface $entityManager
+     * @param EntityManagerInterface $entityManager ,
      * @param ResponseParserInterface $responseParser
      */
     public function __construct(
         EntityManagerInterface $entityManager,
         ResponseParserInterface $responseParser
     ) {
-        $this->repository = $entityManager->getRepository(Currency::class);
+        $this->repository = $entityManager->getRepository(Status::class);
         $this->responseParser = $responseParser;
     }
 
@@ -46,7 +46,7 @@ class FetchAllCurrenciesHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $event)
     {
-        return $event instanceof FetchAllCurrenciesQuery &&
+        return $event instanceof FetchAllPaymentStatusesQuery &&
             $event->getAdapterName() === ShopwareAdapter::getName();
     }
 
@@ -55,26 +55,27 @@ class FetchAllCurrenciesHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $event)
     {
-        $query = $this->createCurrenciesQuery();
+        $query = $this->createPaymentStatusQuery();
 
-        $orderStatuses = array_map(function ($status) {
+        $paymentStatuses = array_map(function ($status) {
             return $this->responseParser->parse($status);
         }, $query->getArrayResult());
 
-        return array_filter($orderStatuses);
+        return array_filter($paymentStatuses);
     }
 
     /**
      * @return Query
      */
-    private function createCurrenciesQuery()
+    private function createPaymentStatusQuery()
     {
-        $queryBuilder = $this->repository->createQueryBuilder('currencies');
+        $queryBuilder = $this->repository->createQueryBuilder('status');
         $queryBuilder->select([
-            'currencies.id as id',
-            'currencies.name as name',
-            'currencies.currency as currency'
+            'status.id as id',
+            'status.name as name'
         ]);
+        $queryBuilder->where('status.group = :group');
+        $queryBuilder->setParameter('group', Status::GROUP_PAYMENT);
 
         $query = $queryBuilder->getQuery();
         $query->execute();

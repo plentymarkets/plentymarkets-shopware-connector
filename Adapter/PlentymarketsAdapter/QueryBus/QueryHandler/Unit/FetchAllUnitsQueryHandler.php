@@ -1,18 +1,18 @@
 <?php
 
-namespace PlentymarketsAdapter\QueryBus\QueryHandler\CustomerGroup;
+namespace PlentymarketsAdapter\QueryBus\QueryHandler\Unit;
 
-use PlentyConnector\Connector\QueryBus\Query\CustomerGroup\FetchAllCustomerGroupsQuery;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
+use PlentyConnector\Connector\QueryBus\Query\Unit\FetchAllUnitsQuery;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 
 /**
- * Class FetchAllCustomerGroupsHandler
+ * Class FetchAllUnitsQueryHandler
  */
-class FetchAllCustomerGroupsHandler implements QueryHandlerInterface
+class FetchAllUnitsQueryHandler implements QueryHandlerInterface
 {
     /**
      * @var ClientInterface
@@ -25,7 +25,7 @@ class FetchAllCustomerGroupsHandler implements QueryHandlerInterface
     private $responseParser;
 
     /**
-     * FetchAllCustomerGroupsHandler constructor.
+     * FetchAllUnitsQueryHandler constructor.
      *
      * @param ClientInterface $client
      * @param ResponseParserInterface $responseParser
@@ -43,7 +43,7 @@ class FetchAllCustomerGroupsHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $event)
     {
-        return $event instanceof FetchAllCustomerGroupsQuery &&
+        return $event instanceof FetchAllUnitsQuery &&
             $event->getAdapterName() === PlentymarketsAdapter::getName();
     }
 
@@ -52,13 +52,18 @@ class FetchAllCustomerGroupsHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $event)
     {
-        $customerGroups = [];
-        $response = $this->client->request('GET', 'accounts/contacts/classes');
+        $units = array_map(function ($unit) {
+            $names = $this->client->request('GET', 'items/units/' . $unit['id'] . '/names');
 
-        foreach ($response as $id => $name) {
-            $customerGroups[] = $this->responseParser->parse(['id' => $id, 'name' => $name]);
-        }
+            if (!array_key_exists('name', $names)) {
+                $names = array_shift($names);
+            }
 
-        return array_filter($customerGroups);
+            $unit['name'] = $names['name'];
+
+            return $this->responseParser->parse($unit);
+        }, $this->client->request('GET', 'items/units'));
+
+        return array_filter($units);
     }
 }

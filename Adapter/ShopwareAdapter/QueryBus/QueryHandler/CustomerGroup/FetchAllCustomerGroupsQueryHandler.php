@@ -1,21 +1,22 @@
 <?php
 
-namespace ShopwareAdapter\QueryBus\QueryHandler\Unit;
+namespace ShopwareAdapter\QueryBus\QueryHandler\CustomerGroup;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query;
+use PlentyConnector\Connector\QueryBus\Query\CustomerGroup\FetchAllCustomerGroupsQuery;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
-use PlentyConnector\Connector\QueryBus\Query\Unit\FetchAllUnitsQuery;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use Shopware\Components\Model\ModelRepository;
-use Shopware\Models\Article\Unit;
+use Shopware\Models\Customer\Group;
+use Shopware\Models\Shop\Currency;
 use ShopwareAdapter\ResponseParser\ResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class FetchAllUnitsHandler
+ * Class FetchAllCustomerGroupsQueryHandler
  */
-class FetchAllUnitsHandler implements QueryHandlerInterface
+class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
 {
     /**
      * @var ModelRepository
@@ -28,7 +29,7 @@ class FetchAllUnitsHandler implements QueryHandlerInterface
     private $responseParser;
 
     /**
-     * FetchAllUnitsHandler constructor.
+     * FetchAllCustomerGroupsQueryHandler constructor.
      *
      * @param EntityManagerInterface $entityManager
      * @param ResponseParserInterface $responseParser
@@ -37,7 +38,7 @@ class FetchAllUnitsHandler implements QueryHandlerInterface
         EntityManagerInterface $entityManager,
         ResponseParserInterface $responseParser
     ) {
-        $this->repository = $entityManager->getRepository(Unit::class);
+        $this->repository = $entityManager->getRepository(Group::class);
         $this->responseParser = $responseParser;
     }
 
@@ -46,7 +47,7 @@ class FetchAllUnitsHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $event)
     {
-        return $event instanceof FetchAllUnitsQuery &&
+        return $event instanceof FetchAllCustomerGroupsQuery &&
             $event->getAdapterName() === ShopwareAdapter::getName();
     }
 
@@ -55,25 +56,24 @@ class FetchAllUnitsHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $event)
     {
-        $query = $this->createUnitsQuery();
+        $query = $this->createCustomerGroupsQuery();
 
-        $units = array_map(function ($unit) {
-            return $this->responseParser->parse($unit);
+        $customerGroups = array_map(function ($group) {
+            return $this->responseParser->parse($group);
         }, $query->getArrayResult());
 
-        return array_filter($units);
+        return array_filter($customerGroups);
     }
 
     /**
      * @return Query
      */
-    private function createUnitsQuery()
+    private function createCustomerGroupsQuery()
     {
-        $queryBuilder = $this->repository->createQueryBuilder('units');
+        $queryBuilder = $this->repository->createQueryBuilder('groups');
         $queryBuilder->select([
-            'units.id as id',
-            'units.name as name',
-            'units.unit as unit',
+            'groups.id as id',
+            'groups.name as name'
         ]);
 
         $query = $queryBuilder->getQuery();

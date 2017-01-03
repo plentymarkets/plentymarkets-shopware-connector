@@ -1,18 +1,18 @@
 <?php
 
-namespace PlentymarketsAdapter\QueryBus\QueryHandler\Unit;
+namespace PlentymarketsAdapter\QueryBus\QueryHandler\ShippingProfile;
 
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
-use PlentyConnector\Connector\QueryBus\Query\Unit\FetchAllUnitsQuery;
+use PlentyConnector\Connector\QueryBus\Query\ShippingProfile\FetchAllShippingProfilesQuery;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 
 /**
- * Class FetchAllUnitsHandler
+ * Class FetchAllShippingProfilesQueryHandler
  */
-class FetchAllUnitsHandler implements QueryHandlerInterface
+class FetchAllShippingProfilesQueryHandler implements QueryHandlerInterface
 {
     /**
      * @var ClientInterface
@@ -25,7 +25,7 @@ class FetchAllUnitsHandler implements QueryHandlerInterface
     private $responseParser;
 
     /**
-     * FetchAllUnitsHandler constructor.
+     * FetchAllShippingProfilesQueryHandler constructor.
      *
      * @param ClientInterface $client
      * @param ResponseParserInterface $responseParser
@@ -43,7 +43,7 @@ class FetchAllUnitsHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $event)
     {
-        return $event instanceof FetchAllUnitsQuery &&
+        return $event instanceof FetchAllShippingProfilesQuery &&
             $event->getAdapterName() === PlentymarketsAdapter::getName();
     }
 
@@ -52,18 +52,10 @@ class FetchAllUnitsHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $event)
     {
-        $units = array_map(function ($unit) {
-            $names = $this->client->request('GET', 'items/units/' . $unit['id'] . '/names');
+        $shippingProfiles = array_map(function ($shippingProfile) {
+            return $this->responseParser->parse($shippingProfile);
+        }, $this->client->request('GET', 'orders/shipping/presets'));
 
-            if (!array_key_exists('name', $names)) {
-                $names = array_shift($names);
-            }
-
-            $unit['name'] = $names['name'];
-
-            return $this->responseParser->parse($unit);
-        }, $this->client->request('GET', 'items/units'));
-
-        return array_filter($units);
+        return array_filter($shippingProfiles);
     }
 }

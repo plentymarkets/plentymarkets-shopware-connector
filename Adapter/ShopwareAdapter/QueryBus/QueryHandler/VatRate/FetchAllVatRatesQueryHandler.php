@@ -1,22 +1,21 @@
 <?php
 
-namespace ShopwareAdapter\QueryBus\QueryHandler\CustomerGroup;
+namespace ShopwareAdapter\QueryBus\QueryHandler\VatRate;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query;
-use PlentyConnector\Connector\QueryBus\Query\CustomerGroup\FetchAllCustomerGroupsQuery;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
+use PlentyConnector\Connector\QueryBus\Query\VatRate\FetchAllVatRatesQuery;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use Shopware\Components\Model\ModelRepository;
-use Shopware\Models\Customer\Group;
-use Shopware\Models\Shop\Currency;
+use Shopware\Models\Tax\Tax;
 use ShopwareAdapter\ResponseParser\ResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class FetchAllCustomerGroupsHandler
+ * Class FetchAllVatRatesQueryHandler
  */
-class FetchAllCustomerGroupsHandler implements QueryHandlerInterface
+class FetchAllVatRatesQueryHandler implements QueryHandlerInterface
 {
     /**
      * @var ModelRepository
@@ -29,7 +28,7 @@ class FetchAllCustomerGroupsHandler implements QueryHandlerInterface
     private $responseParser;
 
     /**
-     * FetchAllCustomerGroupsHandler constructor.
+     * FetchAllVatRatesQueryHandler constructor.
      *
      * @param EntityManagerInterface $entityManager
      * @param ResponseParserInterface $responseParser
@@ -38,7 +37,7 @@ class FetchAllCustomerGroupsHandler implements QueryHandlerInterface
         EntityManagerInterface $entityManager,
         ResponseParserInterface $responseParser
     ) {
-        $this->repository = $entityManager->getRepository(Group::class);
+        $this->repository = $entityManager->getRepository(Tax::class);
         $this->responseParser = $responseParser;
     }
 
@@ -47,7 +46,7 @@ class FetchAllCustomerGroupsHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $event)
     {
-        return $event instanceof FetchAllCustomerGroupsQuery &&
+        return $event instanceof FetchAllVatRatesQuery &&
             $event->getAdapterName() === ShopwareAdapter::getName();
     }
 
@@ -56,24 +55,25 @@ class FetchAllCustomerGroupsHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $event)
     {
-        $query = $this->createCustomerGroupsQuery();
+        $query = $this->createTaxQuery();
 
-        $customerGroups = array_map(function ($group) {
-            return $this->responseParser->parse($group);
+        $vatRates = array_map(function ($vatRate) {
+            return $this->responseParser->parse($vatRate);
         }, $query->getArrayResult());
 
-        return array_filter($customerGroups);
+        return array_filter($vatRates);
     }
 
     /**
      * @return Query
      */
-    private function createCustomerGroupsQuery()
+    private function createTaxQuery()
     {
-        $queryBuilder = $this->repository->createQueryBuilder('groups');
+        $queryBuilder = $this->repository->createQueryBuilder('taxes');
         $queryBuilder->select([
-            'groups.id as id',
-            'groups.name as name'
+            'taxes.id as id',
+            'taxes.name as name',
+            'taxes.tax as tax',
         ]);
 
         $query = $queryBuilder->getQuery();

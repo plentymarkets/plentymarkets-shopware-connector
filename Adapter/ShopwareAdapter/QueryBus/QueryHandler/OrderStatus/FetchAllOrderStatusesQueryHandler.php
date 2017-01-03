@@ -13,9 +13,9 @@ use ShopwareAdapter\ResponseParser\ResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class FetchAllOrderStatusesHandler
+ * Class FetchAllOrderStatusesQueryHandler
  */
-class FetchAllOrderStatusesHandler implements QueryHandlerInterface
+class FetchAllOrderStatusesQueryHandler implements QueryHandlerInterface
 {
     /**
      * @var ModelRepository
@@ -28,7 +28,7 @@ class FetchAllOrderStatusesHandler implements QueryHandlerInterface
     private $responseParser;
 
     /**
-     * FetchAllOrderStatusesHandler constructor.
+     * FetchAllOrderStatusesQueryHandler constructor.
      *
      * @param EntityManagerInterface $entityManager
      * @param ResponseParserInterface $responseParser
