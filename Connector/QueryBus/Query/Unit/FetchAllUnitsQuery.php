@@ -16,7 +16,7 @@ class FetchAllUnitsQuery implements FetchAllQueryInterface
     private $adapterName;
 
     /**
-     * FetchAllManufacturersQuery constructor.
+     * FetchAllUnitsQuery constructor.
      *
      * @param string $adapterName
      */

@@ -16,7 +16,7 @@ class FetchAllShopsQuery implements FetchAllQueryInterface
     private $adapterName;
 
     /**
-     * FetchAllManufacturersQuery constructor.
+     * FetchAllShopsQuery constructor.
      *
      * @param string $adapterName
      */

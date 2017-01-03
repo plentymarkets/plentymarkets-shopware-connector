@@ -41,7 +41,7 @@ class Shop implements ShopInterface
      */
     public static function getType()
     {
-        return 'Shop';
+        return self::TYPE;
     }
 
     /**
