@@ -36,6 +36,10 @@
 
         <!-- Response Parser -->
 
+        <service id="plentmarkets_adapter.response_parser.country" class="PlentymarketsAdapter\ResponseParser\Country\CountryResponseParser">
+            <argument type="service" id="plentyconnector.identity_service"/>
+        </service>
+
         <service id="plentmarkets_adapter.response_parser.currency" class="PlentymarketsAdapter\ResponseParser\Currency\CurrencyResponseParser">
             <argument type="service" id="plentyconnector.identity_service"/>
         </service>
@@ -104,6 +108,13 @@
         </service>
 
         <!-- Mapping query handlers -->
+
+        <service id="plentymarkets_adapter.query_handler.fetch_all_countries" class="PlentymarketsAdapter\QueryBus\QueryHandler\Country\FetchAllCountriesQueryHandler">
+            <argument type="service" id="plentmarkets_adapter.client"/>
+            <argument type="service" id="plentmarkets_adapter.response_parser.country"/>
+
+            <tag name="plentyconnector.query_handler"/>
+        </service>
 
         <service id="plentymarkets_adapter.query_handler.fetch_all_currencies" class="PlentymarketsAdapter\QueryBus\QueryHandler\Currency\FetchAllCurrenciesQueryHandler">
             <argument type="service" id="plentmarkets_adapter.client"/>

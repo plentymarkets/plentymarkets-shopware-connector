@@ -10,6 +10,7 @@
         <parameter key="plentyconnector.adapter.shopware" type="constant">ShopwareAdapter\ShopwareAdapter::NAME</parameter>
         <parameter key="plentyconnector.adapter.plentymarkets" type="constant">PlentymarketsAdapter\PlentymarketsAdapter::NAME</parameter>
 
+        <parameter key="plentyconnector.transfer_object.country" type="constant">PlentyConnector\Connector\TransferObject\Country\Country::TYPE</parameter>
         <parameter key="plentyconnector.transfer_object.currency" type="constant">PlentyConnector\Connector\TransferObject\Currency\Currency::TYPE</parameter>
         <parameter key="plentyconnector.transfer_object.customer_group" type="constant">PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup::TYPE</parameter>
         <parameter key="plentyconnector.transfer_object.manufacturer" type="constant">PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer::TYPE</parameter>
@@ -110,6 +111,14 @@
         </service>
 
         <!-- Mapping definitions -->
+
+        <service id="plentyconnector.mapping_definition.country" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
+            <argument>%plentyconnector.adapter.plentymarkets%</argument>
+            <argument>%plentyconnector.adapter.shopware%</argument>
+            <argument>%plentyconnector.transfer_object.country%</argument>
+
+            <tag name="plentyconnector.mapping_definition"/>
+        </service>
 
         <service id="plentyconnector.mapping_definition.currency" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
             <argument>%plentyconnector.adapter.plentymarkets%</argument>
@@ -217,6 +226,10 @@
         <service id="plentyconnector.query_factory" class="PlentyConnector\Connector\QueryBus\QueryFactory\QueryFactory"/>
 
         <!-- Query generator -->
+
+        <service id="plentyconnector.query_generator.country" class="PlentyConnector\Connector\QueryBus\QueryGenerator\Country\CountryQueryGenerator">
+            <tag name="plentyconnector.query_generator" />
+        </service>
 
         <service id="plentyconnector.query_generator.currency" class="PlentyConnector\Connector\QueryBus\QueryGenerator\Currency\CurrencyQueryGenerator">
             <tag name="plentyconnector.query_generator" />

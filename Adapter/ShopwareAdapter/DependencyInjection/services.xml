@@ -14,6 +14,10 @@
             <argument type="service" id="plentyconnector.identity_service"/>
         </service>
 
+        <service id="shopware_adapter.response_parser.country" class="ShopwareAdapter\ResponseParser\Country\CountryResponseParser">
+            <argument type="service" id="plentyconnector.identity_service"/>
+        </service>
+
         <service id="shopware_adapter.response_parser.currency" class="ShopwareAdapter\ResponseParser\Currency\CurrencyResponseParser">
             <argument type="service" id="plentyconnector.identity_service"/>
         </service>
@@ -94,14 +98,21 @@
 
         <!-- Mapping query handlers -->
 
-        <service id="shopware_adapter.query_handler.fetch_all_order_currencies" class="ShopwareAdapter\QueryBus\QueryHandler\Currency\FetchAllCurrenciesQueryHandler">
+        <service id="shopware_adapter.query_handler.fetch_all_countries" class="ShopwareAdapter\QueryBus\QueryHandler\Country\FetchAllCountriesQueryHandler">
+            <argument type="service" id="models"/>
+            <argument type="service" id="shopware_adapter.response_parser.country"/>
+
+            <tag name="plentyconnector.query_handler"/>
+        </service>
+
+        <service id="shopware_adapter.query_handler.fetch_all_currencies" class="ShopwareAdapter\QueryBus\QueryHandler\Currency\FetchAllCurrenciesQueryHandler">
             <argument type="service" id="models"/>
             <argument type="service" id="shopware_adapter.response_parser.currency"/>
 
             <tag name="plentyconnector.query_handler"/>
         </service>
 
-        <service id="shopware_adapter.query_handler.fetch_all_order_customer_groupd" class="ShopwareAdapter\QueryBus\QueryHandler\CustomerGroup\FetchAllCustomerGroupsQueryHandler">
+        <service id="shopware_adapter.query_handler.fetch_all_customer_groupd" class="ShopwareAdapter\QueryBus\QueryHandler\CustomerGroup\FetchAllCustomerGroupsQueryHandler">
             <argument type="service" id="models"/>
             <argument type="service" id="shopware_adapter.response_parser.customer_group"/>
 

@@ -1,21 +1,22 @@
 <?php
 
-namespace ShopwareAdapter\QueryBus\QueryHandler\Currency;
+namespace ShopwareAdapter\QueryBus\QueryHandler\Country;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query;
+use PlentyConnector\Connector\QueryBus\Query\Country\FetchAllCountriesQuery;
 use PlentyConnector\Connector\QueryBus\Query\Currency\FetchAllCurrenciesQuery;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use Shopware\Components\Model\ModelRepository;
-use Shopware\Models\Shop\Currency;
+use Shopware\Models\Country\Country;
 use ShopwareAdapter\ResponseParser\ResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class FetchAllCurrenciesQueryHandler
+ * Class FetchAllCountriesQueryHandler
  */
-class FetchAllCurrenciesQueryHandler implements QueryHandlerInterface
+class FetchAllCountriesQueryHandler implements QueryHandlerInterface
 {
     /**
      * @var ModelRepository
@@ -28,7 +29,7 @@ class FetchAllCurrenciesQueryHandler implements QueryHandlerInterface
     private $responseParser;
 
     /**
-     * FetchAllCurrenciesQueryHandler constructor.
+     * FetchAllCountriesQueryHandler constructor.
      *
      * @param EntityManagerInterface $entityManager
      * @param ResponseParserInterface $responseParser
@@ -37,7 +38,7 @@ class FetchAllCurrenciesQueryHandler implements QueryHandlerInterface
         EntityManagerInterface $entityManager,
         ResponseParserInterface $responseParser
     ) {
-        $this->repository = $entityManager->getRepository(Currency::class);
+        $this->repository = $entityManager->getRepository(Country::class);
         $this->responseParser = $responseParser;
     }
 
@@ -46,7 +47,7 @@ class FetchAllCurrenciesQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $event)
     {
-        return $event instanceof FetchAllCurrenciesQuery &&
+        return $event instanceof FetchAllCountriesQuery &&
             $event->getAdapterName() === ShopwareAdapter::getName();
     }
 
@@ -57,11 +58,11 @@ class FetchAllCurrenciesQueryHandler implements QueryHandlerInterface
     {
         $query = $this->createCurrenciesQuery();
 
-        $currencies = array_map(function ($currency) {
-            return $this->responseParser->parse($currency);
+        $countries = array_map(function ($country) {
+            return $this->responseParser->parse($country);
         }, $query->getArrayResult());
 
-        return array_filter($currencies);
+        return array_filter($countries);
     }
 
     /**
@@ -69,11 +70,11 @@ class FetchAllCurrenciesQueryHandler implements QueryHandlerInterface
      */
     private function createCurrenciesQuery()
     {
-        $queryBuilder = $this->repository->createQueryBuilder('currencies');
+        $queryBuilder = $this->repository->createQueryBuilder('countries');
         $queryBuilder->select([
-            'currencies.id as id',
-            'currencies.name as name',
-            'currencies.currency as currency'
+            'countries.id as id',
+            'countries.name as name',
+            'countries.iso as countryCode'
         ]);
 
         $query = $queryBuilder->getQuery();
