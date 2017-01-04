@@ -46,7 +46,7 @@ class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
             return $this->responseParser->parse($status);
         }, $this->getPaymentStatuses());
 
-        return $paymentStatuses;
+        return array_filter($paymentStatuses);
     }
 
     /**
@@ -94,7 +94,7 @@ class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
             [
                 'id' => 10,
                 'name' => 'Partially refunded',
-            ]
+            ],
         ];
     }
 }

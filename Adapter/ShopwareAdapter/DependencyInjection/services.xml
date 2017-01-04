@@ -26,6 +26,10 @@
             <argument type="service" id="plentyconnector.identity_service"/>
         </service>
 
+        <service id="shopware_adapter.response_parser.language" class="ShopwareAdapter\ResponseParser\Language\LanguageResponseParser">
+            <argument type="service" id="plentyconnector.identity_service"/>
+        </service>
+
         <service id="shopware_adapter.response_parser.order_status" class="ShopwareAdapter\ResponseParser\OrderStatus\OrderStatusResponseParser">
             <argument type="service" id="plentyconnector.identity_service"/>
         </service>
@@ -112,9 +116,16 @@
             <tag name="plentyconnector.query_handler"/>
         </service>
 
-        <service id="shopware_adapter.query_handler.fetch_all_customer_groupd" class="ShopwareAdapter\QueryBus\QueryHandler\CustomerGroup\FetchAllCustomerGroupsQueryHandler">
+        <service id="shopware_adapter.query_handler.fetch_all_customer_groups" class="ShopwareAdapter\QueryBus\QueryHandler\CustomerGroup\FetchAllCustomerGroupsQueryHandler">
             <argument type="service" id="models"/>
             <argument type="service" id="shopware_adapter.response_parser.customer_group"/>
+
+            <tag name="plentyconnector.query_handler"/>
+        </service>
+
+        <service id="shopware_adapter.query_handler.fetch_all_languages" class="ShopwareAdapter\QueryBus\QueryHandler\Language\FetchAllLanguagesQueryHandler">
+            <argument type="service" id="models"/>
+            <argument type="service" id="shopware_adapter.response_parser.language"/>
 
             <tag name="plentyconnector.query_handler"/>
         </service>
