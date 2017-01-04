@@ -86,6 +86,7 @@
             <tag name="plentyconnector.connector_definition"/>
         </service>
 
+        <!--
         <service id="plentyconnector.connector_definition.product" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
             <argument>%plentyconnector.adapter.plentymarkets%</argument>
             <argument>%plentyconnector.adapter.shopware%</argument>
@@ -93,6 +94,7 @@
 
             <tag name="plentyconnector.connector_definition"/>
         </service>
+        -->
 
         <!-- Cleanup Service -->
 
