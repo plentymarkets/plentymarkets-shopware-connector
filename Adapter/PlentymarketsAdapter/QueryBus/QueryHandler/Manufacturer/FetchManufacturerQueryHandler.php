@@ -37,7 +37,7 @@ class FetchManufacturerQueryHandler implements QueryHandlerInterface
     private $identityService;
 
     /**
-     * FetchAllManufacturersQueryHandler constructor.
+     * FetchManufacturerQueryHandler constructor.
      *
      * @param ClientInterface $client
      * @param ResponseParserInterface $responseMapper

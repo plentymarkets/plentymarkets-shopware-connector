@@ -10,6 +10,7 @@ use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 use Shopware\Commands\ShopwareCommand;
 use Shopware\Components\Logger;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
+use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -30,10 +31,12 @@ class ImportManufacturersCommand extends ShopwareCommand
     private $logger;
 
     /**
-     * HandleManufacturerCommand constructor.
+     * ImportManufacturersCommand constructor.
      *
      * @param Connector $connector
      * @param Logger $logger
+     *
+     * @throws LogicException
      */
     public function __construct(Connector $connector, Logger $logger)
     {

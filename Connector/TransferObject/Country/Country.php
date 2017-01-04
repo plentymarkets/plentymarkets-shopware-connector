@@ -51,7 +51,7 @@ class Country implements CountryInterface
     {
         Assertion::allInArray(array_keys($params), [
             'identifier',
-            'name'
+            'name',
         ]);
 
         return new self(

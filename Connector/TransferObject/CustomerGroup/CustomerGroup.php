@@ -51,7 +51,7 @@ class CustomerGroup implements CustomerGroupInterface
     {
         Assertion::allInArray(array_keys($params), [
             'identifier',
-            'name'
+            'name',
         ]);
 
         return new self(

@@ -90,7 +90,7 @@ class Mapping implements MappingInterface
             'originTransferObjects',
             'destinationAdapterName',
             'destinationTransferObjects',
-            'objectType'
+            'objectType',
         ]);
 
         return new self(
