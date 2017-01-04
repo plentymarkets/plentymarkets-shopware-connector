@@ -2,7 +2,9 @@
 
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentyConnector\Connector\IdentityService\IdentityService;
+use PlentyConnector\Connector\MappingService\MappingServiceInterface;
 use PlentyConnector\Connector\QueryBus\Query\Manufacturer\GetManufacturerQuery;
+use PlentyConnector\Connector\TransferObject\Identity\Identity;
 use PlentyConnector\Connector\TransferObject\MappedTransferObjectInterface;
 use PlentyConnector\Connector\TransferObject\Mapping\MappingInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
@@ -177,7 +179,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
                 $destinationIdentifier = $update->identifier;
                 $objectType = $update->objectType;
 
-                $oldIdentity = $identityService->findIdentity([
+                $oldIdentity = $identityService->findOneBy([
                     'objectType' => $objectType,
                     'objectIdentifier' => $originIdentifier,
                     'adapterName' => $originAdapterName,
@@ -185,8 +187,13 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
 
                 $originAdapterIdentifier = $oldIdentity->getAdapterIdentifier();
 
-                $identityService->removeIdentity($originAdapterIdentifier, $originAdapterName, $objectType);
-                $identityService->createIdentity($destinationIdentifier, $objectType, $originAdapterIdentifier, $originAdapterName);
+                $identityService->remove(Identity::fromArray([
+                    'objectIdentifier' => $originIdentifier,
+                    'objectType' => $objectType,
+                    'adapterIdentifier' => $originAdapterIdentifier,
+                    'adapterName' => $originAdapterName,
+                ]));
+                $identityService->create($destinationIdentifier, $objectType, $originAdapterIdentifier, $originAdapterName);
             }
 
             $this->View()->assign([
