@@ -1,7 +1,7 @@
 <?php
 
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
-use PlentyConnector\Connector\MappingService\MappingServiceInterface;
+use PlentyConnector\Connector\IdentityService\IdentityService;
 use PlentyConnector\Connector\QueryBus\Query\Manufacturer\GetManufacturerQuery;
 use PlentyConnector\Connector\TransferObject\MappedTransferObjectInterface;
 use PlentyConnector\Connector\TransferObject\Mapping\MappingInterface;
@@ -149,6 +149,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
                     'originTransferObjects' => array_map($transferObjectMapping, $mapping->getOriginTransferObjects()),
                     'destinationTransferObjects' => array_map($transferObjectMapping,
                         $mapping->getDestinationTransferObjects()),
+                    'objectType' => $mapping->getObjectType()
                 ];
             }, $mappingInformation)
         ]);
@@ -157,8 +158,31 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
     /**
      *
      */
-    public function updateIdentityAction()
+    public function updateIdentitiesAction()
     {
+        $updates = json_decode($this->request->getRawBody());
 
+        /**
+         * @var IdentityService $identityService
+         */
+        $identityService = Shopware()->Container()->get('plentyconnector.identity_service');
+
+        foreach ($updates as $update) {
+            $originAdapterName = $update->originAdapterName;
+            $originIdentifier = $update->originIdentifier;
+            $destinationIdentifier = $update->destinationIdentifier;
+            $objectType = $update->objectType;
+
+            $oldIdentity = $identityService->findIdentity([
+                'objectType' => $objectType,
+                'objectIdentifier' => $originIdentifier,
+                'adapterName' => $originAdapterName,
+            ]);
+
+            $originAdapterIdentifier = $oldIdentity->getAdapterIdentifier();
+
+            $identityService->removeIdentity($objectType, $originAdapterIdentifier, $originAdapterName);
+            $identityService->createIdentity($destinationIdentifier, $objectType, $originAdapterIdentifier, $originAdapterName);
+        }
     }
 }

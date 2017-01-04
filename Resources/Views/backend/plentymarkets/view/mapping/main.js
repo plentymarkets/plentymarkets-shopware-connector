@@ -33,19 +33,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Main', {
 	 */
 	initComponent: function()
 	{
-		var me = this, names = {};
-
-		names['Shop'] = 'Shops';
-		names['Currency'] = 'Währungen';
-		names['Country'] = 'Länder';
-		names['MeasureUnit'] = 'Einheiten';
-		names['Vat'] = 'Steuersätze';
-		names['ShippingProfile'] = 'Versandarten';
-		names['MethodOfPayment'] = 'Zahlungsarten';
-		names['CustomerClass'] = 'Kundengruppen';
-		names['Referrer'] = 'Partner';
-		names['OrderStatus'] = 'Auftragsstatus';
-		names['PaymentStatus'] = 'Zahlungsstatus';
+		var me = this;
 
 		me.listeners = {
 			activate: function()
@@ -59,25 +47,18 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Main', {
 						Ext.Array.each(records, function(record)
 						{
 							var mapping = record.data;
-							var tabName = "Unknown";
-
-							if (!!mapping.originTransferObjects &&
-								mapping.originTransferObjects.length > 0) {
-								tabName = mapping.originTransferObjects[0].type;
-							} else if (!!mapping.destinationTransferObjects &&
-								mapping.destinationTransferObjects.length > 0) {
-								tabName = mapping.destinationTransferObjects[0].type;
-							}
+							var objectType = mapping.objectType;
 
 							me.add({
 								xtype: 'plentymarkets-view-mapping-tab',
-								title: tabName,
+								title: objectType,
+								objectType: objectType,
 								mapping: mapping,
 								panel: me
 							});
 						});
 
-						if (records.length > 0) {
+						if (records != null && records.length > 0) {
 							me.setActiveTab(0);
 						} else {
 							// TODO no mapping found

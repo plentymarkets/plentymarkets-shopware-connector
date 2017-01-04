@@ -58,15 +58,22 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Tab', {
 			var mappedOrigin = me.mapping.originTransferObjects.find(function(object) {
 				return object.identifier == e.value[0];
 			});
+
+			// TODO validate before setting value
+
 			e.record.beginEdit();
 			e.record.set('originName', mappedOrigin.name);
 			e.record.set('originIdentifier', mappedOrigin.identifier);
 			e.record.endEdit();
-
-			// TODO validate
 		});
 
 		me.callParent(arguments);
+	},
+
+	updateRows: function()
+	{
+		var me = this;
+		me.store.removeAll();
 	},
 
 	getToolbar: function()
@@ -82,6 +89,8 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Tab', {
 				cls: 'secondary',
 				handler: function()
 				{
+					me.updateRows();
+					return;
 					me.setLoading(true);
 					// TODO primitive implementation
 					// Better: graph matching with Sorted Winkler
@@ -142,29 +151,25 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Tab', {
 				// find changed mapping
 				var updatedItems = [];
 				me.store.each(function(object) {
-					if (object.data.identifier != object.data.originIdentifier) {
-						items.push(object.data);
+					if (object.data.identifier != object.data.originIdentifier &&
+						object.data.originIdentifier != null && object.data.originIdentifier.length > 0) {
+						updatedItems.push(object.data);
 					}
 				});
 
-				Ext.create('Ext.data.Store', {
-					fields : ['identifier', 'name', 'originName', 'originIdentifier'],
-					data : destinationObjects.map(function(object) {
-						var origin = me.mapping.originTransferObjects.filter(function(originObject) {
-							return object.identifier == originObject.identifier;
-						});
-						var origName = (!!origin[0]) ? origin[0].name : "";
-						var origId = (!!origin[0]) ? origin[0].identifier : "";
+				var objectType = me.objectType;
+
+				Ext.Ajax.request({
+					url: '{url  action="updateIdentities"}',
+					jsonData : updatedItems.map(function(item) {
 						return {
-							identifier: object.identifier,
-							name: object.name,
-							originName: origName,
-							originIdentifier: origId
+							originIdentifier: item.originIdentifier,
+							originAdapterName: me.mapping.originAdapterName,
+							destinationIdentifier: item.identifier,
+							objectType: objectType
 						};
 					})
 				});
-
-				// TODO store data
 			}
 		});
 

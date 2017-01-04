@@ -32,7 +32,9 @@ Ext.define('Shopware.apps.Plentymarkets', {
 	],
 
 	stores: [
-		'settings.Batch'
+		'settings.Batch',
+		'Mapping',
+		'Settings'
 	],
 
 	models: [
