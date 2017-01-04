@@ -28,25 +28,6 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Tab', {
 	{
 		var me = this;
 
-		var destinationObjects = me.mapping.destinationTransferObjects;
-
-		me.store = Ext.create('Ext.data.Store', {
-			fields : ['identifier', 'name', 'originName', 'originIdentifier'],
-			data : destinationObjects.map(function(object) {
-				var origin = me.mapping.originTransferObjects.filter(function(originObject) {
-					return object.identifier == originObject.identifier;
-				});
-				var origName = (!!origin[0]) ? origin[0].name : "";
-				var origId = (!!origin[0]) ? origin[0].identifier : "";
-				return {
-					identifier: object.identifier,
-					name: object.name,
-					originName: origName,
-					originIdentifier: origId
-				};
-			})
-		});
-
 		me.columns = me.getColumns();
 
 		me.dockedItems = [me.getToolbar()];
@@ -59,7 +40,11 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Tab', {
 				return object.identifier == e.value[0];
 			});
 
-			// TODO validate before setting value
+			if (mappedOrigin == undefined) {
+				return;
+			}
+
+			// TODO validate before setting value, e.g. object is already mapped
 
 			e.record.beginEdit();
 			e.record.set('originName', mappedOrigin.name);
@@ -70,77 +55,20 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Tab', {
 		me.callParent(arguments);
 	},
 
-	updateRows: function()
-	{
-		var me = this;
-		me.store.removeAll();
-	},
-
 	getToolbar: function()
 	{
 		var me = this, items = ['->'];
 		me.currentResource = null;
 
-		if (!me.mapping.isComplete)
-		{
-			items.push({
-				xtype: 'button',
-				text: 'Offene Datensätze automatisch zuordnen',
-				cls: 'secondary',
-				handler: function()
-				{
-					me.updateRows();
-					return;
-					me.setLoading(true);
-					// TODO primitive implementation
-					// Better: graph matching with Sorted Winkler
-
-					var items = [];
-					me.store.each(function(object) {
-						items.push(object.data);
-					});
-					var unmatchedOriginObjects = me.mapping.originTransferObjects.filter(function(object) {
-						return -1 == items.findIndex(function (itemObject) {
-								return itemObject.originName == object.name;
-							});
-					});
-
-					var levensthein = function (a, b) {
-						var m = [], i, j, min = Math.min;
-						if (!(a && b)) return (b || a).length;
-						for (i = 0; i <= b.length; m[i] = [i++]);
-						for (j = 0; j <= a.length; m[0][j] = j++);
-						for (i = 1; i <= b.length; i++) {
-							for (j = 1; j <= a.length; j++) {
-								m[i][j] = b.charAt(i - 1) == a.charAt(j - 1)
-									? m[i - 1][j - 1]
-									: m[i][j] = min(
-									m[i - 1][j - 1] + 1,
-									min(m[i][j - 1] + 1, m[i - 1 ][j] + 1))
-							}
-						}
-						return m[b.length][a.length];
-					};
-
-					me.store.each(function (object) {
-						if (object.data.originName && object.data.originName.length > 0) {
-							return;
-						}
-						var match = unmatchedOriginObjects.find(function (originObject) {
-							return levensthein(originObject.name.toLowerCase(), object.data.name.toLowerCase()) < 3;
-						});
-
-						if (!!match) {
-							object.beginEdit();
-							object.set('originName', match.name);
-							object.endEdit();
-						}
-					});
-
-					me.setLoading(false);
-				}
-			})
-		}
+		items.push({
+			xtype: 'button',
+			text: 'Neu laden',
+			cls: 'secondary',
+			handler: function()
+			{
+				me.panel.loadTabs(me.title);
+			}
+		});
 
 		items.push({
 			xtype: 'button',
@@ -148,27 +76,10 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Tab', {
 			cls: 'primary',
 			handler: function()
 			{
-				// find changed mapping
-				var updatedItems = [];
-				me.store.each(function(object) {
-					if (object.data.identifier != object.data.originIdentifier &&
-						object.data.originIdentifier != null && object.data.originIdentifier.length > 0) {
-						updatedItems.push(object.data);
+				me.store.sync({
+					failure : function(batch, options) {
+						Ext.Msg.alert("Fehler", batch.proxy.getReader().jsonData.message);
 					}
-				});
-
-				var objectType = me.objectType;
-
-				Ext.Ajax.request({
-					url: '{url  action="updateIdentities"}',
-					jsonData : updatedItems.map(function(item) {
-						return {
-							originIdentifier: item.originIdentifier,
-							originAdapterName: me.mapping.originAdapterName,
-							destinationIdentifier: item.identifier,
-							objectType: objectType
-						};
-					})
 				});
 			}
 		});
@@ -199,25 +110,15 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Tab', {
 	{
 		var me = this;
 
-		var originStore = Ext.create('Ext.data.Store', {
-			fields : ['identifier', 'name'],
-			data : me.mapping.originTransferObjects.map(function(object) {
-				return {
-					identifier: object.identifier,
-					name: object.name
-				};
-			})
-		});
-
-		var destination = me.mapping.destinationAdapterName;
-		var origin = me.mapping.originAdapterName;
+		var originStore = Ext.create('Shopware.apps.Plentymarkets.store.mapping.TransferObject');
+		originStore.loadData(me.mapping.originTransferObjects);
 
 		var columns = [{
-			header: destination,
+			header: me.mapping.destinationAdapterName,
 			dataIndex: 'name',
 			flex: 1
 		}, {
-			header: origin,
+			header: me.mapping.originAdapterName,
 			dataIndex: 'originName',
 			flex: 1.5,
 			editor: {

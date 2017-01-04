@@ -1,5 +1,5 @@
 // {namespace name=backend/Plentymarkets/model}
-// {block name=backend/Plentymarkets/model/Settings}
+// {block name=backend/Plentymarkets/model/mapping/Information}
 
 /**
  * The settings data model defines the different data fields for reading,
@@ -8,12 +8,12 @@
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
-Ext.define('Shopware.apps.Plentymarkets.model.Mapping', {
+Ext.define('Shopware.apps.Plentymarkets.model.mapping.Information', {
 
     extend: 'Ext.data.Model',
 
     fields: [
-        // {block name="backend/Plentymarkets/model/Settings/fields"}{/block}
+        // {block name="backend/Plentymarkets/model/mapping/Information/fields"}{/block}
         {
             name: 'originAdapterName',
             type: 'string'
@@ -31,14 +31,16 @@ Ext.define('Shopware.apps.Plentymarkets.model.Mapping', {
             type: 'auto'
         },
         {
-            name: 'isComplete',
-            type: 'boolean'
+            name: 'objectType',
+            type: 'string'
         }
     ],
 
     proxy: {
         type: 'ajax',
-
+        api: {
+            read: '{url action=getMappingInformation}'
+        },
         reader: {
             type: 'json',
             root: 'data'

@@ -18,7 +18,6 @@ Ext.define('Shopware.apps.Plentymarkets', {
 
 	controllers: [
 	    'Main',
-	    'Mapping',
 	    'Settings'
 	],
 
@@ -33,14 +32,16 @@ Ext.define('Shopware.apps.Plentymarkets', {
 
 	stores: [
 		'settings.Batch',
-		'Mapping',
+		'mapping.Row',
+		'mapping.Information',
+		'mapping.TransferObject',
 		'Settings'
 	],
 
 	models: [
-	    'mapping.Plentymarkets',
-	    'mapping.Shopware',
-	    'mapping.Status',
+	    'mapping.Row',
+	    'mapping.Information',
+	    'mapping.TransferObject',
 	    'Multishop',
 	    'Orderstatus',
 	    'Manufacturer',

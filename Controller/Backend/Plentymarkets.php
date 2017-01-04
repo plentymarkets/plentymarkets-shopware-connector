@@ -124,7 +124,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
     /**
      * @throws \Exception
      */
-    public function getMappingsAction()
+    public function getMappingInformationAction()
     {
         /**
          * @var MappingServiceInterface $mappingService
@@ -161,28 +161,43 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
     public function updateIdentitiesAction()
     {
         $updates = json_decode($this->request->getRawBody());
+        if(!is_array($updates)) {
+            $updates = array($updates);
+        }
 
         /**
          * @var IdentityService $identityService
          */
         $identityService = Shopware()->Container()->get('plentyconnector.identity_service');
 
-        foreach ($updates as $update) {
-            $originAdapterName = $update->originAdapterName;
-            $originIdentifier = $update->originIdentifier;
-            $destinationIdentifier = $update->destinationIdentifier;
-            $objectType = $update->objectType;
+        try {
+            foreach ($updates as $update) {
+                $originAdapterName = $update->originAdapterName;
+                $originIdentifier = $update->originIdentifier;
+                $destinationIdentifier = $update->identifier;
+                $objectType = $update->objectType;
 
-            $oldIdentity = $identityService->findIdentity([
-                'objectType' => $objectType,
-                'objectIdentifier' => $originIdentifier,
-                'adapterName' => $originAdapterName,
+                $oldIdentity = $identityService->findIdentity([
+                    'objectType' => $objectType,
+                    'objectIdentifier' => $originIdentifier,
+                    'adapterName' => $originAdapterName,
+                ]);
+
+                $originAdapterIdentifier = $oldIdentity->getAdapterIdentifier();
+
+                $identityService->removeIdentity($originAdapterIdentifier, $originAdapterName, $objectType);
+                $identityService->createIdentity($destinationIdentifier, $objectType, $originAdapterIdentifier, $originAdapterName);
+            }
+
+            $this->View()->assign([
+                'success' => true,
+                'data' => $updates
             ]);
-
-            $originAdapterIdentifier = $oldIdentity->getAdapterIdentifier();
-
-            $identityService->removeIdentity($objectType, $originAdapterIdentifier, $originAdapterName);
-            $identityService->createIdentity($destinationIdentifier, $objectType, $originAdapterIdentifier, $originAdapterName);
+        } catch(Exception $e) {
+            $this->View()->assign([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
         }
     }
 }
