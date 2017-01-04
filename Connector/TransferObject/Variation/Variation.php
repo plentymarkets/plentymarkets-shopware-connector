@@ -16,7 +16,7 @@ class Variation implements VariationInterface
      *
      * @var string
      */
-    private $identifer;
+    private $identifier;
 
     /**
      * @var string
@@ -26,15 +26,15 @@ class Variation implements VariationInterface
     /**
      * Variation constructor.
      *
-     * @param string $identifer
+     * @param string $identifier
      * @param string $name
      */
-    public function __construct($identifer, $name)
+    public function __construct($identifier, $name)
     {
-        Assertion::uuid($identifer);
+        Assertion::uuid($identifier);
         Assertion::string($name);
 
-        $this->identifer = $identifer;
+        $this->identifier = $identifier;
         $this->name = $name;
     }
 
@@ -52,7 +52,7 @@ class Variation implements VariationInterface
     public static function fromArray(array $params = [])
     {
         return new self(
-            $params['identifer'],
+            $params['identifier'],
             $params['name']
         );
     }

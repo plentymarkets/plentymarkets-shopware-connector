@@ -9,8 +9,5 @@ use PlentyConnector\Connector\TransferObject\MappedTransferObjectInterface;
  */
 interface CountryInterface extends MappedTransferObjectInterface
 {
-    /**
-     * @return string
-     */
-    public function getCountryCode();
+
 }

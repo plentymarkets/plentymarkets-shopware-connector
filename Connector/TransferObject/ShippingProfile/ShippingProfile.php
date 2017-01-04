@@ -16,7 +16,7 @@ class ShippingProfile implements ShippingProfileInterface
      *
      * @var string
      */
-    private $identifer;
+    private $identifier;
 
     /**
      * @var string
@@ -34,7 +34,7 @@ class ShippingProfile implements ShippingProfileInterface
         Assertion::uuid($identifier);
         Assertion::string($name);
 
-        $this->identifer = $identifier;
+        $this->identifier = $identifier;
         $this->name = $name;
     }
 
@@ -67,7 +67,7 @@ class ShippingProfile implements ShippingProfileInterface
      */
     public function getIdentifier()
     {
-        return $this->identifer;
+        return $this->identifier;
     }
 
     /**

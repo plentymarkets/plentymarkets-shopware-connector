@@ -17,7 +17,7 @@ class Product implements ProductInterface
      *
      * @var string
      */
-    private $identifer;
+    private $identifier;
 
     /**
      * @var string
@@ -49,7 +49,7 @@ class Product implements ProductInterface
         Assertion::isArray($variants);
         Assertion::isInstanceOf($manufacturer, ManufacturerInterface::class);
 
-        $this->identifer = $identifier;
+        $this->identifier = $identifier;
         $this->name = $name;
         $this->variants = $variants;
         $this->manufacturer = $manufacturer;
@@ -79,9 +79,9 @@ class Product implements ProductInterface
     /**
      * @return string
      */
-    public function getIdentifer()
+    public function getidentifier()
     {
-        return $this->identifer;
+        return $this->identifier;
     }
 
     /**

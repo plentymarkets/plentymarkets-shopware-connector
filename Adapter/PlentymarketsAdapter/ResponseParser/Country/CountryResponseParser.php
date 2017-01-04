@@ -41,7 +41,6 @@ class CountryResponseParser implements ResponseParserInterface
         return Country::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
             'name' => $entry['name'],
-            'countryCode' => $entry['isoCode2']
         ]);
     }
 }

@@ -22,24 +22,17 @@ class Unit implements UnitInterface
     private $name;
 
     /**
-     * @var string
-     */
-    private $unit;
-
-    /**
      * Unit constructor.
      *
      * @param string $identifier
      * @param string $name
-     * @param string $unit
      */
-    public function __construct($identifier, $name, $unit)
+    public function __construct($identifier, $name)
     {
         Assertion::uuid($identifier);
         Assertion::string($name);
 
         $this->identifier = $identifier;
-        $this->unit = $unit;
         $this->name = $name;
     }
 
@@ -59,13 +52,11 @@ class Unit implements UnitInterface
         Assertion::allInArray(array_keys($params), [
             'identifier',
             'name',
-            'unit'
         ]);
 
         return new self(
             $params['identifier'],
-            $params['name'],
-            $params['unit']
+            $params['name']
         );
     }
 
@@ -83,13 +74,5 @@ class Unit implements UnitInterface
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUnit()
-    {
-        return $this->unit;
     }
 }

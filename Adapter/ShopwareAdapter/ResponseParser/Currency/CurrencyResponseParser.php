@@ -41,7 +41,6 @@ class CurrencyResponseParser implements ResponseParserInterface
         return Currency::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
             'name' => $entry['name'],
-            'currency' => $entry['currency']
         ]);
     }
 }

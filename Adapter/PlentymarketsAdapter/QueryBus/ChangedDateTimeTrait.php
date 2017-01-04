@@ -2,6 +2,9 @@
 
 namespace PlentymarketsAdapter\QueryBus;
 
+use DateTime;
+use DateTimeImmutable;
+use DateTimeZone;
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 
 /**
@@ -18,12 +21,12 @@ trait ChangedDateTimeTrait
     {
         $key = 'PlentymarketsAdapter.' . get_called_class() . 'DateTime';
 
-        $timezone = new \DateTimeZone('UTC');
+        $timezone = new DateTimeZone('UTC');
         $lastRun = $config->get($key, '2000-01-01');
 
-        $dateTime = new \DateTimeImmutable($lastRun, $timezone);
+        $dateTime = new DateTimeImmutable($lastRun, $timezone);
 
-        return $dateTime->format('Y-m-d G-i-s');
+        return $dateTime->format(DateTime::ATOM);
     }
 
     /**
@@ -33,8 +36,8 @@ trait ChangedDateTimeTrait
     {
         $key = 'PlentymarketsAdapter.' . get_called_class() . 'DateTime';
 
-        $timezone = new \DateTimeZone('UTC');
-        $dateTime = new \DateTimeImmutable('now', $timezone);
+        $timezone = new DateTimeZone('UTC');
+        $dateTime = new DateTimeImmutable('now', $timezone);
 
         $config->set($key, $dateTime);
     }

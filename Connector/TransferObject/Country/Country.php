@@ -22,28 +22,18 @@ class Country implements CountryInterface
     private $name;
 
     /**
-     * ISO 3166-1 alpha-2
-     *
-     * @var string
-     */
-    private $countryCode;
-
-    /**
      * Country constructor.
      *
      * @param string $identifier
      * @param string $name
-     * @param string $countryCode
      */
-    public function __construct($identifier, $name, $countryCode)
+    public function __construct($identifier, $name)
     {
         Assertion::uuid($identifier);
         Assertion::string($name);
-        Assertion::string($countryCode);
 
         $this->identifier = $identifier;
         $this->name = $name;
-        $this->countryCode = $countryCode;
     }
 
     /**
@@ -61,14 +51,12 @@ class Country implements CountryInterface
     {
         Assertion::allInArray(array_keys($params), [
             'identifier',
-            'name',
-            'countryCode'
+            'name'
         ]);
 
         return new self(
             $params['identifier'],
-            $params['name'],
-            $params['countryCode']
+            $params['name']
         );
     }
 
@@ -86,13 +74,5 @@ class Country implements CountryInterface
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCountryCode()
-    {
-        return $this->countryCode;
     }
 }

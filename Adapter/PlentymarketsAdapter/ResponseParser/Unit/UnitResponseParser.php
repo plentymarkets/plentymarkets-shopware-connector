@@ -38,12 +38,9 @@ class UnitResponseParser implements ResponseParserInterface
             Unit::getType()
         );
 
-        $unit = Unit::fromArray([
+        return Unit::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
             'name' => $entry['name'],
-            'unit' => $entry['unitOfMeasurement']
         ]);
-
-        return $unit;
     }
 }

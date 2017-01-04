@@ -22,26 +22,18 @@ class VatRate implements VatRateInterface
     private $name;
 
     /**
-     * @var float
-     */
-    private $vatRate;
-
-    /**
      * VatRate constructor.
      *
      * @param string $identifier
      * @param string $name
-     * @param float $vatRate
      */
-    public function __construct($identifier, $name, $vatRate)
+    public function __construct($identifier, $name)
     {
         Assertion::uuid($identifier);
         Assertion::string($name);
-        Assertion::float($vatRate);
 
         $this->identifier = $identifier;
         $this->name = $name;
-        $this->vatRate = $vatRate;
     }
 
     /**
@@ -60,13 +52,11 @@ class VatRate implements VatRateInterface
         Assertion::allInArray(array_keys($params), [
             'identifier',
             'name',
-            'vatRate'
         ]);
 
         return new self(
             $params['identifier'],
-            $params['name'],
-            $params['vatRate']
+            $params['name']
         );
     }
 
@@ -84,13 +74,5 @@ class VatRate implements VatRateInterface
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * @return float
-     */
-    public function getVatRate()
-    {
-        return $this->vatRate;
     }
 }

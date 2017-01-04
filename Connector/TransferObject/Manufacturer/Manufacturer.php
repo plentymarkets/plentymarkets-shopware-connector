@@ -16,7 +16,7 @@ class Manufacturer implements ManufacturerInterface
      *
      * @var string
      */
-    private $identifer;
+    private $identifier;
 
     /**
      * @var string
@@ -48,7 +48,7 @@ class Manufacturer implements ManufacturerInterface
         Assertion::nullOrUrl($logo);
         Assertion::nullOrUrl($link);
 
-        $this->identifer = $identifier;
+        $this->identifier = $identifier;
         $this->name = $name;
         $this->logo = $logo;
         $this->link = $link;
@@ -87,7 +87,7 @@ class Manufacturer implements ManufacturerInterface
      */
     public function getIdentifier()
     {
-        return $this->identifer;
+        return $this->identifier;
     }
 
     /**

@@ -38,12 +38,9 @@ class VatRateResponseParser implements ResponseParserInterface
             VatRate::getType()
         );
 
-        $vatRate = VatRate::fromArray([
+        return VatRate::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
             'name' => null !== $entry['name'] ? $entry['name'] : $entry['vatRate'] . ' %',
-            'vatRate' => (float)$entry['vatRate']
         ]);
-
-        return $vatRate;
     }
 }

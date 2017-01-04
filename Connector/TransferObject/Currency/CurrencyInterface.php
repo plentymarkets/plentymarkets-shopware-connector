@@ -9,10 +9,5 @@ use PlentyConnector\Connector\TransferObject\MappedTransferObjectInterface;
  */
 interface CurrencyInterface extends MappedTransferObjectInterface
 {
-    /**
-     * ISO 4217 based currency name
-     *
-     * @return string
-     */
-    public function getCurrency();
+
 }

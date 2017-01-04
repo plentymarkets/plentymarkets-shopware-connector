@@ -14,7 +14,7 @@ class PaymentMethod implements PaymentMethodInterface
     /**
      * @var string
      */
-    private $identifer;
+    private $identifier;
 
     /**
      * @var string
@@ -32,7 +32,7 @@ class PaymentMethod implements PaymentMethodInterface
         Assertion::uuid($identifier);
         Assertion::string($name);
 
-        $this->identifer = $identifier;
+        $this->identifier = $identifier;
         $this->name = $name;
     }
 
@@ -65,7 +65,7 @@ class PaymentMethod implements PaymentMethodInterface
      */
     public function getIdentifier()
     {
-        return $this->identifer;
+        return $this->identifier;
     }
 
     /**
