@@ -78,7 +78,7 @@ class ImportManufacturersCommand extends ShopwareCommand
         try {
             $queryType = $all ? QueryType::ALL : QueryType::CHANGED;
 
-            $this->connector->handle(Manufacturer::getType(), $queryType);
+            $this->connector->handle($queryType, Manufacturer::getType());
         } catch (Exception $e) {
             $this->logger->error($e->getMessage());
         }
