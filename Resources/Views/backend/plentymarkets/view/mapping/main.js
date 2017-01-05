@@ -33,64 +33,88 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Main', {
 	 */
 	initComponent: function()
 	{
-		var me = this, names = {};
-
-		names['Shop'] = 'Shops';
-		names['Currency'] = 'Währungen';
-		names['Country'] = 'Länder';
-		names['MeasureUnit'] = 'Einheiten';
-		names['Vat'] = 'Steuersätze';
-		names['ShippingProfile'] = 'Versandarten';
-		names['MethodOfPayment'] = 'Zahlungsarten';
-		names['CustomerClass'] = 'Kundengruppen';
-		names['Referrer'] = 'Partner';
-		names['OrderStatus'] = 'Auftragsstatus';
-		names['PaymentStatus'] = 'Zahlungsstatus';
+		var me = this;
 
 		me.listeners = {
 			activate: function()
 			{
 				if (!me.isBuilt)
 				{
-					me.setLoading(true);
-					Ext.create('Shopware.apps.Plentymarkets.store.Mapping').load(function(records)
-					{
-
-						Ext.Array.each(records, function(record)
-						{
-							var mapping = record.data;
-							var tabName = "Unknown";
-
-							if (!!mapping.originTransferObjects &&
-								mapping.originTransferObjects.length > 0) {
-								tabName = mapping.originTransferObjects[0].type;
-							} else if (!!mapping.destinationTransferObjects &&
-								mapping.destinationTransferObjects.length > 0) {
-								tabName = mapping.destinationTransferObjects[0].type;
-							}
-
-							me.add({
-								xtype: 'plentymarkets-view-mapping-tab',
-								title: tabName,
-								mapping: mapping,
-								panel: me
-							});
-						});
-
-						if (records.length > 0) {
-							me.setActiveTab(0);
-						} else {
-							// TODO no mapping found
-						}
-
-						me.setLoading(false);
-						me.isBuilt = true;
-					});
+					me.loadTabs();
 				}
 			}
 		};
 
 		me.callParent(arguments);
+	},
+
+	loadTabs: function(currentTabTitle) {
+		var me = this;
+
+		me.setLoading(true);
+
+		if (me.isBuilt) {
+			me.removeAll();
+			me.isBuilt = false;
+		}
+
+		Ext.create('Shopware.apps.Plentymarkets.store.mapping.Information').load(function(records)
+		{
+			var currentTab = 0;
+
+			Ext.Array.each(records, function(record)
+			{
+				var mapping = record.data;
+				var objectType = mapping.objectType;
+
+				var rows = mapping.destinationTransferObjects.map(function(object) {
+					var origin = mapping.originTransferObjects.find(function(originObject) {
+						return object.identifier == originObject.identifier;
+					});
+					var origName = (!!origin) ? origin.name : "";
+					var origId = (!!origin) ? origin.identifier : "";
+					return {
+						identifier: object.identifier,
+						name: object.name,
+						adapterName: mapping.destinationAdapterName,
+						originIdentifier: origId,
+						originName: origName,
+						originAdapterName: mapping.originAdapterName,
+						objectType : objectType
+					};
+				});
+
+				if (rows.length == 0) {
+					// There are no objects to be mapped
+					return;
+				}
+
+				var store = Ext.create('Shopware.apps.Plentymarkets.store.mapping.Row');
+				store.loadData(rows);
+				store.commitChanges();
+
+				var tab = me.add({
+					xtype: 'plentymarkets-view-mapping-tab',
+					title: objectType,
+					store: store,
+					mapping: mapping,
+					panel: me
+				});
+
+				if (objectType == currentTabTitle) {
+					currentTab = tab;
+				}
+			});
+
+			if (me.items != null && me.items.length > 0) {
+				me.setActiveTab(currentTab);
+			} else {
+				// TODO no mapping found
+			}
+
+			me.setLoading(false);
+			me.isBuilt = true;
+		});
 	}
 
 });
