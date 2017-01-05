@@ -4,8 +4,8 @@ namespace PlentyConnector\Installer;
 
 use DateTime;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DBALException;
-use Exception;
+use Doctrine\DBAL\Exception\InvalidArgumentException;
+use PlentyConnector\Subscriber\CronjobSubscriper;
 use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
 use Shopware\Components\Plugin\Context\UpdateContext;
@@ -20,10 +20,10 @@ class CronjobInstaller implements InstallerInterface
      */
     private $connection;
 
-    private $cronjobs = [
-        'Synchronize' => 300,
-        'Cleanup' => 86400
-    ];
+    /**
+     * @var array
+     */
+    private $cronjobs = [];
 
     /**
      * DatabaseInstaller constructor.
@@ -33,37 +33,79 @@ class CronjobInstaller implements InstallerInterface
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
+        $this->cronjobs = CronjobSubscriper::CRONJOBS;
     }
 
     /**
-     * {@inheritdoc}
+     * @param InstallContext $context
+     *
+     * @throws InvalidArgumentException
      */
     public function install(InstallContext $context)
     {
+        $this->removeCronjobs();
+
         foreach ($this->cronjobs as $name => $interval) {
-            try {
-                $this->addCronjob($name, $interval);
-            } catch (Exception $exception) {
-                // fail silently
-            }
+            $this->addCronjob($name, $interval, $context->getPlugin()->getId());
         }
     }
 
     /**
-     * @param $name
-     * @param $interval
+     * @param UpdateContext $context
+     *
+     * @throws InvalidArgumentException
      */
-    private function addCronjob($name, $interval)
+    public function update(UpdateContext $context)
+    {
+        $this->removeCronjobs($context->getPlugin()->getId());
+
+        foreach ($this->cronjobs as $name => $interval) {
+            $this->addCronjob($name, $interval, $context->getPlugin()->getId());
+        }
+    }
+
+    /**
+     * @param UninstallContext $context
+     *
+     * @throws InvalidArgumentException
+     */
+    public function uninstall(UninstallContext $context)
+    {
+        $this->removeCronjobs($context->getPlugin()->getId());
+    }
+
+    /**
+     * @param integer|null $pluginIdentifier
+     *
+     * @throws InvalidArgumentException
+     */
+    private function removeCronjobs($pluginIdentifier = null)
+    {
+        if (null !== $pluginIdentifier) {
+            $this->connection->delete('s_crontab', ['pluginID' => $pluginIdentifier]);
+        }
+
+        foreach ($this->cronjobs as $name => $interval) {
+            $this->connection->delete('s_crontab', ['name' => 'PlentyConnector ' . $name]);
+        }
+    }
+
+    /**
+     * @param string $name
+     * @param integer $interval
+     * @param integer $pluginIdentifier
+     */
+    private function addCronjob($name, $interval, $pluginIdentifier)
     {
         $data = [
-            'name' => $name,
-            'action' => 'Shopware_CronJob_' . $name,
+            'name' => 'PlentyConnector ' . $name,
+            'action' => 'Shopware_CronJob_PlentyConnector' . $name,
             'next' => new DateTime(),
             'start' => null,
-            'interval' => $interval,
-            'active' => 1,
+            '`interval`' => $interval,
+            'active' => true,
             'end' => new DateTime(),
-            'pluginID' => null
+            'pluginID' => $pluginIdentifier,
         ];
 
         $types = [
@@ -72,37 +114,5 @@ class CronjobInstaller implements InstallerInterface
         ];
 
         $this->connection->insert('s_crontab', $data, $types);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function update(UpdateContext $context)
-    {
-
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function uninstall(UninstallContext $context)
-    {
-        foreach ($this->cronjobs as $name => $interval) {
-            try {
-                $this->removeCronjob($name);
-            } catch (Exception $exception) {
-                // fail silently
-            }
-        }
-    }
-
-    /**
-     * @param $name
-     *
-     * @throws DBALException
-     */
-    private function removeCronjob($name)
-    {
-        $this->connection->executeQuery('DELETE FROM s_crontab WHERE `name` = ?', $name);
     }
 }

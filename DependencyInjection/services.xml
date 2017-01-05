@@ -67,6 +67,14 @@
             <tag name="shopware.event_subscriber" />
         </service>
 
+        <service id="plentyconnector.subscriber.cronjob" class="PlentyConnector\Subscriber\CronjobSubscriper">
+            <argument type="service" id="plentyconnector.connector" />
+            <argument type="service" id="plentyconnector.cleanup_service" />
+            <argument type="service" id="plentyconnector.logger" />
+
+            <tag name="shopware.event_subscriber" />
+        </service>
+
         <!-- Connector -->
 
         <service id="plentyconnector.connector" class="PlentyConnector\Connector\Connector">

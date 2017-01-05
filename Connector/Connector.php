@@ -101,31 +101,10 @@ class Connector implements ConnectorInterface
     /**
      * {@inheritdoc}
      */
-    public function executeQuery(QueryInterface $query)
+    public function handle($queryType, $objectType = null, $identifier = null)
     {
-        return $this->queryBus->handle($query);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function executeEvent(EventInterface $event)
-    {
-        $this->eventBus->handle($event);
-    }
-
-    /**
-     * @param string $objectType
-     * @param int $queryType
-     * @param string|null $identifier
-     *
-     * @throws MissingQueryException
-     * @throws MissingCommandException
-     */
-    public function handle($objectType, $queryType, $identifier = null)
-    {
-        Assertion::string($objectType);
-        Assertion::inArray($queryType, QueryType::getAllTypes());
+        Assertion::InArray($queryType, QueryType::getAllTypes());
+        Assertion::nullOrstring($objectType);
 
         if ($queryType === QueryType::ONE) {
             Assertion::notNull($identifier);
@@ -163,7 +142,7 @@ class Connector implements ConnectorInterface
 
     /**
      * @param DefinitionInterface $definition
-     * @param int $queryType
+     * @param integer $queryType
      * @param string|null $identifier
      *
      * @throws MissingQueryException
@@ -216,13 +195,5 @@ class Connector implements ConnectorInterface
         } catch (\Exception $exception) {
             // TODO: finalize
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function executeCommand(CommandInterface $command)
-    {
-        $this->commandBus->handle($command);
     }
 }

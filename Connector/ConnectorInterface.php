@@ -3,9 +3,8 @@
 namespace PlentyConnector\Connector;
 
 use PlentyConnector\Adapter\AdapterInterface;
-use PlentyConnector\Connector\CommandBus\Command\CommandInterface;
-use PlentyConnector\Connector\EventBus\Event\EventInterface;
-use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
+use PlentyConnector\Connector\Exception\MissingCommandException;
+use PlentyConnector\Connector\Exception\MissingQueryException;
 use PlentyConnector\Connector\TransferObject\Definition\DefinitionInterface;
 
 /**
@@ -24,19 +23,12 @@ interface ConnectorInterface
     public function addDefinition(DefinitionInterface $definition);
 
     /**
-     * @param CommandInterface $command
-     */
-    public function executeCommand(CommandInterface $command);
-
-    /**
-     * @param QueryInterface $query
+     * @param integer $queryType
+     * @param string|null $objectType
+     * @param string|null $identifier
      *
-     * @return mixed
+     * @throws MissingQueryException
+     * @throws MissingCommandException
      */
-    public function executeQuery(QueryInterface $query);
-
-    /**
-     * @param EventInterface $event
-     */
-    public function executeEvent(EventInterface $event);
+    public function handle($queryType, $objectType = null, $identifier = null);
 }

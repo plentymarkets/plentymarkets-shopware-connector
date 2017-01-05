@@ -2,6 +2,7 @@
 
 namespace PlentyConnector;
 
+use Doctrine\DBAL\Exception\InvalidArgumentException;
 use Exception;
 use PlentyConnector\DependencyInjection\CompilerPass\AdapterCompilerPass;
 use PlentyConnector\DependencyInjection\CompilerPass\CleanupDefinitionCompilerPass;
@@ -84,6 +85,7 @@ class PlentyConnector extends Plugin
      *
      * @throws ServiceCircularReferenceException
      * @throws ServiceNotFoundException
+     * @throws InvalidArgumentException
      */
     public function install(InstallContext $context)
     {
@@ -101,6 +103,7 @@ class PlentyConnector extends Plugin
      *
      * @throws ServiceCircularReferenceException
      * @throws ServiceNotFoundException
+     * @throws InvalidArgumentException
      */
     public function update(UpdateContext $context)
     {
@@ -118,6 +121,7 @@ class PlentyConnector extends Plugin
      *
      * @throws ServiceCircularReferenceException
      * @throws ServiceNotFoundException
+     * @throws InvalidArgumentException
      */
     public function uninstall(UninstallContext $context)
     {
