@@ -20,6 +20,8 @@ class ControllerPathSubscriber implements SubscriberInterface
     private $container;
 
     /**
+     * ControllerPathSubscriber constructor.
+     *
      * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
@@ -28,7 +30,7 @@ class ControllerPathSubscriber implements SubscriberInterface
     }
 
     /**
-     * @return array
+     * {@inheritdoc9
      */
     public static function getSubscribedEvents()
     {
