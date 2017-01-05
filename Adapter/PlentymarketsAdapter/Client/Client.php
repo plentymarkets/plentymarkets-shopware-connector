@@ -82,6 +82,14 @@ class Client implements ClientInterface
             $options['json'] = $params;
         }
 
+        if (!array_key_exists('connect_timeout', $options)) {
+            $options['connect_timeout'] = 30;
+        }
+
+        if (!array_key_exists('timeout', $options)) {
+            $options['timeout'] = 30;
+        }
+
         if (null !== $limit) {
             $params['itemsPerPage'] = (int)$limit;
         }
@@ -119,7 +127,7 @@ class Client implements ClientInterface
 
                 return $this->request($method, $path, $params, $limit, $offset);
             } else {
-                // unknown exception, throw up
+                // generic exception
                 throw $exception;
             }
         }
@@ -183,6 +191,7 @@ class Client implements ClientInterface
         $headers = [
             'Content-Type' => 'application/json',
             'Accept' => 'application/x.plentymarkets.v1+json',
+            'user-agent' => $this->getUserAgent(),
         ];
 
         if ($path !== 'login') {
@@ -190,6 +199,14 @@ class Client implements ClientInterface
         }
 
         return $headers;
+    }
+
+    /**
+     * @return string
+     */
+    private function getUserAgent()
+    {
+        return 'Shopware/PlentyConnector/2.0/Rest/v1';
     }
 
     /**

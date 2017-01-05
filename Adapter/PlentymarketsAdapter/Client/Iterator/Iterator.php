@@ -102,8 +102,8 @@ class Iterator implements BaseIterator
 
     /**
      * @param array $criteria
-     * @param int $limit
-     * @param int $offset
+     * @param integer $limit
+     * @param integer $offset
      */
     private function loadPage(array $criteria = [], $limit = 0, $offset = 0)
     {
