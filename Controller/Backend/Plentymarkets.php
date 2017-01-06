@@ -207,4 +207,21 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
             ]);
         }
     }
+
+    public function syncItemAction()
+    {
+        // TODO implement
+        $data = json_decode($this->request->getRawBody());
+
+        if ($data->itemId != null && $data->itemId != '') {
+            $this->View()->assign([
+                'success' => true
+            ]);
+        } else {
+            $this->View()->assign([
+                'success' => false,
+                'message' => 'Artikel ID ist leer.'
+            ]);
+        }
+    }
 }

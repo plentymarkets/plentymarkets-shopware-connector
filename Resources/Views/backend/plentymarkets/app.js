@@ -18,7 +18,8 @@ Ext.define('Shopware.apps.Plentymarkets', {
 
 	controllers: [
 	    'Main',
-	    'Settings'
+		'Settings',
+		'Misc'
 	],
 
 	views: [
