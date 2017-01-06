@@ -41,6 +41,7 @@ Ext.define('Shopware.apps.Plentymarkets.model.mapping.Information', {
         api: {
             read: '{url action=getMappingInformation}'
         },
+        timeout: 45000,
         reader: {
             type: 'json',
             root: 'data'

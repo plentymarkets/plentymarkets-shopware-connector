@@ -62,7 +62,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Main', {
 		mappingInformationStore.proxy.extraParams = {
 			fresh: !!fresh
 		};
-		mappingInformationStore.load(function(records)
+		mappingInformationStore.load(function(records, operation, success)
 		{
 			var currentTab = 0;
 
@@ -112,8 +112,8 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Main', {
 
 			if (me.items != null && me.items.length > 0) {
 				me.setActiveTab(currentTab);
-			} else {
-				// TODO no mapping found
+			} else if (!success) {
+				Shopware.Notification.createGrowlMessage('Abrufen der Mapping Information fehlgeschlagen', operation.error.statusText);
 			}
 
 			me.setLoading(false);
