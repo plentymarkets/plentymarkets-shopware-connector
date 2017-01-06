@@ -3,6 +3,7 @@
 namespace PlentyConnector\Connector\MappingService;
 
 use Assert\Assertion;
+use Doctrine\Common\Cache\Cache;
 use PlentyConnector\Connector\Exception\MissingQueryException;
 use PlentyConnector\Connector\QueryBus\QueryFactory\QueryFactoryInterface;
 use PlentyConnector\Connector\QueryBus\QueryType;
@@ -33,17 +34,35 @@ class MappingService implements MappingServiceInterface
     private $queryBus;
 
     /**
+     * @var Cache
+     */
+    private $cache;
+
+    /**
+     * @var string
+     */
+    private $cacheKey = 'PlentyConnector_MappingInformations';
+
+    /**
+     * @var string
+     */
+    private $cacheLifetime = 86400;
+
+    /**
      * MappingService constructor.
      *
      * @param QueryFactoryInterface $queryFactory
      * @param ServiceBusInterface $queryBus
+     * @param Cache $cache
      */
     public function __construct(
         QueryFactoryInterface $queryFactory,
-        ServiceBusInterface $queryBus
+        ServiceBusInterface $queryBus,
+        Cache $cache
     ) {
         $this->queryFactory = $queryFactory;
         $this->queryBus = $queryBus;
+        $this->cache = $cache;
     }
 
     /**
@@ -57,9 +76,14 @@ class MappingService implements MappingServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getMappingInformation($objectType = null)
+    public function getMappingInformation($objectType = null, $fresh = false)
     {
         Assertion::nullOrString($objectType);
+        Assertion::boolean($fresh);
+
+        if (!$fresh && $this->cache->contains($this->cacheKey)) {
+            return $this->cache->fetch($this->cacheKey);
+        }
 
         $result = [];
         $definitions = $this->getDefinitions($objectType);
@@ -73,6 +97,8 @@ class MappingService implements MappingServiceInterface
                 'objectType' => $definition->getObjectType()
             ]);
         });
+
+        $result = $this->cache->save($this->cacheKey, $result, $this->cacheLifetime);
 
         return $result;
     }

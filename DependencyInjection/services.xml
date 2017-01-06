@@ -59,6 +59,12 @@
             <argument type="service" id="models"/>
         </service>
 
+        <!-- Cache -->
+
+        <service id="plentyconnector.cache" class="Doctrine\Common\Cache\Cache">
+            <factory service="ModelConfig" method="getMetadataCacheImpl" />
+        </service>
+
         <!-- Subscriber -->
 
         <service id="plentyconnector.subscriber.controller_path" class="PlentyConnector\Subscriber\ControllerPathSubscriber">
@@ -128,6 +134,7 @@
         <service id="plentyconnector.mapping_service" class="PlentyConnector\Connector\MappingService\MappingService">
             <argument type="service" id="plentyconnector.query_factory"/>
             <argument type="service" id="plentyconnector.query_bus"/>
+            <argument type="service" id="plentyconnector.cache"/>
         </service>
 
         <!-- Mapping definitions -->

@@ -18,10 +18,11 @@ interface MappingServiceInterface
 
     /**
      * @param null $objectType
+     * @param bool $fresh
      *
      * @return MappingInterface[]
      *
      * @throws MissingQueryException
      */
-    public function getMappingInformation($objectType = null);
+    public function getMappingInformation($objectType = null, $fresh = false);
 }
