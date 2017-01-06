@@ -31,7 +31,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
         ];
 
         $options = [
-            'base_url' => $this->Request()->get('ApiUrl'),
+            'base_uri' => $this->Request()->get('ApiUrl'),
         ];
 
         $success = false;

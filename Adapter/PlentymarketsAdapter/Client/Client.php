@@ -121,7 +121,8 @@ class Client implements ClientInterface
 
             return $result;
         } catch (ClientException $exception) {
-            if ($exception->hasResponse() && $exception->getResponse()->getStatusCode() === 401) {
+            if ($exception->hasResponse() && $exception->getResponse()->getStatusCode() === 401
+                    && !$this->isLoginRequired($path) && $this->accessToken != null) {
                 // retry with fresh accessToken
                 $this->accessToken = null;
 
