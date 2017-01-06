@@ -3,12 +3,10 @@
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentyConnector\Connector\IdentityService\IdentityService;
 use PlentyConnector\Connector\MappingService\MappingServiceInterface;
-use PlentyConnector\Connector\QueryBus\Query\Manufacturer\GetManufacturerQuery;
 use PlentyConnector\Connector\TransferObject\Identity\Identity;
 use PlentyConnector\Connector\TransferObject\MappedTransferObjectInterface;
 use PlentyConnector\Connector\TransferObject\Mapping\MappingInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
-use Shopware\Components\Api\Manager;
 
 /**
  * Class Shopware_Controller_Backend_Plentymarkets.
@@ -84,41 +82,6 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
                 'ApiUrl' => $config->get('rest_url'),
                 'ApiUsername' => $config->get('rest_username'),
                 'ApiPassword' => $config->get('rest_password'),
-            ],
-        ));
-    }
-
-    /**
-     * Loads stores settings.
-     */
-    public function getSettingsViewDataAction()
-    {
-        /**
-         * @var Shopware\Components\Api\Resource\Manufacturer
-         */
-        $resource = Manager::getResource('manufacturer');
-        $manufacturers = $resource->getList(0, null)['data'];
-
-//        $queryBus = $this->container->get('plentyconnector.query_bus');
-//
-//        $warehouses = array_map(function(ResponseItem $item) {
-//            return array(
-//                'name' => $item->getItem()->getName()
-//            );
-//        }, $queryBus->handle(new GetRemoteWarehouseQuery()));
-//
-//        $orderReferrers = array_map(function(ResponseItem $item) {
-//            return array(
-//                'name' => $item->getItem()->getName()
-//            );
-//        }, $queryBus->handle(new GetRemoteOrderReferrerQuery()));
-
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => [
-                'manufacturers' => $manufacturers,
-                'warehouses' => [],
-                'orderReferrers' => [],
             ],
         ));
     }
