@@ -48,7 +48,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Main', {
 		me.callParent(arguments);
 	},
 
-	loadTabs: function(currentTabTitle) {
+	loadTabs: function(currentTabTitle, fresh) {
 		var me = this;
 
 		me.setLoading(true);
@@ -58,7 +58,11 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Main', {
 			me.isBuilt = false;
 		}
 
-		Ext.create('Shopware.apps.Plentymarkets.store.mapping.Information').load(function(records)
+		var mappingInformationStore = Ext.create('Shopware.apps.Plentymarkets.store.mapping.Information');
+		mappingInformationStore.proxy.extraParams = {
+			fresh: !!fresh
+		};
+		mappingInformationStore.load(function(records)
 		{
 			var currentTab = 0;
 

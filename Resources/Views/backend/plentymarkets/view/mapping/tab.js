@@ -66,7 +66,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Tab', {
 			cls: 'secondary',
 			handler: function()
 			{
-				me.panel.loadTabs(me.title);
+				me.panel.loadTabs(me.title, true);
 			}
 		});
 
