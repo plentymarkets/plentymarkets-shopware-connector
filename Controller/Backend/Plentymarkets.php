@@ -3,12 +3,10 @@
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentyConnector\Connector\IdentityService\IdentityService;
 use PlentyConnector\Connector\MappingService\MappingServiceInterface;
-use PlentyConnector\Connector\QueryBus\Query\Manufacturer\GetManufacturerQuery;
 use PlentyConnector\Connector\TransferObject\Identity\Identity;
 use PlentyConnector\Connector\TransferObject\MappedTransferObjectInterface;
 use PlentyConnector\Connector\TransferObject\Mapping\MappingInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
-use Shopware\Components\Api\Manager;
 
 /**
  * Class Shopware_Controller_Backend_Plentymarkets.
@@ -31,7 +29,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
         ];
 
         $options = [
-            'base_url' => $this->Request()->get('ApiUrl'),
+            'base_uri' => $this->Request()->get('ApiUrl'),
         ];
 
         $success = false;
@@ -89,50 +87,25 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
     }
 
     /**
-     * Loads stores settings.
-     */
-    public function getSettingsViewDataAction()
-    {
-        /**
-         * @var Shopware\Components\Api\Resource\Manufacturer
-         */
-        $resource = Manager::getResource('manufacturer');
-        $manufacturers = $resource->getList(0, null)['data'];
-
-//        $queryBus = $this->container->get('plentyconnector.query_bus');
-//
-//        $warehouses = array_map(function(ResponseItem $item) {
-//            return array(
-//                'name' => $item->getItem()->getName()
-//            );
-//        }, $queryBus->handle(new GetRemoteWarehouseQuery()));
-//
-//        $orderReferrers = array_map(function(ResponseItem $item) {
-//            return array(
-//                'name' => $item->getItem()->getName()
-//            );
-//        }, $queryBus->handle(new GetRemoteOrderReferrerQuery()));
-
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => [
-                'manufacturers' => $manufacturers,
-                'warehouses' => [],
-                'orderReferrers' => [],
-            ],
-        ));
-    }
-
-    /**
      * @throws \Exception
      */
     public function getMappingInformationAction()
     {
+        $fresh = $this->request->get('fresh') === 'true';
         /**
          * @var MappingServiceInterface $mappingService
          */
         $mappingService = Shopware()->Container()->get('plentyconnector.mapping_service');
-        $mappingInformation = $mappingService->getMappingInformation();
+
+        try {
+            $mappingInformation = $mappingService->getMappingInformation(null, $fresh);
+        } catch(Exception $e) {
+            $this->View()->assign([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+            return;
+        }
 
         $transferObjectMapping = function (MappedTransferObjectInterface $object) {
             return [
@@ -204,6 +177,23 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
             $this->View()->assign([
                 'success' => false,
                 'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function syncItemAction()
+    {
+        // TODO implement
+        $data = json_decode($this->request->getRawBody());
+
+        if ($data->itemId != null && $data->itemId != '') {
+            $this->View()->assign([
+                'success' => true
+            ]);
+        } else {
+            $this->View()->assign([
+                'success' => false,
+                'message' => 'Artikel ID ist leer.'
             ]);
         }
     }

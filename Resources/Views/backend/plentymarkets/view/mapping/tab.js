@@ -29,9 +29,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Tab', {
 		var me = this;
 
 		me.columns = me.getColumns();
-
 		me.dockedItems = [me.getToolbar()];
-
 		me.plugins = [me.createRowEditing()];
 
 		me.on('edit', function(editor, e)
@@ -43,8 +41,6 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Tab', {
 			if (mappedOrigin == undefined) {
 				return;
 			}
-
-			// TODO validate before setting value, e.g. object is already mapped
 
 			e.record.beginEdit();
 			e.record.set('originName', mappedOrigin.name);
@@ -58,7 +54,6 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Tab', {
 	getToolbar: function()
 	{
 		var me = this, items = ['->'];
-		me.currentResource = null;
 
 		items.push({
 			xtype: 'button',
@@ -66,7 +61,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Tab', {
 			cls: 'secondary',
 			handler: function()
 			{
-				me.panel.loadTabs(me.title);
+				me.panel.fireEvent('reload', me);
 			}
 		});
 
@@ -76,11 +71,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Tab', {
 			cls: 'primary',
 			handler: function()
 			{
-				me.store.sync({
-					failure : function(batch, options) {
-						Ext.Msg.alert("Fehler", batch.proxy.getReader().jsonData.message);
-					}
-				});
+				me.panel.fireEvent('save', me);
 			}
 		});
 
