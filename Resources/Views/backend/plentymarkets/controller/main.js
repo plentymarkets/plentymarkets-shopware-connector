@@ -31,6 +31,5 @@ Ext.define('Shopware.apps.Plentymarkets.controller.Main', {
 
         me.callParent(arguments);
     }
-
 });
 // {/block}

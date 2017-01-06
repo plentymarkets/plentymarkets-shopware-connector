@@ -46,6 +46,5 @@ Ext.define('Shopware.apps.Plentymarkets.model.mapping.Information', {
             messageProperty: 'message'
         }
     }
-
 });
 // {/block}

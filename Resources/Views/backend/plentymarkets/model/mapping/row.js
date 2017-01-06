@@ -54,6 +54,5 @@ Ext.define('Shopware.apps.Plentymarkets.model.mapping.Row', {
             root: 'data'
         }
     }
-
 });
 // {/block}

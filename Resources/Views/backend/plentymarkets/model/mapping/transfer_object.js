@@ -20,6 +20,5 @@ Ext.define('Shopware.apps.Plentymarkets.model.mapping.TransferObject', {
             type: 'string'
         }
     ]
-
 });
 // {/block}

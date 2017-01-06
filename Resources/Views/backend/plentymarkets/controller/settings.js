@@ -61,6 +61,5 @@ Ext.define('Shopware.apps.Plentymarkets.controller.Settings', {
             }
         });
     }
-
 });
 // {/block}
