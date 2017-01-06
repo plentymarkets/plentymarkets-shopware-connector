@@ -6,50 +6,46 @@
  * controllers, views, stores and models. The views build the graphical content and handle events.
  * The stores act as a data exchange layer between the views and the models. The models are well-defined
  * data structures, which are used for data exchange. And finally the controllers manage all processes.
- * 
- * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 Ext.define('Shopware.apps.Plentymarkets', {
+    name: 'Shopware.apps.Plentymarkets',
+    extend: 'Enlight.app.SubApplication',
+    loadPath: '{url action=load}',
+    bulkLoad: true,
 
-	name: 'Shopware.apps.Plentymarkets',
-	extend: 'Enlight.app.SubApplication',
-	loadPath: '{url action=load}',
-	bulkLoad: true,
+    controllers: [
+        'Main',
+        'Settings',
+        'Mapping',
+        'Misc'
+    ],
 
-	controllers: [
-	    'Main',
-		'Settings',
-		'Mapping',
-		'Misc'
-	],
+    views: [
+        'Main',
+        'mapping.Tab',
+        'mapping.Main',
+        'Misc',
+        'Settings'
+    ],
 
-	views: [
-	    'Main',
-	    'mapping.Tab',
-	    'mapping.Main',
-	    'Misc',
-	    'Settings'
-	],
+    stores: [
+        'mapping.Row',
+        'mapping.Information',
+        'mapping.TransferObject',
+        'Settings'
+    ],
 
-	stores: [
-		'mapping.Row',
-		'mapping.Information',
-		'mapping.TransferObject',
-		'Settings'
-	],
+    models: [
+        'mapping.Row',
+        'mapping.Information',
+        'mapping.TransferObject',
+        'Settings'
+    ],
 
-	models: [
-	    'mapping.Row',
-	    'mapping.Information',
-	    'mapping.TransferObject',
-	    'Settings'
-	],
+    launch: function () {
+        var me = this, mainController = me.getController('Main');
 
-	launch: function()
-	{
-		var me = this, mainController = me.getController('Main');
-
-		return mainController.mainWindow;
-	}
+        return mainController.mainWindow;
+    }
 });
 // {/block}

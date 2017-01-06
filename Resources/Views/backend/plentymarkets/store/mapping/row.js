@@ -8,7 +8,9 @@
  */
 Ext.define('Shopware.apps.Plentymarkets.store.mapping.Row', {
     extend: 'Ext.data.Store',
+
     autoLoad: false,
+
     model: 'Shopware.apps.Plentymarkets.model.mapping.Row'
 });
 // {/block}

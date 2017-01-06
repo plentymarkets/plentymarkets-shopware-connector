@@ -7,11 +7,9 @@
  * @author David Thulke <thulke@arvatis.com>
  */
 Ext.define('Shopware.apps.Plentymarkets.controller.Misc', {
-
     extend: 'Ext.app.Controller',
 
-    init: function()
-    {
+    init: function () {
         var me = this;
 
         me.control({
@@ -23,7 +21,7 @@ Ext.define('Shopware.apps.Plentymarkets.controller.Misc', {
         me.callParent(arguments);
     },
 
-    onSyncItem: function(view) {
+    onSyncItem: function (view) {
         var message = 'Möchten Sie, dass der Artikel mit der von Ihnen eingegeben plentymarkets Artikel ID sofort abgeglichen wird?';
 
         Ext.Msg.confirm('Bestätigung erforderlich!', message, function (button) {

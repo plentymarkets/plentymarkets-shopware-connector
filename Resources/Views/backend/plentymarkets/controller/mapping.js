@@ -3,21 +3,17 @@
 
 /**
  * Controller handling events of the mapping tab.
- *
- * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 Ext.define('Shopware.apps.Plentymarkets.controller.Mapping', {
-
     extend: 'Ext.app.Controller',
 
-    init: function()
-    {
+    init: function () {
         var me = this;
 
         me.control({
             'plentymarkets-view-mapping-main': {
-                load : me.onLoadTabs,
-                reload: function(view) {
+                load: me.onLoadTabs,
+                reload: function (view) {
                     me.onLoadTabs(view.panel, view.title, true);
                 },
                 save: me.onSave
@@ -27,7 +23,7 @@ Ext.define('Shopware.apps.Plentymarkets.controller.Mapping', {
         me.callParent(arguments);
     },
 
-    onLoadTabs : function(view, currentTabTitle, fresh) {
+    onLoadTabs: function (view, currentTabTitle, fresh) {
         if (view.isBuilt && !fresh) {
             return;
         }
@@ -40,20 +36,20 @@ Ext.define('Shopware.apps.Plentymarkets.controller.Mapping', {
         }
 
         var mappingInformationStore = Ext.create('Shopware.apps.Plentymarkets.store.mapping.Information');
+
         mappingInformationStore.proxy.extraParams = {
             fresh: !!fresh
         };
-        mappingInformationStore.load(function(records, operation, success)
-        {
+
+        mappingInformationStore.load(function (records, operation, success) {
             var currentTab = 0;
 
-            Ext.Array.each(records, function(record)
-            {
+            Ext.Array.each(records, function (record) {
                 var mapping = record.data;
                 var objectType = mapping.objectType;
 
-                var rows = mapping.destinationTransferObjects.map(function(object) {
-                    var origin = mapping.originTransferObjects.find(function(originObject) {
+                var rows = mapping.destinationTransferObjects.map(function (object) {
+                    var origin = mapping.originTransferObjects.find(function (originObject) {
                         return object.identifier == originObject.identifier;
                     });
                     var origName = (!!origin) ? origin.name : "";
@@ -65,7 +61,7 @@ Ext.define('Shopware.apps.Plentymarkets.controller.Mapping', {
                         originIdentifier: origId,
                         originName: origName,
                         originAdapterName: mapping.originAdapterName,
-                        objectType : objectType
+                        objectType: objectType
                     };
                 });
 
@@ -109,9 +105,9 @@ Ext.define('Shopware.apps.Plentymarkets.controller.Mapping', {
         });
     },
 
-    onSave: function(view) {
+    onSave: function (view) {
         view.store.sync({
-            failure : function(batch, options) {
+            failure: function (batch, options) {
                 Ext.Msg.alert("Fehler", batch.proxy.getReader().jsonData.message);
             }
         });

@@ -5,8 +5,6 @@
  * The settings data model defines the different data fields for reading,
  * saving, deleting settings data and is extended by the Ext data model
  * "Ext.data.Model".
- *
- * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 Ext.define('Shopware.apps.Plentymarkets.model.mapping.Information', {
 
