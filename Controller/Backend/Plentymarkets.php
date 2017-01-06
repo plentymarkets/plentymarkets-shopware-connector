@@ -96,7 +96,16 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
          * @var MappingServiceInterface $mappingService
          */
         $mappingService = Shopware()->Container()->get('plentyconnector.mapping_service');
-        $mappingInformation = $mappingService->getMappingInformation(null, $fresh);
+
+        try {
+            $mappingInformation = $mappingService->getMappingInformation(null, $fresh);
+        } catch(Exception $e) {
+            $this->View()->assign([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+            return;
+        }
 
         $transferObjectMapping = function (MappedTransferObjectInterface $object) {
             return [

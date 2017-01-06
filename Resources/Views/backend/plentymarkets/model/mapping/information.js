@@ -44,7 +44,8 @@ Ext.define('Shopware.apps.Plentymarkets.model.mapping.Information', {
         timeout: 45000,
         reader: {
             type: 'json',
-            root: 'data'
+            root: 'data',
+            messageProperty: 'message'
         }
     }
 

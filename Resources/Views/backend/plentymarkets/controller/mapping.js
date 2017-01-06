@@ -95,7 +95,14 @@ Ext.define('Shopware.apps.Plentymarkets.controller.Mapping', {
                 view.isBuilt = true;
                 view.setActiveTab(currentTab);
             } else if (!success) {
-                Shopware.Notification.createGrowlMessage('Abrufen der Mapping Information fehlgeschlagen', operation.error.statusText);
+                var message;
+                if (typeof operation.error === 'string' || operation.error instanceof String) {
+                    message = operation.error;
+                } else {
+                    message = operation.error.statusText;
+                }
+
+                Shopware.Notification.createGrowlMessage('Abrufen der Mapping Information fehlgeschlagen', message);
             }
 
             view.setLoading(false);
