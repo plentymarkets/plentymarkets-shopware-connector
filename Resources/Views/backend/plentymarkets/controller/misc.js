@@ -31,7 +31,7 @@ Ext.define('Shopware.apps.Plentymarkets.controller.Misc', {
                 Ext.Ajax.request({
                     url: '{url action=syncItem}',
                     success: function (response, options) {
-                        var responseObject = JSON.parse(response.responseText);
+                        var responseObject = Ext.decode(response.responseText);
                         if (responseObject.success) {
                             Shopware.Notification.createGrowlMessage('Aktion ausgeführt', 'Der Artikel wurde aktualisiert');
                         } else {
