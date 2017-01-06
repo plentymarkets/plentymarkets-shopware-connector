@@ -98,7 +98,7 @@ class MappingService implements MappingServiceInterface
             ]);
         });
 
-        $result = $this->cache->save($this->cacheKey, $result, $this->cacheLifetime);
+        $this->cache->save($this->cacheKey, $result, $this->cacheLifetime);
 
         return $result;
     }
