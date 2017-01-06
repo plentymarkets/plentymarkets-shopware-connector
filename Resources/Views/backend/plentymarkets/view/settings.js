@@ -48,6 +48,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
     registerEvents: function () {
         this.addEvents('save');
         this.addEvents('refresh');
+        this.addEvents('test');
     },
 
     build: function () {
@@ -105,6 +106,13 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
             ui: 'shopware-ui',
             items: ['->', {
                 xtype: 'button',
+                text: '{s name=plentymarkets/view/settings/button/test}Zugangsdaten Testen{/s}',
+                cls: 'secondary',
+                handler: function () {
+                    me.fireEvent('test', me);
+                }
+            }, {
+                xtype: 'button',
                 text: '{s name=plentymarkets/view/settings/button/refresh}plentymarkets Daten neu abrufen{/s}',
                 cls: 'secondary',
                 handler: function () {
@@ -127,6 +135,39 @@ Ext.define('Shopware.apps.Plentymarkets.view.Settings', {
         var paymentStatusStore = Ext.create('Shopware.apps.Base.store.PaymentStatus').load();
 
         return [
+            {
+                xtype: 'fieldset',
+                title: 'Zugangsdaten',
+                layout: 'anchor',
+                defaults: {
+                    labelWidth: 155,
+                    anchor: '100%'
+                },
+                items: [
+
+                    {
+                        xtype: 'textfield',
+                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/ApiUrl}URL{/s}',
+                        helpText: 'Die URL muss mit <b>http://</b> oder <b>https://</b> beginnen.',
+                        supportText: 'Tragen Sie hier die URL Ihres plentymarkets-Systems ein. Sie finden diese Information in der plentymarkets-Administration unter <b>Einstellungen » Grundeinstellungen » API-Daten » Host</b>.',
+                        emptyText: 'http://www.ihr-plentymarkets-system.de/',
+                        name: 'ApiUrl',
+                        allowBlank: false
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/ApiUsernamex}Benutzername{/s}',
+                        supportText: 'Der Benutzer sollte vom Typ <b>API</b> sein und nur für shopware verwendert werden. Achtung: Der Benutzer wird in Ihrem plentymarkets System unter <b>Einstellungen » Grundeinstellungen » Benutzer » Konten</b> angelegt!',
+                        name: 'ApiUsername',
+                        allowBlank: false
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: '{s name=plentymarkets/view/settings/textfield/ApiPasswordx}Passwort{/s}',
+                        supportText: 'Bitte vergeben Sie ein sicheres und starkes Passwort.',
+                        name: 'ApiPassword',
+                        allowBlank: false,
+                        inputType: 'password'
+                    }]
+            },
             {
                 xtype: 'fieldset',
                 title: 'Import Artikeldaten',

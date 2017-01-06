@@ -24,7 +24,6 @@ Ext.define('Shopware.apps.Plentymarkets', {
 	],
 
 	views: [
-	    'Api',
 	    'Main',
 	    'mapping.Tab',
 	    'mapping.Main',

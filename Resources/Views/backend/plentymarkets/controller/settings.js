@@ -18,10 +18,7 @@ Ext.define('Shopware.apps.Plentymarkets.controller.Settings', {
 		me.control({
 			'plentymarkets-view-settings': {
 				save: me.onSave,
-				refresh: me.onRefresh
-			},
-			'plentymarkets-view-api': {
-				save: me.onSave,
+				refresh: me.onRefresh,
 				test: me.onTest
 			}
 		});
@@ -67,7 +64,6 @@ Ext.define('Shopware.apps.Plentymarkets.controller.Settings', {
 			callback: function(data, operation)
 			{
 				view.loadRecord(data);
-				//view.main.setTabAvailability();
 				view.setLoading(false);
 				Shopware.Notification.createGrowlMessage('Einstellungen gespeichert', 'Die Einstellungen wurden gespeichert');
 			}

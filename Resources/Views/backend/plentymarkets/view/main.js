@@ -41,14 +41,8 @@ Ext.define('Shopware.apps.Plentymarkets.view.Main', {
 		});
 		me.sf.on('activate', me.sf.build);
 
-		me.api = Ext.widget('plentymarkets-view-api', {
-			settings: me.settings,
-			main: me
-		});
-		me.api.on('activate', me.api.build);
-
 		me.tabpanel = Ext.create('Ext.tab.Panel', {
-			items: [me.api, me.sf, {
+			items: [me.sf, {
 				xtype: 'plentymarkets-view-mapping-main'
             }, {
 				xtype: 'plentymarkets-view-misc'
