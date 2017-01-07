@@ -61,7 +61,7 @@ class FetchAllVatRatesQueryHandler implements QueryHandlerInterface
             }
         }
 
-        $vatRates = array_map(function($vatRate) {
+        $vatRates = array_map(function ($vatRate) {
             return $this->responseParser->parse($vatRate);
         }, $vatRates);
 
