@@ -2,7 +2,7 @@
     "name": "plentymarkets/shopware-connector",
     "license": "GPL-3.0",
     "type": "project",
-    "description": "Plentymarkets Shopware connector",
+    "description": "plentymarkets Shopware connector",
     "keywords": [
         "plenty",
         "shopware",
