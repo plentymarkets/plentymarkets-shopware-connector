@@ -1,11 +1,7 @@
-// {namespace name=backend/Plentymarkets/controller}
-// {block name=backend/Plentymarkets/controller/settings}
+// {namespace name=backend/plentyconnector/controller}
+// {block name=backend/plentyconnector/controller/settings}
 
-/**
- * The settings controller mainly handles event functions like saving data from different views and
- * is extended by the Ext app controller "Ext.app.controller".
- */
-Ext.define('Shopware.apps.Plentymarkets.controller.Settings', {
+Ext.define('Shopware.apps.PlentyConnector.controller.Settings', {
     extend: 'Ext.app.Controller',
 
     init: function () {

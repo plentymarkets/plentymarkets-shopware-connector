@@ -1,12 +1,7 @@
-// {namespace name=backend/Plentymarkets/controller}
-// {block name=backend/Plentymarkets/controller/misc}
+// {namespace name=backend/plentyconnector/controller}
+// {block name=backend/plentyconnector/controller/misc}
 
-/**
- * Controller handling events of the misc tab.
- *
- * @author David Thulke <thulke@arvatis.com>
- */
-Ext.define('Shopware.apps.Plentymarkets.controller.Misc', {
+Ext.define('Shopware.apps.PlentyConnector.controller.Misc', {
     extend: 'Ext.app.Controller',
 
     init: function () {
@@ -30,6 +25,7 @@ Ext.define('Shopware.apps.Plentymarkets.controller.Misc', {
                     url: '{url action=syncItem}',
                     success: function (response, options) {
                         var responseObject = Ext.decode(response.responseText);
+
                         if (responseObject.success) {
                             Shopware.Notification.createGrowlMessage('Aktion ausgeführt', 'Der Artikel wurde aktualisiert');
                         } else {

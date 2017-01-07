@@ -1,14 +1,7 @@
-// {namespace name=backend/Plentymarkets/view}
-// {block name=backend/Plentymarkets/view/Misc}
+// {namespace name=backend/plentyconnector/view}
+// {block name=backend/plentyconnector/view/misc}
 
-/**
- * The settings view builds the graphical elements and loads all saved settings
- * data. It shows for example the chosen warhouse, the manufacturer or the order
- * status. The settings are differentiated into four groups: "Import
- * Artikelstammdaten", "Export Aufträge", "Warenausgang", "Zahlungseingang bei
- * plentymarkets". It is extended by the Ext form panel "Ext.form.Panel".
- */
-Ext.define('Shopware.apps.Plentymarkets.view.Misc', {
+Ext.define('Shopware.apps.PlentyConnector.view.Misc', {
     extend: 'Ext.form.Panel',
 
     alias: 'widget.plentymarkets-view-misc',

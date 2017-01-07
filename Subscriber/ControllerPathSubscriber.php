@@ -35,7 +35,7 @@ class ControllerPathSubscriber implements SubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            'Enlight_Controller_Dispatcher_ControllerPath_Backend_Plentymarkets' => 'onControllerBackendPlentymarkets'
+            'Enlight_Controller_Dispatcher_ControllerPath_Backend_PlentyConnector' => 'onControllerBackendPlentyConnector'
         ];
     }
 
@@ -48,7 +48,7 @@ class ControllerPathSubscriber implements SubscriberInterface
      * @throws ServiceNotFoundException
      * @throws ServiceCircularReferenceException
      */
-    public function onControllerBackendPlentymarkets(Enlight_Event_EventArgs $args)
+    public function onControllerBackendPlentyConnector(Enlight_Event_EventArgs $args)
     {
         $basePath = $this->container->getParameter('plentyconnector.plugin_dir');
 
@@ -56,6 +56,6 @@ class ControllerPathSubscriber implements SubscriberInterface
             $basePath . '/Resources/Views/'
         );
 
-        return $basePath . '/Controller/Backend/Plentymarkets.php';
+        return $basePath . '/Controller/Backend/PlentyConnector.php';
     }
 }

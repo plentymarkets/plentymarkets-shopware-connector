@@ -1,17 +1,11 @@
-// {namespace name=backend/Plentymarkets/model}
-// {block name=backend/Plentymarkets/model/mapping/Row}
+// {namespace name=backend/plentyconnector/model/mapping}
+// {block name=backend/plentyconnector/model/mapping/row}
 
-/**
- * The settings data model defines the different data fields for reading,
- * saving, deleting settings data and is extended by the Ext data model
- * "Ext.data.Model".
- */
-Ext.define('Shopware.apps.Plentymarkets.model.mapping.Row', {
-
+Ext.define('Shopware.apps.PlentyConnector.model.mapping.Row', {
     extend: 'Ext.data.Model',
 
     fields: [
-        // {block name="backend/Plentymarkets/model/mapping/Row/fields"}{/block}
+        // {block name="backend/plentyconnector/model/mapping/row/fields"}{/block}
         {
             name: 'identifier',
             type: 'string'

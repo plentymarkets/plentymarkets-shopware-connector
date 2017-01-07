@@ -9,9 +9,9 @@ use PlentyConnector\Connector\TransferObject\Mapping\MappingInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 
 /**
- * Class Shopware_Controller_Backend_Plentymarkets.
+ * Class Shopware_Controllers_Backend_PlentyConnector
  */
-class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_Backend_ExtJs
 {
     /**
      * @throws \Exception
@@ -92,6 +92,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
     public function getMappingInformationAction()
     {
         $fresh = $this->request->get('fresh') === 'true';
+
         /**
          * @var MappingServiceInterface $mappingService
          */
@@ -104,6 +105,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
                 'success' => false,
                 'message' => $e->getMessage()
             ]);
+
             return;
         }
 
@@ -122,8 +124,7 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
                     'originAdapterName' => $mapping->getOriginAdapterName(),
                     'destinationAdapterName' => $mapping->getDestinationAdapterName(),
                     'originTransferObjects' => array_map($transferObjectMapping, $mapping->getOriginTransferObjects()),
-                    'destinationTransferObjects' => array_map($transferObjectMapping,
-                        $mapping->getDestinationTransferObjects()),
+                    'destinationTransferObjects' => array_map($transferObjectMapping, $mapping->getDestinationTransferObjects()),
                     'objectType' => $mapping->getObjectType()
                 ];
             }, $mappingInformation)
@@ -131,13 +132,14 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
     }
 
     /**
-     *
+     * @throws \Exception
      */
     public function updateIdentitiesAction()
     {
         $updates = json_decode($this->request->getRawBody());
-        if(!is_array($updates)) {
-            $updates = array($updates);
+
+        if (!is_array($updates)) {
+            $updates = [$updates];
         }
 
         /**
@@ -166,7 +168,13 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
                     'adapterIdentifier' => $originAdapterIdentifier,
                     'adapterName' => $originAdapterName,
                 ]));
-                $identityService->create($destinationIdentifier, $objectType, $originAdapterIdentifier, $originAdapterName);
+
+                $identityService->create(
+                    $destinationIdentifier,
+                    $objectType,
+                    $originAdapterIdentifier,
+                    $originAdapterName
+                );
             }
 
             $this->View()->assign([
@@ -181,12 +189,14 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
         }
     }
 
+    /**
+     * TODO: implement
+     */
     public function syncItemAction()
     {
-        // TODO implement
         $data = json_decode($this->request->getRawBody());
 
-        if ($data->itemId != null && $data->itemId != '') {
+        if (null !== $data->itemId && '' !== $data->itemId) {
             $this->View()->assign([
                 'success' => true
             ]);

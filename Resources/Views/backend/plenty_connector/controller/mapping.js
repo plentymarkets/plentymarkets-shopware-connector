@@ -1,10 +1,7 @@
-// {namespace name=backend/Plentymarkets/controller}
-// {block name=backend/Plentymarkets/controller/mapping}
+// {namespace name=backend/plentyconnector/controller}
+// {block name=backend/plentyconnector/controller/mapping}
 
-/**
- * Controller handling events of the mapping tab.
- */
-Ext.define('Shopware.apps.Plentymarkets.controller.Mapping', {
+Ext.define('Shopware.apps.PlentyConnector.controller.Mapping', {
     extend: 'Ext.app.Controller',
 
     init: function () {
@@ -35,7 +32,7 @@ Ext.define('Shopware.apps.Plentymarkets.controller.Mapping', {
             view.isBuilt = false;
         }
 
-        var mappingInformationStore = Ext.create('Shopware.apps.Plentymarkets.store.mapping.Information');
+        var mappingInformationStore = Ext.create('Shopware.apps.PlentyConnector.store.mapping.Information');
 
         mappingInformationStore.proxy.extraParams = {
             fresh: !!fresh
@@ -70,7 +67,7 @@ Ext.define('Shopware.apps.Plentymarkets.controller.Mapping', {
                     return;
                 }
 
-                var store = Ext.create('Shopware.apps.Plentymarkets.store.mapping.Row');
+                var store = Ext.create('Shopware.apps.PlentyConnector.store.mapping.Row');
                 store.loadData(rows);
                 store.commitChanges();
 

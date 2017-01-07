@@ -1,15 +1,7 @@
-// {namespace name=backend/Plentymarkets/view}
-// {block name=backend/Plentymarkets/view/mapping/Tab}
+// {namespace name=backend/plentyconnector/view/mapping}
+// {block name=backend/plentyconnector/view/mapping/tab}
 
-/**
- * The tab view builds the graphical table elements like column heading.
- * Every table consists of two columns, the "Shopware" column and the "plentymarkets" column.
- * These two columns represent the data mapping between shopware and plentymarkets.
- * It is extended by the Ext grid panel "Ext.grid.Panel".
- *
- * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
- */
-Ext.define('Shopware.apps.Plentymarkets.view.mapping.Tab', {
+Ext.define('Shopware.apps.PlentyConnector.view.mapping.Tab', {
     extend: 'Ext.grid.Panel',
 
     alias: 'widget.plentymarkets-view-mapping-tab',
@@ -93,7 +85,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.mapping.Tab', {
     getColumns: function () {
         var me = this;
 
-        var originStore = Ext.create('Shopware.apps.Plentymarkets.store.mapping.TransferObject');
+        var originStore = Ext.create('Shopware.apps.PlentyConnector.store.mapping.TransferObject');
         originStore.loadData(me.mapping.originTransferObjects);
 
         return [{

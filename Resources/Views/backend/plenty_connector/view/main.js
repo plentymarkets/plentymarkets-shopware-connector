@@ -1,13 +1,7 @@
-// {namespace name=backend/Plentymarkets/view}
-// {block name=backend/Plentymarkets/view/Main}
+// {namespace name=backend/plentyconnector/view}
+// {block name=backend/plentyconnector/view/main}
 
-/**
- * The main view builds the main tab panel which contains the five tabs: start,
- * api, settings, export, mapping and log. This view also provides a function
- * for setting the tab availability triggered by events. It is extended by the
- * Enlight app window "Enlight.app.Window".
- */
-Ext.define('Shopware.apps.Plentymarkets.view.Main', {
+Ext.define('Shopware.apps.PlentyConnector.view.Main', {
     extend: 'Enlight.app.Window',
 
     alias: 'widget.plentymarkets-view-main',
@@ -20,8 +14,7 @@ Ext.define('Shopware.apps.Plentymarkets.view.Main', {
     stateful: true,
     stateId: 'plentymarkets-view-main',
 
-    title: '{s name=main/window/title}plentymarkets{/s}',
-    iconCls: 'plenty-p',
+    title: '{s name=main/window/title}Plentymarkets Shopware Connector{/s}',
 
     initComponent: function () {
         var me = this;

@@ -1,11 +1,7 @@
-// {namespace name=backend/Plentymarkets/controller}
-// {block name=backend/Plentymarkets/controller/main}
+// {namespace name=backend/plentyconnector/controller}
+// {block name=backend/plentyconnector/controller/main}
 
-/**
- * The main controller builds the main window of plentymarkets plugin and initializes settings and
- * is extended by die Ext app controller "Ext.app.Controller".
- */
-Ext.define('Shopware.apps.Plentymarkets.controller.Main', {
+Ext.define('Shopware.apps.PlentyConnector.controller.Main', {
     extend: 'Ext.app.Controller',
 
     mainWindow: null,
