@@ -7,15 +7,14 @@ Ext.define('Shopware.apps.PlentyConnector.model.Settings', {
     fields: [
         // {block name="backend/plentyconnector/model/settings/fields"}{/block}
         {
-            name: 'PlentymarketsVersion',
-            type: 'string'
-        }, {
             name: 'ApiUrl',
             type: 'string'
-        }, {
+        },
+        {
             name: 'ApiUsername',
             type: 'string'
-        }, {
+        },
+        {
             name: 'ApiPassword',
             type: 'string'
         }

@@ -6,7 +6,7 @@ Ext.define('Shopware.apps.PlentyConnector.view.Misc', {
 
     alias: 'widget.plentymarkets-view-misc',
 
-    title: '{s name=plentymarkets/view/misc/title}Verschiedenes{/s}',
+    title: '{s name=plentyconnector/view/misc/title}Verschiedenes{/s}',
     autoScroll: true,
     cls: 'shopware-form',
     layout: 'anchor',

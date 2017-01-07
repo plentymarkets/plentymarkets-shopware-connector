@@ -36,6 +36,9 @@ Ext.define('Shopware.apps.PlentyConnector', {
         'Settings'
     ],
 
+    /**
+     *
+     */
     launch: function () {
         var me = this, mainController = me.getController('Main');
 

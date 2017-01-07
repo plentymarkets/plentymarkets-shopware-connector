@@ -40,9 +40,11 @@ Ext.define('Shopware.apps.PlentyConnector.model.mapping.Row', {
 
     proxy: {
         type: 'ajax',
+
         api: {
             update: '{url action=updateIdentities}'
         },
+
         reader: {
             type: 'json',
             root: 'data'

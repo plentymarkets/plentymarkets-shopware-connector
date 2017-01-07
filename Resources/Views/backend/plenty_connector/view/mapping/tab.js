@@ -100,7 +100,7 @@ Ext.define('Shopware.apps.PlentyConnector.view.mapping.Tab', {
                 xtype: 'combo',
                 queryMode: 'local',
                 autoSelect: true,
-                emptyText: '{s name=plentymarkets/view/mapping/choose}Bitte wählen{/s}',
+                emptyText: '{s name=plentyconnector/view/mapping/choose}Bitte wählen{/s}',
                 allowBlank: true,
                 editable: false,
                 store: originStore,
