@@ -5,7 +5,6 @@ namespace ShopwareAdapter\QueryBus\QueryHandler\Country;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query;
 use PlentyConnector\Connector\QueryBus\Query\Country\FetchAllCountriesQuery;
-use PlentyConnector\Connector\QueryBus\Query\Currency\FetchAllCurrenciesQuery;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use Shopware\Components\Model\ModelRepository;
