@@ -94,11 +94,11 @@ class PlentyConnector extends Plugin
         $databaseInstaller = new DatabaseInstaller($this->container->get('models'));
         $databaseInstaller->install($context);
 
-        $databaseInstaller = new CronjobInstaller($this->container->get('dbal_connection'));
-        $databaseInstaller->install($context);
+        $cronjobInstaller = new CronjobInstaller($this->container->get('dbal_connection'));
+        $cronjobInstaller->install($context);
 
-        $databaseInstaller = new PermissionInstaller($this->container->get('acl'));
-        $databaseInstaller->install($context);
+        $permissionInstaller = new PermissionInstaller($this->container->get('acl'));
+        $permissionInstaller->install($context);
 
         parent::install($context);
     }
@@ -116,11 +116,11 @@ class PlentyConnector extends Plugin
         $databaseInstaller = new DatabaseInstaller($this->container->get('models'));
         $databaseInstaller->update($context);
 
-        $databaseInstaller = new CronjobInstaller($this->container->get('dbal_connection'));
-        $databaseInstaller->update($context);
+        $cronjobInstaller = new CronjobInstaller($this->container->get('dbal_connection'));
+        $cronjobInstaller->update($context);
 
-        $databaseInstaller = new PermissionInstaller($this->container->get('acl'));
-        $databaseInstaller->update($context);
+        $permissionInstaller = new PermissionInstaller($this->container->get('acl'));
+        $permissionInstaller->update($context);
 
         parent::update($context);
     }
@@ -138,11 +138,11 @@ class PlentyConnector extends Plugin
         $databaseInstaller = new DatabaseInstaller($this->container->get('models'));
         $databaseInstaller->uninstall($context);
 
-        $databaseInstaller = new CronjobInstaller($this->container->get('dbal_connection'));
-        $databaseInstaller->uninstall($context);
+        $cronjobInstaller = new CronjobInstaller($this->container->get('dbal_connection'));
+        $cronjobInstaller->uninstall($context);
 
-        $databaseInstaller = new PermissionInstaller($this->container->get('acl'));
-        $databaseInstaller->uninstall($context);
+        $permissionInstaller = new PermissionInstaller($this->container->get('acl'));
+        $permissionInstaller->uninstall($context);
 
         parent::uninstall($context);
     }
