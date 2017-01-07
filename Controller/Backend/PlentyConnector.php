@@ -6,6 +6,7 @@ use PlentyConnector\Connector\MappingService\MappingServiceInterface;
 use PlentyConnector\Connector\TransferObject\Identity\Identity;
 use PlentyConnector\Connector\TransferObject\MappedTransferObjectInterface;
 use PlentyConnector\Connector\TransferObject\Mapping\MappingInterface;
+use PlentyConnector\Installer\PermissionInstaller;
 use PlentymarketsAdapter\Client\ClientInterface;
 
 /**
@@ -13,6 +14,22 @@ use PlentymarketsAdapter\Client\ClientInterface;
  */
 class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_Backend_ExtJs
 {
+    /**
+     * initialize permissions per action
+     */
+    public function initAcl()
+    {
+        $this->addAclPermission('testApiCredentials', PermissionInstaller::PERMISSION_READ, 'Insufficient Permissions');
+
+        $this->addAclPermission('getSettingsList', PermissionInstaller::PERMISSION_READ, 'Insufficient Permissions');
+        $this->addAclPermission('saveSettings', PermissionInstaller::PERMISSION_WRITE, 'Insufficient Permissions');
+
+        $this->addAclPermission('getMappingInformation', PermissionInstaller::PERMISSION_READ, 'Insufficient Permissions');
+        $this->addAclPermission('updateIdentities', PermissionInstaller::PERMISSION_WRITE, 'Insufficient Permissions');
+
+        $this->addAclPermission('syncItem', PermissionInstaller::PERMISSION_WRITE, 'Insufficient Permissions');
+    }
+
     /**
      * @throws \Exception
      */

@@ -17,6 +17,7 @@ use PlentyConnector\DependencyInjection\CompilerPass\QueryGeneratorCompilerPassi
 use PlentyConnector\DependencyInjection\CompilerPass\QueryHandlerCompilerPass;
 use PlentyConnector\Installer\CronjobInstaller;
 use PlentyConnector\Installer\DatabaseInstaller;
+use PlentyConnector\Installer\PermissionInstaller;
 use Shopware\Components\Plugin;
 use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
@@ -86,6 +87,7 @@ class PlentyConnector extends Plugin
      * @throws ServiceCircularReferenceException
      * @throws ServiceNotFoundException
      * @throws InvalidArgumentException
+     * @throws Exception
      */
     public function install(InstallContext $context)
     {
@@ -93,6 +95,9 @@ class PlentyConnector extends Plugin
         $databaseInstaller->install($context);
 
         $databaseInstaller = new CronjobInstaller($this->container->get('dbal_connection'));
+        $databaseInstaller->install($context);
+
+        $databaseInstaller = new PermissionInstaller($this->container->get('acl'));
         $databaseInstaller->install($context);
 
         parent::install($context);
@@ -104,6 +109,7 @@ class PlentyConnector extends Plugin
      * @throws ServiceCircularReferenceException
      * @throws ServiceNotFoundException
      * @throws InvalidArgumentException
+     * @throws Exception
      */
     public function update(UpdateContext $context)
     {
@@ -111,6 +117,9 @@ class PlentyConnector extends Plugin
         $databaseInstaller->update($context);
 
         $databaseInstaller = new CronjobInstaller($this->container->get('dbal_connection'));
+        $databaseInstaller->update($context);
+
+        $databaseInstaller = new PermissionInstaller($this->container->get('acl'));
         $databaseInstaller->update($context);
 
         parent::update($context);
@@ -122,6 +131,7 @@ class PlentyConnector extends Plugin
      * @throws ServiceCircularReferenceException
      * @throws ServiceNotFoundException
      * @throws InvalidArgumentException
+     * @throws Exception
      */
     public function uninstall(UninstallContext $context)
     {
@@ -129,6 +139,9 @@ class PlentyConnector extends Plugin
         $databaseInstaller->uninstall($context);
 
         $databaseInstaller = new CronjobInstaller($this->container->get('dbal_connection'));
+        $databaseInstaller->uninstall($context);
+
+        $databaseInstaller = new PermissionInstaller($this->container->get('acl'));
         $databaseInstaller->uninstall($context);
 
         parent::uninstall($context);
