@@ -3,7 +3,7 @@
 namespace PlentyConnector\Subscriber;
 
 use Enlight\Event\SubscriberInterface;
-use Enlight_Event_EventArgs as Args;
+use Enlight_Components_Cron_EventArgs as Args;
 use Exception;
 use PlentyConnector\Connector\CleanupService\CleanupServiceInterface;
 use PlentyConnector\Connector\ConnectorInterface;
@@ -19,7 +19,7 @@ class CronjobSubscriper implements SubscriberInterface
     const CRONJOB_CLEANUP = 'Cleanup';
 
     /**
-     * pre defined list to invalidate simple caches
+     * List of all cronjobs
      */
     const CRONJOBS = [
         self::CRONJOB_SYNCHRONIZE => 300,

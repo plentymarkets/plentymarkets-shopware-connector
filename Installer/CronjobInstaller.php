@@ -104,6 +104,7 @@ class CronjobInstaller implements InstallerInterface
             'start' => null,
             '`interval`' => $interval,
             'active' => true,
+            'disable_on_error' => true,
             'end' => new DateTime(),
             'pluginID' => $pluginIdentifier,
         ];
