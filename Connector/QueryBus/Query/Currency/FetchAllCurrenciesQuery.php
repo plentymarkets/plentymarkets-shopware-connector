@@ -28,7 +28,7 @@ class FetchAllCurrenciesQuery implements FetchAllQueryInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getAdapterName()
     {

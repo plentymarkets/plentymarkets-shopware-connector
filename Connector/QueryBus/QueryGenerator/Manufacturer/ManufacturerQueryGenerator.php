@@ -18,7 +18,7 @@ class ManufacturerQueryGenerator implements QueryGeneratorInterface
      */
     public function supports($transferObjectType)
     {
-        return $transferObjectType === Manufacturer::getType();
+        return $transferObjectType === Manufacturer::TYPE;
     }
 
     /**

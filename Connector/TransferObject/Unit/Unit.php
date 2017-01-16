@@ -39,7 +39,7 @@ class Unit implements UnitInterface
     /**
      * {@inheritdoc}
      */
-    public static function getType()
+    public function getType()
     {
         return self::TYPE;
     }

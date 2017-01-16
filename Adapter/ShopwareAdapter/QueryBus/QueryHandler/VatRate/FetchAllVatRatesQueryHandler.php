@@ -44,22 +44,22 @@ class FetchAllVatRatesQueryHandler implements QueryHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(QueryInterface $event)
+    public function supports(QueryInterface $query)
     {
-        return $event instanceof FetchAllVatRatesQuery &&
-            $event->getAdapterName() === ShopwareAdapter::getName();
+        return $query instanceof FetchAllVatRatesQuery &&
+            $query->getAdapterName() === ShopwareAdapter::NAME;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function handle(QueryInterface $event)
+    public function handle(QueryInterface $query)
     {
-        $query = $this->createTaxQuery();
+        $objectQuery = $this->createTaxQuery();
 
         $vatRates = array_map(function ($vatRate) {
             return $this->responseParser->parse($vatRate);
-        }, $query->getArrayResult());
+        }, $objectQuery->getArrayResult());
 
         return array_filter($vatRates);
     }
@@ -76,9 +76,9 @@ class FetchAllVatRatesQueryHandler implements QueryHandlerInterface
             'taxes.tax as tax',
         ]);
 
-        $query = $queryBuilder->getQuery();
-        $query->execute();
+        $objectQuery = $queryBuilder->getQuery();
+        $objectQuery->execute();
 
-        return $query;
+        return $objectQuery;
     }
 }

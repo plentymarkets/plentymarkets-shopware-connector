@@ -78,9 +78,9 @@ class ImportCategoriesCommand extends ShopwareCommand
         try {
             $queryType = $all ? QueryType::ALL : QueryType::CHANGED;
 
-            $this->connector->handle($queryType, Category::getType());
-        } catch (Exception $e) {
-            $this->logger->error($e->getMessage());
+            $this->connector->handle($queryType, Category::TYPE);
+        } catch (Exception $exception) {
+            $this->logger->error($exception->getMessage());
         }
     }
 }

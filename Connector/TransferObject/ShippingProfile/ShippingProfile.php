@@ -41,7 +41,7 @@ class ShippingProfile implements ShippingProfileInterface
     /**
      * {@inheritdoc}
      */
-    public static function getType()
+    public function getType()
     {
         return self::TYPE;
     }

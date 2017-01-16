@@ -19,13 +19,13 @@ class CommandGeneratorCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->has('plentyconnector.command_factory')) {
+        if (!$container->has('plenty_connector.command_factory')) {
             return;
         }
 
-        $definition = $container->findDefinition('plentyconnector.command_factory');
+        $definition = $container->findDefinition('plenty_connector.command_factory');
 
-        $taggedServices = $container->findTaggedServiceIds('plentyconnector.command_generator');
+        $taggedServices = $container->findTaggedServiceIds('plenty_connector.command_generator');
 
         foreach ($taggedServices as $id => $tags) {
             $definition->addMethodCall('addGenerator', [new Reference($id)]);

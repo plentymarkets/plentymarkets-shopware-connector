@@ -44,22 +44,22 @@ class FetchAllUnitsQueryHandler implements QueryHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(QueryInterface $event)
+    public function supports(QueryInterface $query)
     {
-        return $event instanceof FetchAllUnitsQuery &&
-            $event->getAdapterName() === ShopwareAdapter::getName();
+        return $query instanceof FetchAllUnitsQuery &&
+            $query->getAdapterName() === ShopwareAdapter::NAME;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function handle(QueryInterface $event)
+    public function handle(QueryInterface $query)
     {
-        $query = $this->createUnitsQuery();
+        $objectQuery = $this->createUnitsQuery();
 
         $units = array_map(function ($unit) {
             return $this->responseParser->parse($unit);
-        }, $query->getArrayResult());
+        }, $objectQuery->getArrayResult());
 
         return array_filter($units);
     }
@@ -76,9 +76,9 @@ class FetchAllUnitsQueryHandler implements QueryHandlerInterface
             'units.unit as unit',
         ]);
 
-        $query = $queryBuilder->getQuery();
-        $query->execute();
+        $objectQuery = $queryBuilder->getQuery();
+        $objectQuery->execute();
 
-        return $query;
+        return $objectQuery;
     }
 }

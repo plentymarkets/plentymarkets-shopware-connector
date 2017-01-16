@@ -36,8 +36,8 @@ class OrderStatusResponseParser implements ResponseParserInterface
     {
         $identity = $this->identityService->findOneOrCreate(
             (string)$entry['id'],
-            PlentymarketsAdapter::getName(),
-            OrderStatus::getType()
+            PlentymarketsAdapter::NAME,
+            OrderStatus::TYPE
         );
 
         return OrderStatus::fromArray([

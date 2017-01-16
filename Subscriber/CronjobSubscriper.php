@@ -8,6 +8,7 @@ use Exception;
 use PlentyConnector\Connector\CleanupService\CleanupServiceInterface;
 use PlentyConnector\Connector\ConnectorInterface;
 use PlentyConnector\Connector\QueryBus\QueryType;
+use PlentyConnector\PlentyConnector;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -15,16 +16,6 @@ use Psr\Log\LoggerInterface;
  */
 class CronjobSubscriper implements SubscriberInterface
 {
-    const CRONJOB_SYNCHRONIZE = 'Synchronize';
-    const CRONJOB_CLEANUP = 'Cleanup';
-
-    /**
-     * List of all cronjobs
-     */
-    const CRONJOBS = [
-        self::CRONJOB_SYNCHRONIZE => 300,
-        self::CRONJOB_CLEANUP => 86400,
-    ];
 
     /**
      * @var ConnectorInterface
@@ -64,8 +55,8 @@ class CronjobSubscriper implements SubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            'Shopware_CronJob_PlentyConnector' . self::CRONJOB_SYNCHRONIZE => 'onRunCronjobSynchronize',
-            'Shopware_CronJob_PlentyConnector' . self::CRONJOB_CLEANUP => 'onRunCronjobCleanup'
+            'Shopware_CronJob_PlentyConnector' . PlentyConnector::CRONJOB_SYNCHRONIZE => 'onRunCronjobSynchronize',
+            'Shopware_CronJob_PlentyConnector' . PlentyConnector::CRONJOB_CLEANUP => 'onRunCronjobCleanup'
         ];
     }
 
@@ -82,6 +73,8 @@ class CronjobSubscriper implements SubscriberInterface
             $this->logger->error($exception->getMessage());
         }
 
+        $args->setReturn(true);
+
         return true;
     }
 
@@ -97,6 +90,8 @@ class CronjobSubscriper implements SubscriberInterface
         } catch (Exception $exception) {
             $this->logger->error($exception->getMessage());
         }
+
+        $args->setReturn(true);
 
         return true;
     }

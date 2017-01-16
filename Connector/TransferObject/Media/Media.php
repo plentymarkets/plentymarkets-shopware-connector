@@ -56,7 +56,7 @@ class Media implements MediaInterface
     /**
      * {@inheritdoc}
      */
-    public static function getType()
+    public function getType()
     {
         return self::TYPE;
     }

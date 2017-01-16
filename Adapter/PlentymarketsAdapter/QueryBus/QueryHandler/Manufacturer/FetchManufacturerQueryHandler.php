@@ -5,6 +5,7 @@ namespace PlentymarketsAdapter\QueryBus\QueryHandler\Manufacturer;
 use Exception;
 use PlentyConnector\Adapter\PlentymarketsAdapter\Client\Exception\InvalidResponseException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
+use PlentyConnector\Connector\QueryBus\Query\FetchQueryInterface;
 use PlentyConnector\Connector\QueryBus\Query\Manufacturer\FetchManufacturerQuery;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
@@ -54,18 +55,18 @@ class FetchManufacturerQueryHandler implements QueryHandlerInterface
     }
 
     /**
-     * @param QueryInterface $event
+     * @param QueryInterface $query
      *
      * @return bool
      */
-    public function supports(QueryInterface $event)
+    public function supports(QueryInterface $query)
     {
-        return $event instanceof FetchManufacturerQuery &&
-            $event->getAdapterName() === PlentymarketsAdapter::getName();
+        return $query instanceof FetchManufacturerQuery &&
+            $query->getAdapterName() === PlentymarketsAdapter::NAME;
     }
 
     /**
-     * @param QueryInterface $event
+     * @param QueryInterface $query
      *
      * @return TransferObjectInterface
      *
@@ -74,12 +75,15 @@ class FetchManufacturerQueryHandler implements QueryHandlerInterface
      * @throws Exception
      * @throws UnexpectedValueException
      */
-    public function handle(QueryInterface $event)
+    public function handle(QueryInterface $query)
     {
+        /**
+         * @var FetchQueryInterface $query
+         */
         $identity = $this->identityService->findOneBy([
-            'objectIdentifier' => $event->getIdentifier(),
-            'objectType' => Manufacturer::getType(),
-            'adapterName' => PlentymarketsAdapter::getName(),
+            'objectIdentifier' => $query->getIdentifier(),
+            'objectType' => Manufacturer::TYPE,
+            'adapterName' => PlentymarketsAdapter::NAME,
         ]);
 
         $element = $this->client->request('GET', 'items/manufacturers/' . $identity->getAdapterIdentifier());

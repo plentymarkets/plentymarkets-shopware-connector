@@ -34,8 +34,8 @@ class CustomerGroupResponseParser implements ResponseParserInterface
     {
         $identity = $this->identityService->findOneOrCreate(
             (string)$entry['id'],
-            PlentymarketsAdapter::getName(),
-            CustomerGroup::getType()
+            PlentymarketsAdapter::NAME,
+            CustomerGroup::TYPE
         );
 
         return CustomerGroup::fromArray([

@@ -41,16 +41,16 @@ class FetchAllOrderStatusesQueryHandler implements QueryHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(QueryInterface $event)
+    public function supports(QueryInterface $query)
     {
-        return $event instanceof FetchAllOrderStatusesQuery &&
-            $event->getAdapterName() === PlentymarketsAdapter::getName();
+        return $query instanceof FetchAllOrderStatusesQuery &&
+            $query->getAdapterName() === PlentymarketsAdapter::NAME;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function handle(QueryInterface $event)
+    public function handle(QueryInterface $query)
     {
         $statusArray = array_map(function ($orderStatus) {
             return $this->responseParser->parse($orderStatus);

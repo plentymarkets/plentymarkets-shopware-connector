@@ -34,8 +34,8 @@ class VatRateResponseParser implements ResponseParserInterface
     {
         $identity = $this->identityService->findOneOrCreate(
             (string)$entry['id'],
-            PlentymarketsAdapter::getName(),
-            VatRate::getType()
+            PlentymarketsAdapter::NAME,
+            VatRate::TYPE
         );
 
         return VatRate::fromArray([

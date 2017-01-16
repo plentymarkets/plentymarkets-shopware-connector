@@ -50,7 +50,7 @@ class ControllerPathSubscriber implements SubscriberInterface
      */
     public function onControllerBackendPlentyConnector(Enlight_Event_EventArgs $args)
     {
-        $basePath = $this->container->getParameter('plentyconnector.plugin_dir');
+        $basePath = $this->container->getParameter('plenty_connector.plugin_dir');
 
         $this->container->get('template')->addTemplateDir(
             $basePath . '/Resources/Views/'

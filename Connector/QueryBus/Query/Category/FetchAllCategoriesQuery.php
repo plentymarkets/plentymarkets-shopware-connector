@@ -28,7 +28,7 @@ class FetchAllCategoriesQuery implements FetchAllQueryInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getAdapterName()
     {

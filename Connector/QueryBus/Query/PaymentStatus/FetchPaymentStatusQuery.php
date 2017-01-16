@@ -21,18 +21,26 @@ class FetchPaymentStatusQuery implements FetchQueryInterface
     private $identifier;
 
     /**
-     * FetchPaymentStatusQuery constructor.
+     * FetchManufacturerQuery constructor.
      *
-     * @param string $adapterName
      * @param string $identifier
+     * @param string $adapterName
      */
-    public function __construct($adapterName, $identifier)
+    public function __construct($identifier, $adapterName)
     {
-        Assertion::string($adapterName);
         Assertion::uuid($identifier);
+        Assertion::string($adapterName);
 
-        $this->adapterName = $adapterName;
         $this->identifier = $identifier;
+        $this->adapterName = $adapterName;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIdentifier()
+    {
+        return $this->identifier;
     }
 
     /**
@@ -46,19 +54,11 @@ class FetchPaymentStatusQuery implements FetchQueryInterface
     /**
      * {@inheritdoc}
      */
-    public function getIdentifier()
-    {
-        return $this->identifier;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getPayload()
     {
         return [
-            'adapterName' => $this->adapterName,
             'identifier' => $this->identifier,
+            'adapterName' => $this->adapterName,
         ];
     }
 
@@ -67,7 +67,7 @@ class FetchPaymentStatusQuery implements FetchQueryInterface
      */
     public function setPayload(array $payload = [])
     {
-        $this->adapterName = $payload['adapterName'];
         $this->identifier = $payload['identifier'];
+        $this->adapterName = $payload['adapterName'];
     }
 }

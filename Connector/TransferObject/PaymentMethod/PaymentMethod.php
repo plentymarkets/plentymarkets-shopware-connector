@@ -39,7 +39,7 @@ class PaymentMethod implements PaymentMethodInterface
     /**
      * {@inheritdoc}
      */
-    public static function getType()
+    public function getType()
     {
         return self::TYPE;
     }

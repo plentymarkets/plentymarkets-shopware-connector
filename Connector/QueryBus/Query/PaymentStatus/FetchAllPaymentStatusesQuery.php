@@ -28,7 +28,7 @@ class FetchAllPaymentStatusesQuery implements FetchAllQueryInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getAdapterName()
     {

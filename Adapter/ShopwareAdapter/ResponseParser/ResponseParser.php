@@ -46,18 +46,18 @@ class ResponseParser implements ResponseParserInterface
     {
         $identity = $this->identityService->findOrCreateIdentity(
             (string)$entry['id'],
-            ShopwareAdapter::getName(),
-            Order::getType()
+            ShopwareAdapter::NAME,
+            Order::TYPE
         );
 
         $orderItems = array_map(array($this, 'parseOrderItem'), $entry['details']);
 
-        $shopIdentity = $this->findIdentityOrThrow(Shop::getType(), (string)$entry['shopId']);
-        $orderStatusIdentity = $this->findIdentityOrThrow(OrderStatus::getType(), (string)$entry['orderStatusId']);
-        $paymentStatusIdentity = $this->findIdentityOrThrow(PaymentStatus::getType(),
+        $shopIdentity = $this->findIdentityOrThrow(Shop::TYPE, (string)$entry['shopId']);
+        $orderStatusIdentity = $this->findIdentityOrThrow(OrderStatus::TYPE, (string)$entry['orderStatusId']);
+        $paymentStatusIdentity = $this->findIdentityOrThrow(PaymentStatus::TYPE,
             (string)$entry['paymentStatusId']);
-        $paymentMethodIdentity = $this->findIdentityOrThrow(PaymentMethod::getType(), (string)$entry['paymentId']);
-        $shippingProfileIdentity = $this->findIdentityOrThrow(ShippingProfile::getType(), (string)$entry['dispatchId']);
+        $paymentMethodIdentity = $this->findIdentityOrThrow(PaymentMethod::TYPE, (string)$entry['paymentId']);
+        $shippingProfileIdentity = $this->findIdentityOrThrow(ShippingProfile::TYPE, (string)$entry['dispatchId']);
 
         $order = Order::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
@@ -78,7 +78,7 @@ class ResponseParser implements ResponseParserInterface
         $identity = $this->identityService->findIdentity([
             'objectType' => $objectType,
             'adapterIdentifier' => $adapterIdentifier,
-            'adapterName' => ShopwareAdapter::getName(),
+            'adapterName' => ShopwareAdapter::NAME,
         ]);
 
         if ($identity === null) {
@@ -110,12 +110,12 @@ class ResponseParser implements ResponseParserInterface
 
         $identity = $this->identityService->findOrCreateIdentity(
             (string)$entry['id'],
-            ShopwareAdapter::getName(),
-            OrderItem::getType()
+            ShopwareAdapter::NAME,
+            OrderItem::TYPE
         );
 
-        $productIdentity = $this->findIdentityOrThrow(Product::getType(), (string)$entry['articleId']);
-        $variationIdentity = $this->findIdentityOrThrow(Variation::getType(), $variantId);
+        $productIdentity = $this->findIdentityOrThrow(Product::TYPE, (string)$entry['articleId']);
+        $variationIdentity = $this->findIdentityOrThrow(Variation::TYPE, $variantId);
 
         $orderItem = OrderItem::fromArray([
             'identifier' => $identity->getObjectIdentifier(),

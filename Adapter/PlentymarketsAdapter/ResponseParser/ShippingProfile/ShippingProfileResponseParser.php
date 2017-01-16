@@ -34,8 +34,8 @@ class ShippingProfileResponseParser implements ResponseParserInterface
     {
         $identity = $this->identityService->findOneOrCreate(
             (string)$entry['id'],
-            PlentymarketsAdapter::getName(),
-            ShippingProfile::getType()
+            PlentymarketsAdapter::NAME,
+            ShippingProfile::TYPE
         );
 
         return ShippingProfile::fromArray([

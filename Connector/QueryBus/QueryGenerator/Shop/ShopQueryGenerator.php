@@ -18,7 +18,7 @@ class ShopQueryGenerator implements QueryGeneratorInterface
      */
     public function supports($transferObjectType)
     {
-        return $transferObjectType === Shop::getType();
+        return $transferObjectType === Shop::TYPE;
     }
 
     /**

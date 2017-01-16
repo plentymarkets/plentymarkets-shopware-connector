@@ -28,7 +28,7 @@ class FetchAllCountriesQuery implements FetchAllQueryInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getAdapterName()
     {

@@ -18,7 +18,7 @@ class CategoryQueryGenerator implements QueryGeneratorInterface
      */
     public function supports($transferObjectType)
     {
-        return $transferObjectType === Category::getType();
+        return $transferObjectType === Category::TYPE;
     }
 
     /**

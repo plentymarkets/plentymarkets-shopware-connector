@@ -34,8 +34,8 @@ class UnitResponseParser implements ResponseParserInterface
     {
         $identity = $this->identityService->findOneOrCreate(
             (string)$entry['id'],
-            PlentymarketsAdapter::getName(),
-            Unit::getType()
+            PlentymarketsAdapter::NAME,
+            Unit::TYPE
         );
 
         return Unit::fromArray([

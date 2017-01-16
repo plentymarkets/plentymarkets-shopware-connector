@@ -41,16 +41,16 @@ class FetchAllUnitsQueryHandler implements QueryHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(QueryInterface $event)
+    public function supports(QueryInterface $query)
     {
-        return $event instanceof FetchAllUnitsQuery &&
-            $event->getAdapterName() === PlentymarketsAdapter::getName();
+        return $query instanceof FetchAllUnitsQuery &&
+            $query->getAdapterName() === PlentymarketsAdapter::NAME;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function handle(QueryInterface $event)
+    public function handle(QueryInterface $query)
     {
         $units = array_map(function ($unit) {
             $names = $this->client->request('GET', 'items/units/' . $unit['id'] . '/names');

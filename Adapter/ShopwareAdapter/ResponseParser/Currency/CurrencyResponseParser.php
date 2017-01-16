@@ -34,8 +34,8 @@ class CurrencyResponseParser implements ResponseParserInterface
     {
         $identity = $this->identityService->findOneOrCreate(
             (string)$entry['id'],
-            ShopwareAdapter::getName(),
-            Currency::getType()
+            ShopwareAdapter::NAME,
+            Currency::TYPE
         );
 
         return Currency::fromArray([

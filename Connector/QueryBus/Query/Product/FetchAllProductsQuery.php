@@ -28,7 +28,7 @@ class FetchAllProductsQuery implements QueryInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getAdapterName()
     {

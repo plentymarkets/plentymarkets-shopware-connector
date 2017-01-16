@@ -57,7 +57,7 @@ class Manufacturer implements ManufacturerInterface
     /**
      * {@inheritdoc}
      */
-    public static function getType()
+    public function getType()
     {
         return self::TYPE;
     }

@@ -51,16 +51,16 @@ class GetChangedOrderQueryHandler implements QueryHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(QueryInterface $event)
+    public function supports(QueryInterface $query)
     {
-        return $event instanceof GetChangedOrderQuery &&
-            $event->getAdapterName() === ShopwareAdapter::getName();
+        return $query instanceof GetChangedOrderQuery &&
+            $query->getAdapterName() === ShopwareAdapter::NAME;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function handle(QueryInterface $event)
+    public function handle(QueryInterface $query)
     {
         $orders = $this->orderResource->getList(0, null)['data'];
 
@@ -73,8 +73,8 @@ class GetChangedOrderQueryHandler implements QueryHandlerInterface
         foreach ($orders as $order) {
             try {
                 $result[] = $this->responseParser->parseOrder($this->orderResource->getOne($order['id']));
-            } catch (Exception $e) {
-                $this->logger->error($e->getMessage());
+            } catch (Exception $exception) {
+                $this->logger->error($exception->getMessage());
             }
         }
 

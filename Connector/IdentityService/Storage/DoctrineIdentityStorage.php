@@ -69,7 +69,14 @@ class DoctrineIdentityStorage implements IdentityStorageInterface
          */
         $result = $this->identityRepository->findBy($criteria);
 
-        throw new NotImplementedException("test");
+        return array_map(function(IdentityModel $model) {
+            return Identity::fromArray([
+                'objectIdentifier' => $model->getObjectIdentifier(),
+                'objectType' => $model->getObjectType(),
+                'adapterIdentifier' => $model->getAdapterIdentifier(),
+                'adapterName' => $model->getAdapterName(),
+            ]);
+        }, $result);
     }
 
     /**
@@ -86,6 +93,8 @@ class DoctrineIdentityStorage implements IdentityStorageInterface
 
         $this->entityManager->persist($model);
         $this->entityManager->flush();
+
+        return true;
     }
 
     /**
@@ -100,7 +109,13 @@ class DoctrineIdentityStorage implements IdentityStorageInterface
             'objectType' => $identity->getObjectType(),
         ]);
 
+        if (null === $result) {
+            return false;
+        }
+
         $this->entityManager->remove($result);
         $this->entityManager->flush();
+
+        return true;
     }
 }

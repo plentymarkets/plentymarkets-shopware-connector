@@ -25,11 +25,15 @@ interface IdentityStorageInterface
 
     /**
      * @param IdentityInterface $identity
+     *
+     * @return bool
      */
     public function persist(IdentityInterface $identity);
 
     /**
      * @param IdentityInterface $identity
+     *
+     * @return bool
      */
     public function remove(IdentityInterface $identity);
 }

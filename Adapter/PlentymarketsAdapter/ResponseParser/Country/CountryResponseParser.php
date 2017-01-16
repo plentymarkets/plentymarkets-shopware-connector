@@ -34,8 +34,8 @@ class CountryResponseParser implements ResponseParserInterface
     {
         $identity = $this->identityService->findOneOrCreate(
             (string)$entry['id'],
-            PlentymarketsAdapter::getName(),
-            Country::getType()
+            PlentymarketsAdapter::NAME,
+            Country::TYPE
         );
 
         return Country::fromArray([

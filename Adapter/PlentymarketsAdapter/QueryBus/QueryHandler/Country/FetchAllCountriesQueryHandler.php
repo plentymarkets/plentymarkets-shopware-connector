@@ -41,16 +41,16 @@ class FetchAllCountriesQueryHandler implements QueryHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(QueryInterface $event)
+    public function supports(QueryInterface $query)
     {
-        return $event instanceof FetchAllCountriesQuery &&
-            $event->getAdapterName() === PlentymarketsAdapter::getName();
+        return $query instanceof FetchAllCountriesQuery &&
+            $query->getAdapterName() === PlentymarketsAdapter::NAME;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function handle(QueryInterface $event)
+    public function handle(QueryInterface $query)
     {
         $countries = array_map(function ($country) {
             return $this->responseParser->parse($country);

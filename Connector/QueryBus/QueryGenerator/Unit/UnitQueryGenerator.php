@@ -2,10 +2,12 @@
 
 namespace PlentyConnector\Connector\QueryBus\QueryGenerator\Unit;
 
+use PlentyConnector\Connector\QueryBus\Query\Unit\CheckUnitExistsQuery;
 use PlentyConnector\Connector\QueryBus\Query\Unit\FetchAllUnitsQuery;
 use PlentyConnector\Connector\QueryBus\Query\Unit\FetchChangedUnitsQuery;
 use PlentyConnector\Connector\QueryBus\Query\Unit\FetchUnitQuery;
 use PlentyConnector\Connector\QueryBus\QueryGenerator\QueryGeneratorInterface;
+use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\TransferObject\Unit\Unit;
 
 /**
@@ -18,7 +20,7 @@ class UnitQueryGenerator implements QueryGeneratorInterface
      */
     public function supports($transferObjectType)
     {
-        return $transferObjectType === Unit::getType();
+        return $transferObjectType === Unit::TYPE;
     }
 
     /**
@@ -43,5 +45,13 @@ class UnitQueryGenerator implements QueryGeneratorInterface
     public function generateFetchQuery($adapterName, $identifier)
     {
         return new FetchUnitQuery($adapterName, $identifier);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function generateExistsQuery($adapterName, TransferObjectInterface $transferObject)
+    {
+        return new CheckUnitExistsQuery($adapterName, $transferObject);
     }
 }

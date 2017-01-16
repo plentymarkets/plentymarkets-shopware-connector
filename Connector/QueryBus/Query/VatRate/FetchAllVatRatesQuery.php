@@ -28,7 +28,7 @@ class FetchAllVatRatesQuery implements FetchAllQueryInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getAdapterName()
     {

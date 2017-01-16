@@ -32,30 +32,51 @@ class Category implements CategoryInterface
     private $shopIdentifier;
 
     /**
+     * @var integer
+     */
+    private $position;
+
+    /**
      * Category constructor.
      *
      * @param string $identifier
      * @param string $name
      * @param string|null $parentIdentifier
-     * @param string|null $shopIdentifier
+     * @param string $shopIdentifier
+     * @param integer $position
      */
-    public function __construct($identifier, $name, $parentIdentifier = null, $shopIdentifier = null)
-    {
+    public function __construct(
+        $identifier,
+        $name,
+        $parentIdentifier = null,
+        $shopIdentifier,
+        $position,
+        $description,
+        $longDescription,
+        $metaTitle,
+        $metaDescription,
+        $metaKeywords,
+        $translations,
+        $attributes
+    ) {
         Assertion::uuid($identifier);
         Assertion::string($name);
         Assertion::nullOrUuid($parentIdentifier);
-        Assertion::nullOrUuid($shopIdentifier);
+        Assertion::uuid($shopIdentifier);
+        Assertion::integer($position);
+        Assertion::greaterOrEqualThan($position, 0);
 
         $this->identifier = $identifier;
         $this->name = $name;
         $this->parentIdentifier = $parentIdentifier;
         $this->shopIdentifier = $shopIdentifier;
+        $this->position = $position;
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function getType()
+    public function getType()
     {
         return self::TYPE;
     }
@@ -110,5 +131,13 @@ class Category implements CategoryInterface
     public function getShopIdentifier()
     {
         return $this->shopIdentifier;
+    }
+
+    /**
+     * @return TranslationInterface[]
+     */
+    public function getTranslations()
+    {
+        // TODO: Implement getTranslations() method.
     }
 }

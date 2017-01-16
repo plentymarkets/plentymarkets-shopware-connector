@@ -19,13 +19,13 @@ class ConnectorDefinitionCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->has('plentyconnector.connector')) {
+        if (!$container->has('plenty_connector.connector')) {
             return;
         }
 
-        $definition = $container->findDefinition('plentyconnector.connector');
+        $definition = $container->findDefinition('plenty_connector.connector');
 
-        $taggedServices = $container->findTaggedServiceIds('plentyconnector.connector_definition');
+        $taggedServices = $container->findTaggedServiceIds('plenty_connector.connector_definition');
 
         foreach ($taggedServices as $id => $tags) {
             $definition->addMethodCall('addDefinition', [new Reference($id)]);

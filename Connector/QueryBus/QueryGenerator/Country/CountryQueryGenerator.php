@@ -18,7 +18,7 @@ class CountryQueryGenerator implements QueryGeneratorInterface
      */
     public function supports($transferObjectType)
     {
-        return $transferObjectType === Country::getType();
+        return $transferObjectType === Country::TYPE;
     }
 
     /**

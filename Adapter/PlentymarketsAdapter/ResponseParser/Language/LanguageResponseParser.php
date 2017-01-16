@@ -34,8 +34,8 @@ class LanguageResponseParser implements ResponseParserInterface
     {
         $identity = $this->identityService->findOneOrCreate(
             (string)$entry['id'],
-            PlentymarketsAdapter::getName(),
-            Language::getType()
+            PlentymarketsAdapter::NAME,
+            Language::TYPE
         );
 
         return Language::fromArray([

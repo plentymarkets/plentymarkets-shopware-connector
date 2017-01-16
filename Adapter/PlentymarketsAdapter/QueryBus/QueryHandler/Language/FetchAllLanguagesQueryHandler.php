@@ -31,16 +31,16 @@ class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(QueryInterface $event)
+    public function supports(QueryInterface $query)
     {
-        return $event instanceof FetchAllLanguagesQuery &&
-            $event->getAdapterName() === PlentymarketsAdapter::getName();
+        return $query instanceof FetchAllLanguagesQuery &&
+            $query->getAdapterName() === PlentymarketsAdapter::NAME;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function handle(QueryInterface $event)
+    public function handle(QueryInterface $query)
     {
         $languages = array_map(function ($language) {
             return $this->responseParser->parse($language);

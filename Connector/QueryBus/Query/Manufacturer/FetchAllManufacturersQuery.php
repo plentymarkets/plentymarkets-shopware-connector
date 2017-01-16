@@ -28,7 +28,7 @@ class FetchAllManufacturersQuery implements FetchAllQueryInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getAdapterName()
     {

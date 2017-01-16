@@ -2,8 +2,8 @@
 
 namespace PlentyConnector\Connector\CommandBus\Command\Manufacturer;
 
+use Assert\Assertion;
 use PlentyConnector\Connector\CommandBus\Command\CommandInterface;
-use PlentyConnector\Connector\TransferObject\Manufacturer\ManufacturerInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
@@ -12,33 +12,27 @@ use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 class HandleManufacturerCommand implements CommandInterface
 {
     /**
-     * @var ManufacturerInterface
-     */
-    private $manufacturer;
-
-    /**
      * @var string
      */
     private $adapterName;
 
     /**
-     * ImportLocalManufacturerCommand constructor.
-     *
-     * @param TransferObjectInterface $manufacturer the transferobject which will be handeled
-     * @param string $adapterName the classname of the target adapter
+     * @var TransferObjectInterface
      */
-    public function __construct(TransferObjectInterface $manufacturer, $adapterName = '')
-    {
-        $this->manufacturer = $manufacturer;
-        $this->adapterName = $adapterName;
-    }
+    private $transferObject;
 
     /**
-     * @return ManufacturerInterface
+     * ImportManufacturerCommand constructor.
+     *
+     * @param string $adapterName the classname of the target adapter
+     * @param TransferObjectInterface $transferObject the transferobject which will be handeled
      */
-    public function getManufacturer()
+    public function __construct($adapterName, TransferObjectInterface $transferObject)
     {
-        return $this->manufacturer;
+        Assertion::string($adapterName);
+
+        $this->adapterName = $adapterName;
+        $this->transferObject = $transferObject;
     }
 
     /**
@@ -50,13 +44,21 @@ class HandleManufacturerCommand implements CommandInterface
     }
 
     /**
+     * @return TransferObjectInterface
+     */
+    public function getTransferObject()
+    {
+        return $this->transferObject;
+    }
+
+    /**
      * @return array
      */
     public function getPayload()
     {
         return [
             'adapterName' => $this->adapterName,
-            'manufacturer' => $this->manufacturer,
+            'transferObject' => $this->transferObject,
         ];
     }
 
@@ -66,6 +68,6 @@ class HandleManufacturerCommand implements CommandInterface
     public function setPayload(array $payload)
     {
         $this->adapterName = $payload['adapterName'];
-        $this->manufacturer = $payload['manufacturer'];
+        $this->transferObject = $payload['transferObject'];
     }
 }

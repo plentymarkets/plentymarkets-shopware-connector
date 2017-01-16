@@ -13,23 +13,23 @@ interface CommandGeneratorInterface
     /**
      * @param string $transferObjectType
      *
-     * @return boolean
+     * @return bool
      */
     public function supports($transferObjectType);
 
     /**
-     * @param TransferObjectInterface $transferObject
      * @param string $adapterName
+     * @param TransferObjectInterface $transferObject
      *
      * @return CommandInterface
      */
-    public function generateHandleCommand(TransferObjectInterface $transferObject, $adapterName);
+    public function generateHandleCommand($adapterName, TransferObjectInterface $transferObject);
 
     /**
-     * @param TransferObjectInterface $transferObject
      * @param string $adapterName
+     * @param string $objectIdentifier
      *
      * @return CommandInterface
      */
-    public function generateRemoveCommand(TransferObjectInterface $transferObject, $adapterName);
+    public function generateRemoveCommand($adapterName, $objectIdentifier);
 }

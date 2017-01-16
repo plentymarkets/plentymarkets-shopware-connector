@@ -34,8 +34,8 @@ class PaymentStatusResponseParser implements ResponseParserInterface
     {
         $identity = $this->identityService->findOneOrCreate(
             (string)$entry['id'],
-            ShopwareAdapter::getName(),
-            PaymentStatus::getType()
+            ShopwareAdapter::NAME,
+            PaymentStatus::TYPE
         );
 
         return PaymentStatus::fromArray([

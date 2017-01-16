@@ -18,7 +18,7 @@ class PaymentMethodQueryGenerator implements QueryGeneratorInterface
      */
     public function supports($transferObjectType)
     {
-        return $transferObjectType === PaymentMethod::getType();
+        return $transferObjectType === PaymentMethod::TYPE;
     }
 
     /**

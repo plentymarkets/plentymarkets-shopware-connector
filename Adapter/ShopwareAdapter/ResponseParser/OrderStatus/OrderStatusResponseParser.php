@@ -34,8 +34,8 @@ class OrderStatusResponseParser implements ResponseParserInterface
     {
         $identity = $this->identityService->findOneOrCreate(
             (string)$entry['id'],
-            ShopwareAdapter::getName(),
-            OrderStatus::getType()
+            ShopwareAdapter::NAME,
+            OrderStatus::TYPE
         );
 
         return OrderStatus::fromArray([

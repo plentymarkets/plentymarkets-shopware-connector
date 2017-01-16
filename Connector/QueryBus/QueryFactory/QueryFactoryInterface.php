@@ -3,6 +3,8 @@
 namespace PlentyConnector\Connector\QueryBus\QueryFactory;
 
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
+use PlentyConnector\Connector\QueryBus\QueryFactory\Exception\MissingQueryException;
+use PlentyConnector\Connector\QueryBus\QueryFactory\Exception\MissingQueryGeneratorException;
 use PlentyConnector\Connector\QueryBus\QueryGenerator\QueryGeneratorInterface;
 
 /**
@@ -19,9 +21,12 @@ interface QueryFactoryInterface
      * @param string $adapterName
      * @param string $objectType
      * @param string $queryType
-     * @param string|null $identifier
+     * @param mixed $payload
      *
      * @return QueryInterface
+     *
+     * @throws MissingQueryGeneratorException
+     * @throws MissingQueryException
      */
-    public function create($adapterName, $objectType, $queryType, $identifier = null);
+    public function create($adapterName, $objectType, $queryType, $payload = null);
 }

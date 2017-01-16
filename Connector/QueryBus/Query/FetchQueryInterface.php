@@ -11,4 +11,9 @@ interface FetchQueryInterface extends QueryInterface
      * @return string
      */
     public function getIdentifier();
+
+    /**
+     * @return string
+     */
+    public function getAdapterName();
 }

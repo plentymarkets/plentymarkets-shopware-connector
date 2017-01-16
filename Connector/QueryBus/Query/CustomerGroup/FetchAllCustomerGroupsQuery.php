@@ -28,7 +28,7 @@ class FetchAllCustomerGroupsQuery implements FetchAllQueryInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getAdapterName()
     {

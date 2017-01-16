@@ -34,8 +34,8 @@ class PaymentMethodResponseParser implements ResponseParserInterface
     {
         $identity = $this->identityService->findOneOrCreate(
             (string)$entry['id'],
-            PlentymarketsAdapter::getName(),
-            PaymentMethod::getType()
+            PlentymarketsAdapter::NAME,
+            PaymentMethod::TYPE
         );
 
         return PaymentMethod::fromArray([

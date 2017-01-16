@@ -44,22 +44,22 @@ class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(QueryInterface $event)
+    public function supports(QueryInterface $query)
     {
-        return $event instanceof FetchAllCustomerGroupsQuery &&
-            $event->getAdapterName() === ShopwareAdapter::getName();
+        return $query instanceof FetchAllCustomerGroupsQuery &&
+            $query->getAdapterName() === ShopwareAdapter::NAME;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function handle(QueryInterface $event)
+    public function handle(QueryInterface $query)
     {
-        $query = $this->createCustomerGroupsQuery();
+        $objectQuery = $this->createCustomerGroupsQuery();
 
         $customerGroups = array_map(function ($group) {
             return $this->responseParser->parse($group);
-        }, $query->getArrayResult());
+        }, $objectQuery->getArrayResult());
 
         return array_filter($customerGroups);
     }
@@ -75,9 +75,9 @@ class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
             'groups.name as name'
         ]);
 
-        $query = $queryBuilder->getQuery();
-        $query->execute();
+        $objectQuery = $queryBuilder->getQuery();
+        $objectQuery->execute();
 
-        return $query;
+        return $objectQuery;
     }
 }

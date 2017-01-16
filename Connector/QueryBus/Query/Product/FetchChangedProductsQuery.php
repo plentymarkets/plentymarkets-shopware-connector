@@ -28,7 +28,7 @@ class FetchChangedProductsQuery implements QueryInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getAdapterName()
     {

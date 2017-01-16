@@ -60,22 +60,22 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
     }
 
     /**
-     * @param QueryInterface $event
+     * @param QueryInterface $query
      *
      * @return bool
      */
-    public function supports(QueryInterface $event)
+    public function supports(QueryInterface $query)
     {
-        return $event instanceof FetchChangedCategoriesQuery &&
-            $event->getAdapterName() === PlentymarketsAdapter::getName();
+        return $query instanceof FetchChangedCategoriesQuery &&
+            $query->getAdapterName() === PlentymarketsAdapter::NAME;
     }
 
     /**
-     * @param QueryInterface $event
+     * @param QueryInterface $query
      *
      * @return TransferObjectInterface[]
      */
-    public function handle(QueryInterface $event)
+    public function handle(QueryInterface $query)
     {
         // TODO: process elements
     }

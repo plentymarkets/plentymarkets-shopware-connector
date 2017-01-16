@@ -18,13 +18,13 @@ class QueryHandlerCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->has('plentyconnector.query_bus.query_handler_middleware')) {
+        if (!$container->has('plenty_connector.query_bus.query_handler_middleware')) {
             return;
         }
 
-        $definition = $container->findDefinition('plentyconnector.query_bus.query_handler_middleware');
+        $definition = $container->findDefinition('plenty_connector.query_bus.query_handler_middleware');
 
-        $taggedServices = $container->findTaggedServiceIds('plentyconnector.query_handler');
+        $taggedServices = $container->findTaggedServiceIds('plenty_connector.query_handler');
 
         foreach ($taggedServices as $id => $tags) {
             $definition->addMethodCall('addHandler', [new Reference($id)]);

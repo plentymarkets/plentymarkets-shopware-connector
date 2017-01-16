@@ -18,7 +18,7 @@ class CustomerGroupQueryGenerator implements QueryGeneratorInterface
      */
     public function supports($transferObjectType)
     {
-        return $transferObjectType === CustomerGroup::getType();
+        return $transferObjectType === CustomerGroup::TYPE;
     }
 
     /**

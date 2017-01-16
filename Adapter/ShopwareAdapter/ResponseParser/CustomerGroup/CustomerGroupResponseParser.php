@@ -34,8 +34,8 @@ class CustomerGroupResponseParser implements ResponseParserInterface
     {
         $identity = $this->identityService->findOneOrCreate(
             (string)$entry['id'],
-            ShopwareAdapter::getName(),
-            CustomerGroup::getType()
+            ShopwareAdapter::NAME,
+            CustomerGroup::TYPE
         );
 
         return CustomerGroup::fromArray([

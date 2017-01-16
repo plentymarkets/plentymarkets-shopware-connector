@@ -44,22 +44,22 @@ class FetchAllCurrenciesQueryHandler implements QueryHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(QueryInterface $event)
+    public function supports(QueryInterface $query)
     {
-        return $event instanceof FetchAllCurrenciesQuery &&
-            $event->getAdapterName() === ShopwareAdapter::getName();
+        return $query instanceof FetchAllCurrenciesQuery &&
+            $query->getAdapterName() === ShopwareAdapter::NAME;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function handle(QueryInterface $event)
+    public function handle(QueryInterface $query)
     {
-        $query = $this->createCurrenciesQuery();
+        $objectQuery = $this->createCurrenciesQuery();
 
         $currencies = array_map(function ($currency) {
             return $this->responseParser->parse($currency);
-        }, $query->getArrayResult());
+        }, $objectQuery->getArrayResult());
 
         return array_filter($currencies);
     }
@@ -76,9 +76,9 @@ class FetchAllCurrenciesQueryHandler implements QueryHandlerInterface
             'currencies.currency as currency'
         ]);
 
-        $query = $queryBuilder->getQuery();
-        $query->execute();
+        $objectQuery = $queryBuilder->getQuery();
+        $objectQuery->execute();
 
-        return $query;
+        return $objectQuery;
     }
 }

@@ -75,7 +75,7 @@ class Mapping implements MappingInterface
     /**
      * {@inheritdoc}
      */
-    public static function getType()
+    public function getType()
     {
         return self::TYPE;
     }

@@ -39,7 +39,7 @@ class CustomerGroup implements CustomerGroupInterface
     /**
      * {@inheritdoc}
      */
-    public static function getType()
+    public function getType()
     {
         return self::TYPE;
     }

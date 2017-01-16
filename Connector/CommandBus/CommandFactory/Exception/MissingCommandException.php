@@ -1,6 +1,6 @@
 <?php
 
-namespace PlentyConnector\Connector\Exception;
+namespace PlentyConnector\Connector\CommandBus\CommandFactory\Exception;
 
 use InvalidArgumentException;
 use PlentyConnector\Connector\TransferObject\Definition\DefinitionInterface;
@@ -11,13 +11,14 @@ use PlentyConnector\Connector\TransferObject\Definition\DefinitionInterface;
 class MissingCommandException extends InvalidArgumentException
 {
     /**
-     * @param DefinitionInterface $definition
+     * @param string $objectType
+     * @param string $commandType
      *
      * @return self
      */
-    public static function fromDefinition(DefinitionInterface $definition)
+    public static function fromObjectData($objectType, $commandType)
     {
-        $message = sprintf('No command could be generated for the current definition: %s', $definition) . "\n";
+        $message = 'No matching command found! type: ' . $objectType . ' queryType: ' . $commandType;
 
         return new static($message);
     }

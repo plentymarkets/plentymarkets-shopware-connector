@@ -7,5 +7,8 @@ namespace PlentyConnector\Connector\QueryBus\Query;
  */
 interface FetchAllQueryInterface extends QueryInterface
 {
-
+    /**
+     * @return string
+     */
+    public function getAdapterName();
 }

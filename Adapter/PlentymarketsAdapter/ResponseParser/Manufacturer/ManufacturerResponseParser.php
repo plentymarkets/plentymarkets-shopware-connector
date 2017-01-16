@@ -34,8 +34,8 @@ class ManufacturerResponseParser implements ResponseParserInterface
     {
         $identity = $this->identityService->findOneOrCreate(
             (string)$entry['id'],
-            PlentymarketsAdapter::getName(),
-            Manufacturer::getType()
+            PlentymarketsAdapter::NAME,
+            Manufacturer::TYPE
         );
 
         return Manufacturer::fromArray([

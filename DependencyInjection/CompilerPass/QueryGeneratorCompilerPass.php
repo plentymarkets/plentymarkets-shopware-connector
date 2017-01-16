@@ -19,13 +19,13 @@ class QueryGeneratorCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->has('plentyconnector.query_factory')) {
+        if (!$container->has('plenty_connector.query_factory')) {
             return;
         }
 
-        $definition = $container->findDefinition('plentyconnector.query_factory');
+        $definition = $container->findDefinition('plenty_connector.query_factory');
 
-        $taggedServices = $container->findTaggedServiceIds('plentyconnector.query_generator');
+        $taggedServices = $container->findTaggedServiceIds('plenty_connector.query_generator');
 
         foreach ($taggedServices as $id => $tags) {
             $definition->addMethodCall('addGenerator', [new Reference($id)]);

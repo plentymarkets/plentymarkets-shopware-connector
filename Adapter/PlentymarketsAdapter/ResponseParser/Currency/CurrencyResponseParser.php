@@ -34,8 +34,8 @@ class CurrencyResponseParser implements ResponseParserInterface
     {
         $identity = $this->identityService->findOneOrCreate(
             (string)$entry['currency'],
-            PlentymarketsAdapter::getName(),
-            Currency::getType()
+            PlentymarketsAdapter::NAME,
+            Currency::TYPE
         );
 
         return Currency::fromArray([

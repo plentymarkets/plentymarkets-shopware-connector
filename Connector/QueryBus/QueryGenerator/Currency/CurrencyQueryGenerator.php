@@ -18,7 +18,7 @@ class CurrencyQueryGenerator implements QueryGeneratorInterface
      */
     public function supports($transferObjectType)
     {
-        return $transferObjectType === Currency::getType();
+        return $transferObjectType === Currency::TYPE;
     }
 
     /**

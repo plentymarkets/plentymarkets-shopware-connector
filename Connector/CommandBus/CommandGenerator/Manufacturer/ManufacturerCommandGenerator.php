@@ -18,22 +18,22 @@ class ManufacturerCommandGenerator implements CommandGeneratorInterface
      */
     public function supports($transferObjectType)
     {
-        return $transferObjectType === Manufacturer::getType();
+        return $transferObjectType === Manufacturer::TYPE;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function generateHandleCommand(TransferObjectInterface $transferObject, $adapterName)
+    public function generateHandleCommand($adapterName, TransferObjectInterface $transferObject)
     {
-        return new HandleManufacturerCommand($transferObject, $adapterName);
+        return new HandleManufacturerCommand($adapterName, $transferObject);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function generateRemoveCommand(TransferObjectInterface $transferObject, $adapterName)
+    public function generateRemoveCommand($adapterName, $objectIdentifier)
     {
-        return new RemoveManufacturerCommand($transferObject, $adapterName);
+        return new RemoveManufacturerCommand($adapterName, $objectIdentifier);
     }
 }

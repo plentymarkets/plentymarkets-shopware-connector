@@ -3,8 +3,9 @@
 namespace PlentyConnector\Connector\CommandBus\CommandFactory;
 
 use PlentyConnector\Connector\CommandBus\Command\CommandInterface;
+use PlentyConnector\Connector\CommandBus\CommandFactory\Exception\MissingCommandException;
+use PlentyConnector\Connector\CommandBus\CommandFactory\Exception\MissingCommandGeneratorException;
 use PlentyConnector\Connector\CommandBus\CommandGenerator\CommandGeneratorInterface;
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
  * Class CommandFactoryInterface.
@@ -17,11 +18,15 @@ interface CommandFactoryInterface
     public function addGenerator(CommandGeneratorInterface $generator);
 
     /**
-     * @param TransferObjectInterface $object
      * @param string $adapterName
+     * @param string $objectType
      * @param string $commandType
+     * @param mixed $payload
      *
      * @return CommandInterface
+     *
+     * @throws MissingCommandGeneratorException
+     * @throws MissingCommandException
      */
-    public function create(TransferObjectInterface $object, $adapterName, $commandType);
+    public function create($adapterName, $objectType, $commandType, $payload = null);
 }

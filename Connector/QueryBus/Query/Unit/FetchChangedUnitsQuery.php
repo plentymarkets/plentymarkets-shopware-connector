@@ -28,7 +28,7 @@ class FetchChangedUnitsQuery implements FetchChangedQueryInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getAdapterName()
     {

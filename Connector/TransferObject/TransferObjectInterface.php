@@ -10,7 +10,7 @@ interface TransferObjectInterface
     /**
      * @return string
      */
-    public static function getType();
+    public function getType();
 
     /**
      * @param array $params

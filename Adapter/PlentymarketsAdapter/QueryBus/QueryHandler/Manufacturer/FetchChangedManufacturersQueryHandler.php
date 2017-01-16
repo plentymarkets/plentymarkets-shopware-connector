@@ -62,24 +62,24 @@ class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
     }
 
     /**
-     * @param QueryInterface $event
+     * @param QueryInterface $query
      *
      * @return bool
      */
-    public function supports(QueryInterface $event)
+    public function supports(QueryInterface $query)
     {
-        return $event instanceof FetchChangedManufacturersQuery &&
-            $event->getAdapterName() === PlentymarketsAdapter::getName();
+        return $query instanceof FetchChangedManufacturersQuery &&
+            $query->getAdapterName() === PlentymarketsAdapter::NAME;
     }
 
     /**
-     * @param QueryInterface $event
+     * @param QueryInterface $query
      *
      * @return TransferObjectInterface[]
      *
      * @throws UnexpectedValueException
      */
-    public function handle(QueryInterface $event)
+    public function handle(QueryInterface $query)
     {
         $criteria = [
             'lastUpdateTimestamp' => $this->getChangedDateTime($this->config),
@@ -89,8 +89,8 @@ class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
         foreach ($this->client->getIterator('items/manufacturers', $criteria) as $element) {
             try {
                 $result[] = $this->responseMapper->parse($element);
-            } catch (Exception $e) {
-                $this->logger->error($e->getMessage());
+            } catch (Exception $exception) {
+                $this->logger->error($exception->getMessage());
             }
         }
 

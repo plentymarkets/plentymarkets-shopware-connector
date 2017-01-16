@@ -28,7 +28,7 @@ class FetchAllOrderStatusesQuery implements FetchAllQueryInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getAdapterName()
     {

@@ -49,31 +49,32 @@ class FetchAllManufacturersQueryHandler implements QueryHandlerInterface
     }
 
     /**
-     * @param QueryInterface $event
+     * @param QueryInterface $query
      *
      * @return bool
      */
-    public function supports(QueryInterface $event)
+    public function supports(QueryInterface $query)
     {
-        return $event instanceof FetchAllManufacturersQuery &&
-            $event->getAdapterName() === PlentymarketsAdapter::getName();
+        return $query instanceof FetchAllManufacturersQuery &&
+            $query->getAdapterName() === PlentymarketsAdapter::NAME;
     }
 
     /**
-     * @param QueryInterface $event
+     * @param QueryInterface $query
      *
      * @return TransferObjectInterface[]
      *
      * @throws UnexpectedValueException
      */
-    public function handle(QueryInterface $event)
+    public function handle(QueryInterface $query)
     {
         $result = [];
+
         foreach ($this->client->getIterator('items/manufacturers') as $element) {
             try {
                 $result[] = $this->responseMapper->parse($element);
-            } catch (Exception $e) {
-                $this->logger->error($e->getMessage());
+            } catch (Exception $exception) {
+                $this->logger->error($exception->getMessage());
             }
         }
 

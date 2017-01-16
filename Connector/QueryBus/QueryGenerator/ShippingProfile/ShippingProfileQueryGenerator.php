@@ -18,7 +18,7 @@ class ShippingProfileQueryGenerator implements QueryGeneratorInterface
      */
     public function supports($transferObjectType)
     {
-        return $transferObjectType === ShippingProfile::getType();
+        return $transferObjectType === ShippingProfile::TYPE;
     }
 
     /**

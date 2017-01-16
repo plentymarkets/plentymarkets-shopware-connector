@@ -28,7 +28,7 @@ class FetchChangedOrderStatusesQuery implements FetchChangedQueryInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getAdapterName()
     {

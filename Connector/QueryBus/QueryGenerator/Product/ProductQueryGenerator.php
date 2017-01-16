@@ -18,7 +18,7 @@ class ProductQueryGenerator implements QueryGeneratorInterface
      */
     public function supports($transferObjectType)
     {
-        return $transferObjectType === Product::getType();
+        return $transferObjectType === Product::TYPE;
     }
 
     /**

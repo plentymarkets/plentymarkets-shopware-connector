@@ -4,7 +4,8 @@ namespace PlentyConnector\Connector\MappingService;
 
 use Assert\Assertion;
 use Doctrine\Common\Cache\Cache;
-use PlentyConnector\Connector\Exception\MissingQueryException;
+use PlentyConnector\Connector\QueryBus\QueryFactory\Exception\MissingQueryException;
+use PlentyConnector\Connector\QueryBus\QueryFactory\Exception\MissingQueryGeneratorException;
 use PlentyConnector\Connector\QueryBus\QueryFactory\QueryFactoryInterface;
 use PlentyConnector\Connector\QueryBus\QueryType;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
@@ -125,9 +126,10 @@ class MappingService implements MappingServiceInterface
      * @param DefinitionInterface $definition
      * @param string $adapterName
      *
-     * @return TransferObjectInterface[]|null
+     * @return TransferObjectInterface[]
      *
-     * @throws \PlentyConnector\Connector\Exception\MissingQueryException
+     * @throws MissingQueryGeneratorException
+     * @throws MissingQueryException
      */
     private function query(DefinitionInterface $definition, $adapterName)
     {
@@ -137,10 +139,6 @@ class MappingService implements MappingServiceInterface
             QueryType::ALL
         );
 
-        if (null === $originQuery) {
-            throw MissingQueryException::fromDefinition($definition);
-        }
-
         $objects = $this->queryBus->handle($originQuery);
 
         if (null === $objects) {
@@ -148,7 +146,7 @@ class MappingService implements MappingServiceInterface
         }
 
         return array_filter($objects, function (TransferObjectInterface $object) use ($definition) {
-            return $object::getType() === $definition->getObjectType()
+            return $object->getType() === $definition->getObjectType()
                 && is_subclass_of($object, MappedTransferObjectInterface::class);
         });
     }

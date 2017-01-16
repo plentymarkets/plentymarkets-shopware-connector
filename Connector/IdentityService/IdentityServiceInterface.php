@@ -46,4 +46,11 @@ interface IdentityServiceInterface
      * @param IdentityInterface $identity
      */
     public function remove(IdentityInterface $identity);
+
+    /**
+     * @param array $criteria
+     *
+     * @return bool
+     */
+    public function exists(array $criteria = []);
 }

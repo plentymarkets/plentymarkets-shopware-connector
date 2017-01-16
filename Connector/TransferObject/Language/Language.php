@@ -39,7 +39,7 @@ class Language implements LanguageInterface
     /**
      * {@inheritdoc}
      */
-    public static function getType()
+    public function getType()
     {
         return self::TYPE;
     }

@@ -2,7 +2,8 @@
 
 namespace PlentyConnector\Connector\MappingService;
 
-use PlentyConnector\Connector\Exception\MissingQueryException;
+use PlentyConnector\Connector\QueryBus\QueryFactory\Exception\MissingQueryException;
+use PlentyConnector\Connector\QueryBus\QueryFactory\Exception\MissingQueryGeneratorException;
 use PlentyConnector\Connector\TransferObject\Definition\DefinitionInterface;
 use PlentyConnector\Connector\TransferObject\Mapping\MappingInterface;
 
@@ -23,6 +24,7 @@ interface MappingServiceInterface
      * @return MappingInterface[]
      *
      * @throws MissingQueryException
+     * @throws MissingQueryGeneratorException
      */
     public function getMappingInformation($objectType = null, $fresh = false);
 }

@@ -2,9 +2,8 @@
 
 namespace PlentyConnector\Connector\CommandBus\Command\Manufacturer;
 
+use Assert\Assertion;
 use PlentyConnector\Connector\CommandBus\Command\CommandInterface;
-use PlentyConnector\Connector\TransferObject\Manufacturer\ManufacturerInterface;
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
  * Class RemoveManufacturerCommand.
@@ -12,33 +11,27 @@ use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 class RemoveManufacturerCommand implements CommandInterface
 {
     /**
-     * @var ManufacturerInterface
-     */
-    private $manufacturer;
-
-    /**
      * @var string
      */
     private $adapterName;
 
     /**
-     * ImportLocalManufacturerCommand constructor.
-     *
-     * @param TransferObjectInterface $manufacturer the transferobject which will be handeled
-     * @param string $adapterName the classname of the target adapter
+     * @var string
      */
-    public function __construct(TransferObjectInterface $manufacturer, $adapterName = '')
-    {
-        $this->manufacturer = $manufacturer;
-        $this->adapterName = $adapterName;
-    }
+    private $objectIdentifier;
 
     /**
-     * @return ManufacturerInterface
+     * RemoveManufacturerCommand constructor.
+     *
+     * @param string $adapterName the classname of the target adapter
+     * @param string $objectIdentifier the identifier of the transferobject which will be handeled
      */
-    public function getManufacturer()
+    public function __construct($adapterName, $objectIdentifier)
     {
-        return $this->manufacturer;
+        Assertion::string($adapterName);
+
+        $this->adapterName = $adapterName;
+        $this->objectIdentifier = $objectIdentifier;
     }
 
     /**
@@ -50,13 +43,21 @@ class RemoveManufacturerCommand implements CommandInterface
     }
 
     /**
+     * @return string
+     */
+    public function getObjectIdentifier()
+    {
+        return $this->objectIdentifier;
+    }
+
+    /**
      * @return array
      */
     public function getPayload()
     {
         return [
             'adapterName' => $this->adapterName,
-            'manufacturer' => $this->manufacturer,
+            'objectIdentifier' => $this->objectIdentifier,
         ];
     }
 
@@ -66,6 +67,6 @@ class RemoveManufacturerCommand implements CommandInterface
     public function setPayload(array $payload)
     {
         $this->adapterName = $payload['adapterName'];
-        $this->manufacturer = $payload['manufacturer'];
+        $this->objectIdentifier = $payload['objectIdentifier'];
     }
 }

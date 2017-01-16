@@ -34,8 +34,8 @@ class ShippingProfileResponseParser implements ResponseParserInterface
     {
         $identity = $this->identityService->findOneOrCreate(
             (string)$entry['id'],
-            ShopwareAdapter::getName(),
-            ShippingProfile::getType()
+            ShopwareAdapter::NAME,
+            ShippingProfile::TYPE
         );
 
         return ShippingProfile::fromArray([

@@ -3,8 +3,11 @@
 namespace PlentyConnector\Connector\QueryBus\QueryFactory;
 
 use Assert\Assertion;
+use PlentyConnector\Connector\QueryBus\QueryFactory\Exception\MissingQueryException;
+use PlentyConnector\Connector\QueryBus\QueryFactory\Exception\MissingQueryGeneratorException;
 use PlentyConnector\Connector\QueryBus\QueryGenerator\QueryGeneratorInterface;
 use PlentyConnector\Connector\QueryBus\QueryType;
+use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
  * Class QueryFactory.
@@ -27,14 +30,14 @@ class QueryFactory implements QueryFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function create($adapterName, $objectType, $queryType, $identifier = null)
+    public function create($adapterName, $objectType, $queryType, $payload = null)
     {
         Assertion::string($adapterName);
         Assertion::string($objectType);
         Assertion::inArray($queryType, QueryType::getAllTypes());
 
         if ($queryType === QueryType::ONE) {
-            Assertion::uuid($identifier);
+            Assertion::uuid($payload);
         }
 
         /**
@@ -47,16 +50,27 @@ class QueryFactory implements QueryFactoryInterface
         $generator = array_shift($generators);
 
         if (null === $generator) {
-            return null;
+            throw MissingQueryGeneratorException::fromObjectData($objectType, $queryType);
         }
+
+        $query = null;
 
         switch ($queryType) {
             case QueryType::ONE:
-                return $generator->generateFetchQuery($adapterName, $identifier);
+                $query = $generator->generateFetchQuery($adapterName, $payload);
+                break;
             case QueryType::CHANGED:
-                return $generator->generateFetchChangedQuery($adapterName);
+                $query = $generator->generateFetchChangedQuery($adapterName);
+                break;
             case QueryType::ALL:
-                return $generator->generateFetchAllQuery($adapterName);
+                $query = $generator->generateFetchAllQuery($adapterName);
+                break;
         }
+
+        if (null === $query) {
+            throw MissingQueryException::fromObjectData($objectType, $queryType);
+        }
+
+        return $query;
     }
 }

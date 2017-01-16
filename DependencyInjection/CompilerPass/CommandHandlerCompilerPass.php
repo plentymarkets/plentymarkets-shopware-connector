@@ -18,13 +18,13 @@ class CommandHandlerCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->has('plentyconnector.command_bus.command_handler_middleware')) {
+        if (!$container->has('plenty_connector.command_bus.command_handler_middleware')) {
             return;
         }
 
-        $definition = $container->findDefinition('plentyconnector.command_bus.command_handler_middleware');
+        $definition = $container->findDefinition('plenty_connector.command_bus.command_handler_middleware');
 
-        $taggedServices = $container->findTaggedServiceIds('plentyconnector.command_handler');
+        $taggedServices = $container->findTaggedServiceIds('plenty_connector.command_handler');
 
         foreach ($taggedServices as $id => $tags) {
             $definition->addMethodCall('addHandler', [new Reference($id)]);

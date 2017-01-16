@@ -14,7 +14,7 @@ class PlentymarketsAdapter implements AdapterInterface
     /**
      * {@inheritdoc}
      */
-    public static function getName()
+    public function getName()
     {
         return self::NAME;
     }

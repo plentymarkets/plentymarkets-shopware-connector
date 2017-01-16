@@ -53,7 +53,7 @@ class Definition implements DefinitionInterface
     /**
      * {@inheritdoc}
      */
-    public static function getType()
+    public function getType()
     {
         return self::TYPE;
     }

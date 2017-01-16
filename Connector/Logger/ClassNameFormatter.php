@@ -139,12 +139,12 @@ class ClassNameFormatter implements Formatter
     /**
      * {@inheritDoc}
      */
-    public function logCommandFailed(LoggerInterface $logger, $command, Exception $e)
+    public function logCommandFailed(LoggerInterface $logger, $command, Exception $exception)
     {
         $message = $this->getFailedMessage($command);
         $payload = $this->getPayload($command);
 
-        $payload = array_merge($payload, ['exception' => $e]);
+        $payload = array_merge($payload, ['exception' => $exception]);
 
         $logger->log(
             $this->commandFailedLevel,

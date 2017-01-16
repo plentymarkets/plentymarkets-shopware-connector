@@ -34,8 +34,8 @@ class ShopResponseParser implements ResponseParserInterface
     {
         $identity = $this->identityService->findOneOrCreate(
             (string)$entry['id'],
-            ShopwareAdapter::getName(),
-            Shop::getType()
+            ShopwareAdapter::NAME,
+            Shop::TYPE
         );
 
         return Shop::fromArray([

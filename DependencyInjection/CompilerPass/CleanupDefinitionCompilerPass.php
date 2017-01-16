@@ -19,13 +19,13 @@ class CleanupDefinitionCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->has('plentyconnector.cleanup_service')) {
+        if (!$container->has('plenty_connector.cleanup_service')) {
             return;
         }
 
-        $definition = $container->findDefinition('plentyconnector.cleanup_service');
+        $definition = $container->findDefinition('plenty_connector.cleanup_service');
 
-        $taggedServices = $container->findTaggedServiceIds('plentyconnector.connector_definition');
+        $taggedServices = $container->findTaggedServiceIds('plenty_connector.connector_definition');
 
         foreach ($taggedServices as $id => $tags) {
             $definition->addMethodCall('addDefinition', [new Reference($id)]);

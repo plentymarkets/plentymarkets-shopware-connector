@@ -43,22 +43,22 @@ class FetchAllPaymentMethodsQueryHandler implements QueryHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(QueryInterface $event)
+    public function supports(QueryInterface $query)
     {
-        return $event instanceof FetchAllPaymentMethodsQuery &&
-            $event->getAdapterName() === ShopwareAdapter::getName();
+        return $query instanceof FetchAllPaymentMethodsQuery &&
+            $query->getAdapterName() === ShopwareAdapter::NAME;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function handle(QueryInterface $event)
+    public function handle(QueryInterface $query)
     {
-        $query = $this->repository->getActivePaymentsQuery();
+        $objectQuery = $this->repository->getActivePaymentsQuery();
 
         $paymentMethods = array_map(function ($paymentMethod) {
             return $this->responseParser->parse($paymentMethod);
-        }, $query->getArrayResult());
+        }, $objectQuery->getArrayResult());
 
         return array_filter($paymentMethods);
     }

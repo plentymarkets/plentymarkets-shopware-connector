@@ -3,7 +3,10 @@
 namespace PlentyConnector\Connector\IdentityService;
 
 use Assert\Assertion;
+use PlentyConnector\Connector\EventBus\Event\Identity\IdentityCreatedEvent;
+use PlentyConnector\Connector\EventBus\Event\Identity\IdentityRemovedEvent;
 use PlentyConnector\Connector\IdentityService\Storage\IdentityStorageInterface;
+use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use PlentyConnector\Connector\TransferObject\Identity\Identity;
 use PlentyConnector\Connector\TransferObject\Identity\IdentityInterface;
 use Ramsey\Uuid\Uuid;
@@ -17,6 +20,11 @@ class IdentityService implements IdentityServiceInterface
      * @var IdentityStorageInterface
      */
     private $storage;
+
+    /**
+     * @var ServiceBusInterface
+     */
+    private $eventBus;
 
     /**
      * IdentityService constructor.
@@ -70,6 +78,29 @@ class IdentityService implements IdentityServiceInterface
     /**
      * {@inheritdoc}
      */
+    public function create($objectIdentifier, $objectType, $adapterIdentifier, $adapterName)
+    {
+        $params = compact(
+            'objectIdentifier',
+            'objectType',
+            'adapterIdentifier',
+            'adapterName'
+        );
+
+        $identity = Identity::fromArray($params);
+
+        $result = $this->storage->persist($identity);
+
+        if ($result) {
+            //$this->eventBus->handle(new IdentityCreatedEvent($identity));
+        }
+
+        return $identity;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findby(array $criteria = [])
     {
         Assertion::isArray($criteria);
@@ -80,32 +111,22 @@ class IdentityService implements IdentityServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function create($objectIdentifier, $objectType, $adapterIdentifier, $adapterName)
+    public function remove(IdentityInterface $identity)
     {
-        Assertion::string($objectIdentifier);
-        Assertion::string($objectType);
-        Assertion::string($adapterIdentifier);
-        Assertion::string($adapterName);
+        $result = $this->storage->remove($identity);
 
-        $params = compact(
-            'objectIdentifier',
-            'objectType',
-            'adapterIdentifier',
-            'adapterName'
-        );
-
-        $identity = Identity::fromArray($params);
-
-        $this->storage->persist($identity);
-
-        return $identity;
+        if ($result) {
+            //$this->eventBus->handle(new IdentityRemovedEvent($identity));
+        }
     }
 
     /**
      * {@inheritdoc}
      */
-    public function remove(IdentityInterface $identity)
+    public function exists(array $criteria = [])
     {
-        $this->storage->remove($identity);
+        $identity = $this->findOneBy($criteria);
+
+        return (bool)$identity;
     }
 }

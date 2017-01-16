@@ -28,7 +28,7 @@ class FetchAllUnitsQuery implements FetchAllQueryInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getAdapterName()
     {

@@ -49,32 +49,34 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
     }
 
     /**
-     * @param QueryInterface $event
+     * @param QueryInterface $query
      *
      * @return bool
      */
-    public function supports(QueryInterface $event)
+    public function supports(QueryInterface $query)
     {
-        return $event instanceof FetchAllCategoriesQuery &&
-            $event->getAdapterName() === PlentymarketsAdapter::getName();
+        return $query instanceof FetchAllCategoriesQuery &&
+            $query->getAdapterName() === PlentymarketsAdapter::NAME;
     }
 
     /**
-     * @param QueryInterface $event
+     * @param QueryInterface $query
      *
      * @return TransferObjectInterface[]
      *
      * @throws UnexpectedValueException
      */
-    public function handle(QueryInterface $event)
+    public function handle(QueryInterface $query)
     {
-        $elements = $this->client->request('GET', 'categories/');
+        $elements = $this->client->request('GET', 'categories', [
+            'with' => 'clients',
+        ]);
 
-        $elements = array_filter($elements, function($element) {
-            return $element['type'] === 'item';
+        $elements = array_filter($elements, function ($element) {
+            return $element['type'] === 'item' && $element['right'] === 'all';
         });
 
-        array_walk($elements, function($element) {
+        array_walk($elements, function ($element) {
             // TODO: process elements
         });
 

@@ -39,7 +39,7 @@ class PaymentStatus implements PaymentStatusInterface
     /**
      * {@inheritdoc}
      */
-    public static function getType()
+    public function getType()
     {
         return self::TYPE;
     }

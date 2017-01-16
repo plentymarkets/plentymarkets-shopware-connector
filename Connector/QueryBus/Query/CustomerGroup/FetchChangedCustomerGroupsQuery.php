@@ -28,7 +28,7 @@ class FetchChangedCustomerGroupsQuery implements FetchChangedQueryInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getAdapterName()
     {

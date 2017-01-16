@@ -43,12 +43,12 @@ class RemoveManufacturerCommandHandler implements CommandHandlerInterface
     /**
      * @param CommandInterface $command
      *
-     * @return boolean
+     * @return bool
      */
     public function supports(CommandInterface $command)
     {
         return $command instanceof RemoveManufacturerCommand &&
-            $command->getAdapterName() === ShopwareAdapter::getName();
+            $command->getAdapterName() === ShopwareAdapter::NAME;
     }
 
     /**
@@ -63,12 +63,12 @@ class RemoveManufacturerCommandHandler implements CommandHandlerInterface
         /**
          * @var RemoveManufacturerCommand $command
          */
-        $manufacturer = $command->getManufacturer();
+        $identifier = $command->getObjectIdentifier();
 
         $identity = $this->identityService->findOneBy([
-            'objectIdentifier' => $manufacturer->getIdentifier(),
-            'objectType' => Manufacturer::getType(),
-            'adapterName' => ShopwareAdapter::getName(),
+            'objectIdentifier' => $identifier,
+            'objectType' => Manufacturer::TYPE,
+            'adapterName' => ShopwareAdapter::NAME,
         ]);
 
         if (null === $identity) {

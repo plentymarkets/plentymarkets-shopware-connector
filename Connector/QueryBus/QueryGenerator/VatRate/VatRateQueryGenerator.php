@@ -18,7 +18,7 @@ class VatRateQueryGenerator implements QueryGeneratorInterface
      */
     public function supports($transferObjectType)
     {
-        return $transferObjectType === VatRate::getType();
+        return $transferObjectType === VatRate::TYPE;
     }
 
     /**

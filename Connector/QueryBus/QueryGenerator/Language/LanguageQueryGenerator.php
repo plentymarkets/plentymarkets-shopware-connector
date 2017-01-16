@@ -18,7 +18,7 @@ class LanguageQueryGenerator implements QueryGeneratorInterface
      */
     public function supports($transferObjectType)
     {
-        return $transferObjectType === Language::getType();
+        return $transferObjectType === Language::TYPE;
     }
 
     /**

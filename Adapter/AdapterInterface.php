@@ -12,5 +12,5 @@ interface AdapterInterface
      *
      * @return string
      */
-    public static function getName();
+    public function getName();
 }

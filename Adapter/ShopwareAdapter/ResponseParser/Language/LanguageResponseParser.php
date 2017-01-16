@@ -34,8 +34,8 @@ class LanguageResponseParser implements ResponseParserInterface
     {
         $identity = $this->identityService->findOneOrCreate(
             (string)$entry['id'],
-            ShopwareAdapter::getName(),
-            Language::getType()
+            ShopwareAdapter::NAME,
+            Language::TYPE
         );
 
         return Language::fromArray([

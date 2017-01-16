@@ -39,7 +39,7 @@ class Country implements CountryInterface
     /**
      * {@inheritdoc}
      */
-    public static function getType()
+    public function getType()
     {
         return self::TYPE;
     }

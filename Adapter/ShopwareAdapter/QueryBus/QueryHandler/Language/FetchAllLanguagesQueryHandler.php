@@ -44,22 +44,22 @@ class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(QueryInterface $event)
+    public function supports(QueryInterface $query)
     {
-        return $event instanceof FetchAllLanguagesQuery &&
-            $event->getAdapterName() === ShopwareAdapter::getName();
+        return $query instanceof FetchAllLanguagesQuery &&
+            $query->getAdapterName() === ShopwareAdapter::NAME;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function handle(QueryInterface $event)
+    public function handle(QueryInterface $query)
     {
-        $query = $this->createLocalesQuery();
+        $objectQuery = $this->createLocalesQuery();
 
         $languages = array_map(function ($language) {
             return $this->responseParser->parse($language);
-        }, $query->getArrayResult());
+        }, $objectQuery->getArrayResult());
 
         return array_filter($languages);
     }
@@ -76,9 +76,9 @@ class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
             'locales.locale as locale'
         ]);
 
-        $query = $queryBuilder->getQuery();
-        $query->execute();
+        $objectQuery = $queryBuilder->getQuery();
+        $objectQuery->execute();
 
-        return $query;
+        return $objectQuery;
     }
 }

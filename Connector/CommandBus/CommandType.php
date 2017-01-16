@@ -7,8 +7,8 @@ namespace PlentyConnector\Connector\CommandBus;
  */
 final class CommandType
 {
-    const HANDLE = 1;
-    const REMOVE = 2;
+    const HANDLE = 'handle';
+    const REMOVE = 'remove';
 
     /**
      * @return array

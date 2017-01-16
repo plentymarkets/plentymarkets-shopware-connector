@@ -43,22 +43,22 @@ class FetchAllShippingProfilesQueryHandler implements QueryHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(QueryInterface $event)
+    public function supports(QueryInterface $query)
     {
-        return $event instanceof FetchAllShippingProfilesQuery &&
-            $event->getAdapterName() === ShopwareAdapter::getName();
+        return $query instanceof FetchAllShippingProfilesQuery &&
+            $query->getAdapterName() === ShopwareAdapter::NAME;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function handle(QueryInterface $event)
+    public function handle(QueryInterface $query)
     {
-        $query = $this->repository->getListQuery();
+        $objectQuery = $this->repository->getListQuery();
 
         $shippingProfiles = array_map(function ($shippingProfile) {
             return $this->responseParser->parse($shippingProfile);
-        }, $query->getArrayResult());
+        }, $objectQuery->getArrayResult());
 
         return array_filter($shippingProfiles);
     }

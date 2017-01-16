@@ -44,22 +44,22 @@ class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(QueryInterface $event)
+    public function supports(QueryInterface $query)
     {
-        return $event instanceof FetchAllPaymentStatusesQuery &&
-            $event->getAdapterName() === ShopwareAdapter::getName();
+        return $query instanceof FetchAllPaymentStatusesQuery &&
+            $query->getAdapterName() === ShopwareAdapter::NAME;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function handle(QueryInterface $event)
+    public function handle(QueryInterface $query)
     {
-        $query = $this->createPaymentStatusQuery();
+        $objectQuery = $this->createPaymentStatusQuery();
 
         $paymentStatuses = array_map(function ($status) {
             return $this->responseParser->parse($status);
-        }, $query->getArrayResult());
+        }, $objectQuery->getArrayResult());
 
         return array_filter($paymentStatuses);
     }
@@ -77,9 +77,9 @@ class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
         $queryBuilder->where('status.group = :group');
         $queryBuilder->setParameter('group', Status::GROUP_PAYMENT);
 
-        $query = $queryBuilder->getQuery();
-        $query->execute();
+        $objectQuery = $queryBuilder->getQuery();
+        $objectQuery->execute();
 
-        return $query;
+        return $objectQuery;
     }
 }

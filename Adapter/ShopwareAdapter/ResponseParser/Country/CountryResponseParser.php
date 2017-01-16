@@ -34,8 +34,8 @@ class CountryResponseParser implements ResponseParserInterface
     {
         $identity = $this->identityService->findOneOrCreate(
             (string)$entry['id'],
-            ShopwareAdapter::getName(),
-            Country::getType()
+            ShopwareAdapter::NAME,
+            Country::TYPE
         );
 
         return Country::fromArray([

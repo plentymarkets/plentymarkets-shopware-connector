@@ -44,22 +44,22 @@ class FetchAllOrderStatusesQueryHandler implements QueryHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(QueryInterface $event)
+    public function supports(QueryInterface $query)
     {
-        return $event instanceof FetchAllOrderStatusesQuery &&
-            $event->getAdapterName() === ShopwareAdapter::getName();
+        return $query instanceof FetchAllOrderStatusesQuery &&
+            $query->getAdapterName() === ShopwareAdapter::NAME;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function handle(QueryInterface $event)
+    public function handle(QueryInterface $query)
     {
-        $query = $this->createOrderStatusQuery();
+        $objectQuery = $this->createOrderStatusQuery();
 
         $orderStatuses = array_map(function ($status) {
             return $this->responseParser->parse($status);
-        }, $query->getArrayResult());
+        }, $objectQuery->getArrayResult());
 
         return array_filter($orderStatuses);
     }
@@ -77,9 +77,9 @@ class FetchAllOrderStatusesQueryHandler implements QueryHandlerInterface
         $queryBuilder->where('status.group = :group');
         $queryBuilder->setParameter('group', Status::GROUP_STATE);
 
-        $query = $queryBuilder->getQuery();
-        $query->execute();
+        $objectQuery = $queryBuilder->getQuery();
+        $objectQuery->execute();
 
-        return $query;
+        return $objectQuery;
     }
 }

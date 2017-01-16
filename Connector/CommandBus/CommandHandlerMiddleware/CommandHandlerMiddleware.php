@@ -44,11 +44,11 @@ class CommandHandlerMiddleware implements Middleware
         });
 
         if (0 === count($handlers)) {
-            if ($query instanceof CommandInterface) {
+            if ($command instanceof CommandInterface) {
                 throw NotFoundException::fromCommand($command);
             }
 
-            return $next($query);
+            return $next($command);
         }
 
         array_map(function (CommandHandlerInterface $handler) use ($command) {

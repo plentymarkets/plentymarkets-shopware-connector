@@ -7,9 +7,9 @@ namespace PlentyConnector\Connector\QueryBus;
  */
 final class QueryType
 {
-    const ALL = 1;
-    const CHANGED = 2;
-    const ONE = 3;
+    const ALL = 'all';
+    const CHANGED = 'changed';
+    const ONE = 'one';
 
     /**
      * @return array

@@ -45,7 +45,7 @@ class ImportProductCommandHandler implements CommandHandlerInterface
     {
         return
             $command instanceof ImportProductCommand &&
-            $command->getAdapterName() === ShopwareAdapter::getName();
+            $command->getAdapterName() === ShopwareAdapter::NAME;
     }
 
     /**
@@ -69,8 +69,8 @@ class ImportProductCommandHandler implements CommandHandlerInterface
     {
         $identity = $this->identityService->findIdentity([
             'objectIdentifier' => $product->getManufacturer()->getIdentifier(),
-            'objectType' => Manufacturer::getType(),
-            'adapterName' => ShopwareAdapter::getName(),
+            'objectType' => Manufacturer::TYPE,
+            'adapterName' => ShopwareAdapter::NAME,
         ]);
 
         if (null !== $identity) {

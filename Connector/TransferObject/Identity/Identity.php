@@ -63,7 +63,7 @@ class Identity implements IdentityInterface
     /**
      * {@inheritdoc}
      */
-    public static function getType()
+    public function getType()
     {
         return self::TYPE;
     }

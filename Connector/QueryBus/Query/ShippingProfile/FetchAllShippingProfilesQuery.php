@@ -28,7 +28,7 @@ class FetchAllShippingProfilesQuery implements FetchAllQueryInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getAdapterName()
     {

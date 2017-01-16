@@ -18,13 +18,13 @@ class EventHandlerCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->has('plentyconnector.event_bus.event_handler_middleware')) {
+        if (!$container->has('plenty_connector.event_bus.event_handler_middleware')) {
             return;
         }
 
-        $definition = $container->findDefinition('plentyconnector.event_bus.event_handler_middleware');
+        $definition = $container->findDefinition('plenty_connector.event_bus.event_handler_middleware');
 
-        $taggedServices = $container->findTaggedServiceIds('plentyconnector.eventhandler');
+        $taggedServices = $container->findTaggedServiceIds('plenty_connector.eventhandler');
 
         foreach ($taggedServices as $id => $tags) {
             $definition->addMethodCall('addHandler', [new Reference($id)]);

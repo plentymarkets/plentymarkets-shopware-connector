@@ -18,7 +18,7 @@ class PaymentStatusQueryGenerator implements QueryGeneratorInterface
      */
     public function supports($transferObjectType)
     {
-        return $transferObjectType === PaymentStatus::getType();
+        return $transferObjectType === PaymentStatus::TYPE;
     }
 
     /**

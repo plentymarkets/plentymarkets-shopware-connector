@@ -41,7 +41,7 @@ class Variation implements VariationInterface
     /**
      * {@inheritdoc}
      */
-    public static function getType()
+    public function getType()
     {
         return self::TYPE;
     }

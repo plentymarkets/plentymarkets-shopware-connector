@@ -33,8 +33,8 @@ class UnitResponseParser implements ResponseParserInterface
     {
         $identity = $this->identityService->findOneOrCreate(
             (string)$entry['id'],
-            ShopwareAdapter::getName(),
-            Unit::getType()
+            ShopwareAdapter::NAME,
+            Unit::TYPE
         );
 
         return Unit::fromArray([

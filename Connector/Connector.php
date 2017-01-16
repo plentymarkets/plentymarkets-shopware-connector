@@ -4,21 +4,22 @@ namespace PlentyConnector\Connector;
 
 use Assert\Assertion;
 use PlentyConnector\Adapter\AdapterInterface;
-use PlentyConnector\Connector\CommandBus\Command\CommandInterface;
-use PlentyConnector\Connector\CommandBus\CommandFactory\CommandFactory;
+use PlentyConnector\Connector\CommandBus\CommandFactory\CommandFactoryInterface;
+use PlentyConnector\Connector\CommandBus\CommandFactory\Exception\MissingCommandException;
+use PlentyConnector\Connector\CommandBus\CommandFactory\Exception\MissingCommandGeneratorException;
 use PlentyConnector\Connector\CommandBus\CommandType;
-use PlentyConnector\Connector\EventBus\Event\EventInterface;
-use PlentyConnector\Connector\Exception\MissingCommandException;
-use PlentyConnector\Connector\Exception\MissingQueryException;
-use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
-use PlentyConnector\Connector\QueryBus\QueryFactory\QueryFactory;
+use PlentyConnector\Connector\QueryBus\QueryFactory\Exception\MissingQueryException;
+use PlentyConnector\Connector\QueryBus\QueryFactory\Exception\MissingQueryGeneratorException;
+use PlentyConnector\Connector\QueryBus\QueryFactory\QueryFactoryInterface;
 use PlentyConnector\Connector\QueryBus\QueryType;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use PlentyConnector\Connector\TransferObject\Definition\DefinitionInterface;
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
+use PlentyConnector\Connector\TransferObject\SynchronizedTransferObjectInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * TODO: error and exception handling
+ * TODO: Refaktor
  *
  * Class Connector.
  */
@@ -50,14 +51,19 @@ class Connector implements ConnectorInterface
     private $eventBus;
 
     /**
-     * @var QueryFactory
+     * @var QueryFactoryInterface
      */
     private $queryFactory;
 
     /**
-     * @var CommandFactory
+     * @var CommandFactoryInterface
      */
     private $commandFactory;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * Connector constructor.
@@ -65,21 +71,24 @@ class Connector implements ConnectorInterface
      * @param ServiceBusInterface $queryBus
      * @param ServiceBusInterface $commandBus
      * @param ServiceBusInterface $eventBus
-     * @param QueryFactory $queryFactory
-     * @param CommandFactory $commandFactory
+     * @param QueryFactoryInterface $queryFactory
+     * @param CommandFactoryInterface $commandFactory
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ServiceBusInterface $queryBus,
         ServiceBusInterface $commandBus,
         ServiceBusInterface $eventBus,
-        QueryFactory $queryFactory,
-        CommandFactory $commandFactory
+        QueryFactoryInterface $queryFactory,
+        CommandFactoryInterface $commandFactory,
+        LoggerInterface $logger
     ) {
         $this->queryBus = $queryBus;
         $this->commandBus = $commandBus;
         $this->eventBus = $eventBus;
         $this->queryFactory = $queryFactory;
         $this->commandFactory = $commandFactory;
+        $this->logger = $logger;
     }
 
     /**
@@ -123,9 +132,7 @@ class Connector implements ConnectorInterface
     }
 
     /**
-     * @param string|null $type
-     *
-     * @return DefinitionInterface[]|null
+     * {@inheritdoc}
      */
     private function getDefinitions($type = null)
     {
@@ -146,54 +153,32 @@ class Connector implements ConnectorInterface
      * @param string|null $identifier
      *
      * @throws MissingQueryException
+     * @throws MissingQueryGeneratorException
      * @throws MissingCommandException
+     * @throws MissingCommandGeneratorException
      */
     private function handleDefinition(DefinitionInterface $definition, $queryType, $identifier = null)
     {
-        $query = $this->queryFactory->create(
+        /**
+         * @var SynchronizedTransferObjectInterface[] $objects
+         */
+        $objects = $this->queryBus->handle($this->queryFactory->create(
             $definition->getOriginAdapterName(),
             $definition->getObjectType(),
             $queryType,
             $identifier
-        );
-
-        if (null === $query) {
-            throw MissingQueryException::fromDefinition($definition);
-        }
-
-        /**
-         * @var TransferObjectInterface[] $objects
-         */
-        $objects = $this->queryBus->handle($query);
+        ));
 
         if (null === $objects) {
             $objects = [];
         }
 
-        array_walk($objects, function (TransferObjectInterface $object) use ($definition) {
-            $command = $this->commandFactory->create(
+        array_walk($objects, function (SynchronizedTransferObjectInterface $object) use ($definition) {
+            $this->commandBus->handle($this->commandFactory->create(
                 $object,
                 $definition->getDestinationAdapterName(),
                 CommandType::HANDLE
-            );
-
-            if (null === $command) {
-                throw MissingCommandException::fromDefinition($definition);
-            }
-
-            $this->handleCommand($command);
+            ));
         });
-    }
-
-    /**
-     * @param CommandInterface $command
-     */
-    private function handleCommand(CommandInterface $command)
-    {
-        try {
-            $this->commandBus->handle($command);
-        } catch (\Exception $exception) {
-            // TODO: finalize
-        }
     }
 }
