@@ -252,10 +252,6 @@
             <tag name="console.command" />
         </service>
 
-        <!-- Output Handler -->
-
-        <service id="plenty_connector.console.output_handler" class="PlentyConnector\Console\OutputHandler\OutputHandler" />
-
         <!-- Identity Service -->
 
         <service id="plenty_connector.identity_storage" class="PlentyConnector\Connector\IdentityService\Storage\DoctrineIdentityStorage">
