@@ -29,11 +29,12 @@ class CronjobInstaller implements InstallerInterface
      * DatabaseInstaller constructor.
      *
      * @param Connection $connection
+     * @param array $cronjobs
      */
-    public function __construct(Connection $connection)
+    public function __construct(Connection $connection, array $cronjobs)
     {
         $this->connection = $connection;
-        $this->cronjobs = CronjobSubscriper::CRONJOBS;
+        $this->cronjobs = $cronjobs;
     }
 
     /**

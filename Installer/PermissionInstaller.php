@@ -3,9 +3,12 @@
 namespace PlentyConnector\Installer;
 
 use Exception;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
 use Shopware\Components\Plugin\Context\UpdateContext;
+use Shopware\Models\Plugin\Plugin;
+use Shopware\Models\User\Resource;
 use Shopware_Components_Acl;
 
 /**
@@ -13,16 +16,15 @@ use Shopware_Components_Acl;
  */
 class PermissionInstaller implements InstallerInterface
 {
-    const PERMISSION_READ = 'read';
-    const PERMISSION_WRITE = 'write';
+    /**
+     * @var ModelManager
+     */
+    private $em;
 
     /**
-     * List of all permissions
+     * @var ModelRepository
      */
-    const PERMISSIONS = [
-        self::PERMISSION_READ,
-        self::PERMISSION_WRITE,
-    ];
+    private $repository;
 
     /**
      * @var Shopware_Components_Acl
@@ -30,13 +32,53 @@ class PermissionInstaller implements InstallerInterface
     private $acl;
 
     /**
-     * PermissionInstaller constructor.
-     *
-     * @param Shopware_Components_Acl $acl
+     * @var array
      */
-    public function __construct(Shopware_Components_Acl $acl)
+    private $permissions;
+
+    /**
+     * CronjobSyncronizer constructor.
+     *
+     * @param ModelManager $em
+     * @param Shopware_Components_Acl $acl
+     * @param array $permissions
+     */
+    public function __construct(ModelManager $em, Shopware_Components_Acl $acl, array $permissions)
     {
+        $this->em = $em;
+        $this->repository = $this->em->getRepository(Resource::class);
         $this->acl = $acl;
+        $this->permissions = $permissions;
+    }
+
+    /**
+     * @param InstallContext $context
+     *
+     * @throws Exception
+     */
+    public function install(InstallContext $context)
+    {
+        $this->synchronize($context->getPlugin(), $this->permissions);
+    }
+
+    /**
+     * @param UpdateContext $context
+     *
+     * @throws Exception
+     */
+    public function update(UpdateContext $context)
+    {
+        $this->synchronize($context->getPlugin(), $this->permissions);
+    }
+
+    /**
+     * @param UninstallContext $context
+     *
+     * @throws Exception
+     */
+    public function uninstall(UninstallContext $context)
+    {
+        $this->removePermissions($context);
     }
 
     /**
@@ -48,49 +90,90 @@ class PermissionInstaller implements InstallerInterface
     }
 
     /**
-     * @param InstallContext $context
-     *
-     * @throws Exception
+     * @param Plugin $plugin
+     * @param array $permissions
      */
-    private function createPermissions(InstallContext $context)
+    private function synchronize(Plugin $plugin, array $permissions)
+    {
+        $resource = $this->getResource($plugin->getName());
+
+        if (null === $resource) {
+            $this->createResource($plugin, $permissions);
+
+            return;
+        }
+
+        $this->synchronizePrivileges($resource, $permissions);
+        $this->removeNotExistingPrivileges($resource, $permissions);
+    }
+
+    /**
+     * @param $resourceName
+     *
+     * @return Resource
+     */
+    private function getResource($resourceName)
+    {
+        return $this->repository->findOneBy(['name' => $resourceName]);
+    }
+
+    /**
+     * @param Plugin $plugin
+     * @param array $permissions
+     *
+     * @throws Enlight_Exception
+     */
+    private function createResource(Plugin $plugin, array $permissions)
     {
         $this->acl->createResource(
-            $context->getPlugin()->getName(),
-            self::PERMISSIONS,
-            $context->getPlugin()->getLabel(),
-            $context->getPlugin()->getId()
+            $plugin->getName(),
+            $permissions,
+            $plugin->getLabel(),
+            $plugin->getId()
         );
     }
 
     /**
-     * @param InstallContext $context
-     *
-     * @throws Exception
+     * @param Resource $resource
+     * @param array $permissions
      */
-    public function install(InstallContext $context)
+    private function synchronizePrivileges(Resource $resource, array $permissions)
     {
-        $this->removePermissions($context);
-        $this->createPermissions($context);
+        $existingPrivileges = array_filter($resource->getPrivileges()->toArray(), function (Privilege $privilege) use ($permissions) {
+            return in_array($privilege->getName(), $permissions, true);
+        });
+
+        $existingPrivileges = array_map(function (Privilege $privilege) {
+            return $privilege->getName();
+        }, $existingPrivileges);
+
+        $newPrivileges = array_diff($permissions, $existingPrivileges);
+
+        array_walk($newPrivileges, function ($name) use ($resource) {
+            $this->acl->createPrivilege($resource->getId(), $name);
+        });
     }
 
     /**
-     * @param UpdateContext $context
-     *
-     * @throws Exception
+     * @param Resource $resource
+     * @param array $permissions
      */
-    public function update(UpdateContext $context)
+    protected function removeNotExistingPrivileges(Resource $resource, array $permissions)
     {
-        $this->removePermissions($context);
-        $this->createPermissions($context);
-    }
+        $existingPrivileges = $resource->getPrivileges()->toArray();
 
-    /**
-     * @param UninstallContext $context
-     *
-     * @throws Exception
-     */
-    public function uninstall(UninstallContext $context)
-    {
-        $this->removePermissions($context);
+        $orphanedPrivileges = array_filter($existingPrivileges, function (Privilege $privilege) use ($permissions) {
+            return !in_array($privilege->getName(), $permissions, true);
+        });
+
+        if (empty($orphanedPrivileges)) {
+            return;
+        }
+
+        array_walk($orphanedPrivileges, function (Privilege $privilege) {
+            $this->em->remove($privilege);
+        });
+
+        $this->em->flush();
     }
 }

@@ -4,6 +4,8 @@ namespace PlentyConnector;
 
 use Doctrine\DBAL\Exception\InvalidArgumentException;
 use Exception;
+use PlentyConnector\Connector\ConfigService\Model\Config;
+use PlentyConnector\Connector\IdentityService\Model\Identity;
 use PlentyConnector\DependencyInjection\CompilerPass\AdapterCompilerPass;
 use PlentyConnector\DependencyInjection\CompilerPass\CleanupDefinitionCompilerPass;
 use PlentyConnector\DependencyInjection\CompilerPass\CommandGeneratorCompilerPass;
@@ -31,10 +33,40 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 require __DIR__ . '/autoload.php';
 
 /**
- * Class PlentyConnector.
+ * Class plenty_connector.
  */
 class PlentyConnector extends Plugin
 {
+    const PERMISSION_READ = 'read';
+    const PERMISSION_WRITE = 'write';
+
+    /**
+     * List of all permissions
+     */
+    const PERMISSIONS = [
+        self::PERMISSION_READ,
+        self::PERMISSION_WRITE,
+    ];
+
+    /**
+     * List of all models
+     */
+    const MODELS = [
+        Config::class,
+        Identity::class,
+    ];
+
+    const CRONJOB_SYNCHRONIZE = 'Synchronize';
+    const CRONJOB_CLEANUP = 'Cleanup';
+
+    /**
+     * List of all cronjobs
+     */
+    const CRONJOBS = [
+        self::CRONJOB_SYNCHRONIZE => 300,
+        self::CRONJOB_CLEANUP => 86400,
+    ];
+
     /**
      * @param ContainerBuilder $container
      *
@@ -42,7 +74,7 @@ class PlentyConnector extends Plugin
      */
     public function build(ContainerBuilder $container)
     {
-        $container->setParameter('plentyconnector.plugin_dir', $this->getPath());
+        $container->setParameter('plenty_connector.plugin_dir', $this->getPath());
 
         $this->loadFile($container, __DIR__ . '/Adapter/ShopwareAdapter/DependencyInjection/services.xml');
         $this->loadFile($container, __DIR__ . '/Adapter/PlentymarketsAdapter/DependencyInjection/services.xml');
@@ -91,13 +123,26 @@ class PlentyConnector extends Plugin
      */
     public function install(InstallContext $context)
     {
-        $databaseInstaller = new DatabaseInstaller($this->container->get('models'));
+        // Models
+        $databaseInstaller = new DatabaseInstaller(
+            $this->container->get('models'),
+            self::MODELS
+        );
         $databaseInstaller->install($context);
 
-        $cronjobInstaller = new CronjobInstaller($this->container->get('dbal_connection'));
+        // Cronjobs
+        $cronjobInstaller = new CronjobInstaller(
+            $this->container->get('dbal_connection'),
+            self::CRONJOBS
+        );
         $cronjobInstaller->install($context);
 
-        $permissionInstaller = new PermissionInstaller($this->container->get('acl'));
+        // Permissions
+        $permissionInstaller = new PermissionInstaller(
+            $this->container->get('models'),
+            $this->container->get('acl'),
+            self::PERMISSIONS
+        );
         $permissionInstaller->install($context);
 
         parent::install($context);
@@ -113,13 +158,26 @@ class PlentyConnector extends Plugin
      */
     public function update(UpdateContext $context)
     {
-        $databaseInstaller = new DatabaseInstaller($this->container->get('models'));
+        // Models
+        $databaseInstaller = new DatabaseInstaller(
+            $this->container->get('models'),
+            self::MODELS
+        );
         $databaseInstaller->update($context);
 
-        $cronjobInstaller = new CronjobInstaller($this->container->get('dbal_connection'));
+        // Cronjobs
+        $cronjobInstaller = new CronjobInstaller(
+            $this->container->get('dbal_connection'),
+            self::CRONJOBS
+        );
         $cronjobInstaller->update($context);
 
-        $permissionInstaller = new PermissionInstaller($this->container->get('acl'));
+        // Permissions
+        $permissionInstaller = new PermissionInstaller(
+            $this->container->get('models'),
+            $this->container->get('acl'),
+            self::PERMISSIONS
+        );
         $permissionInstaller->update($context);
 
         parent::update($context);
@@ -135,13 +193,25 @@ class PlentyConnector extends Plugin
      */
     public function uninstall(UninstallContext $context)
     {
-        $databaseInstaller = new DatabaseInstaller($this->container->get('models'));
+        // Models
+        $databaseInstaller = new DatabaseInstaller(
+            $this->container->get('models'),
+            self::MODELS
+        );
         $databaseInstaller->uninstall($context);
 
-        $cronjobInstaller = new CronjobInstaller($this->container->get('dbal_connection'));
+        // Cronjobs
+        $cronjobInstaller = new CronjobInstaller(
+            $this->container->get('dbal_connection'),
+            self::CRONJOBS
+        );
         $cronjobInstaller->uninstall($context);
 
-        $permissionInstaller = new PermissionInstaller($this->container->get('acl'));
+        $permissionInstaller = new PermissionInstaller(
+            $this->container->get('models'),
+            $this->container->get('acl'),
+            self::PERMISSIONS
+        );
         $permissionInstaller->uninstall($context);
 
         parent::uninstall($context);
