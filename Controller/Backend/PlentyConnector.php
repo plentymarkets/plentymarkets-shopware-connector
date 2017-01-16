@@ -1,13 +1,18 @@
 <?php
 
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
+use PlentyConnector\Connector\ConnectorInterface;
 use PlentyConnector\Connector\IdentityService\IdentityService;
+use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\MappingService\MappingServiceInterface;
+use PlentyConnector\Connector\QueryBus\QueryType;
 use PlentyConnector\Connector\TransferObject\Identity\Identity;
 use PlentyConnector\Connector\TransferObject\MappedTransferObjectInterface;
 use PlentyConnector\Connector\TransferObject\Mapping\MappingInterface;
-use PlentyConnector\Installer\PermissionInstaller;
+use PlentyConnector\Connector\TransferObject\Product\Product;
+use PlentyConnector\PlentyConnector;
 use PlentymarketsAdapter\Client\ClientInterface;
+use PlentymarketsAdapter\PlentymarketsAdapter;
 
 /**
  * Class Shopware_Controllers_Backend_PlentyConnector
@@ -19,15 +24,19 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
      */
     public function initAcl()
     {
-        $this->addAclPermission('testApiCredentials', PermissionInstaller::PERMISSION_READ, 'Insufficient Permissions');
+        // Credentials
+        $this->addAclPermission('testApiCredentials', PlentyConnector::PERMISSION_READ, 'Insufficient Permissions');
 
-        $this->addAclPermission('getSettingsList', PermissionInstaller::PERMISSION_READ, 'Insufficient Permissions');
-        $this->addAclPermission('saveSettings', PermissionInstaller::PERMISSION_WRITE, 'Insufficient Permissions');
+        // Settings
+        $this->addAclPermission('getSettingsList', PlentyConnector::PERMISSION_READ, 'Insufficient Permissions');
+        $this->addAclPermission('saveSettings', PlentyConnector::PERMISSION_WRITE, 'Insufficient Permissions');
 
-        $this->addAclPermission('getMappingInformation', PermissionInstaller::PERMISSION_READ, 'Insufficient Permissions');
-        $this->addAclPermission('updateIdentities', PermissionInstaller::PERMISSION_WRITE, 'Insufficient Permissions');
+        // Mapping
+        $this->addAclPermission('getMappingInformation', PlentyConnector::PERMISSION_READ, 'Insufficient Permissions');
+        $this->addAclPermission('updateIdentities', PlentyConnector::PERMISSION_WRITE, 'Insufficient Permissions');
 
-        $this->addAclPermission('syncItem', PermissionInstaller::PERMISSION_WRITE, 'Insufficient Permissions');
+        // Sync one product
+        $this->addAclPermission('syncItem', PlentyConnector::PERMISSION_WRITE, 'Insufficient Permissions');
     }
 
     /**
@@ -57,7 +66,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
             if (isset($login['accessToken'])) {
                 $success = true;
             }
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             // fail silently
         }
 
@@ -74,7 +83,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         /**
          * @var ConfigServiceInterface $config
          */
-        $config = $this->container->get('plentyconnector.config');
+        $config = $this->container->get('plenty_connector.config');
 
         $config->set('rest_url', $this->Request()->get('ApiUrl'));
         $config->set('rest_username', $this->Request()->get('ApiUsername'));
@@ -91,7 +100,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
      */
     public function getSettingsListAction()
     {
-        $config = $this->container->get('plentyconnector.config');
+        $config = $this->container->get('plenty_connector.config');
 
         $this->View()->assign(array(
             'success' => true,
@@ -113,14 +122,14 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         /**
          * @var MappingServiceInterface $mappingService
          */
-        $mappingService = Shopware()->Container()->get('plentyconnector.mapping_service');
+        $mappingService = Shopware()->Container()->get('plenty_connector.mapping_service');
 
         try {
             $mappingInformation = $mappingService->getMappingInformation(null, $fresh);
-        } catch(Exception $e) {
+        } catch (Exception $exception) {
             $this->View()->assign([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => $exception->getMessage()
             ]);
 
             return;
@@ -129,7 +138,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         $transferObjectMapping = function (MappedTransferObjectInterface $object) {
             return [
                 'identifier' => $object->getIdentifier(),
-                'type' => $object::getType(),
+                'type' => $object->getType(),
                 'name' => $object->getName()
             ];
         };
@@ -141,7 +150,8 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
                     'originAdapterName' => $mapping->getOriginAdapterName(),
                     'destinationAdapterName' => $mapping->getDestinationAdapterName(),
                     'originTransferObjects' => array_map($transferObjectMapping, $mapping->getOriginTransferObjects()),
-                    'destinationTransferObjects' => array_map($transferObjectMapping, $mapping->getDestinationTransferObjects()),
+                    'destinationTransferObjects' => array_map($transferObjectMapping,
+                        $mapping->getDestinationTransferObjects()),
                     'objectType' => $mapping->getObjectType()
                 ];
             }, $mappingInformation)
@@ -162,7 +172,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         /**
          * @var IdentityService $identityService
          */
-        $identityService = Shopware()->Container()->get('plentyconnector.identity_service');
+        $identityService = Shopware()->Container()->get('plenty_connector.identity_service');
 
         try {
             foreach ($updates as $update) {
@@ -198,29 +208,57 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
                 'success' => true,
                 'data' => $updates
             ]);
-        } catch(Exception $e) {
+        } catch (Exception $exception) {
             $this->View()->assign([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => $exception->getMessage()
             ]);
         }
     }
 
     /**
-     * TODO: implement
+     * TODO: Remove identity if nothing has been handled
+     *
+     * Sync one product based on the plentymarkets id
      */
     public function syncItemAction()
     {
-        $data = json_decode($this->request->getRawBody());
+        $data = json_decode($this->request->getRawBody(), true);
 
-        if (null !== $data->itemId && '' !== $data->itemId) {
-            $this->View()->assign([
-                'success' => true
-            ]);
-        } else {
+        if (null === $data['itemId'] || '' === $data['itemId']) {
             $this->View()->assign([
                 'success' => false,
                 'message' => 'Artikel ID ist leer.'
+            ]);
+
+            return;
+        }
+
+        try {
+            /**
+             * @var IdentityServiceInterface $identityService
+             */
+            $identityService = Shopware()->Container()->get('plenty_connector.identity_service');
+
+            $identity = $identityService->findOneOrCreate(
+                $data['itemId'],
+                PlentymarketsAdapter::NAME,
+                Product::TYPE
+            );
+
+            /**
+             * @var ConnectorInterface $connector
+             */
+            $connector = Shopware()->Container()->get('plenty_connector.connector');
+            $connector->handle(QueryType::ONE, Product::TYPE, $identity->getObjectIdentifier());
+
+            $this->View()->assign([
+                'success' => true
+            ]);
+        } catch (Exception $exception) {
+            $this->View()->assign([
+                'success' => false,
+                'message' => $exception->getMessage(),
             ]);
         }
     }
