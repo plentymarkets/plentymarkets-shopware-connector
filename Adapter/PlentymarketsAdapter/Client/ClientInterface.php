@@ -2,8 +2,6 @@
 
 namespace PlentymarketsAdapter\Client;
 
-use Exception;
-use GuzzleHttp\Exception\ClientException;
 use Iterator;
 use PlentyConnector\Adapter\PlentymarketsAdapter\Client\Exception\InvalidResponseException;
 use PlentymarketsAdapter\Client\Exception\InvalidCredentialsException;
@@ -24,8 +22,6 @@ interface ClientInterface
      *
      * @return array
      *
-     * @throws ClientException
-     * @throws Exception
      * @throws InvalidCredentialsException
      * @throws InvalidResponseException
      */
