@@ -84,9 +84,6 @@ Ext.define('Shopware.apps.PlentyConnector.view.Settings', {
         });
     },
 
-    /**
-     * @returns {[*]}
-     */
     getFieldSets: function () {
         return [
             {
