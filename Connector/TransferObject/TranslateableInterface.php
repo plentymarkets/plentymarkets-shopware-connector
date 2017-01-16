@@ -10,11 +10,6 @@ use PlentyConnector\Connector\TransferObject\Translation\TranslationInterface;
 interface TranslateableInterface
 {
     /**
-     * @param TranslationInterface $translation
-     */
-    public function addTranslation(TranslationInterface $translation);
-
-    /**
      * @return TranslationInterface[]
      */
     public function getTranslations();
