@@ -2,12 +2,13 @@
 
 namespace PlentyConnector\Connector\QueryBus\Query\Order;
 
-use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
+use Assert\Assertion;
+use PlentyConnector\Connector\QueryBus\Query\FetchChangedQueryInterface;
 
 /**
- * Class GetOrderQuery
+ * Class FetchChangedOrdersQuery.
  */
-class GetOrderQuery implements QueryInterface
+class FetchChangedOrdersQuery implements FetchChangedQueryInterface
 {
     /**
      * @var string
@@ -15,12 +16,14 @@ class GetOrderQuery implements QueryInterface
     private $adapterName;
 
     /**
-     * FetchAllManufacturersQuery constructor.
+     * FetchChangedManufacturersQuery constructor.
      *
      * @param string $adapterName
      */
     public function __construct($adapterName)
     {
+        Assertion::string($adapterName);
+
         $this->adapterName = $adapterName;
     }
 

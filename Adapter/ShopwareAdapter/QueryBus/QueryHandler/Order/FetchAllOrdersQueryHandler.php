@@ -2,7 +2,7 @@
 
 namespace ShopwareAdapter\QueryBus\QueryHandler\Order;
 
-use Exception;
+use PlentyConnector\Connector\QueryBus\Query\Order\FetchAllOrdersQuery;
 use PlentyConnector\Connector\QueryBus\Query\Order\GetChangedOrderQuery;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
@@ -12,9 +12,9 @@ use ShopwareAdapter\ResponseParser\ResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class GetChangedOrderQueryHandler
+ * Class FetchAllOrdersQueryHandler
  */
-class GetChangedOrderQueryHandler implements QueryHandlerInterface
+class FetchAllOrdersQueryHandler implements QueryHandlerInterface
 {
     /**
      * @var ResponseParserInterface
@@ -53,8 +53,8 @@ class GetChangedOrderQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof GetChangedOrderQuery &&
-            $query->getAdapterName() === ShopwareAdapter::NAME;
+        return $query instanceof FetchAllOrdersQuery &&
+            $query->getAdapterName() === ShopwareAdapter::getName();
     }
 
     /**
@@ -62,21 +62,19 @@ class GetChangedOrderQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $orders = $this->orderResource->getList(0, null)['data'];
+        $filter = [
+            [
+                'property'   => 'status',
+                'expression' => '!=',
+                'value'      => -1
+            ]
+        ];
 
-        // ignore cancelled orders
-        $orders = array_filter($orders, function ($item) {
-            return $item['orderStatusId'] != -1;
-        });
+        $orders = $this->orderResource->getList(0, null, $filter);
 
-        $result = [];
-        foreach ($orders as $order) {
-            try {
-                $result[] = $this->responseParser->parseOrder($this->orderResource->getOne($order['id']));
-            } catch (Exception $exception) {
-                $this->logger->error($exception->getMessage());
-            }
-        }
+        $result = array_map(function ($order) {
+            return $this->responseParser->parse($this->orderResource->getOne($order['id']));
+        }, $orders['data']);
 
         return $result;
     }
