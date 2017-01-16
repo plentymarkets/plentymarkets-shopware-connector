@@ -6,7 +6,7 @@ use Assert\Assertion;
 use PlentyConnector\Connector\QueryBus\Query\FetchAllQueryInterface;
 
 /**
- * Class FetchAllManufacturersQuery.
+ * Class FetchAllOrdersQuery.
  */
 class FetchAllOrdersQuery implements FetchAllQueryInterface
 {
@@ -16,7 +16,7 @@ class FetchAllOrdersQuery implements FetchAllQueryInterface
     private $adapterName;
 
     /**
-     * FetchAllManufacturersQuery constructor.
+     * FetchAllOrdersQuery constructor.
      *
      * @param string $adapterName
      */

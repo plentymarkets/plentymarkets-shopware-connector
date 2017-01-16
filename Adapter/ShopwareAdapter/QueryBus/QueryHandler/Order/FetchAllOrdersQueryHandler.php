@@ -32,7 +32,7 @@ class FetchAllOrdersQueryHandler implements QueryHandlerInterface
     private $orderResource;
 
     /**
-     * GetChangedOrderQueryHandler constructor.
+     * FetchAllOrdersQueryHandler constructor.
      *
      * @param ResponseParserInterface $responseParser
      * @param LoggerInterface $logger
@@ -54,7 +54,7 @@ class FetchAllOrdersQueryHandler implements QueryHandlerInterface
     public function supports(QueryInterface $query)
     {
         return $query instanceof FetchAllOrdersQuery &&
-            $query->getAdapterName() === ShopwareAdapter::getName();
+            $query->getAdapterName() === ShopwareAdapter::NAME;
     }
 
     /**

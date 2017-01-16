@@ -2,6 +2,7 @@
 
 namespace ShopwareAdapter\ResponseParser\Order;
 
+use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Order\Order;
 use PlentyConnector\Connector\TransferObject\OrderStatus\OrderStatus;
@@ -28,27 +29,30 @@ class OrderResponseParser implements ResponseParserInterface
     private $orderItemResponseParser;
 
     /**
-     * ResponseParser constructor.
+     * OrderResponseParser constructor.
      *
      * @param IdentityServiceInterface $identityService
      * @param ResponseParserInterface $orderItemResponseParser
      */
-    public function __construct(IdentityServiceInterface $identityService, ResponseParserInterface $orderItemResponseParser)
-    {
+    public function __construct(
+        IdentityServiceInterface $identityService,
+        ResponseParserInterface $orderItemResponseParser
+    ) {
         $this->identityService = $identityService;
         $this->orderItemResponseParser = $orderItemResponseParser;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @throws NotFoundException
      */
     public function parse(array $entry)
     {
-
         $identity = $this->identityService->findOneOrCreate(
             (string)$entry['id'],
-            ShopwareAdapter::getName(),
-            Order::getType()
+            ShopwareAdapter::NAME,
+            Order::TYPE
         );
 
         $orderItems = array_filter(array_map(function ($orderItem) {
@@ -57,28 +61,28 @@ class OrderResponseParser implements ResponseParserInterface
 
         $shopIdentity = $this->identityService->findOneOrThrow(
             (string)$entry['shopId'],
-            ShopwareAdapter::getName(),
-            Shop::getType()
+            ShopwareAdapter::NAME,
+            Shop::TYPE
         );
         $orderStatusIdentity = $this->identityService->findOneOrThrow(
             (string)$entry['orderStatusId'],
-            ShopwareAdapter::getName(),
-            OrderStatus::getType()
+            ShopwareAdapter::NAME,
+            OrderStatus::TYPE
         );
         $paymentStatusIdentity = $this->identityService->findOneOrThrow(
             (string)$entry['paymentStatusId'],
-            ShopwareAdapter::getName(),
-            PaymentStatus::getType()
+            ShopwareAdapter::NAME,
+            PaymentStatus::TYPE
         );
         $paymentMethodIdentity = $this->identityService->findOneOrThrow(
             (string)$entry['paymentId'],
-            ShopwareAdapter::getName(),
-            PaymentMethod::getType()
+            ShopwareAdapter::NAME,
+            PaymentMethod::TYPE
         );
         $shippingProfileIdentity = $this->identityService->findOneOrThrow(
             (string)$entry['dispatchId'],
-            ShopwareAdapter::getName(),
-            ShippingProfile::getType()
+            ShopwareAdapter::NAME,
+            ShippingProfile::TYPE
         );
 
         $order = Order::fromArray([

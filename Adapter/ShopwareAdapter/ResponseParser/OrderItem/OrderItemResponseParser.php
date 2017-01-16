@@ -2,6 +2,7 @@
 
 namespace ShopwareAdapter\ResponseParser\OrderItem;
 
+use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\OrderItem\OrderItem;
 use PlentyConnector\Connector\TransferObject\Product\Product;
@@ -22,7 +23,7 @@ class OrderItemResponseParser implements ResponseParserInterface
     private $identityService;
 
     /**
-     * ResponseParser constructor.
+     * OrderItemResponseParser constructor.
      *
      * @param IdentityServiceInterface $identityService
      */
@@ -33,6 +34,8 @@ class OrderItemResponseParser implements ResponseParserInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws NotFoundException
      */
     public function parse(array $entry)
     {
@@ -55,19 +58,19 @@ class OrderItemResponseParser implements ResponseParserInterface
 
         $identity = $this->identityService->findOneOrCreate(
             (string)$entry['id'],
-            ShopwareAdapter::getName(),
-            OrderItem::getType()
+            ShopwareAdapter::NAME,
+            OrderItem::TYPE
         );
 
         $productIdentity = $this->identityService->findOneOrThrow(
             (string)$entry['articleId'],
-            ShopwareAdapter::getName(),
-            Product::getType()
+            ShopwareAdapter::NAME,
+            Product::TYPE
         );
         $variationIdentity = $this->identityService->findOneOrThrow(
             $variantId,
-            ShopwareAdapter::getName(),
-            Variation::getType()
+            ShopwareAdapter::NAME,
+            Variation::TYPE
         );
 
         $orderItem = OrderItem::fromArray([

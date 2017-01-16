@@ -3,7 +3,8 @@
 namespace ShopwareAdapter\QueryBus\QueryHandler\Order;
 
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\QueryBus\Query\FetchOrderQuery;
+use PlentyConnector\Connector\QueryBus\Query\FetchQueryInterface;
+use PlentyConnector\Connector\QueryBus\Query\Order\FetchOrderQuery;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use PlentyConnector\Connector\TransferObject\Order\Order;
@@ -38,7 +39,7 @@ class FetchOrderQueryHandler implements QueryHandlerInterface
     private $orderResource;
 
     /**
-     * GetChangedOrderQueryHandler constructor.
+     * FetchOrderQueryHandler constructor.
      *
      * @param ResponseParserInterface $responseParser
      * @param LoggerInterface $logger
@@ -60,21 +61,24 @@ class FetchOrderQueryHandler implements QueryHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(QueryInterface $event)
+    public function supports(QueryInterface $query)
     {
-        return $event instanceof FetchOrderQuery &&
-            $event->getAdapterName() === ShopwareAdapter::getName();
+        return $query instanceof FetchOrderQuery &&
+            $query->getAdapterName() === ShopwareAdapter::NAME;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function handle(QueryInterface $event)
+    public function handle(QueryInterface $query)
     {
+        /**
+         * @var FetchQueryInterface $event
+         */
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => $event->getIdentifier(),
-            'objectType' => Order::getType(),
-            'adapterName' => ShopwareAdapter::getName(),
+            'objectType' => Order::TYPE,
+            'adapterName' => ShopwareAdapter::NAME,
         ]);
 
         $order = $this->orderResource->getOne($identity->getAdapterIdentifier());

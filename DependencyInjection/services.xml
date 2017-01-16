@@ -292,12 +292,12 @@
             <tag name="plenty_connector.query_generator" />
         </service>
 
-        <service id="plentyconnector.query_generator.order" class="PlentyConnector\Connector\QueryBus\QueryGenerator\Order\OrderQueryGenerator">
-            <tag name="plentyconnector.query_generator" />
+        <service id="plenty_connector.query_generator.order" class="PlentyConnector\Connector\QueryBus\QueryGenerator\Order\OrderQueryGenerator">
+            <tag name="plenty_connector.query_generator" />
         </service>
 
-        <service id="plentyconnector.query_generator.order_status" class="PlentyConnector\Connector\QueryBus\QueryGenerator\OrderStatus\OrderStatusQueryGenerator">
-            <tag name="plentyconnector.query_generator" />
+        <service id="plenty_connector.query_generator.order_status" class="PlentyConnector\Connector\QueryBus\QueryGenerator\OrderStatus\OrderStatusQueryGenerator">
+            <tag name="plenty_connector.query_generator" />
         </service>
 
         <service id="plenty_connector.query_generator.payment_method" class="PlentyConnector\Connector\QueryBus\QueryGenerator\PaymentMethod\PaymentMethodQueryGenerator">

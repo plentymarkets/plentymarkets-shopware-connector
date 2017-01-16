@@ -15,7 +15,7 @@ class OrderQueryGenerator implements QueryGeneratorInterface
      */
     public function supports($transferObjectType)
     {
-        return $transferObjectType === Order::getType();
+        return $transferObjectType === Order::TYPE;
     }
 
     /**

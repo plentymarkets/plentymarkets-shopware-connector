@@ -2,7 +2,7 @@
 
 namespace ShopwareAdapter\QueryBus\QueryHandler\Order;
 
-use PlentyConnector\Connector\QueryBus\Query\FetchChangedOrdersQuery;
+use PlentyConnector\Connector\QueryBus\Query\Order\FetchChangedOrdersQuery;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use Psr\Log\LoggerInterface;
@@ -34,7 +34,7 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
     private $orderResource;
 
     /**
-     * GetChangedOrderQueryHandler constructor.
+     * FetchChangedOrdersQueryHandler constructor.
      *
      * @param ResponseParserInterface $responseParser
      * @param LoggerInterface $logger
@@ -56,7 +56,7 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
     public function supports(QueryInterface $event)
     {
         return $event instanceof FetchChangedOrdersQuery &&
-            $event->getAdapterName() === ShopwareAdapter::getName();
+            $event->getAdapterName() === ShopwareAdapter::NAME;
     }
 
     /**

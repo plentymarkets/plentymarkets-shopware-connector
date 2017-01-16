@@ -21,7 +21,7 @@ class FetchOrderQuery implements FetchQueryInterface
     private $identifier;
 
     /**
-     * FetchManufacturerQuery constructor.
+     * FetchOrderQuery constructor.
      *
      * @param string $adapterName
      * @param string $identifier

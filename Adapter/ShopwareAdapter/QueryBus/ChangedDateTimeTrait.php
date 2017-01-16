@@ -20,7 +20,7 @@ trait ChangedDateTimeTrait
      */
     public function getChangedDateTime(ConfigServiceInterface $config)
     {
-        $key = ShopwareAdapter::getName() . '.' . get_called_class() . 'DateTime';
+        $key = ShopwareAdapter::NAME . '.' . get_called_class() . 'DateTime';
 
         $timezone = new DateTimeZone('UTC');
         $lastRun = $config->get($key, '2000-01-01');
@@ -35,7 +35,7 @@ trait ChangedDateTimeTrait
      */
     public function setChangedDateTime(ConfigServiceInterface $config)
     {
-        $key = ShopwareAdapter::getName() . '.' . get_called_class() . 'DateTime';
+        $key = ShopwareAdapter::NAME . '.' . get_called_class() . 'DateTime';
 
         $timezone = new DateTimeZone('UTC');
         $dateTime = new DateTimeImmutable('now', $timezone);
