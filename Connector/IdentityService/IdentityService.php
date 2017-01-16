@@ -5,6 +5,7 @@ namespace PlentyConnector\Connector\IdentityService;
 use Assert\Assertion;
 use PlentyConnector\Connector\EventBus\Event\Identity\IdentityCreatedEvent;
 use PlentyConnector\Connector\EventBus\Event\Identity\IdentityRemovedEvent;
+use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\Storage\IdentityStorageInterface;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use PlentyConnector\Connector\TransferObject\Identity\Identity;
@@ -60,6 +61,29 @@ class IdentityService implements IdentityServiceInterface
                 (string)$adapterIdentifier,
                 $adapterName
             );
+        }
+
+        return $identity;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findOneOrThrow($adapterIdentifier, $adapterName, $objectType)
+    {
+        Assertion::string($adapterIdentifier);
+        Assertion::string($adapterName);
+        Assertion::string($objectType);
+
+        $identity = $this->findOneBy([
+            'objectType' => $objectType,
+            'adapterIdentifier' => $adapterIdentifier,
+            'adapterName' => $adapterName,
+        ]);
+
+        if (null === $identity) {
+            throw new NotFoundException(sprintf('Could not find identity for %s with identifier %s in %s.',
+                $objectType, $adapterIdentifier, $adapterName));
         }
 
         return $identity;

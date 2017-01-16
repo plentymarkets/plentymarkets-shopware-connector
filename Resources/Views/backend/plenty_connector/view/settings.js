@@ -84,6 +84,9 @@ Ext.define('Shopware.apps.PlentyConnector.view.Settings', {
         });
     },
 
+    /**
+     * Creates the rows of the settings view.
+     */
     getFieldSets: function () {
         return [
             {
