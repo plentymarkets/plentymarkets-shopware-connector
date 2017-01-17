@@ -8,8 +8,8 @@ use PlentyConnector\Connector\EventBus\Event\Identity\IdentityRemovedEvent;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\Storage\IdentityStorageInterface;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
-use PlentyConnector\Connector\TransferObject\Identity\Identity;
-use PlentyConnector\Connector\TransferObject\Identity\IdentityInterface;
+use PlentyConnector\Connector\ValueObject\Identity\Identity;
+use PlentyConnector\Connector\ValueObject\Identity\IdentityInterface;
 use Ramsey\Uuid\Uuid;
 
 /**

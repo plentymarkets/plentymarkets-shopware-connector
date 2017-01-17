@@ -3,12 +3,14 @@
 namespace ShopwareAdapter\CommandBus\CommandHandler\Manufacturer;
 
 use PlentyConnector\Connector\CommandBus\Command\CommandInterface;
+use PlentyConnector\Connector\CommandBus\Command\HandleCommandInterface;
 use PlentyConnector\Connector\CommandBus\Command\Manufacturer\HandleManufacturerCommand;
 use PlentyConnector\Connector\CommandBus\CommandHandler\CommandHandlerInterface;
-use PlentyConnector\Connector\EventBus\EventGeneratorTrait;
+use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 use PlentyConnector\Connector\TransferObject\Manufacturer\ManufacturerInterface;
+use PlentyConnector\Connector\TransferObject\Media\Media;
 use Shopware\Components\Api\Resource\Manufacturer as ManufacturerResource;
 use ShopwareAdapter\ShopwareAdapter;
 
@@ -17,8 +19,6 @@ use ShopwareAdapter\ShopwareAdapter;
  */
 class HandleManufacturerCommandHandler implements CommandHandlerInterface
 {
-    use EventGeneratorTrait;
-
     /**
      * @var ManufacturerResource
      */
@@ -42,9 +42,7 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param CommandInterface $command
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function supports(CommandInterface $command)
     {
@@ -59,11 +57,12 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
      * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * @throws \PlentyConnector\Connector\IdentityService\Exception\NotFoundException
      */
     public function handle(CommandInterface $command)
     {
         /**
-         * @var HandleManufacturerCommand $command
+         * @var HandleCommandInterface $command
          * @var ManufacturerInterface $manufacturer
          */
         $manufacturer = $command->getTransferObject();
@@ -76,9 +75,19 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
             $params['link'] = $manufacturer->getLink();
         }
 
-        if (null !== $manufacturer->getLogo()) {
+        if (null !== $manufacturer->getLogoIdentifier()) {
+            $mediaIdentity = $this->identityService->findOneBy([
+                'objectIdentifier' => $manufacturer->getLogoIdentifier(),
+                'objectType' => Media::TYPE,
+                'adapterName' => ShopwareAdapter::NAME,
+            ]);
+
+            if (null === $mediaIdentity) {
+                throw new NotFoundException('Missing Media for Adapter');
+            }
+
             $params['image'] = [
-                'link' => $manufacturer->getLogo(),
+                'mediaId' => $mediaIdentity->getAdapterIdentifier(),
             ];
         }
 

@@ -1,15 +1,15 @@
 <?php
 
-namespace PlentyConnector\Connector\CommandBus\Command\Manufacturer;
+namespace PlentyConnector\Connector\CommandBus\Command\Media;
 
 use Assert\Assertion;
 use PlentyConnector\Connector\CommandBus\Command\HandleCommandInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
- * Class HandleManufacturerCommand.
+ * Class HandleMediaCommand.
  */
-class HandleManufacturerCommand implements HandleCommandInterface
+class HandleMediaCommand implements HandleCommandInterface
 {
     /**
      * @var string
@@ -22,7 +22,7 @@ class HandleManufacturerCommand implements HandleCommandInterface
     private $transferObject;
 
     /**
-     * HandleManufacturerCommand constructor.
+     * HandleMediaCommand constructor.
      *
      * @param string $adapterName the classname of the target adapter
      * @param TransferObjectInterface $transferObject the transferobject which will be handeled

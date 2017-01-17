@@ -1,6 +1,6 @@
 <?php
 
-namespace PlentyConnector\Connector\TransferObject\Definition;
+namespace PlentyConnector\Connector\ValueObject\Definition;
 
 use Assert\Assertion;
 
@@ -9,8 +9,6 @@ use Assert\Assertion;
  */
 class Definition implements DefinitionInterface
 {
-    const TYPE = 'Definition';
-
     /**
      * origin adapter name.
      *
@@ -48,14 +46,6 @@ class Definition implements DefinitionInterface
         $this->originAdapterName = $originAdapterName;
         $this->destinationAdapterName = $destinationAdapterName;
         $this->objectType = $objectType;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getType()
-    {
-        return self::TYPE;
     }
 
     /**

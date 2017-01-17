@@ -26,7 +26,7 @@ class Manufacturer implements ManufacturerInterface
     /**
      * @var string
      */
-    private $logo;
+    private $logoIdentifier;
 
     /**
      * @var string
@@ -38,19 +38,19 @@ class Manufacturer implements ManufacturerInterface
      *
      * @param string $identifier
      * @param string $name
-     * @param string $logo
-     * @param string $link
+     * @param string|null $logoIdentifier
+     * @param string|null $link
      */
-    public function __construct($identifier, $name, $logo = null, $link = null)
+    public function __construct($identifier, $name, $logoIdentifier = null, $link = null)
     {
         Assertion::uuid($identifier);
         Assertion::string($name);
-        Assertion::nullOrUrl($logo);
+        Assertion::nullOrUuid($logoIdentifier);
         Assertion::nullOrUrl($link);
 
         $this->identifier = $identifier;
         $this->name = $name;
-        $this->logo = $logo;
+        $this->logoIdentifier = $logoIdentifier;
         $this->link = $link;
     }
 
@@ -70,14 +70,14 @@ class Manufacturer implements ManufacturerInterface
         Assertion::allInArray(array_keys($params), [
             'identifier',
             'name',
-            'logo',
+            'logoIdentifier',
             'link',
         ]);
 
         return new self(
             $params['identifier'],
             $params['name'],
-            $params['logo'],
+            $params['logoIdentifier'],
             $params['link']
         );
     }
@@ -101,9 +101,9 @@ class Manufacturer implements ManufacturerInterface
     /**
      * {@inheritdoc}
      */
-    public function getLogo()
+    public function getLogoIdentifier()
     {
-        return $this->logo;
+        return $this->logoIdentifier;
     }
 
     /**

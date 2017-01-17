@@ -95,7 +95,7 @@
 
         <!-- Connector definitions -->
 
-        <service id="plenty_connector.connector_definition.category" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
+        <service id="plenty_connector.connector_definition.category" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.category%</argument>
@@ -103,7 +103,7 @@
             <tag name="plenty_connector.connector_definition" />
         </service>
 
-        <service id="plenty_connector.connector_definition.manufacturer" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
+        <service id="plenty_connector.connector_definition.manufacturer" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.manufacturer%</argument>
@@ -112,7 +112,7 @@
         </service>
 
         <!--
-        <service id="plenty_connector.connector_definition.product" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
+        <service id="plenty_connector.connector_definition.product" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.product%</argument>
@@ -142,7 +142,7 @@
 
         <!-- Mapping definitions -->
 
-        <service id="plenty_connector.mapping_definition.country" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
+        <service id="plenty_connector.mapping_definition.country" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.country%</argument>
@@ -150,7 +150,7 @@
             <tag name="plenty_connector.mapping_definition" />
         </service>
 
-        <service id="plenty_connector.mapping_definition.currency" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
+        <service id="plenty_connector.mapping_definition.currency" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.currency%</argument>
@@ -158,7 +158,7 @@
             <tag name="plenty_connector.mapping_definition" />
         </service>
 
-        <service id="plenty_connector.mapping_definition.customer_group" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
+        <service id="plenty_connector.mapping_definition.customer_group" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.customer_group%</argument>
@@ -166,7 +166,7 @@
             <tag name="plenty_connector.mapping_definition" />
         </service>
 
-        <service id="plenty_connector.mapping_definition.language" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
+        <service id="plenty_connector.mapping_definition.language" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.language%</argument>
@@ -174,7 +174,7 @@
             <tag name="plenty_connector.mapping_definition" />
         </service>
 
-        <service id="plenty_connector.mapping_definition.payment_method" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
+        <service id="plenty_connector.mapping_definition.payment_method" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.payment_method%</argument>
@@ -182,7 +182,7 @@
             <tag name="plenty_connector.mapping_definition" />
         </service>
 
-        <service id="plenty_connector.mapping_definition.shipping_profile" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
+        <service id="plenty_connector.mapping_definition.shipping_profile" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.shipping_profile%</argument>
@@ -190,7 +190,7 @@
             <tag name="plenty_connector.mapping_definition" />
         </service>
 
-        <service id="plenty_connector.mapping_definition.shop" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
+        <service id="plenty_connector.mapping_definition.shop" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.shop%</argument>
@@ -198,7 +198,7 @@
             <tag name="plenty_connector.mapping_definition" />
         </service>
 
-        <service id="plenty_connector.mapping_definition.payment_status" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
+        <service id="plenty_connector.mapping_definition.payment_status" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.payment_status%</argument>
@@ -206,7 +206,7 @@
             <tag name="plenty_connector.mapping_definition" />
         </service>
 
-        <service id="plenty_connector.mapping_definition.order_status" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
+        <service id="plenty_connector.mapping_definition.order_status" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.order_status%</argument>
@@ -214,7 +214,7 @@
             <tag name="plenty_connector.mapping_definition" />
         </service>
 
-        <service id="plenty_connector.mapping_definition.unit" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
+        <service id="plenty_connector.mapping_definition.unit" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.unit%</argument>
@@ -222,7 +222,7 @@
             <tag name="plenty_connector.mapping_definition" />
         </service>
 
-        <service id="plenty_connector.mapping_definition.vat_rate" class="PlentyConnector\Connector\TransferObject\Definition\Definition">
+        <service id="plenty_connector.mapping_definition.vat_rate" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.vat_rate%</argument>
@@ -331,6 +331,10 @@
         <!-- Command generator -->
 
         <service id="plenty_connector.command_generator.manufacturer" class="PlentyConnector\Connector\CommandBus\CommandGenerator\Manufacturer\ManufacturerCommandGenerator">
+            <tag name="plenty_connector.command_generator" />
+        </service>
+
+        <service id="plenty_connector.command_generator.media" class="PlentyConnector\Connector\CommandBus\CommandGenerator\Media\MediaCommandGenerator">
             <tag name="plenty_connector.command_generator" />
         </service>
 

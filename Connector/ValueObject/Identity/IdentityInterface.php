@@ -1,13 +1,13 @@
 <?php
 
-namespace PlentyConnector\Connector\TransferObject\Identity;
+namespace PlentyConnector\Connector\ValueObject\Identity;
 
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
+use PlentyConnector\Connector\ValueObject\ValueObjectInterface;
 
 /**
  * Interface IdentityInterface.
  */
-interface IdentityInterface extends TransferObjectInterface
+interface IdentityInterface extends ValueObjectInterface
 {
     /**
      * @return string

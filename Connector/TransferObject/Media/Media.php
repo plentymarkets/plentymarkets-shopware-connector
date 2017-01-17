@@ -27,30 +27,65 @@ class Media implements MediaInterface
     private $hash;
 
     /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @var string
+     */
+    private $alternateName;
+
+    /**
+     * @var array
+     */
+    private $translations;
+
+    /**
+     * @var array
+     */
+    private $attributes;
+
+    /**
      * Media constructor.
      *
      * @param string $identifier
      * @param string $link
+     * @param string $name
+     * @param string $alternateName
      * @param string|null $hash
+     * @param array $translations
+     * @param array $attributes
      */
     public function __construct(
         $identifier,
         $link,
-        $hash = null
+        $name,
+        $alternateName,
+        $hash = null,
+        array $translations = [],
+        array $attributes = []
     ) {
         Assertion::uuid($identifier);
         Assertion::url($link);
-        Assertion::readable($link);
-        Assertion::nullOrString($hash);
+        Assertion::string($name);
+        Assertion::string($alternateName);
 
         $this->identifier = $identifier;
         $this->link = $link;
 
-        if (null === $hash) {
+        $this->name = $name;
+        $this->alternateName = $alternateName;
+
+        if (empty($hash)) {
             $hash = sha1_file($link);
         }
 
+        Assertion::string($hash);
+
         $this->hash = $hash;
+        $this->translations = $translations;
+        $this->attributes = $attributes;
     }
 
     /**
@@ -68,14 +103,22 @@ class Media implements MediaInterface
     {
         Assertion::allInArray(array_keys($params), [
             'identifier',
-            'name',
             'link',
+            'hash',
+            'name',
+            'alternateName',
+            'translations',
+            'attributes',
         ]);
 
         return new self(
             $params['identifier'],
+            $params['link'],
             $params['name'],
-            $params['link']
+            $params['alternateName'],
+            $params['hash'],
+            $params['translations'],
+            $params['attributes']
         );
     }
 
@@ -101,5 +144,37 @@ class Media implements MediaInterface
     public function getHash()
     {
         return $this->hash;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAlternateName()
+    {
+        return $this->alternateName;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTranslations()
+    {
+        return $this->translations;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
     }
 }

@@ -13,7 +13,7 @@ use PlentyConnector\Connector\QueryBus\QueryFactory\Exception\MissingQueryGenera
 use PlentyConnector\Connector\QueryBus\QueryFactory\QueryFactoryInterface;
 use PlentyConnector\Connector\QueryBus\QueryType;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
-use PlentyConnector\Connector\TransferObject\Definition\DefinitionInterface;
+use PlentyConnector\Connector\ValueObject\Definition\DefinitionInterface;
 use PlentyConnector\Connector\TransferObject\SynchronizedTransferObjectInterface;
 use Psr\Log\LoggerInterface;
 
@@ -175,9 +175,10 @@ class Connector implements ConnectorInterface
 
         array_walk($objects, function (SynchronizedTransferObjectInterface $object) use ($definition) {
             $this->commandBus->handle($this->commandFactory->create(
-                $object,
                 $definition->getDestinationAdapterName(),
-                CommandType::HANDLE
+                $object->getType(),
+                CommandType::HANDLE,
+                $object
             ));
         });
     }

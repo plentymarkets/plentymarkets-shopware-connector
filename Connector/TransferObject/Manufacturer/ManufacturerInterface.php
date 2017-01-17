@@ -18,7 +18,7 @@ interface ManufacturerInterface extends SynchronizedTransferObjectInterface
     /**
      * @return string
      */
-    public function getLogo();
+    public function getLogoIdentifier();
 
     /**
      * @return string

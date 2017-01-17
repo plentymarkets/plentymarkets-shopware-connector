@@ -3,7 +3,7 @@
 namespace PlentyConnector\Connector\IdentityService;
 
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
-use PlentyConnector\Connector\TransferObject\Identity\IdentityInterface;
+use PlentyConnector\Connector\ValueObject\Identity\IdentityInterface;
 
 /**
  * Interface IdentityServiceInterface.

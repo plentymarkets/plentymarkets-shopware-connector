@@ -5,8 +5,8 @@ namespace PlentyConnector\Connector\IdentityService\Storage;
 use Doctrine\ORM\EntityManagerInterface;
 use PlentyConnector\Connector\IdentityService\Model\Identity as IdentityModel;
 use PlentyConnector\Connector\IdentityService\Model\IdentityRepository;
-use PlentyConnector\Connector\TransferObject\Identity\Identity;
-use PlentyConnector\Connector\TransferObject\Identity\IdentityInterface;
+use PlentyConnector\Connector\ValueObject\Identity\Identity;
+use PlentyConnector\Connector\ValueObject\Identity\IdentityInterface;
 use Symfony\Component\Intl\Exception\NotImplementedException;
 
 /**

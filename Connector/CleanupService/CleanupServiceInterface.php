@@ -2,7 +2,7 @@
 
 namespace PlentyConnector\Connector\CleanupService;
 
-use PlentyConnector\Connector\TransferObject\Definition\DefinitionInterface;
+use PlentyConnector\Connector\ValueObject\Definition\DefinitionInterface;
 
 /**
  * Interface CleanupServiceInterface.

@@ -67,19 +67,25 @@
 
         <service id="shopware_adapter.shopware_api_manager" class="Shopware\Components\Api\Manager" />
 
-        <service id="shopware_adapter.shopware_resource.order" class="Shopware\Components\Api\Resource\Order">
-            <factory service="shopware_adapter.shopware_api_manager" method="getResource" />
-
-            <argument type="string">Order</argument>
-        </service>
-
         <service id="shopware_adapter.shopware_resource.manufacturer" class="Shopware\Components\Api\Resource\Manufacturer">
             <factory service="shopware_adapter.shopware_api_manager" method="getResource" />
 
             <argument type="string">Manufacturer</argument>
         </service>
 
-        <!-- Command handlers -->
+        <service id="shopware_adapter.shopware_resource.media" class="Shopware\Components\Api\Resource\Media">
+            <factory service="shopware_adapter.shopware_api_manager" method="getResource" />
+
+            <argument type="string">Media</argument>
+        </service>
+
+        <service id="shopware_adapter.shopware_resource.order" class="Shopware\Components\Api\Resource\Order">
+            <factory service="shopware_adapter.shopware_api_manager" method="getResource" />
+
+            <argument type="string">Order</argument>
+        </service>
+
+        <!-- Manufacturer command handlers -->
 
         <service id="shopware_adapter.command_handler.handle_manufacturer" class="ShopwareAdapter\CommandBus\CommandHandler\Manufacturer\HandleManufacturerCommandHandler">
             <argument type="service" id="shopware_adapter.shopware_resource.manufacturer" />
@@ -90,6 +96,22 @@
 
         <service id="shopware_adapter.command_handler.remove_manufacturer" class="ShopwareAdapter\CommandBus\CommandHandler\Manufacturer\RemoveManufacturerCommandHandler">
             <argument type="service" id="shopware_adapter.shopware_resource.manufacturer" />
+            <argument type="service" id="plenty_connector.identity_service" />
+
+            <tag name="plenty_connector.command_handler" />
+        </service>
+
+        <!-- Media command handlers -->
+
+        <service id="shopware_adapter.command_handler.handle_media" class="ShopwareAdapter\CommandBus\CommandHandler\Media\HandleMediaCommandHandler">
+            <argument type="service" id="shopware_adapter.shopware_resource.media" />
+            <argument type="service" id="plenty_connector.identity_service" />
+
+            <tag name="plenty_connector.command_handler" />
+        </service>
+
+        <service id="shopware_adapter.command_handler.remove_media" class="ShopwareAdapter\CommandBus\CommandHandler\Media\RemoveMediaCommandHandler">
+            <argument type="service" id="shopware_adapter.shopware_resource.media" />
             <argument type="service" id="plenty_connector.identity_service" />
 
             <tag name="plenty_connector.command_handler" />

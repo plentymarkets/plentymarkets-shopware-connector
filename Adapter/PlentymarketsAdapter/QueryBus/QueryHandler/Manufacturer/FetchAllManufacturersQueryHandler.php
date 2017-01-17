@@ -24,7 +24,12 @@ class FetchAllManufacturersQueryHandler implements QueryHandlerInterface
     /**
      * @var ResponseParserInterface
      */
-    private $responseMapper;
+    private $manufacturerResponseParser;
+
+    /**
+     * @var ResponseParserInterface
+     */
+    private $mediaResponseParser;
 
     /**
      * @var LoggerInterface
@@ -35,16 +40,19 @@ class FetchAllManufacturersQueryHandler implements QueryHandlerInterface
      * FetchAllManufacturersQueryHandler constructor.
      *
      * @param ClientInterface $client
-     * @param ResponseParserInterface $responseMapper
+     * @param ResponseParserInterface $manufacturerResponseParser
+     * @param ResponseParserInterface $mediaResponseParser
      * @param LoggerInterface $logger
      */
     public function __construct(
         ClientInterface $client,
-        ResponseParserInterface $responseMapper,
+        ResponseParserInterface $manufacturerResponseParser,
+        ResponseParserInterface $mediaResponseParser,
         LoggerInterface $logger
     ) {
         $this->client = $client;
-        $this->responseMapper = $responseMapper;
+        $this->manufacturerResponseParser = $manufacturerResponseParser;
+        $this->mediaResponseParser = $mediaResponseParser;
         $this->logger = $logger;
     }
 
@@ -72,7 +80,16 @@ class FetchAllManufacturersQueryHandler implements QueryHandlerInterface
 
         foreach ($this->client->getIterator('items/manufacturers') as $element) {
             try {
-                $result[] = $this->responseMapper->parse($element);
+                if (!empty($element['logo'])) {
+                    $result[] = $media = $this->mediaResponseParser->parse([
+                        'link' => $element['logo'],
+                        'name' => $element['name']
+                    ]);
+
+                    $element['logoIdentifier'] = $media->getIdentifier();
+                }
+
+                $result[] = $this->manufacturerResponseParser->parse($element);
             } catch (Exception $exception) {
                 $this->logger->error($exception->getMessage());
             }

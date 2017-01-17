@@ -14,8 +14,8 @@ use PlentyConnector\Connector\QueryBus\QueryFactory\Exception\MissingQueryGenera
 use PlentyConnector\Connector\QueryBus\QueryFactory\QueryFactoryInterface;
 use PlentyConnector\Connector\QueryBus\QueryType;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
-use PlentyConnector\Connector\TransferObject\Definition\DefinitionInterface;
-use PlentyConnector\Connector\TransferObject\Identity\IdentityInterface;
+use PlentyConnector\Connector\ValueObject\Definition\DefinitionInterface;
+use PlentyConnector\Connector\ValueObject\Identity\IdentityInterface;
 use PlentyConnector\Connector\TransferObject\SynchronizedTransferObjectInterface;
 use Psr\Log\LoggerInterface;
 

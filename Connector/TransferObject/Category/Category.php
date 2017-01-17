@@ -3,6 +3,8 @@
 namespace PlentyConnector\Connector\TransferObject\Category;
 
 use Assert\Assertion;
+use PlentyConnector\Connector\TransferObject\Translation\Translation;
+use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
 /**
  * Class Category
@@ -22,7 +24,7 @@ class Category implements CategoryInterface
     private $name;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $parentIdentifier;
 
@@ -32,45 +34,136 @@ class Category implements CategoryInterface
     private $shopIdentifier;
 
     /**
+     * @var string|null
+     */
+    private $imageIdentifier;
+
+    /**
      * @var integer
      */
     private $position;
 
     /**
+     * @var string
+     */
+    private $description;
+
+    /**
+     * @var string
+     */
+    private $longDescription;
+
+    /**
+     * @var string
+     */
+    private $metaTitle;
+
+    /**
+     * @var string
+     */
+    private $metaDescription;
+
+    /**
+     * @var string
+     */
+    private $metaKeywords;
+
+    /**
+     * @var string
+     */
+    private $metaRobots;
+
+    /**
+     * @var Translation[]
+     */
+    private $translations;
+
+    /**
+     * @var Attribute[]
+     */
+    private $attributes;
+
+    /**
      * Category constructor.
      *
      * @param string $identifier
+     *
      * @param string $name
+     *
      * @param string|null $parentIdentifier
      * @param string $shopIdentifier
+     * @param string|null $imageIdentifier
+     *
      * @param integer $position
+     *
+     * @param string $description
+     * @param string $longDescription
+     *
+     * @param string $metaTitle
+     * @param string $metaDescription
+     * @param string $metaKeywords
+     * @param string $metaRobots
+     *
+     * @param array $translations
+     * @param array $attributes
      */
     public function __construct(
         $identifier,
         $name,
         $parentIdentifier = null,
         $shopIdentifier,
+        $imageIdentifier,
         $position,
         $description,
         $longDescription,
         $metaTitle,
         $metaDescription,
         $metaKeywords,
-        $translations,
-        $attributes
+        $metaRobots,
+        array $translations = [],
+        array $attributes = []
     ) {
         Assertion::uuid($identifier);
+
         Assertion::string($name);
+
         Assertion::nullOrUuid($parentIdentifier);
         Assertion::uuid($shopIdentifier);
+        Assertion::nullOrUuid($imageIdentifier);
+
         Assertion::integer($position);
         Assertion::greaterOrEqualThan($position, 0);
 
+        Assertion::string($description);
+        Assertion::string($longDescription);
+
+        Assertion::string($metaTitle);
+        Assertion::string($metaDescription);
+        Assertion::string($metaKeywords);
+        Assertion::string($metaRobots);
+
+        Assertion::allIsInstanceOf($translations, Translation::class);
+        Assertion::allIsInstanceOf($attributes, Attribute::class);
+
         $this->identifier = $identifier;
+
         $this->name = $name;
         $this->parentIdentifier = $parentIdentifier;
         $this->shopIdentifier = $shopIdentifier;
+        $this->imageIdentifier = $imageIdentifier;
+
         $this->position = $position;
+
+        $this->description = $description;
+        $this->longDescription = $longDescription;
+
+        $this->metaTitle = $metaTitle;
+        $this->metaDescription = $metaDescription;
+        $this->metaKeywords = $metaKeywords;
+        $this->metaRobots = $metaRobots;
+
+        $this->translations = $translations;
+        $this->attributes = $attributes;
     }
 
     /**
@@ -91,13 +184,33 @@ class Category implements CategoryInterface
             'name',
             'parentIdentifier',
             'shopIdentifier',
+            'imageIdentifier',
+            'position',
+            'description',
+            'longDescription',
+            'metaTitle',
+            'metaDescription',
+            'metaKeywords',
+            'metaRobots',
+            'translations',
+            'attributes',
         ]);
 
         return new self(
             $params['identifier'],
             $params['name'],
             $params['parentIdentifier'],
-            $params['shopIdentifier']
+            $params['shopIdentifier'],
+            $params['imageIdentifier'],
+            $params['position'],
+            $params['description'],
+            $params['longDescription'],
+            $params['metaTitle'],
+            $params['metaDescription'],
+            $params['metaKeywords'],
+            $params['metaRobots'],
+            $params['translations'],
+            $params['attributes']
         );
     }
 
@@ -118,7 +231,7 @@ class Category implements CategoryInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getParentIdentifier()
     {
@@ -126,7 +239,7 @@ class Category implements CategoryInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getShopIdentifier()
     {
@@ -134,10 +247,82 @@ class Category implements CategoryInterface
     }
 
     /**
-     * @return TranslationInterface[]
+     * {@inheritdoc}
+     */
+    public function getImageIdentifier()
+    {
+        return $this->imageIdentifier;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLongDescription()
+    {
+        return $this->longDescription;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMetaTitle()
+    {
+        return $this->metaTitle;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMetaDescription()
+    {
+        return $this->metaDescription;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMetaKeywords()
+    {
+        return $this->metaKeywords;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMetaRobots()
+    {
+        return $this->metaRobots;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getTranslations()
     {
-        // TODO: Implement getTranslations() method.
+        return $this->translations;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
     }
 }

@@ -1,14 +1,14 @@
 <?php
 
-namespace PlentyConnector\Connector\CommandBus\Command\Manufacturer;
+namespace PlentyConnector\Connector\CommandBus\Command\Media;
 
 use Assert\Assertion;
 use PlentyConnector\Connector\CommandBus\Command\RemoveCommandInterfaca;
 
 /**
- * Class RemoveManufacturerCommand.
+ * Class RemoveMediaCommand.
  */
-class RemoveManufacturerCommand implements RemoveCommandInterfaca
+class RemoveMediaCommand implements RemoveCommandInterfaca
 {
     /**
      * @var string
@@ -21,7 +21,7 @@ class RemoveManufacturerCommand implements RemoveCommandInterfaca
     private $objectIdentifier;
 
     /**
-     * RemoveManufacturerCommand constructor.
+     * RemoveMediaCommand constructor.
      *
      * @param string $adapterName the classname of the target adapter
      * @param string $objectIdentifier the identifier of the transferobject which will be handeled

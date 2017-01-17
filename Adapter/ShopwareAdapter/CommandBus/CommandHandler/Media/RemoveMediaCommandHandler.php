@@ -1,23 +1,23 @@
 <?php
 
-namespace ShopwareAdapter\CommandBus\CommandHandler\Manufacturer;
+namespace ShopwareAdapter\CommandBus\CommandHandler\Media;
 
 use PlentyConnector\Connector\CommandBus\Command\CommandInterface;
-use PlentyConnector\Connector\CommandBus\Command\Manufacturer\RemoveManufacturerCommand;
+use PlentyConnector\Connector\CommandBus\Command\Media\RemoveMediaCommand;
 use PlentyConnector\Connector\CommandBus\Command\RemoveCommandInterfaca;
 use PlentyConnector\Connector\CommandBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
-use Shopware\Components\Api\Resource\Manufacturer as ManufacturerResource;
+use PlentyConnector\Connector\TransferObject\Media\Media;
+use Shopware\Components\Api\Resource\Media as MediaResource;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class RemoveManufacturerCommandHandler.
+ * Class RemoveMediaCommandHandler.
  */
-class RemoveManufacturerCommandHandler implements CommandHandlerInterface
+class RemoveMediaCommandHandler implements CommandHandlerInterface
 {
     /**
-     * @var ManufacturerResource
+     * @var MediaResource
      */
     private $resource;
 
@@ -27,12 +27,12 @@ class RemoveManufacturerCommandHandler implements CommandHandlerInterface
     private $identityService;
 
     /**
-     * RemoveManufacturerCommandHandler constructor.
+     * RemoveMediaCommandHandler constructor.
      *
-     * @param ManufacturerResource $resource
+     * @param MediaResource $resource
      * @param IdentityServiceInterface $identityService
      */
-    public function __construct(ManufacturerResource $resource, IdentityServiceInterface $identityService)
+    public function __construct(MediaResource $resource, IdentityServiceInterface $identityService)
     {
         $this->resource = $resource;
         $this->identityService = $identityService;
@@ -43,7 +43,7 @@ class RemoveManufacturerCommandHandler implements CommandHandlerInterface
      */
     public function supports(CommandInterface $command)
     {
-        return $command instanceof RemoveManufacturerCommand &&
+        return $command instanceof RemoveMediaCommand &&
             $command->getAdapterName() === ShopwareAdapter::NAME;
     }
 
@@ -63,7 +63,7 @@ class RemoveManufacturerCommandHandler implements CommandHandlerInterface
 
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => $identifier,
-            'objectType' => Manufacturer::TYPE,
+            'objectType' => Media::TYPE,
             'adapterName' => ShopwareAdapter::NAME,
         ]);
 

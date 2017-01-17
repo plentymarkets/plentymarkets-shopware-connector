@@ -41,8 +41,8 @@ class ManufacturerResponseParser implements ResponseParserInterface
         return Manufacturer::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
             'name' => $entry['name'],
-            'logo' => !empty($entry['logo']) ? $entry['name'] : null,
-            'link' => !empty($entry['url']) ? $entry['name'] : null,
+            'logoIdentifier' => !empty($entry['logoIdentifier']) ? $entry['logoIdentifier'] : null,
+            'link' => !empty($entry['url']) ? $entry['url'] : null,
         ]);
     }
 }

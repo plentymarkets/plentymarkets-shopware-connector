@@ -3,7 +3,6 @@
 namespace PlentyConnector\Connector\CommandBus\CommandFactory\Exception;
 
 use InvalidArgumentException;
-use PlentyConnector\Connector\TransferObject\Definition\DefinitionInterface;
 
 /**
  * Class MissingCommandException

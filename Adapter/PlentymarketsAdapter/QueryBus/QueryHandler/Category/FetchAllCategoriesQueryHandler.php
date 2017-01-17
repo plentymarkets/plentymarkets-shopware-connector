@@ -9,7 +9,6 @@ use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 use Psr\Log\LoggerInterface;
-use UnexpectedValueException;
 
 /**
  * Class FetchAllCategoriesQueryHandler
@@ -24,7 +23,7 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
     /**
      * @var ResponseParserInterface
      */
-    private $responseMapper;
+    private $responseParser;
 
     /**
      * @var LoggerInterface
@@ -35,23 +34,21 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
      * FetchAllCategoriesQueryHandler constructor.
      *
      * @param ClientInterface $client
-     * @param ResponseParserInterface $responseMapper
+     * @param ResponseParserInterface $responseParser
      * @param LoggerInterface $logger
      */
     public function __construct(
         ClientInterface $client,
-        ResponseParserInterface $responseMapper,
+        ResponseParserInterface $responseParser,
         LoggerInterface $logger
     ) {
         $this->client = $client;
-        $this->responseMapper = $responseMapper;
+        $this->responseParser = $responseParser;
         $this->logger = $logger;
     }
 
     /**
-     * @param QueryInterface $query
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function supports(QueryInterface $query)
     {
@@ -60,26 +57,22 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
     }
 
     /**
-     * @param QueryInterface $query
-     *
-     * @return TransferObjectInterface[]
-     *
-     * @throws UnexpectedValueException
+     * {@inheritdoc}
      */
     public function handle(QueryInterface $query)
     {
         $elements = $this->client->request('GET', 'categories', [
-            'with' => 'clients',
+            'with' => 'clients,details',
         ]);
 
         $elements = array_filter($elements, function ($element) {
             return $element['type'] === 'item' && $element['right'] === 'all';
         });
 
-        array_walk($elements, function ($element) {
-            // TODO: process elements
-        });
+        $categories = array_map(function ($category) {
+            return $this->responseParser->parse($category);
+        }, $elements);
 
-        return [];
+        return array_filter($categories);
     }
 }

@@ -4,8 +4,10 @@ namespace PlentymarketsAdapter\QueryBus\QueryHandler\Category;
 
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\QueryBus\Query\Category\FetchCategoryQuery;
+use PlentyConnector\Connector\QueryBus\Query\FetchQueryInterface;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\TransferObject\Category\Category;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
@@ -24,7 +26,7 @@ class FetchCategoryQueryHandler implements QueryHandlerInterface
     /**
      * @var ResponseParserInterface
      */
-    private $responseMapper;
+    private $responseParser;
 
     /**
      * @var IdentityServiceInterface
@@ -35,23 +37,21 @@ class FetchCategoryQueryHandler implements QueryHandlerInterface
      * FetchCategoryQueryHandler constructor.
      *
      * @param ClientInterface $client
-     * @param ResponseParserInterface $responseMapper
+     * @param ResponseParserInterface $responseParser
      * @param IdentityServiceInterface $identityService
      */
     public function __construct(
         ClientInterface $client,
-        ResponseParserInterface $responseMapper,
+        ResponseParserInterface $responseParser,
         IdentityServiceInterface $identityService
     ) {
         $this->client = $client;
-        $this->responseMapper = $responseMapper;
+        $this->responseParser = $responseParser;
         $this->identityService = $identityService;
     }
 
     /**
-     * @param QueryInterface $query
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function supports(QueryInterface $query)
     {
@@ -60,12 +60,21 @@ class FetchCategoryQueryHandler implements QueryHandlerInterface
     }
 
     /**
-     * @param QueryInterface $query
-     *
-     * @return TransferObjectInterface
+     * {@inheritdoc}
      */
     public function handle(QueryInterface $query)
     {
-        // TODO: process elements
+        /**
+         * @var FetchQueryInterface $query
+         */
+        $identity = $this->identityService->findOneBy([
+            'objectIdentifier' => $query->getIdentifier(),
+            'objectType' => Category::TYPE,
+            'adapterName' => PlentymarketsAdapter::NAME,
+        ]);
+
+        $element = $this->client->request('GET', 'categories/' . $identity->getAdapterIdentifier());
+
+        return $this->responseParser->parse($element);
     }
 }

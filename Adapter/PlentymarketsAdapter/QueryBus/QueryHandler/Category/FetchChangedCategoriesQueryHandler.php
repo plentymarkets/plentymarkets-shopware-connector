@@ -32,7 +32,7 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
     /**
      * @var ResponseParserInterface
      */
-    private $responseMapper;
+    private $responseParser;
 
     /**
      * @var LoggerInterface
@@ -44,25 +44,23 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
      *
      * @param ClientInterface $client
      * @param ConfigServiceInterface $config
-     * @param ResponseParserInterface $responseMapper
+     * @param ResponseParserInterface $responseParser
      * @param LoggerInterface $logger
      */
     public function __construct(
         ClientInterface $client,
         ConfigServiceInterface $config,
-        ResponseParserInterface $responseMapper,
+        ResponseParserInterface $responseParser,
         LoggerInterface $logger
     ) {
         $this->client = $client;
         $this->config = $config;
-        $this->responseMapper = $responseMapper;
+        $this->responseParser = $responseParser;
         $this->logger = $logger;
     }
 
     /**
-     * @param QueryInterface $query
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function supports(QueryInterface $query)
     {
@@ -71,12 +69,22 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
     }
 
     /**
-     * @param QueryInterface $query
-     *
-     * @return TransferObjectInterface[]
+     * {@inheritdoc}
      */
     public function handle(QueryInterface $query)
     {
-        // TODO: process elements
+        $elements = $this->client->request('GET', 'categories', [
+            'with' => 'clients,details',
+        ]);
+
+        $elements = array_filter($elements, function ($element) {
+            return $element['type'] === 'item' && $element['right'] === 'all';
+        });
+
+        $categories = array_map(function ($category) {
+            return $this->responseParser->parse($category);
+        }, $elements);
+
+        return array_filter($categories);
     }
 }

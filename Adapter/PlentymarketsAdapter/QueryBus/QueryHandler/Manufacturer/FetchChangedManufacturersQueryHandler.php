@@ -34,7 +34,12 @@ class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
     /**
      * @var ResponseParserInterface
      */
-    private $responseMapper;
+    private $manufacturerResponseParser;
+
+    /**
+     * @var ResponseParserInterface
+     */
+    private $mediaResponseParser;
 
     /**
      * @var LoggerInterface
@@ -46,18 +51,21 @@ class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
      *
      * @param ClientInterface $client
      * @param ConfigServiceInterface $config
-     * @param ResponseParserInterface $responseMapper
+     * @param ResponseParserInterface $manufacturerResponseParser
+     * @param ResponseParserInterface $mediaResponseParser
      * @param LoggerInterface $logger
      */
     public function __construct(
         ClientInterface $client,
         ConfigServiceInterface $config,
-        ResponseParserInterface $responseMapper,
+        ResponseParserInterface $manufacturerResponseParser,
+        ResponseParserInterface $mediaResponseParser,
         LoggerInterface $logger
     ) {
         $this->client = $client;
         $this->config = $config;
-        $this->responseMapper = $responseMapper;
+        $this->manufacturerResponseParser = $manufacturerResponseParser;
+        $this->mediaResponseParser = $mediaResponseParser;
         $this->logger = $logger;
     }
 
@@ -86,15 +94,25 @@ class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
         ];
 
         $result = [];
+
         foreach ($this->client->getIterator('items/manufacturers', $criteria) as $element) {
             try {
-                $result[] = $this->responseMapper->parse($element);
+                if (!empty($element['logo'])) {
+                    $result[] = $media = $this->mediaResponseParser->parse([
+                        'link' => $element['logo'],
+                        'name' => $element['name']
+                    ]);
+
+                    $element['logoIdentifier'] = $media->getIdentifier();
+                }
+
+                $result[] = $this->manufacturerResponseParser->parse($element);
             } catch (Exception $exception) {
                 $this->logger->error($exception->getMessage());
             }
         }
 
-        if ([] !== $result) {
+        if (!empty($result)) {
             $this->setChangedDateTime($this->config);
         }
 

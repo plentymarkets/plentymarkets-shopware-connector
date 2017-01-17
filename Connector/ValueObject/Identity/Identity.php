@@ -1,6 +1,6 @@
 <?php
 
-namespace PlentyConnector\Connector\TransferObject\Identity;
+namespace PlentyConnector\Connector\ValueObject\Identity;
 
 use Assert\Assertion;
 
@@ -9,8 +9,6 @@ use Assert\Assertion;
  */
 class Identity implements IdentityInterface
 {
-    const TYPE = 'Identity';
-
     /**
      * Identifier of the object.
      *
@@ -58,14 +56,6 @@ class Identity implements IdentityInterface
         $this->objectType = $objectType;
         $this->adapterIdentifier = $adapterIdentifier;
         $this->adapterName = $adapterName;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getType()
-    {
-        return self::TYPE;
     }
 
     /**

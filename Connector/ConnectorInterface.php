@@ -5,7 +5,7 @@ namespace PlentyConnector\Connector;
 use PlentyConnector\Adapter\AdapterInterface;
 use PlentyConnector\Connector\Exception\MissingCommandException;
 use PlentyConnector\Connector\Exception\MissingQueryException;
-use PlentyConnector\Connector\TransferObject\Definition\DefinitionInterface;
+use PlentyConnector\Connector\ValueObject\Definition\DefinitionInterface;
 
 /**
  * Interface ConnectorInterface.

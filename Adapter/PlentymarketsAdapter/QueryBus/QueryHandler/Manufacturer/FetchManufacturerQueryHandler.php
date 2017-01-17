@@ -30,7 +30,12 @@ class FetchManufacturerQueryHandler implements QueryHandlerInterface
     /**
      * @var ResponseParserInterface
      */
-    private $responseMapper;
+    private $manufacturerResponseParser;
+
+    /**
+     * @var ResponseParserInterface
+     */
+    private $mediaResponseParser;
 
     /**
      * @var IdentityServiceInterface
@@ -41,16 +46,19 @@ class FetchManufacturerQueryHandler implements QueryHandlerInterface
      * FetchManufacturerQueryHandler constructor.
      *
      * @param ClientInterface $client
-     * @param ResponseParserInterface $responseMapper
+     * @param ResponseParserInterface $manufacturerResponseParser
+     * @param ResponseParserInterface $mediaResponseParser
      * @param IdentityServiceInterface $identityService
      */
     public function __construct(
         ClientInterface $client,
-        ResponseParserInterface $responseMapper,
+        ResponseParserInterface $manufacturerResponseParser,
+        ResponseParserInterface $mediaResponseParser,
         IdentityServiceInterface $identityService
     ) {
         $this->client = $client;
-        $this->responseMapper = $responseMapper;
+        $this->manufacturerResponseParser = $manufacturerResponseParser;
+        $this->mediaResponseParser = $mediaResponseParser;
         $this->identityService = $identityService;
     }
 
@@ -88,6 +96,15 @@ class FetchManufacturerQueryHandler implements QueryHandlerInterface
 
         $element = $this->client->request('GET', 'items/manufacturers/' . $identity->getAdapterIdentifier());
 
-        return $this->responseMapper->parse($element);
+        if (!empty($element['logo'])) {
+            $result[] = $media = $this->mediaResponseParser->parse([
+                'link' => $element['logo'],
+                'name' => $element['name']
+            ]);
+
+            $element['logoIdentifier'] = $media->getIdentifier();
+        }
+
+        return $this->manufacturerResponseParser->parse($element);
     }
 }
