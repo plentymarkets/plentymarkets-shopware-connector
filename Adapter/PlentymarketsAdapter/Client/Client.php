@@ -127,6 +127,8 @@ class Client implements ClientInterface
             if (array_key_exists('entries', $result)) {
                 $result = $result['entries'];
             }
+
+            return $result;
         } catch (ClientException $exception) {
             if ($exception->hasResponse() && $exception->getResponse()->getStatusCode() === 401
                 && !$this->isLoginRequired($path) && $this->accessToken != null
