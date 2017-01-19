@@ -4,6 +4,7 @@ namespace PlentyConnector\Connector\Translation;
 
 use PlentyConnector\Connector\TransferObject\TranslateableInterface;
 use PlentyConnector\Connector\ValueObject\Translation\TranslationInterface;
+use ReflectionClass;
 
 /**
  * Class TranslationHelper
@@ -15,7 +16,7 @@ class TranslationHelper implements TranslationHelperInterface
      */
     public function translate($languageIdentifier, TranslateableInterface $object)
     {
-        $reflectionClass = new \ReflectionClass($object);
+        $reflectionClass = new ReflectionClass($object);
         $properties = $reflectionClass->getProperties();
 
         $translations = array_filter($object->getTranslations(), function(TranslationInterface $translation) use ($languageIdentifier) {
