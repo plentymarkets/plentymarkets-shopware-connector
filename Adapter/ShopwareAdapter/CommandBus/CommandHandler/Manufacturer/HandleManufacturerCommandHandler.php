@@ -97,8 +97,6 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
             'adapterName' => ShopwareAdapter::NAME,
         ]);
 
-        $createManufacturer = true;
-
         if (null === $identity) {
             $existingManufacturer = $this->findExistingManufacturer($manufacturer);
 
@@ -109,20 +107,16 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
                     (string)$existingManufacturer['id'],
                     ShopwareAdapter::NAME
                 );
-
-                $createManufacturer = false;
             }
-        } else {
-            $createManufacturer = false;
         }
 
-        if ($createManufacturer) {
-            $manufacturerModel = $this->resource->create($params);
+        if (null === $identity) {
+            $newManufacturer = $this->resource->create($params);
 
             $this->identityService->create(
                 $manufacturer->getIdentifier(),
                 Manufacturer::TYPE,
-                (string)$manufacturerModel->getId(),
+                (string)$newManufacturer->getId(),
                 ShopwareAdapter::NAME
             );
         } else {
