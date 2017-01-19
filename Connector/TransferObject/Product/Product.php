@@ -42,8 +42,12 @@ class Product implements ProductInterface
      * @param array $variants
      * @param ManufacturerInterface $manufacturer
      */
-    public function __construct($identifier, $name, array $variants = [], ManufacturerInterface $manufacturer)
-    {
+    public function __construct(
+        $identifier,
+        $name,
+        array $variants = [],
+        ManufacturerInterface $manufacturer
+    ) {
         Assertion::uuid($identifier);
         Assertion::string($name);
         Assertion::isArray($variants);

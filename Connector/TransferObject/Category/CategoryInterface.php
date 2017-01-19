@@ -22,14 +22,14 @@ interface CategoryInterface extends SynchronizedTransferObjectInterface, Transla
     public function getParentIdentifier();
 
     /**
-     * @return string
+     * @return array
      */
     public function getShopIdentifier();
 
     /**
-     * @return string|null
+     * @return array
      */
-    public function getImageIdentifier();
+    public function getImageIdentifiers();
 
     /**
      * @return int

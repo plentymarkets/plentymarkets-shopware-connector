@@ -3,7 +3,7 @@
 namespace PlentyConnector\Connector\TransferObject\Category;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\Translation\Translation;
+use PlentyConnector\Connector\ValueObject\Translation\Translation;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
 /**
@@ -34,9 +34,9 @@ class Category implements CategoryInterface
     private $shopIdentifier;
 
     /**
-     * @var string|null
+     * @var array
      */
-    private $imageIdentifier;
+    private $imageIdentifiers;
 
     /**
      * @var integer
@@ -92,8 +92,7 @@ class Category implements CategoryInterface
      *
      * @param string|null $parentIdentifier
      * @param string $shopIdentifier
-     * @param string|null $imageIdentifier
-     *
+     * @param array $imageIdentifiers
      * @param integer $position
      *
      * @param string $description
@@ -106,13 +105,14 @@ class Category implements CategoryInterface
      *
      * @param array $translations
      * @param array $attributes
+     *
      */
     public function __construct(
         $identifier,
         $name,
         $parentIdentifier = null,
         $shopIdentifier,
-        $imageIdentifier,
+        array $imageIdentifiers = [],
         $position,
         $description,
         $longDescription,
@@ -129,7 +129,7 @@ class Category implements CategoryInterface
 
         Assertion::nullOrUuid($parentIdentifier);
         Assertion::uuid($shopIdentifier);
-        Assertion::nullOrUuid($imageIdentifier);
+        Assertion::allUuid($imageIdentifiers);
 
         Assertion::integer($position);
         Assertion::greaterOrEqualThan($position, 0);
@@ -150,7 +150,7 @@ class Category implements CategoryInterface
         $this->name = $name;
         $this->parentIdentifier = $parentIdentifier;
         $this->shopIdentifier = $shopIdentifier;
-        $this->imageIdentifier = $imageIdentifier;
+        $this->imageIdentifiers = $imageIdentifiers;
 
         $this->position = $position;
 
@@ -184,7 +184,7 @@ class Category implements CategoryInterface
             'name',
             'parentIdentifier',
             'shopIdentifier',
-            'imageIdentifier',
+            'imageIdentifiers',
             'position',
             'description',
             'longDescription',
@@ -201,7 +201,7 @@ class Category implements CategoryInterface
             $params['name'],
             $params['parentIdentifier'],
             $params['shopIdentifier'],
-            $params['imageIdentifier'],
+            $params['imageIdentifiers'],
             $params['position'],
             $params['description'],
             $params['longDescription'],
@@ -249,9 +249,9 @@ class Category implements CategoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getImageIdentifier()
+    public function getImageIdentifiers()
     {
-        return $this->imageIdentifier;
+        return $this->imageIdentifiers;
     }
 
     /**

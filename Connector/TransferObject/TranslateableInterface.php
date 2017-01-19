@@ -2,7 +2,7 @@
 
 namespace PlentyConnector\Connector\TransferObject;
 
-use PlentyConnector\Connector\TransferObject\Translation\TranslationInterface;
+use PlentyConnector\Connector\ValueObject\Translation\TranslationInterface;
 
 /**
  * Interface TranslateableInterface
