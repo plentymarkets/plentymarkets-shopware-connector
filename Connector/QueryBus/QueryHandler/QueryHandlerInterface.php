@@ -2,6 +2,7 @@
 
 namespace PlentyConnector\Connector\QueryBus\QueryHandler;
 
+use Exception;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 
 /**
@@ -21,7 +22,7 @@ interface QueryHandlerInterface
      *
      * @return mixed
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function handle(QueryInterface $query);
 }

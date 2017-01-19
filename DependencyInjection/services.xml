@@ -66,6 +66,8 @@
             <factory service="ModelConfig" method="getMetadataCacheImpl" />
         </service>
 
+        <service id="plenty_connector.translation_helper" class="PlentyConnector\Connector\Translation\TranslationHelper" />
+
         <!-- Subscriber -->
 
         <service id="plenty_connector.subscriber.controller_path" class="PlentyConnector\Subscriber\ControllerPathSubscriber">
@@ -329,6 +331,10 @@
         <service id="plenty_connector.command_factory" class="PlentyConnector\Connector\CommandBus\CommandFactory\CommandFactory" />
 
         <!-- Command generator -->
+
+        <service id="plenty_connector.command_generator.category" class="PlentyConnector\Connector\CommandBus\CommandGenerator\Category\CategoryCommandGenerator">
+            <tag name="plenty_connector.command_generator" />
+        </service>
 
         <service id="plenty_connector.command_generator.manufacturer" class="PlentyConnector\Connector\CommandBus\CommandGenerator\Manufacturer\ManufacturerCommandGenerator">
             <tag name="plenty_connector.command_generator" />
