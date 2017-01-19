@@ -32,34 +32,24 @@ class FetchAllManufacturersQueryHandler implements QueryHandlerInterface
     private $mediaResponseParser;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * FetchAllManufacturersQueryHandler constructor.
      *
      * @param ClientInterface $client
      * @param ResponseParserInterface $manufacturerResponseParser
      * @param ResponseParserInterface $mediaResponseParser
-     * @param LoggerInterface $logger
      */
     public function __construct(
         ClientInterface $client,
         ResponseParserInterface $manufacturerResponseParser,
-        ResponseParserInterface $mediaResponseParser,
-        LoggerInterface $logger
+        ResponseParserInterface $mediaResponseParser
     ) {
         $this->client = $client;
         $this->manufacturerResponseParser = $manufacturerResponseParser;
         $this->mediaResponseParser = $mediaResponseParser;
-        $this->logger = $logger;
     }
 
     /**
-     * @param QueryInterface $query
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function supports(QueryInterface $query)
     {
@@ -68,31 +58,23 @@ class FetchAllManufacturersQueryHandler implements QueryHandlerInterface
     }
 
     /**
-     * @param QueryInterface $query
-     *
-     * @return TransferObjectInterface[]
-     *
-     * @throws UnexpectedValueException
+     * {@inheritdoc}
      */
     public function handle(QueryInterface $query)
     {
         $result = [];
 
         foreach ($this->client->getIterator('items/manufacturers') as $element) {
-            try {
-                if (!empty($element['logo'])) {
-                    $result[] = $media = $this->mediaResponseParser->parse([
-                        'link' => $element['logo'],
-                        'name' => $element['name']
-                    ]);
+            if (!empty($element['logo'])) {
+                $result[] = $media = $this->mediaResponseParser->parse([
+                    'link' => $element['logo'],
+                    'name' => $element['name']
+                ]);
 
-                    $element['logoIdentifier'] = $media->getIdentifier();
-                }
-
-                $result[] = $this->manufacturerResponseParser->parse($element);
-            } catch (Exception $exception) {
-                $this->logger->error($exception->getMessage());
+                $element['logoIdentifier'] = $media->getIdentifier();
             }
+
+            $result[] = $this->manufacturerResponseParser->parse($element);
         }
 
         return $result;

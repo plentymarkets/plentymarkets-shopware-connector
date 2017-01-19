@@ -42,37 +42,27 @@ class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
     private $mediaResponseParser;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * FetchChangedManufacturersQueryHandler constructor.
      *
      * @param ClientInterface $client
      * @param ConfigServiceInterface $config
      * @param ResponseParserInterface $manufacturerResponseParser
      * @param ResponseParserInterface $mediaResponseParser
-     * @param LoggerInterface $logger
      */
     public function __construct(
         ClientInterface $client,
         ConfigServiceInterface $config,
         ResponseParserInterface $manufacturerResponseParser,
-        ResponseParserInterface $mediaResponseParser,
-        LoggerInterface $logger
+        ResponseParserInterface $mediaResponseParser
     ) {
         $this->client = $client;
         $this->config = $config;
         $this->manufacturerResponseParser = $manufacturerResponseParser;
         $this->mediaResponseParser = $mediaResponseParser;
-        $this->logger = $logger;
     }
 
     /**
-     * @param QueryInterface $query
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function supports(QueryInterface $query)
     {
@@ -81,11 +71,7 @@ class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
     }
 
     /**
-     * @param QueryInterface $query
-     *
-     * @return TransferObjectInterface[]
-     *
-     * @throws UnexpectedValueException
+     * {@inheritdoc}
      */
     public function handle(QueryInterface $query)
     {
@@ -96,20 +82,16 @@ class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
         $result = [];
 
         foreach ($this->client->getIterator('items/manufacturers', $criteria) as $element) {
-            try {
-                if (!empty($element['logo'])) {
-                    $result[] = $media = $this->mediaResponseParser->parse([
-                        'link' => $element['logo'],
-                        'name' => $element['name']
-                    ]);
+            if (!empty($element['logo'])) {
+                $result[] = $media = $this->mediaResponseParser->parse([
+                    'link' => $element['logo'],
+                    'name' => $element['name']
+                ]);
 
-                    $element['logoIdentifier'] = $media->getIdentifier();
-                }
-
-                $result[] = $this->manufacturerResponseParser->parse($element);
-            } catch (Exception $exception) {
-                $this->logger->error($exception->getMessage());
+                $element['logoIdentifier'] = $media->getIdentifier();
             }
+
+            $result[] = $this->manufacturerResponseParser->parse($element);
         }
 
         if (!empty($result)) {

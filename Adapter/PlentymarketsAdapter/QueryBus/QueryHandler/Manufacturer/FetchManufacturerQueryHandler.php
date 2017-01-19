@@ -15,6 +15,7 @@ use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\Client\Exception\InvalidCredentialsException;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
+use Psr\Log\LoggerInterface;
 use UnexpectedValueException;
 
 /**
@@ -63,9 +64,7 @@ class FetchManufacturerQueryHandler implements QueryHandlerInterface
     }
 
     /**
-     * @param QueryInterface $query
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function supports(QueryInterface $query)
     {
@@ -74,17 +73,12 @@ class FetchManufacturerQueryHandler implements QueryHandlerInterface
     }
 
     /**
-     * @param QueryInterface $query
-     *
-     * @return TransferObjectInterface
-     *
-     * @throws InvalidResponseException
-     * @throws InvalidCredentialsException
-     * @throws Exception
-     * @throws UnexpectedValueException
+     * {@inheritdoc}
      */
     public function handle(QueryInterface $query)
     {
+        $result = [];
+
         /**
          * @var FetchQueryInterface $query
          */
@@ -105,6 +99,8 @@ class FetchManufacturerQueryHandler implements QueryHandlerInterface
             $element['logoIdentifier'] = $media->getIdentifier();
         }
 
-        return $this->manufacturerResponseParser->parse($element);
+        $result[] = $this->manufacturerResponseParser->parse($element);
+
+        return $result;
     }
 }
