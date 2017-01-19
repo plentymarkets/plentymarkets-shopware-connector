@@ -5,7 +5,8 @@ namespace PlentymarketsAdapter\ResponseParser\Media;
 use Assert\Assertion;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Media\Media;
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
+use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
+use PlentymarketsAdapter\Helper\MediaCategoryHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 
@@ -20,19 +21,24 @@ class MediaResponseParser implements ResponseParserInterface
     private $identityService;
 
     /**
+     * @var MediaCategoryHelper
+     */
+    private $categoryHelper;
+
+    /**
      * OrderStatusResponseParser constructor.
      *
      * @param IdentityServiceInterface $identityService
+     * @param MediaCategoryHelper $categoryHelper
      */
-    public function __construct(IdentityServiceInterface $identityService)
+    public function __construct(IdentityServiceInterface $identityService, MediaCategoryHelper $categoryHelper)
     {
         $this->identityService = $identityService;
+        $this->categoryHelper = $categoryHelper;
     }
 
     /**
-     * @param array $entry
-     *
-     * @return TransferObjectInterface|null
+     * {@inheritdoc}
      */
     public function parse(array $entry)
     {
@@ -58,6 +64,20 @@ class MediaResponseParser implements ResponseParserInterface
             $entry['attributes'] = [];
         }
 
+        if (array_key_exists('mediaCategory', $entry)) {
+            $mediaCategories = $this->categoryHelper->getCategories();
+
+            $mediaCategoryIdentity = $this->identityService->findOneOrCreate(
+                (string)$mediaCategories[$entry['mediaCategory']]['id'],
+                PlentymarketsAdapter::NAME,
+                MediaCategory::TYPE
+            );
+
+            $entry['mediaCategoryIdentifier'] = $mediaCategoryIdentity->getObjectIdentifier();
+        } else {
+            $entry['mediaCategoryIdentifier'] = null;
+        }
+
         $identity = $this->identityService->findOneOrCreate(
             (string)$entry['hash'],
             PlentymarketsAdapter::NAME,
@@ -66,6 +86,7 @@ class MediaResponseParser implements ResponseParserInterface
 
         return Media::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
+            'mediaCategoryIdentifier' => $entry['mediaCategoryIdentifier'],
             'link' => $entry['link'],
             'hash' => $entry['hash'],
             'name' => $entry['name'],

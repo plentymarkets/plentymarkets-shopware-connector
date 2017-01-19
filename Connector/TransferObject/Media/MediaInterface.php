@@ -14,6 +14,11 @@ interface MediaInterface extends SynchronizedTransferObjectInterface, Attributea
     /**
      * @return string
      */
+    public function getMediaCategoryIdentifier();
+
+    /**
+     * @return string
+     */
     public function getLink();
 
     /**

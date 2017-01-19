@@ -2,6 +2,8 @@
 
 namespace PlentyConnector\Connector\QueryBus;
 
+use ReflectionClass;
+
 /**
  * Class QueryType
  */
@@ -16,7 +18,7 @@ final class QueryType
      */
     public static function getAllTypes()
     {
-        $oClass = new \ReflectionClass(__CLASS__);
+        $oClass = new ReflectionClass(__CLASS__);
 
         return $oClass->getConstants();
     }

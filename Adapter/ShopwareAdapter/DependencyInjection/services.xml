@@ -141,6 +141,22 @@
             <tag name="plenty_connector.command_handler" />
         </service>
 
+        <!-- Media category command handlers -->
+
+        <service id="shopware_adapter.command_handler.handle_media_category" class="ShopwareAdapter\CommandBus\CommandHandler\MediaCategory\HandleMediaCategoryCommandHandler">
+            <argument type="service" id="models" />
+            <argument type="service" id="plenty_connector.identity_service" />
+
+            <tag name="plenty_connector.command_handler" />
+        </service>
+
+        <service id="shopware_adapter.command_handler.remove_media_category" class="ShopwareAdapter\CommandBus\CommandHandler\MediaCategory\RemoveMediaCategoryCommandHandler">
+            <argument type="service" id="models" />
+            <argument type="service" id="plenty_connector.identity_service" />
+
+            <tag name="plenty_connector.command_handler" />
+        </service>
+
         <!-- Query handlers -->
 
         <service id="shopware_adapter.query_handler.fetch_all_orders" class="ShopwareAdapter\QueryBus\QueryHandler\Order\FetchAllOrdersQueryHandler">

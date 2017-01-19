@@ -2,6 +2,7 @@
 
 namespace PlentymarketsAdapter\ResponseParser\Category;
 
+use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
@@ -35,6 +36,6 @@ class CategoryResponseParser implements ResponseParserInterface
      */
     public function parse(array $entry)
     {
-        return null;
+
     }
 }

@@ -19,6 +19,11 @@ class Media implements MediaInterface
     /**
      * @var string
      */
+    private $mediaCategoryIdentifier;
+
+    /**
+     * @var string
+     */
     private $link;
 
     /**
@@ -50,6 +55,7 @@ class Media implements MediaInterface
      * Media constructor.
      *
      * @param string $identifier
+     * @param string $mediaCategoryIdentifier
      * @param string $link
      * @param string $name
      * @param string $alternateName
@@ -59,6 +65,7 @@ class Media implements MediaInterface
      */
     public function __construct(
         $identifier,
+        $mediaCategoryIdentifier = null,
         $link,
         $name,
         $alternateName,
@@ -67,11 +74,13 @@ class Media implements MediaInterface
         array $attributes = []
     ) {
         Assertion::uuid($identifier);
+        Assertion::nullOrUuid($mediaCategoryIdentifier);
         Assertion::url($link);
         Assertion::string($name);
         Assertion::string($alternateName);
 
         $this->identifier = $identifier;
+        $this->mediaCategoryIdentifier = $mediaCategoryIdentifier;
         $this->link = $link;
 
         $this->name = $name;
@@ -103,6 +112,7 @@ class Media implements MediaInterface
     {
         Assertion::allInArray(array_keys($params), [
             'identifier',
+            'mediaCategoryIdentifier',
             'link',
             'hash',
             'name',
@@ -113,6 +123,7 @@ class Media implements MediaInterface
 
         return new self(
             $params['identifier'],
+            $params['mediaCategoryIdentifier'],
             $params['link'],
             $params['name'],
             $params['alternateName'],
@@ -128,6 +139,14 @@ class Media implements MediaInterface
     public function getIdentifier()
     {
         return $this->identifier;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMediaCategoryIdentifier()
+    {
+        return $this->mediaCategoryIdentifier;
     }
 
     /**

@@ -16,6 +16,7 @@
         <parameter key="plenty_connector.transfer_object.customer_group" type="constant">PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup::TYPE</parameter>
         <parameter key="plenty_connector.transfer_object.language" type="constant">PlentyConnector\Connector\TransferObject\Language\Language::TYPE</parameter>
         <parameter key="plenty_connector.transfer_object.manufacturer" type="constant">PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer::TYPE</parameter>
+        <parameter key="plenty_connector.transfer_object.media_category" type="constant">PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory::TYPE</parameter>
         <parameter key="plenty_connector.transfer_object.order_status" type="constant">PlentyConnector\Connector\TransferObject\OrderStatus\OrderStatus::TYPE</parameter>
         <parameter key="plenty_connector.transfer_object.payment_method" type="constant">PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod::TYPE</parameter>
         <parameter key="plenty_connector.transfer_object.payment_status" type="constant">PlentyConnector\Connector\TransferObject\PaymentStatus\PaymentStatus::TYPE</parameter>
@@ -101,6 +102,15 @@
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.category%</argument>
+
+            <tag name="plenty_connector.connector_definition" />
+        </service>
+
+        <service id="plenty_connector.connector_definition.media_category" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
+            <argument>%plenty_connector.adapter.plentymarkets%</argument>
+            <argument>%plenty_connector.adapter.shopware%</argument>
+            <argument>%plenty_connector.transfer_object.media_category%</argument>
+            <argument>100</argument>
 
             <tag name="plenty_connector.connector_definition" />
         </service>
@@ -248,6 +258,13 @@
             <tag name="console.command" />
         </service>
 
+        <service id="plenty_connector.console.import_media_categories_command" class="PlentyConnector\Console\Command\ImportMediaCategoriesCommand">
+            <argument type="service" id="plenty_connector.connector" />
+            <argument type="service" id="plenty_connector.logger" />
+
+            <tag name="console.command" />
+        </service>
+
         <service id="plenty_connector.console.test_command" class="PlentyConnector\Console\Command\TestCommand">
             <argument type="service" id="plentmarkets_adapter.client" />
 
@@ -291,6 +308,14 @@
         </service>
 
         <service id="plenty_connector.query_generator.manufacturer" class="PlentyConnector\Connector\QueryBus\QueryGenerator\Manufacturer\ManufacturerQueryGenerator">
+            <tag name="plenty_connector.query_generator" />
+        </service>
+
+        <service id="plenty_connector.query_generator.media" class="PlentyConnector\Connector\QueryBus\QueryGenerator\Media\MediaQueryGenerator">
+            <tag name="plenty_connector.query_generator" />
+        </service>
+
+        <service id="plenty_connector.query_generator.media_category" class="PlentyConnector\Connector\QueryBus\QueryGenerator\MediaCategory\MediaCategoryQueryGenerator">
             <tag name="plenty_connector.query_generator" />
         </service>
 
@@ -341,6 +366,10 @@
         </service>
 
         <service id="plenty_connector.command_generator.media" class="PlentyConnector\Connector\CommandBus\CommandGenerator\Media\MediaCommandGenerator">
+            <tag name="plenty_connector.command_generator" />
+        </service>
+
+        <service id="plenty_connector.command_generator.media_category" class="PlentyConnector\Connector\CommandBus\CommandGenerator\MediaCategory\MediaCategoryCommandGenerator">
             <tag name="plenty_connector.command_generator" />
         </service>
 

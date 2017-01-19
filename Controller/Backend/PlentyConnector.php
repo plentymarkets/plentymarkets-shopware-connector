@@ -8,7 +8,7 @@ use PlentyConnector\Connector\MappingService\MappingServiceInterface;
 use PlentyConnector\Connector\QueryBus\QueryType;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use PlentyConnector\Connector\TransferObject\MappedTransferObjectInterface;
-use PlentyConnector\Connector\TransferObject\Mapping\MappingInterface;
+use PlentyConnector\Connector\ValueObject\Mapping\MappingInterface;
 use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\PlentyConnector;
 use PlentymarketsAdapter\Client\ClientInterface;

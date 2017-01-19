@@ -52,6 +52,12 @@
             <argument>%kernel.environment%</argument>
         </service>
 
+        <!-- Helpers -->
+
+        <service id="plentmarkets_adapter.helper.language" class="PlentymarketsAdapter\Helper\LanguageHelper" />
+
+        <service id="plentmarkets_adapter.helper.media_category" class="PlentymarketsAdapter\Helper\MediaCategoryHelper" />
+
         <!-- Response Parser -->
 
         <service id="plentmarkets_adapter.response_parser.category" class="PlentymarketsAdapter\ResponseParser\Category\CategoryResponseParser">
@@ -79,6 +85,11 @@
         </service>
 
         <service id="plentmarkets_adapter.response_parser.media" class="PlentymarketsAdapter\ResponseParser\Media\MediaResponseParser">
+            <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="plentmarkets_adapter.helper.media_category" />
+        </service>
+
+        <service id="plentmarkets_adapter.response_parser.media_category" class="PlentymarketsAdapter\ResponseParser\MediaCategory\MediaCategoryResponseParser">
             <argument type="service" id="plenty_connector.identity_service" />
         </service>
 
@@ -118,6 +129,7 @@
             <argument type="service" id="plentmarkets_adapter.response_parser.media" />
             <argument type="service" id="plenty_connector.config" />
             <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="plentmarkets_adapter.helper.language" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
@@ -168,6 +180,31 @@
             <tag name="plenty_connector.query_handler" />
         </service>
 
+        <!-- Media cateogry query handlers -->
+
+        <service id="plentymarkets_adapter.query_handler.fetch_all_media_categories" class="PlentymarketsAdapter\QueryBus\QueryHandler\MediaCategory\FetchAllMediaCategoriesQueryHandler">
+            <argument type="service" id="plentmarkets_adapter.helper.media_category" />
+            <argument type="service" id="plentmarkets_adapter.response_parser.media_category" />
+
+            <tag name="plenty_connector.query_handler" />
+        </service>
+
+        <service id="plentymarkets_adapter.query_handler.fetch_changed_media_categories" class="PlentymarketsAdapter\QueryBus\QueryHandler\MediaCategory\FetchChangedMediaCategoriesQueryHandler">
+            <argument type="service" id="plenty_connector.config" />
+            <argument type="service" id="plentmarkets_adapter.helper.media_category" />
+            <argument type="service" id="plentmarkets_adapter.response_parser.media_category" />
+
+            <tag name="plenty_connector.query_handler" />
+        </service>
+
+        <service id="plentymarkets_adapter.query_handler.fetch_media_category" class="PlentymarketsAdapter\QueryBus\QueryHandler\MediaCategory\FetchMediaCategoryHandler">
+            <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="plentmarkets_adapter.helper.media_category" />
+            <argument type="service" id="plentmarkets_adapter.response_parser.media_category" />
+
+            <tag name="plenty_connector.query_handler" />
+        </service>
+
         <!-- Mapping query handlers -->
 
         <service id="plentymarkets_adapter.query_handler.fetch_all_countries" class="PlentymarketsAdapter\QueryBus\QueryHandler\Country\FetchAllCountriesQueryHandler">
@@ -193,6 +230,7 @@
 
         <service id="plentymarkets_adapter.query_handler.fetch_all_languages" class="PlentymarketsAdapter\QueryBus\QueryHandler\Language\FetchAllLanguagesQueryHandler">
             <argument type="service" id="plentmarkets_adapter.response_parser.language" />
+            <argument type="service" id="plentmarkets_adapter.helper.language" />
 
             <tag name="plenty_connector.query_handler" />
         </service>

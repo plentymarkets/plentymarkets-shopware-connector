@@ -1,6 +1,6 @@
 <?php
 
-namespace PlentyConnector\Connector\TransferObject\Mapping;
+namespace PlentyConnector\Connector\ValueObject\Mapping;
 
 use Assert\Assertion;
 use PlentyConnector\Connector\TransferObject\MappedTransferObjectInterface;

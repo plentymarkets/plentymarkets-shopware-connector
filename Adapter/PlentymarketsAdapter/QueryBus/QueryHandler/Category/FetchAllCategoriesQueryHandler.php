@@ -12,6 +12,8 @@ use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
 use PlentymarketsAdapter\Client\ClientInterface;
+use PlentymarketsAdapter\Helper\LanguageHelper;
+use PlentymarketsAdapter\Helper\MediaCategoryHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 
@@ -44,6 +46,10 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
      * @var IdentityServiceInterface
      */
     private $identityService;
+    /**
+     * @var LanguageHelper
+     */
+    private $languageHelper;
 
     /**
      * FetchAllCategoriesQueryHandler constructor.
@@ -53,19 +59,22 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
      * @param ResponseParserInterface $mediaResponseParser
      * @param ConfigService $config
      * @param IdentityServiceInterface $identityService
+     * @param LanguageHelper $languageHelper
      */
     public function __construct(
         ClientInterface $client,
         ResponseParserInterface $categoryResponseParser,
         ResponseParserInterface $mediaResponseParser,
         ConfigService $config,
-        IdentityServiceInterface $identityService
+        IdentityServiceInterface $identityService,
+        LanguageHelper $languageHelper
     ) {
         $this->client = $client;
         $this->categoryResponseParser = $categoryResponseParser;
         $this->mediaResponseParser = $mediaResponseParser;
         $this->config = $config;
         $this->identityService = $identityService;
+        $this->languageHelper = $languageHelper;
     }
 
     /**
@@ -84,14 +93,14 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
     {
         $elements = $this->client->request('GET', 'categories', [
             'with' => 'clients,details',
+            'lang' => implode(',', array_column($this->languageHelper->getLanguages(), 'id'))
         ]);
 
         $elements = array_filter($elements, function ($element) {
             return $element['type'] === 'item' && $element['right'] === 'all';
         });
 
-        $parts = parse_url($this->config->get('rest_url'));
-        $baseUrl = sprintf('https://%s/', $parts['host']);
+        $baseUrl = $this->getBaseUrl();
 
         $result = [];
 
@@ -101,14 +110,13 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
             }
 
             $categoriesGrouped = [];
-
             if (is_array($element['details'])) {
                 foreach ($element['details'] as $detail) {
                     $categoriesGrouped[$detail['plentyId']][] = $detail;
                 }
             }
 
-            foreach ($categoriesGrouped as $plentyId => $group) {
+            foreach ($categoriesGrouped as $plentyId => $details) {
                 $categoryIdentifier = $this->identityService->findOneOrCreate(
                     (string)($plentyId . '-' . $element['id']),
                     PlentymarketsAdapter::NAME,
@@ -133,20 +141,20 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
                     Shop::TYPE
                 );
 
-                $name = $group['0']['name'];
-                $description = $group['0']['description'];
-                $longDescription = $group['0']['description2'];
-                $position = $group['0']['position'];
+                $name = $details['0']['name'];
+                $description = $details['0']['description'];
+                $longDescription = $details['0']['description2'];
+                $position = $details['0']['position'];
 
-                $metaTitle = $group['0']['metaTitle'];
-                $metaDescription = $group['0']['metaDescription'];
-                $metaKeywords = $group['0']['metaKeywords'];
-                $metaRobots = $group['0']['metaRobots'];
+                $metaTitle = $details['0']['metaTitle'];
+                $metaDescription = $details['0']['metaDescription'];
+                $metaKeywords = $details['0']['metaKeywords'];
+                $metaRobots = $details['0']['metaRobots'];
 
                 $translations = [];
                 $imageIdentifiers = [];
 
-                foreach ($group as $detail) {
+                foreach ($details as $detail) {
                     $languageIdentifier = $this->identityService->findOneOrThrow(
                         $detail['lang'],
                         PlentymarketsAdapter::NAME,
@@ -155,6 +163,7 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
 
                     if (!empty($detail['image'])) {
                         $result[] = $media = $this->mediaResponseParser->parse([
+                            'mediaCategory' => MediaCategoryHelper::CATEGORY,
                             'link' => $baseUrl . 'documents/' . $detail['image'],
                             'name' => $detail['name'],
                             'alternateName' => $detail['name'],
@@ -165,6 +174,7 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
 
                     if (!empty($detail['image2'])) {
                         $result[] = $media = $this->mediaResponseParser->parse([
+                            'mediaCategory' => MediaCategoryHelper::CATEGORY,
                             'link' => $baseUrl . 'documents/' . $detail['image2'],
                             'name' => $detail['name'],
                             'alternateName' => $detail['name'],
@@ -236,5 +246,15 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
         });
 
         return array_filter($result);
+    }
+
+    /**
+     * @return string
+     */
+    private function getBaseUrl()
+    {
+        $parts = parse_url($this->config->get('rest_url'));
+
+        return sprintf('https://%s/', $parts['host']);
     }
 }

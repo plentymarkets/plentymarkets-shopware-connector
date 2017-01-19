@@ -105,6 +105,22 @@ class Connector implements ConnectorInterface
     public function addDefinition(DefinitionInterface $definition)
     {
         $this->definitions[] = $definition;
+
+        $this->sortDefinitions();
+    }
+
+    /**
+     *  sort definitions by priority. Highest priority needs to be on top of the array
+     */
+    private function sortDefinitions()
+    {
+        usort($this->definitions, function(DefinitionInterface $a, DefinitionInterface $b) {
+            if ($a->getPriority() === $b->getPriority()) {
+                return 0;
+            }
+
+            return ($a->getPriority() > $b->getPriority()) ? -1 : 1;
+        });
     }
 
     /**
@@ -124,6 +140,10 @@ class Connector implements ConnectorInterface
 
         if (null === $definitions) {
             $definitions = [];
+        }
+
+        if (empty($definitions)) {
+            $this->logger->warning('No definitions found');
         }
 
         array_walk($definitions, function (DefinitionInterface $definition) use ($queryType, $identifier) {

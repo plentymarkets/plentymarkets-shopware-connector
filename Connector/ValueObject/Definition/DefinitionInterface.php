@@ -25,6 +25,11 @@ interface DefinitionInterface extends ValueObjectInterface
     public function getObjectType();
 
     /**
+     * @return int
+     */
+    public function getPriority();
+
+    /**
      * @return string
      */
     public function __toString();

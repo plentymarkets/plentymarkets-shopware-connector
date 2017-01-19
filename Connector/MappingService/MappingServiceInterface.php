@@ -5,7 +5,7 @@ namespace PlentyConnector\Connector\MappingService;
 use PlentyConnector\Connector\QueryBus\QueryFactory\Exception\MissingQueryException;
 use PlentyConnector\Connector\QueryBus\QueryFactory\Exception\MissingQueryGeneratorException;
 use PlentyConnector\Connector\ValueObject\Definition\DefinitionInterface;
-use PlentyConnector\Connector\TransferObject\Mapping\MappingInterface;
+use PlentyConnector\Connector\ValueObject\Mapping\MappingInterface;
 
 /**
  * Interface MappingServiceInterface.

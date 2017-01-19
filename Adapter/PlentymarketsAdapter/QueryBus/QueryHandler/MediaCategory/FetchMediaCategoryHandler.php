@@ -1,6 +1,6 @@
 <?php
 
-namespace PlentymarketsAdapter\QueryBus\QueryHandler\Manufacturer;
+namespace PlentymarketsAdapter\QueryBus\QueryHandler\MediaCategory;
 
 use Exception;
 use PlentyConnector\Adapter\PlentymarketsAdapter\Client\Exception\InvalidResponseException;
@@ -10,57 +10,52 @@ use PlentyConnector\Connector\QueryBus\Query\Manufacturer\FetchManufacturerQuery
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
+use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\Client\Exception\InvalidCredentialsException;
+use PlentymarketsAdapter\Helper\MediaCategoryHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 use Psr\Log\LoggerInterface;
+use ShopwareAdapter\ResponseParser\ResponseParser;
 use UnexpectedValueException;
 
 /**
- * Class FetchManufacturerQueryHandler
+ * Class FetchMediaCategoryHandler
  */
-class FetchManufacturerQueryHandler implements QueryHandlerInterface
+class FetchMediaCategoryHandler implements QueryHandlerInterface
 {
-    /**
-     * @var ClientInterface
-     */
-    private $client;
-
-    /**
-     * @var ResponseParserInterface
-     */
-    private $manufacturerResponseParser;
-
-    /**
-     * @var ResponseParserInterface
-     */
-    private $mediaResponseParser;
-
     /**
      * @var IdentityServiceInterface
      */
     private $identityService;
 
     /**
-     * FetchManufacturerQueryHandler constructor.
+     * @var MediaCategoryHelper
+     */
+    private $mediaCategoryHelper;
+
+    /**
+     * @var ResponseParserInterface
+     */
+    private $responseParser;
+
+    /**
+     * FetchMediaCategoryHandler constructor.
      *
-     * @param ClientInterface $client
-     * @param ResponseParserInterface $manufacturerResponseParser
-     * @param ResponseParserInterface $mediaResponseParser
      * @param IdentityServiceInterface $identityService
+     * @param MediaCategoryHelper $mediaCategoryHelper
+     * @param ResponseParserInterface $responseParser
      */
     public function __construct(
-        ClientInterface $client,
-        ResponseParserInterface $manufacturerResponseParser,
-        ResponseParserInterface $mediaResponseParser,
-        IdentityServiceInterface $identityService
+        IdentityServiceInterface $identityService,
+        MediaCategoryHelper $mediaCategoryHelper,
+        ResponseParserInterface $responseParser
     ) {
-        $this->client = $client;
-        $this->manufacturerResponseParser = $manufacturerResponseParser;
-        $this->mediaResponseParser = $mediaResponseParser;
         $this->identityService = $identityService;
+        $this->mediaCategoryHelper = $mediaCategoryHelper;
+        $this->responseParser = $responseParser;
     }
 
     /**
@@ -77,29 +72,22 @@ class FetchManufacturerQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $result = [];
-
         /**
          * @var FetchQueryInterface $query
          */
+        $result = [];
+
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => $query->getIdentifier(),
-            'objectType' => Manufacturer::TYPE,
+            'objectType' => MediaCategory::TYPE,
             'adapterName' => PlentymarketsAdapter::NAME,
         ]);
 
-        $element = $this->client->request('GET', 'items/manufacturers/' . $identity->getAdapterIdentifier());
+        $caegories = $this->mediaCategoryHelper->getCategories();
 
-        if (!empty($element['logo'])) {
-            $result[] = $media = $this->mediaResponseParser->parse([
-                'link' => $element['logo'],
-                'name' => $element['name']
-            ]);
-
-            $element['logoIdentifier'] = $media->getIdentifier();
+        if (array_key_exists($identity->getAdapterIdentifier(), $caegories)) {
+            $result[] =  $this->responseParser->parse($caegories[$identity->getAdapterIdentifier()]);
         }
-
-        $result[] = $this->manufacturerResponseParser->parse($element);
 
         return array_filter($result);
     }

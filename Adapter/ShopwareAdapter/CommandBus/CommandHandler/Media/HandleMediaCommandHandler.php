@@ -6,9 +6,11 @@ use PlentyConnector\Connector\CommandBus\Command\CommandInterface;
 use PlentyConnector\Connector\CommandBus\Command\HandleCommandInterface;
 use PlentyConnector\Connector\CommandBus\Command\Media\HandleMediaCommand;
 use PlentyConnector\Connector\CommandBus\CommandHandler\CommandHandlerInterface;
+use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Media\Media;
 use PlentyConnector\Connector\TransferObject\Media\MediaInterface;
+use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
 use Shopware\Components\Api\Resource\Media as MediaResource;
 use Shopware\Models\Media\Album;
 use ShopwareAdapter\ShopwareAdapter;
@@ -58,6 +60,7 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Exception
+     * @throws \PlentyConnector\Connector\IdentityService\Exception\NotFoundException
      */
     public function handle(CommandInterface $command)
     {
@@ -78,6 +81,20 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
             'file' => $media->getLink(),
             'description' => $media->getName(),
         ];
+
+        if (null !== $media->getMediaCategoryIdentifier()) {
+            $mediaCategoryIdentity = $this->identityService->findOneBy([
+                'objectIdentifier' => $media->getMediaCategoryIdentifier(),
+                'objectType' => MediaCategory::TYPE,
+                'adapterName' => ShopwareAdapter::NAME,
+            ]);
+
+            if (null === $mediaCategoryIdentity) {
+                throw new NotFoundException('Missing Media Category for Adapter');
+            }
+
+            $params['album'] = $mediaCategoryIdentity->getAdapterIdentifier();
+        }
 
         if (null === $identity) {
             $mediaModel = $this->resource->create($params);

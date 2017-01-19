@@ -6,6 +6,7 @@ use PlentyConnector\Connector\QueryBus\Query\Manufacturer\FetchAllManufacturersQ
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
+use PlentymarketsAdapter\Helper\MediaCategoryHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 use Psr\Log\LoggerInterface;
@@ -67,8 +68,9 @@ class FetchAllManufacturersQueryHandler implements QueryHandlerInterface
         foreach ($this->client->getIterator('items/manufacturers') as $element) {
             if (!empty($element['logo'])) {
                 $result[] = $media = $this->mediaResponseParser->parse([
+                    'mediaCategory' => MediaCategoryHelper::MANUFACTURER,
                     'link' => $element['logo'],
-                    'name' => $element['name']
+                    'name' => $element['name'],
                 ]);
 
                 $element['logoIdentifier'] = $media->getIdentifier();

@@ -1,16 +1,19 @@
 <?php
 
-namespace PlentymarketsAdapter\ResponseParser\OrderStatus;
+namespace PlentymarketsAdapter\ResponseParser\MediaCategory;
 
+use Assert\Assertion;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\OrderStatus\OrderStatus;
+use PlentyConnector\Connector\TransferObject\Media\Media;
+use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
+use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 
 /**
- * Class OrderStatusResponseParser
+ * Class MediaCategoryResponseParser
  */
-class OrderStatusResponseParser implements ResponseParserInterface
+class MediaCategoryResponseParser implements ResponseParserInterface
 {
     /**
      * @var IdentityServiceInterface
@@ -35,12 +38,12 @@ class OrderStatusResponseParser implements ResponseParserInterface
         $identity = $this->identityService->findOneOrCreate(
             (string)$entry['id'],
             PlentymarketsAdapter::NAME,
-            OrderStatus::TYPE
+            MediaCategory::TYPE
         );
 
-        return OrderStatus::fromArray([
+        return MediaCategory::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => (string)$entry['id'],
+            'name' => (string)$entry['name'],
         ]);
     }
 }

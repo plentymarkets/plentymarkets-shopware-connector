@@ -33,7 +33,7 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 require __DIR__ . '/autoload.php';
 
 /**
- * Class plenty_connector.
+ * Class PlentyConnector.
  */
 class PlentyConnector extends Plugin
 {

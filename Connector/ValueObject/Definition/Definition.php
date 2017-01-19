@@ -31,21 +31,29 @@ class Definition implements DefinitionInterface
     private $objectType;
 
     /**
+     * @var int
+     */
+    private $priority;
+
+    /**
      * Definition constructor.
      *
      * @param string $originAdapterName
      * @param string $destinationAdapterName
      * @param string $objectType
+     * @param int|null $priority
      */
-    public function __construct($originAdapterName, $destinationAdapterName, $objectType)
+    public function __construct($originAdapterName, $destinationAdapterName, $objectType, $priority = null)
     {
         Assertion::string($originAdapterName);
         Assertion::string($destinationAdapterName);
         Assertion::string($objectType);
+        Assertion::nullOrInteger($priority);
 
         $this->originAdapterName = $originAdapterName;
         $this->destinationAdapterName = $destinationAdapterName;
         $this->objectType = $objectType;
+        $this->priority = $priority;
     }
 
     /**
@@ -58,6 +66,10 @@ class Definition implements DefinitionInterface
             'destinationAdapterName',
             'objectType',
         ]);
+
+        if (!array_key_exists('priority', $params)) {
+            $params['priority'] = 0;
+        }
 
         return new self(
             $params['originAdapterName'],
@@ -88,6 +100,14 @@ class Definition implements DefinitionInterface
     public function getObjectType()
     {
         return $this->objectType;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPriority()
+    {
+        return $this->priority;
     }
 
     /**
