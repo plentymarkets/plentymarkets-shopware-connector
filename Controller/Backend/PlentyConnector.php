@@ -13,6 +13,7 @@ use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\PlentyConnector;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
+use Ramsey\Uuid\Uuid;
 
 /**
  * Class Shopware_Controllers_Backend_PlentyConnector
@@ -176,6 +177,8 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
 
         try {
             foreach ($updates as $update) {
+                $remove = $update->originName === null || $update->originName == '';
+
                 $originAdapterName = $update->originAdapterName;
                 $originIdentifier = $update->originIdentifier;
                 $destinationIdentifier = $update->identifier;
@@ -197,11 +200,16 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
                 ]));
 
                 $identityService->create(
-                    $destinationIdentifier,
+                    ($remove) ? Uuid::uuid4()->toString() : $destinationIdentifier,
                     $objectType,
                     $originAdapterIdentifier,
                     $originAdapterName
                 );
+
+                if ($remove) {
+                    $update->originAdapterName = null;
+                    $update->originIdentifier = null;
+                }
             }
 
             $this->View()->assign([
