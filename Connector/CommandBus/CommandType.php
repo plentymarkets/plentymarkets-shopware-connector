@@ -2,6 +2,8 @@
 
 namespace PlentyConnector\Connector\CommandBus;
 
+use ReflectionClass;
+
 /**
  * Class CommandType
  */
@@ -15,7 +17,7 @@ final class CommandType
      */
     public static function getAllTypes()
     {
-        $oClass = new \ReflectionClass(__CLASS__);
+        $oClass = new ReflectionClass(__CLASS__);
 
         return $oClass->getConstants();
     }
