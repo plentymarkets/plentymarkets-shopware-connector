@@ -24,17 +24,16 @@ Ext.define('Shopware.apps.PlentyConnector.view.mapping.Tab', {
 
         me.on('edit', function (editor, e) {
             var mappedOrigin = me.mapping.originTransferObjects.find(function (object) {
-                return object.identifier == e.value[0];
+                return object.identifier == e.value;
             });
 
-            if (mappedOrigin == undefined) {
-                return;
+            if (mappedOrigin != undefined) {
+                // update entry
+                e.record.beginEdit();
+                e.record.set('originName', mappedOrigin.name);
+                e.record.set('originIdentifier', mappedOrigin.identifier);
+                e.record.endEdit();
             }
-
-            e.record.beginEdit();
-            e.record.set('originName', mappedOrigin.name);
-            e.record.set('originIdentifier', mappedOrigin.identifier);
-            e.record.endEdit();
         });
 
         me.callParent(arguments);
@@ -86,7 +85,11 @@ Ext.define('Shopware.apps.PlentyConnector.view.mapping.Tab', {
         var me = this;
 
         var originStore = Ext.create('Shopware.apps.PlentyConnector.store.mapping.TransferObject');
-        originStore.loadData(me.mapping.originTransferObjects);
+        var emptyField = {
+            name: '{s name=plentyconnector/view/mapping/choose}Bitte wählen{/s}',
+            identifier: null
+        };
+        originStore.loadData([emptyField].concat(me.mapping.originTransferObjects));
 
         return [{
             header: me.mapping.destinationAdapterName,
@@ -106,12 +109,7 @@ Ext.define('Shopware.apps.PlentyConnector.view.mapping.Tab', {
                 store: originStore,
                 displayField: 'name',
                 valueField: 'identifier',
-                multiSelect: true,
-                listeners: {
-                    beforeselect: function (combo, record, index, opts) {
-                        combo.setValue([]);
-                    }
-                }
+                multiSelect: false
             }
         }];
     }
