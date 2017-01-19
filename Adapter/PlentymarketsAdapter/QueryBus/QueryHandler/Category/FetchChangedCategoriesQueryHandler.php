@@ -32,31 +32,31 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
     /**
      * @var ResponseParserInterface
      */
-    private $responseParser;
+    private $categoryResponseParser;
 
     /**
-     * @var LoggerInterface
+     * @var ResponseParserInterface
      */
-    private $logger;
+    private $mediaResponseParser;
 
     /**
      * FetchChangedCategoriesQueryHandler constructor.
      *
      * @param ClientInterface $client
      * @param ConfigServiceInterface $config
-     * @param ResponseParserInterface $responseParser
-     * @param LoggerInterface $logger
+     * @param ResponseParserInterface $categoryResponseParser
+     * @param ResponseParserInterface $mediaResponseParser
      */
     public function __construct(
         ClientInterface $client,
         ConfigServiceInterface $config,
-        ResponseParserInterface $responseParser,
-        LoggerInterface $logger
+        ResponseParserInterface $categoryResponseParser,
+        ResponseParserInterface $mediaResponseParser
     ) {
         $this->client = $client;
         $this->config = $config;
-        $this->responseParser = $responseParser;
-        $this->logger = $logger;
+        $this->categoryResponseParser = $categoryResponseParser;
+        $this->mediaResponseParser = $mediaResponseParser;
     }
 
     /**
@@ -81,10 +81,21 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
             return $element['type'] === 'item' && $element['right'] === 'all';
         });
 
-        $categories = array_map(function ($category) {
-            return $this->responseParser->parse($category);
-        }, $elements);
+        $result = [];
 
-        return array_filter($categories);
+        array_walk($elements, function ($category) use (&$result) {
+            if (!empty($element['image'])) {
+                $result[] = $media = $this->mediaResponseParser->parse([
+                    'link' => $element['image'],
+                    'name' => $element['name']
+                ]);
+
+                $element['imageIdentifier'] = $media->getIdentifier();
+            }
+
+            $result[] = $this->categoryResponseParser->parse($category);
+        });
+
+        return array_filter($result);
     }
 }

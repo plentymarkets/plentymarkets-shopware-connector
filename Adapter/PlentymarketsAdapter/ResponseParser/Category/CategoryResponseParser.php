@@ -27,12 +27,14 @@ class CategoryResponseParser implements ResponseParserInterface
     }
 
     /**
+     * TODO: Implement
+     *
      * @param array $entry
      *
      * @return TransferObjectInterface[]
      */
     public function parse(array $entry)
     {
-        // TODO: Implement parse() method.
+        return null;
     }
 }

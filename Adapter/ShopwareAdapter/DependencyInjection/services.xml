@@ -67,6 +67,12 @@
 
         <service id="shopware_adapter.shopware_api_manager" class="Shopware\Components\Api\Manager" />
 
+        <service id="shopware_adapter.shopware_resource.category" class="Shopware\Components\Api\Resource\Category">
+            <factory service="shopware_adapter.shopware_api_manager" method="getResource" />
+
+            <argument type="string">Category</argument>
+        </service>
+
         <service id="shopware_adapter.shopware_resource.manufacturer" class="Shopware\Components\Api\Resource\Manufacturer">
             <factory service="shopware_adapter.shopware_api_manager" method="getResource" />
 
@@ -83,6 +89,24 @@
             <factory service="shopware_adapter.shopware_api_manager" method="getResource" />
 
             <argument type="string">Order</argument>
+        </service>
+
+        <!-- Category command handlers -->
+
+        <service id="shopware_adapter.command_handler.handle_category" class="ShopwareAdapter\CommandBus\CommandHandler\Category\HandleCategoryCommandHandler">
+            <argument type="service" id="shopware_adapter.shopware_resource.category" />
+            <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="plenty_connector.translation_helper" />
+            <argument type="service" id="models" />
+
+            <tag name="plenty_connector.command_handler" />
+        </service>
+
+        <service id="shopware_adapter.command_handler.remove_category" class="ShopwareAdapter\CommandBus\CommandHandler\Category\RemoveCategoryCommandHandler">
+            <argument type="service" id="shopware_adapter.shopware_resource.category" />
+            <argument type="service" id="plenty_connector.identity_service" />
+
+            <tag name="plenty_connector.command_handler" />
         </service>
 
         <!-- Manufacturer command handlers -->

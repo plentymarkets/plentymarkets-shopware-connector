@@ -26,7 +26,12 @@ class FetchCategoryQueryHandler implements QueryHandlerInterface
     /**
      * @var ResponseParserInterface
      */
-    private $responseParser;
+    private $categoryResponseParser;
+
+    /**
+     * @var ResponseParserInterface
+     */
+    private $mediaResponseParser;
 
     /**
      * @var IdentityServiceInterface
@@ -37,16 +42,19 @@ class FetchCategoryQueryHandler implements QueryHandlerInterface
      * FetchCategoryQueryHandler constructor.
      *
      * @param ClientInterface $client
-     * @param ResponseParserInterface $responseParser
+     * @param ResponseParserInterface $categoryResponseParser
+     * @param ResponseParserInterface $mediaResponseParser
      * @param IdentityServiceInterface $identityService
      */
     public function __construct(
         ClientInterface $client,
-        ResponseParserInterface $responseParser,
+        ResponseParserInterface $categoryResponseParser,
+        ResponseParserInterface $mediaResponseParser,
         IdentityServiceInterface $identityService
     ) {
         $this->client = $client;
-        $this->responseParser = $responseParser;
+        $this->categoryResponseParser = $categoryResponseParser;
+        $this->mediaResponseParser = $mediaResponseParser;
         $this->identityService = $identityService;
     }
 
@@ -73,8 +81,21 @@ class FetchCategoryQueryHandler implements QueryHandlerInterface
             'adapterName' => PlentymarketsAdapter::NAME,
         ]);
 
-        $element = $this->client->request('GET', 'categories/' . $identity->getAdapterIdentifier());
+        $element = $this->client->request('GET', 'categories/' . $identity->getAdapterIdentifier(), [
+            'with' => 'clients,details',
+        ]);
 
-        return $this->responseParser->parse($element);
+        if (!empty($element['image'])) {
+            $result[] = $media = $this->mediaResponseParser->parse([
+                'link' => $element['image'],
+                'name' => $element['name']
+            ]);
+
+            $element['imageIdentifier'] = $media->getIdentifier();
+        }
+
+        $result[] = $this->categoryResponseParser->parse($element);
+
+        return $result;
     }
 }
