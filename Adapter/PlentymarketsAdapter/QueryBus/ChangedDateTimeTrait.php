@@ -13,13 +13,23 @@ use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 trait ChangedDateTimeTrait
 {
     /**
+     * @param $class
+     *
+     * @return string
+     */
+    private function getClassName($class)
+    {
+        return substr(strrchr(get_class($class), '\\'), 1);
+    }
+
+    /**
      * @param ConfigServiceInterface $config
      *
      * @return string
      */
     public function getChangedDateTime(ConfigServiceInterface $config)
     {
-        $key = 'PlentymarketsAdapter.' . get_called_class() . 'DateTime';
+        $key = 'PlentymarketsAdapter.' . $this->getClassName(get_called_class()) . '.LastChangeDateTime';
 
         $timezone = new DateTimeZone('UTC');
         $lastRun = $config->get($key, '2000-01-01');
@@ -34,7 +44,7 @@ trait ChangedDateTimeTrait
      */
     public function setChangedDateTime(ConfigServiceInterface $config)
     {
-        $key = 'PlentymarketsAdapter.' . get_called_class() . 'DateTime';
+        $key = 'PlentymarketsAdapter.' . $this->getClassName(get_called_class()) . '.LastChangeDateTime';
 
         $timezone = new DateTimeZone('UTC');
         $dateTime = new DateTimeImmutable('now', $timezone);
