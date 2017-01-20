@@ -3,12 +3,12 @@
 namespace PlentyConnector\Connector\CommandBus\Command\Manufacturer;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\CommandBus\Command\RemoveCommandInterfaca;
+use PlentyConnector\Connector\CommandBus\Command\RemoveCommandInterface;
 
 /**
  * Class RemoveManufacturerCommand.
  */
-class RemoveManufacturerCommand implements RemoveCommandInterfaca
+class RemoveManufacturerCommand implements RemoveCommandInterface
 {
     /**
      * @var string

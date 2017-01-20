@@ -5,10 +5,11 @@ namespace ShopwareAdapter\CommandBus\CommandHandler\MediaCategory;
 use Doctrine\ORM\EntityManagerInterface;
 use PlentyConnector\Connector\CommandBus\Command\CommandInterface;
 use PlentyConnector\Connector\CommandBus\Command\MediaCategory\RemoveMediaCategoryCommand;
-use PlentyConnector\Connector\CommandBus\Command\RemoveCommandInterfaca;
+use PlentyConnector\Connector\CommandBus\Command\RemoveCommandInterface;
 use PlentyConnector\Connector\CommandBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Media\Media;
+use Psr\Log\LoggerInterface;
 use Shopware\Models\Media\Album;
 use ShopwareAdapter\ShopwareAdapter;
 
@@ -28,15 +29,25 @@ class RemoveMediaCategoryCommandHandler implements CommandHandlerInterface
     private $identityService;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * HandleMediaCategoryCommandHandler constructor.
      *
      * @param EntityManagerInterface $entityManager
      * @param IdentityServiceInterface $identityService
+     * @param LoggerInterface $logger
      */
-    public function __construct(EntityManagerInterface $entityManager, IdentityServiceInterface $identityService)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        IdentityServiceInterface $identityService,
+        LoggerInterface $logger
+    ) {
         $this->entityManager = $entityManager;
         $this->identityService = $identityService;
+        $this->logger = $logger;
     }
 
     /**
@@ -58,7 +69,7 @@ class RemoveMediaCategoryCommandHandler implements CommandHandlerInterface
     public function handle(CommandInterface $command)
     {
         /**
-         * @var RemoveCommandInterfaca $command
+         * @var RemoveCommandInterface $command
          */
         $identifier = $command->getObjectIdentifier();
 
@@ -79,6 +90,8 @@ class RemoveMediaCategoryCommandHandler implements CommandHandlerInterface
         if (null !== $album) {
             $this->entityManager->remove($album);
             $this->entityManager->flush();
+        } else {
+            $this->logger->notice('identity removed but the object was not found');
         }
 
         $this->identityService->remove($identity);

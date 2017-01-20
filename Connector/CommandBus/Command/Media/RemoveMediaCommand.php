@@ -3,12 +3,12 @@
 namespace PlentyConnector\Connector\CommandBus\Command\Media;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\CommandBus\Command\RemoveCommandInterfaca;
+use PlentyConnector\Connector\CommandBus\Command\RemoveCommandInterface;
 
 /**
  * Class RemoveMediaCommand.
  */
-class RemoveMediaCommand implements RemoveCommandInterfaca
+class RemoveMediaCommand implements RemoveCommandInterface
 {
     /**
      * @var string

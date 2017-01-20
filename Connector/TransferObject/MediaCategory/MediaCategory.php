@@ -3,7 +3,6 @@
 namespace PlentyConnector\Connector\TransferObject\MediaCategory;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategoryInterface;
 
 /**
  * Class MediaCategory

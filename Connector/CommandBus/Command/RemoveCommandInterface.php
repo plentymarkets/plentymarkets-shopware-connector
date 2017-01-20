@@ -2,12 +2,10 @@
 
 namespace PlentyConnector\Connector\CommandBus\Command;
 
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
-
 /**
- * Class RemoveCommandInterfaca
+ * Class RemoveCommandInterface
  */
-interface RemoveCommandInterfaca extends CommandInterface
+interface RemoveCommandInterface extends CommandInterface
 {
     /**
      * @return string

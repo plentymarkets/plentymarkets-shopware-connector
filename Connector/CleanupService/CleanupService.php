@@ -189,11 +189,11 @@ class CleanupService implements CleanupServiceInterface
                 'objectType' => $objectType,
             ]);
 
-            $allIdentities = array_filter($allIdentities, function(IdentityInterface $identity) use ($identifiers) {
+            $orphanedIdentities = array_filter($allIdentities, function(IdentityInterface $identity) use ($identifiers) {
                 return !in_array($identity->getObjectIdentifier(), $identifiers, true);
             });
 
-            array_walk($allIdentities, function (IdentityInterface $identity) use ($adapterName, $objectType) {
+            array_walk($orphanedIdentities, function (IdentityInterface $identity) use ($adapterName, $objectType) {
                 $this->commandBus->handle($this->commandFactory->create(
                     $adapterName,
                     $objectType,

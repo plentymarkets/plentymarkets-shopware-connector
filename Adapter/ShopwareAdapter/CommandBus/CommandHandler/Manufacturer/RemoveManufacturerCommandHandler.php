@@ -4,10 +4,11 @@ namespace ShopwareAdapter\CommandBus\CommandHandler\Manufacturer;
 
 use PlentyConnector\Connector\CommandBus\Command\CommandInterface;
 use PlentyConnector\Connector\CommandBus\Command\Manufacturer\RemoveManufacturerCommand;
-use PlentyConnector\Connector\CommandBus\Command\RemoveCommandInterfaca;
+use PlentyConnector\Connector\CommandBus\Command\RemoveCommandInterface;
 use PlentyConnector\Connector\CommandBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
+use Psr\Log\LoggerInterface;
 use Shopware\Components\Api\Resource\Manufacturer as ManufacturerResource;
 use ShopwareAdapter\ShopwareAdapter;
 
@@ -27,15 +28,25 @@ class RemoveManufacturerCommandHandler implements CommandHandlerInterface
     private $identityService;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * RemoveManufacturerCommandHandler constructor.
      *
      * @param ManufacturerResource $resource
      * @param IdentityServiceInterface $identityService
+     * @param LoggerInterface $logger
      */
-    public function __construct(ManufacturerResource $resource, IdentityServiceInterface $identityService)
-    {
+    public function __construct(
+        ManufacturerResource $resource,
+        IdentityServiceInterface $identityService,
+        LoggerInterface $logger
+    ) {
         $this->resource = $resource;
         $this->identityService = $identityService;
+        $this->logger = $logger;
     }
 
     /**
@@ -57,7 +68,7 @@ class RemoveManufacturerCommandHandler implements CommandHandlerInterface
     public function handle(CommandInterface $command)
     {
         /**
-         * @var RemoveCommandInterfaca $command
+         * @var RemoveCommandInterface $command
          */
         $identifier = $command->getObjectIdentifier();
 
@@ -71,7 +82,12 @@ class RemoveManufacturerCommandHandler implements CommandHandlerInterface
             return;
         }
 
-        $this->resource->delete($identity->getAdapterIdentifier());
+        try {
+            $this->resource->delete($identity->getAdapterIdentifier());
+        } catch (NotFoundException $exception) {
+            $this->logger->notice('identity removed but the object was not found');
+        }
+
         $this->identityService->remove($identity);
     }
 }

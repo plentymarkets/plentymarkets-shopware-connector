@@ -105,6 +105,7 @@
         <service id="shopware_adapter.command_handler.remove_category" class="ShopwareAdapter\CommandBus\CommandHandler\Category\RemoveCategoryCommandHandler">
             <argument type="service" id="shopware_adapter.shopware_resource.category" />
             <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="plenty_connector.logger" />
 
             <tag name="plenty_connector.command_handler" />
         </service>
@@ -121,6 +122,7 @@
         <service id="shopware_adapter.command_handler.remove_manufacturer" class="ShopwareAdapter\CommandBus\CommandHandler\Manufacturer\RemoveManufacturerCommandHandler">
             <argument type="service" id="shopware_adapter.shopware_resource.manufacturer" />
             <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="plenty_connector.logger" />
 
             <tag name="plenty_connector.command_handler" />
         </service>
@@ -137,6 +139,7 @@
         <service id="shopware_adapter.command_handler.remove_media" class="ShopwareAdapter\CommandBus\CommandHandler\Media\RemoveMediaCommandHandler">
             <argument type="service" id="shopware_adapter.shopware_resource.media" />
             <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="plenty_connector.logger" />
 
             <tag name="plenty_connector.command_handler" />
         </service>
@@ -153,6 +156,7 @@
         <service id="shopware_adapter.command_handler.remove_media_category" class="ShopwareAdapter\CommandBus\CommandHandler\MediaCategory\RemoveMediaCategoryCommandHandler">
             <argument type="service" id="models" />
             <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="plenty_connector.logger" />
 
             <tag name="plenty_connector.command_handler" />
         </service>

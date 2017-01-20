@@ -3,12 +3,12 @@
 namespace PlentyConnector\Connector\CommandBus\Command\Category;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\CommandBus\Command\RemoveCommandInterfaca;
+use PlentyConnector\Connector\CommandBus\Command\RemoveCommandInterface;
 
 /**
  * Class RemoveCategoryCommand.
  */
-class RemoveCategoryCommand implements RemoveCommandInterfaca
+class RemoveCategoryCommand implements RemoveCommandInterface
 {
     /**
      * @var string

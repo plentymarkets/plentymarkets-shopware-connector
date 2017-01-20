@@ -10,6 +10,7 @@ use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use PlentyConnector\Connector\TransferObject\Order\Order;
 use Psr\Log\LoggerInterface;
 use Shopware\Components\Api\Resource;
+use ShopwareAdapter\ResponseParser\Order\OrderResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
