@@ -137,10 +137,16 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         }
 
         $transferObjectMapping = function (TransferObjectInterface $object) {
+            if (method_exists($object, 'getName')) {
+                $name = $object->getName();
+            } else {
+                $name = $object->getIdentifier();
+            }
+
             return [
                 'identifier' => $object->getIdentifier(),
                 'type' => $object->getType(),
-                'name' => $object->getName()
+                'name' => $name
             ];
         };
 
