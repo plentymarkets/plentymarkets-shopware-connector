@@ -26,11 +26,6 @@ use Psr\Log\LoggerInterface;
 class Connector implements ConnectorInterface
 {
     /**
-     * @var AdapterInterface[]|null
-     */
-    private $adapters = [];
-
-    /**
      * @var DefinitionInterface[]|null
      */
     private $definitions = [];
@@ -89,14 +84,6 @@ class Connector implements ConnectorInterface
         $this->queryFactory = $queryFactory;
         $this->commandFactory = $commandFactory;
         $this->logger = $logger;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addAdapter(AdapterInterface $adapters)
-    {
-        $this->adapters[] = $adapters;
     }
 
     /**

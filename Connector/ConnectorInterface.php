@@ -13,11 +13,6 @@ use PlentyConnector\Connector\ValueObject\Definition\DefinitionInterface;
 interface ConnectorInterface
 {
     /**
-     * @param AdapterInterface $adapters
-     */
-    public function addAdapter(AdapterInterface $adapters);
-
-    /**
      * @param DefinitionInterface $definition
      */
     public function addDefinition(DefinitionInterface $definition);
