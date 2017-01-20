@@ -9,6 +9,7 @@ use PlentyConnector\Connector\CommandBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 use Psr\Log\LoggerInterface;
+use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Resource\Manufacturer as ManufacturerResource;
 use ShopwareAdapter\ShopwareAdapter;
 

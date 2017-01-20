@@ -9,6 +9,7 @@ use PlentyConnector\Connector\CommandBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Category\Category;
 use Psr\Log\LoggerInterface;
+use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Resource\Category as CategoryResource;
 use ShopwareAdapter\ShopwareAdapter;
 
