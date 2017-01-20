@@ -170,10 +170,19 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
      */
     public function updateIdentitiesAction()
     {
-        $updates = json_decode($this->request->getRawBody());
+        $updates = json_decode($this->request->getRawBody(), true);
 
-        if (!is_array($updates)) {
+        if (array_key_exists('identifier', $updates)) {
             $updates = [$updates];
+        }
+
+        if ($this->hasDuplicateMappings($updates)) {
+            $this->View()->assign([
+                'success' => false,
+                'message' => 'duplicate mapping'
+            ]);
+
+            return;
         }
 
         /**
@@ -182,13 +191,13 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         $identityService = Shopware()->Container()->get('plenty_connector.identity_service');
 
         try {
-            foreach ($updates as $update) {
-                $remove = $update->originName === null || $update->originName == '';
+            foreach ($updates as $key => $update) {
+                $remove = $update['originName'] === null || $update['originName'] === '';
 
-                $originAdapterName = $update->originAdapterName;
-                $originIdentifier = $update->originIdentifier;
-                $destinationIdentifier = $update->identifier;
-                $objectType = $update->objectType;
+                $originAdapterName = $update['originAdapterName'];
+                $originIdentifier = $update['originIdentifier'];
+                $destinationIdentifier = $update['identifier'];
+                $objectType = $update['objectType'];
 
                 $oldIdentity = $identityService->findOneBy([
                     'objectType' => $objectType,
@@ -206,15 +215,15 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
                 ]));
 
                 $identityService->create(
-                    ($remove) ? Uuid::uuid4()->toString() : $destinationIdentifier,
+                    $remove ? Uuid::uuid4()->toString() : $destinationIdentifier,
                     $objectType,
                     $originAdapterIdentifier,
                     $originAdapterName
                 );
 
                 if ($remove) {
-                    $update->originAdapterName = null;
-                    $update->originIdentifier = null;
+                    $updates[$key]['originAdapterName'] = null;
+                    $updates[$key]['originIdentifier'] = null;
                 }
             }
 
@@ -228,6 +237,18 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
                 'message' => $exception->getMessage()
             ]);
         }
+    }
+
+    /**
+     * @param array $updates
+     *
+     * @return bool
+     */
+    private function hasDuplicateMappings(array $updates)
+    {
+        $originIdentifiers = array_column($updates, 'originIdentifier');
+
+        return count(array_count_values($originIdentifiers)) < count($originIdentifiers);
     }
 
     /**
