@@ -10,6 +10,7 @@ use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod;
 use PlentyConnector\Connector\TransferObject\PaymentStatus\PaymentStatus;
 use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
+use ShopwareAdapter\ResponseParser\OrderItem\OrderItemResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -23,7 +24,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     private $identityService;
 
     /**
-     * @var OrderResponseParserInterface
+     * @var OrderItemResponseParserInterface
      */
     private $orderItemResponseParser;
 
@@ -31,11 +32,11 @@ class OrderResponseParser implements OrderResponseParserInterface
      * OrderResponseParser constructor.
      *
      * @param IdentityServiceInterface $identityService
-     * @param OrderResponseParserInterface $orderItemResponseParser
+     * @param OrderItemResponseParserInterface $orderItemResponseParser
      */
     public function __construct(
         IdentityServiceInterface $identityService,
-        OrderResponseParserInterface $orderItemResponseParser
+        OrderItemResponseParserInterface $orderItemResponseParser
     ) {
         $this->identityService = $identityService;
         $this->orderItemResponseParser = $orderItemResponseParser;

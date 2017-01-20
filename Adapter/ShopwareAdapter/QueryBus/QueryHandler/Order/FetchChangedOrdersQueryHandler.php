@@ -8,6 +8,7 @@ use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use Psr\Log\LoggerInterface;
 use Shopware\Components\Api\Resource;
 use ShopwareAdapter\QueryBus\ChangedDateTimeTrait;
+use ShopwareAdapter\ResponseParser\Order\OrderResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**

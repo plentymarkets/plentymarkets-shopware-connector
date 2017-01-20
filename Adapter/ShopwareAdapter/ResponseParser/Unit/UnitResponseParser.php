@@ -4,6 +4,7 @@ namespace ShopwareAdapter\ResponseParser\Unit;
 
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Unit\Unit;
+use ShopwareAdapter\ShopwareAdapter;
 
 /**
  * Class UnitResponseParser

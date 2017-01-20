@@ -237,7 +237,7 @@
 
         <service id="shopware_adapter.query_handler.fetch_all_shipping_profiles" class="ShopwareAdapter\QueryBus\QueryHandler\ShippingProfile\FetchAllShippingProfilesQueryHandler">
             <argument type="service" id="models" />
-            <argument type="service" id="shopware_adapter.response_parser.payment_method" />
+            <argument type="service" id="shopware_adapter.response_parser.shipping_profile" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
@@ -251,7 +251,7 @@
 
         <service id="shopware_adapter.query_handler.fetch_all_units" class="ShopwareAdapter\QueryBus\QueryHandler\Unit\FetchAllUnitsQueryHandler">
             <argument type="service" id="models" />
-            <argument type="service" id="shopware_adapter.response_parser.shop" />
+            <argument type="service" id="shopware_adapter.response_parser.unit" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
