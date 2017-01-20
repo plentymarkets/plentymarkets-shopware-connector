@@ -141,6 +141,12 @@ class Category implements CategoryInterface
         Assertion::string($metaDescription);
         Assertion::string($metaKeywords);
         Assertion::string($metaRobots);
+        Assertion::inArray($metaRobots, [
+            'INDEX, FOLLOW',
+            'NOINDEX, FOLLOW',
+            'INDEX, NOFOLLOW',
+            'NOINDEX, NOFOLLOW',
+        ]);
 
         Assertion::allIsInstanceOf($translations, Translation::class);
         Assertion::allIsInstanceOf($attributes, Attribute::class);

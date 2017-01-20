@@ -20,22 +20,22 @@ class Translation implements TranslationInterface
     private $property;
 
     /**
-     * @var string
+     * @var mixed
      */
     private $value;
 
     /**
      * Translation constructor.
      *
-     * @param $languageIdentifier
-     * @param $property
-     * @param $value
+     * @param string $languageIdentifier
+     * @param string $property
+     * @param mixed $value
      */
     public function __construct($languageIdentifier, $property, $value)
     {
         Assertion::uuid($languageIdentifier);
         Assertion::string($property);
-        Assertion::string($value);
+        Assertion::notNull($value);
 
         $this->languageIdentifier = $languageIdentifier;
         $this->property = $property;

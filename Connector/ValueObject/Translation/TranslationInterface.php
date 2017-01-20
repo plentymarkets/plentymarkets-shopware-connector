@@ -26,7 +26,7 @@ interface TranslationInterface extends ValueObjectInterface
     /**
      * Get the value
      *
-     * @return string
+     * @return mixed
      */
     public function getValue();
 }

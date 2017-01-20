@@ -2,15 +2,14 @@
 
 namespace PlentymarketsAdapter\QueryBus\QueryHandler\Category;
 
-use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentyConnector\Connector\QueryBus\Query\Category\FetchChangedCategoriesQuery;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
+use PlentymarketsAdapter\Helper\LanguageHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\QueryBus\ChangedDateTimeTrait;
 use PlentymarketsAdapter\ResponseParser\Category\CategoryResponseParserInterface;
-use PlentymarketsAdapter\ResponseParser\Media\MediaResponseParserInterface;
 
 /**
  * Class FetchChangedCategoriesQueryHandler.
@@ -25,38 +24,30 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
     private $client;
 
     /**
-     * @var ConfigServiceInterface
-     */
-    private $config;
-
-    /**
      * @var CategoryResponseParserInterface
      */
     private $categoryResponseParser;
 
     /**
-     * @var MediaResponseParserInterface
+     * @var LanguageHelper
      */
-    private $mediaResponseParser;
+    private $languageHelper;
 
     /**
-     * FetchChangedCategoriesQueryHandler constructor.
+     * FetchCategoryQueryHandler constructor.
      *
      * @param ClientInterface $client
-     * @param ConfigServiceInterface $config
      * @param CategoryResponseParserInterface $categoryResponseParser
-     * @param MediaResponseParserInterface $mediaResponseParser
+     * @param LanguageHelper $languageHelper
      */
     public function __construct(
         ClientInterface $client,
-        ConfigServiceInterface $config,
         CategoryResponseParserInterface $categoryResponseParser,
-        MediaResponseParserInterface $mediaResponseParser
+        LanguageHelper $languageHelper
     ) {
         $this->client = $client;
-        $this->config = $config;
         $this->categoryResponseParser = $categoryResponseParser;
-        $this->mediaResponseParser = $mediaResponseParser;
+        $this->languageHelper = $languageHelper;
     }
 
     /**
@@ -74,7 +65,8 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
     public function handle(QueryInterface $query)
     {
         $elements = $this->client->request('GET', 'categories', [
-            'with' => 'clients,details',
+            'with' => 'details',
+            'lang' => implode(',', array_column($this->languageHelper->getLanguages(), 'id'))
         ]);
 
         $elements = array_filter($elements, function ($element) {
@@ -83,17 +75,28 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
 
         $result = [];
 
-        array_walk($elements, function ($category) use (&$result) {
-            if (!empty($element['image'])) {
-                $result[] = $media = $this->mediaResponseParser->parse([
-                    'link' => $element['image'],
-                    'name' => $element['name']
-                ]);
-
-                $element['imageIdentifier'] = $media->getIdentifier();
+        array_walk($elements, function (array $element) use (&$result) {
+            if (empty($element['details'])) {
+                return;
             }
 
-            $result[] = $this->categoryResponseParser->parse($category);
+            $categoriesGrouped = [];
+            foreach ($element['details'] as $detail) {
+                $categoriesGrouped[$detail['plentyId']][] = $detail;
+            }
+
+            foreach ($categoriesGrouped as $plentyId => $details) {
+                $parsedElements = $this->categoryResponseParser->parse([
+                    'plentyId' => $plentyId,
+                    'categoryId' => $element['id'],
+                    'parentCategoryId' => $element['parentCategoryId'],
+                    'details' => $details,
+                ]);
+
+                foreach ($parsedElements as $parsedElement) {
+                    $result[] = $parsedElement;
+                }
+            }
         });
 
         return array_filter($result);

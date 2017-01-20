@@ -7,11 +7,10 @@ use PlentyConnector\Connector\QueryBus\Query\Category\FetchCategoryQuery;
 use PlentyConnector\Connector\QueryBus\Query\FetchQueryInterface;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
-use PlentyConnector\Connector\TransferObject\Category\Category;
 use PlentymarketsAdapter\Client\ClientInterface;
+use PlentymarketsAdapter\Helper\LanguageHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Category\CategoryResponseParserInterface;
-use PlentymarketsAdapter\ResponseParser\Media\MediaResponseParserInterface;
 
 /**
  * Class FetchCategoryQueryHandler
@@ -29,9 +28,9 @@ class FetchCategoryQueryHandler implements QueryHandlerInterface
     private $categoryResponseParser;
 
     /**
-     * @var MediaResponseParserInterface
+     * @var LanguageHelper
      */
-    private $mediaResponseParser;
+    private $languageHelper;
 
     /**
      * @var IdentityServiceInterface
@@ -43,18 +42,18 @@ class FetchCategoryQueryHandler implements QueryHandlerInterface
      *
      * @param ClientInterface $client
      * @param CategoryResponseParserInterface $categoryResponseParser
-     * @param MediaResponseParserInterface $mediaResponseParser
+     * @param LanguageHelper $languageHelper
      * @param IdentityServiceInterface $identityService
      */
     public function __construct(
         ClientInterface $client,
         CategoryResponseParserInterface $categoryResponseParser,
-        MediaResponseParserInterface $mediaResponseParser,
+        LanguageHelper $languageHelper,
         IdentityServiceInterface $identityService
     ) {
         $this->client = $client;
         $this->categoryResponseParser = $categoryResponseParser;
-        $this->mediaResponseParser = $mediaResponseParser;
+        $this->languageHelper = $languageHelper;
         $this->identityService = $identityService;
     }
 
@@ -82,19 +81,37 @@ class FetchCategoryQueryHandler implements QueryHandlerInterface
         ]);
 
         $element = $this->client->request('GET', 'categories/' . $identity->getAdapterIdentifier(), [
-            'with' => 'clients,details',
+            'with' => 'details',
+            'lang' => implode(',', array_column($this->languageHelper->getLanguages(), 'id'))
         ]);
 
-        if (!empty($element['image'])) {
-            $result[] = $media = $this->mediaResponseParser->parse([
-                'link' => $element['image'],
-                'name' => $element['name']
-            ]);
-
-            $element['imageIdentifier'] = $media->getIdentifier();
+        if ($element['type'] !== 'item' || $element['right'] !== 'all') {
+            return [];
         }
 
-        $result[] = $this->categoryResponseParser->parse($element);
+        if (empty($element['details'])) {
+            return [];
+        }
+
+        $result = [];
+
+        $categoriesGrouped = [];
+        foreach ($element['details'] as $detail) {
+            $categoriesGrouped[$detail['plentyId']][] = $detail;
+        }
+
+        foreach ($categoriesGrouped as $plentyId => $details) {
+            $parsedElements = $this->categoryResponseParser->parse([
+                'plentyId' => $plentyId,
+                'categoryId' => $element['id'],
+                'parentCategoryId' => $element['parentCategoryId'],
+                'details' => $details,
+            ]);
+
+            foreach ($parsedElements as $parsedElement) {
+                $result[] = $parsedElement;
+            }
+        }
 
         return array_filter($result);
     }
