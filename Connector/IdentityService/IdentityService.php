@@ -3,8 +3,8 @@
 namespace PlentyConnector\Connector\IdentityService;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\EventBus\Event\Identity\IdentityCreatedEvent;
-use PlentyConnector\Connector\EventBus\Event\Identity\IdentityRemovedEvent;
+use PlentyConnector\Connector\ServiceBus\Event\Identity\IdentityCreatedEvent;
+use PlentyConnector\Connector\ServiceBus\Event\Identity\IdentityRemovedEvent;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\Storage\IdentityStorageInterface;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
@@ -21,11 +21,6 @@ class IdentityService implements IdentityServiceInterface
      * @var IdentityStorageInterface
      */
     private $storage;
-
-    /**
-     * @var ServiceBusInterface
-     */
-    private $eventBus;
 
     /**
      * IdentityService constructor.
@@ -116,7 +111,7 @@ class IdentityService implements IdentityServiceInterface
         $result = $this->storage->persist($identity);
 
         if ($result) {
-            //$this->eventBus->handle(new IdentityCreatedEvent($identity));
+            //$this->ServiceBus->handle(new IdentityCreatedEvent($identity));
         }
 
         return $identity;
@@ -140,7 +135,7 @@ class IdentityService implements IdentityServiceInterface
         $result = $this->storage->remove($identity);
 
         if ($result) {
-            //$this->eventBus->handle(new IdentityRemovedEvent($identity));
+            //$this->ServiceBus->handle(new IdentityRemovedEvent($identity));
         }
     }
 

@@ -2,8 +2,8 @@
 
 namespace PlentyConnector\Connector\MappingService;
 
-use PlentyConnector\Connector\QueryBus\QueryFactory\Exception\MissingQueryException;
-use PlentyConnector\Connector\QueryBus\QueryFactory\Exception\MissingQueryGeneratorException;
+use PlentyConnector\Connector\ServiceBus\QueryFactory\Exception\MissingQueryException;
+use PlentyConnector\Connector\ServiceBus\QueryFactory\Exception\MissingQueryGeneratorException;
 use PlentyConnector\Connector\ValueObject\Definition\DefinitionInterface;
 use PlentyConnector\Connector\ValueObject\Mapping\MappingInterface;
 

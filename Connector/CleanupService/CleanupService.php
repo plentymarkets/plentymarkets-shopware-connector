@@ -4,15 +4,15 @@ namespace PlentyConnector\Connector\CleanupService;
 
 use Assert\Assertion;
 use Exception;
-use PlentyConnector\Connector\CommandBus\CommandFactory\CommandFactoryInterface;
-use PlentyConnector\Connector\CommandBus\CommandFactory\Exception\MissingCommandException;
-use PlentyConnector\Connector\CommandBus\CommandFactory\Exception\MissingCommandGeneratorException;
-use PlentyConnector\Connector\CommandBus\CommandType;
+use PlentyConnector\Connector\ServiceBus\CommandFactory\CommandFactoryInterface;
+use PlentyConnector\Connector\ServiceBus\CommandFactory\Exception\MissingCommandException;
+use PlentyConnector\Connector\ServiceBus\CommandFactory\Exception\MissingCommandGeneratorException;
+use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\QueryBus\QueryFactory\Exception\MissingQueryException;
-use PlentyConnector\Connector\QueryBus\QueryFactory\Exception\MissingQueryGeneratorException;
-use PlentyConnector\Connector\QueryBus\QueryFactory\QueryFactoryInterface;
-use PlentyConnector\Connector\QueryBus\QueryType;
+use PlentyConnector\Connector\ServiceBus\QueryFactory\Exception\MissingQueryException;
+use PlentyConnector\Connector\ServiceBus\QueryFactory\Exception\MissingQueryGeneratorException;
+use PlentyConnector\Connector\ServiceBus\QueryFactory\QueryFactoryInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use PlentyConnector\Connector\ValueObject\Definition\DefinitionInterface;
 use PlentyConnector\Connector\ValueObject\Identity\IdentityInterface;
@@ -32,12 +32,7 @@ class CleanupService implements CleanupServiceInterface
     /**
      * @var ServiceBusInterface
      */
-    private $queryBus;
-
-    /**
-     * @var ServiceBusInterface
-     */
-    private $commandBus;
+    private $serviceBus;
 
     /**
      * @var QueryFactoryInterface
@@ -67,23 +62,20 @@ class CleanupService implements CleanupServiceInterface
     /**
      * CleanupService constructor.
      *
-     * @param ServiceBusInterface $queryBus
-     * @param ServiceBusInterface $commandBus
+     * @param ServiceBusInterface $serviceBus
      * @param QueryFactoryInterface $queryFactory
      * @param CommandFactoryInterface $commandFactory
      * @param IdentityServiceInterface $identityService
      * @param LoggerInterface $logger
      */
     public function __construct(
-        ServiceBusInterface $queryBus,
-        ServiceBusInterface $commandBus,
+        ServiceBusInterface $serviceBus,
         QueryFactoryInterface $queryFactory,
         CommandFactoryInterface $commandFactory,
         IdentityServiceInterface $identityService,
         LoggerInterface $logger
     ) {
-        $this->queryBus = $queryBus;
-        $this->commandBus = $commandBus;
+        $this->serviceBus = $serviceBus;
         $this->queryFactory = $queryFactory;
         $this->commandFactory = $commandFactory;
         $this->identityService = $identityService;
@@ -158,7 +150,7 @@ class CleanupService implements CleanupServiceInterface
         ]);
 
         array_walk($allIdentities, function (IdentityInterface $identity) use ($definition) {
-            $this->commandBus->handle($this->commandFactory->create(
+            $this->serviceBus->handle($this->commandFactory->create(
                 $definition->getDestinationAdapterName(),
                 $definition->getObjectType(),
                 CommandType::REMOVE,
@@ -194,7 +186,7 @@ class CleanupService implements CleanupServiceInterface
             });
 
             array_walk($orphanedIdentities, function (IdentityInterface $identity) use ($adapterName, $objectType) {
-                $this->commandBus->handle($this->commandFactory->create(
+                $this->serviceBus->handle($this->commandFactory->create(
                     $adapterName,
                     $objectType,
                     CommandType::REMOVE,
@@ -217,7 +209,7 @@ class CleanupService implements CleanupServiceInterface
         /**
          * @var TransferObjectInterface[] $objects
          */
-        $objects = $this->queryBus->handle($this->queryFactory->create(
+        $objects = $this->serviceBus->handle($this->queryFactory->create(
             $definition->getOriginAdapterName(),
             $definition->getObjectType(),
             QueryType::ALL

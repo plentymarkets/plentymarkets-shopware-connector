@@ -4,9 +4,9 @@ namespace PlentyConnector\Connector\Logger;
 
 use Exception;
 use League\Tactician\Logger\Formatter\Formatter;
-use PlentyConnector\Connector\CommandBus\Command\CommandInterface;
-use PlentyConnector\Connector\EventBus\Event\EventInterface;
-use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
+use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
+use PlentyConnector\Connector\ServiceBus\Event\EventInterface;
+use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 

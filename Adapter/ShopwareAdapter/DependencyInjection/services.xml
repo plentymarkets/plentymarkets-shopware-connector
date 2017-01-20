@@ -87,7 +87,7 @@
 
         <!-- Category command handlers -->
 
-        <service id="shopware_adapter.command_handler.handle_category" class="ShopwareAdapter\CommandBus\CommandHandler\Category\HandleCategoryCommandHandler">
+        <service id="shopware_adapter.command_handler.handle_category" class="ShopwareAdapter\ServiceBus\CommandHandler\Category\HandleCategoryCommandHandler">
             <argument type="service" id="shopware_adapter.shopware_resource.category" />
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plenty_connector.translation_helper" />
@@ -96,7 +96,7 @@
             <tag name="plenty_connector.command_handler" />
         </service>
 
-        <service id="shopware_adapter.command_handler.remove_category" class="ShopwareAdapter\CommandBus\CommandHandler\Category\RemoveCategoryCommandHandler">
+        <service id="shopware_adapter.command_handler.remove_category" class="ShopwareAdapter\ServiceBus\CommandHandler\Category\RemoveCategoryCommandHandler">
             <argument type="service" id="shopware_adapter.shopware_resource.category" />
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plenty_connector.logger" />
@@ -106,14 +106,14 @@
 
         <!-- Manufacturer command handlers -->
 
-        <service id="shopware_adapter.command_handler.handle_manufacturer" class="ShopwareAdapter\CommandBus\CommandHandler\Manufacturer\HandleManufacturerCommandHandler">
+        <service id="shopware_adapter.command_handler.handle_manufacturer" class="ShopwareAdapter\ServiceBus\CommandHandler\Manufacturer\HandleManufacturerCommandHandler">
             <argument type="service" id="shopware_adapter.shopware_resource.manufacturer" />
             <argument type="service" id="plenty_connector.identity_service" />
 
             <tag name="plenty_connector.command_handler" />
         </service>
 
-        <service id="shopware_adapter.command_handler.remove_manufacturer" class="ShopwareAdapter\CommandBus\CommandHandler\Manufacturer\RemoveManufacturerCommandHandler">
+        <service id="shopware_adapter.command_handler.remove_manufacturer" class="ShopwareAdapter\ServiceBus\CommandHandler\Manufacturer\RemoveManufacturerCommandHandler">
             <argument type="service" id="shopware_adapter.shopware_resource.manufacturer" />
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plenty_connector.logger" />
@@ -123,14 +123,14 @@
 
         <!-- Media command handlers -->
 
-        <service id="shopware_adapter.command_handler.handle_media" class="ShopwareAdapter\CommandBus\CommandHandler\Media\HandleMediaCommandHandler">
+        <service id="shopware_adapter.command_handler.handle_media" class="ShopwareAdapter\ServiceBus\CommandHandler\Media\HandleMediaCommandHandler">
             <argument type="service" id="shopware_adapter.shopware_resource.media" />
             <argument type="service" id="plenty_connector.identity_service" />
 
             <tag name="plenty_connector.command_handler" />
         </service>
 
-        <service id="shopware_adapter.command_handler.remove_media" class="ShopwareAdapter\CommandBus\CommandHandler\Media\RemoveMediaCommandHandler">
+        <service id="shopware_adapter.command_handler.remove_media" class="ShopwareAdapter\ServiceBus\CommandHandler\Media\RemoveMediaCommandHandler">
             <argument type="service" id="shopware_adapter.shopware_resource.media" />
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plenty_connector.logger" />
@@ -140,14 +140,14 @@
 
         <!-- Media category command handlers -->
 
-        <service id="shopware_adapter.command_handler.handle_media_category" class="ShopwareAdapter\CommandBus\CommandHandler\MediaCategory\HandleMediaCategoryCommandHandler">
+        <service id="shopware_adapter.command_handler.handle_media_category" class="ShopwareAdapter\ServiceBus\CommandHandler\MediaCategory\HandleMediaCategoryCommandHandler">
             <argument type="service" id="models" />
             <argument type="service" id="plenty_connector.identity_service" />
 
             <tag name="plenty_connector.command_handler" />
         </service>
 
-        <service id="shopware_adapter.command_handler.remove_media_category" class="ShopwareAdapter\CommandBus\CommandHandler\MediaCategory\RemoveMediaCategoryCommandHandler">
+        <service id="shopware_adapter.command_handler.remove_media_category" class="ShopwareAdapter\ServiceBus\CommandHandler\MediaCategory\RemoveMediaCategoryCommandHandler">
             <argument type="service" id="models" />
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plenty_connector.logger" />
@@ -157,7 +157,7 @@
 
         <!-- Query handlers -->
 
-        <service id="shopware_adapter.query_handler.fetch_all_orders" class="ShopwareAdapter\QueryBus\QueryHandler\Order\FetchAllOrdersQueryHandler">
+        <service id="shopware_adapter.query_handler.fetch_all_orders" class="ShopwareAdapter\ServiceBus\QueryHandler\Order\FetchAllOrdersQueryHandler">
             <argument type="service" id="shopware_adapter.response_parser.order" />
             <argument type="service" id="plenty_connector.logger" />
             <argument type="service" id="shopware_adapter.shopware_resource.order" />
@@ -165,7 +165,7 @@
             <tag name="plenty_connector.query_handler" />
         </service>
 
-        <service id="shopware_adapter.query_handler.fetch_changed_orders" class="ShopwareAdapter\QueryBus\QueryHandler\Order\FetchChangedOrdersQueryHandler">
+        <service id="shopware_adapter.query_handler.fetch_changed_orders" class="ShopwareAdapter\ServiceBus\QueryHandler\Order\FetchChangedOrdersQueryHandler">
             <argument type="service" id="shopware_adapter.response_parser.order" />
             <argument type="service" id="plenty_connector.logger" />
             <argument type="service" id="shopware_adapter.shopware_resource.order" />
@@ -173,7 +173,7 @@
             <tag name="plenty_connector.query_handler" />
         </service>
 
-        <service id="shopware_adapter.query_handler.fetch_order" class="ShopwareAdapter\QueryBus\QueryHandler\Order\FetchOrderQueryHandler">
+        <service id="shopware_adapter.query_handler.fetch_order" class="ShopwareAdapter\ServiceBus\QueryHandler\Order\FetchOrderQueryHandler">
             <argument type="service" id="shopware_adapter.response_parser.order" />
             <argument type="service" id="plenty_connector.logger" />
             <argument type="service" id="plenty_connector.identity_service" />
@@ -184,77 +184,77 @@
 
         <!-- Mapping query handlers -->
 
-        <service id="shopware_adapter.query_handler.fetch_all_countries" class="ShopwareAdapter\QueryBus\QueryHandler\Country\FetchAllCountriesQueryHandler">
+        <service id="shopware_adapter.query_handler.fetch_all_countries" class="ShopwareAdapter\ServiceBus\QueryHandler\Country\FetchAllCountriesQueryHandler">
             <argument type="service" id="models" />
             <argument type="service" id="shopware_adapter.response_parser.country" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
 
-        <service id="shopware_adapter.query_handler.fetch_all_currencies" class="ShopwareAdapter\QueryBus\QueryHandler\Currency\FetchAllCurrenciesQueryHandler">
+        <service id="shopware_adapter.query_handler.fetch_all_currencies" class="ShopwareAdapter\ServiceBus\QueryHandler\Currency\FetchAllCurrenciesQueryHandler">
             <argument type="service" id="models" />
             <argument type="service" id="shopware_adapter.response_parser.currency" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
 
-        <service id="shopware_adapter.query_handler.fetch_all_customer_groups" class="ShopwareAdapter\QueryBus\QueryHandler\CustomerGroup\FetchAllCustomerGroupsQueryHandler">
+        <service id="shopware_adapter.query_handler.fetch_all_customer_groups" class="ShopwareAdapter\ServiceBus\QueryHandler\CustomerGroup\FetchAllCustomerGroupsQueryHandler">
             <argument type="service" id="models" />
             <argument type="service" id="shopware_adapter.response_parser.customer_group" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
 
-        <service id="shopware_adapter.query_handler.fetch_all_languages" class="ShopwareAdapter\QueryBus\QueryHandler\Language\FetchAllLanguagesQueryHandler">
+        <service id="shopware_adapter.query_handler.fetch_all_languages" class="ShopwareAdapter\ServiceBus\QueryHandler\Language\FetchAllLanguagesQueryHandler">
             <argument type="service" id="models" />
             <argument type="service" id="shopware_adapter.response_parser.language" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
 
-        <service id="shopware_adapter.query_handler.fetch_all_order_statuses" class="ShopwareAdapter\QueryBus\QueryHandler\OrderStatus\FetchAllOrderStatusesQueryHandler">
+        <service id="shopware_adapter.query_handler.fetch_all_order_statuses" class="ShopwareAdapter\ServiceBus\QueryHandler\OrderStatus\FetchAllOrderStatusesQueryHandler">
             <argument type="service" id="models" />
             <argument type="service" id="shopware_adapter.response_parser.order_status" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
 
-        <service id="shopware_adapter.query_handler.fetch_all_payment_methods" class="ShopwareAdapter\QueryBus\QueryHandler\PaymentMethod\FetchAllPaymentMethodsQueryHandler">
+        <service id="shopware_adapter.query_handler.fetch_all_payment_methods" class="ShopwareAdapter\ServiceBus\QueryHandler\PaymentMethod\FetchAllPaymentMethodsQueryHandler">
             <argument type="service" id="models" />
             <argument type="service" id="shopware_adapter.response_parser.payment_method" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
 
-        <service id="shopware_adapter.query_handler.fetch_all_payment_statuses" class="ShopwareAdapter\QueryBus\QueryHandler\PaymentStatus\FetchAllPaymentStatusesQueryHandler">
+        <service id="shopware_adapter.query_handler.fetch_all_payment_statuses" class="ShopwareAdapter\ServiceBus\QueryHandler\PaymentStatus\FetchAllPaymentStatusesQueryHandler">
             <argument type="service" id="models" />
             <argument type="service" id="shopware_adapter.response_parser.payment_status" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
 
-        <service id="shopware_adapter.query_handler.fetch_all_shipping_profiles" class="ShopwareAdapter\QueryBus\QueryHandler\ShippingProfile\FetchAllShippingProfilesQueryHandler">
+        <service id="shopware_adapter.query_handler.fetch_all_shipping_profiles" class="ShopwareAdapter\ServiceBus\QueryHandler\ShippingProfile\FetchAllShippingProfilesQueryHandler">
             <argument type="service" id="models" />
             <argument type="service" id="shopware_adapter.response_parser.shipping_profile" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
 
-        <service id="shopware_adapter.query_handler.fetch_all_shops" class="ShopwareAdapter\QueryBus\QueryHandler\Shop\FetchAllShopsQueryHandler">
+        <service id="shopware_adapter.query_handler.fetch_all_shops" class="ShopwareAdapter\ServiceBus\QueryHandler\Shop\FetchAllShopsQueryHandler">
             <argument type="service" id="models" />
             <argument type="service" id="shopware_adapter.response_parser.shop" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
 
-        <service id="shopware_adapter.query_handler.fetch_all_units" class="ShopwareAdapter\QueryBus\QueryHandler\Unit\FetchAllUnitsQueryHandler">
+        <service id="shopware_adapter.query_handler.fetch_all_units" class="ShopwareAdapter\ServiceBus\QueryHandler\Unit\FetchAllUnitsQueryHandler">
             <argument type="service" id="models" />
             <argument type="service" id="shopware_adapter.response_parser.unit" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
 
-        <service id="shopware_adapter.query_handler.fetch_all_vat_rates" class="ShopwareAdapter\QueryBus\QueryHandler\VatRate\FetchAllVatRatesQueryHandler">
+        <service id="shopware_adapter.query_handler.fetch_all_vat_rates" class="ShopwareAdapter\ServiceBus\QueryHandler\VatRate\FetchAllVatRatesQueryHandler">
             <argument type="service" id="models" />
             <argument type="service" id="shopware_adapter.response_parser.vat_rate" />
 

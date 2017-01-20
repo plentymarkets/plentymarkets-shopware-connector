@@ -3,15 +3,14 @@
 namespace PlentyConnector\Connector;
 
 use Assert\Assertion;
-use PlentyConnector\Adapter\AdapterInterface;
-use PlentyConnector\Connector\CommandBus\CommandFactory\CommandFactoryInterface;
-use PlentyConnector\Connector\CommandBus\CommandFactory\Exception\MissingCommandException;
-use PlentyConnector\Connector\CommandBus\CommandFactory\Exception\MissingCommandGeneratorException;
-use PlentyConnector\Connector\CommandBus\CommandType;
-use PlentyConnector\Connector\QueryBus\QueryFactory\Exception\MissingQueryException;
-use PlentyConnector\Connector\QueryBus\QueryFactory\Exception\MissingQueryGeneratorException;
-use PlentyConnector\Connector\QueryBus\QueryFactory\QueryFactoryInterface;
-use PlentyConnector\Connector\QueryBus\QueryType;
+use PlentyConnector\Connector\ServiceBus\CommandFactory\CommandFactoryInterface;
+use PlentyConnector\Connector\ServiceBus\CommandFactory\Exception\MissingCommandException;
+use PlentyConnector\Connector\ServiceBus\CommandFactory\Exception\MissingCommandGeneratorException;
+use PlentyConnector\Connector\ServiceBus\CommandType;
+use PlentyConnector\Connector\ServiceBus\QueryFactory\Exception\MissingQueryException;
+use PlentyConnector\Connector\ServiceBus\QueryFactory\Exception\MissingQueryGeneratorException;
+use PlentyConnector\Connector\ServiceBus\QueryFactory\QueryFactoryInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use PlentyConnector\Connector\ValueObject\Definition\DefinitionInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
@@ -33,17 +32,7 @@ class Connector implements ConnectorInterface
     /**
      * @var ServiceBusInterface
      */
-    private $queryBus;
-
-    /**
-     * @var ServiceBusInterface
-     */
-    private $commandBus;
-
-    /**
-     * @var ServiceBusInterface
-     */
-    private $eventBus;
+    private $serviceBus;
 
     /**
      * @var QueryFactoryInterface
@@ -63,24 +52,18 @@ class Connector implements ConnectorInterface
     /**
      * Connector constructor.
      *
-     * @param ServiceBusInterface $queryBus
-     * @param ServiceBusInterface $commandBus
-     * @param ServiceBusInterface $eventBus
+     * @param ServiceBusInterface $serviceBus
      * @param QueryFactoryInterface $queryFactory
      * @param CommandFactoryInterface $commandFactory
      * @param LoggerInterface $logger
      */
     public function __construct(
-        ServiceBusInterface $queryBus,
-        ServiceBusInterface $commandBus,
-        ServiceBusInterface $eventBus,
+        ServiceBusInterface $serviceBus,
         QueryFactoryInterface $queryFactory,
         CommandFactoryInterface $commandFactory,
         LoggerInterface $logger
     ) {
-        $this->queryBus = $queryBus;
-        $this->commandBus = $commandBus;
-        $this->eventBus = $eventBus;
+        $this->serviceBus = $serviceBus;
         $this->queryFactory = $queryFactory;
         $this->commandFactory = $commandFactory;
         $this->logger = $logger;
@@ -169,7 +152,7 @@ class Connector implements ConnectorInterface
         /**
          * @var TransferObjectInterface[] $objects
          */
-        $objects = $this->queryBus->handle($this->queryFactory->create(
+        $objects = $this->serviceBus->handle($this->queryFactory->create(
             $definition->getOriginAdapterName(),
             $definition->getObjectType(),
             $queryType,
@@ -181,7 +164,7 @@ class Connector implements ConnectorInterface
         }
 
         array_walk($objects, function (TransferObjectInterface $object) use ($definition) {
-            $this->commandBus->handle($this->commandFactory->create(
+            $this->serviceBus->handle($this->commandFactory->create(
                 $definition->getDestinationAdapterName(),
                 $object->getType(),
                 CommandType::HANDLE,

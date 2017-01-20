@@ -4,10 +4,10 @@ namespace PlentyConnector\Connector\MappingService;
 
 use Assert\Assertion;
 use Doctrine\Common\Cache\Cache;
-use PlentyConnector\Connector\QueryBus\QueryFactory\Exception\MissingQueryException;
-use PlentyConnector\Connector\QueryBus\QueryFactory\Exception\MissingQueryGeneratorException;
-use PlentyConnector\Connector\QueryBus\QueryFactory\QueryFactoryInterface;
-use PlentyConnector\Connector\QueryBus\QueryType;
+use PlentyConnector\Connector\ServiceBus\QueryFactory\Exception\MissingQueryException;
+use PlentyConnector\Connector\ServiceBus\QueryFactory\Exception\MissingQueryGeneratorException;
+use PlentyConnector\Connector\ServiceBus\QueryFactory\QueryFactoryInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use PlentyConnector\Connector\ValueObject\Definition\DefinitionInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
@@ -31,7 +31,7 @@ class MappingService implements MappingServiceInterface
     /**
      * @var ServiceBusInterface
      */
-    private $queryBus;
+    private $serviceBus;
 
     /**
      * @var Cache
@@ -52,16 +52,16 @@ class MappingService implements MappingServiceInterface
      * MappingService constructor.
      *
      * @param QueryFactoryInterface $queryFactory
-     * @param ServiceBusInterface $queryBus
+     * @param ServiceBusInterface $serviceBus
      * @param Cache $cache
      */
     public function __construct(
         QueryFactoryInterface $queryFactory,
-        ServiceBusInterface $queryBus,
+        ServiceBusInterface $serviceBus,
         Cache $cache
     ) {
         $this->queryFactory = $queryFactory;
-        $this->queryBus = $queryBus;
+        $this->serviceBus = $serviceBus;
         $this->cache = $cache;
     }
 
@@ -138,7 +138,7 @@ class MappingService implements MappingServiceInterface
             QueryType::ALL
         );
 
-        $objects = $this->queryBus->handle($originQuery);
+        $objects = $this->serviceBus->handle($originQuery);
 
         if (null === $objects) {
             $objects = [];

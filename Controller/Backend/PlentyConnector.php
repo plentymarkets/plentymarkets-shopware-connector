@@ -5,7 +5,7 @@ use PlentyConnector\Connector\ConnectorInterface;
 use PlentyConnector\Connector\IdentityService\IdentityService;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\MappingService\MappingServiceInterface;
-use PlentyConnector\Connector\QueryBus\QueryType;
+use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\ValueObject\Mapping\MappingInterface;

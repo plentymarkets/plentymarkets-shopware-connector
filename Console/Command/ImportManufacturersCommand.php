@@ -5,7 +5,7 @@ namespace PlentyConnector\Console\Command;
 use Exception;
 use PlentyConnector\Connector\Connector;
 use PlentyConnector\Connector\Logger\ConsoleHandler;
-use PlentyConnector\Connector\QueryBus\QueryType;
+use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 use Shopware\Commands\ShopwareCommand;
 use Shopware\Components\Logger;

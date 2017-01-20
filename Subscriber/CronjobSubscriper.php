@@ -7,7 +7,7 @@ use Enlight_Components_Cron_EventArgs as Args;
 use Exception;
 use PlentyConnector\Connector\CleanupService\CleanupServiceInterface;
 use PlentyConnector\Connector\ConnectorInterface;
-use PlentyConnector\Connector\QueryBus\QueryType;
+use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\PlentyConnector;
 use Psr\Log\LoggerInterface;
 
