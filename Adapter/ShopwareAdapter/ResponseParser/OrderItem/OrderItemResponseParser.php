@@ -9,13 +9,12 @@ use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\Connector\TransferObject\Variation\Variation;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Variant;
-use ShopwareAdapter\ResponseParser\ResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
  * Class OrderItemResponseParser
  */
-class OrderItemResponseParser implements ResponseParserInterface
+class OrderItemResponseParser implements OrderItemResponseParserInterface
 {
     /**
      * @var IdentityServiceInterface

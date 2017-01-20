@@ -8,10 +8,10 @@ use PlentyConnector\Connector\QueryBus\Query\FetchQueryInterface;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use PlentyConnector\Connector\TransferObject\Category\Category;
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
+use PlentymarketsAdapter\ResponseParser\Category\CategoryResponseParserInterface;
+use PlentymarketsAdapter\ResponseParser\Media\MediaResponseParserInterface;
 
 /**
  * Class FetchCategoryQueryHandler
@@ -24,12 +24,12 @@ class FetchCategoryQueryHandler implements QueryHandlerInterface
     private $client;
 
     /**
-     * @var ResponseParserInterface
+     * @var CategoryResponseParserInterface
      */
     private $categoryResponseParser;
 
     /**
-     * @var ResponseParserInterface
+     * @var MediaResponseParserInterface
      */
     private $mediaResponseParser;
 
@@ -42,14 +42,14 @@ class FetchCategoryQueryHandler implements QueryHandlerInterface
      * FetchCategoryQueryHandler constructor.
      *
      * @param ClientInterface $client
-     * @param ResponseParserInterface $categoryResponseParser
-     * @param ResponseParserInterface $mediaResponseParser
+     * @param CategoryResponseParserInterface $categoryResponseParser
+     * @param MediaResponseParserInterface $mediaResponseParser
      * @param IdentityServiceInterface $identityService
      */
     public function __construct(
         ClientInterface $client,
-        ResponseParserInterface $categoryResponseParser,
-        ResponseParserInterface $mediaResponseParser,
+        CategoryResponseParserInterface $categoryResponseParser,
+        MediaResponseParserInterface $mediaResponseParser,
         IdentityServiceInterface $identityService
     ) {
         $this->client = $client;

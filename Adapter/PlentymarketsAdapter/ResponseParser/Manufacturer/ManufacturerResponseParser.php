@@ -5,12 +5,11 @@ namespace PlentymarketsAdapter\ResponseParser\Manufacturer;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 
 /**
  * Class ManufacturerResponseParser
  */
-class ManufacturerResponseParser implements ResponseParserInterface
+class ManufacturerResponseParser implements ManufacturerResponseParserInterface
 {
     /**
      * @var IdentityServiceInterface

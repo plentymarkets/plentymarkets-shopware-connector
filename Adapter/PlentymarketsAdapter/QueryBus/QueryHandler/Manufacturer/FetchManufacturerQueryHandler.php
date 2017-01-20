@@ -2,21 +2,16 @@
 
 namespace PlentymarketsAdapter\QueryBus\QueryHandler\Manufacturer;
 
-use Exception;
-use PlentyConnector\Adapter\PlentymarketsAdapter\Client\Exception\InvalidResponseException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\QueryBus\Query\FetchQueryInterface;
 use PlentyConnector\Connector\QueryBus\Query\Manufacturer\FetchManufacturerQuery;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
-use PlentymarketsAdapter\Client\Exception\InvalidCredentialsException;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
-use Psr\Log\LoggerInterface;
-use UnexpectedValueException;
+use PlentymarketsAdapter\ResponseParser\Manufacturer\ManufacturerResponseParserInterface;
+use PlentymarketsAdapter\ResponseParser\Media\MediaResponseParserInterface;
 
 /**
  * Class FetchManufacturerQueryHandler
@@ -29,12 +24,12 @@ class FetchManufacturerQueryHandler implements QueryHandlerInterface
     private $client;
 
     /**
-     * @var ResponseParserInterface
+     * @var ManufacturerResponseParserInterface
      */
     private $manufacturerResponseParser;
 
     /**
-     * @var ResponseParserInterface
+     * @var MediaResponseParserInterface
      */
     private $mediaResponseParser;
 
@@ -47,14 +42,14 @@ class FetchManufacturerQueryHandler implements QueryHandlerInterface
      * FetchManufacturerQueryHandler constructor.
      *
      * @param ClientInterface $client
-     * @param ResponseParserInterface $manufacturerResponseParser
-     * @param ResponseParserInterface $mediaResponseParser
+     * @param ManufacturerResponseParserInterface $manufacturerResponseParser
+     * @param MediaResponseParserInterface $mediaResponseParser
      * @param IdentityServiceInterface $identityService
      */
     public function __construct(
         ClientInterface $client,
-        ResponseParserInterface $manufacturerResponseParser,
-        ResponseParserInterface $mediaResponseParser,
+        ManufacturerResponseParserInterface $manufacturerResponseParser,
+        MediaResponseParserInterface $mediaResponseParser,
         IdentityServiceInterface $identityService
     ) {
         $this->client = $client;

@@ -9,7 +9,7 @@ use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Models\Order\Status;
-use ShopwareAdapter\ResponseParser\ResponseParserInterface;
+use ShopwareAdapter\ResponseParser\PaymentStatus\PaymentStatusResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -23,7 +23,7 @@ class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
     private $repository;
 
     /**
-     * @var ResponseParserInterface
+     * @var PaymentStatusResponseParserInterface
      */
     private $responseParser;
 
@@ -31,11 +31,11 @@ class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
      * FetchAllPaymentStatusesQueryHandler constructor.
      *
      * @param EntityManagerInterface $entityManager ,
-     * @param ResponseParserInterface $responseParser
+     * @param PaymentStatusResponseParserInterface $responseParser
      */
     public function __construct(
         EntityManagerInterface $entityManager,
-        ResponseParserInterface $responseParser
+        PaymentStatusResponseParserInterface $responseParser
     ) {
         $this->repository = $entityManager->getRepository(Status::class);
         $this->responseParser = $responseParser;

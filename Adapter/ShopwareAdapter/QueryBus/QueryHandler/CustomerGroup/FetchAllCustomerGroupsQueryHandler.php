@@ -9,7 +9,7 @@ use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Models\Customer\Group;
-use ShopwareAdapter\ResponseParser\ResponseParserInterface;
+use ShopwareAdapter\ResponseParser\CustomerGroup\CustomerGroupResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -23,7 +23,7 @@ class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
     private $repository;
 
     /**
-     * @var ResponseParserInterface
+     * @var CustomerGroupResponseParserInterface
      */
     private $responseParser;
 
@@ -31,11 +31,11 @@ class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
      * FetchAllCustomerGroupsQueryHandler constructor.
      *
      * @param EntityManagerInterface $entityManager
-     * @param ResponseParserInterface $responseParser
+     * @param CustomerGroupResponseParserInterface $responseParser
      */
     public function __construct(
         EntityManagerInterface $entityManager,
-        ResponseParserInterface $responseParser
+        CustomerGroupResponseParserInterface $responseParser
     ) {
         $this->repository = $entityManager->getRepository(Group::class);
         $this->responseParser = $responseParser;

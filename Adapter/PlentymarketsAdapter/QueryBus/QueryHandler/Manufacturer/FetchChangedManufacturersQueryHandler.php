@@ -2,7 +2,6 @@
 
 namespace PlentymarketsAdapter\QueryBus\QueryHandler\Manufacturer;
 
-use Exception;
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentyConnector\Connector\QueryBus\Query\Manufacturer\FetchChangedManufacturersQuery;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
@@ -10,9 +9,8 @@ use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\QueryBus\ChangedDateTimeTrait;
-use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
-use Psr\Log\LoggerInterface;
-use UnexpectedValueException;
+use PlentymarketsAdapter\ResponseParser\Manufacturer\ManufacturerResponseParserInterface;
+use PlentymarketsAdapter\ResponseParser\Media\MediaResponseParserInterface;
 
 /**
  * Class FetchChangedManufacturersQueryHandler.
@@ -32,12 +30,12 @@ class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
     private $config;
 
     /**
-     * @var ResponseParserInterface
+     * @var ManufacturerResponseParserInterface
      */
     private $manufacturerResponseParser;
 
     /**
-     * @var ResponseParserInterface
+     * @var MediaResponseParserInterface
      */
     private $mediaResponseParser;
 
@@ -46,14 +44,14 @@ class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
      *
      * @param ClientInterface $client
      * @param ConfigServiceInterface $config
-     * @param ResponseParserInterface $manufacturerResponseParser
-     * @param ResponseParserInterface $mediaResponseParser
+     * @param ManufacturerResponseParserInterface $manufacturerResponseParser
+     * @param MediaResponseParserInterface $mediaResponseParser
      */
     public function __construct(
         ClientInterface $client,
         ConfigServiceInterface $config,
-        ResponseParserInterface $manufacturerResponseParser,
-        ResponseParserInterface $mediaResponseParser
+        ManufacturerResponseParserInterface $manufacturerResponseParser,
+        MediaResponseParserInterface $mediaResponseParser
     ) {
         $this->client = $client;
         $this->config = $config;

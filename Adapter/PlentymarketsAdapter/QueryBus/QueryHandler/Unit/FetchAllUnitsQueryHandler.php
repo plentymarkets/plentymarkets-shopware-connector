@@ -7,7 +7,7 @@ use PlentyConnector\Connector\QueryBus\Query\Unit\FetchAllUnitsQuery;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
+use PlentymarketsAdapter\ResponseParser\Unit\UnitResponseParserInterface;
 
 /**
  * Class FetchAllUnitsQueryHandler
@@ -20,7 +20,7 @@ class FetchAllUnitsQueryHandler implements QueryHandlerInterface
     private $client;
 
     /**
-     * @var ResponseParserInterface
+     * @var UnitResponseParserInterface
      */
     private $responseParser;
 
@@ -28,11 +28,11 @@ class FetchAllUnitsQueryHandler implements QueryHandlerInterface
      * FetchAllUnitsQueryHandler constructor.
      *
      * @param ClientInterface $client
-     * @param ResponseParserInterface $responseParser
+     * @param UnitResponseParserInterface $responseParser
      */
     public function __construct(
         ClientInterface $client,
-        ResponseParserInterface $responseParser
+        UnitResponseParserInterface $responseParser
     ) {
         $this->client = $client;
         $this->responseParser = $responseParser;

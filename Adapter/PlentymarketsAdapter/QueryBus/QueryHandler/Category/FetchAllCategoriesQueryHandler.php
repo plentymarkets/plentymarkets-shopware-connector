@@ -15,7 +15,8 @@ use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\Helper\LanguageHelper;
 use PlentymarketsAdapter\Helper\MediaCategoryHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
+use PlentymarketsAdapter\ResponseParser\Category\CategoryResponseParserInterface;
+use PlentymarketsAdapter\ResponseParser\Media\MediaResponseParserInterface;
 
 /**
  * Class FetchAllCategoriesQueryHandler
@@ -28,12 +29,12 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
     private $client;
 
     /**
-     * @var ResponseParserInterface
+     * @var CategoryResponseParserInterface
      */
     private $categoryResponseParser;
 
     /**
-     * @var ResponseParserInterface
+     * @var MediaResponseParserInterface
      */
     private $mediaResponseParser;
 
@@ -55,16 +56,16 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
      * FetchAllCategoriesQueryHandler constructor.
      *
      * @param ClientInterface $client
-     * @param ResponseParserInterface $categoryResponseParser
-     * @param ResponseParserInterface $mediaResponseParser
+     * @param CategoryResponseParserInterface $categoryResponseParser
+     * @param MediaResponseParserInterface $mediaResponseParser
      * @param ConfigService $config
      * @param IdentityServiceInterface $identityService
      * @param LanguageHelper $languageHelper
      */
     public function __construct(
         ClientInterface $client,
-        ResponseParserInterface $categoryResponseParser,
-        ResponseParserInterface $mediaResponseParser,
+        CategoryResponseParserInterface $categoryResponseParser,
+        MediaResponseParserInterface $mediaResponseParser,
         ConfigService $config,
         IdentityServiceInterface $identityService,
         LanguageHelper $languageHelper

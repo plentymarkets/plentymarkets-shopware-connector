@@ -7,7 +7,7 @@ use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
+use PlentymarketsAdapter\ResponseParser\Country\CountryResponseParserInterface;
 
 /**
  * Class FetchAllCountriesQueryHandler
@@ -20,7 +20,7 @@ class FetchAllCountriesQueryHandler implements QueryHandlerInterface
     private $client;
 
     /**
-     * @var ResponseParserInterface
+     * @var CountryResponseParserInterface
      */
     private $responseParser;
 
@@ -28,11 +28,11 @@ class FetchAllCountriesQueryHandler implements QueryHandlerInterface
      * FetchAllCountriesQueryHandler constructor.
      *
      * @param ClientInterface $client
-     * @param ResponseParserInterface $responseParser
+     * @param CountryResponseParserInterface $responseParser
      */
     public function __construct(
         ClientInterface $client,
-        ResponseParserInterface $responseParser
+        CountryResponseParserInterface $responseParser
     ) {
         $this->client = $client;
         $this->responseParser = $responseParser;

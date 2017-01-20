@@ -2,16 +2,12 @@
 
 namespace PlentymarketsAdapter\QueryBus\QueryHandler\MediaCategory;
 
-use PlentyConnector\Connector\QueryBus\Query\Manufacturer\FetchAllManufacturersQuery;
 use PlentyConnector\Connector\QueryBus\Query\MediaCategory\FetchAllMediaCategoriesQuery;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
-use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\Helper\MediaCategoryHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
-use Psr\Log\LoggerInterface;
-use UnexpectedValueException;
+use PlentymarketsAdapter\ResponseParser\MediaCategory\MediaCategoryResponseParserInterface;
 
 /**
  * Class FetchAllMediaCategoriesQueryHandler
@@ -24,7 +20,7 @@ class FetchAllMediaCategoriesQueryHandler implements QueryHandlerInterface
     private $mediaCategoryHelper;
 
     /**
-     * @var ResponseParserInterface
+     * @var MediaCategoryResponseParserInterface
      */
     private $responseParser;
 
@@ -32,11 +28,11 @@ class FetchAllMediaCategoriesQueryHandler implements QueryHandlerInterface
      * FetchAllMediaCategoriesQueryHandler constructor.
      *
      * @param MediaCategoryHelper $mediaCategoryHelper
-     * @param ResponseParserInterface $responseParser
+     * @param MediaCategoryResponseParserInterface $responseParser
      */
     public function __construct(
         MediaCategoryHelper $mediaCategoryHelper,
-        ResponseParserInterface $responseParser
+        MediaCategoryResponseParserInterface $responseParser
     ) {
         $this->mediaCategoryHelper = $mediaCategoryHelper;
         $this->responseParser = $responseParser;

@@ -7,7 +7,7 @@ use PlentyConnector\Connector\QueryBus\Query\ShippingProfile\FetchAllShippingPro
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
+use PlentymarketsAdapter\ResponseParser\ShippingProfile\ShippingProfileResponseParserInterface;
 
 /**
  * Class FetchAllShippingProfilesQueryHandler
@@ -20,7 +20,7 @@ class FetchAllShippingProfilesQueryHandler implements QueryHandlerInterface
     private $client;
 
     /**
-     * @var ResponseParserInterface
+     * @var ShippingProfileResponseParserInterface
      */
     private $responseParser;
 
@@ -28,11 +28,11 @@ class FetchAllShippingProfilesQueryHandler implements QueryHandlerInterface
      * FetchAllShippingProfilesQueryHandler constructor.
      *
      * @param ClientInterface $client
-     * @param ResponseParserInterface $responseParser
+     * @param ShippingProfileResponseParserInterface $responseParser
      */
     public function __construct(
         ClientInterface $client,
-        ResponseParserInterface $responseParser
+        ShippingProfileResponseParserInterface $responseParser
     ) {
         $this->client = $client;
         $this->responseParser = $responseParser;

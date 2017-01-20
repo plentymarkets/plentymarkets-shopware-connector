@@ -9,7 +9,7 @@ use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Models\Shop\Currency;
-use ShopwareAdapter\ResponseParser\ResponseParserInterface;
+use ShopwareAdapter\ResponseParser\Currency\CurrencyResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -23,7 +23,7 @@ class FetchAllCurrenciesQueryHandler implements QueryHandlerInterface
     private $repository;
 
     /**
-     * @var ResponseParserInterface
+     * @var CurrencyResponseParserInterface
      */
     private $responseParser;
 
@@ -31,11 +31,11 @@ class FetchAllCurrenciesQueryHandler implements QueryHandlerInterface
      * FetchAllCurrenciesQueryHandler constructor.
      *
      * @param EntityManagerInterface $entityManager
-     * @param ResponseParserInterface $responseParser
+     * @param CurrencyResponseParserInterface $responseParser
      */
     public function __construct(
         EntityManagerInterface $entityManager,
-        ResponseParserInterface $responseParser
+        CurrencyResponseParserInterface $responseParser
     ) {
         $this->repository = $entityManager->getRepository(Currency::class);
         $this->responseParser = $responseParser;

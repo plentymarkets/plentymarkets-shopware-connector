@@ -4,13 +4,12 @@ namespace ShopwareAdapter\ResponseParser\VatRate;
 
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
-use ShopwareAdapter\ResponseParser\ResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
  * Class VatRateResponseParser
  */
-class VatRateResponseParser implements ResponseParserInterface
+class VatRateResponseParser implements VatRateResponseParserInterface
 {
     /**
      * @var IdentityServiceInterface

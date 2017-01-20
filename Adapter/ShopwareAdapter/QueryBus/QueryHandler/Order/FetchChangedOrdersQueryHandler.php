@@ -8,7 +8,6 @@ use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use Psr\Log\LoggerInterface;
 use Shopware\Components\Api\Resource;
 use ShopwareAdapter\QueryBus\ChangedDateTimeTrait;
-use ShopwareAdapter\ResponseParser\ResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -19,7 +18,7 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
     use ChangedDateTimeTrait;
 
     /**
-     * @var ResponseParserInterface
+     * @var OrderResponseParserInterface
      */
     private $responseParser;
 
@@ -36,12 +35,12 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
     /**
      * FetchChangedOrdersQueryHandler constructor.
      *
-     * @param ResponseParserInterface $responseParser
+     * @param OrderResponseParserInterface $responseParser
      * @param LoggerInterface $logger
      * @param Resource\Order $orderResource
      */
     public function __construct(
-        ResponseParserInterface $responseParser,
+        OrderResponseParserInterface $responseParser,
         LoggerInterface $logger,
         Resource\Order $orderResource
     ) {
@@ -70,9 +69,9 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
 
         $filter = [
             [
-                'property'   => 'status',
+                'property' => 'status',
                 'expression' => '!=',
-                'value'      => -1
+                'value' => -1
             ],
         ];
 

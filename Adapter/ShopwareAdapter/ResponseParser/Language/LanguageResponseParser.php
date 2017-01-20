@@ -4,13 +4,12 @@ namespace ShopwareAdapter\ResponseParser\Language;
 
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Language\Language;
-use ShopwareAdapter\ResponseParser\ResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
  * Class LanguageResponseParser
  */
-class LanguageResponseParser implements ResponseParserInterface
+class LanguageResponseParser implements LanguageResponseParserInterface
 {
     /**
      * @var IdentityServiceInterface

@@ -9,7 +9,7 @@ use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Models\Shop\Locale;
-use ShopwareAdapter\ResponseParser\ResponseParserInterface;
+use ShopwareAdapter\ResponseParser\Language\LanguageResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -23,7 +23,7 @@ class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
     private $repository;
 
     /**
-     * @var ResponseParserInterface
+     * @var LanguageResponseParserInterface
      */
     private $responseParser;
 
@@ -31,11 +31,11 @@ class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
      * FetchAllLanguagesQueryHandler constructor.
      *
      * @param EntityManagerInterface $entityManager
-     * @param ResponseParserInterface $responseParser
+     * @param LanguageResponseParserInterface $responseParser
      */
     public function __construct(
         EntityManagerInterface $entityManager,
-        ResponseParserInterface $responseParser
+        LanguageResponseParserInterface $responseParser
     ) {
         $this->repository = $entityManager->getRepository(Locale::class);
         $this->responseParser = $responseParser;

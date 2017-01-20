@@ -8,7 +8,6 @@ use PlentyConnector\Connector\CommandBus\Command\HandleCommandInterface;
 use PlentyConnector\Connector\CommandBus\Command\MediaCategory\HandleMediaCategoryCommand;
 use PlentyConnector\Connector\CommandBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\Media\Media;
 use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
 use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategoryInterface;
 use Shopware\Models\Media\Album;

@@ -7,7 +7,7 @@ use PlentyConnector\Connector\QueryBus\Query\VatRate\FetchAllVatRatesQuery;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
+use PlentymarketsAdapter\ResponseParser\VatRate\VatRateResponseParserInterface;
 
 /**
  * Class FetchAllVatRatesQueryHandler
@@ -20,7 +20,7 @@ class FetchAllVatRatesQueryHandler implements QueryHandlerInterface
     private $client;
 
     /**
-     * @var ResponseParserInterface
+     * @var VatRateResponseParserInterface
      */
     private $responseParser;
 
@@ -28,11 +28,11 @@ class FetchAllVatRatesQueryHandler implements QueryHandlerInterface
      * FetchAllVatRatesQueryHandler constructor.
      *
      * @param ClientInterface $client
-     * @param ResponseParserInterface $responseParser
+     * @param VatRateResponseParserInterface $responseParser
      */
     public function __construct(
         ClientInterface $client,
-        ResponseParserInterface $responseParser
+        VatRateResponseParserInterface $responseParser
     ) {
         $this->client = $client;
         $this->responseParser = $responseParser;

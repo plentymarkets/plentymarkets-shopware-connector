@@ -8,7 +8,7 @@ use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use PlentymarketsAdapter\Helper\MediaCategoryHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
+use PlentymarketsAdapter\ResponseParser\MediaCategory\MediaCategoryResponseParserInterface;
 
 /**
  * Class FetchChangedMediaCategoriesQueryHandler.
@@ -26,7 +26,7 @@ class FetchChangedMediaCategoriesQueryHandler implements QueryHandlerInterface
     private $mediaCategoryHelper;
 
     /**
-     * @var ResponseParserInterface
+     * @var MediaCategoryResponseParserInterface
      */
     private $responseParser;
 
@@ -35,12 +35,12 @@ class FetchChangedMediaCategoriesQueryHandler implements QueryHandlerInterface
      *
      * @param ConfigServiceInterface $config
      * @param MediaCategoryHelper $mediaCategoryHelper
-     * @param ResponseParserInterface $responseParser
+     * @param MediaCategoryResponseParserInterface $responseParser
      */
     public function __construct(
         ConfigServiceInterface $config,
         MediaCategoryHelper $mediaCategoryHelper,
-        ResponseParserInterface $responseParser
+        MediaCategoryResponseParserInterface $responseParser
     ) {
         $this->config = $config;
         $this->mediaCategoryHelper = $mediaCategoryHelper;

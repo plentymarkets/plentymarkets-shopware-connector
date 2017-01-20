@@ -8,7 +8,7 @@ use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use Shopware\Models\Payment\Payment;
 use Shopware\Models\Payment\Repository;
-use ShopwareAdapter\ResponseParser\ResponseParserInterface;
+use ShopwareAdapter\ResponseParser\PaymentMethod\PaymentMethodResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -22,7 +22,7 @@ class FetchAllPaymentMethodsQueryHandler implements QueryHandlerInterface
     private $repository;
 
     /**
-     * @var ResponseParserInterface
+     * @var PaymentMethodResponseParserInterface
      */
     private $responseParser;
 
@@ -30,11 +30,11 @@ class FetchAllPaymentMethodsQueryHandler implements QueryHandlerInterface
      * FetchAllPaymentMethodsQueryHandler constructor.
      *
      * @param EntityManagerInterface $entityManager
-     * @param ResponseParserInterface $responseParser
+     * @param PaymentMethodResponseParserInterface $responseParser
      */
     public function __construct(
         EntityManagerInterface $entityManager,
-        ResponseParserInterface $responseParser
+        PaymentMethodResponseParserInterface $responseParser
     ) {
         $this->repository = $entityManager->getRepository(Payment::class);
         $this->responseParser = $responseParser;

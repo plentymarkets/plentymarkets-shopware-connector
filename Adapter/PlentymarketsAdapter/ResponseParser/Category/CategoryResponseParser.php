@@ -2,15 +2,12 @@
 
 namespace PlentymarketsAdapter\ResponseParser\Category;
 
-use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
-use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 
 /**
  * Class CategoryResponseParser
  */
-class CategoryResponseParser implements ResponseParserInterface
+class CategoryResponseParser implements CategoryResponseParserInterface
 {
     /**
      * @var IdentityServiceInterface
@@ -28,11 +25,7 @@ class CategoryResponseParser implements ResponseParserInterface
     }
 
     /**
-     * TODO: Implement
-     *
-     * @param array $entry
-     *
-     * @return TransferObjectInterface[]
+     * {@inheritdoc}
      */
     public function parse(array $entry)
     {

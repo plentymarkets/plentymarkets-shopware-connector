@@ -6,7 +6,7 @@ use PlentyConnector\Connector\QueryBus\Query\PaymentStatus\FetchAllPaymentStatus
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
+use PlentymarketsAdapter\ResponseParser\PaymentStatus\PaymentStatusResponseParserInterface;
 
 /**
  * Class FetchAllPaymentStatusesQueryHandler
@@ -14,16 +14,16 @@ use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
 {
     /**
-     * @var ResponseParserInterface
+     * @var PaymentStatusResponseParserInterface
      */
     private $responseParser;
 
     /**
      * FetchAllPaymentStatusesQueryHandler constructor.
      *
-     * @param ResponseParserInterface $responseParser
+     * @param PaymentStatusResponseParserInterface $responseParser
      */
-    public function __construct(ResponseParserInterface $responseParser)
+    public function __construct(PaymentStatusResponseParserInterface $responseParser)
     {
         $this->responseParser = $responseParser;
     }

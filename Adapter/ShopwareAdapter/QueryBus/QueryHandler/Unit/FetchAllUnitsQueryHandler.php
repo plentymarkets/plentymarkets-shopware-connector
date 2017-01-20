@@ -9,7 +9,7 @@ use PlentyConnector\Connector\QueryBus\Query\Unit\FetchAllUnitsQuery;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Models\Article\Unit;
-use ShopwareAdapter\ResponseParser\ResponseParserInterface;
+use ShopwareAdapter\ResponseParser\Unit\UnitResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -23,7 +23,7 @@ class FetchAllUnitsQueryHandler implements QueryHandlerInterface
     private $repository;
 
     /**
-     * @var ResponseParserInterface
+     * @var UnitResponseParserInterface
      */
     private $responseParser;
 
@@ -31,11 +31,11 @@ class FetchAllUnitsQueryHandler implements QueryHandlerInterface
      * FetchAllUnitsQueryHandler constructor.
      *
      * @param EntityManagerInterface $entityManager
-     * @param ResponseParserInterface $responseParser
+     * @param UnitResponseParserInterface $responseParser
      */
     public function __construct(
         EntityManagerInterface $entityManager,
-        ResponseParserInterface $responseParser
+        UnitResponseParserInterface $responseParser
     ) {
         $this->repository = $entityManager->getRepository(Unit::class);
         $this->responseParser = $responseParser;

@@ -2,24 +2,15 @@
 
 namespace PlentymarketsAdapter\QueryBus\QueryHandler\MediaCategory;
 
-use Exception;
-use PlentyConnector\Adapter\PlentymarketsAdapter\Client\Exception\InvalidResponseException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\QueryBus\Query\FetchQueryInterface;
 use PlentyConnector\Connector\QueryBus\Query\Manufacturer\FetchManufacturerQuery;
 use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
-use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
-use PlentymarketsAdapter\Client\ClientInterface;
-use PlentymarketsAdapter\Client\Exception\InvalidCredentialsException;
 use PlentymarketsAdapter\Helper\MediaCategoryHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
-use Psr\Log\LoggerInterface;
-use ShopwareAdapter\ResponseParser\ResponseParser;
-use UnexpectedValueException;
+use PlentymarketsAdapter\ResponseParser\MediaCategory\MediaCategoryResponseParserInterface;
 
 /**
  * Class FetchMediaCategoryHandler
@@ -37,7 +28,7 @@ class FetchMediaCategoryHandler implements QueryHandlerInterface
     private $mediaCategoryHelper;
 
     /**
-     * @var ResponseParserInterface
+     * @var MediaCategoryResponseParserInterface
      */
     private $responseParser;
 
@@ -46,12 +37,12 @@ class FetchMediaCategoryHandler implements QueryHandlerInterface
      *
      * @param IdentityServiceInterface $identityService
      * @param MediaCategoryHelper $mediaCategoryHelper
-     * @param ResponseParserInterface $responseParser
+     * @param MediaCategoryResponseParserInterface $responseParser
      */
     public function __construct(
         IdentityServiceInterface $identityService,
         MediaCategoryHelper $mediaCategoryHelper,
-        ResponseParserInterface $responseParser
+        MediaCategoryResponseParserInterface $responseParser
     ) {
         $this->identityService = $identityService;
         $this->mediaCategoryHelper = $mediaCategoryHelper;
@@ -86,7 +77,7 @@ class FetchMediaCategoryHandler implements QueryHandlerInterface
         $caegories = $this->mediaCategoryHelper->getCategories();
 
         if (array_key_exists($identity->getAdapterIdentifier(), $caegories)) {
-            $result[] =  $this->responseParser->parse($caegories[$identity->getAdapterIdentifier()]);
+            $result[] = $this->responseParser->parse($caegories[$identity->getAdapterIdentifier()]);
         }
 
         return array_filter($result);

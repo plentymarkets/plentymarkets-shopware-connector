@@ -4,13 +4,12 @@ namespace ShopwareAdapter\ResponseParser\Shop;
 
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
-use ShopwareAdapter\ResponseParser\ResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
  * Class ShopResponseParser
  */
-class ShopResponseParser implements ResponseParserInterface
+class ShopResponseParser implements ShopResponseParserInterface
 {
     /**
      * @var IdentityServiceInterface

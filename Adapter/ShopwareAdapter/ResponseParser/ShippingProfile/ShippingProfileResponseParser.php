@@ -4,13 +4,12 @@ namespace ShopwareAdapter\ResponseParser\ShippingProfile;
 
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
-use ShopwareAdapter\ResponseParser\ResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
  * Class ShippingProfileResponseParser
  */
-class ShippingProfileResponseParser implements ResponseParserInterface
+class ShippingProfileResponseParser implements ShippingProfileResponseParserInterface
 {
     /**
      * @var IdentityServiceInterface

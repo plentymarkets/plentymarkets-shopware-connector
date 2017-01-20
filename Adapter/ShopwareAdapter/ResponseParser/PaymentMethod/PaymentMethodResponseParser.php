@@ -4,13 +4,12 @@ namespace ShopwareAdapter\ResponseParser\PaymentMethod;
 
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod;
-use ShopwareAdapter\ResponseParser\ResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
  * Class PaymentMethodResponseParser
  */
-class PaymentMethodResponseParser implements ResponseParserInterface
+class PaymentMethodResponseParser implements PaymentMethodResponseParserInterface
 {
     /**
      * @var IdentityServiceInterface

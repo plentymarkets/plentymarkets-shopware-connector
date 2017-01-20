@@ -5,12 +5,11 @@ namespace PlentymarketsAdapter\ResponseParser\OrderStatus;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\OrderStatus\OrderStatus;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 
 /**
  * Class OrderStatusResponseParser
  */
-class OrderStatusResponseParser implements ResponseParserInterface
+class OrderStatusResponseParser implements OrderStatusResponseParserInterface
 {
     /**
      * @var IdentityServiceInterface

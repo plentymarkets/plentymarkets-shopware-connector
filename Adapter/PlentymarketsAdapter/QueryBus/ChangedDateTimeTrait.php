@@ -13,16 +13,6 @@ use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 trait ChangedDateTimeTrait
 {
     /**
-     * @param $class
-     *
-     * @return string
-     */
-    private function getClassName($class)
-    {
-        return substr(strrchr(get_class($class), '\\'), 1);
-    }
-
-    /**
      * @param ConfigServiceInterface $config
      *
      * @return string
@@ -37,6 +27,16 @@ trait ChangedDateTimeTrait
         $dateTime = new DateTimeImmutable($lastRun, $timezone);
 
         return $dateTime->format(DateTime::ATOM);
+    }
+
+    /**
+     * @param $class
+     *
+     * @return string
+     */
+    private function getClassName($class)
+    {
+        return substr(strrchr(get_class($class), '\\'), 1);
     }
 
     /**

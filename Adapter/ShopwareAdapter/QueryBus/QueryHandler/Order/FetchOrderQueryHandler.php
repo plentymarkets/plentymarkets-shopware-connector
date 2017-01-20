@@ -10,7 +10,6 @@ use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use PlentyConnector\Connector\TransferObject\Order\Order;
 use Psr\Log\LoggerInterface;
 use Shopware\Components\Api\Resource;
-use ShopwareAdapter\ResponseParser\ResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -19,7 +18,7 @@ use ShopwareAdapter\ShopwareAdapter;
 class FetchOrderQueryHandler implements QueryHandlerInterface
 {
     /**
-     * @var ResponseParserInterface
+     * @var OrderResponseParserInterface
      */
     private $responseParser;
 
@@ -41,13 +40,13 @@ class FetchOrderQueryHandler implements QueryHandlerInterface
     /**
      * FetchOrderQueryHandler constructor.
      *
-     * @param ResponseParserInterface $responseParser
+     * @param OrderResponseParserInterface $responseParser
      * @param LoggerInterface $logger
      * @param IdentityServiceInterface $identityService
      * @param Resource\Order $orderResource
      */
     public function __construct(
-        ResponseParserInterface $responseParser,
+        OrderResponseParserInterface $responseParser,
         LoggerInterface $logger,
         IdentityServiceInterface $identityService,
         Resource\Order $orderResource

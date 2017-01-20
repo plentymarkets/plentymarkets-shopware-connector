@@ -8,9 +8,8 @@ use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\Helper\MediaCategoryHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
-use Psr\Log\LoggerInterface;
-use UnexpectedValueException;
+use PlentymarketsAdapter\ResponseParser\Manufacturer\ManufacturerResponseParserInterface;
+use PlentymarketsAdapter\ResponseParser\Media\MediaResponseParserInterface;
 
 /**
  * Class FetchAllManufacturersQueryHandler
@@ -23,12 +22,12 @@ class FetchAllManufacturersQueryHandler implements QueryHandlerInterface
     private $client;
 
     /**
-     * @var ResponseParserInterface
+     * @var ManufacturerResponseParserInterface
      */
     private $manufacturerResponseParser;
 
     /**
-     * @var ResponseParserInterface
+     * @var MediaResponseParserInterface
      */
     private $mediaResponseParser;
 
@@ -36,13 +35,13 @@ class FetchAllManufacturersQueryHandler implements QueryHandlerInterface
      * FetchAllManufacturersQueryHandler constructor.
      *
      * @param ClientInterface $client
-     * @param ResponseParserInterface $manufacturerResponseParser
-     * @param ResponseParserInterface $mediaResponseParser
+     * @param ManufacturerResponseParserInterface $manufacturerResponseParser
+     * @param MediaResponseParserInterface $mediaResponseParser
      */
     public function __construct(
         ClientInterface $client,
-        ResponseParserInterface $manufacturerResponseParser,
-        ResponseParserInterface $mediaResponseParser
+        ManufacturerResponseParserInterface $manufacturerResponseParser,
+        MediaResponseParserInterface $mediaResponseParser
     ) {
         $this->client = $client;
         $this->manufacturerResponseParser = $manufacturerResponseParser;

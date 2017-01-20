@@ -5,12 +5,11 @@ namespace PlentymarketsAdapter\ResponseParser\Language;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 
 /**
  * Class LanguageResponseParser
  */
-class LanguageResponseParser implements ResponseParserInterface
+class LanguageResponseParser implements LanguageResponseParserInterface
 {
     /**
      * @var IdentityServiceInterface

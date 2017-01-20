@@ -8,7 +8,7 @@ use PlentyConnector\Connector\QueryBus\Query\ShippingProfile\FetchAllShippingPro
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use Shopware\Models\Dispatch\Dispatch;
 use Shopware\Models\Dispatch\Repository;
-use ShopwareAdapter\ResponseParser\ResponseParserInterface;
+use ShopwareAdapter\ResponseParser\ShippingProfile\ShippingProfileResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -22,7 +22,7 @@ class FetchAllShippingProfilesQueryHandler implements QueryHandlerInterface
     private $repository;
 
     /**
-     * @var ResponseParserInterface
+     * @var ShippingProfileResponseParserInterface
      */
     private $responseParser;
 
@@ -30,11 +30,11 @@ class FetchAllShippingProfilesQueryHandler implements QueryHandlerInterface
      * FetchAllShippingProfilesQueryHandler constructor.
      *
      * @param EntityManagerInterface $entityManager
-     * @param ResponseParserInterface $responseParser
+     * @param ShippingProfileResponseParserInterface $responseParser
      */
     public function __construct(
         EntityManagerInterface $entityManager,
-        ResponseParserInterface $responseParser
+        ShippingProfileResponseParserInterface $responseParser
     ) {
         $this->repository = $entityManager->getRepository(Dispatch::class);
         $this->responseParser = $responseParser;

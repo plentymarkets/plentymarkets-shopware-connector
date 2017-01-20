@@ -7,7 +7,7 @@ use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
+use PlentymarketsAdapter\ResponseParser\OrderStatus\OrderStatusResponseParserInterface;
 
 /**
  * Class FetchAllOrderStatusesQueryHandler
@@ -20,19 +20,19 @@ class FetchAllOrderStatusesQueryHandler implements QueryHandlerInterface
     private $client;
 
     /**
-     * @var ResponseParserInterface
+     * @var OrderStatusResponseParserInterface
      */
     private $responseParser;
 
     /**
-     * FetchAllOrderStatusesQueryHandler constructor.
+     * OrderStatusResponseParserInterface constructor.
      *
      * @param ClientInterface $client
-     * @param ResponseParserInterface $responseParser
+     * @param OrderStatusResponseParserInterface $responseParser
      */
     public function __construct(
         ClientInterface $client,
-        ResponseParserInterface $responseParser
+        OrderStatusResponseParserInterface $responseParser
     ) {
         $this->client = $client;
         $this->responseParser = $responseParser;

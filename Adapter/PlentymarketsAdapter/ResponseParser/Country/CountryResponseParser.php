@@ -5,12 +5,11 @@ namespace PlentymarketsAdapter\ResponseParser\Country;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Country\Country;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 
 /**
  * Class CountryResponseParser
  */
-class CountryResponseParser implements ResponseParserInterface
+class CountryResponseParser implements CountryResponseParserInterface
 {
     /**
      * @var IdentityServiceInterface

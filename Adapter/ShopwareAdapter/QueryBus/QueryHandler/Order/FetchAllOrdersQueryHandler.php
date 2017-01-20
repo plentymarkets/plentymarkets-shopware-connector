@@ -8,7 +8,7 @@ use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use Psr\Log\LoggerInterface;
 use Shopware\Components\Api\Resource;
-use ShopwareAdapter\ResponseParser\ResponseParserInterface;
+use ShopwareAdapter\ResponseParser\Order\OrderResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -17,7 +17,7 @@ use ShopwareAdapter\ShopwareAdapter;
 class FetchAllOrdersQueryHandler implements QueryHandlerInterface
 {
     /**
-     * @var ResponseParserInterface
+     * @var OrderResponseParserInterface
      */
     private $responseParser;
 
@@ -34,12 +34,12 @@ class FetchAllOrdersQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllOrdersQueryHandler constructor.
      *
-     * @param ResponseParserInterface $responseParser
+     * @param OrderResponseParserInterface $responseParser
      * @param LoggerInterface $logger
      * @param Resource\Order $orderResource
      */
     public function __construct(
-        ResponseParserInterface $responseParser,
+        OrderResponseParserInterface $responseParser,
         LoggerInterface $logger,
         Resource\Order $orderResource
     ) {
@@ -64,9 +64,9 @@ class FetchAllOrdersQueryHandler implements QueryHandlerInterface
     {
         $filter = [
             [
-                'property'   => 'status',
+                'property' => 'status',
                 'expression' => '!=',
-                'value'      => -1
+                'value' => -1
             ]
         ];
 

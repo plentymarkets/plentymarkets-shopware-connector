@@ -8,12 +8,11 @@ use PlentyConnector\Connector\TransferObject\Media\Media;
 use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
 use PlentymarketsAdapter\Helper\MediaCategoryHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 
 /**
  * Class MediaResponseParser
  */
-class MediaResponseParser implements ResponseParserInterface
+class MediaResponseParser implements MediaResponseParserInterface
 {
     /**
      * @var IdentityServiceInterface

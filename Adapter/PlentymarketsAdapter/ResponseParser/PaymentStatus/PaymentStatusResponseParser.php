@@ -5,12 +5,11 @@ namespace PlentymarketsAdapter\ResponseParser\PaymentStatus;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\PaymentStatus\PaymentStatus;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 
 /**
  * Class PaymentStatusResponseParser
  */
-class PaymentStatusResponseParser implements ResponseParserInterface
+class PaymentStatusResponseParser implements PaymentStatusResponseParserInterface
 {
     /**
      * @var IdentityServiceInterface

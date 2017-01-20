@@ -4,13 +4,12 @@ namespace ShopwareAdapter\ResponseParser\Currency;
 
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Currency\Currency;
-use ShopwareAdapter\ResponseParser\ResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
  * Class CurrencyResponseParser
  */
-class CurrencyResponseParser implements ResponseParserInterface
+class CurrencyResponseParser implements CurrencyResponseParserInterface
 {
     /**
      * @var IdentityServiceInterface

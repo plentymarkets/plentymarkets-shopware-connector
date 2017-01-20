@@ -9,8 +9,8 @@ use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\QueryBus\ChangedDateTimeTrait;
-use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
-use Psr\Log\LoggerInterface;
+use PlentymarketsAdapter\ResponseParser\Category\CategoryResponseParserInterface;
+use PlentymarketsAdapter\ResponseParser\Media\MediaResponseParserInterface;
 
 /**
  * Class FetchChangedCategoriesQueryHandler.
@@ -30,12 +30,12 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
     private $config;
 
     /**
-     * @var ResponseParserInterface
+     * @var CategoryResponseParserInterface
      */
     private $categoryResponseParser;
 
     /**
-     * @var ResponseParserInterface
+     * @var MediaResponseParserInterface
      */
     private $mediaResponseParser;
 
@@ -44,14 +44,14 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
      *
      * @param ClientInterface $client
      * @param ConfigServiceInterface $config
-     * @param ResponseParserInterface $categoryResponseParser
-     * @param ResponseParserInterface $mediaResponseParser
+     * @param CategoryResponseParserInterface $categoryResponseParser
+     * @param MediaResponseParserInterface $mediaResponseParser
      */
     public function __construct(
         ClientInterface $client,
         ConfigServiceInterface $config,
-        ResponseParserInterface $categoryResponseParser,
-        ResponseParserInterface $mediaResponseParser
+        CategoryResponseParserInterface $categoryResponseParser,
+        MediaResponseParserInterface $mediaResponseParser
     ) {
         $this->client = $client;
         $this->config = $config;

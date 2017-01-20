@@ -8,7 +8,7 @@ use PlentyConnector\Connector\QueryBus\Query\Shop\FetchAllShopsQuery;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use Shopware\Models\Dispatch\Repository;
 use Shopware\Models\Shop\Shop;
-use ShopwareAdapter\ResponseParser\ResponseParserInterface;
+use ShopwareAdapter\ResponseParser\Shop\ShopResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -17,24 +17,24 @@ use ShopwareAdapter\ShopwareAdapter;
 class FetchAllShopsQueryHandler implements QueryHandlerInterface
 {
     /**
-     * @var ResponseParserInterface
-     */
-    private $responseParser;
-
-    /**
      * @var Repository
      */
     private $repository;
 
     /**
+     * @var ShopResponseParserInterface
+     */
+    private $responseParser;
+
+    /**
      * FetchAllShopsQueryHandler constructor.
      *
      * @param EntityManagerInterface $entityManager
-     * @param ResponseParserInterface $responseParser
+     * @param ShopResponseParserInterface $responseParser
      */
     public function __construct(
         EntityManagerInterface $entityManager,
-        ResponseParserInterface $responseParser
+        ShopResponseParserInterface $responseParser
     ) {
         $this->repository = $entityManager->getRepository(Shop::class);
         $this->responseParser = $responseParser;

@@ -9,7 +9,7 @@ use PlentyConnector\Connector\QueryBus\Query\VatRate\FetchAllVatRatesQuery;
 use PlentyConnector\Connector\QueryBus\QueryHandler\QueryHandlerInterface;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Models\Tax\Tax;
-use ShopwareAdapter\ResponseParser\ResponseParserInterface;
+use ShopwareAdapter\ResponseParser\VatRate\VatRateResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -23,7 +23,7 @@ class FetchAllVatRatesQueryHandler implements QueryHandlerInterface
     private $repository;
 
     /**
-     * @var ResponseParserInterface
+     * @var VatRateResponseParserInterface
      */
     private $responseParser;
 
@@ -31,11 +31,11 @@ class FetchAllVatRatesQueryHandler implements QueryHandlerInterface
      * FetchAllVatRatesQueryHandler constructor.
      *
      * @param EntityManagerInterface $entityManager
-     * @param ResponseParserInterface $responseParser
+     * @param VatRateResponseParserInterface $responseParser
      */
     public function __construct(
         EntityManagerInterface $entityManager,
-        ResponseParserInterface $responseParser
+        VatRateResponseParserInterface $responseParser
     ) {
         $this->repository = $entityManager->getRepository(Tax::class);
         $this->responseParser = $responseParser;

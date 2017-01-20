@@ -2,18 +2,14 @@
 
 namespace PlentymarketsAdapter\ResponseParser\MediaCategory;
 
-use Assert\Assertion;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\Media\Media;
 use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ResponseParser\ResponseParserInterface;
 
 /**
  * Class MediaCategoryResponseParser
  */
-class MediaCategoryResponseParser implements ResponseParserInterface
+class MediaCategoryResponseParser implements MediaCategoryResponseParserInterface
 {
     /**
      * @var IdentityServiceInterface
