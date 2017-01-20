@@ -2,12 +2,15 @@
 
 namespace PlentyConnector\Connector\TransferObject\Shop;
 
-use PlentyConnector\Connector\TransferObject\MappedTransferObjectInterface;
+use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
  * Interface ShopInterface
  */
-interface ShopInterface extends MappedTransferObjectInterface
+interface ShopInterface extends TransferObjectInterface
 {
-
+    /**
+     * @return string
+     */
+    public function getName();
 }

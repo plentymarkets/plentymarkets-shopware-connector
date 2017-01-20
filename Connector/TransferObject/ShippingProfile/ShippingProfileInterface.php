@@ -2,12 +2,15 @@
 
 namespace PlentyConnector\Connector\TransferObject\ShippingProfile;
 
-use PlentyConnector\Connector\TransferObject\MappedTransferObjectInterface;
+use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
  * Interface ShippingProfileInterface.
  */
-interface ShippingProfileInterface extends MappedTransferObjectInterface
+interface ShippingProfileInterface extends TransferObjectInterface
 {
-
+    /**
+     * @return string
+     */
+    public function getName();
 }

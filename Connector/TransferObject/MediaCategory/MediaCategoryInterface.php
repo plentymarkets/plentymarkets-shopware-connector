@@ -2,12 +2,12 @@
 
 namespace PlentyConnector\Connector\TransferObject\MediaCategory;
 
-use PlentyConnector\Connector\TransferObject\SynchronizedTransferObjectInterface;
+use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
  * Interface
  */
-interface MediaCategoryInterface extends SynchronizedTransferObjectInterface
+interface MediaCategoryInterface extends TransferObjectInterface
 {
     /**
      * {@inheritdoc}

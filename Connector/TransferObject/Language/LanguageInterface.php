@@ -2,12 +2,15 @@
 
 namespace PlentyConnector\Connector\TransferObject\Language;
 
-use PlentyConnector\Connector\TransferObject\MappedTransferObjectInterface;
+use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
  * Interface LanguageInterface
  */
-interface LanguageInterface extends MappedTransferObjectInterface
+interface LanguageInterface extends TransferObjectInterface
 {
-
+    /**
+     * @return string
+     */
+    public function getName();
 }

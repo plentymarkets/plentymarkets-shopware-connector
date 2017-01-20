@@ -56,4 +56,20 @@ class Variation implements VariationInterface
             $params['name']
         );
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIdentifier()
+    {
+        // TODO: Implement getIdentifier() method.
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        // TODO: Implement getName() method.
+    }
 }

@@ -10,9 +10,8 @@ use PlentyConnector\Connector\QueryBus\QueryFactory\QueryFactoryInterface;
 use PlentyConnector\Connector\QueryBus\QueryType;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use PlentyConnector\Connector\ValueObject\Definition\DefinitionInterface;
-use PlentyConnector\Connector\TransferObject\MappedTransferObjectInterface;
-use PlentyConnector\Connector\ValueObject\Mapping\Mapping;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
+use PlentyConnector\Connector\ValueObject\Mapping\Mapping;
 
 /**
  * Class MappingService.
@@ -145,9 +144,22 @@ class MappingService implements MappingServiceInterface
             $objects = [];
         }
 
-        return array_filter($objects, function (TransferObjectInterface $object) use ($definition) {
-            return $object->getType() === $definition->getObjectType()
-                && is_subclass_of($object, MappedTransferObjectInterface::class);
+        $objects = array_filter($objects, function (TransferObjectInterface $object) use ($definition) {
+            return $object->getType() === $definition->getObjectType();
         });
+
+        usort($objects, function(TransferObjectInterface $a, TransferObjectInterface $b) {
+            if (method_exists($a, 'getName') && method_exists($b, 'getName')) {
+                $namea = $a->getName();
+                $nameb = $b->getName();
+            } else {
+                $namea = $a->getIdentifier();
+                $nameb = $b->getIdentifier();
+            }
+
+            return strnatcmp($namea, $nameb);
+        });
+
+        return $objects;
     }
 }

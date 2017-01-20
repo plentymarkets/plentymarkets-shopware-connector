@@ -49,6 +49,7 @@ class Definition implements DefinitionInterface
         Assertion::string($destinationAdapterName);
         Assertion::string($objectType);
         Assertion::nullOrInteger($priority);
+        Assertion::nullOrGreaterThan($priority, 0);
 
         $this->originAdapterName = $originAdapterName;
         $this->destinationAdapterName = $destinationAdapterName;

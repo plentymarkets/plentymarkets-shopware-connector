@@ -90,4 +90,12 @@ class OrderItem implements OrderItemInterface
             $params['price']
         );
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIdentifier()
+    {
+        // TODO: Implement getIdentifier() method.
+    }
 }

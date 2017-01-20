@@ -14,7 +14,7 @@ use PlentyConnector\Connector\QueryBus\QueryType;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use PlentyConnector\Connector\ValueObject\Definition\DefinitionInterface;
 use PlentyConnector\Connector\ValueObject\Identity\IdentityInterface;
-use PlentyConnector\Connector\TransferObject\SynchronizedTransferObjectInterface;
+use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 
@@ -27,7 +27,7 @@ class CleanupServiceTest extends TestCase
     {
         $orphanedUuid = Uuid::uuid4()->toString();
 
-        $testElement = $this->createMock(SynchronizedTransferObjectInterface::class);
+        $testElement = $this->createMock(TransferObjectInterface::class);
         $testElement->expects($this->once())->method('getType')->willReturn('TestType');
         $testElement->expects($this->once())->method('getIdentifier')->willReturn(Uuid::uuid4()->toString());
 

@@ -81,7 +81,7 @@ class Product implements ProductInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getidentifier()
     {
@@ -89,7 +89,7 @@ class Product implements ProductInterface
     }
 
     /**
-     * @return mixed
+     * {@inheritdoc}
      */
     public function getName()
     {

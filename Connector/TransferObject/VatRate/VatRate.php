@@ -61,7 +61,7 @@ class VatRate implements VatRateInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getIdentifier()
     {
@@ -69,7 +69,7 @@ class VatRate implements VatRateInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getName()
     {

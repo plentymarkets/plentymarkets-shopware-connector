@@ -61,7 +61,7 @@ class Shop implements ShopInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getIdentifier()
     {
@@ -69,7 +69,7 @@ class Shop implements ShopInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getName()
     {

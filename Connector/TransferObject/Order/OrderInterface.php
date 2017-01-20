@@ -13,11 +13,6 @@ interface OrderInterface extends TransferObjectInterface
     /**
      * @return string
      */
-    public function getIdentifier();
-
-    /**
-     * @return string
-     */
     public function getOrderNumber();
 
     /**

@@ -2,12 +2,15 @@
 
 namespace PlentyConnector\Connector\TransferObject\OrderStatus;
 
-use PlentyConnector\Connector\TransferObject\MappedTransferObjectInterface;
+use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
  * Interface OrderStatusInterface
  */
-interface OrderStatusInterface extends MappedTransferObjectInterface
+interface OrderStatusInterface extends TransferObjectInterface
 {
-
+    /**
+     * @return string
+     */
+    public function getName();
 }

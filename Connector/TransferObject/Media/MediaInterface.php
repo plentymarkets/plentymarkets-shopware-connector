@@ -3,13 +3,13 @@
 namespace PlentyConnector\Connector\TransferObject\Media;
 
 use PlentyConnector\Connector\TransferObject\AttributeableInterface;
-use PlentyConnector\Connector\TransferObject\SynchronizedTransferObjectInterface;
+use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\TransferObject\TranslateableInterface;
 
 /**
  * Interface
  */
-interface MediaInterface extends SynchronizedTransferObjectInterface, AttributeableInterface, TranslateableInterface
+interface MediaInterface extends TransferObjectInterface, AttributeableInterface, TranslateableInterface
 {
     /**
      * @return string

@@ -3,13 +3,13 @@
 namespace PlentyConnector\Connector\TransferObject\Category;
 
 use PlentyConnector\Connector\TransferObject\AttributeableInterface;
-use PlentyConnector\Connector\TransferObject\SynchronizedTransferObjectInterface;
+use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\TransferObject\TranslateableInterface;
 
 /**
  * Interface CategoryInterface
  */
-interface CategoryInterface extends SynchronizedTransferObjectInterface, TranslateableInterface, AttributeableInterface
+interface CategoryInterface extends TransferObjectInterface, TranslateableInterface, AttributeableInterface
 {
     /**
      * @return string

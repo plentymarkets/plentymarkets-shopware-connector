@@ -9,5 +9,8 @@ use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
  */
 interface VariationInterface extends TransferObjectInterface
 {
-
+    /**
+     * @return string
+     */
+    public function getName();
 }

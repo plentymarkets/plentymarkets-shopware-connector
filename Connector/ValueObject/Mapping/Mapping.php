@@ -3,7 +3,7 @@
 namespace PlentyConnector\Connector\ValueObject\Mapping;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\MappedTransferObjectInterface;
+use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
  * Class Mapping
@@ -20,7 +20,7 @@ class Mapping implements MappingInterface
     private $originAdapterName;
 
     /**
-     * @var MappedTransferObjectInterface[]
+     * @var TransferObjectInterface[]
      */
     private $originTransferObjects;
 
@@ -32,7 +32,7 @@ class Mapping implements MappingInterface
     private $destinationAdapterName;
 
     /**
-     * @var MappedTransferObjectInterface[]
+     * @var TransferObjectInterface[]
      */
     private $destinationTransferObjects;
 
@@ -45,9 +45,9 @@ class Mapping implements MappingInterface
      * Mapping constructor.
      *
      * @param string $originAdapterName
-     * @param MappedTransferObjectInterface[] $originTransferObjects
+     * @param TransferObjectInterface[] $originTransferObjects
      * @param string $destinationAdapterName
-     * @param MappedTransferObjectInterface[] $destinationTransferObjects
+     * @param TransferObjectInterface[] $destinationTransferObjects
      * @param string $objectType
      */
     public function __construct(
@@ -58,10 +58,10 @@ class Mapping implements MappingInterface
         $objectType
     ) {
         Assertion::string($originAdapterName);
-        Assertion::allIsInstanceOf($originTransferObjects, MappedTransferObjectInterface::class);
+        Assertion::allIsInstanceOf($originTransferObjects, TransferObjectInterface::class);
 
         Assertion::string($destinationAdapterName);
-        Assertion::allIsInstanceOf($destinationTransferObjects, MappedTransferObjectInterface::class);
+        Assertion::allIsInstanceOf($destinationTransferObjects, TransferObjectInterface::class);
 
         Assertion::string($objectType);
 

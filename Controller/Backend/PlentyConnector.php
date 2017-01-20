@@ -7,7 +7,7 @@ use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\MappingService\MappingServiceInterface;
 use PlentyConnector\Connector\QueryBus\QueryType;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
-use PlentyConnector\Connector\TransferObject\MappedTransferObjectInterface;
+use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\ValueObject\Mapping\MappingInterface;
 use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\PlentyConnector;
@@ -136,7 +136,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
             return;
         }
 
-        $transferObjectMapping = function (MappedTransferObjectInterface $object) {
+        $transferObjectMapping = function (TransferObjectInterface $object) {
             return [
                 'identifier' => $object->getIdentifier(),
                 'type' => $object->getType(),

@@ -7,7 +7,7 @@ use PlentyConnector\Connector\CommandBus\CommandFactory\Exception\MissingCommand
 use PlentyConnector\Connector\CommandBus\CommandFactory\Exception\MissingCommandGeneratorException;
 use PlentyConnector\Connector\CommandBus\CommandGenerator\CommandGeneratorInterface;
 use PlentyConnector\Connector\CommandBus\CommandType;
-use PlentyConnector\Connector\TransferObject\SynchronizedTransferObjectInterface;
+use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
  * Class CommandFactoryInterface.
@@ -37,7 +37,7 @@ class CommandFactory implements CommandFactoryInterface
         Assertion::inArray($commandType, CommandType::getAllTypes());
 
         if ($commandType === CommandType::HANDLE) {
-            Assertion::isInstanceOf($payload, SynchronizedTransferObjectInterface::class);
+            Assertion::isInstanceOf($payload, TransferObjectInterface::class);
         }
 
         if ($commandType === CommandType::REMOVE) {

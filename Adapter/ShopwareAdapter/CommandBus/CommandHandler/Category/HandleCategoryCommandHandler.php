@@ -7,6 +7,7 @@ use PlentyConnector\Connector\CommandBus\Command\Category\HandleCategoryCommand;
 use PlentyConnector\Connector\CommandBus\Command\CommandInterface;
 use PlentyConnector\Connector\CommandBus\Command\HandleCommandInterface;
 use PlentyConnector\Connector\CommandBus\CommandHandler\CommandHandlerInterface;
+use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Category\Category;
 use PlentyConnector\Connector\TransferObject\Category\CategoryInterface;
@@ -57,6 +58,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
      * @param CategoryResource $resource
      * @param IdentityServiceInterface $identityService
      * @param TranslationHelperInterface $translationHelper
+     * @param EntityManagerInterface $entityManager
      */
     public function __construct(
         CategoryResource $resource,
@@ -82,14 +84,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param CommandInterface $command
-     *
-     * @throws \Shopware\Components\Api\Exception\ValidationException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \PlentyConnector\Connector\IdentityService\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
-     * @throws \Exception
+     * {@inheritdoc}
      */
     public function handle(CommandInterface $command)
     {
@@ -106,13 +101,13 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         ]);
 
         if (null === $shopIdentity) {
-            // throw
+            throw new NotFoundException();
         }
 
         $shop = $this->shopRepository->find($shopIdentity->getAdapterIdentifier());
 
         if (null === $shop) {
-            // throw
+            throw new NotFoundException();
         }
 
         $languageIdentity = $this->identityService->findOneBy([
@@ -135,7 +130,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             ]);
 
             if (null === $parentCategoryIdentity) {
-                // throw
+                throw new NotFoundException();
             }
 
             $parentCategory = $parentCategoryIdentity->getAdapterIdentifier();
@@ -176,7 +171,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             ]);
 
             if (null === $mediaIdentity) {
-                // throw
+                throw new NotFoundException();
             }
 
             $parans['media']['mediaId'] = $mediaIdentity->getAdapterIdentifier();

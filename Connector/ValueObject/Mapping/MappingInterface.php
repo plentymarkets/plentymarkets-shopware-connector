@@ -2,13 +2,13 @@
 
 namespace PlentyConnector\Connector\ValueObject\Mapping;
 
-use PlentyConnector\Connector\TransferObject\MappedTransferObjectInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
+use PlentyConnector\Connector\ValueObject\ValueObjectInterface;
 
 /**
  * Interface MappingInterface
  */
-interface MappingInterface extends TransferObjectInterface
+interface MappingInterface extends ValueObjectInterface
 {
     /**
      * @return string
@@ -16,7 +16,7 @@ interface MappingInterface extends TransferObjectInterface
     public function getOriginAdapterName();
 
     /**
-     * @return MappedTransferObjectInterface[]
+     * @return TransferObjectInterface[]
      */
     public function getOriginTransferObjects();
 
@@ -26,7 +26,7 @@ interface MappingInterface extends TransferObjectInterface
     public function getDestinationAdapterName();
 
     /**
-     * @return MappedTransferObjectInterface[]
+     * @return TransferObjectInterface[]
      */
     public function getDestinationTransferObjects();
 

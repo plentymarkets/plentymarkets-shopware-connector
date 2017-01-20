@@ -2,12 +2,15 @@
 
 namespace PlentyConnector\Connector\TransferObject\PaymentMethod;
 
-use PlentyConnector\Connector\TransferObject\MappedTransferObjectInterface;
+use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
  * Interface PaymentMethodInterface.
  */
-interface PaymentMethodInterface extends MappedTransferObjectInterface
+interface PaymentMethodInterface extends TransferObjectInterface
 {
-
+    /**
+     * @return string
+     */
+    public function getName();
 }

@@ -2,12 +2,15 @@
 
 namespace PlentyConnector\Connector\TransferObject\CustomerGroup;
 
-use PlentyConnector\Connector\TransferObject\MappedTransferObjectInterface;
+use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
  * Interface CustomerGroupInterface
  */
-interface CustomerGroupInterface extends MappedTransferObjectInterface
+interface CustomerGroupInterface extends TransferObjectInterface
 {
-
+    /**
+     * @return string
+     */
+    public function getName();
 }

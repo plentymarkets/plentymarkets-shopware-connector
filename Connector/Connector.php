@@ -14,7 +14,7 @@ use PlentyConnector\Connector\QueryBus\QueryFactory\QueryFactoryInterface;
 use PlentyConnector\Connector\QueryBus\QueryType;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use PlentyConnector\Connector\ValueObject\Definition\DefinitionInterface;
-use PlentyConnector\Connector\TransferObject\SynchronizedTransferObjectInterface;
+use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -180,7 +180,7 @@ class Connector implements ConnectorInterface
     private function handleDefinition(DefinitionInterface $definition, $queryType, $identifier = null)
     {
         /**
-         * @var SynchronizedTransferObjectInterface[] $objects
+         * @var TransferObjectInterface[] $objects
          */
         $objects = $this->queryBus->handle($this->queryFactory->create(
             $definition->getOriginAdapterName(),
@@ -193,7 +193,7 @@ class Connector implements ConnectorInterface
             $objects = [];
         }
 
-        array_walk($objects, function (SynchronizedTransferObjectInterface $object) use ($definition) {
+        array_walk($objects, function (TransferObjectInterface $object) use ($definition) {
             $this->commandBus->handle($this->commandFactory->create(
                 $definition->getDestinationAdapterName(),
                 $object->getType(),

@@ -10,5 +10,8 @@ use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
  */
 interface ProductInterface extends TransferObjectInterface
 {
-
+    /**
+     * @return string
+     */
+    public function getName();
 }
