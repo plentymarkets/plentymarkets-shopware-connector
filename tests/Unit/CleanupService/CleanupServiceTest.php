@@ -4,13 +4,13 @@ namespace PlentyConnector\tests\Unit\CleanupService;
 
 use PHPUnit\Framework\TestCase;
 use PlentyConnector\Connector\CleanupService\CleanupService;
-use PlentyConnector\Connector\CommandBus\Command\CommandInterface;
-use PlentyConnector\Connector\CommandBus\CommandFactory\CommandFactory;
-use PlentyConnector\Connector\CommandBus\CommandType;
+use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
+use PlentyConnector\Connector\ServiceBus\CommandFactory\CommandFactory;
+use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\QueryBus\Query\QueryInterface;
-use PlentyConnector\Connector\QueryBus\QueryFactory\QueryFactoryInterface;
-use PlentyConnector\Connector\QueryBus\QueryType;
+use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
+use PlentyConnector\Connector\ServiceBus\QueryFactory\QueryFactoryInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use PlentyConnector\Connector\ValueObject\Definition\DefinitionInterface;
 use PlentyConnector\Connector\ValueObject\Identity\IdentityInterface;
@@ -34,13 +34,13 @@ class CleanupServiceTest extends TestCase
         $command = $this->createMock(CommandInterface::class);
         $query = $this->createMock(QueryInterface::class);
 
-        $queryBus = $this->createMock(ServiceBusInterface::class);
-        $queryBus->expects($this->once())->method('handle')->with($query)->willReturn([
+        $ServiceBus = $this->createMock(ServiceBusInterface::class);
+        $ServiceBus->expects($this->once())->method('handle')->with($query)->willReturn([
             $testElement
         ]);
 
-        $commandBus = $this->createMock(ServiceBusInterface::class);
-        $commandBus->expects($this->once())->method('handle')->with($command);
+        $ServiceBus = $this->createMock(ServiceBusInterface::class);
+        $ServiceBus->expects($this->once())->method('handle')->with($command);
 
         $queryFactory = $this->createMock(QueryFactoryInterface::class);
         $queryFactory->expects($this->once())->method('create')->with(
@@ -74,8 +74,8 @@ class CleanupServiceTest extends TestCase
         $logger = $this->createMock(LoggerInterface::class);
 
         $cleanupService = new CleanupService(
-            $queryBus,
-            $commandBus,
+            $ServiceBus,
+            $ServiceBus,
             $queryFactory,
             $commandFactory,
             $identityService,
@@ -94,11 +94,11 @@ class CleanupServiceTest extends TestCase
         $command = $this->createMock(CommandInterface::class);
         $query = $this->createMock(QueryInterface::class);
 
-        $queryBus = $this->createMock(ServiceBusInterface::class);
-        $queryBus->expects($this->once())->method('handle')->with($query)->willReturn([]);
+        $ServiceBus = $this->createMock(ServiceBusInterface::class);
+        $ServiceBus->expects($this->once())->method('handle')->with($query)->willReturn([]);
 
-        $commandBus = $this->createMock(ServiceBusInterface::class);
-        $commandBus->expects($this->once())->method('handle')->with($command);
+        $ServiceBus = $this->createMock(ServiceBusInterface::class);
+        $ServiceBus->expects($this->once())->method('handle')->with($command);
 
         $queryFactory = $this->createMock(QueryFactoryInterface::class);
         $queryFactory->expects($this->once())->method('create')->with(
@@ -132,8 +132,8 @@ class CleanupServiceTest extends TestCase
         $logger = $this->createMock(LoggerInterface::class);
 
         $cleanupService = new CleanupService(
-            $queryBus,
-            $commandBus,
+            $ServiceBus,
+            $ServiceBus,
             $queryFactory,
             $commandFactory,
             $identityService,
