@@ -34,13 +34,10 @@ class CleanupServiceTest extends TestCase
         $command = $this->createMock(CommandInterface::class);
         $query = $this->createMock(QueryInterface::class);
 
-        $ServiceBus = $this->createMock(ServiceBusInterface::class);
-        $ServiceBus->expects($this->once())->method('handle')->with($query)->willReturn([
-            $testElement
-        ]);
-
-        $ServiceBus = $this->createMock(ServiceBusInterface::class);
-        $ServiceBus->expects($this->once())->method('handle')->with($command);
+        $serviceBus = $this->createMock(ServiceBusInterface::class);
+        $serviceBus->method('handle')
+            ->withConsecutive($query, $command)
+            ->willReturnOnConsecutiveCalls([$testElement], true);
 
         $queryFactory = $this->createMock(QueryFactoryInterface::class);
         $queryFactory->expects($this->once())->method('create')->with(
@@ -70,12 +67,12 @@ class CleanupServiceTest extends TestCase
         $definition->expects($this->any())->method('getOriginAdapterName')->willReturn('TestOriginAdapter');
         $definition->expects($this->any())->method('getDestinationAdapterName')->willReturn('TestDestinationAdapter');
         $definition->expects($this->any())->method('getObjectType')->willReturn('TestType');
+        $definition->method('getPriority')->willReturn(0);
 
         $logger = $this->createMock(LoggerInterface::class);
 
         $cleanupService = new CleanupService(
-            $ServiceBus,
-            $ServiceBus,
+            $serviceBus,
             $queryFactory,
             $commandFactory,
             $identityService,
@@ -94,11 +91,10 @@ class CleanupServiceTest extends TestCase
         $command = $this->createMock(CommandInterface::class);
         $query = $this->createMock(QueryInterface::class);
 
-        $ServiceBus = $this->createMock(ServiceBusInterface::class);
-        $ServiceBus->expects($this->once())->method('handle')->with($query)->willReturn([]);
-
-        $ServiceBus = $this->createMock(ServiceBusInterface::class);
-        $ServiceBus->expects($this->once())->method('handle')->with($command);
+        $serviceBus = $this->createMock(ServiceBusInterface::class);
+        $serviceBus->method('handle')
+            ->withConsecutive($query, $command)
+            ->willReturnOnConsecutiveCalls([], true);
 
         $queryFactory = $this->createMock(QueryFactoryInterface::class);
         $queryFactory->expects($this->once())->method('create')->with(
@@ -132,8 +128,7 @@ class CleanupServiceTest extends TestCase
         $logger = $this->createMock(LoggerInterface::class);
 
         $cleanupService = new CleanupService(
-            $ServiceBus,
-            $ServiceBus,
+            $serviceBus,
             $queryFactory,
             $commandFactory,
             $identityService,
