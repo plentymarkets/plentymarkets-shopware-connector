@@ -36,4 +36,12 @@ interface ClientInterface
      * @throws UnexpectedValueException
      */
     public function getIterator($path, array $criteria = []);
+
+    /**
+     * @param $path
+     * @param array $criteria
+     *
+     * @return int
+     */
+    public function getTotal($path, array $criteria = []);
 }
