@@ -3,7 +3,6 @@
 namespace PlentymarketsAdapter\Client;
 
 use Assert\Assertion;
-use Exception;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 use GuzzleHttp\Exception\ClientException;
@@ -68,13 +67,8 @@ class Client implements ClientInterface
      */
     public function request($method, $path, array $params = [], $limit = null, $offset = null, array $options = [])
     {
-        Assertion::string($method);
-        Assertion::string($path);
-        Assertion::isArray($params);
         Assertion::nullOrInteger($limit);
-        Assertion::nullOrGreaterThan($limit, 0);
         Assertion::nullOrInteger($offset);
-        Assertion::nullOrGreaterOrEqualThan($offset, 0);
         Assertion::isArray($options);
 
         if ($this->isLoginRequired($path)) {
@@ -82,10 +76,15 @@ class Client implements ClientInterface
         }
 
         $method = strtoupper($method);
-        $options = $this->getOptions($method, $path, $params, $limit, $offset, $options);
+
+        $options = $this->getOptions($limit, $offset, $options);
+        $url = $this->getUrl($path, $options);
+        $requestOptions = $this->getRequestOptions($method, $path, $params, $options);
+
+        $request = $this->connection->createRequest($method, $url, $requestOptions);
 
         try {
-            $response = $this->connection->request($method, $path, $options);
+            $response = $this->connection->send($request);
 
             $result = json_decode($response->getBody(), true);
 
@@ -106,9 +105,7 @@ class Client implements ClientInterface
 
             return $result;
         } catch (ClientException $exception) {
-            if ($exception->hasResponse() && $exception->getResponse()->getStatusCode() === 401
-                && !$this->isLoginRequired($path) && $this->accessToken != null
-            ) {
+            if ($exception->hasResponse() && $exception->getResponse()->getStatusCode() === 401 && !$this->isLoginRequired($path) && $this->accessToken != null) {
                 // retry with fresh accessToken
                 $this->accessToken = null;
 
@@ -143,7 +140,7 @@ class Client implements ClientInterface
     }
 
     /**
-     * @throws Exception
+     * @throws InvalidCredentialsException
      */
     private function login()
     {
@@ -162,7 +159,6 @@ class Client implements ClientInterface
 
     /**
      * @param $url
-     *
      * @return string
      *
      * @throws InvalidCredentialsException
@@ -237,58 +233,93 @@ class Client implements ClientInterface
     }
 
     /**
-     * @param $method
-     * @param $path
-     * @param array $params
      * @param $limit
      * @param $offset
      * @param array $options
      *
      * @return array
      */
-    private function getOptions($method, $path, array $params, $limit, $offset, array $options)
+    private function getOptions($limit, $offset, array $options)
     {
-        if (!array_key_exists('base_uri', $options)) {
-            $options['base_uri'] = $this->getBaseUri($this->config->get('rest_url'));
-        } else {
-            $options['base_uri'] = $this->getBaseUri($options['base_uri']);
-        }
-
-        if (!array_key_exists('headers', $options)) {
-            $options['headers'] = $this->getHeaders($path);
-        }
-
-        if ($method === 'GET') {
-            $options['query'] = $params;
-        } else {
-            $options['json'] = $params;
-        }
-
-        if (!array_key_exists('connect_timeout', $options)) {
-            $options['connect_timeout'] = 30;
-        }
-
-        if (!array_key_exists('timeout', $options)) {
-            $options['timeout'] = 30;
-        }
-
         if (!array_key_exists('plainResponse', $options)) {
             $options['plainResponse'] = false;
         }
 
-        if (!array_key_exists('http_errors', $options)) {
-            $options['http_errors'] = true;
-        }
-
         if (null !== $limit) {
-            $params['itemsPerPage'] = (int)$limit;
+            $options['itemsPerPage'] = (int)$limit;
         }
 
         if (null !== $offset) {
-            $params['page'] = $this->getPage($limit, $offset);
+            $options['page'] = $this->getPage($limit, $offset);
         }
 
         return $options;
+    }
+
+    /**
+     * @param string $method
+     * @param string $path
+     * @param array $params
+     * @param array $options
+     *
+     * @return array
+     */
+    private function getRequestOptions($method, $path, array $params, array $options)
+    {
+        Assertion::string($method);
+        Assertion::inArray($method, [
+            'POST',
+            'PUT',
+            'DELETE',
+            'GET'
+        ]);
+        Assertion::isArray($params);
+
+        $requestOptions = [];
+
+        if ($method === 'GET') {
+            $requestOptions['query'] = $params;
+        } else {
+            $requestOptions['json'] = $params;
+        }
+
+        if (!array_key_exists('headers', $options)) {
+            $requestOptions['headers'] = $this->getHeaders($path);
+        }
+
+        if (!array_key_exists('connect_timeout', $options)) {
+            $requestOptions['connect_timeout'] = 30;
+        }
+
+        if (!array_key_exists('timeout', $options)) {
+            $requestOptions['timeout'] = 30;
+        }
+
+        if (!array_key_exists('exceptions', $options)) {
+            $requestOptions['exceptions'] = true;
+        }
+
+        return $requestOptions;
+    }
+
+    /**
+     * @param string $path
+     * @param array $options
+     *
+     * @return string
+     */
+    private function getUrl($path, array $options = [])
+    {
+        Assertion::string($path);
+        Assertion::notBlank($path);
+
+        if (!array_key_exists('base_uri', $options)) {
+            $base_uri = $this->getBaseUri($this->config->get('rest_url'));
+        } else {
+            $base_uri = $this->getBaseUri($options['base_uri']);
+        }
+
+        return $base_uri . $path;
     }
 
     /**

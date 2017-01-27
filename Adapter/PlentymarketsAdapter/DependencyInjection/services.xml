@@ -4,38 +4,8 @@
     <services>
         <!-- Guzzle -->
 
-        <service id="plentymarkets_adapter.http_client.handler" class="GuzzleHttp\Handler\CurlHandler">
-            <factory class="PlentymarketsAdapter\Client\Handler\HandlerFactory" method="factory" />
-        </service>
-
-        <service id="plentymarkets_adapter.http_client.default_handler_stack" class="GuzzleHttp\HandlerStack">
-            <factory class="GuzzleHttp\HandlerStack" method="create" />
-
-            <argument type="service" id="plentymarkets_adapter.http_client.handler" />
-        </service>
-
-        <service id="plentymarkets_adapter.http_client.logging.message_formatter" class="GuzzleHttp\MessageFormatter">
-            <argument>{method} {target} - {req_body} - {code}</argument>
-        </service>
-
-        <service id="plentymarkets_adapter.http_client.middleware.logging" class="GuzzleHttp\Middleware">
-            <factory class="GuzzleHttp\Middleware" method="log" />
-
-            <argument type="service" id="plenty_connector.logger" />
-            <argument type="service" id="plentymarkets_adapter.http_client.logging.message_formatter" />
-            <argument type="constant">Psr\Log\LogLevel::DEBUG</argument>
-        </service>
-
-        <service id="plentymarkets_adapter.http_client.handler_stack" class="GuzzleHttp\HandlerStack" parent="plentymarkets_adapter.http_client.default_handler_stack">
-            <call method="push">
-                <argument type="service" id="plentymarkets_adapter.http_client.middleware.logging" />
-            </call>
-        </service>
-
         <service id="plentymarkets_adapter.http_client" class="GuzzleHttp\Client">
-            <argument type="collection">
-                <argument key="handler" type="service" id="plentymarkets_adapter.http_client.handler_stack" />
-            </argument>
+            <factory service="guzzle_http_client_factory" method="createClient" />
         </service>
 
         <!-- Client -->

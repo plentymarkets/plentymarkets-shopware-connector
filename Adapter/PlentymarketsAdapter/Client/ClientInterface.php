@@ -21,24 +21,19 @@ interface ClientInterface
      * @param array $options
      *
      * @return array
-     *
-     * @throws InvalidCredentialsException
-     * @throws InvalidResponseException
      */
     public function request($method, $path, array $criteria = [], $limit = null, $offset = null, array $options = []);
 
     /**
-     * @param $path
+     * @param string $path
      * @param array $criteria
      *
      * @return Iterator
-     *
-     * @throws UnexpectedValueException
      */
     public function getIterator($path, array $criteria = []);
 
     /**
-     * @param $path
+     * @param string $path
      * @param array $criteria
      *
      * @return int
