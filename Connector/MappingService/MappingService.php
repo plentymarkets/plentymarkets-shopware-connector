@@ -157,7 +157,10 @@ class MappingService implements MappingServiceInterface
                 $nameb = $b->getIdentifier();
             }
 
-            return strnatcmp($namea, $nameb);
+            $namea = trim($namea);
+            $nameb = trim($nameb);
+
+            return strnatcasecmp($namea, $nameb);
         });
 
         return $objects;
