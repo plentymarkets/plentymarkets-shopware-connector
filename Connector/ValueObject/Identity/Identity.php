@@ -48,9 +48,13 @@ class Identity implements IdentityInterface
     private function __construct($objectIdentifier, $objectType, $adapterIdentifier, $adapterName)
     {
         Assertion::string($objectIdentifier);
+        Assertion::notBlank($objectIdentifier);
         Assertion::string($objectType);
+        Assertion::notBlank($objectType);
         Assertion::string($adapterIdentifier);
+        Assertion::notBlank($adapterIdentifier);
         Assertion::string($adapterName);
+        Assertion::notBlank($adapterName);
 
         $this->objectIdentifier = $objectIdentifier;
         $this->objectType = $objectType;
