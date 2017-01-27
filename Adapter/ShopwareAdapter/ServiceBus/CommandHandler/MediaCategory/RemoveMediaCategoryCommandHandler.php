@@ -60,11 +60,7 @@ class RemoveMediaCategoryCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param CommandInterface $command
-     *
-     * @throws \Shopware\Components\Api\Exception\ValidationException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * {@inheritdoc}
      */
     public function handle(CommandInterface $command)
     {
@@ -80,7 +76,9 @@ class RemoveMediaCategoryCommandHandler implements CommandHandlerInterface
         ]);
 
         if (null === $identity) {
-            return;
+            $this->logger->notice('no matching identity found', ['command' => $command]);
+
+            return false;
         }
 
         $repository = $this->entityManager->getRepository(Album::class);
@@ -95,5 +93,7 @@ class RemoveMediaCategoryCommandHandler implements CommandHandlerInterface
         }
 
         $this->identityService->remove($identity);
+
+        return true;
     }
 }

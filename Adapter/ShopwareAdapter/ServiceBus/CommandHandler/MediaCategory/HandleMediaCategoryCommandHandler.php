@@ -46,19 +46,12 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
      */
     public function supports(CommandInterface $command)
     {
-        return
-            $command instanceof HandleMediaCategoryCommand &&
+        return $command instanceof HandleMediaCategoryCommand &&
             $command->getAdapterName() === ShopwareAdapter::NAME;
     }
 
     /**
-     * @param CommandInterface $command
-     *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\ValidationException
-     * @throws \Exception
+     * {@inheritdoc}
      */
     public function handle(CommandInterface $command)
     {
@@ -110,7 +103,7 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
         if (null === $identity) {
             $this->createNewAlbum($mediaCategory, $parent, $parentSettings);
 
-            return;
+            return true;
         }
 
         $album = $albumRepository->find($identity->getAdapterIdentifier());
@@ -123,6 +116,8 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
         } else {
             $this->createNewAlbum($mediaCategory, $parent, $parentSettings);
         }
+
+        return true;
     }
 
     /**

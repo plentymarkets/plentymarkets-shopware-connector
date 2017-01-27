@@ -46,18 +46,12 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
      */
     public function supports(CommandInterface $command)
     {
-        return
-            $command instanceof HandleManufacturerCommand &&
+        return $command instanceof HandleManufacturerCommand &&
             $command->getAdapterName() === ShopwareAdapter::NAME;
     }
 
     /**
-     * @param CommandInterface $command
-     *
-     * @throws \Shopware\Components\Api\Exception\ValidationException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \PlentyConnector\Connector\IdentityService\Exception\NotFoundException
+     * {@inheritdoc}
      */
     public function handle(CommandInterface $command)
     {
@@ -122,6 +116,8 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
         } else {
             $this->resource->update($identity->getAdapterIdentifier(), $params);
         }
+
+        return true;
     }
 
     /**

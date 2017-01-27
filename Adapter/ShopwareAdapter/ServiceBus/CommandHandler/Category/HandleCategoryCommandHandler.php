@@ -15,6 +15,7 @@ use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentyConnector\Connector\TransferObject\Media\Media;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentyConnector\Connector\Translation\TranslationHelperInterface;
+use Psr\Log\LoggerInterface;
 use Shopware\Components\Api\Resource\Category as CategoryResource;
 use Shopware\Models\Category\Category as CategoryModel;
 use Shopware\Models\Category\Repository as CategoryRepository;
@@ -53,24 +54,32 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     private $shopRepository;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * HandleCategoryCommandHandler constructor.
      *
      * @param CategoryResource $resource
      * @param IdentityServiceInterface $identityService
      * @param TranslationHelperInterface $translationHelper
      * @param EntityManagerInterface $entityManager
+     * @param LoggerInterface $logger
      */
     public function __construct(
         CategoryResource $resource,
         IdentityServiceInterface $identityService,
         TranslationHelperInterface $translationHelper,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        LoggerInterface $logger
     ) {
         $this->resource = $resource;
         $this->identityService = $identityService;
         $this->translationHelper = $translationHelper;
         $this->categoryRepository = $entityManager->getRepository(CategoryModel::class);
         $this->shopRepository = $entityManager->getRepository(ShopModel::class);
+        $this->logger = $logger;
     }
 
     /**
@@ -78,8 +87,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
      */
     public function supports(CommandInterface $command)
     {
-        return
-            $command instanceof HandleCategoryCommand &&
+        return $command instanceof HandleCategoryCommand &&
             $command->getAdapterName() === ShopwareAdapter::NAME;
     }
 
@@ -101,7 +109,9 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         ]);
 
         if (null === $shopIdentity) {
-            throw new NotFoundException();
+            $this->logger->notice('no matching shop found', ['command' => $command]);
+
+            return false;
         }
 
         $shop = $this->shopRepository->find($shopIdentity->getAdapterIdentifier());
@@ -189,6 +199,8 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         } else {
             $this->resource->update($categoryIdentity->getAdapterIdentifier(), $parans);
         }
+
+        return true;
     }
 
     /**

@@ -47,20 +47,12 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
      */
     public function supports(CommandInterface $command)
     {
-        return
-            $command instanceof HandleMediaCommand &&
+        return $command instanceof HandleMediaCommand &&
             $command->getAdapterName() === ShopwareAdapter::NAME;
     }
 
     /**
-     * @param CommandInterface $command
-     *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\ValidationException
-     * @throws \Exception
-     * @throws \PlentyConnector\Connector\IdentityService\Exception\NotFoundException
+     * {@inheritdoc}
      */
     public function handle(CommandInterface $command)
     {
@@ -110,5 +102,7 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
 
             $this->resource->update($identity->getAdapterIdentifier(), $params);
         }
+
+        return true;
     }
 }
