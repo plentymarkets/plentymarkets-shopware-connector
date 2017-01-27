@@ -2,20 +2,21 @@
 
 namespace PlentyConnector\Connector\ValueObject\Attribute;
 
+use PlentyConnector\Connector\TransferObject\TranslateableInterface;
 use PlentyConnector\Connector\ValueObject\ValueObjectInterface;
 
 /**
  * Interface AttributeInterface
  */
-interface AttributeInterface extends ValueObjectInterface
+interface AttributeInterface extends ValueObjectInterface, TranslateableInterface
 {
     /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getKey();
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getValue();
 }
