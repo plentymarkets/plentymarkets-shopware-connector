@@ -38,8 +38,11 @@ class IdentityService implements IdentityServiceInterface
     public function findOneOrCreate($adapterIdentifier, $adapterName, $objectType)
     {
         Assertion::string($adapterIdentifier);
+        Assertion::notBlank($adapterIdentifier);
         Assertion::string($adapterName);
+        Assertion::notBlank($adapterName);
         Assertion::string($objectType);
+        Assertion::notBlank($objectType);
 
         $identity = $this->findOneBy([
             'objectType' => $objectType,
@@ -67,8 +70,11 @@ class IdentityService implements IdentityServiceInterface
     public function findOneOrThrow($adapterIdentifier, $adapterName, $objectType)
     {
         Assertion::string($adapterIdentifier);
+        Assertion::notBlank($adapterIdentifier);
         Assertion::string($adapterName);
+        Assertion::notBlank($adapterName);
         Assertion::string($objectType);
+        Assertion::notBlank($objectType);
 
         $identity = $this->findOneBy([
             'objectType' => $objectType,
