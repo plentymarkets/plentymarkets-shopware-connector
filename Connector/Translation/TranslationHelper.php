@@ -12,6 +12,28 @@ use ReflectionClass;
 class TranslationHelper implements TranslationHelperInterface
 {
     /**
+     * @param TranslateableInterface $object
+     *
+     * @return array
+     */
+    public function getLanguageIdentifiers(TranslateableInterface $object)
+    {
+        $languages = [];
+
+        foreach ($object->getTranslations() as $translation) {
+            $languageIdentifier = $translation->getLanguageIdentifier();
+
+            if (isset($languages[$languageIdentifier])) {
+                continue;
+            }
+
+            $languages[$languageIdentifier] = $languageIdentifier;
+        }
+
+        return $languages;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function translate($languageIdentifier, TranslateableInterface $object)
