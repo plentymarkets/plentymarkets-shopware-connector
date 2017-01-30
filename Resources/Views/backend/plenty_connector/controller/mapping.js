@@ -107,6 +107,9 @@ Ext.define('Shopware.apps.PlentyConnector.controller.Mapping', {
         view.store.sync({
             failure: function (batch, options) {
                 Ext.Msg.alert("Fehler", batch.proxy.getReader().jsonData.message);
+            },
+            success: function (batch, options) {
+                Shopware.Notification.createGrowlMessage("Erfolgreich", "Mapping wurde gespeichert.");
             }
         });
     }
