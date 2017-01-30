@@ -32,6 +32,13 @@ Ext.define('Shopware.apps.PlentyConnector.view.mapping.Tab', {
                 e.record.beginEdit();
                 e.record.set('originName', mappedOrigin.name);
                 e.record.set('originIdentifier', mappedOrigin.identifier);
+                e.record.set('remove', false);
+                e.record.endEdit();
+            } else {
+                e.record.beginEdit();
+                e.record.set('originName', undefined);
+                e.record.set('originIdentifier', undefined);
+                e.record.set('remove', true);
                 e.record.endEdit();
             }
         });

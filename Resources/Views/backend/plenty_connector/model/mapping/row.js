@@ -33,10 +33,14 @@ Ext.define('Shopware.apps.PlentyConnector.model.mapping.Row', {
         {
             name: 'objectType',
             type: 'string'
+        },
+        {
+            name: 'remove',
+            type: 'boolean'
         }
     ],
 
-    idProperty: 'identifier',
+    idProperty: 'name',
 
     proxy: {
         type: 'ajax',

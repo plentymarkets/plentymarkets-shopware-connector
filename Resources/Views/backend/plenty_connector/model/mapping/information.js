@@ -33,7 +33,7 @@ Ext.define('Shopware.apps.PlentyConnector.model.mapping.Information', {
         api: {
             read: '{url action=getMappingInformation}'
         },
-        timeout: 45000,
+        timeout: 300000,
         reader: {
             type: 'json',
             root: 'data',

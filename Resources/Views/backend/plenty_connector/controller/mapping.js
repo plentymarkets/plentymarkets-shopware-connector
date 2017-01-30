@@ -25,7 +25,7 @@ Ext.define('Shopware.apps.PlentyConnector.controller.Mapping', {
             return;
         }
 
-        view.setLoading(true);
+        view.setLoading("Loading... (this can take some time)");
 
         if (view.isBuilt) {
             view.removeAll();
@@ -58,7 +58,8 @@ Ext.define('Shopware.apps.PlentyConnector.controller.Mapping', {
                         originIdentifier: origId,
                         originName: origName,
                         originAdapterName: mapping.originAdapterName,
-                        objectType: objectType
+                        objectType: objectType,
+                        remove: false
                     };
                 });
 
@@ -106,6 +107,9 @@ Ext.define('Shopware.apps.PlentyConnector.controller.Mapping', {
         view.store.sync({
             failure: function (batch, options) {
                 Ext.Msg.alert("Fehler", batch.proxy.getReader().jsonData.message);
+            },
+            success: function (batch, options) {
+                Shopware.Notification.createGrowlMessage("Erfolgreich", "Mapping wurde gespeichert.");
             }
         });
     }
