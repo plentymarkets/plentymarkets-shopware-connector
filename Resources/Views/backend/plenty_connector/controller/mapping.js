@@ -25,7 +25,7 @@ Ext.define('Shopware.apps.PlentyConnector.controller.Mapping', {
             return;
         }
 
-        view.setLoading(true);
+        view.setLoading("Loading... (this can take some time)");
 
         if (view.isBuilt) {
             view.removeAll();
