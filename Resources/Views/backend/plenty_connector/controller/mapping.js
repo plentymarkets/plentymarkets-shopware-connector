@@ -58,7 +58,8 @@ Ext.define('Shopware.apps.PlentyConnector.controller.Mapping', {
                         originIdentifier: origId,
                         originName: origName,
                         originAdapterName: mapping.originAdapterName,
-                        objectType: objectType
+                        objectType: objectType,
+                        remove: false
                     };
                 });
 
