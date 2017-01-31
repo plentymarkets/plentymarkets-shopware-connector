@@ -50,6 +50,7 @@ class OrderItem implements OrderItemInterface
      * @param $variationId
      * @param $name
      * @param $price
+     * @throws \Assert\AssertionFailedException
      */
     public function __construct($identifier, $quantity, $productId, $variationId, $name, $price)
     {
@@ -96,6 +97,46 @@ class OrderItem implements OrderItemInterface
      */
     public function getIdentifier()
     {
-        // TODO: Implement getIdentifier() method.
+        return $this->identifier;
+    }
+
+    /**
+     * @return int
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProductId()
+    {
+        return $this->productId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVariationId()
+    {
+        return $this->variationId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPrice()
+    {
+        return $this->price;
     }
 }
