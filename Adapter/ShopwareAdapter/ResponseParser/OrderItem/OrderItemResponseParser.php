@@ -67,7 +67,7 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
             Product::TYPE
         );
         $variationIdentity = $this->identityService->findOneOrThrow(
-            $variantId,
+            (string)$variantId,
             ShopwareAdapter::NAME,
             Variation::TYPE
         );

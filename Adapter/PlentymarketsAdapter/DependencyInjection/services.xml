@@ -244,5 +244,15 @@
 
             <tag name="plenty_connector.query_handler" />
         </service>
+
+        <!-- Order Command Handlers -->
+
+        <service id="plentymarkets_adapter.command_handler.handle_order" class="PlentymarketsAdapter\ServiceBus\CommandHandler\Order\HandleOrderCommandHandler">
+            <argument type="service" id="plentmarkets_adapter.client" />
+            <argument type="service" id="plenty_connector.identity_service" />
+
+            <tag name="plenty_connector.command_handler" />
+        </service>
+
     </services>
 </container>
