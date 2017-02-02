@@ -1,6 +1,6 @@
 <?php
 
-namespace PlentyConnector\tests\Unit\ServiceBus\CommandGenerator;
+namespace PlentyConnector\tests\Unit\ServiceBus\CommandFactory;
 
 use PHPUnit\Framework\TestCase;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
