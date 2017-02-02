@@ -46,10 +46,12 @@ class Definition implements DefinitionInterface
     public function __construct($originAdapterName, $destinationAdapterName, $objectType, $priority = null)
     {
         Assertion::string($originAdapterName);
+        Assertion::notBlank($originAdapterName);
         Assertion::string($destinationAdapterName);
+        Assertion::notBlank($destinationAdapterName);
         Assertion::string($objectType);
+        Assertion::notBlank($objectType);
         Assertion::nullOrInteger($priority);
-        Assertion::nullOrGreaterThan($priority, 0);
 
         $this->originAdapterName = $originAdapterName;
         $this->destinationAdapterName = $destinationAdapterName;

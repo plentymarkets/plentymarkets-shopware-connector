@@ -31,6 +31,7 @@ class Country implements CountryInterface
     {
         Assertion::uuid($identifier);
         Assertion::string($name);
+        Assertion::notBlank($name);
 
         $this->identifier = $identifier;
         $this->name = $name;

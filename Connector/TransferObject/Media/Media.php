@@ -3,6 +3,8 @@
 namespace PlentyConnector\Connector\TransferObject\Media;
 
 use Assert\Assertion;
+use PlentyConnector\Connector\ValueObject\Attribute\AttributeInterface;
+use PlentyConnector\Connector\ValueObject\Translation\TranslationInterface;
 
 /**
  * Class Media
@@ -42,12 +44,12 @@ class Media implements MediaInterface
     private $alternateName;
 
     /**
-     * @var array
+     * @var TranslationInterface[]
      */
     private $translations;
 
     /**
-     * @var array
+     * @var AttributeInterface[]
      */
     private $attributes;
 
@@ -60,8 +62,8 @@ class Media implements MediaInterface
      * @param string $name
      * @param string $alternateName
      * @param string|null $hash
-     * @param array $translations
-     * @param array $attributes
+     * @param TranslationInterface[] $translations
+     * @param AttributeInterface[] $attributes
      */
     public function __construct(
         $identifier,

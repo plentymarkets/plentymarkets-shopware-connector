@@ -3,8 +3,8 @@
 namespace PlentyConnector\Connector\TransferObject\Category;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\ValueObject\Translation\Translation;
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
+use PlentyConnector\Connector\ValueObject\Attribute\AttributeInterface;
+use PlentyConnector\Connector\ValueObject\Translation\TranslationInterface;
 
 /**
  * Class Category
@@ -74,12 +74,12 @@ class Category implements CategoryInterface
     private $metaRobots;
 
     /**
-     * @var Translation[]
+     * @var TranslationInterface[]
      */
     private $translations;
 
     /**
-     * @var Attribute[]
+     * @var AttributeInterface[]
      */
     private $attributes;
 
@@ -103,9 +103,8 @@ class Category implements CategoryInterface
      * @param string $metaKeywords
      * @param string $metaRobots
      *
-     * @param array $translations
-     * @param array $attributes
-     *
+     * @param TranslationInterface[] $translations
+     * @param AttributeInterface[] $attributes
      */
     public function __construct(
         $identifier,
@@ -126,6 +125,7 @@ class Category implements CategoryInterface
         Assertion::uuid($identifier);
 
         Assertion::string($name);
+        Assertion::notBlank($name);
 
         Assertion::nullOrUuid($parentIdentifier);
         Assertion::uuid($shopIdentifier);
@@ -148,8 +148,8 @@ class Category implements CategoryInterface
             'NOINDEX, NOFOLLOW',
         ]);
 
-        Assertion::allIsInstanceOf($translations, Translation::class);
-        Assertion::allIsInstanceOf($attributes, Attribute::class);
+        Assertion::allIsInstanceOf($translations, TranslationInterface::class);
+        Assertion::allIsInstanceOf($attributes, AttributeInterface::class);
 
         $this->identifier = $identifier;
 

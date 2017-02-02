@@ -10,8 +10,6 @@ use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
  */
 class Mapping implements MappingInterface
 {
-    const TYPE = 'Mapping';
-
     /**
      * origin adapter name.
      *
@@ -64,20 +62,13 @@ class Mapping implements MappingInterface
         Assertion::allIsInstanceOf($destinationTransferObjects, TransferObjectInterface::class);
 
         Assertion::string($objectType);
+        Assertion::notBlank($objectType);
 
         $this->originAdapterName = $originAdapterName;
         $this->originTransferObjects = $originTransferObjects;
         $this->destinationAdapterName = $destinationAdapterName;
         $this->destinationTransferObjects = $destinationTransferObjects;
         $this->objectType = $objectType;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getType()
-    {
-        return self::TYPE;
     }
 
     /**

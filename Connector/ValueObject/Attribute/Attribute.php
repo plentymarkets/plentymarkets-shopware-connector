@@ -3,7 +3,7 @@
 namespace PlentyConnector\Connector\ValueObject\Attribute;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\ValueObject\Translation\Translation;
+use PlentyConnector\Connector\ValueObject\Translation\TranslationInterface;
 
 /**
  * Class Attribute
@@ -21,7 +21,7 @@ class Attribute implements AttributeInterface
     private $value;
 
     /**
-     * @var array
+     * @var TranslationInterface[]
      */
     private $translations;
 
@@ -30,13 +30,14 @@ class Attribute implements AttributeInterface
      *
      * @param string $key
      * @param string $value
-     * @param array $translations
+     * @param TranslationInterface[] $translations
      */
     public function __construct($key, $value, array $translations = [])
     {
         Assertion::string($key);
+        Assertion::notBlank($key);
         Assertion::string($value);
-        Assertion::allIsInstanceOf($translations, Translation::class);
+        Assertion::allIsInstanceOf($translations, TranslationInterface::class);
 
         $this->key = $key;
         $this->value = $value;
@@ -51,11 +52,13 @@ class Attribute implements AttributeInterface
         Assertion::allInArray(array_keys($params), [
             'key',
             'value',
+            'translations'
         ]);
 
         return new self(
             $params['key'],
-            $params['value']
+            $params['value'],
+            $params['translations']
         );
     }
 

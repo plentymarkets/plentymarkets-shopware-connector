@@ -45,6 +45,7 @@ class Manufacturer implements ManufacturerInterface
     {
         Assertion::uuid($identifier);
         Assertion::string($name);
+        Assertion::notBlank($name);
         Assertion::nullOrUuid($logoIdentifier);
         Assertion::nullOrUrl($link);
 

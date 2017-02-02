@@ -35,6 +35,7 @@ class Translation implements TranslationInterface
     {
         Assertion::uuid($languageIdentifier);
         Assertion::string($property);
+        Assertion::notBlank($property);
         Assertion::notNull($value);
 
         $this->languageIdentifier = $languageIdentifier;
