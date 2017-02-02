@@ -37,9 +37,12 @@ class UnitResponseParser implements UnitResponseParserInterface
             Unit::TYPE
         );
 
+        // use first unit name as name
+        $name = implode(' / ', array_column($entry['names'], 'name'));
+
         return Unit::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => $entry['name'],
+            'name' => $name,
         ]);
     }
 }
