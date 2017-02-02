@@ -34,10 +34,6 @@ Ext.define('Shopware.apps.PlentyConnector.controller.Mapping', {
 
         var mappingInformationStore = Ext.create('Shopware.apps.PlentyConnector.store.mapping.Information');
 
-        mappingInformationStore.proxy.extraParams = {
-            fresh: !!fresh
-        };
-
         mappingInformationStore.load(function (records, operation, success) {
             var currentTab = 0;
 
