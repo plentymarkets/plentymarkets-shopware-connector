@@ -3,7 +3,6 @@
 namespace PlentyConnector\Connector\MappingService;
 
 use Assert\Assertion;
-use Doctrine\Common\Cache\Cache;
 use PlentyConnector\Connector\ServiceBus\QueryFactory\Exception\MissingQueryException;
 use PlentyConnector\Connector\ServiceBus\QueryFactory\Exception\MissingQueryGeneratorException;
 use PlentyConnector\Connector\ServiceBus\QueryFactory\QueryFactoryInterface;
@@ -34,35 +33,17 @@ class MappingService implements MappingServiceInterface
     private $serviceBus;
 
     /**
-     * @var Cache
-     */
-    private $cache;
-
-    /**
-     * @var string
-     */
-    private $cacheKey = 'PlentyConnector_MappingInformations';
-
-    /**
-     * @var string
-     */
-    private $cacheLifetime = 86400;
-
-    /**
      * MappingService constructor.
      *
      * @param QueryFactoryInterface $queryFactory
      * @param ServiceBusInterface $serviceBus
-     * @param Cache $cache
      */
     public function __construct(
         QueryFactoryInterface $queryFactory,
-        ServiceBusInterface $serviceBus,
-        Cache $cache
+        ServiceBusInterface $serviceBus
     ) {
         $this->queryFactory = $queryFactory;
         $this->serviceBus = $serviceBus;
-        $this->cache = $cache;
     }
 
     /**
@@ -76,14 +57,9 @@ class MappingService implements MappingServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getMappingInformation($objectType = null, $fresh = false)
+    public function getMappingInformation($objectType = null)
     {
         Assertion::nullOrString($objectType);
-        Assertion::boolean($fresh);
-
-        if (!$fresh && $this->cache->contains($this->cacheKey)) {
-            return $this->cache->fetch($this->cacheKey);
-        }
 
         $result = [];
         $definitions = $this->getDefinitions($objectType);
@@ -97,8 +73,6 @@ class MappingService implements MappingServiceInterface
                 'objectType' => $definition->getObjectType()
             ]);
         });
-
-        $this->cache->save($this->cacheKey, $result, $this->cacheLifetime);
 
         return $result;
     }

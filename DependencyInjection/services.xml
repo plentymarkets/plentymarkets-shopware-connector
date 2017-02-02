@@ -62,11 +62,7 @@
             <argument type="service" id="service_container" />
         </service>
 
-        <!-- Cache -->
-
-        <service id="plenty_connector.cache" class="Doctrine\Common\Cache\Cache">
-            <factory service="ModelConfig" method="getMetadataCacheImpl" />
-        </service>
+        <!-- Translation Helper -->
 
         <service id="plenty_connector.translation_helper" class="PlentyConnector\Connector\Translation\TranslationHelper" />
 
@@ -101,6 +97,7 @@
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.category%</argument>
+            <argument>80</argument>
 
             <tag name="plenty_connector.connector_definition" />
         </service>
@@ -118,6 +115,16 @@
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.manufacturer%</argument>
+            <argument>90</argument>
+
+            <tag name="plenty_connector.connector_definition" />
+        </service>
+
+        <service id="plenty_connector.connector_definition.product" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
+            <argument>%plenty_connector.adapter.plentymarkets%</argument>
+            <argument>%plenty_connector.adapter.shopware%</argument>
+            <argument>%plenty_connector.transfer_object.product%</argument>
+            <argument>70</argument>
 
             <tag name="plenty_connector.connector_definition" />
         </service>
@@ -126,6 +133,7 @@
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.transfer_object.order%</argument>
+            <argument>60</argument>
 
             <tag name="plenty_connector.connector_definition" />
         </service>
@@ -155,7 +163,6 @@
         <service id="plenty_connector.mapping_service" class="PlentyConnector\Connector\MappingService\MappingService">
             <argument type="service" id="plenty_connector.query_factory" />
             <argument type="service" id="plenty_connector.service_bus" />
-            <argument type="service" id="plenty_connector.cache" />
         </service>
 
         <!-- Mapping definitions -->
@@ -271,6 +278,13 @@
             <tag name="console.command" />
         </service>
 
+        <service id="plenty_connector.console.import_products_command" class="PlentyConnector\Console\Command\ImportProductsCommand">
+            <argument type="service" id="plenty_connector.connector" />
+            <argument type="service" id="plenty_connector.logger" />
+
+            <tag name="console.command" />
+        </service>
+
         <service id="plenty_connector.console.test_command" class="PlentyConnector\Console\Command\TestCommand">
             <argument type="service" id="plentmarkets_adapter.client" />
 
@@ -341,6 +355,10 @@
             <tag name="plenty_connector.query_generator" />
         </service>
 
+        <service id="plenty_connector.query_generator.product" class="PlentyConnector\Connector\ServiceBus\QueryGenerator\Product\ProductQueryGenerator">
+            <tag name="plenty_connector.query_generator" />
+        </service>
+
         <service id="plenty_connector.query_generator.shipping_profile" class="PlentyConnector\Connector\ServiceBus\QueryGenerator\ShippingProfile\ShippingProfileQueryGenerator">
             <tag name="plenty_connector.query_generator" />
         </service>
@@ -376,6 +394,10 @@
         </service>
 
         <service id="plenty_connector.command_generator.media_category" class="PlentyConnector\Connector\ServiceBus\CommandGenerator\MediaCategory\MediaCategoryCommandGenerator">
+            <tag name="plenty_connector.command_generator" />
+        </service>
+
+        <service id="plenty_connector.command_generator.product" class="PlentyConnector\Connector\ServiceBus\CommandGenerator\Product\ProductCommandGenerator">
             <tag name="plenty_connector.command_generator" />
         </service>
 

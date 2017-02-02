@@ -6,7 +6,6 @@ use PlentyConnector\Connector\IdentityService\IdentityService;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\MappingService\MappingServiceInterface;
 use PlentyConnector\Connector\ServiceBus\QueryType;
-use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\ValueObject\Mapping\MappingInterface;
 use PlentyConnector\Connector\TransferObject\Product\Product;
@@ -118,15 +117,13 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
      */
     public function getMappingInformationAction()
     {
-        $fresh = $this->request->get('fresh') === 'true';
-
         /**
          * @var MappingServiceInterface $mappingService
          */
         $mappingService = Shopware()->Container()->get('plenty_connector.mapping_service');
 
         try {
-            $mappingInformation = $mappingService->getMappingInformation(null, $fresh);
+            $mappingInformation = $mappingService->getMappingInformation(null);
         } catch (Exception $exception) {
             $this->View()->assign([
                 'success' => false,
@@ -269,7 +266,8 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
                 'objectIdentifier' => $update['originIdentifier'],
                 'adapterName' => $update['adapterName'],
             ]);
-            if ($existingDestinationIdentities != null && count($existingDestinationIdentities) > 0) {
+
+            if (null !== $existingDestinationIdentities && count($existingDestinationIdentities) > 0) {
                 return true;
             }
         }
