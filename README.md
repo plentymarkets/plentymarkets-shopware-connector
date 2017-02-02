@@ -5,6 +5,19 @@
 - **License**: GPL v3
 - **Github Repository**: <https://github.com/plentymarkets/plentymarkets-shopware-connector>
 
+Die arvatis media GmbH entwickelt als exklusiver Partner von plentymarkets den neuen Shopware-Connector. Alle Details zur Entwicklung  finden Sie im [Blog von arvatis][8] oder [direkt bei plentymarkets][9].
+
+   [8]: http://www.arvatis.com/blog/allgemein/der-neue-plenty-shopware-connector-entwickelt-von-der-arvatis-media-gmbh/
+   [9]: https://www.plentymarkets.eu/blog/Shopware-Connector-f-uuml-r-plenty-7-ndash-arvatis-uuml-bernimmt-Weiterentwicklung/b-1707/
+
+Darüber hinaus hat die arvatis media den [aktuellen Connector bereits Shopware 5.2 kompatibel][10] weiterentwickelt, sodass alle plentymarkets-Nutzer auf die neuen Shopware Features, wie beispielsweise verbesserte Einkaufswelten, zurückgreifen können.
+
+   [10]: http://www.arvatis.com/blog/allgemein/plenty-shopware-connector-version-1-9-1/
+
+Der Support für den Connector erfolgt ebenfalls durch die arvatis im plentymarkets-Forum [im Bereich Shopware-Connector][11]. 
+
+   [11]: https://forum.plentymarkets.com/c/shopware-connector
+
 Verbinden Sie die plentymarkets Komplettlösung für Ihren Onlinehandel mit Fokus auf Warenwirtschaft und Multi-Channel-Vertrieb bis zum Fulfillment mit den Frontendlösungen für Ihr individuelles Shopdesign von Shopware. Installieren Sie dafür das kostenlose Shopware-Plugin für Ihr plentymarkets-System und nutzen Sie beide Systeme mit allen Funktionen parallel. Nach einem initialen Export und Import beider Systeme werden alle Daten, je nach Vorkommen und Änderung im jeweiligen System, permanent über die SOAP-Schnittstelle synchronisiert. So sind die Daten in beiden Systemen immer auf dem neuesten Stand.
 
 ## So geht’s...
@@ -15,7 +28,7 @@ Das Plugin steht im [Shopware Community Store][1] direkt zum kostenlosen Downloa
 
 ### Systemvoraussetzungen
 
-  * mindestens plentymarkets-Version 5.0
+  * plentymarkets-Version 5.0 oder 6.0
   * mindestens Shopware-Version 5.2
 
 ### Technische Voraussetzungen
@@ -33,12 +46,6 @@ Sind diese Voraussetzungen nicht erfüllt, ist ein Betrieb des Connectors unmög
 Möchten Sie die Einrichtung und Verwaltung des Shopware-Connectors zu Ihrem plentymarkets-System dennoch eigenverantwortlich übernehmen, beachten Sie bitte neben den oben genannten Voraussetzungen auch unbedingt die ausführliche Installationsanleitung mit Video-Guide im plentymarkets [Online-Handbuch][4]. 
 
    [4]: http://man.plentymarkets.eu/tools/shopware-connector/installation/#2-4
-
-Natürlich nimmt auch unser plentymarkets-Support gerne die Einrichtung für Sie vor. Die Dienstleistung erfolgt auf Basis einer minutengenauen Abrechnung (ca. 90 min) und kann ausschließlich ab dem Volumentarif Professional 1.500 in Anspruch genommen werden und steht nur für Kunden ab dem Silber-Segment zur Verfügung. Beachten Sie bitte, dass hier ausschließlich die Einrichtung über den Browser übernommen wird und keine Serverleistungen/-arbeiten erbracht werden. Buchen Sie die Einrichtung Ihres Plugins direkt über dieses [Auftragsformular][5]. Eine vor Ort Beratung und genaue Projektplanung ist ab einem plentymarkets Professional Gold-Tarif buchbar. 
-
-   [5]: https://www.plentymarkets.eu/tpl/download/plentymarkets_Auftrag_Erweiterungen-Shopware.pdf
-
-Bitte beachten Sie, dass es unserem Support nicht möglich ist, Bronze-Kunden bei Problemen mit dem Shopware-Connector zu unterstützen.
 
 ## Shopware-Partneragenturen
 

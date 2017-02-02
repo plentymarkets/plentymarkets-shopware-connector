@@ -72,14 +72,14 @@ class PlentymarketsExportContinuousController
 	}
 
 	/**
-	 * Runs an export for the given entity
+     * Runs an export for the given entity.
 	 *
 	 * @param string $entity
 	 */
 	public function run($entity)
 	{
 		$class = sprintf('PlentymarketsExportContinuousController%s', $entity);
-		$Controller = new $class;
+        $Controller = new $class();
 		$Controller->run();
 	}
 

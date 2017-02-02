@@ -69,6 +69,15 @@ class PlentymarketsImportEntityItemLinked
 	{
 		Shopware()->Db()->delete('s_articles_relationships', 'articleID = ' . $this->SHOPWARE_itemId);
 		Shopware()->Db()->delete('s_articles_similar', 'articleID = ' . $this->SHOPWARE_itemId);
+
+        // Allow plugins to change the data
+        Enlight()->Events()->notify(
+            'PlentyConnector_ImportEntityItemLinked_AfterPurge',
+            array(
+                'subject' => $this,
+                'id' => $this->SHOPWARE_itemId,
+            )
+        );
 	}
 
 	/**
@@ -98,36 +107,41 @@ class PlentymarketsImportEntityItemLinked
 		/** @var PlentySoapObject_GetLinkedItems $LinkedItem */
 		foreach ($this->LinkedItems->item as $LinkedItem)
 		{
-			// Get the id
-			try
-			{
-				$SHOWWARE_linkedItemId = PlentymarketsMappingController::getItemByPlentyID($LinkedItem->ItemID);
-			}
-			catch (PlentymarketsMappingExceptionNotExistant $E)
-			{
-				continue;
-			}
+        try {
+            $SHOWWARE_linkedItemId = PlentymarketsMappingController::getItemByPlentyID($LinkedItem->ItemID);
+        } catch (PlentymarketsMappingExceptionNotExistant $E) {
+            continue;
+        }
 
-			if ($LinkedItem->Relationship == 'Accessory')
-			{
-				$table = 's_articles_relationships';
-			}
-			else if ($LinkedItem->Relationship == 'Similar')
-			{
-				$table = 's_articles_similar';
-			}
-			else
-			{
-				continue;
-			}
+        $table = '';
 
-			Shopware()->Db()->insert(
-				$table,
-				array(
-					'articleID' => (integer) $this->SHOPWARE_itemId,
-					'relatedarticle' => (integer) $SHOWWARE_linkedItemId
-				)
-			);
+        if ($LinkedItem->Relationship === 'Accessory') {
+            $table = 's_articles_relationships';
+        } elseif ($LinkedItem->Relationship === 'Similar') {
+            $table = 's_articles_similar';
+        } else {
+            // Allow plugins to change the data
+            $table = Enlight()->Events()->filter(
+                'PlentyConnector_ImportEntityItemLinked_GetTable',
+                $table,
+                array(
+                    'subject' => $this,
+                    'item' => $LinkedItem
+                )
+            );
+
+            if (empty($table)) {
+                continue;
+            }
+        }
+
+        Shopware()->Db()->insert(
+            $table,
+            array(
+                'articleID' => (integer)$this->SHOPWARE_itemId,
+                'relatedarticle' => (integer)$SHOWWARE_linkedItemId,
+            )
+        );
 		}
 
 		$this->purgeViews();

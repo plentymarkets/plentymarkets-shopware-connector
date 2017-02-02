@@ -218,9 +218,9 @@ class PlentymarketsExportEntityOrder
 					$Object_OrderInfo->InfoDate = $this->getOrderTimestamp();
 					$Object_OrderHead->OrderInfos[] = $Object_OrderInfo;
 				}
-				
+
 				$PaymentInstances = $Customer->getPaymentInstances();
-				
+
                                 if ($PaymentInstances)
                                 {
                                         foreach ($PaymentInstances as $PaymentInstance)
@@ -233,16 +233,16 @@ class PlentymarketsExportEntityOrder
                                                         $Object_BankData->BankName = $PaymentInstance->getBankName();
                                                         $Object_BankData->IBAN = $PaymentInstance->getIban();
                                                         $Object_BankData->BIC = $PaymentInstance->getBic();
-                                                        
+
                                                         $Object_SetBankCreditCardData = new PlentySoapObject_SetBankCreditCardData();
                                                         $Object_SetBankCreditCardData->CustomerID = $this->PLENTY_customerID;
                                                         $Object_SetBankCreditCardData->BankData = $Object_BankData;
-                                                        
+
                                                         $Request_SetBankCreditCardData = new PlentySoapRequest_SetBankCreditCardData();
                                                         $Request_SetBankCreditCardData->CustomerData[] = $Object_SetBankCreditCardData;
-                                                        
+
                                                         $Response_SetBankCreditCardData = PlentymarketsSoapClient::getInstance()->SetBankCreditCardData($Request_SetBankCreditCardData);
-                                                        
+
                                                         if (!$Response_SetBankCreditCardData->Success)
                                                         {
                                                                 // Set the error end quit
@@ -342,20 +342,13 @@ class PlentymarketsExportEntityOrder
 				}
 			}
 
-			// Coupon
-			if ($Item->getMode() == 2)
-			{
-				$itemId = -1;
-				$rowType = 'Coupon';
-			}
-
-			// Additional coupon identifiers für 3rd party plugins
+			// Coupon and additional coupon identifiers für 3rd party plugins
 			$couponIdentifiers = PyConf()->get('OrderAdditionalCouponIdentifiers', '');
 			$couponIdentifiers = explode('|', $couponIdentifiers);
-			if (in_array($number, $couponIdentifiers))
+			if ($Item->getMode() == 2 or in_array($number, $couponIdentifiers))
 			{
-				$itemId = -1;
 				$rowType = 'Coupon';
+				$itemText = $Item->getArticleName() . ': ' . $Item->getArticleNumber();
 			}
 
 			// surcharge for method of payment
@@ -398,6 +391,11 @@ class PlentymarketsExportEntityOrder
 						break;
 				}
 			}
+			
+			if ($rowType != 'Default')
+			{
+				$itemId = -1;
+			}
 
 			if ($isOrderNet)
 			{
@@ -424,6 +422,16 @@ class PlentymarketsExportEntityOrder
 		}
 
 		$Request_AddOrders->Orders[] = $Object_Order;
+
+        // Allow plugins to change the data
+        $Request_AddOrders = Enlight()->Events()->filter(
+            'PlentyConnector_ExportEntityOrder_BeforeAddOrders',
+            $Request_AddOrders,
+            array(
+                'subject' => $this,
+                'order' => $this->Order,
+            )
+        );
 
 		// Do the request
 		$Response_AddOrders = PlentymarketsSoapClient::getInstance()->AddOrders($Request_AddOrders);

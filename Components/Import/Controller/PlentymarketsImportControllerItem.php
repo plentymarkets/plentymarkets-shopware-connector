@@ -76,14 +76,25 @@ class PlentymarketsImportControllerItem
 		$Request_GetItemsBase->GetTechnicalData = false;
 		$Request_GetItemsBase->StoreID = $storeId;
 		$Request_GetItemsBase->ItemID = $itemId;
-		
+
 		// get the main language of the shop
 	//$mainLang = array_values(PlentymarketsTranslation::getInstance()->getShopMainLanguage(PlentymarketsMappingController::getShopByPlentyID($storeId)));
-		// set the main language of the shop in soap request 
+		// set the main language of the shop in soap request
 	//$Request_GetItemsBase->Lang = PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($mainLang[0]['locale']);
 
 		$Request_GetItemsBase->Lang = 'de';
-		
+
+        // Allow plugins to change the data
+        $Request_GetItemsBase = Enlight()->Events()->filter(
+            'PlentyConnector_ImportControllerItem_AfterCreateGetItemBaseRequest',
+            $Request_GetItemsBase,
+            array(
+                'subject' => $this,
+                'itemid' => $itemId,
+                'storeid' => $storeId,
+            )
+        );
+
 		// Do the request
 		$Response_GetItemsBase = PlentymarketsSoapClient::getInstance()->GetItemsBase($Request_GetItemsBase);
 
@@ -104,17 +115,31 @@ class PlentymarketsImportControllerItem
 		//
 		$ItemBase = $Response_GetItemsBase->ItemsBase->item[0];
 
-		// Skip bundles
-		if ($ItemBase->BundleType == 'bundle' && PlentymarketsConfig::getInstance()->getItemBundleHeadActionID(IMPORT_ITEM_BUNDLE_HEAD_NO) == IMPORT_ITEM_BUNDLE_HEAD_NO)
-		{
-			PlentymarketsLogger::getInstance()->message('Sync:Item', 'The item »' . $ItemBase->Texts->Name . '« will be skipped (bundle)');
-			return;
-		}
-		
+        // Skip bundles
+        $skipBundles = PlentymarketsConfig::getInstance()->getItemBundleHeadActionID(IMPORT_ITEM_BUNDLE_HEAD_NO) == IMPORT_ITEM_BUNDLE_HEAD_NO;
+
+        // Allow plugins to change the data
+        $skipBundles = Shopware()->Events()->filter(
+            'PlentyConnector_ImportControllerItem_FilterSkipBundles',
+            $skipBundles,
+            [
+                'subject' => $this,
+                'itemid' => $itemId,
+                'storeid' => $storeId,
+                'itembase' => $ItemBase,
+            ]
+        );
+
+        if ($ItemBase->BundleType === 'bundle' && $skipBundles) {
+            PlentymarketsLogger::getInstance()->message('Sync:Item', 'The item »' . $ItemBase->Texts->Name . '« will be skipped (bundle)');
+
+            return;
+        }
+
 		// get the item texts in all active languages
 		$itemTexts = array();
 		$shopId = PlentymarketsMappingController::getShopByPlentyID($storeId);
-		
+
 		//if this is a main shop , get the item texts translation for its main language and its shop languages
 		if(PlentymarketsTranslation::isMainShop($shopId))
 		{
@@ -142,7 +167,7 @@ class PlentymarketsImportControllerItem
 					$itemText['locale'] = $language['locale'];
 
 					// if mainShopId == null, then it is the main shop and no language shop
-					// each language shop has a mainShopId 
+					// each language shop has a mainShopId
 					if(!is_null($language['mainShopId']))
 					{
 						$itemText['languageShopId'] = PlentymarketsTranslation::getLanguageShopID($localeId, $language['mainShopId']);
@@ -159,12 +184,12 @@ class PlentymarketsImportControllerItem
 				}
 			}
 		}
-			 		
+
 		try
 		{
 			$shopId = PlentymarketsMappingController::getShopByPlentyID($storeId);
 			$Shop = Shopware()->Models()->find('Shopware\Models\Shop\Shop', $shopId);
-			
+
 			$Importuer = new PlentymarketsImportEntityItem($ItemBase, $Shop);
 
 			// The item has already been updated
@@ -176,9 +201,9 @@ class PlentymarketsImportControllerItem
 				//if this is a main shop , import the translation for its main language and its shop languages
 				if(PlentymarketsTranslation::isMainShop($shopId))
 				{
-					if (!empty($itemTexts)) 
+					if (!empty($itemTexts))
 					{
-						// Do the import for item texts translation 
+						// Do the import for item texts translation
 						$Importuer->saveItemTextsTranslation($itemTexts);
 					}
 
@@ -197,14 +222,14 @@ class PlentymarketsImportControllerItem
 				{
 					if (!empty($itemTexts))
 					{
-						// Do the import for item texts translation 
+						// Do the import for item texts translation
 						$Importuer->saveItemTextsTranslation($itemTexts);
 					}
-									
+
 					// Do the import for the property value translations
 					$Importuer->importItemPropertyValueTranslations();
 				}
-				
+
 				// Add it to the link controller
 				PlentymarketsImportControllerItemLinked::getInstance()->addItem($ItemBase->ItemID);
 
