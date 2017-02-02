@@ -257,35 +257,14 @@
 
         <!-- Console -->
 
-        <service id="plenty_connector.console.import_categories_command" class="PlentyConnector\Console\Command\ImportCategoriesCommand">
+        <service id="plenty_connector.console.command.process_command" class="PlentyConnector\Console\Command\ProcessCommand">
             <argument type="service" id="plenty_connector.connector" />
             <argument type="service" id="plenty_connector.logger" />
 
             <tag name="console.command" />
         </service>
 
-        <service id="plenty_connector.console.import_manufacturers_command" class="PlentyConnector\Console\Command\ImportManufacturersCommand">
-            <argument type="service" id="plenty_connector.connector" />
-            <argument type="service" id="plenty_connector.logger" />
-
-            <tag name="console.command" />
-        </service>
-
-        <service id="plenty_connector.console.import_media_categories_command" class="PlentyConnector\Console\Command\ImportMediaCategoriesCommand">
-            <argument type="service" id="plenty_connector.connector" />
-            <argument type="service" id="plenty_connector.logger" />
-
-            <tag name="console.command" />
-        </service>
-
-        <service id="plenty_connector.console.import_products_command" class="PlentyConnector\Console\Command\ImportProductsCommand">
-            <argument type="service" id="plenty_connector.connector" />
-            <argument type="service" id="plenty_connector.logger" />
-
-            <tag name="console.command" />
-        </service>
-
-        <service id="plenty_connector.console.test_command" class="PlentyConnector\Console\Command\TestCommand">
+        <service id="plenty_connector.console.command.test_command" class="PlentyConnector\Console\Command\TestCommand">
             <argument type="service" id="plentmarkets_adapter.client" />
 
             <tag name="console.command" />

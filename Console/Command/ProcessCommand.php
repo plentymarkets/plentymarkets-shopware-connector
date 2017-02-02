@@ -6,19 +6,19 @@ use Exception;
 use PlentyConnector\Connector\Connector;
 use PlentyConnector\Connector\Logger\ConsoleHandler;
 use PlentyConnector\Connector\ServiceBus\QueryType;
-use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 use Shopware\Commands\ShopwareCommand;
 use Shopware\Components\Logger;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Exception\LogicException;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Command to manually import manufacturer.
+ * Command to manually process definitions.
  */
-class ImportManufacturersCommand extends ShopwareCommand
+class ProcessCommand extends ShopwareCommand
 {
     /**
      * @var Connector
@@ -31,7 +31,7 @@ class ImportManufacturersCommand extends ShopwareCommand
     private $logger;
 
     /**
-     * ImportManufacturersCommand constructor.
+     * ProcessCommand constructor.
      *
      * @param Connector $connector
      * @param Logger $logger
@@ -51,13 +51,18 @@ class ImportManufacturersCommand extends ShopwareCommand
      */
     protected function configure()
     {
-        $this->setName('plentyconnector:import:manufacturers');
-        $this->setDescription('Import manufacturers');
+        $this->setName('plentyconnector:process');
+        $this->setDescription('process all definitions according');
+        $this->addArgument(
+            'objectType',
+            InputArgument::OPTIONAL,
+            'Object type to process. Leave empty for every object type'
+        );
         $this->addOption(
             'all',
             null,
             InputOption::VALUE_NONE,
-            'If set, import every manufacturer'
+            'If set, ignore changes and process everything'
         );
     }
 
@@ -72,13 +77,14 @@ class ImportManufacturersCommand extends ShopwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $all = (bool)$input->getOption('all');
+        $objectType = $input->getArgument('objectType');
 
         $this->logger->pushHandler(new ConsoleHandler($output));
 
         try {
             $queryType = $all ? QueryType::ALL : QueryType::CHANGED;
 
-            $this->connector->handle($queryType, Manufacturer::TYPE);
+            $this->connector->handle($queryType, $objectType);
         } catch (Exception $exception) {
             $this->logger->error($exception->getMessage());
         }
