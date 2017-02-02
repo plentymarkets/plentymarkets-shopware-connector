@@ -5,7 +5,7 @@ namespace PlentyConnector\tests\Unit\CleanupService;
 use PHPUnit\Framework\TestCase;
 use PlentyConnector\Connector\CleanupService\CleanupService;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
-use PlentyConnector\Connector\ServiceBus\CommandFactory\CommandFactory;
+use PlentyConnector\Connector\ServiceBus\CommandFactory\CommandFactoryInterface;
 use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
@@ -46,7 +46,7 @@ class CleanupServiceTest extends TestCase
             QueryType::ALL
         )->willReturn($query);
 
-        $commandFactory = $this->createMock(CommandFactory::class);
+        $commandFactory = $this->createMock(CommandFactoryInterface::class);
         $commandFactory->expects($this->once())->method('create')->with(
             'TestDestinationAdapter',
             'TestType',
@@ -103,7 +103,7 @@ class CleanupServiceTest extends TestCase
             QueryType::ALL
         )->willReturn($query);
 
-        $commandFactory = $this->createMock(CommandFactory::class);
+        $commandFactory = $this->createMock(CommandFactoryInterface::class);
         $commandFactory->expects($this->once())->method('create')->with(
             'TestDestinationAdapter',
             'TestType',
