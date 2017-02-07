@@ -34,7 +34,7 @@ class ProcessCommand extends ShopwareCommand
      * ProcessCommand constructor.
      *
      * @param Connector $connector
-     * @param Logger $logger
+     * @param Logger    $logger
      *
      * @throws LogicException
      */
@@ -67,16 +67,16 @@ class ProcessCommand extends ShopwareCommand
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      *
-     * @return int|null|void
-     *
      * @throws Exception
+     *
+     * @return int|null|void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $all = (bool)$input->getOption('all');
+        $all = (bool) $input->getOption('all');
         $objectType = $input->getArgument('objectType');
 
         $this->logger->pushHandler(new ConsoleHandler($output));

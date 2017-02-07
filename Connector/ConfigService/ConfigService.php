@@ -38,7 +38,7 @@ class ConfigService implements ConfigServiceInterface
     private $config = [];
 
     /**
-     * @param ModelManager $entityManager
+     * @param ModelManager       $entityManager
      * @param ContainerInterface $container
      */
     public function __construct(ModelManager $entityManager, ContainerInterface $container)
@@ -79,21 +79,6 @@ class ConfigService implements ConfigServiceInterface
     }
 
     /**
-     * pre fill the whole existing config.
-     */
-    private function initialize()
-    {
-        /**
-         * @var ConfigModel[]
-         */
-        $elements = $this->repository->findAll();
-
-        foreach ($elements as $element) {
-            $this->config[$element->getName()] = $element;
-        }
-    }
-
-    /**
      * {@inheritdoc}
      *
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
@@ -119,5 +104,20 @@ class ConfigService implements ConfigServiceInterface
 
         $this->entityManager->persist($this->config[$key]);
         $this->entityManager->flush($this->config[$key]);
+    }
+
+    /**
+     * pre fill the whole existing config.
+     */
+    private function initialize()
+    {
+        /**
+         * @var ConfigModel[]
+         */
+        $elements = $this->repository->findAll();
+
+        foreach ($elements as $element) {
+            $this->config[$element->getName()] = $element;
+        }
     }
 }

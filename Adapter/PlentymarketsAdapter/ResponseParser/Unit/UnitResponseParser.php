@@ -32,7 +32,7 @@ class UnitResponseParser implements UnitResponseParserInterface
     public function parse(array $entry)
     {
         $identity = $this->identityService->findOneOrCreate(
-            (string)$entry['id'],
+            (string) $entry['id'],
             PlentymarketsAdapter::NAME,
             Unit::TYPE
         );

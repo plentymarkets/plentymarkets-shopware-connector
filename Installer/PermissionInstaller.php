@@ -39,9 +39,9 @@ class PermissionInstaller implements InstallerInterface
     /**
      * CronjobSyncronizer constructor.
      *
-     * @param ModelManager $em
+     * @param ModelManager            $em
      * @param Shopware_Components_Acl $acl
-     * @param array $permissions
+     * @param array                   $permissions
      */
     public function __construct(ModelManager $em, Shopware_Components_Acl $acl, array $permissions)
     {
@@ -82,81 +82,8 @@ class PermissionInstaller implements InstallerInterface
     }
 
     /**
-     * @param InstallContext $context
-     */
-    private function removePermissions(InstallContext $context)
-    {
-        $this->acl->deleteResource($context->getPlugin()->getName());
-    }
-
-    /**
-     * @param Plugin $plugin
-     * @param array $permissions
-     */
-    private function synchronize(Plugin $plugin, array $permissions)
-    {
-        $resource = $this->getResource($plugin->getName());
-
-        if (null === $resource) {
-            $this->createResource($plugin, $permissions);
-
-            return;
-        }
-
-        $this->synchronizePrivileges($resource, $permissions);
-        $this->removeNotExistingPrivileges($resource, $permissions);
-    }
-
-    /**
-     * @param $resourceName
-     *
-     * @return Resource
-     */
-    private function getResource($resourceName)
-    {
-        return $this->repository->findOneBy(['name' => $resourceName]);
-    }
-
-    /**
-     * @param Plugin $plugin
-     * @param array $permissions
-     *
-     * @throws Enlight_Exception
-     */
-    private function createResource(Plugin $plugin, array $permissions)
-    {
-        $this->acl->createResource(
-            $plugin->getName(),
-            $permissions,
-            $plugin->getLabel(),
-            $plugin->getId()
-        );
-    }
-
-    /**
-     * @param Resource $resource
-     * @param array $permissions
-     */
-    private function synchronizePrivileges(Resource $resource, array $permissions)
-    {
-        $existingPrivileges = array_filter($resource->getPrivileges()->toArray(), function (Privilege $privilege) use ($permissions) {
-            return in_array($privilege->getName(), $permissions, true);
-        });
-
-        $existingPrivileges = array_map(function (Privilege $privilege) {
-            return $privilege->getName();
-        }, $existingPrivileges);
-
-        $newPrivileges = array_diff($permissions, $existingPrivileges);
-
-        array_walk($newPrivileges, function ($name) use ($resource) {
-            $this->acl->createPrivilege($resource->getId(), $name);
-        });
-    }
-
-    /**
-     * @param Resource $resource
-     * @param array $permissions
+     * @param resource $resource
+     * @param array    $permissions
      */
     protected function removeNotExistingPrivileges(Resource $resource, array $permissions)
     {
@@ -175,5 +102,78 @@ class PermissionInstaller implements InstallerInterface
         });
 
         $this->em->flush();
+    }
+
+    /**
+     * @param InstallContext $context
+     */
+    private function removePermissions(InstallContext $context)
+    {
+        $this->acl->deleteResource($context->getPlugin()->getName());
+    }
+
+    /**
+     * @param Plugin $plugin
+     * @param array  $permissions
+     */
+    private function synchronize(Plugin $plugin, array $permissions)
+    {
+        $resource = $this->getResource($plugin->getName());
+
+        if (null === $resource) {
+            $this->createResource($plugin, $permissions);
+
+            return;
+        }
+
+        $this->synchronizePrivileges($resource, $permissions);
+        $this->removeNotExistingPrivileges($resource, $permissions);
+    }
+
+    /**
+     * @param $resourceName
+     *
+     * @return resource
+     */
+    private function getResource($resourceName)
+    {
+        return $this->repository->findOneBy(['name' => $resourceName]);
+    }
+
+    /**
+     * @param Plugin $plugin
+     * @param array  $permissions
+     *
+     * @throws Enlight_Exception
+     */
+    private function createResource(Plugin $plugin, array $permissions)
+    {
+        $this->acl->createResource(
+            $plugin->getName(),
+            $permissions,
+            $plugin->getLabel(),
+            $plugin->getId()
+        );
+    }
+
+    /**
+     * @param resource $resource
+     * @param array    $permissions
+     */
+    private function synchronizePrivileges(Resource $resource, array $permissions)
+    {
+        $existingPrivileges = array_filter($resource->getPrivileges()->toArray(), function (Privilege $privilege) use ($permissions) {
+            return in_array($privilege->getName(), $permissions, true);
+        });
+
+        $existingPrivileges = array_map(function (Privilege $privilege) {
+            return $privilege->getName();
+        }, $existingPrivileges);
+
+        $newPrivileges = array_diff($permissions, $existingPrivileges);
+
+        array_walk($newPrivileges, function ($name) use ($resource) {
+            $this->acl->createPrivilege($resource->getId(), $name);
+        });
     }
 }

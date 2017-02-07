@@ -37,7 +37,7 @@ class OrderItem implements OrderItemInterface
     private $name;
 
     /**
-     * @var double
+     * @var float
      */
     private $price;
 
@@ -50,6 +50,7 @@ class OrderItem implements OrderItemInterface
      * @param $variationId
      * @param $name
      * @param $price
+     *
      * @throws \Assert\AssertionFailedException
      */
     public function __construct($identifier, $quantity, $productId, $variationId, $name, $price)

@@ -48,8 +48,9 @@ interface IdentityServiceInterface
      * @param string $adapterName
      * @param string $objectType
      *
-     * @return IdentityInterface
      * @throws NotFoundException
+     *
+     * @return IdentityInterface
      */
     public function findOneOrThrow($adapterIdentifier, $adapterName, $objectType);
 

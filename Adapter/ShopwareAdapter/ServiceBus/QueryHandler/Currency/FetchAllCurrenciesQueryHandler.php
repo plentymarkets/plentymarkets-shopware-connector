@@ -30,7 +30,7 @@ class FetchAllCurrenciesQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllCurrenciesQueryHandler constructor.
      *
-     * @param EntityManagerInterface $entityManager
+     * @param EntityManagerInterface          $entityManager
      * @param CurrencyResponseParserInterface $responseParser
      */
     public function __construct(
@@ -73,7 +73,7 @@ class FetchAllCurrenciesQueryHandler implements QueryHandlerInterface
         $queryBuilder->select([
             'currencies.id as id',
             'currencies.name as name',
-            'currencies.currency as currency'
+            'currencies.currency as currency',
         ]);
 
         $objectQuery = $queryBuilder->getQuery();

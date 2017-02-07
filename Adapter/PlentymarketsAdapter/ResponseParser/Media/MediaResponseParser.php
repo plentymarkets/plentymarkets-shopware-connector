@@ -28,7 +28,7 @@ class MediaResponseParser implements MediaResponseParserInterface
      * OrderStatusResponseParser constructor.
      *
      * @param IdentityServiceInterface $identityService
-     * @param MediaCategoryHelper $categoryHelper
+     * @param MediaCategoryHelper      $categoryHelper
      */
     public function __construct(IdentityServiceInterface $identityService, MediaCategoryHelper $categoryHelper)
     {
@@ -67,7 +67,7 @@ class MediaResponseParser implements MediaResponseParserInterface
             $mediaCategories = $this->categoryHelper->getCategories();
 
             $mediaCategoryIdentity = $this->identityService->findOneOrCreate(
-                (string)$mediaCategories[$entry['mediaCategory']]['id'],
+                (string) $mediaCategories[$entry['mediaCategory']]['id'],
                 PlentymarketsAdapter::NAME,
                 MediaCategory::TYPE
             );
@@ -78,7 +78,7 @@ class MediaResponseParser implements MediaResponseParserInterface
         }
 
         $identity = $this->identityService->findOneOrCreate(
-            (string)$entry['hash'],
+            (string) $entry['hash'],
             PlentymarketsAdapter::NAME,
             Media::TYPE
         );

@@ -53,7 +53,7 @@ class Iterator implements BaseIterator
      *
      * @param string $path
      * @param Client $client
-     * @param array $criteria
+     * @param array  $criteria
      *
      * @throws UnexpectedValueException
      */
@@ -101,20 +101,6 @@ class Iterator implements BaseIterator
     }
 
     /**
-     * @param array $criteria
-     * @param integer $limit
-     * @param integer $offset
-     */
-    private function loadPage(array $criteria = [], $limit = 0, $offset = 0)
-    {
-        $result = $this->client->request('GET', $this->path, $criteria, $limit, $offset);
-
-        foreach ($result as $key => $item) {
-            $this->page[$this->index + $key] = $item;
-        }
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function key()
@@ -133,5 +119,19 @@ class Iterator implements BaseIterator
 
         $this->offset = 0;
         $this->index = 0;
+    }
+
+    /**
+     * @param array $criteria
+     * @param int   $limit
+     * @param int   $offset
+     */
+    private function loadPage(array $criteria = [], $limit = 0, $offset = 0)
+    {
+        $result = $this->client->request('GET', $this->path, $criteria, $limit, $offset);
+
+        foreach ($result as $key => $item) {
+            $this->page[$this->index + $key] = $item;
+        }
     }
 }

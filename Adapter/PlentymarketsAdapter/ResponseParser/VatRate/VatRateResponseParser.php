@@ -32,7 +32,7 @@ class VatRateResponseParser implements VatRateResponseParserInterface
     public function parse(array $entry)
     {
         $identity = $this->identityService->findOneOrCreate(
-            (string)$entry['id'],
+            (string) $entry['id'],
             PlentymarketsAdapter::NAME,
             VatRate::TYPE
         );

@@ -8,8 +8,8 @@ use PlentyConnector\Connector\ServiceBus\QueryFactory\Exception\MissingQueryGene
 use PlentyConnector\Connector\ServiceBus\QueryFactory\QueryFactoryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
-use PlentyConnector\Connector\ValueObject\Definition\DefinitionInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
+use PlentyConnector\Connector\ValueObject\Definition\DefinitionInterface;
 use PlentyConnector\Connector\ValueObject\Mapping\Mapping;
 
 /**
@@ -36,7 +36,7 @@ class MappingService implements MappingServiceInterface
      * MappingService constructor.
      *
      * @param QueryFactoryInterface $queryFactory
-     * @param ServiceBusInterface $serviceBus
+     * @param ServiceBusInterface   $serviceBus
      */
     public function __construct(
         QueryFactoryInterface $queryFactory,
@@ -70,7 +70,7 @@ class MappingService implements MappingServiceInterface
                 'originTransferObjects' => $this->query($definition, $definition->getOriginAdapterName()),
                 'destinationAdapterName' => $definition->getDestinationAdapterName(),
                 'destinationTransferObjects' => $this->query($definition, $definition->getDestinationAdapterName()),
-                'objectType' => $definition->getObjectType()
+                'objectType' => $definition->getObjectType(),
             ]);
         });
 
@@ -97,12 +97,12 @@ class MappingService implements MappingServiceInterface
 
     /**
      * @param DefinitionInterface $definition
-     * @param string $adapterName
-     *
-     * @return TransferObjectInterface[]
+     * @param string              $adapterName
      *
      * @throws MissingQueryGeneratorException
      * @throws MissingQueryException
+     *
+     * @return TransferObjectInterface[]
      */
     private function query(DefinitionInterface $definition, $adapterName)
     {
@@ -122,7 +122,7 @@ class MappingService implements MappingServiceInterface
             return $object->getType() === $definition->getObjectType();
         });
 
-        usort($objects, function(TransferObjectInterface $a, TransferObjectInterface $b) {
+        usort($objects, function (TransferObjectInterface $a, TransferObjectInterface $b) {
             if (method_exists($a, 'getName') && method_exists($b, 'getName')) {
                 $namea = $a->getName();
                 $nameb = $b->getName();

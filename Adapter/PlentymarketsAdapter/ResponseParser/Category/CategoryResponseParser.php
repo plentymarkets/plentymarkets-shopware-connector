@@ -35,8 +35,8 @@ class CategoryResponseParser implements CategoryResponseParserInterface
     /**
      * CategoryResponseParser constructor.
      *
-     * @param IdentityServiceInterface $identityService
-     * @param ConfigServiceInterface $config
+     * @param IdentityServiceInterface     $identityService
+     * @param ConfigServiceInterface       $config
      * @param MediaResponseParserInterface $mediaResponseParser
      */
     public function __construct(
@@ -57,14 +57,14 @@ class CategoryResponseParser implements CategoryResponseParserInterface
         $result = [];
 
         $categoryIdentifier = $this->identityService->findOneOrCreate(
-            (string)($entry['plentyId'] . '-' . $entry['categoryId']),
+            (string) ($entry['plentyId'] . '-' . $entry['categoryId']),
             PlentymarketsAdapter::NAME,
             Category::TYPE
         );
 
         if (null !== $entry['parentCategoryId']) {
             $parentIdentity = $this->identityService->findOneOrCreate(
-                (string)($entry['plentyId'] . '-' . $entry['parentCategoryId']),
+                (string) ($entry['plentyId'] . '-' . $entry['parentCategoryId']),
                 PlentymarketsAdapter::NAME,
                 Category::TYPE
             );
@@ -75,7 +75,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
         }
 
         $shppIdentifier = $this->identityService->findOneOrCreate(
-            (string)$entry['plentyId'],
+            (string) $entry['plentyId'],
             PlentymarketsAdapter::NAME,
             Shop::TYPE
         );
@@ -181,7 +181,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
             $languageIdentifier = $this->identityService->findOneBy([
                 'adapterIdentifier' => $detail['lang'],
                 'adapterName' => PlentymarketsAdapter::NAME,
-                'objectType' => Language::TYPE
+                'objectType' => Language::TYPE,
             ]);
 
             if (null === $languageIdentifier) {

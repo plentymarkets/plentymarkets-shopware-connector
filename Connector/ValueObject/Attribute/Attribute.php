@@ -28,8 +28,8 @@ class Attribute implements AttributeInterface
     /**
      * Attribute constructor.
      *
-     * @param string $key
-     * @param string $value
+     * @param string                 $key
+     * @param string                 $value
      * @param TranslationInterface[] $translations
      */
     public function __construct($key, $value, array $translations = [])
@@ -52,7 +52,7 @@ class Attribute implements AttributeInterface
         Assertion::allInArray(array_keys($params), [
             'key',
             'value',
-            'translations'
+            'translations',
         ]);
 
         return new self(

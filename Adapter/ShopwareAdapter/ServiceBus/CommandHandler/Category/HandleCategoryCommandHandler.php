@@ -3,12 +3,12 @@
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Category;
 
 use Doctrine\ORM\EntityManagerInterface;
+use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
+use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\Category\HandleCategoryCommand;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\HandleCommandInterface;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
-use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Category\Category;
 use PlentyConnector\Connector\TransferObject\Category\CategoryInterface;
 use PlentyConnector\Connector\TransferObject\Language\Language;
@@ -61,11 +61,11 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     /**
      * HandleCategoryCommandHandler constructor.
      *
-     * @param CategoryResource $resource
-     * @param IdentityServiceInterface $identityService
+     * @param CategoryResource           $resource
+     * @param IdentityServiceInterface   $identityService
      * @param TranslationHelperInterface $translationHelper
-     * @param EntityManagerInterface $entityManager
-     * @param LoggerInterface $logger
+     * @param EntityManagerInterface     $entityManager
+     * @param LoggerInterface            $logger
      */
     public function __construct(
         CategoryResource $resource,
@@ -98,7 +98,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     {
         /**
          * @var HandleCommandInterface $command
-         * @var CategoryInterface $category
+         * @var CategoryInterface      $category
          */
         $category = $command->getTransferObject();
 
@@ -121,9 +121,9 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         }
 
         $languageIdentity = $this->identityService->findOneBy([
-            'adapterIdentifier' => (string)$shop->getLocale()->getId(),
+            'adapterIdentifier' => (string) $shop->getLocale()->getId(),
             'adapterName' => ShopwareAdapter::NAME,
-            'objectType' => Language::TYPE
+            'objectType' => Language::TYPE,
         ]);
 
         if (null !== $languageIdentity) {
@@ -136,7 +136,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             $parentCategoryIdentity = $this->identityService->findOneBy([
                 'objectIdentifier' => $category->getParentIdentifier(),
                 'objectType' => Category::TYPE,
-                'adapterName' => ShopwareAdapter::NAME
+                'adapterName' => ShopwareAdapter::NAME,
             ]);
 
             if (null === $parentCategoryIdentity) {
@@ -159,7 +159,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
                 $categoryIdentity = $this->identityService->create(
                     $category->getIdentifier(),
                     Category::TYPE,
-                    (string)$existingCategory,
+                    (string) $existingCategory,
                     ShopwareAdapter::NAME
                 );
             }
@@ -193,7 +193,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             $this->identityService->create(
                 $category->getIdentifier(),
                 Category::TYPE,
-                (string)$newCategory->getId(),
+                (string) $newCategory->getId(),
                 ShopwareAdapter::NAME
             );
         } else {
@@ -205,7 +205,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
 
     /**
      * @param CategoryInterface $category
-     * @param int $parentCategory
+     * @param int               $parentCategory
      *
      * @return int|null
      */
@@ -213,7 +213,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     {
         $existingCategory = $this->categoryRepository->findOneBy([
             'name' => $category->getName(),
-            'parentId' => $parentCategory
+            'parentId' => $parentCategory,
         ]);
 
         if (null === $existingCategory) {

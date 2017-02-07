@@ -32,14 +32,14 @@ class PaymentStatusResponseParser implements PaymentStatusResponseParserInterfac
     public function parse(array $entry)
     {
         $identity = $this->identityService->findOneOrCreate(
-            (string)$entry['id'],
+            (string) $entry['id'],
             PlentymarketsAdapter::NAME,
             PaymentStatus::TYPE
         );
 
         return PaymentStatus::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => $entry['name']
+            'name' => $entry['name'],
         ]);
     }
 }

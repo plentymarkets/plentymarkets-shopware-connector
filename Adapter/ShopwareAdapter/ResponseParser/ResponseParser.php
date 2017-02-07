@@ -45,19 +45,19 @@ class ResponseParser implements ResponseParserInterface
     public function parseOrder($entry)
     {
         $identity = $this->identityService->findOrCreateIdentity(
-            (string)$entry['id'],
+            (string) $entry['id'],
             ShopwareAdapter::NAME,
             Order::TYPE
         );
 
-        $orderItems = array_map(array($this, 'parseOrderItem'), $entry['details']);
+        $orderItems = array_map([$this, 'parseOrderItem'], $entry['details']);
 
-        $shopIdentity = $this->findIdentityOrThrow(Shop::TYPE, (string)$entry['shopId']);
-        $orderStatusIdentity = $this->findIdentityOrThrow(OrderStatus::TYPE, (string)$entry['orderStatusId']);
+        $shopIdentity = $this->findIdentityOrThrow(Shop::TYPE, (string) $entry['shopId']);
+        $orderStatusIdentity = $this->findIdentityOrThrow(OrderStatus::TYPE, (string) $entry['orderStatusId']);
         $paymentStatusIdentity = $this->findIdentityOrThrow(PaymentStatus::TYPE,
-            (string)$entry['paymentStatusId']);
-        $paymentMethodIdentity = $this->findIdentityOrThrow(PaymentMethod::TYPE, (string)$entry['paymentId']);
-        $shippingProfileIdentity = $this->findIdentityOrThrow(ShippingProfile::TYPE, (string)$entry['dispatchId']);
+            (string) $entry['paymentStatusId']);
+        $paymentMethodIdentity = $this->findIdentityOrThrow(PaymentMethod::TYPE, (string) $entry['paymentId']);
+        $shippingProfileIdentity = $this->findIdentityOrThrow(ShippingProfile::TYPE, (string) $entry['dispatchId']);
 
         $order = Order::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
@@ -71,22 +71,6 @@ class ResponseParser implements ResponseParserInterface
         ]);
 
         return $order;
-    }
-
-    private function findIdentityOrThrow($objectType, $adapterIdentifier)
-    {
-        $identity = $this->identityService->findIdentity([
-            'objectType' => $objectType,
-            'adapterIdentifier' => $adapterIdentifier,
-            'adapterName' => ShopwareAdapter::NAME,
-        ]);
-
-        if ($identity === null) {
-            // TODO add proper exception
-            throw new \Exception();
-        }
-
-        return $identity;
     }
 
     public function parseOrderItem($entry)
@@ -109,12 +93,12 @@ class ResponseParser implements ResponseParserInterface
         $variantId = $variantResource->getIdFromNumber($entry['articleNumber']);
 
         $identity = $this->identityService->findOrCreateIdentity(
-            (string)$entry['id'],
+            (string) $entry['id'],
             ShopwareAdapter::NAME,
             OrderItem::TYPE
         );
 
-        $productIdentity = $this->findIdentityOrThrow(Product::TYPE, (string)$entry['articleId']);
+        $productIdentity = $this->findIdentityOrThrow(Product::TYPE, (string) $entry['articleId']);
         $variationIdentity = $this->findIdentityOrThrow(Variation::TYPE, $variantId);
 
         $orderItem = OrderItem::fromArray([
@@ -137,5 +121,21 @@ class ResponseParser implements ResponseParserInterface
     public function parse(array $entry)
     {
         // TODO: Implement parse() method.
+    }
+
+    private function findIdentityOrThrow($objectType, $adapterIdentifier)
+    {
+        $identity = $this->identityService->findIdentity([
+            'objectType' => $objectType,
+            'adapterIdentifier' => $adapterIdentifier,
+            'adapterName' => ShopwareAdapter::NAME,
+        ]);
+
+        if ($identity === null) {
+            // TODO add proper exception
+            throw new \Exception();
+        }
+
+        return $identity;
     }
 }

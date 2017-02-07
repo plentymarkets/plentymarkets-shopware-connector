@@ -2,12 +2,12 @@
 
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Media;
 
+use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
+use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\HandleCommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\Media\HandleMediaCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
-use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Media\Media;
 use PlentyConnector\Connector\TransferObject\Media\MediaInterface;
 use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
@@ -33,7 +33,7 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
     /**
      * HandleMediaCommandHandler constructor.
      *
-     * @param MediaResource $resource
+     * @param MediaResource            $resource
      * @param IdentityServiceInterface $identityService
      */
     public function __construct(MediaResource $resource, IdentityServiceInterface $identityService)
@@ -58,7 +58,7 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
     {
         /**
          * @var HandleCommandInterface $command
-         * @var MediaInterface $media
+         * @var MediaInterface         $media
          */
         $media = $command->getTransferObject();
 
@@ -94,7 +94,7 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
             $this->identityService->create(
                 $media->getIdentifier(),
                 Media::TYPE,
-                (string)$mediaModel->getId(),
+                (string) $mediaModel->getId(),
                 ShopwareAdapter::NAME
             );
         } else {

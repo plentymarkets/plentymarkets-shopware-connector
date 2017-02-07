@@ -3,11 +3,11 @@
 namespace ShopwareAdapter\ServiceBus\CommandHandler\MediaCategory;
 
 use Doctrine\ORM\EntityManagerInterface;
+use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\HandleCommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\MediaCategory\HandleMediaCategoryCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
 use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategoryInterface;
 use Shopware\Models\Media\Album;
@@ -32,7 +32,7 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
     /**
      * HandleMediaCategoryCommandHandler constructor.
      *
-     * @param EntityManagerInterface $entityManager
+     * @param EntityManagerInterface   $entityManager
      * @param IdentityServiceInterface $identityService
      */
     public function __construct(EntityManagerInterface $entityManager, IdentityServiceInterface $identityService)
@@ -122,8 +122,8 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
 
     /**
      * @param MediaCategoryInterface $mediaCategory
-     * @param Album $parent
-     * @param Settings $parentSettings
+     * @param Album                  $parent
+     * @param Settings               $parentSettings
      */
     private function createNewAlbum(MediaCategoryInterface $mediaCategory, Album $parent, Settings $parentSettings)
     {
@@ -135,7 +135,7 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
         $album = new Album();
         $album->setParent($parent);
         $album->setName($mediaCategory->getName());
-        $album->setPosition((int)$position + 1);
+        $album->setPosition((int) $position + 1);
 
         $settings = new Settings();
         $settings->setAlbum($album);
@@ -154,7 +154,7 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
         $this->identityService->create(
             $mediaCategory->getIdentifier(),
             MediaCategory::TYPE,
-            (string)$album->getId(),
+            (string) $album->getId(),
             ShopwareAdapter::NAME
         );
     }

@@ -34,9 +34,9 @@ class FetchAllManufacturersQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllManufacturersQueryHandler constructor.
      *
-     * @param ClientInterface $client
+     * @param ClientInterface                     $client
      * @param ManufacturerResponseParserInterface $manufacturerResponseParser
-     * @param MediaResponseParserInterface $mediaResponseParser
+     * @param MediaResponseParserInterface        $mediaResponseParser
      */
     public function __construct(
         ClientInterface $client,

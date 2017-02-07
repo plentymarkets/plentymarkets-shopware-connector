@@ -38,9 +38,9 @@ class Definition implements DefinitionInterface
     /**
      * Definition constructor.
      *
-     * @param string $originAdapterName
-     * @param string $destinationAdapterName
-     * @param string $objectType
+     * @param string   $originAdapterName
+     * @param string   $destinationAdapterName
+     * @param string   $objectType
      * @param int|null $priority
      */
     public function __construct($originAdapterName, $destinationAdapterName, $objectType, $priority = null)
@@ -57,6 +57,14 @@ class Definition implements DefinitionInterface
         $this->destinationAdapterName = $destinationAdapterName;
         $this->objectType = $objectType;
         $this->priority = $priority;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        return $this->objectType . ': ' . $this->originAdapterName . ' > ' . $this->destinationAdapterName;
     }
 
     /**
@@ -111,13 +119,5 @@ class Definition implements DefinitionInterface
     public function getPriority()
     {
         return $this->priority;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __toString()
-    {
-        return $this->objectType . ': ' . $this->originAdapterName . ' > ' . $this->destinationAdapterName;
     }
 }

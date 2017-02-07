@@ -32,7 +32,7 @@ class ManufacturerResponseParser implements ManufacturerResponseParserInterface
     public function parse(array $entry)
     {
         $identity = $this->identityService->findOneOrCreate(
-            (string)$entry['id'],
+            (string) $entry['id'],
             PlentymarketsAdapter::NAME,
             Manufacturer::TYPE
         );

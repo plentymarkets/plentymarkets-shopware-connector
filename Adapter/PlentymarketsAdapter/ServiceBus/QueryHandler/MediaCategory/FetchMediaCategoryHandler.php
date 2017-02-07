@@ -35,8 +35,8 @@ class FetchMediaCategoryHandler implements QueryHandlerInterface
     /**
      * FetchMediaCategoryHandler constructor.
      *
-     * @param IdentityServiceInterface $identityService
-     * @param MediaCategoryHelper $mediaCategoryHelper
+     * @param IdentityServiceInterface             $identityService
+     * @param MediaCategoryHelper                  $mediaCategoryHelper
      * @param MediaCategoryResponseParserInterface $responseParser
      */
     public function __construct(

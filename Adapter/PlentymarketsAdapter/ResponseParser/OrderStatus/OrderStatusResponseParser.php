@@ -32,14 +32,14 @@ class OrderStatusResponseParser implements OrderStatusResponseParserInterface
     public function parse(array $entry)
     {
         $identity = $this->identityService->findOneOrCreate(
-            (string)$entry['id'],
+            (string) $entry['id'],
             PlentymarketsAdapter::NAME,
             OrderStatus::TYPE
         );
 
         return OrderStatus::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => (string)$entry['id'],
+            'name' => (string) $entry['id'],
         ]);
     }
 }

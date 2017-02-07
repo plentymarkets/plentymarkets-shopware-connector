@@ -17,7 +17,7 @@ interface TranslationHelperInterface
     public function getLanguageIdentifiers(TranslateableInterface $object);
 
     /**
-     * @param string $languageIdentifier
+     * @param string                 $languageIdentifier
      * @param TranslateableInterface $object
      *
      * @return TransferObjectInterface

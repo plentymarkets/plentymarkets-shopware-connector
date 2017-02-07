@@ -30,7 +30,7 @@ class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllLanguagesQueryHandler constructor.
      *
-     * @param EntityManagerInterface $entityManager
+     * @param EntityManagerInterface          $entityManager
      * @param LanguageResponseParserInterface $responseParser
      */
     public function __construct(
@@ -73,7 +73,7 @@ class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
         $queryBuilder->select([
             'locales.id as id',
             'locales.language as name',
-            'locales.locale as locale'
+            'locales.locale as locale',
         ]);
 
         $objectQuery = $queryBuilder->getQuery();

@@ -21,12 +21,12 @@ interface QueryFactoryInterface
      * @param string $adapterName
      * @param string $objectType
      * @param string $queryType
-     * @param mixed $payload
-     *
-     * @return QueryInterface
+     * @param mixed  $payload
      *
      * @throws MissingQueryGeneratorException
      * @throws MissingQueryException
+     *
+     * @return QueryInterface
      */
     public function create($adapterName, $objectType, $queryType, $payload = null);
 }

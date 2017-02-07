@@ -26,7 +26,7 @@ class EventHandlerMiddleware implements Middleware
 
     /**
      * @param EventInterface $event
-     * @param callable $next
+     * @param callable       $next
      *
      * @return mixed
      */

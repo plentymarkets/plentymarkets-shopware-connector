@@ -46,7 +46,7 @@ class Client implements ClientInterface
     /**
      * Client constructor.
      *
-     * @param GuzzleClient $connection
+     * @param GuzzleClient           $connection
      * @param ConfigServiceInterface $config
      * @param $environment
      */
@@ -61,7 +61,7 @@ class Client implements ClientInterface
     }
 
     /**
-     * TODO: simplify login handling
+     * TODO: simplify login handling.
      *
      * {@inheritdoc}
      */
@@ -86,7 +86,13 @@ class Client implements ClientInterface
         try {
             $response = $this->connection->send($request);
 
-            $result = json_decode($response->getBody(), true);
+            $body = $response->getBody();
+
+            if (null === $body) {
+                // throw
+            }
+
+            $result = json_decode($body->getContents(), true);
 
             if (null === $result) {
                 throw InvalidResponseException::fromParams($method, $path, $options);
@@ -110,11 +116,40 @@ class Client implements ClientInterface
                 $this->accessToken = null;
 
                 return $this->request($method, $path, $params, $limit, $offset);
-            } else {
+            }
                 // generic exception
                 throw $exception;
-            }
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIterator($path, array $criteria = [])
+    {
+        return new Iterator($path, $this, $criteria);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTotal($path, array $criteria = [])
+    {
+        $options = [
+            'plainResponse' => true,
+        ];
+
+        $response = $this->request('GET', $path, $criteria, null, null, $options);
+
+        if (array_key_exists('totalsCount', $response)) {
+            return (int) $response['totalsCount'];
+        }
+
+        if (array_key_exists('entries', $response)) {
+            $response = $response['entries'];
+        }
+
+        return count($response);
     }
 
     /**
@@ -159,9 +194,10 @@ class Client implements ClientInterface
 
     /**
      * @param $url
-     * @return string
      *
      * @throws InvalidCredentialsException
+     *
+     * @return string
      */
     private function getBaseUri($url)
     {
@@ -203,36 +239,6 @@ class Client implements ClientInterface
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getIterator($path, array $criteria = [])
-    {
-        return new Iterator($path, $this, $criteria);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTotal($path, array $criteria = [])
-    {
-        $options = [
-            'plainResponse' => true,
-        ];
-
-        $response = $this->request('GET', $path, $criteria, null, null, $options);
-
-        if (array_key_exists('totalsCount', $response)) {
-            return (int)$response['totalsCount'];
-        }
-
-        if (array_key_exists('entries', $response)) {
-            $response = $response['entries'];
-        }
-
-        return count($response);
-    }
-
-    /**
      * @param $limit
      * @param $offset
      * @param array $options
@@ -246,7 +252,7 @@ class Client implements ClientInterface
         }
 
         if (null !== $limit) {
-            $options['itemsPerPage'] = (int)$limit;
+            $options['itemsPerPage'] = (int) $limit;
         }
 
         if (null !== $offset) {
@@ -259,8 +265,8 @@ class Client implements ClientInterface
     /**
      * @param string $method
      * @param string $path
-     * @param array $params
-     * @param array $options
+     * @param array  $params
+     * @param array  $options
      *
      * @return array
      */
@@ -271,7 +277,7 @@ class Client implements ClientInterface
             'POST',
             'PUT',
             'DELETE',
-            'GET'
+            'GET',
         ]);
         Assertion::isArray($params);
 
@@ -304,7 +310,7 @@ class Client implements ClientInterface
 
     /**
      * @param string $path
-     * @param array $options
+     * @param array  $options
      *
      * @return string
      */
@@ -333,7 +339,7 @@ class Client implements ClientInterface
         $page = 1;
 
         if (null !== $offset) {
-            $page = (int)(floor($offset / $limit) + 1);
+            $page = (int) (floor($offset / $limit) + 1);
         }
 
         return $page;

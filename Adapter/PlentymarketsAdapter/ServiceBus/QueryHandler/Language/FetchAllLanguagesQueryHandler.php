@@ -28,7 +28,7 @@ class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
      * FetchAllLanguagesQueryHandler constructor.
      *
      * @param LanguageResponseParserInterface $responseParser
-     * @param LanguageHelper $languageHelper
+     * @param LanguageHelper                  $languageHelper
      */
     public function __construct(
         LanguageResponseParserInterface $responseParser,

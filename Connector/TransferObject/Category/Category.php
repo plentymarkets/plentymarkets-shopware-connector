@@ -39,7 +39,7 @@ class Category implements CategoryInterface
     private $imageIdentifiers;
 
     /**
-     * @var integer
+     * @var int
      */
     private $position;
 
@@ -86,32 +86,27 @@ class Category implements CategoryInterface
     /**
      * Category constructor.
      *
-     * @param string $identifier
-     *
-     * @param string $name
-     *
-     * @param string|null $parentIdentifier
-     * @param string $shopIdentifier
-     * @param array $imageIdentifiers
-     * @param integer $position
-     *
-     * @param string $description
-     * @param string $longDescription
-     *
-     * @param string $metaTitle
-     * @param string $metaDescription
-     * @param string $metaKeywords
-     * @param string $metaRobots
-     *
+     * @param string                 $identifier
+     * @param string                 $name
+     * @param string|null            $parentIdentifier
+     * @param string                 $shopIdentifier
+     * @param array                  $imageIdentifiers
+     * @param int                    $position
+     * @param string                 $description
+     * @param string                 $longDescription
+     * @param string                 $metaTitle
+     * @param string                 $metaDescription
+     * @param string                 $metaKeywords
+     * @param string                 $metaRobots
      * @param TranslationInterface[] $translations
-     * @param AttributeInterface[] $attributes
+     * @param AttributeInterface[]   $attributes
      */
     public function __construct(
         $identifier,
         $name,
-        $parentIdentifier = null,
+        $parentIdentifier,
         $shopIdentifier,
-        array $imageIdentifiers = [],
+        array $imageIdentifiers,
         $position,
         $description,
         $longDescription,

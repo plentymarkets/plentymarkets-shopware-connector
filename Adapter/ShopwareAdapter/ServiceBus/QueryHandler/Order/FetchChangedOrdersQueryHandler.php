@@ -7,8 +7,8 @@ use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
 use Psr\Log\LoggerInterface;
 use Shopware\Components\Api\Resource;
-use ShopwareAdapter\ServiceBus\ChangedDateTimeTrait;
 use ShopwareAdapter\ResponseParser\Order\OrderResponseParserInterface;
+use ShopwareAdapter\ServiceBus\ChangedDateTimeTrait;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -37,8 +37,8 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
      * FetchChangedOrdersQueryHandler constructor.
      *
      * @param OrderResponseParserInterface $responseParser
-     * @param LoggerInterface $logger
-     * @param Resource\Order $orderResource
+     * @param LoggerInterface              $logger
+     * @param Resource\Order               $orderResource
      */
     public function __construct(
         OrderResponseParserInterface $responseParser,
@@ -66,13 +66,12 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
     {
         // TODO how to identify changed orders?
 
-        throw new \Exception("Not implemented!");
-
+        throw new \Exception('Not implemented!');
         $filter = [
             [
                 'property' => 'status',
                 'expression' => '!=',
-                'value' => -1
+                'value' => -1,
             ],
         ];
 

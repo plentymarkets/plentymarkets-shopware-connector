@@ -6,16 +6,13 @@ use Doctrine\DBAL\Exception\InvalidArgumentException;
 use Exception;
 use PlentyConnector\Connector\ConfigService\Model\Config;
 use PlentyConnector\Connector\IdentityService\Model\Identity;
-use PlentyConnector\DependencyInjection\CompilerPass\AdapterCompilerPass;
 use PlentyConnector\DependencyInjection\CompilerPass\CleanupDefinitionCompilerPass;
 use PlentyConnector\DependencyInjection\CompilerPass\CommandGeneratorCompilerPass;
 use PlentyConnector\DependencyInjection\CompilerPass\CommandHandlerCompilerPass;
 use PlentyConnector\DependencyInjection\CompilerPass\ConnectorDefinitionCompilerPass;
 use PlentyConnector\DependencyInjection\CompilerPass\EventHandlerCompilerPass;
 use PlentyConnector\DependencyInjection\CompilerPass\MappingDefinitionCompilerPass;
-use PlentyConnector\DependencyInjection\CompilerPass\ParameterCompilerPass;
 use PlentyConnector\DependencyInjection\CompilerPass\QueryGeneratorCompilerPass;
-use PlentyConnector\DependencyInjection\CompilerPass\QueryGeneratorCompilerPassimplements;
 use PlentyConnector\DependencyInjection\CompilerPass\QueryHandlerCompilerPass;
 use PlentyConnector\Installer\CronjobInstaller;
 use PlentyConnector\Installer\DatabaseInstaller;
@@ -90,26 +87,6 @@ class PlentyConnector extends Plugin
         $container->addCompilerPass(new QueryHandlerCompilerPass());
 
         parent::build($container);
-    }
-
-    /**
-     * @param ContainerBuilder $container
-     * @param $filename
-     *
-     * @throws Exception
-     */
-    private function loadFile(ContainerBuilder $container, $filename)
-    {
-        if (!is_file($filename)) {
-            return;
-        }
-
-        $loader = new XmlFileLoader(
-            $container,
-            new FileLocator()
-        );
-
-        $loader->load($filename);
     }
 
     /**
@@ -214,5 +191,25 @@ class PlentyConnector extends Plugin
         $permissionInstaller->uninstall($context);
 
         parent::uninstall($context);
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param $filename
+     *
+     * @throws Exception
+     */
+    private function loadFile(ContainerBuilder $container, $filename)
+    {
+        if (!is_file($filename)) {
+            return;
+        }
+
+        $loader = new XmlFileLoader(
+            $container,
+            new FileLocator()
+        );
+
+        $loader->load($filename);
     }
 }

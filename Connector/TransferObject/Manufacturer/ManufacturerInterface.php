@@ -2,7 +2,6 @@
 
 namespace PlentyConnector\Connector\TransferObject\Manufacturer;
 
-use PlentyConnector\Connector\TransferObject\NameableInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**

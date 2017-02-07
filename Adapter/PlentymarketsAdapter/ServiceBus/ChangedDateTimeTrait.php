@@ -30,16 +30,6 @@ trait ChangedDateTimeTrait
     }
 
     /**
-     * @param $class
-     *
-     * @return string
-     */
-    private function getClassName($class)
-    {
-        return substr(strrchr(get_class($class), '\\'), 1);
-    }
-
-    /**
      * @param ConfigServiceInterface $config
      */
     public function setChangedDateTime(ConfigServiceInterface $config)
@@ -50,5 +40,15 @@ trait ChangedDateTimeTrait
         $dateTime = new DateTimeImmutable('now', $timezone);
 
         $config->set($key, $dateTime);
+    }
+
+    /**
+     * @param $class
+     *
+     * @return string
+     */
+    private function getClassName($class)
+    {
+        return substr(strrchr(get_class($class), '\\'), 1);
     }
 }

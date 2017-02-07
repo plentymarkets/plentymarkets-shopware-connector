@@ -32,7 +32,7 @@ class CountryResponseParser implements CountryResponseParserInterface
     public function parse(array $entry)
     {
         $identity = $this->identityService->findOneOrCreate(
-            (string)$entry['id'],
+            (string) $entry['id'],
             PlentymarketsAdapter::NAME,
             Country::TYPE
         );

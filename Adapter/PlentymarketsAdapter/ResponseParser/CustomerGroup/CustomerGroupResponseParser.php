@@ -32,14 +32,14 @@ class CustomerGroupResponseParser implements CustomerGroupResponseParserInterfac
     public function parse(array $entry)
     {
         $identity = $this->identityService->findOneOrCreate(
-            (string)$entry['id'],
+            (string) $entry['id'],
             PlentymarketsAdapter::NAME,
             CustomerGroup::TYPE
         );
 
         return CustomerGroup::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => $entry['name']
+            'name' => $entry['name'],
         ]);
     }
 }

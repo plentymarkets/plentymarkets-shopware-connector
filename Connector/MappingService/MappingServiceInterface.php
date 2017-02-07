@@ -20,10 +20,10 @@ interface MappingServiceInterface
     /**
      * @param null $objectType
      *
-     * @return MappingInterface[]
-     *
      * @throws MissingQueryException
      * @throws MissingQueryGeneratorException
+     *
+     * @return MappingInterface[]
      */
     public function getMappingInformation($objectType = null);
 }

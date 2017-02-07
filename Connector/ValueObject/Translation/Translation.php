@@ -29,7 +29,7 @@ class Translation implements TranslationInterface
      *
      * @param string $languageIdentifier
      * @param string $property
-     * @param mixed $value
+     * @param mixed  $value
      */
     public function __construct($languageIdentifier, $property, $value)
     {

@@ -32,7 +32,7 @@ class OrderStatusResponseParser implements OrderStatusResponseParserInterface
     public function parse(array $entry)
     {
         $identity = $this->identityService->findOneOrCreate(
-            (string)$entry['id'],
+            (string) $entry['id'],
             ShopwareAdapter::NAME,
             OrderStatus::TYPE
         );

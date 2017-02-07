@@ -8,8 +8,8 @@ use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\Helper\LanguageHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ServiceBus\ChangedDateTimeTrait;
 use PlentymarketsAdapter\ResponseParser\Category\CategoryResponseParserInterface;
+use PlentymarketsAdapter\ServiceBus\ChangedDateTimeTrait;
 
 /**
  * Class FetchChangedCategoriesQueryHandler.
@@ -36,9 +36,9 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
     /**
      * FetchCategoryQueryHandler constructor.
      *
-     * @param ClientInterface $client
+     * @param ClientInterface                 $client
      * @param CategoryResponseParserInterface $categoryResponseParser
-     * @param LanguageHelper $languageHelper
+     * @param LanguageHelper                  $languageHelper
      */
     public function __construct(
         ClientInterface $client,
@@ -66,7 +66,7 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
     {
         $elements = $this->client->request('GET', 'categories', [
             'with' => 'details',
-            'lang' => implode(',', array_column($this->languageHelper->getLanguages(), 'id'))
+            'lang' => implode(',', array_column($this->languageHelper->getLanguages(), 'id')),
         ]);
 
         $elements = array_filter($elements, function ($element) {

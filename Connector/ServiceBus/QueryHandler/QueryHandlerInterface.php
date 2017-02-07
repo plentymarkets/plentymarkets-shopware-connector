@@ -20,9 +20,9 @@ interface QueryHandlerInterface
     /**
      * @param QueryInterface $query
      *
-     * @return mixed
-     *
      * @throws Exception
+     *
+     * @return mixed
      */
     public function handle(QueryInterface $query);
 }

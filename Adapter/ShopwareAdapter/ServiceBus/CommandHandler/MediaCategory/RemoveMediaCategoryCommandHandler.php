@@ -3,11 +3,11 @@
 namespace ShopwareAdapter\ServiceBus\CommandHandler\MediaCategory;
 
 use Doctrine\ORM\EntityManagerInterface;
+use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\MediaCategory\RemoveMediaCategoryCommand;
 use PlentyConnector\Connector\ServiceBus\Command\RemoveCommandInterface;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Media\Media;
 use Psr\Log\LoggerInterface;
 use Shopware\Models\Media\Album;
@@ -36,9 +36,9 @@ class RemoveMediaCategoryCommandHandler implements CommandHandlerInterface
     /**
      * HandleMediaCategoryCommandHandler constructor.
      *
-     * @param EntityManagerInterface $entityManager
+     * @param EntityManagerInterface   $entityManager
      * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface $logger
+     * @param LoggerInterface          $logger
      */
     public function __construct(
         EntityManagerInterface $entityManager,

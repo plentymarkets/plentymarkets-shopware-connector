@@ -12,6 +12,11 @@ interface DefinitionInterface extends ValueObjectInterface
     /**
      * @return string
      */
+    public function __toString();
+
+    /**
+     * @return string
+     */
     public function getOriginAdapterName();
 
     /**
@@ -28,9 +33,4 @@ interface DefinitionInterface extends ValueObjectInterface
      * @return int
      */
     public function getPriority();
-
-    /**
-     * @return string
-     */
-    public function __toString();
 }

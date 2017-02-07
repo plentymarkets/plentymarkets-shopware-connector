@@ -32,7 +32,7 @@ class PaymentMethodResponseParser implements PaymentMethodResponseParserInterfac
     public function parse(array $entry)
     {
         $identity = $this->identityService->findOneOrCreate(
-            (string)$entry['id'],
+            (string) $entry['id'],
             ShopwareAdapter::NAME,
             PaymentMethod::TYPE
         );

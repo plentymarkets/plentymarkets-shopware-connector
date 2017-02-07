@@ -32,7 +32,7 @@ class CustomerGroupResponseParser implements CustomerGroupResponseParserInterfac
     public function parse(array $entry)
     {
         $identity = $this->identityService->findOneOrCreate(
-            (string)$entry['id'],
+            (string) $entry['id'],
             ShopwareAdapter::NAME,
             CustomerGroup::TYPE
         );

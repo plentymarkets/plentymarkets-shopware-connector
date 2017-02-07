@@ -30,7 +30,7 @@ class FetchAllCountriesQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllCountriesQueryHandler constructor.
      *
-     * @param EntityManagerInterface $entityManager
+     * @param EntityManagerInterface         $entityManager
      * @param CountryResponseParserInterface $responseParser
      */
     public function __construct(
@@ -73,7 +73,7 @@ class FetchAllCountriesQueryHandler implements QueryHandlerInterface
         $queryBuilder->select([
             'countries.id as id',
             'countries.name as name',
-            'countries.iso as countryCode'
+            'countries.iso as countryCode',
         ]);
 
         $objectQuery = $queryBuilder->getQuery();

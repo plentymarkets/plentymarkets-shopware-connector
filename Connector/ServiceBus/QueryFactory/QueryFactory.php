@@ -7,7 +7,6 @@ use PlentyConnector\Connector\ServiceBus\QueryFactory\Exception\MissingQueryExce
 use PlentyConnector\Connector\ServiceBus\QueryFactory\Exception\MissingQueryGeneratorException;
 use PlentyConnector\Connector\ServiceBus\QueryGenerator\QueryGeneratorInterface;
 use PlentyConnector\Connector\ServiceBus\QueryType;
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
  * Class QueryFactory.

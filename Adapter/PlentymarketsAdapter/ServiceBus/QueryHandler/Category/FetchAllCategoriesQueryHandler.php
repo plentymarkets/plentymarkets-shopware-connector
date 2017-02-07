@@ -33,9 +33,9 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllCategoriesQueryHandler constructor.
      *
-     * @param ClientInterface $client
+     * @param ClientInterface                 $client
      * @param CategoryResponseParserInterface $categoryResponseParser
-     * @param LanguageHelper $languageHelper
+     * @param LanguageHelper                  $languageHelper
      */
     public function __construct(
         ClientInterface $client,
@@ -63,7 +63,7 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
     {
         $elements = $this->client->request('GET', 'categories', [
             'with' => 'details',
-            'lang' => implode(',', array_column($this->languageHelper->getLanguages(), 'id'))
+            'lang' => implode(',', array_column($this->languageHelper->getLanguages(), 'id')),
         ]);
 
         $elements = array_filter($elements, function ($element) {

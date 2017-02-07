@@ -2,12 +2,12 @@
 
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Manufacturer;
 
+use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
+use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\HandleCommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\Manufacturer\HandleManufacturerCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
-use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 use PlentyConnector\Connector\TransferObject\Manufacturer\ManufacturerInterface;
 use PlentyConnector\Connector\TransferObject\Media\Media;
@@ -32,7 +32,7 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
     /**
      * HandleManufacturerCommandHandler constructor.
      *
-     * @param ManufacturerResource $resource
+     * @param ManufacturerResource     $resource
      * @param IdentityServiceInterface $identityService
      */
     public function __construct(ManufacturerResource $resource, IdentityServiceInterface $identityService)
@@ -57,7 +57,7 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
     {
         /**
          * @var HandleCommandInterface $command
-         * @var ManufacturerInterface $manufacturer
+         * @var ManufacturerInterface  $manufacturer
          */
         $manufacturer = $command->getTransferObject();
 
@@ -98,7 +98,7 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
                 $identity = $this->identityService->create(
                     $manufacturer->getIdentifier(),
                     Manufacturer::TYPE,
-                    (string)$existingManufacturer['id'],
+                    (string) $existingManufacturer['id'],
                     ShopwareAdapter::NAME
                 );
             }
@@ -110,7 +110,7 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
             $this->identityService->create(
                 $manufacturer->getIdentifier(),
                 Manufacturer::TYPE,
-                (string)$newManufacturer->getId(),
+                (string) $newManufacturer->getId(),
                 ShopwareAdapter::NAME
             );
         } else {

@@ -12,8 +12,8 @@ use PlentyConnector\Connector\ServiceBus\QueryFactory\Exception\MissingQueryGene
 use PlentyConnector\Connector\ServiceBus\QueryFactory\QueryFactoryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
-use PlentyConnector\Connector\ValueObject\Definition\DefinitionInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
+use PlentyConnector\Connector\ValueObject\Definition\DefinitionInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -52,10 +52,10 @@ class Connector implements ConnectorInterface
     /**
      * Connector constructor.
      *
-     * @param ServiceBusInterface $serviceBus
-     * @param QueryFactoryInterface $queryFactory
+     * @param ServiceBusInterface     $serviceBus
+     * @param QueryFactoryInterface   $queryFactory
      * @param CommandFactoryInterface $commandFactory
-     * @param LoggerInterface $logger
+     * @param LoggerInterface         $logger
      */
     public function __construct(
         ServiceBusInterface $serviceBus,
@@ -77,20 +77,6 @@ class Connector implements ConnectorInterface
         $this->definitions[] = $definition;
 
         $this->sortDefinitions();
-    }
-
-    /**
-     *  sort definitions by priority. Highest priority needs to be on top of the array
-     */
-    private function sortDefinitions()
-    {
-        usort($this->definitions, function(DefinitionInterface $a, DefinitionInterface $b) {
-            if ($a->getPriority() === $b->getPriority()) {
-                return 0;
-            }
-
-            return ($a->getPriority() > $b->getPriority()) ? -1 : 1;
-        });
     }
 
     /**
@@ -122,6 +108,20 @@ class Connector implements ConnectorInterface
     }
 
     /**
+     *  sort definitions by priority. Highest priority needs to be on top of the array
+     */
+    private function sortDefinitions()
+    {
+        usort($this->definitions, function (DefinitionInterface $a, DefinitionInterface $b) {
+            if ($a->getPriority() === $b->getPriority()) {
+                return 0;
+            }
+
+            return ($a->getPriority() > $b->getPriority()) ? -1 : 1;
+        });
+    }
+
+    /**
      * {@inheritdoc}
      */
     private function getDefinitions($type = null)
@@ -139,8 +139,8 @@ class Connector implements ConnectorInterface
 
     /**
      * @param DefinitionInterface $definition
-     * @param integer $queryType
-     * @param string|null $identifier
+     * @param int                 $queryType
+     * @param string|null         $identifier
      *
      * @throws MissingQueryException
      * @throws MissingQueryGeneratorException

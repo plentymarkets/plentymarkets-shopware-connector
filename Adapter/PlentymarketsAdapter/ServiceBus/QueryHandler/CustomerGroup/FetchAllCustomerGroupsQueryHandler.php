@@ -27,7 +27,7 @@ class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllCustomerGroupsQueryHandler constructor.
      *
-     * @param ClientInterface $client
+     * @param ClientInterface                      $client
      * @param CustomerGroupResponseParserInterface $responseParser
      */
     public function __construct(

@@ -46,7 +46,7 @@ class ClassNameFormatter implements Formatter
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function logCommandReceived(LoggerInterface $logger, $command)
     {
@@ -57,13 +57,31 @@ class ClassNameFormatter implements Formatter
     }
 
     /**
-     * @param $command
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    private function getRecievedMessage($command)
+    public function logCommandSucceeded(LoggerInterface $logger, $command, $returnValue)
     {
-        return $this->getType($command) . ' received: ' . $this->getClassName($command);
+        $message = $this->getSucceededMessage($command);
+        $payload = $this->getPayload($command);
+
+        $logger->log($this->commandSucceededLevel, $message, $payload);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function logCommandFailed(LoggerInterface $logger, $command, Exception $exception)
+    {
+        $message = $this->getFailedMessage($command);
+        $payload = $this->getPayload($command);
+
+        $payload = array_merge($payload, ['exception' => $exception]);
+
+        $logger->log(
+            $this->commandFailedLevel,
+            $message,
+            $payload
+        );
     }
 
     /**
@@ -116,14 +134,13 @@ class ClassNameFormatter implements Formatter
     }
 
     /**
-     * {@inheritDoc}
+     * @param $command
+     *
+     * @return string
      */
-    public function logCommandSucceeded(LoggerInterface $logger, $command, $returnValue)
+    private function getRecievedMessage($command)
     {
-        $message = $this->getSucceededMessage($command);
-        $payload = $this->getPayload($command);
-
-        $logger->log($this->commandSucceededLevel, $message, $payload);
+        return $this->getType($command) . ' received: ' . $this->getClassName($command);
     }
 
     /**
@@ -134,23 +151,6 @@ class ClassNameFormatter implements Formatter
     private function getSucceededMessage($command)
     {
         return $this->getType($command) . ' succeeded: ' . $this->getClassName($command);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function logCommandFailed(LoggerInterface $logger, $command, Exception $exception)
-    {
-        $message = $this->getFailedMessage($command);
-        $payload = $this->getPayload($command);
-
-        $payload = array_merge($payload, ['exception' => $exception]);
-
-        $logger->log(
-            $this->commandFailedLevel,
-            $message,
-            $payload
-        );
     }
 
     /**

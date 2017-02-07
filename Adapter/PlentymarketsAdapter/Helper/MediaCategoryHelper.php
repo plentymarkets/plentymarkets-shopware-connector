@@ -11,9 +11,6 @@ class MediaCategoryHelper
     const PRODUCT = 2;
     const CATEGORY = 3;
 
-    /**
-     *
-     */
     public function getCategories()
     {
         return [

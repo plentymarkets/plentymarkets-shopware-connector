@@ -2,11 +2,11 @@
 
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Category;
 
+use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\Category\RemoveCategoryCommand;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\RemoveCommandInterface;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Category\Category;
 use Psr\Log\LoggerInterface;
 use Shopware\Components\Api\Exception\NotFoundException;
@@ -36,9 +36,9 @@ class RemoveCategoryCommandHandler implements CommandHandlerInterface
     /**
      * RemoveCategoryCommandHandler constructor.
      *
-     * @param CategoryResource $resource
+     * @param CategoryResource         $resource
      * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface $logger
+     * @param LoggerInterface          $logger
      */
     public function __construct(
         CategoryResource $resource,

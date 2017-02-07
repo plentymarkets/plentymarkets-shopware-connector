@@ -4,19 +4,19 @@ namespace PlentyConnector\Connector\CleanupService;
 
 use Assert\Assertion;
 use Exception;
+use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\CommandFactory\CommandFactoryInterface;
 use PlentyConnector\Connector\ServiceBus\CommandFactory\Exception\MissingCommandException;
 use PlentyConnector\Connector\ServiceBus\CommandFactory\Exception\MissingCommandGeneratorException;
 use PlentyConnector\Connector\ServiceBus\CommandType;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\QueryFactory\Exception\MissingQueryException;
 use PlentyConnector\Connector\ServiceBus\QueryFactory\Exception\MissingQueryGeneratorException;
 use PlentyConnector\Connector\ServiceBus\QueryFactory\QueryFactoryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
+use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\ValueObject\Definition\DefinitionInterface;
 use PlentyConnector\Connector\ValueObject\Identity\IdentityInterface;
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -62,11 +62,11 @@ class CleanupService implements CleanupServiceInterface
     /**
      * CleanupService constructor.
      *
-     * @param ServiceBusInterface $serviceBus
-     * @param QueryFactoryInterface $queryFactory
-     * @param CommandFactoryInterface $commandFactory
+     * @param ServiceBusInterface      $serviceBus
+     * @param QueryFactoryInterface    $queryFactory
+     * @param CommandFactoryInterface  $commandFactory
      * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface $logger
+     * @param LoggerInterface          $logger
      */
     public function __construct(
         ServiceBusInterface $serviceBus,
@@ -181,7 +181,7 @@ class CleanupService implements CleanupServiceInterface
                 'objectType' => $objectType,
             ]);
 
-            $orphanedIdentities = array_filter($allIdentities, function(IdentityInterface $identity) use ($identifiers) {
+            $orphanedIdentities = array_filter($allIdentities, function (IdentityInterface $identity) use ($identifiers) {
                 return !in_array($identity->getObjectIdentifier(), $identifiers, true);
             });
 

@@ -56,18 +56,18 @@ class Media implements MediaInterface
     /**
      * Media constructor.
      *
-     * @param string $identifier
-     * @param string $mediaCategoryIdentifier
-     * @param string $link
-     * @param string $name
-     * @param string $alternateName
-     * @param string|null $hash
+     * @param string                 $identifier
+     * @param string                 $mediaCategoryIdentifier
+     * @param string                 $link
+     * @param string                 $name
+     * @param string                 $alternateName
+     * @param string|null            $hash
      * @param TranslationInterface[] $translations
-     * @param AttributeInterface[] $attributes
+     * @param AttributeInterface[]   $attributes
      */
     public function __construct(
         $identifier,
-        $mediaCategoryIdentifier = null,
+        $mediaCategoryIdentifier,
         $link,
         $name,
         $alternateName,

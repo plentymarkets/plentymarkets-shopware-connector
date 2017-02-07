@@ -4,8 +4,6 @@ namespace PlentyConnector\Installer;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Tools\SchemaTool;
-use PlentyConnector\Connector\ConfigService\Model\Config;
-use PlentyConnector\Connector\IdentityService\Model\Identity;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
@@ -30,7 +28,7 @@ class DatabaseInstaller implements InstallerInterface
      * DatabaseInstaller constructor.
      *
      * @param ModelManager $entitiyManager
-     * @param array $models
+     * @param array        $models
      */
     public function __construct(ModelManager $entitiyManager, array $models)
     {

@@ -35,18 +35,18 @@ class ControllerPathSubscriber implements SubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            'Enlight_Controller_Dispatcher_ControllerPath_Backend_PlentyConnector' => 'onControllerBackendPlentyConnector'
+            'Enlight_Controller_Dispatcher_ControllerPath_Backend_PlentyConnector' => 'onControllerBackendPlentyConnector',
         ];
     }
 
     /**
      * @param Enlight_Event_EventArgs $args
      *
-     * @return string
-     *
      * @throws InvalidArgumentException
      * @throws ServiceNotFoundException
      * @throws ServiceCircularReferenceException
+     *
+     * @return string
      */
     public function onControllerBackendPlentyConnector(Enlight_Event_EventArgs $args)
     {

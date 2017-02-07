@@ -3,9 +3,6 @@
 namespace PlentymarketsAdapter\Client;
 
 use Iterator;
-use PlentyConnector\Adapter\PlentymarketsAdapter\Client\Exception\InvalidResponseException;
-use PlentymarketsAdapter\Client\Exception\InvalidCredentialsException;
-use UnexpectedValueException;
 
 /**
  * Interface ClientInterface.
@@ -13,12 +10,12 @@ use UnexpectedValueException;
 interface ClientInterface
 {
     /**
-     * @param string $method
-     * @param string $path
-     * @param array $params
+     * @param string   $method
+     * @param string   $path
+     * @param array    $params
      * @param int|null $limit
      * @param int|null $offset
-     * @param array $options
+     * @param array    $options
      *
      * @return array
      */
@@ -26,7 +23,7 @@ interface ClientInterface
 
     /**
      * @param string $path
-     * @param array $criteria
+     * @param array  $criteria
      *
      * @return Iterator
      */
@@ -34,7 +31,7 @@ interface ClientInterface
 
     /**
      * @param string $path
-     * @param array $criteria
+     * @param array  $criteria
      *
      * @return int
      */

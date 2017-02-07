@@ -30,7 +30,7 @@ class FetchAllOrderStatusesQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllOrderStatusesQueryHandler constructor.
      *
-     * @param EntityManagerInterface $entityManager
+     * @param EntityManagerInterface             $entityManager
      * @param OrderStatusResponseParserInterface $responseParser
      */
     public function __construct(
@@ -72,7 +72,7 @@ class FetchAllOrderStatusesQueryHandler implements QueryHandlerInterface
         $queryBuilder = $this->repository->createQueryBuilder('status');
         $queryBuilder->select([
             'status.id as id',
-            'status.name as name'
+            'status.name as name',
         ]);
         $queryBuilder->where('status.group = :group');
         $queryBuilder->setParameter('group', Status::GROUP_STATE);

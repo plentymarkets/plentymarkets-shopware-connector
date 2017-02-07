@@ -27,11 +27,11 @@ class QueryHandlerMiddleware implements Middleware
 
     /**
      * @param QueryInterface $query
-     * @param callable $next
-     *
-     * @return mixed
+     * @param callable       $next
      *
      * @throws NotFoundException
+     *
+     * @return mixed
      */
     public function execute($query, callable $next)
     {

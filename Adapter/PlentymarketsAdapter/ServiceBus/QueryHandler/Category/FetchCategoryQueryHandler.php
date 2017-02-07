@@ -40,10 +40,10 @@ class FetchCategoryQueryHandler implements QueryHandlerInterface
     /**
      * FetchCategoryQueryHandler constructor.
      *
-     * @param ClientInterface $client
+     * @param ClientInterface                 $client
      * @param CategoryResponseParserInterface $categoryResponseParser
-     * @param LanguageHelper $languageHelper
-     * @param IdentityServiceInterface $identityService
+     * @param LanguageHelper                  $languageHelper
+     * @param IdentityServiceInterface        $identityService
      */
     public function __construct(
         ClientInterface $client,
@@ -82,7 +82,7 @@ class FetchCategoryQueryHandler implements QueryHandlerInterface
 
         $element = $this->client->request('GET', 'categories/' . $identity->getAdapterIdentifier(), [
             'with' => 'details',
-            'lang' => implode(',', array_column($this->languageHelper->getLanguages(), 'id'))
+            'lang' => implode(',', array_column($this->languageHelper->getLanguages(), 'id')),
         ]);
 
         if ($element['type'] !== 'item' || $element['right'] !== 'all') {

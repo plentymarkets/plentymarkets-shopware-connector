@@ -8,9 +8,9 @@ use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ServiceBus\ChangedDateTimeTrait;
 use PlentymarketsAdapter\ResponseParser\Manufacturer\ManufacturerResponseParserInterface;
 use PlentymarketsAdapter\ResponseParser\Media\MediaResponseParserInterface;
+use PlentymarketsAdapter\ServiceBus\ChangedDateTimeTrait;
 
 /**
  * Class FetchChangedManufacturersQueryHandler.
@@ -42,10 +42,10 @@ class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
     /**
      * FetchChangedManufacturersQueryHandler constructor.
      *
-     * @param ClientInterface $client
-     * @param ConfigServiceInterface $config
+     * @param ClientInterface                     $client
+     * @param ConfigServiceInterface              $config
      * @param ManufacturerResponseParserInterface $manufacturerResponseParser
-     * @param MediaResponseParserInterface $mediaResponseParser
+     * @param MediaResponseParserInterface        $mediaResponseParser
      */
     public function __construct(
         ClientInterface $client,
@@ -83,7 +83,7 @@ class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
             if (!empty($element['logo'])) {
                 $result[] = $media = $this->mediaResponseParser->parse([
                     'link' => $element['logo'],
-                    'name' => $element['name']
+                    'name' => $element['name'],
                 ]);
 
                 $element['logoIdentifier'] = $media->getIdentifier();

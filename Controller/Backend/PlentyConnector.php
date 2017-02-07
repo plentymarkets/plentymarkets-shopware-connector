@@ -6,9 +6,9 @@ use PlentyConnector\Connector\IdentityService\IdentityService;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\MappingService\MappingServiceInterface;
 use PlentyConnector\Connector\ServiceBus\QueryType;
+use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\ValueObject\Mapping\MappingInterface;
-use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\PlentyConnector;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
@@ -70,9 +70,9 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
             // fail silently
         }
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => $success,
-        ));
+        ]);
     }
 
     /**
@@ -89,10 +89,10 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         $config->set('rest_username', $this->Request()->get('ApiUsername'));
         $config->set('rest_password', $this->Request()->get('ApiPassword'));
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true,
             'data' => $this->Request()->getParams(),
-        ));
+        ]);
     }
 
     /**
@@ -102,14 +102,14 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
     {
         $config = $this->container->get('plenty_connector.config');
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true,
             'data' => [
                 'ApiUrl' => $config->get('rest_url'),
                 'ApiUsername' => $config->get('rest_username'),
                 'ApiPassword' => $config->get('rest_password'),
             ],
-        ));
+        ]);
     }
 
     /**
@@ -127,7 +127,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         } catch (Exception $exception) {
             $this->View()->assign([
                 'success' => false,
-                'message' => $exception->getMessage()
+                'message' => $exception->getMessage(),
             ]);
 
             return;
@@ -143,7 +143,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
             return [
                 'identifier' => $object->getIdentifier(),
                 'type' => $object->getType(),
-                'name' => $name
+                'name' => $name,
             ];
         };
 
@@ -155,9 +155,9 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
                     'destinationAdapterName' => $mapping->getDestinationAdapterName(),
                     'originTransferObjects' => array_map($transferObjectMapping, $mapping->getOriginTransferObjects()),
                     'destinationTransferObjects' => array_map($transferObjectMapping, $mapping->getDestinationTransferObjects()),
-                    'objectType' => $mapping->getObjectType()
+                    'objectType' => $mapping->getObjectType(),
                 ];
-            }, $mappingInformation)
+            }, $mappingInformation),
         ]);
     }
 
@@ -181,7 +181,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
             if ($this->hasDuplicateMappings($updates)) {
                 $this->View()->assign([
                     'success' => false,
-                    'message' => 'duplicate mapping'
+                    'message' => 'duplicate mapping',
                 ]);
 
                 return;
@@ -204,8 +204,9 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
                 if (null === $oldDestinationIdentity) {
                     $this->View()->assign([
                         'success' => false,
-                        'message' => 'reload mapping'
+                        'message' => 'reload mapping',
                     ]);
+
                     return;
                 }
 
@@ -230,24 +231,73 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
 
             $this->View()->assign([
                 'success' => true,
-                'data' => $updates
+                'data' => $updates,
             ]);
         } catch (Exception $exception) {
             $this->View()->assign([
                 'success' => false,
-                'message' => $exception->getMessage()
+                'message' => $exception->getMessage(),
+            ]);
+        }
+    }
+
+    /**
+     * TODO: Remove identity if nothing has been handled
+     *
+     * Sync one product based on the plentymarkets id
+     */
+    public function syncItemAction()
+    {
+        $data = json_decode($this->request->getRawBody(), true);
+
+        if (null === $data['itemId'] || '' === $data['itemId']) {
+            $this->View()->assign([
+                'success' => false,
+                'message' => 'Artikel ID ist leer.',
+            ]);
+
+            return;
+        }
+
+        try {
+            /**
+             * @var IdentityServiceInterface $identityService
+             */
+            $identityService = Shopware()->Container()->get('plenty_connector.identity_service');
+
+            $identity = $identityService->findOneOrCreate(
+                $data['itemId'],
+                PlentymarketsAdapter::NAME,
+                Product::TYPE
+            );
+
+            /**
+             * @var ConnectorInterface $connector
+             */
+            $connector = Shopware()->Container()->get('plenty_connector.connector');
+            $connector->handle(QueryType::ONE, Product::TYPE, $identity->getObjectIdentifier());
+
+            $this->View()->assign([
+                'success' => true,
+            ]);
+        } catch (Exception $exception) {
+            $this->View()->assign([
+                'success' => false,
+                'message' => $exception->getMessage(),
             ]);
         }
     }
 
     /**
      * @param array $updates
-     * @return bool
+     *
      * @throws Exception
+     *
+     * @return bool
      */
     private function hasDuplicateMappings(array $updates)
     {
-        $originIdentifiers = array_column(array_filter($updates, function($update) {
+        $originIdentifiers = array_column(array_filter($updates, function ($update) {
             return !$update['remove'];
         }), 'originIdentifier');
 
@@ -273,52 +323,5 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         }
 
         return false;
-    }
-
-    /**
-     * TODO: Remove identity if nothing has been handled
-     *
-     * Sync one product based on the plentymarkets id
-     */
-    public function syncItemAction()
-    {
-        $data = json_decode($this->request->getRawBody(), true);
-
-        if (null === $data['itemId'] || '' === $data['itemId']) {
-            $this->View()->assign([
-                'success' => false,
-                'message' => 'Artikel ID ist leer.'
-            ]);
-
-            return;
-        }
-
-        try {
-            /**
-             * @var IdentityServiceInterface $identityService
-             */
-            $identityService = Shopware()->Container()->get('plenty_connector.identity_service');
-
-            $identity = $identityService->findOneOrCreate(
-                $data['itemId'],
-                PlentymarketsAdapter::NAME,
-                Product::TYPE
-            );
-
-            /**
-             * @var ConnectorInterface $connector
-             */
-            $connector = Shopware()->Container()->get('plenty_connector.connector');
-            $connector->handle(QueryType::ONE, Product::TYPE, $identity->getObjectIdentifier());
-
-            $this->View()->assign([
-                'success' => true
-            ]);
-        } catch (Exception $exception) {
-            $this->View()->assign([
-                'success' => false,
-                'message' => $exception->getMessage(),
-            ]);
-        }
     }
 }

@@ -7,7 +7,6 @@ use PlentyConnector\Connector\IdentityService\Model\Identity as IdentityModel;
 use PlentyConnector\Connector\IdentityService\Model\IdentityRepository;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use PlentyConnector\Connector\ValueObject\Identity\IdentityInterface;
-use Symfony\Component\Intl\Exception\NotImplementedException;
 
 /**
  * Class DoctrineIdentityStorage.
@@ -69,7 +68,7 @@ class DoctrineIdentityStorage implements IdentityStorageInterface
          */
         $result = $this->identityRepository->findBy($criteria);
 
-        return array_map(function(IdentityModel $model) {
+        return array_map(function (IdentityModel $model) {
             return Identity::fromArray([
                 'objectIdentifier' => $model->getObjectIdentifier(),
                 'objectType' => $model->getObjectType(),

@@ -21,12 +21,12 @@ interface CommandFactoryInterface
      * @param string $adapterName
      * @param string $objectType
      * @param string $commandType
-     * @param mixed $payload
-     *
-     * @return CommandInterface
+     * @param mixed  $payload
      *
      * @throws MissingCommandGeneratorException
      * @throws MissingCommandException
+     *
+     * @return CommandInterface
      */
     public function create($adapterName, $objectType, $commandType, $payload = null);
 }

@@ -2,11 +2,11 @@
 
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Media;
 
+use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\Media\RemoveMediaCommand;
 use PlentyConnector\Connector\ServiceBus\Command\RemoveCommandInterface;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Media\Media;
 use Psr\Log\LoggerInterface;
 use Shopware\Components\Api\Exception\NotFoundException;
@@ -36,9 +36,9 @@ class RemoveMediaCommandHandler implements CommandHandlerInterface
     /**
      * RemoveMediaCommandHandler constructor.
      *
-     * @param MediaResource $resource
+     * @param MediaResource            $resource
      * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface $logger
+     * @param LoggerInterface          $logger
      */
     public function __construct(
         MediaResource $resource,

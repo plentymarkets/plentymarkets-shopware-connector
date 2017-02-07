@@ -16,7 +16,6 @@ use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 
-
 /**
  * Class HandleOrderCommandHandler.
  */
@@ -35,7 +34,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     /**
      * HandleOrderCommandHandler constructor.
      *
-     * @param ClientInterface $client
+     * @param ClientInterface          $client
      * @param IdentityServiceInterface $identityService
      */
     public function __construct(ClientInterface $client, IdentityServiceInterface $identityService)
@@ -60,7 +59,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     {
         /**
          * @var HandleCommandInterface $command
-         * @var OrderInterface $order
+         * @var OrderInterface         $order
          */
         $order = $command->getTransferObject();
 
@@ -96,7 +95,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             $params['statusId'] = $orderStatusIdentity->getAdapterIdentifier();
             $params['plentyId'] = $shopIdentity->getAdapterIdentifier();
 
-            $params['orderItems'] = array_map(function($item) use ($shippingProfileIdentity) {
+            $params['orderItems'] = array_map(function ($item) use ($shippingProfileIdentity) {
                 /**
                  * @var OrderItemInterface $item
                  */
@@ -133,9 +132,8 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             }, $order->getOrderItems());
 
             $result = $this->client->request('post', 'orders', $params);
-        } else {
-            // TODO update existing order
         }
+            // TODO update existing order
 
         return true;
     }

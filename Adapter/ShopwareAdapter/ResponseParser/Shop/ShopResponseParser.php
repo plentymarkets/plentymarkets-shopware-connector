@@ -32,14 +32,14 @@ class ShopResponseParser implements ShopResponseParserInterface
     public function parse(array $entry)
     {
         $identity = $this->identityService->findOneOrCreate(
-            (string)$entry['id'],
+            (string) $entry['id'],
             ShopwareAdapter::NAME,
             Shop::TYPE
         );
 
         return Shop::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => $entry['name']
+            'name' => $entry['name'],
         ]);
     }
 }

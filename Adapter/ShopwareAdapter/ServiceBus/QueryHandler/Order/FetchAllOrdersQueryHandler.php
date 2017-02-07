@@ -3,7 +3,6 @@
 namespace ShopwareAdapter\ServiceBus\QueryHandler\Order;
 
 use PlentyConnector\Connector\ServiceBus\Query\Order\FetchAllOrdersQuery;
-use PlentyConnector\Connector\ServiceBus\Query\Order\GetChangedOrderQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
 use Psr\Log\LoggerInterface;
@@ -35,8 +34,8 @@ class FetchAllOrdersQueryHandler implements QueryHandlerInterface
      * FetchAllOrdersQueryHandler constructor.
      *
      * @param OrderResponseParserInterface $responseParser
-     * @param LoggerInterface $logger
-     * @param Resource\Order $orderResource
+     * @param LoggerInterface              $logger
+     * @param Resource\Order               $orderResource
      */
     public function __construct(
         OrderResponseParserInterface $responseParser,
@@ -66,8 +65,8 @@ class FetchAllOrdersQueryHandler implements QueryHandlerInterface
             [
                 'property' => 'status',
                 'expression' => '!=',
-                'value' => -1
-            ]
+                'value' => -1,
+            ],
         ];
 
         $orders = $this->orderResource->getList(0, null, $filter);

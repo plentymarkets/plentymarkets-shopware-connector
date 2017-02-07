@@ -32,14 +32,14 @@ class MediaCategoryResponseParser implements MediaCategoryResponseParserInterfac
     public function parse(array $entry)
     {
         $identity = $this->identityService->findOneOrCreate(
-            (string)$entry['id'],
+            (string) $entry['id'],
             PlentymarketsAdapter::NAME,
             MediaCategory::TYPE
         );
 
         return MediaCategory::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => (string)$entry['name'],
+            'name' => (string) $entry['name'],
         ]);
     }
 }

@@ -41,10 +41,10 @@ class FetchManufacturerQueryHandler implements QueryHandlerInterface
     /**
      * FetchManufacturerQueryHandler constructor.
      *
-     * @param ClientInterface $client
+     * @param ClientInterface                     $client
      * @param ManufacturerResponseParserInterface $manufacturerResponseParser
-     * @param MediaResponseParserInterface $mediaResponseParser
-     * @param IdentityServiceInterface $identityService
+     * @param MediaResponseParserInterface        $mediaResponseParser
+     * @param IdentityServiceInterface            $identityService
      */
     public function __construct(
         ClientInterface $client,
@@ -88,7 +88,7 @@ class FetchManufacturerQueryHandler implements QueryHandlerInterface
         if (!empty($element['logo'])) {
             $result[] = $media = $this->mediaResponseParser->parse([
                 'link' => $element['logo'],
-                'name' => $element['name']
+                'name' => $element['name'],
             ]);
 
             $element['logoIdentifier'] = $media->getIdentifier();

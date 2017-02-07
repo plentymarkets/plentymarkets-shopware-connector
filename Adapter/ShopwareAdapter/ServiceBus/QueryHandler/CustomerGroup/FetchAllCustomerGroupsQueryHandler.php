@@ -30,7 +30,7 @@ class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllCustomerGroupsQueryHandler constructor.
      *
-     * @param EntityManagerInterface $entityManager
+     * @param EntityManagerInterface               $entityManager
      * @param CustomerGroupResponseParserInterface $responseParser
      */
     public function __construct(
@@ -72,7 +72,7 @@ class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
         $queryBuilder = $this->repository->createQueryBuilder('groups');
         $queryBuilder->select([
             'groups.id as id',
-            'groups.name as name'
+            'groups.name as name',
         ]);
 
         $objectQuery = $queryBuilder->getQuery();

@@ -1,11 +1,8 @@
 <?php
 
-
 namespace PlentyConnector\Connector\ServiceBus\QueryGenerator;
 
-
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
  * Interface QueryGeneratorInterface

@@ -32,7 +32,7 @@ class CurrencyResponseParser implements CurrencyResponseParserInterface
     public function parse(array $entry)
     {
         $identity = $this->identityService->findOneOrCreate(
-            (string)$entry['id'],
+            (string) $entry['id'],
             ShopwareAdapter::NAME,
             Currency::TYPE
         );

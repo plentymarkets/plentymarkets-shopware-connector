@@ -36,8 +36,8 @@ class Manufacturer implements ManufacturerInterface
     /**
      * Manufacturer constructor.
      *
-     * @param string $identifier
-     * @param string $name
+     * @param string      $identifier
+     * @param string      $name
      * @param string|null $logoIdentifier
      * @param string|null $link
      */

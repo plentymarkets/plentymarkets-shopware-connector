@@ -56,18 +56,18 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
         $variantId = $variantResource->getIdFromNumber($entry['articleNumber']);
 
         $identity = $this->identityService->findOneOrCreate(
-            (string)$entry['id'],
+            (string) $entry['id'],
             ShopwareAdapter::NAME,
             OrderItem::TYPE
         );
 
         $productIdentity = $this->identityService->findOneOrThrow(
-            (string)$entry['articleId'],
+            (string) $entry['articleId'],
             ShopwareAdapter::NAME,
             Product::TYPE
         );
         $variationIdentity = $this->identityService->findOneOrThrow(
-            (string)$variantId,
+            (string) $variantId,
             ShopwareAdapter::NAME,
             Variation::TYPE
         );

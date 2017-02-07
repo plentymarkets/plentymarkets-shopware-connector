@@ -31,7 +31,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     /**
      * OrderResponseParser constructor.
      *
-     * @param IdentityServiceInterface $identityService
+     * @param IdentityServiceInterface         $identityService
      * @param OrderItemResponseParserInterface $orderItemResponseParser
      */
     public function __construct(
@@ -50,7 +50,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     public function parse(array $entry)
     {
         $identity = $this->identityService->findOneOrCreate(
-            (string)$entry['id'],
+            (string) $entry['id'],
             ShopwareAdapter::NAME,
             Order::TYPE
         );
@@ -60,27 +60,27 @@ class OrderResponseParser implements OrderResponseParserInterface
         }, $entry['details']));
 
         $shopIdentity = $this->identityService->findOneOrThrow(
-            (string)$entry['shopId'],
+            (string) $entry['shopId'],
             ShopwareAdapter::NAME,
             Shop::TYPE
         );
         $orderStatusIdentity = $this->identityService->findOneOrThrow(
-            (string)$entry['orderStatusId'],
+            (string) $entry['orderStatusId'],
             ShopwareAdapter::NAME,
             OrderStatus::TYPE
         );
         $paymentStatusIdentity = $this->identityService->findOneOrThrow(
-            (string)$entry['paymentStatusId'],
+            (string) $entry['paymentStatusId'],
             ShopwareAdapter::NAME,
             PaymentStatus::TYPE
         );
         $paymentMethodIdentity = $this->identityService->findOneOrThrow(
-            (string)$entry['paymentId'],
+            (string) $entry['paymentId'],
             ShopwareAdapter::NAME,
             PaymentMethod::TYPE
         );
         $shippingProfileIdentity = $this->identityService->findOneOrThrow(
-            (string)$entry['dispatchId'],
+            (string) $entry['dispatchId'],
             ShopwareAdapter::NAME,
             ShippingProfile::TYPE
         );

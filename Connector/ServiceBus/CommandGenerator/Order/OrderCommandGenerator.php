@@ -7,7 +7,6 @@ use PlentyConnector\Connector\ServiceBus\CommandGenerator\CommandGeneratorInterf
 use PlentyConnector\Connector\TransferObject\Order\Order;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
-
 /**
  * Class OrderCommandGenerator
  */

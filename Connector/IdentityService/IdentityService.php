@@ -3,11 +3,10 @@
 namespace PlentyConnector\Connector\IdentityService;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\ServiceBus\Event\Identity\IdentityCreatedEvent;
-use PlentyConnector\Connector\ServiceBus\Event\Identity\IdentityRemovedEvent;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\Storage\IdentityStorageInterface;
-use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
+use PlentyConnector\Connector\ServiceBus\Event\Identity\IdentityCreatedEvent;
+use PlentyConnector\Connector\ServiceBus\Event\Identity\IdentityRemovedEvent;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use PlentyConnector\Connector\ValueObject\Identity\IdentityInterface;
 use Ramsey\Uuid\Uuid;
@@ -56,7 +55,7 @@ class IdentityService implements IdentityServiceInterface
             $identity = $this->create(
                 $objectIdentifier,
                 $objectType,
-                (string)$adapterIdentifier,
+                (string) $adapterIdentifier,
                 $adapterName
             );
         }
@@ -155,6 +154,6 @@ class IdentityService implements IdentityServiceInterface
     {
         $identity = $this->findOneBy($criteria);
 
-        return (bool)$identity;
+        return (bool) $identity;
     }
 }
