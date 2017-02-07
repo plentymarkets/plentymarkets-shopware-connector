@@ -4,17 +4,17 @@ namespace PlentyConnector\tests\Unit\CleanupService;
 
 use PHPUnit\Framework\TestCase;
 use PlentyConnector\Connector\CleanupService\CleanupService;
+use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\CommandFactory\CommandFactoryInterface;
 use PlentyConnector\Connector\ServiceBus\CommandType;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryFactory\QueryFactoryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
+use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\ValueObject\Definition\DefinitionInterface;
 use PlentyConnector\Connector\ValueObject\Identity\IdentityInterface;
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 
