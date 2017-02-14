@@ -40,14 +40,6 @@ class Language implements LanguageInterface
     /**
      * {@inheritdoc}
      */
-    public function getType()
-    {
-        return self::TYPE;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public static function fromArray(array $params = [])
     {
         Assertion::allInArray(array_keys($params), [
@@ -59,6 +51,14 @@ class Language implements LanguageInterface
             $params['identifier'],
             $params['name']
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getType()
+    {
+        return self::TYPE;
     }
 
     /**

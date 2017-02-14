@@ -27,7 +27,7 @@ class FetchAllShopsQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllShopsQueryHandler constructor.
      *
-     * @param ClientInterface             $client
+     * @param ClientInterface $client
      * @param ShopResponseParserInterface $responseParser
      */
     public function __construct(

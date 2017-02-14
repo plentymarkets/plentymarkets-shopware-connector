@@ -32,7 +32,7 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
     /**
      * HandleMediaCategoryCommandHandler constructor.
      *
-     * @param EntityManagerInterface   $entityManager
+     * @param EntityManagerInterface $entityManager
      * @param IdentityServiceInterface $identityService
      */
     public function __construct(EntityManagerInterface $entityManager, IdentityServiceInterface $identityService)
@@ -122,8 +122,8 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
 
     /**
      * @param MediaCategoryInterface $mediaCategory
-     * @param Album                  $parent
-     * @param Settings               $parentSettings
+     * @param Album $parent
+     * @param Settings $parentSettings
      */
     private function createNewAlbum(MediaCategoryInterface $mediaCategory, Album $parent, Settings $parentSettings)
     {

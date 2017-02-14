@@ -86,20 +86,20 @@ class Category implements CategoryInterface
     /**
      * Category constructor.
      *
-     * @param string                 $identifier
-     * @param string                 $name
-     * @param string|null            $parentIdentifier
-     * @param string                 $shopIdentifier
-     * @param array                  $imageIdentifiers
-     * @param int                    $position
-     * @param string                 $description
-     * @param string                 $longDescription
-     * @param string                 $metaTitle
-     * @param string                 $metaDescription
-     * @param string                 $metaKeywords
-     * @param string                 $metaRobots
+     * @param string $identifier
+     * @param string $name
+     * @param string|null $parentIdentifier
+     * @param string $shopIdentifier
+     * @param array $imageIdentifiers
+     * @param int $position
+     * @param string $description
+     * @param string $longDescription
+     * @param string $metaTitle
+     * @param string $metaDescription
+     * @param string $metaKeywords
+     * @param string $metaRobots
      * @param TranslationInterface[] $translations
-     * @param AttributeInterface[]   $attributes
+     * @param AttributeInterface[] $attributes
      */
     public function __construct(
         $identifier,
@@ -170,14 +170,6 @@ class Category implements CategoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getType()
-    {
-        return self::TYPE;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public static function fromArray(array $params = [])
     {
         Assertion::allInArray(array_keys($params), [
@@ -213,6 +205,14 @@ class Category implements CategoryInterface
             $params['translations'],
             $params['attributes']
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getType()
+    {
+        return self::TYPE;
     }
 
     /**

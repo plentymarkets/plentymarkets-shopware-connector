@@ -62,11 +62,11 @@ class CleanupService implements CleanupServiceInterface
     /**
      * CleanupService constructor.
      *
-     * @param ServiceBusInterface      $serviceBus
-     * @param QueryFactoryInterface    $queryFactory
-     * @param CommandFactoryInterface  $commandFactory
+     * @param ServiceBusInterface $serviceBus
+     * @param QueryFactoryInterface $queryFactory
+     * @param CommandFactoryInterface $commandFactory
      * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface          $logger
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ServiceBusInterface $serviceBus,
@@ -139,6 +139,40 @@ class CleanupService implements CleanupServiceInterface
     /**
      * @param DefinitionInterface $definition
      *
+     * @throws MissingQueryException
+     * @throws MissingQueryGeneratorException
+     *
+     * @return bool
+     */
+    private function collectObjectIdentifiers(DefinitionInterface $definition)
+    {
+        /**
+         * @var TransferObjectInterface[] $objects
+         */
+        $objects = $this->serviceBus->handle($this->queryFactory->create(
+            $definition->getOriginAdapterName(),
+            $definition->getObjectType(),
+            QueryType::ALL
+        ));
+
+        if (empty($objects)) {
+            return false;
+        }
+
+        array_walk($objects, function (TransferObjectInterface $transferObject) use ($definition) {
+            $this->elements[] = [
+                'adapterIdentifier' => $transferObject->getIdentifier(),
+                'adapterName' => $definition->getDestinationAdapterName(),
+                'type' => $transferObject->getType(),
+            ];
+        });
+
+        return true;
+    }
+
+    /**
+     * @param DefinitionInterface $definition
+     *
      * @throws MissingCommandException
      * @throws MissingCommandGeneratorException
      */
@@ -181,9 +215,10 @@ class CleanupService implements CleanupServiceInterface
                 'objectType' => $objectType,
             ]);
 
-            $orphanedIdentities = array_filter($allIdentities, function (IdentityInterface $identity) use ($identifiers) {
-                return !in_array($identity->getObjectIdentifier(), $identifiers, true);
-            });
+            $orphanedIdentities = array_filter($allIdentities,
+                function (IdentityInterface $identity) use ($identifiers) {
+                    return !in_array($identity->getObjectIdentifier(), $identifiers, true);
+                });
 
             array_walk($orphanedIdentities, function (IdentityInterface $identity) use ($adapterName, $objectType) {
                 $this->serviceBus->handle($this->commandFactory->create(
@@ -194,39 +229,5 @@ class CleanupService implements CleanupServiceInterface
                 ));
             });
         }
-    }
-
-    /**
-     * @param DefinitionInterface $definition
-     *
-     * @throws MissingQueryException
-     * @throws MissingQueryGeneratorException
-     *
-     * @return bool
-     */
-    private function collectObjectIdentifiers(DefinitionInterface $definition)
-    {
-        /**
-         * @var TransferObjectInterface[] $objects
-         */
-        $objects = $this->serviceBus->handle($this->queryFactory->create(
-            $definition->getOriginAdapterName(),
-            $definition->getObjectType(),
-            QueryType::ALL
-        ));
-
-        if (empty($objects)) {
-            return false;
-        }
-
-        array_walk($objects, function (TransferObjectInterface $transferObject) use ($definition) {
-            $this->elements[] = [
-                'adapterIdentifier' => $transferObject->getIdentifier(),
-                'adapterName' => $definition->getDestinationAdapterName(),
-                'type' => $transferObject->getType(),
-            ];
-        });
-
-        return true;
     }
 }

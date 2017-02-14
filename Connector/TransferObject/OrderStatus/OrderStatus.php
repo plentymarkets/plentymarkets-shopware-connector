@@ -40,14 +40,6 @@ class OrderStatus implements OrderStatusInterface
     /**
      * {@inheritdoc}
      */
-    public function getType()
-    {
-        return self::TYPE;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public static function fromArray(array $params = [])
     {
         Assertion::allInArray(array_keys($params), [
@@ -59,6 +51,14 @@ class OrderStatus implements OrderStatusInterface
             $params['identifier'],
             $params['name']
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getType()
+    {
+        return self::TYPE;
     }
 
     /**

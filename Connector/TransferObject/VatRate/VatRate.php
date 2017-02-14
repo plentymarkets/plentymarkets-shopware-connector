@@ -40,14 +40,6 @@ class VatRate implements VatRateInterface
     /**
      * {@inheritdoc}
      */
-    public function getType()
-    {
-        return self::TYPE;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public static function fromArray(array $params = [])
     {
         Assertion::allInArray(array_keys($params), [
@@ -59,6 +51,14 @@ class VatRate implements VatRateInterface
             $params['identifier'],
             $params['name']
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getType()
+    {
+        return self::TYPE;
     }
 
     /**

@@ -29,7 +29,7 @@ class FetchAllShippingProfilesQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllShippingProfilesQueryHandler constructor.
      *
-     * @param EntityManagerInterface                 $entityManager
+     * @param EntityManagerInterface $entityManager
      * @param ShippingProfileResponseParserInterface $responseParser
      */
     public function __construct(

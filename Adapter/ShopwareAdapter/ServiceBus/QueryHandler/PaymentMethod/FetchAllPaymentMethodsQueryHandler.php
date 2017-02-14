@@ -29,7 +29,7 @@ class FetchAllPaymentMethodsQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllPaymentMethodsQueryHandler constructor.
      *
-     * @param EntityManagerInterface               $entityManager
+     * @param EntityManagerInterface $entityManager
      * @param PaymentMethodResponseParserInterface $responseParser
      */
     public function __construct(

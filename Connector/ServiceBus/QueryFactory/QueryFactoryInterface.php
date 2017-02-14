@@ -21,7 +21,7 @@ interface QueryFactoryInterface
      * @param string $adapterName
      * @param string $objectType
      * @param string $queryType
-     * @param mixed  $payload
+     * @param mixed $payload
      *
      * @throws MissingQueryGeneratorException
      * @throws MissingQueryException

@@ -46,7 +46,7 @@ class Client implements ClientInterface
     /**
      * Client constructor.
      *
-     * @param GuzzleClient           $connection
+     * @param GuzzleClient $connection
      * @param ConfigServiceInterface $config
      * @param $environment
      */
@@ -58,6 +58,36 @@ class Client implements ClientInterface
         $this->connection = $connection;
         $this->config = $config;
         $this->environment = $environment;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIterator($path, array $criteria = [])
+    {
+        return new Iterator($path, $this, $criteria);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTotal($path, array $criteria = [])
+    {
+        $options = [
+            'plainResponse' => true,
+        ];
+
+        $response = $this->request('GET', $path, $criteria, null, null, $options);
+
+        if (array_key_exists('totalsCount', $response)) {
+            return (int) $response['totalsCount'];
+        }
+
+        if (array_key_exists('entries', $response)) {
+            $response = $response['entries'];
+        }
+
+        return count($response);
     }
 
     /**
@@ -117,39 +147,9 @@ class Client implements ClientInterface
 
                 return $this->request($method, $path, $params, $limit, $offset);
             }
-                // generic exception
-                throw $exception;
+            // generic exception
+            throw $exception;
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getIterator($path, array $criteria = [])
-    {
-        return new Iterator($path, $this, $criteria);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTotal($path, array $criteria = [])
-    {
-        $options = [
-            'plainResponse' => true,
-        ];
-
-        $response = $this->request('GET', $path, $criteria, null, null, $options);
-
-        if (array_key_exists('totalsCount', $response)) {
-            return (int) $response['totalsCount'];
-        }
-
-        if (array_key_exists('entries', $response)) {
-            $response = $response['entries'];
-        }
-
-        return count($response);
     }
 
     /**
@@ -193,52 +193,6 @@ class Client implements ClientInterface
     }
 
     /**
-     * @param $url
-     *
-     * @throws InvalidCredentialsException
-     *
-     * @return string
-     */
-    private function getBaseUri($url)
-    {
-        if (null === $url) {
-            throw new InvalidCredentialsException();
-        }
-
-        $parts = parse_url($url);
-
-        return sprintf('https://%s/%s/', $parts['host'], 'rest');
-    }
-
-    /**
-     * @param string $path
-     *
-     * @return array
-     */
-    private function getHeaders($path)
-    {
-        $headers = [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/x.plentymarkets.v1+json',
-            'user-agent' => $this->getUserAgent(),
-        ];
-
-        if ($path !== 'login') {
-            $headers['Authorization'] = 'Bearer ' . $this->accessToken;
-        }
-
-        return $headers;
-    }
-
-    /**
-     * @return string
-     */
-    private function getUserAgent()
-    {
-        return 'Shopware/PlentyConnector/2.0/Rest/v1';
-    }
-
-    /**
      * @param $limit
      * @param $offset
      * @param array $options
@@ -263,10 +217,65 @@ class Client implements ClientInterface
     }
 
     /**
+     * @param int $limit
+     * @param int $offset
+     *
+     * @return int
+     */
+    private function getPage($limit, $offset)
+    {
+        $page = 1;
+
+        if (null !== $offset) {
+            $page = (int) (floor($offset / $limit) + 1);
+        }
+
+        return $page;
+    }
+
+    /**
+     * @param string $path
+     * @param array $options
+     *
+     * @return string
+     */
+    private function getUrl($path, array $options = [])
+    {
+        Assertion::string($path);
+        Assertion::notBlank($path);
+
+        if (!array_key_exists('base_uri', $options)) {
+            $base_uri = $this->getBaseUri($this->config->get('rest_url'));
+        } else {
+            $base_uri = $this->getBaseUri($options['base_uri']);
+        }
+
+        return $base_uri . $path;
+    }
+
+    /**
+     * @param $url
+     *
+     * @throws InvalidCredentialsException
+     *
+     * @return string
+     */
+    private function getBaseUri($url)
+    {
+        if (null === $url) {
+            throw new InvalidCredentialsException();
+        }
+
+        $parts = parse_url($url);
+
+        return sprintf('https://%s/%s/', $parts['host'], 'rest');
+    }
+
+    /**
      * @param string $method
      * @param string $path
-     * @param array  $params
-     * @param array  $options
+     * @param array $params
+     * @param array $options
      *
      * @return array
      */
@@ -310,38 +319,29 @@ class Client implements ClientInterface
 
     /**
      * @param string $path
-     * @param array  $options
      *
-     * @return string
+     * @return array
      */
-    private function getUrl($path, array $options = [])
+    private function getHeaders($path)
     {
-        Assertion::string($path);
-        Assertion::notBlank($path);
+        $headers = [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/x.plentymarkets.v1+json',
+            'user-agent' => $this->getUserAgent(),
+        ];
 
-        if (!array_key_exists('base_uri', $options)) {
-            $base_uri = $this->getBaseUri($this->config->get('rest_url'));
-        } else {
-            $base_uri = $this->getBaseUri($options['base_uri']);
+        if ($path !== 'login') {
+            $headers['Authorization'] = 'Bearer ' . $this->accessToken;
         }
 
-        return $base_uri . $path;
+        return $headers;
     }
 
     /**
-     * @param int $limit
-     * @param int $offset
-     *
-     * @return int
+     * @return string
      */
-    private function getPage($limit, $offset)
+    private function getUserAgent()
     {
-        $page = 1;
-
-        if (null !== $offset) {
-            $page = (int) (floor($offset / $limit) + 1);
-        }
-
-        return $page;
+        return 'Shopware/PlentyConnector/2.0/Rest/v1';
     }
 }

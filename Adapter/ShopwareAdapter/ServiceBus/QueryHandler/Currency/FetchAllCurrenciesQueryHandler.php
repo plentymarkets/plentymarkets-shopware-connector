@@ -30,7 +30,7 @@ class FetchAllCurrenciesQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllCurrenciesQueryHandler constructor.
      *
-     * @param EntityManagerInterface          $entityManager
+     * @param EntityManagerInterface $entityManager
      * @param CurrencyResponseParserInterface $responseParser
      */
     public function __construct(

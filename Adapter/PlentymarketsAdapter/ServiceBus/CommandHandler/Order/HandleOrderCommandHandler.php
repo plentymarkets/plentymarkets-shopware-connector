@@ -34,7 +34,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     /**
      * HandleOrderCommandHandler constructor.
      *
-     * @param ClientInterface          $client
+     * @param ClientInterface $client
      * @param IdentityServiceInterface $identityService
      */
     public function __construct(ClientInterface $client, IdentityServiceInterface $identityService)
@@ -49,7 +49,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     public function supports(CommandInterface $command)
     {
         return $command instanceof HandleOrderCommand &&
-        $command->getAdapterName() === PlentymarketsAdapter::NAME;
+            $command->getAdapterName() === PlentymarketsAdapter::NAME;
     }
 
     /**
@@ -59,7 +59,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     {
         /**
          * @var HandleCommandInterface $command
-         * @var OrderInterface         $order
+         * @var OrderInterface $order
          */
         $order = $command->getTransferObject();
 
@@ -119,10 +119,12 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                 ];
 
                 // WAREHOUSE, see OrderItemProperty on https://developers.plentymarkets.com/api-doc/Order#orderitem_models_order
-                $itemParams['properties'] = [[
-                    'typeId' => 1,
-                    'value' => '1',
-                ]];
+                $itemParams['properties'] = [
+                    [
+                        'typeId' => 1,
+                        'value' => '1',
+                    ],
+                ];
 
                 // TODO product and variation
 
@@ -133,7 +135,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
 
             $result = $this->client->request('post', 'orders', $params);
         }
-            // TODO update existing order
+        // TODO update existing order
 
         return true;
     }

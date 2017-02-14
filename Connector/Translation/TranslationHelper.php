@@ -41,9 +41,10 @@ class TranslationHelper implements TranslationHelperInterface
         $reflectionClass = new ReflectionClass($object);
         $properties = $reflectionClass->getProperties();
 
-        $translations = array_filter($object->getTranslations(), function (TranslationInterface $translation) use ($languageIdentifier) {
-            return $translation->getLanguageIdentifier() === $languageIdentifier;
-        });
+        $translations = array_filter($object->getTranslations(),
+            function (TranslationInterface $translation) use ($languageIdentifier) {
+                return $translation->getLanguageIdentifier() === $languageIdentifier;
+            });
 
         if (empty($translations)) {
             return $object;
@@ -51,9 +52,10 @@ class TranslationHelper implements TranslationHelperInterface
 
         $args = [];
         foreach ($properties as $property) {
-            $possibleTranslations = array_filter($translations, function (TranslationInterface $translation) use ($property) {
-                return $translation->getProperty() === $property->getName();
-            });
+            $possibleTranslations = array_filter($translations,
+                function (TranslationInterface $translation) use ($property) {
+                    return $translation->getProperty() === $property->getName();
+                });
 
             if (empty($possibleTranslations)) {
                 $property->setAccessible(true);

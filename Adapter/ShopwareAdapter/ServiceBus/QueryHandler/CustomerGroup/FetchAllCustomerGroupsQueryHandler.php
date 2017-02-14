@@ -30,7 +30,7 @@ class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllCustomerGroupsQueryHandler constructor.
      *
-     * @param EntityManagerInterface               $entityManager
+     * @param EntityManagerInterface $entityManager
      * @param CustomerGroupResponseParserInterface $responseParser
      */
     public function __construct(

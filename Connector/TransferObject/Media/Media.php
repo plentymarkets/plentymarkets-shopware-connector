@@ -56,14 +56,14 @@ class Media implements MediaInterface
     /**
      * Media constructor.
      *
-     * @param string                 $identifier
-     * @param string                 $mediaCategoryIdentifier
-     * @param string                 $link
-     * @param string                 $name
-     * @param string                 $alternateName
-     * @param string|null            $hash
+     * @param string $identifier
+     * @param string $mediaCategoryIdentifier
+     * @param string $link
+     * @param string $name
+     * @param string $alternateName
+     * @param string|null $hash
      * @param TranslationInterface[] $translations
-     * @param AttributeInterface[]   $attributes
+     * @param AttributeInterface[] $attributes
      */
     public function __construct(
         $identifier,
@@ -102,14 +102,6 @@ class Media implements MediaInterface
     /**
      * {@inheritdoc}
      */
-    public function getType()
-    {
-        return self::TYPE;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public static function fromArray(array $params = [])
     {
         Assertion::allInArray(array_keys($params), [
@@ -133,6 +125,14 @@ class Media implements MediaInterface
             $params['translations'],
             $params['attributes']
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getType()
+    {
+        return self::TYPE;
     }
 
     /**

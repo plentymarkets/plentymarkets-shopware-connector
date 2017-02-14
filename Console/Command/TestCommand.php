@@ -42,7 +42,7 @@ class TestCommand extends ShopwareCommand
     }
 
     /**
-     * @param InputInterface  $input
+     * @param InputInterface $input
      * @param OutputInterface $output
      *
      * @throws Exception

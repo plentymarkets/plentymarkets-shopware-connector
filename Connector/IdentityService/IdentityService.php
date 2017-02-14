@@ -34,6 +34,35 @@ class IdentityService implements IdentityServiceInterface
     /**
      * {@inheritdoc}
      */
+    public function findOneOrThrow($adapterIdentifier, $adapterName, $objectType)
+    {
+        // TODO following line only for debugging!
+        return $this->findOneOrCreate($adapterIdentifier, $adapterName, $objectType);
+
+        Assertion::string($adapterIdentifier);
+        Assertion::notBlank($adapterIdentifier);
+        Assertion::string($adapterName);
+        Assertion::notBlank($adapterName);
+        Assertion::string($objectType);
+        Assertion::notBlank($objectType);
+
+        $identity = $this->findOneBy([
+            'objectType' => $objectType,
+            'adapterIdentifier' => $adapterIdentifier,
+            'adapterName' => $adapterName,
+        ]);
+
+        if (null === $identity) {
+            throw new NotFoundException(sprintf('Could not find identity for %s with identifier %s in %s.',
+                $objectType, $adapterIdentifier, $adapterName));
+        }
+
+        return $identity;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findOneOrCreate($adapterIdentifier, $adapterName, $objectType)
     {
         Assertion::string($adapterIdentifier);
@@ -58,35 +87,6 @@ class IdentityService implements IdentityServiceInterface
                 (string) $adapterIdentifier,
                 $adapterName
             );
-        }
-
-        return $identity;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function findOneOrThrow($adapterIdentifier, $adapterName, $objectType)
-    {
-        // TODO following line only for debugging!
-        return $this->findOneOrCreate($adapterIdentifier, $adapterName, $objectType);
-
-        Assertion::string($adapterIdentifier);
-        Assertion::notBlank($adapterIdentifier);
-        Assertion::string($adapterName);
-        Assertion::notBlank($adapterName);
-        Assertion::string($objectType);
-        Assertion::notBlank($objectType);
-
-        $identity = $this->findOneBy([
-            'objectType' => $objectType,
-            'adapterIdentifier' => $adapterIdentifier,
-            'adapterName' => $adapterName,
-        ]);
-
-        if (null === $identity) {
-            throw new NotFoundException(sprintf('Could not find identity for %s with identifier %s in %s.',
-                $objectType, $adapterIdentifier, $adapterName));
         }
 
         return $identity;

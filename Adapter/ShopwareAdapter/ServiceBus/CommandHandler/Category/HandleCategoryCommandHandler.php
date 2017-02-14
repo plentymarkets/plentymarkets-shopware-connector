@@ -61,11 +61,11 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     /**
      * HandleCategoryCommandHandler constructor.
      *
-     * @param CategoryResource           $resource
-     * @param IdentityServiceInterface   $identityService
+     * @param CategoryResource $resource
+     * @param IdentityServiceInterface $identityService
      * @param TranslationHelperInterface $translationHelper
-     * @param EntityManagerInterface     $entityManager
-     * @param LoggerInterface            $logger
+     * @param EntityManagerInterface $entityManager
+     * @param LoggerInterface $logger
      */
     public function __construct(
         CategoryResource $resource,
@@ -98,7 +98,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     {
         /**
          * @var HandleCommandInterface $command
-         * @var CategoryInterface      $category
+         * @var CategoryInterface $category
          */
         $category = $command->getTransferObject();
 
@@ -205,7 +205,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
 
     /**
      * @param CategoryInterface $category
-     * @param int               $parentCategory
+     * @param int $parentCategory
      *
      * @return int|null
      */

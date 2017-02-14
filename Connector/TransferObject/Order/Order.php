@@ -98,14 +98,6 @@ class Order implements OrderInterface
     /**
      * {@inheritdoc}
      */
-    public function getType()
-    {
-        return self::TYPE;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public static function fromArray(array $params = [])
     {
         return new self(
@@ -118,6 +110,14 @@ class Order implements OrderInterface
             $params['shippingProfileId'],
             $params['shopId']
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getType()
+    {
+        return self::TYPE;
     }
 
     /**

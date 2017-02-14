@@ -23,7 +23,7 @@ class RemoveManufacturerCommand implements RemoveCommandInterface
     /**
      * RemoveManufacturerCommand constructor.
      *
-     * @param string $adapterName      the classname of the target adapter
+     * @param string $adapterName the classname of the target adapter
      * @param string $objectIdentifier the identifier of the transferobject which will be handeled
      */
     public function __construct($adapterName, $objectIdentifier)

@@ -30,7 +30,7 @@ class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllLanguagesQueryHandler constructor.
      *
-     * @param EntityManagerInterface          $entityManager
+     * @param EntityManagerInterface $entityManager
      * @param LanguageResponseParserInterface $responseParser
      */
     public function __construct(

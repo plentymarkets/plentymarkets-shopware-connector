@@ -30,7 +30,7 @@ class FetchAllOrderStatusesQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllOrderStatusesQueryHandler constructor.
      *
-     * @param EntityManagerInterface             $entityManager
+     * @param EntityManagerInterface $entityManager
      * @param OrderStatusResponseParserInterface $responseParser
      */
     public function __construct(

@@ -32,7 +32,7 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
     /**
      * HandleManufacturerCommandHandler constructor.
      *
-     * @param ManufacturerResource     $resource
+     * @param ManufacturerResource $resource
      * @param IdentityServiceInterface $identityService
      */
     public function __construct(ManufacturerResource $resource, IdentityServiceInterface $identityService)
@@ -57,7 +57,7 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
     {
         /**
          * @var HandleCommandInterface $command
-         * @var ManufacturerInterface  $manufacturer
+         * @var ManufacturerInterface $manufacturer
          */
         $manufacturer = $command->getTransferObject();
 

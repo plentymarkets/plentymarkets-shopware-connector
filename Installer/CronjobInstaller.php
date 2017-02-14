@@ -28,7 +28,7 @@ class CronjobInstaller implements InstallerInterface
      * DatabaseInstaller constructor.
      *
      * @param Connection $connection
-     * @param array      $cronjobs
+     * @param array $cronjobs
      */
     public function __construct(Connection $connection, array $cronjobs)
     {
@@ -92,8 +92,8 @@ class CronjobInstaller implements InstallerInterface
 
     /**
      * @param string $name
-     * @param int    $interval
-     * @param int    $pluginIdentifier
+     * @param int $interval
+     * @param int $pluginIdentifier
      */
     private function addCronjob($name, $interval, $pluginIdentifier)
     {

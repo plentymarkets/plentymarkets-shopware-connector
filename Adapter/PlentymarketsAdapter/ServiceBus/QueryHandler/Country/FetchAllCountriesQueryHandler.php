@@ -27,7 +27,7 @@ class FetchAllCountriesQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllCountriesQueryHandler constructor.
      *
-     * @param ClientInterface                $client
+     * @param ClientInterface $client
      * @param CountryResponseParserInterface $responseParser
      */
     public function __construct(

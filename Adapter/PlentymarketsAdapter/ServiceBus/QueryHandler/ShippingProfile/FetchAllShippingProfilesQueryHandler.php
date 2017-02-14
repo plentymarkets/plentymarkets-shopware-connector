@@ -27,7 +27,7 @@ class FetchAllShippingProfilesQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllShippingProfilesQueryHandler constructor.
      *
-     * @param ClientInterface                        $client
+     * @param ClientInterface $client
      * @param ShippingProfileResponseParserInterface $responseParser
      */
     public function __construct(

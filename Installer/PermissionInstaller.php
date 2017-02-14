@@ -39,9 +39,9 @@ class PermissionInstaller implements InstallerInterface
     /**
      * CronjobSyncronizer constructor.
      *
-     * @param ModelManager            $em
+     * @param ModelManager $em
      * @param Shopware_Components_Acl $acl
-     * @param array                   $permissions
+     * @param array $permissions
      */
     public function __construct(ModelManager $em, Shopware_Components_Acl $acl, array $permissions)
     {
@@ -82,8 +82,8 @@ class PermissionInstaller implements InstallerInterface
     }
 
     /**
-     * @param resource $resource
-     * @param array    $permissions
+     * @param Resource $resource
+     * @param array $permissions
      */
     protected function removeNotExistingPrivileges(Resource $resource, array $permissions)
     {
@@ -105,16 +105,8 @@ class PermissionInstaller implements InstallerInterface
     }
 
     /**
-     * @param InstallContext $context
-     */
-    private function removePermissions(InstallContext $context)
-    {
-        $this->acl->deleteResource($context->getPlugin()->getName());
-    }
-
-    /**
      * @param Plugin $plugin
-     * @param array  $permissions
+     * @param array $permissions
      */
     private function synchronize(Plugin $plugin, array $permissions)
     {
@@ -133,7 +125,7 @@ class PermissionInstaller implements InstallerInterface
     /**
      * @param $resourceName
      *
-     * @return resource
+     * @return Resource
      */
     private function getResource($resourceName)
     {
@@ -142,7 +134,7 @@ class PermissionInstaller implements InstallerInterface
 
     /**
      * @param Plugin $plugin
-     * @param array  $permissions
+     * @param array $permissions
      *
      * @throws Enlight_Exception
      */
@@ -157,8 +149,8 @@ class PermissionInstaller implements InstallerInterface
     }
 
     /**
-     * @param resource $resource
-     * @param array    $permissions
+     * @param Resource $resource
+     * @param array $permissions
      */
     private function synchronizePrivileges(Resource $resource, array $permissions)
     {
@@ -175,5 +167,13 @@ class PermissionInstaller implements InstallerInterface
         array_walk($newPrivileges, function ($name) use ($resource) {
             $this->acl->createPrivilege($resource->getId(), $name);
         });
+    }
+
+    /**
+     * @param InstallContext $context
+     */
+    private function removePermissions(InstallContext $context)
+    {
+        $this->acl->deleteResource($context->getPlugin()->getName());
     }
 }

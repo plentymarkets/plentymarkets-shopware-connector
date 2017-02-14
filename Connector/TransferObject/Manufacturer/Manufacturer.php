@@ -36,8 +36,8 @@ class Manufacturer implements ManufacturerInterface
     /**
      * Manufacturer constructor.
      *
-     * @param string      $identifier
-     * @param string      $name
+     * @param string $identifier
+     * @param string $name
      * @param string|null $logoIdentifier
      * @param string|null $link
      */
@@ -58,14 +58,6 @@ class Manufacturer implements ManufacturerInterface
     /**
      * {@inheritdoc}
      */
-    public function getType()
-    {
-        return self::TYPE;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public static function fromArray(array $params = [])
     {
         Assertion::allInArray(array_keys($params), [
@@ -81,6 +73,14 @@ class Manufacturer implements ManufacturerInterface
             $params['logoIdentifier'],
             $params['link']
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getType()
+    {
+        return self::TYPE;
     }
 
     /**

@@ -73,14 +73,6 @@ class OrderItem implements OrderItemInterface
     /**
      * {@inheritdoc}
      */
-    public function getType()
-    {
-        return self::TYPE;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public static function fromArray(array $params = [])
     {
         return new self(
@@ -91,6 +83,14 @@ class OrderItem implements OrderItemInterface
             $params['name'],
             $params['price']
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getType()
+    {
+        return self::TYPE;
     }
 
     /**

@@ -24,7 +24,7 @@ class HandleMediaCategoryCommand implements HandleCommandInterface
     /**
      * HandleMediaCategoryCommand constructor.
      *
-     * @param string                  $adapterName    the classname of the target adapter
+     * @param string $adapterName the classname of the target adapter
      * @param TransferObjectInterface $transferObject the transferobject which will be handeled
      */
     public function __construct($adapterName, TransferObjectInterface $transferObject)

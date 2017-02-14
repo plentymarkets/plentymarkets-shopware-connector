@@ -31,7 +31,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     /**
      * OrderResponseParser constructor.
      *
-     * @param IdentityServiceInterface         $identityService
+     * @param IdentityServiceInterface $identityService
      * @param OrderItemResponseParserInterface $orderItemResponseParser
      */
     public function __construct(

@@ -154,7 +154,8 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
                     'originAdapterName' => $mapping->getOriginAdapterName(),
                     'destinationAdapterName' => $mapping->getDestinationAdapterName(),
                     'originTransferObjects' => array_map($transferObjectMapping, $mapping->getOriginTransferObjects()),
-                    'destinationTransferObjects' => array_map($transferObjectMapping, $mapping->getDestinationTransferObjects()),
+                    'destinationTransferObjects' => array_map($transferObjectMapping,
+                        $mapping->getDestinationTransferObjects()),
                     'objectType' => $mapping->getObjectType(),
                 ];
             }, $mappingInformation),

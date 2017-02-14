@@ -8,6 +8,13 @@ namespace PlentyConnector\Connector\TransferObject;
 interface TransferObjectInterface
 {
     /**
+     * @param array $params
+     *
+     * @return self
+     */
+    public static function fromArray(array $params = []);
+
+    /**
      * return a uuid.
      *
      * @return string
@@ -20,11 +27,4 @@ interface TransferObjectInterface
      * @return string
      */
     public function getType();
-
-    /**
-     * @param array $params
-     *
-     * @return self
-     */
-    public static function fromArray(array $params = []);
 }

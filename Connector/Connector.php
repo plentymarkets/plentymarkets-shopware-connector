@@ -52,10 +52,10 @@ class Connector implements ConnectorInterface
     /**
      * Connector constructor.
      *
-     * @param ServiceBusInterface     $serviceBus
-     * @param QueryFactoryInterface   $queryFactory
+     * @param ServiceBusInterface $serviceBus
+     * @param QueryFactoryInterface $queryFactory
      * @param CommandFactoryInterface $commandFactory
-     * @param LoggerInterface         $logger
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ServiceBusInterface $serviceBus,
@@ -139,8 +139,8 @@ class Connector implements ConnectorInterface
 
     /**
      * @param DefinitionInterface $definition
-     * @param int                 $queryType
-     * @param string|null         $identifier
+     * @param int $queryType
+     * @param string|null $identifier
      *
      * @throws MissingQueryException
      * @throws MissingQueryGeneratorException

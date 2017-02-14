@@ -36,9 +36,9 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
     /**
      * FetchCategoryQueryHandler constructor.
      *
-     * @param ClientInterface                 $client
+     * @param ClientInterface $client
      * @param CategoryResponseParserInterface $categoryResponseParser
-     * @param LanguageHelper                  $languageHelper
+     * @param LanguageHelper $languageHelper
      */
     public function __construct(
         ClientInterface $client,

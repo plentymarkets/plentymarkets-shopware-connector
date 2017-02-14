@@ -34,7 +34,7 @@ class ProcessCommand extends ShopwareCommand
      * ProcessCommand constructor.
      *
      * @param Connector $connector
-     * @param Logger    $logger
+     * @param Logger $logger
      *
      * @throws LogicException
      */
@@ -67,7 +67,7 @@ class ProcessCommand extends ShopwareCommand
     }
 
     /**
-     * @param InputInterface  $input
+     * @param InputInterface $input
      * @param OutputInterface $output
      *
      * @throws Exception

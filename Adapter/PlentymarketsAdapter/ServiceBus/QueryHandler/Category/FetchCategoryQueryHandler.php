@@ -40,10 +40,10 @@ class FetchCategoryQueryHandler implements QueryHandlerInterface
     /**
      * FetchCategoryQueryHandler constructor.
      *
-     * @param ClientInterface                 $client
+     * @param ClientInterface $client
      * @param CategoryResponseParserInterface $categoryResponseParser
-     * @param LanguageHelper                  $languageHelper
-     * @param IdentityServiceInterface        $identityService
+     * @param LanguageHelper $languageHelper
+     * @param IdentityServiceInterface $identityService
      */
     public function __construct(
         ClientInterface $client,

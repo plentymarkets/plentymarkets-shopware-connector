@@ -15,6 +15,7 @@ return PhpCsFixer\Config::create()
         'phpdoc_order' => true,
         'phpdoc_summary' => false,
         'phpdoc_to_comment' => false,
+        'phpdoc_align' => false,
         'phpdoc_var_without_name' => false,
         'blank_line_after_opening_tag' => true,
         'concat_space' => ['spacing' => 'one'],

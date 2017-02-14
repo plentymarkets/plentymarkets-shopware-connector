@@ -28,8 +28,8 @@ class Attribute implements AttributeInterface
     /**
      * Attribute constructor.
      *
-     * @param string                 $key
-     * @param string                 $value
+     * @param string $key
+     * @param string $value
      * @param TranslationInterface[] $translations
      */
     public function __construct($key, $value, array $translations = [])

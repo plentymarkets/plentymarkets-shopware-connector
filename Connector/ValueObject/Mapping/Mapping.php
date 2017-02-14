@@ -42,11 +42,11 @@ class Mapping implements MappingInterface
     /**
      * Mapping constructor.
      *
-     * @param string                    $originAdapterName
+     * @param string $originAdapterName
      * @param TransferObjectInterface[] $originTransferObjects
-     * @param string                    $destinationAdapterName
+     * @param string $destinationAdapterName
      * @param TransferObjectInterface[] $destinationTransferObjects
-     * @param string                    $objectType
+     * @param string $objectType
      */
     public function __construct(
         $originAdapterName,

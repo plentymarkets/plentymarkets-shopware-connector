@@ -33,8 +33,8 @@ class FetchChangedMediaCategoriesQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllMediaCategoriesQueryHandler constructor.
      *
-     * @param ConfigServiceInterface               $config
-     * @param MediaCategoryHelper                  $mediaCategoryHelper
+     * @param ConfigServiceInterface $config
+     * @param MediaCategoryHelper $mediaCategoryHelper
      * @param MediaCategoryResponseParserInterface $responseParser
      */
     public function __construct(
