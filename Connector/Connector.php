@@ -4,11 +4,7 @@ namespace PlentyConnector\Connector;
 
 use Assert\Assertion;
 use PlentyConnector\Connector\ServiceBus\CommandFactory\CommandFactoryInterface;
-use PlentyConnector\Connector\ServiceBus\CommandFactory\Exception\MissingCommandException;
-use PlentyConnector\Connector\ServiceBus\CommandFactory\Exception\MissingCommandGeneratorException;
 use PlentyConnector\Connector\ServiceBus\CommandType;
-use PlentyConnector\Connector\ServiceBus\QueryFactory\Exception\MissingQueryException;
-use PlentyConnector\Connector\ServiceBus\QueryFactory\Exception\MissingQueryGeneratorException;
 use PlentyConnector\Connector\ServiceBus\QueryFactory\QueryFactoryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
@@ -122,7 +118,9 @@ class Connector implements ConnectorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param null $type
+     *
+     * @return DefinitionInterface[]
      */
     private function getDefinitions($type = null)
     {
@@ -141,11 +139,6 @@ class Connector implements ConnectorInterface
      * @param DefinitionInterface $definition
      * @param int $queryType
      * @param string|null $identifier
-     *
-     * @throws MissingQueryException
-     * @throws MissingQueryGeneratorException
-     * @throws MissingCommandException
-     * @throws MissingCommandGeneratorException
      */
     private function handleDefinition(DefinitionInterface $definition, $queryType, $identifier = null)
     {
