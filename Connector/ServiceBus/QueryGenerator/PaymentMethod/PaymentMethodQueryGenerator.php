@@ -24,17 +24,17 @@ class PaymentMethodQueryGenerator implements QueryGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generateFetchChangedQuery($adapterName)
+    public function generateFetchAllQuery($adapterName)
     {
-        return new FetchChangedPaymentMethodsQuery($adapterName);
+        return new FetchAllPaymentMethodsQuery($adapterName);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function generateFetchAllQuery($adapterName)
+    public function generateFetchChangedQuery($adapterName)
     {
-        return new FetchAllPaymentMethodsQuery($adapterName);
+        return new FetchChangedPaymentMethodsQuery($adapterName);
     }
 
     /**

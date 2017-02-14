@@ -24,17 +24,17 @@ class ProductQueryGenerator implements QueryGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generateFetchChangedQuery($adapterName)
+    public function generateFetchAllQuery($adapterName)
     {
-        return new FetchChangedProductsQuery($adapterName);
+        return new FetchAllProductsQuery($adapterName);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function generateFetchAllQuery($adapterName)
+    public function generateFetchChangedQuery($adapterName)
     {
-        return new FetchAllProductsQuery($adapterName);
+        return new FetchChangedProductsQuery($adapterName);
     }
 
     /**

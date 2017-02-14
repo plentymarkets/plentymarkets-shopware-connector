@@ -26,14 +26,6 @@ class UnitQueryGenerator implements QueryGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generateFetchChangedQuery($adapterName)
-    {
-        return new FetchChangedUnitsQuery($adapterName);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function generateFetchAllQuery($adapterName)
     {
         return new FetchAllUnitsQuery($adapterName);
@@ -42,16 +34,16 @@ class UnitQueryGenerator implements QueryGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generateFetchQuery($adapterName, $identifier)
+    public function generateFetchChangedQuery($adapterName)
     {
-        return new FetchUnitQuery($adapterName, $identifier);
+        return new FetchChangedUnitsQuery($adapterName);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function generateExistsQuery($adapterName, TransferObjectInterface $transferObject)
+    public function generateFetchQuery($adapterName, $identifier)
     {
-        return new CheckUnitExistsQuery($adapterName, $transferObject);
+        return new FetchUnitQuery($adapterName, $identifier);
     }
 }

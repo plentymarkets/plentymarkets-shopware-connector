@@ -24,17 +24,17 @@ class PaymentStatusQueryGenerator implements QueryGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generateFetchChangedQuery($adapterName)
+    public function generateFetchAllQuery($adapterName)
     {
-        return new FetchChangedPaymentStatusesQuery($adapterName);
+        return new FetchAllPaymentStatusesQuery($adapterName);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function generateFetchAllQuery($adapterName)
+    public function generateFetchChangedQuery($adapterName)
     {
-        return new FetchAllPaymentStatusesQuery($adapterName);
+        return new FetchChangedPaymentStatusesQuery($adapterName);
     }
 
     /**

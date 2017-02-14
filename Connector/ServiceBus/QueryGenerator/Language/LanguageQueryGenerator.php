@@ -24,17 +24,17 @@ class LanguageQueryGenerator implements QueryGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generateFetchChangedQuery($adapterName)
+    public function generateFetchAllQuery($adapterName)
     {
-        return new FetchChangedLanguagesQuery($adapterName);
+        return new FetchAllLanguagesQuery($adapterName);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function generateFetchAllQuery($adapterName)
+    public function generateFetchChangedQuery($adapterName)
     {
-        return new FetchAllLanguagesQuery($adapterName);
+        return new FetchChangedLanguagesQuery($adapterName);
     }
 
     /**

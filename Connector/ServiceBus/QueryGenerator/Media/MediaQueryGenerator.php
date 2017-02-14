@@ -24,17 +24,17 @@ class MediaQueryGenerator implements QueryGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generateFetchChangedQuery($adapterName)
+    public function generateFetchAllQuery($adapterName)
     {
-        return new FetchChangedMediaQuery($adapterName);
+        return new FetchAllMediaQuery($adapterName);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function generateFetchAllQuery($adapterName)
+    public function generateFetchChangedQuery($adapterName)
     {
-        return new FetchAllMediaQuery($adapterName);
+        return new FetchChangedMediaQuery($adapterName);
     }
 
     /**

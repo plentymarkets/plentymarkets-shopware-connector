@@ -24,17 +24,17 @@ class CurrencyQueryGenerator implements QueryGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generateFetchChangedQuery($adapterName)
+    public function generateFetchAllQuery($adapterName)
     {
-        return new FetchChangedCurrenciesQuery($adapterName);
+        return new FetchAllCurrenciesQuery($adapterName);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function generateFetchAllQuery($adapterName)
+    public function generateFetchChangedQuery($adapterName)
     {
-        return new FetchAllCurrenciesQuery($adapterName);
+        return new FetchChangedCurrenciesQuery($adapterName);
     }
 
     /**

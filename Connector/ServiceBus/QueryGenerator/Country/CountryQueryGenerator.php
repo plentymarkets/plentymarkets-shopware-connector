@@ -24,17 +24,17 @@ class CountryQueryGenerator implements QueryGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generateFetchChangedQuery($adapterName)
+    public function generateFetchAllQuery($adapterName)
     {
-        return new FetchChangedCountriesQuery($adapterName);
+        return new FetchAllCountriesQuery($adapterName);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function generateFetchAllQuery($adapterName)
+    public function generateFetchChangedQuery($adapterName)
     {
-        return new FetchAllCountriesQuery($adapterName);
+        return new FetchChangedCountriesQuery($adapterName);
     }
 
     /**

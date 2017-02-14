@@ -24,17 +24,17 @@ class ShopQueryGenerator implements QueryGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generateFetchChangedQuery($adapterName)
+    public function generateFetchAllQuery($adapterName)
     {
-        return new FetchChangedShopsQuery($adapterName);
+        return new FetchAllShopsQuery($adapterName);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function generateFetchAllQuery($adapterName)
+    public function generateFetchChangedQuery($adapterName)
     {
-        return new FetchAllShopsQuery($adapterName);
+        return new FetchChangedShopsQuery($adapterName);
     }
 
     /**

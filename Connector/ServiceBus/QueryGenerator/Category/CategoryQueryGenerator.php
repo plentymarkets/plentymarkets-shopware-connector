@@ -24,17 +24,17 @@ class CategoryQueryGenerator implements QueryGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generateFetchChangedQuery($adapterName)
+    public function generateFetchAllQuery($adapterName)
     {
-        return new FetchChangedCategoriesQuery($adapterName);
+        return new FetchAllCategoriesQuery($adapterName);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function generateFetchAllQuery($adapterName)
+    public function generateFetchChangedQuery($adapterName)
     {
-        return new FetchAllCategoriesQuery($adapterName);
+        return new FetchChangedCategoriesQuery($adapterName);
     }
 
     /**

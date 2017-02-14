@@ -24,17 +24,17 @@ class VatRateQueryGenerator implements QueryGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generateFetchChangedQuery($adapterName)
+    public function generateFetchAllQuery($adapterName)
     {
-        return new FetchChangedVatRatesQuery($adapterName);
+        return new FetchAllVatRatesQuery($adapterName);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function generateFetchAllQuery($adapterName)
+    public function generateFetchChangedQuery($adapterName)
     {
-        return new FetchAllVatRatesQuery($adapterName);
+        return new FetchChangedVatRatesQuery($adapterName);
     }
 
     /**

@@ -24,17 +24,17 @@ class OrderStatusQueryGenerator implements QueryGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generateFetchChangedQuery($adapterName)
+    public function generateFetchAllQuery($adapterName)
     {
-        return new FetchChangedOrderStatusesQuery($adapterName);
+        return new FetchAllOrderStatusesQuery($adapterName);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function generateFetchAllQuery($adapterName)
+    public function generateFetchChangedQuery($adapterName)
     {
-        return new FetchAllOrderStatusesQuery($adapterName);
+        return new FetchChangedOrderStatusesQuery($adapterName);
     }
 
     /**

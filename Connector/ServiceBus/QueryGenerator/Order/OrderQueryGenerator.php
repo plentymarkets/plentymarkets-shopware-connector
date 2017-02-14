@@ -21,17 +21,17 @@ class OrderQueryGenerator implements QueryGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generateFetchChangedQuery($adapterName)
+    public function generateFetchAllQuery($adapterName)
     {
-        return new FetchChangedOrdersQuery($adapterName);
+        return new FetchAllOrdersQuery($adapterName);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function generateFetchAllQuery($adapterName)
+    public function generateFetchChangedQuery($adapterName)
     {
-        return new FetchAllOrdersQuery($adapterName);
+        return new FetchChangedOrdersQuery($adapterName);
     }
 
     /**

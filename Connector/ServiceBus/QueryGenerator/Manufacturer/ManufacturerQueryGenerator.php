@@ -24,17 +24,17 @@ class ManufacturerQueryGenerator implements QueryGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generateFetchChangedQuery($adapterName)
+    public function generateFetchAllQuery($adapterName)
     {
-        return new FetchChangedManufacturersQuery($adapterName);
+        return new FetchAllManufacturersQuery($adapterName);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function generateFetchAllQuery($adapterName)
+    public function generateFetchChangedQuery($adapterName)
     {
-        return new FetchAllManufacturersQuery($adapterName);
+        return new FetchChangedManufacturersQuery($adapterName);
     }
 
     /**

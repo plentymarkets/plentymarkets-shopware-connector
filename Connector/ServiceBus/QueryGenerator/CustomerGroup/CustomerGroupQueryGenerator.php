@@ -24,17 +24,17 @@ class CustomerGroupQueryGenerator implements QueryGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generateFetchChangedQuery($adapterName)
+    public function generateFetchAllQuery($adapterName)
     {
-        return new FetchChangedCustomerGroupsQuery($adapterName);
+        return new FetchAllCustomerGroupsQuery($adapterName);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function generateFetchAllQuery($adapterName)
+    public function generateFetchChangedQuery($adapterName)
     {
-        return new FetchAllCustomerGroupsQuery($adapterName);
+        return new FetchChangedCustomerGroupsQuery($adapterName);
     }
 
     /**

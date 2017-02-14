@@ -21,14 +21,14 @@ interface QueryGeneratorInterface
      *
      * @return QueryInterface
      */
-    public function generateFetchChangedQuery($adapterName);
+    public function generateFetchAllQuery($adapterName);
 
     /**
      * @param string $adapterName
      *
      * @return QueryInterface
      */
-    public function generateFetchAllQuery($adapterName);
+    public function generateFetchChangedQuery($adapterName);
 
     /**
      * @param string $adapterName

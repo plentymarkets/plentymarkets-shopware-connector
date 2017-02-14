@@ -24,17 +24,17 @@ class ShippingProfileQueryGenerator implements QueryGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generateFetchChangedQuery($adapterName)
+    public function generateFetchAllQuery($adapterName)
     {
-        return new FetchChangedShippingProfilesQuery($adapterName);
+        return new FetchAllShippingProfilesQuery($adapterName);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function generateFetchAllQuery($adapterName)
+    public function generateFetchChangedQuery($adapterName)
     {
-        return new FetchAllShippingProfilesQuery($adapterName);
+        return new FetchChangedShippingProfilesQuery($adapterName);
     }
 
     /**
