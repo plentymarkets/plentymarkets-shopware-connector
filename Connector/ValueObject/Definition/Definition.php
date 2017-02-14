@@ -53,6 +53,10 @@ class Definition implements DefinitionInterface
         Assertion::notBlank($objectType);
         Assertion::nullOrInteger($priority);
 
+        if (null === $priority) {
+            $priority = 0;
+        }
+
         $this->originAdapterName = $originAdapterName;
         $this->destinationAdapterName = $destinationAdapterName;
         $this->objectType = $objectType;
