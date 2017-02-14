@@ -8,7 +8,8 @@ use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
 use Shopware\Components\Plugin\Context\UpdateContext;
 use Shopware\Models\Plugin\Plugin;
-use Shopware\Models\User\Resource;
+use Shopware\Models\User\Privilege as ShopwarePrivilege;
+use Shopware\Models\User\Resource as ShopwareResource;
 use Shopware_Components_Acl;
 
 /**
@@ -46,7 +47,7 @@ class PermissionInstaller implements InstallerInterface
     public function __construct(ModelManager $em, Shopware_Components_Acl $acl, array $permissions)
     {
         $this->em = $em;
-        $this->repository = $this->em->getRepository(Resource::class);
+        $this->repository = $this->em->getRepository(ShopwareResource::class);
         $this->acl = $acl;
         $this->permissions = $permissions;
     }
@@ -82,14 +83,14 @@ class PermissionInstaller implements InstallerInterface
     }
 
     /**
-     * @param Resource $resource
+     * @param ShopwareResource $resource
      * @param array $permissions
      */
-    protected function removeNotExistingPrivileges(Resource $resource, array $permissions)
+    protected function removeNotExistingPrivileges(ShopwareResource $resource, array $permissions)
     {
         $existingPrivileges = $resource->getPrivileges()->toArray();
 
-        $orphanedPrivileges = array_filter($existingPrivileges, function (Privilege $privilege) use ($permissions) {
+        $orphanedPrivileges = array_filter($existingPrivileges, function (ShopwarePrivilege $privilege) use ($permissions) {
             return !in_array($privilege->getName(), $permissions, true);
         });
 
@@ -125,7 +126,7 @@ class PermissionInstaller implements InstallerInterface
     /**
      * @param $resourceName
      *
-     * @return Resource
+     * @return ShopwareResource
      */
     private function getResource($resourceName)
     {
@@ -149,16 +150,16 @@ class PermissionInstaller implements InstallerInterface
     }
 
     /**
-     * @param Resource $resource
+     * @param ShopwareResource $resource
      * @param array $permissions
      */
-    private function synchronizePrivileges(Resource $resource, array $permissions)
+    private function synchronizePrivileges(ShopwareResource $resource, array $permissions)
     {
-        $existingPrivileges = array_filter($resource->getPrivileges()->toArray(), function (Privilege $privilege) use ($permissions) {
+        $existingPrivileges = array_filter($resource->getPrivileges()->toArray(), function (ShopwarePrivilege $privilege) use ($permissions) {
             return in_array($privilege->getName(), $permissions, true);
         });
 
-        $existingPrivileges = array_map(function (Privilege $privilege) {
+        $existingPrivileges = array_map(function (ShopwarePrivilege $privilege) {
             return $privilege->getName();
         }, $existingPrivileges);
 
