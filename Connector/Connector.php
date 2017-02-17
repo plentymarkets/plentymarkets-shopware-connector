@@ -80,8 +80,8 @@ class Connector implements ConnectorInterface
      */
     public function handle($queryType, $objectType = null, $identifier = null)
     {
-        Assertion::InArray($queryType, QueryType::getAllTypes());
-        Assertion::nullOrstring($objectType);
+        Assertion::inArray($queryType, QueryType::getAllTypes());
+        Assertion::nullOrString($objectType);
 
         if ($queryType === QueryType::ONE) {
             Assertion::notNull($identifier);
@@ -108,12 +108,12 @@ class Connector implements ConnectorInterface
      */
     private function sortDefinitions()
     {
-        usort($this->definitions, function (Definition $a, Definition $b) {
-            if ($a->getPriority() === $b->getPriority()) {
+        usort($this->definitions, function (Definition $definitionLeft, Definition $definitionRight) {
+            if ($definitionLeft->getPriority() === $definitionRight->getPriority()) {
                 return 0;
             }
 
-            return ($a->getPriority() > $b->getPriority()) ? -1 : 1;
+            return ($definitionLeft->getPriority() > $definitionRight->getPriority()) ? -1 : 1;
         });
     }
 
