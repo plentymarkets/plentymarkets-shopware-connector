@@ -70,7 +70,7 @@ class RemoveCategoryCommandHandler implements CommandHandlerInterface
         $identifier = $command->getObjectIdentifier();
 
         $identity = $this->identityService->findOneBy([
-            'objectIdentifier' => $identifier,
+            'objectIdentifier' => (string) $identifier,
             'objectType' => Category::TYPE,
             'adapterName' => ShopwareAdapter::NAME,
         ]);

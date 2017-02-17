@@ -2,7 +2,7 @@
 
 namespace PlentymarketsAdapter\ResponseParser\Manufacturer;
 
-use PlentyConnector\Connector\TransferObject\Manufacturer\ManufacturerInterface;
+use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 
 /**
  * Interface ManufacturerResponseParserInterface
@@ -12,7 +12,7 @@ interface ManufacturerResponseParserInterface
     /**
      * @param array $entry
      *
-     * @return ManufacturerInterface|null
+     * @return null|Manufacturer
      */
     public function parse(array $entry);
 }

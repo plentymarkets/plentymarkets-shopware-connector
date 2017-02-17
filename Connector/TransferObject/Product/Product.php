@@ -3,16 +3,18 @@
 namespace PlentyConnector\Connector\TransferObject\Product;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\Product\LinkedProduct\LinkedProductInterface;
-use PlentyConnector\Connector\TransferObject\Product\Property\PropertyInterface;
-use PlentyConnector\Connector\TransferObject\Product\Variation\VariationInterface;
-use PlentyConnector\Connector\ValueObject\Attribute\AttributeInterface;
-use PlentyConnector\Connector\ValueObject\Translation\TranslationInterface;
+use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
+use PlentyConnector\Connector\TransferObject\Product\LinkedProduct\LinkedProduct;
+use PlentyConnector\Connector\TransferObject\Product\Property\Property;
+use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
+use PlentyConnector\Connector\TransferObject\TranslateableInterface;
+use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
+use PlentyConnector\Connector\ValueObject\Translation\Translation;
 
 /**
  * Class Product.
  */
-class Product implements ProductInterface
+class Product extends AbstractTransferObject implements TranslateableInterface
 {
     const TYPE = 'Product';
 
@@ -21,306 +23,117 @@ class Product implements ProductInterface
      *
      * @var string
      */
-    private $identifier;
+    private $identifier = '';
 
     /**
      * @var string
      */
-    private $name;
+    private $name = '';
 
     /**
      * @var string
      */
-    private $number;
+    private $number = '';
 
     /**
      * @var bool
      */
-    private $active;
+    private $active = false;
 
     /**
      * @var int
      */
-    private $stock;
+    private $stock = 0;
 
     /**
      * @var string
      */
-    private $manufacturerIdentifier;
+    private $manufacturerIdentifier = '';
 
     /**
      * @var array
      */
-    private $categoryIdentifiers;
+    private $categoryIdentifiers = [];
 
     /**
      * @var array
      */
-    private $defaultCategoryIdentifiers;
+    private $defaultCategoryIdentifiers = [];
 
     /**
      * @var array
      */
-    private $shippingProfileIdentifiers;
+    private $shippingProfileIdentifiers = [];
 
     /**
-     * @var VariationInterface[]
+     * @var Variation[]
      */
-    private $variations;
-
-    /**
-     * @var string
-     */
-    private $vatRateIdentifier;
+    private $variations = [];
 
     /**
      * @var string
      */
-    private $description;
+    private $vatRateIdentifier = '';
 
     /**
      * @var string
      */
-    private $longDescription;
+    private $description = '';
 
     /**
      * @var string
      */
-    private $technicalDescription;
+    private $longDescription = '';
 
     /**
      * @var string
      */
-    private $metaTitle;
+    private $technicalDescription = '';
 
     /**
      * @var string
      */
-    private $metaDescription;
+    private $metaTitle = '';
 
     /**
      * @var string
      */
-    private $metaKeywords;
+    private $metaDescription = '';
 
     /**
      * @var string
      */
-    private $metaRobots;
+    private $metaKeywords = '';
 
     /**
-     * @var LinkedProductInterface[]
+     * @var string
      */
-    private $linkedProducts;
+    private $metaRobots = '';
+
+    /**
+     * @var LinkedProduct[]
+     */
+    private $linkedProducts = [];
 
     /**
      * @var array
      */
-    private $documents;
+    private $documents = [];
 
     /**
-     * @var PropertyInterface[]
+     * @var Property[]
      */
-    private $properties;
+    private $properties = [];
 
     /**
-     * @var TranslationInterface[]
+     * @var Translation[]
      */
-    private $translations;
+    private $translations = [];
 
     /**
-     * @var AttributeInterface[]
+     * @var Attribute[]
      */
-    private $attributes;
-
-    /**
-     * Product constructor.
-     *
-     * @param string $identifier
-     * @param string $name
-     * @param string $number
-     * @param bool $active
-     * @param int $stock
-     * @param string $manufacturerIdentifier
-     * @param array $categoryIdentifiers
-     * @param array $defaultCategoryIdentifiers
-     * @param array $shippingProfileIdentifiers
-     * @param VariationInterface[] $variations
-     * @param string $vatRateIdentifier
-     * @param string $description
-     * @param string $longDescription
-     * @param string $technicalDescription
-     * @param string $metaTitle
-     * @param string $metaDescription
-     * @param string $metaKeywords
-     * @param string $metaRobots
-     * @param LinkedProductInterface[] $linkedProducts
-     * @param array $documents
-     * @param PropertyInterface[] $properties
-     * @param TranslationInterface[] $translations
-     * @param AttributeInterface[] $attributes
-     */
-    public function __construct(
-        $identifier,
-        $name,
-        $number,
-        $active,
-        $stock,
-        $manufacturerIdentifier,
-        array $categoryIdentifiers,
-        array $defaultCategoryIdentifiers,
-        array $shippingProfileIdentifiers,
-        $variations,
-        $vatRateIdentifier,
-        $description,
-        $longDescription,
-        $technicalDescription,
-        $metaTitle,
-        $metaDescription,
-        $metaKeywords,
-        $metaRobots,
-        array $linkedProducts = [],
-        array $documents = [],
-        array $properties = [],
-        array $translations = [],
-        array $attributes = []
-    ) {
-        Assertion::uuid($identifier);
-        Assertion::string($name);
-        Assertion::string($number);
-        Assertion::boolean($active);
-        Assertion::integer($stock);
-        Assertion::uuid($manufacturerIdentifier);
-        Assertion::allUuid($categoryIdentifiers);
-        Assertion::allUuid($defaultCategoryIdentifiers);
-        Assertion::allUuid($shippingProfileIdentifiers);
-
-        Assertion::allIsInstanceOf($variations, VariationInterface::class);
-
-        Assertion::uuid($vatRateIdentifier);
-
-        Assertion::string($description);
-        Assertion::string($longDescription);
-        Assertion::string($technicalDescription);
-
-        Assertion::string($metaTitle);
-        Assertion::string($metaDescription);
-        Assertion::string($metaKeywords);
-        Assertion::string($metaRobots);
-        Assertion::inArray($metaRobots, [
-            'INDEX, FOLLOW',
-            'NOINDEX, FOLLOW',
-            'INDEX, NOFOLLOW',
-            'NOINDEX, NOFOLLOW',
-        ]);
-
-        Assertion::allIsInstanceOf($linkedProducts, LinkedProductInterface::class);
-
-        Assertion::allUuid($documents);
-
-        Assertion::allIsInstanceOf($properties, PropertyInterface::class);
-        Assertion::allIsInstanceOf($translations, TranslationInterface::class);
-        Assertion::allIsInstanceOf($attributes, AttributeInterface::class);
-
-        $this->identifier = $identifier;
-        $this->name = $name;
-        $this->number = $number;
-        $this->active = $active;
-        $this->stock = $stock;
-        $this->manufacturerIdentifier = $manufacturerIdentifier;
-        $this->categoryIdentifiers = $categoryIdentifiers;
-        $this->defaultCategoryIdentifiers = $defaultCategoryIdentifiers;
-        $this->shippingProfileIdentifiers = $shippingProfileIdentifiers;
-
-        $this->variations = $variations;
-
-        $this->vatRateIdentifier = $vatRateIdentifier;
-
-        $this->description = $description;
-        $this->longDescription = $longDescription;
-        $this->technicalDescription = $technicalDescription;
-
-        $this->metaTitle = $metaTitle;
-        $this->metaDescription = $metaDescription;
-        $this->metaKeywords = $metaKeywords;
-        $this->metaRobots = $metaRobots;
-
-        $this->linkedProducts = $linkedProducts;
-
-        $this->documents = $documents;
-
-        $this->properties = $properties;
-        $this->translations = $translations;
-        $this->attributes = $attributes;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function fromArray(array $params = [])
-    {
-        Assertion::allInArray(array_keys($params), [
-            'identifier',
-            'name',
-            'number',
-            'active',
-            'stock',
-            'manufacturerIdentifier',
-            'categoryIdentifiers',
-            'defaultCategoryIdentifiers',
-            'shippingProfileIdentifiers',
-
-            'variations',
-
-            'vatRateIdentifier',
-
-            'description',
-            'longDescription',
-            'technicalDescription',
-
-            'metaTitle',
-            'metaDescription',
-            'metaKeywords',
-            'metaRobots',
-
-            'documents',
-
-            'properties',
-            'translations',
-            'attributes',
-        ]);
-
-        return new self(
-            $params['identifier'],
-            $params['name'],
-            $params['number'],
-            $params['active'],
-            $params['stock'],
-            $params['manufacturerIdentifier'],
-            $params['categoryIdentifiers'],
-            $params['defaultCategoryIdentifiers'],
-            $params['shippingProfileIdentifiers'],
-
-            $params['variations'],
-
-            $params['vatRateIdentifier'],
-
-            $params['description'],
-            $params['longDescription'],
-            $params['technicalDescription'],
-
-            $params['metaTitle'],
-            $params['metaDescription'],
-            $params['metaKeywords'],
-            $params['metaRobots'],
-
-            $params['documents'],
-
-            $params['properties'],
-            $params['translations'],
-            $params['attributes']
-        );
-    }
+    private $attributes = [];
 
     /**
      * {@inheritdoc}
@@ -331,15 +144,27 @@ class Product implements ProductInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getIdentifier()
     {
+        Assertion::notBlank($this->identifier);
+
         return $this->identifier;
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $identifier
+     */
+    public function setIdentifier($identifier)
+    {
+        Assertion::uuid($identifier);
+
+        $this->identifier = $identifier;
+    }
+
+    /**
+     * @return string
      */
     public function getName()
     {
@@ -347,7 +172,17 @@ class Product implements ProductInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        Assertion::string($name);
+
+        $this->name = $name;
+    }
+
+    /**
+     * @return string
      */
     public function getNumber()
     {
@@ -355,7 +190,17 @@ class Product implements ProductInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $number
+     */
+    public function setNumber($number)
+    {
+        Assertion::string($number);
+
+        $this->number = $number;
+    }
+
+    /**
+     * @return bool
      */
     public function isActive()
     {
@@ -363,7 +208,17 @@ class Product implements ProductInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param bool $active
+     */
+    public function setActive($active)
+    {
+        Assertion::boolean($active);
+
+        $this->active = $active;
+    }
+
+    /**
+     * @return int
      */
     public function getStock()
     {
@@ -371,7 +226,17 @@ class Product implements ProductInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param int $stock
+     */
+    public function setStock($stock)
+    {
+        Assertion::integer($stock);
+
+        $this->stock = $stock;
+    }
+
+    /**
+     * @return string
      */
     public function getManufacturerIdentifier()
     {
@@ -379,7 +244,17 @@ class Product implements ProductInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $manufacturerIdentifier
+     */
+    public function setManufacturerIdentifier($manufacturerIdentifier)
+    {
+        Assertion::uuid($manufacturerIdentifier);
+
+        $this->manufacturerIdentifier = $manufacturerIdentifier;
+    }
+
+    /**
+     * @return array
      */
     public function getCategoryIdentifiers()
     {
@@ -387,7 +262,17 @@ class Product implements ProductInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $categoryIdentifiers
+     */
+    public function setCategoryIdentifiers($categoryIdentifiers)
+    {
+        Assertion::allUuid($categoryIdentifiers);
+
+        $this->categoryIdentifiers = $categoryIdentifiers;
+    }
+
+    /**
+     * @return array
      */
     public function getDefaultCategoryIdentifiers()
     {
@@ -395,7 +280,17 @@ class Product implements ProductInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $defaultCategoryIdentifiers
+     */
+    public function setDefaultCategoryIdentifiers($defaultCategoryIdentifiers)
+    {
+        Assertion::allUuid($defaultCategoryIdentifiers);
+
+        $this->defaultCategoryIdentifiers = $defaultCategoryIdentifiers;
+    }
+
+    /**
+     * @return array
      */
     public function getShippingProfileIdentifiers()
     {
@@ -403,7 +298,17 @@ class Product implements ProductInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $shippingProfileIdentifiers
+     */
+    public function setShippingProfileIdentifiers($shippingProfileIdentifiers)
+    {
+        Assertion::allUuid($shippingProfileIdentifiers);
+
+        $this->shippingProfileIdentifiers = $shippingProfileIdentifiers;
+    }
+
+    /**
+     * @return Variation[]
      */
     public function getVariations()
     {
@@ -411,7 +316,17 @@ class Product implements ProductInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param Variation[] $variations
+     */
+    public function setVariations($variations)
+    {
+        Assertion::allIsInstanceOf($variations, Variation::class);
+
+        $this->variations = $variations;
+    }
+
+    /**
+     * @return string
      */
     public function getVatRateIdentifier()
     {
@@ -419,7 +334,17 @@ class Product implements ProductInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $vatRateIdentifier
+     */
+    public function setVatRateIdentifier($vatRateIdentifier)
+    {
+        Assertion::uuid($vatRateIdentifier);
+
+        $this->vatRateIdentifier = $vatRateIdentifier;
+    }
+
+    /**
+     * @return string
      */
     public function getDescription()
     {
@@ -427,7 +352,17 @@ class Product implements ProductInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $description
+     */
+    public function setDescription($description)
+    {
+        Assertion::string($description);
+
+        $this->description = $description;
+    }
+
+    /**
+     * @return string
      */
     public function getLongDescription()
     {
@@ -435,7 +370,17 @@ class Product implements ProductInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $longDescription
+     */
+    public function setLongDescription($longDescription)
+    {
+        Assertion::string($longDescription);
+
+        $this->longDescription = $longDescription;
+    }
+
+    /**
+     * @return string
      */
     public function getTechnicalDescription()
     {
@@ -443,7 +388,17 @@ class Product implements ProductInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $technicalDescription
+     */
+    public function setTechnicalDescription($technicalDescription)
+    {
+        Assertion::string($technicalDescription);
+
+        $this->technicalDescription = $technicalDescription;
+    }
+
+    /**
+     * @return string
      */
     public function getMetaTitle()
     {
@@ -451,7 +406,17 @@ class Product implements ProductInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $metaTitle
+     */
+    public function setMetaTitle($metaTitle)
+    {
+        Assertion::string($metaTitle);
+
+        $this->metaTitle = $metaTitle;
+    }
+
+    /**
+     * @return string
      */
     public function getMetaDescription()
     {
@@ -459,7 +424,17 @@ class Product implements ProductInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $metaDescription
+     */
+    public function setMetaDescription($metaDescription)
+    {
+        Assertion::string($metaDescription);
+
+        $this->metaDescription = $metaDescription;
+    }
+
+    /**
+     * @return string
      */
     public function getMetaKeywords()
     {
@@ -467,7 +442,17 @@ class Product implements ProductInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $metaKeywords
+     */
+    public function setMetaKeywords($metaKeywords)
+    {
+        Assertion::string($metaKeywords);
+
+        $this->metaKeywords = $metaKeywords;
+    }
+
+    /**
+     * @return string
      */
     public function getMetaRobots()
     {
@@ -475,7 +460,23 @@ class Product implements ProductInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $metaRobots
+     */
+    public function setMetaRobots($metaRobots)
+    {
+        Assertion::string($metaRobots);
+        Assertion::inArray($metaRobots, [
+            'INDEX, FOLLOW',
+            'NOINDEX, FOLLOW',
+            'INDEX, NOFOLLOW',
+            'NOINDEX, NOFOLLOW',
+        ]);
+
+        $this->metaRobots = $metaRobots;
+    }
+
+    /**
+     * @return LinkedProduct[]
      */
     public function getLinkedProducts()
     {
@@ -483,7 +484,17 @@ class Product implements ProductInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param LinkedProduct[] $linkedProducts
+     */
+    public function setLinkedProducts($linkedProducts)
+    {
+        Assertion::allIsInstanceOf($linkedProducts, LinkedProduct::class);
+
+        $this->linkedProducts = $linkedProducts;
+    }
+
+    /**
+     * @return array
      */
     public function getDocuments()
     {
@@ -491,7 +502,17 @@ class Product implements ProductInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $documents
+     */
+    public function setDocuments($documents)
+    {
+        Assertion::allUuid($documents);
+
+        $this->documents = $documents;
+    }
+
+    /**
+     * @return Property[]
      */
     public function getProperties()
     {
@@ -499,7 +520,17 @@ class Product implements ProductInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param Property[] $properties
+     */
+    public function setProperties($properties)
+    {
+        Assertion::allIsInstanceOf($properties, Property::class);
+
+        $this->properties = $properties;
+    }
+
+    /**
+     * @return Translation[]
      */
     public function getTranslations()
     {
@@ -507,10 +538,30 @@ class Product implements ProductInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param Translation[] $translations
+     */
+    public function setTranslations($translations)
+    {
+        Assertion::allIsInstanceOf($translations, Translation::class);
+
+        $this->translations = $translations;
+    }
+
+    /**
+     * @return Attribute[]
      */
     public function getAttributes()
     {
         return $this->attributes;
+    }
+
+    /**
+     * @param Attribute[] $attributes
+     */
+    public function setAttributes($attributes)
+    {
+        Assertion::allIsInstanceOf($attributes, Attribute::class);
+
+        $this->attributes = $attributes;
     }
 }

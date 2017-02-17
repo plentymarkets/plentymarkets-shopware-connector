@@ -3,12 +3,13 @@
 namespace PlentyConnector\Connector\TransferObject\Order;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\OrderItem\OrderItemInterface;
+use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
+use PlentyConnector\Connector\TransferObject\OrderItem\OrderItem;
 
 /**
  * Class Order.
  */
-class Order implements OrderInterface
+class Order extends AbstractTransferObject
 {
     const TYPE = 'Order';
 
@@ -17,100 +18,42 @@ class Order implements OrderInterface
      *
      * @var string
      */
-    private $identifier;
+    private $identifier = '';
 
     /**
      * @var string
      */
-    private $orderNumber;
+    private $orderNumber = '';
 
     /**
-     * @var OrderItemInterface[]
+     * @var OrderItem[]
      */
-    private $orderItems;
-
-    /**
-     * @var string
-     */
-    private $orderStatusId;
+    private $orderItems = [];
 
     /**
      * @var string
      */
-    private $paymentStatusId;
+    private $orderStatusId = '';
 
     /**
      * @var string
      */
-    private $paymentMethodId;
+    private $paymentStatusId = '';
 
     /**
      * @var string
      */
-    private $shippingProfileId;
+    private $paymentMethodId = '';
 
     /**
      * @var string
      */
-    private $shopId;
+    private $shippingProfileId = '';
 
     /**
-     * Order constructor.
-     *
-     * @param $identifier
-     * @param $orderNumber
-     * @param $orderItems
-     * @param $orderStatusId
-     * @param $paymentStatusId
-     * @param $paymentMethodId
-     * @param $shippingProfileId
-     * @param $shopId
+     * @var string
      */
-    public function __construct(
-        $identifier,
-        $orderNumber,
-        $orderItems,
-        $orderStatusId,
-        $paymentStatusId,
-        $paymentMethodId,
-        $shippingProfileId,
-        $shopId
-    ) {
-        Assertion::uuid($identifier);
-        Assertion::string($orderNumber);
-        Assertion::isArray($orderItems);
-        Assertion::string($orderStatusId);
-        Assertion::string($paymentStatusId);
-        Assertion::string($paymentMethodId);
-        Assertion::string($shippingProfileId);
-        Assertion::string($shopId);
-
-        $this->identifier = $identifier;
-        $this->orderNumber = $orderNumber;
-        $this->orderItems = $orderItems;
-        $this->orderStatusId = $orderStatusId;
-        $this->paymentStatusId = $paymentStatusId;
-        $this->paymentMethodId = $paymentMethodId;
-        $this->shippingProfileId = $shippingProfileId;
-        $this->shopId = $shopId;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function fromArray(array $params = [])
-    {
-        return new self(
-            $params['identifier'],
-            $params['orderNumber'],
-            $params['orderItems'],
-            $params['orderStatusId'],
-            $params['paymentStatusId'],
-            $params['paymentMethodId'],
-            $params['shippingProfileId'],
-            $params['shopId']
-        );
-    }
+    private $shopId = '';
 
     /**
      * {@inheritdoc}
@@ -125,11 +68,23 @@ class Order implements OrderInterface
      */
     public function getIdentifier()
     {
+        Assertion::notBlank($this->identifier);
+
         return $this->identifier;
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $identifier
+     */
+    public function setIdentifier($identifier)
+    {
+        Assertion::uuid($identifier);
+
+        $this->identifier = $identifier;
+    }
+
+    /**
+     * @return string
      */
     public function getOrderNumber()
     {
@@ -137,7 +92,17 @@ class Order implements OrderInterface
     }
 
     /**
-     * @return OrderItemInterface[]
+     * @param string $orderNumber
+     */
+    public function setOrderNumber($orderNumber)
+    {
+        Assertion::string($orderNumber);
+
+        $this->orderNumber = $orderNumber;
+    }
+
+    /**
+     * @return OrderItem[]
      */
     public function getOrderItems()
     {
@@ -145,7 +110,17 @@ class Order implements OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param OrderItem[] $orderItems
+     */
+    public function setOrderItems($orderItems)
+    {
+        Assertion::allIsInstanceOf($orderItems, OrderItem::class);
+
+        $this->orderItems = $orderItems;
+    }
+
+    /**
+     * @return string
      */
     public function getOrderStatusId()
     {
@@ -153,7 +128,17 @@ class Order implements OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $orderStatusId
+     */
+    public function setOrderStatusId($orderStatusId)
+    {
+        Assertion::string($orderStatusId);
+
+        $this->orderStatusId = $orderStatusId;
+    }
+
+    /**
+     * @return string
      */
     public function getPaymentStatusId()
     {
@@ -161,7 +146,17 @@ class Order implements OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $paymentStatusId
+     */
+    public function setPaymentStatusId($paymentStatusId)
+    {
+        Assertion::string($paymentStatusId);
+
+        $this->paymentStatusId = $paymentStatusId;
+    }
+
+    /**
+     * @return string
      */
     public function getPaymentMethodId()
     {
@@ -169,7 +164,17 @@ class Order implements OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $paymentMethodId
+     */
+    public function setPaymentMethodId($paymentMethodId)
+    {
+        Assertion::string($paymentMethodId);
+
+        $this->paymentMethodId = $paymentMethodId;
+    }
+
+    /**
+     * @return string
      */
     public function getShippingProfileId()
     {
@@ -177,10 +182,30 @@ class Order implements OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $shippingProfileId
+     */
+    public function setShippingProfileId($shippingProfileId)
+    {
+        Assertion::string($shippingProfileId);
+
+        $this->shippingProfileId = $shippingProfileId;
+    }
+
+    /**
+     * @return string
      */
     public function getShopId()
     {
         return $this->shopId;
+    }
+
+    /**
+     * @param string $shopId
+     */
+    public function setShopId($shopId)
+    {
+        Assertion::string($shopId);
+
+        $this->shopId = $shopId;
     }
 }

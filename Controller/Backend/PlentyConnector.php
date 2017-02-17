@@ -8,7 +8,7 @@ use PlentyConnector\Connector\MappingService\MappingServiceInterface;
 use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
-use PlentyConnector\Connector\ValueObject\Mapping\MappingInterface;
+use PlentyConnector\Connector\ValueObject\Mapping\Mapping;
 use PlentyConnector\PlentyConnector;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
@@ -149,7 +149,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
 
         $this->View()->assign([
             'success' => true,
-            'data' => array_map(function (MappingInterface $mapping) use ($transferObjectMapping) {
+            'data' => array_map(function (Mapping $mapping) use ($transferObjectMapping) {
                 return [
                     'originAdapterName' => $mapping->getOriginAdapterName(),
                     'destinationAdapterName' => $mapping->getDestinationAdapterName(),

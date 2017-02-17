@@ -2,7 +2,7 @@
 
 namespace PlentyConnector\Connector\CleanupService;
 
-use PlentyConnector\Connector\ValueObject\Definition\DefinitionInterface;
+use PlentyConnector\Connector\ValueObject\Definition\Definition;
 
 /**
  * Interface CleanupServiceInterface.
@@ -10,12 +10,12 @@ use PlentyConnector\Connector\ValueObject\Definition\DefinitionInterface;
 interface CleanupServiceInterface
 {
     /**
-     * @param DefinitionInterface $definition
+     * @param Definition $definition
      */
-    public function addDefinition(DefinitionInterface $definition);
+    public function addDefinition(Definition $definition);
 
     /**
-     * @param string|null $objectType
+     * @param null|string $objectType
      */
     public function cleanup($objectType = null);
 }

@@ -9,7 +9,7 @@ use PlentyConnector\Connector\ServiceBus\QueryFactory\QueryFactoryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
-use PlentyConnector\Connector\ValueObject\Definition\DefinitionInterface;
+use PlentyConnector\Connector\ValueObject\Definition\Definition;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -21,7 +21,7 @@ use Psr\Log\LoggerInterface;
 class Connector implements ConnectorInterface
 {
     /**
-     * @var DefinitionInterface[]|null
+     * @var null|Definition[]
      */
     private $definitions = [];
 
@@ -68,7 +68,7 @@ class Connector implements ConnectorInterface
     /**
      * {@inheritdoc}
      */
-    public function addDefinition(DefinitionInterface $definition)
+    public function addDefinition(Definition $definition)
     {
         $this->definitions[] = $definition;
 
@@ -98,7 +98,7 @@ class Connector implements ConnectorInterface
             $this->logger->warning('No definitions found');
         }
 
-        array_walk($definitions, function (DefinitionInterface $definition) use ($queryType, $identifier) {
+        array_walk($definitions, function (Definition $definition) use ($queryType, $identifier) {
             $this->handleDefinition($definition, $queryType, $identifier);
         });
     }
@@ -108,7 +108,7 @@ class Connector implements ConnectorInterface
      */
     private function sortDefinitions()
     {
-        usort($this->definitions, function (DefinitionInterface $a, DefinitionInterface $b) {
+        usort($this->definitions, function (Definition $a, Definition $b) {
             if ($a->getPriority() === $b->getPriority()) {
                 return 0;
             }
@@ -120,7 +120,7 @@ class Connector implements ConnectorInterface
     /**
      * @param null $type
      *
-     * @return DefinitionInterface[]
+     * @return Definition[]
      */
     private function getDefinitions($type = null)
     {
@@ -128,7 +128,7 @@ class Connector implements ConnectorInterface
             return [];
         }
 
-        $definitions = array_filter($this->definitions, function (DefinitionInterface $definition) use ($type) {
+        $definitions = array_filter($this->definitions, function (Definition $definition) use ($type) {
             return $definition->getObjectType() === $type || null === $type;
         });
 
@@ -136,11 +136,11 @@ class Connector implements ConnectorInterface
     }
 
     /**
-     * @param DefinitionInterface $definition
+     * @param Definition $definition
      * @param int $queryType
-     * @param string|null $identifier
+     * @param null|string $identifier
      */
-    private function handleDefinition(DefinitionInterface $definition, $queryType, $identifier = null)
+    private function handleDefinition(Definition $definition, $queryType, $identifier = null)
     {
         /**
          * @var TransferObjectInterface[] $objects

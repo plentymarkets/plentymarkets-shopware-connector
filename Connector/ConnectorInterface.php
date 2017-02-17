@@ -4,7 +4,7 @@ namespace PlentyConnector\Connector;
 
 use PlentyConnector\Connector\Exception\MissingCommandException;
 use PlentyConnector\Connector\Exception\MissingQueryException;
-use PlentyConnector\Connector\ValueObject\Definition\DefinitionInterface;
+use PlentyConnector\Connector\ValueObject\Definition\Definition;
 
 /**
  * Interface ConnectorInterface.
@@ -12,14 +12,14 @@ use PlentyConnector\Connector\ValueObject\Definition\DefinitionInterface;
 interface ConnectorInterface
 {
     /**
-     * @param DefinitionInterface $definition
+     * @param Definition $definition
      */
-    public function addDefinition(DefinitionInterface $definition);
+    public function addDefinition(Definition $definition);
 
     /**
      * @param int $queryType
-     * @param string|null $objectType
-     * @param string|null $identifier
+     * @param null|string $objectType
+     * @param null|string $identifier
      *
      * @throws MissingQueryException
      * @throws MissingCommandException

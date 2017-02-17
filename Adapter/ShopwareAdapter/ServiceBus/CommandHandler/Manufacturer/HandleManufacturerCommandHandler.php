@@ -9,7 +9,6 @@ use PlentyConnector\Connector\ServiceBus\Command\HandleCommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\Manufacturer\HandleManufacturerCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
-use PlentyConnector\Connector\TransferObject\Manufacturer\ManufacturerInterface;
 use PlentyConnector\Connector\TransferObject\Media\Media;
 use Shopware\Components\Api\Resource\Manufacturer as ManufacturerResource;
 use ShopwareAdapter\ShopwareAdapter;
@@ -57,7 +56,7 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
     {
         /**
          * @var HandleCommandInterface $command
-         * @var ManufacturerInterface $manufacturer
+         * @var Manufacturer $manufacturer
          */
         $manufacturer = $command->getTransferObject();
 
@@ -71,7 +70,7 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
 
         if (null !== $manufacturer->getLogoIdentifier()) {
             $mediaIdentity = $this->identityService->findOneBy([
-                'objectIdentifier' => $manufacturer->getLogoIdentifier(),
+                'objectIdentifier' => (string) $manufacturer->getLogoIdentifier(),
                 'objectType' => Media::TYPE,
                 'adapterName' => ShopwareAdapter::NAME,
             ]);
@@ -86,7 +85,7 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
         }
 
         $identity = $this->identityService->findOneBy([
-            'objectIdentifier' => $manufacturer->getIdentifier(),
+            'objectIdentifier' => (string) $manufacturer->getIdentifier(),
             'objectType' => Manufacturer::TYPE,
             'adapterName' => ShopwareAdapter::NAME,
         ]);
@@ -96,7 +95,7 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
 
             if (null !== $existingManufacturer) {
                 $identity = $this->identityService->create(
-                    $manufacturer->getIdentifier(),
+                    (string) $manufacturer->getIdentifier(),
                     Manufacturer::TYPE,
                     (string) $existingManufacturer['id'],
                     ShopwareAdapter::NAME
@@ -108,7 +107,7 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
             $newManufacturer = $this->resource->create($params);
 
             $this->identityService->create(
-                $manufacturer->getIdentifier(),
+                (string) $manufacturer->getIdentifier(),
                 Manufacturer::TYPE,
                 (string) $newManufacturer->getId(),
                 ShopwareAdapter::NAME
@@ -121,11 +120,11 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param ManufacturerInterface $manufacturer
+     * @param Manufacturer $manufacturer
      *
-     * @return Supplier|null
+     * @return null|Supplier
      */
-    private function findExistingManufacturer(ManufacturerInterface $manufacturer)
+    private function findExistingManufacturer(Manufacturer $manufacturer)
     {
         $result = $this->resource->getList(0, 1, [
             'supplier.name' => $manufacturer->getName(),

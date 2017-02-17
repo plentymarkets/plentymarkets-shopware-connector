@@ -8,8 +8,7 @@ use PlentyConnector\Connector\ServiceBus\Command\HandleCommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\Order\HandleOrderCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\TransferObject\Order\Order;
-use PlentyConnector\Connector\TransferObject\Order\OrderInterface;
-use PlentyConnector\Connector\TransferObject\OrderItem\OrderItemInterface;
+use PlentyConnector\Connector\TransferObject\OrderItem\OrderItem;
 use PlentyConnector\Connector\TransferObject\OrderStatus\OrderStatus;
 use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
@@ -59,7 +58,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     {
         /**
          * @var HandleCommandInterface $command
-         * @var OrderInterface $order
+         * @var Order $order
          */
         $order = $command->getTransferObject();
 
@@ -97,7 +96,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
 
             $params['orderItems'] = array_map(function ($item) use ($shippingProfileIdentity) {
                 /**
-                 * @var OrderItemInterface $item
+                 * @var OrderItem $item
                  */
                 $itemParams = [];
 

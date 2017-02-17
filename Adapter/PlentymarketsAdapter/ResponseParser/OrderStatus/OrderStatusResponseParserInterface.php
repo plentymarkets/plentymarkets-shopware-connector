@@ -2,7 +2,7 @@
 
 namespace PlentymarketsAdapter\ResponseParser\OrderStatus;
 
-use PlentyConnector\Connector\TransferObject\OrderStatus\OrderStatusInterface;
+use PlentyConnector\Connector\TransferObject\OrderStatus\OrderStatus;
 
 /**
  * Interface OrderStatusResponseParserInterface
@@ -12,7 +12,7 @@ interface OrderStatusResponseParserInterface
     /**
      * @param array $entry
      *
-     * @return OrderStatusInterface|null
+     * @return null|OrderStatus
      */
     public function parse(array $entry);
 }

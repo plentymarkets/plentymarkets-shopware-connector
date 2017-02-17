@@ -2,7 +2,7 @@
 
 namespace PlentymarketsAdapter\ResponseParser\PaymentStatus;
 
-use PlentyConnector\Connector\TransferObject\PaymentStatus\PaymentStatusInterface;
+use PlentyConnector\Connector\TransferObject\PaymentStatus\PaymentStatus;
 
 /**
  * Interface PaymentStatusResponseParserInterface
@@ -12,7 +12,7 @@ interface PaymentStatusResponseParserInterface
     /**
      * @param array $entry
      *
-     * @return PaymentStatusInterface|null
+     * @return null|PaymentStatus
      */
     public function parse(array $entry);
 }

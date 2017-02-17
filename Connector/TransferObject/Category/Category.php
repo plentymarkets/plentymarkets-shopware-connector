@@ -3,209 +3,87 @@
 namespace PlentyConnector\Connector\TransferObject\Category;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\ValueObject\Attribute\AttributeInterface;
-use PlentyConnector\Connector\ValueObject\Translation\TranslationInterface;
+use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
+use PlentyConnector\Connector\TransferObject\TranslateableInterface;
+use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
+use PlentyConnector\Connector\ValueObject\Translation\Translation;
 
 /**
  * Class Category
  */
-class Category implements CategoryInterface
+class Category extends AbstractTransferObject implements TranslateableInterface
 {
     const TYPE = 'Category';
 
     /**
      * @var string
      */
-    private $identifier;
+    private $identifier = '';
 
     /**
      * @var string
      */
-    private $name;
+    private $name = '';
 
     /**
-     * @var string|null
+     * @var null|string
      */
     private $parentIdentifier;
 
     /**
      * @var string
      */
-    private $shopIdentifier;
+    private $shopIdentifier = '';
 
     /**
      * @var array
      */
-    private $imageIdentifiers;
+    private $imageIdentifiers = [];
 
     /**
      * @var int
      */
-    private $position;
+    private $position = 0;
 
     /**
      * @var string
      */
-    private $description;
+    private $description = '';
 
     /**
      * @var string
      */
-    private $longDescription;
+    private $longDescription = '';
 
     /**
      * @var string
      */
-    private $metaTitle;
+    private $metaTitle = '';
 
     /**
      * @var string
      */
-    private $metaDescription;
+    private $metaDescription = '';
 
     /**
      * @var string
      */
-    private $metaKeywords;
+    private $metaKeywords = '';
 
     /**
      * @var string
      */
-    private $metaRobots;
+    private $metaRobots = '';
 
     /**
-     * @var TranslationInterface[]
+     * @var Translation[]
      */
-    private $translations;
+    private $translations = [];
 
     /**
-     * @var AttributeInterface[]
+     * @var Attribute[]
      */
-    private $attributes;
-
-    /**
-     * Category constructor.
-     *
-     * @param string $identifier
-     * @param string $name
-     * @param string|null $parentIdentifier
-     * @param string $shopIdentifier
-     * @param array $imageIdentifiers
-     * @param int $position
-     * @param string $description
-     * @param string $longDescription
-     * @param string $metaTitle
-     * @param string $metaDescription
-     * @param string $metaKeywords
-     * @param string $metaRobots
-     * @param TranslationInterface[] $translations
-     * @param AttributeInterface[] $attributes
-     */
-    public function __construct(
-        $identifier,
-        $name,
-        $parentIdentifier,
-        $shopIdentifier,
-        array $imageIdentifiers,
-        $position,
-        $description,
-        $longDescription,
-        $metaTitle,
-        $metaDescription,
-        $metaKeywords,
-        $metaRobots,
-        array $translations = [],
-        array $attributes = []
-    ) {
-        Assertion::uuid($identifier);
-
-        Assertion::string($name);
-        Assertion::notBlank($name);
-
-        Assertion::nullOrUuid($parentIdentifier);
-        Assertion::uuid($shopIdentifier);
-        Assertion::allUuid($imageIdentifiers);
-
-        Assertion::integer($position);
-        Assertion::greaterOrEqualThan($position, 0);
-
-        Assertion::string($description);
-        Assertion::string($longDescription);
-
-        Assertion::string($metaTitle);
-        Assertion::string($metaDescription);
-        Assertion::string($metaKeywords);
-        Assertion::string($metaRobots);
-        Assertion::inArray($metaRobots, [
-            'INDEX, FOLLOW',
-            'NOINDEX, FOLLOW',
-            'INDEX, NOFOLLOW',
-            'NOINDEX, NOFOLLOW',
-        ]);
-
-        Assertion::allIsInstanceOf($translations, TranslationInterface::class);
-        Assertion::allIsInstanceOf($attributes, AttributeInterface::class);
-
-        $this->identifier = $identifier;
-
-        $this->name = $name;
-        $this->parentIdentifier = $parentIdentifier;
-        $this->shopIdentifier = $shopIdentifier;
-        $this->imageIdentifiers = $imageIdentifiers;
-
-        $this->position = $position;
-
-        $this->description = $description;
-        $this->longDescription = $longDescription;
-
-        $this->metaTitle = $metaTitle;
-        $this->metaDescription = $metaDescription;
-        $this->metaKeywords = $metaKeywords;
-        $this->metaRobots = $metaRobots;
-
-        $this->translations = $translations;
-        $this->attributes = $attributes;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function fromArray(array $params = [])
-    {
-        Assertion::allInArray(array_keys($params), [
-            'identifier',
-            'name',
-            'parentIdentifier',
-            'shopIdentifier',
-            'imageIdentifiers',
-            'position',
-            'description',
-            'longDescription',
-            'metaTitle',
-            'metaDescription',
-            'metaKeywords',
-            'metaRobots',
-            'translations',
-            'attributes',
-        ]);
-
-        return new self(
-            $params['identifier'],
-            $params['name'],
-            $params['parentIdentifier'],
-            $params['shopIdentifier'],
-            $params['imageIdentifiers'],
-            $params['position'],
-            $params['description'],
-            $params['longDescription'],
-            $params['metaTitle'],
-            $params['metaDescription'],
-            $params['metaKeywords'],
-            $params['metaRobots'],
-            $params['translations'],
-            $params['attributes']
-        );
-    }
+    private $attributes = [];
 
     /**
      * {@inheritdoc}
@@ -220,11 +98,23 @@ class Category implements CategoryInterface
      */
     public function getIdentifier()
     {
+        Assertion::notBlank($this->identifier);
+
         return $this->identifier;
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $identifier
+     */
+    public function setIdentifier($identifier)
+    {
+        Assertion::uuid($identifier);
+
+        $this->identifier = $identifier;
+    }
+
+    /**
+     * @return string
      */
     public function getName()
     {
@@ -232,7 +122,18 @@ class Category implements CategoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        Assertion::string($name);
+        Assertion::notBlank($name);
+
+        $this->name = $name;
+    }
+
+    /**
+     * @return null|string
      */
     public function getParentIdentifier()
     {
@@ -240,7 +141,17 @@ class Category implements CategoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $parentIdentifier
+     */
+    public function setParentIdentifier($parentIdentifier)
+    {
+        Assertion::nullOrUuid($parentIdentifier);
+
+        $this->parentIdentifier = $parentIdentifier;
+    }
+
+    /**
+     * @return string
      */
     public function getShopIdentifier()
     {
@@ -248,7 +159,17 @@ class Category implements CategoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $shopIdentifier
+     */
+    public function setShopIdentifier($shopIdentifier)
+    {
+        Assertion::uuid($shopIdentifier);
+
+        $this->shopIdentifier = $shopIdentifier;
+    }
+
+    /**
+     * @return array
      */
     public function getImageIdentifiers()
     {
@@ -256,7 +177,17 @@ class Category implements CategoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $imageIdentifiers
+     */
+    public function setImageIdentifiers($imageIdentifiers)
+    {
+        Assertion::allUuid($imageIdentifiers);
+
+        $this->imageIdentifiers = $imageIdentifiers;
+    }
+
+    /**
+     * @return int
      */
     public function getPosition()
     {
@@ -264,7 +195,18 @@ class Category implements CategoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param int $position
+     */
+    public function setPosition($position)
+    {
+        Assertion::integer($position);
+        Assertion::greaterOrEqualThan($position, 0);
+
+        $this->position = $position;
+    }
+
+    /**
+     * @return string
      */
     public function getDescription()
     {
@@ -272,7 +214,17 @@ class Category implements CategoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $description
+     */
+    public function setDescription($description)
+    {
+        Assertion::string($description);
+
+        $this->description = $description;
+    }
+
+    /**
+     * @return string
      */
     public function getLongDescription()
     {
@@ -280,7 +232,17 @@ class Category implements CategoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $longDescription
+     */
+    public function setLongDescription($longDescription)
+    {
+        Assertion::string($longDescription);
+
+        $this->longDescription = $longDescription;
+    }
+
+    /**
+     * @return string
      */
     public function getMetaTitle()
     {
@@ -288,7 +250,17 @@ class Category implements CategoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $metaTitle
+     */
+    public function setMetaTitle($metaTitle)
+    {
+        Assertion::string($metaTitle);
+
+        $this->metaTitle = $metaTitle;
+    }
+
+    /**
+     * @return string
      */
     public function getMetaDescription()
     {
@@ -296,7 +268,17 @@ class Category implements CategoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $metaDescription
+     */
+    public function setMetaDescription($metaDescription)
+    {
+        Assertion::string($metaDescription);
+
+        $this->metaDescription = $metaDescription;
+    }
+
+    /**
+     * @return string
      */
     public function getMetaKeywords()
     {
@@ -304,7 +286,17 @@ class Category implements CategoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $metaKeywords
+     */
+    public function setMetaKeywords($metaKeywords)
+    {
+        Assertion::string($metaKeywords);
+
+        $this->metaKeywords = $metaKeywords;
+    }
+
+    /**
+     * @return string
      */
     public function getMetaRobots()
     {
@@ -312,7 +304,23 @@ class Category implements CategoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $metaRobots
+     */
+    public function setMetaRobots($metaRobots)
+    {
+        Assertion::string($metaRobots);
+        Assertion::inArray($metaRobots, [
+            'INDEX, FOLLOW',
+            'NOINDEX, FOLLOW',
+            'INDEX, NOFOLLOW',
+            'NOINDEX, NOFOLLOW',
+        ]);
+
+        $this->metaRobots = $metaRobots;
+    }
+
+    /**
+     * @return Translation[]
      */
     public function getTranslations()
     {
@@ -320,10 +328,30 @@ class Category implements CategoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param Translation[] $translations
+     */
+    public function setTranslations($translations)
+    {
+        Assertion::allIsInstanceOf($translations, Translation::class);
+
+        $this->translations = $translations;
+    }
+
+    /**
+     * @return Attribute[]
      */
     public function getAttributes()
     {
         return $this->attributes;
+    }
+
+    /**
+     * @param Attribute[] $attributes
+     */
+    public function setAttributes($attributes)
+    {
+        Assertion::allIsInstanceOf($attributes, Attribute::class);
+
+        $this->attributes = $attributes;
     }
 }

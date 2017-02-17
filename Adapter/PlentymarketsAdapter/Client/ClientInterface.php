@@ -13,8 +13,8 @@ interface ClientInterface
      * @param string $method
      * @param string $path
      * @param array $params
-     * @param int|null $limit
-     * @param int|null $offset
+     * @param null|int $limit
+     * @param null|int $offset
      * @param array $options
      *
      * @return array

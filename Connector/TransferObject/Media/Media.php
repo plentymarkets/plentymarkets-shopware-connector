@@ -3,129 +3,57 @@
 namespace PlentyConnector\Connector\TransferObject\Media;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\ValueObject\Attribute\AttributeInterface;
-use PlentyConnector\Connector\ValueObject\Translation\TranslationInterface;
+use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
+use PlentyConnector\Connector\TransferObject\TranslateableInterface;
+use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
+use PlentyConnector\Connector\ValueObject\Translation\Translation;
 
 /**
  * Class Media
  */
-class Media implements MediaInterface
+class Media extends AbstractTransferObject implements TranslateableInterface
 {
     const TYPE = 'Media';
 
     /**
      * @var string
      */
-    private $identifier;
+    private $identifier = '';
 
     /**
      * @var string
      */
-    private $mediaCategoryIdentifier;
+    private $mediaCategoryIdentifier = '';
 
     /**
      * @var string
      */
-    private $link;
+    private $link = '';
 
     /**
      * @var string
      */
-    private $hash;
+    private $hash = '';
 
     /**
      * @var string
      */
-    private $name;
+    private $name = '';
 
     /**
      * @var string
      */
-    private $alternateName;
+    private $alternateName = '';
 
     /**
-     * @var TranslationInterface[]
+     * @var Translation[]
      */
-    private $translations;
+    private $translations = [];
 
     /**
-     * @var AttributeInterface[]
+     * @var Attribute[]
      */
-    private $attributes;
-
-    /**
-     * Media constructor.
-     *
-     * @param string $identifier
-     * @param string $mediaCategoryIdentifier
-     * @param string $link
-     * @param string $name
-     * @param string $alternateName
-     * @param string|null $hash
-     * @param TranslationInterface[] $translations
-     * @param AttributeInterface[] $attributes
-     */
-    public function __construct(
-        $identifier,
-        $mediaCategoryIdentifier,
-        $link,
-        $name,
-        $alternateName,
-        $hash = null,
-        array $translations = [],
-        array $attributes = []
-    ) {
-        Assertion::uuid($identifier);
-        Assertion::nullOrUuid($mediaCategoryIdentifier);
-        Assertion::url($link);
-        Assertion::string($name);
-        Assertion::string($alternateName);
-
-        $this->identifier = $identifier;
-        $this->mediaCategoryIdentifier = $mediaCategoryIdentifier;
-        $this->link = $link;
-
-        $this->name = $name;
-        $this->alternateName = $alternateName;
-
-        if (empty($hash)) {
-            $hash = sha1_file($link);
-        }
-
-        Assertion::string($hash);
-
-        $this->hash = $hash;
-        $this->translations = $translations;
-        $this->attributes = $attributes;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function fromArray(array $params = [])
-    {
-        Assertion::allInArray(array_keys($params), [
-            'identifier',
-            'mediaCategoryIdentifier',
-            'link',
-            'hash',
-            'name',
-            'alternateName',
-            'translations',
-            'attributes',
-        ]);
-
-        return new self(
-            $params['identifier'],
-            $params['mediaCategoryIdentifier'],
-            $params['link'],
-            $params['name'],
-            $params['alternateName'],
-            $params['hash'],
-            $params['translations'],
-            $params['attributes']
-        );
-    }
+    private $attributes = [];
 
     /**
      * {@inheritdoc}
@@ -140,11 +68,23 @@ class Media implements MediaInterface
      */
     public function getIdentifier()
     {
+        Assertion::notBlank($this->identifier);
+
         return $this->identifier;
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $identifier
+     */
+    public function setIdentifier($identifier)
+    {
+        Assertion::uuid($identifier);
+
+        $this->identifier = $identifier;
+    }
+
+    /**
+     * @return string
      */
     public function getMediaCategoryIdentifier()
     {
@@ -152,7 +92,17 @@ class Media implements MediaInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $mediaCategoryIdentifier
+     */
+    public function setMediaCategoryIdentifier($mediaCategoryIdentifier)
+    {
+        Assertion::uuid($mediaCategoryIdentifier);
+
+        $this->mediaCategoryIdentifier = $mediaCategoryIdentifier;
+    }
+
+    /**
+     * @return string
      */
     public function getLink()
     {
@@ -160,15 +110,39 @@ class Media implements MediaInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $link
+     */
+    public function setLink($link)
+    {
+        Assertion::url($link);
+
+        $this->link = $link;
+    }
+
+    /**
+     * @return string
      */
     public function getHash()
     {
+        if (empty($this->hash)) {
+            $this->hash = sha1_file($this->link);
+        }
+
         return $this->hash;
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $hash
+     */
+    public function setHash($hash)
+    {
+        Assertion::string($hash);
+
+        $this->hash = $hash;
+    }
+
+    /**
+     * @return string
      */
     public function getName()
     {
@@ -176,7 +150,17 @@ class Media implements MediaInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        Assertion::string($name);
+
+        $this->name = $name;
+    }
+
+    /**
+     * @return string
      */
     public function getAlternateName()
     {
@@ -184,7 +168,17 @@ class Media implements MediaInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $alternateName
+     */
+    public function setAlternateName($alternateName)
+    {
+        Assertion::string($alternateName);
+
+        $this->alternateName = $alternateName;
+    }
+
+    /**
+     * @return Translation[]
      */
     public function getTranslations()
     {
@@ -192,10 +186,30 @@ class Media implements MediaInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param Translation[] $translations
+     */
+    public function setTranslations($translations)
+    {
+        Assertion::allIsInstanceOf($translations, Translation::class);
+
+        $this->translations = $translations;
+    }
+
+    /**
+     * @return Attribute[]
      */
     public function getAttributes()
     {
         return $this->attributes;
+    }
+
+    /**
+     * @param Attribute[] $attributes
+     */
+    public function setAttributes($attributes)
+    {
+        Assertion::allIsInstanceOf($attributes, Attribute::class);
+
+        $this->attributes = $attributes;
     }
 }

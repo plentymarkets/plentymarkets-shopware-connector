@@ -9,7 +9,6 @@ use PlentyConnector\Connector\ServiceBus\Command\HandleCommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\MediaCategory\HandleMediaCategoryCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
-use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategoryInterface;
 use Shopware\Models\Media\Album;
 use Shopware\Models\Media\Settings;
 use ShopwareAdapter\ShopwareAdapter;
@@ -57,12 +56,12 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
     {
         /**
          * @var HandleCommandInterface $command
-         * @var MediaCategoryInterface $mediaCategory
+         * @var MediaCategory $mediaCategory
          */
         $mediaCategory = $command->getTransferObject();
 
         $identity = $this->identityService->findOneBy([
-            'objectIdentifier' => $mediaCategory->getIdentifier(),
+            'objectIdentifier' => (string) $mediaCategory->getIdentifier(),
             'objectType' => MediaCategory::TYPE,
             'adapterName' => ShopwareAdapter::NAME,
         ]);
@@ -121,11 +120,11 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param MediaCategoryInterface $mediaCategory
+     * @param MediaCategory $mediaCategory
      * @param Album $parent
      * @param Settings $parentSettings
      */
-    private function createNewAlbum(MediaCategoryInterface $mediaCategory, Album $parent, Settings $parentSettings)
+    private function createNewAlbum(MediaCategory $mediaCategory, Album $parent, Settings $parentSettings)
     {
         $connection = $this->entityManager->getConnection();
 

@@ -72,7 +72,7 @@ class ProcessCommand extends ShopwareCommand
      *
      * @throws Exception
      *
-     * @return int|null|void
+     * @return null|int|void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

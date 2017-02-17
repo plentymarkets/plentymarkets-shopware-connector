@@ -15,8 +15,8 @@ use PlentyConnector\Connector\ServiceBus\QueryFactory\QueryFactoryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
-use PlentyConnector\Connector\ValueObject\Definition\DefinitionInterface;
-use PlentyConnector\Connector\ValueObject\Identity\IdentityInterface;
+use PlentyConnector\Connector\ValueObject\Definition\Definition;
+use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -25,7 +25,7 @@ use Psr\Log\LoggerInterface;
 class CleanupService implements CleanupServiceInterface
 {
     /**
-     * @var DefinitionInterface[]
+     * @var Definition[]
      */
     private $definitions;
 
@@ -85,13 +85,13 @@ class CleanupService implements CleanupServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function addDefinition(DefinitionInterface $definition)
+    public function addDefinition(Definition $definition)
     {
         $this->definitions[] = $definition;
     }
 
     /**
-     * @param string|null $objectType
+     * @param null|string $objectType
      */
     public function cleanup($objectType = null)
     {
@@ -99,7 +99,7 @@ class CleanupService implements CleanupServiceInterface
 
         $definitions = $this->getDefinitions($objectType);
 
-        array_walk($definitions, function (DefinitionInterface $definition) {
+        array_walk($definitions, function (Definition $definition) {
             try {
                 $foundElements = $this->collectObjectIdentifiers($definition);
 
@@ -119,9 +119,9 @@ class CleanupService implements CleanupServiceInterface
     }
 
     /**
-     * @param string|null $objectType
+     * @param null|string $objectType
      *
-     * @return DefinitionInterface[]|null
+     * @return null|Definition[]
      */
     private function getDefinitions($objectType = null)
     {
@@ -129,7 +129,7 @@ class CleanupService implements CleanupServiceInterface
             return [];
         }
 
-        $definitions = array_filter($this->definitions, function (DefinitionInterface $definition) use ($objectType) {
+        $definitions = array_filter($this->definitions, function (Definition $definition) use ($objectType) {
             return $definition->getObjectType() === $objectType || null === $objectType;
         });
 
@@ -137,14 +137,14 @@ class CleanupService implements CleanupServiceInterface
     }
 
     /**
-     * @param DefinitionInterface $definition
+     * @param Definition $definition
      *
      * @throws MissingQueryException
      * @throws MissingQueryGeneratorException
      *
      * @return bool
      */
-    private function collectObjectIdentifiers(DefinitionInterface $definition)
+    private function collectObjectIdentifiers(Definition $definition)
     {
         /**
          * @var TransferObjectInterface[] $objects
@@ -171,19 +171,19 @@ class CleanupService implements CleanupServiceInterface
     }
 
     /**
-     * @param DefinitionInterface $definition
+     * @param Definition $definition
      *
      * @throws MissingCommandException
      * @throws MissingCommandGeneratorException
      */
-    private function removeAllElements(DefinitionInterface $definition)
+    private function removeAllElements(Definition $definition)
     {
         $allIdentities = $this->identityService->findby([
             'adapterName' => $definition->getDestinationAdapterName(),
             'objectType' => $definition->getObjectType(),
         ]);
 
-        array_walk($allIdentities, function (IdentityInterface $identity) use ($definition) {
+        array_walk($allIdentities, function (Identity $identity) use ($definition) {
             $this->serviceBus->handle($this->commandFactory->create(
                 $definition->getDestinationAdapterName(),
                 $definition->getObjectType(),
@@ -216,11 +216,11 @@ class CleanupService implements CleanupServiceInterface
             ]);
 
             $orphanedIdentities = array_filter($allIdentities,
-                function (IdentityInterface $identity) use ($identifiers) {
+                function (Identity $identity) use ($identifiers) {
                     return !in_array($identity->getObjectIdentifier(), $identifiers, true);
                 });
 
-            array_walk($orphanedIdentities, function (IdentityInterface $identity) use ($adapterName, $objectType) {
+            array_walk($orphanedIdentities, function (Identity $identity) use ($adapterName, $objectType) {
                 $this->serviceBus->handle($this->commandFactory->create(
                     $adapterName,
                     $objectType,

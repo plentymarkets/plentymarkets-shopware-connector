@@ -6,7 +6,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use PlentyConnector\Connector\IdentityService\Model\Identity as IdentityModel;
 use PlentyConnector\Connector\IdentityService\Model\IdentityRepository;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
-use PlentyConnector\Connector\ValueObject\Identity\IdentityInterface;
 
 /**
  * Class DoctrineIdentityStorage.
@@ -81,7 +80,7 @@ class DoctrineIdentityStorage implements IdentityStorageInterface
     /**
      * {@inheritdoc}
      */
-    public function persist(IdentityInterface $identity)
+    public function persist(Identity $identity)
     {
         $model = new IdentityModel(
             $identity->getObjectIdentifier(),
@@ -99,7 +98,7 @@ class DoctrineIdentityStorage implements IdentityStorageInterface
     /**
      * {@inheritdoc}
      */
-    public function remove(IdentityInterface $identity)
+    public function remove(Identity $identity)
     {
         $result = $this->identityRepository->findOneBy([
             'adapterIdentifier' => $identity->getAdapterIdentifier(),

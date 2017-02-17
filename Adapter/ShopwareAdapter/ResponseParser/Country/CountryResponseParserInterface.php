@@ -2,7 +2,7 @@
 
 namespace ShopwareAdapter\ResponseParser\Country;
 
-use PlentyConnector\Connector\TransferObject\Country\CountryInterface;
+use PlentyConnector\Connector\TransferObject\Country\Country;
 
 /**
  * Interface CountryResponseParserInterface
@@ -12,7 +12,7 @@ interface CountryResponseParserInterface
     /**
      * @param array $entry
      *
-     * @return CountryInterface|null
+     * @return null|Country
      */
     public function parse(array $entry);
 }

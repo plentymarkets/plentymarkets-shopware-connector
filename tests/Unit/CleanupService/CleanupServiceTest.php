@@ -13,8 +13,8 @@ use PlentyConnector\Connector\ServiceBus\QueryFactory\QueryFactoryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
-use PlentyConnector\Connector\ValueObject\Definition\DefinitionInterface;
-use PlentyConnector\Connector\ValueObject\Identity\IdentityInterface;
+use PlentyConnector\Connector\ValueObject\Definition\Definition;
+use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 
@@ -54,7 +54,7 @@ class CleanupServiceTest extends TestCase
             $orphanedUuid
         )->willReturn($command);
 
-        $identity = $this->createMock(IdentityInterface::class);
+        $identity = $this->createMock(Identity::class);
         $identity->expects($this->any())->method('getObjectIdentifier')->willReturn($orphanedUuid);
         $identity->expects($this->any())->method('getObjectType')->willReturn('TestType');
         $identity->expects($this->any())->method('getAdapterIdentifier')->willReturn('2');
@@ -63,7 +63,7 @@ class CleanupServiceTest extends TestCase
         $identityService = $this->createMock(IdentityServiceInterface::class);
         $identityService->expects($this->once())->method('findby')->willReturn([$identity]);
 
-        $definition = $this->createMock(DefinitionInterface::class);
+        $definition = $this->createMock(Definition::class);
         $definition->expects($this->any())->method('getOriginAdapterName')->willReturn('TestOriginAdapter');
         $definition->expects($this->any())->method('getDestinationAdapterName')->willReturn('TestDestinationAdapter');
         $definition->expects($this->any())->method('getObjectType')->willReturn('TestType');
@@ -111,7 +111,7 @@ class CleanupServiceTest extends TestCase
             $orphanedUuid
         )->willReturn($command);
 
-        $identity = $this->createMock(IdentityInterface::class);
+        $identity = $this->createMock(Identity::class);
         $identity->expects($this->any())->method('getObjectIdentifier')->willReturn($orphanedUuid);
         $identity->expects($this->any())->method('getObjectType')->willReturn('TestType');
         $identity->expects($this->any())->method('getAdapterIdentifier')->willReturn('2');
@@ -120,7 +120,7 @@ class CleanupServiceTest extends TestCase
         $identityService = $this->createMock(IdentityServiceInterface::class);
         $identityService->expects($this->once())->method('findby')->willReturn([$identity]);
 
-        $definition = $this->createMock(DefinitionInterface::class);
+        $definition = $this->createMock(Definition::class);
         $definition->expects($this->any())->method('getOriginAdapterName')->willReturn('TestOriginAdapter');
         $definition->expects($this->any())->method('getDestinationAdapterName')->willReturn('TestDestinationAdapter');
         $definition->expects($this->any())->method('getObjectType')->willReturn('TestType');

@@ -10,7 +10,6 @@ use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\HandleCommandInterface;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\TransferObject\Category\Category;
-use PlentyConnector\Connector\TransferObject\Category\CategoryInterface;
 use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentyConnector\Connector\TransferObject\Media\Media;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
@@ -98,12 +97,12 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     {
         /**
          * @var HandleCommandInterface $command
-         * @var CategoryInterface $category
+         * @var Category $category
          */
         $category = $command->getTransferObject();
 
         $shopIdentity = $this->identityService->findOneBy([
-            'objectIdentifier' => $category->getShopIdentifier(),
+            'objectIdentifier' => (string) $category->getShopIdentifier(),
             'objectType' => Shop::TYPE,
             'adapterName' => ShopwareAdapter::NAME,
         ]);
@@ -134,7 +133,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             $parentCategory = $shop->getCategory()->getId();
         } else {
             $parentCategoryIdentity = $this->identityService->findOneBy([
-                'objectIdentifier' => $category->getParentIdentifier(),
+                'objectIdentifier' => (string) $category->getParentIdentifier(),
                 'objectType' => Category::TYPE,
                 'adapterName' => ShopwareAdapter::NAME,
             ]);
@@ -157,7 +156,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
 
             if (null !== $existingCategory) {
                 $categoryIdentity = $this->identityService->create(
-                    $category->getIdentifier(),
+                    (string) $category->getIdentifier(),
                     Category::TYPE,
                     (string) $existingCategory,
                     ShopwareAdapter::NAME
@@ -175,7 +174,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             $mediaIdentifier = array_shift($mediaIdentifiers);
 
             $mediaIdentity = $this->identityService->findOneBy([
-                'objectIdentifier' => $mediaIdentifier,
+                'objectIdentifier' => (string) $mediaIdentifier,
                 'objectType' => Media::TYPE,
                 'adapterName' => ShopwareAdapter::NAME,
             ]);
@@ -191,7 +190,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             $newCategory = $this->resource->create($parans);
 
             $this->identityService->create(
-                $category->getIdentifier(),
+                (string) $category->getIdentifier(),
                 Category::TYPE,
                 (string) $newCategory->getId(),
                 ShopwareAdapter::NAME
@@ -204,12 +203,12 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param CategoryInterface $category
+     * @param Category $category
      * @param int $parentCategory
      *
-     * @return int|null
+     * @return null|int
      */
-    private function findExistingCategory(CategoryInterface $category, $parentCategory)
+    private function findExistingCategory(Category $category, $parentCategory)
     {
         $existingCategory = $this->categoryRepository->findOneBy([
             'name' => $category->getName(),

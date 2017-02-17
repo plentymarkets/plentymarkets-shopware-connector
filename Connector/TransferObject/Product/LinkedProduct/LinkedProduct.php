@@ -3,57 +3,25 @@
 namespace PlentyConnector\Connector\TransferObject\Product\LinkedProduct;
 
 use Assert\Assertion;
+use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 
 /**
  * Class LinkedProduct
  */
-class LinkedProduct implements LinkedProductInterface
+class LinkedProduct extends AbstractValueObject
 {
     /**
      * @var string
      */
-    private $type;
+    private $type = '';
 
     /**
      * @var string
      */
-    private $productIdentifier;
+    private $productIdentifier = '';
 
     /**
-     * LinkedProduct constructor.
-     *
-     * @param string $type
-     * @param array $productIdentifier
-     */
-    public function __construct($type, $productIdentifier)
-    {
-        Assertion::string($type);
-        Assertion::uuid($productIdentifier);
-
-        $this->type = $type;
-        $this->productIdentifier = $productIdentifier;
-    }
-
-    /**
-     * @param array $params
-     *
-     * @return self
-     */
-    public static function fromArray(array $params = [])
-    {
-        Assertion::allInArray(array_keys($params), [
-            'type',
-            'productIdentifier',
-        ]);
-
-        return new self(
-            $params['type'],
-            $params['productIdentifier']
-        );
-    }
-
-    /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getType()
     {
@@ -61,10 +29,30 @@ class LinkedProduct implements LinkedProductInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $type
+     */
+    public function setType($type)
+    {
+        Assertion::string($type);
+
+        $this->type = $type;
+    }
+
+    /**
+     * @return string
      */
     public function getProductIdentifier()
     {
         return $this->productIdentifier;
+    }
+
+    /**
+     * @param string $productIdentifier
+     */
+    public function setProductIdentifier($productIdentifier)
+    {
+        Assertion::uuid($productIdentifier);
+
+        $this->productIdentifier = $productIdentifier;
     }
 }

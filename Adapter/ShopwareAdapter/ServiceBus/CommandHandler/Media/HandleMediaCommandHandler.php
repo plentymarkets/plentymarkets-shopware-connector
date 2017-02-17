@@ -9,7 +9,6 @@ use PlentyConnector\Connector\ServiceBus\Command\HandleCommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\Media\HandleMediaCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\TransferObject\Media\Media;
-use PlentyConnector\Connector\TransferObject\Media\MediaInterface;
 use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
 use Shopware\Components\Api\Resource\Media as MediaResource;
 use Shopware\Models\Media\Album;
@@ -58,12 +57,12 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
     {
         /**
          * @var HandleCommandInterface $command
-         * @var MediaInterface $media
+         * @var Media $media
          */
         $media = $command->getTransferObject();
 
         $identity = $this->identityService->findOneBy([
-            'objectIdentifier' => $media->getIdentifier(),
+            'objectIdentifier' => (string) $media->getIdentifier(),
             'objectType' => Media::TYPE,
             'adapterName' => ShopwareAdapter::NAME,
         ]);

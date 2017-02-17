@@ -12,7 +12,7 @@ use PlentyConnector\Connector\ServiceBus\QueryFactory\QueryFactoryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
-use PlentyConnector\Connector\ValueObject\Definition\DefinitionInterface;
+use PlentyConnector\Connector\ValueObject\Definition\Definition;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 
@@ -49,7 +49,7 @@ class ConnectorTest extends TestCase
             $testElement
         )->willReturn($command);
 
-        $definition = $this->createMock(DefinitionInterface::class);
+        $definition = $this->createMock(Definition::class);
         $definition->expects($this->any())->method('getOriginAdapterName')->willReturn('TestOriginAdapter');
         $definition->expects($this->any())->method('getDestinationAdapterName')->willReturn('TestDestinationAdapter');
         $definition->expects($this->any())->method('getObjectType')->willReturn('TestType');
@@ -93,7 +93,7 @@ class ConnectorTest extends TestCase
             $testElement
         )->willReturn($command);
 
-        $definition = $this->createMock(DefinitionInterface::class);
+        $definition = $this->createMock(Definition::class);
         $definition->expects($this->any())->method('getOriginAdapterName')->willReturn('TestOriginAdapter');
         $definition->expects($this->any())->method('getDestinationAdapterName')->willReturn('TestDestinationAdapter');
         $definition->expects($this->any())->method('getObjectType')->willReturn('TestType');
@@ -134,7 +134,7 @@ class ConnectorTest extends TestCase
             $testElement
         )->willReturn($command);
 
-        $definition = $this->createMock(DefinitionInterface::class);
+        $definition = $this->createMock(Definition::class);
         $definition->expects($this->any())->method('getOriginAdapterName')->willReturn('TestOriginAdapter');
         $definition->expects($this->any())->method('getDestinationAdapterName')->willReturn('TestDestinationAdapter');
         $definition->expects($this->any())->method('getObjectType')->willReturn('TestType');

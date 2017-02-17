@@ -3,11 +3,12 @@
 namespace PlentyConnector\Connector\ValueObject\Identity;
 
 use Assert\Assertion;
+use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 
 /**
  * Class Identity.
  */
-class Identity implements IdentityInterface
+class Identity extends AbstractValueObject
 {
     /**
      * Identifier of the object.
@@ -38,52 +39,7 @@ class Identity implements IdentityInterface
     private $adapterName;
 
     /**
-     * Identity constructor.
-     *
-     * @param string $objectIdentifier
-     * @param string $objectType
-     * @param string $adapterIdentifier
-     * @param string $adapterName
-     */
-    private function __construct($objectIdentifier, $objectType, $adapterIdentifier, $adapterName)
-    {
-        Assertion::string($objectIdentifier);
-        Assertion::notBlank($objectIdentifier);
-        Assertion::string($objectType);
-        Assertion::notBlank($objectType);
-        Assertion::string($adapterIdentifier);
-        Assertion::notBlank($adapterIdentifier);
-        Assertion::string($adapterName);
-        Assertion::notBlank($adapterName);
-
-        $this->objectIdentifier = $objectIdentifier;
-        $this->objectType = $objectType;
-        $this->adapterIdentifier = $adapterIdentifier;
-        $this->adapterName = $adapterName;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function fromArray(array $params = [])
-    {
-        Assertion::allInArray(array_keys($params), [
-            'objectIdentifier',
-            'objectType',
-            'adapterIdentifier',
-            'adapterName',
-        ]);
-
-        return new self(
-            $params['objectIdentifier'],
-            $params['objectType'],
-            $params['adapterIdentifier'],
-            $params['adapterName']
-        );
-    }
-
-    /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getObjectIdentifier()
     {
@@ -91,7 +47,18 @@ class Identity implements IdentityInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $objectIdentifier
+     */
+    public function setObjectIdentifier($objectIdentifier)
+    {
+        Assertion::string($objectIdentifier);
+        Assertion::notBlank($objectIdentifier);
+
+        $this->objectIdentifier = $objectIdentifier;
+    }
+
+    /**
+     * @return string
      */
     public function getObjectType()
     {
@@ -99,7 +66,18 @@ class Identity implements IdentityInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $objectType
+     */
+    public function setObjectType($objectType)
+    {
+        Assertion::string($objectType);
+        Assertion::notBlank($objectType);
+
+        $this->objectType = $objectType;
+    }
+
+    /**
+     * @return string
      */
     public function getAdapterIdentifier()
     {
@@ -107,10 +85,32 @@ class Identity implements IdentityInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $adapterIdentifier
+     */
+    public function setAdapterIdentifier($adapterIdentifier)
+    {
+        Assertion::string($adapterIdentifier);
+        Assertion::notBlank($adapterIdentifier);
+
+        $this->adapterIdentifier = $adapterIdentifier;
+    }
+
+    /**
+     * @return string
      */
     public function getAdapterName()
     {
         return $this->adapterName;
+    }
+
+    /**
+     * @param string $adapterName
+     */
+    public function setAdapterName($adapterName)
+    {
+        Assertion::string($adapterName);
+        Assertion::notBlank($adapterName);
+
+        $this->adapterName = $adapterName;
     }
 }

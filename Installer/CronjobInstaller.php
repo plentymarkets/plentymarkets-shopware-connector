@@ -75,7 +75,7 @@ class CronjobInstaller implements InstallerInterface
     }
 
     /**
-     * @param int|null $pluginIdentifier
+     * @param null|int $pluginIdentifier
      *
      * @throws InvalidArgumentException
      */

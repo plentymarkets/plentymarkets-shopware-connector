@@ -3,56 +3,27 @@
 namespace PlentyConnector\Connector\TransferObject\Product\Property\Value;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\ValueObject\Translation\TranslationInterface;
+use PlentyConnector\Connector\TransferObject\TranslateableInterface;
+use PlentyConnector\Connector\ValueObject\AbstractValueObject;
+use PlentyConnector\Connector\ValueObject\Translation\Translation;
 
 /**
  * Class Value
  */
-class Value implements ValueInterface
+class Value  extends AbstractValueObject implements TranslateableInterface
 {
     /**
      * @var string
      */
-    private $value;
+    private $value = [];
 
     /**
-     * @var TranslationInterface[]
+     * @var Translation[]
      */
-    private $translations;
+    private $translations = [];
 
     /**
-     * Value constructor.
-     *
-     * @param string $value
-     * @param TranslationInterface[] $translations
-     */
-    public function __construct($value, array $translations = [])
-    {
-        Assertion::string($value);
-        Assertion::allIsInstanceOf($translations, TranslationInterface::class);
-
-        $this->value = $value;
-        $this->translations = $translations;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function fromArray(array $params = [])
-    {
-        Assertion::allInArray(array_keys($params), [
-            'value',
-            'translations',
-        ]);
-
-        return new self(
-            $params['value'],
-            $params['translations']
-        );
-    }
-
-    /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getValue()
     {
@@ -60,10 +31,30 @@ class Value implements ValueInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $value
+     */
+    public function setValue($value)
+    {
+        Assertion::string($value);
+
+        $this->value = $value;
+    }
+
+    /**
+     * @return Translation[]
      */
     public function getTranslations()
     {
         return $this->translations;
+    }
+
+    /**
+     * @param Translation[] $translations
+     */
+    public function setTranslations($translations)
+    {
+        Assertion::allIsInstanceOf($translations, Translation::class);
+
+        $this->translations = $translations;
     }
 }

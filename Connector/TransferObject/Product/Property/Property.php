@@ -3,68 +3,33 @@
 namespace PlentyConnector\Connector\TransferObject\Product\Property;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\Product\Property\Value\ValueInterface;
-use PlentyConnector\Connector\ValueObject\Translation\TranslationInterface;
+use PlentyConnector\Connector\TransferObject\Product\Property\Value\Value;
+use PlentyConnector\Connector\TransferObject\TranslateableInterface;
+use PlentyConnector\Connector\ValueObject\AbstractValueObject;
+use PlentyConnector\Connector\ValueObject\Translation\Translation;
 
 /**
  * Class Property
  */
-class Property implements PropertyInterface
+class Property  extends AbstractValueObject implements TranslateableInterface
 {
     /**
      * @var string
      */
-    private $key;
+    private $key = '';
 
     /**
-     * @var ValueInterface[]
+     * @var Value[]
      */
-    private $values;
+    private $values = [];
 
     /**
-     * @var TranslationInterface[]
+     * @var Translation[]
      */
-    private $translations;
+    private $translations = [];
 
     /**
-     * Property constructor.
-     *
-     * @param string $key
-     * @param ValueInterface[] $values
-     * @param TranslationInterface[] $translations
-     */
-    public function __construct($key, array $values = [], array $translations = [])
-    {
-        Assertion::string($key);
-        Assertion::notBlank($key);
-        Assertion::allIsInstanceOf($translations, ValueInterface::class);
-        Assertion::allIsInstanceOf($translations, TranslationInterface::class);
-
-        $this->key = $key;
-        $this->values = $values;
-        $this->translations = $translations;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function fromArray(array $params = [])
-    {
-        Assertion::allInArray(array_keys($params), [
-            'key',
-            'value',
-            'translations',
-        ]);
-
-        return new self(
-            $params['key'],
-            $params['value'],
-            $params['translations']
-        );
-    }
-
-    /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getKey()
     {
@@ -72,7 +37,18 @@ class Property implements PropertyInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $key
+     */
+    public function setKey($key)
+    {
+        Assertion::string($key);
+        Assertion::notBlank($key);
+
+        $this->key = $key;
+    }
+
+    /**
+     * @return Value[]
      */
     public function getValues()
     {
@@ -80,10 +56,30 @@ class Property implements PropertyInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param Value[] $values
+     */
+    public function setValues($values)
+    {
+        Assertion::allIsInstanceOf($values, Value::class);
+
+        $this->values = $values;
+    }
+
+    /**
+     * @return Translation[]
      */
     public function getTranslations()
     {
         return $this->translations;
+    }
+
+    /**
+     * @param Translation[] $translations
+     */
+    public function setTranslations($translations)
+    {
+        Assertion::allIsInstanceOf($translations, Translation::class);
+
+        $this->translations = $translations;
     }
 }

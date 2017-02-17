@@ -2,7 +2,7 @@
 
 namespace PlentymarketsAdapter\ResponseParser\Media;
 
-use PlentyConnector\Connector\TransferObject\Media\MediaInterface;
+use PlentyConnector\Connector\TransferObject\Media\Media;
 
 /**
  * Interface MediaResponseParserInterface
@@ -12,7 +12,7 @@ interface MediaResponseParserInterface
     /**
      * @param array $entry
      *
-     * @return MediaInterface|null
+     * @return null|Media
      */
     public function parse(array $entry);
 }

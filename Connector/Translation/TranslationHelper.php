@@ -3,7 +3,7 @@
 namespace PlentyConnector\Connector\Translation;
 
 use PlentyConnector\Connector\TransferObject\TranslateableInterface;
-use PlentyConnector\Connector\ValueObject\Translation\TranslationInterface;
+use PlentyConnector\Connector\ValueObject\Translation\Translation;
 use ReflectionClass;
 
 /**
@@ -42,7 +42,7 @@ class TranslationHelper implements TranslationHelperInterface
         $properties = $reflectionClass->getProperties();
 
         $translations = array_filter($object->getTranslations(),
-            function (TranslationInterface $translation) use ($languageIdentifier) {
+            function (Translation $translation) use ($languageIdentifier) {
                 return $translation->getLanguageIdentifier() === $languageIdentifier;
             });
 
@@ -53,7 +53,7 @@ class TranslationHelper implements TranslationHelperInterface
         $args = [];
         foreach ($properties as $property) {
             $possibleTranslations = array_filter($translations,
-                function (TranslationInterface $translation) use ($property) {
+                function (Translation $translation) use ($property) {
                     return $translation->getProperty() === $property->getName();
                 });
 

@@ -3,11 +3,12 @@
 namespace PlentyConnector\Connector\ValueObject\Translation;
 
 use Assert\Assertion;
+use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 
 /**
  * Class Translation
  */
-class Translation implements TranslationInterface
+class Translation extends AbstractValueObject
 {
     /**
      * @var string
@@ -25,44 +26,9 @@ class Translation implements TranslationInterface
     private $value;
 
     /**
-     * Translation constructor.
+     * return the language identifier
      *
-     * @param string $languageIdentifier
-     * @param string $property
-     * @param mixed $value
-     */
-    public function __construct($languageIdentifier, $property, $value)
-    {
-        Assertion::uuid($languageIdentifier);
-        Assertion::string($property);
-        Assertion::notBlank($property);
-        Assertion::notNull($value);
-
-        $this->languageIdentifier = $languageIdentifier;
-        $this->property = $property;
-        $this->value = $value;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function fromArray(array $params = [])
-    {
-        Assertion::allInArray(array_keys($params), [
-            'languageIdentifier',
-            'property',
-            'value',
-        ]);
-
-        return new self(
-            $params['languageIdentifier'],
-            $params['property'],
-            $params['value']
-        );
-    }
-
-    /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getLanguageIdentifier()
     {
@@ -70,7 +36,19 @@ class Translation implements TranslationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $languageIdentifier
+     */
+    public function setLanguageIdentifier($languageIdentifier)
+    {
+        Assertion::uuid($languageIdentifier);
+
+        $this->languageIdentifier = $languageIdentifier;
+    }
+
+    /**
+     * Get the property
+     *
+     * @return string
      */
     public function getProperty()
     {
@@ -78,10 +56,33 @@ class Translation implements TranslationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $property
+     */
+    public function setProperty($property)
+    {
+        Assertion::string($property);
+        Assertion::notBlank($property);
+
+        $this->property = $property;
+    }
+
+    /**
+     * Get the value
+     *
+     * @return mixed
      */
     public function getValue()
     {
         return $this->value;
+    }
+
+    /**
+     * @param mixed $value
+     */
+    public function setValue($value)
+    {
+        Assertion::notNull($value);
+
+        $this->value = $value;
     }
 }

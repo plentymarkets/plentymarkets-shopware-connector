@@ -9,7 +9,7 @@ use PlentyConnector\Connector\ServiceBus\QueryFactory\QueryFactoryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
-use PlentyConnector\Connector\ValueObject\Definition\DefinitionInterface;
+use PlentyConnector\Connector\ValueObject\Definition\Definition;
 use PlentyConnector\Connector\ValueObject\Mapping\Mapping;
 
 /**
@@ -18,7 +18,7 @@ use PlentyConnector\Connector\ValueObject\Mapping\Mapping;
 class MappingService implements MappingServiceInterface
 {
     /**
-     * @var DefinitionInterface[]
+     * @var Definition[]
      */
     private $definitions;
 
@@ -49,7 +49,7 @@ class MappingService implements MappingServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function addDefinition(DefinitionInterface $definition)
+    public function addDefinition(Definition $definition)
     {
         $this->definitions[] = $definition;
     }
@@ -64,7 +64,7 @@ class MappingService implements MappingServiceInterface
         $result = [];
         $definitions = $this->getDefinitions($objectType);
 
-        array_walk($definitions, function (DefinitionInterface $definition) use (&$result) {
+        array_walk($definitions, function (Definition $definition) use (&$result) {
             $result[] = Mapping::fromArray([
                 'originAdapterName' => $definition->getOriginAdapterName(),
                 'originTransferObjects' => $this->query($definition, $definition->getOriginAdapterName()),
@@ -78,9 +78,9 @@ class MappingService implements MappingServiceInterface
     }
 
     /**
-     * @param string|null $objectType
+     * @param null|string $objectType
      *
-     * @return DefinitionInterface[]|null
+     * @return null|Definition[]
      */
     private function getDefinitions($objectType = null)
     {
@@ -88,7 +88,7 @@ class MappingService implements MappingServiceInterface
             return [];
         }
 
-        $definitions = array_filter($this->definitions, function (DefinitionInterface $definition) use ($objectType) {
+        $definitions = array_filter($this->definitions, function (Definition $definition) use ($objectType) {
             return $definition->getObjectType() === $objectType || null === $objectType;
         });
 
@@ -96,7 +96,7 @@ class MappingService implements MappingServiceInterface
     }
 
     /**
-     * @param DefinitionInterface $definition
+     * @param Definition $definition
      * @param string $adapterName
      *
      * @throws MissingQueryGeneratorException
@@ -104,7 +104,7 @@ class MappingService implements MappingServiceInterface
      *
      * @return TransferObjectInterface[]
      */
-    private function query(DefinitionInterface $definition, $adapterName)
+    private function query(Definition $definition, $adapterName)
     {
         $originQuery = $this->queryFactory->create(
             $adapterName,

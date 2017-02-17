@@ -10,7 +10,7 @@ interface ShippingProfileResponseParserInterface
     /**
      * @param array $entry
      *
-     * @return ShippingProfileInterfaceProf|null
+     * @return null|ShippingProfileProf
      */
     public function parse(array $entry);
 }

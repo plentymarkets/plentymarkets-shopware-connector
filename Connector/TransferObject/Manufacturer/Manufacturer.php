@@ -3,77 +3,34 @@
 namespace PlentyConnector\Connector\TransferObject\Manufacturer;
 
 use Assert\Assertion;
+use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 
 /**
  * Class TransferObjects.
  */
-class Manufacturer implements ManufacturerInterface
+class Manufacturer extends AbstractTransferObject
 {
     const TYPE = 'Manufacturer';
 
     /**
-     * Identifier of the object.
-     *
      * @var string
      */
-    private $identifier;
-
-    /**
-     * @var string
-     */
-    private $name;
+    private $identifier = '';
 
     /**
      * @var string
      */
-    private $logoIdentifier;
+    private $name = '';
 
     /**
      * @var string
      */
-    private $link;
+    private $logoIdentifier = '';
 
     /**
-     * Manufacturer constructor.
-     *
-     * @param string $identifier
-     * @param string $name
-     * @param string|null $logoIdentifier
-     * @param string|null $link
+     * @var string
      */
-    public function __construct($identifier, $name, $logoIdentifier = null, $link = null)
-    {
-        Assertion::uuid($identifier);
-        Assertion::string($name);
-        Assertion::notBlank($name);
-        Assertion::nullOrUuid($logoIdentifier);
-        Assertion::nullOrUrl($link);
-
-        $this->identifier = $identifier;
-        $this->name = $name;
-        $this->logoIdentifier = $logoIdentifier;
-        $this->link = $link;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function fromArray(array $params = [])
-    {
-        Assertion::allInArray(array_keys($params), [
-            'identifier',
-            'name',
-            'logoIdentifier',
-            'link',
-        ]);
-
-        return new self(
-            $params['identifier'],
-            $params['name'],
-            $params['logoIdentifier'],
-            $params['link']
-        );
-    }
+    private $link = '';
 
     /**
      * {@inheritdoc}
@@ -88,11 +45,23 @@ class Manufacturer implements ManufacturerInterface
      */
     public function getIdentifier()
     {
+        Assertion::notBlank($this->identifier);
+
         return $this->identifier;
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $identifier
+     */
+    public function setIdentifier($identifier)
+    {
+        Assertion::uuid($identifier);
+
+        $this->identifier = $identifier;
+    }
+
+    /**
+     * @return string
      */
     public function getName()
     {
@@ -100,7 +69,18 @@ class Manufacturer implements ManufacturerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        Assertion::string($name);
+        Assertion::notBlank($name);
+
+        $this->name = $name;
+    }
+
+    /**
+     * @return string
      */
     public function getLogoIdentifier()
     {
@@ -108,10 +88,30 @@ class Manufacturer implements ManufacturerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $logoIdentifier
+     */
+    public function setLogoIdentifier($logoIdentifier)
+    {
+        Assertion::nullOrUuid($logoIdentifier);
+
+        $this->logoIdentifier = $logoIdentifier;
+    }
+
+    /**
+     * @return string
      */
     public function getLink()
     {
         return $this->link;
+    }
+
+    /**
+     * @param string $link
+     */
+    public function setLink($link)
+    {
+        Assertion::nullOrUrl($link);
+
+        $this->link = $link;
     }
 }

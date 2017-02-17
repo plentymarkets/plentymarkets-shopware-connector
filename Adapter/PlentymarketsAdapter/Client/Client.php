@@ -29,12 +29,12 @@ class Client implements ClientInterface
     private $config;
 
     /**
-     * @var string|null
+     * @var null|string
      */
     private $accessToken;
 
     /**
-     * @var string|null
+     * @var null|string
      */
     private $refreshToken;
 

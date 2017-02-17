@@ -91,9 +91,15 @@
             <argument type="service" id="plenty_connector.logger" />
         </service>
 
+        <!-- Definition factory -->
+
+        <service id="plenty_connector.definition_factory" class="PlentyConnector\Connector\DefinitionFactory\DefinitionFactory" />
+
         <!-- Connector definitions -->
 
         <service id="plenty_connector.connector_definition.category" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
+            <factory service="plenty_connector.definition_factory" method="factory" />
+
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.category%</argument>
@@ -103,6 +109,8 @@
         </service>
 
         <service id="plenty_connector.connector_definition.media_category" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
+            <factory service="plenty_connector.definition_factory" method="factory" />
+
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.media_category%</argument>
@@ -121,6 +129,8 @@
         </service>
 
         <service id="plenty_connector.connector_definition.product" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
+            <factory service="plenty_connector.definition_factory" method="factory" />
+
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.product%</argument>
@@ -130,6 +140,8 @@
         </service>
 
         <service id="plenty_connector.connector_definition.order" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
+            <factory service="plenty_connector.definition_factory" method="factory" />
+
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.transfer_object.order%</argument>
@@ -168,6 +180,8 @@
         <!-- Mapping definitions -->
 
         <service id="plenty_connector.mapping_definition.country" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
+            <factory service="plenty_connector.definition_factory" method="factory" />
+
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.country%</argument>
@@ -176,6 +190,8 @@
         </service>
 
         <service id="plenty_connector.mapping_definition.currency" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
+            <factory service="plenty_connector.definition_factory" method="factory" />
+
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.currency%</argument>
@@ -184,6 +200,8 @@
         </service>
 
         <service id="plenty_connector.mapping_definition.customer_group" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
+            <factory service="plenty_connector.definition_factory" method="factory" />
+
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.customer_group%</argument>
@@ -192,6 +210,8 @@
         </service>
 
         <service id="plenty_connector.mapping_definition.language" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
+            <factory service="plenty_connector.definition_factory" method="factory" />
+
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.language%</argument>
@@ -200,6 +220,8 @@
         </service>
 
         <service id="plenty_connector.mapping_definition.payment_method" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
+            <factory service="plenty_connector.definition_factory" method="factory" />
+
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.payment_method%</argument>
@@ -208,6 +230,8 @@
         </service>
 
         <service id="plenty_connector.mapping_definition.shipping_profile" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
+            <factory service="plenty_connector.definition_factory" method="factory" />
+
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.shipping_profile%</argument>
@@ -216,6 +240,8 @@
         </service>
 
         <service id="plenty_connector.mapping_definition.shop" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
+            <factory service="plenty_connector.definition_factory" method="factory" />
+
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.shop%</argument>
@@ -224,6 +250,8 @@
         </service>
 
         <service id="plenty_connector.mapping_definition.payment_status" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
+            <factory service="plenty_connector.definition_factory" method="factory" />
+
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.payment_status%</argument>
@@ -232,6 +260,8 @@
         </service>
 
         <service id="plenty_connector.mapping_definition.order_status" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
+            <factory service="plenty_connector.definition_factory" method="factory" />
+
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.order_status%</argument>
@@ -240,6 +270,8 @@
         </service>
 
         <service id="plenty_connector.mapping_definition.unit" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
+            <factory service="plenty_connector.definition_factory" method="factory" />
+
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.unit%</argument>
@@ -248,6 +280,8 @@
         </service>
 
         <service id="plenty_connector.mapping_definition.vat_rate" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
+            <factory service="plenty_connector.definition_factory" method="factory" />
+
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.vat_rate%</argument>

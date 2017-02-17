@@ -3,7 +3,7 @@
 namespace PlentyConnector\Connector\IdentityService;
 
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
-use PlentyConnector\Connector\ValueObject\Identity\IdentityInterface;
+use PlentyConnector\Connector\ValueObject\Identity\Identity;
 
 /**
  * Interface IdentityServiceInterface.
@@ -13,14 +13,14 @@ interface IdentityServiceInterface
     /**
      * @param array $criteria
      *
-     * @return IdentityInterface|null
+     * @return null|Identity
      */
     public function findOneBy(array $criteria = []);
 
     /**
      * @param array $criteria
      *
-     * @return IdentityInterface[]|null
+     * @return null|Identity[]
      */
     public function findby(array $criteria = []);
 
@@ -30,7 +30,7 @@ interface IdentityServiceInterface
      * @param string $adapterIdentifier
      * @param string $adapterName
      *
-     * @return IdentityInterface
+     * @return Identity
      */
     public function create($objectIdentifier, $objectType, $adapterIdentifier, $adapterName);
 
@@ -39,7 +39,7 @@ interface IdentityServiceInterface
      * @param string $adapterName
      * @param string $objectType
      *
-     * @return IdentityInterface
+     * @return Identity
      */
     public function findOneOrCreate($adapterIdentifier, $adapterName, $objectType);
 
@@ -50,14 +50,14 @@ interface IdentityServiceInterface
      *
      * @throws NotFoundException
      *
-     * @return IdentityInterface
+     * @return Identity
      */
     public function findOneOrThrow($adapterIdentifier, $adapterName, $objectType);
 
     /**
-     * @param IdentityInterface $identity
+     * @param Identity $identity
      */
-    public function remove(IdentityInterface $identity);
+    public function remove(Identity $identity);
 
     /**
      * @param array $criteria

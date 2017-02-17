@@ -12,7 +12,7 @@ interface UnitResponseParserInterface
     /**
      * @param array $entry
      *
-     * @return UnitInterface|null
+     * @return null|UnitInterface
      */
     public function parse(array $entry);
 }

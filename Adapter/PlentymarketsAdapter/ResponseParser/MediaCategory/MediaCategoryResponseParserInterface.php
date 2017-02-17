@@ -2,7 +2,7 @@
 
 namespace PlentymarketsAdapter\ResponseParser\MediaCategory;
 
-use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategoryInterface;
+use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
 
 /**
  * Interface MediaCategoryResponseParserInterface
@@ -12,7 +12,7 @@ interface MediaCategoryResponseParserInterface
     /**
      * @param array $entry
      *
-     * @return MediaCategoryInterface|null
+     * @return null|MediaCategory
      */
     public function parse(array $entry);
 }

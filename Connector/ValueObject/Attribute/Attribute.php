@@ -3,12 +3,14 @@
 namespace PlentyConnector\Connector\ValueObject\Attribute;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\ValueObject\Translation\TranslationInterface;
+use PlentyConnector\Connector\TransferObject\TranslateableInterface;
+use PlentyConnector\Connector\ValueObject\AbstractValueObject;
+use PlentyConnector\Connector\ValueObject\Translation\Translation;
 
 /**
  * Class Attribute
  */
-class Attribute implements AttributeInterface
+class Attribute extends AbstractValueObject implements TranslateableInterface
 {
     /**
      * @var string
@@ -21,49 +23,12 @@ class Attribute implements AttributeInterface
     private $value;
 
     /**
-     * @var TranslationInterface[]
+     * @var Translation[]
      */
     private $translations;
 
     /**
-     * Attribute constructor.
-     *
-     * @param string $key
-     * @param string $value
-     * @param TranslationInterface[] $translations
-     */
-    public function __construct($key, $value, array $translations = [])
-    {
-        Assertion::string($key);
-        Assertion::notBlank($key);
-        Assertion::string($value);
-        Assertion::allIsInstanceOf($translations, TranslationInterface::class);
-
-        $this->key = $key;
-        $this->value = $value;
-        $this->translations = $translations;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function fromArray(array $params = [])
-    {
-        Assertion::allInArray(array_keys($params), [
-            'key',
-            'value',
-            'translations',
-        ]);
-
-        return new self(
-            $params['key'],
-            $params['value'],
-            $params['translations']
-        );
-    }
-
-    /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getKey()
     {
@@ -71,7 +36,18 @@ class Attribute implements AttributeInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $key
+     */
+    public function setKey($key)
+    {
+        Assertion::string($key);
+        Assertion::notBlank($key);
+
+        $this->key = $key;
+    }
+
+    /**
+     * @return string
      */
     public function getValue()
     {
@@ -79,10 +55,30 @@ class Attribute implements AttributeInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $value
+     */
+    public function setValue($value)
+    {
+        Assertion::string($value);
+
+        $this->value = $value;
+    }
+
+    /**
+     * @return Translation[]
      */
     public function getTranslations()
     {
         return $this->translations;
+    }
+
+    /**
+     * @param Translation[] $translations
+     */
+    public function setTranslations($translations)
+    {
+        Assertion::allIsInstanceOf($translations, Translation::class);
+
+        $this->translations = $translations;
     }
 }

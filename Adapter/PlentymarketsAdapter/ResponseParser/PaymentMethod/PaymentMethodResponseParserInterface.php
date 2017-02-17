@@ -2,7 +2,7 @@
 
 namespace PlentymarketsAdapter\ResponseParser\PaymentMethod;
 
-use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethodInterface;
+use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod;
 
 /**
  * Interface PaymentMethodResponseParserInterface
@@ -12,7 +12,7 @@ interface PaymentMethodResponseParserInterface
     /**
      * @param array $entry
      *
-     * @return PaymentMethodInterface|null
+     * @return null|PaymentMethod
      */
     public function parse(array $entry);
 }

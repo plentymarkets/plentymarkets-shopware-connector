@@ -3,11 +3,12 @@
 namespace PlentyConnector\Connector\ValueObject\Definition;
 
 use Assert\Assertion;
+use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 
 /**
  * Class Definition.
  */
-class Definition implements DefinitionInterface
+class Definition extends AbstractValueObject
 {
     /**
      * origin adapter name.
@@ -33,68 +34,10 @@ class Definition implements DefinitionInterface
     /**
      * @var int
      */
-    private $priority;
+    private $priority = 0;
 
     /**
-     * Definition constructor.
-     *
-     * @param string $originAdapterName
-     * @param string $destinationAdapterName
-     * @param string $objectType
-     * @param int|null $priority
-     */
-    public function __construct($originAdapterName, $destinationAdapterName, $objectType, $priority = null)
-    {
-        Assertion::string($originAdapterName);
-        Assertion::notBlank($originAdapterName);
-        Assertion::string($destinationAdapterName);
-        Assertion::notBlank($destinationAdapterName);
-        Assertion::string($objectType);
-        Assertion::notBlank($objectType);
-        Assertion::nullOrInteger($priority);
-
-        if (null === $priority) {
-            $priority = 0;
-        }
-
-        $this->originAdapterName = $originAdapterName;
-        $this->destinationAdapterName = $destinationAdapterName;
-        $this->objectType = $objectType;
-        $this->priority = $priority;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __toString()
-    {
-        return $this->objectType . ': ' . $this->originAdapterName . ' > ' . $this->destinationAdapterName;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function fromArray(array $params = [])
-    {
-        Assertion::allInArray(array_keys($params), [
-            'originAdapterName',
-            'destinationAdapterName',
-            'objectType',
-        ]);
-
-        if (!array_key_exists('priority', $params)) {
-            $params['priority'] = 0;
-        }
-
-        return new self(
-            $params['originAdapterName'],
-            $params['destinationAdapterName'],
-            $params['objectType']
-        );
-    }
-
-    /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getOriginAdapterName()
     {
@@ -102,7 +45,18 @@ class Definition implements DefinitionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $originAdapterName
+     */
+    public function setOriginAdapterName($originAdapterName)
+    {
+        Assertion::string($originAdapterName);
+        Assertion::notBlank($originAdapterName);
+
+        $this->originAdapterName = $originAdapterName;
+    }
+
+    /**
+     * @return string
      */
     public function getDestinationAdapterName()
     {
@@ -110,7 +64,18 @@ class Definition implements DefinitionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $destinationAdapterName
+     */
+    public function setDestinationAdapterName($destinationAdapterName)
+    {
+        Assertion::string($destinationAdapterName);
+        Assertion::notBlank($destinationAdapterName);
+
+        $this->destinationAdapterName = $destinationAdapterName;
+    }
+
+    /**
+     * @return string
      */
     public function getObjectType()
     {
@@ -118,10 +83,35 @@ class Definition implements DefinitionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $objectType
+     */
+    public function setObjectType($objectType)
+    {
+        Assertion::string($objectType);
+        Assertion::notBlank($objectType);
+
+        $this->objectType = $objectType;
+    }
+
+    /**
+     * @return int
      */
     public function getPriority()
     {
         return $this->priority;
+    }
+
+    /**
+     * @param null|int $priority
+     */
+    public function setPriority($priority)
+    {
+        if (null === $priority) {
+            $priority = 0;
+        }
+
+        Assertion::integer($priority);
+
+        $this->priority = $priority;
     }
 }

@@ -3,44 +3,45 @@
 namespace PlentyConnector\Connector\TransferObject\Product\Variation;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\Product\Price\PriceInterface;
-use PlentyConnector\Connector\TransferObject\Product\Property\PropertyInterface;
-use PlentyConnector\Connector\ValueObject\Attribute\AttributeInterface;
+use PlentyConnector\Connector\TransferObject\Product\Price\Price;
+use PlentyConnector\Connector\TransferObject\Product\Property\Property;
+use PlentyConnector\Connector\ValueObject\AbstractValueObject;
+use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
 /**
  * Class Variation.
  */
-class Variation implements VariationInterface
+class Variation extends AbstractValueObject
 {
     /**
      * @var bool
      */
-    private $active;
+    private $active = false;
 
     /**
      * @var bool
      */
-    private $isMain;
+    private $isMain = false;
 
     /**
      * @var int
      */
-    private $stock;
+    private $stock = 0;
 
     /**
      * @var string
      */
-    private $number;
+    private $number = '';
 
     /**
      * @var array
      */
-    private $imageIdentifiers;
+    private $imageIdentifiers = [];
 
     /**
-     * @var PriceInterface[]
+     * @var Price[]
      */
-    private $prices;
+    private $prices = [];
 
     /**
      * @var string
@@ -50,116 +51,39 @@ class Variation implements VariationInterface
     /**
      * @var float
      */
-    private $content;
+    private $content = 0.0;
 
     /**
      * @var string
      */
-    private $packagingUnit;
+    private $packagingUnit = '';
 
     /**
-     * @var AttributeInterface[]
+     * @var Attribute[]
      */
-    private $attributes;
+    private $attributes = [];
 
     /**
-     * @var PropertyInterface[]
+     * @var Property[]
      */
-    private $properties;
-
-    /**
-     * Variation constructor.
-     *
-     * @param bool $active
-     * @param bool $isMain
-     * @param int $stock
-     * @param string $number
-     * @param array $imageIdentifiers
-     * @param PriceInterface[] $prices
-     * @param string $unitIdentifier
-     * @param float $content
-     * @param string $packagingUnit
-     * @param AttributeInterface[] $attributes
-     * @param PropertyInterface[] $properties
-     */
-    public function __construct(
-        $active,
-        $isMain,
-        $stock,
-        $number,
-        array $imageIdentifiers,
-        array $prices,
-        $unitIdentifier,
-        $content,
-        $packagingUnit,
-        array $attributes = [],
-        array $properties = []
-    ) {
-        Assertion::boolean($active);
-        Assertion::boolean($isMain);
-        Assertion::integer($stock);
-        Assertion::string($number);
-        Assertion::allUuid($imageIdentifiers);
-        Assertion::allIsInstanceOf($prices, PriceInterface::class);
-        Assertion::uuid($unitIdentifier);
-        Assertion::float($content);
-        Assertion::string($packagingUnit);
-        Assertion::allIsInstanceOf($attributes, AttributeInterface::class);
-        Assertion::allIsInstanceOf($properties, PropertyInterface::class);
-
-        $this->active = $active;
-        $this->isMain = $isMain;
-        $this->stock = $stock;
-        $this->number = $number;
-        $this->imageIdentifiers = $imageIdentifiers;
-        $this->prices = $prices;
-        $this->unitIdentifier = $unitIdentifier;
-        $this->content = $content;
-        $this->packagingUnit = $packagingUnit;
-        $this->attributes = $attributes;
-        $this->properties = $properties;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function fromArray(array $params = [])
-    {
-        Assertion::allInArray(array_keys($params), [
-            'active',
-            'isMain',
-            'stock',
-            'number',
-            'imageIdentifiers',
-            'prices',
-            'unitIdentifier',
-            'content',
-            'packagingUnit',
-            'attributes',
-            'properties',
-        ]);
-
-        return new self(
-            $params['active'],
-            $params['isMain'],
-            $params['stock'],
-            $params['number'],
-            $params['imageIdentifiers'],
-            $params['prices'],
-            $params['unitIdentifier'],
-            $params['content'],
-            $params['packagingUnit'],
-            $params['attributes'],
-            $params['properties']
-        );
-    }
+    private $properties = [];
 
     /**
      * @return bool
      */
-    public function getActive()
+    public function isActive()
     {
         return $this->active;
+    }
+
+    /**
+     * @param bool $active
+     */
+    public function setActive($active)
+    {
+        Assertion::boolean($active);
+
+        $this->active = $active;
     }
 
     /**
@@ -171,11 +95,31 @@ class Variation implements VariationInterface
     }
 
     /**
+     * @param bool $isMain
+     */
+    public function setIsMain($isMain)
+    {
+        Assertion::boolean($isMain);
+
+        $this->isMain = $isMain;
+    }
+
+    /**
      * @return int
      */
     public function getStock()
     {
         return $this->stock;
+    }
+
+    /**
+     * @param int $stock
+     */
+    public function setStock($stock)
+    {
+        Assertion::integer($stock);
+
+        $this->stock = $stock;
     }
 
     /**
@@ -187,6 +131,16 @@ class Variation implements VariationInterface
     }
 
     /**
+     * @param string $number
+     */
+    public function setNumber($number)
+    {
+        Assertion::string($number);
+
+        $this->number = $number;
+    }
+
+    /**
      * @return array
      */
     public function getImageIdentifiers()
@@ -195,11 +149,31 @@ class Variation implements VariationInterface
     }
 
     /**
-     * @return PriceInterface[]
+     * @param array $imageIdentifiers
+     */
+    public function setImageIdentifiers($imageIdentifiers)
+    {
+        Assertion::allUuid($imageIdentifiers);
+
+        $this->imageIdentifiers = $imageIdentifiers;
+    }
+
+    /**
+     * @return Price[]
      */
     public function getPrices()
     {
         return $this->prices;
+    }
+
+    /**
+     * @param Price[] $prices
+     */
+    public function setPrices($prices)
+    {
+        Assertion::allIsInstanceOf($prices, Price::class);
+
+        $this->prices = $prices;
     }
 
     /**
@@ -211,11 +185,31 @@ class Variation implements VariationInterface
     }
 
     /**
-     * @return mixed
+     * @param string $unitIdentifier
+     */
+    public function setUnitIdentifier($unitIdentifier)
+    {
+        Assertion::uuid($unitIdentifier);
+
+        $this->unitIdentifier = $unitIdentifier;
+    }
+
+    /**
+     * @return float
      */
     public function getContent()
     {
         return $this->content;
+    }
+
+    /**
+     * @param float $content
+     */
+    public function setContent($content)
+    {
+        Assertion::float($content);
+
+        $this->content = $content;
     }
 
     /**
@@ -227,9 +221,17 @@ class Variation implements VariationInterface
     }
 
     /**
-     * Gets Attributes for the variation. Can be used to transport additional data from and to the adapters
-     *
-     * @return AttributeInterface[]
+     * @param string $packagingUnit
+     */
+    public function setPackagingUnit($packagingUnit)
+    {
+        Assertion::string($packagingUnit);
+
+        $this->packagingUnit = $packagingUnit;
+    }
+
+    /**
+     * @return Attribute[]
      */
     public function getAttributes()
     {
@@ -237,12 +239,30 @@ class Variation implements VariationInterface
     }
 
     /**
-     * Gets the variation characteristics in form of properties. Example: Color=Black, Size=XL
-     *
-     * @return PropertyInterface[]
+     * @param Attribute[] $attributes
+     */
+    public function setAttributes($attributes)
+    {
+        Assertion::allIsInstanceOf($attributes, Attribute::class);
+
+        $this->attributes = $attributes;
+    }
+
+    /**
+     * @return Property[]
      */
     public function getProperties()
     {
         return $this->properties;
+    }
+
+    /**
+     * @param Property[] $properties
+     */
+    public function setProperties($properties)
+    {
+        Assertion::allIsInstanceOf($properties, Property::class);
+
+        $this->properties = $properties;
     }
 }

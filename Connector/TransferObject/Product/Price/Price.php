@@ -3,96 +3,40 @@
 namespace PlentyConnector\Connector\TransferObject\Product\Price;
 
 use Assert\Assertion;
+use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 
 /**
  * Class Price.
  */
-class Price implements PriceInterface
+class Price  extends AbstractValueObject
 {
     /**
      * @var float
      */
-    private $price;
+    private $price = 0.0;
 
     /**
      * @var float
      */
-    private $pseudoPrice;
+    private $pseudoPrice = 0.0;
 
     /**
-     * @var string|null
+     * @var null|string
      */
     private $customerGroupIdentifier;
 
     /**
      * @var int
      */
-    private $fromAmount;
+    private $fromAmount = 1;
 
     /**
-     * @var int
+     * @var null|int
      */
     private $toAmount;
 
     /**
-     * Price constructor.
-     *
-     * @param float $price
-     * @param float $pseudoPrice
-     * @param string|null $customerGroupIdentifier
-     * @param int $fromAmount
-     * @param int $toAmount
-     */
-    public function __construct(
-        $price,
-        $pseudoPrice,
-        $customerGroupIdentifier = null,
-        $fromAmount,
-        $toAmount = null
-    ) {
-        Assertion::float($price);
-        Assertion::greaterOrEqualThan($price, '0.0');
-        Assertion::float($pseudoPrice);
-        Assertion::nullOrUuid($customerGroupIdentifier);
-        Assertion::integer($fromAmount);
-        Assertion::greaterOrEqualThan($fromAmount, 1);
-        Assertion::integer($toAmount);
-
-        if ($pseudoPrice <= $price) {
-            $pseudoPrice = 0.0;
-        }
-
-        $this->price = $price;
-        $this->pseudoPrice = $pseudoPrice;
-        $this->customerGroupIdentifier = $customerGroupIdentifier;
-        $this->fromAmount = $fromAmount;
-        $this->toAmount = $toAmount;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function fromArray(array $params = [])
-    {
-        Assertion::allInArray(array_keys($params), [
-            'price',
-            'pseudoPrice',
-            'customerGroupIdentifier',
-            'from',
-            'to',
-        ]);
-
-        return new self(
-            $params['price'],
-            $params['pseudoPrice'],
-            $params['customerGroupIdentifier'],
-            $params['from'],
-            $params['to']
-        );
-    }
-
-    /**
-     * {@inheritdoc}
+     * @return float
      */
     public function getPrice()
     {
@@ -100,7 +44,18 @@ class Price implements PriceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param float $price
+     */
+    public function setPrice($price)
+    {
+        Assertion::float($price);
+        Assertion::greaterOrEqualThan($price, '0.0');
+
+        $this->price = $price;
+    }
+
+    /**
+     * @return float
      */
     public function getPseudoPrice()
     {
@@ -108,7 +63,18 @@ class Price implements PriceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param float $pseudoPrice
+     */
+    public function setPseudoPrice($pseudoPrice)
+    {
+        Assertion::float($pseudoPrice);
+        Assertion::greaterOrEqualThan($pseudoPrice, '0.0');
+
+        $this->pseudoPrice = $pseudoPrice;
+    }
+
+    /**
+     * @return null|string
      */
     public function getCustomerGroupIdentifier()
     {
@@ -116,7 +82,17 @@ class Price implements PriceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param null|string $customerGroupIdentifier
+     */
+    public function setCustomerGroupIdentifier($customerGroupIdentifier = null)
+    {
+        Assertion::nullOrUuid($customerGroupIdentifier);
+
+        $this->customerGroupIdentifier = $customerGroupIdentifier;
+    }
+
+    /**
+     * @return int
      */
     public function getFromAmount()
     {
@@ -124,10 +100,33 @@ class Price implements PriceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param int $fromAmount
+     */
+    public function setFromAmount($fromAmount)
+    {
+        Assertion::integer($fromAmount);
+        Assertion::greaterOrEqualThan($fromAmount, 1);
+
+        $this->fromAmount = $fromAmount;
+    }
+
+    /**
+     * @return int
      */
     public function getToAmount()
     {
         return $this->toAmount;
     }
+
+    /**
+     * @param null|int $toAmount
+     */
+    public function setToAmount($toAmount = null)
+    {
+        Assertion::nullOrInteger($toAmount);
+
+        $this->toAmount = $toAmount;
+    }
+
+
 }

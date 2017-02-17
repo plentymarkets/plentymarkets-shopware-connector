@@ -3,87 +3,44 @@
 namespace PlentyConnector\Connector\TransferObject\OrderItem;
 
 use Assert\Assertion;
+use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 
 /**
  * Class OrderItem
  */
-class OrderItem implements OrderItemInterface
+class OrderItem extends AbstractTransferObject
 {
     const TYPE = 'OrderItem';
 
     /**
      * @var string
      */
-    private $identifier;
+    private $identifier = '';
 
     /**
      * @var int
      */
-    private $quantity;
+    private $quantity = 1;
 
     /**
      * @var string
      */
-    private $productId;
+    private $productId = '';
 
     /**
      * @var string
      */
-    private $variationId;
+    private $variationId = '';
 
     /**
      * @var string
      */
-    private $name;
+    private $name = '';
 
     /**
      * @var float
      */
-    private $price;
-
-    /**
-     * OrderItem constructor.
-     *
-     * @param $identifier
-     * @param $quantity
-     * @param $productId
-     * @param $variationId
-     * @param $name
-     * @param $price
-     *
-     * @throws \Assert\AssertionFailedException
-     */
-    public function __construct($identifier, $quantity, $productId, $variationId, $name, $price)
-    {
-        Assertion::uuid($identifier);
-        Assertion::integer($quantity);
-        Assertion::string($productId);
-        Assertion::string($variationId);
-        Assertion::string($name);
-        Assertion::numeric($price);
-
-        $this->identifier = $identifier;
-        $this->quantity = $quantity;
-        $this->productId = $productId;
-        $this->variationId = $variationId;
-        $this->name = $name;
-        $this->price = $price;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function fromArray(array $params = [])
-    {
-        return new self(
-            $params['identifier'],
-            $params['quantity'],
-            $params['productId'],
-            $params['variationId'],
-            $params['name'],
-            $params['price']
-        );
-    }
+    private $price = 0.0;
 
     /**
      * {@inheritdoc}
@@ -98,7 +55,19 @@ class OrderItem implements OrderItemInterface
      */
     public function getIdentifier()
     {
+        Assertion::notBlank($this->identifier);
+
         return $this->identifier;
+    }
+
+    /**
+     * @param string $identifier
+     */
+    public function setIdentifier($identifier)
+    {
+        Assertion::uuid($identifier);
+
+        $this->identifier = $identifier;
     }
 
     /**
@@ -110,11 +79,31 @@ class OrderItem implements OrderItemInterface
     }
 
     /**
+     * @param int $quantity
+     */
+    public function setQuantity($quantity)
+    {
+        Assertion::integer($quantity);
+
+        $this->quantity = $quantity;
+    }
+
+    /**
      * @return string
      */
     public function getProductId()
     {
         return $this->productId;
+    }
+
+    /**
+     * @param string $productId
+     */
+    public function setProductId($productId)
+    {
+        Assertion::string($productId);
+
+        $this->productId = $productId;
     }
 
     /**
@@ -126,6 +115,16 @@ class OrderItem implements OrderItemInterface
     }
 
     /**
+     * @param string $variationId
+     */
+    public function setVariationId($variationId)
+    {
+        Assertion::string($variationId);
+
+        $this->variationId = $variationId;
+    }
+
+    /**
      * @return string
      */
     public function getName()
@@ -134,10 +133,30 @@ class OrderItem implements OrderItemInterface
     }
 
     /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        Assertion::string($name);
+
+        $this->name = $name;
+    }
+
+    /**
      * @return float
      */
     public function getPrice()
     {
         return $this->price;
+    }
+
+    /**
+     * @param float $price
+     */
+    public function setPrice($price)
+    {
+        Assertion::numeric($price);
+
+        $this->price = $price;
     }
 }

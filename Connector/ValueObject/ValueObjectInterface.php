@@ -9,8 +9,6 @@ interface ValueObjectInterface
 {
     /**
      * @param array $params
-     *
-     * @return self
      */
     public static function fromArray(array $params = []);
 }

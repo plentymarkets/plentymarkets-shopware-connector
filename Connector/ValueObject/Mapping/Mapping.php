@@ -4,11 +4,12 @@ namespace PlentyConnector\Connector\ValueObject\Mapping;
 
 use Assert\Assertion;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
+use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 
 /**
  * Class Mapping
  */
-class Mapping implements MappingInterface
+class Mapping extends AbstractValueObject
 {
     /**
      * origin adapter name.
@@ -40,61 +41,7 @@ class Mapping implements MappingInterface
     private $objectType;
 
     /**
-     * Mapping constructor.
-     *
-     * @param string $originAdapterName
-     * @param TransferObjectInterface[] $originTransferObjects
-     * @param string $destinationAdapterName
-     * @param TransferObjectInterface[] $destinationTransferObjects
-     * @param string $objectType
-     */
-    public function __construct(
-        $originAdapterName,
-        array $originTransferObjects,
-        $destinationAdapterName,
-        array $destinationTransferObjects,
-        $objectType
-    ) {
-        Assertion::string($originAdapterName);
-        Assertion::allIsInstanceOf($originTransferObjects, TransferObjectInterface::class);
-
-        Assertion::string($destinationAdapterName);
-        Assertion::allIsInstanceOf($destinationTransferObjects, TransferObjectInterface::class);
-
-        Assertion::string($objectType);
-        Assertion::notBlank($objectType);
-
-        $this->originAdapterName = $originAdapterName;
-        $this->originTransferObjects = $originTransferObjects;
-        $this->destinationAdapterName = $destinationAdapterName;
-        $this->destinationTransferObjects = $destinationTransferObjects;
-        $this->objectType = $objectType;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function fromArray(array $params = [])
-    {
-        Assertion::allInArray(array_keys($params), [
-            'originAdapterName',
-            'originTransferObjects',
-            'destinationAdapterName',
-            'destinationTransferObjects',
-            'objectType',
-        ]);
-
-        return new self(
-            $params['originAdapterName'],
-            $params['originTransferObjects'],
-            $params['destinationAdapterName'],
-            $params['destinationTransferObjects'],
-            $params['objectType']
-        );
-    }
-
-    /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getOriginAdapterName()
     {
@@ -102,7 +49,17 @@ class Mapping implements MappingInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $originAdapterName
+     */
+    public function setOriginAdapterName($originAdapterName)
+    {
+        Assertion::string($originAdapterName);
+
+        $this->originAdapterName = $originAdapterName;
+    }
+
+    /**
+     * @return TransferObjectInterface[]
      */
     public function getOriginTransferObjects()
     {
@@ -110,7 +67,17 @@ class Mapping implements MappingInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param TransferObjectInterface[] $originTransferObjects
+     */
+    public function setOriginTransferObjects($originTransferObjects)
+    {
+        Assertion::allIsInstanceOf($originTransferObjects, TransferObjectInterface::class);
+
+        $this->originTransferObjects = $originTransferObjects;
+    }
+
+    /**
+     * @return string
      */
     public function getDestinationAdapterName()
     {
@@ -118,7 +85,17 @@ class Mapping implements MappingInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $destinationAdapterName
+     */
+    public function setDestinationAdapterName($destinationAdapterName)
+    {
+        Assertion::string($destinationAdapterName);
+
+        $this->destinationAdapterName = $destinationAdapterName;
+    }
+
+    /**
+     * @return TransferObjectInterface[]
      */
     public function getDestinationTransferObjects()
     {
@@ -126,10 +103,31 @@ class Mapping implements MappingInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param TransferObjectInterface[] $destinationTransferObjects
+     */
+    public function setDestinationTransferObjects($destinationTransferObjects)
+    {
+        Assertion::allIsInstanceOf($destinationTransferObjects, TransferObjectInterface::class);
+
+        $this->destinationTransferObjects = $destinationTransferObjects;
+    }
+
+    /**
+     * @return string
      */
     public function getObjectType()
     {
         return $this->objectType;
+    }
+
+    /**
+     * @param string $objectType
+     */
+    public function setObjectType($objectType)
+    {
+        Assertion::string($objectType);
+        Assertion::notBlank($objectType);
+
+        $this->objectType = $objectType;
     }
 }

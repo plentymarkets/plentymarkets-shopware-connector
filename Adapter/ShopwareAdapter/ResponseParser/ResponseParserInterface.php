@@ -12,7 +12,7 @@ interface ResponseParserInterface
     /**
      * @param array $entry
      *
-     * @return TransferObjectInterface|null
+     * @return null|TransferObjectInterface
      */
     public function parse(array $entry);
 }
