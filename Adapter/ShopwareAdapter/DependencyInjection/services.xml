@@ -85,6 +85,24 @@
             <argument type="string">Order</argument>
         </service>
 
+        <service id="shopware_adapter.shopware_resource.product" class="Shopware\Components\Api\Resource\Article">
+            <factory service="shopware_adapter.shopware_api_manager" method="getResource" />
+
+            <argument type="string">Article</argument>
+        </service>
+
+        <service id="shopware_adapter.shopware_resource.property_group" class="Shopware\Components\Api\Resource\PropertyGroup">
+            <factory service="shopware_adapter.shopware_api_manager" method="getResource" />
+
+            <argument type="string">PropertyGroup</argument>
+        </service>
+
+        <service id="shopware_adapter.shopware_resource.translation" class="Shopware\Components\Api\Resource\Translation">
+            <factory service="shopware_adapter.shopware_api_manager" method="getResource" />
+
+            <argument type="string">Translation</argument>
+        </service>
+
         <!-- Category command handlers -->
 
         <service id="shopware_adapter.command_handler.handle_category" class="ShopwareAdapter\ServiceBus\CommandHandler\Category\HandleCategoryCommandHandler">
@@ -152,6 +170,18 @@
             <argument type="service" id="models" />
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plenty_connector.logger" />
+
+            <tag name="plenty_connector.command_handler" />
+        </service>
+
+        <!-- Product command handlers -->
+
+        <service id="shopware_adapter.command_handler.handle_product" class="ShopwareAdapter\ServiceBus\CommandHandler\Product\HandleProductCommandHandler">
+
+            <tag name="plenty_connector.command_handler" />
+        </service>
+
+        <service id="shopware_adapter.command_handler.remove_product" class="ShopwareAdapter\ServiceBus\CommandHandler\Product\RemoveProductCommandHandler">
 
             <tag name="plenty_connector.command_handler" />
         </service>
