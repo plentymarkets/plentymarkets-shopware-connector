@@ -63,14 +63,6 @@ class ConfigService implements ConfigServiceInterface
             }
         }
 
-        if ($this->container->hasParameter('plenty_connector.config.' . $key)) {
-            try {
-                return $this->container->getParameter('plenty_connector.' . $key);
-            } catch (Exception $exception) {
-                // fail silently
-            }
-        }
-
         if (!array_key_exists($key, $this->config)) {
             return $default;
         }
