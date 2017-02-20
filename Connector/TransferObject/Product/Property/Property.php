@@ -16,7 +16,7 @@ class Property  extends AbstractValueObject implements TranslateableInterface
     /**
      * @var string
      */
-    private $key = '';
+    private $name = '';
 
     /**
      * @var Value[]
@@ -31,20 +31,20 @@ class Property  extends AbstractValueObject implements TranslateableInterface
     /**
      * @return string
      */
-    public function getKey()
+    public function getName()
     {
-        return $this->key;
+        return $this->name;
     }
 
     /**
-     * @param string $key
+     * @param string $name
      */
-    public function setKey($key)
+    public function setName($name)
     {
-        Assertion::string($key);
-        Assertion::notBlank($key);
+        Assertion::string($name);
+        Assertion::notBlank($name);
 
-        $this->key = $key;
+        $this->name = $name;
     }
 
     /**

@@ -34,6 +34,11 @@ class Variation extends AbstractValueObject
     private $number = '';
 
     /**
+     * @var string
+     */
+    private $model = '';
+
+    /**
      * @var array
      */
     private $imageIdentifiers = [];
@@ -44,9 +49,14 @@ class Variation extends AbstractValueObject
     private $prices = [];
 
     /**
+     * @var float
+     */
+    private $purchasePrice = 0.0;
+
+    /**
      * @var string
      */
-    private $unitIdentifier;
+    private $unitIdentifier = '';
 
     /**
      * @var float
@@ -54,9 +64,34 @@ class Variation extends AbstractValueObject
     private $content = 0.0;
 
     /**
-     * @var string
+     * @var null|int
      */
-    private $packagingUnit = '';
+    private $maximumOrderQuantity;
+
+    /**
+     * @var int
+     */
+    private $minimumOrderQuantity = 1;
+
+    /**
+     * @var int
+     */
+    private $intervalOrderQuantity = 1;
+
+    /**
+     * @var null|int
+     */
+    private $width;
+
+    /**
+     * @var null|int
+     */
+    private $height;
+
+    /**
+     * @var null|int
+     */
+    private $length;
 
     /**
      * @var Attribute[]
@@ -141,6 +176,24 @@ class Variation extends AbstractValueObject
     }
 
     /**
+     * @return string
+     */
+    public function getModel()
+    {
+        return $this->model;
+    }
+
+    /**
+     * @param string $model
+     */
+    public function setModel($model)
+    {
+        Assertion::string($model);
+
+        $this->model = $model;
+    }
+
+    /**
      * @return array
      */
     public function getImageIdentifiers()
@@ -174,6 +227,24 @@ class Variation extends AbstractValueObject
         Assertion::allIsInstanceOf($prices, Price::class);
 
         $this->prices = $prices;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPurchasePrice()
+    {
+        return $this->purchasePrice;
+    }
+
+    /**
+     * @param float $purchasePrice
+     */
+    public function setPurchasePrice($purchasePrice)
+    {
+        Assertion::float($purchasePrice);
+
+        $this->purchasePrice = $purchasePrice;
     }
 
     /**
@@ -213,21 +284,109 @@ class Variation extends AbstractValueObject
     }
 
     /**
-     * @return string
+     * @return null|int
      */
-    public function getPackagingUnit()
+    public function getMaximumOrderQuantity()
     {
-        return $this->packagingUnit;
+        return $this->maximumOrderQuantity;
     }
 
     /**
-     * @param string $packagingUnit
+     * @param null|int $maximumOrderQuantity
      */
-    public function setPackagingUnit($packagingUnit)
+    public function setMaximumOrderQuantity($maximumOrderQuantity)
     {
-        Assertion::string($packagingUnit);
+        Assertion::nullOrInteger($maximumOrderQuantity);
 
-        $this->packagingUnit = $packagingUnit;
+        $this->maximumOrderQuantity = $maximumOrderQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMinimumOrderQuantity()
+    {
+        return $this->minimumOrderQuantity;
+    }
+
+    /**
+     * @param int $minimumOrderQuantity
+     */
+    public function setMinimumOrderQuantity($minimumOrderQuantity)
+    {
+        Assertion::integer($minimumOrderQuantity);
+
+        $this->minimumOrderQuantity = $minimumOrderQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIntervalOrderQuantity()
+    {
+        return $this->intervalOrderQuantity;
+    }
+
+    /**
+     * @param int $intervalOrderQuantity
+     */
+    public function setIntervalOrderQuantity($intervalOrderQuantity)
+    {
+        Assertion::integer($intervalOrderQuantity);
+
+        $this->intervalOrderQuantity = $intervalOrderQuantity;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getWidth()
+    {
+        return $this->width;
+    }
+
+    /**
+     * @param int|null $width
+     */
+    public function setWidth($width)
+    {
+        Assertion::nullOrInteger($width);
+
+        $this->width = $width;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getHeight()
+    {
+        return $this->height;
+    }
+
+    /**
+     * @param int|null $height
+     */
+    public function setHeight($height)
+    {
+        Assertion::nullOrInteger($height);
+
+        $this->height = $height;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getLength()
+    {
+        return $this->length;
+    }
+
+    /**
+     * @param int|null $length
+     */
+    public function setLength($length)
+    {
+        $this->length = $length;
     }
 
     /**

@@ -10,6 +10,10 @@ use PlentyConnector\Connector\ValueObject\AbstractValueObject;
  */
 class LinkedProduct extends AbstractValueObject
 {
+    const TYPE_ACCESSORY = 'Accessory';
+    const TYPE_REPLACEMENT = 'Replacement';
+    const TYPE_SIMILAR = 'Similar';
+
     /**
      * @var string
      */

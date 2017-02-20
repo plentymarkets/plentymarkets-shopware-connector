@@ -23,6 +23,11 @@ class Price  extends AbstractValueObject
     /**
      * @var null|string
      */
+    private $currencyIdentifier;
+
+    /**
+     * @var null|string
+     */
     private $customerGroupIdentifier;
 
     /**
@@ -71,6 +76,24 @@ class Price  extends AbstractValueObject
         Assertion::greaterOrEqualThan($pseudoPrice, '0.0');
 
         $this->pseudoPrice = $pseudoPrice;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getCurrencyIdentifier()
+    {
+        return $this->currencyIdentifier;
+    }
+
+    /**
+     * @param null|string $currencyIdentifier
+     */
+    public function setCurrencyIdentifier($currencyIdentifier = null)
+    {
+        Assertion::nullOrUuid($currencyIdentifier);
+
+        $this->currencyIdentifier = $currencyIdentifier;
     }
 
     /**

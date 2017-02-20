@@ -41,11 +41,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     private $active = false;
 
     /**
-     * @var int
-     */
-    private $stock = 0;
-
-    /**
      * @var string
      */
     private $manufacturerIdentifier = '';
@@ -64,6 +59,11 @@ class Product extends AbstractTransferObject implements TranslateableInterface
      * @var array
      */
     private $shippingProfileIdentifiers = [];
+
+    /**
+     * @var array
+     */
+    private $imageIdentifiers = [];
 
     /**
      * @var Variation[]
@@ -218,24 +218,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     }
 
     /**
-     * @return int
-     */
-    public function getStock()
-    {
-        return $this->stock;
-    }
-
-    /**
-     * @param int $stock
-     */
-    public function setStock($stock)
-    {
-        Assertion::integer($stock);
-
-        $this->stock = $stock;
-    }
-
-    /**
      * @return string
      */
     public function getManufacturerIdentifier()
@@ -305,6 +287,24 @@ class Product extends AbstractTransferObject implements TranslateableInterface
         Assertion::allUuid($shippingProfileIdentifiers);
 
         $this->shippingProfileIdentifiers = $shippingProfileIdentifiers;
+    }
+
+    /**
+     * @return array
+     */
+    public function getImageIdentifiers()
+    {
+        return $this->imageIdentifiers;
+    }
+
+    /**
+     * @param array $imageIdentifiers
+     */
+    public function setImageIdentifiers($imageIdentifiers)
+    {
+        Assertion::allUuid($imageIdentifiers);
+
+        $this->imageIdentifiers = $imageIdentifiers;
     }
 
     /**
