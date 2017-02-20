@@ -2,8 +2,6 @@
 
 namespace PlentyConnector\Connector\ValueObject;
 
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
-
 /**
  * Class AbstractValueObject
  */
