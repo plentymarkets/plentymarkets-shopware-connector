@@ -81,7 +81,7 @@ class FetchAllProductsQueryHandler implements QueryHandlerInterface
 
         foreach ($products as $product) {
             $variations = $this->client->request('GET', 'items/' . $product['id'] . '/variations', [
-                'with' => 'variationSuppliers,variationClients,variationSalesPrices,variationCategories,variationDefaultCategory,unit,variationAttributeValues',
+                'with' => 'variationClients,variationSalesPrices,variationCategories,variationDefaultCategory,unit,variationAttributeValues',
             ]);
 
             $mainVariation = $this->responseParser->getMainVariation($variations);
@@ -91,6 +91,10 @@ class FetchAllProductsQueryHandler implements QueryHandlerInterface
                 PlentymarketsAdapter::NAME,
                 Product::TYPE
             );
+
+            $hasStockLimitation = array_filter($variations, function(array $variation) {
+                return (bool) $variation['stockLimitation'];
+            });
 
             /**
              * @var Product $object
@@ -107,9 +111,11 @@ class FetchAllProductsQueryHandler implements QueryHandlerInterface
                 'imageIdentifiers' => $this->responseParser->getImageIdentifiers($product, $product['texts'], $result),
                 'variations' => $this->responseParser->getVariations($product['texts'], $variations, $result),
                 'vatRateIdentifier' => $this->responseParser->getVatRateIdentifier($mainVariation),
+                'limitedStock' => (bool) $hasStockLimitation,
                 'description' => $product['texts'][0]['shortDescription'],
                 'longDescription' => $product['texts'][0]['description'],
                 'technicalDescription' => $product['texts'][0]['technicalData'],
+                'releaseDate' => null,
                 'metaTitle' => $product['texts'][0]['name1'],
                 'metaDescription' => $product['texts'][0]['metaDescription'],
                 'metaKeywords' => $product['texts'][0]['keywords'],

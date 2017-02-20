@@ -3,6 +3,7 @@
 namespace PlentyConnector\Connector\TransferObject\Product;
 
 use Assert\Assertion;
+use DateTimeImmutable;
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 use PlentyConnector\Connector\TransferObject\Product\LinkedProduct\LinkedProduct;
 use PlentyConnector\Connector\TransferObject\Product\Property\Property;
@@ -76,6 +77,11 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     private $vatRateIdentifier = '';
 
     /**
+     * @var bool
+     */
+    private $limitedStock = false;
+
+    /**
      * @var string
      */
     private $description = '';
@@ -89,6 +95,11 @@ class Product extends AbstractTransferObject implements TranslateableInterface
      * @var string
      */
     private $technicalDescription = '';
+
+    /**
+     * @var null|DateTimeImmutable
+     */
+    private $releaseData;
 
     /**
      * @var string
@@ -202,7 +213,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     /**
      * @return bool
      */
-    public function isActive()
+    public function getActive()
     {
         return $this->active;
     }
@@ -344,6 +355,24 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     }
 
     /**
+     * @return bool
+     */
+    public function getLimitedStock()
+    {
+        return $this->limitedStock;
+    }
+
+    /**
+     * @param bool $limitedStock
+     */
+    public function setLimitedStock($limitedStock)
+    {
+        Assertion::boolean($limitedStock);
+
+        $this->limitedStock = $limitedStock;
+    }
+
+    /**
      * @return string
      */
     public function getDescription()
@@ -395,6 +424,22 @@ class Product extends AbstractTransferObject implements TranslateableInterface
         Assertion::string($technicalDescription);
 
         $this->technicalDescription = $technicalDescription;
+    }
+
+    /**
+     * @return DateTimeImmutable
+     */
+    public function getReleaseData()
+    {
+        return $this->releaseData;
+    }
+
+    /**
+     * @param null|DateTimeImmutable $releaseData
+     */
+    public function setReleaseData(DateTimeImmutable $releaseData = null)
+    {
+        $this->releaseData = $releaseData;
     }
 
     /**

@@ -64,7 +64,10 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $event)
     {
-        // TODO how to identify changed orders?
+        $this->logger->notice('not implemented yes');
+
+        return [];
+
 
         throw new \Exception('Not implemented!');
         $filter = [

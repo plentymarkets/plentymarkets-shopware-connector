@@ -36,6 +36,11 @@ class Variation extends AbstractValueObject
     /**
      * @var string
      */
+    private $ean;
+
+    /**
+     * @var string
+     */
     private $model = '';
 
     /**
@@ -64,7 +69,7 @@ class Variation extends AbstractValueObject
     private $content = 0.0;
 
     /**
-     * @var null|int
+     * @var int
      */
     private $maximumOrderQuantity;
 
@@ -79,19 +84,24 @@ class Variation extends AbstractValueObject
     private $intervalOrderQuantity = 1;
 
     /**
-     * @var null|int
+     * @var int
      */
-    private $width;
+    private $width = 0;
 
     /**
-     * @var null|int
+     * @var int
      */
-    private $height;
+    private $height = 0;
 
     /**
-     * @var null|int
+     * @var int
      */
-    private $length;
+    private $length = 0;
+
+    /**
+     * @var int
+     */
+    private $weight = 0;
 
     /**
      * @var Attribute[]
@@ -106,7 +116,7 @@ class Variation extends AbstractValueObject
     /**
      * @return bool
      */
-    public function isActive()
+    public function getActive()
     {
         return $this->active;
     }
@@ -173,6 +183,24 @@ class Variation extends AbstractValueObject
         Assertion::string($number);
 
         $this->number = $number;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEan()
+    {
+        return $this->ean;
+    }
+
+    /**
+     * @param string $ean
+     */
+    public function setEan($ean)
+    {
+        Assertion::string($ean);
+
+        $this->ean = $ean;
     }
 
     /**
@@ -284,7 +312,7 @@ class Variation extends AbstractValueObject
     }
 
     /**
-     * @return null|int
+     * @return int
      */
     public function getMaximumOrderQuantity()
     {
@@ -292,11 +320,11 @@ class Variation extends AbstractValueObject
     }
 
     /**
-     * @param null|int $maximumOrderQuantity
+     * @param int $maximumOrderQuantity
      */
     public function setMaximumOrderQuantity($maximumOrderQuantity)
     {
-        Assertion::nullOrInteger($maximumOrderQuantity);
+        Assertion::integer($maximumOrderQuantity);
 
         $this->maximumOrderQuantity = $maximumOrderQuantity;
     }
@@ -338,7 +366,7 @@ class Variation extends AbstractValueObject
     }
 
     /**
-     * @return int|null
+     * @return int
      */
     public function getWidth()
     {
@@ -346,17 +374,17 @@ class Variation extends AbstractValueObject
     }
 
     /**
-     * @param int|null $width
+     * @param int $width
      */
     public function setWidth($width)
     {
-        Assertion::nullOrInteger($width);
+        Assertion::integer($width);
 
         $this->width = $width;
     }
 
     /**
-     * @return int|null
+     * @return int
      */
     public function getHeight()
     {
@@ -364,17 +392,17 @@ class Variation extends AbstractValueObject
     }
 
     /**
-     * @param int|null $height
+     * @param int $height
      */
     public function setHeight($height)
     {
-        Assertion::nullOrInteger($height);
+        Assertion::integer($height);
 
         $this->height = $height;
     }
 
     /**
-     * @return int|null
+     * @return int
      */
     public function getLength()
     {
@@ -382,11 +410,31 @@ class Variation extends AbstractValueObject
     }
 
     /**
-     * @param int|null $length
+     * @param int $length
      */
     public function setLength($length)
     {
+        Assertion::integer($length);
+
         $this->length = $length;
+    }
+
+    /**
+     * @return int
+     */
+    public function getWeight()
+    {
+        return $this->weight;
+    }
+
+    /**
+     * @param int $weight
+     */
+    public function setWeight($weight)
+    {
+        Assertion::integer($weight);
+
+        $this->weight = $weight;
     }
 
     /**

@@ -120,6 +120,8 @@
         </service>
 
         <service id="plenty_connector.connector_definition.manufacturer" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
+            <factory service="plenty_connector.definition_factory" method="factory" />
+
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.manufacturer%</argument>
@@ -149,16 +151,6 @@
 
             <tag name="plenty_connector.connector_definition" />
         </service>
-
-        <!--
-        <service id="plenty_connector.connector_definition.product" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
-            <argument>%plenty_connector.adapter.plentymarkets%</argument>
-            <argument>%plenty_connector.adapter.shopware%</argument>
-            <argument>%plenty_connector.transfer_object.product%</argument>
-
-            <tag name="plenty_connector.connector_definition" />
-        </service>
-        -->
 
         <!-- Cleanup Service -->
 

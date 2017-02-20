@@ -108,7 +108,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                 $itemParams['referrerId'] = 1;
                 $itemParams['itemVariationId'] = 1001;
                 $itemParams['countryVatId'] = 1;
-                $itemParams['vatField'] = 0;
+                $itemParams['vatField'] = 0; // TODO: discuss
                 $itemParams['vatRate'] = 19;
                 $itemParams['amounts'] = [
                     'isSystemCurrency' => true,

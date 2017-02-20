@@ -96,7 +96,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return array
      */
-    public function getPrices(array $variation)
+    private function getPrices(array $variation)
     {
         $customerGroups = array_keys($this->client->request('GET', 'accounts/contacts/classes'));
 
@@ -140,7 +140,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             } else {
                 $temporaryPrices['default'][$priceConfiguration['type']] = [
                     'from' => $priceConfiguration['minimumOrderQuantity'],
-                    'price' => $price['price'],
+                    'price' => $price['price']
                 ];
             }
         }
@@ -175,6 +175,9 @@ class ProductResponseParser implements ProductResponseParserInterface
         }
 
         foreach ($prices as $price) {
+            /**
+             * @var Price[] $possibleScalePrices
+             */
             $possibleScalePrices = array_filter($prices, function(Price $possiblePrice) use ($price) {
                 return $possiblePrice->getCustomerGroupIdentifier() === $price->getCustomerGroupIdentifier() &&
                     spl_object_hash($price) !== spl_object_hash($possiblePrice);
@@ -204,6 +207,15 @@ class ProductResponseParser implements ProductResponseParserInterface
                 }
             }
         }
+
+        // TODO: remove when prices are fixed
+        $prices[] = Price::fromArray([
+            'price' => 20.0,
+            'pseudoPrice' => 40.0,
+            'customerGroupIdentifier' => null,
+            'from' => 1,
+            'to' => null,
+        ]);
 
         return $prices;
     }
@@ -402,7 +414,7 @@ class ProductResponseParser implements ProductResponseParserInterface
                 $store = array_shift($store);
 
                 $categoryIdentity = $this->identityService->findOneBy([
-                    'adapterIdentifier' => (string) ($store['id'] . '-' . $category['branchId']),
+                    'adapterIdentifier' => (string) ($store['storeIdentifier'] . '-' . $category['branchId']),
                     'adapterName' => PlentymarketsAdapter::NAME,
                     'objectType' => Category::TYPE,
                 ]);
@@ -531,7 +543,7 @@ class ProductResponseParser implements ProductResponseParserInterface
                 $store = array_shift($store);
 
                 $categoryIdentity = $this->identityService->findOneBy([
-                    'adapterIdentifier' => (string) ($store['id'] . '-' . $category['categoryId']),
+                    'adapterIdentifier' => (string) ($store['storeIdentifier'] . '-' . $category['categoryId']),
                     'adapterName' => PlentymarketsAdapter::NAME,
                     'objectType' => Category::TYPE,
                 ]);
@@ -681,9 +693,7 @@ class ProductResponseParser implements ProductResponseParserInterface
     {
         $mappedVariations = [];
 
-        // TOOD: with, height, length attributes
-        //
-        // TODO: availability von beta1
+        // TODO: availability von arvatis-beta
 
         if (count($variations) > 1) {
             $variations = array_filter($variations, function (array $variation) {
@@ -698,8 +708,8 @@ class ProductResponseParser implements ProductResponseParserInterface
                 'active' => true,
                 'isMain' => $first,
                 'stock' => $this->getStock($variation),
-                'limitedStock' => (bool) $variation['stockLimitation'],
                 'number' => (string) $variation['number'],
+                'ean' => '',
                 'model' => $variation['model'],
                 'imageIdentifiers' => $this->getVariationImages($texts, $variation, $result),
                 'prices' => $this->getPrices($variation),
@@ -712,11 +722,12 @@ class ProductResponseParser implements ProductResponseParserInterface
                 'width' => (int) $variation['widthMM'],
                 'height' => (int) $variation['heightMM'],
                 'length' => (int) $variation['lengthMM'],
+                'weight' => (int) $variation['weightNetG'],
                 'attributes' => [],
                 'properties' => $this->getVariationProperties($variation),
             ]);
 
-            $first = true;
+            $first = false;
         }
 
         return $mappedVariations;
@@ -820,8 +831,8 @@ class ProductResponseParser implements ProductResponseParserInterface
                 }
             }
 
-            $valueNames = $attributes[$attributeValue['attributeId']]['names'];
-            $propertyNames = $attributes[$attributeValue['attributeId']]['values'][$attributeValue['valueId']]['names'];
+            $propertyNames = $attributes[$attributeValue['attributeId']]['names'];
+            $valueNames = $attributes[$attributeValue['attributeId']]['values'][$attributeValue['valueId']]['names'];
 
             $value = Value::fromArray([
                 'value' => $valueNames[0]['name'],

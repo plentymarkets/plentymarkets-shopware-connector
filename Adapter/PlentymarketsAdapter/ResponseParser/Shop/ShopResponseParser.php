@@ -31,8 +31,12 @@ class ShopResponseParser implements ShopResponseParserInterface
      */
     public function parse(array $entry)
     {
+        if (null === $entry['storeIdentifier']) {
+            return null;
+        }
+
         $identity = $this->identityService->findOneOrCreate(
-            (string) $entry['id'],
+            (string) $entry['storeIdentifier'],
             PlentymarketsAdapter::NAME,
             Shop::TYPE
         );

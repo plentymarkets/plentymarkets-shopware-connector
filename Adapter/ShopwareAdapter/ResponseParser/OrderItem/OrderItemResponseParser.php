@@ -6,7 +6,7 @@ use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\OrderItem\OrderItem;
 use PlentyConnector\Connector\TransferObject\Product\Product;
-use PlentyConnector\Connector\TransferObject\Variation\Variation;
+use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Variant;
 use ShopwareAdapter\ShopwareAdapter;

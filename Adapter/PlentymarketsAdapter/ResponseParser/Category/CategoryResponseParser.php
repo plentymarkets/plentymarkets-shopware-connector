@@ -78,7 +78,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
             $parentCategoryIdentifier = null;
         }
 
-        $shppIdentifier = $this->identityService->findOneOrCreate(
+        $shopIdentifier = $this->identityService->findOneOrCreate(
             (string) $entry['plentyId'],
             PlentymarketsAdapter::NAME,
             Shop::TYPE
@@ -88,7 +88,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
             'identifier' => $categoryIdentifier->getObjectIdentifier(),
             'name' => $entry['details']['0']['name'],
             'parentIdentifier' => $parentCategoryIdentifier,
-            'shopIdentifier' => $shppIdentifier->getObjectIdentifier(),
+            'shopIdentifier' => $shopIdentifier->getObjectIdentifier(),
             'imageIdentifiers' => $this->getImages($entry['details']['0'], $result),
             'position' => $entry['details']['0']['position'],
             'description' => $entry['details']['0']['description'],

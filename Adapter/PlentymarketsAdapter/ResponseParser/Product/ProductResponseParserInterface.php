@@ -18,13 +18,6 @@ interface ProductResponseParserInterface
     public function getMainVariation(array $variations);
 
     /**
-     * @param $variation
-     *
-     * @return array
-     */
-    public function getPrices(array $variation);
-
-    /**
      * @param array $variation
      *
      * @return string

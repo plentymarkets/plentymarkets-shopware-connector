@@ -72,6 +72,10 @@ class FetchOrderQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
+        $this->logger->notice('not implemented yes');
+
+        return;
+
         /**
          * @var FetchQueryInterface $event
          */
