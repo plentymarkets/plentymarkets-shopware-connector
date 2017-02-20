@@ -56,6 +56,10 @@ class CategoryResponseParser implements CategoryResponseParserInterface
     {
         $result = [];
 
+        if (empty($entry['plentyId'])) {
+            return null;
+        }
+
         $categoryIdentifier = $this->identityService->findOneOrCreate(
             (string) ($entry['plentyId'] . '-' . $entry['categoryId']),
             PlentymarketsAdapter::NAME,
