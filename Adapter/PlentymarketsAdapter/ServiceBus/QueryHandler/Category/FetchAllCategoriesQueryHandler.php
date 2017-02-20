@@ -90,6 +90,10 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
                     'details' => $details,
                 ]);
 
+                if (empty($parsedElements)) {
+                    continue;
+                }
+
                 foreach ($parsedElements as $parsedElement) {
                     $result[] = $parsedElement;
                 }
