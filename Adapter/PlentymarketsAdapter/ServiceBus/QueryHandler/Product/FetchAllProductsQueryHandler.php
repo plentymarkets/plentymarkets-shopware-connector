@@ -73,13 +73,13 @@ class FetchAllProductsQueryHandler implements QueryHandlerInterface
     {
         $webstores = $this->client->request('GET', 'webstores');
 
-        $iterator = $this->client->getIterator('items', [
+        $products = $this->client->request('GET', 'items', [
             'lang' => implode(',', array_column($this->languageHelper->getLanguages(), 'id')),
         ]);
 
         $result = [];
 
-        foreach ($iterator as $product) {
+        foreach ($products as $product) {
             $variations = $this->client->request('GET', 'items/' . $product['id'] . '/variations', [
                 'with' => 'variationSuppliers,variationClients,variationSalesPrices,variationCategories,variationDefaultCategory,unit,variationAttributeValues',
             ]);
@@ -92,24 +92,20 @@ class FetchAllProductsQueryHandler implements QueryHandlerInterface
                 Product::TYPE
             );
 
-            // TODO: get texts from variations: items/{id}/variations/{variationId}/descriptions
-            /* TODO:
-                post: rest/items/properties/{id}/selections
-                get: rest/items/properties/{id}/selections (Gibt alle Werte für die Property ID aus)
-                get: rest/items/properties/{id}/selections/{lang} (Gibt einen Wert für die Property ID in der entspr. Sprache aus)
-                put: rest/items/properties/{id}/selections/{lang}
-                delete: rest/items/properties/{id}/selections/{lang}
-            */
+            /**
+             * @var Product $object
+             */
             $object = Product::fromArray([
                 'identifier' => $identity->getObjectIdentifier(),
                 'name' => $product['texts'][0]['name1'],
-                'active' => $product['isActive'],
-                'stock' => $this->responseParser->getStock($product, $mainVariation),
                 'number' => $mainVariation['number'],
+                'active' => $product['isActive'],
                 'manufacturerIdentifier' => $this->responseParser->getManufacturerIdentifier($product),
                 'categoryIdentifiers' => $this->responseParser->getCategories($mainVariation, $webstores),
                 'defaultCategoryIdentifiers' => $this->responseParser->getDafaultCategories($mainVariation, $webstores),
                 'shippingProfileIdentifiers' => $this->responseParser->getShippingProfiles($product),
+                'imageIdentifiers' => $this->responseParser->getImageIdentifiers($product, $product['texts'], $result),
+                'variations' => $this->responseParser->getVariations($product['texts'], $variations, $result),
                 'vatRateIdentifier' => $this->responseParser->getVatRateIdentifier($mainVariation),
                 'description' => $product['texts'][0]['shortDescription'],
                 'longDescription' => $product['texts'][0]['description'],
@@ -118,6 +114,9 @@ class FetchAllProductsQueryHandler implements QueryHandlerInterface
                 'metaDescription' => $product['texts'][0]['metaDescription'],
                 'metaKeywords' => $product['texts'][0]['keywords'],
                 'metaRobots' => 'INDEX, FOLLOW',
+                'linkedProducts' => $this->responseParser->getLinkedProducts($product),
+                'documents' => $this->responseParser->getDocuments($product),
+                'properties' => $this->responseParser->getProperties($mainVariation),
                 'translations' => $this->responseParser->getProductTranslations($product['texts']),
                 'attributes' => $this->responseParser->getAttributes($product),
             ]);

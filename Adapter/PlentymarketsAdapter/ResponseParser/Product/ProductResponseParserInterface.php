@@ -2,6 +2,9 @@
 
 namespace PlentymarketsAdapter\ResponseParser\Product;
 
+use phpDocumentor\Reflection\DocBlock\Tags\Property;
+use PlentyConnector\Connector\TransferObject\Product\LinkedProduct\LinkedProduct;
+
 /**
  * Interface ProductResponseParserInterface.
  */
@@ -15,26 +18,11 @@ interface ProductResponseParserInterface
     public function getMainVariation(array $variations);
 
     /**
-     * @param $mainVariation
+     * @param $variation
      *
      * @return array
      */
-    public function getPrices($mainVariation);
-
-    /**
-     * @param array $product
-     * @param array $result
-     *
-     * @return array
-     */
-    public function getImageIdentifiers(array $product, array &$result);
-
-    /**
-     * @param array $variation
-     *
-     * @return string
-     */
-    public function getUnitIdentifier(array $variation);
+    public function getPrices(array $variation);
 
     /**
      * @param array $variation
@@ -58,6 +46,15 @@ interface ProductResponseParserInterface
     public function getShippingProfiles(array $product);
 
     /**
+     * @param array $product
+     * @param array $texts
+     * @param $result
+     *
+     * @return array
+     */
+    public function getImageIdentifiers(array $product, array $texts, array &$result);
+
+    /**
      * @param array $mainVariation
      * @param array $webstores
      *
@@ -73,12 +70,11 @@ interface ProductResponseParserInterface
     public function getProductTranslations(array $texts);
 
     /**
-     * @param $product
      * @param $variation
      *
      * @return int
      */
-    public function getStock($product, $variation);
+    public function getStock($variation);
 
     /**
      * @param array $mainVariation
@@ -94,4 +90,34 @@ interface ProductResponseParserInterface
      * @return Attribute[]
      */
     public function getAttributes(array $product);
+
+    /**
+     * @param array $texts
+     * @param array $variations
+     * @param array $result
+     *
+     * @return array
+     */
+    public function getVariations(array $texts, $variations, array &$result);
+
+    /**
+     * @param $product
+     *
+     * @return LinkedProduct[]
+     */
+    public function getLinkedProducts(array $product);
+
+    /**
+     * @param array $product
+     *
+     * @return array
+     */
+    public function getDocuments(array $product);
+
+    /**
+     * @param $product
+     *
+     * @return Property[]
+     */
+    public function getProperties(array $product);
 }

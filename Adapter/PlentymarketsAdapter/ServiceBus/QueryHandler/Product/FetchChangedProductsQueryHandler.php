@@ -70,63 +70,6 @@ class FetchChangedProductsQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $webstores = $this->client->request('GET', 'webstores');
-
-        /*
-            'updatedBetween',
-            'variationUpdatedBetween',
-            'variationRelatedUpdatedBetween'
-         */
-
-        $iterator = $this->client->getIterator('items', [
-            'lang' => implode(',', array_column($this->languageHelper->getLanguages(), 'id')),
-        ]);
-
-        $result = [];
-
-        foreach ($iterator as $product) {
-            $variations = $this->client->request('GET', 'items/' . $product['id'] . '/variations', [
-                'with' => 'variationSuppliers,variationClients,variationSalesPrices,variationCategories,variationDefaultCategory,unit,variationAttributeValues',
-            ]);
-
-            $mainVariation = $this->responseParser->getMainVariation($variations);
-
-            $identity = $this->identityService->findOneOrCreate(
-                (string) $product['id'],
-                PlentymarketsAdapter::NAME,
-                Product::TYPE
-            );
-
-            $object = Product::fromArray([
-                'identifier' => $identity->getObjectIdentifier(),
-                'name' => $product['texts'][0]['name1'],
-                'active' => $product['isActive'],
-                'stock' => $this->responseParser->getStock($product, $mainVariation),
-                'number' => $mainVariation['number'],
-                'manufacturerIdentifier' => $this->responseParser->getManufacturerIdentifier($product),
-                'categoryIdentifiers' => $this->responseParser->getCategories($mainVariation, $webstores),
-                'defaultCategoryIdentifiers' => $this->responseParser->getDafaultCategories($mainVariation, $webstores),
-                'imageIdentifiers' => $this->responseParser->getImageIdentifiers($product, $result),
-                'prices' => $this->responseParser->getPrices($mainVariation),
-                'unitIdentifier' => $this->responseParser->getUnitIdentifier($mainVariation),
-                'content' => (float) $mainVariation['unit']['content'],
-                'packagingUnit' => '',
-                'shippingProfileIdentifiers' => $this->responseParser->getShippingProfiles($product),
-                'vatRateIdentifier' => $this->responseParser->getVatRateIdentifier($mainVariation),
-                'description' => $product['texts'][0]['shortDescription'],
-                'longDescription' => $product['texts'][0]['description'],
-                'technicalDescription' => $product['texts'][0]['technicalData'],
-                'metaTitle' => $product['texts'][0]['name1'],
-                'metaDescription' => $product['texts'][0]['metaDescription'],
-                'metaKeywords' => $product['texts'][0]['keywords'],
-                'metaRobots' => 'INDEX, FOLLOW',
-                'translations' => $this->responseParser->getProductTranslations($product['texts']),
-                'attributes' => $this->responseParser->getAttributes($product),
-            ]);
-
-            $result[] = $object;
-        }
-
-        return $result;
+        throw new \Exception('not implemented');
     }
 }

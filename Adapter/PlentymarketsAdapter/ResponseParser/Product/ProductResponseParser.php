@@ -4,9 +4,15 @@ namespace PlentymarketsAdapter\ResponseParser\Product;
 
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Category\Category;
+use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
 use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
+use PlentyConnector\Connector\TransferObject\Product\LinkedProduct\LinkedProduct;
 use PlentyConnector\Connector\TransferObject\Product\Price\Price;
+use PlentyConnector\Connector\TransferObject\Product\Product;
+use PlentyConnector\Connector\TransferObject\Product\Property\Property;
+use PlentyConnector\Connector\TransferObject\Product\Property\Value\Value;
+use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
 use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentyConnector\Connector\TransferObject\Unit\Unit;
@@ -77,25 +83,27 @@ class ProductResponseParser implements ProductResponseParserInterface
         });
 
         if (empty($mainVariation)) {
-            // throw NoMainVariatonException
+            // TODO: throw
         }
 
         return array_shift($mainVariation);
     }
 
     /**
-     * @param $mainVariation
+     * TODO: finalize prices
+     *
+     * @param array $variation
      *
      * @return array
      */
-    public function getPrices($mainVariation)
+    public function getPrices(array $variation)
     {
         $customerGroups = array_keys($this->client->request('GET', 'accounts/contacts/classes'));
 
         $priceConfigurations = $this->getPriceConfigurations();
 
-        $tmporaryPrices = [];
-        foreach ($mainVariation['variationSalesPrices'] as $price) {
+        $temporaryPrices = [];
+        foreach ($variation['variationSalesPrices'] as $price) {
             $priceConfiguration = array_filter($priceConfigurations, function ($configuration) use ($price) {
                 return $configuration['id'] === $price['salesPriceId'];
             });
@@ -110,7 +118,7 @@ class ProductResponseParser implements ProductResponseParserInterface
 
             $customerClasses = $priceConfiguration['customerClasses'];
 
-            if (count($customerClasses) === 1 && $customerClasses[0]['customerClassId'] === -1) {
+            if (count($customerClasses) !== 1 && $customerClasses[0]['customerClassId'] !== -1) {
                 foreach ($customerGroups as $group) {
                     $customerGroupIdentity = $this->identityService->findOneBy([
                         'adapterIdentifier' => $group,
@@ -119,60 +127,116 @@ class ProductResponseParser implements ProductResponseParserInterface
                     ]);
 
                     if (null === $customerGroupIdentity) {
-                        // throw
+                        // TODO: throw
+
+                        break;
                     }
 
-                    $tmporaryPrices[$customerGroupIdentity->getObjectIdentifier()][$priceConfiguration['type']] = $price['price'];
+                    $temporaryPrices[$customerGroupIdentity->getObjectIdentifier()][$priceConfiguration['type']] = [
+                        'from' => $priceConfiguration['minimumOrderQuantity'],
+                        'price' => $price['price'],
+                    ];
                 }
+            } else {
+                $temporaryPrices['default'][$priceConfiguration['type']] = [
+                    'from' => $priceConfiguration['minimumOrderQuantity'],
+                    'price' => $price['price'],
+                ];
             }
         }
 
-        // TODO: minimumOrderQuantity Mengenstaffeln
+        /**
+         * @var Price[] $prices
+         */
         $prices = [];
-        foreach ($tmporaryPrices as $customerGroup => $priceArray) {
+        foreach ($temporaryPrices as $customerGroup => $priceArray) {
+            if ($customerGroup === 'default') {
+                $customerGroup = null;
+            }
+
+            $price = 0.0;
+            $pseudoPrice = 0.0;
+
+            if (isset($priceArray['default'])) {
+                $price = (double) $priceArray['default']['price'];
+            }
+
+            if (isset($priceArray['default'])) {
+                $pseudoPrice = (double) $priceArray['rrp']['price'];
+            }
+
             $prices[] = Price::fromArray([
-                'price' => (float) $priceArray['default'],
-                'pseudoPrice' => (float) $priceArray['rrp'],
+                'price' => $price,
+                'pseudoPrice' => $pseudoPrice,
                 'customerGroupIdentifier' => $customerGroup,
-                'from' => 1,
+                'from' => (int) $priceArray['default']['from'],
                 'to' => null,
-                'percent' => 0,
             ]);
+        }
+
+        foreach ($prices as $price) {
+            $possibleScalePrices = array_filter($prices, function(Price $possiblePrice) use ($price) {
+                return $possiblePrice->getCustomerGroupIdentifier() === $price->getCustomerGroupIdentifier() &&
+                    spl_object_hash($price) !== spl_object_hash($possiblePrice);
+            });
+
+            if (empty($possibleScalePrices)) {
+                continue;
+            }
+
+            usort($possibleScalePrices, function(Price $possibleScalePriceLeft, Price $possibleScalePriceright) {
+                if ($possibleScalePriceLeft->getFromAmount() === $possibleScalePriceright->getFromAmount()) {
+                    return 0;
+                }
+
+                if ($possibleScalePriceLeft->getFromAmount() > $possibleScalePriceright->getFromAmount()) {
+                    return 1;
+                }
+
+                return -1;
+            });
+
+            foreach ($possibleScalePrices as $possibleScalePrice) {
+                if ($possibleScalePrice->getFromAmount() > $price->getFromAmount()) {
+                    $price->setToAmount($possibleScalePrice->getFromAmount() - 1);
+
+                    break;
+                }
+            }
         }
 
         return $prices;
     }
 
     /**
-     * @param array $product
+     * @param array $texts
+     * @param array $variation
      * @param array $result
      *
      * @return array
      */
-    public function getImageIdentifiers(array $product, array &$result)
+    private function getVariationImages(array $texts, array $variation, array &$result)
     {
-        $images = $this->client->request('GET', 'items/' . $product['id'] . '/images', [
-            'with' => 'names',
-            'lang' => implode(',', array_column($this->languageHelper->getLanguages(), 'id')),
-        ]);
+        $url = 'items/' . $variation['itemId'] . '/variations/' . $variation['id'] . '/images';
+        $images = $this->client->request('GET', $url);
 
-        $imageIdentifiers = array_map(function ($image) use ($product, &$result) {
+        $imageIdentifiers = array_map(function ($image) use ($texts, &$result) {
             /**
-             * @var MediaResponseParserInterface
+             * @var MediaResponseParserInterface $mediaResponseParser
              */
             $mediaResponseParser = Shopware()->Container()->get('plentmarkets_adapter.response_parser.media');
 
             if (!empty($image['names'][0]['name'])) {
                 $name = $image['names'][0]['name'];
             } else {
-                $name = $product['texts'][0]['name1'];
+                $name = $texts[0]['name1'];
             }
 
             $media = $mediaResponseParser->parse([
                 'mediaCategory' => MediaCategoryHelper::PRODUCT,
                 'link' => $image['url'],
                 'name' => $name,
-                'translations' => $this->getMediaTranslations($image, $product['texts']),
+                'translations' => $this->getMediaTranslations($image, $texts),
             ]);
 
             $result[] = $media;
@@ -188,7 +252,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return string
      */
-    public function getUnitIdentifier(array $variation)
+    private function getUnitIdentifier(array $variation)
     {
         // Unit
         $unitIdentity = $this->identityService->findOneBy([
@@ -198,7 +262,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         ]);
 
         if (null === $unitIdentity) {
-            // throw
+            // TODO: throw
         }
 
         return $unitIdentity->getObjectIdentifier();
@@ -218,7 +282,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         ]);
 
         if (null === $vatRateIdentity) {
-            // throw
+            // TODO: throw
         }
 
         return $vatRateIdentity->getObjectIdentifier();
@@ -238,7 +302,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         );
 
         if (null === $manufacturerIdentity) {
-            // throw
+            // TODO: throw
         }
 
         return $manufacturerIdentity->getObjectIdentifier();
@@ -251,11 +315,10 @@ class ProductResponseParser implements ProductResponseParserInterface
      */
     public function getShippingProfiles(array $product)
     {
-        $productShippingProfiles = $this->client->request('GET', 'items/' . $product['id'] . '/item_shipping_profiles',
-            [
-                'with' => 'names',
-                'lang' => implode(',', array_column($this->languageHelper->getLanguages(), 'id')),
-            ]);
+        $productShippingProfiles = $this->client->request('GET', 'items/' . $product['id'] . '/item_shipping_profiles', [
+            'with' => 'names',
+            'lang' => implode(',', array_column($this->languageHelper->getLanguages(), 'id')),
+        ]);
 
         $shippingProfiles = [];
         foreach ($productShippingProfiles as $profile) {
@@ -266,13 +329,54 @@ class ProductResponseParser implements ProductResponseParserInterface
             ]);
 
             if (null === $profileIdentity) {
-                // throw
+                // TODO: notice
+
+                continue;
             }
 
             $shippingProfiles[] = $profileIdentity->getObjectIdentifier();
         }
 
         return $shippingProfiles;
+    }
+
+    /**
+     * @param array $product
+     * @param array $texts
+     * @param array $result
+     *
+     * @return array
+     */
+    public function getImageIdentifiers(array $product, array $texts, array &$result)
+    {
+        $url = 'items/' . $product['id'] . '/images';
+        $images = $this->client->request('GET', $url);
+
+        $imageIdentifiers = array_map(function ($image) use ($texts, &$result) {
+            /**
+             * @var MediaResponseParserInterface $mediaResponseParser
+             */
+            $mediaResponseParser = Shopware()->Container()->get('plentmarkets_adapter.response_parser.media');
+
+            if (!empty($image['names'][0]['name'])) {
+                $name = $image['names'][0]['name'];
+            } else {
+                $name = $texts[0]['name1'];
+            }
+
+            $media = $mediaResponseParser->parse([
+                'mediaCategory' => MediaCategoryHelper::PRODUCT,
+                'link' => $image['url'],
+                'name' => $name,
+                'translations' => $this->getMediaTranslations($image, $texts),
+            ]);
+
+            $result[] = $media;
+
+            return $media->getIdentifier();
+        }, $images);
+
+        return array_filter($imageIdentifiers);
     }
 
     /**
@@ -292,7 +396,7 @@ class ProductResponseParser implements ProductResponseParserInterface
                 });
 
                 if (empty($store)) {
-                    // throw
+                    // TODO: notice
                 }
 
                 $store = array_shift($store);
@@ -304,7 +408,9 @@ class ProductResponseParser implements ProductResponseParserInterface
                 ]);
 
                 if (null === $categoryIdentity) {
-                    // throw
+                    // TODO: notice
+
+                    continue;
                 }
 
                 $defaultCategories[] = $categoryIdentity->getObjectIdentifier();
@@ -381,14 +487,13 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * @param $product
      * @param $variation
      *
      * @return int
      */
-    public function getStock($product, $variation)
+    public function getStock($variation)
     {
-        $url = 'items/' . $product['id'] . '/variations/' . $variation['id'] . '/stock';
+        $url = 'items/' . $variation['itemId'] . '/variations/' . $variation['id'] . '/stock';
         $stocks = $this->client->request('GET', $url);
 
         $summedStocks = 0;
@@ -418,7 +523,7 @@ class ProductResponseParser implements ProductResponseParserInterface
                 });
 
                 if (empty($store)) {
-                    // notice
+                    // TODO: notice
 
                     continue;
                 }
@@ -432,7 +537,7 @@ class ProductResponseParser implements ProductResponseParserInterface
                 ]);
 
                 if (null === $categoryIdentity) {
-                    // notice
+                    // TODO: notice
 
                     continue;
                 }
@@ -559,6 +664,234 @@ class ProductResponseParser implements ProductResponseParserInterface
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
                 'property' => 'alternateName',
                 'value' => $alternate,
+            ]);
+        }
+
+        return $translations;
+    }
+
+    /**
+     * @param array $texts
+     * @param array $variations
+     * @param array $result
+     *
+     * @return array
+     */
+    public function getVariations(array $texts, $variations, array &$result)
+    {
+        $mappedVariations = [];
+
+        // TOOD: with, height, length attributes
+        //
+        // TODO: availability von beta1
+
+        if (count($variations) > 1) {
+            $variations = array_filter($variations, function (array $variation) {
+                return !$variation['isMain'];
+            });
+        }
+
+        $first = true;
+
+        foreach ($variations as $variation) {
+            $mappedVariations[] = Variation::fromArray([
+                'active' => true,
+                'isMain' => $first,
+                'stock' => $this->getStock($variation),
+                'limitedStock' => (bool) $variation['stockLimitation'],
+                'number' => (string) $variation['number'],
+                'model' => $variation['model'],
+                'imageIdentifiers' => $this->getVariationImages($texts, $variation, $result),
+                'prices' => $this->getPrices($variation),
+                'purchasePrice' => (double) $variation['purchasePrice'],
+                'unitIdentifier' => $this->getUnitIdentifier($variation),
+                'content' => (double) $variation['unit']['content'],
+                'maximumOrderQuantity' => (int) $variation['maximumOrderQuantity'],
+                'minimumOrderQuantity' => (int) $variation['minimumOrderQuantity'],
+                'intervalOrderQuantity' => (int) $variation['intervalOrderQuantity'],
+                'width' => (int) $variation['widthMM'],
+                'height' => (int) $variation['heightMM'],
+                'length' => (int) $variation['lengthMM'],
+                'attributes' => [],
+                'properties' => $this->getVariationProperties($variation),
+            ]);
+
+            $first = true;
+        }
+
+        return $mappedVariations;
+    }
+
+    /**
+     * @param $product
+     *
+     * @return LinkedProduct[]
+     */
+    public function getLinkedProducts(array $product)
+    {
+        $linkedProducts = $images = $this->client->request('GET', 'items/' . $product['id'] . '/item_cross_selling');
+
+        $result = [];
+        foreach ($linkedProducts as $linkedProduct) {
+            if ($linkedProduct['relationship'] === 'Similar') {
+                $type = LinkedProduct::TYPE_SIMILAR;
+            } elseif ($linkedProduct['relationship'] === 'Accessory') {
+                $type = LinkedProduct::TYPE_ACCESSORY;
+            } elseif ($linkedProduct['relationship'] === 'ReplacementPart') {
+                $type = LinkedProduct::TYPE_REPLACEMENT;
+            } else {
+                continue;
+            }
+
+            $productIdentity = $this->identityService->findOneBy([
+                'adapterIdentifier' => $linkedProduct['crossItemId'],
+                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType' => Product::TYPE,
+            ]);
+
+            if (null === $productIdentity) {
+                // TODO: throw event to trigger import of missing product
+
+                continue;
+            }
+
+            $result[] = LinkedProduct::fromArray([
+                'type' => $type,
+                'productIdentifier' => $productIdentity->getObjectIdentifier(),
+            ]);
+        }
+
+        return $result;
+    }
+
+    /**
+     * TODO
+     *
+     * @param array $product
+     *
+     * @return array
+     */
+    public function getDocuments(array $product)
+    {
+        return [];
+    }
+
+    /**
+     * TODO
+     *
+     * @param $product
+     *
+     * @return Property[]
+     */
+    public function getProperties(array $product)
+    {
+
+        /* TODO:
+            post: rest/items/properties/{id}/selections
+            get: rest/items/properties/{id}/selections (Gibt alle Werte für die Property ID aus)
+            get: rest/items/properties/{id}/selections/{lang} (Gibt einen Wert für die Property ID in der entspr. Sprache aus)
+            put: rest/items/properties/{id}/selections/{lang}
+            delete: rest/items/properties/{id}/selections/{lang}
+        */
+
+        return [];
+    }
+
+    /**
+     * @param $variation
+     *
+     * @return Property[]
+     */
+    public function getVariationProperties(array $variation)
+    {
+        static $attributes;
+
+        $result = [];
+        foreach ($variation['variationAttributeValues'] as $attributeValue) {
+            if (!isset($attributes[$attributeValue['attributeId']])) {
+                $attributes[$attributeValue['attributeId']] = $this->client->request('GET', 'items/attributes/' . $attributeValue['attributeId']);
+                $attributes[$attributeValue['attributeId']]['names'] = $this->client->request('GET', 'items/attributes/' . $attributeValue['attributeId'] . '/names');
+                $attributes[$attributeValue['attributeId']]['values'] = [];
+
+                $values = $this->client->request('GET', 'items/attributes/' . $attributeValue['attributeId'] . '/values');
+                foreach ($values as $value) {
+                    $attributes[$attributeValue['attributeId']]['values'][$value['id']] = $value;
+                    $attributes[$attributeValue['attributeId']]['values'][$value['id']]['names'] = $this->client->request('GET', 'items/attribute_values/' . $value['id'] . '/names');
+                }
+            }
+
+            $valueNames = $attributes[$attributeValue['attributeId']]['names'];
+            $propertyNames = $attributes[$attributeValue['attributeId']]['values'][$attributeValue['valueId']]['names'];
+
+            $value = Value::fromArray([
+                'value' => $valueNames[0]['name'],
+                'translations' => $this->getPropertyValueTranslations($valueNames),
+            ]);
+
+            $result[] = Property::fromArray([
+                'name' => $propertyNames[0]['name'],
+                'values' => [$value],
+                'translations' => $this->getPropertyTranslations($propertyNames),
+            ]);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param array $names
+     *
+     * @return Translation[]
+     */
+    private function getPropertyValueTranslations(array $names)
+    {
+        $translations = [];
+
+        foreach ($names as $name) {
+            $languageIdentifier = $this->identityService->findOneBy([
+                'adapterIdentifier' => $name['lang'],
+                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType' => Language::TYPE,
+            ]);
+
+            if (null === $languageIdentifier) {
+                continue;
+            }
+
+            $translations[] = Translation::fromArray([
+                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                'property' => 'value',
+                'value' => $name['name'],
+            ]);
+        }
+
+        return $translations;
+    }
+
+    /**
+     * @param array $names
+     *
+     * @return Translation[]
+     */
+    private function getPropertyTranslations(array $names)
+    {
+        $translations = [];
+
+        foreach ($names as $name) {
+            $languageIdentifier = $this->identityService->findOneBy([
+                'adapterIdentifier' => $name['lang'],
+                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType' => Language::TYPE,
+            ]);
+
+            if (null === $languageIdentifier) {
+                continue;
+            }
+
+            $translations[] = Translation::fromArray([
+                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                'property' => 'name',
+                'value' => $name['name'],
             ]);
         }
 

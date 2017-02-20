@@ -175,7 +175,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
      * @param array $details
      * @param $result
      *
-     * @return array
+     * @return Translation[]
      */
     private function getTranslations(array $details, &$result)
     {
