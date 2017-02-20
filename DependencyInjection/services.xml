@@ -298,12 +298,6 @@
             <tag name="console.command" />
         </service>
 
-        <service id="plenty_connector.console.command.test_command" class="PlentyConnector\Console\Command\TestCommand">
-            <argument type="service" id="plentmarkets_adapter.client" />
-
-            <tag name="console.command" />
-        </service>
-
         <!-- Identity Service -->
 
         <service id="plenty_connector.identity_storage" class="PlentyConnector\Connector\IdentityService\Storage\DoctrineIdentityStorage">

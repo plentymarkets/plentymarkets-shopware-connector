@@ -2,7 +2,7 @@
 
 namespace PlentyConnector\Console\Command;
 
-use PlentyConnector\Logger\ConsoleHandler;
+use PlentyConnector\Connector\Logger\ConsoleHandler;
 use PlentymarketsAdapter\Client\Client;
 use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -47,18 +47,20 @@ class TestCommand extends ShopwareCommand
      *
      * @throws Exception
      *
-     * @return int|null|void
+     * @return null|int|void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         /**
          * @var Logger
          */
-        $logger = $this->container->get('plentyconnector.logger');
+        $logger = $this->container->get('plenty_connector.logger');
         $logger->pushHandler(new ConsoleHandler($output));
 
-        $mapping = $this->container->get('plentyconnector.mapping_service');
-        $mapping->getMappingInformation();
+        $mapping = $this->container->get('plenty_connector.mapping_service');
+        $mappings = $mapping->getMappingInformation();
+
+        $output->writeln('mapping:' .  count($mappings));
 
         try {
             //$this->connector->handle(Manufacturer::getType(), 'All');
