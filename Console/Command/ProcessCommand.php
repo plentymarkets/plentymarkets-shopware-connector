@@ -56,7 +56,14 @@ class ProcessCommand extends ShopwareCommand
         $this->addArgument(
             'objectType',
             InputArgument::OPTIONAL,
-            'Object type to process. Leave empty for every object type'
+            'Object type to process. Leave empty for every object type',
+            null
+        );
+        $this->addArgument(
+            'objectIdentifier',
+            InputArgument::OPTIONAL,
+            'Object Identifier to process. Leave empty for every object type',
+            null
         );
         $this->addOption(
             'all',
@@ -72,21 +79,27 @@ class ProcessCommand extends ShopwareCommand
      *
      * @throws Exception
      *
-     * @return null|int|void
+     * @return int|void|null
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $all = (bool) $input->getOption('all');
         $objectType = $input->getArgument('objectType');
+        $objectIdentifier = $input->getArgument('objectIdentifier');
 
         $this->logger->pushHandler(new ConsoleHandler($output));
 
         try {
-            $queryType = $all ? QueryType::ALL : QueryType::CHANGED;
+            if ($objectIdentifier) {
+                $queryType = QueryType::ONE;
+            } else {
+                $queryType = $all ? QueryType::ALL : QueryType::CHANGED;
+            }
 
-            $this->connector->handle($queryType, $objectType);
+            $this->connector->handle($queryType, $objectType, $objectIdentifier);
         } catch (Exception $exception) {
             $this->logger->error($exception->getMessage());
+            $this->logger->error($exception->getTraceAsString());
         }
     }
 }
