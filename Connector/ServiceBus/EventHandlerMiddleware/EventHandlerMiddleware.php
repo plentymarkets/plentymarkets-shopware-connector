@@ -36,11 +36,11 @@ class EventHandlerMiddleware implements Middleware
             return $next($event);
         }
 
-        $handlers = array_filter($this->handlers, function (EventHandlerInterface $handler) use ($event) {
-            if (!($event instanceof EventInterface)) {
-                return false;
-            }
+        if (!($event instanceof EventInterface)) {
+            return $next($event);
+        }
 
+        $handlers = array_filter($this->handlers, function (EventHandlerInterface $handler) use ($event) {
             return $handler->supports($event);
         });
 

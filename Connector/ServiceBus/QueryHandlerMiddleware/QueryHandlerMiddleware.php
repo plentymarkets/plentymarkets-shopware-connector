@@ -39,20 +39,16 @@ class QueryHandlerMiddleware implements Middleware
             return $next($query);
         }
 
-        $handlers = array_filter($this->handlers, function (QueryHandlerInterface $handler) use ($query) {
-            if (!($query instanceof QueryInterface)) {
-                return false;
-            }
+        if (!($query instanceof QueryInterface)) {
+            return $next($query);
+        }
 
+        $handlers = array_filter($this->handlers, function (QueryHandlerInterface $handler) use ($query) {
             return $handler->supports($query);
         });
 
         if (0 === count($handlers)) {
-            if ($query instanceof QueryInterface) {
-                throw NotFoundException::fromQuery($query);
-            }
-
-            return $next($query);
+            throw NotFoundException::fromQuery($query);
         }
 
         $handler = array_shift($handlers);

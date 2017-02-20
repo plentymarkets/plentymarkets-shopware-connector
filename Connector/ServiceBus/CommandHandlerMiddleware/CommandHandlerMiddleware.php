@@ -39,20 +39,16 @@ class CommandHandlerMiddleware implements Middleware
             return $next($command);
         }
 
-        $handlers = array_filter($this->handlers, function (CommandHandlerInterface $handler) use ($command) {
-            if (!($command instanceof CommandInterface)) {
-                return false;
-            }
+        if (!($command instanceof CommandInterface)) {
+            return $next($command);
+        }
 
+        $handlers = array_filter($this->handlers, function (CommandHandlerInterface $handler) use ($command) {
             return $handler->supports($command);
         });
 
         if (0 === count($handlers)) {
-            if ($command instanceof CommandInterface) {
-                throw NotFoundException::fromCommand($command);
-            }
-
-            return $next($command);
+            throw NotFoundException::fromCommand($command);
         }
 
         array_map(function (CommandHandlerInterface $handler) use ($command) {
