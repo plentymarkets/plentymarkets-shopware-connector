@@ -15,6 +15,7 @@ use PlentyConnector\Connector\TransferObject\Media\Media;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentyConnector\Connector\Translation\TranslationHelperInterface;
 use Psr\Log\LoggerInterface;
+use Shopware\Components\Api\Exception\NotFoundException as ResourceNotFoundException;
 use Shopware\Components\Api\Resource\Category as CategoryResource;
 use Shopware\Models\Category\Category as CategoryModel;
 use Shopware\Models\Category\Repository as CategoryRepository;
@@ -184,6 +185,16 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             }
 
             $parans['media']['mediaId'] = $mediaIdentity->getAdapterIdentifier();
+        }
+
+        if (null !== $categoryIdentity) {
+            try {
+                $this->resource->getOne($categoryIdentity->getAdapterIdentifier());
+            } catch (ResourceNotFoundException $exception) {
+                $this->identityService->remove($categoryIdentity);
+
+                $categoryIdentity = null;
+            }
         }
 
         if (null === $categoryIdentity) {
