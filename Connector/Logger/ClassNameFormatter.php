@@ -7,6 +7,7 @@ use League\Tactician\Logger\Formatter\Formatter;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\Event\EventInterface;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
+use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 
@@ -89,7 +90,7 @@ class ClassNameFormatter implements Formatter
      *
      * @return string
      */
-    protected function getType($command)
+    private function getType($command)
     {
         if ($command instanceof CommandInterface) {
             return 'Command';
@@ -111,7 +112,7 @@ class ClassNameFormatter implements Formatter
      *
      * @return string
      */
-    protected function getClassName($command)
+    private function getClassName($command)
     {
         return substr(strrchr(get_class($command), '\\'), 1);
     }
@@ -121,7 +122,7 @@ class ClassNameFormatter implements Formatter
      *
      * @return array
      */
-    protected function getPayload($command)
+    private function getPayload($command)
     {
         if (!($command instanceof CommandInterface)
             && !($command instanceof QueryInterface)
@@ -130,7 +131,24 @@ class ClassNameFormatter implements Formatter
             return [];
         }
 
-        return $command->getPayload();
+        $payload = $command->getPayload();
+
+        return $this->preparePayload($payload);
+    }
+
+    /**
+     * @param array $payload
+     *
+     * @return array
+     */
+    private function preparePayload(array $payload) {
+        return array_map(function($payload) {
+            if (!($payload instanceof TransferObjectInterface)) {
+                return $payload;
+            }
+
+            return $payload->getIdentifier();
+        }, $payload);
     }
 
     /**
