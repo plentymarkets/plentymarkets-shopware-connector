@@ -115,7 +115,6 @@ class FetchAllProductsQueryHandler implements QueryHandlerInterface
                 'description' => $product['texts'][0]['shortDescription'],
                 'longDescription' => $product['texts'][0]['description'],
                 'technicalDescription' => $product['texts'][0]['technicalData'],
-                'releaseDate' => null,
                 'metaTitle' => $product['texts'][0]['name1'],
                 'metaDescription' => $product['texts'][0]['metaDescription'],
                 'metaKeywords' => $product['texts'][0]['keywords'],

@@ -2,6 +2,8 @@
 
 namespace PlentymarketsAdapter\ResponseParser\Product;
 
+use DateTimeImmutable;
+use DateTimeZone;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Category\Category;
 use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
@@ -98,7 +100,11 @@ class ProductResponseParser implements ProductResponseParserInterface
      */
     private function getPrices(array $variation)
     {
-        $customerGroups = array_keys($this->client->request('GET', 'accounts/contacts/classes'));
+        static $customerGroups;
+
+        if (null === $customerGroups) {
+            $customerGroups = array_keys($this->client->request('GET', 'accounts/contacts/classes'));
+        }
 
         $priceConfigurations = $this->getPriceConfigurations();
 
@@ -298,6 +304,22 @@ class ProductResponseParser implements ProductResponseParserInterface
         }
 
         return $vatRateIdentity->getObjectIdentifier();
+    }
+
+    /**
+     * @param array $variation
+     *
+     * @return null|DateTimeImmutable
+     */
+    private function getReleaseDate(array $variation)
+    {
+        if (null !== $variation['releasedAt']) {
+            $timezone = new DateTimeZone('UTC');
+
+            return new DateTimeImmutable($variation['releasedAt'], $timezone);
+        }
+
+        return null;
     }
 
     /**
@@ -591,31 +613,35 @@ class ProductResponseParser implements ProductResponseParserInterface
      */
     private function getPriceConfigurations()
     {
-        $priceConfigurations = $this->client->request('GET', 'items/sales_prices');
+        static $priceConfigurations;
 
-        $shopIdentities = $this->identityService->findby([
-            'adapterName' => PlentymarketsAdapter::NAME,
-            'objectType' => Shop::TYPE,
-        ]);
+        if (null === $priceConfigurations) {
+            $priceConfigurations = $this->client->request('GET', 'items/sales_prices');
 
-        if (empty($shopIdentities)) {
-            return [];
-        }
+            $shopIdentities = $this->identityService->findby([
+                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType' => Shop::TYPE,
+            ]);
 
-        $priceConfigurations = array_filter($priceConfigurations, function ($priceConfiguration) use ($shopIdentities) {
-            foreach ($shopIdentities as $identity) {
-                foreach ($priceConfiguration['clients'] as $client) {
-                    if ($identity->getAdapterIdentifier() === (string) $client['plentyId']) {
-                        return true;
-                    }
-                }
+            if (empty($shopIdentities)) {
+                return [];
             }
 
-            return false;
-        });
+            $priceConfigurations = array_filter($priceConfigurations, function ($priceConfiguration) use ($shopIdentities) {
+                foreach ($shopIdentities as $identity) {
+                    foreach ($priceConfiguration['clients'] as $client) {
+                        if ($identity->getAdapterIdentifier() === (string) $client['plentyId']) {
+                            return true;
+                        }
+                    }
+                }
 
-        if (empty($priceConfigurations)) {
-            $this->logger->notice('no valid price configuration found');
+                return false;
+            });
+
+            if (empty($priceConfigurations)) {
+                $this->logger->notice('no valid price configuration found');
+            }
         }
 
         return $priceConfigurations;
@@ -693,8 +719,6 @@ class ProductResponseParser implements ProductResponseParserInterface
     {
         $mappedVariations = [];
 
-        // TODO: availability von arvatis-beta
-
         if (count($variations) > 1) {
             $variations = array_filter($variations, function (array $variation) {
                 return !$variation['isMain'];
@@ -719,6 +743,8 @@ class ProductResponseParser implements ProductResponseParserInterface
                 'maximumOrderQuantity' => (int) $variation['maximumOrderQuantity'],
                 'minimumOrderQuantity' => (int) $variation['minimumOrderQuantity'],
                 'intervalOrderQuantity' => (int) $variation['intervalOrderQuantity'],
+                'releaseDate' => $this->getReleaseDate($variation),
+                'shippingTime' => $this->getShippingTime($variation),
                 'width' => (int) $variation['widthMM'],
                 'height' => (int) $variation['heightMM'],
                 'length' => (int) $variation['lengthMM'],
@@ -806,6 +832,38 @@ class ProductResponseParser implements ProductResponseParserInterface
         */
 
         return [];
+    }
+
+    /**
+     * @param array $variation
+     *
+     * @return integer
+     */
+    private function getShippingTime(array $variation)
+    {
+        static $shippingConfigurations;
+
+        if (null === $shippingConfigurations) {
+            try {
+                $shippingConfigurations = $this->client->request('GET', 'availabilities');
+            } catch (\Exception $exception) {
+                // not implemented on all systems yet
+
+                $shippingConfigurations = [];
+            }
+        }
+
+        $shippingConfiguration = array_filter($shippingConfigurations, function(array $configuration) use ($variation) {
+            return $configuration['id'] ===  $variation['availability'];
+        });
+
+        if (!empty($shippingConfiguration)) {
+            $shippingConfiguration = array_shift($shippingConfiguration);
+
+            return $shippingConfiguration['averageDays'];
+        }
+
+        return 0;
     }
 
     /**

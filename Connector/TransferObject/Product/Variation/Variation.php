@@ -86,6 +86,16 @@ class Variation extends AbstractValueObject
     /**
      * @var int
      */
+    private $shippingTime = 0;
+
+    /**
+     * @var null|DateTimeImmutable
+     */
+    private $releaseDate;
+
+    /**
+     * @var int
+     */
     private $width = 0;
 
     /**
@@ -363,6 +373,40 @@ class Variation extends AbstractValueObject
         Assertion::integer($intervalOrderQuantity);
 
         $this->intervalOrderQuantity = $intervalOrderQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getShippingTime()
+    {
+        return $this->shippingTime;
+    }
+
+    /**
+     * @param int $shippingTime
+     */
+    public function setShippingTime($shippingTime)
+    {
+        Assertion::integer($shippingTime);
+
+        $this->shippingTime = $shippingTime;
+    }
+
+    /**
+     * @return null|DateTimeImmutable
+     */
+    public function getReleaseDate()
+    {
+        return $this->releaseDate;
+    }
+
+    /**
+     * @param null|DateTimeImmutable $releaseDate
+     */
+    public function setReleaseDate($releaseDate)
+    {
+        $this->releaseDate = $releaseDate;
     }
 
     /**

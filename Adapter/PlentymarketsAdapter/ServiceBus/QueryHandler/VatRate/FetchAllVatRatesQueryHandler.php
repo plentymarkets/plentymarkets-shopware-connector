@@ -52,8 +52,8 @@ class FetchAllVatRatesQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $vatRates = [];
-        $vatRatesByCountry = $this->client->request('GET', 'vat');
+        $defaultVatRates = [];
+        $vatRatesByCountry = $this->client->request('GET', 'vat/standard');
 
         foreach ($vatRatesByCountry as $countryVat) {
             foreach ($countryVat['vatRates'] as $rate) {
@@ -63,7 +63,7 @@ class FetchAllVatRatesQueryHandler implements QueryHandlerInterface
 
         $vatRates = array_map(function ($vatRate) {
             return $this->responseParser->parse($vatRate);
-        }, $vatRates);
+        }, $defaultVatRates);
 
         return array_filter($vatRates);
     }

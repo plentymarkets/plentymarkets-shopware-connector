@@ -97,11 +97,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     private $technicalDescription = '';
 
     /**
-     * @var null|DateTimeImmutable
-     */
-    private $releaseData;
-
-    /**
      * @var string
      */
     private $metaTitle = '';
