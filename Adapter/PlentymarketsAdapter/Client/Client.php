@@ -10,6 +10,7 @@ use PlentyConnector\Adapter\PlentymarketsAdapter\Client\Exception\InvalidRespons
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentymarketsAdapter\Client\Exception\InvalidCredentialsException;
 use PlentymarketsAdapter\Client\Iterator\Iterator;
+use Psr\Log\LoggerInterface;
 
 /**
  * RepsonseModifier example.
@@ -39,6 +40,11 @@ class Client implements ClientInterface
     private $refreshToken;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @var string
      */
     private $environment;
@@ -49,14 +55,17 @@ class Client implements ClientInterface
      * @param GuzzleClient $connection
      * @param ConfigServiceInterface $config
      * @param $environment
+     * @param LoggerInterface $logger
      */
     public function __construct(
         GuzzleClient $connection,
         ConfigServiceInterface $config,
+        LoggerInterface $logger,
         $environment
     ) {
         $this->connection = $connection;
         $this->config = $config;
+        $this->logger = $logger;
         $this->environment = $environment;
     }
 
@@ -116,6 +125,8 @@ class Client implements ClientInterface
         try {
             $response = $this->connection->send($request);
 
+            $this->logger->debug('HTTP request: status: ' . $response->getStatusCode() . ' method: ' . $request->getMethod() . ' path: ' . $request->getPath());
+
             $body = $response->getBody();
 
             if (null === $body) {
@@ -159,10 +170,6 @@ class Client implements ClientInterface
      */
     private function isLoginRequired($path)
     {
-        if ($this->environment === 'testing') {
-            return false;
-        }
-
         if ($path === 'login') {
             return false;
         }
