@@ -129,7 +129,7 @@ class Connector implements ConnectorInterface
         }
 
         $definitions = array_filter($this->definitions, function (Definition $definition) use ($type) {
-            return $definition->getObjectType() === $type || null === $type;
+            return $definition->getObjectType() === ucfirst($type) || null === $type;
         });
 
         return $definitions;
@@ -156,7 +156,16 @@ class Connector implements ConnectorInterface
             $objects = [];
         }
 
-        array_walk($objects, function (TransferObjectInterface $object) use ($definition) {
+        $sortedObjects = [];
+        foreach ($objects as $object) {
+            if (isset($sortedObjects[$object->getIdentifier()])) {
+                continue;
+            }
+
+            $sortedObjects[$object->getIdentifier()] = $object;
+        }
+
+        array_walk($sortedObjects, function (TransferObjectInterface $object) use ($definition) {
             $this->serviceBus->handle($this->commandFactory->create(
                 $definition->getDestinationAdapterName(),
                 $object->getType(),
