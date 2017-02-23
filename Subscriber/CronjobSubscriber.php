@@ -12,9 +12,9 @@ use PlentyConnector\PlentyConnector;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class CronjobSubscriper
+ * Class CronjobSubscriber
  */
-class CronjobSubscriper implements SubscriberInterface
+class CronjobSubscriber implements SubscriberInterface
 {
     /**
      * @var ConnectorInterface
@@ -32,7 +32,7 @@ class CronjobSubscriper implements SubscriberInterface
     private $logger;
 
     /**
-     * CronjobSubscriper constructor.
+     * CronjobSubscriber constructor.
      *
      * @param ConnectorInterface $connector
      * @param CleanupServiceInterface $cleanupService

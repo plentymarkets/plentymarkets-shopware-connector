@@ -74,7 +74,7 @@
             <tag name="shopware.event_subscriber" />
         </service>
 
-        <service id="plenty_connector.subscriber.cronjob" class="PlentyConnector\Subscriber\CronjobSubscriper">
+        <service id="plenty_connector.subscriber.cronjob" class="PlentyConnector\Subscriber\CronjobSubscriber">
             <argument type="service" id="plenty_connector.connector" />
             <argument type="service" id="plenty_connector.cleanup_service" />
             <argument type="service" id="plenty_connector.logger" />
@@ -283,7 +283,7 @@
 
         <!-- Console -->
 
-        <service id="plenty_connector.console.command.process_command" class="PlentyConnector\Console\Command\ProcessCommand">
+        <service id="plenty_connector.console.command.process" class="PlentyConnector\Console\Command\ProcessCommand">
             <argument type="service" id="plenty_connector.connector" />
             <argument type="service" id="plenty_connector.logger" />
 
