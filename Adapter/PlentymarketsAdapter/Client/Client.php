@@ -158,6 +158,7 @@ class Client implements ClientInterface
 
                 return $this->request($method, $path, $params, $limit, $offset);
             }
+
             // generic exception
             throw $exception;
         }
