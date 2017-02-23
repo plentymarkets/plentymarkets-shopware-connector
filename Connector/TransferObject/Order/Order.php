@@ -3,8 +3,14 @@
 namespace PlentyConnector\Connector\TransferObject\Order;
 
 use Assert\Assertion;
+use DateTimeImmutable;
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
-use PlentyConnector\Connector\TransferObject\OrderItem\OrderItem;
+use PlentyConnector\Connector\TransferObject\Order\Address\Address;
+use PlentyConnector\Connector\TransferObject\Order\Comment\Comment;
+use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
+use PlentyConnector\Connector\TransferObject\Order\OrderItem\OrderItem;
+use PlentyConnector\Connector\TransferObject\Order\Payment\Payment;
+use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
 /**
  * Class Order.
@@ -12,6 +18,9 @@ use PlentyConnector\Connector\TransferObject\OrderItem\OrderItem;
 class Order extends AbstractTransferObject
 {
     const TYPE = 'Order';
+
+    const TYPE_ORDER = 1;
+    const TYPE_OFFER = 2;
 
     /**
      * Identifier of the object.
@@ -21,9 +30,34 @@ class Order extends AbstractTransferObject
     private $identifier = '';
 
     /**
+     * @var int
+     */
+    private $orderType;
+
+    /**
      * @var string
      */
     private $orderNumber = '';
+
+    /**
+     * @var DateTimeImmutable;
+     */
+    private $orderTime;
+
+    /**
+     * @var Customer
+     */
+    private $customer;
+
+    /**
+     * @var Address
+     */
+    private $billingAddress;
+
+    /**
+     * @var Address
+     */
+    private $shippingAddress;
 
     /**
      * @var OrderItem[]
@@ -31,29 +65,44 @@ class Order extends AbstractTransferObject
     private $orderItems = [];
 
     /**
-     * @var string
+     * @var Payment[]
      */
-    private $orderStatusId = '';
+    private $payments = [];
 
     /**
      * @var string
      */
-    private $paymentStatusId = '';
+    private $shopIdentifier = '';
 
     /**
      * @var string
      */
-    private $paymentMethodId = '';
+    private $orderStatusIdentifier = '';
 
     /**
      * @var string
      */
-    private $shippingProfileId = '';
+    private $paymentStatusIdentifier = '';
 
     /**
      * @var string
      */
-    private $shopId = '';
+    private $paymentMethodIdentifier = '';
+
+    /**
+     * @var string
+     */
+    private $shippingProfileIdentifier = '';
+
+    /**
+     * @var Comment[]
+     */
+    private $comments = [];
+
+    /**
+     * @var Attribute[]
+     */
+    private $attributes = [];
 
     /**
      * {@inheritdoc}
@@ -84,6 +133,22 @@ class Order extends AbstractTransferObject
     }
 
     /**
+     * @return int
+     */
+    public function getOrderType()
+    {
+        return $this->orderType;
+    }
+
+    /**
+     * @param int $orderType
+     */
+    public function setOrderType($orderType)
+    {
+        $this->orderType = $orderType;
+    }
+
+    /**
      * @return string
      */
     public function getOrderNumber()
@@ -96,9 +161,71 @@ class Order extends AbstractTransferObject
      */
     public function setOrderNumber($orderNumber)
     {
-        Assertion::string($orderNumber);
-
         $this->orderNumber = $orderNumber;
+    }
+
+    /**
+     * @return DateTimeImmutable
+     */
+    public function getOrderTime()
+    {
+        return $this->orderTime;
+    }
+
+    /**
+     * @param DateTimeImmutable $orderTime
+     */
+    public function setOrderTime($orderTime)
+    {
+        $this->orderTime = $orderTime;
+    }
+
+    /**
+     * @return Customer
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
+    }
+
+    /**
+     * @param Customer $customer
+     */
+    public function setCustomer($customer)
+    {
+        $this->customer = $customer;
+    }
+
+    /**
+     * @return Address
+     */
+    public function getBillingAddress()
+    {
+        return $this->billingAddress;
+    }
+
+    /**
+     * @param Address $billingAddress
+     */
+    public function setBillingAddress($billingAddress)
+    {
+        $this->billingAddress = $billingAddress;
+    }
+
+    /**
+     * @return Address
+     */
+    public function getShippingAddress()
+    {
+        return $this->shippingAddress;
+    }
+
+    /**
+     * @param Address $shippingAddress
+     */
+    public function setShippingAddress($shippingAddress)
+    {
+        $this->shippingAddress = $shippingAddress;
     }
 
     /**
@@ -114,98 +241,136 @@ class Order extends AbstractTransferObject
      */
     public function setOrderItems($orderItems)
     {
-        Assertion::allIsInstanceOf($orderItems, OrderItem::class);
-
         $this->orderItems = $orderItems;
     }
 
     /**
-     * @return string
+     * @return Payment[]
      */
-    public function getOrderStatusId()
+    public function getPayment()
     {
-        return $this->orderStatusId;
+        return $this->payments;
     }
 
     /**
-     * @param string $orderStatusId
+     * @param Payment[] $payment
      */
-    public function setOrderStatusId($orderStatusId)
+    public function setPayments($payments)
     {
-        Assertion::string($orderStatusId);
-
-        $this->orderStatusId = $orderStatusId;
+        $this->payments = $payments;
     }
 
     /**
      * @return string
      */
-    public function getPaymentStatusId()
+    public function getShopIdentifier()
     {
-        return $this->paymentStatusId;
+        return $this->shopIdentifier;
     }
 
     /**
-     * @param string $paymentStatusId
+     * @param string $shopIdentifier
      */
-    public function setPaymentStatusId($paymentStatusId)
+    public function setShopIdentifier($shopIdentifier)
     {
-        Assertion::string($paymentStatusId);
-
-        $this->paymentStatusId = $paymentStatusId;
+        $this->shopIdentifier = $shopIdentifier;
     }
 
     /**
      * @return string
      */
-    public function getPaymentMethodId()
+    public function getOrderStatusIdentifier()
     {
-        return $this->paymentMethodId;
+        return $this->orderStatusIdentifier;
     }
 
     /**
-     * @param string $paymentMethodId
+     * @param string $orderStatusIdentifier
      */
-    public function setPaymentMethodId($paymentMethodId)
+    public function setOrderStatusIdentifier($orderStatusIdentifier)
     {
-        Assertion::string($paymentMethodId);
-
-        $this->paymentMethodId = $paymentMethodId;
+        $this->orderStatusIdentifier = $orderStatusIdentifier;
     }
 
     /**
      * @return string
      */
-    public function getShippingProfileId()
+    public function getPaymentStatusIdentifier()
     {
-        return $this->shippingProfileId;
+        return $this->paymentStatusIdentifier;
     }
 
     /**
-     * @param string $shippingProfileId
+     * @param string $paymentStatusIdentifier
      */
-    public function setShippingProfileId($shippingProfileId)
+    public function setPaymentStatusIdentifier($paymentStatusIdentifier)
     {
-        Assertion::string($shippingProfileId);
-
-        $this->shippingProfileId = $shippingProfileId;
+        $this->paymentStatusIdentifier = $paymentStatusIdentifier;
     }
 
     /**
      * @return string
      */
-    public function getShopId()
+    public function getPaymentMethodIdentifier()
     {
-        return $this->shopId;
+        return $this->paymentMethodIdentifier;
     }
 
     /**
-     * @param string $shopId
+     * @param string $paymentMethodIdentifier
      */
-    public function setShopId($shopId)
+    public function setPaymentMethodIdentifier($paymentMethodIdentifier)
     {
-        Assertion::string($shopId);
-
-        $this->shopId = $shopId;
+        $this->paymentMethodIdentifier = $paymentMethodIdentifier;
     }
+
+    /**
+     * @return string
+     */
+    public function getShippingProfileIdentifier()
+    {
+        return $this->shippingProfileIdentifier;
+    }
+
+    /**
+     * @param string $shippingProfileIdentifier
+     */
+    public function setShippingProfileIdentifier($shippingProfileIdentifier)
+    {
+        $this->shippingProfileIdentifier = $shippingProfileIdentifier;
+    }
+
+    /**
+     * @return Comment[]
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    /**
+     * @param Comment[] $comments
+     */
+    public function setComments($comments)
+    {
+        $this->comments = $comments;
+    }
+
+    /**
+     * @return Attribute[]
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
+
+    /**
+     * @param Attribute[] $attributes
+     */
+    public function setAttributes($attributes)
+    {
+        $this->attributes = $attributes;
+    }
+
+
 }
