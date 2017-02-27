@@ -253,7 +253,7 @@ class Order extends AbstractTransferObject
     }
 
     /**
-     * @param Payment[] $payment
+     * @param Payment[] $payments
      */
     public function setPayments($payments)
     {

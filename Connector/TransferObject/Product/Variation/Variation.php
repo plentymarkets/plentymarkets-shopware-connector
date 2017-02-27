@@ -36,7 +36,7 @@ class Variation extends AbstractValueObject
     /**
      * @var string
      */
-    private $ean;
+    private $ean = '';
 
     /**
      * @var string

@@ -4,6 +4,7 @@ namespace PlentyConnector\Connector\TransferObject\Manufacturer;
 
 use Assert\Assertion;
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
+use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
 /**
  * Class TransferObjects.
@@ -31,6 +32,11 @@ class Manufacturer extends AbstractTransferObject
      * @var string
      */
     private $link = '';
+
+    /**
+     * @var Attribute[]
+     */
+    private $attributes = [];
 
     /**
      * {@inheritdoc}
@@ -113,5 +119,23 @@ class Manufacturer extends AbstractTransferObject
         Assertion::nullOrUrl($link);
 
         $this->link = $link;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
+
+    /**
+     * @param mixed $attributes
+     */
+    public function setAttributes($attributes)
+    {
+        Assertion::allIsInstanceOf($attributes, Attribute::class);
+
+        $this->attributes = $attributes;
     }
 }

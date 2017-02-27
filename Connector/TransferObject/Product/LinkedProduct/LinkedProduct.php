@@ -20,6 +20,11 @@ class LinkedProduct extends AbstractValueObject
     private $type = '';
 
     /**
+     * @var int
+     */
+    private $position = 0;
+
+    /**
      * @var string
      */
     private $productIdentifier = '';
@@ -40,6 +45,22 @@ class LinkedProduct extends AbstractValueObject
         Assertion::string($type);
 
         $this->type = $type;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * @param int $position
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
     }
 
     /**
