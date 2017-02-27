@@ -300,7 +300,7 @@ class HandleOrderCommandHandlerTest extends TestCase
 
     public function test_export_order()
     {
-        if (getenv('TRAVIS') === true) {
+        if (getenv('TRAVIS') === 'true') {
             $this->markTestSkipped('This test should not run if on Travis.');
         }
 
