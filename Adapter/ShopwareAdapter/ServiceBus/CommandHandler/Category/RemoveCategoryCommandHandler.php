@@ -8,6 +8,7 @@ use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\RemoveCommandInterface;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\TransferObject\Category\Category;
+use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Psr\Log\LoggerInterface;
 use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Resource\Category as CategoryResource;
@@ -87,7 +88,13 @@ class RemoveCategoryCommandHandler implements CommandHandlerInterface
             $this->logger->notice('identity removed but the object was not found', ['command' => $command]);
         }
 
-        $this->identityService->remove($identity);
+        $identities = $this->identityService->findBy([
+            'objectIdentifier' => $identifier,
+        ]);
+
+        array_walk($identities, function(Identity $identity) {
+            $this->identityService->remove($identity);
+        });
 
         return true;
     }
