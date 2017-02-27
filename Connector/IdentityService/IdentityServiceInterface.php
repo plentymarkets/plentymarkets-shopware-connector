@@ -22,7 +22,7 @@ interface IdentityServiceInterface
      *
      * @return null|Identity[]
      */
-    public function findby(array $criteria = []);
+    public function findBy(array $criteria = []);
 
     /**
      * @param string $objectIdentifier

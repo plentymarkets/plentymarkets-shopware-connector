@@ -125,7 +125,7 @@ class IdentityService implements IdentityServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function findby(array $criteria = [])
+    public function findBy(array $criteria = [])
     {
         Assertion::isArray($criteria);
 

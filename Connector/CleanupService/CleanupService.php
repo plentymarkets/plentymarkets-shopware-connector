@@ -176,7 +176,7 @@ class CleanupService implements CleanupServiceInterface
      */
     private function removeAllElements(Definition $definition)
     {
-        $allIdentities = $this->identityService->findby([
+        $allIdentities = $this->identityService->findBy([
             'adapterName' => $definition->getDestinationAdapterName(),
             'objectType' => $definition->getObjectType(),
         ]);
@@ -208,7 +208,7 @@ class CleanupService implements CleanupServiceInterface
 
             $identifiers = array_column($group, 'adapterIdentifier');
 
-            $allIdentities = $this->identityService->findby([
+            $allIdentities = $this->identityService->findBy([
                 'adapterName' => $adapterName,
                 'objectType' => $objectType,
             ]);

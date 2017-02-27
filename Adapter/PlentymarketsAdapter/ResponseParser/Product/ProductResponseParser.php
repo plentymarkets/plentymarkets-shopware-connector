@@ -104,7 +104,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         if (null === $priceConfigurations) {
             $priceConfigurations = $this->client->request('GET', 'items/sales_prices');
 
-            $shopIdentities = $this->identityService->findby([
+            $shopIdentities = $this->identityService->findBy([
                 'adapterName' => PlentymarketsAdapter::NAME,
                 'objectType' => Shop::TYPE,
             ]);

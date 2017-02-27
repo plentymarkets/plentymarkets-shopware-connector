@@ -312,7 +312,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         $identityService = Shopware()->Container()->get('plenty_connector.identity_service');
 
         foreach ($updates as $key => $update) {
-            $existingDestinationIdentities = $identityService->findby([
+            $existingDestinationIdentities = $identityService->findBy([
                 'objectType' => $update['objectType'],
                 'objectIdentifier' => $update['originIdentifier'],
                 'adapterName' => $update['adapterName'],
