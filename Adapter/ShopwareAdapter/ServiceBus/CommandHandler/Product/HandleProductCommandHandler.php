@@ -362,7 +362,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             '__options_images' => ['replace' => true],
             '__options_similar' => ['replace' => true],
             '__options_prices' => ['replace' => true],
-            '__options_variants' => ['replace' => true],
         ];
 
         if (null !== $manufacturerIdentity) {
