@@ -290,6 +290,13 @@
             <tag name="console.command" />
         </service>
 
+        <service id="plenty_connector.console.command.cleanup" class="PlentyConnector\Console\Command\CleanupCommand">
+            <argument type="service" id="plenty_connector.cleanup_service" />
+            <argument type="service" id="plenty_connector.logger" />
+
+            <tag name="console.command" />
+        </service>
+
         <!-- Identity Service -->
 
         <service id="plenty_connector.identity_storage" class="PlentyConnector\Connector\IdentityService\Storage\DoctrineIdentityStorage">
