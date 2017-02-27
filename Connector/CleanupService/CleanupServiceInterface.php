@@ -15,7 +15,7 @@ interface CleanupServiceInterface
     public function addDefinition(Definition $definition);
 
     /**
-     * @param null|string $objectType
+     *
      */
-    public function cleanup($objectType = null);
+    public function cleanup();
 }

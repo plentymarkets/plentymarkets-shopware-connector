@@ -91,13 +91,11 @@ class CleanupService implements CleanupServiceInterface
     }
 
     /**
-     * @param null|string $objectType
+     *
      */
-    public function cleanup($objectType = null)
+    public function cleanup()
     {
-        Assertion::nullOrString($objectType);
-
-        $definitions = $this->getDefinitions($objectType);
+        $definitions = $this->getDefinitions();
 
         array_walk($definitions, function (Definition $definition) {
             try {
@@ -215,10 +213,9 @@ class CleanupService implements CleanupServiceInterface
                 'objectType' => $objectType,
             ]);
 
-            $orphanedIdentities = array_filter($allIdentities,
-                function (Identity $identity) use ($identifiers) {
-                    return !in_array($identity->getObjectIdentifier(), $identifiers, true);
-                });
+            $orphanedIdentities = array_filter($allIdentities, function (Identity $identity) use ($identifiers) {
+                return !in_array($identity->getObjectIdentifier(), $identifiers, true);
+            });
 
             array_walk($orphanedIdentities, function (Identity $identity) use ($adapterName, $objectType) {
                 $this->serviceBus->handle($this->commandFactory->create(
