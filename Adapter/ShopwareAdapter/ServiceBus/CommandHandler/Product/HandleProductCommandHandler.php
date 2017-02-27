@@ -359,7 +359,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             'metaTitle' => $product->getMetaTitle(),
             'keywords' => $product->getMetaKeywords(),
             '__options_categories' => ['replace' => true],
-            '__options_images' => ['replace' => true],
             '__options_similar' => ['replace' => true],
             '__options_prices' => ['replace' => true],
         ];
