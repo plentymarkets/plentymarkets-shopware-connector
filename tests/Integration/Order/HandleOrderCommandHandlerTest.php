@@ -53,13 +53,11 @@ class HandleOrderCommandHandlerTest extends TestCase
         $config->set('rest_password', '48TRtL73H2');
     }
 
-
     /**
      * @return string
      */
     private function getLanguageIdentifier()
     {
-
         $languageIdentity = $this->identityService->findOneBy([
             'adapterIdentifier' => 'de',
             'adapterName' => PlentymarketsAdapter::NAME,
@@ -302,6 +300,10 @@ class HandleOrderCommandHandlerTest extends TestCase
 
     public function test_export_order()
     {
+        if (getenv('TRAVIS') === true) {
+            $this->markTestSkipped('This test should not run if on Travis.');
+        }
+
         /**
          * @var HandleOrderCommandHandler $handler
          */
