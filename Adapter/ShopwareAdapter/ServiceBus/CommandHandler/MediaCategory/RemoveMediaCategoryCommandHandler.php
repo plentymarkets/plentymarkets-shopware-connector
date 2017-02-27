@@ -89,7 +89,7 @@ class RemoveMediaCategoryCommandHandler implements CommandHandlerInterface
             $this->entityManager->remove($album);
             $this->entityManager->flush();
         } else {
-            $this->logger->notice('identity removed but the object was not found');
+            $this->logger->notice('identity removed but the object was not found', ['command' => $command]);
         }
 
         $this->identityService->remove($identity);

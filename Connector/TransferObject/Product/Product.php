@@ -42,6 +42,11 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     private $active = false;
 
     /**
+     * @var array
+     */
+    private $shopIdentifiers = [];
+
+    /**
      * @var string
      */
     private $manufacturerIdentifier = '';
@@ -221,6 +226,24 @@ class Product extends AbstractTransferObject implements TranslateableInterface
         Assertion::boolean($active);
 
         $this->active = $active;
+    }
+
+    /**
+     * @return array
+     */
+    public function getShopIdentifiers()
+    {
+        return $this->shopIdentifiers;
+    }
+
+    /**
+     * @param array $shopIdentifiers
+     */
+    public function setShopIdentifiers($shopIdentifiers)
+    {
+        Assertion::allUuid($shopIdentifiers);
+
+        $this->shopIdentifiers = $shopIdentifiers;
     }
 
     /**
@@ -419,22 +442,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface
         Assertion::string($technicalDescription);
 
         $this->technicalDescription = $technicalDescription;
-    }
-
-    /**
-     * @return DateTimeImmutable
-     */
-    public function getReleaseData()
-    {
-        return $this->releaseData;
-    }
-
-    /**
-     * @param null|DateTimeImmutable $releaseData
-     */
-    public function setReleaseData(DateTimeImmutable $releaseData = null)
-    {
-        $this->releaseData = $releaseData;
     }
 
     /**

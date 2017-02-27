@@ -84,7 +84,7 @@ class RemoveCategoryCommandHandler implements CommandHandlerInterface
         try {
             $this->resource->delete($identity->getAdapterIdentifier());
         } catch (NotFoundException $exception) {
-            $this->logger->notice('identity removed but the object was not found');
+            $this->logger->notice('identity removed but the object was not found', ['command' => $command]);
         }
 
         $this->identityService->remove($identity);
