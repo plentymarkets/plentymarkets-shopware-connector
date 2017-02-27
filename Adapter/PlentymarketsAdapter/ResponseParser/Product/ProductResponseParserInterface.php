@@ -4,6 +4,8 @@ namespace PlentymarketsAdapter\ResponseParser\Product;
 
 use phpDocumentor\Reflection\DocBlock\Tags\Property;
 use PlentyConnector\Connector\TransferObject\Product\LinkedProduct\LinkedProduct;
+use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
+use PlentyConnector\Connector\ValueObject\Translation\Translation;
 
 /**
  * Interface ProductResponseParserInterface.
@@ -58,7 +60,7 @@ interface ProductResponseParserInterface
     /**
      * @param array $texts
      *
-     * @return array
+     * @return Translation[]
      */
     public function getProductTranslations(array $texts);
 
@@ -89,7 +91,7 @@ interface ProductResponseParserInterface
      * @param array $variations
      * @param array $result
      *
-     * @return array
+     * @return Variation[]
      */
     public function getVariations(array $texts, $variations, array &$result);
 
@@ -113,4 +115,11 @@ interface ProductResponseParserInterface
      * @return Property[]
      */
     public function getProperties(array $product);
+
+    /**
+     * @param array $mainVariation
+     *
+     * @return array
+     */
+    public function getShopIdentifiers(array $mainVariation);
 }

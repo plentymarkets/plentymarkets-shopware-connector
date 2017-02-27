@@ -16,6 +16,7 @@ use PlentyConnector\Connector\TransferObject\Product\LinkedProduct\LinkedProduct
 use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
 use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
+use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentyConnector\Connector\TransferObject\Unit\Unit;
 use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
 use PlentyConnector\Connector\Translation\TranslationHelperInterface;
@@ -29,7 +30,7 @@ use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Article;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Customer\Group;
-use Shopware\Models\Shop\Shop;
+use Shopware\Models\Shop\Shop as ShopModel;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -81,6 +82,29 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             'objectType' => Product::TYPE,
             'adapterName' => ShopwareAdapter::NAME,
         ]);
+
+        $shopIdentifiers = array_filter($product->getShopIdentifiers(), function($identifier) use ($identityService) {
+            $shopIdentity = $identityService->findOneBy([
+                'objectIdentifier' => $identifier,
+                'objectType' => Shop::TYPE,
+                'adapterName' => ShopwareAdapter::NAME,
+            ]);
+
+            if (null !== $shopIdentity) {
+                return true;
+            }
+        });
+
+        // validate shop mapping
+        if (empty($shopIdentifiers)) {
+            /**
+             * @var LoggerInterface $logger
+             */
+            $logger = Shopware()->Container()->get('plenty_connector.logger');
+            $logger->notice('no valid shop found', ['command' => $command]);
+
+            return false;
+        }
 
         $vatIdentity = $identityService->findOneBy([
             'adapterName' => ShopwareAdapter::NAME,
@@ -160,7 +184,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         }
 
         $categoryRepository = $entityManager->getRepository(\Shopware\Models\Category\Category::class);
-        $shopRepository = $entityManager->getRepository(Shop::class);
+        $shopRepository = $entityManager->getRepository(ShopModel::class);
 
         $seoCategories = [];
         foreach ($product->getDefaultCategoryIdentifiers() as $categoryIdentifier) {
@@ -361,6 +385,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             '__options_categories' => ['replace' => true],
             '__options_similar' => ['replace' => true],
             '__options_prices' => ['replace' => true],
+            '__options_images' => ['replace' => true],
         ];
 
         if (null !== $manufacturerIdentity) {

@@ -104,6 +104,7 @@ class FetchAllProductsQueryHandler implements QueryHandlerInterface
                 'name' => $product['texts'][0]['name1'],
                 'number' => $mainVariation['number'],
                 'active' => $product['isActive'],
+                'shopIdentifiers' => $this->responseParser->getShopIdentifiers($mainVariation),
                 'manufacturerIdentifier' => $this->responseParser->getManufacturerIdentifier($product),
                 'categoryIdentifiers' => $this->responseParser->getCategories($mainVariation, $webstores),
                 'defaultCategoryIdentifiers' => $this->responseParser->getDafaultCategories($mainVariation, $webstores),

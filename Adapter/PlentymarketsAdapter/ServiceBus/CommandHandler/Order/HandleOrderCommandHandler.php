@@ -74,70 +74,69 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             'adapterName' => PlentymarketsAdapter::NAME,
         ]);
 
-        $shopIdentity = $this->identityService->findOneBy([
-            'objectIdentifier' => $order->getShopIdentifier(),
-            'objectType' => Shop::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
-        ]);
-
-        $shippingProfileIdentity = $this->identityService->findOneBy([
-            'objectIdentifier' => $order->getShippingProfileIdentifier(),
-            'objectType' => ShippingProfile::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
-        ]);
-
-        $params = [];
-
-
-        /*
-            Contact Options:
-            int 	typeId 	The type ID of the contact option. It is possible to define individual contact option types. The following types are available by default and cannot be deleted:
-
-            1 = Telephone
-            2 = Email
-            3 = Telefax
-            4 = Web page
-            5 = Marketplace
-            6 = Identification number
-            7 = Payment
-            8 = User name
-            9 = Group
-            10 = Access
-            11 = Additional
-
-            int 	subTypeId 	The sub-type ID of the contact option. It is possible to define individual contact option sub-types. The following types are available by default and cannot be deleted:
-
-            1 = Work
-            2 = Mobile private
-            3 = Mobile work
-            4 = Private
-            5 = PayPal
-            6 = Ebay
-            7 = Amazon
-            8 = Klarna
-            9 = DHL
-            10 = Forum
-            11 = Guest
-            12 = Contact person
-            13 = Marketplace partner
-         */
-
-        // create new order
-        if ($order->getOrderType() === Order::TYPE_ORDER) {
-            $params['typeId'] = 1;
-        } else {
-            // TODO: throw notice
-        }
-
-        $params['plentyId'] = $shopIdentity->getAdapterIdentifier();
-
         if ($identity === null) {
+            $shopIdentity = $this->identityService->findOneBy([
+                'objectIdentifier' => $order->getShopIdentifier(),
+                'objectType' => Shop::TYPE,
+                'adapterName' => PlentymarketsAdapter::NAME,
+            ]);
+
+            $shippingProfileIdentity = $this->identityService->findOneBy([
+                'objectIdentifier' => $order->getShippingProfileIdentifier(),
+                'objectType' => ShippingProfile::TYPE,
+                'adapterName' => PlentymarketsAdapter::NAME,
+            ]);
+
+            $params = [];
+
+
+            /*
+                Contact Options:
+                int 	typeId 	The type ID of the contact option. It is possible to define individual contact option types. The following types are available by default and cannot be deleted:
+
+                1 = Telephone
+                2 = Email
+                3 = Telefax
+                4 = Web page
+                5 = Marketplace
+                6 = Identification number
+                7 = Payment
+                8 = User name
+                9 = Group
+                10 = Access
+                11 = Additional
+
+                int 	subTypeId 	The sub-type ID of the contact option. It is possible to define individual contact option sub-types. The following types are available by default and cannot be deleted:
+
+                1 = Work
+                2 = Mobile private
+                3 = Mobile work
+                4 = Private
+                5 = PayPal
+                6 = Ebay
+                7 = Amazon
+                8 = Klarna
+                9 = DHL
+                10 = Forum
+                11 = Guest
+                12 = Contact person
+                13 = Marketplace partner
+             */
+
+            // create new order
+            if ($order->getOrderType() === Order::TYPE_ORDER) {
+                $params['typeId'] = 1;
+            } else {
+                // TODO: throw notice
+            }
+
+            $params['plentyId'] = $shopIdentity->getAdapterIdentifier();
+
             $languageIdentity = $this->identityService->findOneBy([
                 'objectIdentifier' => $order->getCustomer()->getLanguageIdentifier(),
                 'objectType' => Language::TYPE,
                 'adapterName' => PlentymarketsAdapter::NAME,
             ]);
-
 
             $customer = $order->getCustomer();
             $plentyCustomer = false;
@@ -210,7 +209,6 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                 ]
             ];
 
-
             $params['addressRelations'] = [];
 
             $billingAddress = $this->createAddress($order->getBillingAddress());
@@ -238,7 +236,6 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             // TODO: properties https://developers.plentymarkets.com/rest-doc/order_order_property/details
 
             // TODO: COUPON_CODE = 18 & COUPON_TYPE = 19 type=fixed
-
 
             $params['properties'] = [
                 [

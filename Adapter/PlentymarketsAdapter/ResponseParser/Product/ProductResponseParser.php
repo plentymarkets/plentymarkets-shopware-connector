@@ -92,8 +92,48 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * TODO: finalize prices
+     * Returns the matching price configurations. We need a direct mapping in these configurations to find the
+     * correct price.
      *
+     * @return array
+     */
+    private function getPriceConfigurations()
+    {
+        static $priceConfigurations;
+
+        if (null === $priceConfigurations) {
+            $priceConfigurations = $this->client->request('GET', 'items/sales_prices');
+
+            $shopIdentities = $this->identityService->findby([
+                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType' => Shop::TYPE,
+            ]);
+
+            if (empty($shopIdentities)) {
+                return $priceConfigurations;
+            }
+
+            $priceConfigurations = array_filter($priceConfigurations, function ($priceConfiguration) use ($shopIdentities) {
+                foreach ($shopIdentities as $identity) {
+                    foreach ($priceConfiguration['clients'] as $client) {
+                        if ($client['plentyId'] === -1 || $identity->getAdapterIdentifier() === (string) $client['plentyId']) {
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
+            });
+
+            if (empty($priceConfigurations)) {
+                $this->logger->notice('no valid price configuration found');
+            }
+        }
+
+        return $priceConfigurations;
+    }
+
+    /**
      * @param array $variation
      *
      * @return array
@@ -135,19 +175,23 @@ class ProductResponseParser implements ProductResponseParserInterface
                     if (null === $customerGroupIdentity) {
                         // TODO: throw
 
-                        break;
+                        continue;
                     }
 
-                    $temporaryPrices[$customerGroupIdentity->getObjectIdentifier()][$priceConfiguration['type']] = [
-                        'from' => $priceConfiguration['minimumOrderQuantity'],
-                        'price' => $price['price'],
-                    ];
+                    if (!isset($temporaryPrices[$customerGroupIdentity->getObjectIdentifier()][$priceConfiguration['type']])) {
+                        $temporaryPrices[$customerGroupIdentity->getObjectIdentifier()][$priceConfiguration['type']] = [
+                            'from' => $priceConfiguration['minimumOrderQuantity'],
+                            'price' => $price['price'],
+                        ];
+                    }
                 }
             } else {
-                $temporaryPrices['default'][$priceConfiguration['type']] = [
-                    'from' => $priceConfiguration['minimumOrderQuantity'],
-                    'price' => $price['price']
-                ];
+                if (!isset($temporaryPrices['default'][$priceConfiguration['type']])) {
+                    $temporaryPrices['default'][$priceConfiguration['type']] = [
+                        'from' => $priceConfiguration['minimumOrderQuantity'],
+                        'price' => $price['price']
+                    ];
+                }
             }
         }
 
@@ -213,15 +257,6 @@ class ProductResponseParser implements ProductResponseParserInterface
                 }
             }
         }
-
-        // TODO: remove when prices are fixed
-        $prices[] = Price::fromArray([
-            'price' => 20.0,
-            'pseudoPrice' => 40.0,
-            'customerGroupIdentifier' => null,
-            'from' => 1,
-            'to' => null,
-        ]);
 
         return $prices;
     }
@@ -457,7 +492,7 @@ class ProductResponseParser implements ProductResponseParserInterface
     /**
      * @param array $texts
      *
-     * @return array
+     * @return Translation[]
      */
     public function getProductTranslations(array $texts)
     {
@@ -606,48 +641,6 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * Returns the matching price configurations. We need a direct mapping in these configurations to find the
-     * correct price.
-     *
-     * @return array
-     */
-    private function getPriceConfigurations()
-    {
-        static $priceConfigurations;
-
-        if (null === $priceConfigurations) {
-            $priceConfigurations = $this->client->request('GET', 'items/sales_prices');
-
-            $shopIdentities = $this->identityService->findby([
-                'adapterName' => PlentymarketsAdapter::NAME,
-                'objectType' => Shop::TYPE,
-            ]);
-
-            if (empty($shopIdentities)) {
-                return [];
-            }
-
-            $priceConfigurations = array_filter($priceConfigurations, function ($priceConfiguration) use ($shopIdentities) {
-                foreach ($shopIdentities as $identity) {
-                    foreach ($priceConfiguration['clients'] as $client) {
-                        if ($identity->getAdapterIdentifier() === (string) $client['plentyId']) {
-                            return true;
-                        }
-                    }
-                }
-
-                return false;
-            });
-
-            if (empty($priceConfigurations)) {
-                $this->logger->notice('no valid price configuration found');
-            }
-        }
-
-        return $priceConfigurations;
-    }
-
-    /**
      * @param array $image
      * @param array $productTexts
      *
@@ -713,7 +706,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      * @param array $variations
      * @param array $result
      *
-     * @return array
+     * @return Variation[]
      */
     public function getVariations(array $texts, $variations, array &$result)
     {
@@ -965,5 +958,33 @@ class ProductResponseParser implements ProductResponseParserInterface
         }
 
         return $translations;
+    }
+
+    /**
+     * @param array $mainVariation
+     *
+     * @return array
+     */
+    public function getShopIdentifiers(array $mainVariation)
+    {
+        $identifiers = [];
+
+        foreach ($mainVariation['variationClients'] as $client) {
+            $identity = $this->identityService->findOneBy([
+                'adapterIdentifier' => $client['plentyId'],
+                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType' => Shop::TYPE,
+            ]);
+
+            if (null === $identity) {
+                $this->logger->notice('shop not found', $client);
+
+                continue;
+            }
+
+            $identifiers[] = $identity->getObjectIdentifier();
+        }
+
+        return $identifiers;
     }
 }
