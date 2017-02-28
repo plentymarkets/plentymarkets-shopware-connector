@@ -8,6 +8,8 @@ use PlentyConnector\Connector\ServiceBus\Command\HandleCommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\Order\HandleOrderCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\TransferObject\Country\Country;
+use PlentyConnector\Connector\TransferObject\Currency\Currency;
+use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
 use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentyConnector\Connector\TransferObject\Order\Address\Address;
 use PlentyConnector\Connector\TransferObject\Order\Comment\Comment;
@@ -19,6 +21,7 @@ use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
+use Psr\Log\LoggerInterface;
 use VIISON\AddressSplitter\AddressSplitter;
 
 /**
@@ -37,15 +40,25 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     private $identityService;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * HandleOrderCommandHandler constructor.
      *
      * @param ClientInterface $client
      * @param IdentityServiceInterface $identityService
+     * @param LoggerInterface $logger
      */
-    public function __construct(ClientInterface $client, IdentityServiceInterface $identityService)
-    {
+    public function __construct(
+        ClientInterface $client,
+        IdentityServiceInterface $identityService,
+        LoggerInterface $logger
+    ) {
         $this->client = $client;
         $this->identityService = $identityService;
+        $this->logger = $logger;
     }
 
     /**
@@ -81,125 +94,43 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                 'adapterName' => PlentymarketsAdapter::NAME,
             ]);
 
-            $shippingProfileIdentity = $this->identityService->findOneBy([
-                'objectIdentifier' => $order->getShippingProfileIdentifier(),
-                'objectType' => ShippingProfile::TYPE,
-                'adapterName' => PlentymarketsAdapter::NAME,
-            ]);
-
-            $params = [];
-
-
-            /*
-                Contact Options:
-                int 	typeId 	The type ID of the contact option. It is possible to define individual contact option types. The following types are available by default and cannot be deleted:
-
-                1 = Telephone
-                2 = Email
-                3 = Telefax
-                4 = Web page
-                5 = Marketplace
-                6 = Identification number
-                7 = Payment
-                8 = User name
-                9 = Group
-                10 = Access
-                11 = Additional
-
-                int 	subTypeId 	The sub-type ID of the contact option. It is possible to define individual contact option sub-types. The following types are available by default and cannot be deleted:
-
-                1 = Work
-                2 = Mobile private
-                3 = Mobile work
-                4 = Private
-                5 = PayPal
-                6 = Ebay
-                7 = Amazon
-                8 = Klarna
-                9 = DHL
-                10 = Forum
-                11 = Guest
-                12 = Contact person
-                13 = Marketplace partner
-             */
-
-            // create new order
-            if ($order->getOrderType() === Order::TYPE_ORDER) {
-                $params['typeId'] = 1;
-            } else {
-                // TODO: throw notice
-            }
-
-            $params['plentyId'] = $shopIdentity->getAdapterIdentifier();
-
             $languageIdentity = $this->identityService->findOneBy([
                 'objectIdentifier' => $order->getCustomer()->getLanguageIdentifier(),
                 'objectType' => Language::TYPE,
                 'adapterName' => PlentymarketsAdapter::NAME,
             ]);
 
-            $customer = $order->getCustomer();
-            $plentyCustomer = false;
+            $shippingProfileIdentity = $this->identityService->findOneBy([
+                'objectIdentifier' => $order->getShippingProfileIdentifier(),
+                'objectType' => ShippingProfile::TYPE,
+                'adapterName' => PlentymarketsAdapter::NAME,
+            ]);
 
-            if ($customer->getType() === Customer::TYPE_NORMAL) {
-                $customerResult = $this->client->request('GET', 'accounts/contacts', ['contactEmail' => $customer->getEmail()]);
+            $currencyIdentity = $this->identityService->findOneBy([
+                'objectIdentifier' => $order->getCurrencyIdentifier(),
+                'objectType' => Currency::TYPE,
+                'adapterName' => PlentymarketsAdapter::NAME
+            ]);
 
-                if (!empty($customerResult)) {
-                    $possibleCustomers = array_filter($customerResult, function ($entry) {
-                        return !isset($entry['singleAccess']) || $entry['singleAccess'] === false;
-                    });
+            if ('EUR' !== $currencyIdentity->getAdapterIdentifier()) {
+                $this->logger->warning('only the currency EUR is currently supported', ['command', $command]);
 
-                    $plentyCustomer = array_shift($possibleCustomers);
-                }
+                return false;
             }
 
-            static $webstores;
+            $params = [];
 
-            if (null === $webstores) {
-                $webstores = $this->client->request('GET', 'webstores');
+            if ($order->getOrderType() === Order::TYPE_ORDER) {
+                $params['typeId'] = 1;
+            } else {
+                $this->logger->notice('only orders are supported');
+
+                return false;
             }
 
-            $accountWebStore = array_filter($webstores, function ($store) use ($shopIdentity) {
-                return $store['storeIdentifier'] === $shopIdentity->getAdapterIdentifier();
-            });
+            $params['plentyId'] = $shopIdentity->getAdapterIdentifier();
 
-            if (!$plentyCustomer) {
-                $customerParams = [
-                    'number' => $customer->getNumber(), // freidefiniert
-                    'typeId' => 1, // hartcoded für kunde
-                    'firstName' => $customer->getFirstname(),
-                    'lastName' => $customer->getLastname(),
-                    'gender' => $customer->getSalutation() === Customer::SALUTATION_MR ? 'male' : 'female',
-                    //'classId' => 1,  //mapping
-                    'lang' => $languageIdentity->getAdapterIdentifier(),
-                    'referrerId' => 1,
-                    'singleAccess' => $customer->getType() === Customer::TYPE_GUEST,
-                    'plentyId' => $accountWebStore['id'],
-                    'userId' => 1,
-                    'options' => [
-                        /*[
-                            'typeId' => 1,
-                            'subTypeId' => 4,
-                            'value' => $customer->getPhoneNumber(),
-                            'priority' => 0
-                        ],
-                        [
-                            'typeId' => 1,
-                            'subTypeId' => 2,
-                            'value' => $customer->getMobilePhoneNumber(),
-                            'priority' => 0
-                        ],*/
-                        [
-                            'typeId' => 2,
-                            'subTypeId' => 4,
-                            'value' => $customer->getEmail(),
-                            'priority' => 0
-                        ]
-                    ]
-                ];
-
-                $plentyCustomer = $this->client->request('POST', 'accounts/contacts', $customerParams);
-            }
+            $plentyCustomer = $this->createCustomer($order);
 
             $params['relations'] = [
                 [
@@ -211,7 +142,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
 
             $params['addressRelations'] = [];
 
-            $billingAddress = $this->createAddress($order->getBillingAddress());
+            $billingAddress = $this->createAddress($order->getBillingAddress(), $order->getCustomer(), $plentyCustomer);
             if (!empty($billingAddress)) {
                 $params['addressRelations'][] = [
                     'typeId' => 1,
@@ -219,7 +150,8 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                 ];
             }
 
-            $shippingAddress = $this->createAddress($order->getShippingAddress());
+            $shippingAddress = $this->createAddress($order->getShippingAddress(), $order->getCustomer(),
+                $plentyCustomer);
             if (!empty($shippingAddress)) {
                 $params['addressRelations'][] = [
                     'typeId' => 2,
@@ -259,7 +191,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                 ]
             ];
 
-            $params['orderItems'] = array_map(function (OrderItem $item) use ($shippingProfileIdentity) {
+            $params['orderItems'] = array_map(function (OrderItem $item) use ($shippingProfileIdentity, $currencyIdentity) {
                 $itemParams = [];
 
                 if ($item->getType() === OrderItem::TYPE_PRODUCT) {
@@ -293,14 +225,17 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                     $itemParams['typeId'] = 9;
                 }
 
+                //$this->getVatConfiguration($order, $item);
+
                 // /rest/vat/locations/{locationId}/countries/{countryId}
                 $itemParams['countryVatId'] = 1; // TODO: remove hardcoded
                 $itemParams['vatField'] = 0; // TODO: remove hardcoded
 
                 // Wenn currency != EUR, nur Währung EUR angeben (faktor beachten)
+
                 $itemParams['amounts'] = [
                     [
-                        'currency' => 'EUR', // TODO: remove hardcoded
+                        'currency' => $currencyIdentity->getAdapterIdentifier(),
                         'priceOriginalGross' => $item->getPrice(),
                     ]
                 ];
@@ -313,13 +248,13 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                     ]
                 ];
 
-
                 // Custom Products // aus merkmale
                 $itemParams['orderProperties'] = [];
 
-
                 return $itemParams;
             }, $order->getOrderItems());
+
+            $params['referrerId'] = 1; // TOOD: testen
 
             $result = $this->client->request('post', 'orders', $params);
 
@@ -335,8 +270,19 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                     $commentParams['userId'] = 1; // TODO: userId des rest benutzers auslesen?
                 }
 
-                $commentResult = $this->client->request('post', 'comments', $commentParams);
+                $this->client->request('post', 'comments', $commentParams);
             }
+
+            foreach ($order->getPayments() as $payment) {
+
+            }
+
+            $this->identityService->create(
+                $order->getIdentifier(),
+                Order::TYPE,
+                (string) $result['id'],
+                PlentymarketsAdapter::NAME
+            );
         }
 
         // TODO update existing order
@@ -345,6 +291,11 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         return true;
     }
 
+    /**
+     * @param $number
+     *
+     * @return int
+     */
     private function getVariationIdFromNumber($number)
     {
         $variations = $this->client->request('GET', 'items/variations', ['numberExact' => $number]);
@@ -355,15 +306,119 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             return $variation['id'];
         }
 
-        return false;
+        return 0;
+    }
+
+    private function createCustomer(Order $order)
+    {
+        $languageIdentity = $this->identityService->findOneBy([
+            'objectIdentifier' => $order->getCustomer()->getLanguageIdentifier(),
+            'objectType' => Language::TYPE,
+            'adapterName' => PlentymarketsAdapter::NAME,
+        ]);
+
+        $shopIdentity = $this->identityService->findOneBy([
+            'objectIdentifier' => $order->getShopIdentifier(),
+            'objectType' => Shop::TYPE,
+            'adapterName' => PlentymarketsAdapter::NAME,
+        ]);
+
+        $customer = $order->getCustomer();
+        $plentyCustomer = false;
+
+        if ($customer->getType() === Customer::TYPE_NORMAL) {
+            $customerResult = $this->client->request('GET', 'accounts/contacts',
+                ['contactEmail' => $customer->getEmail()]);
+
+            if (!empty($customerResult)) {
+                $possibleCustomers = array_filter($customerResult, function ($entry) {
+                    return !isset($entry['singleAccess']) || $entry['singleAccess'] === false;
+                });
+
+                $plentyCustomer = array_shift($possibleCustomers);
+            }
+        }
+
+        static $webstores;
+
+        if (null === $webstores) {
+            $webstores = $this->client->request('GET', 'webstores');
+        }
+
+        $accountWebStore = array_filter($webstores, function ($store) use ($shopIdentity) {
+            return (string)$store['storeIdentifier'] === $shopIdentity->getAdapterIdentifier();
+        });
+
+        $customerGroupIdentitiy = $this->identityService->findOneBy([
+            'objectIdentifier' => $order->getCustomer()->getCustomerGroupIdentifier(),
+            'objectType' => CustomerGroup::TYPE,
+            'adapterName' => PlentymarketsAdapter::NAME,
+        ]);
+
+        $customerParams = [
+            'number' => $customer->getNumber(),
+            'typeId' => 1, // hartcoded für kunde
+            'firstName' => $customer->getFirstname(),
+            'lastName' => $customer->getLastname(),
+            'gender' => $customer->getSalutation() === Customer::SALUTATION_MR ? 'male' : 'female',
+            'classId' => (int)$customerGroupIdentitiy->getAdapterIdentifier(),
+            'lang' => $languageIdentity->getAdapterIdentifier(),
+            'referrerId' => 1, // TODO: Konfigurierbar über Config. (/rest/orders/referrers)
+            'singleAccess' => $customer->getType() === Customer::TYPE_GUEST,
+            'plentyId' => $accountWebStore['id'],
+            'newsletterAllowanceAt' => '',
+            'birthdayAt' => $customer->getBirthday()->format(DATE_W3C),
+            'lastOrderAt' => $order->getOrderTime()->format(DATE_W3C),
+            'privatePhone' => $customer->getPhoneNumber(),
+            'privateMobile' => $customer->getMobilePhoneNumber(),
+            'userId' => 1, // TODO: Konfigurierbar über Config (rest/accounts)
+            'options' => []
+        ];
+
+        if (!empty($customer->getPhoneNumber())) {
+            $customerParams['options'][] = [
+                'typeId' => 1,
+                'subTypeId' => 4,
+                'value' => $customer->getPhoneNumber(),
+                'priority' => 0
+            ];
+        }
+
+        if (!empty($customer->getMobilePhoneNumber())) {
+            $customerParams['options'][] = [
+                'typeId' => 1,
+                'subTypeId' => 2,
+                'value' => $customer->getMobilePhoneNumber(),
+                'priority' => 0
+            ];
+        }
+
+        if (!empty($customer->getEmail())) {
+            $customerParams['options'][] = [
+                'typeId' => 2,
+                'subTypeId' => 4,
+                'value' => $customer->getEmail(),
+                'priority' => 0
+            ];
+        }
+
+        if (!$plentyCustomer) {
+            $plentyCustomer = $this->client->request('POST', 'accounts/contacts', $customerParams);
+        } else {
+            $tmpResult = $this->client->request('PUT', 'accounts/contacts/' . $plentyCustomer['id'], $customerParams);
+        }
+
+        return $plentyCustomer;
     }
 
     /**
      * @param Address $address
+     * @param Customer $customer
+     * @param array $plentyCustomer
      *
      * @return array
      */
-    private function createAddress(Address $address)
+    private function createAddress(Address $address, Customer $customer, array $plentyCustomer)
     {
         $countryIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $address->getCountryIdentifier(),
@@ -387,6 +442,8 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             $address3 = '';
         }
 
+        // TODO: Addition feld prüfen
+
         $params = [
             'name1' => trim($address->getCompany() . ' ' . $address->getDepartment()),
             'name2' => $address->getFirstname(),
@@ -397,8 +454,27 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             'postalCode' => $address->getZipcode(),
             'town' => $address->getCity(),
             'countryId' => $countryIdentity->getAdapterIdentifier(),
+            'options' => [
+                [
+                    'typeId' => 5,
+                    'value' => $customer->getEmail(),
+                ],
+                [
+                    'typeId' => 4,
+                    'value' => $customer->getPhoneNumber(),
+                ],
+            ]
         ];
 
-        return $this->client->request('POST', 'accounts/addresses', $params);
+        return $this->client->request('POST', 'accounts/contacts/' . $plentyCustomer['id'] . '/addresses', $params);
+    }
+
+    /**
+     * @param Order $order
+     * @param OrderItem $item
+     */
+    private function getVatConfiguration(Order $order, OrderItem $item)
+    {
+
     }
 }

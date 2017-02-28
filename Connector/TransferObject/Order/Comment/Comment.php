@@ -7,13 +7,13 @@ namespace PlentyConnector\Connector\TransferObject\Order\Comment;
  */
 class Comment
 {
-    const TYPE_INTERNAL = 'Internal';
-    const TYPE_CUSTOMER = 'Customer';
+    const TYPE_INTERNAL = 1;
+    const TYPE_CUSTOMER = 2;
 
     /**
      * @var int
      */
-    private $type;
+    private $type = self::TYPE_CUSTOMER;
 
     /**
      * @var string

@@ -32,7 +32,7 @@ class Order extends AbstractTransferObject
     /**
      * @var int
      */
-    private $orderType;
+    private $orderType = self::TYPE_ORDER;
 
     /**
      * @var string
@@ -45,17 +45,17 @@ class Order extends AbstractTransferObject
     private $orderTime;
 
     /**
-     * @var Customer
+     * @var null|Customer
      */
     private $customer;
 
     /**
-     * @var Address
+     * @var null|Address
      */
     private $billingAddress;
 
     /**
-     * @var Address
+     * @var null|Address
      */
     private $shippingAddress;
 
@@ -73,6 +73,11 @@ class Order extends AbstractTransferObject
      * @var string
      */
     private $shopIdentifier = '';
+
+    /**
+     * @var string
+     */
+    private $currencyIdentifier = '';
 
     /**
      * @var string
@@ -103,6 +108,14 @@ class Order extends AbstractTransferObject
      * @var Attribute[]
      */
     private $attributes = [];
+
+    /**
+     * Order constructor.
+     */
+    public function __construct()
+    {
+        $this->orderTime = new DateTimeImmutable();
+    }
 
     /**
      * {@inheritdoc}
@@ -247,7 +260,7 @@ class Order extends AbstractTransferObject
     /**
      * @return Payment[]
      */
-    public function getPayment()
+    public function getPayments()
     {
         return $this->payments;
     }
@@ -274,6 +287,22 @@ class Order extends AbstractTransferObject
     public function setShopIdentifier($shopIdentifier)
     {
         $this->shopIdentifier = $shopIdentifier;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrencyIdentifier()
+    {
+        return $this->currencyIdentifier;
+    }
+
+    /**
+     * @param string $currencyIdentifier
+     */
+    public function setCurrencyIdentifier($currencyIdentifier)
+    {
+        $this->currencyIdentifier = $currencyIdentifier;
     }
 
     /**

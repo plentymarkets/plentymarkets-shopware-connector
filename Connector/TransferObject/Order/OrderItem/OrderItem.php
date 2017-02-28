@@ -19,7 +19,7 @@ class OrderItem extends AbstractValueObject
     /**
      * @var int
      */
-    private $type;
+    private $type = self::TYPE_PRODUCT;
 
     /**
      * @var int
@@ -44,7 +44,7 @@ class OrderItem extends AbstractValueObject
     /**
      * @var string
      */
-    private $vatRateIdentifier;
+    private $vatRateIdentifier = '';
 
     /**
      * @var Attribute[]

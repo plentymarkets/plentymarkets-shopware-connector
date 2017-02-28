@@ -1,8 +1,6 @@
 <?php
 
-
 namespace PlentyConnector\tests\Integration\Order;
-
 
 use PHPUnit\Framework\TestCase;
 use PlentyConnector\Connector\ConfigService\ConfigService;
@@ -10,6 +8,7 @@ use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\Order\HandleOrderCommand;
 use PlentyConnector\Connector\TransferObject\Country\Country;
 use PlentyConnector\Connector\TransferObject\Currency\Currency;
+use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
 use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentyConnector\Connector\TransferObject\Order\Address\Address;
 use PlentyConnector\Connector\TransferObject\Order\Comment\Comment;
@@ -26,6 +25,9 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ServiceBus\CommandHandler\Order\HandleOrderCommandHandler;
 use Ramsey\Uuid\Uuid;
 
+/**
+ * Class HandleOrderCommandHandlerTest
+ */
 class HandleOrderCommandHandlerTest extends TestCase
 {
     /**
@@ -38,6 +40,9 @@ class HandleOrderCommandHandlerTest extends TestCase
      */
     private $identityService;
 
+    /**
+     *
+     */
     public function setUp()
     {
         $this->client = Shopware()->Container()->get('plentmarkets_adapter.client');
@@ -68,21 +73,39 @@ class HandleOrderCommandHandlerTest extends TestCase
     }
 
     /**
+     * @return string
+     */
+    private function getCustomerGroupIdentifier()
+    {
+        $languageIdentity = $this->identityService->findOneBy([
+            'adapterIdentifier' => '1',
+            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType' => CustomerGroup::TYPE,
+        ]);
+
+        return $languageIdentity->getObjectIdentifier();
+    }
+
+    /**
      * @return Customer
      */
     private function getCustomer()
     {
         $customer = new Customer();
         $customer->setType(Customer::TYPE_NORMAL);
-        $customer->setNumber('2000');
-        $customer->setEmail('max@muster.com');
+        $customer->setNumber('2002');
+        $customer->setEmail('maxime@muster.com');
         $customer->setLanguageIdentifier($this->getLanguageIdentifier());
+        $customer->setCustomerGroupIdentifier($this->getCustomerGroupIdentifier());
         $customer->setCompany('Company');
-        $customer->setDepartment('Department');
-        $customer->setSalutation('Salutation');
-        $customer->setTitle('Title');
-        $customer->setFirstname('Firstname');
-        $customer->setLastname('Lastname');
+        $customer->setNewsletter(false);
+        $customer->setDepartment('Department 2');
+        $customer->setSalutation('Salutation 2');
+        $customer->setTitle('Title 2');
+        $customer->setFirstname('Firstname 2');
+        $customer->setLastname('Lastname 2');
+        $customer->setPhoneNumber('07251/61682');
+        $customer->setMobilePhoneNumber('017212 34567');
 
         return $customer;
     }
@@ -101,7 +124,7 @@ class HandleOrderCommandHandlerTest extends TestCase
         }
 
         $countryIdentity = $this->identityService->findOneOrCreate(
-            (string) $country['id'],
+            (string)$country['id'],
             PlentymarketsAdapter::NAME,
             Country::TYPE
         );
@@ -136,7 +159,7 @@ class HandleOrderCommandHandlerTest extends TestCase
         }
 
         $countryIdentity = $this->identityService->findOneOrCreate(
-            (string) $vatRate['id'],
+            (string)$vatRate['id'],
             PlentymarketsAdapter::NAME,
             VatRate::TYPE
         );
@@ -188,7 +211,7 @@ class HandleOrderCommandHandlerTest extends TestCase
         }
 
         $paymentMethodIdentity = $this->identityService->findOneOrCreate(
-            (string) $paymentMethod['id'],
+            (string)$paymentMethod['id'],
             PlentymarketsAdapter::NAME,
             PaymentMethod::TYPE
         );
@@ -230,7 +253,7 @@ class HandleOrderCommandHandlerTest extends TestCase
         }
 
         $shopIdentity = $this->identityService->findOneOrCreate(
-            (string) $shop['storeIdentifier'],
+            (string)$shop['storeIdentifier'],
             PlentymarketsAdapter::NAME,
             Shop::TYPE
         );
@@ -238,6 +261,9 @@ class HandleOrderCommandHandlerTest extends TestCase
         return $shopIdentity->getObjectIdentifier();
     }
 
+    /**
+     * @return array
+     */
     private function getComments()
     {
         $internalComment = new Comment();
@@ -265,9 +291,23 @@ class HandleOrderCommandHandlerTest extends TestCase
         }
 
         $identity = $this->identityService->findOneOrCreate(
-            (string) $shippingProfile['id'],
+            (string)$shippingProfile['id'],
             PlentymarketsAdapter::NAME,
             ShippingProfile::TYPE
+        );
+
+        return $identity->getObjectIdentifier();
+    }
+
+    /**
+     * @return string
+     */
+    private function getCurrencyIdentifier()
+    {
+        $identity = $this->identityService->findOneOrCreate(
+            'EUR',
+            PlentymarketsAdapter::NAME,
+            Currency::TYPE
         );
 
         return $identity->getObjectIdentifier();
@@ -289,6 +329,7 @@ class HandleOrderCommandHandlerTest extends TestCase
         $order->setOrderItems($this->getOrderItems());
         $order->setPayments($this->getPayments());
         $order->setShopIdentifier($this->getShopIdentifier());
+        $order->setCurrencyIdentifier($this->getCurrencyIdentifier());
         $order->setOrderStatusIdentifier(null);
         $order->setPaymentStatusIdentifier(null);
         $order->setPaymentMethodIdentifier($this->getPaymentMethodIdentifier());
@@ -311,6 +352,6 @@ class HandleOrderCommandHandlerTest extends TestCase
 
         $command = new HandleOrderCommand(PlentymarketsAdapter::NAME, $this->createOrderTransferObject());
 
-        $handler->handle($command);
+        $this->assertTrue($handler->handle($command));
     }
 }

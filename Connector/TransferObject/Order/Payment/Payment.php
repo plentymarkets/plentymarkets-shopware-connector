@@ -12,22 +12,22 @@ class Payment
     /**
      * @var double
      */
-    private $amount;
+    private $amount = 0.0;
 
     /**
      * @var string
      */
-    private $currencyIdentifier;
+    private $currencyIdentifier = '';
 
     /**
      * @var string
      */
-    private $paymentMethodIdentifier;
+    private $paymentMethodIdentifier = '';
 
     /**
      * @var string
      */
-    private $transactionReference;
+    private $transactionReference = '';
 
     /**
      * @var Attribute[]
@@ -113,6 +113,4 @@ class Payment
     {
         $this->attributes = $attributes;
     }
-
-
 }

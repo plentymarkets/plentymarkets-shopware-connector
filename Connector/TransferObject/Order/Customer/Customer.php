@@ -2,6 +2,8 @@
 
 namespace PlentyConnector\Connector\TransferObject\Order\Customer;
 
+use Assert\Assertion;
+use DateTimeImmutable;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
 /**
@@ -19,32 +21,42 @@ class Customer
     /**
      * @var int
      */
-    private $type;
+    private $type = self::TYPE_NORMAL;
 
     /**
      * @var string
      */
-    private $number;
+    private $number = '';
 
     /**
      * @var string
      */
-    private $email;
+    private $email = '';
+
+    /**
+     * @var bool
+     */
+    private $newsletter = false;
 
     /**
      * @var string
      */
-    private $languageIdentifier;
+    private $languageIdentifier = '';
 
     /**
-     * @var null|string
+     * @var string
      */
-    private $company;
+    private $customerGroupIdentifier = '';
 
     /**
-     * @var null|string
+     * @var string
      */
-    private $department;
+    private $company = '';
+
+    /**
+     * @var string
+     */
+    private $department = '';
 
     /**
      * @var int
@@ -52,24 +64,47 @@ class Customer
     private $salutation = 0;
 
     /**
-     * @var null|string
+     * @var string
      */
-    private $title;
+    private $title = '';
 
     /**
-     * @var null|string
+     * @var string
      */
-    private $firstname;
+    private $firstname = '';
 
     /**
-     * @var null|string
+     * @var string
      */
-    private $lastname;
+    private $lastname = '';
+
+    /**
+     * @var DateTimeImmutable
+     */
+    private $birthday;
+
+    /**
+     * @var string
+     */
+    private $phoneNumber = '';
+
+    /**
+     * @var string
+     */
+    private $mobilePhoneNumber = '';
 
     /**
      * @var Attribute[]
      */
     private $attributes = [];
+
+    /**
+     * Customer constructor.
+     */
+    public function __construct()
+    {
+        $this->birthday = new DateTimeImmutable();
+    }
 
     /**
      * @return int
@@ -120,6 +155,24 @@ class Customer
     }
 
     /**
+     * @return bool
+     */
+    public function getNewsletter()
+    {
+        return $this->newsletter;
+    }
+
+    /**
+     * @param bool $newsletter
+     */
+    public function setNewsletter($newsletter)
+    {
+        Assertion::boolean($newsletter);
+
+        $this->newsletter = $newsletter;
+    }
+
+    /**
      * @return string
      */
     public function getLanguageIdentifier()
@@ -132,7 +185,27 @@ class Customer
      */
     public function setLanguageIdentifier($languageIdentifier)
     {
+        Assertion::uuid($languageIdentifier);
+
         $this->languageIdentifier = $languageIdentifier;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCustomerGroupIdentifier()
+    {
+        return $this->customerGroupIdentifier;
+    }
+
+    /**
+     * @param string $customerGroupIdentifier
+     */
+    public function setCustomerGroupIdentifier($customerGroupIdentifier)
+    {
+        Assertion::uuid($customerGroupIdentifier);
+
+        $this->customerGroupIdentifier = $customerGroupIdentifier;
     }
 
     /**
@@ -229,6 +302,54 @@ class Customer
     public function setLastname($lastname)
     {
         $this->lastname = $lastname;
+    }
+
+    /**
+     * @return DateTimeImmutable
+     */
+    public function getBirthday()
+    {
+        return $this->birthday;
+    }
+
+    /**
+     * @param DateTimeImmutable $birthday
+     */
+    public function setBirthday(DateTimeImmutable $birthday)
+    {
+        $this->birthday = $birthday;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhoneNumber()
+    {
+        return $this->phoneNumber;
+    }
+
+    /**
+     * @param string $phoneNumber
+     */
+    public function setPhoneNumber($phoneNumber)
+    {
+        $this->phoneNumber = $phoneNumber;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMobilePhoneNumber()
+    {
+        return $this->mobilePhoneNumber;
+    }
+
+    /**
+     * @param string $mobilePhoneNumber
+     */
+    public function setMobilePhoneNumber($mobilePhoneNumber)
+    {
+        $this->mobilePhoneNumber = $mobilePhoneNumber;
     }
 
     /**

@@ -284,9 +284,9 @@
         <service id="plentymarkets_adapter.command_handler.handle_order" class="PlentymarketsAdapter\ServiceBus\CommandHandler\Order\HandleOrderCommandHandler">
             <argument type="service" id="plentmarkets_adapter.client" />
             <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="plenty_connector.logger" />
 
             <tag name="plenty_connector.command_handler" />
         </service>
-
     </services>
 </container>
