@@ -28,8 +28,10 @@ use Shopware\Bundle\AttributeBundle\Service\DataPersister;
 use Shopware\Bundle\AttributeBundle\Service\TypeMapping;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Article;
+use Shopware\Components\Api\Resource\PropertyGroup;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Customer\Group;
+use Shopware\Models\Property\Repository;
 use Shopware\Models\Shop\Shop as ShopModel;
 use ShopwareAdapter\ShopwareAdapter;
 
@@ -90,9 +92,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 'adapterName' => ShopwareAdapter::NAME,
             ]);
 
-            if (null !== $shopIdentity) {
-                return true;
-            }
+            return null !== $shopIdentity;
         });
 
         // validate shop mapping
@@ -356,9 +356,12 @@ class HandleProductCommandHandler implements CommandHandlerInterface
 
         $mainDetail = array_shift($variations);
 
+        $propertyData = $this->getPropertyData($product);
+
         $params = [
             //'priceGroupId' => 0,
-            //'filterGroupId' => 0,
+            'filterGroupId' => $propertyData['filterGroupId'],
+            'propertyValues' => $propertyData['propertyValues'],
             //'pseudoSales => 0,
             //'highlight' => false,
             //'priceGroupActive => 0,
@@ -388,6 +391,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             '__options_images' => ['replace' => true],
         ];
 
+        // TODO: add default supplier via config
         if (null !== $manufacturerIdentity) {
             $params['supplierId'] = $manufacturerIdentity->getAdapterIdentifier();
         }
@@ -494,13 +498,10 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 }
 
                 try {
-                    $existingProduct = $resource->getIdByData(['id' => $productIdentity->getAdapterIdentifier()]);
-
                     $result[$productIdentity->getAdapterIdentifier()] = ['id' => $productIdentity->getAdapterIdentifier(), 'cross' => true];
                 } catch (\Exception $exception) {
                     // fail silently
                 }
-
             }
         }
 
@@ -551,6 +552,50 @@ class HandleProductCommandHandler implements CommandHandlerInterface
     }
 
     /**
+     * @param Product $product
+     *
+     * @return array
+     */
+    private function getPropertyData(Product $product)
+    {
+        $result = [];
+
+        /**
+         * @var Repository $groupRepository
+         */
+        $groupRepository = Shopware()->Models()->getRepository(\Shopware\Models\Property\Group::class);
+        /**
+         * @var \Shopware\Models\Property\Group $propertyGroup
+         */
+        $propertyGroup = $groupRepository->findOneBy(['name' => 'PlentyConnector']);
+
+        if (null === $propertyGroup) {
+            $propertyGroup = new \Shopware\Models\Property\Group();
+            $propertyGroup->setName('PlentyConnector');
+            $propertyGroup->setPosition(1);
+            $propertyGroup->setComparable(true);
+            $propertyGroup->setSortMode(true);
+
+            Shopware()->Models()->persist($propertyGroup);
+            Shopware()->Models()->flush();
+        }
+
+        $result['filterGroupId'] = $propertyGroup->getId();
+        $result['propertyValues'] = [];
+
+        foreach ($product->getProperties() as $property) {
+            foreach ($property->getValues() as $value) {
+                $result['propertyValues'][] = [
+                    'option' => ['name' => $property->getName()],
+                    'value' => $value->getValue(),
+                ];
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * @param Variation $variation
      * @param Product $product
      *
@@ -583,7 +628,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
 
         $prices = [];
         foreach ($variation->getPrices() as $price) {
-
             if (null === $price->getCustomerGroupIdentifier()) {
                 $customerGroupKey = 'EK';
             } else {

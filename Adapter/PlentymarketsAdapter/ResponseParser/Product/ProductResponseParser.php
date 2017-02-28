@@ -807,24 +807,105 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * TODO
-     *
-     * @param $product
+     * @param $mainVariation
      *
      * @return Property[]
      */
-    public function getProperties(array $product)
+    public function getProperties(array $mainVariation)
     {
+        $result = [];
 
-        /* TODO:
-            post: rest/items/properties/{id}/selections
-            get: rest/items/properties/{id}/selections (Gibt alle Werte für die Property ID aus)
-            get: rest/items/properties/{id}/selections/{lang} (Gibt einen Wert für die Property ID in der entspr. Sprache aus)
-            put: rest/items/properties/{id}/selections/{lang}
-            delete: rest/items/properties/{id}/selections/{lang}
-        */
+        $url = 'items/' . $mainVariation['itemId'] . '/variations/' . $mainVariation['id'] . '/variation_properties';
+        $properties = $this->client->request('GET', $url);
 
-        return [];
+        static $propertyNames;
+
+        foreach ($properties as $property) {
+            if (!isset($propertyNames[$property['property']['id']])) {
+                $propertyName = $this->client->request('GET', 'items/properties/' . $property['property']['id'] . '/names');
+
+                $propertyNames[$property['property']['id']] = $propertyName;
+            } else {
+                $propertyName = $propertyNames[$property['property']['id']];
+            }
+
+            $translations = [];
+            foreach ($propertyName as $name) {
+                $languageIdentifier = $this->identityService->findOneBy([
+                    'adapterIdentifier' => $name['lang'],
+                    'adapterName' => PlentymarketsAdapter::NAME,
+                    'objectType' => Language::TYPE,
+                ]);
+
+                if (null === $languageIdentifier) {
+                    continue;
+                }
+
+                $translations[] = Translation::fromArray([
+                    'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                    'property' => 'name',
+                    'value' => $name['name'],
+                ]);
+            }
+
+            $values = [];
+
+            if ($property['property']['valueType'] === 'text') {
+                if (!isset($property['names'][0]['value'])) {
+                    continue;
+                }
+
+                $valueTranslations = [];
+                foreach ($property['names'] as $name) {
+                    $languageIdentifier = $this->identityService->findOneBy([
+                        'adapterIdentifier' => $name['lang'],
+                        'adapterName' => PlentymarketsAdapter::NAME,
+                        'objectType' => Language::TYPE,
+                    ]);
+
+                    if (null === $languageIdentifier) {
+                        continue;
+                    }
+
+                    $valueTranslations[] = Translation::fromArray([
+                        'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                        'property' => 'value',
+                        'value' => $name['value'],
+                    ]);
+                }
+
+                $values[] = Value::fromArray([
+                    'value' => (string) $property['names'][0]['value'],
+                    'translations' => $valueTranslations,
+                ]);
+            } elseif ($property['property']['valueType'] === 'int') {
+                // TODO: add unit
+                $values[] = Value::fromArray([
+                    'value' => (string) $property['valueInt'],
+                ]);
+            } elseif ($property['property']['valueType'] === 'float') {
+                // TODO: add unit
+                $values[] = Value::fromArray([
+                    'value' => (string)$property['valueFloat'],
+                ]);
+            } elseif ($property['property']['valueType'] === 'file') {
+                // TODO: add correct file path
+
+                continue;
+            } elseif ($property['property']['valueType'] === 'selection') {
+                // TODO: add get correct selection from seperate call
+
+                continue;
+            }
+
+            $result[] = Property::fromArray([
+                'name' => $propertyName[0]['name'],
+                'values' => $values,
+                'translations' => $translations,
+            ]);
+        }
+
+        return $result;
     }
 
     /**

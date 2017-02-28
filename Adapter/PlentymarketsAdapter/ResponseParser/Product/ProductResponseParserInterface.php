@@ -110,11 +110,11 @@ interface ProductResponseParserInterface
     public function getDocuments(array $product);
 
     /**
-     * @param $product
+     * @param $mainVariation
      *
      * @return Property[]
      */
-    public function getProperties(array $product);
+    public function getProperties(array $mainVariation);
 
     /**
      * @param array $mainVariation

@@ -400,6 +400,4 @@ class Order extends AbstractTransferObject
     {
         $this->attributes = $attributes;
     }
-
-
 }
