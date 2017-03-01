@@ -65,10 +65,6 @@ class FetchAllProductsQueryHandler implements QueryHandlerInterface
             'lang' => $this->languageHelper->getLanguagesQueryString(),
         ]);
 
-        $products = array_filter($products, function (array $product) {
-            return $product['id'] === 132;
-        });
-
         $result = [];
 
         foreach ($products as $product) {
