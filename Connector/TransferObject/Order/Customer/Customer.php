@@ -103,7 +103,8 @@ class Customer
      */
     public function __construct()
     {
-        $this->birthday = new DateTimeImmutable();
+        $timezone = new DateTimeZone('UTC');
+        $this->birthday = new DateTimeImmutable('now', $timezone);
     }
 
     /**

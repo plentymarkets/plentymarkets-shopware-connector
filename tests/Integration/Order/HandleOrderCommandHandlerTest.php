@@ -331,11 +331,13 @@ class HandleOrderCommandHandlerTest extends TestCase
      */
     private function createOrderTransferObject()
     {
+        $timezone = new DateTimeZone('UTC');
+
         $order = new Order();
         $order->setIdentifier(Uuid::uuid4()->toString());
         $order->setOrderType(Order::TYPE_ORDER);
         $order->setOrderNumber('2000');
-        $order->setOrderTime(new \DateTimeImmutable());
+        $order->setOrderTime(new \DateTimeImmutable('now', $timezone));
         $order->setCustomer($this->getCustomer());
         $order->setBillingAddress($this->getAddress());
         $order->setShippingAddress($this->getAddress());

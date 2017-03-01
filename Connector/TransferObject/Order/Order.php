@@ -114,7 +114,8 @@ class Order extends AbstractTransferObject
      */
     public function __construct()
     {
-        $this->orderTime = new DateTimeImmutable();
+        $timezone = new DateTimeZone('UTC');
+        $this->orderTime = new DateTimeImmutable('now', $timezone);
     }
 
     /**
