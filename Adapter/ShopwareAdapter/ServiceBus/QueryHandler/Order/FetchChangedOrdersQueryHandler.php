@@ -68,7 +68,6 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
 
         return [];
 
-
         throw new \Exception('Not implemented!');
         $filter = [
             [

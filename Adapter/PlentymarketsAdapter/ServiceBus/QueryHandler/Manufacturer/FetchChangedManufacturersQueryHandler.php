@@ -73,8 +73,13 @@ class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
+        $lastCangedTime = $this->getChangedDateTime();
+
+        $currentDateTime = $this->getCurrentDateTime();
+        $oldTimestamp = $lastCangedTime->format(DATE_W3C);
+
         $criteria = [
-            'lastUpdateTimestamp' => $this->getChangedDateTime($this->config),
+            'lastUpdateTimestamp' => $oldTimestamp,
         ];
 
         $result = [];
@@ -93,7 +98,7 @@ class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
         }
 
         if (!empty($result)) {
-            $this->setChangedDateTime($this->config);
+            $this->setChangedDateTime($currentDateTime);
         }
 
         return $result;

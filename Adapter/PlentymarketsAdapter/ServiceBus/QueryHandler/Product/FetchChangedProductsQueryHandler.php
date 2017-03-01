@@ -2,7 +2,6 @@
 
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Product;
 
-use DateTime;
 use PlentyConnector\Connector\ServiceBus\Query\Product\FetchChangedProductsQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
@@ -68,20 +67,22 @@ class FetchChangedProductsQueryHandler implements QueryHandlerInterface
         $lastCangedTime = $this->getChangedDateTime();
 
         $currentDateTime = $this->getCurrentDateTime();
-        $oldTimestamp = $lastCangedTime->format(DateTime::W3C);
-        $newTimestamp = $currentDateTime->format(DateTime::W3C);
+        $oldTimestamp = $lastCangedTime->format(DATE_W3C);
+        $newTimestamp = $currentDateTime->format(DATE_W3C);
 
         $products = $this->client->request('GET', 'items', [
             'lang' => $this->languageHelper->getLanguagesQueryString(),
             'updatedBetween' =>  $oldTimestamp . ',' . $newTimestamp,
         ]);
 
-        $this->setChangedDateTime($currentDateTime);
-
         $result = [];
 
         foreach ($products as $product) {
             $result[] = $this->responseParser->parse($product, $result);
+        }
+
+        if (!empty($result)) {
+            $this->setChangedDateTime($currentDateTime);
         }
 
         return $result;
