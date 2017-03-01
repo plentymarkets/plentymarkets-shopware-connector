@@ -2,9 +2,9 @@
 
 namespace PlentyConnector\Connector\ServiceBus\QueryGenerator\Order;
 
-use PlentyConnector\Connector\ServiceBus\Query\FetchChangedOrdersQuery;
-use PlentyConnector\Connector\ServiceBus\Query\FetchOrderQuery;
 use PlentyConnector\Connector\ServiceBus\Query\Order\FetchAllOrdersQuery;
+use PlentyConnector\Connector\ServiceBus\Query\Order\FetchChangedOrdersQuery;
+use PlentyConnector\Connector\ServiceBus\Query\Order\FetchOrderQuery;
 use PlentyConnector\Connector\ServiceBus\QueryGenerator\QueryGeneratorInterface;
 use PlentyConnector\Connector\TransferObject\Order\Order;
 
