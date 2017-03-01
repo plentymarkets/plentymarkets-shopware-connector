@@ -2,12 +2,10 @@
 
 namespace PlentyConnector\Connector\ServiceBus\QueryGenerator\Unit;
 
-use PlentyConnector\Connector\ServiceBus\Query\Unit\CheckUnitExistsQuery;
 use PlentyConnector\Connector\ServiceBus\Query\Unit\FetchAllUnitsQuery;
 use PlentyConnector\Connector\ServiceBus\Query\Unit\FetchChangedUnitsQuery;
 use PlentyConnector\Connector\ServiceBus\Query\Unit\FetchUnitQuery;
 use PlentyConnector\Connector\ServiceBus\QueryGenerator\QueryGeneratorInterface;
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\TransferObject\Unit\Unit;
 
 /**

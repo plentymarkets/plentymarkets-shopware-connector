@@ -28,7 +28,6 @@ use Shopware\Bundle\AttributeBundle\Service\DataPersister;
 use Shopware\Bundle\AttributeBundle\Service\TypeMapping;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Article;
-use Shopware\Components\Api\Resource\PropertyGroup;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Customer\Group;
 use Shopware\Models\Property\Repository;
@@ -85,7 +84,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             'adapterName' => ShopwareAdapter::NAME,
         ]);
 
-        $shopIdentifiers = array_filter($product->getShopIdentifiers(), function($identifier) use ($identityService) {
+        $shopIdentifiers = array_filter($product->getShopIdentifiers(), function ($identifier) use ($identityService) {
             $shopIdentity = $identityService->findOneBy([
                 'objectIdentifier' => $identifier,
                 'objectType' => Shop::TYPE,
@@ -205,6 +204,17 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             }
 
             $category = $categoryRepository->find($categoryIdentity->getAdapterIdentifier());
+
+            if (null === $category) {
+                /**
+                 * @var LoggerInterface $logger
+                 */
+                $logger = Shopware()->Container()->get('plenty_connector.logger');
+                $logger->notice('seo category is missing', ['command' => $command]);
+
+                continue;
+            }
+
             $parents = array_reverse(array_filter(explode('|', $category->getPath())));
 
             $shops = $shopRepository->findBy([
@@ -437,7 +447,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 $identityService->create(
                     $product->getIdentifier(),
                     Product::TYPE,
-                    (string)$productModel->getId(),
+                    (string) $productModel->getId(),
                     ShopwareAdapter::NAME
                 );
             } else {
@@ -477,11 +487,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         $identityService = Shopware()->Container()->get('plenty_connector.identity_service');
 
         $result = [];
-
-        /**
-         * @var Article $resource
-         */
-        $resource = Shopware()->Container()->get('shopware_adapter.shopware_resource.product');
 
         foreach ($product->getLinkedProducts() as $linkedProduct) {
             if ($linkedProduct->getType() === $type) {
@@ -547,7 +552,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         return [
             'name' => $product->getName(),
             'type' => 2,
-            'groups' => $groups
+            'groups' => $groups,
         ];
     }
 
@@ -586,7 +591,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         foreach ($product->getProperties() as $property) {
             foreach ($property->getValues() as $value) {
                 $result['propertyValues'][] = [
-                    'option' => ['name' => $property->getName()],
+                    'option' => ['name' => $property->getName(), 'filterable' => true],
                     'value' => $value->getValue(),
                 ];
             }
@@ -699,7 +704,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             'minPurchase' => $variation->getMinimumOrderQuantity(),
             'purchaseSteps' => $variation->getIntervalOrderQuantity(),
             'maxPurchase' => $variation->getMaximumOrderQuantity(),
-            'shippingFree' => false
+            'shippingFree' => false,
         ];
 
         if (!empty($configuratorOptions)) {

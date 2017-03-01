@@ -72,6 +72,4 @@ class Comment
     {
         $this->attributes = $attributes;
     }
-
-
 }

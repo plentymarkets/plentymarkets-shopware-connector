@@ -40,9 +40,6 @@ class HandleOrderCommandHandlerTest extends TestCase
      */
     private $identityService;
 
-    /**
-     *
-     */
     public function setUp()
     {
         $this->client = Shopware()->Container()->get('plentmarkets_adapter.client');
@@ -56,6 +53,22 @@ class HandleOrderCommandHandlerTest extends TestCase
         $config->set('rest_url', 'http://arvatis-beta.plentymarkets-cloud01.com');
         $config->set('rest_username', 'py101');
         $config->set('rest_password', '48TRtL73H2');
+    }
+
+    public function test_export_order()
+    {
+        if (getenv('TRAVIS') === 'true') {
+            $this->markTestSkipped('This test should not run if on Travis.');
+        }
+
+        /**
+         * @var HandleOrderCommandHandler $handler
+         */
+        $handler = Shopware()->Container()->get('plentymarkets_adapter.command_handler.handle_order');
+
+        $command = new HandleOrderCommand(PlentymarketsAdapter::NAME, $this->createOrderTransferObject());
+
+        $this->assertTrue($handler->handle($command));
     }
 
     /**
@@ -124,7 +137,7 @@ class HandleOrderCommandHandlerTest extends TestCase
         }
 
         $countryIdentity = $this->identityService->findOneOrCreate(
-            (string)$country['id'],
+            (string) $country['id'],
             PlentymarketsAdapter::NAME,
             Country::TYPE
         );
@@ -159,7 +172,7 @@ class HandleOrderCommandHandlerTest extends TestCase
         }
 
         $countryIdentity = $this->identityService->findOneOrCreate(
-            (string)$vatRate['id'],
+            (string) $vatRate['id'],
             PlentymarketsAdapter::NAME,
             VatRate::TYPE
         );
@@ -211,7 +224,7 @@ class HandleOrderCommandHandlerTest extends TestCase
         }
 
         $paymentMethodIdentity = $this->identityService->findOneOrCreate(
-            (string)$paymentMethod['id'],
+            (string) $paymentMethod['id'],
             PlentymarketsAdapter::NAME,
             PaymentMethod::TYPE
         );
@@ -253,7 +266,7 @@ class HandleOrderCommandHandlerTest extends TestCase
         }
 
         $shopIdentity = $this->identityService->findOneOrCreate(
-            (string)$shop['storeIdentifier'],
+            (string) $shop['storeIdentifier'],
             PlentymarketsAdapter::NAME,
             Shop::TYPE
         );
@@ -291,7 +304,7 @@ class HandleOrderCommandHandlerTest extends TestCase
         }
 
         $identity = $this->identityService->findOneOrCreate(
-            (string)$shippingProfile['id'],
+            (string) $shippingProfile['id'],
             PlentymarketsAdapter::NAME,
             ShippingProfile::TYPE
         );
@@ -337,21 +350,5 @@ class HandleOrderCommandHandlerTest extends TestCase
         $order->setComments($this->getComments());
 
         return $order;
-    }
-
-    public function test_export_order()
-    {
-        if (getenv('TRAVIS') === 'true') {
-            $this->markTestSkipped('This test should not run if on Travis.');
-        }
-
-        /**
-         * @var HandleOrderCommandHandler $handler
-         */
-        $handler = Shopware()->Container()->get('plentymarkets_adapter.command_handler.handle_order');
-
-        $command = new HandleOrderCommand(PlentymarketsAdapter::NAME, $this->createOrderTransferObject());
-
-        $this->assertTrue($handler->handle($command));
     }
 }

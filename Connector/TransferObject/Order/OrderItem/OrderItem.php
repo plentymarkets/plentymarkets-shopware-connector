@@ -162,6 +162,4 @@ class OrderItem extends AbstractValueObject
     {
         $this->attributes = $attributes;
     }
-
-
 }

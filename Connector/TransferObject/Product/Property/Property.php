@@ -11,7 +11,7 @@ use PlentyConnector\Connector\ValueObject\Translation\Translation;
 /**
  * Class Property
  */
-class Property  extends AbstractValueObject implements TranslateableInterface
+class Property extends AbstractValueObject implements TranslateableInterface
 {
     /**
      * @var string

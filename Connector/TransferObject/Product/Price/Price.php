@@ -8,7 +8,7 @@ use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 /**
  * Class Price.
  */
-class Price  extends AbstractValueObject
+class Price extends AbstractValueObject
 {
     /**
      * @var float
@@ -127,6 +127,4 @@ class Price  extends AbstractValueObject
 
         $this->toAmount = $toAmount;
     }
-
-
 }

@@ -109,7 +109,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             $currencyIdentity = $this->identityService->findOneBy([
                 'objectIdentifier' => $order->getCurrencyIdentifier(),
                 'objectType' => Currency::TYPE,
-                'adapterName' => PlentymarketsAdapter::NAME
+                'adapterName' => PlentymarketsAdapter::NAME,
             ]);
 
             if ('EUR' !== $currencyIdentity->getAdapterIdentifier()) {
@@ -136,8 +136,8 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                 [
                     'referenceType' => 'contact',
                     'referenceId' => $plentyCustomer['id'],
-                    'relation' => 'receiver'
-                ]
+                    'relation' => 'receiver',
+                ],
             ];
 
             $params['addressRelations'] = [];
@@ -187,8 +187,8 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             $params['dates'] = [
                 [
                     'typeId' => 2,
-                    'date' => $order->getOrderTime()->format(DATE_W3C)
-                ]
+                    'date' => $order->getOrderTime()->format(DATE_W3C),
+                ],
             ];
 
             $params['orderItems'] = array_map(function (OrderItem $item) use ($shippingProfileIdentity, $currencyIdentity) {
@@ -237,15 +237,14 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                     [
                         'currency' => $currencyIdentity->getAdapterIdentifier(),
                         'priceOriginalGross' => $item->getPrice(),
-                    ]
+                    ],
                 ];
-
 
                 $itemParams['properties'] = [
                     [
                         'typeId' => 2,
                         'value' => $shippingProfileIdentity->getAdapterIdentifier(),
-                    ]
+                    ],
                 ];
 
                 // Custom Products // aus merkmale
@@ -263,7 +262,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                     'referenceType' => 'order',
                     'referenceValue' => $result['id'],
                     'text' => $comment->getComment(),
-                    'isVisibleForContact' => $comment->getType() === Comment::TYPE_CUSTOMER
+                    'isVisibleForContact' => $comment->getType() === Comment::TYPE_CUSTOMER,
                 ];
 
                 if ($comment->getType() === Comment::TYPE_INTERNAL) {
@@ -282,7 +281,6 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         }
 
         // TODO update existing order
-
 
         return true;
     }
@@ -342,7 +340,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         }
 
         $accountWebStore = array_filter($webstores, function ($store) use ($shopIdentity) {
-            return (string)$store['storeIdentifier'] === $shopIdentity->getAdapterIdentifier();
+            return (string) $store['storeIdentifier'] === $shopIdentity->getAdapterIdentifier();
         });
 
         $customerGroupIdentitiy = $this->identityService->findOneBy([
@@ -357,7 +355,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             'firstName' => $customer->getFirstname(),
             'lastName' => $customer->getLastname(),
             'gender' => $customer->getSalutation() === Customer::SALUTATION_MR ? 'male' : 'female',
-            'classId' => (int)$customerGroupIdentitiy->getAdapterIdentifier(),
+            'classId' => (int) $customerGroupIdentitiy->getAdapterIdentifier(),
             'lang' => $languageIdentity->getAdapterIdentifier(),
             'referrerId' => 1, // TODO: Konfigurierbar über Config. (/rest/orders/referrers)
             'singleAccess' => $customer->getType() === Customer::TYPE_GUEST,
@@ -366,7 +364,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             'birthdayAt' => $customer->getBirthday()->format(DATE_W3C),
             'lastOrderAt' => $order->getOrderTime()->format(DATE_W3C),
             'userId' => 1, // TODO: Konfigurierbar über Config (rest/accounts)
-            'options' => []
+            'options' => [],
         ];
 
         if (!empty($customer->getPhoneNumber())) {
@@ -374,7 +372,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                 'typeId' => 1,
                 'subTypeId' => 4,
                 'value' => $customer->getPhoneNumber(),
-                'priority' => 0
+                'priority' => 0,
             ];
         }
 
@@ -383,7 +381,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                 'typeId' => 1,
                 'subTypeId' => 2,
                 'value' => $customer->getMobilePhoneNumber(),
-                'priority' => 0
+                'priority' => 0,
             ];
         }
 
@@ -392,7 +390,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                 'typeId' => 2,
                 'subTypeId' => 4,
                 'value' => $customer->getEmail(),
-                'priority' => 0
+                'priority' => 0,
             ];
         }
 
@@ -417,7 +415,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         $countryIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $address->getCountryIdentifier(),
             'objectType' => Country::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME
+            'adapterName' => PlentymarketsAdapter::NAME,
         ]);
 
         if (null === $countryIdentity) {
@@ -457,7 +455,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                     'typeId' => 4,
                     'value' => $customer->getPhoneNumber(),
                 ],
-            ]
+            ],
         ];
 
         return $this->client->request('POST', 'accounts/contacts/' . $plentyCustomer['id'] . '/addresses', $params);
@@ -469,6 +467,5 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
      */
     private function getVatConfiguration(Order $order, OrderItem $item)
     {
-
     }
 }

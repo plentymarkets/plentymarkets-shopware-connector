@@ -141,8 +141,9 @@ class ClassNameFormatter implements Formatter
      *
      * @return array
      */
-    private function preparePayload(array $payload) {
-        return array_map(function($payload) {
+    private function preparePayload(array $payload)
+    {
+        return array_map(function ($payload) {
             if (!($payload instanceof TransferObjectInterface)) {
                 return $payload;
             }

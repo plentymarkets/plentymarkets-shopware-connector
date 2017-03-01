@@ -14,8 +14,5 @@ interface CleanupServiceInterface
      */
     public function addDefinition(Definition $definition);
 
-    /**
-     *
-     */
     public function cleanup();
 }

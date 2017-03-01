@@ -97,7 +97,7 @@ class RemoveMediaCategoryCommandHandler implements CommandHandlerInterface
             'objectIdentifier' => $identifier,
         ]);
 
-        array_walk($identities, function(Identity $identity) {
+        array_walk($identities, function (Identity $identity) {
             $this->identityService->remove($identity);
         });
 

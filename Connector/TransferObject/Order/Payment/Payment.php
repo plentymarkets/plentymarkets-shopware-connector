@@ -10,7 +10,7 @@ use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 class Payment
 {
     /**
-     * @var double
+     * @var float
      */
     private $amount = 0.0;
 

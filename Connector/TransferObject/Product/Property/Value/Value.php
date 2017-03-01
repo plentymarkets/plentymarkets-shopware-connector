@@ -10,7 +10,7 @@ use PlentyConnector\Connector\ValueObject\Translation\Translation;
 /**
  * Class Value
  */
-class Value  extends AbstractValueObject implements TranslateableInterface
+class Value extends AbstractValueObject implements TranslateableInterface
 {
     /**
      * @var string

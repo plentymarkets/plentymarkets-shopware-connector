@@ -2,7 +2,6 @@
 
 namespace PlentyConnector\Connector\CleanupService;
 
-use Assert\Assertion;
 use Exception;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\CommandFactory\CommandFactoryInterface;
@@ -90,9 +89,6 @@ class CleanupService implements CleanupServiceInterface
         $this->definitions[] = $definition;
     }
 
-    /**
-     *
-     */
     public function cleanup()
     {
         $definitions = $this->getDefinitions();

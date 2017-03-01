@@ -71,7 +71,7 @@ class RemoveProductCommandHandler implements CommandHandlerInterface
         $identifier = $command->getObjectIdentifier();
 
         $identity = $this->identityService->findOneBy([
-            'objectIdentifier' => (string)$identifier,
+            'objectIdentifier' => (string) $identifier,
             'objectType' => Product::TYPE,
             'adapterName' => ShopwareAdapter::NAME,
         ]);
@@ -92,7 +92,7 @@ class RemoveProductCommandHandler implements CommandHandlerInterface
             'objectIdentifier' => $identifier,
         ]);
 
-        array_walk($identities, function(Identity $identity) {
+        array_walk($identities, function (Identity $identity) {
             $this->identityService->remove($identity);
         });
 

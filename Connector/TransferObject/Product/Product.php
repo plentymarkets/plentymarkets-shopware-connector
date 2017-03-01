@@ -3,7 +3,6 @@
 namespace PlentyConnector\Connector\TransferObject\Product;
 
 use Assert\Assertion;
-use DateTimeImmutable;
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 use PlentyConnector\Connector\TransferObject\Product\LinkedProduct\LinkedProduct;
 use PlentyConnector\Connector\TransferObject\Product\Property\Property;
