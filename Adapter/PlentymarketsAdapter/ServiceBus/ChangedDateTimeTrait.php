@@ -2,7 +2,6 @@
 
 namespace PlentymarketsAdapter\ServiceBus;
 
-use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
@@ -13,14 +12,6 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
  */
 trait ChangedDateTimeTrait
 {
-    /**
-     * @return string
-     */
-    private function getKey()
-    {
-        return PlentymarketsAdapter::NAME . get_called_class() . '.LastChangeDateTime';
-    }
-
     /**
      * @return DateTimeImmutable
      */
@@ -58,5 +49,13 @@ trait ChangedDateTimeTrait
         $timezone = new DateTimeZone('UTC');
 
         return new DateTimeImmutable('now', $timezone);
+    }
+
+    /**
+     * @return string
+     */
+    private function getKey()
+    {
+        return PlentymarketsAdapter::NAME . get_called_class() . '.LastChangeDateTime';
     }
 }

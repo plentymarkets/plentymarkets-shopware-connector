@@ -958,13 +958,42 @@ class ProductResponseParser implements ProductResponseParserInterface
                     'value' => (string) $property['valueFloat'],
                 ]);
             } elseif ($property['property']['valueType'] === 'file') {
-                // TODO: add correct file path
+                $this->logger->notice('file properties are not supported', ['variation', $mainVariation['id']]);
 
                 continue;
             } elseif ($property['property']['valueType'] === 'selection') {
-                // TODO: add get correct selection from seperate call
+                static $selections;
 
-                continue;
+                if (!isset($selections[$property['propertyId']])) {
+                    $selection = $this->client->request('GET', 'items/properties/' . $property['propertyId'] . '/selections');
+
+                    foreach ($selection as $element) {
+                        $selections[$property['propertyId']][$element['id']] = $element;
+                        $selections[$property['propertyId']][$element['id']]['translations'] = [];
+
+                        $languageIdentifier = $this->identityService->findOneBy([
+                            'adapterIdentifier' => $element['lang'],
+                            'adapterName' => PlentymarketsAdapter::NAME,
+                            'objectType' => Language::TYPE,
+                        ]);
+
+                        if (null !== $languageIdentifier) {
+                            $translation = Translation::fromArray([
+                                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                                'property' => 'value',
+                                'value' => $element['name'],
+                            ]);
+
+                            $selections[$property['propertyId']][$element['id']]['translations'] = [$translation];
+                        }
+                    }
+                }
+
+                // TODO: add unit
+                $values[] = Value::fromArray([
+                    'value' => (string) $selections[$property['propertyId']][$property['propertySelectionId']]['name'],
+                    'translations' => $selections[$property['propertyId']][$property['propertySelectionId']]['translations'],
+                ]);
             }
 
             $result[] = Property::fromArray([

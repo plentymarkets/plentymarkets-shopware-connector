@@ -72,7 +72,7 @@ class FetchChangedProductsQueryHandler implements QueryHandlerInterface
 
         $products = $this->client->request('GET', 'items', [
             'lang' => $this->languageHelper->getLanguagesQueryString(),
-            'updatedBetween' =>  $oldTimestamp . ',' . $newTimestamp,
+            'updatedBetween' => $oldTimestamp . ',' . $newTimestamp,
         ]);
 
         $result = [];
