@@ -2,7 +2,7 @@
 
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Product;
 
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
+use DateTime;
 use PlentyConnector\Connector\ServiceBus\Query\Product\FetchChangedProductsQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
@@ -10,12 +10,15 @@ use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\Helper\LanguageHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Product\ProductResponseParserInterface;
+use PlentymarketsAdapter\ServiceBus\ChangedDateTimeTrait;
 
 /**
  * Class FetchChangedProductsQueryHandler.
  */
 class FetchChangedProductsQueryHandler implements QueryHandlerInterface
 {
+    use ChangedDateTimeTrait;
+
     /**
      * @var ClientInterface
      */
@@ -27,11 +30,6 @@ class FetchChangedProductsQueryHandler implements QueryHandlerInterface
     private $languageHelper;
 
     /**
-     * @var IdentityServiceInterface
-     */
-    private $identityService;
-
-    /**
      * @var ProductResponseParserInterface
      */
     private $responseParser;
@@ -41,18 +39,15 @@ class FetchChangedProductsQueryHandler implements QueryHandlerInterface
      *
      * @param ClientInterface $client
      * @param LanguageHelper $languageHelper
-     * @param IdentityServiceInterface $identityService
      * @param ProductResponseParserInterface $responseParser
      */
     public function __construct(
         ClientInterface $client,
         LanguageHelper $languageHelper,
-        IdentityServiceInterface $identityService,
         ProductResponseParserInterface $responseParser
     ) {
         $this->client = $client;
         $this->languageHelper = $languageHelper;
-        $this->identityService = $identityService;
         $this->responseParser = $responseParser;
     }
 
@@ -70,6 +65,25 @@ class FetchChangedProductsQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        throw new \Exception('not implemented');
+        $lastCangedTime = $this->getChangedDateTime();
+
+        $currentDateTime = $this->getCurrentDateTime();
+        $oldTimestamp = $lastCangedTime->format(DateTime::W3C);
+        $newTimestamp = $currentDateTime->format(DateTime::W3C);
+
+        $products = $this->client->request('GET', 'items', [
+            'lang' => $this->languageHelper->getLanguagesQueryString(),
+            'updatedBetween' =>  $oldTimestamp . ',' . $newTimestamp,
+        ]);
+
+        $this->setChangedDateTime($currentDateTime);
+
+        $result = [];
+
+        foreach ($products as $product) {
+            $result[] = $this->responseParser->parse($product, $result);
+        }
+
+        return $result;
     }
 }

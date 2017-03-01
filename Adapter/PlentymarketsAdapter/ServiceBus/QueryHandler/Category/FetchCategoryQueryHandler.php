@@ -82,7 +82,7 @@ class FetchCategoryQueryHandler implements QueryHandlerInterface
 
         $element = $this->client->request('GET', 'categories/' . $identity->getAdapterIdentifier(), [
             'with' => 'details',
-            'lang' => implode(',', array_column($this->languageHelper->getLanguages(), 'id')),
+            'lang' => $this->languageHelper->getLanguagesQueryString(),
         ]);
 
         if ($element['type'] !== 'item' || $element['right'] !== 'all') {

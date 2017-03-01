@@ -94,4 +94,12 @@ class LanguageHelper
             ],
         ];
     }
+
+    /**
+     * @return string
+     */
+    public function getLanguagesQueryString()
+    {
+        return implode(',', array_column($this->getLanguages(), 'id'));
+    }
 }

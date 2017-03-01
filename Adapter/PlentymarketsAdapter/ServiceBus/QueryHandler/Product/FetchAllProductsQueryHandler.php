@@ -2,11 +2,9 @@
 
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Product;
 
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Query\Product\FetchAllProductsQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
-use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\Helper\LanguageHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
@@ -28,11 +26,6 @@ class FetchAllProductsQueryHandler implements QueryHandlerInterface
     private $languageHelper;
 
     /**
-     * @var IdentityServiceInterface
-     */
-    private $identityService;
-
-    /**
      * @var ProductResponseParserInterface
      */
     private $responseParser;
@@ -42,18 +35,15 @@ class FetchAllProductsQueryHandler implements QueryHandlerInterface
      *
      * @param ClientInterface $client
      * @param LanguageHelper $languageHelper
-     * @param IdentityServiceInterface $identityService
      * @param ProductResponseParserInterface $responseParser
      */
     public function __construct(
         ClientInterface $client,
         LanguageHelper $languageHelper,
-        IdentityServiceInterface $identityService,
         ProductResponseParserInterface $responseParser
     ) {
         $this->client = $client;
         $this->languageHelper = $languageHelper;
-        $this->identityService = $identityService;
         $this->responseParser = $responseParser;
     }
 
@@ -71,63 +61,18 @@ class FetchAllProductsQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $webstores = $this->client->request('GET', 'webstores');
-
         $products = $this->client->request('GET', 'items', [
-            'lang' => implode(',', array_column($this->languageHelper->getLanguages(), 'id')),
+            'lang' => $this->languageHelper->getLanguagesQueryString(),
         ]);
+
+        $products = array_filter($products, function (array $product) {
+            return $product['id'] === 132;
+        });
 
         $result = [];
 
         foreach ($products as $product) {
-            $variations = $this->client->request('GET', 'items/' . $product['id'] . '/variations', [
-                'with' => 'variationClients,variationSalesPrices,variationCategories,variationDefaultCategory,unit,variationAttributeValues',
-            ]);
-
-            $mainVariation = $this->responseParser->getMainVariation($variations);
-
-            $identity = $this->identityService->findOneOrCreate(
-                (string) $product['id'],
-                PlentymarketsAdapter::NAME,
-                Product::TYPE
-            );
-
-            $hasStockLimitation = array_filter($variations, function(array $variation) {
-                return (bool) $variation['stockLimitation'];
-            });
-
-            /**
-             * @var Product $object
-             */
-            $object = Product::fromArray([
-                'identifier' => $identity->getObjectIdentifier(),
-                'name' => $product['texts'][0]['name1'],
-                'number' => $mainVariation['number'],
-                'active' => $product['isActive'],
-                'shopIdentifiers' => $this->responseParser->getShopIdentifiers($mainVariation),
-                'manufacturerIdentifier' => $this->responseParser->getManufacturerIdentifier($product),
-                'categoryIdentifiers' => $this->responseParser->getCategories($mainVariation, $webstores),
-                'defaultCategoryIdentifiers' => $this->responseParser->getDafaultCategories($mainVariation, $webstores),
-                'shippingProfileIdentifiers' => $this->responseParser->getShippingProfiles($product),
-                'imageIdentifiers' => $this->responseParser->getImageIdentifiers($product, $product['texts'], $result),
-                'variations' => $this->responseParser->getVariations($product['texts'], $variations, $result),
-                'vatRateIdentifier' => $this->responseParser->getVatRateIdentifier($mainVariation),
-                'limitedStock' => (bool) $hasStockLimitation,
-                'description' => $product['texts'][0]['shortDescription'],
-                'longDescription' => $product['texts'][0]['description'],
-                'technicalDescription' => $product['texts'][0]['technicalData'],
-                'metaTitle' => $product['texts'][0]['name1'],
-                'metaDescription' => $product['texts'][0]['metaDescription'],
-                'metaKeywords' => $product['texts'][0]['keywords'],
-                'metaRobots' => 'INDEX, FOLLOW',
-                'linkedProducts' => $this->responseParser->getLinkedProducts($product),
-                'documents' => $this->responseParser->getDocuments($product),
-                'properties' => $this->responseParser->getProperties($mainVariation),
-                'translations' => $this->responseParser->getProductTranslations($product['texts']),
-                'attributes' => $this->responseParser->getAttributes($product),
-            ]);
-
-            $result[] = $object;
+            $result[] = $this->responseParser->parse($product, $result);
         }
 
         return $result;

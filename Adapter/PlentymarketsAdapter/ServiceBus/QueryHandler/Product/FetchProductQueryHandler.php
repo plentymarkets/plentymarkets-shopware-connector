@@ -2,11 +2,16 @@
 
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Product;
 
+use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
+use PlentyConnector\Connector\ServiceBus\Query\FetchQueryInterface;
 use PlentyConnector\Connector\ServiceBus\Query\Product\FetchProductQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentymarketsAdapter\Client\ClientInterface;
+use PlentymarketsAdapter\Helper\LanguageHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
+use PlentymarketsAdapter\ResponseParser\Product\ProductResponseParserInterface;
 
 /**
  * Class FetchProductQueryHandler.
@@ -19,14 +24,38 @@ class FetchProductQueryHandler implements QueryHandlerInterface
     private $client;
 
     /**
+     * @var LanguageHelper
+     */
+    private $languageHelper;
+
+    /**
+     * @var IdentityServiceInterface
+     */
+    private $identityService;
+
+    /**
+     * @var ProductResponseParserInterface
+     */
+    private $responseParser;
+
+    /**
      * FetchProductQueryHandler constructor.
      *
      * @param ClientInterface $client
+     * @param LanguageHelper $languageHelper
+     * @param IdentityServiceInterface $identityService
+     * @param ProductResponseParserInterface $responseParser
      */
     public function __construct(
-        ClientInterface $client
+        ClientInterface $client,
+        LanguageHelper $languageHelper,
+        IdentityServiceInterface $identityService,
+        ProductResponseParserInterface $responseParser
     ) {
         $this->client = $client;
+        $this->languageHelper = $languageHelper;
+        $this->identityService = $identityService;
+        $this->responseParser = $responseParser;
     }
 
     /**
@@ -43,6 +72,23 @@ class FetchProductQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        throw new \Exception('not implemented');
+        /**
+         * @var FetchQueryInterface $query
+         */
+        $identity = $this->identityService->findOneBy([
+            'objectIdentifier' => $query->getIdentifier(),
+            'objectType' => Product::TYPE,
+            'adapterName' => PlentymarketsAdapter::NAME,
+        ]);
+
+        $product = $this->client->request('GET', 'items/' . $identity->getAdapterIdentifier(), [
+            'lang' => $this->languageHelper->getLanguagesQueryString(),
+        ]);
+
+        $result = [];
+
+        $result[] = $this->responseParser->parse($product, $result);
+
+        return $result;
     }
 }

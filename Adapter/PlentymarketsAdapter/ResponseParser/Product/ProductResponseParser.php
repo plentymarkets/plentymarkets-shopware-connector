@@ -74,11 +74,81 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
+     * @param array $product
+     * @param array $result
+     *
+     * @return Product
+     */
+    public function parse(array $product, array &$result)
+    {
+        static $webstores;
+
+        if (null === $webstores) {
+            $webstores = $this->client->request('GET', 'webstores');
+        }
+
+        $variations = $this->client->request('GET', 'items/' . $product['id'] . '/variations', [
+            'with' => 'variationClients,variationSalesPrices,variationCategories,variationDefaultCategory,unit,variationAttributeValues',
+        ]);
+
+        $mainVariation = $this->getMainVariation($variations);
+
+        $identity = $this->identityService->findOneOrCreate(
+            (string) $product['id'],
+            PlentymarketsAdapter::NAME,
+            Product::TYPE
+        );
+
+        $hasStockLimitation = array_filter($variations, function (array $variation) {
+            return (bool) $variation['stockLimitation'];
+        });
+
+        $shopIdentifiers = $this->getShopIdentifiers($mainVariation);
+
+        if (empty($shopIdentifiers)) {
+            return null;
+        }
+
+        /**
+         * @var Product $object
+         */
+        $object = Product::fromArray([
+            'identifier' => $identity->getObjectIdentifier(),
+            'name' => $product['texts'][0]['name1'],
+            'number' => $mainVariation['number'],
+            'active' => $product['isActive'],
+            'shopIdentifiers' => $shopIdentifiers,
+            'manufacturerIdentifier' => $this->getManufacturerIdentifier($product),
+            'categoryIdentifiers' => $this->getCategories($mainVariation, $webstores),
+            'defaultCategoryIdentifiers' => $this->getDafaultCategories($mainVariation, $webstores),
+            'shippingProfileIdentifiers' => $this->getShippingProfiles($product),
+            'imageIdentifiers' => $this->getImageIdentifiers($product, $product['texts'], $result),
+            'variations' => $this->getVariations($product['texts'], $variations, $result),
+            'vatRateIdentifier' => $this->getVatRateIdentifier($mainVariation),
+            'limitedStock' => (bool) $hasStockLimitation,
+            'description' => $product['texts'][0]['shortDescription'],
+            'longDescription' => $product['texts'][0]['description'],
+            'technicalDescription' => $product['texts'][0]['technicalData'],
+            'metaTitle' => $product['texts'][0]['name1'],
+            'metaDescription' => $product['texts'][0]['metaDescription'],
+            'metaKeywords' => $product['texts'][0]['keywords'],
+            'metaRobots' => 'INDEX, FOLLOW',
+            'linkedProducts' => $this->getLinkedProducts($product),
+            'documents' => $this->getDocuments($product),
+            'properties' => $this->getProperties($mainVariation),
+            'translations' => $this->getProductTranslations($product['texts']),
+            'attributes' => $this->getAttributes($product),
+        ]);
+
+        return $object;
+    }
+
+    /**
      * @param array $variations
      *
      * @return array
      */
-    public function getMainVariation(array $variations)
+    private function getMainVariation(array $variations)
     {
         $mainVariation = array_filter($variations, function ($varation) {
             return $varation['isMain'] === true;
@@ -92,8 +162,7 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * Returns the matching price configurations. We need a direct mapping in these configurations to find the
-     * correct price.
+     * Returns the matching price configurations.
      *
      * @return array
      */
@@ -189,7 +258,7 @@ class ProductResponseParser implements ProductResponseParserInterface
                 if (!isset($temporaryPrices['default'][$priceConfiguration['type']])) {
                     $temporaryPrices['default'][$priceConfiguration['type']] = [
                         'from' => $priceConfiguration['minimumOrderQuantity'],
-                        'price' => $price['price']
+                        'price' => $price['price'],
                     ];
                 }
             }
@@ -208,11 +277,11 @@ class ProductResponseParser implements ProductResponseParserInterface
             $pseudoPrice = 0.0;
 
             if (isset($priceArray['default'])) {
-                $price = (double) $priceArray['default']['price'];
+                $price = (float) $priceArray['default']['price'];
             }
 
             if (isset($priceArray['default'])) {
-                $pseudoPrice = (double) $priceArray['rrp']['price'];
+                $pseudoPrice = (float) $priceArray['rrp']['price'];
             }
 
             $prices[] = Price::fromArray([
@@ -228,7 +297,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             /**
              * @var Price[] $possibleScalePrices
              */
-            $possibleScalePrices = array_filter($prices, function(Price $possiblePrice) use ($price) {
+            $possibleScalePrices = array_filter($prices, function (Price $possiblePrice) use ($price) {
                 return $possiblePrice->getCustomerGroupIdentifier() === $price->getCustomerGroupIdentifier() &&
                     spl_object_hash($price) !== spl_object_hash($possiblePrice);
             });
@@ -237,7 +306,7 @@ class ProductResponseParser implements ProductResponseParserInterface
                 continue;
             }
 
-            usort($possibleScalePrices, function(Price $possibleScalePriceLeft, Price $possibleScalePriceright) {
+            usort($possibleScalePrices, function (Price $possibleScalePriceLeft, Price $possibleScalePriceright) {
                 if ($possibleScalePriceLeft->getFromAmount() === $possibleScalePriceright->getFromAmount()) {
                     return 0;
                 }
@@ -326,7 +395,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return string
      */
-    public function getVatRateIdentifier(array $variation)
+    private function getVatRateIdentifier(array $variation)
     {
         $vatRateIdentity = $this->identityService->findOneBy([
             'adapterIdentifier' => $variation['vatId'],
@@ -362,7 +431,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return string
      */
-    public function getManufacturerIdentifier(array $product)
+    private function getManufacturerIdentifier(array $product)
     {
         $manufacturerIdentity = $this->identityService->findOneOrCreate(
             (string) $product['manufacturerId'],
@@ -382,11 +451,11 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return array
      */
-    public function getShippingProfiles(array $product)
+    private function getShippingProfiles(array $product)
     {
         $productShippingProfiles = $this->client->request('GET', 'items/' . $product['id'] . '/item_shipping_profiles', [
             'with' => 'names',
-            'lang' => implode(',', array_column($this->languageHelper->getLanguages(), 'id')),
+            'lang' => $this->languageHelper->getLanguagesQueryString(),
         ]);
 
         $shippingProfiles = [];
@@ -416,7 +485,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return array
      */
-    public function getImageIdentifiers(array $product, array $texts, array &$result)
+    private function getImageIdentifiers(array $product, array $texts, array &$result)
     {
         $url = 'items/' . $product['id'] . '/images';
         $images = $this->client->request('GET', $url);
@@ -454,7 +523,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return array
      */
-    public function getDafaultCategories(array $mainVariation, array $webstores)
+    private function getDafaultCategories(array $mainVariation, array $webstores)
     {
         $defaultCategories = [];
 
@@ -494,7 +563,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return Translation[]
      */
-    public function getProductTranslations(array $texts)
+    private function getProductTranslations(array $texts)
     {
         $translations = [];
 
@@ -560,7 +629,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return int
      */
-    public function getStock($variation)
+    private function getStock($variation)
     {
         $url = 'items/' . $variation['itemId'] . '/variations/' . $variation['id'] . '/stock';
         $stocks = $this->client->request('GET', $url);
@@ -582,7 +651,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return array
      */
-    public function getCategories(array $mainVariation, array $webstores)
+    private function getCategories(array $mainVariation, array $webstores)
     {
         $categories = [];
         foreach ($mainVariation['variationCategories'] as $category) {
@@ -623,7 +692,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return Attribute[]
      */
-    public function getAttributes(array $product)
+    private function getAttributes(array $product)
     {
         $attributes = [];
 
@@ -708,7 +777,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return Variation[]
      */
-    public function getVariations(array $texts, $variations, array &$result)
+    private function getVariations(array $texts, $variations, array &$result)
     {
         $mappedVariations = [];
 
@@ -730,9 +799,9 @@ class ProductResponseParser implements ProductResponseParserInterface
                 'model' => $variation['model'],
                 'imageIdentifiers' => $this->getVariationImages($texts, $variation, $result),
                 'prices' => $this->getPrices($variation),
-                'purchasePrice' => (double) $variation['purchasePrice'],
+                'purchasePrice' => (float) $variation['purchasePrice'],
                 'unitIdentifier' => $this->getUnitIdentifier($variation),
-                'content' => (double) $variation['unit']['content'],
+                'content' => (float) $variation['unit']['content'],
                 'maximumOrderQuantity' => (int) $variation['maximumOrderQuantity'],
                 'minimumOrderQuantity' => (int) $variation['minimumOrderQuantity'],
                 'intervalOrderQuantity' => (int) $variation['intervalOrderQuantity'],
@@ -757,7 +826,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return LinkedProduct[]
      */
-    public function getLinkedProducts(array $product)
+    private function getLinkedProducts(array $product)
     {
         $linkedProducts = $images = $this->client->request('GET', 'items/' . $product['id'] . '/item_cross_selling');
 
@@ -801,7 +870,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return array
      */
-    public function getDocuments(array $product)
+    private function getDocuments(array $product)
     {
         return [];
     }
@@ -811,7 +880,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return Property[]
      */
-    public function getProperties(array $mainVariation)
+    private function getProperties(array $mainVariation)
     {
         $result = [];
 
@@ -886,7 +955,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             } elseif ($property['property']['valueType'] === 'float') {
                 // TODO: add unit
                 $values[] = Value::fromArray([
-                    'value' => (string)$property['valueFloat'],
+                    'value' => (string) $property['valueFloat'],
                 ]);
             } elseif ($property['property']['valueType'] === 'file') {
                 // TODO: add correct file path
@@ -911,7 +980,7 @@ class ProductResponseParser implements ProductResponseParserInterface
     /**
      * @param array $variation
      *
-     * @return integer
+     * @return int
      */
     private function getShippingTime(array $variation)
     {
@@ -927,8 +996,8 @@ class ProductResponseParser implements ProductResponseParserInterface
             }
         }
 
-        $shippingConfiguration = array_filter($shippingConfigurations, function(array $configuration) use ($variation) {
-            return $configuration['id'] ===  $variation['availability'];
+        $shippingConfiguration = array_filter($shippingConfigurations, function (array $configuration) use ($variation) {
+            return $configuration['id'] === $variation['availability'];
         });
 
         if (!empty($shippingConfiguration)) {
@@ -945,7 +1014,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return Property[]
      */
-    public function getVariationProperties(array $variation)
+    private function getVariationProperties(array $variation)
     {
         static $attributes;
 
@@ -1046,7 +1115,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return array
      */
-    public function getShopIdentifiers(array $mainVariation)
+    private function getShopIdentifiers(array $mainVariation)
     {
         $identifiers = [];
 

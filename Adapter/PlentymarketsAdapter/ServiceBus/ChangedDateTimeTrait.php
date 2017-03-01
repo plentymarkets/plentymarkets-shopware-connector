@@ -6,6 +6,7 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
+use PlentymarketsAdapter\PlentymarketsAdapter;
 
 /**
  * Class ChangedDateTimeTrait.
@@ -13,42 +14,49 @@ use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 trait ChangedDateTimeTrait
 {
     /**
-     * @param ConfigServiceInterface $config
-     *
      * @return string
      */
-    public function getChangedDateTime(ConfigServiceInterface $config)
+    private function getKey()
     {
-        $key = 'PlentymarketsAdapter.' . $this->getClassName(get_called_class()) . '.LastChangeDateTime';
-
-        $timezone = new DateTimeZone('UTC');
-        $lastRun = $config->get($key, '2000-01-01');
-
-        $dateTime = new DateTimeImmutable($lastRun, $timezone);
-
-        return $dateTime->format(DateTime::ATOM);
+        return PlentymarketsAdapter::NAME . get_called_class() . '.LastChangeDateTime';
     }
 
     /**
-     * @param ConfigServiceInterface $config
+     * @return DateTimeImmutable
      */
-    public function setChangedDateTime(ConfigServiceInterface $config)
+    public function getChangedDateTime()
     {
-        $key = 'PlentymarketsAdapter.' . $this->getClassName(get_called_class()) . '.LastChangeDateTime';
+        /**
+         * @var ConfigServiceInterface $config
+         */
+        $config = Shopware()->Container()->get('plenty_connector.config');
 
         $timezone = new DateTimeZone('UTC');
-        $dateTime = new DateTimeImmutable('now', $timezone);
+        $lastRun = $config->get($this->getKey(), '2000-01-01');
 
-        $config->set($key, $dateTime);
+        return new DateTimeImmutable($lastRun, $timezone);
     }
 
     /**
-     * @param $class
-     *
-     * @return string
+     * @param DateTimeImmutable $dateTime
      */
-    private function getClassName($class)
+    public function setChangedDateTime(DateTimeImmutable $dateTime)
     {
-        return substr(strrchr(get_class($class), '\\'), 1);
+        /**
+         * @var ConfigServiceInterface $config
+         */
+        $config = Shopware()->Container()->get('plenty_connector.config');
+
+        $config->set($this->getKey(), $dateTime);
+    }
+
+    /**
+     * @return DateTimeImmutable
+     */
+    public function getCurrentDateTime()
+    {
+        $timezone = new DateTimeZone('UTC');
+
+        return new DateTimeImmutable('now', $timezone);
     }
 }

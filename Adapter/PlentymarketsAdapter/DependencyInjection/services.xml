@@ -180,7 +180,6 @@
         <service id="plentymarkets_adapter.query_handler.fetch_all_products" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Product\FetchAllProductsQueryHandler">
             <argument type="service" id="plentmarkets_adapter.client" />
             <argument type="service" id="plentmarkets_adapter.helper.language" />
-            <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plentmarkets_adapter.response_parser.product" />
 
             <tag name="plenty_connector.query_handler" />
@@ -189,7 +188,6 @@
         <service id="plentymarkets_adapter.query_handler.fetch_changed_products" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Product\FetchChangedProductsQueryHandler">
             <argument type="service" id="plentmarkets_adapter.client" />
             <argument type="service" id="plentmarkets_adapter.helper.language" />
-            <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plentmarkets_adapter.response_parser.product" />
 
             <tag name="plenty_connector.query_handler" />
@@ -197,6 +195,9 @@
 
         <service id="plentymarkets_adapter.query_handler.fetch_product" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Product\FetchProductQueryHandler">
             <argument type="service" id="plentmarkets_adapter.client" />
+            <argument type="service" id="plentmarkets_adapter.helper.language" />
+            <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="plentmarkets_adapter.response_parser.product" />
 
             <tag name="plenty_connector.query_handler" />
         </service>

@@ -66,7 +66,7 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
     {
         $elements = $this->client->request('GET', 'categories', [
             'with' => 'details',
-            'lang' => implode(',', array_column($this->languageHelper->getLanguages(), 'id')),
+            'lang' => $this->languageHelper->getLanguagesQueryString(),
         ]);
 
         $elements = array_filter($elements, function ($element) {
