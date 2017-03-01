@@ -273,10 +273,6 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                 $this->client->request('post', 'comments', $commentParams);
             }
 
-            foreach ($order->getPayments() as $payment) {
-
-            }
-
             $this->identityService->create(
                 $order->getIdentifier(),
                 Order::TYPE,
@@ -369,8 +365,6 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             'newsletterAllowanceAt' => '',
             'birthdayAt' => $customer->getBirthday()->format(DATE_W3C),
             'lastOrderAt' => $order->getOrderTime()->format(DATE_W3C),
-            'privatePhone' => $customer->getPhoneNumber(),
-            'privateMobile' => $customer->getMobilePhoneNumber(),
             'userId' => 1, // TODO: Konfigurierbar über Config (rest/accounts)
             'options' => []
         ];
