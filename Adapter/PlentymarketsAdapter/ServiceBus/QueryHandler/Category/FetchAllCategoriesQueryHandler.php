@@ -63,11 +63,12 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
     {
         $elements = $this->client->request('GET', 'categories', [
             'with' => 'details',
+            'type' => 'item',
             'lang' => $this->languageHelper->getLanguagesQueryString(),
         ]);
 
         $elements = array_filter($elements, function ($element) {
-            return $element['type'] === 'item' && $element['right'] === 'all';
+            return $element['right'] === 'all';
         });
 
         $result = [];
