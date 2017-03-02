@@ -64,13 +64,18 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
+        $lastCangedTime = $this->getChangedDateTime();
+        $currentDateTime = $this->getCurrentDateTime();
+
         $elements = $this->client->request('GET', 'categories', [
             'with' => 'details',
+            'type' => 'item',
+            'updatedAt' => $lastCangedTime->format(DATE_W3C),
             'lang' => $this->languageHelper->getLanguagesQueryString(),
         ]);
 
         $elements = array_filter($elements, function ($element) {
-            return $element['type'] === 'item' && $element['right'] === 'all';
+            return $element['right'] === 'all';
         });
 
         $result = [];
@@ -98,6 +103,10 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
                 }
             }
         });
+
+        if (!empty($result)) {
+            $this->setChangedDateTime($currentDateTime);
+        }
 
         return array_filter($result);
     }
