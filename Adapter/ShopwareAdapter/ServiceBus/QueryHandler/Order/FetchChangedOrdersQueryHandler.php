@@ -64,11 +64,7 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $event)
     {
-        $this->logger->notice('not implemented yes');
 
-        return [];
-
-        throw new \Exception('Not implemented!');
         $filter = [
             [
                 'property' => 'status',

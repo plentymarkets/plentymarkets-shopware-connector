@@ -355,10 +355,10 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             'firstName' => $customer->getFirstname(),
             'lastName' => $customer->getLastname(),
             'gender' => $customer->getSalutation() === Customer::SALUTATION_MR ? 'male' : 'female',
-            'classId' => (int) $customerGroupIdentitiy->getAdapterIdentifier(),
+            'classId' => (int) $customerGroupIdentitiy->getAdapterIdentifier(),//Todo: handle no customer group at plenty
             'lang' => $languageIdentity->getAdapterIdentifier(),
             'referrerId' => 1, // TODO: Konfigurierbar über Config. (/rest/orders/referrers)
-            'singleAccess' => $customer->getType() === Customer::TYPE_GUEST,
+            'singleAccess' => $customer->getCustomerType() === Customer::TYPE_GUEST,
             'plentyId' => $accountWebStore['id'],
             'newsletterAllowanceAt' => '',
             'birthdayAt' => $customer->getBirthday()->format(DATE_W3C),
@@ -461,11 +461,4 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         return $this->client->request('POST', 'accounts/contacts/' . $plentyCustomer['id'] . '/addresses', $params);
     }
 
-    /**
-     * @param Order $order
-     * @param OrderItem $item
-     */
-    private function getVatConfiguration(Order $order, OrderItem $item)
-    {
-    }
 }

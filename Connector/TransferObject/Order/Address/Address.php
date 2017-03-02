@@ -2,6 +2,8 @@
 
 namespace PlentyConnector\Connector\TransferObject\Order\Address;
 
+use Assert\Assertion;
+use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
 /**
@@ -10,12 +12,13 @@ use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
  *
  * Class Address
  */
-class Address
+class Address extends AbstractTransferObject
 {
     const SALUTATION_MR = 1;
     const SALUTATION_MS = 2;
     const SALUTATION_FIRM = 3;
 
+    const TYPE = 'OrderAddress';
     /**
      * @var null|string
      */
@@ -75,6 +78,18 @@ class Address
      * @var Attribute[]
      */
     private $attributes = [];
+
+    private $identifier;
+
+    /**
+     * @var string
+     */
+    private $phoneNumber = '';
+
+    /**
+     * @var string
+     */
+    private $mobilePhoneNumber = '';
 
     /**
      * @return null|string
@@ -266,5 +281,55 @@ class Address
     public function setAttributes($attributes)
     {
         $this->attributes = $attributes;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getType()
+    {
+        return self::TYPE;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIdentifier()
+    {
+        Assertion::notBlank($this->identifier);
+
+        return $this->identifier;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhoneNumber()
+    {
+        return $this->phoneNumber;
+    }
+
+    /**
+     * @param string $phoneNumber
+     */
+    public function setPhoneNumber($phoneNumber)
+    {
+        $this->phoneNumber = $phoneNumber;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMobilePhoneNumber()
+    {
+        return $this->mobilePhoneNumber;
+    }
+
+    /**
+     * @param string $mobilePhoneNumber
+     */
+    public function setMobilePhoneNumber($mobilePhoneNumber)
+    {
+        $this->mobilePhoneNumber = $mobilePhoneNumber;
     }
 }

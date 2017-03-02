@@ -61,9 +61,6 @@ class FetchAllOrdersQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $this->logger->notice('not implemented yes');
-
-        return [];
 
         $filter = [
             [
@@ -74,6 +71,7 @@ class FetchAllOrdersQueryHandler implements QueryHandlerInterface
         ];
 
         $orders = $this->orderResource->getList(0, null, $filter);
+
 
         $result = array_map(function ($order) {
             return $this->responseParser->parse($this->orderResource->getOne($order['id']));

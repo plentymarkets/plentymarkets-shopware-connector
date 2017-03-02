@@ -114,7 +114,7 @@ class Order extends AbstractTransferObject
      */
     public function __construct()
     {
-        $timezone = new DateTimeZone('UTC');
+        $timezone = new \DateTimeZone('UTC');
         $this->orderTime = new DateTimeImmutable('now', $timezone);
     }
 
@@ -221,7 +221,7 @@ class Order extends AbstractTransferObject
     /**
      * @param Address $billingAddress
      */
-    public function setBillingAddress($billingAddress)
+    public function setBillingAddress(Address $billingAddress)
     {
         $this->billingAddress = $billingAddress;
     }
@@ -237,7 +237,7 @@ class Order extends AbstractTransferObject
     /**
      * @param Address $shippingAddress
      */
-    public function setShippingAddress($shippingAddress)
+    public function setShippingAddress(Address $shippingAddress)
     {
         $this->shippingAddress = $shippingAddress;
     }

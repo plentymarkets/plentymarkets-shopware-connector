@@ -4,12 +4,12 @@ namespace PlentyConnector\Connector\TransferObject\Order\Customer;
 
 use Assert\Assertion;
 use DateTimeImmutable;
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
+use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 
 /**
  * Class Customer
  */
-class Customer
+class Customer extends AbstractTransferObject
 {
     const TYPE_NORMAL = 1;
     const TYPE_GUEST = 2;
@@ -17,6 +17,10 @@ class Customer
     const SALUTATION_MR = 1;
     const SALUTATION_MS = 2;
     const SALUTATION_FIRM = 3;
+
+    const TYPE = 'order_customer';
+
+    private $identifier;
 
     /**
      * @var int
@@ -47,16 +51,6 @@ class Customer
      * @var string
      */
     private $customerGroupIdentifier = '';
-
-    /**
-     * @var string
-     */
-    private $company = '';
-
-    /**
-     * @var string
-     */
-    private $department = '';
 
     /**
      * @var int
@@ -94,23 +88,23 @@ class Customer
     private $mobilePhoneNumber = '';
 
     /**
-     * @var Attribute[]
+     * @var string
      */
-    private $attributes = [];
-
+    private $shopIdentifier;
+    
     /**
      * Customer constructor.
      */
     public function __construct()
     {
-        $timezone = new DateTimeZone('UTC');
+        $timezone = new \DateTimeZone('UTC');
         $this->birthday = new DateTimeImmutable('now', $timezone);
     }
 
     /**
      * @return int
      */
-    public function getType()
+    public function getCustomerType()
     {
         return $this->type;
     }
@@ -210,38 +204,6 @@ class Customer
     }
 
     /**
-     * @return null|string
-     */
-    public function getCompany()
-    {
-        return $this->company;
-    }
-
-    /**
-     * @param null|string $company
-     */
-    public function setCompany($company)
-    {
-        $this->company = $company;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getDepartment()
-    {
-        return $this->department;
-    }
-
-    /**
-     * @param null|string $department
-     */
-    public function setDepartment($department)
-    {
-        $this->department = $department;
-    }
-
-    /**
      * @return int
      */
     public function getSalutation()
@@ -306,7 +268,7 @@ class Customer
     }
 
     /**
-     * @return DateTimeImmutable
+     * @return DateTimeImmutable|null
      */
     public function getBirthday()
     {
@@ -316,7 +278,7 @@ class Customer
     /**
      * @param DateTimeImmutable $birthday
      */
-    public function setBirthday(DateTimeImmutable $birthday)
+    public function setBirthday($birthday)
     {
         $this->birthday = $birthday;
     }
@@ -354,18 +316,36 @@ class Customer
     }
 
     /**
-     * @return Attribute[]
+     * {@inheritdoc}
      */
-    public function getAttributes()
+    public function getIdentifier()
     {
-        return $this->attributes;
+        Assertion::notBlank($this->identifier);
+
+        return $this->identifier;
     }
 
     /**
-     * @param Attribute[] $attributes
+     * {@inheritdoc}
      */
-    public function setAttributes($attributes)
+    public function getType()
     {
-        $this->attributes = $attributes;
+        return self::TYPE;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShopIdentifier()
+    {
+        return $this->shopIdentifier;
+    }
+
+    /**
+     * @param string $shopIdentifier
+     */
+    public function setShopIdentifier($shopIdentifier)
+    {
+        $this->shopIdentifier = $shopIdentifier;
     }
 }
