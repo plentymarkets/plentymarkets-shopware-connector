@@ -85,6 +85,6 @@ class FetchChangedProductsQueryHandler implements QueryHandlerInterface
             $this->setChangedDateTime($currentDateTime);
         }
 
-        return $result;
+        return array_filter($result);
     }
 }

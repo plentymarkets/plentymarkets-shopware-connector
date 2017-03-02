@@ -89,6 +89,6 @@ class FetchProductQueryHandler implements QueryHandlerInterface
 
         $result[] = $this->responseParser->parse($product, $result);
 
-        return $result;
+        return array_filter($result);
     }
 }
