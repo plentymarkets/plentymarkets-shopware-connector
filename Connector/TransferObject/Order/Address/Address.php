@@ -18,7 +18,6 @@ class Address extends AbstractTransferObject
     const SALUTATION_MS = 2;
     const SALUTATION_FIRM = 3;
 
-    const TYPE = 'OrderAddress';
     /**
      * @var null|string
      */

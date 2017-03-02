@@ -13,6 +13,7 @@ use ShopwareAdapter\ShopwareAdapter;
 class AddressResponseParser implements AddressResponseParserInterface
 {
     use GetAttributeTrait;
+
     /**
      * @var IdentityServiceInterface
      */
@@ -38,6 +39,7 @@ class AddressResponseParser implements AddressResponseParserInterface
             ShopwareAdapter::NAME,
             Address::TYPE
         );
+
         //TODO: state, additional address lines
         return Address::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
@@ -53,8 +55,6 @@ class AddressResponseParser implements AddressResponseParserInterface
             'countryIdentifier' => $entry['country']['iso3'],
             'vatId' => isset($entry['vatId']) ? $entry['vatId'] : null,
             'attributes' => $this->getAttributes($entry['attribute']),
-
         ]);
     }
-
 }

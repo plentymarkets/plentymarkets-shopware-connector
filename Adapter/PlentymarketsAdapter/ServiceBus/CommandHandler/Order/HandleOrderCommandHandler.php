@@ -355,7 +355,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             'firstName' => $customer->getFirstname(),
             'lastName' => $customer->getLastname(),
             'gender' => $customer->getSalutation() === Customer::SALUTATION_MR ? 'male' : 'female',
-            'classId' => (int) $customerGroupIdentitiy->getAdapterIdentifier(),//Todo: handle no customer group at plenty
+            'classId' => (int) $customerGroupIdentitiy->getAdapterIdentifier(), // TODO: handle no customer group at plenty
             'lang' => $languageIdentity->getAdapterIdentifier(),
             'referrerId' => 1, // TODO: Konfigurierbar über Config. (/rest/orders/referrers)
             'singleAccess' => $customer->getCustomerType() === Customer::TYPE_GUEST,
@@ -460,5 +460,4 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
 
         return $this->client->request('POST', 'accounts/contacts/' . $plentyCustomer['id'] . '/addresses', $params);
     }
-
 }

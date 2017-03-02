@@ -20,12 +20,11 @@ use ShopwareAdapter\ResponseParser\OrderItem\OrderItemResponseParser;
  */
 class OrderResponseParserTest extends ResponseParserTest
 {
-    /** @var  OrderResponseParser */
+    /**
+     * @var OrderResponseParser
+     */
     private $orderResponseParser;
 
-    /**
-     * @return void
-     */
     public function setUp()
     {
         parent::setup();
@@ -43,13 +42,11 @@ class OrderResponseParserTest extends ResponseParserTest
         );
     }
 
-    /**
-     * @return void
-     */
     public function testOrderParsing()
     {
-
-        /** @var Order $orderDto */
+        /**
+         * @var Order $orderDto
+         */
         $orderDto = $this->orderResponseParser->parse(self::$orderData);
 
         $this->assertInstanceOf(Attribute::class, $orderDto->getAttributes()[0]);
@@ -61,7 +58,7 @@ class OrderResponseParserTest extends ResponseParserTest
         $this->assertSame(
             \DateTimeImmutable::createFromFormat(
                 'Y-m-d H:i:s',
-                "2012-08-30 10:15:54",
+                '2012-08-30 10:15:54',
                 new \DateTimeZone('Europe/Berlin')
             )->format(DATE_W3C),
             $orderDto->getOrderTime()->format(DATE_W3C)

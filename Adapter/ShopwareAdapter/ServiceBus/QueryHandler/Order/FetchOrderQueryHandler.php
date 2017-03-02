@@ -8,7 +8,6 @@ use PlentyConnector\Connector\ServiceBus\Query\Order\FetchOrderQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
 use PlentyConnector\Connector\TransferObject\Order\Order;
-use Psr\Log\LoggerInterface;
 use Shopware\Components\Api\Resource;
 use ShopwareAdapter\ResponseParser\Order\OrderResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
@@ -24,11 +23,6 @@ class FetchOrderQueryHandler implements QueryHandlerInterface
     private $responseParser;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @var IdentityServiceInterface
      */
     private $identityService;
@@ -42,18 +36,15 @@ class FetchOrderQueryHandler implements QueryHandlerInterface
      * FetchOrderQueryHandler constructor.
      *
      * @param OrderResponseParserInterface $responseParser
-     * @param LoggerInterface $logger
      * @param IdentityServiceInterface $identityService
      * @param Resource\Order $orderResource
      */
     public function __construct(
         OrderResponseParserInterface $responseParser,
-        LoggerInterface $logger,
         IdentityServiceInterface $identityService,
         Resource\Order $orderResource
     ) {
         $this->responseParser = $responseParser;
-        $this->logger = $logger;
         $this->identityService = $identityService;
         $this->orderResource = $orderResource;
     }

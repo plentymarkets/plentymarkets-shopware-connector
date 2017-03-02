@@ -18,8 +18,6 @@ class Customer extends AbstractTransferObject
     const SALUTATION_MS = 2;
     const SALUTATION_FIRM = 3;
 
-    const TYPE = 'order_customer';
-
     private $identifier;
 
     /**
@@ -91,7 +89,7 @@ class Customer extends AbstractTransferObject
      * @var string
      */
     private $shopIdentifier;
-    
+
     /**
      * Customer constructor.
      */

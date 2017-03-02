@@ -128,7 +128,6 @@ class HandleOrderCommandHandlerTest extends TestCase
     {
         static $country;
 
-
         if (null === $country) {
             $countries = $this->client->request('GET', 'orders/shipping/countries');
 

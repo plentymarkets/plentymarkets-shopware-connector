@@ -13,7 +13,6 @@ use ShopwareAdapter\ShopwareAdapter;
  */
 class CustomerResponseParser implements CustomerResponseParserInterface
 {
-
     /**
      * @var IdentityServiceInterface
      */
@@ -35,12 +34,13 @@ class CustomerResponseParser implements CustomerResponseParserInterface
     public function parse(array $entry)
     {
         $identity = $this->identityService->findOneOrCreate(
-            (string)$entry['id'],
+            (string) $entry['id'],
             ShopwareAdapter::NAME,
             Customer::TYPE
         )->getObjectIdentifier();
-        $shopIdentity = $this->getIdentifier((string)$entry['shopId'], Shop::TYPE);
-        $languageIdentity = $this->getIdentifier((string)$entry['languageId'], Language::TYPE);
+
+        $shopIdentity = $this->getIdentifier((string) $entry['shopId'], Shop::TYPE);
+        $languageIdentity = $this->getIdentifier((string) $entry['languageId'], Language::TYPE);
 
         return Customer::fromArray([
             'identifier' => $identity,
@@ -52,7 +52,7 @@ class CustomerResponseParser implements CustomerResponseParserInterface
             'number' => $entry['number'],
             'salutation' => $entry['salutation'],
             'title' => $entry['title'],
-            'newsletter' => (bool)$entry['newsletter'],
+            'newsletter' => (bool) $entry['newsletter'],
             'shopIdentifier' => $shopIdentity,
             'languageIdentifier' => $languageIdentity,
         ]);
@@ -60,6 +60,7 @@ class CustomerResponseParser implements CustomerResponseParserInterface
 
     /**
      * @param int
+     *
      * @return int
      */
     private function getCustomerTypeId($shopwareId)
@@ -70,19 +71,23 @@ class CustomerResponseParser implements CustomerResponseParserInterface
 
             case \Shopware\Models\Customer\Customer::ACCOUNT_MODE_FAST_LOGIN:
                 return Customer::TYPE_GUEST;
-
         }
+
         throw new \InvalidArgumentException('Unknown customer type ' . $shopwareId);
     }
 
     /**
-     * @param $entry
+     * @param int $entry
+     * @param string $type
+     *
      * @return string
      */
     private function getIdentifier($entry, $type)
     {
+        Assertion::integer($entry);
+
         return $this->identityService->findOneOrThrow(
-            (string)$entry,
+            (string) $entry,
             ShopwareAdapter::NAME,
             $type
         )->getObjectIdentifier();

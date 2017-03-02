@@ -13,9 +13,6 @@ use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
  */
 class Variation extends AbstractValueObject
 {
-
-    const TYPE = 'Variation';
-
     /**
      * @var bool
      */

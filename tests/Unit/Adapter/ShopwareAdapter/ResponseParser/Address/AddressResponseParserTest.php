@@ -17,16 +17,16 @@ use ShopwareAdapter\ResponseParser\Address\AddressResponseParser;
  */
 class AddressResponseParserTest extends ResponseParserTest
 {
-    /** @var  AddressResponseParser */
+    /** @var AddressResponseParser */
     private $responseParser;
 
-    /**
-     * @return void
-     */
     public function setUp()
     {
         parent::setup();
-        /** @var IdentityService|\PHPUnit_Framework_MockObject_MockObject $identityService */
+
+        /**
+         * @var IdentityService|\PHPUnit_Framework_MockObject_MockObject $identityService
+         */
         $identityService = $this->createMock(IdentityService::class);
 
         $identity = $this->createMock(Identity::class);
@@ -34,16 +34,17 @@ class AddressResponseParserTest extends ResponseParserTest
         $identityService->expects($this->any())->method('findOneOrCreate')->willReturn($identity);
         $identityService->expects($this->any())->method('findOneOrThrow')->willReturn($identity);
 
-        /** @var AddressResponseParser $parser */
+        /**
+         * @var AddressResponseParser $parser
+         */
         $this->responseParser = new AddressResponseParser($identityService);
     }
 
-    /**
-     * @return void
-     */
     public function testAddressParsing()
     {
-        /** @var Address $address */
+        /**
+         * @var Address $address
+         */
         $address = $this->responseParser->parse(self::$orderData['billing']);
 
         $this->assertInstanceOf(Attribute::class, $address->getAttributes()[0]);

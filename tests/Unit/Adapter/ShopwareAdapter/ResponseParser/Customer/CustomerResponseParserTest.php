@@ -14,36 +14,36 @@ use ShopwareAdapter\ResponseParser\Customer\CustomerResponseParser;
  */
 class CustomerResponseParserTest extends ResponseParserTest
 {
-    /** @var  AddressResponseParser */
+    /**
+     * @var AddressResponseParser
+     */
     private $responseParser;
 
-    /**
-     * @return void
-     */
     public function setUp()
     {
         parent::setup();
 
-        /** @var AddressResponseParser $parser */
+        /**
+         * @var AddressResponseParser $parser
+         */
         $this->responseParser = new CustomerResponseParser($this->identityService);
     }
 
-    /**
-     * @return void
-     */
     public function testCustomerParsing()
     {
-        /** @var Customer $customer */
+        /**
+         * @var Customer $customer
+         */
         $customer = $this->responseParser->parse(self::$orderData['customer']);
 
-        $this->assertSame(null, $customer->getBirthday());
+        $this->assertNull($customer->getBirthday());
         $this->assertSame(Customer::TYPE_NORMAL, $customer->getCustomerType());
         $this->assertSame('mustermann@b2b.de', $customer->getEmail());
         $this->assertSame('Händler', $customer->getFirstname());
         $this->assertSame('Kundengruppe-Netto', $customer->getLastname());
-        $this->assertSame(false, $customer->getNewsletter());
+        $this->assertFalse($customer->getNewsletter());
         $this->assertSame('20003', $customer->getNumber());
         $this->assertSame('mr', $customer->getSalutation());
-        $this->assertSame(null, $customer->getTitle());
+        $this->assertNull($customer->getTitle());
     }
 }

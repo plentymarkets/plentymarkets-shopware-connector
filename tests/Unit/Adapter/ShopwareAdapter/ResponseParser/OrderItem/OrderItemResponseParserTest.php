@@ -14,13 +14,11 @@ use ShopwareAdapter\ResponseParser\OrderItem\OrderItemResponseParser;
  */
 class OrderItemResponseParserTest extends ResponseParserTest
 {
-
-    /** @var OrderItemResponseParser */
+    /**
+     * @var OrderItemResponseParser
+     */
     private $responseParser;
 
-    /**
-     * @return void
-     */
     public function setUp()
     {
         parent::setup();
@@ -30,13 +28,11 @@ class OrderItemResponseParserTest extends ResponseParserTest
         );
     }
 
-    /**
-     * @return void
-     */
     public function testOrderItemParsing()
     {
-
-        /** @var OrderItem $orderItem */
+        /**
+         * var OrderItem $orderItem
+         */
         $orderItem = $this->responseParser->parse(self::$orderData['details'][0]);
 
         $this->assertInstanceOf(Attribute::class, $orderItem->getAttributes()[0]);
@@ -45,6 +41,5 @@ class OrderItemResponseParserTest extends ResponseParserTest
         $this->assertSame(836.134, $orderItem->getPrice());
         $this->assertSame(1, $orderItem->getQuantity());
         $this->assertSame(OrderItem::TYPE_PRODUCT, $orderItem->getType());
-
     }
 }

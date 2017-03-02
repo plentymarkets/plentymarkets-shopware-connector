@@ -3,7 +3,6 @@
 namespace ShopwareAdapter\ResponseParser\Order;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Currency\Currency;
 use PlentyConnector\Connector\TransferObject\Order\Address\Address;
@@ -28,6 +27,7 @@ use ShopwareAdapter\ShopwareAdapter;
 class OrderResponseParser implements OrderResponseParserInterface
 {
     use GetAttributeTrait;
+
     /**
      * @var IdentityServiceInterface
      */
@@ -71,20 +71,23 @@ class OrderResponseParser implements OrderResponseParserInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @throws NotFoundException
      */
     public function parse(array $entry)
     {
-
         $orderItems = array_filter(array_map(function ($orderItem) {
             return $this->orderItemResponseParser->parse($orderItem);
         }, $entry['details']));
 
-        /** @var Address $billingAddress */
+        /**
+         * @var Address $billingAddress
+         */
         $billingAddress = $this->orderAddressParser->parse($entry['billing']);
-        /** @var Address $shippingAddress */
+
+        /**
+         * @var Address $shippingAddress
+         */
         $shippingAddress = $this->orderAddressParser->parse($entry['shipping']);
+
         $customer = $this->customerParser->parse($entry['customer']);
         $customer->setMobilePhoneNumber($billingAddress->getMobilePhoneNumber());
         $customer->setPhoneNumber($billingAddress->getPhoneNumber());
@@ -100,7 +103,7 @@ class OrderResponseParser implements OrderResponseParserInterface
                 'customer' => $customer,
                 'phoneNumber' => $entry['billing']['phone'],
                 'orderTime' => $entry['orderTime'],
-                'orderType' => Order::TYPE_ORDER
+                'orderType' => Order::TYPE_ORDER,
             ]
             + $this->fetchMappedAttributes($entry)
         );
@@ -110,6 +113,7 @@ class OrderResponseParser implements OrderResponseParserInterface
 
     /**
      * @param $entry
+     *
      * @return Comment[]
      */
     private function getComments($entry)
@@ -139,13 +143,16 @@ class OrderResponseParser implements OrderResponseParserInterface
 
     /**
      * @param int $entry
+     * @param string $type
+     *
      * @return string
      */
     private function getIdentifier($entry, $type)
     {
         Assertion::integer($entry);
+
         return $this->identityService->findOneOrThrow(
-            (string)$entry,
+            (string) $entry,
             ShopwareAdapter::NAME,
             $type
         )->getObjectIdentifier();
@@ -153,19 +160,28 @@ class OrderResponseParser implements OrderResponseParserInterface
 
     /**
      * @param string $entry
-     * @return mixed
+     *
+     * @return integer
      */
     private function getCurrencyId($entry)
     {
-        /** @var ModelRepository $currencyRepo */
+        /**
+         * @var ModelRepository $currencyRepo
+         */
         $currencyRepo = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Currency::class);
+
         return $currencyRepo->findOneBy(['currency' => $entry])->getId();
     }
 
+    /**
+     * @param $entry
+     *
+     * @return array
+     */
     private function fetchMappedAttributes($entry)
     {
         $orderIdentifier = $this->identityService->findOneOrCreate(
-            (string)$entry['id'],
+            (string) $entry['id'],
             ShopwareAdapter::NAME,
             Order::TYPE
         )->getObjectIdentifier();
@@ -188,6 +204,4 @@ class OrderResponseParser implements OrderResponseParserInterface
             'shopId' => $shopIdentity,
         ];
     }
-
-
 }

@@ -5,7 +5,6 @@ namespace ShopwareAdapter\ServiceBus\QueryHandler\Order;
 use PlentyConnector\Connector\ServiceBus\Query\Order\FetchChangedOrdersQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
-use Psr\Log\LoggerInterface;
 use Shopware\Components\Api\Resource;
 use ShopwareAdapter\ResponseParser\Order\OrderResponseParserInterface;
 use ShopwareAdapter\ServiceBus\ChangedDateTimeTrait;
@@ -24,11 +23,6 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
     private $responseParser;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @var Resource\Order
      */
     private $orderResource;
@@ -37,16 +31,13 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
      * FetchChangedOrdersQueryHandler constructor.
      *
      * @param OrderResponseParserInterface $responseParser
-     * @param LoggerInterface $logger
      * @param Resource\Order $orderResource
      */
     public function __construct(
         OrderResponseParserInterface $responseParser,
-        LoggerInterface $logger,
         Resource\Order $orderResource
     ) {
         $this->responseParser = $responseParser;
-        $this->logger = $logger;
         $this->orderResource = $orderResource;
     }
 
@@ -64,7 +55,6 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $event)
     {
-
         $filter = [
             [
                 'property' => 'status',

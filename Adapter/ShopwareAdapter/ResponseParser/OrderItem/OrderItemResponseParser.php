@@ -3,7 +3,6 @@
 namespace ShopwareAdapter\ResponseParser\OrderItem;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Order\OrderItem\OrderItem;
 use PlentyConnector\Connector\TransferObject\Product\Product;
@@ -20,6 +19,7 @@ use ShopwareAdapter\ShopwareAdapter;
 class OrderItemResponseParser implements OrderItemResponseParserInterface
 {
     use GetAttributeTrait;
+
     /**
      * @var IdentityServiceInterface
      */
@@ -37,12 +37,9 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @throws NotFoundException
      */
     public function parse(array $entry)
     {
-
         // entry mode
         // 0 : Product
         // 1 : Premium Product (Prämie)
@@ -60,10 +57,10 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
         $variantResource = Manager::getResource('variant');
         $variantId = $variantResource->getIdFromNumber($entry['articleNumber']);
 
-        $variationIdentity = $this->getIdentifier((string)$variantId, Variation::TYPE);
-        $identity = $this->getIdentifier((string)$entry['id'], OrderItem::TYPE);
-        $productIdentity = $this->getIdentifier((string)$entry['articleId'], Product::TYPE);
-        $taxId = $this->getIdentifier((string)$entry['taxId'], VatRate::TYPE);
+        $variationIdentity = $this->getIdentifier((string) $variantId, Variation::TYPE);
+        $identity = $this->getIdentifier((string) $entry['id'], OrderItem::TYPE);
+        $productIdentity = $this->getIdentifier((string) $entry['articleId'], Product::TYPE);
+        $taxId = $this->getIdentifier((string) $entry['taxId'], VatRate::TYPE);
 
         $orderItem = OrderItem::fromArray([
             'identifier' => $identity,
@@ -82,16 +79,18 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
 
     /**
      * @param int $entry
+     * @param string $type
+     *
      * @return string
      */
     private function getIdentifier($entry, $type)
     {
         Assertion::integerish($entry);
+
         return $this->identityService->findOneOrThrow(
-            (string)$entry,
+            (string) $entry,
             ShopwareAdapter::NAME,
             $type
         )->getObjectIdentifier();
     }
-
 }

@@ -16,7 +16,6 @@ class OrderItem extends AbstractValueObject
     const TYPE_DISCOUNT = 4;
     const TYPE_PAYMENT_SURCHARGE = 5;
     const TYPE_SHIPPING_COSTS = 6;
-    const TYPE = 'OrderItem';
 
     /**
      * @var int
