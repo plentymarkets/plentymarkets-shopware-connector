@@ -110,9 +110,7 @@ class HandleOrderCommandHandlerTest extends TestCase
         $customer->setEmail('maxime@muster.com');
         $customer->setLanguageIdentifier($this->getLanguageIdentifier());
         $customer->setCustomerGroupIdentifier($this->getCustomerGroupIdentifier());
-        $customer->setCompany('Company');
         $customer->setNewsletter(false);
-        $customer->setDepartment('Department 2');
         $customer->setSalutation('Salutation 2');
         $customer->setTitle('Title 2');
         $customer->setFirstname('Firstname 2');
@@ -129,6 +127,7 @@ class HandleOrderCommandHandlerTest extends TestCase
     private function getAddress()
     {
         static $country;
+
 
         if (null === $country) {
             $countries = $this->client->request('GET', 'orders/shipping/countries');
@@ -331,7 +330,7 @@ class HandleOrderCommandHandlerTest extends TestCase
      */
     private function createOrderTransferObject()
     {
-        $timezone = new DateTimeZone('UTC');
+        $timezone = new \DateTimeZone('UTC');
 
         $order = new Order();
         $order->setIdentifier(Uuid::uuid4()->toString());

@@ -13,6 +13,9 @@ use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
  */
 class Variation extends AbstractValueObject
 {
+
+    const TYPE = 'Variation';
+
     /**
      * @var bool
      */
@@ -89,7 +92,7 @@ class Variation extends AbstractValueObject
     private $shippingTime = 0;
 
     /**
-     * @var null|DateTimeImmutable
+     * @var null|\DateTimeImmutable
      */
     private $releaseDate;
 
@@ -394,7 +397,7 @@ class Variation extends AbstractValueObject
     }
 
     /**
-     * @return null|DateTimeImmutable
+     * @return null|\DateTimeImmutable
      */
     public function getReleaseDate()
     {
@@ -402,7 +405,7 @@ class Variation extends AbstractValueObject
     }
 
     /**
-     * @param null|DateTimeImmutable $releaseDate
+     * @param null|\DateTimeImmutable $releaseDate
      */
     public function setReleaseDate($releaseDate)
     {

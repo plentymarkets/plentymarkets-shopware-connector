@@ -1,0 +1,28 @@
+<?php
+
+
+namespace PlentymarketsAdapter\ResponseParser;
+
+
+use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
+
+trait GetAttributeTrait
+{
+    /**
+     * @param array $attributeData
+     * @return Attribute[]
+     */
+    private function getAttributes(array $attributeData)
+    {
+        $attributes = [];
+        foreach ($attributeData as $key => $value) {
+            $attribute = new Attribute();
+            $attribute->setKey((string)$key);
+            $attribute->setValue((string)$value);
+
+            $attributes[] = $attribute;
+        }
+        return $attributes;
+    }
+
+}

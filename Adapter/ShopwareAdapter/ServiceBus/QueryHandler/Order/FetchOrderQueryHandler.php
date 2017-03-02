@@ -72,15 +72,11 @@ class FetchOrderQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $this->logger->notice('not implemented yes');
-
-        return;
-
         /**
          * @var FetchQueryInterface $event
          */
         $identity = $this->identityService->findOneBy([
-            'objectIdentifier' => $event->getIdentifier(),
+            'objectIdentifier' => $query->getPayload(),
             'objectType' => Order::TYPE,
             'adapterName' => ShopwareAdapter::NAME,
         ]);
