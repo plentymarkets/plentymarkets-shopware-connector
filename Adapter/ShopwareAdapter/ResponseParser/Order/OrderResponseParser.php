@@ -161,7 +161,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     /**
      * @param string $entry
      *
-     * @return integer
+     * @return int
      */
     private function getCurrencyId($entry)
     {

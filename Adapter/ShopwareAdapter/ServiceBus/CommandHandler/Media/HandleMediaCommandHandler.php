@@ -51,6 +51,8 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
     }
 
     /**
+     * TODO: only update if hash has changed - add hash attribute to media
+     *
      * {@inheritdoc}
      */
     public function handle(CommandInterface $command)

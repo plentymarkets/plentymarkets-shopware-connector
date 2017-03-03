@@ -783,7 +783,7 @@ class ProductResponseParser implements ProductResponseParserInterface
 
         if (count($variations) > 1) {
             $variations = array_filter($variations, function (array $variation) {
-                return !$variation['isMain'];
+                return !empty($variation['variationAttributeValues']);
             });
         }
 

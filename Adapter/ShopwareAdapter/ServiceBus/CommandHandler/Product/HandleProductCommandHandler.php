@@ -26,9 +26,12 @@ use Psr\Log\LoggerInterface;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\AttributeBundle\Service\DataPersister;
 use Shopware\Bundle\AttributeBundle\Service\TypeMapping;
+use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Article;
+use Shopware\Components\Api\Resource\Variant;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Article\Detail;
 use Shopware\Models\Customer\Group;
 use Shopware\Models\Property\Repository;
 use Shopware\Models\Shop\Shop as ShopModel;
@@ -355,17 +358,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             }
         }
 
-        $variations = [];
-        foreach ($product->getVariations() as $variation) {
-            if (empty($variation->getPrices())) {
-                continue;
-            }
-
-            $variations[] = $this->getVariationData($variation, $product);
-        }
-
-        $mainDetail = array_shift($variations);
-
         $propertyData = $this->getPropertyData($product);
 
         $params = [
@@ -388,7 +380,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             'taxId' => $vatIdentity->getAdapterIdentifier(),
             'lastStock' => $product->getLimitedStock(),
             'notification' => true,
-            'mainDetail' => $mainDetail,
             'active' => $product->getActive(),
             'images' => $images,
             'similar' => $this->getLinkedProducts($product, LinkedProduct::TYPE_SIMILAR),
@@ -397,6 +388,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             'keywords' => $product->getMetaKeywords(),
             '__options_categories' => ['replace' => true],
             '__options_similar' => ['replace' => true],
+            '__options_related' => ['replace' => true],
             '__options_prices' => ['replace' => true],
             '__options_images' => ['replace' => true],
         ];
@@ -409,7 +401,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         $configuratorSet = $this->getConfiguratorSet($product);
         if (!empty($configuratorSet)) {
             $params['configuratorSet'] = $configuratorSet;
-            $params['variants'] = $variations;
         }
 
         $createProduct = false;
@@ -421,7 +412,8 @@ class HandleProductCommandHandler implements CommandHandlerInterface
 
         if (null === $identity) {
             try {
-                $existingProduct = $resource->getIdFromNumber($product->getNumber());
+                $mainVariation = $this->getMainVariation($product);
+                $existingProduct = $resource->getIdFromNumber($mainVariation->getNumber());
 
                 $identity = $identityService->create(
                     $product->getIdentifier(),
@@ -436,12 +428,27 @@ class HandleProductCommandHandler implements CommandHandlerInterface
 
         if (null !== $identity) {
             if (!$resource->getIdByData(['id' => $identity->getAdapterIdentifier()])) {
+                $identityService->remove($identity);
+
                 $createProduct = true;
             }
         }
 
         try {
             if ($createProduct) {
+                $variations = [];
+
+                foreach ($product->getVariations() as $variation) {
+                    if ($variation->isIsMain()) {
+                        continue;
+                    }
+
+                    $variations[] = $this->getVariationData($variation, $product);
+                }
+
+                $params['mainDetail'] = $this->getVariationData($this->getMainVariation($product), $product);
+                $params['variants'] = $variations;
+
                 $productModel = $resource->create($params);
 
                 $identityService->create(
@@ -450,8 +457,56 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                     (string) $productModel->getId(),
                     ShopwareAdapter::NAME
                 );
+
+                $resource->writeTranslations($productModel->getId(), $translations);
             } else {
                 $productModel = $resource->update($identity->getAdapterIdentifier(), $params);
+
+                foreach ($product->getVariations() as $variation) {
+                    if (empty($variation->getPrices())) {
+                        continue;
+                    }
+
+                    /**
+                     * @var Variant $variantResource
+                     */
+                    $variantResource = Manager::getResource('Variant');
+
+                    try {
+                        $variant = $variantResource->getOneByNumber($variation->getNumber());
+                    } catch (NotFoundException $exception) {
+                        $variant = null;
+                    }
+
+                    $variationParams = $this->getVariationData($variation, $product);
+
+                    if (null === $variant) {
+                        $variationParams['articleId'] = $identity->getAdapterIdentifier();
+
+                        $variantResource->create($variationParams);
+                    } else {
+                        $variantResource->update($variant['id'], $variationParams);
+                    }
+                }
+
+                $mainVariation = $this->getMainVariation($product);
+
+                if (null !== $mainVariation) {
+                    $entityManager = Shopware()->Container()->get('models');
+
+                    $productRepository = $entityManager->getRepository(\Shopware\Models\Article\Article::class);
+                    $detailRepository = $entityManager->getRepository(Detail::class);
+
+                    $mainDetail = $detailRepository->findOneBy(['number' => $mainVariation->getNumber()]);
+
+                    $productModel = $productRepository->find($identity->getAdapterIdentifier());
+                    $productModel->setMainDetail($mainDetail);
+
+                    $entityManager->persist($productModel);
+                    $entityManager->flush();
+                }
+
+                $resource->writeTranslations($productModel->getId(), $translations);
             }
 
             // TODO: fix attributes (create vs update)
@@ -471,6 +526,22 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         }
 
         return true;
+    }
+
+    /**
+     * @param Product $product
+     *
+     * @return null|Variation
+     */
+    private function getMainVariation(Product $product)
+    {
+        foreach ($product->getVariations() as $variation) {
+            if ($variation->isIsMain()) {
+                return $variation;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -629,8 +700,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             throw new \Exception('Missing unit mapping - ' . $variation->getUnitIdentifier());
         }
 
-        $unit = $unitIdentity->getAdapterIdentifier();
-
         $prices = [];
         foreach ($variation->getPrices() as $price) {
             if (null === $price->getCustomerGroupIdentifier()) {
@@ -688,7 +757,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         $shopwareVariation = [
             'name' => $product->getName(),
             'number' => $variation->getNumber(),
-            'unitId' => $unit,
+            'unitId' => $unitIdentity->getAdapterIdentifier(),
             'active' => $variation->getActive(),
             'inStock' => $variation->getStock(),
             'isMain' => $variation->isIsMain(),
