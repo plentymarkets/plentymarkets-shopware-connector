@@ -2,6 +2,7 @@
 
 namespace ShopwareAdapter\ResponseParser\Customer;
 
+use Assert\Assertion;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
@@ -33,17 +34,10 @@ class CustomerResponseParser implements CustomerResponseParserInterface
      */
     public function parse(array $entry)
     {
-        $identity = $this->identityService->findOneOrCreate(
-            (string) $entry['id'],
-            ShopwareAdapter::NAME,
-            Customer::TYPE
-        )->getObjectIdentifier();
-
         $shopIdentity = $this->getIdentifier((string) $entry['shopId'], Shop::TYPE);
         $languageIdentity = $this->getIdentifier((string) $entry['languageId'], Language::TYPE);
 
         return Customer::fromArray([
-            'identifier' => $identity,
             'birthday' => $entry['birthday'] ? \DateTimeImmutable::createFromFormat('Y-m-d', $entry['birthday']) : null,
             'customerType' => $this->getCustomerTypeId($entry['accountMode']),
             'email' => $entry['email'],
@@ -84,8 +78,6 @@ class CustomerResponseParser implements CustomerResponseParserInterface
      */
     private function getIdentifier($entry, $type)
     {
-        Assertion::integer($entry);
-
         return $this->identityService->findOneOrThrow(
             (string) $entry,
             ShopwareAdapter::NAME,

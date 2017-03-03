@@ -67,7 +67,7 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
 
         $result = array_map(function ($order) {
             return $this->responseParser->parse($this->orderResource->getOne($order['id']));
-        }, $orders);
+        }, $orders['data']);
 
         return $result;
     }

@@ -70,6 +70,9 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
+     * TODO: shipping costs as order item
+     * TODO: payment surcharge as order item
+     *
      * {@inheritdoc}
      */
     public function parse(array $entry)
@@ -119,18 +122,14 @@ class OrderResponseParser implements OrderResponseParserInterface
     private function getComments($entry)
     {
         $comments = [];
-        if ($entry['comment']) {//TODO: check type
-            $comment = new Comment();
-            $comment->setType(Comment::TYPE_INTERNAL);
-            $comment->setComment($entry['comment']);
-            $comments[] = $comment;
-        }
+
         if ($entry['internalComment']) {
             $comment = new Comment();
             $comment->setType(Comment::TYPE_INTERNAL);
             $comment->setComment($entry['internalComment']);
             $comments[] = $comment;
         }
+
         if ($entry['customerComment']) {
             $comment = new Comment();
             $comment->setType(Comment::TYPE_CUSTOMER);
@@ -149,7 +148,7 @@ class OrderResponseParser implements OrderResponseParserInterface
      */
     private function getIdentifier($entry, $type)
     {
-        Assertion::integer($entry);
+        Assertion::integerish($entry);
 
         return $this->identityService->findOneOrThrow(
             (string) $entry,
@@ -195,10 +194,10 @@ class OrderResponseParser implements OrderResponseParserInterface
 
         return [
             'identifier' => $orderIdentifier,
-            'orderStatusId' => $orderStatusIdentity,
-            'paymentStatusId' => $paymentStatusIdentity,
-            'paymentMethodId' => $paymentMethodIdentity,
-            'shippingProfileId' => $shippingProfileIdentity,
+            'orderStatusIdentifier' => $orderStatusIdentity,
+            'paymentStatusIdentifier' => $paymentStatusIdentity,
+            'paymentMethodIdentifier' => $paymentMethodIdentity,
+            'shippingProfileIdentifier' => $shippingProfileIdentity,
             'currencyIdentifier' => $currencyIdentifier,
             'shopIdentifier' => $shopIdentity,
             'shopId' => $shopIdentity,

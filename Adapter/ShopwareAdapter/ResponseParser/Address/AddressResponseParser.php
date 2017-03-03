@@ -3,6 +3,7 @@
 namespace ShopwareAdapter\ResponseParser\Address;
 
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
+use PlentyConnector\Connector\TransferObject\Country\Country;
 use PlentyConnector\Connector\TransferObject\Order\Address\Address;
 use PlentymarketsAdapter\ResponseParser\GetAttributeTrait;
 use ShopwareAdapter\ShopwareAdapter;
@@ -34,15 +35,17 @@ class AddressResponseParser implements AddressResponseParserInterface
      */
     public function parse(array $entry)
     {
-        $identity = $this->identityService->findOneOrCreate(
-            (string) $entry['id'],
-            ShopwareAdapter::NAME,
-            Address::TYPE
-        );
+        $countryIdentitiy = $this->identityService->findOneBy([
+            'adapterIdentifier' => $entry['country']['id'],
+            'adapterName' => ShopwareAdapter::NAME,
+            'objectType' => Country::TYPE,
+        ]);
 
-        //TODO: state, additional address lines
+        if (null === $countryIdentitiy) {
+            // TODO: throw
+        }
+
         return Address::fromArray([
-            'identifier' => $identity->getObjectIdentifier(),
             'company' => $entry['company'],
             'department' => $entry['department'],
             'salutation' => $entry['salutation'],
@@ -52,7 +55,7 @@ class AddressResponseParser implements AddressResponseParserInterface
             'street' => $entry['street'],
             'zipcode' => $entry['zipCode'],
             'city' => $entry['city'],
-            'countryIdentifier' => $entry['country']['iso3'],
+            'countryIdentifier' => $countryIdentitiy->getObjectIdentifier(),
             'vatId' => isset($entry['vatId']) ? $entry['vatId'] : null,
             'attributes' => $this->getAttributes($entry['attribute']),
         ]);

@@ -150,8 +150,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                 ];
             }
 
-            $shippingAddress = $this->createAddress($order->getShippingAddress(), $order->getCustomer(),
-                $plentyCustomer);
+            $shippingAddress = $this->createAddress($order->getShippingAddress(), $order->getCustomer(), $plentyCustomer);
             if (!empty($shippingAddress)) {
                 $params['addressRelations'][] = [
                     'typeId' => 2,
@@ -164,6 +163,10 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                 'objectType' => PaymentMethod::TYPE,
                 'adapterName' => PlentymarketsAdapter::NAME,
             ]);
+
+            if (empty($paymentMethodIdentity)) {
+                // TODO: throw
+            }
 
             // TODO: properties https://developers.plentymarkets.com/rest-doc/order_order_property/details
 
@@ -303,6 +306,11 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         return 0;
     }
 
+    /**
+     * @param Order $order
+     *
+     * @return array|bool|mixed
+     */
     private function createCustomer(Order $order)
     {
         $languageIdentity = $this->identityService->findOneBy([
@@ -321,8 +329,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         $plentyCustomer = false;
 
         if ($customer->getType() === Customer::TYPE_NORMAL) {
-            $customerResult = $this->client->request('GET', 'accounts/contacts',
-                ['contactEmail' => $customer->getEmail()]);
+            $customerResult = $this->client->request('GET', 'accounts/contacts', ['contactEmail' => $customer->getEmail()]);
 
             if (!empty($customerResult)) {
                 $possibleCustomers = array_filter($customerResult, function ($entry) {
@@ -343,6 +350,12 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             return (string) $store['storeIdentifier'] === $shopIdentity->getAdapterIdentifier();
         });
 
+        if (empty($accountWebStore)) {
+            // TODO: throw
+        }
+
+        $accountWebStore = array_shift($accountWebStore);
+
         $customerGroupIdentitiy = $this->identityService->findOneBy([
             'objectIdentifier' => $order->getCustomer()->getCustomerGroupIdentifier(),
             'objectType' => CustomerGroup::TYPE,
@@ -355,17 +368,24 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             'firstName' => $customer->getFirstname(),
             'lastName' => $customer->getLastname(),
             'gender' => $customer->getSalutation() === Customer::SALUTATION_MR ? 'male' : 'female',
-            'classId' => (int) $customerGroupIdentitiy->getAdapterIdentifier(), // TODO: handle no customer group at plenty
             'lang' => $languageIdentity->getAdapterIdentifier(),
             'referrerId' => 1, // TODO: Konfigurierbar über Config. (/rest/orders/referrers)
             'singleAccess' => $customer->getCustomerType() === Customer::TYPE_GUEST,
             'plentyId' => $accountWebStore['id'],
             'newsletterAllowanceAt' => '',
-            'birthdayAt' => $customer->getBirthday()->format(DATE_W3C),
             'lastOrderAt' => $order->getOrderTime()->format(DATE_W3C),
             'userId' => 1, // TODO: Konfigurierbar über Config (rest/accounts)
             'options' => [],
         ];
+
+        // TODO: handle no customer group at plenty
+        if (null !== $customerGroupIdentitiy) {
+            $customerParams['classId'] = (int) $customerGroupIdentitiy->getAdapterIdentifier();
+        }
+
+        if (null !== $customer->getBirthday()) {
+            $customerParams['birthdayAt'] = $customer->getBirthday()->format(DATE_W3C);
+        }
 
         if (!empty($customer->getPhoneNumber())) {
             $customerParams['options'][] = [
@@ -419,7 +439,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         ]);
 
         if (null === $countryIdentity) {
-            // TODO: decide what to do
+            throw new \Exception('unmapped country');
         }
 
         try {

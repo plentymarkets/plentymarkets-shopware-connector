@@ -33,9 +33,6 @@ class IdentityService implements IdentityServiceInterface
      */
     public function findOneOrThrow($adapterIdentifier, $adapterName, $objectType)
     {
-        // TODO following line only for debugging!
-        return $this->findOneOrCreate($adapterIdentifier, $adapterName, $objectType);
-
         Assertion::string($adapterIdentifier);
         Assertion::notBlank($adapterIdentifier);
         Assertion::string($adapterName);
