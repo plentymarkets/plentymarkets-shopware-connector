@@ -140,6 +140,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
 
         $images = [];
 
+        $position = 0;
         foreach ($product->getImageIdentifiers() as $imageIdentifier) {
             $imageIdentity = $identityService->findOneBy([
                 'objectIdentifier' => $imageIdentifier,
@@ -159,6 +160,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
 
             $images[] = [
                 'mediaId' => $imageIdentity->getAdapterIdentifier(),
+                'position' => $position++,
             ];
         }
 
@@ -740,6 +742,8 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         }
 
         $images = [];
+        $position = 0;
+
         foreach ($variation->getImageIdentifiers() as $imageIdentifier) {
             $imageIdentity = $identityService->findOneBy([
                 'objectIdentifier' => $imageIdentifier,
@@ -751,7 +755,10 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 continue;
             }
 
-            $images[] = ['mediaId' => $imageIdentity->getAdapterIdentifier()];
+            $images[] = [
+                'mediaId' => $imageIdentity->getAdapterIdentifier(),
+                'position' => $position++,
+            ];
         }
 
         $shopwareVariation = [
