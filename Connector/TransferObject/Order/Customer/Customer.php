@@ -4,12 +4,12 @@ namespace PlentyConnector\Connector\TransferObject\Order\Customer;
 
 use Assert\Assertion;
 use DateTimeImmutable;
-use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
+use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 
 /**
  * Class Customer
  */
-class Customer extends AbstractTransferObject
+class Customer extends AbstractValueObject
 {
     const TYPE_NORMAL = 1;
     const TYPE_GUEST = 2;
@@ -17,8 +17,6 @@ class Customer extends AbstractTransferObject
     const SALUTATION_MR = 1;
     const SALUTATION_MS = 2;
     const SALUTATION_FIRM = 3;
-
-    private $identifier;
 
     /**
      * @var int
@@ -113,6 +111,14 @@ class Customer extends AbstractTransferObject
     public function setType($type)
     {
         $this->type = $type;
+    }
+
+    /**
+     * @return int
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 
     /**
@@ -311,24 +317,6 @@ class Customer extends AbstractTransferObject
     public function setMobilePhoneNumber($mobilePhoneNumber)
     {
         $this->mobilePhoneNumber = $mobilePhoneNumber;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getIdentifier()
-    {
-        Assertion::notBlank($this->identifier);
-
-        return $this->identifier;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getType()
-    {
-        return self::TYPE;
     }
 
     /**
