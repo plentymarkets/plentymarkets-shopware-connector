@@ -141,6 +141,16 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     private $translations = [];
 
     /**
+     * @var null|\DateTimeImmutable
+     */
+    private $availableFrom;
+
+    /**
+     * @var null|\DateTimeImmutable
+     */
+    private $availableTo;
+
+    /**
      * @var Attribute[]
      */
     private $attributes = [];
@@ -238,7 +248,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     /**
      * @param array $shopIdentifiers
      */
-    public function setShopIdentifiers($shopIdentifiers)
+    public function setShopIdentifiers(array $shopIdentifiers)
     {
         Assertion::allUuid($shopIdentifiers);
 
@@ -274,7 +284,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     /**
      * @param array $categoryIdentifiers
      */
-    public function setCategoryIdentifiers($categoryIdentifiers)
+    public function setCategoryIdentifiers(array $categoryIdentifiers)
     {
         Assertion::allUuid($categoryIdentifiers);
 
@@ -292,7 +302,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     /**
      * @param array $defaultCategoryIdentifiers
      */
-    public function setDefaultCategoryIdentifiers($defaultCategoryIdentifiers)
+    public function setDefaultCategoryIdentifiers(array $defaultCategoryIdentifiers)
     {
         Assertion::allUuid($defaultCategoryIdentifiers);
 
@@ -310,7 +320,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     /**
      * @param array $shippingProfileIdentifiers
      */
-    public function setShippingProfileIdentifiers($shippingProfileIdentifiers)
+    public function setShippingProfileIdentifiers(array $shippingProfileIdentifiers)
     {
         Assertion::allUuid($shippingProfileIdentifiers);
 
@@ -328,7 +338,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     /**
      * @param array $imageIdentifiers
      */
-    public function setImageIdentifiers($imageIdentifiers)
+    public function setImageIdentifiers(array $imageIdentifiers)
     {
         Assertion::allUuid($imageIdentifiers);
 
@@ -346,7 +356,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     /**
      * @param Variation[] $variations
      */
-    public function setVariations($variations)
+    public function setVariations(array $variations)
     {
         Assertion::allIsInstanceOf($variations, Variation::class);
 
@@ -532,7 +542,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     /**
      * @param LinkedProduct[] $linkedProducts
      */
-    public function setLinkedProducts($linkedProducts)
+    public function setLinkedProducts(array $linkedProducts)
     {
         Assertion::allIsInstanceOf($linkedProducts, LinkedProduct::class);
 
@@ -550,7 +560,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     /**
      * @param array $documents
      */
-    public function setDocuments($documents)
+    public function setDocuments(array $documents)
     {
         Assertion::allUuid($documents);
 
@@ -586,11 +596,43 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     /**
      * @param Translation[] $translations
      */
-    public function setTranslations($translations)
+    public function setTranslations(array $translations)
     {
         Assertion::allIsInstanceOf($translations, Translation::class);
 
         $this->translations = $translations;
+    }
+
+    /**
+     * @return null|\DateTimeImmutable
+     */
+    public function getAvailableFrom()
+    {
+        return $this->availableFrom;
+    }
+
+    /**
+     * @param null|\DateTimeImmutable $availableFrom
+     */
+    public function setAvailableFrom(\DateTimeImmutable $availableFrom = null)
+    {
+        $this->availableFrom = $availableFrom;
+    }
+
+    /**
+     * @return null|\DateTimeImmutable
+     */
+    public function getAvailableTo()
+    {
+        return $this->availableTo;
+    }
+
+    /**
+     * @param null|\DateTimeImmutable $availableTo
+     */
+    public function setAvailableTo(\DateTimeImmutable $availableTo = null)
+    {
+        $this->availableTo = $availableTo;
     }
 
     /**
@@ -604,7 +646,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     /**
      * @param Attribute[] $attributes
      */
-    public function setAttributes($attributes)
+    public function setAttributes(array $attributes)
     {
         Assertion::allIsInstanceOf($attributes, Attribute::class);
 

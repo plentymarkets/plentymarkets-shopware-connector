@@ -9,6 +9,7 @@ use PlentyConnector\Connector\TransferObject\Category\Category;
 use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
 use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
+use PlentyConnector\Connector\TransferObject\Product\Barcode\Barcode;
 use PlentyConnector\Connector\TransferObject\Product\LinkedProduct\LinkedProduct;
 use PlentyConnector\Connector\TransferObject\Product\Price\Price;
 use PlentyConnector\Connector\TransferObject\Product\Product;
@@ -137,6 +138,8 @@ class ProductResponseParser implements ProductResponseParserInterface
             'documents' => $this->getDocuments($product),
             'properties' => $this->getProperties($mainVariation),
             'translations' => $this->getProductTranslations($product['texts']),
+            'availableFrom' => $this->getAvailableFrom($mainVariation),
+            'availableTo' => $this->getAvailableTo($mainVariation),
             'attributes' => $this->getAttributes($product),
         ]);
 
@@ -795,7 +798,7 @@ class ProductResponseParser implements ProductResponseParserInterface
                 'isMain' => $first,
                 'stock' => $this->getStock($variation),
                 'number' => (string) $variation['number'],
-                'ean' => '',
+                'barcodes' => $this->getBarcodes($variation),
                 'model' => $variation['model'],
                 'imageIdentifiers' => $this->getVariationImages($texts, $variation, $result),
                 'prices' => $this->getPrices($variation),
@@ -1165,5 +1168,78 @@ class ProductResponseParser implements ProductResponseParserInterface
         }
 
         return $identifiers;
+    }
+
+    /**
+     * @param array $mainVariation
+     *
+     * @return \DateTimeImmutable
+     */
+    private function getAvailableFrom(array $mainVariation)
+    {
+        if (!empty($mainVariation['availableUntil'])) {
+            $timezone = new DateTimeZone('UTC');
+
+            return new DateTimeImmutable('now', $timezone);
+        }
+
+        return null;
+    }
+
+    /**
+     * @param array $mainVariation
+     *
+     * @return \DateTimeImmutable
+     */
+    private function getAvailableTo(array $mainVariation)
+    {
+        if (!empty($mainVariation['availableUntil'])) {
+            $timezone = new DateTimeZone('UTC');
+
+            return new DateTimeImmutable($mainVariation['availableUntil'], $timezone);
+        }
+
+        return null;
+    }
+
+    /**
+     * @param array $variation
+     *
+     * @return string
+     */
+    private function getBarcodes(array $variation)
+    {
+        $url = 'items/' . $variation['itemId'] . '/variations/' . $variation['id'] . '/variation_barcodes';
+        $barcodes = $this->client->request('GET', $url);
+
+        $barcodes = array_map(function(array $barcode) {
+            if ($barcode['barcodeId'] === 1) {
+                return Barcode::fromArray([
+                    'type' => Barcode::TYPE_GTIN13,
+                    'code' => $barcode['code'],
+                ]);
+            } elseif ($barcode['barcodeId'] === 2) {
+                return Barcode::fromArray([
+                    'type' => Barcode::TYPE_GTIN128,
+                    'code' => $barcode['code'],
+                ]);
+            } elseif ($barcode['barcodeId'] === 3) {
+                return Barcode::fromArray([
+                    'type' => Barcode::TYPE_UPC,
+                    'code' => $barcode['code'],
+                ]);
+            } elseif ($barcode['barcodeId'] === 4) {
+                return Barcode::fromArray([
+                    'type' => Barcode::TYPE_ISBN,
+                    'code' => $barcode['code'],
+                ]);
+            }
+
+            $this->logger->notice('unsupported barcode type', $barcode);
+
+            return null;
+        }, $barcodes);
+
+        return array_filter($barcodes);
     }
 }

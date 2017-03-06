@@ -3,6 +3,7 @@
 namespace PlentyConnector\Connector\TransferObject\Product\Variation;
 
 use Assert\Assertion;
+use PlentyConnector\Connector\TransferObject\Product\Barcode\Barcode;
 use PlentyConnector\Connector\TransferObject\Product\Price\Price;
 use PlentyConnector\Connector\TransferObject\Product\Property\Property;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
@@ -34,9 +35,9 @@ class Variation extends AbstractValueObject
     private $number = '';
 
     /**
-     * @var string
+     * @var Barcode[]
      */
-    private $ean = '';
+    private $barcodes = [];
 
     /**
      * @var string
@@ -196,21 +197,21 @@ class Variation extends AbstractValueObject
     }
 
     /**
-     * @return string
+     * @return Barcode[]
      */
-    public function getEan()
+    public function getBarcodes()
     {
-        return $this->ean;
+        return $this->barcodes;
     }
 
     /**
-     * @param string $ean
+     * @param Barcode[] $barcodes
      */
-    public function setEan($ean)
+    public function setBarcodes(array $barcodes)
     {
-        Assertion::string($ean);
+        Assertion::allIsInstanceOf($barcodes, Barcode::class);
 
-        $this->ean = $ean;
+        $this->barcodes = $barcodes;
     }
 
     /**
@@ -242,7 +243,7 @@ class Variation extends AbstractValueObject
     /**
      * @param array $imageIdentifiers
      */
-    public function setImageIdentifiers($imageIdentifiers)
+    public function setImageIdentifiers(array $imageIdentifiers)
     {
         Assertion::allUuid($imageIdentifiers);
 
@@ -492,7 +493,7 @@ class Variation extends AbstractValueObject
     /**
      * @param Attribute[] $attributes
      */
-    public function setAttributes($attributes)
+    public function setAttributes(array $attributes)
     {
         Assertion::allIsInstanceOf($attributes, Attribute::class);
 
@@ -510,7 +511,7 @@ class Variation extends AbstractValueObject
     /**
      * @param Property[] $properties
      */
-    public function setProperties($properties)
+    public function setProperties(array $properties)
     {
         Assertion::allIsInstanceOf($properties, Property::class);
 

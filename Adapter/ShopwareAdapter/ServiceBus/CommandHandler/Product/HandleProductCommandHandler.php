@@ -12,6 +12,7 @@ use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
 use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 use PlentyConnector\Connector\TransferObject\Media\Media;
+use PlentyConnector\Connector\TransferObject\Product\Barcode\Barcode;
 use PlentyConnector\Connector\TransferObject\Product\LinkedProduct\LinkedProduct;
 use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
@@ -372,8 +373,8 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             //'crossBundleLook' => true,
             //'mode' => ?
             //'template'
-            //'availableFrom'
-            //'availableTo'
+            'availableFrom' => $product->getAvailableFrom(),
+            'availableTo' => $product->getAvailableTo(),
             'name' => $product->getName(),
             'description' => $product->getDescription(),
             'descriptionLong' => $product->getLongDescription(),
@@ -761,6 +762,20 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             ];
         }
 
+        /**
+         * @var Barcode[] $barcodes
+         */
+        $barcodes = array_filter($variation->getBarcodes(), function (Barcode $barcode) {
+            return $barcode->getType() === Barcode::TYPE_GTIN13;
+        });
+
+        if (!empty($barcodes)) {
+            $barcode = array_shift($barcodes);
+            $ean = $barcode->getCode();
+        } else {
+            $ean = '';
+        }
+
         $shopwareVariation = [
             'name' => $product->getName(),
             'number' => $variation->getNumber(),
@@ -775,7 +790,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             'weight' => $variation->getWeight(),
             'len' => $variation->getLength(),
             'height' => $variation->getHeight(),
-            'ean' => $variation->getEan(),
+            'ean' => $ean,
             'images' => $images,
             'minPurchase' => $variation->getMinimumOrderQuantity(),
             'purchaseSteps' => $variation->getIntervalOrderQuantity(),
