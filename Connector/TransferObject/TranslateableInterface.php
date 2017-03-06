@@ -2,7 +2,7 @@
 
 namespace PlentyConnector\Connector\TransferObject;
 
-use PlentyConnector\Connector\ValueObject\Translation\TranslationInterface;
+use PlentyConnector\Connector\ValueObject\Translation\Translation;
 
 /**
  * Interface TranslateableInterface
@@ -10,7 +10,7 @@ use PlentyConnector\Connector\ValueObject\Translation\TranslationInterface;
 interface TranslateableInterface
 {
     /**
-     * @return TranslationInterface[]
+     * @return Translation[]
      */
     public function getTranslations();
 }
