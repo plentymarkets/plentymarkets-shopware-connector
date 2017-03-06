@@ -132,7 +132,7 @@ class Manufacturer extends AbstractTransferObject
     /**
      * @param mixed $attributes
      */
-    public function setAttributes($attributes)
+    public function setAttributes(array $attributes)
     {
         Assertion::allIsInstanceOf($attributes, Attribute::class);
 

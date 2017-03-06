@@ -188,7 +188,7 @@ class Media extends AbstractTransferObject implements TranslateableInterface
     /**
      * @param Translation[] $translations
      */
-    public function setTranslations($translations)
+    public function setTranslations(array $translations)
     {
         Assertion::allIsInstanceOf($translations, Translation::class);
 
@@ -206,7 +206,7 @@ class Media extends AbstractTransferObject implements TranslateableInterface
     /**
      * @param Attribute[] $attributes
      */
-    public function setAttributes($attributes)
+    public function setAttributes(array $attributes)
     {
         Assertion::allIsInstanceOf($attributes, Attribute::class);
 

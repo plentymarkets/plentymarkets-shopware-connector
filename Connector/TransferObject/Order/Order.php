@@ -253,7 +253,7 @@ class Order extends AbstractTransferObject
     /**
      * @param OrderItem[] $orderItems
      */
-    public function setOrderItems($orderItems)
+    public function setOrderItems(array $orderItems)
     {
         $this->orderItems = $orderItems;
     }
@@ -269,7 +269,7 @@ class Order extends AbstractTransferObject
     /**
      * @param Payment[] $payments
      */
-    public function setPayments($payments)
+    public function setPayments(array $payments)
     {
         $this->payments = $payments;
     }
@@ -397,7 +397,7 @@ class Order extends AbstractTransferObject
     /**
      * @param Attribute[] $attributes
      */
-    public function setAttributes($attributes)
+    public function setAttributes(array $attributes)
     {
         $this->attributes = $attributes;
     }

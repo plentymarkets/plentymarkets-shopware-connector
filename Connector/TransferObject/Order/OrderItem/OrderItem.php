@@ -65,6 +65,11 @@ class OrderItem extends AbstractValueObject
      */
     public function setType($type)
     {
+        $oClass = new \ReflectionClass(__CLASS__);
+        $possibleValues =  $oClass->getConstants();
+
+        Assertion::inArray($type, $possibleValues);
+
         $this->type = $type;
     }
 
@@ -159,7 +164,7 @@ class OrderItem extends AbstractValueObject
     /**
      * @param Attribute[] $attributes
      */
-    public function setAttributes($attributes)
+    public function setAttributes(array $attributes)
     {
         $this->attributes = $attributes;
     }

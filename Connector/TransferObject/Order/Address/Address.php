@@ -78,8 +78,6 @@ class Address extends AbstractTransferObject
      */
     private $attributes = [];
 
-    private $identifier;
-
     /**
      * @var string
      */
@@ -277,27 +275,9 @@ class Address extends AbstractTransferObject
     /**
      * @param Attribute[] $attributes
      */
-    public function setAttributes($attributes)
+    public function setAttributes(array $attributes)
     {
         $this->attributes = $attributes;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getType()
-    {
-        return self::TYPE;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getIdentifier()
-    {
-        Assertion::notBlank($this->identifier);
-
-        return $this->identifier;
     }
 
     /**

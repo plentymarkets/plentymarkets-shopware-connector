@@ -51,7 +51,7 @@ class Value extends AbstractValueObject implements TranslateableInterface
     /**
      * @param Translation[] $translations
      */
-    public function setTranslations($translations)
+    public function setTranslations(array $translations)
     {
         Assertion::allIsInstanceOf($translations, Translation::class);
 

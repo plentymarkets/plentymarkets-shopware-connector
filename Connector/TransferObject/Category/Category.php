@@ -179,7 +179,7 @@ class Category extends AbstractTransferObject implements TranslateableInterface
     /**
      * @param array $imageIdentifiers
      */
-    public function setImageIdentifiers($imageIdentifiers)
+    public function setImageIdentifiers(array $imageIdentifiers)
     {
         Assertion::allUuid($imageIdentifiers);
 
@@ -330,7 +330,7 @@ class Category extends AbstractTransferObject implements TranslateableInterface
     /**
      * @param Translation[] $translations
      */
-    public function setTranslations($translations)
+    public function setTranslations(array $translations)
     {
         Assertion::allIsInstanceOf($translations, Translation::class);
 
@@ -348,7 +348,7 @@ class Category extends AbstractTransferObject implements TranslateableInterface
     /**
      * @param Attribute[] $attributes
      */
-    public function setAttributes($attributes)
+    public function setAttributes(array $attributes)
     {
         Assertion::allIsInstanceOf($attributes, Attribute::class);
 
