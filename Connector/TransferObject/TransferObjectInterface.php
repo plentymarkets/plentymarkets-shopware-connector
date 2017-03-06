@@ -20,4 +20,11 @@ interface TransferObjectInterface
      * @return string
      */
     public function getType();
+
+    /**
+     * @param array $params
+     *
+     * @return TransferObjectInterface
+     */
+    public static function fromArray(array $params = []);
 }
