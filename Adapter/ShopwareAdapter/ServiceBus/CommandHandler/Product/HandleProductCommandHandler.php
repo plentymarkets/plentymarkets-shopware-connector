@@ -22,12 +22,12 @@ use PlentyConnector\Connector\TransferObject\Unit\Unit;
 use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
 use PlentyConnector\Connector\Translation\TranslationHelperInterface;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
-use PlentymarketsAdapter\PlentymarketsAdapter;
 use Psr\Log\LoggerInterface;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\AttributeBundle\Service\DataPersister;
 use Shopware\Bundle\AttributeBundle\Service\TypeMapping;
 use Shopware\Components\Api\Exception\NotFoundException;
+use Shopware\Components\Api\Exception\ValidationException;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Article;
 use Shopware\Components\Api\Resource\Variant;
@@ -37,6 +37,7 @@ use Shopware\Models\Customer\Group;
 use Shopware\Models\Property\Repository;
 use Shopware\Models\Shop\Shop as ShopModel;
 use ShopwareAdapter\ShopwareAdapter;
+use Symfony\Component\Validator\ConstraintViolationInterface;
 
 /**
  * Class HandleProductCommandHandler.
@@ -442,7 +443,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 $variations = [];
 
                 foreach ($product->getVariations() as $variation) {
-                    if ($variation->isIsMain()) {
+                    if ($variation->isMain()) {
                         continue;
                     }
 
@@ -450,7 +451,10 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 }
 
                 $params['mainDetail'] = $this->getVariationData($this->getMainVariation($product), $product);
-                $params['variants'] = $variations;
+
+                if (!empty($variations)) {
+                    $params['variants'] = $variations;
+                }
 
                 $productModel = $resource->create($params);
 
@@ -539,7 +543,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
     private function getMainVariation(Product $product)
     {
         foreach ($product->getVariations() as $variation) {
-            if ($variation->isIsMain()) {
+            if ($variation->isMain()) {
                 return $variation;
             }
         }
@@ -549,7 +553,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
 
     /**
      * @param Product $product
-     * @param string $type
+     * @param int $type
      *
      * @return array
      */
@@ -567,7 +571,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 $productIdentity = $identityService->findOneBy([
                     'objectIdentifier' => $linkedProduct->getProductIdentifier(),
                     'objectType' => Product::TYPE,
-                    'adapterName' => PlentymarketsAdapter::NAME,
+                    'adapterName' => ShopwareAdapter::NAME,
                 ]);
 
                 if (null === $productIdentity) {
@@ -577,7 +581,10 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 }
 
                 try {
-                    $result[$productIdentity->getAdapterIdentifier()] = ['id' => $productIdentity->getAdapterIdentifier(), 'cross' => true];
+                    $result[$productIdentity->getAdapterIdentifier()] = [
+                        'id' => $productIdentity->getAdapterIdentifier(),
+                        'cross' => false,
+                    ];
                 } catch (\Exception $exception) {
                     // fail silently
                 }
@@ -729,7 +736,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 'pseudoPrice' => $price->getPseudoPrice(),
                 'from' => $price->getFromAmount(),
                 'to' => $price->getToAmount(),
-             ];
+            ];
         }
 
         $configuratorOptions = [];
@@ -782,8 +789,8 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             'unitId' => $unitIdentity->getAdapterIdentifier(),
             'active' => $variation->getActive(),
             'inStock' => $variation->getStock(),
-            'isMain' => $variation->isIsMain(),
-            'standard' => $variation->isIsMain(),
+            'isMain' => $variation->isMain(),
+            'standard' => $variation->isMain(),
             'shippingtime' => $variation->getShippingTime(),
             'prices' => $prices,
             'purchasePrice' => $variation->getPurchasePrice(),

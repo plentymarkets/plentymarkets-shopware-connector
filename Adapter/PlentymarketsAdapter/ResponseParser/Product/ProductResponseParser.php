@@ -89,7 +89,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         }
 
         $variations = $this->client->request('GET', 'items/' . $product['id'] . '/variations', [
-            'with' => 'variationClients,variationSalesPrices,variationCategories,variationDefaultCategory,unit,variationAttributeValues',
+            'with' => 'variationClients,variationSalesPrices,variationCategories,variationDefaultCategory,unit,variationAttributeValues,variationBarcodes',
         ]);
 
         $mainVariation = $this->getMainVariation($variations);
@@ -364,7 +364,7 @@ class ProductResponseParser implements ProductResponseParserInterface
                 'translations' => $this->getMediaTranslations($image, $texts),
             ]);
 
-            $result[] = $media;
+            // fire event with media
 
             return $media->getIdentifier();
         }, $images);
@@ -387,7 +387,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         ]);
 
         if (null === $unitIdentity) {
-            // TODO: throw
+            throw new \Exception('missing mapping for unit');
         }
 
         return $unitIdentity->getObjectIdentifier();
@@ -630,7 +630,7 @@ class ProductResponseParser implements ProductResponseParserInterface
     /**
      * @param $variation
      *
-     * @return int
+     * @return float
      */
     private function getStock($variation)
     {
@@ -645,7 +645,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             }
         }
 
-        return $summedStocks;
+        return (float) $summedStocks;
     }
 
     /**
@@ -805,9 +805,9 @@ class ProductResponseParser implements ProductResponseParserInterface
                 'purchasePrice' => (float) $variation['purchasePrice'],
                 'unitIdentifier' => $this->getUnitIdentifier($variation),
                 'content' => (float) $variation['unit']['content'],
-                'maximumOrderQuantity' => (int) $variation['maximumOrderQuantity'],
-                'minimumOrderQuantity' => (int) $variation['minimumOrderQuantity'],
-                'intervalOrderQuantity' => (int) $variation['intervalOrderQuantity'],
+                'maximumOrderQuantity' => (float) $variation['maximumOrderQuantity'],
+                'minimumOrderQuantity' => (float) $variation['minimumOrderQuantity'],
+                'intervalOrderQuantity' => (float) $variation['intervalOrderQuantity'],
                 'releaseDate' => $this->getReleaseDate($variation),
                 'shippingTime' => $this->getShippingTime($variation),
                 'width' => (int) $variation['widthMM'],
@@ -1209,37 +1209,24 @@ class ProductResponseParser implements ProductResponseParserInterface
      */
     private function getBarcodes(array $variation)
     {
-        $url = 'items/' . $variation['itemId'] . '/variations/' . $variation['id'] . '/variation_barcodes';
-        $barcodes = $this->client->request('GET', $url);
+        $barcodeMapping = [
+            1 => Barcode::TYPE_GTIN13,
+            2 => Barcode::TYPE_GTIN128,
+            3 => Barcode::TYPE_UPC,
+            4 => Barcode::TYPE_ISBN,
+        ];
 
-        $barcodes = array_map(function(array $barcode) {
-            if ($barcode['barcodeId'] === 1) {
-                return Barcode::fromArray([
-                    'type' => Barcode::TYPE_GTIN13,
-                    'code' => $barcode['code'],
-                ]);
-            } elseif ($barcode['barcodeId'] === 2) {
-                return Barcode::fromArray([
-                    'type' => Barcode::TYPE_GTIN128,
-                    'code' => $barcode['code'],
-                ]);
-            } elseif ($barcode['barcodeId'] === 3) {
-                return Barcode::fromArray([
-                    'type' => Barcode::TYPE_UPC,
-                    'code' => $barcode['code'],
-                ]);
-            } elseif ($barcode['barcodeId'] === 4) {
-                return Barcode::fromArray([
-                    'type' => Barcode::TYPE_ISBN,
-                    'code' => $barcode['code'],
-                ]);
-            }
+        $barcodes = array_filter($variation['variationBarcodes'], function (array $barcode) use ($barcodeMapping) {
+            return array_key_exists($barcode['barcodeId'], $barcodeMapping);
+        });
 
-            $this->logger->notice('unsupported barcode type', $barcode);
-
-            return null;
+        $barcodes = array_map(function (array $barcode) use ($barcodeMapping) {
+            return Barcode::fromArray([
+                'type' => $barcodeMapping[$barcode['barcodeId']],
+                'code' => $barcode['code'],
+            ]);
         }, $barcodes);
 
-        return array_filter($barcodes);
+        return $barcodes;
     }
 }

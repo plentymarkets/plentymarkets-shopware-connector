@@ -2,7 +2,6 @@
 
 namespace ShopwareAdapter\ResponseParser\Customer;
 
-use Assert\Assertion;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
