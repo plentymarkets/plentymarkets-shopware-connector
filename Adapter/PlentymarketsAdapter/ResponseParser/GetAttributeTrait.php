@@ -19,6 +19,10 @@ trait GetAttributeTrait
         $attributes = [];
 
         foreach ($attributeData as $key => $value) {
+            if (empty($value)) {
+                continue;
+            }
+
             $attribute = new Attribute();
             $attribute->setKey((string) $key);
             $attribute->setValue((string) $value);

@@ -2,10 +2,14 @@
 
 namespace ShopwareAdapter\ResponseParser\Customer;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
+use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
 use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
+use Shopware\Models\Customer\Group as GroupModel;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -19,13 +23,22 @@ class CustomerResponseParser implements CustomerResponseParserInterface
     private $identityService;
 
     /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+
+    /**
      * CountryResponseParser constructor.
      *
      * @param IdentityServiceInterface $identityService
+     * @param EntityManagerInterface $entityManager
      */
-    public function __construct(IdentityServiceInterface $identityService)
-    {
+    public function __construct(
+        IdentityServiceInterface $identityService,
+        EntityManagerInterface $entityManager
+    ) {
         $this->identityService = $identityService;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -33,8 +46,30 @@ class CustomerResponseParser implements CustomerResponseParserInterface
      */
     public function parse(array $entry)
     {
-        $shopIdentity = $this->getIdentifier((string) $entry['shopId'], Shop::TYPE);
-        $languageIdentity = $this->getIdentifier((string) $entry['languageId'], Language::TYPE);
+        $entry['salutation'] = strtolower($entry['salutation']);
+
+        $shopIdentifier = $this->getIdentifier((string)$entry['shopId'], Shop::TYPE);
+        $languageIdentifier = $this->getIdentifier((string)$entry['languageId'], Language::TYPE);
+
+        /**
+         * @var EntityRepository $customerGroupRepository
+         */
+        $customerGroupRepository = $this->entityManager->getRepository(GroupModel::class);
+
+        /**
+         * @var GroupModel $customerGroup
+         */
+        $customerGroup = $customerGroupRepository->findOneBy(['key' => $entry['groupKey']]);
+
+        $customerGroupIdentifier = $this->getIdentifier((string)$customerGroup->getId(), CustomerGroup::TYPE);
+
+        if ($entry['salutation'] === 'mr') {
+            $salutation = Customer::SALUTATION_MR;
+        } elseif ($entry['salutation'] === 'ms') {
+            $salutation = Customer::SALUTATION_MS;
+        } else {
+            $salutation = Customer::SALUTATION_FIRM;
+        }
 
         return Customer::fromArray([
             'birthday' => $entry['birthday'] ? \DateTimeImmutable::createFromFormat('Y-m-d', $entry['birthday']) : null,
@@ -43,11 +78,12 @@ class CustomerResponseParser implements CustomerResponseParserInterface
             'firstname' => $entry['firstname'],
             'lastname' => $entry['lastname'],
             'number' => $entry['number'],
-            'salutation' => $entry['salutation'],
+            'salutation' => $salutation,
             'title' => $entry['title'],
-            'newsletter' => (bool) $entry['newsletter'],
-            'shopIdentifier' => $shopIdentity,
-            'languageIdentifier' => $languageIdentity,
+            'newsletter' => (bool)$entry['newsletter'],
+            'shopIdentifier' => $shopIdentifier,
+            'languageIdentifier' => $languageIdentifier,
+            'customerGroupIdentifier' => $customerGroupIdentifier
         ]);
     }
 
@@ -78,7 +114,7 @@ class CustomerResponseParser implements CustomerResponseParserInterface
     private function getIdentifier($entry, $type)
     {
         return $this->identityService->findOneOrThrow(
-            (string) $entry,
+            (string)$entry,
             ShopwareAdapter::NAME,
             $type
         )->getObjectIdentifier();

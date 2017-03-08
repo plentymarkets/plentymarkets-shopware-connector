@@ -105,7 +105,7 @@ class OrderResponseParser implements OrderResponseParserInterface
                 'comments' => $this->getComments($entry),
                 'customer' => $customer,
                 'phoneNumber' => $entry['billing']['phone'],
-                'orderTime' => $entry['orderTime'],
+                'orderTime' => \DateTimeImmutable::createFromMutable($entry['orderTime']),
                 'orderType' => Order::TYPE_ORDER,
             ]
             + $this->fetchMappedAttributes($entry)

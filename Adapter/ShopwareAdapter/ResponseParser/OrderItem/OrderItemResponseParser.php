@@ -50,10 +50,10 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
         $taxId = $this->getIdentifier((string) $entry['taxId'], VatRate::TYPE);
 
         $orderItem = OrderItem::fromArray([
-            'quantity' => $entry['quantity'],
+            'quantity' => (float) $entry['quantity'],
             'name' => $entry['articleName'],
             'number' => $entry['number'],
-            'price' => $entry['price'],
+            'price' => (float) $entry['price'],
             'vatRateIdentifier' => $taxId,
             'attributes' => $this->getAttributes($entry['attribute']),
         ]);

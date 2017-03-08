@@ -5,6 +5,7 @@ namespace ShopwareAdapter\ResponseParser\Address;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Country\Country;
 use PlentyConnector\Connector\TransferObject\Order\Address\Address;
+use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
 use PlentymarketsAdapter\ResponseParser\GetAttributeTrait;
 use ShopwareAdapter\ShopwareAdapter;
 
@@ -35,6 +36,8 @@ class AddressResponseParser implements AddressResponseParserInterface
      */
     public function parse(array $entry)
     {
+        $entry['salutation'] = strtolower($entry['salutation']);
+
         $countryIdentitiy = $this->identityService->findOneBy([
             'adapterIdentifier' => $entry['country']['id'],
             'adapterName' => ShopwareAdapter::NAME,
@@ -45,10 +48,18 @@ class AddressResponseParser implements AddressResponseParserInterface
             // TODO: throw
         }
 
+        if ($entry['salutation'] === 'mr') {
+            $salutation = Customer::SALUTATION_MR;
+        } elseif ($entry['salutation'] === 'ms') {
+            $salutation = Customer::SALUTATION_MS;
+        } else {
+            $salutation = Customer::SALUTATION_FIRM;
+        }
+
         return Address::fromArray([
             'company' => $entry['company'],
             'department' => $entry['department'],
-            'salutation' => $entry['salutation'],
+            'salutation' => $salutation,
             'title' => $entry['title'],
             'firstname' => $entry['firstName'],
             'lastname' => $entry['lastName'],
