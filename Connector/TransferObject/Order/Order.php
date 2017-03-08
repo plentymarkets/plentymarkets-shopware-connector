@@ -199,7 +199,7 @@ class Order extends AbstractTransferObject
     /**
      * @param DateTimeImmutable $orderTime
      */
-    public function setOrderTime($orderTime)
+    public function setOrderTime(DateTimeImmutable $orderTime)
     {
         $this->orderTime = $orderTime;
     }

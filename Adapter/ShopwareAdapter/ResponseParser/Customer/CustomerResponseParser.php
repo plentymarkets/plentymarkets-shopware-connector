@@ -48,8 +48,8 @@ class CustomerResponseParser implements CustomerResponseParserInterface
     {
         $entry['salutation'] = strtolower($entry['salutation']);
 
-        $shopIdentifier = $this->getIdentifier((string)$entry['shopId'], Shop::TYPE);
-        $languageIdentifier = $this->getIdentifier((string)$entry['languageId'], Language::TYPE);
+        $shopIdentifier = $this->getIdentifier((string) $entry['shopId'], Shop::TYPE);
+        $languageIdentifier = $this->getIdentifier((string) $entry['languageId'], Language::TYPE);
 
         /**
          * @var EntityRepository $customerGroupRepository
@@ -61,7 +61,7 @@ class CustomerResponseParser implements CustomerResponseParserInterface
          */
         $customerGroup = $customerGroupRepository->findOneBy(['key' => $entry['groupKey']]);
 
-        $customerGroupIdentifier = $this->getIdentifier((string)$customerGroup->getId(), CustomerGroup::TYPE);
+        $customerGroupIdentifier = $this->getIdentifier((string) $customerGroup->getId(), CustomerGroup::TYPE);
 
         if ($entry['salutation'] === 'mr') {
             $salutation = Customer::SALUTATION_MR;
@@ -80,10 +80,10 @@ class CustomerResponseParser implements CustomerResponseParserInterface
             'number' => $entry['number'],
             'salutation' => $salutation,
             'title' => $entry['title'],
-            'newsletter' => (bool)$entry['newsletter'],
+            'newsletter' => (bool) $entry['newsletter'],
             'shopIdentifier' => $shopIdentifier,
             'languageIdentifier' => $languageIdentifier,
-            'customerGroupIdentifier' => $customerGroupIdentifier
+            'customerGroupIdentifier' => $customerGroupIdentifier,
         ]);
     }
 
@@ -114,7 +114,7 @@ class CustomerResponseParser implements CustomerResponseParserInterface
     private function getIdentifier($entry, $type)
     {
         return $this->identityService->findOneOrThrow(
-            (string)$entry,
+            (string) $entry,
             ShopwareAdapter::NAME,
             $type
         )->getObjectIdentifier();
