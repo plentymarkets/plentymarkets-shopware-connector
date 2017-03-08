@@ -294,12 +294,6 @@
             <tag name="console.command" />
         </service>
 
-        <service id="plenty_connector.console.command.mapping" class="PlentyConnector\Console\Command\MappingCommand">
-            <argument type="service" id="plenty_connector.mapping_service" />
-
-            <tag name="console.command" />
-        </service>
-
         <service id="plenty_connector.console.command.process" class="PlentyConnector\Console\Command\ProcessCommand">
             <argument type="service" id="plenty_connector.connector" />
             <argument type="service" id="plenty_connector.logger" />
