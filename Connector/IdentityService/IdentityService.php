@@ -5,6 +5,7 @@ namespace PlentyConnector\Connector\IdentityService;
 use Assert\Assertion;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\Storage\IdentityStorageInterface;
+use PlentyConnector\Connector\ValidatorService\ValidatorServiceInterface;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Ramsey\Uuid\Uuid;
 
@@ -19,13 +20,22 @@ class IdentityService implements IdentityServiceInterface
     private $storage;
 
     /**
+     * @var ValidatorServiceInterface
+     */
+    private $validator;
+
+    /**
      * IdentityService constructor.
      *
      * @param IdentityStorageInterface $storage
+     * @param ValidatorServiceInterface $validator
      */
-    public function __construct(IdentityStorageInterface $storage)
-    {
+    public function __construct(
+        IdentityStorageInterface $storage,
+        ValidatorServiceInterface $validator
+    ) {
         $this->storage = $storage;
+        $this->validator = $validator;
     }
 
     /**
@@ -47,9 +57,10 @@ class IdentityService implements IdentityServiceInterface
         ]);
 
         if (null === $identity) {
-            throw new NotFoundException(sprintf('Could not find identity for %s with identifier %s in %s.',
-                $objectType, $adapterIdentifier, $adapterName));
+            throw new NotFoundException(sprintf('Could not find identity for %s with identifier %s in %s.', $objectType, $adapterIdentifier, $adapterName));
         }
+
+        $this->validator->validate($identity);
 
         return $identity;
     }
@@ -83,6 +94,8 @@ class IdentityService implements IdentityServiceInterface
             );
         }
 
+        $this->validator->validate($identity);
+
         return $identity;
     }
 
@@ -93,7 +106,10 @@ class IdentityService implements IdentityServiceInterface
     {
         Assertion::isArray($criteria);
 
-        return $this->storage->findOneBy($criteria);
+        $identity = $this->storage->findOneBy($criteria);
+        $this->validator->validate($identity);
+
+        return $identity;
     }
 
     /**
@@ -108,13 +124,13 @@ class IdentityService implements IdentityServiceInterface
             'adapterName'
         );
 
+        /**
+         * @var Identity $identity
+         */
         $identity = Identity::fromArray($params);
 
-        $result = $this->storage->persist($identity);
-
-        if ($result) {
-            //$this->ServiceBus->handle(new IdentityCreatedEvent($identity));
-        }
+        $this->storage->persist($identity);
+        $this->validator->validate($identity);
 
         return $identity;
     }
@@ -126,7 +142,13 @@ class IdentityService implements IdentityServiceInterface
     {
         Assertion::isArray($criteria);
 
-        return $this->storage->findBy($criteria);
+        $identities = $this->storage->findBy($criteria);
+
+        array_walk($identities, function (Identity $identity) {
+            $this->validator->validate($identity);
+        });
+
+        return $identities;
     }
 
     /**
@@ -134,11 +156,8 @@ class IdentityService implements IdentityServiceInterface
      */
     public function remove(Identity $identity)
     {
-        $result = $this->storage->remove($identity);
-
-        if ($result) {
-            //$this->ServiceBus->handle(new IdentityRemovedEvent($identity));
-        }
+        $this->validator->validate($identity);
+        $this->storage->remove($identity);
     }
 
     /**

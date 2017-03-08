@@ -12,14 +12,14 @@ interface IdentityStorageInterface
     /**
      * @param array $criteria
      *
-     * @return null|Identity
+     * @return null|Identity[]
      */
     public function findBy(array $criteria = []);
 
     /**
      * @param array $criteria
      *
-     * @return null|Identity[]
+     * @return null|Identity
      */
     public function findOneBy(array $criteria = []);
 
