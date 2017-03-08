@@ -24,8 +24,8 @@ class CustomerGroupValidator implements ValidatorInterface
      */
     public function validate($object)
     {
-        Assertion::uuid($object->getIdentifier(), null, 'country.identifier');
-        Assertion::string($object->getName(), null, 'country.name');
-        Assertion::notBlank($object->getName(), null, 'country.name');
+        Assertion::uuid($object->getIdentifier(), null, 'customerGroup.identifier');
+        Assertion::string($object->getName(), null, 'customerGroup.name');
+        Assertion::notBlank($object->getName(), null, 'customerGroup.name');
     }
 }

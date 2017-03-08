@@ -24,8 +24,8 @@ class OrderStatusValidator implements ValidatorInterface
      */
     public function validate($object)
     {
-        Assertion::uuid($object->getIdentifier(), null, 'country.identifier');
-        Assertion::string($object->getName(), null, 'country.name');
-        Assertion::notBlank($object->getName(), null, 'country.name');
+        Assertion::uuid($object->getIdentifier(), null, 'orderStatus.identifier');
+        Assertion::string($object->getName(), null, 'orderStatus.name');
+        Assertion::notBlank($object->getName(), null, 'orderStatus.name');
     }
 }

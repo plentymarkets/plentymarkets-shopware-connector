@@ -24,8 +24,8 @@ class UnitValidator implements ValidatorInterface
      */
     public function validate($object)
     {
-        Assertion::uuid($object->getIdentifier(), null, 'country.identifier');
-        Assertion::string($object->getName(), null, 'country.name');
-        Assertion::notBlank($object->getName(), null, 'country.name');
+        Assertion::uuid($object->getIdentifier(), null, 'unit.identifier');
+        Assertion::string($object->getName(), null, 'unit.name');
+        Assertion::notBlank($object->getName(), null, 'unit.name');
     }
 }

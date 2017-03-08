@@ -24,8 +24,8 @@ class PaymentMethodValidator implements ValidatorInterface
      */
     public function validate($object)
     {
-        Assertion::uuid($object->getIdentifier(), null, 'country.identifier');
-        Assertion::string($object->getName(), null, 'country.name');
-        Assertion::notBlank($object->getName(), null, 'country.name');
+        Assertion::uuid($object->getIdentifier(), null, 'paymentMethod.identifier');
+        Assertion::string($object->getName(), null, 'paymentMethod.name');
+        Assertion::notBlank($object->getName(), null, 'paymentMethod.name');
     }
 }

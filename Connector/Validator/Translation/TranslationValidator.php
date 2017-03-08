@@ -24,8 +24,9 @@ class TranslationValidator implements ValidatorInterface
      */
     public function validate($object)
     {
-        Assertion::uuid($object->getIdentifier(), null, 'country.identifier');
-        Assertion::string($object->getName(), null, 'country.name');
-        Assertion::notBlank($object->getName(), null, 'country.name');
+        Assertion::uuid($object->getLanguageIdentifier(), null, 'translation.languageIdentifier');
+
+        Assertion::string($object->getProperty(), null, 'translation.property');
+        Assertion::notBlank($object->getProperty(), null, 'translation.property');
     }
 }
