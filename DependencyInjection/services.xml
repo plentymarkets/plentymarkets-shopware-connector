@@ -90,7 +90,6 @@
             <argument type="service" id="plenty_connector.query_factory" />
             <argument type="service" id="plenty_connector.command_factory" />
             <argument type="service" id="plenty_connector.logger" />
-            <argument type="service" id="plenty_connector.validator_service" />
         </service>
 
         <!-- Definition factory -->
@@ -563,6 +562,10 @@
         <service id="plenty_connector.event_bus.event_handler_middleware" class="PlentyConnector\Connector\ServiceBus\EventHandlerMiddleware\EventHandlerMiddleware" />
         <service id="plenty_connector.query_bus.query_handler_middleware" class="PlentyConnector\Connector\ServiceBus\QueryHandlerMiddleware\QueryHandlerMiddleware" />
 
+        <service id="plenty_connector.service_bus.validator_middleware" class="PlentyConnector\Connector\ServiceBus\ValidatorMiddleware\ValidatorMiddleware">
+            <argument type="service" id="plenty_connector.validator_service" />
+        </service>
+
         <service id="plenty_connector.service_bus.class_name_formatter" class="PlentyConnector\Connector\Logger\ClassNameFormatter" />
 
         <service id="plenty_connector.service_bus.logger_middleware" class="League\Tactician\Logger\LoggerMiddleware">
@@ -576,6 +579,7 @@
             <factory service="plenty_connector.service_bus_factory" method="factory" />
 
             <argument type="service" id="plenty_connector.service_bus.logger_middleware" />
+            <argument type="service" id="plenty_connector.service_bus.validator_middleware" />
             <argument type="service" id="plenty_connector.command_bus.command_handler_middleware" />
             <argument type="service" id="plenty_connector.query_bus.query_handler_middleware" />
             <argument type="service" id="plenty_connector.event_bus.event_handler_middleware" />

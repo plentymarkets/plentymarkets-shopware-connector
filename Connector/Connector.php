@@ -47,31 +47,23 @@ class Connector implements ConnectorInterface
     private $logger;
 
     /**
-     * @var ValidatorServiceInterface
-     */
-    private $validator;
-
-    /**
      * Connector constructor.
      *
      * @param ServiceBusInterface $serviceBus
      * @param QueryFactoryInterface $queryFactory
      * @param CommandFactoryInterface $commandFactory
      * @param LoggerInterface $logger
-     * @param ValidatorServiceInterface $validator
      */
     public function __construct(
         ServiceBusInterface $serviceBus,
         QueryFactoryInterface $queryFactory,
         CommandFactoryInterface $commandFactory,
-        LoggerInterface $logger,
-        ValidatorServiceInterface $validator
+        LoggerInterface $logger
     ) {
         $this->serviceBus = $serviceBus;
         $this->queryFactory = $queryFactory;
         $this->commandFactory = $commandFactory;
         $this->logger = $logger;
-        $this->validator = $validator;
     }
 
     /**
@@ -179,8 +171,6 @@ class Connector implements ConnectorInterface
         }
 
         array_walk($sortedObjects, function (TransferObjectInterface $object) use ($definition) {
-            $this->validator->validate($object);
-
             $this->serviceBus->handle($this->commandFactory->create(
                 $definition->getDestinationAdapterName(),
                 $object->getType(),
