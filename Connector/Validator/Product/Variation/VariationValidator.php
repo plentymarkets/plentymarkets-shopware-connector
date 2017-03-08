@@ -31,7 +31,6 @@ class VariationValidator implements ValidatorInterface
         Assertion::boolean($object->getActive(), null, 'variation.active');
         Assertion::boolean($object->isMain(), null, 'variation.isMain');
         Assertion::float($object->getStock(), null, 'variation.stock');
-        Assertion::greaterOrEqualThan($object->getStock(), 0.0, null, 'variation.stock');
         Assertion::string($object->getNumber(), null, 'variation.number');
         Assertion::notBlank($object->getNumber(), null, 'variation.number');
         Assertion::allIsInstanceOf($object->getBarcodes(), Barcode::class, null, 'variation.barcodes');
