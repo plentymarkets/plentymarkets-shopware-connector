@@ -24,8 +24,8 @@ class CountryValidator implements ValidatorInterface
      */
     public function validate($object)
     {
-        Assertion::uuid($object->getIdentifier());
-        Assertion::string($object->getName());
-        Assertion::notBlank($object->getName());
+        Assertion::uuid($object->getIdentifier(), null, 'country.identifier');
+        Assertion::string($object->getName(), null, 'country.name');
+        Assertion::notBlank($object->getName(), null, 'country.name');
     }
 }

@@ -24,21 +24,32 @@ class CustomerValidator implements ValidatorInterface
      */
     public function validate($object)
     {
-        Assertion::inArray($object->getType(), $object->getCustomerTypes());
-        Assertion::string($object->getNumber());
-        Assertion::notBlank($object->getNumber());
-        Assertion::email($object->getEmail());
-        Assertion::uuid($object->getLanguageIdentifier());
-        Assertion::uuid($object->getCustomerGroupIdentifier());
-        Assertion::inArray($object->getSalutation(), $object->getSalutations());
-        Assertion::nullOrString($object->getTitle());
-        Assertion::string($object->getFirstname());
-        Assertion::notBlank($object->getFirstname());
-        Assertion::string($object->getLastname());
-        Assertion::notBlank($object->getLastname());
-        Assertion::nullOrIsInstanceOf($object->getBirthday(), \DateTimeImmutable::class);
-        Assertion::nullOrString($object->getPhoneNumber());
-        Assertion::nullOrString($object->getMobilePhoneNumber());
-        Assertion::uuid($object->getShopIdentifier());
+        Assertion::inArray($object->getType(), $object->getCustomerTypes(), null, 'customer.identifier');
+
+        Assertion::string($object->getNumber(), 'customer.number');
+        Assertion::notBlank($object->getNumber(), 'customer.number');
+
+        Assertion::email($object->getEmail(), 'customer.email');
+
+        Assertion::uuid($object->getLanguageIdentifier(), 'customer.languageIdentifier');
+
+        Assertion::uuid($object->getCustomerGroupIdentifier(), 'customer.customerGroupIdentifier');
+
+        Assertion::inArray($object->getSalutation(), $object->getSalutations(), 'customer.salutation');
+
+        Assertion::nullOrString($object->getTitle(), 'customer.title');
+
+        Assertion::string($object->getFirstname(), 'customer.firstname');
+        Assertion::notBlank($object->getFirstname(), 'customer.firstname');
+
+        Assertion::string($object->getLastname(), 'customer.lastname');
+        Assertion::notBlank($object->getLastname(), 'customer.lastname');
+
+        Assertion::nullOrIsInstanceOf($object->getBirthday(), \DateTimeImmutable::class, 'customer.birthday');
+
+        Assertion::nullOrString($object->getPhoneNumber(), 'customer.phoneNumber');
+        Assertion::nullOrString($object->getMobilePhoneNumber(), 'customer.mobilePhoneNumber');
+
+        Assertion::uuid($object->getShopIdentifier(), 'customer.identifier');
     }
 }

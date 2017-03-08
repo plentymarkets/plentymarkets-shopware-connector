@@ -29,23 +29,23 @@ class OrderValidator implements ValidatorInterface
      */
     public function validate($object)
     {
-        Assertion::uuid($object->getIdentifier());
-        Assertion::inArray($object->getOrderType(), $object->getOrderTypes());
-        Assertion::string($object->getOrderNumber());
-        Assertion::notBlank($object->getOrderNumber());
-        Assertion::isInstanceOf($object->getOrderTime(), \DateTimeImmutable::class);
-        Assertion::nullOrUuid($object->getCustomer());
-        Assertion::nullOrIsInstanceOf($object->getBillingAddress(), Address::class);
-        Assertion::nullOrIsInstanceOf($object->getShippingAddress(), Address::class);
-        Assertion::allIsInstanceOf($object->getOrderItems(), OrderItem::class);
-        Assertion::allIsInstanceOf($object->getPayments(), Payment::class);
-        Assertion::uuid($object->getShopIdentifier());
-        Assertion::uuid($object->getCurrencyIdentifier());
-        Assertion::uuid($object->getOrderStatusIdentifier());
-        Assertion::uuid($object->getPaymentStatusIdentifier());
-        Assertion::uuid($object->getPaymentMethodIdentifier());
-        Assertion::uuid($object->getShippingProfileIdentifier());
-        Assertion::allIsInstanceOf($object->getComments(), Comment::class);
-        Assertion::allIsInstanceOf($object->getAttributes(), Attribute::class);
+        Assertion::uuid($object->getIdentifier(), null, 'order.identifier');
+        Assertion::inArray($object->getOrderType(), $object->getOrderTypes(), null, 'order.orderType');
+        Assertion::string($object->getOrderNumber(), null, 'order.orderNumber');
+        Assertion::notBlank($object->getOrderNumber(), null, 'order.orderNumber');
+        Assertion::isInstanceOf($object->getOrderTime(), \DateTimeImmutable::class, null, 'order.orderTime');
+        Assertion::nullOrUuid($object->getCustomer(), null, 'order.customer');
+        Assertion::nullOrIsInstanceOf($object->getBillingAddress(), Address::class, null, 'order.billingAddress');
+        Assertion::nullOrIsInstanceOf($object->getShippingAddress(), Address::class, null, 'order.shippingAddress');
+        Assertion::allIsInstanceOf($object->getOrderItems(), OrderItem::class, null, 'order.orderItems');
+        Assertion::allIsInstanceOf($object->getPayments(), Payment::class, null, 'order.payments');
+        Assertion::uuid($object->getShopIdentifier(), null, 'order.shopIdentifier');
+        Assertion::uuid($object->getCurrencyIdentifier(), null, 'order.currencyIdentifier');
+        Assertion::uuid($object->getOrderStatusIdentifier(), null, 'order.orderStatusIdentifier');
+        Assertion::uuid($object->getPaymentStatusIdentifier(), null, 'order.paymentStatusIdentifier');
+        Assertion::uuid($object->getPaymentMethodIdentifier(), null, 'order.paymentMethodIdentifier');
+        Assertion::uuid($object->getShippingProfileIdentifier(), null, 'order.shippingProfileIdentifier');
+        Assertion::allIsInstanceOf($object->getComments(), Comment::class, null, 'order.comments');
+        Assertion::allIsInstanceOf($object->getAttributes(), Attribute::class, null, 'order.attributes');
     }
 }

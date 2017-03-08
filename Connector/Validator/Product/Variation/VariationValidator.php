@@ -28,29 +28,29 @@ class VariationValidator implements ValidatorInterface
      */
     public function validate($object)
     {
-        Assertion::boolean($object->getActive());
-        Assertion::boolean($object->isMain());
-        Assertion::float($object->getStock());
-        Assertion::greaterOrEqualThan($object->getStock(), 0.0);
-        Assertion::string($object->getNumber());
-        Assertion::notBlank($object->getNumber());
-        Assertion::allIsInstanceOf($object->getBarcodes(), Barcode::class);
-        Assertion::string($object->getModel());
-        Assertion::allUuid($object->getImageIdentifiers());
-        Assertion::allIsInstanceOf($object->getPrices(), Price::class);
-        Assertion::float($object->getPurchasePrice());
-        Assertion::uuid($object->getUnitIdentifier());
-        Assertion::float($object->getContent());
-        Assertion::float($object->getMaximumOrderQuantity());
-        Assertion::float($object->getMinimumOrderQuantity());
-        Assertion::float($object->getIntervalOrderQuantity());
-        Assertion::integer($object->getShippingTime());
-        Assertion::isInstanceOf($object->getReleaseDate(), \DateTimeImmutable::class);
-        Assertion::integer($object->getWidth());
-        Assertion::integer($object->getHeight());
-        Assertion::integer($object->getLength());
-        Assertion::integer($object->getWeight());
-        Assertion::isInstanceOf($object->getProperties(), Property::class);
-        Assertion::isInstanceOf($object->getAttributes(), Attribute::class);
+        Assertion::boolean($object->getActive(), null, 'variation.active');
+        Assertion::boolean($object->isMain(), null, 'variation.isMain');
+        Assertion::float($object->getStock(), null, 'variation.stock');
+        Assertion::greaterOrEqualThan($object->getStock(), 0.0, null, 'variation.stock');
+        Assertion::string($object->getNumber(), null, 'variation.number');
+        Assertion::notBlank($object->getNumber(), null, 'variation.number');
+        Assertion::allIsInstanceOf($object->getBarcodes(), Barcode::class, null, 'variation.barcodes');
+        Assertion::string($object->getModel(), null, 'variation.model');
+        Assertion::allUuid($object->getImageIdentifiers(), null, 'variation.imageIdentifiers');
+        Assertion::allIsInstanceOf($object->getPrices(), Price::class, null, 'variation.prices');
+        Assertion::float($object->getPurchasePrice(), null, 'variation.purchasePrice');
+        Assertion::uuid($object->getUnitIdentifier(), null, 'variation.unitIdentifier');
+        Assertion::float($object->getContent(), null, 'variation.content');
+        Assertion::float($object->getMaximumOrderQuantity(), null, 'variation.maximumOrderQuantity');
+        Assertion::float($object->getMinimumOrderQuantity(), null, 'variation.minimumOrderQuantity');
+        Assertion::float($object->getIntervalOrderQuantity(), null, 'variation.intervalOrderQuantity');
+        Assertion::integer($object->getShippingTime(), null, 'variation.shippingTime');
+        Assertion::nullOrIsInstanceOf($object->getReleaseDate(), \DateTimeImmutable::class, null, 'variation.releasedate');
+        Assertion::integer($object->getWidth(), null, 'variation.width');
+        Assertion::integer($object->getHeight(), null, 'variation.height');
+        Assertion::integer($object->getLength(), null, 'variation.length');
+        Assertion::integer($object->getWeight(), null, 'variation.weight');
+        Assertion::isInstanceOf($object->getProperties(), Property::class, null, 'variation.properties');
+        Assertion::isInstanceOf($object->getAttributes(), Attribute::class, null, 'variation.attributes');
     }
 }

@@ -25,10 +25,10 @@ class AttributeValidator implements ValidatorInterface
      */
     public function validate($object)
     {
-        Assertion::string($object->getKey());
-        Assertion::notBlank($object->getKey());
-        Assertion::string($object->getValue());
-        Assertion::notBlank($object->getValue());
-        Assertion::allIsInstanceOf($object->getTranslations(), Translation::class);
+        Assertion::string($object->getKey(), null, 'attribute.key');
+        Assertion::notBlank($object->getKey(), null, 'attribute.key');
+        Assertion::string($object->getValue(), null, 'attribute.value');
+        Assertion::notBlank($object->getValue(), null, 'attribute.value');
+        Assertion::allIsInstanceOf($object->getTranslations(), Translation::class, null, 'attribute.translations');
     }
 }

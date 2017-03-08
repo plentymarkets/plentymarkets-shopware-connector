@@ -31,57 +31,57 @@ class ProductValidator implements ValidatorInterface
      */
     public function validate($object)
     {
-        Assertion::uuid($object->getIdentifier());
+        Assertion::uuid($object->getIdentifier(), null, 'product.identifier');
 
-        Assertion::string($object->getName());
-        Assertion::notBlank($object->getName());
+        Assertion::string($object->getName(), null, 'product.name');
+        Assertion::notBlank($object->getName(), null, 'product.name');
 
-        Assertion::string($object->getNumber());
-        Assertion::notBlank($object->getNumber());
+        Assertion::string($object->getNumber(), null, 'product.number');
+        Assertion::notBlank($object->getNumber(), null, 'product.number');
 
-        Assertion::boolean($object->getActive());
+        Assertion::boolean($object->getActive(), null, 'product.active');
 
-        Assertion::allUuid($object->getShopIdentifiers());
+        Assertion::allUuid($object->getShopIdentifiers(), null, 'product.shopIdentifiers');
 
-        Assertion::uuid($object->getManufacturerIdentifier());
+        Assertion::uuid($object->getManufacturerIdentifier(), null, 'product.manufacturerIdentifier');
 
-        Assertion::allUuid($object->getCategoryIdentifiers());
-        Assertion::allUuid($object->getDefaultCategoryIdentifiers());
-        Assertion::allUuid($object->getShippingProfileIdentifiers());
-        Assertion::allUuid($object->getImageIdentifiers());
+        Assertion::allUuid($object->getCategoryIdentifiers(), null, 'product.categoryIdentifiers');
+        Assertion::allUuid($object->getDefaultCategoryIdentifiers(), null, 'product.defaultCategoryIdentifiers');
+        Assertion::allUuid($object->getShippingProfileIdentifiers(), null, 'product.name');
+        Assertion::allUuid($object->getImageIdentifiers(), null, 'product.imageIdentifiers');
 
-        Assertion::allIsInstanceOf($object->getVariations(), Variation::class);
+        Assertion::allIsInstanceOf($object->getVariations(), Variation::class, null, 'product.variations');
 
-        Assertion::uuid($object->getVatRateIdentifier());
+        Assertion::uuid($object->getVatRateIdentifier(), null, 'product.vatRateIdentifier');
 
-        Assertion::boolean($object->getLimitedStock());
+        Assertion::boolean($object->getLimitedStock(), null, 'product.limitedStock');
 
-        Assertion::string($object->getDescription());
-        Assertion::string($object->getLongDescription());
-        Assertion::string($object->getTechnicalDescription());
+        Assertion::string($object->getDescription(), null, 'product.description');
+        Assertion::string($object->getLongDescription(), null, 'product.longDescription');
+        Assertion::string($object->getTechnicalDescription(), null, 'product.technicalDescription');
 
-        Assertion::string($object->getMetaTitle());
-        Assertion::string($object->getMetaDescription());
-        Assertion::string($object->getMetaKeywords());
-        Assertion::string($object->getMetaRobots());
+        Assertion::string($object->getMetaTitle(), null, 'product.metaTitle');
+        Assertion::string($object->getMetaDescription(), null, 'product.metaDescription');
+        Assertion::string($object->getMetaKeywords(), null, 'product.metaKeywords');
+        Assertion::string($object->getMetaRobots(), null, 'product.metaRobots');
         Assertion::inArray($object->getMetaRobots(), [
             'INDEX, FOLLOW',
             'NOINDEX, FOLLOW',
             'INDEX, NOFOLLOW',
             'NOINDEX, NOFOLLOW',
-        ]);
+        ], null, 'product.metaRobots');
 
-        Assertion::allIsInstanceOf($object->getLinkedProducts(), LinkedProduct::class);
+        Assertion::allIsInstanceOf($object->getLinkedProducts(), LinkedProduct::class, null, 'product.linkedProducts');
 
-        Assertion::allUuid($object->getDocuments());
+        Assertion::allUuid($object->getDocuments(), null, 'product.documents');
 
-        Assertion::allIsInstanceOf($object->getProperties(), Property::class);
+        Assertion::allIsInstanceOf($object->getProperties(), Property::class, null, 'product.properties');
 
-        Assertion::allIsInstanceOf($object->getTranslations(), Translation::class);
+        Assertion::allIsInstanceOf($object->getTranslations(), Translation::class, null, 'product.translations');
 
-        Assertion::nullOrIsInstanceOf($object->getAvailableFrom(), \DateTimeImmutable::class);
-        Assertion::nullOrIsInstanceOf($object->getAvailableTo(), \DateTimeImmutable::class);
+        Assertion::nullOrIsInstanceOf($object->getAvailableFrom(), \DateTimeImmutable::class, null, 'product.availableFrom');
+        Assertion::nullOrIsInstanceOf($object->getAvailableTo(), \DateTimeImmutable::class, null, 'product.availableTo');
 
-        Assertion::allIsInstanceOf($object->getAttributes(), Attribute::class);
+        Assertion::allIsInstanceOf($object->getAttributes(), Attribute::class, null, 'product.attributes');
     }
 }

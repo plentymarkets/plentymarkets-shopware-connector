@@ -25,12 +25,12 @@ class PaymentValidator implements ValidatorInterface
      */
     public function validate($object)
     {
-        Assertion::float($object->getAmount());
-        Assertion::greaterThan($object->getAmount(), 0.0);
-        Assertion::uuid($object->getCurrencyIdentifier());
-        Assertion::uuid($object->getPaymentMethodIdentifier());
-        Assertion::string($object->getTransactionReference());
-        Assertion::notBlank($object->getTransactionReference());
-        Assertion::allIsInstanceOf($object->getAttributes(), Attribute::class);
+        Assertion::float($object->getAmount(), null, 'payment.amount');
+        Assertion::greaterThan($object->getAmount(), 0.0, null, 'payment.amount');
+        Assertion::uuid($object->getCurrencyIdentifier(), null, 'payment.currencyIdentifier');
+        Assertion::uuid($object->getPaymentMethodIdentifier(), null, 'payment.paymentMethodIdentifier');
+        Assertion::string($object->getTransactionReference(), null, 'payment.transactionReference');
+        Assertion::notBlank($object->getTransactionReference(), null, 'payment.transactionReference');
+        Assertion::allIsInstanceOf($object->getAttributes(), Attribute::class, null, 'payment.attributes');
     }
 }

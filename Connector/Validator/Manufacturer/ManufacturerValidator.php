@@ -25,11 +25,15 @@ class ManufacturerValidator implements ValidatorInterface
      */
     public function validate($object)
     {
-        Assertion::uuid($object->getIdentifier());
-        Assertion::string($object->getName());
-        Assertion::notBlank($object->getName());
-        Assertion::nullOrUuid($object->getLogoIdentifier());
-        Assertion::nullOrString($object->getLink());
-        Assertion::allIsInstanceOf($object->getAttributes(), Attribute::class);
+        Assertion::uuid($object->getIdentifier(), null, 'manufacturer.identifier');
+
+        Assertion::string($object->getName(), null, 'manufacturer.name');
+        Assertion::notBlank($object->getName(), null, 'manufacturer.name');
+
+        Assertion::nullOrUuid($object->getLogoIdentifier(), null, 'manufacturer.logoIdentifier');
+
+        Assertion::nullOrString($object->getLink(), null, 'manufacturer.link');
+
+        Assertion::allIsInstanceOf($object->getAttributes(), Attribute::class, null, 'manufacturer.attributes');
     }
 }

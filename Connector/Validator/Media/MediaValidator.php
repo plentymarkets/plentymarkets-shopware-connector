@@ -26,12 +26,17 @@ class MediaValidator implements ValidatorInterface
      */
     public function validate($object)
     {
-        Assertion::uuid($object->getIdentifier());
-        Assertion::uuid($object->getMediaCategoryIdentifier());
-        Assertion::url($object->getLink());
-        Assertion::nullOrString($object->getName());
-        Assertion::nullOrString($object->getAlternateName());
-        Assertion::allIsInstanceOf($object->getTranslations(), Translation::class);
-        Assertion::allIsInstanceOf($object->getAttributes(), Attribute::class);
+        Assertion::uuid($object->getIdentifier(), null, 'media.identifier');
+
+        Assertion::uuid($object->getMediaCategoryIdentifier(), null, 'media.mediaCategoryIdentifier');
+
+        Assertion::url($object->getLink(), null, 'media.link');
+
+        Assertion::nullOrString($object->getName(), null, 'media.name');
+        Assertion::nullOrString($object->getAlternateName(), null, 'media.name');
+
+        Assertion::allIsInstanceOf($object->getTranslations(), Translation::class, null, 'media.translations');
+
+        Assertion::allIsInstanceOf($object->getAttributes(), Attribute::class, null, 'media.attributes');
     }
 }

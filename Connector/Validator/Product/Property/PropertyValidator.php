@@ -26,9 +26,9 @@ class PropertyValidator implements ValidatorInterface
      */
     public function validate($object)
     {
-        Assertion::string($object->getName());
-        Assertion::notBlank($object->getName());
-        Assertion::allIsInstanceOf($object->getValues(), Value::class);
-        Assertion::allIsInstanceOf($object->getTranslations(), Translation::class);
+        Assertion::string($object->getName(), null, 'property.name');
+        Assertion::notBlank($object->getName(), null, 'property.name');
+        Assertion::allIsInstanceOf($object->getValues(), Value::class, null, 'property.values');
+        Assertion::allIsInstanceOf($object->getTranslations(), Translation::class, null, 'property.translations');
     }
 }

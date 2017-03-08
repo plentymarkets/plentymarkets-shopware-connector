@@ -24,13 +24,15 @@ class IdentityValidator implements ValidatorInterface
      */
     public function validate($object)
     {
-        Assertion::uuid($object->getObjectIdentifier());
-        Assertion::string($object->getObjectType());
-        Assertion::notBlank($object->getObjectType());
+        Assertion::uuid($object->getObjectIdentifier(), null, 'identity.objectIdentifier');
 
-        Assertion::string($object->getAdapterIdentifier());
-        Assertion::notBlank($object->getAdapterIdentifier());
-        Assertion::string($object->getAdapterName());
-        Assertion::notBlank($object->getAdapterName());
+        Assertion::string($object->getObjectType(), null, 'definition.objectType');
+        Assertion::notBlank($object->getObjectType(), null, 'definition.objectType');
+
+        Assertion::string($object->getAdapterIdentifier(), null, 'definition.adapterIdentifier');
+        Assertion::notBlank($object->getAdapterIdentifier(), null, 'definition.adapterIdentifier');
+
+        Assertion::string($object->getAdapterName(), null, 'definition.adapterName');
+        Assertion::notBlank($object->getAdapterName(), null, 'definition.adapterName');
     }
 }

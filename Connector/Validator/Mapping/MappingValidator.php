@@ -25,12 +25,12 @@ class MappingValidator implements ValidatorInterface
      */
     public function validate($object)
     {
-        Assertion::string($object->getOriginAdapterName());
-        Assertion::notBlank($object->getOriginAdapterName());
-        Assertion::allIsInstanceOf($object->getOriginTransferObjects(), TransferObjectInterface::class);
+        Assertion::string($object->getOriginAdapterName(), null, 'mapping.originAdapterName');
+        Assertion::notBlank($object->getOriginAdapterName(), null, 'mapping.originAdapterName');
+        Assertion::allIsInstanceOf($object->getOriginTransferObjects(), TransferObjectInterface::class, null, 'mapping.originTransferObjects');
 
-        Assertion::string($object->getDestinationAdapterName());
-        Assertion::notBlank($object->getDestinationAdapterName());
-        Assertion::allIsInstanceOf($object->getDestinationTransferObjects(), TransferObjectInterface::class);
+        Assertion::string($object->getDestinationAdapterName(), null, 'mapping.destinationAdapterName');
+        Assertion::notBlank($object->getDestinationAdapterName(), null, 'mapping.destinationAdapterName');
+        Assertion::allIsInstanceOf($object->getDestinationTransferObjects(), TransferObjectInterface::class, null, 'mapping.destinationTransferObjects');
     }
 }

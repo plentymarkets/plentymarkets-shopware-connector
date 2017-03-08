@@ -26,33 +26,33 @@ class CategoryValidator implements ValidatorInterface
      */
     public function validate($object)
     {
-        Assertion::uuid($object->getIdentifier());
-        Assertion::notBlank($object->getName());
-        Assertion::string($object->getName());
+        Assertion::uuid($object->getIdentifier(), null, 'category.identifier');
+        Assertion::notBlank($object->getName(), null, 'category.name');
+        Assertion::string($object->getName(), null, 'category.name');
 
-        Assertion::nullOrUuid($object->getParentIdentifier());
-        Assertion::uuid($object->getShopIdentifier());
+        Assertion::nullOrUuid($object->getParentIdentifier(), null, 'category.parentIdentifier');
+        Assertion::uuid($object->getShopIdentifier(), null, 'category.parentIdentifier');
 
-        Assertion::allUuid($object->getImageIdentifiers());
+        Assertion::allUuid($object->getImageIdentifiers(), null, 'category.imageIdentifiers');
 
-        Assertion::integer($object->getPosition());
-        Assertion::greaterOrEqualThan($object->getPosition(), 0);
+        Assertion::integer($object->getPosition(), null, 'category.position');
+        Assertion::greaterOrEqualThan($object->getPosition(), 0, null, 'category.position');
 
-        Assertion::string($object->getDescription());
-        Assertion::string($object->getLongDescription());
+        Assertion::string($object->getDescription(), null, 'category.description');
+        Assertion::string($object->getLongDescription(), null, 'category.longDescription');
 
-        Assertion::string($object->getMetaTitle());
-        Assertion::string($object->getMetaDescription());
-        Assertion::string($object->getMetaKeywords());
-        Assertion::string($object->getMetaRobots());
+        Assertion::string($object->getMetaTitle(), null, 'category.metaTitle');
+        Assertion::string($object->getMetaDescription(), null, 'category.metaDescription');
+        Assertion::string($object->getMetaKeywords(), null, 'category.metaKeywords');
+        Assertion::string($object->getMetaRobots(), null, 'category.metaTobots');
         Assertion::inArray($object->getMetaRobots(), [
             'INDEX, FOLLOW',
             'NOINDEX, FOLLOW',
             'INDEX, NOFOLLOW',
             'NOINDEX, NOFOLLOW',
-        ]);
+        ], null, 'category.metaTobots');
 
-        Assertion::allIsInstanceOf($object->getTranslations(), Translation::class);
-        Assertion::allIsInstanceOf($object->getAttributes(), Attribute::class);
+        Assertion::allIsInstanceOf($object->getTranslations(), Translation::class, null, 'category.translations');
+        Assertion::allIsInstanceOf($object->getAttributes(), Attribute::class, null, 'category.attributes');
     }
 }
