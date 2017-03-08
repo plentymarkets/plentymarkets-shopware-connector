@@ -163,6 +163,16 @@ class Order extends AbstractTransferObject
     }
 
     /**
+     * @return array
+     */
+    public function getOrderTypes()
+    {
+        $reflection = new \ReflectionClass(__CLASS__);
+
+        return $reflection->getConstants();
+    }
+
+    /**
      * @return string
      */
     public function getOrderNumber()

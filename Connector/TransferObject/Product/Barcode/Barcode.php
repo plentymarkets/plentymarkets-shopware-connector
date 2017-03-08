@@ -2,7 +2,6 @@
 
 namespace PlentyConnector\Connector\TransferObject\Product\Barcode;
 
-use Assert\Assertion;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 
 /**
@@ -16,9 +15,9 @@ class Barcode extends AbstractValueObject
     const TYPE_ISBN = 4;
 
     /**
-     * @var integer
+     * @var int
      */
-    private $type = 1;
+    private $type = self::TYPE_GTIN13;
 
     /**
      * @var string
@@ -38,12 +37,17 @@ class Barcode extends AbstractValueObject
      */
     public function setType($type)
     {
-        $oClass = new \ReflectionClass(__CLASS__);
-        $possibleValues =  $oClass->getConstants();
-
-        Assertion::inArray($type, $possibleValues);
-
         $this->type = $type;
+    }
+
+    /**
+     * @return array
+     */
+    public function getTypes()
+    {
+        $reflection = new \ReflectionClass(__CLASS__);
+
+        return $reflection->getConstants();
     }
 
     /**
@@ -59,8 +63,6 @@ class Barcode extends AbstractValueObject
      */
     public function setCode($code)
     {
-        Assertion::notBlank($code);
-
         $this->code = $code;
     }
 }

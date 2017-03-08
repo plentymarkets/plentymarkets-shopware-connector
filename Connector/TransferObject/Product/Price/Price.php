@@ -2,7 +2,6 @@
 
 namespace PlentyConnector\Connector\TransferObject\Product\Price;
 
-use Assert\Assertion;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 
 /**
@@ -26,12 +25,12 @@ class Price extends AbstractValueObject
     private $customerGroupIdentifier;
 
     /**
-     * @var int
+     * @var float
      */
-    private $fromAmount = 1;
+    private $fromAmount = 1.0;
 
     /**
-     * @var null|int
+     * @var null|float
      */
     private $toAmount;
 
@@ -48,9 +47,6 @@ class Price extends AbstractValueObject
      */
     public function setPrice($price)
     {
-        Assertion::float($price);
-        Assertion::greaterOrEqualThan($price, '0.0');
-
         $this->price = $price;
     }
 
@@ -67,9 +63,6 @@ class Price extends AbstractValueObject
      */
     public function setPseudoPrice($pseudoPrice)
     {
-        Assertion::float($pseudoPrice);
-        Assertion::greaterOrEqualThan($pseudoPrice, '0.0');
-
         $this->pseudoPrice = $pseudoPrice;
     }
 
@@ -86,13 +79,11 @@ class Price extends AbstractValueObject
      */
     public function setCustomerGroupIdentifier($customerGroupIdentifier = null)
     {
-        Assertion::nullOrUuid($customerGroupIdentifier);
-
         $this->customerGroupIdentifier = $customerGroupIdentifier;
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getFromAmount()
     {
@@ -100,18 +91,15 @@ class Price extends AbstractValueObject
     }
 
     /**
-     * @param int $fromAmount
+     * @param float $fromAmount
      */
     public function setFromAmount($fromAmount)
     {
-        Assertion::integer($fromAmount);
-        Assertion::greaterOrEqualThan($fromAmount, 1);
-
         $this->fromAmount = $fromAmount;
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getToAmount()
     {
@@ -119,12 +107,10 @@ class Price extends AbstractValueObject
     }
 
     /**
-     * @param null|int $toAmount
+     * @param null|float $toAmount
      */
     public function setToAmount($toAmount = null)
     {
-        Assertion::nullOrInteger($toAmount);
-
         $this->toAmount = $toAmount;
     }
 }

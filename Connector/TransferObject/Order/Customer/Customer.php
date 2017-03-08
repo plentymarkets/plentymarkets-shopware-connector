@@ -51,12 +51,12 @@ class Customer extends AbstractValueObject
     /**
      * @var int
      */
-    private $salutation = 0;
+    private $salutation = self::SALUTATION_MR;
 
     /**
-     * @var string
+     * @var null|string
      */
-    private $title = '';
+    private $title;
 
     /**
      * @var string
@@ -69,19 +69,19 @@ class Customer extends AbstractValueObject
     private $lastname = '';
 
     /**
-     * @var DateTimeImmutable
+     * @var null|DateTimeImmutable
      */
     private $birthday;
 
     /**
-     * @var string
+     * @var null|string
      */
-    private $phoneNumber = '';
+    private $phoneNumber;
 
     /**
-     * @var string
+     * @var null|string
      */
-    private $mobilePhoneNumber = '';
+    private $mobilePhoneNumber;
 
     /**
      * @var string
@@ -94,6 +94,7 @@ class Customer extends AbstractValueObject
     public function __construct()
     {
         $timezone = new \DateTimeZone('UTC');
+
         $this->birthday = new DateTimeImmutable('now', $timezone);
     }
 
@@ -106,11 +107,11 @@ class Customer extends AbstractValueObject
     }
 
     /**
-     * @param int $type
+     * @return array
      */
-    public function setType($type)
+    public function getCustomerTypes()
     {
-        $this->type = $type;
+        return $this->getConstantsByName('TYPE');
     }
 
     /**
@@ -119,6 +120,14 @@ class Customer extends AbstractValueObject
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * @param int $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
     }
 
     /**
@@ -224,6 +233,14 @@ class Customer extends AbstractValueObject
     }
 
     /**
+     * @return array
+     */
+    public function getSalutations()
+    {
+        return $this->getConstantsByName('SALUTATION');
+    }
+
+    /**
      * @return null|string
      */
     public function getTitle()
@@ -272,7 +289,7 @@ class Customer extends AbstractValueObject
     }
 
     /**
-     * @return DateTimeImmutable|null
+     * @return null|DateTimeImmutable
      */
     public function getBirthday()
     {
@@ -280,15 +297,15 @@ class Customer extends AbstractValueObject
     }
 
     /**
-     * @param DateTimeImmutable $birthday
+     * @param null|DateTimeImmutable $birthday
      */
-    public function setBirthday($birthday)
+    public function setBirthday(DateTimeImmutable $birthday = null)
     {
         $this->birthday = $birthday;
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getPhoneNumber()
     {
@@ -296,15 +313,15 @@ class Customer extends AbstractValueObject
     }
 
     /**
-     * @param string $phoneNumber
+     * @param null|string $phoneNumber
      */
-    public function setPhoneNumber($phoneNumber)
+    public function setPhoneNumber($phoneNumber = null)
     {
         $this->phoneNumber = $phoneNumber;
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getMobilePhoneNumber()
     {
@@ -312,9 +329,9 @@ class Customer extends AbstractValueObject
     }
 
     /**
-     * @param string $mobilePhoneNumber
+     * @param null|string $mobilePhoneNumber
      */
-    public function setMobilePhoneNumber($mobilePhoneNumber)
+    public function setMobilePhoneNumber($mobilePhoneNumber = null)
     {
         $this->mobilePhoneNumber = $mobilePhoneNumber;
     }
@@ -333,5 +350,27 @@ class Customer extends AbstractValueObject
     public function setShopIdentifier($shopIdentifier)
     {
         $this->shopIdentifier = $shopIdentifier;
+    }
+
+    /**
+     * @param $name
+     *
+     * @return array
+     */
+    private function getConstantsByName($name)
+    {
+        $reflection = new \ReflectionClass(__CLASS__);
+
+        $constants = $reflection->getConstants();
+
+        $result = [];
+
+        foreach ($constants as $key => $constant) {
+            if (false !== stripos($key, $name)) {
+                $result[$key] = $constant;
+            }
+        }
+
+        return $result;
     }
 }

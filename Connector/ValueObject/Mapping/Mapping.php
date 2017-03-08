@@ -2,7 +2,6 @@
 
 namespace PlentyConnector\Connector\ValueObject\Mapping;
 
-use Assert\Assertion;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 
@@ -16,29 +15,35 @@ class Mapping extends AbstractValueObject
      *
      * @var string
      */
-    private $originAdapterName;
+    private $originAdapterName = '';
 
     /**
+     * origin transfer objects
+     *
      * @var TransferObjectInterface[]
      */
-    private $originTransferObjects;
+    private $originTransferObjects = [];
 
     /**
      * destination adapter name.
      *
      * @var string
      */
-    private $destinationAdapterName;
+    private $destinationAdapterName = '';
 
     /**
+     * destination transfer objects
+     *
      * @var TransferObjectInterface[]
      */
-    private $destinationTransferObjects;
+    private $destinationTransferObjects = [];
 
     /**
+     * object type
+     *
      * @var string
      */
-    private $objectType;
+    private $objectType = '';
 
     /**
      * @return string
@@ -53,8 +58,6 @@ class Mapping extends AbstractValueObject
      */
     public function setOriginAdapterName($originAdapterName)
     {
-        Assertion::string($originAdapterName);
-
         $this->originAdapterName = $originAdapterName;
     }
 
@@ -71,8 +74,6 @@ class Mapping extends AbstractValueObject
      */
     public function setOriginTransferObjects($originTransferObjects)
     {
-        Assertion::allIsInstanceOf($originTransferObjects, TransferObjectInterface::class);
-
         $this->originTransferObjects = $originTransferObjects;
     }
 
@@ -89,8 +90,6 @@ class Mapping extends AbstractValueObject
      */
     public function setDestinationAdapterName($destinationAdapterName)
     {
-        Assertion::string($destinationAdapterName);
-
         $this->destinationAdapterName = $destinationAdapterName;
     }
 
@@ -107,8 +106,6 @@ class Mapping extends AbstractValueObject
      */
     public function setDestinationTransferObjects($destinationTransferObjects)
     {
-        Assertion::allIsInstanceOf($destinationTransferObjects, TransferObjectInterface::class);
-
         $this->destinationTransferObjects = $destinationTransferObjects;
     }
 
@@ -125,9 +122,6 @@ class Mapping extends AbstractValueObject
      */
     public function setObjectType($objectType)
     {
-        Assertion::string($objectType);
-        Assertion::notBlank($objectType);
-
         $this->objectType = $objectType;
     }
 }

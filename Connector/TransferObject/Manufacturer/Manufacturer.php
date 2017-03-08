@@ -2,7 +2,6 @@
 
 namespace PlentyConnector\Connector\TransferObject\Manufacturer;
 
-use Assert\Assertion;
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
@@ -24,14 +23,14 @@ class Manufacturer extends AbstractTransferObject
     private $name = '';
 
     /**
-     * @var string
+     * @var null|string
      */
-    private $logoIdentifier = '';
+    private $logoIdentifier;
 
     /**
-     * @var string
+     * @var null|string
      */
-    private $link = '';
+    private $link;
 
     /**
      * @var Attribute[]
@@ -51,8 +50,6 @@ class Manufacturer extends AbstractTransferObject
      */
     public function getIdentifier()
     {
-        Assertion::notBlank($this->identifier);
-
         return $this->identifier;
     }
 
@@ -61,8 +58,6 @@ class Manufacturer extends AbstractTransferObject
      */
     public function setIdentifier($identifier)
     {
-        Assertion::uuid($identifier);
-
         $this->identifier = $identifier;
     }
 
@@ -79,9 +74,6 @@ class Manufacturer extends AbstractTransferObject
      */
     public function setName($name)
     {
-        Assertion::string($name);
-        Assertion::notBlank($name);
-
         $this->name = $name;
     }
 
@@ -94,12 +86,10 @@ class Manufacturer extends AbstractTransferObject
     }
 
     /**
-     * @param string $logoIdentifier
+     * @param null|string $logoIdentifier
      */
-    public function setLogoIdentifier($logoIdentifier)
+    public function setLogoIdentifier($logoIdentifier = null)
     {
-        Assertion::nullOrUuid($logoIdentifier);
-
         $this->logoIdentifier = $logoIdentifier;
     }
 
@@ -112,12 +102,10 @@ class Manufacturer extends AbstractTransferObject
     }
 
     /**
-     * @param string $link
+     * @param null|string $link
      */
-    public function setLink($link)
+    public function setLink($link = null)
     {
-        Assertion::nullOrUrl($link);
-
         $this->link = $link;
     }
 
@@ -134,8 +122,6 @@ class Manufacturer extends AbstractTransferObject
      */
     public function setAttributes(array $attributes)
     {
-        Assertion::allIsInstanceOf($attributes, Attribute::class);
-
         $this->attributes = $attributes;
     }
 }

@@ -2,7 +2,6 @@
 
 namespace PlentyConnector\Connector\ValueObject\Identity;
 
-use Assert\Assertion;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 
 /**
@@ -15,28 +14,28 @@ class Identity extends AbstractValueObject
      *
      * @var string
      */
-    private $objectIdentifier;
+    private $objectIdentifier = '';
 
     /**
      * TransferObject type.
      *
      * @var string
      */
-    private $objectType;
+    private $objectType = '';
 
     /**
      * Identifier inside the adapter domain.
      *
      * @var string
      */
-    private $adapterIdentifier;
+    private $adapterIdentifier = '';
 
     /**
      * Adapter name.
      *
      * @var string
      */
-    private $adapterName;
+    private $adapterName = '';
 
     /**
      * @return string
@@ -51,9 +50,6 @@ class Identity extends AbstractValueObject
      */
     public function setObjectIdentifier($objectIdentifier)
     {
-        Assertion::string($objectIdentifier);
-        Assertion::notBlank($objectIdentifier);
-
         $this->objectIdentifier = $objectIdentifier;
     }
 
@@ -70,9 +66,6 @@ class Identity extends AbstractValueObject
      */
     public function setObjectType($objectType)
     {
-        Assertion::string($objectType);
-        Assertion::notBlank($objectType);
-
         $this->objectType = $objectType;
     }
 
@@ -89,9 +82,6 @@ class Identity extends AbstractValueObject
      */
     public function setAdapterIdentifier($adapterIdentifier)
     {
-        Assertion::string($adapterIdentifier);
-        Assertion::notBlank($adapterIdentifier);
-
         $this->adapterIdentifier = $adapterIdentifier;
     }
 
@@ -108,9 +98,6 @@ class Identity extends AbstractValueObject
      */
     public function setAdapterName($adapterName)
     {
-        Assertion::string($adapterName);
-        Assertion::notBlank($adapterName);
-
         $this->adapterName = $adapterName;
     }
 }

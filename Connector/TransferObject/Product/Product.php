@@ -2,7 +2,6 @@
 
 namespace PlentyConnector\Connector\TransferObject\Product;
 
-use Assert\Assertion;
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 use PlentyConnector\Connector\TransferObject\Product\LinkedProduct\LinkedProduct;
 use PlentyConnector\Connector\TransferObject\Product\Property\Property;
@@ -118,7 +117,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     /**
      * @var string
      */
-    private $metaRobots = '';
+    private $metaRobots = 'INDEX, FOLLOW';
 
     /**
      * @var LinkedProduct[]
@@ -168,8 +167,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface
      */
     public function getIdentifier()
     {
-        Assertion::notBlank($this->identifier);
-
         return $this->identifier;
     }
 
@@ -178,8 +175,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface
      */
     public function setIdentifier($identifier)
     {
-        Assertion::uuid($identifier);
-
         $this->identifier = $identifier;
     }
 
@@ -196,8 +191,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface
      */
     public function setName($name)
     {
-        Assertion::string($name);
-
         $this->name = $name;
     }
 
@@ -214,8 +207,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface
      */
     public function setNumber($number)
     {
-        Assertion::string($number);
-
         $this->number = $number;
     }
 
@@ -232,8 +223,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface
      */
     public function setActive($active)
     {
-        Assertion::boolean($active);
-
         $this->active = $active;
     }
 
@@ -250,8 +239,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface
      */
     public function setShopIdentifiers(array $shopIdentifiers)
     {
-        Assertion::allUuid($shopIdentifiers);
-
         $this->shopIdentifiers = $shopIdentifiers;
     }
 
@@ -268,8 +255,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface
      */
     public function setManufacturerIdentifier($manufacturerIdentifier)
     {
-        Assertion::uuid($manufacturerIdentifier);
-
         $this->manufacturerIdentifier = $manufacturerIdentifier;
     }
 
@@ -286,8 +271,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface
      */
     public function setCategoryIdentifiers(array $categoryIdentifiers)
     {
-        Assertion::allUuid($categoryIdentifiers);
-
         $this->categoryIdentifiers = $categoryIdentifiers;
     }
 
@@ -304,8 +287,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface
      */
     public function setDefaultCategoryIdentifiers(array $defaultCategoryIdentifiers)
     {
-        Assertion::allUuid($defaultCategoryIdentifiers);
-
         $this->defaultCategoryIdentifiers = $defaultCategoryIdentifiers;
     }
 
@@ -322,8 +303,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface
      */
     public function setShippingProfileIdentifiers(array $shippingProfileIdentifiers)
     {
-        Assertion::allUuid($shippingProfileIdentifiers);
-
         $this->shippingProfileIdentifiers = $shippingProfileIdentifiers;
     }
 
@@ -340,8 +319,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface
      */
     public function setImageIdentifiers(array $imageIdentifiers)
     {
-        Assertion::allUuid($imageIdentifiers);
-
         $this->imageIdentifiers = $imageIdentifiers;
     }
 
@@ -358,8 +335,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface
      */
     public function setVariations(array $variations)
     {
-        Assertion::allIsInstanceOf($variations, Variation::class);
-
         $this->variations = $variations;
     }
 
@@ -376,8 +351,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface
      */
     public function setVatRateIdentifier($vatRateIdentifier)
     {
-        Assertion::uuid($vatRateIdentifier);
-
         $this->vatRateIdentifier = $vatRateIdentifier;
     }
 
@@ -394,8 +367,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface
      */
     public function setLimitedStock($limitedStock)
     {
-        Assertion::boolean($limitedStock);
-
         $this->limitedStock = $limitedStock;
     }
 
@@ -412,8 +383,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface
      */
     public function setDescription($description)
     {
-        Assertion::string($description);
-
         $this->description = $description;
     }
 
@@ -430,8 +399,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface
      */
     public function setLongDescription($longDescription)
     {
-        Assertion::string($longDescription);
-
         $this->longDescription = $longDescription;
     }
 
@@ -448,8 +415,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface
      */
     public function setTechnicalDescription($technicalDescription)
     {
-        Assertion::string($technicalDescription);
-
         $this->technicalDescription = $technicalDescription;
     }
 
@@ -466,8 +431,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface
      */
     public function setMetaTitle($metaTitle)
     {
-        Assertion::string($metaTitle);
-
         $this->metaTitle = $metaTitle;
     }
 
@@ -484,8 +447,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface
      */
     public function setMetaDescription($metaDescription)
     {
-        Assertion::string($metaDescription);
-
         $this->metaDescription = $metaDescription;
     }
 
@@ -502,8 +463,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface
      */
     public function setMetaKeywords($metaKeywords)
     {
-        Assertion::string($metaKeywords);
-
         $this->metaKeywords = $metaKeywords;
     }
 
@@ -520,14 +479,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface
      */
     public function setMetaRobots($metaRobots)
     {
-        Assertion::string($metaRobots);
-        Assertion::inArray($metaRobots, [
-            'INDEX, FOLLOW',
-            'NOINDEX, FOLLOW',
-            'INDEX, NOFOLLOW',
-            'NOINDEX, NOFOLLOW',
-        ]);
-
         $this->metaRobots = $metaRobots;
     }
 
@@ -544,8 +495,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface
      */
     public function setLinkedProducts(array $linkedProducts)
     {
-        Assertion::allIsInstanceOf($linkedProducts, LinkedProduct::class);
-
         $this->linkedProducts = $linkedProducts;
     }
 
@@ -562,8 +511,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface
      */
     public function setDocuments(array $documents)
     {
-        Assertion::allUuid($documents);
-
         $this->documents = $documents;
     }
 
@@ -580,8 +527,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface
      */
     public function setProperties($properties)
     {
-        Assertion::allIsInstanceOf($properties, Property::class);
-
         $this->properties = $properties;
     }
 
@@ -598,8 +543,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface
      */
     public function setTranslations(array $translations)
     {
-        Assertion::allIsInstanceOf($translations, Translation::class);
-
         $this->translations = $translations;
     }
 
@@ -648,8 +591,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface
      */
     public function setAttributes(array $attributes)
     {
-        Assertion::allIsInstanceOf($attributes, Attribute::class);
-
         $this->attributes = $attributes;
     }
 }

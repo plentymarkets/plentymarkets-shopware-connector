@@ -2,10 +2,13 @@
 
 namespace PlentyConnector\Connector\TransferObject\Order\Comment;
 
+use PlentyConnector\Connector\ValueObject\AbstractValueObject;
+use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
+
 /**
  * Class Comment
  */
-class Comment
+class Comment extends AbstractValueObject
 {
     const TYPE_INTERNAL = 1;
     const TYPE_CUSTOMER = 2;
@@ -71,5 +74,15 @@ class Comment
     public function setAttributes(array $attributes)
     {
         $this->attributes = $attributes;
+    }
+
+    /**
+     * @return array
+     */
+    public function getTypes()
+    {
+        $reflection = new \ReflectionClass(__CLASS__);
+
+        return $reflection->getConstants();
     }
 }

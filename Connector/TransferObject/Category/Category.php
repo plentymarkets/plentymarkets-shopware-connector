@@ -2,7 +2,6 @@
 
 namespace PlentyConnector\Connector\TransferObject\Category;
 
-use Assert\Assertion;
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 use PlentyConnector\Connector\TransferObject\TranslateableInterface;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
@@ -98,8 +97,6 @@ class Category extends AbstractTransferObject implements TranslateableInterface
      */
     public function getIdentifier()
     {
-        Assertion::notBlank($this->identifier);
-
         return $this->identifier;
     }
 
@@ -108,8 +105,6 @@ class Category extends AbstractTransferObject implements TranslateableInterface
      */
     public function setIdentifier($identifier)
     {
-        Assertion::uuid($identifier);
-
         $this->identifier = $identifier;
     }
 
@@ -126,9 +121,6 @@ class Category extends AbstractTransferObject implements TranslateableInterface
      */
     public function setName($name)
     {
-        Assertion::string($name);
-        Assertion::notBlank($name);
-
         $this->name = $name;
     }
 
@@ -145,8 +137,6 @@ class Category extends AbstractTransferObject implements TranslateableInterface
      */
     public function setParentIdentifier($parentIdentifier)
     {
-        Assertion::nullOrUuid($parentIdentifier);
-
         $this->parentIdentifier = $parentIdentifier;
     }
 
@@ -163,8 +153,6 @@ class Category extends AbstractTransferObject implements TranslateableInterface
      */
     public function setShopIdentifier($shopIdentifier)
     {
-        Assertion::uuid($shopIdentifier);
-
         $this->shopIdentifier = $shopIdentifier;
     }
 
@@ -181,8 +169,6 @@ class Category extends AbstractTransferObject implements TranslateableInterface
      */
     public function setImageIdentifiers(array $imageIdentifiers)
     {
-        Assertion::allUuid($imageIdentifiers);
-
         $this->imageIdentifiers = $imageIdentifiers;
     }
 
@@ -195,12 +181,13 @@ class Category extends AbstractTransferObject implements TranslateableInterface
     }
 
     /**
-     * @param int $position
+     * @param null|int $position
      */
-    public function setPosition($position)
+    public function setPosition($position = null)
     {
-        Assertion::integer($position);
-        Assertion::greaterOrEqualThan($position, 0);
+        if (null === $position) {
+            $position = 0;
+        }
 
         $this->position = $position;
     }
@@ -218,8 +205,6 @@ class Category extends AbstractTransferObject implements TranslateableInterface
      */
     public function setDescription($description)
     {
-        Assertion::string($description);
-
         $this->description = $description;
     }
 
@@ -236,8 +221,6 @@ class Category extends AbstractTransferObject implements TranslateableInterface
      */
     public function setLongDescription($longDescription)
     {
-        Assertion::string($longDescription);
-
         $this->longDescription = $longDescription;
     }
 
@@ -254,8 +237,6 @@ class Category extends AbstractTransferObject implements TranslateableInterface
      */
     public function setMetaTitle($metaTitle)
     {
-        Assertion::string($metaTitle);
-
         $this->metaTitle = $metaTitle;
     }
 
@@ -272,8 +253,6 @@ class Category extends AbstractTransferObject implements TranslateableInterface
      */
     public function setMetaDescription($metaDescription)
     {
-        Assertion::string($metaDescription);
-
         $this->metaDescription = $metaDescription;
     }
 
@@ -290,8 +269,6 @@ class Category extends AbstractTransferObject implements TranslateableInterface
      */
     public function setMetaKeywords($metaKeywords)
     {
-        Assertion::string($metaKeywords);
-
         $this->metaKeywords = $metaKeywords;
     }
 
@@ -308,14 +285,6 @@ class Category extends AbstractTransferObject implements TranslateableInterface
      */
     public function setMetaRobots($metaRobots)
     {
-        Assertion::string($metaRobots);
-        Assertion::inArray($metaRobots, [
-            'INDEX, FOLLOW',
-            'NOINDEX, FOLLOW',
-            'INDEX, NOFOLLOW',
-            'NOINDEX, NOFOLLOW',
-        ]);
-
         $this->metaRobots = $metaRobots;
     }
 
@@ -332,8 +301,6 @@ class Category extends AbstractTransferObject implements TranslateableInterface
      */
     public function setTranslations(array $translations)
     {
-        Assertion::allIsInstanceOf($translations, Translation::class);
-
         $this->translations = $translations;
     }
 
@@ -350,8 +317,6 @@ class Category extends AbstractTransferObject implements TranslateableInterface
      */
     public function setAttributes(array $attributes)
     {
-        Assertion::allIsInstanceOf($attributes, Attribute::class);
-
         $this->attributes = $attributes;
     }
 }

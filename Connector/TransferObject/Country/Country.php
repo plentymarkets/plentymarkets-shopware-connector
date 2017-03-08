@@ -2,7 +2,6 @@
 
 namespace PlentyConnector\Connector\TransferObject\Country;
 
-use Assert\Assertion;
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 
 /**
@@ -35,8 +34,6 @@ class Country extends AbstractTransferObject
      */
     public function getIdentifier()
     {
-        Assertion::notBlank($this->identifier);
-
         return $this->identifier;
     }
 
@@ -45,8 +42,6 @@ class Country extends AbstractTransferObject
      */
     public function setIdentifier($identifier)
     {
-        Assertion::uuid($identifier);
-
         $this->identifier = $identifier;
     }
 
@@ -63,9 +58,6 @@ class Country extends AbstractTransferObject
      */
     public function setName($name)
     {
-        Assertion::string($name);
-        Assertion::notBlank($name);
-
         $this->name = $name;
     }
 }

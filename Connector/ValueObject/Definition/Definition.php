@@ -2,7 +2,6 @@
 
 namespace PlentyConnector\Connector\ValueObject\Definition;
 
-use Assert\Assertion;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 
 /**
@@ -15,26 +14,35 @@ class Definition extends AbstractValueObject
      *
      * @var string
      */
-    private $originAdapterName;
+    private $originAdapterName = '';
 
     /**
      * destination adapter name.
      *
      * @var string
      */
-    private $destinationAdapterName;
+    private $destinationAdapterName = '';
 
     /**
      * The TransferObject class name.
      *
      * @var string
      */
-    private $objectType;
+    private $objectType = '';
 
     /**
+     * Definition priority. Higher priority means earlier processing of the definition
+     *
      * @var int
      */
     private $priority = 0;
+
+    /**
+     * active/deactive flag. Can be used to decorate definitions and disable them completly
+     *
+     * @var bool
+     */
+    private $active = true;
 
     /**
      * @return string
@@ -49,9 +57,6 @@ class Definition extends AbstractValueObject
      */
     public function setOriginAdapterName($originAdapterName)
     {
-        Assertion::string($originAdapterName);
-        Assertion::notBlank($originAdapterName);
-
         $this->originAdapterName = $originAdapterName;
     }
 
@@ -68,9 +73,6 @@ class Definition extends AbstractValueObject
      */
     public function setDestinationAdapterName($destinationAdapterName)
     {
-        Assertion::string($destinationAdapterName);
-        Assertion::notBlank($destinationAdapterName);
-
         $this->destinationAdapterName = $destinationAdapterName;
     }
 
@@ -87,9 +89,6 @@ class Definition extends AbstractValueObject
      */
     public function setObjectType($objectType)
     {
-        Assertion::string($objectType);
-        Assertion::notBlank($objectType);
-
         $this->objectType = $objectType;
     }
 
@@ -104,14 +103,28 @@ class Definition extends AbstractValueObject
     /**
      * @param null|int $priority
      */
-    public function setPriority($priority)
+    public function setPriority($priority = null)
     {
         if (null === $priority) {
             $priority = 0;
         }
 
-        Assertion::integer($priority);
-
         $this->priority = $priority;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param bool $active
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
     }
 }

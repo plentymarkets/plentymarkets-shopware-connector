@@ -2,7 +2,6 @@
 
 namespace PlentyConnector\Connector\ValueObject\Translation;
 
-use Assert\Assertion;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 
 /**
@@ -26,8 +25,6 @@ class Translation extends AbstractValueObject
     private $value;
 
     /**
-     * return the language identifier
-     *
      * @return string
      */
     public function getLanguageIdentifier()
@@ -40,14 +37,10 @@ class Translation extends AbstractValueObject
      */
     public function setLanguageIdentifier($languageIdentifier)
     {
-        Assertion::uuid($languageIdentifier);
-
         $this->languageIdentifier = $languageIdentifier;
     }
 
     /**
-     * Get the property
-     *
      * @return string
      */
     public function getProperty()
@@ -60,15 +53,10 @@ class Translation extends AbstractValueObject
      */
     public function setProperty($property)
     {
-        Assertion::string($property);
-        Assertion::notBlank($property);
-
         $this->property = $property;
     }
 
     /**
-     * Get the value
-     *
      * @return mixed
      */
     public function getValue()
@@ -81,8 +69,6 @@ class Translation extends AbstractValueObject
      */
     public function setValue($value)
     {
-        Assertion::notNull($value);
-
         $this->value = $value;
     }
 }

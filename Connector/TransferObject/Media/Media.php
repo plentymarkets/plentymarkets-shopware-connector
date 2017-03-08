@@ -2,7 +2,6 @@
 
 namespace PlentyConnector\Connector\TransferObject\Media;
 
-use Assert\Assertion;
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 use PlentyConnector\Connector\TransferObject\TranslateableInterface;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
@@ -36,14 +35,14 @@ class Media extends AbstractTransferObject implements TranslateableInterface
     private $hash = '';
 
     /**
-     * @var string
+     * @var null|string
      */
-    private $name = '';
+    private $name;
 
     /**
-     * @var string
+     * @var null|string
      */
-    private $alternateName = '';
+    private $alternateName;
 
     /**
      * @var Translation[]
@@ -68,8 +67,6 @@ class Media extends AbstractTransferObject implements TranslateableInterface
      */
     public function getIdentifier()
     {
-        Assertion::notBlank($this->identifier);
-
         return $this->identifier;
     }
 
@@ -78,8 +75,6 @@ class Media extends AbstractTransferObject implements TranslateableInterface
      */
     public function setIdentifier($identifier)
     {
-        Assertion::uuid($identifier);
-
         $this->identifier = $identifier;
     }
 
@@ -96,8 +91,6 @@ class Media extends AbstractTransferObject implements TranslateableInterface
      */
     public function setMediaCategoryIdentifier($mediaCategoryIdentifier)
     {
-        Assertion::uuid($mediaCategoryIdentifier);
-
         $this->mediaCategoryIdentifier = $mediaCategoryIdentifier;
     }
 
@@ -114,8 +107,6 @@ class Media extends AbstractTransferObject implements TranslateableInterface
      */
     public function setLink($link)
     {
-        Assertion::url($link);
-
         $this->link = $link;
     }
 
@@ -124,20 +115,14 @@ class Media extends AbstractTransferObject implements TranslateableInterface
      */
     public function getHash()
     {
-        if (empty($this->hash)) {
-            $this->hash = sha1_file($this->link);
-        }
-
         return $this->hash;
     }
 
     /**
-     * @param string $hash
+     * @param null|string $hash
      */
-    public function setHash($hash)
+    public function setHash($hash = null)
     {
-        Assertion::string($hash);
-
         $this->hash = $hash;
     }
 
@@ -154,8 +139,6 @@ class Media extends AbstractTransferObject implements TranslateableInterface
      */
     public function setName($name)
     {
-        Assertion::string($name);
-
         $this->name = $name;
     }
 
@@ -172,8 +155,6 @@ class Media extends AbstractTransferObject implements TranslateableInterface
      */
     public function setAlternateName($alternateName)
     {
-        Assertion::string($alternateName);
-
         $this->alternateName = $alternateName;
     }
 
@@ -190,8 +171,6 @@ class Media extends AbstractTransferObject implements TranslateableInterface
      */
     public function setTranslations(array $translations)
     {
-        Assertion::allIsInstanceOf($translations, Translation::class);
-
         $this->translations = $translations;
     }
 
@@ -208,8 +187,6 @@ class Media extends AbstractTransferObject implements TranslateableInterface
      */
     public function setAttributes(array $attributes)
     {
-        Assertion::allIsInstanceOf($attributes, Attribute::class);
-
         $this->attributes = $attributes;
     }
 }

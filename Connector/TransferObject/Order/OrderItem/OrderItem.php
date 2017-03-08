@@ -23,9 +23,9 @@ class OrderItem extends AbstractValueObject
     private $type = self::TYPE_PRODUCT;
 
     /**
-     * @var int
+     * @var float
      */
-    private $quantity = 1;
+    private $quantity = 1.0;
 
     /**
      * @var string
@@ -65,16 +65,21 @@ class OrderItem extends AbstractValueObject
      */
     public function setType($type)
     {
-        $oClass = new \ReflectionClass(__CLASS__);
-        $possibleValues =  $oClass->getConstants();
-
-        Assertion::inArray($type, $possibleValues);
-
         $this->type = $type;
     }
 
     /**
-     * @return int
+     * @return array
+     */
+    public function getTypes()
+    {
+        $reflection = new \ReflectionClass(__CLASS__);
+
+        return $reflection->getConstants();
+    }
+
+    /**
+     * @return float
      */
     public function getQuantity()
     {
@@ -82,7 +87,7 @@ class OrderItem extends AbstractValueObject
     }
 
     /**
-     * @param int $quantity
+     * @param float $quantity
      */
     public function setQuantity($quantity)
     {

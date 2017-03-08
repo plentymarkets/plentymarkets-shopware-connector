@@ -2,7 +2,6 @@
 
 namespace PlentyConnector\Connector\TransferObject\Product\Property;
 
-use Assert\Assertion;
 use PlentyConnector\Connector\TransferObject\Product\Property\Value\Value;
 use PlentyConnector\Connector\TransferObject\TranslateableInterface;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
@@ -41,9 +40,6 @@ class Property extends AbstractValueObject implements TranslateableInterface
      */
     public function setName($name)
     {
-        Assertion::string($name);
-        Assertion::notBlank($name);
-
         $this->name = $name;
     }
 
@@ -60,8 +56,6 @@ class Property extends AbstractValueObject implements TranslateableInterface
      */
     public function setValues($values)
     {
-        Assertion::allIsInstanceOf($values, Value::class);
-
         $this->values = $values;
     }
 
@@ -78,8 +72,6 @@ class Property extends AbstractValueObject implements TranslateableInterface
      */
     public function setTranslations(array $translations)
     {
-        Assertion::allIsInstanceOf($translations, Translation::class);
-
         $this->translations = $translations;
     }
 }

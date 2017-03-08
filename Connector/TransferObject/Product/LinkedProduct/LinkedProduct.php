@@ -2,7 +2,6 @@
 
 namespace PlentyConnector\Connector\TransferObject\Product\LinkedProduct;
 
-use Assert\Assertion;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 
 /**
@@ -10,14 +9,14 @@ use PlentyConnector\Connector\ValueObject\AbstractValueObject;
  */
 class LinkedProduct extends AbstractValueObject
 {
-    const TYPE_ACCESSORY = 'Accessory';
-    const TYPE_REPLACEMENT = 'Replacement';
-    const TYPE_SIMILAR = 'Similar';
+    const TYPE_ACCESSORY = 1;
+    const TYPE_REPLACEMENT = 2;
+    const TYPE_SIMILAR = 3;
 
     /**
      * @var string
      */
-    private $type = '';
+    private $type = self::TYPE_ACCESSORY;
 
     /**
      * @var int
@@ -30,7 +29,7 @@ class LinkedProduct extends AbstractValueObject
     private $productIdentifier = '';
 
     /**
-     * @return string
+     * @return int
      */
     public function getType()
     {
@@ -38,13 +37,21 @@ class LinkedProduct extends AbstractValueObject
     }
 
     /**
-     * @param string $type
+     * @param int $type
      */
     public function setType($type)
     {
-        Assertion::string($type);
-
         $this->type = $type;
+    }
+
+    /**
+     * @return array
+     */
+    public function getTypes()
+    {
+        $reflection = new \ReflectionClass(__CLASS__);
+
+        return $reflection->getConstants();
     }
 
     /**
@@ -76,8 +83,6 @@ class LinkedProduct extends AbstractValueObject
      */
     public function setProductIdentifier($productIdentifier)
     {
-        Assertion::uuid($productIdentifier);
-
         $this->productIdentifier = $productIdentifier;
     }
 }

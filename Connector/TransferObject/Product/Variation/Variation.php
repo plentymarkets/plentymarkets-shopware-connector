@@ -2,7 +2,6 @@
 
 namespace PlentyConnector\Connector\TransferObject\Product\Variation;
 
-use Assert\Assertion;
 use PlentyConnector\Connector\TransferObject\Product\Barcode\Barcode;
 use PlentyConnector\Connector\TransferObject\Product\Price\Price;
 use PlentyConnector\Connector\TransferObject\Product\Property\Property;
@@ -25,7 +24,7 @@ class Variation extends AbstractValueObject
     private $isMain = false;
 
     /**
-     * @var int
+     * @var float
      */
     private $stock = 0;
 
@@ -70,19 +69,19 @@ class Variation extends AbstractValueObject
     private $content = 0.0;
 
     /**
-     * @var int
+     * @var float
      */
     private $maximumOrderQuantity;
 
     /**
-     * @var int
+     * @var float
      */
-    private $minimumOrderQuantity = 1;
+    private $minimumOrderQuantity = 1.0;
 
     /**
-     * @var int
+     * @var float
      */
-    private $intervalOrderQuantity = 1;
+    private $intervalOrderQuantity = 1.0;
 
     /**
      * @var int
@@ -115,14 +114,14 @@ class Variation extends AbstractValueObject
     private $weight = 0;
 
     /**
-     * @var Attribute[]
-     */
-    private $attributes = [];
-
-    /**
      * @var Property[]
      */
     private $properties = [];
+
+    /**
+     * @var Attribute[]
+     */
+    private $attributes = [];
 
     /**
      * @return bool
@@ -137,15 +136,13 @@ class Variation extends AbstractValueObject
      */
     public function setActive($active)
     {
-        Assertion::boolean($active);
-
         $this->active = $active;
     }
 
     /**
      * @return bool
      */
-    public function isIsMain()
+    public function isMain()
     {
         return $this->isMain;
     }
@@ -155,13 +152,11 @@ class Variation extends AbstractValueObject
      */
     public function setIsMain($isMain)
     {
-        Assertion::boolean($isMain);
-
         $this->isMain = $isMain;
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getStock()
     {
@@ -169,12 +164,10 @@ class Variation extends AbstractValueObject
     }
 
     /**
-     * @param int $stock
+     * @param float $stock
      */
     public function setStock($stock)
     {
-        Assertion::integer($stock);
-
         $this->stock = $stock;
     }
 
@@ -191,8 +184,6 @@ class Variation extends AbstractValueObject
      */
     public function setNumber($number)
     {
-        Assertion::string($number);
-
         $this->number = $number;
     }
 
@@ -209,8 +200,6 @@ class Variation extends AbstractValueObject
      */
     public function setBarcodes(array $barcodes)
     {
-        Assertion::allIsInstanceOf($barcodes, Barcode::class);
-
         $this->barcodes = $barcodes;
     }
 
@@ -227,8 +216,6 @@ class Variation extends AbstractValueObject
      */
     public function setModel($model)
     {
-        Assertion::string($model);
-
         $this->model = $model;
     }
 
@@ -245,8 +232,6 @@ class Variation extends AbstractValueObject
      */
     public function setImageIdentifiers(array $imageIdentifiers)
     {
-        Assertion::allUuid($imageIdentifiers);
-
         $this->imageIdentifiers = $imageIdentifiers;
     }
 
@@ -263,8 +248,6 @@ class Variation extends AbstractValueObject
      */
     public function setPrices($prices)
     {
-        Assertion::allIsInstanceOf($prices, Price::class);
-
         $this->prices = $prices;
     }
 
@@ -281,8 +264,6 @@ class Variation extends AbstractValueObject
      */
     public function setPurchasePrice($purchasePrice)
     {
-        Assertion::float($purchasePrice);
-
         $this->purchasePrice = $purchasePrice;
     }
 
@@ -299,8 +280,6 @@ class Variation extends AbstractValueObject
      */
     public function setUnitIdentifier($unitIdentifier)
     {
-        Assertion::uuid($unitIdentifier);
-
         $this->unitIdentifier = $unitIdentifier;
     }
 
@@ -317,13 +296,11 @@ class Variation extends AbstractValueObject
      */
     public function setContent($content)
     {
-        Assertion::float($content);
-
         $this->content = $content;
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getMaximumOrderQuantity()
     {
@@ -331,17 +308,15 @@ class Variation extends AbstractValueObject
     }
 
     /**
-     * @param int $maximumOrderQuantity
+     * @param float $maximumOrderQuantity
      */
     public function setMaximumOrderQuantity($maximumOrderQuantity)
     {
-        Assertion::integer($maximumOrderQuantity);
-
         $this->maximumOrderQuantity = $maximumOrderQuantity;
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getMinimumOrderQuantity()
     {
@@ -349,17 +324,15 @@ class Variation extends AbstractValueObject
     }
 
     /**
-     * @param int $minimumOrderQuantity
+     * @param float $minimumOrderQuantity
      */
     public function setMinimumOrderQuantity($minimumOrderQuantity)
     {
-        Assertion::integer($minimumOrderQuantity);
-
         $this->minimumOrderQuantity = $minimumOrderQuantity;
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getIntervalOrderQuantity()
     {
@@ -367,12 +340,10 @@ class Variation extends AbstractValueObject
     }
 
     /**
-     * @param int $intervalOrderQuantity
+     * @param float $intervalOrderQuantity
      */
     public function setIntervalOrderQuantity($intervalOrderQuantity)
     {
-        Assertion::integer($intervalOrderQuantity);
-
         $this->intervalOrderQuantity = $intervalOrderQuantity;
     }
 
@@ -389,8 +360,6 @@ class Variation extends AbstractValueObject
      */
     public function setShippingTime($shippingTime)
     {
-        Assertion::integer($shippingTime);
-
         $this->shippingTime = $shippingTime;
     }
 
@@ -405,7 +374,7 @@ class Variation extends AbstractValueObject
     /**
      * @param null|\DateTimeImmutable $releaseDate
      */
-    public function setReleaseDate($releaseDate)
+    public function setReleaseDate(\DateTimeImmutable $releaseDate = null)
     {
         $this->releaseDate = $releaseDate;
     }
@@ -423,8 +392,6 @@ class Variation extends AbstractValueObject
      */
     public function setWidth($width)
     {
-        Assertion::integer($width);
-
         $this->width = $width;
     }
 
@@ -441,8 +408,6 @@ class Variation extends AbstractValueObject
      */
     public function setHeight($height)
     {
-        Assertion::integer($height);
-
         $this->height = $height;
     }
 
@@ -459,8 +424,6 @@ class Variation extends AbstractValueObject
      */
     public function setLength($length)
     {
-        Assertion::integer($length);
-
         $this->length = $length;
     }
 
@@ -477,27 +440,7 @@ class Variation extends AbstractValueObject
      */
     public function setWeight($weight)
     {
-        Assertion::integer($weight);
-
         $this->weight = $weight;
-    }
-
-    /**
-     * @return Attribute[]
-     */
-    public function getAttributes()
-    {
-        return $this->attributes;
-    }
-
-    /**
-     * @param Attribute[] $attributes
-     */
-    public function setAttributes(array $attributes)
-    {
-        Assertion::allIsInstanceOf($attributes, Attribute::class);
-
-        $this->attributes = $attributes;
     }
 
     /**
@@ -513,8 +456,22 @@ class Variation extends AbstractValueObject
      */
     public function setProperties(array $properties)
     {
-        Assertion::allIsInstanceOf($properties, Property::class);
-
         $this->properties = $properties;
+    }
+
+    /**
+     * @return Attribute[]
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
+
+    /**
+     * @param Attribute[] $attributes
+     */
+    public function setAttributes(array $attributes)
+    {
+        $this->attributes = $attributes;
     }
 }

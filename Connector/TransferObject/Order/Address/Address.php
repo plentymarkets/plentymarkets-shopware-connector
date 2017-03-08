@@ -2,8 +2,7 @@
 
 namespace PlentyConnector\Connector\TransferObject\Order\Address;
 
-use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
+use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
 /**
@@ -12,7 +11,7 @@ use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
  *
  * Class Address
  */
-class Address extends AbstractTransferObject
+class Address extends AbstractValueObject
 {
     const SALUTATION_MR = 1;
     const SALUTATION_MS = 2;
@@ -31,7 +30,7 @@ class Address extends AbstractTransferObject
     /**
      * @var int
      */
-    private $salutation = 0;
+    private $salutation = self::SALUTATION_MR;
 
     /**
      * @var null|string
@@ -49,7 +48,7 @@ class Address extends AbstractTransferObject
     private $lastname;
 
     /**
-     * @var null|string
+     * @var string
      */
     private $street;
 
@@ -74,19 +73,19 @@ class Address extends AbstractTransferObject
     private $vatId;
 
     /**
-     * @var Attribute[]
-     */
-    private $attributes = [];
-
-    /**
-     * @var string
+     * @var null|string
      */
     private $phoneNumber = '';
 
     /**
-     * @var string
+     * @var null|string
      */
     private $mobilePhoneNumber = '';
+
+    /**
+     * @var Attribute[]
+     */
+    private $attributes = [];
 
     /**
      * @return null|string
@@ -134,6 +133,16 @@ class Address extends AbstractTransferObject
     public function setSalutation($salutation)
     {
         $this->salutation = $salutation;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSalutations()
+    {
+        $reflection = new \ReflectionClass(__CLASS__);
+
+        return $reflection->getConstants();
     }
 
     /**
@@ -265,22 +274,6 @@ class Address extends AbstractTransferObject
     }
 
     /**
-     * @return Attribute[]
-     */
-    public function getAttributes()
-    {
-        return $this->attributes;
-    }
-
-    /**
-     * @param Attribute[] $attributes
-     */
-    public function setAttributes(array $attributes)
-    {
-        $this->attributes = $attributes;
-    }
-
-    /**
      * @return string
      */
     public function getPhoneNumber()
@@ -310,5 +303,21 @@ class Address extends AbstractTransferObject
     public function setMobilePhoneNumber($mobilePhoneNumber)
     {
         $this->mobilePhoneNumber = $mobilePhoneNumber;
+    }
+
+    /**
+     * @return Attribute[]
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
+
+    /**
+     * @param Attribute[] $attributes
+     */
+    public function setAttributes(array $attributes)
+    {
+        $this->attributes = $attributes;
     }
 }

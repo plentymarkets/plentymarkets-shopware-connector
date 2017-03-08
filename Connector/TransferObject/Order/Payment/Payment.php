@@ -2,12 +2,13 @@
 
 namespace PlentyConnector\Connector\TransferObject\Order\Payment;
 
+use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
 /**
  * Class Payment
  */
-class Payment
+class Payment extends AbstractValueObject
 {
     /**
      * @var float
