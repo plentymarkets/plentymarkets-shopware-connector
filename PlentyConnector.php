@@ -14,6 +14,7 @@ use PlentyConnector\DependencyInjection\CompilerPass\EventHandlerCompilerPass;
 use PlentyConnector\DependencyInjection\CompilerPass\MappingDefinitionCompilerPass;
 use PlentyConnector\DependencyInjection\CompilerPass\QueryGeneratorCompilerPass;
 use PlentyConnector\DependencyInjection\CompilerPass\QueryHandlerCompilerPass;
+use PlentyConnector\DependencyInjection\CompilerPass\ValidatorServiceCompilerPass;
 use PlentyConnector\Installer\CronjobInstaller;
 use PlentyConnector\Installer\DatabaseInstaller;
 use PlentyConnector\Installer\PermissionInstaller;
@@ -85,6 +86,7 @@ class PlentyConnector extends Plugin
         $container->addCompilerPass(new MappingDefinitionCompilerPass());
         $container->addCompilerPass(new QueryGeneratorCompilerPass());
         $container->addCompilerPass(new QueryHandlerCompilerPass());
+        $container->addCompilerPass(new ValidatorServiceCompilerPass());
 
         parent::build($container);
     }
