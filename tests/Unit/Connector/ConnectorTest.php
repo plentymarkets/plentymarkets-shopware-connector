@@ -54,6 +54,7 @@ class ConnectorTest extends TestCase
         $definition->expects($this->any())->method('getDestinationAdapterName')->willReturn('TestDestinationAdapter');
         $definition->expects($this->any())->method('getObjectType')->willReturn('TestType');
         $definition->method('getPriority')->willReturn(0);
+        $definition->method('isActive')->willReturn(true);
 
         $logger = $this->createMock(LoggerInterface::class);
 
@@ -98,6 +99,7 @@ class ConnectorTest extends TestCase
         $definition->expects($this->any())->method('getDestinationAdapterName')->willReturn('TestDestinationAdapter');
         $definition->expects($this->any())->method('getObjectType')->willReturn('TestType');
         $definition->method('getPriority')->willReturn(0);
+        $definition->method('isActive')->willReturn(true);
 
         $logger = $this->createMock(LoggerInterface::class);
 
@@ -139,6 +141,7 @@ class ConnectorTest extends TestCase
         $definition->expects($this->any())->method('getDestinationAdapterName')->willReturn('TestDestinationAdapter');
         $definition->expects($this->any())->method('getObjectType')->willReturn('TestType');
         $definition->method('getPriority')->willReturn(0);
+        $definition->method('isActive')->willReturn(true);
 
         $logger = $this->createMock(LoggerInterface::class);
 
