@@ -702,6 +702,10 @@ class ProductResponseParser implements ProductResponseParserInterface
         for ($i = 0; $i < 20; ++$i) {
             $key = 'free' . ($i + 1);
 
+            if (empty($product[$key])) {
+                continue;
+            }
+
             $attributes[] = Attribute::fromArray([
                 'key' => $key,
                 'value' => (string) $product[$key],
@@ -923,7 +927,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             $values = [];
 
             if ($property['property']['valueType'] === 'text') {
-                if (!isset($property['names'][0]['value'])) {
+                if (empty($property['names'][0]['value'])) {
                     continue;
                 }
 
