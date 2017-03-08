@@ -1,9 +1,8 @@
 <?php
 
-
 namespace PlentyConnector\Connector\ValidatorService;
 
-use Exception;
+use Assert\InvalidArgumentException;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 use PlentyConnector\Connector\ValidatorService\Exception\InvalidDataException;
@@ -28,11 +27,9 @@ class ValidatorService implements ValidatorServiceInterface
     }
 
     /**
-     * @param TransferObjectInterface|ValueObjectInterface $object
-     *
-     * @throws InvalidDataException
+     * {@inheritdoc}
      */
-    public function validate($object)
+    public function validate($object, array $parents = [])
     {
         if (!$this->canBeValidated($object)) {
             return;
@@ -47,6 +44,7 @@ class ValidatorService implements ValidatorServiceInterface
                 $validator->validate($object);
             });
 
+            $parents[] = $object;
             $methods = get_class_methods($object);
 
             $methods = array_filter($methods, function ($method) {
@@ -62,7 +60,7 @@ class ValidatorService implements ValidatorServiceInterface
                             continue;
                         }
 
-                        $this->validate($item);
+                        $this->validate($item, $parents);
                     }
                 }
 
@@ -70,10 +68,10 @@ class ValidatorService implements ValidatorServiceInterface
                     continue;
                 }
 
-                $this->validate($result);
+                $this->validate($result, $parents);
             }
-        } catch (Exception $exception) {
-            throw new InvalidDataException();
+        } catch (InvalidArgumentException $exception) {
+            throw InvalidDataException::fromObject($object, $exception->getMessage(), $exception->getPropertyPath(), $parents);
         }
     }
 
