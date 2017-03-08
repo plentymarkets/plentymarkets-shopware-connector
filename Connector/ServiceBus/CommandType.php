@@ -17,8 +17,8 @@ final class CommandType
      */
     public static function getAllTypes()
     {
-        $oClass = new ReflectionClass(__CLASS__);
+        $reflection = new ReflectionClass(__CLASS__);
 
-        return $oClass->getConstants();
+        return $reflection->getConstants();
     }
 }

@@ -51,6 +51,9 @@ class QueryHandlerMiddleware implements Middleware
             throw NotFoundException::fromQuery($query);
         }
 
+        /**
+         * @var QueryHandlerInterface $handler
+         */
         $handler = array_shift($handlers);
         $response = $handler->handle($query);
 
