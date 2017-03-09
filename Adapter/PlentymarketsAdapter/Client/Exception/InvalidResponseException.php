@@ -1,6 +1,6 @@
 <?php
 
-namespace PlentyConnector\Adapter\PlentymarketsAdapter\Client\Exception;
+namespace PlentymarketsAdapter\Client\Exception;
 
 use Exception;
 

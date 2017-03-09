@@ -6,7 +6,7 @@ use Assert\Assertion;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 use GuzzleHttp\Exception\ClientException;
-use PlentyConnector\Adapter\PlentymarketsAdapter\Client\Exception\InvalidResponseException;
+use PlentymarketsAdapter\Client\Exception\InvalidResponseException;
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentymarketsAdapter\Client\Exception\InvalidCredentialsException;
 use PlentymarketsAdapter\Client\Iterator\Iterator;
@@ -128,6 +128,8 @@ class Client implements ClientInterface
             $this->logger->debug('HTTP request: status: ' . $response->getStatusCode() . ' method: ' . $request->getMethod() . ' path: ' . $request->getPath());
 
             $body = $response->getBody();
+
+            $this->logger->debug(json_encode($body->getContents()));
 
             if (null === $body) {
                 // throw
@@ -276,7 +278,7 @@ class Client implements ClientInterface
 
         $parts = parse_url($url);
 
-        return sprintf('https://%s/%s/', $parts['host'], 'rest');
+        return sprintf('%s://%s/%s/', $parts['scheme'], $parts['host'], 'rest');
     }
 
     /**
