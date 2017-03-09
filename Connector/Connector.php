@@ -9,7 +9,6 @@ use PlentyConnector\Connector\ServiceBus\QueryFactory\QueryFactoryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
-use PlentyConnector\Connector\ValidatorService\ValidatorServiceInterface;
 use PlentyConnector\Connector\ValueObject\Definition\Definition;
 use Psr\Log\LoggerInterface;
 
