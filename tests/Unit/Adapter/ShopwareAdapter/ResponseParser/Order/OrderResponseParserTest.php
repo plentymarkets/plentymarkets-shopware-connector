@@ -2,12 +2,15 @@
 
 namespace PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\Order;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use PlentyConnector\Connector\TransferObject\Order\Address\Address;
 use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
 use PlentyConnector\Connector\TransferObject\Order\Order;
 use PlentyConnector\Connector\TransferObject\Order\OrderItem\OrderItem;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\ResponseParserTest;
+use Shopware\Models\Customer\Group;
 use ShopwareAdapter\ResponseParser\Address\AddressResponseParser;
 use ShopwareAdapter\ResponseParser\Customer\CustomerResponseParser;
 use ShopwareAdapter\ResponseParser\Order\OrderResponseParser;
@@ -31,7 +34,17 @@ class OrderResponseParserTest extends ResponseParserTest
 
         $orderItemParser = new OrderItemResponseParser($this->identityService);
         $addressParser = new AddressResponseParser($this->identityService);
-        $customerParser = new CustomerResponseParser($this->identityService);
+
+        $customerGroup = $this->createMock(Group::class);
+        $customerGroup->expects($this->any())->method('getId')->willReturn(1);
+
+        $repository = $this->createMock(EntityRepository::class);
+        $repository->expects($this->any())->method('findOneBy')->with(['key' => 'H'])->willReturn($customerGroup);
+
+        $entityManager = $this->createMock(EntityManagerInterface::class);
+        $entityManager->expects($this->any())->method('getRepository')->willReturn($repository);
+
+        $customerParser = new CustomerResponseParser($this->identityService, $entityManager);
 
         /** @var OrderResponseParser $parser */
         $this->orderResponseParser = $parser = new OrderResponseParser(

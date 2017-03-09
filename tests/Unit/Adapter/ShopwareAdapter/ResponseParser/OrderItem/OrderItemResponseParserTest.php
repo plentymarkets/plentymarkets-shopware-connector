@@ -31,7 +31,7 @@ class OrderItemResponseParserTest extends ResponseParserTest
     public function testOrderItemParsing()
     {
         /**
-         * var OrderItem $orderItem
+         * @var OrderItem $orderItem
          */
         $orderItem = $this->responseParser->parse(self::$orderData['details'][0]);
 
@@ -39,7 +39,7 @@ class OrderItemResponseParserTest extends ResponseParserTest
         $this->assertSame('ESD Download Artikel', $orderItem->getName());
         $this->assertSame('20001', $orderItem->getNumber());
         $this->assertSame(836.134, $orderItem->getPrice());
-        $this->assertSame(1, $orderItem->getQuantity());
+        $this->assertSame(1.0, $orderItem->getQuantity());
         $this->assertSame(OrderItem::TYPE_PRODUCT, $orderItem->getType());
     }
 }

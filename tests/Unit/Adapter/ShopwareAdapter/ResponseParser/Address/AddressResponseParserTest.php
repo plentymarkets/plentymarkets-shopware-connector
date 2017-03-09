@@ -5,6 +5,7 @@ namespace PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\Addr
 use PlentyConnector\Connector\IdentityService\IdentityService;
 use PlentyConnector\Connector\IdentityService\Model\Identity;
 use PlentyConnector\Connector\TransferObject\Order\Address\Address;
+use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\ResponseParserTest;
 use Ramsey\Uuid\Uuid;
@@ -62,7 +63,7 @@ class AddressResponseParserTest extends ResponseParserTest
         $this->assertSame('Einkauf', $address->getDepartment());
         $this->assertSame('Händler', $address->getFirstname());
         $this->assertSame('Kundengruppe-Netto', $address->getLastname());
-        $this->assertSame('mr', $address->getSalutation());
+        $this->assertSame(Customer::SALUTATION_MR, $address->getSalutation());
         $this->assertSame('Musterweg 1', $address->getStreet());
         $this->assertNull($address->getTitle());
         $this->assertSame('', $address->getVatId());

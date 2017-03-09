@@ -2,8 +2,11 @@
 
 namespace PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\Customer;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
 use PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\ResponseParserTest;
+use Shopware\Models\Customer\Group;
 use ShopwareAdapter\ResponseParser\Address\AddressResponseParser;
 use ShopwareAdapter\ResponseParser\Customer\CustomerResponseParser;
 
@@ -23,10 +26,19 @@ class CustomerResponseParserTest extends ResponseParserTest
     {
         parent::setup();
 
+        $customerGroup = $this->createMock(Group::class);
+        $customerGroup->expects($this->any())->method('getId')->willReturn(1);
+
+        $repository = $this->createMock(EntityRepository::class);
+        $repository->expects($this->any())->method('findOneBy')->with(['key' => 'H'])->willReturn($customerGroup);
+
+        $entityManager = $this->createMock(EntityManagerInterface::class);
+        $entityManager->expects($this->any())->method('getRepository')->willReturn($repository);
+
         /**
          * @var AddressResponseParser $parser
          */
-        $this->responseParser = new CustomerResponseParser($this->identityService);
+        $this->responseParser = new CustomerResponseParser($this->identityService, $entityManager);
     }
 
     public function testCustomerParsing()
@@ -43,7 +55,7 @@ class CustomerResponseParserTest extends ResponseParserTest
         $this->assertSame('Kundengruppe-Netto', $customer->getLastname());
         $this->assertFalse($customer->getNewsletter());
         $this->assertSame('20003', $customer->getNumber());
-        $this->assertSame('mr', $customer->getSalutation());
+        $this->assertSame(Customer::SALUTATION_MR, $customer->getSalutation());
         $this->assertNull($customer->getTitle());
     }
 }
