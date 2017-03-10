@@ -78,7 +78,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      * @param array $product
      * @param array $result
      *
-     * @return Product
+     * @return null|Product
      */
     public function parse(array $product, array &$result)
     {
@@ -135,7 +135,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             'metaKeywords' => $product['texts'][0]['keywords'],
             'metaRobots' => 'INDEX, FOLLOW',
             'linkedProducts' => $this->getLinkedProducts($product),
-            'documents' => $this->getDocuments($product),
+            'documents' => [],
             'properties' => $this->getProperties($mainVariation),
             'translations' => $this->getProductTranslations($product['texts']),
             'availableFrom' => $this->getAvailableFrom($mainVariation),
@@ -376,6 +376,8 @@ class ProductResponseParser implements ProductResponseParserInterface
      * @param array $variation
      *
      * @return string
+     *
+     * @throws \Exception
      */
     private function getUnitIdentifier(array $variation)
     {
@@ -871,18 +873,6 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * TODO
-     *
-     * @param array $product
-     *
-     * @return array
-     */
-    private function getDocuments(array $product)
-    {
-        return [];
-    }
-
-    /**
      * @param $mainVariation
      *
      * @return Property[]
@@ -970,6 +960,10 @@ class ProductResponseParser implements ProductResponseParserInterface
                 continue;
             } elseif ($property['property']['valueType'] === 'selection') {
                 static $selections;
+
+                if (null === $property['propertySelectionId']) {
+                    continue;
+                }
 
                 if (!isset($selections[$property['propertyId']])) {
                     $selection = $this->client->request('GET', 'items/properties/' . $property['propertyId'] . '/selections');
