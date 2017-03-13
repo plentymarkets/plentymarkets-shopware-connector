@@ -1,6 +1,6 @@
 {
     "name": "plentymarkets/shopware-connector",
-    "license": "GPL-3.0",
+    "license": "MIT",
     "type": "project",
     "description": "plentymarkets Shopware connector",
     "keywords": [
