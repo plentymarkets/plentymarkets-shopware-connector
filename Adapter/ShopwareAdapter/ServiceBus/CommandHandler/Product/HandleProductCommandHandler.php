@@ -27,7 +27,6 @@ use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\AttributeBundle\Service\DataPersister;
 use Shopware\Bundle\AttributeBundle\Service\TypeMapping;
 use Shopware\Components\Api\Exception\NotFoundException;
-use Shopware\Components\Api\Exception\ValidationException;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Article;
 use Shopware\Components\Api\Resource\Variant;
@@ -37,7 +36,6 @@ use Shopware\Models\Customer\Group;
 use Shopware\Models\Property\Repository;
 use Shopware\Models\Shop\Shop as ShopModel;
 use ShopwareAdapter\ShopwareAdapter;
-use Symfony\Component\Validator\ConstraintViolationInterface;
 
 /**
  * Class HandleProductCommandHandler.

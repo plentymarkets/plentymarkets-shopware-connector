@@ -490,6 +490,10 @@
             <tag name="plenty_connector.validator" />
         </service>
 
+        <service id="plenty_connector.validator.order.payment_data" class="PlentyConnector\Connector\Validator\Order\PaymentData\PaymentDataValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
         <service id="plenty_connector.validator.order_status" class="PlentyConnector\Connector\Validator\OrderStatus\OrderStatusValidator">
             <tag name="plenty_connector.validator" />
         </service>

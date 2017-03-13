@@ -9,6 +9,7 @@ use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
 use PlentyConnector\Connector\TransferObject\Order\Order;
 use PlentyConnector\Connector\TransferObject\Order\OrderItem\OrderItem;
 use PlentyConnector\Connector\TransferObject\Order\Payment\Payment;
+use PlentyConnector\Connector\TransferObject\Order\PaymentData\PaymentDataInterface;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
@@ -47,6 +48,7 @@ class OrderValidator implements ValidatorInterface
         Assertion::uuid($object->getPaymentMethodIdentifier(), null, 'order.paymentMethodIdentifier');
         Assertion::uuid($object->getShippingProfileIdentifier(), null, 'order.shippingProfileIdentifier');
         Assertion::allIsInstanceOf($object->getComments(), Comment::class, null, 'order.comments');
+        Assertion::allIsInstanceOf($object->getPaymentData(), PaymentDataInterface::class, null, 'order.paymentData');
         Assertion::allIsInstanceOf($object->getAttributes(), Attribute::class, null, 'order.attributes');
     }
 }

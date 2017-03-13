@@ -43,9 +43,9 @@ class OrderItem extends AbstractValueObject
     private $price = 0.0;
 
     /**
-     * @var string
+     * @var null|string
      */
-    private $vatRateIdentifier = '';
+    private $vatRateIdentifier;
 
     /**
      * @var Attribute[]
@@ -143,7 +143,7 @@ class OrderItem extends AbstractValueObject
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getVatRateIdentifier()
     {
@@ -151,9 +151,9 @@ class OrderItem extends AbstractValueObject
     }
 
     /**
-     * @param string $vatRateIdentifier
+     * @param null|string $vatRateIdentifier
      */
-    public function setVatRateIdentifier($vatRateIdentifier)
+    public function setVatRateIdentifier($vatRateIdentifier = null)
     {
         $this->vatRateIdentifier = $vatRateIdentifier;
     }

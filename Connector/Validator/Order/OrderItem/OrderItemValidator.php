@@ -33,7 +33,7 @@ class OrderItemValidator implements ValidatorInterface
         Assertion::string($object->getNumber(), null, 'orderItem.number');
         Assertion::notBlank($object->getNumber(), null, 'orderItem.number');
         Assertion::float($object->getPrice(), null, 'orderItem.price');
-        Assertion::uuid($object->getVatRateIdentifier(), null, 'orderItem.vatRateIdentifier');
+        Assertion::nullOrUuid($object->getVatRateIdentifier(), null, 'orderItem.vatRateIdentifier');
         Assertion::allIsInstanceOf($object->getAttributes(), Attribute::class, null, 'orderItem.attributes');
     }
 }

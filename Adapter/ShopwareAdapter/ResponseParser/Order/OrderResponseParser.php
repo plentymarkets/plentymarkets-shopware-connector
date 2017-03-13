@@ -8,16 +8,21 @@ use PlentyConnector\Connector\TransferObject\Currency\Currency;
 use PlentyConnector\Connector\TransferObject\Order\Address\Address;
 use PlentyConnector\Connector\TransferObject\Order\Comment\Comment;
 use PlentyConnector\Connector\TransferObject\Order\Order;
+use PlentyConnector\Connector\TransferObject\Order\OrderItem\OrderItem;
+use PlentyConnector\Connector\TransferObject\Order\Payment\Payment;
+use PlentyConnector\Connector\TransferObject\Order\PaymentData\SepaPaymentData;
 use PlentyConnector\Connector\TransferObject\OrderStatus\OrderStatus;
 use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod;
 use PlentyConnector\Connector\TransferObject\PaymentStatus\PaymentStatus;
 use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentymarketsAdapter\ResponseParser\GetAttributeTrait;
+use Psr\Log\LoggerInterface;
 use Shopware\Components\Model\ModelRepository;
-use ShopwareAdapter\ResponseParser\Address\AddressResponseParser;
+use Shopware\Models\Order\Status;
 use ShopwareAdapter\ResponseParser\Address\AddressResponseParserInterface;
 use ShopwareAdapter\ResponseParser\Customer\CustomerResponseParserInterface;
+use ShopwareAdapter\ResponseParser\OrderItem\Exception\UnsupportedVatRateException;
 use ShopwareAdapter\ResponseParser\OrderItem\OrderItemResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
@@ -49,24 +54,31 @@ class OrderResponseParser implements OrderResponseParserInterface
     private $customerParser;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * OrderResponseParser constructor.
      *
      * @param IdentityServiceInterface $identityService
      * @param OrderItemResponseParserInterface $orderItemResponseParser
-     * @param AddressResponseParser|AddressResponseParserInterface $addressResponseParser
+     * @param AddressResponseParserInterface $orderAddressParser
      * @param CustomerResponseParserInterface $customerParser
+     * @param LoggerInterface $logger
      */
     public function __construct(
         IdentityServiceInterface $identityService,
         OrderItemResponseParserInterface $orderItemResponseParser,
-        AddressResponseParserInterface $addressResponseParser,
-        CustomerResponseParserInterface $customerParser
+        AddressResponseParserInterface $orderAddressParser,
+        CustomerResponseParserInterface $customerParser,
+        LoggerInterface $logger
     ) {
         $this->identityService = $identityService;
         $this->orderItemResponseParser = $orderItemResponseParser;
-        $this->orderAddressParser = $addressResponseParser;
-        $this->orderAddressParser = $addressResponseParser;
+        $this->orderAddressParser = $orderAddressParser;
         $this->customerParser = $customerParser;
+        $this->logger = $logger;
     }
 
     /**
@@ -77,9 +89,21 @@ class OrderResponseParser implements OrderResponseParserInterface
      */
     public function parse(array $entry)
     {
-        $orderItems = array_filter(array_map(function ($orderItem) {
-            return $this->orderItemResponseParser->parse($orderItem);
-        }, $entry['details']));
+        try {
+            $orderItems = array_filter(array_map(function ($orderItem) {
+                return $this->orderItemResponseParser->parse($orderItem);
+            }, $entry['details']));
+        } catch (UnsupportedVatRateException $exception) {
+            $this->logger->notice('unsupported vat rate - order: ' . $entry['number']);
+
+            return null;
+        }
+
+        $shippingCosts = $this->getShippingCosts($entry);
+
+        if (null !== $shippingCosts) {
+            $orderItems[] = $shippingCosts;
+        }
 
         /**
          * @var Address $billingAddress
@@ -95,21 +119,77 @@ class OrderResponseParser implements OrderResponseParserInterface
         $customer->setMobilePhoneNumber($billingAddress->getMobilePhoneNumber());
         $customer->setPhoneNumber($billingAddress->getPhoneNumber());
 
-        $order = Order::fromArray(
-            [
-                'orderNumber' => $entry['number'],
-                'orderItems' => $orderItems,
-                'attributes' => $this->getAttributes(['attribute']),
-                'billingAddress' => $billingAddress,
-                'shippingAddress' => $shippingAddress,
-                'comments' => $this->getComments($entry),
-                'customer' => $customer,
-                'phoneNumber' => $entry['billing']['phone'],
-                'orderTime' => \DateTimeImmutable::createFromMutable($entry['orderTime']),
-                'orderType' => Order::TYPE_ORDER,
-            ]
-            + $this->fetchMappedAttributes($entry)
-        );
+        $orderIdentifier = $this->identityService->findOneOrCreate(
+            (string) $entry['id'],
+            ShopwareAdapter::NAME,
+            Order::TYPE
+        )->getObjectIdentifier();
+
+        $shopIdentity = $this->getIdentifier($entry['shopId'], Shop::TYPE);
+        $orderStatusIdentifier = $this->getIdentifier($entry['orderStatusId'], OrderStatus::TYPE);
+        $paymentStatusIdentifier = $this->getIdentifier($entry['paymentStatusId'], PaymentStatus::TYPE);
+        $paymentMethodIdentifier = $this->getIdentifier($entry['paymentId'], PaymentMethod::TYPE);
+
+        $shippingProfileIdentity = $this->identityService->findOneBy([
+            'adapterIdentifier' => (string) $entry['dispatchId'],
+            'adapterName' => ShopwareAdapter::NAME,
+            'objectType' => ShippingProfile::TYPE
+        ]);
+
+        if (null === $shippingProfileIdentity) {
+            $this->logger->notice('no shipping profile was selected for order: ' . $entry['number']);
+
+            return null;
+        }
+
+        $currencyIdentifier = $this->getIdentifier($this->getCurrencyId($entry['currency']), Currency::TYPE);
+
+        $paymentData = [];
+        foreach ($entry['paymentInstances'] as $paymentInstance) {
+            if (empty($paymentInstance['accountHolder'])) {
+                continue;
+            }
+
+            $paymentData[] = SepaPaymentData::fromArray([
+                'accountOwner' => $paymentInstance['accountHolder'],
+                'iban' => $paymentInstance['iban'],
+                'bic' => $paymentInstance['bic'],
+            ]);
+        }
+
+        $payments = [];
+        if (!empty($entry['paymentStatus'])) {
+            if ($entry['paymentStatus']['id'] === Status::PAYMENT_STATE_COMPLETELY_PAID) {
+                $payments[] = Payment::fromArray([
+                    'amount' => $entry['invoiceAmount'],
+                    'currencyIdentifier' => $currencyIdentifier,
+                    'paymentMethodIdentifier' => $paymentMethodIdentifier,
+                    'transactionReference' => $entry['transactionId']
+                ]);
+            }
+        }
+
+        $order = Order::fromArray([
+            'orderNumber' => $entry['number'],
+            'orderItems' => $orderItems,
+            'attributes' => $this->getAttributes(['attribute']),
+            'billingAddress' => $billingAddress,
+            'shippingAddress' => $shippingAddress,
+            'comments' => $this->getComments($entry),
+            'customer' => $customer,
+            'phoneNumber' => $entry['billing']['phone'],
+            'orderTime' => \DateTimeImmutable::createFromMutable($entry['orderTime']),
+            'orderType' => Order::TYPE_ORDER,
+            'identifier' => $orderIdentifier,
+            'orderStatusIdentifier' => $orderStatusIdentifier,
+            'paymentStatusIdentifier' => $paymentStatusIdentifier,
+            'paymentMethodIdentifier' => $paymentMethodIdentifier,
+            'shippingProfileIdentifier' => $shippingProfileIdentity->getObjectIdentifier(),
+            'currencyIdentifier' => $currencyIdentifier,
+            'shopIdentifier' => $shopIdentity,
+            'paymentData' => $paymentData,
+            'payments' => $payments
+        ]);
 
         return $order;
     }
@@ -158,49 +238,46 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
-     * @param string $entry
+     * @param string $currency
      *
      * @return int
      */
-    private function getCurrencyId($entry)
+    private function getCurrencyId($currency)
     {
         /**
          * @var ModelRepository $currencyRepo
          */
         $currencyRepo = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Currency::class);
 
-        return $currencyRepo->findOneBy(['currency' => $entry])->getId();
+        return $currencyRepo->findOneBy(['currency' => $currency])->getId();
     }
 
     /**
-     * @param $entry
+     * TODO: vatRateIdentifier
      *
-     * @return array
+     * @param array $entry
+     *
+     * @return null|OrderItem
      */
-    private function fetchMappedAttributes($entry)
+    private function getShippingCosts(array $entry)
     {
-        $orderIdentifier = $this->identityService->findOneOrCreate(
-            (string) $entry['id'],
-            ShopwareAdapter::NAME,
-            Order::TYPE
-        )->getObjectIdentifier();
+        if (!empty($entry['invoiceShipping'])) {
+            /**
+             * @var OrderItem $orderItem
+             */
+            $orderItem = OrderItem::fromArray([
+                'type' => OrderItem::TYPE_SHIPPING_COSTS,
+                'quantity' => 1.0,
+                'name' => 'ShippingCosts',
+                'number' => 'ShippingCosts',
+                'price' => (float) $entry['invoiceShipping'],
+                'vatRateIdentifier' => null,
+                'attributes' => [],
+            ]);
 
-        $shopIdentity = $this->getIdentifier($entry['shopId'], Shop::TYPE);
-        $orderStatusIdentity = $this->getIdentifier($entry['orderStatusId'], OrderStatus::TYPE);
-        $paymentStatusIdentity = $this->getIdentifier($entry['paymentStatusId'], PaymentStatus::TYPE);
-        $paymentMethodIdentity = $this->getIdentifier($entry['paymentId'], PaymentMethod::TYPE);
-        $shippingProfileIdentity = $this->getIdentifier($entry['dispatchId'], ShippingProfile::TYPE);
-        $currencyIdentifier = $this->getIdentifier($this->getCurrencyId($entry['currency']), Currency::TYPE);
+            return $orderItem;
+        }
 
-        return [
-            'identifier' => $orderIdentifier,
-            'orderStatusIdentifier' => $orderStatusIdentity,
-            'paymentStatusIdentifier' => $paymentStatusIdentity,
-            'paymentMethodIdentifier' => $paymentMethodIdentity,
-            'shippingProfileIdentifier' => $shippingProfileIdentity,
-            'currencyIdentifier' => $currencyIdentifier,
-            'shopIdentifier' => $shopIdentity,
-            'shopId' => $shopIdentity,
-        ];
+        return null;
     }
 }
