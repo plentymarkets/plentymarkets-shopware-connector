@@ -66,6 +66,6 @@ class FetchAllOrdersQueryHandler implements QueryHandlerInterface
             return $this->responseParser->parse($this->orderResource->getOne($order['id']));
         }, $orders['data']);
 
-        return $result;
+        return array_filter($result);
     }
 }

@@ -74,6 +74,8 @@ class FetchOrderQueryHandler implements QueryHandlerInterface
 
         $order = $this->orderResource->getOne($identity->getAdapterIdentifier());
 
-        return $this->responseParser->parse($order);
+        $order = $this->responseParser->parse($order);
+
+        return array_filter([$order]);
     }
 }
