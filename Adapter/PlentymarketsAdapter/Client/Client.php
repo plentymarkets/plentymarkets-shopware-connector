@@ -45,28 +45,20 @@ class Client implements ClientInterface
     private $logger;
 
     /**
-     * @var string
-     */
-    private $environment;
-
-    /**
      * Client constructor.
      *
      * @param GuzzleClient $connection
      * @param ConfigServiceInterface $config
-     * @param $environment
      * @param LoggerInterface $logger
      */
     public function __construct(
         GuzzleClient $connection,
         ConfigServiceInterface $config,
-        LoggerInterface $logger,
-        $environment
+        LoggerInterface $logger
     ) {
         $this->connection = $connection;
         $this->config = $config;
         $this->logger = $logger;
-        $this->environment = $environment;
     }
 
     /**
@@ -129,8 +121,6 @@ class Client implements ClientInterface
 
             $body = $response->getBody();
 
-            $this->logger->debug(json_encode($body->getContents()));
-
             if (null === $body) {
                 // throw
             }
@@ -155,6 +145,8 @@ class Client implements ClientInterface
             return $result;
         } catch (ClientException $exception) {
             if ($exception->hasResponse() && $exception->getResponse()->getStatusCode() === 401 && !$this->isLoginRequired($path) && $this->accessToken != null) {
+                $this->logger->debug('login refresh');
+
                 // retry with fresh accessToken
                 $this->accessToken = null;
 

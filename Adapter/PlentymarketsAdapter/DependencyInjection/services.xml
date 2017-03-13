@@ -14,7 +14,6 @@
             <argument type="service" id="plentymarkets_adapter.http_client" />
             <argument type="service" id="plenty_connector.config" />
             <argument type="service" id="plenty_connector.logger" />
-            <argument>%kernel.environment%</argument>
         </service>
 
         <!-- Helpers -->
