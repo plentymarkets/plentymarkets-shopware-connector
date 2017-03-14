@@ -581,6 +581,17 @@ class PlentymarketsImportEntityItem
 				}
 			}
 		}
+		
+		// Allow plugins to change the categories
+        	$this->categories = Enlight()->Events()->filter(
+            		'PlentyConnector_ImportEntityItem_AfterSetCategories',
+            		$this->categories,
+			array(
+				'subject' => $this,
+				'itembase' => $this->ItemBase,
+				'shop' => $this->Shop,
+			)
+        	);
 	}
 
 	/**
