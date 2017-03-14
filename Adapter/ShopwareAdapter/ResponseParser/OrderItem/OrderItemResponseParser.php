@@ -2,7 +2,6 @@
 
 namespace ShopwareAdapter\ResponseParser\OrderItem;
 
-use Assert\Assertion;
 use Doctrine\ORM\EntityManagerInterface;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Order\OrderItem\OrderItem;
@@ -71,9 +70,9 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
     /**
      * @param array $entry
      *
-     * @return string
-     *
      * @throws UnsupportedVatRateException
+     *
+     * @return string
      */
     private function getVatRateIdentifier(array $entry)
     {
@@ -100,7 +99,7 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
         $vatRateIdentity = $this->identityService->findOneBy([
             'adapterIdentifier' => (string) $entry['taxId'],
             'adapterName' => ShopwareAdapter::NAME,
-            'objectType' => VatRate::TYPE
+            'objectType' => VatRate::TYPE,
         ]);
 
         if (null === $vatRateIdentity) {
@@ -120,7 +119,7 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
         /**
          * @var OrderItem $orderItem
          */
-        $orderItem =  OrderItem::fromArray([
+        $orderItem = OrderItem::fromArray([
             'type' => OrderItem::TYPE_PRODUCT,
             'quantity' => (float) $entry['quantity'],
             'name' => $entry['articleName'],
@@ -143,7 +142,7 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
         /**
          * @var OrderItem $orderItem
          */
-        $orderItem =  OrderItem::fromArray([
+        $orderItem = OrderItem::fromArray([
             'type' => OrderItem::TYPE_VOUCHER,
             'quantity' => (float) $entry['quantity'],
             'name' => $entry['articleName'],

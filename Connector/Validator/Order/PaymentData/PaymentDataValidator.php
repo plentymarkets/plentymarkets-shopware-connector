@@ -3,11 +3,9 @@
 namespace PlentyConnector\Connector\Validator\Order\PaymentData;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\Order\Payment\Payment;
 use PlentyConnector\Connector\TransferObject\Order\PaymentData\PaymentDataInterface;
 use PlentyConnector\Connector\TransferObject\Order\PaymentData\SepaPaymentData;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
 /**
  * Class PaymentDataValidator

@@ -133,7 +133,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         $shippingProfileIdentity = $this->identityService->findOneBy([
             'adapterIdentifier' => (string) $entry['dispatchId'],
             'adapterName' => ShopwareAdapter::NAME,
-            'objectType' => ShippingProfile::TYPE
+            'objectType' => ShippingProfile::TYPE,
         ]);
 
         if (null === $shippingProfileIdentity) {
@@ -164,7 +164,7 @@ class OrderResponseParser implements OrderResponseParserInterface
                     'amount' => $entry['invoiceAmount'],
                     'currencyIdentifier' => $currencyIdentifier,
                     'paymentMethodIdentifier' => $paymentMethodIdentifier,
-                    'transactionReference' => $entry['transactionId']
+                    'transactionReference' => $entry['transactionId'],
                 ]);
             }
         }
@@ -188,7 +188,7 @@ class OrderResponseParser implements OrderResponseParserInterface
             'currencyIdentifier' => $currencyIdentifier,
             'shopIdentifier' => $shopIdentity,
             'paymentData' => $paymentData,
-            'payments' => $payments
+            'payments' => $payments,
         ]);
 
         return $order;

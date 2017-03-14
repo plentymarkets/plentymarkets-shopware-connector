@@ -218,7 +218,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
 
                 $params['properties'][] = [
                     'typeId' => 19,
-                    'value' => 'fixed'
+                    'value' => 'fixed',
                 ];
             }
 
@@ -344,7 +344,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             $this->identityService->create(
                 $order->getIdentifier(),
                 Order::TYPE,
-                (string)$result['id'],
+                (string) $result['id'],
                 PlentymarketsAdapter::NAME
             );
         }
@@ -414,7 +414,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         }
 
         $accountWebStore = array_filter($webstores, function ($store) use ($shopIdentity) {
-            return (string)$store['storeIdentifier'] === $shopIdentity->getAdapterIdentifier();
+            return (string) $store['storeIdentifier'] === $shopIdentity->getAdapterIdentifier();
         });
 
         if (empty($accountWebStore)) {
@@ -447,7 +447,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
 
         // TODO: handle no customer group at plenty
         if (null !== $customerGroupIdentitiy) {
-            $customerParams['classId'] = (int)$customerGroupIdentitiy->getAdapterIdentifier();
+            $customerParams['classId'] = (int) $customerGroupIdentitiy->getAdapterIdentifier();
         }
 
         if (null !== $customer->getBirthday()) {
@@ -612,7 +612,6 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
          * Shipping address ID = 24
          * Invoice address ID = 25
          */
-
         $paymentParams['property'] = [
             [
                 'typeId' => 23,
@@ -639,14 +638,14 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         if (null !== $billingAddress) {
             $paymentParams['property'][] = [
                 'typeId' => 24,
-                'value' => $billingAddress['id']
+                'value' => $billingAddress['id'],
             ];
         }
 
         if (null !== $shippingAddress) {
             $paymentParams['property'][] = [
                 'typeId' => 25,
-                'value' => $billingAddress['id']
+                'value' => $billingAddress['id'],
             ];
         }
 

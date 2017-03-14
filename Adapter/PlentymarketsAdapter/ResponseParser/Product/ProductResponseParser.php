@@ -375,9 +375,9 @@ class ProductResponseParser implements ProductResponseParserInterface
     /**
      * @param array $variation
      *
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     private function getUnitIdentifier(array $variation)
     {

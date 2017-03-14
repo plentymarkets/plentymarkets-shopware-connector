@@ -7,5 +7,4 @@ namespace ShopwareAdapter\ResponseParser\OrderItem\Exception;
  */
 class UnsupportedVatRateException extends \Exception
 {
-
 }

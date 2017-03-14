@@ -84,7 +84,7 @@ class ProductValidator implements ValidatorInterface
 
         Assertion::allIsInstanceOf($object->getAttributes(), Attribute::class, null, 'product.attributes');
 
-        $mainVariation = array_filter($object->getVariations(), function(Variation $variation) {
+        $mainVariation = array_filter($object->getVariations(), function (Variation $variation) {
             return $variation->isMain();
         });
 
