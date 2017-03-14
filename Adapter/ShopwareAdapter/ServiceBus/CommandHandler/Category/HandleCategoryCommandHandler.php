@@ -109,8 +109,6 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         ]);
 
         if (null === $shopIdentity) {
-            $this->logger->notice('no matching shop found', ['command' => $command]);
-
             return false;
         }
 

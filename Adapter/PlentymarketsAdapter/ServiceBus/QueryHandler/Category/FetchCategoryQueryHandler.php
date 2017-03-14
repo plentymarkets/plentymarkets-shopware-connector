@@ -7,6 +7,7 @@ use PlentyConnector\Connector\ServiceBus\Query\Category\FetchCategoryQuery;
 use PlentyConnector\Connector\ServiceBus\Query\FetchQueryInterface;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\TransferObject\Category\Category;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\Helper\LanguageHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
@@ -80,10 +81,14 @@ class FetchCategoryQueryHandler implements QueryHandlerInterface
             'adapterName' => PlentymarketsAdapter::NAME,
         ]);
 
-        $element = $this->client->request('GET', 'categories/' . $identity->getAdapterIdentifier(), [
+        $identifier = explode('-', $identity->getAdapterIdentifier());
+
+        $element = $this->client->request('GET', 'categories/' . $identifier[1], [
             'with' => 'details',
             'lang' => $this->languageHelper->getLanguagesQueryString(),
         ]);
+
+        $element = array_shift($element);
 
         if ($element['type'] !== 'item' || $element['right'] !== 'all') {
             return [];

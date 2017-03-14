@@ -97,14 +97,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             return null !== $shopIdentity;
         });
 
-        // validate shop mapping
         if (empty($shopIdentifiers)) {
-            /**
-             * @var LoggerInterface $logger
-             */
-            $logger = Shopware()->Container()->get('plenty_connector.logger');
-            $logger->notice('no valid shop found', ['command' => $command]);
-
             return false;
         }
 
@@ -173,13 +166,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             ]);
 
             if (null === $categoryIdentity) {
-                /**
-                 * @var LoggerInterface $logger
-                 */
-                $logger = Shopware()->Container()->get('plenty_connector.logger');
-                $logger->notice('category is missing', ['command' => $command]);
-
-                return false;
+                continue;
             }
 
             $categories[] = [
@@ -199,24 +186,12 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             ]);
 
             if (null === $categoryIdentity) {
-                /**
-                 * @var LoggerInterface $logger
-                 */
-                $logger = Shopware()->Container()->get('plenty_connector.logger');
-                $logger->notice('seo category is missing', ['command' => $command]);
-
-                return false;
+                continue;
             }
 
             $category = $categoryRepository->find($categoryIdentity->getAdapterIdentifier());
 
             if (null === $category) {
-                /**
-                 * @var LoggerInterface $logger
-                 */
-                $logger = Shopware()->Container()->get('plenty_connector.logger');
-                $logger->notice('seo category is missing', ['command' => $command]);
-
                 continue;
             }
 

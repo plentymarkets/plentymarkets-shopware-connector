@@ -1062,6 +1062,10 @@ class ProductResponseParser implements ProductResponseParserInterface
                 }
             }
 
+            if (!isset($attributes[$attributeValue['attributeId']]['values'][$attributeValue['valueId']]['names'])) {
+                continue;
+            }
+
             $propertyNames = $attributes[$attributeValue['attributeId']]['names'];
             $valueNames = $attributes[$attributeValue['attributeId']]['values'][$attributeValue['valueId']]['names'];
 

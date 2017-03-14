@@ -83,5 +83,11 @@ class ProductValidator implements ValidatorInterface
         Assertion::nullOrIsInstanceOf($object->getAvailableTo(), \DateTimeImmutable::class, null, 'product.availableTo');
 
         Assertion::allIsInstanceOf($object->getAttributes(), Attribute::class, null, 'product.attributes');
+
+        $mainVariation = array_filter($object->getVariations(), function(Variation $variation) {
+            return $variation->isMain();
+        });
+
+        Assertion::notEmpty($mainVariation, 'No main variation found.', 'product.variations');
     }
 }

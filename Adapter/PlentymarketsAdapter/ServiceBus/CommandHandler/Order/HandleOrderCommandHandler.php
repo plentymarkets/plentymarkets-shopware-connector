@@ -341,14 +341,12 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                 $this->handlePayment($payment, $order, $billingAddress, $shippingAddress, $plentyOrderIdentifier);
             }
 
-            /**
-             * $this->identityService->create(
-             * $order->getIdentifier(),
-             * Order::TYPE,
-             * (string) $result['id'],
-             * PlentymarketsAdapter::NAME
-             * );
-             */
+            $this->identityService->create(
+                $order->getIdentifier(),
+                Order::TYPE,
+                (string)$result['id'],
+                PlentymarketsAdapter::NAME
+            );
         }
 
         // TODO update existing order
