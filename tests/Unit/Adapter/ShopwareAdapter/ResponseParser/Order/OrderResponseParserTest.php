@@ -4,6 +4,7 @@ namespace PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\Orde
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Monolog\Logger;
 use PlentyConnector\Connector\TransferObject\Order\Address\Address;
 use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
 use PlentyConnector\Connector\TransferObject\Order\Order;
@@ -32,7 +33,9 @@ class OrderResponseParserTest extends ResponseParserTest
     {
         parent::setup();
 
-        $orderItemParser = new OrderItemResponseParser($this->identityService);
+        $entityManager = $this->createMock(EntityManagerInterface::class);
+
+        $orderItemParser = new OrderItemResponseParser($this->identityService, $entityManager);
         $addressParser = new AddressResponseParser($this->identityService);
 
         $customerGroup = $this->createMock(Group::class);
@@ -46,12 +49,15 @@ class OrderResponseParserTest extends ResponseParserTest
 
         $customerParser = new CustomerResponseParser($this->identityService, $entityManager);
 
+        $logger = $this->createMock(Logger::class);
+
         /** @var OrderResponseParser $parser */
         $this->orderResponseParser = $parser = new OrderResponseParser(
             $this->identityService,
             $orderItemParser,
             $addressParser,
-            $customerParser
+            $customerParser,
+            $logger
         );
     }
 

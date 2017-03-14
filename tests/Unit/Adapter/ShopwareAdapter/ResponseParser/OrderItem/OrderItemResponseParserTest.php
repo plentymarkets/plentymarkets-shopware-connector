@@ -2,6 +2,7 @@
 
 namespace PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\OrderItem;
 
+use Doctrine\ORM\EntityManagerInterface;
 use PlentyConnector\Connector\TransferObject\Order\OrderItem\OrderItem;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\ResponseParserTest;
@@ -23,8 +24,11 @@ class OrderItemResponseParserTest extends ResponseParserTest
     {
         parent::setup();
 
+        $entityManager = $this->createMock(EntityManagerInterface::class);
+
         $this->responseParser = $parser = new OrderItemResponseParser(
-            $this->identityService
+            $this->identityService,
+            $entityManager
         );
     }
 
@@ -37,7 +41,7 @@ class OrderItemResponseParserTest extends ResponseParserTest
 
         $this->assertInstanceOf(Attribute::class, $orderItem->getAttributes()[0]);
         $this->assertSame('ESD Download Artikel', $orderItem->getName());
-        $this->assertSame('20001', $orderItem->getNumber());
+        $this->assertSame('SW10196', $orderItem->getNumber());
         $this->assertSame(836.134, $orderItem->getPrice());
         $this->assertSame(1.0, $orderItem->getQuantity());
         $this->assertSame(OrderItem::TYPE_PRODUCT, $orderItem->getType());
