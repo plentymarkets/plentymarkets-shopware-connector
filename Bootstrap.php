@@ -88,7 +88,6 @@ define('MOP_HEIDELPAY_CB',1095); // Carte Bleue
 define('MOP_HEIDELPAY', 1096);
 
 
-
 /**
  * Shortcut for PlentymarketsConfig::getInstance()
  *
@@ -144,7 +143,7 @@ class Shopware_Plugins_Backend_PlentyConnector_Bootstrap extends Shopware_Compon
      */
     public function getVersion()
     {
-        return '1.9.3';
+        return '1.9.4';
     }
 
     /**
