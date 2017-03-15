@@ -68,7 +68,7 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
         $currentDateTime = $this->getCurrentDateTime();
 
         $elements = $this->client->request('GET', 'categories', [
-            'with' => 'details',
+            'with' => 'details,clients',
             'type' => 'item',
             'updatedAt' => $lastCangedTime->format(DATE_W3C),
             'lang' => $this->languageHelper->getLanguagesQueryString(),

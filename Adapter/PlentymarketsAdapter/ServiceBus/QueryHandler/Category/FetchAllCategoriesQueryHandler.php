@@ -62,7 +62,7 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
     public function handle(QueryInterface $query)
     {
         $elements = $this->client->request('GET', 'categories', [
-            'with' => 'details',
+            'with' => 'details,clients',
             'type' => 'item',
             'lang' => $this->languageHelper->getLanguagesQueryString(),
         ]);

@@ -81,10 +81,14 @@ class FetchCategoryQueryHandler implements QueryHandlerInterface
             'adapterName' => PlentymarketsAdapter::NAME,
         ]);
 
+        if (null === $identity) {
+            return [];
+        }
+
         $identifier = explode('-', $identity->getAdapterIdentifier());
 
         $element = $this->client->request('GET', 'categories/' . $identifier[1], [
-            'with' => 'details',
+            'with' => 'details,clients',
             'lang' => $this->languageHelper->getLanguagesQueryString(),
         ]);
 
