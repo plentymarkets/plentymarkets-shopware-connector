@@ -800,7 +800,7 @@ class ProductResponseParser implements ProductResponseParserInterface
 
         foreach ($variations as $variation) {
             $mappedVariations[] = Variation::fromArray([
-                'active' => true,
+                'active' => (bool) $variation['isActive'],
                 'isMain' => $first,
                 'stock' => $this->getStock($variation),
                 'number' => (string) $variation['number'],
