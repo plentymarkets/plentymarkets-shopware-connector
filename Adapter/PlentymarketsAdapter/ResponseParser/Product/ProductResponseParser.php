@@ -804,6 +804,7 @@ class ProductResponseParser implements ProductResponseParserInterface
                 'isMain' => $first,
                 'stock' => $this->getStock($variation),
                 'number' => (string) $variation['number'],
+                'position' => (int) $variation['position'],
                 'barcodes' => $this->getBarcodes($variation),
                 'model' => $variation['model'],
                 'imageIdentifiers' => $this->getVariationImages($texts, $variation, $result),

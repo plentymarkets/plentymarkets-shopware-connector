@@ -645,7 +645,10 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         foreach ($product->getProperties() as $property) {
             foreach ($property->getValues() as $value) {
                 $result['propertyValues'][] = [
-                    'option' => ['name' => $property->getName(), 'filterable' => true],
+                    'option' => [
+                        'name' => $property->getName(),
+                        'filterable' => true
+                    ],
                     'value' => $value->getValue(),
                 ];
             }
@@ -759,6 +762,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         $shopwareVariation = [
             'name' => $product->getName(),
             'number' => $variation->getNumber(),
+            'position' => $variation->getPosition(),
             'unitId' => $unitIdentity->getAdapterIdentifier(),
             'active' => $variation->getActive(),
             'inStock' => $variation->getStock(),
