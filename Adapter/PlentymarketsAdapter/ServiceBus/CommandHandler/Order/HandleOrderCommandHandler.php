@@ -89,8 +89,6 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             'adapterName' => PlentymarketsAdapter::NAME,
         ]);
 
-        $identity = null;
-
         if ($identity === null) {
             $shopIdentity = $this->identityService->findOneBy([
                 'objectIdentifier' => $order->getShopIdentifier(),
@@ -651,7 +649,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
 
         $paymentResult = $this->client->request('POST', 'payments', $paymentParams);
 
-        //$url = 'payment/' . $paymentResult['id'] . '/order/' . $plentyOrderIdentifier;
-        //$paymentOrderRelationResult = $this->client->request('POST', $url);
+        $url = 'payment/' . $paymentResult['id'] . '/order/' . $plentyOrderIdentifier;
+        $this->client->request('POST', $url);
     }
 }
