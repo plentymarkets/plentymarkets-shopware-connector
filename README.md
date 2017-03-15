@@ -2,7 +2,7 @@
 
 # Der plentymarkets-Shopware Connector
 
-- **License**: GPL v3
+- **License**: MIT
 - **Github Repository**: <https://github.com/plentymarkets/plentymarkets-shopware-connector>
 
 ### Systemvoraussetzungen
