@@ -403,6 +403,17 @@ class PlentymarketsImportEntityItem
 			$variationNumberField = PyConf()->getItemVariationNumberSourceKey('ColliNo');
 			$number = trim($AttributeValueSet->{$variationNumberField});
 
+            $details = Enlight()->Events()->filter(
+                'PlentyConnector_ImportEntityItem_AfterGetDetailBase',
+                $details,
+                array(
+                    'subject' => $this,
+                    'itembase' => $this->ItemBase,
+                    'number' => $number,
+                    'shop' => $this->Shop,
+                )
+            );
+
 			try
 			{
 				// Set the details id
