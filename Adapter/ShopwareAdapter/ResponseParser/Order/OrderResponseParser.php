@@ -149,6 +149,12 @@ class OrderResponseParser implements OrderResponseParserInterface
             if (empty($paymentInstance['accountHolder'])) {
                 continue;
             }
+            if (empty($paymentInstance['iban'])) {
+                continue;
+            }
+            if (empty($paymentInstance['bic'])) {
+                continue;
+            }
 
             $paymentData[] = SepaPaymentData::fromArray([
                 'accountOwner' => $paymentInstance['accountHolder'],
