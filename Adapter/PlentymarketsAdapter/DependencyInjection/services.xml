@@ -16,6 +16,10 @@
             <argument type="service" id="plenty_connector.logger" />
         </service>
 
+        <!-- ReadApi -->
+        <service id="plentmarkets_adapter.read_item_api" class="PlentymarketsAdapter\ReadApi\Item">
+            <argument type="service" id="plentmarkets_adapter.client" />
+        </service>
         <!-- Helpers -->
 
         <service id="plentmarkets_adapter.helper.language" class="PlentymarketsAdapter\Helper\LanguageHelper" />
@@ -74,7 +78,6 @@
         <service id="plentmarkets_adapter.response_parser.product" class="PlentymarketsAdapter\ResponseParser\Product\ProductResponseParser">
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plentmarkets_adapter.client" />
-            <argument type="service" id="plentmarkets_adapter.helper.language" />
             <argument type="service" id="plenty_connector.logger" />
         </service>
 
@@ -177,24 +180,21 @@
         <!-- Product query handlers -->
 
         <service id="plentymarkets_adapter.query_handler.fetch_all_products" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Product\FetchAllProductsQueryHandler">
-            <argument type="service" id="plentmarkets_adapter.client" />
-            <argument type="service" id="plentmarkets_adapter.helper.language" />
+            <argument type="service" id="plentmarkets_adapter.read_item_api" />
             <argument type="service" id="plentmarkets_adapter.response_parser.product" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
 
         <service id="plentymarkets_adapter.query_handler.fetch_changed_products" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Product\FetchChangedProductsQueryHandler">
-            <argument type="service" id="plentmarkets_adapter.client" />
-            <argument type="service" id="plentmarkets_adapter.helper.language" />
+            <argument type="service" id="plentmarkets_adapter.read_item_api" />
             <argument type="service" id="plentmarkets_adapter.response_parser.product" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
 
         <service id="plentymarkets_adapter.query_handler.fetch_product" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Product\FetchProductQueryHandler">
-            <argument type="service" id="plentmarkets_adapter.client" />
-            <argument type="service" id="plentmarkets_adapter.helper.language" />
+            <argument type="service" id="plentmarkets_adapter.read_item_api" />
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plentmarkets_adapter.response_parser.product" />
 
