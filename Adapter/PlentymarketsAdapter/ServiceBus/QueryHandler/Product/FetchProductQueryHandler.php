@@ -8,9 +8,8 @@ use PlentyConnector\Connector\ServiceBus\Query\Product\FetchProductQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
 use PlentyConnector\Connector\TransferObject\Product\Product;
-use PlentymarketsAdapter\Client\ClientInterface;
-use PlentymarketsAdapter\Helper\LanguageHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
+use PlentymarketsAdapter\ReadApi\Item;
 use PlentymarketsAdapter\ResponseParser\Product\ProductResponseParserInterface;
 
 /**
@@ -19,14 +18,9 @@ use PlentymarketsAdapter\ResponseParser\Product\ProductResponseParserInterface;
 class FetchProductQueryHandler implements QueryHandlerInterface
 {
     /**
-     * @var ClientInterface
+     * @var Item
      */
-    private $client;
-
-    /**
-     * @var LanguageHelper
-     */
-    private $languageHelper;
+    private $itemApi;
 
     /**
      * @var IdentityServiceInterface
@@ -40,22 +34,18 @@ class FetchProductQueryHandler implements QueryHandlerInterface
 
     /**
      * FetchProductQueryHandler constructor.
-     *
-     * @param ClientInterface $client
-     * @param LanguageHelper $languageHelper
+     * @param Item $itemApi
      * @param IdentityServiceInterface $identityService
      * @param ProductResponseParserInterface $responseParser
      */
     public function __construct(
-        ClientInterface $client,
-        LanguageHelper $languageHelper,
+        Item $itemApi,
         IdentityServiceInterface $identityService,
         ProductResponseParserInterface $responseParser
     ) {
-        $this->client = $client;
-        $this->languageHelper = $languageHelper;
         $this->identityService = $identityService;
         $this->responseParser = $responseParser;
+        $this->itemApi = $itemApi;
     }
 
     /**
@@ -81,9 +71,7 @@ class FetchProductQueryHandler implements QueryHandlerInterface
             'adapterName' => PlentymarketsAdapter::NAME,
         ]);
 
-        $product = $this->client->request('GET', 'items/' . $identity->getAdapterIdentifier(), [
-            'lang' => $this->languageHelper->getLanguagesQueryString(),
-        ]);
+        $product = $this->itemApi->findOne($identity->getAdapterIdentifier());
 
         $result = [];
 

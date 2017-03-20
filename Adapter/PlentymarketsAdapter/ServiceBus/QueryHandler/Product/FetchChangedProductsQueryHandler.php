@@ -5,9 +5,8 @@ namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Product;
 use PlentyConnector\Connector\ServiceBus\Query\Product\FetchChangedProductsQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
-use PlentymarketsAdapter\Client\ClientInterface;
-use PlentymarketsAdapter\Helper\LanguageHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
+use PlentymarketsAdapter\ReadApi\Item;
 use PlentymarketsAdapter\ResponseParser\Product\ProductResponseParserInterface;
 use PlentymarketsAdapter\ServiceBus\ChangedDateTimeTrait;
 
@@ -18,15 +17,6 @@ class FetchChangedProductsQueryHandler implements QueryHandlerInterface
 {
     use ChangedDateTimeTrait;
 
-    /**
-     * @var ClientInterface
-     */
-    private $client;
-
-    /**
-     * @var LanguageHelper
-     */
-    private $languageHelper;
 
     /**
      * @var ProductResponseParserInterface
@@ -34,19 +24,20 @@ class FetchChangedProductsQueryHandler implements QueryHandlerInterface
     private $responseParser;
 
     /**
+     * @var Item
+     */
+    private $itemApi;
+
+    /**
      * FetchChangedProductsQueryHandler constructor.
-     *
-     * @param ClientInterface $client
-     * @param LanguageHelper $languageHelper
+     * @param Item $itemApi
      * @param ProductResponseParserInterface $responseParser
      */
     public function __construct(
-        ClientInterface $client,
-        LanguageHelper $languageHelper,
+        Item $itemApi,
         ProductResponseParserInterface $responseParser
     ) {
-        $this->client = $client;
-        $this->languageHelper = $languageHelper;
+        $this->itemApi = $itemApi;
         $this->responseParser = $responseParser;
     }
 
@@ -70,10 +61,7 @@ class FetchChangedProductsQueryHandler implements QueryHandlerInterface
         $oldTimestamp = $lastCangedTime->format(DATE_W3C);
         $newTimestamp = $currentDateTime->format(DATE_W3C);
 
-        $products = $this->client->request('GET', 'items', [
-            'lang' => $this->languageHelper->getLanguagesQueryString(),
-            'updatedBetween' => $oldTimestamp . ',' . $newTimestamp,
-        ]);
+        $products = $this->itemApi->findChanged($oldTimestamp, $newTimestamp);
 
         $result = [];
 

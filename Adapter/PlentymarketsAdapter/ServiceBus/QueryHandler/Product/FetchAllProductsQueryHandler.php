@@ -5,9 +5,8 @@ namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Product;
 use PlentyConnector\Connector\ServiceBus\Query\Product\FetchAllProductsQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
-use PlentymarketsAdapter\Client\ClientInterface;
-use PlentymarketsAdapter\Helper\LanguageHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
+use PlentymarketsAdapter\ReadApi\Item;
 use PlentymarketsAdapter\ResponseParser\Product\ProductResponseParserInterface;
 
 /**
@@ -16,14 +15,9 @@ use PlentymarketsAdapter\ResponseParser\Product\ProductResponseParserInterface;
 class FetchAllProductsQueryHandler implements QueryHandlerInterface
 {
     /**
-     * @var ClientInterface
+     * @var Item
      */
-    private $client;
-
-    /**
-     * @var LanguageHelper
-     */
-    private $languageHelper;
+    private $itemApi;
 
     /**
      * @var ProductResponseParserInterface
@@ -32,18 +26,14 @@ class FetchAllProductsQueryHandler implements QueryHandlerInterface
 
     /**
      * FetchAllProductsQueryHandler constructor.
-     *
-     * @param ClientInterface $client
-     * @param LanguageHelper $languageHelper
+     * @param Item $itemApi
      * @param ProductResponseParserInterface $responseParser
      */
     public function __construct(
-        ClientInterface $client,
-        LanguageHelper $languageHelper,
+        Item $itemApi,
         ProductResponseParserInterface $responseParser
     ) {
-        $this->client = $client;
-        $this->languageHelper = $languageHelper;
+        $this->itemApi = $itemApi;
         $this->responseParser = $responseParser;
     }
 
@@ -61,9 +51,7 @@ class FetchAllProductsQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $products = $this->client->request('GET', 'items', [
-            'lang' => $this->languageHelper->getLanguagesQueryString(),
-        ]);
+        $products = $this->itemApi->findAll();
 
         $result = [];
 
