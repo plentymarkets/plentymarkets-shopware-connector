@@ -1,8 +1,6 @@
 <?php
 
-
 namespace PlentymarketsAdapter\ReadApi\Item;
-
 
 use PlentymarketsAdapter\ReadApi\ApiAbstract;
 
@@ -13,6 +11,7 @@ class Attribute extends ApiAbstract
 {
     /**
      * @param $attributeId
+     *
      * @return array
      */
     public function findOne($attributeId)

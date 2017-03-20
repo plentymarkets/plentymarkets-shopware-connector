@@ -1,8 +1,6 @@
 <?php
 
-
 namespace PlentymarketsAdapter\ReadApi\Item;
-
 
 use PlentymarketsAdapter\ReadApi\ApiAbstract;
 
@@ -11,9 +9,9 @@ use PlentymarketsAdapter\ReadApi\ApiAbstract;
  */
 class Variation extends ApiAbstract
 {
-
     /**
      * @param null $productId
+     *
      * @return array
      */
     public function findOne($productId)

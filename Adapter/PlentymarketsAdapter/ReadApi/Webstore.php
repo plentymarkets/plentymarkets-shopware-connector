@@ -7,13 +7,13 @@ namespace PlentymarketsAdapter\ReadApi;
  */
 class Webstore extends ApiAbstract
 {
-
     /**
      * @param null $productId
+     *
      * @return array
      */
     public function findAll()
     {
-       return $this->client->request('GET', 'webstores');
+        return $this->client->request('GET', 'webstores');
     }
 }

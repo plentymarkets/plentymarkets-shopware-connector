@@ -1,8 +1,6 @@
 <?php
 
-
 namespace PlentymarketsAdapter\ReadApi\Item\Variation;
-
 
 use PlentymarketsAdapter\ReadApi\ApiAbstract;
 
@@ -11,16 +9,16 @@ use PlentymarketsAdapter\ReadApi\ApiAbstract;
  */
 class Stock extends ApiAbstract
 {
-
     /**
      * @param $productId
      * @param $variationId
+     *
      * @return mixed
      */
     public function findOne($productId, $variationId)
     {
         $url = 'items/' . $productId . '/variations/' . $variationId . '/stock';
-        return $this->client->request('GET', $url);
 
+        return $this->client->request('GET', $url);
     }
 }

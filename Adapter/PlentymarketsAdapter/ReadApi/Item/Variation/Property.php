@@ -12,6 +12,7 @@ class Property extends ApiAbstract
     /**
      * @param $productId
      * @param $variationId
+     *
      * @return mixed
      */
     public function findOne($productId, $variationId)
@@ -21,5 +22,4 @@ class Property extends ApiAbstract
             'items/' . $productId . '/variations/' . $variationId . '/variation_properties'
         );
     }
-
 }

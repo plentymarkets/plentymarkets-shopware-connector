@@ -9,6 +9,7 @@ class Availability extends ApiAbstract
 {
     /**
      * @param null $productId
+     *
      * @return array
      */
     public function findAll()
