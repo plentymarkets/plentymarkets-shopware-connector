@@ -6,6 +6,7 @@ use Assert\Assertion;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentymarketsAdapter\Client\Exception\InvalidCredentialsException;
 use PlentymarketsAdapter\Client\Exception\InvalidResponseException;
@@ -98,6 +99,8 @@ class Client implements ClientInterface
      */
     public function request($method, $path, array $params = [], $limit = null, $offset = null, array $options = [])
     {
+        static $retries = 0;
+
         Assertion::nullOrInteger($limit);
         Assertion::nullOrInteger($offset);
         Assertion::isArray($options);
@@ -142,6 +145,8 @@ class Client implements ClientInterface
                 }
             }
 
+            $retries = 0;
+
             return $result;
         } catch (ClientException $exception) {
             if ($exception->hasResponse() && $exception->getResponse()->getStatusCode() === 401 && !$this->isLoginRequired($path) && $this->accessToken != null) {
@@ -153,7 +158,16 @@ class Client implements ClientInterface
                 return $this->request($method, $path, $params, $limit, $offset);
             }
 
-            // generic exception
+            throw $exception;
+        } catch (ServerException $exception) {
+            if ($exception->hasResponse() && $exception->getResponse()->getStatusCode() === 503 && $retries < 3) {
+                sleep(10);
+
+                $retries++;
+
+                return $this->request($method, $path, $params, $limit, $offset);
+            }
+
             throw $exception;
         }
     }
