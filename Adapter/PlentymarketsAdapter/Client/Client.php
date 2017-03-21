@@ -6,6 +6,7 @@ use Assert\Assertion;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\ServerException;
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentymarketsAdapter\Client\Exception\InvalidCredentialsException;
@@ -169,6 +170,12 @@ class Client implements ClientInterface
             }
 
             throw $exception;
+        } catch (ConnectException $exception) {
+            sleep(10);
+
+            ++$retries;
+
+            return $this->request($method, $path, $params, $limit, $offset);
         }
     }
 
