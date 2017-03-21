@@ -7,8 +7,10 @@ enabled:
   - ordered_imports
   - phpdoc_order
   - short_array_syntax
+  - concat_with_spaces
 
 disabled:
+  - concat_without_spaces
   - phpdoc_summary
   - phpdoc_to_comment
   - phpdoc_align
