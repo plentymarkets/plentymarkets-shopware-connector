@@ -407,7 +407,7 @@ class ProductResponseParser implements ProductResponseParserInterface
                 return $availabilitiy['type'] === 'mandant';
             });
 
-            $shopIdentifiers = array_map(function($shop) use ($webstores) {
+            $shopIdentifiers = array_map(function ($shop) use ($webstores) {
                 $shopIdentity = $this->identityService->findOneBy([
                     'adapterIdentifier' => (string) $webstores[$shop['value']]['storeIdentifier'],
                     'adapterName' => PlentymarketsAdapter::NAME,
@@ -582,7 +582,7 @@ class ProductResponseParser implements ProductResponseParserInterface
                 return $availabilitiy['type'] === 'mandant';
             });
 
-            $shopIdentifiers = array_map(function($shop) use ($webstores) {
+            $shopIdentifiers = array_map(function ($shop) use ($webstores) {
                 $shopIdentity = $this->identityService->findOneBy([
                     'adapterIdentifier' => (string) $webstores[$shop['value']]['storeIdentifier'],
                     'adapterName' => PlentymarketsAdapter::NAME,
