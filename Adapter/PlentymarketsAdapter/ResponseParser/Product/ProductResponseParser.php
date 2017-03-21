@@ -314,7 +314,7 @@ class ProductResponseParser implements ProductResponseParserInterface
                 $price = (float) $priceArray['default']['price'];
             }
 
-            if (isset($priceArray['default'])) {
+            if (isset($priceArray['rrp'])) {
                 $pseudoPrice = (float) $priceArray['rrp']['price'];
             }
 
