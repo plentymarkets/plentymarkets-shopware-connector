@@ -4,8 +4,16 @@ namespace PlentymarketsAdapter\ReadApi;
 
 use PlentymarketsAdapter\Helper\LanguageHelper;
 
+/**
+ * Class Item
+ */
 class Item extends ApiAbstract
 {
+    /**
+     * @param $productId
+     *
+     * @return array
+     */
     public function findOne($productId)
     {
         $languageHelper = new LanguageHelper();
@@ -15,6 +23,9 @@ class Item extends ApiAbstract
         ]);
     }
 
+    /**
+     * @return array
+     */
     public function findAll()
     {
         $languageHelper = new LanguageHelper();
@@ -24,6 +35,12 @@ class Item extends ApiAbstract
         ]));
     }
 
+    /**
+     * @param $startTimestamp
+     * @param $endTimestamp
+     *
+     * @return array
+     */
     public function findChanged($startTimestamp, $endTimestamp)
     {
         $languageHelper = new LanguageHelper();

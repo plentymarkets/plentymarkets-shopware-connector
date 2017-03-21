@@ -5,7 +5,7 @@ namespace PlentymarketsAdapter\ReadApi\Item;
 use PlentymarketsAdapter\ReadApi\ApiAbstract;
 
 /**
- * Class Images
+ * Class Image
  */
 class Image extends ApiAbstract
 {
@@ -16,8 +16,6 @@ class Image extends ApiAbstract
      */
     public function findAll($productId)
     {
-        $url = 'items/' . $productId . '/images';
-
-        return $images = $this->client->request('GET', $url);
+        return $this->client->request('GET', 'items/' . $productId . '/images');
     }
 }

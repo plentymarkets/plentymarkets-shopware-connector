@@ -17,8 +17,6 @@ class Stock extends ApiAbstract
      */
     public function findOne($productId, $variationId)
     {
-        $url = 'items/' . $productId . '/variations/' . $variationId . '/stock';
-
-        return $this->client->request('GET', $url);
+        return $this->client->request('GET', 'items/' . $productId . '/variations/' . $variationId . '/stock');
     }
 }

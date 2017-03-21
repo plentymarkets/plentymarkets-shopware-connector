@@ -19,13 +19,9 @@ class ShippingProfile extends ApiAbstract
     {
         $languageHelper = new LanguageHelper();
 
-        return $this->client->request(
-            'GET',
-            'items/' . $productId . '/item_shipping_profiles',
-            [
-                'with' => 'names',
-                'lang' => $languageHelper->getLanguagesQueryString(),
-            ]
-        );
+        return $this->client->request('GET', 'items/' . $productId . '/item_shipping_profiles', [
+            'with' => 'names',
+            'lang' => $languageHelper->getLanguagesQueryString(),
+        ]);
     }
 }

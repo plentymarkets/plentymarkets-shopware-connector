@@ -5,7 +5,7 @@ namespace PlentymarketsAdapter\ReadApi\Item;
 use PlentymarketsAdapter\ReadApi\ApiAbstract;
 
 /**
- * Class ItemSalesPrices
+ * Class SalesPrice
  */
 class SalesPrice extends ApiAbstract
 {
