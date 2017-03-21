@@ -3,6 +3,7 @@
 namespace PlentyConnector\Connector\TransferObject\Product\Variation;
 
 use PlentyConnector\Connector\TransferObject\Product\Barcode\Barcode;
+use PlentyConnector\Connector\TransferObject\Product\Image\Image;
 use PlentyConnector\Connector\TransferObject\Product\Price\Price;
 use PlentyConnector\Connector\TransferObject\Product\Property\Property;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
@@ -49,9 +50,9 @@ class Variation extends AbstractValueObject
     private $model = '';
 
     /**
-     * @var array
+     * @var Image[]
      */
-    private $imageIdentifiers = [];
+    private $images = [];
 
     /**
      * @var Price[]
@@ -241,19 +242,19 @@ class Variation extends AbstractValueObject
     }
 
     /**
-     * @return array
+     * @return Image[]
      */
-    public function getImageIdentifiers()
+    public function getImages()
     {
-        return $this->imageIdentifiers;
+        return $this->images;
     }
 
     /**
-     * @param array $imageIdentifiers
+     * @param Image[] $images
      */
-    public function setImageIdentifiers(array $imageIdentifiers)
+    public function setImages($images)
     {
-        $this->imageIdentifiers = $imageIdentifiers;
+        $this->images = $images;
     }
 
     /**

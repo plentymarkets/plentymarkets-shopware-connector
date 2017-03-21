@@ -4,6 +4,7 @@ namespace PlentyConnector\Connector\Validator\Product\Variation;
 
 use Assert\Assertion;
 use PlentyConnector\Connector\TransferObject\Product\Barcode\Barcode;
+use PlentyConnector\Connector\TransferObject\Product\Image\Image;
 use PlentyConnector\Connector\TransferObject\Product\Price\Price;
 use PlentyConnector\Connector\TransferObject\Product\Property\Property;
 use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
@@ -36,7 +37,7 @@ class VariationValidator implements ValidatorInterface
         Assertion::notBlank($object->getNumber(), null, 'variation.number');
         Assertion::allIsInstanceOf($object->getBarcodes(), Barcode::class, null, 'variation.barcodes');
         Assertion::string($object->getModel(), null, 'variation.model');
-        Assertion::allUuid($object->getImageIdentifiers(), null, 'variation.imageIdentifiers');
+        Assertion::allIsInstanceOf($object->getImages(), Image::class, null, 'variation.images');
         Assertion::allIsInstanceOf($object->getPrices(), Price::class, null, 'variation.prices');
         Assertion::float($object->getPurchasePrice(), null, 'variation.purchasePrice');
         Assertion::uuid($object->getUnitIdentifier(), null, 'variation.unitIdentifier');

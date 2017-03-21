@@ -3,6 +3,7 @@
 namespace PlentyConnector\Connector\TransferObject\Product;
 
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
+use PlentyConnector\Connector\TransferObject\Product\Image\Image;
 use PlentyConnector\Connector\TransferObject\Product\LinkedProduct\LinkedProduct;
 use PlentyConnector\Connector\TransferObject\Product\Property\Property;
 use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
@@ -65,9 +66,9 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     private $shippingProfileIdentifiers = [];
 
     /**
-     * @var array
+     * @var Image[]
      */
-    private $imageIdentifiers = [];
+    private $images = [];
 
     /**
      * @var Variation[]
@@ -307,19 +308,19 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     }
 
     /**
-     * @return array
+     * @return Image[]
      */
-    public function getImageIdentifiers()
+    public function getImages()
     {
-        return $this->imageIdentifiers;
+        return $this->images;
     }
 
     /**
-     * @param array $imageIdentifiers
+     * @param Image[] $images
      */
-    public function setImageIdentifiers(array $imageIdentifiers)
+    public function setImages($images)
     {
-        $this->imageIdentifiers = $imageIdentifiers;
+        $this->images = $images;
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace PlentyConnector\Connector\Validator\Product;
 
 use Assert\Assertion;
+use PlentyConnector\Connector\TransferObject\Product\Image\Image;
 use PlentyConnector\Connector\TransferObject\Product\LinkedProduct\LinkedProduct;
 use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\Connector\TransferObject\Product\Property\Property;
@@ -48,7 +49,8 @@ class ProductValidator implements ValidatorInterface
         Assertion::allUuid($object->getCategoryIdentifiers(), null, 'product.categoryIdentifiers');
         Assertion::allUuid($object->getDefaultCategoryIdentifiers(), null, 'product.defaultCategoryIdentifiers');
         Assertion::allUuid($object->getShippingProfileIdentifiers(), null, 'product.name');
-        Assertion::allUuid($object->getImageIdentifiers(), null, 'product.imageIdentifiers');
+
+        Assertion::allIsInstanceOf($object->getImages(), Image::class, null, 'product.images');
 
         Assertion::allIsInstanceOf($object->getVariations(), Variation::class, null, 'product.variations');
 
