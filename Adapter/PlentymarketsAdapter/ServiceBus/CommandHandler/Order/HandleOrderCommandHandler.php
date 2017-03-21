@@ -393,8 +393,9 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         $plentyCustomer = false;
 
         if ($customer->getType() === Customer::TYPE_NORMAL) {
-            $customerResult = $this->client->request('GET', 'accounts/contacts',
-                ['contactEmail' => $customer->getEmail()]);
+            $customerResult = $this->client->request('GET', 'accounts/contacts', [
+                'contactEmail' => $customer->getEmail(),
+            ]);
 
             if (!empty($customerResult)) {
                 $possibleCustomers = array_filter($customerResult, function ($entry) {
@@ -482,7 +483,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         if (!$plentyCustomer) {
             $plentyCustomer = $this->client->request('POST', 'accounts/contacts', $customerParams);
         } else {
-            $tmpResult = $this->client->request('PUT', 'accounts/contacts/' . $plentyCustomer['id'], $customerParams);
+            $this->client->request('PUT', 'accounts/contacts/' . $plentyCustomer['id'], $customerParams);
         }
 
         return $plentyCustomer;
@@ -492,6 +493,8 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
      * @param Address $address
      * @param Customer $customer
      * @param array $plentyCustomer
+     *
+     * @throws \Exception
      *
      * @return array
      */
@@ -553,7 +556,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
      * @param null|array $shippingAddress
      * @param $plentyOrderIdentifier
      *
-     * @return bool
+     * @throws \Exception
      */
     private function handlePayment(
         Payment $payment,
@@ -571,7 +574,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         if (null === $paymentMethodIdentity) {
             $this->logger->error('payment method not mapped', ['payment' => $payment]);
 
-            return false;
+            throw new \Exception('payment method not mapped');
         }
 
         $paymentMethodIdentity = $this->identityService->findOneBy([
@@ -589,7 +592,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         if (null === $currencyIdentity) {
             $this->logger->error('currency not mapped', ['payment' => $payment]);
 
-            return false;
+            throw new \Exception('currency not mapped');
         }
 
         $paymentParams = [
