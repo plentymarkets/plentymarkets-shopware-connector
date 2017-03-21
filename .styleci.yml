@@ -6,7 +6,6 @@ enabled:
   - ordered_class_elements
   - ordered_imports
   - phpdoc_order
-  - concat_with_spaces
   - short_array_syntax
 
 disabled:
