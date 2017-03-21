@@ -6,7 +6,6 @@ $finder = PhpCsFixer\Finder::create()->in(__DIR__);
 return PhpCsFixer\Config::create()
     ->setUsingCache(false)
     ->setRules([
-        '@PSR2' => true,
         '@Symfony' => true,
         'no_useless_else' => true,
         'no_useless_return' => true,
