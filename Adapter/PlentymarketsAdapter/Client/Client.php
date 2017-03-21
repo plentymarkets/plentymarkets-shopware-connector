@@ -163,7 +163,7 @@ class Client implements ClientInterface
             if ($exception->hasResponse() && $exception->getResponse()->getStatusCode() === 503 && $retries < 3) {
                 sleep(10);
 
-                $retries++;
+                ++$retries;
 
                 return $this->request($method, $path, $params, $limit, $offset);
             }
