@@ -132,11 +132,23 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         }
 
         $images = [];
+        foreach ($product->getImages() as $image) {
+            $shopIdentifiers = array_filter($image->getShopIdentifiers(), function ($shop) use ($identityService) {
+                $identity = $identityService->findOneBy([
+                    'objectIdentifier' => (string) $shop,
+                    'objectType' => Shop::TYPE,
+                    'adapterName' => ShopwareAdapter::NAME,
+                ]);
 
-        $position = 0;
-        foreach ($product->getImageIdentifiers() as $imageIdentifier) {
+                return $identity !== null;
+            });
+
+            if (empty($shopIdentifiers)) {
+                continue;
+            }
+
             $imageIdentity = $identityService->findOneBy([
-                'objectIdentifier' => $imageIdentifier,
+                'objectIdentifier' => $image->getMediaIdentifier(),
                 'objectType' => Media::TYPE,
                 'adapterName' => ShopwareAdapter::NAME,
             ]);
@@ -153,7 +165,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
 
             $images[] = [
                 'mediaId' => $imageIdentity->getAdapterIdentifier(),
-                'position' => $position++,
+                'position' => $image->getPosition(),
             ];
         }
 
@@ -726,11 +738,23 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         }
 
         $images = [];
-        $position = 0;
+        foreach ($variation->getImages() as $image) {
+            $shopIdentifiers = array_filter($image->getShopIdentifiers(), function ($shop) use ($identityService) {
+                $identity = $identityService->findOneBy([
+                    'objectIdentifier' => (string) $shop,
+                    'objectType' => Shop::TYPE,
+                    'adapterName' => ShopwareAdapter::NAME,
+                ]);
 
-        foreach ($variation->getImageIdentifiers() as $imageIdentifier) {
+                return $identity !== null;
+            });
+
+            if (empty($shopIdentifiers)) {
+                continue;
+            }
+
             $imageIdentity = $identityService->findOneBy([
-                'objectIdentifier' => $imageIdentifier,
+                'objectIdentifier' => $image->getMediaIdentifier(),
                 'objectType' => Media::TYPE,
                 'adapterName' => ShopwareAdapter::NAME,
             ]);
@@ -741,7 +765,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
 
             $images[] = [
                 'mediaId' => $imageIdentity->getAdapterIdentifier(),
-                'position' => $position++,
+                'position' => $image->getPosition(),
             ];
         }
 
