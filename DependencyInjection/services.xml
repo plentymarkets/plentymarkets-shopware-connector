@@ -144,13 +144,24 @@
             <tag name="plenty_connector.connector_definition" />
         </service>
 
-        <service id="plenty_connector.connector_definition.order" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
+        <service id="plenty_connector.connector_definition.exportOrder" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
             <factory service="plenty_connector.definition_factory" method="factory" />
 
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.transfer_object.order%</argument>
             <argument>60</argument>
+
+            <tag name="plenty_connector.connector_definition" />
+        </service>
+
+        <service id="plenty_connector.connector_definition.importOrder" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
+            <factory service="plenty_connector.definition_factory" method="factory" />
+
+            <argument>%plenty_connector.adapter.plentymarkets%</argument>
+            <argument>%plenty_connector.adapter.shopware%</argument>
+            <argument>%plenty_connector.transfer_object.order%</argument>
+            <argument>50</argument>
 
             <tag name="plenty_connector.connector_definition" />
         </service>
@@ -511,6 +522,10 @@
         </service>
 
         <service id="plenty_connector.validator.product.barcode" class="PlentyConnector\Connector\Validator\Product\Barcode\BarcodeValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.product.image" class="PlentyConnector\Connector\Validator\Product\Image\ImageValidator">
             <tag name="plenty_connector.validator" />
         </service>
 
