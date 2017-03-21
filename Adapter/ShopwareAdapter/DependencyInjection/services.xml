@@ -175,6 +175,22 @@
             <tag name="plenty_connector.command_handler" />
         </service>
 
+        <!-- Order command handlers -->
+
+        <service id="shopware_adapter.command_handler.handle_order" class="ShopwareAdapter\ServiceBus\CommandHandler\Order\HandleOrderCommandHandler">
+            <argument type="service" id="models" />
+            <argument type="service" id="plenty_connector.identity_service" />
+
+            <tag name="plenty_connector.command_handler" />
+        </service>
+
+        <service id="shopware_adapter.command_handler.remove_order" class="ShopwareAdapter\ServiceBus\CommandHandler\Order\RemoveOrderCommandHandler">
+            <argument type="service" id="models" />
+            <argument type="service" id="plenty_connector.identity_service" />
+
+            <tag name="plenty_connector.command_handler" />
+        </service>
+
         <!-- Product command handlers -->
 
         <service id="shopware_adapter.command_handler.handle_product" class="ShopwareAdapter\ServiceBus\CommandHandler\Product\HandleProductCommandHandler">

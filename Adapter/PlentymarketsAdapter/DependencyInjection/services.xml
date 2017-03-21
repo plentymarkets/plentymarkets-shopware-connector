@@ -63,6 +63,10 @@
             <argument type="service" id="plenty_connector.identity_service" />
         </service>
 
+        <service id="plentmarkets_adapter.response_parser.order" class="PlentymarketsAdapter\ResponseParser\Order\OrderResponseParser">
+            <argument type="service" id="plenty_connector.identity_service" />
+        </service>
+
         <service id="plentmarkets_adapter.response_parser.order_status" class="PlentymarketsAdapter\ResponseParser\OrderStatus\OrderStatusResponseParser">
             <argument type="service" id="plenty_connector.identity_service" />
         </service>
@@ -148,6 +152,29 @@
             <argument type="service" id="plentmarkets_adapter.response_parser.manufacturer" />
             <argument type="service" id="plentmarkets_adapter.response_parser.media" />
             <argument type="service" id="plenty_connector.identity_service" />
+
+            <tag name="plenty_connector.query_handler" />
+        </service>
+
+        <!-- Order query handlers -->
+
+        <service id="plentymarkets_adapter.query_handler.fetch_all_orders" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Order\FetchAllOrdersQueryHandler">
+            <argument type="service" id="plentmarkets_adapter.client" />
+            <argument type="service" id="plentmarkets_adapter.response_parser.order" />
+
+            <tag name="plenty_connector.query_handler" />
+        </service>
+
+        <service id="plentymarkets_adapter.query_handler.fetch_changed_orders" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Order\FetchChangedOrdersQueryHandler">
+            <argument type="service" id="plentmarkets_adapter.client" />
+            <argument type="service" id="plentmarkets_adapter.response_parser.order" />
+
+            <tag name="plenty_connector.query_handler" />
+        </service>
+
+        <service id="plentymarkets_adapter.query_handler.fetch_order" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Order\FetchOrderQueryHandler">
+            <argument type="service" id="plentmarkets_adapter.client" />
+            <argument type="service" id="plentmarkets_adapter.response_parser.order" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
