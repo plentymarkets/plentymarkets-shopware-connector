@@ -2,7 +2,6 @@
 
 namespace PlentyConnector\Connector\TransferObject\Product\Image;
 
-use Assert\Assertion;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 
 /**
