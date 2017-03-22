@@ -2,7 +2,6 @@
 
 namespace ShopwareAdapter\ServiceBus;
 
-use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
@@ -14,32 +13,49 @@ use ShopwareAdapter\ShopwareAdapter;
 trait ChangedDateTimeTrait
 {
     /**
-     * @param ConfigServiceInterface $config
-     *
-     * @return string
+     * @return DateTimeImmutable
      */
-    public function getChangedDateTime(ConfigServiceInterface $config)
+    public function getChangedDateTime()
     {
-        $key = ShopwareAdapter::NAME . '.' . get_called_class() . 'DateTime';
+        /**
+         * @var ConfigServiceInterface $config
+         */
+        $config = Shopware()->Container()->get('plenty_connector.config');
 
         $timezone = new DateTimeZone('UTC');
-        $lastRun = $config->get($key, '2000-01-01');
+        $lastRun = $config->get($this->getKey(), '2000-01-01');
 
-        $dateTime = new DateTimeImmutable($lastRun, $timezone);
-
-        return $dateTime->format(DateTime::ATOM);
+        return new DateTimeImmutable($lastRun, $timezone);
     }
 
     /**
-     * @param ConfigServiceInterface $config
+     * @param DateTimeImmutable $dateTime
      */
-    public function setChangedDateTime(ConfigServiceInterface $config)
+    public function setChangedDateTime(DateTimeImmutable $dateTime)
     {
-        $key = ShopwareAdapter::NAME . '.' . get_called_class() . 'DateTime';
+        /**
+         * @var ConfigServiceInterface $config
+         */
+        $config = Shopware()->Container()->get('plenty_connector.config');
 
+        $config->set($this->getKey(), $dateTime);
+    }
+
+    /**
+     * @return DateTimeImmutable
+     */
+    public function getCurrentDateTime()
+    {
         $timezone = new DateTimeZone('UTC');
-        $dateTime = new DateTimeImmutable('now', $timezone);
 
-        $config->set($key, $dateTime);
+        return new DateTimeImmutable('now', $timezone);
+    }
+
+    /**
+     * @return string
+     */
+    private function getKey()
+    {
+        return ShopwareAdapter::NAME . get_called_class() . '.LastChangeDateTime';
     }
 }
