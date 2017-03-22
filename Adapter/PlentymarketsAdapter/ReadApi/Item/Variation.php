@@ -10,7 +10,7 @@ use PlentymarketsAdapter\ReadApi\ApiAbstract;
 class Variation extends ApiAbstract
 {
     /**
-     * @param null $productId
+     * @param int $productId
      *
      * @return array
      */

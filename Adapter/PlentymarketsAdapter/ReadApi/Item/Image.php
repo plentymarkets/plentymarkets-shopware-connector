@@ -10,7 +10,7 @@ use PlentymarketsAdapter\ReadApi\ApiAbstract;
 class Image extends ApiAbstract
 {
     /**
-     * @param null $productId
+     * @param int $productId
      *
      * @return array
      */
