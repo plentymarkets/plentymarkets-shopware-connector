@@ -100,7 +100,11 @@ class Client implements ClientInterface
      */
     public function request($method, $path, array $params = [], $limit = null, $offset = null, array $options = [])
     {
-        static $retries = 0;
+        static $retries;
+
+        if (null === $retries) {
+            $retries = 0;
+        }
 
         Assertion::nullOrInteger($limit);
         Assertion::nullOrInteger($offset);
