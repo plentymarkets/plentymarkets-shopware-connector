@@ -138,12 +138,13 @@ class PlentymarketsImportEntityItem
             // if the language is not the main language
             if(isset($itemText['languageShopId']))
             {
-				$data = array($swItemID, $itemText['languageShopId'], $swItemText['txtArtikel']);
 				$columns = array();
 				
                 // save the translation for the language shop
                 $swItemText = array();
                 $swItemText['txtArtikel'] = $this->getItemName($itemText['texts']);
+		 
+		$data = array($swItemID, $itemText['languageShopId'], $swItemText['txtArtikel']);
 				
 				if (PlentymarketsConfig::getInstance()->getItemShortDescriptionImportActionID(IMPORT_ITEM_SHORTDESC) == 1) {
 					$swItemText['txtshortdescription'] = $itemText['texts']->ShortDescription;
