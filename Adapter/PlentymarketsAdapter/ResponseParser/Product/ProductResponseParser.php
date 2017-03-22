@@ -237,6 +237,8 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
+     * TODO: implement new logic for shop based prices
+     *
      * @param array $variation
      *
      * @return array
@@ -316,6 +318,10 @@ class ProductResponseParser implements ProductResponseParserInterface
 
             if (isset($priceArray['rrp'])) {
                 $pseudoPrice = (float) $priceArray['rrp']['price'];
+            }
+
+            if (isset($priceArray['specialOffer'])) {
+                $pseudoPrice = (float) $priceArray['specialOffer']['price'];
             }
 
             $prices[] = Price::fromArray([
