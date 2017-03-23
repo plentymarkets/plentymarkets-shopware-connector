@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,34 +32,33 @@
  */
 class PlentySoapResponseObject_GetMarketShippingProfile
 {
-	
-	/**
-	 * @var string
-	 */
-	public $CreatedBy;
-	
-	/**
-	 * @var string
-	 */
-	public $Market;
-	
-	/**
-	 * @var string
-	 */
-	public $MarketSideID;
-	
-	/**
-	 * @var int
-	 */
-	public $ShippingProfileID;
-	
-	/**
-	 * @var string
-	 */
-	public $ShippingProfileName;
-	
-	/**
-	 * @var int
-	 */
-	public $UserId;
+    /**
+     * @var string
+     */
+    public $CreatedBy;
+
+    /**
+     * @var string
+     */
+    public $Market;
+
+    /**
+     * @var string
+     */
+    public $MarketSideID;
+
+    /**
+     * @var int
+     */
+    public $ShippingProfileID;
+
+    /**
+     * @var string
+     */
+    public $ShippingProfileName;
+
+    /**
+     * @var int
+     */
+    public $UserId;
 }

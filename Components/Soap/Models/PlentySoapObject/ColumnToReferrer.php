@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,14 +32,13 @@
  */
 class PlentySoapObject_ColumnToReferrer
 {
-	
-	/**
-	 * @var int
-	 */
-	public $PriceColumnID;
-	
-	/**
-	 * @var float
-	 */
-	public $ReferrerID;
+    /**
+     * @var int
+     */
+    public $PriceColumnID;
+
+    /**
+     * @var float
+     */
+    public $ReferrerID;
 }
