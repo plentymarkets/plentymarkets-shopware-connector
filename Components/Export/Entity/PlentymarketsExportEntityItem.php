@@ -703,7 +703,7 @@ class PlentymarketsExportEntityItem
 
         $Details = $this->SHOPWARE_Article->getDetails();
 
-        /**
+        /*
          * @var Shopware\Models\Article\Detail
          * @var Shopware\Models\Article\Configurator\Option $ConfiguratorOption
          */
