@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,39 +32,38 @@
  */
 class PlentySoapRequestObject_SetItemsDefaultCategories
 {
-	
-	/**
-	 * @var PlentySoapRequestObject_DefaultCategoryBranch
-	 */
-	public $Branch;
-	
-	/**
-	 * @var int
-	 */
-	public $BranchID;
-	
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
-	
-	/**
-	 * @var int
-	 */
-	public $ItemID;
-	
-	/**
-	 * @var int
-	 */
-	public $Manually;
-	
-	/**
-	 * @var boolean
-	 */
-	public $SetAsStandard;
-	
-	/**
-	 * @var int
-	 */
-	public $StoreID;
+    /**
+     * @var PlentySoapRequestObject_DefaultCategoryBranch
+     */
+    public $Branch;
+
+    /**
+     * @var int
+     */
+    public $BranchID;
+
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
+
+    /**
+     * @var int
+     */
+    public $ItemID;
+
+    /**
+     * @var int
+     */
+    public $Manually;
+
+    /**
+     * @var bool
+     */
+    public $SetAsStandard;
+
+    /**
+     * @var int
+     */
+    public $StoreID;
 }

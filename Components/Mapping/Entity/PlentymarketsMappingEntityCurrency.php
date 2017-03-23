@@ -1,7 +1,7 @@
 <?php
 /**
  * plentymarkets shopware connector
- * Copyright © 2013 plentymarkets GmbH
+ * Copyright © 2013 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -26,7 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * PlentymarketsMappingEntityCurrency provides the actual currency mapping functionality.
  * Like the other mapping entities this class is called in PlentymarketsMappingController. This entity
@@ -36,14 +35,13 @@
  */
 class PlentymarketsMappingEntityCurrency extends PlentymarketsMappingEntityAbstract
 {
-
-	/**
-	 * Returns the name of the database table
-	 * 
-	 * @return string
-	 */
-	protected function getName()
-	{
-		return 'plenty_mapping_currency';
-	}
+    /**
+     * Returns the name of the database table.
+     *
+     * @return string
+     */
+    protected function getName()
+    {
+        return 'plenty_mapping_currency';
+    }
 }

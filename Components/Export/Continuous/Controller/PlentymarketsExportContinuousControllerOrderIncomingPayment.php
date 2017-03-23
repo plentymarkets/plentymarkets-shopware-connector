@@ -1,7 +1,7 @@
 <?php
 /**
  * plentymarkets shopware connector
- * Copyright © 2013 plentymarkets GmbH
+ * Copyright © 2013 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -26,60 +26,53 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
- * Handles the export of the incoming payments
+ * Handles the export of the incoming payments.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 class PlentymarketsExportContinuousControllerOrderIncomingPayment
 {
-	/**
-	 * Runs the export of the incoming payments
-	 */
-	public function run()
-	{
+    /**
+     * Runs the export of the incoming payments.
+     */
+    public function run()
+    {
 
-		// Start
-		PlentymarketsConfig::getInstance()->setItemIncomingPaymentExportStart(time());
+        // Start
+        PlentymarketsConfig::getInstance()->setItemIncomingPaymentExportStart(time());
 
-		$now = time();
-		$lastUpdateTimestamp = date('Y-m-d H:i:s', PlentymarketsConfig::getInstance()->getItemIncomingPaymentExportLastUpdate(time()));
-		$status = explode('|', PlentymarketsConfig::getInstance()->getOrderPaidStatusID(12));
-		$status = array_map('intval', $status);
+        $now = time();
+        $lastUpdateTimestamp = date('Y-m-d H:i:s', PlentymarketsConfig::getInstance()->getItemIncomingPaymentExportLastUpdate(time()));
+        $status = explode('|', PlentymarketsConfig::getInstance()->getOrderPaidStatusID(12));
+        $status = array_map('intval', $status);
 
-		if (!count($status))
-		{
-			$status = array(12);
-		}
+        if (!count($status)) {
+            $status = [12];
+        }
 
-
-		$Result = Shopware()->Db()->query('
+        $Result = Shopware()->Db()->query('
 			SELECT
 					DISTINCT orderID
 				FROM s_order_history
 					JOIN plenty_order ON shopwareId = orderID
 				WHERE
-					change_date > \'' . $lastUpdateTimestamp . '\' AND
-					payment_status_id IN (' . implode(', ', $status) . ') AND
+					change_date > \''.$lastUpdateTimestamp.'\' AND
+					payment_status_id IN ('.implode(', ', $status).') AND
 					IFNULL(plentyOrderPaidStatus, 0) != 1
 		');
 
-		while (($order = $Result->fetchObject()) && is_object($order))
-		{
-			try
-			{
-				$ExportEntityIncomingPayment = new PlentymarketsExportEntityOrderIncomingPayment($order->orderID);
-				$ExportEntityIncomingPayment->book();
-			}
-			catch (PlentymarketsExportEntityException $E)
-			{
-				PlentymarketsLogger::getInstance()->error('Sync:Order:IncomingPayment', $E->getMessage(), $E->getCode());
-			}
-		}
+        while (($order = $Result->fetchObject()) && is_object($order)) {
+            try {
+                $ExportEntityIncomingPayment = new PlentymarketsExportEntityOrderIncomingPayment($order->orderID);
+                $ExportEntityIncomingPayment->book();
+            } catch (PlentymarketsExportEntityException $E) {
+                PlentymarketsLogger::getInstance()->error('Sync:Order:IncomingPayment', $E->getMessage(), $E->getCode());
+            }
+        }
 
-		// Set timestamps
-		PlentymarketsConfig::getInstance()->setItemIncomingPaymentExportTimestampFinished(time());
-		PlentymarketsConfig::getInstance()->setItemIncomingPaymentExportLastUpdate($now);
-	}
+        // Set timestamps
+        PlentymarketsConfig::getInstance()->setItemIncomingPaymentExportTimestampFinished(time());
+        PlentymarketsConfig::getInstance()->setItemIncomingPaymentExportLastUpdate($now);
+    }
 }

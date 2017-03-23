@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,39 +32,38 @@
  */
 class PlentySoapObject_GetDynamicFormats
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_activeaction
-	 */
-	public $ActiveActions;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_activefield
-	 */
-	public $ActiveFields;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_activefilter
-	 */
-	public $ActiveFilters;
-	
-	/**
-	 * @var int
-	 */
-	public $CustomerGroup;
-	
-	/**
-	 * @var int
-	 */
-	public $ID;
-	
-	/**
-	 * @var string
-	 */
-	public $Model;
-	
-	/**
-	 * @var string
-	 */
-	public $UserName;
+    /**
+     * @var ArrayOfPlentysoapobject_activeaction
+     */
+    public $ActiveActions;
+
+    /**
+     * @var ArrayOfPlentysoapobject_activefield
+     */
+    public $ActiveFields;
+
+    /**
+     * @var ArrayOfPlentysoapobject_activefilter
+     */
+    public $ActiveFilters;
+
+    /**
+     * @var int
+     */
+    public $CustomerGroup;
+
+    /**
+     * @var int
+     */
+    public $ID;
+
+    /**
+     * @var string
+     */
+    public $Model;
+
+    /**
+     * @var string
+     */
+    public $UserName;
 }
