@@ -39,7 +39,7 @@ class OrderStatusResponseParser implements OrderStatusResponseParserInterface
 
         return OrderStatus::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => $entry['name'],
+            'name' => empty($entry['name']) ? $entry['id'] : $entry['name'],
         ]);
     }
 }
