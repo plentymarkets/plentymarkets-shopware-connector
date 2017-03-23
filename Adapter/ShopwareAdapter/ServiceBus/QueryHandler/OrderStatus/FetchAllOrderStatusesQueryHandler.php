@@ -73,6 +73,7 @@ class FetchAllOrderStatusesQueryHandler implements QueryHandlerInterface
         $queryBuilder->select([
             'status.id as id',
             'status.name as name',
+            'status.description as description',
         ]);
         $queryBuilder->where('status.group = :group');
         $queryBuilder->setParameter('group', Status::GROUP_STATE);
