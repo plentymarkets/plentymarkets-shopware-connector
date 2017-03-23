@@ -131,43 +131,70 @@ class PlentymarketsImportEntityItem
      */
     public function saveItemTextsTranslation($itemTexts)
     {
+		$swItemID = PlentymarketsMappingController::getItemByPlentyID($this->ItemBase->ItemID);
+		
         foreach ($itemTexts as $itemText)
         {
             // if the language is not the main language
             if(isset($itemText['languageShopId']))
             {
+				$columns = array();
+				
                 // save the translation for the language shop
                 $swItemText = array();
                 $swItemText['txtArtikel'] = $this->getItemName($itemText['texts']);
-                $swItemText['txtshortdescription'] = (PlentymarketsConfig::getInstance()->getItemShortDescriptionImportActionID(IMPORT_ITEM_SHORTDESC) == 1) ? $itemText['texts']->ShortDescription : '';
-                $swItemText['txtlangbeschreibung'] = (PlentymarketsConfig::getInstance()->getItemLongDescriptionImportActionID(IMPORT_ITEM_LONGDESC) == 1) ? $itemText['texts']->LongDescription : '';
-                $swItemText['txtkeywords'] = (PlentymarketsConfig::getInstance()->getItemKeywordsImportActionID(IMPORT_ITEM_KEYWORDS) == 1) ? $itemText['texts']->ItemDescriptionKeywords : '';
-
-                $swItemID = PlentymarketsMappingController::getItemByPlentyID($this->ItemBase->ItemID);
-
-                PlentymarketsTranslation::setShopwareTranslation('article', $swItemID, $itemText['languageShopId'], $swItemText);
+		 
+		$data = array($swItemID, $itemText['languageShopId'], $swItemText['txtArtikel']);
+				
+				if (PlentymarketsConfig::getInstance()->getItemShortDescriptionImportActionID(IMPORT_ITEM_SHORTDESC) == 1) {
+					$swItemText['txtshortdescription'] = $itemText['texts']->ShortDescription;
+					$columns['description'] = $swItemText['txtshortdescription'];
+					$data[] = $swItemText['txtshortdescription'];
+				}
+                
+				if (PlentymarketsConfig::getInstance()->getItemLongDescriptionImportActionID(IMPORT_ITEM_LONGDESC) == 1) {
+					$swItemText['txtlangbeschreibung'] = $itemText['texts']->LongDescription;
+					$columns[] = 'description_long';
+					$data[] = $swItemText['txtlangbeschreibung'];
+				}
+				
+				if (PlentymarketsConfig::getInstance()->getItemKeywordsImportActionID(IMPORT_ITEM_KEYWORDS) == 1) {
+					$swItemText['txtkeywords'] = $itemText['texts']->ItemDescriptionKeywords;
+					$columns[] = 'keywords';
+					$data[] = $swItemText['txtkeywords'];
+				}
+				
+				PlentymarketsTranslation::setShopwareTranslation('article', $swItemID, $itemText['languageShopId'], $swItemText);
+				
+				$data = array($swItemID, $itemText['languageShopId'], $swItemText['txtArtikel']);
 
                 // save the translation in s_articles_translations, too
                 $sql = '
                 		INSERT INTO `s_articles_translations` (
-		                  articleID, languageID, name, keywords, description, description_long
+		                  articleID, languageID, name :columns:
 		                ) VALUES (
-		                  ?, ?, ?, ?, ?, ?
+		                  ?, ?, ? :values:
 		                ) ON DUPLICATE KEY UPDATE
-		                  name = VALUES(name),
-		                  keywords = VALUES(keywords),
-		                  description = VALUES(description),
-		                  description_long = VALUES(description_long);
+		                  name = VALUES(name) :deduplications:;
 		            	';
+				
+				if (!empty($columns)) {
+					$_columns = array();
+					$_values = array();
+					$_deduplicates = array();
 
-                Shopware()->Db()->query($sql, array(
-                    $swItemID,
-                    $itemText['languageShopId'],
-                    isset($swItemText['txtArtikel']) ? (string) $swItemText['txtArtikel'] : '',
-                    ($swItemText['txtkeywords']) ? (string) $swItemText['txtkeywords'] : '',
-                    isset($swItemText['txtshortdescription']) ? (string) $swItemText['txtshortdescription'] : '',
-                    isset($swItemText['txtlangbeschreibung']) ? (string) $swItemText['txtlangbeschreibung'] : ''
-                ));
+					foreach($columns as $column) {
+						$_columns[] = $column;
+						$_values[] = '?';
+						$_deduplications[] = $column . ' = VALUES(' . $column . ')';
+					}
+				}
+				
+				$sql = (!empty($columns)) ? str_replace(':columns:', ', ' . implode(', ', $_columns), $sql) : str_replace(':columns:', '', $sql);
+				$sql = (!empty($columns)) ? str_replace(':values:', ', ' . implode(', ', $_values), $sql) : str_replace(':values:', '', $sql);
+				$sql = (!empty($columns)) ? str_replace(':deduplications:', ', ' . implode(', ', $_deduplications), $sql) : str_replace(':deduplications:', '', $sql);
+
+                Shopware()->Db()->query($sql, $data);
             }
         }
     }
@@ -180,9 +207,18 @@ class PlentymarketsImportEntityItem
 		// save the item texts for the shop main language
         $this->data = array();
         $this->data['name'] = $this->getItemName($this->ItemBase->Texts);
-        $this->data['description'] = (PlentymarketsConfig::getInstance()->getItemShortDescriptionImportActionID(IMPORT_ITEM_SHORTDESC) == 1) ? $this->ItemBase->Texts->ShortDescription : '';
-        $this->data['descriptionLong'] = (PlentymarketsConfig::getInstance()->getItemLongDescriptionImportActionID(IMPORT_ITEM_LONGDESC) == 1) ? $this->ItemBase->Texts->LongDescription : '';
-        $this->data['keywords'] = (PlentymarketsConfig::getInstance()->getItemKeywordsImportActionID(IMPORT_ITEM_KEYWORDS) == 1) ? $this->ItemBase->Texts->Keywords : '';
+		
+		if (PlentymarketsConfig::getInstance()->getItemShortDescriptionImportActionID(IMPORT_ITEM_SHORTDESC) == 1) {
+			$this->data['description'] = $this->ItemBase->Texts->ShortDescription;
+		}
+		
+		if (PlentymarketsConfig::getInstance()->getItemLongDescriptionImportActionID(IMPORT_ITEM_LONGDESC) == 1) {
+			$this->data['descriptionLong'] = $this->ItemBase->Texts->LongDescription;
+		}
+		
+		if (PlentymarketsConfig::getInstance()->getItemKeywordsImportActionID(IMPORT_ITEM_KEYWORDS) == 1) {
+			$this->data['keywords'] = $this->ItemBase->Texts->Keywords;
+		}
 
         $this->data['highlight'] = ($this->ItemBase->WebShopSpecial == 3);
 		$this->data['lastStock'] = ($this->ItemBase->Stock->Limitation == 1);
