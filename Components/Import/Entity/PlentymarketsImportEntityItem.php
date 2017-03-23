@@ -148,7 +148,7 @@ class PlentymarketsImportEntityItem
 				
 				if (PlentymarketsConfig::getInstance()->getItemShortDescriptionImportActionID(IMPORT_ITEM_SHORTDESC) == 1) {
 					$swItemText['txtshortdescription'] = $itemText['texts']->ShortDescription;
-					$columns['description'] = $swItemText['txtshortdescription'];
+					$columns[] = 'description';
 					$data[] = $swItemText['txtshortdescription'];
 				}
                 
@@ -165,8 +165,6 @@ class PlentymarketsImportEntityItem
 				}
 				
 				PlentymarketsTranslation::setShopwareTranslation('article', $swItemID, $itemText['languageShopId'], $swItemText);
-				
-				$data = array($swItemID, $itemText['languageShopId'], $swItemText['txtArtikel']);
 
                 // save the translation in s_articles_translations, too
                 $sql = '
