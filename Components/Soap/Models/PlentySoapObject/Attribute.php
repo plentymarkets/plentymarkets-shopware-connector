@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,34 +32,33 @@
  */
 class PlentySoapObject_Attribute
 {
-	
-	/**
-	 * @var string
-	 */
-	public $AttributeBackendName;
-	
-	/**
-	 * @var string
-	 */
-	public $AttributeFrontendName;
-	
-	/**
-	 * @var int
-	 */
-	public $AttributeID;
-	
-	/**
-	 * @var PlentySoapObject_AttributeValue
-	 */
-	public $AttributeValue;
-	
-	/**
-	 * @var int
-	 */
-	public $MarkupPercental;
-	
-	/**
-	 * @var int
-	 */
-	public $Position;
+    /**
+     * @var string
+     */
+    public $AttributeBackendName;
+
+    /**
+     * @var string
+     */
+    public $AttributeFrontendName;
+
+    /**
+     * @var int
+     */
+    public $AttributeID;
+
+    /**
+     * @var PlentySoapObject_AttributeValue
+     */
+    public $AttributeValue;
+
+    /**
+     * @var int
+     */
+    public $MarkupPercental;
+
+    /**
+     * @var int
+     */
+    public $Position;
 }

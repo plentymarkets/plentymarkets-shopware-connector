@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,84 +32,83 @@
  */
 class PlentySoapObject_ItemsStock
 {
-	
-	/**
-	 * @var float
-	 */
-	public $Price;
-	
-	/**
-	 * @var float
-	 */
-	public $Price1;
-	
-	/**
-	 * @var float
-	 */
-	public $Price10;
-	
-	/**
-	 * @var float
-	 */
-	public $Price11;
-	
-	/**
-	 * @var float
-	 */
-	public $Price12;
-	
-	/**
-	 * @var float
-	 */
-	public $Price2;
-	
-	/**
-	 * @var float
-	 */
-	public $Price3;
-	
-	/**
-	 * @var float
-	 */
-	public $Price4;
-	
-	/**
-	 * @var float
-	 */
-	public $Price5;
-	
-	/**
-	 * @var float
-	 */
-	public $Price6;
-	
-	/**
-	 * @var float
-	 */
-	public $Price7;
-	
-	/**
-	 * @var float
-	 */
-	public $Price8;
-	
-	/**
-	 * @var float
-	 */
-	public $Price9;
-	
-	/**
-	 * @var int
-	 */
-	public $Quantity;
-	
-	/**
-	 * @var string
-	 */
-	public $SKU;
-	
-	/**
-	 * @var string
-	 */
-	public $WarehouseID;
+    /**
+     * @var float
+     */
+    public $Price;
+
+    /**
+     * @var float
+     */
+    public $Price1;
+
+    /**
+     * @var float
+     */
+    public $Price10;
+
+    /**
+     * @var float
+     */
+    public $Price11;
+
+    /**
+     * @var float
+     */
+    public $Price12;
+
+    /**
+     * @var float
+     */
+    public $Price2;
+
+    /**
+     * @var float
+     */
+    public $Price3;
+
+    /**
+     * @var float
+     */
+    public $Price4;
+
+    /**
+     * @var float
+     */
+    public $Price5;
+
+    /**
+     * @var float
+     */
+    public $Price6;
+
+    /**
+     * @var float
+     */
+    public $Price7;
+
+    /**
+     * @var float
+     */
+    public $Price8;
+
+    /**
+     * @var float
+     */
+    public $Price9;
+
+    /**
+     * @var int
+     */
+    public $Quantity;
+
+    /**
+     * @var string
+     */
+    public $SKU;
+
+    /**
+     * @var string
+     */
+    public $WarehouseID;
 }

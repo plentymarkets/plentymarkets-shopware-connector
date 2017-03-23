@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,24 +32,23 @@
  */
 class PlentySoapObject_DeliveryOrder
 {
-	
-	/**
-	 * @var boolean
-	 */
-	public $BookOutgoingItems;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_orderinfo
-	 */
-	public $DeliveryOrderInfos;
-	
-	/**
-	 * @var int
-	 */
-	public $DoneTimestamp;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_deliveryrow
-	 */
-	public $OrderRows;
+    /**
+     * @var bool
+     */
+    public $BookOutgoingItems;
+
+    /**
+     * @var ArrayOfPlentysoapobject_orderinfo
+     */
+    public $DeliveryOrderInfos;
+
+    /**
+     * @var int
+     */
+    public $DoneTimestamp;
+
+    /**
+     * @var ArrayOfPlentysoapobject_deliveryrow
+     */
+    public $OrderRows;
 }

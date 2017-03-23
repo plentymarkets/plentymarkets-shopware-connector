@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,49 +32,48 @@
  */
 class PlentySoapResponse_ObjectItemImage
 {
-	
-	/**
-	 * @var int
-	 */
-	public $ImageID;
-	
-	/**
-	 * @var string
-	 */
-	public $ImageType;
-	
-	/**
-	 * @var string
-	 */
-	public $ImageURL;
-	
-	/**
-	 * @var int
-	 */
-	public $ItemID;
-	
-	/**
-	 * @var string
-	 */
-	public $LastUpdate;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponse_objectgetitemimagename
-	 */
-	public $Names;
-	
-	/**
-	 * @var int
-	 */
-	public $Position;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponse_objectgetitemimagereference
-	 */
-	public $References;
-	
-	/**
-	 * @var string
-	 */
-	public $UploadTime;
+    /**
+     * @var int
+     */
+    public $ImageID;
+
+    /**
+     * @var string
+     */
+    public $ImageType;
+
+    /**
+     * @var string
+     */
+    public $ImageURL;
+
+    /**
+     * @var int
+     */
+    public $ItemID;
+
+    /**
+     * @var string
+     */
+    public $LastUpdate;
+
+    /**
+     * @var ArrayOfPlentysoapresponse_objectgetitemimagename
+     */
+    public $Names;
+
+    /**
+     * @var int
+     */
+    public $Position;
+
+    /**
+     * @var ArrayOfPlentysoapresponse_objectgetitemimagereference
+     */
+    public $References;
+
+    /**
+     * @var string
+     */
+    public $UploadTime;
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * plentymarkets shopware connector
- * Copyright © 2013 plentymarkets GmbH
+ * Copyright © 2013 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -26,7 +26,6 @@
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * The class PlentymarketsExportControllerCustomer handles the item export.
  *
@@ -34,92 +33,84 @@
  */
 class PlentymarketsExportControllerCustomer
 {
-	/**
-	 * PlentymarketsConfig object data.
-	 *
-	 * @var PlentymarketsConfig
-	 */
-	protected $Config;
+    /**
+     * PlentymarketsConfig object data.
+     *
+     * @var PlentymarketsConfig
+     */
+    protected $Config;
 
-	/**
-	 *
-	 * @var integer
-	 */
-	protected $sizeOfChunk;
+    /**
+     * @var int
+     */
+    protected $sizeOfChunk;
 
-	/**
-	 * Prepares config data and checks different conditions like finished mapping.
-	 */
-	public function __construct()
-	{
-		// Config
-		$this->Config = PlentymarketsConfig::getInstance();
+    /**
+     * Prepares config data and checks different conditions like finished mapping.
+     */
+    public function __construct()
+    {
+        // Config
+        $this->Config = PlentymarketsConfig::getInstance();
 
-		// Configure
-		$this->configure();
-	}
+        // Configure
+        $this->configure();
+    }
 
-	/**
-	 * Runs the actual export of the items
-	 */
-	public function run()
-	{
-		// Export
-		$this->export();
-	}
+    /**
+     * Runs the actual export of the items.
+     */
+    public function run()
+    {
+        // Export
+        $this->export();
+    }
 
-	/**
-	 * Configures the chunk settings
-	 */
-	protected function configure()
-	{
-		// Items per chunk
-		$this->sizeOfChunk = (integer) PlentymarketsConfig::getInstance()->getInitialExportChunkSize(PlentymarketsExportController::DEFAULT_CHUNK_SIZE);
-	}
+    /**
+     * Configures the chunk settings.
+     */
+    protected function configure()
+    {
+        // Items per chunk
+        $this->sizeOfChunk = (int) PlentymarketsConfig::getInstance()->getInitialExportChunkSize(PlentymarketsExportController::DEFAULT_CHUNK_SIZE);
+    }
 
-	/**
-	 * Checks whether the export is finshed
-	 *
-	 * @return boolean
-	 */
-	public function isFinished()
-	{
-		return true;
-	}
+    /**
+     * Checks whether the export is finshed.
+     *
+     * @return bool
+     */
+    public function isFinished()
+    {
+        return true;
+    }
 
-	/**
-	 * Exports images, variants, properties item data and items base to make sure, that the corresponding items data exist.
-	 */
-	protected function export()
-	{
-		// Repository
-		$Repository = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer');
+    /**
+     * Exports images, variants, properties item data and items base to make sure, that the corresponding items data exist.
+     */
+    protected function export()
+    {
+        // Repository
+        $Repository = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer');
 
-		// Chunk configuration
-		$chunk = 0;
+        // Chunk configuration
+        $chunk = 0;
 
-		do
-		{
+        do {
+            PlentymarketsLogger::getInstance()->message('Export:Initial:Customer', 'Chunk: '.($chunk + 1));
+            $Customers = $Repository->findBy([], null, $this->sizeOfChunk, $chunk * $this->sizeOfChunk);
 
-			PlentymarketsLogger::getInstance()->message('Export:Initial:Customer', 'Chunk: ' . ($chunk + 1));
-			$Customers = $Repository->findBy(array(), null, $this->sizeOfChunk, $chunk * $this->sizeOfChunk);
+            /** @var Shopware\Models\Customer\Customer $Customer */
+            foreach ($Customers as $Customer) {
+                try {
+                    $PlentymarketsExportEntityItem = new PlentymarketsExportEntityCustomer($Customer);
+                    $PlentymarketsExportEntityItem->export();
+                } catch (PlentymarketsExportEntityException $E) {
+                    PlentymarketsLogger::getInstance()->error('Export:Initial:Customer', $E->getMessage(), $E->getCode());
+                }
+            }
 
-			/** @var Shopware\Models\Customer\Customer $Customer */
-			foreach ($Customers as $Customer)
-			{
-				try
-				{
-					$PlentymarketsExportEntityItem = new PlentymarketsExportEntityCustomer($Customer);
-					$PlentymarketsExportEntityItem->export();
-				}
-				catch (PlentymarketsExportEntityException $E)
-				{
-					PlentymarketsLogger::getInstance()->error('Export:Initial:Customer', $E->getMessage(), $E->getCode());
-				}
-			}
-
-			++$chunk;
-		}
-		while (!empty($Customers) && count($Customers) == $this->sizeOfChunk);
-	}
+            ++$chunk;
+        } while (!empty($Customers) && count($Customers) == $this->sizeOfChunk);
+    }
 }

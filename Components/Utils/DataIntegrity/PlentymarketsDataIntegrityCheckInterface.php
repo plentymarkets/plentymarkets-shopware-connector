@@ -1,7 +1,7 @@
 <?php
 /**
  * plentymarkets shopware connector
- * Copyright © 2013 plentymarkets GmbH
+ * Copyright © 2013 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -27,46 +27,45 @@
  */
 
 /**
- * Data integrity check interface
+ * Data integrity check interface.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 interface PlentymarketsDataIntegrityCheckInterface
 {
-	/**
-	 * Returns the name of the check
-	 */
-	public function getName();
+    /**
+     * Returns the name of the check.
+     */
+    public function getName();
 
-	/**
-	 * Returns a page of invalid data
-	 *
-	 * @param integer $start
-	 * @param integer $offset
-	 */
-	public function getInvalidData($start, $offset);
+    /**
+     * Returns a page of invalid data.
+     *
+     * @param int $start
+     * @param int $offset
+     */
+    public function getInvalidData($start, $offset);
 
-	/**
-	 * Deletes a page of invalid data
-	 *
-	 * @param integer $start
-	 * @param integer $offset
-	 */
-	public function deleteInvalidData($start, $offset);
+    /**
+     * Deletes a page of invalid data.
+     *
+     * @param int $start
+     * @param int $offset
+     */
+    public function deleteInvalidData($start, $offset);
 
-	/**
-	 * Returns the total number of records
-	 */
-	public function getTotal();
+    /**
+     * Returns the total number of records.
+     */
+    public function getTotal();
 
-	/**
-	 * Returns the fields to build an ext js model
-	 */
-	public function getFields();
+    /**
+     * Returns the fields to build an ext js model.
+     */
+    public function getFields();
 
-	/**
-	 * Checks whether the check is valid
-	 */
-	public function isValid();
-
+    /**
+     * Checks whether the check is valid.
+     */
+    public function isValid();
 }

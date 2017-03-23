@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,34 +32,33 @@
  */
 class PlentySoapObject_Coupon
 {
-	
-	/**
-	 * @var float
-	 */
-	public $Amount;
-	
-	/**
-	 * @var int
-	 */
-	public $CampaignID;
-	
-	/**
-	 * @var string
-	 */
-	public $Code;
-	
-	/**
-	 * @var string
-	 */
-	public $GeneratedOn;
-	
-	/**
-	 * @var boolean
-	 */
-	public $IsUsed;
-	
-	/**
-	 * @var string
-	 */
-	public $RedeemedOn;
+    /**
+     * @var float
+     */
+    public $Amount;
+
+    /**
+     * @var int
+     */
+    public $CampaignID;
+
+    /**
+     * @var string
+     */
+    public $Code;
+
+    /**
+     * @var string
+     */
+    public $GeneratedOn;
+
+    /**
+     * @var bool
+     */
+    public $IsUsed;
+
+    /**
+     * @var string
+     */
+    public $RedeemedOn;
 }
