@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,49 +32,48 @@
  */
 class PlentySoapRequest_GetWarehouseItem
 {
-	
-	/**
-	 * @var boolean
-	 */
-	public $GetAllLocationsWithStock;
-	
-	/**
-	 * @var boolean
-	 */
-	public $GetFreeLocation;
-	
-	/**
-	 * @var boolean
-	 */
-	public $GetPreviousLocation;
-	
-	/**
-	 * @var string
-	 */
-	public $ItemEAN;
-	
-	/**
-	 * @var string
-	 */
-	public $ItemNumber;
-	
-	/**
-	 * @var string
-	 */
-	public $Lang;
-	
-	/**
-	 * @var PlentySoapObject_GetWarehouseItemRefundLocation
-	 */
-	public $Refused;
-	
-	/**
-	 * @var string
-	 */
-	public $SKU;
-	
-	/**
-	 * @var int
-	 */
-	public $WarehouseId;
+    /**
+     * @var bool
+     */
+    public $GetAllLocationsWithStock;
+
+    /**
+     * @var bool
+     */
+    public $GetFreeLocation;
+
+    /**
+     * @var bool
+     */
+    public $GetPreviousLocation;
+
+    /**
+     * @var string
+     */
+    public $ItemEAN;
+
+    /**
+     * @var string
+     */
+    public $ItemNumber;
+
+    /**
+     * @var string
+     */
+    public $Lang;
+
+    /**
+     * @var PlentySoapObject_GetWarehouseItemRefundLocation
+     */
+    public $Refused;
+
+    /**
+     * @var string
+     */
+    public $SKU;
+
+    /**
+     * @var int
+     */
+    public $WarehouseId;
 }

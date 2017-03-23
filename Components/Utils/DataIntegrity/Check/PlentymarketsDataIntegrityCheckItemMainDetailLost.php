@@ -1,7 +1,7 @@
 <?php
 /**
  * plentymarkets shopware connector
- * Copyright © 2013 plentymarkets GmbH
+ * Copyright © 2013 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -26,133 +26,129 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
- * Checks for items with non-existant main details
+ * Checks for items with non-existant main details.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 class PlentymarketsDataIntegrityCheckItemMainDetailLost implements PlentymarketsDataIntegrityCheckInterface
 {
-	/**
-	 * Returns the name of the check
-	 *
-	 * @see PlentymarketsDataIntegrityCheckInterface::getName()
-	 */
-	public function getName()
-	{
-		return 'ItemMainDetailLost';
-	}
+    /**
+     * Returns the name of the check.
+     *
+     * @see PlentymarketsDataIntegrityCheckInterface::getName()
+     */
+    public function getName()
+    {
+        return 'ItemMainDetailLost';
+    }
 
-	/**
-	 * Checks whether the check is valid
-	 *
-	 * @return boolean
-	 */
-	public function isValid()
-	{
-		return count($this->getInvalidData(0, 1)) == 0;
-	}
+    /**
+     * Checks whether the check is valid.
+     *
+     * @return bool
+     */
+    public function isValid()
+    {
+        return count($this->getInvalidData(0, 1)) == 0;
+    }
 
-	/**
-	 * Returns a page of invalid data
-	 *
-	 * @param integer $start
-	 * @param integer $offset
-	 * @return array
-	 */
-	public function getInvalidData($start, $offset)
-	{
-		return Shopware()->Db()->query('
+    /**
+     * Returns a page of invalid data.
+     *
+     * @param int $start
+     * @param int $offset
+     *
+     * @return array
+     */
+    public function getInvalidData($start, $offset)
+    {
+        return Shopware()->Db()->query('
 			SELECT SQL_CALC_FOUND_ROWS a.id itemId, a.name, main_detail_id mainDetailId FROM s_articles a
 				WHERE main_detail_id IS NULL OR main_detail_id NOT IN (SELECT id FROM s_articles_details)
 				ORDER BY a.id
-				LIMIT ' . $start . ', ' . $offset . '
+				LIMIT '.$start.', '.$offset.'
 		')->fetchAll();
-	}
+    }
 
-	/**
-	 * Deletes a page of invalid data
-	 *
-	 * @param integer $start
-	 * @param integer $offset
-	 */
-	public function deleteInvalidData($start, $offset)
-	{
-		// Customer group
-		$customerGroupKey = PlentymarketsConfig::getInstance()->getDefaultCustomerGroupKey();
-		$customerGroupRepository = Shopware()->Models()->getRepository('Shopware\Models\Customer\Group');
-		$customerGroups = $customerGroupRepository->findBy(array('key' => $customerGroupKey));
-		$customerGroup = array_pop($customerGroups);
+    /**
+     * Deletes a page of invalid data.
+     *
+     * @param int $start
+     * @param int $offset
+     */
+    public function deleteInvalidData($start, $offset)
+    {
+        // Customer group
+        $customerGroupKey = PlentymarketsConfig::getInstance()->getDefaultCustomerGroupKey();
+        $customerGroupRepository = Shopware()->Models()->getRepository('Shopware\Models\Customer\Group');
+        $customerGroups = $customerGroupRepository->findBy(['key' => $customerGroupKey]);
+        $customerGroup = array_pop($customerGroups);
 
-		foreach ($this->getInvalidData($start, $offset) as $data)
-		{
-			try
-			{
-				/** @var \Shopware\Models\Article\Article $Item */
-				$Item = Shopware()->Models()->find('\Shopware\Models\Article\Article', $data['itemId']);
+        foreach ($this->getInvalidData($start, $offset) as $data) {
+            try {
+                /** @var \Shopware\Models\Article\Article $Item */
+                $Item = Shopware()->Models()->find('\Shopware\Models\Article\Article', $data['itemId']);
 
-				$detail = new \Shopware\Models\Article\Detail();
-				$detail->setArticle($Item);
+                $detail = new \Shopware\Models\Article\Detail();
+                $detail->setArticle($Item);
 
-				// The number will be changed by the sync process
-				$detail->setNumber(PlentymarketsImportItemHelper::getItemNumber());
+                // The number will be changed by the sync process
+                $detail->setNumber(PlentymarketsImportItemHelper::getItemNumber());
 
-				$price = new Shopware\Models\Article\Price();
-				$price->setFrom(1);
-				$price->setPrice(1);
-				$price->setPercent(0);
-				$price->setArticle($Item);
-				$price->setDetail($detail);
-				$price->setCustomerGroup($customerGroup);
+                $price = new Shopware\Models\Article\Price();
+                $price->setFrom(1);
+                $price->setPrice(1);
+                $price->setPercent(0);
+                $price->setArticle($Item);
+                $price->setDetail($detail);
+                $price->setCustomerGroup($customerGroup);
 
-				$Item->setMainDetail($detail);
+                $Item->setMainDetail($detail);
 
-				Shopware()->Models()->persist($Item);
-				Shopware()->Models()->remove($Item);
-			}
-			catch (Exception $E)
-			{
-			}
-		}
-		Shopware()->Models()->flush();
-	}
+                Shopware()->Models()->persist($Item);
+                Shopware()->Models()->remove($Item);
+            } catch (Exception $E) {
+            }
+        }
+        Shopware()->Models()->flush();
+    }
 
-	/**
-	 * Returns the fields to build an ext js model
-	 *
-	 * @return array
-	 */
-	public function getFields()
-	{
-		return array(
-			array(
-				'name' => 'itemId',
-				'description' => 'Artikel ID',
-				'type' => 'int'
-			),
-			array(
-				'name' => 'mainDetailId',
-				'description' => 'Detail ID',
-				'type' => 'int'
-			),
-			array(
-				'name' => 'name',
-				'description' => 'Bezeichnung',
-				'type' => 'string'
-			),
-		);
-	}
+    /**
+     * Returns the fields to build an ext js model.
+     *
+     * @return array
+     */
+    public function getFields()
+    {
+        return [
+            [
+                'name'        => 'itemId',
+                'description' => 'Artikel ID',
+                'type'        => 'int',
+            ],
+            [
+                'name'        => 'mainDetailId',
+                'description' => 'Detail ID',
+                'type'        => 'int',
+            ],
+            [
+                'name'        => 'name',
+                'description' => 'Bezeichnung',
+                'type'        => 'string',
+            ],
+        ];
+    }
 
-	/**
-	 * Returns the total number of records
-	 *
-	 * @return integer
-	 */
-	public function getTotal()
-	{
-		return (integer) Shopware()->Db()->query('
+    /**
+     * Returns the total number of records.
+     *
+     * @return int
+     */
+    public function getTotal()
+    {
+        return (int) Shopware()->Db()->query('
 			SELECT FOUND_ROWS()
 		')->fetchColumn(0);
-	}
+    }
 }

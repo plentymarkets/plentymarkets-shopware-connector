@@ -1,7 +1,7 @@
 <?php
 /**
  * plentymarkets shopware connector
- * Copyright © 2013 plentymarkets GmbH
+ * Copyright © 2013 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -26,7 +26,6 @@
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * This is a stack of SKUs to retrieve the stocks after the import of the items.
  *
@@ -34,102 +33,95 @@
  */
 class PlentymarketsImportItemStockStack
 {
-	/**
-	 *
-	 * @var PlentymarketsImportItemStockStack
-	 */
-	protected static $Instance;
+    /**
+     * @var PlentymarketsImportItemStockStack
+     */
+    protected static $Instance;
 
-	/**
-	 *
-	 * @var string|integer[]
-	 */
-	protected $stack = array();
+    /**
+     * @var string|int[]
+     */
+    protected $stack = [];
 
-	/**
-	 * Singleton: returns an instance
-	 *
-	 * @return PlentymarketsImportItemStockStack
-	 */
-	public static function getInstance()
-	{
-		if (!self::$Instance instanceof self)
-		{
-			self::$Instance = new self();
-		}
-		return self::$Instance;
-	}
+    /**
+     * Singleton: returns an instance.
+     *
+     * @return PlentymarketsImportItemStockStack
+     */
+    public static function getInstance()
+    {
+        if (!self::$Instance instanceof self) {
+            self::$Instance = new self();
+        }
 
-	/**
-	 * Adds the given SKU to the stack
-	 *
-	 * @param string|integer $sku
-	 */
-	public function add($sku)
-	{
-		$this->stack[] = $sku;
-	}
+        return self::$Instance;
+    }
 
-	/**
-	 * Retrieves the stocks for the stack
-	 */
-	public function import()
-	{
-		// Unify
-		$this->stack = array_unique($this->stack);
+    /**
+     * Adds the given SKU to the stack.
+     *
+     * @param string|int $sku
+     */
+    public function add($sku)
+    {
+        $this->stack[] = $sku;
+    }
 
-		if (empty($this->stack))
-		{
-			return;
-		}
+    /**
+     * Retrieves the stocks for the stack.
+     */
+    public function import()
+    {
+        // Unify
+        $this->stack = array_unique($this->stack);
 
-		// Chunkify
-		$stacks = array_chunk($this->stack, 100);
+        if (empty($this->stack)) {
+            return;
+        }
 
-		// Reset
-		$this->stack = array();
+        // Chunkify
+        $stacks = array_chunk($this->stack, 100);
 
-		// Warehouse
-		$warehouseId = PlentymarketsConfig::getInstance()->getItemWarehouseID(0);
+        // Reset
+        $this->stack = [];
 
-		// Build the request
-		$Request_GetCurrentStocks = new PlentySoapRequest_GetCurrentStocks();
-		$Request_GetCurrentStocks->Page = 0;
+        // Warehouse
+        $warehouseId = PlentymarketsConfig::getInstance()->getItemWarehouseID(0);
 
-		//
-		$ImportEntityItemStock = PlentymarketsImportEntityItemStock::getInstance();
+        // Build the request
+        $Request_GetCurrentStocks = new PlentySoapRequest_GetCurrentStocks();
+        $Request_GetCurrentStocks->Page = 0;
 
-		foreach ($stacks as $stack)
-		{
-			// Reset
-			$Request_GetCurrentStocks->Items = array();
+        //
+        $ImportEntityItemStock = PlentymarketsImportEntityItemStock::getInstance();
 
-			// Add the SKUs
-			foreach ($stack as $sku)
-			{
-				$RequestObject_GetCurrentStocks = new PlentySoapRequestObject_GetCurrentStocks();
-				$RequestObject_GetCurrentStocks->SKU = $sku;
-				$Request_GetCurrentStocks->Items[] = $RequestObject_GetCurrentStocks;
-			}
+        foreach ($stacks as $stack) {
+            // Reset
+            $Request_GetCurrentStocks->Items = [];
 
-			// Log
-			PlentymarketsLogger::getInstance()->message('Sync:Item:Stock', 'Fetching ' . count($Request_GetCurrentStocks->Items) . ' stocks');
+            // Add the SKUs
+            foreach ($stack as $sku) {
+                $RequestObject_GetCurrentStocks = new PlentySoapRequestObject_GetCurrentStocks();
+                $RequestObject_GetCurrentStocks->SKU = $sku;
+                $Request_GetCurrentStocks->Items[] = $RequestObject_GetCurrentStocks;
+            }
 
-			// Do the request
-			$Response_GetCurrentStocks = PlentymarketsSoapClient::getInstance()->GetCurrentStocks($Request_GetCurrentStocks);
+            // Log
+            PlentymarketsLogger::getInstance()->message('Sync:Item:Stock', 'Fetching '.count($Request_GetCurrentStocks->Items).' stocks');
 
-			// Process
-			/** @var PlentySoapObject_GetCurrentStocks $CurrentStock */
-			foreach ($Response_GetCurrentStocks->CurrentStocks->item as $CurrentStock)
-			{
-				// Skip wrong warehouses
-				if ($CurrentStock->WarehouseID != $warehouseId)
-				{
-					continue;
-				}
+            // Do the request
+            $Response_GetCurrentStocks = PlentymarketsSoapClient::getInstance()->GetCurrentStocks($Request_GetCurrentStocks);
 
-				$ImportEntityItemStock->update($CurrentStock);
-			}
-		}
-	}
+            // Process
+            /** @var PlentySoapObject_GetCurrentStocks $CurrentStock */
+            foreach ($Response_GetCurrentStocks->CurrentStocks->item as $CurrentStock) {
+                // Skip wrong warehouses
+                if ($CurrentStock->WarehouseID != $warehouseId) {
+                    continue;
+                }
+
+                $ImportEntityItemStock->update($CurrentStock);
+            }
+        }
+    }
 }

@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,74 +32,73 @@
  */
 class PlentySoapObject_GetItemAttributesAttribute
 {
+    /**
+     * @var int
+     */
+    public $AmazonVariation;
 
-	/**
-	 * @var int
-	 */
-	public $AmazonVariation;
+    /**
+     * @var string
+     */
+    public $BackendName;
 
-	/**
-	 * @var string
-	 */
-	public $BackendName;
+    /**
+     * @var string
+     */
+    public $Contentpage;
 
-	/**
-	 * @var string
-	 */
-	public $Contentpage;
+    /**
+     * @var string
+     */
+    public $FrontendName;
 
-	/**
-	 * @var string
-	 */
-	public $FrontendName;
+    /**
+     * @var int
+     */
+    public $GoogleProductsVariation;
 
-	/**
-	 * @var int
-	 */
-	public $GoogleProductsVariation;
+    /**
+     * @var int
+     */
+    public $Id;
 
-	/**
-	 * @var int
-	 */
-	public $Id;
+    /**
+     * @var bool
+     */
+    public $ImageAttribute;
 
-	/**
-	 * @var boolean
-	 */
-	public $ImageAttribute;
+    /**
+     * @var float
+     */
+    public $MarkupPercental;
 
-	/**
-	 * @var float
-	 */
-	public $MarkupPercental;
+    /**
+     * @var int
+     */
+    public $NeckermannAttribute;
 
-	/**
-	 * @var int
-	 */
-	public $NeckermannAttribute;
+    /**
+     * @var int
+     */
+    public $OttoVariation;
 
-	/**
-	 * @var int
-	 */
-	public $OttoVariation;
+    /**
+     * @var int
+     */
+    public $PixmaniaAttribute;
 
-	/**
-	 * @var int
-	 */
-	public $PixmaniaAttribute;
+    /**
+     * @var int
+     */
+    public $Position;
 
-	/**
-	 * @var int
-	 */
-	public $Position;
+    /**
+     * @var int
+     */
+    public $ShopperellaVariation;
 
-	/**
-	 * @var int
-	 */
-	public $ShopperellaVariation;
-
-	/**
-	 * @var ArrayOfPlentysoapobject_getitemattributesattributevalue
-	 */
-	public $Values;
+    /**
+     * @var ArrayOfPlentysoapobject_getitemattributesattributevalue
+     */
+    public $Values;
 }

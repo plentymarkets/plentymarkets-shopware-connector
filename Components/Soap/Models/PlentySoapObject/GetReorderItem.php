@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,59 +32,58 @@
  */
 class PlentySoapObject_GetReorderItem
 {
-	
-	/**
-	 * @var string
-	 */
-	public $ArticleNo;
-	
-	/**
-	 * @var float
-	 */
-	public $DeliveredValueOfItems;
-	
-	/**
-	 * @var string
-	 */
-	public $EAN1;
-	
-	/**
-	 * @var string
-	 */
-	public $ItemName;
-	
-	/**
-	 * @var int
-	 */
-	public $PackagingEntity;
-	
-	/**
-	 * @var float
-	 */
-	public $PurchasePrice;
-	
-	/**
-	 * @var int
-	 */
-	public $Quantity;
-	
-	/**
-	 * @var int
-	 */
-	public $ReorderItemId;
-	
-	/**
-	 * @var string
-	 */
-	public $SKU;
-	
-	/**
-	 * @var string
-	 */
-	public $Status;
-	
-	/**
-	 * @var string
-	 */
-	public $SupplierArticleNo;
+    /**
+     * @var string
+     */
+    public $ArticleNo;
+
+    /**
+     * @var float
+     */
+    public $DeliveredValueOfItems;
+
+    /**
+     * @var string
+     */
+    public $EAN1;
+
+    /**
+     * @var string
+     */
+    public $ItemName;
+
+    /**
+     * @var int
+     */
+    public $PackagingEntity;
+
+    /**
+     * @var float
+     */
+    public $PurchasePrice;
+
+    /**
+     * @var int
+     */
+    public $Quantity;
+
+    /**
+     * @var int
+     */
+    public $ReorderItemId;
+
+    /**
+     * @var string
+     */
+    public $SKU;
+
+    /**
+     * @var string
+     */
+    public $Status;
+
+    /**
+     * @var string
+     */
+    public $SupplierArticleNo;
 }
