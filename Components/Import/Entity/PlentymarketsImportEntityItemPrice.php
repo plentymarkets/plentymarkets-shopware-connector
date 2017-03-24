@@ -229,18 +229,40 @@ class PlentymarketsImportEntityItemPrice
      */
 	public function update($itemId)
 	{
-        /**
-         * @var \Shopware\Components\Api\Resource\Article $ArticleResource
-         */
-		$ArticleResource = \Shopware\Components\Api\Manager::getResource('Article');
-
-		// Updaten
-		$ArticleResource->update($itemId, array(
-			'mainDetail' => array(
-				'prices' => $this->getPrices(),
-                'purchasePrice' => $this->getPurchasePrice(),
-			)
-		));
+        try {
+			/**
+         	* @var \Shopware\Components\Api\Resource\Article $ArticleResource
+         	*/
+			
+			$ArticleResource = \Shopware\Components\Api\Manager::getResource('Article');
+			
+			$article = $ArticleResource->getOne($itemId);
+		
+			$prices = $this->getPrices();
+		
+			// BOF - Allow plugins to change the data before saving
+			$prices = Enlight()->Events()->filter(
+				'PlentyConnector_ImportEntityItemPrice_BeforeSavePrice',
+				$prices,
+				array(
+					'subject' => $this,
+					'number' => $article['mainDetail']['number'],
+					'ean' => $article['mainDetail']['ean']
+				)
+			);
+			// EOF - Allow plugins to change the data before saving
+	
+			// Updaten
+			$ArticleResource->update($itemId, array(
+				'mainDetail' => array(
+					'prices' => $prices,
+					'purchasePrice' => $this->getPurchasePrice(),
+				)
+			));
+		}
+		catch(Exception $e) {
+			// do nothing
+		}
 	}
 
     /**
@@ -260,34 +282,51 @@ class PlentymarketsImportEntityItemPrice
      */
 	public function updateVariant($detailId)
 	{
-		$Detail = Shopware()->Models()->find('Shopware\Models\Article\Detail', $detailId);
+		try {		
+			$Detail = Shopware()->Models()->find('Shopware\Models\Article\Detail', $detailId);
 
-		if (!$Detail instanceof Shopware\Models\Article\Detail) {
-			return PlentymarketsLogger::getInstance()->error('Sync:Item:Price', 'The price of the item detail with the id »'. $detailId .'« could not be updated (item corrupt)', 3610);
-		}
+			if (!$Detail instanceof Shopware\Models\Article\Detail) {
+				return PlentymarketsLogger::getInstance()->error('Sync:Item:Price', 'The price of the item detail with the id »'. $detailId .'« could not be updated (item corrupt)', 3610);
+			}
 
-		$currentPrice = $this->PLENTY_PriceSet->Price + $this->PLENTY_markup;
+			$Article = $Detail->getArticle();
 
-		$Article = $Detail->getArticle();
+			/**
+			 * @var \Shopware\Components\Api\Resource\Article $ArticleResource
+			 */
+			$ArticleResource = \Shopware\Components\Api\Manager::getResource('Article');
 
-        /**
-         * @var \Shopware\Components\Api\Resource\Article $ArticleResource
-         */
-		$ArticleResource = \Shopware\Components\Api\Manager::getResource('Article');
+			$prices = $this->getPrices();
 
-		// Update
-		$ArticleResource->update($Article->getId(), array(
-			'variants' => array(
-				array(
-					'number' => $Detail->getNumber(),
-					'prices' => $this->getPrices(),
-                    'purchasePrice' => $this->getPurchasePrice(),
+			// BOF - Allow plugins to change the data before saving
+			$prices = Enlight()->Events()->filter(
+				'PlentyConnector_ImportEntityItemPrice_BeforeSavePrice',
+				$prices,
+					array(
+							'subject' => $this,
+							'number' => $Detail->getNumber(),
+							'ean' => $Detail->getEan()
+					)
+			);
+			// EOF - Allow plugins to change the data before saving
+
+			// Update
+			$ArticleResource->update($Article->getId(), array(
+				'variants' => array(
+					array(
+						'number' => $Detail->getNumber(),
+						'prices' => $prices,
+						'purchasePrice' => $this->getPurchasePrice(),
+					)
 				)
-			)
-		));
+			));
 
-		PyLog()->message('Sync:Item:Price',
-			'The price of the variant with the number »' . $Detail->getNumber() . '« has been set to »' . money_format('%.2n', $currentPrice) . '«.'
-		);
+			PyLog()->message('Sync:Item:Price',
+				'The price of the variant with the number »' . $Detail->getNumber() . '« has been set to »' . money_format('%.2n', $currentPrice) . '«.'
+			);
+		}
+		catch(Exception $e) {
+			// do nothing
+		}
 	}
 }
