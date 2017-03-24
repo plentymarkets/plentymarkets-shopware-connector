@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,39 +32,38 @@
  */
 class PlentySoapObject_SetStocksTransfer
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CreditorID;
-	
-	/**
-	 * @var PlentySoapObject_StockLocation
-	 */
-	public $CurrentLocation;
-	
-	/**
-	 * @var string
-	 */
-	public $EAN;
-	
-	/**
-	 * @var PlentySoapObject_StockLocation
-	 */
-	public $NewLocation;
-	
-	/**
-	 * @var string
-	 */
-	public $PhysicalStock;
-	
-	/**
-	 * @var int
-	 */
-	public $Reason;
-	
-	/**
-	 * @var string
-	 */
-	public $SKU;
+    /**
+     * @var int
+     */
+    public $CreditorID;
+
+    /**
+     * @var PlentySoapObject_StockLocation
+     */
+    public $CurrentLocation;
+
+    /**
+     * @var string
+     */
+    public $EAN;
+
+    /**
+     * @var PlentySoapObject_StockLocation
+     */
+    public $NewLocation;
+
+    /**
+     * @var string
+     */
+    public $PhysicalStock;
+
+    /**
+     * @var int
+     */
+    public $Reason;
+
+    /**
+     * @var string
+     */
+    public $SKU;
 }

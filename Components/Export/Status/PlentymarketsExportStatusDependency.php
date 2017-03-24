@@ -1,7 +1,7 @@
 <?php
 /**
  * plentymarkets shopware connector
- * Copyright © 2013 plentymarkets GmbH
+ * Copyright © 2013 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -26,58 +26,55 @@
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
- * An export with an dependency
+ * An export with an dependency.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 class PlentymarketsExportStatusDependency extends PlentymarketsExportStatus
 {
+    /**
+     * @var PlentymarketsExportStatus
+     */
+    protected $Dependency;
 
-	/**
-	 *
-	 * @var PlentymarketsExportStatus
-	 */
-	protected $Dependency;
+    /**
+     * Checks whether the export may be announced.
+     *
+     * @return bool
+     */
+    public function mayAnnounce()
+    {
+        return $this->getStatus() == 'open' && !$this->needsDependency();
+    }
 
-	/**
-	 * Checks whether the export may be announced
-	 *
-	 * @return boolean
-	 */
-	public function mayAnnounce()
-	{
-		return $this->getStatus() == 'open' && !$this->needsDependency();
-	}
+    /**
+     * Checks whether the export depends on another export.
+     *
+     * @return bool
+     */
+    public function needsDependency()
+    {
+        return $this->Dependency->needsDependency() || !$this->Dependency->isFinished();
+    }
 
-	/**
-	 * Checks whether the export depends on another export
-	 *
-	 * @return boolean
-	 */
-	public function needsDependency()
-	{
-		return $this->Dependency->needsDependency() || !$this->Dependency->isFinished();
-	}
+    /**
+     * Returns the dependency.
+     *
+     * @return PlentymarketsExportStatus
+     */
+    public function getDependency()
+    {
+        return $this->Dependency;
+    }
 
-	/**
-	 * Returns the dependency
-	 *
-	 * @return PlentymarketsExportStatus
-	 */
-	public function getDependency()
-	{
-		return $this->Dependency;
-	}
-
-	/**
-	 * Sets the dependency
-	 *
-	 * @param PlentymarketsExportStatus $Dependency
-	 */
-	public function setDependency(PlentymarketsExportStatus $Dependency)
-	{
-		$this->Dependency = $Dependency;
-	}
+    /**
+     * Sets the dependency.
+     *
+     * @param PlentymarketsExportStatus $Dependency
+     */
+    public function setDependency(PlentymarketsExportStatus $Dependency)
+    {
+        $this->Dependency = $Dependency;
+    }
 }

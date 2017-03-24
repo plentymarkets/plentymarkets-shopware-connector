@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,34 +32,33 @@
  */
 class PlentySoapObject_GetCurrentStocks4Marketplace
 {
-	
-	/**
-	 * @var string
-	 */
-	public $EAN;
-	
-	/**
-	 * @var string
-	 */
-	public $NetStock;
-	
-	/**
-	 * @var string
-	 */
-	public $PhysicalStock;
-	
-	/**
-	 * @var string
-	 */
-	public $SKU;
-	
-	/**
-	 * @var int
-	 */
-	public $WarehouseID;
-	
-	/**
-	 * @var string
-	 */
-	public $WarehouseType;
+    /**
+     * @var string
+     */
+    public $EAN;
+
+    /**
+     * @var string
+     */
+    public $NetStock;
+
+    /**
+     * @var string
+     */
+    public $PhysicalStock;
+
+    /**
+     * @var string
+     */
+    public $SKU;
+
+    /**
+     * @var int
+     */
+    public $WarehouseID;
+
+    /**
+     * @var string
+     */
+    public $WarehouseType;
 }

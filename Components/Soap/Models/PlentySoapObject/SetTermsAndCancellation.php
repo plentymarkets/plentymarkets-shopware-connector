@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,34 +32,33 @@
  */
 class PlentySoapObject_SetTermsAndCancellation
 {
-	
-	/**
-	 * @var string
-	 */
-	public $CancellationRightsHtml;
-	
-	/**
-	 * @var string
-	 */
-	public $CancellationRightsText;
-	
-	/**
-	 * @var string
-	 */
-	public $Lang;
-	
-	/**
-	 * @var int
-	 */
-	public $StoreID;
-	
-	/**
-	 * @var string
-	 */
-	public $TermsAndConditionsHtml;
-	
-	/**
-	 * @var string
-	 */
-	public $TermsAndConditionsText;
+    /**
+     * @var string
+     */
+    public $CancellationRightsHtml;
+
+    /**
+     * @var string
+     */
+    public $CancellationRightsText;
+
+    /**
+     * @var string
+     */
+    public $Lang;
+
+    /**
+     * @var int
+     */
+    public $StoreID;
+
+    /**
+     * @var string
+     */
+    public $TermsAndConditionsHtml;
+
+    /**
+     * @var string
+     */
+    public $TermsAndConditionsText;
 }
