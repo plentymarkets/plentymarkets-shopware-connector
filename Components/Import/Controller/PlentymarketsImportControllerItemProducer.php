@@ -1,7 +1,7 @@
 <?php
 /**
  * plentymarkets shopware connector
- * Copyright © 2013 plentymarkets GmbH
+ * Copyright © 2013 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -26,37 +26,33 @@
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
- * Imports the item producers
+ * Imports the item producers.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 class PlentymarketsImportControllerItemProducer
 {
-	/**
-	 * Performs the actual import
-	 *
-	 * @param integer $lastUpdateTimestamp
-	 */
-	public function run($lastUpdateTimestamp)
-	{
-		$Request_GetProducers = new PlentySoapRequest_GetProducers();
-		$Request_GetProducers->LastUpdateFrom = $lastUpdateTimestamp;
+    /**
+     * Performs the actual import.
+     *
+     * @param int $lastUpdateTimestamp
+     */
+    public function run($lastUpdateTimestamp)
+    {
+        $Request_GetProducers = new PlentySoapRequest_GetProducers();
+        $Request_GetProducers->LastUpdateFrom = $lastUpdateTimestamp;
 
-		/** @var PlentySoapResponse_GetProducers $Response_GetProducers */
-		$Response_GetProducers = PlentymarketsSoapClient::getInstance()->GetProducers($Request_GetProducers);
+        /** @var PlentySoapResponse_GetProducers $Response_GetProducers */
+        $Response_GetProducers = PlentymarketsSoapClient::getInstance()->GetProducers($Request_GetProducers);
 
-		if (!$Response_GetProducers->Success)
-		{
-			return;
-		}
+        if (!$Response_GetProducers->Success) {
+            return;
+        }
 
-		foreach ($Response_GetProducers->Producers->item as $Producer)
-		{
-			$PlentymarketsImportEntityItemProducer = new PlentymarketsImportEntityItemProducer($Producer);
-			$PlentymarketsImportEntityItemProducer->import();
-		}
-	}
+        foreach ($Response_GetProducers->Producers->item as $Producer) {
+            $PlentymarketsImportEntityItemProducer = new PlentymarketsImportEntityItemProducer($Producer);
+            $PlentymarketsImportEntityItemProducer->import();
+        }
+    }
 }
-

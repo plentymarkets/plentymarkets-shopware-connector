@@ -1,7 +1,7 @@
 <?php
 /**
  * plentymarkets shopware connector
- * Copyright © 2013 plentymarkets GmbH
+ * Copyright © 2013 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -26,7 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * The PlentymarketsMappingController does the actual data mapping. Therefore it uses the corresponding
  * mapping entity classes like PlentymarketsMappingEntityCustomer in /Mapping/Entity. This class is called
@@ -36,207 +35,193 @@
  */
 class PlentymarketsMappingController
 {
+    /**
+     * Dispatches a method call to the actual mapping class.
+     *
+     * @param string $name
+     * @param array  $arguments
+     *
+     * @throws Exception
+     *
+     * @return mixed
+     */
+    public static function __callStatic($name, $arguments)
+    {
+        $matches = [];
+        preg_match('/(add|get|delete)([A-Z][a-zA-Z]*?)(?:By(Shopware|Plenty)ID)?$/', $name, $matches);
 
-	/**
-	 * Dispatches a method call to the actual mapping class
-	 *
-	 * @param string $name
-	 * @param array $arguments
-	 * @throws Exception
-	 * @return mixed
-	 */
-	public static function __callStatic($name, $arguments)
-	{
-		$matches = array();
-		preg_match('/(add|get|delete)([A-Z][a-zA-Z]*?)(?:By(Shopware|Plenty)ID)?$/', $name, $matches);
+        if (count($matches) === 3 && $matches[1] === 'add') {
+            $method = 'add';
+        } elseif (count($matches) === 4) {
+            if ($matches[1] === 'get') {
+                $method = sprintf('getBy%sID', $matches[3]);
+            } elseif ($matches[1] === 'delete') {
+                $method = sprintf('deleteBy%sID', $matches[3]);
+            } else {
+                throw new \Exception();
+            }
+        } else {
+            throw new \Exception();
+        }
 
-		if (count($matches) === 3 && $matches[1] === 'add')
-		{
-			$method = 'add';
-		}
-		else if (count($matches) === 4)
-		{
-			if ($matches[1] === 'get')
-			{
-				$method = sprintf('getBy%sID', $matches[3]);
-			}
-			else if ($matches[1] === 'delete')
-			{
-				$method = sprintf('deleteBy%sID', $matches[3]);
-			}
-			else
-			{
-				throw new \Exception();
-			}
-		}
-		else
-		{
-			throw new \Exception();
-		}
+        //
+        $classname = sprintf('PlentymarketsMappingEntity%s', $matches[2]);
 
-		//
-		$classname = sprintf('PlentymarketsMappingEntity%s', $matches[2]);
+        //
 
-		//
+        //
+        $Instance = $classname::getInstance();
 
-		//
-		$Instance = $classname::getInstance();
+        //
+        return call_user_func_array([
+            $Instance,
+            $method,
+        ], $arguments);
+    }
 
-		//
-		return call_user_func_array(array(
-			$Instance,
-			$method
-		), $arguments);
-	}
+    /**
+     * Clears the internal cache.
+     *
+     * @param $entity
+     */
+    public static function clearCache($entity)
+    {
+        $className = sprintf('PlentymarketsMappingEntity%s', $entity);
 
-	/**
-	 * Clears the internal cache
-	 *
-	 * @param $entity
-	 */
-	public static function clearCache($entity)
-	{
-		$className = sprintf('PlentymarketsMappingEntity%s', $entity);
+        /** @var PlentymarketsMappingEntityAbstract $Instance */
+        $Instance = $className::getInstance();
+        $Instance->clearCache();
+    }
 
-		/** @var PlentymarketsMappingEntityAbstract $Instance */
-		$Instance = $className::getInstance();
-		$Instance->clearCache();
-	}
+    /**
+     * Returns the status of each entity.
+     *
+     * @return array
+     */
+    public static function getStatusList()
+    {
+        $resources = [
+            'Currency' => [
+                's_core_currencies',
+                'currency',
+                'currency',
+            ],
+            'MeasureUnit' => [
+                's_core_units',
+                'measure_unit',
+            ],
+            'MethodOfPayment' => [
+                's_core_paymentmeans',
+                'method_of_payment',
+            ],
+            'Vat' => [
+                's_core_tax',
+                'vat',
+            ],
+            'CustomerClass' => [
+                's_core_customergroups',
+                'customer_class',
+            ],
+            'ShippingProfile' => [
+                's_premium_dispatch',
+                'shipping_profile',
+            ],
+            'Country' => [
+                's_core_countries',
+                'country',
+            ],
+            'Shop' => [
+                's_core_shops',
+                'shop',
+            ],
+        ];
 
-	/**
-	 * Returns the status of each entity
-	 *
-	 * @return array
-	 */
-	public static function getStatusList()
-	{
-		$resources = array(
-			'Currency' => array(
-				's_core_currencies',
-				'currency',
-				'currency'
-			),
-			'MeasureUnit' => array(
-				's_core_units',
-				'measure_unit'
-			),
-			'MethodOfPayment' => array(
-				's_core_paymentmeans',
-				'method_of_payment'
-			),
-			'Vat' => array(
-				's_core_tax',
-				'vat'
-			),
-			'CustomerClass' => array(
-				's_core_customergroups',
-				'customer_class'
-			),
-			'ShippingProfile' => array(
-				's_premium_dispatch',
-				'shipping_profile'
-			),
-			'Country' => array(
-				's_core_countries',
-				'country'
-			),
-			'Shop' => array(
-				's_core_shops',
-				'shop'
-			)
-		);
+        $status = [];
 
-		$status = array();
+        foreach ($resources as $resource => $tables) {
+            $id = isset($tables[2]) ? $tables[2] : 'id';
 
-		foreach ($resources as $resource => $tables)
-		{
+            $whereActive = '';
+            if ($tables[0] == 's_core_paymentmeans' ||
+                $tables[0] == 's_premium_dispatch') {
+                $whereActive = ' AND active = 1';
+            }
 
-			$id = isset($tables[2]) ? $tables[2] : 'id';
-			
-			$whereActive = '';
-			if($tables[0] == 's_core_paymentmeans' ||
-				$tables[0] == 's_premium_dispatch')
-			{
-				$whereActive = ' AND active = 1';
-			}
-			
-			if($tables[0] == 's_core_shops')
-			{
-				$whereActive = ' AND active = 1 AND main_id IS NULL ';
-			}
-			
-			$Statement = Shopware()->Db()->prepare('
+            if ($tables[0] == 's_core_shops') {
+                $whereActive = ' AND active = 1 AND main_id IS NULL ';
+            }
+
+            $Statement = Shopware()->Db()->prepare('
 				SELECT
 						COUNT(*) open
-					FROM ' . $tables[0] . '
-					WHERE ' . $id . ' NOT IN (
+					FROM '.$tables[0].'
+					WHERE '.$id.' NOT IN (
 						SELECT shopwareId
-						FROM plenty_mapping_' . $tables[1].'
+						FROM plenty_mapping_'.$tables[1].'
 					)'.$whereActive.';'
-			);
+            );
 
-			try {
-				$Statement->execute();
-	
-				$status[$resource] = array(
-					'name' => $resource,
-					'open' => (integer) $Statement->fetchObject()->open
-				);
-			}
-			catch (Exception $E)
-			{
-				$status[$resource] = array(
-					'name' => $resource,
-					'open' => 1
-				);
-			}
-		}
+            try {
+                $Statement->execute();
 
-		// static since the mapping is not mandatory
-		$status['Referrer'] = array(
-			'name' => 'Referrer',
-			'open' => 0
-		);
+                $status[$resource] = [
+                    'name' => $resource,
+                    'open' => (int) $Statement->fetchObject()->open,
+                ];
+            } catch (Exception $E) {
+                $status[$resource] = [
+                    'name' => $resource,
+                    'open' => 1,
+                ];
+            }
+        }
 
-		$status['OrderStatus'] = array(
-			'name' => 'OrderStatus',
-			'open' => 0
-		);
+        // static since the mapping is not mandatory
+        $status['Referrer'] = [
+            'name' => 'Referrer',
+            'open' => 0,
+        ];
 
-		$status['PaymentStatus'] = array(
-			'name' => 'PaymentStatus',
-			'open' => 0
-		);
-		
-		return $status;
-	}
+        $status['OrderStatus'] = [
+            'name' => 'OrderStatus',
+            'open' => 0,
+        ];
 
-	/**
-	 * Returns the status of a single entity
-	 *
-	 * @param string $entity
-	 * @return array
-	 */
-	public static function getStatusByEntity($entity)
-	{
-		$status = self::getStatusList();
-		return $status[$entity];
-	}
+        $status['PaymentStatus'] = [
+            'name' => 'PaymentStatus',
+            'open' => 0,
+        ];
 
-	/**
-	 * Checks whether the mapping is complete
-	 *
-	 * @return boolean
-	 */
-	public static function isComplete()
-	{
-		foreach (self::getStatusList() as $resource)
-		{
-			if ($resource['open'] > 0)
-			{
-				return false;
-			}
-		}
-		return true;
-	}
+        return $status;
+    }
+
+    /**
+     * Returns the status of a single entity.
+     *
+     * @param string $entity
+     *
+     * @return array
+     */
+    public static function getStatusByEntity($entity)
+    {
+        $status = self::getStatusList();
+
+        return $status[$entity];
+    }
+
+    /**
+     * Checks whether the mapping is complete.
+     *
+     * @return bool
+     */
+    public static function isComplete()
+    {
+        foreach (self::getStatusList() as $resource) {
+            if ($resource['open'] > 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,69 +32,68 @@
  */
 class PlentySoapObject_ContentPage
 {
-	
-	/**
-	 * @var int
-	 */
-	public $ContentPageID;
-	
-	/**
-	 * @var string
-	 */
-	public $Description;
-	
-	/**
-	 * @var string
-	 */
-	public $Description2;
-	
-	/**
-	 * @var boolean
-	 */
-	public $FullTextActive;
-	
-	/**
-	 * @var string
-	 */
-	public $Lang;
-	
-	/**
-	 * @var string
-	 */
-	public $MetaDescription;
-	
-	/**
-	 * @var string
-	 */
-	public $MetaKeywords;
-	
-	/**
-	 * @var string
-	 */
-	public $MetaTitle;
-	
-	/**
-	 * @var string
-	 */
-	public $Name;
-	
-	/**
-	 * @var string
-	 */
-	public $NameURL;
-	
-	/**
-	 * @var int
-	 */
-	public $Position;
-	
-	/**
-	 * @var string
-	 */
-	public $ShortDescription;
-	
-	/**
-	 * @var int
-	 */
-	public $WebstoreID;
+    /**
+     * @var int
+     */
+    public $ContentPageID;
+
+    /**
+     * @var string
+     */
+    public $Description;
+
+    /**
+     * @var string
+     */
+    public $Description2;
+
+    /**
+     * @var bool
+     */
+    public $FullTextActive;
+
+    /**
+     * @var string
+     */
+    public $Lang;
+
+    /**
+     * @var string
+     */
+    public $MetaDescription;
+
+    /**
+     * @var string
+     */
+    public $MetaKeywords;
+
+    /**
+     * @var string
+     */
+    public $MetaTitle;
+
+    /**
+     * @var string
+     */
+    public $Name;
+
+    /**
+     * @var string
+     */
+    public $NameURL;
+
+    /**
+     * @var int
+     */
+    public $Position;
+
+    /**
+     * @var string
+     */
+    public $ShortDescription;
+
+    /**
+     * @var int
+     */
+    public $WebstoreID;
 }

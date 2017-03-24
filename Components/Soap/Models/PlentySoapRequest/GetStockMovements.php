@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,54 +32,53 @@
  */
 class PlentySoapRequest_GetStockMovements
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var int
-	 */
-	public $DateFrom;
-	
-	/**
-	 * @var int
-	 */
-	public $DateTo;
-	
-	/**
-	 * @var boolean
-	 */
-	public $GetIncomingItems;
-	
-	/**
-	 * @var boolean
-	 */
-	public $GetOutgoingItems;
-	
-	/**
-	 * @var boolean
-	 */
-	public $GetStockCorrections;
-	
-	/**
-	 * @var int
-	 */
-	public $Page;
-	
-	/**
-	 * @var int
-	 */
-	public $Reason;
-	
-	/**
-	 * @var string
-	 */
-	public $SKU;
-	
-	/**
-	 * @var int
-	 */
-	public $WarehouseID;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var int
+     */
+    public $DateFrom;
+
+    /**
+     * @var int
+     */
+    public $DateTo;
+
+    /**
+     * @var bool
+     */
+    public $GetIncomingItems;
+
+    /**
+     * @var bool
+     */
+    public $GetOutgoingItems;
+
+    /**
+     * @var bool
+     */
+    public $GetStockCorrections;
+
+    /**
+     * @var int
+     */
+    public $Page;
+
+    /**
+     * @var int
+     */
+    public $Reason;
+
+    /**
+     * @var string
+     */
+    public $SKU;
+
+    /**
+     * @var int
+     */
+    public $WarehouseID;
 }

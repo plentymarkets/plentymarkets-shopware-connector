@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,109 +32,108 @@
  */
 class PlentySoapObject_DeliveryAddress
 {
-	
-	/**
-	 * @var string
-	 */
-	public $AdditionalName;
-	
-	/**
-	 * @var string
-	 */
-	public $City;
-	
-	/**
-	 * @var string
-	 */
-	public $Company;
-	
-	/**
-	 * @var int
-	 */
-	public $CountryID;
-	
-	/**
-	 * @var string
-	 */
-	public $CountryISO2;
-	
-	/**
-	 * @var int
-	 */
-	public $CustomerID;
-	
-	/**
-	 * @var int
-	 */
-	public $DeliveryAddressID;
-	
-	/**
-	 * @var string
-	 */
-	public $Email;
-	
-	/**
-	 * @var string
-	 */
-	public $Evaluation;
-	
-	/**
-	 * @var string
-	 */
-	public $ExternalDeliveryAddressID;
-	
-	/**
-	 * @var string
-	 */
-	public $Fax;
-	
-	/**
-	 * @var string
-	 */
-	public $FirstName;
-	
-	/**
-	 * @var int
-	 */
-	public $FormOfAddress;
-	
-	/**
-	 * @var string
-	 */
-	public $HouseNumber;
-	
-	/**
-	 * @var string
-	 */
-	public $Postident;
-	
-	/**
-	 * @var string
-	 */
-	public $State;
-	
-	/**
-	 * @var string
-	 */
-	public $StateISO;
-	
-	/**
-	 * @var string
-	 */
-	public $Street;
-	
-	/**
-	 * @var string
-	 */
-	public $Surname;
-	
-	/**
-	 * @var string
-	 */
-	public $Telephone;
-	
-	/**
-	 * @var string
-	 */
-	public $ZIP;
+    /**
+     * @var string
+     */
+    public $AdditionalName;
+
+    /**
+     * @var string
+     */
+    public $City;
+
+    /**
+     * @var string
+     */
+    public $Company;
+
+    /**
+     * @var int
+     */
+    public $CountryID;
+
+    /**
+     * @var string
+     */
+    public $CountryISO2;
+
+    /**
+     * @var int
+     */
+    public $CustomerID;
+
+    /**
+     * @var int
+     */
+    public $DeliveryAddressID;
+
+    /**
+     * @var string
+     */
+    public $Email;
+
+    /**
+     * @var string
+     */
+    public $Evaluation;
+
+    /**
+     * @var string
+     */
+    public $ExternalDeliveryAddressID;
+
+    /**
+     * @var string
+     */
+    public $Fax;
+
+    /**
+     * @var string
+     */
+    public $FirstName;
+
+    /**
+     * @var int
+     */
+    public $FormOfAddress;
+
+    /**
+     * @var string
+     */
+    public $HouseNumber;
+
+    /**
+     * @var string
+     */
+    public $Postident;
+
+    /**
+     * @var string
+     */
+    public $State;
+
+    /**
+     * @var string
+     */
+    public $StateISO;
+
+    /**
+     * @var string
+     */
+    public $Street;
+
+    /**
+     * @var string
+     */
+    public $Surname;
+
+    /**
+     * @var string
+     */
+    public $Telephone;
+
+    /**
+     * @var string
+     */
+    public $ZIP;
 }

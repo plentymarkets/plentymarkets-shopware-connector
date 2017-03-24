@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,69 +32,68 @@
  */
 class PlentySoapObject_GetMethodOfPayments
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_integer
-	 */
-	public $ActiveCountriesOfDelivery;
-	
-	/**
-	 * @var float
-	 */
-	public $CostDomesticFlatRateInternal;
-	
-	/**
-	 * @var float
-	 */
-	public $CostDomesticFlatRateWebshop;
-	
-	/**
-	 * @var float
-	 */
-	public $CostDomesticPercentageInternal;
-	
-	/**
-	 * @var float
-	 */
-	public $CostDomesticPercentageWebshop;
-	
-	/**
-	 * @var float
-	 */
-	public $CostForeignFlatRateInternal;
-	
-	/**
-	 * @var float
-	 */
-	public $CostForeignFlatRateWebshop;
-	
-	/**
-	 * @var float
-	 */
-	public $CostForeignPercentageInternal;
-	
-	/**
-	 * @var float
-	 */
-	public $CostForeignPercentageWebshop;
-	
-	/**
-	 * @var int
-	 */
-	public $MethodOfPaymentID;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_integer
-	 */
-	public $Multishops;
-	
-	/**
-	 * @var string
-	 */
-	public $Name;
-	
-	/**
-	 * @var int
-	 */
-	public $Priority;
+    /**
+     * @var ArrayOfPlentysoapobject_integer
+     */
+    public $ActiveCountriesOfDelivery;
+
+    /**
+     * @var float
+     */
+    public $CostDomesticFlatRateInternal;
+
+    /**
+     * @var float
+     */
+    public $CostDomesticFlatRateWebshop;
+
+    /**
+     * @var float
+     */
+    public $CostDomesticPercentageInternal;
+
+    /**
+     * @var float
+     */
+    public $CostDomesticPercentageWebshop;
+
+    /**
+     * @var float
+     */
+    public $CostForeignFlatRateInternal;
+
+    /**
+     * @var float
+     */
+    public $CostForeignFlatRateWebshop;
+
+    /**
+     * @var float
+     */
+    public $CostForeignPercentageInternal;
+
+    /**
+     * @var float
+     */
+    public $CostForeignPercentageWebshop;
+
+    /**
+     * @var int
+     */
+    public $MethodOfPaymentID;
+
+    /**
+     * @var ArrayOfPlentysoapobject_integer
+     */
+    public $Multishops;
+
+    /**
+     * @var string
+     */
+    public $Name;
+
+    /**
+     * @var int
+     */
+    public $Priority;
 }
