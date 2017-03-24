@@ -320,7 +320,7 @@ class ProductResponseParser implements ProductResponseParserInterface
 
             if (isset($priceArray['specialOffer'])) {
                 if ($pseudoPrice === 0.0) {
-                        $pseudoPrice = $price;
+                    $pseudoPrice = $price;
                 }
                 $price = (float) $priceArray['specialOffer']['price'];
             }
