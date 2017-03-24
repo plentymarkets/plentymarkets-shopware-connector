@@ -120,7 +120,7 @@ class PlentymarketsImportItemVariantController
         foreach ($chunks as $chunk) {
             $Request_GetAttributeValueSets->AttributeValueSets = [];
 
-            /**
+            /*
              * Attribute Value Sets abfragen.
              *
              * @var PlentySoapObject_ItemAttributeValueSet
@@ -147,7 +147,7 @@ class PlentymarketsImportItemVariantController
              */
             $Response_GetAttributeValueSets = PlentymarketsSoapClient::getInstance()->GetAttributeValueSets($Request_GetAttributeValueSets);
 
-            /**
+            /*
              * @var PlentySoapObject_AttributeValueSet
              * @var PlentySoapObject_Attribute         $Attribute
              */
