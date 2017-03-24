@@ -1,7 +1,7 @@
 <?php
 /**
  * plentymarkets shopware connector
- * Copyright © 2013 plentymarkets GmbH
+ * Copyright © 2013 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -35,300 +35,286 @@
  */
 class PlentymarketsUtils
 {
+    /**
+     * @var string
+     */
+    const EXTERNAL_ITEM_ID_FORMAT = 'Swag/%u';
 
-	/**
-	 *
-	 * @var string
-	 */
-	const EXTERNAL_ITEM_ID_FORMAT = 'Swag/%u';
+    /**
+     * @var string
+     */
+    const EXTERNAL_CUSTOMER_ID_FORMAT = 'Swag/%u';
 
-	/**
-	 *
-	 * @var string
-	 */
-	const EXTERNAL_CUSTOMER_ID_FORMAT = 'Swag/%u';
+    /**
+     * @var string
+     */
+    const EXTERNAL_ORDER_ID_FORMAT = 'Swag/%u';
 
-	/**
-	 *
-	 * @var string
-	 */
-	const EXTERNAL_ORDER_ID_FORMAT = 'Swag/%u';
+    /**
+     * Generates an external item id.
+     *
+     * @param int $shopwareID
+     *
+     * @return string
+     */
+    public static function getExternalItemID($shopwareID)
+    {
+        return sprintf(self::EXTERNAL_ITEM_ID_FORMAT, (int) $shopwareID);
+    }
 
-	/**
-	 * Generates an external item id
-	 *
-	 * @param integer $shopwareID
-	 * @return string
-	 */
-	public static function getExternalItemID($shopwareID)
-	{
-		return sprintf(self::EXTERNAL_ITEM_ID_FORMAT, (integer) $shopwareID);
-	}
+    /**
+     * Generates an external customer id.
+     *
+     * @param int $shopwareID
+     *
+     * @return string
+     */
+    public static function getExternalCustomerID($shopwareID)
+    {
+        return sprintf(self::EXTERNAL_CUSTOMER_ID_FORMAT, (int) $shopwareID);
+    }
 
-	/**
-	 * Generates an external customer id
-	 *
-	 * @param integer $shopwareID
-	 * @return string
-	 */
-	public static function getExternalCustomerID($shopwareID)
-	{
-		return sprintf(self::EXTERNAL_CUSTOMER_ID_FORMAT, (integer) $shopwareID);
-	}
+    /**
+     * Returns a shopware id from an external plentymarkets id.
+     *
+     * @param string $externalItemID
+     *
+     * @return int
+     */
+    public static function getShopwareIDFromExternalItemID($externalItemID)
+    {
+        list($shopwareID) = sscanf($externalItemID, self::EXTERNAL_ITEM_ID_FORMAT);
 
-	/**
-	 * Returns a shopware id from an external plentymarkets id
-	 *
-	 * @param string $externalItemID
-	 * @return integer
-	 */
-	public static function getShopwareIDFromExternalItemID($externalItemID)
-	{
-		list ($shopwareID) = sscanf($externalItemID, self::EXTERNAL_ITEM_ID_FORMAT);
+        return (int) $shopwareID;
+    }
 
-		return (integer) $shopwareID;
-	}
+    /**
+     * Returns a shopware id from an external plentymarkets id.
+     *
+     * @param string $externalItemID
+     *
+     * @return int
+     */
+    public static function getShopwareIDFromExternalOrderID($externalItemID)
+    {
+        list($shopwareID) = sscanf($externalItemID, self::EXTERNAL_ORDER_ID_FORMAT);
 
-	/**
-	 * Returns a shopware id from an external plentymarkets id
-	 *
-	 * @param string $externalItemID
-	 * @return integer
-	 */
-	public static function getShopwareIDFromExternalOrderID($externalItemID)
-	{
-		list ($shopwareID) = sscanf($externalItemID, self::EXTERNAL_ORDER_ID_FORMAT);
+        return (int) $shopwareID;
+    }
 
-		return (integer) $shopwareID;
-	}
+    /**
+     * Retrieves the plentymarkets version.
+     */
+    public static function checkPlentymarketsVersion()
+    {
+        $timestamp = PlentymarketsConfig::getInstance()->getPlentymarketsVersionTimestamp(0);
+        if ($timestamp < strtotime('- 12 hours')) {
+            $Response = PlentymarketsSoapClient::getInstance()->GetPlentymarketsVersion();
+            PlentymarketsConfig::getInstance()->setPlentymarketsVersion($Response->PlentyVersion);
+            PlentymarketsConfig::getInstance()->setPlentymarketsVersionTimestamp(time());
+        }
+    }
 
-	/**
-	 * Retrieves the plentymarkets version
-	 */
-	public static function checkPlentymarketsVersion()
-	{
-		$timestamp = PlentymarketsConfig::getInstance()->getPlentymarketsVersionTimestamp(0);
-		if ($timestamp < strtotime('- 12 hours'))
-		{
-			$Response = PlentymarketsSoapClient::getInstance()->GetPlentymarketsVersion();
-			PlentymarketsConfig::getInstance()->setPlentymarketsVersion($Response->PlentyVersion);
-			PlentymarketsConfig::getInstance()->setPlentymarketsVersionTimestamp(time());
-		}
-	}
+    /**
+     * Checks whether two arrays are equal.
+     *
+     * @param array $array1
+     * @param array $array2
+     *
+     * @return bool
+     */
+    public static function arraysAreEqual(array $array1, array $array2)
+    {
+        return count(array_diff($array1, $array2)) === 0;
+    }
 
-	/**
-	 * Checks whether two arrays are equal
-	 *
-	 * @param array $array1
-	 * @param array $array2
-	 * @return boolean
-	 */
-	public static function arraysAreEqual(array $array1, array $array2)
-	{
-		return count(array_diff($array1, $array2)) === 0;
-	}
+    /**
+     * Checks whether it's after midnight.
+     *
+     * @return bool
+     */
+    public static function isAfterMidnight()
+    {
+        if (Shopware()->Bootstrap()->issetResource('License')) {
+            $License = Shopware()->License();
 
-	/**
-	 * Checks whether it's after midnight
-	 *
-	 * @return boolean
-	 */
-	public static function isAfterMidnight()
-	{
-		if (Shopware()->Bootstrap()->issetResource('License'))
-		{
-			$License = Shopware()->License();
+            return $License->checkCoreLicense(false);
+        } else {
+            return false;
+        }
+    }
 
-			return $License->checkCoreLicense(false);
-		}
-		else
-		{
-			return false;
-		}
-	}
+    /**
+     * Returns a human readable size.
+     *
+     * @param int $size
+     *
+     * @return string
+     */
+    public static function convertBytes($size)
+    {
+        $unit = ['b', 'kb', 'mb', 'gb', 'tb', 'pb'];
 
-	/**
-	 * Returns a human readable size
-	 *
-	 * @param integer $size
-	 * @return string
-	 */
-	public static function convertBytes($size)
-	{
-		$unit = array('b', 'kb', 'mb', 'gb', 'tb', 'pb');
+        return @round($size / pow(1024, ($i = floor(log($size, 1024)))), 2).' '.$unit[$i];
+    }
 
-		return @round($size / pow(1024, ($i = floor(log($size, 1024)))), 2) . ' ' . $unit[$i];
-	}
+    /**
+     * @var array
+     */
+    protected static $categoryId2ShopId = [];
 
-	/**
-	 *
-	 * @var array
-	 */
-	protected static $categoryId2ShopId = array();
+    /**
+     * Returns an array with shop id for the given category id.
+     *
+     * @param int $categoryId
+     *
+     * @return array
+     */
+    public static function getShopIdByCategoryRootId($categoryId)
+    {
+        if (!isset(self::$categoryId2ShopId[$categoryId])) {
+            $shopIds = [];
+            $shops = Shopware()->Db()->fetchAll('SELECT id FROM s_core_shops WHERE category_id = '.$categoryId);
+            foreach ($shops as $shop) {
+                $shopIds[] = $shop['id'];
+            }
+            self::$categoryId2ShopId[$categoryId] = $shopIds;
+        }
 
-	/**
-	 * Returns an array with shop id for the given category id
-	 *
-	 * @param integer $categoryId
-	 * @return array
-	 */
-	public static function getShopIdByCategoryRootId($categoryId)
-	{
-		if (!isset(self::$categoryId2ShopId[$categoryId]))
-		{
-			$shopIds = array();
-			$shops = Shopware()->Db()->fetchAll('SELECT id FROM s_core_shops WHERE category_id = ' . $categoryId);
-			foreach ($shops as $shop)
-			{
-				$shopIds[] = $shop['id'];
-			}
-			self::$categoryId2ShopId[$categoryId] = $shopIds;
-		}
+        return self::$categoryId2ShopId[$categoryId];
+    }
 
-		return self::$categoryId2ShopId[$categoryId];
-	}
-
-	/**
-	 * Registers the bundle custom modules
-	 *
-	 * @throws Exception
-	 */
-	public static function registerBundleModules()
-	{
-		$plugin = Shopware()->Db()->fetchRow('
+    /**
+     * Registers the bundle custom modules.
+     *
+     * @throws Exception
+     */
+    public static function registerBundleModules()
+    {
+        $plugin = Shopware()->Db()->fetchRow('
 			SELECT
 					source, namespace, id
 				FROM s_core_plugins
 				WHERE name = "SwagBundle"
 		');
 
-		if (!$plugin)
-		{
-			throw new Exception('SwagBundle is not installed');
-		}
+        if (!$plugin) {
+            throw new Exception('SwagBundle is not installed');
+        }
 
-		$path = realpath(
-			Shopware()->AppPath() . '/Plugins/' . $plugin['source'] . '/' . $plugin['namespace'] . '/SwagBundle/Models/'
-		);
+        $path = realpath(
+            Shopware()->AppPath().'/Plugins/'.$plugin['source'].'/'.$plugin['namespace'].'/SwagBundle/Models/'
+        );
 
-		if (!$path)
-		{
-			throw new Exception('SwagBundle is not installed properly');
-		}
+        if (!$path) {
+            throw new Exception('SwagBundle is not installed properly');
+        }
 
-		$path .= DIRECTORY_SEPARATOR;
+        $path .= DIRECTORY_SEPARATOR;
 
-		Shopware()->Loader()->registerNamespace(
-			'Shopware\CustomModels', $path,
-			Enlight_Loader::DEFAULT_SEPARATOR,
-			Enlight_Loader::DEFAULT_EXTENSION,
-			Enlight_Loader::POSITION_PREPEND
-		);
+        Shopware()->Loader()->registerNamespace(
+            'Shopware\CustomModels', $path,
+            Enlight_Loader::DEFAULT_SEPARATOR,
+            Enlight_Loader::DEFAULT_EXTENSION,
+            Enlight_Loader::POSITION_PREPEND
+        );
 
-		//$Loader = Shopware()->Loader();
-		//echo 1;
-	}
+        //$Loader = Shopware()->Loader();
+        //echo 1;
+    }
 
-	/**
-	 * Returns the root category id
-	 *
-	 * @param \Shopware\Models\Category\Category $category
-	 * @return integer
-	 */
-	public static function getRootIdByCategory(Shopware\Models\Category\Category $category)
-	{
-		while ($category->getParentId())
-		{
-			$parent = $category->getParent();
-			if ($parent->getLevel() == 0)
-			{
-				break;
-			}
-			$category = $parent;
-		}
+    /**
+     * Returns the root category id.
+     *
+     * @param \Shopware\Models\Category\Category $category
+     *
+     * @return int
+     */
+    public static function getRootIdByCategory(Shopware\Models\Category\Category $category)
+    {
+        while ($category->getParentId()) {
+            $parent = $category->getParent();
+            if ($parent->getLevel() == 0) {
+                break;
+            }
+            $category = $parent;
+        }
 
-		return $category->getId();
-	}
+        return $category->getId();
+    }
 
-	/**
-	 * @var null|array
-	 */
-	protected static $availability = null;
+    /**
+     * @var null|array
+     */
+    protected static $availability = null;
 
-	/**
-	 * Returns the shipping time
-	 *
-	 * @param $availabilityId
-	 * @return integer|null
-	 */
-	public static function getShippingTimeByAvailabilityId($availabilityId)
-	{
-		if ((integer) $availabilityId <= 0)
-		{
-			return null;
-		}
-		if (!is_array(self::$availability))
-		{
-			self::$availability = PlentymarketsImportController::getItemAvailability();
-		}
+    /**
+     * Returns the shipping time.
+     *
+     * @param $availabilityId
+     *
+     * @return int|null
+     */
+    public static function getShippingTimeByAvailabilityId($availabilityId)
+    {
+        if ((int) $availabilityId <= 0) {
+            return;
+        }
+        if (!is_array(self::$availability)) {
+            self::$availability = PlentymarketsImportController::getItemAvailability();
+        }
 
-		return isset(self::$availability[$availabilityId]) ? self::$availability[$availabilityId] : null;
-	}
-	
-	public static function getShopwareMainShops()
-	{
-		/** @var $shopRepositoryList Shopware\Models\Shop\Repository */
-		$shopRepositoryList = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
-		
-		$shops = $shopRepositoryList->queryBy(array('mainId' => NULL,
-											        'active = 1'))->getResult();
-		
-		return $shops;
-	}
+        return isset(self::$availability[$availabilityId]) ? self::$availability[$availabilityId] : null;
+    }
 
-	/**
-	 * @param $sStreet
-	 * @return array
-	 */
-	public static function extractStreetAndHouseNo($sStreet)
-	{
-		$reqex  = '/(?<ad>(.*?)[\D]{3}[\s,.])(?<no>';
-		$reqex .= '|[0-9]{1,4}[ a-zA-Z-\/\.]{0,6}'; // f.e. "Rosenstr. 14 "
-		$reqex .= '|[0-9]{1,3}[ a-zA-Z-\/\.]{1,6}[0-9]{1,3}[ a-zA-Z-\/\.]{0,6}[0-9]{0,3}[ a-zA-Z-\/\.]{0,6}[0-9]{0,3}'; // f.e. "Straße in Österreich 30/4/12.2"
-		$reqex .= ')$/';
+    public static function getShopwareMainShops()
+    {
+        /** @var $shopRepositoryList Shopware\Models\Shop\Repository */
+        $shopRepositoryList = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
 
-		$regexNo = '/^(?<no>';
-		$regexNo .= '[0-9]+\s*[a-zA-Z]?'; // f.e. "14 B", "14B"
-		$regexNo .= ')$/';
+        $shops = $shopRepositoryList->queryBy(['mainId' => null,
+                                                    'active = 1', ])->getResult();
 
-		$reqex4foreign = '/^(?<no>[0-9]{1,4}([\D]{0,2}([\s]|[^a-zA-Z0-9])))(?<ad>([\D]+))$/';	// f.e. "16 Bellevue Road"
+        return $shops;
+    }
 
-		$sStreet = trim($sStreet);
+    /**
+     * @param $sStreet
+     *
+     * @return array
+     */
+    public static function extractStreetAndHouseNo($sStreet)
+    {
+        $reqex = '/(?<ad>(.*?)[\D]{3}[\s,.])(?<no>';
+        $reqex .= '|[0-9]{1,4}[ a-zA-Z-\/\.]{0,6}'; // f.e. "Rosenstr. 14 "
+        $reqex .= '|[0-9]{1,3}[ a-zA-Z-\/\.]{1,6}[0-9]{1,3}[ a-zA-Z-\/\.]{0,6}[0-9]{0,3}[ a-zA-Z-\/\.]{0,6}[0-9]{0,3}'; // f.e. "Straße in Österreich 30/4/12.2"
+        $reqex .= ')$/';
 
-		if(preg_match($reqex, $sStreet, $machtes) > 0)
-		{
-			// house number is in street
-			$street         = trim($machtes['ad']);
-			$houseNo        = trim($machtes['no']);
-		}
-		else if(preg_match($regexNo,$sStreet,$machtes) > 0)
-		{
-			//only house number is given in steet (e.g "14B" , "14 B")
-			$street = '';
-			$houseNo= trim($machtes['no']);
-		}
-		else if(preg_match($reqex4foreign, $sStreet, $machtes) > 0)
-		{
-			// house number is in street - foreign address
-			$street         = trim($machtes['ad']);
-			$houseNo        = trim($machtes['no']);
-		}
-		else
-		{
-			$street = '';
-			$houseNo = '';
-		}
+        $regexNo = '/^(?<no>';
+        $regexNo .= '[0-9]+\s*[a-zA-Z]?'; // f.e. "14 B", "14B"
+        $regexNo .= ')$/';
 
-		return array('street'=>$street,'houseNo'=>$houseNo);
-	}
+        $reqex4foreign = '/^(?<no>[0-9]{1,4}([\D]{0,2}([\s]|[^a-zA-Z0-9])))(?<ad>([\D]+))$/';    // f.e. "16 Bellevue Road"
+
+        $sStreet = trim($sStreet);
+
+        if (preg_match($reqex, $sStreet, $machtes) > 0) {
+            // house number is in street
+            $street = trim($machtes['ad']);
+            $houseNo = trim($machtes['no']);
+        } elseif (preg_match($regexNo, $sStreet, $machtes) > 0) {
+            //only house number is given in steet (e.g "14B" , "14 B")
+            $street = '';
+            $houseNo = trim($machtes['no']);
+        } elseif (preg_match($reqex4foreign, $sStreet, $machtes) > 0) {
+            // house number is in street - foreign address
+            $street = trim($machtes['ad']);
+            $houseNo = trim($machtes['no']);
+        } else {
+            $street = '';
+            $houseNo = '';
+        }
+
+        return ['street'=>$street, 'houseNo'=>$houseNo];
+    }
 }

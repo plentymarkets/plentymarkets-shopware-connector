@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,29 +32,28 @@
  */
 class PlentySoapResponse_GetEmailTemplate
 {
-	
-	/**
-	 * @var string
-	 */
-	public $EmailBody;
-	
-	/**
-	 * @var string
-	 */
-	public $EmailTitle;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
-	
-	/**
-	 * @var boolean
-	 */
-	public $UseHTML;
+    /**
+     * @var string
+     */
+    public $EmailBody;
+
+    /**
+     * @var string
+     */
+    public $EmailTitle;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
+
+    /**
+     * @var bool
+     */
+    public $UseHTML;
 }
