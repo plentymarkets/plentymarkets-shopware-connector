@@ -1,7 +1,7 @@
 <?php
 /**
  * plentymarkets shopware connector
- * Copyright © 2013 plentymarkets GmbH
+ * Copyright © 2013 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -27,82 +27,75 @@
  */
 
 /**
- * Imports a property option
+ * Imports a property option.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 class PlentymarketsImportEntityItemPropertyOption
 {
+    /**
+     * @var PlentySoapObject_Property
+     */
+    protected $Option;
 
-	/**
-	 *
-	 * @var PlentySoapObject_Property
-	 */
-	protected $Option;
+    /**
+     * I am the contructor.
+     *
+     * @param PlentySoapObject_Property $Group
+     */
+    public function __construct($Option)
+    {
+        $this->Option = $Option;
+    }
 
-	/**
-	 * I am the contructor
-	 *
-	 * @param PlentySoapObject_Property $Group
-	 */
-	public function __construct($Option)
-	{
-		$this->Option = $Option;
-	}
+    /**
+     * @param int $shopID
+     */
+    public function importPropertyTranslation($shopID)
+    {
+        try {
+            $SHOPWARE_id = PlentymarketsMappingController::getPropertyByPlentyID($this->Option->PropertyID);
+            PyLog()->message('Sync:Item:Property:Option', 'Updating the property option translation »'.$this->Option->PropertyFrontendName.'«');
+        } catch (PlentymarketsMappingExceptionNotExistant $E) {
+            PyLog()->message('Sync:Item:Property:Option', 'Skipping the property option translation »'.$this->Option->PropertyFrontendName.'«');
 
-	/**
-	 * @param int $shopID
-	 */
-	public function importPropertyTranslation($shopID)
-	{
-		try
-		{
-			$SHOPWARE_id = PlentymarketsMappingController::getPropertyByPlentyID($this->Option->PropertyID);
-			PyLog()->message('Sync:Item:Property:Option', 'Updating the property option translation »' . $this->Option->PropertyFrontendName . '«');
-		}
-		catch (PlentymarketsMappingExceptionNotExistant $E)
-		{
-			PyLog()->message('Sync:Item:Property:Option', 'Skipping the property option translation »' . $this->Option->PropertyFrontendName . '«');
-			return;
-		}
+            return;
+        }
 
-		if(!is_null($this->Option->PropertyFrontendName))
-		{
-			// save the translation of the property group
-			$propertery_TranslationData = array('optionName' => $this->Option->PropertyFrontendName);
+        if (!is_null($this->Option->PropertyFrontendName)) {
+            // save the translation of the property group
+            $propertery_TranslationData = ['optionName' => $this->Option->PropertyFrontendName];
 
-			$propertyParts = explode(';', $SHOPWARE_id);
-			$optionId = $propertyParts[1];
+            $propertyParts = explode(';', $SHOPWARE_id);
+            $optionId = $propertyParts[1];
 
-			PlentymarketsTranslation::setShopwareTranslation('propertyoption', $optionId, $shopID, $propertery_TranslationData);
-		}
-	}
-	
-	/**
-	 * Does the actual import
-	 */
-	public function import()
-	{
-		try
-		{
-			$SHOPWARE_id = PlentymarketsMappingController::getPropertyByPlentyID($this->Option->PropertyID);
-			PyLog()->message('Sync:Item:Property:Option', 'Updating the property option »' . $this->Option->PropertyFrontendName . '«');
-		}
-		catch (PlentymarketsMappingExceptionNotExistant $E)
-		{
-			PyLog()->message('Sync:Item:Property:Option', 'Skipping the property option »' . $this->Option->PropertyFrontendName . '«');
-			return;
-		}
+            PlentymarketsTranslation::setShopwareTranslation('propertyoption', $optionId, $shopID, $propertery_TranslationData);
+        }
+    }
 
-		$propertyParts = explode(';', $SHOPWARE_id);
-		$optionId = $propertyParts[1];
+    /**
+     * Does the actual import.
+     */
+    public function import()
+    {
+        try {
+            $SHOPWARE_id = PlentymarketsMappingController::getPropertyByPlentyID($this->Option->PropertyID);
+            PyLog()->message('Sync:Item:Property:Option', 'Updating the property option »'.$this->Option->PropertyFrontendName.'«');
+        } catch (PlentymarketsMappingExceptionNotExistant $E) {
+            PyLog()->message('Sync:Item:Property:Option', 'Skipping the property option »'.$this->Option->PropertyFrontendName.'«');
 
-		/** @var Shopware\Models\Property\Option $Option */
-		$Option = Shopware()->Models()->find('Shopware\Models\Property\Option', $optionId);
+            return;
+        }
 
-		// Set the new data
-		$Option->setName($this->Option->PropertyFrontendName);
-		Shopware()->Models()->persist($Option);
-		Shopware()->Models()->flush();
-	}
+        $propertyParts = explode(';', $SHOPWARE_id);
+        $optionId = $propertyParts[1];
+
+        /** @var Shopware\Models\Property\Option $Option */
+        $Option = Shopware()->Models()->find('Shopware\Models\Property\Option', $optionId);
+
+        // Set the new data
+        $Option->setName($this->Option->PropertyFrontendName);
+        Shopware()->Models()->persist($Option);
+        Shopware()->Models()->flush();
+    }
 }

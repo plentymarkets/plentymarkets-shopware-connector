@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,34 +32,33 @@
  */
 class PlentySoapObject_GetMarketItemNumbers
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CountryID;
-	
-	/**
-	 * @var PlentySoapEnumeration_MarketItem
-	 */
-	public $MarketItem;
-	
-	/**
-	 * @var int
-	 */
-	public $MarketItemRowID;
-	
-	/**
-	 * @var string
-	 */
-	public $MarketItemValue;
-	
-	/**
-	 * @var int
-	 */
-	public $Position;
-	
-	/**
-	 * @var string
-	 */
-	public $SKU;
+    /**
+     * @var int
+     */
+    public $CountryID;
+
+    /**
+     * @var PlentySoapEnumeration_MarketItem
+     */
+    public $MarketItem;
+
+    /**
+     * @var int
+     */
+    public $MarketItemRowID;
+
+    /**
+     * @var string
+     */
+    public $MarketItemValue;
+
+    /**
+     * @var int
+     */
+    public $Position;
+
+    /**
+     * @var string
+     */
+    public $SKU;
 }

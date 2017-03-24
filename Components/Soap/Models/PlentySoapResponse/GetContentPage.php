@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,124 +32,123 @@
  */
 class PlentySoapResponse_GetContentPage
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CategoryID;
-	
-	/**
-	 * @var string
-	 */
-	public $Description;
-	
-	/**
-	 * @var string
-	 */
-	public $Description2;
-	
-	/**
-	 * @var int
-	 */
-	public $FullTextActive;
-	
-	/**
-	 * @var int
-	 */
-	public $Image;
-	
-	/**
-	 * @var int
-	 */
-	public $Image2;
-	
-	/**
-	 * @var string
-	 */
-	public $ItemListView;
-	
-	/**
-	 * @var string
-	 */
-	public $Lang;
-	
-	/**
-	 * @var int
-	 */
-	public $LastUpdateTimestamp;
-	
-	/**
-	 * @var string
-	 */
-	public $LastUpdateUser;
-	
-	/**
-	 * @var string
-	 */
-	public $MetaDescription;
-	
-	/**
-	 * @var string
-	 */
-	public $MetaKeywords;
-	
-	/**
-	 * @var string
-	 */
-	public $MetaTitle;
-	
-	/**
-	 * @var string
-	 */
-	public $Name;
-	
-	/**
-	 * @var string
-	 */
-	public $NameURL;
-	
-	/**
-	 * @var string
-	 */
-	public $PageView;
-	
-	/**
-	 * @var int
-	 */
-	public $PlaceholderTranslation;
-	
-	/**
-	 * @var int
-	 */
-	public $Position;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var string
-	 */
-	public $ShortDescription;
-	
-	/**
-	 * @var int
-	 */
-	public $SingleItemView;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
-	
-	/**
-	 * @var int
-	 */
-	public $WebTemplateExist;
-	
-	/**
-	 * @var int
-	 */
-	public $WebstoreID;
+    /**
+     * @var int
+     */
+    public $CategoryID;
+
+    /**
+     * @var string
+     */
+    public $Description;
+
+    /**
+     * @var string
+     */
+    public $Description2;
+
+    /**
+     * @var int
+     */
+    public $FullTextActive;
+
+    /**
+     * @var int
+     */
+    public $Image;
+
+    /**
+     * @var int
+     */
+    public $Image2;
+
+    /**
+     * @var string
+     */
+    public $ItemListView;
+
+    /**
+     * @var string
+     */
+    public $Lang;
+
+    /**
+     * @var int
+     */
+    public $LastUpdateTimestamp;
+
+    /**
+     * @var string
+     */
+    public $LastUpdateUser;
+
+    /**
+     * @var string
+     */
+    public $MetaDescription;
+
+    /**
+     * @var string
+     */
+    public $MetaKeywords;
+
+    /**
+     * @var string
+     */
+    public $MetaTitle;
+
+    /**
+     * @var string
+     */
+    public $Name;
+
+    /**
+     * @var string
+     */
+    public $NameURL;
+
+    /**
+     * @var string
+     */
+    public $PageView;
+
+    /**
+     * @var int
+     */
+    public $PlaceholderTranslation;
+
+    /**
+     * @var int
+     */
+    public $Position;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var string
+     */
+    public $ShortDescription;
+
+    /**
+     * @var int
+     */
+    public $SingleItemView;
+
+    /**
+     * @var bool
+     */
+    public $Success;
+
+    /**
+     * @var int
+     */
+    public $WebTemplateExist;
+
+    /**
+     * @var int
+     */
+    public $WebstoreID;
 }

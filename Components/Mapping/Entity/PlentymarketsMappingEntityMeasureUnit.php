@@ -1,7 +1,7 @@
 <?php
 /**
  * plentymarkets shopware connector
- * Copyright © 2013 plentymarkets GmbH
+ * Copyright © 2013 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -26,7 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * PlentymarketsMappingEntityMeasureUnit provides the actual measure unit mapping functionality.
  * Like the other mapping entities this class is called in PlentymarketsMappingController. This entity
@@ -36,25 +35,24 @@
  */
 class PlentymarketsMappingEntityMeasureUnit extends PlentymarketsMappingEntityAbstract
 {
+    /**
+     * Initializes the data.
+     *
+     * @see PlentymarketsMappingEntityAbstract::init()
+     */
+    protected function init()
+    {
+        parent::init();
+        parent::initData();
+    }
 
-	/**
-	 * Initializes the data
-	 *
-	 * @see PlentymarketsMappingEntityAbstract::init()
-	 */
-	protected function init()
-	{
-		parent::init();
-		parent::initData();
-	}
-
-	/**
-	 * Returns the name of the database table
-	 * 
-	 * @return string
-	 */
-	protected function getName()
-	{
-		return 'plenty_mapping_measure_unit';
-	}
+    /**
+     * Returns the name of the database table.
+     *
+     * @return string
+     */
+    protected function getName()
+    {
+        return 'plenty_mapping_measure_unit';
+    }
 }

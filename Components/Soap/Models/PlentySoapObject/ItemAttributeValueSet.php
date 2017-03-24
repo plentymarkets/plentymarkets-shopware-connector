@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,69 +32,68 @@
  */
 class PlentySoapObject_ItemAttributeValueSet
 {
-	
-	/**
-	 * @var string
-	 */
-	public $ASIN;
-	
-	/**
-	 * @var int
-	 */
-	public $AttributeValueSetID;
-	
-	/**
-	 * @var string
-	 */
-	public $AttributeValueSetName;
-	
-	/**
-	 * @var int
-	 */
-	public $Availability;
-	
-	/**
-	 * @var string
-	 */
-	public $ColliNo;
-	
-	/**
-	 * @var string
-	 */
-	public $EAN;
-	
-	/**
-	 * @var string
-	 */
-	public $EAN2;
-	
-	/**
-	 * @var string
-	 */
-	public $EAN3;
-	
-	/**
-	 * @var string
-	 */
-	public $EAN4;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Oversale;
-	
-	/**
-	 * @var int
-	 */
-	public $PriceID;
-	
-	/**
-	 * @var float
-	 */
-	public $PurchasePrice;
-	
-	/**
-	 * @var float
-	 */
-	public $UVP;
+    /**
+     * @var string
+     */
+    public $ASIN;
+
+    /**
+     * @var int
+     */
+    public $AttributeValueSetID;
+
+    /**
+     * @var string
+     */
+    public $AttributeValueSetName;
+
+    /**
+     * @var int
+     */
+    public $Availability;
+
+    /**
+     * @var string
+     */
+    public $ColliNo;
+
+    /**
+     * @var string
+     */
+    public $EAN;
+
+    /**
+     * @var string
+     */
+    public $EAN2;
+
+    /**
+     * @var string
+     */
+    public $EAN3;
+
+    /**
+     * @var string
+     */
+    public $EAN4;
+
+    /**
+     * @var bool
+     */
+    public $Oversale;
+
+    /**
+     * @var int
+     */
+    public $PriceID;
+
+    /**
+     * @var float
+     */
+    public $PurchasePrice;
+
+    /**
+     * @var float
+     */
+    public $UVP;
 }

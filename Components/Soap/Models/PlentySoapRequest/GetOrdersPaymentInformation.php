@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,24 +32,23 @@
  */
 class PlentySoapRequest_GetOrdersPaymentInformation
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var PlentySoapRequest_ObjectGetOrdersPaymentInformation
-	 */
-	public $GetOrdersPaymentInformation;
-	
-	/**
-	 * @var boolean
-	 */
-	public $GetPaymentInformationByOrderIDs;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_integer
-	 */
-	public $OrderIDs;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var PlentySoapRequest_ObjectGetOrdersPaymentInformation
+     */
+    public $GetOrdersPaymentInformation;
+
+    /**
+     * @var bool
+     */
+    public $GetPaymentInformationByOrderIDs;
+
+    /**
+     * @var ArrayOfPlentysoapobject_integer
+     */
+    public $OrderIDs;
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * plentymarkets shopware connector
- * Copyright © 2013 plentymarkets GmbH
+ * Copyright © 2013 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -26,271 +26,252 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
- * Determines the status of the plugin regarding to the communication with plenty
+ * Determines the status of the plugin regarding to the communication with plenty.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 class PlentymarketsStatus
 {
-	/**
-	 *
-	 * @var PlentymarketsStatus
-	 */
-	protected static $Instance;
+    /**
+     * @var PlentymarketsStatus
+     */
+    protected static $Instance;
 
-	/**
-	 *
-	 * @var boolean
-	 */
-	protected $isConnected = false;
+    /**
+     * @var bool
+     */
+    protected $isConnected = false;
 
-	/**
-	 *
-	 * @var integer
-	 */
-	protected $connectionTimestamp = 0;
+    /**
+     * @var int
+     */
+    protected $connectionTimestamp = 0;
 
-	/**
-	 *
-	 * @var boolean
-	 */
-	protected $isCliWarningLogged = false;
+    /**
+     * @var bool
+     */
+    protected $isCliWarningLogged = false;
 
-	/**
-	 *
-	 * @var boolean
-	 */
-	protected $isRuntimeWarningLogged = false;
+    /**
+     * @var bool
+     */
+    protected $isRuntimeWarningLogged = false;
 
-	/**
-	 *
-	 * @var boolean
-	 */
-	protected $isLicenseWarningLogged = false;
+    /**
+     * @var bool
+     */
+    protected $isLicenseWarningLogged = false;
 
-	/**
-	 * I am the singleton method
-	 *
-	 * @return PlentymarketsStatus
-	 */
-	public static function getInstance()
-	{
-		if (!self::$Instance instanceof self)
-		{
-			self::$Instance = new self();
-		}
-		return self::$Instance;
-	}
+    /**
+     * I am the singleton method.
+     *
+     * @return PlentymarketsStatus
+     */
+    public static function getInstance()
+    {
+        if (!self::$Instance instanceof self) {
+            self::$Instance = new self();
+        }
 
-	/**
-	 * Checks whether the connection to plentymarkets can be established
-	 *
-	 * @return boolean
-	 */
-	public function isConnected()
-	{
-		// The connection is only checked every 10 seconds
-		if ($this->isConnected && $this->connectionTimestamp > time() - 10)
-		{
-			return true;
-		}
+        return self::$Instance;
+    }
 
-		$this->isConnected = false;
+    /**
+     * Checks whether the connection to plentymarkets can be established.
+     *
+     * @return bool
+     */
+    public function isConnected()
+    {
+        // The connection is only checked every 10 seconds
+        if ($this->isConnected && $this->connectionTimestamp > time() - 10) {
+            return true;
+        }
 
-		if (!PlentymarketsConfig::getInstance()->getApiWsdl())
-		{
-			PlentymarketsConfig::getInstance()->erasePlentymarketsVersion();
-			PlentymarketsConfig::getInstance()->setApiLastStatusTimestamp(time());
-			PlentymarketsConfig::getInstance()->setApiStatus(1);
+        $this->isConnected = false;
 
-			return false;
-		}
+        if (!PlentymarketsConfig::getInstance()->getApiWsdl()) {
+            PlentymarketsConfig::getInstance()->erasePlentymarketsVersion();
+            PlentymarketsConfig::getInstance()->setApiLastStatusTimestamp(time());
+            PlentymarketsConfig::getInstance()->setApiStatus(1);
 
-		try
-		{
-			$Response = PlentymarketsSoapClient::getInstance()->GetServerTime();
+            return false;
+        }
 
-			//
-			PlentymarketsConfig::getInstance()->setApiTimestampDeviation(time() - $Response->Timestamp);
-			PlentymarketsConfig::getInstance()->setApiLastStatusTimestamp(time());
-			PlentymarketsConfig::getInstance()->setApiStatus(2);
+        try {
+            $Response = PlentymarketsSoapClient::getInstance()->GetServerTime();
 
-			$this->isConnected = true;
-			$this->connectionTimestamp = time();
+            //
+            PlentymarketsConfig::getInstance()->setApiTimestampDeviation(time() - $Response->Timestamp);
+            PlentymarketsConfig::getInstance()->setApiLastStatusTimestamp(time());
+            PlentymarketsConfig::getInstance()->setApiStatus(2);
 
-			// plenty version
-			PlentymarketsUtils::checkPlentymarketsVersion();
+            $this->isConnected = true;
+            $this->connectionTimestamp = time();
 
-			return true;
-		}
-		catch (Exception $E)
-		{
-			PlentymarketsConfig::getInstance()->setApiTimestampDeviation(0);
-			PlentymarketsConfig::getInstance()->setApiLastStatusTimestamp(time());
-			PlentymarketsConfig::getInstance()->setApiStatus(1);
+            // plenty version
+            PlentymarketsUtils::checkPlentymarketsVersion();
 
-			return false;
-		}
-	}
+            return true;
+        } catch (Exception $E) {
+            PlentymarketsConfig::getInstance()->setApiTimestampDeviation(0);
+            PlentymarketsConfig::getInstance()->setApiLastStatusTimestamp(time());
+            PlentymarketsConfig::getInstance()->setApiStatus(1);
 
-	/**
-	 * Checks whether the settings are completely done
-	 *
-	 * @return boolean
-	 */
-	protected function isSettingsFinished()
-	{
-		$isSettingsFinished = PlentymarketsConfig::getInstance()->isComplete();
-		PlentymarketsConfig::getInstance()->set('IsSettingsFinished', (integer) $isSettingsFinished);
-		return $isSettingsFinished;
-	}
+            return false;
+        }
+    }
 
-	/**
-	 * Checks whether the mappings are completely done
-	 *
-	 * @return boolean
-	 */
-	protected function isMappingFinished()
-	{
-		$isMappingFinished = PlentymarketsMappingController::isComplete();
-		PlentymarketsConfig::getInstance()->set('IsMappingFinished', (integer) $isMappingFinished);
-		return $isMappingFinished;
-	}
+    /**
+     * Checks whether the settings are completely done.
+     *
+     * @return bool
+     */
+    protected function isSettingsFinished()
+    {
+        $isSettingsFinished = PlentymarketsConfig::getInstance()->isComplete();
+        PlentymarketsConfig::getInstance()->set('IsSettingsFinished', (int) $isSettingsFinished);
 
-	/**
-	 * Checks whether the initial exports are completely done
-	 *
-	 * @return boolean
-	 */
-	protected function isExportFinished()
-	{
-		$isExportFinished = PlentymarketsExportController::getInstance()->isComplete();
-		PlentymarketsConfig::getInstance()->set('IsExportFinished', (integer) $isExportFinished);
-		return $isExportFinished;
-	}
+        return $isSettingsFinished;
+    }
 
-	/**
-	 * Checks whether the data integerity is valid
-	 *
-	 * @return boolean
-	 */
-	protected function isDataIntegrityValid()
-	{
-		$isDataIntegrityValid = PlentymarketsDataIntegrityController::getInstance()->isValid();;
-		PlentymarketsConfig::getInstance()->set('IsDataIntegrityValid', (integer) $isDataIntegrityValid);
-		return $isDataIntegrityValid;
-	}
+    /**
+     * Checks whether the mappings are completely done.
+     *
+     * @return bool
+     */
+    protected function isMappingFinished()
+    {
+        $isMappingFinished = PlentymarketsMappingController::isComplete();
+        PlentymarketsConfig::getInstance()->set('IsMappingFinished', (int) $isMappingFinished);
 
-	/**
-	 * Checks whether data may be imported
-	 *
-	 * @return boolean
-	 */
-	public function mayImport()
-	{
-		return $this->isConnected();
-	}
+        return $isMappingFinished;
+    }
 
-	/**
-	 * Checks whether data may be exported
-	 *
-	 * @return boolean
-	 */
-	public function mayExport()
-	{
-		return (
-			// Connection is okay
-			$this->isConnected() &&
+    /**
+     * Checks whether the initial exports are completely done.
+     *
+     * @return bool
+     */
+    protected function isExportFinished()
+    {
+        $isExportFinished = PlentymarketsExportController::getInstance()->isComplete();
+        PlentymarketsConfig::getInstance()->set('IsExportFinished', (int) $isExportFinished);
 
-			// Config is okay
-			$this->isSettingsFinished() &&
+        return $isExportFinished;
+    }
 
-			// Mapping is okay
-			$this->isMappingFinished()  &&
+    /**
+     * Checks whether the data integerity is valid.
+     *
+     * @return bool
+     */
+    protected function isDataIntegrityValid()
+    {
+        $isDataIntegrityValid = PlentymarketsDataIntegrityController::getInstance()->isValid();
+        PlentymarketsConfig::getInstance()->set('IsDataIntegrityValid', (int) $isDataIntegrityValid);
 
-			// Data is fine
-			$this->isDataIntegrityValid()
-		);
-	}
+        return $isDataIntegrityValid;
+    }
 
-	/**
-	 * Checks whether data may be synchronized
-	 *
-	 * @param boolean $checkExtended Perform the extended checks (memory and runtime)
-	 * @return boolean
-	 */
-	public function maySynchronize($checkExtended=true)
-	{
-		// Export has basically the same needs
-		$mayExport = $this->mayExport();
+    /**
+     * Checks whether data may be imported.
+     *
+     * @return bool
+     */
+    public function mayImport()
+    {
+        return $this->isConnected();
+    }
 
-		// Export is okay
-		$isExportFinished = $this->isExportFinished();
+    /**
+     * Checks whether data may be exported.
+     *
+     * @return bool
+     */
+    public function mayExport()
+    {
+        return
+            // Connection is okay
+            $this->isConnected() &&
 
-		// May Synchronize
-		$maySynchronize = $mayExport && $isExportFinished;
+            // Config is okay
+            $this->isSettingsFinished() &&
 
-		// User settings
-		$mayDatexActual = PlentymarketsConfig::getInstance()->getMayDatexUser(0);
+            // Mapping is okay
+            $this->isMappingFinished() &&
 
-		//
-		if (!$maySynchronize)
-		{
-			// Deactivate the sync and remember the setting
-			PlentymarketsConfig::getInstance()->setMayDatex(0);
-			PlentymarketsConfig::getInstance()->setMayDatexActual(0);
-		}
+            // Data is fine
+            $this->isDataIntegrityValid();
+    }
 
-		else
-		{
-			// Remember the setting and activate or deactivate the sync
-			// depending on the user's choice
-			PlentymarketsConfig::getInstance()->setMayDatex(1);
-			PlentymarketsConfig::getInstance()->setMayDatexActual($mayDatexActual);
-		}
+    /**
+     * Checks whether data may be synchronized.
+     *
+     * @param bool $checkExtended Perform the extended checks (memory and runtime)
+     *
+     * @return bool
+     */
+    public function maySynchronize($checkExtended = true)
+    {
+        // Export has basically the same needs
+        $mayExport = $this->mayExport();
 
-		// status vars
-		$isCli = true;
-		$mayRunUnlimited = true;
+        // Export is okay
+        $isExportFinished = $this->isExportFinished();
 
-		// do some extended checks whether the sync may be started
-		if ($checkExtended)
-		{
-			// Check the cli
-			$sapi = php_sapi_name();
-			if ($sapi != 'cli')
-			{
-				$isCli = false;
-				if (!$this->isCliWarningLogged)
-				{
-					PlentymarketsLogger::getInstance()->error('System:PHP', 'The synchronizing processes have to be started with the PHP-CLI (command line interface). You are using »' . $sapi . '«.', 1001);
-					if (isset($_ENV['_']))
-					{
-						PlentymarketsLogger::getInstance()->error('System:PHP', 'The process is handled through »' . $_ENV['_'] . '«.', 1001);
-					}
-					if (isset($_SERVER['HTTP_REFERER']))
-					{
-						PlentymarketsLogger::getInstance()->error('System:PHP', 'The process is called through »' . $_SERVER['HTTP_REFERER'] . '«.', 1001);
-					}
-					$this->isCliWarningLogged = true;
-				}
-			}
+        // May Synchronize
+        $maySynchronize = $mayExport && $isExportFinished;
 
-			// Check the runtime
-			$runtime = ini_get('max_execution_time');
-			if ($runtime > 0)
-			{
-				$mayRunUnlimited = false;
-				if (!$this->isRuntimeWarningLogged)
-				{
-					PlentymarketsLogger::getInstance()->error('System:PHP', 'The synchronizing processes have to be started with unlimited runtime. Your runtime is limited to »' . $runtime . '« seconds.', 1002);
-					$this->isRuntimeWarningLogged = true;
-				}
-			}
-		}
+        // User settings
+        $mayDatexActual = PlentymarketsConfig::getInstance()->getMayDatexUser(0);
 
-		return $maySynchronize && $mayDatexActual && $isCli && $mayRunUnlimited;
-	}
+        //
+        if (!$maySynchronize) {
+            // Deactivate the sync and remember the setting
+            PlentymarketsConfig::getInstance()->setMayDatex(0);
+            PlentymarketsConfig::getInstance()->setMayDatexActual(0);
+        } else {
+            // Remember the setting and activate or deactivate the sync
+            // depending on the user's choice
+            PlentymarketsConfig::getInstance()->setMayDatex(1);
+            PlentymarketsConfig::getInstance()->setMayDatexActual($mayDatexActual);
+        }
+
+        // status vars
+        $isCli = true;
+        $mayRunUnlimited = true;
+
+        // do some extended checks whether the sync may be started
+        if ($checkExtended) {
+            // Check the cli
+            $sapi = php_sapi_name();
+            if ($sapi != 'cli') {
+                $isCli = false;
+                if (!$this->isCliWarningLogged) {
+                    PlentymarketsLogger::getInstance()->error('System:PHP', 'The synchronizing processes have to be started with the PHP-CLI (command line interface). You are using »'.$sapi.'«.', 1001);
+                    if (isset($_ENV['_'])) {
+                        PlentymarketsLogger::getInstance()->error('System:PHP', 'The process is handled through »'.$_ENV['_'].'«.', 1001);
+                    }
+                    if (isset($_SERVER['HTTP_REFERER'])) {
+                        PlentymarketsLogger::getInstance()->error('System:PHP', 'The process is called through »'.$_SERVER['HTTP_REFERER'].'«.', 1001);
+                    }
+                    $this->isCliWarningLogged = true;
+                }
+            }
+
+            // Check the runtime
+            $runtime = ini_get('max_execution_time');
+            if ($runtime > 0) {
+                $mayRunUnlimited = false;
+                if (!$this->isRuntimeWarningLogged) {
+                    PlentymarketsLogger::getInstance()->error('System:PHP', 'The synchronizing processes have to be started with unlimited runtime. Your runtime is limited to »'.$runtime.'« seconds.', 1002);
+                    $this->isRuntimeWarningLogged = true;
+                }
+            }
+        }
+
+        return $maySynchronize && $mayDatexActual && $isCli && $mayRunUnlimited;
+    }
 }

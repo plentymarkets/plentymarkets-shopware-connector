@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,94 +32,93 @@
  */
 class PlentySoapObject_MarketListingEbay
 {
-	
-	/**
-	 * @var float
-	 */
-	public $AcceptMinPreis;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_string
-	 */
-	public $AdditionalOptions;
-	
-	/**
-	 * @var boolean
-	 */
-	public $BestOffer;
-	
-	/**
-	 * @var string
-	 */
-	public $Category1;
-	
-	/**
-	 * @var string
-	 */
-	public $Category2;
-	
-	/**
-	 * @var string
-	 */
-	public $ConditionDescription;
-	
-	/**
-	 * @var int
-	 */
-	public $ConditionId;
-	
-	/**
-	 * @var int
-	 */
-	public $CounterType;
-	
-	/**
-	 * @var int
-	 */
-	public $EbayPlus;
-	
-	/**
-	 * @var int
-	 */
-	public $GalleryDuration;
-	
-	/**
-	 * @var string
-	 */
-	public $GalleryType;
-	
-	/**
-	 * @var int
-	 */
-	public $PartsFitmentListId;
-	
-	/**
-	 * @var boolean
-	 */
-	public $PrivateAuction;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_marketlistingebayproperty
-	 */
-	public $Properties;
-	
-	/**
-	 * @var float
-	 */
-	public $RejectMinPreis;
-	
-	/**
-	 * @var string
-	 */
-	public $ShopCategory1;
-	
-	/**
-	 * @var string
-	 */
-	public $ShopCategory2;
-	
-	/**
-	 * @var string
-	 */
-	public $TransferRRP;
+    /**
+     * @var float
+     */
+    public $AcceptMinPreis;
+
+    /**
+     * @var ArrayOfPlentysoapobject_string
+     */
+    public $AdditionalOptions;
+
+    /**
+     * @var bool
+     */
+    public $BestOffer;
+
+    /**
+     * @var string
+     */
+    public $Category1;
+
+    /**
+     * @var string
+     */
+    public $Category2;
+
+    /**
+     * @var string
+     */
+    public $ConditionDescription;
+
+    /**
+     * @var int
+     */
+    public $ConditionId;
+
+    /**
+     * @var int
+     */
+    public $CounterType;
+
+    /**
+     * @var int
+     */
+    public $EbayPlus;
+
+    /**
+     * @var int
+     */
+    public $GalleryDuration;
+
+    /**
+     * @var string
+     */
+    public $GalleryType;
+
+    /**
+     * @var int
+     */
+    public $PartsFitmentListId;
+
+    /**
+     * @var bool
+     */
+    public $PrivateAuction;
+
+    /**
+     * @var ArrayOfPlentysoapobject_marketlistingebayproperty
+     */
+    public $Properties;
+
+    /**
+     * @var float
+     */
+    public $RejectMinPreis;
+
+    /**
+     * @var string
+     */
+    public $ShopCategory1;
+
+    /**
+     * @var string
+     */
+    public $ShopCategory2;
+
+    /**
+     * @var string
+     */
+    public $TransferRRP;
 }

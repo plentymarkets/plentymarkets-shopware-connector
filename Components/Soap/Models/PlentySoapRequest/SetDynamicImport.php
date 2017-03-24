@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,34 +32,33 @@
  */
 class PlentySoapRequest_SetDynamicImport
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_string
-	 */
-	public $Content;
-	
-	/**
-	 * @var int
-	 */
-	public $Delimiter;
-	
-	/**
-	 * @var int
-	 */
-	public $FormatID;
-	
-	/**
-	 * @var string
-	 */
-	public $FormatName;
-	
-	/**
-	 * @var boolean
-	 */
-	public $OnlyMatching;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_string
+     */
+    public $Content;
+
+    /**
+     * @var int
+     */
+    public $Delimiter;
+
+    /**
+     * @var int
+     */
+    public $FormatID;
+
+    /**
+     * @var string
+     */
+    public $FormatName;
+
+    /**
+     * @var bool
+     */
+    public $OnlyMatching;
 }

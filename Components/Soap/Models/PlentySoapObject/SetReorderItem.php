@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,49 +32,48 @@
  */
 class PlentySoapObject_SetReorderItem
 {
-	
-	/**
-	 * @var boolean
-	 */
-	public $Cancel;
-	
-	/**
-	 * @var float
-	 */
-	public $DeliveredQuantity;
-	
-	/**
-	 * @var string
-	 */
-	public $DeliveryNumber;
-	
-	/**
-	 * @var float
-	 */
-	public $IntakeQuantity;
-	
-	/**
-	 * @var float
-	 */
-	public $PurchasePrice;
-	
-	/**
-	 * @var float
-	 */
-	public $Quantity;
-	
-	/**
-	 * @var int
-	 */
-	public $ReorderItemId;
-	
-	/**
-	 * @var string
-	 */
-	public $SKU;
-	
-	/**
-	 * @var int
-	 */
-	public $StorageLocationID;
+    /**
+     * @var bool
+     */
+    public $Cancel;
+
+    /**
+     * @var float
+     */
+    public $DeliveredQuantity;
+
+    /**
+     * @var string
+     */
+    public $DeliveryNumber;
+
+    /**
+     * @var float
+     */
+    public $IntakeQuantity;
+
+    /**
+     * @var float
+     */
+    public $PurchasePrice;
+
+    /**
+     * @var float
+     */
+    public $Quantity;
+
+    /**
+     * @var int
+     */
+    public $ReorderItemId;
+
+    /**
+     * @var string
+     */
+    public $SKU;
+
+    /**
+     * @var int
+     */
+    public $StorageLocationID;
 }

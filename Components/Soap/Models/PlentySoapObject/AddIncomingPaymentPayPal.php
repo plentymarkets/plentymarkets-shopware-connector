@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,39 +32,38 @@
  */
 class PlentySoapObject_AddIncomingPaymentPayPal
 {
-	
-	/**
-	 * @var string
-	 */
-	public $ItemBuyer;
-	
-	/**
-	 * @var string
-	 */
-	public $ItemNumber;
-	
-	/**
-	 * @var string
-	 */
-	public $Memo;
-	
-	/**
-	 * @var int
-	 */
-	public $PaymentID;
-	
-	/**
-	 * @var int
-	 */
-	public $PaymentPayPalID;
-	
-	/**
-	 * @var string
-	 */
-	public $ShippingAddress;
-	
-	/**
-	 * @var string
-	 */
-	public $TransactionType;
+    /**
+     * @var string
+     */
+    public $ItemBuyer;
+
+    /**
+     * @var string
+     */
+    public $ItemNumber;
+
+    /**
+     * @var string
+     */
+    public $Memo;
+
+    /**
+     * @var int
+     */
+    public $PaymentID;
+
+    /**
+     * @var int
+     */
+    public $PaymentPayPalID;
+
+    /**
+     * @var string
+     */
+    public $ShippingAddress;
+
+    /**
+     * @var string
+     */
+    public $TransactionType;
 }
