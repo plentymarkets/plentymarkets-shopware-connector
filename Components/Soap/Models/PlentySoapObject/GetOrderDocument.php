@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,49 +32,48 @@
  */
 class PlentySoapObject_GetOrderDocument
 {
-	
-	/**
-	 * @var int
-	 */
-	public $DocumentCreated;
-	
-	/**
-	 * @var int
-	 */
-	public $DocumentDisplayDate;
-	
-	/**
-	 * @var int
-	 */
-	public $DocumentID;
-	
-	/**
-	 * @var string
-	 */
-	public $DocumentNumber;
-	
-	/**
-	 * @var string
-	 */
-	public $DocumentType;
-	
-	/**
-	 * @var int
-	 */
-	public $DocumentUpdated;
-	
-	/**
-	 * @var int
-	 */
-	public $DocumentUserID;
-	
-	/**
-	 * @var int
-	 */
-	public $OrderID;
-	
-	/**
-	 * @var PlentySoapObject_FileBase64Encoded
-	 */
-	public $base64Data;
+    /**
+     * @var int
+     */
+    public $DocumentCreated;
+
+    /**
+     * @var int
+     */
+    public $DocumentDisplayDate;
+
+    /**
+     * @var int
+     */
+    public $DocumentID;
+
+    /**
+     * @var string
+     */
+    public $DocumentNumber;
+
+    /**
+     * @var string
+     */
+    public $DocumentType;
+
+    /**
+     * @var int
+     */
+    public $DocumentUpdated;
+
+    /**
+     * @var int
+     */
+    public $DocumentUserID;
+
+    /**
+     * @var int
+     */
+    public $OrderID;
+
+    /**
+     * @var PlentySoapObject_FileBase64Encoded
+     */
+    public $base64Data;
 }

@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,49 +32,48 @@
  */
 class PlentySoapObject_ItemStock
 {
-	
-	/**
-	 * @var boolean
-	 */
-	public $ChangeAvailablePositiveStock;
-	
-	/**
-	 * @var boolean
-	 */
-	public $ChangeAvailablePositiveStockVariant;
-	
-	/**
-	 * @var boolean
-	 */
-	public $ChangeNotAvailableNoStock;
-	
-	/**
-	 * @var boolean
-	 */
-	public $ChangeNotAvailableNoStockVariant;
-	
-	/**
-	 * @var int
-	 */
-	public $Limitation;
-	
-	/**
-	 * @var int
-	 */
-	public $MainWarehouseID;
-	
-	/**
-	 * @var int
-	 */
-	public $StorageLocation;
-	
-	/**
-	 * @var boolean
-	 */
-	public $WebshopInvisibleNoStock;
-	
-	/**
-	 * @var boolean
-	 */
-	public $WebshopVisiblePositiveStock;
+    /**
+     * @var bool
+     */
+    public $ChangeAvailablePositiveStock;
+
+    /**
+     * @var bool
+     */
+    public $ChangeAvailablePositiveStockVariant;
+
+    /**
+     * @var bool
+     */
+    public $ChangeNotAvailableNoStock;
+
+    /**
+     * @var bool
+     */
+    public $ChangeNotAvailableNoStockVariant;
+
+    /**
+     * @var int
+     */
+    public $Limitation;
+
+    /**
+     * @var int
+     */
+    public $MainWarehouseID;
+
+    /**
+     * @var int
+     */
+    public $StorageLocation;
+
+    /**
+     * @var bool
+     */
+    public $WebshopInvisibleNoStock;
+
+    /**
+     * @var bool
+     */
+    public $WebshopVisiblePositiveStock;
 }

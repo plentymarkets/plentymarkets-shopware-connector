@@ -1,7 +1,7 @@
 <?php
 /**
  * plentymarkets shopware connector
- * Copyright © 2013 plentymarkets GmbH
+ * Copyright © 2013 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -26,54 +26,48 @@
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
- * Controller for the item bundles
+ * Controller for the item bundles.
  *
  * Class PlentymarketsExportControllerItemBundle
  */
 class PlentymarketsExportControllerItemBundle
 {
-	/**
-	 * Registers the bundle modules
-	 */
-	public function __construct()
-	{
-		PlentymarketsUtils::registerBundleModules();
-	}
+    /**
+     * Registers the bundle modules.
+     */
+    public function __construct()
+    {
+        PlentymarketsUtils::registerBundleModules();
+    }
 
-	/**
-	 * Runs the actual export
-	 */
-	public function run()
-	{
-		$repository = Shopware()->Models()->getRepository('Shopware\CustomModels\Bundle\Bundle');
+    /**
+     * Runs the actual export.
+     */
+    public function run()
+    {
+        $repository = Shopware()->Models()->getRepository('Shopware\CustomModels\Bundle\Bundle');
 
-		/** @var Shopware\CustomModels\Bundle\Bundle $bundle */
-		foreach ($repository->findAll() as $bundle)
-		{
-			try
-			{
-				PlentymarketsMappingController::getItemBundleByShopwareID($bundle->getId());
-				continue;
-			}
-			catch (PlentymarketsMappingExceptionNotExistant $e)
-			{
+        /** @var Shopware\CustomModels\Bundle\Bundle $bundle */
+        foreach ($repository->findAll() as $bundle) {
+            try {
+                PlentymarketsMappingController::getItemBundleByShopwareID($bundle->getId());
+                continue;
+            } catch (PlentymarketsMappingExceptionNotExistant $e) {
+            }
 
-			}
+            $exportEntityItemBundle = new PlentymarketsExportEntityItemBundle($bundle);
+            $exportEntityItemBundle->export();
+        }
+    }
 
-			$exportEntityItemBundle = new PlentymarketsExportEntityItemBundle($bundle);
-			$exportEntityItemBundle->export();
-		}
-	}
-
-	/**
-	 * Checks whether the export is finished
-	 *
-	 * @return boolean
-	 */
-	public function isFinished()
-	{
-		return true;
-	}
+    /**
+     * Checks whether the export is finished.
+     *
+     * @return bool
+     */
+    public function isFinished()
+    {
+        return true;
+    }
 }

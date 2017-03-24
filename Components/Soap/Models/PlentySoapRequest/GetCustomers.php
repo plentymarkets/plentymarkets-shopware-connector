@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,124 +32,123 @@
  */
 class PlentySoapRequest_GetCustomers
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var int
-	 */
-	public $CountryID;
-	
-	/**
-	 * @var int
-	 */
-	public $CreatedFrom;
-	
-	/**
-	 * @var int
-	 */
-	public $CreatedTill;
-	
-	/**
-	 * @var int
-	 */
-	public $CustomerClassID;
-	
-	/**
-	 * @var int
-	 */
-	public $CustomerID;
-	
-	/**
-	 * @var string
-	 */
-	public $CustomerNumber;
-	
-	/**
-	 * @var string
-	 */
-	public $Email;
-	
-	/**
-	 * @var string
-	 */
-	public $ExternalCustomerID;
-	
-	/**
-	 * @var boolean
-	 */
-	public $GetCustomerBankData;
-	
-	/**
-	 * @var boolean
-	 */
-	public $IsBlocked;
-	
-	/**
-	 * @var string
-	 */
-	public $Lang;
-	
-	/**
-	 * @var int
-	 */
-	public $LastOrderFrom;
-	
-	/**
-	 * @var int
-	 */
-	public $LastOrderTo;
-	
-	/**
-	 * @var int
-	 */
-	public $LastUpdateFrom;
-	
-	/**
-	 * @var int
-	 */
-	public $LastUpdateTill;
-	
-	/**
-	 * @var int
-	 */
-	public $Newsletter;
-	
-	/**
-	 * @var int
-	 */
-	public $Page;
-	
-	/**
-	 * @var string
-	 */
-	public $Postident;
-	
-	/**
-	 * @var int
-	 */
-	public $ResponsibleID;
-	
-	/**
-	 * @var string
-	 */
-	public $SearchString;
-	
-	/**
-	 * @var int
-	 */
-	public $StoreID;
-	
-	/**
-	 * @var string
-	 */
-	public $Type;
-	
-	/**
-	 * @var string
-	 */
-	public $ZIP;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var int
+     */
+    public $CountryID;
+
+    /**
+     * @var int
+     */
+    public $CreatedFrom;
+
+    /**
+     * @var int
+     */
+    public $CreatedTill;
+
+    /**
+     * @var int
+     */
+    public $CustomerClassID;
+
+    /**
+     * @var int
+     */
+    public $CustomerID;
+
+    /**
+     * @var string
+     */
+    public $CustomerNumber;
+
+    /**
+     * @var string
+     */
+    public $Email;
+
+    /**
+     * @var string
+     */
+    public $ExternalCustomerID;
+
+    /**
+     * @var bool
+     */
+    public $GetCustomerBankData;
+
+    /**
+     * @var bool
+     */
+    public $IsBlocked;
+
+    /**
+     * @var string
+     */
+    public $Lang;
+
+    /**
+     * @var int
+     */
+    public $LastOrderFrom;
+
+    /**
+     * @var int
+     */
+    public $LastOrderTo;
+
+    /**
+     * @var int
+     */
+    public $LastUpdateFrom;
+
+    /**
+     * @var int
+     */
+    public $LastUpdateTill;
+
+    /**
+     * @var int
+     */
+    public $Newsletter;
+
+    /**
+     * @var int
+     */
+    public $Page;
+
+    /**
+     * @var string
+     */
+    public $Postident;
+
+    /**
+     * @var int
+     */
+    public $ResponsibleID;
+
+    /**
+     * @var string
+     */
+    public $SearchString;
+
+    /**
+     * @var int
+     */
+    public $StoreID;
+
+    /**
+     * @var string
+     */
+    public $Type;
+
+    /**
+     * @var string
+     */
+    public $ZIP;
 }

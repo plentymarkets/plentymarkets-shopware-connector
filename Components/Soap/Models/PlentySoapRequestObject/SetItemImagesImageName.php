@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,24 +32,23 @@
  */
 class PlentySoapRequestObject_SetItemImagesImageName
 {
-	
-	/**
-	 * @var string
-	 */
-	public $AlternativeText;
-	
-	/**
-	 * @var boolean
-	 */
-	public $DeleteName;
-	
-	/**
-	 * @var string
-	 */
-	public $Lang;
-	
-	/**
-	 * @var string
-	 */
-	public $Name;
+    /**
+     * @var string
+     */
+    public $AlternativeText;
+
+    /**
+     * @var bool
+     */
+    public $DeleteName;
+
+    /**
+     * @var string
+     */
+    public $Lang;
+
+    /**
+     * @var string
+     */
+    public $Name;
 }

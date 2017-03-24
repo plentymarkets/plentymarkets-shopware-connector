@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,44 +32,43 @@
  */
 class PlentySoapRequestObject_GetListings
 {
-	
-	/**
-	 * @var int
-	 */
-	public $EndTime;
-	
-	/**
-	 * @var string
-	 */
-	public $ExternalID;
-	
-	/**
-	 * @var int
-	 */
-	public $LastUpdate;
-	
-	/**
-	 * @var int
-	 */
-	public $ListingID;
-	
-	/**
-	 * @var string
-	 */
-	public $ListingStatus;
-	
-	/**
-	 * @var int
-	 */
-	public $MarketID;
-	
-	/**
-	 * @var string
-	 */
-	public $MarketName;
-	
-	/**
-	 * @var int
-	 */
-	public $StartTime;
+    /**
+     * @var int
+     */
+    public $EndTime;
+
+    /**
+     * @var string
+     */
+    public $ExternalID;
+
+    /**
+     * @var int
+     */
+    public $LastUpdate;
+
+    /**
+     * @var int
+     */
+    public $ListingID;
+
+    /**
+     * @var string
+     */
+    public $ListingStatus;
+
+    /**
+     * @var int
+     */
+    public $MarketID;
+
+    /**
+     * @var string
+     */
+    public $MarketName;
+
+    /**
+     * @var int
+     */
+    public $StartTime;
 }
