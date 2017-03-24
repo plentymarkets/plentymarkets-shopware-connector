@@ -89,7 +89,7 @@ class PlentymarketsImportEntityItemAttribute
 
         PlentymarketsTranslation::setShopwareTranslation('configuratorgroup', $SHOPWARE_attributeId, $languageShopId, $attr_translationData);
 
-        /**
+        /*
          * @var PlentySoapObject_GetItemAttributesAttributeValue
          */
         foreach ($this->Attribute->Values->item as $plentyAttributeValue) {
@@ -158,7 +158,7 @@ class PlentymarketsImportEntityItemAttribute
             return;
         }
 
-        /**
+        /*
          * @var PlentySoapObject_GetItemAttributesAttributeValue
          * @var Shopware\Models\Article\Configurator\Option      $Option
          */
