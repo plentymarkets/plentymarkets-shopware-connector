@@ -1021,8 +1021,22 @@ class PlentymarketsImportEntityItem
                         $VariantController->getMarkupByVariantId($variantId),
                         $VariantController->getReferencePriceByVaraintId($variantId)
 					);
+					
+					$prices = $PlentymarketsImportEntityItemPrice->getPrices();
+					
+					// BOF - Allow plugins to change the data before saving
+					$prices = Enlight()->Events()->filter(
+						'PlentyConnector_ImportEntityItemPrice_BeforeSavePrice',
+						$prices,
+						array(
+							'subject' => $this,
+							'number' => $variant['number'],
+							'ean' => $variant['ean']
+						)
+					);
+					// EOF - Allow plugins to change the data before saving
 
-					$variant['prices'] = $PlentymarketsImportEntityItemPrice->getPrices();
+					$variant['prices'] = $prices;					
                     $variant['purchasePrice'] = $VariantController->getPurchasePriceByVariantId($variantId);
 
                     // use purchase price from main product instead
@@ -1282,7 +1296,21 @@ class PlentymarketsImportEntityItem
                         $VariantController->getReferencePriceByVaraintId($variantId)
                     );
 
-                    $variant['prices'] = $PlentymarketsImportEntityItemPrice->getPrices();
+                    $prices = $PlentymarketsImportEntityItemPrice->getPrices();
+					
+					// BOF - Allow plugins to change the data before saving
+					$prices = Enlight()->Events()->filter(
+						'PlentyConnector_ImportEntityItemPrice_BeforeSavePrice',
+						$prices,
+						array(
+							'subject' => $this,
+							'number' => $variant['number'],
+							'ean' => $variant['ean']
+						)
+					);
+					// EOF - Allow plugins to change the data before saving
+
+					$variant['prices'] = $prices;
                     $variant['purchasePrice'] = $VariantController->getPurchasePriceByVariantId($variantId);
 
                     // use purchase price from main product instead
