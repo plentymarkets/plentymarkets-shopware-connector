@@ -1,7 +1,7 @@
 <?php
 /**
  * plentymarkets shopware connector
- * Copyright © 2013 plentymarkets GmbH
+ * Copyright © 2013 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -33,151 +33,148 @@
  */
 class PlentymarketsImportItemHelper
 {
+    /**
+     * @var int
+     */
+    protected static $numbersCreated = 0;
 
-	/**
-	 *
-	 * @var integer
-	 */
-	protected static $numbersCreated = 0;
+    /**
+     * Checks whether the item number is existant.
+     *
+     * @param string $number
+     *
+     * @return bool
+     */
+    public static function isNumberExistant($number)
+    {
+        $filter = [
+            'number' => $number,
+        ];
 
-	/**
-	 * Checks whether the item number is existant
-	 *
-	 * @param string $number
-	 * @return boolean
-	 */
-	public static function isNumberExistant($number)
-	{
-		$filter = array(
-			'number' => $number
-		);
+        $detail = Shopware()->Models()
+            ->getRepository('Shopware\Models\Article\Detail')
+            ->findOneBy($filter);
 
-		$detail = Shopware()->Models()
-			->getRepository('Shopware\Models\Article\Detail')
-			->findOneBy($filter);
+        return !empty($detail);
+    }
 
-		return !empty($detail);
-	}
+    /**
+     * Checks whether the item number is from the given item id.
+     *
+     * @param string $number
+     * @param int    $id
+     *
+     * @return bool
+     */
+    public static function isNumberExistantItem($number, $id = null)
+    {
+        $filter = [
+            'number' => $number,
+        ];
 
-	/**
-	 * Checks whether the item number is from the given item id
-	 *
-	 * @param string $number
-	 * @param integer $id
-	 * @return boolean
-	 */
-	public static function isNumberExistantItem($number, $id=null)
-	{
-		$filter = array(
-			'number' => $number
-		);
+        if ($id) {
+            $filter['articleId'] = $id;
+        }
 
-		if ($id)
-		{
-			$filter['articleId'] = $id;
-		}
+        $detail = Shopware()->Models()
+            ->getRepository('Shopware\Models\Article\Detail')
+            ->findOneBy($filter);
 
-		$detail = Shopware()->Models()
-			->getRepository('Shopware\Models\Article\Detail')
-			->findOneBy($filter);
+        return !empty($detail);
+    }
 
-		return !empty($detail);
-	}
+    /**
+     * Checks whether the item number is from the given detail.
+     *
+     * @param string $number
+     * @param int    $id
+     *
+     * @return bool
+     */
+    public static function isNumberExistantVariant($number, $id = null)
+    {
+        $filter = [
+            'number' => $number,
+        ];
 
-	/**
-	 * Checks whether the item number is from the given detail
-	 *
-	 * @param string $number
-	 * @param integer $id
-	 * @return boolean
-	 */
-	public static function isNumberExistantVariant($number, $id=null)
-	{
-		$filter = array(
-			'number' => $number
-		);
+        if ($id) {
+            $filter['id'] = $id;
+        }
 
-		if ($id)
-		{
-			$filter['id'] = $id;
-		}
+        $detail = Shopware()->Models()
+            ->getRepository('Shopware\Models\Article\Detail')
+            ->findOneBy($filter);
 
-		$detail = Shopware()->Models()
-			->getRepository('Shopware\Models\Article\Detail')
-			->findOneBy($filter);
+        return !empty($detail);
+    }
 
-		return !empty($detail);
-	}
+    /**
+     * Returns a generated item number.
+     *
+     * @return string
+     */
+    public static function getItemNumber()
+    {
+        $prefix = Shopware()->Config()->backendAutoOrderNumberPrefix;
 
-	/**
-	 * Returns a generated item number
-	 *
-	 * @return string
-	 */
-	public static function getItemNumber()
-	{
-		$prefix = Shopware()->Config()->backendAutoOrderNumberPrefix;
+        $sql = "SELECT number FROM s_order_number WHERE name = 'articleordernumber'";
+        $number = Shopware()->Db()->fetchOne($sql);
+        $number += self::$numbersCreated;
 
-		$sql = "SELECT number FROM s_order_number WHERE name = 'articleordernumber'";
-		$number = Shopware()->Db()->fetchOne($sql);
-		$number += self::$numbersCreated;
+        do {
+            ++$number;
+            ++self::$numbersCreated;
 
-		do
-		{
-			++$number;
-			++self::$numbersCreated;
+            $sql = 'SELECT id FROM s_articles_details WHERE ordernumber LIKE ?';
+            $hit = Shopware()->Db()->fetchOne($sql, $prefix.$number);
+        } while ($hit);
 
-			$sql = "SELECT id FROM s_articles_details WHERE ordernumber LIKE ?";
-			$hit = Shopware()->Db()->fetchOne($sql, $prefix . $number);
-		}
-		while ($hit);
+        Shopware()->Db()->query("UPDATE s_order_number SET number = ? WHERE name = 'articleordernumber'", [
+            $number,
+        ]);
 
-		Shopware()->Db()->query("UPDATE s_order_number SET number = ? WHERE name = 'articleordernumber'", array(
-			$number
-		));
+        return $prefix.$number;
+    }
 
-		return $prefix . $number;
-	}
+    /**
+     * Returns a usable item number.
+     *
+     * @param string $number
+     *
+     * @return string
+     */
+    public static function getUsableNumber($number)
+    {
+        if (!empty($number) && !self::isNumberExistant($number)) {
+            return $number;
+        }
 
-	/**
-	 * Returns a usable item number
-	 *
-	 * @param string $number
-	 * @return string
-	 */
-	public static function getUsableNumber($number)
-	{
-		if (!empty($number) && !self::isNumberExistant($number))
-		{
-			return $number;
-		}
-		return self::getItemNumber();
-	}
+        return self::getItemNumber();
+    }
 
-	/**
-	 * Checks whether the number is valid
-	 *
-	 * @param string $number
-	 * @return boolean
-	 */
-	public static function isNumberValid($number)
-	{
-		if (strlen($number) < 3 || strlen($number) > 40)
-		{
-			return false;
-		}
+    /**
+     * Checks whether the number is valid.
+     *
+     * @param string $number
+     *
+     * @return bool
+     */
+    public static function isNumberValid($number)
+    {
+        if (strlen($number) < 3 || strlen($number) > 40) {
+            return false;
+        }
 
-		if (version_compare(Shopware::VERSION, '5.0.2', '>=')) {
-			$regex = '/[^a-zA-Z0-9\-\_\.]/';
-		} else {
-			$regex = '/[^a-zA-Z0-9\.\-_ \/]/';
-		}
+        if (version_compare(Shopware::VERSION, '5.0.2', '>=')) {
+            $regex = '/[^a-zA-Z0-9\-\_\.]/';
+        } else {
+            $regex = '/[^a-zA-Z0-9\.\-_ \/]/';
+        }
 
-		if (preg_match($regex, $number))
-		{
-			return false;
-		}
+        if (preg_match($regex, $number)) {
+            return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 }

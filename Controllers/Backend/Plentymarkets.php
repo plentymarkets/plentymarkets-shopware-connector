@@ -1,7 +1,7 @@
 <?php
 /**
  * plentymarkets shopware connector
- * Copyright © 2013 plentymarkets GmbH
+ * Copyright © 2013 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -26,7 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * This class is a main plentymarkets backend action controller. This controller processes all kinds of backend actions
  * of the plentymarkets plugin like saving the settings or loading different kinds of data.
@@ -36,7 +35,7 @@
 class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Backend_ExtJs implements \Shopware\Components\CSRFWhitelistAware
 {
     /**
-     * Returns a list with actions which should not be validated for CSRF protection
+     * Returns a list with actions which should not be validated for CSRF protection.
      *
      * @return string[]
      */
@@ -69,1003 +68,933 @@ class Shopware_Controllers_Backend_Plentymarkets extends Shopware_Controllers_Ba
             'getProducerList',
             'testApiCredentials',
             'syncItem',
-            'fixEmptyItemDetailNumber'
+            'fixEmptyItemDetailNumber',
         ];
     }
 
-	/**
-	 * Runs an cleanup action
-	 */
-	public function runCleanupActionAction()
-	{
+    /**
+     * Runs an cleanup action.
+     */
+    public function runCleanupActionAction()
+    {
+        switch ($this->Request()->get('entity')) {
+            case PlentymarketsGarbageCollector::ACTION_PROPERTIES:
+                PlentymarketsGarbageCollector::getInstance()->run(
+                    PlentymarketsGarbageCollector::ACTION_PROPERTIES
+                );
+                break;
 
-		switch ($this->Request()->get('entity'))
-		{
-			case PlentymarketsGarbageCollector::ACTION_PROPERTIES:
-				PlentymarketsGarbageCollector::getInstance()->run(
-					PlentymarketsGarbageCollector::ACTION_PROPERTIES
-				);
-				break;
+            case PlentymarketsGarbageCollector::ACTION_MAPPING:
+                PlentymarketsGarbageCollector::getInstance()->run(
+                    PlentymarketsGarbageCollector::ACTION_MAPPING
+                );
+                break;
 
-			case PlentymarketsGarbageCollector::ACTION_MAPPING:
-				PlentymarketsGarbageCollector::getInstance()->run(
-					PlentymarketsGarbageCollector::ACTION_MAPPING
-				);
-				break;
+        }
 
-		}
+        $this->View()->assign([
+            'success' => true,
+        ]);
+    }
 
-		$this->View()->assign(array(
-			'success' => true
-		));
-	}
+    /**
+     * Deleted a page of corrupt data.
+     */
+    public function deleteDataIntegrityInvalidDataAction()
+    {
+        $Check = PlentymarketsDataIntegrityController::getInstance()->getCheck($this->Request()->get('type'));
+        $Check->deleteInvalidData(
+            $this->Request()->get('start'),
+            $this->Request()->get('limit')
+        );
 
+        // Cleanup
+        PlentymarketsGarbageCollector::getInstance()->run(
+            PlentymarketsGarbageCollector::ACTION_MAPPING
+        );
 
-	/**
-	 * Deleted a page of corrupt data
-	 */
-	public function deleteDataIntegrityInvalidDataAction()
-	{
+        $this->View()->assign([
+            'success' => true,
+        ]);
+    }
 
-		$Check = PlentymarketsDataIntegrityController::getInstance()->getCheck($this->Request()->get('type'));
-		$Check->deleteInvalidData(
-			$this->Request()->get('start'),
-			$this->Request()->get('limit')
-		);
+    /**
+     * Returns the list of integrity checks.
+     */
+    public function getDataIntegrityInvalidListAction()
+    {
+        $Checks = PlentymarketsDataIntegrityController::getInstance()->getChecks();
+        $data = [];
+        foreach ($Checks as $Check) {
+            $data[] = [
+                'name'   => $Check->getName(),
+                'fields' => $Check->getFields(),
+            ];
+        }
 
-		// Cleanup
-		PlentymarketsGarbageCollector::getInstance()->run(
-			PlentymarketsGarbageCollector::ACTION_MAPPING
-		);
+        $this->View()->assign([
+            'success' => true,
+            'data'    => $data,
+        ]);
+    }
 
-		$this->View()->assign(array(
-			'success' => true
-		));
-	}
+    /**
+     * Returns a list of invalid data records.
+     */
+    public function getDataIntegrityInvalidDataListAction()
+    {
+        $Check = PlentymarketsDataIntegrityController::getInstance()->getCheck($this->Request()->get('type'));
 
-	/**
-	 * Returns the list of integrity checks
-	 */
-	public function getDataIntegrityInvalidListAction()
-	{
+        $this->View()->assign([
+            'success' => true,
+            'data'    => $Check->getInvalidData(
+                $this->Request()->get('start'),
+                $this->Request()->get('limit')
+            ),
+            'total' => $Check->getTotal(),
+        ]);
+    }
 
-		$Checks = PlentymarketsDataIntegrityController::getInstance()->getChecks();
-		$data = array();
-		foreach ($Checks as $Check)
-		{
-			$data[] = array(
-				'name' => $Check->getName(),
-				'fields' => $Check->getFields()
-			);
-		}
+    /**
+     * Loads the status of the continous data exchange.
+     */
+    public function getDxContinuousAction()
+    {
+        $Config = PlentymarketsConfig::getInstance();
 
-		$this->View()->assign(array(
-			'success' => true,
-			'data' => $data
-		));
-	}
+        $this->View()->assign([
+            'success' => true,
+            'data'    => [
 
-	/**
-	 * Returns a list of invalid data records
-	 */
-	public function getDataIntegrityInvalidDataListAction()
-	{
+                // Export
+                'export' => [
+                    [
+                        'Entity'           => 'Order',
+                        'Section'          => 'Order',
+                        'Status'           => $Config->getExportOrderStatus(0),
+                        'Error'            => htmlspecialchars($Config->getExportOrderError('')),
+                        'LastRunTimestamp' => $Config->getExportOrderLastRunTimestamp(0),
+                        'NextRunTimestamp' => $Config->getExportOrderNextRunTimestamp(0),
+                    ],
+                    [
+                        'Entity'           => 'OrderIncomingPayment',
+                        'Section'          => 'Order',
+                        'Status'           => $Config->getExportOrderIncomingPaymentStatus(0),
+                        'Error'            => htmlspecialchars($Config->getExportOrderIncomingPaymentError('')),
+                        'LastRunTimestamp' => $Config->getExportOrderIncomingPaymentLastRunTimestamp(0),
+                        'NextRunTimestamp' => $Config->getExportOrderIncomingPaymentNextRunTimestamp(0),
+                    ],
+                ],
 
-		$Check = PlentymarketsDataIntegrityController::getInstance()->getCheck($this->Request()->get('type'));
+                // Import
+                'import' => [
+                    [
+                        'Entity'           => 'ItemStack',
+                        'Section'          => 'Item',
+                        'Status'           => $Config->getImportItemStackStatus(0),
+                        'Error'            => htmlspecialchars($Config->getImportItemStackError('')),
+                        'LastRunTimestamp' => $Config->getImportItemStackLastRunTimestamp(0),
+                        'NextRunTimestamp' => $Config->getImportItemStackNextRunTimestamp(0),
+                    ],
+                    [
+                        'Entity'           => 'Item',
+                        'Section'          => 'Item',
+                        'Status'           => $Config->getImportItemStatus(0),
+                        'Error'            => htmlspecialchars($Config->getImportItemError('')),
+                        'LastRunTimestamp' => $Config->getImportItemLastRunTimestamp(0),
+                        'NextRunTimestamp' => $Config->getImportItemNextRunTimestamp(0),
+                    ],
+                    [
+                        'Entity'           => 'ItemBundle',
+                        'Section'          => 'Item',
+                        'Status'           => $Config->getImportItemBundleStatus(0),
+                        'Error'            => htmlspecialchars($Config->getImportItemBundleError('')),
+                        'LastRunTimestamp' => $Config->getImportItemBundleLastRunTimestamp(0),
+                        'NextRunTimestamp' => $Config->getImportItemBundleNextRunTimestamp(0),
+                    ],
+                    [
+                        'Entity'           => 'ItemStock',
+                        'Section'          => 'Item',
+                        'Status'           => $Config->getImportItemStockStatus(0),
+                        'Error'            => htmlspecialchars($Config->getImportItemStockError('')),
+                        'LastRunTimestamp' => $Config->getImportItemStockLastRunTimestamp(0),
+                        'NextRunTimestamp' => $Config->getImportItemStockNextRunTimestamp(0),
+                    ],
+                    [
+                        'Entity'           => 'ItemPrice',
+                        'Section'          => 'Item',
+                        'Status'           => $Config->getImportItemPriceStatus(0),
+                        'Error'            => htmlspecialchars($Config->getImportItemPriceError('')),
+                        'LastRunTimestamp' => $Config->getImportItemPriceLastRunTimestamp(0),
+                        'NextRunTimestamp' => $Config->getImportItemPriceNextRunTimestamp(0),
+                    ],
+                    [
+                        'Entity'           => 'OrderIncomingPayment',
+                        'Section'          => 'Order',
+                        'Status'           => $Config->getImportOrderStatus(0),
+                        'Error'            => htmlspecialchars($Config->getImportOrderError('')),
+                        'LastRunTimestamp' => $Config->getImportOrderLastRunTimestamp(0),
+                        'NextRunTimestamp' => $Config->getImportOrderNextRunTimestamp(0),
+                    ],
+                    [
+                        'Entity'           => 'OrderOutgoingItems',
+                        'Section'          => 'Order',
+                        'Status'           => $Config->getImportOrderStatus(0),
+                        'Error'            => htmlspecialchars($Config->getImportOrderError('')),
+                        'LastRunTimestamp' => $Config->getImportOrderLastRunTimestamp(0),
+                        'NextRunTimestamp' => $Config->getImportOrderNextRunTimestamp(0),
+                    ],
+                ],
+            ],
+        ]);
+    }
 
-		$this->View()->assign(array(
-			'success' => true,
-			'data' => $Check->getInvalidData(
-				$this->Request()->get('start'),
-				$this->Request()->get('limit')
-			),
-			'total' => $Check->getTotal()
-		));
-	}
+    /**
+     * Returns the export wizard information.
+     */
+    public function getDxWizardAction()
+    {
+        $Wizard = PlentymarketsExportWizard::getInstance();
 
-	/**
-	 * Loads the status of the continous data exchange
-	 */
-	public function getDxContinuousAction()
-	{
-		$Config = PlentymarketsConfig::getInstance();
+        $this->View()->assign([
+            'success' => true,
+            'data'    => [
+                'isActive'    => $Wizard->isActive(),
+                'mayActivate' => $Wizard->mayActivate(),
+            ],
+        ]);
+    }
 
-		$this->View()->assign(array(
-			'success' => true,
-			'data' => array(
+    /**
+     * Activates or deativated the wizard.
+     */
+    public function setDxWizardAction()
+    {
+        $Wizard = PlentymarketsExportWizard::getInstance();
 
-				// Export
-				'export' => array(
-					array(
-						'Entity' => 'Order',
-						'Section' => 'Order',
-						'Status' => $Config->getExportOrderStatus(0),
-						'Error' => htmlspecialchars($Config->getExportOrderError('')),
-						'LastRunTimestamp' => $Config->getExportOrderLastRunTimestamp(0),
-						'NextRunTimestamp' => $Config->getExportOrderNextRunTimestamp(0),
-					),
-					array(
-						'Entity' => 'OrderIncomingPayment',
-						'Section' => 'Order',
-						'Status' => $Config->getExportOrderIncomingPaymentStatus(0),
-						'Error' => htmlspecialchars($Config->getExportOrderIncomingPaymentError('')),
-						'LastRunTimestamp' => $Config->getExportOrderIncomingPaymentLastRunTimestamp(0),
-						'NextRunTimestamp' => $Config->getExportOrderIncomingPaymentNextRunTimestamp(0),
-					)
-				),
+        if ($this->Request()->get('activate', 'no') == 'yes') {
+            if ($Wizard->mayActivate()) {
+                $Wizard->activate();
+            }
+        } else {
+            $Wizard->deactivate();
+        }
 
-				// Import
-				'import' => array(
-					array(
-						'Entity' => 'ItemStack',
-						'Section' => 'Item',
-						'Status' => $Config->getImportItemStackStatus(0),
-						'Error' => htmlspecialchars($Config->getImportItemStackError('')),
-						'LastRunTimestamp' => $Config->getImportItemStackLastRunTimestamp(0),
-						'NextRunTimestamp' => $Config->getImportItemStackNextRunTimestamp(0),
-					),
-					array(
-						'Entity' => 'Item',
-						'Section' => 'Item',
-						'Status' => $Config->getImportItemStatus(0),
-						'Error' => htmlspecialchars($Config->getImportItemError('')),
-						'LastRunTimestamp' => $Config->getImportItemLastRunTimestamp(0),
-						'NextRunTimestamp' => $Config->getImportItemNextRunTimestamp(0),
-					),
-					array(
-						'Entity' => 'ItemBundle',
-						'Section' => 'Item',
-						'Status' => $Config->getImportItemBundleStatus(0),
-						'Error' => htmlspecialchars($Config->getImportItemBundleError('')),
-						'LastRunTimestamp' => $Config->getImportItemBundleLastRunTimestamp(0),
-						'NextRunTimestamp' => $Config->getImportItemBundleNextRunTimestamp(0),
-					),
-					array(
-						'Entity' => 'ItemStock',
-						'Section' => 'Item',
-						'Status' => $Config->getImportItemStockStatus(0),
-						'Error' => htmlspecialchars($Config->getImportItemStockError('')),
-						'LastRunTimestamp' => $Config->getImportItemStockLastRunTimestamp(0),
-						'NextRunTimestamp' => $Config->getImportItemStockNextRunTimestamp(0),
-					),
-					array(
-						'Entity' => 'ItemPrice',
-						'Section' => 'Item',
-						'Status' => $Config->getImportItemPriceStatus(0),
-						'Error' => htmlspecialchars($Config->getImportItemPriceError('')),
-						'LastRunTimestamp' => $Config->getImportItemPriceLastRunTimestamp(0),
-						'NextRunTimestamp' => $Config->getImportItemPriceNextRunTimestamp(0)
-					),
-					array(
-						'Entity' => 'OrderIncomingPayment',
-						'Section' => 'Order',
-						'Status' => $Config->getImportOrderStatus(0),
-						'Error' => htmlspecialchars($Config->getImportOrderError('')),
-						'LastRunTimestamp' => $Config->getImportOrderLastRunTimestamp(0),
-						'NextRunTimestamp' => $Config->getImportOrderNextRunTimestamp(0),
-					),
-					array(
-						'Entity' => 'OrderOutgoingItems',
-						'Section' => 'Order',
-						'Status' => $Config->getImportOrderStatus(0),
-						'Error' => htmlspecialchars($Config->getImportOrderError('')),
-						'LastRunTimestamp' => $Config->getImportOrderLastRunTimestamp(0),
-						'NextRunTimestamp' => $Config->getImportOrderNextRunTimestamp(0),
-					)
-				)
-			)
-		));
-	}
+        $this->View()->assign([
+            'success' => true,
+            'data'    => [
+                'isActive'    => $Wizard->isActive(),
+                'mayActivate' => $Wizard->mayActivate(),
+            ],
+        ]);
+    }
 
-	/**
-	 * Returns the export wizard information
-	 */
-	public function getDxWizardAction()
-	{
-		$Wizard = PlentymarketsExportWizard::getInstance();
+    /**
+     * Loads the settings.
+     */
+    public function getSettingsListAction()
+    {
+        // Check the api, mapping and export status
+        PlentymarketsStatus::getInstance()->maySynchronize(false);
 
-		$this->View()->assign(array(
-			'success' => true,
-			'data' => array(
-				'isActive' => $Wizard->isActive(),
-				'mayActivate' => $Wizard->mayActivate()
-			)
-		));
-	}
+        $config = PlentymarketsConfig::getInstance()->getConfig();
 
-	/**
-	 * Activates or deativated the wizard
-	 */
-	public function setDxWizardAction()
-	{
-		$Wizard = PlentymarketsExportWizard::getInstance();
+        $config['_WebserverSoftware'] = $_SERVER['SERVER_SOFTWARE'];
+        $config['_WebserverSignature'] = $_SERVER['SERVER_SIGNATURE'];
+        $config['_PhpInterface'] = $_SERVER['GATEWAY_INTERFACE'];
+        $config['_PhpVersion'] = PHP_VERSION;
+        $config['_PhpMemoryLimit'] = ini_get('memory_limit');
 
-		if ($this->Request()->get('activate', 'no') == 'yes')
-		{
-			if ($Wizard->mayActivate())
-			{
-				$Wizard->activate();
-			}
-		}
-		else
-		{
-			$Wizard->deactivate();
-		}
+        if (function_exists('apache_get_modules')) {
+            $modules = apache_get_modules();
+            $phpModules = array_filter($modules, function ($item) {
+                return preg_match('/php|cgi/', $item);
+            });
+            sort($phpModules);
+            $config['_ApacheModules'] = implode('/', $phpModules);
+        } else {
+            $config['_ApacheModules'] = '';
+        }
 
-		$this->View()->assign(array(
-			'success' => true,
-			'data' => array(
-				'isActive' => $Wizard->isActive(),
-				'mayActivate' => $Wizard->mayActivate()
-			)
-		));
-	}
+        if (isset($config['OrderPaidStatusID'])) {
+            $orderPaidIDs = explode('|', $config['OrderPaidStatusID']);
+            $config['OrderPaidStatusID'] = array_map('intval', $orderPaidIDs);
+        } else {
+            $config['OrderPaidStatusID'] = [12];
+        }
 
-	/**
-	 * Loads the settings
-	 */
-	public function getSettingsListAction()
-	{
-		// Check the api, mapping and export status
-		PlentymarketsStatus::getInstance()->maySynchronize(false);
+        if (isset($config['OrderShopgateMOPIDs'])) {
+            $orderShopgateMOPIDs = explode('|', $config['OrderShopgateMOPIDs']);
+            $config['OrderShopgateMOPIDs'] = array_map('intval', $orderShopgateMOPIDs);
+        } else {
+            $config['OrderShopgateMOPIDs'] = [];
+        }
 
-		$config = PlentymarketsConfig::getInstance()->getConfig();
+        $this->View()->assign([
+            'success' => true,
+            'data'    => $config,
+        ]);
+    }
 
-		$config['_WebserverSoftware'] = $_SERVER['SERVER_SOFTWARE'];
-		$config['_WebserverSignature'] = $_SERVER['SERVER_SIGNATURE'];
-		$config['_PhpInterface'] = $_SERVER['GATEWAY_INTERFACE'];
-		$config['_PhpVersion'] = PHP_VERSION;
-		$config['_PhpMemoryLimit'] = ini_get('memory_limit');
+    /**
+     * Loads stores settings.
+     */
+    public function getSettingsStoresAction()
+    {
+        if ($this->Request()->get('refresh', false) == true) {
+            PlentymarketsConfig::getInstance()->setMiscOrderStatusLastImport(0);
+            PlentymarketsConfig::getInstance()->setMiscWarehousesLastImport(0);
+            PlentymarketsConfig::getInstance()->setMiscSalesOrderReferrerLastImport(0);
+        }
 
-		if (function_exists('apache_get_modules'))
-		{
-			$modules = apache_get_modules();
-			$phpModules = array_filter($modules, function ($item)
-			{
-				return preg_match('/php|cgi/', $item);
-			});
-			sort($phpModules);
-			$config['_ApacheModules'] = join('/', $phpModules);
-		}
-		else
-		{
-			$config['_ApacheModules'] = '';
-		}
+        $orderStatusList = PlentymarketsImportController::getOrderStatusList();
+        $orderStatusList[0] = [
+            'status' => 0,
+            'name'   => '---',
+        ];
 
-		if (isset($config['OrderPaidStatusID']))
-		{
-			$orderPaidIDs = explode('|', $config['OrderPaidStatusID']);
-			$config['OrderPaidStatusID'] = array_map('intval', $orderPaidIDs);
-		}
-		else
-		{
-			$config['OrderPaidStatusID'] = array(12);
-		}
+        ksort($orderStatusList);
 
-		if (isset($config['OrderShopgateMOPIDs']))
-		{
-			$orderShopgateMOPIDs = explode('|', $config['OrderShopgateMOPIDs']);
-			$config['OrderShopgateMOPIDs'] = array_map('intval', $orderShopgateMOPIDs);
-		}
-		else
-		{
-			$config['OrderShopgateMOPIDs'] = array();
-		}
-
-		$this->View()->assign(array(
-			'success' => true,
-			'data' => $config
-		));
-	}
-
-	/**
-	 * Loads stores settings
-	 */
-	public function getSettingsStoresAction()
-	{
-		if ($this->Request()->get('refresh', false) == true)
-		{
-			PlentymarketsConfig::getInstance()->setMiscOrderStatusLastImport(0);
-			PlentymarketsConfig::getInstance()->setMiscWarehousesLastImport(0);
-			PlentymarketsConfig::getInstance()->setMiscSalesOrderReferrerLastImport(0);
-		}
-
-		$orderStatusList = PlentymarketsImportController::getOrderStatusList();
-		$orderStatusList[0] = array(
-			'status' => 0,
-			'name' => '---'
-		);
-
-		ksort($orderStatusList);
-
-		$this->View()->assign(array(
-			'success' => true,
-			'data' => array(
-				'warehouses' => array_values(PlentymarketsImportController::getWarehouseList()),
-				'orderReferrer' => array_values(PlentymarketsImportController::getOrderReferrerList()),
-				'orderStatus' => array_values($orderStatusList),
-				'producers' => Shopware()->Db()
-					->fetchAll('
+        $this->View()->assign([
+            'success' => true,
+            'data'    => [
+                'warehouses'    => array_values(PlentymarketsImportController::getWarehouseList()),
+                'orderReferrer' => array_values(PlentymarketsImportController::getOrderReferrerList()),
+                'orderStatus'   => array_values($orderStatusList),
+                'producers'     => Shopware()->Db()
+                    ->fetchAll('
 						SELECT id, name FROM s_articles_supplier ORDER BY name
 					'),
-				'payments' => Shopware()->Db()
-					->fetchAll('
+                'payments' => Shopware()->Db()
+                    ->fetchAll('
 					SELECT id, description as name FROM s_core_paymentmeans WHERE active = 0 ORDER BY name
-				')
-			)
-		));
-	}
+				'),
+            ],
+        ]);
+    }
 
-	/**
-	 * Saves the settings
-	 */
-	public function saveSettingsAction()
-	{
-		$Config = PlentymarketsConfig::getInstance();
+    /**
+     * Saves the settings.
+     */
+    public function saveSettingsAction()
+    {
+        $Config = PlentymarketsConfig::getInstance();
 
-		// Previous Hash
-		$apiUserHash = $Config->getApiUserHash('');
+        // Previous Hash
+        $apiUserHash = $Config->getApiUserHash('');
 
-		// API
-		// Sanitize the Wsdl
-		$wsdlParts = parse_url($this->Request()->ApiWsdl);
-		$wsdl = sprintf('%s://%s', $wsdlParts['scheme'], $wsdlParts['host']);
+        // API
+        // Sanitize the Wsdl
+        $wsdlParts = parse_url($this->Request()->ApiWsdl);
+        $wsdl = sprintf('%s://%s', $wsdlParts['scheme'], $wsdlParts['host']);
 
-		$Config->setApiWsdl($wsdl);
-		$Config->setApiUsername($this->Request()->ApiUsername);
-		$Config->setApiPassword($this->Request()->ApiPassword);
-		$Config->setApiIgnoreGetServerTime((integer) $this->Request()->ApiIgnoreGetServerTime);
-		$Config->setApiUseGzipCompression((integer) $this->Request()->ApiUseGzipCompression);
-		$Config->setApiLogHttpHeaders((integer) $this->Request()->ApiLogHttpHeaders);
-		$Config->setApiHideCallsInLog((integer) $this->Request()->ApiHideCallsInLog);
+        $Config->setApiWsdl($wsdl);
+        $Config->setApiUsername($this->Request()->ApiUsername);
+        $Config->setApiPassword($this->Request()->ApiPassword);
+        $Config->setApiIgnoreGetServerTime((int) $this->Request()->ApiIgnoreGetServerTime);
+        $Config->setApiUseGzipCompression((int) $this->Request()->ApiUseGzipCompression);
+        $Config->setApiLogHttpHeaders((int) $this->Request()->ApiLogHttpHeaders);
+        $Config->setApiHideCallsInLog((int) $this->Request()->ApiHideCallsInLog);
 
-		$hash = md5($wsdl . $this->Request()->ApiUsername . $this->Request()->ApiPassword);
-		if ($apiUserHash != $hash)
-		{
-			$Config->setApiUserHash($hash);
-			$Config->setApiUserID(-1);
-			$Config->setApiLastAuthTimestamp('');
-			$Config->setApiToken('');
+        $hash = md5($wsdl.$this->Request()->ApiUsername.$this->Request()->ApiPassword);
+        if ($apiUserHash != $hash) {
+            $Config->setApiUserHash($hash);
+            $Config->setApiUserID(-1);
+            $Config->setApiLastAuthTimestamp('');
+            $Config->setApiToken('');
 
-			// Check the connection
-			PlentymarketsStatus::getInstance()->isConnected();
-		}
+            // Check the connection
+            PlentymarketsStatus::getInstance()->isConnected();
+        }
 
-		// Item
-		$Config->setItemWarehouseID($this->Request()->ItemWarehouseID);
+        // Item
+        $Config->setItemWarehouseID($this->Request()->ItemWarehouseID);
         $Config->setItemConfiguratorSetType($this->Request()->ItemConfiguratorSetType);
-		$Config->setItemCleanupActionID($this->Request()->ItemCleanupActionID);
-		$Config->setItemCategoryRootID($this->Request()->ItemCategoryRootID);
-		$Config->setItemImageSyncActionID($this->Request()->ItemImageSyncActionID == true ? IMPORT_ITEM_IMAGE_SYNC : IMPORT_ITEM_IMAGE_NO_SYNC);
-		$Config->setItemImageAltAttributeID($this->Request()->ItemImageAltAttributeID);
-		$Config->setItemCategorySyncActionID($this->Request()->ItemCategorySyncActionID == true ? IMPORT_ITEM_CATEGORY_SYNC : IMPORT_ITEM_CATEGORY_NO_SYNC);
-		$Config->setItemNumberImportActionID($this->Request()->ItemNumberImportActionID == true ? IMPORT_ITEM_NUMBER : IMPORT_ITEM_NUMBER_NO);
-		$Config->setItemNumberSourceKey($this->Request()->ItemNumberSourceKey);
-		$Config->setItemVariationNumberSourceKey($this->Request()->ItemVariationNumberSourceKey);
-		$Config->setItemBundleHeadActionID($this->Request()->ItemBundleHeadActionID == true ? IMPORT_ITEM_BUNDLE_HEAD : IMPORT_ITEM_BUNDLE_HEAD_NO);
-		$Config->setItemShortDescriptionImportActionID($this->Request()->ItemShortDescriptionImportActionID == true ? IMPORT_ITEM_SHORTDESC : IMPORT_ITEM_SHORTDESC_NO);
-		$Config->setItemLongDescriptionImportActionID($this->Request()->ItemLongDescriptionImportActionID == true ? IMPORT_ITEM_LONGDESC : IMPORT_ITEM_LONGDESC_NO);
-		$Config->setItemKeywordsImportActionID($this->Request()->ItemKeywordsImportActionID == true ? IMPORT_ITEM_KEYWORDS : IMPORT_ITEM_KEYWORDS_NO);
-		$Config->setItemNameImportActionID($this->Request()->ItemNameImportActionID);
-		$Config->setItemPriceImportActionID($this->Request()->ItemPriceImportActionID);
-		$Config->setItemFreetextsImportActionID($this->Request()->ItemFreetextsImportActionID == true ? IMPORT_ITEM_FREETEXTS : IMPORT_ITEM_FREETEXTS_NO);
-		$Config->setItemAssociateImportActionID(
-			$this->Request()->ItemAssociateImportActionID == PlentymarketsImportItemAssociateController::ACTION_DETACHED
-				? PlentymarketsImportItemAssociateController::ACTION_DETACHED
-				: PlentymarketsImportItemAssociateController::ACTION_CHAINED
-		);
-		$Config->setDefaultCustomerGroupKey($this->Request()->DefaultCustomerGroupKey);
-		$Config->setItemWarehousePercentage($this->Request()->ItemWarehousePercentage);
-		$Config->setItemProducerID($this->Request()->ItemProducerID);
-		$Config->setOrderMarking1($this->Request()->OrderMarking1);
-		$Config->setOrderAdditionalCouponIdentifiers($this->Request()->OrderAdditionalCouponIdentifiers);
-		$Config->setOrderReferrerID($this->Request()->OrderReferrerID);
-		$Config->setOrderPaidStatusID(implode('|', $this->Request()->OrderPaidStatusID));
-		$Config->setOrderShopgateMOPIDs(implode('|', $this->Request()->OrderShopgateMOPIDs));
-		$Config->setOrderItemTextSyncActionID($this->Request()->OrderItemTextSyncActionID == true ? EXPORT_ORDER_ITEM_TEXT_SYNC : EXPORT_ORDER_ITEM_TEXT_SYNC_NO);
-		$Config->setOutgoingItemsOrderStatus($this->Request()->OutgoingItemsOrderStatus);
-		$Config->setCheckOutgoingItems($this->Request()->CheckOutgoingItems == true ? 1 : 0);
-		$Config->setOutgoingItemsID($this->Request()->OutgoingItemsID);
-		$Config->setOutgoingItemsShopwareOrderStatusID($this->Request()->OutgoingItemsShopwareOrderStatusID);
-		$Config->setCheckIncomingPayment($this->Request()->CheckIncomingPayment == true ? 1 : 0);
-		$Config->setIncomingPaymentShopwarePaymentFullStatusID($this->Request()->IncomingPaymentShopwarePaymentFullStatusID);
-		$Config->setIncomingPaymentShopwarePaymentPartialStatusID($this->Request()->IncomingPaymentShopwarePaymentPartialStatusID);
-		$Config->setInitialExportChunkSize(max($this->Request()->InitialExportChunkSize, 1));
-		$Config->setImportItemChunkSize(max($this->Request()->ImportItemChunkSize, 1));
-		$Config->setInitialExportChunksPerRun(max($this->Request()->InitialExportChunksPerRun, -1));
-		$Config->setMayLogUsageData($this->Request()->MayLogUsageData == true ? 1 : 0);
+        $Config->setItemCleanupActionID($this->Request()->ItemCleanupActionID);
+        $Config->setItemCategoryRootID($this->Request()->ItemCategoryRootID);
+        $Config->setItemImageSyncActionID($this->Request()->ItemImageSyncActionID == true ? IMPORT_ITEM_IMAGE_SYNC : IMPORT_ITEM_IMAGE_NO_SYNC);
+        $Config->setItemImageAltAttributeID($this->Request()->ItemImageAltAttributeID);
+        $Config->setItemCategorySyncActionID($this->Request()->ItemCategorySyncActionID == true ? IMPORT_ITEM_CATEGORY_SYNC : IMPORT_ITEM_CATEGORY_NO_SYNC);
+        $Config->setItemNumberImportActionID($this->Request()->ItemNumberImportActionID == true ? IMPORT_ITEM_NUMBER : IMPORT_ITEM_NUMBER_NO);
+        $Config->setItemNumberSourceKey($this->Request()->ItemNumberSourceKey);
+        $Config->setItemVariationNumberSourceKey($this->Request()->ItemVariationNumberSourceKey);
+        $Config->setItemBundleHeadActionID($this->Request()->ItemBundleHeadActionID == true ? IMPORT_ITEM_BUNDLE_HEAD : IMPORT_ITEM_BUNDLE_HEAD_NO);
+        $Config->setItemShortDescriptionImportActionID($this->Request()->ItemShortDescriptionImportActionID == true ? IMPORT_ITEM_SHORTDESC : IMPORT_ITEM_SHORTDESC_NO);
+        $Config->setItemLongDescriptionImportActionID($this->Request()->ItemLongDescriptionImportActionID == true ? IMPORT_ITEM_LONGDESC : IMPORT_ITEM_LONGDESC_NO);
+        $Config->setItemKeywordsImportActionID($this->Request()->ItemKeywordsImportActionID == true ? IMPORT_ITEM_KEYWORDS : IMPORT_ITEM_KEYWORDS_NO);
+        $Config->setItemNameImportActionID($this->Request()->ItemNameImportActionID);
+        $Config->setItemPriceImportActionID($this->Request()->ItemPriceImportActionID);
+        $Config->setItemFreetextsImportActionID($this->Request()->ItemFreetextsImportActionID == true ? IMPORT_ITEM_FREETEXTS : IMPORT_ITEM_FREETEXTS_NO);
+        $Config->setItemAssociateImportActionID(
+            $this->Request()->ItemAssociateImportActionID == PlentymarketsImportItemAssociateController::ACTION_DETACHED
+                ? PlentymarketsImportItemAssociateController::ACTION_DETACHED
+                : PlentymarketsImportItemAssociateController::ACTION_CHAINED
+        );
+        $Config->setDefaultCustomerGroupKey($this->Request()->DefaultCustomerGroupKey);
+        $Config->setItemWarehousePercentage($this->Request()->ItemWarehousePercentage);
+        $Config->setItemProducerID($this->Request()->ItemProducerID);
+        $Config->setOrderMarking1($this->Request()->OrderMarking1);
+        $Config->setOrderAdditionalCouponIdentifiers($this->Request()->OrderAdditionalCouponIdentifiers);
+        $Config->setOrderReferrerID($this->Request()->OrderReferrerID);
+        $Config->setOrderPaidStatusID(implode('|', $this->Request()->OrderPaidStatusID));
+        $Config->setOrderShopgateMOPIDs(implode('|', $this->Request()->OrderShopgateMOPIDs));
+        $Config->setOrderItemTextSyncActionID($this->Request()->OrderItemTextSyncActionID == true ? EXPORT_ORDER_ITEM_TEXT_SYNC : EXPORT_ORDER_ITEM_TEXT_SYNC_NO);
+        $Config->setOutgoingItemsOrderStatus($this->Request()->OutgoingItemsOrderStatus);
+        $Config->setCheckOutgoingItems($this->Request()->CheckOutgoingItems == true ? 1 : 0);
+        $Config->setOutgoingItemsID($this->Request()->OutgoingItemsID);
+        $Config->setOutgoingItemsShopwareOrderStatusID($this->Request()->OutgoingItemsShopwareOrderStatusID);
+        $Config->setCheckIncomingPayment($this->Request()->CheckIncomingPayment == true ? 1 : 0);
+        $Config->setIncomingPaymentShopwarePaymentFullStatusID($this->Request()->IncomingPaymentShopwarePaymentFullStatusID);
+        $Config->setIncomingPaymentShopwarePaymentPartialStatusID($this->Request()->IncomingPaymentShopwarePaymentPartialStatusID);
+        $Config->setInitialExportChunkSize(max($this->Request()->InitialExportChunkSize, 1));
+        $Config->setImportItemChunkSize(max($this->Request()->ImportItemChunkSize, 1));
+        $Config->setInitialExportChunksPerRun(max($this->Request()->InitialExportChunksPerRun, -1));
+        $Config->setMayLogUsageData($this->Request()->MayLogUsageData == true ? 1 : 0);
 
-		// Customer default values
-		$Config->setCustomerDefaultFormOfAddressID($this->Request()->CustomerDefaultFormOfAddressID);
-		$Config->setCustomerDefaultCity($this->Request()->CustomerDefaultCity);
-		$Config->setCustomerDefaultHouseNumber($this->Request()->CustomerDefaultHouseNumber);
-		$Config->setCustomerDefaultStreet($this->Request()->CustomerDefaultStreet);
-		$Config->setCustomerDefaultZipcode($this->Request()->CustomerDefaultZipcode);
+        // Customer default values
+        $Config->setCustomerDefaultFormOfAddressID($this->Request()->CustomerDefaultFormOfAddressID);
+        $Config->setCustomerDefaultCity($this->Request()->CustomerDefaultCity);
+        $Config->setCustomerDefaultHouseNumber($this->Request()->CustomerDefaultHouseNumber);
+        $Config->setCustomerDefaultStreet($this->Request()->CustomerDefaultStreet);
+        $Config->setCustomerDefaultZipcode($this->Request()->CustomerDefaultZipcode);
 
-		//
-		if ($Config->getOutgoingItemsIntervalID() != $this->Request()->OutgoingItemsIntervalID)
-		{
-			switch ($this->Request()->OutgoingItemsIntervalID)
-			{
-				case 1:
-					$nextrun = (date('H') > 12) ? strtotime('tomorrow noon') : strtotime('noon');
-					$interval = 68400;
-					break;
+        //
+        if ($Config->getOutgoingItemsIntervalID() != $this->Request()->OutgoingItemsIntervalID) {
+            switch ($this->Request()->OutgoingItemsIntervalID) {
+                case 1:
+                    $nextrun = (date('H') > 12) ? strtotime('tomorrow noon') : strtotime('noon');
+                    $interval = 68400;
+                    break;
 
-				case 2:
-					$nextrun = (date('H') > 18) ? strtotime('tomorrow 6pm') : strtotime('6pm');
-					$interval = 68400;
-					break;
-				case 3:
-				default:
-					$nextrun = strtotime(date('Y-m-d H:0', strtotime('+ 1 hour')));
-					$interval = 60 * 60;
-			}
+                case 2:
+                    $nextrun = (date('H') > 18) ? strtotime('tomorrow 6pm') : strtotime('6pm');
+                    $interval = 68400;
+                    break;
+                case 3:
+                default:
+                    $nextrun = strtotime(date('Y-m-d H:0', strtotime('+ 1 hour')));
+                    $interval = 60 * 60;
+            }
 
-			$Config->setOutgoingItemsIntervalID($this->Request()->OutgoingItemsIntervalID);
+            $Config->setOutgoingItemsIntervalID($this->Request()->OutgoingItemsIntervalID);
 
-			Shopware()->Db()->query('
+            Shopware()->Db()->query('
 				UPDATE s_crontab
 					SET
-						next = FROM_UNIXTIME(' . $nextrun . '),
-						`interval` = ' . $interval . '
+						next = FROM_UNIXTIME('.$nextrun.'),
+						`interval` = '.$interval.'
 					WHERE action = "Shopware_CronJob_PlentymarketsOrderImportCron"
 			');
-		}
-
-		// Check dx status
-		PlentymarketsStatus::getInstance()->maySynchronize(false);
-
-		// User settings of the data exchange
-		$Config->setMayDatexUser((integer) ($this->Request()->MayDatexUser == true));
-
-		// Activate the actual settings if the user
-		// wants to exchange data and if he is allowed to
-		if ($this->Request()->MayDatexUser == true && $Config->getMayDatex(0))
-		{
-			$Config->setMayDatexActual(1);
-		}
-		else
-		{
-			$Config->setMayDatexActual(0);
-		}
-
-		$config = $Config->getConfig();
-
-		if (isset($config['OrderPaidStatusID']))
-		{
-			$orderPaidIDs = explode('|', $config['OrderPaidStatusID']);
-			$config['OrderPaidStatusID'] = array_map('intval', $orderPaidIDs);
-		}
-		else
-		{
-			$config['OrderPaidStatusID'] = array(12);
-		}
-
-		if (isset($config['OrderShopgateMOPIDs']))
-		{
-			$orderShopgateMOPIDs = explode('|', $config['OrderShopgateMOPIDs']);
-			$config['OrderShopgateMOPIDs'] = array_map('intval', $orderShopgateMOPIDs);
-		}
-		else
-		{
-			$config['OrderShopgateMOPIDs'] = array();
-		}
-
-		$this->View()->assign(array(
-			'success' => true,
-			'data' => $config
-		));
-	}
-
-	/**
-	 * Saves one mapping row
-	 */
-	public function saveMappingAction()
-	{
-		$params = $this->Request()->getParams();
-
-		$entity = $params['entity'];
-
-		$method = sprintf('delete%sByShopwareID', $entity);
-
-		// Delete the mapping for this shopware id
-		call_user_func(array(
-			'PlentymarketsMappingController',
-			$method
-		), $params['id']);
-
-		$method = sprintf('add%s', $entity);
-
-		if (!is_array($params['selectedPlentyId']))
-		{
-			$params['selectedPlentyId'] = array($params['selectedPlentyId']);
-		}
-
-		foreach ($params['selectedPlentyId'] as $selectedPlentyId)
-		{
-			//$selectedPlentyId = sprintf("%.1f", (float)$selectedPlentyId);
-
-			call_user_func(array(
-				'PlentymarketsMappingController',
-				$method
-			), $params['id'], $selectedPlentyId);
-
-		}
-
-		// Neu schreiben
-		$this->View()->assign(array(
-			'success' => true,
-			'data' => PlentymarketsMappingController::getStatusByEntity($entity)
-		));
-	}
-
-	/**
-	 * Announces an export
-	 */
-	public function handleExportAction()
-	{
-		$params = $this->Request()->getParams();
-
-		if (PlentymarketsExportWizard::getInstance()->isActive())
-		{
-			return $this->View()->assign(array(
-				'success' => true,
-				'message' => 'Aktion kann nicht ausgeführt werden, da der automatische Export aktiv ist'
-			));
-		}
-
-		try
-		{
-			if ($params['doAction'] == 'reset')
-			{
-				PlentymarketsExportController::getInstance()->reset($params['name']);
-				PlentymarketsLogger::getInstance()->message('Export:Initial:' . ucfirst($params['name']), 'Resetted');
-
-				$message = 'Export-Status zurückgesetzt';
-			}
-			else if ($params['doAction'] == 'erase')
-			{
-				PlentymarketsExportController::getInstance()->erase($params['name']);
-				PlentymarketsLogger::getInstance()->message('Export:Initial:' . ucfirst($params['name']), 'Completely erased');
-
-				$message = 'Export komplett zurückgesetzt';
-			}
-			else if ($params['doAction'] == 'start')
-			{
-				PlentymarketsExportController::getInstance()->announce($params['name']);
-				PlentymarketsLogger::getInstance()->message('Export:Initial:' . ucfirst($params['name']), 'Announced');
-
-				$message = 'Export vorgemerkt';
-			}
-
-			$success = true;
-		}
-		catch (PlentymarketsExportException $E)
-		{
-			$success = false;
-			$message = $E->getMessage();
-
-			$method = sprintf('set%sExportStatus', $params['name']);
-			PlentymarketsConfig::getInstance()->$method('error');
-
-			$method = sprintf('set%sExportLastErrorMessage', $params['name']);
-			PlentymarketsConfig::getInstance()->$method($message);
-
-			PlentymarketsLogger::getInstance()->error('Export:Initial:' . ucfirst($params['name']), $message, $E->getCode());
-		}
-
-		$settings = $this->getExportStatusList();
-
-		$this->View()->assign(array(
-			'success' => $success,
-			'message' => $message,
-			'data' => $settings[$params['name']]
-		));
-	}
-
-	/**
-	 * Resets a last update timestamp of an entity
-	 */
-	public function resetImportTimestampAction()
-	{
-		$entity = $this->Request()->get('entity');
-
-		if (in_array($entity, array('ItemStack', 'ItemPrice', 'ItemStock', 'ItemBundle')))
-		{
-			PlentymarketsConfig::getInstance()->erase('Import' . $entity . 'LastUpdateTimestamp');
-			PlentymarketsLogger::getInstance()->message('Sync:Reset', $entity . ' resetted');
-		}
-
-		// Cleanup the mapping – whatsoever
-		PlentymarketsGarbageCollector::getInstance()->run(
-			PlentymarketsGarbageCollector::ACTION_MAPPING
-		);
-
-		$this->View()->assign(array(
-			'success' => true,
-			'data' => $entity
-		));
-	}
-
-	/**
-	 * Returns the status for each initial export entity
-	 *
-	 * @return array
-	 */
-	protected function getExportStatusList()
-	{
-		return PlentymarketsExportStatusController::getInstance()->getOverview();
-	}
-
-	/**
-	 * Loads the export status list
-	 */
-	public function getExportStatusListAction()
-	{
-		$this->View()->assign(array(
-			'success' => true,
-			'data' => array_values($this->getExportStatusList())
-		));
-	}
-
-	/**
-	 * Loads the plenty mapping data
-	 */
-	public function getPlentyMappingDataAction()
-	{
-		$forceReload = $this->Request()->get('force', false);
-
-		switch ($this->Request()->map)
-		{
-			case 'Country':
-				$data = PlentymarketsConfig::getInstance()->getMiscCountriesSorted();
-				break;
-
-			case 'Currency':
-				$data = PlentymarketsConfig::getInstance()->getMiscCurrenciesSorted();
-				break;
-
-			case 'MeasureUnit':
-				$data = PlentymarketsConfig::getInstance()->getItemMeasureUnits();
-				break;
-
-			case 'Vat':
-
-				if ($forceReload)
-				{
-					PlentymarketsConfig::getInstance()->setMiscVatLastImport(0);
-				}
-
-				$data = PlentymarketsImportController::getVatList();
-				break;
-
-			case 'Referrer':
-
-				if ($forceReload)
-				{
-					PlentymarketsConfig::getInstance()->setMiscSalesOrderReferrerLastImport(0);
-				}
-
-				$data = PlentymarketsImportController::getOrderReferrerList();
-				break;
-
-			case 'ShippingProfile':
-
-				if ($forceReload)
-				{
-					PlentymarketsConfig::getInstance()->setMiscShippingProfilesLastImport(0);
-				}
-
-				$data = PlentymarketsImportController::getShippingProfileList();
-				break;
-
-			case 'MethodOfPayment':
-
-				if ($forceReload)
-				{
-					PlentymarketsConfig::getInstance()->setMiscMethodsOfPaymentLastImport(0);
-				}
-
-				$data = PlentymarketsImportController::getMethodOfPaymentList();
-				break;
-
-			case 'CustomerClass':
-
-				if ($forceReload)
-				{
-					PlentymarketsConfig::getInstance()->setMiscCustomerClassLastImport(0);
-				}
-
-				$data = PlentymarketsImportController::getCustomerClassList();
-				break;
-
-			case 'Shop':
-
-				if ($forceReload)
-				{
-					PlentymarketsConfig::getInstance()->setMiscMultishopsLastImport(0);
-				}
-
-				$data = PlentymarketsImportController::getStoreList();
-				break;
-
-			case 'OrderStatus':
-			case 'PaymentStatus':
-
-				if ($forceReload)
-				{
-					PlentymarketsConfig::getInstance()->setMiscOrderStatusLastImport(0);
-				}
-
-				$data = PlentymarketsImportController::getOrderStatusList();
-				foreach ($data as &$d)
-				{
-					$d['id'] = $d['status'];
-				}
-				break;
-		}
-
-		$this->View()->assign(array(
-			'success' => true,
-			'data' => array_values($data)
-		));
-	}
-
-	/**
-	 * Loads the mapping data
-	 */
-	public function getMappingDataAction()
-	{
-
-		$map = $this->Request()->getParam('map');
-		$DataController = new PlentymarketsMappingDataController($this->Request()->getParam('auto', false));
-
-		switch ($map)
-		{
-			case 'Vat':
-				$rows = $DataController->getVat();
-				break;
-
-			case 'CustomerClass':
-				$rows = $DataController->getCustomerClass();
-				break;
-
-			case 'MethodOfPayment':
-				$rows = $DataController->getMethodOfPayment();
-				break;
-
-			case 'Referrer':
-				$rows = $DataController->getReferrer();
-				break;
-
-			case 'ShippingProfile':
-				$rows = $DataController->getShippingProfile();
-				break;
-
-			case 'Country':
-				$rows = $DataController->getCountry();
-				break;
-
-			case 'Currency':
-				$rows = $DataController->getCurrency();
-				break;
-
-			case 'Shop':
-				$rows = $DataController->getShops();
-				break;
-
-			case 'MeasureUnit':
-				$rows = $DataController->getMeasureUnit();
-				break;
-
-			case 'OrderStatus':
-				$rows = $DataController->getOrderStatus();
-				break;
-
-			case 'PaymentStatus':
-				$rows = $DataController->getPaymentStatus();
-				break;
-		}
-
-		foreach ($rows as $position => &$row)
-		{
-			$row['position'] = $position;
-		}
-
-		$this->View()->assign(array(
-			'success' => true,
-			'data' => $rows,
-			'total' => count($rows)
-		));
-	}
-
-	/**
-	 * Loads the log data
-	 */
-	public function getLogAction()
-	{
-
-		$data = PlentymarketsLogger::getInstance()->get(
-			$this->Request()->get('start', 0),
-			$this->Request()->get('limit', 50),
-			$this->Request()->get('type', 0),
-			$this->Request()->get('filt0r', '')
-		);
-
-		$data['success'] = true;
-
-		$this->View()->assign($data);
-	}
-
-	/**
-	 * Loads the log identifiers
-	 */
-	public function getLogIdentifierListAction()
-	{
-		$this->View()->assign(array(
-			'success' => true,
-			'data' => PlentymarketsLogger::getInstance()->getIdentifierList()
-		));
-	}
-
-	/**
-	 * Loads the status data
-	 */
-	public function getMappingStatusAction()
-	{
-		$this->View()->assign(array(
-			'success' => true,
-			'data' => array_values(PlentymarketsMappingController::getStatusList())
-		));
-	}
-
-	/**
-	 * Loads the warehouse list data
-	 */
-	public function getWarehouseListAction()
-	{
-		$this->View()->assign(array(
-			'success' => true,
-			'data' => array_values(PlentymarketsImportController::getWarehouseList())
-		));
-	}
-
-	/**
-	 * Loads the order status list data
-	 */
-	public function getOrderStatusListAction()
-	{
-		$values = PlentymarketsImportController::getOrderStatusList();
-		$values[0] = array(
-			'status' => 0,
-			'name' => '---'
-		);
-
-		ksort($values);
-
-		$this->View()->assign(array(
-			'success' => true,
-			'data' => array_values($values)
-		));
-	}
-
-	/**
-	 * Loads the referrer list data
-	 */
-	public function getReferrerListAction()
-	{
-		$this->View()->assign(array(
-			'success' => true,
-			'data' => array_values(PlentymarketsImportController::getOrderReferrerList())
-		));
-	}
-
-	/**
-	 * Loads the multishop list data
-	 */
-	public function getMultishopListAction()
-	{
-		$this->View()->assign(array(
-			'success' => true,
-			'data' => array_values(PlentymarketsImportController::getStoreList())
-		));
-	}
-
-	/**
-	 * Loads the producer list data
-	 */
-	public function getProducerListAction()
-	{
-		$this->View()->assign(array(
-			'success' => true,
-			'data' => Shopware()->Db()
-				->fetchAll('
+        }
+
+        // Check dx status
+        PlentymarketsStatus::getInstance()->maySynchronize(false);
+
+        // User settings of the data exchange
+        $Config->setMayDatexUser((int) ($this->Request()->MayDatexUser == true));
+
+        // Activate the actual settings if the user
+        // wants to exchange data and if he is allowed to
+        if ($this->Request()->MayDatexUser == true && $Config->getMayDatex(0)) {
+            $Config->setMayDatexActual(1);
+        } else {
+            $Config->setMayDatexActual(0);
+        }
+
+        $config = $Config->getConfig();
+
+        if (isset($config['OrderPaidStatusID'])) {
+            $orderPaidIDs = explode('|', $config['OrderPaidStatusID']);
+            $config['OrderPaidStatusID'] = array_map('intval', $orderPaidIDs);
+        } else {
+            $config['OrderPaidStatusID'] = [12];
+        }
+
+        if (isset($config['OrderShopgateMOPIDs'])) {
+            $orderShopgateMOPIDs = explode('|', $config['OrderShopgateMOPIDs']);
+            $config['OrderShopgateMOPIDs'] = array_map('intval', $orderShopgateMOPIDs);
+        } else {
+            $config['OrderShopgateMOPIDs'] = [];
+        }
+
+        $this->View()->assign([
+            'success' => true,
+            'data'    => $config,
+        ]);
+    }
+
+    /**
+     * Saves one mapping row.
+     */
+    public function saveMappingAction()
+    {
+        $params = $this->Request()->getParams();
+
+        $entity = $params['entity'];
+
+        $method = sprintf('delete%sByShopwareID', $entity);
+
+        // Delete the mapping for this shopware id
+        call_user_func([
+            'PlentymarketsMappingController',
+            $method,
+        ], $params['id']);
+
+        $method = sprintf('add%s', $entity);
+
+        if (!is_array($params['selectedPlentyId'])) {
+            $params['selectedPlentyId'] = [$params['selectedPlentyId']];
+        }
+
+        foreach ($params['selectedPlentyId'] as $selectedPlentyId) {
+            //$selectedPlentyId = sprintf("%.1f", (float)$selectedPlentyId);
+
+            call_user_func([
+                'PlentymarketsMappingController',
+                $method,
+            ], $params['id'], $selectedPlentyId);
+        }
+
+        // Neu schreiben
+        $this->View()->assign([
+            'success' => true,
+            'data'    => PlentymarketsMappingController::getStatusByEntity($entity),
+        ]);
+    }
+
+    /**
+     * Announces an export.
+     */
+    public function handleExportAction()
+    {
+        $params = $this->Request()->getParams();
+
+        if (PlentymarketsExportWizard::getInstance()->isActive()) {
+            return $this->View()->assign([
+                'success' => true,
+                'message' => 'Aktion kann nicht ausgeführt werden, da der automatische Export aktiv ist',
+            ]);
+        }
+
+        try {
+            if ($params['doAction'] == 'reset') {
+                PlentymarketsExportController::getInstance()->reset($params['name']);
+                PlentymarketsLogger::getInstance()->message('Export:Initial:'.ucfirst($params['name']), 'Resetted');
+
+                $message = 'Export-Status zurückgesetzt';
+            } elseif ($params['doAction'] == 'erase') {
+                PlentymarketsExportController::getInstance()->erase($params['name']);
+                PlentymarketsLogger::getInstance()->message('Export:Initial:'.ucfirst($params['name']), 'Completely erased');
+
+                $message = 'Export komplett zurückgesetzt';
+            } elseif ($params['doAction'] == 'start') {
+                PlentymarketsExportController::getInstance()->announce($params['name']);
+                PlentymarketsLogger::getInstance()->message('Export:Initial:'.ucfirst($params['name']), 'Announced');
+
+                $message = 'Export vorgemerkt';
+            }
+
+            $success = true;
+        } catch (PlentymarketsExportException $E) {
+            $success = false;
+            $message = $E->getMessage();
+
+            $method = sprintf('set%sExportStatus', $params['name']);
+            PlentymarketsConfig::getInstance()->$method('error');
+
+            $method = sprintf('set%sExportLastErrorMessage', $params['name']);
+            PlentymarketsConfig::getInstance()->$method($message);
+
+            PlentymarketsLogger::getInstance()->error('Export:Initial:'.ucfirst($params['name']), $message, $E->getCode());
+        }
+
+        $settings = $this->getExportStatusList();
+
+        $this->View()->assign([
+            'success' => $success,
+            'message' => $message,
+            'data'    => $settings[$params['name']],
+        ]);
+    }
+
+    /**
+     * Resets a last update timestamp of an entity.
+     */
+    public function resetImportTimestampAction()
+    {
+        $entity = $this->Request()->get('entity');
+
+        if (in_array($entity, ['ItemStack', 'ItemPrice', 'ItemStock', 'ItemBundle'])) {
+            PlentymarketsConfig::getInstance()->erase('Import'.$entity.'LastUpdateTimestamp');
+            PlentymarketsLogger::getInstance()->message('Sync:Reset', $entity.' resetted');
+        }
+
+        // Cleanup the mapping – whatsoever
+        PlentymarketsGarbageCollector::getInstance()->run(
+            PlentymarketsGarbageCollector::ACTION_MAPPING
+        );
+
+        $this->View()->assign([
+            'success' => true,
+            'data'    => $entity,
+        ]);
+    }
+
+    /**
+     * Returns the status for each initial export entity.
+     *
+     * @return array
+     */
+    protected function getExportStatusList()
+    {
+        return PlentymarketsExportStatusController::getInstance()->getOverview();
+    }
+
+    /**
+     * Loads the export status list.
+     */
+    public function getExportStatusListAction()
+    {
+        $this->View()->assign([
+            'success' => true,
+            'data'    => array_values($this->getExportStatusList()),
+        ]);
+    }
+
+    /**
+     * Loads the plenty mapping data.
+     */
+    public function getPlentyMappingDataAction()
+    {
+        $forceReload = $this->Request()->get('force', false);
+
+        switch ($this->Request()->map) {
+            case 'Country':
+                $data = PlentymarketsConfig::getInstance()->getMiscCountriesSorted();
+                break;
+
+            case 'Currency':
+                $data = PlentymarketsConfig::getInstance()->getMiscCurrenciesSorted();
+                break;
+
+            case 'MeasureUnit':
+                $data = PlentymarketsConfig::getInstance()->getItemMeasureUnits();
+                break;
+
+            case 'Vat':
+
+                if ($forceReload) {
+                    PlentymarketsConfig::getInstance()->setMiscVatLastImport(0);
+                }
+
+                $data = PlentymarketsImportController::getVatList();
+                break;
+
+            case 'Referrer':
+
+                if ($forceReload) {
+                    PlentymarketsConfig::getInstance()->setMiscSalesOrderReferrerLastImport(0);
+                }
+
+                $data = PlentymarketsImportController::getOrderReferrerList();
+                break;
+
+            case 'ShippingProfile':
+
+                if ($forceReload) {
+                    PlentymarketsConfig::getInstance()->setMiscShippingProfilesLastImport(0);
+                }
+
+                $data = PlentymarketsImportController::getShippingProfileList();
+                break;
+
+            case 'MethodOfPayment':
+
+                if ($forceReload) {
+                    PlentymarketsConfig::getInstance()->setMiscMethodsOfPaymentLastImport(0);
+                }
+
+                $data = PlentymarketsImportController::getMethodOfPaymentList();
+                break;
+
+            case 'CustomerClass':
+
+                if ($forceReload) {
+                    PlentymarketsConfig::getInstance()->setMiscCustomerClassLastImport(0);
+                }
+
+                $data = PlentymarketsImportController::getCustomerClassList();
+                break;
+
+            case 'Shop':
+
+                if ($forceReload) {
+                    PlentymarketsConfig::getInstance()->setMiscMultishopsLastImport(0);
+                }
+
+                $data = PlentymarketsImportController::getStoreList();
+                break;
+
+            case 'OrderStatus':
+            case 'PaymentStatus':
+
+                if ($forceReload) {
+                    PlentymarketsConfig::getInstance()->setMiscOrderStatusLastImport(0);
+                }
+
+                $data = PlentymarketsImportController::getOrderStatusList();
+                foreach ($data as &$d) {
+                    $d['id'] = $d['status'];
+                }
+                break;
+        }
+
+        $this->View()->assign([
+            'success' => true,
+            'data'    => array_values($data),
+        ]);
+    }
+
+    /**
+     * Loads the mapping data.
+     */
+    public function getMappingDataAction()
+    {
+        $map = $this->Request()->getParam('map');
+        $DataController = new PlentymarketsMappingDataController($this->Request()->getParam('auto', false));
+
+        switch ($map) {
+            case 'Vat':
+                $rows = $DataController->getVat();
+                break;
+
+            case 'CustomerClass':
+                $rows = $DataController->getCustomerClass();
+                break;
+
+            case 'MethodOfPayment':
+                $rows = $DataController->getMethodOfPayment();
+                break;
+
+            case 'Referrer':
+                $rows = $DataController->getReferrer();
+                break;
+
+            case 'ShippingProfile':
+                $rows = $DataController->getShippingProfile();
+                break;
+
+            case 'Country':
+                $rows = $DataController->getCountry();
+                break;
+
+            case 'Currency':
+                $rows = $DataController->getCurrency();
+                break;
+
+            case 'Shop':
+                $rows = $DataController->getShops();
+                break;
+
+            case 'MeasureUnit':
+                $rows = $DataController->getMeasureUnit();
+                break;
+
+            case 'OrderStatus':
+                $rows = $DataController->getOrderStatus();
+                break;
+
+            case 'PaymentStatus':
+                $rows = $DataController->getPaymentStatus();
+                break;
+        }
+
+        foreach ($rows as $position => &$row) {
+            $row['position'] = $position;
+        }
+
+        $this->View()->assign([
+            'success' => true,
+            'data'    => $rows,
+            'total'   => count($rows),
+        ]);
+    }
+
+    /**
+     * Loads the log data.
+     */
+    public function getLogAction()
+    {
+        $data = PlentymarketsLogger::getInstance()->get(
+            $this->Request()->get('start', 0),
+            $this->Request()->get('limit', 50),
+            $this->Request()->get('type', 0),
+            $this->Request()->get('filt0r', '')
+        );
+
+        $data['success'] = true;
+
+        $this->View()->assign($data);
+    }
+
+    /**
+     * Loads the log identifiers.
+     */
+    public function getLogIdentifierListAction()
+    {
+        $this->View()->assign([
+            'success' => true,
+            'data'    => PlentymarketsLogger::getInstance()->getIdentifierList(),
+        ]);
+    }
+
+    /**
+     * Loads the status data.
+     */
+    public function getMappingStatusAction()
+    {
+        $this->View()->assign([
+            'success' => true,
+            'data'    => array_values(PlentymarketsMappingController::getStatusList()),
+        ]);
+    }
+
+    /**
+     * Loads the warehouse list data.
+     */
+    public function getWarehouseListAction()
+    {
+        $this->View()->assign([
+            'success' => true,
+            'data'    => array_values(PlentymarketsImportController::getWarehouseList()),
+        ]);
+    }
+
+    /**
+     * Loads the order status list data.
+     */
+    public function getOrderStatusListAction()
+    {
+        $values = PlentymarketsImportController::getOrderStatusList();
+        $values[0] = [
+            'status' => 0,
+            'name'   => '---',
+        ];
+
+        ksort($values);
+
+        $this->View()->assign([
+            'success' => true,
+            'data'    => array_values($values),
+        ]);
+    }
+
+    /**
+     * Loads the referrer list data.
+     */
+    public function getReferrerListAction()
+    {
+        $this->View()->assign([
+            'success' => true,
+            'data'    => array_values(PlentymarketsImportController::getOrderReferrerList()),
+        ]);
+    }
+
+    /**
+     * Loads the multishop list data.
+     */
+    public function getMultishopListAction()
+    {
+        $this->View()->assign([
+            'success' => true,
+            'data'    => array_values(PlentymarketsImportController::getStoreList()),
+        ]);
+    }
+
+    /**
+     * Loads the producer list data.
+     */
+    public function getProducerListAction()
+    {
+        $this->View()->assign([
+            'success' => true,
+            'data'    => Shopware()->Db()
+                ->fetchAll('
 				SELECT id, name FROM s_articles_supplier ORDER BY name
-			')
-		));
-	}
+			'),
+        ]);
+    }
 
-	/**
-	 * Checks the entered credentials data
-	 */
-	public function testApiCredentialsAction()
-	{
-		try
-		{
-			$wsdl = $this->Request()->ApiWsdl . '/plenty/api/soap/version110/?xml';
-			$Client = PlentymarketsSoapClient::getTestInstance($wsdl, $this->Request()->ApiUsername, $this->Request()->ApiPassword);
-		}
-		catch (Exception $E)
-		{
-			$this->View()->assign(array(
-				'success' => false,
-				'message' => $E->getMessage()
-			));
-			return;
-		}
+    /**
+     * Checks the entered credentials data.
+     */
+    public function testApiCredentialsAction()
+    {
+        try {
+            $wsdl = $this->Request()->ApiWsdl.'/plenty/api/soap/version110/?xml';
+            $Client = PlentymarketsSoapClient::getTestInstance($wsdl, $this->Request()->ApiUsername, $this->Request()->ApiPassword);
+        } catch (Exception $E) {
+            $this->View()->assign([
+                'success' => false,
+                'message' => $E->getMessage(),
+            ]);
 
-		$this->View()->assign(array(
-			'success' => true,
-			'data' => $Client->GetServerTime()
-		));
-	}
+            return;
+        }
 
-	/**
-	 * Syncs an item by it's plentymarkets id
-	 */
-	public function syncItemAction()
-	{
-		$itemId = (integer) $this->Request()->get('itemId', 0);
+        $this->View()->assign([
+            'success' => true,
+            'data'    => $Client->GetServerTime(),
+        ]);
+    }
 
-		if ($itemId)
-		{
-			// Controller
-			$controller = new PlentymarketsImportControllerItem();
+    /**
+     * Syncs an item by it's plentymarkets id.
+     */
+    public function syncItemAction()
+    {
+        $itemId = (int) $this->Request()->get('itemId', 0);
 
-			// StoreIds
-			$stores = Shopware()->Db()->fetchAll('
+        if ($itemId) {
+            // Controller
+            $controller = new PlentymarketsImportControllerItem();
+
+            // StoreIds
+            $stores = Shopware()->Db()->fetchAll('
 				SELECT plentyID FROM plenty_mapping_shop
 			');
 
-			try
-			{
-				foreach ($stores as $store)
-				{
-					$controller->importItem($itemId, $store['plentyID']);
-				}
-			}
-			catch (Exception $e)
-			{
-				PyLog()->error('Fix:Item:Price', $e->getMessage());
-			}
+            try {
+                foreach ($stores as $store) {
+                    $controller->importItem($itemId, $store['plentyID']);
+                }
+            } catch (Exception $e) {
+                PyLog()->error('Fix:Item:Price', $e->getMessage());
+            }
 
-			$controller->finish();
-		}
-	}
+            $controller->finish();
+        }
+    }
 
-	/**
-	 * Fixes the item with an empty order number
-	 */
-	public function fixEmptyItemDetailNumberAction()
-	{
-		$articleRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
+    /**
+     * Fixes the item with an empty order number.
+     */
+    public function fixEmptyItemDetailNumberAction()
+    {
+        $articleRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
 
-		/** @var Shopware\Models\Article\Detail $detail */
-		$detail = $articleRepository->findOneBy(array('number' => ''));
+        /** @var Shopware\Models\Article\Detail $detail */
+        $detail = $articleRepository->findOneBy(['number' => '']);
 
-		if ($detail)
-		{
-			$number = PlentymarketsImportItemHelper::getItemNumber();
-			$detail->setNumber($number);
-			Shopware()->Models()->persist($detail);
-			Shopware()->Models()->flush();
+        if ($detail) {
+            $number = PlentymarketsImportItemHelper::getItemNumber();
+            $detail->setNumber($number);
+            Shopware()->Models()->persist($detail);
+            Shopware()->Models()->flush();
 
-			PyLog()->message('Fix:Item:Detail:Number', 'The number of the item detail with the id »' . $detail->getId() . '« has been set to »' . $number . '«.');
-		}
-		else
-		{
-			PyLog()->message('Fix:Item:Detail:Number', 'No item without a number has been found');
-		}
-	}
+            PyLog()->message('Fix:Item:Detail:Number', 'The number of the item detail with the id »'.$detail->getId().'« has been set to »'.$number.'«.');
+        } else {
+            PyLog()->message('Fix:Item:Detail:Number', 'No item without a number has been found');
+        }
+    }
 }

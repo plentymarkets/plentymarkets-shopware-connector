@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,129 +32,128 @@
  */
 class PlentySoapObject_SetOrdersHead
 {
-	
-	/**
-	 * @var string
-	 */
-	public $Currency;
-	
-	/**
-	 * @var int
-	 */
-	public $CustomerID;
-	
-	/**
-	 * @var string
-	 */
-	public $CustomerReference;
-	
-	/**
-	 * @var int
-	 */
-	public $DeliveryAddressID;
-	
-	/**
-	 * @var string
-	 */
-	public $DoneTimestamp;
-	
-	/**
-	 * @var string
-	 */
-	public $EstimatedTimeOfShipment;
-	
-	/**
-	 * @var string
-	 */
-	public $ExternalOrderID;
-	
-	/**
-	 * @var int
-	 */
-	public $Marking1ID;
-	
-	/**
-	 * @var int
-	 */
-	public $MethodOfPaymentID;
-	
-	/**
-	 * @var int
-	 */
-	public $OrderID;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_orderinfo
-	 */
-	public $OrderInfos;
-	
-	/**
-	 * @var float
-	 */
-	public $OrderStatus;
-	
-	/**
-	 * @var int
-	 */
-	public $OrderTimestamp;
-	
-	/**
-	 * @var string
-	 */
-	public $OrderType;
-	
-	/**
-	 * @var string
-	 */
-	public $PackageNumber;
-	
-	/**
-	 * @var string
-	 */
-	public $PaidTimestamp;
-	
-	/**
-	 * @var float
-	 */
-	public $ReferrerID;
-	
-	/**
-	 * @var int
-	 */
-	public $ResponsibleID;
-	
-	/**
-	 * @var int
-	 */
-	public $SalesAgentID;
-	
-	/**
-	 * @var float
-	 */
-	public $ShippingCosts;
-	
-	/**
-	 * @var int
-	 */
-	public $ShippingID;
-	
-	/**
-	 * @var int
-	 */
-	public $ShippingMethodID;
-	
-	/**
-	 * @var int
-	 */
-	public $ShippingProfileID;
-	
-	/**
-	 * @var int
-	 */
-	public $StoreID;
-	
-	/**
-	 * @var int
-	 */
-	public $WarehouseID;
+    /**
+     * @var string
+     */
+    public $Currency;
+
+    /**
+     * @var int
+     */
+    public $CustomerID;
+
+    /**
+     * @var string
+     */
+    public $CustomerReference;
+
+    /**
+     * @var int
+     */
+    public $DeliveryAddressID;
+
+    /**
+     * @var string
+     */
+    public $DoneTimestamp;
+
+    /**
+     * @var string
+     */
+    public $EstimatedTimeOfShipment;
+
+    /**
+     * @var string
+     */
+    public $ExternalOrderID;
+
+    /**
+     * @var int
+     */
+    public $Marking1ID;
+
+    /**
+     * @var int
+     */
+    public $MethodOfPaymentID;
+
+    /**
+     * @var int
+     */
+    public $OrderID;
+
+    /**
+     * @var ArrayOfPlentysoapobject_orderinfo
+     */
+    public $OrderInfos;
+
+    /**
+     * @var float
+     */
+    public $OrderStatus;
+
+    /**
+     * @var int
+     */
+    public $OrderTimestamp;
+
+    /**
+     * @var string
+     */
+    public $OrderType;
+
+    /**
+     * @var string
+     */
+    public $PackageNumber;
+
+    /**
+     * @var string
+     */
+    public $PaidTimestamp;
+
+    /**
+     * @var float
+     */
+    public $ReferrerID;
+
+    /**
+     * @var int
+     */
+    public $ResponsibleID;
+
+    /**
+     * @var int
+     */
+    public $SalesAgentID;
+
+    /**
+     * @var float
+     */
+    public $ShippingCosts;
+
+    /**
+     * @var int
+     */
+    public $ShippingID;
+
+    /**
+     * @var int
+     */
+    public $ShippingMethodID;
+
+    /**
+     * @var int
+     */
+    public $ShippingProfileID;
+
+    /**
+     * @var int
+     */
+    public $StoreID;
+
+    /**
+     * @var int
+     */
+    public $WarehouseID;
 }

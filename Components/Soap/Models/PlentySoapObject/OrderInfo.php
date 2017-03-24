@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,29 +32,28 @@
  */
 class PlentySoapObject_OrderInfo
 {
-	
-	/**
-	 * @var string
-	 */
-	public $Info;
-	
-	/**
-	 * @var int
-	 */
-	public $InfoCustomer;
-	
-	/**
-	 * @var int
-	 */
-	public $InfoDate;
-	
-	/**
-	 * @var int
-	 */
-	public $InfoID;
-	
-	/**
-	 * @var int
-	 */
-	public $InfoUser;
+    /**
+     * @var string
+     */
+    public $Info;
+
+    /**
+     * @var int
+     */
+    public $InfoCustomer;
+
+    /**
+     * @var int
+     */
+    public $InfoDate;
+
+    /**
+     * @var int
+     */
+    public $InfoID;
+
+    /**
+     * @var int
+     */
+    public $InfoUser;
 }

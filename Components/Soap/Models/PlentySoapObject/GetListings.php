@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,109 +32,108 @@
  */
 class PlentySoapObject_GetListings
 {
-	
-	/**
-	 * @var string
-	 */
-	public $EndTime;
-	
-	/**
-	 * @var string
-	 */
-	public $ExternalId;
-	
-	/**
-	 * @var string
-	 */
-	public $ExternalSKU;
-	
-	/**
-	 * @var int
-	 */
-	public $HasVariations;
-	
-	/**
-	 * @var int
-	 */
-	public $ItemId;
-	
-	/**
-	 * @var string
-	 */
-	public $LastUpdate;
-	
-	/**
-	 * @var int
-	 */
-	public $ListingId;
-	
-	/**
-	 * @var string
-	 */
-	public $ListingTitle;
-	
-	/**
-	 * @var string
-	 */
-	public $ListingType;
-	
-	/**
-	 * @var int
-	 */
-	public $MarketId;
-	
-	/**
-	 * @var int
-	 */
-	public $MarketListingHistoryID;
-	
-	/**
-	 * @var int
-	 */
-	public $MarketListingID;
-	
-	/**
-	 * @var string
-	 */
-	public $MarketName;
-	
-	/**
-	 * @var float
-	 */
-	public $Price;
-	
-	/**
-	 * @var string
-	 */
-	public $Promotion;
-	
-	/**
-	 * @var int
-	 */
-	public $Quantity;
-	
-	/**
-	 * @var int
-	 */
-	public $QuantityRemain;
-	
-	/**
-	 * @var int
-	 */
-	public $QuantitySold;
-	
-	/**
-	 * @var string
-	 */
-	public $RelistedExternalId;
-	
-	/**
-	 * @var string
-	 */
-	public $StartTime;
-	
-	/**
-	 * @var string
-	 */
-	public $Status;
+    /**
+     * @var string
+     */
+    public $EndTime;
+
+    /**
+     * @var string
+     */
+    public $ExternalId;
+
+    /**
+     * @var string
+     */
+    public $ExternalSKU;
+
+    /**
+     * @var int
+     */
+    public $HasVariations;
+
+    /**
+     * @var int
+     */
+    public $ItemId;
+
+    /**
+     * @var string
+     */
+    public $LastUpdate;
+
+    /**
+     * @var int
+     */
+    public $ListingId;
+
+    /**
+     * @var string
+     */
+    public $ListingTitle;
+
+    /**
+     * @var string
+     */
+    public $ListingType;
+
+    /**
+     * @var int
+     */
+    public $MarketId;
+
+    /**
+     * @var int
+     */
+    public $MarketListingHistoryID;
+
+    /**
+     * @var int
+     */
+    public $MarketListingID;
+
+    /**
+     * @var string
+     */
+    public $MarketName;
+
+    /**
+     * @var float
+     */
+    public $Price;
+
+    /**
+     * @var string
+     */
+    public $Promotion;
+
+    /**
+     * @var int
+     */
+    public $Quantity;
+
+    /**
+     * @var int
+     */
+    public $QuantityRemain;
+
+    /**
+     * @var int
+     */
+    public $QuantitySold;
+
+    /**
+     * @var string
+     */
+    public $RelistedExternalId;
+
+    /**
+     * @var string
+     */
+    public $StartTime;
+
+    /**
+     * @var string
+     */
+    public $Status;
 }

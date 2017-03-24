@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,109 +32,108 @@
  */
 class PlentySoapObject_GetShippingProfiles
 {
-	
-	/**
-	 * @var string
-	 */
-	public $BackendName;
-	
-	/**
-	 * @var int
-	 */
-	public $Category;
-	
-	/**
-	 * @var int
-	 */
-	public $DefaultEnabled;
-	
-	/**
-	 * @var int
-	 */
-	public $EbayAuctionTyp;
-	
-	/**
-	 * @var int
-	 */
-	public $EbayExpressShipping;
-	
-	/**
-	 * @var string
-	 */
-	public $EbayShippingProfiles;
-	
-	/**
-	 * @var string
-	 */
-	public $ExcludedCustomerGroups;
-	
-	/**
-	 * @var string
-	 */
-	public $ExcludedMethodOfPayments;
-	
-	/**
-	 * @var float
-	 */
-	public $ExtraChargeForIslands;
-	
-	/**
-	 * @var int
-	 */
-	public $ItemExtraShippingCharge;
-	
-	/**
-	 * @var int
-	 */
-	public $MarkingID;
-	
-	/**
-	 * @var string
-	 */
-	public $Multishops;
-	
-	/**
-	 * @var int
-	 */
-	public $NeckermannReferenceID;
-	
-	/**
-	 * @var int
-	 */
-	public $PostIdent;
-	
-	/**
-	 * @var int
-	 */
-	public $Priority;
-	
-	/**
-	 * @var string
-	 */
-	public $SalesOrderReferrers;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_shippingcharges
-	 */
-	public $ShippingCharges;
-	
-	/**
-	 * @var string
-	 */
-	public $ShippingGroups;
-	
-	/**
-	 * @var int
-	 */
-	public $ShippingProfileID;
-	
-	/**
-	 * @var int
-	 */
-	public $ShippingServiceProviderID;
-	
-	/**
-	 * @var string
-	 */
-	public $WebshopName;
+    /**
+     * @var string
+     */
+    public $BackendName;
+
+    /**
+     * @var int
+     */
+    public $Category;
+
+    /**
+     * @var int
+     */
+    public $DefaultEnabled;
+
+    /**
+     * @var int
+     */
+    public $EbayAuctionTyp;
+
+    /**
+     * @var int
+     */
+    public $EbayExpressShipping;
+
+    /**
+     * @var string
+     */
+    public $EbayShippingProfiles;
+
+    /**
+     * @var string
+     */
+    public $ExcludedCustomerGroups;
+
+    /**
+     * @var string
+     */
+    public $ExcludedMethodOfPayments;
+
+    /**
+     * @var float
+     */
+    public $ExtraChargeForIslands;
+
+    /**
+     * @var int
+     */
+    public $ItemExtraShippingCharge;
+
+    /**
+     * @var int
+     */
+    public $MarkingID;
+
+    /**
+     * @var string
+     */
+    public $Multishops;
+
+    /**
+     * @var int
+     */
+    public $NeckermannReferenceID;
+
+    /**
+     * @var int
+     */
+    public $PostIdent;
+
+    /**
+     * @var int
+     */
+    public $Priority;
+
+    /**
+     * @var string
+     */
+    public $SalesOrderReferrers;
+
+    /**
+     * @var ArrayOfPlentysoapobject_shippingcharges
+     */
+    public $ShippingCharges;
+
+    /**
+     * @var string
+     */
+    public $ShippingGroups;
+
+    /**
+     * @var int
+     */
+    public $ShippingProfileID;
+
+    /**
+     * @var int
+     */
+    public $ShippingServiceProviderID;
+
+    /**
+     * @var string
+     */
+    public $WebshopName;
 }

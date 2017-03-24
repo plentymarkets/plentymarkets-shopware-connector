@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,49 +32,48 @@
  */
 class PlentySoapRequestObject_SetItemImagesImage
 {
-	
-	/**
-	 * @var int
-	 */
-	public $AttributeValueId;
-	
-	/**
-	 * @var base64Binary
-	 */
-	public $ImageFileData;
-	
-	/**
-	 * @var string
-	 */
-	public $ImageFileEnding;
-	
-	/**
-	 * @var string
-	 */
-	public $ImageFileName;
-	
-	/**
-	 * @var int
-	 */
-	public $ImageID;
-	
-	/**
-	 * @var string
-	 */
-	public $ImageURL;
-	
-	/**
-	 * @var ArrayOfPlentysoaprequestobject_setitemimagesimagename
-	 */
-	public $Names;
-	
-	/**
-	 * @var int
-	 */
-	public $Position;
-	
-	/**
-	 * @var ArrayOfPlentysoaprequestobject_setitemimagesimagereference
-	 */
-	public $References;
+    /**
+     * @var int
+     */
+    public $AttributeValueId;
+
+    /**
+     * @var base64Binary
+     */
+    public $ImageFileData;
+
+    /**
+     * @var string
+     */
+    public $ImageFileEnding;
+
+    /**
+     * @var string
+     */
+    public $ImageFileName;
+
+    /**
+     * @var int
+     */
+    public $ImageID;
+
+    /**
+     * @var string
+     */
+    public $ImageURL;
+
+    /**
+     * @var ArrayOfPlentysoaprequestobject_setitemimagesimagename
+     */
+    public $Names;
+
+    /**
+     * @var int
+     */
+    public $Position;
+
+    /**
+     * @var ArrayOfPlentysoaprequestobject_setitemimagesimagereference
+     */
+    public $References;
 }

@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,54 +32,53 @@
  */
 class PlentySoapObject_AddIncomingPayments
 {
-	
-	/**
-	 * @var float
-	 */
-	public $Amount;
-	
-	/**
-	 * @var string
-	 */
-	public $Currency;
-	
-	/**
-	 * @var int
-	 */
-	public $CustomerID;
-	
-	/**
-	 * @var int
-	 */
-	public $MethodOfPaymentID;
-	
-	/**
-	 * @var int
-	 */
-	public $OrderID;
-	
-	/**
-	 * @var PlentySoapObject_AddIncomingPaymentInformation
-	 */
-	public $PaymentInformation;
-	
-	/**
-	 * @var PlentySoapObject_AddIncomingPaymentPayPal
-	 */
-	public $PaymentPayPal;
-	
-	/**
-	 * @var string
-	 */
-	public $ReasonForPayment;
-	
-	/**
-	 * @var string
-	 */
-	public $TransactionID;
-	
-	/**
-	 * @var int
-	 */
-	public $TransactionTime;
+    /**
+     * @var float
+     */
+    public $Amount;
+
+    /**
+     * @var string
+     */
+    public $Currency;
+
+    /**
+     * @var int
+     */
+    public $CustomerID;
+
+    /**
+     * @var int
+     */
+    public $MethodOfPaymentID;
+
+    /**
+     * @var int
+     */
+    public $OrderID;
+
+    /**
+     * @var PlentySoapObject_AddIncomingPaymentInformation
+     */
+    public $PaymentInformation;
+
+    /**
+     * @var PlentySoapObject_AddIncomingPaymentPayPal
+     */
+    public $PaymentPayPal;
+
+    /**
+     * @var string
+     */
+    public $ReasonForPayment;
+
+    /**
+     * @var string
+     */
+    public $TransactionID;
+
+    /**
+     * @var int
+     */
+    public $TransactionTime;
 }
