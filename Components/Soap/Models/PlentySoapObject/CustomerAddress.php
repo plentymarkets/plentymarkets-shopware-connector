@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,119 +32,118 @@
  */
 class PlentySoapObject_CustomerAddress
 {
+    /**
+     * @var string
+     */
+    public $AdditionalName;
 
-	/**
-	 * @var string
-	 */
-	public $AdditionalName;
+    /**
+     * @var string
+     */
+    public $City;
 
-	/**
-	 * @var string
-	 */
-	public $City;
+    /**
+     * @var string
+     */
+    public $Company;
 
-	/**
-	 * @var string
-	 */
-	public $Company;
+    /**
+     * @var int
+     */
+    public $CountryID;
 
-	/**
-	 * @var int
-	 */
-	public $CountryID;
+    /**
+     * @var string
+     */
+    public $CountryISO2;
 
-	/**
-	 * @var string
-	 */
-	public $CountryISO2;
+    /**
+     * @var int
+     */
+    public $CustomerID;
 
-	/**
-	 * @var int
-	 */
-	public $CustomerID;
+    /**
+     * @var string
+     */
+    public $CustomerNo;
 
-	/**
-	 * @var string
-	 */
-	public $CustomerNo;
+    /**
+     * @var string
+     */
+    public $CustomerVATNumber;
 
-	/**
-	 * @var string
-	 */
-	public $CustomerVATNumber;
+    /**
+     * @var string
+     */
+    public $EbayName;
 
-	/**
-	 * @var string
-	 */
-	public $EbayName;
+    /**
+     * @var string
+     */
+    public $Email;
 
-	/**
-	 * @var string
-	 */
-	public $Email;
+    /**
+     * @var string
+     */
+    public $ExternalCustomerNo;
 
-	/**
-	 * @var string
-	 */
-	public $ExternalCustomerNo;
+    /**
+     * @var string
+     */
+    public $Fax;
 
-	/**
-	 * @var string
-	 */
-	public $Fax;
+    /**
+     * @var string
+     */
+    public $FirstName;
 
-	/**
-	 * @var string
-	 */
-	public $FirstName;
+    /**
+     * @var int
+     */
+    public $FormOfAddress;
 
-	/**
-	 * @var int
-	 */
-	public $FormOfAddress;
+    /**
+     * @var string
+     */
+    public $HouseNumber;
 
-	/**
-	 * @var string
-	 */
-	public $HouseNumber;
+    /**
+     * @var string
+     */
+    public $Postident;
 
-	/**
-	 * @var string
-	 */
-	public $Postident;
+    /**
+     * @var string
+     */
+    public $State;
 
-	/**
-	 * @var string
-	 */
-	public $State;
+    /**
+     * @var string
+     */
+    public $StateISO;
 
-	/**
-	 * @var string
-	 */
-	public $StateISO;
+    /**
+     * @var string
+     */
+    public $Street;
 
-	/**
-	 * @var string
-	 */
-	public $Street;
+    /**
+     * @var string
+     */
+    public $Surname;
 
-	/**
-	 * @var string
-	 */
-	public $Surname;
+    /**
+     * @var string
+     */
+    public $Telephone;
 
-	/**
-	 * @var string
-	 */
-	public $Telephone;
+    /**
+     * @var string
+     */
+    public $Title;
 
-	/**
-	 * @var string
-	 */
-	public $Title;
-
-	/**
-	 * @var string
-	 */
-	public $ZIP;
+    /**
+     * @var string
+     */
+    public $ZIP;
 }

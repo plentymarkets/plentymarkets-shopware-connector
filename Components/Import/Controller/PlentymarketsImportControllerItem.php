@@ -1,7 +1,7 @@
 <?php
 /**
  * plentymarkets shopware connector
- * Copyright © 2013 plentymarkets GmbH
+ * Copyright © 2013 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -26,7 +26,6 @@
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * The class PlentymarketsImportController does the actual import for different cronjobs e.g. in the class PlentymarketsCronjobController.
  * It uses the different import entities in /Import/Entity respectively in /Import/Entity/Order, for example PlentymarketsImportEntityItem.
@@ -35,85 +34,83 @@
  */
 class PlentymarketsImportControllerItem
 {
-	/**
-	 *
-	 * @var integer
-	 */
-	const DEFAULT_CHUNK_SIZE = 250;
+    /**
+     * @var int
+     */
+    const DEFAULT_CHUNK_SIZE = 250;
 
-	/**
-	 *
-	 * @var array
-	 */
-	protected $itemIdsDone = array();
+    /**
+     * @var array
+     */
+    protected $itemIdsDone = [];
 
-	/**
-	 * imports the item for the given shop
-	 *
-	 * @param integer $itemId
-	 * @param integer $storeId
-	 * @throws PlentymarketsImportException
-	 */
-	public function importItem($itemId, $storeId)
-	{
-		// Check whether the item has already been imported
-		$full = !isset($this->itemIdsDone[$itemId]);
+    /**
+     * imports the item for the given shop.
+     *
+     * @param int $itemId
+     * @param int $storeId
+     *
+     * @throws PlentymarketsImportException
+     */
+    public function importItem($itemId, $storeId)
+    {
+        // Check whether the item has already been imported
+        $full = !isset($this->itemIdsDone[$itemId]);
 
-		// Build the request
-		$Request_GetItemsBase = new PlentySoapRequest_GetItemsBase();
-		$Request_GetItemsBase->GetAttributeValueSets = $full;
-		$Request_GetItemsBase->GetCategories = true;
-		$Request_GetItemsBase->GetCategoryNames = true;
-		$Request_GetItemsBase->GetItemAttributeMarkup = $full;
-		$Request_GetItemsBase->GetItemOthers = $full;
-		//$Request_GetItemsBase->GetItemProperties = $full;
-		$Request_GetItemsBase->GetItemProperties = true;
-		$Request_GetItemsBase->GetItemSuppliers = false;
-		$Request_GetItemsBase->GetItemURL = 0;
-		$Request_GetItemsBase->GetLongDescription = $full;
-		$Request_GetItemsBase->GetMetaDescription = false;
-		$Request_GetItemsBase->GetShortDescription = $full;
-		$Request_GetItemsBase->GetTechnicalData = false;
-		$Request_GetItemsBase->StoreID = $storeId;
-		$Request_GetItemsBase->ItemID = $itemId;
+        // Build the request
+        $Request_GetItemsBase = new PlentySoapRequest_GetItemsBase();
+        $Request_GetItemsBase->GetAttributeValueSets = $full;
+        $Request_GetItemsBase->GetCategories = true;
+        $Request_GetItemsBase->GetCategoryNames = true;
+        $Request_GetItemsBase->GetItemAttributeMarkup = $full;
+        $Request_GetItemsBase->GetItemOthers = $full;
+        //$Request_GetItemsBase->GetItemProperties = $full;
+        $Request_GetItemsBase->GetItemProperties = true;
+        $Request_GetItemsBase->GetItemSuppliers = false;
+        $Request_GetItemsBase->GetItemURL = 0;
+        $Request_GetItemsBase->GetLongDescription = $full;
+        $Request_GetItemsBase->GetMetaDescription = false;
+        $Request_GetItemsBase->GetShortDescription = $full;
+        $Request_GetItemsBase->GetTechnicalData = false;
+        $Request_GetItemsBase->StoreID = $storeId;
+        $Request_GetItemsBase->ItemID = $itemId;
 
-		// get the main language of the shop
-	//$mainLang = array_values(PlentymarketsTranslation::getInstance()->getShopMainLanguage(PlentymarketsMappingController::getShopByPlentyID($storeId)));
-		// set the main language of the shop in soap request
-	//$Request_GetItemsBase->Lang = PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($mainLang[0]['locale']);
+        // get the main language of the shop
+    //$mainLang = array_values(PlentymarketsTranslation::getInstance()->getShopMainLanguage(PlentymarketsMappingController::getShopByPlentyID($storeId)));
+        // set the main language of the shop in soap request
+    //$Request_GetItemsBase->Lang = PlentymarketsTranslation::getInstance()->getPlentyLocaleFormat($mainLang[0]['locale']);
 
-		$Request_GetItemsBase->Lang = 'de';
+        $Request_GetItemsBase->Lang = 'de';
 
         // Allow plugins to change the data
         $Request_GetItemsBase = Enlight()->Events()->filter(
             'PlentyConnector_ImportControllerItem_AfterCreateGetItemBaseRequest',
             $Request_GetItemsBase,
-            array(
+            [
                 'subject' => $this,
-                'itemid' => $itemId,
+                'itemid'  => $itemId,
                 'storeid' => $storeId,
-            )
+            ]
         );
 
-		// Do the request
-		$Response_GetItemsBase = PlentymarketsSoapClient::getInstance()->GetItemsBase($Request_GetItemsBase);
+        // Do the request
+        $Response_GetItemsBase = PlentymarketsSoapClient::getInstance()->GetItemsBase($Request_GetItemsBase);
 
-		// On error
-		if ($Response_GetItemsBase->Success == false)
-		{
-			// Re-add the item to the stack and quit
-			PlentymarketsImportStackItem::getInstance()->addItem($itemId, $storeId);
-			return;
-		}
+        // On error
+        if ($Response_GetItemsBase->Success == false) {
+            // Re-add the item to the stack and quit
+            PlentymarketsImportStackItem::getInstance()->addItem($itemId, $storeId);
 
-		// Item not found
-		if (!isset($Response_GetItemsBase->ItemsBase->item[0]))
-		{
-			return;
-		}
+            return;
+        }
 
-		//
-		$ItemBase = $Response_GetItemsBase->ItemsBase->item[0];
+        // Item not found
+        if (!isset($Response_GetItemsBase->ItemsBase->item[0])) {
+            return;
+        }
+
+        //
+        $ItemBase = $Response_GetItemsBase->ItemsBase->item[0];
 
         // Skip bundles
         $skipBundles = PlentymarketsConfig::getInstance()->getItemBundleHeadActionID(IMPORT_ITEM_BUNDLE_HEAD_NO) == IMPORT_ITEM_BUNDLE_HEAD_NO;
@@ -123,276 +120,218 @@ class PlentymarketsImportControllerItem
             'PlentyConnector_ImportControllerItem_FilterSkipBundles',
             $skipBundles,
             [
-                'subject' => $this,
-                'itemid' => $itemId,
-                'storeid' => $storeId,
+                'subject'  => $this,
+                'itemid'   => $itemId,
+                'storeid'  => $storeId,
                 'itembase' => $ItemBase,
             ]
         );
 
         if ($ItemBase->BundleType === 'bundle' && $skipBundles) {
-            PlentymarketsLogger::getInstance()->message('Sync:Item', 'The item »' . $ItemBase->Texts->Name . '« will be skipped (bundle)');
+            PlentymarketsLogger::getInstance()->message('Sync:Item', 'The item »'.$ItemBase->Texts->Name.'« will be skipped (bundle)');
 
             return;
         }
 
-		// get the item texts in all active languages
-		$itemTexts = array();
-		$shopId = PlentymarketsMappingController::getShopByPlentyID($storeId);
+        // get the item texts in all active languages
+        $itemTexts = [];
+        $shopId = PlentymarketsMappingController::getShopByPlentyID($storeId);
 
-		//if this is a main shop , get the item texts translation for its main language and its shop languages
-		if(PlentymarketsTranslation::isMainShop($shopId))
-		{
-			// get all active languages of the shop (from shopware)
-			$activeLanguages = PlentymarketsTranslation::getShopActiveLanguages($shopId);
+        //if this is a main shop , get the item texts translation for its main language and its shop languages
+        if (PlentymarketsTranslation::isMainShop($shopId)) {
+            // get all active languages of the shop (from shopware)
+            $activeLanguages = PlentymarketsTranslation::getShopActiveLanguages($shopId);
 
-			foreach($activeLanguages as $localeId => $language)
-			{
-				$Request_GetItemsTexts = new PlentySoapRequest_GetItemsTexts();
-				$Request_GetItemsTexts->ItemsList = array();
+            foreach ($activeLanguages as $localeId => $language) {
+                $Request_GetItemsTexts = new PlentySoapRequest_GetItemsTexts();
+                $Request_GetItemsTexts->ItemsList = [];
 
-				$Object_RequestItems = new PlentySoapObject_RequestItems();
-				$Object_RequestItems->ExternalItemNumer = null; // string
-				$Object_RequestItems->ItemId = $itemId; // string
-				$Object_RequestItems->ItemNumber = null; // string
-				$Object_RequestItems->Lang = PlentymarketsTranslation::getPlentyLocaleFormat($language['locale']); // string
-				$Request_GetItemsTexts->ItemsList[] = $Object_RequestItems;
+                $Object_RequestItems = new PlentySoapObject_RequestItems();
+                $Object_RequestItems->ExternalItemNumer = null; // string
+                $Object_RequestItems->ItemId = $itemId; // string
+                $Object_RequestItems->ItemNumber = null; // string
+                $Object_RequestItems->Lang = PlentymarketsTranslation::getPlentyLocaleFormat($language['locale']); // string
+                $Request_GetItemsTexts->ItemsList[] = $Object_RequestItems;
 
-				$Response_GetItemsTexts = PlentymarketsSoapClient::getInstance()->GetItemsTexts($Request_GetItemsTexts);
+                $Response_GetItemsTexts = PlentymarketsSoapClient::getInstance()->GetItemsTexts($Request_GetItemsTexts);
 
-				if (isset($Response_GetItemsTexts->ItemTexts->item[0]))
-				{
-					$itemText = array();
-					// save the language infos for the item texts
-					$itemText['locale'] = $language['locale'];
+                if (isset($Response_GetItemsTexts->ItemTexts->item[0])) {
+                    $itemText = [];
+                    // save the language infos for the item texts
+                    $itemText['locale'] = $language['locale'];
 
-					// if mainShopId == null, then it is the main shop and no language shop
-					// each language shop has a mainShopId
-					if(!is_null($language['mainShopId']))
-					{
-						$itemText['languageShopId'] = PlentymarketsTranslation::getLanguageShopID($localeId, $language['mainShopId']);
+                    // if mainShopId == null, then it is the main shop and no language shop
+                    // each language shop has a mainShopId
+                    if (!is_null($language['mainShopId'])) {
+                        $itemText['languageShopId'] = PlentymarketsTranslation::getLanguageShopID($localeId, $language['mainShopId']);
+                    } elseif (PlentymarketsTranslation::getPlentyLocaleFormat($language['locale']) != 'de') {
+                        // set the language for the main shop if the main language is not German
+                        $itemText['languageShopId'] = $shopId;
+                    }
 
-					}elseif(PlentymarketsTranslation::getPlentyLocaleFormat($language['locale']) != 'de')
-					{
-						// set the language for the main shop if the main language is not German
-						$itemText['languageShopId'] = $shopId;
-					}
+                    $itemText['texts'] = $Response_GetItemsTexts->ItemTexts->item[0];
 
-					$itemText['texts'] = $Response_GetItemsTexts->ItemTexts->item[0];
+                    $itemTexts[] = $itemText;
+                }
+            }
+        }
 
-					$itemTexts[] = $itemText;
-				}
-			}
-		}
+        try {
+            $shopId = PlentymarketsMappingController::getShopByPlentyID($storeId);
+            $Shop = Shopware()->Models()->find('Shopware\Models\Shop\Shop', $shopId);
 
-		try
-		{
-			$shopId = PlentymarketsMappingController::getShopByPlentyID($storeId);
-			$Shop = Shopware()->Models()->find('Shopware\Models\Shop\Shop', $shopId);
+            $Importuer = new PlentymarketsImportEntityItem($ItemBase, $Shop);
 
-			$Importuer = new PlentymarketsImportEntityItem($ItemBase, $Shop);
+            // The item has already been updated
+            if (!$full) {
+                // so we just need to do the categories
+                $Importuer->importCategories();
 
-			// The item has already been updated
-			if (!$full)
-			{
-				// so we just need to do the categories
-				$Importuer->importCategories();
+                //if this is a main shop , import the translation for its main language and its shop languages
+                if (PlentymarketsTranslation::isMainShop($shopId)) {
+                    if (!empty($itemTexts)) {
+                        // Do the import for item texts translation
+                        $Importuer->saveItemTextsTranslation($itemTexts);
+                    }
 
-				//if this is a main shop , import the translation for its main language and its shop languages
-				if(PlentymarketsTranslation::isMainShop($shopId))
-				{
-					if (!empty($itemTexts))
-					{
-						// Do the import for item texts translation
-						$Importuer->saveItemTextsTranslation($itemTexts);
-					}
+                    // Do the import for the property value translations
+                    $Importuer->importItemPropertyValueTranslations();
+                }
+            } else {
+                // Do a full import
+                $Importuer->import();
 
-					// Do the import for the property value translations
-					$Importuer->importItemPropertyValueTranslations();
-				}
+                //if this is a main shop , import the translation for its main language and its shop languages
+                if (PlentymarketsTranslation::isMainShop($shopId)) {
+                    if (!empty($itemTexts)) {
+                        // Do the import for item texts translation
+                        $Importuer->saveItemTextsTranslation($itemTexts);
+                    }
 
-			}
-			else
-			{
-				// Do a full import
-				$Importuer->import();
+                    // Do the import for the property value translations
+                    $Importuer->importItemPropertyValueTranslations();
+                }
 
-				//if this is a main shop , import the translation for its main language and its shop languages
-				if(PlentymarketsTranslation::isMainShop($shopId))
-				{
-					if (!empty($itemTexts))
-					{
-						// Do the import for item texts translation
-						$Importuer->saveItemTextsTranslation($itemTexts);
-					}
+                // Add it to the link controller
+                PlentymarketsImportControllerItemLinked::getInstance()->addItem($ItemBase->ItemID);
 
-					// Do the import for the property value translations
-					$Importuer->importItemPropertyValueTranslations();
-				}
+                // Mark this item as done
+                $this->itemIdsDone[$ItemBase->ItemID] = true;
+            }
 
-				// Add it to the link controller
-				PlentymarketsImportControllerItemLinked::getInstance()->addItem($ItemBase->ItemID);
+            // Log the usage data
+            PyLog()->usage();
+        } catch (Shopware\Components\Api\Exception\ValidationException $E) {
+            PlentymarketsLogger::getInstance()->error('Sync:Item:Validation', 'The item »'.$ItemBase->Texts->Name.'« with the id »'.$ItemBase->ItemID.'« could not be imported', 3010);
+            foreach ($E->getViolations() as $ConstraintViolation) {
+                PlentymarketsLogger::getInstance()->error('Sync:Item:Validation', $ConstraintViolation->getMessage());
+                PlentymarketsLogger::getInstance()->error('Sync:Item:Validation', $ConstraintViolation->getPropertyPath().': '.$ConstraintViolation->getInvalidValue());
+            }
+        } catch (Shopware\Components\Api\Exception\OrmException $E) {
+            PlentymarketsLogger::getInstance()->error('Sync:Item:Orm', 'The item »'.$ItemBase->Texts->Name.'« with the id »'.$ItemBase->ItemID.'« could not be imported ('.$E->getMessage().')', 3020);
+            PlentymarketsLogger::getInstance()->error('Sync:Item:Orm', $E->getTraceAsString(), 1000);
+            throw new PlentymarketsImportException('The item import will be stopped (internal database error)', 3021);
+        } catch (PlentymarketsImportItemNumberException $E) {
+            PlentymarketsLogger::getInstance()->error('Sync:Item:Number', $E->getMessage(), $E->getCode());
+        } catch (PlentymarketsImportItemException $E) {
+            PlentymarketsLogger::getInstance()->error('Sync:Item:Number', $E->getMessage(), $E->getCode());
+        } catch (Exception $E) {
+            PlentymarketsLogger::getInstance()->error('Sync:Item', 'The item »'.$ItemBase->Texts->Name.'« with the id »'.$ItemBase->ItemID.'« could not be imported', 3000);
+            PlentymarketsLogger::getInstance()->error('Sync:Item', $E->getTraceAsString(), 1000);
+            PlentymarketsLogger::getInstance()->error('Sync:Item', get_class($E));
+            PlentymarketsLogger::getInstance()->error('Sync:Item', $E->getMessage());
+        }
+    }
 
-				// Mark this item as done
-				$this->itemIdsDone[$ItemBase->ItemID] = true;
-			}
+    /**
+     * Finalizes the import.
+     */
+    public function finish()
+    {
+        try {
+            // Stock stack
+            PlentymarketsImportItemStockStack::getInstance()->import();
+        } catch (Exception $E) {
+            PlentymarketsLogger::getInstance()->error('Sync:Item:Stock', 'PlentymarketsImportItemStockStack failed');
+            PlentymarketsLogger::getInstance()->error('Sync:Item:Stock', $E->getMessage());
+        }
 
-			// Log the usage data
-			PyLog()->usage();
-		}
+        try {
+            // Stock stack
+            PlentymarketsImportControllerItemLinked::getInstance()->run();
+        } catch (Exception $E) {
+            PlentymarketsLogger::getInstance()->error('Sync:Item:Linked', 'PlentymarketsImportControllerItemLinked failed');
+            PlentymarketsLogger::getInstance()->error('Sync:Item:Linked', $E->getMessage());
+        }
 
-		catch (Shopware\Components\Api\Exception\ValidationException $E)
-		{
-			PlentymarketsLogger::getInstance()->error('Sync:Item:Validation', 'The item »'. $ItemBase->Texts->Name .'« with the id »'. $ItemBase->ItemID .'« could not be imported', 3010);
-			foreach ($E->getViolations() as $ConstraintViolation)
-			{
-				PlentymarketsLogger::getInstance()->error('Sync:Item:Validation', $ConstraintViolation->getMessage());
-				PlentymarketsLogger::getInstance()->error('Sync:Item:Validation', $ConstraintViolation->getPropertyPath() . ': ' . $ConstraintViolation->getInvalidValue());
-			}
-		}
+        try {
+            // Stock stack
+            PlentymarketsImportItemImageThumbnailController::getInstance()->generate();
+        } catch (Exception $E) {
+            PlentymarketsLogger::getInstance()->error('Sync:Item:Image', 'PlentymarketsImportItemImageThumbnailController failed');
+            PlentymarketsLogger::getInstance()->error('Sync:Item:Image', $E->getMessage());
+        }
+    }
 
-		catch (Shopware\Components\Api\Exception\OrmException $E)
-		{
-			PlentymarketsLogger::getInstance()->error('Sync:Item:Orm', 'The item »'. $ItemBase->Texts->Name .'« with the id »'. $ItemBase->ItemID .'« could not be imported ('. $E->getMessage() .')', 3020);
-			PlentymarketsLogger::getInstance()->error('Sync:Item:Orm', $E->getTraceAsString(), 1000);
-			throw new PlentymarketsImportException('The item import will be stopped (internal database error)', 3021);
-		}
+    /**
+     * Reads the items of plentymarkets that have changed.
+     */
+    public function run()
+    {
+        // Number of items
+        $chunkSize = PlentymarketsConfig::getInstance()->getImportItemChunkSize(self::DEFAULT_CHUNK_SIZE);
 
-		catch (PlentymarketsImportItemNumberException $E)
-		{
-			PlentymarketsLogger::getInstance()->error('Sync:Item:Number', $E->getMessage(), $E->getCode());
-		}
+        // get the chunk out of the stack
+        $chunk = PlentymarketsImportStackItem::getInstance()->getChunk($chunkSize);
 
-		catch (PlentymarketsImportItemException $E)
-		{
-			PlentymarketsLogger::getInstance()->error('Sync:Item:Number', $E->getMessage(), $E->getCode());
-		}
+        // Import each item
+        try {
+            while (($item = array_shift($chunk)) && is_array($item)) {
+                // for each assigned store
+                $storeIds = explode('|', $item['storeIds']);
+                foreach ($storeIds as $storeId) {
+                    // Import the item
+                    $this->importItem($item['itemId'], $storeId);
+                }
+            }
+        } catch (PlentymarketsImportException $E) {
+            PlentymarketsLogger::getInstance()->error('Sync:Item', $E->getMessage(), $E->getCode());
 
-		catch (Exception $E)
-		{
-			PlentymarketsLogger::getInstance()->error('Sync:Item', 'The item »'. $ItemBase->Texts->Name .'« with the id »'. $ItemBase->ItemID .'« could not be imported', 3000);
-			PlentymarketsLogger::getInstance()->error('Sync:Item', $E->getTraceAsString(), 1000);
-			PlentymarketsLogger::getInstance()->error('Sync:Item', get_class($E));
-			PlentymarketsLogger::getInstance()->error('Sync:Item', $E->getMessage());
-		}
-	}
+            // return to the stack
+            foreach ($chunk as $item) {
+                // for each assigned store
+                $storeIds = explode('|', $item['storeIds']);
+                foreach ($storeIds as $storeId) {
+                    // Import the item
+                    PlentymarketsImportStackItem::getInstance()->addItem($item['itemId'], $storeId);
+                }
+            }
 
-	/**
-	 * Finalizes the import
-	 */
-	public function finish()
-	{
-		try
-		{
-			// Stock stack
-			PlentymarketsImportItemStockStack::getInstance()->import();
-		}
-		catch (Exception $E)
-		{
-			PlentymarketsLogger::getInstance()->error('Sync:Item:Stock', 'PlentymarketsImportItemStockStack failed');
-			PlentymarketsLogger::getInstance()->error('Sync:Item:Stock', $E->getMessage());
-		}
+            PlentymarketsLogger::getInstance()->message('Sync:Stack:Item', 'Returned '.count($chunk).' items to the stack');
+        }
 
-		try
-		{
-			// Stock stack
-			PlentymarketsImportControllerItemLinked::getInstance()->run();
-		}
-		catch (Exception $E)
-		{
-			PlentymarketsLogger::getInstance()->error('Sync:Item:Linked', 'PlentymarketsImportControllerItemLinked failed');
-			PlentymarketsLogger::getInstance()->error('Sync:Item:Linked', $E->getMessage());
-		}
+        $numberOfItems = count($this->itemIdsDone);
 
-		try
-		{
-			// Stock stack
-			PlentymarketsImportItemImageThumbnailController::getInstance()->generate();
-		}
-		catch (Exception $E)
-		{
-			PlentymarketsLogger::getInstance()->error('Sync:Item:Image', 'PlentymarketsImportItemImageThumbnailController failed');
-			PlentymarketsLogger::getInstance()->error('Sync:Item:Image', $E->getMessage());
-		}
-	}
+        // Log
+        if ($numberOfItems == 0) {
+            PlentymarketsLogger::getInstance()->message('Sync:Item', 'No item has been updated or created.');
+        } elseif ($numberOfItems == 1) {
+            PlentymarketsLogger::getInstance()->message('Sync:Item', '1 item has been updated or created.');
+        } else {
+            PlentymarketsLogger::getInstance()->message('Sync:Item', $numberOfItems.' items have been updated or created.');
+        }
 
-	/**
-	 * Reads the items of plentymarkets that have changed
-	 */
-	public function run()
-	{
-		// Number of items
-		$chunkSize = PlentymarketsConfig::getInstance()->getImportItemChunkSize(self::DEFAULT_CHUNK_SIZE);
+        // Log stack information
+        $stackSize = count(PlentymarketsImportStackItem::getInstance());
+        if ($stackSize == 1) {
+            PlentymarketsLogger::getInstance()->message('Sync:Stack:Item', '1 item left in the stack');
+        } elseif ($stackSize > 1) {
+            PlentymarketsLogger::getInstance()->message('Sync:Stack:Item', $stackSize.' items left in the stack');
+        } else {
+            PlentymarketsLogger::getInstance()->message('Sync:Stack:Item', 'The stack is empty');
+        }
 
-		// get the chunk out of the stack
-		$chunk = PlentymarketsImportStackItem::getInstance()->getChunk($chunkSize);
-
-		// Import each item
-		try
-		{
-			while (($item = array_shift($chunk)) && is_array($item))
-			{
-				// for each assigned store
-				$storeIds = explode('|', $item['storeIds']);
-				foreach ($storeIds as $storeId)
-				{
-					// Import the item
-					$this->importItem($item['itemId'], $storeId);
-				}
-			}
-		}
-
-		catch (PlentymarketsImportException $E)
-		{
-			PlentymarketsLogger::getInstance()->error('Sync:Item', $E->getMessage(), $E->getCode());
-
-			// return to the stack
-			foreach ($chunk as $item)
-			{
-				// for each assigned store
-				$storeIds = explode('|', $item['storeIds']);
-				foreach ($storeIds as $storeId)
-				{
-					// Import the item
-					PlentymarketsImportStackItem::getInstance()->addItem($item['itemId'], $storeId);
-				}
-			}
-
-			PlentymarketsLogger::getInstance()->message('Sync:Stack:Item', 'Returned ' . count($chunk) . ' items to the stack');
-		}
-
-		$numberOfItems = count($this->itemIdsDone);
-
-		// Log
-		if ($numberOfItems == 0)
-		{
-			PlentymarketsLogger::getInstance()->message('Sync:Item', 'No item has been updated or created.');
-		}
-		else if ($numberOfItems == 1)
-		{
-			PlentymarketsLogger::getInstance()->message('Sync:Item', '1 item has been updated or created.');
-		}
-		else
-		{
-			PlentymarketsLogger::getInstance()->message('Sync:Item', $numberOfItems . ' items have been updated or created.');
-		}
-
-		// Log stack information
-		$stackSize = count(PlentymarketsImportStackItem::getInstance());
-		if ($stackSize == 1)
-		{
-			PlentymarketsLogger::getInstance()->message('Sync:Stack:Item', '1 item left in the stack');
-		}
-		else if ($stackSize > 1)
-		{
-			PlentymarketsLogger::getInstance()->message('Sync:Stack:Item', $stackSize . ' items left in the stack');
-		}
-		else
-		{
-			PlentymarketsLogger::getInstance()->message('Sync:Stack:Item', 'The stack is empty');
-		}
-
-		// Post processed
-		$this->finish();
-	}
+        // Post processed
+        $this->finish();
+    }
 }

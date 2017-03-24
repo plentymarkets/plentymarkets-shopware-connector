@@ -1,7 +1,7 @@
 <?php
 /**
  * plentymarkets shopware connector
- * Copyright © 2013 plentymarkets GmbH
+ * Copyright © 2013 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -27,150 +27,133 @@
  */
 
 /**
- * Manages the import of item-associated data
+ * Manages the import of item-associated data.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 class PlentymarketsImportItemAssociateController
 {
+    /**
+     * Only one entity will me imported per run.
+     *
+     * @var int
+     */
+    const ACTION_DETACHED = 1;
 
-	/**
-	 * Only one entity will me imported per run
-	 *
-	 * @var integer
-	 */
-	const ACTION_DETACHED = 1;
+    /**
+     * All entities will be importet within one run.
+     *
+     * @var int
+     */
+    const ACTION_CHAINED = 2;
 
-	/**
-	 * All entities will be importet within one run
-	 *
-	 * @var integer
-	 */
-	const ACTION_CHAINED = 2;
+    /**
+     * @var array
+     */
+    protected static $associates = [
+        'Producer',
+        'Category',
+        'Attribute',
+        'Property',
+    ];
 
-	/**
-	 *
-	 * @var array
-	 */
-	protected static $associates = array(
-		'Producer',
-		'Category',
-		'Attribute',
-		'Property'
-	);
+    /**
+     * @var int
+     */
+    protected $cronJobInterval;
 
-	/**
-	 *
-	 * @var integer
-	 */
-	protected $cronJobInterval;
+    /**
+     * Runs the item associated import.
+     */
+    public function run($cronJobInterval)
+    {
+        //
+        $this->cronJobInterval = (int) $cronJobInterval;
 
-	/**
-	 * Runs the item associated import
-	 */
-	public function run($cronJobInterval)
-	{
-		//
-		$this->cronJobInterval = (integer) $cronJobInterval;
+        switch (PyConf()->getItemAssociateImportActionID()) {
+            case self::ACTION_CHAINED:
+                $this->runChained();
+                break;
+            default:
+            case self::ACTION_DETACHED:
+                $this->runDetached();
+                break;
+        }
+    }
 
-		switch (PyConf()->getItemAssociateImportActionID())
-		{
-			case self::ACTION_CHAINED:
-				$this->runChained();
-				break;
-			default:
-			case self::ACTION_DETACHED:
-				$this->runDetached();
-				break;
-		}
-	}
+    /**
+     * Imports one entity.
+     */
+    protected function runDetached()
+    {
+        PyLog()->message('Sync:Item:Associate', 'Running in detached mode');
 
-	/**
-	 * Imports one entity
-	 */
-	protected function runDetached()
-	{
-		PyLog()->message('Sync:Item:Associate', 'Running in detached mode');
+        $associates = self::$associates;
 
-		$associates = self::$associates;
+        // get the entity of the previous import
+        $previousEntity = PyConf()->getImportItemAssociateLastEnity();
 
-		// get the entity of the previous import
-		$previousEntity = PyConf()->getImportItemAssociateLastEnity();
+        // No entity or the previous entity was the last of the chain
+        if (!$previousEntity || $previousEntity == end($associates)) {
+            // start with the first one
+            $entity = reset($associates);
+        } else {
+            while (($associate = array_shift($associates)) && $associates) {
+                if ($associate == $previousEntity) {
+                    break;
+                }
+            }
+            $entity = array_shift($associates);
+        }
 
-		// No entity or the previous entity was the last of the chain
-		if (!$previousEntity || $previousEntity == end($associates))
-		{
-			// start with the first one
-			$entity = reset($associates);
-		}
+        // Increase the intervall
+        $this->cronJobInterval *= count(self::$associates);
 
-		else
-		{
-			while (($associate = array_shift($associates)) && $associates)
-			{
-				if ($associate == $previousEntity)
-				{
-					break;
-				}
-			}
-			$entity = array_shift($associates);
-		}
+        $this->runEntity($entity);
+    }
 
-		// Increase the intervall
-		$this->cronJobInterval *= count(self::$associates);
+    /**
+     * Imports all entities.
+     */
+    protected function runChained()
+    {
+        PyLog()->message('Sync:Item:Associate', 'Running in chained mode');
 
-		$this->runEntity($entity);
-	}
+        foreach (self::$associates as $associate) {
+            $this->runEntity($associate);
+        }
+    }
 
-	/**
-	 * Imports all entities
-	 */
-	protected function runChained()
-	{
-		PyLog()->message('Sync:Item:Associate', 'Running in chained mode');
+    /**
+     * Runs the import of an expicit entity.
+     */
+    protected function runEntity($entity)
+    {
+        $timestamp = time();
 
-		foreach (self::$associates as $associate)
-		{
-			$this->runEntity($associate);
-		}
-	}
+        PyConf()->set(sprintf('ImportItem%sLastRunTimestamp', $entity), time());
+        PyConf()->set(sprintf('ImportItem%sNextRunTimestamp', $entity), time() + $this->cronJobInterval);
 
-	/**
-	 * Runs the import of an expicit entity
-	 */
-	protected function runEntity($entity)
-	{
-		$timestamp = time();
+        if (PyStatus()->maySynchronize()) {
+            PyLog()->message('Sync:Item:'.$entity, 'Starting');
+            try {
+                $controller = sprintf('PlentymarketsImportControllerItem%s', $entity);
 
-		PyConf()->set(sprintf('ImportItem%sLastRunTimestamp', $entity), time());
-		PyConf()->set(sprintf('ImportItem%sNextRunTimestamp', $entity), time() + $this->cronJobInterval);
+                $Controller = new $controller();
+                $Controller->run((int) PyConf()->get(sprintf('ImportItem%sLastUpdateTimestamp', $entity)));
 
-		if (PyStatus()->maySynchronize())
-		{
-			PyLog()->message('Sync:Item:' . $entity, 'Starting');
-			try
-			{
-				$controller = sprintf('PlentymarketsImportControllerItem%s', $entity);
+                PyConf()->set(sprintf('ImportItem%sStatus', $entity), 1);
+                PyConf()->set(sprintf('ImportItem%sLastUpdateTimestamp', $entity), $timestamp);
+                PyConf()->erase(sprintf('ImportItem%sError', $entity));
+            } catch (PlentymarketsImportException $E) {
+                PyConf()->set(sprintf('ImportItem%sStatus', $entity), 2);
+                PyConf()->set(sprintf('ImportItem%sError', $entity), $E->getMessage());
+            }
+            PyLog()->message('Sync:Item:'.$entity, 'Finished');
+        } else {
+            PyConf()->set(sprintf('ImportItem%sStatus', $entity), 0);
+        }
 
-				$Controller = new $controller();
-				$Controller->run((integer) PyConf()->get(sprintf('ImportItem%sLastUpdateTimestamp', $entity)));
-
-				PyConf()->set(sprintf('ImportItem%sStatus', $entity), 1);
-				PyConf()->set(sprintf('ImportItem%sLastUpdateTimestamp', $entity), $timestamp);
-				PyConf()->erase(sprintf('ImportItem%sError', $entity));
-			}
-			catch (PlentymarketsImportException $E)
-			{
-				PyConf()->set(sprintf('ImportItem%sStatus', $entity), 2);
-				PyConf()->set(sprintf('ImportItem%sError', $entity), $E->getMessage());
-			}
-			PyLog()->message('Sync:Item:' . $entity, 'Finished');
-		}
-		else
-		{
-			PyConf()->set(sprintf('ImportItem%sStatus', $entity), 0);
-		}
-
-		PyConf()->setImportItemAssociateLastEnity($entity);
-	}
+        PyConf()->setImportItemAssociateLastEnity($entity);
+    }
 }

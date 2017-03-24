@@ -1,7 +1,7 @@
 <?php
 /**
  * plentymarkets shopware connector
- * Copyright © 2013 plentymarkets GmbH
+ * Copyright © 2013 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -26,7 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * PlentymarketsExportControllerItemProducer provides the actual items export functionality. Like the other export
  * entities this class is called in PlentymarketsExportController.
@@ -36,111 +35,100 @@
  */
 class PlentymarketsExportControllerItemProducer
 {
+    /**
+     * @var array
+     */
+    protected $PLENTY_name2ID = [];
 
-	/**
-	 *
-	 * @var array
-	 */
-	protected $PLENTY_name2ID = array();
+    /**
+     * Build the index of existing data.
+     */
+    protected function buildPlentyNameIndex()
+    {
+        $Response_GetProducers = PlentymarketsSoapClient::getInstance()->GetProducers();
 
-	/**
-	 * Build the index of existing data
-	 */
-	protected function buildPlentyNameIndex()
-	{
-		$Response_GetProducers = PlentymarketsSoapClient::getInstance()->GetProducers();
+        if (!$Response_GetProducers->Success) {
+            throw new PlentymarketsExportException('The item producers could not be retrieved', 2930);
+        }
 
-		if (!$Response_GetProducers->Success)
-		{
-			throw new PlentymarketsExportException('The item producers could not be retrieved', 2930);
-		}
+        foreach ($Response_GetProducers->Producers->item as $Producer) {
+            $this->PLENTY_name2ID[$Producer->ProducerName] = $Producer->ProducerID;
+        }
+    }
 
-		foreach ($Response_GetProducers->Producers->item as $Producer)
-		{
-			$this->PLENTY_name2ID[$Producer->ProducerName] = $Producer->ProducerID;
-		}
-	}
+    /**
+     * Build the index and start the export.
+     */
+    public function run()
+    {
+        // Index first
+        $this->buildPlentyNameIndex();
+        $this->doExport();
+    }
 
-	/**
-	 * Build the index and start the export
-	 */
-	public function run()
-	{
-		// Index first
-		$this->buildPlentyNameIndex();
-		$this->doExport();
-	}
+    /**
+     * Export the missing producers.
+     */
+    protected function doExport()
+    {
+        $producers = [];
+        $producerNameMappingShopware = [];
+        $supplierRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Supplier');
 
-	/**
-	 * Export the missing producers
-	 */
-	protected function doExport()
-	{
-		$producers = array();
-		$producerNameMappingShopware = array();
-		$supplierRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Supplier');
+        $Request_SetProducers = new PlentySoapRequest_SetProducers();
 
-		$Request_SetProducers = new PlentySoapRequest_SetProducers();
+        /** @var Shopware\Models\Article\Supplier $Supplier */
+        foreach ($supplierRepository->findAll() as $Supplier) {
+            $Object_SetProducer = new PlentySoapObject_Producer();
 
-		/** @var Shopware\Models\Article\Supplier $Supplier */
-		foreach ($supplierRepository->findAll() as $Supplier)
-		{
-			$Object_SetProducer = new PlentySoapObject_Producer();
+            if (array_key_exists($Supplier->getName(), $this->PLENTY_name2ID)) {
+                PlentymarketsMappingController::addProducer($Supplier->getId(), $this->PLENTY_name2ID[$Supplier->getName()]);
+            } else {
+                // Request object
+                $Object_SetProducer->ProducerExternalName = $Supplier->getName();
+                $Object_SetProducer->ProducerName = $Supplier->getName();
+                $Object_SetProducer->ProducerHomepage = $Supplier->getLink();
 
-			if (array_key_exists($Supplier->getName(), $this->PLENTY_name2ID))
-			{
-				PlentymarketsMappingController::addProducer($Supplier->getId(), $this->PLENTY_name2ID[$Supplier->getName()]);
-			}
-			else
-			{
-				// Request object
-				$Object_SetProducer->ProducerExternalName = $Supplier->getName();
-				$Object_SetProducer->ProducerName = $Supplier->getName();
-				$Object_SetProducer->ProducerHomepage = $Supplier->getLink();
+                // Export-array
+                $producers[] = $Object_SetProducer;
 
-				// Export-array
-				$producers[] = $Object_SetProducer;
+                // Save name and id for the mapping
+                $producerNameMappingShopware[$Supplier->getName()] = $Supplier->getId();
+            }
+        }
 
-				// Save name and id for the mapping
-				$producerNameMappingShopware[$Supplier->getName()] = $Supplier->getId();
-			}
-		}
+        // Chunkify since the call can only handly 50 producers at a time
+        $chunks = array_chunk($producers, 50);
 
-		// Chunkify since the call can only handly 50 producers at a time
-		$chunks = array_chunk($producers, 50);
+        foreach ($chunks as $chunk) {
+            // Set the request
+            $Request_SetProducers->Producers = $chunk;
 
-		foreach ($chunks as $chunk)
-		{
-			// Set the request
-			$Request_SetProducers->Producers = $chunk;
+            // Do the call
+            $Response_SetProducers = PlentymarketsSoapClient::getInstance()->SetProducers($Request_SetProducers);
 
-			// Do the call
-			$Response_SetProducers = PlentymarketsSoapClient::getInstance()->SetProducers($Request_SetProducers);
+            //
+            if (!$Response_SetProducers->Success) {
+                throw new PlentymarketsExportException('The item producers could not be created', 2931);
+            }
 
-			//
-			if (!$Response_SetProducers->Success)
-			{
-				throw new PlentymarketsExportException('The item producers could not be created', 2931);
-			}
+            // Create mapping
+            foreach ($Response_SetProducers->ResponseMessages->item as $ResponseMessage) {
+                PlentymarketsMappingController::addProducer(
+                    $producerNameMappingShopware[$ResponseMessage->IdentificationValue],
+                    $ResponseMessage->SuccessMessages->item[0]->Value
+                );
+            }
+        }
+    }
 
-			// Create mapping
-			foreach ($Response_SetProducers->ResponseMessages->item as $ResponseMessage)
-			{
-				PlentymarketsMappingController::addProducer(
-					$producerNameMappingShopware[$ResponseMessage->IdentificationValue],
-					$ResponseMessage->SuccessMessages->item[0]->Value
-				);
-			}
-		}
-	}
-
-	/**
-	 * Checks whether the export is finshed
-	 *
-	 * @return boolean
-	 */
-	public function isFinished()
-	{
-		return true;
-	}
+    /**
+     * Checks whether the export is finshed.
+     *
+     * @return bool
+     */
+    public function isFinished()
+    {
+        return true;
+    }
 }

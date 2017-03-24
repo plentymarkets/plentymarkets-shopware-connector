@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,54 +32,53 @@
  */
 class PlentySoapRequest_ObjectListing
 {
-	
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
-	
-	/**
-	 * @var int
-	 */
-	public $ItemStockDependence;
-	
-	/**
-	 * @var int
-	 */
-	public $ListingID;
-	
-	/**
-	 * @var int
-	 */
-	public $ListingTemplateID;
-	
-	/**
-	 * @var string
-	 */
-	public $ListingType;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_string
-	 */
-	public $Markets;
-	
-	/**
-	 * @var int
-	 */
-	public $NumberPerLot;
-	
-	/**
-	 * @var string
-	 */
-	public $SKU;
-	
-	/**
-	 * @var string
-	 */
-	public $TransmitItemNumber;
-	
-	/**
-	 * @var int
-	 */
-	public $UseItemPrice;
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
+
+    /**
+     * @var int
+     */
+    public $ItemStockDependence;
+
+    /**
+     * @var int
+     */
+    public $ListingID;
+
+    /**
+     * @var int
+     */
+    public $ListingTemplateID;
+
+    /**
+     * @var string
+     */
+    public $ListingType;
+
+    /**
+     * @var ArrayOfPlentysoapobject_string
+     */
+    public $Markets;
+
+    /**
+     * @var int
+     */
+    public $NumberPerLot;
+
+    /**
+     * @var string
+     */
+    public $SKU;
+
+    /**
+     * @var string
+     */
+    public $TransmitItemNumber;
+
+    /**
+     * @var int
+     */
+    public $UseItemPrice;
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * plentymarkets shopware connector
- * Copyright © 2013 plentymarkets GmbH
+ * Copyright © 2013 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -35,63 +35,53 @@
  */
 class PlentymarketsImportItemVariantController
 {
+    /**
+     * @var PlentySoapObject_ItemBase
+     */
+    protected $ItemBase;
 
-	/**
-	 *
-	 * @var PlentySoapObject_ItemBase
-	 */
-	protected $ItemBase;
+    /**
+     * @var array
+     */
+    protected $groupName2plentyId = [];
 
-	/**
-	 *
-	 * @var array
-	 */
-	protected $groupName2plentyId = array();
+    /**
+     * @var array
+     */
+    protected $groupId2optionName2plentyId = [];
 
-	/**
-	 *
-	 * @var array
-	 */
-	protected $groupId2optionName2plentyId = array();
+    /**
+     * @var array
+     */
+    protected $groups = [];
 
-	/**
-	 *
-	 * @var array
-	 */
-	protected $groups = array();
+    /**
+     * @var array
+     */
+    protected $variants = [];
 
-	/**
-	 *
-	 * @var array
-	 */
-	protected $variants = array();
+    /**
+     * @var array
+     */
+    protected $variant2markup = [];
 
-	/**
-	 *
-	 * @var array
-	 */
-	protected $variant2markup = array();
+    /**
+     * @var array
+     */
+    protected $configuratorOptions = [];
 
-	/**
-	 *
-	 * @var array
-	 */
-	protected $configuratorOptions = array();
+    /**
+     * @var array
+     */
+    protected $valueId2markup = [];
 
-	/**
-	 *
-	 * @var array
-	 */
-	protected $valueId2markup = array();
-
-	/**
-	 *
-	 * @var array
-	 */
-	public static $mapping = array(
-		'group' => array(),
-		'option' => array()
-	);
+    /**
+     * @var array
+     */
+    public static $mapping = [
+        'group'  => [],
+        'option' => [],
+    ];
 
     /**
      * @var array
@@ -104,247 +94,217 @@ class PlentymarketsImportItemVariantController
     protected $purchasePrices;
 
     /**
-	 * Constructor method
-	 *
-	 * @param PlentySoapObject_ItemBase $ItemBase
-	 */
-	public function __construct($ItemBase)
-	{
-	    $this->referencePrices = [];
+     * Constructor method.
+     *
+     * @param PlentySoapObject_ItemBase $ItemBase
+     */
+    public function __construct($ItemBase)
+    {
+        $this->referencePrices = [];
         $this->purchasePrices = [];
 
-		$this->ItemBase = $ItemBase;
+        $this->ItemBase = $ItemBase;
 
-		foreach ($this->ItemBase->ItemAttributeMarkup->item as $ItemAttributeMarkup)
-		{
-			// May be percentage or flat rate surcharge
-			$this->valueId2markup[$ItemAttributeMarkup->ValueID] = (float) $ItemAttributeMarkup->Markup;
-		}
+        foreach ($this->ItemBase->ItemAttributeMarkup->item as $ItemAttributeMarkup) {
+            // May be percentage or flat rate surcharge
+            $this->valueId2markup[$ItemAttributeMarkup->ValueID] = (float) $ItemAttributeMarkup->Markup;
+        }
 
-		//
-		$Request_GetAttributeValueSets = new PlentySoapRequest_GetAttributeValueSets();
+        //
+        $Request_GetAttributeValueSets = new PlentySoapRequest_GetAttributeValueSets();
 
-		$valueIds = array();
+        $valueIds = [];
 
-		$chunks = array_chunk($this->ItemBase->AttributeValueSets->item, 50);
+        $chunks = array_chunk($this->ItemBase->AttributeValueSets->item, 50);
 
-		foreach ($chunks as $chunk)
-		{
-			$Request_GetAttributeValueSets->AttributeValueSets = array();
+        foreach ($chunks as $chunk) {
+            $Request_GetAttributeValueSets->AttributeValueSets = [];
 
             /**
-             * Attribute Value Sets abfragen
+             * Attribute Value Sets abfragen.
              *
-             * @var PlentySoapObject_ItemAttributeValueSet $AttributeValueSet
+             * @var PlentySoapObject_ItemAttributeValueSet
              */
-			foreach ($chunk as $AttributeValueSet)
-			{
-				//
-				$this->variants[$AttributeValueSet->AttributeValueSetID] = array();
+            foreach ($chunk as $AttributeValueSet) {
+                //
+                $this->variants[$AttributeValueSet->AttributeValueSetID] = [];
 
-				//
-				$RequestObject_GetAttributeValueSets = new PlentySoapRequestObject_GetAttributeValueSets();
-				$RequestObject_GetAttributeValueSets->AttributeValueSetID = $AttributeValueSet->AttributeValueSetID;
-				$RequestObject_GetAttributeValueSets->Lang = 'de';
-				$Request_GetAttributeValueSets->AttributeValueSets[] = $RequestObject_GetAttributeValueSets;
+                //
+                $RequestObject_GetAttributeValueSets = new PlentySoapRequestObject_GetAttributeValueSets();
+                $RequestObject_GetAttributeValueSets->AttributeValueSetID = $AttributeValueSet->AttributeValueSetID;
+                $RequestObject_GetAttributeValueSets->Lang = 'de';
+                $Request_GetAttributeValueSets->AttributeValueSets[] = $RequestObject_GetAttributeValueSets;
 
                 // Reference Price (UVP)
                 $this->referencePrices[$AttributeValueSet->AttributeValueSetID] = $AttributeValueSet->UVP;
 
                 // Purchase Price
                 $this->purchasePrices[$AttributeValueSet->AttributeValueSetID] = $AttributeValueSet->PurchasePrice;
-			}
+            }
 
             /**
-             * @var PlentySoapResponse_GetAttributeValueSets $Response_GetAttributeValueSets
+             * @var PlentySoapResponse_GetAttributeValueSets
              */
-			$Response_GetAttributeValueSets = PlentymarketsSoapClient::getInstance()->GetAttributeValueSets($Request_GetAttributeValueSets);
+            $Response_GetAttributeValueSets = PlentymarketsSoapClient::getInstance()->GetAttributeValueSets($Request_GetAttributeValueSets);
 
-			/**
-			 * @var PlentySoapObject_AttributeValueSet $AttributeValueSet
-			 * @var PlentySoapObject_Attribute $Attribute
-			 */
-			foreach ($Response_GetAttributeValueSets->AttributeValueSets->item as $AttributeValueSet)
-			{
-				$this->variant2markup[$AttributeValueSet->AttributeValueSetID] = 0.0;
+            /**
+             * @var PlentySoapObject_AttributeValueSet
+             * @var PlentySoapObject_Attribute         $Attribute
+             */
+            foreach ($Response_GetAttributeValueSets->AttributeValueSets->item as $AttributeValueSet) {
+                $this->variant2markup[$AttributeValueSet->AttributeValueSetID] = 0.0;
 
-				foreach ($AttributeValueSet->Attribute->item as $Attribute)
-				{
-					//
-					if (!array_key_exists($Attribute->AttributeFrontendName, $this->groups))
-					{
-						try
-						{
-							$attributeId = PlentymarketsMappingController::getAttributeGroupByPlentyID($Attribute->AttributeID);
-							$group = array(
-								'id' => $attributeId,
-								'options' => array()
-							);
-						}
-						catch (Exception $e)
-						{
-							$group = array(
-								'name' => $Attribute->AttributeFrontendName,
-								'options' => array()
-							);
-						}
+                foreach ($AttributeValueSet->Attribute->item as $Attribute) {
+                    //
+                    if (!array_key_exists($Attribute->AttributeFrontendName, $this->groups)) {
+                        try {
+                            $attributeId = PlentymarketsMappingController::getAttributeGroupByPlentyID($Attribute->AttributeID);
+                            $group = [
+                                'id'      => $attributeId,
+                                'options' => [],
+                            ];
+                        } catch (Exception $e) {
+                            $group = [
+                                'name'    => $Attribute->AttributeFrontendName,
+                                'options' => [],
+                            ];
+                        }
 
-						$this->groups[$Attribute->AttributeFrontendName] = $group;
+                        $this->groups[$Attribute->AttributeFrontendName] = $group;
 
-						$this->groupId2optionName2plentyId[$Attribute->AttributeID] = array();
-						$this->groupName2plentyId[$Attribute->AttributeFrontendName] = $Attribute->AttributeID;
-					}
+                        $this->groupId2optionName2plentyId[$Attribute->AttributeID] = [];
+                        $this->groupName2plentyId[$Attribute->AttributeFrontendName] = $Attribute->AttributeID;
+                    }
 
-					//
-					$this->configuratorOptions[$AttributeValueSet->AttributeValueSetID][] = array(
-						'group' => $Attribute->AttributeFrontendName,
-						'option' => $Attribute->AttributeValue->ValueFrontendName
-					);
+                    //
+                    $this->configuratorOptions[$AttributeValueSet->AttributeValueSetID][] = [
+                        'group'  => $Attribute->AttributeFrontendName,
+                        'option' => $Attribute->AttributeValue->ValueFrontendName,
+                    ];
 
-					//
-					if (!in_array($Attribute->AttributeValue->ValueID, $valueIds))
-					{
-						try
-						{
-							$valueId = PlentymarketsMappingController::getAttributeOptionByPlentyID($Attribute->AttributeValue->ValueID);
-							$option = array(
-								'id' => $valueId
-							);
-						}
-						catch (Exception $e)
-						{
-							$option = array(
-								'name' => $Attribute->AttributeValue->ValueFrontendName
-							);
-						}
+                    //
+                    if (!in_array($Attribute->AttributeValue->ValueID, $valueIds)) {
+                        try {
+                            $valueId = PlentymarketsMappingController::getAttributeOptionByPlentyID($Attribute->AttributeValue->ValueID);
+                            $option = [
+                                'id' => $valueId,
+                            ];
+                        } catch (Exception $e) {
+                            $option = [
+                                'name' => $Attribute->AttributeValue->ValueFrontendName,
+                            ];
+                        }
 
-						$this->groups[$Attribute->AttributeFrontendName]['options'][] = $option;
-						$this->groupId2optionName2plentyId[$Attribute->AttributeID][$Attribute->AttributeValue->ValueFrontendName] = $Attribute->AttributeValue->ValueID;
-						$valueIds[] = $Attribute->AttributeValue->ValueID;
-					}
+                        $this->groups[$Attribute->AttributeFrontendName]['options'][] = $option;
+                        $this->groupId2optionName2plentyId[$Attribute->AttributeID][$Attribute->AttributeValue->ValueFrontendName] = $Attribute->AttributeValue->ValueID;
+                        $valueIds[] = $Attribute->AttributeValue->ValueID;
+                    }
 
-					if ($this->valueId2markup[$Attribute->AttributeValue->ValueID])
-					{
-						$markup = $this->valueId2markup[$Attribute->AttributeValue->ValueID];
-					}
-					else
-					{
-						$markup = (float) $Attribute->AttributeValue->Markup;
-					}
+                    if ($this->valueId2markup[$Attribute->AttributeValue->ValueID]) {
+                        $markup = $this->valueId2markup[$Attribute->AttributeValue->ValueID];
+                    } else {
+                        $markup = (float) $Attribute->AttributeValue->Markup;
+                    }
 
-					if ($markup)
-					{
-						if ($Attribute->MarkupPercental == 1)
-						{
-							$markup = $this->ItemBase->PriceSet->Price / 100 * $markup;
-						}
+                    if ($markup) {
+                        if ($Attribute->MarkupPercental == 1) {
+                            $markup = $this->ItemBase->PriceSet->Price / 100 * $markup;
+                        }
 
-						$this->variant2markup[$AttributeValueSet->AttributeValueSetID] += $markup;
-					}
-				}
-			}
-		}
-	}
+                        $this->variant2markup[$AttributeValueSet->AttributeValueSetID] += $markup;
+                    }
+                }
+            }
+        }
+    }
 
-	/**
-	 * Generates "reverse mapping"
-	 *
-	 * @param array $article
-	 */
-	public function map($article)
-	{
-		$details = $article['details'];
-		$details[] = $article['mainDetail'];
+    /**
+     * Generates "reverse mapping".
+     *
+     * @param array $article
+     */
+    public function map($article)
+    {
+        $details = $article['details'];
+        $details[] = $article['mainDetail'];
 
-		foreach ($details as $detail)
-		{
-			foreach ($detail['configuratorOptions'] as $option)
-			{
-				try
-				{
-					// Mapping for the Group -> plentymarkets Attribute
-					if (!isset(self::$mapping['group'][$option['groupId']]))
-					{
-						$plentyGroupId = PlentymarketsMappingController::getAttributeGroupByShopwareID($option['groupId']);
-					}
-					else
-					{
-						$plentyGroupId = self::$mapping['group'][$option['groupId']];
-					}
-				}
-				catch (PlentymarketsMappingExceptionNotExistant $E)
-				{
-					// Name auslesen
-					$group = Shopware()->Db()->fetchRow('
+        foreach ($details as $detail) {
+            foreach ($detail['configuratorOptions'] as $option) {
+                try {
+                    // Mapping for the Group -> plentymarkets Attribute
+                    if (!isset(self::$mapping['group'][$option['groupId']])) {
+                        $plentyGroupId = PlentymarketsMappingController::getAttributeGroupByShopwareID($option['groupId']);
+                    } else {
+                        $plentyGroupId = self::$mapping['group'][$option['groupId']];
+                    }
+                } catch (PlentymarketsMappingExceptionNotExistant $E) {
+                    // Name auslesen
+                    $group = Shopware()->Db()->fetchRow('
 						SELECT name FROM s_article_configurator_groups WHERE id = ?
-					', array(
-						$option['groupId']
-					));
+					', [
+                        $option['groupId'],
+                    ]);
 
-					//
-					$plentyGroupId = $this->groupName2plentyId[$group['name']];
+                    //
+                    $plentyGroupId = $this->groupName2plentyId[$group['name']];
 
-					//
-					PlentymarketsMappingController::addAttributeGroup($option['groupId'], $plentyGroupId);
-				}
+                    //
+                    PlentymarketsMappingController::addAttributeGroup($option['groupId'], $plentyGroupId);
+                }
 
-				try
-				{
-					// Mapping for the Group -> plentymarkets Attribute
-					if (!isset(self::$mapping['option'][$option['id']]))
-					{
-						$plentyOptionId = PlentymarketsMappingController::getAttributeOptionByShopwareID($option['id']);
-					}
-					else
-					{
-						$plentyOptionId = self::$mapping['option'][$option['id']];
-					}
-				}
-				catch (PlentymarketsMappingExceptionNotExistant $E)
-				{
-					//
-					$plentyOptionId = $this->groupId2optionName2plentyId[$plentyGroupId][$option['name']];
+                try {
+                    // Mapping for the Group -> plentymarkets Attribute
+                    if (!isset(self::$mapping['option'][$option['id']])) {
+                        $plentyOptionId = PlentymarketsMappingController::getAttributeOptionByShopwareID($option['id']);
+                    } else {
+                        $plentyOptionId = self::$mapping['option'][$option['id']];
+                    }
+                } catch (PlentymarketsMappingExceptionNotExistant $E) {
+                    //
+                    $plentyOptionId = $this->groupId2optionName2plentyId[$plentyGroupId][$option['name']];
 
-					//
-					PlentymarketsMappingController::addAttributeOption($option['id'], $plentyOptionId);
+                    //
+                    PlentymarketsMappingController::addAttributeOption($option['id'], $plentyOptionId);
 
-					//
-				}
+                    //
+                }
 
-				self::$mapping['group'][$option['groupId']] = $plentyGroupId;
-				self::$mapping['option'][$option['id']] = $plentyOptionId;
-			}
-		}
-	}
+                self::$mapping['group'][$option['groupId']] = $plentyGroupId;
+                self::$mapping['option'][$option['id']] = $plentyOptionId;
+            }
+        }
+    }
 
-	/**
-	 * Returns an array of configurator options for the use with the shopware REST API
-	 *
-	 * @param integer $variantId
-	 * @return array
-	 */
-	public function getOptionsByVariantId($variantId)
-	{
-		return $this->configuratorOptions[$variantId];
-	}
+    /**
+     * Returns an array of configurator options for the use with the shopware REST API.
+     *
+     * @param int $variantId
+     *
+     * @return array
+     */
+    public function getOptionsByVariantId($variantId)
+    {
+        return $this->configuratorOptions[$variantId];
+    }
 
-	/**
-	 * Return the markup for a variant
-	 *
-	 * @param integer $variantId
-	 * @return array
-	 */
-	public function getMarkupByVariantId($variantId)
-	{
-		return $this->variant2markup[$variantId];
-	}
+    /**
+     * Return the markup for a variant.
+     *
+     * @param int $variantId
+     *
+     * @return array
+     */
+    public function getMarkupByVariantId($variantId)
+    {
+        return $this->variant2markup[$variantId];
+    }
 
     /**
      * @param $variantId
      *
      * @return float
      */
-	public function getReferencePriceByVaraintId($variantId)
+    public function getReferencePriceByVaraintId($variantId)
     {
         return $this->referencePrices[$variantId];
     }
@@ -359,13 +319,13 @@ class PlentymarketsImportItemVariantController
         return $this->purchasePrices[$variantId];
     }
 
-	/**
-	 * Returns an array of configurator groups for the use with the shopware REST API
-	 *
-	 * @return array
-	 */
-	public function getGroups()
-	{
-		return array_values($this->groups);
-	}
+    /**
+     * Returns an array of configurator groups for the use with the shopware REST API.
+     *
+     * @return array
+     */
+    public function getGroups()
+    {
+        return array_values($this->groups);
+    }
 }
