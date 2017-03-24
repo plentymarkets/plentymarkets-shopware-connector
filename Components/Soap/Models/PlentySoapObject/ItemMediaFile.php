@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,34 +32,33 @@
  */
 class PlentySoapObject_ItemMediaFile
 {
-	
-	/**
-	 * @var PlentySoapObject_FileBase64Encoded
-	 */
-	public $Base64Data;
-	
-	/**
-	 * @var boolean
-	 */
-	public $DisplayCMS;
-	
-	/**
-	 * @var boolean
-	 */
-	public $DisplayEmail;
-	
-	/**
-	 * @var boolean
-	 */
-	public $DisplayMyAccount;
-	
-	/**
-	 * @var int
-	 */
-	public $FileID;
-	
-	/**
-	 * @var string
-	 */
-	public $Title;
+    /**
+     * @var PlentySoapObject_FileBase64Encoded
+     */
+    public $Base64Data;
+
+    /**
+     * @var bool
+     */
+    public $DisplayCMS;
+
+    /**
+     * @var bool
+     */
+    public $DisplayEmail;
+
+    /**
+     * @var bool
+     */
+    public $DisplayMyAccount;
+
+    /**
+     * @var int
+     */
+    public $FileID;
+
+    /**
+     * @var string
+     */
+    public $Title;
 }

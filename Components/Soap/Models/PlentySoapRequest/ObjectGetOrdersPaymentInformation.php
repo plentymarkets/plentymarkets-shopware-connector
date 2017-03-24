@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,64 +32,63 @@
  */
 class PlentySoapRequest_ObjectGetOrdersPaymentInformation
 {
-	
-	/**
-	 * @var float
-	 */
-	public $Amount;
-	
-	/**
-	 * @var int
-	 */
-	public $AssignDateFrom;
-	
-	/**
-	 * @var int
-	 */
-	public $AssignDateTo;
-	
-	/**
-	 * @var int
-	 */
-	public $CustomerID;
-	
-	/**
-	 * @var int
-	 */
-	public $EntryDateFrom;
-	
-	/**
-	 * @var int
-	 */
-	public $EntryDateTo;
-	
-	/**
-	 * @var int
-	 */
-	public $ImportDateFrom;
-	
-	/**
-	 * @var int
-	 */
-	public $ImportDateTo;
-	
-	/**
-	 * @var int
-	 */
-	public $MethodOfPaymentID;
-	
-	/**
-	 * @var int
-	 */
-	public $Page;
-	
-	/**
-	 * @var string
-	 */
-	public $PaymentStatus;
-	
-	/**
-	 * @var string
-	 */
-	public $TransactionID;
+    /**
+     * @var float
+     */
+    public $Amount;
+
+    /**
+     * @var int
+     */
+    public $AssignDateFrom;
+
+    /**
+     * @var int
+     */
+    public $AssignDateTo;
+
+    /**
+     * @var int
+     */
+    public $CustomerID;
+
+    /**
+     * @var int
+     */
+    public $EntryDateFrom;
+
+    /**
+     * @var int
+     */
+    public $EntryDateTo;
+
+    /**
+     * @var int
+     */
+    public $ImportDateFrom;
+
+    /**
+     * @var int
+     */
+    public $ImportDateTo;
+
+    /**
+     * @var int
+     */
+    public $MethodOfPaymentID;
+
+    /**
+     * @var int
+     */
+    public $Page;
+
+    /**
+     * @var string
+     */
+    public $PaymentStatus;
+
+    /**
+     * @var string
+     */
+    public $TransactionID;
 }

@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,39 +32,38 @@
  */
 class PlentySoapRequest_GetMarketplaceTransactions
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var string
-	 */
-	public $Marketplace;
-	
-	/**
-	 * @var int
-	 */
-	public $OrderID;
-	
-	/**
-	 * @var int
-	 */
-	public $Page;
-	
-	/**
-	 * @var string
-	 */
-	public $SellerUserID;
-	
-	/**
-	 * @var int
-	 */
-	public $TimestampFrom;
-	
-	/**
-	 * @var int
-	 */
-	public $TimestampTill;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var string
+     */
+    public $Marketplace;
+
+    /**
+     * @var int
+     */
+    public $OrderID;
+
+    /**
+     * @var int
+     */
+    public $Page;
+
+    /**
+     * @var string
+     */
+    public $SellerUserID;
+
+    /**
+     * @var int
+     */
+    public $TimestampFrom;
+
+    /**
+     * @var int
+     */
+    public $TimestampTill;
 }

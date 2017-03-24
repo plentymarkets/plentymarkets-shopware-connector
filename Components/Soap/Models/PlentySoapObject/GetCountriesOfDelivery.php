@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,39 +32,38 @@
  */
 class PlentySoapObject_GetCountriesOfDelivery
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CountryActive;
-	
-	/**
-	 * @var string
-	 */
-	public $CountryDefaultName;
-	
-	/**
-	 * @var int
-	 */
-	public $CountryID;
-	
-	/**
-	 * @var string
-	 */
-	public $CountryISO2;
-	
-	/**
-	 * @var string
-	 */
-	public $CountryISO3;
-	
-	/**
-	 * @var string
-	 */
-	public $CountryName;
-	
-	/**
-	 * @var string
-	 */
-	public $Lang;
+    /**
+     * @var int
+     */
+    public $CountryActive;
+
+    /**
+     * @var string
+     */
+    public $CountryDefaultName;
+
+    /**
+     * @var int
+     */
+    public $CountryID;
+
+    /**
+     * @var string
+     */
+    public $CountryISO2;
+
+    /**
+     * @var string
+     */
+    public $CountryISO3;
+
+    /**
+     * @var string
+     */
+    public $CountryName;
+
+    /**
+     * @var string
+     */
+    public $Lang;
 }

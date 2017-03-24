@@ -1,7 +1,7 @@
 <?php
 /**
  * plentymarkets shopware connector
- * Copyright © 2013 plentymarkets GmbH
+ * Copyright © 2013 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -27,123 +27,111 @@
  */
 
 /**
- * Imports an item attribute
+ * Imports an item attribute.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 class PlentymarketsImportEntityItemAttribute
 {
-	/**
-	 *
-	 * @var PlentySoapObject_GetItemAttributesAttribute
-	 */
-	protected $Attribute;
+    /**
+     * @var PlentySoapObject_GetItemAttributesAttribute
+     */
+    protected $Attribute;
 
-	/**
-	 *
-	 * @var Shopware\Models\Article\Configurator\Group
-	 */
-	protected $Group;
+    /**
+     * @var Shopware\Models\Article\Configurator\Group
+     */
+    protected $Group;
 
-	/**
-	 * I am the constructor
-	 *
-	 * @param PlentySoapObject_GetItemAttributesAttribute $Attribute
-	 */
-	public function __construct($Attribute)
-	{
-		$this->Attribute = $Attribute;
-	}
+    /**
+     * I am the constructor.
+     *
+     * @param PlentySoapObject_GetItemAttributesAttribute $Attribute
+     */
+    public function __construct($Attribute)
+    {
+        $this->Attribute = $Attribute;
+    }
 
-	/**
-	 * Persists the Attribute
-	 */
-	public function __destruct()
-	{
-		if ($this->Group)
-		{
-			Shopware()->Models()->persist($this->Group);
-			Shopware()->Models()->flush();
-		}
-	}
+    /**
+     * Persists the Attribute.
+     */
+    public function __destruct()
+    {
+        if ($this->Group) {
+            Shopware()->Models()->persist($this->Group);
+            Shopware()->Models()->flush();
+        }
+    }
 
-	/**
-	 * Imports the attribute and the values translations for the language shops
-	 * @param $languageShopId int
-	 */
-	public function importTranslation($languageShopId)
-	{
-		if(is_null($this->Attribute->FrontendName))
-		{
-			return;
-		}
+    /**
+     * Imports the attribute and the values translations for the language shops.
+     *
+     * @param $languageShopId int
+     */
+    public function importTranslation($languageShopId)
+    {
+        if (is_null($this->Attribute->FrontendName)) {
+            return;
+        }
 
-		try
-		{
-			$SHOPWARE_attributeId = PlentymarketsMappingController::getAttributeGroupByPlentyID($this->Attribute->Id);
-			PyLog()->message('Sync:Item:Attribute', 'Updating the attribute translation »' . $this->Attribute->FrontendName . '«');
-		}
-		catch (PlentymarketsMappingExceptionNotExistant $E)
-		{
-			PyLog()->message('Sync:Item:Attribute', 'Skipping the attribute translation »' . $this->Attribute->FrontendName . '«');
-			return;
-		}
+        try {
+            $SHOPWARE_attributeId = PlentymarketsMappingController::getAttributeGroupByPlentyID($this->Attribute->Id);
+            PyLog()->message('Sync:Item:Attribute', 'Updating the attribute translation »'.$this->Attribute->FrontendName.'«');
+        } catch (PlentymarketsMappingExceptionNotExistant $E) {
+            PyLog()->message('Sync:Item:Attribute', 'Skipping the attribute translation »'.$this->Attribute->FrontendName.'«');
 
-		// save the translation of the attribute
-		$attr_translationData = array('name' => $this->Attribute->FrontendName);
+            return;
+        }
 
-		PlentymarketsTranslation::setShopwareTranslation('configuratorgroup', $SHOPWARE_attributeId, $languageShopId, $attr_translationData);
+        // save the translation of the attribute
+        $attr_translationData = ['name' => $this->Attribute->FrontendName];
 
-		/**
-		 * @var PlentySoapObject_GetItemAttributesAttributeValue $plentyAttributeValue
-		 */
-		foreach($this->Attribute->Values->item as $plentyAttributeValue)
-		{
-			try
-			{
-				$SHOPWARE_optionId = PlentymarketsMappingController::getAttributeOptionByPlentyID($plentyAttributeValue->ValueId);
-			}
-			catch (PlentymarketsMappingExceptionNotExistant $E)
-			{
-				continue;
-			}
+        PlentymarketsTranslation::setShopwareTranslation('configuratorgroup', $SHOPWARE_attributeId, $languageShopId, $attr_translationData);
 
-			if (!is_null($plentyAttributeValue->FrontendName))
-			{
-				$attrValue_translationData = array('name' => $plentyAttributeValue->FrontendName);
+        /*
+         * @var PlentySoapObject_GetItemAttributesAttributeValue
+         */
+        foreach ($this->Attribute->Values->item as $plentyAttributeValue) {
+            try {
+                $SHOPWARE_optionId = PlentymarketsMappingController::getAttributeOptionByPlentyID($plentyAttributeValue->ValueId);
+            } catch (PlentymarketsMappingExceptionNotExistant $E) {
+                continue;
+            }
 
-				PlentymarketsTranslation::setShopwareTranslation('configuratoroption', $SHOPWARE_optionId, $languageShopId, $attrValue_translationData);
-			}
-		}
-	}
+            if (!is_null($plentyAttributeValue->FrontendName)) {
+                $attrValue_translationData = ['name' => $plentyAttributeValue->FrontendName];
 
-	/**
-	 * Imports the attribute and the values
-	 */
-	public function import()
-	{
-		$this->importAttribute();
-		$this->importValues();
-	}
+                PlentymarketsTranslation::setShopwareTranslation('configuratoroption', $SHOPWARE_optionId, $languageShopId, $attrValue_translationData);
+            }
+        }
+    }
 
-	/**
-	 * Imports the attribtue
-	 */
-	protected function importAttribute()
-	{
-		try
-		{
-			$SHOPWARE_attributeId = PlentymarketsMappingController::getAttributeGroupByPlentyID($this->Attribute->Id);
-			PyLog()->message('Sync:Item:Attribute', 'Updating the attribute »' . $this->Attribute->FrontendName . '«');
-		}
-		catch (PlentymarketsMappingExceptionNotExistant $E)
-		{
-			PyLog()->message('Sync:Item:Attribute', 'Skipping the attribute »' . $this->Attribute->FrontendName . '«');
-			return;
-		}
+    /**
+     * Imports the attribute and the values.
+     */
+    public function import()
+    {
+        $this->importAttribute();
+        $this->importValues();
+    }
 
-		/** @var Shopware\Models\Article\Configurator\Group $Group */
-		$Group = Shopware()->Models()->find('Shopware\Models\Article\Configurator\Group', $SHOPWARE_attributeId);
+    /**
+     * Imports the attribtue.
+     */
+    protected function importAttribute()
+    {
+        try {
+            $SHOPWARE_attributeId = PlentymarketsMappingController::getAttributeGroupByPlentyID($this->Attribute->Id);
+            PyLog()->message('Sync:Item:Attribute', 'Updating the attribute »'.$this->Attribute->FrontendName.'«');
+        } catch (PlentymarketsMappingExceptionNotExistant $E) {
+            PyLog()->message('Sync:Item:Attribute', 'Skipping the attribute »'.$this->Attribute->FrontendName.'«');
+
+            return;
+        }
+
+        /** @var Shopware\Models\Article\Configurator\Group $Group */
+        $Group = Shopware()->Models()->find('Shopware\Models\Article\Configurator\Group', $SHOPWARE_attributeId);
 
         // Set the new data
         if (!is_null($this->Attribute->FrontendName)) {
@@ -152,45 +140,39 @@ class PlentymarketsImportEntityItemAttribute
             // use backend-name if frontend-name doesn't exists
             $Group->setName($this->Attribute->BackendName);
         } else {
-            PyLog()->message('Sync:Item:Attribute', 'No valid name for the attribute with id »' . $this->Attribute->Id . '«');
+            PyLog()->message('Sync:Item:Attribute', 'No valid name for the attribute with id »'.$this->Attribute->Id.'«');
+
             return;
         }
         $Group->setPosition($this->Attribute->Position);
 
-		$this->Group = $Group;
-	}
+        $this->Group = $Group;
+    }
 
-	/**
-	 * Imports the values
-	 */
-	protected function importValues()
-	{
-		if (!$this->Group)
-		{
-			return;
-		}
+    /**
+     * Imports the values.
+     */
+    protected function importValues()
+    {
+        if (!$this->Group) {
+            return;
+        }
 
-		/**
-		 * @var PlentySoapObject_GetItemAttributesAttributeValue $Value
-		 * @var Shopware\Models\Article\Configurator\Option $Option
-		 */
-		foreach ($this->Attribute->Values->item as $Value)
-		{
-			try
-			{
-				$SHOPWARE_optionId = PlentymarketsMappingController::getAttributeOptionByPlentyID($Value->ValueId);
-			}
-			catch (PlentymarketsMappingExceptionNotExistant $E)
-			{
-				continue;
-			}
+        /*
+         * @var PlentySoapObject_GetItemAttributesAttributeValue
+         * @var Shopware\Models\Article\Configurator\Option      $Option
+         */
+        foreach ($this->Attribute->Values->item as $Value) {
+            try {
+                $SHOPWARE_optionId = PlentymarketsMappingController::getAttributeOptionByPlentyID($Value->ValueId);
+            } catch (PlentymarketsMappingExceptionNotExistant $E) {
+                continue;
+            }
 
-			foreach ($this->Group->getOptions() as $Option)
-			{
-				if ($Option->getId() != $SHOPWARE_optionId)
-				{
-					continue;
-				}
+            foreach ($this->Group->getOptions() as $Option) {
+                if ($Option->getId() != $SHOPWARE_optionId) {
+                    continue;
+                }
 
                 if (!is_null($Value->FrontendName)) {
                     $Option->setName($Value->FrontendName);
@@ -201,7 +183,7 @@ class PlentymarketsImportEntityItemAttribute
                     continue;
                 }
                 $Option->setPosition($Value->Position);
-			}
-		}
-	}
+            }
+        }
+    }
 }
