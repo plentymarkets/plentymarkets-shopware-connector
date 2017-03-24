@@ -1,63 +1,60 @@
 <?php
 
 /**
- * class Plentymarkets Import Item Image Thumbnail Controller
+ * class Plentymarkets Import Item Image Thumbnail Controller.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 class PlentymarketsImportItemImageThumbnailController
 {
-	/**
-	 *
-	 * @var PlentymarketsImportItemImageThumbnailController
-	 */
-	protected static $instance;
+    /**
+     * @var PlentymarketsImportItemImageThumbnailController
+     */
+    protected static $instance;
 
-	/**
-	 * @var \Shopware\Models\Media\Media[]
-	 */
-	protected $media = array();
+    /**
+     * @var \Shopware\Models\Media\Media[]
+     */
+    protected $media = [];
 
-	/**
-	 * Singleton: returns an instance
-	 *
-	 * @return PlentymarketsImportItemImageThumbnailController
-	 */
-	public static function getInstance()
-	{
-		if (!self::$instance instanceof self)
-		{
-			self::$instance = new self();
-		}
-		return self::$instance;
-	}
+    /**
+     * Singleton: returns an instance.
+     *
+     * @return PlentymarketsImportItemImageThumbnailController
+     */
+    public static function getInstance()
+    {
+        if (!self::$instance instanceof self) {
+            self::$instance = new self();
+        }
 
-	/**
-	 * Adds another media resource
-	 *
-	 * @param \Shopware\Models\Media\Media $media
-	 */
-	public function addMediaResource(Shopware\Models\Media\Media $media)
-	{
-		$this->media[] = $media;
-	}
+        return self::$instance;
+    }
 
-	/**
-	 * generate the thumbnails
-	 */
-	public function generate()
-	{
-		if (!count($this->media))
-		{
-			return;
-		}
+    /**
+     * Adds another media resource.
+     *
+     * @param \Shopware\Models\Media\Media $media
+     */
+    public function addMediaResource(Shopware\Models\Media\Media $media)
+    {
+        $this->media[] = $media;
+    }
 
-		$manager = Shopware()->Container()->get('thumbnail_manager');
-		PyLog()->message('Sync:Item:Image:Thumbnail', 'Starting to generate thumbnails for ' . count($this->media) . ' media resources');
-		while ($media = array_pop($this->media))
-		{
-			$manager->createMediaThumbnail($media, array(), true);
-		}
-		PyLog()->message('Sync:Item:Image:Thumbnail', 'Finished generating thumbnails');
-	}
-} 
+    /**
+     * generate the thumbnails.
+     */
+    public function generate()
+    {
+        if (!count($this->media)) {
+            return;
+        }
+
+        $manager = Shopware()->Container()->get('thumbnail_manager');
+        PyLog()->message('Sync:Item:Image:Thumbnail', 'Starting to generate thumbnails for '.count($this->media).' media resources');
+        while ($media = array_pop($this->media)) {
+            $manager->createMediaThumbnail($media, [], true);
+        }
+        PyLog()->message('Sync:Item:Image:Thumbnail', 'Finished generating thumbnails');
+    }
+}

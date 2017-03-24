@@ -1,7 +1,7 @@
 <?php
 /**
  * plentymarkets shopware connector
- * Copyright © 2013 plentymarkets GmbH
+ * Copyright © 2013 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -26,9 +26,8 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
- * Thrown if a single entity of an export fails
+ * Thrown if a single entity of an export fails.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
