@@ -1,7 +1,7 @@
 <?php
 /**
  * plentymarkets shopware connector
- * Copyright © 2013 plentymarkets GmbH
+ * Copyright © 2013 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -27,50 +27,47 @@
  */
 
 /**
- * Imports a item producer
+ * Imports a item producer.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 class PlentymarketsImportEntityItemProducer
 {
-	/**
-	 *
-	 * @var PlentySoapObject_GetProducers
-	 */
-	protected $Producer;
+    /**
+     * @var PlentySoapObject_GetProducers
+     */
+    protected $Producer;
 
-	/**
-	 * I am the constructor
-	 *
-	 * @param PlentySoapObject_GetProducers $Producer
-	 */
-	public function __construct(PlentySoapObject_GetProducers $Producer)
-	{
-		$this->Producer = $Producer;
-	}
+    /**
+     * I am the constructor.
+     *
+     * @param PlentySoapObject_GetProducers $Producer
+     */
+    public function __construct(PlentySoapObject_GetProducers $Producer)
+    {
+        $this->Producer = $Producer;
+    }
 
-	/**
-	 * Does the actual import
-	 */
-	public function import()
-	{
-		try
-		{
-			$SHOPWARE_id = PlentymarketsMappingController::getProducerByPlentyID($this->Producer->ProducerID);
-			PyLog()->message('Sync:Item:Producer', 'Updating the producer »' . $this->Producer->ProducerName . '«');
-		}
-		catch (PlentymarketsMappingExceptionNotExistant $E)
-		{
-			PyLog()->message('Sync:Item:Producer', 'Skipping the producer »' . $this->Producer->ProducerName . '«');
-			return;
-		}
+    /**
+     * Does the actual import.
+     */
+    public function import()
+    {
+        try {
+            $SHOPWARE_id = PlentymarketsMappingController::getProducerByPlentyID($this->Producer->ProducerID);
+            PyLog()->message('Sync:Item:Producer', 'Updating the producer »'.$this->Producer->ProducerName.'«');
+        } catch (PlentymarketsMappingExceptionNotExistant $E) {
+            PyLog()->message('Sync:Item:Producer', 'Skipping the producer »'.$this->Producer->ProducerName.'«');
 
-		/** @var Shopware\Models\Article\Supplier $Supplier */
-		$Supplier = Shopware()->Models()->find('Shopware\Models\Article\Supplier', $SHOPWARE_id);
+            return;
+        }
 
-		// Set the new data
-		$Supplier->setName($this->Producer->ProducerName);
-		Shopware()->Models()->persist($Supplier);
-		Shopware()->Models()->flush();
-	}
+        /** @var Shopware\Models\Article\Supplier $Supplier */
+        $Supplier = Shopware()->Models()->find('Shopware\Models\Article\Supplier', $SHOPWARE_id);
+
+        // Set the new data
+        $Supplier->setName($this->Producer->ProducerName);
+        Shopware()->Models()->persist($Supplier);
+        Shopware()->Models()->flush();
+    }
 }

@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,94 +32,93 @@
  */
 class PlentySoapObject_SetItemAttribute
 {
-	
-	/**
-	 * @var int
-	 */
-	public $AmazonVariation;
-	
-	/**
-	 * @var string
-	 */
-	public $BackendName;
-	
-	/**
-	 * @var string
-	 */
-	public $Contentpage;
-	
-	/**
-	 * @var string
-	 */
-	public $FrontendLang;
-	
-	/**
-	 * @var string
-	 */
-	public $FrontendName;
-	
-	/**
-	 * @var int
-	 */
-	public $GoogleProductsVariation;
-	
-	/**
-	 * @var int
-	 */
-	public $Id;
-	
-	/**
-	 * @var boolean
-	 */
-	public $ImageAttribute;
-	
-	/**
-	 * @var int
-	 */
-	public $LaRedouteVariation;
-	
-	/**
-	 * @var float
-	 */
-	public $MarkupPercental;
-	
-	/**
-	 * @var int
-	 */
-	public $NeckermannAtEnterprise;
-	
-	/**
-	 * @var int
-	 */
-	public $NeckermannAttribute;
-	
-	/**
-	 * @var int
-	 */
-	public $NeckermannCrossDocking;
-	
-	/**
-	 * @var int
-	 */
-	public $OttoVariation;
-	
-	/**
-	 * @var int
-	 */
-	public $PixmaniaAttribute;
-	
-	/**
-	 * @var int
-	 */
-	public $Position;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_setitemattributevalue
-	 */
-	public $Values;
-	
-	/**
-	 * @var string
-	 */
-	public $ViewWebshop;
+    /**
+     * @var int
+     */
+    public $AmazonVariation;
+
+    /**
+     * @var string
+     */
+    public $BackendName;
+
+    /**
+     * @var string
+     */
+    public $Contentpage;
+
+    /**
+     * @var string
+     */
+    public $FrontendLang;
+
+    /**
+     * @var string
+     */
+    public $FrontendName;
+
+    /**
+     * @var int
+     */
+    public $GoogleProductsVariation;
+
+    /**
+     * @var int
+     */
+    public $Id;
+
+    /**
+     * @var bool
+     */
+    public $ImageAttribute;
+
+    /**
+     * @var int
+     */
+    public $LaRedouteVariation;
+
+    /**
+     * @var float
+     */
+    public $MarkupPercental;
+
+    /**
+     * @var int
+     */
+    public $NeckermannAtEnterprise;
+
+    /**
+     * @var int
+     */
+    public $NeckermannAttribute;
+
+    /**
+     * @var int
+     */
+    public $NeckermannCrossDocking;
+
+    /**
+     * @var int
+     */
+    public $OttoVariation;
+
+    /**
+     * @var int
+     */
+    public $PixmaniaAttribute;
+
+    /**
+     * @var int
+     */
+    public $Position;
+
+    /**
+     * @var ArrayOfPlentysoapobject_setitemattributevalue
+     */
+    public $Values;
+
+    /**
+     * @var string
+     */
+    public $ViewWebshop;
 }

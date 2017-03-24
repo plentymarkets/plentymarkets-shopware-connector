@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,49 +32,48 @@
  */
 class PlentySoapObject_SetEmailTemplatesTemplate
 {
-	
-	/**
-	 * @var int
-	 */
-	public $Attachment;
-	
-	/**
-	 * @var int
-	 */
-	public $AttachmentDocument;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_setemailtemplatestemplatecontent
-	 */
-	public $Contents;
-	
-	/**
-	 * @var int
-	 */
-	public $ID;
-	
-	/**
-	 * @var string
-	 */
-	public $Name;
-	
-	/**
-	 * @var string
-	 */
-	public $ReplyTo;
-	
-	/**
-	 * @var int
-	 */
-	public $ResponsibleID;
-	
-	/**
-	 * @var int
-	 */
-	public $Type;
-	
-	/**
-	 * @var string
-	 */
-	public $UseDesign;
+    /**
+     * @var int
+     */
+    public $Attachment;
+
+    /**
+     * @var int
+     */
+    public $AttachmentDocument;
+
+    /**
+     * @var ArrayOfPlentysoapobject_setemailtemplatestemplatecontent
+     */
+    public $Contents;
+
+    /**
+     * @var int
+     */
+    public $ID;
+
+    /**
+     * @var string
+     */
+    public $Name;
+
+    /**
+     * @var string
+     */
+    public $ReplyTo;
+
+    /**
+     * @var int
+     */
+    public $ResponsibleID;
+
+    /**
+     * @var int
+     */
+    public $Type;
+
+    /**
+     * @var string
+     */
+    public $UseDesign;
 }

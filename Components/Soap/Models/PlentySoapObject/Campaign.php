@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,104 +32,103 @@
  */
 class PlentySoapObject_Campaign
 {
-	
-	/**
-	 * @var boolean
-	 */
-	public $AllowPriceComparison;
-	
-	/**
-	 * @var int
-	 */
-	public $AppliedCampaignTo;
-	
-	/**
-	 * @var int
-	 */
-	public $CampaignConcept;
-	
-	/**
-	 * @var int
-	 */
-	public $CampaignType;
-	
-	/**
-	 * @var string
-	 */
-	public $CategoryBranchIds;
-	
-	/**
-	 * @var int
-	 */
-	public $CouponType;
-	
-	/**
-	 * @var string
-	 */
-	public $Description;
-	
-	/**
-	 * @var int
-	 */
-	public $DiscountType;
-	
-	/**
-	 * @var float
-	 */
-	public $DiscountValue;
-	
-	/**
-	 * @var string
-	 */
-	public $EndTime;
-	
-	/**
-	 * @var boolean
-	 */
-	public $HasShippingDiscount;
-	
-	/**
-	 * @var boolean
-	 */
-	public $HasVariousCouponCodes;
-	
-	/**
-	 * @var int
-	 */
-	public $ID;
-	
-	/**
-	 * @var string
-	 */
-	public $ItemDiscountValue;
-	
-	/**
-	 * @var string
-	 */
-	public $ItemIDs;
-	
-	/**
-	 * @var float
-	 */
-	public $MinOrderValue;
-	
-	/**
-	 * @var int
-	 */
-	public $Months;
-	
-	/**
-	 * @var string
-	 */
-	public $Name;
-	
-	/**
-	 * @var int
-	 */
-	public $PendingCoupons;
-	
-	/**
-	 * @var string
-	 */
-	public $StartTime;
+    /**
+     * @var bool
+     */
+    public $AllowPriceComparison;
+
+    /**
+     * @var int
+     */
+    public $AppliedCampaignTo;
+
+    /**
+     * @var int
+     */
+    public $CampaignConcept;
+
+    /**
+     * @var int
+     */
+    public $CampaignType;
+
+    /**
+     * @var string
+     */
+    public $CategoryBranchIds;
+
+    /**
+     * @var int
+     */
+    public $CouponType;
+
+    /**
+     * @var string
+     */
+    public $Description;
+
+    /**
+     * @var int
+     */
+    public $DiscountType;
+
+    /**
+     * @var float
+     */
+    public $DiscountValue;
+
+    /**
+     * @var string
+     */
+    public $EndTime;
+
+    /**
+     * @var bool
+     */
+    public $HasShippingDiscount;
+
+    /**
+     * @var bool
+     */
+    public $HasVariousCouponCodes;
+
+    /**
+     * @var int
+     */
+    public $ID;
+
+    /**
+     * @var string
+     */
+    public $ItemDiscountValue;
+
+    /**
+     * @var string
+     */
+    public $ItemIDs;
+
+    /**
+     * @var float
+     */
+    public $MinOrderValue;
+
+    /**
+     * @var int
+     */
+    public $Months;
+
+    /**
+     * @var string
+     */
+    public $Name;
+
+    /**
+     * @var int
+     */
+    public $PendingCoupons;
+
+    /**
+     * @var string
+     */
+    public $StartTime;
 }
