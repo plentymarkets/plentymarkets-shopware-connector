@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,59 +32,58 @@
  */
 class PlentySoapObject_MarketListingItemVariant
 {
-	
-	/**
-	 * @var boolean
-	 */
-	public $AllowedOverselling;
-	
-	/**
-	 * @var int
-	 */
-	public $AttributeValueSetID;
-	
-	/**
-	 * @var string
-	 */
-	public $ExtSKU;
-	
-	/**
-	 * @var int
-	 */
-	public $GrossStock;
-	
-	/**
-	 * @var int
-	 */
-	public $NetStock;
-	
-	/**
-	 * @var int
-	 */
-	public $Quantity;
-	
-	/**
-	 * @var int
-	 */
-	public $QuantityRemain;
-	
-	/**
-	 * @var int
-	 */
-	public $QuantitySold;
-	
-	/**
-	 * @var int
-	 */
-	public $QuantitySoldDelta;
-	
-	/**
-	 * @var int
-	 */
-	public $StockDependence;
-	
-	/**
-	 * @var float
-	 */
-	public $VariantPrice;
+    /**
+     * @var bool
+     */
+    public $AllowedOverselling;
+
+    /**
+     * @var int
+     */
+    public $AttributeValueSetID;
+
+    /**
+     * @var string
+     */
+    public $ExtSKU;
+
+    /**
+     * @var int
+     */
+    public $GrossStock;
+
+    /**
+     * @var int
+     */
+    public $NetStock;
+
+    /**
+     * @var int
+     */
+    public $Quantity;
+
+    /**
+     * @var int
+     */
+    public $QuantityRemain;
+
+    /**
+     * @var int
+     */
+    public $QuantitySold;
+
+    /**
+     * @var int
+     */
+    public $QuantitySoldDelta;
+
+    /**
+     * @var int
+     */
+    public $StockDependence;
+
+    /**
+     * @var float
+     */
+    public $VariantPrice;
 }

@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,39 +32,38 @@
  */
 class PlentySoapRequest_GetItemCategoryCatalog
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var int
-	 */
-	public $CategoryID;
-	
-	/**
-	 * @var string
-	 */
-	public $Lang;
-	
-	/**
-	 * @var int
-	 */
-	public $LastUpdateFrom;
-	
-	/**
-	 * @var int
-	 */
-	public $LastUpdateTo;
-	
-	/**
-	 * @var int
-	 */
-	public $Page;
-	
-	/**
-	 * @var int
-	 */
-	public $StoreID;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var int
+     */
+    public $CategoryID;
+
+    /**
+     * @var string
+     */
+    public $Lang;
+
+    /**
+     * @var int
+     */
+    public $LastUpdateFrom;
+
+    /**
+     * @var int
+     */
+    public $LastUpdateTo;
+
+    /**
+     * @var int
+     */
+    public $Page;
+
+    /**
+     * @var int
+     */
+    public $StoreID;
 }

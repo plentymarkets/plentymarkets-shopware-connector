@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,49 +32,48 @@
  */
 class PlentySoapObject_GetDynamicImportStack
 {
-	
-	/**
-	 * @var int
-	 */
-	public $DoneRowsQuantity;
-	
-	/**
-	 * @var string
-	 */
-	public $ErrorMessage;
-	
-	/**
-	 * @var string
-	 */
-	public $ErrorText;
-	
-	/**
-	 * @var string
-	 */
-	public $FileName;
-	
-	/**
-	 * @var int
-	 */
-	public $FormatID;
-	
-	/**
-	 * @var int
-	 */
-	public $ID;
-	
-	/**
-	 * @var int
-	 */
-	public $Imported;
-	
-	/**
-	 * @var int
-	 */
-	public $Upload;
-	
-	/**
-	 * @var int
-	 */
-	public $UserID;
+    /**
+     * @var int
+     */
+    public $DoneRowsQuantity;
+
+    /**
+     * @var string
+     */
+    public $ErrorMessage;
+
+    /**
+     * @var string
+     */
+    public $ErrorText;
+
+    /**
+     * @var string
+     */
+    public $FileName;
+
+    /**
+     * @var int
+     */
+    public $FormatID;
+
+    /**
+     * @var int
+     */
+    public $ID;
+
+    /**
+     * @var int
+     */
+    public $Imported;
+
+    /**
+     * @var int
+     */
+    public $Upload;
+
+    /**
+     * @var int
+     */
+    public $UserID;
 }

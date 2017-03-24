@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,69 +32,68 @@
  */
 class PlentySoapObject_MarketListingHood
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_string
-	 */
-	public $AdditionalOptions;
-	
-	/**
-	 * @var string
-	 */
-	public $Category1;
-	
-	/**
-	 * @var string
-	 */
-	public $Category2;
-	
-	/**
-	 * @var int
-	 */
-	public $DeliveryDaysNotOnStockFrom;
-	
-	/**
-	 * @var int
-	 */
-	public $DeliveryDaysNotOnStockTo;
-	
-	/**
-	 * @var int
-	 */
-	public $DeliveryDaysOnStockFrom;
-	
-	/**
-	 * @var int
-	 */
-	public $DeliveryDaysOnStockTo;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_integer
-	 */
-	public $PaymentMethods;
-	
-	/**
-	 * @var int
-	 */
-	public $ShippingDiscount;
-	
-	/**
-	 * @var string
-	 */
-	public $ShopCategory1;
-	
-	/**
-	 * @var string
-	 */
-	public $ShopCategory2;
-	
-	/**
-	 * @var string
-	 */
-	public $ShopCategory3;
-	
-	/**
-	 * @var string
-	 */
-	public $ShowOnShopStartpage;
+    /**
+     * @var ArrayOfPlentysoapobject_string
+     */
+    public $AdditionalOptions;
+
+    /**
+     * @var string
+     */
+    public $Category1;
+
+    /**
+     * @var string
+     */
+    public $Category2;
+
+    /**
+     * @var int
+     */
+    public $DeliveryDaysNotOnStockFrom;
+
+    /**
+     * @var int
+     */
+    public $DeliveryDaysNotOnStockTo;
+
+    /**
+     * @var int
+     */
+    public $DeliveryDaysOnStockFrom;
+
+    /**
+     * @var int
+     */
+    public $DeliveryDaysOnStockTo;
+
+    /**
+     * @var ArrayOfPlentysoapobject_integer
+     */
+    public $PaymentMethods;
+
+    /**
+     * @var int
+     */
+    public $ShippingDiscount;
+
+    /**
+     * @var string
+     */
+    public $ShopCategory1;
+
+    /**
+     * @var string
+     */
+    public $ShopCategory2;
+
+    /**
+     * @var string
+     */
+    public $ShopCategory3;
+
+    /**
+     * @var string
+     */
+    public $ShowOnShopStartpage;
 }

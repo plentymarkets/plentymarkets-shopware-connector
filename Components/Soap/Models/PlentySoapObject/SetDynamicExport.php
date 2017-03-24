@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,34 +32,33 @@
  */
 class PlentySoapObject_SetDynamicExport
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_setdynamicexportfield
-	 */
-	public $Fields;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_setdynamicexportfilter
-	 */
-	public $Filter;
-	
-	/**
-	 * @var string
-	 */
-	public $FormatName;
-	
-	/**
-	 * @var string
-	 */
-	public $FormatType;
-	
-	/**
-	 * @var int
-	 */
-	public $ID;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_setdynamicexportprocedure
-	 */
-	public $Procedures;
+    /**
+     * @var ArrayOfPlentysoapobject_setdynamicexportfield
+     */
+    public $Fields;
+
+    /**
+     * @var ArrayOfPlentysoapobject_setdynamicexportfilter
+     */
+    public $Filter;
+
+    /**
+     * @var string
+     */
+    public $FormatName;
+
+    /**
+     * @var string
+     */
+    public $FormatType;
+
+    /**
+     * @var int
+     */
+    public $ID;
+
+    /**
+     * @var ArrayOfPlentysoapobject_setdynamicexportprocedure
+     */
+    public $Procedures;
 }

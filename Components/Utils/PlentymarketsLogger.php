@@ -1,7 +1,7 @@
 <?php
 /**
  * plentymarkets shopware connector
- * Copyright © 2013 plentymarkets GmbH
+ * Copyright © 2013 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -26,7 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * The main functionality of this class is to log error messages or other messages. Both error messages and other messages are
  * defined in two groups, soap log messages and all other messages. This class is used in the most classes of the plentymarkets
@@ -36,43 +35,37 @@
  */
 class PlentymarketsLogger
 {
+    /**
+     * @var int
+     */
+    const TYPE_ERROR = 1;
 
-	/**
-	 *
-	 * @var integer
-	 */
-	const TYPE_ERROR = 1;
+    /**
+     * @var int
+     */
+    const TYPE_MESSAGE = 2;
 
-	/**
-	 *
-	 * @var integer
-	 */
-	const TYPE_MESSAGE = 2;
+    /**
+     * @var string
+     */
+    const PREFIX_UPDATE = 'Update';
 
-	/**
-	 *
-	 * @var string
-	 */
-	const PREFIX_UPDATE = 'Update';
+    /**
+     * @var \Doctrine\DBAL\Driver\IBMDB2\DB2Statement
+     */
+    protected $StatementInsert = null;
 
-	/**
-	 *
-	 * @var \Doctrine\DBAL\Driver\IBMDB2\DB2Statement
-	 */
-	protected $StatementInsert = null;
+    /**
+     * @var PlentymarketsLogger
+     */
+    protected static $Instance = null;
 
-	/**
-	 *
-	 * @var PlentymarketsLogger
-	 */
-	protected static $Instance = null;
-
-	/**
-	 * Create the insert statement
-	 */
-	public function __construct()
-	{
-		$this->StatementInsert = Shopware()->Db()->prepare('
+    /**
+     * Create the insert statement.
+     */
+    public function __construct()
+    {
+        $this->StatementInsert = Shopware()->Db()->prepare('
 			INSERT INTO plenty_log
 				SET
 					`timestamp` = UNIX_TIMESTAMP(),
@@ -81,175 +74,172 @@ class PlentymarketsLogger
 					message = ?,
 					code = ?
 		');
-	}
+    }
 
-	/**
-	 * Returns an instance
-	 *
-	 * @return PlentymarketsLogger
-	 */
-	public static function getInstance()
-	{
-		if (!self::$Instance instanceof self)
-		{
-			self::$Instance = new self();
-		}
-		return self::$Instance;
-	}
+    /**
+     * Returns an instance.
+     *
+     * @return PlentymarketsLogger
+     */
+    public static function getInstance()
+    {
+        if (!self::$Instance instanceof self) {
+            self::$Instance = new self();
+        }
 
-	/**
-	 * Returns a page of the log
-	 *
-	 * @param integer $start
-	 * @param integer $limit
-	 * @param int|number $type
-	 * @param string $filter
-	 * @return array
-	 */
-	public function get($start, $limit, $type = 0, $filter = '')
-	{
-		$where = 'WHERE 1';
+        return self::$Instance;
+    }
 
-		if ($type > 0)
-		{
-			$where .= ' AND type = ' . (integer) $type;
-		}
+    /**
+     * Returns a page of the log.
+     *
+     * @param int        $start
+     * @param int        $limit
+     * @param int|number $type
+     * @param string     $filter
+     *
+     * @return array
+     */
+    public function get($start, $limit, $type = 0, $filter = '')
+    {
+        $where = 'WHERE 1';
 
-		if (strlen($filter) > 4)
-		{
-			$where .= ' AND identifier LIKE "'. $filter .'"';
-		}
+        if ($type > 0) {
+            $where .= ' AND type = '.(int) $type;
+        }
 
-		if (PyConf()->getApiHideCallsInLog(false))
-		{
-			$where .= ' AND identifier != "Soap:Call"';
-		}
+        if (strlen($filter) > 4) {
+            $where .= ' AND identifier LIKE "'.$filter.'"';
+        }
 
-		$limit = ' LIMIT ' . $start . ', ' . $limit;
+        if (PyConf()->getApiHideCallsInLog(false)) {
+            $where .= ' AND identifier != "Soap:Call"';
+        }
 
-		$Result = Shopware()->Db()->query('
+        $limit = ' LIMIT '.$start.', '.$limit;
+
+        $Result = Shopware()->Db()->query('
 			SELECT
 					SQL_CALC_FOUND_ROWS *
 				FROM plenty_log
-					' . $where . '
+					'.$where.'
 				ORDER BY id DESC
-					' . $limit . '
+					'.$limit.'
 		');
 
-		return array(
-			'data' => $Result->fetchAll(),
-			'total' => Shopware()->Db()->query('
+        return [
+            'data'  => $Result->fetchAll(),
+            'total' => Shopware()->Db()->query('
 				SELECT FOUND_ROWS()
-			')->fetchColumn(0)
-		);
-	}
+			')->fetchColumn(0),
+        ];
+    }
 
-	/**
-	 * Returns all identifiers
-	 * @return array
-	 */
-	public function getIdentifierList()
-	{
-		return Shopware()->Db()->query('
+    /**
+     * Returns all identifiers.
+     *
+     * @return array
+     */
+    public function getIdentifierList()
+    {
+        return Shopware()->Db()->query('
 			SELECT
 					DISTINCT identifier
 				FROM plenty_log
 				ORDER BY identifier ASC
 		')->fetchAll();
-	}
+    }
 
-	/**
-	 * Create a new log entry
-	 *
-	 * @param integer $type
-	 * @param string $identifier
-	 * @param string $message
-	 * @param integer $code
-	 */
-	protected function log($type, $identifier, $message, $code=null)
-	{
-		if (is_array($message))
-		{
-			$format = array_shift($message);
-			$message = vsprintf($format, $message);
-		}
+    /**
+     * Create a new log entry.
+     *
+     * @param int    $type
+     * @param string $identifier
+     * @param string $message
+     * @param int    $code
+     */
+    protected function log($type, $identifier, $message, $code = null)
+    {
+        if (is_array($message)) {
+            $format = array_shift($message);
+            $message = vsprintf($format, $message);
+        }
 
-		try
-		{
-			$this->StatementInsert->execute(array(
-				$type,
-				$identifier,
-				$message,
-				$code
-			));
-		}
-		catch (Exception $E)
-		{
-		}
+        try {
+            $this->StatementInsert->execute([
+                $type,
+                $identifier,
+                $message,
+                $code,
+            ]);
+        } catch (Exception $E) {
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	/**
-	 * Log an error message
-	 *
-	 * @param string $identifier
-	 * @param string $message
-	 * @param integer $code
-	 * @return bool
-	 */
-	public function error($identifier, $message, $code=1000)
-	{
-		return $this->log(self::TYPE_ERROR, $identifier, $message, $code);
-	}
+    /**
+     * Log an error message.
+     *
+     * @param string $identifier
+     * @param string $message
+     * @param int    $code
+     *
+     * @return bool
+     */
+    public function error($identifier, $message, $code = 1000)
+    {
+        return $this->log(self::TYPE_ERROR, $identifier, $message, $code);
+    }
 
-	/**
-	 * Logs a new message
-	 *
-	 * @param string $identifier
-	 * @param string $message
-	 * @return bool
-	 */
-	public function message($identifier, $message)
-	{
-		return $this->log(self::TYPE_MESSAGE, $identifier, $message);
-	}
+    /**
+     * Logs a new message.
+     *
+     * @param string $identifier
+     * @param string $message
+     *
+     * @return bool
+     */
+    public function message($identifier, $message)
+    {
+        return $this->log(self::TYPE_MESSAGE, $identifier, $message);
+    }
 
-	/**
-	 * Logs a debug message
-	 *
-	 * @param string $message
-	 * @return bool
-	 */
-	public function debug($message)
-	{
-		return $this->message('DEBUG', $message);
-	}
+    /**
+     * Logs a debug message.
+     *
+     * @param string $message
+     *
+     * @return bool
+     */
+    public function debug($message)
+    {
+        return $this->message('DEBUG', $message);
+    }
 
-	/**
-	 * Logs the usage data
-	 */
-	public function usage()
-	{
-		// Quit if the usage may not be logged
-		if (!PlentymarketsConfig::getInstance()->getMayLogUsageData(false))
-		{
-			return;
-		}
+    /**
+     * Logs the usage data.
+     */
+    public function usage()
+    {
+        // Quit if the usage may not be logged
+        if (!PlentymarketsConfig::getInstance()->getMayLogUsageData(false)) {
+            return;
+        }
 
-		// Collect data
-		$memoryUsage = PlentymarketsUtils::convertBytes(memory_get_usage());
-		$memoryUsageReal = PlentymarketsUtils::convertBytes(memory_get_usage(true));
-		$memoryLimit = ini_get('memory_limit');
-		$numberOfCalls = PlentymarketsSoapClient::getInstance()->getNumberOfCalls();
+        // Collect data
+        $memoryUsage = PlentymarketsUtils::convertBytes(memory_get_usage());
+        $memoryUsageReal = PlentymarketsUtils::convertBytes(memory_get_usage(true));
+        $memoryLimit = ini_get('memory_limit');
+        $numberOfCalls = PlentymarketsSoapClient::getInstance()->getNumberOfCalls();
 
-		// Generate message
-		$message = sprintf(
-			'Memory: %s (%s) / (%s) – Calls: %s',
-			$memoryUsageReal, $memoryUsage, $memoryLimit, $numberOfCalls
-		);
+        // Generate message
+        $message = sprintf(
+            'Memory: %s (%s) / (%s) – Calls: %s',
+            $memoryUsageReal, $memoryUsage, $memoryLimit, $numberOfCalls
+        );
 
-		// And save to the log
-		$this->message('Usage data', $message);
-	}
+        // And save to the log
+        $this->message('Usage data', $message);
+    }
 }
