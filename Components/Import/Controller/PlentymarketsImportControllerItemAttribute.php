@@ -1,7 +1,7 @@
 <?php
 /**
  * plentymarkets shopware connector
- * Copyright © 2013 plentymarkets GmbH
+ * Copyright © 2013 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -26,80 +26,68 @@
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
- * Imports the item attributes
+ * Imports the item attributes.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 class PlentymarketsImportControllerItemAttribute
 {
-	/**
-	 * Performs the actual import
-	 *
-	 * @param integer $lastUpdateTimestamp
-	 */
-	public function run($lastUpdateTimestamp)
-	{
+    /**
+     * Performs the actual import.
+     *
+     * @param int $lastUpdateTimestamp
+     */
+    public function run($lastUpdateTimestamp)
+    {
+        $Request_GetItemAttributes = new PlentySoapRequest_GetItemAttributes();
+        $Request_GetItemAttributes->GetValues = true;
+        $Request_GetItemAttributes->LastUpdateFrom = $lastUpdateTimestamp;
 
-		$Request_GetItemAttributes = new PlentySoapRequest_GetItemAttributes();
-		$Request_GetItemAttributes->GetValues = true;
-		$Request_GetItemAttributes->LastUpdateFrom = $lastUpdateTimestamp;
+        /** @var PlentySoapResponse_GetItemAttributes $Response_GetItemAttributes */
+        $Response_GetItemAttributes = PlentymarketsSoapClient::getInstance()->GetItemAttributes($Request_GetItemAttributes);
 
-		/** @var PlentySoapResponse_GetItemAttributes $Response_GetItemAttributes */
-		$Response_GetItemAttributes = PlentymarketsSoapClient::getInstance()->GetItemAttributes($Request_GetItemAttributes);
+        if (!$Response_GetItemAttributes->Success) {
+            return;
+        }
 
-		if (!$Response_GetItemAttributes->Success) {
-			return;
-		}
+        foreach ($Response_GetItemAttributes->Attributes->item as $Attribute) {
+            $PlentymarketsImportEntityItemAttribute = new PlentymarketsImportEntityItemAttribute($Attribute);
+            $PlentymarketsImportEntityItemAttribute->import();
+        }
 
-		foreach ($Response_GetItemAttributes->Attributes->item as $Attribute) 
-		{
-			$PlentymarketsImportEntityItemAttribute = new PlentymarketsImportEntityItemAttribute($Attribute);
-			$PlentymarketsImportEntityItemAttribute->import();
-		}
+        // run import of attributes and attributes value translations
+        $mainShops = PlentymarketsUtils::getShopwareMainShops();
 
-		// run import of attributes and attributes value translations
-		$mainShops = PlentymarketsUtils::getShopwareMainShops();
+        /** @var $mainShop Shopware\Models\Shop\Shop */
+        foreach ($mainShops as $mainShop) {
+            // get all active languages of the main shop
+            $activeLanguages = PlentymarketsTranslation::getShopActiveLanguages($mainShop->getId());
 
-		/** @var $mainShop Shopware\Models\Shop\Shop */
-		foreach ($mainShops as $mainShop) 
-		{
-			// get all active languages of the main shop
-			$activeLanguages = PlentymarketsTranslation::getShopActiveLanguages($mainShop->getId());
+            foreach ($activeLanguages as $key => $language) {
+                $Request_GetItemAttributes = new PlentySoapRequest_GetItemAttributes();
+                $Request_GetItemAttributes->GetValues = true;
+                $Request_GetItemAttributes->LastUpdateFrom = $lastUpdateTimestamp;
+                $Request_GetItemAttributes->Lang = PlentymarketsTranslation::getPlentyLocaleFormat($language['locale']);
 
-			foreach ($activeLanguages as $key => $language)
-			{
-				$Request_GetItemAttributes = new PlentySoapRequest_GetItemAttributes();
-				$Request_GetItemAttributes->GetValues = true;
-				$Request_GetItemAttributes->LastUpdateFrom = $lastUpdateTimestamp;
-				$Request_GetItemAttributes->Lang = PlentymarketsTranslation::getPlentyLocaleFormat($language['locale']);
+                /** @var PlentySoapResponse_GetItemAttributes $Response_GetItemAttributes */
+                $Response_GetItemAttributes = PlentymarketsSoapClient::getInstance()->GetItemAttributes($Request_GetItemAttributes);
 
-				/** @var PlentySoapResponse_GetItemAttributes $Response_GetItemAttributes */
-				$Response_GetItemAttributes = PlentymarketsSoapClient::getInstance()->GetItemAttributes($Request_GetItemAttributes);
+                if ($Response_GetItemAttributes->Success) {
+                    foreach ($Response_GetItemAttributes->Attributes->item as $Attribute) {
+                        $PlentymarketsImportEntityItemAttribute = new PlentymarketsImportEntityItemAttribute($Attribute);
 
-				if ($Response_GetItemAttributes->Success) 
-				{
-					foreach ($Response_GetItemAttributes->Attributes->item as $Attribute) 
-					{
-						$PlentymarketsImportEntityItemAttribute = new PlentymarketsImportEntityItemAttribute($Attribute);
-						
-						// set the atrribute translations from plenty for the language shops 
-						if (!is_null($language['mainShopId']))
-						{
-							$languageShopID = PlentymarketsTranslation::getLanguageShopID($key, $language['mainShopId']);
-							$PlentymarketsImportEntityItemAttribute->importTranslation($languageShopID);
-						}
-						else
-						{
-							// import translations for the main shop languages
-							$PlentymarketsImportEntityItemAttribute->importTranslation($mainShop->getId());
-
-						}
-					}
-				}
-			}		
-		}
-	}
+                        // set the atrribute translations from plenty for the language shops
+                        if (!is_null($language['mainShopId'])) {
+                            $languageShopID = PlentymarketsTranslation::getLanguageShopID($key, $language['mainShopId']);
+                            $PlentymarketsImportEntityItemAttribute->importTranslation($languageShopID);
+                        } else {
+                            // import translations for the main shop languages
+                            $PlentymarketsImportEntityItemAttribute->importTranslation($mainShop->getId());
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
-

@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,39 +32,38 @@
  */
 class PlentySoapObject_ReturnItem
 {
-	
-	/**
-	 * @var string
-	 */
-	public $Comment;
-	
-	/**
-	 * @var string
-	 */
-	public $ExternalItemID;
-	
-	/**
-	 * @var int
-	 */
-	public $ItemStatusID;
-	
-	/**
-	 * @var int
-	 */
-	public $OrderRowID;
-	
-	/**
-	 * @var float
-	 */
-	public $Quantity;
-	
-	/**
-	 * @var int
-	 */
-	public $RemainingPercentage;
-	
-	/**
-	 * @var string
-	 */
-	public $SKU;
+    /**
+     * @var string
+     */
+    public $Comment;
+
+    /**
+     * @var string
+     */
+    public $ExternalItemID;
+
+    /**
+     * @var int
+     */
+    public $ItemStatusID;
+
+    /**
+     * @var int
+     */
+    public $OrderRowID;
+
+    /**
+     * @var float
+     */
+    public $Quantity;
+
+    /**
+     * @var int
+     */
+    public $RemainingPercentage;
+
+    /**
+     * @var string
+     */
+    public $SKU;
 }

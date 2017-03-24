@@ -2,7 +2,7 @@
 
 /**
  * plentymarkets shopware connector
- * Copyright © 2013-2015 plentymarkets GmbH
+ * Copyright © 2013-2015 plentymarkets GmbH.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,24 +32,23 @@
  */
 class PlentySoapObject_GetPropertiesListPropertie
 {
-	
-	/**
-	 * @var boolean
-	 */
-	public $IsSalesOrderParam;
-	
-	/**
-	 * @var int
-	 */
-	public $PropertyID;
-	
-	/**
-	 * @var string
-	 */
-	public $PropertyName;
-	
-	/**
-	 * @var string
-	 */
-	public $PropertyValueType;
+    /**
+     * @var bool
+     */
+    public $IsSalesOrderParam;
+
+    /**
+     * @var int
+     */
+    public $PropertyID;
+
+    /**
+     * @var string
+     */
+    public $PropertyName;
+
+    /**
+     * @var string
+     */
+    public $PropertyValueType;
 }
