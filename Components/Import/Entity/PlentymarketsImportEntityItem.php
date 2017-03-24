@@ -477,12 +477,11 @@ class PlentymarketsImportEntityItem
 							throw new PlentymarketsImportItemNumberException('The item variation number »' . $number . '« of item »' . $this->data['name'] . '« with the id »' . $this->ItemBase->ItemID . '« would be assigned twice', 3112);
 						}
 
-						// Use this number
-						$details['number'] = $number;
-
 						// Cache the number
 						$numbersUsed[$number] = true;
 					}
+				} else {
+					$number = Shopware()->Db()->fetchOne('SELECT ordernumber FROM s_articles_details WHERE id = ?', array($details['id']));
 				}
 			}
 			catch (PlentymarketsMappingExceptionNotExistant $e)
@@ -508,17 +507,11 @@ class PlentymarketsImportEntityItem
 						throw new PlentymarketsImportItemNumberException('The item variation number »' . $number . '« of item »' . $this->data['name'] . '« with the id »' . $this->ItemBase->ItemID . '« would be assigned twice', 3112);
 					}
 
-					// Use this number
-					$details['number'] = $number;
-
 					// Cache the number
 					$numbersUsed[$number] = true;
-				}
-
-				else
-				{
+				} else {
 					// A new number is generated
-					$details['number'] = PlentymarketsImportItemHelper::getItemNumber();
+					$number = PlentymarketsImportItemHelper::getItemNumber();
 				}
 			}
 
@@ -533,6 +526,7 @@ class PlentymarketsImportEntityItem
 				$details['additionaltext'] = $AttributeValueSet->AttributeValueSetName;
 			}
 
+			$details['number'] = $number;
 			$details['ean'] = $AttributeValueSet->EAN;
 			$details['X_plentySku'] = $sku;
 
