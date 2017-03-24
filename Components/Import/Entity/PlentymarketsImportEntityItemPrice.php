@@ -232,8 +232,7 @@ class PlentymarketsImportEntityItemPrice
         try {
 			/**
          	* @var \Shopware\Components\Api\Resource\Article $ArticleResource
-         	*/
-			
+         	*/			
 			$ArticleResource = \Shopware\Components\Api\Manager::getResource('Article');
 			
 			$article = $ArticleResource->getOne($itemId);
@@ -261,7 +260,7 @@ class PlentymarketsImportEntityItemPrice
 			));
 		}
 		catch(Exception $e) {
-			// do nothing
+			PlentymarketsLogger::getInstance()->error('Sync:Item:Price', 'The price of the item with the id »'. $itemId .'« could not be updated (item corrupt)', 3610);
 		}
 	}
 
@@ -286,7 +285,7 @@ class PlentymarketsImportEntityItemPrice
 			$Detail = Shopware()->Models()->find('Shopware\Models\Article\Detail', $detailId);
 
 			if (!$Detail instanceof Shopware\Models\Article\Detail) {
-				return PlentymarketsLogger::getInstance()->error('Sync:Item:Price', 'The price of the item detail with the id »'. $detailId .'« could not be updated (item corrupt)', 3610);
+				throw new Exception();
 			}
 
 			$Article = $Detail->getArticle();
@@ -320,13 +319,10 @@ class PlentymarketsImportEntityItemPrice
 					)
 				)
 			));
-
-			PyLog()->message('Sync:Item:Price',
-				'The price of the variant with the number »' . $Detail->getNumber() . '« has been set to »' . money_format('%.2n', $currentPrice) . '«.'
-			);
 		}
 		catch(Exception $e) {
 			// do nothing
+			PlentymarketsLogger::getInstance()->error('Sync:Item:Price', 'The price of the item detail with the id »'. $detailId .'« could not be updated (item corrupt)', 3610);
 		}
 	}
 }
