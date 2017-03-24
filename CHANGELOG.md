@@ -5,6 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [1.9.4] - unreleased
 ### Added
 - event add event PlentyConnector_ImportEntityItemPrice_BeforeSavePrice (@k-30)
+- change method to set the variants on item import entity (@k-30)
 
 ### Fixed
 - article text sync can now be disabled safely (@k-30)
