@@ -19,18 +19,18 @@ class Item extends ApiAbstract
     {
         $languageHelper = new LanguageHelper();
 
-        return $this->client->request('GET', 'items', [
+        return iterator_to_array($this->client->getIterator('items', [
             'lang' => $languageHelper->getLanguagesQueryString(),
-        ]);
+        ]));
     }
 
     public function findChanged($startTimestamp, $endTimestamp)
     {
         $languageHelper = new LanguageHelper();
 
-        return $this->client->request('GET', 'items', [
+        return iterator_to_array($this->client->getIterator('items', [
             'lang' => $languageHelper->getLanguagesQueryString(),
             'updatedBetween' => $startTimestamp . ',' . $endTimestamp,
-        ]);
+        ]));
     }
 }
