@@ -7,7 +7,7 @@ use PlentyConnector\Connector\TransferObject\Product\Barcode\Barcode;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 
 /**
- * Class BarcodeValidator
+ * Class BarcodeValidator.
  */
 class BarcodeValidator implements ValidatorInterface
 {

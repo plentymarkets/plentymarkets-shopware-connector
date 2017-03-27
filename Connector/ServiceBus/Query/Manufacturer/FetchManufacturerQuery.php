@@ -6,7 +6,7 @@ use Assert\Assertion;
 use PlentyConnector\Connector\ServiceBus\Query\FetchQueryInterface;
 
 /**
- * Class FetchManufacturerQuery
+ * Class FetchManufacturerQuery.
  */
 class FetchManufacturerQuery implements FetchQueryInterface
 {
@@ -58,7 +58,7 @@ class FetchManufacturerQuery implements FetchQueryInterface
     {
         return [
             'adapterName' => $this->adapterName,
-            'identifier' => $this->identifier,
+            'identifier'  => $this->identifier,
         ];
     }
 

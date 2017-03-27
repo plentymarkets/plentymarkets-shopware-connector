@@ -13,7 +13,7 @@ use ShopwareAdapter\ResponseParser\PaymentStatus\PaymentStatusResponseParserInte
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class FetchAllPaymentStatusesQueryHandler
+ * Class FetchAllPaymentStatusesQueryHandler.
  */
 class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
 {
@@ -30,7 +30,7 @@ class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllPaymentStatusesQueryHandler constructor.
      *
-     * @param EntityManagerInterface $entityManager ,
+     * @param EntityManagerInterface               $entityManager  ,
      * @param PaymentStatusResponseParserInterface $responseParser
      */
     public function __construct(

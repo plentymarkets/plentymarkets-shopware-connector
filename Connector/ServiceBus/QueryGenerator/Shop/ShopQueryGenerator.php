@@ -9,7 +9,7 @@ use PlentyConnector\Connector\ServiceBus\QueryGenerator\QueryGeneratorInterface;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
 
 /**
- * Class ShopQueryGenerator
+ * Class ShopQueryGenerator.
  */
 class ShopQueryGenerator implements QueryGeneratorInterface
 {

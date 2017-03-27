@@ -9,7 +9,7 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\PaymentStatus\PaymentStatusResponseParserInterface;
 
 /**
- * Class FetchAllPaymentStatusesQueryHandler
+ * Class FetchAllPaymentStatusesQueryHandler.
  */
 class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
 {
@@ -56,43 +56,43 @@ class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
     {
         return [
             [
-                'id' => 1,
+                'id'   => 1,
                 'name' => 'Awaiting approval',
             ],
             [
-                'id' => 2,
+                'id'   => 2,
                 'name' => 'Approved',
             ],
             [
-                'id' => 3,
+                'id'   => 3,
                 'name' => 'Captured',
             ],
             [
-                'id' => 4,
+                'id'   => 4,
                 'name' => 'Partially captured',
             ],
             [
-                'id' => 5,
+                'id'   => 5,
                 'name' => 'Cancelled',
             ],
             [
-                'id' => 6,
+                'id'   => 6,
                 'name' => 'Refused',
             ],
             [
-                'id' => 7,
+                'id'   => 7,
                 'name' => 'Awaiting renewal',
             ],
             [
-                'id' => 8,
+                'id'   => 8,
                 'name' => 'Expired',
             ],
             [
-                'id' => 9,
+                'id'   => 9,
                 'name' => 'Refunded',
             ],
             [
-                'id' => 10,
+                'id'   => 10,
                 'name' => 'Partially refunded',
             ],
         ];

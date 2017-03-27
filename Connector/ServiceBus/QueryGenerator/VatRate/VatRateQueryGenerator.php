@@ -9,7 +9,7 @@ use PlentyConnector\Connector\ServiceBus\QueryGenerator\QueryGeneratorInterface;
 use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
 
 /**
- * Class VatRateQueryGenerator
+ * Class VatRateQueryGenerator.
  */
 class VatRateQueryGenerator implements QueryGeneratorInterface
 {

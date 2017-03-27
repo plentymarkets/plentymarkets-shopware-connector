@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceExce
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 /**
- * Class ControllerPath
+ * Class ControllerPath.
  */
 class ControllerPathSubscriber implements SubscriberInterface
 {
@@ -30,7 +30,7 @@ class ControllerPathSubscriber implements SubscriberInterface
     }
 
     /**
-     * {@inheritdoc9
+     * {@inheritdoc9.
      */
     public static function getSubscribedEvents()
     {
@@ -53,9 +53,9 @@ class ControllerPathSubscriber implements SubscriberInterface
         $basePath = $this->container->getParameter('plenty_connector.plugin_dir');
 
         $this->container->get('template')->addTemplateDir(
-            $basePath . '/Resources/Views/'
+            $basePath.'/Resources/Views/'
         );
 
-        return $basePath . '/Controller/Backend/PlentyConnector.php';
+        return $basePath.'/Controller/Backend/PlentyConnector.php';
     }
 }

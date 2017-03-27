@@ -17,7 +17,7 @@ use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 
 /**
- * Class ConnectorTest
+ * Class ConnectorTest.
  */
 class ConnectorTest extends TestCase
 {

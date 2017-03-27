@@ -60,14 +60,14 @@ class ResponseParser implements ResponseParserInterface
         $shippingProfileIdentity = $this->findIdentityOrThrow(ShippingProfile::TYPE, (string) $entry['dispatchId']);
 
         $order = Order::fromArray([
-            'identifier' => $identity->getObjectIdentifier(),
-            'orderNumber' => $entry['number'],
-            'orderItems' => $orderItems,
-            'orderStatusId' => $orderStatusIdentity->getObjectIdentifier(),
-            'paymentStatusId' => $paymentStatusIdentity->getObjectIdentifier(),
-            'paymentMethodId' => $paymentMethodIdentity->getObjectIdentifier(),
+            'identifier'        => $identity->getObjectIdentifier(),
+            'orderNumber'       => $entry['number'],
+            'orderItems'        => $orderItems,
+            'orderStatusId'     => $orderStatusIdentity->getObjectIdentifier(),
+            'paymentStatusId'   => $paymentStatusIdentity->getObjectIdentifier(),
+            'paymentMethodId'   => $paymentMethodIdentity->getObjectIdentifier(),
             'shippingProfileId' => $shippingProfileIdentity->getObjectIdentifier(),
-            'shopId' => $shopIdentity->getObjectIdentifier(),
+            'shopId'            => $shopIdentity->getObjectIdentifier(),
         ]);
 
         return $order;
@@ -83,11 +83,11 @@ class ResponseParser implements ResponseParserInterface
         // 4 : Surcharge Discount
         if ($entry['mode'] > 0) {
             // TODO implement other product types
-            return null;
+            return;
         }
 
         /**
-         * @var Variant $variantResource
+         * @var Variant
          */
         $variantResource = Manager::getResource('variant');
         $variantId = $variantResource->getIdFromNumber($entry['articleNumber']);
@@ -102,12 +102,12 @@ class ResponseParser implements ResponseParserInterface
         $variationIdentity = $this->findIdentityOrThrow(Variation::TYPE, $variantId);
 
         $orderItem = OrderItem::fromArray([
-            'identifier' => $identity->getObjectIdentifier(),
-            'quantity' => $entry['quantity'],
-            'productId' => $productIdentity->getObjectIdentifier(),
+            'identifier'  => $identity->getObjectIdentifier(),
+            'quantity'    => $entry['quantity'],
+            'productId'   => $productIdentity->getObjectIdentifier(),
             'variationId' => $variationIdentity->getObjectIdentifier(),
-            'name' => $entry['articleName'],
-            'price' => $entry['price'],
+            'name'        => $entry['articleName'],
+            'price'       => $entry['price'],
         ]);
 
         return $orderItem;
@@ -126,9 +126,9 @@ class ResponseParser implements ResponseParserInterface
     private function findIdentityOrThrow($objectType, $adapterIdentifier)
     {
         $identity = $this->identityService->findIdentity([
-            'objectType' => $objectType,
+            'objectType'        => $objectType,
             'adapterIdentifier' => $adapterIdentifier,
-            'adapterName' => ShopwareAdapter::NAME,
+            'adapterName'       => ShopwareAdapter::NAME,
         ]);
 
         if ($identity === null) {

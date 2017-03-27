@@ -9,7 +9,7 @@ use PlentyConnector\Connector\ServiceBus\QueryGenerator\QueryGeneratorInterface;
 use PlentyConnector\Connector\TransferObject\Currency\Currency;
 
 /**
- * Class CurrencyQueryGenerator
+ * Class CurrencyQueryGenerator.
  */
 class CurrencyQueryGenerator implements QueryGeneratorInterface
 {

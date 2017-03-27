@@ -13,7 +13,7 @@ use ShopwareAdapter\ResponseParser\OrderStatus\OrderStatusResponseParserInterfac
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class FetchAllOrderStatusesQueryHandler
+ * Class FetchAllOrderStatusesQueryHandler.
  */
 class FetchAllOrderStatusesQueryHandler implements QueryHandlerInterface
 {
@@ -30,7 +30,7 @@ class FetchAllOrderStatusesQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllOrderStatusesQueryHandler constructor.
      *
-     * @param EntityManagerInterface $entityManager
+     * @param EntityManagerInterface             $entityManager
      * @param OrderStatusResponseParserInterface $responseParser
      */
     public function __construct(

@@ -3,7 +3,7 @@
 namespace PlentyConnector\Connector\TransferObject;
 
 /**
- * Class AbstractTransferObject
+ * Class AbstractTransferObject.
  */
 abstract class AbstractTransferObject implements TransferObjectInterface
 {
@@ -17,7 +17,7 @@ abstract class AbstractTransferObject implements TransferObjectInterface
         $object = new static();
 
         foreach ($params as $key => $value) {
-            $method = 'set' . ucfirst($key);
+            $method = 'set'.ucfirst($key);
 
             if (method_exists($object, $method)) {
                 $object->$method($value);

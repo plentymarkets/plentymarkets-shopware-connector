@@ -5,7 +5,7 @@ namespace PlentyConnector\Connector\TransferObject\PaymentStatus;
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 
 /**
- * Class PaymentStatus
+ * Class PaymentStatus.
  */
 class PaymentStatus extends AbstractTransferObject
 {

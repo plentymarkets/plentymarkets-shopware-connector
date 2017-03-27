@@ -7,7 +7,7 @@ use PlentyConnector\Connector\Validator\ValidatorInterface;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 
 /**
- * Class IdentityValidator
+ * Class IdentityValidator.
  */
 class IdentityValidator implements ValidatorInterface
 {

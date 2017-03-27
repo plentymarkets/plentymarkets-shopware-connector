@@ -5,7 +5,7 @@ namespace PlentymarketsAdapter\ResponseParser\Language;
 use PlentyConnector\Connector\TransferObject\Language\Language;
 
 /**
- * Interface LanguageResponseParserInterface
+ * Interface LanguageResponseParserInterface.
  */
 interface LanguageResponseParserInterface
 {

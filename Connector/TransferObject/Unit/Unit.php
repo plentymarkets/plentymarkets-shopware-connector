@@ -5,7 +5,7 @@ namespace PlentyConnector\Connector\TransferObject\Unit;
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 
 /**
- * Class Unit
+ * Class Unit.
  */
 class Unit extends AbstractTransferObject
 {

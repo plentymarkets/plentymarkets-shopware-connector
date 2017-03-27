@@ -10,7 +10,7 @@ use ShopwareAdapter\ResponseParser\Order\OrderResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class FetchAllOrdersQueryHandler
+ * Class FetchAllOrdersQueryHandler.
  */
 class FetchAllOrdersQueryHandler implements QueryHandlerInterface
 {
@@ -28,7 +28,7 @@ class FetchAllOrdersQueryHandler implements QueryHandlerInterface
      * FetchAllOrdersQueryHandler constructor.
      *
      * @param OrderResponseParserInterface $responseParser
-     * @param Resource\Order $orderResource
+     * @param Resource\Order               $orderResource
      */
     public function __construct(
         OrderResponseParserInterface $responseParser,
@@ -54,9 +54,9 @@ class FetchAllOrdersQueryHandler implements QueryHandlerInterface
     {
         $filter = [
             [
-                'property' => 'status',
+                'property'   => 'status',
                 'expression' => '!=',
-                'value' => -1,
+                'value'      => -1,
             ],
         ];
 

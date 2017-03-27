@@ -31,7 +31,7 @@ class CleanupCommand extends ShopwareCommand
      * CleanupCommand constructor.
      *
      * @param CleanupServiceInterface $cleanupService
-     * @param Logger $logger
+     * @param Logger                  $logger
      *
      * @throws LogicException
      */
@@ -53,7 +53,7 @@ class CleanupCommand extends ShopwareCommand
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      *
      * @throws Exception

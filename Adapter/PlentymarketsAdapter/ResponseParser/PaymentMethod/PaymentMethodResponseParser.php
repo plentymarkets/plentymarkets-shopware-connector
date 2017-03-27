@@ -7,7 +7,7 @@ use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 
 /**
- * Class PaymentMethodResponseParser
+ * Class PaymentMethodResponseParser.
  */
 class PaymentMethodResponseParser implements PaymentMethodResponseParserInterface
 {
@@ -39,7 +39,7 @@ class PaymentMethodResponseParser implements PaymentMethodResponseParserInterfac
 
         return PaymentMethod::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => $entry['name'],
+            'name'       => $entry['name'],
         ]);
     }
 }

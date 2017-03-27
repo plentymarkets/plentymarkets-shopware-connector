@@ -12,7 +12,7 @@ use ShopwareAdapter\ResponseParser\ShippingProfile\ShippingProfileResponseParser
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class FetchAllShippingProfilesQueryHandler
+ * Class FetchAllShippingProfilesQueryHandler.
  */
 class FetchAllShippingProfilesQueryHandler implements QueryHandlerInterface
 {
@@ -29,7 +29,7 @@ class FetchAllShippingProfilesQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllShippingProfilesQueryHandler constructor.
      *
-     * @param EntityManagerInterface $entityManager
+     * @param EntityManagerInterface                 $entityManager
      * @param ShippingProfileResponseParserInterface $responseParser
      */
     public function __construct(

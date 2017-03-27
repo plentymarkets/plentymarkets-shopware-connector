@@ -14,7 +14,7 @@ use PlentyConnector\Connector\Validator\ValidatorInterface;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
 /**
- * Class OrderValidator
+ * Class OrderValidator.
  */
 class OrderValidator implements ValidatorInterface
 {

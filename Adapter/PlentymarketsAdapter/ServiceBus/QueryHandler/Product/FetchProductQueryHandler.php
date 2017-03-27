@@ -34,8 +34,9 @@ class FetchProductQueryHandler implements QueryHandlerInterface
 
     /**
      * FetchProductQueryHandler constructor.
-     * @param Item $itemApi
-     * @param IdentityServiceInterface $identityService
+     *
+     * @param Item                           $itemApi
+     * @param IdentityServiceInterface       $identityService
      * @param ProductResponseParserInterface $responseParser
      */
     public function __construct(
@@ -63,12 +64,12 @@ class FetchProductQueryHandler implements QueryHandlerInterface
     public function handle(QueryInterface $query)
     {
         /**
-         * @var FetchQueryInterface $query
+         * @var FetchQueryInterface
          */
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => $query->getIdentifier(),
-            'objectType' => Product::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => Product::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         $product = $this->itemApi->findOne($identity->getAdapterIdentifier());

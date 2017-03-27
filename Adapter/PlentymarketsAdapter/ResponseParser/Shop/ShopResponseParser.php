@@ -7,7 +7,7 @@ use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 
 /**
- * Class ShopResponseParser
+ * Class ShopResponseParser.
  */
 class ShopResponseParser implements ShopResponseParserInterface
 {
@@ -32,7 +32,7 @@ class ShopResponseParser implements ShopResponseParserInterface
     public function parse(array $entry)
     {
         if (null === $entry['storeIdentifier']) {
-            return null;
+            return;
         }
 
         $identity = $this->identityService->findOneOrCreate(
@@ -43,7 +43,7 @@ class ShopResponseParser implements ShopResponseParserInterface
 
         return Shop::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => empty($entry['name']) ? $entry['type'] : $entry['name'],
+            'name'       => empty($entry['name']) ? $entry['type'] : $entry['name'],
         ]);
     }
 }

@@ -7,7 +7,7 @@ use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 
 /**
- * Class ShopValidator
+ * Class ShopValidator.
  */
 class ShopValidator implements ValidatorInterface
 {

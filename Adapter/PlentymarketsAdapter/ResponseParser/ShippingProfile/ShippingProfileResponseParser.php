@@ -7,7 +7,7 @@ use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 
 /**
- * Class ShippingProfileResponseParser
+ * Class ShippingProfileResponseParser.
  */
 class ShippingProfileResponseParser implements ShippingProfileResponseParserInterface
 {
@@ -39,7 +39,7 @@ class ShippingProfileResponseParser implements ShippingProfileResponseParserInte
 
         return ShippingProfile::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => $entry['backendName'],
+            'name'       => $entry['backendName'],
         ]);
     }
 }

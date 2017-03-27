@@ -42,7 +42,7 @@ class MappingService implements MappingServiceInterface
      * MappingService constructor.
      *
      * @param QueryFactoryInterface $queryFactory
-     * @param ServiceBusInterface $serviceBus
+     * @param ServiceBusInterface   $serviceBus
      */
     public function __construct(
         QueryFactoryInterface $queryFactory,
@@ -74,11 +74,11 @@ class MappingService implements MappingServiceInterface
 
         array_walk($definitions, function (Definition $definition) use (&$result) {
             $mapping = Mapping::fromArray([
-                'originAdapterName' => $definition->getOriginAdapterName(),
-                'originTransferObjects' => $this->query($definition, $definition->getOriginAdapterName()),
-                'destinationAdapterName' => $definition->getDestinationAdapterName(),
+                'originAdapterName'          => $definition->getOriginAdapterName(),
+                'originTransferObjects'      => $this->query($definition, $definition->getOriginAdapterName()),
+                'destinationAdapterName'     => $definition->getDestinationAdapterName(),
                 'destinationTransferObjects' => $this->query($definition, $definition->getDestinationAdapterName()),
-                'objectType' => $definition->getObjectType(),
+                'objectType'                 => $definition->getObjectType(),
             ]);
 
             $this->validator->validate($mapping);
@@ -109,7 +109,7 @@ class MappingService implements MappingServiceInterface
 
     /**
      * @param Definition $definition
-     * @param string $adapterName
+     * @param string     $adapterName
      *
      * @throws MissingQueryGeneratorException
      * @throws MissingQueryException

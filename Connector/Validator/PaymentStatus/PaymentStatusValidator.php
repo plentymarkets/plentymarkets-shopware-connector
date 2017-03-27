@@ -7,7 +7,7 @@ use PlentyConnector\Connector\TransferObject\PaymentStatus\PaymentStatus;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 
 /**
- * Class PaymentStatusValidator
+ * Class PaymentStatusValidator.
  */
 class PaymentStatusValidator implements ValidatorInterface
 {

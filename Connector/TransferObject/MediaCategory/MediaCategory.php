@@ -5,7 +5,7 @@ namespace PlentyConnector\Connector\TransferObject\MediaCategory;
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 
 /**
- * Class MediaCategory
+ * Class MediaCategory.
  */
 class MediaCategory extends AbstractTransferObject
 {

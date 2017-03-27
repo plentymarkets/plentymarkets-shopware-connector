@@ -13,7 +13,7 @@ use ShopwareAdapter\ResponseParser\OrderItem\Exception\UnsupportedVatRateExcepti
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class OrderItemResponseParser
+ * Class OrderItemResponseParser.
  */
 class OrderItemResponseParser implements OrderItemResponseParserInterface
 {
@@ -33,7 +33,7 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
      * OrderItemResponseParser constructor.
      *
      * @param IdentityServiceInterface $identityService
-     * @param EntityManagerInterface $entityManager
+     * @param EntityManagerInterface   $entityManager
      */
     public function __construct(
         IdentityServiceInterface $identityService,
@@ -63,8 +63,6 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
         } elseif (2 === $entry['mode']) {
             return $this->handleVoucher($entry);
         }
-
-        return null;
     }
 
     /**
@@ -78,16 +76,16 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
     {
         if (empty($entry['taxId'])) {
             if (empty($entry['taxRate'])) {
-                return null;
+                return;
             }
 
             /**
-             * @var Repository $repository
+             * @var Repository
              */
             $repository = $this->entityManager->getRepository(Tax::class);
 
             /**
-             * @var Tax $taxModel
+             * @var Tax
              */
             $taxModel = $repository->findOneBy(['tax' => $entry['taxRate']]);
 
@@ -98,8 +96,8 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
 
         $vatRateIdentity = $this->identityService->findOneBy([
             'adapterIdentifier' => (string) $entry['taxId'],
-            'adapterName' => ShopwareAdapter::NAME,
-            'objectType' => VatRate::TYPE,
+            'adapterName'       => ShopwareAdapter::NAME,
+            'objectType'        => VatRate::TYPE,
         ]);
 
         if (null === $vatRateIdentity) {
@@ -117,16 +115,16 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
     private function handleProduct(array $entry)
     {
         /**
-         * @var OrderItem $orderItem
+         * @var OrderItem
          */
         $orderItem = OrderItem::fromArray([
-            'type' => OrderItem::TYPE_PRODUCT,
-            'quantity' => (float) $entry['quantity'],
-            'name' => $entry['articleName'],
-            'number' => $entry['articleNumber'],
-            'price' => (float) $entry['price'],
+            'type'              => OrderItem::TYPE_PRODUCT,
+            'quantity'          => (float) $entry['quantity'],
+            'name'              => $entry['articleName'],
+            'number'            => $entry['articleNumber'],
+            'price'             => (float) $entry['price'],
             'vatRateIdentifier' => $this->getVatRateIdentifier($entry),
-            'attributes' => $this->getAttributes($entry['attribute']),
+            'attributes'        => $this->getAttributes($entry['attribute']),
         ]);
 
         return $orderItem;
@@ -140,16 +138,16 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
     private function handleVoucher(array $entry)
     {
         /**
-         * @var OrderItem $orderItem
+         * @var OrderItem
          */
         $orderItem = OrderItem::fromArray([
-            'type' => OrderItem::TYPE_VOUCHER,
-            'quantity' => (float) $entry['quantity'],
-            'name' => $entry['articleName'],
-            'number' => $entry['articleNumber'],
-            'price' => (float) $entry['price'],
+            'type'              => OrderItem::TYPE_VOUCHER,
+            'quantity'          => (float) $entry['quantity'],
+            'name'              => $entry['articleName'],
+            'number'            => $entry['articleNumber'],
+            'price'             => (float) $entry['price'],
             'vatRateIdentifier' => $this->getVatRateIdentifier($entry),
-            'attributes' => $this->getAttributes($entry['attribute']),
+            'attributes'        => $this->getAttributes($entry['attribute']),
         ]);
 
         return $orderItem;

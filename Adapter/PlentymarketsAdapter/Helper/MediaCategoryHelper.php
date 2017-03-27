@@ -3,7 +3,7 @@
 namespace PlentymarketsAdapter\Helper;
 
 /**
- * Class MediaCategoryHelper
+ * Class MediaCategoryHelper.
  */
 class MediaCategoryHelper
 {
@@ -15,15 +15,15 @@ class MediaCategoryHelper
     {
         return [
             $this::MANUFACTURER => [
-                'id' => $this::MANUFACTURER,
+                'id'   => $this::MANUFACTURER,
                 'name' => 'Manufacturer',
             ],
             $this::PRODUCT => [
-                'id' => $this::PRODUCT,
+                'id'   => $this::PRODUCT,
                 'name' => 'Products',
             ],
             $this::CATEGORY => [
-                'id' => $this::CATEGORY,
+                'id'   => $this::CATEGORY,
                 'name' => 'Categories',
             ],
         ];

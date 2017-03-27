@@ -5,7 +5,7 @@ namespace ShopwareAdapter\ResponseParser\Shop;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
 
 /**
- * Interface ShopResponseParserInterface
+ * Interface ShopResponseParserInterface.
  */
 interface ShopResponseParserInterface
 {

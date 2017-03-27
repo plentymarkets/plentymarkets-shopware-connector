@@ -5,7 +5,7 @@ namespace PlentyConnector\Connector\ServiceBus;
 use ReflectionClass;
 
 /**
- * Class CommandType
+ * Class CommandType.
  */
 final class CommandType
 {

@@ -10,7 +10,7 @@ use PlentymarketsAdapter\ResponseParser\GetAttributeTrait;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class AddressResponseParser
+ * Class AddressResponseParser.
  */
 class AddressResponseParser implements AddressResponseParserInterface
 {
@@ -40,8 +40,8 @@ class AddressResponseParser implements AddressResponseParserInterface
 
         $countryIdentitiy = $this->identityService->findOneBy([
             'adapterIdentifier' => $entry['country']['id'],
-            'adapterName' => ShopwareAdapter::NAME,
-            'objectType' => Country::TYPE,
+            'adapterName'       => ShopwareAdapter::NAME,
+            'objectType'        => Country::TYPE,
         ]);
 
         if (null === $countryIdentitiy) {
@@ -57,18 +57,18 @@ class AddressResponseParser implements AddressResponseParserInterface
         }
 
         return Address::fromArray([
-            'company' => $entry['company'],
-            'department' => $entry['department'],
-            'salutation' => $salutation,
-            'title' => $entry['title'],
-            'firstname' => $entry['firstName'],
-            'lastname' => $entry['lastName'],
-            'street' => $entry['street'],
-            'zipcode' => $entry['zipCode'],
-            'city' => $entry['city'],
+            'company'           => $entry['company'],
+            'department'        => $entry['department'],
+            'salutation'        => $salutation,
+            'title'             => $entry['title'],
+            'firstname'         => $entry['firstName'],
+            'lastname'          => $entry['lastName'],
+            'street'            => $entry['street'],
+            'zipcode'           => $entry['zipCode'],
+            'city'              => $entry['city'],
             'countryIdentifier' => $countryIdentitiy->getObjectIdentifier(),
-            'vatId' => isset($entry['vatId']) ? $entry['vatId'] : null,
-            'attributes' => $this->getAttributes($entry['attribute']),
+            'vatId'             => isset($entry['vatId']) ? $entry['vatId'] : null,
+            'attributes'        => $this->getAttributes($entry['attribute']),
         ]);
     }
 }

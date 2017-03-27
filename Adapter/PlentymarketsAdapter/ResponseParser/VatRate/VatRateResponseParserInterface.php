@@ -5,7 +5,7 @@ namespace PlentymarketsAdapter\ResponseParser\VatRate;
 use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
 
 /**
- * Interface VatRateResponseParserInterface
+ * Interface VatRateResponseParserInterface.
  */
 interface VatRateResponseParserInterface
 {

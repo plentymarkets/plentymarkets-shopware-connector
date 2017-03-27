@@ -5,7 +5,7 @@ namespace PlentymarketsAdapter\ResponseParser\ShippingProfile;
 use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 
 /**
- * Interface ShippingProfileResponseParserInterface
+ * Interface ShippingProfileResponseParserInterface.
  */
 interface ShippingProfileResponseParserInterface
 {

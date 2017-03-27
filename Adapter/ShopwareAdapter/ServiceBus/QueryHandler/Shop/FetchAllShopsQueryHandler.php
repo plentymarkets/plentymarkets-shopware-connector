@@ -12,7 +12,7 @@ use ShopwareAdapter\ResponseParser\Shop\ShopResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class FetchAllShopsQueryHandler
+ * Class FetchAllShopsQueryHandler.
  */
 class FetchAllShopsQueryHandler implements QueryHandlerInterface
 {
@@ -29,7 +29,7 @@ class FetchAllShopsQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllShopsQueryHandler constructor.
      *
-     * @param EntityManagerInterface $entityManager
+     * @param EntityManagerInterface      $entityManager
      * @param ShopResponseParserInterface $responseParser
      */
     public function __construct(

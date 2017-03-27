@@ -7,7 +7,7 @@ use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 
 /**
- * Class MediaCategoryValidator
+ * Class MediaCategoryValidator.
  */
 class MediaCategoryValidator implements ValidatorInterface
 {

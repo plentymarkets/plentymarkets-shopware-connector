@@ -17,7 +17,6 @@ class FetchChangedProductsQueryHandler implements QueryHandlerInterface
 {
     use ChangedDateTimeTrait;
 
-
     /**
      * @var ProductResponseParserInterface
      */
@@ -30,7 +29,8 @@ class FetchChangedProductsQueryHandler implements QueryHandlerInterface
 
     /**
      * FetchChangedProductsQueryHandler constructor.
-     * @param Item $itemApi
+     *
+     * @param Item                           $itemApi
      * @param ProductResponseParserInterface $responseParser
      */
     public function __construct(

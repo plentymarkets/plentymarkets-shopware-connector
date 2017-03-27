@@ -7,7 +7,7 @@ use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 
 /**
- * Class VatRateResponseParser
+ * Class VatRateResponseParser.
  */
 class VatRateResponseParser implements VatRateResponseParserInterface
 {
@@ -39,7 +39,7 @@ class VatRateResponseParser implements VatRateResponseParserInterface
 
         return VatRate::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => !empty($entry['name']) ? $entry['name'] : $entry['vatRate'] . ' %',
+            'name'       => !empty($entry['name']) ? $entry['name'] : $entry['vatRate'].' %',
         ]);
     }
 }

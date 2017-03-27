@@ -5,7 +5,7 @@ namespace PlentyConnector\Connector\TransferObject\VatRate;
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 
 /**
- * Class VatRate
+ * Class VatRate.
  */
 class VatRate extends AbstractTransferObject
 {
