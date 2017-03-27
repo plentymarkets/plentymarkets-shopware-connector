@@ -95,6 +95,7 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
                 $this->resource->getOne($identity->getAdapterIdentifier());
             } catch (\Shopware\Components\Api\Exception\NotFoundException $notFoundException) {
                 $this->identityService->remove($identity);
+                $identity = null;
             }
         }
 
