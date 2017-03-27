@@ -93,7 +93,7 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
         if (null !== $identity) {
             try{
                 $this->resource->getOne($identity->getAdapterIdentifier());
-            } catch (NotFoundException $notFoundException) {
+            } catch (\Shopware\Components\Api\Exception\NotFoundException $notFoundException) {
                 $this->identityService->remove($identity);
             }
         }
