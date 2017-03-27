@@ -9,7 +9,7 @@ use PlentyConnector\Connector\ServiceBus\QueryGenerator\QueryGeneratorInterface;
 use PlentyConnector\Connector\TransferObject\PaymentStatus\PaymentStatus;
 
 /**
- * Class PaymentStatusQueryGenerator
+ * Class PaymentStatusQueryGenerator.
  */
 class PaymentStatusQueryGenerator implements QueryGeneratorInterface
 {

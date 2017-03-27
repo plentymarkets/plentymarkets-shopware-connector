@@ -27,7 +27,7 @@ class IdentityService implements IdentityServiceInterface
     /**
      * IdentityService constructor.
      *
-     * @param IdentityStorageInterface $storage
+     * @param IdentityStorageInterface  $storage
      * @param ValidatorServiceInterface $validator
      */
     public function __construct(
@@ -51,9 +51,9 @@ class IdentityService implements IdentityServiceInterface
         Assertion::notBlank($objectType);
 
         $identity = $this->findOneBy([
-            'objectType' => $objectType,
+            'objectType'        => $objectType,
             'adapterIdentifier' => $adapterIdentifier,
-            'adapterName' => $adapterName,
+            'adapterName'       => $adapterName,
         ]);
 
         if (null === $identity) {
@@ -78,9 +78,9 @@ class IdentityService implements IdentityServiceInterface
         Assertion::notBlank($objectType);
 
         $identity = $this->findOneBy([
-            'objectType' => $objectType,
+            'objectType'        => $objectType,
             'adapterIdentifier' => $adapterIdentifier,
-            'adapterName' => $adapterName,
+            'adapterName'       => $adapterName,
         ]);
 
         if (null === $identity) {
@@ -125,7 +125,7 @@ class IdentityService implements IdentityServiceInterface
         );
 
         /**
-         * @var Identity $identity
+         * @var Identity
          */
         $identity = Identity::fromArray($params);
 

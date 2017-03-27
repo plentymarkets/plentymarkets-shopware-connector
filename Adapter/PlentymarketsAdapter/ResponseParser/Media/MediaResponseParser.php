@@ -10,7 +10,7 @@ use PlentymarketsAdapter\Helper\MediaCategoryHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 
 /**
- * Class MediaResponseParser
+ * Class MediaResponseParser.
  */
 class MediaResponseParser implements MediaResponseParserInterface
 {
@@ -28,7 +28,7 @@ class MediaResponseParser implements MediaResponseParserInterface
      * OrderStatusResponseParser constructor.
      *
      * @param IdentityServiceInterface $identityService
-     * @param MediaCategoryHelper $categoryHelper
+     * @param MediaCategoryHelper      $categoryHelper
      */
     public function __construct(IdentityServiceInterface $identityService, MediaCategoryHelper $categoryHelper)
     {
@@ -84,14 +84,14 @@ class MediaResponseParser implements MediaResponseParserInterface
         );
 
         return Media::fromArray([
-            'identifier' => $identity->getObjectIdentifier(),
+            'identifier'              => $identity->getObjectIdentifier(),
             'mediaCategoryIdentifier' => $entry['mediaCategoryIdentifier'],
-            'link' => $entry['link'],
-            'hash' => $entry['hash'],
-            'name' => $entry['name'],
-            'alternateName' => $entry['alternateName'],
-            'translations' => $entry['translations'],
-            'attributes' => $entry['attributes'],
+            'link'                    => $entry['link'],
+            'hash'                    => $entry['hash'],
+            'name'                    => $entry['name'],
+            'alternateName'           => $entry['alternateName'],
+            'translations'            => $entry['translations'],
+            'attributes'              => $entry['attributes'],
         ]);
     }
 }

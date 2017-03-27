@@ -9,7 +9,7 @@ use PlentyConnector\Connector\ServiceBus\QueryGenerator\QueryGeneratorInterface;
 use PlentyConnector\Connector\TransferObject\Category\Category;
 
 /**
- * Class CategoryQueryGenerator
+ * Class CategoryQueryGenerator.
  */
 class CategoryQueryGenerator implements QueryGeneratorInterface
 {

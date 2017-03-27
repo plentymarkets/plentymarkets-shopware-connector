@@ -13,7 +13,7 @@ use ShopwareAdapter\ResponseParser\Country\CountryResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class FetchAllCountriesQueryHandler
+ * Class FetchAllCountriesQueryHandler.
  */
 class FetchAllCountriesQueryHandler implements QueryHandlerInterface
 {
@@ -30,7 +30,7 @@ class FetchAllCountriesQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllCountriesQueryHandler constructor.
      *
-     * @param EntityManagerInterface $entityManager
+     * @param EntityManagerInterface         $entityManager
      * @param CountryResponseParserInterface $responseParser
      */
     public function __construct(

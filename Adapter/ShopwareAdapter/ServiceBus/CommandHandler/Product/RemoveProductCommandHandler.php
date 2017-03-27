@@ -37,9 +37,9 @@ class RemoveProductCommandHandler implements CommandHandlerInterface
     /**
      * RemoveProductCommandHandler constructor.
      *
-     * @param ArticleResource $resource
+     * @param ArticleResource          $resource
      * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface $logger
+     * @param LoggerInterface          $logger
      */
     public function __construct(
         ArticleResource $resource,
@@ -66,14 +66,14 @@ class RemoveProductCommandHandler implements CommandHandlerInterface
     public function handle(CommandInterface $command)
     {
         /**
-         * @var RemoveCommandInterface $command
+         * @var RemoveCommandInterface
          */
         $identifier = $command->getObjectIdentifier();
 
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => (string) $identifier,
-            'objectType' => Product::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => Product::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         if (null === $identity) {

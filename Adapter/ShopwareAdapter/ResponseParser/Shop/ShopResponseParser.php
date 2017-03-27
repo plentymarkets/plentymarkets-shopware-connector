@@ -7,7 +7,7 @@ use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class ShopResponseParser
+ * Class ShopResponseParser.
  */
 class ShopResponseParser implements ShopResponseParserInterface
 {
@@ -39,7 +39,7 @@ class ShopResponseParser implements ShopResponseParserInterface
 
         return Shop::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => $entry['name'],
+            'name'       => $entry['name'],
         ]);
     }
 }

@@ -9,7 +9,7 @@ use PlentyConnector\Connector\ServiceBus\QueryGenerator\QueryGeneratorInterface;
 use PlentyConnector\Connector\TransferObject\Product\Product;
 
 /**
- * Class ProductQueryGenerator
+ * Class ProductQueryGenerator.
  */
 class ProductQueryGenerator implements QueryGeneratorInterface
 {

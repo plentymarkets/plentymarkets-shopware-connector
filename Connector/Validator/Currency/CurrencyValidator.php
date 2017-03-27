@@ -7,7 +7,7 @@ use PlentyConnector\Connector\TransferObject\Currency\Currency;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 
 /**
- * Class CurrencyValidator
+ * Class CurrencyValidator.
  */
 class CurrencyValidator implements ValidatorInterface
 {

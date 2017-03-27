@@ -9,7 +9,7 @@ use PlentyConnector\Connector\ServiceBus\QueryGenerator\QueryGeneratorInterface;
 use PlentyConnector\Connector\TransferObject\Unit\Unit;
 
 /**
- * Class UnitQueryGenerator
+ * Class UnitQueryGenerator.
  */
 class UnitQueryGenerator implements QueryGeneratorInterface
 {

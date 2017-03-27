@@ -7,7 +7,7 @@ use PlentyConnector\Connector\TransferObject\OrderStatus\OrderStatus;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class OrderStatusResponseParser
+ * Class OrderStatusResponseParser.
  */
 class OrderStatusResponseParser implements OrderStatusResponseParserInterface
 {
@@ -39,7 +39,7 @@ class OrderStatusResponseParser implements OrderStatusResponseParserInterface
 
         return OrderStatus::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => $entry['name'],
+            'name'       => $entry['name'],
         ]);
     }
 }

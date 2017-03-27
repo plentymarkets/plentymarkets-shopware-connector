@@ -9,7 +9,7 @@ use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
- * Class ProductCommandGenerator
+ * Class ProductCommandGenerator.
  */
 class ProductCommandGenerator implements CommandGeneratorInterface
 {

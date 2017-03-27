@@ -10,7 +10,7 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\MediaCategory\MediaCategoryResponseParserInterface;
 
 /**
- * Class FetchAllMediaCategoriesQueryHandler
+ * Class FetchAllMediaCategoriesQueryHandler.
  */
 class FetchAllMediaCategoriesQueryHandler implements QueryHandlerInterface
 {
@@ -27,7 +27,7 @@ class FetchAllMediaCategoriesQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllMediaCategoriesQueryHandler constructor.
      *
-     * @param MediaCategoryHelper $mediaCategoryHelper
+     * @param MediaCategoryHelper                  $mediaCategoryHelper
      * @param MediaCategoryResponseParserInterface $responseParser
      */
     public function __construct(

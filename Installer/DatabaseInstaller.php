@@ -28,7 +28,7 @@ class DatabaseInstaller implements InstallerInterface
      * DatabaseInstaller constructor.
      *
      * @param ModelManager $entitiyManager
-     * @param array $models
+     * @param array        $models
      */
     public function __construct(ModelManager $entitiyManager, array $models)
     {

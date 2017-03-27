@@ -61,11 +61,11 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     /**
      * HandleCategoryCommandHandler constructor.
      *
-     * @param CategoryResource $resource
-     * @param IdentityServiceInterface $identityService
+     * @param CategoryResource           $resource
+     * @param IdentityServiceInterface   $identityService
      * @param TranslationHelperInterface $translationHelper
-     * @param EntityManagerInterface $entityManager
-     * @param LoggerInterface $logger
+     * @param EntityManagerInterface     $entityManager
+     * @param LoggerInterface            $logger
      */
     public function __construct(
         CategoryResource $resource,
@@ -97,15 +97,15 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     public function handle(CommandInterface $command)
     {
         /**
-         * @var HandleCommandInterface $command
-         * @var Category $category
+         * @var HandleCommandInterface
+         * @var Category               $category
          */
         $category = $command->getTransferObject();
 
         $shopIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => (string) $category->getShopIdentifier(),
-            'objectType' => Shop::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => Shop::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         if (null === $shopIdentity) {
@@ -120,8 +120,8 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
 
         $languageIdentity = $this->identityService->findOneBy([
             'adapterIdentifier' => (string) $shop->getLocale()->getId(),
-            'adapterName' => ShopwareAdapter::NAME,
-            'objectType' => Language::TYPE,
+            'adapterName'       => ShopwareAdapter::NAME,
+            'objectType'        => Language::TYPE,
         ]);
 
         if (null !== $languageIdentity) {
@@ -133,8 +133,8 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         } else {
             $parentCategoryIdentity = $this->identityService->findOneBy([
                 'objectIdentifier' => (string) $category->getParentIdentifier(),
-                'objectType' => Category::TYPE,
-                'adapterName' => ShopwareAdapter::NAME,
+                'objectType'       => Category::TYPE,
+                'adapterName'      => ShopwareAdapter::NAME,
             ]);
 
             if (null === $parentCategoryIdentity) {
@@ -146,8 +146,8 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
 
         $categoryIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $category->getIdentifier(),
-            'objectType' => Category::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => Category::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         if (null === $categoryIdentity) {
@@ -164,7 +164,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         }
 
         $parans = [
-            'name' => $category->getName(),
+            'name'   => $category->getName(),
             'parent' => $parentCategory,
         ];
 
@@ -174,8 +174,8 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
 
             $mediaIdentity = $this->identityService->findOneBy([
                 'objectIdentifier' => (string) $mediaIdentifier,
-                'objectType' => Media::TYPE,
-                'adapterName' => ShopwareAdapter::NAME,
+                'objectType'       => Media::TYPE,
+                'adapterName'      => ShopwareAdapter::NAME,
             ]);
 
             if (null === $mediaIdentity) {
@@ -213,19 +213,19 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
 
     /**
      * @param Category $category
-     * @param int $parentCategory
+     * @param int      $parentCategory
      *
      * @return null|int
      */
     private function findExistingCategory(Category $category, $parentCategory)
     {
         $existingCategory = $this->categoryRepository->findOneBy([
-            'name' => $category->getName(),
+            'name'     => $category->getName(),
             'parentId' => $parentCategory,
         ]);
 
         if (null === $existingCategory) {
-            return null;
+            return;
         }
 
         return $existingCategory->getId();

@@ -5,7 +5,7 @@ namespace PlentyConnector\Connector\TransferObject\Language;
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 
 /**
- * Class Language
+ * Class Language.
  */
 class Language extends AbstractTransferObject
 {

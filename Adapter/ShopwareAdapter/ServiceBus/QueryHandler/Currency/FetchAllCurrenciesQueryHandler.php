@@ -13,7 +13,7 @@ use ShopwareAdapter\ResponseParser\Currency\CurrencyResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class FetchAllCurrenciesQueryHandler
+ * Class FetchAllCurrenciesQueryHandler.
  */
 class FetchAllCurrenciesQueryHandler implements QueryHandlerInterface
 {
@@ -30,7 +30,7 @@ class FetchAllCurrenciesQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllCurrenciesQueryHandler constructor.
      *
-     * @param EntityManagerInterface $entityManager
+     * @param EntityManagerInterface          $entityManager
      * @param CurrencyResponseParserInterface $responseParser
      */
     public function __construct(

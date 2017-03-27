@@ -11,7 +11,7 @@ use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use Ramsey\Uuid\Uuid;
 
 /**
- * Class QueryFactoryTest
+ * Class QueryFactoryTest.
  */
 class QueryFactoryTest extends TestCase
 {

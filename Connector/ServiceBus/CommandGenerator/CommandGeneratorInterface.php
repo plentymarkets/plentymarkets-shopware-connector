@@ -6,7 +6,7 @@ use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
- * Interface CommandGeneratorInterface
+ * Interface CommandGeneratorInterface.
  */
 interface CommandGeneratorInterface
 {
@@ -18,7 +18,7 @@ interface CommandGeneratorInterface
     public function supports($transferObjectType);
 
     /**
-     * @param string $adapterName
+     * @param string                  $adapterName
      * @param TransferObjectInterface $transferObject
      *
      * @return CommandInterface

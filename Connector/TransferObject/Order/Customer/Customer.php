@@ -7,7 +7,7 @@ use DateTimeImmutable;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 
 /**
- * Class Customer
+ * Class Customer.
  */
 class Customer extends AbstractValueObject
 {

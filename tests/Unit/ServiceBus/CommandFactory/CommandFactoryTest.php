@@ -11,7 +11,7 @@ use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use Ramsey\Uuid\Uuid;
 
 /**
- * Class CommandFactoryTest
+ * Class CommandFactoryTest.
  */
 class CommandFactoryTest extends TestCase
 {

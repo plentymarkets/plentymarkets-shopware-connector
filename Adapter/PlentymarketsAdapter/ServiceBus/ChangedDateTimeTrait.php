@@ -18,7 +18,7 @@ trait ChangedDateTimeTrait
     public function getChangedDateTime()
     {
         /**
-         * @var ConfigServiceInterface $config
+         * @var ConfigServiceInterface
          */
         $config = Shopware()->Container()->get('plenty_connector.config');
 
@@ -34,7 +34,7 @@ trait ChangedDateTimeTrait
     public function setChangedDateTime(DateTimeImmutable $dateTime)
     {
         /**
-         * @var ConfigServiceInterface $config
+         * @var ConfigServiceInterface
          */
         $config = Shopware()->Container()->get('plenty_connector.config');
 
@@ -56,6 +56,6 @@ trait ChangedDateTimeTrait
      */
     private function getKey()
     {
-        return PlentymarketsAdapter::NAME . get_called_class() . '.LastChangeDateTime';
+        return PlentymarketsAdapter::NAME.get_called_class().'.LastChangeDateTime';
     }
 }

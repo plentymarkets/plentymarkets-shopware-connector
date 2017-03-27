@@ -5,7 +5,7 @@ namespace PlentyConnector\Connector\ValueObject\Translation;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 
 /**
- * Class Translation
+ * Class Translation.
  */
 class Translation extends AbstractValueObject
 {

@@ -13,7 +13,7 @@ use ShopwareAdapter\ResponseParser\Unit\UnitResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class FetchAllUnitsQueryHandler
+ * Class FetchAllUnitsQueryHandler.
  */
 class FetchAllUnitsQueryHandler implements QueryHandlerInterface
 {
@@ -30,7 +30,7 @@ class FetchAllUnitsQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllUnitsQueryHandler constructor.
      *
-     * @param EntityManagerInterface $entityManager
+     * @param EntityManagerInterface      $entityManager
      * @param UnitResponseParserInterface $responseParser
      */
     public function __construct(

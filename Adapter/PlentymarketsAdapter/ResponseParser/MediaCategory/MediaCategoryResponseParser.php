@@ -7,7 +7,7 @@ use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 
 /**
- * Class MediaCategoryResponseParser
+ * Class MediaCategoryResponseParser.
  */
 class MediaCategoryResponseParser implements MediaCategoryResponseParserInterface
 {
@@ -39,7 +39,7 @@ class MediaCategoryResponseParser implements MediaCategoryResponseParserInterfac
 
         return MediaCategory::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => (string) $entry['name'],
+            'name'       => (string) $entry['name'],
         ]);
     }
 }

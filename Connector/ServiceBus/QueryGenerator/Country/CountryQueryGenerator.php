@@ -9,7 +9,7 @@ use PlentyConnector\Connector\ServiceBus\QueryGenerator\QueryGeneratorInterface;
 use PlentyConnector\Connector\TransferObject\Country\Country;
 
 /**
- * Class CountryQueryGenerator
+ * Class CountryQueryGenerator.
  */
 class CountryQueryGenerator implements QueryGeneratorInterface
 {

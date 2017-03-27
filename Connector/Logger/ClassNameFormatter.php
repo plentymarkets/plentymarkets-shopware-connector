@@ -159,7 +159,7 @@ class ClassNameFormatter implements Formatter
      */
     private function getRecievedMessage($command)
     {
-        return $this->getType($command) . ' received: ' . $this->getClassName($command);
+        return $this->getType($command).' received: '.$this->getClassName($command);
     }
 
     /**
@@ -169,7 +169,7 @@ class ClassNameFormatter implements Formatter
      */
     private function getSucceededMessage($command)
     {
-        return $this->getType($command) . ' succeeded: ' . $this->getClassName($command);
+        return $this->getType($command).' succeeded: '.$this->getClassName($command);
     }
 
     /**
@@ -179,6 +179,6 @@ class ClassNameFormatter implements Formatter
      */
     private function getFailedMessage($command)
     {
-        return $this->getType($command) . ' failed: ' . $this->getClassName($command);
+        return $this->getType($command).' failed: '.$this->getClassName($command);
     }
 }

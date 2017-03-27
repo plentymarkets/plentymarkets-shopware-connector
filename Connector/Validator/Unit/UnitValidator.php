@@ -7,7 +7,7 @@ use PlentyConnector\Connector\TransferObject\Unit\Unit;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 
 /**
- * Class UnitValidator
+ * Class UnitValidator.
  */
 class UnitValidator implements ValidatorInterface
 {

@@ -6,7 +6,7 @@ use Assert\Assertion;
 use PlentyConnector\Connector\ServiceBus\Query\FetchQueryInterface;
 
 /**
- * Class FetchLanguageQuery
+ * Class FetchLanguageQuery.
  */
 class FetchLanguageQuery implements FetchQueryInterface
 {
@@ -58,7 +58,7 @@ class FetchLanguageQuery implements FetchQueryInterface
     {
         return [
             'adapterName' => $this->adapterName,
-            'identifier' => $this->identifier,
+            'identifier'  => $this->identifier,
         ];
     }
 

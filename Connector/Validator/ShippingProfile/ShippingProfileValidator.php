@@ -7,7 +7,7 @@ use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 
 /**
- * Class ShippingProfileValidator
+ * Class ShippingProfileValidator.
  */
 class ShippingProfileValidator implements ValidatorInterface
 {

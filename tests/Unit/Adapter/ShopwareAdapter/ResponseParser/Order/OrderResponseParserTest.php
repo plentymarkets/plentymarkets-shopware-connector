@@ -18,7 +18,7 @@ use ShopwareAdapter\ResponseParser\Order\OrderResponseParser;
 use ShopwareAdapter\ResponseParser\OrderItem\OrderItemResponseParser;
 
 /**
- * Class OrderResponseParserTest
+ * Class OrderResponseParserTest.
  *
  * @group ResponseParser
  */
@@ -51,7 +51,7 @@ class OrderResponseParserTest extends ResponseParserTest
 
         $logger = $this->createMock(Logger::class);
 
-        /** @var OrderResponseParser $parser */
+        /* @var OrderResponseParser $parser */
         $this->orderResponseParser = $parser = new OrderResponseParser(
             $this->identityService,
             $orderItemParser,
@@ -64,7 +64,7 @@ class OrderResponseParserTest extends ResponseParserTest
     public function testOrderParsing()
     {
         /**
-         * @var Order $orderDto
+         * @var Order
          */
         $orderDto = $this->orderResponseParser->parse(self::$orderData);
 

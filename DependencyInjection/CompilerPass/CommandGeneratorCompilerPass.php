@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Class QueryGeneratorCompilerPassimplements
+ * Class QueryGeneratorCompilerPassimplements.
  */
 class CommandGeneratorCompilerPass implements CompilerPassInterface
 {

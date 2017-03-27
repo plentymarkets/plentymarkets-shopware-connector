@@ -3,7 +3,7 @@
 namespace PlentyConnector\Connector\ServiceBus\Command;
 
 /**
- * Class RemoveCommandInterface
+ * Class RemoveCommandInterface.
  */
 interface RemoveCommandInterface extends CommandInterface
 {

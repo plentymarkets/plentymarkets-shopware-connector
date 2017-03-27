@@ -3,12 +3,13 @@
 namespace PlentymarketsAdapter\ReadApi;
 
 /**
- * Class Availability
+ * Class Availability.
  */
 class Availability extends ApiAbstract
 {
     /**
      * @param null $productId
+     *
      * @return array
      */
     public function findAll()

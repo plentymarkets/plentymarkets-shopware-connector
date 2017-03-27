@@ -7,7 +7,7 @@ use PlentyConnector\Connector\ValueObject\Definition\Definition;
 use PlentyConnector\Connector\ValueObject\ValueObjectInterface;
 
 /**
- * Class DefinitionFactory
+ * Class DefinitionFactory.
  */
 class DefinitionFactory
 {
@@ -27,9 +27,9 @@ class DefinitionFactory
     }
 
     /**
-     * @param string $originAdapterName
-     * @param string $destinationAdapterName
-     * @param strin $objectType
+     * @param string   $originAdapterName
+     * @param string   $destinationAdapterName
+     * @param strin    $objectType
      * @param null|int $priority
      *
      * @return ValueObjectInterface
@@ -37,10 +37,10 @@ class DefinitionFactory
     public function factory($originAdapterName, $destinationAdapterName, $objectType, $priority = null)
     {
         $definition = Definition::fromArray([
-            'originAdapterName' => $originAdapterName,
+            'originAdapterName'      => $originAdapterName,
             'destinationAdapterName' => $destinationAdapterName,
-            'objectType' => $objectType,
-            'priority' => $priority,
+            'objectType'             => $objectType,
+            'priority'               => $priority,
         ]);
 
         $this->validator->validate($definition);

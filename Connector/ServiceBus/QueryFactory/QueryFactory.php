@@ -40,7 +40,7 @@ class QueryFactory implements QueryFactoryInterface
         }
 
         /**
-         * @var QueryGeneratorInterface[] $generators
+         * @var QueryGeneratorInterface[]
          */
         $generators = array_filter($this->generators, function (QueryGeneratorInterface $generator) use ($objectType) {
             return $generator->supports($objectType);

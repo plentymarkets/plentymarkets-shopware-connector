@@ -28,7 +28,7 @@ use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceExce
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
-require __DIR__ . '/autoload.php';
+require __DIR__.'/autoload.php';
 
 /**
  * Class PlentyConnector.
@@ -39,7 +39,7 @@ class PlentyConnector extends Plugin
     const PERMISSION_WRITE = 'write';
 
     /**
-     * List of all permissions
+     * List of all permissions.
      */
     const PERMISSIONS = [
         self::PERMISSION_READ,
@@ -47,7 +47,7 @@ class PlentyConnector extends Plugin
     ];
 
     /**
-     * List of all models
+     * List of all models.
      */
     const MODELS = [
         Config::class,
@@ -58,11 +58,11 @@ class PlentyConnector extends Plugin
     const CRONJOB_CLEANUP = 'Cleanup';
 
     /**
-     * List of all cronjobs
+     * List of all cronjobs.
      */
     const CRONJOBS = [
         self::CRONJOB_SYNCHRONIZE => 300,
-        self::CRONJOB_CLEANUP => 86400,
+        self::CRONJOB_CLEANUP     => 86400,
     ];
 
     /**
@@ -74,9 +74,9 @@ class PlentyConnector extends Plugin
     {
         $container->setParameter('plenty_connector.plugin_dir', $this->getPath());
 
-        $this->loadFile($container, __DIR__ . '/Adapter/ShopwareAdapter/DependencyInjection/services.xml');
-        $this->loadFile($container, __DIR__ . '/Adapter/PlentymarketsAdapter/DependencyInjection/services.xml');
-        $this->loadFile($container, __DIR__ . '/DependencyInjection/services.xml');
+        $this->loadFile($container, __DIR__.'/Adapter/ShopwareAdapter/DependencyInjection/services.xml');
+        $this->loadFile($container, __DIR__.'/Adapter/PlentymarketsAdapter/DependencyInjection/services.xml');
+        $this->loadFile($container, __DIR__.'/DependencyInjection/services.xml');
 
         $container->addCompilerPass(new CleanupDefinitionCompilerPass());
         $container->addCompilerPass(new CommandGeneratorCompilerPass());

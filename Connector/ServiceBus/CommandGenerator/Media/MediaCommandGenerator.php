@@ -9,7 +9,7 @@ use PlentyConnector\Connector\TransferObject\Media\Media;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
- * Class MediaCommandGenerator
+ * Class MediaCommandGenerator.
  */
 class MediaCommandGenerator implements CommandGeneratorInterface
 {

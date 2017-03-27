@@ -49,9 +49,9 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     /**
      * HandleOrderCommandHandler constructor.
      *
-     * @param ClientInterface $client
+     * @param ClientInterface          $client
      * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface $logger
+     * @param LoggerInterface          $logger
      */
     public function __construct(
         ClientInterface $client,
@@ -78,40 +78,40 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     public function handle(CommandInterface $command)
     {
         /**
-         * @var HandleCommandInterface $command
-         * @var Order $order
+         * @var HandleCommandInterface
+         * @var Order                  $order
          */
         $order = $command->getTransferObject();
 
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => $order->getIdentifier(),
-            'objectType' => Order::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => Order::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         if ($identity === null) {
             $shopIdentity = $this->identityService->findOneBy([
                 'objectIdentifier' => $order->getShopIdentifier(),
-                'objectType' => Shop::TYPE,
-                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType'       => Shop::TYPE,
+                'adapterName'      => PlentymarketsAdapter::NAME,
             ]);
 
             $languageIdentity = $this->identityService->findOneBy([
                 'objectIdentifier' => $order->getCustomer()->getLanguageIdentifier(),
-                'objectType' => Language::TYPE,
-                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType'       => Language::TYPE,
+                'adapterName'      => PlentymarketsAdapter::NAME,
             ]);
 
             $shippingProfileIdentity = $this->identityService->findOneBy([
                 'objectIdentifier' => $order->getShippingProfileIdentifier(),
-                'objectType' => ShippingProfile::TYPE,
-                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType'       => ShippingProfile::TYPE,
+                'adapterName'      => PlentymarketsAdapter::NAME,
             ]);
 
             $currencyIdentity = $this->identityService->findOneBy([
                 'objectIdentifier' => $order->getCurrencyIdentifier(),
-                'objectType' => Currency::TYPE,
-                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType'       => Currency::TYPE,
+                'adapterName'      => PlentymarketsAdapter::NAME,
             ]);
 
             if (null === $currencyIdentity) {
@@ -141,8 +141,8 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             $params['relations'] = [
                 [
                     'referenceType' => 'contact',
-                    'referenceId' => $plentyCustomer['id'],
-                    'relation' => 'receiver',
+                    'referenceId'   => $plentyCustomer['id'],
+                    'relation'      => 'receiver',
                 ],
             ];
 
@@ -151,7 +151,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             $billingAddress = $this->createAddress($order->getBillingAddress(), $order->getCustomer(), $plentyCustomer);
             if (!empty($billingAddress)) {
                 $params['addressRelations'][] = [
-                    'typeId' => 1,
+                    'typeId'    => 1,
                     'addressId' => $billingAddress['id'],
                 ];
             }
@@ -160,15 +160,15 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                 $plentyCustomer);
             if (!empty($shippingAddress)) {
                 $params['addressRelations'][] = [
-                    'typeId' => 2,
+                    'typeId'    => 2,
                     'addressId' => $shippingAddress['id'],
                 ];
             }
 
             $paymentMethodIdentity = $this->identityService->findOneBy([
                 'objectIdentifier' => $order->getPaymentMethodIdentifier(),
-                'objectType' => PaymentMethod::TYPE,
-                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType'       => PaymentMethod::TYPE,
+                'adapterName'      => PlentymarketsAdapter::NAME,
             ]);
 
             if (null === $paymentMethodIdentity) {
@@ -184,15 +184,15 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             $params['properties'] = [
                 [
                     'typeId' => 6,
-                    'value' => $languageIdentity->getAdapterIdentifier(),
+                    'value'  => $languageIdentity->getAdapterIdentifier(),
                 ],
                 [
                     'typeId' => 7,
-                    'value' => $order->getOrderNumber(),
+                    'value'  => $order->getOrderNumber(),
                 ],
                 [
                     'typeId' => 3,
-                    'value' => $paymentMethodIdentity->getAdapterIdentifier(),
+                    'value'  => $paymentMethodIdentity->getAdapterIdentifier(),
                 ],
             ];
 
@@ -203,7 +203,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             $voucher = null;
             if (!empty($vouchers)) {
                 /**
-                 * @var OrderItem $voucher
+                 * @var OrderItem
                  */
                 $voucher = array_shift($vouchers);
             }
@@ -211,19 +211,19 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             if (null !== $voucher) {
                 $params['properties'][] = [
                     'typeId' => 18,
-                    'value' => $voucher->getNumber(),
+                    'value'  => $voucher->getNumber(),
                 ];
 
                 $params['properties'][] = [
                     'typeId' => 19,
-                    'value' => 'fixed',
+                    'value'  => 'fixed',
                 ];
             }
 
             $params['dates'] = [
                 [
                     'typeId' => 2,
-                    'date' => $order->getOrderTime()->format(DATE_W3C),
+                    'date'   => $order->getOrderTime()->format(DATE_W3C),
                 ],
             ];
 
@@ -279,7 +279,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
 
                 $itemParams['amounts'] = [
                     [
-                        'currency' => $currencyIdentity->getAdapterIdentifier(),
+                        'currency'           => $currencyIdentity->getAdapterIdentifier(),
                         'priceOriginalGross' => $item->getPrice(),
                     ],
                 ];
@@ -287,7 +287,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                 $itemParams['properties'] = [
                     [
                         'typeId' => 2,
-                        'value' => $shippingProfileIdentity->getAdapterIdentifier(),
+                        'value'  => $shippingProfileIdentity->getAdapterIdentifier(),
                     ],
                 ];
 
@@ -305,9 +305,9 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
 
             foreach ($order->getComments() as $comment) {
                 $commentParams = [
-                    'referenceType' => 'order',
-                    'referenceValue' => $result['id'],
-                    'text' => $comment->getComment(),
+                    'referenceType'       => 'order',
+                    'referenceValue'      => $result['id'],
+                    'text'                => $comment->getComment(),
                     'isVisibleForContact' => $comment->getType() === Comment::TYPE_CUSTOMER,
                 ];
 
@@ -323,10 +323,10 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                     $sepaPaymentDataParams = [
                         'lastUpdateBy' => 'import',
                         'accountOwner' => $paymentData->getAccountOwner(),
-                        'iban' => $paymentData->getIban(),
-                        'bic' => $paymentData->getBic(),
-                        'orderId' => $result['id'],
-                        'contactId' => $plentyCustomer['id'],
+                        'iban'         => $paymentData->getIban(),
+                        'bic'          => $paymentData->getBic(),
+                        'orderId'      => $result['id'],
+                        'contactId'    => $plentyCustomer['id'],
                     ];
 
                     $this->client->request('POST', 'accounts/contacts/banks', $sepaPaymentDataParams);
@@ -379,14 +379,14 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     {
         $languageIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $order->getCustomer()->getLanguageIdentifier(),
-            'objectType' => Language::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => Language::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         $shopIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $order->getShopIdentifier(),
-            'objectType' => Shop::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => Shop::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         $customer = $order->getCustomer();
@@ -423,24 +423,24 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
 
         $customerGroupIdentitiy = $this->identityService->findOneBy([
             'objectIdentifier' => $order->getCustomer()->getCustomerGroupIdentifier(),
-            'objectType' => CustomerGroup::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => CustomerGroup::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         $customerParams = [
-            'number' => $customer->getNumber(),
-            'typeId' => 1, // hartcoded für kunde
-            'firstName' => $customer->getFirstname(),
-            'lastName' => $customer->getLastname(),
-            'gender' => $customer->getSalutation() === Customer::SALUTATION_MR ? 'male' : 'female',
-            'lang' => $languageIdentity->getAdapterIdentifier(),
-            'referrerId' => 1, // TODO: Konfigurierbar über Config. (/rest/orders/referrers)
-            'singleAccess' => $customer->getCustomerType() === Customer::TYPE_GUEST,
-            'plentyId' => $accountWebStore['id'],
+            'number'                => $customer->getNumber(),
+            'typeId'                => 1, // hartcoded für kunde
+            'firstName'             => $customer->getFirstname(),
+            'lastName'              => $customer->getLastname(),
+            'gender'                => $customer->getSalutation() === Customer::SALUTATION_MR ? 'male' : 'female',
+            'lang'                  => $languageIdentity->getAdapterIdentifier(),
+            'referrerId'            => 1, // TODO: Konfigurierbar über Config. (/rest/orders/referrers)
+            'singleAccess'          => $customer->getCustomerType() === Customer::TYPE_GUEST,
+            'plentyId'              => $accountWebStore['id'],
             'newsletterAllowanceAt' => '',
-            'lastOrderAt' => $order->getOrderTime()->format(DATE_W3C),
-            'userId' => 1, // TODO: Konfigurierbar über Config (rest/accounts)
-            'options' => [],
+            'lastOrderAt'           => $order->getOrderTime()->format(DATE_W3C),
+            'userId'                => 1, // TODO: Konfigurierbar über Config (rest/accounts)
+            'options'               => [],
         ];
 
         // TODO: handle no customer group at plenty
@@ -454,44 +454,44 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
 
         if (!empty($customer->getPhoneNumber())) {
             $customerParams['options'][] = [
-                'typeId' => 1,
+                'typeId'    => 1,
                 'subTypeId' => 4,
-                'value' => $customer->getPhoneNumber(),
-                'priority' => 0,
+                'value'     => $customer->getPhoneNumber(),
+                'priority'  => 0,
             ];
         }
 
         if (!empty($customer->getMobilePhoneNumber())) {
             $customerParams['options'][] = [
-                'typeId' => 1,
+                'typeId'    => 1,
                 'subTypeId' => 2,
-                'value' => $customer->getMobilePhoneNumber(),
-                'priority' => 0,
+                'value'     => $customer->getMobilePhoneNumber(),
+                'priority'  => 0,
             ];
         }
 
         if (!empty($customer->getEmail())) {
             $customerParams['options'][] = [
-                'typeId' => 2,
+                'typeId'    => 2,
                 'subTypeId' => 4,
-                'value' => $customer->getEmail(),
-                'priority' => 0,
+                'value'     => $customer->getEmail(),
+                'priority'  => 0,
             ];
         }
 
         if (!$plentyCustomer) {
             $plentyCustomer = $this->client->request('POST', 'accounts/contacts', $customerParams);
         } else {
-            $tmpResult = $this->client->request('PUT', 'accounts/contacts/' . $plentyCustomer['id'], $customerParams);
+            $tmpResult = $this->client->request('PUT', 'accounts/contacts/'.$plentyCustomer['id'], $customerParams);
         }
 
         return $plentyCustomer;
     }
 
     /**
-     * @param Address $address
+     * @param Address  $address
      * @param Customer $customer
-     * @param array $plentyCustomer
+     * @param array    $plentyCustomer
      *
      * @return array
      */
@@ -499,8 +499,8 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     {
         $countryIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $address->getCountryIdentifier(),
-            'objectType' => Country::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => Country::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         if (null === $countryIdentity) {
@@ -512,7 +512,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
 
             $address1 = $splitResult['streetName'];
             $address2 = $splitResult['houseNumber'];
-            $address3 = trim($splitResult['additionToAddress1'] . ' ' . $splitResult['additionToAddress2']);
+            $address3 = trim($splitResult['additionToAddress1'].' '.$splitResult['additionToAddress2']);
         } catch (\Exception $exception) {
             $address1 = $address->getStreet();
             $address2 = '';
@@ -522,33 +522,33 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         // TODO: Addition feld prüfen
 
         $params = [
-            'name1' => trim($address->getCompany() . ' ' . $address->getDepartment()),
-            'name2' => $address->getFirstname(),
-            'name3' => $address->getLastname(),
-            'address1' => $address1,
-            'address2' => $address2,
-            'address3' => $address3,
+            'name1'      => trim($address->getCompany().' '.$address->getDepartment()),
+            'name2'      => $address->getFirstname(),
+            'name3'      => $address->getLastname(),
+            'address1'   => $address1,
+            'address2'   => $address2,
+            'address3'   => $address3,
             'postalCode' => $address->getZipcode(),
-            'town' => $address->getCity(),
-            'countryId' => $countryIdentity->getAdapterIdentifier(),
-            'options' => [
+            'town'       => $address->getCity(),
+            'countryId'  => $countryIdentity->getAdapterIdentifier(),
+            'options'    => [
                 [
                     'typeId' => 5,
-                    'value' => $customer->getEmail(),
+                    'value'  => $customer->getEmail(),
                 ],
                 [
                     'typeId' => 4,
-                    'value' => $customer->getPhoneNumber(),
+                    'value'  => $customer->getPhoneNumber(),
                 ],
             ],
         ];
 
-        return $this->client->request('POST', 'accounts/contacts/' . $plentyCustomer['id'] . '/addresses', $params);
+        return $this->client->request('POST', 'accounts/contacts/'.$plentyCustomer['id'].'/addresses', $params);
     }
 
     /**
-     * @param Payment $payment
-     * @param Order $order
+     * @param Payment    $payment
+     * @param Order      $order
      * @param null|array $billingAddress
      * @param null|array $shippingAddress
      * @param $plentyOrderIdentifier
@@ -564,8 +564,8 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     ) {
         $paymentMethodIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $payment->getPaymentMethodIdentifier(),
-            'objectType' => PaymentMethod::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => PaymentMethod::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         if (null === $paymentMethodIdentity) {
@@ -576,14 +576,14 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
 
         $paymentMethodIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $payment->getPaymentMethodIdentifier(),
-            'objectType' => PaymentMethod::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => PaymentMethod::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         $currencyIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $payment->getCurrencyIdentifier(),
-            'objectType' => Currency::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => Currency::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         if (null === $currencyIdentity) {
@@ -593,15 +593,15 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         }
 
         $paymentParams = [
-            'amount' => $payment->getAmount(),
-            'exchangeRatio' => 1,
-            'mopId' => $paymentMethodIdentity->getAdapterIdentifier(),
-            'currency' => $currencyIdentity->getAdapterIdentifier(),
-            'type' => 'credit',
+            'amount'          => $payment->getAmount(),
+            'exchangeRatio'   => 1,
+            'mopId'           => $paymentMethodIdentity->getAdapterIdentifier(),
+            'currency'        => $currencyIdentity->getAdapterIdentifier(),
+            'type'            => 'credit',
             'transactionType' => 2,
         ];
 
-        /**
+        /*
          * Payment origin = 23
          * Name of the sender = 11
          * Email of the sender = 12
@@ -613,43 +613,43 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         $paymentParams['property'] = [
             [
                 'typeId' => 23,
-                'value' => 'shopware',
+                'value'  => 'shopware',
             ],
             [
                 'typeId' => 11,
-                'value' => $order->getCustomer()->getFirstname() . ' ' . $order->getCustomer()->getLastname(),
+                'value'  => $order->getCustomer()->getFirstname().' '.$order->getCustomer()->getLastname(),
             ],
             [
                 'typeId' => 12,
-                'value' => $order->getCustomer()->getEmail(),
+                'value'  => $order->getCustomer()->getEmail(),
             ],
             [
                 'typeId' => 1,
-                'value' => $payment->getTransactionReference(),
+                'value'  => $payment->getTransactionReference(),
             ],
             [
                 'typeId' => 3,
-                'value' => 'booked',
+                'value'  => 'booked',
             ],
         ];
 
         if (null !== $billingAddress) {
             $paymentParams['property'][] = [
                 'typeId' => 24,
-                'value' => $billingAddress['id'],
+                'value'  => $billingAddress['id'],
             ];
         }
 
         if (null !== $shippingAddress) {
             $paymentParams['property'][] = [
                 'typeId' => 25,
-                'value' => $billingAddress['id'],
+                'value'  => $billingAddress['id'],
             ];
         }
 
         $paymentResult = $this->client->request('POST', 'payments', $paymentParams);
 
-        $url = 'payment/' . $paymentResult['id'] . '/order/' . $plentyOrderIdentifier;
+        $url = 'payment/'.$paymentResult['id'].'/order/'.$plentyOrderIdentifier;
         $this->client->request('POST', $url);
     }
 }

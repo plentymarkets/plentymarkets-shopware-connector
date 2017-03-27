@@ -7,7 +7,7 @@ use PlentyConnector\Connector\TransferObject\Unit\Unit;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 
 /**
- * Class UnitResponseParser
+ * Class UnitResponseParser.
  */
 class UnitResponseParser implements UnitResponseParserInterface
 {
@@ -42,7 +42,7 @@ class UnitResponseParser implements UnitResponseParserInterface
 
         return Unit::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => $name,
+            'name'       => $name,
         ]);
     }
 }

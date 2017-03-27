@@ -11,7 +11,7 @@ use ShopwareAdapter\ServiceBus\ChangedDateTimeTrait;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class FetchChangedOrdersQueryHandler
+ * Class FetchChangedOrdersQueryHandler.
  */
 class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
 {
@@ -31,7 +31,7 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
      * FetchChangedOrdersQueryHandler constructor.
      *
      * @param OrderResponseParserInterface $responseParser
-     * @param Resource\Order $orderResource
+     * @param Resource\Order               $orderResource
      */
     public function __construct(
         OrderResponseParserInterface $responseParser,
@@ -57,9 +57,9 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
     {
         $filter = [
             [
-                'property' => 'status',
+                'property'   => 'status',
                 'expression' => '!=',
-                'value' => -1,
+                'value'      => -1,
             ],
         ];
 

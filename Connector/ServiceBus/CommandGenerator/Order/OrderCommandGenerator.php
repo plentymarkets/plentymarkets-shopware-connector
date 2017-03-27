@@ -8,7 +8,7 @@ use PlentyConnector\Connector\TransferObject\Order\Order;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
- * Class OrderCommandGenerator
+ * Class OrderCommandGenerator.
  */
 class OrderCommandGenerator implements CommandGeneratorInterface
 {

@@ -37,9 +37,9 @@ class RemoveMediaCategoryCommandHandler implements CommandHandlerInterface
     /**
      * HandleMediaCategoryCommandHandler constructor.
      *
-     * @param EntityManagerInterface $entityManager
+     * @param EntityManagerInterface   $entityManager
      * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface $logger
+     * @param LoggerInterface          $logger
      */
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -66,14 +66,14 @@ class RemoveMediaCategoryCommandHandler implements CommandHandlerInterface
     public function handle(CommandInterface $command)
     {
         /**
-         * @var RemoveCommandInterface $command
+         * @var RemoveCommandInterface
          */
         $identifier = $command->getObjectIdentifier();
 
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => (string) $identifier,
-            'objectType' => Media::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => Media::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         if (null === $identity) {

@@ -10,7 +10,7 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Shop\ShopResponseParserInterface;
 
 /**
- * Class FetchAllShopsQueryHandler
+ * Class FetchAllShopsQueryHandler.
  */
 class FetchAllShopsQueryHandler implements QueryHandlerInterface
 {
@@ -27,7 +27,7 @@ class FetchAllShopsQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllShopsQueryHandler constructor.
      *
-     * @param ClientInterface $client
+     * @param ClientInterface             $client
      * @param ShopResponseParserInterface $responseParser
      */
     public function __construct(

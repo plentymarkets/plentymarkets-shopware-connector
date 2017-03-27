@@ -1,17 +1,14 @@
 <?php
 
-
 namespace PlentymarketsAdapter\ReadApi\Item;
-
 
 use PlentymarketsAdapter\ReadApi\ApiAbstract;
 
 /**
- * Class ItemSalesPrices
+ * Class ItemSalesPrices.
  */
 class SalesPrice extends ApiAbstract
 {
-
     /**
      * @return array
      */
@@ -22,10 +19,11 @@ class SalesPrice extends ApiAbstract
 
     /**
      * @param $priceId
+     *
      * @return array
      */
     public function findOne($priceId)
     {
-        return $this->client->request('GET', 'items/sales_prices/' . $priceId);
+        return $this->client->request('GET', 'items/sales_prices/'.$priceId);
     }
 }

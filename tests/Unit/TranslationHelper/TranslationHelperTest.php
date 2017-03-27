@@ -9,7 +9,7 @@ use PlentyConnector\Connector\ValueObject\Translation\Translation;
 use Ramsey\Uuid\Uuid;
 
 /**
- * Class TranslationHelperTest
+ * Class TranslationHelperTest.
  */
 class TranslationHelperTest extends TestCase
 {
@@ -20,8 +20,8 @@ class TranslationHelperTest extends TestCase
 
         $translations = [Translation::fromArray([
             'languageIdentifier' => $languageIdentifier,
-            'property' => 'name',
-            'value' => $testValue,
+            'property'           => 'name',
+            'value'              => $testValue,
         ])];
 
         $mockObject = $this->createMock(Product::class);

@@ -37,9 +37,9 @@ class RemoveCategoryCommandHandler implements CommandHandlerInterface
     /**
      * RemoveCategoryCommandHandler constructor.
      *
-     * @param CategoryResource $resource
+     * @param CategoryResource         $resource
      * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface $logger
+     * @param LoggerInterface          $logger
      */
     public function __construct(
         CategoryResource $resource,
@@ -66,14 +66,14 @@ class RemoveCategoryCommandHandler implements CommandHandlerInterface
     public function handle(CommandInterface $command)
     {
         /**
-         * @var RemoveCommandInterface $command
+         * @var RemoveCommandInterface
          */
         $identifier = $command->getObjectIdentifier();
 
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => (string) $identifier,
-            'objectType' => Category::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => Category::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         if (null === $identity) {

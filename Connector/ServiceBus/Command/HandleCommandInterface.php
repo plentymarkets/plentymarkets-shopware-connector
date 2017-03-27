@@ -5,7 +5,7 @@ namespace PlentyConnector\Connector\ServiceBus\Command;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
- * Interface HandleCommandInterface
+ * Interface HandleCommandInterface.
  */
 interface HandleCommandInterface extends CommandInterface
 {

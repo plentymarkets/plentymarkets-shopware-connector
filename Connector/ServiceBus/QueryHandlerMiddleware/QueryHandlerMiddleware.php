@@ -27,7 +27,7 @@ class QueryHandlerMiddleware implements Middleware
 
     /**
      * @param QueryInterface $query
-     * @param callable $next
+     * @param callable       $next
      *
      * @throws NotFoundException
      *
@@ -52,7 +52,7 @@ class QueryHandlerMiddleware implements Middleware
         }
 
         /**
-         * @var QueryHandlerInterface $handler
+         * @var QueryHandlerInterface
          */
         $handler = array_shift($handlers);
         $response = $handler->handle($query);

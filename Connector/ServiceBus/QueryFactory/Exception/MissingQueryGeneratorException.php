@@ -5,7 +5,7 @@ namespace PlentyConnector\Connector\ServiceBus\QueryFactory\Exception;
 use InvalidArgumentException;
 
 /**
- * Class MissingQueryGeneratorException
+ * Class MissingQueryGeneratorException.
  */
 class MissingQueryGeneratorException extends InvalidArgumentException
 {
@@ -17,7 +17,7 @@ class MissingQueryGeneratorException extends InvalidArgumentException
      */
     public static function fromObjectData($objectType, $queryType)
     {
-        $message = 'No matching query generator found! type: ' . $objectType . ' queryType: ' . $queryType;
+        $message = 'No matching query generator found! type: '.$objectType.' queryType: '.$queryType;
 
         return new self($message);
     }

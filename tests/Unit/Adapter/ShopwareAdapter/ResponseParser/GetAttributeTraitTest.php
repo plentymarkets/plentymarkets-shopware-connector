@@ -7,7 +7,7 @@ use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentymarketsAdapter\ResponseParser\GetAttributeTrait;
 
 /**
- * Class GetAttributeTraitTest
+ * Class GetAttributeTraitTest.
  *
  * @group ResponseParser
  */

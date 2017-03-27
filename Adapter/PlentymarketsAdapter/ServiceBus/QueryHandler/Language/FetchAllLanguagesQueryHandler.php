@@ -10,7 +10,7 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Language\LanguageResponseParserInterface;
 
 /**
- * Class FetchAllLanguagesQueryHandler
+ * Class FetchAllLanguagesQueryHandler.
  */
 class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
 {
@@ -28,7 +28,7 @@ class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
      * FetchAllLanguagesQueryHandler constructor.
      *
      * @param LanguageResponseParserInterface $responseParser
-     * @param LanguageHelper $languageHelper
+     * @param LanguageHelper                  $languageHelper
      */
     public function __construct(
         LanguageResponseParserInterface $responseParser,

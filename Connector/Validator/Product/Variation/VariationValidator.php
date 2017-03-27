@@ -11,7 +11,7 @@ use PlentyConnector\Connector\Validator\ValidatorInterface;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
 /**
- * Class VariationValidator
+ * Class VariationValidator.
  */
 class VariationValidator implements ValidatorInterface
 {

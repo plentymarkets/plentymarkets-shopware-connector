@@ -13,7 +13,7 @@ use ShopwareAdapter\ResponseParser\VatRate\VatRateResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class FetchAllVatRatesQueryHandler
+ * Class FetchAllVatRatesQueryHandler.
  */
 class FetchAllVatRatesQueryHandler implements QueryHandlerInterface
 {
@@ -30,7 +30,7 @@ class FetchAllVatRatesQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllVatRatesQueryHandler constructor.
      *
-     * @param EntityManagerInterface $entityManager
+     * @param EntityManagerInterface         $entityManager
      * @param VatRateResponseParserInterface $responseParser
      */
     public function __construct(

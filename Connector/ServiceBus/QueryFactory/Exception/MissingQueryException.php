@@ -5,7 +5,7 @@ namespace PlentyConnector\Connector\ServiceBus\QueryFactory\Exception;
 use InvalidArgumentException;
 
 /**
- * Class MissingQueryException
+ * Class MissingQueryException.
  */
 class MissingQueryException extends InvalidArgumentException
 {
@@ -17,7 +17,7 @@ class MissingQueryException extends InvalidArgumentException
      */
     public static function fromObjectData($objectType, $queryType)
     {
-        $message = 'No matching query found! type: ' . $objectType . ' queryType: ' . $queryType;
+        $message = 'No matching query found! type: '.$objectType.' queryType: '.$queryType;
 
         return new self($message);
     }

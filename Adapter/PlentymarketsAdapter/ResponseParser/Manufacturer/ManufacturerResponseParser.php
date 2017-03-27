@@ -7,7 +7,7 @@ use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 
 /**
- * Class ManufacturerResponseParser
+ * Class ManufacturerResponseParser.
  */
 class ManufacturerResponseParser implements ManufacturerResponseParserInterface
 {
@@ -38,10 +38,10 @@ class ManufacturerResponseParser implements ManufacturerResponseParserInterface
         );
 
         return Manufacturer::fromArray([
-            'identifier' => $identity->getObjectIdentifier(),
-            'name' => $entry['name'],
+            'identifier'     => $identity->getObjectIdentifier(),
+            'name'           => $entry['name'],
             'logoIdentifier' => !empty($entry['logoIdentifier']) ? $entry['logoIdentifier'] : null,
-            'link' => !empty($entry['url']) ? $entry['url'] : null,
+            'link'           => !empty($entry['url']) ? $entry['url'] : null,
         ]);
     }
 }

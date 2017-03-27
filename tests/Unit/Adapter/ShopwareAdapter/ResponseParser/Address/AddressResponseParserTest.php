@@ -12,7 +12,7 @@ use Ramsey\Uuid\Uuid;
 use ShopwareAdapter\ResponseParser\Address\AddressResponseParser;
 
 /**
- * Class AddressResponseParserTest
+ * Class AddressResponseParserTest.
  *
  * @group ResponseParser
  */
@@ -38,12 +38,12 @@ class AddressResponseParserTest extends ResponseParserTest
         $identity->expects($this->any())->method('getObjectIdentifier')->willReturn($this->countyIdentifier);
 
         /**
-         * @var IdentityService|\PHPUnit_Framework_MockObject_MockObject $identityService
+         * @var IdentityService|\PHPUnit_Framework_MockObject_MockObject
          */
         $identityService = $this->createMock(IdentityService::class);
         $identityService->expects($this->any())->method('findOneBy')->willReturn($identity);
 
-        /**
+        /*
          * @var AddressResponseParser $parser
          */
         $this->responseParser = new AddressResponseParser($identityService);
@@ -52,7 +52,7 @@ class AddressResponseParserTest extends ResponseParserTest
     public function testAddressParsing()
     {
         /**
-         * @var Address $address
+         * @var Address
          */
         $address = $this->responseParser->parse(self::$orderData['billing']);
 

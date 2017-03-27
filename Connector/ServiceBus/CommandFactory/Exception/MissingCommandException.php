@@ -5,7 +5,7 @@ namespace PlentyConnector\Connector\ServiceBus\CommandFactory\Exception;
 use InvalidArgumentException;
 
 /**
- * Class MissingCommandException
+ * Class MissingCommandException.
  */
 class MissingCommandException extends InvalidArgumentException
 {
@@ -17,7 +17,7 @@ class MissingCommandException extends InvalidArgumentException
      */
     public static function fromObjectData($objectType, $commandType)
     {
-        $message = 'No matching command found! type: ' . $objectType . ' queryType: ' . $commandType;
+        $message = 'No matching command found! type: '.$objectType.' queryType: '.$commandType;
 
         return new static($message);
     }

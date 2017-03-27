@@ -9,7 +9,7 @@ use PlentyConnector\Connector\TransferObject\Category\Category;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
- * Class CategoryCommandGenerator
+ * Class CategoryCommandGenerator.
  */
 class CategoryCommandGenerator implements CommandGeneratorInterface
 {

@@ -1,23 +1,22 @@
 <?php
 
-
 namespace PlentymarketsAdapter\ReadApi\Item;
-
 
 use PlentymarketsAdapter\ReadApi\ApiAbstract;
 
 /**
- * Class Attribute
+ * Class Attribute.
  */
 class Attribute extends ApiAbstract
 {
     /**
      * @param $attributeId
+     *
      * @return array
      */
     public function findOne($attributeId)
     {
-        return $this->client->request('GET', 'items/attributes/' . $attributeId);
+        return $this->client->request('GET', 'items/attributes/'.$attributeId);
     }
 
     /**
