@@ -89,6 +89,15 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
             $params['album'] = $mediaCategoryIdentity->getAdapterIdentifier();
         }
 
+
+        if (null !== $identity) {
+            try{
+                $this->resource->getOne($identity->getAdapterIdentifier());
+            } catch (NotFoundException $notFoundException) {
+                $this->identityService->remove($identity);
+            }
+        }
+
         if (null === $identity) {
             $mediaModel = $this->resource->create($params);
 
