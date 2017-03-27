@@ -2,7 +2,6 @@
 
 namespace PlentyConnector\Connector\TransferObject\Order;
 
-use Assert\Assertion;
 use DateTimeImmutable;
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 use PlentyConnector\Connector\TransferObject\Order\Address\Address;
@@ -137,8 +136,6 @@ class Order extends AbstractTransferObject
      */
     public function getIdentifier()
     {
-        Assertion::notBlank($this->identifier);
-
         return $this->identifier;
     }
 
@@ -147,8 +144,6 @@ class Order extends AbstractTransferObject
      */
     public function setIdentifier($identifier)
     {
-        Assertion::uuid($identifier);
-
         $this->identifier = $identifier;
     }
 

@@ -531,7 +531,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             'address1' => $address1,
             'address2' => $address2,
             'address3' => $address3,
-            'postalCode' => $address->getZipcode(),
+            'postalCode' => $address->getPostalCode(),
             'town' => $address->getCity(),
             'countryId' => $countryIdentity->getAdapterIdentifier(),
             'options' => [

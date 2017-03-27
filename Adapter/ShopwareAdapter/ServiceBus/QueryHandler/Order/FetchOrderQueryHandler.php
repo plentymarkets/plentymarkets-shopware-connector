@@ -72,6 +72,10 @@ class FetchOrderQueryHandler implements QueryHandlerInterface
             'adapterName' => ShopwareAdapter::NAME,
         ]);
 
+        if (null === $identity) {
+            return [];
+        }
+
         $order = $this->orderResource->getOne($identity->getAdapterIdentifier());
 
         $order = $this->responseParser->parse($order);

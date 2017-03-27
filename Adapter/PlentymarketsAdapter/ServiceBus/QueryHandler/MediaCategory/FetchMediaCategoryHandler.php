@@ -74,6 +74,10 @@ class FetchMediaCategoryHandler implements QueryHandlerInterface
             'adapterName' => PlentymarketsAdapter::NAME,
         ]);
 
+        if (null === $identity) {
+            return [];
+        }
+
         $caegories = $this->mediaCategoryHelper->getCategories();
 
         if (array_key_exists($identity->getAdapterIdentifier(), $caegories)) {
