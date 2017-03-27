@@ -308,6 +308,14 @@ class Client implements ClientInterface
 
         $requestOptions = [];
 
+        if (array_key_exists('itemsPerPage', $options)) {
+            $params['itemsPerPage'] = $options['itemsPerPage'];
+        }
+
+        if (array_key_exists('page', $options)) {
+            $params['page'] = $options['page'];
+        }
+
         if ($method === 'GET') {
             $requestOptions['query'] = $params;
         } else {
