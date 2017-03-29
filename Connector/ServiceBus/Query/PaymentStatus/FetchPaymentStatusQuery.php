@@ -6,7 +6,7 @@ use Assert\Assertion;
 use PlentyConnector\Connector\ServiceBus\Query\FetchQueryInterface;
 
 /**
- * Class FetchPaymentStatusQuery
+ * Class FetchPaymentStatusQuery.
  */
 class FetchPaymentStatusQuery implements FetchQueryInterface
 {
@@ -57,7 +57,7 @@ class FetchPaymentStatusQuery implements FetchQueryInterface
     public function getPayload()
     {
         return [
-            'identifier' => $this->identifier,
+            'identifier'  => $this->identifier,
             'adapterName' => $this->adapterName,
         ];
     }

@@ -32,7 +32,7 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
     /**
      * HandleMediaCommandHandler constructor.
      *
-     * @param MediaResource $resource
+     * @param MediaResource            $resource
      * @param IdentityServiceInterface $identityService
      */
     public function __construct(MediaResource $resource, IdentityServiceInterface $identityService)
@@ -51,35 +51,35 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * TODO: only update if hash has changed - add hash attribute to media
+     * TODO: only update if hash has changed - add hash attribute to media.
      *
      * {@inheritdoc}
      */
     public function handle(CommandInterface $command)
     {
         /**
-         * @var HandleCommandInterface $command
-         * @var Media $media
+         * @var HandleCommandInterface
+         * @var Media                  $media
          */
         $media = $command->getTransferObject();
 
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => (string) $media->getIdentifier(),
-            'objectType' => Media::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => Media::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         $params = [
-            'album' => Album::ALBUM_ARTICLE,
-            'file' => $media->getLink(),
+            'album'       => Album::ALBUM_ARTICLE,
+            'file'        => $media->getLink(),
             'description' => $media->getName(),
         ];
 
         if (null !== $media->getMediaCategoryIdentifier()) {
             $mediaCategoryIdentity = $this->identityService->findOneBy([
                 'objectIdentifier' => $media->getMediaCategoryIdentifier(),
-                'objectType' => MediaCategory::TYPE,
-                'adapterName' => ShopwareAdapter::NAME,
+                'objectType'       => MediaCategory::TYPE,
+                'adapterName'      => ShopwareAdapter::NAME,
             ]);
 
             if (null === $mediaCategoryIdentity) {
@@ -89,9 +89,8 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
             $params['album'] = $mediaCategoryIdentity->getAdapterIdentifier();
         }
 
-
         if (null !== $identity) {
-            try{
+            try {
                 $this->resource->getOne($identity->getAdapterIdentifier());
             } catch (\Shopware\Components\Api\Exception\NotFoundException $notFoundException) {
                 $this->identityService->remove($identity);

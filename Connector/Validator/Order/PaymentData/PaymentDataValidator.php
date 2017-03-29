@@ -8,7 +8,7 @@ use PlentyConnector\Connector\TransferObject\Order\PaymentData\SepaPaymentData;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 
 /**
- * Class PaymentDataValidator
+ * Class PaymentDataValidator.
  */
 class PaymentDataValidator implements ValidatorInterface
 {

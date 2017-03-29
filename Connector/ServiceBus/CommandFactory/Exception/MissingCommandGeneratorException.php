@@ -5,7 +5,7 @@ namespace PlentyConnector\Connector\ServiceBus\CommandFactory\Exception;
 use InvalidArgumentException;
 
 /**
- * Class MissingCommandGeneratorException
+ * Class MissingCommandGeneratorException.
  */
 class MissingCommandGeneratorException extends InvalidArgumentException
 {
@@ -17,7 +17,7 @@ class MissingCommandGeneratorException extends InvalidArgumentException
      */
     public static function fromObjectData($objectType, $commandType)
     {
-        $message = 'No matching command generator found! type: ' . $objectType . ' queryType: ' . $commandType;
+        $message = 'No matching command generator found! type: '.$objectType.' queryType: '.$commandType;
 
         return new self($message);
     }

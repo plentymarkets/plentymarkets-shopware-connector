@@ -9,7 +9,7 @@ use PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\ResponsePa
 use ShopwareAdapter\ResponseParser\OrderItem\OrderItemResponseParser;
 
 /**
- * Class OrderItemResponseParserTest
+ * Class OrderItemResponseParserTest.
  *
  * @group ResponseParser
  */
@@ -35,7 +35,7 @@ class OrderItemResponseParserTest extends ResponseParserTest
     public function testOrderItemParsing()
     {
         /**
-         * @var OrderItem $orderItem
+         * @var OrderItem
          */
         $orderItem = $this->responseParser->parse(self::$orderData['details'][0]);
 

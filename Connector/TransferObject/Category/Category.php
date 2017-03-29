@@ -8,7 +8,7 @@ use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
 
 /**
- * Class Category
+ * Class Category.
  */
 class Category extends AbstractTransferObject implements TranslateableInterface
 {

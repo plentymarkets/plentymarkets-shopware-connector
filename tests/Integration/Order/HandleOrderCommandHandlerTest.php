@@ -26,7 +26,7 @@ use PlentymarketsAdapter\ServiceBus\CommandHandler\Order\HandleOrderCommandHandl
 use Ramsey\Uuid\Uuid;
 
 /**
- * Class HandleOrderCommandHandlerTest
+ * Class HandleOrderCommandHandlerTest.
  */
 class HandleOrderCommandHandlerTest extends TestCase
 {
@@ -46,7 +46,7 @@ class HandleOrderCommandHandlerTest extends TestCase
         $this->identityService = Shopware()->Container()->get('plenty_connector.identity_service');
 
         /**
-         * @var ConfigService $config
+         * @var ConfigService
          */
         $config = Shopware()->Container()->get('plenty_connector.config');
 
@@ -62,7 +62,7 @@ class HandleOrderCommandHandlerTest extends TestCase
         }
 
         /**
-         * @var HandleOrderCommandHandler $handler
+         * @var HandleOrderCommandHandler
          */
         $handler = Shopware()->Container()->get('plentymarkets_adapter.command_handler.handle_order');
 
@@ -78,8 +78,8 @@ class HandleOrderCommandHandlerTest extends TestCase
     {
         $languageIdentity = $this->identityService->findOneBy([
             'adapterIdentifier' => 'de',
-            'adapterName' => PlentymarketsAdapter::NAME,
-            'objectType' => Language::TYPE,
+            'adapterName'       => PlentymarketsAdapter::NAME,
+            'objectType'        => Language::TYPE,
         ]);
 
         return $languageIdentity->getObjectIdentifier();
@@ -92,8 +92,8 @@ class HandleOrderCommandHandlerTest extends TestCase
     {
         $languageIdentity = $this->identityService->findOneBy([
             'adapterIdentifier' => '1',
-            'adapterName' => PlentymarketsAdapter::NAME,
-            'objectType' => CustomerGroup::TYPE,
+            'adapterName'       => PlentymarketsAdapter::NAME,
+            'objectType'        => CustomerGroup::TYPE,
         ]);
 
         return $languageIdentity->getObjectIdentifier();

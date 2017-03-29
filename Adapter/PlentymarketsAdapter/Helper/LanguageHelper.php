@@ -3,13 +3,13 @@
 namespace PlentymarketsAdapter\Helper;
 
 /**
- * Class LanguageHelper
+ * Class LanguageHelper.
  */
 class LanguageHelper
 {
     /**
      * Returns a list of all supported languages from plentymarkets
-     * source: https://developers.plentymarkets.com/rest-doc/introduction#languages
+     * source: https://developers.plentymarkets.com/rest-doc/introduction#languages.
      *
      * @return array
      */
@@ -17,79 +17,79 @@ class LanguageHelper
     {
         return [
             [
-                'id' => 'bg',
+                'id'   => 'bg',
                 'name' => 'Bulgarian',
             ],
             [
-                'id' => 'cn',
+                'id'   => 'cn',
                 'name' => 'Chinese',
             ],
             [
-                'id' => 'cz',
+                'id'   => 'cz',
                 'name' => 'Czech',
             ],
             [
-                'id' => 'da',
+                'id'   => 'da',
                 'name' => 'Danish',
             ],
             [
-                'id' => 'de',
+                'id'   => 'de',
                 'name' => 'German',
             ],
             [
-                'id' => 'en',
+                'id'   => 'en',
                 'name' => 'English',
             ],
             [
-                'id' => 'es',
+                'id'   => 'es',
                 'name' => 'Spanish',
             ],
             [
-                'id' => 'fr',
+                'id'   => 'fr',
                 'name' => 'French',
             ],
             [
-                'id' => 'it',
+                'id'   => 'it',
                 'name' => 'Italian',
             ],
             [
-                'id' => 'nl',
+                'id'   => 'nl',
                 'name' => 'Dutch',
             ],
             [
-                'id' => 'nn',
+                'id'   => 'nn',
                 'name' => 'Norwegian',
             ],
             [
-                'id' => 'pl',
+                'id'   => 'pl',
                 'name' => 'Polish',
             ],
             [
-                'id' => 'pt',
+                'id'   => 'pt',
                 'name' => 'Portuguese',
             ],
             [
-                'id' => 'ro',
+                'id'   => 'ro',
                 'name' => 'Romanian',
             ],
             [
-                'id' => 'ru',
+                'id'   => 'ru',
                 'name' => 'Russian',
             ],
             [
-                'id' => 'se',
+                'id'   => 'se',
                 'name' => 'Swedish',
             ],
             [
-                'id' => 'sk',
+                'id'   => 'sk',
                 'name' => 'Slovak',
             ],
             [
-                'id' => 'tr',
+                'id'   => 'tr',
                 'name' => 'Turkish',
             ],
             [
-                'id' => 'vn',
+                'id'   => 'vn',
                 'name' => 'Vietnamese',
             ],
         ];

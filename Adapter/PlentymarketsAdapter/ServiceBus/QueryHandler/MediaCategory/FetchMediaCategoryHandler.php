@@ -13,7 +13,7 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\MediaCategory\MediaCategoryResponseParserInterface;
 
 /**
- * Class FetchMediaCategoryHandler
+ * Class FetchMediaCategoryHandler.
  */
 class FetchMediaCategoryHandler implements QueryHandlerInterface
 {
@@ -35,8 +35,8 @@ class FetchMediaCategoryHandler implements QueryHandlerInterface
     /**
      * FetchMediaCategoryHandler constructor.
      *
-     * @param IdentityServiceInterface $identityService
-     * @param MediaCategoryHelper $mediaCategoryHelper
+     * @param IdentityServiceInterface             $identityService
+     * @param MediaCategoryHelper                  $mediaCategoryHelper
      * @param MediaCategoryResponseParserInterface $responseParser
      */
     public function __construct(
@@ -64,14 +64,14 @@ class FetchMediaCategoryHandler implements QueryHandlerInterface
     public function handle(QueryInterface $query)
     {
         /**
-         * @var FetchQueryInterface $query
+         * @var FetchQueryInterface
          */
         $result = [];
 
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => $query->getIdentifier(),
-            'objectType' => MediaCategory::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => MediaCategory::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         $caegories = $this->mediaCategoryHelper->getCategories();

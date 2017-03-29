@@ -9,7 +9,7 @@ use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
 
 /**
- * Class CategoryValidator
+ * Class CategoryValidator.
  */
 class CategoryValidator implements ValidatorInterface
 {

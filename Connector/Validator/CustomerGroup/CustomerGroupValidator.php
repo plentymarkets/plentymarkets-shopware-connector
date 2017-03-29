@@ -7,7 +7,7 @@ use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 
 /**
- * Class CustomerGroupValidator
+ * Class CustomerGroupValidator.
  */
 class CustomerGroupValidator implements ValidatorInterface
 {

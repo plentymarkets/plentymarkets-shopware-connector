@@ -6,7 +6,7 @@ use PlentyConnector\Connector\TransferObject\TranslateableInterface;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
 
 /**
- * Class TranslationHelper
+ * Class TranslationHelper.
  */
 class TranslationHelper implements TranslationHelperInterface
 {
@@ -38,7 +38,7 @@ class TranslationHelper implements TranslationHelperInterface
     public function translate($languageIdentifier, TranslateableInterface $object)
     {
         /**
-         * @var Translation[] $translations
+         * @var Translation[]
          */
         $translations = array_filter($object->getTranslations(), function (Translation $translation) use ($languageIdentifier) {
             return $translation->getLanguageIdentifier() === $languageIdentifier;
@@ -49,7 +49,7 @@ class TranslationHelper implements TranslationHelperInterface
         }
 
         foreach ($translations as $translation) {
-            $method = 'set' . ucfirst($translation->getProperty());
+            $method = 'set'.ucfirst($translation->getProperty());
 
             if (method_exists($object, $method)) {
                 $object->$method($translation->getValue());

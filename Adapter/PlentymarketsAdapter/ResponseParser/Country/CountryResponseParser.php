@@ -7,7 +7,7 @@ use PlentyConnector\Connector\TransferObject\Country\Country;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 
 /**
- * Class CountryResponseParser
+ * Class CountryResponseParser.
  */
 class CountryResponseParser implements CountryResponseParserInterface
 {
@@ -39,7 +39,7 @@ class CountryResponseParser implements CountryResponseParserInterface
 
         return Country::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => $entry['name'],
+            'name'       => $entry['name'],
         ]);
     }
 }

@@ -5,7 +5,7 @@ namespace PlentyConnector\Connector\TransferObject\Shop;
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 
 /**
- * Class Shop
+ * Class Shop.
  */
 class Shop extends AbstractTransferObject
 {

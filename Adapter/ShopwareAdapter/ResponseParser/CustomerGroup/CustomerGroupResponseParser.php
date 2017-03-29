@@ -7,7 +7,7 @@ use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class CustomerGroupResponseParser
+ * Class CustomerGroupResponseParser.
  */
 class CustomerGroupResponseParser implements CustomerGroupResponseParserInterface
 {
@@ -39,7 +39,7 @@ class CustomerGroupResponseParser implements CustomerGroupResponseParserInterfac
 
         return CustomerGroup::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => $entry['name'],
+            'name'       => $entry['name'],
         ]);
     }
 }

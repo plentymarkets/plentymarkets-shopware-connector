@@ -9,7 +9,7 @@ use PlentymarketsAdapter\Client\Client;
 use UnexpectedValueException;
 
 /**
- * Class Iterator
+ * Class Iterator.
  */
 class Iterator implements BaseIterator
 {
@@ -53,7 +53,7 @@ class Iterator implements BaseIterator
      *
      * @param string $path
      * @param Client $client
-     * @param array $criteria
+     * @param array  $criteria
      *
      * @throws UnexpectedValueException
      */
@@ -75,7 +75,7 @@ class Iterator implements BaseIterator
     }
 
     /**
-     * TODO: needs bugfixing
+     * TODO: needs bugfixing.
      *
      * {@inheritdoc}
      *
@@ -123,8 +123,8 @@ class Iterator implements BaseIterator
 
     /**
      * @param array $criteria
-     * @param int $limit
-     * @param int $offset
+     * @param int   $limit
+     * @param int   $offset
      */
     private function loadPage(array $criteria = [], $limit = 0, $offset = 0)
     {

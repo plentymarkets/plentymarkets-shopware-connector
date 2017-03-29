@@ -3,7 +3,7 @@
 namespace PlentyConnector\Connector\ValueObject;
 
 /**
- * Interface ValueObjectInterface
+ * Interface ValueObjectInterface.
  */
 interface ValueObjectInterface
 {

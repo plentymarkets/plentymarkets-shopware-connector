@@ -13,7 +13,7 @@ use Shopware\Models\User\Resource as ShopwareResource;
 use Shopware_Components_Acl;
 
 /**
- * Class PermissionInstaller
+ * Class PermissionInstaller.
  */
 class PermissionInstaller implements InstallerInterface
 {
@@ -40,9 +40,9 @@ class PermissionInstaller implements InstallerInterface
     /**
      * CronjobSyncronizer constructor.
      *
-     * @param ModelManager $em
+     * @param ModelManager            $em
      * @param Shopware_Components_Acl $acl
-     * @param array $permissions
+     * @param array                   $permissions
      */
     public function __construct(ModelManager $em, Shopware_Components_Acl $acl, array $permissions)
     {
@@ -84,7 +84,7 @@ class PermissionInstaller implements InstallerInterface
 
     /**
      * @param ShopwareResource $resource
-     * @param array $permissions
+     * @param array            $permissions
      */
     protected function removeNotExistingPrivileges(ShopwareResource $resource, array $permissions)
     {
@@ -107,7 +107,7 @@ class PermissionInstaller implements InstallerInterface
 
     /**
      * @param Plugin $plugin
-     * @param array $permissions
+     * @param array  $permissions
      */
     private function synchronize(Plugin $plugin, array $permissions)
     {
@@ -135,7 +135,7 @@ class PermissionInstaller implements InstallerInterface
 
     /**
      * @param Plugin $plugin
-     * @param array $permissions
+     * @param array  $permissions
      *
      * @throws Enlight_Exception
      */
@@ -151,7 +151,7 @@ class PermissionInstaller implements InstallerInterface
 
     /**
      * @param ShopwareResource $resource
-     * @param array $permissions
+     * @param array            $permissions
      */
     private function synchronizePrivileges(ShopwareResource $resource, array $permissions)
     {

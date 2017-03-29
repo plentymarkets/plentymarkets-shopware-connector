@@ -31,7 +31,7 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
     /**
      * HandleManufacturerCommandHandler constructor.
      *
-     * @param ManufacturerResource $resource
+     * @param ManufacturerResource     $resource
      * @param IdentityServiceInterface $identityService
      */
     public function __construct(ManufacturerResource $resource, IdentityServiceInterface $identityService)
@@ -55,8 +55,8 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
     public function handle(CommandInterface $command)
     {
         /**
-         * @var HandleCommandInterface $command
-         * @var Manufacturer $manufacturer
+         * @var HandleCommandInterface
+         * @var Manufacturer           $manufacturer
          */
         $manufacturer = $command->getTransferObject();
 
@@ -71,8 +71,8 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
         if (null !== $manufacturer->getLogoIdentifier()) {
             $mediaIdentity = $this->identityService->findOneBy([
                 'objectIdentifier' => (string) $manufacturer->getLogoIdentifier(),
-                'objectType' => Media::TYPE,
-                'adapterName' => ShopwareAdapter::NAME,
+                'objectType'       => Media::TYPE,
+                'adapterName'      => ShopwareAdapter::NAME,
             ]);
 
             if (null === $mediaIdentity) {
@@ -86,8 +86,8 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
 
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => (string) $manufacturer->getIdentifier(),
-            'objectType' => Manufacturer::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => Manufacturer::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         if (null === $identity) {
@@ -131,7 +131,7 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
         ]);
 
         if (0 === count($result['data'])) {
-            return null;
+            return;
         }
 
         return array_shift($result['data']);

@@ -5,7 +5,7 @@ namespace PlentyConnector\Connector\TransferObject\CustomerGroup;
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 
 /**
- * Class CustomerGroup
+ * Class CustomerGroup.
  */
 class CustomerGroup extends AbstractTransferObject
 {

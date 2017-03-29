@@ -7,7 +7,7 @@ use PlentyConnector\Connector\TransferObject\Product\Price\Price;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 
 /**
- * Class PriceValidator
+ * Class PriceValidator.
  */
 class PriceValidator implements ValidatorInterface
 {

@@ -11,7 +11,7 @@ use ShopwareAdapter\ResponseParser\Address\AddressResponseParser;
 use ShopwareAdapter\ResponseParser\Customer\CustomerResponseParser;
 
 /**
- * Class CustomerResponseParserTest
+ * Class CustomerResponseParserTest.
  *
  * @group ResponseParser
  */
@@ -35,7 +35,7 @@ class CustomerResponseParserTest extends ResponseParserTest
         $entityManager = $this->createMock(EntityManagerInterface::class);
         $entityManager->expects($this->any())->method('getRepository')->willReturn($repository);
 
-        /**
+        /*
          * @var AddressResponseParser $parser
          */
         $this->responseParser = new CustomerResponseParser($this->identityService, $entityManager);
@@ -44,7 +44,7 @@ class CustomerResponseParserTest extends ResponseParserTest
     public function testCustomerParsing()
     {
         /**
-         * @var Customer $customer
+         * @var Customer
          */
         $customer = $this->responseParser->parse(self::$orderData['customer']);
 

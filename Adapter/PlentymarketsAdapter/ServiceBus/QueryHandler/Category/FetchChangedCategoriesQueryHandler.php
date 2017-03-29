@@ -36,9 +36,9 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
     /**
      * FetchCategoryQueryHandler constructor.
      *
-     * @param ClientInterface $client
+     * @param ClientInterface                 $client
      * @param CategoryResponseParserInterface $categoryResponseParser
-     * @param LanguageHelper $languageHelper
+     * @param LanguageHelper                  $languageHelper
      */
     public function __construct(
         ClientInterface $client,
@@ -68,10 +68,10 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
         $currentDateTime = $this->getCurrentDateTime();
 
         $elements = $this->client->request('GET', 'categories', [
-            'with' => 'details,clients',
-            'type' => 'item',
+            'with'      => 'details,clients',
+            'type'      => 'item',
             'updatedAt' => $lastCangedTime->format(DATE_W3C),
-            'lang' => $this->languageHelper->getLanguagesQueryString(),
+            'lang'      => $this->languageHelper->getLanguagesQueryString(),
         ]);
 
         $elements = array_filter($elements, function ($element) {
@@ -92,10 +92,10 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
 
             foreach ($categoriesGrouped as $plentyId => $details) {
                 $parsedElements = $this->categoryResponseParser->parse([
-                    'plentyId' => $plentyId,
-                    'categoryId' => $element['id'],
+                    'plentyId'         => $plentyId,
+                    'categoryId'       => $element['id'],
                     'parentCategoryId' => $element['parentCategoryId'],
-                    'details' => $details,
+                    'details'          => $details,
                 ]);
 
                 foreach ($parsedElements as $parsedElement) {

@@ -14,7 +14,7 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Category\CategoryResponseParserInterface;
 
 /**
- * Class FetchCategoryQueryHandler
+ * Class FetchCategoryQueryHandler.
  */
 class FetchCategoryQueryHandler implements QueryHandlerInterface
 {
@@ -41,10 +41,10 @@ class FetchCategoryQueryHandler implements QueryHandlerInterface
     /**
      * FetchCategoryQueryHandler constructor.
      *
-     * @param ClientInterface $client
+     * @param ClientInterface                 $client
      * @param CategoryResponseParserInterface $categoryResponseParser
-     * @param LanguageHelper $languageHelper
-     * @param IdentityServiceInterface $identityService
+     * @param LanguageHelper                  $languageHelper
+     * @param IdentityServiceInterface        $identityService
      */
     public function __construct(
         ClientInterface $client,
@@ -73,12 +73,12 @@ class FetchCategoryQueryHandler implements QueryHandlerInterface
     public function handle(QueryInterface $query)
     {
         /**
-         * @var FetchQueryInterface $query
+         * @var FetchQueryInterface
          */
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => $query->getIdentifier(),
-            'objectType' => Category::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => Category::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         if (null === $identity) {
@@ -87,7 +87,7 @@ class FetchCategoryQueryHandler implements QueryHandlerInterface
 
         $identifier = explode('-', $identity->getAdapterIdentifier());
 
-        $element = $this->client->request('GET', 'categories/' . $identifier[1], [
+        $element = $this->client->request('GET', 'categories/'.$identifier[1], [
             'with' => 'details,clients',
             'lang' => $this->languageHelper->getLanguagesQueryString(),
         ]);
@@ -111,10 +111,10 @@ class FetchCategoryQueryHandler implements QueryHandlerInterface
 
         foreach ($categoriesGrouped as $plentyId => $details) {
             $parsedElements = $this->categoryResponseParser->parse([
-                'plentyId' => $plentyId,
-                'categoryId' => $element['id'],
+                'plentyId'         => $plentyId,
+                'categoryId'       => $element['id'],
                 'parentCategoryId' => $element['parentCategoryId'],
-                'details' => $details,
+                'details'          => $details,
             ]);
 
             foreach ($parsedElements as $parsedElement) {

@@ -5,7 +5,7 @@ namespace ShopwareAdapter\ResponseParser\Order;
 use PlentyConnector\Connector\TransferObject\Order\Order;
 
 /**
- * Interface OrderResponseParserInterface
+ * Interface OrderResponseParserInterface.
  */
 interface OrderResponseParserInterface
 {

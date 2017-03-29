@@ -12,7 +12,7 @@ use PlentymarketsAdapter\ResponseParser\Manufacturer\ManufacturerResponseParserI
 use PlentymarketsAdapter\ResponseParser\Media\MediaResponseParserInterface;
 
 /**
- * Class FetchAllManufacturersQueryHandler
+ * Class FetchAllManufacturersQueryHandler.
  */
 class FetchAllManufacturersQueryHandler implements QueryHandlerInterface
 {
@@ -34,9 +34,9 @@ class FetchAllManufacturersQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllManufacturersQueryHandler constructor.
      *
-     * @param ClientInterface $client
+     * @param ClientInterface                     $client
      * @param ManufacturerResponseParserInterface $manufacturerResponseParser
-     * @param MediaResponseParserInterface $mediaResponseParser
+     * @param MediaResponseParserInterface        $mediaResponseParser
      */
     public function __construct(
         ClientInterface $client,
@@ -68,8 +68,8 @@ class FetchAllManufacturersQueryHandler implements QueryHandlerInterface
             if (!empty($element['logo'])) {
                 $result[] = $media = $this->mediaResponseParser->parse([
                     'mediaCategory' => MediaCategoryHelper::MANUFACTURER,
-                    'link' => $element['logo'],
-                    'name' => $element['name'],
+                    'link'          => $element['logo'],
+                    'name'          => $element['name'],
                 ]);
 
                 $element['logoIdentifier'] = $media->getIdentifier();

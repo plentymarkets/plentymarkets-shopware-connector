@@ -19,7 +19,7 @@ use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 
 /**
- * Class CleanupServiceTest
+ * Class CleanupServiceTest.
  */
 class CleanupServiceTest extends TestCase
 {

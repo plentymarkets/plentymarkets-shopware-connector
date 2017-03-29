@@ -7,7 +7,7 @@ use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
 /**
  * TODO: change zip to postalCode
- * TOOD: camelCase
+ * TOOD: camelCase.
  *
  * Class Address
  */

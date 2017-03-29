@@ -7,7 +7,7 @@ use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 
 /**
- * Class CustomerValidator
+ * Class CustomerValidator.
  */
 class CustomerValidator implements ValidatorInterface
 {

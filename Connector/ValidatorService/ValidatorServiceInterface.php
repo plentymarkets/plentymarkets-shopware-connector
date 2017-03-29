@@ -7,7 +7,7 @@ use PlentyConnector\Connector\Validator\ValidatorInterface;
 use PlentyConnector\Connector\ValueObject\ValueObjectInterface;
 
 /**
- * Interface ValidatorServiceInterface
+ * Interface ValidatorServiceInterface.
  */
 interface ValidatorServiceInterface
 {
@@ -17,7 +17,7 @@ interface ValidatorServiceInterface
     public function addValidator(ValidatorInterface $validator);
 
     /**
-     * @param TransferObjectInterface|ValueObjectInterface $object
+     * @param TransferObjectInterface|ValueObjectInterface     $object
      * @param TransferObjectInterface[]|ValueObjectInterface[] $parents
      *
      * @throws InvalidDataException

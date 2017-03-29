@@ -5,7 +5,7 @@ namespace PlentymarketsAdapter\ResponseParser;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
- * Interface ResponseParserInterface
+ * Interface ResponseParserInterface.
  */
 interface ResponseParserInterface
 {

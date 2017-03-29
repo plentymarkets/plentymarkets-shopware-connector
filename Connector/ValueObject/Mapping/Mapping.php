@@ -6,7 +6,7 @@ use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 
 /**
- * Class Mapping
+ * Class Mapping.
  */
 class Mapping extends AbstractValueObject
 {
@@ -18,7 +18,7 @@ class Mapping extends AbstractValueObject
     private $originAdapterName = '';
 
     /**
-     * origin transfer objects
+     * origin transfer objects.
      *
      * @var TransferObjectInterface[]
      */
@@ -32,14 +32,14 @@ class Mapping extends AbstractValueObject
     private $destinationAdapterName = '';
 
     /**
-     * destination transfer objects
+     * destination transfer objects.
      *
      * @var TransferObjectInterface[]
      */
     private $destinationTransferObjects = [];
 
     /**
-     * object type
+     * object type.
      *
      * @var string
      */

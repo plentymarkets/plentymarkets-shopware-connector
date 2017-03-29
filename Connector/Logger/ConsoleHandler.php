@@ -2,7 +2,7 @@
 
 namespace PlentyConnector\Connector\Logger;
 
-/**
+/*
  * This file is part of the Symfony package.
  *
  * (c) Fabien Potencier <fabien@symfony.com>
@@ -47,20 +47,20 @@ class ConsoleHandler extends AbstractProcessingHandler implements EventSubscribe
      * @var array
      */
     private $verbosityLevelMap = [
-        OutputInterface::VERBOSITY_QUIET => Logger::ERROR,
-        OutputInterface::VERBOSITY_NORMAL => Logger::WARNING,
-        OutputInterface::VERBOSITY_VERBOSE => Logger::NOTICE,
+        OutputInterface::VERBOSITY_QUIET        => Logger::ERROR,
+        OutputInterface::VERBOSITY_NORMAL       => Logger::WARNING,
+        OutputInterface::VERBOSITY_VERBOSE      => Logger::NOTICE,
         OutputInterface::VERBOSITY_VERY_VERBOSE => Logger::INFO,
-        OutputInterface::VERBOSITY_DEBUG => Logger::DEBUG,
+        OutputInterface::VERBOSITY_DEBUG        => Logger::DEBUG,
     ];
 
     /**
      * Constructor.
      *
-     * @param null|OutputInterface $output The console output to use (the handler remains disabled when passing null
+     * @param null|OutputInterface $output            The console output to use (the handler remains disabled when passing null
      *                                                until the output is set, e.g. by using console events)
-     * @param bool $bubble Whether the messages that are handled can bubble up the stack
-     * @param array $verbosityLevelMap Array that maps the OutputInterface verbosity to a minimum logging
+     * @param bool                 $bubble            Whether the messages that are handled can bubble up the stack
+     * @param array                $verbosityLevelMap Array that maps the OutputInterface verbosity to a minimum logging
      *                                                level (leave empty to use the default mapping)
      */
     public function __construct(OutputInterface $output = null, $bubble = true, array $verbosityLevelMap = [])
@@ -79,7 +79,7 @@ class ConsoleHandler extends AbstractProcessingHandler implements EventSubscribe
     public static function getSubscribedEvents()
     {
         return [
-            ConsoleEvents::COMMAND => ['onCommand', 255],
+            ConsoleEvents::COMMAND   => ['onCommand', 255],
             ConsoleEvents::TERMINATE => ['onTerminate', -255],
         ];
     }

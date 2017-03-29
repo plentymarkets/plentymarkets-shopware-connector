@@ -7,7 +7,7 @@ use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 
 /**
- * Class VatRateValidator
+ * Class VatRateValidator.
  */
 class VatRateValidator implements ValidatorInterface
 {

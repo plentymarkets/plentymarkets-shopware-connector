@@ -8,7 +8,7 @@ use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
 
 /**
- * Class AttributeValidator
+ * Class AttributeValidator.
  */
 class AttributeValidator implements ValidatorInterface
 {

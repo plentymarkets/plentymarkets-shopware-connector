@@ -9,7 +9,7 @@ use PlentyConnector\Connector\ServiceBus\QueryGenerator\QueryGeneratorInterface;
 use PlentyConnector\Connector\TransferObject\Media\Media;
 
 /**
- * Class MediaQueryGenerator
+ * Class MediaQueryGenerator.
  */
 class MediaQueryGenerator implements QueryGeneratorInterface
 {

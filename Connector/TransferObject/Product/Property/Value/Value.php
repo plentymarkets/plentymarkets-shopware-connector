@@ -7,7 +7,7 @@ use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
 
 /**
- * Class Value
+ * Class Value.
  */
 class Value extends AbstractValueObject implements TranslateableInterface
 {

@@ -15,12 +15,12 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use Ramsey\Uuid\Uuid;
 
 /**
- * Class Shopware_Controllers_Backend_PlentyConnector
+ * Class Shopware_Controllers_Backend_PlentyConnector.
  */
 class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_Backend_ExtJs
 {
     /**
-     * initialize permissions per action
+     * initialize permissions per action.
      */
     public function initAcl()
     {
@@ -45,7 +45,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
     public function testApiCredentialsAction()
     {
         /**
-         * @var ClientInterface $client
+         * @var ClientInterface
          */
         $client = $this->container->get('plentmarkets_adapter.client');
 
@@ -81,7 +81,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
     public function saveSettingsAction()
     {
         /**
-         * @var ConfigServiceInterface $config
+         * @var ConfigServiceInterface
          */
         $config = $this->container->get('plenty_connector.config');
 
@@ -91,7 +91,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
 
         $this->View()->assign([
             'success' => true,
-            'data' => $this->Request()->getParams(),
+            'data'    => $this->Request()->getParams(),
         ]);
     }
 
@@ -104,8 +104,8 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
 
         $this->View()->assign([
             'success' => true,
-            'data' => [
-                'ApiUrl' => $config->get('rest_url'),
+            'data'    => [
+                'ApiUrl'      => $config->get('rest_url'),
                 'ApiUsername' => $config->get('rest_username'),
                 'ApiPassword' => $config->get('rest_password'),
             ],
@@ -118,7 +118,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
     public function getMappingInformationAction()
     {
         /**
-         * @var MappingServiceInterface $mappingService
+         * @var MappingServiceInterface
          */
         $mappingService = Shopware()->Container()->get('plenty_connector.mapping_service');
 
@@ -142,18 +142,18 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
 
             return [
                 'identifier' => $object->getIdentifier(),
-                'type' => $object->getType(),
-                'name' => $name,
+                'type'       => $object->getType(),
+                'name'       => $name,
             ];
         };
 
         $this->View()->assign([
             'success' => true,
-            'data' => array_map(function (Mapping $mapping) use ($transferObjectMapping) {
+            'data'    => array_map(function (Mapping $mapping) use ($transferObjectMapping) {
                 return [
-                    'originAdapterName' => $mapping->getOriginAdapterName(),
-                    'destinationAdapterName' => $mapping->getDestinationAdapterName(),
-                    'originTransferObjects' => array_map($transferObjectMapping, $mapping->getOriginTransferObjects()),
+                    'originAdapterName'          => $mapping->getOriginAdapterName(),
+                    'destinationAdapterName'     => $mapping->getDestinationAdapterName(),
+                    'originTransferObjects'      => array_map($transferObjectMapping, $mapping->getOriginTransferObjects()),
                     'destinationTransferObjects' => array_map($transferObjectMapping,
                         $mapping->getDestinationTransferObjects()),
                     'objectType' => $mapping->getObjectType(),
@@ -174,7 +174,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         }
 
         /**
-         * @var IdentityService $identityService
+         * @var IdentityService
          */
         $identityService = Shopware()->Container()->get('plenty_connector.identity_service');
 
@@ -197,9 +197,9 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
                 $originIdentifier = $update['originIdentifier'];
 
                 $oldDestinationIdentity = $identityService->findOneBy([
-                    'objectType' => $objectType,
+                    'objectType'       => $objectType,
                     'objectIdentifier' => $destinationIdentifier,
-                    'adapterName' => $destinationAdapterName,
+                    'adapterName'      => $destinationAdapterName,
                 ]);
 
                 if (null === $oldDestinationIdentity) {
@@ -232,7 +232,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
 
             $this->View()->assign([
                 'success' => true,
-                'data' => $updates,
+                'data'    => $updates,
             ]);
         } catch (Exception $exception) {
             $this->View()->assign([
@@ -243,7 +243,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
     }
 
     /**
-     * TODO: Remove identity if nothing has been handled
+     * TODO: Remove identity if nothing has been handled.
      *
      * Sync one product based on the plentymarkets id
      */
@@ -262,7 +262,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
 
         try {
             /**
-             * @var IdentityServiceInterface $identityService
+             * @var IdentityServiceInterface
              */
             $identityService = Shopware()->Container()->get('plenty_connector.identity_service');
 
@@ -273,7 +273,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
             );
 
             /**
-             * @var ConnectorInterface $connector
+             * @var ConnectorInterface
              */
             $connector = Shopware()->Container()->get('plenty_connector.connector');
             $connector->handle(QueryType::ONE, Product::TYPE, $identity->getObjectIdentifier());
@@ -307,15 +307,15 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         }
 
         /**
-         * @var IdentityService $identityService
+         * @var IdentityService
          */
         $identityService = Shopware()->Container()->get('plenty_connector.identity_service');
 
         foreach ($updates as $key => $update) {
             $existingDestinationIdentities = $identityService->findBy([
-                'objectType' => $update['objectType'],
+                'objectType'       => $update['objectType'],
                 'objectIdentifier' => $update['originIdentifier'],
-                'adapterName' => $update['adapterName'],
+                'adapterName'      => $update['adapterName'],
             ]);
 
             if (null !== $existingDestinationIdentities && count($existingDestinationIdentities) > 0) {

@@ -7,7 +7,7 @@ use PlentyConnector\Connector\TransferObject\OrderStatus\OrderStatus;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 
 /**
- * Class OrderStatusValidator
+ * Class OrderStatusValidator.
  */
 class OrderStatusValidator implements ValidatorInterface
 {

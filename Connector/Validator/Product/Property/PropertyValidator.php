@@ -9,7 +9,7 @@ use PlentyConnector\Connector\Validator\ValidatorInterface;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
 
 /**
- * Class PropertyValidator
+ * Class PropertyValidator.
  */
 class PropertyValidator implements ValidatorInterface
 {

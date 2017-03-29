@@ -31,7 +31,7 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
     /**
      * HandleMediaCategoryCommandHandler constructor.
      *
-     * @param EntityManagerInterface $entityManager
+     * @param EntityManagerInterface   $entityManager
      * @param IdentityServiceInterface $identityService
      */
     public function __construct(EntityManagerInterface $entityManager, IdentityServiceInterface $identityService)
@@ -55,15 +55,15 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
     public function handle(CommandInterface $command)
     {
         /**
-         * @var HandleCommandInterface $command
-         * @var MediaCategory $mediaCategory
+         * @var HandleCommandInterface
+         * @var MediaCategory          $mediaCategory
          */
         $mediaCategory = $command->getTransferObject();
 
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => (string) $mediaCategory->getIdentifier(),
-            'objectType' => MediaCategory::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => MediaCategory::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         $albumRepository = $this->entityManager->getRepository(Album::class);
@@ -121,8 +121,8 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
 
     /**
      * @param MediaCategory $mediaCategory
-     * @param Album $parent
-     * @param Settings $parentSettings
+     * @param Album         $parent
+     * @param Settings      $parentSettings
      */
     private function createNewAlbum(MediaCategory $mediaCategory, Album $parent, Settings $parentSettings)
     {

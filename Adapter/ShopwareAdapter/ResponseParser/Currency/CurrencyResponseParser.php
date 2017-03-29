@@ -7,7 +7,7 @@ use PlentyConnector\Connector\TransferObject\Currency\Currency;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class CurrencyResponseParser
+ * Class CurrencyResponseParser.
  */
 class CurrencyResponseParser implements CurrencyResponseParserInterface
 {
@@ -39,7 +39,7 @@ class CurrencyResponseParser implements CurrencyResponseParserInterface
 
         return Currency::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => $entry['name'],
+            'name'       => $entry['name'],
         ]);
     }
 }
