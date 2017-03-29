@@ -321,7 +321,11 @@ class ProductResponseParser implements ProductResponseParserInterface
             }
 
             if (isset($priceArray['specialOffer'])) {
-                $pseudoPrice = (float) $priceArray['specialOffer']['price'];
+                if ($pseudoPrice === 0.0) {
+                    $pseudoPrice = $price;
+                }
+              
+                $price = (float) $priceArray['specialOffer']['price'];
             }
 
             $prices[] = Price::fromArray([
