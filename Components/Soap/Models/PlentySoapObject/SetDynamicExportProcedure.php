@@ -32,19 +32,18 @@
  */
 class PlentySoapObject_SetDynamicExportProcedure
 {
-	
-	/**
-	 * @var float
-	 */
-	public $OrderStatus;
-	
-	/**
-	 * @var string
-	 */
-	public $ProcedureName;
-	
-	/**
-	 * @var boolean
-	 */
-	public $SetTimestamp;
+    /**
+     * @var float
+     */
+    public $OrderStatus;
+
+    /**
+     * @var string
+     */
+    public $ProcedureName;
+
+    /**
+     * @var bool
+     */
+    public $SetTimestamp;
 }

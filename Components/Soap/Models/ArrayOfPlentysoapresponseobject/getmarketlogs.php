@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapresponseobject_getmarketlogs
 {
-	
-	/**
-	 * @var PlentySoapResponseObject_GetMarketLogs
-	 */
-	public $item;
+    /**
+     * @var PlentySoapResponseObject_GetMarketLogs
+     */
+    public $item;
 }

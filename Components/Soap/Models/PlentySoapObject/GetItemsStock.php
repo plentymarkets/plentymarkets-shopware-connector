@@ -32,14 +32,13 @@
  */
 class PlentySoapObject_GetItemsStock
 {
-	
-	/**
-	 * @var string
-	 */
-	public $SKU;
-	
-	/**
-	 * @var string
-	 */
-	public $WarehouseID;
+    /**
+     * @var string
+     */
+    public $SKU;
+
+    /**
+     * @var string
+     */
+    public $WarehouseID;
 }

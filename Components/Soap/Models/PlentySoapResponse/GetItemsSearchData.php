@@ -32,24 +32,23 @@
  */
 class PlentySoapResponse_GetItemsSearchData
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_getitemsearchdata
-	 */
-	public $ItemsSearchData;
-	
-	/**
-	 * @var int
-	 */
-	public $Pages;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapobject_getitemsearchdata
+     */
+    public $ItemsSearchData;
+
+    /**
+     * @var int
+     */
+    public $Pages;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

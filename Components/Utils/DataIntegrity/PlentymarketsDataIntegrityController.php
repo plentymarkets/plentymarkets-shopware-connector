@@ -26,7 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * Data integrity conroller class
  *
@@ -34,91 +33,88 @@
  */
 class PlentymarketsDataIntegrityController
 {
+    /**
+     * @var PlentymarketsDataIntegrityController
+     */
+    protected static $Instance;
 
-	/**
-	 *
-	 * @var PlentymarketsDataIntegrityController
-	 */
-	protected static $Instance;
+    /**
+     * @var PlentymarketsDataIntegrityCheckInterface[]
+     */
+    protected $Checks = [];
 
-	/**
-	 *
-	 * @var PlentymarketsDataIntegrityCheckInterface[]
-	 */
-	protected $Checks = array();
+    /**
+     * Adds all the checks to the controller
+     */
+    protected function __construct()
+    {
+        $this->add(new PlentymarketsDataIntegrityCheckItemMainDetailLost());
+        $this->add(new PlentymarketsDataIntegrityCheckItemOrphaned());
+        $this->add(new PlentymarketsDataIntegrityCheckItemVariationGroupMultiple());
+        $this->add(new PlentymarketsDataIntegrityCheckItemVariationOptionNotInSet());
+        $this->add(new PlentymarketsDataIntegrityCheckItemVariationOptionLost());
+        $this->add(new PlentymarketsDataIntegrityCheckItemDetailPriceless());
+    }
 
-	/**
-	 * Adds all the checks to the controller
-	 */
-	protected function __construct()
-	{
-		$this->add(new PlentymarketsDataIntegrityCheckItemMainDetailLost());
-		$this->add(new PlentymarketsDataIntegrityCheckItemOrphaned());
-		$this->add(new PlentymarketsDataIntegrityCheckItemVariationGroupMultiple());
-		$this->add(new PlentymarketsDataIntegrityCheckItemVariationOptionNotInSet());
-		$this->add(new PlentymarketsDataIntegrityCheckItemVariationOptionLost());
-		$this->add(new PlentymarketsDataIntegrityCheckItemDetailPriceless());
-	}
+    /**
+     * Returns an instance of PlentymarketsDataIntegrityController
+     *
+     * @return PlentymarketsDataIntegrityController
+     */
+    public static function getInstance()
+    {
+        if (!self::$Instance instanceof self) {
+            self::$Instance = new self();
+        }
 
-	/**
-	 * Returns an instance of PlentymarketsDataIntegrityController
-	 *
-	 * @return PlentymarketsDataIntegrityController
-	 */
-	public static function getInstance()
-	{
-		if (!self::$Instance instanceof self)
-		{
-			self::$Instance = new self();
-		}
-		return self::$Instance;
-	}
+        return self::$Instance;
+    }
 
-	/**
-	 * Adds another check to the controller
-	 *
-	 * @param PlentymarketsDataIntegrityCheckInterface $Check
-	 */
-	public function add(PlentymarketsDataIntegrityCheckInterface $Check)
-	{
-		$this->Checks[$Check->getName()] = $Check;
-	}
+    /**
+     * Adds another check to the controller
+     *
+     * @param PlentymarketsDataIntegrityCheckInterface $Check
+     */
+    public function add(PlentymarketsDataIntegrityCheckInterface $Check)
+    {
+        $this->Checks[$Check->getName()] = $Check;
+    }
 
-	/**
-	 * Returns the checks
-	 *
-	 * @return PlentymarketsDataIntegrityCheckInterface[]
-	 */
-	public function getChecks()
-	{
-		return $this->Checks;
-	}
+    /**
+     * Returns the checks
+     *
+     * @return PlentymarketsDataIntegrityCheckInterface[]
+     */
+    public function getChecks()
+    {
+        return $this->Checks;
+    }
 
-	/**
-	 * Checks whether the checks are valid
-	 *
-	 * @return boolean
-	 */
-	public function isValid()
-	{
-		foreach ($this->Checks as $Check)
-		{
-			if (!$Check->isValid())
-			{
-				return false;
-			}
-		}
-		return true;
-	}
+    /**
+     * Checks whether the checks are valid
+     *
+     * @return bool
+     */
+    public function isValid()
+    {
+        foreach ($this->Checks as $Check) {
+            if (!$Check->isValid()) {
+                return false;
+            }
+        }
 
-	/**
-	 * Returns an explicit check
-	 *
-	 * @param string $name
-	 * @return PlentymarketsDataIntegrityCheckInterface
-	 */
-	public function getCheck($name)
-	{
-		return $this->Checks[$name];
-	}
+        return true;
+    }
+
+    /**
+     * Returns an explicit check
+     *
+     * @param string $name
+     *
+     * @return PlentymarketsDataIntegrityCheckInterface
+     */
+    public function getCheck($name)
+    {
+        return $this->Checks[$name];
+    }
 }

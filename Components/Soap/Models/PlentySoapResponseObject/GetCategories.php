@@ -32,49 +32,48 @@
  */
 class PlentySoapResponseObject_GetCategories
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CategoryID;
-	
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
-	
-	/**
-	 * @var int
-	 */
-	public $LastUpdateTimestamp;
-	
-	/**
-	 * @var int
-	 */
-	public $Level;
-	
-	/**
-	 * @var string
-	 */
-	public $LinkList;
-	
-	/**
-	 * @var int
-	 */
-	public $ParentCategoryID;
-	
-	/**
-	 * @var string
-	 */
-	public $Right;
-	
-	/**
-	 * @var string
-	 */
-	public $Sitemap;
-	
-	/**
-	 * @var string
-	 */
-	public $Type;
+    /**
+     * @var int
+     */
+    public $CategoryID;
+
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
+
+    /**
+     * @var int
+     */
+    public $LastUpdateTimestamp;
+
+    /**
+     * @var int
+     */
+    public $Level;
+
+    /**
+     * @var string
+     */
+    public $LinkList;
+
+    /**
+     * @var int
+     */
+    public $ParentCategoryID;
+
+    /**
+     * @var string
+     */
+    public $Right;
+
+    /**
+     * @var string
+     */
+    public $Sitemap;
+
+    /**
+     * @var string
+     */
+    public $Type;
 }

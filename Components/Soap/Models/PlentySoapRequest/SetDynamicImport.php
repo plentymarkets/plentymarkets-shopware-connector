@@ -32,34 +32,33 @@
  */
 class PlentySoapRequest_SetDynamicImport
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_string
-	 */
-	public $Content;
-	
-	/**
-	 * @var int
-	 */
-	public $Delimiter;
-	
-	/**
-	 * @var int
-	 */
-	public $FormatID;
-	
-	/**
-	 * @var string
-	 */
-	public $FormatName;
-	
-	/**
-	 * @var boolean
-	 */
-	public $OnlyMatching;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_string
+     */
+    public $Content;
+
+    /**
+     * @var int
+     */
+    public $Delimiter;
+
+    /**
+     * @var int
+     */
+    public $FormatID;
+
+    /**
+     * @var string
+     */
+    public $FormatName;
+
+    /**
+     * @var bool
+     */
+    public $OnlyMatching;
 }

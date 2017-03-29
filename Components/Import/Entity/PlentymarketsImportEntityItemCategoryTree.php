@@ -33,216 +33,187 @@
  */
 class PlentymarketsImportEntityItemCategoryTree
 {
-	/**
-	 *
-	 * @var array of Categories from Plenty
-	 */
-	protected $plentyCategoryBranch;
+    /**
+     * @var array of Categories from Plenty
+     */
+    protected $plentyCategoryBranch;
 
-	/**
-	 * @var integer
-	 */
-	protected $storeId;
+    /**
+     * @var int
+     */
+    protected $storeId;
 
-	/**
-	 * @var integer
-	 */
-	protected $shopId;
-	
-	/**
-	 * @var string
-	 */
-	protected $categoryNodeLang;
-	
-	/**
-	 * @var string
-	 */
-	protected $shopLang;
+    /**
+     * @var int
+     */
+    protected $shopId;
 
-	/**
-	 *
-	 * @var Shopware\Models\Category\Repository
-	 */
-	protected static $CategoryRepository;
+    /**
+     * @var string
+     */
+    protected $categoryNodeLang;
 
-	/**
-	 *
-	 * @var Shopware\Components\Api\Resource\Category
-	 */
-	protected static $CategoryApi;
+    /**
+     * @var string
+     */
+    protected $shopLang;
 
-	/**
-	 * I am the constructor
-	 *
-	 * @param PlentySoapObject_ItemCategoryTreeNode|PlentySoapObject_ItemCategory $categoryNode
-	 * @param integer $storeId
-	 * @throws Exception
-	 */
-	public function __construct($categoryNode, $storeId, $categoryNodeLang = 'de')
-	{
-		$category = array();
-		if (property_exists($categoryNode, 'ItemCategoryPath'))
-		{
-			$categoryPath = explode(';', $categoryNode->ItemCategoryPath);
-			$categoryPathNames = explode(';', $categoryNode->ItemCategoryPathNames);
-		}
-		else if (property_exists($categoryNode, 'CategoryPath'))
-		{
-			$categoryPath = explode(';', $categoryNode->CategoryPath);
-			$categoryPathNames = explode(';', $categoryNode->CategoryPathNames);
-		}
-		else
-		{
-			throw new Exception();
-		}
+    /**
+     * @var Shopware\Models\Category\Repository
+     */
+    protected static $CategoryRepository;
 
-		foreach ($categoryPath as $n => $categoryId)
-		{
-			if ($categoryId == 0)
-			{
-				break;
-			}
+    /**
+     * @var Shopware\Components\Api\Resource\Category
+     */
+    protected static $CategoryApi;
 
-			$category[] = array(
-				'branchId' => $categoryId,
-				'name' => $categoryPathNames[$n]
-			);
-		}
+    /**
+     * I am the constructor
+     *
+     * @param PlentySoapObject_ItemCategoryTreeNode|PlentySoapObject_ItemCategory $categoryNode
+     * @param int $storeId
+     *
+     * @throws Exception
+     */
+    public function __construct($categoryNode, $storeId, $categoryNodeLang = 'de')
+    {
+        $category = [];
+        if (property_exists($categoryNode, 'ItemCategoryPath')) {
+            $categoryPath = explode(';', $categoryNode->ItemCategoryPath);
+            $categoryPathNames = explode(';', $categoryNode->ItemCategoryPathNames);
+        } elseif (property_exists($categoryNode, 'CategoryPath')) {
+            $categoryPath = explode(';', $categoryNode->CategoryPath);
+            $categoryPathNames = explode(';', $categoryNode->CategoryPathNames);
+        } else {
+            throw new Exception();
+        }
 
-		$this->plentyCategoryBranch = $category;
-		$this->storeId = $storeId;
-		$this->shopId = PlentymarketsMappingController::getShopByPlentyID($storeId);
-		$this->categoryNodeLang = $categoryNodeLang;
-	
-		// get the main language of the shop set it temp
-		$mainLang = array_values(PlentymarketsTranslation::getShopMainLanguage($this->shopId));
-		$this->shopLang = PlentymarketsTranslation::getPlentyLocaleFormat($mainLang[0]['locale']);
+        foreach ($categoryPath as $n => $categoryId) {
+            if ($categoryId == 0) {
+                break;
+            }
 
-		if (is_null(self::$CategoryRepository))
-		{
-			self::$CategoryRepository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
-		}
+            $category[] = [
+                'branchId' => $categoryId,
+                'name' => $categoryPathNames[$n],
+            ];
+        }
 
-		if (is_null(self::$CategoryApi))
-		{
-			self::$CategoryApi = Shopware\Components\Api\Manager::getResource('Category');
-		}
-	}
+        $this->plentyCategoryBranch = $category;
+        $this->storeId = $storeId;
+        $this->shopId = PlentymarketsMappingController::getShopByPlentyID($storeId);
+        $this->categoryNodeLang = $categoryNodeLang;
 
-	/**
-	 * Does the actual import
-	 */
-	public function import()
-	{
-		$parentId = Shopware()->Models()->find('Shopware\Models\Shop\Shop', $this->shopId)->getCategory()->getId();
+        // get the main language of the shop set it temp
+        $mainLang = array_values(PlentymarketsTranslation::getShopMainLanguage($this->shopId));
+        $this->shopLang = PlentymarketsTranslation::getPlentyLocaleFormat($mainLang[0]['locale']);
 
-		// Trigger to indicate an error while creating new category
-		$addError = false;
-		foreach ($this->plentyCategoryBranch as $plentyCategory)
-		{
-			$plentyCategoryId = $plentyCategory['branchId'];
-			$plentyCategoryName = $plentyCategory['name'];
-			
-			if($this->categoryNodeLang != $this->shopLang)
-			{
-				$plentyLocalCategoryName = $this->getLocalCategoryName($plentyCategoryId);
-				
-				if($plentyLocalCategoryName)
-				{
-					$plentyCategoryName = $plentyLocalCategoryName;
-				}
-			}		
-				
-			// Root category id (out of the shop)
-			$CategoryFound = self::$CategoryRepository->findOneBy(array(
-				'name' => $plentyCategoryName,
-				'parentId' => $parentId
-			));
+        if (is_null(self::$CategoryRepository)) {
+            self::$CategoryRepository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
+        }
 
-			if ($CategoryFound instanceof Shopware\Models\Category\Category)
-			{
-				//
-				PlentymarketsMappingEntityCategory::addCategory(
-					$CategoryFound->getId(), $this->shopId, $plentyCategoryId, $this->storeId
-				);
+        if (is_null(self::$CategoryApi)) {
+            self::$CategoryApi = Shopware\Components\Api\Manager::getResource('Category');
+        }
+    }
 
-				$parentId = $CategoryFound->getId();
-			}
-			else
-			{
-				$params = array();
-				$params['name'] = $plentyCategoryName;
-				$params['parentId'] = $parentId;
+    /**
+     * Does the actual import
+     */
+    public function import()
+    {
+        $parentId = Shopware()->Models()->find('Shopware\Models\Shop\Shop', $this->shopId)->getCategory()->getId();
 
-				try
-				{
-					// Create
-					$CategoryModel = self::$CategoryApi->create($params);
+        // Trigger to indicate an error while creating new category
+        $addError = false;
+        foreach ($this->plentyCategoryBranch as $plentyCategory) {
+            $plentyCategoryId = $plentyCategory['branchId'];
+            $plentyCategoryName = $plentyCategory['name'];
 
-					// Add mapping and save into the object
-					PlentymarketsMappingEntityCategory::addCategory(
-						$CategoryModel->getId(), $this->shopId, $plentyCategoryId, $this->storeId
-					);
+            if ($this->categoryNodeLang != $this->shopLang) {
+                $plentyLocalCategoryName = $this->getLocalCategoryName($plentyCategoryId);
 
-					// Parent
-					$parentCategoryName = $CategoryModel->getParent()->getName();
+                if ($plentyLocalCategoryName) {
+                    $plentyCategoryName = $plentyLocalCategoryName;
+                }
+            }
 
-					// Log
-					PlentymarketsLogger::getInstance()->message('Sync:Item:Category', 'The category »' . $plentyCategoryName . '« has been created beneath the category »' . $parentCategoryName . '«');
+            // Root category id (out of the shop)
+            $CategoryFound = self::$CategoryRepository->findOneBy([
+                'name' => $plentyCategoryName,
+                'parentId' => $parentId,
+            ]);
 
-					// Id to connect with the item
-					$parentId = $CategoryModel->getId();
-				}
-				catch (Exception $E)
-				{
-					// Log
-					PlentymarketsLogger::getInstance()->error('Sync:Item:Category', 'The category »' . $plentyCategoryName . '« with the parentId »' . $parentId . '« could not be created (' . $E->getMessage() . ')', 3300);
+            if ($CategoryFound instanceof Shopware\Models\Category\Category) {
+                PlentymarketsMappingEntityCategory::addCategory(
+                    $CategoryFound->getId(), $this->shopId, $plentyCategoryId, $this->storeId
+                );
 
-					// Set the trigger - the category will not be connected with the item
-					$addError = true;
-				}
+                $parentId = $CategoryFound->getId();
+            } else {
+                $params = [];
+                $params['name'] = $plentyCategoryName;
+                $params['parentId'] = $parentId;
 
-			}
+                try {
+                    // Create
+                    $CategoryModel = self::$CategoryApi->create($params);
 
-		}
-		if ($addError)
-		{
-			return false;
-		}
-		else
-		{
-			return $parentId;
-		}
-	}
-	
-	/*
-	 * Get the category name from Plenty
-	 */	
-	protected function getLocalCategoryName($categoryId)
-	{
-		$categoryName = false;
-	
-		$Request_GetItemCategoryCatalog = new PlentySoapRequest_GetItemCategoryCatalog();
-		$Request_GetItemCategoryCatalog->CategoryID = $categoryId;
-		$Request_GetItemCategoryCatalog->Lang = $this->shopLang;
-		$Request_GetItemCategoryCatalog->StoreID = $this->storeId;
+                    // Add mapping and save into the object
+                    PlentymarketsMappingEntityCategory::addCategory(
+                        $CategoryModel->getId(), $this->shopId, $plentyCategoryId, $this->storeId
+                    );
 
-		/** @var PlentySoapResponse_GetItemCategoryCatalog $Response_GetItemCategoryCatalog */
-		$Response_GetItemCategoryCatalog = PlentymarketsSoapClient::getInstance()->GetItemCategoryCatalog($Request_GetItemCategoryCatalog);
+                    // Parent
+                    $parentCategoryName = $CategoryModel->getParent()->getName();
 
-		if ($Response_GetItemCategoryCatalog->Success) 
-		{
-			if(is_object($Response_GetItemCategoryCatalog->Categories->item[0]))
-			{
-				$categoryName = $Response_GetItemCategoryCatalog->Categories->item[0]->Name;
-				
-				if(empty($categoryName))
-				{
-					$categoryName = false;
-				}
-			}
-		}		
-		
-		return $categoryName;
-	}
+                    // Log
+                    PlentymarketsLogger::getInstance()->message('Sync:Item:Category', 'The category »' . $plentyCategoryName . '« has been created beneath the category »' . $parentCategoryName . '«');
+
+                    // Id to connect with the item
+                    $parentId = $CategoryModel->getId();
+                } catch (Exception $E) {
+                    // Log
+                    PlentymarketsLogger::getInstance()->error('Sync:Item:Category', 'The category »' . $plentyCategoryName . '« with the parentId »' . $parentId . '« could not be created (' . $E->getMessage() . ')', 3300);
+
+                    // Set the trigger - the category will not be connected with the item
+                    $addError = true;
+                }
+            }
+        }
+        if ($addError) {
+            return false;
+        }
+
+        return $parentId;
+    }
+
+    /*
+     * Get the category name from Plenty
+     */
+    protected function getLocalCategoryName($categoryId)
+    {
+        $categoryName = false;
+
+        $Request_GetItemCategoryCatalog = new PlentySoapRequest_GetItemCategoryCatalog();
+        $Request_GetItemCategoryCatalog->CategoryID = $categoryId;
+        $Request_GetItemCategoryCatalog->Lang = $this->shopLang;
+        $Request_GetItemCategoryCatalog->StoreID = $this->storeId;
+
+        /** @var PlentySoapResponse_GetItemCategoryCatalog $Response_GetItemCategoryCatalog */
+        $Response_GetItemCategoryCatalog = PlentymarketsSoapClient::getInstance()->GetItemCategoryCatalog($Request_GetItemCategoryCatalog);
+
+        if ($Response_GetItemCategoryCatalog->Success) {
+            if (is_object($Response_GetItemCategoryCatalog->Categories->item[0])) {
+                $categoryName = $Response_GetItemCategoryCatalog->Categories->item[0]->Name;
+
+                if (empty($categoryName)) {
+                    $categoryName = false;
+                }
+            }
+        }
+
+        return $categoryName;
+    }
 }

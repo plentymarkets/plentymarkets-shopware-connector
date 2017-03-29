@@ -32,14 +32,13 @@
  */
 class PlentySoapResponse_ObjectUpdateListingsVerifyError
 {
-	
-	/**
-	 * @var int
-	 */
-	public $ErrorCode;
-	
-	/**
-	 * @var string
-	 */
-	public $ErrorMessage;
+    /**
+     * @var int
+     */
+    public $ErrorCode;
+
+    /**
+     * @var string
+     */
+    public $ErrorMessage;
 }

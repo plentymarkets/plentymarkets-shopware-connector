@@ -32,14 +32,13 @@
  */
 class PlentySoapObject_DeleteItems
 {
-	
-	/**
-	 * @var string
-	 */
-	public $ExternalItemID;
-	
-	/**
-	 * @var int
-	 */
-	public $ItemID;
+    /**
+     * @var string
+     */
+    public $ExternalItemID;
+
+    /**
+     * @var int
+     */
+    public $ItemID;
 }

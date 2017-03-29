@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoaprequestobject_setitemimagesimage
 {
-	
-	/**
-	 * @var PlentySoapRequestObject_SetItemImagesImage
-	 */
-	public $item;
+    /**
+     * @var PlentySoapRequestObject_SetItemImagesImage
+     */
+    public $item;
 }

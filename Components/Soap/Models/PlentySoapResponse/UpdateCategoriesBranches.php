@@ -32,19 +32,18 @@
  */
 class PlentySoapResponse_UpdateCategoriesBranches
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponseobject_updatecategoriesbranches
-	 */
-	public $UpdatedCategoriesBranches;
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
+
+    /**
+     * @var ArrayOfPlentysoapresponseobject_updatecategoriesbranches
+     */
+    public $UpdatedCategoriesBranches;
 }

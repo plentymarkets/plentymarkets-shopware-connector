@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_AddDocument
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoaprequestobject_adddocument
-	 */
-	public $DocumentList;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoaprequestobject_adddocument
+     */
+    public $DocumentList;
 }

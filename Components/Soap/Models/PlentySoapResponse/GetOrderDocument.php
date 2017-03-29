@@ -32,24 +32,23 @@
  */
 class PlentySoapResponse_GetOrderDocument
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_getorderdocument
-	 */
-	public $OrderDocumentList;
-	
-	/**
-	 * @var int
-	 */
-	public $Pages;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapobject_getorderdocument
+     */
+    public $OrderDocumentList;
+
+    /**
+     * @var int
+     */
+    public $Pages;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

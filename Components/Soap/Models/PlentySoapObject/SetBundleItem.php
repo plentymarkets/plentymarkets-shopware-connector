@@ -32,19 +32,18 @@
  */
 class PlentySoapObject_SetBundleItem
 {
-	
-	/**
-	 * @var string
-	 */
-	public $ItemSKU;
-	
-	/**
-	 * @var int
-	 */
-	public $Quantity;
-	
-	/**
-	 * @var boolean
-	 */
-	public $deleteFromBundle;
+    /**
+     * @var string
+     */
+    public $ItemSKU;
+
+    /**
+     * @var int
+     */
+    public $Quantity;
+
+    /**
+     * @var bool
+     */
+    public $deleteFromBundle;
 }

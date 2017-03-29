@@ -35,78 +35,83 @@
  */
 class PlentymarketsMappingEntityCategory extends PlentymarketsMappingEntityAbstract
 {
-	/**
-	 * @var string
-	 */
-	const DELIMITER = ';';
+    /**
+     * @var string
+     */
+    const DELIMITER = ';';
 
-	/**
-	 * Returns the identifier
-	 *
-	 * @param integer $categoryId
-	 * @param integer $storeOrShopId
-	 * @return string
-	 */
-	public static function getIdentifier($categoryId, $storeOrShopId)
-	{
-		return $categoryId . self::DELIMITER . $storeOrShopId;
-	}
+    /**
+     * Returns the identifier
+     *
+     * @param int $categoryId
+     * @param int $storeOrShopId
+     *
+     * @return string
+     */
+    public static function getIdentifier($categoryId, $storeOrShopId)
+    {
+        return $categoryId . self::DELIMITER . $storeOrShopId;
+    }
 
-	/**
-	 * Returns the plentymarkets category id
-	 *
-	 * @param integer $categoryId
-	 * @param integer $shopId
-	 * @return integer
-	 */
-	public static function getCategoryByShopwareID($categoryId, $shopId)
-	{
-		$category = PlentymarketsMappingController::getCategoryByShopwareID(
-			self::getIdentifier($categoryId, $shopId)
-		);
-		$parts = explode(self::DELIMITER, $category);
-		return (integer) $parts[0];
-	}
+    /**
+     * Returns the plentymarkets category id
+     *
+     * @param int $categoryId
+     * @param int $shopId
+     *
+     * @return int
+     */
+    public static function getCategoryByShopwareID($categoryId, $shopId)
+    {
+        $category = PlentymarketsMappingController::getCategoryByShopwareID(
+            self::getIdentifier($categoryId, $shopId)
+        );
+        $parts = explode(self::DELIMITER, $category);
 
-	/**
-	 * Returns the shopware category id
-	 *
-	 * @param integer $categoryId
-	 * @param integer $storeId
-	 * @return integer
-	 */
-	public static function getCategoryByPlentyID($categoryId, $storeId)
-	{
-		$category = PlentymarketsMappingController::getCategoryByPlentyID(
-			self::getIdentifier($categoryId, $storeId)
-		);
-		$parts = explode(self::DELIMITER, $category);
-		return (integer) $parts[0];
-	}
+        return (int) $parts[0];
+    }
 
-	/**
-	 * Adds a category mapping
-	 *
-	 * @param integer $shopwareCategoryId
-	 * @param integer $shopId
-	 * @param integer $plentyCategoryId
-	 * @param integer $storeId
-	 */
-	public static function addCategory($shopwareCategoryId, $shopId, $plentyCategoryId, $storeId)
-	{
-		PlentymarketsMappingController::addCategory(
-			self::getIdentifier($shopwareCategoryId, $shopId),
-			self::getIdentifier($plentyCategoryId, $storeId)
-		);
-	}
+    /**
+     * Returns the shopware category id
+     *
+     * @param int $categoryId
+     * @param int $storeId
+     *
+     * @return int
+     */
+    public static function getCategoryByPlentyID($categoryId, $storeId)
+    {
+        $category = PlentymarketsMappingController::getCategoryByPlentyID(
+            self::getIdentifier($categoryId, $storeId)
+        );
+        $parts = explode(self::DELIMITER, $category);
 
-	/**
-	 * Returns the name of the database table
-	 *
-	 * @return string
-	 */
-	protected function getName()
-	{
-		return 'plenty_mapping_category';
-	}
+        return (int) $parts[0];
+    }
+
+    /**
+     * Adds a category mapping
+     *
+     * @param int $shopwareCategoryId
+     * @param int $shopId
+     * @param int $plentyCategoryId
+     * @param int $storeId
+     */
+    public static function addCategory($shopwareCategoryId, $shopId, $plentyCategoryId, $storeId)
+    {
+        PlentymarketsMappingController::addCategory(
+            self::getIdentifier($shopwareCategoryId, $shopId),
+            self::getIdentifier($plentyCategoryId, $storeId)
+        );
+    }
+
+    /**
+     * Returns the name of the database table
+     *
+     * @return string
+     */
+    protected function getName()
+    {
+        return 'plenty_mapping_category';
+    }
 }

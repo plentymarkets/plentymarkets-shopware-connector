@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_GetMethodOfPayments
 {
-	
-	/**
-	 * @var boolean
-	 */
-	public $ActivMethodOfPayments;
-	
-	/**
-	 * @var string
-	 */
-	public $Lang;
+    /**
+     * @var bool
+     */
+    public $ActivMethodOfPayments;
+
+    /**
+     * @var string
+     */
+    public $Lang;
 }

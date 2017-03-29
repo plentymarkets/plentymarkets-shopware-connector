@@ -32,19 +32,18 @@
  */
 class PlentySoapRequest_GetReportingFile
 {
-	
-	/**
-	 * @var int
-	 */
-	public $Month;
-	
-	/**
-	 * @var int
-	 */
-	public $Type;
-	
-	/**
-	 * @var int
-	 */
-	public $Year;
+    /**
+     * @var int
+     */
+    public $Month;
+
+    /**
+     * @var int
+     */
+    public $Type;
+
+    /**
+     * @var int
+     */
+    public $Year;
 }

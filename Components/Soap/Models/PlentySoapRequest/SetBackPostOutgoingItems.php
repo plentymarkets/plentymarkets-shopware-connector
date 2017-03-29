@@ -32,19 +32,18 @@
  */
 class PlentySoapRequest_SetBackPostOutgoingItems
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_bookorder
-	 */
-	public $OrderList;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_bookorderrow
-	 */
-	public $RowList;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_bookorder
+     */
+    public $OrderList;
+
+    /**
+     * @var ArrayOfPlentysoapobject_bookorderrow
+     */
+    public $RowList;
 }

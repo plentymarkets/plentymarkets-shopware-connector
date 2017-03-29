@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_GetItemMediaFiles
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_integer
-	 */
-	public $ItemIDs;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_integer
+     */
+    public $ItemIDs;
 }

@@ -32,19 +32,18 @@
  */
 class PlentySoapResponse_GetDeleteLog
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapresponseobject_getdeletelog
-	 */
-	public $DeleteLogList;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapresponseobject_getdeletelog
+     */
+    public $DeleteLogList;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

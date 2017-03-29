@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_responsegetitemswarehousesettings
 {
-	
-	/**
-	 * @var PlentySoapObject_ResponseGetItemsWarehouseSettings
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_ResponseGetItemsWarehouseSettings
+     */
+    public $item;
 }

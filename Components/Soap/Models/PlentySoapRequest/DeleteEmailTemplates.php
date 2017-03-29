@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_DeleteEmailTemplates
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_deleteemailtemplatestemplate
-	 */
-	public $DeleteTemplates;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_deleteemailtemplatestemplate
+     */
+    public $DeleteTemplates;
 }

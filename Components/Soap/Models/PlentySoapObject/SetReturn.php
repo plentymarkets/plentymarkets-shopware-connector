@@ -32,29 +32,28 @@
  */
 class PlentySoapObject_SetReturn
 {
-	
-	/**
-	 * @var int
-	 */
-	public $OrderID;
-	
-	/**
-	 * @var float
-	 */
-	public $OrderStatus;
-	
-	/**
-	 * @var string
-	 */
-	public $PackageNumber;
-	
-	/**
-	 * @var int
-	 */
-	public $ReasonForReturnID;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_setreturnitem
-	 */
-	public $ReturnItems;
+    /**
+     * @var int
+     */
+    public $OrderID;
+
+    /**
+     * @var float
+     */
+    public $OrderStatus;
+
+    /**
+     * @var string
+     */
+    public $PackageNumber;
+
+    /**
+     * @var int
+     */
+    public $ReasonForReturnID;
+
+    /**
+     * @var ArrayOfPlentysoapobject_setreturnitem
+     */
+    public $ReturnItems;
 }

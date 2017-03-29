@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_setdynamicexportfilter
 {
-	
-	/**
-	 * @var PlentySoapObject_SetDynamicExportFilter
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_SetDynamicExportFilter
+     */
+    public $item;
 }

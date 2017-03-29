@@ -32,9 +32,8 @@
  */
 class PlentySoapRequest_DeleteReorder
 {
-	
-	/**
-	 * @var int
-	 */
-	public $ReorderID;
+    /**
+     * @var int
+     */
+    public $ReorderID;
 }

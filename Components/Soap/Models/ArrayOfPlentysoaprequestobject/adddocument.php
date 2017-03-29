@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoaprequestobject_adddocument
 {
-	
-	/**
-	 * @var PlentySoapRequestObject_AddDocument
-	 */
-	public $item;
+    /**
+     * @var PlentySoapRequestObject_AddDocument
+     */
+    public $item;
 }

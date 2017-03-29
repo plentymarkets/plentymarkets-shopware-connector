@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_contentpage
 {
-	
-	/**
-	 * @var PlentySoapObject_ContentPage
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_ContentPage
+     */
+    public $item;
 }

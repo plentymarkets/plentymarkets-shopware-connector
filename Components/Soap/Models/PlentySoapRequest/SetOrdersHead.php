@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_SetOrdersHead
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_setordershead
-	 */
-	public $OrdersHead;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_setordershead
+     */
+    public $OrdersHead;
 }

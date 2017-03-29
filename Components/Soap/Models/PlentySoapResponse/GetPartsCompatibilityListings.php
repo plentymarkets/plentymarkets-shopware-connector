@@ -32,19 +32,18 @@
  */
 class PlentySoapResponse_GetPartsCompatibilityListings
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapresponseobject_getpartscompatibilitylistings
-	 */
-	public $PartsCompatibilityListings;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapresponseobject_getpartscompatibilitylistings
+     */
+    public $PartsCompatibilityListings;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_bundleitem
 {
-	
-	/**
-	 * @var PlentySoapObject_BundleItem
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_BundleItem
+     */
+    public $item;
 }

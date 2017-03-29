@@ -32,24 +32,23 @@
  */
 class PlentySoapRequest_DeleteItemMediaFiles
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var boolean
-	 */
-	public $DeleteFlashFilesOfItems;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_integer
-	 */
-	public $ItemIDs;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_integer
-	 */
-	public $MediaFileIDs;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var bool
+     */
+    public $DeleteFlashFilesOfItems;
+
+    /**
+     * @var ArrayOfPlentysoapobject_integer
+     */
+    public $ItemIDs;
+
+    /**
+     * @var ArrayOfPlentysoapobject_integer
+     */
+    public $MediaFileIDs;
 }

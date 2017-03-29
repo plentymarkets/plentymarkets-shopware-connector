@@ -32,24 +32,23 @@
  */
 class PlentySoapResponse_GetItemsDefaultShippingCost
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_getitemsdefaultshippingcost
-	 */
-	public $ItemsDefaultShippingCost;
-	
-	/**
-	 * @var int
-	 */
-	public $Pages;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapobject_getitemsdefaultshippingcost
+     */
+    public $ItemsDefaultShippingCost;
+
+    /**
+     * @var int
+     */
+    public $Pages;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

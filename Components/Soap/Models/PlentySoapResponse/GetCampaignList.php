@@ -32,24 +32,23 @@
  */
 class PlentySoapResponse_GetCampaignList
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_campaign
-	 */
-	public $Campaigns;
-	
-	/**
-	 * @var int
-	 */
-	public $Pages;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapobject_campaign
+     */
+    public $Campaigns;
+
+    /**
+     * @var int
+     */
+    public $Pages;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

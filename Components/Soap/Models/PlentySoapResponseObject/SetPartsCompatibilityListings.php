@@ -32,19 +32,18 @@
  */
 class PlentySoapResponseObject_SetPartsCompatibilityListings
 {
-	
-	/**
-	 * @var int
-	 */
-	public $FitmentID;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponseobject_fitmentitem
-	 */
-	public $FitmentItems;
-	
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
+    /**
+     * @var int
+     */
+    public $FitmentID;
+
+    /**
+     * @var ArrayOfPlentysoapresponseobject_fitmentitem
+     */
+    public $FitmentItems;
+
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
 }

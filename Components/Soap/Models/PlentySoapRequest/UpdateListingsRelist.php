@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_UpdateListingsRelist
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoaprequestobject_updatelistingsrelist
-	 */
-	public $UpdateListingsRelist;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoaprequestobject_updatelistingsrelist
+     */
+    public $UpdateListingsRelist;
 }

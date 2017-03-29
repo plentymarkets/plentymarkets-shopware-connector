@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapresponse_objectmarketlisting
 {
-	
-	/**
-	 * @var PlentySoapResponse_ObjectMarketListing
-	 */
-	public $item;
+    /**
+     * @var PlentySoapResponse_ObjectMarketListing
+     */
+    public $item;
 }

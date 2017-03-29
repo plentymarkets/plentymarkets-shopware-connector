@@ -32,59 +32,58 @@
  */
 class PlentySoapResponseObject_GetListingsLayoutTemplates
 {
-	
-	/**
-	 * @var string
-	 */
-	public $BodyContent;
-	
-	/**
-	 * @var string
-	 */
-	public $BodyTagExtension;
-	
-	/**
-	 * @var string
-	 */
-	public $CssContent;
-	
-	/**
-	 * @var string
-	 */
-	public $HeaderContent;
-	
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
-	
-	/**
-	 * @var string
-	 */
-	public $Js1Content;
-	
-	/**
-	 * @var string
-	 */
-	public $Js2Content;
-	
-	/**
-	 * @var string
-	 */
-	public $Js3Content;
-	
-	/**
-	 * @var int
-	 */
-	public $LayoutId;
-	
-	/**
-	 * @var string
-	 */
-	public $LayoutName;
-	
-	/**
-	 * @var string
-	 */
-	public $WhichCss;
+    /**
+     * @var string
+     */
+    public $BodyContent;
+
+    /**
+     * @var string
+     */
+    public $BodyTagExtension;
+
+    /**
+     * @var string
+     */
+    public $CssContent;
+
+    /**
+     * @var string
+     */
+    public $HeaderContent;
+
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
+
+    /**
+     * @var string
+     */
+    public $Js1Content;
+
+    /**
+     * @var string
+     */
+    public $Js2Content;
+
+    /**
+     * @var string
+     */
+    public $Js3Content;
+
+    /**
+     * @var int
+     */
+    public $LayoutId;
+
+    /**
+     * @var string
+     */
+    public $LayoutName;
+
+    /**
+     * @var string
+     */
+    public $WhichCss;
 }

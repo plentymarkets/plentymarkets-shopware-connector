@@ -32,64 +32,63 @@
  */
 class PlentySoapObject_SetReorder
 {
-	
-	/**
-	 * @var string
-	 */
-	public $DeliveryNumber;
-	
-	/**
-	 * @var int
-	 */
-	public $DeliveryTimestamp;
-	
-	/**
-	 * @var boolean
-	 */
-	public $IntakeReorder;
-	
-	/**
-	 * @var int
-	 */
-	public $MarkingID;
-	
-	/**
-	 * @var int
-	 */
-	public $PaymentTimestamp;
-	
-	/**
-	 * @var int
-	 */
-	public $ReorderID;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_setreorderitem
-	 */
-	public $ReorderItems;
-	
-	/**
-	 * @var float
-	 */
-	public $ReorderStatus;
-	
-	/**
-	 * @var int
-	 */
-	public $ResponsibleID;
-	
-	/**
-	 * @var int
-	 */
-	public $SupplierID;
-	
-	/**
-	 * @var string
-	 */
-	public $SupplierSign;
-	
-	/**
-	 * @var int
-	 */
-	public $WarehouseID;
+    /**
+     * @var string
+     */
+    public $DeliveryNumber;
+
+    /**
+     * @var int
+     */
+    public $DeliveryTimestamp;
+
+    /**
+     * @var bool
+     */
+    public $IntakeReorder;
+
+    /**
+     * @var int
+     */
+    public $MarkingID;
+
+    /**
+     * @var int
+     */
+    public $PaymentTimestamp;
+
+    /**
+     * @var int
+     */
+    public $ReorderID;
+
+    /**
+     * @var ArrayOfPlentysoapobject_setreorderitem
+     */
+    public $ReorderItems;
+
+    /**
+     * @var float
+     */
+    public $ReorderStatus;
+
+    /**
+     * @var int
+     */
+    public $ResponsibleID;
+
+    /**
+     * @var int
+     */
+    public $SupplierID;
+
+    /**
+     * @var string
+     */
+    public $SupplierSign;
+
+    /**
+     * @var int
+     */
+    public $WarehouseID;
 }

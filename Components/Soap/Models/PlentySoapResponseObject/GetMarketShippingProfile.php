@@ -32,34 +32,33 @@
  */
 class PlentySoapResponseObject_GetMarketShippingProfile
 {
-	
-	/**
-	 * @var string
-	 */
-	public $CreatedBy;
-	
-	/**
-	 * @var string
-	 */
-	public $Market;
-	
-	/**
-	 * @var string
-	 */
-	public $MarketSideID;
-	
-	/**
-	 * @var int
-	 */
-	public $ShippingProfileID;
-	
-	/**
-	 * @var string
-	 */
-	public $ShippingProfileName;
-	
-	/**
-	 * @var int
-	 */
-	public $UserId;
+    /**
+     * @var string
+     */
+    public $CreatedBy;
+
+    /**
+     * @var string
+     */
+    public $Market;
+
+    /**
+     * @var string
+     */
+    public $MarketSideID;
+
+    /**
+     * @var int
+     */
+    public $ShippingProfileID;
+
+    /**
+     * @var string
+     */
+    public $ShippingProfileName;
+
+    /**
+     * @var int
+     */
+    public $UserId;
 }

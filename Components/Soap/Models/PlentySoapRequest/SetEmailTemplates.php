@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_SetEmailTemplates
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_setemailtemplatestemplate
-	 */
-	public $Templates;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_setemailtemplatestemplate
+     */
+    public $Templates;
 }

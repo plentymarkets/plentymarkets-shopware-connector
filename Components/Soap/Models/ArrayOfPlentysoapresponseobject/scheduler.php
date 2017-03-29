@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapresponseobject_scheduler
 {
-	
-	/**
-	 * @var PlentySoapResponseObject_Scheduler
-	 */
-	public $item;
+    /**
+     * @var PlentySoapResponseObject_Scheduler
+     */
+    public $item;
 }

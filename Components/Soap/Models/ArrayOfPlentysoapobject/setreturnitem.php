@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_setreturnitem
 {
-	
-	/**
-	 * @var PlentySoapObject_SetReturnItem
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_SetReturnItem
+     */
+    public $item;
 }

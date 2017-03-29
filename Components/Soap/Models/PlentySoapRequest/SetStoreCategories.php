@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_SetStoreCategories
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_setstorecategory
-	 */
-	public $StoreCategories;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_setstorecategory
+     */
+    public $StoreCategories;
 }

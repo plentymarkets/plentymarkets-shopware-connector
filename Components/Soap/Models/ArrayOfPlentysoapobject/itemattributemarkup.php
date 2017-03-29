@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_itemattributemarkup
 {
-	
-	/**
-	 * @var PlentySoapObject_ItemAttributeMarkup
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_ItemAttributeMarkup
+     */
+    public $item;
 }

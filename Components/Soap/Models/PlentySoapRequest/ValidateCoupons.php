@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_ValidateCoupons
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_string
-	 */
-	public $CouponCodes;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_string
+     */
+    public $CouponCodes;
 }

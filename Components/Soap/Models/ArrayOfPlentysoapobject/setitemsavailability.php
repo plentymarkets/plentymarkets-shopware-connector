@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_setitemsavailability
 {
-	
-	/**
-	 * @var PlentySoapObject_SetItemsAvailability
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_SetItemsAvailability
+     */
+    public $item;
 }

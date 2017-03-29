@@ -37,55 +37,102 @@
  */
 class PlentymarketsImportEntityItemLinked
 {
+    /**
+     * @var int
+     */
+    protected $SHOPWARE_itemId;
 
-	/**
-	 *
-	 * @var integer
-	 */
-	protected $SHOPWARE_itemId;
+    /**
+     * @var PlentySoapObject_GetLinkedItems
+     */
+    protected $LinkedItems;
 
-	/**
-	 *
-	 * @var PlentySoapObject_GetLinkedItems
-	 */
-	protected $LinkedItems;
+    /**
+     * I am the constructor
+     *
+     * @param int $itemId
+     * @param PlentySoapObject_GetLinkedItems $GetLinkedItems
+     */
+    public function __construct($itemId, $GetLinkedItems)
+    {
+        $this->SHOPWARE_itemId = (int) $itemId;
+        $this->LinkedItems = $GetLinkedItems;
+    }
 
-	/**
-	 * I am the constructor
-	 *
-	 * @param integer $itemId
-	 * @param PlentySoapObject_GetLinkedItems $GetLinkedItems
-	 */
-	public function __construct($itemId, $GetLinkedItems)
-	{
-		$this->SHOPWARE_itemId = (integer) $itemId;
-		$this->LinkedItems = $GetLinkedItems;
-	}
+    /**
+     * Retrieves the linked items from plentymarkets and links them
+     */
+    public function link()
+    {
+        // Cleanup
+        $this->purge();
 
-	/**
-	 * Deletes all linked items
-	 */
-	protected function purge()
-	{
-		Shopware()->Db()->delete('s_articles_relationships', 'articleID = ' . $this->SHOPWARE_itemId);
-		Shopware()->Db()->delete('s_articles_similar', 'articleID = ' . $this->SHOPWARE_itemId);
+        /** @var PlentySoapObject_GetLinkedItems $LinkedItem */
+        foreach ($this->LinkedItems->item as $LinkedItem) {
+            try {
+                $SHOWWARE_linkedItemId = PlentymarketsMappingController::getItemByPlentyID($LinkedItem->ItemID);
+            } catch (PlentymarketsMappingExceptionNotExistant $E) {
+                continue;
+            }
+
+            $table = '';
+
+            if ($LinkedItem->Relationship === 'Accessory') {
+                $table = 's_articles_relationships';
+            } elseif ($LinkedItem->Relationship === 'Similar') {
+                $table = 's_articles_similar';
+            } else {
+                // Allow plugins to change the data
+            $table = Enlight()->Events()->filter(
+                'PlentyConnector_ImportEntityItemLinked_GetTable',
+                $table,
+                [
+                    'subject' => $this,
+                    'item' => $LinkedItem,
+                ]
+            );
+
+                if (empty($table)) {
+                    continue;
+                }
+            }
+
+            Shopware()->Db()->insert(
+            $table,
+            [
+                'articleID' => (int) $this->SHOPWARE_itemId,
+                'relatedarticle' => (int) $SHOWWARE_linkedItemId,
+            ]
+        );
+        }
+
+        $this->purgeViews();
+    }
+
+    /**
+     * Deletes all linked items
+     */
+    protected function purge()
+    {
+        Shopware()->Db()->delete('s_articles_relationships', 'articleID = ' . $this->SHOPWARE_itemId);
+        Shopware()->Db()->delete('s_articles_similar', 'articleID = ' . $this->SHOPWARE_itemId);
 
         // Allow plugins to change the data
         Enlight()->Events()->notify(
             'PlentyConnector_ImportEntityItemLinked_AfterPurge',
-            array(
+            [
                 'subject' => $this,
                 'id' => $this->SHOPWARE_itemId,
-            )
+            ]
         );
-	}
+    }
 
-	/**
-	 * Deletes the view counter for non existent links
-	 */
-	protected function purgeViews()
-	{
-		Shopware()->Db()->exec('
+    /**
+     * Deletes the view counter for non existent links
+     */
+    protected function purgeViews()
+    {
+        Shopware()->Db()->exec('
 			DELETE FROM
 					s_articles_similar_shown_ro
 				WHERE
@@ -94,56 +141,5 @@ class PlentymarketsImportEntityItemLinked
 						SELECT relatedarticle FROM s_articles_similar WHERE articleID = ' . $this->SHOPWARE_itemId . '
 					)
 		');
-	}
-
-	/**
-	 * Retrieves the linked items from plentymarkets and links them
-	 */
-	public function link()
-	{
-		// Cleanup
-		$this->purge();
-
-		/** @var PlentySoapObject_GetLinkedItems $LinkedItem */
-		foreach ($this->LinkedItems->item as $LinkedItem)
-		{
-        try {
-            $SHOWWARE_linkedItemId = PlentymarketsMappingController::getItemByPlentyID($LinkedItem->ItemID);
-        } catch (PlentymarketsMappingExceptionNotExistant $E) {
-            continue;
-        }
-
-        $table = '';
-
-        if ($LinkedItem->Relationship === 'Accessory') {
-            $table = 's_articles_relationships';
-        } elseif ($LinkedItem->Relationship === 'Similar') {
-            $table = 's_articles_similar';
-        } else {
-            // Allow plugins to change the data
-            $table = Enlight()->Events()->filter(
-                'PlentyConnector_ImportEntityItemLinked_GetTable',
-                $table,
-                array(
-                    'subject' => $this,
-                    'item' => $LinkedItem
-                )
-            );
-
-            if (empty($table)) {
-                continue;
-            }
-        }
-
-        Shopware()->Db()->insert(
-            $table,
-            array(
-                'articleID' => (integer)$this->SHOPWARE_itemId,
-                'relatedarticle' => (integer)$SHOWWARE_linkedItemId,
-            )
-        );
-		}
-
-		$this->purgeViews();
-	}
+    }
 }

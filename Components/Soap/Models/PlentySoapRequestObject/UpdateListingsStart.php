@@ -32,19 +32,18 @@
  */
 class PlentySoapRequestObject_UpdateListingsStart
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_integer
-	 */
-	public $MarketListingIDs;
-	
-	/**
-	 * @var int
-	 */
-	public $StartDateTimestamp;
-	
-	/**
-	 * @var int
-	 */
-	public $StartDistribution;
+    /**
+     * @var ArrayOfPlentysoapobject_integer
+     */
+    public $MarketListingIDs;
+
+    /**
+     * @var int
+     */
+    public $StartDateTimestamp;
+
+    /**
+     * @var int
+     */
+    public $StartDistribution;
 }

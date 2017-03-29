@@ -32,14 +32,13 @@
  */
 class PlentySoapObject_DeletePriceSets
 {
-	
-	/**
-	 * @var int
-	 */
-	public $ItemID;
-	
-	/**
-	 * @var int
-	 */
-	public $PriceID;
+    /**
+     * @var int
+     */
+    public $ItemID;
+
+    /**
+     * @var int
+     */
+    public $PriceID;
 }

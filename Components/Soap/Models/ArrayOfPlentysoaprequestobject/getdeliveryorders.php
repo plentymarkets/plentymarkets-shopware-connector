@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoaprequestobject_getdeliveryorders
 {
-	
-	/**
-	 * @var PlentySoapRequestObject_GetDeliveryOrders
-	 */
-	public $item;
+    /**
+     * @var PlentySoapRequestObject_GetDeliveryOrders
+     */
+    public $item;
 }

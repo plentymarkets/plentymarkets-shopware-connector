@@ -32,59 +32,58 @@
  */
 class PlentySoapObject_GetReorderItem
 {
-	
-	/**
-	 * @var string
-	 */
-	public $ArticleNo;
-	
-	/**
-	 * @var float
-	 */
-	public $DeliveredValueOfItems;
-	
-	/**
-	 * @var string
-	 */
-	public $EAN1;
-	
-	/**
-	 * @var string
-	 */
-	public $ItemName;
-	
-	/**
-	 * @var int
-	 */
-	public $PackagingEntity;
-	
-	/**
-	 * @var float
-	 */
-	public $PurchasePrice;
-	
-	/**
-	 * @var int
-	 */
-	public $Quantity;
-	
-	/**
-	 * @var int
-	 */
-	public $ReorderItemId;
-	
-	/**
-	 * @var string
-	 */
-	public $SKU;
-	
-	/**
-	 * @var string
-	 */
-	public $Status;
-	
-	/**
-	 * @var string
-	 */
-	public $SupplierArticleNo;
+    /**
+     * @var string
+     */
+    public $ArticleNo;
+
+    /**
+     * @var float
+     */
+    public $DeliveredValueOfItems;
+
+    /**
+     * @var string
+     */
+    public $EAN1;
+
+    /**
+     * @var string
+     */
+    public $ItemName;
+
+    /**
+     * @var int
+     */
+    public $PackagingEntity;
+
+    /**
+     * @var float
+     */
+    public $PurchasePrice;
+
+    /**
+     * @var int
+     */
+    public $Quantity;
+
+    /**
+     * @var int
+     */
+    public $ReorderItemId;
+
+    /**
+     * @var string
+     */
+    public $SKU;
+
+    /**
+     * @var string
+     */
+    public $Status;
+
+    /**
+     * @var string
+     */
+    public $SupplierArticleNo;
 }

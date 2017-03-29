@@ -32,9 +32,8 @@
  */
 class PlentySoapResponseObject_AddDocument
 {
-	
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
 }

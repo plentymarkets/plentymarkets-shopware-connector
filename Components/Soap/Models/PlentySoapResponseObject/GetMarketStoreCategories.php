@@ -32,14 +32,13 @@
  */
 class PlentySoapResponseObject_GetMarketStoreCategories
 {
-	
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponseobject_getmarketstorecategory
-	 */
-	public $MarketStoreCategories;
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
+
+    /**
+     * @var ArrayOfPlentysoapresponseobject_getmarketstorecategory
+     */
+    public $MarketStoreCategories;
 }

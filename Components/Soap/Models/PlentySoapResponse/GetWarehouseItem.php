@@ -32,19 +32,18 @@
  */
 class PlentySoapResponse_GetWarehouseItem
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_getwarehouseitem
-	 */
-	public $ItemsList;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapobject_getwarehouseitem
+     */
+    public $ItemsList;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

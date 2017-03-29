@@ -32,24 +32,23 @@
  */
 class PlentySoapResponse_GetListings
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_getlistings
-	 */
-	public $ListingsList;
-	
-	/**
-	 * @var int
-	 */
-	public $Pages;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapobject_getlistings
+     */
+    public $ListingsList;
+
+    /**
+     * @var int
+     */
+    public $Pages;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

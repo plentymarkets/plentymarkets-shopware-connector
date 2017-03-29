@@ -32,19 +32,18 @@
  */
 class PlentySoapObject_SetDynamicExportFilter
 {
-	
-	/**
-	 * @var string
-	 */
-	public $FilterName;
-	
-	/**
-	 * @var int
-	 */
-	public $Operator;
-	
-	/**
-	 * @var string
-	 */
-	public $Value;
+    /**
+     * @var string
+     */
+    public $FilterName;
+
+    /**
+     * @var int
+     */
+    public $Operator;
+
+    /**
+     * @var string
+     */
+    public $Value;
 }

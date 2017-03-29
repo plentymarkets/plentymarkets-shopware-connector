@@ -32,39 +32,38 @@
  */
 class PlentySoapObject_SetAutonomousReturn
 {
-	
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
-	
-	/**
-	 * @var float
-	 */
-	public $OrderStatus;
-	
-	/**
-	 * @var string
-	 */
-	public $PackageNumber;
-	
-	/**
-	 * @var int
-	 */
-	public $ReasonForReturnID;
-	
-	/**
-	 * @var float
-	 */
-	public $ReferrerID;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_setautonomousreturnitem
-	 */
-	public $ReturnItems;
-	
-	/**
-	 * @var int
-	 */
-	public $StoreID;
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
+
+    /**
+     * @var float
+     */
+    public $OrderStatus;
+
+    /**
+     * @var string
+     */
+    public $PackageNumber;
+
+    /**
+     * @var int
+     */
+    public $ReasonForReturnID;
+
+    /**
+     * @var float
+     */
+    public $ReferrerID;
+
+    /**
+     * @var ArrayOfPlentysoapobject_setautonomousreturnitem
+     */
+    public $ReturnItems;
+
+    /**
+     * @var int
+     */
+    public $StoreID;
 }

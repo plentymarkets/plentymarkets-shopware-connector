@@ -32,89 +32,88 @@
  */
 class PlentySoapResponseObject_Scheduler
 {
-	
-	/**
-	 * @var int
-	 */
-	public $Active;
-	
-	/**
-	 * @var int
-	 */
-	public $AddressDispatch;
-	
-	/**
-	 * @var string
-	 */
-	public $CouponCode;
-	
-	/**
-	 * @var string
-	 */
-	public $Currency;
-	
-	/**
-	 * @var int
-	 */
-	public $LastOrderID;
-	
-	/**
-	 * @var int
-	 */
-	public $MethodOfPaymentID;
-	
-	/**
-	 * @var int
-	 */
-	public $MultishopID;
-	
-	/**
-	 * @var int
-	 */
-	public $ParcelServicePreset;
-	
-	/**
-	 * @var float
-	 */
-	public $Postage;
-	
-	/**
-	 * @var int
-	 */
-	public $SalesAgent;
-	
-	/**
-	 * @var int
-	 */
-	public $SchedulerEnd;
-	
-	/**
-	 * @var int
-	 */
-	public $SchedulerID;
-	
-	/**
-	 * @var int
-	 */
-	public $SchedulerInterval;
-	
-	/**
-	 * @var int
-	 */
-	public $SchedulerLast;
-	
-	/**
-	 * @var int
-	 */
-	public $SchedulerLastUpdate;
-	
-	/**
-	 * @var int
-	 */
-	public $SchedulerStart;
-	
-	/**
-	 * @var int
-	 */
-	public $TypeDispatch;
+    /**
+     * @var int
+     */
+    public $Active;
+
+    /**
+     * @var int
+     */
+    public $AddressDispatch;
+
+    /**
+     * @var string
+     */
+    public $CouponCode;
+
+    /**
+     * @var string
+     */
+    public $Currency;
+
+    /**
+     * @var int
+     */
+    public $LastOrderID;
+
+    /**
+     * @var int
+     */
+    public $MethodOfPaymentID;
+
+    /**
+     * @var int
+     */
+    public $MultishopID;
+
+    /**
+     * @var int
+     */
+    public $ParcelServicePreset;
+
+    /**
+     * @var float
+     */
+    public $Postage;
+
+    /**
+     * @var int
+     */
+    public $SalesAgent;
+
+    /**
+     * @var int
+     */
+    public $SchedulerEnd;
+
+    /**
+     * @var int
+     */
+    public $SchedulerID;
+
+    /**
+     * @var int
+     */
+    public $SchedulerInterval;
+
+    /**
+     * @var int
+     */
+    public $SchedulerLast;
+
+    /**
+     * @var int
+     */
+    public $SchedulerLastUpdate;
+
+    /**
+     * @var int
+     */
+    public $SchedulerStart;
+
+    /**
+     * @var int
+     */
+    public $TypeDispatch;
 }

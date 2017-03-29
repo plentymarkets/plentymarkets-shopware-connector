@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_SetReturns
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_setreturn
-	 */
-	public $Returns;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_setreturn
+     */
+    public $Returns;
 }

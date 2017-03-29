@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_shelf
 {
-	
-	/**
-	 * @var PlentySoapObject_Shelf
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_Shelf
+     */
+    public $item;
 }

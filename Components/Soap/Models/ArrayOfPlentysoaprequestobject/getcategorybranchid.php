@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoaprequestobject_getcategorybranchid
 {
-	
-	/**
-	 * @var PlentySoapRequestObject_GetCategoryBranchID
-	 */
-	public $item;
+    /**
+     * @var PlentySoapRequestObject_GetCategoryBranchID
+     */
+    public $item;
 }

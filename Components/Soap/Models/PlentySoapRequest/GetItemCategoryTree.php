@@ -32,19 +32,18 @@
  */
 class PlentySoapRequest_GetItemCategoryTree
 {
-	
-	/**
-	 * @var boolean
-	 */
-	public $GetCategoryNames;
-	
-	/**
-	 * @var string
-	 */
-	public $Lang;
-	
-	/**
-	 * @var int
-	 */
-	public $StoreID;
+    /**
+     * @var bool
+     */
+    public $GetCategoryNames;
+
+    /**
+     * @var string
+     */
+    public $Lang;
+
+    /**
+     * @var int
+     */
+    public $StoreID;
 }

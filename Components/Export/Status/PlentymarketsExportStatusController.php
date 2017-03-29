@@ -26,7 +26,6 @@
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * Controlles the initial export status
  *
@@ -34,232 +33,225 @@
  */
 class PlentymarketsExportStatusController
 {
-	/**
-	 *
-	 * @var PlentymarketsExportStatusController
-	 */
-	protected static $Instance;
+    /**
+     * @var PlentymarketsExportStatusController
+     */
+    protected static $Instance;
 
-	/**
-	 *
-	 * @var PlentymarketsExportStatus[]
-	 */
-	protected $Status = array();
+    /**
+     * @var PlentymarketsExportStatus[]
+     */
+    protected $Status = [];
 
-	/**
-	 * I am the constructor
-	 */
-	protected function __construct()
-	{
-		// ItemCategory
-		$ItemCategory = new PlentymarketsExportStatus('ItemCategory');
-		$this->add($ItemCategory);
+    /**
+     * I am the constructor
+     */
+    protected function __construct()
+    {
+        // ItemCategory
+        $ItemCategory = new PlentymarketsExportStatus('ItemCategory');
+        $this->add($ItemCategory);
 
-		// ItemAttribute
-		$ItemAttribute = new PlentymarketsExportStatusDependency('ItemAttribute');
-		$ItemAttribute->setDependency($ItemCategory);
-		$this->add($ItemAttribute);
+        // ItemAttribute
+        $ItemAttribute = new PlentymarketsExportStatusDependency('ItemAttribute');
+        $ItemAttribute->setDependency($ItemCategory);
+        $this->add($ItemAttribute);
 
-		// ItemProperty
-		$ItemProperty = new PlentymarketsExportStatusDependency('ItemProperty');
-		$ItemProperty->setDependency($ItemAttribute);
-		$this->add($ItemProperty);
+        // ItemProperty
+        $ItemProperty = new PlentymarketsExportStatusDependency('ItemProperty');
+        $ItemProperty->setDependency($ItemAttribute);
+        $this->add($ItemProperty);
 
-		// ItemProducer
-		$ItemProducer = new PlentymarketsExportStatusDependency('ItemProducer');
-		$ItemProducer->setDependency($ItemProperty);
-		$this->add($ItemProducer);
+        // ItemProducer
+        $ItemProducer = new PlentymarketsExportStatusDependency('ItemProducer');
+        $ItemProducer->setDependency($ItemProperty);
+        $this->add($ItemProducer);
 
-		// Item
-		$Item = new PlentymarketsExportStatusDependency('Item');
-		$Item->setDependency($ItemProducer);
-		$this->add($Item);
+        // Item
+        $Item = new PlentymarketsExportStatusDependency('Item');
+        $Item->setDependency($ItemProducer);
+        $this->add($Item);
 
-		// ItemCrossSelling
-		$ItemCrossSelling = new PlentymarketsExportStatusDependency('ItemCrossSelling');
-		$ItemCrossSelling->setDependency($Item);
-		$this->add($ItemCrossSelling);
+        // ItemCrossSelling
+        $ItemCrossSelling = new PlentymarketsExportStatusDependency('ItemCrossSelling');
+        $ItemCrossSelling->setDependency($Item);
+        $this->add($ItemCrossSelling);
 
-		// Customer
-		$Bundle = new PlentymarketsExportStatus('ItemBundle');
-		$Bundle->setOptional();
-		$this->add($Bundle);
+        // Customer
+        $Bundle = new PlentymarketsExportStatus('ItemBundle');
+        $Bundle->setOptional();
+        $this->add($Bundle);
 
-		// Customer
-		$Customer = new PlentymarketsExportStatus('Customer');
-		$Customer->setOptional();
-		$this->add($Customer);
-	}
+        // Customer
+        $Customer = new PlentymarketsExportStatus('Customer');
+        $Customer->setOptional();
+        $this->add($Customer);
+    }
 
-	/**
-	 * I am the singleton method
-	 *
-	 * @return PlentymarketsExportStatusController
-	 */
-	public static function getInstance()
-	{
-		if (!self::$Instance instanceof self)
-		{
-			self::$Instance = new self();
-		}
-		return self::$Instance;
-	}
+    /**
+     * I am the singleton method
+     *
+     * @return PlentymarketsExportStatusController
+     */
+    public static function getInstance()
+    {
+        if (!self::$Instance instanceof self) {
+            self::$Instance = new self();
+        }
 
-	/**
-	 * Adds a status to the controller
-	 *
-	 * @param PlentymarketsExportStatus $Status
-	 */
-	public function add(PlentymarketsExportStatus $Status)
-	{
-		$this->Status[$Status->getName()] = $Status;
-	}
+        return self::$Instance;
+    }
 
-	/**
-	 * Returns the overview for the use in the view
-	 *
-	 * @return array
-	 */
-	public function getOverview()
-	{
-		$wizardIsActive = PlentymarketsExportWizard::getInstance()->isActive();
-		$overview = array();
+    /**
+     * Adds a status to the controller
+     *
+     * @param PlentymarketsExportStatus $Status
+     */
+    public function add(PlentymarketsExportStatus $Status)
+    {
+        $this->Status[$Status->getName()] = $Status;
+    }
 
-		/** @var PlentymarketsExportStatus $Status */
-		foreach ($this->Status as $position => $Status)
-		{
-			$overview[$Status->getName()] = array(
-				// Position
-				'position' => $position,
+    /**
+     * Returns the overview for the use in the view
+     *
+     * @return array
+     */
+    public function getOverview()
+    {
+        $wizardIsActive = PlentymarketsExportWizard::getInstance()->isActive();
+        $overview = [];
 
-				// Data
-				'name' => $Status->getName(),
-				'status' => $Status->getStatus(),
-				'error' => htmlspecialchars($Status->getError()),
-				'start' => $Status->getStart(),
-				'finished' => $Status->getFinished(),
+        /** @var PlentymarketsExportStatus $Status */
+        foreach ($this->Status as $position => $Status) {
+            $overview[$Status->getName()] = [
+                // Position
+                'position' => $position,
 
-				// Flags
-				'mayAnnounce' => !$wizardIsActive && $this->mayAnnounce() && $Status->mayAnnounce(),
-				'mayReset' => !$wizardIsActive && $Status->mayReset(),
-				'mayErase' => !$wizardIsActive && $Status->mayErase(),
-				'isOverdue' => $Status->isOverdue(),
-				'needsDependency' => !$wizardIsActive && $Status->needsDependency() && !$Status->isFinished()
-			);
-		}
+                // Data
+                'name' => $Status->getName(),
+                'status' => $Status->getStatus(),
+                'error' => htmlspecialchars($Status->getError()),
+                'start' => $Status->getStart(),
+                'finished' => $Status->getFinished(),
 
-		return $overview;
-	}
+                // Flags
+                'mayAnnounce' => !$wizardIsActive && $this->mayAnnounce() && $Status->mayAnnounce(),
+                'mayReset' => !$wizardIsActive && $Status->mayReset(),
+                'mayErase' => !$wizardIsActive && $Status->mayErase(),
+                'isOverdue' => $Status->isOverdue(),
+                'needsDependency' => !$wizardIsActive && $Status->needsDependency() && !$Status->isFinished(),
+            ];
+        }
 
-	/**
-	 * Returns an entity
-	 *
-	 * @param string $entity
-	 * @return PlentymarketsExportStatus
-	 */
-	public function getEntity($entity)
-	{
-		return $this->Status[$entity];
-	}
+        return $overview;
+    }
 
-	/**
-	 * Returns the next entity to be announced
-	 *
-	 * @throws PlentymarketsExportStatusException if there is no announceable entity
-	 * @return PlentymarketsExportStatus
-	 */
-	public function getNext()
-	{
-		foreach ($this->Status as $Status)
-		{
-			if ($Status->mayAnnounce())
-			{
-				return $Status;
-			}
-		}
-		throw new PlentymarketsExportStatusException('No entity to announce', 2010);
-	}
+    /**
+     * Returns an entity
+     *
+     * @param string $entity
+     *
+     * @return PlentymarketsExportStatus
+     */
+    public function getEntity($entity)
+    {
+        return $this->Status[$entity];
+    }
 
-	/**
-	 * Checks whether an entity may be announced
-	 *
-	 * @return boolean
-	 */
-	public function mayAnnounce()
-	{
-		if ($this->isBroke())
-		{
-			return false;
-		}
-		foreach ($this->Status as $Status)
-		{
-			if ($Status->isBlocking())
-			{
-				return false;
-			}
-		}
-		return true;
-	}
+    /**
+     * Returns the next entity to be announced
+     *
+     * @throws PlentymarketsExportStatusException if there is no announceable entity
+     *
+     * @return PlentymarketsExportStatus
+     */
+    public function getNext()
+    {
+        foreach ($this->Status as $Status) {
+            if ($Status->mayAnnounce()) {
+                return $Status;
+            }
+        }
+        throw new PlentymarketsExportStatusException('No entity to announce', 2010);
+    }
 
-	/**
-	 * Checks whether the specifies entity may be announced
-	 *
-	 * @param string $entity
-	 * @return boolean
-	 */
-	public function mayAnnounceEntity($entity)
-	{
-		return $this->mayAnnounce() && $this->Status[$entity]->mayAnnounce();
-	}
+    /**
+     * Checks whether an entity may be announced
+     *
+     * @return bool
+     */
+    public function mayAnnounce()
+    {
+        if ($this->isBroke()) {
+            return false;
+        }
+        foreach ($this->Status as $Status) {
+            if ($Status->isBlocking()) {
+                return false;
+            }
+        }
 
-	/**
-	 * Checks whether the whole export is blocked through an broke entity
-	 *
-	 * @return boolean
-	 */
-	public function isBroke()
-	{
-		foreach ($this->Status as $Status)
-		{
-			if ($Status->isBroke())
-			{
-				return true;
-			}
-		}
-		return false;
-	}
+        return true;
+    }
 
-	/**
-	 * Checks wheter on of the exports is waiting to be carried out
-	 *
-	 * @return boolean
-	 */
-	public function isWaiting()
-	{
-		foreach ($this->Status as $Status)
-		{
-			if ($Status->isWaiting())
-			{
-				return true;
-			}
-		}
-		return false;
-	}
+    /**
+     * Checks whether the specifies entity may be announced
+     *
+     * @param string $entity
+     *
+     * @return bool
+     */
+    public function mayAnnounceEntity($entity)
+    {
+        return $this->mayAnnounce() && $this->Status[$entity]->mayAnnounce();
+    }
 
-	/**
-	 * Checks wheter the mandatory exports are finished
-	 *
-	 * @return boolean
-	 */
-	public function isFinished()
-	{
-		foreach ($this->Status as $Status)
-		{
-			if (!$Status->isOptional() && !$Status->isFinished())
-			{
-				return false;
-			}
-		}
-		return true;
-	}
+    /**
+     * Checks whether the whole export is blocked through an broke entity
+     *
+     * @return bool
+     */
+    public function isBroke()
+    {
+        foreach ($this->Status as $Status) {
+            if ($Status->isBroke()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks wheter on of the exports is waiting to be carried out
+     *
+     * @return bool
+     */
+    public function isWaiting()
+    {
+        foreach ($this->Status as $Status) {
+            if ($Status->isWaiting()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks wheter the mandatory exports are finished
+     *
+     * @return bool
+     */
+    public function isFinished()
+    {
+        foreach ($this->Status as $Status) {
+            if (!$Status->isOptional() && !$Status->isFinished()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

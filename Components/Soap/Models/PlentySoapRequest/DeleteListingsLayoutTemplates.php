@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_DeleteListingsLayoutTemplates
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoaprequestobject_deletelistingslayouttemplates
-	 */
-	public $DeleteListingsLayoutTemplates;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoaprequestobject_deletelistingslayouttemplates
+     */
+    public $DeleteListingsLayoutTemplates;
 }

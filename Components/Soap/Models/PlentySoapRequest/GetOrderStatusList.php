@@ -32,9 +32,8 @@
  */
 class PlentySoapRequest_GetOrderStatusList
 {
-	
-	/**
-	 * @var string
-	 */
-	public $Lang;
+    /**
+     * @var string
+     */
+    public $Lang;
 }

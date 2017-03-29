@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_SetStocksTransfer
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_setstockstransfer
-	 */
-	public $StockTransfers;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_setstockstransfer
+     */
+    public $StockTransfers;
 }

@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_setcreditnoteitem
 {
-	
-	/**
-	 * @var PlentySoapObject_SetCreditNoteItem
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_SetCreditNoteItem
+     */
+    public $item;
 }

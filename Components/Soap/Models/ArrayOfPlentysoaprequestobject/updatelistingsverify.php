@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoaprequestobject_updatelistingsverify
 {
-	
-	/**
-	 * @var PlentySoapRequestObject_UpdateListingsVerify
-	 */
-	public $item;
+    /**
+     * @var PlentySoapRequestObject_UpdateListingsVerify
+     */
+    public $item;
 }

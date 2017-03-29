@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoaprequestobject_getcustomersschedulers
 {
-	
-	/**
-	 * @var PlentySoapRequestObject_GetCustomersSchedulers
-	 */
-	public $item;
+    /**
+     * @var PlentySoapRequestObject_GetCustomersSchedulers
+     */
+    public $item;
 }

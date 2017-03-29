@@ -32,9 +32,8 @@
  */
 class PlentySoapObject_GetWarehouseItemRefundLocation
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_integer
-	 */
-	public $RefusedLocations;
+    /**
+     * @var ArrayOfPlentysoapobject_integer
+     */
+    public $RefusedLocations;
 }

@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapresponsemessage
 {
-	
-	/**
-	 * @var PlentySoapResponseMessage
-	 */
-	public $item;
+    /**
+     * @var PlentySoapResponseMessage
+     */
+    public $item;
 }

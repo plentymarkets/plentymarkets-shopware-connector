@@ -32,19 +32,18 @@
  */
 class PlentySoapObject_SetWarranty
 {
-	
-	/**
-	 * @var int
-	 */
-	public $OrderID;
-	
-	/**
-	 * @var float
-	 */
-	public $OrderStatus;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_setwarrantyitem
-	 */
-	public $WarrantyItems;
+    /**
+     * @var int
+     */
+    public $OrderID;
+
+    /**
+     * @var float
+     */
+    public $OrderStatus;
+
+    /**
+     * @var ArrayOfPlentysoapobject_setwarrantyitem
+     */
+    public $WarrantyItems;
 }

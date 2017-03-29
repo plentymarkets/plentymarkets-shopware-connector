@@ -32,14 +32,13 @@
  */
 class PlentySoapObject_AttributeVariantList
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_integer
-	 */
-	public $AttributeValueIDs;
-	
-	/**
-	 * @var boolean
-	 */
-	public $delete;
+    /**
+     * @var ArrayOfPlentysoapobject_integer
+     */
+    public $AttributeValueIDs;
+
+    /**
+     * @var bool
+     */
+    public $delete;
 }

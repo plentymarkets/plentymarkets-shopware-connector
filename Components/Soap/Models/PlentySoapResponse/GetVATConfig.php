@@ -32,24 +32,23 @@
  */
 class PlentySoapResponse_GetVATConfig
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_deliverycountryvat
-	 */
-	public $CountryVAT;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_defaultcountryvat
-	 */
-	public $DefaultVAT;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapobject_deliverycountryvat
+     */
+    public $CountryVAT;
+
+    /**
+     * @var ArrayOfPlentysoapobject_defaultcountryvat
+     */
+    public $DefaultVAT;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

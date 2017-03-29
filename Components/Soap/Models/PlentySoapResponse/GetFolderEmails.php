@@ -32,29 +32,28 @@
  */
 class PlentySoapResponse_GetFolderEmails
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_getfolderemailsemail
-	 */
-	public $Emails;
-	
-	/**
-	 * @var int
-	 */
-	public $FolderID;
-	
-	/**
-	 * @var int
-	 */
-	public $Pages;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapobject_getfolderemailsemail
+     */
+    public $Emails;
+
+    /**
+     * @var int
+     */
+    public $FolderID;
+
+    /**
+     * @var int
+     */
+    public $Pages;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

@@ -32,39 +32,38 @@
  */
 class PlentySoapRequest_GetDynamicExport
 {
-	
-	/**
-	 * @var int
-	 */
-	public $FormatID;
-	
-	/**
-	 * @var string
-	 */
-	public $FormatName;
-	
-	/**
-	 * @var int
-	 */
-	public $Offset;
-	
-	/**
-	 * @var int
-	 */
-	public $RowCount;
-	
-	/**
-	 * @var int
-	 */
-	public $StockItemBundle;
-	
-	/**
-	 * @var int
-	 */
-	public $StockOption;
-	
-	/**
-	 * @var int
-	 */
-	public $StockSupplier;
+    /**
+     * @var int
+     */
+    public $FormatID;
+
+    /**
+     * @var string
+     */
+    public $FormatName;
+
+    /**
+     * @var int
+     */
+    public $Offset;
+
+    /**
+     * @var int
+     */
+    public $RowCount;
+
+    /**
+     * @var int
+     */
+    public $StockItemBundle;
+
+    /**
+     * @var int
+     */
+    public $StockOption;
+
+    /**
+     * @var int
+     */
+    public $StockSupplier;
 }

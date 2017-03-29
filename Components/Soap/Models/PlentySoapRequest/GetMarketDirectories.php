@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_GetMarketDirectories
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoaprequestobject_getmarketdirectories
-	 */
-	public $GetMarketDirectories;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoaprequestobject_getmarketdirectories
+     */
+    public $GetMarketDirectories;
 }

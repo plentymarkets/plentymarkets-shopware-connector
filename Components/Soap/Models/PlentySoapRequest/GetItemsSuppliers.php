@@ -32,19 +32,18 @@
  */
 class PlentySoapRequest_GetItemsSuppliers
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_getitemssuppliers
-	 */
-	public $ItemIDList;
-	
-	/**
-	 * @var int
-	 */
-	public $LastUpdate;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_getitemssuppliers
+     */
+    public $ItemIDList;
+
+    /**
+     * @var int
+     */
+    public $LastUpdate;
 }

@@ -32,14 +32,13 @@
  */
 class PlentySoapResponseObject_GetMarketShippingProfiles
 {
-	
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponseobject_getmarketshippingprofile
-	 */
-	public $MarketShippingProfiles;
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
+
+    /**
+     * @var ArrayOfPlentysoapresponseobject_getmarketshippingprofile
+     */
+    public $MarketShippingProfiles;
 }

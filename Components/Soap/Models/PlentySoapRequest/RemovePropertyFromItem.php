@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_RemovePropertyFromItem
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_removepropertyfromitem
-	 */
-	public $RemovePropertyFromItemList;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_removepropertyfromitem
+     */
+    public $RemovePropertyFromItemList;
 }

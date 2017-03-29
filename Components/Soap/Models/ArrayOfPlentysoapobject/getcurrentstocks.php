@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_getcurrentstocks
 {
-	
-	/**
-	 * @var PlentySoapObject_GetCurrentStocks
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_GetCurrentStocks
+     */
+    public $item;
 }

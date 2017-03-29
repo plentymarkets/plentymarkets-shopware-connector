@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_setitemsbaseitembase
 {
-	
-	/**
-	 * @var PlentySoapObject_SetItemsBaseItemBase
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_SetItemsBaseItemBase
+     */
+    public $item;
 }

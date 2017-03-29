@@ -32,29 +32,28 @@
  */
 class PlentySoapRequest_GetPropertyGroups
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var string
-	 */
-	public $Lang;
-	
-	/**
-	 * @var int
-	 */
-	public $LastUpdateFrom;
-	
-	/**
-	 * @var int
-	 */
-	public $LastUpdateTill;
-	
-	/**
-	 * @var int
-	 */
-	public $Page;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var string
+     */
+    public $Lang;
+
+    /**
+     * @var int
+     */
+    public $LastUpdateFrom;
+
+    /**
+     * @var int
+     */
+    public $LastUpdateTill;
+
+    /**
+     * @var int
+     */
+    public $Page;
 }

@@ -32,19 +32,18 @@
  */
 class PlentySoapResponse_GetItemMediaFiles
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_getitemmediafiles
-	 */
-	public $ItemMediaFiles;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapobject_getitemmediafiles
+     */
+    public $ItemMediaFiles;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

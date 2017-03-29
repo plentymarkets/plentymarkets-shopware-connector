@@ -32,29 +32,28 @@
  */
 class PlentySoapResponseObject_GetMarketDirectories
 {
-	
-	/**
-	 * @var int
-	 */
-	public $DirectoryId;
-	
-	/**
-	 * @var int
-	 */
-	public $DirectoryLevel;
-	
-	/**
-	 * @var string
-	 */
-	public $DirectoryName;
-	
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
-	
-	/**
-	 * @var int
-	 */
-	public $ParentDirectoryId;
+    /**
+     * @var int
+     */
+    public $DirectoryId;
+
+    /**
+     * @var int
+     */
+    public $DirectoryLevel;
+
+    /**
+     * @var string
+     */
+    public $DirectoryName;
+
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
+
+    /**
+     * @var int
+     */
+    public $ParentDirectoryId;
 }

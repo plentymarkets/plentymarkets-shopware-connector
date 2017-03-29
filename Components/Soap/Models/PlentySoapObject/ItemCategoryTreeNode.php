@@ -32,14 +32,13 @@
  */
 class PlentySoapObject_ItemCategoryTreeNode
 {
-	
-	/**
-	 * @var string
-	 */
-	public $CategoryPath;
-	
-	/**
-	 * @var string
-	 */
-	public $CategoryPathNames;
+    /**
+     * @var string
+     */
+    public $CategoryPath;
+
+    /**
+     * @var string
+     */
+    public $CategoryPathNames;
 }

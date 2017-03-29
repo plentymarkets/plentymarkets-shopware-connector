@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_GetItemsPriceLists
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoaprequestobject_getitemspricelists
-	 */
-	public $Items;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoaprequestobject_getitemspricelists
+     */
+    public $Items;
 }

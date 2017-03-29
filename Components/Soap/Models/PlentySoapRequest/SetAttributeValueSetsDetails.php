@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_SetAttributeValueSetsDetails
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_setattributevaluesetsdetails
-	 */
-	public $AttributeValueSetsDetails;
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
+    /**
+     * @var ArrayOfPlentysoapobject_setattributevaluesetsdetails
+     */
+    public $AttributeValueSetsDetails;
+
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
 }

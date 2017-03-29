@@ -26,7 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * PlentymarketsMappingEntityProducer provides the actual producer mapping functionality.
  * Like the other mapping entities this class is called in PlentymarketsMappingController. This entity
@@ -36,14 +35,13 @@
  */
 class PlentymarketsMappingEntityProducer extends PlentymarketsMappingEntityAbstract
 {
-
-	/**
-	 * Returns the name of the database table
-	 * 
-	 * @return string
-	 */
-	protected function getName()
-	{
-		return 'plenty_mapping_producer';
-	}
+    /**
+     * Returns the name of the database table
+     *
+     * @return string
+     */
+    protected function getName()
+    {
+        return 'plenty_mapping_producer';
+    }
 }

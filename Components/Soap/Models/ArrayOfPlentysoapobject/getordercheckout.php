@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_getordercheckout
 {
-	
-	/**
-	 * @var PlentySoapObject_GetOrderCheckout
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_GetOrderCheckout
+     */
+    public $item;
 }

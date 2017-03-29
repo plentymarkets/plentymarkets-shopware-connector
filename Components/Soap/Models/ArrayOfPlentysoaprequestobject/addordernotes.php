@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoaprequestobject_addordernotes
 {
-	
-	/**
-	 * @var PlentySoapRequestObject_AddOrderNotes
-	 */
-	public $item;
+    /**
+     * @var PlentySoapRequestObject_AddOrderNotes
+     */
+    public $item;
 }

@@ -31,41 +31,41 @@
  */
 class PlentymarketsAutoLoader
 {
-	/**
-	 * @var array
-	 */
-	protected $classMap = array();
+    /**
+     * @var array
+     */
+    protected $classMap = [];
 
-	/**
-	 * Loads the class map
-	 */
-	public function __construct()
-	{
-		$this->classMap = require_once __DIR__ . DIRECTORY_SEPARATOR . 'autoloadClassMap.php';
-	}
+    /**
+     * Loads the class map
+     */
+    public function __construct()
+    {
+        $this->classMap = require_once __DIR__ . DIRECTORY_SEPARATOR . 'autoloadClassMap.php';
+    }
 
-	/**
-	 * Load the file to the given class name
-	 *
-	 * @param string $className
-	 * @return boolean
-	 */
-	public function load($className)
-	{
-		if (!isset($this->classMap[$className]))
-		{
-			return false;
-		}
+    /**
+     * Load the file to the given class name
+     *
+     * @param string $className
+     *
+     * @return bool
+     */
+    public function load($className)
+    {
+        if (!isset($this->classMap[$className])) {
+            return false;
+        }
 
-		require_once __DIR__ . DIRECTORY_SEPARATOR . $this->classMap[$className];
-	}
+        require_once __DIR__ . DIRECTORY_SEPARATOR . $this->classMap[$className];
+    }
 
-	/**
-	 * Registers the auto loader
-	 */
-	public static function register()
-	{
-		$loader = new self();
-		spl_autoload_register(array($loader, 'load'));
-	}
+    /**
+     * Registers the auto loader
+     */
+    public static function register()
+    {
+        $loader = new self();
+        spl_autoload_register([$loader, 'load']);
+    }
 }

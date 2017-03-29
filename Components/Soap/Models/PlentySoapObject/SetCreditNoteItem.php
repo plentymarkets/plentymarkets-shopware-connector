@@ -32,14 +32,13 @@
  */
 class PlentySoapObject_SetCreditNoteItem
 {
-	
-	/**
-	 * @var float
-	 */
-	public $OrderRowId;
-	
-	/**
-	 * @var float
-	 */
-	public $Quantity;
+    /**
+     * @var float
+     */
+    public $OrderRowId;
+
+    /**
+     * @var float
+     */
+    public $Quantity;
 }

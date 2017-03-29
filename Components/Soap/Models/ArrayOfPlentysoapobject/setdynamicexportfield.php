@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_setdynamicexportfield
 {
-	
-	/**
-	 * @var PlentySoapObject_SetDynamicExportField
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_SetDynamicExportField
+     */
+    public $item;
 }

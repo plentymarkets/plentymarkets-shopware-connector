@@ -32,9 +32,8 @@
  */
 class PlentySoapRequest_GetItemsPropertiesList
 {
-	
-	/**
-	 * @var string
-	 */
-	public $Lang;
+    /**
+     * @var string
+     */
+    public $Lang;
 }

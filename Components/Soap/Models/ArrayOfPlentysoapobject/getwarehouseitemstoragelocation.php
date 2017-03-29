@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_getwarehouseitemstoragelocation
 {
-	
-	/**
-	 * @var PlentySoapObject_GetWarehouseItemStorageLocation
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_GetWarehouseItemStorageLocation
+     */
+    public $item;
 }

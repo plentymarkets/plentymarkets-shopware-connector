@@ -32,9 +32,8 @@
  */
 class PlentySoapRequestObject_UpdateListingsRelist
 {
-	
-	/**
-	 * @var int
-	 */
-	public $MarketListingHistoryID;
+    /**
+     * @var int
+     */
+    public $MarketListingHistoryID;
 }

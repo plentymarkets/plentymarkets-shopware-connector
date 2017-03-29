@@ -32,19 +32,18 @@
  */
 class PlentySoapResponse_SetCategories
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapresponseobject_setcategories
-	 */
-	public $Categories;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapresponseobject_setcategories
+     */
+    public $Categories;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

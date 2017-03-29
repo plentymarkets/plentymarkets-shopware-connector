@@ -26,7 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * PlentymarketsMappingEntityShop provides the actual item mapping functionality.
  * Like the other mapping entities this class is called in PlentymarketsMappingController. This entity
@@ -36,14 +35,13 @@
  */
 class PlentymarketsMappingEntityShop extends PlentymarketsMappingEntityAbstract
 {
-
-	/**
-	 * Returns the name of the database table
-	 * 
-	 * @return string
-	 */
-	protected function getName()
-	{
-		return 'plenty_mapping_shop';
-	}
+    /**
+     * Returns the name of the database table
+     *
+     * @return string
+     */
+    protected function getName()
+    {
+        return 'plenty_mapping_shop';
+    }
 }

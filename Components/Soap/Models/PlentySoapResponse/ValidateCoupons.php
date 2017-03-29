@@ -32,19 +32,18 @@
  */
 class PlentySoapResponse_ValidateCoupons
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_coupon
-	 */
-	public $Coupons;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapobject_coupon
+     */
+    public $Coupons;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

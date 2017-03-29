@@ -33,54 +33,52 @@
  */
 class PlentymarketsExportContinuousController
 {
-	/**
-	 * PlentymarketsExportContinuousController object data.
-	 *
-	 * @var PlentymarketsExportContinuousController
-	 */
-	protected static $Instance;
+    /**
+     * PlentymarketsExportContinuousController object data.
+     *
+     * @var PlentymarketsExportContinuousController
+     */
+    protected static $Instance;
 
-	/**
-	 * PlentymarketsConfig object data.
-	 *
-	 * @var PlentymarketsConfig
-	 */
-	protected $Config;
+    /**
+     * PlentymarketsConfig object data.
+     *
+     * @var PlentymarketsConfig
+     */
+    protected $Config;
 
-	/**
-	 * Prepares config data and checks different conditions like finished mapping.
-	 */
-	protected function __construct()
-	{
-		//
-		$this->Config = PlentymarketsConfig::getInstance();
-	}
+    /**
+     * Prepares config data and checks different conditions like finished mapping.
+     */
+    protected function __construct()
+    {
+        $this->Config = PlentymarketsConfig::getInstance();
+    }
 
-	/**
-	 * If an instance of PlentymarketsExportContinuousController exists, it returns this instance.
-	 * Else it creates a new instance of PlentymarketsExportController.
-	 *
-	 * @return PlentymarketsExportContinuousController
-	 */
-	public static function getInstance()
-	{
-		if (!self::$Instance instanceof self)
-		{
-			self::$Instance = new self();
-		}
-		return self::$Instance;
-	}
+    /**
+     * If an instance of PlentymarketsExportContinuousController exists, it returns this instance.
+     * Else it creates a new instance of PlentymarketsExportController.
+     *
+     * @return PlentymarketsExportContinuousController
+     */
+    public static function getInstance()
+    {
+        if (!self::$Instance instanceof self) {
+            self::$Instance = new self();
+        }
 
-	/**
+        return self::$Instance;
+    }
+
+    /**
      * Runs an export for the given entity.
-	 *
-	 * @param string $entity
-	 */
-	public function run($entity)
-	{
-		$class = sprintf('PlentymarketsExportContinuousController%s', $entity);
+     *
+     * @param string $entity
+     */
+    public function run($entity)
+    {
+        $class = sprintf('PlentymarketsExportContinuousController%s', $entity);
         $Controller = new $class();
-		$Controller->run();
-	}
-
+        $Controller->run();
+    }
 }

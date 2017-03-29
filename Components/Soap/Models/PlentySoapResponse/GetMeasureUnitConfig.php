@@ -32,19 +32,18 @@
  */
 class PlentySoapResponse_GetMeasureUnitConfig
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_getmeasureunitconfig
-	 */
-	public $MeasureUnitConfig;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapobject_getmeasureunitconfig
+     */
+    public $MeasureUnitConfig;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

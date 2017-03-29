@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_getmethodofpayments
 {
-	
-	/**
-	 * @var PlentySoapObject_GetMethodOfPayments
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_GetMethodOfPayments
+     */
+    public $item;
 }

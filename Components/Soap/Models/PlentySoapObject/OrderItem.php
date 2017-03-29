@@ -32,139 +32,138 @@
  */
 class PlentySoapObject_OrderItem
 {
-	
-	/**
-	 * @var int
-	 */
-	public $BundleItemID;
-	
-	/**
-	 * @var string
-	 */
-	public $Currency;
-	
-	/**
-	 * @var float
-	 */
-	public $CurrencyGross;
-	
-	/**
-	 * @var float
-	 */
-	public $CurrencyNet;
-	
-	/**
-	 * @var string
-	 */
-	public $EAN;
-	
-	/**
-	 * @var string
-	 */
-	public $EAN2;
-	
-	/**
-	 * @var string
-	 */
-	public $EAN3;
-	
-	/**
-	 * @var string
-	 */
-	public $EAN4;
-	
-	/**
-	 * @var string
-	 */
-	public $ExternalItemID;
-	
-	/**
-	 * @var string
-	 */
-	public $ExternalOrderItemID;
-	
-	/**
-	 * @var int
-	 */
-	public $ItemID;
-	
-	/**
-	 * @var string
-	 */
-	public $ItemNo;
-	
-	/**
-	 * @var float
-	 */
-	public $ItemRebate;
-	
-	/**
-	 * @var string
-	 */
-	public $ItemText;
-	
-	/**
-	 * @var string
-	 */
-	public $NeckermannItemNo;
-	
-	/**
-	 * @var int
-	 */
-	public $OrderID;
-	
-	/**
-	 * @var int
-	 */
-	public $OrderRowID;
-	
-	/**
-	 * @var int
-	 */
-	public $ParentOrderRowID;
-	
-	/**
-	 * @var float
-	 */
-	public $Price;
-	
-	/**
-	 * @var float
-	 */
-	public $Quantity;
-	
-	/**
-	 * @var float
-	 */
-	public $ReferrerID;
-	
-	/**
-	 * @var PlentySoapEnumeration_OrderItemRowType
-	 */
-	public $RowType;
-	
-	/**
-	 * @var string
-	 */
-	public $SKU;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_salesorderproperty
-	 */
-	public $SalesOrderProperties;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_integer
-	 */
-	public $StorageLocationIDs;
-	
-	/**
-	 * @var float
-	 */
-	public $VAT;
-	
-	/**
-	 * @var int
-	 */
-	public $WarehouseID;
+    /**
+     * @var int
+     */
+    public $BundleItemID;
+
+    /**
+     * @var string
+     */
+    public $Currency;
+
+    /**
+     * @var float
+     */
+    public $CurrencyGross;
+
+    /**
+     * @var float
+     */
+    public $CurrencyNet;
+
+    /**
+     * @var string
+     */
+    public $EAN;
+
+    /**
+     * @var string
+     */
+    public $EAN2;
+
+    /**
+     * @var string
+     */
+    public $EAN3;
+
+    /**
+     * @var string
+     */
+    public $EAN4;
+
+    /**
+     * @var string
+     */
+    public $ExternalItemID;
+
+    /**
+     * @var string
+     */
+    public $ExternalOrderItemID;
+
+    /**
+     * @var int
+     */
+    public $ItemID;
+
+    /**
+     * @var string
+     */
+    public $ItemNo;
+
+    /**
+     * @var float
+     */
+    public $ItemRebate;
+
+    /**
+     * @var string
+     */
+    public $ItemText;
+
+    /**
+     * @var string
+     */
+    public $NeckermannItemNo;
+
+    /**
+     * @var int
+     */
+    public $OrderID;
+
+    /**
+     * @var int
+     */
+    public $OrderRowID;
+
+    /**
+     * @var int
+     */
+    public $ParentOrderRowID;
+
+    /**
+     * @var float
+     */
+    public $Price;
+
+    /**
+     * @var float
+     */
+    public $Quantity;
+
+    /**
+     * @var float
+     */
+    public $ReferrerID;
+
+    /**
+     * @var PlentySoapEnumeration_OrderItemRowType
+     */
+    public $RowType;
+
+    /**
+     * @var string
+     */
+    public $SKU;
+
+    /**
+     * @var ArrayOfPlentysoapobject_salesorderproperty
+     */
+    public $SalesOrderProperties;
+
+    /**
+     * @var ArrayOfPlentysoapobject_integer
+     */
+    public $StorageLocationIDs;
+
+    /**
+     * @var float
+     */
+    public $VAT;
+
+    /**
+     * @var int
+     */
+    public $WarehouseID;
 }

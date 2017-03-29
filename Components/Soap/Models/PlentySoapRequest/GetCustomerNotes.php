@@ -32,19 +32,18 @@
  */
 class PlentySoapRequest_GetCustomerNotes
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var int
-	 */
-	public $CustomerID;
-	
-	/**
-	 * @var int
-	 */
-	public $Page;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var int
+     */
+    public $CustomerID;
+
+    /**
+     * @var int
+     */
+    public $Page;
 }

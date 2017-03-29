@@ -32,19 +32,18 @@
  */
 class PlentySoapResponse_GetShippingProfileConfigurations
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_getshippingprofileconfigurations
-	 */
-	public $ShippingProfileConfigurations;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var ArrayOfPlentysoapobject_getshippingprofileconfigurations
+     */
+    public $ShippingProfileConfigurations;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

@@ -32,14 +32,13 @@
  */
 class PlentySoapObject_GetEmailFolderList
 {
-	
-	/**
-	 * @var int
-	 */
-	public $FolderID;
-	
-	/**
-	 * @var string
-	 */
-	public $FolderName;
+    /**
+     * @var int
+     */
+    public $FolderID;
+
+    /**
+     * @var string
+     */
+    public $FolderName;
 }

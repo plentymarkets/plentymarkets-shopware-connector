@@ -32,74 +32,73 @@
  */
 class PlentySoapObject_AddIncomingPaymentInformation
 {
-	
-	/**
-	 * @var string
-	 */
-	public $AccountBIC;
-	
-	/**
-	 * @var string
-	 */
-	public $AccountCountry;
-	
-	/**
-	 * @var string
-	 */
-	public $AccountHolder;
-	
-	/**
-	 * @var string
-	 */
-	public $AccountIBAN;
-	
-	/**
-	 * @var string
-	 */
-	public $AccountNumber;
-	
-	/**
-	 * @var string
-	 */
-	public $BankCode;
-	
-	/**
-	 * @var string
-	 */
-	public $BankName;
-	
-	/**
-	 * @var string
-	 */
-	public $InformationText;
-	
-	/**
-	 * @var int
-	 */
-	public $PaymentID;
-	
-	/**
-	 * @var int
-	 */
-	public $PaymentInformationID;
-	
-	/**
-	 * @var string
-	 */
-	public $ReceiverName;
-	
-	/**
-	 * @var string
-	 */
-	public $SenderEmail;
-	
-	/**
-	 * @var string
-	 */
-	public $SenderFirstName;
-	
-	/**
-	 * @var string
-	 */
-	public $SenderLastName;
+    /**
+     * @var string
+     */
+    public $AccountBIC;
+
+    /**
+     * @var string
+     */
+    public $AccountCountry;
+
+    /**
+     * @var string
+     */
+    public $AccountHolder;
+
+    /**
+     * @var string
+     */
+    public $AccountIBAN;
+
+    /**
+     * @var string
+     */
+    public $AccountNumber;
+
+    /**
+     * @var string
+     */
+    public $BankCode;
+
+    /**
+     * @var string
+     */
+    public $BankName;
+
+    /**
+     * @var string
+     */
+    public $InformationText;
+
+    /**
+     * @var int
+     */
+    public $PaymentID;
+
+    /**
+     * @var int
+     */
+    public $PaymentInformationID;
+
+    /**
+     * @var string
+     */
+    public $ReceiverName;
+
+    /**
+     * @var string
+     */
+    public $SenderEmail;
+
+    /**
+     * @var string
+     */
+    public $SenderFirstName;
+
+    /**
+     * @var string
+     */
+    public $SenderLastName;
 }

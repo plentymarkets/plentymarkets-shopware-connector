@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoaprequestobject_getitemspricelists
 {
-	
-	/**
-	 * @var PlentySoapRequestObject_GetItemsPriceLists
-	 */
-	public $item;
+    /**
+     * @var PlentySoapRequestObject_GetItemsPriceLists
+     */
+    public $item;
 }

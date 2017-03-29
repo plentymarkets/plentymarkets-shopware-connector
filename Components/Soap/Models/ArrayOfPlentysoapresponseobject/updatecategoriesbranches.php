@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapresponseobject_updatecategoriesbranches
 {
-	
-	/**
-	 * @var PlentySoapResponseObject_UpdateCategoriesBranches
-	 */
-	public $item;
+    /**
+     * @var PlentySoapResponseObject_UpdateCategoriesBranches
+     */
+    public $item;
 }

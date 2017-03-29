@@ -22,7 +22,6 @@
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * PlentymarketsImportEntityOrderIncomingPayments provides
  * the actual order incoming payments import functionality
@@ -31,85 +30,73 @@
  */
 class PlentymarketsImportEntityOrderIncomingPayments extends PlentymarketsImportEntityOrderAbstract
 {
-	/**
-	 *
-	 * @var integer
-	 */
-	protected static $paymentStatusFull;
+    /**
+     * @var int
+     */
+    protected static $paymentStatusFull;
 
-	/**
-	 *
-	 * @var integer
-	 */
-	protected static $paymentStatusPartial;
+    /**
+     * @var int
+     */
+    protected static $paymentStatusPartial;
 
-	/**
-	 *
-	 * @var string
-	 */
-	protected static $action = 'IncomingPayment';
+    /**
+     * @var string
+     */
+    protected static $action = 'IncomingPayment';
 
-	/**
-	 * Prepares the soap orders SOAP object
-	 *
-	 * @see PlentymarketsImportEntityOrderAbstract::prepare()
-	 */
-	public function prepare()
-	{
-		$timestamp = PlentymarketsConfig::getInstance()->getImportOrderIncomingPaymentsLastUpdateTimestamp(0);
-		if ($timestamp > 0)
-		{
-			$this->log('LastUpdate: ' . date('r', $timestamp));
-		}
+    /**
+     * Prepares the soap orders SOAP object
+     *
+     * @see PlentymarketsImportEntityOrderAbstract::prepare()
+     */
+    public function prepare()
+    {
+        $timestamp = PlentymarketsConfig::getInstance()->getImportOrderIncomingPaymentsLastUpdateTimestamp(0);
+        if ($timestamp > 0) {
+            $this->log('LastUpdate: ' . date('r', $timestamp));
+        }
 
-		$this->Request_SearchOrders->OrderPaidFrom = $timestamp;
+        $this->Request_SearchOrders->OrderPaidFrom = $timestamp;
 
-		if (is_null(self::$paymentStatusFull))
-		{
-			self::$paymentStatusFull = PlentymarketsConfig::getInstance()->getIncomingPaymentShopwarePaymentFullStatusID();
-		}
+        if (is_null(self::$paymentStatusFull)) {
+            self::$paymentStatusFull = PlentymarketsConfig::getInstance()->getIncomingPaymentShopwarePaymentFullStatusID();
+        }
 
-		if (is_null(self::$paymentStatusPartial))
-		{
-			self::$paymentStatusPartial = PlentymarketsConfig::getInstance()->getIncomingPaymentShopwarePaymentPartialStatusID();
-		}
-	}
+        if (is_null(self::$paymentStatusPartial)) {
+            self::$paymentStatusPartial = PlentymarketsConfig::getInstance()->getIncomingPaymentShopwarePaymentPartialStatusID();
+        }
+    }
 
-	/**
-	 * Handles the actual import
-	 *
-	 * @param integer $shopwareOrderId
-	 * @param PlentySoapObject_OrderHead $Order
-	 */
-	public function handle($shopwareOrderId, $Order)
-	{
-		// Payment status
-		if ($Order->PaymentStatus == 1)
-		{
-			$paymentStatus = self::$paymentStatusFull;
-		}
-		else if ($Order->PaymentStatus == 4)
-		{
-			$paymentStatus = self::$paymentStatusPartial;
-		}
-		else
-		{
-			$paymentStatus = -1;
-		}
+    /**
+     * Handles the actual import
+     *
+     * @param int $shopwareOrderId
+     * @param PlentySoapObject_OrderHead $Order
+     */
+    public function handle($shopwareOrderId, $Order)
+    {
+        // Payment status
+        if ($Order->PaymentStatus == 1) {
+            $paymentStatus = self::$paymentStatusFull;
+        } elseif ($Order->PaymentStatus == 4) {
+            $paymentStatus = self::$paymentStatusPartial;
+        } else {
+            $paymentStatus = -1;
+        }
 
-		if ($paymentStatus > 0)
-		{
-			self::$OrderModule->setPaymentStatus($shopwareOrderId, $paymentStatus, false, 'plentymarkets');
+        if ($paymentStatus > 0) {
+            self::$OrderModule->setPaymentStatus($shopwareOrderId, $paymentStatus, false, 'plentymarkets');
 
-			Shopware()->Db()->query('
+            Shopware()->Db()->query('
 				UPDATE plenty_order
 					SET
 						plentyOrderPaidStatus = 1,
 						plentyOrderPaidTimestamp = NOW()
 					WHERE shopwareId = ?
-			', array(
-				$shopwareOrderId,
-			));
-		}
-	}
+			', [
+                $shopwareOrderId,
+            ]);
+        }
+    }
 }

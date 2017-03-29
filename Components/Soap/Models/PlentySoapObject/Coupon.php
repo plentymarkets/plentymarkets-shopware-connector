@@ -32,34 +32,33 @@
  */
 class PlentySoapObject_Coupon
 {
-	
-	/**
-	 * @var float
-	 */
-	public $Amount;
-	
-	/**
-	 * @var int
-	 */
-	public $CampaignID;
-	
-	/**
-	 * @var string
-	 */
-	public $Code;
-	
-	/**
-	 * @var string
-	 */
-	public $GeneratedOn;
-	
-	/**
-	 * @var boolean
-	 */
-	public $IsUsed;
-	
-	/**
-	 * @var string
-	 */
-	public $RedeemedOn;
+    /**
+     * @var float
+     */
+    public $Amount;
+
+    /**
+     * @var int
+     */
+    public $CampaignID;
+
+    /**
+     * @var string
+     */
+    public $Code;
+
+    /**
+     * @var string
+     */
+    public $GeneratedOn;
+
+    /**
+     * @var bool
+     */
+    public $IsUsed;
+
+    /**
+     * @var string
+     */
+    public $RedeemedOn;
 }

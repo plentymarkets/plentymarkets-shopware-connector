@@ -32,19 +32,18 @@
  */
 class PlentySoapRequestObject_GetItemsPriceLists
 {
-	
-	/**
-	 * @var string
-	 */
-	public $ExternalItemID;
-	
-	/**
-	 * @var float
-	 */
-	public $Referrer;
-	
-	/**
-	 * @var string
-	 */
-	public $SKU;
+    /**
+     * @var string
+     */
+    public $ExternalItemID;
+
+    /**
+     * @var float
+     */
+    public $Referrer;
+
+    /**
+     * @var string
+     */
+    public $SKU;
 }

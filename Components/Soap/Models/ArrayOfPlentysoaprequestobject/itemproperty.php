@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoaprequestobject_itemproperty
 {
-	
-	/**
-	 * @var PlentySoapRequestObject_ItemProperty
-	 */
-	public $item;
+    /**
+     * @var PlentySoapRequestObject_ItemProperty
+     */
+    public $item;
 }

@@ -32,24 +32,23 @@
  */
 class PlentySoapRequestObject_FitmentItem
 {
-	
-	/**
-	 * @var int
-	 */
-	public $FitmentID;
-	
-	/**
-	 * @var int
-	 */
-	public $FitmentItemID;
-	
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
-	
-	/**
-	 * @var ArrayOfPlentysoaprequestobject_itemproperty
-	 */
-	public $ItemPropertyList;
+    /**
+     * @var int
+     */
+    public $FitmentID;
+
+    /**
+     * @var int
+     */
+    public $FitmentItemID;
+
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
+
+    /**
+     * @var ArrayOfPlentysoaprequestobject_itemproperty
+     */
+    public $ItemPropertyList;
 }

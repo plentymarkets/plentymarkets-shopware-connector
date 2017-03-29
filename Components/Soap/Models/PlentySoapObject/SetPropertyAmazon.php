@@ -32,14 +32,13 @@
  */
 class PlentySoapObject_SetPropertyAmazon
 {
-	
-	/**
-	 * @var string
-	 */
-	public $AmazonCorrelation;
-	
-	/**
-	 * @var string
-	 */
-	public $AmazonGenre;
+    /**
+     * @var string
+     */
+    public $AmazonCorrelation;
+
+    /**
+     * @var string
+     */
+    public $AmazonGenre;
 }

@@ -32,19 +32,18 @@
  */
 class PlentySoapRequest_ObjectSetItemCategory
 {
-	
-	/**
-	 * @var int
-	 */
-	public $BranchID;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Delete;
-	
-	/**
-	 * @var int
-	 */
-	public $ItemID;
+    /**
+     * @var int
+     */
+    public $BranchID;
+
+    /**
+     * @var bool
+     */
+    public $Delete;
+
+    /**
+     * @var int
+     */
+    public $ItemID;
 }

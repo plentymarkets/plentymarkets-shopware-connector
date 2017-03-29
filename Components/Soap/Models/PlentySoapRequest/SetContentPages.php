@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_SetContentPages
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_contentpage
-	 */
-	public $ContentPages;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_contentpage
+     */
+    public $ContentPages;
 }

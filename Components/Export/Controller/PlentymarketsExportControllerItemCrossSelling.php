@@ -26,7 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * PlentymarketsExportControllerItemCrossSelling handles the export of the cross selling
  *
@@ -34,34 +33,31 @@
  */
 class PlentymarketsExportControllerItemCrossSelling
 {
-
-	/**
-	 * Links all the items together
-	 */
-	public function run()
-	{
-		$itemsToLink = Shopware()->Db()->fetchAll('
+    /**
+     * Links all the items together
+     */
+    public function run()
+    {
+        $itemsToLink = Shopware()->Db()->fetchAll('
 			SELECT shopwareID FROM plenty_mapping_item
 		');
 
-		// Crosselling
-		foreach ($itemsToLink as $item)
-		{
-			$PlentymarketsExportEntityItem = new PlentymarketsExportEntityItemLinked(
-				Shopware()->Models()->find('Shopware\Models\Article\Article', $item['shopwareID'])
-			);
-			$PlentymarketsExportEntityItem->link();
-		}
-	}
+        // Crosselling
+        foreach ($itemsToLink as $item) {
+            $PlentymarketsExportEntityItem = new PlentymarketsExportEntityItemLinked(
+                Shopware()->Models()->find('Shopware\Models\Article\Article', $item['shopwareID'])
+            );
+            $PlentymarketsExportEntityItem->link();
+        }
+    }
 
-	/**
-	 * Checks whether the export is finshed
-	 *
-	 * @return boolean
-	 */
-	public function isFinished()
-	{
-		return true;
-	}
-
+    /**
+     * Checks whether the export is finshed
+     *
+     * @return bool
+     */
+    public function isFinished()
+    {
+        return true;
+    }
 }

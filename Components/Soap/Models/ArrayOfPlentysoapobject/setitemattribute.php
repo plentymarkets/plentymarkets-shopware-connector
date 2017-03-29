@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_setitemattribute
 {
-	
-	/**
-	 * @var PlentySoapObject_SetItemAttribute
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_SetItemAttribute
+     */
+    public $item;
 }

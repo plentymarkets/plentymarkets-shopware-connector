@@ -32,39 +32,38 @@
  */
 class PlentySoapRequest_GetItemCategoryCatalog
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var int
-	 */
-	public $CategoryID;
-	
-	/**
-	 * @var string
-	 */
-	public $Lang;
-	
-	/**
-	 * @var int
-	 */
-	public $LastUpdateFrom;
-	
-	/**
-	 * @var int
-	 */
-	public $LastUpdateTo;
-	
-	/**
-	 * @var int
-	 */
-	public $Page;
-	
-	/**
-	 * @var int
-	 */
-	public $StoreID;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var int
+     */
+    public $CategoryID;
+
+    /**
+     * @var string
+     */
+    public $Lang;
+
+    /**
+     * @var int
+     */
+    public $LastUpdateFrom;
+
+    /**
+     * @var int
+     */
+    public $LastUpdateTo;
+
+    /**
+     * @var int
+     */
+    public $Page;
+
+    /**
+     * @var int
+     */
+    public $StoreID;
 }

@@ -32,29 +32,28 @@
  */
 class PlentySoapObject_GetProducers
 {
-	
-	/**
-	 * @var string
-	 */
-	public $ExternalProducerName;
-	
-	/**
-	 * @var int
-	 */
-	public $ProducerID;
-	
-	/**
-	 * @var string
-	 */
-	public $ProducerLogoURL;
-	
-	/**
-	 * @var string
-	 */
-	public $ProducerName;
-	
-	/**
-	 * @var string
-	 */
-	public $ProducerURL;
+    /**
+     * @var string
+     */
+    public $ExternalProducerName;
+
+    /**
+     * @var int
+     */
+    public $ProducerID;
+
+    /**
+     * @var string
+     */
+    public $ProducerLogoURL;
+
+    /**
+     * @var string
+     */
+    public $ProducerName;
+
+    /**
+     * @var string
+     */
+    public $ProducerURL;
 }

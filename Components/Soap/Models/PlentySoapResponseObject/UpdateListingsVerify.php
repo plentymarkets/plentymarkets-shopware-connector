@@ -32,14 +32,13 @@
  */
 class PlentySoapResponseObject_UpdateListingsVerify
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapresponse_objectupdatelistingsverifyerror
-	 */
-	public $ErrorList;
-	
-	/**
-	 * @var int
-	 */
-	public $MarketListingID;
+    /**
+     * @var ArrayOfPlentysoapresponse_objectupdatelistingsverifyerror
+     */
+    public $ErrorList;
+
+    /**
+     * @var int
+     */
+    public $MarketListingID;
 }

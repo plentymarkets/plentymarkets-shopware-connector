@@ -32,179 +32,178 @@
  */
 class PlentySoapObject_MarketListing
 {
+    /**
+     * @var int
+     */
+    public $AttributeValueSetId;
 
-	/**
-	 * @var int
-	 */
-	public $AttributeValueSetId;
+    /**
+     * @var string
+     */
+    public $BasicPriceInText;
 
-	/**
-	 * @var string
-	 */
-	public $BasicPriceInText;
+    /**
+     * @var bool
+     */
+    public $DeleteMarketListing;
 
-	/**
-	 * @var boolean
-	 */
-	public $DeleteMarketListing;
+    /**
+     * @var int
+     */
+    public $DirectoryId;
 
-	/**
-	 * @var int
-	 */
-	public $DirectoryId;
+    /**
+     * @var int
+     */
+    public $Duration;
 
-	/**
-	 * @var int
-	 */
-	public $Duration;
+    /**
+     * @var float
+     */
+    public $FixedPrice;
 
-	/**
-	 * @var float
-	 */
-	public $FixedPrice;
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
 
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
+    /**
+     * @var string
+     */
+    public $Lang;
 
-	/**
-	 * @var string
-	 */
-	public $Lang;
+    /**
+     * @var int
+     */
+    public $LayoutId;
 
-	/**
-	 * @var int
-	 */
-	public $LayoutId;
+    /**
+     * @var bool
+     */
+    public $ListAllVariants;
 
-	/**
-	 * @var boolean
-	 */
-	public $ListAllVariants;
+    /**
+     * @var string
+     */
+    public $ListingDescription;
 
-	/**
-	 * @var string
-	 */
-	public $ListingDescription;
+    /**
+     * @var bool
+     */
+    public $ListingEnabled;
 
-	/**
-	 * @var boolean
-	 */
-	public $ListingEnabled;
+    /**
+     * @var int
+     */
+    public $ListingID;
 
-	/**
-	 * @var int
-	 */
-	public $ListingID;
+    /**
+     * @var string
+     */
+    public $ListingSubtitle;
 
-	/**
-	 * @var string
-	 */
-	public $ListingSubtitle;
+    /**
+     * @var string
+     */
+    public $ListingTitle;
 
-	/**
-	 * @var string
-	 */
-	public $ListingTitle;
+    /**
+     * @var int
+     */
+    public $MarketID;
 
-	/**
-	 * @var int
-	 */
-	public $MarketID;
+    /**
+     * @var PlentySoapObject_MarketListingEbay
+     */
+    public $MarketListingEbay;
 
-	/**
-	 * @var PlentySoapObject_MarketListingEbay
-	 */
-	public $MarketListingEbay;
+    /**
+     * @var PlentySoapObject_MarketListingHood
+     */
+    public $MarketListingHood;
 
-	/**
-	 * @var PlentySoapObject_MarketListingHood
-	 */
-	public $MarketListingHood;
+    /**
+     * @var int
+     */
+    public $MarketListingID;
 
-	/**
-	 * @var int
-	 */
-	public $MarketListingID;
+    /**
+     * @var PlentySoapObject_MarketListingRicardo
+     */
+    public $MarketListingRicardo;
 
-	/**
-	 * @var PlentySoapObject_MarketListingRicardo
-	 */
-	public $MarketListingRicardo;
+    /**
+     * @var int
+     */
+    public $MaxNumOfImages;
 
-	/**
-	 * @var int
-	 */
-	public $MaxNumOfImages;
+    /**
+     * @var int
+     */
+    public $MaxQuantity;
 
-	/**
-	 * @var int
-	 */
-	public $MaxQuantity;
+    /**
+     * @var int
+     */
+    public $MaximumMarketListings;
 
-	/**
-	 * @var int
-	 */
-	public $MaximumMarketListings;
+    /**
+     * @var float
+     */
+    public $MinPrice;
 
-	/**
-	 * @var float
-	 */
-	public $MinPrice;
+    /**
+     * @var bool
+     */
+    public $NeverEnding;
 
-	/**
-	 * @var boolean
-	 */
-	public $NeverEnding;
+    /**
+     * @var float
+     */
+    public $OrderStatus;
 
-	/**
-	 * @var float
-	 */
-	public $OrderStatus;
+    /**
+     * @var bool
+     */
+    public $SetMarketListingEbay;
 
-	/**
-	 * @var boolean
-	 */
-	public $SetMarketListingEbay;
+    /**
+     * @var bool
+     */
+    public $SetMarketListingHood;
 
-	/**
-	 * @var boolean
-	 */
-	public $SetMarketListingHood;
+    /**
+     * @var bool
+     */
+    public $SetMarketListingRicardo;
 
-	/**
-	 * @var boolean
-	 */
-	public $SetMarketListingRicardo;
+    /**
+     * @var int
+     */
+    public $ShippingProfileId;
 
-	/**
-	 * @var int
-	 */
-	public $ShippingProfileId;
+    /**
+     * @var float
+     */
+    public $StartPrice;
 
-	/**
-	 * @var float
-	 */
-	public $StartPrice;
+    /**
+     * @var int
+     */
+    public $UserId;
 
-	/**
-	 * @var int
-	 */
-	public $UserId;
+    /**
+     * @var float
+     */
+    public $VAT;
 
-	/**
-	 * @var float
-	 */
-	public $VAT;
+    /**
+     * @var int
+     */
+    public $VATCountryID;
 
-	/**
-	 * @var int
-	 */
-	public $VATCountryID;
-
-	/**
-	 * @var int
-	 */
-	public $WarehouseId;
+    /**
+     * @var int
+     */
+    public $WarehouseId;
 }

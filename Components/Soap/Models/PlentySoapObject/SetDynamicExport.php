@@ -32,34 +32,33 @@
  */
 class PlentySoapObject_SetDynamicExport
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_setdynamicexportfield
-	 */
-	public $Fields;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_setdynamicexportfilter
-	 */
-	public $Filter;
-	
-	/**
-	 * @var string
-	 */
-	public $FormatName;
-	
-	/**
-	 * @var string
-	 */
-	public $FormatType;
-	
-	/**
-	 * @var int
-	 */
-	public $ID;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_setdynamicexportprocedure
-	 */
-	public $Procedures;
+    /**
+     * @var ArrayOfPlentysoapobject_setdynamicexportfield
+     */
+    public $Fields;
+
+    /**
+     * @var ArrayOfPlentysoapobject_setdynamicexportfilter
+     */
+    public $Filter;
+
+    /**
+     * @var string
+     */
+    public $FormatName;
+
+    /**
+     * @var string
+     */
+    public $FormatType;
+
+    /**
+     * @var int
+     */
+    public $ID;
+
+    /**
+     * @var ArrayOfPlentysoapobject_setdynamicexportprocedure
+     */
+    public $Procedures;
 }

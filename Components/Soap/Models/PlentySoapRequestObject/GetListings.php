@@ -32,44 +32,43 @@
  */
 class PlentySoapRequestObject_GetListings
 {
-	
-	/**
-	 * @var int
-	 */
-	public $EndTime;
-	
-	/**
-	 * @var string
-	 */
-	public $ExternalID;
-	
-	/**
-	 * @var int
-	 */
-	public $LastUpdate;
-	
-	/**
-	 * @var int
-	 */
-	public $ListingID;
-	
-	/**
-	 * @var string
-	 */
-	public $ListingStatus;
-	
-	/**
-	 * @var int
-	 */
-	public $MarketID;
-	
-	/**
-	 * @var string
-	 */
-	public $MarketName;
-	
-	/**
-	 * @var int
-	 */
-	public $StartTime;
+    /**
+     * @var int
+     */
+    public $EndTime;
+
+    /**
+     * @var string
+     */
+    public $ExternalID;
+
+    /**
+     * @var int
+     */
+    public $LastUpdate;
+
+    /**
+     * @var int
+     */
+    public $ListingID;
+
+    /**
+     * @var string
+     */
+    public $ListingStatus;
+
+    /**
+     * @var int
+     */
+    public $MarketID;
+
+    /**
+     * @var string
+     */
+    public $MarketName;
+
+    /**
+     * @var int
+     */
+    public $StartTime;
 }
