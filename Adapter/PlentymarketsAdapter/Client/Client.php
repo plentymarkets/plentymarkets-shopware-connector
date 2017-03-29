@@ -47,9 +47,9 @@ class Client implements ClientInterface
     /**
      * Client constructor.
      *
-     * @param GuzzleClient $connection
+     * @param GuzzleClient           $connection
      * @param ConfigServiceInterface $config
-     * @param LoggerInterface $logger
+     * @param LoggerInterface        $logger
      */
     public function __construct(
         GuzzleClient $connection,
@@ -117,7 +117,7 @@ class Client implements ClientInterface
         try {
             $response = $this->connection->send($request);
 
-            $this->logger->debug('HTTP request: status: ' . $response->getStatusCode() . ' method: ' . $request->getMethod() . ' path: ' . $request->getPath());
+            $this->logger->debug('HTTP request: status: '.$response->getStatusCode().' method: '.$request->getMethod().' path: '.$request->getPath());
 
             $body = $response->getBody();
 
@@ -237,7 +237,7 @@ class Client implements ClientInterface
 
     /**
      * @param string $path
-     * @param array $options
+     * @param array  $options
      *
      * @return string
      */
@@ -252,7 +252,7 @@ class Client implements ClientInterface
             $base_uri = $this->getBaseUri($options['base_uri']);
         }
 
-        return $base_uri . $path;
+        return $base_uri.$path;
     }
 
     /**
@@ -276,8 +276,8 @@ class Client implements ClientInterface
     /**
      * @param string $method
      * @param string $path
-     * @param array $params
-     * @param array $options
+     * @param array  $params
+     * @param array  $options
      *
      * @return array
      */
@@ -328,12 +328,12 @@ class Client implements ClientInterface
     {
         $headers = [
             'Content-Type' => 'application/json',
-            'Accept' => 'application/x.plentymarkets.v1+json',
-            'user-agent' => $this->getUserAgent(),
+            'Accept'       => 'application/x.plentymarkets.v1+json',
+            'user-agent'   => $this->getUserAgent(),
         ];
 
         if ($path !== 'login') {
-            $headers['Authorization'] = 'Bearer ' . $this->accessToken;
+            $headers['Authorization'] = 'Bearer '.$this->accessToken;
         }
 
         return $headers;

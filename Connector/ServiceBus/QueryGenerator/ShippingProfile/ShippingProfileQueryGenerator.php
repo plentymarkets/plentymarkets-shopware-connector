@@ -9,7 +9,7 @@ use PlentyConnector\Connector\ServiceBus\QueryGenerator\QueryGeneratorInterface;
 use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 
 /**
- * Class ShippingProfileQueryGenerator
+ * Class ShippingProfileQueryGenerator.
  */
 class ShippingProfileQueryGenerator implements QueryGeneratorInterface
 {

@@ -13,7 +13,7 @@ use ShopwareAdapter\ResponseParser\CustomerGroup\CustomerGroupResponseParserInte
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class FetchAllCustomerGroupsQueryHandler
+ * Class FetchAllCustomerGroupsQueryHandler.
  */
 class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
 {
@@ -30,7 +30,7 @@ class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllCustomerGroupsQueryHandler constructor.
      *
-     * @param EntityManagerInterface $entityManager
+     * @param EntityManagerInterface               $entityManager
      * @param CustomerGroupResponseParserInterface $responseParser
      */
     public function __construct(

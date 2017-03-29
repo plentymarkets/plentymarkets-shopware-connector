@@ -3,7 +3,7 @@
 namespace PlentyConnector\Connector\ValueObject;
 
 /**
- * Class AbstractValueObject
+ * Class AbstractValueObject.
  */
 abstract class AbstractValueObject implements ValueObjectInterface
 {
@@ -17,7 +17,7 @@ abstract class AbstractValueObject implements ValueObjectInterface
         $object = new static();
 
         foreach ($params as $key => $value) {
-            $method = 'set' . ucfirst($key);
+            $method = 'set'.ucfirst($key);
 
             if (method_exists($object, $method)) {
                 $object->$method($value);

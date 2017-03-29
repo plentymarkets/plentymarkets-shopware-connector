@@ -8,7 +8,7 @@ use PlentyConnector\Connector\IdentityService\Model\Identity;
 use Ramsey\Uuid\Uuid;
 
 /**
- * Class ResponseParserTest
+ * Class ResponseParserTest.
  */
 abstract class ResponseParserTest extends TestCase
 {
@@ -37,7 +37,7 @@ abstract class ResponseParserTest extends TestCase
         $identity->expects($this->any())->method('getObjectIdentifier')->willReturn($this->objectIdentifier);
 
         /**
-         * @var IdentityService|\PHPUnit_Framework_MockObject_MockObject $identityService
+         * @var IdentityService|\PHPUnit_Framework_MockObject_MockObject
          */
         $identityService = $this->createMock(IdentityService::class);
         $identityService->expects($this->any())->method('findOneBy')->willReturn($identity);

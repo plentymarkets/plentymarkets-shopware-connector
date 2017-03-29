@@ -21,7 +21,7 @@ interface CommandFactoryInterface
      * @param string $adapterName
      * @param string $objectType
      * @param string $commandType
-     * @param mixed $payload
+     * @param mixed  $payload
      *
      * @throws MissingCommandGeneratorException
      * @throws MissingCommandException

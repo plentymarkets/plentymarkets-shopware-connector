@@ -5,7 +5,7 @@ namespace PlentyConnector\Connector\TransferObject\Currency;
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 
 /**
- * Class Currency
+ * Class Currency.
  */
 class Currency extends AbstractTransferObject
 {

@@ -31,14 +31,14 @@ class Definition extends AbstractValueObject
     private $objectType = '';
 
     /**
-     * Definition priority. Higher priority means earlier processing of the definition
+     * Definition priority. Higher priority means earlier processing of the definition.
      *
      * @var int
      */
     private $priority = 0;
 
     /**
-     * active/deactive flag. Can be used to decorate definitions and disable them completly
+     * active/deactive flag. Can be used to decorate definitions and disable them completly.
      *
      * @var bool
      */

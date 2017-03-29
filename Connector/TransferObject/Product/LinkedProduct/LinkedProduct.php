@@ -5,7 +5,7 @@ namespace PlentyConnector\Connector\TransferObject\Product\LinkedProduct;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 
 /**
- * Class LinkedProduct
+ * Class LinkedProduct.
  */
 class LinkedProduct extends AbstractValueObject
 {

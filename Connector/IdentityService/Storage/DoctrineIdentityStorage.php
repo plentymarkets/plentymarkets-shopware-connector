@@ -47,10 +47,10 @@ class DoctrineIdentityStorage implements IdentityStorageInterface
 
         if (null !== $result) {
             $identity = Identity::fromArray([
-                'objectIdentifier' => $result->getObjectIdentifier(),
-                'objectType' => $result->getObjectType(),
+                'objectIdentifier'  => $result->getObjectIdentifier(),
+                'objectType'        => $result->getObjectType(),
                 'adapterIdentifier' => $result->getAdapterIdentifier(),
-                'adapterName' => $result->getAdapterName(),
+                'adapterName'       => $result->getAdapterName(),
             ]);
         }
 
@@ -69,10 +69,10 @@ class DoctrineIdentityStorage implements IdentityStorageInterface
 
         return array_map(function (IdentityModel $model) {
             return Identity::fromArray([
-                'objectIdentifier' => $model->getObjectIdentifier(),
-                'objectType' => $model->getObjectType(),
+                'objectIdentifier'  => $model->getObjectIdentifier(),
+                'objectType'        => $model->getObjectType(),
                 'adapterIdentifier' => $model->getAdapterIdentifier(),
-                'adapterName' => $model->getAdapterName(),
+                'adapterName'       => $model->getAdapterName(),
             ]);
         }, $result);
     }
@@ -102,9 +102,9 @@ class DoctrineIdentityStorage implements IdentityStorageInterface
     {
         $result = $this->identityRepository->findOneBy([
             'adapterIdentifier' => $identity->getAdapterIdentifier(),
-            'adapterName' => $identity->getAdapterName(),
-            'objectIdentifier' => $identity->getObjectIdentifier(),
-            'objectType' => $identity->getObjectType(),
+            'adapterName'       => $identity->getAdapterName(),
+            'objectIdentifier'  => $identity->getObjectIdentifier(),
+            'objectType'        => $identity->getObjectType(),
         ]);
 
         if (null === $result) {

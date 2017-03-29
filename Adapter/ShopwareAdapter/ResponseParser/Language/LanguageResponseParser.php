@@ -7,7 +7,7 @@ use PlentyConnector\Connector\TransferObject\Language\Language;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class LanguageResponseParser
+ * Class LanguageResponseParser.
  */
 class LanguageResponseParser implements LanguageResponseParserInterface
 {
@@ -39,7 +39,7 @@ class LanguageResponseParser implements LanguageResponseParserInterface
 
         return Language::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => $entry['name'] . ' (' . $entry['locale'] . ')',
+            'name'       => $entry['name'].' ('.$entry['locale'].')',
         ]);
     }
 }

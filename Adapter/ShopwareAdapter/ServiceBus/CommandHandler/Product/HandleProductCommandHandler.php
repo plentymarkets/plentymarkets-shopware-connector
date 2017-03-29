@@ -66,32 +66,32 @@ class HandleProductCommandHandler implements CommandHandlerInterface
     public function handle(CommandInterface $command)
     {
         /**
-         * @var HandleCommandInterface $command
-         * @var Product $product
+         * @var HandleCommandInterface
+         * @var Product                $product
          */
         $product = $command->getTransferObject();
 
         /**
-         * @var ModelManager $entityManager
+         * @var ModelManager
          */
         $entityManager = Shopware()->Container()->get('models');
 
         /**
-         * @var IdentityServiceInterface $identityService
+         * @var IdentityServiceInterface
          */
         $identityService = Shopware()->Container()->get('plenty_connector.identity_service');
 
         $identity = $identityService->findOneBy([
             'objectIdentifier' => $product->getIdentifier(),
-            'objectType' => Product::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => Product::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         $shopIdentifiers = array_filter($product->getShopIdentifiers(), function ($identifier) use ($identityService) {
             $shopIdentity = $identityService->findOneBy([
                 'objectIdentifier' => $identifier,
-                'objectType' => Shop::TYPE,
-                'adapterName' => ShopwareAdapter::NAME,
+                'objectType'       => Shop::TYPE,
+                'adapterName'      => ShopwareAdapter::NAME,
             ]);
 
             return null !== $shopIdentity;
@@ -102,14 +102,14 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         }
 
         $vatIdentity = $identityService->findOneBy([
-            'adapterName' => ShopwareAdapter::NAME,
-            'objectType' => VatRate::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
+            'objectType'       => VatRate::TYPE,
             'objectIdentifier' => $product->getVatRateIdentifier(),
         ]);
 
         if (null === $vatIdentity) {
             /**
-             * @var LoggerInterface $logger
+             * @var LoggerInterface
              */
             $logger = Shopware()->Container()->get('plenty_connector.logger');
             $logger->notice('vat rate not mapped', ['command' => $command]);
@@ -118,14 +118,14 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         }
 
         $manufacturerIdentity = $identityService->findOneBy([
-            'adapterName' => ShopwareAdapter::NAME,
-            'objectType' => Manufacturer::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
+            'objectType'       => Manufacturer::TYPE,
             'objectIdentifier' => $product->getManufacturerIdentifier(),
         ]);
 
         if (null === $manufacturerIdentity) {
             /**
-             * @var LoggerInterface $logger
+             * @var LoggerInterface
              */
             $logger = Shopware()->Container()->get('plenty_connector.logger');
             $logger->notice('manufacturer is missing', ['command' => $command]);
@@ -137,13 +137,13 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         foreach ($product->getImageIdentifiers() as $imageIdentifier) {
             $imageIdentity = $identityService->findOneBy([
                 'objectIdentifier' => $imageIdentifier,
-                'objectType' => Media::TYPE,
-                'adapterName' => ShopwareAdapter::NAME,
+                'objectType'       => Media::TYPE,
+                'adapterName'      => ShopwareAdapter::NAME,
             ]);
 
             if (null === $imageIdentity) {
                 /**
-                 * @var LoggerInterface $logger
+                 * @var LoggerInterface
                  */
                 $logger = Shopware()->Container()->get('plenty_connector.logger');
                 $logger->notice('image is missing', ['command' => $command]);
@@ -152,7 +152,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             }
 
             $images[] = [
-                'mediaId' => $imageIdentity->getAdapterIdentifier(),
+                'mediaId'  => $imageIdentity->getAdapterIdentifier(),
                 'position' => $position++,
             ];
         }
@@ -161,8 +161,8 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         foreach ($product->getCategoryIdentifiers() as $categoryIdentifier) {
             $categoryIdentity = $identityService->findOneBy([
                 'objectIdentifier' => $categoryIdentifier,
-                'objectType' => Category::TYPE,
-                'adapterName' => ShopwareAdapter::NAME,
+                'objectType'       => Category::TYPE,
+                'adapterName'      => ShopwareAdapter::NAME,
             ]);
 
             if (null === $categoryIdentity) {
@@ -181,8 +181,8 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         foreach ($product->getDefaultCategoryIdentifiers() as $categoryIdentifier) {
             $categoryIdentity = $identityService->findOneBy([
                 'objectIdentifier' => $categoryIdentifier,
-                'objectType' => Category::TYPE,
-                'adapterName' => ShopwareAdapter::NAME,
+                'objectType'       => Category::TYPE,
+                'adapterName'      => ShopwareAdapter::NAME,
             ]);
 
             if (null === $categoryIdentity) {
@@ -204,31 +204,31 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             foreach ($shops as $shop) {
                 $seoCategories[] = [
                     'categoryId' => $categoryIdentity->getAdapterIdentifier(),
-                    'shopId' => $shop->getId(),
+                    'shopId'     => $shop->getId(),
                 ];
             }
         }
 
         /**
-         * @var CrudService $attributeService
+         * @var CrudService
          */
         $attributeService = Shopware()->Container()->get('shopware_attribute.crud_service');
 
         $attributes = [];
         foreach ($product->getAttributes() as $attribute) {
             $attributeConfig = $attributeService->get('s_articles_attributes',
-                'plentyconnector_' . $attribute->getKey());
+                'plentyconnector_'.$attribute->getKey());
 
             if (!$attributeConfig) {
                 $attributeService->update(
                     's_articles_attributes',
-                    'plentyconnector_' . $attribute->getKey(),
+                    'plentyconnector_'.$attribute->getKey(),
                     TypeMapping::TYPE_STRING,
                     [
-                        'label' => 'PlentyConnector ' . $attribute->getKey(),
+                        'label'            => 'PlentyConnector '.$attribute->getKey(),
                         'displayInBackend' => true,
-                        'translatable' => true,
-                        'custom' => true,
+                        'translatable'     => true,
+                        'custom'           => true,
                     ]
                 );
 
@@ -237,19 +237,19 @@ class HandleProductCommandHandler implements CommandHandlerInterface
 
             $entityManager->generateAttributeModels(['s_articles_attributes']);
 
-            $attributes['plentyconnector_' . $attribute->getKey()] = $attribute->getValue();
+            $attributes['plentyconnector_'.$attribute->getKey()] = $attribute->getValue();
         }
 
         foreach ($product->getShippingProfileIdentifiers() as $identifier) {
             $profileIdentity = $identityService->findOneBy([
-                'adapterName' => ShopwareAdapter::NAME,
-                'objectType' => ShippingProfile::TYPE,
+                'adapterName'      => ShopwareAdapter::NAME,
+                'objectType'       => ShippingProfile::TYPE,
                 'objectIdentifier' => $identifier,
             ]);
 
             if (null === $profileIdentity) {
                 /**
-                 * @var LoggerInterface $logger
+                 * @var LoggerInterface
                  */
                 $logger = Shopware()->Container()->get('plenty_connector.logger');
                 $logger->notice('shipping profile not mapped', ['command' => $command]);
@@ -257,7 +257,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 continue;
             }
 
-            $columnName = 'plentyconnector_shippingprofile' . $profileIdentity->getAdapterIdentifier();
+            $columnName = 'plentyconnector_shippingprofile'.$profileIdentity->getAdapterIdentifier();
             $attributeConfig = $attributeService->get('s_articles_attributes', $columnName);
 
             if (!$attributeConfig) {
@@ -266,40 +266,40 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                     $columnName,
                     TypeMapping::TYPE_BOOLEAN,
                     [
-                        'label' => 'PlentyConnector ShippingProfile ' . $profileIdentity->getAdapterIdentifier(),
+                        'label'            => 'PlentyConnector ShippingProfile '.$profileIdentity->getAdapterIdentifier(),
                         'displayInBackend' => true,
-                        'custom' => true,
-                        'defaultValue' => 0,
+                        'custom'           => true,
+                        'defaultValue'     => 0,
                     ]
                 );
 
                 $entityManager->generateAttributeModels(['s_articles_attributes']);
             }
 
-            $attributes['plentyconnector_shippingProfile' . $profileIdentity->getAdapterIdentifier()] = 1;
+            $attributes['plentyconnector_shippingProfile'.$profileIdentity->getAdapterIdentifier()] = 1;
         }
 
         /**
-         * @var TranslationHelperInterface $translationHelper
+         * @var TranslationHelperInterface
          */
         $translationHelper = Shopware()->Container()->get('plenty_connector.translation_helper');
 
         $translations = [];
         foreach ($translationHelper->getLanguageIdentifiers($product) as $languageIdentifier) {
             /**
-             * @var Product $translatedProduct
+             * @var Product
              */
             $translatedProduct = $translationHelper->translate($languageIdentifier, $product);
 
             $languageIdentity = $identityService->findOneBy([
-                'adapterName' => ShopwareAdapter::NAME,
-                'objectType' => Language::TYPE,
+                'adapterName'      => ShopwareAdapter::NAME,
+                'objectType'       => Language::TYPE,
                 'objectIdentifier' => $languageIdentifier,
             ]);
 
             if (null === $languageIdentity) {
                 /**
-                 * @var LoggerInterface $logger
+                 * @var LoggerInterface
                  */
                 $logger = Shopware()->Container()->get('plenty_connector.logger');
                 $logger->notice('langauge not mapped', ['command' => $command]);
@@ -312,19 +312,19 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             ]);
 
             $translation = [
-                'name' => $translatedProduct->getName(),
-                'description' => $translatedProduct->getDescription(),
+                'name'            => $translatedProduct->getName(),
+                'description'     => $translatedProduct->getDescription(),
                 'descriptionLong' => $translatedProduct->getLongDescription(),
-                'keywords' => $translatedProduct->getMetaKeywords(),
+                'keywords'        => $translatedProduct->getMetaKeywords(),
             ];
 
             foreach ($product->getAttributes() as $attribute) {
                 /**
-                 * @var Attribute $translatedAttribute
+                 * @var Attribute
                  */
                 $translatedAttribute = $translationHelper->translate($languageIdentifier, $attribute);
 
-                $key = '__attribute_plentyconnector' . ucfirst($translatedAttribute->getKey());
+                $key = '__attribute_plentyconnector'.ucfirst($translatedAttribute->getKey());
                 $translation[$key] = $translatedAttribute->getValue();
             }
 
@@ -339,7 +339,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
 
         $params = [
             //'priceGroupId' => 0,
-            'filterGroupId' => $propertyData['filterGroupId'],
+            'filterGroupId'  => $propertyData['filterGroupId'],
             'propertyValues' => $propertyData['propertyValues'],
             //'pseudoSales => 0,
             //'highlight' => false,
@@ -347,27 +347,27 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             //'crossBundleLook' => true,
             //'mode' => ?
             //'template'
-            'availableFrom' => $product->getAvailableFrom(),
-            'availableTo' => $product->getAvailableTo(),
-            'name' => $product->getName(),
-            'description' => $product->getDescription(),
-            'descriptionLong' => $product->getLongDescription(),
-            'categories' => $categories,
-            'seoCategories' => $seoCategories,
-            'taxId' => $vatIdentity->getAdapterIdentifier(),
-            'lastStock' => $product->getLimitedStock(),
-            'notification' => true,
-            'active' => $product->getActive(),
-            'images' => $images,
-            'similar' => $this->getLinkedProducts($product, LinkedProduct::TYPE_SIMILAR),
-            'related' => $this->getLinkedProducts($product, LinkedProduct::TYPE_ACCESSORY),
-            'metaTitle' => $product->getMetaTitle(),
-            'keywords' => $product->getMetaKeywords(),
+            'availableFrom'        => $product->getAvailableFrom(),
+            'availableTo'          => $product->getAvailableTo(),
+            'name'                 => $product->getName(),
+            'description'          => $product->getDescription(),
+            'descriptionLong'      => $product->getLongDescription(),
+            'categories'           => $categories,
+            'seoCategories'        => $seoCategories,
+            'taxId'                => $vatIdentity->getAdapterIdentifier(),
+            'lastStock'            => $product->getLimitedStock(),
+            'notification'         => true,
+            'active'               => $product->getActive(),
+            'images'               => $images,
+            'similar'              => $this->getLinkedProducts($product, LinkedProduct::TYPE_SIMILAR),
+            'related'              => $this->getLinkedProducts($product, LinkedProduct::TYPE_ACCESSORY),
+            'metaTitle'            => $product->getMetaTitle(),
+            'keywords'             => $product->getMetaKeywords(),
             '__options_categories' => ['replace' => true],
-            '__options_similar' => ['replace' => true],
-            '__options_related' => ['replace' => true],
-            '__options_prices' => ['replace' => true],
-            '__options_images' => ['replace' => true],
+            '__options_similar'    => ['replace' => true],
+            '__options_related'    => ['replace' => true],
+            '__options_prices'     => ['replace' => true],
+            '__options_images'     => ['replace' => true],
         ];
 
         // TODO: add default supplier via config
@@ -383,7 +383,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         $createProduct = false;
 
         /**
-         * @var Article $resource
+         * @var Article
          */
         $resource = Manager::getResource('Article');
 
@@ -448,7 +448,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                     }
 
                     /**
-                     * @var Variant $variantResource
+                     * @var Variant
                      */
                     $variantResource = Manager::getResource('Variant');
 
@@ -493,7 +493,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             // TODO: create translation and attribute helper
 
             /**
-             * @var DataPersister $attributePersister
+             * @var DataPersister
              */
             $attributePersister = Shopware()->Container()->get('shopware_attribute.data_persister');
             //$attributePersister->persist($attributes, 's_articles_attributes', $productModel->getId());
@@ -520,20 +520,18 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 return $variation;
             }
         }
-
-        return null;
     }
 
     /**
      * @param Product $product
-     * @param int $type
+     * @param int     $type
      *
      * @return array
      */
     private function getLinkedProducts(Product $product, $type = LinkedProduct::TYPE_SIMILAR)
     {
         /**
-         * @var IdentityServiceInterface $identityService
+         * @var IdentityServiceInterface
          */
         $identityService = Shopware()->Container()->get('plenty_connector.identity_service');
 
@@ -543,8 +541,8 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             if ($linkedProduct->getType() === $type) {
                 $productIdentity = $identityService->findOneBy([
                     'objectIdentifier' => $linkedProduct->getProductIdentifier(),
-                    'objectType' => Product::TYPE,
-                    'adapterName' => ShopwareAdapter::NAME,
+                    'objectType'       => Product::TYPE,
+                    'adapterName'      => ShopwareAdapter::NAME,
                 ]);
 
                 if (null === $productIdentity) {
@@ -555,7 +553,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
 
                 try {
                     $result[$productIdentity->getAdapterIdentifier()] = [
-                        'id' => $productIdentity->getAdapterIdentifier(),
+                        'id'    => $productIdentity->getAdapterIdentifier(),
                         'cross' => false,
                     ];
                 } catch (\Exception $exception) {
@@ -604,8 +602,8 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         }
 
         return [
-            'name' => $product->getName(),
-            'type' => 2,
+            'name'   => $product->getName(),
+            'type'   => 2,
             'groups' => $groups,
         ];
     }
@@ -620,11 +618,11 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         $result = [];
 
         /**
-         * @var Repository $groupRepository
+         * @var Repository
          */
         $groupRepository = Shopware()->Models()->getRepository(\Shopware\Models\Property\Group::class);
         /**
-         * @var \Shopware\Models\Property\Group $propertyGroup
+         * @var \Shopware\Models\Property\Group
          */
         $propertyGroup = $groupRepository->findOneBy(['name' => 'PlentyConnector']);
 
@@ -646,8 +644,8 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             foreach ($property->getValues() as $value) {
                 $result['propertyValues'][] = [
                     'option' => [
-                        'name' => $property->getName(),
-                        'filterable' => true
+                        'name'       => $property->getName(),
+                        'filterable' => true,
                     ],
                     'value' => $value->getValue(),
                 ];
@@ -659,31 +657,31 @@ class HandleProductCommandHandler implements CommandHandlerInterface
 
     /**
      * @param Variation $variation
-     * @param Product $product
+     * @param Product   $product
      *
      * @return array
      */
     private function getVariationData(Variation $variation, Product $product)
     {
         /**
-         * @var IdentityServiceInterface $identityService
+         * @var IdentityServiceInterface
          */
         $identityService = Shopware()->Container()->get('plenty_connector.identity_service');
 
         /**
-         * @var ModelManager $entityManager
+         * @var ModelManager
          */
         $entityManager = Shopware()->Container()->get('models');
         $customerGroupRepository = $entityManager->getRepository(Group::class);
 
         $unitIdentity = $identityService->findOneBy([
             'objectIdentifier' => $variation->getUnitIdentifier(),
-            'objectType' => Unit::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => Unit::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         if (null === $unitIdentity) {
-            throw new \Exception('Missing unit mapping - ' . $variation->getUnitIdentifier());
+            throw new \Exception('Missing unit mapping - '.$variation->getUnitIdentifier());
         }
 
         $prices = [];
@@ -693,8 +691,8 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             } else {
                 $customerGroupIdentity = $identityService->findOneBy([
                     'objectIdentifier' => $price->getCustomerGroupIdentifier(),
-                    'objectType' => CustomerGroup::TYPE,
-                    'adapterName' => ShopwareAdapter::NAME,
+                    'objectType'       => CustomerGroup::TYPE,
+                    'adapterName'      => ShopwareAdapter::NAME,
                 ]);
 
                 if (null === $customerGroupIdentity) {
@@ -708,10 +706,10 @@ class HandleProductCommandHandler implements CommandHandlerInterface
 
             $prices[] = [
                 'customerGroupKey' => $customerGroupKey,
-                'price' => $price->getPrice(),
-                'pseudoPrice' => $price->getPseudoPrice(),
-                'from' => $price->getFromAmount(),
-                'to' => $price->getToAmount(),
+                'price'            => $price->getPrice(),
+                'pseudoPrice'      => $price->getPseudoPrice(),
+                'from'             => $price->getFromAmount(),
+                'to'               => $price->getToAmount(),
             ];
         }
 
@@ -719,7 +717,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         foreach ($variation->getProperties() as $property) {
             foreach ($property->getValues() as $value) {
                 $configuratorOptions[] = [
-                    'group' => $property->getName(),
+                    'group'  => $property->getName(),
                     'option' => $value->getValue(),
                 ];
             }
@@ -731,8 +729,8 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         foreach ($variation->getImageIdentifiers() as $imageIdentifier) {
             $imageIdentity = $identityService->findOneBy([
                 'objectIdentifier' => $imageIdentifier,
-                'objectType' => Media::TYPE,
-                'adapterName' => ShopwareAdapter::NAME,
+                'objectType'       => Media::TYPE,
+                'adapterName'      => ShopwareAdapter::NAME,
             ]);
 
             if (null === $imageIdentity) {
@@ -740,13 +738,13 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             }
 
             $images[] = [
-                'mediaId' => $imageIdentity->getAdapterIdentifier(),
+                'mediaId'  => $imageIdentity->getAdapterIdentifier(),
                 'position' => $position++,
             ];
         }
 
         /**
-         * @var Barcode[] $barcodes
+         * @var Barcode[]
          */
         $barcodes = array_filter($variation->getBarcodes(), function (Barcode $barcode) {
             return $barcode->getType() === Barcode::TYPE_GTIN13;
@@ -760,26 +758,26 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         }
 
         $shopwareVariation = [
-            'name' => $product->getName(),
-            'number' => $variation->getNumber(),
-            'position' => $variation->getPosition(),
-            'unitId' => $unitIdentity->getAdapterIdentifier(),
-            'active' => $variation->getActive(),
-            'inStock' => $variation->getStock(),
-            'isMain' => $variation->isMain(),
-            'standard' => $variation->isMain(),
-            'shippingtime' => $variation->getShippingTime(),
-            'prices' => $prices,
+            'name'          => $product->getName(),
+            'number'        => $variation->getNumber(),
+            'position'      => $variation->getPosition(),
+            'unitId'        => $unitIdentity->getAdapterIdentifier(),
+            'active'        => $variation->getActive(),
+            'inStock'       => $variation->getStock(),
+            'isMain'        => $variation->isMain(),
+            'standard'      => $variation->isMain(),
+            'shippingtime'  => $variation->getShippingTime(),
+            'prices'        => $prices,
             'purchasePrice' => $variation->getPurchasePrice(),
-            'weight' => $variation->getWeight(),
-            'len' => $variation->getLength(),
-            'height' => $variation->getHeight(),
-            'ean' => $ean,
-            'images' => $images,
-            'minPurchase' => $variation->getMinimumOrderQuantity(),
+            'weight'        => $variation->getWeight(),
+            'len'           => $variation->getLength(),
+            'height'        => $variation->getHeight(),
+            'ean'           => $ean,
+            'images'        => $images,
+            'minPurchase'   => $variation->getMinimumOrderQuantity(),
             'purchaseSteps' => $variation->getIntervalOrderQuantity(),
-            'maxPurchase' => $variation->getMaximumOrderQuantity(),
-            'shippingFree' => false,
+            'maxPurchase'   => $variation->getMaximumOrderQuantity(),
+            'shippingFree'  => false,
         ];
 
         if (!empty($configuratorOptions)) {

@@ -7,7 +7,7 @@ use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class VatRateResponseParser
+ * Class VatRateResponseParser.
  */
 class VatRateResponseParser implements VatRateResponseParserInterface
 {
@@ -39,7 +39,7 @@ class VatRateResponseParser implements VatRateResponseParserInterface
 
         return VatRate::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => $entry['name'],
+            'name'       => $entry['name'],
         ]);
     }
 }

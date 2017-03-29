@@ -13,7 +13,7 @@ use Shopware\Models\Customer\Group as GroupModel;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class CustomerResponseParser
+ * Class CustomerResponseParser.
  */
 class CustomerResponseParser implements CustomerResponseParserInterface
 {
@@ -31,7 +31,7 @@ class CustomerResponseParser implements CustomerResponseParserInterface
      * CountryResponseParser constructor.
      *
      * @param IdentityServiceInterface $identityService
-     * @param EntityManagerInterface $entityManager
+     * @param EntityManagerInterface   $entityManager
      */
     public function __construct(
         IdentityServiceInterface $identityService,
@@ -52,12 +52,12 @@ class CustomerResponseParser implements CustomerResponseParserInterface
         $languageIdentifier = $this->getIdentifier((string) $entry['languageId'], Language::TYPE);
 
         /**
-         * @var EntityRepository $customerGroupRepository
+         * @var EntityRepository
          */
         $customerGroupRepository = $this->entityManager->getRepository(GroupModel::class);
 
         /**
-         * @var GroupModel $customerGroup
+         * @var GroupModel
          */
         $customerGroup = $customerGroupRepository->findOneBy(['key' => $entry['groupKey']]);
 
@@ -72,17 +72,17 @@ class CustomerResponseParser implements CustomerResponseParserInterface
         }
 
         return Customer::fromArray([
-            'birthday' => $entry['birthday'] ? \DateTimeImmutable::createFromFormat('Y-m-d', $entry['birthday']) : null,
-            'customerType' => $this->getCustomerTypeId($entry['accountMode']),
-            'email' => $entry['email'],
-            'firstname' => $entry['firstname'],
-            'lastname' => $entry['lastname'],
-            'number' => $entry['number'],
-            'salutation' => $salutation,
-            'title' => $entry['title'],
-            'newsletter' => (bool) $entry['newsletter'],
-            'shopIdentifier' => $shopIdentifier,
-            'languageIdentifier' => $languageIdentifier,
+            'birthday'                => $entry['birthday'] ? \DateTimeImmutable::createFromFormat('Y-m-d', $entry['birthday']) : null,
+            'customerType'            => $this->getCustomerTypeId($entry['accountMode']),
+            'email'                   => $entry['email'],
+            'firstname'               => $entry['firstname'],
+            'lastname'                => $entry['lastname'],
+            'number'                  => $entry['number'],
+            'salutation'              => $salutation,
+            'title'                   => $entry['title'],
+            'newsletter'              => (bool) $entry['newsletter'],
+            'shopIdentifier'          => $shopIdentifier,
+            'languageIdentifier'      => $languageIdentifier,
             'customerGroupIdentifier' => $customerGroupIdentifier,
         ]);
     }
@@ -102,11 +102,11 @@ class CustomerResponseParser implements CustomerResponseParserInterface
                 return Customer::TYPE_GUEST;
         }
 
-        throw new \InvalidArgumentException('Unknown customer type ' . $shopwareId);
+        throw new \InvalidArgumentException('Unknown customer type '.$shopwareId);
     }
 
     /**
-     * @param int $entry
+     * @param int    $entry
      * @param string $type
      *
      * @return string

@@ -14,7 +14,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * TODO: error and exception handling
- * TODO: Refaktor
+ * TODO: Refaktor.
  *
  * Class Connector.
  */
@@ -48,10 +48,10 @@ class Connector implements ConnectorInterface
     /**
      * Connector constructor.
      *
-     * @param ServiceBusInterface $serviceBus
-     * @param QueryFactoryInterface $queryFactory
+     * @param ServiceBusInterface     $serviceBus
+     * @param QueryFactoryInterface   $queryFactory
      * @param CommandFactoryInterface $commandFactory
-     * @param LoggerInterface $logger
+     * @param LoggerInterface         $logger
      */
     public function __construct(
         ServiceBusInterface $serviceBus,
@@ -108,7 +108,7 @@ class Connector implements ConnectorInterface
     }
 
     /**
-     *  sort definitions by priority. Highest priority needs to be on top of the array
+     *  sort definitions by priority. Highest priority needs to be on top of the array.
      */
     private function sortDefinitions()
     {
@@ -140,14 +140,14 @@ class Connector implements ConnectorInterface
     }
 
     /**
-     * @param Definition $definition
-     * @param int $queryType
+     * @param Definition  $definition
+     * @param int         $queryType
      * @param null|string $identifier
      */
     private function handleDefinition(Definition $definition, $queryType, $identifier = null)
     {
         /**
-         * @var TransferObjectInterface[] $objects
+         * @var TransferObjectInterface[]
          */
         $objects = $this->serviceBus->handle($this->queryFactory->create(
             $definition->getOriginAdapterName(),

@@ -13,7 +13,7 @@ use ShopwareAdapter\ResponseParser\Language\LanguageResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class FetchAllLanguagesQueryHandler
+ * Class FetchAllLanguagesQueryHandler.
  */
 class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
 {
@@ -30,7 +30,7 @@ class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllLanguagesQueryHandler constructor.
      *
-     * @param EntityManagerInterface $entityManager
+     * @param EntityManagerInterface          $entityManager
      * @param LanguageResponseParserInterface $responseParser
      */
     public function __construct(

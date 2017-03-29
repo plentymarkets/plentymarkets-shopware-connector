@@ -7,7 +7,7 @@ use PlentyConnector\Connector\TransferObject\PaymentStatus\PaymentStatus;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class PaymentStatusResponseParser
+ * Class PaymentStatusResponseParser.
  */
 class PaymentStatusResponseParser implements PaymentStatusResponseParserInterface
 {
@@ -39,7 +39,7 @@ class PaymentStatusResponseParser implements PaymentStatusResponseParserInterfac
 
         return PaymentStatus::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => $entry['name'],
+            'name'       => $entry['name'],
         ]);
     }
 }

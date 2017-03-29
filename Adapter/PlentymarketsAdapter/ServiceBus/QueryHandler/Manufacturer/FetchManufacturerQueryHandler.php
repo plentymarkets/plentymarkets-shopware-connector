@@ -14,7 +14,7 @@ use PlentymarketsAdapter\ResponseParser\Manufacturer\ManufacturerResponseParserI
 use PlentymarketsAdapter\ResponseParser\Media\MediaResponseParserInterface;
 
 /**
- * Class FetchManufacturerQueryHandler
+ * Class FetchManufacturerQueryHandler.
  */
 class FetchManufacturerQueryHandler implements QueryHandlerInterface
 {
@@ -41,10 +41,10 @@ class FetchManufacturerQueryHandler implements QueryHandlerInterface
     /**
      * FetchManufacturerQueryHandler constructor.
      *
-     * @param ClientInterface $client
+     * @param ClientInterface                     $client
      * @param ManufacturerResponseParserInterface $manufacturerResponseParser
-     * @param MediaResponseParserInterface $mediaResponseParser
-     * @param IdentityServiceInterface $identityService
+     * @param MediaResponseParserInterface        $mediaResponseParser
+     * @param IdentityServiceInterface            $identityService
      */
     public function __construct(
         ClientInterface $client,
@@ -75,15 +75,15 @@ class FetchManufacturerQueryHandler implements QueryHandlerInterface
         $result = [];
 
         /**
-         * @var FetchQueryInterface $query
+         * @var FetchQueryInterface
          */
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => $query->getIdentifier(),
-            'objectType' => Manufacturer::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => Manufacturer::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
-        $element = $this->client->request('GET', 'items/manufacturers/' . $identity->getAdapterIdentifier());
+        $element = $this->client->request('GET', 'items/manufacturers/'.$identity->getAdapterIdentifier());
 
         if (!empty($element['logo'])) {
             $result[] = $media = $this->mediaResponseParser->parse([

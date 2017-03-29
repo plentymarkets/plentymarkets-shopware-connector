@@ -5,7 +5,7 @@ namespace PlentyConnector\Connector\TransferObject\Country;
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 
 /**
- * Class Country
+ * Class Country.
  */
 class Country extends AbstractTransferObject
 {

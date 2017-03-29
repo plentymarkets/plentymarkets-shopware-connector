@@ -5,7 +5,7 @@ namespace PlentyConnector\Connector\TransferObject\OrderStatus;
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 
 /**
- * Class OrderStatus
+ * Class OrderStatus.
  */
 class OrderStatus extends AbstractTransferObject
 {

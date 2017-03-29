@@ -12,7 +12,7 @@ use PlentyConnector\PlentyConnector;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class CronjobSubscriber
+ * Class CronjobSubscriber.
  */
 class CronjobSubscriber implements SubscriberInterface
 {
@@ -34,9 +34,9 @@ class CronjobSubscriber implements SubscriberInterface
     /**
      * CronjobSubscriber constructor.
      *
-     * @param ConnectorInterface $connector
+     * @param ConnectorInterface      $connector
      * @param CleanupServiceInterface $cleanupService
-     * @param LoggerInterface $logger
+     * @param LoggerInterface         $logger
      */
     public function __construct(
         ConnectorInterface $connector,
@@ -54,8 +54,8 @@ class CronjobSubscriber implements SubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            'Shopware_CronJob_PlentyConnector' . PlentyConnector::CRONJOB_SYNCHRONIZE => 'onRunCronjobSynchronize',
-            'Shopware_CronJob_PlentyConnector' . PlentyConnector::CRONJOB_CLEANUP => 'onRunCronjobCleanup',
+            'Shopware_CronJob_PlentyConnector'.PlentyConnector::CRONJOB_SYNCHRONIZE => 'onRunCronjobSynchronize',
+            'Shopware_CronJob_PlentyConnector'.PlentyConnector::CRONJOB_CLEANUP     => 'onRunCronjobCleanup',
         ];
     }
 

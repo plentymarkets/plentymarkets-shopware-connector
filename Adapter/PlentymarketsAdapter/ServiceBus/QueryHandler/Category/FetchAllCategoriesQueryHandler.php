@@ -11,7 +11,7 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Category\CategoryResponseParserInterface;
 
 /**
- * Class FetchAllCategoriesQueryHandler
+ * Class FetchAllCategoriesQueryHandler.
  */
 class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
 {
@@ -33,9 +33,9 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllCategoriesQueryHandler constructor.
      *
-     * @param ClientInterface $client
+     * @param ClientInterface                 $client
      * @param CategoryResponseParserInterface $categoryResponseParser
-     * @param LanguageHelper $languageHelper
+     * @param LanguageHelper                  $languageHelper
      */
     public function __construct(
         ClientInterface $client,
@@ -85,10 +85,10 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
 
             foreach ($categoriesGrouped as $plentyId => $details) {
                 $parsedElements = $this->categoryResponseParser->parse([
-                    'plentyId' => $plentyId,
-                    'categoryId' => $element['id'],
+                    'plentyId'         => $plentyId,
+                    'categoryId'       => $element['id'],
                     'parentCategoryId' => $element['parentCategoryId'],
-                    'details' => $details,
+                    'details'          => $details,
                 ]);
 
                 if (empty($parsedElements)) {

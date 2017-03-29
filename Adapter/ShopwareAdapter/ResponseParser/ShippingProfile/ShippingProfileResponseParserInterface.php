@@ -3,7 +3,7 @@
 namespace ShopwareAdapter\ResponseParser\ShippingProfile;
 
 /**
- * Interface ShippingProfileResponseParserInterface
+ * Interface ShippingProfileResponseParserInterface.
  */
 interface ShippingProfileResponseParserInterface
 {

@@ -9,7 +9,7 @@ use PlentyConnector\Connector\ServiceBus\QueryGenerator\QueryGeneratorInterface;
 use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
 
 /**
- * Class CustomerGroupQueryGenerator
+ * Class CustomerGroupQueryGenerator.
  */
 class CustomerGroupQueryGenerator implements QueryGeneratorInterface
 {

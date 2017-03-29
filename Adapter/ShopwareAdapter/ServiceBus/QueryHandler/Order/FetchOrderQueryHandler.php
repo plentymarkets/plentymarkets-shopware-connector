@@ -13,7 +13,7 @@ use ShopwareAdapter\ResponseParser\Order\OrderResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
- * Class FetchOrderQueryHandler
+ * Class FetchOrderQueryHandler.
  */
 class FetchOrderQueryHandler implements QueryHandlerInterface
 {
@@ -36,8 +36,8 @@ class FetchOrderQueryHandler implements QueryHandlerInterface
      * FetchOrderQueryHandler constructor.
      *
      * @param OrderResponseParserInterface $responseParser
-     * @param IdentityServiceInterface $identityService
-     * @param Resource\Order $orderResource
+     * @param IdentityServiceInterface     $identityService
+     * @param Resource\Order               $orderResource
      */
     public function __construct(
         OrderResponseParserInterface $responseParser,
@@ -64,12 +64,12 @@ class FetchOrderQueryHandler implements QueryHandlerInterface
     public function handle(QueryInterface $query)
     {
         /**
-         * @var FetchQueryInterface $event
+         * @var FetchQueryInterface
          */
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => $query->getPayload(),
-            'objectType' => Order::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => Order::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         $order = $this->orderResource->getOne($identity->getAdapterIdentifier());

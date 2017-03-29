@@ -3,7 +3,7 @@
 namespace PlentyConnector\Connector\ServiceBus\Query;
 
 /**
- * Interface FetchAllQueryInterface
+ * Interface FetchAllQueryInterface.
  */
 interface FetchAllQueryInterface extends QueryInterface
 {

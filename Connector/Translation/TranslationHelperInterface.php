@@ -5,7 +5,7 @@ namespace PlentyConnector\Connector\Translation;
 use PlentyConnector\Connector\TransferObject\TranslateableInterface;
 
 /**
- * Interface TranslationHelperInterface
+ * Interface TranslationHelperInterface.
  */
 interface TranslationHelperInterface
 {
@@ -17,7 +17,7 @@ interface TranslationHelperInterface
     public function getLanguageIdentifiers(TranslateableInterface $object);
 
     /**
-     * @param string $languageIdentifier
+     * @param string                 $languageIdentifier
      * @param TranslateableInterface $object
      *
      * @return TransferObjectInterface

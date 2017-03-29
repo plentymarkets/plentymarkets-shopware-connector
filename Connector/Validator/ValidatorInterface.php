@@ -6,7 +6,7 @@ use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\ValueObject\ValueObjectInterface;
 
 /**
- * Interface ValidatorInterface
+ * Interface ValidatorInterface.
  */
 interface ValidatorInterface
 {

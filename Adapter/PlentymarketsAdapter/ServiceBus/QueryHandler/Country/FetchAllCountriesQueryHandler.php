@@ -10,7 +10,7 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Country\CountryResponseParserInterface;
 
 /**
- * Class FetchAllCountriesQueryHandler
+ * Class FetchAllCountriesQueryHandler.
  */
 class FetchAllCountriesQueryHandler implements QueryHandlerInterface
 {
@@ -27,7 +27,7 @@ class FetchAllCountriesQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllCountriesQueryHandler constructor.
      *
-     * @param ClientInterface $client
+     * @param ClientInterface                $client
      * @param CountryResponseParserInterface $responseParser
      */
     public function __construct(

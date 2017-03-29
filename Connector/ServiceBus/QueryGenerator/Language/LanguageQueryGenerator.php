@@ -9,7 +9,7 @@ use PlentyConnector\Connector\ServiceBus\QueryGenerator\QueryGeneratorInterface;
 use PlentyConnector\Connector\TransferObject\Language\Language;
 
 /**
- * Class LanguageQueryGenerator
+ * Class LanguageQueryGenerator.
  */
 class LanguageQueryGenerator implements QueryGeneratorInterface
 {

@@ -5,7 +5,7 @@ namespace PlentyConnector\Connector\ServiceBus;
 use ReflectionClass;
 
 /**
- * Class QueryType
+ * Class QueryType.
  */
 final class QueryType
 {

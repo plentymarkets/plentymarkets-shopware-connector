@@ -10,7 +10,7 @@ use Shopware\Components\Plugin\Context\UninstallContext;
 use Shopware\Components\Plugin\Context\UpdateContext;
 
 /**
- * Class CronjobInstaller
+ * Class CronjobInstaller.
  */
 class CronjobInstaller implements InstallerInterface
 {
@@ -28,7 +28,7 @@ class CronjobInstaller implements InstallerInterface
      * DatabaseInstaller constructor.
      *
      * @param Connection $connection
-     * @param array $cronjobs
+     * @param array      $cronjobs
      */
     public function __construct(Connection $connection, array $cronjobs)
     {
@@ -86,32 +86,32 @@ class CronjobInstaller implements InstallerInterface
         }
 
         foreach ($this->cronjobs as $name => $interval) {
-            $this->connection->delete('s_crontab', ['name' => 'PlentyConnector ' . $name]);
+            $this->connection->delete('s_crontab', ['name' => 'PlentyConnector '.$name]);
         }
     }
 
     /**
      * @param string $name
-     * @param int $interval
-     * @param int $pluginIdentifier
+     * @param int    $interval
+     * @param int    $pluginIdentifier
      */
     private function addCronjob($name, $interval, $pluginIdentifier)
     {
         $data = [
-            'name' => 'PlentyConnector ' . $name,
-            'action' => 'Shopware_CronJob_PlentyConnector' . $name,
-            'next' => new DateTime(),
-            'start' => null,
-            '`interval`' => $interval,
-            'active' => true,
+            'name'             => 'PlentyConnector '.$name,
+            'action'           => 'Shopware_CronJob_PlentyConnector'.$name,
+            'next'             => new DateTime(),
+            'start'            => null,
+            '`interval`'       => $interval,
+            'active'           => true,
             'disable_on_error' => true,
-            'end' => new DateTime(),
-            'pluginID' => $pluginIdentifier,
+            'end'              => new DateTime(),
+            'pluginID'         => $pluginIdentifier,
         ];
 
         $types = [
             'next' => 'datetime',
-            'end' => 'datetime',
+            'end'  => 'datetime',
         ];
 
         $this->connection->insert('s_crontab', $data, $types);

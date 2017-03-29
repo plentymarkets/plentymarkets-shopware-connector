@@ -61,11 +61,11 @@ class CleanupService implements CleanupServiceInterface
     /**
      * CleanupService constructor.
      *
-     * @param ServiceBusInterface $serviceBus
-     * @param QueryFactoryInterface $queryFactory
-     * @param CommandFactoryInterface $commandFactory
+     * @param ServiceBusInterface      $serviceBus
+     * @param QueryFactoryInterface    $queryFactory
+     * @param CommandFactoryInterface  $commandFactory
      * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface $logger
+     * @param LoggerInterface          $logger
      */
     public function __construct(
         ServiceBusInterface $serviceBus,
@@ -141,7 +141,7 @@ class CleanupService implements CleanupServiceInterface
     private function collectObjectIdentifiers(Definition $definition)
     {
         /**
-         * @var TransferObjectInterface[] $objects
+         * @var TransferObjectInterface[]
          */
         $objects = $this->serviceBus->handle($this->queryFactory->create(
             $definition->getOriginAdapterName(),
@@ -156,8 +156,8 @@ class CleanupService implements CleanupServiceInterface
         array_walk($objects, function (TransferObjectInterface $transferObject) use ($definition) {
             $this->elements[] = [
                 'adapterIdentifier' => $transferObject->getIdentifier(),
-                'adapterName' => $definition->getDestinationAdapterName(),
-                'type' => $transferObject->getType(),
+                'adapterName'       => $definition->getDestinationAdapterName(),
+                'type'              => $transferObject->getType(),
             ];
         });
 
@@ -174,7 +174,7 @@ class CleanupService implements CleanupServiceInterface
     {
         $allIdentities = $this->identityService->findBy([
             'adapterName' => $definition->getDestinationAdapterName(),
-            'objectType' => $definition->getObjectType(),
+            'objectType'  => $definition->getObjectType(),
         ]);
 
         array_walk($allIdentities, function (Identity $identity) use ($definition) {
@@ -195,7 +195,7 @@ class CleanupService implements CleanupServiceInterface
     {
         $groups = [];
         foreach ($this->elements as $element) {
-            $groups[$element['adapterName'] . '_' . $element['type']][] = $element;
+            $groups[$element['adapterName'].'_'.$element['type']][] = $element;
         }
 
         foreach ($groups as $group) {
@@ -206,7 +206,7 @@ class CleanupService implements CleanupServiceInterface
 
             $allIdentities = $this->identityService->findBy([
                 'adapterName' => $adapterName,
-                'objectType' => $objectType,
+                'objectType'  => $objectType,
             ]);
 
             $orphanedIdentities = array_filter($allIdentities, function (Identity $identity) use ($identifiers) {

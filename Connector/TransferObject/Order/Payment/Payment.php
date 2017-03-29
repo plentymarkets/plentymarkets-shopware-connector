@@ -6,7 +6,7 @@ use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
 /**
- * Class Payment
+ * Class Payment.
  */
 class Payment extends AbstractValueObject
 {

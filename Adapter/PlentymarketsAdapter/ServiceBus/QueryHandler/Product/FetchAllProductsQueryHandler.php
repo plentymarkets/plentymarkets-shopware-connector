@@ -26,7 +26,8 @@ class FetchAllProductsQueryHandler implements QueryHandlerInterface
 
     /**
      * FetchAllProductsQueryHandler constructor.
-     * @param Item $itemApi
+     *
+     * @param Item                           $itemApi
      * @param ProductResponseParserInterface $responseParser
      */
     public function __construct(

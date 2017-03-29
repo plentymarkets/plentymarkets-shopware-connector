@@ -7,7 +7,7 @@ use PlentyConnector\Connector\Validator\ValidatorInterface;
 use PlentyConnector\Connector\ValueObject\Definition\Definition;
 
 /**
- * Class DefinitionValidator
+ * Class DefinitionValidator.
  */
 class DefinitionValidator implements ValidatorInterface
 {
