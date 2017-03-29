@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_SetRepairs
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_setrepair
-	 */
-	public $Repairs;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_setrepair
+     */
+    public $Repairs;
 }

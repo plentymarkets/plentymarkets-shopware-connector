@@ -32,24 +32,23 @@
  */
 class PlentySoapObject_SetRepairItem
 {
-	
-	/**
-	 * @var string
-	 */
-	public $Comment;
-	
-	/**
-	 * @var int
-	 */
-	public $ItemStatusID;
-	
-	/**
-	 * @var float
-	 */
-	public $OrderRowId;
-	
-	/**
-	 * @var float
-	 */
-	public $Quantity;
+    /**
+     * @var string
+     */
+    public $Comment;
+
+    /**
+     * @var int
+     */
+    public $ItemStatusID;
+
+    /**
+     * @var float
+     */
+    public $OrderRowId;
+
+    /**
+     * @var float
+     */
+    public $Quantity;
 }

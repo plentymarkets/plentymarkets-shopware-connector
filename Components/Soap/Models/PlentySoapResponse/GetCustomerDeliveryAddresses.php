@@ -32,24 +32,23 @@
  */
 class PlentySoapResponse_GetCustomerDeliveryAddresses
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapresponse_objectgetcustomerdeliveryaddresses
-	 */
-	public $DeliveryAddresses;
-	
-	/**
-	 * @var int
-	 */
-	public $Pages;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapresponse_objectgetcustomerdeliveryaddresses
+     */
+    public $DeliveryAddresses;
+
+    /**
+     * @var int
+     */
+    public $Pages;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

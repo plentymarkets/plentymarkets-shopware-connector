@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_getordersorderconfirmationdocumenturls
 {
-	
-	/**
-	 * @var PlentySoapObject_GetOrdersOrderConfirmationDocumentURLs
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_GetOrdersOrderConfirmationDocumentURLs
+     */
+    public $item;
 }

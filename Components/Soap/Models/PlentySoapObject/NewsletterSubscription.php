@@ -32,29 +32,28 @@
  */
 class PlentySoapObject_NewsletterSubscription
 {
-	
-	/**
-	 * @var int
-	 */
-	public $Directory;
-	
-	/**
-	 * @var int
-	 */
-	public $NewsletterSubscriptionID;
-	
-	/**
-	 * @var int
-	 */
-	public $SubscriptionConfirmedTimestamp;
-	
-	/**
-	 * @var int
-	 */
-	public $SubscriptionTimestamp;
-	
-	/**
-	 * @var string
-	 */
-	public $TemplateLang;
+    /**
+     * @var int
+     */
+    public $Directory;
+
+    /**
+     * @var int
+     */
+    public $NewsletterSubscriptionID;
+
+    /**
+     * @var int
+     */
+    public $SubscriptionConfirmedTimestamp;
+
+    /**
+     * @var int
+     */
+    public $SubscriptionTimestamp;
+
+    /**
+     * @var string
+     */
+    public $TemplateLang;
 }

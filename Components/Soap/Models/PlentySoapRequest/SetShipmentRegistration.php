@@ -32,24 +32,23 @@
  */
 class PlentySoapRequest_SetShipmentRegistration
 {
-	
-	/**
-	 * @var PlentySoapObject_Param
-	 */
-	public $AdditionalParams;
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var PlentySoapObject_Param
-	 */
-	public $SearchParams;
-	
-	/**
-	 * @var string
-	 */
-	public $ShippingProvider;
+    /**
+     * @var PlentySoapObject_Param
+     */
+    public $AdditionalParams;
+
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var PlentySoapObject_Param
+     */
+    public $SearchParams;
+
+    /**
+     * @var string
+     */
+    public $ShippingProvider;
 }

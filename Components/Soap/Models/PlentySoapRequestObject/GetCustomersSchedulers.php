@@ -32,14 +32,13 @@
  */
 class PlentySoapRequestObject_GetCustomersSchedulers
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CustomerID;
-	
-	/**
-	 * @var int
-	 */
-	public $SchedulerID;
+    /**
+     * @var int
+     */
+    public $CustomerID;
+
+    /**
+     * @var int
+     */
+    public $SchedulerID;
 }

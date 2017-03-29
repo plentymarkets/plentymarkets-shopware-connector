@@ -32,34 +32,33 @@
  */
 class PlentySoapRequestObject_GetCategoryBranchID
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CategoryIdLevel1;
-	
-	/**
-	 * @var int
-	 */
-	public $CategoryIdLevel2;
-	
-	/**
-	 * @var int
-	 */
-	public $CategoryIdLevel3;
-	
-	/**
-	 * @var int
-	 */
-	public $CategoryIdLevel4;
-	
-	/**
-	 * @var int
-	 */
-	public $CategoryIdLevel5;
-	
-	/**
-	 * @var int
-	 */
-	public $CategoryIdLevel6;
+    /**
+     * @var int
+     */
+    public $CategoryIdLevel1;
+
+    /**
+     * @var int
+     */
+    public $CategoryIdLevel2;
+
+    /**
+     * @var int
+     */
+    public $CategoryIdLevel3;
+
+    /**
+     * @var int
+     */
+    public $CategoryIdLevel4;
+
+    /**
+     * @var int
+     */
+    public $CategoryIdLevel5;
+
+    /**
+     * @var int
+     */
+    public $CategoryIdLevel6;
 }

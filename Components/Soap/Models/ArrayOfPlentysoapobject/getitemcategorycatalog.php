@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_getitemcategorycatalog
 {
-	
-	/**
-	 * @var PlentySoapObject_GetItemCategoryCatalog
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_GetItemCategoryCatalog
+     */
+    public $item;
 }

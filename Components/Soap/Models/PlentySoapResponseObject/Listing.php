@@ -32,19 +32,18 @@
  */
 class PlentySoapResponseObject_Listing
 {
-	
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
-	
-	/**
-	 * @var int
-	 */
-	public $ListingId;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponse_objectmarketlisting
-	 */
-	public $MarketListings;
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
+
+    /**
+     * @var int
+     */
+    public $ListingId;
+
+    /**
+     * @var ArrayOfPlentysoapresponse_objectmarketlisting
+     */
+    public $MarketListings;
 }

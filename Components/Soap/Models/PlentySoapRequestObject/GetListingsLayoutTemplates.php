@@ -32,14 +32,13 @@
  */
 class PlentySoapRequestObject_GetListingsLayoutTemplates
 {
-	
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
-	
-	/**
-	 * @var int
-	 */
-	public $ListingLayoutTemplateID;
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
+
+    /**
+     * @var int
+     */
+    public $ListingLayoutTemplateID;
 }

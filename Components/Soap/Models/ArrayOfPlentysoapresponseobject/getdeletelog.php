@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapresponseobject_getdeletelog
 {
-	
-	/**
-	 * @var PlentySoapResponseObject_GetDeleteLog
-	 */
-	public $item;
+    /**
+     * @var PlentySoapResponseObject_GetDeleteLog
+     */
+    public $item;
 }

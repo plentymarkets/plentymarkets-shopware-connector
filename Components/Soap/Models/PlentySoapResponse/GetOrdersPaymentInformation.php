@@ -32,24 +32,23 @@
  */
 class PlentySoapResponse_GetOrdersPaymentInformation
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_orderspaymentinformation
-	 */
-	public $OrderPaymentInformation;
-	
-	/**
-	 * @var int
-	 */
-	public $Pages;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapobject_orderspaymentinformation
+     */
+    public $OrderPaymentInformation;
+
+    /**
+     * @var int
+     */
+    public $Pages;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

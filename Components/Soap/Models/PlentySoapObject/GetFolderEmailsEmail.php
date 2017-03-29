@@ -32,24 +32,23 @@
  */
 class PlentySoapObject_GetFolderEmailsEmail
 {
-	
-	/**
-	 * @var PlentySoapObject_Customer
-	 */
-	public $Customer;
-	
-	/**
-	 * @var string
-	 */
-	public $CustomerGender;
-	
-	/**
-	 * @var int
-	 */
-	public $EmailID;
-	
-	/**
-	 * @var string
-	 */
-	public $TemplateLanguage;
+    /**
+     * @var PlentySoapObject_Customer
+     */
+    public $Customer;
+
+    /**
+     * @var string
+     */
+    public $CustomerGender;
+
+    /**
+     * @var int
+     */
+    public $EmailID;
+
+    /**
+     * @var string
+     */
+    public $TemplateLanguage;
 }

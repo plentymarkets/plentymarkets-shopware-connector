@@ -32,274 +32,273 @@
  */
 class PlentySoapObject_ItemAvailability
 {
-	
-	/**
-	 * @var int
-	 */
-	public $Allyouneeed;
-	
-	/**
-	 * @var int
-	 */
-	public $AmazonFBA;
-	
-	/**
-	 * @var string
-	 */
-	public $AmazonFEDAS;
-	
-	/**
-	 * @var boolean
-	 */
-	public $AmazonMultichannel;
-	
-	/**
-	 * @var boolean
-	 */
-	public $AmazonMultichannelCom;
-	
-	/**
-	 * @var boolean
-	 */
-	public $AmazonMultichannelDe;
-	
-	/**
-	 * @var boolean
-	 */
-	public $AmazonMultichannelEs;
-	
-	/**
-	 * @var boolean
-	 */
-	public $AmazonMultichannelFr;
-	
-	/**
-	 * @var boolean
-	 */
-	public $AmazonMultichannelIt;
-	
-	/**
-	 * @var boolean
-	 */
-	public $AmazonMultichannelUk;
-	
-	/**
-	 * @var int
-	 */
-	public $AmazonProduct;
-	
-	/**
-	 * @var int
-	 */
-	public $AvailabilityID;
-	
-	/**
-	 * @var int
-	 */
-	public $AvailableUntil;
-	
-	/**
-	 * @var int
-	 */
-	public $Cdiscount;
-	
-	/**
-	 * @var int
-	 */
-	public $CouchCommerce;
-	
-	/**
-	 * @var int
-	 */
-	public $DaWanda;
-	
-	/**
-	 * @var int
-	 */
-	public $Flubit;
-	
-	/**
-	 * @var int
-	 */
-	public $Fruugo;
-	
-	/**
-	 * @var int
-	 */
-	public $GartenXXL;
-	
-	/**
-	 * @var int
-	 */
-	public $Gimahhot;
-	
-	/**
-	 * @var int
-	 */
-	public $GoogleBase;
-	
-	/**
-	 * @var int
-	 */
-	public $Grosshandel;
-	
-	/**
-	 * @var int
-	 */
-	public $Hertie;
-	
-	/**
-	 * @var int
-	 */
-	public $Hitmeister;
-	
-	/**
-	 * @var int
-	 */
-	public $Hood;
-	
-	/**
-	 * @var int
-	 */
-	public $Inactive;
-	
-	/**
-	 * @var int
-	 */
-	public $IntervalSalesOrderQuantity;
-	
-	/**
-	 * @var int
-	 */
-	public $LaRedoute;
-	
-	/**
-	 * @var int
-	 */
-	public $Laary;
-	
-	/**
-	 * @var int
-	 */
-	public $MaximumSalesOrderQuantity;
-	
-	/**
-	 * @var int
-	 */
-	public $Mercateo;
-	
-	/**
-	 * @var int
-	 */
-	public $MinimumSalesOrderQuantity;
-	
-	/**
-	 * @var int
-	 */
-	public $NeckermannAtCrossDocking;
-	
-	/**
-	 * @var string
-	 */
-	public $NeckermannAtCrossDockingProductType;
-	
-	/**
-	 * @var string
-	 */
-	public $NeckermannAtCrossDockingProvisionType;
-	
-	/**
-	 * @var int
-	 */
-	public $NeckermannAtEnterprise;
-	
-	/**
-	 * @var string
-	 */
-	public $NeckermannAtEnterpriseProductType;
-	
-	/**
-	 * @var string
-	 */
-	public $NeckermannAtEnterpriseProvisionType;
-	
-	/**
-	 * @var int
-	 */
-	public $Otto;
-	
-	/**
-	 * @var int
-	 */
-	public $Play;
-	
-	/**
-	 * @var int
-	 */
-	public $PlusDe;
-	
-	/**
-	 * @var int
-	 */
-	public $RakutenDe;
-	
-	/**
-	 * @var int
-	 */
-	public $RakutenDeCategory;
-	
-	/**
-	 * @var int
-	 */
-	public $RakutenUk;
-	
-	/**
-	 * @var int
-	 */
-	public $Restposten;
-	
-	/**
-	 * @var int
-	 */
-	public $Shopgate;
-	
-	/**
-	 * @var int
-	 */
-	public $SumoScout;
-	
-	/**
-	 * @var int
-	 */
-	public $Tracdelight;
-	
-	/**
-	 * @var int
-	 */
-	public $Twenga;
-	
-	/**
-	 * @var int
-	 */
-	public $WebAPI;
-	
-	/**
-	 * @var int
-	 */
-	public $Webshop;
-	
-	/**
-	 * @var int
-	 */
-	public $Yatego;
-	
-	/**
-	 * @var int
-	 */
-	public $Zalando;
-	
-	/**
-	 * @var int
-	 */
-	public $Zentralverkauf;
+    /**
+     * @var int
+     */
+    public $Allyouneeed;
+
+    /**
+     * @var int
+     */
+    public $AmazonFBA;
+
+    /**
+     * @var string
+     */
+    public $AmazonFEDAS;
+
+    /**
+     * @var bool
+     */
+    public $AmazonMultichannel;
+
+    /**
+     * @var bool
+     */
+    public $AmazonMultichannelCom;
+
+    /**
+     * @var bool
+     */
+    public $AmazonMultichannelDe;
+
+    /**
+     * @var bool
+     */
+    public $AmazonMultichannelEs;
+
+    /**
+     * @var bool
+     */
+    public $AmazonMultichannelFr;
+
+    /**
+     * @var bool
+     */
+    public $AmazonMultichannelIt;
+
+    /**
+     * @var bool
+     */
+    public $AmazonMultichannelUk;
+
+    /**
+     * @var int
+     */
+    public $AmazonProduct;
+
+    /**
+     * @var int
+     */
+    public $AvailabilityID;
+
+    /**
+     * @var int
+     */
+    public $AvailableUntil;
+
+    /**
+     * @var int
+     */
+    public $Cdiscount;
+
+    /**
+     * @var int
+     */
+    public $CouchCommerce;
+
+    /**
+     * @var int
+     */
+    public $DaWanda;
+
+    /**
+     * @var int
+     */
+    public $Flubit;
+
+    /**
+     * @var int
+     */
+    public $Fruugo;
+
+    /**
+     * @var int
+     */
+    public $GartenXXL;
+
+    /**
+     * @var int
+     */
+    public $Gimahhot;
+
+    /**
+     * @var int
+     */
+    public $GoogleBase;
+
+    /**
+     * @var int
+     */
+    public $Grosshandel;
+
+    /**
+     * @var int
+     */
+    public $Hertie;
+
+    /**
+     * @var int
+     */
+    public $Hitmeister;
+
+    /**
+     * @var int
+     */
+    public $Hood;
+
+    /**
+     * @var int
+     */
+    public $Inactive;
+
+    /**
+     * @var int
+     */
+    public $IntervalSalesOrderQuantity;
+
+    /**
+     * @var int
+     */
+    public $LaRedoute;
+
+    /**
+     * @var int
+     */
+    public $Laary;
+
+    /**
+     * @var int
+     */
+    public $MaximumSalesOrderQuantity;
+
+    /**
+     * @var int
+     */
+    public $Mercateo;
+
+    /**
+     * @var int
+     */
+    public $MinimumSalesOrderQuantity;
+
+    /**
+     * @var int
+     */
+    public $NeckermannAtCrossDocking;
+
+    /**
+     * @var string
+     */
+    public $NeckermannAtCrossDockingProductType;
+
+    /**
+     * @var string
+     */
+    public $NeckermannAtCrossDockingProvisionType;
+
+    /**
+     * @var int
+     */
+    public $NeckermannAtEnterprise;
+
+    /**
+     * @var string
+     */
+    public $NeckermannAtEnterpriseProductType;
+
+    /**
+     * @var string
+     */
+    public $NeckermannAtEnterpriseProvisionType;
+
+    /**
+     * @var int
+     */
+    public $Otto;
+
+    /**
+     * @var int
+     */
+    public $Play;
+
+    /**
+     * @var int
+     */
+    public $PlusDe;
+
+    /**
+     * @var int
+     */
+    public $RakutenDe;
+
+    /**
+     * @var int
+     */
+    public $RakutenDeCategory;
+
+    /**
+     * @var int
+     */
+    public $RakutenUk;
+
+    /**
+     * @var int
+     */
+    public $Restposten;
+
+    /**
+     * @var int
+     */
+    public $Shopgate;
+
+    /**
+     * @var int
+     */
+    public $SumoScout;
+
+    /**
+     * @var int
+     */
+    public $Tracdelight;
+
+    /**
+     * @var int
+     */
+    public $Twenga;
+
+    /**
+     * @var int
+     */
+    public $WebAPI;
+
+    /**
+     * @var int
+     */
+    public $Webshop;
+
+    /**
+     * @var int
+     */
+    public $Yatego;
+
+    /**
+     * @var int
+     */
+    public $Zalando;
+
+    /**
+     * @var int
+     */
+    public $Zentralverkauf;
 }

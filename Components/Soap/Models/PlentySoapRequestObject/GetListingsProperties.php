@@ -32,14 +32,13 @@
  */
 class PlentySoapRequestObject_GetListingsProperties
 {
-	
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
-	
-	/**
-	 * @var int
-	 */
-	public $ListingPropertyID;
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
+
+    /**
+     * @var int
+     */
+    public $ListingPropertyID;
 }

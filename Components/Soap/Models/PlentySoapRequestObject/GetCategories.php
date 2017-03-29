@@ -32,14 +32,13 @@
  */
 class PlentySoapRequestObject_GetCategories
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CategoryID;
-	
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
+    /**
+     * @var int
+     */
+    public $CategoryID;
+
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
 }

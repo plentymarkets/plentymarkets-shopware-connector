@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_SetItemsPurchasePrice
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_setitemspurchaseprice
-	 */
-	public $ItemsPurchasePrice;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_setitemspurchaseprice
+     */
+    public $ItemsPurchasePrice;
 }

@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_columntoreferrer
 {
-	
-	/**
-	 * @var PlentySoapObject_ColumnToReferrer
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_ColumnToReferrer
+     */
+    public $item;
 }

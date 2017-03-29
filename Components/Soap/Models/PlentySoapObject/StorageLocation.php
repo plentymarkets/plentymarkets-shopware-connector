@@ -32,19 +32,18 @@
  */
 class PlentySoapObject_StorageLocation
 {
-	
-	/**
-	 * @var int
-	 */
-	public $StorageLocationId;
-	
-	/**
-	 * @var string
-	 */
-	public $StorageLocationName;
-	
-	/**
-	 * @var string
-	 */
-	public $Type;
+    /**
+     * @var int
+     */
+    public $StorageLocationId;
+
+    /**
+     * @var string
+     */
+    public $StorageLocationName;
+
+    /**
+     * @var string
+     */
+    public $Type;
 }

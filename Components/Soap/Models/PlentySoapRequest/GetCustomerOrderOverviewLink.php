@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_GetCustomerOrderOverviewLink
 {
-	
-	/**
-	 * @var int
-	 */
-	public $OrderID;
-	
-	/**
-	 * @var int
-	 */
-	public $StoreID;
+    /**
+     * @var int
+     */
+    public $OrderID;
+
+    /**
+     * @var int
+     */
+    public $StoreID;
 }

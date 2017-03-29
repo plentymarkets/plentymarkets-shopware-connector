@@ -32,14 +32,13 @@
  */
 class PlentySoapObject_GetShippingProfileConfigurationsProvider
 {
-	
-	/**
-	 * @var string
-	 */
-	public $ShippingServiceProviderName;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_getshippingprofileconfigurationsprovidersetting
-	 */
-	public $ShippingServiceProviderSettings;
+    /**
+     * @var string
+     */
+    public $ShippingServiceProviderName;
+
+    /**
+     * @var ArrayOfPlentysoapobject_getshippingprofileconfigurationsprovidersetting
+     */
+    public $ShippingServiceProviderSettings;
 }

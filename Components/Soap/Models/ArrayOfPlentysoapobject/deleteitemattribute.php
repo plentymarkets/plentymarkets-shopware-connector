@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_deleteitemattribute
 {
-	
-	/**
-	 * @var PlentySoapObject_DeleteItemAttribute
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_DeleteItemAttribute
+     */
+    public $item;
 }

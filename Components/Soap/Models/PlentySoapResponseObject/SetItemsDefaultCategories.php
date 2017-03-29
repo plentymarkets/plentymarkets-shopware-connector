@@ -32,14 +32,13 @@
  */
 class PlentySoapResponseObject_SetItemsDefaultCategories
 {
-	
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
-	
-	/**
-	 * @var int
-	 */
-	public $ItemID;
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
+
+    /**
+     * @var int
+     */
+    public $ItemID;
 }

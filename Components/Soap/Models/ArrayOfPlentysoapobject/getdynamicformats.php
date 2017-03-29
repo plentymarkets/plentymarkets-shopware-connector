@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_getdynamicformats
 {
-	
-	/**
-	 * @var PlentySoapObject_GetDynamicFormats
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_GetDynamicFormats
+     */
+    public $item;
 }

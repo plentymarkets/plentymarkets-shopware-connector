@@ -32,34 +32,33 @@
  */
 class PlentySoapRequest_GetMarketItemNumbers
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var int
-	 */
-	public $CountryID;
-	
-	/**
-	 * @var int
-	 */
-	public $Lastupdate;
-	
-	/**
-	 * @var PlentySoapEnumeration_MarketItem
-	 */
-	public $Market;
-	
-	/**
-	 * @var int
-	 */
-	public $Page;
-	
-	/**
-	 * @var string
-	 */
-	public $SKU;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var int
+     */
+    public $CountryID;
+
+    /**
+     * @var int
+     */
+    public $Lastupdate;
+
+    /**
+     * @var PlentySoapEnumeration_MarketItem
+     */
+    public $Market;
+
+    /**
+     * @var int
+     */
+    public $Page;
+
+    /**
+     * @var string
+     */
+    public $SKU;
 }

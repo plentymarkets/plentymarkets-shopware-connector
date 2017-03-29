@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoaprequest_objectdeleteorderitem
 {
-	
-	/**
-	 * @var PlentySoapRequest_ObjectDeleteOrderItem
-	 */
-	public $item;
+    /**
+     * @var PlentySoapRequest_ObjectDeleteOrderItem
+     */
+    public $item;
 }

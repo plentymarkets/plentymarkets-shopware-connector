@@ -32,9 +32,8 @@
  */
 class PlentySoapRequest_GetCountriesOfDelivery
 {
-	
-	/**
-	 * @var boolean
-	 */
-	public $ActiveCountriesOfDelivery;
+    /**
+     * @var bool
+     */
+    public $ActiveCountriesOfDelivery;
 }

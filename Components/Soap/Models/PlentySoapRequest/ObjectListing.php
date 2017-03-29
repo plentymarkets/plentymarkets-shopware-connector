@@ -32,54 +32,53 @@
  */
 class PlentySoapRequest_ObjectListing
 {
-	
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
-	
-	/**
-	 * @var int
-	 */
-	public $ItemStockDependence;
-	
-	/**
-	 * @var int
-	 */
-	public $ListingID;
-	
-	/**
-	 * @var int
-	 */
-	public $ListingTemplateID;
-	
-	/**
-	 * @var string
-	 */
-	public $ListingType;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_string
-	 */
-	public $Markets;
-	
-	/**
-	 * @var int
-	 */
-	public $NumberPerLot;
-	
-	/**
-	 * @var string
-	 */
-	public $SKU;
-	
-	/**
-	 * @var string
-	 */
-	public $TransmitItemNumber;
-	
-	/**
-	 * @var int
-	 */
-	public $UseItemPrice;
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
+
+    /**
+     * @var int
+     */
+    public $ItemStockDependence;
+
+    /**
+     * @var int
+     */
+    public $ListingID;
+
+    /**
+     * @var int
+     */
+    public $ListingTemplateID;
+
+    /**
+     * @var string
+     */
+    public $ListingType;
+
+    /**
+     * @var ArrayOfPlentysoapobject_string
+     */
+    public $Markets;
+
+    /**
+     * @var int
+     */
+    public $NumberPerLot;
+
+    /**
+     * @var string
+     */
+    public $SKU;
+
+    /**
+     * @var string
+     */
+    public $TransmitItemNumber;
+
+    /**
+     * @var int
+     */
+    public $UseItemPrice;
 }

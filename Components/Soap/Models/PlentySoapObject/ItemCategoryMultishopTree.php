@@ -32,14 +32,13 @@
  */
 class PlentySoapObject_ItemCategoryMultishopTree
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_itemcategorytreenode
-	 */
-	public $CategoryTree;
-	
-	/**
-	 * @var int
-	 */
-	public $StoreID;
+    /**
+     * @var ArrayOfPlentysoapobject_itemcategorytreenode
+     */
+    public $CategoryTree;
+
+    /**
+     * @var int
+     */
+    public $StoreID;
 }

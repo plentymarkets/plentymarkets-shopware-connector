@@ -32,19 +32,18 @@
  */
 class PlentySoapResponseObject_AddOrderNotes
 {
-	
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
-	
-	/**
-	 * @var int
-	 */
-	public $OrderID;
-	
-	/**
-	 * @var int
-	 */
-	public $OrderNoteID;
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
+
+    /**
+     * @var int
+     */
+    public $OrderID;
+
+    /**
+     * @var int
+     */
+    public $OrderNoteID;
 }

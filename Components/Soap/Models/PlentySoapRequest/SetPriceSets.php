@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_SetPriceSets
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_setpricesets
-	 */
-	public $PriceSetList;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_setpricesets
+     */
+    public $PriceSetList;
 }

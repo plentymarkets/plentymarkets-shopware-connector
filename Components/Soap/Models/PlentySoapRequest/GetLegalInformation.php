@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_GetLegalInformation
 {
-	
-	/**
-	 * @var string
-	 */
-	public $Lang;
-	
-	/**
-	 * @var int
-	 */
-	public $StoreID;
+    /**
+     * @var string
+     */
+    public $Lang;
+
+    /**
+     * @var int
+     */
+    public $StoreID;
 }

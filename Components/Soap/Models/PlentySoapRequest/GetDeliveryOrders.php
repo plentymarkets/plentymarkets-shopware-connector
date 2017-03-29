@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_GetDeliveryOrders
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoaprequestobject_getdeliveryorders
-	 */
-	public $DeliveryOrders;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoaprequestobject_getdeliveryorders
+     */
+    public $DeliveryOrders;
 }

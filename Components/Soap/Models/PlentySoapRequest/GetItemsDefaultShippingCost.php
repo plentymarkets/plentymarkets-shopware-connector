@@ -32,24 +32,23 @@
  */
 class PlentySoapRequest_GetItemsDefaultShippingCost
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_integer
-	 */
-	public $ItemIDs;
-	
-	/**
-	 * @var int
-	 */
-	public $LastUpdate;
-	
-	/**
-	 * @var int
-	 */
-	public $Page;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_integer
+     */
+    public $ItemIDs;
+
+    /**
+     * @var int
+     */
+    public $LastUpdate;
+
+    /**
+     * @var int
+     */
+    public $Page;
 }

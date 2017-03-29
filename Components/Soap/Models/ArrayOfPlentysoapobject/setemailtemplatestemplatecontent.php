@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_setemailtemplatestemplatecontent
 {
-	
-	/**
-	 * @var PlentySoapObject_SetEmailTemplatesTemplateContent
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_SetEmailTemplatesTemplateContent
+     */
+    public $item;
 }

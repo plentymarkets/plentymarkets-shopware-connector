@@ -32,29 +32,28 @@
  */
 class PlentySoapObject_SetDeliveryOrder
 {
-	
-	/**
-	 * @var boolean
-	 */
-	public $BookOutgoingItems;
-	
-	/**
-	 * @var int
-	 */
-	public $DeliveryOrderID;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_orderinfo
-	 */
-	public $DeliveryOrderInfos;
-	
-	/**
-	 * @var int
-	 */
-	public $DoneTimestamp;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_setdeliveryrow
-	 */
-	public $OrderRows;
+    /**
+     * @var bool
+     */
+    public $BookOutgoingItems;
+
+    /**
+     * @var int
+     */
+    public $DeliveryOrderID;
+
+    /**
+     * @var ArrayOfPlentysoapobject_orderinfo
+     */
+    public $DeliveryOrderInfos;
+
+    /**
+     * @var int
+     */
+    public $DoneTimestamp;
+
+    /**
+     * @var ArrayOfPlentysoapobject_setdeliveryrow
+     */
+    public $OrderRows;
 }

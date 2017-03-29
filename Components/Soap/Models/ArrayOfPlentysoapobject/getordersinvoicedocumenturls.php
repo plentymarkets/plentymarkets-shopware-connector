@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_getordersinvoicedocumenturls
 {
-	
-	/**
-	 * @var PlentySoapObject_GetOrdersInvoiceDocumentURLs
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_GetOrdersInvoiceDocumentURLs
+     */
+    public $item;
 }

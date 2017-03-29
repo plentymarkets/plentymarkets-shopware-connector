@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_getwarehouselist
 {
-	
-	/**
-	 * @var PlentySoapObject_GetWarehouseList
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_GetWarehouseList
+     */
+    public $item;
 }

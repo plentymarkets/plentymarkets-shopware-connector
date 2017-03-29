@@ -32,14 +32,13 @@
  */
 class PlentySoapObject_ColumnToReferrer
 {
-	
-	/**
-	 * @var int
-	 */
-	public $PriceColumnID;
-	
-	/**
-	 * @var float
-	 */
-	public $ReferrerID;
+    /**
+     * @var int
+     */
+    public $PriceColumnID;
+
+    /**
+     * @var float
+     */
+    public $ReferrerID;
 }

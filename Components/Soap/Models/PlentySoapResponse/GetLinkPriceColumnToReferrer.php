@@ -32,19 +32,18 @@
  */
 class PlentySoapResponse_GetLinkPriceColumnToReferrer
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_columntoreferrer
-	 */
-	public $PriceColumnToReferrerList;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapobject_columntoreferrer
+     */
+    public $PriceColumnToReferrerList;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

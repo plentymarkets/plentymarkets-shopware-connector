@@ -32,29 +32,28 @@
  */
 class PlentySoapRequest_GetItemsUpdated
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var int
-	 */
-	public $LastUpdateFrom;
-	
-	/**
-	 * @var int
-	 */
-	public $LastUpdateTill;
-	
-	/**
-	 * @var int
-	 */
-	public $Page;
-	
-	/**
-	 * @var int
-	 */
-	public $StoreID;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var int
+     */
+    public $LastUpdateFrom;
+
+    /**
+     * @var int
+     */
+    public $LastUpdateTill;
+
+    /**
+     * @var int
+     */
+    public $Page;
+
+    /**
+     * @var int
+     */
+    public $StoreID;
 }

@@ -32,19 +32,18 @@
  */
 class PlentySoapObject_DeliveryCountryVAT
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CountryID;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_getvatconfig
-	 */
-	public $CountryVAT;
-	
-	/**
-	 * @var string
-	 */
-	public $StartDate;
+    /**
+     * @var int
+     */
+    public $CountryID;
+
+    /**
+     * @var ArrayOfPlentysoapobject_getvatconfig
+     */
+    public $CountryVAT;
+
+    /**
+     * @var string
+     */
+    public $StartDate;
 }

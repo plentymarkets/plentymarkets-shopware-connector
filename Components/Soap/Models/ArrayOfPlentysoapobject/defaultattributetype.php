@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_defaultattributetype
 {
-	
-	/**
-	 * @var PlentySoapObject_DefaultAttributeType
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_DefaultAttributeType
+     */
+    public $item;
 }

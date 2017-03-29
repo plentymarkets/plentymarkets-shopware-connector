@@ -32,14 +32,13 @@
  */
 class PlentySoapObject_GetEmailTemplatesTemplate
 {
-	
-	/**
-	 * @var int
-	 */
-	public $ID;
-	
-	/**
-	 * @var string
-	 */
-	public $Name;
+    /**
+     * @var int
+     */
+    public $ID;
+
+    /**
+     * @var string
+     */
+    public $Name;
 }

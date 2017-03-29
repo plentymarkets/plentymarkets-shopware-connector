@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_DeletePriceSets
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_deletepricesets
-	 */
-	public $PriceIDs;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_deletepricesets
+     */
+    public $PriceIDs;
 }

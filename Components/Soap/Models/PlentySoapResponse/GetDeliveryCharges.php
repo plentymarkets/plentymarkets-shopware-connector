@@ -32,19 +32,18 @@
  */
 class PlentySoapResponse_GetDeliveryCharges
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_shippingcost
-	 */
-	public $ShippingCostsList;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var ArrayOfPlentysoapobject_shippingcost
+     */
+    public $ShippingCostsList;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

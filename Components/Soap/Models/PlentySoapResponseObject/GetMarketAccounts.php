@@ -32,49 +32,48 @@
  */
 class PlentySoapResponseObject_GetMarketAccounts
 {
-	
-	/**
-	 * @var string
-	 */
-	public $Environment;
-	
-	/**
-	 * @var string
-	 */
-	public $Expire;
-	
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
-	
-	/**
-	 * @var string
-	 */
-	public $Inserted;
-	
-	/**
-	 * @var int
-	 */
-	public $MarketAccountId;
-	
-	/**
-	 * @var string
-	 */
-	public $MarketAccountName;
-	
-	/**
-	 * @var int
-	 */
-	public $MarketId;
-	
-	/**
-	 * @var string
-	 */
-	public $Status;
-	
-	/**
-	 * @var string
-	 */
-	public $Token;
+    /**
+     * @var string
+     */
+    public $Environment;
+
+    /**
+     * @var string
+     */
+    public $Expire;
+
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
+
+    /**
+     * @var string
+     */
+    public $Inserted;
+
+    /**
+     * @var int
+     */
+    public $MarketAccountId;
+
+    /**
+     * @var string
+     */
+    public $MarketAccountName;
+
+    /**
+     * @var int
+     */
+    public $MarketId;
+
+    /**
+     * @var string
+     */
+    public $Status;
+
+    /**
+     * @var string
+     */
+    public $Token;
 }

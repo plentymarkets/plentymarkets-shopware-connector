@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapresponseobject_deletecategories
 {
-	
-	/**
-	 * @var PlentySoapResponseObject_DeleteCategories
-	 */
-	public $item;
+    /**
+     * @var PlentySoapResponseObject_DeleteCategories
+     */
+    public $item;
 }

@@ -26,7 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * PlentymarketsMappingEntityCustomer provides the actual customer mapping functionality.
  * Like the other mapping entities this class is called in PlentymarketsMappingController. This entity
@@ -36,14 +35,13 @@
  */
 class PlentymarketsMappingEntityCustomer extends PlentymarketsMappingEntityAbstract
 {
-
-	/**
-	 * Returns the name of the database table
-	 * 
-	 * @return string
-	 */
-	protected function getName()
-	{
-		return 'plenty_mapping_customer';
-	}
+    /**
+     * Returns the name of the database table
+     *
+     * @return string
+     */
+    protected function getName()
+    {
+        return 'plenty_mapping_customer';
+    }
 }

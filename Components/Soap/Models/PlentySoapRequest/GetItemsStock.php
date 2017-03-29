@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_GetItemsStock
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_getitemsstock
-	 */
-	public $GetItemsStock;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_getitemsstock
+     */
+    public $GetItemsStock;
 }

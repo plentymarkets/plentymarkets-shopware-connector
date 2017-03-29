@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_AddItemMediaFile
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_additemmediafile
-	 */
-	public $ItemMediaFile;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_additemmediafile
+     */
+    public $ItemMediaFile;
 }

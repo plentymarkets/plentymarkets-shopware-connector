@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_GetMarketStoreCategories
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoaprequestobject_getmarketstorecategories
-	 */
-	public $GetMarketStoreCategories;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoaprequestobject_getmarketstorecategories
+     */
+    public $GetMarketStoreCategories;
 }

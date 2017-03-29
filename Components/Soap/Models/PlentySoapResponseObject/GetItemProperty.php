@@ -32,14 +32,13 @@
  */
 class PlentySoapResponseObject_GetItemProperty
 {
-	
-	/**
-	 * @var string
-	 */
-	public $Name;
-	
-	/**
-	 * @var string
-	 */
-	public $Value;
+    /**
+     * @var string
+     */
+    public $Name;
+
+    /**
+     * @var string
+     */
+    public $Value;
 }

@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_AddIncomingPayments
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_addincomingpayments
-	 */
-	public $IncomingPayments;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_addincomingpayments
+     */
+    public $IncomingPayments;
 }

@@ -32,29 +32,28 @@
  */
 class PlentySoapObject_ShippingCost
 {
-	
-	/**
-	 * @var int
-	 */
-	public $ParcelServiceID;
-	
-	/**
-	 * @var string
-	 */
-	public $ParcelServiceName;
-	
-	/**
-	 * @var int
-	 */
-	public $ParcelServicePresetID;
-	
-	/**
-	 * @var string
-	 */
-	public $ParcelServicePresetName;
-	
-	/**
-	 * @var float
-	 */
-	public $ShippingAmount;
+    /**
+     * @var int
+     */
+    public $ParcelServiceID;
+
+    /**
+     * @var string
+     */
+    public $ParcelServiceName;
+
+    /**
+     * @var int
+     */
+    public $ParcelServicePresetID;
+
+    /**
+     * @var string
+     */
+    public $ParcelServicePresetName;
+
+    /**
+     * @var float
+     */
+    public $ShippingAmount;
 }

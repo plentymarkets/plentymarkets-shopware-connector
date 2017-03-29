@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_GetMarketShippingProfiles
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoaprequestobject_getmarketshippingprofiles
-	 */
-	public $GetMarketShippingProfiles;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoaprequestobject_getmarketshippingprofiles
+     */
+    public $GetMarketShippingProfiles;
 }

@@ -32,19 +32,18 @@
  */
 class PlentySoapObject_ShippingCharges
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_shippingchargescosts
-	 */
-	public $ShippingCosts;
-	
-	/**
-	 * @var int
-	 */
-	public $ShippingDestinationID;
-	
-	/**
-	 * @var string
-	 */
-	public $ShippingDestinationName;
+    /**
+     * @var ArrayOfPlentysoapobject_shippingchargescosts
+     */
+    public $ShippingCosts;
+
+    /**
+     * @var int
+     */
+    public $ShippingDestinationID;
+
+    /**
+     * @var string
+     */
+    public $ShippingDestinationName;
 }

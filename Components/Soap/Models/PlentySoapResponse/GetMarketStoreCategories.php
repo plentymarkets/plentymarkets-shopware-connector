@@ -32,19 +32,18 @@
  */
 class PlentySoapResponse_GetMarketStoreCategories
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapresponseobject_getmarketstorecategories
-	 */
-	public $MarketStoreCategories;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapresponseobject_getmarketstorecategories
+     */
+    public $MarketStoreCategories;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

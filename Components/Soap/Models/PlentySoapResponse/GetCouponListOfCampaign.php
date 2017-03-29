@@ -32,29 +32,28 @@
  */
 class PlentySoapResponse_GetCouponListOfCampaign
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_coupon
-	 */
-	public $Coupons;
-	
-	/**
-	 * @var int
-	 */
-	public $Pages;
-	
-	/**
-	 * @var int
-	 */
-	public $PendingCoupons;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapobject_coupon
+     */
+    public $Coupons;
+
+    /**
+     * @var int
+     */
+    public $Pages;
+
+    /**
+     * @var int
+     */
+    public $PendingCoupons;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

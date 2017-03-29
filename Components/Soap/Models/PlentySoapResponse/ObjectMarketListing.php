@@ -32,14 +32,13 @@
  */
 class PlentySoapResponse_ObjectMarketListing
 {
-	
-	/**
-	 * @var int
-	 */
-	public $MarketListingId;
-	
-	/**
-	 * @var string
-	 */
-	public $MarketName;
+    /**
+     * @var int
+     */
+    public $MarketListingId;
+
+    /**
+     * @var string
+     */
+    public $MarketName;
 }

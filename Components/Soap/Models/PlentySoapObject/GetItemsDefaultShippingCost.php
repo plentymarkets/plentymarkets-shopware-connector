@@ -32,29 +32,28 @@
  */
 class PlentySoapObject_GetItemsDefaultShippingCost
 {
-	
-	/**
-	 * @var int
-	 */
-	public $ItemID;
-	
-	/**
-	 * @var int
-	 */
-	public $MethodOfPaymentID;
-	
-	/**
-	 * @var float
-	 */
-	public $ReferrerID;
-	
-	/**
-	 * @var float
-	 */
-	public $ShippingCosts;
-	
-	/**
-	 * @var int
-	 */
-	public $ShippingDestinationID;
+    /**
+     * @var int
+     */
+    public $ItemID;
+
+    /**
+     * @var int
+     */
+    public $MethodOfPaymentID;
+
+    /**
+     * @var float
+     */
+    public $ReferrerID;
+
+    /**
+     * @var float
+     */
+    public $ShippingCosts;
+
+    /**
+     * @var int
+     */
+    public $ShippingDestinationID;
 }

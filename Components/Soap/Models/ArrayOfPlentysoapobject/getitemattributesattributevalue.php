@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_getitemattributesattributevalue
 {
-	
-	/**
-	 * @var PlentySoapObject_GetItemAttributesAttributeValue
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_GetItemAttributesAttributeValue
+     */
+    public $item;
 }

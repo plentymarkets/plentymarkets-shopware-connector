@@ -32,19 +32,18 @@
  */
 class PlentySoapObject_GetSalesOrderReferrer
 {
-	
-	/**
-	 * @var string
-	 */
-	public $Name;
-	
-	/**
-	 * @var int
-	 */
-	public $PriceColumn;
-	
-	/**
-	 * @var float
-	 */
-	public $SalesOrderReferrerID;
+    /**
+     * @var string
+     */
+    public $Name;
+
+    /**
+     * @var int
+     */
+    public $PriceColumn;
+
+    /**
+     * @var float
+     */
+    public $SalesOrderReferrerID;
 }

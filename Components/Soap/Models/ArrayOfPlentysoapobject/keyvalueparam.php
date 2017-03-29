@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_keyvalueparam
 {
-	
-	/**
-	 * @var PlentySoapObject_KeyValueParam
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_KeyValueParam
+     */
+    public $item;
 }

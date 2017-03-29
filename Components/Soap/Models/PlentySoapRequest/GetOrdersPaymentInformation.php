@@ -32,24 +32,23 @@
  */
 class PlentySoapRequest_GetOrdersPaymentInformation
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var PlentySoapRequest_ObjectGetOrdersPaymentInformation
-	 */
-	public $GetOrdersPaymentInformation;
-	
-	/**
-	 * @var boolean
-	 */
-	public $GetPaymentInformationByOrderIDs;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_integer
-	 */
-	public $OrderIDs;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var PlentySoapRequest_ObjectGetOrdersPaymentInformation
+     */
+    public $GetOrdersPaymentInformation;
+
+    /**
+     * @var bool
+     */
+    public $GetPaymentInformationByOrderIDs;
+
+    /**
+     * @var ArrayOfPlentysoapobject_integer
+     */
+    public $OrderIDs;
 }

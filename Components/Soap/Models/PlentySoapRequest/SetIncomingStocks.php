@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_SetIncomingStocks
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_setincomingstocks
-	 */
-	public $IncomingStocks;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_setincomingstocks
+     */
+    public $IncomingStocks;
 }

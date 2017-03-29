@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapresponseobject_getmarketstorecategory
 {
-	
-	/**
-	 * @var PlentySoapResponseObject_GetMarketStoreCategory
-	 */
-	public $item;
+    /**
+     * @var PlentySoapResponseObject_GetMarketStoreCategory
+     */
+    public $item;
 }

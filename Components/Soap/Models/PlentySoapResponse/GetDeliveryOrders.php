@@ -32,19 +32,18 @@
  */
 class PlentySoapResponse_GetDeliveryOrders
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_order
-	 */
-	public $DeliveryOrders;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapobject_order
+     */
+    public $DeliveryOrders;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

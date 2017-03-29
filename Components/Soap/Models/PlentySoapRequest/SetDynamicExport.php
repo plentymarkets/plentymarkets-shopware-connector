@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_SetDynamicExport
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_setdynamicexport
-	 */
-	public $DynamicExportItems;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_setdynamicexport
+     */
+    public $DynamicExportItems;
 }

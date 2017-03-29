@@ -32,19 +32,18 @@
  */
 class PlentySoapObject_CustomersNewsletterSubscriptions
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CustomerID;
-	
-	/**
-	 * @var string
-	 */
-	public $CustomerNumber;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_newslettersubscription
-	 */
-	public $NewsletterSubscriptions;
+    /**
+     * @var int
+     */
+    public $CustomerID;
+
+    /**
+     * @var string
+     */
+    public $CustomerNumber;
+
+    /**
+     * @var ArrayOfPlentysoapobject_newslettersubscription
+     */
+    public $NewsletterSubscriptions;
 }

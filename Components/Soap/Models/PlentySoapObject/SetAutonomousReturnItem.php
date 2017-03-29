@@ -32,54 +32,53 @@
  */
 class PlentySoapObject_SetAutonomousReturnItem
 {
-	
-	/**
-	 * @var string
-	 */
-	public $Comment;
-	
-	/**
-	 * @var string
-	 */
-	public $Currency;
-	
-	/**
-	 * @var float
-	 */
-	public $ExchangeRatio;
-	
-	/**
-	 * @var string
-	 */
-	public $ExternalItemId;
-	
-	/**
-	 * @var int
-	 */
-	public $ItemStatusID;
-	
-	/**
-	 * @var float
-	 */
-	public $Quantity;
-	
-	/**
-	 * @var int
-	 */
-	public $RemainingPercentage;
-	
-	/**
-	 * @var string
-	 */
-	public $SKU;
-	
-	/**
-	 * @var int
-	 */
-	public $StorageLocationID;
-	
-	/**
-	 * @var int
-	 */
-	public $WarehouseID;
+    /**
+     * @var string
+     */
+    public $Comment;
+
+    /**
+     * @var string
+     */
+    public $Currency;
+
+    /**
+     * @var float
+     */
+    public $ExchangeRatio;
+
+    /**
+     * @var string
+     */
+    public $ExternalItemId;
+
+    /**
+     * @var int
+     */
+    public $ItemStatusID;
+
+    /**
+     * @var float
+     */
+    public $Quantity;
+
+    /**
+     * @var int
+     */
+    public $RemainingPercentage;
+
+    /**
+     * @var string
+     */
+    public $SKU;
+
+    /**
+     * @var int
+     */
+    public $StorageLocationID;
+
+    /**
+     * @var int
+     */
+    public $WarehouseID;
 }

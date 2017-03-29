@@ -32,19 +32,18 @@
  */
 class PlentySoapResponse_GetListingsProperties
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapresponseobject_getlistingsproperties
-	 */
-	public $ListingProperties;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapresponseobject_getlistingsproperties
+     */
+    public $ListingProperties;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

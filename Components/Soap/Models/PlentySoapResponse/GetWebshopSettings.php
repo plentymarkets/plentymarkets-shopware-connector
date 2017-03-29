@@ -32,19 +32,18 @@
  */
 class PlentySoapResponse_GetWebshopSettings
 {
-	
-	/**
-	 * @var PlentySoapObject_GetWebshopSettingsItemSorting
-	 */
-	public $ItemSorting;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var PlentySoapObject_GetWebshopSettingsItemSorting
+     */
+    public $ItemSorting;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

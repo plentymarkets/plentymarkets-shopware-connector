@@ -32,39 +32,38 @@
  */
 class PlentySoapObject_PaymentInformation
 {
-	
-	/**
-	 * @var int
-	 */
-	public $MethodOfPaymentId;
-	
-	/**
-	 * @var string
-	 */
-	public $MethodOfPaymentName;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_string
-	 */
-	public $PaymentReferenceList;
-	
-	/**
-	 * @var float
-	 */
-	public $TransactionAmount;
-	
-	/**
-	 * @var int
-	 */
-	public $TransactionAssignDate;
-	
-	/**
-	 * @var string
-	 */
-	public $TransactionCurrency;
-	
-	/**
-	 * @var string
-	 */
-	public $TransactionId;
+    /**
+     * @var int
+     */
+    public $MethodOfPaymentId;
+
+    /**
+     * @var string
+     */
+    public $MethodOfPaymentName;
+
+    /**
+     * @var ArrayOfPlentysoapobject_string
+     */
+    public $PaymentReferenceList;
+
+    /**
+     * @var float
+     */
+    public $TransactionAmount;
+
+    /**
+     * @var int
+     */
+    public $TransactionAssignDate;
+
+    /**
+     * @var string
+     */
+    public $TransactionCurrency;
+
+    /**
+     * @var string
+     */
+    public $TransactionId;
 }

@@ -26,7 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * PlentymarketsImportEntityItemPrice provides the actual item price import functionality. Like the other import
  * entities this class is called in PlentymarketsImportController. It is important to deliver the correct price set
@@ -37,17 +36,15 @@
  */
 class PlentymarketsImportEntityItemPrice
 {
-	/**
-	 *
-	 * @var PlentySoapObject_ItemPriceSet
-	 */
-	protected $PLENTY_PriceSet;
+    /**
+     * @var PlentySoapObject_ItemPriceSet
+     */
+    protected $PLENTY_PriceSet;
 
-	/**
-	 *
-	 * @var float
-	 */
-	protected $PLENTY_markup = 0.0;
+    /**
+     * @var float
+     */
+    protected $PLENTY_markup = 0.0;
 
     /**
      * @var float
@@ -61,34 +58,19 @@ class PlentymarketsImportEntityItemPrice
      * @param float $markup
      * @param float $referencePrice
      */
-	public function __construct($PriceSet, $markup = 0.0, $referencePrice = 0.0)
-	{
-		$this->PLENTY_PriceSet = $PriceSet;
-		$this->PLENTY_markup = $markup;
+    public function __construct($PriceSet, $markup = 0.0, $referencePrice = 0.0)
+    {
+        $this->PLENTY_PriceSet = $PriceSet;
+        $this->PLENTY_markup = $markup;
         $this->referencePrice = $referencePrice;
 
-		$this->prepare();
-	}
-
-	/**
-	 * Prepared the plentymarkets price set for further use
-	 */
-	protected function prepare()
-	{
-		for ($n = 6; $n < 12; ++$n)
-		{
-			$rebateLevel = sprintf('RebateLevelPrice%u', $n);
-			if ($this->PLENTY_PriceSet->$rebateLevel <= 0)
-			{
-				$this->PLENTY_PriceSet->$rebateLevel = -1;
-			}
-		}
-	}
+        $this->prepare();
+    }
 
     /**
      * @return float
      */
-	public function getPurchasePrice()
+    public function getPurchasePrice()
     {
         if (isset($this->PLENTY_PriceSet->PurchasePriceNet) && null !== $this->PLENTY_PriceSet->PurchasePriceNet) {
             return $this->PLENTY_PriceSet->PurchasePriceNet;
@@ -97,71 +79,60 @@ class PlentymarketsImportEntityItemPrice
         return 0.0;
     }
 
-	/**
-	 * Returns a price array for the shopware REST api
-	 *
-	 * @return array
-	 */
-	public function getPrices()
-	{
-		$prices = array();
-		$customerGroupKey = PlentymarketsConfig::getInstance()->getDefaultCustomerGroupKey();
+    /**
+     * Returns a price array for the shopware REST api
+     *
+     * @return array
+     */
+    public function getPrices()
+    {
+        $prices = [];
+        $customerGroupKey = PlentymarketsConfig::getInstance()->getDefaultCustomerGroupKey();
 
-		// Prices
-		if ($this->PLENTY_PriceSet->RebateLevelPrice6 > 0)
-		{
-			$price = array(
-				'from' => 1,
-				'to' => $this->PLENTY_PriceSet->RebateLevelPrice6 - 1,
-				'customerGroupKey' => $customerGroupKey,
-				'price' => $this->PLENTY_PriceSet->Price,
-				'percent' => 0
-			);
-			$prices[] = $price;
+        // Prices
+        if ($this->PLENTY_PriceSet->RebateLevelPrice6 > 0) {
+            $price = [
+                'from' => 1,
+                'to' => $this->PLENTY_PriceSet->RebateLevelPrice6 - 1,
+                'customerGroupKey' => $customerGroupKey,
+                'price' => $this->PLENTY_PriceSet->Price,
+                'percent' => 0,
+            ];
+            $prices[] = $price;
 
-			for ($n = 6; $n < 12; ++$n)
-			{
-				$price = sprintf('Price%u', $n);
-				$rebateLevel = sprintf('RebateLevelPrice%u', $n);
-				$rebateLevelNext = sprintf('RebateLevelPrice%u', $n + 1);
+            for ($n = 6; $n < 12; ++$n) {
+                $price = sprintf('Price%u', $n);
+                $rebateLevel = sprintf('RebateLevelPrice%u', $n);
+                $rebateLevelNext = sprintf('RebateLevelPrice%u', $n + 1);
 
-				if ($this->PLENTY_PriceSet->$rebateLevel > 0)
-				{
-					if (isset($this->PLENTY_PriceSet->$rebateLevelNext))
-					{
-						$to = $this->PLENTY_PriceSet->$rebateLevelNext - 1;
-					}
-					else
-					{
-						$to = 'beliebig';
-					}
+                if ($this->PLENTY_PriceSet->$rebateLevel > 0) {
+                    if (isset($this->PLENTY_PriceSet->$rebateLevelNext)) {
+                        $to = $this->PLENTY_PriceSet->$rebateLevelNext - 1;
+                    } else {
+                        $to = 'beliebig';
+                    }
 
-					$price = array(
-						'customerGroupKey' => $customerGroupKey,
-						'from' => $this->PLENTY_PriceSet->$rebateLevel,
-						'to' => $to,
-						'price' => $this->PLENTY_PriceSet->$price,
-						'percent' => (($this->PLENTY_PriceSet->Price - $this->PLENTY_PriceSet->$price) / $this->PLENTY_PriceSet->Price) * 100
-					);
-					$prices[] = $price;
-				}
-				else
-				{
-					break;
-				}
-			}
-		}
-		else
-		{
-			$price = array(
-				'customerGroupKey' => $customerGroupKey
-			);
+                    $price = [
+                        'customerGroupKey' => $customerGroupKey,
+                        'from' => $this->PLENTY_PriceSet->$rebateLevel,
+                        'to' => $to,
+                        'price' => $this->PLENTY_PriceSet->$price,
+                        'percent' => (($this->PLENTY_PriceSet->Price - $this->PLENTY_PriceSet->$price) / $this->PLENTY_PriceSet->Price) * 100,
+                    ];
+                    $prices[] = $price;
+                } else {
+                    break;
+                }
+            }
+        } else {
+            $price = [
+                'customerGroupKey' => $customerGroupKey,
+            ];
 
-			// Reliably available starting in SOAP 111
-			if (isset($this->PLENTY_PriceSet->Price) && !is_null($this->PLENTY_PriceSet->Price))
-			{
-				$price['price'] = $this->getItemPrice($this->PLENTY_PriceSet);
-			}
+            // Reliably available starting in SOAP 111
+            if (isset($this->PLENTY_PriceSet->Price) && !is_null($this->PLENTY_PriceSet->Price)) {
+                $price['price'] = $this->getItemPrice($this->PLENTY_PriceSet);
+            }
 
             // if uvp is empty, try to load from the price set, which could be the main product
             if (empty($this->referencePrice)) {
@@ -170,85 +141,62 @@ class PlentymarketsImportEntityItemPrice
                 $referencePrice = $this->referencePrice;
             }
 
-			// Reliably available starting in SOAP 111
+            // Reliably available starting in SOAP 111
             // check whether the RRP is higher than price to prevent ugly display
-			if (isset($referencePrice) && !is_null($referencePrice) && isset($price['price']) && ($referencePrice > $price['price']))
-			{
-				$price['pseudoPrice'] = $referencePrice;
-			}
+            if (isset($referencePrice) && !is_null($referencePrice) && isset($price['price']) && ($referencePrice > $price['price'])) {
+                $price['pseudoPrice'] = $referencePrice;
+            }
 
-			$prices[] = $price;
-		}
+            $prices[] = $price;
+        }
 
-		foreach ($prices as &$price)
-		{
-			$price['price'] += $this->PLENTY_markup;
-		}
+        foreach ($prices as &$price) {
+            $price['price'] += $this->PLENTY_markup;
+        }
 
         // Allow plugins to change the data
         $prices = Enlight()->Events()->filter(
             'PlentyConnector_ImportEntityItemPrice_AfterGetPrice',
             $prices,
-            array(
+            [
                 'subject' => $this,
                 'priceset' => $this->PLENTY_PriceSet,
                 'markup' => $this->PLENTY_markup,
-            )
+            ]
         );
 
-		return $prices;
-	}
-
-    /**
-     * Returns the item price
-     *
-     * @return double
-     */
-    protected function getItemPrice($ItemPrices)
-    {
-        $usePrice = PlentymarketsConfig::getInstance()->getItemPriceImportActionID(IMPORT_ITEM_PRICE);
-
-        if($usePrice != 'Price')
-        {
-            if(!empty($ItemPrices->{$usePrice}))
-            {
-                return $ItemPrices->{$usePrice};
-            }
-        }
-
-        return $ItemPrices->Price;
+        return $prices;
     }
 
     /**
      * Update the prices for a base item
      *
-     * @param integer $itemId
+     * @param int $itemId
+     *
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\ValidationException
      */
-	public function update($itemId)
-	{
+    public function update($itemId)
+    {
         /**
          * @var \Shopware\Components\Api\Resource\Article $ArticleResource
          */
-		$ArticleResource = \Shopware\Components\Api\Manager::getResource('Article');
+        $ArticleResource = \Shopware\Components\Api\Manager::getResource('Article');
 
-		// Updaten
-		$ArticleResource->update($itemId, array(
-			'mainDetail' => array(
-				'prices' => $this->getPrices(),
+        // Updaten
+        $ArticleResource->update($itemId, [
+            'mainDetail' => [
+                'prices' => $this->getPrices(),
                 'purchasePrice' => $this->getPurchasePrice(),
-			)
-		));
-	}
+            ],
+        ]);
+    }
 
     /**
      * Update the prices for a variant
      *
-     * @param integer $detailId
-     *
-     * @return bool
+     * @param int $detailId
      *
      * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
@@ -257,37 +205,70 @@ class PlentymarketsImportEntityItemPrice
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
+     *
+     * @return bool
      */
-	public function updateVariant($detailId)
-	{
-		$Detail = Shopware()->Models()->find('Shopware\Models\Article\Detail', $detailId);
+    public function updateVariant($detailId)
+    {
+        $Detail = Shopware()->Models()->find('Shopware\Models\Article\Detail', $detailId);
 
-		if (!$Detail instanceof Shopware\Models\Article\Detail) {
-			return PlentymarketsLogger::getInstance()->error('Sync:Item:Price', 'The price of the item detail with the id »'. $detailId .'« could not be updated (item corrupt)', 3610);
-		}
+        if (!$Detail instanceof Shopware\Models\Article\Detail) {
+            return PlentymarketsLogger::getInstance()->error('Sync:Item:Price', 'The price of the item detail with the id »' . $detailId . '« could not be updated (item corrupt)', 3610);
+        }
 
-		$currentPrice = $this->PLENTY_PriceSet->Price + $this->PLENTY_markup;
+        $currentPrice = $this->PLENTY_PriceSet->Price + $this->PLENTY_markup;
 
-		$Article = $Detail->getArticle();
+        $Article = $Detail->getArticle();
 
         /**
          * @var \Shopware\Components\Api\Resource\Article $ArticleResource
          */
-		$ArticleResource = \Shopware\Components\Api\Manager::getResource('Article');
+        $ArticleResource = \Shopware\Components\Api\Manager::getResource('Article');
 
-		// Update
-		$ArticleResource->update($Article->getId(), array(
-			'variants' => array(
-				array(
-					'number' => $Detail->getNumber(),
-					'prices' => $this->getPrices(),
+        // Update
+        $ArticleResource->update($Article->getId(), [
+            'variants' => [
+                [
+                    'number' => $Detail->getNumber(),
+                    'prices' => $this->getPrices(),
                     'purchasePrice' => $this->getPurchasePrice(),
-				)
-			)
-		));
+                ],
+            ],
+        ]);
 
-		PyLog()->message('Sync:Item:Price',
-			'The price of the variant with the number »' . $Detail->getNumber() . '« has been set to »' . money_format('%.2n', $currentPrice) . '«.'
-		);
-	}
+        PyLog()->message('Sync:Item:Price',
+            'The price of the variant with the number »' . $Detail->getNumber() . '« has been set to »' . money_format('%.2n', $currentPrice) . '«.'
+        );
+    }
+
+    /**
+     * Prepared the plentymarkets price set for further use
+     */
+    protected function prepare()
+    {
+        for ($n = 6; $n < 12; ++$n) {
+            $rebateLevel = sprintf('RebateLevelPrice%u', $n);
+            if ($this->PLENTY_PriceSet->$rebateLevel <= 0) {
+                $this->PLENTY_PriceSet->$rebateLevel = -1;
+            }
+        }
+    }
+
+    /**
+     * Returns the item price
+     *
+     * @return float
+     */
+    protected function getItemPrice($ItemPrices)
+    {
+        $usePrice = PlentymarketsConfig::getInstance()->getItemPriceImportActionID(IMPORT_ITEM_PRICE);
+
+        if ($usePrice != 'Price') {
+            if (!empty($ItemPrices->{$usePrice})) {
+                return $ItemPrices->{$usePrice};
+            }
+        }
+
+        return $ItemPrices->Price;
+    }
 }

@@ -32,19 +32,18 @@
  */
 class PlentySoapResponse_GetMarketListingItemVariants
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_getmarketlistingitemvariants
-	 */
-	public $ResponseMarketListingItemVariants;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapobject_getmarketlistingitemvariants
+     */
+    public $ResponseMarketListingItemVariants;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

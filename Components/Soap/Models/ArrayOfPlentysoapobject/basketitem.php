@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_basketitem
 {
-	
-	/**
-	 * @var PlentySoapObject_BasketItem
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_BasketItem
+     */
+    public $item;
 }

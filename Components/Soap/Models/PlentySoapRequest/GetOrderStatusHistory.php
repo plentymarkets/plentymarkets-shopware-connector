@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_GetOrderStatusHistory
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_integer
-	 */
-	public $OrderIDs;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_integer
+     */
+    public $OrderIDs;
 }

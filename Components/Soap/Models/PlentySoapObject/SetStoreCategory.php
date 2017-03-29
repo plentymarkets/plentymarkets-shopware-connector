@@ -32,29 +32,28 @@
  */
 class PlentySoapObject_SetStoreCategory
 {
-	
-	/**
-	 * @var int
-	 */
-	public $BranchID;
-	
-	/**
-	 * @var int
-	 */
-	public $ContainsItem;
-	
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
-	
-	/**
-	 * @var boolean
-	 */
-	public $RemoveStoreCategory;
-	
-	/**
-	 * @var int
-	 */
-	public $StoreID;
+    /**
+     * @var int
+     */
+    public $BranchID;
+
+    /**
+     * @var int
+     */
+    public $ContainsItem;
+
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
+
+    /**
+     * @var bool
+     */
+    public $RemoveStoreCategory;
+
+    /**
+     * @var int
+     */
+    public $StoreID;
 }

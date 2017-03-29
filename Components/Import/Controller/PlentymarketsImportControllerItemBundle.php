@@ -26,7 +26,6 @@
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * Controller of the item bundles
  *
@@ -34,68 +33,58 @@
  */
 class PlentymarketsImportControllerItemBundle
 {
-	/**
-	 * Registers the bundle module
-	 */
-	public function __construct()
-	{
-		PlentymarketsUtils::registerBundleModules();
-	}
+    /**
+     * Registers the bundle module
+     */
+    public function __construct()
+    {
+        PlentymarketsUtils::registerBundleModules();
+    }
 
-	/**
-	 * Does the actual import work
-	 */
-	public function import()
-	{
-		PlentymarketsLogger::getInstance()->message('Sync:Item:Bundle', 'LastUpdate: ' . date('r', PlentymarketsConfig::getInstance()->getImportItemBundleLastUpdateTimestamp(time())));
+    /**
+     * Does the actual import work
+     */
+    public function import()
+    {
+        PlentymarketsLogger::getInstance()->message('Sync:Item:Bundle', 'LastUpdate: ' . date('r', PlentymarketsConfig::getInstance()->getImportItemBundleLastUpdateTimestamp(time())));
 
-		$numberOfBundlesUpdated = 0;
-		$timestamp = PlentymarketsConfig::getInstance()->getImportItemBundleLastUpdateTimestamp(1);
-		$now = time();
+        $numberOfBundlesUpdated = 0;
+        $timestamp = PlentymarketsConfig::getInstance()->getImportItemBundleLastUpdateTimestamp(1);
+        $now = time();
 
-		// Get all bundles
-		$Request_GetItemBundles = new PlentySoapRequest_GetItemBundles();
-		$Request_GetItemBundles->LastUpdate = $timestamp;
-		$Request_GetItemBundles->Page = 0;
+        // Get all bundles
+        $Request_GetItemBundles = new PlentySoapRequest_GetItemBundles();
+        $Request_GetItemBundles->LastUpdate = $timestamp;
+        $Request_GetItemBundles->Page = 0;
 
-		do
-		{
-			/** @var PlentySoapResponse_GetItemBundles $Response_GetItemBundles */
-			$Response_GetItemBundles = PlentymarketsSoapClient::getInstance()->GetItemBundles($Request_GetItemBundles);
+        do {
+            /** @var PlentySoapResponse_GetItemBundles $Response_GetItemBundles */
+            $Response_GetItemBundles = PlentymarketsSoapClient::getInstance()->GetItemBundles($Request_GetItemBundles);
 
-			$pages = max($Response_GetItemBundles->Pages, 1);
-			PlentymarketsLogger::getInstance()->message('Sync:Item:Bundle', 'Page: ' . ($Request_GetItemBundles->Page + 1) . '/' . $pages);
+            $pages = max($Response_GetItemBundles->Pages, 1);
+            PlentymarketsLogger::getInstance()->message('Sync:Item:Bundle', 'Page: ' . ($Request_GetItemBundles->Page + 1) . '/' . $pages);
 
-			foreach ($Response_GetItemBundles->ItemBundles->item as $PlentySoapObject_Bundle)
-			{
-				$PlentymarketsImportEntityItemBundle = new PlentymarketsImportEntityItemBundle($PlentySoapObject_Bundle);
-				try
-				{
-					$PlentymarketsImportEntityItemBundle->import();
-					++$numberOfBundlesUpdated;
-				}
-				catch (PlentymarketsImportException $e)
-				{
-					PyLog()->error('Sync:Item:Bundle', $e->getMessage(), $e->getCode());
-				}
-			}
-		} // Until all pages are received
-		while (++$Request_GetItemBundles->Page < $Response_GetItemBundles->Pages);
+            foreach ($Response_GetItemBundles->ItemBundles->item as $PlentySoapObject_Bundle) {
+                $PlentymarketsImportEntityItemBundle = new PlentymarketsImportEntityItemBundle($PlentySoapObject_Bundle);
+                try {
+                    $PlentymarketsImportEntityItemBundle->import();
+                    ++$numberOfBundlesUpdated;
+                } catch (PlentymarketsImportException $e) {
+                    PyLog()->error('Sync:Item:Bundle', $e->getMessage(), $e->getCode());
+                }
+            }
+        } // Until all pages are received
+        while (++$Request_GetItemBundles->Page < $Response_GetItemBundles->Pages);
 
-		PlentymarketsConfig::getInstance()->setImportItemBundleLastUpdateTimestamp($now);
+        PlentymarketsConfig::getInstance()->setImportItemBundleLastUpdateTimestamp($now);
 
-		// Log
-		if ($numberOfBundlesUpdated == 0)
-		{
-			PlentymarketsLogger::getInstance()->message('Sync:Item:Bundle', 'No item bundle has been updated or created.');
-		}
-		else if ($numberOfBundlesUpdated == 1)
-		{
-			PlentymarketsLogger::getInstance()->message('Sync:Item:Bundle', '1 item bundle has been updated or created.');
-		}
-		else
-		{
-			PlentymarketsLogger::getInstance()->message('Sync:Item:Bundle', $numberOfBundlesUpdated . ' item bundles have been updated or created.');
-		}
-	}
+        // Log
+        if ($numberOfBundlesUpdated == 0) {
+            PlentymarketsLogger::getInstance()->message('Sync:Item:Bundle', 'No item bundle has been updated or created.');
+        } elseif ($numberOfBundlesUpdated == 1) {
+            PlentymarketsLogger::getInstance()->message('Sync:Item:Bundle', '1 item bundle has been updated or created.');
+        } else {
+            PlentymarketsLogger::getInstance()->message('Sync:Item:Bundle', $numberOfBundlesUpdated . ' item bundles have been updated or created.');
+        }
+    }
 }

@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_GetPartsCompatibilityListings
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoaprequestobject_getpartscompatibilitylistings
-	 */
-	public $GetPartsCompatibilityListings;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoaprequestobject_getpartscompatibilitylistings
+     */
+    public $GetPartsCompatibilityListings;
 }

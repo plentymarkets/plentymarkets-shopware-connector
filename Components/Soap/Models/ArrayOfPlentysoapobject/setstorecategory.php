@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_setstorecategory
 {
-	
-	/**
-	 * @var PlentySoapObject_SetStoreCategory
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_SetStoreCategory
+     */
+    public $item;
 }

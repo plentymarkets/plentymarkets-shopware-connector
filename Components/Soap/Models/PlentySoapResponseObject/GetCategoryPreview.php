@@ -32,14 +32,13 @@
  */
 class PlentySoapResponseObject_GetCategoryPreview
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CategoryID;
-	
-	/**
-	 * @var string
-	 */
-	public $Name;
+    /**
+     * @var int
+     */
+    public $CategoryID;
+
+    /**
+     * @var string
+     */
+    public $Name;
 }

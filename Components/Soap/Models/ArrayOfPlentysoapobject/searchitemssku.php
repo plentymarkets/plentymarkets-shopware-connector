@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_searchitemssku
 {
-	
-	/**
-	 * @var PlentySoapObject_SearchItemsSKU
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_SearchItemsSKU
+     */
+    public $item;
 }

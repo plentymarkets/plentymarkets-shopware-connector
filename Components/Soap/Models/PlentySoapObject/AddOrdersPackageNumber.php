@@ -32,14 +32,13 @@
  */
 class PlentySoapObject_AddOrdersPackageNumber
 {
-	
-	/**
-	 * @var int
-	 */
-	public $OrderID;
-	
-	/**
-	 * @var string
-	 */
-	public $OrderPackageNumber;
+    /**
+     * @var int
+     */
+    public $OrderID;
+
+    /**
+     * @var string
+     */
+    public $OrderPackageNumber;
 }

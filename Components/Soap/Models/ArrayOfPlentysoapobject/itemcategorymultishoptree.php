@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_itemcategorymultishoptree
 {
-	
-	/**
-	 * @var PlentySoapObject_ItemCategoryMultishopTree
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_ItemCategoryMultishopTree
+     */
+    public $item;
 }

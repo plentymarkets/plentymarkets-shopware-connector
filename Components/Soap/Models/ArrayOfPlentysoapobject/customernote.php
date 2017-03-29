@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_customernote
 {
-	
-	/**
-	 * @var PlentySoapObject_CustomerNote
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_CustomerNote
+     */
+    public $item;
 }

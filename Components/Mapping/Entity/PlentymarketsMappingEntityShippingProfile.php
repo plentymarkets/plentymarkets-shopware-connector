@@ -26,7 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * PlentymarketsMappingEntityShippingProfile provides the actual shipping profile mapping functionality.
  * Like the other mapping entities this class is called in PlentymarketsMappingController. This entity
@@ -36,13 +35,13 @@
  */
 class PlentymarketsMappingEntityShippingProfile extends PlentymarketsMappingEntityAbstract
 {
-	/**
-	 * Returns the name of the database table
-	 * 
-	 * @return string
-	 */
-	protected function getName()
-	{
-		return 'plenty_mapping_shipping_profile';
-	}
+    /**
+     * Returns the name of the database table
+     *
+     * @return string
+     */
+    protected function getName()
+    {
+        return 'plenty_mapping_shipping_profile';
+    }
 }

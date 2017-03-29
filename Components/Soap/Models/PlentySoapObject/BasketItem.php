@@ -32,24 +32,23 @@
  */
 class PlentySoapObject_BasketItem
 {
-	
-	/**
-	 * @var int
-	 */
-	public $FSK;
-	
-	/**
-	 * @var float
-	 */
-	public $Price;
-	
-	/**
-	 * @var int
-	 */
-	public $Quantity;
-	
-	/**
-	 * @var string
-	 */
-	public $SKU;
+    /**
+     * @var int
+     */
+    public $FSK;
+
+    /**
+     * @var float
+     */
+    public $Price;
+
+    /**
+     * @var int
+     */
+    public $Quantity;
+
+    /**
+     * @var string
+     */
+    public $SKU;
 }

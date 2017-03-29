@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_DeleteItemsSuppliers
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_integer
-	 */
-	public $ItemsSuppliersRowIDList;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_integer
+     */
+    public $ItemsSuppliersRowIDList;
 }

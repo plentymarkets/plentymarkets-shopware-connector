@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapresponseobject_getcategorypreview
 {
-	
-	/**
-	 * @var PlentySoapResponseObject_GetCategoryPreview
-	 */
-	public $item;
+    /**
+     * @var PlentySoapResponseObject_GetCategoryPreview
+     */
+    public $item;
 }

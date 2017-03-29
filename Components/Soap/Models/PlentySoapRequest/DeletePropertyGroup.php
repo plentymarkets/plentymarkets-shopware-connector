@@ -32,9 +32,8 @@
  */
 class PlentySoapRequest_DeletePropertyGroup
 {
-	
-	/**
-	 * @var int
-	 */
-	public $PropertyGroupID;
+    /**
+     * @var int
+     */
+    public $PropertyGroupID;
 }

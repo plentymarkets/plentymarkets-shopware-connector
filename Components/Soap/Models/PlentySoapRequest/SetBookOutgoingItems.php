@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_SetBookOutgoingItems
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_bookorder
-	 */
-	public $OrderList;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_bookorder
+     */
+    public $OrderList;
 }

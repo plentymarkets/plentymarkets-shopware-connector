@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_UpdateListingsStart
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoaprequestobject_updatelistingsstart
-	 */
-	public $UpdateListingsStart;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoaprequestobject_updatelistingsstart
+     */
+    public $UpdateListingsStart;
 }

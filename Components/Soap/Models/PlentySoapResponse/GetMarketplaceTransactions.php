@@ -32,24 +32,23 @@
  */
 class PlentySoapResponse_GetMarketplaceTransactions
 {
-	
-	/**
-	 * @var int
-	 */
-	public $Pages;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_getmarketplacetransactions
-	 */
-	public $Transactions;
+    /**
+     * @var int
+     */
+    public $Pages;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
+
+    /**
+     * @var ArrayOfPlentysoapobject_getmarketplacetransactions
+     */
+    public $Transactions;
 }

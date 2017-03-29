@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_setwarrantyitem
 {
-	
-	/**
-	 * @var PlentySoapObject_SetWarrantyItem
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_SetWarrantyItem
+     */
+    public $item;
 }

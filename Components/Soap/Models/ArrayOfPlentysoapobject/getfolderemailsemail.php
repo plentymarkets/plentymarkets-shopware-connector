@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_getfolderemailsemail
 {
-	
-	/**
-	 * @var PlentySoapObject_GetFolderEmailsEmail
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_GetFolderEmailsEmail
+     */
+    public $item;
 }

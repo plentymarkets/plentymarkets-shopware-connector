@@ -32,14 +32,13 @@
  */
 class PlentySoapRequestObject_DeleteListingsLayoutTemplates
 {
-	
-	/**
-	 * @var int
-	 */
-	public $DeleteListingID;
-	
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
+    /**
+     * @var int
+     */
+    public $DeleteListingID;
+
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
 }

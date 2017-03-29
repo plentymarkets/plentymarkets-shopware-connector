@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_DeleteItemAttribute
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_deleteitemattribute
-	 */
-	public $DeleteAttributes;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_deleteitemattribute
+     */
+    public $DeleteAttributes;
 }

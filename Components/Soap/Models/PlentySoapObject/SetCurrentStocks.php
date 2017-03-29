@@ -32,49 +32,48 @@
  */
 class PlentySoapObject_SetCurrentStocks
 {
-	
-	/**
-	 * @var string
-	 */
-	public $EAN;
-	
-	/**
-	 * @var string
-	 */
-	public $EAN2;
-	
-	/**
-	 * @var string
-	 */
-	public $EAN3;
-	
-	/**
-	 * @var string
-	 */
-	public $EAN4;
-	
-	/**
-	 * @var string
-	 */
-	public $PhysicalStock;
-	
-	/**
-	 * @var int
-	 */
-	public $Reason;
-	
-	/**
-	 * @var string
-	 */
-	public $SKU;
-	
-	/**
-	 * @var int
-	 */
-	public $StorageLocation;
-	
-	/**
-	 * @var int
-	 */
-	public $WarehouseID;
+    /**
+     * @var string
+     */
+    public $EAN;
+
+    /**
+     * @var string
+     */
+    public $EAN2;
+
+    /**
+     * @var string
+     */
+    public $EAN3;
+
+    /**
+     * @var string
+     */
+    public $EAN4;
+
+    /**
+     * @var string
+     */
+    public $PhysicalStock;
+
+    /**
+     * @var int
+     */
+    public $Reason;
+
+    /**
+     * @var string
+     */
+    public $SKU;
+
+    /**
+     * @var int
+     */
+    public $StorageLocation;
+
+    /**
+     * @var int
+     */
+    public $WarehouseID;
 }

@@ -32,24 +32,23 @@
  */
 class PlentySoapObject_Shelf
 {
-	
-	/**
-	 * @var int
-	 */
-	public $Level;
-	
-	/**
-	 * @var int
-	 */
-	public $ShelfId;
-	
-	/**
-	 * @var string
-	 */
-	public $ShelfName;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_storagelocation
-	 */
-	public $StorageLocationsList;
+    /**
+     * @var int
+     */
+    public $Level;
+
+    /**
+     * @var int
+     */
+    public $ShelfId;
+
+    /**
+     * @var string
+     */
+    public $ShelfName;
+
+    /**
+     * @var ArrayOfPlentysoapobject_storagelocation
+     */
+    public $StorageLocationsList;
 }

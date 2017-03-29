@@ -32,19 +32,18 @@
  */
 class PlentySoapResponse_DeleteListingsTemplates
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapresponseobject_deletelistingstemplates
-	 */
-	public $DeletedListingsTemplates;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapresponseobject_deletelistingstemplates
+     */
+    public $DeletedListingsTemplates;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

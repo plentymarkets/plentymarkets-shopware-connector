@@ -32,19 +32,18 @@
  */
 class PlentySoapRequest_GetContentPage
 {
-	
-	/**
-	 * @var int
-	 */
-	public $ContentPageID;
-	
-	/**
-	 * @var string
-	 */
-	public $Lang;
-	
-	/**
-	 * @var int
-	 */
-	public $StoreID;
+    /**
+     * @var int
+     */
+    public $ContentPageID;
+
+    /**
+     * @var string
+     */
+    public $Lang;
+
+    /**
+     * @var int
+     */
+    public $StoreID;
 }

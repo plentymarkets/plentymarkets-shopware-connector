@@ -32,24 +32,23 @@
  */
 class PlentySoapRequest_GetItemsStockSearch
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var int
-	 */
-	public $Page;
-	
-	/**
-	 * @var float
-	 */
-	public $ReferrerID;
-	
-	/**
-	 * @var int
-	 */
-	public $WarehouseID;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var int
+     */
+    public $Page;
+
+    /**
+     * @var float
+     */
+    public $ReferrerID;
+
+    /**
+     * @var int
+     */
+    public $WarehouseID;
 }

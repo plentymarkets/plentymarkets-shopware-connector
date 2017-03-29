@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_itemssuppliers
 {
-	
-	/**
-	 * @var PlentySoapObject_ItemsSuppliers
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_ItemsSuppliers
+     */
+    public $item;
 }

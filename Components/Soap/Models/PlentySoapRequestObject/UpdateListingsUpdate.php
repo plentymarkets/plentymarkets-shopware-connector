@@ -32,19 +32,18 @@
  */
 class PlentySoapRequestObject_UpdateListingsUpdate
 {
-	
-	/**
-	 * @var int
-	 */
-	public $MarketListingHistoryID;
-	
-	/**
-	 * @var string
-	 */
-	public $MarketName;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_string
-	 */
-	public $UpdateOptions;
+    /**
+     * @var int
+     */
+    public $MarketListingHistoryID;
+
+    /**
+     * @var string
+     */
+    public $MarketName;
+
+    /**
+     * @var ArrayOfPlentysoapobject_string
+     */
+    public $UpdateOptions;
 }

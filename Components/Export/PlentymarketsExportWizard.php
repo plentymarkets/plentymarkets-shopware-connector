@@ -26,7 +26,6 @@
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * Export wizard - automatically announces the next export
  *
@@ -34,145 +33,132 @@
  */
 class PlentymarketsExportWizard
 {
+    /**
+     * @var PlentymarketsExportStatusController
+     */
+    protected $StatusController;
 
-	/**
-	 *
-	 * @var PlentymarketsExportStatusController
-	 */
-	protected $StatusController;
+    /**
+     * @var PlentymarketsExportWizard
+     */
+    protected static $Instance;
 
-	/**
-	 *
-	 * @var PlentymarketsExportWizard
-	 */
-	protected static $Instance;
+    /**
+     * Contructor method
+     */
+    protected function __construct()
+    {
+        $this->StatusController = PlentymarketsExportStatusController::getInstance();
+    }
 
-	/**
-	 * Contructor method
-	 */
-	protected function __construct()
-	{
-		$this->StatusController = PlentymarketsExportStatusController::getInstance();
-	}
+    /**
+     * Singleton method
+     *
+     * @return PlentymarketsExportWizard
+     */
+    public static function getInstance()
+    {
+        if (!self::$Instance instanceof self) {
+            self::$Instance = new self();
+        }
 
-	/**
-	 * Singleton method
-	 *
-	 * @return PlentymarketsExportWizard
-	 */
-	public static function getInstance()
-	{
-		if (!self::$Instance instanceof self)
-		{
-			self::$Instance = new self();
-		}
-		return self::$Instance;
-	}
+        return self::$Instance;
+    }
 
-	/**
-	 * Does the actual magic :)
-	 */
-	public function conjure()
-	{
-		//
-		if (!$this->isActive())
-		{
-			return;
-		}
+    /**
+     * Does the actual magic :)
+     */
+    public function conjure()
+    {
+        if (!$this->isActive()) {
+            return;
+        }
 
-		// If there is nothing to do for the wizzard
-		if ($this->StatusController->isBroke())
-		{
-			// Deactivate
-			$this->deactivate();
+        // If there is nothing to do for the wizzard
+        if ($this->StatusController->isBroke()) {
+            // Deactivate
+            $this->deactivate();
 
-			// Log
-			PlentymarketsLogger::getInstance()->message('Export:Initial:Wizard', 'Automatically disabled because an entity is broke');
+            // Log
+            PlentymarketsLogger::getInstance()->message('Export:Initial:Wizard', 'Automatically disabled because an entity is broke');
 
-			return;
-		}
+            return;
+        }
 
-		// If there is nothing to do for the wizzard
-		if ($this->StatusController->isFinished())
-		{
-			// Deactivate
-			$this->deactivate();
+        // If there is nothing to do for the wizzard
+        if ($this->StatusController->isFinished()) {
+            // Deactivate
+            $this->deactivate();
 
-			// Log
-			PlentymarketsLogger::getInstance()->message('Export:Initial:Wizard', 'Automatically disabled because there is nothing more to do');
+            // Log
+            PlentymarketsLogger::getInstance()->message('Export:Initial:Wizard', 'Automatically disabled because there is nothing more to do');
 
-			return;
-		}
+            return;
+        }
 
-		// Entity is already waiting (item chunks)
-		if ($this->StatusController->isWaiting())
-		{
-			// Log
-			PlentymarketsLogger::getInstance()->message('Export:Initial:Wizard', 'An entity is already waiting');
+        // Entity is already waiting (item chunks)
+        if ($this->StatusController->isWaiting()) {
+            // Log
+            PlentymarketsLogger::getInstance()->message('Export:Initial:Wizard', 'An entity is already waiting');
 
-			return;
-		}
+            return;
+        }
 
-		try
-		{
-			// Get the next entity
-			$EntityStatus = $this->StatusController->getNext();
+        try {
+            // Get the next entity
+            $EntityStatus = $this->StatusController->getNext();
 
-			// and announce it
-			PlentymarketsExportController::getInstance()->announce($EntityStatus->getName());
+            // and announce it
+            PlentymarketsExportController::getInstance()->announce($EntityStatus->getName());
 
-			// Log
-			PlentymarketsLogger::getInstance()->message('Export:Initial:Wizard', 'Automatically announced ' . $EntityStatus->getName());
-		}
-		catch (PlentymarketsExportException $E)
-		{
-			PlentymarketsLogger::getInstance()->error('Export:Initial:Wizard', $E->getMessage(), $E->getCode());
-			$this->deactivate();
-		}
-		catch (PlentymarketsExportStatusException $E)
-		{
-			PlentymarketsLogger::getInstance()->error('Export:Initial:Wizard', $E->getMessage(), $E->getCode());
-			$this->deactivate();
-		}
-	}
+            // Log
+            PlentymarketsLogger::getInstance()->message('Export:Initial:Wizard', 'Automatically announced ' . $EntityStatus->getName());
+        } catch (PlentymarketsExportException $E) {
+            PlentymarketsLogger::getInstance()->error('Export:Initial:Wizard', $E->getMessage(), $E->getCode());
+            $this->deactivate();
+        } catch (PlentymarketsExportStatusException $E) {
+            PlentymarketsLogger::getInstance()->error('Export:Initial:Wizard', $E->getMessage(), $E->getCode());
+            $this->deactivate();
+        }
+    }
 
-	/**
-	 * Checkes wheter the wizard is active
-	 *
-	 * @return boolean
-	 */
-	public function isActive()
-	{
-		return (boolean) PlentymarketsConfig::getInstance()->getIsExportWizardActive();
-	}
+    /**
+     * Checkes wheter the wizard is active
+     *
+     * @return bool
+     */
+    public function isActive()
+    {
+        return (bool) PlentymarketsConfig::getInstance()->getIsExportWizardActive();
+    }
 
-	/**
-	 * Checks whether the wizard may be activated
-	 *
-	 * @return boolean
-	 */
-	public function mayActivate()
-	{
-		return $this->StatusController->mayAnnounce() && !$this->StatusController->isFinished();
-	}
+    /**
+     * Checks whether the wizard may be activated
+     *
+     * @return bool
+     */
+    public function mayActivate()
+    {
+        return $this->StatusController->mayAnnounce() && !$this->StatusController->isFinished();
+    }
 
-	/**
-	 * Activates the wizard
-	 */
-	public function activate()
-	{
-		// Active
-		PlentymarketsConfig::getInstance()->setIsExportWizardActive(1);
+    /**
+     * Activates the wizard
+     */
+    public function activate()
+    {
+        // Active
+        PlentymarketsConfig::getInstance()->setIsExportWizardActive(1);
 
-		// Kickstart
-		$this->conjure();
-	}
+        // Kickstart
+        $this->conjure();
+    }
 
-	/**
-	 * Deactivates the wizard
-	 */
-	public function deactivate()
-	{
-		PlentymarketsConfig::getInstance()->setIsExportWizardActive(0);
-	}
+    /**
+     * Deactivates the wizard
+     */
+    public function deactivate()
+    {
+        PlentymarketsConfig::getInstance()->setIsExportWizardActive(0);
+    }
 }

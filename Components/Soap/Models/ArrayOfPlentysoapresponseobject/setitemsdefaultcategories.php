@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapresponseobject_setitemsdefaultcategories
 {
-	
-	/**
-	 * @var PlentySoapResponseObject_SetItemsDefaultCategories
-	 */
-	public $item;
+    /**
+     * @var PlentySoapResponseObject_SetItemsDefaultCategories
+     */
+    public $item;
 }

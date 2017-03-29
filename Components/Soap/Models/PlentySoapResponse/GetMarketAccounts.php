@@ -32,19 +32,18 @@
  */
 class PlentySoapResponse_GetMarketAccounts
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapresponseobject_getmarketaccounts
-	 */
-	public $AccountList;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapresponseobject_getmarketaccounts
+     */
+    public $AccountList;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

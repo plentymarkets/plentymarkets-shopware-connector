@@ -32,9 +32,8 @@
  */
 class PlentySoapRequest_GetWarehouseList
 {
-	
-	/**
-	 * @var int
-	 */
-	public $UserID;
+    /**
+     * @var int
+     */
+    public $UserID;
 }

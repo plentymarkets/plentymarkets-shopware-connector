@@ -32,24 +32,23 @@
  */
 class PlentySoapObject_SetCreditNote
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_setcreditnoteitem
-	 */
-	public $CreditNoteItems;
-	
-	/**
-	 * @var int
-	 */
-	public $OrderID;
-	
-	/**
-	 * @var float
-	 */
-	public $OrderStatus;
-	
-	/**
-	 * @var float
-	 */
-	public $ShippingCosts;
+    /**
+     * @var ArrayOfPlentysoapobject_setcreditnoteitem
+     */
+    public $CreditNoteItems;
+
+    /**
+     * @var int
+     */
+    public $OrderID;
+
+    /**
+     * @var float
+     */
+    public $OrderStatus;
+
+    /**
+     * @var float
+     */
+    public $ShippingCosts;
 }

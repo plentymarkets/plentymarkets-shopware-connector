@@ -32,24 +32,23 @@
  */
 class PlentySoapResponse_GetEmailFolderList
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_getemailfolderlist
-	 */
-	public $Folders;
-	
-	/**
-	 * @var int
-	 */
-	public $Pages;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapobject_getemailfolderlist
+     */
+    public $Folders;
+
+    /**
+     * @var int
+     */
+    public $Pages;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

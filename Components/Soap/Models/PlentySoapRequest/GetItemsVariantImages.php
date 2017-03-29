@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_GetItemsVariantImages
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoaprequestobject_getitemsvariantimages
-	 */
-	public $Items;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoaprequestobject_getitemsvariantimages
+     */
+    public $Items;
 }

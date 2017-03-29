@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_setdeliveryrow
 {
-	
-	/**
-	 * @var PlentySoapObject_SetDeliveryRow
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_SetDeliveryRow
+     */
+    public $item;
 }

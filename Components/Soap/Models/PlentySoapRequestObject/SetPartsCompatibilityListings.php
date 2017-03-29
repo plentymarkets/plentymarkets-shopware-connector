@@ -32,29 +32,28 @@
  */
 class PlentySoapRequestObject_SetPartsCompatibilityListings
 {
-	
-	/**
-	 * @var int
-	 */
-	public $FitmentID;
-	
-	/**
-	 * @var ArrayOfPlentysoaprequestobject_fitmentitem
-	 */
-	public $FitmentItems;
-	
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
-	
-	/**
-	 * @var string
-	 */
-	public $Name;
-	
-	/**
-	 * @var int
-	 */
-	public $SiteID;
+    /**
+     * @var int
+     */
+    public $FitmentID;
+
+    /**
+     * @var ArrayOfPlentysoaprequestobject_fitmentitem
+     */
+    public $FitmentItems;
+
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
+
+    /**
+     * @var string
+     */
+    public $Name;
+
+    /**
+     * @var int
+     */
+    public $SiteID;
 }

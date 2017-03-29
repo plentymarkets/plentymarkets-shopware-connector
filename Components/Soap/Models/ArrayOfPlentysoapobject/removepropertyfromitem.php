@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_removepropertyfromitem
 {
-	
-	/**
-	 * @var PlentySoapObject_RemovePropertyFromItem
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_RemovePropertyFromItem
+     */
+    public $item;
 }

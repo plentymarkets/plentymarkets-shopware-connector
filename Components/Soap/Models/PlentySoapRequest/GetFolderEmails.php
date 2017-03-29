@@ -32,19 +32,18 @@
  */
 class PlentySoapRequest_GetFolderEmails
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var PlentySoapObject_Integer
-	 */
-	public $FolderID;
-	
-	/**
-	 * @var int
-	 */
-	public $Page;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var PlentySoapObject_Integer
+     */
+    public $FolderID;
+
+    /**
+     * @var int
+     */
+    public $Page;
 }

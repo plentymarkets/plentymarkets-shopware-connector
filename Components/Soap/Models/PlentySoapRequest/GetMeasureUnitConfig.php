@@ -32,9 +32,8 @@
  */
 class PlentySoapRequest_GetMeasureUnitConfig
 {
-	
-	/**
-	 * @var string
-	 */
-	public $Lang;
+    /**
+     * @var string
+     */
+    public $Lang;
 }

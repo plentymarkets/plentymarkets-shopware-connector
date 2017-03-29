@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_getshippingprofileconfigurationsshippingdestination
 {
-	
-	/**
-	 * @var PlentySoapObject_GetShippingProfileConfigurationsShippingDestination
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_GetShippingProfileConfigurationsShippingDestination
+     */
+    public $item;
 }

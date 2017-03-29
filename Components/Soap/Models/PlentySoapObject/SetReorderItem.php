@@ -32,49 +32,48 @@
  */
 class PlentySoapObject_SetReorderItem
 {
-	
-	/**
-	 * @var boolean
-	 */
-	public $Cancel;
-	
-	/**
-	 * @var float
-	 */
-	public $DeliveredQuantity;
-	
-	/**
-	 * @var string
-	 */
-	public $DeliveryNumber;
-	
-	/**
-	 * @var float
-	 */
-	public $IntakeQuantity;
-	
-	/**
-	 * @var float
-	 */
-	public $PurchasePrice;
-	
-	/**
-	 * @var float
-	 */
-	public $Quantity;
-	
-	/**
-	 * @var int
-	 */
-	public $ReorderItemId;
-	
-	/**
-	 * @var string
-	 */
-	public $SKU;
-	
-	/**
-	 * @var int
-	 */
-	public $StorageLocationID;
+    /**
+     * @var bool
+     */
+    public $Cancel;
+
+    /**
+     * @var float
+     */
+    public $DeliveredQuantity;
+
+    /**
+     * @var string
+     */
+    public $DeliveryNumber;
+
+    /**
+     * @var float
+     */
+    public $IntakeQuantity;
+
+    /**
+     * @var float
+     */
+    public $PurchasePrice;
+
+    /**
+     * @var float
+     */
+    public $Quantity;
+
+    /**
+     * @var int
+     */
+    public $ReorderItemId;
+
+    /**
+     * @var string
+     */
+    public $SKU;
+
+    /**
+     * @var int
+     */
+    public $StorageLocationID;
 }

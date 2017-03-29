@@ -32,19 +32,18 @@
  */
 class PlentySoapResponseObject_SetStoreCategories
 {
-	
-	/**
-	 * @var int
-	 */
-	public $BranchID;
-	
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
-	
-	/**
-	 * @var int
-	 */
-	public $StoreID;
+    /**
+     * @var int
+     */
+    public $BranchID;
+
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
+
+    /**
+     * @var int
+     */
+    public $StoreID;
 }

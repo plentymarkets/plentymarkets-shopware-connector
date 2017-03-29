@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_SetBankCreditCardData
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_setbankcreditcarddata
-	 */
-	public $CustomerData;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_setbankcreditcarddata
+     */
+    public $CustomerData;
 }

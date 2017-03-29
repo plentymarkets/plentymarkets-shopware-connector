@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_itemtexts
 {
-	
-	/**
-	 * @var PlentySoapObject_ItemTexts
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_ItemTexts
+     */
+    public $item;
 }

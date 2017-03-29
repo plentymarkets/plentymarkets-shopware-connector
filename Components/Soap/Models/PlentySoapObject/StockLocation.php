@@ -32,14 +32,13 @@
  */
 class PlentySoapObject_StockLocation
 {
-	
-	/**
-	 * @var string
-	 */
-	public $StorageLocation;
-	
-	/**
-	 * @var int
-	 */
-	public $WarehouseID;
+    /**
+     * @var string
+     */
+    public $StorageLocation;
+
+    /**
+     * @var int
+     */
+    public $WarehouseID;
 }

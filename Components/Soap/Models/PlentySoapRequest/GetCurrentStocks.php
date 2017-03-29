@@ -32,34 +32,33 @@
  */
 class PlentySoapRequest_GetCurrentStocks
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var boolean
-	 */
-	public $GetCurrentStocksByEAN;
-	
-	/**
-	 * @var ArrayOfPlentysoaprequestobject_getcurrentstocks
-	 */
-	public $Items;
-	
-	/**
-	 * @var int
-	 */
-	public $LastUpdate;
-	
-	/**
-	 * @var int
-	 */
-	public $Page;
-	
-	/**
-	 * @var int
-	 */
-	public $WarehouseID;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var bool
+     */
+    public $GetCurrentStocksByEAN;
+
+    /**
+     * @var ArrayOfPlentysoaprequestobject_getcurrentstocks
+     */
+    public $Items;
+
+    /**
+     * @var int
+     */
+    public $LastUpdate;
+
+    /**
+     * @var int
+     */
+    public $Page;
+
+    /**
+     * @var int
+     */
+    public $WarehouseID;
 }

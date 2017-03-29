@@ -32,34 +32,33 @@
  */
 class PlentySoapObject_ItemCategory
 {
-	
-	/**
-	 * @var int
-	 */
-	public $ItemCategoryID;
-	
-	/**
-	 * @var int
-	 */
-	public $ItemCategoryLevel;
-	
-	/**
-	 * @var string
-	 */
-	public $ItemCategoryPath;
-	
-	/**
-	 * @var string
-	 */
-	public $ItemCategoryPathNames;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_integer
-	 */
-	public $ItemStandardCategory;
-	
-	/**
-	 * @var int
-	 */
-	public $RemoveCategoryFromItem;
+    /**
+     * @var int
+     */
+    public $ItemCategoryID;
+
+    /**
+     * @var int
+     */
+    public $ItemCategoryLevel;
+
+    /**
+     * @var string
+     */
+    public $ItemCategoryPath;
+
+    /**
+     * @var string
+     */
+    public $ItemCategoryPathNames;
+
+    /**
+     * @var ArrayOfPlentysoapobject_integer
+     */
+    public $ItemStandardCategory;
+
+    /**
+     * @var int
+     */
+    public $RemoveCategoryFromItem;
 }

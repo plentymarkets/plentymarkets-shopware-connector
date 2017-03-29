@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_getorderdocument
 {
-	
-	/**
-	 * @var PlentySoapObject_GetOrderDocument
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_GetOrderDocument
+     */
+    public $item;
 }

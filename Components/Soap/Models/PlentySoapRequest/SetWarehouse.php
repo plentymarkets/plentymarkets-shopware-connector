@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_SetWarehouse
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_setwarehouse
-	 */
-	public $WarehouseList;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_setwarehouse
+     */
+    public $WarehouseList;
 }

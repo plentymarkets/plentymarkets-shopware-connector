@@ -32,59 +32,58 @@
  */
 class PlentySoapObject_MarketListingItemVariant
 {
-	
-	/**
-	 * @var boolean
-	 */
-	public $AllowedOverselling;
-	
-	/**
-	 * @var int
-	 */
-	public $AttributeValueSetID;
-	
-	/**
-	 * @var string
-	 */
-	public $ExtSKU;
-	
-	/**
-	 * @var int
-	 */
-	public $GrossStock;
-	
-	/**
-	 * @var int
-	 */
-	public $NetStock;
-	
-	/**
-	 * @var int
-	 */
-	public $Quantity;
-	
-	/**
-	 * @var int
-	 */
-	public $QuantityRemain;
-	
-	/**
-	 * @var int
-	 */
-	public $QuantitySold;
-	
-	/**
-	 * @var int
-	 */
-	public $QuantitySoldDelta;
-	
-	/**
-	 * @var int
-	 */
-	public $StockDependence;
-	
-	/**
-	 * @var float
-	 */
-	public $VariantPrice;
+    /**
+     * @var bool
+     */
+    public $AllowedOverselling;
+
+    /**
+     * @var int
+     */
+    public $AttributeValueSetID;
+
+    /**
+     * @var string
+     */
+    public $ExtSKU;
+
+    /**
+     * @var int
+     */
+    public $GrossStock;
+
+    /**
+     * @var int
+     */
+    public $NetStock;
+
+    /**
+     * @var int
+     */
+    public $Quantity;
+
+    /**
+     * @var int
+     */
+    public $QuantityRemain;
+
+    /**
+     * @var int
+     */
+    public $QuantitySold;
+
+    /**
+     * @var int
+     */
+    public $QuantitySoldDelta;
+
+    /**
+     * @var int
+     */
+    public $StockDependence;
+
+    /**
+     * @var float
+     */
+    public $VariantPrice;
 }

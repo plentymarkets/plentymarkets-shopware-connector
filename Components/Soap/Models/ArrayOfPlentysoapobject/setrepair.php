@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_setrepair
 {
-	
-	/**
-	 * @var PlentySoapObject_SetRepair
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_SetRepair
+     */
+    public $item;
 }

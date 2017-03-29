@@ -32,19 +32,18 @@
  */
 class PlentySoapRequest_GetOrdersInvoiceDocumentURLs
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var boolean
-	 */
-	public $GetDocumentAsBinaryData;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_integer
-	 */
-	public $OrderIDs;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var bool
+     */
+    public $GetDocumentAsBinaryData;
+
+    /**
+     * @var ArrayOfPlentysoapobject_integer
+     */
+    public $OrderIDs;
 }

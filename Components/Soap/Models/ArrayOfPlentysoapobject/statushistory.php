@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_statushistory
 {
-	
-	/**
-	 * @var PlentySoapObject_StatusHistory
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_StatusHistory
+     */
+    public $item;
 }

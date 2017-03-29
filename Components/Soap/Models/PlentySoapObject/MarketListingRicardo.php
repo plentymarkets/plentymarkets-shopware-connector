@@ -32,69 +32,68 @@
  */
 class PlentySoapObject_MarketListingRicardo
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_string
-	 */
-	public $AdditionalOptions;
-	
-	/**
-	 * @var int
-	 */
-	public $AutomaticReactivation;
-	
-	/**
-	 * @var int
-	 */
-	public $AvailabilityId;
-	
-	/**
-	 * @var string
-	 */
-	public $CategoryId;
-	
-	/**
-	 * @var int
-	 */
-	public $ConditionId;
-	
-	/**
-	 * @var float
-	 */
-	public $DeliveryCost;
-	
-	/**
-	 * @var int
-	 */
-	public $DeliveryID;
-	
-	/**
-	 * @var boolean
-	 */
-	public $IsIndividualShippingCosts;
-	
-	/**
-	 * @var boolean
-	 */
-	public $NoWarranty;
-	
-	/**
-	 * @var int
-	 */
-	public $PackageSizeID;
-	
-	/**
-	 * @var int
-	 */
-	public $PaymentId;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_integer
-	 */
-	public $PaymentMethods;
-	
-	/**
-	 * @var float
-	 */
-	public $PriceIncrement;
+    /**
+     * @var ArrayOfPlentysoapobject_string
+     */
+    public $AdditionalOptions;
+
+    /**
+     * @var int
+     */
+    public $AutomaticReactivation;
+
+    /**
+     * @var int
+     */
+    public $AvailabilityId;
+
+    /**
+     * @var string
+     */
+    public $CategoryId;
+
+    /**
+     * @var int
+     */
+    public $ConditionId;
+
+    /**
+     * @var float
+     */
+    public $DeliveryCost;
+
+    /**
+     * @var int
+     */
+    public $DeliveryID;
+
+    /**
+     * @var bool
+     */
+    public $IsIndividualShippingCosts;
+
+    /**
+     * @var bool
+     */
+    public $NoWarranty;
+
+    /**
+     * @var int
+     */
+    public $PackageSizeID;
+
+    /**
+     * @var int
+     */
+    public $PaymentId;
+
+    /**
+     * @var ArrayOfPlentysoapobject_integer
+     */
+    public $PaymentMethods;
+
+    /**
+     * @var float
+     */
+    public $PriceIncrement;
 }

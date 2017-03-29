@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_getitemsvariantimagesimage
 {
-	
-	/**
-	 * @var PlentySoapObject_GetItemsVariantImagesImage
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_GetItemsVariantImagesImage
+     */
+    public $item;
 }

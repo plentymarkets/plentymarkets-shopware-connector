@@ -32,19 +32,18 @@
  */
 class PlentySoapRequest_GetDeleteLog
 {
-	
-	/**
-	 * @var int
-	 */
-	public $ReferenceType;
-	
-	/**
-	 * @var int
-	 */
-	public $TimestampFrom;
-	
-	/**
-	 * @var int
-	 */
-	public $TimestampTo;
+    /**
+     * @var int
+     */
+    public $ReferenceType;
+
+    /**
+     * @var int
+     */
+    public $TimestampFrom;
+
+    /**
+     * @var int
+     */
+    public $TimestampTo;
 }

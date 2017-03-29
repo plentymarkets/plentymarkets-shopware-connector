@@ -32,54 +32,53 @@
  */
 class PlentySoapObject_SetItemsAvailability
 {
+    /**
+     * @var int
+     */
+    public $ChangeAvailablePositiveStock;
 
-	/**
-	 * @var int
-	 */
-	public $ChangeAvailablePositiveStock;
+    /**
+     * @var int
+     */
+    public $ChangeAvailablePositiveStockVariant;
 
-	/**
-	 * @var int
-	 */
-	public $ChangeAvailablePositiveStockVariant;
+    /**
+     * @var int
+     */
+    public $ChangeNotAvailableNoStock;
 
-	/**
-	 * @var int
-	 */
-	public $ChangeNotAvailableNoStock;
+    /**
+     * @var int
+     */
+    public $ChangeNotAvailableNoStockVariant;
 
-	/**
-	 * @var int
-	 */
-	public $ChangeNotAvailableNoStockVariant;
+    /**
+     * @var PlentySoapObject_ItemAvailability
+     */
+    public $ItemAvailability;
 
-	/**
-	 * @var PlentySoapObject_ItemAvailability
-	 */
-	public $ItemAvailability;
+    /**
+     * @var int
+     */
+    public $ItemID;
 
-	/**
-	 * @var int
-	 */
-	public $ItemID;
+    /**
+     * @var int
+     */
+    public $Limitation;
 
-	/**
-	 * @var int
-	 */
-	public $Limitation;
+    /**
+     * @var int
+     */
+    public $Published;
 
-	/**
-	 * @var int
-	 */
-	public $Published;
+    /**
+     * @var int
+     */
+    public $WebshopInvisibleNoStock;
 
-	/**
-	 * @var int
-	 */
-	public $WebshopInvisibleNoStock;
-
-	/**
-	 * @var int
-	 */
-	public $WebshopVisiblePositiveStock;
+    /**
+     * @var int
+     */
+    public $WebshopVisiblePositiveStock;
 }

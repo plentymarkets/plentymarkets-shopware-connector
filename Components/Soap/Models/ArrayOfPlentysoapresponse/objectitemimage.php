@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapresponse_objectitemimage
 {
-	
-	/**
-	 * @var PlentySoapResponse_ObjectItemImage
-	 */
-	public $item;
+    /**
+     * @var PlentySoapResponse_ObjectItemImage
+     */
+    public $item;
 }

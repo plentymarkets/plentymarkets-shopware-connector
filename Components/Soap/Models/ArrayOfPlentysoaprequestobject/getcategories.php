@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoaprequestobject_getcategories
 {
-	
-	/**
-	 * @var PlentySoapRequestObject_GetCategories
-	 */
-	public $item;
+    /**
+     * @var PlentySoapRequestObject_GetCategories
+     */
+    public $item;
 }

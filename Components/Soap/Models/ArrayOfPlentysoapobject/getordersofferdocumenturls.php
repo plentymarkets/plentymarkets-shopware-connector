@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_getordersofferdocumenturls
 {
-	
-	/**
-	 * @var PlentySoapObject_GetOrdersOfferDocumentURLs
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_GetOrdersOfferDocumentURLs
+     */
+    public $item;
 }

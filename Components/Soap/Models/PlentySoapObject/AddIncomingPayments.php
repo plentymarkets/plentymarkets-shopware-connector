@@ -32,54 +32,53 @@
  */
 class PlentySoapObject_AddIncomingPayments
 {
-	
-	/**
-	 * @var float
-	 */
-	public $Amount;
-	
-	/**
-	 * @var string
-	 */
-	public $Currency;
-	
-	/**
-	 * @var int
-	 */
-	public $CustomerID;
-	
-	/**
-	 * @var int
-	 */
-	public $MethodOfPaymentID;
-	
-	/**
-	 * @var int
-	 */
-	public $OrderID;
-	
-	/**
-	 * @var PlentySoapObject_AddIncomingPaymentInformation
-	 */
-	public $PaymentInformation;
-	
-	/**
-	 * @var PlentySoapObject_AddIncomingPaymentPayPal
-	 */
-	public $PaymentPayPal;
-	
-	/**
-	 * @var string
-	 */
-	public $ReasonForPayment;
-	
-	/**
-	 * @var string
-	 */
-	public $TransactionID;
-	
-	/**
-	 * @var int
-	 */
-	public $TransactionTime;
+    /**
+     * @var float
+     */
+    public $Amount;
+
+    /**
+     * @var string
+     */
+    public $Currency;
+
+    /**
+     * @var int
+     */
+    public $CustomerID;
+
+    /**
+     * @var int
+     */
+    public $MethodOfPaymentID;
+
+    /**
+     * @var int
+     */
+    public $OrderID;
+
+    /**
+     * @var PlentySoapObject_AddIncomingPaymentInformation
+     */
+    public $PaymentInformation;
+
+    /**
+     * @var PlentySoapObject_AddIncomingPaymentPayPal
+     */
+    public $PaymentPayPal;
+
+    /**
+     * @var string
+     */
+    public $ReasonForPayment;
+
+    /**
+     * @var string
+     */
+    public $TransactionID;
+
+    /**
+     * @var int
+     */
+    public $TransactionTime;
 }

@@ -32,19 +32,18 @@
  */
 class PlentySoapResponse_GetServerTime
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
-	
-	/**
-	 * @var int
-	 */
-	public $Timestamp;
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
+
+    /**
+     * @var int
+     */
+    public $Timestamp;
 }

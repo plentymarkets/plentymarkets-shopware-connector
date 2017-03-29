@@ -32,19 +32,18 @@
  */
 class PlentySoapResponse_GetCategoryPreview
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapresponseobject_getcategorypreview
-	 */
-	public $CategoriesPreview;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapresponseobject_getcategorypreview
+     */
+    public $CategoriesPreview;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

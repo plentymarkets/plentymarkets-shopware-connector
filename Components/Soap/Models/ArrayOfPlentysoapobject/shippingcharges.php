@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_shippingcharges
 {
-	
-	/**
-	 * @var PlentySoapObject_ShippingCharges
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_ShippingCharges
+     */
+    public $item;
 }

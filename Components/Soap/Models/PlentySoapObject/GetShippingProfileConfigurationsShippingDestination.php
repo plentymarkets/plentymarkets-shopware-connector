@@ -32,19 +32,18 @@
  */
 class PlentySoapObject_GetShippingProfileConfigurationsShippingDestination
 {
-	
-	/**
-	 * @var int
-	 */
-	public $ShippingDestinationID;
-	
-	/**
-	 * @var string
-	 */
-	public $ShippingDestinationName;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_getshippingprofileconfigurationsprovider
-	 */
-	public $ShippingServiceProviders;
+    /**
+     * @var int
+     */
+    public $ShippingDestinationID;
+
+    /**
+     * @var string
+     */
+    public $ShippingDestinationName;
+
+    /**
+     * @var ArrayOfPlentysoapobject_getshippingprofileconfigurationsprovider
+     */
+    public $ShippingServiceProviders;
 }

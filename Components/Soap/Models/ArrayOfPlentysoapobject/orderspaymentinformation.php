@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_orderspaymentinformation
 {
-	
-	/**
-	 * @var PlentySoapObject_OrdersPaymentInformation
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_OrdersPaymentInformation
+     */
+    public $item;
 }

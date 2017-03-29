@@ -32,9 +32,8 @@
  */
 class PlentySoapObject_DeleteItemAttribute
 {
-	
-	/**
-	 * @var int
-	 */
-	public $AttributeId;
+    /**
+     * @var int
+     */
+    public $AttributeId;
 }

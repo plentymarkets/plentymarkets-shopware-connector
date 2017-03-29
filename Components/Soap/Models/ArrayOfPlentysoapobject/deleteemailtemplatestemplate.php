@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_deleteemailtemplatestemplate
 {
-	
-	/**
-	 * @var PlentySoapObject_DeleteEmailTemplatesTemplate
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_DeleteEmailTemplatesTemplate
+     */
+    public $item;
 }

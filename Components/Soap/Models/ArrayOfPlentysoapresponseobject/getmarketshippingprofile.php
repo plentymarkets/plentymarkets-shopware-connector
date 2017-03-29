@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapresponseobject_getmarketshippingprofile
 {
-	
-	/**
-	 * @var PlentySoapResponseObject_GetMarketShippingProfile
-	 */
-	public $item;
+    /**
+     * @var PlentySoapResponseObject_GetMarketShippingProfile
+     */
+    public $item;
 }

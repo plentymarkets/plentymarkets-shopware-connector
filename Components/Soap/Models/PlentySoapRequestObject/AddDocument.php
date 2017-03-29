@@ -32,34 +32,33 @@
  */
 class PlentySoapRequestObject_AddDocument
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CategoryID;
-	
-	/**
-	 * @var PlentySoapObject_FileBase64Encoded
-	 */
-	public $Document;
-	
-	/**
-	 * @var int
-	 */
-	public $DocumentCreated;
-	
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
-	
-	/**
-	 * @var PlentySoapEnumeration_AddOrderDocument
-	 */
-	public $OrderDocumentType;
-	
-	/**
-	 * @var int
-	 */
-	public $OrderID;
+    /**
+     * @var int
+     */
+    public $CategoryID;
+
+    /**
+     * @var PlentySoapObject_FileBase64Encoded
+     */
+    public $Document;
+
+    /**
+     * @var int
+     */
+    public $DocumentCreated;
+
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
+
+    /**
+     * @var PlentySoapEnumeration_AddOrderDocument
+     */
+    public $OrderDocumentType;
+
+    /**
+     * @var int
+     */
+    public $OrderID;
 }

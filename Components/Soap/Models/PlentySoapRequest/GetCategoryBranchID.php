@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_GetCategoryBranchID
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoaprequestobject_getcategorybranchid
-	 */
-	public $Categories;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoaprequestobject_getcategorybranchid
+     */
+    public $Categories;
 }

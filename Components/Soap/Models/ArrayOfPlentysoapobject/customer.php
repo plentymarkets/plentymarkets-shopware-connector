@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_customer
 {
-	
-	/**
-	 * @var PlentySoapObject_Customer
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_Customer
+     */
+    public $item;
 }

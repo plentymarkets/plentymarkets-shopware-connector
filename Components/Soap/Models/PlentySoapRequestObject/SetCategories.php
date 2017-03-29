@@ -32,39 +32,38 @@
  */
 class PlentySoapRequestObject_SetCategories
 {
+    /**
+     * @var int
+     */
+    public $CategoryID;
 
-	/**
-	 * @var int
-	 */
-	public $CategoryID;
+    /**
+     * @var PlentySoapRequestObject_CreateCategory
+     */
+    public $CreateCategory;
 
-	/**
-	 * @var PlentySoapRequestObject_CreateCategory
-	 */
-	public $CreateCategory;
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
 
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
+    /**
+     * @var PlentySoapRequestObject_SetCategoryBase
+     */
+    public $SetCategoryBase;
 
-	/**
-	 * @var PlentySoapRequestObject_SetCategoryBase
-	 */
-	public $SetCategoryBase;
+    /**
+     * @var int
+     */
+    public $SetLinkList;
 
-	/**
-	 * @var int
-	 */
-	public $SetLinkList;
+    /**
+     * @var string
+     */
+    public $SetRight;
 
-	/**
-	 * @var string
-	 */
-	public $SetRight;
-
-	/**
-	 * @var string
-	 */
-	public $SetType;
+    /**
+     * @var string
+     */
+    public $SetType;
 }

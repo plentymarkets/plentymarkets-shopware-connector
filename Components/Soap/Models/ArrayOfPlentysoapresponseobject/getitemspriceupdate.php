@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapresponseobject_getitemspriceupdate
 {
-	
-	/**
-	 * @var PlentySoapResponseObject_GetItemsPriceUpdate
-	 */
-	public $item;
+    /**
+     * @var PlentySoapResponseObject_GetItemsPriceUpdate
+     */
+    public $item;
 }

@@ -32,14 +32,13 @@
  */
 class PlentySoapRequestObject_GetMarketDirectories
 {
-	
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
-	
-	/**
-	 * @var int
-	 */
-	public $MarketDirectoryID;
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
+
+    /**
+     * @var int
+     */
+    public $MarketDirectoryID;
 }

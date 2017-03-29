@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_UpdateCategoriesBranches
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoaprequestobject_updatecategoriesbranches
-	 */
-	public $UpdateCategoriesBranches;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoaprequestobject_updatecategoriesbranches
+     */
+    public $UpdateCategoriesBranches;
 }

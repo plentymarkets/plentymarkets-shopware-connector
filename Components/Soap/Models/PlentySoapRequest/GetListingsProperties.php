@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_GetListingsProperties
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoaprequestobject_getlistingsproperties
-	 */
-	public $GetListingsProperties;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoaprequestobject_getlistingsproperties
+     */
+    public $GetListingsProperties;
 }

@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapresponse_objectupdatelistingsverifyerror
 {
-	
-	/**
-	 * @var PlentySoapResponse_ObjectUpdateListingsVerifyError
-	 */
-	public $item;
+    /**
+     * @var PlentySoapResponse_ObjectUpdateListingsVerifyError
+     */
+    public $item;
 }

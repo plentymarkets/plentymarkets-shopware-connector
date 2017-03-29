@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_GetLinkedItems
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_getlinkeditems
-	 */
-	public $ItemsList;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_getlinkeditems
+     */
+    public $ItemsList;
 }

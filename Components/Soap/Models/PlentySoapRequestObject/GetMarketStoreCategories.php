@@ -32,19 +32,18 @@
  */
 class PlentySoapRequestObject_GetMarketStoreCategories
 {
-	
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
-	
-	/**
-	 * @var string
-	 */
-	public $Market;
-	
-	/**
-	 * @var int
-	 */
-	public $UserId;
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
+
+    /**
+     * @var string
+     */
+    public $Market;
+
+    /**
+     * @var int
+     */
+    public $UserId;
 }

@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_getvatconfig
 {
-	
-	/**
-	 * @var PlentySoapObject_GetVATConfig
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_GetVATConfig
+     */
+    public $item;
 }

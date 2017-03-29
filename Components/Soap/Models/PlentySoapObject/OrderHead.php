@@ -32,219 +32,218 @@
  */
 class PlentySoapObject_OrderHead
 {
-	
-	/**
-	 * @var string
-	 */
-	public $Currency;
-	
-	/**
-	 * @var int
-	 */
-	public $CustomerID;
-	
-	/**
-	 * @var string
-	 */
-	public $CustomerReference;
-	
-	/**
-	 * @var int
-	 */
-	public $DeliveryAddressID;
-	
-	/**
-	 * @var int
-	 */
-	public $DoneTimestamp;
-	
-	/**
-	 * @var int
-	 */
-	public $DunningLevel;
-	
-	/**
-	 * @var string
-	 */
-	public $EbaySellerAccount;
-	
-	/**
-	 * @var string
-	 */
-	public $EstimatedTimeOfShipment;
-	
-	/**
-	 * @var float
-	 */
-	public $ExchangeRatio;
-	
-	/**
-	 * @var string
-	 */
-	public $ExternalOrderID;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_orderincomingpayment
-	 */
-	public $IncomingPayments;
-	
-	/**
-	 * @var float
-	 */
-	public $InitialCurrencyShippingCosts;
-	
-	/**
-	 * @var float
-	 */
-	public $InitialCurrencyTotalInvoice;
-	
-	/**
-	 * @var string
-	 */
-	public $Invoice;
-	
-	/**
-	 * @var boolean
-	 */
-	public $IsNetto;
-	
-	/**
-	 * @var int
-	 */
-	public $LastUpdate;
-	
-	/**
-	 * @var int
-	 */
-	public $Marking1ID;
-	
-	/**
-	 * @var int
-	 */
-	public $MethodOfPaymentID;
-	
-	/**
-	 * @var PlentySoapObject_OrderDocumentNumbers
-	 */
-	public $OrderDocumentNumbers;
-	
-	/**
-	 * @var int
-	 */
-	public $OrderID;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_orderinfo
-	 */
-	public $OrderInfos;
-	
-	/**
-	 * @var float
-	 */
-	public $OrderStatus;
-	
-	/**
-	 * @var int
-	 */
-	public $OrderTimestamp;
-	
-	/**
-	 * @var string
-	 */
-	public $OrderType;
-	
-	/**
-	 * @var string
-	 */
-	public $PackageNumber;
-	
-	/**
-	 * @var int
-	 */
-	public $PaidTimestamp;
-	
-	/**
-	 * @var int
-	 */
-	public $ParentOrderID;
-	
-	/**
-	 * @var int
-	 */
-	public $PaymentStatus;
-	
-	/**
-	 * @var float
-	 */
-	public $ReferrerID;
-	
-	/**
-	 * @var string
-	 */
-	public $RemoteIP;
-	
-	/**
-	 * @var int
-	 */
-	public $ResponsibleID;
-	
-	/**
-	 * @var int
-	 */
-	public $SalesAgentID;
-	
-	/**
-	 * @var string
-	 */
-	public $SellerAccount;
-	
-	/**
-	 * @var float
-	 */
-	public $ShippingCosts;
-	
-	/**
-	 * @var int
-	 */
-	public $ShippingID;
-	
-	/**
-	 * @var int
-	 */
-	public $ShippingMethodID;
-	
-	/**
-	 * @var int
-	 */
-	public $ShippingProfileID;
-	
-	/**
-	 * @var int
-	 */
-	public $StoreID;
-	
-	/**
-	 * @var float
-	 */
-	public $TotalBrutto;
-	
-	/**
-	 * @var float
-	 */
-	public $TotalInvoice;
-	
-	/**
-	 * @var float
-	 */
-	public $TotalNetto;
-	
-	/**
-	 * @var float
-	 */
-	public $TotalVAT;
-	
-	/**
-	 * @var int
-	 */
-	public $WarehouseID;
+    /**
+     * @var string
+     */
+    public $Currency;
+
+    /**
+     * @var int
+     */
+    public $CustomerID;
+
+    /**
+     * @var string
+     */
+    public $CustomerReference;
+
+    /**
+     * @var int
+     */
+    public $DeliveryAddressID;
+
+    /**
+     * @var int
+     */
+    public $DoneTimestamp;
+
+    /**
+     * @var int
+     */
+    public $DunningLevel;
+
+    /**
+     * @var string
+     */
+    public $EbaySellerAccount;
+
+    /**
+     * @var string
+     */
+    public $EstimatedTimeOfShipment;
+
+    /**
+     * @var float
+     */
+    public $ExchangeRatio;
+
+    /**
+     * @var string
+     */
+    public $ExternalOrderID;
+
+    /**
+     * @var ArrayOfPlentysoapobject_orderincomingpayment
+     */
+    public $IncomingPayments;
+
+    /**
+     * @var float
+     */
+    public $InitialCurrencyShippingCosts;
+
+    /**
+     * @var float
+     */
+    public $InitialCurrencyTotalInvoice;
+
+    /**
+     * @var string
+     */
+    public $Invoice;
+
+    /**
+     * @var bool
+     */
+    public $IsNetto;
+
+    /**
+     * @var int
+     */
+    public $LastUpdate;
+
+    /**
+     * @var int
+     */
+    public $Marking1ID;
+
+    /**
+     * @var int
+     */
+    public $MethodOfPaymentID;
+
+    /**
+     * @var PlentySoapObject_OrderDocumentNumbers
+     */
+    public $OrderDocumentNumbers;
+
+    /**
+     * @var int
+     */
+    public $OrderID;
+
+    /**
+     * @var ArrayOfPlentysoapobject_orderinfo
+     */
+    public $OrderInfos;
+
+    /**
+     * @var float
+     */
+    public $OrderStatus;
+
+    /**
+     * @var int
+     */
+    public $OrderTimestamp;
+
+    /**
+     * @var string
+     */
+    public $OrderType;
+
+    /**
+     * @var string
+     */
+    public $PackageNumber;
+
+    /**
+     * @var int
+     */
+    public $PaidTimestamp;
+
+    /**
+     * @var int
+     */
+    public $ParentOrderID;
+
+    /**
+     * @var int
+     */
+    public $PaymentStatus;
+
+    /**
+     * @var float
+     */
+    public $ReferrerID;
+
+    /**
+     * @var string
+     */
+    public $RemoteIP;
+
+    /**
+     * @var int
+     */
+    public $ResponsibleID;
+
+    /**
+     * @var int
+     */
+    public $SalesAgentID;
+
+    /**
+     * @var string
+     */
+    public $SellerAccount;
+
+    /**
+     * @var float
+     */
+    public $ShippingCosts;
+
+    /**
+     * @var int
+     */
+    public $ShippingID;
+
+    /**
+     * @var int
+     */
+    public $ShippingMethodID;
+
+    /**
+     * @var int
+     */
+    public $ShippingProfileID;
+
+    /**
+     * @var int
+     */
+    public $StoreID;
+
+    /**
+     * @var float
+     */
+    public $TotalBrutto;
+
+    /**
+     * @var float
+     */
+    public $TotalInvoice;
+
+    /**
+     * @var float
+     */
+    public $TotalNetto;
+
+    /**
+     * @var float
+     */
+    public $TotalVAT;
+
+    /**
+     * @var int
+     */
+    public $WarehouseID;
 }
