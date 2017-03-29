@@ -6,6 +6,7 @@ use Assert\Assertion;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\ServerException;
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentymarketsAdapter\Client\Exception\InvalidCredentialsException;
@@ -99,7 +100,11 @@ class Client implements ClientInterface
      */
     public function request($method, $path, array $params = [], $limit = null, $offset = null, array $options = [])
     {
-        static $retries = 0;
+        static $retries;
+
+        if (null === $retries) {
+            $retries = 0;
+        }
 
         Assertion::nullOrInteger($limit);
         Assertion::nullOrInteger($offset);
@@ -169,6 +174,12 @@ class Client implements ClientInterface
             }
 
             throw $exception;
+        } catch (ConnectException $exception) {
+            sleep(10);
+
+            ++$retries;
+
+            return $this->request($method, $path, $params, $limit, $offset);
         }
     }
 
@@ -307,6 +318,14 @@ class Client implements ClientInterface
         Assertion::isArray($params);
 
         $requestOptions = [];
+
+        if (array_key_exists('itemsPerPage', $options)) {
+            $params['itemsPerPage'] = $options['itemsPerPage'];
+        }
+
+        if (array_key_exists('page', $options)) {
+            $params['page'] = $options['page'];
+        }
 
         if ($method === 'GET') {
             $requestOptions['query'] = $params;

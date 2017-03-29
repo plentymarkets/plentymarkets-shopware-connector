@@ -24,7 +24,7 @@ class CustomerValidator implements ValidatorInterface
      */
     public function validate($object)
     {
-        Assertion::inArray($object->getType(), $object->getCustomerTypes(), null, 'customer.identifier');
+        Assertion::inArray($object->getType(), $object->getCustomerTypes(), null, 'customer.type');
 
         Assertion::string($object->getNumber(), 'customer.number');
         Assertion::notBlank($object->getNumber(), 'customer.number');
@@ -50,6 +50,6 @@ class CustomerValidator implements ValidatorInterface
         Assertion::nullOrString($object->getPhoneNumber(), 'customer.phoneNumber');
         Assertion::nullOrString($object->getMobilePhoneNumber(), 'customer.mobilePhoneNumber');
 
-        Assertion::uuid($object->getShopIdentifier(), 'customer.identifier');
+        Assertion::uuid($object->getShopIdentifier(), 'customer.shopIdentifier');
     }
 }

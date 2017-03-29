@@ -2,7 +2,6 @@
 
 namespace PlentyConnector\Connector\TransferObject\Order\Customer;
 
-use Assert\Assertion;
 use DateTimeImmutable;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 
@@ -175,8 +174,6 @@ class Customer extends AbstractValueObject
      */
     public function setNewsletter($newsletter)
     {
-        Assertion::boolean($newsletter);
-
         $this->newsletter = $newsletter;
     }
 
@@ -193,8 +190,6 @@ class Customer extends AbstractValueObject
      */
     public function setLanguageIdentifier($languageIdentifier)
     {
-        Assertion::uuid($languageIdentifier);
-
         $this->languageIdentifier = $languageIdentifier;
     }
 
@@ -211,8 +206,6 @@ class Customer extends AbstractValueObject
      */
     public function setCustomerGroupIdentifier($customerGroupIdentifier)
     {
-        Assertion::uuid($customerGroupIdentifier);
-
         $this->customerGroupIdentifier = $customerGroupIdentifier;
     }
 

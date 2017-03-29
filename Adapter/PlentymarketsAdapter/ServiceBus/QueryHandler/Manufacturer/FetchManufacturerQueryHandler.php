@@ -83,6 +83,10 @@ class FetchManufacturerQueryHandler implements QueryHandlerInterface
             'adapterName' => PlentymarketsAdapter::NAME,
         ]);
 
+        if (null === $identity) {
+            return [];
+        }
+
         $element = $this->client->request('GET', 'items/manufacturers/' . $identity->getAdapterIdentifier());
 
         if (!empty($element['logo'])) {

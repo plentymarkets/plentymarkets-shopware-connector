@@ -33,8 +33,8 @@ class AddressValidator implements ValidatorInterface
         Assertion::nullOrString($object->getLastname(), null, 'address.lastname');
         Assertion::string($object->getStreet(), null, 'address.street');
         Assertion::notBlank($object->getStreet(), null, 'address.street');
-        Assertion::string($object->getZipcode(), null, 'address.zipcode');
-        Assertion::notBlank($object->getZipcode(), null, 'address.zipcode');
+        Assertion::string($object->getPostalCode(), null, 'address.postalCode');
+        Assertion::notBlank($object->getPostalCode(), null, 'address.postalCode');
         Assertion::string($object->getCity(), null, 'address.city');
         Assertion::notBlank($object->getCity(), null, 'address.city');
         Assertion::uuid($object->getCountryIdentifier(), null, 'address.countryIdentifier');

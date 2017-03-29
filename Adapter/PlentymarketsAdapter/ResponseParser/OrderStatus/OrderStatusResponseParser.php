@@ -31,6 +31,10 @@ class OrderStatusResponseParser implements OrderStatusResponseParserInterface
      */
     public function parse(array $entry)
     {
+        if (empty($entry['id'])) {
+            return null;
+        }
+
         $identity = $this->identityService->findOneOrCreate(
             (string) $entry['id'],
             PlentymarketsAdapter::NAME,

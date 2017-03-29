@@ -67,6 +67,6 @@ class AddressResponseParserTest extends ResponseParserTest
         $this->assertSame('Musterweg 1', $address->getStreet());
         $this->assertNull($address->getTitle());
         $this->assertSame('', $address->getVatId());
-        $this->assertSame('00000', $address->getZipcode());
+        $this->assertSame('00000', $address->getPostalCode());
     }
 }

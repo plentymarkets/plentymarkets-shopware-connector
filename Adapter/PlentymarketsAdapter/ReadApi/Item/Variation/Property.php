@@ -17,9 +17,8 @@ class Property extends ApiAbstract
      */
     public function findOne($productId, $variationId)
     {
-        return $this->client->request(
-            'GET',
-            'items/' . $productId . '/variations/' . $variationId . '/variation_properties'
-        );
+        $url = 'items/' . $productId . '/variations/' . $variationId . '/variation_properties';
+
+        return $this->client->request('GET', $url);
     }
 }

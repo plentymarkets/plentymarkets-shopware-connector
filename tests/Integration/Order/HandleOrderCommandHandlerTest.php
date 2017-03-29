@@ -148,7 +148,7 @@ class HandleOrderCommandHandlerTest extends TestCase
         $address->setFirstname('Firstname');
         $address->setLastname('Lastname');
         $address->setStreet('Street 2');
-        $address->setZipcode('12345');
+        $address->setPostalCode('12345');
         $address->setCity('City');
         $address->setCountryIdentifier($countryIdentity->getObjectIdentifier());
         $address->setVatId('');

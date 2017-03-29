@@ -237,6 +237,8 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
+     * TODO: implement new logic for shop based prices
+     *
      * @param array $variation
      *
      * @return array
@@ -322,6 +324,7 @@ class ProductResponseParser implements ProductResponseParserInterface
                 if ($pseudoPrice === 0.0) {
                     $pseudoPrice = $price;
                 }
+              
                 $price = (float) $priceArray['specialOffer']['price'];
             }
 
@@ -382,14 +385,7 @@ class ProductResponseParser implements ProductResponseParserInterface
     {
         $images = $this->itemsVariationsImagesApi->findOne($variation['itemId'], $variation['id']);
 
-        // TOOD: Remove hack when storeIdentifier is returned
-        static $webstores;
-
-        if (null === $webstores) {
-            $webstores = $this->webstoresApi->findAll();
-        }
-
-        $imageIdentifiers = array_map(function ($image) use ($texts, &$result, $webstores) {
+        $imageIdentifiers = array_map(function ($image) use ($texts, &$result) {
             /**
              * @var MediaResponseParserInterface $mediaResponseParser
              */
@@ -414,9 +410,9 @@ class ProductResponseParser implements ProductResponseParserInterface
                 return $availabilitiy['type'] === 'mandant';
             });
 
-            $shopIdentifiers = array_map(function ($shop) use ($webstores) {
+            $shopIdentifiers = array_map(function ($shop) {
                 $shopIdentity = $this->identityService->findOneBy([
-                    'adapterIdentifier' => (string) $webstores[$shop['value']]['storeIdentifier'],
+                    'adapterIdentifier' => (string) $shop['value'],
                     'adapterName' => PlentymarketsAdapter::NAME,
                     'objectType' => Shop::TYPE,
                 ]);
@@ -557,14 +553,7 @@ class ProductResponseParser implements ProductResponseParserInterface
     {
         $images = $this->itemsImagesApi->findAll($product['id']);
 
-        // TOOD: Remove hack when storeIdentifier is returned
-        static $webstores;
-
-        if (null === $webstores) {
-            $webstores = $this->webstoresApi->findAll();
-        }
-
-        $imageIdentifiers = array_map(function ($image) use ($texts, &$result, $webstores) {
+        $imageIdentifiers = array_map(function ($image) use ($texts, &$result) {
             /**
              * @var MediaResponseParserInterface $mediaResponseParser
              */
@@ -589,9 +578,9 @@ class ProductResponseParser implements ProductResponseParserInterface
                 return $availabilitiy['type'] === 'mandant';
             });
 
-            $shopIdentifiers = array_map(function ($shop) use ($webstores) {
+            $shopIdentifiers = array_map(function ($shop) {
                 $shopIdentity = $this->identityService->findOneBy([
-                    'adapterIdentifier' => (string) $webstores[$shop['value']]['storeIdentifier'],
+                    'adapterIdentifier' => (string) $shop['value'],
                     'adapterName' => PlentymarketsAdapter::NAME,
                     'objectType' => Shop::TYPE,
                 ]);
