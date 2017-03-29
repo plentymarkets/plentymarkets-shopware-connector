@@ -7,7 +7,6 @@ enabled:
   - ordered_imports
   - phpdoc_order
   - short_array_syntax
-  - phpdoc_scalar
   - no_unused_imports
   - concat_with_spaces
 
