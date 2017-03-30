@@ -64,6 +64,7 @@ class AddressResponseParser implements AddressResponseParserInterface
             'firstname' => $entry['firstName'],
             'lastname' => $entry['lastName'],
             'street' => $entry['street'],
+            'additional' => $entry['additionalAddressLine1'],
             'postalCode' => $entry['zipCode'],
             'city' => $entry['city'],
             'countryIdentifier' => $countryIdentitiy->getObjectIdentifier(),

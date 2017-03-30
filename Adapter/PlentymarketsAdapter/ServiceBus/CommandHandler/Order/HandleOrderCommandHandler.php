@@ -532,29 +532,85 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
 
         // TODO: Addition feld prüfen
 
-        $params = [
-            'name1' => trim($address->getCompany() . ' ' . $address->getDepartment()),
-            'name2' => $address->getFirstname(),
-            'name3' => $address->getLastname(),
-            'address1' => $address1,
-            'address2' => $address2,
-            'address3' => $address3,
-            'postalCode' => $address->getPostalCode(),
-            'town' => $address->getCity(),
-            'countryId' => $countryIdentity->getAdapterIdentifier(),
-            'options' => [
-                [
-                    'typeId' => 5,
-                    'value' => $customer->getEmail(),
+        if (strcasecmp($address1, "Packstation") == 0) {
+            $params = [
+                'name1' => trim($address->getCompany() . ' ' . $address->getDepartment()),
+                'name2' => $address->getFirstname(),
+                'name3' => $address->getLastname(),
+                'isPackstation' => true,
+                'address1' => 'PACKSTATION',
+                'address2' => $address2,
+                'postalCode' => $address->getPostalCode(),
+                'town' => $address->getCity(),
+                'countryId' => $countryIdentity->getAdapterIdentifier(),
+                'options' => [
+                    [
+                        'typeId' => 5,
+                        'value' => $customer->getEmail(),
+                    ],
+                    [
+                        'typeId' => 4,
+                        'value' => $customer->getPhoneNumber(),
+                    ],
+                    [
+                        'typeId' => 6,
+                        'value' => $address->getAdditional(),
+                    ],
                 ],
-                [
-                    'typeId' => 4,
-                    'value' => $customer->getPhoneNumber(),
+            ];
+            //var_dump($params);
+        } elseif (strcasecmp($address1, "Postfiliale") == 0) {
+            $params = [
+                'name1' => trim($address->getCompany() . ' ' . $address->getDepartment()),
+                'name2' => $address->getFirstname(),
+                'name3' => $address->getLastname(),
+                'isPostfiliale' => true,
+                'address1' => 'POSTFILIALE',
+                'address2' => $address2,
+                'postalCode' => $address->getPostalCode(),
+                'town' => $address->getCity(),
+                'countryId' => $countryIdentity->getAdapterIdentifier(),
+                'options' => [
+                    [
+                        'typeId' => 5,
+                        'value' => $customer->getEmail(),
+                    ],
+                    [
+                        'typeId' => 4,
+                        'value' => $customer->getPhoneNumber(),
+                    ],
+                    [
+                        'typeId' => 6,
+                        'value' => $address->getAdditional(),
+                    ],
                 ],
-            ],
-        ];
+            ];
+        } else {
+            $params = [
+                'name1' => trim($address->getCompany() . ' ' . $address->getDepartment()),
+                'name2' => $address->getFirstname(),
+                'name3' => $address->getLastname(),
+                'address1' => $address1,
+                'address2' => $address2,
+                'address3' => $address->getAdditional(),
+                'postalCode' => $address->getPostalCode(),
+                'town' => $address->getCity(),
+                'countryId' => $countryIdentity->getAdapterIdentifier(),
+                'options' => [
+                    [
+                        'typeId' => 5,
+                        'value' => $customer->getEmail(),
+                    ],
+                    [
+                        'typeId' => 4,
+                        'value' => $customer->getPhoneNumber(),
+                    ],
+                ],
+            ];
+        }
 
         return $this->client->request('POST', 'accounts/contacts/' . $plentyCustomer['id'] . '/addresses', $params);
+
     }
 
     /**
