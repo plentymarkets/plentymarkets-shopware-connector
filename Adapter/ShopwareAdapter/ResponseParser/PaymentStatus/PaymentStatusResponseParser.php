@@ -37,9 +37,17 @@ class PaymentStatusResponseParser implements PaymentStatusResponseParserInterfac
             PaymentStatus::TYPE
         );
 
+        if (!empty($entry['name'])) {
+            $name = $entry['name'];
+        } elseif (!empty($entry['description'])) {
+            $name = $entry['description'];
+        } else {
+            $name = $entry['id'];
+        }
+
         return PaymentStatus::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => $entry['name'],
+            'name' => (string) $name,
         ]);
     }
 }
