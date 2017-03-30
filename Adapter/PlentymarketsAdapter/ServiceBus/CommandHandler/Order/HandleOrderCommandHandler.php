@@ -108,6 +108,10 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                 'adapterName' => PlentymarketsAdapter::NAME,
             ]);
 
+            if (null === $shippingProfileIdentity) {
+                $this->logger->notice('no shipping profile selected', ['command', $command]);
+            }
+
             $currencyIdentity = $this->identityService->findOneBy([
                 'objectIdentifier' => $order->getCurrencyIdentifier(),
                 'objectType' => Currency::TYPE,
@@ -252,7 +256,10 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                 $itemParams['typeId'] = $typeId;
                 $itemParams['orderItemName'] = $item->getName();
                 $itemParams['quantity'] = $item->getQuantity();
-                $itemParams['shippingProfileId'] = $shippingProfileIdentity->getAdapterIdentifier();
+
+                if (null !== $shippingProfileIdentity) {
+                    $itemParams['shippingProfileId'] = $shippingProfileIdentity->getAdapterIdentifier();
+                }
 
                 if (!empty($item->getNumber())) {
                     $itemParams['itemVariationId'] = $this->getVariationIdFromNumber($item->getNumber());
@@ -269,7 +276,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                 if (null !== $item->getVatRateIdentifier()) {
                     // /rest/vat/locations/{locationId}/countries/{countryId}
                     $itemParams['countryVatId'] = 1; // TODO: remove hardcoded
-                    $itemParams['vatField'] = 0; // TODO: remove hardcoded
+                    $itemParams['vatRate'] = 19; // TODO: remove hardcoded
                 } else {
                     $itemParams['countryVatId'] = 1; // TODO: remove hardcoded
                     $itemParams['vatRate'] = 0;
@@ -318,6 +325,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                 $this->client->request('post', 'comments', $commentParams);
             }
 
+            // https://forum.plentymarkets.com/t/rest-api-paypal-kauf-auf-rechnung/46159/3
             foreach ($order->getPaymentData() as $paymentData) {
                 if ($paymentData instanceof SepaPaymentData) {
                     $sepaPaymentDataParams = [
