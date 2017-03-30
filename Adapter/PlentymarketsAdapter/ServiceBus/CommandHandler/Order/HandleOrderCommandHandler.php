@@ -532,7 +532,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
 
         // TODO: Addition feld prüfen
 
-        if (strcasecmp($address1, "Packstation") == 0) {
+        if (strcasecmp($address1, 'Packstation') == 0) {
             $params = [
                 'name1' => trim($address->getCompany() . ' ' . $address->getDepartment()),
                 'name2' => $address->getFirstname(),
@@ -559,7 +559,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                 ],
             ];
             //var_dump($params);
-        } elseif (strcasecmp($address1, "Postfiliale") == 0) {
+        } elseif (strcasecmp($address1, 'Postfiliale') == 0) {
             $params = [
                 'name1' => trim($address->getCompany() . ' ' . $address->getDepartment()),
                 'name2' => $address->getFirstname(),
