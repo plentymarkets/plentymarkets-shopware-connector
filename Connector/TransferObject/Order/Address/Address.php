@@ -52,6 +52,11 @@ class Address extends AbstractValueObject
     private $street;
 
     /**
+     * @var null|string
+     */
+    private $additional;
+
+    /**
      * @var string
      */
     private $postalCode;
@@ -190,6 +195,22 @@ class Address extends AbstractValueObject
     public function setLastname($lastname)
     {
         $this->lastname = $lastname;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getAdditional()
+    {
+        return $this->additional;
+    }
+
+    /**
+     * @param null|string $additional
+     */
+    public function setAdditional($additional)
+    {
+        $this->additional = $additional;
     }
 
     /**
