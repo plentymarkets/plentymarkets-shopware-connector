@@ -108,10 +108,6 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                 'adapterName' => PlentymarketsAdapter::NAME,
             ]);
 
-            if (null === $shippingProfileIdentity) {
-                $this->logger->notice('no shipping profile selected', ['command', $command]);
-            }
-
             $currencyIdentity = $this->identityService->findOneBy([
                 'objectIdentifier' => $order->getCurrencyIdentifier(),
                 'objectType' => Currency::TYPE,
@@ -256,10 +252,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                 $itemParams['typeId'] = $typeId;
                 $itemParams['orderItemName'] = $item->getName();
                 $itemParams['quantity'] = $item->getQuantity();
-
-                if (null !== $shippingProfileIdentity) {
-                    $itemParams['shippingProfileId'] = $shippingProfileIdentity->getAdapterIdentifier();
-                }
+                $itemParams['shippingProfileId'] = $shippingProfileIdentity->getAdapterIdentifier();
 
                 if (!empty($item->getNumber())) {
                     $itemParams['itemVariationId'] = $this->getVariationIdFromNumber($item->getNumber());
@@ -276,7 +269,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                 if (null !== $item->getVatRateIdentifier()) {
                     // /rest/vat/locations/{locationId}/countries/{countryId}
                     $itemParams['countryVatId'] = 1; // TODO: remove hardcoded
-                    $itemParams['vatRate'] = 19; // TODO: remove hardcoded
+                    $itemParams['vatField'] = 0; // TODO: remove hardcoded
                 } else {
                     $itemParams['countryVatId'] = 1; // TODO: remove hardcoded
                     $itemParams['vatRate'] = 0;
@@ -325,7 +318,6 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                 $this->client->request('post', 'comments', $commentParams);
             }
 
-            // https://forum.plentymarkets.com/t/rest-api-paypal-kauf-auf-rechnung/46159/3
             foreach ($order->getPaymentData() as $paymentData) {
                 if ($paymentData instanceof SepaPaymentData) {
                     $sepaPaymentDataParams = [
@@ -401,9 +393,8 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         $plentyCustomer = false;
 
         if ($customer->getType() === Customer::TYPE_NORMAL) {
-            $customerResult = $this->client->request('GET', 'accounts/contacts', [
-                'contactEmail' => $customer->getEmail(),
-            ]);
+            $customerResult = $this->client->request('GET', 'accounts/contacts',
+                ['contactEmail' => $customer->getEmail()]);
 
             if (!empty($customerResult)) {
                 $possibleCustomers = array_filter($customerResult, function ($entry) {
@@ -491,7 +482,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         if (!$plentyCustomer) {
             $plentyCustomer = $this->client->request('POST', 'accounts/contacts', $customerParams);
         } else {
-            $this->client->request('PUT', 'accounts/contacts/' . $plentyCustomer['id'], $customerParams);
+            $tmpResult = $this->client->request('PUT', 'accounts/contacts/' . $plentyCustomer['id'], $customerParams);
         }
 
         return $plentyCustomer;
@@ -501,8 +492,6 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
      * @param Address $address
      * @param Customer $customer
      * @param array $plentyCustomer
-     *
-     * @throws \Exception
      *
      * @return array
      */
@@ -538,8 +527,8 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             'name3' => $address->getLastname(),
             'address1' => $address1,
             'address2' => $address2,
-            'address3' => $address3,
-            'postalCode' => $address->getPostalCode(),
+            'address3' => $address->getAdditional(),
+            'postalCode' => $address->getZipcode(),
             'town' => $address->getCity(),
             'countryId' => $countryIdentity->getAdapterIdentifier(),
             'options' => [
@@ -564,7 +553,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
      * @param null|array $shippingAddress
      * @param $plentyOrderIdentifier
      *
-     * @throws \Exception
+     * @return bool
      */
     private function handlePayment(
         Payment $payment,
@@ -582,7 +571,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         if (null === $paymentMethodIdentity) {
             $this->logger->error('payment method not mapped', ['payment' => $payment]);
 
-            throw new \Exception('payment method not mapped');
+            return false;
         }
 
         $paymentMethodIdentity = $this->identityService->findOneBy([
@@ -600,7 +589,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         if (null === $currencyIdentity) {
             $this->logger->error('currency not mapped', ['payment' => $payment]);
 
-            throw new \Exception('currency not mapped');
+            return false;
         }
 
         $paymentParams = [
