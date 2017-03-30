@@ -6,6 +6,7 @@ use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
 /**
+ * TODO: change zip to postalCode
  * TOOD: camelCase
  *
  * Class Address
@@ -52,9 +53,14 @@ class Address extends AbstractValueObject
     private $street;
 
     /**
+     * @var null|string
+     */
+    private $additional;
+
+    /**
      * @var string
      */
-    private $postalCode;
+    private $zipcode;
 
     /**
      * @var string
@@ -209,19 +215,35 @@ class Address extends AbstractValueObject
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getPostalCode()
+    public function getAdditional()
     {
-        return $this->postalCode;
+        return $this->additional;
     }
 
     /**
-     * @param string $postalCode
+     * @param null|string $additional
      */
-    public function setPostalCode($postalCode)
+    public function setAdditional($additional)
     {
-        $this->postalCode = $postalCode;
+        $this->additional = $additional;
+    }
+
+    /**
+     * @return string
+     */
+    public function getZipcode()
+    {
+        return $this->zipcode;
+    }
+
+    /**
+     * @param string $zipcode
+     */
+    public function setZipcode($zipcode)
+    {
+        $this->zipcode = $zipcode;
     }
 
     /**
