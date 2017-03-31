@@ -2,11 +2,13 @@
 
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Order;
 
+use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Query\Order\FetchOrderQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
-use PlentymarketsAdapter\Client\ClientInterface;
+use PlentyConnector\Connector\TransferObject\Order\Order;
 use PlentymarketsAdapter\PlentymarketsAdapter;
+use PlentymarketsAdapter\ReadApi\Order\Order as OrderApi;
 use PlentymarketsAdapter\ResponseParser\Order\OrderResponseParserInterface;
 
 /**
@@ -15,27 +17,35 @@ use PlentymarketsAdapter\ResponseParser\Order\OrderResponseParserInterface;
 class FetchOrderQueryHandler implements QueryHandlerInterface
 {
     /**
-     * @var ClientInterface
+     * @var Order
      */
-    private $client;
+    private $api;
+
+    /**
+     * @var IdentityServiceInterface
+     */
+    private $identityService;
 
     /**
      * @var OrderResponseParserInterface
      */
-    private $orderResponseParser;
+    private $responseParser;
 
     /**
-     * FetchOrderQueryHandler constructor.
+     * FetchAllOrdersQueryHandler constructor.
      *
-     * @param ClientInterface $client
-     * @param OrderResponseParserInterface $orderResponseParser
+     * @param OrderApi $api
+     * @param IdentityServiceInterface $identityService
+     * @param OrderResponseParserInterface $responseParser
      */
     public function __construct(
-        ClientInterface $client,
-        OrderResponseParserInterface $orderResponseParser
+        OrderApi $api,
+        IdentityServiceInterface $identityService,
+        OrderResponseParserInterface $responseParser
     ) {
-        $this->client = $client;
-        $this->orderResponseParser = $orderResponseParser;
+        $this->api = $api;
+        $this->identityService = $identityService;
+        $this->responseParser = $responseParser;
     }
 
     /**
@@ -52,6 +62,23 @@ class FetchOrderQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        return [];
+        /**
+         * @var FetchOrderQuery $query
+         */
+        $identity = $this->identityService->findOneBy([
+            'objectIdentifier' => $query->getIdentifier(),
+            'objectType' => Order::TYPE,
+            'adapterName' => PlentymarketsAdapter::NAME,
+        ]);
+
+        if (null === $identity) {
+            return [];
+        }
+
+        $order = $this->api->find($identity->getAdapterIdentifier());
+
+        $result = [$this->responseParser->parse($order)];
+
+        return array_filter($result);
     }
 }

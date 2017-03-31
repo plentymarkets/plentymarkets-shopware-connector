@@ -8,6 +8,7 @@ use PlentyConnector\Connector\TransferObject\Order\Address\Address;
 use PlentyConnector\Connector\TransferObject\Order\Comment\Comment;
 use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
 use PlentyConnector\Connector\TransferObject\Order\OrderItem\OrderItem;
+use PlentyConnector\Connector\TransferObject\Order\Package\Package;
 use PlentyConnector\Connector\TransferObject\Order\Payment\Payment;
 use PlentyConnector\Connector\TransferObject\Order\PaymentData\PaymentDataInterface;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
@@ -108,6 +109,11 @@ class Order extends AbstractTransferObject
      * @var PaymentDataInterface[]
      */
     private $paymentData;
+
+    /**
+     * @var Package[]
+     */
+    private $packages = [];
 
     /**
      * @var Attribute[]
@@ -411,6 +417,22 @@ class Order extends AbstractTransferObject
     public function setPaymentData(array $paymentData = [])
     {
         $this->paymentData = $paymentData;
+    }
+
+    /**
+     * @return Package[]
+     */
+    public function getPackages()
+    {
+        return $this->packages;
+    }
+
+    /**
+     * @param Package[] $packages
+     */
+    public function setPackages($packages)
+    {
+        $this->packages = $packages;
     }
 
     /**

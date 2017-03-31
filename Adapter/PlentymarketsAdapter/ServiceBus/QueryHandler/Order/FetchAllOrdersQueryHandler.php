@@ -5,8 +5,8 @@ namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Order;
 use PlentyConnector\Connector\ServiceBus\Query\Order\FetchAllOrdersQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
-use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
+use PlentymarketsAdapter\ReadApi\Order\Order;
 use PlentymarketsAdapter\ResponseParser\Order\OrderResponseParserInterface;
 
 /**
@@ -15,27 +15,27 @@ use PlentymarketsAdapter\ResponseParser\Order\OrderResponseParserInterface;
 class FetchAllOrdersQueryHandler implements QueryHandlerInterface
 {
     /**
-     * @var ClientInterface
+     * @var Order
      */
-    private $client;
+    private $api;
 
     /**
      * @var OrderResponseParserInterface
      */
-    private $orderResponseParser;
+    private $responseParser;
 
     /**
      * FetchAllOrdersQueryHandler constructor.
      *
-     * @param ClientInterface $client
-     * @param OrderResponseParserInterface $orderResponseParser
+     * @param Order $api
+     * @param OrderResponseParserInterface $responseParser
      */
     public function __construct(
-        ClientInterface $client,
-        OrderResponseParserInterface $orderResponseParser
+        Order $api,
+        OrderResponseParserInterface $responseParser
     ) {
-        $this->client = $client;
-        $this->orderResponseParser = $orderResponseParser;
+        $this->api = $api;
+        $this->responseParser = $responseParser;
     }
 
     /**
@@ -52,6 +52,13 @@ class FetchAllOrdersQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        return [];
+        $orders = $this->api->findAll();
+
+        $result = [];
+        foreach ($orders as $order) {
+            $result[] = $this->responseParser->parse($order);
+        }
+
+        return array_filter($result);
     }
 }

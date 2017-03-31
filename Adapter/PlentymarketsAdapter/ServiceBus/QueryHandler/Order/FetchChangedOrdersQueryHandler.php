@@ -5,37 +5,40 @@ namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Order;
 use PlentyConnector\Connector\ServiceBus\Query\Order\FetchChangedOrdersQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
-use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
+use PlentymarketsAdapter\ReadApi\Order\Order;
 use PlentymarketsAdapter\ResponseParser\Order\OrderResponseParserInterface;
+use PlentymarketsAdapter\ServiceBus\ChangedDateTimeTrait;
 
 /**
  * Class FetchChangedOrdersQueryHandler
  */
 class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
 {
+    use ChangedDateTimeTrait;
+
     /**
-     * @var ClientInterface
+     * @var Order
      */
-    private $client;
+    private $api;
 
     /**
      * @var OrderResponseParserInterface
      */
-    private $orderResponseParser;
+    private $responseParser;
 
     /**
-     * FetchChangedOrdersQueryHandler constructor.
+     * FetchAllOrdersQueryHandler constructor.
      *
-     * @param ClientInterface $client
-     * @param OrderResponseParserInterface $orderResponseParser
+     * @param Order $api
+     * @param OrderResponseParserInterface $responseParser
      */
     public function __construct(
-        ClientInterface $client,
-        OrderResponseParserInterface $orderResponseParser
+        Order $api,
+        OrderResponseParserInterface $responseParser
     ) {
-        $this->client = $client;
-        $this->orderResponseParser = $orderResponseParser;
+        $this->api = $api;
+        $this->responseParser = $responseParser;
     }
 
     /**
@@ -52,6 +55,25 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        return [];
+        $lastCangedTime = $this->getChangedDateTime();
+        $currentDateTime = $this->getCurrentDateTime();
+
+        $criteria = [
+            'createdAtFrom' => $lastCangedTime->format(DATE_W3C),
+            'createdAtTo' => $currentDateTime->format(DATE_W3C),
+        ];
+
+        $orders = $this->api->findBy($criteria);
+
+        $result = [];
+        foreach ($orders as $order) {
+            $result[] = $this->responseParser->parse($order);
+        }
+
+        if (!empty($result)) {
+            $this->setChangedDateTime($currentDateTime);
+        }
+
+        return array_filter($result);
     }
 }
