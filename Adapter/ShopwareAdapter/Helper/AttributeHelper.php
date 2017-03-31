@@ -4,7 +4,6 @@ namespace PlentyConnector\Adapter\ShopwareAdapter\Helper;
 
 use Assert\Assertion;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
-use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\AttributeBundle\Service\DataPersister;
 use Shopware\Bundle\AttributeBundle\Service\TypeMapping;
@@ -65,12 +64,13 @@ class AttributeHelper
     }
 
     /**
-     * @param Identity $identity
+     * @param int $identifier
      * @param Attribute[] $attributes
      * @param string $table
      */
-    public function saveAttributes(Identity $identity, array $attributes, $table)
+    public function saveAttributes($identifier, array $attributes, $table)
     {
+        Assertion::integer($identifier);
         Assertion::allIsInstanceOf($attributes, Attribute::class);
         Assertion::notBlank($table);
 
@@ -85,7 +85,7 @@ class AttributeHelper
         $this->dataPersister->persist(
             $this->getAttributesAsArray($attributes),
             $table,
-            $identity->getAdapterIdentifier()
+            $identifier
         );
     }
 

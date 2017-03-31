@@ -423,7 +423,24 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                     ShopwareAdapter::NAME
                 );
 
-                $resource->writeTranslations($productModel->getId(), $translations);
+                /**
+                 * @var Variant $variantResource
+                 */
+                $variantResource = Manager::getResource('Variant');
+
+                foreach ($product->getVariations() as $variation) {
+                    try {
+                        $variant = $variantResource->getOneByNumber($variation->getNumber());
+                    } catch (NotFoundException $exception) {
+                        continue;
+                    }
+
+                    $this->attributeHelper->saveAttributes(
+                        (int) $variant['id'],
+                        $product->getAttributes(),
+                        's_articles_attributes'
+                    );
+                }
             } else {
                 $productModel = $resource->update($identity->getAdapterIdentifier(), $params);
 
@@ -448,10 +465,16 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                     if (null === $variant) {
                         $variationParams['articleId'] = $identity->getAdapterIdentifier();
 
-                        $variantResource->create($variationParams);
+                        $variant = $variantResource->create($variationParams);
                     } else {
                         $variantResource->update($variant['id'], $variationParams);
                     }
+
+                    $this->attributeHelper->saveAttributes(
+                        (int) $variant['id'],
+                        $product->getAttributes(),
+                        's_articles_attributes'
+                    );
                 }
 
                 $mainVariation = $this->getMainVariation($product);
@@ -470,11 +493,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                     $entityManager->persist($productModel);
                     $entityManager->flush();
                 }
-
-                $resource->writeTranslations($productModel->getId(), $translations);
             }
-
-            $this->attributeHelper->saveAttributes($identity, $product->getAttributes(), 's_articles_attributes');
 
             $resource->writeTranslations($productModel->getId(), $translations);
         } catch (\Exception $exception) {

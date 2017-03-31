@@ -1,17 +1,12 @@
 <?php
 
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
-use PlentyConnector\Connector\ConnectorInterface;
 use PlentyConnector\Connector\IdentityService\IdentityService;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\MappingService\MappingServiceInterface;
-use PlentyConnector\Connector\ServiceBus\QueryType;
-use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\ValueObject\Mapping\Mapping;
 use PlentyConnector\PlentyConnector;
 use PlentymarketsAdapter\Client\ClientInterface;
-use PlentymarketsAdapter\PlentymarketsAdapter;
 use Ramsey\Uuid\Uuid;
 
 /**

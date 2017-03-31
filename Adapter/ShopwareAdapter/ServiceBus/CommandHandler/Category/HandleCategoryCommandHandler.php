@@ -274,7 +274,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         }
 
         $this->attributeHelper->saveAttributes(
-            $categoryIdentity,
+            (int) $categoryIdentity->getAdapterIdentifier(),
             $category->getAttributes(),
             's_categories_attributes'
         );
