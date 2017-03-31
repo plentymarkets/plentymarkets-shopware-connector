@@ -70,29 +70,25 @@ class RemoveCategoryCommandHandler implements CommandHandlerInterface
          */
         $identifier = $command->getObjectIdentifier();
 
-        $identity = $this->identityService->findOneBy([
+        $identities = $this->identityService->findBy([
             'objectIdentifier' => (string) $identifier,
             'objectType' => Category::TYPE,
             'adapterName' => ShopwareAdapter::NAME,
         ]);
 
-        if (null === $identity) {
+        if (null === $identities) {
             $this->logger->notice('no matching identity found', ['command' => $command]);
 
             return false;
         }
 
-        try {
-            $this->resource->delete($identity->getAdapterIdentifier());
-        } catch (NotFoundException $exception) {
-            $this->logger->notice('identity removed but the object was not found', ['command' => $command]);
-        }
+        array_walk($identities, function(Identity $identity) use ($command) {
+            try {
+                $this->resource->delete($identity->getAdapterIdentifier());
+            } catch (NotFoundException $exception) {
+                $this->logger->notice('identity removed but the object was not found', ['command' => $command]);
+            }
 
-        $identities = $this->identityService->findBy([
-            'objectIdentifier' => $identifier,
-        ]);
-
-        array_walk($identities, function (Identity $identity) {
             $this->identityService->remove($identity);
         });
 

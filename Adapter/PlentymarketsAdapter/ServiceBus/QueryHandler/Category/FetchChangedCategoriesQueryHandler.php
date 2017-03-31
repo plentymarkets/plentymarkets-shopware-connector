@@ -10,6 +10,7 @@ use PlentymarketsAdapter\Helper\LanguageHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Category\CategoryResponseParserInterface;
 use PlentymarketsAdapter\ServiceBus\ChangedDateTimeTrait;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class FetchChangedCategoriesQueryHandler.
@@ -34,20 +35,28 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
     private $languageHelper;
 
     /**
-     * FetchCategoryQueryHandler constructor.
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * FetchChangedCategoriesQueryHandler constructor.
      *
      * @param ClientInterface $client
      * @param CategoryResponseParserInterface $categoryResponseParser
      * @param LanguageHelper $languageHelper
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ClientInterface $client,
         CategoryResponseParserInterface $categoryResponseParser,
-        LanguageHelper $languageHelper
+        LanguageHelper $languageHelper,
+        LoggerInterface $logger
     ) {
         $this->client = $client;
         $this->categoryResponseParser = $categoryResponseParser;
         $this->languageHelper = $languageHelper;
+        $this->logger = $logger;
     }
 
     /**
@@ -67,42 +76,27 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
         $lastCangedTime = $this->getChangedDateTime();
         $currentDateTime = $this->getCurrentDateTime();
 
-        $elements = $this->client->request('GET', 'categories', [
+        $elements = $this->client->getIterator('categories', [
             'with' => 'details,clients',
             'type' => 'item',
             'updatedAt' => $lastCangedTime->format(DATE_W3C),
             'lang' => $this->languageHelper->getLanguagesQueryString(),
         ]);
 
-        $elements = array_filter($elements, function ($element) {
-            return $element['right'] === 'all';
-        });
-
         $result = [];
+        foreach ($elements as $element) {
+            if ($element['right'] !== 'all') {
+                $this->logger->notice('unsupported category rights');
 
-        array_walk($elements, function (array $element) use (&$result) {
-            if (empty($element['details'])) {
-                return;
+                continue;
             }
 
-            $categoriesGrouped = [];
-            foreach ($element['details'] as $detail) {
-                $categoriesGrouped[$detail['plentyId']][] = $detail;
-            }
+            $parsedElements = $this->categoryResponseParser->parse($element);
 
-            foreach ($categoriesGrouped as $plentyId => $details) {
-                $parsedElements = $this->categoryResponseParser->parse([
-                    'plentyId' => $plentyId,
-                    'categoryId' => $element['id'],
-                    'parentCategoryId' => $element['parentCategoryId'],
-                    'details' => $details,
-                ]);
-
-                foreach ($parsedElements as $parsedElement) {
-                    $result[] = $parsedElement;
-                }
+            foreach ($parsedElements as $parsedElement) {
+                $result[] = $parsedElement;
             }
-        });
+        }
 
         if (!empty($result)) {
             $this->setChangedDateTime($currentDateTime);

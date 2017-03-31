@@ -3,7 +3,7 @@
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Category;
 
 use Doctrine\ORM\EntityManagerInterface;
-use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
+use PlentyConnector\Adapter\ShopwareAdapter\Helper\AttributeHelper;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\Category\HandleCategoryCommand;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
@@ -11,11 +11,12 @@ use PlentyConnector\Connector\ServiceBus\Command\HandleCommandInterface;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\TransferObject\Category\Category;
 use PlentyConnector\Connector\TransferObject\Language\Language;
-use PlentyConnector\Connector\TransferObject\Media\Media;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentyConnector\Connector\Translation\TranslationHelperInterface;
+use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
+use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Psr\Log\LoggerInterface;
-use Shopware\Components\Api\Exception\NotFoundException as ResourceNotFoundException;
+use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Resource\Category as CategoryResource;
 use Shopware\Models\Category\Category as CategoryModel;
 use Shopware\Models\Category\Repository as CategoryRepository;
@@ -54,6 +55,11 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     private $shopRepository;
 
     /**
+     * @var AttributeHelper
+     */
+    private $attributeHelper;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -65,6 +71,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
      * @param IdentityServiceInterface $identityService
      * @param TranslationHelperInterface $translationHelper
      * @param EntityManagerInterface $entityManager
+     * @param AttributeHelper $attributeHelper
      * @param LoggerInterface $logger
      */
     public function __construct(
@@ -72,6 +79,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         IdentityServiceInterface $identityService,
         TranslationHelperInterface $translationHelper,
         EntityManagerInterface $entityManager,
+        AttributeHelper $attributeHelper,
         LoggerInterface $logger
     ) {
         $this->resource = $resource;
@@ -79,6 +87,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         $this->translationHelper = $translationHelper;
         $this->categoryRepository = $entityManager->getRepository(CategoryModel::class);
         $this->shopRepository = $entityManager->getRepository(ShopModel::class);
+        $this->attributeHelper = $attributeHelper;
         $this->logger = $logger;
     }
 
@@ -102,8 +111,49 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
          */
         $category = $command->getTransferObject();
 
+        foreach ($category->getShopIdentifiers() as $shopIdentifier) {
+            $this->handleCategory($category, $shopIdentifier);
+        }
+    }
+
+    /**
+     * @param Category $category
+     * @param Identity $shopIdentity
+     *
+     * @throws \Exception
+     */
+    private function prepareCategory(Category $category, Identity $shopIdentity)
+    {
+        $attributes = $category->getAttributes();
+
+        $shopAttribute = array_filter($attributes, function (Attribute $attribute) {
+            return 'shopIdentifier' === $attribute->getKey();
+        });
+
+        if (!empty($shopAttribute)) {
+            throw new \Exception('shopIdentifier is not a allowed attribute key');
+        }
+
+        $attributes[] = Attribute::fromArray([
+            'key' => 'shopIdentifier',
+            'value' => $shopIdentity->getObjectIdentifier(),
+        ]);
+
+        $category->setAttributes($attributes);
+    }
+
+    /**
+     * @param Category $category
+     * @param $shopIdentifier
+     *
+     * @throws NotFoundException
+     *
+     * @return bool
+     */
+    private function handleCategory(Category $category, $shopIdentifier)
+    {
         $shopIdentity = $this->identityService->findOneBy([
-            'objectIdentifier' => (string) $category->getShopIdentifier(),
+            'objectIdentifier' => (string)$shopIdentifier,
             'objectType' => Shop::TYPE,
             'adapterName' => ShopwareAdapter::NAME,
         ]);
@@ -115,11 +165,17 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         $shop = $this->shopRepository->find($shopIdentity->getAdapterIdentifier());
 
         if (null === $shop) {
-            throw new NotFoundException();
+            $this->logger->notice('could not find shopware shop', [$shopIdentity]);
+
+            return false;
         }
 
+        $category = clone $category;
+
+        $this->prepareCategory($category, $shopIdentity);
+
         $languageIdentity = $this->identityService->findOneBy([
-            'adapterIdentifier' => (string) $shop->getLocale()->getId(),
+            'adapterIdentifier' => (string)$shop->getLocale()->getId(),
             'adapterName' => ShopwareAdapter::NAME,
             'objectType' => Language::TYPE,
         ]);
@@ -132,7 +188,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             $parentCategory = $shop->getCategory()->getId();
         } else {
             $parentCategoryIdentity = $this->identityService->findOneBy([
-                'objectIdentifier' => (string) $category->getParentIdentifier(),
+                'objectIdentifier' => (string)$category->getParentIdentifier(),
                 'objectType' => Category::TYPE,
                 'adapterName' => ShopwareAdapter::NAME,
             ]);
@@ -144,20 +200,29 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             $parentCategory = $parentCategoryIdentity->getAdapterIdentifier();
         }
 
-        $categoryIdentity = $this->identityService->findOneBy([
+        $categoryIdentities = $this->identityService->findBy([
             'objectIdentifier' => $category->getIdentifier(),
             'objectType' => Category::TYPE,
             'adapterName' => ShopwareAdapter::NAME,
         ]);
+
+        $possibleIdentities = array_filter($categoryIdentities, function (Identity $identity) use ($shopIdentity) {
+            return $this->validIdentity($identity, $shopIdentity);
+        });
+
+        $categoryIdentity = null;
+        if (!empty($possibleIdentities)) {
+            $categoryIdentity = array_shift($possibleIdentities);
+        }
 
         if (null === $categoryIdentity) {
             $existingCategory = $this->findExistingCategory($category, $parentCategory);
 
             if (null !== $existingCategory) {
                 $categoryIdentity = $this->identityService->create(
-                    (string) $category->getIdentifier(),
+                    (string)$category->getIdentifier(),
                     Category::TYPE,
-                    (string) $existingCategory,
+                    (string)$existingCategory,
                     ShopwareAdapter::NAME
                 );
             }
@@ -173,7 +238,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             $mediaIdentifier = array_shift($mediaIdentifiers);
 
             $mediaIdentity = $this->identityService->findOneBy([
-                'objectIdentifier' => (string) $mediaIdentifier,
+                'objectIdentifier' => (string)$mediaIdentifier,
                 'objectType' => Media::TYPE,
                 'adapterName' => ShopwareAdapter::NAME,
             ]);
@@ -188,7 +253,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         if (null !== $categoryIdentity) {
             try {
                 $this->resource->getOne($categoryIdentity->getAdapterIdentifier());
-            } catch (ResourceNotFoundException $exception) {
+            } catch (NotFoundException $exception) {
                 $this->identityService->remove($categoryIdentity);
 
                 $categoryIdentity = null;
@@ -198,15 +263,21 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         if (null === $categoryIdentity) {
             $newCategory = $this->resource->create($parans);
 
-            $this->identityService->create(
-                (string) $category->getIdentifier(),
+            $categoryIdentity = $this->identityService->create(
+                (string)$category->getIdentifier(),
                 Category::TYPE,
-                (string) $newCategory->getId(),
+                (string)$newCategory->getId(),
                 ShopwareAdapter::NAME
             );
         } else {
             $this->resource->update($categoryIdentity->getAdapterIdentifier(), $parans);
         }
+
+        $this->attributeHelper->saveAttributes(
+            $categoryIdentity,
+            $category->getAttributes(),
+            's_categories_attributes'
+        );
 
         return true;
     }
@@ -229,5 +300,37 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         }
 
         return $existingCategory->getId();
+    }
+
+    /**
+     * @param Identity $categoryIdentity
+     * @param Identity $shopIdentity
+     *
+     * @return bool
+     */
+    private function validIdentity(Identity $categoryIdentity, Identity $shopIdentity)
+    {
+        $id = $categoryIdentity->getAdapterIdentifier();
+
+        $categoryQuery = $this->categoryRepository->getDetailQueryBuilderWithoutArticles($id)->getQuery();
+
+        $categories = $categoryQuery->execute();
+
+        if (empty($categories)) {
+            return false;
+        }
+
+        /**
+         * @var CategoryModel $category
+         */
+        $category = array_shift($categories);
+
+        $attributes = $category->getAttribute();
+
+        if (method_exists($attributes, 'getPlentyConnectorShopIdentifier')) {
+            return $shopIdentity->getObjectIdentifier() === $attributes->getPlentyConnectorShopIdentifier();
+        }
+
+        return false;
     }
 }

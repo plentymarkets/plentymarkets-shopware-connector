@@ -12,6 +12,7 @@ use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\Helper\LanguageHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Category\CategoryResponseParserInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class FetchCategoryQueryHandler
@@ -39,23 +40,31 @@ class FetchCategoryQueryHandler implements QueryHandlerInterface
     private $identityService;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * FetchCategoryQueryHandler constructor.
      *
      * @param ClientInterface $client
      * @param CategoryResponseParserInterface $categoryResponseParser
      * @param LanguageHelper $languageHelper
      * @param IdentityServiceInterface $identityService
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ClientInterface $client,
         CategoryResponseParserInterface $categoryResponseParser,
         LanguageHelper $languageHelper,
-        IdentityServiceInterface $identityService
+        IdentityServiceInterface $identityService,
+        LoggerInterface $logger
     ) {
         $this->client = $client;
         $this->categoryResponseParser = $categoryResponseParser;
         $this->languageHelper = $languageHelper;
         $this->identityService = $identityService;
+        $this->logger = $logger;
     }
 
     /**
@@ -85,41 +94,29 @@ class FetchCategoryQueryHandler implements QueryHandlerInterface
             return [];
         }
 
-        $identifier = explode('-', $identity->getAdapterIdentifier());
-
-        $element = $this->client->request('GET', 'categories/' . $identifier[1], [
+        $element = $this->client->request('GET', 'categories/' . $identity->getAdapterIdentifier(), [
             'with' => 'details,clients',
+            'type' => 'item',
             'lang' => $this->languageHelper->getLanguagesQueryString(),
         ]);
 
+        if (empty($element)) {
+            return [];
+        }
+
         $element = array_shift($element);
 
-        if ($element['type'] !== 'item' || $element['right'] !== 'all') {
+        if ($element['right'] !== 'all') {
+            $this->logger->notice('unsupported category rights');
+
             return [];
         }
 
-        if (empty($element['details'])) {
-            return [];
-        }
+        $parsedElements = $this->categoryResponseParser->parse($element);
 
         $result = [];
-
-        $categoriesGrouped = [];
-        foreach ($element['details'] as $detail) {
-            $categoriesGrouped[$detail['plentyId']][] = $detail;
-        }
-
-        foreach ($categoriesGrouped as $plentyId => $details) {
-            $parsedElements = $this->categoryResponseParser->parse([
-                'plentyId' => $plentyId,
-                'categoryId' => $element['id'],
-                'parentCategoryId' => $element['parentCategoryId'],
-                'details' => $details,
-            ]);
-
-            foreach ($parsedElements as $parsedElement) {
-                $result[] = $parsedElement;
-            }
+        foreach ($parsedElements as $parsedElement) {
+            $result[] = $parsedElement;
         }
 
         return array_filter($result);
