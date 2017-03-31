@@ -179,15 +179,6 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         $identityService = Shopware()->Container()->get('plenty_connector.identity_service');
 
         try {
-            if ($this->hasDuplicateMappings($updates)) {
-                $this->View()->assign([
-                    'success' => false,
-                    'message' => 'duplicate mapping',
-                ]);
-
-                return;
-            }
-
             foreach ($updates as $key => $update) {
                 $remove = $update['remove'];
 
@@ -287,42 +278,5 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
                 'message' => $exception->getMessage(),
             ]);
         }
-    }
-
-    /**
-     * @param array $updates
-     *
-     * @throws Exception
-     *
-     * @return bool
-     */
-    private function hasDuplicateMappings(array $updates)
-    {
-        $originIdentifiers = array_column(array_filter($updates, function ($update) {
-            return !$update['remove'];
-        }), 'originIdentifier');
-
-        if (count(array_count_values($originIdentifiers)) < count($originIdentifiers)) {
-            return true;
-        }
-
-        /**
-         * @var IdentityService $identityService
-         */
-        $identityService = Shopware()->Container()->get('plenty_connector.identity_service');
-
-        foreach ($updates as $key => $update) {
-            $existingDestinationIdentities = $identityService->findBy([
-                'objectType' => $update['objectType'],
-                'objectIdentifier' => $update['originIdentifier'],
-                'adapterName' => $update['adapterName'],
-            ]);
-
-            if (null !== $existingDestinationIdentities && count($existingDestinationIdentities) > 0) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }
