@@ -82,7 +82,7 @@ class RemoveCategoryCommandHandler implements CommandHandlerInterface
             return false;
         }
 
-        array_walk($identities, function(Identity $identity) use ($command) {
+        array_walk($identities, function (Identity $identity) use ($command) {
             try {
                 $this->resource->delete($identity->getAdapterIdentifier());
             } catch (NotFoundException $exception) {

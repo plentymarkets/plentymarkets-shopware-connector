@@ -69,6 +69,7 @@ class OrderResponseParser implements OrderResponseParserInterface
 
     /**
      * OrderResponseParser constructor.
+     *
      * @param IdentityServiceInterface $identityService
      * @param LoggerInterface $logger
      * @param AddressApi $addressApi
@@ -96,66 +97,6 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
-     * @param array $entry
-     *
-     * @return array
-     */
-    private function getBillingAddressData(array $entry)
-    {
-        $billingAddress = array_filter($entry['addressRelations'], function (array $address) {
-            return $address['typeId'] === 1;
-        });
-
-        if (empty($billingAddress)) {
-            return null;
-        }
-
-        $billingAddress = array_shift($billingAddress);
-
-        return $this->addressApi->find($billingAddress['addressId']);
-    }
-
-    /**
-     * @param array $entry
-     *
-     * @return array
-     */
-    private function getShippingAddressData(array $entry)
-    {
-        $shippingAddress = array_filter($entry['addressRelations'], function (array $address) {
-            return $address['typeId'] === 2;
-        });
-
-        if (empty($shippingAddress)) {
-            return null;
-        }
-
-        $shippingAddress = array_shift($shippingAddress);
-
-        return $this->addressApi->find($shippingAddress['addressId']);
-    }
-
-    /**
-     * @param array $entry
-     *
-     * @return array
-     */
-    private function getCustomerData(array $entry)
-    {
-        $relations = array_filter($entry['relations'], function (array $relation) {
-            return $relation['referenceType'] === 'contact';
-        });
-
-        if (empty($relations)) {
-            return null;
-        }
-
-        $relation = array_shift($relations);
-
-        return $this->customerApi->find($relation['referenceId']);
-    }
-
-    /**
      * TODO: OrderItems
      * TODO: Comments
      *
@@ -164,7 +105,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     public function parse(array $entry)
     {
         $shopIdentity = $this->identityService->findOneBy([
-            'adapterIdentifier' => (string)$entry['plentyId'],
+            'adapterIdentifier' => (string) $entry['plentyId'],
             'adapterName' => PlentymarketsAdapter::NAME,
             'objectType' => Shop::TYPE,
         ]);
@@ -176,7 +117,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         }
 
         $identity = $this->identityService->findOneOrCreate(
-            (string)$entry['id'],
+            (string) $entry['id'],
             PlentymarketsAdapter::NAME,
             Order::TYPE
         );
@@ -258,6 +199,66 @@ class OrderResponseParser implements OrderResponseParserInterface
     /**
      * @param array $entry
      *
+     * @return array
+     */
+    private function getBillingAddressData(array $entry)
+    {
+        $billingAddress = array_filter($entry['addressRelations'], function (array $address) {
+            return $address['typeId'] === 1;
+        });
+
+        if (empty($billingAddress)) {
+            return null;
+        }
+
+        $billingAddress = array_shift($billingAddress);
+
+        return $this->addressApi->find($billingAddress['addressId']);
+    }
+
+    /**
+     * @param array $entry
+     *
+     * @return array
+     */
+    private function getShippingAddressData(array $entry)
+    {
+        $shippingAddress = array_filter($entry['addressRelations'], function (array $address) {
+            return $address['typeId'] === 2;
+        });
+
+        if (empty($shippingAddress)) {
+            return null;
+        }
+
+        $shippingAddress = array_shift($shippingAddress);
+
+        return $this->addressApi->find($shippingAddress['addressId']);
+    }
+
+    /**
+     * @param array $entry
+     *
+     * @return array
+     */
+    private function getCustomerData(array $entry)
+    {
+        $relations = array_filter($entry['relations'], function (array $relation) {
+            return $relation['referenceType'] === 'contact';
+        });
+
+        if (empty($relations)) {
+            return null;
+        }
+
+        $relation = array_shift($relations);
+
+        return $this->customerApi->find($relation['referenceId']);
+    }
+
+    /**
+     * @param array $entry
+     *
      * @return null|value
      */
     private function getOrdernumber(array $entry)
@@ -290,7 +291,7 @@ class OrderResponseParser implements OrderResponseParserInterface
             $property = array_shift($property);
 
             $identity = $this->identityService->findOneBy([
-                'adapterIdentifier' => (string)$property['value'],
+                'adapterIdentifier' => (string) $property['value'],
                 'adapterName' => PlentymarketsAdapter::NAME,
                 'objectType' => Language::TYPE,
             ]);
@@ -377,7 +378,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         }
 
         return $this->identityService->findOneBy([
-            'adapterIdentifier' => (string)$webstores[$plentyCustomer['plentyId']]['storeIdentifier'],
+            'adapterIdentifier' => (string) $webstores[$plentyCustomer['plentyId']]['storeIdentifier'],
             'adapterName' => PlentymarketsAdapter::NAME,
             'objectType' => Shop::TYPE,
         ]);
@@ -391,7 +392,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     private function getCustomerGroupIdentity(array $plentyCustomer)
     {
         return $this->identityService->findOneBy([
-            'adapterIdentifier' => (string)$plentyCustomer['classId'],
+            'adapterIdentifier' => (string) $plentyCustomer['classId'],
             'adapterName' => PlentymarketsAdapter::NAME,
             'objectType' => CustomerGroup::TYPE,
         ]);
@@ -413,7 +414,7 @@ class OrderResponseParser implements OrderResponseParserInterface
             $shippingProfile = array_shift($shippingProfiles);
 
             $identity = $this->identityService->findOneBy([
-                'adapterIdentifier' => (string)$shippingProfile,
+                'adapterIdentifier' => (string) $shippingProfile,
                 'adapterName' => PlentymarketsAdapter::NAME,
                 'objectType' => ShippingProfile::TYPE,
             ]);
@@ -438,7 +439,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         $amount = array_shift($entry['amounts']);
 
         return $this->identityService->findOneBy([
-            'adapterIdentifier' => (string)$amount['currency'],
+            'adapterIdentifier' => (string) $amount['currency'],
             'adapterName' => PlentymarketsAdapter::NAME,
             'objectType' => Currency::TYPE,
         ]);
@@ -459,7 +460,7 @@ class OrderResponseParser implements OrderResponseParserInterface
             $property = array_shift($property);
 
             $identity = $this->identityService->findOneBy([
-                'adapterIdentifier' => (string)$property['value'],
+                'adapterIdentifier' => (string) $property['value'],
                 'adapterName' => PlentymarketsAdapter::NAME,
                 'objectType' => PaymentMethod::TYPE,
             ]);
@@ -504,7 +505,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     private function getOrderStatusIdentity(array $entry)
     {
         return $this->identityService->findOneBy([
-            'adapterIdentifier' => (string)$entry['statusId'],
+            'adapterIdentifier' => (string) $entry['statusId'],
             'adapterName' => PlentymarketsAdapter::NAME,
             'objectType' => OrderStatus::TYPE,
         ]);
@@ -542,7 +543,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         }
 
         $countryIdentity = $this->identityService->findOneBy([
-            'adapterIdentifier' => (string)$entry['billingAddressData']['countryId'],
+            'adapterIdentifier' => (string) $entry['billingAddressData']['countryId'],
             'adapterName' => PlentymarketsAdapter::NAME,
             'objectType' => Country::TYPE,
         ]);
@@ -586,7 +587,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         }
 
         $countryIdentity = $this->identityService->findOneBy([
-            'adapterIdentifier' => (string)$entry['shippingAddressData']['countryId'],
+            'adapterIdentifier' => (string) $entry['shippingAddressData']['countryId'],
             'adapterName' => PlentymarketsAdapter::NAME,
             'objectType' => Country::TYPE,
         ]);
@@ -702,7 +703,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         $result = [];
         foreach ($numbers as $number) {
             $package = new Package();
-            $package->setShippingCode((string)$number);
+            $package->setShippingCode((string) $number);
 
             if (!empty($shoppingDate)) {
                 $package->setShippingTime(\DateTimeImmutable::createFromFormat(DATE_ATOM, $shoppingDate['date']));

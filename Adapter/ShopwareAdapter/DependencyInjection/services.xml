@@ -203,6 +203,8 @@
         <!-- Product command handlers -->
 
         <service id="shopware_adapter.command_handler.handle_product" class="ShopwareAdapter\ServiceBus\CommandHandler\Product\HandleProductCommandHandler">
+            <argument type="service" id="plenty_connector.identity_service" />
+            <argument  type="service" id="shopware_adapter.attribute_helper" />
 
             <tag name="plenty_connector.command_handler" />
         </service>

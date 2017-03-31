@@ -57,11 +57,32 @@ class AttributeHelper
      *
      * @return string
      */
-    private function getAttributeKey(Attribute $attribute)
+    public function getAttributeKey(Attribute $attribute)
     {
         $attribute_key = strtolower(preg_replace('/[A-Z]/', '_\\0', lcfirst($attribute->getKey())));
 
         return $this->prefix . $attribute_key;
+    }
+
+    /**
+     * @param Identity $identity
+     * @param Attribute[] $attributes
+     * @param string $table
+     */
+    public function saveAttributes(Identity $identity, array $attributes, $table)
+    {
+        Assertion::allIsInstanceOf($attributes, Attribute::class);
+        Assertion::notBlank($table);
+
+        array_walk($attributes, function (Attribute $attribute) use ($table) {
+            $this->prepareAttribute($attribute, $table);
+        });
+
+        $this->dataPersister->persist(
+            $this->getAttributesAsArray($attributes),
+            $table,
+            $identity->getAdapterIdentifier()
+        );
     }
 
     /**
@@ -110,25 +131,5 @@ class AttributeHelper
         }
 
         return $result;
-    }
-
-    /**
-     * @param Identity $identity
-     * @param Attribute[] $attributes
-     * @param string $table
-     */
-    public function saveAttributes(Identity $identity, array $attributes = [], $table)
-    {
-        Assertion::allIsInstanceOf($attributes, Attribute::class);
-
-        array_walk($attributes, function (Attribute $attribute) use ($table) {
-            $this->prepareAttribute($attribute, $table);
-        });
-
-        $this->dataPersister->persist(
-            $this->getAttributesAsArray($attributes),
-            $table,
-            $identity->getAdapterIdentifier()
-        );
     }
 }

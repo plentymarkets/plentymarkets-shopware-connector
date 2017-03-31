@@ -120,60 +120,64 @@ class ProductResponseParser implements ProductResponseParserInterface
             $webstores = $this->webstoresApi->findAll();
         }
 
-        $variations = $this->itemsVariationsApi->findOne($product['id']);
+        try {
+            $variations = $this->itemsVariationsApi->findOne($product['id']);
 
-        $mainVariation = $this->getMainVariation($variations);
+            $mainVariation = $this->getMainVariation($variations);
 
-        $identity = $this->identityService->findOneOrCreate(
-            (string) $product['id'],
-            PlentymarketsAdapter::NAME,
-            Product::TYPE
-        );
+            $identity = $this->identityService->findOneOrCreate(
+                (string) $product['id'],
+                PlentymarketsAdapter::NAME,
+                Product::TYPE
+            );
 
-        $hasStockLimitation = array_filter($variations, function (array $variation) {
-            return (bool) $variation['stockLimitation'];
-        });
+            $hasStockLimitation = array_filter($variations, function (array $variation) {
+                return (bool) $variation['stockLimitation'];
+            });
 
-        $shopIdentifiers = $this->getShopIdentifiers($mainVariation);
+            $shopIdentifiers = $this->getShopIdentifiers($mainVariation);
 
-        if (empty($shopIdentifiers)) {
+            if (empty($shopIdentifiers)) {
+                return null;
+            }
+
+            /**
+             * @var Product $object
+             */
+            $object = Product::fromArray([
+                'identifier' => $identity->getObjectIdentifier(),
+                'name' => $product['texts'][0]['name1'],
+                'number' => $mainVariation['number'],
+                'active' => $product['isActive'],
+                'shopIdentifiers' => $shopIdentifiers,
+                'manufacturerIdentifier' => $this->getManufacturerIdentifier($product),
+                'categoryIdentifiers' => $this->getCategories($mainVariation, $webstores),
+                'defaultCategoryIdentifiers' => $this->getDafaultCategories($mainVariation, $webstores),
+                'shippingProfileIdentifiers' => $this->getShippingProfiles($product),
+                'images' => $this->getImages($product, $product['texts'], $result),
+                'variations' => $this->getVariations($product['texts'], $variations, $result),
+                'vatRateIdentifier' => $this->getVatRateIdentifier($mainVariation),
+                'limitedStock' => (bool) $hasStockLimitation,
+                'description' => $product['texts'][0]['shortDescription'],
+                'longDescription' => $product['texts'][0]['description'],
+                'technicalDescription' => $product['texts'][0]['technicalData'],
+                'metaTitle' => $product['texts'][0]['name1'],
+                'metaDescription' => $product['texts'][0]['metaDescription'],
+                'metaKeywords' => $product['texts'][0]['keywords'],
+                'metaRobots' => 'INDEX, FOLLOW',
+                'linkedProducts' => $this->getLinkedProducts($product),
+                'documents' => [],
+                'properties' => $this->getProperties($mainVariation),
+                'translations' => $this->getProductTranslations($product['texts']),
+                'availableFrom' => $this->getAvailableFrom($mainVariation),
+                'availableTo' => $this->getAvailableTo($mainVariation),
+                'attributes' => $this->getAttributes($product),
+            ]);
+
+            return $object;
+        } catch (\Exception $exception) {
             return null;
         }
-
-        /**
-         * @var Product $object
-         */
-        $object = Product::fromArray([
-            'identifier' => $identity->getObjectIdentifier(),
-            'name' => $product['texts'][0]['name1'],
-            'number' => $mainVariation['number'],
-            'active' => $product['isActive'],
-            'shopIdentifiers' => $shopIdentifiers,
-            'manufacturerIdentifier' => $this->getManufacturerIdentifier($product),
-            'categoryIdentifiers' => $this->getCategories($mainVariation, $webstores),
-            'defaultCategoryIdentifiers' => $this->getDafaultCategories($mainVariation, $webstores),
-            'shippingProfileIdentifiers' => $this->getShippingProfiles($product),
-            'images' => $this->getImages($product, $product['texts'], $result),
-            'variations' => $this->getVariations($product['texts'], $variations, $result),
-            'vatRateIdentifier' => $this->getVatRateIdentifier($mainVariation),
-            'limitedStock' => (bool) $hasStockLimitation,
-            'description' => $product['texts'][0]['shortDescription'],
-            'longDescription' => $product['texts'][0]['description'],
-            'technicalDescription' => $product['texts'][0]['technicalData'],
-            'metaTitle' => $product['texts'][0]['name1'],
-            'metaDescription' => $product['texts'][0]['metaDescription'],
-            'metaKeywords' => $product['texts'][0]['keywords'],
-            'metaRobots' => 'INDEX, FOLLOW',
-            'linkedProducts' => $this->getLinkedProducts($product),
-            'documents' => [],
-            'properties' => $this->getProperties($mainVariation),
-            'translations' => $this->getProductTranslations($product['texts']),
-            'availableFrom' => $this->getAvailableFrom($mainVariation),
-            'availableTo' => $this->getAvailableTo($mainVariation),
-            'attributes' => $this->getAttributes($product),
-        ]);
-
-        return $object;
     }
 
     /**
@@ -451,7 +455,9 @@ class ProductResponseParser implements ProductResponseParserInterface
         ]);
 
         if (null === $unitIdentity) {
-            throw new \Exception('missing mapping for unit');
+            $this->logger->notice('variation without a proper unit', $variation);
+
+            throw new \Exception('missing mapping for unit - ' . json_encode($variation['unit']));
         }
 
         return $unitIdentity->getObjectIdentifier();

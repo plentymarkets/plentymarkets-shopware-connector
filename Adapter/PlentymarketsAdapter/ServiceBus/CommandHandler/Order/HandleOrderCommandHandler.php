@@ -610,7 +610,6 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         }
 
         return $this->client->request('POST', 'accounts/contacts/' . $plentyCustomer['id'] . '/addresses', $params);
-
     }
 
     /**

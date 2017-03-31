@@ -153,7 +153,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     private function handleCategory(Category $category, $shopIdentifier)
     {
         $shopIdentity = $this->identityService->findOneBy([
-            'objectIdentifier' => (string)$shopIdentifier,
+            'objectIdentifier' => (string) $shopIdentifier,
             'objectType' => Shop::TYPE,
             'adapterName' => ShopwareAdapter::NAME,
         ]);
@@ -175,7 +175,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         $this->prepareCategory($category, $shopIdentity);
 
         $languageIdentity = $this->identityService->findOneBy([
-            'adapterIdentifier' => (string)$shop->getLocale()->getId(),
+            'adapterIdentifier' => (string) $shop->getLocale()->getId(),
             'adapterName' => ShopwareAdapter::NAME,
             'objectType' => Language::TYPE,
         ]);
@@ -188,7 +188,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             $parentCategory = $shop->getCategory()->getId();
         } else {
             $parentCategoryIdentity = $this->identityService->findOneBy([
-                'objectIdentifier' => (string)$category->getParentIdentifier(),
+                'objectIdentifier' => (string) $category->getParentIdentifier(),
                 'objectType' => Category::TYPE,
                 'adapterName' => ShopwareAdapter::NAME,
             ]);
@@ -220,9 +220,9 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
 
             if (null !== $existingCategory) {
                 $categoryIdentity = $this->identityService->create(
-                    (string)$category->getIdentifier(),
+                    (string) $category->getIdentifier(),
                     Category::TYPE,
-                    (string)$existingCategory,
+                    (string) $existingCategory,
                     ShopwareAdapter::NAME
                 );
             }
@@ -238,7 +238,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             $mediaIdentifier = array_shift($mediaIdentifiers);
 
             $mediaIdentity = $this->identityService->findOneBy([
-                'objectIdentifier' => (string)$mediaIdentifier,
+                'objectIdentifier' => (string) $mediaIdentifier,
                 'objectType' => Media::TYPE,
                 'adapterName' => ShopwareAdapter::NAME,
             ]);
@@ -264,9 +264,9 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             $newCategory = $this->resource->create($parans);
 
             $categoryIdentity = $this->identityService->create(
-                (string)$category->getIdentifier(),
+                (string) $category->getIdentifier(),
                 Category::TYPE,
-                (string)$newCategory->getId(),
+                (string) $newCategory->getId(),
                 ShopwareAdapter::NAME
             );
         } else {
