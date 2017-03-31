@@ -208,7 +208,7 @@ class Address extends AbstractValueObject
     /**
      * @param null|string $additional
      */
-    public function setAdditional($additional)
+    public function setAdditional($additional = null)
     {
         $this->additional = $additional;
     }
