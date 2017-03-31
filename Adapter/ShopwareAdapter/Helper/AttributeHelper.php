@@ -108,7 +108,7 @@ class AttributeHelper
                 $key,
                 TypeMapping::TYPE_STRING,
                 [
-                    'label' => 'PlentyConnector ' . $key,
+                    'label' => 'PlentyConnector ' . $attribute->getKey(),
                     'displayInBackend' => true,
                     'translatable' => true,
                     'custom' => true,
