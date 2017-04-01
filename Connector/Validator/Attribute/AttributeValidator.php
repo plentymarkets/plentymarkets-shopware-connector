@@ -27,6 +27,7 @@ class AttributeValidator implements ValidatorInterface
     {
         Assertion::string($object->getKey(), null, 'attribute.key');
         Assertion::notBlank($object->getKey(), null, 'attribute.key');
+        Assertion::string($object->getValue(), null, 'attribute.value');
         Assertion::allIsInstanceOf($object->getTranslations(), Translation::class, null, 'attribute.translations');
     }
 }
