@@ -545,14 +545,11 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                     continue;
                 }
 
-                try {
-                    $result[$productIdentity->getAdapterIdentifier()] = [
-                        'id' => $productIdentity->getAdapterIdentifier(),
-                        'cross' => false,
-                    ];
-                } catch (\Exception $exception) {
-                    // fail silently
-                }
+                $result[$productIdentity->getAdapterIdentifier()] = [
+                    'id' => $productIdentity->getAdapterIdentifier(),
+                    'position' => $linkedProduct->getPosition(),
+                    'cross' => false,
+                ];
             }
         }
 
