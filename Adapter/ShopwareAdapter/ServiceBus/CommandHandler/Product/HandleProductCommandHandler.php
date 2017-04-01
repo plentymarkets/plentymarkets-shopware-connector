@@ -309,7 +309,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                  */
                 $translatedAttribute = $translationHelper->translate($languageIdentifier, $attribute);
 
-                $key = $this->attributeHelper->getAttributeKey($attribute);
+                $key = 'plentyConnector' . ucfirst($attribute->getKey());
                 $translation[$key] = $translatedAttribute->getValue();
             }
 

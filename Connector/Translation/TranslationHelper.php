@@ -37,6 +37,8 @@ class TranslationHelper implements TranslationHelperInterface
      */
     public function translate($languageIdentifier, TranslateableInterface $object)
     {
+        $object = clone $object;
+
         /**
          * @var Translation[] $translations
          */
