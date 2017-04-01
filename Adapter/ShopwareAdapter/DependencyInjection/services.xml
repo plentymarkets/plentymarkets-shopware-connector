@@ -138,6 +138,7 @@
         <service id="shopware_adapter.command_handler.handle_manufacturer" class="ShopwareAdapter\ServiceBus\CommandHandler\Manufacturer\HandleManufacturerCommandHandler">
             <argument type="service" id="shopware_adapter.shopware_resource.manufacturer" />
             <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="shopware_adapter.attribute_helper" />
 
             <tag name="plenty_connector.command_handler" />
         </service>

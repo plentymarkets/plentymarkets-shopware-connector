@@ -2,6 +2,7 @@
 
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Manufacturer;
 
+use PlentyConnector\Adapter\ShopwareAdapter\Helper\AttributeHelper;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
@@ -29,15 +30,25 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
     private $identityService;
 
     /**
+     * @var AttributeHelper
+     */
+    private $attributeHelper;
+
+    /**
      * HandleManufacturerCommandHandler constructor.
      *
      * @param ManufacturerResource $resource
      * @param IdentityServiceInterface $identityService
+     * @param AttributeHelper $attributeHelper
      */
-    public function __construct(ManufacturerResource $resource, IdentityServiceInterface $identityService)
-    {
+    public function __construct(
+        ManufacturerResource $resource,
+        IdentityServiceInterface $identityService,
+        AttributeHelper $attributeHelper
+    ) {
         $this->resource = $resource;
         $this->identityService = $identityService;
+        $this->attributeHelper = $attributeHelper;
     }
 
     /**
@@ -115,6 +126,12 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
         } else {
             $this->resource->update($identity->getAdapterIdentifier(), $params);
         }
+
+        $this->attributeHelper->saveAttributes(
+            (int) $identity->getAdapterIdentifier(),
+            $manufacturer->getAttributes(),
+            's_articles_supplier_attributes'
+        );
 
         return true;
     }
