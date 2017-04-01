@@ -2,6 +2,7 @@
 
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Media;
 
+use PlentyConnector\Adapter\ShopwareAdapter\Helper\AttributeHelper;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
@@ -30,15 +31,25 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
     private $identityService;
 
     /**
+     * @var AttributeHelper
+     */
+    private $attributeHelper;
+
+    /**
      * HandleMediaCommandHandler constructor.
      *
      * @param MediaResource $resource
      * @param IdentityServiceInterface $identityService
+     * @param AttributeHelper $attributeHelper
      */
-    public function __construct(MediaResource $resource, IdentityServiceInterface $identityService)
-    {
+    public function __construct(
+        MediaResource $resource,
+        IdentityServiceInterface $identityService,
+        AttributeHelper $attributeHelper
+    ) {
         $this->resource = $resource;
         $this->identityService = $identityService;
+        $this->attributeHelper = $attributeHelper;
     }
 
     /**
@@ -103,6 +114,12 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
 
             $this->resource->update($identity->getAdapterIdentifier(), $params);
         }
+
+        $this->attributeHelper->saveAttributes(
+            (int) $identity->getAdapterIdentifier(),
+            $media->getAttributes(),
+            's_media_attributes'
+        );
 
         return true;
     }
