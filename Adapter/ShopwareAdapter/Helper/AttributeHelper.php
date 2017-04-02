@@ -106,7 +106,7 @@ class AttributeHelper
             $this->attributeService->update(
                 $table,
                 $key,
-                TypeMapping::TYPE_STRING,
+                TypeMapping::TYPE_TEXT,
                 [
                     'label' => 'PlentyConnector ' . $attribute->getKey(),
                     'displayInBackend' => true,
