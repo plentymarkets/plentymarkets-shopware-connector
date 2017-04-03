@@ -141,6 +141,8 @@ class ProductResponseParser implements ProductResponseParserInterface
                 return null;
             }
 
+            $variations = $this->getVariations($product['texts'], $variations, $result);
+
             /**
              * @var Product $object
              */
@@ -148,14 +150,14 @@ class ProductResponseParser implements ProductResponseParserInterface
                 'identifier' => $identity->getObjectIdentifier(),
                 'name' => $product['texts'][0]['name1'],
                 'number' => $mainVariation['number'],
-                'active' => $product['isActive'],
+                'active' => $this->getActive($variations),
                 'shopIdentifiers' => $shopIdentifiers,
                 'manufacturerIdentifier' => $this->getManufacturerIdentifier($product),
                 'categoryIdentifiers' => $this->getCategories($mainVariation, $webstores),
                 'defaultCategoryIdentifiers' => $this->getDafaultCategories($mainVariation, $webstores),
                 'shippingProfileIdentifiers' => $this->getShippingProfiles($product),
                 'images' => $this->getImages($product, $product['texts'], $result),
-                'variations' => $this->getVariations($product['texts'], $variations, $result),
+                'variations' => $variations,
                 'vatRateIdentifier' => $this->getVatRateIdentifier($mainVariation),
                 'limitedStock' => (bool) $hasStockLimitation,
                 'description' => $product['texts'][0]['shortDescription'],
@@ -880,7 +882,7 @@ class ProductResponseParser implements ProductResponseParserInterface
 
         foreach ($variations as $variation) {
             $mappedVariations[] = Variation::fromArray([
-                'active' => true,
+                'active' => (bool) $variation['isActive'],
                 'isMain' => $first,
                 'stock' => $this->getStock($variation),
                 'number' => (string) $variation['number'],
@@ -1317,5 +1319,21 @@ class ProductResponseParser implements ProductResponseParserInterface
         }, $barcodes);
 
         return $barcodes;
+    }
+
+    /**
+     * @param Variation[] $variations
+     *
+     * @return bool
+     */
+    private function getActive(array $variations)
+    {
+        foreach ($variations as $variation) {
+            if ($variation->getActive()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
