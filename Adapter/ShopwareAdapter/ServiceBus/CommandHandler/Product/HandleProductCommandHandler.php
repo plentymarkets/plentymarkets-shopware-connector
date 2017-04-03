@@ -179,19 +179,17 @@ class HandleProductCommandHandler implements CommandHandlerInterface
 
         $categories = [];
         foreach ($product->getCategoryIdentifiers() as $categoryIdentifier) {
-            $categoryIdentity = $this->identityService->findOneBy([
+            $categoryIdentities = $this->identityService->findBy([
                 'objectIdentifier' => $categoryIdentifier,
                 'objectType' => Category::TYPE,
                 'adapterName' => ShopwareAdapter::NAME,
             ]);
 
-            if (null === $categoryIdentity) {
-                continue;
+            foreach ($categoryIdentities as $categoryIdentity) {
+                $categories[] = [
+                    'id' => $categoryIdentity->getAdapterIdentifier(),
+                ];
             }
-
-            $categories[] = [
-                'id' => $categoryIdentity->getAdapterIdentifier(),
-            ];
         }
 
         $categoryRepository = $entityManager->getRepository(\Shopware\Models\Category\Category::class);
@@ -199,33 +197,31 @@ class HandleProductCommandHandler implements CommandHandlerInterface
 
         $seoCategories = [];
         foreach ($product->getDefaultCategoryIdentifiers() as $categoryIdentifier) {
-            $categoryIdentity = $this->identityService->findOneBy([
+            $categoryIdentities = $this->identityService->findBy([
                 'objectIdentifier' => $categoryIdentifier,
                 'objectType' => Category::TYPE,
                 'adapterName' => ShopwareAdapter::NAME,
             ]);
 
-            if (null === $categoryIdentity) {
-                continue;
-            }
+            foreach ($categoryIdentities as $categoryIdentity) {
+                $category = $categoryRepository->find($categoryIdentity->getAdapterIdentifier());
 
-            $category = $categoryRepository->find($categoryIdentity->getAdapterIdentifier());
+                if (null === $category) {
+                    continue;
+                }
 
-            if (null === $category) {
-                continue;
-            }
+                $parents = array_reverse(array_filter(explode('|', $category->getPath())));
 
-            $parents = array_reverse(array_filter(explode('|', $category->getPath())));
+                $shops = $shopRepository->findBy([
+                    'categoryId' => array_shift($parents),
+                ]);
 
-            $shops = $shopRepository->findBy([
-                'categoryId' => array_shift($parents),
-            ]);
-
-            foreach ($shops as $shop) {
-                $seoCategories[] = [
-                    'categoryId' => $categoryIdentity->getAdapterIdentifier(),
-                    'shopId' => $shop->getId(),
-                ];
+                foreach ($shops as $shop) {
+                    $seoCategories[] = [
+                        'categoryId' => $categoryIdentity->getAdapterIdentifier(),
+                        'shopId' => $shop->getId(),
+                    ];
+                }
             }
         }
 
