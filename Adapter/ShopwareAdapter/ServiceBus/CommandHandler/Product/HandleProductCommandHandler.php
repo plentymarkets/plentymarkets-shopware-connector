@@ -246,18 +246,8 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 continue;
             }
 
-            $attributes = $product->getAttributes();
-
-            $shopAttribute = array_filter($attributes, function (Attribute $attribute) {
-                return 'shippingProfile' === $attribute->getKey();
-            });
-
-            if (!empty($shopAttribute)) {
-                throw new \Exception('shippingProfile is not a allowed attribute key');
-            }
-
             $attributes[] = Attribute::fromArray([
-                'key' => 'shippingProfile',
+                'key' => 'shippingProfile' . $profileIdentity->getAdapterIdentifier(),
                 'value' => $profileIdentity->getObjectIdentifier(),
             ]);
 
