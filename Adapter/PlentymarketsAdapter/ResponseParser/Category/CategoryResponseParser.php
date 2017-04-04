@@ -111,8 +111,8 @@ class CategoryResponseParser implements CategoryResponseParserInterface
             'shopIdentifiers' => $shopIdentifiers,
             'imageIdentifiers' => $this->getImages($entry['details']['0'], $result),
             'position' => $entry['details']['0']['position'],
-            'description' => $entry['details']['0']['description'],
-            'longDescription' => $entry['details']['0']['description2'],
+            'description' => $entry['details']['0']['shortDescription'],
+            'longDescription' => $entry['details']['0']['description'],
             'metaTitle' => $entry['details']['0']['metaTitle'],
             'metaDescription' => $entry['details']['0']['metaDescription'],
             'metaKeywords' => $entry['details']['0']['metaKeywords'],
@@ -227,13 +227,13 @@ class CategoryResponseParser implements CategoryResponseParserInterface
             $translations[] = Translation::fromArray([
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
                 'property' => 'description',
-                'value' => $detail['description'],
+                'value' => $detail['shortDescription'],
             ]);
 
             $translations[] = Translation::fromArray([
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
                 'property' => 'longDescription',
-                'value' => $detail['description2'],
+                'value' => $detail['description'],
             ]);
 
             $translations[] = Translation::fromArray([

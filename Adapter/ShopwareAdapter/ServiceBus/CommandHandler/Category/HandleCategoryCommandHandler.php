@@ -231,6 +231,11 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         $parans = [
             'name' => $category->getName(),
             'parent' => $parentCategory,
+            'metaTitle' => $category->getMetaTitle(),
+            'metaKeywords' => $category->getMetaKeywords(),
+            'metaDescription' => $category->getMetaDescription(),
+            'cmsHeadline' => $category->getDescription(),
+            'cmsText' => $category->getLongDescription(),
         ];
 
         if (!empty($category->getImageIdentifiers())) {
