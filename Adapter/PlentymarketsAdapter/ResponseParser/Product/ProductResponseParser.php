@@ -391,7 +391,14 @@ class ProductResponseParser implements ProductResponseParserInterface
     {
         $images = $this->itemsVariationsImagesApi->findOne($variation['itemId'], $variation['id']);
 
-        $imageIdentifiers = array_map(function ($image) use ($texts, &$result) {
+        // TOOD: Remove hack when storeIdentifier is returned
+        static $webstores;
+
+        if (null === $webstores) {
+            $webstores = $this->webstoresApi->findAll();
+        }
+
+        $imageIdentifiers = array_map(function ($image) use ($texts, &$result, $webstores) {
             /**
              * @var MediaResponseParserInterface $mediaResponseParser
              */
@@ -416,9 +423,9 @@ class ProductResponseParser implements ProductResponseParserInterface
                 return $availabilitiy['type'] === 'mandant';
             });
 
-            $shopIdentifiers = array_map(function ($shop) {
+            $shopIdentifiers = array_map(function ($shop) use ($webstores) {
                 $shopIdentity = $this->identityService->findOneBy([
-                    'adapterIdentifier' => (string) $shop['value'],
+                    'adapterIdentifier' => (string) $webstores[$shop['value']]['storeIdentifier'],
                     'adapterName' => PlentymarketsAdapter::NAME,
                     'objectType' => Shop::TYPE,
                 ]);
@@ -561,7 +568,14 @@ class ProductResponseParser implements ProductResponseParserInterface
     {
         $images = $this->itemsImagesApi->findAll($product['id']);
 
-        $imageIdentifiers = array_map(function ($image) use ($texts, &$result) {
+        // TOOD: Remove hack when storeIdentifier is returned
+        static $webstores;
+
+        if (null === $webstores) {
+            $webstores = $this->webstoresApi->findAll();
+        }
+
+        $imageIdentifiers = array_map(function ($image) use ($texts, &$result, $webstores) {
             /**
              * @var MediaResponseParserInterface $mediaResponseParser
              */
@@ -586,9 +600,9 @@ class ProductResponseParser implements ProductResponseParserInterface
                 return $availabilitiy['type'] === 'mandant';
             });
 
-            $shopIdentifiers = array_map(function ($shop) {
+            $shopIdentifiers = array_map(function ($shop) use ($webstores) {
                 $shopIdentity = $this->identityService->findOneBy([
-                    'adapterIdentifier' => (string) $shop['value'],
+                    'adapterIdentifier' => (string) $webstores[$shop['value']]['storeIdentifier'],
                     'adapterName' => PlentymarketsAdapter::NAME,
                     'objectType' => Shop::TYPE,
                 ]);
@@ -621,31 +635,19 @@ class ProductResponseParser implements ProductResponseParserInterface
         $defaultCategories = [];
 
         foreach ($mainVariation['variationDefaultCategory'] as $category) {
-            foreach ($mainVariation['variationClients'] as $client) {
-                $store = array_filter($webstores, function ($store) use ($client) {
-                    return $store['storeIdentifier'] === $client['plentyId'];
-                });
+            $categoryIdentity = $this->identityService->findOneBy([
+                'adapterIdentifier' => (string) $category['branchId'],
+                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType' => Category::TYPE,
+            ]);
 
-                if (empty($store)) {
-                    // TODO: notice
-                }
+            if (null === $categoryIdentity) {
+                // TODO: notice
 
-                $store = array_shift($store);
-
-                $categoryIdentity = $this->identityService->findOneBy([
-                    'adapterIdentifier' => (string) ($store['storeIdentifier'] . '-' . $category['branchId']),
-                    'adapterName' => PlentymarketsAdapter::NAME,
-                    'objectType' => Category::TYPE,
-                ]);
-
-                if (null === $categoryIdentity) {
-                    // TODO: notice
-
-                    continue;
-                }
-
-                $defaultCategories[] = $categoryIdentity->getObjectIdentifier();
+                continue;
             }
+
+            $defaultCategories[] = $categoryIdentity->getObjectIdentifier();
         }
 
         return $defaultCategories;
@@ -747,33 +749,19 @@ class ProductResponseParser implements ProductResponseParserInterface
     {
         $categories = [];
         foreach ($mainVariation['variationCategories'] as $category) {
-            foreach ($mainVariation['variationClients'] as $client) {
-                $store = array_filter($webstores, function ($store) use ($client) {
-                    return $store['storeIdentifier'] === $client['plentyId'];
-                });
+            $categoryIdentity = $this->identityService->findOneBy([
+                'adapterIdentifier' => (string) $category['categoryId'],
+                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType' => Category::TYPE,
+            ]);
 
-                if (empty($store)) {
-                    // TODO: notice
+            if (null === $categoryIdentity) {
+                // TODO: notice
 
-                    continue;
-                }
-
-                $store = array_shift($store);
-
-                $categoryIdentity = $this->identityService->findOneBy([
-                    'adapterIdentifier' => (string) ($store['storeIdentifier'] . '-' . $category['categoryId']),
-                    'adapterName' => PlentymarketsAdapter::NAME,
-                    'objectType' => Category::TYPE,
-                ]);
-
-                if (null === $categoryIdentity) {
-                    // TODO: notice
-
-                    continue;
-                }
-
-                $categories[] = $categoryIdentity->getObjectIdentifier();
+                continue;
             }
+
+            $categories[] = $categoryIdentity->getObjectIdentifier();
         }
 
         return $categories;
