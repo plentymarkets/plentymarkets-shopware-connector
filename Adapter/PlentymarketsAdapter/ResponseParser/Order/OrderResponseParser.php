@@ -728,7 +728,7 @@ class OrderResponseParser implements OrderResponseParserInterface
             $number = $this->getNumberFromVariation($item['itemVariationId']);
 
             $orderItem = new OrderItem();
-            $orderItem->setQuantity($item['quantity']);
+            $orderItem->setQuantity((float) $item['quantity']);
             $orderItem->setName($item['orderItemName']);
             $orderItem->setNumber($number);
             $orderItem->setPrice($this->getOrderItemPrice($item));
