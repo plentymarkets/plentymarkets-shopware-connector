@@ -30,7 +30,7 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllOrdersQueryHandler constructor.
      *
-     * @param Order $api
+     * @param Order                        $api
      * @param OrderResponseParserInterface $responseParser
      */
     public function __construct(

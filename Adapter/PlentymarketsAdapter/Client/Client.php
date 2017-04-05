@@ -49,9 +49,9 @@ class Client implements ClientInterface
     /**
      * Client constructor.
      *
-     * @param GuzzleClient $connection
+     * @param GuzzleClient           $connection
      * @param ConfigServiceInterface $config
-     * @param LoggerInterface $logger
+     * @param LoggerInterface        $logger
      */
     public function __construct(
         GuzzleClient $connection,
@@ -180,6 +180,10 @@ class Client implements ClientInterface
             ++$retries;
 
             return $this->request($method, $path, $params, $limit, $offset);
+        } catch (\Exception $exception) {
+            var_dump($exception);
+
+            return [];
         }
     }
 
@@ -262,7 +266,7 @@ class Client implements ClientInterface
 
     /**
      * @param string $path
-     * @param array $options
+     * @param array  $options
      *
      * @return string
      */
@@ -301,8 +305,8 @@ class Client implements ClientInterface
     /**
      * @param string $method
      * @param string $path
-     * @param array $params
-     * @param array $options
+     * @param array  $params
+     * @param array  $options
      *
      * @return array
      */

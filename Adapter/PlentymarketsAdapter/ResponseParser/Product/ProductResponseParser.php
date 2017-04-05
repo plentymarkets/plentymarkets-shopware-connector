@@ -74,8 +74,8 @@ class ProductResponseParser implements ProductResponseParserInterface
      * ProductResponseParser constructor.
      *
      * @param IdentityServiceInterface $identityService
-     * @param ClientInterface $client
-     * @param LoggerInterface $logger
+     * @param ClientInterface          $client
+     * @param LoggerInterface          $logger
      */
     public function __construct(
         IdentityServiceInterface $identityService,

@@ -27,7 +27,7 @@ class FetchAllUnitsQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllUnitsQueryHandler constructor.
      *
-     * @param ClientInterface $client
+     * @param ClientInterface             $client
      * @param UnitResponseParserInterface $responseParser
      */
     public function __construct(

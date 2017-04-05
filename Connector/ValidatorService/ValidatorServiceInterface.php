@@ -17,7 +17,7 @@ interface ValidatorServiceInterface
     public function addValidator(ValidatorInterface $validator);
 
     /**
-     * @param TransferObjectInterface|ValueObjectInterface $object
+     * @param TransferObjectInterface|ValueObjectInterface     $object
      * @param TransferObjectInterface[]|ValueObjectInterface[] $parents
      *
      * @throws InvalidDataException

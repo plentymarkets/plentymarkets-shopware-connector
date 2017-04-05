@@ -39,10 +39,10 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllCategoriesQueryHandler constructor.
      *
-     * @param ClientInterface $client
+     * @param ClientInterface                 $client
      * @param CategoryResponseParserInterface $categoryResponseParser
-     * @param LanguageHelper $languageHelper
-     * @param LoggerInterface $logger
+     * @param LanguageHelper                  $languageHelper
+     * @param LoggerInterface                 $logger
      */
     public function __construct(
         ClientInterface $client,

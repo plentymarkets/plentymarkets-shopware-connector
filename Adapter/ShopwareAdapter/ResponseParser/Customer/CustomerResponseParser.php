@@ -31,7 +31,7 @@ class CustomerResponseParser implements CustomerResponseParserInterface
      * CountryResponseParser constructor.
      *
      * @param IdentityServiceInterface $identityService
-     * @param EntityManagerInterface $entityManager
+     * @param EntityManagerInterface   $entityManager
      */
     public function __construct(
         IdentityServiceInterface $identityService,
@@ -106,7 +106,7 @@ class CustomerResponseParser implements CustomerResponseParserInterface
     }
 
     /**
-     * @param int $entry
+     * @param int    $entry
      * @param string $type
      *
      * @return string

@@ -31,7 +31,7 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
      * FetchChangedOrdersQueryHandler constructor.
      *
      * @param OrderResponseParserInterface $responseParser
-     * @param Resource\Order $orderResource
+     * @param Resource\Order               $orderResource
      */
     public function __construct(
         OrderResponseParserInterface $responseParser,

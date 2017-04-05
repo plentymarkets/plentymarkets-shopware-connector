@@ -27,9 +27,9 @@ class DefinitionFactory
     }
 
     /**
-     * @param string $originAdapterName
-     * @param string $destinationAdapterName
-     * @param strin $objectType
+     * @param string   $originAdapterName
+     * @param string   $destinationAdapterName
+     * @param strin    $objectType
      * @param null|int $priority
      *
      * @return ValueObjectInterface

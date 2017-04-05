@@ -31,7 +31,7 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
     /**
      * HandleMediaCategoryCommandHandler constructor.
      *
-     * @param EntityManagerInterface $entityManager
+     * @param EntityManagerInterface   $entityManager
      * @param IdentityServiceInterface $identityService
      */
     public function __construct(EntityManagerInterface $entityManager, IdentityServiceInterface $identityService)
@@ -56,7 +56,7 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
     {
         /**
          * @var HandleCommandInterface $command
-         * @var MediaCategory $mediaCategory
+         * @var MediaCategory          $mediaCategory
          */
         $mediaCategory = $command->getTransferObject();
 
@@ -121,8 +121,8 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
 
     /**
      * @param MediaCategory $mediaCategory
-     * @param Album $parent
-     * @param Settings $parentSettings
+     * @param Album         $parent
+     * @param Settings      $parentSettings
      */
     private function createNewAlbum(MediaCategory $mediaCategory, Album $parent, Settings $parentSettings)
     {

@@ -49,9 +49,9 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     /**
      * HandleOrderCommandHandler constructor.
      *
-     * @param ClientInterface $client
+     * @param ClientInterface          $client
      * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface $logger
+     * @param LoggerInterface          $logger
      */
     public function __construct(
         ClientInterface $client,
@@ -79,7 +79,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     {
         /**
          * @var HandleCommandInterface $command
-         * @var Order $order
+         * @var Order                  $order
          */
         $order = $command->getTransferObject();
 
@@ -270,8 +270,6 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                 if ($item->getType() === OrderItem::TYPE_PRODUCT && null === $item->getNumber()) {
                     $itemParams['typeId'] = 9;
                 }
-
-                //$this->getVatConfiguration($order, $item);
 
                 if (null !== $item->getVatRateIdentifier()) {
                     // /rest/vat/locations/{locationId}/countries/{countryId}
@@ -498,9 +496,9 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param Address $address
+     * @param Address  $address
      * @param Customer $customer
-     * @param array $plentyCustomer
+     * @param array    $plentyCustomer
      *
      * @throws \Exception
      *
@@ -613,8 +611,8 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param Payment $payment
-     * @param Order $order
+     * @param Payment    $payment
+     * @param Order      $order
      * @param null|array $billingAddress
      * @param null|array $shippingAddress
      * @param $plentyOrderIdentifier

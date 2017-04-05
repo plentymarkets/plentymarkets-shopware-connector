@@ -42,10 +42,10 @@ class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
     /**
      * FetchChangedManufacturersQueryHandler constructor.
      *
-     * @param ClientInterface $client
-     * @param ConfigServiceInterface $config
+     * @param ClientInterface                     $client
+     * @param ConfigServiceInterface              $config
      * @param ManufacturerResponseParserInterface $manufacturerResponseParser
-     * @param MediaResponseParserInterface $mediaResponseParser
+     * @param MediaResponseParserInterface        $mediaResponseParser
      */
     public function __construct(
         ClientInterface $client,

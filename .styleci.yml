@@ -13,5 +13,4 @@ disabled:
   - concat_without_spaces
   - phpdoc_summary
   - phpdoc_to_comment
-  - phpdoc_align
   - phpdoc_var_without_name

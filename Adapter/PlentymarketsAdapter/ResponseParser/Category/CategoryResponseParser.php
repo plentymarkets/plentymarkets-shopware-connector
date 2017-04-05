@@ -41,10 +41,10 @@ class CategoryResponseParser implements CategoryResponseParserInterface
     /**
      * CategoryResponseParser constructor.
      *
-     * @param IdentityServiceInterface $identityService
-     * @param ConfigServiceInterface $config
+     * @param IdentityServiceInterface     $identityService
+     * @param ConfigServiceInterface       $config
      * @param MediaResponseParserInterface $mediaResponseParser
-     * @param LoggerInterface $logger
+     * @param LoggerInterface              $logger
      */
     public function __construct(
         IdentityServiceInterface $identityService,

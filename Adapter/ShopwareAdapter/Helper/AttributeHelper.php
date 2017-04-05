@@ -37,8 +37,8 @@ class AttributeHelper
     /**
      * AttributeHelper constructor.
      *
-     * @param CrudService $attributeService
-     * @param ModelManager $entityManager
+     * @param CrudService   $attributeService
+     * @param ModelManager  $entityManager
      * @param DataPersister $dataPersister
      */
     public function __construct(
@@ -64,9 +64,9 @@ class AttributeHelper
     }
 
     /**
-     * @param int $identifier
+     * @param int         $identifier
      * @param Attribute[] $attributes
-     * @param string $table
+     * @param string      $table
      */
     public function saveAttributes($identifier, array $attributes, $table)
     {
@@ -91,7 +91,7 @@ class AttributeHelper
 
     /**
      * @param Attribute $attribute
-     * @param string $table
+     * @param string    $table
      */
     private function prepareAttribute(Attribute $attribute, $table)
     {

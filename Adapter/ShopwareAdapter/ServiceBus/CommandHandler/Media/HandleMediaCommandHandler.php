@@ -38,9 +38,9 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
     /**
      * HandleMediaCommandHandler constructor.
      *
-     * @param MediaResource $resource
+     * @param MediaResource            $resource
      * @param IdentityServiceInterface $identityService
-     * @param AttributeHelper $attributeHelper
+     * @param AttributeHelper          $attributeHelper
      */
     public function __construct(
         MediaResource $resource,
@@ -70,7 +70,7 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
     {
         /**
          * @var HandleCommandInterface $command
-         * @var Media $media
+         * @var Media                  $media
          */
         $media = $command->getTransferObject();
 

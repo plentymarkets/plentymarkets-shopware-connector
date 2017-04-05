@@ -61,11 +61,11 @@ class OrderResponseParser implements OrderResponseParserInterface
     /**
      * OrderResponseParser constructor.
      *
-     * @param IdentityServiceInterface $identityService
+     * @param IdentityServiceInterface         $identityService
      * @param OrderItemResponseParserInterface $orderItemResponseParser
-     * @param AddressResponseParserInterface $orderAddressParser
-     * @param CustomerResponseParserInterface $customerParser
-     * @param LoggerInterface $logger
+     * @param AddressResponseParserInterface   $orderAddressParser
+     * @param CustomerResponseParserInterface  $customerParser
+     * @param LoggerInterface                  $logger
      */
     public function __construct(
         IdentityServiceInterface $identityService,
@@ -227,7 +227,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
-     * @param int $entry
+     * @param int    $entry
      * @param string $type
      *
      * @return string

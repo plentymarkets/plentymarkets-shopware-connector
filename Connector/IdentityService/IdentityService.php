@@ -27,7 +27,7 @@ class IdentityService implements IdentityServiceInterface
     /**
      * IdentityService constructor.
      *
-     * @param IdentityStorageInterface $storage
+     * @param IdentityStorageInterface  $storage
      * @param ValidatorServiceInterface $validator
      */
     public function __construct(

@@ -27,7 +27,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     /**
      * HandleOrderCommandHandler constructor.
      *
-     * @param EntityManagerInterface $entityManager
+     * @param EntityManagerInterface   $entityManager
      * @param IdentityServiceInterface $identityService
      */
     public function __construct(EntityManagerInterface $entityManager, IdentityServiceInterface $identityService)

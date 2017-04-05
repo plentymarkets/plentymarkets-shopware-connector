@@ -61,11 +61,11 @@ class CleanupService implements CleanupServiceInterface
     /**
      * CleanupService constructor.
      *
-     * @param ServiceBusInterface $serviceBus
-     * @param QueryFactoryInterface $queryFactory
-     * @param CommandFactoryInterface $commandFactory
+     * @param ServiceBusInterface      $serviceBus
+     * @param QueryFactoryInterface    $queryFactory
+     * @param CommandFactoryInterface  $commandFactory
      * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface $logger
+     * @param LoggerInterface          $logger
      */
     public function __construct(
         ServiceBusInterface $serviceBus,

@@ -37,9 +37,9 @@ class RemoveProductCommandHandler implements CommandHandlerInterface
     /**
      * RemoveProductCommandHandler constructor.
      *
-     * @param ArticleResource $resource
+     * @param ArticleResource          $resource
      * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface $logger
+     * @param LoggerInterface          $logger
      */
     public function __construct(
         ArticleResource $resource,

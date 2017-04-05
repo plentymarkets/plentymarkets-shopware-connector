@@ -27,7 +27,7 @@ class FetchAllCurrenciesQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllCurrenciesQueryHandler constructor.
      *
-     * @param ClientInterface $client
+     * @param ClientInterface                 $client
      * @param CurrencyResponseParserInterface $responseParser
      */
     public function __construct(

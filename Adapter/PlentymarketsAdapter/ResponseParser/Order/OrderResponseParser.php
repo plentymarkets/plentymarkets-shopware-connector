@@ -71,12 +71,12 @@ class OrderResponseParser implements OrderResponseParserInterface
      * OrderResponseParser constructor.
      *
      * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface $logger
-     * @param AddressApi $addressApi
-     * @param CustomerApi $customerApi
-     * @param CommentApi $commentApi
-     * @param WebstoreApi $webstoreApi
-     * @param ClientInterface $client
+     * @param LoggerInterface          $logger
+     * @param AddressApi               $addressApi
+     * @param CustomerApi              $customerApi
+     * @param CommentApi               $commentApi
+     * @param WebstoreApi              $webstoreApi
+     * @param ClientInterface          $client
      */
     public function __construct(
         IdentityServiceInterface $identityService,
@@ -732,7 +732,7 @@ class OrderResponseParser implements OrderResponseParserInterface
             $orderItem->setName($item['orderItemName']);
             $orderItem->setNumber($number);
             $orderItem->setPrice($this->getOrderItemPrice($item));
-            $orderItem->setVatRateIdentifier();
+            $orderItem->setVatRateIdentifier($this->getVatRateIdentifier($entry));
             $orderItem->setAttributes([]);
 
             $result[] = $orderItem;
@@ -748,7 +748,23 @@ class OrderResponseParser implements OrderResponseParserInterface
      */
     private function getOrderItemPrice(array $item)
     {
-        return 0.0;
+        $price = 0.0;
+
+        foreach ($item['amounts'] as $amount) {
+            $price += $amount['priceOriginalGross'];
+        }
+
+        return $price;
+    }
+
+    /**
+     * @param array $item
+     *
+     * @return string
+     */
+    private function getVatRateIdentifier(array $item)
+    {
+        return '';
     }
 
     /**

@@ -34,9 +34,9 @@ class CronjobSubscriber implements SubscriberInterface
     /**
      * CronjobSubscriber constructor.
      *
-     * @param ConnectorInterface $connector
+     * @param ConnectorInterface      $connector
      * @param CleanupServiceInterface $cleanupService
-     * @param LoggerInterface $logger
+     * @param LoggerInterface         $logger
      */
     public function __construct(
         ConnectorInterface $connector,

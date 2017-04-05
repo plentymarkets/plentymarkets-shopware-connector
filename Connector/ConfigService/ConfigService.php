@@ -38,7 +38,7 @@ class ConfigService implements ConfigServiceInterface
     private $config = [];
 
     /**
-     * @param ModelManager $entityManager
+     * @param ModelManager       $entityManager
      * @param ContainerInterface $container
      */
     public function __construct(ModelManager $entityManager, ContainerInterface $container)
