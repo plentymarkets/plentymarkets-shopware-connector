@@ -391,14 +391,7 @@ class ProductResponseParser implements ProductResponseParserInterface
     {
         $images = $this->itemsVariationsImagesApi->findOne($variation['itemId'], $variation['id']);
 
-        // TOOD: Remove hack when storeIdentifier is returned
-        static $webstores;
-
-        if (null === $webstores) {
-            $webstores = $this->webstoresApi->findAll();
-        }
-
-        $imageIdentifiers = array_map(function ($image) use ($texts, &$result, $webstores) {
+        $imageIdentifiers = array_map(function ($image) use ($texts, &$result) {
             /**
              * @var MediaResponseParserInterface $mediaResponseParser
              */
@@ -423,9 +416,9 @@ class ProductResponseParser implements ProductResponseParserInterface
                 return $availabilitiy['type'] === 'mandant';
             });
 
-            $shopIdentifiers = array_map(function ($shop) use ($webstores) {
+            $shopIdentifiers = array_map(function ($shop) {
                 $shopIdentity = $this->identityService->findOneBy([
-                    'adapterIdentifier' => (string) $webstores[$shop['value']]['storeIdentifier'],
+                    'adapterIdentifier' => (string) $shop['value'],
                     'adapterName' => PlentymarketsAdapter::NAME,
                     'objectType' => Shop::TYPE,
                 ]);
@@ -568,14 +561,7 @@ class ProductResponseParser implements ProductResponseParserInterface
     {
         $images = $this->itemsImagesApi->findAll($product['id']);
 
-        // TOOD: Remove hack when storeIdentifier is returned
-        static $webstores;
-
-        if (null === $webstores) {
-            $webstores = $this->webstoresApi->findAll();
-        }
-
-        $imageIdentifiers = array_map(function ($image) use ($texts, &$result, $webstores) {
+        $imageIdentifiers = array_map(function ($image) use ($texts, &$result) {
             /**
              * @var MediaResponseParserInterface $mediaResponseParser
              */
@@ -600,9 +586,9 @@ class ProductResponseParser implements ProductResponseParserInterface
                 return $availabilitiy['type'] === 'mandant';
             });
 
-            $shopIdentifiers = array_map(function ($shop) use ($webstores) {
+            $shopIdentifiers = array_map(function ($shop) {
                 $shopIdentity = $this->identityService->findOneBy([
-                    'adapterIdentifier' => (string) $webstores[$shop['value']]['storeIdentifier'],
+                    'adapterIdentifier' => (string) $shop['value'],
                     'adapterName' => PlentymarketsAdapter::NAME,
                     'objectType' => Shop::TYPE,
                 ]);
@@ -1126,25 +1112,21 @@ class ProductResponseParser implements ProductResponseParserInterface
             if (!isset($attributes[$attributeValue['attributeId']])) {
                 $attributes[$attributeValue['attributeId']] = $this->itemAttributesApi->findOne($attributeValue['attributeId']);
 
-                $attributes[$attributeValue['attributeId']]['names'] = $this->itemAttributesNamesApi->findOne($attributeValue['attributeId']);
-
                 $attributes[$attributeValue['attributeId']]['values'] = [];
 
                 $values = $this->itemAttributesValuesApi->findOne($attributeValue['attributeId']);
 
                 foreach ($values as $value) {
                     $attributes[$attributeValue['attributeId']]['values'][$value['id']] = $value;
-                    $attributes[$attributeValue['attributeId']]['values'][$value['id']]['names'] =
-                        $this->itemAttributeValueNamesApi->findOne($value['id']);
                 }
             }
 
-            if (!isset($attributes[$attributeValue['attributeId']]['values'][$attributeValue['valueId']]['names'])) {
+            if (!isset($attributes[$attributeValue['attributeId']]['values'][$attributeValue['valueId']]['valueNames'])) {
                 continue;
             }
 
-            $propertyNames = $attributes[$attributeValue['attributeId']]['names'];
-            $valueNames = $attributes[$attributeValue['attributeId']]['values'][$attributeValue['valueId']]['names'];
+            $propertyNames = $attributes[$attributeValue['attributeId']]['attributeNames'];
+            $valueNames = $attributes[$attributeValue['attributeId']]['values'][$attributeValue['valueId']]['valueNames'];
 
             $value = Value::fromArray([
                 'value' => $valueNames[0]['name'],

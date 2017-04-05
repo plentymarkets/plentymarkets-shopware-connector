@@ -16,7 +16,9 @@ class Attribute extends ApiAbstract
      */
     public function findOne($attributeId)
     {
-        return $this->client->request('GET', 'items/attributes/' . $attributeId);
+        return $this->client->request('GET', 'items/attributes/' . $attributeId, [
+            'with' => 'names'
+        ]);
     }
 
     /**
@@ -24,6 +26,8 @@ class Attribute extends ApiAbstract
      */
     public function findAll()
     {
-        return $this->client->request('GET', 'items/attributes/');
+        return $this->client->request('GET', 'items/attributes/', [
+            'with' => 'names'
+        ]);
     }
 }
