@@ -66,6 +66,7 @@ class ConsoleHandler extends AbstractProcessingHandler implements EventSubscribe
     public function __construct(OutputInterface $output = null, $bubble = true, array $verbosityLevelMap = [])
     {
         parent::__construct(Logger::DEBUG, $bubble);
+
         $this->output = $output;
 
         if ($verbosityLevelMap) {

@@ -137,7 +137,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
         if (!empty($detail['imagePath'])) {
             $result[] = $media = $this->mediaResponseParser->parse([
                 'mediaCategory' => MediaCategoryHelper::CATEGORY,
-                'link' => $this->getBaseUrl() .'documents/'. $detail['imagePath'],
+                'link' => $this->getBaseUrl() . 'documents/' . $detail['imagePath'],
                 'name' => $detail['name'],
                 'alternateName' => $detail['name'],
             ]);
@@ -148,7 +148,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
         if (!empty($detail['image2Path'])) {
             $result[] = $media = $this->mediaResponseParser->parse([
                 'mediaCategory' => MediaCategoryHelper::CATEGORY,
-                'link' => $this->getBaseUrl() .'documents/'.  $detail['image2Path'],
+                'link' => $this->getBaseUrl() . 'documents/' . $detail['image2Path'],
                 'name' => $detail['name'],
                 'alternateName' => $detail['name'],
             ]);

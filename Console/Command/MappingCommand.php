@@ -38,8 +38,8 @@ class MappingCommand extends ShopwareCommand
      * MappingCommand constructor.
      *
      * @param MappingServiceInterface $mappingService
-     * @param Logger $logger
-     * @param OutputHandlerInterface $outputHandler
+     * @param Logger                  $logger
+     * @param OutputHandlerInterface  $outputHandler
      */
     public function __construct(
         MappingServiceInterface $mappingService,
@@ -69,7 +69,7 @@ class MappingCommand extends ShopwareCommand
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      *
      * @throws Exception
@@ -96,7 +96,7 @@ class MappingCommand extends ShopwareCommand
 
                 $rows = [];
                 foreach ($entry->getOriginTransferObjects() as $object) {
-                    $targetIdentifier = array_filter($entry->getDestinationTransferObjects(), function(TransferObjectInterface $targetObject) use ($object) {
+                    $targetIdentifier = array_filter($entry->getDestinationTransferObjects(), function (TransferObjectInterface $targetObject) use ($object) {
                         return $object->getIdentifier() === $targetObject->getIdentifier();
                     });
 
