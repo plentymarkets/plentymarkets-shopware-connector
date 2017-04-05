@@ -134,10 +134,10 @@ class CategoryResponseParser implements CategoryResponseParserInterface
     {
         $imageIdentifiers = [];
 
-        if (!empty($detail['image'])) {
+        if (!empty($detail['imagePath'])) {
             $result[] = $media = $this->mediaResponseParser->parse([
                 'mediaCategory' => MediaCategoryHelper::CATEGORY,
-                'link' => $this->getBaseUrl() . 'documents/' . $detail['image'],
+                'link' => $this->getBaseUrl() . $detail['imagePath'],
                 'name' => $detail['name'],
                 'alternateName' => $detail['name'],
             ]);
@@ -145,10 +145,10 @@ class CategoryResponseParser implements CategoryResponseParserInterface
             $imageIdentifiers[] = $media->getIdentifier();
         }
 
-        if (!empty($detail['image2'])) {
+        if (!empty($detail['image2Path'])) {
             $result[] = $media = $this->mediaResponseParser->parse([
                 'mediaCategory' => MediaCategoryHelper::CATEGORY,
-                'link' => $this->getBaseUrl() . 'documents/' . $detail['image2'],
+                'link' => $this->getBaseUrl() . $detail['image2Path'],
                 'name' => $detail['name'],
                 'alternateName' => $detail['name'],
             ]);
