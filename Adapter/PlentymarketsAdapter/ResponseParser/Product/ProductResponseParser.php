@@ -58,15 +58,11 @@ class ProductResponseParser implements ProductResponseParserInterface
     private $itemsItemShippingProfilesApi;
     private $itemsAccountsContacsClasses;
     private $itemsImagesApi;
-    private $itemsVariationsVariationPropertiesApi;
     private $itemsVariationsStockApi;
     private $itemsVariationsImagesApi;
-    private $itemsItemCrossSelling;
     private $itemsPropertiesSelectionsApi;
     private $availabilitiesApi;
-    private $itemAttributesNamesApi;
     private $itemAttributesApi;
-    private $itemAttributeValueNamesApi;
     private $itemAttributesValuesApi;
     private $itemsPropertiesNamesApi;
 
@@ -95,15 +91,11 @@ class ProductResponseParser implements ProductResponseParserInterface
         $this->itemsImagesApi = new \PlentymarketsAdapter\ReadApi\Item\Image($client);
         $this->itemsVariationsStockApi = new \PlentymarketsAdapter\ReadApi\Item\Variation\Stock($client);
         $this->itemsVariationsImagesApi = new \PlentymarketsAdapter\ReadApi\Item\Variation\Image($client);
-        $this->itemsItemCrossSelling = new \PlentymarketsAdapter\ReadApi\Item\CrossSelling($client);
-        $this->itemsVariationsVariationPropertiesApi = new \PlentymarketsAdapter\ReadApi\Item\Variation\Property($client);
         $this->itemsPropertiesSelectionsApi = new\PlentymarketsAdapter\ReadApi\Item\Property\Selection($client);
         $this->availabilitiesApi = new \PlentymarketsAdapter\ReadApi\Availability($client);
         $this->itemsPropertiesNamesApi = new \PlentymarketsAdapter\ReadApi\Item\Property\Name($client);
-        $this->itemAttributesNamesApi = new \PlentymarketsAdapter\ReadApi\Item\Attribute\Name($client);
         $this->itemAttributesApi = new \PlentymarketsAdapter\ReadApi\Item\Attribute($client);
         $this->itemAttributesValuesApi = new \PlentymarketsAdapter\ReadApi\Item\Attribute\Value($client);
-        $this->itemAttributeValueNamesApi = new \PlentymarketsAdapter\ReadApi\Item\Attribute\ValueName($client);
     }
 
     /**
@@ -891,10 +883,9 @@ class ProductResponseParser implements ProductResponseParserInterface
      */
     private function getLinkedProducts(array $product)
     {
-        $linkedProducts = $this->itemsItemCrossSelling->findAll($product['id']);
-
         $result = [];
-        foreach ($linkedProducts as $linkedProduct) {
+
+        foreach ($product['itemCrossSelling'] as $linkedProduct) {
             if ($linkedProduct['relationship'] === 'Similar') {
                 $type = LinkedProduct::TYPE_SIMILAR;
             } elseif ($linkedProduct['relationship'] === 'Accessory') {
