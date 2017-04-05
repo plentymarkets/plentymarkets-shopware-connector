@@ -153,8 +153,8 @@ class ProductResponseParser implements ProductResponseParserInterface
                 'active' => $this->getActive($variations),
                 'shopIdentifiers' => $shopIdentifiers,
                 'manufacturerIdentifier' => $this->getManufacturerIdentifier($product),
-                'categoryIdentifiers' => $this->getCategories($mainVariation, $webstores),
-                'defaultCategoryIdentifiers' => $this->getDafaultCategories($mainVariation, $webstores),
+                'categoryIdentifiers' => $this->getCategories($mainVariation),
+                'defaultCategoryIdentifiers' => $this->getDafaultCategories($mainVariation),
                 'shippingProfileIdentifiers' => $this->getShippingProfiles($product),
                 'images' => $this->getImages($product, $product['texts'], $result),
                 'variations' => $variations,
@@ -169,7 +169,7 @@ class ProductResponseParser implements ProductResponseParserInterface
                 'metaRobots' => 'INDEX, FOLLOW',
                 'linkedProducts' => $this->getLinkedProducts($product),
                 'documents' => [],
-                'properties' => $this->getProperties($mainVariation),
+                'properties' => $this->getProperties($product),
                 'translations' => $this->getProductTranslations($product['texts']),
                 'availableFrom' => $this->getAvailableFrom($mainVariation),
                 'availableTo' => $this->getAvailableTo($mainVariation),
@@ -612,11 +612,10 @@ class ProductResponseParser implements ProductResponseParserInterface
 
     /**
      * @param array $mainVariation
-     * @param array $webstores
      *
      * @return array
      */
-    private function getDafaultCategories(array $mainVariation, array $webstores)
+    private function getDafaultCategories(array $mainVariation)
     {
         $defaultCategories = [];
 
@@ -727,11 +726,10 @@ class ProductResponseParser implements ProductResponseParserInterface
 
     /**
      * @param array $mainVariation
-     * @param array $webstores
      *
      * @return array
      */
-    private function getCategories(array $mainVariation, array $webstores)
+    private function getCategories(array $mainVariation)
     {
         $categories = [];
         foreach ($mainVariation['variationCategories'] as $category) {
@@ -929,28 +927,27 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * @param $mainVariation
+     * @param array $product
      *
      * @return Property[]
      */
-    private function getProperties(array $mainVariation)
+    private function getProperties(array $product)
     {
-        $result = [];
-
-        $properties = $this->itemsVariationsVariationPropertiesApi->findOne(
-            $mainVariation['itemId'],
-            $mainVariation['id']
-        );
+        if (empty($product['itemProperties'])) {
+            return [];
+        }
 
         static $propertyNames;
 
-        foreach ($properties as $property) {
-            if (!isset($propertyNames[$property['property']['id']])) {
-                $propertyName = $this->itemsPropertiesNamesApi->findOne($property['property']['id']);
+        $result = [];
 
-                $propertyNames[$property['property']['id']] = $propertyName;
+        foreach ($product['itemProperties'] as $property) {
+            if (!isset($propertyNames[$property['propertyId']])) {
+                $propertyName = $this->itemsPropertiesNamesApi->findOne($property['propertyId']);
+
+                $propertyNames[$property['propertyId']] = $propertyName;
             } else {
-                $propertyName = $propertyNames[$property['property']['id']];
+                $propertyName = $propertyNames[$property['propertyId']];
             }
 
             $translations = [];
@@ -1002,21 +999,19 @@ class ProductResponseParser implements ProductResponseParserInterface
                     'value' => (string) $property['names'][0]['value'],
                     'translations' => $valueTranslations,
                 ]);
-            } elseif ($property['property']['valueType'] === 'int') {
-                // TODO: add unit
+            } elseif ($property['valueType'] === 'int') {
                 $values[] = Value::fromArray([
                     'value' => (string) $property['valueInt'],
                 ]);
-            } elseif ($property['property']['valueType'] === 'float') {
-                // TODO: add unit
+            } elseif ($property['valueType'] === 'float') {
                 $values[] = Value::fromArray([
                     'value' => (string) $property['valueFloat'],
                 ]);
-            } elseif ($property['property']['valueType'] === 'file') {
-                $this->logger->notice('file properties are not supported', ['variation', $mainVariation['id']]);
+            } elseif ($property['valueType'] === 'file') {
+                $this->logger->notice('file properties are not supported', ['product', $product['id']]);
 
                 continue;
-            } elseif ($property['property']['valueType'] === 'selection') {
+            } elseif ($property['valueType'] === 'selection') {
                 static $selections;
 
                 if (null === $property['propertySelectionId']) {
@@ -1048,7 +1043,6 @@ class ProductResponseParser implements ProductResponseParserInterface
                     }
                 }
 
-                // TODO: add unit
                 $values[] = Value::fromArray([
                     'value' => (string) $selections[$property['propertyId']][$property['propertySelectionId']]['name'],
                     'translations' => $selections[$property['propertyId']][$property['propertySelectionId']]['translations'],

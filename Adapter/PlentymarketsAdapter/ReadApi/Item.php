@@ -20,6 +20,7 @@ class Item extends ApiAbstract
 
         return $this->client->request('GET', 'items/' . $productId, [
             'lang' => $languageHelper->getLanguagesQueryString(),
+            'with' => 'itemProperties.valueTexts'
         ]);
     }
 
@@ -32,6 +33,7 @@ class Item extends ApiAbstract
 
         return iterator_to_array($this->client->getIterator('items', [
             'lang' => $languageHelper->getLanguagesQueryString(),
+            'with' => 'itemProperties.valueTexts'
         ]));
     }
 
@@ -48,6 +50,7 @@ class Item extends ApiAbstract
         return iterator_to_array($this->client->getIterator('items', [
             'lang' => $languageHelper->getLanguagesQueryString(),
             'updatedBetween' => $startTimestamp . ',' . $endTimestamp,
+            'with' => 'itemProperties.valueTexts'
         ]));
     }
 }
