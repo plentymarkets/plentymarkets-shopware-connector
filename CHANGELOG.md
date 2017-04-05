@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- Order status and shipping number import functionality
+- display mapping console command
+
 ### Changed
 - 1:N mapping of entities instead of 1:1
 - categories support multiple shop identifiers instead of a single shop identitifer
@@ -10,6 +14,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - the category field longDescription will now be synced with the field cmsText. 
 - the category fields meta* are now transfered
 - product images can now limited to a shop
+- reduced amount of calls during the product sync by 2 per item
+- removed the product image shop setting workaround
+- optimized the item cross selling retrieving
 
 ### Fixed
 - product translations
