@@ -59,6 +59,7 @@ class ProductResponseParser implements ProductResponseParserInterface
     private $itemsItemShippingProfilesApi;
     private $itemsAccountsContacsClasses;
     private $itemsImagesApi;
+    private $itemsVariationsVariationPropertiesApi;
     private $itemsVariationsStockApi;
     private $itemsVariationsImagesApi;
     private $itemsPropertiesSelectionsApi;
@@ -92,6 +93,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         $this->itemsImagesApi = new \PlentymarketsAdapter\ReadApi\Item\Image($client);
         $this->itemsVariationsStockApi = new \PlentymarketsAdapter\ReadApi\Item\Variation\Stock($client);
         $this->itemsVariationsImagesApi = new \PlentymarketsAdapter\ReadApi\Item\Variation\Image($client);
+        $this->itemsVariationsVariationPropertiesApi = new \PlentymarketsAdapter\ReadApi\Item\Variation\Property($client);
         $this->itemsPropertiesSelectionsApi = new\PlentymarketsAdapter\ReadApi\Item\Property\Selection($client);
         $this->availabilitiesApi = new \PlentymarketsAdapter\ReadApi\Availability($client);
         $this->itemsPropertiesNamesApi = new \PlentymarketsAdapter\ReadApi\Item\Property\Name($client);
@@ -162,7 +164,7 @@ class ProductResponseParser implements ProductResponseParserInterface
                 'metaRobots' => 'INDEX, FOLLOW',
                 'linkedProducts' => $this->getLinkedProducts($product),
                 'documents' => [],
-                'properties' => $this->getProperties($product),
+                'properties' => $this->getProperties($mainVariation),
                 'translations' => $this->getProductTranslations($product['texts']),
                 'availableFrom' => $this->getAvailableFrom($mainVariation),
                 'availableTo' => $this->getAvailableTo($mainVariation),
@@ -927,27 +929,28 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * @param array $product
+     * @param $mainVariation
      *
      * @return Property[]
      */
-    private function getProperties(array $product)
+    private function getProperties(array $mainVariation)
     {
-        if (empty($product['itemProperties'])) {
-            return [];
-        }
+        $result = [];
+
+        $properties = $this->itemsVariationsVariationPropertiesApi->findOne(
+            $mainVariation['itemId'],
+            $mainVariation['id']
+        );
 
         static $propertyNames;
 
-        $result = [];
+        foreach ($properties as $property) {
+            if (!isset($propertyNames[$property['property']['id']])) {
+                $propertyName = $this->itemsPropertiesNamesApi->findOne($property['property']['id']);
 
-        foreach ($product['itemProperties'] as $property) {
-            if (!isset($propertyNames[$property['propertyId']])) {
-                $propertyName = $this->itemsPropertiesNamesApi->findOne($property['propertyId']);
-
-                $propertyNames[$property['propertyId']] = $propertyName;
+                $propertyNames[$property['property']['id']] = $propertyName;
             } else {
-                $propertyName = $propertyNames[$property['propertyId']];
+                $propertyName = $propertyNames[$property['property']['id']];
             }
 
             $translations = [];
@@ -999,19 +1002,19 @@ class ProductResponseParser implements ProductResponseParserInterface
                     'value' => (string) $property['names'][0]['value'],
                     'translations' => $valueTranslations,
                 ]);
-            } elseif ($property['valueType'] === 'int') {
+            } elseif ($property['property']['valueType'] === 'int') {
                 $values[] = Value::fromArray([
                     'value' => (string) $property['valueInt'],
                 ]);
-            } elseif ($property['valueType'] === 'float') {
+            } elseif ($property['property']['valueType'] === 'float') {
                 $values[] = Value::fromArray([
                     'value' => (string) $property['valueFloat'],
                 ]);
-            } elseif ($property['valueType'] === 'file') {
-                $this->logger->notice('file properties are not supported', ['product', $product['id']]);
+            } elseif ($property['property']['valueType'] === 'file') {
+                $this->logger->notice('file properties are not supported', ['variation', $mainVariation['id']]);
 
                 continue;
-            } elseif ($property['valueType'] === 'selection') {
+            } elseif ($property['property']['valueType'] === 'selection') {
                 static $selections;
 
                 if (null === $property['propertySelectionId']) {
