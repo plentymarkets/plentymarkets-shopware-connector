@@ -103,7 +103,7 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
         if (null === $identity) {
             $mediaModel = $this->resource->create($params);
 
-            $this->identityService->create(
+            $identity = $this->identityService->create(
                 $media->getIdentifier(),
                 Media::TYPE,
                 (string) $mediaModel->getId(),
