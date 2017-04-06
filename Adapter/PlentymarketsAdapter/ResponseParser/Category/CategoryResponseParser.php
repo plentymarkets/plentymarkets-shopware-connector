@@ -87,6 +87,10 @@ class CategoryResponseParser implements CategoryResponseParserInterface
 
         $shopIdentifiers = [];
         foreach ($entry['clients'] as $client) {
+            if (null === $client['plentyId']) {
+                continue;
+            }
+
             $identity = $this->identityService->findOneOrCreate(
                 (string) $client['plentyId'],
                 PlentymarketsAdapter::NAME,
