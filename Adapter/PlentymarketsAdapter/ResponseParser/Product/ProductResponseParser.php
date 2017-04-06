@@ -4,6 +4,7 @@ namespace PlentymarketsAdapter\ResponseParser\Product;
 
 use DateTimeImmutable;
 use DateTimeZone;
+use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Category\Category;
 use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
@@ -170,6 +171,8 @@ class ProductResponseParser implements ProductResponseParserInterface
 
             return $object;
         } catch (\Exception $exception) {
+            $this->logger->error($exception->getMessage(), ['product' => $product]);
+
             return null;
         }
     }
@@ -276,7 +279,7 @@ class ProductResponseParser implements ProductResponseParserInterface
                     ]);
 
                     if (null === $customerGroupIdentity) {
-                        // TODO: throw
+                        $this->logger->warning('missing mapping für customer group', ['group' => $group]);
 
                         continue;
                     }
@@ -435,12 +438,16 @@ class ProductResponseParser implements ProductResponseParserInterface
     /**
      * @param array $variation
      *
-     * @throws \Exception
+     * @throws NotFoundException
      *
      * @return string
      */
     private function getUnitIdentifier(array $variation)
     {
+        if (empty($variation['unit'])) {
+            return null;
+        }
+
         // Unit
         $unitIdentity = $this->identityService->findOneBy([
             'adapterIdentifier' => $variation['unit']['unitId'],
@@ -449,9 +456,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         ]);
 
         if (null === $unitIdentity) {
-            $this->logger->notice('variation without a proper unit', $variation);
-
-            throw new \Exception('missing mapping for unit - ' . json_encode($variation['unit']));
+            throw new NotFoundException('missing mapping for unit');
         }
 
         return $unitIdentity->getObjectIdentifier();
@@ -459,6 +464,8 @@ class ProductResponseParser implements ProductResponseParserInterface
 
     /**
      * @param array $variation
+     *
+     * @throws NotFoundException
      *
      * @return string
      */
@@ -471,7 +478,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         ]);
 
         if (null === $vatRateIdentity) {
-            // TODO: throw
+            throw new NotFoundException('missing mapping for vat rate');
         }
 
         return $vatRateIdentity->getObjectIdentifier();
@@ -496,6 +503,8 @@ class ProductResponseParser implements ProductResponseParserInterface
     /**
      * @param array $product
      *
+     * @throws NotFoundException
+     *
      * @return string
      */
     private function getManufacturerIdentifier(array $product)
@@ -507,7 +516,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         );
 
         if (null === $manufacturerIdentity) {
-            // TODO: throw
+            throw new NotFoundException('missing mapping for manufacturer');
         }
 
         return $manufacturerIdentity->getObjectIdentifier();
@@ -531,7 +540,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             ]);
 
             if (null === $profileIdentity) {
-                // TODO: notice
+                $this->logger->warning('missing mapping for shipping profile', ['profile' => $profile]);
 
                 continue;
             }
@@ -619,7 +628,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             ]);
 
             if (null === $categoryIdentity) {
-                // TODO: notice
+                $this->logger->warning('missing mapping for categiry', ['category' => $category]);
 
                 continue;
             }
@@ -732,7 +741,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             ]);
 
             if (null === $categoryIdentity) {
-                // TODO: notice
+                $this->logger->warning('missing mapping for categiry', ['category' => $category]);
 
                 continue;
             }
@@ -903,7 +912,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             ]);
 
             if (null === $productIdentity) {
-                // TODO: throw event to trigger import of missing product
+                $this->logger->warning('linked product not found', ['linkedProduct' => $linkedProduct]);
 
                 continue;
             }
