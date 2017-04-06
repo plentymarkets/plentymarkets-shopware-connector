@@ -5,7 +5,9 @@ namespace PlentyConnector;
 use Doctrine\DBAL\Exception\InvalidArgumentException;
 use Exception;
 use PlentyConnector\Connector\ConfigService\Model\Config;
+use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\IdentityService\Model\Identity;
+use PlentyConnector\Connector\TransferObject\Category\Category;
 use PlentyConnector\DependencyInjection\CompilerPass\CleanupDefinitionCompilerPass;
 use PlentyConnector\DependencyInjection\CompilerPass\CommandGeneratorCompilerPass;
 use PlentyConnector\DependencyInjection\CompilerPass\CommandHandlerCompilerPass;
@@ -158,6 +160,10 @@ class PlentyConnector extends Plugin
         );
         $permissionInstaller->update($context);
 
+        if ($this->updateNeeded($context, '2.0.0-rc2')) {
+            $this->clearCategoryIdentities();
+        }
+
         parent::update($context);
     }
 
@@ -193,6 +199,32 @@ class PlentyConnector extends Plugin
         $permissionInstaller->uninstall($context);
 
         parent::uninstall($context);
+    }
+
+    /**
+     * @param UpdateContext $context
+     * @param $targetVersion
+     *
+     * @return mixed
+     */
+    private function updateNeeded(UpdateContext $context, $targetVersion)
+    {
+        return version_compare($context->getCurrentVersion(), $targetVersion, '<');
+    }
+
+    /**
+     * remove category identities as we changed the mapping format.
+     */
+    private function clearCategoryIdentities()
+    {
+        /**
+         * @var IdentityServiceInterface $identityService
+         */
+        $identityService = $this->container->get('plenty_connector.identity_service');
+
+        foreach ($identityService->findBy(['objectType' => Category::TYPE]) as $identity) {
+            $identityService->remove($identity);
+        }
     }
 
     /**
