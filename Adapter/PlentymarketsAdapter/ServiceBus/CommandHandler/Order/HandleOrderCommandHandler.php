@@ -2,6 +2,7 @@
 
 namespace PlentymarketsAdapter\ServiceBus\CommandHandler\Order;
 
+use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\HandleCommandInterface;
@@ -21,6 +22,7 @@ use PlentyConnector\Connector\TransferObject\Order\PaymentData\SepaPaymentData;
 use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod;
 use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
+use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use Psr\Log\LoggerInterface;
@@ -272,12 +274,21 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                 }
 
                 if (null !== $item->getVatRateIdentifier()) {
-                    // /rest/vat/locations/{locationId}/countries/{countryId}
-                    $itemParams['countryVatId'] = 1; // TODO: remove hardcoded
-                    $itemParams['vatRate'] = 19; // TODO: remove hardcoded
+                    $vatRateIdentity = $this->identityService->findOneBy([
+                        'objectIdentifier' => $item->getVatRateIdentifier(),
+                        'objectType' => VatRate::TYPE,
+                        'adapterName' => PlentymarketsAdapter::NAME,
+                    ]);
+
+                    if (null === $vatRateIdentity) {
+                        throw new NotFoundException('vatRate identity not found');
+                    }
+
+                    $itemParams['countryVatId'] = 1;
+                    $itemParams['vatField'] = $vatRateIdentity->getAdapterIdentifier();
                 } else {
-                    $itemParams['countryVatId'] = 1; // TODO: remove hardcoded
-                    $itemParams['vatRate'] = 0;
+                    $itemParams['countryVatId'] = 1;
+                    $itemParams['vatField'] = 0;
                 }
 
                 // Wenn currency != EUR, nur Währung EUR angeben (faktor beachten)
@@ -530,7 +541,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
 
         // TODO: Addition feld prüfen
 
-        if (strcasecmp($address1, 'Packstation') == 0) {
+        if (0 === strcasecmp($address1, 'Packstation')) {
             $params = [
                 'name1' => trim($address->getCompany() . ' ' . $address->getDepartment()),
                 'name2' => $address->getFirstname(),
@@ -556,8 +567,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                     ],
                 ],
             ];
-            //var_dump($params);
-        } elseif (strcasecmp($address1, 'Postfiliale') == 0) {
+        } elseif (0 === strcasecmp($address1, 'Postfiliale')) {
             $params = [
                 'name1' => trim($address->getCompany() . ' ' . $address->getDepartment()),
                 'name2' => $address->getFirstname(),
@@ -591,6 +601,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                 'address1' => $address1,
                 'address2' => $address2,
                 'address3' => $address->getAdditional(),
+                'address4' => $address3,
                 'postalCode' => $address->getPostalCode(),
                 'town' => $address->getCity(),
                 'countryId' => $countryIdentity->getAdapterIdentifier(),
