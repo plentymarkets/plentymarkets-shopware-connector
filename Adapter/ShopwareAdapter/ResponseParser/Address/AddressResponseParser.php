@@ -2,6 +2,7 @@
 
 namespace ShopwareAdapter\ResponseParser\Address;
 
+use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Country\Country;
 use PlentyConnector\Connector\TransferObject\Order\Address\Address;
@@ -45,7 +46,7 @@ class AddressResponseParser implements AddressResponseParserInterface
         ]);
 
         if (null === $countryIdentitiy) {
-            // TODO: throw
+            throw new NotFoundException('country mapping missing - ' . json_encode($entry['country']));
         }
 
         if ($entry['salutation'] === 'mr') {
