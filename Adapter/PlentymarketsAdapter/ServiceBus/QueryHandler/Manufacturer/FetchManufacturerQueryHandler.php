@@ -91,8 +91,10 @@ class FetchManufacturerQueryHandler implements QueryHandlerInterface
 
         if (!empty($element['logo'])) {
             $result[] = $media = $this->mediaResponseParser->parse([
+                'mediaCategory' => MediaCategoryHelper::MANUFACTURER,
                 'link' => $element['logo'],
                 'name' => $element['name'],
+                'alternateName' => $element['name'],
             ]);
 
             $element['logoIdentifier'] = $media->getIdentifier();

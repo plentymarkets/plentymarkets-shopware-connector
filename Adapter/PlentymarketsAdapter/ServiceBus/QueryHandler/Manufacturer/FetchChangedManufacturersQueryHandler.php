@@ -7,6 +7,7 @@ use PlentyConnector\Connector\ServiceBus\Query\Manufacturer\FetchChangedManufact
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
+use PlentymarketsAdapter\Helper\MediaCategoryHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Manufacturer\ManufacturerResponseParserInterface;
 use PlentymarketsAdapter\ResponseParser\Media\MediaResponseParserInterface;
@@ -87,8 +88,10 @@ class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
         foreach ($this->client->getIterator('items/manufacturers', $criteria) as $element) {
             if (!empty($element['logo'])) {
                 $result[] = $media = $this->mediaResponseParser->parse([
+                    'mediaCategory' => MediaCategoryHelper::MANUFACTURER,
                     'link' => $element['logo'],
                     'name' => $element['name'],
+                    'alternateName' => $element['name'],
                 ]);
 
                 $element['logoIdentifier'] = $media->getIdentifier();
