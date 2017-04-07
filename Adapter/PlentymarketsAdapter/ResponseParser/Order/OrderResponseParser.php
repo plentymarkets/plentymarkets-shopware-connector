@@ -764,7 +764,7 @@ class OrderResponseParser implements OrderResponseParserInterface
      */
     private function getVatRateIdentifier(array $item)
     {
-        return '';
+        return null;
     }
 
     /**

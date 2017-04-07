@@ -315,9 +315,9 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
 
             $params['referrerId'] = 1; // TOOD: testen
 
-            $this->logger->notice(json_encode($params));
-
             $result = $this->client->request('post', 'orders', $params);
+
+            $this->logger->notice(json_encode($result));
 
             foreach ($order->getComments() as $comment) {
                 $commentParams = [

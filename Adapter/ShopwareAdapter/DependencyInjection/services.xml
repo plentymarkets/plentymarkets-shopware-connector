@@ -30,6 +30,7 @@
 
         <service id="shopware_adapter.response_parser.order" class="ShopwareAdapter\ResponseParser\Order\OrderResponseParser">
             <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="models" />
             <argument type="service" id="shopware_adapter.response_parser.order_item" />
             <argument type="service" id="shopware_adapter.response_parser.address" />
             <argument type="service" id="shopware_adapter.response_parser.customer" />

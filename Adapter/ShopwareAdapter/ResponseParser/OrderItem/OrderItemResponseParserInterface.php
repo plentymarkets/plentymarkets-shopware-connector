@@ -11,8 +11,9 @@ interface OrderItemResponseParserInterface
 {
     /**
      * @param array $entry
+     * @param bool $taxFree
      *
      * @return null|OrderItem
      */
-    public function parse(array $entry);
+    public function parse(array $entry, $taxFree = false);
 }
