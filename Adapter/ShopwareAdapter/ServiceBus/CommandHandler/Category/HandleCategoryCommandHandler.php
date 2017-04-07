@@ -369,7 +369,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         ]);
 
         foreach ($categoryIdentities as $identity) {
-            if (isset($validIdentities[$identity->getAdapterIdentifier()])) {
+            if (isset($validIdentities[$identity->getObjectIdentifier()])) {
                 continue;
             }
 
