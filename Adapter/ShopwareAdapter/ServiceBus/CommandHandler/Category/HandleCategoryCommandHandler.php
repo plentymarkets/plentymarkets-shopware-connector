@@ -230,6 +230,8 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         }
 
         $parans = [
+            'active' => $category->getActive(),
+            'position' => $category->getPosition(),
             'name' => $category->getName(),
             'parent' => $parentCategory,
             'metaTitle' => $category->getMetaTitle(),

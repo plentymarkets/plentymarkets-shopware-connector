@@ -25,6 +25,11 @@ class Category extends AbstractTransferObject implements TranslateableInterface
     private $name = '';
 
     /**
+     * @var bool
+     */
+    private $active = false;
+
+    /**
      * @var null|string
      */
     private $parentIdentifier;
@@ -122,6 +127,22 @@ class Category extends AbstractTransferObject implements TranslateableInterface
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param bool $active
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
     }
 
     /**

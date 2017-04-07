@@ -111,6 +111,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
         $result[] = Category::fromArray([
             'identifier' => $categoryIdentifier->getObjectIdentifier(),
             'name' => $entry['details']['0']['name'],
+            'active' => true,
             'parentIdentifier' => $parentCategoryIdentifier,
             'shopIdentifiers' => $shopIdentifiers,
             'imageIdentifiers' => $this->getImages($entry['details']['0'], $result),
