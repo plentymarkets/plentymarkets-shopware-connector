@@ -118,6 +118,10 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             try {
                 $identity = $this->handleCategory($category, $shopIdentifier);
 
+                if (null === $identity) {
+                    continue;
+                }
+
                 $validIdentities[$identity->getObjectIdentifier()] = $identity->getObjectIdentifier();
             } catch (IdentityNotFoundException $exception) {
                 $this->logger->warning($exception->getMessage());
@@ -165,7 +169,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
      * @throws NotFoundException
      * @throws IdentityNotFoundException
      *
-     * @return Identity
+     * @return null|Identity
      */
     private function handleCategory(Category $category, $shopIdentifier)
     {
@@ -176,7 +180,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         ]);
 
         if (null === $shopIdentity) {
-            throw new IdentityNotFoundException();
+            return null;
         }
 
         $shop = $this->shopRepository->find($shopIdentity->getAdapterIdentifier());
@@ -209,7 +213,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             ]);
 
             if (null === $parentCategoryIdentity) {
-                throw new \InvalidArgumentException();
+                throw new \InvalidArgumentException('missing parent category - ' . $category->getParentIdentifier());
             }
 
             $parentCategory = $parentCategoryIdentity->getAdapterIdentifier();
