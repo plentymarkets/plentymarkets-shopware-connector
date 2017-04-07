@@ -362,7 +362,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
 
     /**
      * @param Category $category
-     * @param array $validIdentities
+     * @param array    $validIdentities
      */
     private function handleOrphanedCategories(Category $category, array $validIdentities = [])
     {

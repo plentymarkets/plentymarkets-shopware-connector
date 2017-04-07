@@ -635,7 +635,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
 
     /**
      * @param Variation $variation
-     * @param Product $product
+     * @param Product   $product
      *
      * @throws \Exception
      *
