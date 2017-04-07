@@ -4,6 +4,7 @@ namespace ShopwareAdapter\ServiceBus\CommandHandler\Category;
 
 use Doctrine\ORM\EntityManagerInterface;
 use PlentyConnector\Adapter\ShopwareAdapter\Helper\AttributeHelper;
+use PlentyConnector\Connector\IdentityService\Exception\NotFoundException as IdentityNotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\Category\HandleCategoryCommand;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
@@ -112,16 +113,25 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
          */
         $category = $command->getTransferObject();
 
+        $validIdentities = [];
         foreach ($category->getShopIdentifiers() as $shopIdentifier) {
-            $this->handleCategory($category, $shopIdentifier);
+            try {
+                $identity = $this->handleCategory($category, $shopIdentifier);
+
+                $validIdentities[$identity->getObjectIdentifier()] = $identity->getObjectIdentifier();
+            } catch (IdentityNotFoundException $exception) {
+                $this->logger->warning($exception->getMessage());
+            }
         }
+
+        $this->handleOrphanedCategories($category, $validIdentities);
     }
 
     /**
      * @param Category $category
      * @param Identity $shopIdentity
      *
-     * @throws \Exception
+     * @throws \InvalidArgumentException
      */
     private function prepareCategory(Category $category, Identity $shopIdentity)
     {
@@ -132,12 +142,17 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         });
 
         if (!empty($shopAttribute)) {
-            throw new \Exception('shopIdentifier is not a allowed attribute key');
+            throw new \InvalidArgumentException('shopIdentifier is not a allowed attribute key');
         }
 
         $attributes[] = Attribute::fromArray([
             'key' => 'shopIdentifier',
             'value' => $shopIdentity->getObjectIdentifier(),
+        ]);
+
+        $attributes[] = Attribute::fromArray([
+            'key' => 'metaRobots',
+            'value' => $category->getMetaRobots(),
         ]);
 
         $category->setAttributes($attributes);
@@ -148,8 +163,9 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
      * @param $shopIdentifier
      *
      * @throws NotFoundException
+     * @throws IdentityNotFoundException
      *
-     * @return bool
+     * @return Identity
      */
     private function handleCategory(Category $category, $shopIdentifier)
     {
@@ -160,15 +176,13 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         ]);
 
         if (null === $shopIdentity) {
-            return false;
+            throw new IdentityNotFoundException();
         }
 
         $shop = $this->shopRepository->find($shopIdentity->getAdapterIdentifier());
 
         if (null === $shop) {
-            $this->logger->notice('could not find shopware shop', [$shopIdentity]);
-
-            return false;
+            throw new IdentityNotFoundException('missing shop - ' . $shopIdentity->getObjectIdentifier());
         }
 
         $category = clone $category;
@@ -195,7 +209,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             ]);
 
             if (null === $parentCategoryIdentity) {
-                throw new NotFoundException();
+                throw new \InvalidArgumentException();
             }
 
             $parentCategory = $parentCategoryIdentity->getAdapterIdentifier();
@@ -287,7 +301,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             's_categories_attributes'
         );
 
-        return true;
+        return $categoryIdentity;
     }
 
     /**
@@ -340,5 +354,39 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         }
 
         return false;
+    }
+
+    /**
+     * @param Category $category
+     * @param array $validIdentities
+     */
+    private function handleOrphanedCategories(Category $category, array $validIdentities = [])
+    {
+        $categoryIdentities = $this->identityService->findBy([
+            'objectIdentifier' => $category->getIdentifier(),
+            'objectType' => Category::TYPE,
+            'adapterName' => ShopwareAdapter::NAME,
+        ]);
+
+        foreach ($categoryIdentities as $identity) {
+            if (isset($validIdentities[$identity->getAdapterIdentifier()])) {
+                continue;
+            }
+
+            try {
+                $this->resource->getOne($identity->getAdapterIdentifier());
+            } catch (NotFoundException $exception) {
+                $this->identityService->remove($identity);
+
+                continue;
+            }
+
+            $params = [
+                'name' => $category->getName(),
+                'active' => false,
+            ];
+
+            $this->resource->update($identity->getAdapterIdentifier(), $params);
+        }
     }
 }
