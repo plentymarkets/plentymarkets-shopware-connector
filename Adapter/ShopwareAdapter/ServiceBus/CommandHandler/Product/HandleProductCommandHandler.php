@@ -3,6 +3,7 @@
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Product;
 
 use PlentyConnector\Adapter\ShopwareAdapter\Helper\AttributeHelper;
+use PlentyConnector\Connector\IdentityService\Exception\NotFoundException as IdentityNotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\HandleCommandInterface;
@@ -634,7 +635,9 @@ class HandleProductCommandHandler implements CommandHandlerInterface
 
     /**
      * @param Variation $variation
-     * @param Product   $product
+     * @param Product $product
+     *
+     * @throws \Exception
      *
      * @return array
      */
@@ -653,7 +656,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         ]);
 
         if (null === $unitIdentity) {
-            throw new \Exception('Missing unit mapping - ' . $variation->getUnitIdentifier());
+            throw new IdentityNotFoundException('Missing unit mapping');
         }
 
         $prices = [];
