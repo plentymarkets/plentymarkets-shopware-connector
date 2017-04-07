@@ -288,7 +288,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                     $itemParams['vatField'] = $vatRateIdentity->getAdapterIdentifier();
                 } else {
                     $itemParams['countryVatId'] = 1;
-                    $itemParams['vatField'] = 0;
+                    $itemParams['vatRate'] = 0;
                 }
 
                 // Wenn currency != EUR, nur Währung EUR angeben (faktor beachten)
