@@ -90,7 +90,7 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
 
     /**
      * @param array $entry
-     * @param bool $taxFree
+     * @param bool  $taxFree
      *
      * @return OrderItem
      */
@@ -114,7 +114,7 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
 
     /**
      * @param array $entry
-     * @param bool $taxFree
+     * @param bool  $taxFree
      *
      * @return OrderItem
      */

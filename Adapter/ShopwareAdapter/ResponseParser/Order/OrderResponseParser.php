@@ -71,12 +71,12 @@ class OrderResponseParser implements OrderResponseParserInterface
     /**
      * OrderResponseParser constructor.
      *
-     * @param IdentityServiceInterface          $identityService
-     * @param EntityManagerInterface            $entityManager
-     * @param OrderItemResponseParserInterface  $orderItemResponseParser
-     * @param AddressResponseParserInterface    $orderAddressParser
-     * @param CustomerResponseParserInterface   $customerParser
-     * @param LoggerInterface                   $logger
+     * @param IdentityServiceInterface         $identityService
+     * @param EntityManagerInterface           $entityManager
+     * @param OrderItemResponseParserInterface $orderItemResponseParser
+     * @param AddressResponseParserInterface   $orderAddressParser
+     * @param CustomerResponseParserInterface  $customerParser
+     * @param LoggerInterface                  $logger
      */
     public function __construct(
         IdentityServiceInterface $identityService,
@@ -91,42 +91,6 @@ class OrderResponseParser implements OrderResponseParserInterface
         $this->orderAddressParser = $orderAddressParser;
         $this->customerParser = $customerParser;
         $this->logger = $logger;
-    }
-
-    /**
-     * @param array $orderItems
-     *
-     * @return array
-     *
-     * @throws \Exception
-     */
-    private function prepareOrderItems(array $orderItems)
-    {
-        foreach ($orderItems as $orderItem) {
-            if (empty($orderItem['taxId'])) {
-                if (empty($orderItem['taxRate'])) {
-                    continue;
-                }
-
-                /**
-                 * @var Repository $repository
-                 */
-                $repository = $this->entityManager->getRepository(Tax::class);
-
-                /**
-                 * @var Tax $taxModel
-                 */
-                $taxModel = $repository->findOneBy(['tax' => $orderItem['taxRate']]);
-
-                if (null === $taxModel) {
-                    throw new \Exception('no matching tax rate found - ' . $orderItem['taxRate']);
-                }
-
-                $orderItem['taxId'] = $taxModel->getId();
-            }
-        }
-
-        return $orderItems;
     }
 
     /**
@@ -252,6 +216,42 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
+     * @param array $orderItems
+     *
+     * @throws \Exception
+     *
+     * @return array
+     */
+    private function prepareOrderItems(array $orderItems)
+    {
+        foreach ($orderItems as $orderItem) {
+            if (empty($orderItem['taxId'])) {
+                if (empty($orderItem['taxRate'])) {
+                    continue;
+                }
+
+                /**
+                 * @var Repository $repository
+                 */
+                $repository = $this->entityManager->getRepository(Tax::class);
+
+                /**
+                 * @var Tax $taxModel
+                 */
+                $taxModel = $repository->findOneBy(['tax' => $orderItem['taxRate']]);
+
+                if (null === $taxModel) {
+                    throw new \Exception('no matching tax rate found - ' . $orderItem['taxRate']);
+                }
+
+                $orderItem['taxId'] = $taxModel->getId();
+            }
+        }
+
+        return $orderItems;
+    }
+
+    /**
      * @param $entry
      *
      * @return Comment[]
@@ -278,7 +278,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
-     * @param int $entry
+     * @param int    $entry
      * @param string $type
      *
      * @return string
@@ -312,9 +312,9 @@ class OrderResponseParser implements OrderResponseParserInterface
     /**
      * @param array $entry
      *
-     * @return string
-     *
      * @throws NotFoundException
+     *
+     * @return string
      */
     private function getShippingCostsVatRateIdentifier(array $entry)
     {
@@ -367,7 +367,7 @@ class OrderResponseParser implements OrderResponseParserInterface
 
     /**
      * @param array $entry
-     * @param bool $taxFree
+     * @param bool  $taxFree
      *
      * @return null|OrderItem
      */
