@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Order status and shipping number import functionality
 - display mapping console command
 - Category metaRobots are synced to a shopware attribute
+- shipping costs vatRate is calculated now
 
 ### Changed
 - 1:N mapping of entities instead of 1:1
@@ -19,6 +20,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - removed the product image shop setting workaround
 - optimized the item cross selling retrieving
 - categories with no active shop assignment will be deactivated
+- order item vatRate is now synced correctly
 
 ### Fixed
 - product translations
