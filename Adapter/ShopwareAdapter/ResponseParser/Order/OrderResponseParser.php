@@ -87,6 +87,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         LoggerInterface $logger
     ) {
         $this->identityService = $identityService;
+        $this->entityManager = $entityManager;
         $this->orderItemResponseParser = $orderItemResponseParser;
         $this->orderAddressParser = $orderAddressParser;
         $this->customerParser = $customerParser;
