@@ -112,7 +112,7 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
         } else {
             unset($params['file']);
 
-            $this->resource->update($identity->getAdapterIdentifier(), $params);
+            $identity = $this->resource->update($identity->getAdapterIdentifier(), $params);
         }
 
         $this->attributeHelper->saveAttributes(
