@@ -56,14 +56,16 @@ class PlentyConnector extends Plugin
         Identity::class,
     ];
 
-    const CRONJOB_SYNCHRONIZE = 'Synchronize';
-    const CRONJOB_CLEANUP = 'Cleanup';
-
     /**
      * List of all cronjobs
      */
+    const CRONJOB_SYNCHRONIZE = 'Synchronize';
+    const CRONJOB_SYNCHRONIZE_ORDERS = 'SynchronizeOrders';
+    const CRONJOB_CLEANUP = 'Cleanup';
+
     const CRONJOBS = [
         self::CRONJOB_SYNCHRONIZE => 300,
+        self::CRONJOB_SYNCHRONIZE_ORDERS => 300,
         self::CRONJOB_CLEANUP => 86400,
     ];
 

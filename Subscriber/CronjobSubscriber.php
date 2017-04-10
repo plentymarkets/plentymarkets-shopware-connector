@@ -8,6 +8,7 @@ use Exception;
 use PlentyConnector\Connector\CleanupService\CleanupServiceInterface;
 use PlentyConnector\Connector\ConnectorInterface;
 use PlentyConnector\Connector\ServiceBus\QueryType;
+use PlentyConnector\Connector\TransferObject\Order\Order;
 use PlentyConnector\PlentyConnector;
 use Psr\Log\LoggerInterface;
 
@@ -55,6 +56,7 @@ class CronjobSubscriber implements SubscriberInterface
     {
         return [
             'Shopware_CronJob_PlentyConnector' . PlentyConnector::CRONJOB_SYNCHRONIZE => 'onRunCronjobSynchronize',
+            'Shopware_CronJob_PlentyConnector' . PlentyConnector::CRONJOB_SYNCHRONIZE_ORDERS => 'onRunCronjobSynchronizeOrders',
             'Shopware_CronJob_PlentyConnector' . PlentyConnector::CRONJOB_CLEANUP => 'onRunCronjobCleanup',
         ];
     }
@@ -68,6 +70,24 @@ class CronjobSubscriber implements SubscriberInterface
     {
         try {
             $this->connector->handle(QueryType::CHANGED);
+        } catch (Exception $exception) {
+            $this->logger->error($exception->getMessage());
+        }
+
+        $args->setReturn(true);
+
+        return true;
+    }
+
+    /**
+     * @param Args $args
+     *
+     * @return bool
+     */
+    public function onRunCronjobSynchronizeOrders(Args $args)
+    {
+        try {
+            $this->connector->handle(QueryType::CHANGED, Order::TYPE);
         } catch (Exception $exception) {
             $this->logger->error($exception->getMessage());
         }
