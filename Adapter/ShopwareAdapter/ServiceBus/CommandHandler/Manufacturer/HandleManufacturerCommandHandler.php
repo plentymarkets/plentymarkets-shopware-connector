@@ -124,7 +124,7 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
                 ShopwareAdapter::NAME
             );
         } else {
-            $this->resource->update($identity->getAdapterIdentifier(), $params);
+            $identity = $this->resource->update($identity->getAdapterIdentifier(), $params);
         }
 
         $this->attributeHelper->saveAttributes(
