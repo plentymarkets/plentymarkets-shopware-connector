@@ -6,6 +6,7 @@ use PlentyConnector\Connector\ServiceBus\Query\Order\FetchChangedOrdersQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
 use Shopware\Components\Api\Resource;
+use Shopware\Models\Order\Status;
 use ShopwareAdapter\ResponseParser\Order\OrderResponseParserInterface;
 use ShopwareAdapter\ServiceBus\ChangedDateTimeTrait;
 use ShopwareAdapter\ShopwareAdapter;
@@ -58,8 +59,8 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
         $filter = [
             [
                 'property' => 'status',
-                'expression' => '!=',
-                'value' => -1,
+                'expression' => '=',
+                'value' => Status::ORDER_STATE_OPEN,
             ],
         ];
 
