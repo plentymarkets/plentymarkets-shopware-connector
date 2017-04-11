@@ -199,7 +199,6 @@ class OrderResponseParser implements OrderResponseParserInterface
             'shippingAddress' => $shippingAddress,
             'comments' => $this->getComments($entry),
             'customer' => $customer,
-            'phoneNumber' => $entry['billing']['phone'],
             'orderTime' => \DateTimeImmutable::createFromMutable($entry['orderTime']),
             'orderType' => Order::TYPE_ORDER,
             'identifier' => $orderIdentifier,
@@ -225,7 +224,7 @@ class OrderResponseParser implements OrderResponseParserInterface
      */
     private function prepareOrderItems(array $orderItems)
     {
-        foreach ($orderItems as $orderItem) {
+        foreach ($orderItems as $key => $orderItem) {
             if (empty($orderItem['taxId'])) {
                 if (empty($orderItem['taxRate'])) {
                     continue;
@@ -245,7 +244,7 @@ class OrderResponseParser implements OrderResponseParserInterface
                     throw new \Exception('no matching tax rate found - ' . $orderItem['taxRate']);
                 }
 
-                $orderItem['taxId'] = $taxModel->getId();
+                $orderItems[$key]['taxId'] = $taxModel->getId();
             }
         }
 
