@@ -298,7 +298,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
                 ShopwareAdapter::NAME
             );
         } else {
-            $categoryIdentity = $this->resource->update($categoryIdentity->getAdapterIdentifier(), $parans);
+            $this->resource->update($categoryIdentity->getAdapterIdentifier(), $parans);
         }
 
         $this->attributeHelper->saveAttributes(

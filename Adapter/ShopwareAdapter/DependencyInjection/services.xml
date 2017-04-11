@@ -156,6 +156,7 @@
 
         <service id="shopware_adapter.command_handler.handle_media" class="ShopwareAdapter\ServiceBus\CommandHandler\Media\HandleMediaCommandHandler">
             <argument type="service" id="shopware_adapter.shopware_resource.media" />
+            <argument type="service" id="shopware_media.media_service" />
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="shopware_adapter.attribute_helper" />
 

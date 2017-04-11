@@ -11,6 +11,7 @@ use PlentyConnector\Connector\ServiceBus\Command\Media\HandleMediaCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\TransferObject\Media\Media;
 use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
+use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Components\Api\Resource\Media as MediaResource;
 use Shopware\Models\Media\Album;
 use ShopwareAdapter\ShopwareAdapter;
@@ -26,6 +27,11 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
     private $resource;
 
     /**
+     * @var MediaService
+     */
+    private $mediaService;
+
+    /**
      * @var IdentityServiceInterface
      */
     private $identityService;
@@ -37,17 +43,19 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
 
     /**
      * HandleMediaCommandHandler constructor.
-     *
-     * @param MediaResource            $resource
+     * @param MediaResource $resource
+     * @param MediaService $mediaService
      * @param IdentityServiceInterface $identityService
-     * @param AttributeHelper          $attributeHelper
+     * @param AttributeHelper $attributeHelper
      */
     public function __construct(
         MediaResource $resource,
+        MediaService $mediaService,
         IdentityServiceInterface $identityService,
         AttributeHelper $attributeHelper
     ) {
         $this->resource = $resource;
+        $this->mediaService = $mediaService;
         $this->identityService = $identityService;
         $this->attributeHelper = $attributeHelper;
     }
@@ -100,6 +108,16 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
             $params['album'] = $mediaCategoryIdentity->getAdapterIdentifier();
         }
 
+        if (null !== $identity) {
+            $mediaObject = $this->resource->getOne($identity->getAdapterIdentifier());
+
+            if (!$this->mediaService->has($mediaObject['path'])) {
+                $this->identityService->remove($identity);
+
+                $identity = null;
+            }
+        }
+
         if (null === $identity) {
             $mediaModel = $this->resource->create($params);
 
@@ -112,7 +130,7 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
         } else {
             unset($params['file']);
 
-            $identity = $this->resource->update($identity->getAdapterIdentifier(), $params);
+            $this->resource->update($identity->getAdapterIdentifier(), $params);
         }
 
         $this->attributeHelper->saveAttributes(
