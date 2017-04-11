@@ -46,24 +46,24 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
      */
     public function parse(array $entry, $taxFree = false)
     {
-        // TODO implement other product types
-        // entry mode
-        // 3 : Rebate
-        // 4 : Surcharge Discount;
+        switch ($entry['mode']) {
+            case 0:
+            case 1:
+                return $this->handleProduct($entry, $taxFree);
+                break;
+            case 2:
+                return $this->handleVoucher($entry, $taxFree);
+                break;
+            case 3:
+                return $this->handleDiscount($entry, $taxFree);
+                break;
+            case 4:
+                return $this->handlePaymentSurcharge($entry, $taxFree);
+                break;
+            default:
+                throw new \Exception("unsupported entry mode");
 
-        if (0 === $entry['mode']) {
-            return $this->handleProduct($entry, $taxFree);
         }
-
-        if (1 === $entry['mode']) {
-            return $this->handleProduct($entry, $taxFree);
-        }
-
-        if (2 === $entry['mode']) {
-            return $this->handleVoucher($entry, $taxFree);
-        }
-
-        return null;
     }
 
     /**
@@ -71,10 +71,14 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
      *
      * @throws UnsupportedVatRateException
      *
-     * @return string
+     * @return null|string
      */
     private function getVatRateIdentifier(array $entry)
     {
+        if (0 === (int) $entry['taxId'] && 0 === (int) $entry['taxRate']) {
+            return null;
+        }
+
         $vatRateIdentity = $this->identityService->findOneBy([
             'adapterIdentifier' => (string) $entry['taxId'],
             'adapterName' => ShopwareAdapter::NAME,
@@ -101,6 +105,54 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
          */
         $orderItem = OrderItem::fromArray([
             'type' => OrderItem::TYPE_PRODUCT,
+            'quantity' => (float) $entry['quantity'],
+            'name' => $entry['articleName'],
+            'number' => $entry['articleNumber'],
+            'price' => (float) $entry['price'],
+            'vatRateIdentifier' => $taxFree ? null : $this->getVatRateIdentifier($entry),
+            'attributes' => $this->getAttributes($entry['attribute']),
+        ]);
+
+        return $orderItem;
+    }
+
+    /**
+     * @param array $entry
+     * @param bool  $taxFree
+     *
+     * @return OrderItem
+     */
+    private function handleDiscount(array $entry, $taxFree = false)
+    {
+        /**
+         * @var OrderItem $orderItem
+         */
+        $orderItem = OrderItem::fromArray([
+            'type' => OrderItem::TYPE_DISCOUNT,
+            'quantity' => (float) $entry['quantity'],
+            'name' => $entry['articleName'],
+            'number' => $entry['articleNumber'],
+            'price' => (float) $entry['price'],
+            'vatRateIdentifier' => $taxFree ? null : $this->getVatRateIdentifier($entry),
+            'attributes' => $this->getAttributes($entry['attribute']),
+        ]);
+
+        return $orderItem;
+    }
+
+    /**
+     * @param array $entry
+     * @param bool  $taxFree
+     *
+     * @return OrderItem
+     */
+    private function handlePaymentSurcharge(array $entry, $taxFree = false)
+    {
+        /**
+         * @var OrderItem $orderItem
+         */
+        $orderItem = OrderItem::fromArray([
+            'type' => OrderItem::TYPE_PAYMENT_SURCHARGE,
             'quantity' => (float) $entry['quantity'],
             'name' => $entry['articleName'],
             'number' => $entry['articleNumber'],
