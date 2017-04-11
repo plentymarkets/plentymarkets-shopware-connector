@@ -139,7 +139,7 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
     /**
      * @param Manufacturer $manufacturer
      *
-     * @return null|Supplier
+     * @return null|array
      */
     private function findExistingManufacturer(Manufacturer $manufacturer)
     {
