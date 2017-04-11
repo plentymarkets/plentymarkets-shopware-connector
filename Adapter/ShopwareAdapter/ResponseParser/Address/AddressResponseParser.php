@@ -57,7 +57,7 @@ class AddressResponseParser implements AddressResponseParserInterface
             $salutation = Customer::SALUTATION_FIRM;
         }
 
-        return Address::fromArray([
+        $params = [
             'company' => $entry['company'],
             'department' => $entry['department'],
             'salutation' => $salutation,
@@ -71,6 +71,12 @@ class AddressResponseParser implements AddressResponseParserInterface
             'countryIdentifier' => $countryIdentitiy->getObjectIdentifier(),
             'vatId' => isset($entry['vatId']) ? $entry['vatId'] : null,
             'attributes' => $this->getAttributes($entry['attribute']),
-        ]);
+        ];
+
+        if (isset($entry['phone'])) {
+            $params['phoneNumber'] = $entry['phone'];
+        }
+
+        return Address::fromArray($params);
     }
 }
