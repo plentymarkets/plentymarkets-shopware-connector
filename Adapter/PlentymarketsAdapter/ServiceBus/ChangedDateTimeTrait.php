@@ -23,9 +23,13 @@ trait ChangedDateTimeTrait
         $config = Shopware()->Container()->get('plenty_connector.config');
 
         $timezone = new DateTimeZone('UTC');
-        $lastRun = $config->get($this->getKey(), '2000-01-01');
+        $lastRun = $config->get($this->getKey());
 
-        return new DateTimeImmutable($lastRun, $timezone);
+        if (null === $lastRun) {
+            $lastRun = '2000-01-01T00:00:00+01:00';
+        }
+
+        return DateTimeImmutable::createFromFormat(DATE_W3C, $lastRun, $timezone);
     }
 
     /**
