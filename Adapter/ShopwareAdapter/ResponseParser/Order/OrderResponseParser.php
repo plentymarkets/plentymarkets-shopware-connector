@@ -3,16 +3,18 @@
 namespace ShopwareAdapter\ResponseParser\Order;
 
 use Assert\Assertion;
+use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManagerInterface;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Currency\Currency;
-use PlentyConnector\Connector\TransferObject\Order\Address\Address;
 use PlentyConnector\Connector\TransferObject\Order\Comment\Comment;
 use PlentyConnector\Connector\TransferObject\Order\Order;
 use PlentyConnector\Connector\TransferObject\Order\OrderItem\OrderItem;
 use PlentyConnector\Connector\TransferObject\Order\Payment\Payment;
-use PlentyConnector\Connector\TransferObject\Order\PaymentData\SepaPaymentData;
+use PlentyConnector\Connector\TransferObject\Order\PaymentData\PaymentDataInterface;
+use PlentyConnector\Connector\TransferObject\Order\PaymentData\PayPalPlusInvoicePaymentData;
+use PlentyConnector\Connector\TransferObject\Customer\BankAccount\BankAccount;
 use PlentyConnector\Connector\TransferObject\OrderStatus\OrderStatus;
 use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod;
 use PlentyConnector\Connector\TransferObject\PaymentStatus\PaymentStatus;
@@ -95,8 +97,6 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
-     * TODO: payment surcharge as order item
-     *
      * {@inheritdoc}
      */
     public function parse(array $entry)
@@ -121,14 +121,7 @@ class OrderResponseParser implements OrderResponseParserInterface
             $orderItems[] = $shippingCosts;
         }
 
-        /**
-         * @var Address $billingAddress
-         */
         $billingAddress = $this->orderAddressParser->parse($entry['billing']);
-
-        /**
-         * @var Address $shippingAddress
-         */
         $shippingAddress = $this->orderAddressParser->parse($entry['shipping']);
 
         $customer = $this->customerParser->parse($entry['customer']);
@@ -160,36 +153,6 @@ class OrderResponseParser implements OrderResponseParserInterface
 
         $currencyIdentifier = $this->getIdentifier($this->getCurrencyId($entry['currency']), Currency::TYPE);
 
-        $paymentData = [];
-        foreach ($entry['paymentInstances'] as $paymentInstance) {
-            if (empty($paymentInstance['accountHolder'])) {
-                continue;
-            }
-            if (empty($paymentInstance['iban'])) {
-                continue;
-            }
-            if (empty($paymentInstance['bic'])) {
-                continue;
-            }
-
-            $paymentData[] = SepaPaymentData::fromArray([
-                'accountOwner' => $paymentInstance['accountHolder'],
-                'iban' => $paymentInstance['iban'],
-                'bic' => $paymentInstance['bic'],
-            ]);
-        }
-
-        $payments = [];
-        if (!empty($entry['paymentStatus'])) {
-            if ($entry['paymentStatus']['id'] === Status::PAYMENT_STATE_COMPLETELY_PAID) {
-                $payments[] = Payment::fromArray([
-                    'amount' => $entry['invoiceAmount'],
-                    'currencyIdentifier' => $currencyIdentifier,
-                    'paymentMethodIdentifier' => $paymentMethodIdentifier,
-                    'transactionReference' => $entry['transactionId'],
-                ]);
-            }
-        }
 
         $order = Order::fromArray([
             'orderNumber' => $entry['number'],
@@ -208,11 +171,9 @@ class OrderResponseParser implements OrderResponseParserInterface
             'shippingProfileIdentifier' => $shippingProfileIdentity->getObjectIdentifier(),
             'currencyIdentifier' => $currencyIdentifier,
             'shopIdentifier' => $shopIdentity,
-            'paymentData' => $paymentData,
-            'payments' => $payments,
         ]);
 
-        return $order;
+        return [$order];
     }
 
     /**
@@ -394,5 +355,88 @@ class OrderResponseParser implements OrderResponseParserInterface
         $orderItem->setVatRateIdentifier($vatRateIdentifier);
 
         return $orderItem;
+    }
+
+    /**
+     * @param array $entry
+     *
+     * @return null|BankAccount
+     */
+    private function getSepaPaymentData(array $entry)
+    {
+        foreach ($entry['paymentInstances'] as $paymentInstance) {
+            if (empty($paymentInstance['accountHolder'])) {
+                continue;
+            }
+
+            if (empty($paymentInstance['iban'])) {
+                continue;
+            }
+
+            if (empty($paymentInstance['bic'])) {
+                continue;
+            }
+
+            $sepaPaymentData = new BankAccount();
+            $sepaPaymentData->setAccountOwner($paymentInstance['accountHolder']);
+            $sepaPaymentData->setIban($paymentInstance['iban']);
+            $sepaPaymentData->setIban($paymentInstance['bic']);
+
+            return $sepaPaymentData;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param array $entry
+     *
+     * @return null|PayPalPlusInvoicePaymentData
+     */
+    private function getPayPalPlusInvoicePaymentData(array $entry)
+    {
+        $connection = $this->entityManager->getConnection();
+
+        try {
+            $query = 'SELECT * FROM s_payment_paypal_plus_payment_instruction WHERE ordernumber = ?';
+            $paypalData = $connection->fetchAssoc($query, [$entry['number']]);
+        } catch (DBALException $exception) {
+            return null;
+        }
+
+        if (empty($paypalData)) {
+            return null;
+        }
+
+        $paymentData = new PayPalPlusInvoicePaymentData();
+        $paymentData->setReferenceNumber($paypalData['reference_number']);
+        $paymentData->setInstructionType($paypalData['instruction_type']);
+        $paymentData->setBankName($paypalData['bank_name']);
+        $paymentData->setAccountHolderName($paypalData['account_holder_name']);
+        $paymentData->setInternationalBankAccountNumber($paypalData['international_bank_account_number']);
+        $paymentData->setBankIdentifierCode($paypalData['bank_identifier_code']);
+        $paymentData->setAmountValue((float) $paypalData['amount_value']);
+        $paymentData->setAmountCurrency($paypalData['amount_currency']);
+
+        $timezone = new \DateTimeZone('Europe/Berlin');
+        $dueDate = \DateTimeImmutable::createFromFormat('Y-m-d\ H:i:s', $paypalData['payment_due_date'], $timezone);
+        $paymentData->setPaymentDueDate($dueDate);
+
+        return $paymentData;
+    }
+
+    /**
+     * @param array $entry
+     *
+     * @return PaymentDataInterface[]
+     */
+    private function getPaymentData(array $entry)
+    {
+        $paymentData = [];
+
+        $paymentData[] = $this->getSepaPaymentData($entry);
+        $paymentData[] = $this->getPayPalPlusInvoicePaymentData($entry);
+
+        return array_filter($paymentData);
     }
 }

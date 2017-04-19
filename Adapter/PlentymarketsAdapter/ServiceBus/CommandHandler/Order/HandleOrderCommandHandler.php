@@ -17,8 +17,6 @@ use PlentyConnector\Connector\TransferObject\Order\Comment\Comment;
 use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
 use PlentyConnector\Connector\TransferObject\Order\Order;
 use PlentyConnector\Connector\TransferObject\Order\OrderItem\OrderItem;
-use PlentyConnector\Connector\TransferObject\Order\Payment\Payment;
-use PlentyConnector\Connector\TransferObject\Order\PaymentData\SepaPaymentData;
 use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod;
 use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
@@ -91,280 +89,311 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             'adapterName' => PlentymarketsAdapter::NAME,
         ]);
 
-        if ($identity === null) {
-            $shopIdentity = $this->identityService->findOneBy([
-                'objectIdentifier' => $order->getShopIdentifier(),
-                'objectType' => Shop::TYPE,
-                'adapterName' => PlentymarketsAdapter::NAME,
-            ]);
+        if ($identity !== null) {
+            return true;
+        }
 
-            $languageIdentity = $this->identityService->findOneBy([
-                'objectIdentifier' => $order->getCustomer()->getLanguageIdentifier(),
-                'objectType' => Language::TYPE,
-                'adapterName' => PlentymarketsAdapter::NAME,
-            ]);
+        if ($this->isExistingOrder($order->getOrderNumber())) {
+            return true;
+        }
 
-            $shippingProfileIdentity = $this->identityService->findOneBy([
-                'objectIdentifier' => $order->getShippingProfileIdentifier(),
-                'objectType' => ShippingProfile::TYPE,
-                'adapterName' => PlentymarketsAdapter::NAME,
-            ]);
+        try {
+            $this->handleOrder($order);
+        } catch (\Exception $exception) {
+            $this->logger->error($exception->getMessage());
+            $this->logger->error($order->getIdentifier());
 
-            if (null === $shippingProfileIdentity) {
-                $this->logger->notice('no shipping profile selected', ['command', $command]);
+            return false;
+        }
+
+        try {
+            $this->handleComments($order);
+        } catch (\Exception $exception) {
+            $this->logger->error($exception->getMessage());
+            $this->logger->error($order->getIdentifier());
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param Order $order
+     *
+     * @throws NotFoundException
+     */
+    private function handleComments(Order $order)
+    {
+        $orderIdentity = $this->identityService->findOneBy([
+            'objectIdentifier' => $order->getIdentifier(),
+            'objectType' => Order::TYPE,
+            'adapterName' => PlentymarketsAdapter::NAME,
+        ]);
+
+        if (null === $orderIdentity) {
+            throw new NotFoundException('could not find order for comment handling - ' . $order->getIdentifier());
+        }
+
+        foreach ($order->getComments() as $comment) {
+            $commentParams = [
+                'referenceType' => 'order',
+                'referenceValue' => $orderIdentity->getAdapterIdentifier(),
+                'text' => $comment->getComment(),
+                'isVisibleForContact' => $comment->getType() === Comment::TYPE_CUSTOMER,
+            ];
+
+            if ($comment->getType() === Comment::TYPE_INTERNAL) {
+                $commentParams['userId'] = 1; // TODO: userId des rest benutzers auslesen?
             }
 
-            $currencyIdentity = $this->identityService->findOneBy([
-                'objectIdentifier' => $order->getCurrencyIdentifier(),
-                'objectType' => Currency::TYPE,
-                'adapterName' => PlentymarketsAdapter::NAME,
-            ]);
+            $this->client->request('post', 'comments', $commentParams);
+        }
+    }
 
-            if (null === $currencyIdentity) {
-                return false;
-            }
+    /**
+     * @param Order $order
+     *
+     * @return bool
+     */
+    private function handleOrder(Order $order)
+    {
+        $shopIdentity = $this->identityService->findOneBy([
+            'objectIdentifier' => $order->getShopIdentifier(),
+            'objectType' => Shop::TYPE,
+            'adapterName' => PlentymarketsAdapter::NAME,
+        ]);
 
-            if ('EUR' !== $currencyIdentity->getAdapterIdentifier()) {
-                $this->logger->warning('only the currency EUR is currently supported', ['command', $command]);
+        $languageIdentity = $this->identityService->findOneBy([
+            'objectIdentifier' => $order->getCustomer()->getLanguageIdentifier(),
+            'objectType' => Language::TYPE,
+            'adapterName' => PlentymarketsAdapter::NAME,
+        ]);
 
-                return false;
-            }
+        $shippingProfileIdentity = $this->identityService->findOneBy([
+            'objectIdentifier' => $order->getShippingProfileIdentifier(),
+            'objectType' => ShippingProfile::TYPE,
+            'adapterName' => PlentymarketsAdapter::NAME,
+        ]);
 
-            $params = [];
+        if (null === $shippingProfileIdentity) {
+            $this->logger->notice('no shipping profile selected', ['orderNumber', $order->getOrderNumber()]);
+        }
 
-            if ($order->getOrderType() === Order::TYPE_ORDER) {
-                $params['typeId'] = 1;
+        $currencyIdentity = $this->identityService->findOneBy([
+            'objectIdentifier' => $order->getCurrencyIdentifier(),
+            'objectType' => Currency::TYPE,
+            'adapterName' => PlentymarketsAdapter::NAME,
+        ]);
+
+        if (null === $currencyIdentity) {
+            // TODO: throw
+
+            return false;
+        }
+
+        if ('EUR' !== $currencyIdentity->getAdapterIdentifier()) {
+            // TODO: throw
+            $this->logger->warning('only the currency EUR is supported', ['orderNumber', $order->getOrderNumber()]);
+
+            return false;
+        }
+
+        $params = [];
+
+        if ($order->getOrderType() === Order::TYPE_ORDER) {
+            $params['typeId'] = 1;
+        } else {
+            // TODO: throw
+            $this->logger->notice('only orders are supported');
+
+            return false;
+        }
+
+        $params['plentyId'] = $shopIdentity->getAdapterIdentifier();
+
+        $plentyCustomer = $this->handleCustomer($order);
+
+        $params['relations'] = [
+            [
+                'referenceType' => 'contact',
+                'referenceId' => $plentyCustomer['id'],
+                'relation' => 'receiver',
+            ],
+        ];
+
+        $params['addressRelations'] = [];
+
+        $billingAddress = $this->createAddress($order->getBillingAddress(), $order->getCustomer(), $plentyCustomer);
+        if (!empty($billingAddress)) {
+            $params['addressRelations'][] = [
+                'typeId' => 1,
+                'addressId' => $billingAddress['id'],
+            ];
+        }
+
+        $shippingAddress = $this->createAddress($order->getShippingAddress(), $order->getCustomer(), $plentyCustomer);
+        if (!empty($shippingAddress)) {
+            $params['addressRelations'][] = [
+                'typeId' => 2,
+                'addressId' => $shippingAddress['id'],
+            ];
+        }
+
+        $paymentMethodIdentity = $this->identityService->findOneBy([
+            'objectIdentifier' => $order->getPaymentMethodIdentifier(),
+            'objectType' => PaymentMethod::TYPE,
+            'adapterName' => PlentymarketsAdapter::NAME,
+        ]);
+
+        if (null === $paymentMethodIdentity) {
+            // TODO: throw
+
+            return false;
+        }
+
+        $params['properties'] = [
+            [
+                'typeId' => 6,
+                'value' => $languageIdentity->getAdapterIdentifier(),
+            ],
+            [
+                'typeId' => 7,
+                'value' => $order->getOrderNumber(),
+            ],
+            [
+                'typeId' => 3,
+                'value' => $paymentMethodIdentity->getAdapterIdentifier(),
+            ],
+        ];
+
+        $vouchers = array_filter($order->getOrderItems(), function (OrderItem $item) {
+            return $item->getType() === OrderItem::TYPE_VOUCHER;
+        });
+
+        $voucher = null;
+        if (!empty($vouchers)) {
+            /**
+             * @var OrderItem $voucher
+             */
+            $voucher = array_shift($vouchers);
+        }
+
+        if (null !== $voucher) {
+            $params['properties'][] = [
+                'typeId' => 18,
+                'value' => $voucher->getNumber(),
+            ];
+
+            $params['properties'][] = [
+                'typeId' => 19,
+                'value' => 'fixed',
+            ];
+        }
+
+        $params['dates'] = [
+            [
+                'typeId' => 2,
+                'date' => $order->getOrderTime()->format(DATE_W3C),
+            ],
+        ];
+
+        $params['orderItems'] = array_map(function (OrderItem $item) use (
+            $shippingProfileIdentity,
+            $currencyIdentity
+        ) {
+            $itemParams = [];
+
+            if ($item->getType() === OrderItem::TYPE_PRODUCT) {
+                $typeId = 1;
+            } elseif ($item->getType() === OrderItem::TYPE_DISCOUNT) {
+                $typeId = 4;
+            } elseif ($item->getType() === OrderItem::TYPE_VOUCHER) {
+                $typeId = 4;
+            } elseif ($item->getType() === OrderItem::TYPE_COUPON) {
+                $typeId = 5;
+            } elseif ($item->getType() === OrderItem::TYPE_PAYMENT_SURCHARGE) {
+                $typeId = 7;
+            } elseif ($item->getType() === OrderItem::TYPE_SHIPPING_COSTS) {
+                $typeId = 6;
             } else {
-                $this->logger->notice('only orders are supported');
-
-                return false;
+                throw new \Exception('unsupported type');
             }
 
-            $params['plentyId'] = $shopIdentity->getAdapterIdentifier();
+            $itemParams['typeId'] = $typeId;
+            $itemParams['orderItemName'] = $item->getName();
+            $itemParams['quantity'] = $item->getQuantity();
 
-            $plentyCustomer = $this->createCustomer($order);
+            if (null !== $shippingProfileIdentity) {
+                $itemParams['shippingProfileId'] = $shippingProfileIdentity->getAdapterIdentifier();
+            }
 
-            $params['relations'] = [
+            if (!empty($item->getNumber())) {
+                $itemParams['itemVariationId'] = $this->getVariationIdFromNumber($item->getNumber());
+            } else {
+                $itemParams['itemVariationId'] = 0;
+            }
+
+            if ($item->getType() === OrderItem::TYPE_PRODUCT && null === $item->getNumber()) {
+                $itemParams['typeId'] = 9;
+            }
+
+            if (null !== $item->getVatRateIdentifier()) {
+                $vatRateIdentity = $this->identityService->findOneBy([
+                    'objectIdentifier' => $item->getVatRateIdentifier(),
+                    'objectType' => VatRate::TYPE,
+                    'adapterName' => PlentymarketsAdapter::NAME,
+                ]);
+
+                if (null === $vatRateIdentity) {
+                    throw new NotFoundException('vatRate identity not found');
+                }
+
+                $itemParams['countryVatId'] = 1;
+                $itemParams['vatField'] = $vatRateIdentity->getAdapterIdentifier();
+            } else {
+                $itemParams['countryVatId'] = 1;
+                $itemParams['vatRate'] = 0;
+            }
+
+            // Wenn currency != EUR, nur Währung EUR angeben (faktor beachten)
+
+            $itemParams['amounts'] = [
                 [
-                    'referenceType' => 'contact',
-                    'referenceId' => $plentyCustomer['id'],
-                    'relation' => 'receiver',
+                    'currency' => $currencyIdentity->getAdapterIdentifier(),
+                    'priceOriginalGross' => $item->getPrice(),
                 ],
             ];
 
-            $params['addressRelations'] = [];
-
-            $billingAddress = $this->createAddress($order->getBillingAddress(), $order->getCustomer(), $plentyCustomer);
-            if (!empty($billingAddress)) {
-                $params['addressRelations'][] = [
-                    'typeId' => 1,
-                    'addressId' => $billingAddress['id'],
-                ];
-            }
-
-            $shippingAddress = $this->createAddress($order->getShippingAddress(), $order->getCustomer(),
-                $plentyCustomer);
-            if (!empty($shippingAddress)) {
-                $params['addressRelations'][] = [
-                    'typeId' => 2,
-                    'addressId' => $shippingAddress['id'],
-                ];
-            }
-
-            $paymentMethodIdentity = $this->identityService->findOneBy([
-                'objectIdentifier' => $order->getPaymentMethodIdentifier(),
-                'objectType' => PaymentMethod::TYPE,
-                'adapterName' => PlentymarketsAdapter::NAME,
-            ]);
-
-            if (null === $paymentMethodIdentity) {
-                // TODO: throw
-
-                return false;
-            }
-
-            // TODO: properties https://developers.plentymarkets.com/rest-doc/order_order_property/details
-
-            // TODO: COUPON_CODE = 18 & COUPON_TYPE = 19 type=fixed
-
-            $params['properties'] = [
-                [
-                    'typeId' => 6,
-                    'value' => $languageIdentity->getAdapterIdentifier(),
-                ],
-                [
-                    'typeId' => 7,
-                    'value' => $order->getOrderNumber(),
-                ],
-                [
-                    'typeId' => 3,
-                    'value' => $paymentMethodIdentity->getAdapterIdentifier(),
-                ],
-            ];
-
-            $vouchers = array_filter($order->getOrderItems(), function (OrderItem $item) {
-                return $item->getType() === OrderItem::TYPE_VOUCHER;
-            });
-
-            $voucher = null;
-            if (!empty($vouchers)) {
-                /**
-                 * @var OrderItem $voucher
-                 */
-                $voucher = array_shift($vouchers);
-            }
-
-            if (null !== $voucher) {
-                $params['properties'][] = [
-                    'typeId' => 18,
-                    'value' => $voucher->getNumber(),
-                ];
-
-                $params['properties'][] = [
-                    'typeId' => 19,
-                    'value' => 'fixed',
-                ];
-            }
-
-            $params['dates'] = [
-                [
-                    'typeId' => 2,
-                    'date' => $order->getOrderTime()->format(DATE_W3C),
-                ],
-            ];
-
-            $params['orderItems'] = array_map(function (OrderItem $item) use (
-                $shippingProfileIdentity,
-                $currencyIdentity
-            ) {
-                $itemParams = [];
-
-                if ($item->getType() === OrderItem::TYPE_PRODUCT) {
-                    $typeId = 1;
-                } elseif ($item->getType() === OrderItem::TYPE_DISCOUNT) {
-                    $typeId = 4;
-                } elseif ($item->getType() === OrderItem::TYPE_VOUCHER) {
-                    $typeId = 4;
-                } elseif ($item->getType() === OrderItem::TYPE_COUPON) {
-                    $typeId = 5;
-                } elseif ($item->getType() === OrderItem::TYPE_PAYMENT_SURCHARGE) {
-                    $typeId = 7;
-                } elseif ($item->getType() === OrderItem::TYPE_SHIPPING_COSTS) {
-                    $typeId = 6;
-                } else {
-                    throw new \Exception('unsupported type');
-                }
-
-                $itemParams['typeId'] = $typeId;
-                $itemParams['orderItemName'] = $item->getName();
-                $itemParams['quantity'] = $item->getQuantity();
-
-                if (null !== $shippingProfileIdentity) {
-                    $itemParams['shippingProfileId'] = $shippingProfileIdentity->getAdapterIdentifier();
-                }
-
-                if (!empty($item->getNumber())) {
-                    $itemParams['itemVariationId'] = $this->getVariationIdFromNumber($item->getNumber());
-                } else {
-                    $itemParams['itemVariationId'] = 0;
-                }
-
-                if ($item->getType() === OrderItem::TYPE_PRODUCT && null === $item->getNumber()) {
-                    $itemParams['typeId'] = 9;
-                }
-
-                if (null !== $item->getVatRateIdentifier()) {
-                    $vatRateIdentity = $this->identityService->findOneBy([
-                        'objectIdentifier' => $item->getVatRateIdentifier(),
-                        'objectType' => VatRate::TYPE,
-                        'adapterName' => PlentymarketsAdapter::NAME,
-                    ]);
-
-                    if (null === $vatRateIdentity) {
-                        throw new NotFoundException('vatRate identity not found');
-                    }
-
-                    $itemParams['countryVatId'] = 1;
-                    $itemParams['vatField'] = $vatRateIdentity->getAdapterIdentifier();
-                } else {
-                    $itemParams['countryVatId'] = 1;
-                    $itemParams['vatRate'] = 0;
-                }
-
-                // Wenn currency != EUR, nur Währung EUR angeben (faktor beachten)
-
-                $itemParams['amounts'] = [
-                    [
-                        'currency' => $currencyIdentity->getAdapterIdentifier(),
-                        'priceOriginalGross' => $item->getPrice(),
-                    ],
-                ];
-
+            if (null !== $shippingProfileIdentity) {
                 $itemParams['properties'] = [
                     [
                         'typeId' => 2,
                         'value' => $shippingProfileIdentity->getAdapterIdentifier(),
                     ],
                 ];
-
-                // Custom Products // aus merkmale
-                $itemParams['orderProperties'] = [];
-
-                return $itemParams;
-            }, $order->getOrderItems());
-
-            $params['referrerId'] = 1; // TOOD: testen
-
-            $result = $this->client->request('post', 'orders', $params);
-
-            $this->logger->notice(json_encode($result));
-
-            foreach ($order->getComments() as $comment) {
-                $commentParams = [
-                    'referenceType' => 'order',
-                    'referenceValue' => $result['id'],
-                    'text' => $comment->getComment(),
-                    'isVisibleForContact' => $comment->getType() === Comment::TYPE_CUSTOMER,
-                ];
-
-                if ($comment->getType() === Comment::TYPE_INTERNAL) {
-                    $commentParams['userId'] = 1; // TODO: userId des rest benutzers auslesen?
-                }
-
-                $this->client->request('post', 'comments', $commentParams);
             }
 
-            // https://forum.plentymarkets.com/t/rest-api-paypal-kauf-auf-rechnung/46159/3
-            foreach ($order->getPaymentData() as $paymentData) {
-                if ($paymentData instanceof SepaPaymentData) {
-                    $sepaPaymentDataParams = [
-                        'lastUpdateBy' => 'import',
-                        'accountOwner' => $paymentData->getAccountOwner(),
-                        'iban' => $paymentData->getIban(),
-                        'bic' => $paymentData->getBic(),
-                        'orderId' => $result['id'],
-                        'contactId' => $plentyCustomer['id'],
-                    ];
+            // Custom Products // aus merkmale
+            $itemParams['orderProperties'] = [];
 
-                    $this->client->request('POST', 'accounts/contacts/banks', $sepaPaymentDataParams);
-                }
-            }
+            return $itemParams;
+        }, $order->getOrderItems());
 
-            foreach ($order->getPayments() as $payment) {
-                $plentyOrderIdentifier = $result['id'];
-
-                $this->handlePayment($payment, $order, $billingAddress, $shippingAddress, $plentyOrderIdentifier);
-            }
-
-            $this->identityService->create(
-                $order->getIdentifier(),
-                Order::TYPE,
-                (string) $result['id'],
-                PlentymarketsAdapter::NAME
-            );
+        if ($order->getOrderNumber() === '20008') {
+            var_dump($params);
         }
 
-        // TODO update existing order
+        $params['referrerId'] = 1; // TOOD: testen
+
+        $result = $this->client->request('post', 'orders', $params);
+
+        $this->identityService->create(
+            $order->getIdentifier(),
+            Order::TYPE,
+            (string) $result['id'],
+            PlentymarketsAdapter::NAME
+        );
 
         return true;
     }
@@ -388,11 +417,55 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     }
 
     /**
+     * @param string $orderNumber
+     *
+     * @return bool
+     */
+    private function isExistingOrder($orderNumber)
+    {
+        $result = $this->client->request('GET', 'orders', [
+            'externalOrderId' => $orderNumber,
+        ]);
+
+        if (!empty($result)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $mail
+     *
+     * @return null|array
+     */
+    private function findCustomer($mail)
+    {
+        $customerResult = $this->client->request('GET', 'accounts/contacts', [
+            'contactEmail' => $mail,
+        ]);
+
+        if (empty($customerResult)) {
+            return null;
+        }
+
+        $possibleCustomers = array_filter($customerResult, function ($entry) {
+            return !isset($entry['singleAccess']) || $entry['singleAccess'] === false;
+        });
+
+        if (empty($possibleCustomers)) {
+            return null;
+        }
+
+        return array_shift($possibleCustomers);
+    }
+
+    /**
      * @param Order $order
      *
      * @return array|bool|mixed
      */
-    private function createCustomer(Order $order)
+    private function handleCustomer(Order $order)
     {
         $languageIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $order->getCustomer()->getLanguageIdentifier(),
@@ -410,17 +483,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         $plentyCustomer = false;
 
         if ($customer->getType() === Customer::TYPE_NORMAL) {
-            $customerResult = $this->client->request('GET', 'accounts/contacts', [
-                'contactEmail' => $customer->getEmail(),
-            ]);
-
-            if (!empty($customerResult)) {
-                $possibleCustomers = array_filter($customerResult, function ($entry) {
-                    return !isset($entry['singleAccess']) || $entry['singleAccess'] === false;
-                });
-
-                $plentyCustomer = array_shift($possibleCustomers);
-            }
+            $plentyCustomer = $this->findCustomer($customer->getEmail());
         }
 
         static $webstores;
@@ -470,7 +533,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             $customerParams['birthdayAt'] = $customer->getBirthday()->format(DATE_W3C);
         }
 
-        if (!empty($customer->getPhoneNumber())) {
+        if (null !== $customer->getPhoneNumber()) {
             $customerParams['options'][] = [
                 'typeId' => 1,
                 'subTypeId' => 4,
@@ -479,7 +542,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             ];
         }
 
-        if (!empty($customer->getMobilePhoneNumber())) {
+        if (null !== $customer->getMobilePhoneNumber()) {
             $customerParams['options'][] = [
                 'typeId' => 1,
                 'subTypeId' => 2,
@@ -619,112 +682,5 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         }
 
         return $this->client->request('POST', 'accounts/contacts/' . $plentyCustomer['id'] . '/addresses', $params);
-    }
-
-    /**
-     * @param Payment    $payment
-     * @param Order      $order
-     * @param null|array $billingAddress
-     * @param null|array $shippingAddress
-     * @param $plentyOrderIdentifier
-     *
-     * @throws \Exception
-     */
-    private function handlePayment(
-        Payment $payment,
-        Order $order,
-        array $billingAddress = null,
-        array $shippingAddress = null,
-        $plentyOrderIdentifier
-    ) {
-        $paymentMethodIdentity = $this->identityService->findOneBy([
-            'objectIdentifier' => $payment->getPaymentMethodIdentifier(),
-            'objectType' => PaymentMethod::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
-        ]);
-
-        if (null === $paymentMethodIdentity) {
-            $this->logger->error('payment method not mapped', ['payment' => $payment]);
-
-            throw new \Exception('payment method not mapped');
-        }
-
-        $paymentMethodIdentity = $this->identityService->findOneBy([
-            'objectIdentifier' => $payment->getPaymentMethodIdentifier(),
-            'objectType' => PaymentMethod::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
-        ]);
-
-        $currencyIdentity = $this->identityService->findOneBy([
-            'objectIdentifier' => $payment->getCurrencyIdentifier(),
-            'objectType' => Currency::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
-        ]);
-
-        if (null === $currencyIdentity) {
-            $this->logger->error('currency not mapped', ['payment' => $payment]);
-
-            throw new \Exception('currency not mapped');
-        }
-
-        $paymentParams = [
-            'amount' => $payment->getAmount(),
-            'exchangeRatio' => 1,
-            'mopId' => $paymentMethodIdentity->getAdapterIdentifier(),
-            'currency' => $currencyIdentity->getAdapterIdentifier(),
-            'type' => 'credit',
-            'transactionType' => 2,
-        ];
-
-        /**
-         * Payment origin = 23
-         * Name of the sender = 11
-         * Email of the sender = 12
-         * Transaction ID = 1
-         * Booking text = 3
-         * Shipping address ID = 24
-         * Invoice address ID = 25
-         */
-        $paymentParams['property'] = [
-            [
-                'typeId' => 23,
-                'value' => 'shopware',
-            ],
-            [
-                'typeId' => 11,
-                'value' => $order->getCustomer()->getFirstname() . ' ' . $order->getCustomer()->getLastname(),
-            ],
-            [
-                'typeId' => 12,
-                'value' => $order->getCustomer()->getEmail(),
-            ],
-            [
-                'typeId' => 1,
-                'value' => $payment->getTransactionReference(),
-            ],
-            [
-                'typeId' => 3,
-                'value' => 'booked',
-            ],
-        ];
-
-        if (null !== $billingAddress) {
-            $paymentParams['property'][] = [
-                'typeId' => 24,
-                'value' => $billingAddress['id'],
-            ];
-        }
-
-        if (null !== $shippingAddress) {
-            $paymentParams['property'][] = [
-                'typeId' => 25,
-                'value' => $billingAddress['id'],
-            ];
-        }
-
-        $paymentResult = $this->client->request('POST', 'payments', $paymentParams);
-
-        $url = 'payment/' . $paymentResult['id'] . '/order/' . $plentyOrderIdentifier;
-        $this->client->request('POST', $url);
     }
 }

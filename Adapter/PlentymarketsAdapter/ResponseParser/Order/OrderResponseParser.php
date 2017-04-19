@@ -181,7 +181,6 @@ class OrderResponseParser implements OrderResponseParserInterface
         $order->setBillingAddress($this->getBillingAddress($entry));
         $order->setShippingAddress($this->getShippingAddress($entry));
         $order->setOrderItems($this->getOrderItems($entry));
-        $order->setPayments([]);
         $order->setShopIdentifier($shopIdentity->getObjectIdentifier());
         $order->setCurrencyIdentifier($currencyIdentity->getObjectIdentifier());
         $order->setOrderStatusIdentifier($oderStatusIdentity->getObjectIdentifier());
@@ -189,7 +188,6 @@ class OrderResponseParser implements OrderResponseParserInterface
         $order->setPaymentMethodIdentifier($paymentMethodIdentity->getObjectIdentifier());
         $order->setShippingProfileIdentifier($shippingProfileIdentity->getObjectIdentifier());
         $order->setComments($this->getComments($entry));
-        $order->setPaymentData([]);
         $order->setPackages($this->getPackages($entry));
         $order->setAttributes([]);
 
@@ -259,7 +257,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     /**
      * @param array $entry
      *
-     * @return null|value
+     * @return null|string
      */
     private function getOrdernumber(array $entry)
     {
