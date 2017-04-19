@@ -55,6 +55,10 @@
             <argument type="service" id="plenty_connector.identity_service" />
         </service>
 
+        <service id="shopware_adapter.response_parser.payment" class="ShopwareAdapter\ResponseParser\Payment\PaymentResponseParser">
+            <argument type="service" id="plenty_connector.identity_service" />
+        </service>
+
         <service id="shopware_adapter.response_parser.payment_method" class="ShopwareAdapter\ResponseParser\PaymentMethod\PaymentMethodResponseParser">
             <argument type="service" id="plenty_connector.identity_service" />
         </service>
@@ -221,7 +225,7 @@
             <tag name="plenty_connector.command_handler" />
         </service>
 
-        <!-- Query handlers -->
+        <!-- Order query handlers -->
 
         <service id="shopware_adapter.query_handler.fetch_all_orders" class="ShopwareAdapter\ServiceBus\QueryHandler\Order\FetchAllOrdersQueryHandler">
             <argument type="service" id="shopware_adapter.response_parser.order" />
@@ -239,6 +243,30 @@
 
         <service id="shopware_adapter.query_handler.fetch_order" class="ShopwareAdapter\ServiceBus\QueryHandler\Order\FetchOrderQueryHandler">
             <argument type="service" id="shopware_adapter.response_parser.order" />
+            <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="shopware_adapter.shopware_resource.order" />
+
+            <tag name="plenty_connector.query_handler" />
+        </service>
+
+        <!-- Payment query handlers -->
+
+        <service id="shopware_adapter.query_handler.fetch_all_payments" class="ShopwareAdapter\ServiceBus\QueryHandler\Payment\FetchAllPaymentsQueryHandler">
+            <argument type="service" id="shopware_adapter.response_parser.payment" />
+            <argument type="service" id="shopware_adapter.shopware_resource.order" />
+
+            <tag name="plenty_connector.query_handler" />
+        </service>
+
+        <service id="shopware_adapter.query_handler.fetch_changed_payments" class="ShopwareAdapter\ServiceBus\QueryHandler\Payment\FetchChangedPaymentsQueryHandler">
+            <argument type="service" id="shopware_adapter.response_parser.payment" />
+            <argument type="service" id="shopware_adapter.shopware_resource.order" />
+
+            <tag name="plenty_connector.query_handler" />
+        </service>
+
+        <service id="shopware_adapter.query_handler.fetch_payment" class="ShopwareAdapter\ServiceBus\QueryHandler\Payment\FetchPaymentQueryHandler">
+            <argument type="service" id="shopware_adapter.response_parser.payment" />
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="shopware_adapter.shopware_resource.order" />
 
