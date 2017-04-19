@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <!-- Services -->
+
+    <services>
+        <service id="plenty_connector.validator.payment.sepa" class="PlentyConnector\Payment\Sepa\Validator\SepaPaymentDataValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.payment.paypal.sepa_payment_response_parser" class="PlentyConnector\Payment\Sepa\Shopware\SepaPaymentResponseParser" decorates="shopware_adapter.response_parser.payment" public="false">
+            <argument type="service" id="plenty_connector.payment.paypal.sepa_payment_response_parser.inner" />
+            <argument type="service" id="plenty_connector.identity_service" />
+        </service>
+
+        <service id="plenty_connector.payment.paypal.sepa_payment_command_handler" class="PlentyConnector\Payment\Sepa\Plentymarkets\HandleSepaPaymentCommandHandler" decorates="plentymarkets_adapter.command_handler.handle_payment" public="false">
+            <argument type="service" id="plenty_connector.payment.paypal.sepa_payment_command_handler.inner" />
+            <argument type="service" id="plentmarkets_adapter.client" />
+            <argument type="service" id="plenty_connector.identity_service" />
+        </service>
+    </services>
+</container>

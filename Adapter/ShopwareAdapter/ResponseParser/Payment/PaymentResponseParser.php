@@ -70,33 +70,28 @@ class PaymentResponseParser implements PaymentResponseParserInterface
      */
     public function parse(array $element)
     {
-        $payments = [];
-
         $paymentIdentifier = $this->identityService->findOneOrCreate(
             (string) $element['id'],
             ShopwareAdapter::NAME,
             Payment::TYPE
         )->getObjectIdentifier();
 
-        $orderIdentifier = $this->getIdentifier($element['id'], Order::TYPE);
-
-        $currencyIdentifier = $this->getIdentifier($this->getCurrencyId($element['currency']), Currency::TYPE);
-        $paymentMethodIdentifier = $this->getIdentifier($element['paymentId'], PaymentMethod::TYPE);
-
-        if (!empty($element['paymentStatus'])) {
-            if (Status::PAYMENT_STATE_COMPLETELY_PAID === $element['paymentStatus']['id']) {
-                $payment = new Payment();
-                $payment->setIdentifier($paymentIdentifier);
-                $payment->setOrderIdentifer($orderIdentifier);
-                $payment->setAmount($element['invoiceAmount']);
-                $payment->setCurrencyIdentifier($currencyIdentifier);
-                $payment->setPaymentMethodIdentifier($paymentMethodIdentifier);
-                $payment->setTransactionReference($element['transactionId']);
-
-                $payments[] = $payment;
-            }
+        if (empty($element['paymentStatus'])) {
+            return [];
         }
 
-        return $payments;
+        if (Status::PAYMENT_STATE_COMPLETELY_PAID !== $element['paymentStatus']['id']) {
+            return [];
+        }
+
+        $payment = new Payment();
+        $payment->setIdentifier($paymentIdentifier);
+        $payment->setOrderIdentifer($this->getIdentifier($element['id'], Order::TYPE));
+        $payment->setAmount($element['invoiceAmount']);
+        $payment->setCurrencyIdentifier($this->getIdentifier($this->getCurrencyId($element['currency']), Currency::TYPE));
+        $payment->setPaymentMethodIdentifier($this->getIdentifier($element['paymentId'], PaymentMethod::TYPE));
+        $payment->setTransactionReference($element['transactionId']);
+
+        return [$payment];
     }
 }

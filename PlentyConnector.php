@@ -78,9 +78,10 @@ class PlentyConnector extends Plugin
     {
         $container->setParameter('plenty_connector.plugin_dir', $this->getPath());
 
+        $this->loadFile($container, __DIR__ . '/DependencyInjection/services.xml');
         $this->loadFile($container, __DIR__ . '/Adapter/ShopwareAdapter/DependencyInjection/services.xml');
         $this->loadFile($container, __DIR__ . '/Adapter/PlentymarketsAdapter/DependencyInjection/services.xml');
-        $this->loadFile($container, __DIR__ . '/DependencyInjection/services.xml');
+        $this->loadFile($container, __DIR__ . '/Payment/Sepa/DependencyInjection/services.xml');
 
         $container->addCompilerPass(new CleanupDefinitionCompilerPass());
         $container->addCompilerPass(new CommandGeneratorCompilerPass());

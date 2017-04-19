@@ -1,7 +1,8 @@
 <?php
 
-namespace PlentyConnector\Connector\TransferObject\Order\PaymentData;
+namespace PlentyConnector\Payment\Sepa\PaymentData;
 
+use PlentyConnector\Connector\TransferObject\Payment\PaymentData\PaymentDataInterface;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 
 /**
