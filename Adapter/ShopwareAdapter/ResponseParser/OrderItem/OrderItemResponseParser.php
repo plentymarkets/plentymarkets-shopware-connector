@@ -61,8 +61,7 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
                 return $this->handlePaymentSurcharge($entry, $taxFree);
                 break;
             default:
-                throw new \Exception("unsupported entry mode");
-
+                throw new \Exception('unsupported entry mode');
         }
     }
 
