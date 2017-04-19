@@ -8,6 +8,7 @@ use PlentyConnector\Connector\TransferObject\Currency\Currency;
 use PlentyConnector\Connector\TransferObject\Order\Order;
 use PlentyConnector\Connector\TransferObject\Payment\Payment;
 use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod;
+use Shopware\Components\Model\ModelRepository;
 use Shopware\Models\Order\Status;
 use Shopware\Models\Shop\Currency as CurrencyModel;
 use ShopwareAdapter\ShopwareAdapter;
@@ -57,11 +58,11 @@ class PaymentResponseParser implements PaymentResponseParserInterface
     private function getCurrencyId($currency)
     {
         /**
-         * @var ModelRepository $currencyRepo
+         * @var ModelRepository $currencyRepository
          */
-        $currencyRepo = Shopware()->Models()->getRepository(CurrencyModel::class);
+        $currencyRepository = Shopware()->Models()->getRepository(CurrencyModel::class);
 
-        return $currencyRepo->findOneBy(['currency' => $currency])->getId();
+        return $currencyRepository->findOneBy(['currency' => $currency])->getId();
     }
 
     /**
