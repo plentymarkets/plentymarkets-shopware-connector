@@ -3,7 +3,7 @@
 namespace PlentyConnector\Connector\Validator\Order\Payment;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\Order\Payment\Payment;
+use PlentyConnector\Connector\TransferObject\Payment\Payment;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
@@ -29,6 +29,7 @@ class PaymentValidator implements ValidatorInterface
         Assertion::greaterThan($object->getAmount(), 0.0, null, 'payment.amount');
         Assertion::uuid($object->getCurrencyIdentifier(), null, 'payment.currencyIdentifier');
         Assertion::uuid($object->getPaymentMethodIdentifier(), null, 'payment.paymentMethodIdentifier');
+        Assertion::uuid($object->getOrderIdentifer(), null, 'payment.orderIdentifier');
         Assertion::string($object->getTransactionReference(), null, 'payment.transactionReference');
         Assertion::notBlank($object->getTransactionReference(), null, 'payment.transactionReference');
         Assertion::allIsInstanceOf($object->getAttributes(), Attribute::class, null, 'payment.attributes');

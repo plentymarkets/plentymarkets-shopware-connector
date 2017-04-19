@@ -40,7 +40,6 @@ class OrderValidator implements ValidatorInterface
         Assertion::nullOrIsInstanceOf($object->getBillingAddress(), Address::class, null, 'order.billingAddress');
         Assertion::nullOrIsInstanceOf($object->getShippingAddress(), Address::class, null, 'order.shippingAddress');
         Assertion::allIsInstanceOf($object->getOrderItems(), OrderItem::class, null, 'order.orderItems');
-        Assertion::allIsInstanceOf($object->getPayments(), Payment::class, null, 'order.payments');
         Assertion::uuid($object->getShopIdentifier(), null, 'order.shopIdentifier');
         Assertion::uuid($object->getCurrencyIdentifier(), null, 'order.currencyIdentifier');
         Assertion::uuid($object->getOrderStatusIdentifier(), null, 'order.orderStatusIdentifier');
@@ -48,7 +47,6 @@ class OrderValidator implements ValidatorInterface
         Assertion::uuid($object->getPaymentMethodIdentifier(), null, 'order.paymentMethodIdentifier');
         Assertion::uuid($object->getShippingProfileIdentifier(), null, 'order.shippingProfileIdentifier');
         Assertion::allIsInstanceOf($object->getComments(), Comment::class, null, 'order.comments');
-        Assertion::allIsInstanceOf($object->getPaymentData(), PaymentDataInterface::class, null, 'order.paymentData');
         Assertion::allIsInstanceOf($object->getAttributes(), Attribute::class, null, 'order.attributes');
     }
 }
