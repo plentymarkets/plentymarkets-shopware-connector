@@ -54,12 +54,12 @@ class FetchAllProductsQueryHandler implements QueryHandlerInterface
     {
         $products = $this->itemApi->findAll();
 
-        $result = [];
+        foreach ($products as $element) {
+            $parsedElements = array_filter($this->responseParser->parse($element));
 
-        foreach ($products as $product) {
-            $result[] = $this->responseParser->parse($product, $result);
+            foreach ($parsedElements as $parsedElement) {
+                yield $parsedElement;
+            }
         }
-
-        return array_filter($result);
     }
 }

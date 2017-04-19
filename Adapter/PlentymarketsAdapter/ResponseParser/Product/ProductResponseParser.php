@@ -20,6 +20,7 @@ use PlentyConnector\Connector\TransferObject\Product\Property\Value\Value;
 use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
 use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
+use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\TransferObject\Unit\Unit;
 use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
@@ -103,11 +104,10 @@ class ProductResponseParser implements ProductResponseParserInterface
 
     /**
      * @param array $product
-     * @param array $result
      *
-     * @return null|Product
+     * @return TransferObjectInterface[]
      */
-    public function parse(array $product, array &$result)
+    public function parse(array $product)
     {
         static $webstores;
 
@@ -116,6 +116,8 @@ class ProductResponseParser implements ProductResponseParserInterface
         }
 
         try {
+            $result = [];
+
             $variations = $this->itemsVariationsApi->findOne($product['id']);
 
             $mainVariation = $this->getMainVariation($variations);
@@ -171,7 +173,9 @@ class ProductResponseParser implements ProductResponseParserInterface
                 'attributes' => $this->getAttributes($product),
             ]);
 
-            return $object;
+            $result[] = $object;
+
+            return $result;
         } catch (\Exception $exception) {
             $this->logger->error($exception->getMessage(), ['product' => $product]);
 
@@ -630,7 +634,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             ]);
 
             if (null === $categoryIdentity) {
-                $this->logger->warning('missing mapping for categiry', ['category' => $category]);
+                $this->logger->warning('missing mapping for category', ['category' => $category]);
 
                 continue;
             }
@@ -743,7 +747,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             ]);
 
             if (null === $categoryIdentity) {
-                $this->logger->warning('missing mapping for categiry', ['category' => $category]);
+                $this->logger->warning('missing mapping for category', ['category' => $category]);
 
                 continue;
             }

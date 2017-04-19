@@ -56,23 +56,18 @@ class FetchChangedProductsQueryHandler implements QueryHandlerInterface
     public function handle(QueryInterface $query)
     {
         $lastCangedTime = $this->getChangedDateTime();
-
         $currentDateTime = $this->getCurrentDateTime();
-        $oldTimestamp = $lastCangedTime->format(DATE_W3C);
-        $newTimestamp = $currentDateTime->format(DATE_W3C);
 
-        $products = $this->itemApi->findChanged($oldTimestamp, $newTimestamp);
+        $products = $this->itemApi->findChanged($lastCangedTime, $currentDateTime);
 
-        $result = [];
+        foreach ($products as $element) {
+            $parsedElements = array_filter($this->responseParser->parse($element));
 
-        foreach ($products as $product) {
-            $result[] = $this->responseParser->parse($product, $result);
+            foreach ($parsedElements as $parsedElement) {
+                yield $parsedElement;
+            }
         }
 
-        if (!empty($result)) {
-            $this->setChangedDateTime($currentDateTime);
-        }
-
-        return array_filter($result);
+        $this->setChangedDateTime($currentDateTime);
     }
 }

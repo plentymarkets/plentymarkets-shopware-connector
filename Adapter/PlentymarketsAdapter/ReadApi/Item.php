@@ -2,6 +2,7 @@
 
 namespace PlentymarketsAdapter\ReadApi;
 
+use DateTimeImmutable;
 use PlentymarketsAdapter\Helper\LanguageHelper;
 
 /**
@@ -43,13 +44,16 @@ class Item extends ApiAbstract
      *
      * @return array
      */
-    public function findChanged($startTimestamp, $endTimestamp)
+    public function findChanged(DateTimeImmutable $startTimestamp, DateTimeImmutable $endTimestamp)
     {
+        $start = $startTimestamp->format(DATE_W3C);
+        $end = $endTimestamp->format(DATE_W3C);
+
         $languageHelper = new LanguageHelper();
 
         return iterator_to_array($this->client->getIterator('items', [
             'lang' => $languageHelper->getLanguagesQueryString(),
-            'updatedBetween' => $startTimestamp . ',' . $endTimestamp,
+            'updatedBetween' => $start . ',' . $end,
             'with' => 'itemProperties.valueTexts,itemCrossSelling',
         ]));
     }
