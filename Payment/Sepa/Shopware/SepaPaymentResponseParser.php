@@ -33,7 +33,7 @@ class SepaPaymentResponseParser implements PaymentResponseParserInterface
      * SepaPaymentResponseParser constructor.
      *
      * @param PaymentResponseParserInterface $parentResponseParser
-     * @param IdentityServiceInterface $identityService
+     * @param IdentityServiceInterface       $identityService
      */
     public function __construct(
         PaymentResponseParserInterface $parentResponseParser,
@@ -41,6 +41,37 @@ class SepaPaymentResponseParser implements PaymentResponseParserInterface
     ) {
         $this->parentResponseParser = $parentResponseParser;
         $this->identityService = $identityService;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function parse(array $element)
+    {
+        $payments = $this->parentResponseParser->parse($element);
+
+        if (!$this->hasSepaPaymentInstance($element)) {
+            return $payments;
+        }
+
+        if (empty($payments)) {
+            $identifier = $this->getIdentifier($element['id'], Payment::TYPE);
+
+            $payment = new Payment();
+            $payment->setOrderIdentifer($this->getIdentifier($element['id'], Order::TYPE));
+            $payment->setIdentifier($identifier);
+            $payment->setTransactionReference($identifier);
+            $payment->setCurrencyIdentifier($this->getIdentifier($this->getCurrencyId($element['currency']), Currency::TYPE));
+            $payment->setPaymentMethodIdentifier($this->getIdentifier($element['paymentId'], PaymentMethod::TYPE));
+
+            $payments = [$payment];
+        }
+
+        foreach ($payments as $payment) {
+            $payment->setPaymentData([$this->getSepaPaymentData($element)]);
+        }
+
+        return $payments;
     }
 
     /**
@@ -118,36 +149,5 @@ class SepaPaymentResponseParser implements PaymentResponseParserInterface
         }
 
         return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function parse(array $element)
-    {
-        $payments = $this->parentResponseParser->parse($element);
-
-        if (!$this->hasSepaPaymentInstance($element)) {
-            return $payments;
-        }
-
-        if (empty($payments)) {
-            $identifier = $this->getIdentifier($element['id'], Payment::TYPE);
-
-            $payment = new Payment();
-            $payment->setOrderIdentifer($this->getIdentifier($element['id'], Order::TYPE));
-            $payment->setIdentifier($identifier);
-            $payment->setTransactionReference($identifier);
-            $payment->setCurrencyIdentifier($this->getIdentifier($this->getCurrencyId($element['currency']), Currency::TYPE));
-            $payment->setPaymentMethodIdentifier($this->getIdentifier($element['paymentId'], PaymentMethod::TYPE));
-
-            $payments = [$payment];
-        }
-
-        foreach ($payments as $payment) {
-            $payment->setPaymentData([$this->getSepaPaymentData($element)]);
-        }
-
-        return $payments;
     }
 }

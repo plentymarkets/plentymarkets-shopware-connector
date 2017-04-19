@@ -8,11 +8,9 @@ use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\HandleCommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\Payment\HandlePaymentCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
-use PlentyConnector\Connector\TransferObject\Currency\Currency;
 use PlentyConnector\Connector\TransferObject\Order\Order;
 use PlentyConnector\Connector\TransferObject\Payment\Payment;
 use PlentyConnector\Connector\TransferObject\Payment\PaymentData\PaymentDataInterface;
-use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use PlentyConnector\Payment\Sepa\PaymentData\SepaPaymentData;
 use PlentymarketsAdapter\Client\ClientInterface;
@@ -41,8 +39,8 @@ class HandleSepaPaymentCommandHandler implements CommandHandlerInterface
     /**
      * HandleSepaPaymentCommandHandler constructor.
      *
-     * @param CommandHandlerInterface $parentCommandHandler
-     * @param ClientInterface $client
+     * @param CommandHandlerInterface  $parentCommandHandler
+     * @param ClientInterface          $client
      * @param IdentityServiceInterface $identityService
      */
     public function __construct(
@@ -71,11 +69,11 @@ class HandleSepaPaymentCommandHandler implements CommandHandlerInterface
     {
         /**
          * @var HandleCommandInterface $command
-         * @var Payment $payment
+         * @var Payment                $payment
          */
         $payment = $command->getTransferObject();
 
-        $paymentData = array_filter($payment->getPaymentData(), function(PaymentDataInterface $paymentData) {
+        $paymentData = array_filter($payment->getPaymentData(), function (PaymentDataInterface $paymentData) {
             return $paymentData instanceof SepaPaymentData;
         });
 
@@ -121,7 +119,7 @@ class HandleSepaPaymentCommandHandler implements CommandHandlerInterface
     /**
      * @param Identity $orderIdentity
      *
-     * @return null|integer
+     * @return null|int
      */
     private function getContactIdentifier(Identity $orderIdentity)
     {

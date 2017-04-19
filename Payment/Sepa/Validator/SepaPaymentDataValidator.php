@@ -3,12 +3,11 @@
 namespace PlentyConnector\Payment\Sepa\Validator;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\Customer\BankAccount\BankAccount;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 use PlentyConnector\Payment\Sepa\PaymentData\SepaPaymentData;
 
 /**
- * Class BankAccountValidator
+ * Class SepaPaymentDataValidator
  */
 class SepaPaymentDataValidator implements ValidatorInterface
 {

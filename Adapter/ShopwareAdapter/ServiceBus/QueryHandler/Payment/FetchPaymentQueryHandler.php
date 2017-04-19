@@ -32,7 +32,6 @@ class FetchPaymentQueryHandler implements QueryHandlerInterface
      */
     private $orderResource;
 
-
     /**
      * {@inheritdoc}
      */

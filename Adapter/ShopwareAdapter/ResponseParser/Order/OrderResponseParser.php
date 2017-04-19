@@ -147,7 +147,6 @@ class OrderResponseParser implements OrderResponseParserInterface
 
         $currencyIdentifier = $this->getIdentifier($this->getCurrencyId($entry['currency']), Currency::TYPE);
 
-
         $order = Order::fromArray([
             'orderNumber' => $entry['number'],
             'orderItems' => $orderItems,

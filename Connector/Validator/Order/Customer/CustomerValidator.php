@@ -3,7 +3,6 @@
 namespace PlentyConnector\Connector\Validator\Order\Customer;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\Customer\BankAccount\BankAccount;
 use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 

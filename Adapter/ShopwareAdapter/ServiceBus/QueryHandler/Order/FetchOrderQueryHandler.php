@@ -37,7 +37,7 @@ class FetchOrderQueryHandler implements QueryHandlerInterface
      *
      * @param OrderResponseParserInterface $responseParser
      * @param IdentityServiceInterface     $identityService
-     * @param OrderResource               $orderResource
+     * @param OrderResource                $orderResource
      */
     public function __construct(
         OrderResponseParserInterface $responseParser,

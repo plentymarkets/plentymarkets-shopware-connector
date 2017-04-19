@@ -34,6 +34,36 @@ class PaymentResponseParser implements PaymentResponseParserInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function parse(array $element)
+    {
+        $paymentIdentifier = $this->identityService->findOneOrCreate(
+            (string) $element['id'],
+            ShopwareAdapter::NAME,
+            Payment::TYPE
+        )->getObjectIdentifier();
+
+        if (empty($element['paymentStatus'])) {
+            return [];
+        }
+
+        if (Status::PAYMENT_STATE_COMPLETELY_PAID !== $element['paymentStatus']['id']) {
+            return [];
+        }
+
+        $payment = new Payment();
+        $payment->setIdentifier($paymentIdentifier);
+        $payment->setOrderIdentifer($this->getIdentifier($element['id'], Order::TYPE));
+        $payment->setAmount($element['invoiceAmount']);
+        $payment->setCurrencyIdentifier($this->getIdentifier($this->getCurrencyId($element['currency']), Currency::TYPE));
+        $payment->setPaymentMethodIdentifier($this->getIdentifier($element['paymentId'], PaymentMethod::TYPE));
+        $payment->setTransactionReference($element['transactionId']);
+
+        return [$payment];
+    }
+
+    /**
      * @param int    $entry
      * @param string $type
      *
@@ -63,35 +93,5 @@ class PaymentResponseParser implements PaymentResponseParserInterface
         $currencyRepository = Shopware()->Models()->getRepository(CurrencyModel::class);
 
         return $currencyRepository->findOneBy(['currency' => $currency])->getId();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function parse(array $element)
-    {
-        $paymentIdentifier = $this->identityService->findOneOrCreate(
-            (string) $element['id'],
-            ShopwareAdapter::NAME,
-            Payment::TYPE
-        )->getObjectIdentifier();
-
-        if (empty($element['paymentStatus'])) {
-            return [];
-        }
-
-        if (Status::PAYMENT_STATE_COMPLETELY_PAID !== $element['paymentStatus']['id']) {
-            return [];
-        }
-
-        $payment = new Payment();
-        $payment->setIdentifier($paymentIdentifier);
-        $payment->setOrderIdentifer($this->getIdentifier($element['id'], Order::TYPE));
-        $payment->setAmount($element['invoiceAmount']);
-        $payment->setCurrencyIdentifier($this->getIdentifier($this->getCurrencyId($element['currency']), Currency::TYPE));
-        $payment->setPaymentMethodIdentifier($this->getIdentifier($element['paymentId'], PaymentMethod::TYPE));
-        $payment->setTransactionReference($element['transactionId']);
-
-        return [$payment];
     }
 }

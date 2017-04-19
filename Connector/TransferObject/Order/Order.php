@@ -9,7 +9,6 @@ use PlentyConnector\Connector\TransferObject\Order\Comment\Comment;
 use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
 use PlentyConnector\Connector\TransferObject\Order\OrderItem\OrderItem;
 use PlentyConnector\Connector\TransferObject\Order\Package\Package;
-use PlentyConnector\Connector\TransferObject\Payment\Payment;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
 /**

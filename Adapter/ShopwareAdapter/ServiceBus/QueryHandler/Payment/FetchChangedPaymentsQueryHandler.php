@@ -5,9 +5,9 @@ namespace ShopwareAdapter\ServiceBus\QueryHandler\Payment;
 use PlentyConnector\Connector\ServiceBus\Query\Payment\FetchChangedPaymentsQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
-use ShopwareAdapter\ResponseParser\Payment\PaymentResponseParserInterface;
 use Shopware\Components\Api\Resource\Order as OrderResource;
 use Shopware\Models\Order\Status;
+use ShopwareAdapter\ResponseParser\Payment\PaymentResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -29,7 +29,7 @@ class FetchChangedPaymentsQueryHandler implements QueryHandlerInterface
      * FetchAllPaymentsQueryHandler constructor.
      *
      * @param PaymentResponseParserInterface $responseParser
-     * @param OrderResource $orderResource
+     * @param OrderResource                  $orderResource
      */
     public function __construct(PaymentResponseParserInterface $responseParser, OrderResource $orderResource)
     {

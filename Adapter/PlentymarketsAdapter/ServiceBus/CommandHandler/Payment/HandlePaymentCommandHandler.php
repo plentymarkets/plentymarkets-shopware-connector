@@ -33,7 +33,7 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
     /**
      * HandlePaymentCommandHandler constructor.
      *
-     * @param ClientInterface $client
+     * @param ClientInterface          $client
      * @param IdentityServiceInterface $identityService
      */
     public function __construct(
@@ -60,7 +60,7 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
     {
         /**
          * @var HandleCommandInterface $command
-         * @var Payment $payment
+         * @var Payment                $payment
          */
         $payment = $command->getTransferObject();
 

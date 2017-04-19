@@ -29,7 +29,7 @@ class FetchAllPaymentsQueryHandler implements QueryHandlerInterface
      * FetchAllPaymentsQueryHandler constructor.
      *
      * @param PaymentResponseParserInterface $responseParser
-     * @param OrderResource $orderResource
+     * @param OrderResource                  $orderResource
      */
     public function __construct(PaymentResponseParserInterface $responseParser, OrderResource $orderResource)
     {
