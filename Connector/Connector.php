@@ -160,22 +160,13 @@ class Connector implements ConnectorInterface
             $objects = [];
         }
 
-        $sortedObjects = [];
         foreach ($objects as $object) {
-            if (isset($sortedObjects[$object->getIdentifier()])) {
-                continue;
-            }
-
-            $sortedObjects[$object->getIdentifier()] = $object;
-        }
-
-        array_walk($sortedObjects, function (TransferObjectInterface $object) use ($definition) {
             $this->serviceBus->handle($this->commandFactory->create(
                 $definition->getDestinationAdapterName(),
                 $object->getType(),
                 CommandType::HANDLE,
                 $object
             ));
-        });
+        }
     }
 }
