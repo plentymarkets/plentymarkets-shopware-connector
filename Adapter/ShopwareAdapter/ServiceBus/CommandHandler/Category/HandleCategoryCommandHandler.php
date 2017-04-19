@@ -233,7 +233,18 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
 
         $categoryIdentity = null;
         if (!empty($possibleIdentities)) {
+            /**
+             * @var Identity $categoryIdentity
+             */
             $categoryIdentity = array_shift($possibleIdentities);
+        }
+
+        if (null !== $categoryIdentity) {
+            try {
+                $this->resource->getOne($categoryIdentity->getAdapterIdentifier());
+            } catch (NotFoundException $exception) {
+                $categoryIdentity = null;
+            }
         }
 
         if (null === $categoryIdentity) {
