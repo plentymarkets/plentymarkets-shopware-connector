@@ -5,9 +5,8 @@ namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Category;
 use PlentyConnector\Connector\ServiceBus\Query\Category\FetchAllCategoriesQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
-use PlentymarketsAdapter\Client\ClientInterface;
-use PlentymarketsAdapter\Helper\LanguageHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
+use PlentymarketsAdapter\ReadApi\Category\Category;
 use PlentymarketsAdapter\ResponseParser\Category\CategoryResponseParserInterface;
 use Psr\Log\LoggerInterface;
 
@@ -17,19 +16,14 @@ use Psr\Log\LoggerInterface;
 class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
 {
     /**
-     * @var ClientInterface
+     * @var Category
      */
-    private $client;
+    private $categoryApi;
 
     /**
      * @var CategoryResponseParserInterface
      */
     private $categoryResponseParser;
-
-    /**
-     * @var LanguageHelper
-     */
-    private $languageHelper;
 
     /**
      * @var LoggerInterface
@@ -39,20 +33,17 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllCategoriesQueryHandler constructor.
      *
-     * @param ClientInterface                 $client
+     * @param Category                        $categoryApi
      * @param CategoryResponseParserInterface $categoryResponseParser
-     * @param LanguageHelper                  $languageHelper
      * @param LoggerInterface                 $logger
      */
     public function __construct(
-        ClientInterface $client,
+        Category $categoryApi,
         CategoryResponseParserInterface $categoryResponseParser,
-        LanguageHelper $languageHelper,
         LoggerInterface $logger
     ) {
-        $this->client = $client;
+        $this->categoryApi = $categoryApi;
         $this->categoryResponseParser = $categoryResponseParser;
-        $this->languageHelper = $languageHelper;
         $this->logger = $logger;
     }
 
@@ -70,13 +61,8 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $elements = $this->client->getIterator('categories', [
-            'with' => 'details,clients',
-            'type' => 'item',
-            'lang' => $this->languageHelper->getLanguagesQueryString(),
-        ]);
+        $elements = $this->categoryApi->findAll();
 
-        $result = [];
         foreach ($elements as $element) {
             if ($element['right'] !== 'all') {
                 $this->logger->notice('unsupported category rights');
@@ -84,13 +70,11 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
                 continue;
             }
 
-            $parsedElements = $this->categoryResponseParser->parse($element);
+            $parsedElements = array_filter($this->categoryResponseParser->parse($element));
 
             foreach ($parsedElements as $parsedElement) {
-                $result[] = $parsedElement;
+                yield $parsedElement;
             }
         }
-
-        return array_filter($result);
     }
 }
