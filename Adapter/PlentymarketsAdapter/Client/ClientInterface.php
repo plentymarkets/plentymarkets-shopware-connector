@@ -2,7 +2,7 @@
 
 namespace PlentymarketsAdapter\Client;
 
-use Iterator;
+use PlentymarketsAdapter\Client\Iterator\Iterator;
 
 /**
  * Interface ClientInterface.
