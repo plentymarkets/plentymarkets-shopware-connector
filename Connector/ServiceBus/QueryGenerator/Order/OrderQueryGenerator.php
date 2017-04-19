@@ -8,6 +8,9 @@ use PlentyConnector\Connector\ServiceBus\Query\Order\FetchOrderQuery;
 use PlentyConnector\Connector\ServiceBus\QueryGenerator\QueryGeneratorInterface;
 use PlentyConnector\Connector\TransferObject\Order\Order;
 
+/**
+ * Class OrderQueryGenerator
+ */
 class OrderQueryGenerator implements QueryGeneratorInterface
 {
     /**

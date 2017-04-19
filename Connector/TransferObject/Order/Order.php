@@ -9,8 +9,7 @@ use PlentyConnector\Connector\TransferObject\Order\Comment\Comment;
 use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
 use PlentyConnector\Connector\TransferObject\Order\OrderItem\OrderItem;
 use PlentyConnector\Connector\TransferObject\Order\Package\Package;
-use PlentyConnector\Connector\TransferObject\Order\Payment\Payment;
-use PlentyConnector\Connector\TransferObject\Order\PaymentData\PaymentDataInterface;
+use PlentyConnector\Connector\TransferObject\Payment\Payment;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
 /**
@@ -66,11 +65,6 @@ class Order extends AbstractTransferObject
     private $orderItems = [];
 
     /**
-     * @var Payment[]
-     */
-    private $payments = [];
-
-    /**
      * @var string
      */
     private $shopIdentifier = '';
@@ -104,11 +98,6 @@ class Order extends AbstractTransferObject
      * @var Comment[]
      */
     private $comments = [];
-
-    /**
-     * @var PaymentDataInterface[]
-     */
-    private $paymentData;
 
     /**
      * @var Package[]
@@ -276,22 +265,6 @@ class Order extends AbstractTransferObject
     }
 
     /**
-     * @return Payment[]
-     */
-    public function getPayments()
-    {
-        return $this->payments;
-    }
-
-    /**
-     * @param Payment[] $payments
-     */
-    public function setPayments(array $payments)
-    {
-        $this->payments = $payments;
-    }
-
-    /**
      * @return string
      */
     public function getShopIdentifier()
@@ -401,22 +374,6 @@ class Order extends AbstractTransferObject
     public function setComments($comments)
     {
         $this->comments = $comments;
-    }
-
-    /**
-     * @return PaymentDataInterface[]
-     */
-    public function getPaymentData()
-    {
-        return $this->paymentData;
-    }
-
-    /**
-     * @param PaymentDataInterface[] $paymentData
-     */
-    public function setPaymentData(array $paymentData = [])
-    {
-        $this->paymentData = $paymentData;
     }
 
     /**
