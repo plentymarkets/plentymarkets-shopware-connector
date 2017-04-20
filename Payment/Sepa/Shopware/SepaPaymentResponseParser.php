@@ -68,7 +68,11 @@ class SepaPaymentResponseParser implements PaymentResponseParserInterface
         }
 
         foreach ($payments as $payment) {
-            $payment->setPaymentData([$this->getSepaPaymentData($element)]);
+            if (!($payment instanceof Payment)) {
+                continue;
+            }
+
+            $payment->setPaymentData($this->getSepaPaymentData($element));
         }
 
         return $payments;

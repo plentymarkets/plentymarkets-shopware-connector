@@ -10,7 +10,6 @@ use PlentyConnector\Connector\ServiceBus\Command\Payment\HandlePaymentCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\TransferObject\Order\Order;
 use PlentyConnector\Connector\TransferObject\Payment\Payment;
-use PlentyConnector\Connector\TransferObject\Payment\PaymentData\PaymentDataInterface;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use PlentyConnector\Payment\Sepa\PaymentData\SepaPaymentData;
 use PlentymarketsAdapter\Client\ClientInterface;
@@ -73,13 +72,14 @@ class HandleSepaPaymentCommandHandler implements CommandHandlerInterface
          */
         $payment = $command->getTransferObject();
 
-        $paymentData = array_filter($payment->getPaymentData(), function (PaymentDataInterface $paymentData) {
-            return $paymentData instanceof SepaPaymentData;
-        });
-
-        if (empty($paymentData)) {
+        if (!($payment->getPaymentData() instanceof SepaPaymentData)) {
             return $this->parentCommandHandler->handle($command);
         }
+
+        /**
+         * @var SepaPaymentData $data
+         */
+        $data = $payment->getPaymentData();
 
         $orderIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $payment->getOrderIdentifer(),
@@ -97,31 +97,26 @@ class HandleSepaPaymentCommandHandler implements CommandHandlerInterface
             throw new NotFoundException('could not find contact for bank account handling - ' . $payment->getOrderIdentifer());
         }
 
-        /**
-         * @var SepaPaymentData $data
-         */
-        foreach ($paymentData as $data) {
-            $bankAccounts = $this->client->request('GET', 'accounts/contacts/' . $contactId . '/banks');
+        $bankAccounts = $this->client->request('GET', 'accounts/contacts/' . $contactId . '/banks');
 
-            $possibleBankAccounts = array_filter($bankAccounts, function (array $bankAccount) use ($data, $orderIdentity) {
-                return $bankAccount['iban'] === $data->getIban() && $bankAccount['orderId'] === (int) $orderIdentity->getAdapterIdentifier();
-            });
+        $possibleBankAccounts = array_filter($bankAccounts, function (array $bankAccount) use ($data, $orderIdentity) {
+            return $bankAccount['iban'] === $data->getIban() && $bankAccount['orderId'] === (int) $orderIdentity->getAdapterIdentifier();
+        });
 
-            if (!empty($possibleBankAccounts)) {
-                continue;
-            }
-
-            $sepaPaymentDataParams = [
-                'lastUpdateBy' => 'import',
-                'accountOwner' => $data->getAccountOwner(),
-                'iban' => $data->getIban(),
-                'bic' => $data->getBic(),
-                'orderId' => $orderIdentity->getAdapterIdentifier(),
-                'contactId' => $contactId,
-            ];
-
-            $this->client->request('POST', 'accounts/contacts/banks', $sepaPaymentDataParams);
+        if (!empty($possibleBankAccounts)) {
+            return true;
         }
+
+        $sepaPaymentDataParams = [
+            'lastUpdateBy' => 'import',
+            'accountOwner' => $data->getAccountOwner(),
+            'iban' => $data->getIban(),
+            'bic' => $data->getBic(),
+            'orderId' => $orderIdentity->getAdapterIdentifier(),
+            'contactId' => $contactId,
+        ];
+
+        $this->client->request('POST', 'accounts/contacts/banks', $sepaPaymentDataParams);
 
         return true;
     }
