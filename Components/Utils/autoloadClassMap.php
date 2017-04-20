@@ -356,6 +356,7 @@
 	'PlentymarketsImportEntityOrderIncomingPayments' => '../../Components/Import/Entity/Order/PlentymarketsImportEntityOrderIncomingPayments.php',
 	'PlentymarketsImportEntityOrderStatusChange' => '../../Components/Import/Entity/Order/PlentymarketsImportEntityOrderStatusChange.php',
 	'PlentymarketsImportEntityOrderOutgoingItems' => '../../Components/Import/Entity/Order/PlentymarketsImportEntityOrderOutgoingItems.php',
+    'PlentymarketsImportEntityOrderPackageNumber' => '../../Components/Import/Entity/Order/PlentymarketsImportEntityOrderPackageNumber.php',
 	'PlentymarketsImportException' => '../../Components/Import/Exception/PlentymarketsImportException.php',
 	'PlentymarketsImportItemAssociateController' => '../../Components/Import/PlentymarketsImportItemAssociateController.php',
 	'PlentymarketsImportItemException' => '../../Components/Import/Exception/PlentymarketsImportItemException.php',
