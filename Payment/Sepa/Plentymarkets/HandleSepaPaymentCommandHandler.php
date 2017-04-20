@@ -101,6 +101,16 @@ class HandleSepaPaymentCommandHandler implements CommandHandlerInterface
          * @var SepaPaymentData $data
          */
         foreach ($paymentData as $data) {
+            $bankAccounts = $this->client->request('GET', 'accounts/contacts/' . $contactId . '/banks');
+
+            $possibleBankAccounts = array_filter($bankAccounts, function (array $bankAccount) use ($data, $orderIdentity) {
+                return $bankAccount['iban'] === $data->getIban() && $bankAccount['orderId'] === (int) $orderIdentity->getAdapterIdentifier();
+            });
+
+            if (!empty($possibleBankAccounts)) {
+                continue;
+            }
+
             $sepaPaymentDataParams = [
                 'lastUpdateBy' => 'import',
                 'accountOwner' => $data->getAccountOwner(),
