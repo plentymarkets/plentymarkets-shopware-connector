@@ -49,6 +49,6 @@ class PayPalPlusInvoicePaymentDataValidator implements ValidatorInterface
         Assertion::string($object->getAmountCurrency(), null, 'payment.paypal.invoice.amountCurrency');
         Assertion::notBlank($object->getAmountCurrency(), null, 'payment.paypal.invoice.amountCurrency');
 
-        Assertion::isInstanceOf($object->getPaymentDueDate(), DateTimeImmutable::class, null,'payment.paypal.invoice.amountCurrency');
+        Assertion::isInstanceOf($object->getPaymentDueDate(), DateTimeImmutable::class, null, 'payment.paypal.invoice.amountCurrency');
     }
 }
