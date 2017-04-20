@@ -33,6 +33,23 @@ class FetchPaymentQueryHandler implements QueryHandlerInterface
     private $orderResource;
 
     /**
+     * FetchPaymentQueryHandler constructor.
+     *
+     * @param PaymentResponseParserInterface $responseParser
+     * @param IdentityServiceInterface $identityService
+     * @param OrderResource $orderResource
+     */
+    public function __construct(
+        PaymentResponseParserInterface $responseParser,
+        IdentityServiceInterface $identityService,
+        OrderResource $orderResource
+    ) {
+        $this->responseParser = $responseParser;
+        $this->identityService = $identityService;
+        $this->orderResource = $orderResource;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function supports(QueryInterface $query)
@@ -63,6 +80,6 @@ class FetchPaymentQueryHandler implements QueryHandlerInterface
 
         $order = $this->responseParser->parse($order);
 
-        return array_filter([$order]);
+        return array_filter($order);
     }
 }
