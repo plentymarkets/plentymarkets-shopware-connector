@@ -609,7 +609,7 @@
 
         <service id="plenty_connector.service_bus.class_name_formatter" class="PlentyConnector\Connector\Logger\ClassNameFormatter" />
 
-        <service id="plenty_connector.service_bus.logger_middleware" class="League\Tactician\Logger\LoggerMiddleware">
+        <service id="plenty_connector.service_bus.logger_middleware" class="PlentyConnector\Connector\Logger\LoggerMiddleware">
             <argument type="service" id="plenty_connector.service_bus.class_name_formatter" />
             <argument type="service" id="plenty_connector.logger" />
         </service>

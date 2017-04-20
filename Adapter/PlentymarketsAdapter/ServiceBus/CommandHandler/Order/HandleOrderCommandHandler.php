@@ -97,58 +97,10 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             return true;
         }
 
-        try {
-            $this->handleOrder($order);
-        } catch (\Exception $exception) {
-            $this->logger->error($exception->getMessage());
-            $this->logger->error($order->getIdentifier());
-
-            return false;
-        }
-
-        try {
-            $this->handleComments($order);
-        } catch (\Exception $exception) {
-            $this->logger->error($exception->getMessage());
-            $this->logger->error($order->getIdentifier());
-
-            return false;
-        }
+        $this->handleOrder($order);
+        $this->handleComments($order);
 
         return true;
-    }
-
-    /**
-     * @param Order $order
-     *
-     * @throws NotFoundException
-     */
-    private function handleComments(Order $order)
-    {
-        $orderIdentity = $this->identityService->findOneBy([
-            'objectIdentifier' => $order->getIdentifier(),
-            'objectType' => Order::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
-        ]);
-
-        if (null === $orderIdentity) {
-            throw new NotFoundException('could not find order for comment handling - ' . $order->getIdentifier());
-        }
-
-        foreach ($order->getComments() as $comment) {
-            $commentParams = [
-                'referenceType' => 'order',
-                'referenceValue' => $orderIdentity->getAdapterIdentifier(),
-                'text' => $comment->getComment(),
-                'isVisibleForContact' => $comment->getType() === Comment::TYPE_CUSTOMER,
-            ];
-
-            if ($comment->getType() === Comment::TYPE_INTERNAL) {
-                $commentParams['userId'] = 1; // TODO: userId des rest benutzers auslesen?
-            }
-
-            $this->client->request('post', 'comments', $commentParams);
-        }
     }
 
     /**
@@ -379,10 +331,6 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
 
             return $itemParams;
         }, $order->getOrderItems());
-
-        if ($order->getOrderNumber() === '20008') {
-            var_dump($params);
-        }
 
         $params['referrerId'] = 1; // TOOD: testen
 
@@ -682,5 +630,38 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         }
 
         return $this->client->request('POST', 'accounts/contacts/' . $plentyCustomer['id'] . '/addresses', $params);
+    }
+
+    /**
+     * @param Order $order
+     *
+     * @throws NotFoundException
+     */
+    private function handleComments(Order $order)
+    {
+        $orderIdentity = $this->identityService->findOneBy([
+            'objectIdentifier' => $order->getIdentifier(),
+            'objectType' => Order::TYPE,
+            'adapterName' => PlentymarketsAdapter::NAME,
+        ]);
+
+        if (null === $orderIdentity) {
+            throw new NotFoundException('could not find order for comment handling - ' . $order->getIdentifier());
+        }
+
+        foreach ($order->getComments() as $comment) {
+            $commentParams = [
+                'referenceType' => 'order',
+                'referenceValue' => $orderIdentity->getAdapterIdentifier(),
+                'text' => $comment->getComment(),
+                'isVisibleForContact' => $comment->getType() === Comment::TYPE_CUSTOMER,
+            ];
+
+            if ($comment->getType() === Comment::TYPE_INTERNAL) {
+                $commentParams['userId'] = 1; // TODO: userId des rest benutzers auslesen?
+            }
+
+            $this->client->request('post', 'comments', $commentParams);
+        }
     }
 }
