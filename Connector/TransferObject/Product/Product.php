@@ -2,6 +2,7 @@
 
 namespace PlentyConnector\Connector\TransferObject\Product;
 
+use DateTimeImmutable;
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 use PlentyConnector\Connector\TransferObject\Product\Image\Image;
 use PlentyConnector\Connector\TransferObject\Product\LinkedProduct\LinkedProduct;
@@ -141,12 +142,12 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     private $translations = [];
 
     /**
-     * @var null|\DateTimeImmutable
+     * @var null|DateTimeImmutable
      */
     private $availableFrom;
 
     /**
-     * @var null|\DateTimeImmutable
+     * @var null|DateTimeImmutable
      */
     private $availableTo;
 
@@ -548,7 +549,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     }
 
     /**
-     * @return null|\DateTimeImmutable
+     * @return null|DateTimeImmutable
      */
     public function getAvailableFrom()
     {
@@ -556,15 +557,15 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     }
 
     /**
-     * @param null|\DateTimeImmutable $availableFrom
+     * @param null|DateTimeImmutable $availableFrom
      */
-    public function setAvailableFrom(\DateTimeImmutable $availableFrom = null)
+    public function setAvailableFrom(DateTimeImmutable $availableFrom = null)
     {
         $this->availableFrom = $availableFrom;
     }
 
     /**
-     * @return null|\DateTimeImmutable
+     * @return null|DateTimeImmutable
      */
     public function getAvailableTo()
     {
@@ -572,9 +573,9 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     }
 
     /**
-     * @param null|\DateTimeImmutable $availableTo
+     * @param null|DateTimeImmutable $availableTo
      */
-    public function setAvailableTo(\DateTimeImmutable $availableTo = null)
+    public function setAvailableTo(DateTimeImmutable $availableTo = null)
     {
         $this->availableTo = $availableTo;
     }

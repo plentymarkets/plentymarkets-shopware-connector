@@ -2,6 +2,7 @@
 
 namespace PlentyConnector\Connector\TransferObject\Product\Variation;
 
+use DateTimeImmutable;
 use PlentyConnector\Connector\TransferObject\Product\Barcode\Barcode;
 use PlentyConnector\Connector\TransferObject\Product\Image\Image;
 use PlentyConnector\Connector\TransferObject\Product\Price\Price;
@@ -95,7 +96,7 @@ class Variation extends AbstractValueObject
     private $shippingTime = 0;
 
     /**
-     * @var null|\DateTimeImmutable
+     * @var null|DateTimeImmutable
      */
     private $releaseDate;
 
@@ -386,7 +387,7 @@ class Variation extends AbstractValueObject
     }
 
     /**
-     * @return null|\DateTimeImmutable
+     * @return null|DateTimeImmutable
      */
     public function getReleaseDate()
     {
@@ -394,9 +395,9 @@ class Variation extends AbstractValueObject
     }
 
     /**
-     * @param null|\DateTimeImmutable $releaseDate
+     * @param null|DateTimeImmutable $releaseDate
      */
-    public function setReleaseDate(\DateTimeImmutable $releaseDate = null)
+    public function setReleaseDate(DateTimeImmutable $releaseDate = null)
     {
         $this->releaseDate = $releaseDate;
     }

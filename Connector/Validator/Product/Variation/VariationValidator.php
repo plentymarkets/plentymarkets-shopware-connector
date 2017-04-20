@@ -3,6 +3,7 @@
 namespace PlentyConnector\Connector\Validator\Product\Variation;
 
 use Assert\Assertion;
+use DateTimeImmutable;
 use PlentyConnector\Connector\TransferObject\Product\Barcode\Barcode;
 use PlentyConnector\Connector\TransferObject\Product\Image\Image;
 use PlentyConnector\Connector\TransferObject\Product\Price\Price;
@@ -46,7 +47,7 @@ class VariationValidator implements ValidatorInterface
         Assertion::float($object->getMinimumOrderQuantity(), null, 'variation.minimumOrderQuantity');
         Assertion::float($object->getIntervalOrderQuantity(), null, 'variation.intervalOrderQuantity');
         Assertion::integer($object->getShippingTime(), null, 'variation.shippingTime');
-        Assertion::nullOrIsInstanceOf($object->getReleaseDate(), \DateTimeImmutable::class, null, 'variation.releasedate');
+        Assertion::nullOrIsInstanceOf($object->getReleaseDate(), DateTimeImmutable::class, null, 'variation.releasedate');
         Assertion::integer($object->getWidth(), null, 'variation.width');
         Assertion::integer($object->getHeight(), null, 'variation.height');
         Assertion::integer($object->getLength(), null, 'variation.length');

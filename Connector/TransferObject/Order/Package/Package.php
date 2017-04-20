@@ -2,6 +2,7 @@
 
 namespace PlentyConnector\Connector\TransferObject\Order\Package;
 
+use DateTimeImmutable;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 
 /**
@@ -10,7 +11,7 @@ use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 class Package extends AbstractValueObject
 {
     /**
-     * @var \DateTimeImmutable
+     * @var DateTimeImmutable
      */
     private $shippingTime;
 
@@ -26,11 +27,11 @@ class Package extends AbstractValueObject
     {
         $timezone = new \DateTimeZone('UTC');
 
-        $this->shippingTime = new \DateTimeImmutable('now', $timezone);
+        $this->shippingTime = new DateTimeImmutable('now', $timezone);
     }
 
     /**
-     * @return \DateTimeImmutable
+     * @return DateTimeImmutable
      */
     public function getShippingTime()
     {
@@ -38,7 +39,7 @@ class Package extends AbstractValueObject
     }
 
     /**
-     * @param \DateTimeImmutable $shippingTime
+     * @param DateTimeImmutable $shippingTime
      */
     public function setShippingTime($shippingTime)
     {

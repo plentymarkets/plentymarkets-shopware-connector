@@ -3,6 +3,7 @@
 namespace PlentyConnector\Connector\Validator\Order\Customer;
 
 use Assert\Assertion;
+use DateTimeImmutable;
 use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 
@@ -45,7 +46,7 @@ class CustomerValidator implements ValidatorInterface
         Assertion::string($object->getLastname(), 'customer.lastname');
         Assertion::notBlank($object->getLastname(), 'customer.lastname');
 
-        Assertion::nullOrIsInstanceOf($object->getBirthday(), \DateTimeImmutable::class, 'customer.birthday');
+        Assertion::nullOrIsInstanceOf($object->getBirthday(), DateTimeImmutable::class, 'customer.birthday');
 
         Assertion::nullOrString($object->getPhoneNumber(), 'customer.phoneNumber');
         Assertion::nullOrString($object->getMobilePhoneNumber(), 'customer.mobilePhoneNumber');

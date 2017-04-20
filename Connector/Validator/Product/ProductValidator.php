@@ -3,6 +3,7 @@
 namespace PlentyConnector\Connector\Validator\Product;
 
 use Assert\Assertion;
+use DateTimeImmutable;
 use PlentyConnector\Connector\TransferObject\Product\Image\Image;
 use PlentyConnector\Connector\TransferObject\Product\LinkedProduct\LinkedProduct;
 use PlentyConnector\Connector\TransferObject\Product\Product;
@@ -81,8 +82,8 @@ class ProductValidator implements ValidatorInterface
 
         Assertion::allIsInstanceOf($object->getTranslations(), Translation::class, null, 'product.translations');
 
-        Assertion::nullOrIsInstanceOf($object->getAvailableFrom(), \DateTimeImmutable::class, null, 'product.availableFrom');
-        Assertion::nullOrIsInstanceOf($object->getAvailableTo(), \DateTimeImmutable::class, null, 'product.availableTo');
+        Assertion::nullOrIsInstanceOf($object->getAvailableFrom(), DateTimeImmutable::class, null, 'product.availableFrom');
+        Assertion::nullOrIsInstanceOf($object->getAvailableTo(), DateTimeImmutable::class, null, 'product.availableTo');
 
         Assertion::allIsInstanceOf($object->getAttributes(), Attribute::class, null, 'product.attributes');
 

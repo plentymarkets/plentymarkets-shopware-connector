@@ -3,6 +3,7 @@
 namespace ShopwareAdapter\ResponseParser\Order;
 
 use Assert\Assertion;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
@@ -155,7 +156,7 @@ class OrderResponseParser implements OrderResponseParserInterface
             'shippingAddress' => $shippingAddress,
             'comments' => $this->getComments($entry),
             'customer' => $customer,
-            'orderTime' => \DateTimeImmutable::createFromMutable($entry['orderTime']),
+            'orderTime' => DateTimeImmutable::createFromMutable($entry['orderTime']),
             'orderType' => Order::TYPE_ORDER,
             'identifier' => $orderIdentifier,
             'orderStatusIdentifier' => $orderStatusIdentifier,

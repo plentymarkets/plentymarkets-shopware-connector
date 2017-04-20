@@ -2,6 +2,8 @@
 
 namespace PlentyConnector\Connector\ConfigService;
 
+use DateTime;
+use DateTimeImmutable;
 use Exception;
 use PlentyConnector\Connector\ConfigService\Model\Config as ConfigModel;
 use Shopware\Components\Model\ModelManager;
@@ -88,7 +90,7 @@ class ConfigService implements ConfigServiceInterface
             return;
         }
 
-        if ($value instanceof \DateTime || $value instanceof \DateTimeImmutable) {
+        if ($value instanceof DateTime || $value instanceof DateTimeImmutable) {
             $value = $value->format(DATE_W3C);
         }
 

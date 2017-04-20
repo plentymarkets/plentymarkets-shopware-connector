@@ -3,6 +3,7 @@
 namespace PlentyConnector\Connector\Validator\Order;
 
 use Assert\Assertion;
+use DateTimeImmutable;
 use PlentyConnector\Connector\TransferObject\Order\Address\Address;
 use PlentyConnector\Connector\TransferObject\Order\Comment\Comment;
 use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
@@ -33,7 +34,7 @@ class OrderValidator implements ValidatorInterface
         Assertion::inArray($object->getOrderType(), $object->getOrderTypes(), null, 'order.orderType');
         Assertion::string($object->getOrderNumber(), null, 'order.orderNumber');
         Assertion::notBlank($object->getOrderNumber(), null, 'order.orderNumber');
-        Assertion::isInstanceOf($object->getOrderTime(), \DateTimeImmutable::class, null, 'order.orderTime');
+        Assertion::isInstanceOf($object->getOrderTime(), DateTimeImmutable::class, null, 'order.orderTime');
         Assertion::isInstanceOf($object->getCustomer(), Customer::class, null, 'order.customer');
         Assertion::nullOrIsInstanceOf($object->getBillingAddress(), Address::class, null, 'order.billingAddress');
         Assertion::nullOrIsInstanceOf($object->getShippingAddress(), Address::class, null, 'order.shippingAddress');

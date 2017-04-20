@@ -170,9 +170,9 @@ class Payment extends AbstractTransferObject
     }
 
     /**
-     * @param PaymentDataInterface[] $paymentData
+     * @param PaymentDataInterface $paymentData
      */
-    public function setPaymentData(array $paymentData = [])
+    public function setPaymentData(PaymentDataInterface $paymentData)
     {
         $this->paymentData = $paymentData;
     }

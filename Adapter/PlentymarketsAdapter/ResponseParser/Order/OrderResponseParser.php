@@ -2,6 +2,7 @@
 
 namespace PlentymarketsAdapter\ResponseParser\Order;
 
+use DateTimeImmutable;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Country\Country;
 use PlentyConnector\Connector\TransferObject\Currency\Currency;
@@ -512,7 +513,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     /**
      * @param array $entry
      *
-     * @return \DateTimeImmutable|null
+     * @return DateTimeImmutable|null
      */
     private function getOrderTime(array $entry)
     {
@@ -523,7 +524,9 @@ class OrderResponseParser implements OrderResponseParserInterface
         if (!empty($date)) {
             $date = array_shift($date);
 
-            return \DateTimeImmutable::createFromFormat(DATE_W3C, $date['date']);
+            $timezone = new \DateTimeZone('UTC');
+
+            return DateTimeImmutable::createFromFormat(DATE_W3C, $date['date'], $timezone);
         }
 
         return null;
@@ -704,7 +707,13 @@ class OrderResponseParser implements OrderResponseParserInterface
             $package->setShippingCode((string) $number);
 
             if (!empty($shoppingDate)) {
-                $package->setShippingTime(\DateTimeImmutable::createFromFormat(DATE_ATOM, $shoppingDate['date']));
+                $timezone = new \DateTimeZone('UTC');
+
+                $package->setShippingTime(DateTimeImmutable::createFromFormat(
+                    DATE_ATOM,
+                    $shoppingDate['date'],
+                    $timezone
+                ));
             }
 
             $result[] = $package;
