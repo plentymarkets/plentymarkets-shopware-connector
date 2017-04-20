@@ -52,6 +52,12 @@
 
         <service id="plentmarkets_adapter.helper.media_category" class="PlentymarketsAdapter\Helper\MediaCategoryHelper" />
 
+        <!-- Request Generator -->
+
+        <service id="plentmarkets_adapter.request_generator.payment" class="PlentymarketsAdapter\RequestGenerator\Payment\PaymentRequestGenerator">
+            <argument type="service" id="plenty_connector.identity_service" />
+        </service>
+
         <!-- Response Parser -->
 
         <service id="plentmarkets_adapter.response_parser.category" class="PlentymarketsAdapter\ResponseParser\Category\CategoryResponseParser">
@@ -356,6 +362,7 @@
         <service id="plentymarkets_adapter.command_handler.handle_payment" class="PlentymarketsAdapter\ServiceBus\CommandHandler\Payment\HandlePaymentCommandHandler">
             <argument type="service" id="plentmarkets_adapter.client" />
             <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="plentmarkets_adapter.request_generator.payment" />
 
             <tag name="plenty_connector.command_handler" />
         </service>
