@@ -81,7 +81,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
             ]);
 
             if (null === $parentIdentity) {
-                $this->logger->notice('parent identity was not found');
+                $this->logger->notice('parent category was not found', ['category' => $entry]);
 
                 return [];
             }
