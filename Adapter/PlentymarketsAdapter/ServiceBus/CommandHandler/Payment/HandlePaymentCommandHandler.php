@@ -2,7 +2,6 @@
 
 namespace PlentymarketsAdapter\ServiceBus\CommandHandler\Payment;
 
-use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\HandleCommandInterface;
@@ -13,6 +12,7 @@ use PlentyConnector\Connector\TransferObject\Payment\Payment;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\RequestGenerator\Payment\PaymentRequestGeneratorInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class HandlePaymentCommandHandler.
@@ -35,20 +35,28 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
     private $requestGenerator;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * HandlePaymentCommandHandler constructor.
      *
-     * @param ClientInterface                  $client
-     * @param IdentityServiceInterface         $identityService
+     * @param ClientInterface $client
+     * @param IdentityServiceInterface $identityService
      * @param PaymentRequestGeneratorInterface $requestGenerator
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ClientInterface $client,
         IdentityServiceInterface $identityService,
-        PaymentRequestGeneratorInterface $requestGenerator
+        PaymentRequestGeneratorInterface $requestGenerator,
+        LoggerInterface $logger
     ) {
         $this->client = $client;
         $this->identityService = $identityService;
         $this->requestGenerator = $requestGenerator;
+        $this->logger = $logger;
     }
 
     /**
@@ -67,7 +75,7 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
     {
         /**
          * @var HandleCommandInterface $command
-         * @var Payment                $payment
+         * @var Payment $payment
          */
         $payment = $command->getTransferObject();
 
@@ -88,14 +96,14 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
         ]);
 
         if (null === $orderIdentity) {
-            throw new NotFoundException('order not found');
+            $this->logger->notice('order was not exported before payment handling');
+
+            return false;
         }
 
-        $paymentResult = $this->client->request(
-            'POST',
-            'payments',
-            $this->requestGenerator->generate($payment)
-        );
+        $params = $this->requestGenerator->generate($payment);
+
+        $paymentResult = $this->client->request('POST', 'payments', $params);
 
         $this->identityService->create(
             $payment->getIdentifier(),

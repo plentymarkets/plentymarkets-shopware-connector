@@ -363,6 +363,7 @@
             <argument type="service" id="plentmarkets_adapter.client" />
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plentmarkets_adapter.request_generator.payment" />
+            <argument type="service" id="plenty_connector.logger" />
 
             <tag name="plenty_connector.command_handler" />
         </service>
