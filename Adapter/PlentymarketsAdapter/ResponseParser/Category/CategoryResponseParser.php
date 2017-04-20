@@ -74,15 +74,25 @@ class CategoryResponseParser implements CategoryResponseParserInterface
         );
 
         if (null !== $entry['parentCategoryId']) {
-            $parentIdentity = $this->identityService->findOneOrCreate(
-                (string) $entry['parentCategoryId'],
-                PlentymarketsAdapter::NAME,
-                Category::TYPE
-            );
+            $parentIdentity = $this->identityService->findOneBy([
+                'adapterIdentifier' => (string) $entry['parentCategoryId'],
+                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType' => Category::TYPE,
+            ]);
+
+            if (null === $parentIdentity) {
+                $this->logger->notice('parent identity was not found');
+
+                return [];
+            }
 
             $parentCategoryIdentifier = $parentIdentity->getObjectIdentifier();
         } else {
             $parentCategoryIdentifier = null;
+        }
+
+        if (empty($entry['clients'])) {
+            return [];
         }
 
         $shopIdentifiers = [];
