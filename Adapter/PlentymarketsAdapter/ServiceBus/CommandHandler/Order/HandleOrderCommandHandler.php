@@ -107,6 +107,8 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
      * @param Order $order
      *
      * @return bool
+     *
+     * @throws NotFoundException
      */
     private function handleOrder(Order $order)
     {
@@ -199,9 +201,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         ]);
 
         if (null === $paymentMethodIdentity) {
-            // TODO: throw
-
-            return false;
+            throw new NotFoundException('missing payment method mapping');
         }
 
         $params['properties'] = [

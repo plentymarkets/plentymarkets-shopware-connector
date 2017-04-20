@@ -80,6 +80,6 @@ class FetchOrderQueryHandler implements QueryHandlerInterface
 
         $order = $this->responseParser->parse($order);
 
-        return array_filter([$order]);
+        return array_filter($order);
     }
 }

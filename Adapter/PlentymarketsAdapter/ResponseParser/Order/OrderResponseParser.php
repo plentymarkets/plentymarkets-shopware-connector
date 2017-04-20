@@ -192,7 +192,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         $order->setPackages($this->getPackages($entry));
         $order->setAttributes([]);
 
-        return $order;
+        return [$order];
     }
 
     /**

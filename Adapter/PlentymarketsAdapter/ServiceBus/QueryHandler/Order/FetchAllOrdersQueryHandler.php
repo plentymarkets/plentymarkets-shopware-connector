@@ -54,11 +54,12 @@ class FetchAllOrdersQueryHandler implements QueryHandlerInterface
     {
         $orders = $this->api->findAll();
 
-        $result = [];
-        foreach ($orders as $order) {
-            $result[] = $this->responseParser->parse($order);
-        }
+        foreach ($orders as $element) {
+            $parsedElements = array_filter($this->responseParser->parse($element));
 
-        return array_filter($result);
+            foreach ($parsedElements as $parsedElement) {
+                yield $parsedElement;
+            }
+        }
     }
 }

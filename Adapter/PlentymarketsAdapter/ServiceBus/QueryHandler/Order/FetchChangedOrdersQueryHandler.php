@@ -65,15 +65,14 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
 
         $orders = $this->api->findBy($criteria);
 
-        $result = [];
-        foreach ($orders as $order) {
-            $result[] = $this->responseParser->parse($order);
+        foreach ($orders as $element) {
+            $parsedElements = array_filter($this->responseParser->parse($element));
+
+            foreach ($parsedElements as $parsedElement) {
+                yield $parsedElement;
+            }
         }
 
-        if (!empty($result)) {
-            $this->setChangedDateTime($currentDateTime);
-        }
-
-        return array_filter($result);
+        $this->setChangedDateTime($currentDateTime);
     }
 }

@@ -75,10 +75,10 @@ class FetchOrderQueryHandler implements QueryHandlerInterface
             return [];
         }
 
-        $order = $this->api->find($identity->getAdapterIdentifier());
+        $orderData = $this->api->find($identity->getAdapterIdentifier());
 
-        $result = [$this->responseParser->parse($order)];
+        $order = $this->responseParser->parse($orderData);
 
-        return array_filter($result);
+        return array_filter($order);
     }
 }
