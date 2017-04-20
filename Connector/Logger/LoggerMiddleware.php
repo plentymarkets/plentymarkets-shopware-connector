@@ -2,11 +2,10 @@
 
 namespace PlentyConnector\Connector\Logger;
 
-
+use Exception;
 use League\Tactician\Logger\Formatter\Formatter;
 use League\Tactician\Middleware;
 use Psr\Log\LoggerInterface;
-use Exception;
 
 /**
  * Class LoggerMiddleware
@@ -24,7 +23,7 @@ class LoggerMiddleware implements Middleware
     private $formatter;
 
     /**
-     * @param Formatter $formatter
+     * @param Formatter       $formatter
      * @param LoggerInterface $logger
      */
     public function __construct(Formatter $formatter, LoggerInterface $logger)
