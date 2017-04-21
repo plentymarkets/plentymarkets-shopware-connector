@@ -11,7 +11,6 @@ use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Manufacturer\ManufacturerResponseParserInterface;
-use PlentymarketsAdapter\ResponseParser\Media\MediaResponseParserInterface;
 
 /**
  * Class FetchManufacturerQueryHandler
@@ -29,11 +28,6 @@ class FetchManufacturerQueryHandler implements QueryHandlerInterface
     private $manufacturerResponseParser;
 
     /**
-     * @var MediaResponseParserInterface
-     */
-    private $mediaResponseParser;
-
-    /**
      * @var IdentityServiceInterface
      */
     private $identityService;
@@ -43,18 +37,15 @@ class FetchManufacturerQueryHandler implements QueryHandlerInterface
      *
      * @param ClientInterface                     $client
      * @param ManufacturerResponseParserInterface $manufacturerResponseParser
-     * @param MediaResponseParserInterface        $mediaResponseParser
      * @param IdentityServiceInterface            $identityService
      */
     public function __construct(
         ClientInterface $client,
         ManufacturerResponseParserInterface $manufacturerResponseParser,
-        MediaResponseParserInterface $mediaResponseParser,
         IdentityServiceInterface $identityService
     ) {
         $this->client = $client;
         $this->manufacturerResponseParser = $manufacturerResponseParser;
-        $this->mediaResponseParser = $mediaResponseParser;
         $this->identityService = $identityService;
     }
 
@@ -72,8 +63,6 @@ class FetchManufacturerQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $result = [];
-
         /**
          * @var FetchQueryInterface $query
          */
@@ -89,18 +78,7 @@ class FetchManufacturerQueryHandler implements QueryHandlerInterface
 
         $element = $this->client->request('GET', 'items/manufacturers/' . $identity->getAdapterIdentifier());
 
-        if (!empty($element['logo'])) {
-            $result[] = $media = $this->mediaResponseParser->parse([
-                'mediaCategory' => MediaCategoryHelper::MANUFACTURER,
-                'link' => $element['logo'],
-                'name' => $element['name'],
-                'alternateName' => $element['name'],
-            ]);
-
-            $element['logoIdentifier'] = $media->getIdentifier();
-        }
-
-        $result[] = $this->manufacturerResponseParser->parse($element);
+        $result = $this->manufacturerResponseParser->parse($element);
 
         return array_filter($result);
     }

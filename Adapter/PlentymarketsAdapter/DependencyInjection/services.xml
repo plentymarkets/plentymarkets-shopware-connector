@@ -85,6 +85,7 @@
 
         <service id="plentmarkets_adapter.response_parser.manufacturer" class="PlentymarketsAdapter\ResponseParser\Manufacturer\ManufacturerResponseParser">
             <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="plentmarkets_adapter.response_parser.media" />
         </service>
 
         <service id="plentmarkets_adapter.response_parser.media" class="PlentymarketsAdapter\ResponseParser\Media\MediaResponseParser">
@@ -179,7 +180,6 @@
 
         <service id="plentymarkets_adapter.query_handler.fetch_changed_manufacturers" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Manufacturer\FetchChangedManufacturersQueryHandler">
             <argument type="service" id="plentmarkets_adapter.client" />
-            <argument type="service" id="plenty_connector.config" />
             <argument type="service" id="plentmarkets_adapter.response_parser.manufacturer" />
             <argument type="service" id="plentmarkets_adapter.response_parser.media" />
 
@@ -189,7 +189,6 @@
         <service id="plentymarkets_adapter.query_handler.fetch_manufacturer" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Manufacturer\FetchManufacturerQueryHandler">
             <argument type="service" id="plentmarkets_adapter.client" />
             <argument type="service" id="plentmarkets_adapter.response_parser.manufacturer" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.media" />
             <argument type="service" id="plenty_connector.identity_service" />
 
             <tag name="plenty_connector.query_handler" />
