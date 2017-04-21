@@ -529,6 +529,10 @@
             <tag name="plenty_connector.validator" />
         </service>
 
+        <service id="plenty_connector.validator.order.package" class="PlentyConnector\Connector\Validator\Order\Package\PackageValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
         <service id="plenty_connector.validator.order.payment" class="PlentyConnector\Connector\Validator\Order\Payment\PaymentValidator">
             <tag name="plenty_connector.validator" />
         </service>
