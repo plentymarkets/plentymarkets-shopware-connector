@@ -676,6 +676,13 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
+     * Der Versanddienstleister wird nicht mehr im Auftrag gespeichert. Es wird nur noch das Versandprofil als
+     * OrderProperty gespeichert. Willst du den Dienstleister wissen, musst du das Versandprofil selbst laden:
+     * REST: https://developers.plentymarkets.com/rest-doc/order_shipping_profile/details#get-a-shipping-profile
+     * Plugins: https://developers.plentymarkets.com/api-doc/Order#element_132
+     * Darin hast du das Feld parcelServiceId, das ist die ID des Versanddienstleisters
+     * (https://developers.plentymarkets.com/api-doc/order#order_models_parcelservicepreset)
+     *
      * @param array $entry
      *
      * @return Package[]
@@ -692,6 +699,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         foreach ($numbers as $number) {
             $package = new Package();
             $package->setShippingCode((string) $number);
+            $package->setShippingProvider();
 
             if (!empty($shippingDate)) {
                 $shippingDate = array_shift($shippingDate);

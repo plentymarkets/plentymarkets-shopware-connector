@@ -26,25 +26,17 @@ class FetchAllManufacturersQueryHandler implements QueryHandlerInterface
     private $manufacturerResponseParser;
 
     /**
-     * @var MediaResponseParserInterface
-     */
-    private $mediaResponseParser;
-
-    /**
      * FetchAllManufacturersQueryHandler constructor.
      *
      * @param ClientInterface                     $client
      * @param ManufacturerResponseParserInterface $manufacturerResponseParser
-     * @param MediaResponseParserInterface        $mediaResponseParser
      */
     public function __construct(
         ClientInterface $client,
-        ManufacturerResponseParserInterface $manufacturerResponseParser,
-        MediaResponseParserInterface $mediaResponseParser
+        ManufacturerResponseParserInterface $manufacturerResponseParser
     ) {
         $this->client = $client;
         $this->manufacturerResponseParser = $manufacturerResponseParser;
-        $this->mediaResponseParser = $mediaResponseParser;
     }
 
     /**
