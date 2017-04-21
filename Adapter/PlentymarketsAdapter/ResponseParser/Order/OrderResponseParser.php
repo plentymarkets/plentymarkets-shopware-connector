@@ -25,7 +25,6 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Address\Address as AddressApi;
 use PlentymarketsAdapter\ReadApi\Comment\Comment as CommentApi;
 use PlentymarketsAdapter\ReadApi\Customer\Customer as CustomerApi;
-use PlentymarketsAdapter\ReadApi\Webstore as WebstoreApi;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -59,11 +58,6 @@ class OrderResponseParser implements OrderResponseParserInterface
     private $commentApi;
 
     /**
-     * @var WebstoreApi
-     */
-    private $webstoreApi;
-
-    /**
      * @var ClientInterface
      */
     private $client;
@@ -76,7 +70,6 @@ class OrderResponseParser implements OrderResponseParserInterface
      * @param AddressApi               $addressApi
      * @param CustomerApi              $customerApi
      * @param CommentApi               $commentApi
-     * @param WebstoreApi              $webstoreApi
      * @param ClientInterface          $client
      */
     public function __construct(
@@ -85,7 +78,6 @@ class OrderResponseParser implements OrderResponseParserInterface
         AddressApi $addressApi,
         CustomerApi $customerApi,
         CommentApi $commentApi,
-        WebstoreApi $webstoreApi,
         ClientInterface $client
     ) {
         $this->identityService = $identityService;
@@ -93,7 +85,6 @@ class OrderResponseParser implements OrderResponseParserInterface
         $this->addressApi = $addressApi;
         $this->customerApi = $customerApi;
         $this->commentApi = $commentApi;
-        $this->webstoreApi = $webstoreApi;
         $this->client = $client;
     }
 
@@ -114,7 +105,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         if (null === $shopIdentity) {
             $this->logger->notice('unknown shop');
 
-            return null;
+            return [];
         }
 
         $identity = $this->identityService->findOneOrCreate(
@@ -127,50 +118,56 @@ class OrderResponseParser implements OrderResponseParserInterface
         if (null === $shippingProfileIdentity) {
             $this->logger->notice('no shipping profile found');
 
-            return null;
+            return [];
         }
 
         $currencyIdentity = $this->getCurrencyIdentity($entry);
         if (null === $currencyIdentity) {
             $this->logger->notice('no currency found');
 
-            return null;
+            return [];
         }
 
         $paymentMethodIdentity = $this->getPaymentMethodIdentity($entry);
         if (null === $paymentMethodIdentity) {
             $this->logger->notice('no payment method found');
 
-            return null;
+            return [];
         }
 
         $paymentStatusIdentity = $this->getPaymentStatusIdentity($entry);
         if (null === $paymentStatusIdentity) {
             $this->logger->notice('no payment status found');
 
-            return null;
+            return [];
         }
 
         $oderStatusIdentity = $this->getOrderStatusIdentity($entry);
         if (null === $oderStatusIdentity) {
             $this->logger->notice('no order status found');
 
-            return null;
+            return [];
         }
 
         $entry['customerData'] = $this->getCustomerData($entry);
         if (empty($entry['customerData'])) {
-            return null;
+            $this->logger->notice('no customer found');
+
+            return [];
         }
 
         $entry['billingAddressData'] = $this->getBillingAddressData($entry);
         if (empty($entry['billingAddressData'])) {
-            return null;
+            $this->logger->notice('no billing address found');
+
+            return [];
         }
 
         $entry['shippingAddressData'] = $this->getShippingAddressData($entry);
         if (empty($entry['shippingAddressData'])) {
-            return null;
+            $this->logger->notice('no shipping address found');
+
+            return [];
         }
 
         $order = new Order();
@@ -370,14 +367,8 @@ class OrderResponseParser implements OrderResponseParserInterface
      */
     private function getShopIdentity(array $plentyCustomer)
     {
-        static $webstores = null;
-
-        if (null === $webstores) {
-            $webstores = $this->webstoreApi->findAll();
-        }
-
         return $this->identityService->findOneBy([
-            'adapterIdentifier' => (string) $webstores[$plentyCustomer['plentyId']]['storeIdentifier'],
+            'adapterIdentifier' => (string) $plentyCustomer['plentyId'],
             'adapterName' => PlentymarketsAdapter::NAME,
             'objectType' => Shop::TYPE,
         ]);
@@ -693,25 +684,23 @@ class OrderResponseParser implements OrderResponseParserInterface
     {
         $numbers = $this->client->request('GET', 'orders/' . $entry['id'] . '/packagenumbers');
 
-        $shoppingDate = array_filter($entry['dates'], function (array $date) {
+        $shippingDate = array_filter($entry['dates'], function (array $date) {
             return $date['typeId'] === 8;
         });
-
-        if (!empty($shoppingDate)) {
-            $shoppingDate = array_shift($shoppingDate);
-        }
 
         $result = [];
         foreach ($numbers as $number) {
             $package = new Package();
             $package->setShippingCode((string) $number);
 
-            if (!empty($shoppingDate)) {
+            if (!empty($shippingDate)) {
+                $shippingDate = array_shift($shippingDate);
+
                 $timezone = new \DateTimeZone('UTC');
 
                 $package->setShippingTime(DateTimeImmutable::createFromFormat(
                     DATE_ATOM,
-                    $shoppingDate['date'],
+                    $shippingDate['date'],
                     $timezone
                 ));
             }

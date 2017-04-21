@@ -114,11 +114,6 @@ class FetchCategoryQueryHandler implements QueryHandlerInterface
 
         $parsedElements = $this->categoryResponseParser->parse($element);
 
-        $result = [];
-        foreach ($parsedElements as $parsedElement) {
-            $result[] = $parsedElement;
-        }
-
-        return array_filter($result);
+        return array_filter($parsedElements);
     }
 }

@@ -18,12 +18,12 @@ class Package extends AbstractValueObject
     /**
      * @var string
      */
-    private $shippingCode;
+    private $shippingCode = '';
 
     /**
-     * @var string
+     * @var null{string
      */
-    private $shippingProvider;
+    private $shippingProvider = null;
 
     /**
      * Package constructor.
@@ -68,7 +68,7 @@ class Package extends AbstractValueObject
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getShippingProvider()
     {
@@ -76,9 +76,9 @@ class Package extends AbstractValueObject
     }
 
     /**
-     * @param string $shippingProvider
+     * @param null|string $shippingProvider
      */
-    public function setShippingProvider($shippingProvider)
+    public function setShippingProvider($shippingProvider = null)
     {
         $this->shippingProvider = $shippingProvider;
     }

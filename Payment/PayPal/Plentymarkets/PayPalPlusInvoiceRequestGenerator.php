@@ -40,7 +40,7 @@ class PayPalPlusInvoiceRequestGenerator implements PaymentRequestGeneratorInterf
         /**
          * @var PayPalPlusInvoicePaymentData $data
          */
-        $data = array_shift($paymentData);
+        $data = $payment->getPaymentData();
 
         $paymentParams['property'][] = [
             'typeId' => 22,

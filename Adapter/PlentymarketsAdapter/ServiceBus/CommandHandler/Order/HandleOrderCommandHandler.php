@@ -332,7 +332,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             return $itemParams;
         }, $order->getOrderItems());
 
-        $params['referrerId'] = 1; // TOOD: testen
+        $params['referrerId'] = 1;
 
         $result = $this->client->request('post', 'orders', $params);
 

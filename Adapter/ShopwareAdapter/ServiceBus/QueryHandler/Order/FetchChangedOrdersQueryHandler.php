@@ -69,7 +69,13 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
         foreach ($orders['data'] as $order) {
             $order = $this->orderResource->getOne($order['id']);
 
-            $parsedElements = array_filter($this->responseParser->parse($order));
+            $result = $this->responseParser->parse($order);
+
+            if (empty($result)) {
+                continue;
+            }
+
+            $parsedElements = array_filter($result);
 
             foreach ($parsedElements as $parsedElement) {
                 yield $parsedElement;

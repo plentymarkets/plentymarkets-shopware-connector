@@ -102,7 +102,6 @@
             <argument type="service" id="plentmarkets_adapter.read_api_address" />
             <argument type="service" id="plentmarkets_adapter.read_api_customer" />
             <argument type="service" id="plentmarkets_adapter.read_api_comment" />
-            <argument type="service" id="plentmarkets_adapter.read_api_webstore" />
             <argument type="service" id="plentmarkets_adapter.client" />
         </service>
 

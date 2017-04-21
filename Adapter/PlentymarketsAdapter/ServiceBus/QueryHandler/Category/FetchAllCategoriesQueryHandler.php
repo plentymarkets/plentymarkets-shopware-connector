@@ -70,7 +70,13 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
                 continue;
             }
 
-            $parsedElements = array_filter($this->categoryResponseParser->parse($element));
+            $result = $this->categoryResponseParser->parse($element);
+
+            if (empty($result)) {
+                continue;
+            }
+
+            $parsedElements = array_filter($result);
 
             foreach ($parsedElements as $parsedElement) {
                 yield $parsedElement;

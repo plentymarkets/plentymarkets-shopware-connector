@@ -134,7 +134,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         $shopIdentifiers = $this->getShopIdentifiers($mainVariation);
 
         if (empty($shopIdentifiers)) {
-            return null;
+            return [];
         }
 
         $variations = $this->getVariations($product['texts'], $variations, $result);
@@ -973,12 +973,12 @@ class ProductResponseParser implements ProductResponseParserInterface
             $values = [];
 
             if ($property['property']['valueType'] === 'text') {
-                if (empty($property['names'][0]['value'])) {
+                if (empty($property['valueTexts'][0]['value'])) {
                     continue;
                 }
 
                 $valueTranslations = [];
-                foreach ($property['names'] as $name) {
+                foreach ($property['valueTexts'] as $name) {
                     $languageIdentifier = $this->identityService->findOneBy([
                         'adapterIdentifier' => $name['lang'],
                         'adapterName' => PlentymarketsAdapter::NAME,
@@ -997,7 +997,7 @@ class ProductResponseParser implements ProductResponseParserInterface
                 }
 
                 $values[] = Value::fromArray([
-                    'value' => (string) $property['names'][0]['value'],
+                    'value' => (string) $property['valueTexts'][0]['value'],
                     'translations' => $valueTranslations,
                 ]);
             } elseif ($property['property']['valueType'] === 'int') {
