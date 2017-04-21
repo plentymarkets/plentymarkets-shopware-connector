@@ -61,8 +61,6 @@ class FetchAllManufacturersQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $result = [];
-
         $manufacturers = $this->client->getIterator('items/manufacturers');
 
         foreach ($manufacturers as $element) {
@@ -78,7 +76,5 @@ class FetchAllManufacturersQueryHandler implements QueryHandlerInterface
                 yield $parsedElement;
             }
         }
-
-        return $result;
     }
 }
