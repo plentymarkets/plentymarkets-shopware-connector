@@ -78,8 +78,7 @@ class FetchProductQueryHandler implements QueryHandlerInterface
 
         $product = $this->itemApi->findOne($identity->getAdapterIdentifier());
 
-        $result = [];
-        $result[] = $this->responseParser->parse($product, $result);
+        $result = $this->responseParser->parse($product);
 
         return array_filter($result);
     }
