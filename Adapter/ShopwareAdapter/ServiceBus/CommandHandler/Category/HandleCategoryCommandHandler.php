@@ -116,13 +116,26 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         $validIdentities = [];
         foreach ($category->getShopIdentifiers() as $shopIdentifier) {
             try {
-                $identity = $this->handleCategory($category, $shopIdentifier);
+                $shopIdentities = $this->identityService->findBy([
+                    'objectIdentifier' => (string) $shopIdentifier,
+                    'objectType' => Shop::TYPE,
+                    'adapterName' => ShopwareAdapter::NAME,
+                ]);
 
-                if (null === $identity) {
-                    continue;
+                if (empty($shopIdentities)) {
+                    return null;
                 }
 
-                $validIdentities[$identity->getObjectIdentifier()] = $identity->getObjectIdentifier();
+                foreach ($shopIdentities as $shopIdentity) {
+                    $identity = $this->handleCategory($category, $shopIdentity);
+
+                    if (null === $identity) {
+                        continue;
+                    }
+
+                    $identifier = $identity->getObjectIdentifier();
+                    $validIdentities[$identifier] = $identifier;
+                }
             } catch (IdentityNotFoundException $exception) {
                 $this->logger->warning($exception->getMessage());
             }
@@ -153,7 +166,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
 
         $attributes[] = Attribute::fromArray([
             'key' => 'shopIdentifier',
-            'value' => $shopIdentity->getObjectIdentifier(),
+            'value' => $shopIdentity->getAdapterIdentifier(),
         ]);
 
         $attributes[] = Attribute::fromArray([
@@ -166,30 +179,16 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
 
     /**
      * @param Category $category
-     * @param $shopIdentifier
+     * @param Identity $shopIdentity
      *
      * @throws NotFoundException
      * @throws IdentityNotFoundException
      *
      * @return null|Identity
      */
-    private function handleCategory(Category $category, $shopIdentifier)
+    private function handleCategory(Category $category, Identity $shopIdentity)
     {
-        $shopIdentity = $this->identityService->findOneBy([
-            'objectIdentifier' => (string) $shopIdentifier,
-            'objectType' => Shop::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
-        ]);
-
-        if (null === $shopIdentity) {
-            return null;
-        }
-
         $shop = $this->shopRepository->find($shopIdentity->getAdapterIdentifier());
-
-        if (null === $shop) {
-            throw new IdentityNotFoundException('missing shop - ' . $shopIdentity->getObjectIdentifier());
-        }
 
         $category = clone $category;
 
@@ -202,17 +201,36 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         ]);
 
         if (null !== $languageIdentity) {
-            $category = $this->translationHelper->translate($languageIdentity->getObjectIdentifier(), $category);
+            /**
+             * @var Category $translated
+             */
+            $translated = $this->translationHelper->translate($languageIdentity->getObjectIdentifier(), $category);
+
+            if (null !== $translated) {
+                $category = $translated;
+            }
         }
 
         if (null === $category->getParentIdentifier()) {
             $parentCategory = $shop->getCategory()->getId();
         } else {
-            $parentCategoryIdentity = $this->identityService->findOneBy([
+            $parentCategoryIdentities = $this->identityService->findBy([
                 'objectIdentifier' => (string) $category->getParentIdentifier(),
                 'objectType' => Category::TYPE,
                 'adapterName' => ShopwareAdapter::NAME,
             ]);
+
+            $possibleIdentities = array_filter($parentCategoryIdentities, function (Identity $identity) use ($shopIdentity) {
+                return $this->validIdentity($identity, $shopIdentity);
+            });
+
+            $parentCategoryIdentity = null;
+            if (!empty($possibleIdentities)) {
+                /**
+                 * @var Identity $categoryIdentity
+                 */
+                $parentCategoryIdentity = array_shift($possibleIdentities);
+            }
 
             if (null === $parentCategoryIdentity) {
                 throw new \InvalidArgumentException('missing parent category - ' . $category->getParentIdentifier());
@@ -367,7 +385,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         $attributes = $category->getAttribute();
 
         if (method_exists($attributes, 'getPlentyConnectorShopIdentifier')) {
-            return $shopIdentity->getObjectIdentifier() === $attributes->getPlentyConnectorShopIdentifier();
+            return $shopIdentity->getAdapterIdentifier() === $attributes->getPlentyConnectorShopIdentifier();
         }
 
         return false;

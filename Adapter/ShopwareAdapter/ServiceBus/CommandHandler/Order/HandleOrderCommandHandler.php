@@ -4,6 +4,7 @@ namespace ShopwareAdapter\ServiceBus\CommandHandler\Order;
 
 use DateTime;
 use DateTimeZone;
+use PlentyConnector\Adapter\ShopwareAdapter\Helper\AttributeHelper;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\Order\HandleOrderCommand;
@@ -17,7 +18,6 @@ use Psr\Log\LoggerInterface;
 use Shopware\Components\Api\Resource\Order as OrderResource;
 use Shopware\Models\Order\Status;
 use ShopwareAdapter\ShopwareAdapter;
-use PlentyConnector\Adapter\ShopwareAdapter\Helper\AttributeHelper;
 
 /**
  * Class HandleOrderCommandHandler.
@@ -48,9 +48,9 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
      * HandleOrderCommandHandler constructor.
      *
      * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface $logger
-     * @param OrderResource $orderResource
-     * @param AttributeHelper $attributeHelper
+     * @param LoggerInterface          $logger
+     * @param OrderResource            $orderResource
+     * @param AttributeHelper          $attributeHelper
      */
     public function __construct(
         IdentityServiceInterface $identityService,
@@ -80,7 +80,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     {
         /**
          * @var HandleOrderCommand $command
-         * @var Order $order
+         * @var Order              $order
          */
         $order = $command->getTransferObject();
 
@@ -164,7 +164,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param Order $order
+     * @param Order   $order
      * @param Package $package
      */
     private function addShippingProviderAttribute(Order $order, Package $package)

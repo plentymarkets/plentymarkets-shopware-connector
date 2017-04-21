@@ -106,9 +106,9 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     /**
      * @param Order $order
      *
-     * @return bool
-     *
      * @throws NotFoundException
+     *
+     * @return bool
      */
     private function handleOrder(Order $order)
     {
