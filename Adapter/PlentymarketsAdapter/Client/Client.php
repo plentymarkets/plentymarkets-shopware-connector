@@ -164,6 +164,16 @@ class Client implements ClientInterface
             }
 
             throw $exception;
+        } catch (InvalidResponseException $exception) {
+            if ($retries < 3) {
+                sleep(10);
+
+                ++$retries;
+
+                return $this->request($method, $path, $params, $limit, $offset);
+            }
+
+            throw $exception;
         } catch (ServerException $exception) {
             if ($exception->hasResponse() && $exception->getResponse()->getStatusCode() === 503 && $retries < 3) {
                 sleep(10);
@@ -173,6 +183,15 @@ class Client implements ClientInterface
                 return $this->request($method, $path, $params, $limit, $offset);
             }
 
+            if ($exception->hasResponse() && $exception->getResponse()) {
+                throw new ServerException(
+                    $exception->getMessage() . ' - ' . $exception->getResponse()->getBody(),
+                    $exception->getRequest(),
+                    $exception->getResponse(),
+                    $exception->getPrevious()
+                );
+            }
+
             throw $exception;
         } catch (ConnectException $exception) {
             sleep(10);
@@ -180,10 +199,6 @@ class Client implements ClientInterface
             ++$retries;
 
             return $this->request($method, $path, $params, $limit, $offset);
-        } catch (\Exception $exception) {
-            var_dump($exception);
-
-            return [];
         }
     }
 
