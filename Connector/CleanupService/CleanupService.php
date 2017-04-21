@@ -153,13 +153,13 @@ class CleanupService implements CleanupServiceInterface
             return false;
         }
 
-        array_walk($objects, function (TransferObjectInterface $transferObject) use ($definition) {
+        foreach ($objects as $transferObject) {
             $this->elements[] = [
                 'adapterIdentifier' => $transferObject->getIdentifier(),
                 'adapterName' => $definition->getDestinationAdapterName(),
                 'type' => $transferObject->getType(),
             ];
-        });
+        }
 
         return true;
     }
