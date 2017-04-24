@@ -49,7 +49,7 @@ class CleanupCommand extends ShopwareCommand
     protected function configure()
     {
         $this->setName('plentyconnector:cleanup');
-        $this->setDescription('cleanup task');
+        $this->setDescription('remove orphaned transfer objects');
     }
 
     /**

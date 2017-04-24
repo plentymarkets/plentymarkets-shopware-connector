@@ -59,7 +59,7 @@ class MappingCommand extends ShopwareCommand
     protected function configure()
     {
         $this->setName('plentyconnector:mapping');
-        $this->setDescription('cleanup task');
+        $this->setDescription('displays mapping informations');
         $this->addArgument(
             'objectType',
             InputArgument::OPTIONAL,

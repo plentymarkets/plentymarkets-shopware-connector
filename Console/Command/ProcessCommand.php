@@ -52,7 +52,7 @@ class ProcessCommand extends ShopwareCommand
     protected function configure()
     {
         $this->setName('plentyconnector:process');
-        $this->setDescription('process all definitions according');
+        $this->setDescription('process definitons');
         $this->addArgument(
             'objectType',
             InputArgument::OPTIONAL,
