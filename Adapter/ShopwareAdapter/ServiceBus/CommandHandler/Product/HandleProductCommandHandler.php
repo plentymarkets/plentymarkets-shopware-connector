@@ -28,6 +28,7 @@ use Psr\Log\LoggerInterface;
 use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Article;
+use Shopware\Components\Api\Resource\Resource;
 use Shopware\Components\Api\Resource\Variant;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Article\Detail;
@@ -456,6 +457,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                      * @var Variant $variantResource
                      */
                     $variantResource = Manager::getResource('Variant');
+                    $variantResource->setResultMode(Resource::HYDRATE_ARRAY);
 
                     try {
                         $variant = $variantResource->getOneByNumber($variation->getNumber());
