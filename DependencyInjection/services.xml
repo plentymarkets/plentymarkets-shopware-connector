@@ -611,7 +611,9 @@
             <argument type="service" id="plenty_connector.validator_service" />
         </service>
 
-        <service id="plenty_connector.service_bus.class_name_formatter" class="PlentyConnector\Connector\Logger\ClassNameFormatter" />
+        <service id="plenty_connector.service_bus.class_name_formatter" class="PlentyConnector\Connector\Logger\ClassNameFormatter">
+            <argument type="service" id="plenty_connector.logger" />
+        </service>
 
         <service id="plenty_connector.service_bus.logger_middleware" class="PlentyConnector\Connector\Logger\LoggerMiddleware">
             <argument type="service" id="plenty_connector.service_bus.class_name_formatter" />

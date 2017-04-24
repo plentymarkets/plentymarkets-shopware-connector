@@ -2,6 +2,7 @@
 
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Category;
 
+use DeepCopy\DeepCopy;
 use Doctrine\ORM\EntityManagerInterface;
 use PlentyConnector\Adapter\ShopwareAdapter\Helper\AttributeHelper;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException as IdentityNotFoundException;
@@ -190,7 +191,8 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     {
         $shop = $this->shopRepository->find($shopIdentity->getAdapterIdentifier());
 
-        $category = clone $category;
+        $deepCopy = new DeepCopy();
+        $category = $deepCopy->copy($category);
 
         $this->prepareCategory($category, $shopIdentity);
 

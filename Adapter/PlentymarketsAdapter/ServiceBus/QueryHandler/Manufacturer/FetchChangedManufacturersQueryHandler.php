@@ -5,7 +5,6 @@ namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Manufacturer;
 use PlentyConnector\Connector\ServiceBus\Query\Manufacturer\FetchChangedManufacturersQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
-use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Manufacturer\ManufacturerResponseParserInterface;

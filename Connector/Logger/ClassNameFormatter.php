@@ -3,7 +3,6 @@
 namespace PlentyConnector\Connector\Logger;
 
 use Exception;
-use League\Tactician\Logger\Formatter\Formatter;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\Event\EventInterface;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
@@ -14,8 +13,13 @@ use Psr\Log\LogLevel;
 /**
  * Returns log messages only dump the Command & Exception's class names.
  */
-class ClassNameFormatter implements Formatter
+class ClassNameFormatter implements ClassNameFormatterInterface
 {
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
     /**
      * @var string
      */
@@ -32,15 +36,18 @@ class ClassNameFormatter implements Formatter
     private $commandFailedLevel;
 
     /**
-     * @param string $commandReceivedLevel
-     * @param string $commandSucceededLevel
-     * @param string $commandFailedLevel
+     * @param LoggerInterface $logger
+     * @param string          $commandReceivedLevel
+     * @param string          $commandSucceededLevel
+     * @param string          $commandFailedLevel
      */
     public function __construct(
+        LoggerInterface $logger,
         $commandReceivedLevel = LogLevel::DEBUG,
         $commandSucceededLevel = LogLevel::DEBUG,
         $commandFailedLevel = LogLevel::ERROR
     ) {
+        $this->logger = $logger;
         $this->commandReceivedLevel = $commandReceivedLevel;
         $this->commandSucceededLevel = $commandSucceededLevel;
         $this->commandFailedLevel = $commandFailedLevel;
@@ -49,36 +56,36 @@ class ClassNameFormatter implements Formatter
     /**
      * {@inheritdoc}
      */
-    public function logCommandReceived(LoggerInterface $logger, $command)
+    public function logCommandReceived($command)
     {
         $message = $this->getRecievedMessage($command);
         $payload = $this->getPayload($command);
 
-        $logger->log($this->commandReceivedLevel, $message, $payload);
+        $this->logger->log($this->commandReceivedLevel, $message, $payload);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function logCommandSucceeded(LoggerInterface $logger, $command, $returnValue)
+    public function logCommandSucceeded($command, $returnValue)
     {
         $message = $this->getSucceededMessage($command);
         $payload = $this->getPayload($command);
 
-        $logger->log($this->commandSucceededLevel, $message, $payload);
+        $this->logger->log($this->commandSucceededLevel, $message, $payload);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function logCommandFailed(LoggerInterface $logger, $command, Exception $exception)
+    public function logCommandFailed($command, Exception $exception)
     {
         $message = $this->getFailedMessage($command);
         $payload = $this->getPayload($command);
 
         $payload = array_merge($payload, ['exception' => $exception]);
 
-        $logger->log(
+        $this->logger->log(
             $this->commandFailedLevel,
             $message,
             $payload

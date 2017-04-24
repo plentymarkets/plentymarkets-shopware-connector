@@ -8,7 +8,6 @@ use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Manufacturer\ManufacturerResponseParserInterface;
-use PlentymarketsAdapter\ResponseParser\Media\MediaResponseParserInterface;
 
 /**
  * Class FetchAllManufacturersQueryHandler
