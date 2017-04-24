@@ -129,8 +129,6 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
                 ShopwareAdapter::NAME
             );
         } else {
-            unset($params['file']);
-
             $this->resource->update($identity->getAdapterIdentifier(), $params);
         }
 

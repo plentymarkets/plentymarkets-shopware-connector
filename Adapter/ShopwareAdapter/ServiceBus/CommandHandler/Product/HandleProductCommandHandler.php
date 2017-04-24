@@ -245,6 +245,20 @@ class HandleProductCommandHandler implements CommandHandlerInterface
 
             $attributes = $product->getAttributes();
 
+            $existingAttributes = array_filter($attributes, function (Attribute $attribute) use ($profileIdentity) {
+                return $attribute->getKey() === 'shippingProfile' . $profileIdentity->getAdapterIdentifier();
+            });
+
+            if (!empty($existingAttributes)) {
+                /**
+                 * @var LoggerInterface $logger
+                 */
+                $logger = Shopware()->Container()->get('plenty_connector.logger');
+                $logger->notice('shippingProfile is not a allowed attribute key', ['command' => $command]);
+
+                continue;
+            }
+
             $attributes[] = Attribute::fromArray([
                 'key' => 'shippingProfile' . $profileIdentity->getAdapterIdentifier(),
                 'value' => $profileIdentity->getObjectIdentifier(),
@@ -536,6 +550,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
 
                 $result[$productIdentity->getAdapterIdentifier()] = [
                     'id' => $productIdentity->getAdapterIdentifier(),
+                    'number' => null,
                     'position' => $linkedProduct->getPosition(),
                     'cross' => false,
                 ];
@@ -694,7 +709,9 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         foreach ($variation->getProperties() as $property) {
             foreach ($property->getValues() as $value) {
                 $configuratorOptions[] = [
+                    'groupId' => null,
                     'group' => $property->getName(),
+                    'optionId' => null,
                     'option' => $value->getValue(),
                 ];
             }
