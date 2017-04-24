@@ -243,6 +243,8 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 continue;
             }
 
+            $attributes = $product->getAttributes();
+
             $attributes[] = Attribute::fromArray([
                 'key' => 'shippingProfile' . $profileIdentity->getAdapterIdentifier(),
                 'value' => $profileIdentity->getObjectIdentifier(),
