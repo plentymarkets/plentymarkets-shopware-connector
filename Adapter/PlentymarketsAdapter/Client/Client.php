@@ -163,6 +163,15 @@ class Client implements ClientInterface
                 return $this->request($method, $path, $params, $limit, $offset);
             }
 
+            if ($exception->hasResponse() && $exception->getResponse()) {
+                throw new ClientException(
+                    $exception->getMessage() . ' - ' . $exception->getResponse()->getBody(),
+                    $exception->getRequest(),
+                    $exception->getResponse(),
+                    $exception->getPrevious()
+                );
+            }
+
             throw $exception;
         } catch (InvalidResponseException $exception) {
             if ($retries < 3) {
