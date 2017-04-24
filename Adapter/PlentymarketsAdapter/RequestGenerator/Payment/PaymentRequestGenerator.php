@@ -61,6 +61,7 @@ class PaymentRequestGenerator implements PaymentRequestGeneratorInterface
             'currency' => $currencyIdentity->getAdapterIdentifier(),
             'type' => 'credit',
             'transactionType' => 2,
+            'status' => 2,
         ];
 
         /**
