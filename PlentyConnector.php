@@ -8,6 +8,7 @@ use PlentyConnector\Connector\ConfigService\Model\Config;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\IdentityService\Model\Identity;
 use PlentyConnector\Connector\TransferObject\Category\Category;
+use PlentyConnector\Connector\TransferObject\PaymentStatus\PaymentStatus;
 use PlentyConnector\DependencyInjection\CompilerPass\CleanupDefinitionCompilerPass;
 use PlentyConnector\DependencyInjection\CompilerPass\CommandGeneratorCompilerPass;
 use PlentyConnector\DependencyInjection\CompilerPass\CommandHandlerCompilerPass;
@@ -166,6 +167,7 @@ class PlentyConnector extends Plugin
 
         if ($this->updateNeeded($context, '2.0.0-rc2')) {
             $this->clearCategoryIdentities();
+            $this->clearPaymentStatusIdentities();
         }
 
         parent::update($context);
@@ -227,6 +229,18 @@ class PlentyConnector extends Plugin
         $identityService = $this->container->get('plenty_connector.identity_service');
 
         foreach ($identityService->findBy(['objectType' => Category::TYPE]) as $identity) {
+            $identityService->remove($identity);
+        }
+    }
+
+    private function clearPaymentStatusIdentities()
+    {
+        /**
+         * @var IdentityServiceInterface $identityService
+         */
+        $identityService = $this->container->get('plenty_connector.identity_service');
+
+        foreach ($identityService->findBy(['objectType' => PaymentStatus::TYPE]) as $identity) {
             $identityService->remove($identity);
         }
     }
