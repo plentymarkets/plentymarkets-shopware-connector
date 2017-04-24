@@ -25,7 +25,7 @@ class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
     private $responseParser;
 
     /**
-     * FetchAllPaymentStatusesQueryHandler constructor.     *
+     * FetchAllPaymentStatusesQueryHandler constructor.
      *
      * @param ClientInterface                      $client
      * @param PaymentStatusResponseParserInterface $responseParser
@@ -34,6 +34,7 @@ class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
         ClientInterface $client,
         PaymentStatusResponseParserInterface $responseParser
     ) {
+        $this->client = $client;
         $this->responseParser = $responseParser;
     }
 
@@ -51,8 +52,8 @@ class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $paymentStatuses = array_map(function ($orderStatus) {
-            return $this->responseParser->parse($orderStatus);
+        $paymentStatuses = array_map(function ($paymentStatus) {
+            return $this->responseParser->parse($paymentStatus);
         }, $this->client->request('GET', 'orders/statuses', ['with' => 'names']));
 
         return array_filter($paymentStatuses);
