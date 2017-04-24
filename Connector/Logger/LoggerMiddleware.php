@@ -3,9 +3,7 @@
 namespace PlentyConnector\Connector\Logger;
 
 use Exception;
-use League\Tactician\Logger\Formatter\Formatter;
 use League\Tactician\Middleware;
-use Psr\Log\LoggerInterface;
 
 /**
  * Class LoggerMiddleware
@@ -13,23 +11,16 @@ use Psr\Log\LoggerInterface;
 class LoggerMiddleware implements Middleware
 {
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var Formatter
+     * @var ClassNameFormatter
      */
     private $formatter;
 
     /**
-     * @param Formatter       $formatter
-     * @param LoggerInterface $logger
+     * @param ClassNameFormatter $formatter
      */
-    public function __construct(Formatter $formatter, LoggerInterface $logger)
+    public function __construct(ClassNameFormatter $formatter)
     {
         $this->formatter = $formatter;
-        $this->logger = $logger;
     }
 
     /**
@@ -37,16 +28,20 @@ class LoggerMiddleware implements Middleware
      */
     public function execute($command, callable $next)
     {
-        $this->formatter->logCommandReceived($this->logger, $command);
+        $this->formatter->logCommandReceived($command);
+
+        $returnValue = false;
 
         try {
             $returnValue = $next($command);
 
-            $this->formatter->logCommandSucceeded($this->logger, $command, $returnValue);
+            $this->formatter->logCommandSucceeded($command, $returnValue);
 
             return $returnValue;
         } catch (Exception $e) {
-            $this->formatter->logCommandFailed($this->logger, $command, $e);
+            $this->formatter->logCommandFailed($command, $e);
         }
+
+        return $returnValue;
     }
 }

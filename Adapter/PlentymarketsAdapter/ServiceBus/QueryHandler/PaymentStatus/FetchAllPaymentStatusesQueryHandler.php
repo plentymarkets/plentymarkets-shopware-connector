@@ -5,6 +5,7 @@ namespace PlentymarketsAdapter\ServiceBus\QueryHandler\PaymentStatus;
 use PlentyConnector\Connector\ServiceBus\Query\PaymentStatus\FetchAllPaymentStatusesQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\PaymentStatus\PaymentStatusResponseParserInterface;
 
@@ -14,17 +15,25 @@ use PlentymarketsAdapter\ResponseParser\PaymentStatus\PaymentStatusResponseParse
 class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
 {
     /**
+     * @var ClientInterface
+     */
+    private $client;
+
+    /**
      * @var PaymentStatusResponseParserInterface
      */
     private $responseParser;
 
     /**
-     * FetchAllPaymentStatusesQueryHandler constructor.
+     * FetchAllPaymentStatusesQueryHandler constructor.     *
      *
+     * @param ClientInterface                      $client
      * @param PaymentStatusResponseParserInterface $responseParser
      */
-    public function __construct(PaymentStatusResponseParserInterface $responseParser)
-    {
+    public function __construct(
+        ClientInterface $client,
+        PaymentStatusResponseParserInterface $responseParser
+    ) {
         $this->responseParser = $responseParser;
     }
 
@@ -42,59 +51,10 @@ class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $paymentStatuses = array_map(function ($status) {
-            return $this->responseParser->parse($status);
-        }, $this->getPaymentStatuses());
+        $paymentStatuses = array_map(function ($orderStatus) {
+            return $this->responseParser->parse($orderStatus);
+        }, $this->client->request('GET', 'orders/statuses', ['with' => 'names']));
 
         return array_filter($paymentStatuses);
-    }
-
-    /**
-     * @return array
-     */
-    private function getPaymentStatuses()
-    {
-        return [
-            [
-                'id' => 1,
-                'name' => 'Awaiting approval',
-            ],
-            [
-                'id' => 2,
-                'name' => 'Approved',
-            ],
-            [
-                'id' => 3,
-                'name' => 'Captured',
-            ],
-            [
-                'id' => 4,
-                'name' => 'Partially captured',
-            ],
-            [
-                'id' => 5,
-                'name' => 'Cancelled',
-            ],
-            [
-                'id' => 6,
-                'name' => 'Refused',
-            ],
-            [
-                'id' => 7,
-                'name' => 'Awaiting renewal',
-            ],
-            [
-                'id' => 8,
-                'name' => 'Expired',
-            ],
-            [
-                'id' => 9,
-                'name' => 'Refunded',
-            ],
-            [
-                'id' => 10,
-                'name' => 'Partially refunded',
-            ],
-        ];
     }
 }

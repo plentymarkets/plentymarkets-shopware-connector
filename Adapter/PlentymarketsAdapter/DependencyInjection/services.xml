@@ -311,6 +311,7 @@
         </service>
 
         <service id="plentymarkets_adapter.query_handler.fetch_all_payment_statuses" class="PlentymarketsAdapter\ServiceBus\QueryHandler\PaymentStatus\FetchAllPaymentStatusesQueryHandler">
+            <argument type="service" id="plentmarkets_adapter.client" />
             <argument type="service" id="plentmarkets_adapter.response_parser.payment_status" />
 
             <tag name="plenty_connector.query_handler" />
