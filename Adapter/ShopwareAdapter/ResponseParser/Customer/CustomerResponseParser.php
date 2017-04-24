@@ -77,8 +77,11 @@ class CustomerResponseParser implements CustomerResponseParserInterface
             $birthday = null;
         } else {
             $timezone = new DateTimeZone('UTC');
-
             $birthday = DateTimeImmutable::createFromFormat('Y-m-d', $entry['birthday'], $timezone);
+
+            if (!($birthday instanceof DateTimeImmutable)) {
+                $birthday = null;
+            }
         }
 
         return Customer::fromArray([
