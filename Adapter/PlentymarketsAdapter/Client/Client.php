@@ -123,9 +123,9 @@ class Client implements ClientInterface
         $request = $this->connection->createRequest($method, $url, $requestOptions);
 
         try {
-            $response = $this->connection->send($request);
+            $this->logger->debug('HTTP request: method: ' . $request->getMethod() . ' path: ' . $request->getPath() . ' params: ' . json_encode($params));
 
-            $this->logger->debug('HTTP request: status: ' . $response->getStatusCode() . ' method: ' . $request->getMethod() . ' path: ' . $request->getPath());
+            $response = $this->connection->send($request);
 
             $body = $response->getBody();
 
