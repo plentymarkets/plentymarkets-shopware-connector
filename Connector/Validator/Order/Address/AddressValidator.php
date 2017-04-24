@@ -25,23 +25,23 @@ class AddressValidator implements ValidatorInterface
      */
     public function validate($object)
     {
-        Assertion::nullOrString($object->getCompany(), null, 'address.company');
-        Assertion::nullOrString($object->getDepartment(), null, 'address.department');
+        Assertion::nullOrNotBlank($object->getCompany(), null, 'address.company');
+        Assertion::nullOrNotBlank($object->getDepartment(), null, 'address.department');
         Assertion::inArray($object->getSalutation(), $object->getSalutations(), null, 'address.saluation');
-        Assertion::nullOrString($object->getTitle(), null, 'address.title');
-        Assertion::nullOrString($object->getFirstname(), null, 'address.firstname');
-        Assertion::nullOrString($object->getLastname(), null, 'address.lastname');
+        Assertion::nullOrNotBlank($object->getTitle(), null, 'address.title');
+        Assertion::nullOrNotBlank($object->getFirstname(), null, 'address.firstname');
+        Assertion::nullOrNotBlank($object->getLastname(), null, 'address.lastname');
         Assertion::string($object->getStreet(), null, 'address.street');
         Assertion::notBlank($object->getStreet(), null, 'address.street');
-        Assertion::nullOrString($object->getAdditional(), null, 'address.additional');
+        Assertion::nullOrNotBlank($object->getAdditional(), null, 'address.additional');
         Assertion::string($object->getPostalCode(), null, 'address.postalCode');
         Assertion::notBlank($object->getPostalCode(), null, 'address.postalCode');
         Assertion::string($object->getCity(), null, 'address.city');
         Assertion::notBlank($object->getCity(), null, 'address.city');
         Assertion::uuid($object->getCountryIdentifier(), null, 'address.countryIdentifier');
-        Assertion::nullOrString($object->getVatId(), null, 'address.vatId');
-        Assertion::nullOrString($object->getPhoneNumber(), null, 'address.phoneNumber');
-        Assertion::nullOrString($object->getMobilePhoneNumber(), null, 'address.mobilePhoneNumber');
+        Assertion::nullOrNotBlank($object->getVatId(), null, 'address.vatId');
+        Assertion::nullOrNotBlank($object->getPhoneNumber(), null, 'address.phoneNumber');
+        Assertion::nullOrNotBlank($object->getMobilePhoneNumber(), null, 'address.mobilePhoneNumber');
         Assertion::allIsInstanceOf($object->getAttributes(), Attribute::class, null, 'address.attributes');
     }
 }

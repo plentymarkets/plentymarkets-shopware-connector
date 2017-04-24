@@ -58,14 +58,10 @@ class AddressResponseParser implements AddressResponseParserInterface
         }
 
         $params = [
-            'company' => $entry['company'],
-            'department' => $entry['department'],
             'salutation' => $salutation,
-            'title' => $entry['title'],
             'firstname' => $entry['firstName'],
             'lastname' => $entry['lastName'],
             'street' => $entry['street'],
-            'additional' => $entry['additionalAddressLine1'],
             'postalCode' => $entry['zipCode'],
             'city' => $entry['city'],
             'countryIdentifier' => $countryIdentitiy->getObjectIdentifier(),
@@ -73,7 +69,23 @@ class AddressResponseParser implements AddressResponseParserInterface
             'attributes' => $this->getAttributes($entry['attribute']),
         ];
 
-        if (isset($entry['phone'])) {
+        if (!empty($entry['department'])) {
+            $params['department'] = $entry['department'];
+        }
+
+        if (!empty($entry['title'])) {
+            $params['title'] = $entry['title'];
+        }
+
+        if (!empty($entry['company'])) {
+            $params['company'] = $entry['company'];
+        }
+
+        if (!empty($entry['additionalAddressLine1'])) {
+            $params['additional'] = $entry['additionalAddressLine1'];
+        }
+
+        if (!empty($entry['phone'])) {
             $params['phoneNumber'] = $entry['phone'];
         }
 

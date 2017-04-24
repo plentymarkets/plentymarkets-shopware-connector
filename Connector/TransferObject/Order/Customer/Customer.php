@@ -85,7 +85,7 @@ class Customer extends AbstractValueObject
     /**
      * @var string
      */
-    private $shopIdentifier;
+    private $shopIdentifier = '';
 
     /**
      * Customer constructor.

@@ -32,7 +32,7 @@ class ManufacturerValidator implements ValidatorInterface
 
         Assertion::nullOrUuid($object->getLogoIdentifier(), null, 'manufacturer.logoIdentifier');
 
-        Assertion::nullOrString($object->getLink(), null, 'manufacturer.link');
+        Assertion::nullOrNotBlank($object->getLink(), null, 'manufacturer.link');
 
         Assertion::allIsInstanceOf($object->getAttributes(), Attribute::class, null, 'manufacturer.attributes');
     }

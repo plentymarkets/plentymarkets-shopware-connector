@@ -34,12 +34,12 @@ class Address extends AbstractValueObject
     /**
      * @var null|string
      */
-    private $title;
+    private $title ;
 
     /**
      * @var null|string
      */
-    private $firstname;
+    private $firstname ;
 
     /**
      * @var null|string
@@ -49,7 +49,7 @@ class Address extends AbstractValueObject
     /**
      * @var string
      */
-    private $street;
+    private $street = '';
 
     /**
      * @var null|string
@@ -59,32 +59,32 @@ class Address extends AbstractValueObject
     /**
      * @var string
      */
-    private $postalCode;
+    private $postalCode = '';
 
     /**
      * @var string
      */
-    private $city;
+    private $city = '';
 
     /**
      * @var string
      */
-    private $countryIdentifier;
+    private $countryIdentifier = '';
 
     /**
      * @var null|string
      */
-    private $vatId;
+    private $vatId ;
 
     /**
      * @var null|string
      */
-    private $phoneNumber = '';
+    private $phoneNumber;
 
     /**
      * @var null|string
      */
-    private $mobilePhoneNumber = '';
+    private $mobilePhoneNumber;
 
     /**
      * @var Attribute[]
@@ -294,7 +294,7 @@ class Address extends AbstractValueObject
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getPhoneNumber()
     {
@@ -302,15 +302,15 @@ class Address extends AbstractValueObject
     }
 
     /**
-     * @param string $phoneNumber
+     * @param null|string $phoneNumber
      */
-    public function setPhoneNumber($phoneNumber)
+    public function setPhoneNumber($phoneNumber = null)
     {
         $this->phoneNumber = $phoneNumber;
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getMobilePhoneNumber()
     {
@@ -318,9 +318,9 @@ class Address extends AbstractValueObject
     }
 
     /**
-     * @param string $mobilePhoneNumber
+     * @param string null|$mobilePhoneNumber
      */
-    public function setMobilePhoneNumber($mobilePhoneNumber)
+    public function setMobilePhoneNumber($mobilePhoneNumber = null)
     {
         $this->mobilePhoneNumber = $mobilePhoneNumber;
     }

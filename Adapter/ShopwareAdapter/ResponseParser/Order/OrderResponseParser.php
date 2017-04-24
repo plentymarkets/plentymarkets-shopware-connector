@@ -120,6 +120,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         $shippingAddress = $this->orderAddressParser->parse($entry['shipping']);
 
         $customer = $this->customerParser->parse($entry['customer']);
+
         $customer->setMobilePhoneNumber($billingAddress->getMobilePhoneNumber());
         $customer->setPhoneNumber($billingAddress->getPhoneNumber());
 

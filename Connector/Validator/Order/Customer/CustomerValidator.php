@@ -38,7 +38,7 @@ class CustomerValidator implements ValidatorInterface
 
         Assertion::inArray($object->getSalutation(), $object->getSalutations(), 'customer.salutation');
 
-        Assertion::nullOrString($object->getTitle(), 'customer.title');
+        Assertion::nullOrNotBlank($object->getTitle(), 'customer.title');
 
         Assertion::string($object->getFirstname(), 'customer.firstname');
         Assertion::notBlank($object->getFirstname(), 'customer.firstname');
@@ -48,8 +48,8 @@ class CustomerValidator implements ValidatorInterface
 
         Assertion::nullOrIsInstanceOf($object->getBirthday(), DateTimeImmutable::class, 'customer.birthday');
 
-        Assertion::nullOrString($object->getPhoneNumber(), 'customer.phoneNumber');
-        Assertion::nullOrString($object->getMobilePhoneNumber(), 'customer.mobilePhoneNumber');
+        Assertion::nullOrNotBlank($object->getPhoneNumber(), 'customer.phoneNumber');
+        Assertion::nullOrNotBlank($object->getMobilePhoneNumber(), 'customer.mobilePhoneNumber');
 
         Assertion::uuid($object->getShopIdentifier(), 'customer.shopIdentifier');
     }

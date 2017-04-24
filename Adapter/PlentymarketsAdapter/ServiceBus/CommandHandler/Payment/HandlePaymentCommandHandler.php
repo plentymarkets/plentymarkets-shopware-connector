@@ -85,7 +85,7 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
             'adapterName' => PlentymarketsAdapter::NAME,
         ]);
 
-        if ($identity !== null) {
+        if (null !== $identity) {
             return true;
         }
 

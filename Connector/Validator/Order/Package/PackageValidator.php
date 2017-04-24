@@ -26,6 +26,6 @@ class PackageValidator implements ValidatorInterface
     {
         Assertion::isInstanceOf($object->getShippingTime(), \DateTimeImmutable::class, null, 'package.shippingTime');
         Assertion::string($object->getShippingCode(), null, 'package.shippingCode');
-        Assertion::nullOrString($object->getShippingProvider(), null, 'package.shippingProvider');
+        Assertion::nullOrNotBlank($object->getShippingProvider(), null, 'package.shippingProvider');
     }
 }
