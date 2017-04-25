@@ -38,8 +38,8 @@ class LoggerMiddleware implements Middleware
             $this->formatter->logCommandSucceeded($command, $returnValue);
 
             return $returnValue;
-        } catch (Exception $e) {
-            $this->formatter->logCommandFailed($command, $e);
+        } catch (Exception $exception) {
+            $this->formatter->logCommandFailed($command, $exception);
         }
 
         return $returnValue;
