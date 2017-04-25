@@ -853,6 +853,14 @@ class ProductResponseParser implements ProductResponseParserInterface
 
         $first = true;
 
+        usort($variations, function(array $a, array $b) {
+            if ((int) $a['position'] === (int) $b['position']) {
+                return 0;
+            }
+
+            return ((int) $a < (int) $b) ? -1 : 1;
+        });
+
         foreach ($variations as $variation) {
             $mappedVariations[] = Variation::fromArray([
                 'active' => (bool) $variation['isActive'],
@@ -860,6 +868,7 @@ class ProductResponseParser implements ProductResponseParserInterface
                 'stock' => $this->getStock($variation),
                 'number' => (string) $variation['number'],
                 'barcodes' => $this->getBarcodes($variation),
+                'position' => (int) $variation['position'],
                 'model' => (string) $variation['model'],
                 'images' => $this->getVariationImages($texts, $variation, $result),
                 'prices' => $this->getPrices($variation),
