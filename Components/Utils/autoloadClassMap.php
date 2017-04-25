@@ -356,6 +356,7 @@ return [
     'PlentymarketsImportEntityItemStock' => '../../Components/Import/Entity/PlentymarketsImportEntityItemStock.php',
     'PlentymarketsImportEntityOrderAbstract' => '../../Components/Import/Entity/Order/PlentymarketsImportEntityOrderAbstract.php',
     'PlentymarketsImportEntityOrderIncomingPayments' => '../../Components/Import/Entity/Order/PlentymarketsImportEntityOrderIncomingPayments.php',
+    'PlentymarketsImportEntityOrderPackageNumber' => '../../Components/Import/Entity/Order/PlentymarketsImportEntityOrderPackageNumber.php',
     'PlentymarketsImportEntityOrderStatusChange' => '../../Components/Import/Entity/Order/PlentymarketsImportEntityOrderStatusChange.php',
     'PlentymarketsImportEntityOrderOutgoingItems' => '../../Components/Import/Entity/Order/PlentymarketsImportEntityOrderOutgoingItems.php',
     'PlentymarketsImportException' => '../../Components/Import/Exception/PlentymarketsImportException.php',

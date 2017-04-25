@@ -92,7 +92,7 @@ class PlentymarketsImportController
             }
         }
 
-        // Until all pages are received
+            // Until all pages are received
         while (++$Request_GetItemsPriceUpdate->Page < $Response_GetItemsPriceUpdate->Pages);
 
         PlentymarketsConfig::getInstance()->setImportItemPriceLastUpdateTimestamp($now);
@@ -146,8 +146,12 @@ class PlentymarketsImportController
                 $PlentymarketsImportEntityOrderStatusChange = new PlentymarketsImportEntityOrderStatusChange($shopId['plentyID']);
                 $PlentymarketsImportEntityOrderStatusChange->import();
             }
+
+            $PlentymarketsImportEntityOrderStatusChange = new PlentymarketsImportEntityOrderPackageNumber($shopId['plentyID']);
+            $PlentymarketsImportEntityOrderStatusChange->import();
         }
 
+        PlentymarketsConfig::getInstance()->setImportOrderPackageNumberLastUpdateTimestamp($timestamp);
         PlentymarketsConfig::getInstance()->setImportOrderIncomingPaymentsLastUpdateTimestamp($timestamp);
         PlentymarketsConfig::getInstance()->setImportOrderOutgoingItemsLastUpdateTimestamp($timestamp);
         PlentymarketsConfig::getInstance()->setImportOrderStatusChangeLastUpdateTimestamp($timestamp);
@@ -181,7 +185,7 @@ class PlentymarketsImportController
             Shopware()->Models()->clear();
         }
 
-        // Until all pages are received
+            // Until all pages are received
         while (++$Request_GetCurrentStocks->Page < $Response_GetCurrentStocks->Pages);
 
         PlentymarketsConfig::getInstance()->setImportItemStockLastUpdateTimestamp($timestamp);
