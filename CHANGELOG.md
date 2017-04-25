@@ -6,6 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - event add event PlentyConnector_ImportEntityItemPrice_BeforeSavePrice (@k-30)
 - change method to set the variants on item import entity (@k-30)
+- Tracking Number will be imported if set (@Pfabeck)
 
 ### Fixed
 - article text sync can now be disabled safely (@k-30)
