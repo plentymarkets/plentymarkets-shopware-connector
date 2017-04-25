@@ -400,112 +400,106 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             }
         }
 
-        try {
-            if ($createProduct) {
-                $variations = [];
+        if ($createProduct) {
+            $variations = [];
 
-                foreach ($product->getVariations() as $variation) {
-                    if ($variation->isMain()) {
-                        continue;
-                    }
-
-                    $variations[] = $this->getVariationData($variation, $product);
+            foreach ($product->getVariations() as $variation) {
+                if ($variation->isMain()) {
+                    continue;
                 }
 
-                $params['mainDetail'] = $this->getVariationData($this->getMainVariation($product), $product);
+                $variations[] = $this->getVariationData($variation, $product);
+            }
 
-                if (!empty($variations)) {
-                    $params['variants'] = $variations;
+            $params['mainDetail'] = $this->getVariationData($this->getMainVariation($product), $product);
+
+            if (!empty($variations)) {
+                $params['variants'] = $variations;
+            }
+
+            $productModel = $resource->create($params);
+
+            $this->identityService->create(
+                $product->getIdentifier(),
+                Product::TYPE,
+                (string) $productModel->getId(),
+                ShopwareAdapter::NAME
+            );
+
+            /**
+             * @var Variant $variantResource
+             */
+            $variantResource = Manager::getResource('Variant');
+
+            foreach ($product->getVariations() as $variation) {
+                try {
+                    $variant = $variantResource->getOneByNumber($variation->getNumber());
+                } catch (NotFoundException $exception) {
+                    continue;
                 }
 
-                $productModel = $resource->create($params);
-
-                $this->identityService->create(
-                    $product->getIdentifier(),
-                    Product::TYPE,
-                    (string) $productModel->getId(),
-                    ShopwareAdapter::NAME
+                $this->attributeHelper->saveAttributes(
+                    (int) $variant['id'],
+                    $product->getAttributes(),
+                    's_articles_attributes'
                 );
+            }
+        } else {
+            $productModel = $resource->update($identity->getAdapterIdentifier(), $params);
+
+            foreach ($product->getVariations() as $variation) {
+                if (empty($variation->getPrices())) {
+                    continue;
+                }
 
                 /**
                  * @var Variant $variantResource
                  */
                 $variantResource = Manager::getResource('Variant');
+                $variantResource->setResultMode(Resource::HYDRATE_ARRAY);
 
-                foreach ($product->getVariations() as $variation) {
-                    try {
-                        $variant = $variantResource->getOneByNumber($variation->getNumber());
-                    } catch (NotFoundException $exception) {
-                        continue;
-                    }
-
-                    $this->attributeHelper->saveAttributes(
-                        (int) $variant['id'],
-                        $product->getAttributes(),
-                        's_articles_attributes'
-                    );
-                }
-            } else {
-                $productModel = $resource->update($identity->getAdapterIdentifier(), $params);
-
-                foreach ($product->getVariations() as $variation) {
-                    if (empty($variation->getPrices())) {
-                        continue;
-                    }
-
-                    /**
-                     * @var Variant $variantResource
-                     */
-                    $variantResource = Manager::getResource('Variant');
-                    $variantResource->setResultMode(Resource::HYDRATE_ARRAY);
-
-                    try {
-                        $variant = $variantResource->getOneByNumber($variation->getNumber());
-                    } catch (NotFoundException $exception) {
-                        $variant = null;
-                    }
-
-                    $variationParams = $this->getVariationData($variation, $product);
-
-                    if (null === $variant) {
-                        $variationParams['articleId'] = $identity->getAdapterIdentifier();
-
-                        $variant = $variantResource->create($variationParams);
-                    } else {
-                        $variantResource->update($variant['id'], $variationParams);
-                    }
-
-                    $this->attributeHelper->saveAttributes(
-                        (int) $variant['id'],
-                        $product->getAttributes(),
-                        's_articles_attributes'
-                    );
+                try {
+                    $variant = $variantResource->getOneByNumber($variation->getNumber());
+                } catch (NotFoundException $exception) {
+                    $variant = null;
                 }
 
-                $mainVariation = $this->getMainVariation($product);
+                $variationParams = $this->getVariationData($variation, $product);
 
-                if (null !== $mainVariation) {
-                    $entityManager = Shopware()->Container()->get('models');
+                if (null === $variant) {
+                    $variationParams['articleId'] = $identity->getAdapterIdentifier();
 
-                    $productRepository = $entityManager->getRepository(\Shopware\Models\Article\Article::class);
-                    $detailRepository = $entityManager->getRepository(Detail::class);
-
-                    $mainDetail = $detailRepository->findOneBy(['number' => $mainVariation->getNumber()]);
-
-                    $productModel = $productRepository->find($identity->getAdapterIdentifier());
-                    $productModel->setMainDetail($mainDetail);
-
-                    $entityManager->persist($productModel);
-                    $entityManager->flush();
+                    $variant = $variantResource->create($variationParams);
+                } else {
+                    $variantResource->update($variant['id'], $variationParams);
                 }
+
+                $this->attributeHelper->saveAttributes(
+                    (int) $variant['id'],
+                    $product->getAttributes(),
+                    's_articles_attributes'
+                );
             }
 
-            $resource->writeTranslations($productModel->getId(), $translations);
-        } catch (\Exception $exception) {
-            $logger = Shopware()->Container()->get('plenty_connector.logger');
-            $logger->error($exception->getMessage());
-            $logger->error($exception->getTraceAsString());
+            $mainVariation = $this->getMainVariation($product);
+
+            if (null !== $mainVariation) {
+                $entityManager = Shopware()->Container()->get('models');
+
+                $productRepository = $entityManager->getRepository(\Shopware\Models\Article\Article::class);
+                $detailRepository = $entityManager->getRepository(Detail::class);
+
+                $mainDetail = $detailRepository->findOneBy(['number' => $mainVariation->getNumber()]);
+
+                $productModel = $productRepository->find($identity->getAdapterIdentifier());
+                $productModel->setMainDetail($mainDetail);
+
+                $entityManager->persist($productModel);
+                $entityManager->flush();
+            }
         }
+
+        $resource->writeTranslations($productModel->getId(), $translations);
 
         return true;
     }
@@ -545,8 +539,10 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 ]);
 
                 if (null === $productIdentity) {
-                    // TODO: product was not imported, throw event to import it right away
+                    continue;
+                }
 
+                if (null === $productIdentity) {
                     continue;
                 }
 
