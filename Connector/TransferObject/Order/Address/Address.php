@@ -34,12 +34,12 @@ class Address extends AbstractValueObject
     /**
      * @var null|string
      */
-    private $title ;
+    private $title;
 
     /**
      * @var null|string
      */
-    private $firstname ;
+    private $firstname;
 
     /**
      * @var null|string
@@ -74,7 +74,7 @@ class Address extends AbstractValueObject
     /**
      * @var null|string
      */
-    private $vatId ;
+    private $vatId;
 
     /**
      * @var null|string
