@@ -32,14 +32,13 @@
  */
 class PlentySoapResponseObject_FitmentItem
 {
-	
-	/**
-	 * @var int
-	 */
-	public $FitmentItemID;
-	
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
+    /**
+     * @var int
+     */
+    public $FitmentItemID;
+
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
 }

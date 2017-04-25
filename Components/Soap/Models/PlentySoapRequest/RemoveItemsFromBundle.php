@@ -32,19 +32,18 @@
  */
 class PlentySoapRequest_RemoveItemsFromBundle
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_removebundleitem
-	 */
-	public $BundleItems;
-	
-	/**
-	 * @var string
-	 */
-	public $BundleSKU;
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
+    /**
+     * @var ArrayOfPlentysoapobject_removebundleitem
+     */
+    public $BundleItems;
+
+    /**
+     * @var string
+     */
+    public $BundleSKU;
+
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
 }

@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_setpropertychoice
 {
-	
-	/**
-	 * @var PlentySoapObject_SetPropertyChoice
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_SetPropertyChoice
+     */
+    public $item;
 }

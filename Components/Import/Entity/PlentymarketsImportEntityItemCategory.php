@@ -33,62 +33,59 @@
  */
 class PlentymarketsImportEntityItemCategory
 {
-	/**
-	 *
-	 * @var PlentySoapObject_GetItemCategoryCatalog
-	 */
-	protected $Category;
+    /**
+     * @var PlentySoapObject_GetItemCategoryCatalog
+     */
+    protected $Category;
 
-	/**
-	 * I am the constructor
-	 *
-	 * @param PlentySoapObject_GetItemCategoryCatalog $Category
-	 */
-	public function __construct($Category)
-	{
-		$this->Category = $Category;
-	}
+    /**
+     * I am the constructor
+     *
+     * @param PlentySoapObject_GetItemCategoryCatalog $Category
+     */
+    public function __construct($Category)
+    {
+        $this->Category = $Category;
+    }
 
-	/**
-	 * Does the actual import
-	 */
-	public function import()
-	{
-		$row = Shopware()->Db()->fetchAll('
+    /**
+     * Does the actual import
+     */
+    public function import()
+    {
+        $row = Shopware()->Db()->fetchAll('
 			SELECT *
 				FROM plenty_mapping_category
 				WHERE plentyID LIKE "' . $this->Category->CategoryID . ';%"
 				LIMIT 1
 		');
 
-		if (!$row)
-		{
-			// PyLog()->message('Sync:Item:Category', 'Skipping the category »' . $this->Category->Name . '« (not found)');
-			return;
-		}
+        if (!$row) {
+            // PyLog()->message('Sync:Item:Category', 'Skipping the category »' . $this->Category->Name . '« (not found)');
+            return;
+        }
 
-		$index = explode(PlentymarketsMappingEntityCategory::DELIMITER, $row[0]['shopwareID']);
-		$categoryId = $index[0];
+        $index = explode(PlentymarketsMappingEntityCategory::DELIMITER, $row[0]['shopwareID']);
+        $categoryId = $index[0];
 
-		/** @var Shopware\Models\Category\Category $Category */
-		$Category = Shopware()->Models()->find('Shopware\Models\Category\Category', $categoryId);
+        /** @var Shopware\Models\Category\Category $Category */
+        $Category = Shopware()->Models()->find('Shopware\Models\Category\Category', $categoryId);
 
-		// If the shopware category wasn't found, something is terribly wrong
-		if (!$Category)
-		{
-			PyLog()->message('Sync:Item:Category', 'Skipping the category »' . $this->Category->Name . '« (not found)');
-			return;
-		}
+        // If the shopware category wasn't found, something is terribly wrong
+        if (!$Category) {
+            PyLog()->message('Sync:Item:Category', 'Skipping the category »' . $this->Category->Name . '« (not found)');
 
-		// Update the category only if the name's changed
-		if ($Category->getName() != $this->Category->Name || $Category->getPosition() != $this->Category->Position)
-		{
-			PyLog()->message('Sync:Item:Category', 'Updating the category »' . $this->Category->Name . '«');
-			$Category->setName($this->Category->Name);
-			$Category->setPosition($this->Category->Position);
+            return;
+        }
 
-			Shopware()->Models()->persist($Category);
-			Shopware()->Models()->flush();
-		}
-	}
+        // Update the category only if the name's changed
+        if ($Category->getName() != $this->Category->Name || $Category->getPosition() != $this->Category->Position) {
+            PyLog()->message('Sync:Item:Category', 'Updating the category »' . $this->Category->Name . '«');
+            $Category->setName($this->Category->Name);
+            $Category->setPosition($this->Category->Position);
+
+            Shopware()->Models()->persist($Category);
+            Shopware()->Models()->flush();
+        }
+    }
 }

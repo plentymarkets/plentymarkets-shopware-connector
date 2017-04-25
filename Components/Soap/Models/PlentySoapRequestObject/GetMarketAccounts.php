@@ -32,14 +32,13 @@
  */
 class PlentySoapRequestObject_GetMarketAccounts
 {
-	
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
-	
-	/**
-	 * @var int
-	 */
-	public $MarketAccountID;
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
+
+    /**
+     * @var int
+     */
+    public $MarketAccountID;
 }

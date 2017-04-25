@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_SetItemsFreeTextFields
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_setitemsfreetextfields
-	 */
-	public $ItemsFreeTextsList;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_setitemsfreetextfields
+     */
+    public $ItemsFreeTextsList;
 }

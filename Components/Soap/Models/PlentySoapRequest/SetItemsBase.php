@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_SetItemsBase
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_setitemsbaseitembase
-	 */
-	public $BaseItems;
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
+    /**
+     * @var ArrayOfPlentysoapobject_setitemsbaseitembase
+     */
+    public $BaseItems;
+
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
 }

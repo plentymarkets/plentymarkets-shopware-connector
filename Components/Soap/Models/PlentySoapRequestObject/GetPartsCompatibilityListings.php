@@ -32,14 +32,13 @@
  */
 class PlentySoapRequestObject_GetPartsCompatibilityListings
 {
-	
-	/**
-	 * @var int
-	 */
-	public $FitmentID;
-	
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
+    /**
+     * @var int
+     */
+    public $FitmentID;
+
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
 }

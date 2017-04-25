@@ -32,19 +32,18 @@
  */
 class PlentySoapRequest_GetShippingProfileConfigurations
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_integer
-	 */
-	public $ShippingDestinationIDs;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_integer
-	 */
-	public $ShippingProfileIDs;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_integer
+     */
+    public $ShippingDestinationIDs;
+
+    /**
+     * @var ArrayOfPlentysoapobject_integer
+     */
+    public $ShippingProfileIDs;
 }

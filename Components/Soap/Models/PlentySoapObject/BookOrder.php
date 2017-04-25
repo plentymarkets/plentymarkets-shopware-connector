@@ -32,9 +32,8 @@
  */
 class PlentySoapObject_BookOrder
 {
-	
-	/**
-	 * @var int
-	 */
-	public $OrderID;
+    /**
+     * @var int
+     */
+    public $OrderID;
 }

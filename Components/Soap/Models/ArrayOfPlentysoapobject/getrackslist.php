@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_getrackslist
 {
-	
-	/**
-	 * @var PlentySoapObject_GetRacksList
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_GetRacksList
+     */
+    public $item;
 }

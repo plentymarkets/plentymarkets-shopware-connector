@@ -32,19 +32,18 @@
  */
 class PlentySoapResponse_GetListingsTemplates
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapresponseobject_getlistingstemplates
-	 */
-	public $ListingTemplates;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapresponseobject_getlistingstemplates
+     */
+    public $ListingTemplates;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

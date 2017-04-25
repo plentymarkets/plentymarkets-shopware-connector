@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapresponseobject_getlinkeditems
 {
-	
-	/**
-	 * @var PlentySoapResponseObject_GetLinkedItems
-	 */
-	public $item;
+    /**
+     * @var PlentySoapResponseObject_GetLinkedItems
+     */
+    public $item;
 }

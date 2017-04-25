@@ -32,29 +32,28 @@
  */
 class PlentySoapRequestObject_GetCurrentStocks
 {
-	
-	/**
-	 * @var string
-	 */
-	public $EAN;
-	
-	/**
-	 * @var string
-	 */
-	public $EAN2;
-	
-	/**
-	 * @var string
-	 */
-	public $EAN3;
-	
-	/**
-	 * @var string
-	 */
-	public $EAN4;
-	
-	/**
-	 * @var string
-	 */
-	public $SKU;
+    /**
+     * @var string
+     */
+    public $EAN;
+
+    /**
+     * @var string
+     */
+    public $EAN2;
+
+    /**
+     * @var string
+     */
+    public $EAN3;
+
+    /**
+     * @var string
+     */
+    public $EAN4;
+
+    /**
+     * @var string
+     */
+    public $SKU;
 }

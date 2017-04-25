@@ -32,19 +32,18 @@
  */
 class PlentySoapResponse_GetCustomerClasses
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_getcustomerclasses
-	 */
-	public $CustomerClasses;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapobject_getcustomerclasses
+     */
+    public $CustomerClasses;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

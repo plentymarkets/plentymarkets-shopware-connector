@@ -32,49 +32,48 @@
  */
 class PlentySoapRequest_GetOrderDocument
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var int
-	 */
-	public $CreatedFrom;
-	
-	/**
-	 * @var int
-	 */
-	public $CreatedTill;
-	
-	/**
-	 * @var int
-	 */
-	public $DocumentID;
-	
-	/**
-	 * @var string
-	 */
-	public $DocumentNumber;
-	
-	/**
-	 * @var boolean
-	 */
-	public $GetFileData;
-	
-	/**
-	 * @var PlentySoapEnumeration_OrderDocumentType
-	 */
-	public $OrderDocumentType;
-	
-	/**
-	 * @var int
-	 */
-	public $OrderID;
-	
-	/**
-	 * @var int
-	 */
-	public $Page;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var int
+     */
+    public $CreatedFrom;
+
+    /**
+     * @var int
+     */
+    public $CreatedTill;
+
+    /**
+     * @var int
+     */
+    public $DocumentID;
+
+    /**
+     * @var string
+     */
+    public $DocumentNumber;
+
+    /**
+     * @var bool
+     */
+    public $GetFileData;
+
+    /**
+     * @var PlentySoapEnumeration_OrderDocumentType
+     */
+    public $OrderDocumentType;
+
+    /**
+     * @var int
+     */
+    public $OrderID;
+
+    /**
+     * @var int
+     */
+    public $Page;
 }

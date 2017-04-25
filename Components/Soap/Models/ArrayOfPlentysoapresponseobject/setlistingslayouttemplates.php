@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapresponseobject_setlistingslayouttemplates
 {
-	
-	/**
-	 * @var PlentySoapResponseObject_SetListingsLayoutTemplates
-	 */
-	public $item;
+    /**
+     * @var PlentySoapResponseObject_SetListingsLayoutTemplates
+     */
+    public $item;
 }

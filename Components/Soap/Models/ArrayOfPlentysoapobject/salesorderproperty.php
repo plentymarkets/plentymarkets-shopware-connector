@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_salesorderproperty
 {
-	
-	/**
-	 * @var PlentySoapObject_SalesOrderProperty
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_SalesOrderProperty
+     */
+    public $item;
 }

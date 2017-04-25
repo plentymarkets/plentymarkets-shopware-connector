@@ -32,19 +32,18 @@
  */
 class PlentySoapRequest_GetCouponListOfCampaign
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var int
-	 */
-	public $CampaignID;
-	
-	/**
-	 * @var int
-	 */
-	public $Page;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var int
+     */
+    public $CampaignID;
+
+    /**
+     * @var int
+     */
+    public $Page;
 }

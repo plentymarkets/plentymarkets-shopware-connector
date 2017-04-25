@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_getmarketplacetransactions
 {
-	
-	/**
-	 * @var PlentySoapObject_GetMarketplaceTransactions
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_GetMarketplaceTransactions
+     */
+    public $item;
 }

@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_SetItemCategory
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoaprequest_objectsetitemcategory
-	 */
-	public $SetItemCategory;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoaprequest_objectsetitemcategory
+     */
+    public $SetItemCategory;
 }

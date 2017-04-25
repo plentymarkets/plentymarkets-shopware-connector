@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_getitemmediafiles
 {
-	
-	/**
-	 * @var PlentySoapObject_GetItemMediaFiles
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_GetItemMediaFiles
+     */
+    public $item;
 }

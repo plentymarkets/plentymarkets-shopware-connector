@@ -32,9 +32,8 @@
  */
 class PlentySoapObject_Integer
 {
-	
-	/**
-	 * @var int
-	 */
-	public $intValue;
+    /**
+     * @var int
+     */
+    public $intValue;
 }

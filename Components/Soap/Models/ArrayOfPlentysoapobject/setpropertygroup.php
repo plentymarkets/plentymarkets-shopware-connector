@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_setpropertygroup
 {
-	
-	/**
-	 * @var PlentySoapObject_SetPropertyGroup
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_SetPropertyGroup
+     */
+    public $item;
 }

@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_AddOrderNotes
 {
-	
-	/**
-	 * @var ArrayOfPlentysoaprequestobject_addordernotes
-	 */
-	public $AddOrderNotes;
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
+    /**
+     * @var ArrayOfPlentysoaprequestobject_addordernotes
+     */
+    public $AddOrderNotes;
+
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
 }

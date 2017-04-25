@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoaprequest_objectsetcustomerdeliveryaddresses
 {
-	
-	/**
-	 * @var PlentySoapRequest_ObjectSetCustomerDeliveryAddresses
-	 */
-	public $item;
+    /**
+     * @var PlentySoapRequest_ObjectSetCustomerDeliveryAddresses
+     */
+    public $item;
 }

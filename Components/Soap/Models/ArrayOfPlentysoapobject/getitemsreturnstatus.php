@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_getitemsreturnstatus
 {
-	
-	/**
-	 * @var PlentySoapObject_GetItemsReturnStatus
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_GetItemsReturnStatus
+     */
+    public $item;
 }

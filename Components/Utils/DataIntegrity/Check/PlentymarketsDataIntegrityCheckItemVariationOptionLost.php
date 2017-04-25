@@ -26,7 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * Find items with non-existant properties
  *
@@ -34,38 +33,39 @@
  */
 class PlentymarketsDataIntegrityCheckItemVariationOptionLost implements PlentymarketsDataIntegrityCheckInterface
 {
-	/**
-	 * Returns the name of the check
-	 *
-	 * @see PlentymarketsDataIntegrityCheckInterface::getName()
-	 */
-	public function getName()
-	{
-		return 'ItemVariationOptionLost';
-	}
+    /**
+     * Returns the name of the check
+     *
+     * @see PlentymarketsDataIntegrityCheckInterface::getName()
+     */
+    public function getName()
+    {
+        return 'ItemVariationOptionLost';
+    }
 
-	/**
-	 * Checks whether the check is valid
-	 *
-	 * @return boolean
-	 */
-	public function isValid()
-	{
-		return count($this->getInvalidData(0, 1)) == 0;
-	}
+    /**
+     * Checks whether the check is valid
+     *
+     * @return bool
+     */
+    public function isValid()
+    {
+        return count($this->getInvalidData(0, 1)) == 0;
+    }
 
-	/**
-	 * Returns a page of invalid data
-	 *
-	 * @param integer $start
-	 * @param integer $offset
-	 * @return array
-	 */
-	public function getInvalidData($start, $offset)
-	{
-		// SELECT article_id, option_id FROM s_article_configurator_option_relations  cor
-		//WHERE option_id NOT IN (SELECT id FROM s_article_configurator_options);
-		return Shopware()->Db()->query('
+    /**
+     * Returns a page of invalid data
+     *
+     * @param int $start
+     * @param int $offset
+     *
+     * @return array
+     */
+    public function getInvalidData($start, $offset)
+    {
+        // SELECT article_id, option_id FROM s_article_configurator_option_relations  cor
+        //WHERE option_id NOT IN (SELECT id FROM s_article_configurator_options);
+        return Shopware()->Db()->query('
 			SELECT
 					SQL_CALC_FOUND_ROWS a.name, ad.ordernumber, ad.additionaltext, article_id detailsId, a.id itemId, option_id optionId
 				FROM s_article_configurator_option_relations cor
@@ -75,99 +75,93 @@ class PlentymarketsDataIntegrityCheckItemVariationOptionLost implements Plentyma
 				ORDER BY ad.ordernumber DESC, article_id
 				LIMIT ' . $start . ', ' . $offset . '
 		')->fetchAll();
-	}
+    }
 
-	/**
-	 * Deletes a page of invalid data
-	 *
-	 * @param integer $start
-	 * @param integer $offset
-	 */
-	public function deleteInvalidData($start, $offset)
-	{
-		foreach ($this->getInvalidData($start, $offset) as $data)
-		{
-			// Item detail still available
-			if (!empty($data['ordernumber']))
-			{
-				try
-				{
-					$Detail = Shopware()->Models()->find('\Shopware\Models\Article\Detail', $data['detailsId']);
-					Shopware()->Models()->remove($Detail);
-				}
-				catch (Exception $E)
-				{
-				}
-			}
+    /**
+     * Deletes a page of invalid data
+     *
+     * @param int $start
+     * @param int $offset
+     */
+    public function deleteInvalidData($start, $offset)
+    {
+        foreach ($this->getInvalidData($start, $offset) as $data) {
+            // Item detail still available
+            if (!empty($data['ordernumber'])) {
+                try {
+                    $Detail = Shopware()->Models()->find('\Shopware\Models\Article\Detail', $data['detailsId']);
+                    Shopware()->Models()->remove($Detail);
+                } catch (Exception $E) {
+                }
+            }
 
-			// delete only the relation
-			else
-			{
-				Shopware()->Db()->query('
+            // delete only the relation
+            else {
+                Shopware()->Db()->query('
 					DELETE FROM s_article_configurator_option_relations
 						WHERE
 							article_id = ? AND
 							option_id = ?
 						LIMIT 1
-				', array(
-					$data['detailsId'],
-					$data['optionId']
-				));
-			}
-		}
-		Shopware()->Models()->flush();
-	}
+				', [
+                    $data['detailsId'],
+                    $data['optionId'],
+                ]);
+            }
+        }
+        Shopware()->Models()->flush();
+    }
 
-	/**
-	 * Returns the fields to build an ext js model
-	 *
-	 * @return array
-	 */
-	public function getFields()
-	{
-		return array(
-			array(
-				'name' => 'name',
-				'description' => 'Beueichnung',
-				'type' => 'string'
-			),
-			array(
-				'name' => 'ordernumber',
-				'description' => 'Nummer',
-				'type' => 'string'
-			),
-			array(
-				'name' => 'additionaltext',
-				'description' => 'Zusatztext',
-				'type' => 'string'
-			),
-			array(
-				'name' => 'detailsId',
-				'description' => 'Detail ID',
-				'type' => 'int'
-			),
-			array(
-				'name' => 'itemId',
-				'description' => 'Artikel ID',
-				'type' => 'int'
-			),
-			array(
-				'name' => 'optionId',
-				'description' => 'Option ID',
-				'type' => 'int'
-			),
-		);
-	}
+    /**
+     * Returns the fields to build an ext js model
+     *
+     * @return array
+     */
+    public function getFields()
+    {
+        return [
+            [
+                'name' => 'name',
+                'description' => 'Beueichnung',
+                'type' => 'string',
+            ],
+            [
+                'name' => 'ordernumber',
+                'description' => 'Nummer',
+                'type' => 'string',
+            ],
+            [
+                'name' => 'additionaltext',
+                'description' => 'Zusatztext',
+                'type' => 'string',
+            ],
+            [
+                'name' => 'detailsId',
+                'description' => 'Detail ID',
+                'type' => 'int',
+            ],
+            [
+                'name' => 'itemId',
+                'description' => 'Artikel ID',
+                'type' => 'int',
+            ],
+            [
+                'name' => 'optionId',
+                'description' => 'Option ID',
+                'type' => 'int',
+            ],
+        ];
+    }
 
-	/**
-	 * Returns the total number of records
-	 *
-	 * @return integer
-	 */
-	public function getTotal()
-	{
-		return (integer) Shopware()->Db()->query('
+    /**
+     * Returns the total number of records
+     *
+     * @return int
+     */
+    public function getTotal()
+    {
+        return (int) Shopware()->Db()->query('
 			SELECT FOUND_ROWS()
 		')->fetchColumn(0);
-	}
+    }
 }

@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_itemsstocksearch
 {
-	
-	/**
-	 * @var PlentySoapObject_ItemsStockSearch
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_ItemsStockSearch
+     */
+    public $item;
 }

@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_setdynamicexportprocedure
 {
-	
-	/**
-	 * @var PlentySoapObject_SetDynamicExportProcedure
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_SetDynamicExportProcedure
+     */
+    public $item;
 }

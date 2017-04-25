@@ -32,9 +32,8 @@
  */
 class PlentySoapRequestObject_UpdateListingsVerify
 {
-	
-	/**
-	 * @var int
-	 */
-	public $MarketListingID;
+    /**
+     * @var int
+     */
+    public $MarketListingID;
 }

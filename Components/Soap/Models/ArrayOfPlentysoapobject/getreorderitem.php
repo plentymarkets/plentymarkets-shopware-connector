@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_getreorderitem
 {
-	
-	/**
-	 * @var PlentySoapObject_GetReorderItem
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_GetReorderItem
+     */
+    public $item;
 }

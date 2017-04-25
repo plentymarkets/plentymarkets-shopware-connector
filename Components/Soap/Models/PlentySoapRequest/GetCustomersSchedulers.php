@@ -32,29 +32,28 @@
  */
 class PlentySoapRequest_GetCustomersSchedulers
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoaprequestobject_getcustomersschedulers
-	 */
-	public $GetCustomersSchedulersList;
-	
-	/**
-	 * @var int
-	 */
-	public $Page;
-	
-	/**
-	 * @var int
-	 */
-	public $SchedulerEnd;
-	
-	/**
-	 * @var int
-	 */
-	public $SchedulerStart;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoaprequestobject_getcustomersschedulers
+     */
+    public $GetCustomersSchedulersList;
+
+    /**
+     * @var int
+     */
+    public $Page;
+
+    /**
+     * @var int
+     */
+    public $SchedulerEnd;
+
+    /**
+     * @var int
+     */
+    public $SchedulerStart;
 }

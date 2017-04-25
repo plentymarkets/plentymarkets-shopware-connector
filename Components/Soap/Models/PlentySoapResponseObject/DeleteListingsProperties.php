@@ -32,14 +32,13 @@
  */
 class PlentySoapResponseObject_DeleteListingsProperties
 {
-	
-	/**
-	 * @var int
-	 */
-	public $DeletedPropertyID;
-	
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
+    /**
+     * @var int
+     */
+    public $DeletedPropertyID;
+
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
 }

@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_setautonomousreturnitem
 {
-	
-	/**
-	 * @var PlentySoapObject_SetAutonomousReturnItem
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_SetAutonomousReturnItem
+     */
+    public $item;
 }

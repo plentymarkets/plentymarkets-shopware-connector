@@ -32,14 +32,13 @@
  */
 class PlentySoapObject_GetReasonsForReturn
 {
-	
-	/**
-	 * @var int
-	 */
-	public $ReasonForReturnID;
-	
-	/**
-	 * @var string
-	 */
-	public $ReasonForReturnName;
+    /**
+     * @var int
+     */
+    public $ReasonForReturnID;
+
+    /**
+     * @var string
+     */
+    public $ReasonForReturnName;
 }

@@ -1,0 +1,25 @@
+<?php
+
+$finder = PhpCsFixer\Finder::create()->in(__DIR__);
+
+
+return PhpCsFixer\Config::create()
+    ->setUsingCache(false)
+    ->setRules([
+        '@Symfony' => true,
+        'no_useless_else' => true,
+        'no_useless_return' => true,
+        'ordered_class_elements' => true,
+        'ordered_imports' => true,
+        'phpdoc_order' => true,
+        'phpdoc_summary' => false,
+        'phpdoc_to_comment' => false,
+        'phpdoc_align' => false,
+        'phpdoc_var_without_name' => false,
+        'blank_line_after_opening_tag' => true,
+        'concat_space' => ['spacing' => 'one'],
+        'array_syntax' => ['syntax' => 'short']
+    ])
+    ->setFinder($finder)
+;
+

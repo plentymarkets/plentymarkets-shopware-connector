@@ -32,14 +32,13 @@
  */
 class PlentySoapRequestObject_GetDeliveryOrders
 {
-	
-	/**
-	 * @var int
-	 */
-	public $DeliveryOrderID;
-	
-	/**
-	 * @var string
-	 */
-	public $ExternalOrderID;
+    /**
+     * @var int
+     */
+    public $DeliveryOrderID;
+
+    /**
+     * @var string
+     */
+    public $ExternalOrderID;
 }

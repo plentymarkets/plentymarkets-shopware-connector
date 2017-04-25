@@ -32,19 +32,18 @@
  */
 class PlentySoapRequest_SetItemsWarehouseSettings
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_setitemswarehousesettings
-	 */
-	public $ItemsList;
-	
-	/**
-	 * @var boolean
-	 */
-	public $VariantSettings;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_setitemswarehousesettings
+     */
+    public $ItemsList;
+
+    /**
+     * @var bool
+     */
+    public $VariantSettings;
 }

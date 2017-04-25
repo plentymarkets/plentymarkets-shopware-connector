@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_activefield
 {
-	
-	/**
-	 * @var PlentySoapObject_ActiveField
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_ActiveField
+     */
+    public $item;
 }

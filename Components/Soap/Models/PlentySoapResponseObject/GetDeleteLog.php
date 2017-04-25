@@ -32,24 +32,23 @@
  */
 class PlentySoapResponseObject_GetDeleteLog
 {
-	
-	/**
-	 * @var int
-	 */
-	public $ReferenceType;
-	
-	/**
-	 * @var int
-	 */
-	public $ReferenceValue;
-	
-	/**
-	 * @var int
-	 */
-	public $Timestamp;
-	
-	/**
-	 * @var string
-	 */
-	public $User;
+    /**
+     * @var int
+     */
+    public $ReferenceType;
+
+    /**
+     * @var int
+     */
+    public $ReferenceValue;
+
+    /**
+     * @var int
+     */
+    public $Timestamp;
+
+    /**
+     * @var string
+     */
+    public $User;
 }

@@ -32,164 +32,163 @@
  */
 class PlentySoapObject_OrdersPaymentInformation
 {
-	
-	/**
-	 * @var int
-	 */
-	public $MethodOfPayment;
-	
-	/**
-	 * @var int
-	 */
-	public $OrderID;
-	
-	/**
-	 * @var string
-	 */
-	public $PayPalTransactionItemBuyer;
-	
-	/**
-	 * @var string
-	 */
-	public $PayPalTransactionItemNumber;
-	
-	/**
-	 * @var string
-	 */
-	public $PayPalTransactionItemTransactionID;
-	
-	/**
-	 * @var string
-	 */
-	public $PayPalTransactionREFID;
-	
-	/**
-	 * @var string
-	 */
-	public $PayPalTransactionReceiverPayerId;
-	
-	/**
-	 * @var string
-	 */
-	public $PayPalTransactionType;
-	
-	/**
-	 * @var int
-	 */
-	public $PaymentID;
-	
-	/**
-	 * @var string
-	 */
-	public $PaymentStatus;
-	
-	/**
-	 * @var string
-	 */
-	public $ReferenceId;
-	
-	/**
-	 * @var float
-	 */
-	public $TransactionAmount;
-	
-	/**
-	 * @var string
-	 */
-	public $TransactionAssignDate;
-	
-	/**
-	 * @var string
-	 */
-	public $TransactionCurrency;
-	
-	/**
-	 * @var string
-	 */
-	public $TransactionCustomerBankAccountBIC;
-	
-	/**
-	 * @var string
-	 */
-	public $TransactionCustomerBankAccountCountry;
-	
-	/**
-	 * @var string
-	 */
-	public $TransactionCustomerBankAccountHolder;
-	
-	/**
-	 * @var string
-	 */
-	public $TransactionCustomerBankAccountIBAN;
-	
-	/**
-	 * @var string
-	 */
-	public $TransactionCustomerBankAccountNumber;
-	
-	/**
-	 * @var string
-	 */
-	public $TransactionCustomerBankCode;
-	
-	/**
-	 * @var string
-	 */
-	public $TransactionCustomerBankName;
-	
-	/**
-	 * @var string
-	 */
-	public $TransactionCustomerEmail;
-	
-	/**
-	 * @var string
-	 */
-	public $TransactionCustomerFirstname;
-	
-	/**
-	 * @var string
-	 */
-	public $TransactionCustomerId;
-	
-	/**
-	 * @var string
-	 */
-	public $TransactionCustomerLastname;
-	
-	/**
-	 * @var string
-	 */
-	public $TransactionEntryDate;
-	
-	/**
-	 * @var float
-	 */
-	public $TransactionExchangeRatio;
-	
-	/**
-	 * @var string
-	 */
-	public $TransactionID;
-	
-	/**
-	 * @var string
-	 */
-	public $TransactionImportDate;
-	
-	/**
-	 * @var string
-	 */
-	public $TransactionReceiverName;
-	
-	/**
-	 * @var string
-	 */
-	public $TransactionText;
-	
-	/**
-	 * @var string
-	 */
-	public $TransactionType;
+    /**
+     * @var int
+     */
+    public $MethodOfPayment;
+
+    /**
+     * @var int
+     */
+    public $OrderID;
+
+    /**
+     * @var string
+     */
+    public $PayPalTransactionItemBuyer;
+
+    /**
+     * @var string
+     */
+    public $PayPalTransactionItemNumber;
+
+    /**
+     * @var string
+     */
+    public $PayPalTransactionItemTransactionID;
+
+    /**
+     * @var string
+     */
+    public $PayPalTransactionREFID;
+
+    /**
+     * @var string
+     */
+    public $PayPalTransactionReceiverPayerId;
+
+    /**
+     * @var string
+     */
+    public $PayPalTransactionType;
+
+    /**
+     * @var int
+     */
+    public $PaymentID;
+
+    /**
+     * @var string
+     */
+    public $PaymentStatus;
+
+    /**
+     * @var string
+     */
+    public $ReferenceId;
+
+    /**
+     * @var float
+     */
+    public $TransactionAmount;
+
+    /**
+     * @var string
+     */
+    public $TransactionAssignDate;
+
+    /**
+     * @var string
+     */
+    public $TransactionCurrency;
+
+    /**
+     * @var string
+     */
+    public $TransactionCustomerBankAccountBIC;
+
+    /**
+     * @var string
+     */
+    public $TransactionCustomerBankAccountCountry;
+
+    /**
+     * @var string
+     */
+    public $TransactionCustomerBankAccountHolder;
+
+    /**
+     * @var string
+     */
+    public $TransactionCustomerBankAccountIBAN;
+
+    /**
+     * @var string
+     */
+    public $TransactionCustomerBankAccountNumber;
+
+    /**
+     * @var string
+     */
+    public $TransactionCustomerBankCode;
+
+    /**
+     * @var string
+     */
+    public $TransactionCustomerBankName;
+
+    /**
+     * @var string
+     */
+    public $TransactionCustomerEmail;
+
+    /**
+     * @var string
+     */
+    public $TransactionCustomerFirstname;
+
+    /**
+     * @var string
+     */
+    public $TransactionCustomerId;
+
+    /**
+     * @var string
+     */
+    public $TransactionCustomerLastname;
+
+    /**
+     * @var string
+     */
+    public $TransactionEntryDate;
+
+    /**
+     * @var float
+     */
+    public $TransactionExchangeRatio;
+
+    /**
+     * @var string
+     */
+    public $TransactionID;
+
+    /**
+     * @var string
+     */
+    public $TransactionImportDate;
+
+    /**
+     * @var string
+     */
+    public $TransactionReceiverName;
+
+    /**
+     * @var string
+     */
+    public $TransactionText;
+
+    /**
+     * @var string
+     */
+    public $TransactionType;
 }

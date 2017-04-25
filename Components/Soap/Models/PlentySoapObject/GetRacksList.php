@@ -32,24 +32,23 @@
  */
 class PlentySoapObject_GetRacksList
 {
-	
-	/**
-	 * @var string
-	 */
-	public $Name;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_rack
-	 */
-	public $RacksList;
-	
-	/**
-	 * @var int
-	 */
-	public $Type;
-	
-	/**
-	 * @var int
-	 */
-	public $WarehouseId;
+    /**
+     * @var string
+     */
+    public $Name;
+
+    /**
+     * @var ArrayOfPlentysoapobject_rack
+     */
+    public $RacksList;
+
+    /**
+     * @var int
+     */
+    public $Type;
+
+    /**
+     * @var int
+     */
+    public $WarehouseId;
 }

@@ -32,19 +32,18 @@
  */
 class PlentySoapResponse_AddOrderNotes
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapresponseobject_addordernotes
-	 */
-	public $OrderNotes;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapresponseobject_addordernotes
+     */
+    public $OrderNotes;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

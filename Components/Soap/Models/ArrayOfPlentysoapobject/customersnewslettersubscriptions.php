@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_customersnewslettersubscriptions
 {
-	
-	/**
-	 * @var PlentySoapObject_CustomersNewsletterSubscriptions
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_CustomersNewsletterSubscriptions
+     */
+    public $item;
 }

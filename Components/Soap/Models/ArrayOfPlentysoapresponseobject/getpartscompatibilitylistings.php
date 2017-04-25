@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapresponseobject_getpartscompatibilitylistings
 {
-	
-	/**
-	 * @var PlentySoapResponseObject_GetPartsCompatibilityListings
-	 */
-	public $item;
+    /**
+     * @var PlentySoapResponseObject_GetPartsCompatibilityListings
+     */
+    public $item;
 }

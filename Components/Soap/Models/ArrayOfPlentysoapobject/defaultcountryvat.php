@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_defaultcountryvat
 {
-	
-	/**
-	 * @var PlentySoapObject_DefaultCountryVAT
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_DefaultCountryVAT
+     */
+    public $item;
 }

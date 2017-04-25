@@ -32,9 +32,8 @@
  */
 class PlentySoapRequest_DeleteProperty
 {
-	
-	/**
-	 * @var int
-	 */
-	public $PropertyID;
+    /**
+     * @var int
+     */
+    public $PropertyID;
 }

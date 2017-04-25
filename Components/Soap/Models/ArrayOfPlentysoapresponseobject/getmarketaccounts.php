@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapresponseobject_getmarketaccounts
 {
-	
-	/**
-	 * @var PlentySoapResponseObject_GetMarketAccounts
-	 */
-	public $item;
+    /**
+     * @var PlentySoapResponseObject_GetMarketAccounts
+     */
+    public $item;
 }

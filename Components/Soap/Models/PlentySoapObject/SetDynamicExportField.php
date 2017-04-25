@@ -32,24 +32,23 @@
  */
 class PlentySoapObject_SetDynamicExportField
 {
-	
-	/**
-	 * @var string
-	 */
-	public $FieldName;
-	
-	/**
-	 * @var int
-	 */
-	public $ImportProcedure;
-	
-	/**
-	 * @var string
-	 */
-	public $IndividualFieldName;
-	
-	/**
-	 * @var int
-	 */
-	public $Position;
+    /**
+     * @var string
+     */
+    public $FieldName;
+
+    /**
+     * @var int
+     */
+    public $ImportProcedure;
+
+    /**
+     * @var string
+     */
+    public $IndividualFieldName;
+
+    /**
+     * @var int
+     */
+    public $Position;
 }

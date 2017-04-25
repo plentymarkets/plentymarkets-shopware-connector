@@ -26,7 +26,6 @@
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * Controller for the item bundles
  *
@@ -34,46 +33,41 @@
  */
 class PlentymarketsExportControllerItemBundle
 {
-	/**
-	 * Registers the bundle modules
-	 */
-	public function __construct()
-	{
-		PlentymarketsUtils::registerBundleModules();
-	}
+    /**
+     * Registers the bundle modules
+     */
+    public function __construct()
+    {
+        PlentymarketsUtils::registerBundleModules();
+    }
 
-	/**
-	 * Runs the actual export
-	 */
-	public function run()
-	{
-		$repository = Shopware()->Models()->getRepository('Shopware\CustomModels\Bundle\Bundle');
+    /**
+     * Runs the actual export
+     */
+    public function run()
+    {
+        $repository = Shopware()->Models()->getRepository('Shopware\CustomModels\Bundle\Bundle');
 
-		/** @var Shopware\CustomModels\Bundle\Bundle $bundle */
-		foreach ($repository->findAll() as $bundle)
-		{
-			try
-			{
-				PlentymarketsMappingController::getItemBundleByShopwareID($bundle->getId());
-				continue;
-			}
-			catch (PlentymarketsMappingExceptionNotExistant $e)
-			{
+        /** @var Shopware\CustomModels\Bundle\Bundle $bundle */
+        foreach ($repository->findAll() as $bundle) {
+            try {
+                PlentymarketsMappingController::getItemBundleByShopwareID($bundle->getId());
+                continue;
+            } catch (PlentymarketsMappingExceptionNotExistant $e) {
+            }
 
-			}
+            $exportEntityItemBundle = new PlentymarketsExportEntityItemBundle($bundle);
+            $exportEntityItemBundle->export();
+        }
+    }
 
-			$exportEntityItemBundle = new PlentymarketsExportEntityItemBundle($bundle);
-			$exportEntityItemBundle->export();
-		}
-	}
-
-	/**
-	 * Checks whether the export is finished
-	 *
-	 * @return boolean
-	 */
-	public function isFinished()
-	{
-		return true;
-	}
+    /**
+     * Checks whether the export is finished
+     *
+     * @return bool
+     */
+    public function isFinished()
+    {
+        return true;
+    }
 }

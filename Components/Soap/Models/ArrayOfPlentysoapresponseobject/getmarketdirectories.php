@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapresponseobject_getmarketdirectories
 {
-	
-	/**
-	 * @var PlentySoapResponseObject_GetMarketDirectories
-	 */
-	public $item;
+    /**
+     * @var PlentySoapResponseObject_GetMarketDirectories
+     */
+    public $item;
 }

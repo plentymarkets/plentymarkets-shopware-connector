@@ -32,9 +32,8 @@
  */
 class PlentySoapObject_GetItemsSuppliers
 {
-	
-	/**
-	 * @var int
-	 */
-	public $ItemID;
+    /**
+     * @var int
+     */
+    public $ItemID;
 }

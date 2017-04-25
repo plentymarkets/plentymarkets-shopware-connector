@@ -26,97 +26,85 @@
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * The class PlentymarketsImportController does the actual import for different cronjobs e.g.
  * in the class PlentymarketsCronjobController.
  * It uses the different import entities in /Import/Entity respectively in /Import/Entity/Order, for example PlentymarketsImportEntityItem.
- * 
+ *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 class PlentymarketsImportControllerItemLinked
 {
+    /**
+     * @var PlentymarketsImportControllerItemLinked
+     */
+    protected static $Instance;
 
-	/**
-	 *
-	 * @var PlentymarketsImportControllerItemLinked
-	 */
-	protected static $Instance;
+    /**
+     * @var int[]
+     */
+    protected $itemIds = [];
 
-	/**
-	 *
-	 * @var integer[]
-	 */
-	protected $itemIds = array();
+    /**
+     * I am the constructor
+     */
+    protected function __construct()
+    {
+    }
 
-	/**
-	 * I am the constructor
-	 */
-	protected function __construct()
-	{
-	}
+    /**
+     * Singleton: returns an instance
+     *
+     * @return PlentymarketsImportControllerItemLinked
+     */
+    public static function getInstance()
+    {
+        if (!self::$Instance instanceof self) {
+            self::$Instance = new self();
+        }
 
-	/**
-	 * Singleton: returns an instance
-	 * 
-	 * @return PlentymarketsImportControllerItemLinked
-	 */
-	public static function getInstance()
-	{
-		if (!self::$Instance instanceof self)
-		{
-			self::$Instance = new self();
-		}
-		return self::$Instance;
-	}
+        return self::$Instance;
+    }
 
-	/**
-	 * Add an item id to the stack
-	 * 
-	 * @param integer $itemId        	
-	 */
-	public function addItem($itemId)
-	{
-		$this->itemIds[] = $itemId;
-	}
+    /**
+     * Add an item id to the stack
+     *
+     * @param int $itemId
+     */
+    public function addItem($itemId)
+    {
+        $this->itemIds[] = $itemId;
+    }
 
-	/**
-	 * Imports the linked items
-	 *
-	 */
-	public function run()
-	{
-		foreach (array_chunk($this->itemIds, 100) as $chunk)
-		{
-			$Request_GetLinkedItems = new PlentySoapRequest_GetLinkedItems();
-			$Request_GetLinkedItems->ItemsList = array();
-			
-			//
-			foreach ($chunk as $itemId)
-			{
-				$Object_GetLinkedItems = new PlentySoapObject_GetLinkedItems();
-				$Object_GetLinkedItems->ItemID = $itemId;
-				$Request_GetLinkedItems->ItemsList[] = $Object_GetLinkedItems;
-			}
-			
-			/** @var PlentySoapResponse_GetLinkedItems $Response_GetLinkedItems */
-			$Response_GetLinkedItems = PlentymarketsSoapClient::getInstance()->GetLinkedItems($Request_GetLinkedItems);
+    /**
+     * Imports the linked items
+     */
+    public function run()
+    {
+        foreach (array_chunk($this->itemIds, 100) as $chunk) {
+            $Request_GetLinkedItems = new PlentySoapRequest_GetLinkedItems();
+            $Request_GetLinkedItems->ItemsList = [];
 
-			/** @var PlentySoapResponseObject_GetLinkedItems $Item */
-			foreach ($Response_GetLinkedItems->Items->item as $Item)
-			{
-				try
-				{
-					$SHOPWARE_itemId = PlentymarketsMappingController::getItemByPlentyID($Item->ItemID);
-				}
-				catch (PlentymarketsMappingExceptionNotExistant $E)
-				{
-					continue;
-				}
-				
-				$PlentymarketsImportEntityItemLinked = new PlentymarketsImportEntityItemLinked($SHOPWARE_itemId, $Item->LinkedItems);
-				$PlentymarketsImportEntityItemLinked->link();
-			}
-		}
-	}
+            foreach ($chunk as $itemId) {
+                $Object_GetLinkedItems = new PlentySoapObject_GetLinkedItems();
+                $Object_GetLinkedItems->ItemID = $itemId;
+                $Request_GetLinkedItems->ItemsList[] = $Object_GetLinkedItems;
+            }
+
+            /** @var PlentySoapResponse_GetLinkedItems $Response_GetLinkedItems */
+            $Response_GetLinkedItems = PlentymarketsSoapClient::getInstance()->GetLinkedItems($Request_GetLinkedItems);
+
+            /** @var PlentySoapResponseObject_GetLinkedItems $Item */
+            foreach ($Response_GetLinkedItems->Items->item as $Item) {
+                try {
+                    $SHOPWARE_itemId = PlentymarketsMappingController::getItemByPlentyID($Item->ItemID);
+                } catch (PlentymarketsMappingExceptionNotExistant $E) {
+                    continue;
+                }
+
+                $PlentymarketsImportEntityItemLinked = new PlentymarketsImportEntityItemLinked($SHOPWARE_itemId, $Item->LinkedItems);
+                $PlentymarketsImportEntityItemLinked->link();
+            }
+        }
+    }
 }

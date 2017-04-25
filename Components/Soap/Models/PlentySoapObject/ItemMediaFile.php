@@ -32,34 +32,33 @@
  */
 class PlentySoapObject_ItemMediaFile
 {
-	
-	/**
-	 * @var PlentySoapObject_FileBase64Encoded
-	 */
-	public $Base64Data;
-	
-	/**
-	 * @var boolean
-	 */
-	public $DisplayCMS;
-	
-	/**
-	 * @var boolean
-	 */
-	public $DisplayEmail;
-	
-	/**
-	 * @var boolean
-	 */
-	public $DisplayMyAccount;
-	
-	/**
-	 * @var int
-	 */
-	public $FileID;
-	
-	/**
-	 * @var string
-	 */
-	public $Title;
+    /**
+     * @var PlentySoapObject_FileBase64Encoded
+     */
+    public $Base64Data;
+
+    /**
+     * @var bool
+     */
+    public $DisplayCMS;
+
+    /**
+     * @var bool
+     */
+    public $DisplayEmail;
+
+    /**
+     * @var bool
+     */
+    public $DisplayMyAccount;
+
+    /**
+     * @var int
+     */
+    public $FileID;
+
+    /**
+     * @var string
+     */
+    public $Title;
 }

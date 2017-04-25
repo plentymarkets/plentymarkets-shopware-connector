@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_SetListings
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoaprequest_objectlisting
-	 */
-	public $Listings;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoaprequest_objectlisting
+     */
+    public $Listings;
 }

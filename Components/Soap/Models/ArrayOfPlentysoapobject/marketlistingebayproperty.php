@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_marketlistingebayproperty
 {
-	
-	/**
-	 * @var PlentySoapObject_MarketListingEbayProperty
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_MarketListingEbayProperty
+     */
+    public $item;
 }

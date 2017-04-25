@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoaprequestobject_fitmentitem
 {
-	
-	/**
-	 * @var PlentySoapRequestObject_FitmentItem
-	 */
-	public $item;
+    /**
+     * @var PlentySoapRequestObject_FitmentItem
+     */
+    public $item;
 }

@@ -32,19 +32,18 @@
  */
 class PlentySoapRequest_GetListings
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoaprequestobject_getlistings
-	 */
-	public $GetListings;
-	
-	/**
-	 * @var int
-	 */
-	public $Page;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoaprequestobject_getlistings
+     */
+    public $GetListings;
+
+    /**
+     * @var int
+     */
+    public $Page;
 }

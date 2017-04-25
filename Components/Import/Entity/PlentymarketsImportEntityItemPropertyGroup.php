@@ -33,72 +33,66 @@
  */
 class PlentymarketsImportEntityItemPropertyGroup
 {
-	/**
-	 *
-	 * @var PlentySoapObject_PropertyGroup
-	 */
-	protected $Group;
+    /**
+     * @var PlentySoapObject_PropertyGroup
+     */
+    protected $Group;
 
-	/**
-	 * I am the constructor
-	 *
-	 * @param PlentySoapObject_PropertyGroup $Group
-	 */
-	public function __construct($Group)
-	{
-		$this->Group = $Group;
-	}
+    /**
+     * I am the constructor
+     *
+     * @param PlentySoapObject_PropertyGroup $Group
+     */
+    public function __construct($Group)
+    {
+        $this->Group = $Group;
+    }
 
-	/**
-	 * @param int $shopId
-	 */
-	public function importPropertyGroupTranslation($shopId)
-	{
-		try
-		{
-			$SHOPWARE_id = PlentymarketsMappingController::getPropertyGroupByPlentyID($this->Group->PropertyGroupID);
-			PyLog()->message('Sync:Item:Property Group', 'Updating the property group translation »' . $this->Group->FrontendName . '«');
-		}
-		catch (PlentymarketsMappingExceptionNotExistant $E)
-		{
-			PyLog()->message('Sync:Item:Property Group', 'Skipping the property group translation »' . $this->Group->FrontendName . '«');
-			return;
-		}
+    /**
+     * @param int $shopId
+     */
+    public function importPropertyGroupTranslation($shopId)
+    {
+        try {
+            $SHOPWARE_id = PlentymarketsMappingController::getPropertyGroupByPlentyID($this->Group->PropertyGroupID);
+            PyLog()->message('Sync:Item:Property Group', 'Updating the property group translation »' . $this->Group->FrontendName . '«');
+        } catch (PlentymarketsMappingExceptionNotExistant $E) {
+            PyLog()->message('Sync:Item:Property Group', 'Skipping the property group translation »' . $this->Group->FrontendName . '«');
 
-		if(!is_null($this->Group->FrontendName))
-		{
-			// save the translation of the property group
-			$properteryGroup_TranslationData = array('groupName' => $this->Group->FrontendName);
-			
-			$propertyParts = explode(';', $SHOPWARE_id);
-			$groupId = $propertyParts[0];
+            return;
+        }
 
-			PlentymarketsTranslation::setShopwareTranslation('propertygroup', $groupId, $shopId, $properteryGroup_TranslationData);
-		}
-	}
+        if (!is_null($this->Group->FrontendName)) {
+            // save the translation of the property group
+            $properteryGroup_TranslationData = ['groupName' => $this->Group->FrontendName];
 
-	/**
-	 * Does the actual import
-	 */
-	public function import()
-	{
-		try
-		{
-			$SHOPWARE_id = PlentymarketsMappingController::getPropertyGroupByPlentyID($this->Group->PropertyGroupID);
-			PyLog()->message('Sync:Item:Producer', 'Updating the property group »' . $this->Group->FrontendName . '«');
-		}
-		catch (PlentymarketsMappingExceptionNotExistant $E)
-		{
-			PyLog()->message('Sync:Item:Producer', 'Skipping the property group »' . $this->Group->FrontendName . '«');
-			return;
-		}
+            $propertyParts = explode(';', $SHOPWARE_id);
+            $groupId = $propertyParts[0];
 
-		/** @var Shopware\Models\Property\Group $Group */
-		$Group = Shopware()->Models()->find('Shopware\Models\Property\Group', $SHOPWARE_id);
+            PlentymarketsTranslation::setShopwareTranslation('propertygroup', $groupId, $shopId, $properteryGroup_TranslationData);
+        }
+    }
 
-		// Set the new data
-		$Group->setName($this->Group->FrontendName);
-		Shopware()->Models()->persist($Group);
-		Shopware()->Models()->flush();
-	}
+    /**
+     * Does the actual import
+     */
+    public function import()
+    {
+        try {
+            $SHOPWARE_id = PlentymarketsMappingController::getPropertyGroupByPlentyID($this->Group->PropertyGroupID);
+            PyLog()->message('Sync:Item:Producer', 'Updating the property group »' . $this->Group->FrontendName . '«');
+        } catch (PlentymarketsMappingExceptionNotExistant $E) {
+            PyLog()->message('Sync:Item:Producer', 'Skipping the property group »' . $this->Group->FrontendName . '«');
+
+            return;
+        }
+
+        /** @var Shopware\Models\Property\Group $Group */
+        $Group = Shopware()->Models()->find('Shopware\Models\Property\Group', $SHOPWARE_id);
+
+        // Set the new data
+        $Group->setName($this->Group->FrontendName);
+        Shopware()->Models()->persist($Group);
+        Shopware()->Models()->flush();
+    }
 }

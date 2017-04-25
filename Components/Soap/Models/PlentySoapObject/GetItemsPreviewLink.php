@@ -32,14 +32,13 @@
  */
 class PlentySoapObject_GetItemsPreviewLink
 {
-	
-	/**
-	 * @var int
-	 */
-	public $ItemID;
-	
-	/**
-	 * @var string
-	 */
-	public $ItemPreviewLink;
+    /**
+     * @var int
+     */
+    public $ItemID;
+
+    /**
+     * @var string
+     */
+    public $ItemPreviewLink;
 }

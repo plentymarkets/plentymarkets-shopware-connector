@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_SetCreditNotes
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_setcreditnote
-	 */
-	public $CreditNotes;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_setcreditnote
+     */
+    public $CreditNotes;
 }

@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_GetTermsAndCancellation
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_gettermsandcancellation
-	 */
-	public $TermsAndCancellation;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_gettermsandcancellation
+     */
+    public $TermsAndCancellation;
 }

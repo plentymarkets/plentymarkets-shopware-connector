@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_GetListingsTemplates
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoaprequestobject_getlistingstemplates
-	 */
-	public $GetListingsTemplates;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoaprequestobject_getlistingstemplates
+     */
+    public $GetListingsTemplates;
 }

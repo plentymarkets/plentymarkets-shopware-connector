@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_SetMarketListings
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_marketlisting
-	 */
-	public $MarketListings;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_marketlisting
+     */
+    public $MarketListings;
 }

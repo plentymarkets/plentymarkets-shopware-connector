@@ -32,24 +32,23 @@
  */
 class PlentySoapRequestObject_SetCategoryBase
 {
-	
-	/**
-	 * @var int
-	 */
-	public $LinkList;
-	
-	/**
-	 * @var string
-	 */
-	public $Right;
-	
-	/**
-	 * @var int
-	 */
-	public $SiteMap;
-	
-	/**
-	 * @var string
-	 */
-	public $Type;
+    /**
+     * @var int
+     */
+    public $LinkList;
+
+    /**
+     * @var string
+     */
+    public $Right;
+
+    /**
+     * @var int
+     */
+    public $SiteMap;
+
+    /**
+     * @var string
+     */
+    public $Type;
 }

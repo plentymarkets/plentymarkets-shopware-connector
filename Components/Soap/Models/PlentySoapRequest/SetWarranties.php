@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_SetWarranties
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_setwarranty
-	 */
-	public $Warranties;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_setwarranty
+     */
+    public $Warranties;
 }

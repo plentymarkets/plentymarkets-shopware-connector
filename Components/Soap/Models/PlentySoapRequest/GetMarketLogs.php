@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_GetMarketLogs
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoaprequestobject_getmarketlogs
-	 */
-	public $GetMarketLogs;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoaprequestobject_getmarketlogs
+     */
+    public $GetMarketLogs;
 }

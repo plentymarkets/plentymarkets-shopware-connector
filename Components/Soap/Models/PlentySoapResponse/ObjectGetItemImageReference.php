@@ -32,14 +32,13 @@
  */
 class PlentySoapResponse_ObjectGetItemImageReference
 {
-	
-	/**
-	 * @var PlentySoapEnumeration_SetItemImagesImageReferenceType
-	 */
-	public $ReferenceType;
-	
-	/**
-	 * @var int
-	 */
-	public $ReferenceValue;
+    /**
+     * @var PlentySoapEnumeration_SetItemImagesImageReferenceType
+     */
+    public $ReferenceType;
+
+    /**
+     * @var int
+     */
+    public $ReferenceValue;
 }

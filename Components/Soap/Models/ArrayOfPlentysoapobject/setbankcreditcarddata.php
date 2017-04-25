@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_setbankcreditcarddata
 {
-	
-	/**
-	 * @var PlentySoapObject_SetBankCreditCardData
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_SetBankCreditCardData
+     */
+    public $item;
 }

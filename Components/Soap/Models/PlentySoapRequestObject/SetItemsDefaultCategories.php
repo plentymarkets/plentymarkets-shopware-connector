@@ -32,39 +32,38 @@
  */
 class PlentySoapRequestObject_SetItemsDefaultCategories
 {
-	
-	/**
-	 * @var PlentySoapRequestObject_DefaultCategoryBranch
-	 */
-	public $Branch;
-	
-	/**
-	 * @var int
-	 */
-	public $BranchID;
-	
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
-	
-	/**
-	 * @var int
-	 */
-	public $ItemID;
-	
-	/**
-	 * @var int
-	 */
-	public $Manually;
-	
-	/**
-	 * @var boolean
-	 */
-	public $SetAsStandard;
-	
-	/**
-	 * @var int
-	 */
-	public $StoreID;
+    /**
+     * @var PlentySoapRequestObject_DefaultCategoryBranch
+     */
+    public $Branch;
+
+    /**
+     * @var int
+     */
+    public $BranchID;
+
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
+
+    /**
+     * @var int
+     */
+    public $ItemID;
+
+    /**
+     * @var int
+     */
+    public $Manually;
+
+    /**
+     * @var bool
+     */
+    public $SetAsStandard;
+
+    /**
+     * @var int
+     */
+    public $StoreID;
 }

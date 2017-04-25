@@ -32,34 +32,33 @@
  */
 class PlentySoapObject_Rack
 {
-	
-	/**
-	 * @var int
-	 */
-	public $DefaultRack;
-	
-	/**
-	 * @var int
-	 */
-	public $Position;
-	
-	/**
-	 * @var int
-	 */
-	public $RackId;
-	
-	/**
-	 * @var string
-	 */
-	public $RackName;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_shelf
-	 */
-	public $ShelvesList;
-	
-	/**
-	 * @var int
-	 */
-	public $Zone;
+    /**
+     * @var int
+     */
+    public $DefaultRack;
+
+    /**
+     * @var int
+     */
+    public $Position;
+
+    /**
+     * @var int
+     */
+    public $RackId;
+
+    /**
+     * @var string
+     */
+    public $RackName;
+
+    /**
+     * @var ArrayOfPlentysoapobject_shelf
+     */
+    public $ShelvesList;
+
+    /**
+     * @var int
+     */
+    public $Zone;
 }

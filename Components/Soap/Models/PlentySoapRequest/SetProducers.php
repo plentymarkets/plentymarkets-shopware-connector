@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_SetProducers
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_producer
-	 */
-	public $Producers;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_producer
+     */
+    public $Producers;
 }

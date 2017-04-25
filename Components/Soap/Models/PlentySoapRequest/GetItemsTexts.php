@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_GetItemsTexts
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_requestitems
-	 */
-	public $ItemsList;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_requestitems
+     */
+    public $ItemsList;
 }

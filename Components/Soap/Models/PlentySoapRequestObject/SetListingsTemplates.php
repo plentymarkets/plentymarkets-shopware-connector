@@ -32,144 +32,143 @@
  */
 class PlentySoapRequestObject_SetListingsTemplates
 {
-	
-	/**
-	 * @var int
-	 */
-	public $AutoRelist;
-	
-	/**
-	 * @var int
-	 */
-	public $BasicPriceInText;
-	
-	/**
-	 * @var int
-	 */
-	public $CopyItemDescription;
-	
-	/**
-	 * @var int
-	 */
-	public $CopyItemTitle;
-	
-	/**
-	 * @var int
-	 */
-	public $DirectoryId;
-	
-	/**
-	 * @var float
-	 */
-	public $FixedPrice;
-	
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
-	
-	/**
-	 * @var string
-	 */
-	public $Lang;
-	
-	/**
-	 * @var int
-	 */
-	public $LayoutId;
-	
-	/**
-	 * @var int
-	 */
-	public $ListAllVariations;
-	
-	/**
-	 * @var int
-	 */
-	public $ListingEnabled;
-	
-	/**
-	 * @var int
-	 */
-	public $ListingType;
-	
-	/**
-	 * @var int
-	 */
-	public $MaxNumOfImages;
-	
-	/**
-	 * @var int
-	 */
-	public $MaxQuantity;
-	
-	/**
-	 * @var int
-	 */
-	public $NumberPerLot;
-	
-	/**
-	 * @var float
-	 */
-	public $OrderStatus;
-	
-	/**
-	 * @var float
-	 */
-	public $ReservePrice;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_integer
-	 */
-	public $SchedulerIds;
-	
-	/**
-	 * @var float
-	 */
-	public $StartPrice;
-	
-	/**
-	 * @var int
-	 */
-	public $StockDependence;
-	
-	/**
-	 * @var string
-	 */
-	public $Subtitle;
-	
-	/**
-	 * @var int
-	 */
-	public $TemplateId;
-	
-	/**
-	 * @var string
-	 */
-	public $TemplateName;
-	
-	/**
-	 * @var string
-	 */
-	public $TransmitItemNumberType;
-	
-	/**
-	 * @var int
-	 */
-	public $UsePrice;
-	
-	/**
-	 * @var float
-	 */
-	public $VAT;
-	
-	/**
-	 * @var int
-	 */
-	public $VATCountry;
-	
-	/**
-	 * @var int
-	 */
-	public $WarehouseId;
+    /**
+     * @var int
+     */
+    public $AutoRelist;
+
+    /**
+     * @var int
+     */
+    public $BasicPriceInText;
+
+    /**
+     * @var int
+     */
+    public $CopyItemDescription;
+
+    /**
+     * @var int
+     */
+    public $CopyItemTitle;
+
+    /**
+     * @var int
+     */
+    public $DirectoryId;
+
+    /**
+     * @var float
+     */
+    public $FixedPrice;
+
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
+
+    /**
+     * @var string
+     */
+    public $Lang;
+
+    /**
+     * @var int
+     */
+    public $LayoutId;
+
+    /**
+     * @var int
+     */
+    public $ListAllVariations;
+
+    /**
+     * @var int
+     */
+    public $ListingEnabled;
+
+    /**
+     * @var int
+     */
+    public $ListingType;
+
+    /**
+     * @var int
+     */
+    public $MaxNumOfImages;
+
+    /**
+     * @var int
+     */
+    public $MaxQuantity;
+
+    /**
+     * @var int
+     */
+    public $NumberPerLot;
+
+    /**
+     * @var float
+     */
+    public $OrderStatus;
+
+    /**
+     * @var float
+     */
+    public $ReservePrice;
+
+    /**
+     * @var ArrayOfPlentysoapobject_integer
+     */
+    public $SchedulerIds;
+
+    /**
+     * @var float
+     */
+    public $StartPrice;
+
+    /**
+     * @var int
+     */
+    public $StockDependence;
+
+    /**
+     * @var string
+     */
+    public $Subtitle;
+
+    /**
+     * @var int
+     */
+    public $TemplateId;
+
+    /**
+     * @var string
+     */
+    public $TemplateName;
+
+    /**
+     * @var string
+     */
+    public $TransmitItemNumberType;
+
+    /**
+     * @var int
+     */
+    public $UsePrice;
+
+    /**
+     * @var float
+     */
+    public $VAT;
+
+    /**
+     * @var int
+     */
+    public $VATCountry;
+
+    /**
+     * @var int
+     */
+    public $WarehouseId;
 }

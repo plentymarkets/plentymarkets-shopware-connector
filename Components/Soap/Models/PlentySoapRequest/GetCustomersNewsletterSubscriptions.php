@@ -32,24 +32,23 @@
  */
 class PlentySoapRequest_GetCustomersNewsletterSubscriptions
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var int
-	 */
-	public $CustomerID;
-	
-	/**
-	 * @var string
-	 */
-	public $Email;
-	
-	/**
-	 * @var int
-	 */
-	public $Page;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var int
+     */
+    public $CustomerID;
+
+    /**
+     * @var string
+     */
+    public $Email;
+
+    /**
+     * @var int
+     */
+    public $Page;
 }

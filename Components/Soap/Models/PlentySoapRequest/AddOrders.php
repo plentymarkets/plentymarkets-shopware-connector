@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_AddOrders
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_order
-	 */
-	public $Orders;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_order
+     */
+    public $Orders;
 }

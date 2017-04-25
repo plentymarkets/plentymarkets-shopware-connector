@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_setitemsfreetextfields
 {
-	
-	/**
-	 * @var PlentySoapObject_SetItemsFreeTextFields
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_SetItemsFreeTextFields
+     */
+    public $item;
 }

@@ -32,19 +32,18 @@
  */
 class PlentySoapResponse_GetRacksList
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_getrackslist
-	 */
-	public $WarehouseList;
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
+
+    /**
+     * @var ArrayOfPlentysoapobject_getrackslist
+     */
+    public $WarehouseList;
 }

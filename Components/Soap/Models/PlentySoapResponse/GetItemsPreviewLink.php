@@ -32,19 +32,18 @@
  */
 class PlentySoapResponse_GetItemsPreviewLink
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_getitemspreviewlink
-	 */
-	public $ItemsData;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapobject_getitemspreviewlink
+     */
+    public $ItemsData;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

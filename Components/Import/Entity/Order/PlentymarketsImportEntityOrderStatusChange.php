@@ -22,7 +22,6 @@
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * PlentymarketsImportEntityOrderStatusChange provides status change
  *
@@ -30,58 +29,50 @@
  */
 class PlentymarketsImportEntityOrderStatusChange extends PlentymarketsImportEntityOrderAbstract
 {
-	/**
-	 *
-	 * @var string
-	 */
-	protected static $action = 'StatusChange';
+    /**
+     * @var string
+     */
+    protected static $action = 'StatusChange';
 
-	/**
-	 * Prepares the soap orders SOAP object
-	 *
-	 * @see PlentymarketsImportEntityOrderAbstract::prepare()
-	 */
-	public function prepare()
-	{
-		$timestamp = (int)PlentymarketsConfig::getInstance()->getImportOrderStatusChangeLastUpdateTimestamp(0);
+    /**
+     * Prepares the soap orders SOAP object
+     *
+     * @see PlentymarketsImportEntityOrderAbstract::prepare()
+     */
+    public function prepare()
+    {
+        $timestamp = (int) PlentymarketsConfig::getInstance()->getImportOrderStatusChangeLastUpdateTimestamp(0);
 
-		if (!$timestamp)
-		{
-			$timestamp = time();
-		}
+        if (!$timestamp) {
+            $timestamp = time();
+        }
 
-		$this->log('LastUpdate: ' . date('r', $timestamp));
-		$this->Request_SearchOrders->LastUpdateFrom = $timestamp;
-	}
+        $this->log('LastUpdate: ' . date('r', $timestamp));
+        $this->Request_SearchOrders->LastUpdateFrom = $timestamp;
+    }
 
-	/**
-	 * Handles the actual import
-	 *
-	 * @param integer $shopwareOrderId
-	 * @param PlentySoapObject_OrderHead $Order
-	 */
-	public function handle($shopwareOrderId, $Order)
-	{
-		try
-		{
-			$status = sprintf("%.1f", (float)$Order->OrderStatus);
-			$message = sprintf('plentymarkets Status %s', $status);
-			$orderStatus = PlentymarketsMappingController::getOrderStatusByPlentyID($status);
-			self::$OrderModule->setOrderStatus($shopwareOrderId, $orderStatus, false, $message);
-		}
-		catch (Exception $e)
-		{
-		}
+    /**
+     * Handles the actual import
+     *
+     * @param int $shopwareOrderId
+     * @param PlentySoapObject_OrderHead $Order
+     */
+    public function handle($shopwareOrderId, $Order)
+    {
+        try {
+            $status = sprintf('%.1f', (float) $Order->OrderStatus);
+            $message = sprintf('plentymarkets Status %s', $status);
+            $orderStatus = PlentymarketsMappingController::getOrderStatusByPlentyID($status);
+            self::$OrderModule->setOrderStatus($shopwareOrderId, $orderStatus, false, $message);
+        } catch (Exception $e) {
+        }
 
-		try
-		{
-			$status = sprintf("%.1f", (float)$Order->OrderStatus);
-			$message = sprintf('plentymarkets Status %s', $status);
-			$paymentStatus = PlentymarketsMappingController::getPaymentStatusByPlentyID($status);
-			self::$OrderModule->setPaymentStatus($shopwareOrderId, $paymentStatus, false, $message);
-		}
-		catch (Exception $e)
-		{
-		}
-	}
+        try {
+            $status = sprintf('%.1f', (float) $Order->OrderStatus);
+            $message = sprintf('plentymarkets Status %s', $status);
+            $paymentStatus = PlentymarketsMappingController::getPaymentStatusByPlentyID($status);
+            self::$OrderModule->setPaymentStatus($shopwareOrderId, $paymentStatus, false, $message);
+        } catch (Exception $e) {
+        }
+    }
 }

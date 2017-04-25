@@ -32,24 +32,23 @@
  */
 class PlentySoapResponse_AddDocument
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapresponseobject_adddocument
-	 */
-	public $Documents;
-	
-	/**
-	 * @var int
-	 */
-	public $OrderID;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapresponseobject_adddocument
+     */
+    public $Documents;
+
+    /**
+     * @var int
+     */
+    public $OrderID;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

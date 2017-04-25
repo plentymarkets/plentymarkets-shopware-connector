@@ -32,9 +32,8 @@
  */
 class PlentySoapObject_DeleteEmailTemplatesTemplate
 {
-	
-	/**
-	 * @var int
-	 */
-	public $EmailTemplateID;
+    /**
+     * @var int
+     */
+    public $EmailTemplateID;
 }

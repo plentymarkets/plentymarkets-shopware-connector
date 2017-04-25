@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_setpropertyamazon
 {
-	
-	/**
-	 * @var PlentySoapObject_SetPropertyAmazon
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_SetPropertyAmazon
+     */
+    public $item;
 }

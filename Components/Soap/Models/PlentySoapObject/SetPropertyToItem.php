@@ -32,24 +32,23 @@
  */
 class PlentySoapObject_SetPropertyToItem
 {
-	
-	/**
-	 * @var int
-	 */
-	public $ItemId;
-	
-	/**
-	 * @var string
-	 */
-	public $Lang;
-	
-	/**
-	 * @var int
-	 */
-	public $PropertyId;
-	
-	/**
-	 * @var string
-	 */
-	public $PropertyItemValue;
+    /**
+     * @var int
+     */
+    public $ItemId;
+
+    /**
+     * @var string
+     */
+    public $Lang;
+
+    /**
+     * @var int
+     */
+    public $PropertyId;
+
+    /**
+     * @var string
+     */
+    public $PropertyItemValue;
 }

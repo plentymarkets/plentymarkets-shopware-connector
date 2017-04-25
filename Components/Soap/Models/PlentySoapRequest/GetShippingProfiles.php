@@ -32,19 +32,18 @@
  */
 class PlentySoapRequest_GetShippingProfiles
 {
-	
-	/**
-	 * @var boolean
-	 */
-	public $GetShippingCharges;
-	
-	/**
-	 * @var string
-	 */
-	public $Lang;
-	
-	/**
-	 * @var int
-	 */
-	public $ShippingProfileID;
+    /**
+     * @var bool
+     */
+    public $GetShippingCharges;
+
+    /**
+     * @var string
+     */
+    public $Lang;
+
+    /**
+     * @var int
+     */
+    public $ShippingProfileID;
 }

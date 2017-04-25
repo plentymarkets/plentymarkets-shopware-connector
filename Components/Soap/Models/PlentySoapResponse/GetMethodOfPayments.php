@@ -32,19 +32,18 @@
  */
 class PlentySoapResponse_GetMethodOfPayments
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_getmethodofpayments
-	 */
-	public $MethodOfPayment;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapobject_getmethodofpayments
+     */
+    public $MethodOfPayment;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

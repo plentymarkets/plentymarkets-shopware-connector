@@ -32,34 +32,33 @@
  */
 class PlentySoapObject_SetReturnItem
 {
-	
-	/**
-	 * @var string
-	 */
-	public $Comment;
-	
-	/**
-	 * @var string
-	 */
-	public $ExternalItemId;
-	
-	/**
-	 * @var int
-	 */
-	public $ItemStatusID;
-	
-	/**
-	 * @var float
-	 */
-	public $OrderRowId;
-	
-	/**
-	 * @var float
-	 */
-	public $Quantity;
-	
-	/**
-	 * @var int
-	 */
-	public $RemainingPercentage;
+    /**
+     * @var string
+     */
+    public $Comment;
+
+    /**
+     * @var string
+     */
+    public $ExternalItemId;
+
+    /**
+     * @var int
+     */
+    public $ItemStatusID;
+
+    /**
+     * @var float
+     */
+    public $OrderRowId;
+
+    /**
+     * @var float
+     */
+    public $Quantity;
+
+    /**
+     * @var int
+     */
+    public $RemainingPercentage;
 }

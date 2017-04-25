@@ -32,29 +32,28 @@
  */
 class PlentySoapRequest_GetCustomerOrders
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CustomerID;
-	
-	/**
-	 * @var string
-	 */
-	public $CustomerNo;
-	
-	/**
-	 * @var int
-	 */
-	public $DateFrom;
-	
-	/**
-	 * @var int
-	 */
-	public $DateTo;
-	
-	/**
-	 * @var string
-	 */
-	public $ExternalCustomerID;
+    /**
+     * @var int
+     */
+    public $CustomerID;
+
+    /**
+     * @var string
+     */
+    public $CustomerNo;
+
+    /**
+     * @var int
+     */
+    public $DateFrom;
+
+    /**
+     * @var int
+     */
+    public $DateTo;
+
+    /**
+     * @var string
+     */
+    public $ExternalCustomerID;
 }

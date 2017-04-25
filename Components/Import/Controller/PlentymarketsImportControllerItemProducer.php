@@ -26,7 +26,6 @@
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * Imports the item producers
  *
@@ -34,29 +33,26 @@
  */
 class PlentymarketsImportControllerItemProducer
 {
-	/**
-	 * Performs the actual import
-	 *
-	 * @param integer $lastUpdateTimestamp
-	 */
-	public function run($lastUpdateTimestamp)
-	{
-		$Request_GetProducers = new PlentySoapRequest_GetProducers();
-		$Request_GetProducers->LastUpdateFrom = $lastUpdateTimestamp;
+    /**
+     * Performs the actual import
+     *
+     * @param int $lastUpdateTimestamp
+     */
+    public function run($lastUpdateTimestamp)
+    {
+        $Request_GetProducers = new PlentySoapRequest_GetProducers();
+        $Request_GetProducers->LastUpdateFrom = $lastUpdateTimestamp;
 
-		/** @var PlentySoapResponse_GetProducers $Response_GetProducers */
-		$Response_GetProducers = PlentymarketsSoapClient::getInstance()->GetProducers($Request_GetProducers);
+        /** @var PlentySoapResponse_GetProducers $Response_GetProducers */
+        $Response_GetProducers = PlentymarketsSoapClient::getInstance()->GetProducers($Request_GetProducers);
 
-		if (!$Response_GetProducers->Success)
-		{
-			return;
-		}
+        if (!$Response_GetProducers->Success) {
+            return;
+        }
 
-		foreach ($Response_GetProducers->Producers->item as $Producer)
-		{
-			$PlentymarketsImportEntityItemProducer = new PlentymarketsImportEntityItemProducer($Producer);
-			$PlentymarketsImportEntityItemProducer->import();
-		}
-	}
+        foreach ($Response_GetProducers->Producers->item as $Producer) {
+            $PlentymarketsImportEntityItemProducer = new PlentymarketsImportEntityItemProducer($Producer);
+            $PlentymarketsImportEntityItemProducer->import();
+        }
+    }
 }
-

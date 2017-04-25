@@ -26,7 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * Find item variantions with multiple attribute options per group
  *
@@ -34,36 +33,37 @@
  */
 class PlentymarketsDataIntegrityCheckItemVariationGroupMultiple implements PlentymarketsDataIntegrityCheckInterface
 {
-	/**
-	 * Returns the name of the check
-	 *
-	 * @see PlentymarketsDataIntegrityCheckInterface::getName()
-	 */
-	public function getName()
-	{
-		return 'ItemVariationGroupMultiple';
-	}
+    /**
+     * Returns the name of the check
+     *
+     * @see PlentymarketsDataIntegrityCheckInterface::getName()
+     */
+    public function getName()
+    {
+        return 'ItemVariationGroupMultiple';
+    }
 
-	/**
-	 * Checks whether the check is valid
-	 *
-	 * @return boolean
-	 */
-	public function isValid()
-	{
-		return count($this->getInvalidData(0, 1)) == 0;
-	}
+    /**
+     * Checks whether the check is valid
+     *
+     * @return bool
+     */
+    public function isValid()
+    {
+        return count($this->getInvalidData(0, 1)) == 0;
+    }
 
-	/**
-	 * Returns a page of invalid data
-	 *
-	 * @param integer $start
-	 * @param integer $offset
-	 * @return array
-	 */
-	public function getInvalidData($start, $offset)
-	{
-		return Shopware()->Db()->query('
+    /**
+     * Returns a page of invalid data
+     *
+     * @param int $start
+     * @param int $offset
+     *
+     * @return array
+     */
+    public function getInvalidData($start, $offset)
+    {
+        return Shopware()->Db()->query('
 			SELECT SQL_CALC_FOUND_ROWS a.name, ad.ordernumber, article_id detailsId, count(*) - 1 diff, co.group_id groupId, a.id itemId, GROUP_CONCAT(cor.option_id SEPARATOR "|") optionIds, GROUP_CONCAT(co.name SEPARATOR ", ") `option`, cg.name `group`
 				FROM s_article_configurator_option_relations  cor
 				LEFT JOIN s_article_configurator_options co ON co.id = cor.option_id
@@ -75,99 +75,94 @@ class PlentymarketsDataIntegrityCheckItemVariationGroupMultiple implements Plent
 				ORDER BY ad.ordernumber DESC, article_id
 				LIMIT ' . $start . ', ' . $offset . '
 		')->fetchAll();
-	}
+    }
 
-	/**
-	 * Deletes a page of invalid data
-	 *
-	 * @param integer $start
-	 * @param integer $offset
-	 */
-	public function deleteInvalidData($start, $offset)
-	{
-		foreach ($this->getInvalidData($start, $offset) as $data)
-		{
-			try
-			{
-				$Item = Shopware()->Models()->find('\Shopware\Models\Article\Detail', $data['detailsId']);
-				Shopware()->Models()->remove($Item);
-			}
-			catch (Exception $E)
-			{
-				PlentymarketsLogger::getInstance()->error(__LINE__ . __METHOD__, $E->getMessage());
-				foreach (explode('|', $data['optionIds']) as $optionId)
-				{
-					Shopware()->Db()->query('
+    /**
+     * Deletes a page of invalid data
+     *
+     * @param int $start
+     * @param int $offset
+     */
+    public function deleteInvalidData($start, $offset)
+    {
+        foreach ($this->getInvalidData($start, $offset) as $data) {
+            try {
+                $Item = Shopware()->Models()->find('\Shopware\Models\Article\Detail', $data['detailsId']);
+                Shopware()->Models()->remove($Item);
+            } catch (Exception $E) {
+                PlentymarketsLogger::getInstance()->error(__LINE__ . __METHOD__, $E->getMessage());
+                foreach (explode('|', $data['optionIds']) as $optionId) {
+                    Shopware()->Db()->query('
 						DELETE FROM s_article_configurator_option_relations
 							WHERE
 								article_id = ? AND
 								option_id = ?
 							LIMIT 1
-					', array(
-						$data['detailsId'],
-						$optionId
-					));
-				}
-			}
-		}
-		Shopware()->Models()->flush();
-	}
+					', [
+                        $data['detailsId'],
+                        $optionId,
+                    ]);
+                }
+            }
+        }
+        Shopware()->Models()->flush();
+    }
 
-	/**
-	 * Returns the fields to build an ext js model
-	 *
-	 * @return array
-	 */
-	public function getFields()
-	{
-		return array(
-			array(
-				'name' => 'name',
-				'description' => 'Bezeichnung',
-				'type' => 'string'
-			),
-			array(
-				'name' => 'ordernumber',
-				'description' => 'Nummer',
-				'type' => 'string'
-			),
-			array(
-				'name' => 'itemId',
-				'description' => 'Artikel ID',
-				'type' => 'int'
-			),
-			array(
-				'name' => 'detailsId',
-				'description' => 'Detail ID',
-				'type' => 'int'
-			),
-			array(
-				'name' => 'option',
-				'description' => 'Optionen',
-				'type' => 'string'
-			),
-			array(
-				'name' => 'group',
-				'description' => 'Gruppe',
-				'type' => 'string'
-			),
-			array(
-				'name' => 'groupId',
-				'description' => 'Gruppen ID',
-				'type' => 'int'
-			),
-		);
-	}
+    /**
+     * Returns the fields to build an ext js model
+     *
+     * @return array
+     */
+    public function getFields()
+    {
+        return [
+            [
+                'name' => 'name',
+                'description' => 'Bezeichnung',
+                'type' => 'string',
+            ],
+            [
+                'name' => 'ordernumber',
+                'description' => 'Nummer',
+                'type' => 'string',
+            ],
+            [
+                'name' => 'itemId',
+                'description' => 'Artikel ID',
+                'type' => 'int',
+            ],
+            [
+                'name' => 'detailsId',
+                'description' => 'Detail ID',
+                'type' => 'int',
+            ],
+            [
+                'name' => 'option',
+                'description' => 'Optionen',
+                'type' => 'string',
+            ],
+            [
+                'name' => 'group',
+                'description' => 'Gruppe',
+                'type' => 'string',
+            ],
+            [
+                'name' => 'groupId',
+                'description' => 'Gruppen ID',
+                'type' => 'int',
+            ],
+        ];
+    }
 
-	/**
-	 * Returns the total number of records
-	 *
-	 * @return integer
-	 */
-	public function getTotal()
-	{
-		return (integer) Shopware()->Db()->query('
+    /**
+     * Returns the total number of records
+     *
+     * @return int
+     */
+    public function getTotal()
+    {
+        return (int) Shopware()->Db()->query('
 			SELECT FOUND_ROWS()
 		')->fetchColumn(0);
-	}
+    }
 }

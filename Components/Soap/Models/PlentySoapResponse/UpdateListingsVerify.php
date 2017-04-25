@@ -32,19 +32,18 @@
  */
 class PlentySoapResponse_UpdateListingsVerify
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponseobject_updatelistingsverify
-	 */
-	public $UpdateListingsVerify;
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
+
+    /**
+     * @var ArrayOfPlentysoapresponseobject_updatelistingsverify
+     */
+    public $UpdateListingsVerify;
 }

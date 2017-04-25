@@ -22,67 +22,59 @@
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * PlentymarketsImportEntityOrderOutgoingItems provides the actual order outgoing items import functionality.
  * Like the other import entities this class is called in PlentymarketsImportController. It inherits some methods
- * from the entity class PlentymarketsImportEntityOrderAbstract. 
+ * from the entity class PlentymarketsImportEntityOrderAbstract.
  * The data import takes place based on plentymarkets SOAP-calls.
  *
  * @author Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 class PlentymarketsImportEntityOrderOutgoingItems extends PlentymarketsImportEntityOrderAbstract
 {
-	/**
-	 *
-	 * @var integer
-	 */
-	protected static $orderStatus;
+    /**
+     * @var int
+     */
+    protected static $orderStatus;
 
-	/**
-	 *
-	 * @var string
-	 */
-	protected static $action = 'OutgoingItems';
+    /**
+     * @var string
+     */
+    protected static $action = 'OutgoingItems';
 
-	/**
-	 * Prepares the search orders SOAP object
-	 * 
-	 * @see PlentymarketsImportEntityOrderAbstract::prepare()
-	 */
-	public function prepare()
-	{
-		if (is_null(self::$orderStatus))
-		{
-			self::$orderStatus = PlentymarketsConfig::getInstance()->getOutgoingItemsShopwareOrderStatusID(7);
-		}
-		
-		$timestamp = PlentymarketsConfig::getInstance()->getImportOrderOutgoingItemsLastUpdateTimestamp(0);
-		
-		$this->log('LastUpdate: ' . date('r', $timestamp));
+    /**
+     * Prepares the search orders SOAP object
+     *
+     * @see PlentymarketsImportEntityOrderAbstract::prepare()
+     */
+    public function prepare()
+    {
+        if (is_null(self::$orderStatus)) {
+            self::$orderStatus = PlentymarketsConfig::getInstance()->getOutgoingItemsShopwareOrderStatusID(7);
+        }
 
-		if (PlentymarketsConfig::getInstance()->getOutgoingItemsOrderStatus(0))
-		{
-			$this->Request_SearchOrders->LastUpdateFrom = $timestamp;
-			$this->Request_SearchOrders->OrderStatus = (float) PlentymarketsConfig::getInstance()->getOutgoingItemsOrderStatus();
-			$this->log('Mode: Status (' . $this->Request_SearchOrders->OrderStatus . ')');
-		}
+        $timestamp = PlentymarketsConfig::getInstance()->getImportOrderOutgoingItemsLastUpdateTimestamp(0);
 
-		else
-		{
-			$this->Request_SearchOrders->OrderCompletedFrom = $timestamp;
-			$this->log('Mode: Outgoing items booked');
-		}
-	}
+        $this->log('LastUpdate: ' . date('r', $timestamp));
 
-	/**
-	 * Handles the actual import
-	 *
-	 * @param integer $shopwareOrderId
-	 * @param PlentySoapObject_OrderHead $Order
-	 */
-	public function handle($shopwareOrderId, $Order)
-	{
-		self::$OrderModule->setOrderStatus($shopwareOrderId, self::$orderStatus, false, 'plentymarkets');
-	}
+        if (PlentymarketsConfig::getInstance()->getOutgoingItemsOrderStatus(0)) {
+            $this->Request_SearchOrders->LastUpdateFrom = $timestamp;
+            $this->Request_SearchOrders->OrderStatus = (float) PlentymarketsConfig::getInstance()->getOutgoingItemsOrderStatus();
+            $this->log('Mode: Status (' . $this->Request_SearchOrders->OrderStatus . ')');
+        } else {
+            $this->Request_SearchOrders->OrderCompletedFrom = $timestamp;
+            $this->log('Mode: Outgoing items booked');
+        }
+    }
+
+    /**
+     * Handles the actual import
+     *
+     * @param int $shopwareOrderId
+     * @param PlentySoapObject_OrderHead $Order
+     */
+    public function handle($shopwareOrderId, $Order)
+    {
+        self::$OrderModule->setOrderStatus($shopwareOrderId, self::$orderStatus, false, 'plentymarkets');
+    }
 }

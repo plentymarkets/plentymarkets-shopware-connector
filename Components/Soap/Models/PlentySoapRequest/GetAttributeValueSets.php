@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_GetAttributeValueSets
 {
-	
-	/**
-	 * @var ArrayOfPlentysoaprequestobject_getattributevaluesets
-	 */
-	public $AttributeValueSets;
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
+    /**
+     * @var ArrayOfPlentysoaprequestobject_getattributevaluesets
+     */
+    public $AttributeValueSets;
+
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
 }

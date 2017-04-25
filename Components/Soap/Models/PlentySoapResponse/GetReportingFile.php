@@ -32,29 +32,28 @@
  */
 class PlentySoapResponse_GetReportingFile
 {
-	
-	/**
-	 * @var base64Binary
-	 */
-	public $Data;
-	
-	/**
-	 * @var string
-	 */
-	public $Filename;
-	
-	/**
-	 * @var string
-	 */
-	public $MD5Checksum;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var base64Binary
+     */
+    public $Data;
+
+    /**
+     * @var string
+     */
+    public $Filename;
+
+    /**
+     * @var string
+     */
+    public $MD5Checksum;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

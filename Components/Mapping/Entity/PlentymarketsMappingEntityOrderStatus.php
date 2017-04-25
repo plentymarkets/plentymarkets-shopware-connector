@@ -26,7 +26,6 @@
  * @author     Daniel Bächtle <daniel.baechtle@plentymarkets.com>
  */
 
-
 /**
  * PlentymarketsMappingEntityPropertyGroup provides the actual property group mapping functionality.
  * Like the other mapping entities this class is called in PlentymarketsMappingController. This entity
@@ -36,22 +35,21 @@
  */
 class PlentymarketsMappingEntityOrderStatus extends PlentymarketsMappingEntityAbstract
 {
+    /**
+     * Returns the name of the database table
+     *
+     * @return string
+     */
+    protected function getName()
+    {
+        return 'plenty_mapping_order_status';
+    }
 
-	/**
-	 * Returns the name of the database table
-	 * 
-	 * @return string
-	 */
-	protected function getName()
-	{
-		return 'plenty_mapping_order_status';
-	}
-
-	/**
-	 * @param int $shopwareID
-	 * @param int $plentyID
-	 */
-	protected function setCache($shopwareID, $plentyID)
-	{
-	}
+    /**
+     * @param int $shopwareID
+     * @param int $plentyID
+     */
+    protected function setCache($shopwareID, $plentyID)
+    {
+    }
 }

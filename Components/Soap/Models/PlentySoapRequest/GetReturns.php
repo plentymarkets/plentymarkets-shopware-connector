@@ -32,34 +32,33 @@
  */
 class PlentySoapRequest_GetReturns
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var string
-	 */
-	public $ExternalReturnID;
-	
-	/**
-	 * @var int
-	 */
-	public $LastUpdate;
-	
-	/**
-	 * @var int
-	 */
-	public $Page;
-	
-	/**
-	 * @var float
-	 */
-	public $ReferrerID;
-	
-	/**
-	 * @var float
-	 */
-	public $ReturnStatus;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var string
+     */
+    public $ExternalReturnID;
+
+    /**
+     * @var int
+     */
+    public $LastUpdate;
+
+    /**
+     * @var int
+     */
+    public $Page;
+
+    /**
+     * @var float
+     */
+    public $ReferrerID;
+
+    /**
+     * @var float
+     */
+    public $ReturnStatus;
 }

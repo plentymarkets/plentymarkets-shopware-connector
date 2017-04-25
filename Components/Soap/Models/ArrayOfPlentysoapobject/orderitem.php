@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_orderitem
 {
-	
-	/**
-	 * @var PlentySoapObject_OrderItem
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_OrderItem
+     */
+    public $item;
 }

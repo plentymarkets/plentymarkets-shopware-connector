@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_AddOrdersPackageNumber
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_addorderspackagenumber
-	 */
-	public $PackageNumbers;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_addorderspackagenumber
+     */
+    public $PackageNumbers;
 }

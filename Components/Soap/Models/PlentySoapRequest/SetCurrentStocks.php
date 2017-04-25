@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_SetCurrentStocks
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_setcurrentstocks
-	 */
-	public $CurrentStocks;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_setcurrentstocks
+     */
+    public $CurrentStocks;
 }

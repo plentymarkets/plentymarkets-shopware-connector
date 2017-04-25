@@ -32,14 +32,13 @@
  */
 class PlentySoapObject_GetShippingProfileConfigurationsProviderSetting
 {
-	
-	/**
-	 * @var string
-	 */
-	public $SettingDescription;
-	
-	/**
-	 * @var string
-	 */
-	public $SettingValue;
+    /**
+     * @var string
+     */
+    public $SettingDescription;
+
+    /**
+     * @var string
+     */
+    public $SettingValue;
 }

@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoaprequestobject_updatelistingsstop
 {
-	
-	/**
-	 * @var PlentySoapRequestObject_UpdateListingsStop
-	 */
-	public $item;
+    /**
+     * @var PlentySoapRequestObject_UpdateListingsStop
+     */
+    public $item;
 }

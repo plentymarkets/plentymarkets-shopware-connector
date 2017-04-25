@@ -32,39 +32,38 @@
  */
 class PlentySoapObject_AddIncomingPaymentPayPal
 {
-	
-	/**
-	 * @var string
-	 */
-	public $ItemBuyer;
-	
-	/**
-	 * @var string
-	 */
-	public $ItemNumber;
-	
-	/**
-	 * @var string
-	 */
-	public $Memo;
-	
-	/**
-	 * @var int
-	 */
-	public $PaymentID;
-	
-	/**
-	 * @var int
-	 */
-	public $PaymentPayPalID;
-	
-	/**
-	 * @var string
-	 */
-	public $ShippingAddress;
-	
-	/**
-	 * @var string
-	 */
-	public $TransactionType;
+    /**
+     * @var string
+     */
+    public $ItemBuyer;
+
+    /**
+     * @var string
+     */
+    public $ItemNumber;
+
+    /**
+     * @var string
+     */
+    public $Memo;
+
+    /**
+     * @var int
+     */
+    public $PaymentID;
+
+    /**
+     * @var int
+     */
+    public $PaymentPayPalID;
+
+    /**
+     * @var string
+     */
+    public $ShippingAddress;
+
+    /**
+     * @var string
+     */
+    public $TransactionType;
 }

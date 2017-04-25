@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_orderinfo
 {
-	
-	/**
-	 * @var PlentySoapObject_OrderInfo
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_OrderInfo
+     */
+    public $item;
 }

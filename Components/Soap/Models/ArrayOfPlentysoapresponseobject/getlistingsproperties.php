@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapresponseobject_getlistingsproperties
 {
-	
-	/**
-	 * @var PlentySoapResponseObject_GetListingsProperties
-	 */
-	public $item;
+    /**
+     * @var PlentySoapResponseObject_GetListingsProperties
+     */
+    public $item;
 }

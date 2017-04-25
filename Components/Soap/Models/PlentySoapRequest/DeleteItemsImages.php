@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_DeleteItemsImages
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_deleteitemsimages
-	 */
-	public $Items;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_deleteitemsimages
+     */
+    public $Items;
 }

@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_setpricesets
 {
-	
-	/**
-	 * @var PlentySoapObject_SetPriceSets
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_SetPriceSets
+     */
+    public $item;
 }

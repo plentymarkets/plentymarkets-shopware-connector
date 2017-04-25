@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_attributelink
 {
-	
-	/**
-	 * @var PlentySoapObject_AttributeLink
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_AttributeLink
+     */
+    public $item;
 }

@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_campaign
 {
-	
-	/**
-	 * @var PlentySoapObject_Campaign
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_Campaign
+     */
+    public $item;
 }

@@ -33,38 +33,36 @@
  */
 class PlentymarketsImportControllerItemCategory
 {
-	/**
-	 * Performs the actual import
-	 *
-	 * @param integer $lastUpdateTimestamp
-	 */
-	public function run($lastUpdateTimestamp)
-	{
-		$Request_GetItemCategoryCatalog = new PlentySoapRequest_GetItemCategoryCatalog();
-		$Request_GetItemCategoryCatalog->Lang = 'de';
-		$Request_GetItemCategoryCatalog->LastUpdateFrom = $lastUpdateTimestamp;
+    /**
+     * Performs the actual import
+     *
+     * @param int $lastUpdateTimestamp
+     */
+    public function run($lastUpdateTimestamp)
+    {
+        $Request_GetItemCategoryCatalog = new PlentySoapRequest_GetItemCategoryCatalog();
+        $Request_GetItemCategoryCatalog->Lang = 'de';
+        $Request_GetItemCategoryCatalog->LastUpdateFrom = $lastUpdateTimestamp;
 
-		$Request_GetItemCategoryCatalog->Page = 0;
+        $Request_GetItemCategoryCatalog->Page = 0;
 
-		do
-		{
-			/** @var PlentySoapResponse_GetItemCategoryCatalog $Response_GetItemCategoryCatalog */
-			$Response_GetItemCategoryCatalog = PlentymarketsSoapClient::getInstance()->GetItemCategoryCatalog($Request_GetItemCategoryCatalog);
+        do {
+            /** @var PlentySoapResponse_GetItemCategoryCatalog $Response_GetItemCategoryCatalog */
+            $Response_GetItemCategoryCatalog = PlentymarketsSoapClient::getInstance()->GetItemCategoryCatalog($Request_GetItemCategoryCatalog);
 
-			foreach ($Response_GetItemCategoryCatalog->Categories->item as $Category)
-			{
-				$PlentymarketsImportEntityItemCategory = new PlentymarketsImportEntityItemCategory($Category);
-				$PlentymarketsImportEntityItemCategory->import();
-			}
-		} while (++$Request_GetItemCategoryCatalog->Page < $Response_GetItemCategoryCatalog->Pages);
+            foreach ($Response_GetItemCategoryCatalog->Categories->item as $Category) {
+                $PlentymarketsImportEntityItemCategory = new PlentymarketsImportEntityItemCategory($Category);
+                $PlentymarketsImportEntityItemCategory->import();
+            }
+        } while (++$Request_GetItemCategoryCatalog->Page < $Response_GetItemCategoryCatalog->Pages);
 
-		$importControllerItemCategoryTree = new PlentymarketsImportControllerItemCategoryTree();
-		$importControllerItemCategoryTree->run();
+        $importControllerItemCategoryTree = new PlentymarketsImportControllerItemCategoryTree();
+        $importControllerItemCategoryTree->run();
 
-		/** @var \Shopware\Components\Model\CategoryDenormalization $component */
-		$component = Shopware()->CategoryDenormalization();
-		$component->rebuildCategoryPath();
-		$component->removeAllAssignments();
-		$component->rebuildAllAssignments();
-	}
+        /** @var \Shopware\Components\Model\CategoryDenormalization $component */
+        $component = Shopware()->CategoryDenormalization();
+        $component->rebuildCategoryPath();
+        $component->removeAllAssignments();
+        $component->rebuildAllAssignments();
+    }
 }

@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_coupon
 {
-	
-	/**
-	 * @var PlentySoapObject_Coupon
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_Coupon
+     */
+    public $item;
 }

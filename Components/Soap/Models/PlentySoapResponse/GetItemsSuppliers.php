@@ -32,19 +32,18 @@
  */
 class PlentySoapResponse_GetItemsSuppliers
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_itemssupplierslist
-	 */
-	public $ItemsSuppliersList;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapobject_itemssupplierslist
+     */
+    public $ItemsSuppliersList;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

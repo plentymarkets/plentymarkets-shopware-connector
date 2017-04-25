@@ -32,29 +32,28 @@
  */
 class PlentySoapRequest_GetWarehouseStorageLocation
 {
-	
-	/**
-	 * @var boolean
-	 */
-	public $GetFreeLocation;
-	
-	/**
-	 * @var boolean
-	 */
-	public $GetPreviousLocation;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_integer
-	 */
-	public $RefusedLocations;
-	
-	/**
-	 * @var string
-	 */
-	public $SKU;
-	
-	/**
-	 * @var int
-	 */
-	public $WarehouseId;
+    /**
+     * @var bool
+     */
+    public $GetFreeLocation;
+
+    /**
+     * @var bool
+     */
+    public $GetPreviousLocation;
+
+    /**
+     * @var ArrayOfPlentysoapobject_integer
+     */
+    public $RefusedLocations;
+
+    /**
+     * @var string
+     */
+    public $SKU;
+
+    /**
+     * @var int
+     */
+    public $WarehouseId;
 }

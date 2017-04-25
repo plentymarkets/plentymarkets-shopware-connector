@@ -32,39 +32,38 @@
  */
 class PlentySoapRequest_GetDeliveryCharges
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_basketitem
-	 */
-	public $BasketItemList;
-	
-	/**
-	 * @var string
-	 */
-	public $Currency;
-	
-	/**
-	 * @var int
-	 */
-	public $MethodOfPaymentID;
-	
-	/**
-	 * @var float
-	 */
-	public $ReferrerID;
-	
-	/**
-	 * @var int
-	 */
-	public $ShippingCountryID;
-	
-	/**
-	 * @var int
-	 */
-	public $StoreID;
-	
-	/**
-	 * @var string
-	 */
-	public $ZipCode;
+    /**
+     * @var ArrayOfPlentysoapobject_basketitem
+     */
+    public $BasketItemList;
+
+    /**
+     * @var string
+     */
+    public $Currency;
+
+    /**
+     * @var int
+     */
+    public $MethodOfPaymentID;
+
+    /**
+     * @var float
+     */
+    public $ReferrerID;
+
+    /**
+     * @var int
+     */
+    public $ShippingCountryID;
+
+    /**
+     * @var int
+     */
+    public $StoreID;
+
+    /**
+     * @var string
+     */
+    public $ZipCode;
 }

@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_GetMarketAccounts
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoaprequestobject_getmarketaccounts
-	 */
-	public $GetMarketAccounts;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoaprequestobject_getmarketaccounts
+     */
+    public $GetMarketAccounts;
 }

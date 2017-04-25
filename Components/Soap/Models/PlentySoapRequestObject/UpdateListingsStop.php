@@ -32,9 +32,8 @@
  */
 class PlentySoapRequestObject_UpdateListingsStop
 {
-	
-	/**
-	 * @var int
-	 */
-	public $MarketListingHistoryID;
+    /**
+     * @var int
+     */
+    public $MarketListingHistoryID;
 }

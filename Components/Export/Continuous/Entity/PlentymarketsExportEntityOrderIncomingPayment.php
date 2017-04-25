@@ -36,273 +36,239 @@
  */
 class PlentymarketsExportEntityOrderIncomingPayment
 {
+    /**
+     * Shopware order data
+     *
+     * @var array
+     */
+    protected $order = [];
 
-	/**
-	 * Shopware order data
-	 *
-	 * @var array
-	 */
-	protected $order = array();
+    /**
+     * plentymarkets order data (out of shopware)
+     *
+     * @var array
+     */
+    protected $plentyOrder = [];
 
-	/**
-	 * plentymarkets order data (out of shopware)
-	 *
-	 * @var array
-	 */
-	protected $plentyOrder = array();
+    /**
+     * Constructor method
+     *
+     * @param int $orderID Shopware order id
+     *
+     * @throws Exception
+     */
+    public function __construct($orderID)
+    {
+        $OrderResource = Shopware\Components\Api\Manager::getResource('Order');
 
-	/**
-	 * Constructor method
-	 *
-	 * @param integer $orderID Shopware order id
-	 * @throws Exception
-	 */
-	public function __construct($orderID)
-	{
-		$OrderResource = Shopware\Components\Api\Manager::getResource('Order');
+        try {
+            $this->order = $OrderResource->getOne($orderID);
+        } catch (\Shopware\Components\Api\Exception\NotFoundException $E) {
+            throw new PlentymarketsExportEntityException('The incoming payment of the order with the id »' . $orderID . '« could not be booked (order not found)', 4110);
+        }
 
-		try
-		{
-			$this->order = $OrderResource->getOne($orderID);
-		}
-		catch (\Shopware\Components\Api\Exception\NotFoundException $E)
-		{
-			throw new PlentymarketsExportEntityException('The incoming payment of the order with the id »' . $orderID . '« could not be booked (order not found)', 4110);
-		}
-
-		$Result = Shopware()->Db()->query('
+        $Result = Shopware()->Db()->query('
 			SELECT
 					*
 				FROM plenty_order
 				WHERE shopwareId = ?
-		', array(
-			$orderID
-		));
+		', [
+            $orderID,
+        ]);
 
-		$plentyOrder = $Result->fetchObject();
-		if (!is_object($plentyOrder) || (integer) $plentyOrder->plentyOrderId <= 0)
-		{
-			throw new PlentymarketsExportEntityException('The incoming payment of the order with the number »' . $this->order['number'] . '« could not be booked (order was not yet exported)', 4120);
-		}
-		if (!is_null($plentyOrder->plentyOrderPaidTimestamp))
-		{
-			throw new PlentymarketsExportEntityException('The incoming payment of the order with the number »' . $this->order['number'] . '« could not be booked (has already been exported)', 4130);
-		}
+        $plentyOrder = $Result->fetchObject();
+        if (!is_object($plentyOrder) || (int) $plentyOrder->plentyOrderId <= 0) {
+            throw new PlentymarketsExportEntityException('The incoming payment of the order with the number »' . $this->order['number'] . '« could not be booked (order was not yet exported)', 4120);
+        }
+        if (!is_null($plentyOrder->plentyOrderPaidTimestamp)) {
+            throw new PlentymarketsExportEntityException('The incoming payment of the order with the number »' . $this->order['number'] . '« could not be booked (has already been exported)', 4130);
+        }
 
-		$this->plentyOrder = $plentyOrder;
-	}
+        $this->plentyOrder = $plentyOrder;
+    }
 
-	/**
-	 * Books the incoming payment
-	 */
-	public function book()
-	{
-		$methodOfPaymentId = PlentymarketsMappingController::getMethodOfPaymentByShopwareID($this->order['paymentId']);
-		if ($methodOfPaymentId == MOP_AMAZON_PAYMENT)
-		{
-			PlentymarketsLogger::getInstance()->message('Sync:Order:IncomingPayment', 'The incoming payment of the order with the number »' . $this->order['number'] . '« was ignored (Amazon Payment)');
-			return;
-		}
+    /**
+     * Books the incoming payment
+     */
+    public function book()
+    {
+        $methodOfPaymentId = PlentymarketsMappingController::getMethodOfPaymentByShopwareID($this->order['paymentId']);
+        if ($methodOfPaymentId == MOP_AMAZON_PAYMENT) {
+            PlentymarketsLogger::getInstance()->message('Sync:Order:IncomingPayment', 'The incoming payment of the order with the number »' . $this->order['number'] . '« was ignored (Amazon Payment)');
 
-		$transactionId = '';
-		if ($methodOfPaymentId == MOP_KLARNA || $methodOfPaymentId == MOP_KLARNACREDIT)
-		{
-			$transactionId = $this->getKlarnaTransactionId();
-			$reasonForPayment = '';
-		}
-		else
-		{
-			$reasonForPayment = sprintf('Shopware (OrderId: %u, CustomerId: %u)', $this->order['id'], $this->order['customerId']);
-		}
+            return;
+        }
 
-		if(	$methodOfPaymentId == MOP_HEIDELPAY_DD ||
-			$methodOfPaymentId == MOP_HEIDELPAY_PP ||
-			$methodOfPaymentId == MOP_HEIDELPAY_CC ||
-			$methodOfPaymentId == MOP_HEIDELPAY_DC ||
-			$methodOfPaymentId == MOP_HEIDELPAY_OT ||
-			$methodOfPaymentId == MOP_HEIDELPAY_VA ||
-			$methodOfPaymentId == MOP_HEIDELPAY_UA ||
-			$methodOfPaymentId == MOP_HEIDELPAY_SFT ||
-			$methodOfPaymentId == MOP_HEIDELPAY_TP ||
-			$methodOfPaymentId == MOP_HEIDELPAY_GP ||
-			$methodOfPaymentId == MOP_HEIDELPAY_IDL ||
-			$methodOfPaymentId == MOP_HEIDELPAY_EPS ||
-			$methodOfPaymentId == MOP_HEIDELPAY_CB
-		)
-		{
-			$transactionId = $this->getHeidelpayUniqueId().';'.$this->order['transactionId'];
+        $transactionId = '';
+        if ($methodOfPaymentId == MOP_KLARNA || $methodOfPaymentId == MOP_KLARNACREDIT) {
+            $transactionId = $this->getKlarnaTransactionId();
+            $reasonForPayment = '';
+        } else {
+            $reasonForPayment = sprintf('Shopware (OrderId: %u, CustomerId: %u)', $this->order['id'], $this->order['customerId']);
+        }
 
-		}
+        if ($methodOfPaymentId == MOP_HEIDELPAY_DD ||
+            $methodOfPaymentId == MOP_HEIDELPAY_PP ||
+            $methodOfPaymentId == MOP_HEIDELPAY_CC ||
+            $methodOfPaymentId == MOP_HEIDELPAY_DC ||
+            $methodOfPaymentId == MOP_HEIDELPAY_OT ||
+            $methodOfPaymentId == MOP_HEIDELPAY_VA ||
+            $methodOfPaymentId == MOP_HEIDELPAY_UA ||
+            $methodOfPaymentId == MOP_HEIDELPAY_SFT ||
+            $methodOfPaymentId == MOP_HEIDELPAY_TP ||
+            $methodOfPaymentId == MOP_HEIDELPAY_GP ||
+            $methodOfPaymentId == MOP_HEIDELPAY_IDL ||
+            $methodOfPaymentId == MOP_HEIDELPAY_EPS ||
+            $methodOfPaymentId == MOP_HEIDELPAY_CB
+        ) {
+            $transactionId = $this->getHeidelpayUniqueId() . ';' . $this->order['transactionId'];
+        }
 
-		$Request_AddIncomingPayments = new PlentySoapRequest_AddIncomingPayments();
+        $Request_AddIncomingPayments = new PlentySoapRequest_AddIncomingPayments();
 
-		$Request_AddIncomingPayments->IncomingPayments = array();
-		$Object_AddIncomingPayments = new PlentySoapObject_AddIncomingPayments();
-		$Object_AddIncomingPayments->Amount = $this->order['invoiceAmount'];
-		$Object_AddIncomingPayments->Currency = PlentymarketsMappingController::getCurrencyByShopwareID($this->order['currency']);
-		$Object_AddIncomingPayments->CustomerEmail = $this->order['customer']['email'];
-		$Object_AddIncomingPayments->CustomerID = $this->getCustomerId();
-		$Object_AddIncomingPayments->CustomerName = $this->getCustomerName();
-		$Object_AddIncomingPayments->MethodOfPaymentID = $methodOfPaymentId;
-		$Object_AddIncomingPayments->OrderID = $this->plentyOrder->plentyOrderId;
-		$Object_AddIncomingPayments->ReasonForPayment = $reasonForPayment;
+        $Request_AddIncomingPayments->IncomingPayments = [];
+        $Object_AddIncomingPayments = new PlentySoapObject_AddIncomingPayments();
+        $Object_AddIncomingPayments->Amount = $this->order['invoiceAmount'];
+        $Object_AddIncomingPayments->Currency = PlentymarketsMappingController::getCurrencyByShopwareID($this->order['currency']);
+        $Object_AddIncomingPayments->CustomerEmail = $this->order['customer']['email'];
+        $Object_AddIncomingPayments->CustomerID = $this->getCustomerId();
+        $Object_AddIncomingPayments->CustomerName = $this->getCustomerName();
+        $Object_AddIncomingPayments->MethodOfPaymentID = $methodOfPaymentId;
+        $Object_AddIncomingPayments->OrderID = $this->plentyOrder->plentyOrderId;
+        $Object_AddIncomingPayments->ReasonForPayment = $reasonForPayment;
 
-		if ($transactionId)
-		{
-			$Object_AddIncomingPayments->TransactionID = $transactionId;
-		}
-		else if (empty($this->order['transactionId']))
-		{
-			$Object_AddIncomingPayments->TransactionID = $Object_AddIncomingPayments->ReasonForPayment;
-		}
-		else
-		{
-			$Object_AddIncomingPayments->TransactionID = $this->order['transactionId'];
-		}
+        if ($transactionId) {
+            $Object_AddIncomingPayments->TransactionID = $transactionId;
+        } elseif (empty($this->order['transactionId'])) {
+            $Object_AddIncomingPayments->TransactionID = $Object_AddIncomingPayments->ReasonForPayment;
+        } else {
+            $Object_AddIncomingPayments->TransactionID = $this->order['transactionId'];
+        }
 
-		if ($this->object['clearedDate'] instanceof DateTime)
-		{
-			$Object_AddIncomingPayments->TransactionTime = $this->order['clearedDate']->getTimestamp();
-		}
-		else
-		{
-			$Object_AddIncomingPayments->TransactionTime = time();
-		}
+        if ($this->object['clearedDate'] instanceof DateTime) {
+            $Object_AddIncomingPayments->TransactionTime = $this->order['clearedDate']->getTimestamp();
+        } else {
+            $Object_AddIncomingPayments->TransactionTime = time();
+        }
 
-		$Request_AddIncomingPayments->IncomingPayments[] = $Object_AddIncomingPayments;
-		$Response_AddIncomingPayments = PlentymarketsSoapClient::getInstance()->AddIncomingPayments($Request_AddIncomingPayments);
+        $Request_AddIncomingPayments->IncomingPayments[] = $Object_AddIncomingPayments;
+        $Response_AddIncomingPayments = PlentymarketsSoapClient::getInstance()->AddIncomingPayments($Request_AddIncomingPayments);
 
-		// Check for success
-		if ($Response_AddIncomingPayments->Success)
-		{
-			PlentymarketsLogger::getInstance()->message('Sync:Order:IncomingPayment', 'The incoming payment of the order with the number »' . $this->order['number'] . '« was booked');
-			Shopware()->Db()->query('
+        // Check for success
+        if ($Response_AddIncomingPayments->Success) {
+            PlentymarketsLogger::getInstance()->message('Sync:Order:IncomingPayment', 'The incoming payment of the order with the number »' . $this->order['number'] . '« was booked');
+            Shopware()->Db()->query('
 					UPDATE plenty_order
 						SET
 							plentyOrderPaidStatus = 1,
 							plentyOrderPaidTimestamp = NOW()
 						WHERE shopwareId = ?
-				', array(
-				$this->order['id']
-			));
-		}
-		else
-		{
-			throw new PlentymarketsExportEntityException('The incoming payment of the order with the number »' . $this->order['number'] . '« could not be booked', 4140);
-		}
-	}
+				', [
+                $this->order['id'],
+            ]);
+        } else {
+            throw new PlentymarketsExportEntityException('The incoming payment of the order with the number »' . $this->order['number'] . '« could not be booked', 4140);
+        }
+    }
 
-	/**
-	 * Returns the plentymarkets customer id
-	 *
-	 * @throws PlentymarketsExportEntityException
-	 * @return integer
-	 */
-	protected function getCustomerId()
-	{
-		try
-		{
-			return PlentymarketsMappingController::getCustomerByShopwareID($this->order['billing']['id']);
-		}
-		catch (PlentymarketsMappingExceptionNotExistant $E)
-		{
-			// Customer needs to be re-exported
-			PlentymarketsLogger::getInstance()->message('Sync:Order:IncomingPayment', 'Re-exporting customer');
-		}
+    /**
+     * Returns the plentymarkets customer id
+     *
+     * @throws PlentymarketsExportEntityException
+     *
+     * @return int
+     */
+    protected function getCustomerId()
+    {
+        try {
+            return PlentymarketsMappingController::getCustomerByShopwareID($this->order['billing']['id']);
+        } catch (PlentymarketsMappingExceptionNotExistant $E) {
+            // Customer needs to be re-exported
+            PlentymarketsLogger::getInstance()->message('Sync:Order:IncomingPayment', 'Re-exporting customer');
+        }
 
-		// Get the data
-		$Customer = Shopware()->Models()->find('Shopware\Models\Customer\Customer', $this->order['customerId']);
-		$BillingAddress = Shopware()->Models()->find('Shopware\Models\Order\Billing', $this->order['billing']['id']);
+        // Get the data
+        $Customer = Shopware()->Models()->find('Shopware\Models\Customer\Customer', $this->order['customerId']);
+        $BillingAddress = Shopware()->Models()->find('Shopware\Models\Order\Billing', $this->order['billing']['id']);
 
-		try
-			// Export
-		{
-			$PlentymarketsExportEntityCustomer = new PlentymarketsExportEntityCustomer($Customer, $BillingAddress);
-			$PlentymarketsExportEntityCustomer->export();
-		}
-		catch (PlentymarketsExportEntityException $E)
-		{
-			throw new PlentymarketsExportEntityException('The incoming payment of the order with the number »' . $this->order['number'] . '« could not be booked (' . $E->getMessage() . ')', 4150);
-		}
+        try {
+            // Export
+            $PlentymarketsExportEntityCustomer = new PlentymarketsExportEntityCustomer($Customer, $BillingAddress);
+            $PlentymarketsExportEntityCustomer->export();
+        } catch (PlentymarketsExportEntityException $E) {
+            throw new PlentymarketsExportEntityException('The incoming payment of the order with the number »' . $this->order['number'] . '« could not be booked (' . $E->getMessage() . ')', 4150);
+        }
 
-		return PlentymarketsMappingController::getCustomerByShopwareID($this->order['billing']['id']);
-	}
+        return PlentymarketsMappingController::getCustomerByShopwareID($this->order['billing']['id']);
+    }
 
-	/**
-	 * Returns the full customer name
-	 *
-	 * @return string
-	 */
-	protected function getCustomerName()
-	{
-		return sprintf('%s %s', $this->order['billing']['firstName'], $this->order['billing']['lastName']);
-	}
+    /**
+     * Returns the full customer name
+     *
+     * @return string
+     */
+    protected function getCustomerName()
+    {
+        return sprintf('%s %s', $this->order['billing']['firstName'], $this->order['billing']['lastName']);
+    }
 
-	/**
-	 * Returns the klarna transaction id
-	 *
-	 * @return string
-	 */
-	protected function getKlarnaTransactionId()
-	{
-		$orderNumber = $this->order['number'];
+    /**
+     * Returns the klarna transaction id
+     *
+     * @return string
+     */
+    protected function getKlarnaTransactionId()
+    {
+        $orderNumber = $this->order['number'];
 
-		try
-		{
-			// eid / shop_id
-			$multistore = Shopware()->Db()->query('
+        try {
+            // eid / shop_id
+            $multistore = Shopware()->Db()->query('
 				SELECT shop_id FROM Pi_klarna_payment_multistore WHERE order_number = ?
-			', array(
-				$orderNumber
-			))->fetchObject();
+			', [
+                $orderNumber,
+            ])->fetchObject();
 
-			// pclass
-			$pclass = Shopware()->Db()->query('
+            // pclass
+            $pclass = Shopware()->Db()->query('
 				SELECT pclassid FROM Pi_klarna_payment_pclass where ordernumber = ?
-			', array(
-				$orderNumber
-			))->fetchObject();
+			', [
+                $orderNumber,
+            ])->fetchObject();
 
-			// Transaction ID
-			$order = Shopware()->Db()->query('
+            // Transaction ID
+            $order = Shopware()->Db()->query('
 				SELECT transactionid FROM Pi_klarna_payment_order_data WHERE order_number = ?
-			', array(
-				$orderNumber
-			))->fetchObject();
-		}
+			', [
+                $orderNumber,
+            ])->fetchObject();
+        } catch (Exception $e) {
+            return '';
+        }
 
-		catch (Exception $e)
-		{
-			return '';
-		}
+        return sprintf('%s_%s_%s', $order->transactionid, $pclass->pclassid, $multistore->shop_id);
+    }
 
-		return sprintf('%s_%s_%s', $order->transactionid, $pclass->pclassid, $multistore->shop_id);
-	}
+    /**
+     * Returns the heidelpay unique ID which belongs to the transaction
+     *
+     * @return string
+     */
+    protected function getHeidelpayUniqueId()
+    {
+        $transactionId = $this->order['transactionId'];
 
-	/**
-	 * Returns the heidelpay unique ID which belongs to the transaction
-	 *
-	 * @return string
-	 */
-	protected function getHeidelpayUniqueId()
-	{
-		$transactionId = $this->order['transactionId'];
-
-		try
-		{
-			// unique ID of transaction 
-			$uniqueID = Shopware()->Db()->query('
+        try {
+            // unique ID of transaction
+            $uniqueID = Shopware()->Db()->query('
 				SELECT uniqueid FROM s_plugin_hgw_transactions WHERE transactionid = ?
-			', array(
-				$transactionId
-			))->fetchObject();
-		}
+			', [
+                $transactionId,
+            ])->fetchObject();
+        } catch (Exception $e) {
+            return '';
+        }
 
-		catch (Exception $e)
-		{
-			return '';
-		}
-
-		return sprintf('%s',$uniqueID->uniqueid);
-	}
+        return sprintf('%s', $uniqueID->uniqueid);
+    }
 }

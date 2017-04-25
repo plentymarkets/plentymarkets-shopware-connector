@@ -32,9 +32,8 @@
  */
 class PlentySoapRequest_ObjectDeleteOrderItem
 {
-	
-	/**
-	 * @var int
-	 */
-	public $OrderRowID;
+    /**
+     * @var int
+     */
+    public $OrderRowID;
 }

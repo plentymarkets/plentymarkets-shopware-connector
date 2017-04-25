@@ -32,14 +32,13 @@
  */
 class PlentySoapObject_SetDeliveryRow
 {
-	
-	/**
-	 * @var int
-	 */
-	public $OrderRowID;
-	
-	/**
-	 * @var float
-	 */
-	public $Quantity;
+    /**
+     * @var int
+     */
+    public $OrderRowID;
+
+    /**
+     * @var float
+     */
+    public $Quantity;
 }

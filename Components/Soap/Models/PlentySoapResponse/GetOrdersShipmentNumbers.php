@@ -32,19 +32,18 @@
  */
 class PlentySoapResponse_GetOrdersShipmentNumbers
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_getordersshipmentnumbers
-	 */
-	public $OrdersShipmentNumbers;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapobject_getordersshipmentnumbers
+     */
+    public $OrdersShipmentNumbers;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

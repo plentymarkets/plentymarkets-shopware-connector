@@ -32,19 +32,18 @@
  */
 class PlentySoapResponse_GetMarketDirectories
 {
-	
-	/**
-	 * @var ArrayOfPlentysoapresponseobject_getmarketdirectories
-	 */
-	public $MarketDirectories;
-	
-	/**
-	 * @var ArrayOfPlentysoapresponsemessage
-	 */
-	public $ResponseMessages;
-	
-	/**
-	 * @var boolean
-	 */
-	public $Success;
+    /**
+     * @var ArrayOfPlentysoapresponseobject_getmarketdirectories
+     */
+    public $MarketDirectories;
+
+    /**
+     * @var ArrayOfPlentysoapresponsemessage
+     */
+    public $ResponseMessages;
+
+    /**
+     * @var bool
+     */
+    public $Success;
 }

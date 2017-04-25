@@ -32,19 +32,18 @@
  */
 class PlentySoapRequestObject_UpdateCategoriesBranches
 {
-	
-	/**
-	 * @var int
-	 */
-	public $DestinationBranchID;
-	
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
-	
-	/**
-	 * @var int
-	 */
-	public $SourceBranchID;
+    /**
+     * @var int
+     */
+    public $DestinationBranchID;
+
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
+
+    /**
+     * @var int
+     */
+    public $SourceBranchID;
 }

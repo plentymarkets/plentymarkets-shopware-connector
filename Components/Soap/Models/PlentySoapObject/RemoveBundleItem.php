@@ -32,9 +32,8 @@
  */
 class PlentySoapObject_RemoveBundleItem
 {
-	
-	/**
-	 * @var string
-	 */
-	public $ItemSKU;
+    /**
+     * @var string
+     */
+    public $ItemSKU;
 }

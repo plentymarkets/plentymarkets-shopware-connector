@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapresponseobject_deletelistingstemplates
 {
-	
-	/**
-	 * @var PlentySoapResponseObject_DeleteListingsTemplates
-	 */
-	public $item;
+    /**
+     * @var PlentySoapResponseObject_DeleteListingsTemplates
+     */
+    public $item;
 }

@@ -32,14 +32,13 @@
  */
 class PlentySoapRequestObject_GetMarketLogs
 {
-	
-	/**
-	 * @var string
-	 */
-	public $IdentificationValue;
-	
-	/**
-	 * @var int
-	 */
-	public $MarketLogID;
+    /**
+     * @var string
+     */
+    public $IdentificationValue;
+
+    /**
+     * @var int
+     */
+    public $MarketLogID;
 }

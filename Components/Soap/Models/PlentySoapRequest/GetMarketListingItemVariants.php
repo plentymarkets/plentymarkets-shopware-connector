@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_GetMarketListingItemVariants
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_integer
-	 */
-	public $MarketListingHistoryIDs;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_integer
+     */
+    public $MarketListingHistoryIDs;
 }

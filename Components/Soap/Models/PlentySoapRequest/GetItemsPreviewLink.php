@@ -32,19 +32,18 @@
  */
 class PlentySoapRequest_GetItemsPreviewLink
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_integer
-	 */
-	public $ItemIDs;
-	
-	/**
-	 * @var int
-	 */
-	public $MultishopsID;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_integer
+     */
+    public $ItemIDs;
+
+    /**
+     * @var int
+     */
+    public $MultishopsID;
 }

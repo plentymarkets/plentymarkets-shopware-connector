@@ -32,14 +32,13 @@
  */
 class PlentySoapRequest_SetAutonomousReturns
 {
-	
-	/**
-	 * @var int
-	 */
-	public $CallItemsLimit;
-	
-	/**
-	 * @var ArrayOfPlentysoapobject_setautonomousreturn
-	 */
-	public $Returns;
+    /**
+     * @var int
+     */
+    public $CallItemsLimit;
+
+    /**
+     * @var ArrayOfPlentysoapobject_setautonomousreturn
+     */
+    public $Returns;
 }

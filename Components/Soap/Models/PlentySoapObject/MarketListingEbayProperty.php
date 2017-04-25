@@ -32,24 +32,23 @@
  */
 class PlentySoapObject_MarketListingEbayProperty
 {
-	
-	/**
-	 * @var boolean
-	 */
-	public $DeleteProperty;
-	
-	/**
-	 * @var int
-	 */
-	public $PropertyID;
-	
-	/**
-	 * @var string
-	 */
-	public $PropertyName;
-	
-	/**
-	 * @var string
-	 */
-	public $PropertyValue;
+    /**
+     * @var bool
+     */
+    public $DeleteProperty;
+
+    /**
+     * @var int
+     */
+    public $PropertyID;
+
+    /**
+     * @var string
+     */
+    public $PropertyName;
+
+    /**
+     * @var string
+     */
+    public $PropertyValue;
 }

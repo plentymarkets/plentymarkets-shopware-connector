@@ -32,9 +32,8 @@
  */
 class ArrayOfPlentysoapobject_getcategorymappingformarket
 {
-	
-	/**
-	 * @var PlentySoapObject_GetCategoryMappingForMarket
-	 */
-	public $item;
+    /**
+     * @var PlentySoapObject_GetCategoryMappingForMarket
+     */
+    public $item;
 }
