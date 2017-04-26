@@ -853,7 +853,7 @@ class ProductResponseParser implements ProductResponseParserInterface
 
         $first = true;
 
-        usort($variations, function(array $a, array $b) {
+        usort($variations, function (array $a, array $b) {
             if ((int) $a['position'] === (int) $b['position']) {
                 return 0;
             }
