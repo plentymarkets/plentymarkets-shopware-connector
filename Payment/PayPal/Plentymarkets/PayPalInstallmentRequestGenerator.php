@@ -3,13 +3,13 @@
 namespace PlentyConnector\Payment\PayPal\Plentymarkets;
 
 use PlentyConnector\Connector\TransferObject\Payment\Payment;
-use PlentyConnector\Payment\PayPal\PaymentData\PayPalPlusInvoicePaymentData;
+use PlentyConnector\Payment\PayPal\PaymentData\PayPalInstallmentPaymentData;
 use PlentymarketsAdapter\RequestGenerator\Payment\PaymentRequestGeneratorInterface;
 
 /**
- * Class PayPalPlusInvoiceRequestGenerator
+ * Class PayPalInstallmentRequestGenerator
  */
-class PayPalPlusInvoiceRequestGenerator implements PaymentRequestGeneratorInterface
+class PayPalInstallmentRequestGenerator implements PaymentRequestGeneratorInterface
 {
     /**
      * @var PaymentRequestGeneratorInterface
@@ -17,7 +17,7 @@ class PayPalPlusInvoiceRequestGenerator implements PaymentRequestGeneratorInterf
     private $parentRequestGenerator;
 
     /**
-     * PayPalPlusInvoiceRequestGenerator constructor.
+     * PayPalInstallmentRequestGenerator constructor.
      *
      * @param PaymentRequestGeneratorInterface $parentRequestGenerator
      */
@@ -33,24 +33,21 @@ class PayPalPlusInvoiceRequestGenerator implements PaymentRequestGeneratorInterf
     {
         $paymentParams = $this->parentRequestGenerator->generate($payment);
 
-        if (!($payment->getPaymentData() instanceof PayPalPlusInvoicePaymentData)) {
+        if (!($payment->getPaymentData() instanceof PayPalInstallmentPaymentData)) {
             return $paymentParams;
         }
 
         /**
-         * @var PayPalPlusInvoicePaymentData $data
+         * @var PayPalInstallmentPaymentData $data
          */
         $data = $payment->getPaymentData();
 
         $paymentParams['property'][] = [
             'typeId' => 22,
             'value' => [
-                'accountHolder' => $data->getAccountHolderName(),
-                'bankName' => $data->getBankName(),
-                'bic' => $data->getBankIdentifierCode(),
-                'iban' => $data->getInternationalBankAccountNumber(),
-                'paymentDueDate' => $data->getPaymentDueDate()->format(DATE_W3C),
-                'reference' => $data->getReferenceNumber(),
+                'currency' => $data->getCurrency(),
+                'financingCosts' => $data->getFinancingCosts(),
+                'totalCostsIncludeFinancing' => $data->getTotalCostsIncludeFinancing(),
             ],
         ];
 
