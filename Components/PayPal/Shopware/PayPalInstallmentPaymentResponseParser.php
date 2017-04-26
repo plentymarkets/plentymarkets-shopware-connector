@@ -1,10 +1,10 @@
 <?php
 
-namespace PlentyConnector\Payment\PayPal\Shopware;
+namespace PlentyConnector\Components\PayPal\Shopware;
 
 use Doctrine\DBAL\Connection;
 use PlentyConnector\Connector\TransferObject\Payment\Payment;
-use PlentyConnector\Payment\PayPal\PaymentData\PayPalInstallmentPaymentData;
+use PlentyConnector\Components\PayPal\PaymentData\PayPalInstallmentPaymentData;
 use ShopwareAdapter\ResponseParser\Payment\PaymentResponseParserInterface;
 
 /**

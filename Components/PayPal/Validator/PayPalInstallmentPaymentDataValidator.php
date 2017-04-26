@@ -1,10 +1,10 @@
 <?php
 
-namespace PlentyConnector\Payment\PayPal\Validator;
+namespace PlentyConnector\Components\PayPal\Validator;
 
 use Assert\Assertion;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
-use PlentyConnector\Payment\PayPal\PaymentData\PayPalInstallmentPaymentData;
+use PlentyConnector\Components\PayPal\PaymentData\PayPalInstallmentPaymentData;
 
 /**
  * Class PayPalInstallmentPaymentDataValidator

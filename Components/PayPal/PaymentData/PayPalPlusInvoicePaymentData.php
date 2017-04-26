@@ -1,6 +1,6 @@
 <?php
 
-namespace PlentyConnector\Payment\PayPal\PaymentData;
+namespace PlentyConnector\Components\PayPal\PaymentData;
 
 use DateTimeImmutable;
 use PlentyConnector\Connector\TransferObject\Payment\PaymentData\PaymentDataInterface;

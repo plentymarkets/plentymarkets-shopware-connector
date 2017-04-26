@@ -1,11 +1,11 @@
 <?php
 
-namespace PlentyConnector\Payment\PayPal\Validator;
+namespace PlentyConnector\Components\PayPal\Validator;
 
 use Assert\Assertion;
 use DateTimeImmutable;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
-use PlentyConnector\Payment\PayPal\PaymentData\PayPalPlusInvoicePaymentData;
+use PlentyConnector\Components\PayPal\PaymentData\PayPalPlusInvoicePaymentData;
 
 /**
  * Class PayPalPlusInvoicePaymentDataValidator

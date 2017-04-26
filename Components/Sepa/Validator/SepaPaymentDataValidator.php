@@ -1,10 +1,10 @@
 <?php
 
-namespace PlentyConnector\Payment\Sepa\Validator;
+namespace PlentyConnector\Components\Sepa\Validator;
 
 use Assert\Assertion;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
-use PlentyConnector\Payment\Sepa\PaymentData\SepaPaymentData;
+use PlentyConnector\Components\Sepa\PaymentData\SepaPaymentData;
 
 /**
  * Class SepaPaymentDataValidator

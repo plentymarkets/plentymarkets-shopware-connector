@@ -6,16 +6,16 @@
     <!-- Services -->
 
     <services>
-        <service id="plenty_connector.payment.sepa.validator" class="PlentyConnector\Payment\Sepa\Validator\SepaPaymentDataValidator">
+        <service id="plenty_connector.payment.sepa.validator" class="PlentyConnector\Components\Sepa\Validator\SepaPaymentDataValidator">
             <tag name="plenty_connector.validator" />
         </service>
 
-        <service id="plenty_connector.payment.sepa.payment_response_parser" class="PlentyConnector\Payment\Sepa\Shopware\SepaPaymentResponseParser" decorates="shopware_adapter.response_parser.payment" public="false">
+        <service id="plenty_connector.payment.sepa.payment_response_parser" class="PlentyConnector\Components\Sepa\Shopware\SepaPaymentResponseParser" decorates="shopware_adapter.response_parser.payment" public="false">
             <argument type="service" id="plenty_connector.payment.sepa.payment_response_parser.inner" />
             <argument type="service" id="plenty_connector.identity_service" />
         </service>
 
-        <service id="plenty_connector.payment.sepa.payment_command_handler" class="PlentyConnector\Payment\Sepa\Plentymarkets\HandleSepaPaymentCommandHandler" decorates="plentymarkets_adapter.command_handler.handle_payment" public="false">
+        <service id="plenty_connector.payment.sepa.payment_command_handler" class="PlentyConnector\Components\Sepa\Plentymarkets\HandleSepaPaymentCommandHandler" decorates="plentymarkets_adapter.command_handler.handle_payment" public="false">
             <argument type="service" id="plenty_connector.payment.sepa.payment_command_handler.inner" />
             <argument type="service" id="plentmarkets_adapter.client" />
             <argument type="service" id="plenty_connector.identity_service" />

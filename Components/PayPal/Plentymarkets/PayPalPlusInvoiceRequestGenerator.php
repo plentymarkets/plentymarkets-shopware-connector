@@ -1,15 +1,15 @@
 <?php
 
-namespace PlentyConnector\Payment\PayPal\Plentymarkets;
+namespace PlentyConnector\Components\PayPal\Plentymarkets;
 
 use PlentyConnector\Connector\TransferObject\Payment\Payment;
-use PlentyConnector\Payment\PayPal\PaymentData\PayPalInstallmentPaymentData;
+use PlentyConnector\Components\PayPal\PaymentData\PayPalPlusInvoicePaymentData;
 use PlentymarketsAdapter\RequestGenerator\Payment\PaymentRequestGeneratorInterface;
 
 /**
- * Class PayPalInstallmentRequestGenerator
+ * Class PayPalPlusInvoiceRequestGenerator
  */
-class PayPalInstallmentRequestGenerator implements PaymentRequestGeneratorInterface
+class PayPalPlusInvoiceRequestGenerator implements PaymentRequestGeneratorInterface
 {
     /**
      * @var PaymentRequestGeneratorInterface
@@ -17,7 +17,7 @@ class PayPalInstallmentRequestGenerator implements PaymentRequestGeneratorInterf
     private $parentRequestGenerator;
 
     /**
-     * PayPalInstallmentRequestGenerator constructor.
+     * PayPalPlusInvoiceRequestGenerator constructor.
      *
      * @param PaymentRequestGeneratorInterface $parentRequestGenerator
      */
@@ -33,21 +33,24 @@ class PayPalInstallmentRequestGenerator implements PaymentRequestGeneratorInterf
     {
         $paymentParams = $this->parentRequestGenerator->generate($payment);
 
-        if (!($payment->getPaymentData() instanceof PayPalInstallmentPaymentData)) {
+        if (!($payment->getPaymentData() instanceof PayPalPlusInvoicePaymentData)) {
             return $paymentParams;
         }
 
         /**
-         * @var PayPalInstallmentPaymentData $data
+         * @var PayPalPlusInvoicePaymentData $data
          */
         $data = $payment->getPaymentData();
 
         $paymentParams['property'][] = [
             'typeId' => 22,
             'value' => [
-                'currency' => $data->getCurrency(),
-                'financingCosts' => $data->getFinancingCosts(),
-                'totalCostsIncludeFinancing' => $data->getTotalCostsIncludeFinancing(),
+                'accountHolder' => $data->getAccountHolderName(),
+                'bankName' => $data->getBankName(),
+                'bic' => $data->getBankIdentifierCode(),
+                'iban' => $data->getInternationalBankAccountNumber(),
+                'paymentDueDate' => $data->getPaymentDueDate()->format(DATE_W3C),
+                'reference' => $data->getReferenceNumber(),
             ],
         ];
 

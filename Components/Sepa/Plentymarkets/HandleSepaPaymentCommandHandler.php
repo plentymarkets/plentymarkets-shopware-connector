@@ -1,6 +1,6 @@
 <?php
 
-namespace PlentyConnector\Payment\Sepa\Plentymarkets;
+namespace PlentyConnector\Components\Sepa\Plentymarkets;
 
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
@@ -11,7 +11,7 @@ use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\TransferObject\Order\Order;
 use PlentyConnector\Connector\TransferObject\Payment\Payment;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
-use PlentyConnector\Payment\Sepa\PaymentData\SepaPaymentData;
+use PlentyConnector\Components\Sepa\PaymentData\SepaPaymentData;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 
