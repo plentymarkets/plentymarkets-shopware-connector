@@ -482,6 +482,23 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 );
             }
 
+            foreach ($productModel->getDetails() as $detail) {
+                $found = false;
+                foreach ($product->getVariations() as $variation) {
+                    if ($variation->getNumber() === $detail->getNumber()) {
+                        $found = true;
+                    }
+                }
+
+                if ($found) {
+                    continue;
+                }
+
+                $entityManager->remove($detail);
+            }
+
+            $entityManager->flush();
+
             $mainVariation = $this->getMainVariation($product);
 
             if (null !== $mainVariation) {
