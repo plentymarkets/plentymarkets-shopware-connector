@@ -20,9 +20,14 @@
 
         <service id="plentmarkets_adapter.read_api_item" class="PlentymarketsAdapter\ReadApi\Item">
             <argument type="service" id="plentmarkets_adapter.client" />
+            <argument type="service" id="plentmarkets_adapter.read_api_variant" />
         </service>
 
         <service id="plentmarkets_adapter.read_api_comment" class="PlentymarketsAdapter\ReadApi\Comment\Comment">
+            <argument type="service" id="plentmarkets_adapter.client" />
+        </service>
+
+        <service id="plentmarkets_adapter.read_api_variant" class="PlentymarketsAdapter\ReadApi\Item\Variation">
             <argument type="service" id="plentmarkets_adapter.client" />
         </service>
 

@@ -55,7 +55,6 @@ class ProductResponseParser implements ProductResponseParserInterface
      * @var \PlentymarketsAdapter\ReadApi\Webstore
      */
     private $webstoresApi;
-    private $itemsVariationsApi;
     private $itemsSalesPricesApi;
     private $itemsItemShippingProfilesApi;
     private $itemsAccountsContacsClasses;
@@ -87,7 +86,6 @@ class ProductResponseParser implements ProductResponseParserInterface
 
         //TODO: inject when refactoring this class
         $this->webstoresApi = new \PlentymarketsAdapter\ReadApi\Webstore($client);
-        $this->itemsVariationsApi = new \PlentymarketsAdapter\ReadApi\Item\Variation($client);
         $this->itemsSalesPricesApi = new \PlentymarketsAdapter\ReadApi\Item\SalesPrice($client);
         $this->itemsAccountsContacsClasses = new \PlentymarketsAdapter\ReadApi\Account\ContactClass($client);
         $this->itemsItemShippingProfilesApi = new \PlentymarketsAdapter\ReadApi\Item\ShippingProfile($client);
@@ -117,9 +115,7 @@ class ProductResponseParser implements ProductResponseParserInterface
 
         $result = [];
 
-        $variations = $this->itemsVariationsApi->findOne($product['id']);
-
-        $mainVariation = $this->getMainVariation($variations);
+        $mainVariation = $this->getMainVariation($product['variations']);
 
         $identity = $this->identityService->findOneOrCreate(
             (string) $product['id'],
@@ -127,7 +123,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             Product::TYPE
         );
 
-        $hasStockLimitation = array_filter($variations, function (array $variation) {
+        $hasStockLimitation = array_filter($product['variations'], function (array $variation) {
             return (bool) $variation['stockLimitation'];
         });
 
@@ -137,7 +133,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             return [];
         }
 
-        $variations = $this->getVariations($product['texts'], $variations, $result);
+        $variations = $this->getVariations($product['texts'], $product['variations'], $result);
 
         /**
          * @var Product $object
@@ -189,7 +185,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         });
 
         if (empty($mainVariation)) {
-            // TODO: throw
+            throw new \InvalidArgumentException('product without main variaton');
         }
 
         return array_shift($mainVariation);
