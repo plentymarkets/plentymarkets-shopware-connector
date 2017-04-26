@@ -471,15 +471,21 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                     $variationParams['articleId'] = $identity->getAdapterIdentifier();
 
                     $variant = $variantResource->create($variationParams);
+
+                    $this->attributeHelper->saveAttributes(
+                        (int) $variant->getId(),
+                        $product->getAttributes(),
+                        's_articles_attributes'
+                    );
                 } else {
                     $variantResource->update($variant['id'], $variationParams);
-                }
 
-                $this->attributeHelper->saveAttributes(
-                    (int) $variant['id'],
-                    $product->getAttributes(),
-                    's_articles_attributes'
-                );
+                    $this->attributeHelper->saveAttributes(
+                        (int) $variant['id'],
+                        $product->getAttributes(),
+                        's_articles_attributes'
+                    );
+                }
             }
 
             foreach ($productModel->getDetails() as $detail) {
