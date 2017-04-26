@@ -858,7 +858,7 @@ class ProductResponseParser implements ProductResponseParserInterface
                 return 0;
             }
 
-            return ((int) $a < (int) $b) ? -1 : 1;
+            return ((int) $a['position'] < (int) $b['position']) ? -1 : 1;
         });
 
         foreach ($variations as $variation) {
