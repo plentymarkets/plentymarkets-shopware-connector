@@ -47,12 +47,28 @@ class ProcessCommand extends ShopwareCommand
     }
 
     /**
+     * @return string
+     */
+    private function getHelpText()
+    {
+        $examples = [
+            'import all products: plentyconnector:process Product --all',
+            'import changed products: plentyconnector:process Product',
+            'import single product: plentyconnector:process Product 753c7d5d-09be-4dd3-bd3f-3d5cc2e92dab',
+            'import changed orders: plentyconnector:process Order',
+        ];
+
+        return "Examples:\n\n" . implode("\n", $examples);
+    }
+
+    /**
      * @throws InvalidArgumentException
      */
     protected function configure()
     {
         $this->setName('plentyconnector:process');
         $this->setDescription('process definitons');
+        $this->setHelp($this->getHelpText());
         $this->addArgument(
             'objectType',
             InputArgument::OPTIONAL,
