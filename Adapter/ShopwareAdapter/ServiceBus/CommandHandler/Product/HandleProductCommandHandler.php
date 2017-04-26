@@ -695,7 +695,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         ]);
 
         if (null === $unitIdentity) {
-            throw new IdentityNotFoundException('Missing unit mapping');
+            throw new IdentityNotFoundException('Missing unit mapping - ' . $variation->getNumber());
         }
 
         $prices = [];
