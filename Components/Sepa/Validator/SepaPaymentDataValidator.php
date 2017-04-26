@@ -24,10 +24,10 @@ class SepaPaymentDataValidator implements ValidatorInterface
      */
     public function validate($object)
     {
-        Assertion::string($object->getAccountOwner(), null, 'payment.sepa.accountOwner');
-        Assertion::notBlank($object->getAccountOwner(), null, 'payment.sepa.accountOwner');
-        Assertion::string($object->getIban(), null, 'payment.sepa.iban');
-        Assertion::notBlank($object->getIban(), null, 'payment.sepa.iban');
-        Assertion::nullOrString($object->getBic(), null, 'payment.sepa.bic');
+        Assertion::string($object->getAccountOwner(), null, 'components.sepa.accountOwner');
+        Assertion::notBlank($object->getAccountOwner(), null, 'components.sepa.accountOwner');
+        Assertion::string($object->getIban(), null, 'components.sepa.iban');
+        Assertion::notBlank($object->getIban(), null, 'components.sepa.iban');
+        Assertion::nullOrString($object->getBic(), null, 'components.sepa.bic');
     }
 }

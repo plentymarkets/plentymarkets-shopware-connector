@@ -8,32 +8,32 @@
     <services>
         <!-- PayPal Plus Invoice -->
 
-        <service id="plenty_connector.payment.paypal.invoice_validator" class="PlentyConnector\Components\PayPal\Validator\PayPalPlusInvoicePaymentDataValidator">
+        <service id="plenty_connector.components.paypal.invoice_validator" class="PlentyConnector\Components\PayPal\Validator\PayPalPlusInvoicePaymentDataValidator">
             <tag name="plenty_connector.validator" />
         </service>
 
-        <service id="plenty_connector.payment.paypal.invoice.payment_response_parser" class="PlentyConnector\Components\PayPal\Shopware\PayPalPlusInvoicePaymentResponseParser" decorates="shopware_adapter.response_parser.payment" public="false">
-            <argument type="service" id="plenty_connector.payment.paypal.invoice.payment_response_parser.inner" />
+        <service id="plenty_connector.components.paypal.invoice.payment_response_parser" class="PlentyConnector\Components\PayPal\Shopware\PayPalPlusInvoicePaymentResponseParser" decorates="shopware_adapter.response_parser.payment" public="false">
+            <argument type="service" id="plenty_connector.components.paypal.invoice.payment_response_parser.inner" />
             <argument type="service" id="dbal_connection" />
         </service>
 
-        <service id="plenty_connector.payment.paypal.invoice.request_generator" class="PlentyConnector\Components\PayPal\Plentymarkets\PayPalPlusInvoiceRequestGenerator" decorates="plentmarkets_adapter.request_generator.payment" public="false">
-            <argument type="service" id="plenty_connector.payment.paypal.invoice.request_generator.inner" />
+        <service id="plenty_connector.components.paypal.invoice.request_generator" class="PlentyConnector\Components\PayPal\Plentymarkets\PayPalPlusInvoiceRequestGenerator" decorates="plentmarkets_adapter.request_generator.payment" public="false">
+            <argument type="service" id="plenty_connector.components.paypal.invoice.request_generator.inner" />
         </service>
 
-        <!-- PayPal Plus Invoice -->
+        <!-- PayPal Installment -->
 
-        <service id="plenty_connector.payment.paypal.installment_validator" class="PlentyConnector\Components\PayPal\Validator\PayPalInstallmentPaymentDataValidator">
+        <service id="plenty_connector.components.paypal.installment_validator" class="PlentyConnector\Components\PayPal\Validator\PayPalInstallmentPaymentDataValidator">
             <tag name="plenty_connector.validator" />
         </service>
 
-        <service id="plenty_connector.payment.paypal.installment.payment_response_parser" class="PlentyConnector\Components\PayPal\Shopware\PayPalInstallmentPaymentResponseParser" decorates="shopware_adapter.response_parser.payment" public="false">
-            <argument type="service" id="plenty_connector.payment.paypal.installment.payment_response_parser.inner" />
+        <service id="plenty_connector.components.paypal.installment.payment_response_parser" class="PlentyConnector\Components\PayPal\Shopware\PayPalInstallmentPaymentResponseParser" decorates="shopware_adapter.response_parser.payment" public="false">
+            <argument type="service" id="plenty_connector.components.paypal.installment.payment_response_parser.inner" />
             <argument type="service" id="dbal_connection" />
         </service>
 
-        <service id="plenty_connector.payment.paypal.installment.request_generator" class="PlentyConnector\Components\PayPal\Plentymarkets\PayPalInstallmentRequestGenerator" decorates="plentmarkets_adapter.request_generator.payment" public="false">
-            <argument type="service" id="plenty_connector.payment.paypal.installment.request_generator.inner" />
+        <service id="plenty_connector.components.paypal.installment.request_generator" class="PlentyConnector\Components\PayPal\Plentymarkets\PayPalInstallmentRequestGenerator" decorates="plentmarkets_adapter.request_generator.payment" public="false">
+            <argument type="service" id="plenty_connector.components.paypal.installment.request_generator.inner" />
         </service>
     </services>
 </container>

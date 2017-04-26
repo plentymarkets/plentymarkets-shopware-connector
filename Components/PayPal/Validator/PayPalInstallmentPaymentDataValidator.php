@@ -24,11 +24,11 @@ class PayPalInstallmentPaymentDataValidator implements ValidatorInterface
      */
     public function validate($object)
     {
-        Assertion::string($object->getCurrency(), null, 'payment.paypal.installment.currency');
-        Assertion::notBlank($object->getCurrency(), null, 'payment.paypal.installment.currency');
+        Assertion::string($object->getCurrency(), null, 'components.paypal.installment.currency');
+        Assertion::notBlank($object->getCurrency(), null, 'components.paypal.installment.currency');
 
-        Assertion::float($object->getFinancingCosts(), null, 'payment.paypal.installment.financingCosts');
+        Assertion::float($object->getFinancingCosts(), null, 'components.paypal.installment.financingCosts');
 
-        Assertion::float($object->getTotalCostsIncludeFinancing(), null, 'payment.paypal.installment.totalCostsIncludeFinancing');
+        Assertion::float($object->getTotalCostsIncludeFinancing(), null, 'components.paypal.installment.totalCostsIncludeFinancing');
     }
 }
