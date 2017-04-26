@@ -47,10 +47,9 @@ class CommandFactory implements CommandFactoryInterface
         /**
          * @var CommandGeneratorInterface[] $generators
          */
-        $generators = array_filter($this->generators,
-            function (CommandGeneratorInterface $generator) use ($objectType) {
-                return $generator->supports($objectType);
-            });
+        $generators = array_filter($this->generators, function (CommandGeneratorInterface $generator) use ($objectType) {
+            return $generator->supports($objectType);
+        });
 
         $generator = array_shift($generators);
 

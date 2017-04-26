@@ -5,8 +5,8 @@ namespace PlentyConnector\Components\PayPal\Shopware;
 use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\DBAL\Connection;
-use PlentyConnector\Connector\TransferObject\Payment\Payment;
 use PlentyConnector\Components\PayPal\PaymentData\PayPalPlusInvoicePaymentData;
+use PlentyConnector\Connector\TransferObject\Payment\Payment;
 use ShopwareAdapter\ResponseParser\Payment\PaymentResponseParserInterface;
 
 /**

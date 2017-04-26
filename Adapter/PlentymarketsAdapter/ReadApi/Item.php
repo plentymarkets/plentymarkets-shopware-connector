@@ -20,7 +20,7 @@ class Item extends ApiAbstract
     /**
      * Item constructor.
      *
-     * @param Client $client
+     * @param Client    $client
      * @param Variation $itemsVariationsApi
      */
     public function __construct(
@@ -30,14 +30,6 @@ class Item extends ApiAbstract
         parent::__construct($client);
 
         $this->itemsVariationsApi = $itemsVariationsApi;
-    }
-
-    /**
-     * @param array $element
-     */
-    private function addAdditionalData(array &$element)
-    {
-        $element['variations'] = $this->itemsVariationsApi->findOne($element['id']);
     }
 
     /**
@@ -102,5 +94,13 @@ class Item extends ApiAbstract
         }
 
         return $result;
+    }
+
+    /**
+     * @param array $element
+     */
+    private function addAdditionalData(array &$element)
+    {
+        $element['variations'] = $this->itemsVariationsApi->findOne($element['id']);
     }
 }

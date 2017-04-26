@@ -4,8 +4,8 @@ namespace PlentyConnector\Components\PayPal\Validator;
 
 use Assert\Assertion;
 use DateTimeImmutable;
-use PlentyConnector\Connector\Validator\ValidatorInterface;
 use PlentyConnector\Components\PayPal\PaymentData\PayPalPlusInvoicePaymentData;
+use PlentyConnector\Connector\Validator\ValidatorInterface;
 
 /**
  * Class PayPalPlusInvoicePaymentDataValidator

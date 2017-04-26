@@ -3,8 +3,8 @@
 namespace PlentyConnector\Components\PayPal\Validator;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\Validator\ValidatorInterface;
 use PlentyConnector\Components\PayPal\PaymentData\PayPalInstallmentPaymentData;
+use PlentyConnector\Connector\Validator\ValidatorInterface;
 
 /**
  * Class PayPalInstallmentPaymentDataValidator

@@ -3,12 +3,12 @@
 namespace PlentyConnector\Components\Sepa\Shopware;
 
 use Assert\Assertion;
+use PlentyConnector\Components\Sepa\PaymentData\SepaPaymentData;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Currency\Currency;
 use PlentyConnector\Connector\TransferObject\Order\Order;
 use PlentyConnector\Connector\TransferObject\Payment\Payment;
 use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod;
-use PlentyConnector\Components\Sepa\PaymentData\SepaPaymentData;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Models\Shop\Currency as CurrencyModel;
 use ShopwareAdapter\ResponseParser\Payment\PaymentResponseParserInterface;

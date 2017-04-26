@@ -3,8 +3,8 @@
 namespace PlentyConnector\Components\Sepa\Validator;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\Validator\ValidatorInterface;
 use PlentyConnector\Components\Sepa\PaymentData\SepaPaymentData;
+use PlentyConnector\Connector\Validator\ValidatorInterface;
 
 /**
  * Class SepaPaymentDataValidator
