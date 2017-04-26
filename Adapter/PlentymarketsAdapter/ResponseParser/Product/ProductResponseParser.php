@@ -90,8 +90,6 @@ class ProductResponseParser implements ProductResponseParserInterface
         $this->itemsAccountsContacsClasses = new \PlentymarketsAdapter\ReadApi\Account\ContactClass($client);
         $this->itemsItemShippingProfilesApi = new \PlentymarketsAdapter\ReadApi\Item\ShippingProfile($client);
         $this->itemsImagesApi = new \PlentymarketsAdapter\ReadApi\Item\Image($client);
-        $this->itemsVariationsStockApi = new \PlentymarketsAdapter\ReadApi\Item\Variation\Stock($client);
-        $this->itemsVariationsImagesApi = new \PlentymarketsAdapter\ReadApi\Item\Variation\Image($client);
         $this->itemsVariationsVariationPropertiesApi = new \PlentymarketsAdapter\ReadApi\Item\Variation\Property($client);
         $this->itemsPropertiesSelectionsApi = new\PlentymarketsAdapter\ReadApi\Item\Property\Selection($client);
         $this->availabilitiesApi = new \PlentymarketsAdapter\ReadApi\Availability($client);
@@ -380,8 +378,6 @@ class ProductResponseParser implements ProductResponseParserInterface
      */
     private function getVariationImages(array $texts, array $variation, array &$result)
     {
-        $images = $this->itemsVariationsImagesApi->findOne($variation['itemId'], $variation['id']);
-
         $imageIdentifiers = array_map(function ($image) use ($texts, &$result) {
             /**
              * @var MediaResponseParserInterface $mediaResponseParser
@@ -426,7 +422,7 @@ class ProductResponseParser implements ProductResponseParserInterface
                 'shopIdentifiers' => array_filter($shopIdentifiers),
                 'position' => (int) $image['position'],
             ]);
-        }, $images);
+        }, $variation['images']);
 
         return array_filter($imageIdentifiers);
     }
@@ -708,11 +704,9 @@ class ProductResponseParser implements ProductResponseParserInterface
      */
     private function getStock($variation)
     {
-        $stocks = $this->itemsVariationsStockApi->findOne($variation['itemId'], $variation['id']);
-
         $summedStocks = 0;
 
-        foreach ($stocks as $stock) {
+        foreach ($variation['stock'] as $stock) {
             if (array_key_exists('netStock', $stock)) {
                 $summedStocks += $stock['netStock'];
             }

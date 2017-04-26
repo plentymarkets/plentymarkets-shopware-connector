@@ -4,9 +4,7 @@ namespace PlentymarketsAdapter\Client\Iterator;
 
 use Assert\Assertion;
 use Iterator as BaseIterator;
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentymarketsAdapter\Client\Client;
-use UnexpectedValueException;
 
 /**
  * Class Iterator
@@ -34,7 +32,7 @@ class Iterator implements BaseIterator
     private $offset = 0;
 
     /**
-     * @var TransferObjectInterface[]
+     * @var array
      */
     private $page = [];
 
@@ -54,8 +52,6 @@ class Iterator implements BaseIterator
      * @param string $path
      * @param Client $client
      * @param array  $criteria
-     *
-     * @throws UnexpectedValueException
      */
     public function __construct($path, Client $client, array $criteria = [])
     {
@@ -75,11 +71,7 @@ class Iterator implements BaseIterator
     }
 
     /**
-     * TODO: needs bugfixing
-     *
      * {@inheritdoc}
-     *
-     * @throws UnexpectedValueException
      */
     public function next()
     {
@@ -110,8 +102,6 @@ class Iterator implements BaseIterator
 
     /**
      * {@inheritdoc}
-     *
-     * @throws UnexpectedValueException
      */
     public function rewind()
     {
@@ -123,8 +113,8 @@ class Iterator implements BaseIterator
 
     /**
      * @param array $criteria
-     * @param int   $limit
-     * @param int   $offset
+     * @param int $limit
+     * @param int $offset
      */
     private function loadPage(array $criteria = [], $limit = 0, $offset = 0)
     {

@@ -17,7 +17,7 @@ class Variation extends ApiAbstract
     public function findOne($productId)
     {
         return $this->client->request('GET', 'items/' . $productId . '/variations', [
-            'with' => 'variationClients,variationSalesPrices,variationCategories,variationDefaultCategory,unit,variationAttributeValues,variationBarcodes',
+            'with' => 'variationClients,variationSalesPrices,variationCategories,variationDefaultCategory,unit,variationAttributeValues,variationBarcodes,images,stock',
         ]);
     }
 }

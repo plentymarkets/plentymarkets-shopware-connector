@@ -58,16 +58,16 @@ class Item extends ApiAbstract
     {
         $languageHelper = new LanguageHelper();
 
-        $result = iterator_to_array($this->client->getIterator('items', [
+        $result = $this->client->getIterator('items', [
             'lang' => $languageHelper->getLanguagesQueryString(),
             'with' => 'itemProperties.valueTexts,itemCrossSelling',
-        ]));
+        ]);
 
-        foreach ($result as &$element) {
+        foreach ($result as $element) {
             $this->addAdditionalData($element);
-        }
 
-        return $result;
+            yield $element;
+        }
     }
 
     /**
@@ -83,17 +83,17 @@ class Item extends ApiAbstract
 
         $languageHelper = new LanguageHelper();
 
-        $result = iterator_to_array($this->client->getIterator('items', [
+        $result = $this->client->getIterator('items', [
             'lang' => $languageHelper->getLanguagesQueryString(),
             'updatedBetween' => $start . ',' . $end,
             'with' => 'itemProperties.valueTexts,itemCrossSelling',
-        ]));
+        ]);
 
-        foreach ($result as &$element) {
+        foreach ($result as $element) {
             $this->addAdditionalData($element);
-        }
 
-        return $result;
+            yield $element;
+        }
     }
 
     /**
