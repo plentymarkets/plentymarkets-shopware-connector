@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <!-- Services -->
+
+    <services>
+        <service id="plenty_connector.components.bundle.bundle_validator" class="PlentyConnector\Components\Bundle\Validator\BundleValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.components.bundle.bundle_product_validator" class="PlentyConnector\Components\Bundle\Validator\BundleProduct\BundleProductValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.components.bundle.command_generator.bundle" class="PlentyConnector\Components\Bundle\CommandGenerator\BundleCommandGenerator">
+            <tag name="plenty_connector.command_generator" />
+        </service>
+
+        <service id="plenty_connector.components.bundle.command_handler.handle_bundle" class="PlentyConnector\Components\Bundle\Shopware\HandleBundleCommandHandler">
+            <argument type="service" id="plenty_connector.identity_service" />
+
+            <tag name="plenty_connector.command_handler" />
+        </service>
+
+        <service id="plenty_connector.components.bundle.command_handler.remove_bundle" class="PlentyConnector\Components\Bundle\Shopware\RemoveBundleCommandHandler">
+            <argument type="service" id="plenty_connector.identity_service" />
+
+            <tag name="plenty_connector.command_handler" />
+        </service>
+
+        <service id="plenty_connector_components_bundle.bundle_response_parser" class="PlentyConnector\Components\Bundle\Plentymarkets\BundleResponseParser" decorates="plentmarkets_adapter.response_parser.product" public="false">
+            <argument type="service" id="plenty_connector_components_bundle.bundle_response_parser.inner" />
+            <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="plentmarkets_adapter.client" />
+        </service>
+    </services>
+</container>
