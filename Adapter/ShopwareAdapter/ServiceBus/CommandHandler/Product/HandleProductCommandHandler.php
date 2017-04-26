@@ -787,6 +787,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             'active' => $variation->getActive(),
             'inStock' => $variation->getStock(),
             'isMain' => $variation->isMain(),
+            'kind' => $variation->isMain() ? 1 : 2,
             'standard' => $variation->isMain(),
             'shippingtime' => $variation->getShippingTime(),
             'prices' => $prices,
