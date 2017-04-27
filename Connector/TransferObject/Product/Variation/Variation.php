@@ -78,6 +78,11 @@ class Variation extends AbstractValueObject
     /**
      * @var float
      */
+    private $packagingUnit = 0.0;
+
+    /**
+     * @var float
+     */
     private $maximumOrderQuantity;
 
     /**
@@ -320,6 +325,22 @@ class Variation extends AbstractValueObject
     public function setContent($content)
     {
         $this->content = $content;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPackagingUnit()
+    {
+        return $this->packagingUnit;
+    }
+
+    /**
+     * @param float $packagingUnit
+     */
+    public function setPackagingUnit($packagingUnit)
+    {
+        $this->packagingUnit = $packagingUnit;
     }
 
     /**

@@ -803,6 +803,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             'height' => $variation->getHeight(),
             'ean' => $ean,
             'images' => $images,
+            'packunit' => $variation->getPackagingUnit(),
             'minPurchase' => $variation->getMinimumOrderQuantity(),
             'purchaseSteps' => $variation->getIntervalOrderQuantity(),
             'maxPurchase' => $variation->getMaximumOrderQuantity(),

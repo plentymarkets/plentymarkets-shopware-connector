@@ -60,8 +60,6 @@ class ProductResponseParser implements ProductResponseParserInterface
     private $itemsAccountsContacsClasses;
     private $itemsImagesApi;
     private $itemsVariationsVariationPropertiesApi;
-    private $itemsVariationsStockApi;
-    private $itemsVariationsImagesApi;
     private $itemsPropertiesSelectionsApi;
     private $availabilitiesApi;
     private $itemAttributesApi;
@@ -374,11 +372,11 @@ class ProductResponseParser implements ProductResponseParserInterface
      * @param array $variation
      * @param array $result
      *
-     * @return array
+     * @return Image[]
      */
     private function getVariationImages(array $texts, array $variation, array &$result)
     {
-        $imageIdentifiers = array_map(function ($image) use ($texts, &$result) {
+        $images = array_map(function ($image) use ($texts, &$result) {
             /**
              * @var MediaResponseParserInterface $mediaResponseParser
              */
@@ -424,7 +422,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             ]);
         }, $variation['images']);
 
-        return array_filter($imageIdentifiers);
+        return array_filter($images);
     }
 
     /**
@@ -841,8 +839,6 @@ class ProductResponseParser implements ProductResponseParserInterface
             });
         }
 
-        $first = true;
-
         usort($variations, function (array $a, array $b) {
             if ((int) $a['position'] === (int) $b['position']) {
                 return 0;
@@ -851,33 +847,34 @@ class ProductResponseParser implements ProductResponseParserInterface
             return ((int) $a['position'] < (int) $b['position']) ? -1 : 1;
         });
 
-        foreach ($variations as $variation) {
-            $mappedVariations[] = Variation::fromArray([
-                'active' => (bool) $variation['isActive'],
-                'isMain' => $first,
-                'stock' => $this->getStock($variation),
-                'number' => (string) $variation['number'],
-                'barcodes' => $this->getBarcodes($variation),
-                'position' => (int) $variation['position'],
-                'model' => (string) $variation['model'],
-                'images' => $this->getVariationImages($texts, $variation, $result),
-                'prices' => $this->getPrices($variation),
-                'purchasePrice' => (float) $variation['purchasePrice'],
-                'unitIdentifier' => $this->getUnitIdentifier($variation),
-                'content' => (float) $variation['unit']['content'],
-                'maximumOrderQuantity' => (float) $variation['maximumOrderQuantity'],
-                'minimumOrderQuantity' => (float) $variation['minimumOrderQuantity'],
-                'intervalOrderQuantity' => (float) $variation['intervalOrderQuantity'],
-                'releaseDate' => $this->getReleaseDate($variation),
-                'shippingTime' => $this->getShippingTime($variation),
-                'width' => (int) $variation['widthMM'],
-                'height' => (int) $variation['heightMM'],
-                'length' => (int) $variation['lengthMM'],
-                'weight' => (int) $variation['weightNetG'],
-                'attributes' => [],
-                'properties' => $this->getVariationProperties($variation),
-            ]);
+        $first = true;
+        foreach ($variations as $element) {
+            $variation = new Variation();
+            $variation->setActive((bool) $element['isActive']);
+            $variation->setIsMain($first);
+            $variation->setStock($this->getStock($element));
+            $variation->setNumber((string) $element['number']);
+            $variation->setBarcodes($this->getBarcodes($element));
+            $variation->setPosition((int) $element['position']);
+            $variation->setModel((string) $element['model']);
+            $variation->setImages($this->getVariationImages($texts, $element, $result));
+            $variation->setPrices($this->getPrices($element));
+            $variation->setPurchasePrice((float) $element['purchasePrice']);
+            $variation->setUnitIdentifier($this->getUnitIdentifier($element));
+            $variation->setContent((float) $element['unit']['content']);
+            $variation->setPackagingUnit((float) $element['packingUnits']);
+            $variation->setMaximumOrderQuantity((float) $element['maximumOrderQuantity']);
+            $variation->setMinimumOrderQuantity((float) $element['minimumOrderQuantity']);
+            $variation->setIntervalOrderQuantity((float) $element['intervalOrderQuantity']);
+            $variation->setReleaseDate($this->getReleaseDate($element));
+            $variation->setShippingTime($this->getShippingTime($element));
+            $variation->setWidth((int) $element['widthMM']);
+            $variation->setHeight((int) $element['heightMM']);
+            $variation->setLength((int) $element['lengthMM']);
+            $variation->setWeight((int) $element['weightNetG']);
+            $variation->setProperties($this->getVariationProperties($element));
 
+            $mappedVariations[] = $variation;
             $first = false;
         }
 
@@ -1260,7 +1257,7 @@ class ProductResponseParser implements ProductResponseParserInterface
     /**
      * @param array $variation
      *
-     * @return string
+     * @return Barcode[]
      */
     private function getBarcodes(array $variation)
     {
