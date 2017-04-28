@@ -6,6 +6,7 @@ use DateTimeImmutable;
 use DateTimeZone;
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
+use ReflectionClass;
 
 /**
  * Class ChangedDateTimeTrait.
@@ -60,6 +61,8 @@ trait ChangedDateTimeTrait
      */
     private function getKey()
     {
-        return PlentymarketsAdapter::NAME . get_called_class() . '.LastChangeDateTime';
+        $ref = new ReflectionClass(get_called_class());
+
+        return PlentymarketsAdapter::NAME . '.' . $ref->getShortName() . '.LastChangeDateTime';
     }
 }

@@ -5,6 +5,7 @@ namespace PlentyConnector\Connector\ConfigService;
 use DateTime;
 use DateTimeImmutable;
 use Exception;
+use PlentyConnector\Connector\ConfigService\Model\Config;
 use PlentyConnector\Connector\ConfigService\Model\Config as ConfigModel;
 use Shopware\Components\Model\ModelManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -33,13 +34,6 @@ class ConfigService implements ConfigServiceInterface
     private $container;
 
     /**
-     * Config data array.
-     *
-     * @var ConfigModel[]
-     */
-    private $config = [];
-
-    /**
      * @param ModelManager       $entityManager
      * @param ContainerInterface $container
      */
@@ -48,8 +42,6 @@ class ConfigService implements ConfigServiceInterface
         $this->entityManager = $entityManager;
         $this->repository = $entityManager->getRepository(ConfigModel::class);
         $this->container = $container;
-
-        $this->initialize();
     }
 
     /**
@@ -65,11 +57,15 @@ class ConfigService implements ConfigServiceInterface
             }
         }
 
-        if (!array_key_exists($key, $this->config)) {
+        $element = $this->repository->findOneBy([
+            'name' => $key,
+        ]);
+
+        if (null === $element) {
             return $default;
         }
 
-        return $this->config[$key]->getValue();
+        return $element->getValue();
     }
 
     /**
@@ -80,13 +76,16 @@ class ConfigService implements ConfigServiceInterface
      */
     public function set($key, $value)
     {
-        if (!array_key_exists($key, $this->config)) {
-            $this->config[$key] = new ConfigModel();
+        $element = $this->repository->findOneBy([
+            'name' => $key,
+        ]);
 
-            $this->config[$key]->setName($key);
+        if (null === $element) {
+            $element = new Config();
+            $element->setName($key);
         }
 
-        if (null !== $this->config[$key] && $this->config[$key] === $value) {
+        if ($element->getValue() === $value) {
             return;
         }
 
@@ -94,24 +93,9 @@ class ConfigService implements ConfigServiceInterface
             $value = $value->format(DATE_W3C);
         }
 
-        $this->config[$key]->setValue($value);
+        $element->setValue($value);
 
-        $this->entityManager->persist($this->config[$key]);
-        $this->entityManager->flush($this->config[$key]);
-    }
-
-    /**
-     * pre fill the whole existing config.
-     */
-    private function initialize()
-    {
-        /**
-         * @var ConfigModel[]
-         */
-        $elements = $this->repository->findAll();
-
-        foreach ($elements as $element) {
-            $this->config[$element->getName()] = $element;
-        }
+        $this->entityManager->persist($element);
+        $this->entityManager->flush($element);
     }
 }

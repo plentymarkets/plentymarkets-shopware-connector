@@ -5,6 +5,7 @@ namespace ShopwareAdapter\ServiceBus;
 use DateTimeImmutable;
 use DateTimeZone;
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
+use ReflectionClass;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -60,6 +61,8 @@ trait ChangedDateTimeTrait
      */
     private function getKey()
     {
-        return ShopwareAdapter::NAME . get_called_class() . '.LastChangeDateTime';
+        $ref = new ReflectionClass(get_called_class());
+
+        return ShopwareAdapter::NAME . '.' . $ref->getShortName() . '.LastChangeDateTime';
     }
 }
