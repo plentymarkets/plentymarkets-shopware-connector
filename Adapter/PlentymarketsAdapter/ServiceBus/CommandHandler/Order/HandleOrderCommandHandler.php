@@ -440,16 +440,6 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             $webstores = $this->client->request('GET', 'webstores');
         }
 
-        $accountWebStore = array_filter($webstores, function ($store) use ($shopIdentity) {
-            return (string) $store['storeIdentifier'] === $shopIdentity->getAdapterIdentifier();
-        });
-
-        if (empty($accountWebStore)) {
-            // TODO: throw
-        }
-
-        $accountWebStore = array_shift($accountWebStore);
-
         $customerGroupIdentitiy = $this->identityService->findOneBy([
             'objectIdentifier' => $order->getCustomer()->getCustomerGroupIdentifier(),
             'objectType' => CustomerGroup::TYPE,
@@ -465,7 +455,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             'lang' => $languageIdentity->getAdapterIdentifier(),
             'referrerId' => 1, // TODO: Konfigurierbar über Config. (/rest/orders/referrers)
             'singleAccess' => $customer->getCustomerType() === Customer::TYPE_GUEST,
-            'plentyId' => $accountWebStore['id'],
+            'plentyId' => $shopIdentity->getAdapterIdentifier(),
             'newsletterAllowanceAt' => '',
             'lastOrderAt' => $order->getOrderTime()->format(DATE_W3C),
             'userId' => 1, // TODO: Konfigurierbar über Config (rest/accounts)
