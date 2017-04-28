@@ -3,6 +3,7 @@
 namespace PlentyConnector;
 
 use Doctrine\DBAL\Exception\InvalidArgumentException;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use PlentyConnector\Connector\ConfigService\Model\Config;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
@@ -169,6 +170,7 @@ class PlentyConnector extends Plugin
         if ($this->updateNeeded($context, '2.0.0-rc2')) {
             $this->clearCategoryIdentities();
             $this->clearPaymentStatusIdentities();
+            $this->clearLastChangedConfigEntries();
         }
 
         parent::update($context);
@@ -234,6 +236,9 @@ class PlentyConnector extends Plugin
         }
     }
 
+    /**
+     * remove category identities as we changed what informations are mapped
+     */
     private function clearPaymentStatusIdentities()
     {
         /**
@@ -244,6 +249,31 @@ class PlentyConnector extends Plugin
         foreach ($identityService->findBy(['objectType' => PaymentStatus::TYPE]) as $identity) {
             $identityService->remove($identity);
         }
+    }
+
+    /**
+     * reimport everything as we changed the config format
+     */
+    private function clearLastChangedConfigEntries()
+    {
+        /**
+         * @var EntityManagerInterface $models
+         */
+        $entityManager = $this->container->get('models');
+        $repository = $entityManager->getRepository(Config::class);
+
+        /**
+         * @var Config $element
+         */
+        foreach ($repository->findAll() as $element) {
+            if (false !== stripos($element->getName(), 'rest_')) {
+                continue;
+            }
+
+            $entityManager->remove($element);
+        }
+
+        $entityManager->flush();
     }
 
     /**
