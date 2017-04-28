@@ -67,9 +67,6 @@ class ConfigService implements ConfigServiceInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function set($key, $value)
     {
