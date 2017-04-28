@@ -434,12 +434,6 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             $plentyCustomer = $this->findCustomer($customer->getEmail());
         }
 
-        static $webstores;
-
-        if (null === $webstores) {
-            $webstores = $this->client->request('GET', 'webstores');
-        }
-
         $customerGroupIdentitiy = $this->identityService->findOneBy([
             'objectIdentifier' => $order->getCustomer()->getCustomerGroupIdentifier(),
             'objectType' => CustomerGroup::TYPE,
