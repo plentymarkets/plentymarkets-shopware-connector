@@ -76,7 +76,7 @@ class PaymentRequestGenerator implements PaymentRequestGeneratorInterface
         $paymentParams['property'] = [
             [
                 'typeId' => 23,
-                'value' => 'shopware',
+                'value' => 4,
             ],
             [
                 'typeId' => 1,
