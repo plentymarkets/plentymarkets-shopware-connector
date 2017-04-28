@@ -141,14 +141,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         ]);
 
         if (null === $currencyIdentity) {
-            // TODO: throw
-
-            return false;
-        }
-
-        if ('EUR' !== $currencyIdentity->getAdapterIdentifier()) {
-            // TODO: throw
-            $this->logger->warning('only the currency EUR is supported', ['orderNumber', $order->getOrderNumber()]);
+            $this->logger->notice('currency not mapped');
 
             return false;
         }
@@ -158,7 +151,6 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         if ($order->getOrderType() === Order::TYPE_ORDER) {
             $params['typeId'] = 1;
         } else {
-            // TODO: throw
             $this->logger->notice('only orders are supported');
 
             return false;
@@ -307,8 +299,6 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                 $itemParams['countryVatId'] = 1;
                 $itemParams['vatRate'] = 0;
             }
-
-            // Wenn currency != EUR, nur Währung EUR angeben (faktor beachten)
 
             $itemParams['amounts'] = [
                 [
