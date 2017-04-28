@@ -114,6 +114,13 @@ class OrderResponseParser implements OrderResponseParserInterface
             Order::TYPE
         );
 
+        $orderNumber = $this->getOrdernumber($entry);
+        if (null === $orderNumber) {
+            $this->logger->notice('no order number found');
+
+            return [];
+        }
+
         $shippingProfileIdentity = $this->getShippingProfileIdentity($entry);
         if (null === $shippingProfileIdentity) {
             $this->logger->notice('no shipping profile found');
@@ -173,13 +180,6 @@ class OrderResponseParser implements OrderResponseParserInterface
         $customer = $this->getCustomer($entry);
         if (null === $customer) {
             $this->logger->notice('no customer found');
-
-            return [];
-        }
-
-        $orderNumber = $this->getOrdernumber($entry);
-        if (null === $orderNumber) {
-            $this->logger->notice('no order number found');
 
             return [];
         }
