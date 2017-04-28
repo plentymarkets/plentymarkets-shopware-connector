@@ -103,7 +103,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         if (null !== $package) {
             $this->addShippingProviderAttribute($order, $package);
 
-            $params['trackingcode'] = $package->getShippingCode();
+            $params['trackingCode'] = $package->getShippingCode();
         }
 
         $orderStatusIdentity = $this->identityService->findOneBy([
@@ -113,7 +113,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         ]);
 
         if (null !== $orderStatusIdentity) {
-            $params['orderStatus'] = $orderStatusIdentity->getAdapterIdentifier();
+            $params['orderStatusId'] = $orderStatusIdentity->getAdapterIdentifier();
         } else {
             $this->logger->notice('oder status not mapped', ['order' => $order]);
         }
@@ -125,7 +125,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         ]);
 
         if (null !== $paymentStatusIdentity) {
-            $params['paymentStatus'] = $paymentStatusIdentity->getAdapterIdentifier();
+            $params['paymentStatusId'] = $paymentStatusIdentity->getAdapterIdentifier();
 
             if ((int) $paymentStatusIdentity->getAdapterIdentifier() === Status::PAYMENT_STATE_COMPLETELY_PAID) {
                 $timezone = new DateTimeZone('UTC');
