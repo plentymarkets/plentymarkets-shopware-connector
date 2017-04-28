@@ -48,6 +48,11 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     private $translationHelper;
 
     /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+
+    /**
      * @var CategoryRepository
      */
     private $categoryRepository;
@@ -88,6 +93,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         $this->resource = $resource;
         $this->identityService = $identityService;
         $this->translationHelper = $translationHelper;
+        $this->entityManager = $entityManager;
         $this->categoryRepository = $entityManager->getRepository(CategoryModel::class);
         $this->shopRepository = $entityManager->getRepository(ShopModel::class);
         $this->attributeHelper = $attributeHelper;
@@ -369,28 +375,19 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
      */
     private function validIdentity(Identity $categoryIdentity, Identity $shopIdentity)
     {
-        $id = $categoryIdentity->getAdapterIdentifier();
+        $connection = $this->entityManager->getConnection();
 
-        $categoryQuery = $this->categoryRepository->getDetailQueryBuilderWithoutArticles($id)->getQuery();
+        try {
+            $query = 'SELECT categoryID FROM s_categories_attributes WHERE categoryID = ? AND plenty_connector_shop_identifier = ?';
+            $attribute = $connection->fetchColumn($query, [
+                $categoryIdentity->getAdapterIdentifier(),
+                $shopIdentity->getAdapterIdentifier(),
+            ]);
 
-        $categories = $categoryQuery->execute();
-
-        if (empty($categories)) {
+            return (bool) $attribute;
+        } catch (\Exception $exception) {
             return false;
         }
-
-        /**
-         * @var CategoryModel $category
-         */
-        $category = array_shift($categories);
-
-        $attributes = $category->getAttribute();
-
-        if (method_exists($attributes, 'getPlentyConnectorShopIdentifier')) {
-            return $shopIdentity->getAdapterIdentifier() === $attributes->getPlentyConnectorShopIdentifier();
-        }
-
-        return false;
     }
 
     /**
