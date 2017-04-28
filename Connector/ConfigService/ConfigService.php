@@ -85,12 +85,12 @@ class ConfigService implements ConfigServiceInterface
             $element->setName($key);
         }
 
-        if ($element->getValue() === $value) {
-            return;
-        }
-
         if ($value instanceof DateTime || $value instanceof DateTimeImmutable) {
             $value = $value->format(DATE_W3C);
+        }
+
+        if ($element->getValue() === $value) {
+            return;
         }
 
         $element->setValue($value);
