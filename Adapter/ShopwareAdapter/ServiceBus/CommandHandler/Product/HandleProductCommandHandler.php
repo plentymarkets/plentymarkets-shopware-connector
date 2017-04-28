@@ -472,17 +472,21 @@ class HandleProductCommandHandler implements CommandHandlerInterface
 
                     $variant = $variantResource->create($variationParams);
 
+                    $attributes = array_merge($product->getAttributes(), $variation->getAttributes());
+
                     $this->attributeHelper->saveAttributes(
                         (int) $variant->getId(),
-                        $product->getAttributes(),
+                        $attributes,
                         's_articles_attributes'
                     );
                 } else {
                     $variantResource->update($variant['id'], $variationParams);
 
+                    $attributes = array_merge($product->getAttributes(), $variation->getAttributes());
+
                     $this->attributeHelper->saveAttributes(
                         (int) $variant['id'],
-                        $product->getAttributes(),
+                        $attributes,
                         's_articles_attributes'
                     );
                 }
