@@ -44,11 +44,11 @@ class PayPalInstallmentRequestGenerator implements PaymentRequestGeneratorInterf
 
         $paymentParams['property'][] = [
             'typeId' => 22,
-            'value' => [
+            'value' => json_encode([
                 'currency' => $data->getCurrency(),
                 'financingCosts' => $data->getFinancingCosts(),
                 'totalCostsIncludeFinancing' => $data->getTotalCostsIncludeFinancing(),
-            ],
+            ]),
         ];
 
         return $paymentParams;

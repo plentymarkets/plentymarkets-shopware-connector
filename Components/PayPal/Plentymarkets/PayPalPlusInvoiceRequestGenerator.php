@@ -44,14 +44,14 @@ class PayPalPlusInvoiceRequestGenerator implements PaymentRequestGeneratorInterf
 
         $paymentParams['property'][] = [
             'typeId' => 22,
-            'value' => [
+            'value' => json_encode([
                 'accountHolder' => $data->getAccountHolderName(),
                 'bankName' => $data->getBankName(),
                 'bic' => $data->getBankIdentifierCode(),
                 'iban' => $data->getInternationalBankAccountNumber(),
                 'paymentDueDate' => $data->getPaymentDueDate()->format(DATE_W3C),
                 'reference' => $data->getReferenceNumber(),
-            ],
+            ]),
         ];
 
         return $paymentParams;
