@@ -65,7 +65,7 @@ class AddressResponseParser implements AddressResponseParserInterface
             'postalCode' => $entry['zipCode'],
             'city' => $entry['city'],
             'countryIdentifier' => $countryIdentitiy->getObjectIdentifier(),
-            'vatId' => isset($entry['vatId']) ? $entry['vatId'] : null,
+            'vatId' => !empty($entry['vatId']) ? $entry['vatId'] : null,
             'attributes' => $this->getAttributes($entry['attribute']),
         ];
 
