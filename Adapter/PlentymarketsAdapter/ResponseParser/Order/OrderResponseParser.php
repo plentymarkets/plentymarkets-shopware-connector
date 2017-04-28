@@ -170,12 +170,26 @@ class OrderResponseParser implements OrderResponseParserInterface
             return [];
         }
 
+        $customer = $this->getCustomer($entry);
+        if (null === $customer) {
+            $this->logger->notice('no customer found');
+
+            return [];
+        }
+
+        $orderNumber = $this->getOrdernumber($entry);
+        if (null === $orderNumber) {
+            $this->logger->notice('no order number found');
+
+            return [];
+        }
+
         $order = new Order();
         $order->setIdentifier($identity->getObjectIdentifier());
         $order->setOrderType($entry['typeId'] === 1 ? Order::TYPE_ORDER : Order::TYPE_OFFER);
-        $order->setOrderNumber($this->getOrdernumber($entry));
+        $order->setOrderNumber($orderNumber);
         $order->setOrderTime($this->getOrderTime($entry));
-        $order->setCustomer($this->getCustomer($entry));
+        $order->setCustomer($customer);
         $order->setBillingAddress($this->getBillingAddress($entry));
         $order->setShippingAddress($this->getShippingAddress($entry));
         $order->setOrderItems($this->getOrderItems($entry));
