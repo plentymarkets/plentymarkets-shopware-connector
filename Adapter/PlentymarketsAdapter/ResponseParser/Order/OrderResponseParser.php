@@ -349,7 +349,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         $customer->setLanguageIdentifier($languageIdentity->getObjectIdentifier());
         $customer->setCustomerGroupIdentifier($cutomerGroupIdentity->getObjectIdentifier());
         $customer->setSalutation($entry['customerData']['gender'] === 'male' ? Customer::SALUTATION_MR : Customer::SALUTATION_MS);
-        $customer->setTitle('');
+        $customer->setTitle(null);
         $customer->setFirstname($entry['customerData']['firstName']);
         $customer->setLastname($entry['customerData']['lastName']);
         $customer->setBirthday(null);
@@ -549,20 +549,15 @@ class OrderResponseParser implements OrderResponseParserInterface
         $street = $entry['billingAddressData']['address1'] . ' ' . $entry['billingAddressData']['address2'] . ' ' . $entry['billingAddressData']['address3'];
 
         $address = new Address();
-        $address->setCompany('');
-        $address->setDepartment('');
         $address->setSalutation(1);
-        $address->setTitle('');
         $address->setFirstname($entry['billingAddressData']['name2']);
         $address->setLastname($entry['billingAddressData']['name3']);
         $address->setStreet(trim($street));
         $address->setPostalCode($entry['billingAddressData']['postalCode']);
         $address->setCity($entry['billingAddressData']['town']);
         $address->setCountryIdentifier($countryIdentity->getObjectIdentifier());
-        $address->setVatId('');
         $address->setPhoneNumber($this->getPhoneNumber($entry));
         $address->setMobilePhoneNumber($this->getMobilePhoneNumber($entry));
-        $address->setAttributes([]);
 
         return $address;
     }
@@ -593,20 +588,15 @@ class OrderResponseParser implements OrderResponseParserInterface
         $street = $entry['shippingAddressData']['address1'] . ' ' . $entry['shippingAddressData']['address2'] . ' ' . $entry['shippingAddressData']['address3'];
 
         $address = new Address();
-        $address->setCompany('');
-        $address->setDepartment('');
         $address->setSalutation(1);
-        $address->setTitle('');
         $address->setFirstname($entry['shippingAddressData']['name2']);
         $address->setLastname($entry['shippingAddressData']['name3']);
         $address->setStreet(trim($street));
         $address->setPostalCode($entry['shippingAddressData']['postalCode']);
         $address->setCity($entry['shippingAddressData']['town']);
         $address->setCountryIdentifier($countryIdentity->getObjectIdentifier());
-        $address->setVatId('');
         $address->setPhoneNumber($this->getPhoneNumber($entry));
         $address->setMobilePhoneNumber($this->getMobilePhoneNumber($entry));
-        $address->setAttributes([]);
 
         return $address;
     }
