@@ -11,9 +11,6 @@ use Shopware\Components\Model\ModelManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * TODO: Refactor
- * TODO: add readonly flag for container based config values (+ backend)
- *
  * Class ConfigService.
  */
 class ConfigService implements ConfigServiceInterface

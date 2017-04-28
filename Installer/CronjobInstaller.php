@@ -22,7 +22,7 @@ class CronjobInstaller implements InstallerInterface
     /**
      * @var array
      */
-    private $cronjobs = [];
+    private $cronjobs;
 
     /**
      * DatabaseInstaller constructor.
