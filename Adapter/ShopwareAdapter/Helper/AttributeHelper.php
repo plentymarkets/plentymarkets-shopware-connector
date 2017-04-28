@@ -58,7 +58,9 @@ class AttributeHelper
      */
     public function getAttributeKey(Attribute $attribute)
     {
-        $attribute_key = strtolower(preg_replace('/[A-Z]/', '_\\0', lcfirst($attribute->getKey())));
+        $key = iconv('UTF-8', 'ASCII//TRANSLIT', $attribute->getKey());
+
+        $attribute_key = strtolower(preg_replace('/[A-Z]/', '_\\0', lcfirst($key)));
 
         return $this->prefix . $attribute_key;
     }
