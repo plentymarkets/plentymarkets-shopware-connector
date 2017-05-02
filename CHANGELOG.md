@@ -8,6 +8,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - display mapping console command
 - Category metaRobots are synced to a shopware attribute
 - shipping costs vatRate is calculated now
+- Added reference unit synchronization
+- Sync product packaging units and content
 
 ### Changed
 - 1:N mapping of entities instead of 1:1

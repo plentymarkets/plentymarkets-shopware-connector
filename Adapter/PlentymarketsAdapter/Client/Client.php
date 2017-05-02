@@ -12,7 +12,6 @@ use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentymarketsAdapter\Client\Exception\InvalidCredentialsException;
 use PlentymarketsAdapter\Client\Exception\InvalidResponseException;
 use PlentymarketsAdapter\Client\Iterator\Iterator;
-use Psr\Log\LoggerInterface;
 
 /**
  * RepsonseModifier example.
@@ -42,25 +41,17 @@ class Client implements ClientInterface
     private $refreshToken;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * Client constructor.
      *
      * @param GuzzleClient           $connection
      * @param ConfigServiceInterface $config
-     * @param LoggerInterface        $logger
      */
     public function __construct(
         GuzzleClient $connection,
-        ConfigServiceInterface $config,
-        LoggerInterface $logger
+        ConfigServiceInterface $config
     ) {
         $this->connection = $connection;
         $this->config = $config;
-        $this->logger = $logger;
     }
 
     /**
@@ -123,8 +114,6 @@ class Client implements ClientInterface
         $request = $this->connection->createRequest($method, $url, $requestOptions);
 
         try {
-            $this->logger->debug('HTTP request: method: ' . $request->getMethod() . ' path: ' . $request->getPath() . ' params: ' . json_encode($params));
-
             $response = $this->connection->send($request);
 
             $body = $response->getBody();
@@ -155,8 +144,6 @@ class Client implements ClientInterface
             return $result;
         } catch (ClientException $exception) {
             if ($exception->hasResponse() && $exception->getResponse()->getStatusCode() === 401 && !$this->isLoginRequired($path) && $this->accessToken != null) {
-                $this->logger->debug('login refresh');
-
                 // retry with fresh accessToken
                 $this->accessToken = null;
 
