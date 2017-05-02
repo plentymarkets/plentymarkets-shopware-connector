@@ -84,6 +84,10 @@ class CustomerResponseParser implements CustomerResponseParserInterface
             }
         }
 
+        if (empty($entry['title'])) {
+            $entry['title'] = null;
+        }
+
         return Customer::fromArray([
             'birthday' => $birthday,
             'customerType' => $this->getCustomerTypeId($entry['accountMode']),
