@@ -78,6 +78,11 @@ class Variation extends AbstractValueObject
     /**
      * @var float
      */
+    private $referenceAmount = 0.0;
+
+    /**
+     * @var float
+     */
     private $packagingUnit = 0.0;
 
     /**
@@ -325,6 +330,22 @@ class Variation extends AbstractValueObject
     public function setContent($content)
     {
         $this->content = $content;
+    }
+
+    /**
+     * @return float
+     */
+    public function getReferenceAmount()
+    {
+        return $this->referenceAmount;
+    }
+
+    /**
+     * @param float $referenceAmount
+     */
+    public function setReferenceAmount($referenceAmount)
+    {
+        $this->referenceAmount = $referenceAmount;
     }
 
     /**

@@ -42,8 +42,9 @@ class VariationValidator implements ValidatorInterface
         Assertion::allIsInstanceOf($object->getImages(), Image::class, null, 'variation.images');
         Assertion::allIsInstanceOf($object->getPrices(), Price::class, null, 'variation.prices');
         Assertion::float($object->getPurchasePrice(), null, 'variation.purchasePrice');
-        Assertion::nullOrUuid($object->getUnitIdentifier(), null, 'variation.unitIdentifier');
         Assertion::float($object->getContent(), null, 'variation.content');
+        Assertion::nullOrUuid($object->getUnitIdentifier(), null, 'variation.unitIdentifier');
+        Assertion::float($object->getReferenceAmount(), null, 'variation.referenceAmount');
         Assertion::float($object->getPackagingUnit(), null, 'variation.packagingUnit');
         Assertion::float($object->getMaximumOrderQuantity(), null, 'variation.maximumOrderQuantity');
         Assertion::float($object->getMinimumOrderQuantity(), null, 'variation.minimumOrderQuantity');

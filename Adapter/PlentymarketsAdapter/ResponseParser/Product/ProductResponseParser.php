@@ -749,7 +749,7 @@ class ProductResponseParser implements ProductResponseParserInterface
     {
         $attributes = [];
 
-        for ($i = 0; $i < 20; ++$i) {
+        for ($i = 0; $i < 20; $i++) {
             $key = 'free' . ($i + 1);
 
             $attributes[] = Attribute::fromArray([
@@ -862,6 +862,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             $variation->setPurchasePrice((float) $element['purchasePrice']);
             $variation->setUnitIdentifier($this->getUnitIdentifier($element));
             $variation->setContent((float) $element['unit']['content']);
+            $variation->setReferenceAmount((float) $element['unit']['content']);
             $variation->setPackagingUnit((float) $element['packingUnits']);
             $variation->setMaximumOrderQuantity((float) $element['maximumOrderQuantity']);
             $variation->setMinimumOrderQuantity((float) $element['minimumOrderQuantity']);
