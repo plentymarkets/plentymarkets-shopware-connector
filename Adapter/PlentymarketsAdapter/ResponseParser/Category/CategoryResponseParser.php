@@ -181,7 +181,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
     {
         $parts = parse_url($this->config->get('rest_url'));
 
-        return sprintf('https://%s/', $parts['host']);
+        return sprintf('%s://%s/', $parts['scheme'], $parts['host']);
     }
 
     /**
