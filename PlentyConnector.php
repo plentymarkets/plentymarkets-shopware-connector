@@ -73,6 +73,35 @@ class PlentyConnector extends Plugin
 
     /**
      * @param ContainerBuilder $container
+     * @param array $plugins
+     *
+     * @return bool
+     */
+    private function pluginExists(ContainerBuilder $container, array $plugins)
+    {
+        $folders = $container->getParameter('shopware.plugin_directories');
+
+        foreach ($plugins as $pluginName) {
+            foreach ($folders as $folder) {
+                if (file_exists($folder . 'Backend/' . $pluginName)) {
+                    return true;
+                }
+
+                if (file_exists($folder . 'Core/' . $pluginName)) {
+                    return true;
+                }
+
+                if (file_exists($folder . 'Frontend/' . $pluginName)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param ContainerBuilder $container
      *
      * @throws Exception
      */
@@ -81,11 +110,21 @@ class PlentyConnector extends Plugin
         $container->setParameter('plenty_connector.plugin_dir', $this->getPath());
 
         $this->loadFile($container, __DIR__ . '/DependencyInjection/services.xml');
+
+        // Adapter
         $this->loadFile($container, __DIR__ . '/Adapter/ShopwareAdapter/DependencyInjection/services.xml');
         $this->loadFile($container, __DIR__ . '/Adapter/PlentymarketsAdapter/DependencyInjection/services.xml');
+
+        // Payments
         $this->loadFile($container, __DIR__ . '/Components/Sepa/DependencyInjection/services.xml');
-        $this->loadFile($container, __DIR__ . '/Components/PayPal/DependencyInjection/services.xml');
-        $this->loadFile($container, __DIR__ . '/Components/Bundle/DependencyInjection/services.xml');
+
+        if ($this->pluginExists($container, ['SwagPaymentPaypal', 'SwagPaymentPayPalInstallments', 'SwagPaymentPaypalPlus'])) {
+            $this->loadFile($container, __DIR__ . '/Components/PayPal/DependencyInjection/services.xml');
+        }
+
+        if ($this->pluginExists($container, ['SwagBundle'])) {
+            $this->loadFile($container, __DIR__ . '/Components/Bundle/DependencyInjection/services.xml');
+        }
 
         $container->addCompilerPass(new CleanupDefinitionCompilerPass());
         $container->addCompilerPass(new CommandGeneratorCompilerPass());
