@@ -4,6 +4,7 @@ namespace PlentymarketsAdapter\ResponseParser\Product;
 
 use DateTimeImmutable;
 use DateTimeZone;
+use InvalidArgumentException;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Category\Category;
@@ -111,7 +112,11 @@ class ProductResponseParser implements ProductResponseParserInterface
 
         $result = [];
 
-        $mainVariation = $this->getMainVariation($product['variations']);
+        try {
+            $mainVariation = $this->getMainVariation($product['variations']);
+        } catch (InvalidArgumentException $exception) {
+            return [];
+        }
 
         $identity = $this->identityService->findOneOrCreate(
             (string) $product['id'],
@@ -181,7 +186,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         });
 
         if (empty($mainVariation)) {
-            throw new \InvalidArgumentException('product without main variaton');
+            throw new InvalidArgumentException('product without main variaton');
         }
 
         return array_shift($mainVariation);
@@ -749,7 +754,7 @@ class ProductResponseParser implements ProductResponseParserInterface
     {
         $attributes = [];
 
-        for ($i = 0; $i < 20; $i++) {
+        for ($i = 0; $i < 20; ++$i) {
             $key = 'free' . ($i + 1);
 
             $attributes[] = Attribute::fromArray([
