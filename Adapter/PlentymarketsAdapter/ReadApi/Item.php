@@ -101,6 +101,6 @@ class Item extends ApiAbstract
      */
     private function addAdditionalData(array &$element)
     {
-        $element['variations'] = $this->itemsVariationsApi->findOne($element['id']);
+        $element['variations'] = $this->itemsVariationsApi->findBy(['itemId' => $element['id']]);
     }
 }
