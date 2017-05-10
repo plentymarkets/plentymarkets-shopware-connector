@@ -18,14 +18,14 @@ class FetchChangedProductsQueryHandler implements QueryHandlerInterface
     use ChangedDateTimeTrait;
 
     /**
-     * @var ProductResponseParserInterface
-     */
-    private $responseParser;
-
-    /**
      * @var Item
      */
     private $itemApi;
+
+    /**
+     * @var ProductResponseParserInterface
+     */
+    private $responseParser;
 
     /**
      * FetchChangedProductsQueryHandler constructor.

@@ -411,6 +411,10 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             'adapterName' => PlentymarketsAdapter::NAME,
         ]);
 
+        if (null === $languageIdentity) {
+            throw new NotFoundException('language not found');
+        }
+
         $shopIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $order->getShopIdentifier(),
             'objectType' => Shop::TYPE,
