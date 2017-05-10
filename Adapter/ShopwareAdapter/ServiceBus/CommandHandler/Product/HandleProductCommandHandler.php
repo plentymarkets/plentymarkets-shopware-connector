@@ -714,7 +714,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 ]);
 
                 if (null === $customerGroupIdentity) {
-                    // TODO: throw
+                    continue;
                 }
 
                 $group = $customerGroupRepository->find($customerGroupIdentity->getAdapterIdentifier());
@@ -792,7 +792,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             'len' => $variation->getLength(),
             'height' => $variation->getHeight(),
             'width' => $variation->getWidth(),
-            'releaseDate' => $variation->getReleaseDate()->format(DATE_W3C),
             'images' => $images,
             'purchaseUnit' => $variation->getContent(),
             'referenceUnit' => $variation->getReferenceAmount(),
@@ -802,6 +801,10 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             'maxPurchase' => $variation->getMaximumOrderQuantity(),
             'shippingFree' => false,
         ];
+
+        if (null !== $variation->getReleaseDate()) {
+            $shopwareVariation['releaseDate'] = $variation->getReleaseDate()->format(DATE_W3C);
+        }
 
         if (!empty($configuratorOptions)) {
             $shopwareVariation['configuratorOptions'] = $configuratorOptions;
