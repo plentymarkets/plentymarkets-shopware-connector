@@ -7,6 +7,7 @@ use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 use PlentymarketsAdapter\Helper\MediaCategoryHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Media\MediaResponseParserInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class ManufacturerResponseParser
@@ -24,17 +25,25 @@ class ManufacturerResponseParser implements ManufacturerResponseParserInterface
     private $mediaResponseParser;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * ManufacturerResponseParser constructor.
      *
-     * @param IdentityServiceInterface     $identityService
+     * @param IdentityServiceInterface $identityService
      * @param MediaResponseParserInterface $mediaResponseParser
+     * @param LoggerInterface $logger
      */
     public function __construct(
         IdentityServiceInterface $identityService,
-        MediaResponseParserInterface $mediaResponseParser
+        MediaResponseParserInterface $mediaResponseParser,
+        LoggerInterface $logger
     ) {
         $this->identityService = $identityService;
         $this->mediaResponseParser = $mediaResponseParser;
+        $this->logger = $logger;
     }
 
     /**
@@ -57,16 +66,20 @@ class ManufacturerResponseParser implements ManufacturerResponseParserInterface
         }
 
         if (!empty($entry['logo'])) {
-            $media = $this->mediaResponseParser->parse([
-                'mediaCategory' => MediaCategoryHelper::MANUFACTURER,
-                'link' => $entry['logo'],
-                'name' => $entry['name'],
-                'alternateName' => $entry['name'],
-            ]);
+            try {
+                $media = $this->mediaResponseParser->parse([
+                    'mediaCategory' => MediaCategoryHelper::MANUFACTURER,
+                    'link' => $entry['logo'],
+                    'name' => $entry['name'],
+                    'alternateName' => $entry['name'],
+                ]);
 
-            $manufacturer->setLogoIdentifier($media->getIdentifier());
+                $manufacturer->setLogoIdentifier($media->getIdentifier());
 
-            $result[] = $media;
+                $result[] = $media;
+            } catch (\Exception $exception) {
+                $this->logger->notice('manufacturer logo was ignored', ['name' => $entry['name']]);
+            }
         }
 
         $result[] = $manufacturer;
