@@ -5,12 +5,14 @@
 * **License:** MIT
 * **Github Repository:** <https://github.com/plentymarkets/plentymarkets-shopware-connector>
 
-## System Requirements
+## Requirements
 
 * plentymarkets version >= 7.0
 * shopware version >= 5.2
 * shell access
 * cronjobs
+* active plentymarkets webshop
+* plentymarkets user with all rest permissions
   
 ## Installation Guide
 
