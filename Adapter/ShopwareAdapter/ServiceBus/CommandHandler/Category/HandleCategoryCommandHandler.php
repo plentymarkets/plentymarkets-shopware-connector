@@ -130,7 +130,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
                 ]);
 
                 if (empty($shopIdentities)) {
-                    return null;
+                    continue;
                 }
 
                 foreach ($shopIdentities as $shopIdentity) {
