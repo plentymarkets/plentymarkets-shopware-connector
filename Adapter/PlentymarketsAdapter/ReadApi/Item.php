@@ -52,7 +52,7 @@ class Item extends ApiAbstract
     }
 
     /**
-     * @return array
+     * @return \Generator
      */
     public function findAll()
     {
@@ -74,7 +74,7 @@ class Item extends ApiAbstract
      * @param $startTimestamp
      * @param $endTimestamp
      *
-     * @return array
+     * @return \Generator
      */
     public function findChanged(DateTimeImmutable $startTimestamp, DateTimeImmutable $endTimestamp)
     {
