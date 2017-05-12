@@ -344,7 +344,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             'categories' => $categories,
             'seoCategories' => $seoCategories,
             'taxId' => $vatIdentity->getAdapterIdentifier(),
-            'lastStock' => $product->getLimitedStock(),
+            'lastStock' => $product->hasStockLimitation(),
             'notification' => true,
             'active' => $product->getActive(),
             'images' => $images,

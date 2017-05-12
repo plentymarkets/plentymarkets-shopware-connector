@@ -138,40 +138,35 @@ class ProductResponseParser implements ProductResponseParserInterface
 
         $variations = $this->getVariations($product['texts'], $product['variations'], $result);
 
-        /**
-         * @var Product $object
-         */
-        $object = Product::fromArray([
-            'identifier' => $identity->getObjectIdentifier(),
-            'name' => (string) $product['texts'][0]['name1'],
-            'number' => (string) $mainVariation['number'],
-            'active' => $this->getActive($variations),
-            'shopIdentifiers' => $shopIdentifiers,
-            'manufacturerIdentifier' => $this->getManufacturerIdentifier($product),
-            'categoryIdentifiers' => $this->getCategories($mainVariation),
-            'defaultCategoryIdentifiers' => $this->getDafaultCategories($mainVariation),
-            'shippingProfileIdentifiers' => $this->getShippingProfiles($product),
-            'images' => $this->getImages($product, $product['texts'], $result),
-            'variations' => $variations,
-            'vatRateIdentifier' => $this->getVatRateIdentifier($mainVariation),
-            'limitedStock' => (bool) $hasStockLimitation,
-            'description' => (string) $product['texts'][0]['shortDescription'],
-            'longDescription' => (string) $product['texts'][0]['description'],
-            'technicalDescription' => (string) $product['texts'][0]['technicalData'],
-            'metaTitle' => (string) $product['texts'][0]['name1'],
-            'metaDescription' => (string) $product['texts'][0]['metaDescription'],
-            'metaKeywords' => (string) $product['texts'][0]['keywords'],
-            'metaRobots' => 'INDEX, FOLLOW',
-            'linkedProducts' => $this->getLinkedProducts($product),
-            'documents' => [],
-            'properties' => $this->getProperties($mainVariation),
-            'translations' => $this->getProductTranslations($product['texts']),
-            'availableFrom' => $this->getAvailableFrom($mainVariation),
-            'availableTo' => $this->getAvailableTo($mainVariation),
-            'attributes' => $this->getAttributes($product),
-        ]);
+        $productObject = new Product();
+        $productObject->setIdentifier($identity->getObjectIdentifier());
+        $productObject->setName((string) $product['texts'][0]['name1']);
+        $productObject->setNumber((string) $mainVariation['number']);
+        $productObject->setActive($this->getActive($variations));
+        $productObject->setShopIdentifiers($shopIdentifiers);
+        $productObject->setManufacturerIdentifier($this->getManufacturerIdentifier($product));
+        $productObject->setCategoryIdentifiers($this->getCategories($mainVariation));
+        $productObject->setDefaultCategoryIdentifiers($this->getDafaultCategories($mainVariation));
+        $productObject->setShippingProfileIdentifiers($this->getShippingProfiles($product));
+        $productObject->setImages($this->getImages($product, $product['texts'], $result));
+        $productObject->setVariations($variations);
+        $productObject->setVatRateIdentifier($this->getVatRateIdentifier($mainVariation));
+        $productObject->setStockLimitation((bool) $hasStockLimitation);
+        $productObject->setDescription((string) $product['texts'][0]['shortDescription']);
+        $productObject->setLongDescription((string) $product['texts'][0]['description']);
+        $productObject->setTechnicalDescription((string) $product['texts'][0]['technicalData']);
+        $productObject->setMetaTitle((string) $product['texts'][0]['name1']);
+        $productObject->setMetaDescription((string) $product['texts'][0]['metaDescription']);
+        $productObject->setMetaKeywords((string) $product['texts'][0]['keywords']);
+        $productObject->setMetaRobots('INDEX, FOLLOW');
+        $productObject->setLinkedProducts($this->getLinkedProducts($product));
+        $productObject->setProperties($this->getProperties($mainVariation));
+        $productObject->setTranslations($this->getProductTranslations($product['texts']));
+        $productObject->setAvailableFrom($this->getAvailableFrom($mainVariation));
+        $productObject->setAvailableTo($this->getAvailableTo($mainVariation));
+        $productObject->setAttributes($this->getAttributes($product));
 
-        $result[] = $object;
+        $result[] = $productObject;
 
         return $result;
     }

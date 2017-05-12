@@ -57,7 +57,7 @@ class ProductValidator implements ValidatorInterface
 
         Assertion::uuid($object->getVatRateIdentifier(), null, 'product.vatRateIdentifier');
 
-        Assertion::boolean($object->getLimitedStock(), null, 'product.limitedStock');
+        Assertion::boolean($object->hasStockLimitation(), null, 'product.limitedStock');
 
         Assertion::string($object->getDescription(), null, 'product.description');
         Assertion::string($object->getLongDescription(), null, 'product.longDescription');

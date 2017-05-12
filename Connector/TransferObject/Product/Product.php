@@ -84,7 +84,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     /**
      * @var bool
      */
-    private $limitedStock = false;
+    private $stockLimitation = false;
 
     /**
      * @var string
@@ -359,17 +359,17 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     /**
      * @return bool
      */
-    public function getLimitedStock()
+    public function hasStockLimitation()
     {
-        return $this->limitedStock;
+        return $this->stockLimitation;
     }
 
     /**
-     * @param bool $limitedStock
+     * @param bool $stockLimitation
      */
-    public function setLimitedStock($limitedStock)
+    public function setStockLimitation($stockLimitation)
     {
-        $this->limitedStock = $limitedStock;
+        $this->stockLimitation = $stockLimitation;
     }
 
     /**
