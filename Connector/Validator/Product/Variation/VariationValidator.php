@@ -34,7 +34,7 @@ class VariationValidator implements ValidatorInterface
         Assertion::boolean($object->isMain(), null, 'variation.isMain');
         Assertion::float($object->getStock(), null, 'variation.stock');
         Assertion::string($object->getNumber(), null, 'variation.number');
-        AssertioN::regex($object->getNumber(), '/^[a-zA-Z0-9-_.]+$/', null, 'variation.number');
+        Assertion::regex($object->getNumber(), '/^[a-zA-Z0-9-_.]+$/', null, 'variation.number');
         Assertion::integer($object->getPosition(), null, 'variation.position');
         Assertion::notBlank($object->getNumber(), null, 'variation.number');
         Assertion::allIsInstanceOf($object->getBarcodes(), Barcode::class, null, 'variation.barcodes');
