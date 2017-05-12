@@ -25,8 +25,8 @@ class ValueValidator implements ValidatorInterface
      */
     public function validate($object)
     {
-        Assertion::string($object->getValue(), null, 'value.value');
-        Assertion::notBlank($object->getValue(), null, 'order.value');
-        Assertion::allIsInstanceOf($object->getTranslations(), Translation::class, null, 'order.translations');
+        Assertion::string($object->getValue(), null, 'product.property.value.value');
+        Assertion::notBlank($object->getValue(), null, 'product.property.value.value');
+        Assertion::allIsInstanceOf($object->getTranslations(), Translation::class, null, 'product.property.value.translations');
     }
 }

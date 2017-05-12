@@ -24,8 +24,8 @@ class BarcodeValidator implements ValidatorInterface
      */
     public function validate($object)
     {
-        Assertion::inArray($object->getType(), $object->getTypes(), null, 'order.type');
-        Assertion::string($object->getCode(), null, 'order.code');
-        Assertion::notBlank($object->getCode(), null, 'order.code');
+        Assertion::inArray($object->getType(), $object->getTypes(), null, 'product.barcode.type');
+        Assertion::string($object->getCode(), null, 'product.barcode.code');
+        Assertion::notBlank($object->getCode(), null, 'product.barcode.code');
     }
 }

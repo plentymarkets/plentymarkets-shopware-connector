@@ -24,9 +24,9 @@ class ImageValidator implements ValidatorInterface
      */
     public function validate($object)
     {
-        Assertion::uuid($object->getMediaIdentifier(), null, 'image.mediaIdentifier');
-        Assertion::allUuid($object->getShopIdentifiers(), null, 'image.shopIdentifiers');
-        Assertion::integer($object->getPosition(), null, 'image.position');
-        Assertion::greaterOrEqualThan($object->getPosition(), 0, null, 'image.position');
+        Assertion::uuid($object->getMediaIdentifier(), null, 'product.image.mediaIdentifier');
+        Assertion::allUuid($object->getShopIdentifiers(), null, 'product.image.shopIdentifiers');
+        Assertion::integer($object->getPosition(), null, 'product.image.position');
+        Assertion::greaterOrEqualThan($object->getPosition(), 0, null, 'product.image.position');
     }
 }

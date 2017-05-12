@@ -24,13 +24,13 @@ class PriceValidator implements ValidatorInterface
      */
     public function validate($object)
     {
-        Assertion::float($object->getPrice(), null, 'order.price');
-        Assertion::greaterOrEqualThan($object->getPrice(), 0.0, null, 'order.price');
-        Assertion::float($object->getPseudoPrice(), null, 'order.pseudoPrice');
-        Assertion::greaterOrEqualThan($object->getPseudoPrice(), 0.0, null, 'order.pseudoPrice');
-        Assertion::nullOrUuid($object->getCustomerGroupIdentifier(), null, 'order.customerGroupIdentifier');
-        Assertion::float($object->getFromAmount(), null, 'order.fromAmount');
-        Assertion::greaterThan($object->getFromAmount(), 0.0, null, 'order.fromAmount');
-        Assertion::nullOrFloat($object->getToAmount(), null, 'order.toAmount');
+        Assertion::float($object->getPrice(), null, 'product.price.price');
+        Assertion::greaterOrEqualThan($object->getPrice(), 0.0, null, 'product.price.price');
+        Assertion::float($object->getPseudoPrice(), null, 'product.price.pseudoPrice');
+        Assertion::greaterOrEqualThan($object->getPseudoPrice(), 0.0, null, 'product.price.pseudoPrice');
+        Assertion::nullOrUuid($object->getCustomerGroupIdentifier(), null, 'product.price.customerGroupIdentifier');
+        Assertion::float($object->getFromAmount(), null, 'product.price.fromAmount');
+        Assertion::greaterThan($object->getFromAmount(), 0.0, null, 'product.price.fromAmount');
+        Assertion::nullOrFloat($object->getToAmount(), null, 'product.price.toAmount');
     }
 }

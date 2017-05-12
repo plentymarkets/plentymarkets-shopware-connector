@@ -24,9 +24,9 @@ class LinkedProductValidator implements ValidatorInterface
      */
     public function validate($object)
     {
-        Assertion::inArray($object->getType(), $object->getTypes(), null, 'order.type');
-        Assertion::integer($object->getPosition(), null, 'order.position');
-        Assertion::greaterOrEqualThan($object->getPosition(), 0, null, 'order.position');
-        Assertion::uuid($object->getProductIdentifier(), null, 'order.productIdentifier');
+        Assertion::inArray($object->getType(), $object->getTypes(), null, 'product.linkedProduct.type');
+        Assertion::integer($object->getPosition(), null, 'product.linkedProduct.position');
+        Assertion::greaterOrEqualThan($object->getPosition(), 0, null, 'product.linkedProduct.position');
+        Assertion::uuid($object->getProductIdentifier(), null, 'product.linkedProduct.productIdentifier');
     }
 }
