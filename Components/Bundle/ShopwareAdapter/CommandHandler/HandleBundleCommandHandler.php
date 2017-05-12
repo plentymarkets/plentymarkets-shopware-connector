@@ -12,6 +12,7 @@ use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
+use PlentyConnector\Connector\TransferObject\Product\Price\Price;
 use PlentyConnector\Connector\TransferObject\Product\Product;
 use Shopware\CustomModels\Bundle\Article;
 use Shopware\CustomModels\Bundle\Bundle as BundleModel;
@@ -106,11 +107,11 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param \PlentyConnector\Connector\TransferObject\Product\Price\Price $price
+     * @param Price $price
      *
      * @return null|GroupModel
      */
-    private function getCustomerGroupFromPrice(\PlentyConnector\Connector\TransferObject\Product\Price\Price $price)
+    private function getCustomerGroupFromPrice(Price $price)
     {
         $repository = $this->entityManager->getRepository(GroupModel::class);
 
