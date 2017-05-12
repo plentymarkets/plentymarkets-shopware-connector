@@ -41,7 +41,7 @@ class ProductValidator implements ValidatorInterface
         Assertion::string($object->getNumber(), null, 'product.number');
         Assertion::notBlank($object->getNumber(), null, 'product.number');
 
-        Assertion::boolean($object->getActive(), null, 'product.active');
+        Assertion::boolean($object->isActive(), null, 'product.active');
 
         Assertion::allUuid($object->getShopIdentifiers(), null, 'product.shopIdentifiers');
 

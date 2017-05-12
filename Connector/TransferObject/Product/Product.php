@@ -215,7 +215,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     /**
      * @return bool
      */
-    public function getActive()
+    public function isActive()
     {
         return $this->active;
     }

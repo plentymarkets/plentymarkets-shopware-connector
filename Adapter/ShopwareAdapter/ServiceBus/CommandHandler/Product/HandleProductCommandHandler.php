@@ -346,7 +346,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             'taxId' => $vatIdentity->getAdapterIdentifier(),
             'lastStock' => $product->hasStockLimitation(),
             'notification' => true,
-            'active' => $product->getActive(),
+            'active' => $product->isActive(),
             'images' => $images,
             'similar' => $this->getLinkedProducts($product, LinkedProduct::TYPE_SIMILAR),
             'related' => $this->getLinkedProducts($product, LinkedProduct::TYPE_ACCESSORY),
