@@ -820,10 +820,18 @@ class ProductResponseParser implements ProductResponseParserInterface
                     'translations' => $valueTranslations,
                 ]);
             } elseif ($property['property']['valueType'] === 'int') {
+                if (null === $property['valueInt']) {
+                    continue;
+                }
+
                 $values[] = Value::fromArray([
                     'value' => (string) $property['valueInt'],
                 ]);
             } elseif ($property['property']['valueType'] === 'float') {
+                if (null === $property['valueFloat']) {
+                    continue;
+                }
+
                 $values[] = Value::fromArray([
                     'value' => (string) $property['valueFloat'],
                 ]);
@@ -863,8 +871,14 @@ class ProductResponseParser implements ProductResponseParserInterface
                     }
                 }
 
+                $selectionValue = (string) $selections[$property['propertyId']][$property['propertySelectionId']]['name'];
+
+                if (empty($selectionValue)) {
+                    continue;
+                }
+
                 $values[] = Value::fromArray([
-                    'value' => (string) $selections[$property['propertyId']][$property['propertySelectionId']]['name'],
+                    'value' => $selectionValue,
                     'translations' => $selections[$property['propertyId']][$property['propertySelectionId']]['translations'],
                 ]);
             }
