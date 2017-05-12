@@ -1053,7 +1053,7 @@ class ProductResponseParser implements ProductResponseParserInterface
     /**
      * @param array $mainVariation
      *
-     * @return DateTimeImmutable
+     * @return null|DateTimeImmutable
      */
     private function getAvailableFrom(array $mainVariation)
     {
@@ -1069,7 +1069,7 @@ class ProductResponseParser implements ProductResponseParserInterface
     /**
      * @param array $mainVariation
      *
-     * @return DateTimeImmutable
+     * @return null|DateTimeImmutable
      */
     private function getAvailableTo(array $mainVariation)
     {
