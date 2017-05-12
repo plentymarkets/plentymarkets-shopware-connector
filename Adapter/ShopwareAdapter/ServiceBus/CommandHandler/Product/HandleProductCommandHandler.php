@@ -719,6 +719,10 @@ class HandleProductCommandHandler implements CommandHandlerInterface
 
                 $group = $customerGroupRepository->find($customerGroupIdentity->getAdapterIdentifier());
 
+                if (null === $group) {
+                    continue;
+                }
+
                 $customerGroupKey = $group->getKey();
             }
 
