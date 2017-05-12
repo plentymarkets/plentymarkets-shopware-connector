@@ -3,9 +3,10 @@
 namespace PlentyConnector\Components\Bundle\TransferObject\BundleProduct;
 
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
+use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
 /**
- * Class BundleProduct
+ * Class Product
  */
 class BundleProduct extends AbstractValueObject
 {
@@ -17,7 +18,17 @@ class BundleProduct extends AbstractValueObject
     /**
      * @var float
      */
-    private $amount;
+    private $amount = 0.0;
+
+    /**
+     * @var int
+     */
+    private $position = 0;
+
+    /**
+     * @var Attribute[]
+     */
+    private $attributes = [];
 
     /**
      * @return string
@@ -49,5 +60,37 @@ class BundleProduct extends AbstractValueObject
     public function setAmount($amount)
     {
         $this->amount = $amount;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * @param int $position
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
+    }
+
+    /**
+     * @return Attribute[]
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
+
+    /**
+     * @param Attribute[] $attributes
+     */
+    public function setAttributes($attributes)
+    {
+        $this->attributes = $attributes;
     }
 }

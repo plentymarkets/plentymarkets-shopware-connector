@@ -24,10 +24,14 @@ class BundleProductValidator implements ValidatorInterface
      */
     public function validate($object)
     {
-        Assertion::string($object->getNumber(), null, 'components.bundleProduct.number');
-        Assertion::notEmpty($object->getNumber(), null, 'components.bundleProduct.number');
+        Assertion::string($object->getNumber(), null, 'components.bundle.product.number');
+        Assertion::notEmpty($object->getNumber(), null, 'components.bundle.product.number');
 
-        Assertion::float($object->getAmount(), null, 'components.bundleProduct.amount');
-        Assertion::greaterOrEqualThan($object->getAmount(), 0, null, 'components.bundleProduct.amount');
+        Assertion::float($object->getAmount(), null, 'components.bundle.product.amount');
+        Assertion::greaterOrEqualThan($object->getAmount(), 0, null, 'components.bundle.product.amount');
+
+        Assertion::integer($object->getPosition(), null, 'components.bundle.product.position');
+
+        Assertion::allIsInstanceOf($object->getAttributes(), Attribute::class, null, 'components.bundle.product.attributes');
     }
 }
