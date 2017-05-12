@@ -32,9 +32,9 @@ class ManufacturerResponseParser implements ManufacturerResponseParserInterface
     /**
      * ManufacturerResponseParser constructor.
      *
-     * @param IdentityServiceInterface $identityService
+     * @param IdentityServiceInterface     $identityService
      * @param MediaResponseParserInterface $mediaResponseParser
-     * @param LoggerInterface $logger
+     * @param LoggerInterface              $logger
      */
     public function __construct(
         IdentityServiceInterface $identityService,
