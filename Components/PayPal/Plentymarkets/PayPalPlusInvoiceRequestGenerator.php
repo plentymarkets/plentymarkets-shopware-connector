@@ -49,8 +49,8 @@ class PayPalPlusInvoiceRequestGenerator implements PaymentRequestGeneratorInterf
                 'bankName' => $data->getBankName(),
                 'bic' => $data->getBankIdentifierCode(),
                 'iban' => $data->getInternationalBankAccountNumber(),
-                'paymentDueDate' => $data->getPaymentDueDate()->format(DATE_W3C),
-                'reference' => $data->getReferenceNumber(),
+                'paymentDue' => $data->getPaymentDueDate()->format(DATE_W3C),
+                'referenceNumber' => $data->getReferenceNumber(),
             ]),
         ];
 
