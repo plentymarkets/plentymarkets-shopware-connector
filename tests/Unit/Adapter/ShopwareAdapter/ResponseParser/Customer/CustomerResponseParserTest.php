@@ -49,7 +49,7 @@ class CustomerResponseParserTest extends ResponseParserTest
         $customer = $this->responseParser->parse(self::$orderData['customer']);
 
         $this->assertNull($customer->getBirthday());
-        $this->assertSame(Customer::TYPE_NORMAL, $customer->getCustomerType());
+        $this->assertSame(Customer::TYPE_NORMAL, $customer->getType());
         $this->assertSame('mustermann@b2b.de', $customer->getEmail());
         $this->assertSame('Händler', $customer->getFirstname());
         $this->assertSame('Kundengruppe-Netto', $customer->getLastname());
