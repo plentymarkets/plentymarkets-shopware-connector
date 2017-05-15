@@ -112,7 +112,7 @@ Ext.define('Shopware.apps.PlentyConnector.view.Settings', {
                     {
                         xtype: 'textfield',
                         fieldLabel: '{s name=plentyconnector/view/settings/textfield/ApiUsername}Benutzername{/s}',
-                        supportText: 'Der Benutzer sollte vom Typ <b>API</b> sein und nur für shopware verwendert werden. Achtung: Der Benutzer wird in Ihrem plentymarkets System unter <b>Einstellungen » Grundeinstellungen » Benutzer » Konten</b> angelegt!',
+                        supportText: 'Der Benutzer sollte vom Typ <b>API</b> sein und nur für shopware verwendet werden. Achtung: Der Benutzer wird in Ihrem plentymarkets System unter <b>Einstellungen » Grundeinstellungen » Benutzer » Konten</b> angelegt!',
                         name: 'ApiUsername',
                         allowBlank: false
                     },

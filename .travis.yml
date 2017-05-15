@@ -4,7 +4,6 @@ php:
   - 5.6
   - 7.0
   - 7.1
-  - nightly
 
 sudo: false
 
@@ -14,7 +13,6 @@ services:
 env:
   matrix:
     - SHOPWARE_VERSION="5.2"
-    - SHOPWARE_VERSION="5.3"
   global:
     - PLUGIN_NAME=PlentyConnector
     - SHOPWARE_DIRECTORY=${HOME}/shopware
@@ -39,11 +37,6 @@ before_script:
 
 script:
   - composer test
-
-matrix:
-  allow_failures:
-    - env: SHOPWARE_VERSION="5.3"
-    - php: nightly
 
 notifications:
   slack:

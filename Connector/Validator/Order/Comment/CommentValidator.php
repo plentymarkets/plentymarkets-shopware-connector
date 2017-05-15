@@ -25,9 +25,9 @@ class CommentValidator implements ValidatorInterface
      */
     public function validate($object)
     {
-        Assertion::inArray($object->getType(), $object->getTypes(), null, 'comment.type');
-        Assertion::string($object->getComment(), null, 'comment.comment');
-        Assertion::notBlank($object->getComment(), null, 'comment.comment');
-        Assertion::allIsInstanceOf($object->getAttributes(), Attribute::class, null, 'comment.attributes');
+        Assertion::inArray($object->getType(), $object->getTypes(), null, 'order.comment.type');
+        Assertion::string($object->getComment(), null, 'order.comment.comment');
+        Assertion::notBlank($object->getComment(), null, 'order.comment.comment');
+        Assertion::allIsInstanceOf($object->getAttributes(), Attribute::class, null, 'order.comment.attributes');
     }
 }

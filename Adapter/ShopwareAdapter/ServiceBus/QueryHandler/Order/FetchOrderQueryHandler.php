@@ -8,7 +8,7 @@ use PlentyConnector\Connector\ServiceBus\Query\Order\FetchOrderQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
 use PlentyConnector\Connector\TransferObject\Order\Order;
-use Shopware\Components\Api\Resource;
+use Shopware\Components\Api\Resource\Order as OrderResource;
 use ShopwareAdapter\ResponseParser\Order\OrderResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
@@ -28,7 +28,7 @@ class FetchOrderQueryHandler implements QueryHandlerInterface
     private $identityService;
 
     /**
-     * @var Resource\Order
+     * @var OrderResource
      */
     private $orderResource;
 
@@ -36,13 +36,13 @@ class FetchOrderQueryHandler implements QueryHandlerInterface
      * FetchOrderQueryHandler constructor.
      *
      * @param OrderResponseParserInterface $responseParser
-     * @param IdentityServiceInterface $identityService
-     * @param Resource\Order $orderResource
+     * @param IdentityServiceInterface     $identityService
+     * @param OrderResource                $orderResource
      */
     public function __construct(
         OrderResponseParserInterface $responseParser,
         IdentityServiceInterface $identityService,
-        Resource\Order $orderResource
+        OrderResource $orderResource
     ) {
         $this->responseParser = $responseParser;
         $this->identityService = $identityService;
@@ -72,10 +72,14 @@ class FetchOrderQueryHandler implements QueryHandlerInterface
             'adapterName' => ShopwareAdapter::NAME,
         ]);
 
+        if (null === $identity) {
+            return [];
+        }
+
         $order = $this->orderResource->getOne($identity->getAdapterIdentifier());
 
         $order = $this->responseParser->parse($order);
 
-        return array_filter([$order]);
+        return array_filter($order);
     }
 }

@@ -2,14 +2,12 @@
 
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Manufacturer;
 
-use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Query\Manufacturer\FetchChangedManufacturersQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Manufacturer\ManufacturerResponseParserInterface;
-use PlentymarketsAdapter\ResponseParser\Media\MediaResponseParserInterface;
 use PlentymarketsAdapter\ServiceBus\ChangedDateTimeTrait;
 
 /**
@@ -25,38 +23,22 @@ class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
     private $client;
 
     /**
-     * @var ConfigServiceInterface
-     */
-    private $config;
-
-    /**
      * @var ManufacturerResponseParserInterface
      */
     private $manufacturerResponseParser;
 
     /**
-     * @var MediaResponseParserInterface
-     */
-    private $mediaResponseParser;
-
-    /**
      * FetchChangedManufacturersQueryHandler constructor.
      *
-     * @param ClientInterface $client
-     * @param ConfigServiceInterface $config
+     * @param ClientInterface                     $client
      * @param ManufacturerResponseParserInterface $manufacturerResponseParser
-     * @param MediaResponseParserInterface $mediaResponseParser
      */
     public function __construct(
         ClientInterface $client,
-        ConfigServiceInterface $config,
-        ManufacturerResponseParserInterface $manufacturerResponseParser,
-        MediaResponseParserInterface $mediaResponseParser
+        ManufacturerResponseParserInterface $manufacturerResponseParser
     ) {
         $this->client = $client;
-        $this->config = $config;
         $this->manufacturerResponseParser = $manufacturerResponseParser;
-        $this->mediaResponseParser = $mediaResponseParser;
     }
 
     /**
@@ -79,28 +61,25 @@ class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
         $oldTimestamp = $lastCangedTime->format(DATE_W3C);
 
         $criteria = [
-            'lastUpdateTimestamp' => $oldTimestamp,
+            'updatedAt' => $oldTimestamp,
         ];
 
-        $result = [];
+        $manufacturers = $this->client->getIterator('items/manufacturers', $criteria);
 
-        foreach ($this->client->getIterator('items/manufacturers', $criteria) as $element) {
-            if (!empty($element['logo'])) {
-                $result[] = $media = $this->mediaResponseParser->parse([
-                    'link' => $element['logo'],
-                    'name' => $element['name'],
-                ]);
+        foreach ($manufacturers as $element) {
+            $result = $this->manufacturerResponseParser->parse($element);
 
-                $element['logoIdentifier'] = $media->getIdentifier();
+            if (empty($result)) {
+                continue;
             }
 
-            $result[] = $this->manufacturerResponseParser->parse($element);
+            $parsedElements = array_filter($result);
+
+            foreach ($parsedElements as $parsedElement) {
+                yield $parsedElement;
+            }
         }
 
-        if (!empty($result)) {
-            $this->setChangedDateTime($currentDateTime);
-        }
-
-        return $result;
+        $this->setChangedDateTime($currentDateTime);
     }
 }

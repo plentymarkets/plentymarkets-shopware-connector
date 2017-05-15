@@ -61,11 +61,11 @@ class CleanupService implements CleanupServiceInterface
     /**
      * CleanupService constructor.
      *
-     * @param ServiceBusInterface $serviceBus
-     * @param QueryFactoryInterface $queryFactory
-     * @param CommandFactoryInterface $commandFactory
+     * @param ServiceBusInterface      $serviceBus
+     * @param QueryFactoryInterface    $queryFactory
+     * @param CommandFactoryInterface  $commandFactory
      * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface $logger
+     * @param LoggerInterface          $logger
      */
     public function __construct(
         ServiceBusInterface $serviceBus,
@@ -153,13 +153,13 @@ class CleanupService implements CleanupServiceInterface
             return false;
         }
 
-        array_walk($objects, function (TransferObjectInterface $transferObject) use ($definition) {
+        foreach ($objects as $transferObject) {
             $this->elements[] = [
                 'adapterIdentifier' => $transferObject->getIdentifier(),
                 'adapterName' => $definition->getDestinationAdapterName(),
                 'type' => $transferObject->getType(),
             ];
-        });
+        }
 
         return true;
     }

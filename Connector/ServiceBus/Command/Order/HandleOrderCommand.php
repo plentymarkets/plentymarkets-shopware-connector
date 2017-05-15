@@ -7,7 +7,7 @@ use PlentyConnector\Connector\ServiceBus\Command\HandleCommandInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
 /**
- * Class HandleMediaCategoryCommand.
+ * Class HandleOrderCommand.
  */
 class HandleOrderCommand implements HandleCommandInterface
 {
@@ -22,9 +22,9 @@ class HandleOrderCommand implements HandleCommandInterface
     private $transferObject;
 
     /**
-     * HandleMediaCategoryCommand constructor.
+     * HandleOrderCommand constructor.
      *
-     * @param string $adapterName the classname of the target adapter
+     * @param string                  $adapterName    the classname of the target adapter
      * @param TransferObjectInterface $transferObject the transferobject which will be handeled
      */
     public function __construct($adapterName, TransferObjectInterface $transferObject)

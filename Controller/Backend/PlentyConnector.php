@@ -1,17 +1,12 @@
 <?php
 
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
-use PlentyConnector\Connector\ConnectorInterface;
 use PlentyConnector\Connector\IdentityService\IdentityService;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\MappingService\MappingServiceInterface;
-use PlentyConnector\Connector\ServiceBus\QueryType;
-use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\ValueObject\Mapping\Mapping;
 use PlentyConnector\PlentyConnector;
 use PlentymarketsAdapter\Client\ClientInterface;
-use PlentymarketsAdapter\PlentymarketsAdapter;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -179,15 +174,6 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         $identityService = Shopware()->Container()->get('plenty_connector.identity_service');
 
         try {
-            if ($this->hasDuplicateMappings($updates)) {
-                $this->View()->assign([
-                    'success' => false,
-                    'message' => 'duplicate mapping',
-                ]);
-
-                return;
-            }
-
             foreach ($updates as $key => $update) {
                 $remove = $update['remove'];
 
@@ -240,89 +226,5 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
                 'message' => $exception->getMessage(),
             ]);
         }
-    }
-
-    /**
-     * TODO: Remove identity if nothing has been handled
-     *
-     * Sync one product based on the plentymarkets id
-     */
-    public function syncItemAction()
-    {
-        $data = json_decode($this->request->getRawBody(), true);
-
-        if (null === $data['itemId'] || '' === $data['itemId']) {
-            $this->View()->assign([
-                'success' => false,
-                'message' => 'Artikel ID ist leer.',
-            ]);
-
-            return;
-        }
-
-        try {
-            /**
-             * @var IdentityServiceInterface $identityService
-             */
-            $identityService = Shopware()->Container()->get('plenty_connector.identity_service');
-
-            $identity = $identityService->findOneOrCreate(
-                $data['itemId'],
-                PlentymarketsAdapter::NAME,
-                Product::TYPE
-            );
-
-            /**
-             * @var ConnectorInterface $connector
-             */
-            $connector = Shopware()->Container()->get('plenty_connector.connector');
-            $connector->handle(QueryType::ONE, Product::TYPE, $identity->getObjectIdentifier());
-
-            $this->View()->assign([
-                'success' => true,
-            ]);
-        } catch (Exception $exception) {
-            $this->View()->assign([
-                'success' => false,
-                'message' => $exception->getMessage(),
-            ]);
-        }
-    }
-
-    /**
-     * @param array $updates
-     *
-     * @throws Exception
-     *
-     * @return bool
-     */
-    private function hasDuplicateMappings(array $updates)
-    {
-        $originIdentifiers = array_column(array_filter($updates, function ($update) {
-            return !$update['remove'];
-        }), 'originIdentifier');
-
-        if (count(array_count_values($originIdentifiers)) < count($originIdentifiers)) {
-            return true;
-        }
-
-        /**
-         * @var IdentityService $identityService
-         */
-        $identityService = Shopware()->Container()->get('plenty_connector.identity_service');
-
-        foreach ($updates as $key => $update) {
-            $existingDestinationIdentities = $identityService->findBy([
-                'objectType' => $update['objectType'],
-                'objectIdentifier' => $update['originIdentifier'],
-                'adapterName' => $update['adapterName'],
-            ]);
-
-            if (null !== $existingDestinationIdentities && count($existingDestinationIdentities) > 0) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

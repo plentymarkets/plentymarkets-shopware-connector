@@ -31,7 +31,7 @@ class CategoryValidator implements ValidatorInterface
         Assertion::string($object->getName(), null, 'category.name');
 
         Assertion::nullOrUuid($object->getParentIdentifier(), null, 'category.parentIdentifier');
-        Assertion::uuid($object->getShopIdentifier(), null, 'category.parentIdentifier');
+        Assertion::allUuid($object->getShopIdentifiers(), null, 'category.parentIdentifiers');
 
         Assertion::allUuid($object->getImageIdentifiers(), null, 'category.imageIdentifiers');
 
@@ -44,7 +44,7 @@ class CategoryValidator implements ValidatorInterface
         Assertion::string($object->getMetaTitle(), null, 'category.metaTitle');
         Assertion::string($object->getMetaDescription(), null, 'category.metaDescription');
         Assertion::string($object->getMetaKeywords(), null, 'category.metaKeywords');
-        Assertion::string($object->getMetaRobots(), null, 'category.metaTobots');
+        Assertion::string($object->getMetaRobots(), null, 'category.metaRobots');
         Assertion::inArray($object->getMetaRobots(), [
             'INDEX, FOLLOW',
             'NOINDEX, FOLLOW',

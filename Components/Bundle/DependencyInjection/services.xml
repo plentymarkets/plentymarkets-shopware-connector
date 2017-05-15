@@ -1,0 +1,107 @@
+<?xml version="1.0" ?>
+
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <!-- Parameters -->
+
+    <parameters>
+        <parameter key="plenty_connector.transfer_object.bundle" type="constant">PlentyConnector\Components\Bundle\TransferObject\Bundle::TYPE</parameter>
+    </parameters>
+
+    <!-- Services -->
+
+    <services>
+
+        <!-- Bundle Helper -->
+
+        <service id="plenty_connector.components.bundle.helper" class="PlentyConnector\Components\Bundle\Helper\BundleHelper">
+            <argument type="service" id="plugins" />
+        </service>
+
+        <!-- Reponse Parser -->
+
+        <service id="plenty_connector_components_bundle.bundle_response_parser" class="PlentyConnector\Components\Bundle\PlentymarketsAdapter\ResponseParser\BundleResponseParser">
+            <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="plentmarkets_adapter.response_parser.product.price" />
+            <argument type="service" id="plentmarkets_adapter.client" />
+            <argument type="service" id="plenty_connector.logger" />
+        </service>
+
+        <!-- Definition -->
+
+        <service id="plenty_connector.connector_definition.bundle" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
+            <factory service="plenty_connector.definition_factory" method="factory" />
+
+            <argument>%plenty_connector.adapter.plentymarkets%</argument>
+            <argument>%plenty_connector.adapter.shopware%</argument>
+            <argument>%plenty_connector.transfer_object.bundle%</argument>
+            <argument>10</argument>
+
+            <tag name="plenty_connector.connector_definition" />
+        </service>
+
+        <!-- Validator -->
+
+        <service id="plenty_connector.components.bundle.bundle_validator" class="PlentyConnector\Components\Bundle\Validator\BundleValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.components.bundle.bundle_product_validator" class="PlentyConnector\Components\Bundle\Validator\BundleProduct\BundleProductValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <!-- Query -->
+
+        <service id="plenty_connector.components.bundle.query_generator.bundle" class="PlentyConnector\Components\Bundle\QueryGenerator\BundleQueryGenerator">
+            <tag name="plenty_connector.query_generator" />
+        </service>
+
+        <service id="plenty_connector.components.bundle.query_handler.fetch_all_bundles" class="PlentyConnector\Components\Bundle\PlentymarketsAdapter\QueryHandler\FetchAllBundlesQueryHandler">
+            <argument type="service" id="plentmarkets_adapter.read_api.item" />
+            <argument type="service" id="plenty_connector_components_bundle.bundle_response_parser" />
+
+            <tag name="plenty_connector.query_handler" />
+        </service>
+
+        <service id="plenty_connector.components.bundle.query_handler.fetch_changed_bundles" class="PlentyConnector\Components\Bundle\PlentymarketsAdapter\QueryHandler\FetchChangedBundlesQueryHandler">
+            <argument type="service" id="plentmarkets_adapter.read_api.item" />
+            <argument type="service" id="plenty_connector_components_bundle.bundle_response_parser" />
+
+            <tag name="plenty_connector.query_handler" />
+        </service>
+
+        <service id="plenty_connector.components.bundle.query_handler.fetch_bundle" class="PlentyConnector\Components\Bundle\PlentymarketsAdapter\QueryHandler\FetchBundleQueryHandler">
+            <argument type="service" id="plentmarkets_adapter.read_api.item" />
+            <argument type="service" id="plentmarkets_adapter.read_api.variant" />
+            <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="plenty_connector_components_bundle.bundle_response_parser" />
+
+            <tag name="plenty_connector.query_handler" />
+        </service>
+
+        <!-- Command -->
+
+        <service id="plenty_connector.components.bundle.command_generator.bundle" class="PlentyConnector\Components\Bundle\CommandGenerator\BundleCommandGenerator">
+            <tag name="plenty_connector.command_generator" />
+        </service>
+
+        <service id="plenty_connector.components.bundle.command_handler.handle_bundle" class="PlentyConnector\Components\Bundle\ShopwareAdapter\CommandHandler\HandleBundleCommandHandler">
+            <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="models" />
+            <argument type="service" id="plenty_connector.components.bundle.helper" />
+
+            <tag name="plenty_connector.command_handler" />
+        </service>
+
+        <service id="plenty_connector.components.bundle.command_handler.remove_bundle" class="PlentyConnector\Components\Bundle\ShopwareAdapter\CommandHandler\RemoveBundleCommandHandler">
+            <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="models" />
+            <argument type="service" id="plenty_connector.components.bundle.helper" />
+            <argument type="service" id="plenty_connector.logger" />
+
+            <tag name="plenty_connector.command_handler" />
+        </service>
+    </services>
+</container>

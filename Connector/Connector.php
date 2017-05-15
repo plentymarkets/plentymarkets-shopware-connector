@@ -48,10 +48,10 @@ class Connector implements ConnectorInterface
     /**
      * Connector constructor.
      *
-     * @param ServiceBusInterface $serviceBus
-     * @param QueryFactoryInterface $queryFactory
+     * @param ServiceBusInterface     $serviceBus
+     * @param QueryFactoryInterface   $queryFactory
      * @param CommandFactoryInterface $commandFactory
-     * @param LoggerInterface $logger
+     * @param LoggerInterface         $logger
      */
     public function __construct(
         ServiceBusInterface $serviceBus,
@@ -140,8 +140,8 @@ class Connector implements ConnectorInterface
     }
 
     /**
-     * @param Definition $definition
-     * @param int $queryType
+     * @param Definition  $definition
+     * @param int         $queryType
      * @param null|string $identifier
      */
     private function handleDefinition(Definition $definition, $queryType, $identifier = null)
@@ -160,22 +160,13 @@ class Connector implements ConnectorInterface
             $objects = [];
         }
 
-        $sortedObjects = [];
         foreach ($objects as $object) {
-            if (isset($sortedObjects[$object->getIdentifier()])) {
-                continue;
-            }
-
-            $sortedObjects[$object->getIdentifier()] = $object;
-        }
-
-        array_walk($sortedObjects, function (TransferObjectInterface $object) use ($definition) {
             $this->serviceBus->handle($this->commandFactory->create(
                 $definition->getDestinationAdapterName(),
                 $object->getType(),
                 CommandType::HANDLE,
                 $object
             ));
-        });
+        }
     }
 }

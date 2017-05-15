@@ -19,6 +19,7 @@
         <parameter key="plenty_connector.transfer_object.media_category" type="constant">PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory::TYPE</parameter>
         <parameter key="plenty_connector.transfer_object.order" type="constant">PlentyConnector\Connector\TransferObject\Order\Order::TYPE</parameter>
         <parameter key="plenty_connector.transfer_object.order_status" type="constant">PlentyConnector\Connector\TransferObject\OrderStatus\OrderStatus::TYPE</parameter>
+        <parameter key="plenty_connector.transfer_object.payment" type="constant">PlentyConnector\Connector\TransferObject\Payment\Payment::TYPE</parameter>
         <parameter key="plenty_connector.transfer_object.payment_method" type="constant">PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod::TYPE</parameter>
         <parameter key="plenty_connector.transfer_object.payment_status" type="constant">PlentyConnector\Connector\TransferObject\PaymentStatus\PaymentStatus::TYPE</parameter>
         <parameter key="plenty_connector.transfer_object.product" type="constant">PlentyConnector\Connector\TransferObject\Product\Product::TYPE</parameter>
@@ -144,13 +145,35 @@
             <tag name="plenty_connector.connector_definition" />
         </service>
 
-        <service id="plenty_connector.connector_definition.order" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
+        <service id="plenty_connector.connector_definition.export_order" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
             <factory service="plenty_connector.definition_factory" method="factory" />
 
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.transfer_object.order%</argument>
             <argument>60</argument>
+
+            <tag name="plenty_connector.connector_definition" />
+        </service>
+
+        <service id="plenty_connector.connector_definition.import_order" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
+            <factory service="plenty_connector.definition_factory" method="factory" />
+
+            <argument>%plenty_connector.adapter.plentymarkets%</argument>
+            <argument>%plenty_connector.adapter.shopware%</argument>
+            <argument>%plenty_connector.transfer_object.order%</argument>
+            <argument>50</argument>
+
+            <tag name="plenty_connector.connector_definition" />
+        </service>
+
+        <service id="plenty_connector.connector_definition.payment" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
+            <factory service="plenty_connector.definition_factory" method="factory" />
+
+            <argument>%plenty_connector.adapter.shopware%</argument>
+            <argument>%plenty_connector.adapter.plentymarkets%</argument>
+            <argument>%plenty_connector.transfer_object.payment%</argument>
+            <argument>40</argument>
 
             <tag name="plenty_connector.connector_definition" />
         </service>
@@ -294,12 +317,24 @@
             <tag name="console.command" />
         </service>
 
+        <service id="plenty_connector.console.command.mapping" class="PlentyConnector\Console\Command\MappingCommand">
+            <argument type="service" id="plenty_connector.mapping_service" />
+            <argument type="service" id="plenty_connector.logger" />
+            <argument type="service" id="plenty_connector.console.output_handler" />
+
+            <tag name="console.command" />
+        </service>
+
         <service id="plenty_connector.console.command.process" class="PlentyConnector\Console\Command\ProcessCommand">
             <argument type="service" id="plenty_connector.connector" />
             <argument type="service" id="plenty_connector.logger" />
 
             <tag name="console.command" />
         </service>
+
+        <!-- Output handler -->
+
+        <service id="plenty_connector.console.output_handler" class="PlentyConnector\Console\OutputHandler\OutputHandler" />
 
         <!-- Identity Service -->
 
@@ -358,6 +393,10 @@
             <tag name="plenty_connector.query_generator" />
         </service>
 
+        <service id="plenty_connector.query_generator.payment" class="PlentyConnector\Connector\ServiceBus\QueryGenerator\Payment\PaymentQueryGenerator">
+            <tag name="plenty_connector.query_generator" />
+        </service>
+
         <service id="plenty_connector.query_generator.payment_method" class="PlentyConnector\Connector\ServiceBus\QueryGenerator\PaymentMethod\PaymentMethodQueryGenerator">
             <tag name="plenty_connector.query_generator" />
         </service>
@@ -408,6 +447,10 @@
             <tag name="plenty_connector.command_generator" />
         </service>
 
+        <service id="plenty_connector.command_generator.payment" class="PlentyConnector\Connector\ServiceBus\CommandGenerator\Payment\PaymentCommandGenerator">
+            <tag name="plenty_connector.command_generator" />
+        </service>
+
         <service id="plenty_connector.command_generator.product" class="PlentyConnector\Connector\ServiceBus\CommandGenerator\Product\ProductCommandGenerator">
             <tag name="plenty_connector.command_generator" />
         </service>
@@ -431,10 +474,6 @@
         </service>
 
         <service id="plenty_connector.validator.country" class="PlentyConnector\Connector\Validator\Country\CountryValidator">
-            <tag name="plenty_connector.validator" />
-        </service>
-
-        <service id="plenty_connector.validator.customer" class="PlentyConnector\Connector\Validator\Customer\CustomerValidator">
             <tag name="plenty_connector.validator" />
         </service>
 
@@ -478,6 +517,10 @@
             <tag name="plenty_connector.validator" />
         </service>
 
+        <service id="plenty_connector.validator.order.customer" class="PlentyConnector\Connector\Validator\Order\Customer\CustomerValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
         <service id="plenty_connector.validator.order.comment" class="PlentyConnector\Connector\Validator\Order\Comment\CommentValidator">
             <tag name="plenty_connector.validator" />
         </service>
@@ -486,11 +529,11 @@
             <tag name="plenty_connector.validator" />
         </service>
 
-        <service id="plenty_connector.validator.order.payment" class="PlentyConnector\Connector\Validator\Order\Payment\PaymentValidator">
+        <service id="plenty_connector.validator.order.package" class="PlentyConnector\Connector\Validator\Order\Package\PackageValidator">
             <tag name="plenty_connector.validator" />
         </service>
 
-        <service id="plenty_connector.validator.order.payment_data" class="PlentyConnector\Connector\Validator\Order\PaymentData\PaymentDataValidator">
+        <service id="plenty_connector.validator.order.payment" class="PlentyConnector\Connector\Validator\Order\Payment\PaymentValidator">
             <tag name="plenty_connector.validator" />
         </service>
 
@@ -511,6 +554,10 @@
         </service>
 
         <service id="plenty_connector.validator.product.barcode" class="PlentyConnector\Connector\Validator\Product\Barcode\BarcodeValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.product.image" class="PlentyConnector\Connector\Validator\Product\Image\ImageValidator">
             <tag name="plenty_connector.validator" />
         </service>
 
@@ -564,11 +611,12 @@
             <argument type="service" id="plenty_connector.validator_service" />
         </service>
 
-        <service id="plenty_connector.service_bus.class_name_formatter" class="PlentyConnector\Connector\Logger\ClassNameFormatter" />
-
-        <service id="plenty_connector.service_bus.logger_middleware" class="League\Tactician\Logger\LoggerMiddleware">
-            <argument type="service" id="plenty_connector.service_bus.class_name_formatter" />
+        <service id="plenty_connector.service_bus.class_name_formatter" class="PlentyConnector\Connector\Logger\ClassNameFormatter">
             <argument type="service" id="plenty_connector.logger" />
+        </service>
+
+        <service id="plenty_connector.service_bus.logger_middleware" class="PlentyConnector\Connector\Logger\LoggerMiddleware">
+            <argument type="service" id="plenty_connector.service_bus.class_name_formatter" />
         </service>
 
         <service id="plenty_connector.service_bus_factory" class="PlentyConnector\Connector\ServiceBus\ServiceBusFactory" />

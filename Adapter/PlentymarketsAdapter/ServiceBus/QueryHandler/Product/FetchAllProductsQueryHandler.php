@@ -26,7 +26,8 @@ class FetchAllProductsQueryHandler implements QueryHandlerInterface
 
     /**
      * FetchAllProductsQueryHandler constructor.
-     * @param Item $itemApi
+     *
+     * @param Item                           $itemApi
      * @param ProductResponseParserInterface $responseParser
      */
     public function __construct(
@@ -53,12 +54,18 @@ class FetchAllProductsQueryHandler implements QueryHandlerInterface
     {
         $products = $this->itemApi->findAll();
 
-        $result = [];
+        foreach ($products as $element) {
+            $result = $this->responseParser->parse($element);
 
-        foreach ($products as $product) {
-            $result[] = $this->responseParser->parse($product, $result);
+            if (empty($result)) {
+                continue;
+            }
+
+            $parsedElements = array_filter($result);
+
+            foreach ($parsedElements as $parsedElement) {
+                yield $parsedElement;
+            }
         }
-
-        return array_filter($result);
     }
 }

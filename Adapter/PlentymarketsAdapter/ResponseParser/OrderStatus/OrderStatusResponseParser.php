@@ -31,6 +31,10 @@ class OrderStatusResponseParser implements OrderStatusResponseParserInterface
      */
     public function parse(array $entry)
     {
+        if (empty($entry['id'])) {
+            return null;
+        }
+
         $identity = $this->identityService->findOneOrCreate(
             (string) $entry['id'],
             PlentymarketsAdapter::NAME,
@@ -39,7 +43,27 @@ class OrderStatusResponseParser implements OrderStatusResponseParserInterface
 
         return OrderStatus::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => (string) $entry['id'],
+            'name' => $this->getName($entry),
         ]);
+    }
+
+    /**
+     * @param $entry
+     *
+     * @return string
+     */
+    private function getName($entry)
+    {
+        if (empty($entry['names'])) {
+            return $entry['id'];
+        }
+
+        $names = array_filter(array_column($entry['names'], 'backendName'));
+
+        if (!empty($names)) {
+            return array_shift($names);
+        }
+
+        return $entry['id'];
     }
 }

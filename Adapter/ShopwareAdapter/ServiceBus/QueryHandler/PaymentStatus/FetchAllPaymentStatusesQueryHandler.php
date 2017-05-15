@@ -30,7 +30,7 @@ class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllPaymentStatusesQueryHandler constructor.
      *
-     * @param EntityManagerInterface $entityManager ,
+     * @param EntityManagerInterface               $entityManager  ,
      * @param PaymentStatusResponseParserInterface $responseParser
      */
     public function __construct(
@@ -73,6 +73,7 @@ class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
         $queryBuilder->select([
             'status.id as id',
             'status.name as name',
+            'status.description as description',
         ]);
         $queryBuilder->where('status.group = :group');
         $queryBuilder->setParameter('group', Status::GROUP_PAYMENT);

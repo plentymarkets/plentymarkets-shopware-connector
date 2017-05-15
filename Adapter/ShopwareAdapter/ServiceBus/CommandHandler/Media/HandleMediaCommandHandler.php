@@ -2,6 +2,7 @@
 
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Media;
 
+use PlentyConnector\Adapter\ShopwareAdapter\Helper\AttributeHelper;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
@@ -10,6 +11,7 @@ use PlentyConnector\Connector\ServiceBus\Command\Media\HandleMediaCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\TransferObject\Media\Media;
 use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
+use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Components\Api\Resource\Media as MediaResource;
 use Shopware\Models\Media\Album;
 use ShopwareAdapter\ShopwareAdapter;
@@ -25,20 +27,38 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
     private $resource;
 
     /**
+     * @var MediaService
+     */
+    private $mediaService;
+
+    /**
      * @var IdentityServiceInterface
      */
     private $identityService;
 
     /**
+     * @var AttributeHelper
+     */
+    private $attributeHelper;
+
+    /**
      * HandleMediaCommandHandler constructor.
      *
-     * @param MediaResource $resource
+     * @param MediaResource            $resource
+     * @param MediaService             $mediaService
      * @param IdentityServiceInterface $identityService
+     * @param AttributeHelper          $attributeHelper
      */
-    public function __construct(MediaResource $resource, IdentityServiceInterface $identityService)
-    {
+    public function __construct(
+        MediaResource $resource,
+        MediaService $mediaService,
+        IdentityServiceInterface $identityService,
+        AttributeHelper $attributeHelper
+    ) {
         $this->resource = $resource;
+        $this->mediaService = $mediaService;
         $this->identityService = $identityService;
+        $this->attributeHelper = $attributeHelper;
     }
 
     /**
@@ -59,7 +79,7 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
     {
         /**
          * @var HandleCommandInterface $command
-         * @var Media $media
+         * @var Media                  $media
          */
         $media = $command->getTransferObject();
 
@@ -89,12 +109,12 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
             $params['album'] = $mediaCategoryIdentity->getAdapterIdentifier();
         }
 
-
         if (null !== $identity) {
-            try{
-                $this->resource->getOne($identity->getAdapterIdentifier());
-            } catch (\Shopware\Components\Api\Exception\NotFoundException $notFoundException) {
+            $mediaObject = $this->resource->getOne($identity->getAdapterIdentifier());
+
+            if (!$this->mediaService->has($mediaObject['path'])) {
                 $this->identityService->remove($identity);
+
                 $identity = null;
             }
         }
@@ -102,7 +122,7 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
         if (null === $identity) {
             $mediaModel = $this->resource->create($params);
 
-            $this->identityService->create(
+            $identity = $this->identityService->create(
                 $media->getIdentifier(),
                 Media::TYPE,
                 (string) $mediaModel->getId(),
@@ -113,6 +133,12 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
 
             $this->resource->update($identity->getAdapterIdentifier(), $params);
         }
+
+        $this->attributeHelper->saveAttributes(
+            (int) $identity->getAdapterIdentifier(),
+            $media->getAttributes(),
+            's_media_attributes'
+        );
 
         return true;
     }

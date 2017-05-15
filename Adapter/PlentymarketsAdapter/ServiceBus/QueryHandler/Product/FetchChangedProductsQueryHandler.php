@@ -17,6 +17,10 @@ class FetchChangedProductsQueryHandler implements QueryHandlerInterface
 {
     use ChangedDateTimeTrait;
 
+    /**
+     * @var Item
+     */
+    private $itemApi;
 
     /**
      * @var ProductResponseParserInterface
@@ -24,13 +28,9 @@ class FetchChangedProductsQueryHandler implements QueryHandlerInterface
     private $responseParser;
 
     /**
-     * @var Item
-     */
-    private $itemApi;
-
-    /**
      * FetchChangedProductsQueryHandler constructor.
-     * @param Item $itemApi
+     *
+     * @param Item                           $itemApi
      * @param ProductResponseParserInterface $responseParser
      */
     public function __construct(
@@ -56,23 +56,24 @@ class FetchChangedProductsQueryHandler implements QueryHandlerInterface
     public function handle(QueryInterface $query)
     {
         $lastCangedTime = $this->getChangedDateTime();
-
         $currentDateTime = $this->getCurrentDateTime();
-        $oldTimestamp = $lastCangedTime->format(DATE_W3C);
-        $newTimestamp = $currentDateTime->format(DATE_W3C);
 
-        $products = $this->itemApi->findChanged($oldTimestamp, $newTimestamp);
+        $products = $this->itemApi->findChanged($lastCangedTime, $currentDateTime);
 
-        $result = [];
+        foreach ($products as $element) {
+            $result = $this->responseParser->parse($element);
 
-        foreach ($products as $product) {
-            $result[] = $this->responseParser->parse($product, $result);
+            if (empty($result)) {
+                continue;
+            }
+
+            $parsedElements = array_filter($result);
+
+            foreach ($parsedElements as $parsedElement) {
+                yield $parsedElement;
+            }
         }
 
-        if (!empty($result)) {
-            $this->setChangedDateTime($currentDateTime);
-        }
-
-        return array_filter($result);
+        $this->setChangedDateTime($currentDateTime);
     }
 }

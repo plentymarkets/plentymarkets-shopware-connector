@@ -2,6 +2,7 @@
 
 namespace PlentyConnector\Connector\Translation;
 
+use DeepCopy\DeepCopy;
 use PlentyConnector\Connector\TransferObject\TranslateableInterface;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
 
@@ -37,6 +38,9 @@ class TranslationHelper implements TranslationHelperInterface
      */
     public function translate($languageIdentifier, TranslateableInterface $object)
     {
+        $deepCopy = new DeepCopy();
+        $object = $deepCopy->copy($object);
+
         /**
          * @var Translation[] $translations
          */

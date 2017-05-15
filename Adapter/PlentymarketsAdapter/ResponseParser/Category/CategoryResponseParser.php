@@ -11,6 +11,7 @@ use PlentyConnector\Connector\ValueObject\Translation\Translation;
 use PlentymarketsAdapter\Helper\MediaCategoryHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Media\MediaResponseParserInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class CategoryResponseParser
@@ -33,20 +34,28 @@ class CategoryResponseParser implements CategoryResponseParserInterface
     private $mediaResponseParser;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * CategoryResponseParser constructor.
      *
-     * @param IdentityServiceInterface $identityService
-     * @param ConfigServiceInterface $config
+     * @param IdentityServiceInterface     $identityService
+     * @param ConfigServiceInterface       $config
      * @param MediaResponseParserInterface $mediaResponseParser
+     * @param LoggerInterface              $logger
      */
     public function __construct(
         IdentityServiceInterface $identityService,
         ConfigServiceInterface $config,
-        MediaResponseParserInterface $mediaResponseParser
+        MediaResponseParserInterface $mediaResponseParser,
+        LoggerInterface $logger
     ) {
         $this->identityService = $identityService;
         $this->config = $config;
         $this->mediaResponseParser = $mediaResponseParser;
+        $this->logger = $logger;
     }
 
     /**
@@ -54,45 +63,71 @@ class CategoryResponseParser implements CategoryResponseParserInterface
      */
     public function parse(array $entry)
     {
-        $result = [];
-
-        if (empty($entry['plentyId'])) {
-            return null;
+        if (empty($entry['details'])) {
+            return [];
         }
 
         $categoryIdentifier = $this->identityService->findOneOrCreate(
-            (string) ($entry['plentyId'] . '-' . $entry['categoryId']),
+            (string) $entry['id'],
             PlentymarketsAdapter::NAME,
             Category::TYPE
         );
 
         if (null !== $entry['parentCategoryId']) {
-            $parentIdentity = $this->identityService->findOneOrCreate(
-                (string) ($entry['plentyId'] . '-' . $entry['parentCategoryId']),
-                PlentymarketsAdapter::NAME,
-                Category::TYPE
-            );
+            $parentIdentity = $this->identityService->findOneBy([
+                'adapterIdentifier' => (string) $entry['parentCategoryId'],
+                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType' => Category::TYPE,
+            ]);
+
+            if (null === $parentIdentity) {
+                $this->logger->notice('parent category was not found', ['category' => $entry]);
+
+                return [];
+            }
 
             $parentCategoryIdentifier = $parentIdentity->getObjectIdentifier();
         } else {
             $parentCategoryIdentifier = null;
         }
 
-        $shopIdentifier = $this->identityService->findOneOrCreate(
-            (string) $entry['plentyId'],
-            PlentymarketsAdapter::NAME,
-            Shop::TYPE
-        );
+        if (empty($entry['clients'])) {
+            return [];
+        }
+
+        $shopIdentifiers = [];
+        foreach ($entry['clients'] as $client) {
+            if (null === $client['plentyId']) {
+                continue;
+            }
+
+            $identity = $this->identityService->findOneOrCreate(
+                (string) $client['plentyId'],
+                PlentymarketsAdapter::NAME,
+                Shop::TYPE
+            );
+
+            if (null === $identity) {
+                $this->logger->notice('shop not found');
+
+                continue;
+            }
+
+            $shopIdentifiers[] = $identity->getObjectIdentifier();
+        }
+
+        $result = [];
 
         $result[] = Category::fromArray([
             'identifier' => $categoryIdentifier->getObjectIdentifier(),
             'name' => $entry['details']['0']['name'],
+            'active' => true,
             'parentIdentifier' => $parentCategoryIdentifier,
-            'shopIdentifier' => $shopIdentifier->getObjectIdentifier(),
+            'shopIdentifiers' => $shopIdentifiers,
             'imageIdentifiers' => $this->getImages($entry['details']['0'], $result),
             'position' => $entry['details']['0']['position'],
-            'description' => $entry['details']['0']['description'],
-            'longDescription' => $entry['details']['0']['description2'],
+            'description' => $entry['details']['0']['shortDescription'],
+            'longDescription' => $entry['details']['0']['description'],
             'metaTitle' => $entry['details']['0']['metaTitle'],
             'metaDescription' => $entry['details']['0']['metaDescription'],
             'metaKeywords' => $entry['details']['0']['metaKeywords'],
@@ -114,10 +149,10 @@ class CategoryResponseParser implements CategoryResponseParserInterface
     {
         $imageIdentifiers = [];
 
-        if (!empty($detail['image'])) {
+        if (!empty($detail['imagePath'])) {
             $result[] = $media = $this->mediaResponseParser->parse([
                 'mediaCategory' => MediaCategoryHelper::CATEGORY,
-                'link' => $this->getBaseUrl() . 'documents/' . $detail['image'],
+                'link' => $this->getBaseUrl() . 'documents/' . $detail['imagePath'],
                 'name' => $detail['name'],
                 'alternateName' => $detail['name'],
             ]);
@@ -125,10 +160,10 @@ class CategoryResponseParser implements CategoryResponseParserInterface
             $imageIdentifiers[] = $media->getIdentifier();
         }
 
-        if (!empty($detail['image2'])) {
+        if (!empty($detail['image2Path'])) {
             $result[] = $media = $this->mediaResponseParser->parse([
                 'mediaCategory' => MediaCategoryHelper::CATEGORY,
-                'link' => $this->getBaseUrl() . 'documents/' . $detail['image2'],
+                'link' => $this->getBaseUrl() . 'documents/' . $detail['image2Path'],
                 'name' => $detail['name'],
                 'alternateName' => $detail['name'],
             ]);
@@ -146,7 +181,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
     {
         $parts = parse_url($this->config->get('rest_url'));
 
-        return sprintf('https://%s/', $parts['host']);
+        return sprintf('%s://%s/', $parts['scheme'], $parts['host']);
     }
 
     /**
@@ -168,7 +203,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
             return $robotsMap[$metaRobots];
         }
 
-        return '';
+        return 'INDEX, FOLLOW';
     }
 
     /**
@@ -207,13 +242,13 @@ class CategoryResponseParser implements CategoryResponseParserInterface
             $translations[] = Translation::fromArray([
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
                 'property' => 'description',
-                'value' => $detail['description'],
+                'value' => $detail['shortDescription'],
             ]);
 
             $translations[] = Translation::fromArray([
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
                 'property' => 'longDescription',
-                'value' => $detail['description2'],
+                'value' => $detail['description'],
             ]);
 
             $translations[] = Translation::fromArray([

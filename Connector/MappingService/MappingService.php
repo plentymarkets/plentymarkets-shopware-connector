@@ -41,8 +41,9 @@ class MappingService implements MappingServiceInterface
     /**
      * MappingService constructor.
      *
-     * @param QueryFactoryInterface $queryFactory
-     * @param ServiceBusInterface $serviceBus
+     * @param QueryFactoryInterface     $queryFactory
+     * @param ServiceBusInterface       $serviceBus
+     * @param ValidatorServiceInterface $validator
      */
     public function __construct(
         QueryFactoryInterface $queryFactory,
@@ -109,7 +110,7 @@ class MappingService implements MappingServiceInterface
 
     /**
      * @param Definition $definition
-     * @param string $adapterName
+     * @param string     $adapterName
      *
      * @throws MissingQueryGeneratorException
      * @throws MissingQueryException

@@ -11,7 +11,6 @@ use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Manufacturer\ManufacturerResponseParserInterface;
-use PlentymarketsAdapter\ResponseParser\Media\MediaResponseParserInterface;
 
 /**
  * Class FetchManufacturerQueryHandler
@@ -29,11 +28,6 @@ class FetchManufacturerQueryHandler implements QueryHandlerInterface
     private $manufacturerResponseParser;
 
     /**
-     * @var MediaResponseParserInterface
-     */
-    private $mediaResponseParser;
-
-    /**
      * @var IdentityServiceInterface
      */
     private $identityService;
@@ -41,20 +35,17 @@ class FetchManufacturerQueryHandler implements QueryHandlerInterface
     /**
      * FetchManufacturerQueryHandler constructor.
      *
-     * @param ClientInterface $client
+     * @param ClientInterface                     $client
      * @param ManufacturerResponseParserInterface $manufacturerResponseParser
-     * @param MediaResponseParserInterface $mediaResponseParser
-     * @param IdentityServiceInterface $identityService
+     * @param IdentityServiceInterface            $identityService
      */
     public function __construct(
         ClientInterface $client,
         ManufacturerResponseParserInterface $manufacturerResponseParser,
-        MediaResponseParserInterface $mediaResponseParser,
         IdentityServiceInterface $identityService
     ) {
         $this->client = $client;
         $this->manufacturerResponseParser = $manufacturerResponseParser;
-        $this->mediaResponseParser = $mediaResponseParser;
         $this->identityService = $identityService;
     }
 
@@ -72,8 +63,6 @@ class FetchManufacturerQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $result = [];
-
         /**
          * @var FetchQueryInterface $query
          */
@@ -83,18 +72,13 @@ class FetchManufacturerQueryHandler implements QueryHandlerInterface
             'adapterName' => PlentymarketsAdapter::NAME,
         ]);
 
-        $element = $this->client->request('GET', 'items/manufacturers/' . $identity->getAdapterIdentifier());
-
-        if (!empty($element['logo'])) {
-            $result[] = $media = $this->mediaResponseParser->parse([
-                'link' => $element['logo'],
-                'name' => $element['name'],
-            ]);
-
-            $element['logoIdentifier'] = $media->getIdentifier();
+        if (null === $identity) {
+            return [];
         }
 
-        $result[] = $this->manufacturerResponseParser->parse($element);
+        $element = $this->client->request('GET', 'items/manufacturers/' . $identity->getAdapterIdentifier());
+
+        $result = $this->manufacturerResponseParser->parse($element);
 
         return array_filter($result);
     }

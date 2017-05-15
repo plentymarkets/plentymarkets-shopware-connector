@@ -28,7 +28,7 @@ class MediaResponseParser implements MediaResponseParserInterface
      * OrderStatusResponseParser constructor.
      *
      * @param IdentityServiceInterface $identityService
-     * @param MediaCategoryHelper $categoryHelper
+     * @param MediaCategoryHelper      $categoryHelper
      */
     public function __construct(IdentityServiceInterface $identityService, MediaCategoryHelper $categoryHelper)
     {
@@ -47,12 +47,12 @@ class MediaResponseParser implements MediaResponseParserInterface
             $entry['hash'] = sha1_file($entry['link']);
         }
 
-        if (!array_key_exists('name', $entry)) {
-            $entry['name'] = '';
+        if (empty($entry['name'])) {
+            $entry['name'] = null;
         }
 
-        if (!array_key_exists('alternateName', $entry)) {
-            $entry['alternateName'] = '';
+        if (empty($entry['alternateName'])) {
+            $entry['alternateName'] = null;
         }
 
         if (!array_key_exists('translations', $entry)) {

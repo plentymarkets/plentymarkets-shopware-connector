@@ -6,11 +6,12 @@ use Assert\Assertion;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\ServerException;
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentymarketsAdapter\Client\Exception\InvalidCredentialsException;
 use PlentymarketsAdapter\Client\Exception\InvalidResponseException;
 use PlentymarketsAdapter\Client\Iterator\Iterator;
-use Psr\Log\LoggerInterface;
 
 /**
  * RepsonseModifier example.
@@ -40,25 +41,17 @@ class Client implements ClientInterface
     private $refreshToken;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * Client constructor.
      *
-     * @param GuzzleClient $connection
+     * @param GuzzleClient           $connection
      * @param ConfigServiceInterface $config
-     * @param LoggerInterface $logger
      */
     public function __construct(
         GuzzleClient $connection,
-        ConfigServiceInterface $config,
-        LoggerInterface $logger
+        ConfigServiceInterface $config
     ) {
         $this->connection = $connection;
         $this->config = $config;
-        $this->logger = $logger;
     }
 
     /**
@@ -98,6 +91,12 @@ class Client implements ClientInterface
      */
     public function request($method, $path, array $params = [], $limit = null, $offset = null, array $options = [])
     {
+        static $retries;
+
+        if (null === $retries) {
+            $retries = 0;
+        }
+
         Assertion::nullOrInteger($limit);
         Assertion::nullOrInteger($offset);
         Assertion::isArray($options);
@@ -116,8 +115,6 @@ class Client implements ClientInterface
 
         try {
             $response = $this->connection->send($request);
-
-            $this->logger->debug('HTTP request: status: ' . $response->getStatusCode() . ' method: ' . $request->getMethod() . ' path: ' . $request->getPath());
 
             $body = $response->getBody();
 
@@ -142,19 +139,62 @@ class Client implements ClientInterface
                 }
             }
 
+            $retries = 0;
+
             return $result;
         } catch (ClientException $exception) {
             if ($exception->hasResponse() && $exception->getResponse()->getStatusCode() === 401 && !$this->isLoginRequired($path) && $this->accessToken != null) {
-                $this->logger->debug('login refresh');
-
                 // retry with fresh accessToken
                 $this->accessToken = null;
 
                 return $this->request($method, $path, $params, $limit, $offset);
             }
 
-            // generic exception
+            if ($exception->hasResponse() && $exception->getResponse()) {
+                throw new ClientException(
+                    $exception->getMessage() . ' - ' . $exception->getResponse()->getBody(),
+                    $exception->getRequest(),
+                    $exception->getResponse(),
+                    $exception->getPrevious()
+                );
+            }
+
             throw $exception;
+        } catch (InvalidResponseException $exception) {
+            if ($retries < 3) {
+                sleep(10);
+
+                ++$retries;
+
+                return $this->request($method, $path, $params, $limit, $offset);
+            }
+
+            throw $exception;
+        } catch (ServerException $exception) {
+            if ($exception->hasResponse() && $exception->getResponse()->getStatusCode() === 503 && $retries < 3) {
+                sleep(10);
+
+                ++$retries;
+
+                return $this->request($method, $path, $params, $limit, $offset);
+            }
+
+            if ($exception->hasResponse() && $exception->getResponse()) {
+                throw new ServerException(
+                    $exception->getMessage() . ' - ' . $exception->getResponse()->getBody(),
+                    $exception->getRequest(),
+                    $exception->getResponse(),
+                    $exception->getPrevious()
+                );
+            }
+
+            throw $exception;
+        } catch (ConnectException $exception) {
+            sleep(10);
+
+            ++$retries;
+
+            return $this->request($method, $path, $params, $limit, $offset);
         }
     }
 
@@ -237,7 +277,7 @@ class Client implements ClientInterface
 
     /**
      * @param string $path
-     * @param array $options
+     * @param array  $options
      *
      * @return string
      */
@@ -276,8 +316,8 @@ class Client implements ClientInterface
     /**
      * @param string $method
      * @param string $path
-     * @param array $params
-     * @param array $options
+     * @param array  $params
+     * @param array  $options
      *
      * @return array
      */
@@ -293,6 +333,14 @@ class Client implements ClientInterface
         Assertion::isArray($params);
 
         $requestOptions = [];
+
+        if (array_key_exists('itemsPerPage', $options)) {
+            $params['itemsPerPage'] = $options['itemsPerPage'];
+        }
+
+        if (array_key_exists('page', $options)) {
+            $params['page'] = $options['page'];
+        }
 
         if ($method === 'GET') {
             $requestOptions['query'] = $params;

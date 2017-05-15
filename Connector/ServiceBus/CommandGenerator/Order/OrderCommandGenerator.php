@@ -3,6 +3,7 @@
 namespace PlentyConnector\Connector\ServiceBus\CommandGenerator\Order;
 
 use PlentyConnector\Connector\ServiceBus\Command\Order\HandleOrderCommand;
+use PlentyConnector\Connector\ServiceBus\Command\Order\RemoveOrderCommand;
 use PlentyConnector\Connector\ServiceBus\CommandGenerator\CommandGeneratorInterface;
 use PlentyConnector\Connector\TransferObject\Order\Order;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
@@ -33,6 +34,6 @@ class OrderCommandGenerator implements CommandGeneratorInterface
      */
     public function generateRemoveCommand($adapterName, $objectIdentifier)
     {
-        // TODO
+        return new RemoveOrderCommand($adapterName, $objectIdentifier);
     }
 }

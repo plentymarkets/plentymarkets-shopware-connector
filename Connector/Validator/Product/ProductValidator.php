@@ -3,6 +3,8 @@
 namespace PlentyConnector\Connector\Validator\Product;
 
 use Assert\Assertion;
+use DateTimeImmutable;
+use PlentyConnector\Connector\TransferObject\Product\Image\Image;
 use PlentyConnector\Connector\TransferObject\Product\LinkedProduct\LinkedProduct;
 use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\Connector\TransferObject\Product\Property\Property;
@@ -39,7 +41,7 @@ class ProductValidator implements ValidatorInterface
         Assertion::string($object->getNumber(), null, 'product.number');
         Assertion::notBlank($object->getNumber(), null, 'product.number');
 
-        Assertion::boolean($object->getActive(), null, 'product.active');
+        Assertion::boolean($object->isActive(), null, 'product.active');
 
         Assertion::allUuid($object->getShopIdentifiers(), null, 'product.shopIdentifiers');
 
@@ -48,13 +50,14 @@ class ProductValidator implements ValidatorInterface
         Assertion::allUuid($object->getCategoryIdentifiers(), null, 'product.categoryIdentifiers');
         Assertion::allUuid($object->getDefaultCategoryIdentifiers(), null, 'product.defaultCategoryIdentifiers');
         Assertion::allUuid($object->getShippingProfileIdentifiers(), null, 'product.name');
-        Assertion::allUuid($object->getImageIdentifiers(), null, 'product.imageIdentifiers');
+
+        Assertion::allIsInstanceOf($object->getImages(), Image::class, null, 'product.images');
 
         Assertion::allIsInstanceOf($object->getVariations(), Variation::class, null, 'product.variations');
 
         Assertion::uuid($object->getVatRateIdentifier(), null, 'product.vatRateIdentifier');
 
-        Assertion::boolean($object->getLimitedStock(), null, 'product.limitedStock');
+        Assertion::boolean($object->hasStockLimitation(), null, 'product.stockLimitation');
 
         Assertion::string($object->getDescription(), null, 'product.description');
         Assertion::string($object->getLongDescription(), null, 'product.longDescription');
@@ -79,8 +82,8 @@ class ProductValidator implements ValidatorInterface
 
         Assertion::allIsInstanceOf($object->getTranslations(), Translation::class, null, 'product.translations');
 
-        Assertion::nullOrIsInstanceOf($object->getAvailableFrom(), \DateTimeImmutable::class, null, 'product.availableFrom');
-        Assertion::nullOrIsInstanceOf($object->getAvailableTo(), \DateTimeImmutable::class, null, 'product.availableTo');
+        Assertion::nullOrIsInstanceOf($object->getAvailableFrom(), DateTimeImmutable::class, null, 'product.availableFrom');
+        Assertion::nullOrIsInstanceOf($object->getAvailableTo(), DateTimeImmutable::class, null, 'product.availableTo');
 
         Assertion::allIsInstanceOf($object->getAttributes(), Attribute::class, null, 'product.attributes');
 

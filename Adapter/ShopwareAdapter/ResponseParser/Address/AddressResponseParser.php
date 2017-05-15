@@ -2,6 +2,7 @@
 
 namespace ShopwareAdapter\ResponseParser\Address;
 
+use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Country\Country;
 use PlentyConnector\Connector\TransferObject\Order\Address\Address;
@@ -45,7 +46,7 @@ class AddressResponseParser implements AddressResponseParserInterface
         ]);
 
         if (null === $countryIdentitiy) {
-            // TODO: throw
+            throw new NotFoundException('country mapping missing - ' . json_encode($entry));
         }
 
         if ($entry['salutation'] === 'mr') {
@@ -56,19 +57,38 @@ class AddressResponseParser implements AddressResponseParserInterface
             $salutation = Customer::SALUTATION_FIRM;
         }
 
-        return Address::fromArray([
-            'company' => $entry['company'],
-            'department' => $entry['department'],
+        $params = [
             'salutation' => $salutation,
-            'title' => $entry['title'],
             'firstname' => $entry['firstName'],
             'lastname' => $entry['lastName'],
             'street' => $entry['street'],
-            'zipcode' => $entry['zipCode'],
+            'postalCode' => $entry['zipCode'],
             'city' => $entry['city'],
             'countryIdentifier' => $countryIdentitiy->getObjectIdentifier(),
-            'vatId' => isset($entry['vatId']) ? $entry['vatId'] : null,
+            'vatId' => !empty($entry['vatId']) ? $entry['vatId'] : null,
             'attributes' => $this->getAttributes($entry['attribute']),
-        ]);
+        ];
+
+        if (!empty($entry['department'])) {
+            $params['department'] = $entry['department'];
+        }
+
+        if (!empty($entry['title'])) {
+            $params['title'] = $entry['title'];
+        }
+
+        if (!empty($entry['company'])) {
+            $params['company'] = $entry['company'];
+        }
+
+        if (!empty($entry['additionalAddressLine1'])) {
+            $params['additional'] = $entry['additionalAddressLine1'];
+        }
+
+        if (!empty($entry['phone'])) {
+            $params['phoneNumber'] = $entry['phone'];
+        }
+
+        return Address::fromArray($params);
     }
 }

@@ -27,7 +27,7 @@ class CommandHandlerMiddleware implements Middleware
 
     /**
      * @param CommandInterface $command
-     * @param callable $next
+     * @param callable         $next
      *
      * @throws NotFoundException
      *
@@ -51,9 +51,9 @@ class CommandHandlerMiddleware implements Middleware
             throw NotFoundException::fromCommand($command);
         }
 
-        array_map(function (CommandHandlerInterface $handler) use ($command) {
+        foreach ($handlers as $handler) {
             $handler->handle($command);
-        }, $handlers);
+        }
 
         return $next($command);
     }

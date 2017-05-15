@@ -6,10 +6,8 @@ use PlentyConnector\Connector\ServiceBus\Query\Manufacturer\FetchAllManufacturer
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
-use PlentymarketsAdapter\Helper\MediaCategoryHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Manufacturer\ManufacturerResponseParserInterface;
-use PlentymarketsAdapter\ResponseParser\Media\MediaResponseParserInterface;
 
 /**
  * Class FetchAllManufacturersQueryHandler
@@ -27,25 +25,17 @@ class FetchAllManufacturersQueryHandler implements QueryHandlerInterface
     private $manufacturerResponseParser;
 
     /**
-     * @var MediaResponseParserInterface
-     */
-    private $mediaResponseParser;
-
-    /**
      * FetchAllManufacturersQueryHandler constructor.
      *
-     * @param ClientInterface $client
+     * @param ClientInterface                     $client
      * @param ManufacturerResponseParserInterface $manufacturerResponseParser
-     * @param MediaResponseParserInterface $mediaResponseParser
      */
     public function __construct(
         ClientInterface $client,
-        ManufacturerResponseParserInterface $manufacturerResponseParser,
-        MediaResponseParserInterface $mediaResponseParser
+        ManufacturerResponseParserInterface $manufacturerResponseParser
     ) {
         $this->client = $client;
         $this->manufacturerResponseParser = $manufacturerResponseParser;
-        $this->mediaResponseParser = $mediaResponseParser;
     }
 
     /**
@@ -62,22 +52,20 @@ class FetchAllManufacturersQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $result = [];
+        $manufacturers = $this->client->getIterator('items/manufacturers');
 
-        foreach ($this->client->getIterator('items/manufacturers') as $element) {
-            if (!empty($element['logo'])) {
-                $result[] = $media = $this->mediaResponseParser->parse([
-                    'mediaCategory' => MediaCategoryHelper::MANUFACTURER,
-                    'link' => $element['logo'],
-                    'name' => $element['name'],
-                ]);
+        foreach ($manufacturers as $element) {
+            $result = $this->manufacturerResponseParser->parse($element);
 
-                $element['logoIdentifier'] = $media->getIdentifier();
+            if (empty($result)) {
+                continue;
             }
 
-            $result[] = $this->manufacturerResponseParser->parse($element);
-        }
+            $parsedElements = array_filter($result);
 
-        return $result;
+            foreach ($parsedElements as $parsedElement) {
+                yield $parsedElement;
+            }
+        }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Manufacturer;
 
+use PlentyConnector\Adapter\ShopwareAdapter\Helper\AttributeHelper;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
@@ -29,15 +30,25 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
     private $identityService;
 
     /**
+     * @var AttributeHelper
+     */
+    private $attributeHelper;
+
+    /**
      * HandleManufacturerCommandHandler constructor.
      *
-     * @param ManufacturerResource $resource
+     * @param ManufacturerResource     $resource
      * @param IdentityServiceInterface $identityService
+     * @param AttributeHelper          $attributeHelper
      */
-    public function __construct(ManufacturerResource $resource, IdentityServiceInterface $identityService)
-    {
+    public function __construct(
+        ManufacturerResource $resource,
+        IdentityServiceInterface $identityService,
+        AttributeHelper $attributeHelper
+    ) {
         $this->resource = $resource;
         $this->identityService = $identityService;
+        $this->attributeHelper = $attributeHelper;
     }
 
     /**
@@ -56,7 +67,7 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
     {
         /**
          * @var HandleCommandInterface $command
-         * @var Manufacturer $manufacturer
+         * @var Manufacturer           $manufacturer
          */
         $manufacturer = $command->getTransferObject();
 
@@ -106,7 +117,7 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
         if (null === $identity) {
             $newManufacturer = $this->resource->create($params);
 
-            $this->identityService->create(
+            $identity = $this->identityService->create(
                 (string) $manufacturer->getIdentifier(),
                 Manufacturer::TYPE,
                 (string) $newManufacturer->getId(),
@@ -116,13 +127,19 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
             $this->resource->update($identity->getAdapterIdentifier(), $params);
         }
 
+        $this->attributeHelper->saveAttributes(
+            (int) $identity->getAdapterIdentifier(),
+            $manufacturer->getAttributes(),
+            's_articles_supplier_attributes'
+        );
+
         return true;
     }
 
     /**
      * @param Manufacturer $manufacturer
      *
-     * @return null|Supplier
+     * @return null|array
      */
     private function findExistingManufacturer(Manufacturer $manufacturer)
     {

@@ -10,15 +10,13 @@ Ext.define('Shopware.apps.PlentyConnector', {
     controllers: [
         'Main',
         'Settings',
-        'Mapping',
-        'Misc'
+        'Mapping'
     ],
 
     views: [
         'Main',
         'mapping.Tab',
         'mapping.Main',
-        'Misc',
         'Settings'
     ],
 

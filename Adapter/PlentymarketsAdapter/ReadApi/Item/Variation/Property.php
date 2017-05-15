@@ -12,14 +12,13 @@ class Property extends ApiAbstract
     /**
      * @param $productId
      * @param $variationId
+     *
      * @return mixed
      */
     public function findOne($productId, $variationId)
     {
-        return $this->client->request(
-            'GET',
-            'items/' . $productId . '/variations/' . $variationId . '/variation_properties'
-        );
-    }
+        $url = 'items/' . $productId . '/variations/' . $variationId . '/variation_properties';
 
+        return $this->client->request('GET', $url);
+    }
 }

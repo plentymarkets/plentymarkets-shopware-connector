@@ -3,9 +3,13 @@
 namespace PlentyConnector;
 
 use Doctrine\DBAL\Exception\InvalidArgumentException;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use PlentyConnector\Connector\ConfigService\Model\Config;
+use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\IdentityService\Model\Identity;
+use PlentyConnector\Connector\TransferObject\Category\Category;
+use PlentyConnector\Connector\TransferObject\PaymentStatus\PaymentStatus;
 use PlentyConnector\DependencyInjection\CompilerPass\CleanupDefinitionCompilerPass;
 use PlentyConnector\DependencyInjection\CompilerPass\CommandGeneratorCompilerPass;
 use PlentyConnector\DependencyInjection\CompilerPass\CommandHandlerCompilerPass;
@@ -54,14 +58,16 @@ class PlentyConnector extends Plugin
         Identity::class,
     ];
 
-    const CRONJOB_SYNCHRONIZE = 'Synchronize';
-    const CRONJOB_CLEANUP = 'Cleanup';
-
     /**
      * List of all cronjobs
      */
+    const CRONJOB_SYNCHRONIZE = 'Synchronize';
+    const CRONJOB_SYNCHRONIZE_ORDERS = 'SynchronizeOrders';
+    const CRONJOB_CLEANUP = 'Cleanup';
+
     const CRONJOBS = [
         self::CRONJOB_SYNCHRONIZE => 300,
+        self::CRONJOB_SYNCHRONIZE_ORDERS => 300,
         self::CRONJOB_CLEANUP => 86400,
     ];
 
@@ -74,9 +80,20 @@ class PlentyConnector extends Plugin
     {
         $container->setParameter('plenty_connector.plugin_dir', $this->getPath());
 
+        $this->loadFile($container, __DIR__ . '/DependencyInjection/services.xml');
+
         $this->loadFile($container, __DIR__ . '/Adapter/ShopwareAdapter/DependencyInjection/services.xml');
         $this->loadFile($container, __DIR__ . '/Adapter/PlentymarketsAdapter/DependencyInjection/services.xml');
-        $this->loadFile($container, __DIR__ . '/DependencyInjection/services.xml');
+
+        $this->loadFile($container, __DIR__ . '/Components/Sepa/DependencyInjection/services.xml');
+
+        if ($this->pluginExists($container, ['SwagPaymentPaypal', 'SwagPaymentPayPalInstallments', 'SwagPaymentPaypalPlus'])) {
+            $this->loadFile($container, __DIR__ . '/Components/PayPal/DependencyInjection/services.xml');
+        }
+
+        if ($this->pluginExists($container, ['SwagBundle'])) {
+            $this->loadFile($container, __DIR__ . '/Components/Bundle/DependencyInjection/services.xml');
+        }
 
         $container->addCompilerPass(new CleanupDefinitionCompilerPass());
         $container->addCompilerPass(new CommandGeneratorCompilerPass());
@@ -158,6 +175,12 @@ class PlentyConnector extends Plugin
         );
         $permissionInstaller->update($context);
 
+        if ($this->updateNeeded($context, '2.0.0-rc2')) {
+            $this->clearCategoryIdentities();
+            $this->clearPaymentStatusIdentities();
+            $this->clearLastChangedConfigEntries();
+        }
+
         parent::update($context);
     }
 
@@ -193,6 +216,101 @@ class PlentyConnector extends Plugin
         $permissionInstaller->uninstall($context);
 
         parent::uninstall($context);
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param array            $plugins
+     *
+     * @return bool
+     */
+    private function pluginExists(ContainerBuilder $container, array $plugins)
+    {
+        $folders = $container->getParameter('shopware.plugin_directories');
+
+        foreach ($plugins as $pluginName) {
+            foreach ($folders as $folder) {
+                if (file_exists($folder . 'Backend/' . $pluginName)) {
+                    return true;
+                }
+
+                if (file_exists($folder . 'Core/' . $pluginName)) {
+                    return true;
+                }
+
+                if (file_exists($folder . 'Frontend/' . $pluginName)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param UpdateContext $context
+     * @param $targetVersion
+     *
+     * @return mixed
+     */
+    private function updateNeeded(UpdateContext $context, $targetVersion)
+    {
+        return version_compare($context->getCurrentVersion(), $targetVersion, '<');
+    }
+
+    /**
+     * remove category identities as we changed the mapping format.
+     */
+    private function clearCategoryIdentities()
+    {
+        /**
+         * @var IdentityServiceInterface $identityService
+         */
+        $identityService = $this->container->get('plenty_connector.identity_service');
+
+        foreach ($identityService->findBy(['objectType' => Category::TYPE]) as $identity) {
+            $identityService->remove($identity);
+        }
+    }
+
+    /**
+     * remove category identities as we changed what informations are mapped
+     */
+    private function clearPaymentStatusIdentities()
+    {
+        /**
+         * @var IdentityServiceInterface $identityService
+         */
+        $identityService = $this->container->get('plenty_connector.identity_service');
+
+        foreach ($identityService->findBy(['objectType' => PaymentStatus::TYPE]) as $identity) {
+            $identityService->remove($identity);
+        }
+    }
+
+    /**
+     * reimport everything as we changed the config format
+     */
+    private function clearLastChangedConfigEntries()
+    {
+        /**
+         * @var EntityManagerInterface $models
+         */
+        $entityManager = $this->container->get('models');
+        $repository = $entityManager->getRepository(Config::class);
+
+        /**
+         * @var Config $element
+         */
+        foreach ($repository->findAll() as $element) {
+            if (false !== stripos($element->getName(), 'rest_')) {
+                continue;
+            }
+
+            $entityManager->remove($element);
+        }
+
+        $entityManager->flush();
     }
 
     /**

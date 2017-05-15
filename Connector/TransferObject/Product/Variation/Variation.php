@@ -2,7 +2,9 @@
 
 namespace PlentyConnector\Connector\TransferObject\Product\Variation;
 
+use DateTimeImmutable;
 use PlentyConnector\Connector\TransferObject\Product\Barcode\Barcode;
+use PlentyConnector\Connector\TransferObject\Product\Image\Image;
 use PlentyConnector\Connector\TransferObject\Product\Price\Price;
 use PlentyConnector\Connector\TransferObject\Product\Property\Property;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
@@ -49,9 +51,9 @@ class Variation extends AbstractValueObject
     private $model = '';
 
     /**
-     * @var array
+     * @var Image[]
      */
-    private $imageIdentifiers = [];
+    private $images = [];
 
     /**
      * @var Price[]
@@ -76,6 +78,16 @@ class Variation extends AbstractValueObject
     /**
      * @var float
      */
+    private $referenceAmount = 0.0;
+
+    /**
+     * @var float
+     */
+    private $packagingUnit = 0.0;
+
+    /**
+     * @var float
+     */
     private $maximumOrderQuantity;
 
     /**
@@ -94,7 +106,7 @@ class Variation extends AbstractValueObject
     private $shippingTime = 0;
 
     /**
-     * @var null|\DateTimeImmutable
+     * @var null|DateTimeImmutable
      */
     private $releaseDate;
 
@@ -241,19 +253,19 @@ class Variation extends AbstractValueObject
     }
 
     /**
-     * @return array
+     * @return Image[]
      */
-    public function getImageIdentifiers()
+    public function getImages()
     {
-        return $this->imageIdentifiers;
+        return $this->images;
     }
 
     /**
-     * @param array $imageIdentifiers
+     * @param Image[] $images
      */
-    public function setImageIdentifiers(array $imageIdentifiers)
+    public function setImages($images)
     {
-        $this->imageIdentifiers = $imageIdentifiers;
+        $this->images = $images;
     }
 
     /**
@@ -323,6 +335,38 @@ class Variation extends AbstractValueObject
     /**
      * @return float
      */
+    public function getReferenceAmount()
+    {
+        return $this->referenceAmount;
+    }
+
+    /**
+     * @param float $referenceAmount
+     */
+    public function setReferenceAmount($referenceAmount)
+    {
+        $this->referenceAmount = $referenceAmount;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPackagingUnit()
+    {
+        return $this->packagingUnit;
+    }
+
+    /**
+     * @param float $packagingUnit
+     */
+    public function setPackagingUnit($packagingUnit)
+    {
+        $this->packagingUnit = $packagingUnit;
+    }
+
+    /**
+     * @return float
+     */
     public function getMaximumOrderQuantity()
     {
         return $this->maximumOrderQuantity;
@@ -385,7 +429,7 @@ class Variation extends AbstractValueObject
     }
 
     /**
-     * @return null|\DateTimeImmutable
+     * @return null|DateTimeImmutable
      */
     public function getReleaseDate()
     {
@@ -393,9 +437,9 @@ class Variation extends AbstractValueObject
     }
 
     /**
-     * @param null|\DateTimeImmutable $releaseDate
+     * @param null|DateTimeImmutable $releaseDate
      */
-    public function setReleaseDate(\DateTimeImmutable $releaseDate = null)
+    public function setReleaseDate(DateTimeImmutable $releaseDate = null)
     {
         $this->releaseDate = $releaseDate;
     }

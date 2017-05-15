@@ -25,15 +25,15 @@ class OrderItemValidator implements ValidatorInterface
      */
     public function validate($object)
     {
-        Assertion::inArray($object->getType(), $object->getTypes(), null, 'orderItem.type');
-        Assertion::float($object->getQuantity(), null, 'orderItem.quantity');
-        Assertion::greaterThan($object->getQuantity(), 0.0, null, 'orderItem.quantity');
-        Assertion::string($object->getName(), null, 'orderItem.name');
-        Assertion::notBlank($object->getName(), null, 'orderItem.name');
-        Assertion::string($object->getNumber(), null, 'orderItem.number');
-        Assertion::notBlank($object->getNumber(), null, 'orderItem.number');
-        Assertion::float($object->getPrice(), null, 'orderItem.price');
-        Assertion::nullOrUuid($object->getVatRateIdentifier(), null, 'orderItem.vatRateIdentifier');
-        Assertion::allIsInstanceOf($object->getAttributes(), Attribute::class, null, 'orderItem.attributes');
+        Assertion::inArray($object->getType(), $object->getTypes(), null, 'order.orderItem.type');
+        Assertion::float($object->getQuantity(), null, 'order.orderItem.quantity');
+        Assertion::greaterThan($object->getQuantity(), 0.0, null, 'order.orderItem.quantity');
+        Assertion::string($object->getName(), null, 'order.orderItem.name');
+        Assertion::notBlank($object->getName(), null, 'order.orderItem.name');
+        Assertion::string($object->getNumber(), null, 'order.orderItem.number');
+        Assertion::notBlank($object->getNumber(), null, 'order.orderItem.number');
+        Assertion::float($object->getPrice(), null, 'order.orderItem.price');
+        Assertion::nullOrUuid($object->getVatRateIdentifier(), null, 'order.orderItem.vatRateIdentifier');
+        Assertion::allIsInstanceOf($object->getAttributes(), Attribute::class, null, 'order.orderItem.attributes');
     }
 }

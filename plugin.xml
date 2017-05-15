@@ -3,13 +3,8 @@
     <label lang="de">plentymarkets Shopware Connector</label>
     <label lang="en">plentymarkets Shopware Connector</label>
 
-    <version>2.0.0</version>
+    <version>2.0.0-rc2</version>
     <link>https://www.plentymarkets.eu/</link>
     <author>arvatis media GmbH</author>
     <compatibility minVersion="5.2.0" />
-
-    <changelog version="2.0.0">
-        <changes lang="de">Veröffentlichung</changes>
-        <changes lang="en">Release</changes>
-    </changelog>
 </plugin>

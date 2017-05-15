@@ -2,7 +2,9 @@
 
 namespace PlentyConnector\Connector\TransferObject\Product;
 
+use DateTimeImmutable;
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
+use PlentyConnector\Connector\TransferObject\Product\Image\Image;
 use PlentyConnector\Connector\TransferObject\Product\LinkedProduct\LinkedProduct;
 use PlentyConnector\Connector\TransferObject\Product\Property\Property;
 use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
@@ -65,9 +67,9 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     private $shippingProfileIdentifiers = [];
 
     /**
-     * @var array
+     * @var Image[]
      */
-    private $imageIdentifiers = [];
+    private $images = [];
 
     /**
      * @var Variation[]
@@ -82,7 +84,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     /**
      * @var bool
      */
-    private $limitedStock = false;
+    private $stockLimitation = false;
 
     /**
      * @var string
@@ -140,12 +142,12 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     private $translations = [];
 
     /**
-     * @var null|\DateTimeImmutable
+     * @var null|DateTimeImmutable
      */
     private $availableFrom;
 
     /**
-     * @var null|\DateTimeImmutable
+     * @var null|DateTimeImmutable
      */
     private $availableTo;
 
@@ -213,7 +215,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     /**
      * @return bool
      */
-    public function getActive()
+    public function isActive()
     {
         return $this->active;
     }
@@ -307,19 +309,19 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     }
 
     /**
-     * @return array
+     * @return Image[]
      */
-    public function getImageIdentifiers()
+    public function getImages()
     {
-        return $this->imageIdentifiers;
+        return $this->images;
     }
 
     /**
-     * @param array $imageIdentifiers
+     * @param Image[] $images
      */
-    public function setImageIdentifiers(array $imageIdentifiers)
+    public function setImages($images)
     {
-        $this->imageIdentifiers = $imageIdentifiers;
+        $this->images = $images;
     }
 
     /**
@@ -357,17 +359,17 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     /**
      * @return bool
      */
-    public function getLimitedStock()
+    public function hasStockLimitation()
     {
-        return $this->limitedStock;
+        return $this->stockLimitation;
     }
 
     /**
-     * @param bool $limitedStock
+     * @param bool $stockLimitation
      */
-    public function setLimitedStock($limitedStock)
+    public function setStockLimitation($stockLimitation)
     {
-        $this->limitedStock = $limitedStock;
+        $this->stockLimitation = $stockLimitation;
     }
 
     /**
@@ -547,7 +549,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     }
 
     /**
-     * @return null|\DateTimeImmutable
+     * @return null|DateTimeImmutable
      */
     public function getAvailableFrom()
     {
@@ -555,15 +557,15 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     }
 
     /**
-     * @param null|\DateTimeImmutable $availableFrom
+     * @param null|DateTimeImmutable $availableFrom
      */
-    public function setAvailableFrom(\DateTimeImmutable $availableFrom = null)
+    public function setAvailableFrom(DateTimeImmutable $availableFrom = null)
     {
         $this->availableFrom = $availableFrom;
     }
 
     /**
-     * @return null|\DateTimeImmutable
+     * @return null|DateTimeImmutable
      */
     public function getAvailableTo()
     {
@@ -571,9 +573,9 @@ class Product extends AbstractTransferObject implements TranslateableInterface
     }
 
     /**
-     * @param null|\DateTimeImmutable $availableTo
+     * @param null|DateTimeImmutable $availableTo
      */
-    public function setAvailableTo(\DateTimeImmutable $availableTo = null)
+    public function setAvailableTo(DateTimeImmutable $availableTo = null)
     {
         $this->availableTo = $availableTo;
     }

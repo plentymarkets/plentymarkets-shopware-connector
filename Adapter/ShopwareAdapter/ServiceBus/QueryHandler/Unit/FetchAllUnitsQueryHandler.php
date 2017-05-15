@@ -30,7 +30,7 @@ class FetchAllUnitsQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllUnitsQueryHandler constructor.
      *
-     * @param EntityManagerInterface $entityManager
+     * @param EntityManagerInterface      $entityManager
      * @param UnitResponseParserInterface $responseParser
      */
     public function __construct(

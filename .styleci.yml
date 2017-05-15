@@ -1,0 +1,16 @@
+preset: symfony
+
+enabled:
+  - no_useless_else
+  - no_useless_return
+  - ordered_class_elements
+  - ordered_imports
+  - phpdoc_order
+  - short_array_syntax
+  - concat_with_spaces
+
+disabled:
+  - concat_without_spaces
+  - phpdoc_summary
+  - phpdoc_to_comment
+  - phpdoc_var_without_name

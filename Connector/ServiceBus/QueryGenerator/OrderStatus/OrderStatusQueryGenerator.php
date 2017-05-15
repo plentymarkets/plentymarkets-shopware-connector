@@ -9,7 +9,7 @@ use PlentyConnector\Connector\ServiceBus\QueryGenerator\QueryGeneratorInterface;
 use PlentyConnector\Connector\TransferObject\OrderStatus\OrderStatus;
 
 /**
- * Class ManufacturerQueryGenerator
+ * Class OrderStatusQueryGenerator
  */
 class OrderStatusQueryGenerator implements QueryGeneratorInterface
 {

@@ -32,8 +32,8 @@ class MediaValidator implements ValidatorInterface
 
         Assertion::url($object->getLink(), null, 'media.link');
 
-        Assertion::nullOrString($object->getName(), null, 'media.name');
-        Assertion::nullOrString($object->getAlternateName(), null, 'media.name');
+        Assertion::nullOrNotBlank($object->getName(), null, 'media.name');
+        Assertion::nullOrNotBlank($object->getAlternateName(), null, 'media.name');
 
         Assertion::allIsInstanceOf($object->getTranslations(), Translation::class, null, 'media.translations');
 

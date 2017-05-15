@@ -5,7 +5,8 @@ namespace ShopwareAdapter\ServiceBus\QueryHandler\Order;
 use PlentyConnector\Connector\ServiceBus\Query\Order\FetchAllOrdersQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
-use Shopware\Components\Api\Resource;
+use Shopware\Components\Api\Resource\Order as OrderResource;
+use Shopware\Models\Order\Status;
 use ShopwareAdapter\ResponseParser\Order\OrderResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
@@ -20,7 +21,7 @@ class FetchAllOrdersQueryHandler implements QueryHandlerInterface
     private $responseParser;
 
     /**
-     * @var Resource\Order
+     * @var OrderResource
      */
     private $orderResource;
 
@@ -28,11 +29,11 @@ class FetchAllOrdersQueryHandler implements QueryHandlerInterface
      * FetchAllOrdersQueryHandler constructor.
      *
      * @param OrderResponseParserInterface $responseParser
-     * @param Resource\Order $orderResource
+     * @param OrderResource                $orderResource
      */
     public function __construct(
         OrderResponseParserInterface $responseParser,
-        Resource\Order $orderResource
+        OrderResource $orderResource
     ) {
         $this->responseParser = $responseParser;
         $this->orderResource = $orderResource;
@@ -55,17 +56,27 @@ class FetchAllOrdersQueryHandler implements QueryHandlerInterface
         $filter = [
             [
                 'property' => 'status',
-                'expression' => '!=',
-                'value' => -1,
+                'expression' => '=',
+                'value' => Status::ORDER_STATE_OPEN,
             ],
         ];
 
         $orders = $this->orderResource->getList(0, null, $filter);
 
-        $result = array_map(function ($order) {
-            return $this->responseParser->parse($this->orderResource->getOne($order['id']));
-        }, $orders['data']);
+        foreach ($orders['data'] as $order) {
+            $order = $this->orderResource->getOne($order['id']);
 
-        return array_filter($result);
+            $result = $this->responseParser->parse($order);
+
+            if (empty($result)) {
+                continue;
+            }
+
+            $parsedElements = array_filter($result);
+
+            foreach ($parsedElements as $parsedElement) {
+                yield $parsedElement;
+            }
+        }
     }
 }

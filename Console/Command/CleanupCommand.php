@@ -31,7 +31,7 @@ class CleanupCommand extends ShopwareCommand
      * CleanupCommand constructor.
      *
      * @param CleanupServiceInterface $cleanupService
-     * @param Logger $logger
+     * @param Logger                  $logger
      *
      * @throws LogicException
      */
@@ -49,11 +49,11 @@ class CleanupCommand extends ShopwareCommand
     protected function configure()
     {
         $this->setName('plentyconnector:cleanup');
-        $this->setDescription('cleanup task');
+        $this->setDescription('remove orphaned transfer objects');
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      *
      * @throws Exception

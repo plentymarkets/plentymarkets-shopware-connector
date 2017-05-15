@@ -33,8 +33,6 @@ Ext.define('Shopware.apps.PlentyConnector.view.Main', {
         me.tabpanel = Ext.create('Ext.tab.Panel', {
             items: [me.sf, {
                 xtype: 'plentymarkets-view-mapping-main'
-            }, {
-                xtype: 'plentymarkets-view-misc'
             }]
         });
 

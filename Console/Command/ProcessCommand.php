@@ -34,7 +34,7 @@ class ProcessCommand extends ShopwareCommand
      * ProcessCommand constructor.
      *
      * @param Connector $connector
-     * @param Logger $logger
+     * @param Logger    $logger
      *
      * @throws LogicException
      */
@@ -52,7 +52,8 @@ class ProcessCommand extends ShopwareCommand
     protected function configure()
     {
         $this->setName('plentyconnector:process');
-        $this->setDescription('process all definitions according');
+        $this->setDescription('process definitons');
+        $this->setHelp($this->getHelpText());
         $this->addArgument(
             'objectType',
             InputArgument::OPTIONAL,
@@ -74,7 +75,7 @@ class ProcessCommand extends ShopwareCommand
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      *
      * @throws Exception
@@ -101,5 +102,20 @@ class ProcessCommand extends ShopwareCommand
             $this->logger->error($exception->getMessage());
             $this->logger->error($exception->getTraceAsString());
         }
+    }
+
+    /**
+     * @return string
+     */
+    private function getHelpText()
+    {
+        $examples = [
+            'import all products: plentyconnector:process Product --all',
+            'import changed products: plentyconnector:process Product',
+            'import single product: plentyconnector:process Product 753c7d5d-09be-4dd3-bd3f-3d5cc2e92dab',
+            'import changed orders: plentyconnector:process Order',
+        ];
+
+        return "Examples:\n\n" . implode("\n", $examples);
     }
 }

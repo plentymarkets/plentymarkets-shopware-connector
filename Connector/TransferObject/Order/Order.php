@@ -2,15 +2,13 @@
 
 namespace PlentyConnector\Connector\TransferObject\Order;
 
-use Assert\Assertion;
 use DateTimeImmutable;
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 use PlentyConnector\Connector\TransferObject\Order\Address\Address;
 use PlentyConnector\Connector\TransferObject\Order\Comment\Comment;
 use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
 use PlentyConnector\Connector\TransferObject\Order\OrderItem\OrderItem;
-use PlentyConnector\Connector\TransferObject\Order\Payment\Payment;
-use PlentyConnector\Connector\TransferObject\Order\PaymentData\PaymentDataInterface;
+use PlentyConnector\Connector\TransferObject\Order\Package\Package;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
 /**
@@ -66,11 +64,6 @@ class Order extends AbstractTransferObject
     private $orderItems = [];
 
     /**
-     * @var Payment[]
-     */
-    private $payments = [];
-
-    /**
      * @var string
      */
     private $shopIdentifier = '';
@@ -106,9 +99,9 @@ class Order extends AbstractTransferObject
     private $comments = [];
 
     /**
-     * @var PaymentDataInterface[]
+     * @var Package[]
      */
-    private $paymentData;
+    private $packages = [];
 
     /**
      * @var Attribute[]
@@ -137,8 +130,6 @@ class Order extends AbstractTransferObject
      */
     public function getIdentifier()
     {
-        Assertion::notBlank($this->identifier);
-
         return $this->identifier;
     }
 
@@ -147,8 +138,6 @@ class Order extends AbstractTransferObject
      */
     public function setIdentifier($identifier)
     {
-        Assertion::uuid($identifier);
-
         $this->identifier = $identifier;
     }
 
@@ -275,22 +264,6 @@ class Order extends AbstractTransferObject
     }
 
     /**
-     * @return Payment[]
-     */
-    public function getPayments()
-    {
-        return $this->payments;
-    }
-
-    /**
-     * @param Payment[] $payments
-     */
-    public function setPayments(array $payments)
-    {
-        $this->payments = $payments;
-    }
-
-    /**
      * @return string
      */
     public function getShopIdentifier()
@@ -403,19 +376,19 @@ class Order extends AbstractTransferObject
     }
 
     /**
-     * @return PaymentDataInterface[]
+     * @return Package[]
      */
-    public function getPaymentData()
+    public function getPackages()
     {
-        return $this->paymentData;
+        return $this->packages;
     }
 
     /**
-     * @param PaymentDataInterface[] $paymentData
+     * @param Package[] $packages
      */
-    public function setPaymentData(array $paymentData = [])
+    public function setPackages($packages)
     {
-        $this->paymentData = $paymentData;
+        $this->packages = $packages;
     }
 
     /**

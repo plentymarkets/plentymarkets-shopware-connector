@@ -37,9 +37,17 @@ class OrderStatusResponseParser implements OrderStatusResponseParserInterface
             OrderStatus::TYPE
         );
 
+        if (!empty($entry['name'])) {
+            $name = $entry['name'];
+        } elseif (!empty($entry['description'])) {
+            $name = $entry['description'];
+        } else {
+            $name = $entry['id'];
+        }
+
         return OrderStatus::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => $entry['name'],
+            'name' => (string) $name,
         ]);
     }
 }

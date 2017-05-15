@@ -5,11 +5,11 @@ namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Category;
 use PlentyConnector\Connector\ServiceBus\Query\Category\FetchChangedCategoriesQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
-use PlentymarketsAdapter\Client\ClientInterface;
-use PlentymarketsAdapter\Helper\LanguageHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
+use PlentymarketsAdapter\ReadApi\Category\Category;
 use PlentymarketsAdapter\ResponseParser\Category\CategoryResponseParserInterface;
 use PlentymarketsAdapter\ServiceBus\ChangedDateTimeTrait;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class FetchChangedCategoriesQueryHandler.
@@ -19,9 +19,9 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
     use ChangedDateTimeTrait;
 
     /**
-     * @var ClientInterface
+     * @var Category
      */
-    private $client;
+    private $categoryApi;
 
     /**
      * @var CategoryResponseParserInterface
@@ -29,25 +29,25 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
     private $categoryResponseParser;
 
     /**
-     * @var LanguageHelper
+     * @var LoggerInterface
      */
-    private $languageHelper;
+    private $logger;
 
     /**
-     * FetchCategoryQueryHandler constructor.
+     * FetchChangedCategoriesQueryHandler constructor.
      *
-     * @param ClientInterface $client
+     * @param Category                        $categoryApi
      * @param CategoryResponseParserInterface $categoryResponseParser
-     * @param LanguageHelper $languageHelper
+     * @param LoggerInterface                 $logger
      */
     public function __construct(
-        ClientInterface $client,
+        Category $categoryApi,
         CategoryResponseParserInterface $categoryResponseParser,
-        LanguageHelper $languageHelper
+        LoggerInterface $logger
     ) {
-        $this->client = $client;
+        $this->categoryApi = $categoryApi;
         $this->categoryResponseParser = $categoryResponseParser;
-        $this->languageHelper = $languageHelper;
+        $this->logger = $logger;
     }
 
     /**
@@ -67,47 +67,28 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
         $lastCangedTime = $this->getChangedDateTime();
         $currentDateTime = $this->getCurrentDateTime();
 
-        $elements = $this->client->request('GET', 'categories', [
-            'with' => 'details,clients',
-            'type' => 'item',
-            'updatedAt' => $lastCangedTime->format(DATE_W3C),
-            'lang' => $this->languageHelper->getLanguagesQueryString(),
-        ]);
+        $elements = $this->categoryApi->findChanged($lastCangedTime, $currentDateTime);
 
-        $elements = array_filter($elements, function ($element) {
-            return $element['right'] === 'all';
-        });
+        foreach ($elements as $element) {
+            if ($element['right'] !== 'all') {
+                $this->logger->notice('unsupported category rights');
 
-        $result = [];
-
-        array_walk($elements, function (array $element) use (&$result) {
-            if (empty($element['details'])) {
-                return;
+                continue;
             }
 
-            $categoriesGrouped = [];
-            foreach ($element['details'] as $detail) {
-                $categoriesGrouped[$detail['plentyId']][] = $detail;
+            $result = $this->categoryResponseParser->parse($element);
+
+            if (empty($result)) {
+                continue;
             }
 
-            foreach ($categoriesGrouped as $plentyId => $details) {
-                $parsedElements = $this->categoryResponseParser->parse([
-                    'plentyId' => $plentyId,
-                    'categoryId' => $element['id'],
-                    'parentCategoryId' => $element['parentCategoryId'],
-                    'details' => $details,
-                ]);
+            $parsedElements = array_filter($result);
 
-                foreach ($parsedElements as $parsedElement) {
-                    $result[] = $parsedElement;
-                }
+            foreach ($parsedElements as $parsedElement) {
+                yield $parsedElement;
             }
-        });
-
-        if (!empty($result)) {
-            $this->setChangedDateTime($currentDateTime);
         }
 
-        return array_filter($result);
+        $this->setChangedDateTime($currentDateTime);
     }
 }

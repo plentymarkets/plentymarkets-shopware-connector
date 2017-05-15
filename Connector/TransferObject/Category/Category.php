@@ -25,14 +25,19 @@ class Category extends AbstractTransferObject implements TranslateableInterface
     private $name = '';
 
     /**
+     * @var bool
+     */
+    private $active = false;
+
+    /**
      * @var null|string
      */
     private $parentIdentifier;
 
     /**
-     * @var string
+     * @var array
      */
-    private $shopIdentifier = '';
+    private $shopIdentifiers = '';
 
     /**
      * @var array
@@ -125,6 +130,22 @@ class Category extends AbstractTransferObject implements TranslateableInterface
     }
 
     /**
+     * @return bool
+     */
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param bool $active
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+    }
+
+    /**
      * @return null|string
      */
     public function getParentIdentifier()
@@ -141,19 +162,19 @@ class Category extends AbstractTransferObject implements TranslateableInterface
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getShopIdentifier()
+    public function getShopIdentifiers()
     {
-        return $this->shopIdentifier;
+        return $this->shopIdentifiers;
     }
 
     /**
-     * @param string $shopIdentifier
+     * @param array $shopIdentifiers
      */
-    public function setShopIdentifier($shopIdentifier)
+    public function setShopIdentifiers(array $shopIdentifiers = [])
     {
-        $this->shopIdentifier = $shopIdentifier;
+        $this->shopIdentifiers = $shopIdentifiers;
     }
 
     /**
