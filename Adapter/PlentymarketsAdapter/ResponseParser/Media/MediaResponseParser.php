@@ -34,8 +34,8 @@ class MediaResponseParser implements MediaResponseParserInterface
      * MediaResponseParser constructor.
      *
      * @param IdentityServiceInterface $identityService
-     * @param MediaCategoryHelper $categoryHelper
-     * @param LoggerInterface $logger
+     * @param MediaCategoryHelper      $categoryHelper
+     * @param LoggerInterface          $logger
      */
     public function __construct(
         IdentityServiceInterface $identityService,
