@@ -42,7 +42,8 @@ class MappingService implements MappingServiceInterface
      * MappingService constructor.
      *
      * @param QueryFactoryInterface $queryFactory
-     * @param ServiceBusInterface   $serviceBus
+     * @param ServiceBusInterface $serviceBus
+     * @param ValidatorServiceInterface $validator
      */
     public function __construct(
         QueryFactoryInterface $queryFactory,
