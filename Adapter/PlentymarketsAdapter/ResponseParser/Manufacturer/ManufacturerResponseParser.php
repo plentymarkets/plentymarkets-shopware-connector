@@ -74,9 +74,11 @@ class ManufacturerResponseParser implements ManufacturerResponseParserInterface
                     'alternateName' => $entry['name'],
                 ]);
 
-                $manufacturer->setLogoIdentifier($media->getIdentifier());
+                if (null !== $media) {
+                    $manufacturer->setLogoIdentifier($media->getIdentifier());
 
-                $result[] = $media;
+                    $result[] = $media;
+                }
             } catch (\Exception $exception) {
                 $this->logger->notice('manufacturer logo was ignored', ['name' => $entry['name']]);
             }
