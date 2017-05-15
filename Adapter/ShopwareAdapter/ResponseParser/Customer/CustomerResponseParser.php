@@ -88,20 +88,21 @@ class CustomerResponseParser implements CustomerResponseParserInterface
             $entry['title'] = null;
         }
 
-        return Customer::fromArray([
-            'birthday' => $birthday,
-            'customerType' => $this->getCustomerTypeId($entry['accountMode']),
-            'email' => $entry['email'],
-            'firstname' => $entry['firstname'],
-            'lastname' => $entry['lastname'],
-            'number' => $entry['number'],
-            'salutation' => $salutation,
-            'title' => $entry['title'],
-            'newsletter' => (bool) $entry['newsletter'],
-            'shopIdentifier' => $shopIdentifier,
-            'languageIdentifier' => $languageIdentifier,
-            'customerGroupIdentifier' => $customerGroupIdentifier,
-        ]);
+        $customer = new Customer();
+        $customer->setBirthday($birthday);
+        $customer->setType($this->getCustomerTypeId($entry['accountMode']));
+        $customer->setEmail($entry['email']);
+        $customer->setFirstname($entry['firstname']);
+        $customer->setLastname($entry['lastname']);
+        $customer->setNumber($entry['number']);
+        $customer->setSalutation($salutation);
+        $customer->setTitle($entry['title']);
+        $customer->setNewsletter((bool) $entry['newsletter']);
+        $customer->setShopIdentifier($shopIdentifier);
+        $customer->setLanguageIdentifier($languageIdentifier);
+        $customer->setCustomerGroupIdentifier($customerGroupIdentifier);
+
+        return $customer;
     }
 
     /**

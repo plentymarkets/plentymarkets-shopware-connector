@@ -98,14 +98,6 @@ class Customer extends AbstractValueObject
     }
 
     /**
-     * @return int
-     */
-    public function getCustomerType()
-    {
-        return $this->type;
-    }
-
-    /**
      * @return array
      */
     public function getCustomerTypes()

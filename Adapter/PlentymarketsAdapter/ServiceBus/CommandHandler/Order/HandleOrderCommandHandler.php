@@ -97,8 +97,11 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             return true;
         }
 
-        $this->handleOrder($order);
-        $this->handleComments($order);
+        $result = $this->handleOrder($order);
+
+        if ($result) {
+            $this->handleComments($order);
+        }
 
         return true;
     }
@@ -117,6 +120,12 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             'objectType' => Shop::TYPE,
             'adapterName' => PlentymarketsAdapter::NAME,
         ]);
+
+        if (null === $shopIdentity) {
+            $this->logger->notice('shop not mapped');
+
+            return false;
+        }
 
         $languageIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $order->getCustomer()->getLanguageIdentifier(),
@@ -412,7 +421,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         ]);
 
         if (null === $languageIdentity) {
-            throw new NotFoundException('language not found');
+            throw new NotFoundException('language not found - ' . $order->getCustomer()->getLanguageIdentifier());
         }
 
         $shopIdentity = $this->identityService->findOneBy([
@@ -442,7 +451,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             'gender' => $customer->getSalutation() === Customer::SALUTATION_MR ? 'male' : 'female',
             'lang' => $languageIdentity->getAdapterIdentifier(),
             'referrerId' => 1, // TODO: Konfigurierbar über Config. (/rest/orders/referrers)
-            'singleAccess' => $customer->getCustomerType() === Customer::TYPE_GUEST,
+            'singleAccess' => $customer->getType() === Customer::TYPE_GUEST,
             'plentyId' => $shopIdentity->getAdapterIdentifier(),
             'newsletterAllowanceAt' => '',
             'lastOrderAt' => $order->getOrderTime()->format(DATE_W3C),
@@ -547,10 +556,6 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                         'value' => $customer->getEmail(),
                     ],
                     [
-                        'typeId' => 4,
-                        'value' => $customer->getPhoneNumber(),
-                    ],
-                    [
                         'typeId' => 6,
                         'value' => $address->getAdditional(),
                     ],
@@ -571,10 +576,6 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                     [
                         'typeId' => 5,
                         'value' => $customer->getEmail(),
-                    ],
-                    [
-                        'typeId' => 4,
-                        'value' => $customer->getPhoneNumber(),
                     ],
                     [
                         'typeId' => 6,
@@ -599,11 +600,14 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                         'typeId' => 5,
                         'value' => $customer->getEmail(),
                     ],
-                    [
-                        'typeId' => 4,
-                        'value' => $customer->getPhoneNumber(),
-                    ],
                 ],
+            ];
+        }
+
+        if (null !== $customer->getPhoneNumber()) {
+            $params['options'][] = [
+                'typeId' => 4,
+                'value' => $customer->getPhoneNumber(),
             ];
         }
 
