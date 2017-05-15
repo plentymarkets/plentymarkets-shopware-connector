@@ -48,8 +48,8 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
      * HandleBundleCommandHandler constructor.
      *
      * @param IdentityServiceInterface $identityService
-     * @param EntityManagerInterface $entityManager
-     * @param BundleHelper $bundleHelper
+     * @param EntityManagerInterface   $entityManager
+     * @param BundleHelper             $bundleHelper
      */
     public function __construct(
         IdentityServiceInterface $identityService,
@@ -71,11 +71,103 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function handle(CommandInterface $command)
+    {
+        /**
+         * @var HandleBundleCommand $command
+         * @var Bundle              $bundle
+         */
+        $bundle = $command->getTransferObject();
+
+        $identity = $this->identityService->findOneBy([
+            'objectIdentifier' => (string) $bundle->getIdentifier(),
+            'objectType' => Bundle::TYPE,
+            'adapterName' => ShopwareAdapter::NAME,
+        ]);
+
+        $this->bundleHelper->registerBundleModels();
+
+        /**
+         * @var BundleRepository $repository
+         */
+        $repository = $this->entityManager->getRepository(BundleModel::class);
+
+        if (null === $identity) {
+            $existingBundle = $repository->findOneBy(['number' => $bundle->getNumber()]);
+
+            if (null !== $existingBundle) {
+                $identity = $this->identityService->create(
+                    $bundle->getIdentifier(),
+                    Bundle::TYPE,
+                    (string) $existingBundle->getId(),
+                    ShopwareAdapter::NAME
+                );
+            }
+        } else {
+            $existingBundle = $repository->find($identity->getAdapterIdentifier());
+
+            if (null === $existingBundle) {
+                $this->identityService->remove($identity);
+
+                $identity = null;
+            }
+        }
+
+        if (null === $identity) {
+            $bundleModel = new BundleModel();
+
+            $bundleModel->setDisplayGlobal(true);
+            $bundleModel->setSells(0);
+            $bundleModel->setCreated('now');
+            $bundleModel->setType(1);
+            $bundleModel->setDiscountType('abs');
+            $bundleModel->setQuantity(0);
+            $bundleModel->setShowName(false);
+        } else {
+            /**
+             * @var BundleModel $bundleModel
+             */
+            $bundleModel = $repository->find($identity->getAdapterIdentifier());
+
+            foreach ($bundleModel->getPrices() as $price) {
+                $this->entityManager->remove($price);
+            }
+
+            foreach ($bundleModel->getArticles() as $article) {
+                $this->entityManager->remove($article);
+            }
+
+            foreach ($bundleModel->getCustomerGroups() as $customerGroup) {
+                $this->entityManager->remove($customerGroup);
+            }
+        }
+
+        $bundleModel->setName($bundle->getName());
+        $bundleModel->setValidFrom($bundle->getAvailableFrom());
+        $bundleModel->setValidTo($bundle->getAvailableTo());
+        $bundleModel->setLimited($bundle->hasStockLimitation());
+        $bundleModel->setActive($bundle->isActive());
+        $bundleModel->setQuantity($bundle->getStock());
+        $bundleModel->setNumber($bundle->getNumber());
+        $bundleModel->setArticle($this->getArticle($bundle));
+        $bundleModel->setCustomerGroups($this->getCustomerGroups($bundle));
+        $bundleModel->setPrices($this->getPrices($bundle));
+        $bundleModel->setArticles($this->getArticles($bundle));
+
+        $this->entityManager->persist($bundleModel);
+        $this->entityManager->flush();
+
+        return true;
+    }
+
+    /**
      * @param Bundle $bundle
      *
-     * @return ArticleModel
-     *
      * @throws NotFoundException
+     *
+     * @return ArticleModel
      */
     private function getArticle(Bundle $bundle)
     {
@@ -202,97 +294,5 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
         }
 
         return new ArrayCollection($result);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function handle(CommandInterface $command)
-    {
-        /**
-         * @var HandleBundleCommand $command
-         * @var Bundle $bundle
-         */
-        $bundle = $command->getTransferObject();
-
-        $identity = $this->identityService->findOneBy([
-            'objectIdentifier' => (string) $bundle->getIdentifier(),
-            'objectType' => Bundle::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
-        ]);
-
-        $this->bundleHelper->registerBundleModels();
-
-        /**
-         * @var BundleRepository $repository
-         */
-        $repository = $this->entityManager->getRepository(BundleModel::class);
-
-        if (null === $identity) {
-            $existingBundle = $repository->findOneBy(['number' => $bundle->getNumber()]);
-
-            if (null !== $existingBundle) {
-                $identity = $this->identityService->create(
-                    $bundle->getIdentifier(),
-                    Bundle::TYPE,
-                    (string) $existingBundle->getId(),
-                    ShopwareAdapter::NAME
-                );
-            }
-        } else {
-            $existingBundle = $repository->find($identity->getAdapterIdentifier());
-
-            if (null === $existingBundle) {
-                $this->identityService->remove($identity);
-
-                $identity = null;
-            }
-        }
-
-        if (null === $identity) {
-            $bundleModel = new BundleModel();
-
-            $bundleModel->setDisplayGlobal(true);
-            $bundleModel->setSells(0);
-            $bundleModel->setCreated('now');
-            $bundleModel->setType(1);
-            $bundleModel->setDiscountType('abs');
-            $bundleModel->setQuantity(0);
-            $bundleModel->setShowName(false);
-        } else {
-            /**
-             * @var BundleModel $bundleModel
-             */
-            $bundleModel = $repository->find($identity->getAdapterIdentifier());
-
-            foreach ($bundleModel->getPrices() as $price) {
-                $this->entityManager->remove($price);
-            }
-
-            foreach ($bundleModel->getArticles() as $article) {
-                $this->entityManager->remove($article);
-            }
-
-            foreach ($bundleModel->getCustomerGroups() as $customerGroup) {
-                $this->entityManager->remove($customerGroup);
-            }
-        }
-
-        $bundleModel->setName($bundle->getName());
-        $bundleModel->setValidFrom($bundle->getAvailableFrom());
-        $bundleModel->setValidTo($bundle->getAvailableTo());
-        $bundleModel->setLimited($bundle->hasStockLimitation());
-        $bundleModel->setActive($bundle->isActive());
-        $bundleModel->setQuantity($bundle->getStock());
-        $bundleModel->setNumber($bundle->getNumber());
-        $bundleModel->setArticle($this->getArticle($bundle));
-        $bundleModel->setCustomerGroups($this->getCustomerGroups($bundle));
-        $bundleModel->setPrices($this->getPrices($bundle));
-        $bundleModel->setArticles($this->getArticles($bundle));
-
-        $this->entityManager->persist($bundleModel);
-        $this->entityManager->flush();
-
-        return true;
     }
 }

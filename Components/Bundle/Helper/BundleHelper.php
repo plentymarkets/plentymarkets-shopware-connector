@@ -2,7 +2,6 @@
 
 namespace PlentyConnector\Components\Bundle\Helper;
 
-use Enlight_Loader;
 use Enlight_Plugin_PluginManager;
 use Shopware\CustomModels\Bundle\Bundle as BundleModel;
 

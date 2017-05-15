@@ -11,9 +11,9 @@ use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Psr\Log\LoggerInterface;
-use ShopwareAdapter\ShopwareAdapter;
 use Shopware\CustomModels\Bundle\Bundle as BundleModel;
 use Shopware\CustomModels\Bundle\Repository as BundleRepository;
+use ShopwareAdapter\ShopwareAdapter;
 
 /**
  * Class RemoveBundleCommandHandler.
@@ -44,9 +44,9 @@ class RemoveBundleCommandHandler implements CommandHandlerInterface
      * RemoveBundleCommandHandler constructor.
      *
      * @param IdentityServiceInterface $identityService
-     * @param EntityManagerInterface $entityManager
-     * @param BundleHelper $bundleHelper
-     * @param LoggerInterface $logger
+     * @param EntityManagerInterface   $entityManager
+     * @param BundleHelper             $bundleHelper
+     * @param LoggerInterface          $logger
      */
     public function __construct(
         IdentityServiceInterface $identityService,

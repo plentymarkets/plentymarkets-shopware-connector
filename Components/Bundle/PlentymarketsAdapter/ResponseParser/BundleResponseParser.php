@@ -44,10 +44,10 @@ class BundleResponseParser implements BundleResponseParserInterface
     /**
      * BundleResponseParser constructor.
      *
-     * @param IdentityServiceInterface $identityService
+     * @param IdentityServiceInterface     $identityService
      * @param PriceResponseParserInterface $priceResponseParser
-     * @param ClientInterface $client
-     * @param LoggerInterface $logger
+     * @param ClientInterface              $client
+     * @param LoggerInterface              $logger
      */
     public function __construct(
         IdentityServiceInterface $identityService,
