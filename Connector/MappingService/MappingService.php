@@ -135,21 +135,6 @@ class MappingService implements MappingServiceInterface
             return $object->getType() === $definition->getObjectType();
         });
 
-        usort($objects, function (TransferObjectInterface $a, TransferObjectInterface $b) {
-            if (method_exists($a, 'getName') && method_exists($b, 'getName')) {
-                $namea = $a->getName();
-                $nameb = $b->getName();
-            } else {
-                $namea = $a->getIdentifier();
-                $nameb = $b->getIdentifier();
-            }
-
-            $namea = trim($namea);
-            $nameb = trim($nameb);
-
-            return strnatcasecmp($namea, $nameb);
-        });
-
         return $objects;
     }
 }
