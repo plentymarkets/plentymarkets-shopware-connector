@@ -431,6 +431,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         ]);
 
         $customer = $order->getCustomer();
+
         $plentyCustomer = false;
 
         if ($customer->getType() === Customer::TYPE_NORMAL) {
@@ -445,21 +446,20 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
 
         $customerParams = [
             'number' => $customer->getNumber(),
-            'typeId' => 1, // hartcoded für kunde
+            'typeId' => 1,
             'firstName' => $customer->getFirstname(),
             'lastName' => $customer->getLastname(),
             'gender' => $customer->getSalutation() === Customer::SALUTATION_MR ? 'male' : 'female',
             'lang' => $languageIdentity->getAdapterIdentifier(),
-            'referrerId' => 1, // TODO: Konfigurierbar über Config. (/rest/orders/referrers)
+            'referrerId' => 1,
             'singleAccess' => $customer->getType() === Customer::TYPE_GUEST,
             'plentyId' => $shopIdentity->getAdapterIdentifier(),
             'newsletterAllowanceAt' => '',
             'lastOrderAt' => $order->getOrderTime()->format(DATE_W3C),
-            'userId' => 1, // TODO: Konfigurierbar über Config (rest/accounts)
+            'userId' => 1,
             'options' => [],
         ];
 
-        // TODO: handle no customer group at plenty
         if (null !== $customerGroupIdentitiy) {
             $customerParams['classId'] = (int) $customerGroupIdentitiy->getAdapterIdentifier();
         }
