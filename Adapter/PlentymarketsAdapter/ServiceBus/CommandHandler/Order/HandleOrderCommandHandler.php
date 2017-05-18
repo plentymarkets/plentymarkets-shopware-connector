@@ -468,6 +468,14 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             $customerParams['birthdayAt'] = $customer->getBirthday()->format(DATE_W3C);
         }
 
+        if ($customer->getNewsletter()) {
+            if (null !== $customer->getNewsletterAgreementDate()) {
+                $customerParams['newsletterAllowanceAt'] = $customer->getNewsletterAgreementDate()->format(DATE_W3C);
+            } else {
+                $customerParams['newsletterAllowanceAt'] = $order->getOrderTime()->format(DATE_W3C);
+            }
+        }
+
         if (null !== $customer->getPhoneNumber()) {
             $customerParams['options'][] = [
                 'typeId' => 1,
