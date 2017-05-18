@@ -12,6 +12,7 @@ use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use Shopware\Models\Customer\Group as GroupModel;
+use Shopware\Models\Newsletter\Address;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -97,10 +98,23 @@ class CustomerResponseParser implements CustomerResponseParserInterface
         $customer->setNumber($entry['number']);
         $customer->setSalutation($salutation);
         $customer->setTitle($entry['title']);
-        $customer->setNewsletter((bool) $entry['newsletter']);
         $customer->setShopIdentifier($shopIdentifier);
         $customer->setLanguageIdentifier($languageIdentifier);
         $customer->setCustomerGroupIdentifier($customerGroupIdentifier);
+
+        /**
+         * @var EntityRepository $newsletterRepository
+         */
+        $newsletterRepository = $this->entityManager->getRepository(Address::class);
+        $newsletter = $newsletterRepository->findOneBy(['email' => $entry['email']]);
+
+        if ($newsletter !== null) {
+            $customer->setNewsletter(true);
+
+            if (null !== $newsletter->getAdded()) {
+                $customer->setNewsletterAgreementDate(DateTimeImmutable::createFromMutable($newsletter->getAdded()));
+            }
+        }
 
         return $customer;
     }
