@@ -2,6 +2,7 @@
 
 namespace PlentymarketsAdapter\ReadApi\Order;
 
+use PlentymarketsAdapter\Client\Iterator\Iterator;
 use PlentymarketsAdapter\ReadApi\ApiAbstract;
 
 /**
@@ -39,7 +40,7 @@ class Order extends ApiAbstract
             'with' => $this->includes,
         ]);
 
-        return $this->client->request('GET', 'orders', $criteria);
+        return iterator_to_array($this->client->getIterator('orders', $criteria));
     }
 
     /**
@@ -53,7 +54,7 @@ class Order extends ApiAbstract
             'with' => $this->includes,
         ]);
 
-        return $this->client->request('GET', 'orders', $criteria);
+        return iterator_to_array($this->client->getIterator('orders', $criteria));
     }
 
     /**

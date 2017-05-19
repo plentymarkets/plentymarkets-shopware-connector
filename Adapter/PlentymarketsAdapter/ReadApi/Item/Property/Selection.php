@@ -2,6 +2,7 @@
 
 namespace PlentymarketsAdapter\ReadApi\Item\Property;
 
+use PlentymarketsAdapter\Client\Iterator\Iterator;
 use PlentymarketsAdapter\ReadApi\ApiAbstract;
 
 /**
@@ -12,10 +13,10 @@ class Selection extends ApiAbstract
     /**
      * @param $propertyId
      *
-     * @return mixed
+     * @return array
      */
     public function findOne($propertyId)
     {
-        return $this->client->request('GET', 'items/properties/' . $propertyId . '/selections');
+        return iterator_to_array($this->client->getIterator('items/properties/' . $propertyId . '/selections'));
     }
 }

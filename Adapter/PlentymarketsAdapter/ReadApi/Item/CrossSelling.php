@@ -2,6 +2,7 @@
 
 namespace PlentymarketsAdapter\ReadApi\Item;
 
+use PlentymarketsAdapter\Client\Iterator\Iterator;
 use PlentymarketsAdapter\ReadApi\ApiAbstract;
 
 /**
@@ -12,10 +13,10 @@ class CrossSelling extends ApiAbstract
     /**
      * @param $productId
      *
-     * @return mixed
+     * @return array
      */
     public function findAll($productId)
     {
-        return $this->client->request('GET', 'items/' . $productId . '/item_cross_selling');
+        return iterator_to_array($this->client->getIterator( 'items/' . $productId . '/item_cross_selling'));
     }
 }

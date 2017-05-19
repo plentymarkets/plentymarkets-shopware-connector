@@ -2,6 +2,7 @@
 
 namespace PlentymarketsAdapter\ReadApi\Item;
 
+use PlentymarketsAdapter\Client\Iterator\Iterator;
 use PlentymarketsAdapter\ReadApi\ApiAbstract;
 
 /**
@@ -14,7 +15,7 @@ class SalesPrice extends ApiAbstract
      */
     public function findAll()
     {
-        return $this->client->request('GET', 'items/sales_prices');
+        return iterator_to_array($this->client->getIterator( 'items/sales_prices'));
     }
 
     /**
