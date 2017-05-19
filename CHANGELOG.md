@@ -27,6 +27,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - product translations
 
+### Removed
+- Variation packaging unit
+
 ## [2.0.0-rc1]
 ### Added
 - complete rewrite using the plenty rest api
