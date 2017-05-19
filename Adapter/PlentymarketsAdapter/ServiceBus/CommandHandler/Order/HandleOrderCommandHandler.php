@@ -456,7 +456,6 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             'plentyId' => $shopIdentity->getAdapterIdentifier(),
             'newsletterAllowanceAt' => '',
             'lastOrderAt' => $order->getOrderTime()->format(DATE_W3C),
-            'userId' => 1,
             'options' => [],
         ];
 
