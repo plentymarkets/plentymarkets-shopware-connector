@@ -43,9 +43,16 @@ class PlentyConnector extends Plugin
     const PERMISSION_WRITE = 'write';
 
     /**
+     * List of all cronjobs
+     */
+    const CRONJOB_SYNCHRONIZE = 'Synchronize';
+    const CRONJOB_SYNCHRONIZE_ORDERS = 'SynchronizeOrders';
+    const CRONJOB_CLEANUP = 'Cleanup';
+
+    /**
      * List of all permissions
      */
-    const PERMISSIONS = [
+    public static $permissions = [
         self::PERMISSION_READ,
         self::PERMISSION_WRITE,
     ];
@@ -53,7 +60,7 @@ class PlentyConnector extends Plugin
     /**
      * List of all models
      */
-    const MODELS = [
+    public static $models = [
         Config::class,
         Identity::class,
     ];
@@ -61,11 +68,7 @@ class PlentyConnector extends Plugin
     /**
      * List of all cronjobs
      */
-    const CRONJOB_SYNCHRONIZE = 'Synchronize';
-    const CRONJOB_SYNCHRONIZE_ORDERS = 'SynchronizeOrders';
-    const CRONJOB_CLEANUP = 'Cleanup';
-
-    const CRONJOBS = [
+    public static $cronjobs = [
         self::CRONJOB_SYNCHRONIZE => 300,
         self::CRONJOB_SYNCHRONIZE_ORDERS => 300,
         self::CRONJOB_CLEANUP => 86400,
@@ -121,14 +124,14 @@ class PlentyConnector extends Plugin
         // Models
         $databaseInstaller = new DatabaseInstaller(
             $this->container->get('models'),
-            self::MODELS
+            self::$models
         );
         $databaseInstaller->install($context);
 
         // Cronjobs
         $cronjobInstaller = new CronjobInstaller(
             $this->container->get('dbal_connection'),
-            self::CRONJOBS
+            self::$cronjobs
         );
         $cronjobInstaller->install($context);
 
@@ -136,7 +139,7 @@ class PlentyConnector extends Plugin
         $permissionInstaller = new PermissionInstaller(
             $this->container->get('models'),
             $this->container->get('acl'),
-            self::PERMISSIONS
+            self::$permissions
         );
         $permissionInstaller->install($context);
 
@@ -156,14 +159,14 @@ class PlentyConnector extends Plugin
         // Models
         $databaseInstaller = new DatabaseInstaller(
             $this->container->get('models'),
-            self::MODELS
+            self::$models
         );
         $databaseInstaller->update($context);
 
         // Cronjobs
         $cronjobInstaller = new CronjobInstaller(
             $this->container->get('dbal_connection'),
-            self::CRONJOBS
+            self::$cronjobs
         );
         $cronjobInstaller->update($context);
 
@@ -171,7 +174,7 @@ class PlentyConnector extends Plugin
         $permissionInstaller = new PermissionInstaller(
             $this->container->get('models'),
             $this->container->get('acl'),
-            self::PERMISSIONS
+            self::$permissions
         );
         $permissionInstaller->update($context);
 
@@ -197,21 +200,22 @@ class PlentyConnector extends Plugin
         // Models
         $databaseInstaller = new DatabaseInstaller(
             $this->container->get('models'),
-            self::MODELS
+            self::$models
         );
         $databaseInstaller->uninstall($context);
 
         // Cronjobs
         $cronjobInstaller = new CronjobInstaller(
             $this->container->get('dbal_connection'),
-            self::CRONJOBS
+            self::$cronjobs
         );
         $cronjobInstaller->uninstall($context);
 
+        // Permissions
         $permissionInstaller = new PermissionInstaller(
             $this->container->get('models'),
             $this->container->get('acl'),
-            self::PERMISSIONS
+            self::$permissions
         );
         $permissionInstaller->uninstall($context);
 
