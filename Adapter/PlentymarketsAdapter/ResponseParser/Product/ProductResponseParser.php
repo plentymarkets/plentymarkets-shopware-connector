@@ -350,6 +350,10 @@ class ProductResponseParser implements ProductResponseParserInterface
             'translations' => $this->getMediaTranslations($entry, $texts),
         ]);
 
+        if (null === $media) {
+            return null;
+        }
+
         $result[] = $media;
 
         $linkedShops = array_filter($entry['availabilities'], function (array $availabilitiy) {
@@ -394,7 +398,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             $images[] = $this->parseImage($entry, $texts, $result);
         }
 
-        return $images;
+        return array_filter($images);
     }
 
     /**

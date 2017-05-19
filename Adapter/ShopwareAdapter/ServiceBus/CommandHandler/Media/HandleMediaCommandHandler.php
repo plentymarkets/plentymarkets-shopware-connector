@@ -71,8 +71,6 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * TODO: only update if hash has changed - add hash attribute to media
-     *
      * {@inheritdoc}
      */
     public function handle(CommandInterface $command)
@@ -91,7 +89,7 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
 
         $params = [
             'album' => Album::ALBUM_ARTICLE,
-            'file' => $media->getLink(),
+            'file' => $media->getContent(),
             'description' => $media->getName(),
         ];
 

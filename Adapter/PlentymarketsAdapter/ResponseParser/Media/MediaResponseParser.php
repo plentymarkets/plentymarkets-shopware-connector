@@ -8,6 +8,7 @@ use PlentyConnector\Connector\TransferObject\Media\Media;
 use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
 use PlentymarketsAdapter\Helper\MediaCategoryHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class MediaResponseParser
@@ -25,15 +26,25 @@ class MediaResponseParser implements MediaResponseParserInterface
     private $categoryHelper;
 
     /**
-     * OrderStatusResponseParser constructor.
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * MediaResponseParser constructor.
      *
      * @param IdentityServiceInterface $identityService
      * @param MediaCategoryHelper      $categoryHelper
+     * @param LoggerInterface          $logger
      */
-    public function __construct(IdentityServiceInterface $identityService, MediaCategoryHelper $categoryHelper)
-    {
+    public function __construct(
+        IdentityServiceInterface $identityService,
+        MediaCategoryHelper $categoryHelper,
+        LoggerInterface $logger
+    ) {
         $this->identityService = $identityService;
         $this->categoryHelper = $categoryHelper;
+        $this->logger = $logger;
     }
 
     /**
@@ -41,57 +52,75 @@ class MediaResponseParser implements MediaResponseParserInterface
      */
     public function parse(array $entry)
     {
-        Assertion::url($entry['link']);
+        try {
+            Assertion::url($entry['link']);
 
-        if (!array_key_exists('hash', $entry)) {
-            $entry['hash'] = sha1_file($entry['link']);
-        }
+            $content = @file_get_contents($entry['link']);
 
-        if (empty($entry['name'])) {
-            $entry['name'] = null;
-        }
+            if (false === $content) {
+                $this->logger->warning('could not load media file - ' . $entry['link']);
 
-        if (empty($entry['alternateName'])) {
-            $entry['alternateName'] = null;
-        }
+                return null;
+            }
 
-        if (!array_key_exists('translations', $entry)) {
-            $entry['translations'] = [];
-        }
+            $type = pathinfo($entry['link'], PATHINFO_EXTENSION);
+            $content = 'data:image/' . $type . ';base64,' . base64_encode($content);
 
-        if (!array_key_exists('attributes', $entry)) {
-            $entry['attributes'] = [];
-        }
+            if (!array_key_exists('hash', $entry)) {
+                $entry['hash'] = sha1($content);
+            }
 
-        if (array_key_exists('mediaCategory', $entry)) {
-            $mediaCategories = $this->categoryHelper->getCategories();
+            if (empty($entry['name'])) {
+                $entry['name'] = null;
+            }
 
-            $mediaCategoryIdentity = $this->identityService->findOneOrCreate(
-                (string) $mediaCategories[$entry['mediaCategory']]['id'],
+            if (empty($entry['alternateName'])) {
+                $entry['alternateName'] = null;
+            }
+
+            if (!array_key_exists('translations', $entry)) {
+                $entry['translations'] = [];
+            }
+
+            if (!array_key_exists('attributes', $entry)) {
+                $entry['attributes'] = [];
+            }
+
+            if (array_key_exists('mediaCategory', $entry)) {
+                $mediaCategories = $this->categoryHelper->getCategories();
+
+                $mediaCategoryIdentity = $this->identityService->findOneOrCreate(
+                    (string) $mediaCategories[$entry['mediaCategory']]['id'],
+                    PlentymarketsAdapter::NAME,
+                    MediaCategory::TYPE
+                );
+
+                $entry['mediaCategoryIdentifier'] = $mediaCategoryIdentity->getObjectIdentifier();
+            } else {
+                $entry['mediaCategoryIdentifier'] = null;
+            }
+
+            $identity = $this->identityService->findOneOrCreate(
+                (string) $entry['hash'],
                 PlentymarketsAdapter::NAME,
-                MediaCategory::TYPE
+                Media::TYPE
             );
 
-            $entry['mediaCategoryIdentifier'] = $mediaCategoryIdentity->getObjectIdentifier();
-        } else {
-            $entry['mediaCategoryIdentifier'] = null;
+            $media = new Media();
+            $media->setIdentifier($identity->getObjectIdentifier());
+            $media->setMediaCategoryIdentifier($entry['mediaCategoryIdentifier']);
+            $media->setContent($content);
+            $media->setHash($entry['hash']);
+            $media->setName($entry['name']);
+            $media->setAlternateName($entry['alternateName']);
+            $media->setTranslations($entry['translations']);
+            $media->setAttributes($entry['attributes']);
+
+            return $media;
+        } catch (\Exception $exception) {
+            $this->logger->warning($exception->getMessage());
+
+            return null;
         }
-
-        $identity = $this->identityService->findOneOrCreate(
-            (string) $entry['hash'],
-            PlentymarketsAdapter::NAME,
-            Media::TYPE
-        );
-
-        return Media::fromArray([
-            'identifier' => $identity->getObjectIdentifier(),
-            'mediaCategoryIdentifier' => $entry['mediaCategoryIdentifier'],
-            'link' => $entry['link'],
-            'hash' => $entry['hash'],
-            'name' => $entry['name'],
-            'alternateName' => $entry['alternateName'],
-            'translations' => $entry['translations'],
-            'attributes' => $entry['attributes'],
-        ]);
     }
 }
