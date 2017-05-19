@@ -3,7 +3,8 @@
 # PlentyConnector
 
 * **License:** MIT
-* **Github Repository:** <https://github.com/plentymarkets/plentymarkets-shopware-connector>
+* **Repository:** [Github](https://github.com/plentymarkets/plentymarkets-shopware-connector)
+* **Documentation:** [Google Docs](https://docs.google.com/document/d/1yPr_SrBshsT0IJSuI8DmA7Berr275ZY6qDMMiqavbQI/edit?usp=sharing)
 
 ## Requirements
 
@@ -13,7 +14,7 @@
 * cronjobs
 * active plentymarkets webshop
 * plentymarkets user with all rest permissions
-  
+
 ## Installation Guide
 
 ### Git
