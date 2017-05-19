@@ -27,7 +27,7 @@ class Payment extends ApiAbstract
      */
     public function findAll(array $criteria = [])
     {
-        return $this->client->getIterator( 'payments', $criteria);
+        return $this->client->getIterator('payments', $criteria);
     }
 
     /**
@@ -37,7 +37,7 @@ class Payment extends ApiAbstract
      */
     public function findBy(array $criteria = [])
     {
-        return $this->client->getIterator( 'payments', $criteria);
+        return $this->client->getIterator('payments', $criteria);
     }
 
     /**

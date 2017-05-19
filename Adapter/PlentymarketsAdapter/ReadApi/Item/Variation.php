@@ -22,6 +22,6 @@ class Variation extends ApiAbstract
             'with' => $this->with,
         ]);
 
-        return iterator_to_array($this->client->getIterator( 'items/variations', $params));
+        return iterator_to_array($this->client->getIterator('items/variations', $params));
     }
 }

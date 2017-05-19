@@ -2,7 +2,6 @@
 
 namespace PlentymarketsAdapter\ReadApi\Item\Attribute;
 
-use PlentymarketsAdapter\Client\Iterator\Iterator;
 use PlentymarketsAdapter\ReadApi\ApiAbstract;
 
 /**
