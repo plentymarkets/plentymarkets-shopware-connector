@@ -1,7 +1,6 @@
 | Q                       | A
 | ----------------------- | ---
-| Bug?                    | no|yes
-| New Feature?            | no|yes
+| issue or Enhancement    | issue|Enhancement
 | Version                 | Specific version or SHA of a commit
 
 

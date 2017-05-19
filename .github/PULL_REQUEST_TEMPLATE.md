@@ -1,11 +1,12 @@
-| Q               | A
-| --------------- | ---
-| Bug fix?        | no|yes
-| New feature?    | no|yes
-| BC breaks?      | no|yes
-| Deprecations?   | no|yes
-| Related tickets | fixes #X, partially #Y, mentioned in #Z
-| License         | MIT
+| Q                         | A
+| ------------------------- | ---
+| issue or Enhancement      | issue|Enhancement
+| BC breaks?                | no|yes
+| Deprecations?             | no|yes
+| Changelog updated?        | no|yes
+| Tests exists and pass?    | yes/no
+| Related tickets           | fixes #X, partially #Y, mentioned in #Z
+| License                   | MIT
 
 
 #### What's in this PR?
