@@ -11,6 +11,7 @@ use PlentyConnector\Connector\ServiceBus\Command\Manufacturer\HandleManufacturer
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 use PlentyConnector\Connector\TransferObject\Media\Media;
+use Shopware\Components\Api\Exception\NotFoundException as ManufacturerNotFoundException;
 use Shopware\Components\Api\Resource\Manufacturer as ManufacturerResource;
 use ShopwareAdapter\ShopwareAdapter;
 
@@ -111,6 +112,16 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
                     (string) $existingManufacturer['id'],
                     ShopwareAdapter::NAME
                 );
+            }
+        }
+
+        if ($identity) {
+            try {
+                $this->resource->getOne($identity->getAdapterIdentifier());
+            } catch (ManufacturerNotFoundException $exception) {
+                $this->identityService->remove($identity);
+
+                $identity = null;
             }
         }
 
