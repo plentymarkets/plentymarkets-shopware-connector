@@ -2,6 +2,7 @@
 
 namespace PlentymarketsAdapter\ReadApi\Payment;
 
+use PlentymarketsAdapter\Client\Iterator\Iterator;
 use PlentymarketsAdapter\ReadApi\ApiAbstract;
 
 /**
@@ -22,21 +23,21 @@ class Payment extends ApiAbstract
     /**
      * @param array $criteria
      *
-     * @return array
+     * @return Iterator
      */
     public function findAll(array $criteria = [])
     {
-        return $this->client->request('GET', 'payments', $criteria);
+        return $this->client->getIterator('payments', $criteria);
     }
 
     /**
      * @param array $criteria
      *
-     * @return array
+     * @return Iterator
      */
     public function findBy(array $criteria = [])
     {
-        return $this->client->request('GET', 'payments', $criteria);
+        return $this->client->getIterator('payments', $criteria);
     }
 
     /**

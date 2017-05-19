@@ -14,7 +14,7 @@ class SalesPrice extends ApiAbstract
      */
     public function findAll()
     {
-        return $this->client->request('GET', 'items/sales_prices');
+        return iterator_to_array($this->client->getIterator('items/sales_prices'));
     }
 
     /**

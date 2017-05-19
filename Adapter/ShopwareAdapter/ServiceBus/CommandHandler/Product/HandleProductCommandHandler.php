@@ -799,7 +799,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             'images' => $images,
             'purchaseUnit' => $variation->getContent(),
             'referenceUnit' => $variation->getReferenceAmount(),
-            'packUnit' => $variation->getPackagingUnit(),
             'minPurchase' => $variation->getMinimumOrderQuantity(),
             'purchaseSteps' => $variation->getIntervalOrderQuantity(),
             'maxPurchase' => $variation->getMaximumOrderQuantity(),
