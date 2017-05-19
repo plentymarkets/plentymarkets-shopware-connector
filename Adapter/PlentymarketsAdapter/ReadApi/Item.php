@@ -64,10 +64,6 @@ class Item extends ApiAbstract
         ]);
 
         foreach ($result as $element) {
-            if ($element['id'] === -1) {
-                continue;
-            }
-
             $this->addAdditionalData($element);
 
             yield $element;
@@ -94,10 +90,6 @@ class Item extends ApiAbstract
         ]);
 
         foreach ($result as $element) {
-            if ($element['id'] === -1) {
-                continue;
-            }
-
             $this->addAdditionalData($element);
 
             yield $element;
