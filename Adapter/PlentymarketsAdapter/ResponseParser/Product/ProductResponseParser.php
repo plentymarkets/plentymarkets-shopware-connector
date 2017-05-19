@@ -198,51 +198,11 @@ class ProductResponseParser implements ProductResponseParserInterface
      */
     private function getVariationImages(array $texts, array $variation, array &$result)
     {
-        $images = array_map(function ($image) use ($texts, &$result) {
-            /**
-             * @var MediaResponseParserInterface $mediaResponseParser
-             */
-            $mediaResponseParser = Shopware()->Container()->get('plentmarkets_adapter.response_parser.media');
+        $images = [];
 
-            if (!empty($image['names'][0]['name'])) {
-                $name = $image['names'][0]['name'];
-            } else {
-                $name = $texts[0]['name1'];
-            }
-
-            $media = $mediaResponseParser->parse([
-                'mediaCategory' => MediaCategoryHelper::PRODUCT,
-                'link' => $image['url'],
-                'name' => $name,
-                'translations' => $this->getMediaTranslations($image, $texts),
-            ]);
-
-            $result[] = $media;
-
-            $linkedShops = array_filter($image['availabilities'], function (array $availabilitiy) {
-                return $availabilitiy['type'] === 'mandant';
-            });
-
-            $shopIdentifiers = array_map(function ($shop) {
-                $shopIdentity = $this->identityService->findOneBy([
-                    'adapterIdentifier' => (string) $shop['value'],
-                    'adapterName' => PlentymarketsAdapter::NAME,
-                    'objectType' => Shop::TYPE,
-                ]);
-
-                if (null === $shopIdentity) {
-                    return null;
-                }
-
-                return $shopIdentity->getObjectIdentifier();
-            }, $linkedShops);
-
-            return Image::fromArray([
-                'mediaIdentifier' => $media->getIdentifier(),
-                'shopIdentifiers' => array_filter($shopIdentifiers),
-                'position' => (int) $image['position'],
-            ]);
-        }, $variation['images']);
+        foreach ($variation['images'] as $entry) {
+            $images[] = $this->parseImage($entry, $texts, $result);
+        }
 
         return array_filter($images);
     }
@@ -364,6 +324,61 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
+     * @param array $entry
+     * @param array $texts
+     * @param array $result
+     *
+     * @return Image
+     */
+    private function parseImage(array $entry, array $texts, array &$result)
+    {
+        /**
+         * @var MediaResponseParserInterface $mediaResponseParser
+         */
+        $mediaResponseParser = Shopware()->Container()->get('plentmarkets_adapter.response_parser.media');
+
+        if (!empty($entry['names'][0]['name'])) {
+            $name = $entry['names'][0]['name'];
+        } else {
+            $name = $texts[0]['name1'];
+        }
+
+        $media = $mediaResponseParser->parse([
+            'mediaCategory' => MediaCategoryHelper::PRODUCT,
+            'link' => $entry['url'],
+            'name' => $name,
+            'translations' => $this->getMediaTranslations($entry, $texts),
+        ]);
+
+        $result[] = $media;
+
+        $linkedShops = array_filter($entry['availabilities'], function (array $availabilitiy) {
+            return $availabilitiy['type'] === 'mandant';
+        });
+
+        $shopIdentifiers = array_map(function ($shop) {
+            $shopIdentity = $this->identityService->findOneBy([
+                'adapterIdentifier' => (string) $shop['value'],
+                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType' => Shop::TYPE,
+            ]);
+
+            if (null === $shopIdentity) {
+                return null;
+            }
+
+            return $shopIdentity->getObjectIdentifier();
+        }, $linkedShops);
+
+        $image = new Image();
+        $image->setMediaIdentifier($media->getIdentifier());
+        $image->setShopIdentifiers(array_filter($shopIdentifiers));
+        $image->setPosition((int) $entry['position']);
+
+        return $image;
+    }
+
+    /**
      * @param array $product
      * @param array $texts
      * @param array $result
@@ -372,55 +387,14 @@ class ProductResponseParser implements ProductResponseParserInterface
      */
     private function getImages(array $product, array $texts, array &$result)
     {
-        $images = $this->itemsImagesApi->findAll($product['id']);
+        $entries = $this->itemsImagesApi->findAll($product['id']);
 
-        $imageIdentifiers = array_map(function ($image) use ($texts, &$result) {
-            /**
-             * @var MediaResponseParserInterface $mediaResponseParser
-             */
-            $mediaResponseParser = Shopware()->Container()->get('plentmarkets_adapter.response_parser.media');
+        $images = [];
+        foreach ($entries as $entry) {
+            $images[] = $this->parseImage($entry, $texts, $result);
+        }
 
-            if (!empty($image['names'][0]['name'])) {
-                $name = $image['names'][0]['name'];
-            } else {
-                $name = $texts[0]['name1'];
-            }
-
-            $media = $mediaResponseParser->parse([
-                'mediaCategory' => MediaCategoryHelper::PRODUCT,
-                'link' => $image['url'],
-                'name' => $name,
-                'translations' => $this->getMediaTranslations($image, $texts),
-            ]);
-
-            $result[] = $media;
-
-            $linkedShops = array_filter($image['availabilities'], function (array $availabilitiy) {
-                return $availabilitiy['type'] === 'mandant';
-            });
-
-            $shopIdentifiers = array_map(function ($shop) {
-                $shopIdentity = $this->identityService->findOneBy([
-                    'adapterIdentifier' => (string) $shop['value'],
-                    'adapterName' => PlentymarketsAdapter::NAME,
-                    'objectType' => Shop::TYPE,
-                ]);
-
-                if (null === $shopIdentity) {
-                    return null;
-                }
-
-                return $shopIdentity->getObjectIdentifier();
-            }, $linkedShops);
-
-            return Image::fromArray([
-                'mediaIdentifier' => $media->getIdentifier(),
-                'shopIdentifiers' => array_filter($shopIdentifiers),
-                'position' => (int) $image['position'],
-            ]);
-        }, $images);
-
-        return array_filter($imageIdentifiers);
+        return $images;
     }
 
     /**

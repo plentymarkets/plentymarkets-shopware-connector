@@ -12,12 +12,12 @@ class Value extends ApiAbstract
     /**
      * @param $attributeId
      *
-     * @return mixed
+     * @return array
      */
     public function findOne($attributeId)
     {
-        return $this->client->request('GET', 'items/attributes/' . $attributeId . '/values', [
+        return iterator_to_array($this->client->getIterator('items/attributes/' . $attributeId . '/values', [
             'with' => 'names',
-        ]);
+        ]));
     }
 }

@@ -85,7 +85,7 @@ class PriceResponseParser implements PriceResponseParserInterface
 
             $priceConfiguration = array_shift($priceConfiguration);
 
-            $customerClasses = $priceConfiguration['customerClasses'];
+            $customerClasses = (array) $priceConfiguration['customerClasses'];
 
             if (count($customerClasses) !== 1 && $customerClasses[0]['customerClassId'] !== -1) {
                 foreach ($customerGroups as $group) {
