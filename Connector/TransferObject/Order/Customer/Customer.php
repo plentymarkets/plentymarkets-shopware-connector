@@ -38,6 +38,11 @@ class Customer extends AbstractValueObject
     private $newsletter = false;
 
     /**
+     * @var null|DateTimeImmutable
+     */
+    private $newsletterAgreementDate;
+
+    /**
      * @var string
      */
     private $languageIdentifier = '';
@@ -95,14 +100,6 @@ class Customer extends AbstractValueObject
         $timezone = new \DateTimeZone('UTC');
 
         $this->birthday = new DateTimeImmutable('now', $timezone);
-    }
-
-    /**
-     * @return int
-     */
-    public function getCustomerType()
-    {
-        return $this->type;
     }
 
     /**
@@ -175,6 +172,22 @@ class Customer extends AbstractValueObject
     public function setNewsletter($newsletter)
     {
         $this->newsletter = $newsletter;
+    }
+
+    /**
+     * @return null|DateTimeImmutable
+     */
+    public function getNewsletterAgreementDate()
+    {
+        return $this->newsletterAgreementDate;
+    }
+
+    /**
+     * @param null|DateTimeImmutable $newsletterAgreementDate
+     */
+    public function setNewsletterAgreementDate(DateTimeImmutable $newsletterAgreementDate = null)
+    {
+        $this->newsletterAgreementDate = $newsletterAgreementDate;
     }
 
     /**

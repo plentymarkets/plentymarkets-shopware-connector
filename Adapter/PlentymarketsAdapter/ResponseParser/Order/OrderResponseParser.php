@@ -89,9 +89,6 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
-     * TODO: OrderItems
-     * TODO: Comments
-     *
      * {@inheritdoc}
      */
     public function parse(array $entry)

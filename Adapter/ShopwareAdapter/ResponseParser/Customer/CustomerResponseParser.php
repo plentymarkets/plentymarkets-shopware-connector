@@ -12,6 +12,7 @@ use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use Shopware\Models\Customer\Group as GroupModel;
+use Shopware\Models\Newsletter\Address;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -88,20 +89,34 @@ class CustomerResponseParser implements CustomerResponseParserInterface
             $entry['title'] = null;
         }
 
-        return Customer::fromArray([
-            'birthday' => $birthday,
-            'customerType' => $this->getCustomerTypeId($entry['accountMode']),
-            'email' => $entry['email'],
-            'firstname' => $entry['firstname'],
-            'lastname' => $entry['lastname'],
-            'number' => $entry['number'],
-            'salutation' => $salutation,
-            'title' => $entry['title'],
-            'newsletter' => (bool) $entry['newsletter'],
-            'shopIdentifier' => $shopIdentifier,
-            'languageIdentifier' => $languageIdentifier,
-            'customerGroupIdentifier' => $customerGroupIdentifier,
-        ]);
+        $customer = new Customer();
+        $customer->setBirthday($birthday);
+        $customer->setType($this->getCustomerTypeId($entry['accountMode']));
+        $customer->setEmail($entry['email']);
+        $customer->setFirstname($entry['firstname']);
+        $customer->setLastname($entry['lastname']);
+        $customer->setNumber($entry['number']);
+        $customer->setSalutation($salutation);
+        $customer->setTitle($entry['title']);
+        $customer->setShopIdentifier($shopIdentifier);
+        $customer->setLanguageIdentifier($languageIdentifier);
+        $customer->setCustomerGroupIdentifier($customerGroupIdentifier);
+
+        /**
+         * @var EntityRepository $newsletterRepository
+         */
+        $newsletterRepository = $this->entityManager->getRepository(Address::class);
+        $newsletter = $newsletterRepository->findOneBy(['email' => $entry['email']]);
+
+        if ($newsletter !== null) {
+            $customer->setNewsletter(true);
+
+            if (null !== $newsletter->getAdded()) {
+                $customer->setNewsletterAgreementDate(DateTimeImmutable::createFromMutable($newsletter->getAdded()));
+            }
+        }
+
+        return $customer;
     }
 
     /**
