@@ -43,6 +43,13 @@ class PlentyConnector extends Plugin
     const PERMISSION_WRITE = 'write';
 
     /**
+     * List of all cronjobs
+     */
+    const CRONJOB_SYNCHRONIZE = 'Synchronize';
+    const CRONJOB_SYNCHRONIZE_ORDERS = 'SynchronizeOrders';
+    const CRONJOB_CLEANUP = 'Cleanup';
+
+    /**
      * List of all permissions
      */
     public static $permissions = [
@@ -61,10 +68,6 @@ class PlentyConnector extends Plugin
     /**
      * List of all cronjobs
      */
-    const CRONJOB_SYNCHRONIZE = 'Synchronize';
-    const CRONJOB_SYNCHRONIZE_ORDERS = 'SynchronizeOrders';
-    const CRONJOB_CLEANUP = 'Cleanup';
-
     public static $cronjobs = [
         self::CRONJOB_SYNCHRONIZE => 300,
         self::CRONJOB_SYNCHRONIZE_ORDERS => 300,
