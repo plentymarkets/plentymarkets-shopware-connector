@@ -65,4 +65,13 @@ interface IdentityServiceInterface
      * @return bool
      */
     public function exists(array $criteria = []);
+
+    /**
+     * @param $objectIdentifier
+     * @param $objectType
+     * @param $adapterName
+     *
+     * @return bool
+     */
+    public function isMapppedIdentity($objectIdentifier, $objectType, $adapterName);
 }
