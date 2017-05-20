@@ -23,6 +23,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - optimized the item cross selling retrieving
 - categories with no active shop assignment will be deactivated
 - order item vatRate is now synced correctly
+- added a isMapppedIdentity function to the identityService
+- implemented the isMapppedIdentity in all parsers to reduce the amount of objects transferred
 
 ### Fixed
 - product translations
