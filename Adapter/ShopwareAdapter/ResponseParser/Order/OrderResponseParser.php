@@ -96,6 +96,22 @@ class OrderResponseParser implements OrderResponseParserInterface
      */
     public function parse(array $entry)
     {
+        $shopIdentity = $this->identityService->findOneOrThrow(
+            (string) $entry['shopId'],
+            ShopwareAdapter::NAME,
+            Shop::TYPE
+        );
+
+        $isMappedIdentity = $this->identityService->isMapppedIdentity(
+            $shopIdentity->getObjectIdentifier(),
+            $shopIdentity->getObjectType(),
+            $shopIdentity->getAdapterName()
+        );
+
+        if (!$isMappedIdentity) {
+            return [];
+        }
+
         $taxFree = ($entry['net'] || $entry['taxFree']);
 
         $entry['details'] = $this->prepareOrderItems($entry['details']);
@@ -107,7 +123,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         } catch (UnsupportedVatRateException $exception) {
             $this->logger->notice('unsupported vat rate - order: ' . $entry['number']);
 
-            return null;
+            return [];
         }
 
         $shippingCosts = $this->getShippingCosts($entry, $taxFree);
@@ -130,7 +146,6 @@ class OrderResponseParser implements OrderResponseParserInterface
             Order::TYPE
         )->getObjectIdentifier();
 
-        $shopIdentity = $this->getIdentifier($entry['shopId'], Shop::TYPE);
         $orderStatusIdentifier = $this->getIdentifier($entry['orderStatusId'], OrderStatus::TYPE);
         $paymentStatusIdentifier = $this->getIdentifier($entry['paymentStatusId'], PaymentStatus::TYPE);
         $paymentMethodIdentifier = $this->getIdentifier($entry['paymentId'], PaymentMethod::TYPE);
@@ -144,7 +159,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         if (null === $shippingProfileIdentity) {
             $this->logger->notice('no shipping profile was selected for order: ' . $entry['number']);
 
-            return null;
+            return [];
         }
 
         $currencyIdentifier = $this->getIdentifier($this->getCurrencyId($entry['currency']), Currency::TYPE);
@@ -165,7 +180,7 @@ class OrderResponseParser implements OrderResponseParserInterface
             'paymentMethodIdentifier' => $paymentMethodIdentifier,
             'shippingProfileIdentifier' => $shippingProfileIdentity->getObjectIdentifier(),
             'currencyIdentifier' => $currencyIdentifier,
-            'shopIdentifier' => $shopIdentity,
+            'shopIdentifier' => $shopIdentity->getObjectIdentifier(),
         ]);
 
         return [$order];
