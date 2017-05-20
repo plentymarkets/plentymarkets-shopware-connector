@@ -52,8 +52,25 @@ class PaymentResponseParser implements PaymentResponseParserInterface
             return [];
         }
 
+        $shopIdentity = $this->identityService->findOneOrThrow(
+            (string) $element['shopId'],
+            ShopwareAdapter::NAME,
+            Shop::TYPE
+        );
+
+        $isMappedIdentity = $this->identityService->isMapppedIdentity(
+            $shopIdentity->getObjectIdentifier(),
+            $shopIdentity->getObjectType(),
+            $shopIdentity->getAdapterName()
+        );
+
+        if (!$isMappedIdentity) {
+            return [];
+        }
+
         $payment = new Payment();
         $payment->setIdentifier($paymentIdentifier);
+        $payment->setShopIdentifier($shopIdentity->getObjectIdentifier());
         $payment->setOrderIdentifer($this->getIdentifier($element['id'], Order::TYPE));
         $payment->setAmount($element['invoiceAmount']);
         $payment->setCurrencyIdentifier($this->getIdentifier($this->getCurrencyId($element['currency']), Currency::TYPE));

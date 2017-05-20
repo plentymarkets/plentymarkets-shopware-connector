@@ -1030,6 +1030,16 @@ class ProductResponseParser implements ProductResponseParserInterface
                 continue;
             }
 
+            $isMappedIdentity = $this->identityService->isMapppedIdentity(
+                $identity->getObjectIdentifier(),
+                $identity->getObjectType(),
+                $identity->getAdapterName()
+            );
+
+            if (!$isMappedIdentity) {
+                continue;
+            }
+
             $identifiers[] = $identity->getObjectIdentifier();
         }
 

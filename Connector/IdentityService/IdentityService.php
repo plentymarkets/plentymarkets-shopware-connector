@@ -57,7 +57,8 @@ class IdentityService implements IdentityServiceInterface
         ]);
 
         if (null === $identity) {
-            throw new NotFoundException(sprintf('Could not find identity for %s with identifier %s in %s.', $objectType, $adapterIdentifier, $adapterName));
+            throw new NotFoundException(sprintf('Could not find identity for %s with identifier %s in %s.', $objectType,
+                $adapterIdentifier, $adapterName));
         }
 
         $this->validator->validate($identity);
@@ -168,5 +169,30 @@ class IdentityService implements IdentityServiceInterface
         $identity = $this->findOneBy($criteria);
 
         return (bool) $identity;
+    }
+
+    /**
+     * @param $objectIdentifier
+     * @param $objectType
+     * @param $adapterName
+     *
+     * @return bool
+     */
+    public function isMapppedIdentity($objectIdentifier, $objectType, $adapterName)
+    {
+        $identities = $this->findBy([
+            'objectIdentifier' => $objectIdentifier,
+            'objectType' => $objectType,
+        ]);
+
+        $otherIdentities = array_filter($identities, function (Identity $identity) use ($adapterName) {
+            return $identity->getAdapterName() !== $adapterName;
+        });
+
+        if (empty($otherIdentities)) {
+            return false;
+        }
+
+        return true;
     }
 }
