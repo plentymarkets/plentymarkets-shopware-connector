@@ -451,12 +451,10 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             'lastName' => $customer->getLastname(),
             'gender' => $customer->getSalutation() === Customer::SALUTATION_MR ? 'male' : 'female',
             'lang' => $languageIdentity->getAdapterIdentifier(),
-            'referrerId' => 1,
             'singleAccess' => $customer->getType() === Customer::TYPE_GUEST,
             'plentyId' => $shopIdentity->getAdapterIdentifier(),
             'newsletterAllowanceAt' => '',
             'lastOrderAt' => $order->getOrderTime()->format(DATE_W3C),
-            'userId' => 1,
             'options' => [],
         ];
 
