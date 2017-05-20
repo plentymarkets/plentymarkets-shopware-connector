@@ -31,6 +31,11 @@ class Payment extends AbstractTransferObject
     /**
      * @var string
      */
+    private $shopIdentifier = '';
+
+    /**
+     * @var string
+     */
     private $currencyIdentifier = '';
 
     /**
@@ -111,6 +116,22 @@ class Payment extends AbstractTransferObject
     public function setAmount($amount)
     {
         $this->amount = $amount;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShopIdentifier()
+    {
+        return $this->shopIdentifier;
+    }
+
+    /**
+     * @param string $shopIdentifier
+     */
+    public function setShopIdentifier($shopIdentifier)
+    {
+        $this->shopIdentifier = $shopIdentifier;
     }
 
     /**
