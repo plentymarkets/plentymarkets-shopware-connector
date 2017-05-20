@@ -25,6 +25,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - order item vatRate is now synced correctly
 - added a isMapppedIdentity function to the identityService
 - implemented the isMapppedIdentity in all parsers to reduce the amount of objects transferred
+- sync model field to shopware's supplierNumber
 
 ### Fixed
 - product translations
