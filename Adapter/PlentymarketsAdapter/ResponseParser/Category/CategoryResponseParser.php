@@ -113,6 +113,16 @@ class CategoryResponseParser implements CategoryResponseParserInterface
                 continue;
             }
 
+            $isMappedIdentity = $this->identityService->isMapppedIdentity(
+                $identity->getObjectIdentifier(),
+                $identity->getObjectType(),
+                $identity->getAdapterName()
+            );
+
+            if (!$isMappedIdentity) {
+                continue;
+            }
+
             $shopIdentifiers[] = $identity->getObjectIdentifier();
         }
 
