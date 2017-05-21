@@ -39,6 +39,7 @@
             <argument>%plenty_connector.transfer_object.bundle%</argument>
             <argument>10</argument>
 
+            <tag name="plenty_connector.cleanup_definition" />
             <tag name="plenty_connector.connector_definition" />
         </service>
 
