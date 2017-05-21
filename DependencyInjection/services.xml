@@ -110,6 +110,7 @@
             <argument>80</argument>
 
             <tag name="plenty_connector.connector_definition" />
+            <tag name="plenty_connector.cleanup_definition" />
         </service>
 
         <service id="plenty_connector.connector_definition.media_category" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
@@ -121,6 +122,7 @@
             <argument>100</argument>
 
             <tag name="plenty_connector.connector_definition" />
+            <tag name="plenty_connector.cleanup_definition" />
         </service>
 
         <service id="plenty_connector.connector_definition.manufacturer" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
@@ -132,6 +134,7 @@
             <argument>90</argument>
 
             <tag name="plenty_connector.connector_definition" />
+            <tag name="plenty_connector.cleanup_definition" />
         </service>
 
         <service id="plenty_connector.connector_definition.product" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
@@ -143,6 +146,7 @@
             <argument>70</argument>
 
             <tag name="plenty_connector.connector_definition" />
+            <tag name="plenty_connector.cleanup_definition" />
         </service>
 
         <service id="plenty_connector.connector_definition.export_order" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
