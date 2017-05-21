@@ -4,7 +4,7 @@
 
 * **License:** MIT
 * **Repository:** [Github](https://github.com/plentymarkets/plentymarkets-shopware-connector)
-* **Documentation:** [Google Docs](https://docs.google.com/document/d/1yPr_SrBshsT0IJSuI8DmA7Berr275ZY6qDMMiqavbQI/edit?usp=sharing)
+* **Documentation:** [Google Docs](https://docs.google.com/a/arvatis.com/document/d/10mPeV3xqx4We71dYQdPmJK2qvb21Rpym6FG_tKwHKfc/edit?usp=sharing)
 
 ## Requirements
 
