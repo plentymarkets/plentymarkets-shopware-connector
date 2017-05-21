@@ -25,7 +25,7 @@ class CleanupDefinitionCompilerPass implements CompilerPassInterface
 
         $definition = $container->findDefinition('plenty_connector.cleanup_service');
 
-        $taggedServices = $container->findTaggedServiceIds('plenty_connector.connector_definition');
+        $taggedServices = $container->findTaggedServiceIds('plenty_connector.cleanup_definition');
 
         foreach ($taggedServices as $id => $tags) {
             $definition->addMethodCall('addDefinition', [new Reference($id)]);
