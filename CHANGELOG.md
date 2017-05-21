@@ -10,6 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - shipping costs vatRate is calculated now
 - Added reference unit synchronization
 - Sync product packaging units and content
+- Added a separate tag for definitions related to cleanup
 
 ### Changed
 - 1:N mapping of entities instead of 1:1
