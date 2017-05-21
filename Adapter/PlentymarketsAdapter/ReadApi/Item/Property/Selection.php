@@ -16,6 +16,6 @@ class Selection extends ApiAbstract
      */
     public function findOne($propertyId)
     {
-        return iterator_to_array($this->client->getIterator('items/properties/' . $propertyId . '/selections'));
+        return $this->client->request('GET', 'items/properties/' . $propertyId . '/selections');
     }
 }
