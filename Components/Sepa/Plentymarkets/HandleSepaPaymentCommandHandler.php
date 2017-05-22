@@ -76,10 +76,15 @@ class HandleSepaPaymentCommandHandler implements CommandHandlerInterface
             return $this->parentCommandHandler->handle($command);
         }
 
-        /**
-         * @var SepaPaymentData $data
-         */
-        $data = $payment->getPaymentData();
+        $identity = $this->identityService->findOneBy([
+            'objectIdentifier' => $payment->getIdentifier(),
+            'objectType' => Payment::TYPE,
+            'adapterName' => PlentymarketsAdapter::NAME,
+        ]);
+
+        if (null !== $identity) {
+            return true;
+        }
 
         $orderIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $payment->getOrderIdentifer(),
@@ -97,6 +102,11 @@ class HandleSepaPaymentCommandHandler implements CommandHandlerInterface
             throw new NotFoundException('could not find contact for bank account handling - ' . $payment->getOrderIdentifer());
         }
 
+        /**
+         * @var SepaPaymentData $data
+         */
+        $data = $payment->getPaymentData();
+
         $bankAccounts = $this->client->request('GET', 'accounts/contacts/' . $contactId . '/banks');
 
         $possibleBankAccounts = array_filter($bankAccounts, function (array $bankAccount) use ($data, $orderIdentity) {
@@ -104,6 +114,15 @@ class HandleSepaPaymentCommandHandler implements CommandHandlerInterface
         });
 
         if (!empty($possibleBankAccounts)) {
+            $possibleBankAccounts = array_shift($possibleBankAccounts);
+
+            $this->identityService->create(
+                $payment->getIdentifier(),
+                Payment::TYPE,
+                (string) $possibleBankAccounts['id'],
+                PlentymarketsAdapter::NAME
+            );
+
             return true;
         }
 
@@ -116,7 +135,14 @@ class HandleSepaPaymentCommandHandler implements CommandHandlerInterface
             'contactId' => $contactId,
         ];
 
-        $this->client->request('POST', 'accounts/contacts/banks', $sepaPaymentDataParams);
+        $paymentResult = $this->client->request('POST', 'accounts/contacts/banks', $sepaPaymentDataParams);
+
+        $this->identityService->create(
+            $payment->getIdentifier(),
+            Payment::TYPE,
+            (string) $paymentResult['id'],
+            PlentymarketsAdapter::NAME
+        );
 
         return true;
     }

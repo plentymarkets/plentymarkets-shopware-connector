@@ -9,6 +9,7 @@ use PlentyConnector\Connector\TransferObject\Currency\Currency;
 use PlentyConnector\Connector\TransferObject\Order\Order;
 use PlentyConnector\Connector\TransferObject\Payment\Payment;
 use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod;
+use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Models\Shop\Currency as CurrencyModel;
 use ShopwareAdapter\ResponseParser\Payment\PaymentResponseParserInterface;
@@ -60,6 +61,7 @@ class SepaPaymentResponseParser implements PaymentResponseParserInterface
             $payment = new Payment();
             $payment->setOrderIdentifer($this->getIdentifier($element['id'], Order::TYPE));
             $payment->setIdentifier($identifier);
+            $payment->setShopIdentifier($this->getIdentifier($element['shopId'], Shop::TYPE));
             $payment->setTransactionReference($identifier);
             $payment->setCurrencyIdentifier($this->getIdentifier($this->getCurrencyId($element['currency']), Currency::TYPE));
             $payment->setPaymentMethodIdentifier($this->getIdentifier($element['paymentId'], PaymentMethod::TYPE));
