@@ -456,6 +456,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             'newsletterAllowanceAt' => '',
             'lastOrderAt' => $order->getOrderTime()->format(DATE_W3C),
             'options' => [],
+            'referrerId' => 1,
         ];
 
         if (null !== $customerGroupIdentitiy) {

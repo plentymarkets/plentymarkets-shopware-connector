@@ -108,7 +108,7 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
         $this->identityService->create(
             $payment->getIdentifier(),
             Payment::TYPE,
-            $paymentResult['id'],
+            (string) $paymentResult['id'],
             PlentymarketsAdapter::NAME
         );
 
