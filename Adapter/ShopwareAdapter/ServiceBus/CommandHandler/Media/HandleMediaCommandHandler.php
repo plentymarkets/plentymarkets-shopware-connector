@@ -12,6 +12,7 @@ use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\TransferObject\Media\Media;
 use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
 use Shopware\Bundle\MediaBundle\MediaService;
+use Shopware\Components\Api\Exception\NotFoundException as MediaNotFoundException;
 use Shopware\Components\Api\Resource\Media as MediaResource;
 use Shopware\Models\Media\Album;
 use ShopwareAdapter\ShopwareAdapter;
@@ -108,9 +109,15 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
         }
 
         if (null !== $identity) {
-            $mediaObject = $this->resource->getOne($identity->getAdapterIdentifier());
+            try {
+                $mediaObject = $this->resource->getOne($identity->getAdapterIdentifier());
 
-            if (!$this->mediaService->has($mediaObject['path'])) {
+                if (!$this->mediaService->has($mediaObject['path'])) {
+                    $this->identityService->remove($identity);
+
+                    $identity = null;
+                }
+            } catch (MediaNotFoundException $exception) {
                 $this->identityService->remove($identity);
 
                 $identity = null;
