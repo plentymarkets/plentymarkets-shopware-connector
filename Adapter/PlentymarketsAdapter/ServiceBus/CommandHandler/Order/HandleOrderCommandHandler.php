@@ -513,14 +513,14 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param Address $address
+     * @param Address  $address
      * @param Customer $customer
-     * @param array $plentyCustomer
-     * @param int $addressType
-     *
-     * @return array
+     * @param array    $plentyCustomer
+     * @param int      $addressType
      *
      * @throws Exception
+     *
+     * @return array
      */
     private function createAddress(Address $address, Customer $customer, array $plentyCustomer, $addressType = 1)
     {
