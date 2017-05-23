@@ -2,6 +2,7 @@
 
 namespace PlentymarketsAdapter\ServiceBus\CommandHandler\Order;
 
+use Exception;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
@@ -179,7 +180,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
 
         $params['addressRelations'] = [];
 
-        $billingAddress = $this->createAddress($order->getBillingAddress(), $order->getCustomer(), $plentyCustomer);
+        $billingAddress = $this->createAddress($order->getBillingAddress(), $order->getCustomer(), $plentyCustomer, 1);
         if (!empty($billingAddress)) {
             $params['addressRelations'][] = [
                 'typeId' => 1,
@@ -187,7 +188,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             ];
         }
 
-        $shippingAddress = $this->createAddress($order->getShippingAddress(), $order->getCustomer(), $plentyCustomer);
+        $shippingAddress = $this->createAddress($order->getShippingAddress(), $order->getCustomer(), $plentyCustomer, 2);
         if (!empty($shippingAddress)) {
             $params['addressRelations'][] = [
                 'typeId' => 2,
@@ -270,7 +271,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             } elseif ($item->getType() === OrderItem::TYPE_SHIPPING_COSTS) {
                 $typeId = 6;
             } else {
-                throw new \Exception('unsupported type');
+                throw new Exception('unsupported type');
             }
 
             $itemParams['typeId'] = $typeId;
@@ -512,15 +513,16 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param Address  $address
+     * @param Address $address
      * @param Customer $customer
-     * @param array    $plentyCustomer
-     *
-     * @throws \Exception
+     * @param array $plentyCustomer
+     * @param int $addressType
      *
      * @return array
+     *
+     * @throws Exception
      */
-    private function createAddress(Address $address, Customer $customer, array $plentyCustomer)
+    private function createAddress(Address $address, Customer $customer, array $plentyCustomer, $addressType = 1)
     {
         $countryIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $address->getCountryIdentifier(),
@@ -529,7 +531,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         ]);
 
         if (null === $countryIdentity) {
-            throw new \Exception('unmapped country');
+            throw new Exception('unmapped country');
         }
 
         try {
@@ -538,25 +540,27 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             $address1 = $splitResult['streetName'];
             $address2 = $splitResult['houseNumber'];
             $address3 = trim($splitResult['additionToAddress1'] . ' ' . $splitResult['additionToAddress2']);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $address1 = $address->getStreet();
             $address2 = '';
             $address3 = '';
         }
 
-        // TODO: Addition feld prüfen
+        $params = [
+            'name1' => trim($address->getCompany() . ' ' . $address->getDepartment()),
+            'name2' => $address->getFirstname(),
+            'name3' => $address->getLastname(),
+            'postalCode' => $address->getPostalCode(),
+            'town' => $address->getCity(),
+            'countryId' => $countryIdentity->getAdapterIdentifier(),
+            'typeId' => $addressType,
+        ];
 
         if (0 === strcasecmp($address1, 'Packstation')) {
             $params = [
-                'name1' => trim($address->getCompany() . ' ' . $address->getDepartment()),
-                'name2' => $address->getFirstname(),
-                'name3' => $address->getLastname(),
                 'isPackstation' => true,
                 'address1' => 'PACKSTATION',
                 'address2' => $address2,
-                'postalCode' => $address->getPostalCode(),
-                'town' => $address->getCity(),
-                'countryId' => $countryIdentity->getAdapterIdentifier(),
                 'options' => [
                     [
                         'typeId' => 5,
@@ -569,16 +573,10 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                 ],
             ];
         } elseif (0 === strcasecmp($address1, 'Postfiliale')) {
-            $params = [
-                'name1' => trim($address->getCompany() . ' ' . $address->getDepartment()),
-                'name2' => $address->getFirstname(),
-                'name3' => $address->getLastname(),
+            $params = array_merge($params, [
                 'isPostfiliale' => true,
                 'address1' => 'POSTFILIALE',
                 'address2' => $address2,
-                'postalCode' => $address->getPostalCode(),
-                'town' => $address->getCity(),
-                'countryId' => $countryIdentity->getAdapterIdentifier(),
                 'options' => [
                     [
                         'typeId' => 5,
@@ -589,26 +587,20 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                         'value' => $address->getAdditional(),
                     ],
                 ],
-            ];
+            ]);
         } else {
-            $params = [
-                'name1' => trim($address->getCompany() . ' ' . $address->getDepartment()),
-                'name2' => $address->getFirstname(),
-                'name3' => $address->getLastname(),
+            $params = array_merge($params, [
                 'address1' => $address1,
                 'address2' => $address2,
                 'address3' => $address->getAdditional(),
                 'address4' => $address3,
-                'postalCode' => $address->getPostalCode(),
-                'town' => $address->getCity(),
-                'countryId' => $countryIdentity->getAdapterIdentifier(),
                 'options' => [
                     [
                         'typeId' => 5,
                         'value' => $customer->getEmail(),
                     ],
                 ],
-            ];
+            ]);
         }
 
         if (null !== $customer->getPhoneNumber()) {
