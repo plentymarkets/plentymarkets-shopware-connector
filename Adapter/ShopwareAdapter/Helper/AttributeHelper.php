@@ -45,9 +45,9 @@ class AttributeHelper
     /**
      * AttributeHelper constructor.
      *
-     * @param CrudService $attributeService
-     * @param ModelManager $entityManager
-     * @param DataPersister $dataPersister
+     * @param CrudService               $attributeService
+     * @param ModelManager              $entityManager
+     * @param DataPersister             $dataPersister
      * @param ValidatorServiceInterface $validator
      */
     public function __construct(
@@ -103,6 +103,53 @@ class AttributeHelper
     }
 
     /**
+     * @param AttributableInterface $object
+     * @param $fieldName
+     */
+    public function addFieldAsAttribute(AttributableInterface $object, $fieldName)
+    {
+        if (!method_exists($object, 'getAttributes')) {
+            return;
+        }
+
+        $method = 'get' . ucfirst($fieldName);
+
+        if (!method_exists($object, $method)) {
+            return;
+        }
+
+        $fieldValue = $object->$method();
+
+        if (null === $fieldValue) {
+            return;
+        }
+
+        $attribute = new Attribute();
+        $attribute->setKey($fieldName);
+        $attribute->setValue($fieldValue);
+
+        if ($object instanceof TranslateableInterface) {
+            $translations = $object->getTranslations();
+            $newTranslations = [];
+
+            foreach ($translations as $translation) {
+                if ($fieldName === $translation->getProperty()) {
+                    $newTranslation = clone $translation;
+                    $newTranslation->setProperty('value');
+
+                    $newTranslations[] = $newTranslation;
+                }
+            }
+
+            $attribute->setTranslations($newTranslations);
+        }
+
+        $this->validator->validate($attribute);
+
+        $object->setAttributes(array_merge($object->getAttributes(), [$attribute]));
+    }
+
+    /**
      * @param Attribute $attribute
      * @param string    $table
      */
@@ -148,52 +195,5 @@ class AttributeHelper
         }
 
         return $result;
-    }
-
-    /**
-     * @param AttributableInterface $object
-     * @param $fieldName
-     */
-    public function addFieldAsAttribute(AttributableInterface $object, $fieldName)
-    {
-        if (!method_exists($object, 'getAttributes')) {
-            return;
-        }
-
-        $method = 'get' . ucfirst($fieldName);
-
-        if (!method_exists($object, $method)) {
-            return;
-        }
-
-        $fieldValue = $object->$method();
-
-        if (null === $fieldValue) {
-            return;
-        }
-
-        $attribute = new Attribute();
-        $attribute->setKey($fieldName);
-        $attribute->setValue($fieldValue);
-
-        if ($object instanceof TranslateableInterface) {
-            $translations = $object->getTranslations();
-            $newTranslations = [];
-
-            foreach ($translations as $translation) {
-                if ($fieldName === $translation->getProperty()) {
-                    $newTranslation = clone $translation;
-                    $newTranslation->setProperty('value');
-
-                    $newTranslations[] = $newTranslation;
-                }
-            }
-
-            $attribute->setTranslations($newTranslations);
-        }
-
-        $this->validator->validate($attribute);
-
-        $object->setAttributes(array_merge($object->getAttributes(), [$attribute]));
     }
 }
