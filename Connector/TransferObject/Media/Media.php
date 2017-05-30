@@ -3,6 +3,7 @@
 namespace PlentyConnector\Connector\TransferObject\Media;
 
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
+use PlentyConnector\Connector\TransferObject\AttributableInterface;
 use PlentyConnector\Connector\TransferObject\TranslateableInterface;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
@@ -10,7 +11,7 @@ use PlentyConnector\Connector\ValueObject\Translation\Translation;
 /**
  * Class Media
  */
-class Media extends AbstractTransferObject implements TranslateableInterface
+class Media extends AbstractTransferObject implements TranslateableInterface, AttributableInterface
 {
     const TYPE = 'Media';
 

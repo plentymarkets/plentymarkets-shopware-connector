@@ -2,6 +2,7 @@
 
 namespace PlentyConnector\Connector\TransferObject\Order\Address;
 
+use PlentyConnector\Connector\TransferObject\AttributableInterface;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
@@ -10,7 +11,7 @@ use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
  *
  * Class Address
  */
-class Address extends AbstractValueObject
+class Address extends AbstractValueObject implements AttributableInterface
 {
     const SALUTATION_MR = 1;
     const SALUTATION_MS = 2;
