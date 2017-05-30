@@ -584,7 +584,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                     [
                         'typeId' => 5,
                         'value' => $customer->getEmail(),
-                    ]
+                    ],
                 ],
             ]);
 
