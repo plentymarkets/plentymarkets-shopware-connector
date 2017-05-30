@@ -94,6 +94,8 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
             'description' => $media->getName(),
         ];
 
+        $this->attributeHelper->addFieldAsAttribute($media, 'alternateName');
+
         if (null !== $media->getMediaCategoryIdentifier()) {
             $mediaCategoryIdentity = $this->identityService->findOneBy([
                 'objectIdentifier' => $media->getMediaCategoryIdentifier(),

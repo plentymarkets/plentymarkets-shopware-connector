@@ -4,6 +4,7 @@ namespace PlentyConnector\Connector\TransferObject\Order;
 
 use DateTimeImmutable;
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
+use PlentyConnector\Connector\TransferObject\AttributableInterface;
 use PlentyConnector\Connector\TransferObject\Order\Address\Address;
 use PlentyConnector\Connector\TransferObject\Order\Comment\Comment;
 use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
@@ -14,7 +15,7 @@ use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 /**
  * Class Order.
  */
-class Order extends AbstractTransferObject
+class Order extends AbstractTransferObject implements AttributableInterface
 {
     const TYPE = 'Order';
 

@@ -3,13 +3,14 @@
 namespace PlentyConnector\Connector\TransferObject\Payment;
 
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
+use PlentyConnector\Connector\TransferObject\AttributableInterface;
 use PlentyConnector\Connector\TransferObject\Payment\PaymentData\PaymentDataInterface;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
 /**
  * Class Payment
  */
-class Payment extends AbstractTransferObject
+class Payment extends AbstractTransferObject implements AttributableInterface
 {
     const TYPE = 'Payment';
 

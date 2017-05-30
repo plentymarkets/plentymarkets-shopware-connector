@@ -2,13 +2,14 @@
 
 namespace PlentyConnector\Connector\TransferObject\Order\OrderItem;
 
+use PlentyConnector\Connector\TransferObject\AttributableInterface;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
 /**
  * Class OrderItem
  */
-class OrderItem extends AbstractValueObject
+class OrderItem extends AbstractValueObject implements AttributableInterface
 {
     const TYPE_PRODUCT = 1;
     const TYPE_VOUCHER = 2;
