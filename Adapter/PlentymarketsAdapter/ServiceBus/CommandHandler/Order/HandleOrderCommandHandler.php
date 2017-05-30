@@ -557,7 +557,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         ];
 
         if (0 === strcasecmp($address1, 'Packstation')) {
-            $params = [
+            $params = array_merge($params, [
                 'isPackstation' => true,
                 'address1' => 'PACKSTATION',
                 'address2' => $address2,
@@ -566,12 +566,15 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                         'typeId' => 5,
                         'value' => $customer->getEmail(),
                     ],
-                    [
-                        'typeId' => 6,
-                        'value' => $address->getAdditional(),
-                    ],
                 ],
-            ];
+            ]);
+
+            if (null !== $address->getAdditional()) {
+                $params['options'][] = [
+                    'typeId' => 6,
+                    'value' => $address->getAdditional(),
+                ];
+            }
         } elseif (0 === strcasecmp($address1, 'Postfiliale')) {
             $params = array_merge($params, [
                 'isPostfiliale' => true,
@@ -582,12 +585,15 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                         'typeId' => 5,
                         'value' => $customer->getEmail(),
                     ],
-                    [
-                        'typeId' => 6,
-                        'value' => $address->getAdditional(),
-                    ],
                 ],
             ]);
+
+            if (null !== $address->getAdditional()) {
+                $params['options'][] = [
+                    'typeId' => 6,
+                    'value' => $address->getAdditional(),
+                ];
+            }
         } else {
             $params = array_merge($params, [
                 'address1' => $address1,
@@ -637,10 +643,6 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                 'text' => $comment->getComment(),
                 'isVisibleForContact' => $comment->getType() === Comment::TYPE_CUSTOMER,
             ];
-
-            if ($comment->getType() === Comment::TYPE_INTERNAL) {
-                $commentParams['userId'] = 1; // TODO: userId des rest benutzers auslesen?
-            }
 
             $this->client->request('post', 'comments', $commentParams);
         }
