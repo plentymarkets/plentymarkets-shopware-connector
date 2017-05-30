@@ -4,6 +4,7 @@ namespace PlentyConnector\Connector\TransferObject\Product;
 
 use DateTimeImmutable;
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
+use PlentyConnector\Connector\TransferObject\AttributableInterface;
 use PlentyConnector\Connector\TransferObject\Product\Image\Image;
 use PlentyConnector\Connector\TransferObject\Product\LinkedProduct\LinkedProduct;
 use PlentyConnector\Connector\TransferObject\Product\Property\Property;
@@ -15,7 +16,7 @@ use PlentyConnector\Connector\ValueObject\Translation\Translation;
 /**
  * Class Product.
  */
-class Product extends AbstractTransferObject implements TranslateableInterface
+class Product extends AbstractTransferObject implements TranslateableInterface, AttributableInterface
 {
     const TYPE = 'Product';
 

@@ -2,13 +2,14 @@
 
 namespace PlentyConnector\Connector\TransferObject\Order\Comment;
 
+use PlentyConnector\Connector\TransferObject\AttributableInterface;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
 /**
  * Class Comment
  */
-class Comment extends AbstractValueObject
+class Comment extends AbstractValueObject implements AttributableInterface
 {
     const TYPE_INTERNAL = 1;
     const TYPE_CUSTOMER = 2;

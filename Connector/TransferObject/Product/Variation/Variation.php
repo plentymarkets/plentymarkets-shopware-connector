@@ -3,6 +3,7 @@
 namespace PlentyConnector\Connector\TransferObject\Product\Variation;
 
 use DateTimeImmutable;
+use PlentyConnector\Connector\TransferObject\AttributableInterface;
 use PlentyConnector\Connector\TransferObject\Product\Barcode\Barcode;
 use PlentyConnector\Connector\TransferObject\Product\Image\Image;
 use PlentyConnector\Connector\TransferObject\Product\Price\Price;
@@ -13,7 +14,7 @@ use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 /**
  * Class Variation.
  */
-class Variation extends AbstractValueObject
+class Variation extends AbstractValueObject implements AttributableInterface
 {
     /**
      * @var bool
