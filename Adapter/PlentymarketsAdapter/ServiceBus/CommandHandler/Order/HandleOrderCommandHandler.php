@@ -141,7 +141,9 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         ]);
 
         if (null === $shippingProfileIdentity) {
-            $this->logger->notice('no shipping profile selected', ['orderNumber', $order->getOrderNumber()]);
+            $this->logger->error('no shipping profile selected', ['orderNumber', $order->getOrderNumber()]);
+
+            return false;
         }
 
         $currencyIdentity = $this->identityService->findOneBy([
