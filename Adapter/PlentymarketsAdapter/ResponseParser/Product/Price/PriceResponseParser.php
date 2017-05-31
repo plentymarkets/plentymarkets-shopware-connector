@@ -41,9 +41,9 @@ class PriceResponseParser implements PriceResponseParserInterface
      * PriceResponseParser constructor.
      *
      * @param IdentityServiceInterface $identityService
-     * @param SalesPrice               $itemsSalesPricesApi
-     * @param ContactClass             $itemsAccountsContacsClasses
-     * @param LoggerInterface          $logger
+     * @param SalesPrice $itemsSalesPricesApi
+     * @param ContactClass $itemsAccountsContacsClasses
+     * @param LoggerInterface $logger
      */
     public function __construct(
         IdentityServiceInterface $identityService,
@@ -58,22 +58,29 @@ class PriceResponseParser implements PriceResponseParserInterface
     }
 
     /**
-     * @param array $variation
+     * @param array $variationSalesPrices
      *
-     * @return Price[]
+     * @return array
      */
-    public function parse(array $variation)
+    private function getPricesAsSortedArray(array $variationSalesPrices = [])
     {
+        $priceConfigurations = $this->getPriceConfigurations();
+
+        if (empty($priceConfigurations)) {
+            $this->logger->notice('no valid price configuration found');
+
+            return [];
+        }
+
         static $customerGroups;
 
         if (null === $customerGroups) {
             $customerGroups = array_keys($this->itemsAccountsContacsClasses->findAll());
         }
 
-        $priceConfigurations = $this->getPriceConfigurations();
-
         $temporaryPrices = [];
-        foreach ($variation['variationSalesPrices'] as $price) {
+
+        foreach ($variationSalesPrices as $price) {
             $priceConfiguration = array_filter($priceConfigurations, function ($configuration) use ($price) {
                 return $configuration['id'] === $price['salesPriceId'];
             });
@@ -87,6 +94,8 @@ class PriceResponseParser implements PriceResponseParserInterface
             $priceConfiguration = array_shift($priceConfiguration);
 
             $customerClasses = (array) $priceConfiguration['customerClasses'];
+
+            $type = 'default';
 
             if (count($customerClasses) !== 1 && $customerClasses[0]['customerClassId'] !== -1) {
                 foreach ($customerGroups as $group) {
@@ -102,22 +111,29 @@ class PriceResponseParser implements PriceResponseParserInterface
                         continue;
                     }
 
-                    if (!isset($temporaryPrices[$customerGroupIdentity->getObjectIdentifier()][$priceConfiguration['type']])) {
-                        $temporaryPrices[$customerGroupIdentity->getObjectIdentifier()][$priceConfiguration['type']] = [
-                            'from' => $priceConfiguration['minimumOrderQuantity'],
-                            'price' => $price['price'],
-                        ];
-                    }
-                }
-            } else {
-                if (!isset($temporaryPrices['default'][$priceConfiguration['type']])) {
-                    $temporaryPrices['default'][$priceConfiguration['type']] = [
-                        'from' => $priceConfiguration['minimumOrderQuantity'],
-                        'price' => $price['price'],
-                    ];
+                    $type = $customerGroupIdentity->getObjectIdentifier();
                 }
             }
+
+            $from = (float) $priceConfiguration['minimumOrderQuantity'];
+
+            $temporaryPrices[$type][$priceConfiguration['type']][$from] = [
+                'from' => $from,
+                'price' => (float) $price['price'],
+            ];
         }
+
+        return $temporaryPrices;
+    }
+
+    /**
+     * @param array $variation
+     *
+     * @return Price[]
+     */
+    public function parse(array $variation)
+    {
+        $temporaryPrices = $this->getPricesAsSortedArray($variation['variationSalesPrices']);
 
         /**
          * @var Price[] $prices
@@ -128,32 +144,16 @@ class PriceResponseParser implements PriceResponseParserInterface
                 $customerGroup = null;
             }
 
-            $price = 0.0;
-            $pseudoPrice = 0.0;
+            foreach ($priceArray['default'] as $salesPrice) {
+                $priceObject = new Price();
+                $priceObject->setPrice($salesPrice['price']);
+                $priceObject->setCustomerGroupIdentifier($customerGroup);
+                $priceObject->setFromAmount($salesPrice['from']);
 
-            if (isset($priceArray['default'])) {
-                $price = (float) $priceArray['default']['price'];
+                $this->addPseudoPrice($priceObject, $priceArray);
+
+                $prices[] = $priceObject;
             }
-
-            if (isset($priceArray['rrp'])) {
-                $pseudoPrice = (float) $priceArray['rrp']['price'];
-            }
-
-            if (isset($priceArray['specialOffer'])) {
-                if ($pseudoPrice === 0.0) {
-                    $pseudoPrice = $price;
-                }
-
-                $price = (float) $priceArray['specialOffer']['price'];
-            }
-
-            $prices[] = Price::fromArray([
-                'price' => $price,
-                'pseudoPrice' => $pseudoPrice,
-                'customerGroupIdentifier' => $customerGroup,
-                'from' => (int) $priceArray['default']['from'],
-                'to' => null,
-            ]);
         }
 
         foreach ($prices as $price) {
@@ -225,20 +225,23 @@ class PriceResponseParser implements PriceResponseParserInterface
             });
 
             if (empty($shopIdentities)) {
+                $priceConfigurations = [];
+
                 return $priceConfigurations;
             }
 
-            $priceConfigurations = array_filter($priceConfigurations, function ($priceConfiguration) use ($shopIdentities) {
-                foreach ($shopIdentities as $identity) {
-                    foreach ($priceConfiguration['clients'] as $client) {
-                        if ($client['plentyId'] === -1 || $identity->getAdapterIdentifier() === (string) $client['plentyId']) {
-                            return true;
+            $priceConfigurations = array_filter($priceConfigurations,
+                function ($priceConfiguration) use ($shopIdentities) {
+                    foreach ($shopIdentities as $identity) {
+                        foreach ($priceConfiguration['clients'] as $client) {
+                            if ($client['plentyId'] === -1 || $identity->getAdapterIdentifier() === (string) $client['plentyId']) {
+                                return true;
+                            }
                         }
                     }
-                }
 
-                return false;
-            });
+                    return false;
+                });
 
             if (empty($priceConfigurations)) {
                 $this->logger->notice('no valid price configuration found');
@@ -246,5 +249,24 @@ class PriceResponseParser implements PriceResponseParserInterface
         }
 
         return $priceConfigurations;
+    }
+
+    /**
+     * @param Price $price
+     * @param array $priceArray
+     */
+    private function addPseudoPrice(Price $price, $priceArray)
+    {
+        if (isset($priceArray['rrp'][$price->getFromAmount()])) {
+            $price->setPseudoPrice($priceArray['rrp'][$price->getFromAmount()]['price']);
+        }
+
+        if (isset($priceArray['specialOffer'][$price->getFromAmount()])) {
+            if (0.0 === $price->getPseudoPrice()) {
+                $price->setPseudoPrice($price->getPrice());
+            }
+
+            $price->setPrice($priceArray['specialOffer'][$price->getFromAmount()]['price']);
+        }
     }
 }
