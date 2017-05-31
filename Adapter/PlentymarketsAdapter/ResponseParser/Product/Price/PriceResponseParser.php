@@ -41,9 +41,9 @@ class PriceResponseParser implements PriceResponseParserInterface
      * PriceResponseParser constructor.
      *
      * @param IdentityServiceInterface $identityService
-     * @param SalesPrice $itemsSalesPricesApi
-     * @param ContactClass $itemsAccountsContacsClasses
-     * @param LoggerInterface $logger
+     * @param SalesPrice               $itemsSalesPricesApi
+     * @param ContactClass             $itemsAccountsContacsClasses
+     * @param LoggerInterface          $logger
      */
     public function __construct(
         IdentityServiceInterface $identityService,
@@ -55,6 +55,73 @@ class PriceResponseParser implements PriceResponseParserInterface
         $this->itemsSalesPricesApi = $itemsSalesPricesApi;
         $this->itemsAccountsContacsClasses = $itemsAccountsContacsClasses;
         $this->logger = $logger;
+    }
+
+    /**
+     * @param array $variation
+     *
+     * @return Price[]
+     */
+    public function parse(array $variation)
+    {
+        $temporaryPrices = $this->getPricesAsSortedArray($variation['variationSalesPrices']);
+
+        /**
+         * @var Price[] $prices
+         */
+        $prices = [];
+        foreach ($temporaryPrices as $customerGroup => $priceArray) {
+            if ($customerGroup === 'default') {
+                $customerGroup = null;
+            }
+
+            foreach ($priceArray['default'] as $salesPrice) {
+                $priceObject = new Price();
+                $priceObject->setPrice($salesPrice['price']);
+                $priceObject->setCustomerGroupIdentifier($customerGroup);
+                $priceObject->setFromAmount($salesPrice['from']);
+
+                $this->addPseudoPrice($priceObject, $priceArray);
+
+                $prices[] = $priceObject;
+            }
+        }
+
+        foreach ($prices as $price) {
+            /**
+             * @var Price[] $possibleScalePrices
+             */
+            $possibleScalePrices = array_filter($prices, function (Price $possiblePrice) use ($price) {
+                return $possiblePrice->getCustomerGroupIdentifier() === $price->getCustomerGroupIdentifier() &&
+                    spl_object_hash($price) !== spl_object_hash($possiblePrice);
+            });
+
+            if (empty($possibleScalePrices)) {
+                continue;
+            }
+
+            usort($possibleScalePrices, function (Price $possibleScalePriceLeft, Price $possibleScalePriceright) {
+                if ($possibleScalePriceLeft->getFromAmount() === $possibleScalePriceright->getFromAmount()) {
+                    return 0;
+                }
+
+                if ($possibleScalePriceLeft->getFromAmount() > $possibleScalePriceright->getFromAmount()) {
+                    return 1;
+                }
+
+                return -1;
+            });
+
+            foreach ($possibleScalePrices as $possibleScalePrice) {
+                if ($possibleScalePrice->getFromAmount() > $price->getFromAmount()) {
+                    $price->setToAmount($possibleScalePrice->getFromAmount() - 1);
+
+                    break;
+                }
+            }
+        }
+
+        return $prices;
     }
 
     /**
@@ -124,73 +191,6 @@ class PriceResponseParser implements PriceResponseParserInterface
         }
 
         return $temporaryPrices;
-    }
-
-    /**
-     * @param array $variation
-     *
-     * @return Price[]
-     */
-    public function parse(array $variation)
-    {
-        $temporaryPrices = $this->getPricesAsSortedArray($variation['variationSalesPrices']);
-
-        /**
-         * @var Price[] $prices
-         */
-        $prices = [];
-        foreach ($temporaryPrices as $customerGroup => $priceArray) {
-            if ($customerGroup === 'default') {
-                $customerGroup = null;
-            }
-
-            foreach ($priceArray['default'] as $salesPrice) {
-                $priceObject = new Price();
-                $priceObject->setPrice($salesPrice['price']);
-                $priceObject->setCustomerGroupIdentifier($customerGroup);
-                $priceObject->setFromAmount($salesPrice['from']);
-
-                $this->addPseudoPrice($priceObject, $priceArray);
-
-                $prices[] = $priceObject;
-            }
-        }
-
-        foreach ($prices as $price) {
-            /**
-             * @var Price[] $possibleScalePrices
-             */
-            $possibleScalePrices = array_filter($prices, function (Price $possiblePrice) use ($price) {
-                return $possiblePrice->getCustomerGroupIdentifier() === $price->getCustomerGroupIdentifier() &&
-                    spl_object_hash($price) !== spl_object_hash($possiblePrice);
-            });
-
-            if (empty($possibleScalePrices)) {
-                continue;
-            }
-
-            usort($possibleScalePrices, function (Price $possibleScalePriceLeft, Price $possibleScalePriceright) {
-                if ($possibleScalePriceLeft->getFromAmount() === $possibleScalePriceright->getFromAmount()) {
-                    return 0;
-                }
-
-                if ($possibleScalePriceLeft->getFromAmount() > $possibleScalePriceright->getFromAmount()) {
-                    return 1;
-                }
-
-                return -1;
-            });
-
-            foreach ($possibleScalePrices as $possibleScalePrice) {
-                if ($possibleScalePrice->getFromAmount() > $price->getFromAmount()) {
-                    $price->setToAmount($possibleScalePrice->getFromAmount() - 1);
-
-                    break;
-                }
-            }
-        }
-
-        return $prices;
     }
 
     /**

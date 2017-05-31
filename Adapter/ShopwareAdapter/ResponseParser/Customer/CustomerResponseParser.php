@@ -3,7 +3,6 @@
 namespace ShopwareAdapter\ResponseParser\Customer;
 
 use DateTimeImmutable;
-use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
