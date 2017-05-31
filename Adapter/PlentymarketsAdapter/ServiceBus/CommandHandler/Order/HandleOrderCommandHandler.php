@@ -646,7 +646,31 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                 'isVisibleForContact' => $comment->getType() === Comment::TYPE_CUSTOMER,
             ];
 
+            if ($comment->getType() === Comment::TYPE_INTERNAL) {
+                $commentParams['userId'] = $this->getUserId();
+            }
+
             $this->client->request('post', 'comments', $commentParams);
         }
+    }
+
+    /**
+     * @throws Exception
+     *
+     * @return int
+     */
+    private function getUserId()
+    {
+        static $user = null;
+
+        if (null === $user) {
+            $user = $this->client->request('GET', 'user');
+
+            if (empty($user)) {
+                throw new Exception('could not read user data');
+            }
+        }
+
+        return (int) $user['id'];
     }
 }

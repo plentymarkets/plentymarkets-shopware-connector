@@ -122,7 +122,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
              * @var LoggerInterface $logger
              */
             $logger = Shopware()->Container()->get('plenty_connector.logger');
-            $logger->notice('vat rate not mapped', ['command' => $command]);
+            $logger->notice('vat rate not mapped - ' . $product->getVatRateIdentifier(), ['command' => $command]);
 
             return false;
         }
@@ -138,7 +138,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
              * @var LoggerInterface $logger
              */
             $logger = Shopware()->Container()->get('plenty_connector.logger');
-            $logger->notice('manufacturer is missing', ['command' => $command]);
+            $logger->notice('manufacturer is missing - ' . $product->getManufacturerIdentifier(), ['command' => $command]);
         }
 
         $images = [];
@@ -168,7 +168,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                  * @var LoggerInterface $logger
                  */
                 $logger = Shopware()->Container()->get('plenty_connector.logger');
-                $logger->notice('image is missing', ['command' => $command]);
+                $logger->notice('image is missing - ' . $image->getMediaIdentifier(), ['command' => $command]);
 
                 return false;
             }
@@ -239,7 +239,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                  * @var LoggerInterface $logger
                  */
                 $logger = Shopware()->Container()->get('plenty_connector.logger');
-                $logger->notice('shipping profile not mapped', ['command' => $command]);
+                $logger->notice('shipping profile not mapped - ' . $identifier, ['command' => $command]);
 
                 continue;
             }
@@ -291,7 +291,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                  * @var LoggerInterface $logger
                  */
                 $logger = Shopware()->Container()->get('plenty_connector.logger');
-                $logger->notice('langauge not mapped', ['command' => $command]);
+                $logger->notice('langauge not mapped - ' . $languageIdentifier, ['command' => $command]);
 
                 continue;
             }
@@ -360,7 +360,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             '__options_images' => ['replace' => true],
         ];
 
-        // TODO: add default supplier via config
         if (null !== $manufacturerIdentity) {
             $params['supplierId'] = $manufacturerIdentity->getAdapterIdentifier();
         }

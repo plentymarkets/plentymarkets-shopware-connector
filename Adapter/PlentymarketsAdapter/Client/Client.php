@@ -357,7 +357,7 @@ class Client implements ClientInterface
         }
 
         if (!array_key_exists('timeout', $options)) {
-            $requestOptions['timeout'] = 30;
+            $requestOptions['timeout'] = 60;
         }
 
         if (!array_key_exists('exceptions', $options)) {
