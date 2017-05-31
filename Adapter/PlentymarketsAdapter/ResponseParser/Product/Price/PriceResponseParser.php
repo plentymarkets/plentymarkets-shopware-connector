@@ -6,6 +6,7 @@ use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
 use PlentyConnector\Connector\TransferObject\Product\Price\Price;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
+use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Account\ContactClass;
 use PlentymarketsAdapter\ReadApi\Item\SalesPrice;
@@ -208,6 +209,20 @@ class PriceResponseParser implements PriceResponseParserInterface
                 'adapterName' => PlentymarketsAdapter::NAME,
                 'objectType' => Shop::TYPE,
             ]);
+
+            $shopIdentities = array_filter($shopIdentities, function (Identity $identity) {
+                $isMappedIdentity = $this->identityService->isMapppedIdentity(
+                    $identity->getObjectIdentifier(),
+                    $identity->getObjectType(),
+                    $identity->getAdapterName()
+                );
+
+                if (!$isMappedIdentity) {
+                    return false;
+                }
+
+                return true;
+            });
 
             if (empty($shopIdentities)) {
                 return $priceConfigurations;
