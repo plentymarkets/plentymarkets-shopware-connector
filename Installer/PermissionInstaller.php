@@ -2,7 +2,6 @@
 
 namespace PlentyConnector\Installer;
 
-use Exception;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
@@ -54,8 +53,6 @@ class PermissionInstaller implements InstallerInterface
 
     /**
      * @param InstallContext $context
-     *
-     * @throws Exception
      */
     public function install(InstallContext $context)
     {
@@ -64,8 +61,6 @@ class PermissionInstaller implements InstallerInterface
 
     /**
      * @param UpdateContext $context
-     *
-     * @throws Exception
      */
     public function update(UpdateContext $context)
     {
@@ -74,8 +69,6 @@ class PermissionInstaller implements InstallerInterface
 
     /**
      * @param UninstallContext $context
-     *
-     * @throws Exception
      */
     public function uninstall(UninstallContext $context)
     {
