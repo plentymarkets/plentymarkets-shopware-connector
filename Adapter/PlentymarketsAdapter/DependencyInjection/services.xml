@@ -66,6 +66,27 @@
 
         <!-- Request Generator -->
 
+        <service id="plentmarkets_adapter.request_generator.address" class="PlentymarketsAdapter\RequestGenerator\Order\Address\AddressRequestGenerator">
+            <argument type="service" id="plenty_connector.identity_service" />
+        </service>
+
+        <service id="plentmarkets_adapter.request_generator.order" class="PlentymarketsAdapter\RequestGenerator\Order\OrderRequestGenerator">
+            <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="plentmarkets_adapter.client" />
+            <argument type="service" id="plentmarkets_adapter.request_generator.order_item" />
+            <argument type="service" id="plentmarkets_adapter.request_generator.customer" />
+            <argument type="service" id="plentmarkets_adapter.request_generator.address" />
+        </service>
+
+        <service id="plentmarkets_adapter.request_generator.order_item" class="PlentymarketsAdapter\RequestGenerator\Order\OrderItem\OrderItemRequestGenerator">
+            <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="plentmarkets_adapter.client" />
+        </service>
+
+        <service id="plentmarkets_adapter.request_generator.customer" class="PlentymarketsAdapter\RequestGenerator\Order\Customer\CustomerRequestGenerator">
+            <argument type="service" id="plenty_connector.identity_service" />
+        </service>
+
         <service id="plentmarkets_adapter.request_generator.payment" class="PlentymarketsAdapter\RequestGenerator\Payment\PaymentRequestGenerator">
             <argument type="service" id="plenty_connector.identity_service" />
         </service>
@@ -372,7 +393,7 @@
         <service id="plentymarkets_adapter.command_handler.handle_order" class="PlentymarketsAdapter\ServiceBus\CommandHandler\Order\HandleOrderCommandHandler">
             <argument type="service" id="plentmarkets_adapter.client" />
             <argument type="service" id="plenty_connector.identity_service" />
-            <argument type="service" id="plenty_connector.logger" />
+            <argument type="service" id="plentmarkets_adapter.request_generator.order" />
 
             <tag name="plenty_connector.command_handler" />
         </service>
