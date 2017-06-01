@@ -2,13 +2,7 @@
 
 namespace ShopwareAdapter\RequestGenerator\Product\ConfiguratorSet;
 
-use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\Currency\Currency;
-use PlentyConnector\Connector\TransferObject\Payment\Payment;
-use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod;
 use PlentyConnector\Connector\TransferObject\Product\Product;
-use PlentymarketsAdapter\PlentymarketsAdapter;
 
 /**
  * Class ConfiguratorSetRequestGenerator

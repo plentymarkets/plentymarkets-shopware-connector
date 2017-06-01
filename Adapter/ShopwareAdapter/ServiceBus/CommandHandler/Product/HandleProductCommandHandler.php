@@ -61,8 +61,8 @@ class HandleProductCommandHandler implements CommandHandlerInterface
     /**
      * HandleProductCommandHandler constructor.
      *
-     * @param IdentityServiceInterface $identityService
-     * @param AttributeHelper $attributeHelper
+     * @param IdentityServiceInterface                 $identityService
+     * @param AttributeHelper                          $attributeHelper
      * @param ConfiguratorSetRequestGeneratorInterface $configuratorSetRequestGenerator
      */
     public function __construct(
