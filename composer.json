@@ -10,6 +10,7 @@
     ],
     "homepage": "https://github.com/plentymarkets/plentymarkets-shopware-connector",
     "require": {
+        "php": "^5.6.4||^7.0",
         "viison/address-splitter": "dev-master",
         "league/tactician": "^1.0",
         "ramsey/uuid": "^3.5",

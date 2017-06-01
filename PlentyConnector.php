@@ -2,9 +2,7 @@
 
 namespace PlentyConnector;
 
-use Doctrine\DBAL\Exception\InvalidArgumentException;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use PlentyConnector\Connector\ConfigService\Model\Config;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\IdentityService\Model\Identity;
@@ -28,8 +26,6 @@ use Shopware\Components\Plugin\Context\UninstallContext;
 use Shopware\Components\Plugin\Context\UpdateContext;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
-use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 require __DIR__ . '/autoload.php';
@@ -76,8 +72,6 @@ class PlentyConnector extends Plugin
 
     /**
      * @param ContainerBuilder $container
-     *
-     * @throws Exception
      */
     public function build(ContainerBuilder $container)
     {
@@ -113,11 +107,6 @@ class PlentyConnector extends Plugin
 
     /**
      * @param InstallContext $context
-     *
-     * @throws ServiceCircularReferenceException
-     * @throws ServiceNotFoundException
-     * @throws InvalidArgumentException
-     * @throws Exception
      */
     public function install(InstallContext $context)
     {
@@ -148,11 +137,6 @@ class PlentyConnector extends Plugin
 
     /**
      * @param UpdateContext $context
-     *
-     * @throws ServiceCircularReferenceException
-     * @throws ServiceNotFoundException
-     * @throws InvalidArgumentException
-     * @throws Exception
      */
     public function update(UpdateContext $context)
     {
@@ -189,11 +173,6 @@ class PlentyConnector extends Plugin
 
     /**
      * @param UninstallContext $context
-     *
-     * @throws ServiceCircularReferenceException
-     * @throws ServiceNotFoundException
-     * @throws InvalidArgumentException
-     * @throws Exception
      */
     public function uninstall(UninstallContext $context)
     {
@@ -320,8 +299,6 @@ class PlentyConnector extends Plugin
     /**
      * @param ContainerBuilder $container
      * @param $filename
-     *
-     * @throws Exception
      */
     private function loadFile(ContainerBuilder $container, $filename)
     {

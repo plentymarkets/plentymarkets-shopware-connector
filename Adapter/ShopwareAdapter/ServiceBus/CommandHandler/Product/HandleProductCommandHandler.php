@@ -35,6 +35,7 @@ use Shopware\Models\Article\Detail;
 use Shopware\Models\Customer\Group;
 use Shopware\Models\Property\Repository;
 use Shopware\Models\Shop\Shop as ShopModel;
+use ShopwareAdapter\RequestGenerator\Product\ConfiguratorSet\ConfiguratorSetRequestGeneratorInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -53,15 +54,25 @@ class HandleProductCommandHandler implements CommandHandlerInterface
     private $attributeHelper;
 
     /**
+     * @var ConfiguratorSetRequestGeneratorInterface
+     */
+    private $configuratorSetRequestGenerator;
+
+    /**
      * HandleProductCommandHandler constructor.
      *
-     * @param IdentityServiceInterface $identityService
-     * @param AttributeHelper          $attributeHelper
+     * @param IdentityServiceInterface                 $identityService
+     * @param AttributeHelper                          $attributeHelper
+     * @param ConfiguratorSetRequestGeneratorInterface $configuratorSetRequestGenerator
      */
-    public function __construct(IdentityServiceInterface $identityService, AttributeHelper $attributeHelper)
-    {
+    public function __construct(
+        IdentityServiceInterface $identityService,
+        AttributeHelper $attributeHelper,
+        ConfiguratorSetRequestGeneratorInterface $configuratorSetRequestGenerator
+    ) {
         $this->identityService = $identityService;
         $this->attributeHelper = $attributeHelper;
+        $this->configuratorSetRequestGenerator = $configuratorSetRequestGenerator;
     }
 
     /**
@@ -122,7 +133,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
              * @var LoggerInterface $logger
              */
             $logger = Shopware()->Container()->get('plenty_connector.logger');
-            $logger->notice('vat rate not mapped', ['command' => $command]);
+            $logger->notice('vat rate not mapped - ' . $product->getVatRateIdentifier(), ['command' => $command]);
 
             return false;
         }
@@ -138,7 +149,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
              * @var LoggerInterface $logger
              */
             $logger = Shopware()->Container()->get('plenty_connector.logger');
-            $logger->notice('manufacturer is missing', ['command' => $command]);
+            $logger->notice('manufacturer is missing - ' . $product->getManufacturerIdentifier(), ['command' => $command]);
         }
 
         $images = [];
@@ -168,7 +179,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                  * @var LoggerInterface $logger
                  */
                 $logger = Shopware()->Container()->get('plenty_connector.logger');
-                $logger->notice('image is missing', ['command' => $command]);
+                $logger->notice('image is missing - ' . $image->getMediaIdentifier(), ['command' => $command]);
 
                 return false;
             }
@@ -239,7 +250,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                  * @var LoggerInterface $logger
                  */
                 $logger = Shopware()->Container()->get('plenty_connector.logger');
-                $logger->notice('shipping profile not mapped', ['command' => $command]);
+                $logger->notice('shipping profile not mapped - ' . $identifier, ['command' => $command]);
 
                 continue;
             }
@@ -291,7 +302,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                  * @var LoggerInterface $logger
                  */
                 $logger = Shopware()->Container()->get('plenty_connector.logger');
-                $logger->notice('langauge not mapped', ['command' => $command]);
+                $logger->notice('langauge not mapped - ' . $languageIdentifier, ['command' => $command]);
 
                 continue;
             }
@@ -360,12 +371,11 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             '__options_images' => ['replace' => true],
         ];
 
-        // TODO: add default supplier via config
         if (null !== $manufacturerIdentity) {
             $params['supplierId'] = $manufacturerIdentity->getAdapterIdentifier();
         }
 
-        $configuratorSet = $this->getConfiguratorSet($product);
+        $configuratorSet = $this->configuratorSetRequestGenerator->generate($product);
         if (!empty($configuratorSet)) {
             $params['configuratorSet'] = $configuratorSet;
         }
@@ -558,6 +568,11 @@ class HandleProductCommandHandler implements CommandHandlerInterface
     {
         $result = [];
 
+        /**
+         * @var Article $resource
+         */
+        $resource = Manager::getResource('Article');
+
         foreach ($product->getLinkedProducts() as $linkedProduct) {
             if ($linkedProduct->getType() === $type) {
                 $productIdentity = $this->identityService->findOneBy([
@@ -570,7 +585,8 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                     continue;
                 }
 
-                if (null === $productIdentity) {
+                $productExists = $resource->getIdByData(['id' => $productIdentity->getAdapterIdentifier()]);
+                if (!$productExists) {
                     continue;
                 }
 
@@ -584,49 +600,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         }
 
         return $result;
-    }
-
-    /**
-     * @param Product $product
-     *
-     * @return array
-     */
-    private function getConfiguratorSet(Product $product)
-    {
-        if (empty($product->getVariations())) {
-            return [];
-        }
-
-        $groups = [];
-        foreach ($product->getVariations() as $variation) {
-            if (empty($variation->getPrices())) {
-                continue;
-            }
-
-            $properties = $variation->getProperties();
-
-            foreach ($properties as $property) {
-                $propertyName = $property->getName();
-
-                $groups[$propertyName]['name'] = $propertyName;
-
-                foreach ($property->getValues() as $value) {
-                    $propertyValue = $value->getValue();
-
-                    $groups[$propertyName]['options'][$propertyValue]['name'] = $propertyValue;
-                }
-            }
-        }
-
-        if (empty($groups)) {
-            return [];
-        }
-
-        return [
-            'name' => $product->getName(),
-            'type' => 2,
-            'groups' => $groups,
-        ];
     }
 
     /**

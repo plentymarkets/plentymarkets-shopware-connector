@@ -3,7 +3,6 @@
 namespace ShopwareAdapter\ResponseParser\Customer;
 
 use DateTimeImmutable;
-use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
@@ -77,8 +76,7 @@ class CustomerResponseParser implements CustomerResponseParserInterface
         if (empty($entry['birthday'])) {
             $birthday = null;
         } else {
-            $timezone = new DateTimeZone('UTC');
-            $birthday = DateTimeImmutable::createFromFormat('Y-m-d', $entry['birthday'], $timezone);
+            $birthday = DateTimeImmutable::createFromMutable($entry['birthday']);
 
             if (!($birthday instanceof DateTimeImmutable)) {
                 $birthday = null;

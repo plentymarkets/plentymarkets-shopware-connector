@@ -8,6 +8,7 @@ use PlentyConnector\Connector\TransferObject\Currency\Currency;
 use PlentyConnector\Connector\TransferObject\Order\Order;
 use PlentyConnector\Connector\TransferObject\Payment\Payment;
 use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod;
+use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Models\Order\Status;
 use Shopware\Models\Shop\Currency as CurrencyModel;
