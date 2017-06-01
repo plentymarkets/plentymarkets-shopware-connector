@@ -2,6 +2,7 @@
 
 namespace PlentymarketsAdapter\ReadApi\Order;
 
+use PlentymarketsAdapter\Client\Iterator\Iterator;
 use PlentymarketsAdapter\ReadApi\ApiAbstract;
 
 /**
@@ -31,7 +32,7 @@ class Order extends ApiAbstract
     /**
      * @param array $criteria
      *
-     * @return array
+     * @return Iterator
      */
     public function findAll(array $criteria = [])
     {
@@ -39,13 +40,13 @@ class Order extends ApiAbstract
             'with' => $this->includes,
         ]);
 
-        return iterator_to_array($this->client->getIterator('orders', $criteria));
+        return $this->client->getIterator('orders', $criteria);
     }
 
     /**
      * @param array $criteria
      *
-     * @return array
+     * @return Iterator
      */
     public function findBy(array $criteria = [])
     {
@@ -53,7 +54,7 @@ class Order extends ApiAbstract
             'with' => $this->includes,
         ]);
 
-        return iterator_to_array($this->client->getIterator('orders', $criteria));
+        return $this->client->getIterator('orders', $criteria);
     }
 
     /**
@@ -63,7 +64,7 @@ class Order extends ApiAbstract
      */
     public function findOneBy(array $criteria = [])
     {
-        $result = $this->findBy($criteria);
+        $result = iterator_to_array($this->findBy($criteria));
 
         if (!empty($result)) {
             $result = array_shift($result);
