@@ -2,7 +2,16 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [2.0.2]
+### Changed
+- bump version number for shopware store release
+
+## [2.0.1]
+### Changed
+- overhauled the price parsing
+- refaktored the plenty order handler
+
+## [2.0.0]
 ### Added
 - Order status and shipping number import functionality
 - display mapping console command
