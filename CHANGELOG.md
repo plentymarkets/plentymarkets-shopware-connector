@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [2.0.3]
+### Added
+- remove old tables on update from 1.9.4
+
 ### Fixed
 - product image alternate name was ignored
 
