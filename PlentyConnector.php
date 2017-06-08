@@ -2,6 +2,7 @@
 
 namespace PlentyConnector;
 
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use PlentyConnector\Connector\ConfigService\Model\Config;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
@@ -140,6 +141,10 @@ class PlentyConnector extends Plugin
      */
     public function update(UpdateContext $context)
     {
+        if ($this->updateNeeded($context, '2.0.0')) {
+            $this->clearOldDatabaseTables();
+        }
+
         // Models
         $databaseInstaller = new DatabaseInstaller(
             $this->container->get('models'),
@@ -162,7 +167,7 @@ class PlentyConnector extends Plugin
         );
         $permissionInstaller->update($context);
 
-        if ($this->updateNeeded($context, '2.0.0-rc2')) {
+        if ($this->updateNeeded($context, '2.0.0-rc2') && $this->updatePossible($context, '2.0.0')) {
             $this->clearCategoryIdentities();
             $this->clearPaymentStatusIdentities();
             $this->clearLastChangedConfigEntries();
@@ -242,6 +247,17 @@ class PlentyConnector extends Plugin
     }
 
     /**
+     * @param UpdateContext $context
+     * @param $targetVersion
+     *
+     * @return mixed
+     */
+    private function updatePossible(UpdateContext $context, $targetVersion)
+    {
+        return version_compare($context->getCurrentVersion(), $targetVersion, '>');
+    }
+
+    /**
      * remove category identities as we changed the mapping format.
      */
     private function clearCategoryIdentities()
@@ -294,6 +310,54 @@ class PlentyConnector extends Plugin
         }
 
         $entityManager->flush();
+    }
+
+    /**
+     *
+     */
+    private function clearOldDatabaseTables()
+    {
+        $tables = [
+            'plenty_log',
+            'plenty_mapping_attribute_group',
+            'plenty_mapping_attribute_option',
+            'plenty_mapping_category',
+            'plenty_mapping_category_old',
+            'plenty_mapping_country',
+            'plenty_mapping_currency',
+            'plenty_mapping_customer',
+            'plenty_mapping_customer_billing_address',
+            'plenty_mapping_customer_class',
+            'plenty_mapping_item',
+            'plenty_mapping_item_bundle',
+            'plenty_mapping_item_variant',
+            'plenty_mapping_measure_unit',
+            'plenty_mapping_method_of_payment',
+            'plenty_mapping_order_status',
+            'plenty_mapping_payment_status',
+            'plenty_mapping_producer',
+            'plenty_mapping_property',
+            'plenty_mapping_property_group',
+            'plenty_mapping_referrer',
+            'plenty_mapping_shipping_profile',
+            'plenty_mapping_shop',
+            'plenty_mapping_vat',
+        ];
+
+        /**
+         * @var Connection $connection
+         */
+        $connection = $this->container->get('dbal_connection');
+
+        foreach ($tables as $table) {
+            try {
+                $query = 'DROP TABLE IF EXISTS ?';
+
+                $connection->query($query, [$table]);
+            } catch (\Exception $exception) {
+                // fail silently
+            }
+        }
     }
 
     /**
