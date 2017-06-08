@@ -312,9 +312,6 @@ class PlentyConnector extends Plugin
         $entityManager->flush();
     }
 
-    /**
-     *
-     */
     private function clearOldDatabaseTables()
     {
         $tables = [
