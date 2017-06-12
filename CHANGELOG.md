@@ -5,8 +5,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [2.0.4]
 ### Changed
 - order reimport performance optimization
+- check for order existance by shop to avoid duplications
 
 ### Fixed
+- shipping times without a value will now be casted to 0
 - use correct get parameter for changed orders
 
 ## [2.0.3]
@@ -14,7 +16,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - remove old tables on update from 1.9.4
 
 ### Fixed
-- shipping times without a value will now be casted to 0
 - product image alternate name was ignored
 
 ## [2.0.2]
