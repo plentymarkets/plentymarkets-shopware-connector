@@ -902,18 +902,21 @@ class ProductResponseParser implements ProductResponseParserInterface
             }
         }
 
-        $shippingConfiguration = array_filter($shippingConfigurations,
-            function (array $configuration) use ($variation) {
-                return $configuration['id'] === $variation['availability'];
-            });
+        $shippingConfiguration = array_filter($shippingConfigurations, function (array $configuration) use ($variation) {
+            return $configuration['id'] === $variation['availability'];
+        });
 
-        if (!empty($shippingConfiguration)) {
-            $shippingConfiguration = array_shift($shippingConfiguration);
-
-            return $shippingConfiguration['averageDays'];
+        if (empty($shippingConfiguration)) {
+            return 0;
         }
 
-        return 0;
+        $shippingConfiguration = array_shift($shippingConfiguration);
+
+        if (empty($shippingConfiguration['averageDays'])) {
+            return 0;
+        }
+
+        return (int) $shippingConfiguration['averageDays'];
     }
 
     /**

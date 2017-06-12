@@ -14,6 +14,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - remove old tables on update from 1.9.4
 
 ### Fixed
+- shipping times without a value will now be casted to 0
 - product image alternate name was ignored
 
 ## [2.0.2]
