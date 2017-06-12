@@ -10,6 +10,7 @@ use PlentyConnector\Connector\ServiceBus\Command\Order\HandleOrderCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\TransferObject\Order\Comment\Comment;
 use PlentyConnector\Connector\TransferObject\Order\Order;
+use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\RequestGenerator\Order\OrderRequestGeneratorInterface;
@@ -82,7 +83,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             return true;
         }
 
-        if ($this->isExistingOrder($order->getOrderNumber())) {
+        if ($this->isExistingOrder($order)) {
             return true;
         }
 
@@ -118,15 +119,31 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param string $orderNumber
+     * @param Order $order
+     *
+     * @throws NotFoundException
      *
      * @return bool
      */
-    private function isExistingOrder($orderNumber)
+    private function isExistingOrder(Order $order)
     {
-        $result = $this->client->request('GET', 'orders', [
-            'externalOrderId' => $orderNumber,
+        $shopIdentity = $this->identityService->findOneBy([
+            'objectIdentifier' => $order->getShopIdentifier(),
+            'objectType' => Shop::TYPE,
+            'adapterName' => PlentymarketsAdapter::NAME,
         ]);
+
+        if (null === $shopIdentity) {
+            throw new NotFoundException('shop not mapped');
+        }
+
+        $result = $this->client->request('GET', 'orders', [
+            'externalOrderId' => $order->getOrderNumber(),
+        ]);
+
+        $result = array_filter($result, function (array $order) use ($shopIdentity) {
+            return (int) $order['plentyId'] === $shopIdentity->getAdapterIdentifier();
+        });
 
         if (!empty($result)) {
             return true;
