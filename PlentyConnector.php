@@ -111,6 +111,8 @@ class PlentyConnector extends Plugin
      */
     public function install(InstallContext $context)
     {
+        $this->clearOldDatabaseTables();
+
         // Models
         $databaseInstaller = new DatabaseInstaller(
             $this->container->get('models'),
