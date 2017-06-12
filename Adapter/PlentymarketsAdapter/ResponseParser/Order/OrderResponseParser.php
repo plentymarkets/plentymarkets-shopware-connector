@@ -105,13 +105,13 @@ class OrderResponseParser implements OrderResponseParserInterface
             return [];
         }
 
-        $isMappedIdentity = $this->identityService->isMapppedIdentity(
+        $isMappedShopIdentity = $this->identityService->isMapppedIdentity(
             $shopIdentity->getObjectIdentifier(),
             $shopIdentity->getObjectType(),
             $shopIdentity->getAdapterName()
         );
 
-        if (!$isMappedIdentity) {
+        if (!$isMappedShopIdentity) {
             return [];
         }
 
@@ -120,6 +120,16 @@ class OrderResponseParser implements OrderResponseParserInterface
             PlentymarketsAdapter::NAME,
             Order::TYPE
         );
+
+        $isMappedOrderIdentity = $this->identityService->isMapppedIdentity(
+            $identity->getObjectIdentifier(),
+            $identity->getObjectType(),
+            $identity->getAdapterName()
+        );
+
+        if (!$isMappedOrderIdentity) {
+            return [];
+        }
 
         $orderNumber = $this->getOrdernumber($entry);
         if (null === $orderNumber) {

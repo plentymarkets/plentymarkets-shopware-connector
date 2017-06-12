@@ -59,8 +59,8 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
         $currentDateTime = $this->getCurrentDateTime();
 
         $criteria = [
-            'createdAtFrom' => $lastCangedTime->format(DATE_W3C),
-            'createdAtTo' => $currentDateTime->format(DATE_W3C),
+            'updatedAtFrom' => $lastCangedTime->format(DATE_W3C),
+            'updatedAtTo' => $currentDateTime->format(DATE_W3C),
         ];
 
         $orders = $this->api->findBy($criteria);
