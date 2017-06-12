@@ -5,6 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [2.0.4]
 ### Changed
 - order reimport performance optimization
+- enforce a manufacturer when importing products to shopware
 
 ### Fixed
 - use correct get parameter for changed orders
