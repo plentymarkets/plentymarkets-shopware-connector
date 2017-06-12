@@ -150,6 +150,8 @@ class HandleProductCommandHandler implements CommandHandlerInterface
              */
             $logger = Shopware()->Container()->get('plenty_connector.logger');
             $logger->notice('manufacturer is missing - ' . $product->getManufacturerIdentifier(), ['command' => $command]);
+
+            return false;
         }
 
         $images = [];
@@ -363,6 +365,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             'related' => $this->getLinkedProducts($product, LinkedProduct::TYPE_ACCESSORY),
             'metaTitle' => $product->getMetaTitle(),
             'keywords' => $product->getMetaKeywords(),
+            'supplierId' => $manufacturerIdentity->getAdapterIdentifier(),
             '__options_categories' => ['replace' => true],
             '__options_seoCategories' => ['replace' => true],
             '__options_similar' => ['replace' => true],
@@ -370,10 +373,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             '__options_prices' => ['replace' => true],
             '__options_images' => ['replace' => true],
         ];
-
-        if (null !== $manufacturerIdentity) {
-            $params['supplierId'] = $manufacturerIdentity->getAdapterIdentifier();
-        }
 
         $configuratorSet = $this->configuratorSetRequestGenerator->generate($product);
         if (!empty($configuratorSet)) {
