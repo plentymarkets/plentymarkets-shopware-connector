@@ -912,6 +912,10 @@ class ProductResponseParser implements ProductResponseParserInterface
 
         $shippingConfiguration = array_shift($shippingConfiguration);
 
+        if (empty($shippingConfiguration['averageDays'])) {
+            return 0;
+        }
+
         return (int) $shippingConfiguration['averageDays'];
     }
 
