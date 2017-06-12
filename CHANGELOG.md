@@ -5,6 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [2.0.4]
 ### Changed
 - order reimport performance optimization
+- remove old plentyconnector tables on installation, too
 - check for order existance by shop to avoid duplications
 
 ### Fixed
