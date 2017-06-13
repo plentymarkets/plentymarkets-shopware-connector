@@ -103,23 +103,20 @@ Ext.define('Shopware.apps.PlentyConnector.view.Settings', {
                     {
                         xtype: 'textfield',
                         fieldLabel: '{s name=plentyconnector/view/settings/textfield/ApiUrl}URL{/s}',
-                        helpText: 'Die URL muss mit <b>http://</b> oder <b>https://</b> beginnen.',
-                        supportText: 'Tragen Sie hier die URL Ihres plentymarkets-Systems ein. Sie finden diese Information in der plentymarkets-Administration unter <b>Einstellungen » Grundeinstellungen » API-Daten » Host</b>.',
-                        emptyText: 'http://www.ihr-plentymarkets-system.de/',
+                        supportText: 'Tragen Sie hier die URL Ihres plentymarkets-Systems ein. Sie finden diese Information in der plentymarkets-Administration unter <b>Einstellungen » Grundeinstellungen » API-Daten » Host</b>. Die URL muss mit <b>http://</b> oder <b>https://</b> beginnen.',
+                        emptyText: 'https://www.ihr-plentymarkets-system.de/',
                         name: 'ApiUrl',
                         allowBlank: false
                     },
                     {
                         xtype: 'textfield',
                         fieldLabel: '{s name=plentyconnector/view/settings/textfield/ApiUsername}Benutzername{/s}',
-                        supportText: 'Der Benutzer sollte vom Typ <b>API</b> sein und nur für shopware verwendet werden. Achtung: Der Benutzer wird in Ihrem plentymarkets System unter <b>Einstellungen » Grundeinstellungen » Benutzer » Konten</b> angelegt!',
                         name: 'ApiUsername',
                         allowBlank: false
                     },
                     {
                         xtype: 'textfield',
                         fieldLabel: '{s name=plentyconnector/view/settings/textfield/ApiPassword}Passwort{/s}',
-                        supportText: 'Bitte vergeben Sie ein sicheres und starkes Passwort.',
                         name: 'ApiPassword',
                         allowBlank: false,
                         inputType: 'password'
