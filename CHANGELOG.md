@@ -9,6 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - remove old plentyconnector tables on installation, too
 - check for order existance by shop to avoid duplications
 - enhance the backend rest api settings description
+- export order discounts and payment surcharges as position
 
 ### Fixed
 - shipping times without a value will now be casted to 0
