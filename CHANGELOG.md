@@ -8,6 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - enforce a manufacturer when importing products to shopware
 - remove old plentyconnector tables on installation, too
 - check for order existance by shop to avoid duplications
+- enhance the backend rest api settings description
 - export order discounts and payment surcharges as position
 
 ### Fixed
