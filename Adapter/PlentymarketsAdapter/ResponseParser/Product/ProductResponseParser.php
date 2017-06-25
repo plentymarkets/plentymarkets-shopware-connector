@@ -166,7 +166,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         $productObject->setAvailableTo($this->getAvailableTo($mainVariation));
         $productObject->setAttributes($this->getAttributes($product));
 
-        $result[] = $productObject;
+        $result[$identity->getObjectIdentifier()] = $productObject;
 
         return $result;
     }
@@ -367,7 +367,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             return null;
         }
 
-        $result[] = $media;
+        $result[$media->getIdentifier()] = $media;
 
         $linkedShops = array_filter($entry['availabilities'], function (array $availabilitiy) {
             return $availabilitiy['type'] === 'mandant';
