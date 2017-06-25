@@ -7,6 +7,7 @@ use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Category\Category;
 use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
+use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
 use PlentymarketsAdapter\Helper\MediaCategoryHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
@@ -67,7 +68,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
             return [];
         }
 
-        $categoryIdentifier = $this->identityService->findOneOrCreate(
+        $categoryIdentity = $this->identityService->findOneOrCreate(
             (string) $entry['id'],
             PlentymarketsAdapter::NAME,
             Category::TYPE
@@ -81,7 +82,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
             ]);
 
             if (null === $parentIdentity) {
-                $this->logger->notice('parent category was not found', ['category' => $entry]);
+                $this->logger->notice('parent category was not found', ['category' => $categoryIdentity->getObjectIdentifier()]);
 
                 return [];
             }
@@ -97,39 +98,43 @@ class CategoryResponseParser implements CategoryResponseParserInterface
 
         $shopIdentifiers = [];
         foreach ($entry['clients'] as $client) {
-            if (null === $client['plentyId']) {
+            if (empty($client['plentyId'])) {
                 continue;
             }
 
-            $identity = $this->identityService->findOneOrCreate(
-                (string) $client['plentyId'],
-                PlentymarketsAdapter::NAME,
-                Shop::TYPE
-            );
+            $identity = $this->getShopIdentity($client['plentyId']);
 
             if (null === $identity) {
-                $this->logger->notice('shop not found');
-
-                continue;
-            }
-
-            $isMappedIdentity = $this->identityService->isMapppedIdentity(
-                $identity->getObjectIdentifier(),
-                $identity->getObjectType(),
-                $identity->getAdapterName()
-            );
-
-            if (!$isMappedIdentity) {
                 continue;
             }
 
             $shopIdentifiers[] = $identity->getObjectIdentifier();
         }
 
+        foreach ($entry['details'] as $key => $detail) {
+            $entry['details'][$key]['shortDescription'] = $entry['details']['0']['shortDescription'];
+        }
+
+        $entry['details'] = array_values(array_filter($entry['details'], function (array $detail) {
+            if (empty($detail['plentyId'])) {
+                return false;
+            }
+
+            $identity = $this->getShopIdentity($detail['plentyId']);
+
+            return !(null === $identity);
+        }));
+
+        if (empty($entry['details'])) {
+            $this->logger->notice('no valid translation found', ['category' => $categoryIdentity->getObjectIdentifier()]);
+
+            return [];
+        }
+
         $result = [];
 
         $result[] = Category::fromArray([
-            'identifier' => $categoryIdentifier->getObjectIdentifier(),
+            'identifier' => $categoryIdentity->getObjectIdentifier(),
             'name' => $entry['details']['0']['name'],
             'active' => true,
             'parentIdentifier' => $parentCategoryIdentifier,
@@ -147,6 +152,38 @@ class CategoryResponseParser implements CategoryResponseParserInterface
         ]);
 
         return $result;
+    }
+
+    /**
+     * @param $plentyId
+     *
+     * @return null|Identity
+     */
+    private function getShopIdentity($plentyId)
+    {
+        $identity = $this->identityService->findOneBy([
+            'adapterIdentifier' => (string) $plentyId,
+            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType' => Shop::TYPE,
+        ]);
+
+        if (null === $identity) {
+            $this->logger->notice('shop not found', ['shop' => $plentyId]);
+
+            return null;
+        }
+
+        $isMappedIdentity = $this->identityService->isMapppedIdentity(
+            $identity->getObjectIdentifier(),
+            $identity->getObjectType(),
+            $identity->getAdapterName()
+        );
+
+        if (!$isMappedIdentity) {
+            return null;
+        }
+
+        return $identity;
     }
 
     /**
