@@ -8,6 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - enforce a manufacturer when importing products to shopware
 - remove old plentyconnector tables on installation, too
 - check for order existance by shop to avoid duplications
+- product image handling performance improved
 
 ### Fixed
 - shipping times without a value will now be casted to 0
