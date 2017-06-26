@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [2.0.4]
+### Added
+- composer installer support
+
 ### Changed
 - order reimport performance optimization
 - enforce a manufacturer when importing products to shopware
@@ -11,6 +14,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - product image handling performance improved
 - enhance the backend rest api settings description
 - export order discounts and payment surcharges as position
+- allow a lower price from amount
 
 ### Fixed
 - shipping times without a value will now be casted to 0
