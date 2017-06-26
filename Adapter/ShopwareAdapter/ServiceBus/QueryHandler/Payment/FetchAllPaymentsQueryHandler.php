@@ -57,11 +57,6 @@ class FetchAllPaymentsQueryHandler implements QueryHandlerInterface
                 'expression' => '=',
                 'value' => Status::ORDER_STATE_OPEN,
             ],
-            [
-                'property' => 'cleared',
-                'expression' => '=',
-                'value' => Status::PAYMENT_STATE_COMPLETELY_PAID,
-            ],
         ];
 
         $orders = $this->orderResource->getList(0, null, $filter);

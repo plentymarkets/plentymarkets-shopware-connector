@@ -20,6 +20,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - shipping times without a value will now be casted to 0
 - use correct get parameter for changed orders
 - only the category translations with a matching shop are now pulled
+- Sepa payment data was ignored
 
 ## [2.0.3]
 ### Added
