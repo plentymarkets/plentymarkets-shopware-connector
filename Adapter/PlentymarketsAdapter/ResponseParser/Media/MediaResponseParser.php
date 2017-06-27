@@ -63,8 +63,11 @@ class MediaResponseParser implements MediaResponseParserInterface
                 return null;
             }
 
-            $type = pathinfo($entry['link'], PATHINFO_EXTENSION);
-            $content = 'data:image/' . $type . ';base64,' . base64_encode($content);
+            $content = base64_encode($content);
+
+            if (empty($entry['filename'])) {
+                $entry['filename'] = basename($entry['link']);
+            }
 
             if (!array_key_exists('hash', $entry)) {
                 $entry['hash'] = sha1($content);
@@ -110,6 +113,7 @@ class MediaResponseParser implements MediaResponseParserInterface
             $media->setIdentifier($identity->getObjectIdentifier());
             $media->setMediaCategoryIdentifier($entry['mediaCategoryIdentifier']);
             $media->setContent($content);
+            $media->setFilename($entry['filename']);
             $media->setHash($entry['hash']);
             $media->setName($entry['name']);
             $media->setAlternateName($entry['alternateName']);
