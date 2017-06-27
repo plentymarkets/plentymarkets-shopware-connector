@@ -15,6 +15,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - enhance the backend rest api settings description
 - export order discounts and payment surcharges as position
 - allow a lower price from amount
+- always export shipping costs to prevent plenty from using the default settings
 
 ### Fixed
 - shipping times without a value will now be casted to 0
