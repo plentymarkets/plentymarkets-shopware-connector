@@ -31,7 +31,7 @@ class QueryFactoryTest extends TestCase
 
         $query = $queryFactory->create('TestAdapter', 'TestType', QueryType::ALL);
 
-        $this->assertEquals($query, $queryMock);
+        self::assertEquals($query, $queryMock);
     }
 
     public function test_generate_fetch_changed_query()
@@ -50,7 +50,7 @@ class QueryFactoryTest extends TestCase
 
         $query = $queryFactory->create('TestAdapter', 'TestType', QueryType::CHANGED);
 
-        $this->assertEquals($query, $queryMock);
+        self::assertEquals($query, $queryMock);
     }
 
     public function test_generate_fetch_one_query()
@@ -71,6 +71,6 @@ class QueryFactoryTest extends TestCase
 
         $query = $queryFactory->create('TestAdapter', 'TestType', QueryType::ONE, $uuid);
 
-        $this->assertEquals($query, $queryMock);
+        self::assertEquals($query, $queryMock);
     }
 }

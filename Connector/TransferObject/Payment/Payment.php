@@ -55,9 +55,9 @@ class Payment extends AbstractTransferObject implements AttributableInterface
     private $accountHolder = '';
 
     /**
-     * @var PaymentDataInterface[]
+     * @var null|PaymentDataInterface
      */
-    private $paymentData = [];
+    private $paymentData;
 
     /**
      * @var Attribute[]
@@ -205,7 +205,7 @@ class Payment extends AbstractTransferObject implements AttributableInterface
     }
 
     /**
-     * @return PaymentDataInterface[]
+     * @return null|PaymentDataInterface
      */
     public function getPaymentData()
     {
@@ -213,9 +213,9 @@ class Payment extends AbstractTransferObject implements AttributableInterface
     }
 
     /**
-     * @param PaymentDataInterface $paymentData
+     * @param null|PaymentDataInterface $paymentData
      */
-    public function setPaymentData(PaymentDataInterface $paymentData)
+    public function setPaymentData(PaymentDataInterface $paymentData = null)
     {
         $this->paymentData = $paymentData;
     }
