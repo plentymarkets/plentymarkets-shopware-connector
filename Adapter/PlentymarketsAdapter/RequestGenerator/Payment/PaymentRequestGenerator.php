@@ -81,10 +81,6 @@ class PaymentRequestGenerator implements PaymentRequestGeneratorInterface
                 'typeId' => 3,
                 'value' => $payment->getTransactionReference(),
             ],
-            [
-                'typeId' => 3,
-                'value' => 'booked',
-            ],
         ];
 
         return $paymentParams;
