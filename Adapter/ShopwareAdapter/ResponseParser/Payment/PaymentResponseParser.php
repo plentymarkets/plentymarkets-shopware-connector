@@ -3,6 +3,7 @@
 namespace ShopwareAdapter\ResponseParser\Payment;
 
 use Assert\Assertion;
+use InvalidArgumentException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Currency\Currency;
 use PlentyConnector\Connector\TransferObject\Order\Order;
@@ -69,13 +70,15 @@ class PaymentResponseParser implements PaymentResponseParserInterface
             return [];
         }
 
+        $currencyIdentifier = $this->getIdentifier($this->getCurrencyId($element['currency']),Currency::TYPE);
+
         $payment = new Payment();
         $payment->setIdentifier($paymentIdentifier);
         $payment->setShopIdentifier($shopIdentity->getObjectIdentifier());
         $payment->setOrderIdentifer($this->getIdentifier($element['id'], Order::TYPE));
         $payment->setAmount($element['invoiceAmount']);
-        $payment->setAccountHolder();
-        $payment->setCurrencyIdentifier($this->getIdentifier($this->getCurrencyId($element['currency']), Currency::TYPE));
+        $payment->setAccountHolder($this->getAccountHolder($element));
+        $payment->setCurrencyIdentifier($currencyIdentifier);
         $payment->setPaymentMethodIdentifier($this->getIdentifier($element['paymentId'], PaymentMethod::TYPE));
         $payment->setTransactionReference($element['transactionId']);
 
@@ -83,7 +86,7 @@ class PaymentResponseParser implements PaymentResponseParserInterface
     }
 
     /**
-     * @param int    $entry
+     * @param int $entry
      * @param string $type
      *
      * @return string
@@ -111,6 +114,25 @@ class PaymentResponseParser implements PaymentResponseParserInterface
          */
         $currencyRepository = Shopware()->Models()->getRepository(CurrencyModel::class);
 
-        return $currencyRepository->findOneBy(['currency' => $currency])->getId();
+        $currencyModel = $currencyRepository->findOneBy(['currency' => $currency]);
+
+        if (null === $currencyModel) {
+            throw new InvalidArgumentException('invalid currency code');
+        }
+
+        return $currencyModel->getId();
+    }
+
+    /**
+     * @param array $element
+     *
+     * @return string
+     */
+    private function getAccountHolder(array $element)
+    {
+        $firstName = !empty($element['billing']['firstName']) ? $element['billing']['firstName'] : '';
+        $lastName = !empty($element['billing']['lastName']) ? $element['billing']['lastName'] : '';
+
+        return trim(sprintf('%s %s', $firstName, $lastName));
     }
 }
