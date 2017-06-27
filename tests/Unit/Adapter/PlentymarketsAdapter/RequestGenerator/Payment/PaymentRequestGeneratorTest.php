@@ -32,7 +32,7 @@ class PaymentRequestGeneratorTest extends RequestGeneratorTest
      * @dataProvider getPaymentObjects
      *
      * @param Payment $payment
-     * @param array $expectedRequest
+     * @param array   $expectedRequest
      */
     public function testPaymentRequestIsGeneratedCorrectly(Payment $payment, array $expectedRequest)
     {
@@ -54,7 +54,7 @@ class PaymentRequestGeneratorTest extends RequestGeneratorTest
         $payment->setAccountHolder('Account Holder');
 
         return [
-            [$payment, json_decode($this->completeRequest, true)]
+            [$payment, json_decode($this->completeRequest, true)],
         ];
     }
 }

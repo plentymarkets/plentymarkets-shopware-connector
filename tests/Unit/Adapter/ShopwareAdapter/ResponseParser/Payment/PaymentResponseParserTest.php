@@ -4,8 +4,6 @@ namespace PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\Orde
 
 use PlentyConnector\Connector\TransferObject\Payment\Payment;
 use PlentyConnector\Connector\Validator\Order\Payment\PaymentValidator;
-use PlentyConnector\Connector\ValidatorService\ValidatorService;
-use PlentyConnector\Connector\ValidatorService\ValidatorServiceInterface;
 use PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\ResponseParserTest;
 use ShopwareAdapter\DataProvider\Currency\CurrencyDataProviderInterface;
 use ShopwareAdapter\ResponseParser\Payment\PaymentResponseParser;
