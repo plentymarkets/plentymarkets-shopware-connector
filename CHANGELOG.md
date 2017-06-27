@@ -15,12 +15,15 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - enhance the backend rest api settings description
 - export order discounts and payment surcharges as position
 - allow a lower price from amount
+- check for payment existence before exporting payments
+- added a account holder field to payments
 
 ### Fixed
 - shipping times without a value will now be casted to 0
 - use correct get parameter for changed orders
 - only the category translations with a matching shop are now pulled
 - Sepa payment data was ignored
+- use correct property field for payments
 
 ## [2.0.3]
 ### Added
