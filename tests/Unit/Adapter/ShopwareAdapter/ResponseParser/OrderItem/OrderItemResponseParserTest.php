@@ -39,11 +39,11 @@ class OrderItemResponseParserTest extends ResponseParserTest
          */
         $orderItem = $this->responseParser->parse(self::$orderData['details'][0]);
 
-        $this->assertInstanceOf(Attribute::class, $orderItem->getAttributes()[0]);
-        $this->assertSame('ESD Download Artikel', $orderItem->getName());
-        $this->assertSame('SW10196', $orderItem->getNumber());
-        $this->assertSame(836.134, $orderItem->getPrice());
-        $this->assertSame(1.0, $orderItem->getQuantity());
-        $this->assertSame(OrderItem::TYPE_PRODUCT, $orderItem->getType());
+        self::assertInstanceOf(Attribute::class, $orderItem->getAttributes()[0]);
+        self::assertSame('ESD Download Artikel', $orderItem->getName());
+        self::assertSame('SW10196', $orderItem->getNumber());
+        self::assertSame(836.134, $orderItem->getPrice());
+        self::assertSame(1.0, $orderItem->getQuantity());
+        self::assertSame(OrderItem::TYPE_PRODUCT, $orderItem->getType());
     }
 }
