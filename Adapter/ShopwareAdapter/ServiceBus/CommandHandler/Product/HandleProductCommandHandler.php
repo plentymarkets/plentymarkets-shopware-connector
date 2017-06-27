@@ -2,7 +2,6 @@
 
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Product;
 
-use ShopwareAdapter\Helper\AttributeHelper;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException as IdentityNotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
@@ -35,6 +34,7 @@ use Shopware\Models\Article\Detail;
 use Shopware\Models\Customer\Group;
 use Shopware\Models\Property\Repository;
 use Shopware\Models\Shop\Shop as ShopModel;
+use ShopwareAdapter\Helper\AttributeHelper;
 use ShopwareAdapter\RequestGenerator\Product\ConfiguratorSet\ConfiguratorSetRequestGeneratorInterface;
 use ShopwareAdapter\ShopwareAdapter;
 

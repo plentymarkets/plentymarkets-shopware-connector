@@ -4,7 +4,6 @@ namespace ShopwareAdapter\ServiceBus\CommandHandler\Order;
 
 use DateTime;
 use DateTimeZone;
-use ShopwareAdapter\Helper\AttributeHelper;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\Order\HandleOrderCommand;
@@ -17,6 +16,7 @@ use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use Psr\Log\LoggerInterface;
 use Shopware\Components\Api\Resource\Order as OrderResource;
 use Shopware\Models\Order\Status;
+use ShopwareAdapter\Helper\AttributeHelper;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**

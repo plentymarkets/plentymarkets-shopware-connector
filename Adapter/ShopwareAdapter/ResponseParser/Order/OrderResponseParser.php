@@ -20,7 +20,6 @@ use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
 use PlentymarketsAdapter\ResponseParser\GetAttributeTrait;
 use Psr\Log\LoggerInterface;
-use Shopware\Components\Model\ModelRepository;
 use Shopware\Models\Tax\Repository;
 use Shopware\Models\Tax\Tax;
 use ShopwareAdapter\DataProvider\Currency\CurrencyDataProviderInterface;
@@ -63,25 +62,25 @@ class OrderResponseParser implements OrderResponseParserInterface
     private $customerParser;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @var CurrencyDataProviderInterface
      */
     private $currencyDataProvider;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * OrderResponseParser constructor.
      *
-     * @param IdentityServiceInterface $identityService
-     * @param EntityManagerInterface $entityManager
+     * @param IdentityServiceInterface         $identityService
+     * @param EntityManagerInterface           $entityManager
      * @param OrderItemResponseParserInterface $orderItemResponseParser
-     * @param AddressResponseParserInterface $orderAddressParser
-     * @param CustomerResponseParserInterface $customerParser
-     * @param LoggerInterface $logger
-     * @param CurrencyDataProviderInterface $currencyDataProvider
+     * @param AddressResponseParserInterface   $orderAddressParser
+     * @param CustomerResponseParserInterface  $customerParser
+     * @param CurrencyDataProviderInterface    $currencyDataProvider
+     * @param LoggerInterface                  $logger
      */
     public function __construct(
         IdentityServiceInterface $identityService,
@@ -89,16 +88,16 @@ class OrderResponseParser implements OrderResponseParserInterface
         OrderItemResponseParserInterface $orderItemResponseParser,
         AddressResponseParserInterface $orderAddressParser,
         CustomerResponseParserInterface $customerParser,
-        LoggerInterface $logger,
-        CurrencyDataProviderInterface $currencyDataProvider
+        CurrencyDataProviderInterface $currencyDataProvider,
+        LoggerInterface $logger
     ) {
         $this->identityService = $identityService;
         $this->entityManager = $entityManager;
         $this->orderItemResponseParser = $orderItemResponseParser;
         $this->orderAddressParser = $orderAddressParser;
         $this->customerParser = $customerParser;
-        $this->logger = $logger;
         $this->currencyDataProvider = $currencyDataProvider;
+        $this->logger = $logger;
     }
 
     /**
@@ -168,7 +167,7 @@ class OrderResponseParser implements OrderResponseParserInterface
             return [];
         }
 
-        $shopwareCurrencyIdentifier = $this->currencyDataProvider->getCurrencyIdentifierByCode($element['currency']);
+        $shopwareCurrencyIdentifier = $this->currencyDataProvider->getCurrencyIdentifierByCode($entry['currency']);
         $currencyIdentifier = $this->getConnectorIdentifier($shopwareCurrencyIdentifier, Currency::TYPE);
 
         $order = Order::fromArray([
