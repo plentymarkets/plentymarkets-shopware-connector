@@ -2,7 +2,6 @@
 
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Manufacturer;
 
-use PlentyConnector\Adapter\ShopwareAdapter\Helper\AttributeHelper;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
@@ -13,6 +12,7 @@ use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 use PlentyConnector\Connector\TransferObject\Media\Media;
 use Shopware\Components\Api\Exception\NotFoundException as ManufacturerNotFoundException;
 use Shopware\Components\Api\Resource\Manufacturer as ManufacturerResource;
+use ShopwareAdapter\Helper\AttributeHelper;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**

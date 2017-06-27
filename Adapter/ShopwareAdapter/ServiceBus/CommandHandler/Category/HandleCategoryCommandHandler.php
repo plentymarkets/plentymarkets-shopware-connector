@@ -4,7 +4,6 @@ namespace ShopwareAdapter\ServiceBus\CommandHandler\Category;
 
 use DeepCopy\DeepCopy;
 use Doctrine\ORM\EntityManagerInterface;
-use PlentyConnector\Adapter\ShopwareAdapter\Helper\AttributeHelper;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException as IdentityNotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\Category\HandleCategoryCommand;
@@ -25,6 +24,7 @@ use Shopware\Models\Category\Category as CategoryModel;
 use Shopware\Models\Category\Repository as CategoryRepository;
 use Shopware\Models\Shop\Repository as ShopRepository;
 use Shopware\Models\Shop\Shop as ShopModel;
+use ShopwareAdapter\Helper\AttributeHelper;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**

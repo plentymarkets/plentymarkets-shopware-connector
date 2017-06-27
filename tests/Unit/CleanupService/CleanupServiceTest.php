@@ -81,7 +81,7 @@ class CleanupServiceTest extends TestCase
 
         $cleanupService->addDefinition($definition);
 
-        $cleanupService->cleanup('TestType');
+        $cleanupService->cleanup();
     }
 
     public function test_cleanup_specific_type_and_remove_all()
@@ -137,6 +137,6 @@ class CleanupServiceTest extends TestCase
 
         $cleanupService->addDefinition($definition);
 
-        $cleanupService->cleanup('TestType');
+        $cleanupService->cleanup();
     }
 }

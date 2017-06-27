@@ -23,6 +23,6 @@ class GetAttributeTraitTest extends TestCase
         $expected->setKey('key');
         $expected->setValue('value');
 
-        $this->assertEquals($expected, $attributes[0]);
+        self::assertEquals($expected, $attributes[0]);
     }
 }

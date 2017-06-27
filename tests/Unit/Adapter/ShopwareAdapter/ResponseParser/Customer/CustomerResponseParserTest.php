@@ -56,14 +56,14 @@ class CustomerResponseParserTest extends ResponseParserTest
          */
         $customer = $this->responseParser->parse(self::$orderData['customer']);
 
-        $this->assertNull($customer->getBirthday());
-        $this->assertSame(Customer::TYPE_NORMAL, $customer->getType());
-        $this->assertSame('mustermann@b2b.de', $customer->getEmail());
-        $this->assertSame('Händler', $customer->getFirstname());
-        $this->assertSame('Kundengruppe-Netto', $customer->getLastname());
-        $this->assertTrue($customer->getNewsletter());
-        $this->assertSame('20003', $customer->getNumber());
-        $this->assertSame(Customer::SALUTATION_MR, $customer->getSalutation());
-        $this->assertNull($customer->getTitle());
+        self::assertNull($customer->getBirthday());
+        self::assertSame(Customer::TYPE_NORMAL, $customer->getType());
+        self::assertSame('mustermann@b2b.de', $customer->getEmail());
+        self::assertSame('Händler', $customer->getFirstname());
+        self::assertSame('Kundengruppe-Netto', $customer->getLastname());
+        self::assertTrue($customer->getNewsletter());
+        self::assertSame('20003', $customer->getNumber());
+        self::assertSame(Customer::SALUTATION_MR, $customer->getSalutation());
+        self::assertNull($customer->getTitle());
     }
 }

@@ -56,17 +56,17 @@ class AddressResponseParserTest extends ResponseParserTest
          */
         $address = $this->responseParser->parse(self::$orderData['billing']);
 
-        $this->assertInstanceOf(Attribute::class, $address->getAttributes()[0]);
-        $this->assertSame('Musterstadt', $address->getCity());
-        $this->assertSame('B2B', $address->getCompany());
-        $this->assertSame($this->countyIdentifier, $address->getCountryIdentifier());
-        $this->assertSame('Einkauf', $address->getDepartment());
-        $this->assertSame('Händler', $address->getFirstname());
-        $this->assertSame('Kundengruppe-Netto', $address->getLastname());
-        $this->assertSame(Customer::SALUTATION_MR, $address->getSalutation());
-        $this->assertSame('Musterweg 1', $address->getStreet());
-        $this->assertNull($address->getTitle());
-        $this->assertNull($address->getVatId());
-        $this->assertSame('00000', $address->getPostalCode());
+        self::assertInstanceOf(Attribute::class, $address->getAttributes()[0]);
+        self::assertSame('Musterstadt', $address->getCity());
+        self::assertSame('B2B', $address->getCompany());
+        self::assertSame($this->countyIdentifier, $address->getCountryIdentifier());
+        self::assertSame('Einkauf', $address->getDepartment());
+        self::assertSame('Händler', $address->getFirstname());
+        self::assertSame('Kundengruppe-Netto', $address->getLastname());
+        self::assertSame(Customer::SALUTATION_MR, $address->getSalutation());
+        self::assertSame('Musterweg 1', $address->getStreet());
+        self::assertNull($address->getTitle());
+        self::assertNull($address->getVatId());
+        self::assertSame('00000', $address->getPostalCode());
     }
 }

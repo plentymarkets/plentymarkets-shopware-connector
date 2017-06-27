@@ -2,7 +2,6 @@
 
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Media;
 
-use PlentyConnector\Adapter\ShopwareAdapter\Helper\AttributeHelper;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
@@ -15,6 +14,7 @@ use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Components\Api\Exception\NotFoundException as MediaNotFoundException;
 use Shopware\Components\Api\Resource\Media as MediaResource;
 use Shopware\Models\Media\Album;
+use ShopwareAdapter\Helper\AttributeHelper;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
