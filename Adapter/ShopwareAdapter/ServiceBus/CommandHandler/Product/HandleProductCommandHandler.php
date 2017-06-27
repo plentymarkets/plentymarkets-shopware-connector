@@ -2,7 +2,7 @@
 
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Product;
 
-use PlentyConnector\Adapter\ShopwareAdapter\Helper\AttributeHelper;
+use ShopwareAdapter\Helper\AttributeHelper;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException as IdentityNotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;

@@ -4,7 +4,7 @@ namespace ShopwareAdapter\ServiceBus\CommandHandler\Order;
 
 use DateTime;
 use DateTimeZone;
-use PlentyConnector\Adapter\ShopwareAdapter\Helper\AttributeHelper;
+use ShopwareAdapter\Helper\AttributeHelper;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\Order\HandleOrderCommand;

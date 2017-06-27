@@ -4,7 +4,7 @@
     <services>
         <!-- Attributes -->
 
-        <service id="shopware_adapter.attribute_helper" class="PlentyConnector\Adapter\ShopwareAdapter\Helper\AttributeHelper">
+        <service id="shopware_adapter.attribute_helper" class="ShopwareAdapter\Helper\AttributeHelper">
             <argument type="service" id="shopware_attribute.crud_service" />
             <argument type="service" id="models" />
             <argument type="service" id="shopware_attribute.data_persister" />
