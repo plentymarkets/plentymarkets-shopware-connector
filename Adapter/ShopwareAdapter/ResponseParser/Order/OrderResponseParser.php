@@ -126,11 +126,7 @@ class OrderResponseParser implements OrderResponseParserInterface
             return [];
         }
 
-        $shippingCosts = $this->getShippingCosts($entry, $taxFree);
-
-        if (null !== $shippingCosts) {
-            $orderItems[] = $shippingCosts;
-        }
+        $orderItems[] = $this->getShippingCosts($entry, $taxFree);
 
         $billingAddress = $this->orderAddressParser->parse($entry['billing']);
         $shippingAddress = $this->orderAddressParser->parse($entry['shipping']);
@@ -350,10 +346,6 @@ class OrderResponseParser implements OrderResponseParserInterface
         } else {
             $shippingCosts = (float) $entry['invoiceShipping'];
             $vatRateIdentifier = $this->getShippingCostsVatRateIdentifier($entry);
-        }
-
-        if (empty($shippingCosts)) {
-            return null;
         }
 
         $orderItem = new OrderItem();

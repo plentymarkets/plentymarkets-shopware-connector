@@ -17,6 +17,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - allow a lower price from amount
 - check for payment existence before exporting payments
 - added a account holder field to payments
+- always export shipping costs to prevent plenty from using the default settings
 
 ### Fixed
 - shipping times without a value will now be casted to 0
