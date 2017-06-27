@@ -3,16 +3,14 @@
 namespace ShopwareAdapter\ResponseParser\Payment;
 
 use Assert\Assertion;
-use InvalidArgumentException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Currency\Currency;
 use PlentyConnector\Connector\TransferObject\Order\Order;
 use PlentyConnector\Connector\TransferObject\Payment\Payment;
 use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
-use Shopware\Components\Model\ModelRepository;
 use Shopware\Models\Order\Status;
-use Shopware\Models\Shop\Currency as CurrencyModel;
+use ShopwareAdapter\DataProvider\Currency\CurrencyDataProviderInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -26,13 +24,22 @@ class PaymentResponseParser implements PaymentResponseParserInterface
     private $identityService;
 
     /**
-     * OrderStatusResponseParser constructor.
-     *
-     * @param IdentityServiceInterface $identityService
+     * @var CurrencyDataProviderInterface
      */
-    public function __construct(IdentityServiceInterface $identityService)
-    {
+    private $currencyDataProvider;
+
+    /**
+     * PaymentResponseParser constructor.
+     *
+     * @param IdentityServiceInterface      $identityService
+     * @param CurrencyDataProviderInterface $currencyDataProvider
+     */
+    public function __construct(
+        IdentityServiceInterface $identityService,
+        CurrencyDataProviderInterface $currencyDataProvider
+    ) {
         $this->identityService = $identityService;
+        $this->currencyDataProvider = $currencyDataProvider;
     }
 
     /**
@@ -70,16 +77,17 @@ class PaymentResponseParser implements PaymentResponseParserInterface
             return [];
         }
 
-        $currencyIdentifier = $this->getIdentifier($this->getCurrencyId($element['currency']), Currency::TYPE);
+        $shopwareCurrencyIdentifier = $this->currencyDataProvider->getCurrencyIdentifierByCode($element['currency']);
+        $currencyIdentifier = $this->getConnectorIdentifier($shopwareCurrencyIdentifier, Currency::TYPE);
 
         $payment = new Payment();
         $payment->setIdentifier($paymentIdentifier);
         $payment->setShopIdentifier($shopIdentity->getObjectIdentifier());
-        $payment->setOrderIdentifer($this->getIdentifier($element['id'], Order::TYPE));
+        $payment->setOrderIdentifer($this->getConnectorIdentifier($element['id'], Order::TYPE));
         $payment->setAmount($element['invoiceAmount']);
         $payment->setAccountHolder($this->getAccountHolder($element));
         $payment->setCurrencyIdentifier($currencyIdentifier);
-        $payment->setPaymentMethodIdentifier($this->getIdentifier($element['paymentId'], PaymentMethod::TYPE));
+        $payment->setPaymentMethodIdentifier($this->getConnectorIdentifier($element['paymentId'], PaymentMethod::TYPE));
         $payment->setTransactionReference($element['transactionId']);
 
         return [$payment];
@@ -91,7 +99,7 @@ class PaymentResponseParser implements PaymentResponseParserInterface
      *
      * @return string
      */
-    private function getIdentifier($entry, $type)
+    private function getConnectorIdentifier($entry, $type)
     {
         Assertion::integerish($entry);
 
@@ -100,27 +108,6 @@ class PaymentResponseParser implements PaymentResponseParserInterface
             ShopwareAdapter::NAME,
             $type
         )->getObjectIdentifier();
-    }
-
-    /**
-     * @param string $currency
-     *
-     * @return int
-     */
-    private function getCurrencyId($currency)
-    {
-        /**
-         * @var ModelRepository $currencyRepository
-         */
-        $currencyRepository = Shopware()->Models()->getRepository(CurrencyModel::class);
-
-        $currencyModel = $currencyRepository->findOneBy(['currency' => $currency]);
-
-        if (null === $currencyModel) {
-            throw new InvalidArgumentException('invalid currency code');
-        }
-
-        return $currencyModel->getId();
     }
 
     /**

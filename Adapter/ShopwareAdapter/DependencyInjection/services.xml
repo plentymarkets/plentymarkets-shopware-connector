@@ -2,6 +2,12 @@
 
 <container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+        <!-- Data Provider -->
+
+        <service id="shopware_adapter.data_provider.currency" class="ShopwareAdapter\DataProvider\Currency\CurrencyDataProvider">
+            <argument type="service" id="models" />
+        </service>
+
         <!-- Attributes -->
 
         <service id="shopware_adapter.attribute_helper" class="ShopwareAdapter\Helper\AttributeHelper">

@@ -5,6 +5,7 @@ namespace ShopwareAdapter\ResponseParser\Order;
 use Assert\Assertion;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
+use InvalidArgumentException;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Currency\Currency;
@@ -22,6 +23,7 @@ use Psr\Log\LoggerInterface;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Models\Tax\Repository;
 use Shopware\Models\Tax\Tax;
+use ShopwareAdapter\DataProvider\Currency\CurrencyDataProviderInterface;
 use ShopwareAdapter\ResponseParser\Address\AddressResponseParserInterface;
 use ShopwareAdapter\ResponseParser\Customer\CustomerResponseParserInterface;
 use ShopwareAdapter\ResponseParser\OrderItem\Exception\UnsupportedVatRateException;
@@ -66,14 +68,20 @@ class OrderResponseParser implements OrderResponseParserInterface
     private $logger;
 
     /**
+     * @var CurrencyDataProviderInterface
+     */
+    private $currencyDataProvider;
+
+    /**
      * OrderResponseParser constructor.
      *
-     * @param IdentityServiceInterface         $identityService
-     * @param EntityManagerInterface           $entityManager
+     * @param IdentityServiceInterface $identityService
+     * @param EntityManagerInterface $entityManager
      * @param OrderItemResponseParserInterface $orderItemResponseParser
-     * @param AddressResponseParserInterface   $orderAddressParser
-     * @param CustomerResponseParserInterface  $customerParser
-     * @param LoggerInterface                  $logger
+     * @param AddressResponseParserInterface $orderAddressParser
+     * @param CustomerResponseParserInterface $customerParser
+     * @param LoggerInterface $logger
+     * @param CurrencyDataProviderInterface $currencyDataProvider
      */
     public function __construct(
         IdentityServiceInterface $identityService,
@@ -81,7 +89,8 @@ class OrderResponseParser implements OrderResponseParserInterface
         OrderItemResponseParserInterface $orderItemResponseParser,
         AddressResponseParserInterface $orderAddressParser,
         CustomerResponseParserInterface $customerParser,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        CurrencyDataProviderInterface $currencyDataProvider
     ) {
         $this->identityService = $identityService;
         $this->entityManager = $entityManager;
@@ -89,6 +98,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         $this->orderAddressParser = $orderAddressParser;
         $this->customerParser = $customerParser;
         $this->logger = $logger;
+        $this->currencyDataProvider = $currencyDataProvider;
     }
 
     /**
@@ -142,9 +152,9 @@ class OrderResponseParser implements OrderResponseParserInterface
             Order::TYPE
         )->getObjectIdentifier();
 
-        $orderStatusIdentifier = $this->getIdentifier($entry['orderStatusId'], OrderStatus::TYPE);
-        $paymentStatusIdentifier = $this->getIdentifier($entry['paymentStatusId'], PaymentStatus::TYPE);
-        $paymentMethodIdentifier = $this->getIdentifier($entry['paymentId'], PaymentMethod::TYPE);
+        $orderStatusIdentifier = $this->getConnectorIdentifier($entry['orderStatusId'], OrderStatus::TYPE);
+        $paymentStatusIdentifier = $this->getConnectorIdentifier($entry['paymentStatusId'], PaymentStatus::TYPE);
+        $paymentMethodIdentifier = $this->getConnectorIdentifier($entry['paymentId'], PaymentMethod::TYPE);
 
         $shippingProfileIdentity = $this->identityService->findOneBy([
             'adapterIdentifier' => (string) $entry['dispatchId'],
@@ -158,7 +168,8 @@ class OrderResponseParser implements OrderResponseParserInterface
             return [];
         }
 
-        $currencyIdentifier = $this->getIdentifier($this->getCurrencyId($entry['currency']), Currency::TYPE);
+        $shopwareCurrencyIdentifier = $this->currencyDataProvider->getCurrencyIdentifierByCode($element['currency']);
+        $currencyIdentifier = $this->getConnectorIdentifier($shopwareCurrencyIdentifier, Currency::TYPE);
 
         $order = Order::fromArray([
             'orderNumber' => $entry['number'],
@@ -185,8 +196,6 @@ class OrderResponseParser implements OrderResponseParserInterface
     /**
      * @param array $orderItems
      *
-     * @throws \Exception
-     *
      * @return array
      */
     private function prepareOrderItems(array $orderItems)
@@ -208,7 +217,7 @@ class OrderResponseParser implements OrderResponseParserInterface
                 $taxModel = $repository->findOneBy(['tax' => $orderItem['taxRate']]);
 
                 if (null === $taxModel) {
-                    throw new \Exception('no matching tax rate found - ' . $orderItem['taxRate']);
+                    throw new InvalidArgumentException('no matching tax rate found - ' . $orderItem['taxRate']);
                 }
 
                 $orderItems[$key]['taxId'] = $taxModel->getId();
@@ -250,7 +259,7 @@ class OrderResponseParser implements OrderResponseParserInterface
      *
      * @return string
      */
-    private function getIdentifier($entry, $type)
+    private function getConnectorIdentifier($entry, $type)
     {
         Assertion::integerish($entry);
 
@@ -259,21 +268,6 @@ class OrderResponseParser implements OrderResponseParserInterface
             ShopwareAdapter::NAME,
             $type
         )->getObjectIdentifier();
-    }
-
-    /**
-     * @param string $currency
-     *
-     * @return int
-     */
-    private function getCurrencyId($currency)
-    {
-        /**
-         * @var ModelRepository $currencyRepo
-         */
-        $currencyRepo = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Currency::class);
-
-        return $currencyRepo->findOneBy(['currency' => $currency])->getId();
     }
 
     /**
