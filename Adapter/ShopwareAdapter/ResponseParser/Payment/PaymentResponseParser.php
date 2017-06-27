@@ -70,7 +70,7 @@ class PaymentResponseParser implements PaymentResponseParserInterface
             return [];
         }
 
-        $currencyIdentifier = $this->getIdentifier($this->getCurrencyId($element['currency']),Currency::TYPE);
+        $currencyIdentifier = $this->getIdentifier($this->getCurrencyId($element['currency']), Currency::TYPE);
 
         $payment = new Payment();
         $payment->setIdentifier($paymentIdentifier);
@@ -86,7 +86,7 @@ class PaymentResponseParser implements PaymentResponseParserInterface
     }
 
     /**
-     * @param int $entry
+     * @param int    $entry
      * @param string $type
      *
      * @return string
