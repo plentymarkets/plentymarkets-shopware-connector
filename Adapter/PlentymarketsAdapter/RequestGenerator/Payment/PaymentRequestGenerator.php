@@ -64,22 +64,21 @@ class PaymentRequestGenerator implements PaymentRequestGeneratorInterface
             'status' => 2,
         ];
 
-        /**
-         * Payment origin = 23
-         * Name of the sender = 11
-         * Email of the sender = 12
-         * Transaction ID = 1
-         * Booking text = 3
-         * Shipping address ID = 24
-         * Invoice address ID = 25
-         */
-        $paymentParams['property'] = [
+        $paymentParams['properties'] = [
             [
                 'typeId' => 23,
                 'value' => 4,
             ],
             [
+                'typeId' => 11,
+                'value' => $payment->getAccountHolder(),
+            ],
+            [
                 'typeId' => 1,
+                'value' => $payment->getTransactionReference(),
+            ],
+            [
+                'typeId' => 3,
                 'value' => $payment->getTransactionReference(),
             ],
             [

@@ -74,6 +74,7 @@ class PaymentResponseParser implements PaymentResponseParserInterface
         $payment->setShopIdentifier($shopIdentity->getObjectIdentifier());
         $payment->setOrderIdentifer($this->getIdentifier($element['id'], Order::TYPE));
         $payment->setAmount($element['invoiceAmount']);
+        $payment->setAccountHolder();
         $payment->setCurrencyIdentifier($this->getIdentifier($this->getCurrencyId($element['currency']), Currency::TYPE));
         $payment->setPaymentMethodIdentifier($this->getIdentifier($element['paymentId'], PaymentMethod::TYPE));
         $payment->setTransactionReference($element['transactionId']);

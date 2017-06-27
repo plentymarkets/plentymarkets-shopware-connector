@@ -50,6 +50,11 @@ class Payment extends AbstractTransferObject implements AttributableInterface
     private $transactionReference = '';
 
     /**
+     * @var string
+     */
+    private $accountHolder = '';
+
+    /**
      * @var PaymentDataInterface[]
      */
     private $paymentData = [];
@@ -181,6 +186,22 @@ class Payment extends AbstractTransferObject implements AttributableInterface
     public function setTransactionReference($transactionReference)
     {
         $this->transactionReference = $transactionReference;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccountHolder()
+    {
+        return $this->accountHolder;
+    }
+
+    /**
+     * @param string $accountHolder
+     */
+    public function setAccountHolder($accountHolder = '')
+    {
+        $this->accountHolder = $accountHolder;
     }
 
     /**
