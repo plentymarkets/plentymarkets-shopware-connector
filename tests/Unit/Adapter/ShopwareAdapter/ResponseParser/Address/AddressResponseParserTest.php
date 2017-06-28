@@ -28,9 +28,9 @@ class AddressResponseParserTest extends ResponseParserTest
      */
     private $countyIdentifier;
 
-    public function setUp()
+    protected function setUp()
     {
-        parent::setup();
+        parent::setUp();
 
         $this->countyIdentifier = Uuid::uuid4()->toString();
 

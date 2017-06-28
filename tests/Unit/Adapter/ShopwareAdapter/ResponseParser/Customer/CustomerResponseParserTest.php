@@ -23,9 +23,9 @@ class CustomerResponseParserTest extends ResponseParserTest
      */
     private $responseParser;
 
-    public function setUp()
+    protected function setUp()
     {
-        parent::setup();
+        parent::setUp();
 
         $customerGroup = $this->createMock(Group::class);
         $customerGroup->expects($this->any())->method('getId')->willReturn(1);
