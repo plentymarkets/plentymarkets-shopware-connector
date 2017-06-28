@@ -638,7 +638,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 $result['propertyValues'][] = [
                     'option' => [
                         'name' => $property->getName(),
-                        'filterable' => true,
                     ],
                     'value' => $value->getValue(),
                 ];

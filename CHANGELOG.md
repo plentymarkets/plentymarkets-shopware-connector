@@ -18,6 +18,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - check for payment existence before exporting payments
 - added a account holder field to payments
 - always export shipping costs to prevent plenty from using the default settings
+- Properties are not filteres by default to enable configuration in shopware
 - ignore pseudo prices if equal or lower then the normal price
 
 ### Fixed
