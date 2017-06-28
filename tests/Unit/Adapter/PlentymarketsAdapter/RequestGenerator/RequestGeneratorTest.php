@@ -22,7 +22,7 @@ abstract class RequestGeneratorTest extends TestCase
      */
     protected $objectIdentifier;
 
-    public function setup()
+    protected function setUp()
     {
         $this->objectIdentifier = Uuid::uuid4()->toString();
 

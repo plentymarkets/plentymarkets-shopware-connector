@@ -20,9 +20,9 @@ class PaymentResponseParserTest extends ResponseParserTest
      */
     private $validator;
 
-    public function setUp()
+    protected function setUp()
     {
-        parent::setup();
+        parent::setUp();
 
         $currencyDataProvider = $this->createMock(CurrencyDataProviderInterface::class);
         $currencyDataProvider->expects($this->once())->method('getCurrencyIdentifierByCode')->willReturn('1');

@@ -19,9 +19,9 @@ class PaymentRequestGeneratorTest extends RequestGeneratorTest
 
     private $completeRequest = '{"amount":200,"exchangeRatio":1,"mopId":"1","currency":"1","type":"credit","transactionType":2,"status":2,"properties":[{"typeId":23,"value":4},{"typeId":11,"value":"Account Holder"},{"typeId":1,"value":"transaction"},{"typeId":3,"value":"transaction"}]}';
 
-    public function setUp()
+    protected function setUp()
     {
-        parent::setup();
+        parent::setUp();
 
         $this->requestGenerator = $parser = new PaymentRequestGenerator(
             $this->identityService

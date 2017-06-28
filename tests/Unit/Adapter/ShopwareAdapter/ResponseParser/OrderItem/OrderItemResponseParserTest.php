@@ -20,9 +20,9 @@ class OrderItemResponseParserTest extends ResponseParserTest
      */
     private $responseParser;
 
-    public function setUp()
+    protected function setUp()
     {
-        parent::setup();
+        parent::setUp();
 
         $entityManager = $this->createMock(EntityManagerInterface::class);
 

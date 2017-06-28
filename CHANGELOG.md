@@ -2,9 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [2.0.4]
+## [2.1.0]
 ### Added
 - composer installer support
+- introduced a new variation request generator
 
 ### Changed
 - order reimport performance optimization
@@ -14,7 +15,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - product image handling performance improved
 - enhance the backend rest api settings description
 - export order discounts and payment surcharges as position
-- allow a lower price from amount
 - check for payment existence before exporting payments
 - added a account holder field to payments
 - always export shipping costs to prevent plenty from using the default settings
