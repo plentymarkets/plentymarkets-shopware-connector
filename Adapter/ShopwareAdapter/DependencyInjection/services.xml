@@ -8,6 +8,10 @@
             <argument type="service" id="models" />
         </service>
 
+        <service id="shopware_adapter.data_provider.customer_group" class="ShopwareAdapter\DataProvider\CustomerGroup\CustomerGroupDataProvider">
+            <argument type="service" id="models" />
+        </service>
+
         <!-- Attributes -->
 
         <service id="shopware_adapter.attribute_helper" class="ShopwareAdapter\Helper\AttributeHelper">
@@ -19,7 +23,12 @@
 
         <!-- Request Generator -->
 
-        <service id="plentmarkets_adapter.request_generator.product_configurator_set" class="ShopwareAdapter\RequestGenerator\Product\ConfiguratorSet\ConfiguratorSetRequestGenerator" />
+        <service id="shopware_adapter.request_generator.product.configurator_set" class="ShopwareAdapter\RequestGenerator\Product\ConfiguratorSet\ConfiguratorSetRequestGenerator" />
+
+        <service id="shopware_adapter.request_generator.product.variation" class="ShopwareAdapter\RequestGenerator\Product\Variation\VariationRequestGenerator">
+            <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="shopware_adapter.data_provider.customer_group" />
+        </service>
 
         <!-- Response Parser -->
 
@@ -221,7 +230,8 @@
         <service id="shopware_adapter.command_handler.handle_product" class="ShopwareAdapter\ServiceBus\CommandHandler\Product\HandleProductCommandHandler">
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="shopware_adapter.attribute_helper" />
-            <argument type="service" id="plentmarkets_adapter.request_generator.product_configurator_set" />
+            <argument type="service" id="shopware_adapter.request_generator.product.configurator_set" />
+            <argument type="service" id="shopware_adapter.request_generator.product.variation" />
 
             <tag name="plenty_connector.command_handler" />
         </service>
