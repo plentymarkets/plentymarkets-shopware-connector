@@ -637,8 +637,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             foreach ($property->getValues() as $value) {
                 $result['propertyValues'][] = [
                     'option' => [
-                        'name' => $property->getName(),
-                        'filterable' => true,
+                        'name' => $property->getName()
                     ],
                     'value' => $value->getValue(),
                 ];
