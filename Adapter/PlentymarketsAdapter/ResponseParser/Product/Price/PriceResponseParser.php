@@ -258,7 +258,11 @@ class PriceResponseParser implements PriceResponseParserInterface
     private function addPseudoPrice(Price $price, $priceArray)
     {
         if (isset($priceArray['rrp'][$price->getFromAmount()])) {
-            $price->setPseudoPrice($priceArray['rrp'][$price->getFromAmount()]['price']);
+            $pseudoPrice = $priceArray['rrp'][$price->getFromAmount()]['price'];
+
+            if ($pseudoPrice > $price->getPrice()) {
+                $price->setPseudoPrice($pseudoPrice);
+            }
         }
 
         if (isset($priceArray['specialOffer'][$price->getFromAmount()])) {
