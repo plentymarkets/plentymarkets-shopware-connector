@@ -35,10 +35,10 @@ Ext.define('Shopware.apps.PlentyConnector.controller.Settings', {
                 response = Ext.decode(response.responseText);
 
                 if (response.success) {
-                    Shopware.Notification.createGrowlMessage('Daten gültig', 'Die Daten sind gültig');
+                    Shopware.Notification.createGrowlMessage('{s name=plentyconnector/controller/settings/datavalid1}{/s}', '{s name=plentyconnector/controller/settings/datavalid2}{/s}');
                 }
                 else {
-                    Shopware.Notification.createGrowlMessage('Daten ungültig', 'Die Daten sind ungültig');
+                    Shopware.Notification.createGrowlMessage('{s name=plentyconnector/controller/settings/datainvalid1}{/s}', '{s name=plentyconnector/controller/settings/datainvalid2}{/s}');
                 }
             }
         });
@@ -53,7 +53,7 @@ Ext.define('Shopware.apps.PlentyConnector.controller.Settings', {
             callback: function (data, operation) {
                 view.loadRecord(data);
                 view.setLoading(false);
-                Shopware.Notification.createGrowlMessage('Einstellungen gespeichert', 'Die Einstellungen wurden gespeichert');
+                Shopware.Notification.createGrowlMessage('{s name=plentyconnector/controller/settings1}{/s}', '{s name=plentyconnector/controller/settings2}{/s}');
             }
         });
     }

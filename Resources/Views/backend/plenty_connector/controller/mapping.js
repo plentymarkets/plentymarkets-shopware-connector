@@ -25,7 +25,7 @@ Ext.define('Shopware.apps.PlentyConnector.controller.Mapping', {
             return;
         }
 
-        view.setLoading("Loading... (this can take some time)");
+        view.setLoading("{s name=plentyconnector/controller/mapping/loading}{/s}");
 
         if (view.isBuilt) {
             view.removeAll();
@@ -92,7 +92,7 @@ Ext.define('Shopware.apps.PlentyConnector.controller.Mapping', {
                     message = operation.error.statusText;
                 }
 
-                Shopware.Notification.createGrowlMessage('Abrufen der Mapping Information fehlgeschlagen', message);
+                Shopware.Notification.createGrowlMessage('{s name=plentyconnector/controller/mapping/mappingerror}{/s}', message);
             }
 
             view.setLoading(false);
@@ -105,7 +105,7 @@ Ext.define('Shopware.apps.PlentyConnector.controller.Mapping', {
                 Ext.Msg.alert("Fehler", batch.proxy.getReader().jsonData.message);
             },
             success: function (batch, options) {
-                Shopware.Notification.createGrowlMessage("Erfolgreich", "Mapping wurde gespeichert.");
+                Shopware.Notification.createGrowlMessage("{s name=plentyconnector/controller/mapping/success1}{/s}", "{s name=plentyconnector/controller/mapping/success2}{/s}");
             }
         });
     }

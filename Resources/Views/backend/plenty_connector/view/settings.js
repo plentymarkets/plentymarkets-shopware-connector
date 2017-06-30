@@ -6,7 +6,7 @@ Ext.define('Shopware.apps.PlentyConnector.view.Settings', {
 
     alias: 'widget.plentymarkets-view-settings',
 
-    title: '{s name=plentyconnector/view/settings/title}Einstellungen{/s}',
+    title: '{s name=plentyconnector/view/settings/title}{/s}',
     autoScroll: true,
     cls: 'shopware-form',
     layout: 'anchor',
@@ -66,7 +66,7 @@ Ext.define('Shopware.apps.PlentyConnector.view.Settings', {
             items: ['->',
                 {
                     xtype: 'button',
-                    text: '{s name=plentyconnector/view/settings/button/test}Zugangsdaten Testen{/s}',
+                    text: '{s name=plentyconnector/view/settings/button/test}{/s}',
                     cls: 'secondary',
                     handler: function () {
                         me.fireEvent('test', me);
@@ -74,7 +74,7 @@ Ext.define('Shopware.apps.PlentyConnector.view.Settings', {
                 },
                 {
                     xtype: 'button',
-                    text: '{s name=plentyconnector/view/settings/button/save}Speichern{/s}',
+                    text: '{s name=plentyconnector/view/settings/button/save}{/s}',
                     cls: 'primary',
                     handler: function () {
                         me.fireEvent('save', me);
@@ -91,7 +91,7 @@ Ext.define('Shopware.apps.PlentyConnector.view.Settings', {
         return [
             {
                 xtype: 'fieldset',
-                title: 'Zugangsdaten',
+                title: '{s name=plentyconnector/view/settings/title}{/s}',
                 layout: 'anchor',
 
                 defaults: {
@@ -102,7 +102,7 @@ Ext.define('Shopware.apps.PlentyConnector.view.Settings', {
                 items: [
                     {
                         xtype: 'textfield',
-                        fieldLabel: '{s name=plentyconnector/view/settings/textfield/ApiUrl}URL{/s}',
+                        fieldLabel: '{s name=plentyconnector/view/settings/textfield/ApiUrl}{/s}',
                         supportText: 'Tragen Sie hier die URL Ihres plentymarkets-Systems ein. Sie finden diese Information in der plentymarkets-Administration unter <b>Einstellungen » Grundeinstellungen » API-Daten » Host</b>. Die URL muss mit <b>http://</b> oder <b>https://</b> beginnen.',
                         emptyText: 'https://www.ihr-plentymarkets-system.de/',
                         name: 'ApiUrl',
@@ -110,13 +110,13 @@ Ext.define('Shopware.apps.PlentyConnector.view.Settings', {
                     },
                     {
                         xtype: 'textfield',
-                        fieldLabel: '{s name=plentyconnector/view/settings/textfield/ApiUsername}Benutzername{/s}',
+                        fieldLabel: '{s name=plentyconnector/view/settings/textfield/ApiUsername}{/s}',
                         name: 'ApiUsername',
                         allowBlank: false
                     },
                     {
                         xtype: 'textfield',
-                        fieldLabel: '{s name=plentyconnector/view/settings/textfield/ApiPassword}Passwort{/s}',
+                        fieldLabel: '{s name=plentyconnector/view/settings/textfield/ApiPassword}{/s}',
                         name: 'ApiPassword',
                         allowBlank: false,
                         inputType: 'password'
