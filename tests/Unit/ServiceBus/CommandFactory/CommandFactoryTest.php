@@ -31,7 +31,7 @@ class CommandFactoryTest extends TestCase
 
         $command = $commandFactory->create('TestAdapter', 'TestType', CommandType::HANDLE, $transferObject);
 
-        $this->assertEquals($command, $commandMock);
+        self::assertEquals($command, $commandMock);
     }
 
     public function test_generate_remove_command()
@@ -52,6 +52,6 @@ class CommandFactoryTest extends TestCase
 
         $command = $commandFactory->create('TestAdapter', 'TestType', CommandType::REMOVE, $uuid);
 
-        $this->assertEquals($command, $commandMock);
+        self::assertEquals($command, $commandMock);
     }
 }

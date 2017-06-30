@@ -89,6 +89,10 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
             return true;
         }
 
+        if ($this->isExistingPayment($payment)) {
+            $this->logger->notice('payment with the same transaction id already exists.');
+        }
+
         $orderIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $payment->getOrderIdentifer(),
             'objectType' => Order::TYPE,
@@ -118,5 +122,26 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
         );
 
         return true;
+    }
+
+    /**
+     * @param Payment $payment
+     *
+     * @return bool
+     */
+    private function isExistingPayment(Payment $payment)
+    {
+        $url = 'payments/property/1/' . $payment->getTransactionReference();
+        $payments = $this->client->request('GET', $url);
+
+        if (empty($payments)) {
+            return false;
+        }
+
+        $payments = array_filter($payments, function (array $payment) {
+            return !$payment['deleted'];
+        });
+
+        return !empty($payments);
     }
 }

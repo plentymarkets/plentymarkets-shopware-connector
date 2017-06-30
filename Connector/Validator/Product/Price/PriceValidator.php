@@ -30,7 +30,7 @@ class PriceValidator implements ValidatorInterface
         Assertion::greaterOrEqualThan($object->getPseudoPrice(), 0.0, null, 'product.price.pseudoPrice');
         Assertion::nullOrUuid($object->getCustomerGroupIdentifier(), null, 'product.price.customerGroupIdentifier');
         Assertion::float($object->getFromAmount(), null, 'product.price.fromAmount');
-        Assertion::greaterOrEqualThan($object->getFromAmount(), 0.0, null, 'product.price.fromAmount');
+        Assertion::greaterThan($object->getFromAmount(), 0.0, null, 'product.price.fromAmount');
         Assertion::nullOrFloat($object->getToAmount(), null, 'product.price.toAmount');
     }
 }

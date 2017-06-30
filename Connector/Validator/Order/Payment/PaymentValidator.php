@@ -31,6 +31,7 @@ class PaymentValidator implements ValidatorInterface
         Assertion::uuid($object->getPaymentMethodIdentifier(), null, 'payment.paymentMethodIdentifier');
         Assertion::uuid($object->getOrderIdentifer(), null, 'payment.paymentIdentifier');
         Assertion::string($object->getTransactionReference(), null, 'payment.transactionReference');
+        Assertion::string($object->getAccountHolder(), null, 'payment.accountHolder');
         Assertion::notBlank($object->getTransactionReference(), null, 'payment.transactionReference');
         Assertion::allIsInstanceOf($object->getAttributes(), Attribute::class, null, 'payment.attributes');
     }

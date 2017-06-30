@@ -40,15 +40,11 @@ class ProductResponseParser implements ProductResponseParserInterface
      * @var IdentityServiceInterface
      */
     private $identityService;
+
     /**
      * @var PriceResponseParserInterface
      */
     private $priceResponseParser;
-
-    /**
-     * @var ClientInterface
-     */
-    private $client;
 
     /**
      * @var LoggerInterface
@@ -84,7 +80,6 @@ class ProductResponseParser implements ProductResponseParserInterface
     ) {
         $this->identityService = $identityService;
         $this->priceResponseParser = $priceResponseParser;
-        $this->client = $client;
         $this->logger = $logger;
 
         //TODO: inject when refactoring this class
@@ -349,7 +344,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             $alternate = '';
 
             foreach ($texts as $productText) {
-                if ($entry['names'][0]['lang'] === $productText['lang']) {
+                if (isset($entry['names'][0]['lang']) && $entry['names'][0]['lang'] === $productText['lang']) {
                     $alternate = $productText['name1'];
                 }
             }
