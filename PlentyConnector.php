@@ -21,7 +21,6 @@ use PlentyConnector\DependencyInjection\CompilerPass\ValidatorServiceCompilerPas
 use PlentyConnector\Installer\CronjobInstaller;
 use PlentyConnector\Installer\DatabaseInstaller;
 use PlentyConnector\Installer\PermissionInstaller;
-use Shopware\Components\CacheManager;
 use Shopware\Components\Plugin;
 use Shopware\Components\Plugin\Context\ActivateContext;
 use Shopware\Components\Plugin\Context\InstallContext;
@@ -207,11 +206,12 @@ class PlentyConnector extends Plugin
         );
         $permissionInstaller->uninstall($context);
 
-         parent::uninstall($context);
+        parent::uninstall($context);
     }
 
     /**
      * @param ActivateContext $context
+     *
      * @throws \RuntimeException
      */
     public function activate(ActivateContext $context)
