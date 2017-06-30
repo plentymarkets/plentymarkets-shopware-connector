@@ -6,7 +6,7 @@ Ext.define('Shopware.apps.PlentyConnector.view.mapping.Main', {
 
     alias: 'widget.plentymarkets-view-mapping-main',
 
-    title: '{s name=plentyconnector/view/mappingtabs/title}Mapping{/s}',
+    title: '{s name=plentyconnector/view/mapping/main/title}{/s}',
     autoScroll: true,
     cls: 'shopware-form',
     layout: 'anchor',
