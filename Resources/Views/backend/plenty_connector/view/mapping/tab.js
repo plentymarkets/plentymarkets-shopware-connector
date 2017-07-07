@@ -93,7 +93,7 @@ Ext.define('Shopware.apps.PlentyConnector.view.mapping.Tab', {
 
         var originStore = Ext.create('Shopware.apps.PlentyConnector.store.mapping.TransferObject');
         var emptyField = {
-            name: '{s name=plentyconnector/view/mapping/choose}Bitte wählen{/s}',
+            name: '{s name=plentyconnector/view/mapping/tab/choose}{/s}',
             identifier: null
         };
         originStore.loadData([emptyField].concat(me.mapping.originTransferObjects));
@@ -110,7 +110,7 @@ Ext.define('Shopware.apps.PlentyConnector.view.mapping.Tab', {
                 xtype: 'combo',
                 queryMode: 'local',
                 autoSelect: true,
-                emptyText: '{s name=plentyconnector/view/mapping/choose}Bitte wählen{/s}',
+                emptyText: '{s name=plentyconnector/view/mapping/tab/choose}{/s}',
                 allowBlank: true,
                 editable: false,
                 store: originStore,

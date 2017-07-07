@@ -22,6 +22,7 @@ use PlentyConnector\Installer\CronjobInstaller;
 use PlentyConnector\Installer\DatabaseInstaller;
 use PlentyConnector\Installer\PermissionInstaller;
 use Shopware\Components\Plugin;
+use Shopware\Components\Plugin\Context\ActivateContext;
 use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
 use Shopware\Components\Plugin\Context\UpdateContext;
@@ -206,6 +207,18 @@ class PlentyConnector extends Plugin
         $permissionInstaller->uninstall($context);
 
         parent::uninstall($context);
+    }
+
+    /**
+     * @param ActivateContext $context
+     *
+     * @throws \RuntimeException
+     */
+    public function activate(ActivateContext $context)
+    {
+        $context->scheduleClearCache(InstallContext::CACHE_LIST_ALL);
+
+        parent::activate($context);
     }
 
     /**

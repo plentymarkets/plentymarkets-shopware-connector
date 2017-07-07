@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Added
+- Translation for Backend Modul
+- extended Cachereload on activate
+
 ## [2.1.0]
 ### Added
 - composer installer support
