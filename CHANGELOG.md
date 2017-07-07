@@ -7,6 +7,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Translation for Backend Modul
 - extended Cachereload on activate
 
+### Fixed
+- Fatal error when variation unit is not mapped
+
 ## [2.1.0]
 ### Added
 - composer installer support

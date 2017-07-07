@@ -2,6 +2,7 @@
 
 namespace ShopwareAdapter\RequestGenerator\Product\Variation;
 
+use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
 use PlentyConnector\Connector\TransferObject\Media\Media;
@@ -57,7 +58,7 @@ class VariationRequestGenerator implements VariationRequestGeneratorInterface
         ]);
 
         if (null === $unitIdentity) {
-            throw new IdentityNotFoundException('Missing unit mapping - ' . $variation->getNumber());
+            throw new NotFoundException('Missing unit mapping - ' . $variation->getNumber());
         }
 
         $prices = [];
