@@ -4,11 +4,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
-- Translation for Backend Modul
-- extended Cachereload on activate
+- translation for backend modul
+- extended cache reload on activate
+- translation of properties and property values for shopware
 
 ### Fixed
-- Fatal error when variation unit is not mapped
+- fatal error when variation unit is not mapped
 
 ## [2.1.0]
 ### Added
@@ -26,14 +27,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - check for payment existence before exporting payments
 - added a account holder field to payments
 - always export shipping costs to prevent plenty from using the default settings
-- Properties are not filteres by default to enable configuration in shopware
+- properties are not filteres by default to enable configuration in shopware
 - ignore pseudo prices if equal or lower then the normal price
 
 ### Fixed
 - shipping times without a value will now be casted to 0
 - use correct get parameter for changed orders
 - only the category translations with a matching shop are now pulled
-- Sepa payment data was ignored
+- sepa payment data was ignored
 - use correct property field for payments
 
 ## [2.0.3]
@@ -56,11 +57,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Order status and shipping number import functionality
 - display mapping console command
-- Category metaRobots are synced to a shopware attribute
+- category metaRobots are synced to a shopware attribute
 - shipping costs vatRate is calculated now
-- Added reference unit synchronization
-- Sync product packaging units and content
-- Added a separate tag for definitions related to cleanup
+- added reference unit synchronization
+- sync product packaging units and content
+- added a separate tag for definitions related to cleanup
 
 ### Changed
 - 1:N mapping of entities instead of 1:1
@@ -82,7 +83,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - product translations
 
 ### Removed
-- Variation packaging unit
+- variation packaging unit
 
 ## [2.0.0-rc1]
 ### Added
