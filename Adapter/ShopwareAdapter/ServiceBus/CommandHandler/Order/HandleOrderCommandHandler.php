@@ -51,18 +51,18 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
      * @param IdentityServiceInterface $identityService
      * @param LoggerInterface          $logger
      * @param OrderResource            $orderResource
-     * @param AttributeHelper          $attributeHelper
+     * @param AttributeDataPersisterInterface          $attributePersister
      */
     public function __construct(
         IdentityServiceInterface $identityService,
         LoggerInterface $logger,
         OrderResource $orderResource,
-        AttributeHelper $attributeHelper
+        AttributeDataPersisterInterface $attributePersister
     ) {
         $this->identityService = $identityService;
         $this->logger = $logger;
         $this->orderResource = $orderResource;
-        $this->attributeHelper = $attributeHelper;
+        $this->attributePersister = $attributePersister;
     }
 
     /**
