@@ -420,10 +420,9 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                     continue;
                 }
 
-                $this->attributeDataPersister->saveAttributes(
-                    (int) $variant['id'],
-                    $product->getAttributes(),
-                    's_articles_attributes'
+                $this->attributeDataPersister->saveProductDetailAttributes(
+                    $variant,
+                    $product->getAttributes()
                 );
             }
         } else {
@@ -438,7 +437,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                  * @var Variant $variantResource
                  */
                 $variantResource = Manager::getResource('Variant');
-                $variantResource->setResultMode(Resource::HYDRATE_ARRAY);
+                $variantResource->setResultMode(Resource::HYDRATE_OBJECT);
 
                 try {
                     $variant = $variantResource->getOneByNumber($variation->getNumber());
@@ -451,24 +450,22 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 if (null === $variant) {
                     $variationParams['articleId'] = $identity->getAdapterIdentifier();
 
-                    $variant = $variantResource->create($variationParams);
+                    $variantModel = $variantResource->create($variationParams);
 
                     $attributes = array_merge($product->getAttributes(), $variation->getAttributes());
 
-                    $this->attributeDataPersister->saveAttributes(
-                        (int) $variant->getId(),
-                        $attributes,
-                        's_articles_attributes'
+                    $this->attributeDataPersister->saveProductDetailAttributes(
+                        $variantModel,
+                        $attributes
                     );
                 } else {
-                    $variantResource->update($variant['id'], $variationParams);
+                    $variantModel = $variantResource->update($variant->getId(), $variationParams);
 
                     $attributes = array_merge($product->getAttributes(), $variation->getAttributes());
 
-                    $this->attributeDataPersister->saveAttributes(
-                        (int) $variant['id'],
-                        $attributes,
-                        's_articles_attributes'
+                    $this->attributeDataPersister->saveProductDetailAttributes(
+                        $variantModel,
+                        $attributes
                     );
                 }
             }

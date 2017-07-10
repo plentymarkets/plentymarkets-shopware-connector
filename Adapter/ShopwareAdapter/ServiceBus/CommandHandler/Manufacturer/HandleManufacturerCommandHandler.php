@@ -126,22 +126,21 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
         }
 
         if (null === $identity) {
-            $newManufacturer = $this->resource->create($params);
+            $manufacturerModel = $this->resource->create($params);
 
-            $identity = $this->identityService->create(
+            $this->identityService->create(
                 (string) $manufacturer->getIdentifier(),
                 Manufacturer::TYPE,
-                (string) $newManufacturer->getId(),
+                (string) $manufacturerModel->getId(),
                 ShopwareAdapter::NAME
             );
         } else {
-            $this->resource->update($identity->getAdapterIdentifier(), $params);
+            $manufacturerModel = $this->resource->update($identity->getAdapterIdentifier(), $params);
         }
 
-        $this->attributePersister->saveAttributes(
-            (int) $identity->getAdapterIdentifier(),
-            $manufacturer->getAttributes(),
-            's_articles_supplier_attributes'
+        $this->attributePersister->saveManufacturerAttributes(
+            $manufacturerModel,
+            $manufacturer->getAttributes()
         );
 
         return true;

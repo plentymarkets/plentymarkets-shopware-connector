@@ -8,6 +8,11 @@ use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\AttributeBundle\Service\DataPersister as ShopwareDataPersister;
 use Shopware\Bundle\AttributeBundle\Service\TypeMapping;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Article\Detail;
+use Shopware\Models\Article\Supplier;
+use Shopware\Models\Category\Category;
+use Shopware\Models\Media\Media;
+use Shopware\Models\Order\Order;
 
 /**
  * Class AttributeDataPersister
@@ -54,7 +59,49 @@ class AttributeDataPersister implements AttributeDataPersisterInterface
     /**
      * {@inheritdoc}
      */
-    public function saveAttributes($identifier, array $attributes, $table)
+    public function saveCategoryAttributes(Category $category, array $attributes)
+    {
+        $this->saveAttributes($category->getId(), 's_categories_attributes', $attributes);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function saveManufacturerAttributes(Supplier $supplier, array $attributes)
+    {
+        $this->saveAttributes($supplier->getId(), 's_articles_supplier_attributes', $attributes);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function saveOrderAttributes(Order $order, array $attributes)
+    {
+        $this->saveAttributes($order->getId(), 's_order_attributes', $attributes);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function saveMediaAttributes(Media $media, array $attributes)
+    {
+        $this->saveAttributes($media->getId(), 's_media_attributes', $attributes);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function saveProductDetailAttributes(Detail $detail, array $attributes)
+    {
+        $this->saveAttributes($detail->getId(), 's_articles_attributes', $attributes);
+    }
+
+    /**
+     * @param $identifier
+     * @param $table
+     * @param Attribute[] $attributes
+     */
+    private function saveAttributes($identifier, $table, array $attributes)
     {
         Assertion::integer($identifier);
         Assertion::allIsInstanceOf($attributes, Attribute::class);

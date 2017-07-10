@@ -339,23 +339,19 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         }
 
         if (null === $categoryIdentity) {
-            $newCategory = $this->resource->create($parans);
+            $categoryModel = $this->resource->create($parans);
 
             $categoryIdentity = $this->identityService->create(
                 (string) $category->getIdentifier(),
                 Category::TYPE,
-                (string) $newCategory->getId(),
+                (string) $categoryModel->getId(),
                 ShopwareAdapter::NAME
             );
         } else {
-            $this->resource->update($categoryIdentity->getAdapterIdentifier(), $parans);
+            $categoryModel = $this->resource->update($categoryIdentity->getAdapterIdentifier(), $parans);
         }
 
-        $this->attributePersister->saveAttributes(
-            (int) $categoryIdentity->getAdapterIdentifier(),
-            $category->getAttributes(),
-            's_categories_attributes'
-        );
+        $this->attributePersister->saveCategoryAttributes($categoryModel, $category->getAttributes());
 
         return $categoryIdentity;
     }

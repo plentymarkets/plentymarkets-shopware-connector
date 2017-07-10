@@ -138,7 +138,7 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
         if (null === $identity) {
             $mediaModel = $this->resource->create($params);
 
-            $identity = $this->identityService->create(
+            $this->identityService->create(
                 $media->getIdentifier(),
                 Media::TYPE,
                 (string) $mediaModel->getId(),
@@ -147,13 +147,12 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
         } else {
             unset($params['file']);
 
-            $this->resource->update($identity->getAdapterIdentifier(), $params);
+            $mediaModel = $this->resource->update($identity->getAdapterIdentifier(), $params);
         }
 
-        $this->attributePersister->saveAttributes(
-            (int) $identity->getAdapterIdentifier(),
-            $media->getAttributes(),
-            's_media_attributes'
+        $this->attributePersister->saveMediaAttributes(
+            $mediaModel,
+            $media->getAttributes()
         );
 
         return true;
