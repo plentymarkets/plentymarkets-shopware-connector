@@ -12,7 +12,7 @@ use PlentyConnector\Connector\Translation\TranslationHelperInterface;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use Psr\Log\LoggerInterface;
 use Shopware\Components\Model\ModelRepository;
-use Shopware\Models\Property\Group as PropertyGroupModel;
+use Shopware\Models\Property\Option as PropertyGroupModel;
 use Shopware\Models\Property\Repository as PropertyGroupRepository;
 use Shopware\Models\Property\Value as PropertyValueModel;
 use Shopware\Models\Shop\Repository as ShopRepository;
