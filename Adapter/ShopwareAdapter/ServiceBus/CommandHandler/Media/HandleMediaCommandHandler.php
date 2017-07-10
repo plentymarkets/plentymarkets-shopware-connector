@@ -14,6 +14,7 @@ use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Components\Api\Exception\NotFoundException as MediaNotFoundException;
 use Shopware\Components\Api\Resource\Media as MediaResource;
 use Shopware\Models\Media\Album;
+use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
 use ShopwareAdapter\Helper\AttributeHelper;
 use ShopwareAdapter\ShopwareAdapter;
 
@@ -43,23 +44,30 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
     private $attributeHelper;
 
     /**
+     * @var AttributeDataPersisterInterface
+     */
+    private $attributePersister;
+
+    /**
      * HandleMediaCommandHandler constructor.
-     *
-     * @param MediaResource            $resource
-     * @param MediaService             $mediaService
+     * @param MediaResource $resource
+     * @param MediaService $mediaService
      * @param IdentityServiceInterface $identityService
-     * @param AttributeHelper          $attributeHelper
+     * @param AttributeHelper $attributeHelper
+     * @param AttributeDataPersisterInterface $attributePersister
      */
     public function __construct(
         MediaResource $resource,
         MediaService $mediaService,
         IdentityServiceInterface $identityService,
-        AttributeHelper $attributeHelper
+        AttributeHelper $attributeHelper,
+        AttributeDataPersisterInterface $attributePersister
     ) {
         $this->resource = $resource;
         $this->mediaService = $mediaService;
         $this->identityService = $identityService;
         $this->attributeHelper = $attributeHelper;
+        $this->attributePersister = $attributePersister;
     }
 
     /**
@@ -141,7 +149,7 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
             $this->resource->update($identity->getAdapterIdentifier(), $params);
         }
 
-        $this->attributeHelper->saveAttributes(
+        $this->attributePersister->saveAttributes(
             (int) $identity->getAdapterIdentifier(),
             $media->getAttributes(),
             's_media_attributes'

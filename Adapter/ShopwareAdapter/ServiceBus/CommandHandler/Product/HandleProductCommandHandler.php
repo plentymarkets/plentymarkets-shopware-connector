@@ -8,7 +8,6 @@ use PlentyConnector\Connector\ServiceBus\Command\HandleCommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\Product\HandleProductCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\TransferObject\Category\Category;
-use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 use PlentyConnector\Connector\TransferObject\Media\Media;
 use PlentyConnector\Connector\TransferObject\Product\LinkedProduct\LinkedProduct;
@@ -17,7 +16,6 @@ use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
 use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
-use PlentyConnector\Connector\Translation\TranslationHelperInterface;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use Psr\Log\LoggerInterface;
 use Shopware\Components\Api\Exception\NotFoundException;
@@ -26,9 +24,13 @@ use Shopware\Components\Api\Resource\Article;
 use Shopware\Components\Api\Resource\Resource;
 use Shopware\Components\Api\Resource\Variant;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Models\Article\Detail;
+use Shopware\Models\Article\Article as ArticleModel;
+use Shopware\Models\Article\Detail as DetailModel;
+use Shopware\Models\Property\Group as GroupModel;
 use Shopware\Models\Property\Repository;
 use Shopware\Models\Shop\Shop as ShopModel;
+use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
+use ShopwareAdapter\DataPersister\Translation\TranslationDataPersisterInterface;
 use ShopwareAdapter\Helper\AttributeHelper;
 use ShopwareAdapter\RequestGenerator\Product\ConfiguratorSet\ConfiguratorSetRequestGeneratorInterface;
 use ShopwareAdapter\RequestGenerator\Product\Variation\VariationRequestGeneratorInterface;
@@ -60,23 +62,38 @@ class HandleProductCommandHandler implements CommandHandlerInterface
     private $variationRequestGenerator;
 
     /**
+     * @var AttributeDataPersisterInterface
+     */
+    private $attributeDataPersister;
+
+    /**
+     * @var TranslationDataPersisterInterface
+     */
+    private $translationDataPersister;
+
+    /**
      * HandleProductCommandHandler constructor.
-     *
-     * @param IdentityServiceInterface                 $identityService
-     * @param AttributeHelper                          $attributeHelper
+     * @param IdentityServiceInterface $identityService
+     * @param AttributeHelper $attributeHelper
      * @param ConfiguratorSetRequestGeneratorInterface $configuratorSetRequestGenerator
-     * @param VariationRequestGeneratorInterface       $variationRequestGenerator
+     * @param VariationRequestGeneratorInterface $variationRequestGenerator
+     * @param AttributeDataPersisterInterface $attributeDataPersister
+     * @param TranslationDataPersisterInterface $translationDataPersister
      */
     public function __construct(
         IdentityServiceInterface $identityService,
         AttributeHelper $attributeHelper,
         ConfiguratorSetRequestGeneratorInterface $configuratorSetRequestGenerator,
-        VariationRequestGeneratorInterface $variationRequestGenerator
+        VariationRequestGeneratorInterface $variationRequestGenerator,
+        AttributeDataPersisterInterface $attributeDataPersister,
+        TranslationDataPersisterInterface $translationDataPersister
     ) {
         $this->identityService = $identityService;
         $this->attributeHelper = $attributeHelper;
         $this->configuratorSetRequestGenerator = $configuratorSetRequestGenerator;
         $this->variationRequestGenerator = $variationRequestGenerator;
+        $this->attributeDataPersister = $attributeDataPersister;
+        $this->translationDataPersister = $translationDataPersister;
     }
 
     /**
@@ -97,7 +114,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
     {
         /**
          * @var HandleCommandInterface $command
-         * @var Product                $product
+         * @var Product $product
          */
         $product = $command->getTransferObject();
 
@@ -286,62 +303,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             $product->setAttributes($attributes);
         }
 
-        /**
-         * @var TranslationHelperInterface $translationHelper
-         */
-        $translationHelper = Shopware()->Container()->get('plenty_connector.translation_helper');
-
-        $translations = [];
-        foreach ($translationHelper->getLanguageIdentifiers($product) as $languageIdentifier) {
-            /**
-             * @var Product $translatedProduct
-             */
-            $translatedProduct = $translationHelper->translate($languageIdentifier, $product);
-
-            $languageIdentity = $this->identityService->findOneBy([
-                'adapterName' => ShopwareAdapter::NAME,
-                'objectType' => Language::TYPE,
-                'objectIdentifier' => $languageIdentifier,
-            ]);
-
-            if (null === $languageIdentity) {
-                /**
-                 * @var LoggerInterface $logger
-                 */
-                $logger = Shopware()->Container()->get('plenty_connector.logger');
-                $logger->notice('langauge not mapped - ' . $languageIdentifier, ['command' => $command]);
-
-                continue;
-            }
-
-            $shops = $shopRepository->findBy([
-                'locale' => $languageIdentity->getAdapterIdentifier(),
-            ]);
-
-            $translation = [
-                'name' => $translatedProduct->getName(),
-                'description' => $translatedProduct->getDescription(),
-                'descriptionLong' => $translatedProduct->getLongDescription(),
-                'keywords' => $translatedProduct->getMetaKeywords(),
-            ];
-
-            foreach ($product->getAttributes() as $attribute) {
-                /**
-                 * @var Attribute $translatedAttribute
-                 */
-                $translatedAttribute = $translationHelper->translate($languageIdentifier, $attribute);
-
-                $key = 'plentyConnector' . ucfirst($attribute->getKey());
-                $translation[$key] = $translatedAttribute->getValue();
-            }
-
-            foreach ($shops as $shop) {
-                $translation['shopId'] = $shop->getId();
-
-                $translations[] = $translation;
-            }
-        }
-
         $propertyData = $this->getPropertyData($product);
 
         $params = [
@@ -366,7 +327,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             'notification' => true,
             'active' => $product->isActive(),
             'images' => $images,
-            'similar' => $this->getLinkedProducts($product, LinkedProduct::TYPE_SIMILAR),
+            'similar' => $this->getLinkedProducts($product),
             'related' => $this->getLinkedProducts($product, LinkedProduct::TYPE_ACCESSORY),
             'metaTitle' => $product->getMetaTitle(),
             'keywords' => $product->getMetaKeywords(),
@@ -415,6 +376,8 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             }
         }
 
+        $this->attributeHelper->addFieldAsAttribute($product, 'technicalDescription');
+
         if ($createProduct) {
             $variations = [];
 
@@ -426,7 +389,10 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 $variations[] = $this->variationRequestGenerator->generate($variation, $product);
             }
 
-            $params['mainDetail'] = $this->variationRequestGenerator->generate($this->getMainVariation($product), $product);
+            $params['mainDetail'] = $this->variationRequestGenerator->generate(
+                $this->getMainVariation($product),
+                $product
+            );
 
             if (!empty($variations)) {
                 $params['variants'] = $variations;
@@ -453,7 +419,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                     continue;
                 }
 
-                $this->attributeHelper->saveAttributes(
+                $this->attributeDataPersister->saveAttributes(
                     (int) $variant['id'],
                     $product->getAttributes(),
                     's_articles_attributes'
@@ -488,7 +454,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
 
                     $attributes = array_merge($product->getAttributes(), $variation->getAttributes());
 
-                    $this->attributeHelper->saveAttributes(
+                    $this->attributeDataPersister->saveAttributes(
                         (int) $variant->getId(),
                         $attributes,
                         's_articles_attributes'
@@ -498,7 +464,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
 
                     $attributes = array_merge($product->getAttributes(), $variation->getAttributes());
 
-                    $this->attributeHelper->saveAttributes(
+                    $this->attributeDataPersister->saveAttributes(
                         (int) $variant['id'],
                         $attributes,
                         's_articles_attributes'
@@ -528,8 +494,8 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             if (null !== $mainVariation) {
                 $entityManager = Shopware()->Container()->get('models');
 
-                $productRepository = $entityManager->getRepository(\Shopware\Models\Article\Article::class);
-                $detailRepository = $entityManager->getRepository(Detail::class);
+                $productRepository = $entityManager->getRepository(ArticleModel::class);
+                $detailRepository = $entityManager->getRepository(DetailModel::class);
 
                 $mainDetail = $detailRepository->findOneBy(['number' => $mainVariation->getNumber()]);
 
@@ -541,7 +507,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             }
         }
 
-        $resource->writeTranslations($productModel->getId(), $translations);
+        $this->translationDataPersister->writeProductTranslations($product);
 
         return true;
     }
@@ -564,7 +530,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
 
     /**
      * @param Product $product
-     * @param int     $type
+     * @param int $type
      *
      * @return array
      */
@@ -618,14 +584,14 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         /**
          * @var Repository $groupRepository
          */
-        $groupRepository = Shopware()->Models()->getRepository(\Shopware\Models\Property\Group::class);
+        $groupRepository = Shopware()->Models()->getRepository(GroupModel::class);
         /**
-         * @var \Shopware\Models\Property\Group $propertyGroup
+         * @var Group $propertyGroup
          */
         $propertyGroup = $groupRepository->findOneBy(['name' => 'PlentyConnector']);
 
         if (null === $propertyGroup) {
-            $propertyGroup = new \Shopware\Models\Property\Group();
+            $propertyGroup = new GroupModel();
             $propertyGroup->setName('PlentyConnector');
             $propertyGroup->setPosition(1);
             $propertyGroup->setComparable(true);

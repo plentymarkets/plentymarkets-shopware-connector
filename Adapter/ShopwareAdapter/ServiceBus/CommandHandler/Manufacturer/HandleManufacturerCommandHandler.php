@@ -12,6 +12,7 @@ use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 use PlentyConnector\Connector\TransferObject\Media\Media;
 use Shopware\Components\Api\Exception\NotFoundException as ManufacturerNotFoundException;
 use Shopware\Components\Api\Resource\Manufacturer as ManufacturerResource;
+use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
 use ShopwareAdapter\Helper\AttributeHelper;
 use ShopwareAdapter\ShopwareAdapter;
 
@@ -31,25 +32,24 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
     private $identityService;
 
     /**
-     * @var AttributeHelper
+     * @var AttributeDataPersisterInterface
      */
-    private $attributeHelper;
+    private $attributePersister;
 
     /**
      * HandleManufacturerCommandHandler constructor.
-     *
-     * @param ManufacturerResource     $resource
+     * @param ManufacturerResource $resource
      * @param IdentityServiceInterface $identityService
-     * @param AttributeHelper          $attributeHelper
+     * @param AttributeDataPersisterInterface $attributePersister
      */
     public function __construct(
         ManufacturerResource $resource,
         IdentityServiceInterface $identityService,
-        AttributeHelper $attributeHelper
+        AttributeDataPersisterInterface $attributePersister
     ) {
         $this->resource = $resource;
         $this->identityService = $identityService;
-        $this->attributeHelper = $attributeHelper;
+        $this->attributePersister = $attributePersister;
     }
 
     /**
@@ -138,7 +138,7 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
             $this->resource->update($identity->getAdapterIdentifier(), $params);
         }
 
-        $this->attributeHelper->saveAttributes(
+        $this->attributePersister->saveAttributes(
             (int) $identity->getAdapterIdentifier(),
             $manufacturer->getAttributes(),
             's_articles_supplier_attributes'

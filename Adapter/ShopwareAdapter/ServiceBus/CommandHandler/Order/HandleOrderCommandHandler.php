@@ -16,6 +16,7 @@ use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use Psr\Log\LoggerInterface;
 use Shopware\Components\Api\Resource\Order as OrderResource;
 use Shopware\Models\Order\Status;
+use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
 use ShopwareAdapter\Helper\AttributeHelper;
 use ShopwareAdapter\ShopwareAdapter;
 
@@ -40,9 +41,9 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     private $orderResource;
 
     /**
-     * @var AttributeHelper
+     * @var AttributeDataPersisterInterface
      */
-    private $attributeHelper;
+    private $attributePersister;
 
     /**
      * HandleOrderCommandHandler constructor.
@@ -138,7 +139,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
 
         $this->orderResource->update($orderIdentity->getAdapterIdentifier(), $params);
 
-        $this->attributeHelper->saveAttributes(
+        $this->attributePersister->saveAttributes(
             (int) $orderIdentity->getAdapterIdentifier(),
             $order->getAttributes(),
             's_order_attributes'

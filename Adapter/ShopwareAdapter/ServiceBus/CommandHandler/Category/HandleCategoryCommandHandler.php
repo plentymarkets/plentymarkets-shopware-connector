@@ -4,6 +4,7 @@ namespace ShopwareAdapter\ServiceBus\CommandHandler\Category;
 
 use DeepCopy\DeepCopy;
 use Doctrine\ORM\EntityManagerInterface;
+use InvalidArgumentException;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException as IdentityNotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\Category\HandleCategoryCommand;
@@ -24,7 +25,7 @@ use Shopware\Models\Category\Category as CategoryModel;
 use Shopware\Models\Category\Repository as CategoryRepository;
 use Shopware\Models\Shop\Repository as ShopRepository;
 use Shopware\Models\Shop\Shop as ShopModel;
-use ShopwareAdapter\Helper\AttributeHelper;
+use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -63,32 +64,31 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     private $shopRepository;
 
     /**
-     * @var AttributeHelper
-     */
-    private $attributeHelper;
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
 
     /**
+     * @var AttributeDataPersisterInterface
+     */
+    private $attributePersister;
+
+    /**
      * HandleCategoryCommandHandler constructor.
-     *
-     * @param CategoryResource           $resource
-     * @param IdentityServiceInterface   $identityService
+     * @param CategoryResource $resource
+     * @param IdentityServiceInterface $identityService
      * @param TranslationHelperInterface $translationHelper
-     * @param EntityManagerInterface     $entityManager
-     * @param AttributeHelper            $attributeHelper
-     * @param LoggerInterface            $logger
+     * @param EntityManagerInterface $entityManager
+     * @param LoggerInterface $logger
+     * @param AttributeDataPersisterInterface $attributePersister
      */
     public function __construct(
         CategoryResource $resource,
         IdentityServiceInterface $identityService,
         TranslationHelperInterface $translationHelper,
         EntityManagerInterface $entityManager,
-        AttributeHelper $attributeHelper,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        AttributeDataPersisterInterface $attributePersister
     ) {
         $this->resource = $resource;
         $this->identityService = $identityService;
@@ -96,8 +96,8 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         $this->entityManager = $entityManager;
         $this->categoryRepository = $entityManager->getRepository(CategoryModel::class);
         $this->shopRepository = $entityManager->getRepository(ShopModel::class);
-        $this->attributeHelper = $attributeHelper;
         $this->logger = $logger;
+        $this->attributePersister = $attributePersister;
     }
 
     /**
@@ -157,7 +157,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
      * @param Category $category
      * @param Identity $shopIdentity
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     private function prepareCategory(Category $category, Identity $shopIdentity)
     {
@@ -168,7 +168,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         });
 
         if (!empty($shopAttribute)) {
-            throw new \InvalidArgumentException('shopIdentifier is not a allowed attribute key');
+            throw new InvalidArgumentException('shopIdentifier is not a allowed attribute key');
         }
 
         $attributes[] = Attribute::fromArray([
@@ -202,8 +202,14 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
 
         $this->prepareCategory($category, $shopIdentity);
 
+        $shopLocale = $shop->getLocale();
+
+        if (null === $shopLocale) {
+            throw new InvalidArgumentException('shop without locale assignment');
+        }
+
         $languageIdentity = $this->identityService->findOneBy([
-            'adapterIdentifier' => (string) $shop->getLocale()->getId(),
+            'adapterIdentifier' => (string) $shopLocale->getId(),
             'adapterName' => ShopwareAdapter::NAME,
             'objectType' => Language::TYPE,
         ]);
@@ -220,7 +226,13 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         }
 
         if (null === $category->getParentIdentifier()) {
-            $parentCategory = $shop->getCategory()->getId();
+            $mainCategory = $shop->getCategory();
+
+            if (null === $mainCategory) {
+                throw new InvalidArgumentException('shop without main cateogry assignment');
+            }
+
+            $parentCategory = $mainCategory->getId();
         } else {
             $parentCategoryIdentities = $this->identityService->findBy([
                 'objectIdentifier' => (string) $category->getParentIdentifier(),
@@ -241,7 +253,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             }
 
             if (null === $parentCategoryIdentity) {
-                throw new \InvalidArgumentException('missing parent category - ' . $category->getParentIdentifier());
+                throw new InvalidArgumentException('missing parent category - ' . $category->getParentIdentifier());
             }
 
             $parentCategory = $parentCategoryIdentity->getAdapterIdentifier();
@@ -309,7 +321,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             ]);
 
             if (null === $mediaIdentity) {
-                throw new NotFoundException();
+                throw new IdentityNotFoundException('media identity noct found');
             }
 
             $parans['media']['mediaId'] = $mediaIdentity->getAdapterIdentifier();
@@ -338,7 +350,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             $this->resource->update($categoryIdentity->getAdapterIdentifier(), $parans);
         }
 
-        $this->attributeHelper->saveAttributes(
+        $this->attributePersister->saveAttributes(
             (int) $categoryIdentity->getAdapterIdentifier(),
             $category->getAttributes(),
             's_categories_attributes'
