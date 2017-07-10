@@ -63,10 +63,10 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
     /**
      * TranslationHelper constructor.
      *
-     * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface $logger
-     * @param EntityManagerInterface $entityManager
-     * @param TranslationHelperInterface $translationHelper
+     * @param IdentityServiceInterface        $identityService
+     * @param LoggerInterface                 $logger
+     * @param EntityManagerInterface          $entityManager
+     * @param TranslationHelperInterface      $translationHelper
      * @param Shopware_Components_Translation $translationManager
      */
     public function __construct(
@@ -83,6 +83,65 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
         $this->propertyValueRepository = $entityManager->getRepository(PropertyValueModel::class);
         $this->translationHelper = $translationHelper;
         $this->translationManager = $translationManager;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function writeProductTranslations(Product $product)
+    {
+        $productIdentity = $this->identityService->findOneBy([
+            'objectIdentifier' => $product->getIdentifier(),
+            'objectType' => Product::TYPE,
+            'adapterName' => ShopwareAdapter::NAME,
+        ]);
+
+        foreach ($this->translationHelper->getLanguageIdentifiers($product) as $languageIdentifier) {
+            /**
+             * @var Product $translatedProduct
+             */
+            $translatedProduct = $this->translationHelper->translate($languageIdentifier, $product);
+
+            $languageIdentity = $this->identityService->findOneBy([
+                'adapterName' => ShopwareAdapter::NAME,
+                'objectType' => Language::TYPE,
+                'objectIdentifier' => $languageIdentifier,
+            ]);
+
+            if (null === $languageIdentity) {
+                $this->logger->notice('langauge not mapped - ' . $languageIdentifier);
+
+                continue;
+            }
+
+            $translation = [
+                'languageIdentifier' => $languageIdentity->getAdapterIdentifier(),
+                'name' => $translatedProduct->getName(),
+                'description' => $translatedProduct->getDescription(),
+                'descriptionLong' => $translatedProduct->getLongDescription(),
+                'keywords' => $translatedProduct->getMetaKeywords(),
+            ];
+
+            foreach ($product->getAttributes() as $attribute) {
+                /**
+                 * @var Attribute $translatedAttribute
+                 */
+                $translatedAttribute = $this->translationHelper->translate($languageIdentifier, $attribute);
+
+                $key = 'plentyConnector' . ucfirst($attribute->getKey());
+                $translation[$key] = $translatedAttribute->getValue();
+            }
+
+            $this->writeTranslations('article', $productIdentity->getAdapterIdentifier(), $translation);
+        }
+
+        foreach ($product->getProperties() as $property) {
+            $this->writePropertyGroupTranslations($property);
+
+            foreach ($property->getValues() as $value) {
+                $this->writePropertyValueTranslations($value);
+            }
+        }
     }
 
     /**
@@ -170,68 +229,9 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function writeProductTranslations(Product $product)
-    {
-        $productIdentity = $this->identityService->findOneBy([
-            'objectIdentifier' => $product->getIdentifier(),
-            'objectType' => Product::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
-        ]);
-
-        foreach ($this->translationHelper->getLanguageIdentifiers($product) as $languageIdentifier) {
-            /**
-             * @var Product $translatedProduct
-             */
-            $translatedProduct = $this->translationHelper->translate($languageIdentifier, $product);
-
-            $languageIdentity = $this->identityService->findOneBy([
-                'adapterName' => ShopwareAdapter::NAME,
-                'objectType' => Language::TYPE,
-                'objectIdentifier' => $languageIdentifier,
-            ]);
-
-            if (null === $languageIdentity) {
-                $this->logger->notice('langauge not mapped - ' . $languageIdentifier);
-
-                continue;
-            }
-
-            $translation = [
-                'languageIdentifier' => $languageIdentity->getAdapterIdentifier(),
-                'name' => $translatedProduct->getName(),
-                'description' => $translatedProduct->getDescription(),
-                'descriptionLong' => $translatedProduct->getLongDescription(),
-                'keywords' => $translatedProduct->getMetaKeywords(),
-            ];
-
-            foreach ($product->getAttributes() as $attribute) {
-                /**
-                 * @var Attribute $translatedAttribute
-                 */
-                $translatedAttribute = $this->translationHelper->translate($languageIdentifier, $attribute);
-
-                $key = 'plentyConnector' . ucfirst($attribute->getKey());
-                $translation[$key] = $translatedAttribute->getValue();
-            }
-
-            $this->writeTranslations('article', $productIdentity->getAdapterIdentifier(), $translation);
-        }
-
-        foreach ($product->getProperties() as $property) {
-            $this->writePropertyGroupTranslations($property);
-
-            foreach ($property->getValues() as $value) {
-                $this->writePropertyValueTranslations($value);
-            }
-        }
-    }
-
-    /**
      * @param string $type
-     * @param int $primaryKey
-     * @param array $translation
+     * @param int    $primaryKey
+     * @param array  $translation
      */
     private function writeTranslations($type, $primaryKey, array $translation)
     {

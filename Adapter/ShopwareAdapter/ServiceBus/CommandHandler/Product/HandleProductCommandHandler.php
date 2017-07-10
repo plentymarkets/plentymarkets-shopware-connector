@@ -73,12 +73,13 @@ class HandleProductCommandHandler implements CommandHandlerInterface
 
     /**
      * HandleProductCommandHandler constructor.
-     * @param IdentityServiceInterface $identityService
-     * @param AttributeHelper $attributeHelper
+     *
+     * @param IdentityServiceInterface                 $identityService
+     * @param AttributeHelper                          $attributeHelper
      * @param ConfiguratorSetRequestGeneratorInterface $configuratorSetRequestGenerator
-     * @param VariationRequestGeneratorInterface $variationRequestGenerator
-     * @param AttributeDataPersisterInterface $attributeDataPersister
-     * @param TranslationDataPersisterInterface $translationDataPersister
+     * @param VariationRequestGeneratorInterface       $variationRequestGenerator
+     * @param AttributeDataPersisterInterface          $attributeDataPersister
+     * @param TranslationDataPersisterInterface        $translationDataPersister
      */
     public function __construct(
         IdentityServiceInterface $identityService,
@@ -114,7 +115,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
     {
         /**
          * @var HandleCommandInterface $command
-         * @var Product $product
+         * @var Product                $product
          */
         $product = $command->getTransferObject();
 
@@ -530,7 +531,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
 
     /**
      * @param Product $product
-     * @param int $type
+     * @param int     $type
      *
      * @return array
      */

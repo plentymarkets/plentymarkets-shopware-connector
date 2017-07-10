@@ -37,8 +37,8 @@ class AttributeDataPersister implements AttributeDataPersisterInterface
     /**
      * AttributeDataPersister constructor.
      *
-     * @param CrudService $attributeService
-     * @param ModelManager $entityManager
+     * @param CrudService           $attributeService
+     * @param ModelManager          $entityManager
      * @param ShopwareDataPersister $shopwareDataPersister
      */
     public function __construct(
@@ -49,20 +49,6 @@ class AttributeDataPersister implements AttributeDataPersisterInterface
         $this->attributeService = $attributeService;
         $this->entityManager = $entityManager;
         $this->shopwareDataPersister = $shopwareDataPersister;
-    }
-
-    /**
-     * @param Attribute $attribute
-     *
-     * @return string
-     */
-    private function getAttributeKey(Attribute $attribute)
-    {
-        $key = iconv('UTF-8', 'ASCII//TRANSLIT', $attribute->getKey());
-
-        $attribute_key = strtolower(preg_replace('/[A-Z]/', '_\\0', lcfirst($key)));
-
-        return $this->prefix . $attribute_key;
     }
 
     /**
@@ -91,7 +77,21 @@ class AttributeDataPersister implements AttributeDataPersisterInterface
 
     /**
      * @param Attribute $attribute
-     * @param string $table
+     *
+     * @return string
+     */
+    private function getAttributeKey(Attribute $attribute)
+    {
+        $key = iconv('UTF-8', 'ASCII//TRANSLIT', $attribute->getKey());
+
+        $attribute_key = strtolower(preg_replace('/[A-Z]/', '_\\0', lcfirst($key)));
+
+        return $this->prefix . $attribute_key;
+    }
+
+    /**
+     * @param Attribute $attribute
+     * @param string    $table
      */
     private function prepareAttribute(Attribute $attribute, $table)
     {

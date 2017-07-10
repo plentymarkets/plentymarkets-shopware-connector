@@ -8,9 +8,9 @@ namespace ShopwareAdapter\DataPersister\Attribute;
 interface AttributeDataPersisterInterface
 {
     /**
-     * @param int $identifier
+     * @param int         $identifier
      * @param Attribute[] $attributes
-     * @param string $table
+     * @param string      $table
      */
     public function saveAttributes($identifier, array $attributes, $table);
 }

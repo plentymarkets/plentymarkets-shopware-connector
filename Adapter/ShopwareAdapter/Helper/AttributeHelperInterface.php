@@ -1,6 +1,5 @@
 <?php
 
-
 namespace ShopwareAdapter\Helper;
 
 use PlentyConnector\Connector\TransferObject\AttributableInterface;

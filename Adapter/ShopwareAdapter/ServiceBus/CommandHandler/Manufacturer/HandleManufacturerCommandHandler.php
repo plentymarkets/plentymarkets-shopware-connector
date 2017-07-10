@@ -13,7 +13,6 @@ use PlentyConnector\Connector\TransferObject\Media\Media;
 use Shopware\Components\Api\Exception\NotFoundException as ManufacturerNotFoundException;
 use Shopware\Components\Api\Resource\Manufacturer as ManufacturerResource;
 use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
-use ShopwareAdapter\Helper\AttributeHelper;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -38,8 +37,9 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
 
     /**
      * HandleManufacturerCommandHandler constructor.
-     * @param ManufacturerResource $resource
-     * @param IdentityServiceInterface $identityService
+     *
+     * @param ManufacturerResource            $resource
+     * @param IdentityServiceInterface        $identityService
      * @param AttributeDataPersisterInterface $attributePersister
      */
     public function __construct(

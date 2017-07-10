@@ -50,10 +50,11 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
 
     /**
      * HandleMediaCommandHandler constructor.
-     * @param MediaResource $resource
-     * @param MediaService $mediaService
-     * @param IdentityServiceInterface $identityService
-     * @param AttributeHelper $attributeHelper
+     *
+     * @param MediaResource                   $resource
+     * @param MediaService                    $mediaService
+     * @param IdentityServiceInterface        $identityService
+     * @param AttributeHelper                 $attributeHelper
      * @param AttributeDataPersisterInterface $attributePersister
      */
     public function __construct(

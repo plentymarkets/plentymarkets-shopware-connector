@@ -75,11 +75,12 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
 
     /**
      * HandleCategoryCommandHandler constructor.
-     * @param CategoryResource $resource
-     * @param IdentityServiceInterface $identityService
-     * @param TranslationHelperInterface $translationHelper
-     * @param EntityManagerInterface $entityManager
-     * @param LoggerInterface $logger
+     *
+     * @param CategoryResource                $resource
+     * @param IdentityServiceInterface        $identityService
+     * @param TranslationHelperInterface      $translationHelper
+     * @param EntityManagerInterface          $entityManager
+     * @param LoggerInterface                 $logger
      * @param AttributeDataPersisterInterface $attributePersister
      */
     public function __construct(
