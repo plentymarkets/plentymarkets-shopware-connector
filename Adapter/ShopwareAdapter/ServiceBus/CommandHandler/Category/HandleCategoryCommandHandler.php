@@ -286,7 +286,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             }
         }
 
-        $parans = [
+        $params = [
             'active' => $category->getActive(),
             'position' => $category->getPosition(),
             'name' => $category->getName(),
@@ -312,7 +312,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
                 throw new NotFoundException();
             }
 
-            $parans['media']['mediaId'] = $mediaIdentity->getAdapterIdentifier();
+            $params['media']['mediaId'] = $mediaIdentity->getAdapterIdentifier();
         }
 
         if (null !== $categoryIdentity) {
@@ -326,7 +326,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         }
 
         if (null === $categoryIdentity) {
-            $newCategory = $this->resource->create($parans);
+            $newCategory = $this->resource->create($params);
 
             $categoryIdentity = $this->identityService->create(
                 (string) $category->getIdentifier(),
@@ -335,7 +335,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
                 ShopwareAdapter::NAME
             );
         } else {
-            $this->resource->update($categoryIdentity->getAdapterIdentifier(), $parans);
+            $this->resource->update($categoryIdentity->getAdapterIdentifier(), $params);
         }
 
         $this->attributeHelper->saveAttributes(
