@@ -2,7 +2,6 @@
 
 namespace ShopwareAdapter\DataPersister\Translation;
 
-use Doctrine\ORM\EntityManagerInterface;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentyConnector\Connector\TransferObject\Product\Product;
@@ -11,13 +10,8 @@ use PlentyConnector\Connector\TransferObject\Product\Property\Value\Value;
 use PlentyConnector\Connector\Translation\TranslationHelperInterface;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use Psr\Log\LoggerInterface;
-use Shopware\Components\Model\ModelRepository;
-use Shopware\Models\Property\Option as PropertyGroupModel;
-use Shopware\Models\Property\Repository as PropertyGroupRepository;
-use Shopware\Models\Property\Value as PropertyValueModel;
-use Shopware\Models\Shop\Repository as ShopRepository;
-use Shopware\Models\Shop\Shop as ShopModel;
 use Shopware_Components_Translation;
+use ShopwareAdapter\DataProvider\Translation\TranslationDataProviderInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -36,19 +30,9 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
     private $logger;
 
     /**
-     * @var ShopRepository
+     * @var TranslationDataProviderInterface
      */
-    private $shopRepository;
-
-    /**
-     * @var PropertyGroupRepository
-     */
-    private $propertyGroupRepository;
-
-    /**
-     * @var ModelRepository
-     */
-    private $propertyValueRepository;
+    private $dataProvider;
 
     /**
      * @var TranslationHelperInterface
@@ -58,31 +42,29 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
     /**
      * @var Shopware_Components_Translation
      */
-    private $translationManager;
+    private $shopwareTranslationManager;
 
     /**
      * TranslationHelper constructor.
      *
-     * @param IdentityServiceInterface        $identityService
-     * @param LoggerInterface                 $logger
-     * @param EntityManagerInterface          $entityManager
-     * @param TranslationHelperInterface      $translationHelper
-     * @param Shopware_Components_Translation $translationManager
+     * @param IdentityServiceInterface         $identityService
+     * @param LoggerInterface                  $logger
+     * @param TranslationDataProviderInterface $dataProvider
+     * @param TranslationHelperInterface       $translationHelper
+     * @param Shopware_Components_Translation  $shopwareTranslationManager
      */
     public function __construct(
         IdentityServiceInterface $identityService,
         LoggerInterface $logger,
-        EntityManagerInterface $entityManager,
+        TranslationDataProviderInterface $dataProvider,
         TranslationHelperInterface $translationHelper,
-        Shopware_Components_Translation $translationManager
+        Shopware_Components_Translation $shopwareTranslationManager
     ) {
         $this->identityService = $identityService;
         $this->logger = $logger;
-        $this->shopRepository = $entityManager->getRepository(ShopModel::class);
-        $this->propertyGroupRepository = $entityManager->getRepository(PropertyGroupModel::class);
-        $this->propertyValueRepository = $entityManager->getRepository(PropertyValueModel::class);
+        $this->dataProvider = $dataProvider;
         $this->translationHelper = $translationHelper;
-        $this->translationManager = $translationManager;
+        $this->shopwareTranslationManager = $shopwareTranslationManager;
     }
 
     /**
@@ -115,7 +97,7 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
             }
 
             $translation = [
-                'languageIdentifier' => $languageIdentity->getAdapterIdentifier(),
+                'languageIdentity' => $languageIdentity,
                 'name' => $translatedProduct->getName(),
                 'description' => $translatedProduct->getDescription(),
                 'descriptionLong' => $translatedProduct->getLongDescription(),
@@ -149,9 +131,7 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
      */
     private function writePropertyValueTranslations(Value $value)
     {
-        $propertyValueModel = $this->propertyValueRepository->findOneBy([
-            'value' => $value->getValue(),
-        ]);
+        $propertyValueModel = $this->dataProvider->getPropertyValueByValue($value);
 
         if (null === $propertyValueModel) {
             $this->logger->notice('property value not found - ' . $value->getValue());
@@ -178,7 +158,7 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
             }
 
             $translation = [
-                'languageIdentifier' => $languageIdentity->getAdapterIdentifier(),
+                'languageIdentity' => $languageIdentity,
                 'optionValue' => $translatedPropertyValue->getValue(),
             ];
 
@@ -191,12 +171,10 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
      */
     private function writePropertyGroupTranslations(Property $property)
     {
-        $propertyGroupModel = $this->propertyGroupRepository->findOneBy([
-            'name' => $property->getName(),
-        ]);
+        $propertyOptionModel = $this->dataProvider->getPropertyOptionByName($property);
 
-        if (null === $propertyGroupModel) {
-            $this->logger->notice('property group not found - ' . $property->getName());
+        if (null === $propertyOptionModel) {
+            $this->logger->notice('property option not found - ' . $property->getName());
 
             return;
         }
@@ -220,11 +198,11 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
             }
 
             $translation = [
-                'languageIdentifier' => $languageIdentity->getAdapterIdentifier(),
+                'languageIdentity' => $languageIdentity,
                 'optionName' => $translatedProperty->getName(),
             ];
 
-            $this->writeTranslations('propertyoption', (int) $propertyGroupModel->getId(), $translation);
+            $this->writeTranslations('propertyoption', (int) $propertyOptionModel->getId(), $translation);
         }
     }
 
@@ -235,12 +213,10 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
      */
     private function writeTranslations($type, $primaryKey, array $translation)
     {
-        $shops = $this->shopRepository->findBy([
-            'locale' => $translation['languageIdentifier'],
-        ]);
+        $shops = $this->dataProvider->getShopsByLocaleIdentitiy($translation['languageIdentity']);
 
         foreach ($shops as $shop) {
-            $this->translationManager->write($shop->getId(), $type, $primaryKey, $translation);
+            $this->shopwareTranslationManager->write($shop->getId(), $type, $primaryKey, $translation);
         }
     }
 }

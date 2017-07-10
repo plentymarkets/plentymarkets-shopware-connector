@@ -16,12 +16,16 @@
             <argument type="service" id="models" />
         </service>
 
+        <service id="shopware_adapter.data_provider.translation" class="ShopwareAdapter\DataProvider\Translation\TranslationDataProvider">
+            <argument type="service" id="models" />
+        </service>
+
         <!-- Data Persister -->
 
         <service id="shopware_adapter.data_persister.translation" class="ShopwareAdapter\DataPersister\Translation\TranslationDataPersister">
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plenty_connector.logger" />
-            <argument type="service" id="models" />
+            <argument type="service" id="shopware_adapter.data_provider.translation" />
             <argument type="service" id="plenty_connector.translation_helper" />
             <argument type="service" id="shopware_adapter.shopware_translation_component" />
         </service>
