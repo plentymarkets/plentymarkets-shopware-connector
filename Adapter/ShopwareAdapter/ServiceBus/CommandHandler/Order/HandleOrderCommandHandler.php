@@ -17,7 +17,6 @@ use Psr\Log\LoggerInterface;
 use Shopware\Components\Api\Resource\Order as OrderResource;
 use Shopware\Models\Order\Status;
 use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
-use ShopwareAdapter\Helper\AttributeHelper;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -48,10 +47,10 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     /**
      * HandleOrderCommandHandler constructor.
      *
-     * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface          $logger
-     * @param OrderResource            $orderResource
-     * @param AttributeDataPersisterInterface          $attributePersister
+     * @param IdentityServiceInterface        $identityService
+     * @param LoggerInterface                 $logger
+     * @param OrderResource                   $orderResource
+     * @param AttributeDataPersisterInterface $attributePersister
      */
     public function __construct(
         IdentityServiceInterface $identityService,
