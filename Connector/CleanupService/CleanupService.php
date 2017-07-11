@@ -2,7 +2,6 @@
 
 namespace PlentyConnector\Connector\CleanupService;
 
-use Exception;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\CommandFactory\CommandFactoryInterface;
 use PlentyConnector\Connector\ServiceBus\CommandFactory\Exception\MissingCommandException;
@@ -226,7 +225,7 @@ class CleanupService implements CleanupServiceInterface
                     CommandType::REMOVE,
                     $identity->getObjectIdentifier()
                 ));
-            };
+            }
         }
     }
 }
