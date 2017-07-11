@@ -7,6 +7,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Translation for Backend Modul
 - extended Cachereload on activate
 
+### Changed
+- optimized the cleanup service to be more error resistent
+
 ### Fixed
 - Fatal error when variation unit is not mapped
 
