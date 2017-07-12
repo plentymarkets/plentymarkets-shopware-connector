@@ -343,16 +343,9 @@ class ProductResponseParser implements ProductResponseParserInterface
             $name = $texts[0]['name1'];
         }
 
+        $alternate = $name;
         if (!empty($entry['names'][0]['alternate'])) {
             $alternate = $entry['names'][0]['alternate'];
-        } else {
-            $alternate = '';
-
-            foreach ($texts as $productText) {
-                if ($entry['names'][0]['lang'] === $productText['lang']) {
-                    $alternate = $productText['name1'];
-                }
-            }
         }
 
         $media = $mediaResponseParser->parse([

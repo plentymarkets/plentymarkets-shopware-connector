@@ -2,9 +2,8 @@
 
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Media;
 
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
-use PlentyConnector\Adapter\ShopwareAdapter\Helper\AttributeHelper;
+use PlentyConnector\Connector\ValueObject\Identity\Identity;
+use ShopwareAdapter\Helper\AttributeHelper;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
@@ -13,14 +12,12 @@ use PlentyConnector\Connector\ServiceBus\Command\Media\HandleMediaCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\TransferObject\Media\Media;
 use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
-use RuntimeException;
 use Shopware\Bundle\MediaBundle\MediaService;
+use Shopware\Components\Api\Exception\NotFoundException as MediaNotFoundException;
 use Shopware\Components\Api\Resource\Media as MediaResource;
-use Shopware\Models\Media\Album as AlbumModel;
-use Shopware\Models\Media\Media as MediaModel;
-use Shopware\Models\Media\Repository as MediaRepository;
+use Shopware\Models\Media\Album;
 use ShopwareAdapter\ShopwareAdapter;
-use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class HandleMediaCommandHandler.
@@ -87,55 +84,67 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
          */
         $media = $command->getTransferObject();
 
+        $params = [
+            'album' => Album::ALBUM_ARTICLE,
+            'file' => $this->uploadFile($media),
+            'description' => $media->getName(),
+        ];
+
+        $this->attributeHelper->addFieldAsAttribute($media, 'alternateName');
+        $this->attributeHelper->addFieldAsAttribute($media, 'name');
+        $this->attributeHelper->addFieldAsAttribute($media, 'filename');
+        $this->attributeHelper->addFieldAsAttribute($media, 'hash');
+
+        if (null !== $media->getMediaCategoryIdentifier()) {
+            $mediaCategoryIdentity = $this->identityService->findOneBy([
+                'objectIdentifier' => $media->getMediaCategoryIdentifier(),
+                'objectType' => MediaCategory::TYPE,
+                'adapterName' => ShopwareAdapter::NAME,
+            ]);
+
+            if (null === $mediaCategoryIdentity) {
+                throw new NotFoundException('missing media category for adapter');
+            }
+
+            $params['album'] = $mediaCategoryIdentity->getAdapterIdentifier();
+        }
+
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => (string) $media->getIdentifier(),
             'objectType' => Media::TYPE,
             'adapterName' => ShopwareAdapter::NAME,
         ]);
 
-        /**
-         * @var EntityManagerInterface $entityManager
-         */
-        $entityManager = Shopware()->Container()->get('models');
+        if (null !== $identity) {
+            try {
+                $this->resource->delete($identity->getAdapterIdentifier());
+            } catch (MediaNotFoundException $exception) {
+                // fail silently
+            }
 
-        $this->attributeHelper->addFieldAsAttribute($media, 'alternateName');
-        $this->attributeHelper->addFieldAsAttribute($media, 'hash');
+            $identities = $this->identityService->findBy([
+                'objectIdentifier' => $identity->getObjectIdentifier(),
+                'objectType' => Media::TYPE,
+                'adapterIdentifier' => $identity->getAdapterIdentifier(),
+                'adapterName' => $identity->getAdapterName(),
+            ]);
 
-        $mediaObject = $this->getExistingMedia($media);
-
-        if (null === $mediaObject) {
-            $mediaObject = new MediaModel();
-            $mediaObject->setCreated(new \DateTime());
-            $mediaObject->setUserId(0);
+            array_walk($identities, function (Identity $identity) {
+                $this->identityService->remove($identity);
+            });
         }
 
-        if (null !== $media->getName()) {
-            $mediaObject->setName($media->getName());
-        } else {
-            $mediaObject->setName($media->getFilename());
-        }
+        $mediaModel = $this->resource->create($params);
 
-        $mediaObject->setDescription('');
-
-        $mediaObject->setAlbum($this->getAlbum($media));
-
-        $file = $this->uploadFile($media);
-        //$mediaObject->setFile($file);
-
-        $entityManager->persist($mediaObject);
-        $entityManager->flush();
-
-        if (null === $identity) {
-            $identity = $this->identityService->create(
-                $media->getIdentifier(),
-                Media::TYPE,
-                (string) $mediaObject->getId(),
-                ShopwareAdapter::NAME
-            );
-        }
+        $this->identityService->create(
+            $media->getIdentifier(),
+            Media::TYPE,
+            (string) $mediaModel->getId(),
+            ShopwareAdapter::NAME
+        );
 
         $this->attributeHelper->saveAttributes(
-            (int) $identity->getAdapterIdentifier(),
+            (int) $mediaModel->getId(),
             $media->getAttributes(),
             's_media_attributes'
         );
@@ -146,48 +155,7 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
     /**
      * @param Media $media
      *
-     * @return null|MediaModel
-     */
-    private function getExistingMedia(Media $media)
-    {
-        $identity = $this->identityService->findOneBy([
-            'objectIdentifier' => (string) $media->getIdentifier(),
-            'objectType' => Media::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
-        ]);
-
-        if (null === $identity) {
-            return null;
-        }
-
-        /**
-         * @var EntityManagerInterface $entityManager
-         */
-        $entityManager = Shopware()->Container()->get('models');
-
-        /**
-         * @var MediaRepository $mediaRepository
-         */
-        $mediaRepository = $entityManager->getRepository(MediaModel::class);
-
-        /**
-         * @var null|MediaModel $mediaObject
-         */
-        $mediaObject = $mediaRepository->find($identity->getAdapterIdentifier());
-
-        if (null === $mediaObject) {
-            $this->identityService->remove($identity);
-
-            return null;
-        }
-
-        return $mediaObject;
-    }
-
-    /**
-     * @param Media $media
-     *
-     * @return File
+     * @return UploadedFile
      */
     private function uploadFile(Media $media)
     {
@@ -196,51 +164,6 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
 
         file_put_contents($filePath, base64_decode($media->getContent()));
 
-        return new File($filePath, true);
-    }
-
-    /**
-     * @param Media $media
-     *
-     * @throws NotFoundException
-     *
-     * @return null|AlbumModel
-     */
-    private function getAlbum(Media $media)
-    {
-        if (null === $media->getMediaCategoryIdentifier()) {
-            throw new NotFoundException('missing media category');
-        }
-
-        /**
-         * @var EntityManagerInterface $entityManager
-         */
-        $entityManager = Shopware()->Container()->get('models');
-
-        $mediaCategoryIdentity = $this->identityService->findOneBy([
-            'objectIdentifier' => $media->getMediaCategoryIdentifier(),
-            'objectType' => MediaCategory::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
-        ]);
-
-        if (null === $mediaCategoryIdentity) {
-            throw new NotFoundException('missing media category');
-        }
-
-        /**
-         * @var EntityRepository $albumRepository
-         */
-        $albumRepository = $entityManager->getRepository(AlbumModel::class);
-
-        /**
-         * @var null|AlbumModel $album
-         */
-        $album = $albumRepository->find($mediaCategoryIdentity->getAdapterIdentifier());
-
-        if (null === $album) {
-            throw new RuntimeException('invalid media category');
-        }
-
-        return $album;
+        return new UploadedFile($filePath, $media->getFilename());
     }
 }

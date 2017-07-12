@@ -1,6 +1,6 @@
 <?php
 
-namespace PlentyConnector\Adapter\ShopwareAdapter\Helper;
+namespace ShopwareAdapter\Helper;
 
 use Assert\Assertion;
 use PlentyConnector\Connector\TransferObject\AttributableInterface;
