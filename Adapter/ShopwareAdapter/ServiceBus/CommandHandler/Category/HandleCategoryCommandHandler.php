@@ -195,15 +195,24 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
      */
     private function handleCategory(Category $category, Identity $shopIdentity)
     {
-        $shop = $this->shopRepository->find($shopIdentity->getAdapterIdentifier());
-
         $deepCopy = new DeepCopy();
         $category = $deepCopy->copy($category);
+        $shop = $this->shopRepository->find($shopIdentity->getAdapterIdentifier());
+
+        if (null === $shop) {
+            return null;
+        }
 
         $this->prepareCategory($category, $shopIdentity);
 
+        $locale = $shop->getLocale();
+
+        if (null === $locale) {
+            return null;
+        }
+
         $languageIdentity = $this->identityService->findOneBy([
-            'adapterIdentifier' => (string) $shop->getLocale()->getId(),
+            'adapterIdentifier' => (string) $locale->getId(),
             'adapterName' => ShopwareAdapter::NAME,
             'objectType' => Language::TYPE,
         ]);
@@ -220,7 +229,13 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         }
 
         if (null === $category->getParentIdentifier()) {
-            $parentCategory = $shop->getCategory()->getId();
+            $mainCategory = $shop->getCategory();
+
+            if (null === $mainCategory) {
+                return null;
+            }
+
+            $parentCategory = $mainCategory->getId();
         } else {
             $parentCategoryIdentities = $this->identityService->findBy([
                 'objectIdentifier' => (string) $category->getParentIdentifier(),
@@ -309,7 +324,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             ]);
 
             if (null === $mediaIdentity) {
-                throw new NotFoundException();
+                throw new IdentityNotFoundException('media not found - ' . $mediaIdentifier);
             }
 
             $params['media']['mediaId'] = $mediaIdentity->getAdapterIdentifier();
