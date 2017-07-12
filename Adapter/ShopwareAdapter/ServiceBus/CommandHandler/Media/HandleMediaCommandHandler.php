@@ -2,8 +2,6 @@
 
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Media;
 
-use PlentyConnector\Connector\ValueObject\Identity\Identity;
-use ShopwareAdapter\Helper\AttributeHelper;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
@@ -12,10 +10,11 @@ use PlentyConnector\Connector\ServiceBus\Command\Media\HandleMediaCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\TransferObject\Media\Media;
 use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
-use Shopware\Bundle\MediaBundle\MediaService;
+use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Shopware\Components\Api\Exception\NotFoundException as MediaNotFoundException;
 use Shopware\Components\Api\Resource\Media as MediaResource;
 use Shopware\Models\Media\Album;
+use ShopwareAdapter\Helper\AttributeHelper;
 use ShopwareAdapter\ShopwareAdapter;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -28,11 +27,6 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
      * @var MediaResource
      */
     private $resource;
-
-    /**
-     * @var MediaService
-     */
-    private $mediaService;
 
     /**
      * @var IdentityServiceInterface
@@ -48,18 +42,15 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
      * HandleMediaCommandHandler constructor.
      *
      * @param MediaResource            $resource
-     * @param MediaService             $mediaService
      * @param IdentityServiceInterface $identityService
      * @param AttributeHelper          $attributeHelper
      */
     public function __construct(
         MediaResource $resource,
-        MediaService $mediaService,
         IdentityServiceInterface $identityService,
         AttributeHelper $attributeHelper
     ) {
         $this->resource = $resource;
-        $this->mediaService = $mediaService;
         $this->identityService = $identityService;
         $this->attributeHelper = $attributeHelper;
     }
