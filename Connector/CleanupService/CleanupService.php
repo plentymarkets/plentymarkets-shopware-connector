@@ -2,7 +2,6 @@
 
 namespace PlentyConnector\Connector\CleanupService;
 
-use Exception;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\CommandFactory\CommandFactoryInterface;
 use PlentyConnector\Connector\ServiceBus\CommandFactory\Exception\MissingCommandException;
@@ -93,23 +92,15 @@ class CleanupService implements CleanupServiceInterface
     {
         $definitions = $this->getDefinitions();
 
-        array_walk($definitions, function (Definition $definition) {
-            try {
-                $foundElements = $this->collectObjectIdentifiers($definition);
+        foreach ($definitions as $definition) {
+            $foundElements = $this->collectObjectIdentifiers($definition);
 
-                if (!$foundElements) {
-                    $this->removeAllElements($definition);
-                }
-            } catch (Exception $exception) {
-                $this->logger->emergency($exception->getMessage());
+            if (!$foundElements) {
+                $this->removeAllElements($definition);
             }
-        });
-
-        try {
-            $this->removeOrphanedElements();
-        } catch (Exception $exception) {
-            $this->logger->emergency($exception->getMessage());
         }
+
+        $this->removeOrphanedElements();
     }
 
     /**
@@ -188,39 +179,53 @@ class CleanupService implements CleanupServiceInterface
     }
 
     /**
-     * @throws MissingCommandException
-     * @throws MissingCommandGeneratorException
+     * @return array
      */
-    private function removeOrphanedElements()
+    private function groupElementsByAdapterAndType()
     {
         $groups = [];
+
         foreach ($this->elements as $element) {
             $groups[$element['adapterName'] . '_' . $element['type']][] = $element;
         }
 
+        return $groups;
+    }
+
+    /**
+     * @param array $group
+     *
+     * @return Identity[]
+     */
+    private function findOrphanedIdentitiesByGroup(array $group)
+    {
+        $identifiers = array_column($group, 'adapterIdentifier');
+
+        $allIdentities = $this->identityService->findBy([
+            'adapterName' => $group[0]['adapterName'],
+            'objectType' => $group[0]['type'],
+        ]);
+
+        return array_filter($allIdentities, function (Identity $identity) use ($identifiers) {
+            return !in_array($identity->getObjectIdentifier(), $identifiers, true);
+        });
+    }
+
+    private function removeOrphanedElements()
+    {
+        $groups = $this->groupElementsByAdapterAndType();
+
         foreach ($groups as $group) {
-            $adapterName = $group[0]['adapterName'];
-            $objectType = $group[0]['type'];
+            $orphanedIdentities = $this->findOrphanedIdentitiesByGroup($group);
 
-            $identifiers = array_column($group, 'adapterIdentifier');
-
-            $allIdentities = $this->identityService->findBy([
-                'adapterName' => $adapterName,
-                'objectType' => $objectType,
-            ]);
-
-            $orphanedIdentities = array_filter($allIdentities, function (Identity $identity) use ($identifiers) {
-                return !in_array($identity->getObjectIdentifier(), $identifiers, true);
-            });
-
-            array_walk($orphanedIdentities, function (Identity $identity) use ($adapterName, $objectType) {
+            foreach ($orphanedIdentities as $identity) {
                 $this->serviceBus->handle($this->commandFactory->create(
-                    $adapterName,
-                    $objectType,
+                    $group[0]['adapterName'],
+                    $group[0]['type'],
                     CommandType::REMOVE,
                     $identity->getObjectIdentifier()
                 ));
-            });
+            }
         }
     }
 }

@@ -14,7 +14,7 @@ Ext.define('Shopware.apps.PlentyConnector.view.Main', {
     stateful: true,
     stateId: 'plentymarkets-view-main',
 
-    title: '{s name=main/window/title}plentymarkets Shopware Connector{/s}',
+    title: 'plentymarkets Shopware Connector',
 
     initComponent: function () {
         var me = this;

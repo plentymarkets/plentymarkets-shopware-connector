@@ -7,15 +7,15 @@ Ext.define('Shopware.apps.PlentyConnector.model.Settings', {
     fields: [
         // {block name="backend/plentyconnector/model/settings/fields"}{/block}
         {
-            name: 'ApiUrl',
+            name: '{s name=plentyconnector/model/settings/fields/apiurl}{/s}',
             type: 'string'
         },
         {
-            name: 'ApiUsername',
+            name: '{s name=plentyconnector/model/settings/fields/apiusername}{/s}',
             type: 'string'
         },
         {
-            name: 'ApiPassword',
+            name: '{s name=plentyconnector/model/settings/fields/apipassword}{/s}',
             type: 'string'
         }
     ],
