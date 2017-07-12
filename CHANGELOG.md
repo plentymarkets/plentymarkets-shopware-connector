@@ -9,6 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - optimized the cleanup service to be more error resistent
+- remove media on update to prevent thumbnail corruption
 
 ### Fixed
 - Fatal error when variation unit is not mapped
