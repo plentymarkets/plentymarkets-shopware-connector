@@ -8,6 +8,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - extended cache reload on activate
 - translation of properties and property values for shopware
 
+### Changed
+- optimized the cleanup service to be more error resistent
+
 ### Fixed
 - fatal error when variation unit is not mapped
 
