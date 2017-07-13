@@ -78,7 +78,7 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
         $params = [
             'album' => Album::ALBUM_ARTICLE,
             'file' => $this->uploadFile($media),
-            'description' => $media->getName(),
+            'description' => $media->getName() ? $media->getName() : $media->getFilename(),
         ];
 
         $this->attributeHelper->addFieldAsAttribute($media, 'alternateName');

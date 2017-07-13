@@ -210,6 +210,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
             $media = $this->mediaResponseParser->parse([
                 'mediaCategory' => MediaCategoryHelper::CATEGORY,
                 'link' => $this->getBaseUrl() . 'documents/' . $image,
+                'name' => $detail['name'],
                 'alternateName' => $detail['name'],
             ]);
 
