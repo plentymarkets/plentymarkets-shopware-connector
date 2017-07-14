@@ -82,9 +82,16 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
         } else {
             throw new RuntimeException('unsupported type');
         }
+        
+        // orderItemName should contain specific coupon names, to allow futher analysis
+        if ($orderItem->getType() === OrderItem::TYPE_VOUCHER || $orderItem->getType() === OrderItem::TYPE_COUPON) {
+            $itemParams['orderItemName'] = $orderItem->getNumber();
+        }
+        else{
+             $itemParams['orderItemName'] = $orderItem->getName();
+        }
 
         $itemParams['typeId'] = $typeId;
-        $itemParams['orderItemName'] = $orderItem->getName();
         $itemParams['quantity'] = $orderItem->getQuantity();
 
         if (null !== $shippingProfileIdentity) {
