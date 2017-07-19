@@ -104,6 +104,8 @@ class PlentymarketsImportItemVariantController
         $this->purchasePrices = [];
 
         $this->ItemBase = $ItemBase;
+	    
+	$priceForMarkup = $this->getItemPrice($this->ItemBase->PriceSet);
 
         foreach ($this->ItemBase->ItemAttributeMarkup->item as $ItemAttributeMarkup) {
             // May be percentage or flat rate surcharge
@@ -202,7 +204,7 @@ class PlentymarketsImportItemVariantController
 
                     if ($markup) {
                         if ($Attribute->MarkupPercental == 1) {
-                            $markup = $this->ItemBase->PriceSet->Price / 100 * $markup;
+                            $markup = $priceForMarkup / 100 * $markup;
                         }
 
                         $this->variant2markup[$AttributeValueSet->AttributeValueSetID] += $markup;
@@ -315,5 +317,25 @@ class PlentymarketsImportItemVariantController
     public function getGroups()
     {
         return array_values($this->groups);
+    }
+	
+    /**
+     * Returns the item price
+     *
+     * @return double
+     */
+    protected function getItemPrice($ItemPrices)
+    {
+        $usePrice = PlentymarketsConfig::getInstance()->getItemPriceImportActionID(IMPORT_ITEM_PRICE);
+
+        if($usePrice != 'Price')
+        {
+            if(!empty($ItemPrices->{$usePrice}))
+            {
+                return $ItemPrices->{$usePrice};
+            }
+        }
+
+        return $ItemPrices->Price;
     }
 }
