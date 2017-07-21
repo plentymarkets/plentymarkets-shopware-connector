@@ -9,7 +9,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - optimized the cleanup service to be more error resistent
-- baseprice referenceAmount defaults to 1.0 instead of the item content
+- baseprice referenceAmount defaults to 1.0 instead of the item
+- ignore case of object types when searching definitions
 
 ### Fixed
 - Fatal error when variation unit is not mapped
