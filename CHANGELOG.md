@@ -11,6 +11,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - optimized the cleanup service to be more error resistent
 - use correct category position and image for translations
 - use all translations if no direct translation is found for categories
+- ignore case of object types when searching definitions
+- use voucher number as order item name
 
 ### Fixed
 - Fatal error when variation unit is not mapped
