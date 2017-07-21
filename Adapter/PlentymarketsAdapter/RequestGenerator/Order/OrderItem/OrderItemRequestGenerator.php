@@ -166,7 +166,7 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
 
     /**
      * @param OrderItem $orderItem
-     * 
+     *
      * @return bool
      */
     private function isCouponItem(OrderItem $orderItem)
