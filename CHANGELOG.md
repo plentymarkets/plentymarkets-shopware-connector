@@ -5,10 +5,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - Translation for Backend Modul
-- extended Cachereload on activate
+- extended cachereload on activate
 
 ### Changed
 - optimized the cleanup service to be more error resistent
+- baseprice referenceAmount defaults to 1.0 instead of the item
 - use correct category position and image for translations
 - use all translations if no direct translation is found for categories
 - ignore case of object types when searching definitions
