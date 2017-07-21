@@ -5,10 +5,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - Translation for Backend Modul
-- extended Cachereload on activate
+- extended cachereload on activate
 
 ### Changed
 - optimized the cleanup service to be more error resistent
+- baseprice referenceAmount defaults to 1.0 instead of the item content
 
 ### Fixed
 - Fatal error when variation unit is not mapped
