@@ -113,9 +113,14 @@ class CategoryResponseParser implements CategoryResponseParserInterface
 
         foreach ($entry['details'] as $key => $detail) {
             $entry['details'][$key]['shortDescription'] = $entry['details']['0']['shortDescription'];
+            $entry['details'][$key]['position'] = $entry['details']['0']['position'];
+            $entry['details'][$key]['image'] = $entry['details']['0']['image'];
+            $entry['details'][$key]['imagePath'] = $entry['details']['0']['imagePath'];
+            $entry['details'][$key]['image2'] = $entry['details']['0']['image2'];
+            $entry['details'][$key]['image2Path'] = $entry['details']['0']['image2Path'];
         }
 
-        $entry['details'] = array_values(array_filter($entry['details'], function (array $detail) {
+        $validDetails = array_values(array_filter($entry['details'], function (array $detail) {
             if (empty($detail['plentyId'])) {
                 return false;
             }
@@ -125,29 +130,29 @@ class CategoryResponseParser implements CategoryResponseParserInterface
             return !(null === $identity);
         }));
 
-        if (empty($entry['details'])) {
-            $this->logger->notice('no valid translation found', ['category' => $categoryIdentity->getObjectIdentifier()]);
+        if (empty($validDetails)) {
+            $this->logger->notice('no valid category translation found, using default');
 
-            return [];
+            $validDetails = $entry['details'];
         }
 
         $result = [];
 
         $result[] = Category::fromArray([
             'identifier' => $categoryIdentity->getObjectIdentifier(),
-            'name' => $entry['details']['0']['name'],
+            'name' => $validDetails['0']['name'],
             'active' => true,
             'parentIdentifier' => $parentCategoryIdentifier,
             'shopIdentifiers' => $shopIdentifiers,
-            'imageIdentifiers' => $this->getImages($entry['details']['0'], $result),
-            'position' => $entry['details']['0']['position'],
-            'description' => $entry['details']['0']['shortDescription'],
-            'longDescription' => $entry['details']['0']['description'],
-            'metaTitle' => $entry['details']['0']['metaTitle'],
-            'metaDescription' => $entry['details']['0']['metaDescription'],
-            'metaKeywords' => $entry['details']['0']['metaKeywords'],
-            'metaRobots' => $this->getMetaRobots($entry['details']['0']['metaRobots']),
-            'translations' => $this->getTranslations($entry['details'], $result),
+            'imageIdentifiers' => $this->getImages($validDetails['0'], $result),
+            'position' => $validDetails['0']['position'],
+            'description' => $validDetails['0']['shortDescription'],
+            'longDescription' => $validDetails['0']['description'],
+            'metaTitle' => $validDetails['0']['metaTitle'],
+            'metaDescription' => $validDetails['0']['metaDescription'],
+            'metaKeywords' => $validDetails['0']['metaKeywords'],
+            'metaRobots' => $this->getMetaRobots($validDetails['0']['metaRobots']),
+            'translations' => $this->getTranslations($validDetails, $result),
             'attributes' => [],
         ]);
 
@@ -203,7 +208,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
         }
 
         if (!empty($detail['image2Path'])) {
-            $images[] = $detail['imaimage2PathgePath'];
+            $images[] = $detail['image2Path'];
         }
 
         foreach ($images as $image) {
