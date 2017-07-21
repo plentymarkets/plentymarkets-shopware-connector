@@ -10,6 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - optimized the cleanup service to be more error resistent
 - ignore case of object types when searching definitions
+- use voucher number as order item name
 
 ### Fixed
 - Fatal error when variation unit is not mapped
