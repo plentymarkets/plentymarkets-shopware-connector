@@ -147,6 +147,7 @@ class PriceResponseParser implements PriceResponseParserInterface
 
         $temporaryPrices = [];
 
+
         foreach ($variationSalesPrices as $price) {
             $priceConfiguration = array_filter($priceConfigurations, function ($configuration) use ($price) {
                 return $configuration['id'] === $price['salesPriceId'];
@@ -164,7 +165,7 @@ class PriceResponseParser implements PriceResponseParserInterface
 
             $type = 'default';
 
-            if (count($customerClasses) !== 1 && $customerClasses[0]['customerClassId'] !== -1) {
+            if (isset($customerClasses[0]['customerClassId']) && $customerClasses[0]['customerClassId'] !== -1) {
                 foreach ($customerGroups as $group) {
                     $customerGroupIdentity = $this->identityService->findOneBy([
                         'adapterIdentifier' => $group,
