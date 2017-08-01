@@ -147,7 +147,6 @@ class PriceResponseParser implements PriceResponseParserInterface
 
         $temporaryPrices = [];
 
-
         foreach ($variationSalesPrices as $price) {
             $priceConfiguration = array_filter($priceConfigurations, function ($configuration) use ($price) {
                 return $configuration['id'] === $price['salesPriceId'];
