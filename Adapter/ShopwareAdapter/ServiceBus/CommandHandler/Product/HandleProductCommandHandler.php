@@ -309,7 +309,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                  * @var LoggerInterface $logger
                  */
                 $logger = Shopware()->Container()->get('plenty_connector.logger');
-                $logger->notice('langauge not mapped - ' . $languageIdentifier, ['command' => $command]);
+                $logger->notice('language not mapped - ' . $languageIdentifier, ['command' => $command]);
 
                 continue;
             }
