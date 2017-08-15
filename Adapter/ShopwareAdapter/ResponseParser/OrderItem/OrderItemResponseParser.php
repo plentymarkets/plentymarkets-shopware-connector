@@ -50,15 +50,19 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
             case 0:
             case 1:
                 return $this->handleProduct($entry, $taxFree);
+
                 break;
             case 2:
                 return $this->handleVoucher($entry, $taxFree);
+
                 break;
             case 3:
                 return $this->handleDiscount($entry, $taxFree);
+
                 break;
             case 4:
                 return $this->handlePaymentSurcharge($entry, $taxFree);
+
                 break;
             default:
                 throw new \Exception('unsupported entry mode');

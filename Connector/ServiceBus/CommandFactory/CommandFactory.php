@@ -62,9 +62,11 @@ class CommandFactory implements CommandFactoryInterface
         switch ($commandType) {
             case CommandType::HANDLE:
                 $command = $generator->generateHandleCommand($adapterName, $payload);
+
                 break;
             case CommandType::REMOVE:
                 $command = $generator->generateRemoveCommand($adapterName, $payload);
+
                 break;
         }
 
