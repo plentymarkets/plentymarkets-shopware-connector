@@ -2,21 +2,19 @@
 
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Media;
 
-use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\HandleCommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\Media\HandleMediaCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\TransferObject\Media\Media;
-use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Shopware\Components\Api\Exception\NotFoundException as MediaNotFoundException;
 use Shopware\Components\Api\Resource\Media as MediaResource;
-use Shopware\Models\Media\Album;
+use ShopwareAdapter\DataProvider\Media\MediaDataProviderInterface;
 use ShopwareAdapter\Helper\AttributeHelper;
+use ShopwareAdapter\RequestGenerator\Media\MediaRequestGeneratorInterface;
 use ShopwareAdapter\ShopwareAdapter;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class HandleMediaCommandHandler.
@@ -39,20 +37,36 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
     private $attributeHelper;
 
     /**
+     * @var MediaRequestGeneratorInterface
+     */
+    private $mediaRequestGenerator;
+
+    /**
+     * @var MediaDataProviderInterface
+     */
+    private $mediaDataProvider;
+
+    /**
      * HandleMediaCommandHandler constructor.
      *
-     * @param MediaResource            $resource
+     * @param MediaResource $resource
      * @param IdentityServiceInterface $identityService
-     * @param AttributeHelper          $attributeHelper
+     * @param AttributeHelper $attributeHelper
+     * @param MediaRequestGeneratorInterface $mediaRequestGenerator
+     * @param MediaDataProviderInterface $mediaDataProvider
      */
     public function __construct(
         MediaResource $resource,
         IdentityServiceInterface $identityService,
-        AttributeHelper $attributeHelper
+        AttributeHelper $attributeHelper,
+        MediaRequestGeneratorInterface $mediaRequestGenerator,
+        MediaDataProviderInterface $mediaDataProvider
     ) {
         $this->resource = $resource;
         $this->identityService = $identityService;
         $this->attributeHelper = $attributeHelper;
+        $this->mediaRequestGenerator = $mediaRequestGenerator;
+        $this->mediaDataProvider = $mediaDataProvider;
     }
 
     /**
@@ -75,30 +89,14 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
          */
         $media = $command->getTransferObject();
 
-        $params = [
-            'album' => Album::ALBUM_ARTICLE,
-            'file' => $this->uploadFile($media),
-            'description' => $media->getName() ? $media->getName() : $media->getFilename(),
-        ];
+        if ($media->getHash() === $this->mediaDataProvider->getMediaHashForMediaObject($media)) {
+            return true;
+        }
 
         $this->attributeHelper->addFieldAsAttribute($media, 'alternateName');
         $this->attributeHelper->addFieldAsAttribute($media, 'name');
         $this->attributeHelper->addFieldAsAttribute($media, 'filename');
         $this->attributeHelper->addFieldAsAttribute($media, 'hash');
-
-        if (null !== $media->getMediaCategoryIdentifier()) {
-            $mediaCategoryIdentity = $this->identityService->findOneBy([
-                'objectIdentifier' => $media->getMediaCategoryIdentifier(),
-                'objectType' => MediaCategory::TYPE,
-                'adapterName' => ShopwareAdapter::NAME,
-            ]);
-
-            if (null === $mediaCategoryIdentity) {
-                throw new NotFoundException('missing media category for adapter');
-            }
-
-            $params['album'] = $mediaCategoryIdentity->getAdapterIdentifier();
-        }
 
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => (string) $media->getIdentifier(),
@@ -125,6 +123,7 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
             });
         }
 
+        $params = $this->mediaRequestGenerator->generate($media);
         $mediaModel = $this->resource->create($params);
 
         $this->identityService->create(
@@ -141,20 +140,5 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
         );
 
         return true;
-    }
-
-    /**
-     * @param Media $media
-     *
-     * @return UploadedFile
-     */
-    private function uploadFile(Media $media)
-    {
-        $path = Shopware()->DocPath('media_' . 'temp');
-        $filePath = tempnam($path, 'PlentyConnector') . $media->getFilename();
-
-        file_put_contents($filePath, base64_decode($media->getContent()));
-
-        return new UploadedFile($filePath, $media->getFilename());
     }
 }

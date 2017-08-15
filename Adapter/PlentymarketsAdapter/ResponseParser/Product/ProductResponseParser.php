@@ -347,6 +347,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             'mediaCategory' => MediaCategoryHelper::PRODUCT,
             'link' => $entry['url'],
             'name' => $name,
+            'hash' => $entry['md5Checksum'],
             'alternateName' => $alternate,
             'translations' => $this->getMediaTranslations($entry, $texts),
         ]);

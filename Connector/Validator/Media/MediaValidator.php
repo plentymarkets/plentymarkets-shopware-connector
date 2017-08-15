@@ -30,7 +30,7 @@ class MediaValidator implements ValidatorInterface
 
         Assertion::uuid($object->getMediaCategoryIdentifier(), null, 'media.mediaCategoryIdentifier');
 
-        Assertion::notBlank($object->getContent(), null, 'media.content');
+        Assertion::url($object->getLink(), null, 'media.content');
 
         Assertion::nullOrNotBlank($object->getName(), null, 'media.name');
         Assertion::nullOrNotBlank($object->getAlternateName(), null, 'media.name');

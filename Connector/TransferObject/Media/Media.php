@@ -26,11 +26,11 @@ class Media extends AbstractTransferObject implements TranslateableInterface, At
     private $mediaCategoryIdentifier = '';
 
     /**
-     * base64 encoded media file
+     * link to the actual media
      *
      * @var string
      */
-    private $content;
+    private $link;
 
     /**
      * @var string
@@ -105,17 +105,17 @@ class Media extends AbstractTransferObject implements TranslateableInterface, At
     /**
      * @return string
      */
-    public function getContent()
+    public function getLink()
     {
-        return $this->content;
+        return $this->link;
     }
 
     /**
-     * @param string $content
+     * @param string $link
      */
-    public function setContent($content)
+    public function setLink($link)
     {
-        $this->content = $content;
+        $this->link = $link;
     }
 
     /**

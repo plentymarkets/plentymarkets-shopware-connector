@@ -55,22 +55,12 @@ class MediaResponseParser implements MediaResponseParserInterface
         try {
             Assertion::url($entry['link']);
 
-            $content = @file_get_contents($entry['link']);
-
-            if (false === $content) {
-                $this->logger->warning('could not load media file - ' . $entry['link']);
-
-                return null;
-            }
-
-            $content = base64_encode($content);
-
             if (empty($entry['filename'])) {
                 $entry['filename'] = basename($entry['link']);
             }
 
             if (!array_key_exists('hash', $entry)) {
-                $entry['hash'] = sha1($content);
+                $entry['hash'] = sha1_file($entry['link']);
             }
 
             if (empty($entry['name'])) {
@@ -112,7 +102,7 @@ class MediaResponseParser implements MediaResponseParserInterface
             $media = new Media();
             $media->setIdentifier($identity->getObjectIdentifier());
             $media->setMediaCategoryIdentifier($entry['mediaCategoryIdentifier']);
-            $media->setContent($content);
+            $media->setLink($entry['link']);
             $media->setFilename($entry['filename']);
             $media->setHash($entry['hash']);
             $media->setName($entry['name']);

@@ -57,14 +57,12 @@ class ProcessCommand extends ShopwareCommand
         $this->addArgument(
             'objectType',
             InputArgument::OPTIONAL,
-            'Object type to process. Leave empty for every object type',
-            null
+            'Object type to process. Leave empty for every object type'
         );
         $this->addArgument(
             'objectIdentifier',
             InputArgument::OPTIONAL,
-            'Object Identifier to process. Leave empty for every object type',
-            null
+            'Object Identifier to process. Leave empty for every object type'
         );
         $this->addOption(
             'all',
