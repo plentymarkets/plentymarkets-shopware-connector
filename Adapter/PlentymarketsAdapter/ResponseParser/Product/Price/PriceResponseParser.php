@@ -162,12 +162,17 @@ class PriceResponseParser implements PriceResponseParserInterface
 
             $customerClasses = (array) $priceConfiguration['customerClasses'];
 
-            $type = 'default';
+            $from = (float) $priceConfiguration['minimumOrderQuantity'];
 
-            if (isset($customerClasses[0]['customerClassId']) && $customerClasses[0]['customerClassId'] !== -1) {
-                foreach ($customerGroups as $group) {
+            if (count($customerClasses) === 1 && $customerClasses[0]['customerClassId'] === -1) {
+                $temporaryPrices['default'][$priceConfiguration['type']][$from] = [
+                    'from' => $from,
+                    'price' => (float) $price['price'],
+                ];
+            } else {
+                foreach ($customerClasses as $group) {
                     $customerGroupIdentity = $this->identityService->findOneBy([
-                        'adapterIdentifier' => $group,
+                        'adapterIdentifier' => $group['customerClassId'],
                         'adapterName' => PlentymarketsAdapter::NAME,
                         'objectType' => CustomerGroup::TYPE,
                     ]);
@@ -178,16 +183,14 @@ class PriceResponseParser implements PriceResponseParserInterface
                         continue;
                     }
 
-                    $type = $customerGroupIdentity->getObjectIdentifier();
+                    $customerGroup = $customerGroupIdentity->getObjectIdentifier();
+
+                    $temporaryPrices[$customerGroup][$priceConfiguration['type']][$from] = [
+                        'from' => $from,
+                        'price' => (float) $price['price'],
+                    ];
                 }
             }
-
-            $from = (float) $priceConfiguration['minimumOrderQuantity'];
-
-            $temporaryPrices[$type][$priceConfiguration['type']][$from] = [
-                'from' => $from,
-                'price' => (float) $price['price'],
-            ];
         }
 
         return $temporaryPrices;
