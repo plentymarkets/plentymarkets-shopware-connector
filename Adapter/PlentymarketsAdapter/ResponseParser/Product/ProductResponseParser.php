@@ -664,7 +664,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             $variation->setPurchasePrice((float) $element['purchasePrice']);
             $variation->setUnitIdentifier($this->getUnitIdentifier($element));
             $variation->setContent((float) $element['unit']['content']);
-            $variation->setReferenceAmount((float) $element['unit']['content']);
+            $variation->setReferenceAmount(1.0);
             $variation->setMaximumOrderQuantity((float) $element['maximumOrderQuantity']);
             $variation->setMinimumOrderQuantity((float) $element['minimumOrderQuantity']);
             $variation->setIntervalOrderQuantity((float) $element['intervalOrderQuantity']);

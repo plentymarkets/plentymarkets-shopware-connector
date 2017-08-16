@@ -122,18 +122,18 @@ class Connector implements ConnectorInterface
     }
 
     /**
-     * @param null $type
+     * @param null $objectType
      *
      * @return Definition[]
      */
-    private function getDefinitions($type = null)
+    private function getDefinitions($objectType = null)
     {
         if (null === count($this->definitions)) {
             return [];
         }
 
-        $definitions = array_filter($this->definitions, function (Definition $definition) use ($type) {
-            return $definition->getObjectType() === ucfirst($type) || null === $type;
+        $definitions = array_filter($this->definitions, function (Definition $definition) use ($objectType) {
+            return strtolower($definition->getObjectType()) === strtolower($objectType) || null === $objectType;
         });
 
         return $definitions;

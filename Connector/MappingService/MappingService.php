@@ -102,7 +102,7 @@ class MappingService implements MappingServiceInterface
         }
 
         $definitions = array_filter($this->definitions, function (Definition $definition) use ($objectType) {
-            return $definition->getObjectType() === $objectType || null === $objectType;
+            return strtolower($definition->getObjectType()) === strtolower($objectType) || null === $objectType;
         });
 
         return $definitions;
