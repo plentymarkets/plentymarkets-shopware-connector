@@ -25,8 +25,9 @@ class MediaDataProvider implements MediaDataProviderInterface
 
     /**
      * MediaDataProvider constructor.
+     *
      * @param IdentityServiceInterface $identityService
-     * @param DataLoader $dataLoader
+     * @param DataLoader               $dataLoader
      */
     public function __construct(IdentityServiceInterface $identityService, DataLoader $dataLoader)
     {
