@@ -115,7 +115,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         if (null !== $orderStatusIdentity) {
             $params['orderStatusId'] = $orderStatusIdentity->getAdapterIdentifier();
         } else {
-            $this->logger->notice('oder status not mapped', ['order' => $order]);
+            $this->logger->notice('order status not mapped', ['order' => $order]);
         }
 
         $paymentStatusIdentity = $this->identityService->findOneBy([

@@ -106,7 +106,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     public function parse(array $entry)
     {
         $shopIdentity = $this->identityService->findOneOrThrow(
-            (string) $entry['shopId'],
+            (string) $entry['language'],
             ShopwareAdapter::NAME,
             Shop::TYPE
         );

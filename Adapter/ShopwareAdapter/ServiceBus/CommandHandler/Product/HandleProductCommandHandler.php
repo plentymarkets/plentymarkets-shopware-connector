@@ -303,7 +303,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
 
             $product->setAttributes($attributes);
         }
-
+      
         $propertyData = $this->getPropertyData($product);
 
         $params = [

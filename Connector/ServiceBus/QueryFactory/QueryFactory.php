@@ -57,12 +57,15 @@ class QueryFactory implements QueryFactoryInterface
         switch ($queryType) {
             case QueryType::ONE:
                 $query = $generator->generateFetchQuery($adapterName, $payload);
+
                 break;
             case QueryType::CHANGED:
                 $query = $generator->generateFetchChangedQuery($adapterName);
+
                 break;
             case QueryType::ALL:
                 $query = $generator->generateFetchAllQuery($adapterName);
+
                 break;
         }
 
