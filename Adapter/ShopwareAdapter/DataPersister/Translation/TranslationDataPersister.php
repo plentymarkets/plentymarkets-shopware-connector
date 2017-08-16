@@ -91,7 +91,7 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
             ]);
 
             if (null === $languageIdentity) {
-                $this->logger->notice('langauge not mapped - ' . $languageIdentifier);
+                $this->logger->notice('language not mapped - ' . $languageIdentifier);
 
                 continue;
             }
