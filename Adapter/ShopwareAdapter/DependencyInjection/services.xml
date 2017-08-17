@@ -15,9 +15,14 @@
         <service id="shopware_adapter.data_provider.customer_group" class="ShopwareAdapter\DataProvider\CustomerGroup\CustomerGroupDataProvider">
             <argument type="service" id="models" />
         </service>
-
+      
         <service id="shopware_adapter.data_provider.translation" class="ShopwareAdapter\DataProvider\Translation\TranslationDataProvider">
             <argument type="service" id="models" />
+        </service>
+      
+        <service id="shopware_adapter.data_provider.order" class="ShopwareAdapter\DataProvider\Order\OrderDataProvider">
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="shopware_adapter.shopware_resource.order" />
         </service>
 
         <!-- Data Persister -->
@@ -272,14 +277,14 @@
 
         <service id="shopware_adapter.query_handler.fetch_all_orders" class="ShopwareAdapter\ServiceBus\QueryHandler\Order\FetchAllOrdersQueryHandler">
             <argument type="service" id="shopware_adapter.response_parser.order" />
-            <argument type="service" id="shopware_adapter.shopware_resource.order" />
+            <argument type="service" id="shopware_adapter.data_provider.order" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
 
         <service id="shopware_adapter.query_handler.fetch_changed_orders" class="ShopwareAdapter\ServiceBus\QueryHandler\Order\FetchChangedOrdersQueryHandler">
             <argument type="service" id="shopware_adapter.response_parser.order" />
-            <argument type="service" id="shopware_adapter.shopware_resource.order" />
+            <argument type="service" id="shopware_adapter.data_provider.order" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
@@ -287,7 +292,7 @@
         <service id="shopware_adapter.query_handler.fetch_order" class="ShopwareAdapter\ServiceBus\QueryHandler\Order\FetchOrderQueryHandler">
             <argument type="service" id="shopware_adapter.response_parser.order" />
             <argument type="service" id="plenty_connector.identity_service" />
-            <argument type="service" id="shopware_adapter.shopware_resource.order" />
+            <argument type="service" id="shopware_adapter.data_provider.order" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
