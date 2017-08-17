@@ -5,8 +5,7 @@ namespace ShopwareAdapter\ServiceBus\QueryHandler\Order;
 use PlentyConnector\Connector\ServiceBus\Query\Order\FetchChangedOrdersQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
-use Shopware\Components\Api\Resource\Order as OrderResource;
-use Shopware\Models\Order\Status;
+use ShopwareAdapter\DataProvider\Order\OrderDataProviderInterface;
 use ShopwareAdapter\ResponseParser\Order\OrderResponseParserInterface;
 use ShopwareAdapter\ServiceBus\ChangedDateTimeTrait;
 use ShopwareAdapter\ShopwareAdapter;
@@ -24,22 +23,20 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
     private $responseParser;
 
     /**
-     * @var OrderResource
+     * @var OrderDataProviderInterface
      */
-    private $orderResource;
+    private $dataProvider;
 
     /**
      * FetchChangedOrdersQueryHandler constructor.
      *
      * @param OrderResponseParserInterface $responseParser
-     * @param OrderResource                $orderResource
+     * @param OrderDataProviderInterface   $dataProvider
      */
-    public function __construct(
-        OrderResponseParserInterface $responseParser,
-        OrderResource $orderResource
-    ) {
+    public function __construct(OrderResponseParserInterface $responseParser, OrderDataProviderInterface $dataProvider)
+    {
         $this->responseParser = $responseParser;
-        $this->orderResource = $orderResource;
+        $this->dataProvider = $dataProvider;
     }
 
     /**
@@ -56,18 +53,10 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $event)
     {
-        $filter = [
-            [
-                'property' => 'status',
-                'expression' => '=',
-                'value' => Status::ORDER_STATE_OPEN,
-            ],
-        ];
+        $orders = $this->dataProvider->getOpenOrders();
 
-        $orders = $this->orderResource->getList(0, null, $filter);
-
-        foreach ($orders['data'] as $order) {
-            $order = $this->orderResource->getOne($order['id']);
+        foreach ($orders as $order) {
+            $order = $this->dataProvider->getOrderDetails($order['id']);
 
             $result = $this->responseParser->parse($order);
 
