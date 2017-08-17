@@ -74,6 +74,10 @@ class MediaDataProvider implements MediaDataProviderInterface
 
         $attributes = $this->dataLoader->load('s_media_attributes', $identity->getAdapterIdentifier());
 
+        if (empty($attributes)) {
+            return '';
+        }
+
         foreach ($attributes as $key => $value) {
             if ($key !== 'plenty_connector_hash') {
                 continue;
