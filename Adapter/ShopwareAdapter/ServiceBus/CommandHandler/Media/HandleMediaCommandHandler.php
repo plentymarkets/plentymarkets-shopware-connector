@@ -11,6 +11,7 @@ use PlentyConnector\Connector\TransferObject\Media\Media;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Shopware\Components\Api\Exception\NotFoundException as MediaNotFoundException;
 use Shopware\Components\Api\Resource\Media as MediaResource;
+use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
 use ShopwareAdapter\DataProvider\Media\MediaDataProviderInterface;
 use ShopwareAdapter\Helper\AttributeHelper;
 use ShopwareAdapter\RequestGenerator\Media\MediaRequestGeneratorInterface;
@@ -32,11 +33,6 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
     private $identityService;
 
     /**
-     * @var AttributeHelper
-     */
-    private $attributeHelper;
-
-    /**
      * @var MediaRequestGeneratorInterface
      */
     private $mediaRequestGenerator;
@@ -47,26 +43,39 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
     private $mediaDataProvider;
 
     /**
+     * @var AttributeHelper
+     */
+    private $attributeHelper;
+
+    /**
+     * @var AttributeDataPersisterInterface
+     */
+    private $attributePersister;
+
+    /**
      * HandleMediaCommandHandler constructor.
      *
-     * @param MediaResource                  $resource
-     * @param IdentityServiceInterface       $identityService
-     * @param AttributeHelper                $attributeHelper
-     * @param MediaRequestGeneratorInterface $mediaRequestGenerator
-     * @param MediaDataProviderInterface     $mediaDataProvider
+     * @param MediaResource                   $resource
+     * @param IdentityServiceInterface        $identityService
+     * @param MediaRequestGeneratorInterface  $mediaRequestGenerator
+     * @param MediaDataProviderInterface      $mediaDataProvider
+     * @param AttributeHelper                 $attributeHelper
+     * @param AttributeDataPersisterInterface $attributePersister
      */
     public function __construct(
         MediaResource $resource,
         IdentityServiceInterface $identityService,
-        AttributeHelper $attributeHelper,
         MediaRequestGeneratorInterface $mediaRequestGenerator,
-        MediaDataProviderInterface $mediaDataProvider
+        MediaDataProviderInterface $mediaDataProvider,
+        AttributeHelper $attributeHelper,
+        AttributeDataPersisterInterface $attributePersister
     ) {
         $this->resource = $resource;
         $this->identityService = $identityService;
-        $this->attributeHelper = $attributeHelper;
         $this->mediaRequestGenerator = $mediaRequestGenerator;
         $this->mediaDataProvider = $mediaDataProvider;
+        $this->attributeHelper = $attributeHelper;
+        $this->attributePersister = $attributePersister;
     }
 
     /**
@@ -133,10 +142,9 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
             ShopwareAdapter::NAME
         );
 
-        $this->attributeHelper->saveAttributes(
-            (int) $mediaModel->getId(),
-            $media->getAttributes(),
-            's_media_attributes'
+        $this->attributePersister->saveMediaAttributes(
+            $mediaModel,
+            $media->getAttributes()
         );
 
         return true;

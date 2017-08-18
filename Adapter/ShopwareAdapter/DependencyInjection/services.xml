@@ -2,6 +2,10 @@
 
 <container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+        <!-- Misc Components -->
+
+        <service id="shopware_adapter.shopware_translation_component" class="Shopware_Components_Translation" />
+
         <!-- Data Provider -->
 
         <service id="shopware_adapter.data_provider.currency" class="ShopwareAdapter\DataProvider\Currency\CurrencyDataProvider">
@@ -12,22 +16,40 @@
             <argument type="service" id="models" />
         </service>
 
+        <service id="shopware_adapter.data_provider.translation" class="ShopwareAdapter\DataProvider\Translation\TranslationDataProvider">
+            <argument type="service" id="models" />
+        </service>
+
+
         <service id="shopware_adapter.data_provider.media" class="ShopwareAdapter\DataProvider\Media\MediaDataProvider">
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="shopware_attribute.data_loader" />
         </service>
-  
+
         <service id="shopware_adapter.data_provider.order" class="ShopwareAdapter\DataProvider\Order\OrderDataProvider">
             <argument type="service" id="dbal_connection" />
             <argument type="service" id="shopware_adapter.shopware_resource.order" />
         </service>
 
-        <!-- Attributes -->
+        <!-- Data Persister -->
 
-        <service id="shopware_adapter.attribute_helper" class="ShopwareAdapter\Helper\AttributeHelper">
+        <service id="shopware_adapter.data_persister.translation" class="ShopwareAdapter\DataPersister\Translation\TranslationDataPersister">
+            <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="plenty_connector.logger" />
+            <argument type="service" id="shopware_adapter.data_provider.translation" />
+            <argument type="service" id="plenty_connector.translation_helper" />
+            <argument type="service" id="shopware_adapter.shopware_translation_component" />
+        </service>
+
+        <service id="shopware_adapter.data_persister.attribute" class="ShopwareAdapter\DataPersister\Attribute\AttributeDataPersister">
             <argument type="service" id="shopware_attribute.crud_service" />
             <argument type="service" id="models" />
             <argument type="service" id="shopware_attribute.data_persister" />
+        </service>
+
+        <!-- Helper -->
+
+        <service id="shopware_adapter.attribute_helper" class="ShopwareAdapter\Helper\AttributeHelper">
             <argument type="service" id="plenty_connector.validator_service" />
         </service>
 
@@ -160,8 +182,8 @@
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plenty_connector.translation_helper" />
             <argument type="service" id="models" />
-            <argument type="service" id="shopware_adapter.attribute_helper" />
             <argument type="service" id="plenty_connector.logger" />
+            <argument type="service" id="shopware_adapter.data_persister.attribute" />
 
             <tag name="plenty_connector.command_handler" />
         </service>
@@ -179,7 +201,7 @@
         <service id="shopware_adapter.command_handler.handle_manufacturer" class="ShopwareAdapter\ServiceBus\CommandHandler\Manufacturer\HandleManufacturerCommandHandler">
             <argument type="service" id="shopware_adapter.shopware_resource.manufacturer" />
             <argument type="service" id="plenty_connector.identity_service" />
-            <argument type="service" id="shopware_adapter.attribute_helper" />
+            <argument type="service" id="shopware_adapter.data_persister.attribute" />
 
             <tag name="plenty_connector.command_handler" />
         </service>
@@ -197,9 +219,10 @@
         <service id="shopware_adapter.command_handler.handle_media" class="ShopwareAdapter\ServiceBus\CommandHandler\Media\HandleMediaCommandHandler">
             <argument type="service" id="shopware_adapter.shopware_resource.media" />
             <argument type="service" id="plenty_connector.identity_service" />
-            <argument type="service" id="shopware_adapter.attribute_helper" />
             <argument type="service" id="shopware_adapter.request_generator.media" />
             <argument type="service" id="shopware_adapter.data_provider.media" />
+            <argument type="service" id="shopware_adapter.attribute_helper" />
+            <argument type="service" id="shopware_adapter.data_persister.attribute" />
 
             <tag name="plenty_connector.command_handler" />
         </service>
@@ -235,7 +258,7 @@
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plenty_connector.logger" />
             <argument type="service" id="shopware_adapter.shopware_resource.order" />
-            <argument type="service" id="shopware_adapter.attribute_helper" />
+            <argument type="service" id="shopware_adapter.data_persister.attribute" />
 
             <tag name="plenty_connector.command_handler" />
         </service>
@@ -247,6 +270,8 @@
             <argument type="service" id="shopware_adapter.attribute_helper" />
             <argument type="service" id="shopware_adapter.request_generator.product.configurator_set" />
             <argument type="service" id="shopware_adapter.request_generator.product.variation" />
+            <argument type="service" id="shopware_adapter.data_persister.attribute" />
+            <argument type="service" id="shopware_adapter.data_persister.translation" />
 
             <tag name="plenty_connector.command_handler" />
         </service>

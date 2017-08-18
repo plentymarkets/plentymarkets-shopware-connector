@@ -16,7 +16,7 @@ use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use Psr\Log\LoggerInterface;
 use Shopware\Components\Api\Resource\Order as OrderResource;
 use Shopware\Models\Order\Status;
-use ShopwareAdapter\Helper\AttributeHelper;
+use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -40,28 +40,28 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     private $orderResource;
 
     /**
-     * @var AttributeHelper
+     * @var AttributeDataPersisterInterface
      */
-    private $attributeHelper;
+    private $attributePersister;
 
     /**
      * HandleOrderCommandHandler constructor.
      *
-     * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface          $logger
-     * @param OrderResource            $orderResource
-     * @param AttributeHelper          $attributeHelper
+     * @param IdentityServiceInterface        $identityService
+     * @param LoggerInterface                 $logger
+     * @param OrderResource                   $orderResource
+     * @param AttributeDataPersisterInterface $attributePersister
      */
     public function __construct(
         IdentityServiceInterface $identityService,
         LoggerInterface $logger,
         OrderResource $orderResource,
-        AttributeHelper $attributeHelper
+        AttributeDataPersisterInterface $attributePersister
     ) {
         $this->identityService = $identityService;
         $this->logger = $logger;
         $this->orderResource = $orderResource;
-        $this->attributeHelper = $attributeHelper;
+        $this->attributePersister = $attributePersister;
     }
 
     /**
@@ -136,12 +136,11 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             $this->logger->notice('payment status not mapped', ['order' => $order]);
         }
 
-        $this->orderResource->update($orderIdentity->getAdapterIdentifier(), $params);
+        $orderModel = $this->orderResource->update($orderIdentity->getAdapterIdentifier(), $params);
 
-        $this->attributeHelper->saveAttributes(
-            (int) $orderIdentity->getAdapterIdentifier(),
-            $order->getAttributes(),
-            's_order_attributes'
+        $this->attributePersister->saveOrderAttributes(
+            $orderModel,
+            $order->getAttributes()
         );
 
         return false;
