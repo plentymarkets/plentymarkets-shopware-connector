@@ -2,20 +2,18 @@
 
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Media;
 
-use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\HandleCommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\Media\HandleMediaCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\TransferObject\Media\Media;
-use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
-use Shopware\Bundle\MediaBundle\MediaService;
+use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Shopware\Components\Api\Exception\NotFoundException as MediaNotFoundException;
 use Shopware\Components\Api\Resource\Media as MediaResource;
-use Shopware\Models\Media\Album;
-use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
+use ShopwareAdapter\DataProvider\Media\MediaDataProviderInterface;
 use ShopwareAdapter\Helper\AttributeHelper;
+use ShopwareAdapter\RequestGenerator\Media\MediaRequestGeneratorInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -29,11 +27,6 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
     private $resource;
 
     /**
-     * @var MediaService
-     */
-    private $mediaService;
-
-    /**
      * @var IdentityServiceInterface
      */
     private $identityService;
@@ -44,6 +37,16 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
     private $attributeHelper;
 
     /**
+     * @var MediaRequestGeneratorInterface
+     */
+    private $mediaRequestGenerator;
+
+    /**
+     * @var MediaDataProviderInterface
+     */
+    private $mediaDataProvider;
+
+    /**
      * @var AttributeDataPersisterInterface
      */
     private $attributePersister;
@@ -51,22 +54,25 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
     /**
      * HandleMediaCommandHandler constructor.
      *
-     * @param MediaResource                   $resource
-     * @param MediaService                    $mediaService
-     * @param IdentityServiceInterface        $identityService
-     * @param AttributeHelper                 $attributeHelper
+     * @param MediaResource                  $resource
+     * @param IdentityServiceInterface       $identityService
+     * @param MediaRequestGeneratorInterface $mediaRequestGenerator
+     * @param MediaDataProviderInterface     $mediaDataProvider
+     * @param AttributeHelper                $attributeHelper
      * @param AttributeDataPersisterInterface $attributePersister
      */
     public function __construct(
         MediaResource $resource,
-        MediaService $mediaService,
         IdentityServiceInterface $identityService,
+        MediaRequestGeneratorInterface $mediaRequestGenerator,
+        MediaDataProviderInterface $mediaDataProvider,
         AttributeHelper $attributeHelper,
         AttributeDataPersisterInterface $attributePersister
     ) {
         $this->resource = $resource;
-        $this->mediaService = $mediaService;
         $this->identityService = $identityService;
+        $this->mediaRequestGenerator = $mediaRequestGenerator;
+        $this->mediaDataProvider = $mediaDataProvider;
         $this->attributeHelper = $attributeHelper;
         $this->attributePersister = $attributePersister;
     }
@@ -91,64 +97,49 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
          */
         $media = $command->getTransferObject();
 
+        if ($media->getHash() === $this->mediaDataProvider->getMediaHashForMediaObject($media)) {
+            return true;
+        }
+
+        $this->attributeHelper->addFieldAsAttribute($media, 'alternateName');
+        $this->attributeHelper->addFieldAsAttribute($media, 'name');
+        $this->attributeHelper->addFieldAsAttribute($media, 'filename');
+        $this->attributeHelper->addFieldAsAttribute($media, 'hash');
+
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => (string) $media->getIdentifier(),
             'objectType' => Media::TYPE,
             'adapterName' => ShopwareAdapter::NAME,
         ]);
 
-        $params = [
-            'album' => Album::ALBUM_ARTICLE,
-            'file' => $media->getContent(),
-            'description' => $media->getName(),
-        ];
-
-        $this->attributeHelper->addFieldAsAttribute($media, 'alternateName');
-
-        if (null !== $media->getMediaCategoryIdentifier()) {
-            $mediaCategoryIdentity = $this->identityService->findOneBy([
-                'objectIdentifier' => $media->getMediaCategoryIdentifier(),
-                'objectType' => MediaCategory::TYPE,
-                'adapterName' => ShopwareAdapter::NAME,
-            ]);
-
-            if (null === $mediaCategoryIdentity) {
-                throw new NotFoundException('Missing Media Category for Adapter');
-            }
-
-            $params['album'] = $mediaCategoryIdentity->getAdapterIdentifier();
-        }
-
         if (null !== $identity) {
             try {
-                $mediaObject = $this->resource->getOne($identity->getAdapterIdentifier());
-
-                if (!$this->mediaService->has($mediaObject['path'])) {
-                    $this->identityService->remove($identity);
-
-                    $identity = null;
-                }
+                $this->resource->delete($identity->getAdapterIdentifier());
             } catch (MediaNotFoundException $exception) {
-                $this->identityService->remove($identity);
-
-                $identity = null;
+                // fail silently
             }
+
+            $identities = $this->identityService->findBy([
+                'objectIdentifier' => $identity->getObjectIdentifier(),
+                'objectType' => Media::TYPE,
+                'adapterIdentifier' => $identity->getAdapterIdentifier(),
+                'adapterName' => $identity->getAdapterName(),
+            ]);
+
+            array_walk($identities, function (Identity $identity) {
+                $this->identityService->remove($identity);
+            });
         }
 
-        if (null === $identity) {
-            $mediaModel = $this->resource->create($params);
+        $params = $this->mediaRequestGenerator->generate($media);
+        $mediaModel = $this->resource->create($params);
 
-            $this->identityService->create(
-                $media->getIdentifier(),
-                Media::TYPE,
-                (string) $mediaModel->getId(),
-                ShopwareAdapter::NAME
-            );
-        } else {
-            unset($params['file']);
-
-            $mediaModel = $this->resource->update($identity->getAdapterIdentifier(), $params);
-        }
+        $this->identityService->create(
+            $media->getIdentifier(),
+            Media::TYPE,
+            (string) $mediaModel->getId(),
+            ShopwareAdapter::NAME
+        );
 
         $this->attributePersister->saveMediaAttributes(
             $mediaModel,

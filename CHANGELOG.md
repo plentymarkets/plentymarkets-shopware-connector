@@ -7,6 +7,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - price configurations with multiple selected customer groups
 - use correct shop id for orders
 
+### Changed
+- remove media on update to prevent thumbnail corruption
+- only update media files if file hash changes
+- use array syntax for order querys
+
 ## [2.2.0]
 ### Added
 - translation for backend modul

@@ -196,10 +196,13 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
      */
     private function handleCategory(Category $category, Identity $shopIdentity)
     {
-        $shop = $this->shopRepository->find($shopIdentity->getAdapterIdentifier());
-
         $deepCopy = new DeepCopy();
         $category = $deepCopy->copy($category);
+        $shop = $this->shopRepository->find($shopIdentity->getAdapterIdentifier());
+
+        if (null === $shop) {
+            return null;
+        }
 
         $this->prepareCategory($category, $shopIdentity);
 
@@ -299,7 +302,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             }
         }
 
-        $parans = [
+        $params = [
             'active' => $category->getActive(),
             'position' => $category->getPosition(),
             'name' => $category->getName(),
@@ -322,10 +325,10 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             ]);
 
             if (null === $mediaIdentity) {
-                throw new IdentityNotFoundException('media identity noct found');
+                throw new IdentityNotFoundException('media not found - ' . $mediaIdentifier);
             }
 
-            $parans['media']['mediaId'] = $mediaIdentity->getAdapterIdentifier();
+            $params['media']['mediaId'] = $mediaIdentity->getAdapterIdentifier();
         }
 
         if (null !== $categoryIdentity) {
@@ -339,7 +342,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         }
 
         if (null === $categoryIdentity) {
-            $categoryModel = $this->resource->create($parans);
+            $categoryModel = $this->resource->create($params);
 
             $categoryIdentity = $this->identityService->create(
                 (string) $category->getIdentifier(),
@@ -348,7 +351,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
                 ShopwareAdapter::NAME
             );
         } else {
-            $categoryModel = $this->resource->update($categoryIdentity->getAdapterIdentifier(), $parans);
+            $categoryModel = $this->resource->update($categoryIdentity->getAdapterIdentifier(), $params);
         }
 
         $this->attributePersister->saveCategoryAttributes($categoryModel, $category->getAttributes());

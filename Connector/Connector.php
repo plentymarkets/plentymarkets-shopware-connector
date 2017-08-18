@@ -156,7 +156,7 @@ class Connector implements ConnectorInterface
             $identifier
         ));
 
-        if (null === $objects) {
+        if (empty($objects)) {
             $objects = [];
         }
 

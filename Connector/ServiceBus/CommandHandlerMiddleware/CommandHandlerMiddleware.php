@@ -26,12 +26,7 @@ class CommandHandlerMiddleware implements Middleware
     }
 
     /**
-     * @param CommandInterface $command
-     * @param callable         $next
-     *
-     * @throws NotFoundException
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
     public function execute($command, callable $next)
     {
