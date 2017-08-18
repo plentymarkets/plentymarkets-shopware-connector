@@ -9,6 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - remove media on update to prevent thumbnail corruption
+- use array syntax for order querys
 
 ## [2.2.0]
 ### Added

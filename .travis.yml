@@ -5,6 +5,8 @@ php:
 
 sudo: false
 
+dist: trusty
+
 services:
   - mysql
 
@@ -26,7 +28,7 @@ install:
 before_script:
   - if [[ "$(php --version | grep -cim1 xdebug)" -ge 1 ]]; then phpenv config-rm xdebug.ini; fi
   - git clone https://github.com/shopware/shopware.git ${SHOPWARE_DIRECTORY} --branch ${SHOPWARE_VERSION}
-  - ant -f ${SHOPWARE_DIRECTORY}/build/build.xml -Dapp.host=localhost -Ddb.user=travis -Ddb.host=127.0.0.1 -Ddb.name=shopware build-unit
+  - ant -f ${SHOPWARE_DIRECTORY}/build/build.xml -Dapp.host=localhost -Ddb.user=root -Ddb.host=127.0.0.1 -Ddb.name=shopware build-unit
   - mv ${TRAVIS_BUILD_DIR} ${PLUGIN_DIRECTORY}/${PLUGIN_NAME}
   - php ${HOME}/shopware/bin/console sw:plugin:refresh
   - php ${HOME}/shopware/bin/console sw:plugin:install ${PLUGIN_NAME}
@@ -37,5 +39,6 @@ script:
   - composer test
 
 notifications:
+  email: false
   slack:
     secure: RYu2D/DuaTjXoXL/uqGR7yHSfCV9d267sNiHbFUGec1LBWs77ZsaZq40pNHcscPv7Zk4TEbBiUfDAkKeAShkJX0DcYAm5SxwHgfNC2710PqoESEXrAJPb76CkZmO/Y9PVGENX8vy8D7CGO9BipCOjVv5HyRQ+p0sfQ8z5Th6oRs=
