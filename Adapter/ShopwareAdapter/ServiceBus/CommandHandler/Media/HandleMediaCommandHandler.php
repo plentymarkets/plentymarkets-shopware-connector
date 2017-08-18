@@ -11,6 +11,7 @@ use PlentyConnector\Connector\TransferObject\Media\Media;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Shopware\Components\Api\Exception\NotFoundException as MediaNotFoundException;
 use Shopware\Components\Api\Resource\Media as MediaResource;
+use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
 use ShopwareAdapter\DataProvider\Media\MediaDataProviderInterface;
 use ShopwareAdapter\Helper\AttributeHelper;
 use ShopwareAdapter\RequestGenerator\Media\MediaRequestGeneratorInterface;
@@ -32,11 +33,6 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
     private $identityService;
 
     /**
-     * @var AttributeHelper
-     */
-    private $attributeHelper;
-
-    /**
      * @var MediaRequestGeneratorInterface
      */
     private $mediaRequestGenerator;
@@ -45,6 +41,11 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
      * @var MediaDataProviderInterface
      */
     private $mediaDataProvider;
+
+    /**
+     * @var AttributeHelper
+     */
+    private $attributeHelper;
 
     /**
      * @var AttributeDataPersisterInterface
