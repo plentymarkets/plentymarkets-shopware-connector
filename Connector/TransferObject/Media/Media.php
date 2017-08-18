@@ -26,11 +26,16 @@ class Media extends AbstractTransferObject implements TranslateableInterface, At
     private $mediaCategoryIdentifier = '';
 
     /**
-     * base64 encoded media file
+     * link to the actual media
      *
      * @var string
      */
-    private $content;
+    private $link;
+
+    /**
+     * @var string
+     */
+    private $filename;
 
     /**
      * @var string
@@ -100,17 +105,33 @@ class Media extends AbstractTransferObject implements TranslateableInterface, At
     /**
      * @return string
      */
-    public function getContent()
+    public function getLink()
     {
-        return $this->content;
+        return $this->link;
     }
 
     /**
-     * @param string $content
+     * @param string $link
      */
-    public function setContent($content)
+    public function setLink($link)
     {
-        $this->content = $content;
+        $this->link = $link;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFilename()
+    {
+        return $this->filename;
+    }
+
+    /**
+     * @param string $filename
+     */
+    public function setFilename($filename)
+    {
+        $this->filename = $filename;
     }
 
     /**
@@ -130,7 +151,7 @@ class Media extends AbstractTransferObject implements TranslateableInterface, At
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getName()
     {
@@ -138,15 +159,15 @@ class Media extends AbstractTransferObject implements TranslateableInterface, At
     }
 
     /**
-     * @param string $name
+     * @param null|string $name
      */
-    public function setName($name)
+    public function setName($name = null)
     {
         $this->name = $name;
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getAlternateName()
     {
@@ -154,9 +175,9 @@ class Media extends AbstractTransferObject implements TranslateableInterface, At
     }
 
     /**
-     * @param string $alternateName
+     * @param null|string $alternateName
      */
-    public function setAlternateName($alternateName)
+    public function setAlternateName($alternateName = null)
     {
         $this->alternateName = $alternateName;
     }

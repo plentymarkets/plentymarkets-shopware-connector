@@ -195,15 +195,24 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
      */
     private function handleCategory(Category $category, Identity $shopIdentity)
     {
-        $shop = $this->shopRepository->find($shopIdentity->getAdapterIdentifier());
-
         $deepCopy = new DeepCopy();
         $category = $deepCopy->copy($category);
+        $shop = $this->shopRepository->find($shopIdentity->getAdapterIdentifier());
+
+        if (null === $shop) {
+            return null;
+        }
 
         $this->prepareCategory($category, $shopIdentity);
 
+        $locale = $shop->getLocale();
+
+        if (null === $locale) {
+            return null;
+        }
+
         $languageIdentity = $this->identityService->findOneBy([
-            'adapterIdentifier' => (string) $shop->getLocale()->getId(),
+            'adapterIdentifier' => (string) $locale->getId(),
             'adapterName' => ShopwareAdapter::NAME,
             'objectType' => Language::TYPE,
         ]);
@@ -220,7 +229,13 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         }
 
         if (null === $category->getParentIdentifier()) {
-            $parentCategory = $shop->getCategory()->getId();
+            $mainCategory = $shop->getCategory();
+
+            if (null === $mainCategory) {
+                return null;
+            }
+
+            $parentCategory = $mainCategory->getId();
         } else {
             $parentCategoryIdentities = $this->identityService->findBy([
                 'objectIdentifier' => (string) $category->getParentIdentifier(),
@@ -286,7 +301,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             }
         }
 
-        $parans = [
+        $params = [
             'active' => $category->getActive(),
             'position' => $category->getPosition(),
             'name' => $category->getName(),
@@ -309,10 +324,10 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             ]);
 
             if (null === $mediaIdentity) {
-                throw new NotFoundException();
+                throw new IdentityNotFoundException('media not found - ' . $mediaIdentifier);
             }
 
-            $parans['media']['mediaId'] = $mediaIdentity->getAdapterIdentifier();
+            $params['media']['mediaId'] = $mediaIdentity->getAdapterIdentifier();
         }
 
         if (null !== $categoryIdentity) {
@@ -326,7 +341,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         }
 
         if (null === $categoryIdentity) {
-            $newCategory = $this->resource->create($parans);
+            $newCategory = $this->resource->create($params);
 
             $categoryIdentity = $this->identityService->create(
                 (string) $category->getIdentifier(),
@@ -335,7 +350,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
                 ShopwareAdapter::NAME
             );
         } else {
-            $this->resource->update($categoryIdentity->getAdapterIdentifier(), $parans);
+            $this->resource->update($categoryIdentity->getAdapterIdentifier(), $params);
         }
 
         $this->attributeHelper->saveAttributes(

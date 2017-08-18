@@ -63,8 +63,7 @@ class MappingCommand extends ShopwareCommand
         $this->addArgument(
             'objectType',
             InputArgument::OPTIONAL,
-            'Object type to process. Leave empty for every object type',
-            null
+            'Object type to process. Leave empty for every object type'
         );
     }
 

@@ -338,22 +338,16 @@ class ProductResponseParser implements ProductResponseParserInterface
             $name = $texts[0]['name1'];
         }
 
+        $alternate = $name;
         if (!empty($entry['names'][0]['alternate'])) {
             $alternate = $entry['names'][0]['alternate'];
-        } else {
-            $alternate = '';
-
-            foreach ($texts as $productText) {
-                if (isset($entry['names'][0]['lang']) && $entry['names'][0]['lang'] === $productText['lang']) {
-                    $alternate = $productText['name1'];
-                }
-            }
         }
 
         $media = $mediaResponseParser->parse([
             'mediaCategory' => MediaCategoryHelper::PRODUCT,
             'link' => $entry['url'],
             'name' => $name,
+            'hash' => $entry['md5Checksum'],
             'alternateName' => $alternate,
             'translations' => $this->getMediaTranslations($entry, $texts),
         ]);
