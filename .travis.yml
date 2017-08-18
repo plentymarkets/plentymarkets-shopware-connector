@@ -5,6 +5,8 @@ php:
 
 sudo: false
 
+dist: trusty
+
 services:
   - mysql
 
