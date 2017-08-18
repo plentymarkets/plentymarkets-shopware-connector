@@ -7,6 +7,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - price configurations with multiple selected customer groups
 - use correct shop id for orders
 
+### Changed
+- use array syntax for order querys
+
 ## [2.2.0]
 ### Added
 - Translation for Backend Modul

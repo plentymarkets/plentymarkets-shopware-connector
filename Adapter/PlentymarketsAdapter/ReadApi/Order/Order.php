@@ -11,9 +11,9 @@ use PlentymarketsAdapter\ReadApi\ApiAbstract;
 class Order extends ApiAbstract
 {
     /**
-     * @var string
+     * @var array
      */
-    private $includes = 'addresses,relation';
+    private $includes = ['addresses', 'relations'];
 
     /**
      * @param int $id
