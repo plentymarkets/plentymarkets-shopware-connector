@@ -13,7 +13,7 @@ class Order extends ApiAbstract
     /**
      * @var array
      */
-    private $includes = ['addresses','relations'];
+    private $includes = ['addresses', 'relations'];
 
     /**
      * @param int $id
