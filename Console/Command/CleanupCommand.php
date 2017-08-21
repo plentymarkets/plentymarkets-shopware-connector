@@ -7,7 +7,6 @@ use PlentyConnector\Connector\CleanupService\CleanupServiceInterface;
 use PlentyConnector\Connector\Logger\ConsoleHandler;
 use Psr\Log\LoggerInterface;
 use Shopware\Commands\ShopwareCommand;
-use Shopware\Components\Logger;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;

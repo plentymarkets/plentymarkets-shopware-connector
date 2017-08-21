@@ -3,13 +3,11 @@
 namespace PlentyConnector\Console\Command;
 
 use Exception;
-use PlentyConnector\Connector\Connector;
 use PlentyConnector\Connector\ConnectorInterface;
 use PlentyConnector\Connector\Logger\ConsoleHandler;
 use PlentyConnector\Connector\ServiceBus\QueryType;
 use Psr\Log\LoggerInterface;
 use Shopware\Commands\ShopwareCommand;
-use Shopware\Components\Logger;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputArgument;
