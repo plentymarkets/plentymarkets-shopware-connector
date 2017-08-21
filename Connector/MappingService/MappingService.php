@@ -127,7 +127,7 @@ class MappingService implements MappingServiceInterface
 
         $objects = $this->serviceBus->handle($originQuery);
 
-        if (null === $objects) {
+        if (empty($objects)) {
             $objects = [];
         }
 
