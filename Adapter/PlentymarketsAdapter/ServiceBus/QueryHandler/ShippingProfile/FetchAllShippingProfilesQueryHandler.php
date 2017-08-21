@@ -52,13 +52,10 @@ class FetchAllShippingProfilesQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $shippingProfiles = $this->client->getIterator('orders/shipping/presets');
+        $shippingProfiles = array_map(function ($shippingProfile) {
+            return $this->responseParser->parse($shippingProfile);
+        }, $this->client->request('GET', 'orders/shipping/presets'));
 
-        $result = [];
-        foreach ($shippingProfiles as $shippingProfile) {
-            $result[] = $this->responseParser->parse($shippingProfile);
-        }
-
-        return array_filter($result);
+        return array_filter($shippingProfiles);
     }
 }

@@ -52,13 +52,10 @@ class FetchAllCurrenciesQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $currencies = $this->client->getIterator('orders/currencies');
+        $currencies = array_map(function ($currency) {
+            return $this->responseParser->parse($currency);
+        }, $this->client->request('GET', 'orders/currencies'));
 
-        $result = [];
-        foreach ($currencies as $currency) {
-            $result[] = $this->responseParser->parse($currency);
-        }
-
-        return array_filter($result);
+        return array_filter($currencies);
     }
 }

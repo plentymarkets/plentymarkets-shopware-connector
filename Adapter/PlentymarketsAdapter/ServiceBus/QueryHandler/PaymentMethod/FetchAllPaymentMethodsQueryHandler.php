@@ -52,13 +52,10 @@ class FetchAllPaymentMethodsQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $paymentMethods = $this->client->getIterator('payments/methods');
+        $paymentMethods = array_map(function ($paymentMethod) {
+            return $this->responseParser->parse($paymentMethod);
+        }, $this->client->request('GET', 'payments/methods'));
 
-        $result = [];
-        foreach ($paymentMethods as $paymentMethod) {
-            $result[] = $this->responseParser->parse($paymentMethod);
-        }
-
-        return array_filter($result);
+        return array_filter($paymentMethods);
     }
 }
