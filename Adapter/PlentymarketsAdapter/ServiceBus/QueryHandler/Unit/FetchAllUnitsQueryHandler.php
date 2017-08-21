@@ -52,10 +52,13 @@ class FetchAllUnitsQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $units = array_map(function ($unit) {
-            return $this->responseParser->parse($unit);
-        }, $this->client->request('GET', 'items/units'));
+        $units = $this->client->getIterator('items/units');
 
-        return array_filter($units);
+        $result = [];
+        foreach ($units as $unit) {
+            $result[] = $this->responseParser->parse($unit);
+        }
+
+        return array_filter($result);
     }
 }

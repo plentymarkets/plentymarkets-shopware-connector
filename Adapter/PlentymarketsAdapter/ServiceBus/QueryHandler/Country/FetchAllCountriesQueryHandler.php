@@ -52,10 +52,13 @@ class FetchAllCountriesQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $countries = array_map(function ($country) {
-            return $this->responseParser->parse($country);
-        }, $this->client->request('GET', 'orders/shipping/countries'));
+        $countries = $this->client->getIterator('orders/shipping/countries');
 
-        return array_filter($countries);
+        $result = [];
+        foreach ($countries as $country) {
+            $result[] = $this->responseParser->parse($country);
+        }
+
+        return array_filter($result);
     }
 }
