@@ -7,8 +7,8 @@ use PlentyConnector\Connector\Logger\ConsoleHandler;
 use PlentyConnector\Connector\MappingService\MappingServiceInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
+use Psr\Log\LoggerInterface;
 use Shopware\Commands\ShopwareCommand;
-use Shopware\Components\Logger;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -25,7 +25,7 @@ class MappingCommand extends ShopwareCommand
     private $mappingService;
 
     /**
-     * @var Logger
+     * @var LoggerInterface
      */
     private $logger;
 
@@ -38,12 +38,12 @@ class MappingCommand extends ShopwareCommand
      * MappingCommand constructor.
      *
      * @param MappingServiceInterface $mappingService
-     * @param Logger                  $logger
+     * @param LoggerInterface         $logger
      * @param OutputHandlerInterface  $outputHandler
      */
     public function __construct(
         MappingServiceInterface $mappingService,
-        Logger $logger,
+        LoggerInterface $logger,
         OutputHandlerInterface $outputHandler
     ) {
         $this->mappingService = $mappingService;
