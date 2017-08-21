@@ -4,8 +4,10 @@ namespace PlentyConnector\Console\Command;
 
 use Exception;
 use PlentyConnector\Connector\Connector;
+use PlentyConnector\Connector\ConnectorInterface;
 use PlentyConnector\Connector\Logger\ConsoleHandler;
 use PlentyConnector\Connector\ServiceBus\QueryType;
+use Psr\Log\LoggerInterface;
 use Shopware\Commands\ShopwareCommand;
 use Shopware\Components\Logger;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
@@ -21,24 +23,24 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ProcessCommand extends ShopwareCommand
 {
     /**
-     * @var Connector
+     * @var ConnectorInterface
      */
     private $connector;
 
     /**
-     * @var Logger
+     * @var LoggerInterface
      */
     private $logger;
 
     /**
      * ProcessCommand constructor.
      *
-     * @param Connector $connector
-     * @param Logger    $logger
+     * @param ConnectorInterface $connector
+     * @param LoggerInterface    $logger
      *
      * @throws LogicException
      */
-    public function __construct(Connector $connector, Logger $logger)
+    public function __construct(ConnectorInterface $connector, LoggerInterface $logger)
     {
         $this->connector = $connector;
         $this->logger = $logger;

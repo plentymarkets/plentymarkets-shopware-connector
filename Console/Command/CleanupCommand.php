@@ -5,6 +5,7 @@ namespace PlentyConnector\Console\Command;
 use Exception;
 use PlentyConnector\Connector\CleanupService\CleanupServiceInterface;
 use PlentyConnector\Connector\Logger\ConsoleHandler;
+use Psr\Log\LoggerInterface;
 use Shopware\Commands\ShopwareCommand;
 use Shopware\Components\Logger;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
@@ -23,7 +24,7 @@ class CleanupCommand extends ShopwareCommand
     private $cleanupService;
 
     /**
-     * @var Logger
+     * @var LoggerInterface
      */
     private $logger;
 
@@ -31,11 +32,11 @@ class CleanupCommand extends ShopwareCommand
      * CleanupCommand constructor.
      *
      * @param CleanupServiceInterface $cleanupService
-     * @param Logger                  $logger
+     * @param LoggerInterface         $logger
      *
      * @throws LogicException
      */
-    public function __construct(CleanupServiceInterface $cleanupService, Logger $logger)
+    public function __construct(CleanupServiceInterface $cleanupService, LoggerInterface $logger)
     {
         $this->cleanupService = $cleanupService;
         $this->logger = $logger;

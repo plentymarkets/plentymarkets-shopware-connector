@@ -11,6 +11,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - remove media on update to prevent thumbnail corruption
 - only update media files if file hash changes
 - use array syntax for order querys
+- require interfaces instead of concrete classes in commands
 
 ## [2.2.0]
 ### Added
