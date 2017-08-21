@@ -11,7 +11,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - remove media on update to prevent thumbnail corruption
 - only update media files if file hash changes
 - use array syntax for order querys
-- use iterator to fetch all order status from plentymarkets
+- use iterator to fetch mapping informations from plentymarkets
 
 ## [2.2.0]
 ### Added
