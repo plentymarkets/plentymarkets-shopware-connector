@@ -52,10 +52,13 @@ class FetchAllOrderStatusesQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $statusArray = array_map(function ($orderStatus) {
-            return $this->responseParser->parse($orderStatus);
-        }, $this->client->request('GET', 'orders/statuses', ['with' => 'names']));
+        $status = $this->client->getIterator('orders/statuses', ['with' => 'names']);
 
-        return array_filter($statusArray);
+        $result = [];
+        foreach ($status as $orderStatus) {
+            $result[] = $this->responseParser->parse($orderStatus);
+        }
+
+        return array_filter($result);
     }
 }
