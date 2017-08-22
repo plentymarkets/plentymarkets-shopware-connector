@@ -13,6 +13,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - use array syntax for order querys
 - use iterator to fetch mapping informations from plentymarkets
 - require interfaces instead of concrete classes in commands
+- default to product if order line has a unsupported type
 
 ## [2.2.0]
 ### Added
