@@ -47,11 +47,6 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
     public function parse(array $entry, $taxFree = false)
     {
         switch ($entry['mode']) {
-            case 0:
-            case 1:
-                return $this->handleProduct($entry, $taxFree);
-
-                break;
             case 2:
                 return $this->handleVoucher($entry, $taxFree);
 
@@ -65,7 +60,7 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
 
                 break;
             default:
-                throw new \Exception('unsupported entry mode');
+                return $this->handleProduct($entry, $taxFree);
         }
     }
 
