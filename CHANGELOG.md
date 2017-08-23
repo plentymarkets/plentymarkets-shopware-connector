@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [unreleased]
+## [3.0.0]
 ### Fixed
 - price configurations with multiple selected customer groups
 - use correct shop id for orders
