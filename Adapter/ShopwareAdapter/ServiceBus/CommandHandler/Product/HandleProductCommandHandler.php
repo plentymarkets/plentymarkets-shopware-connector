@@ -18,12 +18,12 @@ use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use Psr\Log\LoggerInterface;
-use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Article;
 use Shopware\Components\Api\Resource\Resource;
 use Shopware\Components\Api\Resource\Variant;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Model\ModelRepository;
 use Shopware\Models\Article\Article as ArticleModel;
 use Shopware\Models\Article\Detail as DetailModel;
 use Shopware\Models\Property\Group as GroupModel;
@@ -250,6 +250,9 @@ class HandleProductCommandHandler implements CommandHandlerInterface
 
                 $parents = array_reverse(array_filter(explode('|', $category->getPath())));
 
+                /**
+                 * @var ShopModel[] $shops
+                 */
                 $shops = $shopRepository->findBy([
                     'categoryId' => array_shift($parents),
                 ]);
@@ -271,12 +274,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             ]);
 
             if (null === $profileIdentity) {
-                /**
-                 * @var LoggerInterface $logger
-                 */
-                $logger = Shopware()->Container()->get('plenty_connector.logger');
-                $logger->notice('shipping profile not mapped - ' . $identifier, ['command' => $command]);
-
                 continue;
             }
 
@@ -408,15 +405,17 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 ShopwareAdapter::NAME
             );
 
-            /**
-             * @var Variant $variantResource
-             */
-            $variantResource = Manager::getResource('Variant');
-
             foreach ($product->getVariations() as $variation) {
-                try {
-                    $variant = $variantResource->getOneByNumber($variation->getNumber());
-                } catch (NotFoundException $exception) {
+                /**
+                 * @var ModelRepository $variantRepository
+                 */
+                $variantRepository = $entityManager->getRepository(DetailModel::class);
+                /**
+                 * @var DetailModel $variant
+                 */
+                $variant = $variantRepository->findOneBy(['number' => $variation->getNumber()]);
+
+                if (null === $variant) {
                     continue;
                 }
 
@@ -426,7 +425,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 );
             }
         } else {
-            $productModel = $resource->update($identity->getAdapterIdentifier(), $params);
+            $resource->update($identity->getAdapterIdentifier(), $params);
 
             foreach ($product->getVariations() as $variation) {
                 if (empty($variation->getPrices())) {
@@ -439,36 +438,55 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 $variantResource = Manager::getResource('Variant');
                 $variantResource->setResultMode(Resource::HYDRATE_OBJECT);
 
-                try {
-                    $variant = $variantResource->getOneByNumber($variation->getNumber());
-                } catch (NotFoundException $exception) {
-                    $variant = null;
-                }
+                /**
+                 * @var ModelRepository $variantRepository
+                 */
+                $variantRepository = $entityManager->getRepository(DetailModel::class);
+
+                /**
+                 * @var DetailModel $variant
+                 */
+                $variant = $variantRepository->findOneBy(['number' => $variation->getNumber()]);
 
                 $variationParams = $this->variationRequestGenerator->generate($variation, $product);
 
                 if (null === $variant) {
                     $variationParams['articleId'] = $identity->getAdapterIdentifier();
 
-                    $variantModel = $variantResource->create($variationParams);
+                    $variantResource->create($variationParams);
+
+                    /**
+                     * @var DetailModel $variant
+                     */
+                    $variant = $variantRepository->findOneBy(['number' => $variation->getNumber()]);
 
                     $attributes = array_merge($product->getAttributes(), $variation->getAttributes());
 
                     $this->attributeDataPersister->saveProductDetailAttributes(
-                        $variantModel,
+                        $variant,
                         $attributes
                     );
                 } else {
-                    $variantModel = $variantResource->update($variant->getId(), $variationParams);
+                    $variantResource->update($variant->getId(), $variationParams);
 
                     $attributes = array_merge($product->getAttributes(), $variation->getAttributes());
 
                     $this->attributeDataPersister->saveProductDetailAttributes(
-                        $variantModel,
+                        $variant,
                         $attributes
                     );
                 }
             }
+
+            /**
+             * @var ModelRepository $articleRepository
+             */
+            $articleRepository = $entityManager->getRepository(ArticleModel::class);
+
+            /**
+             * @var ArticleModel $productModel
+             */
+            $productModel = $articleRepository->find($identity->getAdapterIdentifier());
 
             foreach ($productModel->getDetails() as $detail) {
                 $found = false;
@@ -495,6 +513,9 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 $productRepository = $entityManager->getRepository(ArticleModel::class);
                 $detailRepository = $entityManager->getRepository(DetailModel::class);
 
+                /**
+                 * @var DetailModel $mainDetail
+                 */
                 $mainDetail = $detailRepository->findOneBy(['number' => $mainVariation->getNumber()]);
 
                 $productModel = $productRepository->find($identity->getAdapterIdentifier());
