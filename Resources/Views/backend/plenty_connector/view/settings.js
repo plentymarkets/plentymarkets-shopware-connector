@@ -91,6 +91,7 @@ Ext.define('Shopware.apps.PlentyConnector.view.Settings', {
         return [
             {
                 xtype: 'fieldset',
+                title: '{s name=plentyconnector/view/settings/credentials}{/s}',
                 layout: 'anchor',
 
                 defaults: {
@@ -101,23 +102,53 @@ Ext.define('Shopware.apps.PlentyConnector.view.Settings', {
                 items: [
                     {
                         xtype: 'textfield',
-                        fieldLabel: '{s name=plentyconnector/view/settings/textfield/rest_url}{/s}',
-                        emptyText: 'https://www.ihr-plentymarkets-system.de/',
+                        fieldLabel: '{s name=plentyconnector/view/settings/rest_url}{/s}',
                         name: 'rest_url',
                         allowBlank: false
                     },
                     {
                         xtype: 'textfield',
-                        fieldLabel: '{s name=plentyconnector/view/settings/textfield/rest_username}{/s}',
+                        fieldLabel: '{s name=plentyconnector/view/settings/rest_username}{/s}',
                         name: 'rest_username',
                         allowBlank: false
                     },
                     {
                         xtype: 'textfield',
-                        fieldLabel: '{s name=plentyconnector/view/settings/textfield/rest_password}{/s}',
+                        fieldLabel: '{s name=plentyconnector/view/settings/rest_password}{/s}',
                         name: 'rest_password',
                         allowBlank: false,
                         inputType: 'password'
+                    }
+                ]
+            },
+            {
+                xtype: 'fieldset',
+                title: '{s name=plentyconnector/view/settings/additional}{/s}',
+                layout: 'anchor',
+
+                defaults: {
+                    labelWidth: 155,
+                    anchor: '100%'
+                },
+
+                items: [
+                    {
+                        xtype: 'combobox',
+                        fieldLabel: '{s namespace=backend/article/view/main name=variant/settings/type/label}{/s}',
+                        name: 'product_configurator_type',
+                        allowBlank: false,
+                        editable: false,
+                        mode: 'local',
+                        displayField: 'label',
+                        valueField: 'id',
+                        store: new Ext.data.SimpleStore({
+                            fields:['id', 'label'],
+                            data: [
+                                [0,  '{s namespace=backend/article/view/main name=variant/configurator/types/standard}{/s}'],
+                                [1, '{s namespace=backend/article/view/main name=variant/configurator/types/selection}{/s}'],
+                                [2, '{s namespace=backend/article/view/main name=variant/configurator/types/picture}{/s}']
+                            ]
+                        })
                     }
                 ]
             }

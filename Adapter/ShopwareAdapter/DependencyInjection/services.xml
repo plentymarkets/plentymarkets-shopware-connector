@@ -55,7 +55,9 @@
 
         <!-- Request Generator -->
 
-        <service id="shopware_adapter.request_generator.product.configurator_set" class="ShopwareAdapter\RequestGenerator\Product\ConfiguratorSet\ConfiguratorSetRequestGenerator" />
+        <service id="shopware_adapter.request_generator.product.configurator_set" class="ShopwareAdapter\RequestGenerator\Product\ConfiguratorSet\ConfiguratorSetRequestGenerator">
+            <argument type="service" id="plenty_connector.config" />
+        </service>
 
         <service id="shopware_adapter.request_generator.product.variation" class="ShopwareAdapter\RequestGenerator\Product\Variation\VariationRequestGenerator">
             <argument type="service" id="plenty_connector.identity_service" />

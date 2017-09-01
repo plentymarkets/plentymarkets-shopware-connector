@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
+### Added
+- configurable configurator set type
+
 ### Fixed
 - optimized the update path for versions before 2.0
 - fix for products not able to persist due too detached entities

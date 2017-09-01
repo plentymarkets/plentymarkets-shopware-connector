@@ -5,6 +5,7 @@ Ext.define('Shopware.apps.PlentyConnector.model.Settings', {
     extend: 'Ext.data.Model',
 
     fields: [
+        // credentials
         {
             name: 'rest_url',
             type: 'string'
@@ -16,6 +17,11 @@ Ext.define('Shopware.apps.PlentyConnector.model.Settings', {
         {
             name: 'rest_password',
             type: 'string'
+        },
+        // aditional settings
+        {
+            name: 'product_configurator_type',
+            type: 'integer'
         }
         // {block name="backend/plentyconnector/model/settings/fields"}{/block}
     ],
