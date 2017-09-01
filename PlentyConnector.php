@@ -21,11 +21,13 @@ use PlentyConnector\DependencyInjection\CompilerPass\ValidatorServiceCompilerPas
 use PlentyConnector\Installer\CronjobInstaller;
 use PlentyConnector\Installer\DatabaseInstaller;
 use PlentyConnector\Installer\PermissionInstaller;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin;
 use Shopware\Components\Plugin\Context\ActivateContext;
 use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
 use Shopware\Components\Plugin\Context\UpdateContext;
+use Shopware_Components_Acl;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
@@ -114,24 +116,34 @@ class PlentyConnector extends Plugin
     {
         $this->clearOldDatabaseTables();
 
+        /**
+         * @var ModelManager $models
+         */
+        $models = $this->container->get('models');
+
+        /**
+         * @var Shopware_Components_Acl $acl
+         */
+        $acl = $this->container->get('acl');
+
         // Models
         $databaseInstaller = new DatabaseInstaller(
-            $this->container->get('models'),
+            $models,
             self::$models
         );
         $databaseInstaller->install($context);
 
         // Cronjobs
         $cronjobInstaller = new CronjobInstaller(
-            $this->container->get('dbal_connection'),
+            $models->getConnection(),
             self::$cronjobs
         );
         $cronjobInstaller->install($context);
 
         // Permissions
         $permissionInstaller = new PermissionInstaller(
-            $this->container->get('models'),
-            $this->container->get('acl'),
+            $models,
+            $acl,
             self::$permissions
         );
         $permissionInstaller->install($context);
@@ -148,24 +160,34 @@ class PlentyConnector extends Plugin
             $this->clearOldDatabaseTables();
         }
 
+        /**
+         * @var ModelManager $models
+         */
+        $models = $this->container->get('models');
+
+        /**
+         * @var Shopware_Components_Acl $acl
+         */
+        $acl = $this->container->get('acl');
+
         // Models
         $databaseInstaller = new DatabaseInstaller(
-            $this->container->get('models'),
+            $models,
             self::$models
         );
         $databaseInstaller->update($context);
 
         // Cronjobs
         $cronjobInstaller = new CronjobInstaller(
-            $this->container->get('dbal_connection'),
+            $models->getConnection(),
             self::$cronjobs
         );
         $cronjobInstaller->update($context);
 
         // Permissions
         $permissionInstaller = new PermissionInstaller(
-            $this->container->get('models'),
-            $this->container->get('acl'),
+            $models,
+            $acl,
             self::$permissions
         );
         $permissionInstaller->update($context);
@@ -184,24 +206,34 @@ class PlentyConnector extends Plugin
      */
     public function uninstall(UninstallContext $context)
     {
+        /**
+         * @var ModelManager $models
+         */
+        $models = $this->container->get('models');
+
+        /**
+         * @var Shopware_Components_Acl $acl
+         */
+        $acl = $this->container->get('acl');
+
         // Models
         $databaseInstaller = new DatabaseInstaller(
-            $this->container->get('models'),
+            $models,
             self::$models
         );
         $databaseInstaller->uninstall($context);
 
         // Cronjobs
         $cronjobInstaller = new CronjobInstaller(
-            $this->container->get('dbal_connection'),
+            $models->getConnection(),
             self::$cronjobs
         );
         $cronjobInstaller->uninstall($context);
 
         // Permissions
         $permissionInstaller = new PermissionInstaller(
-            $this->container->get('models'),
-            $this->container->get('acl'),
+            $models,
+            $acl,
             self::$permissions
         );
         $permissionInstaller->uninstall($context);
@@ -308,7 +340,7 @@ class PlentyConnector extends Plugin
     private function clearLastChangedConfigEntries()
     {
         /**
-         * @var EntityManagerInterface $models
+         * @var EntityManagerInterface $entityManager
          */
         $entityManager = $this->container->get('models');
         $repository = $entityManager->getRepository(Config::class);
@@ -317,7 +349,7 @@ class PlentyConnector extends Plugin
          * @var Config $element
          */
         foreach ($repository->findAll() as $element) {
-            if (false !== stripos($element->getName(), 'rest_')) {
+            if (false === stripos($element->getName(), 'LastChangeDateTime')) {
                 continue;
             }
 
@@ -331,6 +363,7 @@ class PlentyConnector extends Plugin
     {
         $tables = [
             'plenty_log',
+            'plenty_config',
             'plenty_mapping_attribute_group',
             'plenty_mapping_attribute_option',
             'plenty_mapping_category',
