@@ -1,4 +1,4 @@
-// {namespace name=backend/plentyconnector/view}
+// {namespace name=backend/plentyconnector/main}
 // {block name=backend/plentyconnector/view/main}
 
 Ext.define('Shopware.apps.PlentyConnector.view.Main', {
@@ -39,4 +39,5 @@ Ext.define('Shopware.apps.PlentyConnector.view.Main', {
         me.add(me.tabpanel);
     }
 });
+
 // {/block}

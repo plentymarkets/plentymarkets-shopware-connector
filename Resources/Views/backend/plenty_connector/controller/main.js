@@ -1,4 +1,4 @@
-// {namespace name=backend/plentyconnector/controller}
+// {namespace name=backend/plentyconnector/main}
 // {block name=backend/plentyconnector/controller/main}
 
 Ext.define('Shopware.apps.PlentyConnector.controller.Main', {
@@ -28,4 +28,5 @@ Ext.define('Shopware.apps.PlentyConnector.controller.Main', {
         me.callParent(arguments);
     }
 });
+
 // {/block}

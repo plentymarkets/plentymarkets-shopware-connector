@@ -6,7 +6,6 @@ use DateTime;
 use DateTimeImmutable;
 use Exception;
 use PlentyConnector\Connector\ConfigService\Model\Config;
-use PlentyConnector\Connector\ConfigService\Model\Config as ConfigModel;
 use Shopware\Components\Model\ModelManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -37,8 +36,28 @@ class ConfigService implements ConfigServiceInterface
     public function __construct(ModelManager $entityManager, ContainerInterface $container)
     {
         $this->entityManager = $entityManager;
-        $this->repository = $entityManager->getRepository(ConfigModel::class);
+        $this->repository = $entityManager->getRepository(Config::class);
         $this->container = $container;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAll()
+    {
+        $containerParameters = $this->container->getParameter('shopware.plenty_connector');
+
+        /**
+         * @var Config[] $configElements
+         */
+        $configElements = $this->repository->findAll();
+
+        $result = [];
+        foreach ($configElements as $element) {
+            $result[$element->getName()] = $element->getValue();
+        }
+
+        return array_merge($result, $containerParameters);
     }
 
     /**

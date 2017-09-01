@@ -1,4 +1,4 @@
-// {namespace name=backend/plentyconnector/controller}
+// {namespace name=backend/plentyconnector/main}
 // {block name=backend/plentyconnector/controller/mapping}
 
 Ext.define('Shopware.apps.PlentyConnector.controller.Mapping', {
@@ -110,4 +110,5 @@ Ext.define('Shopware.apps.PlentyConnector.controller.Mapping', {
         });
     }
 });
+
 // {/block}

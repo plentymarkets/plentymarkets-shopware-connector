@@ -1,4 +1,4 @@
-// {namespace name=backend/plentyconnector/model}
+// {namespace name=backend/plentyconnector/main}
 // {block name=backend/plentyconnector/model/settings}
 
 Ext.define('Shopware.apps.PlentyConnector.model.Settings', {
@@ -7,15 +7,15 @@ Ext.define('Shopware.apps.PlentyConnector.model.Settings', {
     fields: [
         // {block name="backend/plentyconnector/model/settings/fields"}{/block}
         {
-            name: '{s name=plentyconnector/model/settings/fields/apiurl}{/s}',
+            name: 'rest_url',
             type: 'string'
         },
         {
-            name: '{s name=plentyconnector/model/settings/fields/apiusername}{/s}',
+            name: 'rest_username',
             type: 'string'
         },
         {
-            name: '{s name=plentyconnector/model/settings/fields/apipassword}{/s}',
+            name: 'rest_password',
             type: 'string'
         }
     ],
@@ -35,4 +35,5 @@ Ext.define('Shopware.apps.PlentyConnector.model.Settings', {
         }
     }
 });
+
 // {/block}

@@ -1,4 +1,4 @@
-// {namespace name=backend/plentyconnector/controller}
+// {namespace name=backend/plentyconnector/main}
 // {block name=backend/plentyconnector/controller/settings}
 
 Ext.define('Shopware.apps.PlentyConnector.controller.Settings', {
@@ -25,9 +25,9 @@ Ext.define('Shopware.apps.PlentyConnector.controller.Settings', {
         Ext.Ajax.request({
             url: '{url action=testApiCredentials}',
             params: {
-                ApiUrl: form.findField("ApiUrl").getValue(),
-                ApiUsername: form.findField("ApiUsername").getValue(),
-                ApiPassword: form.findField("ApiPassword").getValue()
+                rest_url: form.findField("rest_url").getValue(),
+                rest_username: form.findField("rest_username").getValue(),
+                rest_password: form.findField("rest_password").getValue()
             },
             success: function (response) {
                 view.setLoading(false);

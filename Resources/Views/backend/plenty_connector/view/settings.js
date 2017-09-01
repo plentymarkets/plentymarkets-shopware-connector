@@ -1,4 +1,4 @@
-// {namespace name=backend/plentyconnector/view}
+// {namespace name=backend/plentyconnector/main}
 // {block name=backend/plentyconnector/view/settings}
 
 Ext.define('Shopware.apps.PlentyConnector.view.Settings', {
@@ -91,7 +91,6 @@ Ext.define('Shopware.apps.PlentyConnector.view.Settings', {
         return [
             {
                 xtype: 'fieldset',
-                title: '{s name=plentyconnector/view/settings/title}{/s}',
                 layout: 'anchor',
 
                 defaults: {
@@ -102,22 +101,21 @@ Ext.define('Shopware.apps.PlentyConnector.view.Settings', {
                 items: [
                     {
                         xtype: 'textfield',
-                        fieldLabel: '{s name=plentyconnector/view/settings/textfield/ApiUrl}{/s}',
-                        supportText: 'Tragen Sie hier die URL Ihres plentymarkets-Systems ein. Sie finden diese Information in der plentymarkets-Administration unter <b>Einstellungen » Grundeinstellungen » API-Daten » Host</b>. Die URL muss mit <b>http://</b> oder <b>https://</b> beginnen.',
+                        fieldLabel: '{s name=plentyconnector/view/settings/textfield/rest_url}{/s}',
                         emptyText: 'https://www.ihr-plentymarkets-system.de/',
-                        name: 'ApiUrl',
+                        name: 'rest_url',
                         allowBlank: false
                     },
                     {
                         xtype: 'textfield',
-                        fieldLabel: '{s name=plentyconnector/view/settings/textfield/ApiUsername}{/s}',
-                        name: 'ApiUsername',
+                        fieldLabel: '{s name=plentyconnector/view/settings/textfield/rest_username}{/s}',
+                        name: 'rest_username',
                         allowBlank: false
                     },
                     {
                         xtype: 'textfield',
-                        fieldLabel: '{s name=plentyconnector/view/settings/textfield/ApiPassword}{/s}',
-                        name: 'ApiPassword',
+                        fieldLabel: '{s name=plentyconnector/view/settings/textfield/rest_password}{/s}',
+                        name: 'rest_password',
                         allowBlank: false,
                         inputType: 'password'
                     }

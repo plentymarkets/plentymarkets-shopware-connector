@@ -45,12 +45,12 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         $client = $this->container->get('plentmarkets_adapter.client');
 
         $params = [
-            'username' => $this->Request()->get('ApiUsername'),
-            'password' => $this->Request()->get('ApiPassword'),
+            'username' => $this->Request()->get('rest_username'),
+            'password' => $this->Request()->get('rest_password'),
         ];
 
         $options = [
-            'base_uri' => $this->Request()->get('ApiUrl'),
+            'base_uri' => $this->Request()->get('rest_url'),
         ];
 
         $success = false;
@@ -80,9 +80,9 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
          */
         $config = $this->container->get('plenty_connector.config');
 
-        $config->set('rest_url', $this->Request()->get('ApiUrl'));
-        $config->set('rest_username', $this->Request()->get('ApiUsername'));
-        $config->set('rest_password', $this->Request()->get('ApiPassword'));
+        foreach ($this->cleanParameters($this->Request()->getParams()) as $key => $value) {
+            $config->set($key, $value);
+        }
 
         $this->View()->assign([
             'success' => true,
@@ -95,15 +95,14 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
      */
     public function getSettingsListAction()
     {
+        /**
+         * @var ConfigServiceInterface $config
+         */
         $config = $this->container->get('plenty_connector.config');
 
         $this->View()->assign([
             'success' => true,
-            'data' => [
-                'ApiUrl' => $config->get('rest_url'),
-                'ApiUsername' => $config->get('rest_username'),
-                'ApiPassword' => $config->get('rest_password'),
-            ],
+            'data' => $config->getAll(),
         ]);
     }
 
@@ -118,7 +117,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         $mappingService = Shopware()->Container()->get('plenty_connector.mapping_service');
 
         try {
-            $mappingInformation = $mappingService->getMappingInformation(null);
+            $mappingInformation = $mappingService->getMappingInformation();
         } catch (Exception $exception) {
             $this->View()->assign([
                 'success' => false,
@@ -149,8 +148,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
                     'originAdapterName' => $mapping->getOriginAdapterName(),
                     'destinationAdapterName' => $mapping->getDestinationAdapterName(),
                     'originTransferObjects' => array_map($transferObjectMapping, $mapping->getOriginTransferObjects()),
-                    'destinationTransferObjects' => array_map($transferObjectMapping,
-                        $mapping->getDestinationTransferObjects()),
+                    'destinationTransferObjects' => array_map($transferObjectMapping, $mapping->getDestinationTransferObjects()),
                     'objectType' => $mapping->getObjectType(),
                 ];
             }, $mappingInformation),
@@ -226,5 +224,27 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
                 'message' => $exception->getMessage(),
             ]);
         }
+    }
+
+    private function cleanParameters(array $params)
+    {
+        $result = [];
+
+        $blacklist = [
+            'action',
+            'controller',
+            'module',
+            '_dc',
+        ];
+
+        foreach ($params as $key => $value) {
+            if (in_array($key, $blacklist, true)) {
+                continue;
+            }
+
+            $result[$key] = $value;
+        }
+
+        return $result;
     }
 }

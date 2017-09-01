@@ -1,4 +1,4 @@
-// {namespace name=backend/plentyconnector/store}
+// {namespace name=backend/plentyconnector/main}
 // {block name=backend/plentyconnector/store/settings}
 
 Ext.define('Shopware.apps.PlentyConnector.store.Settings', {
@@ -23,4 +23,5 @@ Ext.define('Shopware.apps.PlentyConnector.store.Settings', {
         }
     }
 });
+
 // {/block}

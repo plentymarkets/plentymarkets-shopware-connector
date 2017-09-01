@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [unreleased]
+### Fixed
+- optimized the update path for versions before 2.0
+- fix for products not able to persist due too detached entities
+
+### Changed
+- use the whole media data for the hash creation, this enforces changes also when media text fields change
+- restructure the backend snippets
+
 ## [3.0.0]
 ### Fixed
 - price configurations with multiple selected customer groups

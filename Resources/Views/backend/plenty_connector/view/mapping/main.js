@@ -1,4 +1,4 @@
-// {namespace name=backend/plentyconnector/view/mapping}
+// {namespace name=backend/plentyconnector/main}
 // {block name=backend/plentyconnector/view/mapping/main}
 
 Ext.define('Shopware.apps.PlentyConnector.view.mapping.Main', {
@@ -39,4 +39,5 @@ Ext.define('Shopware.apps.PlentyConnector.view.mapping.Main', {
         this.addEvents('save');
     }
 });
+
 // {/block}

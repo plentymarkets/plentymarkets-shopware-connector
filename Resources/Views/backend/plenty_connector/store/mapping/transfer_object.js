@@ -1,4 +1,4 @@
-// {namespace name=backend/plentyconnector/store/mapping}
+// {namespace name=backend/plentyconnector/main}
 // {block name=backend/plentyconnector/store/mapping/transferobject}
 
 Ext.define('Shopware.apps.PlentyConnector.store.mapping.TransferObject', {
@@ -8,4 +8,5 @@ Ext.define('Shopware.apps.PlentyConnector.store.mapping.TransferObject', {
 
     model: 'Shopware.apps.PlentyConnector.model.mapping.TransferObject'
 });
+
 // {/block}

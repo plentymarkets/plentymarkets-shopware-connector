@@ -1,4 +1,4 @@
-// {namespace name=backend/plentyconnector/view/mapping}
+// {namespace name=backend/plentyconnector/main}
 // {block name=backend/plentyconnector/view/mapping/tab}
 
 Ext.define('Shopware.apps.PlentyConnector.view.mapping.Tab', {
@@ -121,4 +121,5 @@ Ext.define('Shopware.apps.PlentyConnector.view.mapping.Tab', {
         }];
     }
 });
+
 // {/block}
