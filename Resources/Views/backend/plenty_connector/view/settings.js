@@ -121,6 +121,7 @@ Ext.define('Shopware.apps.PlentyConnector.view.Settings', {
                     }
                 ]
             }
+            // {block name="backend/plentyconnector/view/settings/fields"}{/block}
         ];
     }
 });
