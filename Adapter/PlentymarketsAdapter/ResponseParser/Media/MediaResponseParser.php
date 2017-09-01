@@ -104,7 +104,7 @@ class MediaResponseParser implements MediaResponseParserInterface
             $media->setMediaCategoryIdentifier($entry['mediaCategoryIdentifier']);
             $media->setLink($entry['link']);
             $media->setFilename($entry['filename']);
-            $media->setHash($entry['hash']);
+            $media->setHash(sha1(json_encode($entry))); // include fields when computing the hash
             $media->setName($entry['name']);
             $media->setAlternateName($entry['alternateName']);
             $media->setTranslations($entry['translations']);
