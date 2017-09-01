@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.PlentyConnector.view.Settings', {
     build: function () {
         var me = this;
 
-        if (me.isBuilt == true) {
+        if (me.isBuilt) {
             return;
         }
 
