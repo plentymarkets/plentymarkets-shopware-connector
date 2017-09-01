@@ -99,8 +99,10 @@ class MediaResponseParser implements MediaResponseParserInterface
                 Media::TYPE
             );
 
+            $entry['identifier'] = $identity->getObjectIdentifier();
+
             $media = new Media();
-            $media->setIdentifier($identity->getObjectIdentifier());
+            $media->setIdentifier($entry['identity']);
             $media->setMediaCategoryIdentifier($entry['mediaCategoryIdentifier']);
             $media->setLink($entry['link']);
             $media->setFilename($entry['filename']);
