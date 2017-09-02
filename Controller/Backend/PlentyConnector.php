@@ -247,6 +247,40 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         ]);
     }
 
+    public function getItemWarehousesAction()
+    {
+        /**
+         * @var ClientInterface $client
+         */
+        $client = $this->container->get('plentmarkets_adapter.client');
+
+        /**
+         * @var Shopware_Components_Snippet_Manager $snippetManager
+         */
+        $snippetManager = $this->container->get('snippets');
+        $namespace = 'backend/plentyconnector/main';
+        $snippet = 'plentyconnector/view/settings/additional/item_warehouse/virtualWarehouse';
+
+        $data = [
+            [
+                'id' => 0,
+                'name' => $snippetManager->getNamespace($namespace)->get($snippet),
+            ],
+        ];
+
+        foreach ($client->request('GET', 'stockmanagement/warehouses') as $origin) {
+            $data[] = [
+                'id' => $origin['id'],
+                'name' => $origin['name'],
+            ];
+        }
+
+        $this->View()->assign([
+            'success' => true,
+            'data' => $data,
+        ]);
+    }
+
     private function cleanParameters(array $params)
     {
         $result = [];

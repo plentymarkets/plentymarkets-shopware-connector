@@ -25,7 +25,8 @@ Ext.define('Shopware.apps.PlentyConnector', {
         'mapping.Information',
         'mapping.TransferObject',
         'Settings',
-        'additional.OrderOrigin'
+        'additional.OrderOrigin',
+        'additional.ItemWarehouse'
     ],
 
     models: [
@@ -33,7 +34,8 @@ Ext.define('Shopware.apps.PlentyConnector', {
         'mapping.Information',
         'mapping.TransferObject',
         'Settings',
-        'additional.OrderOrigin'
+        'additional.OrderOrigin',
+        'additional.ItemWarehouse'
     ],
 
     /**

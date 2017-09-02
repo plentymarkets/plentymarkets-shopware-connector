@@ -514,10 +514,13 @@ class ProductResponseParser implements ProductResponseParserInterface
     private function getStock($variation)
     {
         $summedStocks = 0;
-
-        // Test auf Hauptlager: $variation['mainWarehouseId'] === $stock['warehouseId']
+        $itemWarehouse = (int) $this->config->get('item_warehouse', 0);
 
         foreach ($variation['stock'] as $stock) {
+            if ($itemWarehouse !== 0 && $stock['warehouseId'] !== $itemWarehouse) {
+                continue;
+            }
+
             if (array_key_exists('netStock', $stock)) {
                 $summedStocks += $stock['netStock'];
             }

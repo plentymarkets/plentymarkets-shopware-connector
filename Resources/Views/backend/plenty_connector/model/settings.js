@@ -30,6 +30,10 @@ Ext.define('Shopware.apps.PlentyConnector.model.Settings', {
         {
             name: 'order_origin',
             type: 'integer'
+        },
+        {
+            name: 'item_warehouse',
+            type: 'integer'
         }
         // {block name="backend/plentyconnector/model/settings/fields"}{/block}
     ],

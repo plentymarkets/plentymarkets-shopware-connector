@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - configurable configurator set type
 - configurable variation number field
 - configurable order origin (referrer)
+- configurable item warehouse, used for stock calculation
 
 ### Fixed
 - optimized the update path for versions before 2.0
