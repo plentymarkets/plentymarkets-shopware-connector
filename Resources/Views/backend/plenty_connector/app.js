@@ -24,14 +24,16 @@ Ext.define('Shopware.apps.PlentyConnector', {
         'mapping.Row',
         'mapping.Information',
         'mapping.TransferObject',
-        'Settings'
+        'Settings',
+        'additional.OrderOrigin'
     ],
 
     models: [
         'mapping.Row',
         'mapping.Information',
         'mapping.TransferObject',
-        'Settings'
+        'Settings',
+        'additional.OrderOrigin'
     ],
 
     /**

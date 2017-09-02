@@ -26,8 +26,11 @@ Ext.define('Shopware.apps.PlentyConnector.model.Settings', {
         {
             name: 'variation_number_field',
             type: 'string'
+        },
+        {
+            name: 'order_origin',
+            type: 'integer'
         }
-
         // {block name="backend/plentyconnector/model/settings/fields"}{/block}
     ],
 

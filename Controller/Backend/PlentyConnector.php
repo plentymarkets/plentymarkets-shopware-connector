@@ -114,7 +114,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         /**
          * @var MappingServiceInterface $mappingService
          */
-        $mappingService = Shopware()->Container()->get('plenty_connector.mapping_service');
+        $mappingService = $this->container->get('plenty_connector.mapping_service');
 
         try {
             $mappingInformation = $mappingService->getMappingInformation();
@@ -169,7 +169,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         /**
          * @var IdentityService $identityService
          */
-        $identityService = Shopware()->Container()->get('plenty_connector.identity_service');
+        $identityService = $this->container->get('plenty_connector.identity_service');
 
         try {
             foreach ($updates as $key => $update) {
@@ -224,6 +224,27 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
                 'message' => $exception->getMessage(),
             ]);
         }
+    }
+
+    public function getOrderOriginsAction()
+    {
+        /**
+         * @var ClientInterface $client
+         */
+        $client = $this->container->get('plentmarkets_adapter.client');
+
+        $data = [];
+        foreach ($client->request('GET', 'orders/referrers') as $origin) {
+            $data[] = [
+                'id' => $origin['id'],
+                'name' => $origin['name'],
+            ];
+        }
+
+        $this->View()->assign([
+            'success' => true,
+            'data' => $data,
+        ]);
     }
 
     private function cleanParameters(array $params)

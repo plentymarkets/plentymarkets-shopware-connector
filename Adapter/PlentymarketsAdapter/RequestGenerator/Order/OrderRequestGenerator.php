@@ -2,6 +2,7 @@
 
 namespace PlentymarketsAdapter\RequestGenerator\Order;
 
+use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Language\Language;
@@ -49,26 +50,34 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
     private $addressReuqestGenerator;
 
     /**
+     * @var ConfigServiceInterface
+     */
+    private $config;
+
+    /**
      * OrderRequestGenerator constructor.
      *
-     * @param IdentityServiceInterface           $identityService
-     * @param ClientInterface                    $client
+     * @param IdentityServiceInterface $identityService
+     * @param ClientInterface $client
      * @param OrderItemRequestGeneratorInterface $orderItemRequestGenerator
-     * @param CustomerRequestGeneratorInterface  $customerRequestGenerator
-     * @param AddressRequestGeneratorInterface   $addressReuqestGenerator
+     * @param CustomerRequestGeneratorInterface $customerRequestGenerator
+     * @param AddressRequestGeneratorInterface $addressReuqestGenerator
+     * @param ConfigServiceInterface $config
      */
     public function __construct(
         IdentityServiceInterface $identityService,
         ClientInterface $client,
         OrderItemRequestGeneratorInterface $orderItemRequestGenerator,
         CustomerRequestGeneratorInterface $customerRequestGenerator,
-        AddressRequestGeneratorInterface $addressReuqestGenerator
+        AddressRequestGeneratorInterface $addressReuqestGenerator,
+        ConfigServiceInterface $config
     ) {
         $this->identityService = $identityService;
         $this->client = $client;
         $this->orderItemRequestGenerator = $orderItemRequestGenerator;
         $this->customerRequestGenerator = $customerRequestGenerator;
         $this->addressReuqestGenerator = $addressReuqestGenerator;
+        $this->config = $config;
     }
 
     /**
@@ -194,7 +203,7 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
             $params['orderItems'][] = $this->orderItemRequestGenerator->generate($orderItem, $order);
         }
 
-        $params['referrerId'] = 1;
+        $params['referrerId'] = $this->config->get('order_origin', 1);
 
         return $params;
     }

@@ -156,12 +156,26 @@ Ext.define('Shopware.apps.PlentyConnector.view.Settings', {
                         editable: false,
                         mode: 'local',
                         value: 'number',
+                        displayField: 'label',
+                        valueField: 'id',
                         triggerAction: 'all',
                         selectOnFocus: true,
                         store: [
                             ['number', '{s name=plentyconnector/view/settings/additional/product_configurator_type/number}{/s}'],
                             ['id', '{s name=plentyconnector/view/settings/additional/product_configurator_type/variation_id}{/s}']
                         ]
+                    },
+                    {
+                        xtype: 'combobox',
+                        fieldLabel: '{s name=plentyconnector/view/settings/additional/order_origin/label}{/s}',
+                        name: 'order_origin',
+                        allowBlank: false,
+                        editable: false,
+                        triggerAction: 'all',
+                        selectOnFocus: true,
+                        displayField: 'name',
+                        valueField: 'id',
+                        store: Ext.create('Shopware.apps.PlentyConnector.store.additional.OrderOrigin').load()
                     }
                 ]
             }
