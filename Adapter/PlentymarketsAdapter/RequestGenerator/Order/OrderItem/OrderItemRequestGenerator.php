@@ -176,7 +176,7 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
      *
      * @return int
      */
-    public function getVariationIdentifierByIdentifier($identifier)
+    private function getVariationIdentifierByIdentifier($identifier)
     {
         $variations = $this->client->request('GET', 'items/variations', ['id' => $identifier]);
 
