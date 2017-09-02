@@ -5,6 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [unreleased]
 ### Added
 - configurable configurator set type
+- configurable variation number field
 
 ### Fixed
 - optimized the update path for versions before 2.0

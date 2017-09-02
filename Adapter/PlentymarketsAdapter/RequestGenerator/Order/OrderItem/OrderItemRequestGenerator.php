@@ -2,6 +2,7 @@
 
 namespace PlentymarketsAdapter\RequestGenerator\Order\OrderItem;
 
+use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Currency\Currency;
@@ -29,15 +30,25 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
     private $client;
 
     /**
+     * @var ConfigServiceInterface
+     */
+    private $config;
+
+    /**
      * OrderItemRequestGenerator constructor.
      *
      * @param IdentityServiceInterface $identityService
-     * @param ClientInterface          $client
+     * @param ClientInterface $client
+     * @param ConfigServiceInterface $config
      */
-    public function __construct(IdentityServiceInterface $identityService, ClientInterface $client)
-    {
+    public function __construct(
+        IdentityServiceInterface $identityService,
+        ClientInterface $client,
+        ConfigServiceInterface $config
+    ) {
         $this->identityService = $identityService;
         $this->client = $client;
+        $this->config = $config;
     }
 
     /**
@@ -98,7 +109,7 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
         }
 
         if (!empty($orderItem->getNumber())) {
-            $itemParams['itemVariationId'] = $this->getVariationIdFromNumber($orderItem->getNumber());
+            $itemParams['itemVariationId'] = $this->getVariationIdentifier($orderItem);
         } else {
             $itemParams['itemVariationId'] = 0;
         }
@@ -147,11 +158,43 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
     }
 
     /**
+     * @param OrderItem $orderItem
+     *
+     * @return int
+     */
+    private function getVariationIdentifier(OrderItem $orderItem)
+    {
+        if ($this->config->get('variation_number_field', 'number') === 'number') {
+            return $this->getVariationIdentifierFromNumber($orderItem->getNumber());
+        }
+
+        return $this->getVariationIdentifierByIdentifier($orderItem->getNumber());
+    }
+
+    /**
+     * @param $identifier
+     *
+     * @return int
+     */
+    public function getVariationIdentifierByIdentifier($identifier)
+    {
+        $variations = $this->client->request('GET', 'items/variations', ['id' => $identifier]);
+
+        if (!empty($variations)) {
+            $variation = array_shift($variations);
+
+            return $variation['id'];
+        }
+
+        return 0;
+    }
+
+    /**
      * @param $number
      *
      * @return int
      */
-    private function getVariationIdFromNumber($number)
+    private function getVariationIdentifierFromNumber($number)
     {
         $variations = $this->client->request('GET', 'items/variations', ['numberExact' => $number]);
 

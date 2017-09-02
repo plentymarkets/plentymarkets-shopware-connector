@@ -5,6 +5,7 @@ namespace PlentymarketsAdapter\ResponseParser\Product;
 use DateTimeImmutable;
 use DateTimeZone;
 use InvalidArgumentException;
+use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Category\Category;
@@ -52,6 +53,11 @@ class ProductResponseParser implements ProductResponseParserInterface
     private $logger;
 
     /**
+     * @var ConfigServiceInterface
+     */
+    private $config;
+
+    /**
      * @var \PlentymarketsAdapter\ReadApi\Webstore
      */
     private $webstoresApi;
@@ -67,20 +73,23 @@ class ProductResponseParser implements ProductResponseParserInterface
     /**
      * ProductResponseParser constructor.
      *
-     * @param IdentityServiceInterface     $identityService
+     * @param IdentityServiceInterface $identityService
      * @param PriceResponseParserInterface $priceResponseParser
-     * @param ClientInterface              $client
-     * @param LoggerInterface              $logger
+     * @param ClientInterface $client
+     * @param LoggerInterface $logger
+     * @param ConfigServiceInterface $config
      */
     public function __construct(
         IdentityServiceInterface $identityService,
         PriceResponseParserInterface $priceResponseParser,
         ClientInterface $client,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ConfigServiceInterface $config
     ) {
         $this->identityService = $identityService;
         $this->priceResponseParser = $priceResponseParser;
         $this->logger = $logger;
+        $this->config = $config;
 
         //TODO: inject when refactoring this class
         $this->webstoresApi = new \PlentymarketsAdapter\ReadApi\Webstore($client);
@@ -506,6 +515,8 @@ class ProductResponseParser implements ProductResponseParserInterface
     {
         $summedStocks = 0;
 
+        // Test auf Hauptlager: $variation['mainWarehouseId'] === $stock['warehouseId']
+
         foreach ($variation['stock'] as $stock) {
             if (array_key_exists('netStock', $stock)) {
                 $summedStocks += $stock['netStock'];
@@ -655,7 +666,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             $variation->setActive((bool) $element['isActive']);
             $variation->setIsMain($first);
             $variation->setStock($this->getStock($element));
-            $variation->setNumber((string) $element['number']);
+            $variation->setNumber($this->getVariationNumber($element));
             $variation->setBarcodes($this->getBarcodes($element));
             $variation->setPosition((int) $element['position']);
             $variation->setModel((string) $element['model']);
@@ -681,6 +692,20 @@ class ProductResponseParser implements ProductResponseParserInterface
         }
 
         return $mappedVariations;
+    }
+
+    /**
+     * @param array $element
+     *
+     * @return string
+     */
+    private function getVariationNumber(array $element)
+    {
+        if ($this->config->get('variation_number_field', 'number') === 'number') {
+            return (string) $element['number'];
+        }
+
+        return (string) $element['id'];
     }
 
     /**

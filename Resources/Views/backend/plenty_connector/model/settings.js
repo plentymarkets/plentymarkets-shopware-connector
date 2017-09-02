@@ -22,7 +22,12 @@ Ext.define('Shopware.apps.PlentyConnector.model.Settings', {
         {
             name: 'product_configurator_type',
             type: 'integer'
+        },
+        {
+            name: 'variation_number_field',
+            type: 'string'
         }
+
         // {block name="backend/plentyconnector/model/settings/fields"}{/block}
     ],
 

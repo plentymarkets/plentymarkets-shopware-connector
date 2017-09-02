@@ -139,16 +139,29 @@ Ext.define('Shopware.apps.PlentyConnector.view.Settings', {
                         allowBlank: false,
                         editable: false,
                         mode: 'local',
-                        displayField: 'label',
-                        valueField: 'id',
-                        store: new Ext.data.SimpleStore({
-                            fields:['id', 'label'],
-                            data: [
-                                [0,  '{s namespace=backend/article/view/main name=variant/configurator/types/standard}{/s}'],
-                                [1, '{s namespace=backend/article/view/main name=variant/configurator/types/selection}{/s}'],
-                                [2, '{s namespace=backend/article/view/main name=variant/configurator/types/picture}{/s}']
-                            ]
-                        })
+                        value: 0,
+                        triggerAction: 'all',
+                        selectOnFocus: true,
+                        store: [
+                            [0, '{s namespace=backend/article/view/main name=variant/configurator/types/standard}{/s}'],
+                            [1, '{s namespace=backend/article/view/main name=variant/configurator/types/selection}{/s}'],
+                            [2, '{s namespace=backend/article/view/main name=variant/configurator/types/picture}{/s}']
+                        ]
+                    },
+                    {
+                        xtype: 'combobox',
+                        fieldLabel: '{s name=plentyconnector/view/settings/additional/product_configurator_type/label}{/s}',
+                        name: 'variation_number_field',
+                        allowBlank: false,
+                        editable: false,
+                        mode: 'local',
+                        value: 'number',
+                        triggerAction: 'all',
+                        selectOnFocus: true,
+                        store: [
+                            ['number', '{s name=plentyconnector/view/settings/additional/product_configurator_type/number}{/s}'],
+                            ['id', '{s name=plentyconnector/view/settings/additional/product_configurator_type/variation_id}{/s}']
+                        ]
                     }
                 ]
             }
