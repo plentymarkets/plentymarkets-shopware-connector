@@ -1,13 +1,14 @@
 <?php
 
-namespace PlentyConnector\Connector\ServiceBus\Query\Stock;
+namespace PlentyConnector\Connector\ServiceBus\Query\Variation;
 
-use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
+use Assert\Assertion;
+use PlentyConnector\Connector\ServiceBus\Query\FetchAllQueryInterface;
 
 /**
- * Class GetStockQuery.
+ * Class FetchAllVariationsQuery.
  */
-class GetStockQuery implements QueryInterface
+class FetchAllVariationsQuery implements FetchAllQueryInterface
 {
     /**
      * @var string
@@ -15,17 +16,19 @@ class GetStockQuery implements QueryInterface
     private $adapterName;
 
     /**
-     * GetStockQuery constructor.
+     * FetchAllVariationsQuery constructor.
      *
      * @param string $adapterName
      */
     public function __construct($adapterName)
     {
+        Assertion::string($adapterName);
+
         $this->adapterName = $adapterName;
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getAdapterName()
     {

@@ -4,32 +4,26 @@ namespace PlentymarketsAdapter\ResponseParser\Product;
 
 use DateTimeImmutable;
 use DateTimeZone;
-use InvalidArgumentException;
-use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Category\Category;
 use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
-use PlentyConnector\Connector\TransferObject\Product\Barcode\Barcode;
 use PlentyConnector\Connector\TransferObject\Product\Image\Image;
 use PlentyConnector\Connector\TransferObject\Product\LinkedProduct\LinkedProduct;
 use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\Connector\TransferObject\Product\Property\Property;
 use PlentyConnector\Connector\TransferObject\Product\Property\Value\Value;
-use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
 use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
-use PlentyConnector\Connector\TransferObject\Unit\Unit;
 use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
 use PlentymarketsAdapter\Client\ClientInterface;
-use PlentymarketsAdapter\Helper\MediaCategoryHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ResponseParser\Media\MediaResponseParserInterface;
-use PlentymarketsAdapter\ResponseParser\Product\Price\PriceResponseParserInterface;
+use PlentymarketsAdapter\ResponseParser\Product\Image\ImageResponseParserInterface;
+use PlentymarketsAdapter\ResponseParser\Product\Variation\VariationResponseParserInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -43,64 +37,53 @@ class ProductResponseParser implements ProductResponseParserInterface
     private $identityService;
 
     /**
-     * @var PriceResponseParserInterface
-     */
-    private $priceResponseParser;
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
 
     /**
-     * @var ConfigServiceInterface
+     * @var ImageResponseParserInterface
      */
-    private $config;
+    private $imageResponseParser;
 
     /**
-     * @var \PlentymarketsAdapter\ReadApi\Webstore
+     * @var VariationResponseParserInterface
      */
-    private $webstoresApi;
+    private $variationResponseParser;
+
     private $itemsItemShippingProfilesApi;
     private $itemsImagesApi;
     private $itemsVariationsVariationPropertiesApi;
     private $itemsPropertiesSelectionsApi;
-    private $availabilitiesApi;
-    private $itemAttributesApi;
-    private $itemAttributesValuesApi;
     private $itemsPropertiesNamesApi;
 
     /**
      * ProductResponseParser constructor.
      *
-     * @param IdentityServiceInterface $identityService
-     * @param PriceResponseParserInterface $priceResponseParser
-     * @param ClientInterface $client
-     * @param LoggerInterface $logger
-     * @param ConfigServiceInterface $config
+     * @param IdentityServiceInterface         $identityService
+     * @param LoggerInterface                  $logger
+     * @param ImageResponseParserInterface     $imageResponseParser
+     * @param VariationResponseParserInterface $variationResponseParser
+     * @param ClientInterface                  $client
      */
     public function __construct(
         IdentityServiceInterface $identityService,
-        PriceResponseParserInterface $priceResponseParser,
-        ClientInterface $client,
         LoggerInterface $logger,
-        ConfigServiceInterface $config
+        ImageResponseParserInterface $imageResponseParser,
+        VariationResponseParserInterface $variationResponseParser,
+        ClientInterface $client
     ) {
         $this->identityService = $identityService;
-        $this->priceResponseParser = $priceResponseParser;
         $this->logger = $logger;
-        $this->config = $config;
+        $this->imageResponseParser = $imageResponseParser;
+        $this->variationResponseParser = $variationResponseParser;
 
         //TODO: inject when refactoring this class
-        $this->webstoresApi = new \PlentymarketsAdapter\ReadApi\Webstore($client);
         $this->itemsItemShippingProfilesApi = new \PlentymarketsAdapter\ReadApi\Item\ShippingProfile($client);
         $this->itemsImagesApi = new \PlentymarketsAdapter\ReadApi\Item\Image($client);
         $this->itemsVariationsVariationPropertiesApi = new \PlentymarketsAdapter\ReadApi\Item\Variation\Property($client);
         $this->itemsPropertiesSelectionsApi = new\PlentymarketsAdapter\ReadApi\Item\Property\Selection($client);
-        $this->availabilitiesApi = new \PlentymarketsAdapter\ReadApi\Availability($client);
         $this->itemsPropertiesNamesApi = new \PlentymarketsAdapter\ReadApi\Item\Property\Name($client);
-        $this->itemAttributesApi = new \PlentymarketsAdapter\ReadApi\Item\Attribute($client);
-        $this->itemAttributesValuesApi = new \PlentymarketsAdapter\ReadApi\Item\Attribute\Value($client);
     }
 
     /**
@@ -110,17 +93,17 @@ class ProductResponseParser implements ProductResponseParserInterface
      */
     public function parse(array $product)
     {
-        static $webstores;
-
-        if (null === $webstores) {
-            $webstores = $this->webstoresApi->findAll();
-        }
-
         $result = [];
 
-        try {
-            $mainVariation = $this->getMainVariation($product['variations']);
-        } catch (InvalidArgumentException $exception) {
+        $mainVariation = $this->getMainVariation($product['variations']);
+
+        if (empty($mainVariation)) {
+            return [];
+        }
+
+        $shopIdentifiers = $this->getShopIdentifiers($mainVariation);
+
+        if (empty($shopIdentifiers)) {
             return [];
         }
 
@@ -130,32 +113,19 @@ class ProductResponseParser implements ProductResponseParserInterface
             Product::TYPE
         );
 
-        $hasStockLimitation = array_filter($product['variations'], function (array $variation) {
-            return (bool) $variation['stockLimitation'];
-        });
-
-        $shopIdentifiers = $this->getShopIdentifiers($mainVariation);
-
-        if (empty($shopIdentifiers)) {
-            return [];
-        }
-
-        $variations = $this->getVariations($product['texts'], $product['variations'], $result);
-
         $productObject = new Product();
         $productObject->setIdentifier($identity->getObjectIdentifier());
         $productObject->setName((string) $product['texts'][0]['name1']);
         $productObject->setNumber((string) $mainVariation['number']);
-        $productObject->setActive($this->getActive($variations));
+        $productObject->setActive($this->getActive($product['variations']));
         $productObject->setShopIdentifiers($shopIdentifiers);
         $productObject->setManufacturerIdentifier($this->getManufacturerIdentifier($product));
         $productObject->setCategoryIdentifiers($this->getCategories($mainVariation));
         $productObject->setDefaultCategoryIdentifiers($this->getDafaultCategories($mainVariation));
         $productObject->setShippingProfileIdentifiers($this->getShippingProfiles($product));
         $productObject->setImages($this->getImages($product, $product['texts'], $result));
-        $productObject->setVariations($variations);
         $productObject->setVatRateIdentifier($this->getVatRateIdentifier($mainVariation));
-        $productObject->setStockLimitation((bool) $hasStockLimitation);
+        $productObject->setStockLimitation($this->getStockLimitation($product));
         $productObject->setDescription((string) $product['texts'][0]['shortDescription']);
         $productObject->setLongDescription((string) $product['texts'][0]['description']);
         $productObject->setTechnicalDescription((string) $product['texts'][0]['technicalData']);
@@ -170,9 +140,30 @@ class ProductResponseParser implements ProductResponseParserInterface
         $productObject->setAvailableTo($this->getAvailableTo($mainVariation));
         $productObject->setAttributes($this->getAttributes($product));
 
-        $result[$identity->getObjectIdentifier()] = $productObject;
+        $result[$productObject->getIdentifier()] = $productObject;
+
+        $possibleElements = $this->variationResponseParser->parse($product);
+        foreach ($possibleElements as $element) {
+            $result[$element->getIdentifier()] = $element;
+        }
 
         return $result;
+    }
+
+    /**
+     * @param array $product
+     *
+     * @return bool
+     */
+    private function getStockLimitation(array $product)
+    {
+        foreach ($product['variations'] as $variation) {
+            if ($variation['stockLimitation']) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -187,55 +178,10 @@ class ProductResponseParser implements ProductResponseParserInterface
         });
 
         if (empty($mainVariation)) {
-            throw new InvalidArgumentException('product without main variaton');
+            return [];
         }
 
         return array_shift($mainVariation);
-    }
-
-    /**
-     * @param array $texts
-     * @param array $variation
-     * @param array $result
-     *
-     * @return Image[]
-     */
-    private function getVariationImages(array $texts, array $variation, array &$result)
-    {
-        $images = [];
-
-        foreach ($variation['images'] as $entry) {
-            $images[] = $this->parseImage($entry, $texts, $result);
-        }
-
-        return array_filter($images);
-    }
-
-    /**
-     * @param array $variation
-     *
-     * @throws NotFoundException
-     *
-     * @return string
-     */
-    private function getUnitIdentifier(array $variation)
-    {
-        if (empty($variation['unit'])) {
-            return null;
-        }
-
-        // Unit
-        $unitIdentity = $this->identityService->findOneBy([
-            'adapterIdentifier' => $variation['unit']['unitId'],
-            'adapterName' => PlentymarketsAdapter::NAME,
-            'objectType' => Unit::TYPE,
-        ]);
-
-        if (null === $unitIdentity) {
-            throw new NotFoundException('missing mapping for unit');
-        }
-
-        return $unitIdentity->getObjectIdentifier();
     }
 
     /**
@@ -258,22 +204,6 @@ class ProductResponseParser implements ProductResponseParserInterface
         }
 
         return $vatRateIdentity->getObjectIdentifier();
-    }
-
-    /**
-     * @param array $variation
-     *
-     * @return null|DateTimeImmutable
-     */
-    private function getReleaseDate(array $variation)
-    {
-        if (null !== $variation['releasedAt']) {
-            $timezone = new DateTimeZone('UTC');
-
-            return new DateTimeImmutable($variation['releasedAt'], $timezone);
-        }
-
-        return null;
     }
 
     /**
@@ -328,72 +258,6 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * @param array $entry
-     * @param array $texts
-     * @param array $result
-     *
-     * @return Image
-     */
-    private function parseImage(array $entry, array $texts, array &$result)
-    {
-        /**
-         * @var MediaResponseParserInterface $mediaResponseParser
-         */
-        $mediaResponseParser = Shopware()->Container()->get('plentmarkets_adapter.response_parser.media');
-
-        if (!empty($entry['names'][0]['name'])) {
-            $name = $entry['names'][0]['name'];
-        } else {
-            $name = $texts[0]['name1'];
-        }
-
-        $alternate = $name;
-        if (!empty($entry['names'][0]['alternate'])) {
-            $alternate = $entry['names'][0]['alternate'];
-        }
-
-        $media = $mediaResponseParser->parse([
-            'mediaCategory' => MediaCategoryHelper::PRODUCT,
-            'link' => $entry['url'],
-            'name' => $name,
-            'hash' => $entry['md5Checksum'],
-            'alternateName' => $alternate,
-            'translations' => $this->getMediaTranslations($entry, $texts),
-        ]);
-
-        if (null === $media) {
-            return null;
-        }
-
-        $result[$media->getIdentifier()] = $media;
-
-        $linkedShops = array_filter($entry['availabilities'], function (array $availabilitiy) {
-            return $availabilitiy['type'] === 'mandant';
-        });
-
-        $shopIdentifiers = array_map(function ($shop) {
-            $shopIdentity = $this->identityService->findOneBy([
-                'adapterIdentifier' => (string) $shop['value'],
-                'adapterName' => PlentymarketsAdapter::NAME,
-                'objectType' => Shop::TYPE,
-            ]);
-
-            if (null === $shopIdentity) {
-                return null;
-            }
-
-            return $shopIdentity->getObjectIdentifier();
-        }, $linkedShops);
-
-        $image = new Image();
-        $image->setMediaIdentifier($media->getIdentifier());
-        $image->setShopIdentifiers(array_filter($shopIdentifiers));
-        $image->setPosition((int) $entry['position']);
-
-        return $image;
-    }
-
-    /**
      * @param array $product
      * @param array $texts
      * @param array $result
@@ -406,7 +270,7 @@ class ProductResponseParser implements ProductResponseParserInterface
 
         $images = [];
         foreach ($entries as $entry) {
-            $images[] = $this->parseImage($entry, $texts, $result);
+            $images[] = $this->imageResponseParser->parseImage($entry, $texts, $result);
         }
 
         return array_filter($images);
@@ -507,29 +371,6 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * @param $variation
-     *
-     * @return float
-     */
-    private function getStock($variation)
-    {
-        $summedStocks = 0;
-        $itemWarehouse = (int) $this->config->get('item_warehouse', 0);
-
-        foreach ($variation['stock'] as $stock) {
-            if ($itemWarehouse !== 0 && $stock['warehouseId'] !== $itemWarehouse) {
-                continue;
-            }
-
-            if (array_key_exists('netStock', $stock)) {
-                $summedStocks += $stock['netStock'];
-            }
-        }
-
-        return (float) $summedStocks;
-    }
-
-    /**
      * @param array $mainVariation
      *
      * @return array
@@ -575,140 +416,6 @@ class ProductResponseParser implements ProductResponseParserInterface
         }
 
         return $attributes;
-    }
-
-    /**
-     * @param array $image
-     * @param array $productTexts
-     *
-     * @return array
-     */
-    private function getMediaTranslations(array $image, array $productTexts)
-    {
-        $translations = [];
-
-        foreach ($image['names'] as $text) {
-            $languageIdentifier = $this->identityService->findOneBy([
-                'adapterIdentifier' => $text['lang'],
-                'adapterName' => PlentymarketsAdapter::NAME,
-                'objectType' => Language::TYPE,
-            ]);
-
-            if (null === $languageIdentifier) {
-                continue;
-            }
-
-            if (!empty($text['name'])) {
-                $name = $text['name'];
-            } else {
-                $name = '';
-
-                foreach ($productTexts as $productText) {
-                    if ($text['lang'] === $productText['lang']) {
-                        $name = $productText['name1'];
-                    }
-                }
-            }
-
-            $translations[] = Translation::fromArray([
-                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                'property' => 'name',
-                'value' => $name,
-            ]);
-
-            if (!empty($text['alternate'])) {
-                $alternate = $text['alternate'];
-            } else {
-                $alternate = '';
-
-                foreach ($productTexts as $productText) {
-                    if ($text['lang'] === $productText['lang']) {
-                        $alternate = $productText['name1'];
-                    }
-                }
-            }
-
-            $translations[] = Translation::fromArray([
-                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                'property' => 'alternateName',
-                'value' => $alternate,
-            ]);
-        }
-
-        return $translations;
-    }
-
-    /**
-     * @param array $texts
-     * @param array $variations
-     * @param array $result
-     *
-     * @return Variation[]
-     */
-    private function getVariations(array $texts, $variations, array &$result)
-    {
-        $mappedVariations = [];
-
-        if (count($variations) > 1) {
-            $variations = array_filter($variations, function (array $variation) {
-                return !empty($variation['variationAttributeValues']);
-            });
-        }
-
-        usort($variations, function (array $a, array $b) {
-            if ((int) $a['position'] === (int) $b['position']) {
-                return 0;
-            }
-
-            return ((int) $a['position'] < (int) $b['position']) ? -1 : 1;
-        });
-
-        $first = true;
-        foreach ($variations as $element) {
-            $variation = new Variation();
-            $variation->setActive((bool) $element['isActive']);
-            $variation->setIsMain($first);
-            $variation->setStock($this->getStock($element));
-            $variation->setNumber($this->getVariationNumber($element));
-            $variation->setBarcodes($this->getBarcodes($element));
-            $variation->setPosition((int) $element['position']);
-            $variation->setModel((string) $element['model']);
-            $variation->setImages($this->getVariationImages($texts, $element, $result));
-            $variation->setPrices($this->priceResponseParser->parse($element));
-            $variation->setPurchasePrice((float) $element['purchasePrice']);
-            $variation->setUnitIdentifier($this->getUnitIdentifier($element));
-            $variation->setContent((float) $element['unit']['content']);
-            $variation->setReferenceAmount(1.0);
-            $variation->setMaximumOrderQuantity((float) $element['maximumOrderQuantity']);
-            $variation->setMinimumOrderQuantity((float) $element['minimumOrderQuantity']);
-            $variation->setIntervalOrderQuantity((float) $element['intervalOrderQuantity']);
-            $variation->setReleaseDate($this->getReleaseDate($element));
-            $variation->setShippingTime($this->getShippingTime($element));
-            $variation->setWidth((int) $element['widthMM']);
-            $variation->setHeight((int) $element['heightMM']);
-            $variation->setLength((int) $element['lengthMM']);
-            $variation->setWeight((int) $element['weightNetG']);
-            $variation->setProperties($this->getVariationProperties($element));
-
-            $mappedVariations[] = $variation;
-            $first = false;
-        }
-
-        return $mappedVariations;
-    }
-
-    /**
-     * @param array $element
-     *
-     * @return string
-     */
-    private function getVariationNumber(array $element)
-    {
-        if ($this->config->get('variation_number_field', 'number') === 'number') {
-            return (string) $element['number'];
-        }
-
-        return (string) $element['id'];
     }
 
     /**
@@ -901,147 +608,6 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * @param array $variation
-     *
-     * @return int
-     */
-    private function getShippingTime(array $variation)
-    {
-        static $shippingConfigurations;
-
-        if (null === $shippingConfigurations) {
-            try {
-                $shippingConfigurations = $this->availabilitiesApi->findAll();
-            } catch (\Exception $exception) {
-                // not implemented on all systems yet
-
-                $shippingConfigurations = [];
-            }
-        }
-
-        $shippingConfiguration = array_filter($shippingConfigurations, function (array $configuration) use ($variation) {
-            return $configuration['id'] === $variation['availability'];
-        });
-
-        if (empty($shippingConfiguration)) {
-            return 0;
-        }
-
-        $shippingConfiguration = array_shift($shippingConfiguration);
-
-        if (empty($shippingConfiguration['averageDays'])) {
-            return 0;
-        }
-
-        return (int) $shippingConfiguration['averageDays'];
-    }
-
-    /**
-     * @param $variation
-     *
-     * @return Property[]
-     */
-    private function getVariationProperties(array $variation)
-    {
-        static $attributes;
-
-        $result = [];
-        foreach ($variation['variationAttributeValues'] as $attributeValue) {
-            if (!isset($attributes[$attributeValue['attributeId']])) {
-                $attributes[$attributeValue['attributeId']] = $this->itemAttributesApi->findOne($attributeValue['attributeId']);
-
-                $attributes[$attributeValue['attributeId']]['values'] = [];
-
-                $values = $this->itemAttributesValuesApi->findOne($attributeValue['attributeId']);
-
-                foreach ($values as $value) {
-                    $attributes[$attributeValue['attributeId']]['values'][$value['id']] = $value;
-                }
-            }
-
-            if (!isset($attributes[$attributeValue['attributeId']]['values'][$attributeValue['valueId']]['valueNames'])) {
-                continue;
-            }
-
-            $propertyNames = $attributes[$attributeValue['attributeId']]['attributeNames'];
-            $valueNames = $attributes[$attributeValue['attributeId']]['values'][$attributeValue['valueId']]['valueNames'];
-
-            $value = Value::fromArray([
-                'value' => $valueNames[0]['name'],
-                'translations' => $this->getPropertyValueTranslations($valueNames),
-            ]);
-
-            $result[] = Property::fromArray([
-                'name' => $propertyNames[0]['name'],
-                'values' => [$value],
-                'translations' => $this->getPropertyTranslations($propertyNames),
-            ]);
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param array $names
-     *
-     * @return Translation[]
-     */
-    private function getPropertyValueTranslations(array $names)
-    {
-        $translations = [];
-
-        foreach ($names as $name) {
-            $languageIdentifier = $this->identityService->findOneBy([
-                'adapterIdentifier' => $name['lang'],
-                'adapterName' => PlentymarketsAdapter::NAME,
-                'objectType' => Language::TYPE,
-            ]);
-
-            if (null === $languageIdentifier) {
-                continue;
-            }
-
-            $translations[] = Translation::fromArray([
-                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                'property' => 'value',
-                'value' => $name['name'],
-            ]);
-        }
-
-        return $translations;
-    }
-
-    /**
-     * @param array $names
-     *
-     * @return Translation[]
-     */
-    private function getPropertyTranslations(array $names)
-    {
-        $translations = [];
-
-        foreach ($names as $name) {
-            $languageIdentifier = $this->identityService->findOneBy([
-                'adapterIdentifier' => $name['lang'],
-                'adapterName' => PlentymarketsAdapter::NAME,
-                'objectType' => Language::TYPE,
-            ]);
-
-            if (null === $languageIdentifier) {
-                continue;
-            }
-
-            $translations[] = Translation::fromArray([
-                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                'property' => 'name',
-                'value' => $name['name'],
-            ]);
-        }
-
-        return $translations;
-    }
-
-    /**
      * @param array $mainVariation
      *
      * @return array
@@ -1112,42 +678,14 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * @param array $variation
-     *
-     * @return Barcode[]
-     */
-    private function getBarcodes(array $variation)
-    {
-        $barcodeMapping = [
-            1 => Barcode::TYPE_GTIN13,
-            2 => Barcode::TYPE_GTIN128,
-            3 => Barcode::TYPE_UPC,
-            4 => Barcode::TYPE_ISBN,
-        ];
-
-        $barcodes = array_filter($variation['variationBarcodes'], function (array $barcode) use ($barcodeMapping) {
-            return array_key_exists($barcode['barcodeId'], $barcodeMapping);
-        });
-
-        $barcodes = array_map(function (array $barcode) use ($barcodeMapping) {
-            return Barcode::fromArray([
-                'type' => $barcodeMapping[$barcode['barcodeId']],
-                'code' => $barcode['code'],
-            ]);
-        }, $barcodes);
-
-        return $barcodes;
-    }
-
-    /**
-     * @param Variation[] $variations
+     * @param array $variations
      *
      * @return bool
      */
     private function getActive(array $variations)
     {
         foreach ($variations as $variation) {
-            if ($variation->getActive()) {
+            if ((bool) $variation['isActive']) {
                 return true;
             }
         }

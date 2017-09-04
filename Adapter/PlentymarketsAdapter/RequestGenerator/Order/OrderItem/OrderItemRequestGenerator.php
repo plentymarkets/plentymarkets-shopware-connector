@@ -38,8 +38,8 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
      * OrderItemRequestGenerator constructor.
      *
      * @param IdentityServiceInterface $identityService
-     * @param ClientInterface $client
-     * @param ConfigServiceInterface $config
+     * @param ClientInterface          $client
+     * @param ConfigServiceInterface   $config
      */
     public function __construct(
         IdentityServiceInterface $identityService,

@@ -8,7 +8,6 @@ use PlentyConnector\Connector\TransferObject\Product\Image\Image;
 use PlentyConnector\Connector\TransferObject\Product\LinkedProduct\LinkedProduct;
 use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\Connector\TransferObject\Product\Property\Property;
-use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
@@ -53,8 +52,6 @@ class ProductValidator implements ValidatorInterface
 
         Assertion::allIsInstanceOf($object->getImages(), Image::class, null, 'product.images');
 
-        Assertion::allIsInstanceOf($object->getVariations(), Variation::class, null, 'product.variations');
-
         Assertion::uuid($object->getVatRateIdentifier(), null, 'product.vatRateIdentifier');
 
         Assertion::boolean($object->hasStockLimitation(), null, 'product.stockLimitation');
@@ -86,11 +83,5 @@ class ProductValidator implements ValidatorInterface
         Assertion::nullOrIsInstanceOf($object->getAvailableTo(), DateTimeImmutable::class, null, 'product.availableTo');
 
         Assertion::allIsInstanceOf($object->getAttributes(), Attribute::class, null, 'product.attributes');
-
-        $mainVariation = array_filter($object->getVariations(), function (Variation $variation) {
-            return $variation->isMain();
-        });
-
-        Assertion::notEmpty($mainVariation, 'No main variation found.', 'product.variations');
     }
 }

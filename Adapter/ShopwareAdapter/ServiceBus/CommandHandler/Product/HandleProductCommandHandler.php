@@ -2,6 +2,7 @@
 
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Product;
 
+use Doctrine\ORM\EntityManagerInterface;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\HandleCommandInterface;
@@ -12,28 +13,19 @@ use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 use PlentyConnector\Connector\TransferObject\Media\Media;
 use PlentyConnector\Connector\TransferObject\Product\LinkedProduct\LinkedProduct;
 use PlentyConnector\Connector\TransferObject\Product\Product;
-use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
 use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use Psr\Log\LoggerInterface;
-use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Article;
-use Shopware\Components\Api\Resource\Resource;
-use Shopware\Components\Api\Resource\Variant;
-use Shopware\Components\Model\ModelManager;
-use Shopware\Components\Model\ModelRepository;
-use Shopware\Models\Article\Article as ArticleModel;
-use Shopware\Models\Article\Detail as DetailModel;
+use Shopware\Models\Category\Category as CategoryModel;
 use Shopware\Models\Property\Group as GroupModel;
 use Shopware\Models\Property\Repository;
 use Shopware\Models\Shop\Shop as ShopModel;
 use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
 use ShopwareAdapter\DataPersister\Translation\TranslationDataPersisterInterface;
 use ShopwareAdapter\Helper\AttributeHelper;
-use ShopwareAdapter\RequestGenerator\Product\ConfiguratorSet\ConfiguratorSetRequestGeneratorInterface;
-use ShopwareAdapter\RequestGenerator\Product\Variation\VariationRequestGeneratorInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -52,16 +44,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
     private $attributeHelper;
 
     /**
-     * @var ConfiguratorSetRequestGeneratorInterface
-     */
-    private $configuratorSetRequestGenerator;
-
-    /**
-     * @var VariationRequestGeneratorInterface
-     */
-    private $variationRequestGenerator;
-
-    /**
      * @var AttributeDataPersisterInterface
      */
     private $attributeDataPersister;
@@ -72,29 +54,47 @@ class HandleProductCommandHandler implements CommandHandlerInterface
     private $translationDataPersister;
 
     /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+
+    /**
+     * @var Article
+     */
+    private $resource;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * HandleProductCommandHandler constructor.
      *
-     * @param IdentityServiceInterface                 $identityService
-     * @param AttributeHelper                          $attributeHelper
-     * @param ConfiguratorSetRequestGeneratorInterface $configuratorSetRequestGenerator
-     * @param VariationRequestGeneratorInterface       $variationRequestGenerator
-     * @param AttributeDataPersisterInterface          $attributeDataPersister
-     * @param TranslationDataPersisterInterface        $translationDataPersister
+     * @param IdentityServiceInterface          $identityService
+     * @param AttributeHelper                   $attributeHelper
+     * @param AttributeDataPersisterInterface   $attributeDataPersister
+     * @param TranslationDataPersisterInterface $translationDataPersister
+     * @param EntityManagerInterface            $entityManager
+     * @param Article                           $resource
+     * @param LoggerInterface                   $logger
      */
     public function __construct(
         IdentityServiceInterface $identityService,
         AttributeHelper $attributeHelper,
-        ConfiguratorSetRequestGeneratorInterface $configuratorSetRequestGenerator,
-        VariationRequestGeneratorInterface $variationRequestGenerator,
         AttributeDataPersisterInterface $attributeDataPersister,
-        TranslationDataPersisterInterface $translationDataPersister
+        TranslationDataPersisterInterface $translationDataPersister,
+        EntityManagerInterface $entityManager,
+        Article $resource,
+        LoggerInterface $logger
     ) {
         $this->identityService = $identityService;
         $this->attributeHelper = $attributeHelper;
-        $this->configuratorSetRequestGenerator = $configuratorSetRequestGenerator;
-        $this->variationRequestGenerator = $variationRequestGenerator;
         $this->attributeDataPersister = $attributeDataPersister;
         $this->translationDataPersister = $translationDataPersister;
+        $this->entityManager = $entityManager;
+        $this->resource = $resource;
+        $this->logger = $logger;
     }
 
     /**
@@ -108,8 +108,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \Exception
      */
     public function handle(CommandInterface $command)
     {
@@ -118,11 +116,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
          * @var Product                $product
          */
         $product = $command->getTransferObject();
-
-        /**
-         * @var ModelManager $entityManager
-         */
-        $entityManager = Shopware()->Container()->get('models');
 
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => $product->getIdentifier(),
@@ -151,11 +144,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         ]);
 
         if (null === $vatIdentity) {
-            /**
-             * @var LoggerInterface $logger
-             */
-            $logger = Shopware()->Container()->get('plenty_connector.logger');
-            $logger->notice('vat rate not mapped - ' . $product->getVatRateIdentifier(), ['command' => $command]);
+            $this->logger->notice('vat rate not mapped - ' . $product->getVatRateIdentifier(), ['command' => $command]);
 
             return false;
         }
@@ -167,11 +156,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         ]);
 
         if (null === $manufacturerIdentity) {
-            /**
-             * @var LoggerInterface $logger
-             */
-            $logger = Shopware()->Container()->get('plenty_connector.logger');
-            $logger->notice('manufacturer is missing - ' . $product->getManufacturerIdentifier(),
+            $this->logger->error('manufacturer is missing - ' . $product->getManufacturerIdentifier(),
                 ['command' => $command]);
 
             return false;
@@ -200,11 +185,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             ]);
 
             if (null === $imageIdentity) {
-                /**
-                 * @var LoggerInterface $logger
-                 */
-                $logger = Shopware()->Container()->get('plenty_connector.logger');
-                $logger->notice('image is missing - ' . $image->getMediaIdentifier(), ['command' => $command]);
+                $this->logger->notice('image is missing - ' . $image->getMediaIdentifier(), ['command' => $command]);
 
                 return false;
             }
@@ -230,8 +211,8 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             }
         }
 
-        $categoryRepository = $entityManager->getRepository(\Shopware\Models\Category\Category::class);
-        $shopRepository = $entityManager->getRepository(ShopModel::class);
+        $categoryRepository = $this->entityManager->getRepository(CategoryModel::class);
+        $shopRepository = $this->entityManager->getRepository(ShopModel::class);
 
         $seoCategories = [];
         foreach ($product->getDefaultCategoryIdentifiers() as $categoryIdentifier) {
@@ -284,11 +265,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             });
 
             if (!empty($existingAttributes)) {
-                /**
-                 * @var LoggerInterface $logger
-                 */
-                $logger = Shopware()->Container()->get('plenty_connector.logger');
-                $logger->notice('shippingProfile is not a allowed attribute key', ['command' => $command]);
+                $this->logger->notice('shippingProfile is not a allowed attribute key', ['command' => $command]);
 
                 continue;
             }
@@ -338,22 +315,11 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             '__options_images' => ['replace' => true],
         ];
 
-        $configuratorSet = $this->configuratorSetRequestGenerator->generate($product);
-        if (!empty($configuratorSet)) {
-            $params['configuratorSet'] = $configuratorSet;
-        }
-
         $createProduct = false;
-
-        /**
-         * @var Article $resource
-         */
-        $resource = Manager::getResource('Article');
 
         if (null === $identity) {
             try {
-                $mainVariation = $this->getMainVariation($product);
-                $existingProduct = $resource->getIdFromNumber($mainVariation->getNumber());
+                $existingProduct = $this->resource->getIdFromNumber($product->getNumber());
 
                 $identity = $this->identityService->create(
                     $product->getIdentifier(),
@@ -367,7 +333,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         }
 
         if (null !== $identity) {
-            if (!$resource->getIdByData(['id' => $identity->getAdapterIdentifier()])) {
+            if (!$this->resource->getIdByData(['id' => $identity->getAdapterIdentifier()])) {
                 $this->identityService->remove($identity);
 
                 $createProduct = true;
@@ -377,26 +343,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         $this->attributeHelper->addFieldAsAttribute($product, 'technicalDescription');
 
         if ($createProduct) {
-            $variations = [];
-
-            foreach ($product->getVariations() as $variation) {
-                if ($variation->isMain()) {
-                    continue;
-                }
-
-                $variations[] = $this->variationRequestGenerator->generate($variation, $product);
-            }
-
-            $params['mainDetail'] = $this->variationRequestGenerator->generate(
-                $this->getMainVariation($product),
-                $product
-            );
-
-            if (!empty($variations)) {
-                $params['variants'] = $variations;
-            }
-
-            $productModel = $resource->create($params);
+            $productModel = $this->resource->create($params);
 
             $this->identityService->create(
                 $product->getIdentifier(),
@@ -404,147 +351,20 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 (string) $productModel->getId(),
                 ShopwareAdapter::NAME
             );
-
-            foreach ($product->getVariations() as $variation) {
-                /**
-                 * @var ModelRepository $variantRepository
-                 */
-                $variantRepository = $entityManager->getRepository(DetailModel::class);
-                /**
-                 * @var DetailModel $variant
-                 */
-                $variant = $variantRepository->findOneBy(['number' => $variation->getNumber()]);
-
-                if (null === $variant) {
-                    continue;
-                }
-
-                $this->attributeDataPersister->saveProductDetailAttributes(
-                    $variant,
-                    $product->getAttributes()
-                );
-            }
         } else {
-            $resource->update($identity->getAdapterIdentifier(), $params);
+            $productModel = $this->resource->update($identity->getAdapterIdentifier(), $params);
+        }
 
-            foreach ($product->getVariations() as $variation) {
-                if (empty($variation->getPrices())) {
-                    continue;
-                }
-
-                /**
-                 * @var Variant $variantResource
-                 */
-                $variantResource = Manager::getResource('Variant');
-                $variantResource->setResultMode(Resource::HYDRATE_OBJECT);
-
-                /**
-                 * @var ModelRepository $variantRepository
-                 */
-                $variantRepository = $entityManager->getRepository(DetailModel::class);
-
-                /**
-                 * @var DetailModel $variant
-                 */
-                $variant = $variantRepository->findOneBy(['number' => $variation->getNumber()]);
-
-                $variationParams = $this->variationRequestGenerator->generate($variation, $product);
-
-                if (null === $variant) {
-                    $variationParams['articleId'] = $identity->getAdapterIdentifier();
-
-                    $variantResource->create($variationParams);
-
-                    /**
-                     * @var DetailModel $variant
-                     */
-                    $variant = $variantRepository->findOneBy(['number' => $variation->getNumber()]);
-
-                    $attributes = array_merge($product->getAttributes(), $variation->getAttributes());
-
-                    $this->attributeDataPersister->saveProductDetailAttributes(
-                        $variant,
-                        $attributes
-                    );
-                } else {
-                    $variantResource->update($variant->getId(), $variationParams);
-
-                    $attributes = array_merge($product->getAttributes(), $variation->getAttributes());
-
-                    $this->attributeDataPersister->saveProductDetailAttributes(
-                        $variant,
-                        $attributes
-                    );
-                }
-            }
-
-            /**
-             * @var ModelRepository $articleRepository
-             */
-            $articleRepository = $entityManager->getRepository(ArticleModel::class);
-
-            /**
-             * @var ArticleModel $productModel
-             */
-            $productModel = $articleRepository->find($identity->getAdapterIdentifier());
-
-            foreach ($productModel->getDetails() as $detail) {
-                $found = false;
-                foreach ($product->getVariations() as $variation) {
-                    if ($variation->getNumber() === $detail->getNumber()) {
-                        $found = true;
-                    }
-                }
-
-                if ($found) {
-                    continue;
-                }
-
-                $entityManager->remove($detail);
-            }
-
-            $entityManager->flush();
-
-            $mainVariation = $this->getMainVariation($product);
-
-            if (null !== $mainVariation) {
-                $entityManager = Shopware()->Container()->get('models');
-
-                $productRepository = $entityManager->getRepository(ArticleModel::class);
-                $detailRepository = $entityManager->getRepository(DetailModel::class);
-
-                /**
-                 * @var DetailModel $mainDetail
-                 */
-                $mainDetail = $detailRepository->findOneBy(['number' => $mainVariation->getNumber()]);
-
-                $productModel = $productRepository->find($identity->getAdapterIdentifier());
-                $productModel->setMainDetail($mainDetail);
-
-                $entityManager->persist($productModel);
-                $entityManager->flush();
-            }
+        foreach ($productModel->getDetails() as $detail) {
+            $this->attributeDataPersister->saveProductDetailAttributes(
+                $detail,
+                $product->getAttributes()
+            );
         }
 
         $this->translationDataPersister->writeProductTranslations($product);
 
         return true;
-    }
-
-    /**
-     * @param Product $product
-     *
-     * @return null|Variation
-     */
-    private function getMainVariation(Product $product)
-    {
-        foreach ($product->getVariations() as $variation) {
-            if ($variation->isMain()) {
-                return $variation;
-            }
-        }
-
-        return null;
     }
 
     /**
@@ -556,11 +376,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
     private function getLinkedProducts(Product $product, $type = LinkedProduct::TYPE_SIMILAR)
     {
         $result = [];
-
-        /**
-         * @var Article $resource
-         */
-        $resource = Manager::getResource('Article');
 
         foreach ($product->getLinkedProducts() as $linkedProduct) {
             if ($linkedProduct->getType() === $type) {
@@ -574,7 +389,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                     continue;
                 }
 
-                $productExists = $resource->getIdByData(['id' => $productIdentity->getAdapterIdentifier()]);
+                $productExists = $this->resource->getIdByData(['id' => $productIdentity->getAdapterIdentifier()]);
                 if (!$productExists) {
                     continue;
                 }
@@ -598,12 +413,11 @@ class HandleProductCommandHandler implements CommandHandlerInterface
      */
     private function getPropertyData(Product $product)
     {
-        $result = [];
-
         /**
          * @var Repository $groupRepository
          */
-        $groupRepository = Shopware()->Models()->getRepository(GroupModel::class);
+        $groupRepository = $this->entityManager->getRepository(GroupModel::class);
+
         /**
          * @var Group $propertyGroup
          */
@@ -616,10 +430,11 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             $propertyGroup->setComparable(true);
             $propertyGroup->setSortMode(true);
 
-            Shopware()->Models()->persist($propertyGroup);
-            Shopware()->Models()->flush();
+            $this->entityManager->persist($propertyGroup);
+            $this->entityManager->flush();
         }
 
+        $result = [];
         $result['filterGroupId'] = $propertyGroup->getId();
         $result['propertyValues'] = [];
 

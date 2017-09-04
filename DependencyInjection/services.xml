@@ -25,6 +25,7 @@
         <parameter key="plenty_connector.transfer_object.product" type="constant">PlentyConnector\Connector\TransferObject\Product\Product::TYPE</parameter>
         <parameter key="plenty_connector.transfer_object.shipping_profile" type="constant">PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile::TYPE</parameter>
         <parameter key="plenty_connector.transfer_object.shop" type="constant">PlentyConnector\Connector\TransferObject\Shop\Shop::TYPE</parameter>
+        <parameter key="plenty_connector.transfer_object.stock" type="constant">PlentyConnector\Connector\TransferObject\Product\Stock\Stock::TYPE</parameter>
         <parameter key="plenty_connector.transfer_object.unit" type="constant">PlentyConnector\Connector\TransferObject\Unit\Unit::TYPE</parameter>
         <parameter key="plenty_connector.transfer_object.vat_rate" type="constant">PlentyConnector\Connector\TransferObject\VatRate\VatRate::TYPE</parameter>
     </parameters>
@@ -147,6 +148,17 @@
 
             <tag name="plenty_connector.connector_definition" />
             <tag name="plenty_connector.cleanup_definition" />
+        </service>
+
+        <service id="plenty_connector.connector_definition.stock" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
+            <factory service="plenty_connector.definition_factory" method="factory" />
+
+            <argument>%plenty_connector.adapter.plentymarkets%</argument>
+            <argument>%plenty_connector.adapter.shopware%</argument>
+            <argument>%plenty_connector.transfer_object.stock%</argument>
+            <argument>80</argument>
+
+            <tag name="plenty_connector.connector_definition" />
         </service>
 
         <service id="plenty_connector.connector_definition.export_order" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
@@ -421,7 +433,15 @@
             <tag name="plenty_connector.query_generator" />
         </service>
 
+        <service id="plenty_connector.query_generator.stock" class="PlentyConnector\Connector\ServiceBus\QueryGenerator\Stock\StockQueryGenerator">
+            <tag name="plenty_connector.query_generator" />
+        </service>
+
         <service id="plenty_connector.query_generator.unit" class="PlentyConnector\Connector\ServiceBus\QueryGenerator\Unit\UnitQueryGenerator">
+            <tag name="plenty_connector.query_generator" />
+        </service>
+
+        <service id="plenty_connector.query_generator.variation" class="PlentyConnector\Connector\ServiceBus\QueryGenerator\Variation\VariationQueryGenerator">
             <tag name="plenty_connector.query_generator" />
         </service>
 
@@ -460,6 +480,14 @@
         </service>
 
         <service id="plenty_connector.command_generator.order" class="PlentyConnector\Connector\ServiceBus\CommandGenerator\Order\OrderCommandGenerator">
+            <tag name="plenty_connector.command_generator" />
+        </service>
+
+        <service id="plenty_connector.command_generator.stock" class="PlentyConnector\Connector\ServiceBus\CommandGenerator\Stock\StockCommandGenerator">
+            <tag name="plenty_connector.command_generator" />
+        </service>
+
+        <service id="plenty_connector.command_generator.variation" class="PlentyConnector\Connector\ServiceBus\CommandGenerator\Variation\VariationCommandGenerator">
             <tag name="plenty_connector.command_generator" />
         </service>
 
@@ -590,6 +618,10 @@
         </service>
 
         <service id="plenty_connector.validator.shop" class="PlentyConnector\Connector\Validator\Shop\ShopValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.stock" class="PlentyConnector\Connector\Validator\Product\Stock\StockValidator">
             <tag name="plenty_connector.validator" />
         </service>
 

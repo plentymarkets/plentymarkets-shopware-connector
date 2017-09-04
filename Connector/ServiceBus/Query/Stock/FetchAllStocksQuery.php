@@ -2,12 +2,13 @@
 
 namespace PlentyConnector\Connector\ServiceBus\Query\Stock;
 
-use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
+use Assert\Assertion;
+use PlentyConnector\Connector\ServiceBus\Query\FetchAllQueryInterface;
 
 /**
- * Class GetChangedStockQuery.
+ * Class FetchAllStocksQuery.
  */
-class GetChangedStockQuery implements QueryInterface
+class FetchAllStocksQuery implements FetchAllQueryInterface
 {
     /**
      * @var string
@@ -15,17 +16,19 @@ class GetChangedStockQuery implements QueryInterface
     private $adapterName;
 
     /**
-     * GetChangedStockQuery constructor.
+     * FetchAllStocksQuery constructor.
      *
      * @param string $adapterName
      */
     public function __construct($adapterName)
     {
+        Assertion::string($adapterName);
+
         $this->adapterName = $adapterName;
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getAdapterName()
     {

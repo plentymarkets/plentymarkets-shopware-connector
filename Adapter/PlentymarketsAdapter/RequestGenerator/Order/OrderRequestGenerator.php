@@ -57,12 +57,12 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
     /**
      * OrderRequestGenerator constructor.
      *
-     * @param IdentityServiceInterface $identityService
-     * @param ClientInterface $client
+     * @param IdentityServiceInterface           $identityService
+     * @param ClientInterface                    $client
      * @param OrderItemRequestGeneratorInterface $orderItemRequestGenerator
-     * @param CustomerRequestGeneratorInterface $customerRequestGenerator
-     * @param AddressRequestGeneratorInterface $addressReuqestGenerator
-     * @param ConfigServiceInterface $config
+     * @param CustomerRequestGeneratorInterface  $customerRequestGenerator
+     * @param AddressRequestGeneratorInterface   $addressReuqestGenerator
+     * @param ConfigServiceInterface             $config
      */
     public function __construct(
         IdentityServiceInterface $identityService,

@@ -30,9 +30,10 @@ class VariationValidator implements ValidatorInterface
      */
     public function validate($object)
     {
+        Assertion::uuid($object->getIdentifier(), null, 'product.variation.identifier');
+        Assertion::uuid($object->getProductIdentifier(), null, 'product.variation.productIdentifier');
         Assertion::boolean($object->getActive(), null, 'product.variation.active');
         Assertion::boolean($object->isMain(), null, 'product.variation.isMain');
-        Assertion::float($object->getStock(), null, 'product.variation.stock');
         Assertion::string($object->getNumber(), null, 'product.variation.number');
         Assertion::regex($object->getNumber(), '/^[a-zA-Z0-9-_.]+$/', null, 'product.variation.number');
         Assertion::integer($object->getPosition(), null, 'product.variation.position');
