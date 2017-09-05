@@ -70,12 +70,6 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
         $elements = $this->categoryApi->findChanged($lastCangedTime, $currentDateTime);
 
         foreach ($elements as $element) {
-            if ($element['right'] !== 'all') {
-                $this->logger->notice('unsupported category rights');
-
-                continue;
-            }
-
             $result = $this->categoryResponseParser->parse($element);
 
             if (empty($result)) {

@@ -64,12 +64,6 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
         $elements = $this->categoryApi->findAll();
 
         foreach ($elements as $element) {
-            if ($element['right'] !== 'all') {
-                $this->logger->notice('unsupported category rights');
-
-                continue;
-            }
-
             $result = $this->categoryResponseParser->parse($element);
 
             if (empty($result)) {

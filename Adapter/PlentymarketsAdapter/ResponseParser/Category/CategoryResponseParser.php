@@ -65,6 +65,14 @@ class CategoryResponseParser implements CategoryResponseParserInterface
     public function parse(array $entry)
     {
         if (empty($entry['details'])) {
+            $this->logger->notice('category without details');
+
+            return [];
+        }
+
+        if ($entry['right'] !== 'all') {
+            $this->logger->notice('unsupported category rights');
+
             return [];
         }
 

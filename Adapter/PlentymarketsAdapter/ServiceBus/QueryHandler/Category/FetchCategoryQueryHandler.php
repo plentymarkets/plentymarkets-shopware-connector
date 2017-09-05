@@ -94,23 +94,17 @@ class FetchCategoryQueryHandler implements QueryHandlerInterface
             return [];
         }
 
-        $element = $this->client->request('GET', 'categories/' . $identity->getAdapterIdentifier(), [
+        $elements = $this->client->request('GET', 'categories/' . $identity->getAdapterIdentifier(), [
             'with' => 'details,clients',
             'type' => 'item',
             'lang' => $this->languageHelper->getLanguagesQueryString(),
         ]);
 
-        if (empty($element)) {
+        if (empty($elements)) {
             return [];
         }
 
-        $element = array_shift($element);
-
-        if ($element['right'] !== 'all') {
-            $this->logger->notice('unsupported category rights');
-
-            return [];
-        }
+        $element = array_shift($elements);
 
         $parsedElements = $this->categoryResponseParser->parse($element);
 
