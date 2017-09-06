@@ -27,7 +27,7 @@ class FetchAllStocksQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllStocksQueryHandler constructor.
      *
-     * @param ClientInterface $client
+     * @param ClientInterface              $client
      * @param StockResponseParserInterface $responseParser
      */
     public function __construct(ClientInterface $client, StockResponseParserInterface $responseParser)

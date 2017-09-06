@@ -30,7 +30,7 @@ class FetchChangedStocksQueryHandler implements QueryHandlerInterface
     /**
      * FetchChangedStocksQueryHandler constructor.
      *
-     * @param ClientInterface $client
+     * @param ClientInterface              $client
      * @param StockResponseParserInterface $responseParser
      */
     public function __construct(ClientInterface $client, StockResponseParserInterface $responseParser)
@@ -58,7 +58,7 @@ class FetchChangedStocksQueryHandler implements QueryHandlerInterface
 
         $stocks = $this->client->getIterator('stockmanagement/stock', [
             'updatedAtFrom' => $lastCangedTime->format(DATE_W3C),
-            'updatedAtTo' => $currentDateTime->format(DATE_W3C)
+            'updatedAtTo' => $currentDateTime->format(DATE_W3C),
         ]);
 
         $variationIdentifiers = [];
@@ -72,7 +72,7 @@ class FetchChangedStocksQueryHandler implements QueryHandlerInterface
 
         $variations = $this->client->getIterator('items/variations', [
             'with' => 'stock',
-            'id' => implode(',', $variationIdentifiers)
+            'id' => implode(',', $variationIdentifiers),
         ]);
 
         foreach ($variations as $variation) {
