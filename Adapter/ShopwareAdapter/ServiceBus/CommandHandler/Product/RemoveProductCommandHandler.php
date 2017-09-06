@@ -11,7 +11,6 @@ use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Psr\Log\LoggerInterface;
 use Shopware\Components\Api\Exception\NotFoundException;
-use Shopware\Components\Api\Resource\Article as ArticleResource;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**

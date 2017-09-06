@@ -19,7 +19,6 @@ use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
@@ -116,7 +115,7 @@ class ProductResponseParser implements ProductResponseParserInterface
 
         $possibleElements = $this->variationResponseParser->parse($product);
 
-        $variations = array_filter($possibleElements, function(TransferObjectInterface $object) {
+        $variations = array_filter($possibleElements, function (TransferObjectInterface $object) {
             return $object instanceof Variation;
         });
 
@@ -145,7 +144,6 @@ class ProductResponseParser implements ProductResponseParserInterface
         $productObject->setTranslations($this->getProductTranslations($product['texts']));
         $productObject->setAvailableFrom($this->getAvailableFrom($mainVariation));
         $productObject->setAvailableTo($this->getAvailableTo($mainVariation));
-        $productObject->setAttributes($this->getAttributes($product));
         $productObject->setVariantConfiguration($this->getVariantConfiguration($variations));
 
         $result[$productObject->getIdentifier()] = $productObject;
@@ -401,27 +399,6 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * @param array $product
-     *
-     * @return Attribute[]
-     */
-    private function getAttributes(array $product)
-    {
-        $attributes = [];
-
-        for ($i = 0; $i < 20; ++$i) {
-            $key = 'free' . ($i + 1);
-
-            $attributes[] = Attribute::fromArray([
-                'key' => $key,
-                'value' => (string) $product[$key],
-            ]);
-        }
-
-        return $attributes;
-    }
-
-    /**
      * @param $product
      *
      * @return LinkedProduct[]
@@ -479,6 +456,10 @@ class ProductResponseParser implements ProductResponseParserInterface
         static $propertyNames;
 
         foreach ($properties as $property) {
+            if (!$property['property']['isSearchable']) {
+                continue;
+            }
+
             if (!isset($propertyNames[$property['property']['id']])) {
                 $propertyName = $this->itemsPropertiesNamesApi->findOne($property['property']['id']);
 

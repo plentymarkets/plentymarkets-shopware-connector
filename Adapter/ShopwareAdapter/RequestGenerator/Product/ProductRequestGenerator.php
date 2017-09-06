@@ -57,11 +57,11 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
     /**
      * ProductRequestGenerator constructor.
      *
-     * @param IdentityServiceInterface $identityService
-     * @param EntityManagerInterface $entityManager
+     * @param IdentityServiceInterface                 $identityService
+     * @param EntityManagerInterface                   $entityManager
      * @param ConfiguratorSetRequestGeneratorInterface $configuratorSetRequestGenerator
-     * @param ConfigServiceInterface $config
-     * @param LoggerInterface $logger
+     * @param ConfigServiceInterface                   $config
+     * @param LoggerInterface                          $logger
      */
     public function __construct(
         IdentityServiceInterface $identityService,

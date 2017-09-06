@@ -16,6 +16,7 @@ use PlentyConnector\Connector\TransferObject\Product\Property\Value\Value;
 use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\TransferObject\Unit\Unit;
+use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Availability as AvailabilityApi;
@@ -164,6 +165,7 @@ class VariationResponseParser implements VariationResponseParserInterface
             $variationObject->setHeight((int) $variation['heightMM']);
             $variationObject->setLength((int) $variation['lengthMM']);
             $variationObject->setWeight((int) $variation['weightNetG']);
+            $variationObject->setAttributes($this->getAttributes($product));
             $variationObject->setProperties($this->getVariationProperties($variation));
 
             $result[$variationObject->getIdentifier()] = $variationObject;
@@ -416,5 +418,26 @@ class VariationResponseParser implements VariationResponseParserInterface
         }
 
         return $translations;
+    }
+
+    /**
+     * @param array $product
+     *
+     * @return Attribute[]
+     */
+    private function getAttributes(array $product)
+    {
+        $attributes = [];
+
+        for ($i = 0; $i < 20; ++$i) {
+            $key = 'free' . ($i + 1);
+
+            $attributes[] = Attribute::fromArray([
+                'key' => $key,
+                'value' => (string) $product[$key],
+            ]);
+        }
+
+        return $attributes;
     }
 }
