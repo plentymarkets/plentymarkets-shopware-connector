@@ -8,6 +8,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - configurable variation number field
 - configurable order origin (referrer)
 - configurable item warehouse for item stock calculation
+- configurable item notification settings
+- separate stock import logic
 
 ### Fixed
 - optimized the update path for versions before 2.0
@@ -16,6 +18,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - use the whole media data for the hash creation, this enforces changes also when media text fields change
 - restructure the backend snippets
+- separated the variations from products
+- separated stock informations from variations
+- only product properties which have the flag "searchable" set to true are now imported
 
 ## [3.0.0]
 ### Fixed
