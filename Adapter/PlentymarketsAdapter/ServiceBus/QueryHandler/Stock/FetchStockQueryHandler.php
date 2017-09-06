@@ -2,10 +2,13 @@
 
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Stock;
 
+use InvalidArgumentException;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\Query\Stock\FetchStockQuery;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
+use PlentymarketsAdapter\ResponseParser\Product\Stock\StockResponseParserInterface;
 
 /**
  * Class FetchStockQueryHandler.
@@ -22,11 +25,10 @@ class FetchStockQueryHandler implements QueryHandlerInterface
     }
 
     /**
-     * TODO: finalize
-     *
      * {@inheritdoc}
      */
     public function handle(QueryInterface $query)
     {
+        throw new InvalidArgumentException('unsupported operation');
     }
 }

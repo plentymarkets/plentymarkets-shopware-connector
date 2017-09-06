@@ -15,6 +15,28 @@ use PlentymarketsAdapter\ResponseParser\Product\Stock\StockResponseParserInterfa
 class FetchAllStocksQueryHandler implements QueryHandlerInterface
 {
     /**
+     * @var ClientInterface
+     */
+    private $client;
+
+    /**
+     * @var StockResponseParserInterface
+     */
+    private $responseParser;
+
+    /**
+     * FetchAllStocksQueryHandler constructor.
+     *
+     * @param ClientInterface $client
+     * @param StockResponseParserInterface $responseParser
+     */
+    public function __construct(ClientInterface $client, StockResponseParserInterface $responseParser)
+    {
+        $this->client = $client;
+        $this->responseParser = $responseParser;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function supports(QueryInterface $query)
@@ -24,18 +46,11 @@ class FetchAllStocksQueryHandler implements QueryHandlerInterface
     }
 
     /**
-     * TODO: finalize
-     *
      * {@inheritdoc}
      */
     public function handle(QueryInterface $query)
     {
-        /**
-         * @var ClientInterface $client
-         */
-        $client = Shopware()->Container()->get('plentmarkets_adapter.client');
-
-        $stocks = iterator_to_array($client->getIterator('stockmanagement/stock'));
+        $stocks = $this->client->getIterator('stockmanagement/stock');
 
         $groupedStock = [];
         foreach ($stocks as $stock) {
@@ -43,13 +58,8 @@ class FetchAllStocksQueryHandler implements QueryHandlerInterface
             $groupedStock[$stock['variationId']]['stock'][] = $stock;
         }
 
-        /**
-         * @var StockResponseParserInterface $stockResponseParser
-         */
-        $stockResponseParser = Shopware()->Container()->get('plentmarkets_adapter.response_parser.stock');
-
         foreach ($groupedStock as $variation) {
-            $transferObjects = $stockResponseParser->parse($variation);
+            $transferObjects = $this->responseParser->parse($variation);
 
             foreach ($transferObjects as $object) {
                 yield $object;
