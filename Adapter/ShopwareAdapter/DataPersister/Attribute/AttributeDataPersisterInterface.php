@@ -17,29 +17,29 @@ interface AttributeDataPersisterInterface
      * @param Detail      $detail
      * @param Attribute[] $attributes
      */
-    public function saveProductDetailAttributes(Detail $detail, array $attributes);
+    public function saveProductDetailAttributes(Detail $detail, array $attributes = []);
 
     /**
      * @param Category    $category
      * @param Attribute[] $attributes
      */
-    public function saveCategoryAttributes(Category $category, array $attributes);
+    public function saveCategoryAttributes(Category $category, array $attributes = []);
 
     /**
      * @param Order       $order
      * @param Attribute[] $attributes
      */
-    public function saveOrderAttributes(Order $order, array $attributes);
+    public function saveOrderAttributes(Order $order, array $attributes = []);
 
     /**
      * @param Supplier    $supplier
      * @param Attribute[] $attributes
      */
-    public function saveManufacturerAttributes(Supplier $supplier, array $attributes);
+    public function saveManufacturerAttributes(Supplier $supplier, array $attributes = []);
 
     /**
      * @param Media       $media
      * @param Attribute[] $attributes
      */
-    public function saveMediaAttributes(Media $media, array $attributes);
+    public function saveMediaAttributes(Media $media, array $attributes = []);
 }

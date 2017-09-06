@@ -59,7 +59,7 @@ class AttributeDataPersister implements AttributeDataPersisterInterface
     /**
      * {@inheritdoc}
      */
-    public function saveCategoryAttributes(Category $category, array $attributes)
+    public function saveCategoryAttributes(Category $category, array $attributes = [])
     {
         $this->saveAttributes($category->getId(), 's_categories_attributes', $attributes);
     }
@@ -67,7 +67,7 @@ class AttributeDataPersister implements AttributeDataPersisterInterface
     /**
      * {@inheritdoc}
      */
-    public function saveManufacturerAttributes(Supplier $supplier, array $attributes)
+    public function saveManufacturerAttributes(Supplier $supplier, array $attributes = [])
     {
         $this->saveAttributes($supplier->getId(), 's_articles_supplier_attributes', $attributes);
     }
@@ -75,7 +75,7 @@ class AttributeDataPersister implements AttributeDataPersisterInterface
     /**
      * {@inheritdoc}
      */
-    public function saveOrderAttributes(Order $order, array $attributes)
+    public function saveOrderAttributes(Order $order, array $attributes = [])
     {
         $this->saveAttributes($order->getId(), 's_order_attributes', $attributes);
     }
@@ -83,7 +83,7 @@ class AttributeDataPersister implements AttributeDataPersisterInterface
     /**
      * {@inheritdoc}
      */
-    public function saveMediaAttributes(Media $media, array $attributes)
+    public function saveMediaAttributes(Media $media, array $attributes = [])
     {
         $this->saveAttributes($media->getId(), 's_media_attributes', $attributes);
     }
@@ -91,25 +91,21 @@ class AttributeDataPersister implements AttributeDataPersisterInterface
     /**
      * {@inheritdoc}
      */
-    public function saveProductDetailAttributes(Detail $detail, array $attributes)
+    public function saveProductDetailAttributes(Detail $detail, array $attributes = [])
     {
         $this->saveAttributes($detail->getId(), 's_articles_attributes', $attributes);
     }
 
     /**
-     * @param $identifier
-     * @param $table
+     * @param int         $identifier
+     * @param string      $table
      * @param Attribute[] $attributes
      */
-    private function saveAttributes($identifier, $table, array $attributes)
+    private function saveAttributes($identifier, $table, array $attributes = [])
     {
         Assertion::integer($identifier);
         Assertion::allIsInstanceOf($attributes, Attribute::class);
         Assertion::notBlank($table);
-
-        if (empty($attributes)) {
-            return;
-        }
 
         array_walk($attributes, function (Attribute $attribute) use ($table) {
             $this->prepareAttribute($attribute, $table);
