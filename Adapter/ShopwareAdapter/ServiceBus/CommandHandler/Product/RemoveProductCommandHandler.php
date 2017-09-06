@@ -20,11 +20,6 @@ use ShopwareAdapter\ShopwareAdapter;
 class RemoveProductCommandHandler implements CommandHandlerInterface
 {
     /**
-     * @var ArticleResource
-     */
-    private $resource;
-
-    /**
      * @var IdentityServiceInterface
      */
     private $identityService;
@@ -37,16 +32,13 @@ class RemoveProductCommandHandler implements CommandHandlerInterface
     /**
      * RemoveProductCommandHandler constructor.
      *
-     * @param ArticleResource          $resource
      * @param IdentityServiceInterface $identityService
      * @param LoggerInterface          $logger
      */
     public function __construct(
-        ArticleResource $resource,
         IdentityServiceInterface $identityService,
         LoggerInterface $logger
     ) {
-        $this->resource = $resource;
         $this->identityService = $identityService;
         $this->logger = $logger;
     }
@@ -83,7 +75,8 @@ class RemoveProductCommandHandler implements CommandHandlerInterface
         }
 
         try {
-            $this->resource->delete($identity->getAdapterIdentifier());
+            $resource = $this->getArticleResource();
+            $resource->delete($identity->getAdapterIdentifier());
         } catch (NotFoundException $exception) {
             $this->logger->notice('identity removed but the object was not found', ['command' => $command]);
         }
@@ -97,5 +90,15 @@ class RemoveProductCommandHandler implements CommandHandlerInterface
         });
 
         return true;
+    }
+
+    /**
+     * @return Article
+     */
+    private function getArticleResource()
+    {
+        Shopware()->Container()->reset('models');
+
+        return Manager::getResource('Article');
     }
 }

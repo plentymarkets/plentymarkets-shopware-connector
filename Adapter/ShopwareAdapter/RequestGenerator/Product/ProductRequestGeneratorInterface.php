@@ -1,13 +1,13 @@
 <?php
 
-namespace ShopwareAdapter\RequestGenerator\Product\ConfiguratorSet;
+namespace ShopwareAdapter\RequestGenerator\Product;
 
 use PlentyConnector\Connector\TransferObject\Product\Product;
 
 /**
- * Interface ConfiguratorSetRequestGeneratorInterface
+ * Interface ProductRequestGeneratorInterface
  */
-interface ConfiguratorSetRequestGeneratorInterface
+interface ProductRequestGeneratorInterface
 {
     /**
      * @param Product $product

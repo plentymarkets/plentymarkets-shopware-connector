@@ -55,6 +55,14 @@
 
         <!-- Request Generator -->
 
+        <service id="shopware_adapter.request_generator.product" class="ShopwareAdapter\RequestGenerator\Product\ProductRequestGenerator">
+            <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="models" />
+            <argument type="service" id="shopware_adapter.request_generator.product.configurator_set" />
+            <argument type="service" id="plenty_connector.config" />
+            <argument type="service" id="plenty_connector.logger" />
+        </service>
+
         <service id="shopware_adapter.request_generator.product.configurator_set" class="ShopwareAdapter\RequestGenerator\Product\ConfiguratorSet\ConfiguratorSetRequestGenerator">
             <argument type="service" id="plenty_connector.config" />
         </service>
@@ -159,22 +167,10 @@
             <argument type="string">Manufacturer</argument>
         </service>
 
-        <service id="shopware_adapter.shopware_resource.media" class="Shopware\Components\Api\Resource\Media">
-            <factory service="shopware_adapter.shopware_api_manager" method="getResource" />
-
-            <argument type="string">Media</argument>
-        </service>
-
         <service id="shopware_adapter.shopware_resource.order" class="Shopware\Components\Api\Resource\Order">
             <factory service="shopware_adapter.shopware_api_manager" method="getResource" />
 
             <argument type="string">Order</argument>
-        </service>
-
-        <service id="shopware_adapter.shopware_resource.product" class="Shopware\Components\Api\Resource\Article">
-            <factory service="shopware_adapter.shopware_api_manager" method="getResource" />
-
-            <argument type="string">Article</argument>
         </service>
 
         <service id="shopware_adapter.shopware_resource.variation" class="Shopware\Components\Api\Resource\Variant">
@@ -225,7 +221,6 @@
         <!-- Media command handlers -->
 
         <service id="shopware_adapter.command_handler.handle_media" class="ShopwareAdapter\ServiceBus\CommandHandler\Media\HandleMediaCommandHandler">
-            <argument type="service" id="shopware_adapter.shopware_resource.media" />
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="shopware_adapter.request_generator.media" />
             <argument type="service" id="shopware_adapter.data_provider.media" />
@@ -236,7 +231,6 @@
         </service>
 
         <service id="shopware_adapter.command_handler.remove_media" class="ShopwareAdapter\ServiceBus\CommandHandler\Media\RemoveMediaCommandHandler">
-            <argument type="service" id="shopware_adapter.shopware_resource.media" />
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plenty_connector.logger" />
 
@@ -277,16 +271,14 @@
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="shopware_adapter.attribute_helper" />
             <argument type="service" id="shopware_adapter.data_persister.attribute" />
+            <argument type="service" id="shopware_adapter.request_generator.product" />
             <argument type="service" id="shopware_adapter.data_persister.translation" />
             <argument type="service" id="models" />
-            <argument type="service" id="shopware_adapter.shopware_resource.product" />
-            <argument type="service" id="plenty_connector.logger" />
 
             <tag name="plenty_connector.command_handler" />
         </service>
 
         <service id="shopware_adapter.command_handler.remove_product" class="ShopwareAdapter\ServiceBus\CommandHandler\Product\RemoveProductCommandHandler">
-            <argument type="service" id="shopware_adapter.shopware_resource.product" />
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plenty_connector.logger" />
 

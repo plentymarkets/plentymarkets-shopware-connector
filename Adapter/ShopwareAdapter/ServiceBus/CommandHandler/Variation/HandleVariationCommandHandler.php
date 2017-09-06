@@ -98,6 +98,32 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
             $variant = $this->resource->update($variant->getId(), $variationParams);
         }
 
+        $identities = $this->identityService->findBy([
+            'objectIdentifier' => $variation->getIdentifier(),
+            'objectType' => Variation::TYPE,
+            'adapterName' => ShopwareAdapter::NAME,
+        ]);
+
+        $foundIdentity = false;
+        foreach ($identities as $identity) {
+            if ($identity->getAdapterIdentifier() === (string) $variant->getId()) {
+                $foundIdentity = true;
+
+                continue;
+            }
+
+            $this->identityService->remove($identity);
+        }
+
+        if (!$foundIdentity) {
+            $this->identityService->create(
+                $variation->getIdentifier(),
+                Variation::TYPE,
+                (string) $variant->getId(),
+                ShopwareAdapter::NAME
+            );
+        }
+
         if ($variation->isMain()) {
             $this->entityManager->getConnection()->update(
                 's_articles',
@@ -110,21 +136,6 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
             $variant,
             $variation->getAttributes()
         );
-
-        $identity = $this->identityService->findOneBy([
-            'objectIdentifier' => $variation->getIdentifier(),
-            'objectType' => Variation::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
-        ]);
-
-        if (null === $identity) {
-            $this->identityService->create(
-                $variation->getIdentifier(),
-                Variation::TYPE,
-                (string) $variant->getId(),
-                ShopwareAdapter::NAME
-            );
-        }
 
         return true;
     }

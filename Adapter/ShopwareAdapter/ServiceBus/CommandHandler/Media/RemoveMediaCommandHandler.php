@@ -20,11 +20,6 @@ use ShopwareAdapter\ShopwareAdapter;
 class RemoveMediaCommandHandler implements CommandHandlerInterface
 {
     /**
-     * @var MediaResource
-     */
-    private $resource;
-
-    /**
      * @var IdentityServiceInterface
      */
     private $identityService;
@@ -37,16 +32,13 @@ class RemoveMediaCommandHandler implements CommandHandlerInterface
     /**
      * RemoveMediaCommandHandler constructor.
      *
-     * @param MediaResource            $resource
      * @param IdentityServiceInterface $identityService
      * @param LoggerInterface          $logger
      */
     public function __construct(
-        MediaResource $resource,
         IdentityServiceInterface $identityService,
         LoggerInterface $logger
     ) {
-        $this->resource = $resource;
         $this->identityService = $identityService;
         $this->logger = $logger;
     }
@@ -83,7 +75,8 @@ class RemoveMediaCommandHandler implements CommandHandlerInterface
         }
 
         try {
-            $this->resource->delete($identity->getAdapterIdentifier());
+            $resource = $this->getMediaResource();
+            $resource->delete($identity->getAdapterIdentifier());
         } catch (NotFoundException $exception) {
             $this->logger->notice('identity removed but the object was not found', ['command' => $command]);
         }
@@ -97,5 +90,16 @@ class RemoveMediaCommandHandler implements CommandHandlerInterface
         });
 
         return true;
+    }
+
+    /**
+     * @return MediaResource
+     */
+    private function getMediaResource()
+    {
+        // without this reset the entitymanager sometimes the album is not found correctly.
+        Shopware()->Container()->reset('models');
+
+        return Manager::getResource('Media');
     }
 }

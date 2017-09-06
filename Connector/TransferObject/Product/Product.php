@@ -152,6 +152,11 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     private $attributes = [];
 
     /**
+     * @var Property[]
+     */
+    private $variantConfiguration;
+
+    /**
      * {@inheritdoc}
      */
     public function getType()
@@ -573,5 +578,21 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     public function setAttributes(array $attributes)
     {
         $this->attributes = $attributes;
+    }
+
+    /**
+     * @return Property[]
+     */
+    public function getVariantConfiguration()
+    {
+        return $this->variantConfiguration;
+    }
+
+    /**
+     * @param Property[] $variantConfiguration
+     */
+    public function setVariantConfiguration(array $variantConfiguration = [])
+    {
+        $this->variantConfiguration = $variantConfiguration;
     }
 }

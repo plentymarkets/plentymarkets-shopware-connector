@@ -14,6 +14,7 @@ use PlentyConnector\Connector\TransferObject\Product\LinkedProduct\LinkedProduct
 use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\Connector\TransferObject\Product\Property\Property;
 use PlentyConnector\Connector\TransferObject\Product\Property\Value\Value;
+use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
 use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
@@ -113,11 +114,17 @@ class ProductResponseParser implements ProductResponseParserInterface
             Product::TYPE
         );
 
+        $possibleElements = $this->variationResponseParser->parse($product);
+
+        $variations = array_filter($possibleElements, function(TransferObjectInterface $object) {
+            return $object instanceof Variation;
+        });
+
         $productObject = new Product();
         $productObject->setIdentifier($identity->getObjectIdentifier());
         $productObject->setName((string) $product['texts'][0]['name1']);
-        $productObject->setNumber((string) $mainVariation['number']);
-        $productObject->setActive($this->getActive($product['variations']));
+        $productObject->setActive($this->getActive($variations));
+        $productObject->setNumber($this->getProductNumber($variations));
         $productObject->setShopIdentifiers($shopIdentifiers);
         $productObject->setManufacturerIdentifier($this->getManufacturerIdentifier($product));
         $productObject->setCategoryIdentifiers($this->getCategories($mainVariation));
@@ -139,15 +146,11 @@ class ProductResponseParser implements ProductResponseParserInterface
         $productObject->setAvailableFrom($this->getAvailableFrom($mainVariation));
         $productObject->setAvailableTo($this->getAvailableTo($mainVariation));
         $productObject->setAttributes($this->getAttributes($product));
+        $productObject->setVariantConfiguration($this->getVariantConfiguration($variations));
 
         $result[$productObject->getIdentifier()] = $productObject;
 
-        $possibleElements = $this->variationResponseParser->parse($product);
-        foreach ($possibleElements as $element) {
-            $result[$element->getIdentifier()] = $element;
-        }
-
-        return $result;
+        return array_merge($result, $possibleElements);
     }
 
     /**
@@ -678,18 +681,46 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * @param array $variations
+     * @param Variation[] $variations
      *
      * @return bool
      */
-    private function getActive(array $variations)
+    private function getActive(array $variations = [])
     {
         foreach ($variations as $variation) {
-            if ((bool) $variation['isActive']) {
+            if ($variation->getActive()) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    /**
+     * @param Variation[] $variations
+     *
+     * @return Property[]
+     */
+    private function getVariantConfiguration(array $variations = [])
+    {
+        $properties = [];
+
+        foreach ($variations as $variation) {
+            $properties = array_merge($properties, $variation->getProperties());
+        }
+
+        return $properties;
+    }
+
+    /**
+     * @param Variation[] $variations
+     *
+     * @return string
+     */
+    private function getProductNumber(array $variations = [])
+    {
+        $variation = array_shift($variations);
+
+        return $variation->getNumber();
     }
 }

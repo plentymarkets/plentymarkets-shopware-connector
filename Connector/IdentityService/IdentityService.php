@@ -130,8 +130,8 @@ class IdentityService implements IdentityServiceInterface
          */
         $identity = Identity::fromArray($params);
 
-        $this->storage->persist($identity);
         $this->validator->validate($identity);
+        $this->storage->persist($identity);
 
         return $identity;
     }

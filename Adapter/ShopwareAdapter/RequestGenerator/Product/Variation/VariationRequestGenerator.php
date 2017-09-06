@@ -75,6 +75,7 @@ class VariationRequestGenerator implements VariationRequestGeneratorInterface
             'unitId' => $unitIdentity->getAdapterIdentifier(),
             'active' => $variation->getActive(),
             'kind' => $variation->isMain() ? 1 : 2,
+            'isMain' => $variation->isMain(),
             'standard' => $variation->isMain(),
             'shippingtime' => $variation->getShippingTime(),
             'prices' => $this->getPrices($variation),
@@ -90,7 +91,6 @@ class VariationRequestGenerator implements VariationRequestGeneratorInterface
             'minPurchase' => $variation->getMinimumOrderQuantity(),
             'purchaseSteps' => $variation->getIntervalOrderQuantity(),
             'maxPurchase' => $variation->getMaximumOrderQuantity(),
-            'shippingFree' => false,
         ];
 
         if (null !== $variation->getReleaseDate()) {

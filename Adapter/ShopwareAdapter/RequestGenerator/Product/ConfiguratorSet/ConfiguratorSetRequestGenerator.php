@@ -30,28 +30,16 @@ class ConfiguratorSetRequestGenerator implements ConfiguratorSetRequestGenerator
      */
     public function generate(Product $product)
     {
-        if (empty($product->getVariations())) {
-            return [];
-        }
-
         $groups = [];
-        foreach ($product->getVariations() as $variation) {
-            if (empty($variation->getPrices())) {
-                continue;
-            }
+        foreach ($product->getVariantConfiguration() as $property) {
+            $propertyName = $property->getName();
 
-            $properties = $variation->getProperties();
+            $groups[$propertyName]['name'] = $propertyName;
 
-            foreach ($properties as $property) {
-                $propertyName = $property->getName();
+            foreach ($property->getValues() as $value) {
+                $propertyValue = $value->getValue();
 
-                $groups[$propertyName]['name'] = $propertyName;
-
-                foreach ($property->getValues() as $value) {
-                    $propertyValue = $value->getValue();
-
-                    $groups[$propertyName]['options'][$propertyValue]['name'] = $propertyValue;
-                }
+                $groups[$propertyName]['options'][$propertyValue]['name'] = $propertyValue;
             }
         }
 

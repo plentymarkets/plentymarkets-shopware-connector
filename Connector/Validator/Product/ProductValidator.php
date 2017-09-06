@@ -39,6 +39,7 @@ class ProductValidator implements ValidatorInterface
 
         Assertion::string($object->getNumber(), null, 'product.number');
         Assertion::notBlank($object->getNumber(), null, 'product.number');
+        Assertion::regex($object->getNumber(), '/^[a-zA-Z0-9-_.]+$/', null, 'product.number');
 
         Assertion::boolean($object->isActive(), null, 'product.active');
 
@@ -64,12 +65,14 @@ class ProductValidator implements ValidatorInterface
         Assertion::string($object->getMetaDescription(), null, 'product.metaDescription');
         Assertion::string($object->getMetaKeywords(), null, 'product.metaKeywords');
         Assertion::string($object->getMetaRobots(), null, 'product.metaRobots');
-        Assertion::inArray($object->getMetaRobots(), [
+
+        $allowedMetaRobots = [
             'INDEX, FOLLOW',
             'NOINDEX, FOLLOW',
             'INDEX, NOFOLLOW',
             'NOINDEX, NOFOLLOW',
-        ], null, 'product.metaRobots');
+        ];
+        Assertion::inArray($object->getMetaRobots(), $allowedMetaRobots, null, 'product.metaRobots');
 
         Assertion::allIsInstanceOf($object->getLinkedProducts(), LinkedProduct::class, null, 'product.linkedProducts');
 
@@ -83,5 +86,7 @@ class ProductValidator implements ValidatorInterface
         Assertion::nullOrIsInstanceOf($object->getAvailableTo(), DateTimeImmutable::class, null, 'product.availableTo');
 
         Assertion::allIsInstanceOf($object->getAttributes(), Attribute::class, null, 'product.attributes');
+
+        Assertion::allIsInstanceOf($object->getVariantConfiguration(), Property::class, null, 'product.variantConfiguration');
     }
 }
