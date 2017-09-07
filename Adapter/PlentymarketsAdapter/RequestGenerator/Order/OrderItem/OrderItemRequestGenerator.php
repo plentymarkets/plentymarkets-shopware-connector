@@ -112,6 +112,7 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
             $itemParams['itemVariationId'] = $this->getVariationIdentifier($orderItem);
         } else {
             $itemParams['itemVariationId'] = 0;
+            $itemParams['typeId'] = 9; // TYPE_UNASSIGEND_VARIATION;
         }
 
         if ($orderItem->getType() === OrderItem::TYPE_PRODUCT && null === $orderItem->getNumber()) {

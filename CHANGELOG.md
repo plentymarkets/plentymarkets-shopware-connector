@@ -21,6 +21,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - separated the variations from products
 - separated stock informations from variations
 - only product properties which have the flag "searchable" set to true are now imported
+- set order item type to TYPE_UNASSIGEND_VARIATION for plentymarkets if no variation could be found
 
 ## [3.0.0]
 ### Fixed
