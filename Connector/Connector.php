@@ -13,9 +13,6 @@ use PlentyConnector\Connector\ValueObject\Definition\Definition;
 use Psr\Log\LoggerInterface;
 
 /**
- * TODO: error and exception handling
- * TODO: Refaktor
- *
  * Class Connector.
  */
 class Connector implements ConnectorInterface
