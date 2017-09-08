@@ -104,10 +104,6 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
         $itemParams['typeId'] = $typeId;
         $itemParams['quantity'] = $orderItem->getQuantity();
 
-        if (null !== $shippingProfileIdentity) {
-            $itemParams['shippingProfileId'] = $shippingProfileIdentity->getAdapterIdentifier();
-        }
-
         if (!empty($orderItem->getNumber())) {
             $itemParams['itemVariationId'] = $this->getVariationIdentifier($orderItem);
         } else {
@@ -148,10 +144,12 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
             $itemParams['properties'] = [
                 [
                     'typeId' => 2,
-                    'value' => $shippingProfileIdentity->getAdapterIdentifier(),
+                    'value' => (int) $shippingProfileIdentity->getAdapterIdentifier(),
                 ],
             ];
         }
+
+        $itemParams['referrerId'] = $this->config->get('order_origin', 1);
 
         $itemParams['orderProperties'] = [];
 

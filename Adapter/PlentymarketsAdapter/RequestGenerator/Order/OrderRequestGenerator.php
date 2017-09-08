@@ -2,7 +2,6 @@
 
 namespace PlentymarketsAdapter\RequestGenerator\Order;
 
-use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Language\Language;
@@ -11,6 +10,7 @@ use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
 use PlentyConnector\Connector\TransferObject\Order\Order;
 use PlentyConnector\Connector\TransferObject\Order\OrderItem\OrderItem;
 use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod;
+use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
@@ -50,11 +50,6 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
     private $addressReuqestGenerator;
 
     /**
-     * @var ConfigServiceInterface
-     */
-    private $config;
-
-    /**
      * OrderRequestGenerator constructor.
      *
      * @param IdentityServiceInterface           $identityService
@@ -62,22 +57,19 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
      * @param OrderItemRequestGeneratorInterface $orderItemRequestGenerator
      * @param CustomerRequestGeneratorInterface  $customerRequestGenerator
      * @param AddressRequestGeneratorInterface   $addressReuqestGenerator
-     * @param ConfigServiceInterface             $config
      */
     public function __construct(
         IdentityServiceInterface $identityService,
         ClientInterface $client,
         OrderItemRequestGeneratorInterface $orderItemRequestGenerator,
         CustomerRequestGeneratorInterface $customerRequestGenerator,
-        AddressRequestGeneratorInterface $addressReuqestGenerator,
-        ConfigServiceInterface $config
+        AddressRequestGeneratorInterface $addressReuqestGenerator
     ) {
         $this->identityService = $identityService;
         $this->client = $client;
         $this->orderItemRequestGenerator = $orderItemRequestGenerator;
         $this->customerRequestGenerator = $customerRequestGenerator;
         $this->addressReuqestGenerator = $addressReuqestGenerator;
-        $this->config = $config;
     }
 
     /**
@@ -152,6 +144,16 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
             throw new NotFoundException('missing payment method mapping');
         }
 
+        $shippingProfileIdentity = $this->identityService->findOneBy([
+            'objectIdentifier' => $order->getShippingProfileIdentifier(),
+            'objectType' => ShippingProfile::TYPE,
+            'adapterName' => PlentymarketsAdapter::NAME,
+        ]);
+
+        if (null === $shippingProfileIdentity) {
+            throw new NotFoundException('shipping profile not mapped');
+        }
+
         $params['properties'] = [
             [
                 'typeId' => 6,
@@ -164,6 +166,10 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
             [
                 'typeId' => 3,
                 'value' => $paymentMethodIdentity->getAdapterIdentifier(),
+            ],
+            [
+                'typeId' => 2,
+                'value' => (int) $shippingProfileIdentity->getAdapterIdentifier(),
             ],
         ];
 
@@ -202,8 +208,6 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
         foreach ($order->getOrderItems() as $orderItem) {
             $params['orderItems'][] = $this->orderItemRequestGenerator->generate($orderItem, $order);
         }
-
-        $params['referrerId'] = $this->config->get('order_origin', 1);
 
         return $params;
     }
