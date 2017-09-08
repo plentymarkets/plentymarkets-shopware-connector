@@ -24,7 +24,7 @@ class EventHandlerCompilerPass implements CompilerPassInterface
 
         $definition = $container->findDefinition('plenty_connector.event_bus.event_handler_middleware');
 
-        $taggedServices = $container->findTaggedServiceIds('plenty_connector.eventhandler');
+        $taggedServices = $container->findTaggedServiceIds('plenty_connector.event_handler');
 
         foreach ($taggedServices as $id => $tags) {
             $definition->addMethodCall('addHandler', [new Reference($id)]);
