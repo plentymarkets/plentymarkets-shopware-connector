@@ -67,7 +67,7 @@ class FetchChangedStocksQueryHandler implements QueryHandlerInterface
         }
 
         if (empty($variationIdentifiers)) {
-            return [];
+            return;
         }
 
         $variations = $this->client->getIterator('items/variations', [
