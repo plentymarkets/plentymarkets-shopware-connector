@@ -20,6 +20,7 @@ use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Psr\Log\LoggerInterface;
 use Shopware\Components\Api\Exception\NotFoundException;
+use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Category as CategoryResource;
 use Shopware\Models\Category\Category as CategoryModel;
 use Shopware\Models\Category\Repository as CategoryRepository;
@@ -33,11 +34,6 @@ use ShopwareAdapter\ShopwareAdapter;
  */
 class HandleCategoryCommandHandler implements CommandHandlerInterface
 {
-    /**
-     * @var CategoryResource
-     */
-    private $resource;
-
     /**
      * @var IdentityServiceInterface
      */
@@ -76,7 +72,6 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     /**
      * HandleCategoryCommandHandler constructor.
      *
-     * @param CategoryResource                $resource
      * @param IdentityServiceInterface        $identityService
      * @param TranslationHelperInterface      $translationHelper
      * @param EntityManagerInterface          $entityManager
@@ -84,14 +79,12 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
      * @param AttributeDataPersisterInterface $attributePersister
      */
     public function __construct(
-        CategoryResource $resource,
         IdentityServiceInterface $identityService,
         TranslationHelperInterface $translationHelper,
         EntityManagerInterface $entityManager,
         LoggerInterface $logger,
         AttributeDataPersisterInterface $attributePersister
     ) {
-        $this->resource = $resource;
         $this->identityService = $identityService;
         $this->translationHelper = $translationHelper;
         $this->entityManager = $entityManager;
@@ -281,9 +274,11 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             $categoryIdentity = array_shift($possibleIdentities);
         }
 
+        $resource = $this->getCategoryResource();
+
         if (null !== $categoryIdentity) {
             try {
-                $this->resource->getOne($categoryIdentity->getAdapterIdentifier());
+                $resource->getOne($categoryIdentity->getAdapterIdentifier());
             } catch (NotFoundException $exception) {
                 $categoryIdentity = null;
             }
@@ -333,7 +328,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
 
         if (null !== $categoryIdentity) {
             try {
-                $this->resource->getOne($categoryIdentity->getAdapterIdentifier());
+                $resource->getOne($categoryIdentity->getAdapterIdentifier());
             } catch (NotFoundException $exception) {
                 $this->identityService->remove($categoryIdentity);
 
@@ -342,7 +337,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         }
 
         if (null === $categoryIdentity) {
-            $categoryModel = $this->resource->create($params);
+            $categoryModel = $resource->create($params);
 
             $categoryIdentity = $this->identityService->create(
                 (string) $category->getIdentifier(),
@@ -351,7 +346,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
                 ShopwareAdapter::NAME
             );
         } else {
-            $categoryModel = $this->resource->update($categoryIdentity->getAdapterIdentifier(), $params);
+            $categoryModel = $resource->update($categoryIdentity->getAdapterIdentifier(), $params);
         }
 
         $this->attributePersister->saveCategoryAttributes($categoryModel, $category->getAttributes());
@@ -415,12 +410,14 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         ]);
 
         foreach ($categoryIdentities as $identity) {
+            $resource = $this->getCategoryResource();
+
             if (isset($validIdentities[$identity->getObjectIdentifier()])) {
                 continue;
             }
 
             try {
-                $this->resource->getOne($identity->getAdapterIdentifier());
+                $resource->getOne($identity->getAdapterIdentifier());
             } catch (NotFoundException $exception) {
                 $this->identityService->remove($identity);
 
@@ -432,7 +429,18 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
                 'active' => false,
             ];
 
-            $this->resource->update($identity->getAdapterIdentifier(), $params);
+            $resource->update($identity->getAdapterIdentifier(), $params);
         }
+    }
+
+    /**
+     * @return CategoryResource
+     */
+    private function getCategoryResource()
+    {
+        // without this reset the entitymanager sometimes the album is not found correctly.
+        Shopware()->Container()->reset('models');
+
+        return Manager::getResource('Category');
     }
 }
