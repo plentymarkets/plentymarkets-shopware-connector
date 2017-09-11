@@ -75,7 +75,7 @@
 
         <service id="plenty_connector.components.bundle.query_handler.fetch_bundle" class="PlentyConnector\Components\Bundle\PlentymarketsAdapter\QueryHandler\FetchBundleQueryHandler">
             <argument type="service" id="plentmarkets_adapter.read_api.item" />
-            <argument type="service" id="plentmarkets_adapter.read_api.variant" />
+            <argument type="service" id="plentmarkets_adapter.read_api.item.variant" />
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plenty_connector_components_bundle.bundle_response_parser" />
 
