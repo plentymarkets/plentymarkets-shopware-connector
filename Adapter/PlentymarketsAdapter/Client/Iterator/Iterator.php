@@ -3,13 +3,14 @@
 namespace PlentymarketsAdapter\Client\Iterator;
 
 use Assert\Assertion;
+use Countable;
 use Iterator as BaseIterator;
 use PlentymarketsAdapter\Client\Client;
 
 /**
  * Class Iterator
  */
-class Iterator implements BaseIterator
+class Iterator implements BaseIterator, Countable
 {
     /**
      * @var Client
@@ -42,7 +43,7 @@ class Iterator implements BaseIterator
     private $criteria;
 
     /**
-     * @var
+     * @var string
      */
     private $path;
 
@@ -105,7 +106,7 @@ class Iterator implements BaseIterator
      */
     public function rewind()
     {
-        $this->loadPage($this->criteria, $this->limit, 0);
+        $this->loadPage($this->criteria, $this->limit);
 
         $this->offset = 0;
         $this->index = 0;
@@ -123,5 +124,13 @@ class Iterator implements BaseIterator
         foreach ($result as $key => $item) {
             $this->page[$this->index + $key] = $item;
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function count()
+    {
+        return $this->client->getTotal($this->path, $this->criteria);
     }
 }
