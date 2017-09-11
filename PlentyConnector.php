@@ -100,7 +100,6 @@ class PlentyConnector extends Plugin
         $container->addCompilerPass(new CommandGeneratorCompilerPass());
         $container->addCompilerPass(new CommandHandlerCompilerPass());
         $container->addCompilerPass(new ConnectorDefinitionCompilerPass());
-        $container->addCompilerPass(new EventHandlerCompilerPass());
         $container->addCompilerPass(new MappingDefinitionCompilerPass());
         $container->addCompilerPass(new QueryGeneratorCompilerPass());
         $container->addCompilerPass(new QueryHandlerCompilerPass());
