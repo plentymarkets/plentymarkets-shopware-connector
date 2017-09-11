@@ -141,7 +141,7 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
             $itemParams['properties'] = [
                 [
                     'typeId' => 2,
-                    'value' => (int) $shippingProfileIdentity->getAdapterIdentifier(),
+                    'value' => (string) $shippingProfileIdentity->getAdapterIdentifier(),
                 ],
             ];
         }

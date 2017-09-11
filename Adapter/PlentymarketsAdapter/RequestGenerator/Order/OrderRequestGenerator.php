@@ -157,19 +157,19 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
         $params['properties'] = [
             [
                 'typeId' => 6,
-                'value' => $languageIdentity->getAdapterIdentifier(),
+                'value' => (string) $languageIdentity->getAdapterIdentifier(),
             ],
             [
                 'typeId' => 7,
-                'value' => $order->getOrderNumber(),
+                'value' => (string) $order->getOrderNumber(),
             ],
             [
                 'typeId' => 3,
-                'value' => $paymentMethodIdentity->getAdapterIdentifier(),
+                'value' => (string) $paymentMethodIdentity->getAdapterIdentifier(),
             ],
             [
                 'typeId' => 2,
-                'value' => (int) $shippingProfileIdentity->getAdapterIdentifier(),
+                'value' => (string) $shippingProfileIdentity->getAdapterIdentifier(),
             ],
         ];
 
@@ -188,7 +188,7 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
         if (null !== $voucher) {
             $params['properties'][] = [
                 'typeId' => 18,
-                'value' => $voucher->getNumber(),
+                'value' => (string) $voucher->getNumber(),
             ];
 
             $params['properties'][] = [
