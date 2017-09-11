@@ -107,6 +107,10 @@ class AttributeDataPersister implements AttributeDataPersisterInterface
         Assertion::allIsInstanceOf($attributes, Attribute::class);
         Assertion::notBlank($table);
 
+        if (empty($attributes)) {
+            return;
+        }
+
         array_walk($attributes, function (Attribute $attribute) use ($table) {
             $this->prepareAttribute($attribute, $table);
         });
