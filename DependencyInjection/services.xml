@@ -640,7 +640,6 @@
         <!-- Service Bus -->
 
         <service id="plenty_connector.command_bus.command_handler_middleware" class="PlentyConnector\Connector\ServiceBus\CommandHandlerMiddleware\CommandHandlerMiddleware" />
-        <service id="plenty_connector.event_bus.event_handler_middleware" class="PlentyConnector\Connector\ServiceBus\EventHandlerMiddleware\EventHandlerMiddleware" />
         <service id="plenty_connector.query_bus.query_handler_middleware" class="PlentyConnector\Connector\ServiceBus\QueryHandlerMiddleware\QueryHandlerMiddleware" />
 
         <service id="plenty_connector.service_bus.validator_middleware" class="PlentyConnector\Connector\ServiceBus\ValidatorMiddleware\ValidatorMiddleware">
@@ -664,7 +663,6 @@
             <argument type="service" id="plenty_connector.service_bus.validator_middleware" />
             <argument type="service" id="plenty_connector.command_bus.command_handler_middleware" />
             <argument type="service" id="plenty_connector.query_bus.query_handler_middleware" />
-            <argument type="service" id="plenty_connector.event_bus.event_handler_middleware" />
         </service>
     </services>
 </container>
