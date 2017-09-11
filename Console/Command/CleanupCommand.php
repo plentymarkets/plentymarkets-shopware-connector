@@ -27,25 +27,17 @@ class CleanupCommand extends ShopwareCommand
     private $logger;
 
     /**
-     * @var OutputHandlerInterface
-     */
-    private $outputHandler;
-
-    /**
      * CleanupCommand constructor.
      *
      * @param CleanupServiceInterface $cleanupService
      * @param LoggerInterface         $logger
-     * @param OutputHandlerInterface  $outputHandler
      */
     public function __construct(
         CleanupServiceInterface $cleanupService,
-        LoggerInterface $logger,
-        OutputHandlerInterface $outputHandler
+        LoggerInterface $logger
     ) {
         $this->cleanupService = $cleanupService;
         $this->logger = $logger;
-        $this->outputHandler = $outputHandler;
 
         parent::__construct();
     }

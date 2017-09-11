@@ -30,25 +30,17 @@ class ProcessCommand extends ShopwareCommand
     private $logger;
 
     /**
-     * @var OutputHandlerInterface
-     */
-    private $outputHandler;
-
-    /**
      * ProcessCommand constructor.
      *
      * @param ConnectorInterface     $connector
      * @param LoggerInterface        $logger
-     * @param OutputHandlerInterface $outputHandler
      */
     public function __construct(
         ConnectorInterface $connector,
-        LoggerInterface $logger,
-        OutputHandlerInterface $outputHandler
+        LoggerInterface $logger
     ) {
         $this->connector = $connector;
         $this->logger = $logger;
-        $this->outputHandler = $outputHandler;
 
         parent::__construct();
     }
@@ -91,8 +83,6 @@ class ProcessCommand extends ShopwareCommand
         if (method_exists($this->logger, 'pushHandler')) {
             $this->logger->pushHandler(new ConsoleHandler($output));
         }
-
-        $this->outputHandler->initialize($input, $output);
 
         try {
             if ($objectIdentifier) {
