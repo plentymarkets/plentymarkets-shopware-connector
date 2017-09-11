@@ -45,7 +45,11 @@ class ConfigService implements ConfigServiceInterface
      */
     public function getAll()
     {
-        $containerParameters = $this->container->getParameter('shopware.plenty_connector');
+        $containerParameters = [];
+
+        if ($this->container->hasParameter('shopware.plenty_connector')) {
+            $containerParameters = $this->container->getParameter('shopware.plenty_connector');
+        }
 
         /**
          * @var Config[] $configElements
