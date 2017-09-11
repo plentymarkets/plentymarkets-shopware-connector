@@ -9,7 +9,6 @@ use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use Psr\Log\LoggerInterface;
 use Shopware\Commands\ShopwareCommand;
-use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -54,7 +53,7 @@ class MappingCommand extends ShopwareCommand
     }
 
     /**
-     * @throws InvalidArgumentException
+     * {@inheritdoc}
      */
     protected function configure()
     {
@@ -68,14 +67,14 @@ class MappingCommand extends ShopwareCommand
     }
 
     /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return int|void|null
+     * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->logger->pushHandler(new ConsoleHandler($output));
+        if (method_exists($this->logger, 'pushHandler')) {
+            $this->logger->pushHandler(new ConsoleHandler($output));
+        }
+
         $this->outputHandler->initialize($input, $output);
 
         $objectType = $input->getArgument('objectType');

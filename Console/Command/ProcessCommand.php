@@ -6,10 +6,9 @@ use Exception;
 use PlentyConnector\Connector\ConnectorInterface;
 use PlentyConnector\Connector\Logger\ConsoleHandler;
 use PlentyConnector\Connector\ServiceBus\QueryType;
+use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use Psr\Log\LoggerInterface;
 use Shopware\Commands\ShopwareCommand;
-use Symfony\Component\Console\Exception\InvalidArgumentException;
-use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -31,23 +30,31 @@ class ProcessCommand extends ShopwareCommand
     private $logger;
 
     /**
+     * @var OutputHandlerInterface
+     */
+    private $outputHandler;
+
+    /**
      * ProcessCommand constructor.
      *
-     * @param ConnectorInterface $connector
-     * @param LoggerInterface    $logger
-     *
-     * @throws LogicException
+     * @param ConnectorInterface     $connector
+     * @param LoggerInterface        $logger
+     * @param OutputHandlerInterface $outputHandler
      */
-    public function __construct(ConnectorInterface $connector, LoggerInterface $logger)
-    {
+    public function __construct(
+        ConnectorInterface $connector,
+        LoggerInterface $logger,
+        OutputHandlerInterface $outputHandler
+    ) {
         $this->connector = $connector;
         $this->logger = $logger;
+        $this->outputHandler = $outputHandler;
 
         parent::__construct();
     }
 
     /**
-     * @throws InvalidArgumentException
+     * {@inheritdoc}
      */
     protected function configure()
     {
@@ -73,10 +80,7 @@ class ProcessCommand extends ShopwareCommand
     }
 
     /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return int|void|null
+     * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -84,7 +88,11 @@ class ProcessCommand extends ShopwareCommand
         $objectType = $input->getArgument('objectType');
         $objectIdentifier = $input->getArgument('objectIdentifier');
 
-        $this->logger->pushHandler(new ConsoleHandler($output));
+        if (method_exists($this->logger, 'pushHandler')) {
+            $this->logger->pushHandler(new ConsoleHandler($output));
+        }
+
+        $this->outputHandler->initialize($input, $output);
 
         try {
             if ($objectIdentifier) {
