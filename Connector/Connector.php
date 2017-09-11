@@ -10,6 +10,7 @@ use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\ValueObject\Definition\Definition;
+use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -38,6 +39,11 @@ class Connector implements ConnectorInterface
     private $commandFactory;
 
     /**
+     * @var OutputHandlerInterface
+     */
+    private $outputHandler;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -45,20 +51,23 @@ class Connector implements ConnectorInterface
     /**
      * Connector constructor.
      *
-     * @param ServiceBusInterface     $serviceBus
-     * @param QueryFactoryInterface   $queryFactory
+     * @param ServiceBusInterface $serviceBus
+     * @param QueryFactoryInterface $queryFactory
      * @param CommandFactoryInterface $commandFactory
-     * @param LoggerInterface         $logger
+     * @param OutputHandlerInterface $outputHandler
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ServiceBusInterface $serviceBus,
         QueryFactoryInterface $queryFactory,
         CommandFactoryInterface $commandFactory,
+        OutputHandlerInterface $outputHandler,
         LoggerInterface $logger
     ) {
         $this->serviceBus = $serviceBus;
         $this->queryFactory = $queryFactory;
         $this->commandFactory = $commandFactory;
+        $this->outputHandler = $outputHandler;
         $this->logger = $logger;
     }
 
@@ -143,6 +152,8 @@ class Connector implements ConnectorInterface
      */
     private function handleDefinition(Definition $definition, $queryType, $identifier = null)
     {
+        $this->outputHandler->writeLine('loading data for definition');
+
         /**
          * @var TransferObjectInterface[] $objects
          */
@@ -157,6 +168,9 @@ class Connector implements ConnectorInterface
             $objects = [];
         }
 
+        $this->outputHandler->writeLine('handling transfer objects from definition');
+        $this->outputHandler->startProgressBar(count($objects));
+
         foreach ($objects as $object) {
             $this->serviceBus->handle($this->commandFactory->create(
                 $definition->getDestinationAdapterName(),
@@ -164,6 +178,10 @@ class Connector implements ConnectorInterface
                 CommandType::HANDLE,
                 $object
             ));
+
+            $this->outputHandler->advanceProgressBar();
         }
+
+        $this->outputHandler->finishProgressBar();
     }
 }
