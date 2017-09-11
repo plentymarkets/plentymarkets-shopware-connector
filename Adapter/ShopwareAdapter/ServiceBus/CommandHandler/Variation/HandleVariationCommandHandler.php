@@ -130,7 +130,7 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param Detail $variant
+     * @param Detail    $variant
      * @param Variation $variation
      */
     private function correctMainDetailAssignment(Detail $variant, Variation $variation)

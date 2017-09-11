@@ -113,6 +113,14 @@ class Iterator implements BaseIterator, Countable
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function count()
+    {
+        return $this->client->getTotal($this->path, $this->criteria);
+    }
+
+    /**
      * @param array $criteria
      * @param int   $limit
      * @param int   $offset
@@ -124,13 +132,5 @@ class Iterator implements BaseIterator, Countable
         foreach ($result as $key => $item) {
             $this->page[$this->index + $key] = $item;
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function count()
-    {
-        return $this->client->getTotal($this->path, $this->criteria);
     }
 }

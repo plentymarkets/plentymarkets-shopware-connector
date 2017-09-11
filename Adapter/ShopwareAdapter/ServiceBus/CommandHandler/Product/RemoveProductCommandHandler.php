@@ -10,8 +10,8 @@ use PlentyConnector\Connector\ServiceBus\Command\RemoveCommandInterface;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
-use Shopware\Components\Api\Resource\Article;
 use Psr\Log\LoggerInterface;
+use Shopware\Components\Api\Resource\Article;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**

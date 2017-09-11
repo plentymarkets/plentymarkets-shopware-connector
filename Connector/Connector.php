@@ -51,11 +51,11 @@ class Connector implements ConnectorInterface
     /**
      * Connector constructor.
      *
-     * @param ServiceBusInterface $serviceBus
-     * @param QueryFactoryInterface $queryFactory
+     * @param ServiceBusInterface     $serviceBus
+     * @param QueryFactoryInterface   $queryFactory
      * @param CommandFactoryInterface $commandFactory
-     * @param OutputHandlerInterface $outputHandler
-     * @param LoggerInterface $logger
+     * @param OutputHandlerInterface  $outputHandler
+     * @param LoggerInterface         $logger
      */
     public function __construct(
         ServiceBusInterface $serviceBus,
