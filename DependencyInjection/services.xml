@@ -133,7 +133,7 @@
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.manufacturer%</argument>
-            <argument>90</argument>
+            <argument>70</argument>
 
             <tag name="plenty_connector.connector_definition" />
             <tag name="plenty_connector.cleanup_definition" />
@@ -145,7 +145,7 @@
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.product%</argument>
-            <argument>80</argument>
+            <argument>60</argument>
 
             <tag name="plenty_connector.connector_definition" />
             <tag name="plenty_connector.cleanup_definition" />
@@ -157,7 +157,7 @@
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.stock%</argument>
-            <argument>70</argument>
+            <argument>50</argument>
 
             <tag name="plenty_connector.connector_definition" />
         </service>
@@ -168,7 +168,7 @@
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.transfer_object.order%</argument>
-            <argument>60</argument>
+            <argument>40</argument>
 
             <tag name="plenty_connector.connector_definition" />
         </service>
@@ -179,7 +179,7 @@
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.order%</argument>
-            <argument>50</argument>
+            <argument>30</argument>
 
             <tag name="plenty_connector.connector_definition" />
         </service>
@@ -190,7 +190,7 @@
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.transfer_object.payment%</argument>
-            <argument>40</argument>
+            <argument>20</argument>
 
             <tag name="plenty_connector.connector_definition" />
         </service>
