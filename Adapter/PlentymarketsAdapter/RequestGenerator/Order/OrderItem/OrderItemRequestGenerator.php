@@ -106,8 +106,9 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
 
         if (!empty($orderItem->getNumber())) {
             $itemParams['itemVariationId'] = $this->getVariationIdentifier($orderItem);
-        } else {
-            $itemParams['itemVariationId'] = 0;
+        }
+
+        if (empty($itemParams['itemVariationId'])) {
             $itemParams['typeId'] = 9; // TYPE_UNASSIGEND_VARIATION;
         }
 
