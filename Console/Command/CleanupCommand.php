@@ -5,7 +5,6 @@ namespace PlentyConnector\Console\Command;
 use Exception;
 use PlentyConnector\Connector\CleanupService\CleanupServiceInterface;
 use PlentyConnector\Connector\Logger\ConsoleHandler;
-use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use Psr\Log\LoggerInterface;
 use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Input\InputInterface;

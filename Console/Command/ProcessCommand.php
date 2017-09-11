@@ -6,7 +6,6 @@ use Exception;
 use PlentyConnector\Connector\ConnectorInterface;
 use PlentyConnector\Connector\Logger\ConsoleHandler;
 use PlentyConnector\Connector\ServiceBus\QueryType;
-use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use Psr\Log\LoggerInterface;
 use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -32,8 +31,8 @@ class ProcessCommand extends ShopwareCommand
     /**
      * ProcessCommand constructor.
      *
-     * @param ConnectorInterface     $connector
-     * @param LoggerInterface        $logger
+     * @param ConnectorInterface $connector
+     * @param LoggerInterface    $logger
      */
     public function __construct(
         ConnectorInterface $connector,
