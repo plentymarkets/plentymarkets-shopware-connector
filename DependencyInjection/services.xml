@@ -145,7 +145,7 @@
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.product%</argument>
-            <argument>70</argument>
+            <argument>80</argument>
 
             <tag name="plenty_connector.connector_definition" />
             <tag name="plenty_connector.cleanup_definition" />
@@ -157,7 +157,7 @@
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.stock%</argument>
-            <argument>80</argument>
+            <argument>70</argument>
 
             <tag name="plenty_connector.connector_definition" />
         </service>
