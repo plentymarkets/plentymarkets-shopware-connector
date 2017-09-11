@@ -167,12 +167,6 @@
             <argument type="string">Order</argument>
         </service>
 
-        <service id="shopware_adapter.shopware_resource.variation" class="Shopware\Components\Api\Resource\Variant">
-            <factory service="shopware_adapter.shopware_api_manager" method="getResource" />
-
-            <argument type="string">Variant</argument>
-        </service>
-
         <!-- Category command handlers -->
 
         <service id="shopware_adapter.command_handler.handle_category" class="ShopwareAdapter\ServiceBus\CommandHandler\Category\HandleCategoryCommandHandler">
@@ -282,7 +276,6 @@
         <service id="shopware_adapter.command_handler.handle_variation" class="ShopwareAdapter\ServiceBus\CommandHandler\Variation\HandleVariationCommandHandler">
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="shopware_adapter.request_generator.product.variation" />
-            <argument type="service" id="shopware_adapter.shopware_resource.variation" />
             <argument type="service" id="models" />
             <argument type="service" id="shopware_adapter.data_persister.attribute" />
 
@@ -290,6 +283,8 @@
         </service>
 
         <service id="shopware_adapter.command_handler.remove_variation" class="ShopwareAdapter\ServiceBus\CommandHandler\Variation\RemoveVariationCommandHandler">
+            <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="plenty_connector.logger" />
 
             <tag name="plenty_connector.command_handler" />
         </service>

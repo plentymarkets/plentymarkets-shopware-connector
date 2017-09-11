@@ -9,6 +9,7 @@ use PlentyConnector\Connector\ServiceBus\Command\HandleCommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\Variation\HandleVariationCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
+use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Variant;
 use Shopware\Models\Article\Detail;
 use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
@@ -31,11 +32,6 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
     private $variationRequestGenerator;
 
     /**
-     * @var Variant
-     */
-    private $resource;
-
-    /**
      * @var EntityManagerInterface
      */
     private $entityManager;
@@ -50,20 +46,17 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
      *
      * @param IdentityServiceInterface           $identityService
      * @param VariationRequestGeneratorInterface $variationRequestGenerator
-     * @param Variant                            $resource
      * @param EntityManagerInterface             $entityManager
      * @param AttributeDataPersisterInterface    $attributeDataPersister
      */
     public function __construct(
         IdentityServiceInterface $identityService,
         VariationRequestGeneratorInterface $variationRequestGenerator,
-        Variant $resource,
         EntityManagerInterface $entityManager,
         AttributeDataPersisterInterface $attributeDataPersister
     ) {
         $this->identityService = $identityService;
         $this->variationRequestGenerator = $variationRequestGenerator;
-        $this->resource = $resource;
         $this->entityManager = $entityManager;
         $this->attributeDataPersister = $attributeDataPersister;
     }
@@ -92,10 +85,12 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
         $variantRepository = $this->entityManager->getRepository(Detail::class);
         $variant = $variantRepository->findOneBy(['number' => $variation->getNumber()]);
 
+        $resource = $this->getVariationResource();
+
         if (null === $variant) {
-            $variant = $this->resource->create($variationParams);
+            $variant = $resource->create($variationParams);
         } else {
-            $variant = $this->resource->update($variant->getId(), $variationParams);
+            $variant = $resource->update($variant->getId(), $variationParams);
         }
 
         $identities = $this->identityService->findBy([
@@ -124,13 +119,7 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
             );
         }
 
-        if ($variation->isMain()) {
-            $this->entityManager->getConnection()->update(
-                's_articles',
-                ['main_detail_id' => $variant->getId()],
-                ['id' => $variant->getArticle()->getId()]
-            );
-        }
+        $this->correctMainDetailAssignment($variant, $variation);
 
         $this->attributeDataPersister->saveProductDetailAttributes(
             $variant,
@@ -138,5 +127,33 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
         );
 
         return true;
+    }
+
+    /**
+     * @param Detail $variant
+     * @param Variation $variation
+     */
+    private function correctMainDetailAssignment(Detail $variant, Variation $variation)
+    {
+        if (!$variation->isMain()) {
+            return;
+        }
+
+        $this->entityManager->getConnection()->update(
+            's_articles',
+            ['main_detail_id' => $variant->getId()],
+            ['id' => $variant->getArticle()->getId()]
+        );
+    }
+
+    /**
+     * @return Variant
+     */
+    private function getVariationResource()
+    {
+        // without this reset the entitymanager sometimes the album is not found correctly.
+        Shopware()->Container()->reset('models');
+
+        return Manager::getResource('Variant');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Product;
 
+use Exception;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\Product\RemoveProductCommand;
@@ -9,8 +10,8 @@ use PlentyConnector\Connector\ServiceBus\Command\RemoveCommandInterface;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
+use Shopware\Components\Api\Resource\Article;
 use Psr\Log\LoggerInterface;
-use Shopware\Components\Api\Exception\NotFoundException;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -76,7 +77,7 @@ class RemoveProductCommandHandler implements CommandHandlerInterface
         try {
             $resource = $this->getArticleResource();
             $resource->delete($identity->getAdapterIdentifier());
-        } catch (NotFoundException $exception) {
+        } catch (Exception $exception) {
             $this->logger->notice('identity removed but the object was not found', ['command' => $command]);
         }
 

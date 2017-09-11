@@ -57,7 +57,6 @@ class RemoveStockCommandHandler implements CommandHandlerInterface
     {
         /**
          * @var RemoveCommandInterface $command
-         * @var Stock                  $stock
          */
         $identifier = $command->getObjectIdentifier();
 
