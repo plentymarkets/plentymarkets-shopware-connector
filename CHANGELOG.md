@@ -14,6 +14,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - optimized the update path for versions before 2.0
 - fix for products not able to persist due too detached entities
+- the field order origin (Auftragsherkunft) was ignored and the default was used
+- the orer shipping profile was ignored and a default was used
 
 ### Changed
 - use the whole media data for the hash creation, this enforces changes also when media text fields change
