@@ -13,9 +13,7 @@ use Symfony\Component\DependencyInjection\Reference;
 class MappingDefinitionCompilerPass implements CompilerPassInterface
 {
     /**
-     * @param ContainerBuilder $container
-     *
-     * @throws InvalidArgumentException
+     * {@inheritdoc}
      */
     public function process(ContainerBuilder $container)
     {

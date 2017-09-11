@@ -4,7 +4,7 @@
            xmlns="http://symfony.com/schema/dic/services"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <!-- Parameters -->
+    <!-- parameters -->
 
     <parameters>
         <parameter key="plenty_connector.adapter.shopware" type="constant">ShopwareAdapter\ShopwareAdapter::NAME</parameter>
@@ -30,11 +30,11 @@
         <parameter key="plenty_connector.transfer_object.vat_rate" type="constant">PlentyConnector\Connector\TransferObject\VatRate\VatRate::TYPE</parameter>
     </parameters>
 
-    <!-- Services -->
+    <!-- services -->
 
     <services>
 
-        <!-- Logger -->
+        <!-- logger -->
 
         <service id="plenty_connector.logger.handler" class="Monolog\Handler\RotatingFileHandler" public="false">
             <argument>%kernel.logs_dir%/plentyconnector_%kernel.environment%.log</argument>
@@ -58,18 +58,18 @@
             </call>
         </service>
 
-        <!-- Config -->
+        <!-- config -->
 
         <service id="plenty_connector.config" class="PlentyConnector\Connector\ConfigService\ConfigService">
             <argument type="service" id="models" />
             <argument type="service" id="service_container" />
         </service>
 
-        <!-- Translation Helper -->
+        <!-- translation Helper -->
 
         <service id="plenty_connector.translation_helper" class="PlentyConnector\Connector\Translation\TranslationHelper" />
 
-        <!-- Subscriber -->
+        <!-- subscriber -->
 
         <service id="plenty_connector.subscriber.controller_path" class="PlentyConnector\Subscriber\ControllerPathSubscriber">
             <argument type="service" id="service_container" />
@@ -85,22 +85,23 @@
             <tag name="shopware.event_subscriber" />
         </service>
 
-        <!-- Connector -->
+        <!-- connector -->
 
         <service id="plenty_connector.connector" class="PlentyConnector\Connector\Connector">
             <argument type="service" id="plenty_connector.service_bus" />
             <argument type="service" id="plenty_connector.query_factory" />
             <argument type="service" id="plenty_connector.command_factory" />
+            <argument type="service" id="plenty_connector.console.output_handler" />
             <argument type="service" id="plenty_connector.logger" />
         </service>
 
-        <!-- Definition factory -->
+        <!-- definition factory -->
 
         <service id="plenty_connector.definition_factory" class="PlentyConnector\Connector\DefinitionFactory\DefinitionFactory">
             <argument type="service" id="plenty_connector.validator_service" />
         </service>
 
-        <!-- Connector definitions -->
+        <!-- connector definitions -->
 
         <service id="plenty_connector.connector_definition.category" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
             <factory service="plenty_connector.definition_factory" method="factory" />
@@ -194,7 +195,7 @@
             <tag name="plenty_connector.connector_definition" />
         </service>
 
-        <!-- Cleanup Service -->
+        <!-- cleanup Service -->
 
         <service id="plenty_connector.cleanup_service" class="PlentyConnector\Connector\CleanupService\CleanupService">
             <argument type="service" id="plenty_connector.service_bus" />
@@ -204,7 +205,7 @@
             <argument type="service" id="plenty_connector.logger" />
         </service>
 
-        <!-- Mapping Service -->
+        <!-- mapping Service -->
 
         <service id="plenty_connector.mapping_service" class="PlentyConnector\Connector\MappingService\MappingService">
             <argument type="service" id="plenty_connector.query_factory" />
@@ -212,7 +213,7 @@
             <argument type="service" id="plenty_connector.validator_service" />
         </service>
 
-        <!-- Mapping definitions -->
+        <!-- mapping definitions -->
 
         <service id="plenty_connector.mapping_definition.country" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
             <factory service="plenty_connector.definition_factory" method="factory" />
@@ -324,7 +325,7 @@
             <tag name="plenty_connector.mapping_definition" />
         </service>
 
-        <!-- Console -->
+        <!-- console -->
 
         <service id="plenty_connector.console.command.cleanup" class="PlentyConnector\Console\Command\CleanupCommand">
             <argument type="service" id="plenty_connector.cleanup_service" />
@@ -348,11 +349,11 @@
             <tag name="console.command" />
         </service>
 
-        <!-- Output handler -->
+        <!-- output handler -->
 
         <service id="plenty_connector.console.output_handler" class="PlentyConnector\Console\OutputHandler\OutputHandler" />
 
-        <!-- Identity Service -->
+        <!-- identity Service -->
 
         <service id="plenty_connector.identity_storage" class="PlentyConnector\Connector\IdentityService\Storage\DoctrineIdentityStorage">
             <argument type="service" id="models" />
@@ -363,11 +364,11 @@
             <argument type="service" id="plenty_connector.validator_service" />
         </service>
 
-        <!-- Query Factory -->
+        <!-- query Factory -->
 
         <service id="plenty_connector.query_factory" class="PlentyConnector\Connector\ServiceBus\QueryFactory\QueryFactory" />
 
-        <!-- Query generator -->
+        <!-- query generator -->
 
         <service id="plenty_connector.query_generator.category" class="PlentyConnector\Connector\ServiceBus\QueryGenerator\Category\CategoryQueryGenerator">
             <tag name="plenty_connector.query_generator" />
@@ -449,11 +450,11 @@
             <tag name="plenty_connector.query_generator" />
         </service>
 
-        <!-- Command Factory -->
+        <!-- command Factory -->
 
         <service id="plenty_connector.command_factory" class="PlentyConnector\Connector\ServiceBus\CommandFactory\CommandFactory" />
 
-        <!-- Command generator -->
+        <!-- command generator -->
 
         <service id="plenty_connector.command_generator.category" class="PlentyConnector\Connector\ServiceBus\CommandGenerator\Category\CategoryCommandGenerator">
             <tag name="plenty_connector.command_generator" />
@@ -491,11 +492,11 @@
             <tag name="plenty_connector.command_generator" />
         </service>
 
-        <!-- Validator service -->
+        <!-- validator service -->
 
         <service id="plenty_connector.validator_service" class="PlentyConnector\Connector\ValidatorService\ValidatorService" />
 
-        <!-- Validators -->
+        <!-- validators -->
 
         <service id="plenty_connector.validator.attribute" class="PlentyConnector\Connector\Validator\Attribute\AttributeValidator">
             <tag name="plenty_connector.validator" />
@@ -637,7 +638,7 @@
             <tag name="plenty_connector.validator" />
         </service>
 
-        <!-- Service Bus -->
+        <!-- service Bus -->
 
         <service id="plenty_connector.command_bus.command_handler_middleware" class="PlentyConnector\Connector\ServiceBus\CommandHandlerMiddleware\CommandHandlerMiddleware" />
         <service id="plenty_connector.query_bus.query_handler_middleware" class="PlentyConnector\Connector\ServiceBus\QueryHandlerMiddleware\QueryHandlerMiddleware" />

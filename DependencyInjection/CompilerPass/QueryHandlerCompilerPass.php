@@ -12,9 +12,7 @@ use Symfony\Component\DependencyInjection\Reference;
 class QueryHandlerCompilerPass implements CompilerPassInterface
 {
     /**
-     * @param ContainerBuilder $container
-     *
-     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
+     * {@inheritdoc}
      */
     public function process(ContainerBuilder $container)
     {
