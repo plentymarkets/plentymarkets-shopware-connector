@@ -75,11 +75,6 @@ class StockResponseParser implements StockResponseParserInterface
         $itemWarehouse = (int) $this->config->get('item_warehouse', 0);
 
         foreach ($variation['stock'] as $stock) {
-            // don't count stock informations from bundled variations
-            if ($stock['variationId'] !== $variation['id']) {
-                continue;
-            }
-
             if ($itemWarehouse !== 0 && $stock['warehouseId'] !== $itemWarehouse) {
                 continue;
             }
