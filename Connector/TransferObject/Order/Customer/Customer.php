@@ -257,7 +257,7 @@ class Customer extends AbstractValueObject
     /**
      * @param null|string $title
      */
-    public function setTitle($title)
+    public function setTitle($title = null)
     {
         $this->title = $title;
     }
@@ -273,7 +273,7 @@ class Customer extends AbstractValueObject
     /**
      * @param null|string $firstname
      */
-    public function setFirstname($firstname)
+    public function setFirstname($firstname = null)
     {
         $this->firstname = $firstname;
     }
