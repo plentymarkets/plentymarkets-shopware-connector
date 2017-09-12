@@ -8,6 +8,7 @@ use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Item;
 use PlentymarketsAdapter\ResponseParser\Product\ProductResponseParserInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class FetchAllProductsQueryHandler.
@@ -25,17 +26,26 @@ class FetchAllProductsQueryHandler implements QueryHandlerInterface
     private $responseParser;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * FetchAllProductsQueryHandler constructor.
      *
-     * @param Item                           $itemApi
+     * @param Item $itemApi
      * @param ProductResponseParserInterface $responseParser
+     * @param LoggerInterface $logger
      */
     public function __construct(
         Item $itemApi,
-        ProductResponseParserInterface $responseParser
+        ProductResponseParserInterface
+        $responseParser,
+        LoggerInterface $logger
     ) {
         $this->itemApi = $itemApi;
         $this->responseParser = $responseParser;
+        $this->logger = $logger;
     }
 
     /**
@@ -54,8 +64,15 @@ class FetchAllProductsQueryHandler implements QueryHandlerInterface
     {
         $products = $this->itemApi->findAll();
 
-        foreach ($products as $element) {
-            $result = $this->responseParser->parse($element);
+        $parsedElements = [];
+        foreach ($products as $product) {
+            try {
+                $result = $this->responseParser->parse($product);
+            } catch (Exception $exception) {
+                $this->logger->error($exception->getMessage());
+
+                $result = null;
+            }
 
             if (empty($result)) {
                 continue;
@@ -64,8 +81,10 @@ class FetchAllProductsQueryHandler implements QueryHandlerInterface
             $parsedElements = array_filter($result);
 
             foreach ($parsedElements as $parsedElement) {
-                yield $parsedElement;
+                $parsedElements[] = $parsedElement;
             }
         }
+
+        return $parsedElements;
     }
 }

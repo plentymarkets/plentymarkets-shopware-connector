@@ -8,6 +8,7 @@ use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Manufacturer\ManufacturerResponseParserInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class FetchAllManufacturersQueryHandler
@@ -22,20 +23,28 @@ class FetchAllManufacturersQueryHandler implements QueryHandlerInterface
     /**
      * @var ManufacturerResponseParserInterface
      */
-    private $manufacturerResponseParser;
+    private $responseParser;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * FetchAllManufacturersQueryHandler constructor.
      *
-     * @param ClientInterface                     $client
-     * @param ManufacturerResponseParserInterface $manufacturerResponseParser
+     * @param ClientInterface $client
+     * @param ManufacturerResponseParserInterface $responseParser
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ClientInterface $client,
-        ManufacturerResponseParserInterface $manufacturerResponseParser
+        ManufacturerResponseParserInterface $responseParser,
+        LoggerInterface $logger
     ) {
         $this->client = $client;
-        $this->manufacturerResponseParser = $manufacturerResponseParser;
+        $this->responseParser = $responseParser;
+        $this->logger = $logger;
     }
 
     /**
@@ -54,8 +63,15 @@ class FetchAllManufacturersQueryHandler implements QueryHandlerInterface
     {
         $manufacturers = $this->client->getIterator('items/manufacturers');
 
-        foreach ($manufacturers as $element) {
-            $result = $this->manufacturerResponseParser->parse($element);
+        $parsedElements = [];
+        foreach ($manufacturers as $manufacturer) {
+            try {
+                $result = $this->responseParser->parse($manufacturer);
+            } catch (Exception $exception) {
+                $this->logger->error($exception->getMessage());
+
+                $result = null;
+            }
 
             if (empty($result)) {
                 continue;
@@ -64,8 +80,10 @@ class FetchAllManufacturersQueryHandler implements QueryHandlerInterface
             $parsedElements = array_filter($result);
 
             foreach ($parsedElements as $parsedElement) {
-                yield $parsedElement;
+                $parsedElements[] = $parsedElement;
             }
         }
+
+        return $parsedElements;
     }
 }

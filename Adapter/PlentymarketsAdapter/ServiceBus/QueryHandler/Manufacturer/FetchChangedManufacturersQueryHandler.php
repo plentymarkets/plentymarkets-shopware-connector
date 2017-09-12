@@ -9,6 +9,7 @@ use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Manufacturer\ManufacturerResponseParserInterface;
 use PlentymarketsAdapter\ServiceBus\ChangedDateTimeTrait;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class FetchChangedManufacturersQueryHandler.
@@ -25,20 +26,28 @@ class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
     /**
      * @var ManufacturerResponseParserInterface
      */
-    private $manufacturerResponseParser;
+    private $responseParser;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * FetchChangedManufacturersQueryHandler constructor.
      *
-     * @param ClientInterface                     $client
-     * @param ManufacturerResponseParserInterface $manufacturerResponseParser
+     * @param ClientInterface $client
+     * @param ManufacturerResponseParserInterface $responseParser
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ClientInterface $client,
-        ManufacturerResponseParserInterface $manufacturerResponseParser
+        ManufacturerResponseParserInterface $responseParser,
+        LoggerInterface $logger
     ) {
         $this->client = $client;
-        $this->manufacturerResponseParser = $manufacturerResponseParser;
+        $this->responseParser = $responseParser;
+        $this->logger = $logger;
     }
 
     /**
@@ -56,18 +65,21 @@ class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
     public function handle(QueryInterface $query)
     {
         $lastCangedTime = $this->getChangedDateTime();
-
         $currentDateTime = $this->getCurrentDateTime();
-        $oldTimestamp = $lastCangedTime->format(DATE_W3C);
 
-        $criteria = [
-            'updatedAt' => $oldTimestamp,
-        ];
+        $manufacturers = $this->client->getIterator('items/manufacturers', [
+            'updatedAt' => $lastCangedTime->format(DATE_W3C),
+        ]);
 
-        $manufacturers = $this->client->getIterator('items/manufacturers', $criteria);
+        $parsedElements = [];
+        foreach ($manufacturers as $manufacturer) {
+            try {
+                $result = $this->responseParser->parse($manufacturer);
+            } catch (Exception $exception) {
+                $this->logger->error($exception->getMessage());
 
-        foreach ($manufacturers as $element) {
-            $result = $this->manufacturerResponseParser->parse($element);
+                $result = null;
+            }
 
             if (empty($result)) {
                 continue;
@@ -76,10 +88,12 @@ class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
             $parsedElements = array_filter($result);
 
             foreach ($parsedElements as $parsedElement) {
-                yield $parsedElement;
+                $parsedElements[] = $parsedElement;
             }
         }
 
         $this->setChangedDateTime($currentDateTime);
+
+        return $parsedElements;
     }
 }

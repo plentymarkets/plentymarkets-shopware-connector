@@ -5,9 +5,9 @@ namespace ShopwareAdapter\ServiceBus\QueryHandler\Order;
 use PlentyConnector\Connector\ServiceBus\Query\Order\FetchChangedOrdersQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use Psr\Log\LoggerInterface;
 use ShopwareAdapter\DataProvider\Order\OrderDataProviderInterface;
 use ShopwareAdapter\ResponseParser\Order\OrderResponseParserInterface;
-use ShopwareAdapter\ServiceBus\ChangedDateTimeTrait;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -15,8 +15,6 @@ use ShopwareAdapter\ShopwareAdapter;
  */
 class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
 {
-    use ChangedDateTimeTrait;
-
     /**
      * @var OrderResponseParserInterface
      */
@@ -28,15 +26,25 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
     private $dataProvider;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * FetchChangedOrdersQueryHandler constructor.
      *
      * @param OrderResponseParserInterface $responseParser
-     * @param OrderDataProviderInterface   $dataProvider
+     * @param OrderDataProviderInterface $dataProvider
+     * @param LoggerInterface $logger
      */
-    public function __construct(OrderResponseParserInterface $responseParser, OrderDataProviderInterface $dataProvider)
-    {
+    public function __construct(
+        OrderResponseParserInterface $responseParser,
+        OrderDataProviderInterface $dataProvider,
+        LoggerInterface $logger
+    ) {
         $this->responseParser = $responseParser;
         $this->dataProvider = $dataProvider;
+        $this->logger = $logger;
     }
 
     /**
@@ -51,14 +59,21 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function handle(QueryInterface $event)
+    public function handle(QueryInterface $query)
     {
         $orders = $this->dataProvider->getOpenOrders();
 
+        $parsedElements = [];
         foreach ($orders as $order) {
-            $order = $this->dataProvider->getOrderDetails($order['id']);
+            try {
+                $order = $this->dataProvider->getOrderDetails($order['id']);
 
-            $result = $this->responseParser->parse($order);
+                $result = $this->responseParser->parse($order);
+            } catch (Exception $exception) {
+                $this->logger->error($exception->getMessage());
+
+                $result = null;
+            }
 
             if (empty($result)) {
                 continue;
@@ -67,8 +82,10 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
             $parsedElements = array_filter($result);
 
             foreach ($parsedElements as $parsedElement) {
-                yield $parsedElement;
+                $parsedElements[] = $parsedElement;
             }
         }
+
+        return $parsedElements;
     }
 }

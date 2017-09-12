@@ -8,6 +8,7 @@ use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Product\Stock\StockResponseParserInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class FetchAllStocksQueryHandler
@@ -25,15 +26,25 @@ class FetchAllStocksQueryHandler implements QueryHandlerInterface
     private $responseParser;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * FetchAllStocksQueryHandler constructor.
      *
-     * @param ClientInterface              $client
+     * @param ClientInterface $client
      * @param StockResponseParserInterface $responseParser
+     * @param LoggerInterface $logger
      */
-    public function __construct(ClientInterface $client, StockResponseParserInterface $responseParser)
-    {
+    public function __construct(
+        ClientInterface $client,
+        StockResponseParserInterface $responseParser,
+        LoggerInterface $logger
+    ) {
         $this->client = $client;
         $this->responseParser = $responseParser;
+        $this->logger = $logger;
     }
 
     /**
@@ -58,12 +69,27 @@ class FetchAllStocksQueryHandler implements QueryHandlerInterface
             $groupedStock[$stock['variationId']]['stock'][] = $stock;
         }
 
+        $parsedElements = [];
         foreach ($groupedStock as $variation) {
-            $transferObjects = $this->responseParser->parse($variation);
+            try {
+                $result = $this->responseParser->parse($variation);
+            } catch (Exception $exception) {
+                $this->logger->error($exception->getMessage());
 
-            foreach ($transferObjects as $object) {
-                yield $object;
+                $result = null;
+            }
+
+            if (empty($result)) {
+                continue;
+            }
+
+            $parsedElements = array_filter($result);
+
+            foreach ($parsedElements as $parsedElement) {
+                $parsedElements[] = $parsedElement;
             }
         }
+
+        return $parsedElements;
     }
 }

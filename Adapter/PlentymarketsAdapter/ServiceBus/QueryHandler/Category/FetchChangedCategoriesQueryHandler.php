@@ -26,7 +26,7 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
     /**
      * @var CategoryResponseParserInterface
      */
-    private $categoryResponseParser;
+    private $responseParser;
 
     /**
      * @var LoggerInterface
@@ -37,16 +37,16 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
      * FetchChangedCategoriesQueryHandler constructor.
      *
      * @param Category                        $categoryApi
-     * @param CategoryResponseParserInterface $categoryResponseParser
+     * @param CategoryResponseParserInterface $responseParser
      * @param LoggerInterface                 $logger
      */
     public function __construct(
         Category $categoryApi,
-        CategoryResponseParserInterface $categoryResponseParser,
+        CategoryResponseParserInterface $responseParser,
         LoggerInterface $logger
     ) {
         $this->categoryApi = $categoryApi;
-        $this->categoryResponseParser = $categoryResponseParser;
+        $this->responseParser = $responseParser;
         $this->logger = $logger;
     }
 
@@ -67,10 +67,17 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
         $lastCangedTime = $this->getChangedDateTime();
         $currentDateTime = $this->getCurrentDateTime();
 
-        $elements = $this->categoryApi->findChanged($lastCangedTime, $currentDateTime);
+        $categories = $this->categoryApi->findChanged($lastCangedTime, $currentDateTime);
 
-        foreach ($elements as $element) {
-            $result = $this->categoryResponseParser->parse($element);
+        $parsedElements = [];
+        foreach ($categories as $category) {
+            try {
+                $result = $this->responseParser->parse($category);
+            } catch (Exception $exception) {
+                $this->logger->error($exception->getMessage());
+
+                $result = null;
+            }
 
             if (empty($result)) {
                 continue;
@@ -79,10 +86,12 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
             $parsedElements = array_filter($result);
 
             foreach ($parsedElements as $parsedElement) {
-                yield $parsedElement;
+                $parsedElements[] = $parsedElement;
             }
         }
 
         $this->setChangedDateTime($currentDateTime);
+
+        return $parsedElements;
     }
 }

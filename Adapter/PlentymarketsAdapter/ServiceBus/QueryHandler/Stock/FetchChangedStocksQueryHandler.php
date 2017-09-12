@@ -9,6 +9,7 @@ use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Product\Stock\StockResponseParserInterface;
 use PlentymarketsAdapter\ServiceBus\ChangedDateTimeTrait;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class FetchChangedStocksQueryHandler.
@@ -28,15 +29,25 @@ class FetchChangedStocksQueryHandler implements QueryHandlerInterface
     private $responseParser;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * FetchChangedStocksQueryHandler constructor.
      *
-     * @param ClientInterface              $client
+     * @param ClientInterface $client
      * @param StockResponseParserInterface $responseParser
+     * @param LoggerInterface $logger
      */
-    public function __construct(ClientInterface $client, StockResponseParserInterface $responseParser)
-    {
+    public function __construct(
+        ClientInterface $client,
+        StockResponseParserInterface $responseParser,
+        LoggerInterface $logger
+    ) {
         $this->client = $client;
         $this->responseParser = $responseParser;
+        $this->logger = $logger;
     }
 
     /**
@@ -67,7 +78,7 @@ class FetchChangedStocksQueryHandler implements QueryHandlerInterface
         }
 
         if (empty($variationIdentifiers)) {
-            return;
+            return [];
         }
 
         $variations = $this->client->getIterator('items/variations', [
@@ -75,14 +86,29 @@ class FetchChangedStocksQueryHandler implements QueryHandlerInterface
             'id' => implode(',', $variationIdentifiers),
         ]);
 
+        $parsedElements = [];
         foreach ($variations as $variation) {
-            $transferObjects = $this->responseParser->parse($variation);
+            try {
+                $result = $this->responseParser->parse($variation);
+            } catch (Exception $exception) {
+                $this->logger->error($exception->getMessage());
 
-            foreach ($transferObjects as $object) {
-                yield $object;
+                $result = null;
+            }
+
+            if (empty($result)) {
+                continue;
+            }
+
+            $parsedElements = array_filter($result);
+
+            foreach ($parsedElements as $parsedElement) {
+                $parsedElements[] = $parsedElement;
             }
         }
 
         $this->setChangedDateTime($currentDateTime);
+
+        return $parsedElements;
     }
 }

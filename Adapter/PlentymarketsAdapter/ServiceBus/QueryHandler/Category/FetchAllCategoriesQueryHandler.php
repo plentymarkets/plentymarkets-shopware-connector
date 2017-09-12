@@ -23,7 +23,7 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
     /**
      * @var CategoryResponseParserInterface
      */
-    private $categoryResponseParser;
+    private $responseParser;
 
     /**
      * @var LoggerInterface
@@ -34,16 +34,16 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
      * FetchAllCategoriesQueryHandler constructor.
      *
      * @param Category                        $categoryApi
-     * @param CategoryResponseParserInterface $categoryResponseParser
+     * @param CategoryResponseParserInterface $responseParser
      * @param LoggerInterface                 $logger
      */
     public function __construct(
         Category $categoryApi,
-        CategoryResponseParserInterface $categoryResponseParser,
+        CategoryResponseParserInterface $responseParser,
         LoggerInterface $logger
     ) {
         $this->categoryApi = $categoryApi;
-        $this->categoryResponseParser = $categoryResponseParser;
+        $this->responseParser = $responseParser;
         $this->logger = $logger;
     }
 
@@ -61,10 +61,17 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $elements = $this->categoryApi->findAll();
+        $categories = $this->categoryApi->findAll();
 
-        foreach ($elements as $element) {
-            $result = $this->categoryResponseParser->parse($element);
+        $parsedElements = [];
+        foreach ($categories as $category) {
+            try {
+                $result = $this->responseParser->parse($category);
+            } catch (Exception $exception) {
+                $this->logger->error($exception->getMessage());
+
+                $result = null;
+            }
 
             if (empty($result)) {
                 continue;
@@ -73,8 +80,10 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
             $parsedElements = array_filter($result);
 
             foreach ($parsedElements as $parsedElement) {
-                yield $parsedElement;
+                $parsedElements[] = $parsedElement;
             }
         }
+
+        return $parsedElements;
     }
 }

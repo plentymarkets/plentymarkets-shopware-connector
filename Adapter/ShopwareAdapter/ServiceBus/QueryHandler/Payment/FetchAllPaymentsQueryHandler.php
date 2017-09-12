@@ -2,11 +2,12 @@
 
 namespace ShopwareAdapter\ServiceBus\QueryHandler\Payment;
 
+use Exception;
 use PlentyConnector\Connector\ServiceBus\Query\Payment\FetchAllPaymentsQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
-use Shopware\Components\Api\Resource\Order as OrderResource;
-use Shopware\Models\Order\Status;
+use Psr\Log\LoggerInterface;
+use ShopwareAdapter\DataProvider\Order\OrderDataProviderInterface;
 use ShopwareAdapter\ResponseParser\Payment\PaymentResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
@@ -21,20 +22,30 @@ class FetchAllPaymentsQueryHandler implements QueryHandlerInterface
     private $responseParser;
 
     /**
-     * @var OrderResource
+     * @var OrderDataProviderInterface
      */
-    private $orderResource;
+    private $dataProvider;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * FetchAllPaymentsQueryHandler constructor.
      *
      * @param PaymentResponseParserInterface $responseParser
-     * @param OrderResource                  $orderResource
+     * @param OrderDataProviderInterface $dataProvider
+     * @param LoggerInterface $logger
      */
-    public function __construct(PaymentResponseParserInterface $responseParser, OrderResource $orderResource)
-    {
+    public function __construct(
+        PaymentResponseParserInterface $responseParser,
+        OrderDataProviderInterface $dataProvider,
+        LoggerInterface $logger
+    ) {
         $this->responseParser = $responseParser;
-        $this->orderResource = $orderResource;
+        $this->dataProvider = $dataProvider;
+        $this->logger = $logger;
     }
 
     /**
@@ -51,20 +62,19 @@ class FetchAllPaymentsQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $filter = [
-            [
-                'property' => 'status',
-                'expression' => '=',
-                'value' => Status::ORDER_STATE_OPEN,
-            ],
-        ];
+        $orders = $this->dataProvider->getOpenOrders();
 
-        $orders = $this->orderResource->getList(0, null, $filter);
+        $parsedElements = [];
+        foreach ($orders as $order) {
+            try {
+                $order = $this->dataProvider->getOrderDetails($order['id']);
 
-        foreach ($orders['data'] as $order) {
-            $order = $this->orderResource->getOne($order['id']);
+                $result = $this->responseParser->parse($order);
+            } catch (Exception $exception) {
+                $this->logger->error($exception->getMessage());
 
-            $result = $this->responseParser->parse($order);
+                $result = null;
+            }
 
             if (empty($result)) {
                 continue;
@@ -73,8 +83,10 @@ class FetchAllPaymentsQueryHandler implements QueryHandlerInterface
             $parsedElements = array_filter($result);
 
             foreach ($parsedElements as $parsedElement) {
-                yield $parsedElement;
+                $parsedElements[] = $parsedElement;
             }
         }
+
+        return $parsedElements;
     }
 }
