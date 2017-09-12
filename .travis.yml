@@ -16,7 +16,7 @@ env:
     - SHOPWARE_VERSION="5.3"
   global:
     - PLUGIN_NAME=PlentyConnector
-    - SHOPWARE_DIRECTORY=${HOME}/shopware
+    - SHOPWARE_DIRECTORY=${TRAVIS_BUILD_DIR}/shopware
     - PLUGIN_DIRECTORY=${SHOPWARE_DIRECTORY}/custom/plugins
 
 cache:
