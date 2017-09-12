@@ -86,6 +86,8 @@ class FetchAllOrdersQueryHandler implements QueryHandlerInterface
                 $result = null;
             }
 
+            $this->outputHandler->advanceProgressBar();
+
             if (empty($result)) {
                 continue;
             }
@@ -95,8 +97,6 @@ class FetchAllOrdersQueryHandler implements QueryHandlerInterface
             foreach ($parsedElements as $parsedElement) {
                 $parsedElements[] = $parsedElement;
             }
-
-            $this->outputHandler->advanceProgressBar();
         }
 
         $this->outputHandler->finishProgressBar();

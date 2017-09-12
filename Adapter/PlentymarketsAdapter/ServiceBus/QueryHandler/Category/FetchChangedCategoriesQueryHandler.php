@@ -90,6 +90,8 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
                 $result = null;
             }
 
+            $this->outputHandler->advanceProgressBar();
+
             if (empty($result)) {
                 continue;
             }
@@ -99,8 +101,6 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
             foreach ($parsedElements as $parsedElement) {
                 $parsedElements[] = $parsedElement;
             }
-
-            $this->outputHandler->advanceProgressBar();
         }
 
         $this->outputHandler->finishProgressBar();

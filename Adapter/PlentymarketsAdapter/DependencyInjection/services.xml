@@ -309,6 +309,8 @@
         <service id="plentymarkets_adapter.query_handler.fetch_all_media_categories" class="PlentymarketsAdapter\ServiceBus\QueryHandler\MediaCategory\FetchAllMediaCategoriesQueryHandler">
             <argument type="service" id="plentmarkets_adapter.helper.media_category" />
             <argument type="service" id="plentmarkets_adapter.response_parser.media_category" />
+            <argument type="service" id="plenty_connector.logger" />
+            <argument type="service" id="plenty_connector.console.output_handler" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
@@ -317,6 +319,8 @@
             <argument type="service" id="plenty_connector.config" />
             <argument type="service" id="plentmarkets_adapter.helper.media_category" />
             <argument type="service" id="plentmarkets_adapter.response_parser.media_category" />
+            <argument type="service" id="plenty_connector.logger" />
+            <argument type="service" id="plenty_connector.console.output_handler" />
 
             <tag name="plenty_connector.query_handler" />
         </service>

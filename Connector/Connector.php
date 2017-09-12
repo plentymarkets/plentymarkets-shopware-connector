@@ -173,7 +173,12 @@ class Connector implements ConnectorInterface
             $objects = [];
         }
 
-        $this->outputHandler->writeLine('handling transfer objects for definition');
+        $this->outputHandler->writeLine(sprintf('handling data for definition: Type: %s, %s -> %s',
+            $definition->getObjectType(),
+            $definition->getOriginAdapterName(),
+            $definition->getDestinationAdapterName()
+        ));
+
         $this->outputHandler->startProgressBar(count($objects));
 
         foreach ($objects as $object) {

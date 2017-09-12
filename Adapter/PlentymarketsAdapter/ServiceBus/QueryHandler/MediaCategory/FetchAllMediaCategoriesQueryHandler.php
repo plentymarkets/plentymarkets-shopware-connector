@@ -5,9 +5,11 @@ namespace PlentymarketsAdapter\ServiceBus\QueryHandler\MediaCategory;
 use PlentyConnector\Connector\ServiceBus\Query\MediaCategory\FetchAllMediaCategoriesQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use PlentymarketsAdapter\Helper\MediaCategoryHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\MediaCategory\MediaCategoryResponseParserInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class FetchAllMediaCategoriesQueryHandler
@@ -25,17 +27,33 @@ class FetchAllMediaCategoriesQueryHandler implements QueryHandlerInterface
     private $responseParser;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var OutputHandlerInterface
+     */
+    private $outputHandler;
+
+    /**
      * FetchAllMediaCategoriesQueryHandler constructor.
      *
      * @param MediaCategoryHelper                  $mediaCategoryHelper
      * @param MediaCategoryResponseParserInterface $responseParser
+     * @param LoggerInterface                      $logger
+     * @param OutputHandlerInterface               $outputHandler
      */
     public function __construct(
         MediaCategoryHelper $mediaCategoryHelper,
-        MediaCategoryResponseParserInterface $responseParser
+        MediaCategoryResponseParserInterface $responseParser,
+        LoggerInterface $logger,
+        OutputHandlerInterface $outputHandler
     ) {
         $this->mediaCategoryHelper = $mediaCategoryHelper;
         $this->responseParser = $responseParser;
+        $this->logger = $logger;
+        $this->outputHandler = $outputHandler;
     }
 
     /**
@@ -52,10 +70,23 @@ class FetchAllMediaCategoriesQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $mediaCategories = array_map(function ($category) {
-            return $this->responseParser->parse($category);
-        }, $this->mediaCategoryHelper->getCategories());
+        $elements = $this->mediaCategoryHelper->getCategories();
 
-        return array_filter($mediaCategories);
+        $this->outputHandler->startProgressBar(count($elements));
+
+        $parsedElements = [];
+        foreach ($elements as $element) {
+            try {
+                $parsedElements[] = $this->responseParser->parse($element);
+            } catch (Exception $exception) {
+                $this->logger->error($exception->getMessage());
+            }
+
+            $this->outputHandler->advanceProgressBar();
+        }
+
+        $this->outputHandler->finishProgressBar();
+
+        return array_filter($parsedElements);
     }
 }

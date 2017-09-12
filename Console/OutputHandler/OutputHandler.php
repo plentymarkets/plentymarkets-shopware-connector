@@ -55,7 +55,6 @@ class OutputHandler implements OutputHandlerInterface
         }
 
         Assertion::integer($count);
-        Assertion::greaterThan($count, 0);
 
         $this->style->progressStart($count);
     }
