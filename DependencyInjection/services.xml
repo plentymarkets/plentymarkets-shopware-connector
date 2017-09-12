@@ -203,6 +203,7 @@
             <argument type="service" id="plenty_connector.command_factory" />
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plenty_connector.logger" />
+            <argument type="service" id="plenty_connector.console.output_handler" />
         </service>
 
         <!-- mapping Service -->

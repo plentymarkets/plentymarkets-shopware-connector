@@ -2,6 +2,7 @@
 
 namespace PlentyConnector\Connector\CleanupService;
 
+use PlentyConnector\Connector\CleanupService\NotificationLogHandler\NotificationLogHandler;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\CommandFactory\CommandFactoryInterface;
 use PlentyConnector\Connector\ServiceBus\CommandFactory\Exception\MissingCommandException;
@@ -15,6 +16,7 @@ use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\ValueObject\Definition\Definition;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
+use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -22,11 +24,6 @@ use Psr\Log\LoggerInterface;
  */
 class CleanupService implements CleanupServiceInterface
 {
-    /**
-     * @var Definition[]
-     */
-    private $definitions;
-
     /**
      * @var ServiceBusInterface
      */
@@ -48,36 +45,58 @@ class CleanupService implements CleanupServiceInterface
     private $identityService;
 
     /**
-     * @var array
-     */
-    private $elements = [];
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
 
     /**
+     * @var OutputHandlerInterface
+     */
+    private $outputHandler;
+
+    /**
+     * @var Definition[]
+     */
+    private $definitions;
+
+    /**
+     * Array of all the found elements
+     *
+     * @var array
+     */
+    private $elements = [];
+
+    /**
+     * Will be set to true if the logger encounters an error, this will stop the cleanup process
+     *
+     * @var bool
+     */
+    private $error = false;
+
+    /**
      * CleanupService constructor.
      *
-     * @param ServiceBusInterface      $serviceBus
-     * @param QueryFactoryInterface    $queryFactory
-     * @param CommandFactoryInterface  $commandFactory
+     * @param ServiceBusInterface $serviceBus
+     * @param QueryFactoryInterface $queryFactory
+     * @param CommandFactoryInterface $commandFactory
      * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface          $logger
+     * @param LoggerInterface $logger
+     * @param OutputHandlerInterface $outputHandler
      */
     public function __construct(
         ServiceBusInterface $serviceBus,
         QueryFactoryInterface $queryFactory,
         CommandFactoryInterface $commandFactory,
         IdentityServiceInterface $identityService,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        OutputHandlerInterface $outputHandler
     ) {
         $this->serviceBus = $serviceBus;
         $this->queryFactory = $queryFactory;
         $this->commandFactory = $commandFactory;
         $this->identityService = $identityService;
         $this->logger = $logger;
+        $this->outputHandler = $outputHandler;
     }
 
     /**
@@ -90,9 +109,19 @@ class CleanupService implements CleanupServiceInterface
 
     public function cleanup()
     {
+        if (method_exists($this->logger, 'pushHandler')) {
+            $this->logger->pushHandler(new NotificationLogHandler(function () {
+                $this->error = true;
+            }));
+        }
+
         $definitions = $this->getDefinitions();
 
         foreach ($definitions as $definition) {
+            if ($this->error) {
+                continue;
+            }
+
             $foundElements = $this->collectObjectIdentifiers($definition);
 
             if (!$foundElements) {
@@ -131,6 +160,13 @@ class CleanupService implements CleanupServiceInterface
      */
     private function collectObjectIdentifiers(Definition $definition)
     {
+        $this->outputHandler->writeLine(sprintf(
+            'loading data for definition: Type: %s, %s -> %s',
+            $definition->getObjectType(),
+            $definition->getOriginAdapterName(),
+            $definition->getDestinationAdapterName()
+        ));
+
         /**
          * @var TransferObjectInterface[] $objects
          */
@@ -163,10 +199,23 @@ class CleanupService implements CleanupServiceInterface
      */
     private function removeAllElements(Definition $definition)
     {
+        if ($this->hasErrors()) {
+            return;
+        }
+
+        $this->outputHandler->writeLine(sprintf(
+            'remove all data for definition: Type: %s, %s -> %s',
+            $definition->getObjectType(),
+            $definition->getOriginAdapterName(),
+            $definition->getDestinationAdapterName()
+        ));
+
         $allIdentities = $this->identityService->findBy([
             'adapterName' => $definition->getDestinationAdapterName(),
             'objectType' => $definition->getObjectType(),
         ]);
+
+        $this->outputHandler->startProgressBar(count($allIdentities));
 
         array_walk($allIdentities, function (Identity $identity) use ($definition) {
             $this->serviceBus->handle($this->commandFactory->create(
@@ -175,7 +224,11 @@ class CleanupService implements CleanupServiceInterface
                 CommandType::REMOVE,
                 $identity->getObjectIdentifier()
             ));
+
+            $this->outputHandler->advanceProgressBar();
         });
+
+        $this->outputHandler->finishProgressBar();
     }
 
     /**
@@ -213,10 +266,26 @@ class CleanupService implements CleanupServiceInterface
 
     private function removeOrphanedElements()
     {
+        if ($this->hasErrors()) {
+            return;
+        }
+
         $groups = $this->groupElementsByAdapterAndType();
+
+        if (empty($groups)) {
+            return;
+        }
 
         foreach ($groups as $group) {
             $orphanedIdentities = $this->findOrphanedIdentitiesByGroup($group);
+
+            $this->outputHandler->writeLine(sprintf(
+                'remove orphaned data for adapter: %s type: %s',
+                $group[0]['adapterName'],
+                $group[0]['type']
+            ));
+
+            $this->outputHandler->startProgressBar(count($orphanedIdentities));
 
             foreach ($orphanedIdentities as $identity) {
                 $this->serviceBus->handle($this->commandFactory->create(
@@ -225,7 +294,22 @@ class CleanupService implements CleanupServiceInterface
                     CommandType::REMOVE,
                     $identity->getObjectIdentifier()
                 ));
+
+                $this->outputHandler->advanceProgressBar();
             }
+
+            $this->outputHandler->finishProgressBar();
         }
+    }
+
+    private function hasErrors()
+    {
+        if (!$this->error) {
+            return false;
+        }
+
+        $this->logger->error('cleanup process stopped due to an error while collecting data');
+
+        return true;
     }
 }
