@@ -6,9 +6,11 @@ use PlentyConnector\Components\Bundle\PlentymarketsAdapter\ResponseParser\Bundle
 use PlentyConnector\Components\Bundle\Query\FetchChangedBundlesQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Item;
 use PlentymarketsAdapter\ServiceBus\ChangedDateTimeTrait;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class FetchChangedBundlesQueryHandler.
@@ -28,15 +30,33 @@ class FetchChangedBundlesQueryHandler implements QueryHandlerInterface
     private $responseParser;
 
     /**
-     * FetchAllBundlesQueryHandler constructor.
-     *
-     * @param Item                 $itemApi
-     * @param BundleResponseParser $responseParser
+     * @var LoggerInterface
      */
-    public function __construct(Item $itemApi, BundleResponseParser $responseParser)
-    {
+    private $logger;
+
+    /**
+     * @var OutputHandlerInterface
+     */
+    private $outputHandler;
+
+    /**
+     * FetchChangedBundlesQueryHandler constructor.
+     *
+     * @param Item $itemApi
+     * @param BundleResponseParser $responseParser
+     * @param LoggerInterface $logger
+     * @param OutputHandlerInterface $outputHandler
+     */
+    public function __construct(
+        Item $itemApi,
+        BundleResponseParser $responseParser,
+        LoggerInterface $logger,
+        OutputHandlerInterface $outputHandler
+    ) {
         $this->itemApi = $itemApi;
         $this->responseParser = $responseParser;
+        $this->logger = $logger;
+        $this->outputHandler = $outputHandler;
     }
 
     /**
@@ -56,10 +76,21 @@ class FetchChangedBundlesQueryHandler implements QueryHandlerInterface
         $lastCangedTime = $this->getChangedDateTime();
         $currentDateTime = $this->getCurrentDateTime();
 
-        $products = $this->itemApi->findChanged($lastCangedTime, $currentDateTime);
+        $elements = $this->itemApi->findChanged($lastCangedTime, $currentDateTime);
 
-        foreach ($products as $element) {
-            $result = $this->responseParser->parse($element);
+        $this->outputHandler->startProgressBar(count($elements));
+
+        $parsedElements = [];
+        foreach ($elements as $element) {
+            try {
+                $result = $this->responseParser->parse($element);
+            } catch (Exception $exception) {
+                $this->logger->error($exception->getMessage());
+
+                $result = null;
+            }
+
+            $this->outputHandler->advanceProgressBar();
 
             if (empty($result)) {
                 continue;
@@ -68,10 +99,12 @@ class FetchChangedBundlesQueryHandler implements QueryHandlerInterface
             $parsedElements = array_filter($result);
 
             foreach ($parsedElements as $parsedElement) {
-                yield $parsedElement;
+                $parsedElements[] = $parsedElement;
             }
         }
 
-        $this->setChangedDateTime($currentDateTime);
+        $this->outputHandler->finishProgressBar();
+
+        return $parsedElements;
     }
 }
