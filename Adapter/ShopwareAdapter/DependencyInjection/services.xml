@@ -173,7 +173,6 @@
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plenty_connector.translation_helper" />
             <argument type="service" id="models" />
-            <argument type="service" id="plenty_connector.logger" />
             <argument type="service" id="shopware_adapter.data_persister.attribute" />
 
             <tag name="plenty_connector.command_handler" />

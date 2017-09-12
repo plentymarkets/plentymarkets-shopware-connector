@@ -247,8 +247,6 @@ class ProductResponseParser implements ProductResponseParserInterface
             ]);
 
             if (null === $profileIdentity) {
-                $this->logger->warning('missing mapping for shipping profile', ['profile' => $profile]);
-
                 continue;
             }
 
@@ -294,7 +292,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             ]);
 
             if (null === $categoryIdentity) {
-                $this->logger->warning('missing mapping for category', ['category' => $category]);
+                $this->logger->notice('missing mapping for category', ['category' => $category]);
 
                 continue;
             }
@@ -387,7 +385,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             ]);
 
             if (null === $categoryIdentity) {
-                $this->logger->warning('missing mapping for category', ['category' => $category]);
+                $this->logger->notice('missing mapping for category', ['category' => $category]);
 
                 continue;
             }
@@ -425,7 +423,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             ]);
 
             if (null === $productIdentity) {
-                $this->logger->warning('linked product not found', ['linkedProduct' => $linkedProduct]);
+                $this->logger->notice('linked product not found', ['linkedProduct' => $linkedProduct]);
 
                 continue;
             }

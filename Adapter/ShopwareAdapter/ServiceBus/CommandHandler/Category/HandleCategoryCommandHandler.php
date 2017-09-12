@@ -60,11 +60,6 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     private $shopRepository;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @var AttributeDataPersisterInterface
      */
     private $attributePersister;
@@ -75,14 +70,12 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
      * @param IdentityServiceInterface        $identityService
      * @param TranslationHelperInterface      $translationHelper
      * @param EntityManagerInterface          $entityManager
-     * @param LoggerInterface                 $logger
      * @param AttributeDataPersisterInterface $attributePersister
      */
     public function __construct(
         IdentityServiceInterface $identityService,
         TranslationHelperInterface $translationHelper,
         EntityManagerInterface $entityManager,
-        LoggerInterface $logger,
         AttributeDataPersisterInterface $attributePersister
     ) {
         $this->identityService = $identityService;
@@ -90,7 +83,6 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         $this->entityManager = $entityManager;
         $this->categoryRepository = $entityManager->getRepository(CategoryModel::class);
         $this->shopRepository = $entityManager->getRepository(ShopModel::class);
-        $this->logger = $logger;
         $this->attributePersister = $attributePersister;
     }
 
@@ -116,29 +108,25 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
 
         $validIdentities = [];
         foreach ($category->getShopIdentifiers() as $shopIdentifier) {
-            try {
-                $shopIdentities = $this->identityService->findBy([
-                    'objectIdentifier' => (string) $shopIdentifier,
-                    'objectType' => Shop::TYPE,
-                    'adapterName' => ShopwareAdapter::NAME,
-                ]);
+            $shopIdentities = $this->identityService->findBy([
+                'objectIdentifier' => (string) $shopIdentifier,
+                'objectType' => Shop::TYPE,
+                'adapterName' => ShopwareAdapter::NAME,
+            ]);
 
-                if (empty($shopIdentities)) {
+            if (empty($shopIdentities)) {
+                continue;
+            }
+
+            foreach ($shopIdentities as $shopIdentity) {
+                $identity = $this->handleCategory($category, $shopIdentity);
+
+                if (null === $identity) {
                     continue;
                 }
 
-                foreach ($shopIdentities as $shopIdentity) {
-                    $identity = $this->handleCategory($category, $shopIdentity);
-
-                    if (null === $identity) {
-                        continue;
-                    }
-
-                    $identifier = $identity->getObjectIdentifier();
-                    $validIdentities[$identifier] = $identifier;
-                }
-            } catch (IdentityNotFoundException $exception) {
-                $this->logger->warning($exception->getMessage());
+                $identifier = $identity->getObjectIdentifier();
+                $validIdentities[$identifier] = $identifier;
             }
         }
 

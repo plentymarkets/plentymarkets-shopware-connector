@@ -3,6 +3,7 @@
 namespace PlentymarketsAdapter\ResponseParser\Media;
 
 use Assert\Assertion;
+use Exception;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Media\Media;
 use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
@@ -111,10 +112,10 @@ class MediaResponseParser implements MediaResponseParserInterface
             $media->setAttributes($entry['attributes']);
 
             return $media;
-        } catch (\Exception $exception) {
-            $this->logger->warning($exception->getMessage());
-
-            return null;
+        } catch (Exception $exception) {
+            $this->logger->error($exception->getMessage());
         }
+
+        return null;
     }
 }

@@ -105,7 +105,7 @@ class Connector implements ConnectorInterface
         }
 
         if (empty($definitions)) {
-            $this->logger->warning('No definitions found');
+            $this->logger->notice('No definitions found');
         }
 
         array_walk($definitions, function (Definition $definition) use ($queryType, $identifier) {
