@@ -2,6 +2,7 @@
 
 namespace PlentymarketsAdapter\Client;
 
+use Closure;
 use PlentymarketsAdapter\Client\Iterator\Iterator;
 
 /**
@@ -22,12 +23,13 @@ interface ClientInterface
     public function request($method, $path, array $params = [], $limit = null, $offset = null, array $options = []);
 
     /**
-     * @param string $path
-     * @param array  $criteria
+     * @param string       $path
+     * @param array        $criteria
+     * @param null|Closure $prepareFunction
      *
      * @return Iterator
      */
-    public function getIterator($path, array $criteria = []);
+    public function getIterator($path, array $criteria = [], Closure $prepareFunction = null);
 
     /**
      * @param string $path

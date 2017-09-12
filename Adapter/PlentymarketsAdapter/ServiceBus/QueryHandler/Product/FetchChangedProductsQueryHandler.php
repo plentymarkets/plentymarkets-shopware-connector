@@ -5,6 +5,7 @@ namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Product;
 use PlentyConnector\Connector\ServiceBus\Query\Product\FetchChangedProductsQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Item;
 use PlentymarketsAdapter\ResponseParser\Product\ProductResponseParserInterface;
@@ -34,20 +35,28 @@ class FetchChangedProductsQueryHandler implements QueryHandlerInterface
     private $logger;
 
     /**
+     * @var OutputHandlerInterface
+     */
+    private $outputHandler;
+
+    /**
      * FetchChangedProductsQueryHandler constructor.
      *
-     * @param Item $itemApi
+     * @param Item                           $itemApi
      * @param ProductResponseParserInterface $responseParser
-     * @param LoggerInterface $logger
+     * @param LoggerInterface                $logger
+     * @param OutputHandlerInterface         $outputHandler
      */
     public function __construct(
         Item $itemApi,
         ProductResponseParserInterface $responseParser,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        OutputHandlerInterface $outputHandler
     ) {
         $this->itemApi = $itemApi;
         $this->responseParser = $responseParser;
         $this->logger = $logger;
+        $this->outputHandler = $outputHandler;
     }
 
     /**
@@ -67,12 +76,14 @@ class FetchChangedProductsQueryHandler implements QueryHandlerInterface
         $lastCangedTime = $this->getChangedDateTime();
         $currentDateTime = $this->getCurrentDateTime();
 
-        $products = $this->itemApi->findChanged($lastCangedTime, $currentDateTime);
+        $elements = $this->itemApi->findChanged($lastCangedTime, $currentDateTime);
+
+        $this->outputHandler->startProgressBar(count($elements));
 
         $parsedElements = [];
-        foreach ($products as $product) {
+        foreach ($elements as $element) {
             try {
-                $result = $this->responseParser->parse($product);
+                $result = $this->responseParser->parse($element);
             } catch (Exception $exception) {
                 $this->logger->error($exception->getMessage());
 
@@ -88,8 +99,11 @@ class FetchChangedProductsQueryHandler implements QueryHandlerInterface
             foreach ($parsedElements as $parsedElement) {
                 $parsedElements[] = $parsedElement;
             }
+
+            $this->outputHandler->advanceProgressBar();
         }
 
+        $this->outputHandler->finishProgressBar();
         $this->setChangedDateTime($currentDateTime);
 
         return $parsedElements;

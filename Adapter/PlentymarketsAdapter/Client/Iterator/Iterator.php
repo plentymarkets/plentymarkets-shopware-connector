@@ -3,6 +3,7 @@
 namespace PlentymarketsAdapter\Client\Iterator;
 
 use Assert\Assertion;
+use Closure;
 use Countable;
 use Iterator as BaseIterator;
 use PlentymarketsAdapter\Client\Client;
@@ -48,19 +49,26 @@ class Iterator implements BaseIterator, Countable
     private $path;
 
     /**
+     * @var Closure
+     */
+    private $prepareFunction;
+
+    /**
      * ResourceIterator constructor.
      *
-     * @param string $path
-     * @param Client $client
-     * @param array  $criteria
+     * @param string       $path
+     * @param Client       $client
+     * @param array        $criteria
+     * @param null|Closure $prepareFunction
      */
-    public function __construct($path, Client $client, array $criteria = [])
+    public function __construct($path, Client $client, array $criteria = [], Closure $prepareFunction = null)
     {
         Assertion::string($path);
 
         $this->client = $client;
         $this->criteria = $criteria;
         $this->path = $path;
+        $this->prepareFunction = $prepareFunction;
     }
 
     /**
@@ -130,6 +138,10 @@ class Iterator implements BaseIterator, Countable
         $result = $this->client->request('GET', $this->path, $criteria, $limit, $offset);
 
         foreach ($result as $key => $item) {
+            if (null !== $this->prepareFunction) {
+                $item = call_user_func($this->prepareFunction, $item);
+            }
+
             $this->page[$this->index + $key] = $item;
         }
     }

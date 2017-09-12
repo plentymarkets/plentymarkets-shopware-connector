@@ -5,6 +5,7 @@ namespace ShopwareAdapter\ServiceBus\QueryHandler\Order;
 use PlentyConnector\Connector\ServiceBus\Query\Order\FetchAllOrdersQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use Psr\Log\LoggerInterface;
 use ShopwareAdapter\DataProvider\Order\OrderDataProviderInterface;
 use ShopwareAdapter\ResponseParser\Order\OrderResponseParserInterface;
@@ -31,20 +32,28 @@ class FetchAllOrdersQueryHandler implements QueryHandlerInterface
     private $logger;
 
     /**
+     * @var OutputHandlerInterface
+     */
+    private $outputHandler;
+
+    /**
      * FetchAllOrdersQueryHandler constructor.
      *
      * @param OrderResponseParserInterface $responseParser
-     * @param OrderDataProviderInterface $dataProvider
-     * @param LoggerInterface $logger
+     * @param OrderDataProviderInterface   $dataProvider
+     * @param LoggerInterface              $logger
+     * @param OutputHandlerInterface       $outputHandler
      */
     public function __construct(
         OrderResponseParserInterface $responseParser,
         OrderDataProviderInterface $dataProvider,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        OutputHandlerInterface $outputHandler
     ) {
         $this->responseParser = $responseParser;
         $this->dataProvider = $dataProvider;
         $this->logger = $logger;
+        $this->outputHandler = $outputHandler;
     }
 
     /**
@@ -61,14 +70,16 @@ class FetchAllOrdersQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $orders = $this->dataProvider->getOpenOrders();
+        $elements = $this->dataProvider->getOpenOrders();
+
+        $this->outputHandler->startProgressBar(count($elements));
 
         $parsedElements = [];
-        foreach ($orders as $order) {
-            try {
-                $order = $this->dataProvider->getOrderDetails($order['id']);
+        foreach ($elements as $element) {
+            $element = $this->dataProvider->getOrderDetails($element['id']);
 
-                $result = $this->responseParser->parse($order);
+            try {
+                $result = $this->responseParser->parse($element);
             } catch (Exception $exception) {
                 $this->logger->error($exception->getMessage());
 
@@ -84,7 +95,11 @@ class FetchAllOrdersQueryHandler implements QueryHandlerInterface
             foreach ($parsedElements as $parsedElement) {
                 $parsedElements[] = $parsedElement;
             }
+
+            $this->outputHandler->advanceProgressBar();
         }
+
+        $this->outputHandler->finishProgressBar();
 
         return $parsedElements;
     }

@@ -5,6 +5,7 @@ namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Order;
 use PlentyConnector\Connector\ServiceBus\Query\Order\FetchAllOrdersQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Order\Order;
 use PlentymarketsAdapter\ResponseParser\Order\OrderResponseParserInterface;
@@ -31,20 +32,28 @@ class FetchAllOrdersQueryHandler implements QueryHandlerInterface
     private $logger;
 
     /**
+     * @var OutputHandlerInterface
+     */
+    private $outputHandler;
+
+    /**
      * FetchAllOrdersQueryHandler constructor.
      *
-     * @param Order $api
+     * @param Order                        $api
      * @param OrderResponseParserInterface $responseParser
-     * @param LoggerInterface $logger
+     * @param LoggerInterface              $logger
+     * @param OutputHandlerInterface       $outputHandler
      */
     public function __construct(
         Order $api,
         OrderResponseParserInterface $responseParser,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        OutputHandlerInterface $outputHandler
     ) {
         $this->api = $api;
         $this->responseParser = $responseParser;
         $this->logger = $logger;
+        $this->outputHandler = $outputHandler;
     }
 
     /**
@@ -61,12 +70,14 @@ class FetchAllOrdersQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $orders = $this->api->findAll();
+        $elements = $this->api->findAll();
+
+        $this->outputHandler->startProgressBar(count($elements));
 
         $parsedElements = [];
-        foreach ($orders as $order) {
+        foreach ($elements as $element) {
             try {
-                $result = $this->responseParser->parse($order);
+                $result = $this->responseParser->parse($element);
             } catch (Exception $exception) {
                 $this->logger->error($exception->getMessage());
 
@@ -82,7 +93,11 @@ class FetchAllOrdersQueryHandler implements QueryHandlerInterface
             foreach ($parsedElements as $parsedElement) {
                 $parsedElements[] = $parsedElement;
             }
+
+            $this->outputHandler->advanceProgressBar();
         }
+
+        $this->outputHandler->finishProgressBar();
 
         return $parsedElements;
     }

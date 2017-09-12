@@ -5,6 +5,7 @@ namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Manufacturer;
 use PlentyConnector\Connector\ServiceBus\Query\Manufacturer\FetchAllManufacturersQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Manufacturer\ManufacturerResponseParserInterface;
@@ -31,20 +32,28 @@ class FetchAllManufacturersQueryHandler implements QueryHandlerInterface
     private $logger;
 
     /**
+     * @var OutputHandlerInterface
+     */
+    private $outputHandler;
+
+    /**
      * FetchAllManufacturersQueryHandler constructor.
      *
-     * @param ClientInterface $client
+     * @param ClientInterface                     $client
      * @param ManufacturerResponseParserInterface $responseParser
-     * @param LoggerInterface $logger
+     * @param LoggerInterface                     $logger
+     * @param OutputHandlerInterface              $outputHandler
      */
     public function __construct(
         ClientInterface $client,
         ManufacturerResponseParserInterface $responseParser,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        OutputHandlerInterface $outputHandler
     ) {
         $this->client = $client;
         $this->responseParser = $responseParser;
         $this->logger = $logger;
+        $this->outputHandler = $outputHandler;
     }
 
     /**
@@ -61,12 +70,14 @@ class FetchAllManufacturersQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $manufacturers = $this->client->getIterator('items/manufacturers');
+        $elements = $this->client->getIterator('items/manufacturers');
+
+        $this->outputHandler->startProgressBar(count($elements));
 
         $parsedElements = [];
-        foreach ($manufacturers as $manufacturer) {
+        foreach ($elements as $element) {
             try {
-                $result = $this->responseParser->parse($manufacturer);
+                $result = $this->responseParser->parse($element);
             } catch (Exception $exception) {
                 $this->logger->error($exception->getMessage());
 
@@ -82,7 +93,11 @@ class FetchAllManufacturersQueryHandler implements QueryHandlerInterface
             foreach ($parsedElements as $parsedElement) {
                 $parsedElements[] = $parsedElement;
             }
+
+            $this->outputHandler->advanceProgressBar();
         }
+
+        $this->outputHandler->finishProgressBar();
 
         return $parsedElements;
     }

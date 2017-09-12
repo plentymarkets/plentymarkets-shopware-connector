@@ -5,6 +5,7 @@ namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Stock;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\Query\Stock\FetchAllStocksQuery;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Product\Stock\StockResponseParserInterface;
@@ -31,20 +32,28 @@ class FetchAllStocksQueryHandler implements QueryHandlerInterface
     private $logger;
 
     /**
+     * @var OutputHandlerInterface
+     */
+    private $outputHandler;
+
+    /**
      * FetchAllStocksQueryHandler constructor.
      *
-     * @param ClientInterface $client
+     * @param ClientInterface              $client
      * @param StockResponseParserInterface $responseParser
-     * @param LoggerInterface $logger
+     * @param LoggerInterface              $logger
+     * @param OutputHandlerInterface       $outputHandler
      */
     public function __construct(
         ClientInterface $client,
         StockResponseParserInterface $responseParser,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        OutputHandlerInterface $outputHandler
     ) {
         $this->client = $client;
         $this->responseParser = $responseParser;
         $this->logger = $logger;
+        $this->outputHandler = $outputHandler;
     }
 
     /**
@@ -61,18 +70,20 @@ class FetchAllStocksQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $stocks = $this->client->getIterator('stockmanagement/stock');
+        $elements = $this->client->getIterator('stockmanagement/stock');
 
         $groupedStock = [];
-        foreach ($stocks as $stock) {
+        foreach ($elements as $stock) {
             $groupedStock[$stock['variationId']]['id'] = $stock['variationId'];
             $groupedStock[$stock['variationId']]['stock'][] = $stock;
         }
 
+        $this->outputHandler->startProgressBar(count($groupedStock));
+
         $parsedElements = [];
-        foreach ($groupedStock as $variation) {
+        foreach ($groupedStock as $element) {
             try {
-                $result = $this->responseParser->parse($variation);
+                $result = $this->responseParser->parse($element);
             } catch (Exception $exception) {
                 $this->logger->error($exception->getMessage());
 
@@ -88,7 +99,11 @@ class FetchAllStocksQueryHandler implements QueryHandlerInterface
             foreach ($parsedElements as $parsedElement) {
                 $parsedElements[] = $parsedElement;
             }
+
+            $this->outputHandler->advanceProgressBar();
         }
+
+        $this->outputHandler->finishProgressBar();
 
         return $parsedElements;
     }

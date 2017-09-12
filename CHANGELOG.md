@@ -10,6 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - configurable item warehouse for item stock calculation
 - configurable item notification settings
 - separate stock import logic
+- added a progressbar for all commandline operations
 
 ### Fixed
 - optimized the update path for versions before 2.0
@@ -24,6 +25,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - separated stock informations from variations
 - only product properties which have the flag "searchable" set to true are now imported
 - set order item type to TYPE_UNASSIGEND_VARIATION for plentymarkets if no variation could be found
+- better error handling for all query handlers
+- removed all yields in favour of the new progressbar
 
 ## [3.0.0]
 ### Fixed

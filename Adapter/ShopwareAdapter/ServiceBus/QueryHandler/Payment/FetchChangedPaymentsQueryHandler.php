@@ -5,8 +5,8 @@ namespace ShopwareAdapter\ServiceBus\QueryHandler\Payment;
 use PlentyConnector\Connector\ServiceBus\Query\Payment\FetchChangedPaymentsQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use Psr\Log\LoggerInterface;
-use Shopware\Components\Api\Resource\Order as OrderResource;
 use ShopwareAdapter\DataProvider\Order\OrderDataProviderInterface;
 use ShopwareAdapter\ResponseParser\Payment\PaymentResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
@@ -32,20 +32,28 @@ class FetchChangedPaymentsQueryHandler implements QueryHandlerInterface
     private $logger;
 
     /**
+     * @var OutputHandlerInterface
+     */
+    private $outputHandler;
+
+    /**
      * FetchChangedPaymentsQueryHandler constructor.
      *
      * @param PaymentResponseParserInterface $responseParser
-     * @param OrderDataProviderInterface $dataProvider
-     * @param LoggerInterface $logger
+     * @param OrderDataProviderInterface     $dataProvider
+     * @param LoggerInterface                $logger
+     * @param OutputHandlerInterface         $outputHandler
      */
     public function __construct(
         PaymentResponseParserInterface $responseParser,
         OrderDataProviderInterface $dataProvider,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        OutputHandlerInterface $outputHandler
     ) {
         $this->responseParser = $responseParser;
         $this->dataProvider = $dataProvider;
         $this->logger = $logger;
+        $this->outputHandler = $outputHandler;
     }
 
     /**
@@ -62,14 +70,16 @@ class FetchChangedPaymentsQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $orders = $this->dataProvider->getOpenOrders();
+        $elements = $this->dataProvider->getOpenOrders();
+
+        $this->outputHandler->startProgressBar(count($elements));
 
         $parsedElements = [];
-        foreach ($orders as $order) {
-            try {
-                $order = $this->dataProvider->getOrderDetails($order['id']);
+        foreach ($elements as $element) {
+            $element = $this->dataProvider->getOrderDetails($element['id']);
 
-                $result = $this->responseParser->parse($order);
+            try {
+                $result = $this->responseParser->parse($element);
             } catch (Exception $exception) {
                 $this->logger->error($exception->getMessage());
 
@@ -85,7 +95,11 @@ class FetchChangedPaymentsQueryHandler implements QueryHandlerInterface
             foreach ($parsedElements as $parsedElement) {
                 $parsedElements[] = $parsedElement;
             }
+
+            $this->outputHandler->advanceProgressBar();
         }
+
+        $this->outputHandler->finishProgressBar();
 
         return $parsedElements;
     }

@@ -3,6 +3,7 @@
 namespace PlentymarketsAdapter\Client;
 
 use Assert\Assertion;
+use Closure;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 use GuzzleHttp\Exception\ClientException;
@@ -57,9 +58,9 @@ class Client implements ClientInterface
     /**
      * {@inheritdoc}
      */
-    public function getIterator($path, array $criteria = [])
+    public function getIterator($path, array $criteria = [], Closure $prepareFunction = null)
     {
-        return new Iterator($path, $this, $criteria);
+        return new Iterator($path, $this, $criteria, $prepareFunction);
     }
 
     /**

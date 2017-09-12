@@ -5,6 +5,7 @@ namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Stock;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\Query\Stock\FetchChangedStocksQuery;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Product\Stock\StockResponseParserInterface;
@@ -34,20 +35,28 @@ class FetchChangedStocksQueryHandler implements QueryHandlerInterface
     private $logger;
 
     /**
+     * @var OutputHandlerInterface
+     */
+    private $outputHandler;
+
+    /**
      * FetchChangedStocksQueryHandler constructor.
      *
-     * @param ClientInterface $client
+     * @param ClientInterface              $client
      * @param StockResponseParserInterface $responseParser
-     * @param LoggerInterface $logger
+     * @param LoggerInterface              $logger
+     * @param OutputHandlerInterface       $outputHandler
      */
     public function __construct(
         ClientInterface $client,
         StockResponseParserInterface $responseParser,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        OutputHandlerInterface $outputHandler
     ) {
         $this->client = $client;
         $this->responseParser = $responseParser;
         $this->logger = $logger;
+        $this->outputHandler = $outputHandler;
     }
 
     /**
@@ -81,15 +90,17 @@ class FetchChangedStocksQueryHandler implements QueryHandlerInterface
             return [];
         }
 
-        $variations = $this->client->getIterator('items/variations', [
+        $elements = $this->client->getIterator('items/variations', [
             'with' => 'stock',
             'id' => implode(',', $variationIdentifiers),
         ]);
 
+        $this->outputHandler->startProgressBar(count($elements));
+
         $parsedElements = [];
-        foreach ($variations as $variation) {
+        foreach ($elements as $element) {
             try {
-                $result = $this->responseParser->parse($variation);
+                $result = $this->responseParser->parse($element);
             } catch (Exception $exception) {
                 $this->logger->error($exception->getMessage());
 
@@ -105,8 +116,11 @@ class FetchChangedStocksQueryHandler implements QueryHandlerInterface
             foreach ($parsedElements as $parsedElement) {
                 $parsedElements[] = $parsedElement;
             }
+
+            $this->outputHandler->advanceProgressBar();
         }
 
+        $this->outputHandler->finishProgressBar();
         $this->setChangedDateTime($currentDateTime);
 
         return $parsedElements;

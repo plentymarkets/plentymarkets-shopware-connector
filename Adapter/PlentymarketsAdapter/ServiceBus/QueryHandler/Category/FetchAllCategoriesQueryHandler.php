@@ -5,6 +5,7 @@ namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Category;
 use PlentyConnector\Connector\ServiceBus\Query\Category\FetchAllCategoriesQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Category\Category;
 use PlentymarketsAdapter\ResponseParser\Category\CategoryResponseParserInterface;
@@ -31,20 +32,28 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
     private $logger;
 
     /**
+     * @var OutputHandlerInterface
+     */
+    private $outputHandler;
+
+    /**
      * FetchAllCategoriesQueryHandler constructor.
      *
      * @param Category                        $categoryApi
      * @param CategoryResponseParserInterface $responseParser
      * @param LoggerInterface                 $logger
+     * @param OutputHandlerInterface          $outputHandler
      */
     public function __construct(
         Category $categoryApi,
         CategoryResponseParserInterface $responseParser,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        OutputHandlerInterface $outputHandler
     ) {
         $this->categoryApi = $categoryApi;
         $this->responseParser = $responseParser;
         $this->logger = $logger;
+        $this->outputHandler = $outputHandler;
     }
 
     /**
@@ -61,12 +70,14 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $categories = $this->categoryApi->findAll();
+        $elements = $this->categoryApi->findAll();
+
+        $this->outputHandler->startProgressBar(count($elements));
 
         $parsedElements = [];
-        foreach ($categories as $category) {
+        foreach ($elements as $element) {
             try {
-                $result = $this->responseParser->parse($category);
+                $result = $this->responseParser->parse($element);
             } catch (Exception $exception) {
                 $this->logger->error($exception->getMessage());
 
@@ -82,7 +93,11 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
             foreach ($parsedElements as $parsedElement) {
                 $parsedElements[] = $parsedElement;
             }
+
+            $this->outputHandler->advanceProgressBar();
         }
+
+        $this->outputHandler->finishProgressBar();
 
         return $parsedElements;
     }

@@ -152,7 +152,12 @@ class Connector implements ConnectorInterface
      */
     private function handleDefinition(Definition $definition, $queryType, $identifier = null)
     {
-        $this->outputHandler->writeLine('loading data for definition');
+        $this->outputHandler->writeLine(sprintf(
+            'loading data for definition: Type: %s, %s -> %s',
+            $definition->getObjectType(),
+            $definition->getOriginAdapterName(),
+            $definition->getDestinationAdapterName()
+        ));
 
         /**
          * @var TransferObjectInterface[] $objects
@@ -168,7 +173,7 @@ class Connector implements ConnectorInterface
             $objects = [];
         }
 
-        $this->outputHandler->writeLine('handling transfer objects from definition');
+        $this->outputHandler->writeLine('handling transfer objects for definition');
         $this->outputHandler->startProgressBar(count($objects));
 
         foreach ($objects as $object) {

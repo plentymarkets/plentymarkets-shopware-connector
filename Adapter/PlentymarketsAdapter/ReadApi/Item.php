@@ -4,6 +4,7 @@ namespace PlentymarketsAdapter\ReadApi;
 
 use DateTimeImmutable;
 use PlentymarketsAdapter\Client\Client;
+use PlentymarketsAdapter\Client\Iterator\Iterator;
 use PlentymarketsAdapter\Helper\LanguageHelper;
 use PlentymarketsAdapter\ReadApi\Item\Variation;
 
@@ -52,29 +53,27 @@ class Item extends ApiAbstract
     }
 
     /**
-     * @return \Generator
+     * @return Iterator
      */
     public function findAll()
     {
         $languageHelper = new LanguageHelper();
 
-        $result = $this->client->getIterator('items', [
+        return $this->client->getIterator('items', [
             'lang' => $languageHelper->getLanguagesQueryString(),
             'with' => 'itemProperties.valueTexts,itemCrossSelling',
-        ]);
-
-        foreach ($result as $element) {
+        ], function ($element) {
             $this->addAdditionalData($element);
 
-            yield $element;
-        }
+            return $element;
+        });
     }
 
     /**
      * @param $startTimestamp
      * @param $endTimestamp
      *
-     * @return \Generator
+     * @return Iterator
      */
     public function findChanged(DateTimeImmutable $startTimestamp, DateTimeImmutable $endTimestamp)
     {
@@ -83,17 +82,15 @@ class Item extends ApiAbstract
 
         $languageHelper = new LanguageHelper();
 
-        $result = $this->client->getIterator('items', [
+        return $this->client->getIterator('items', [
             'lang' => $languageHelper->getLanguagesQueryString(),
             'updatedBetween' => $start . ',' . $end,
             'with' => 'itemProperties.valueTexts,itemCrossSelling',
-        ]);
-
-        foreach ($result as $element) {
+        ], function ($element) {
             $this->addAdditionalData($element);
 
-            yield $element;
-        }
+            return $element;
+        });
     }
 
     /**

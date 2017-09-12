@@ -330,6 +330,7 @@
         <service id="plenty_connector.console.command.cleanup" class="PlentyConnector\Console\Command\CleanupCommand">
             <argument type="service" id="plenty_connector.cleanup_service" />
             <argument type="service" id="plenty_connector.logger" />
+            <argument type="service" id="plenty_connector.console.output_handler" />
 
             <tag name="console.command" />
         </service>
@@ -345,6 +346,7 @@
         <service id="plenty_connector.console.command.process" class="PlentyConnector\Console\Command\ProcessCommand">
             <argument type="service" id="plenty_connector.connector" />
             <argument type="service" id="plenty_connector.logger" />
+            <argument type="service" id="plenty_connector.console.output_handler" />
 
             <tag name="console.command" />
         </service>

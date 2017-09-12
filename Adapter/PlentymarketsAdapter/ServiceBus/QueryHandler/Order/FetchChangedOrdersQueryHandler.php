@@ -5,6 +5,7 @@ namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Order;
 use PlentyConnector\Connector\ServiceBus\Query\Order\FetchChangedOrdersQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Order\Order;
 use PlentymarketsAdapter\ResponseParser\Order\OrderResponseParserInterface;
@@ -34,20 +35,28 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
     private $logger;
 
     /**
+     * @var OutputHandlerInterface
+     */
+    private $outputHandler;
+
+    /**
      * FetchChangedOrdersQueryHandler constructor.
      *
-     * @param Order $api
+     * @param Order                        $api
      * @param OrderResponseParserInterface $responseParser
-     * @param LoggerInterface $logger
+     * @param LoggerInterface              $logger
+     * @param OutputHandlerInterface       $outputHandler
      */
     public function __construct(
         Order $api,
         OrderResponseParserInterface $responseParser,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        OutputHandlerInterface $outputHandler
     ) {
         $this->api = $api;
         $this->responseParser = $responseParser;
         $this->logger = $logger;
+        $this->outputHandler = $outputHandler;
     }
 
     /**
@@ -72,12 +81,14 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
             'updatedAtTo' => $currentDateTime->format(DATE_W3C),
         ];
 
-        $orders = $this->api->findBy($criteria);
+        $elements = $this->api->findBy($criteria);
+
+        $this->outputHandler->startProgressBar(count($elements));
 
         $parsedElements = [];
-        foreach ($orders as $order) {
+        foreach ($elements as $element) {
             try {
-                $result = $this->responseParser->parse($order);
+                $result = $this->responseParser->parse($element);
             } catch (Exception $exception) {
                 $this->logger->error($exception->getMessage());
 
@@ -93,8 +104,11 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
             foreach ($parsedElements as $parsedElement) {
                 $parsedElements[] = $parsedElement;
             }
+
+            $this->outputHandler->advanceProgressBar();
         }
 
+        $this->outputHandler->finishProgressBar();
         $this->setChangedDateTime($currentDateTime);
 
         return $parsedElements;

@@ -5,6 +5,7 @@ namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Category;
 use PlentyConnector\Connector\ServiceBus\Query\Category\FetchChangedCategoriesQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Category\Category;
 use PlentymarketsAdapter\ResponseParser\Category\CategoryResponseParserInterface;
@@ -34,20 +35,28 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
     private $logger;
 
     /**
+     * @var OutputHandlerInterface
+     */
+    private $outputHandler;
+
+    /**
      * FetchChangedCategoriesQueryHandler constructor.
      *
      * @param Category                        $categoryApi
      * @param CategoryResponseParserInterface $responseParser
      * @param LoggerInterface                 $logger
+     * @param OutputHandlerInterface          $outputHandler
      */
     public function __construct(
         Category $categoryApi,
         CategoryResponseParserInterface $responseParser,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        OutputHandlerInterface $outputHandler
     ) {
         $this->categoryApi = $categoryApi;
         $this->responseParser = $responseParser;
         $this->logger = $logger;
+        $this->outputHandler = $outputHandler;
     }
 
     /**
@@ -67,12 +76,14 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
         $lastCangedTime = $this->getChangedDateTime();
         $currentDateTime = $this->getCurrentDateTime();
 
-        $categories = $this->categoryApi->findChanged($lastCangedTime, $currentDateTime);
+        $elements = $this->categoryApi->findChanged($lastCangedTime, $currentDateTime);
+
+        $this->outputHandler->startProgressBar(count($elements));
 
         $parsedElements = [];
-        foreach ($categories as $category) {
+        foreach ($elements as $element) {
             try {
-                $result = $this->responseParser->parse($category);
+                $result = $this->responseParser->parse($element);
             } catch (Exception $exception) {
                 $this->logger->error($exception->getMessage());
 
@@ -88,8 +99,11 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
             foreach ($parsedElements as $parsedElement) {
                 $parsedElements[] = $parsedElement;
             }
+
+            $this->outputHandler->advanceProgressBar();
         }
 
+        $this->outputHandler->finishProgressBar();
         $this->setChangedDateTime($currentDateTime);
 
         return $parsedElements;

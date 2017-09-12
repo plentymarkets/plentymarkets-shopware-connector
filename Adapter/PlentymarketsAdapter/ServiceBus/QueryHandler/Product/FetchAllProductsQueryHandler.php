@@ -5,6 +5,7 @@ namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Product;
 use PlentyConnector\Connector\ServiceBus\Query\Product\FetchAllProductsQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Item;
 use PlentymarketsAdapter\ResponseParser\Product\ProductResponseParserInterface;
@@ -31,21 +32,28 @@ class FetchAllProductsQueryHandler implements QueryHandlerInterface
     private $logger;
 
     /**
+     * @var OutputHandlerInterface
+     */
+    private $outputHandler;
+
+    /**
      * FetchAllProductsQueryHandler constructor.
      *
-     * @param Item $itemApi
+     * @param Item                           $itemApi
      * @param ProductResponseParserInterface $responseParser
-     * @param LoggerInterface $logger
+     * @param LoggerInterface                $logger
+     * @param OutputHandlerInterface         $outputHandler
      */
     public function __construct(
         Item $itemApi,
-        ProductResponseParserInterface
-        $responseParser,
-        LoggerInterface $logger
+        ProductResponseParserInterface $responseParser,
+        LoggerInterface $logger,
+        OutputHandlerInterface $outputHandler
     ) {
         $this->itemApi = $itemApi;
         $this->responseParser = $responseParser;
         $this->logger = $logger;
+        $this->outputHandler = $outputHandler;
     }
 
     /**
@@ -62,12 +70,14 @@ class FetchAllProductsQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $products = $this->itemApi->findAll();
+        $elements = $this->itemApi->findAll();
+
+        $this->outputHandler->startProgressBar(count($elements));
 
         $parsedElements = [];
-        foreach ($products as $product) {
+        foreach ($elements as $element) {
             try {
-                $result = $this->responseParser->parse($product);
+                $result = $this->responseParser->parse($element);
             } catch (Exception $exception) {
                 $this->logger->error($exception->getMessage());
 
@@ -83,7 +93,11 @@ class FetchAllProductsQueryHandler implements QueryHandlerInterface
             foreach ($parsedElements as $parsedElement) {
                 $parsedElements[] = $parsedElement;
             }
+
+            $this->outputHandler->advanceProgressBar();
         }
+
+        $this->outputHandler->finishProgressBar();
 
         return $parsedElements;
     }

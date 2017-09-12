@@ -313,6 +313,7 @@
             <argument type="service" id="shopware_adapter.response_parser.order" />
             <argument type="service" id="shopware_adapter.data_provider.order" />
             <argument type="service" id="plenty_connector.logger" />
+            <argument type="service" id="plenty_connector.console.output_handler" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
@@ -321,6 +322,7 @@
             <argument type="service" id="shopware_adapter.response_parser.order" />
             <argument type="service" id="shopware_adapter.data_provider.order" />
             <argument type="service" id="plenty_connector.logger" />
+            <argument type="service" id="plenty_connector.console.output_handler" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
@@ -339,6 +341,7 @@
             <argument type="service" id="shopware_adapter.response_parser.payment" />
             <argument type="service" id="shopware_adapter.data_provider.order" />
             <argument type="service" id="plenty_connector.logger" />
+            <argument type="service" id="plenty_connector.console.output_handler" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
@@ -347,6 +350,7 @@
             <argument type="service" id="shopware_adapter.response_parser.payment" />
             <argument type="service" id="shopware_adapter.data_provider.order" />
             <argument type="service" id="plenty_connector.logger" />
+            <argument type="service" id="plenty_connector.console.output_handler" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
