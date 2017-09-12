@@ -36,8 +36,8 @@ class FetchPaymentQueryHandler implements QueryHandlerInterface
      * FetchPaymentQueryHandler constructor.
      *
      * @param PaymentResponseParserInterface $responseParser
-     * @param IdentityServiceInterface $identityService
-     * @param OrderDataProviderInterface $dataProvider
+     * @param IdentityServiceInterface       $identityService
+     * @param OrderDataProviderInterface     $dataProvider
      */
     public function __construct(
         PaymentResponseParserInterface $responseParser,

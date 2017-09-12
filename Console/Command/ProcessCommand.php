@@ -37,8 +37,8 @@ class ProcessCommand extends ShopwareCommand
     /**
      * ProcessCommand constructor.
      *
-     * @param ConnectorInterface $connector
-     * @param LoggerInterface $logger
+     * @param ConnectorInterface     $connector
+     * @param LoggerInterface        $logger
      * @param OutputHandlerInterface $outputHandler
      */
     public function __construct(
