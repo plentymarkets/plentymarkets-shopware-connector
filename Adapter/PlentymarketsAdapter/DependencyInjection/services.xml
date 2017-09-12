@@ -251,6 +251,7 @@
         <service id="plentymarkets_adapter.query_handler.fetch_all_manufacturers" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Manufacturer\FetchAllManufacturersQueryHandler">
             <argument type="service" id="plentmarkets_adapter.client" />
             <argument type="service" id="plentmarkets_adapter.response_parser.manufacturer" />
+            <argument type="service" id="plenty_connector.logger" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
@@ -258,7 +259,7 @@
         <service id="plentymarkets_adapter.query_handler.fetch_changed_manufacturers" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Manufacturer\FetchChangedManufacturersQueryHandler">
             <argument type="service" id="plentmarkets_adapter.client" />
             <argument type="service" id="plentmarkets_adapter.response_parser.manufacturer" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.media" />
+            <argument type="service" id="plenty_connector.logger" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
@@ -276,6 +277,7 @@
         <service id="plentymarkets_adapter.query_handler.fetch_all_orders" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Order\FetchAllOrdersQueryHandler">
             <argument type="service" id="plentmarkets_adapter.read_api.order" />
             <argument type="service" id="plentmarkets_adapter.response_parser.order" />
+            <argument type="service" id="plenty_connector.logger" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
@@ -283,6 +285,7 @@
         <service id="plentymarkets_adapter.query_handler.fetch_changed_orders" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Order\FetchChangedOrdersQueryHandler">
             <argument type="service" id="plentmarkets_adapter.read_api.order" />
             <argument type="service" id="plentmarkets_adapter.response_parser.order" />
+            <argument type="service" id="plenty_connector.logger" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
@@ -325,6 +328,7 @@
         <service id="plentymarkets_adapter.query_handler.fetch_all_products" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Product\FetchAllProductsQueryHandler">
             <argument type="service" id="plentmarkets_adapter.read_api.item" />
             <argument type="service" id="plentmarkets_adapter.response_parser.product" />
+            <argument type="service" id="plenty_connector.logger" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
@@ -332,6 +336,7 @@
         <service id="plentymarkets_adapter.query_handler.fetch_changed_products" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Product\FetchChangedProductsQueryHandler">
             <argument type="service" id="plentmarkets_adapter.read_api.item" />
             <argument type="service" id="plentmarkets_adapter.response_parser.product" />
+            <argument type="service" id="plenty_connector.logger" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
@@ -349,6 +354,7 @@
         <service id="plentymarkets_adapter.query_handler.fetch_all_stocks" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Stock\FetchAllStocksQueryHandler">
             <argument type="service" id="plentmarkets_adapter.client" />
             <argument type="service" id="plentmarkets_adapter.response_parser.stock" />
+            <argument type="service" id="plenty_connector.logger" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
@@ -356,6 +362,7 @@
         <service id="plentymarkets_adapter.query_handler.fetch_changed_stocks" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Stock\FetchChangedStocksQueryHandler">
             <argument type="service" id="plentmarkets_adapter.client" />
             <argument type="service" id="plentmarkets_adapter.response_parser.stock" />
+            <argument type="service" id="plenty_connector.logger" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
