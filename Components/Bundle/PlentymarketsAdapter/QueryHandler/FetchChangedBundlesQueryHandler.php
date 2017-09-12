@@ -42,9 +42,9 @@ class FetchChangedBundlesQueryHandler implements QueryHandlerInterface
     /**
      * FetchChangedBundlesQueryHandler constructor.
      *
-     * @param Item $itemApi
-     * @param BundleResponseParser $responseParser
-     * @param LoggerInterface $logger
+     * @param Item                   $itemApi
+     * @param BundleResponseParser   $responseParser
+     * @param LoggerInterface        $logger
      * @param OutputHandlerInterface $outputHandler
      */
     public function __construct(
