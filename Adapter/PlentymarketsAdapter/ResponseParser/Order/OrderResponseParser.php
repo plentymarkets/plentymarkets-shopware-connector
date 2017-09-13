@@ -115,19 +115,13 @@ class OrderResponseParser implements OrderResponseParserInterface
             return [];
         }
 
-        $identity = $this->identityService->findOneOrCreate(
-            (string) $entry['id'],
-            PlentymarketsAdapter::NAME,
-            Order::TYPE
-        );
+        $identity = $this->identityService->findOneBy([
+            'adapterIdentifier' => (string) $entry['id'],
+            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType' => Order::TYPE,
+        ]);
 
-        $isMappedOrderIdentity = $this->identityService->isMapppedIdentity(
-            $identity->getObjectIdentifier(),
-            $identity->getObjectType(),
-            $identity->getAdapterName()
-        );
-
-        if (!$isMappedOrderIdentity) {
+        if (!$identity) {
             return [];
         }
 
