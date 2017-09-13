@@ -90,9 +90,9 @@ class FetchAllManufacturersQueryHandler implements QueryHandlerInterface
                 continue;
             }
 
-            $parsedElements = array_filter($result);
+            $result = array_filter($result);
 
-            foreach ($parsedElements as $parsedElement) {
+            foreach ($result as $parsedElement) {
                 $parsedElements[] = $parsedElement;
             }
         }
