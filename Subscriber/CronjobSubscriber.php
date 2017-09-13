@@ -9,6 +9,7 @@ use PlentyConnector\Connector\CleanupService\CleanupServiceInterface;
 use PlentyConnector\Connector\ConnectorInterface;
 use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\TransferObject\Order\Order;
+use PlentyConnector\Connector\TransferObject\Payment\Payment;
 use PlentyConnector\PlentyConnector;
 use Psr\Log\LoggerInterface;
 
@@ -88,6 +89,7 @@ class CronjobSubscriber implements SubscriberInterface
     {
         try {
             $this->connector->handle(QueryType::CHANGED, Order::TYPE);
+            $this->connector->handle(QueryType::CHANGED, Payment::TYPE);
         } catch (Exception $exception) {
             $this->logger->error($exception->getMessage());
         }
