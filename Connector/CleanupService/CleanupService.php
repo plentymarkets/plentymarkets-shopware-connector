@@ -2,7 +2,7 @@
 
 namespace PlentyConnector\Connector\CleanupService;
 
-use PlentyConnector\Connector\CleanupService\NotificationLogHandler\NotificationLogHandler;
+use PlentyConnector\Connector\CleanupService\CallbackLogHandler\CallbackLogHandler;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\CommandFactory\CommandFactoryInterface;
 use PlentyConnector\Connector\ServiceBus\CommandFactory\Exception\MissingCommandException;
@@ -110,7 +110,7 @@ class CleanupService implements CleanupServiceInterface
     public function cleanup()
     {
         if (method_exists($this->logger, 'pushHandler')) {
-            $this->logger->pushHandler(new NotificationLogHandler(function () {
+            $this->logger->pushHandler(new CallbackLogHandler(function (array $record) {
                 $this->error = true;
             }));
         }

@@ -1,15 +1,15 @@
 <?php
 
-namespace PlentyConnector\Connector\CleanupService\NotificationLogHandler;
+namespace PlentyConnector\Connector\CleanupService\CallbackLogHandler;
 
 use Closure;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
 
 /**
- * Class NotificationLogHandler
+ * Class CallbackLogHandler
  */
-class NotificationLogHandler extends AbstractProcessingHandler
+class CallbackLogHandler extends AbstractProcessingHandler
 {
     /**
      * The clousure which will be called if an error message was logged
@@ -26,15 +26,16 @@ class NotificationLogHandler extends AbstractProcessingHandler
     private $isProcessing = false;
 
     /**
-     * NotificationLogHandler constructor.
+     * CallbackLogHandler constructor.
      *
      * @param Closure $handler
+     * @param bool|int $level
      */
-    public function __construct($handler)
+    public function __construct($handler, $level = Logger::ERROR)
     {
         $this->handler = $handler;
 
-        parent::__construct(Logger::ERROR);
+        parent::__construct($level);
     }
 
     /**
@@ -47,7 +48,7 @@ class NotificationLogHandler extends AbstractProcessingHandler
         }
 
         $this->isProcessing = true;
-        call_user_func($this->handler);
+        call_user_func($this->handler, $record);
         $this->isProcessing = false;
     }
 }
