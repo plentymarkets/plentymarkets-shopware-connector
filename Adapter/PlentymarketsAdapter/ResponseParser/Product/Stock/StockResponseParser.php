@@ -85,7 +85,7 @@ class StockResponseParser implements StockResponseParserInterface
         $summedStocks = 0;
         $itemWarehouse = (int) $this->config->get('item_warehouse', 0);
 
-        static $warehouses = null;
+        static $warehouses;
 
         if (null === $warehouses) {
             $warehouses = $this->client->request('GET', 'stockmanagement/warehouses');
