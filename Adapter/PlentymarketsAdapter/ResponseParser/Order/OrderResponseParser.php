@@ -93,6 +93,16 @@ class OrderResponseParser implements OrderResponseParserInterface
      */
     public function parse(array $entry)
     {
+        $identity = $this->identityService->findOneBy([
+            'adapterIdentifier' => (string) $entry['id'],
+            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType' => Order::TYPE,
+        ]);
+
+        if (!$identity) {
+            return [];
+        }
+
         $shopIdentity = $this->identityService->findOneBy([
             'adapterIdentifier' => (string) $entry['plentyId'],
             'adapterName' => PlentymarketsAdapter::NAME,
@@ -112,16 +122,6 @@ class OrderResponseParser implements OrderResponseParserInterface
         );
 
         if (!$isMappedShopIdentity) {
-            return [];
-        }
-
-        $identity = $this->identityService->findOneBy([
-            'adapterIdentifier' => (string) $entry['id'],
-            'adapterName' => PlentymarketsAdapter::NAME,
-            'objectType' => Order::TYPE,
-        ]);
-
-        if (!$identity) {
             return [];
         }
 
