@@ -71,6 +71,10 @@ class PriceResponseParser implements PriceResponseParserInterface
          */
         $prices = [];
         foreach ($temporaryPrices as $customerGroup => $priceArray) {
+            if (!isset($priceArray['default'])) {
+                continue;
+            }
+
             if ($customerGroup === 'default') {
                 $customerGroup = null;
             }
@@ -165,10 +169,24 @@ class PriceResponseParser implements PriceResponseParserInterface
             $from = (float) $priceConfiguration['minimumOrderQuantity'];
 
             if (count($customerClasses) === 1 && $customerClasses[0]['customerClassId'] === -1) {
-                $temporaryPrices['default'][$priceConfiguration['type']][$from] = [
-                    'from' => $from,
-                    'price' => (float) $price['price'],
-                ];
+                foreach ($customerGroups as $group) {
+                    $customerGroupIdentity = $this->identityService->findOneBy([
+                        'adapterIdentifier' => $group,
+                        'adapterName' => PlentymarketsAdapter::NAME,
+                        'objectType' => CustomerGroup::TYPE,
+                    ]);
+
+                    if (null === $customerGroupIdentity) {
+                        continue;
+                    }
+
+                    $customerGroup = $customerGroupIdentity->getObjectIdentifier();
+
+                    $temporaryPrices[$customerGroup][$priceConfiguration['type']][$from] = [
+                        'from' => $from,
+                        'price' => (float) $price['price'],
+                    ];
+                }
             } else {
                 foreach ($customerClasses as $group) {
                     $customerGroupIdentity = $this->identityService->findOneBy([
@@ -178,8 +196,6 @@ class PriceResponseParser implements PriceResponseParserInterface
                     ]);
 
                     if (null === $customerGroupIdentity) {
-                        $this->logger->warning('missing mapping für customer group', ['group' => $group]);
-
                         continue;
                     }
 
