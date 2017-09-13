@@ -3,6 +3,7 @@
 namespace PlentyConnector\Console\OutputHandler;
 
 use Assert\Assertion;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -33,6 +34,11 @@ class OutputHandler implements OutputHandlerInterface
     private $verbosity;
 
     /**
+     * @var ProgressBar
+     */
+    private $progressBar;
+
+    /**
      * @param InputInterface  $input
      * @param OutputInterface $output
      */
@@ -56,7 +62,9 @@ class OutputHandler implements OutputHandlerInterface
 
         Assertion::integer($count);
 
-        $this->style->progressStart($count);
+        $this->progressBar = $this->style->createProgressBar($count);
+        $this->progressBar->setFormat('debug');
+        $this->progressBar->start();
     }
 
     public function advanceProgressBar()
@@ -65,7 +73,7 @@ class OutputHandler implements OutputHandlerInterface
             return;
         }
 
-        $this->style->progressAdvance();
+        $this->progressBar->advance();
     }
 
     public function finishProgressBar()
@@ -74,7 +82,9 @@ class OutputHandler implements OutputHandlerInterface
             return;
         }
 
-        $this->style->progressFinish();
+        $this->progressBar->finish();
+        $this->progressBar = null;
+        $this->style->newLine(2);
     }
 
     /**
