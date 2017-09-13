@@ -7,7 +7,7 @@ use Doctrine\ORM\Query;
 use PlentyConnector\Connector\ServiceBus\Query\Currency\FetchAllCurrenciesQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
-use Shopware\Components\Model\ModelRepository;
+use Doctrine\ORM\EntityRepository;
 use Shopware\Models\Shop\Currency;
 use ShopwareAdapter\ResponseParser\Currency\CurrencyResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
@@ -18,7 +18,7 @@ use ShopwareAdapter\ShopwareAdapter;
 class FetchAllCurrenciesQueryHandler implements QueryHandlerInterface
 {
     /**
-     * @var ModelRepository
+     * @var EntityRepository
      */
     private $repository;
 

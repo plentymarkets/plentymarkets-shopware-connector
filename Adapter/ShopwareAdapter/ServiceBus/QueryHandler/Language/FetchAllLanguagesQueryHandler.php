@@ -7,7 +7,7 @@ use Doctrine\ORM\Query;
 use PlentyConnector\Connector\ServiceBus\Query\Language\FetchAllLanguagesQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
-use Shopware\Components\Model\ModelRepository;
+use Doctrine\ORM\EntityRepository;
 use Shopware\Models\Shop\Locale;
 use ShopwareAdapter\ResponseParser\Language\LanguageResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
@@ -18,7 +18,7 @@ use ShopwareAdapter\ShopwareAdapter;
 class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
 {
     /**
-     * @var ModelRepository
+     * @var EntityRepository
      */
     private $repository;
 

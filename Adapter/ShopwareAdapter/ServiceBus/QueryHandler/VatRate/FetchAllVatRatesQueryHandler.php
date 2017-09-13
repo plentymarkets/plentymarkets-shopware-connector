@@ -7,7 +7,7 @@ use Doctrine\ORM\Query;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\Query\VatRate\FetchAllVatRatesQuery;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
-use Shopware\Components\Model\ModelRepository;
+use Doctrine\ORM\EntityRepository;
 use Shopware\Models\Tax\Tax;
 use ShopwareAdapter\ResponseParser\VatRate\VatRateResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
@@ -18,7 +18,7 @@ use ShopwareAdapter\ShopwareAdapter;
 class FetchAllVatRatesQueryHandler implements QueryHandlerInterface
 {
     /**
-     * @var ModelRepository
+     * @var EntityRepository
      */
     private $repository;
 

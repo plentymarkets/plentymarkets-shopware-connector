@@ -7,7 +7,7 @@ use Doctrine\ORM\Query;
 use PlentyConnector\Connector\ServiceBus\Query\CustomerGroup\FetchAllCustomerGroupsQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
-use Shopware\Components\Model\ModelRepository;
+use Doctrine\ORM\EntityRepository;
 use Shopware\Models\Customer\Group;
 use ShopwareAdapter\ResponseParser\CustomerGroup\CustomerGroupResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
@@ -18,7 +18,7 @@ use ShopwareAdapter\ShopwareAdapter;
 class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
 {
     /**
-     * @var ModelRepository
+     * @var EntityRepository
      */
     private $repository;
 

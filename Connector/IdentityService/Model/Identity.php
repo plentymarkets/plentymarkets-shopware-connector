@@ -7,8 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Class Identity.
  *
- *
- * @ORM\Entity(repositoryClass="IdentityRepository")
+ * @ORM\Entity()
  * @ORM\Table(name="plenty_identity")
  */
 class Identity

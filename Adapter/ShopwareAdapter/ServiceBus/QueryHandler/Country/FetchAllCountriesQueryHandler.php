@@ -7,7 +7,7 @@ use Doctrine\ORM\Query;
 use PlentyConnector\Connector\ServiceBus\Query\Country\FetchAllCountriesQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
-use Shopware\Components\Model\ModelRepository;
+use Doctrine\ORM\EntityRepository;
 use Shopware\Models\Country\Country;
 use ShopwareAdapter\ResponseParser\Country\CountryResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
@@ -18,7 +18,7 @@ use ShopwareAdapter\ShopwareAdapter;
 class FetchAllCountriesQueryHandler implements QueryHandlerInterface
 {
     /**
-     * @var ModelRepository
+     * @var EntityRepository
      */
     private $repository;
 

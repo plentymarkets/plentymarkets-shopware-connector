@@ -22,7 +22,7 @@ class PermissionInstaller implements InstallerInterface
     private $em;
 
     /**
-     * @var ModelRepository
+     * @var EntityRepository
      */
     private $repository;
 

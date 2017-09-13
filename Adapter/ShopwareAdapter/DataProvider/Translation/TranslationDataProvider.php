@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use PlentyConnector\Connector\TransferObject\Product\Property\Property;
 use PlentyConnector\Connector\TransferObject\Product\Property\Value\Value;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
-use Shopware\Components\Model\ModelRepository;
+use Doctrine\ORM\EntityRepository;
 use Shopware\Models\Property\Option as PropertyGroupModel;
 use Shopware\Models\Property\Value as PropertyValueModel;
 use Shopware\Models\Shop\Shop as ShopModel;
@@ -17,17 +17,17 @@ use Shopware\Models\Shop\Shop as ShopModel;
 class TranslationDataProvider implements TranslationDataProviderInterface
 {
     /**
-     * @var ModelRepository
+     * @var EntityRepository
      */
     private $shopRepository;
 
     /**
-     * @var ModelRepository
+     * @var EntityRepository
      */
     private $propertyValueRepository;
 
     /**
-     * @var ModelRepository
+     * @var EntityRepository
      */
     private $propertyGroupRepository;
 
