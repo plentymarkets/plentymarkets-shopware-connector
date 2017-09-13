@@ -16,8 +16,8 @@ env:
     - SHOPWARE_VERSION="5.3"
   global:
     - PLUGIN_NAME=PlentyConnector
-    - SHOPWARE_DIRECTORY=${TRAVIS_BUILD_DIR}/../shopware
-    - PLUGIN_DIRECTORY=${SHOPWARE_DIRECTORY}/custom/plugins
+    - SHOPWARE_DIRECTORY="${HOME}/shopware"
+    - PLUGIN_DIRECTORY="${SHOPWARE_DIRECTORY}/custom/plugins"
 
 cache:
    directories:
@@ -28,9 +28,6 @@ install:
 
 before_script:
   - if [[ "$(php --version | grep -cim1 xdebug)" -ge 1 ]]; then phpenv config-rm xdebug.ini; fi
-  - echo ${SHOPWARE_DIRECTORY}
-  - echo ${TRAVIS_BUILD_DIR}/../shopware
-  - echo ${PLUGIN_NAME}
   - git clone https://github.com/shopware/shopware.git ${SHOPWARE_DIRECTORY} --branch ${SHOPWARE_VERSION}
   - ant -f ${SHOPWARE_DIRECTORY}/build/build.xml -Dapp.host=localhost -Ddb.user=root -Ddb.host=127.0.0.1 -Ddb.name=shopware build-unit
   - mv ${TRAVIS_BUILD_DIR} ${PLUGIN_DIRECTORY}/${PLUGIN_NAME}
