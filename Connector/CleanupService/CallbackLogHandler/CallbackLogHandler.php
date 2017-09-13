@@ -28,7 +28,7 @@ class CallbackLogHandler extends AbstractProcessingHandler
     /**
      * CallbackLogHandler constructor.
      *
-     * @param Closure $handler
+     * @param Closure  $handler
      * @param bool|int $level
      */
     public function __construct($handler, $level = Logger::ERROR)

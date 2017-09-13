@@ -18,7 +18,6 @@ use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentyConnector\Connector\Translation\TranslationHelperInterface;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
-use Psr\Log\LoggerInterface;
 use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Category as CategoryResource;
