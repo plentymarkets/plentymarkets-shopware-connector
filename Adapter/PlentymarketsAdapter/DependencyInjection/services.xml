@@ -197,6 +197,7 @@
         <service id="plentmarkets_adapter.response_parser.stock" class="PlentymarketsAdapter\ResponseParser\Product\Stock\StockResponseParser">
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plenty_connector.config" />
+            <argument type="service" id="plentmarkets_adapter.client" />
         </service>
 
         <service id="plentmarkets_adapter.response_parser.unit" class="PlentymarketsAdapter\ResponseParser\Unit\UnitResponseParser">

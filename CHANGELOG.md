@@ -28,6 +28,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - better error handling for all query handlers
 - removed all yields in favour of the new progressbar
 - removed a undefinied notice when parsing prices
+- warehouses with type repair will now be ignored for stock calculation
 
 ## [3.0.0]
 ### Fixed

@@ -6,6 +6,7 @@ use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Product\Stock\Stock;
 use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
+use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 
 /**
@@ -24,15 +25,25 @@ class StockResponseParser implements StockResponseParserInterface
     private $config;
 
     /**
+     * @var ClientInterface
+     */
+    private $client;
+
+    /**
      * StockResponseParser constructor.
      *
      * @param IdentityServiceInterface $identityService
-     * @param ConfigServiceInterface   $config
+     * @param ConfigServiceInterface $config
+     * @param ClientInterface $client
      */
-    public function __construct(IdentityServiceInterface $identityService, ConfigServiceInterface $config)
-    {
+    public function __construct(
+        IdentityServiceInterface $identityService,
+        ConfigServiceInterface $config,
+        ClientInterface $client
+    ) {
         $this->identityService = $identityService;
         $this->config = $config;
+        $this->client = $client;
     }
 
     /**
@@ -74,7 +85,28 @@ class StockResponseParser implements StockResponseParserInterface
         $summedStocks = 0;
         $itemWarehouse = (int) $this->config->get('item_warehouse', 0);
 
+        static $warehouses = null;
+
+        if (null === $warehouses) {
+            $warehouses = $this->client->request('GET', 'stockmanagement/warehouses');
+        }
+
         foreach ($variation['stock'] as $stock) {
+            $warehouse = array_filter($warehouses, function (array $warehouse) use ($stock) {
+                return $stock['warehouseId'] === $warehouse['id'];
+            });
+
+            if (empty($warehouse)) {
+                continue;
+            }
+
+            $warehouse = array_shift($warehouse);
+
+            // is repair warehouse
+            if ($warehouse['typeId'] === 1) {
+                continue;
+            }
+
             if ($itemWarehouse !== 0 && $stock['warehouseId'] !== $itemWarehouse) {
                 continue;
             }

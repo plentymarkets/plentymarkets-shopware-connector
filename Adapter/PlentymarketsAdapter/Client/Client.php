@@ -86,8 +86,6 @@ class Client implements ClientInterface
     }
 
     /**
-     * TODO: simplify login handling.
-     *
      * {@inheritdoc}
      */
     public function request($method, $path, array $params = [], $limit = null, $offset = null, array $options = [])
@@ -120,7 +118,7 @@ class Client implements ClientInterface
             $body = $response->getBody();
 
             if (null === $body) {
-                // throw
+                throw InvalidResponseException::fromParams($method, $path, $options);
             }
 
             $result = json_decode($body->getContents(), true);
@@ -144,7 +142,7 @@ class Client implements ClientInterface
 
             return $result;
         } catch (ClientException $exception) {
-            if ($exception->hasResponse() && $exception->getResponse()->getStatusCode() === 401 && !$this->isLoginRequired($path) && $this->accessToken != null) {
+            if ($exception->hasResponse() && $exception->getResponse()->getStatusCode() === 401 && !$this->isLoginRequired($path) && $this->accessToken !== null) {
                 // retry with fresh accessToken
                 $this->accessToken = null;
 
