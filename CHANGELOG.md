@@ -27,6 +27,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - set order item type to TYPE_UNASSIGEND_VARIATION for plentymarkets if no variation could be found
 - better error handling for all query handlers
 - removed all yields in favour of the new progressbar
+- removed a undefinied notice when parsing prices
 
 ## [3.0.0]
 ### Fixed
