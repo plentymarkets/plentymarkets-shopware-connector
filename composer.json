@@ -15,8 +15,7 @@
         "viison/address-splitter": "dev-master",
         "league/tactician": "^1.0",
         "ramsey/uuid": "^3.5",
-        "myclabs/deep-copy": "^1.6",
-        "roave/security-advisories": "dev-master"
+        "myclabs/deep-copy": "^1.6"
     },
     "require-dev": {
         "phpunit/phpunit": "~5.6"
