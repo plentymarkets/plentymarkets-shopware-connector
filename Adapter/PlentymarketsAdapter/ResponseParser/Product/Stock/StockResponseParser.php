@@ -14,6 +14,8 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
  */
 class StockResponseParser implements StockResponseParserInterface
 {
+    const SALES_WAREHOUSE = 0;
+
     /**
      * @var IdentityServiceInterface
      */
@@ -89,21 +91,16 @@ class StockResponseParser implements StockResponseParserInterface
 
         if (null === $warehouses) {
             $warehouses = $this->client->request('GET', 'stockmanagement/warehouses');
+
+            $warehouses = array_filter($warehouses, function (array $warehouse) {
+                return $warehouse['typeId'] === self::SALES_WAREHOUSE;
+            });
+
+            $warehouses = array_column($warehouses, 'typeId');
         }
 
         foreach ($variation['stock'] as $stock) {
-            $warehouse = array_filter($warehouses, function (array $warehouse) use ($stock) {
-                return $stock['warehouseId'] === $warehouse['id'];
-            });
-
-            if (empty($warehouse)) {
-                continue;
-            }
-
-            $warehouse = array_shift($warehouse);
-
-            // is repair warehouse
-            if ($warehouse['typeId'] === 1) {
+            if (in_array($stock['warehouseId'], $warehouses, true)) {
                 continue;
             }
 
