@@ -11,6 +11,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - configurable item notification settings
 - separate stock import logic
 - added a progressbar for all commandline operations
+- commands will be added to a new backlog for later processing
+- added a backlog processing command and cronjob
 
 ### Fixed
 - optimized the update path for versions before 2.0
@@ -28,7 +30,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - better error handling for all query handlers
 - removed all yields in favour of the new progressbar
 - removed a undefinied notice when parsing prices
-- warehouses with type repair will now be ignored for stock calculation
+- only warehouses of type sales will be used for stock calculation
+- optimize plentymarkets api client error handling
 
 ## [3.0.0]
 ### Fixed

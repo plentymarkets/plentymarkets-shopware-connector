@@ -4,6 +4,7 @@ namespace PlentyConnector;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
+use PlentyConnector\Connector\BacklogService\Model\Backlog;
 use PlentyConnector\Connector\ConfigService\Model\Config;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\IdentityService\Model\Identity;
@@ -47,6 +48,7 @@ class PlentyConnector extends Plugin
     const CRONJOB_SYNCHRONIZE = 'Synchronize';
     const CRONJOB_SYNCHRONIZE_ORDERS = 'SynchronizeOrders';
     const CRONJOB_CLEANUP = 'Cleanup';
+    const CRONJOB_BACKLOG = 'ProcessBacklog';
 
     /**
      * List of all permissions
@@ -62,6 +64,7 @@ class PlentyConnector extends Plugin
     public static $models = [
         Config::class,
         Identity::class,
+        Backlog::class,
     ];
 
     /**
@@ -70,6 +73,7 @@ class PlentyConnector extends Plugin
     public static $cronjobs = [
         self::CRONJOB_SYNCHRONIZE => 300,
         self::CRONJOB_SYNCHRONIZE_ORDERS => 300,
+        self::CRONJOB_BACKLOG => 300,
         self::CRONJOB_CLEANUP => 86400,
     ];
 

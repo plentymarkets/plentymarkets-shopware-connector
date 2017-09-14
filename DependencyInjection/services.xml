@@ -80,6 +80,8 @@
         <service id="plenty_connector.subscriber.cronjob" class="PlentyConnector\Subscriber\CronjobSubscriber">
             <argument type="service" id="plenty_connector.connector" />
             <argument type="service" id="plenty_connector.cleanup_service" />
+            <argument type="service" id="plenty_connector.backlog_service" />
+            <argument type="service" id="plenty_connector.service_bus" />
             <argument type="service" id="plenty_connector.logger" />
 
             <tag name="shopware.event_subscriber" />
@@ -346,6 +348,15 @@
 
         <service id="plenty_connector.console.command.process" class="PlentyConnector\Console\Command\ProcessCommand">
             <argument type="service" id="plenty_connector.connector" />
+            <argument type="service" id="plenty_connector.logger" />
+            <argument type="service" id="plenty_connector.console.output_handler" />
+
+            <tag name="console.command" />
+        </service>
+
+        <service id="plenty_connector.console.command.process_backlog" class="PlentyConnector\Console\Command\ProcessBacklogCommand">
+            <argument type="service" id="plenty_connector.service_bus" />
+            <argument type="service" id="plenty_connector.backlog_service" />
             <argument type="service" id="plenty_connector.logger" />
             <argument type="service" id="plenty_connector.console.output_handler" />
 
@@ -641,6 +652,16 @@
             <tag name="plenty_connector.validator" />
         </service>
 
+        <!-- backlog -->
+
+        <service id="plenty_connector.backlog_service" class="PlentyConnector\Connector\BacklogService\BacklogService">
+            <argument type="service" id="models" />
+        </service>
+
+        <service id="plenty_connector.backlog_service.backlog_command_handler_middleware" class="PlentyConnector\Connector\BacklogService\Middleware\BacklogCommandHandlerMiddleware">
+            <argument type="service" id="plenty_connector.backlog_service" />
+        </service>
+
         <!-- service Bus -->
 
         <service id="plenty_connector.command_bus.command_handler_middleware" class="PlentyConnector\Connector\ServiceBus\CommandHandlerMiddleware\CommandHandlerMiddleware" />
@@ -663,6 +684,7 @@
         <service id="plenty_connector.service_bus" class="PlentyConnector\Connector\ServiceBus\ServiceBus">
             <factory service="plenty_connector.service_bus_factory" method="factory" />
 
+            <argument type="service" id="plenty_connector.backlog_service.backlog_command_handler_middleware" />
             <argument type="service" id="plenty_connector.service_bus.logger_middleware" />
             <argument type="service" id="plenty_connector.service_bus.validator_middleware" />
             <argument type="service" id="plenty_connector.command_bus.command_handler_middleware" />

@@ -3,6 +3,7 @@
 namespace PlentyConnector\Console\Command;
 
 use Exception;
+use PlentyConnector\Connector\BacklogService\Middleware\BacklogCommandHandlerMiddleware;
 use PlentyConnector\Connector\ConnectorInterface;
 use PlentyConnector\Connector\Logger\ConsoleHandler;
 use PlentyConnector\Connector\ServiceBus\QueryType;
@@ -77,6 +78,12 @@ class ProcessCommand extends ShopwareCommand
             InputOption::VALUE_NONE,
             'If set, ignore changes and process everything'
         );
+        $this->addOption(
+            'disableBacklog',
+            null,
+            InputOption::VALUE_NONE,
+            'If set, commands will be handles directly'
+        );
     }
 
     /**
@@ -85,6 +92,11 @@ class ProcessCommand extends ShopwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $all = (bool) $input->getOption('all');
+
+        if ((bool) $input->getOption('disableBacklog')) {
+            BacklogCommandHandlerMiddleware::$active = false;
+        }
+
         $objectType = $input->getArgument('objectType');
         $objectIdentifier = $input->getArgument('objectIdentifier');
 

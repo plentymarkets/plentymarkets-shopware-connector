@@ -181,8 +181,8 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
                 $originIdentifier = $update['originIdentifier'];
 
                 $oldDestinationIdentity = $identityService->findOneBy([
-                    'objectType' => $objectType,
                     'objectIdentifier' => $destinationIdentifier,
+                    'objectType' => $objectType,
                     'adapterName' => $destinationAdapterName,
                 ]);
 
