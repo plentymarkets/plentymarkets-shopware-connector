@@ -36,7 +36,7 @@ class Iterator implements BaseIterator, Countable
     /**
      * @var array
      */
-    private $page = [];
+    private $data = [];
 
     /**
      * @var array
@@ -52,6 +52,11 @@ class Iterator implements BaseIterator, Countable
      * @var Closure
      */
     private $prepareFunction;
+
+    /**
+     * @var bool
+     */
+    private $isLastPage = false;
 
     /**
      * ResourceIterator constructor.
@@ -76,7 +81,11 @@ class Iterator implements BaseIterator, Countable
      */
     public function current()
     {
-        return $this->page[$this->index];
+        $element = $this->data[$this->index];
+
+        unset($this->data[$this->index]);
+
+        return $element;
     }
 
     /**
@@ -86,7 +95,7 @@ class Iterator implements BaseIterator, Countable
     {
         ++$this->index;
 
-        if (!$this->valid()) {
+        if (!$this->isLastPage && !$this->valid()) {
             $this->offset += $this->limit;
 
             $this->loadPage($this->criteria, $this->limit, $this->offset);
@@ -98,7 +107,7 @@ class Iterator implements BaseIterator, Countable
      */
     public function valid()
     {
-        return array_key_exists($this->index, $this->page);
+        return array_key_exists($this->index, $this->data);
     }
 
     /**
@@ -137,12 +146,16 @@ class Iterator implements BaseIterator, Countable
     {
         $result = $this->client->request('GET', $this->path, $criteria, $limit, $offset);
 
-        foreach ($result as $key => $item) {
-            if (null !== $this->prepareFunction) {
-                $item = call_user_func($this->prepareFunction, $item);
-            }
+        if (null !== $this->prepareFunction) {
+            $result = call_user_func($this->prepareFunction, $result);
+        }
 
-            $this->page[$this->index + $key] = $item;
+        if (count($result) !== $this->limit) {
+            $this->isLastPage = true;
+        }
+
+        foreach ($result as $key => $item) {
+            $this->data[$this->index + $key] = $item;
         }
     }
 }
