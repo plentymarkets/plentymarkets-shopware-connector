@@ -153,7 +153,7 @@ class Connector implements ConnectorInterface
     private function handleDefinition(Definition $definition, $queryType, $identifier = null)
     {
         $this->outputHandler->writeLine(sprintf(
-            'loading data for definition: Type: %s, %s -> %s',
+            'handling definition: Type: %s, %s -> %s',
             $definition->getObjectType(),
             $definition->getOriginAdapterName(),
             $definition->getDestinationAdapterName()
@@ -173,14 +173,6 @@ class Connector implements ConnectorInterface
             $objects = [];
         }
 
-        $this->outputHandler->writeLine(sprintf('handling data for definition: Type: %s, %s -> %s',
-            $definition->getObjectType(),
-            $definition->getOriginAdapterName(),
-            $definition->getDestinationAdapterName()
-        ));
-
-        $this->outputHandler->startProgressBar(count($objects));
-
         foreach ($objects as $object) {
             $this->serviceBus->handle($this->commandFactory->create(
                 $definition->getDestinationAdapterName(),
@@ -188,10 +180,6 @@ class Connector implements ConnectorInterface
                 CommandType::HANDLE,
                 $object
             ));
-
-            $this->outputHandler->advanceProgressBar();
         }
-
-        $this->outputHandler->finishProgressBar();
     }
 }
