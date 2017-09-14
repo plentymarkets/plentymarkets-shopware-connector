@@ -97,9 +97,7 @@ class Customer extends AbstractValueObject
      */
     public function __construct()
     {
-        $timezone = new \DateTimeZone('UTC');
-
-        $this->birthday = new DateTimeImmutable('now', $timezone);
+        $this->birthday = new DateTimeImmutable('now');
     }
 
     /**

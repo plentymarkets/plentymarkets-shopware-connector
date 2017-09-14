@@ -3,7 +3,6 @@
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Order;
 
 use DateTime;
-use DateTimeZone;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\Order\HandleOrderCommand;
@@ -128,9 +127,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             $params['paymentStatusId'] = $paymentStatusIdentity->getAdapterIdentifier();
 
             if ((int) $paymentStatusIdentity->getAdapterIdentifier() === Status::PAYMENT_STATE_COMPLETELY_PAID) {
-                $timezone = new DateTimeZone('UTC');
-
-                $params['cleareddate'] = new DateTime('now', $timezone);
+                $params['cleareddate'] = new DateTime('now');
             }
         } else {
             $this->logger->notice('payment status not mapped', ['order' => $order]);

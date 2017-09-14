@@ -3,7 +3,6 @@
 namespace PlentyConnector\Components\PayPal\Shopware;
 
 use DateTimeImmutable;
-use DateTimeZone;
 use Doctrine\DBAL\Connection;
 use PlentyConnector\Components\PayPal\PaymentData\PayPalPlusInvoicePaymentData;
 use PlentyConnector\Connector\TransferObject\Payment\Payment;
@@ -84,8 +83,6 @@ class PayPalPlusInvoicePaymentResponseParser implements PaymentResponseParserInt
             return;
         }
 
-        $timezone = new DateTimeZone('UTC');
-
         $paymentData = new PayPalPlusInvoicePaymentData();
         $paymentData->setAmountCurrency($data['amount_currency']);
         $paymentData->setAmountValue($data['amount_value']);
@@ -97,8 +94,7 @@ class PayPalPlusInvoicePaymentResponseParser implements PaymentResponseParserInt
         $paymentData->setReferenceNumber($data['reference_number']);
         $paymentData->setPaymentDueDate(DateTimeImmutable::createFromFormat(
             'Y-m-d\ H:i:s',
-            $data['payment_due_date'],
-            $timezone
+            $data['payment_due_date']
         ));
 
         $payment->setPaymentData($paymentData);

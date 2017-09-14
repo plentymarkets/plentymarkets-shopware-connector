@@ -3,7 +3,6 @@
 namespace PlentymarketsAdapter\ResponseParser\Product\Variation;
 
 use DateTimeImmutable;
-use DateTimeZone;
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
@@ -203,9 +202,7 @@ class VariationResponseParser implements VariationResponseParserInterface
     private function getReleaseDate(array $variation)
     {
         if (null !== $variation['releasedAt']) {
-            $timezone = new DateTimeZone('UTC');
-
-            return new DateTimeImmutable($variation['releasedAt'], $timezone);
+            return new DateTimeImmutable($variation['releasedAt']);
         }
 
         return null;

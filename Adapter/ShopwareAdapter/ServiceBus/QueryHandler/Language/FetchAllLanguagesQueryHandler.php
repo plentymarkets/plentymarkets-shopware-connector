@@ -3,11 +3,11 @@
 namespace ShopwareAdapter\ServiceBus\QueryHandler\Language;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use PlentyConnector\Connector\ServiceBus\Query\Language\FetchAllLanguagesQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
-use Doctrine\ORM\EntityRepository;
 use Shopware\Models\Shop\Locale;
 use ShopwareAdapter\ResponseParser\Language\LanguageResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;

@@ -3,11 +3,11 @@
 namespace ShopwareAdapter\ServiceBus\QueryHandler\Currency;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use PlentyConnector\Connector\ServiceBus\Query\Currency\FetchAllCurrenciesQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
-use Doctrine\ORM\EntityRepository;
 use Shopware\Models\Shop\Currency;
 use ShopwareAdapter\ResponseParser\Currency\CurrencyResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;

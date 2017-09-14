@@ -3,7 +3,6 @@
 namespace PlentyConnector\Components\Bundle\PlentymarketsAdapter\ResponseParser;
 
 use DateTimeImmutable;
-use DateTimeZone;
 use PlentyConnector\Components\Bundle\TransferObject\Bundle;
 use PlentyConnector\Components\Bundle\TransferObject\BundleProduct\BundleProduct;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
@@ -156,9 +155,7 @@ class BundleResponseParser implements BundleResponseParserInterface
     private function getAvailableFrom(array $mainVariation)
     {
         if (!empty($mainVariation['availableUntil'])) {
-            $timezone = new DateTimeZone('UTC');
-
-            return new DateTimeImmutable('now', $timezone);
+            return new DateTimeImmutable('now');
         }
 
         return null;
@@ -172,9 +169,7 @@ class BundleResponseParser implements BundleResponseParserInterface
     private function getAvailableTo(array $mainVariation)
     {
         if (!empty($mainVariation['availableUntil'])) {
-            $timezone = new DateTimeZone('UTC');
-
-            return new DateTimeImmutable($mainVariation['availableUntil'], $timezone);
+            return new DateTimeImmutable($mainVariation['availableUntil']);
         }
 
         return null;

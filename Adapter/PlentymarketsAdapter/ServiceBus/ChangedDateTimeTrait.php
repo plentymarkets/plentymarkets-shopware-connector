@@ -3,7 +3,6 @@
 namespace PlentymarketsAdapter\ServiceBus;
 
 use DateTimeImmutable;
-use DateTimeZone;
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use ReflectionClass;
@@ -23,14 +22,13 @@ trait ChangedDateTimeTrait
          */
         $config = Shopware()->Container()->get('plenty_connector.config');
 
-        $timezone = new DateTimeZone('UTC');
         $lastRun = $config->get($this->getKey());
 
         if (null === $lastRun) {
             $lastRun = '2000-01-01T00:00:00+01:00';
         }
 
-        return DateTimeImmutable::createFromFormat(DATE_W3C, $lastRun, $timezone);
+        return DateTimeImmutable::createFromFormat(DATE_W3C, $lastRun);
     }
 
     /**
@@ -51,9 +49,7 @@ trait ChangedDateTimeTrait
      */
     public function getCurrentDateTime()
     {
-        $timezone = new DateTimeZone('UTC');
-
-        return new DateTimeImmutable('now', $timezone);
+        return new DateTimeImmutable('now');
     }
 
     /**

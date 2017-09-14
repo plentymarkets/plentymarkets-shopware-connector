@@ -535,9 +535,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         if (!empty($date)) {
             $date = array_shift($date);
 
-            $timezone = new \DateTimeZone('UTC');
-
-            return DateTimeImmutable::createFromFormat(DATE_W3C, $date['date'], $timezone);
+            return DateTimeImmutable::createFromFormat(DATE_W3C, $date['date']);
         }
 
         return null;
@@ -714,12 +712,9 @@ class OrderResponseParser implements OrderResponseParserInterface
             if (!empty($shippingDate)) {
                 $shippingDate = array_shift($shippingDate);
 
-                $timezone = new \DateTimeZone('UTC');
-
                 $package->setShippingTime(DateTimeImmutable::createFromFormat(
                     DATE_ATOM,
-                    $shippingDate['date'],
-                    $timezone
+                    $shippingDate['date']
                 ));
             }
 

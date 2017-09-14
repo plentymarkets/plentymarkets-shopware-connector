@@ -3,6 +3,7 @@
 namespace PlentyConnector\Components\Sepa\Shopware;
 
 use Assert\Assertion;
+use Doctrine\ORM\EntityRepository;
 use PlentyConnector\Components\Sepa\PaymentData\SepaPaymentData;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Currency\Currency;
@@ -10,7 +11,6 @@ use PlentyConnector\Connector\TransferObject\Order\Order;
 use PlentyConnector\Connector\TransferObject\Payment\Payment;
 use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
-use Doctrine\ORM\EntityRepository;
 use Shopware\Models\Shop\Currency as CurrencyModel;
 use ShopwareAdapter\ResponseParser\Payment\PaymentResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;

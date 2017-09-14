@@ -33,8 +33,8 @@ class StockResponseParser implements StockResponseParserInterface
      * StockResponseParser constructor.
      *
      * @param IdentityServiceInterface $identityService
-     * @param ConfigServiceInterface $config
-     * @param ClientInterface $client
+     * @param ConfigServiceInterface   $config
+     * @param ClientInterface          $client
      */
     public function __construct(
         IdentityServiceInterface $identityService,

@@ -3,7 +3,6 @@
 namespace PlentymarketsAdapter\ResponseParser\Product;
 
 use DateTimeImmutable;
-use DateTimeZone;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Category\Category;
@@ -635,9 +634,7 @@ class ProductResponseParser implements ProductResponseParserInterface
     private function getAvailableFrom(array $mainVariation)
     {
         if (!empty($mainVariation['availableUntil'])) {
-            $timezone = new DateTimeZone('UTC');
-
-            return new DateTimeImmutable('now', $timezone);
+            return new DateTimeImmutable('now');
         }
 
         return null;
@@ -651,9 +648,7 @@ class ProductResponseParser implements ProductResponseParserInterface
     private function getAvailableTo(array $mainVariation)
     {
         if (!empty($mainVariation['availableUntil'])) {
-            $timezone = new DateTimeZone('UTC');
-
-            return new DateTimeImmutable($mainVariation['availableUntil'], $timezone);
+            return new DateTimeImmutable($mainVariation['availableUntil']);
         }
 
         return null;

@@ -3,10 +3,10 @@
 namespace ShopwareAdapter\DataProvider\Translation;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use PlentyConnector\Connector\TransferObject\Product\Property\Property;
 use PlentyConnector\Connector\TransferObject\Product\Property\Value\Value;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
-use Doctrine\ORM\EntityRepository;
 use Shopware\Models\Property\Option as PropertyGroupModel;
 use Shopware\Models\Property\Value as PropertyValueModel;
 use Shopware\Models\Shop\Shop as ShopModel;
