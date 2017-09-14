@@ -241,8 +241,8 @@ class ProductResponseParser implements ProductResponseParserInterface
         foreach ($productShippingProfiles as $profile) {
             $profileIdentity = $this->identityService->findOneBy([
                 'adapterIdentifier' => (string) $profile['profileId'],
-                'objectType' => ShippingProfile::TYPE,
                 'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType' => ShippingProfile::TYPE,
             ]);
 
             if (null === $profileIdentity) {

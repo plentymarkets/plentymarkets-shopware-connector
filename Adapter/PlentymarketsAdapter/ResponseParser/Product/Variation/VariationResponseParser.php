@@ -21,6 +21,7 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Availability as AvailabilityApi;
 use PlentymarketsAdapter\ReadApi\Item\Attribute as AttributeApi;
 use PlentymarketsAdapter\ReadApi\Item\Attribute\Value as AttributeValueApi;
+use PlentymarketsAdapter\ReadApi\Item\Barcode as BarcodeApi;
 use PlentymarketsAdapter\ResponseParser\Product\Image\ImageResponseParserInterface;
 use PlentymarketsAdapter\ResponseParser\Product\Price\PriceResponseParserInterface;
 use PlentymarketsAdapter\ResponseParser\Product\Stock\StockResponseParserInterface;
@@ -66,6 +67,11 @@ class VariationResponseParser implements VariationResponseParserInterface
     private $itemAttributesValuesApi;
 
     /**
+     * @var BarcodeApi
+     */
+    private $itemBarcodeApi;
+
+    /**
      * @var ConfigServiceInterface
      */
     private $config;
@@ -73,14 +79,15 @@ class VariationResponseParser implements VariationResponseParserInterface
     /**
      * VariationResponseParser constructor.
      *
-     * @param IdentityServiceInterface     $identityService
+     * @param IdentityServiceInterface $identityService
      * @param PriceResponseParserInterface $priceResponseParser
      * @param ImageResponseParserInterface $imageResponseParser
      * @param StockResponseParserInterface $stockResponseParser
-     * @param AvailabilityApi              $availabilitiesApi
-     * @param AttributeApi                 $itemAttributesApi
-     * @param AttributeValueApi            $itemAttributesValuesApi
-     * @param ConfigServiceInterface       $config
+     * @param AvailabilityApi $availabilitiesApi
+     * @param AttributeApi $itemAttributesApi
+     * @param AttributeValueApi $itemAttributesValuesApi
+     * @param BarcodeApi $itemBarcodeApi
+     * @param ConfigServiceInterface $config
      */
     public function __construct(
         IdentityServiceInterface $identityService,
@@ -90,6 +97,7 @@ class VariationResponseParser implements VariationResponseParserInterface
         AvailabilityApi $availabilitiesApi,
         AttributeApi $itemAttributesApi,
         AttributeValueApi $itemAttributesValuesApi,
+        BarcodeApi $itemBarcodeApi,
         ConfigServiceInterface $config
     ) {
         $this->identityService = $identityService;
@@ -99,6 +107,7 @@ class VariationResponseParser implements VariationResponseParserInterface
         $this->availabilitiesApi = $availabilitiesApi;
         $this->itemAttributesApi = $itemAttributesApi;
         $this->itemAttributesValuesApi = $itemAttributesValuesApi;
+        $this->itemBarcodeApi = $itemBarcodeApi;
         $this->config = $config;
     }
 
@@ -290,12 +299,26 @@ class VariationResponseParser implements VariationResponseParserInterface
      */
     private function getBarcodes(array $variation)
     {
-        $barcodeMapping = [
-            1 => Barcode::TYPE_GTIN13,
-            2 => Barcode::TYPE_GTIN128,
-            3 => Barcode::TYPE_UPC,
-            4 => Barcode::TYPE_ISBN,
-        ];
+        static $barcodeMapping;
+
+        if (null === $barcodeMapping) {
+            $systemBarcodes = $this->itemBarcodeApi->findAll();
+
+            foreach ($systemBarcodes as $systemBarcode) {
+                $typeMapping = [
+                    'GTIN_13' => Barcode::TYPE_GTIN13,
+                    'GTIN_128' => Barcode::TYPE_GTIN128,
+                    'UPC' => Barcode::TYPE_UPC,
+                    'ISBN' => Barcode::TYPE_ISBN,
+                ];
+
+                if (array_key_exists($systemBarcode['type'], $typeMapping)) {
+                    $barcodeMapping[$systemBarcode['id']] = $typeMapping[$systemBarcode['type']];
+                }
+            }
+
+            $barcodeMapping = array_filter($barcodeMapping);
+        }
 
         $barcodes = array_filter($variation['variationBarcodes'], function (array $barcode) use ($barcodeMapping) {
             return array_key_exists($barcode['barcodeId'], $barcodeMapping);
@@ -321,20 +344,22 @@ class VariationResponseParser implements VariationResponseParserInterface
     {
         static $attributes;
 
-        $result = [];
-        foreach ($variation['variationAttributeValues'] as $attributeValue) {
-            if (!isset($attributes[$attributeValue['attributeId']])) {
-                $attributes[$attributeValue['attributeId']] = $this->itemAttributesApi->findOne($attributeValue['attributeId']);
+        if (null === $attributes) {
+            $attributeResult = $this->itemAttributesApi->findAll();
 
-                $attributes[$attributeValue['attributeId']]['values'] = [];
+            foreach ($attributeResult as $attribute) {
+                $attributes[$attribute['id']] = $attribute;
 
-                $values = $this->itemAttributesValuesApi->findOne($attributeValue['attributeId']);
+                $values = $this->itemAttributesValuesApi->findOne($attribute['id']);
 
                 foreach ($values as $value) {
-                    $attributes[$attributeValue['attributeId']]['values'][$value['id']] = $value;
+                    $attributes[$attribute['id']]['values'][$value['id']] = $value;
                 }
             }
+        }
 
+        $result = [];
+        foreach ($variation['variationAttributeValues'] as $attributeValue) {
             if (!isset($attributes[$attributeValue['attributeId']]['values'][$attributeValue['valueId']]['valueNames'])) {
                 continue;
             }

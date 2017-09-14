@@ -34,6 +34,10 @@
             <argument type="service" id="plentmarkets_adapter.client" />
         </service>
 
+        <service id="plentmarkets_adapter.read_api.item.barcode" class="PlentymarketsAdapter\ReadApi\Item\Barcode">
+            <argument type="service" id="plentmarkets_adapter.client" />
+        </service>
+
         <service id="plentmarkets_adapter.read_api.item.variant" class="PlentymarketsAdapter\ReadApi\Item\Variation">
             <argument type="service" id="plentmarkets_adapter.client" />
         </service>
@@ -212,6 +216,7 @@
             <argument type="service" id="plentmarkets_adapter.read_api.item.availability" />
             <argument type="service" id="plentmarkets_adapter.read_api.item.attribute" />
             <argument type="service" id="plentmarkets_adapter.read_api.item.attribute.value" />
+            <argument type="service" id="plentmarkets_adapter.read_api.item.barcode" />
             <argument type="service" id="plenty_connector.config" />
         </service>
 

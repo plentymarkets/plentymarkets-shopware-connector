@@ -26,8 +26,8 @@ class Attribute extends ApiAbstract
      */
     public function findAll()
     {
-        return $this->client->request('GET', 'items/attributes/', [
+        return iterator_to_array($this->client->getIterator( 'items/attributes/', [
             'with' => 'names',
-        ]);
+        ]));
     }
 }
