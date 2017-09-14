@@ -55,13 +55,17 @@ class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $objectQuery = $this->createPaymentStatusQuery();
+        $elements = $this->createPaymentStatusQuery()->getArrayResult();
 
-        $paymentStatuses = array_map(function ($status) {
-            return $this->responseParser->parse($status);
-        }, $objectQuery->getArrayResult());
+        foreach ($elements as $element) {
+            $result = $this->responseParser->parse($element);
 
-        return array_filter($paymentStatuses);
+            if (null === $result) {
+                continue;
+            }
+
+            yield $result;
+        }
     }
 
     /**

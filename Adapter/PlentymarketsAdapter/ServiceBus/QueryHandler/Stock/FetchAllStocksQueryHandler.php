@@ -80,7 +80,6 @@ class FetchAllStocksQueryHandler implements QueryHandlerInterface
 
         $this->outputHandler->startProgressBar(count($groupedStock));
 
-        $parsedElements = [];
         foreach ($groupedStock as $element) {
             try {
                 $result = $this->responseParser->parse($element);
@@ -90,21 +89,19 @@ class FetchAllStocksQueryHandler implements QueryHandlerInterface
                 $result = null;
             }
 
-            $this->outputHandler->advanceProgressBar();
-
             if (empty($result)) {
-                continue;
+                $result = [];
             }
 
             $result = array_filter($result);
 
             foreach ($result as $parsedElement) {
-                $parsedElements[] = $parsedElement;
+                yield $parsedElement;
             }
+
+            $this->outputHandler->advanceProgressBar();
         }
 
         $this->outputHandler->finishProgressBar();
-
-        return $parsedElements;
     }
 }

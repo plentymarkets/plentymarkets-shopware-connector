@@ -74,19 +74,22 @@ class FetchAllMediaCategoriesQueryHandler implements QueryHandlerInterface
 
         $this->outputHandler->startProgressBar(count($elements));
 
-        $parsedElements = [];
         foreach ($elements as $element) {
             try {
-                $parsedElements[] = $this->responseParser->parse($element);
+                $result = $this->responseParser->parse($element);
             } catch (Exception $exception) {
                 $this->logger->error($exception->getMessage());
+
+                $result = null;
+            }
+
+            if (null !== $result) {
+                yield $result;
             }
 
             $this->outputHandler->advanceProgressBar();
         }
 
         $this->outputHandler->finishProgressBar();
-
-        return array_filter($parsedElements);
     }
 }

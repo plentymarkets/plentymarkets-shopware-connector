@@ -80,7 +80,6 @@ class FetchChangedProductsQueryHandler implements QueryHandlerInterface
 
         $this->outputHandler->startProgressBar(count($elements));
 
-        $parsedElements = [];
         foreach ($elements as $element) {
             try {
                 $result = $this->responseParser->parse($element);
@@ -90,22 +89,20 @@ class FetchChangedProductsQueryHandler implements QueryHandlerInterface
                 $result = null;
             }
 
-            $this->outputHandler->advanceProgressBar();
-
             if (empty($result)) {
-                continue;
+                $result = [];
             }
 
             $result = array_filter($result);
 
             foreach ($result as $parsedElement) {
-                $parsedElements[] = $parsedElement;
+                yield $parsedElement;
             }
+
+            $this->outputHandler->advanceProgressBar();
         }
 
         $this->outputHandler->finishProgressBar();
         $this->setChangedDateTime($currentDateTime);
-
-        return $parsedElements;
     }
 }

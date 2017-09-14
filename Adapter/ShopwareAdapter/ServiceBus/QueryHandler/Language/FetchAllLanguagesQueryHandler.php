@@ -55,13 +55,17 @@ class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $objectQuery = $this->createLocalesQuery();
+        $elements = $this->createLocalesQuery()->getArrayResult();
 
-        $languages = array_map(function ($language) {
-            return $this->responseParser->parse($language);
-        }, $objectQuery->getArrayResult());
+        foreach ($elements as $element) {
+            $result = $this->responseParser->parse($element);
 
-        return array_filter($languages);
+            if (null === $result) {
+                continue;
+            }
+
+            yield $result;
+        }
     }
 
     /**

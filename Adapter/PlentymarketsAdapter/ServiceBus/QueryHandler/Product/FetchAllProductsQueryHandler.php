@@ -74,31 +74,37 @@ class FetchAllProductsQueryHandler implements QueryHandlerInterface
 
         $this->outputHandler->startProgressBar(count($elements));
 
-        $parsedElements = [];
+        $counter = 0;
+
         foreach ($elements as $element) {
             try {
+                $start = microtime(true);
+
                 $result = $this->responseParser->parse($element);
+
+                $this->logger->debug('ProductResponseParser: ' . (microtime(true) - $start));
             } catch (Exception $exception) {
                 $this->logger->error($exception->getMessage());
 
                 $result = null;
             }
 
-            $this->outputHandler->advanceProgressBar();
-
             if (empty($result)) {
-                continue;
+                $result = [];
             }
 
             $result = array_filter($result);
 
             foreach ($result as $parsedElement) {
-                $parsedElements[] = $parsedElement;
+                $counter++;
+
+                yield $parsedElement;
             }
+
+            $this->outputHandler->advanceProgressBar();
+            $this->logger->debug('Counter: ' . $counter);
         }
 
         $this->outputHandler->finishProgressBar();
-
-        return $parsedElements;
     }
 }

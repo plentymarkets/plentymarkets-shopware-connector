@@ -99,9 +99,9 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
         }
 
         $vatIdentity = $this->identityService->findOneBy([
-            'adapterName' => ShopwareAdapter::NAME,
-            'objectType' => VatRate::TYPE,
             'objectIdentifier' => $product->getVatRateIdentifier(),
+            'objectType' => VatRate::TYPE,
+            'adapterName' => ShopwareAdapter::NAME,
         ]);
 
         if (null === $vatIdentity) {
@@ -166,9 +166,9 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
     {
         foreach ($product->getShippingProfileIdentifiers() as $identifier) {
             $profileIdentity = $this->identityService->findOneBy([
-                'adapterName' => ShopwareAdapter::NAME,
-                'objectType' => ShippingProfile::TYPE,
                 'objectIdentifier' => $identifier,
+                'objectType' => ShippingProfile::TYPE,
+                'adapterName' => ShopwareAdapter::NAME,
             ]);
 
             if (null === $profileIdentity) {

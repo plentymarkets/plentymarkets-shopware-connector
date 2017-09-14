@@ -54,12 +54,16 @@ class FetchAllShopsQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $objectQuery = $this->repository->getListQuery(['active' => true], ['id' => 'ASC']);
+        $elements = $this->repository->getListQuery(['active' => true], ['id' => 'ASC'])->getArrayResult();
 
-        $shops = array_map(function ($shop) {
-            return $this->responseParser->parse($shop);
-        }, $objectQuery->getArrayResult());
+        foreach ($elements as $element) {
+            $result = $this->responseParser->parse($element);
 
-        return array_filter($shops);
+            if (null === $result) {
+                continue;
+            }
+
+            yield $result;
+        }
     }
 }

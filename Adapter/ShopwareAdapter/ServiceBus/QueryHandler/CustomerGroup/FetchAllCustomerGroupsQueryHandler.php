@@ -55,13 +55,17 @@ class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $objectQuery = $this->createCustomerGroupsQuery();
+        $elements = $this->createCustomerGroupsQuery()->getArrayResult();
 
-        $customerGroups = array_map(function ($group) {
-            return $this->responseParser->parse($group);
-        }, $objectQuery->getArrayResult());
+        foreach ($elements as $element) {
+            $result = $this->responseParser->parse($element);
 
-        return array_filter($customerGroups);
+            if (null === $result) {
+                continue;
+            }
+
+            yield $result;
+        }
     }
 
     /**

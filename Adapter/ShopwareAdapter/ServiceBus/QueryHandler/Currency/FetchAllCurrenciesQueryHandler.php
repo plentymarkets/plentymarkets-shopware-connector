@@ -55,13 +55,17 @@ class FetchAllCurrenciesQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $objectQuery = $this->createCurrenciesQuery();
+        $elements = $this->createCurrenciesQuery()->getArrayResult();
 
-        $currencies = array_map(function ($currency) {
-            return $this->responseParser->parse($currency);
-        }, $objectQuery->getArrayResult());
+        foreach ($elements as $element) {
+            $result = $this->responseParser->parse($element);
 
-        return array_filter($currencies);
+            if (null === $result) {
+                continue;
+            }
+
+            yield $result;
+        }
     }
 
     /**

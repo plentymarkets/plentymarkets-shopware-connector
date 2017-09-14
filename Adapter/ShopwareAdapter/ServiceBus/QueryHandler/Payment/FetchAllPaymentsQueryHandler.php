@@ -75,7 +75,6 @@ class FetchAllPaymentsQueryHandler implements QueryHandlerInterface
 
         $this->outputHandler->startProgressBar(count($elements));
 
-        $parsedElements = [];
         foreach ($elements as $element) {
             $element = $this->dataProvider->getOrderDetails($element['id']);
 
@@ -87,21 +86,19 @@ class FetchAllPaymentsQueryHandler implements QueryHandlerInterface
                 $result = null;
             }
 
-            $this->outputHandler->advanceProgressBar();
-
             if (empty($result)) {
-                continue;
+                $result = [];
             }
 
             $result = array_filter($result);
 
             foreach ($result as $parsedElement) {
-                $parsedElements[] = $parsedElement;
+                yield $parsedElement;
             }
+
+            $this->outputHandler->advanceProgressBar();
         }
 
         $this->outputHandler->finishProgressBar();
-
-        return $parsedElements;
     }
 }

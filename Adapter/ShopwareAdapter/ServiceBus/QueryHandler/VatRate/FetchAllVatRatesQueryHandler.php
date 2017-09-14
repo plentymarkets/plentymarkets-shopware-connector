@@ -55,13 +55,17 @@ class FetchAllVatRatesQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $objectQuery = $this->createTaxQuery();
+        $elements = $this->createTaxQuery()->getArrayResult();
 
-        $vatRates = array_map(function ($vatRate) {
-            return $this->responseParser->parse($vatRate);
-        }, $objectQuery->getArrayResult());
+        foreach ($elements as $element) {
+            $result = $this->responseParser->parse($element);
 
-        return array_filter($vatRates);
+            if (null === $result) {
+                continue;
+            }
+
+            yield $result;
+        }
     }
 
     /**

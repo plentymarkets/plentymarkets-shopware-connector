@@ -54,15 +54,19 @@ class FetchAllVatRatesQueryHandler implements QueryHandlerInterface
     {
         $defaultConfiguration = $this->client->request('GET', 'vat/standard');
 
-        $vatRates = [];
+        $elements = [];
         foreach ($defaultConfiguration['vatRates'] as $rate) {
-            $vatRates[$rate['id']] = $rate;
+            $elements[$rate['id']] = $rate;
         }
 
-        $vatRates = array_map(function ($vatRate) {
-            return $this->responseParser->parse($vatRate);
-        }, $vatRates);
+        foreach ($elements as $element) {
+            $result = $this->responseParser->parse($element);
 
-        return array_filter($vatRates);
+            if (null === $result) {
+                continue;
+            }
+
+            yield $result;
+        }
     }
 }

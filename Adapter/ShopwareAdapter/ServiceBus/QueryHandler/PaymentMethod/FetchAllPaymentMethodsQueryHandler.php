@@ -54,12 +54,16 @@ class FetchAllPaymentMethodsQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $objectQuery = $this->repository->getActivePaymentsQuery();
+        $elements = $this->repository->getActivePaymentsQuery()->getArrayResult();
 
-        $paymentMethods = array_map(function ($paymentMethod) {
-            return $this->responseParser->parse($paymentMethod);
-        }, $objectQuery->getArrayResult());
+        foreach ($elements as $element) {
+            $result = $this->responseParser->parse($element);
 
-        return array_filter($paymentMethods);
+            if (null === $result) {
+                continue;
+            }
+
+            yield $result;
+        }
     }
 }

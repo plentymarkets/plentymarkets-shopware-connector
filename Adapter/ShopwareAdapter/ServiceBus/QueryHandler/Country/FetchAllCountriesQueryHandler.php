@@ -55,13 +55,17 @@ class FetchAllCountriesQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $objectQuery = $this->createCurrenciesQuery();
+        $elements = $this->createCurrenciesQuery()->getArrayResult();
 
-        $countries = array_map(function ($country) {
-            return $this->responseParser->parse($country);
-        }, $objectQuery->getArrayResult());
+        foreach ($elements as $element) {
+            $result = $this->responseParser->parse($element);
 
-        return array_filter($countries);
+            if (null === $result) {
+                continue;
+            }
+
+            yield $result;
+        }
     }
 
     /**

@@ -87,7 +87,7 @@ class FetchChangedStocksQueryHandler implements QueryHandlerInterface
         }
 
         if (empty($variationIdentifiers)) {
-            return [];
+            return;
         }
 
         $elements = $this->client->getIterator('items/variations', [
@@ -97,7 +97,6 @@ class FetchChangedStocksQueryHandler implements QueryHandlerInterface
 
         $this->outputHandler->startProgressBar(count($elements));
 
-        $parsedElements = [];
         foreach ($elements as $element) {
             try {
                 $result = $this->responseParser->parse($element);
@@ -107,22 +106,20 @@ class FetchChangedStocksQueryHandler implements QueryHandlerInterface
                 $result = null;
             }
 
-            $this->outputHandler->advanceProgressBar();
-
             if (empty($result)) {
-                continue;
+                $result = [];
             }
 
             $result = array_filter($result);
 
             foreach ($result as $parsedElement) {
-                $parsedElements[] = $parsedElement;
+                yield $parsedElement;
             }
+
+            $this->outputHandler->advanceProgressBar();
         }
 
         $this->outputHandler->finishProgressBar();
         $this->setChangedDateTime($currentDateTime);
-
-        return $parsedElements;
     }
 }
