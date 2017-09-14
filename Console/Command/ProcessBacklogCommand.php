@@ -3,7 +3,6 @@
 namespace PlentyConnector\Console\Command;
 
 use PlentyConnector\Connector\BacklogService\BacklogService;
-use PlentyConnector\Connector\ConnectorInterface;
 use PlentyConnector\Connector\Logger\ConsoleHandler;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
@@ -78,8 +77,16 @@ class ProcessBacklogCommand extends ShopwareCommand
 
         $counter = 0;
 
+        $this->outputHandler->initialize($input, $output);
+        $this->outputHandler->startProgressBar(100);
+
         while ($counter < 100 && $command = $this->backlogService->dequeue()) {
+            $counter++;
+
             $this->serviceBus->handle($command);
+            $this->outputHandler->advanceProgressBar();
         }
+
+        $this->outputHandler->finishProgressBar();
     }
 }
