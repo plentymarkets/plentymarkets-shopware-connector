@@ -38,9 +38,10 @@ class ProcessBacklogCommand extends ShopwareCommand
 
     /**
      * ProcessBacklogCommand constructor.
-     * @param ServiceBusInterface $serviceBus
-     * @param BacklogService $backlogService
-     * @param LoggerInterface $logger
+     *
+     * @param ServiceBusInterface    $serviceBus
+     * @param BacklogService         $backlogService
+     * @param LoggerInterface        $logger
      * @param OutputHandlerInterface $outputHandler
      */
     public function __construct(
@@ -81,7 +82,7 @@ class ProcessBacklogCommand extends ShopwareCommand
         $this->outputHandler->startProgressBar(50);
 
         while ($counter < 50 && $command = $this->backlogService->dequeue()) {
-            $counter++;
+            ++$counter;
 
             $this->serviceBus->handle($command);
             $this->outputHandler->advanceProgressBar();

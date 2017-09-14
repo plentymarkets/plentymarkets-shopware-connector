@@ -79,15 +79,15 @@ class VariationResponseParser implements VariationResponseParserInterface
     /**
      * VariationResponseParser constructor.
      *
-     * @param IdentityServiceInterface $identityService
+     * @param IdentityServiceInterface     $identityService
      * @param PriceResponseParserInterface $priceResponseParser
      * @param ImageResponseParserInterface $imageResponseParser
      * @param StockResponseParserInterface $stockResponseParser
-     * @param AvailabilityApi $availabilitiesApi
-     * @param AttributeApi $itemAttributesApi
-     * @param AttributeValueApi $itemAttributesValuesApi
-     * @param BarcodeApi $itemBarcodeApi
-     * @param ConfigServiceInterface $config
+     * @param AvailabilityApi              $availabilitiesApi
+     * @param AttributeApi                 $itemAttributesApi
+     * @param AttributeValueApi            $itemAttributesValuesApi
+     * @param BarcodeApi                   $itemBarcodeApi
+     * @param ConfigServiceInterface       $config
      */
     public function __construct(
         IdentityServiceInterface $identityService,

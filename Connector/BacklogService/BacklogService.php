@@ -54,29 +54,12 @@ class BacklogService implements BacklogServiceInterface
     }
 
     /**
-     * @param string $hash
-     *
-     * @return bool
-     */
-    private function entryExists($hash) {
-        $backlog = $this->repository->findOneBy([
-            'hash' => $hash,
-        ]);
-
-        if (!empty($backlog)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function dequeue()
     {
         $backlog = $this->repository->findOneBy([], [
-            'time' => 'ASC'
+            'time' => 'ASC',
         ]);
 
         if (null === $backlog) {
@@ -97,5 +80,23 @@ class BacklogService implements BacklogServiceInterface
         }
 
         return null;
+    }
+
+    /**
+     * @param string $hash
+     *
+     * @return bool
+     */
+    private function entryExists($hash)
+    {
+        $backlog = $this->repository->findOneBy([
+            'hash' => $hash,
+        ]);
+
+        if (!empty($backlog)) {
+            return true;
+        }
+
+        return false;
     }
 }

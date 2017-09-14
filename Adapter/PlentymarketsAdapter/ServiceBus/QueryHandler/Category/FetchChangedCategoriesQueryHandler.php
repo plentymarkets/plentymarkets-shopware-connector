@@ -90,7 +90,7 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
             }
 
             if (empty($result)) {
-                $result = [];;
+                $result = [];
             }
 
             $result = array_filter($result);

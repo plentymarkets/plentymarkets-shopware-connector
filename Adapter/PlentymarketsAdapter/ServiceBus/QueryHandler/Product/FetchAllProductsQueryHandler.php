@@ -96,7 +96,7 @@ class FetchAllProductsQueryHandler implements QueryHandlerInterface
             $result = array_filter($result);
 
             foreach ($result as $parsedElement) {
-                $counter++;
+                ++$counter;
 
                 yield $parsedElement;
             }

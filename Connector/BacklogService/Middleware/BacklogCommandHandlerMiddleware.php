@@ -17,7 +17,7 @@ class BacklogCommandHandlerMiddleware implements Middleware
      *
      * @var bool
      */
-    static public $active = true;
+    public static $active = true;
 
     /**
      * @var BacklogServiceInterface
