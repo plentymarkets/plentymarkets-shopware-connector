@@ -108,6 +108,8 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         if (null === $mainVariation) {
             $productModel = $resouce->create($params);
         } else {
+            $this->correctMainDetailAssignment($mainVariation);
+
             $productModel = $resouce->update($mainVariation->getArticleId(), $params);
         }
 
@@ -147,6 +149,30 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         $this->translationDataPersister->writeProductTranslations($product);
 
         return true;
+    }
+
+    /**
+     * @param Detail    $mainVariation
+     */
+    private function correctMainDetailAssignment(Detail $mainVariation)
+    {
+        $this->entityManager->getConnection()->update(
+            's_articles',
+            ['main_detail_id' => $mainVariation->getId()],
+            ['id' => $mainVariation->getArticle()->getId()]
+        );
+
+        $this->entityManager->getConnection()->update(
+            's_articles_details',
+            ['kind' => 2],
+            ['articleID' => $mainVariation->getArticle()->getId()]
+        );
+
+        $this->entityManager->getConnection()->update(
+            's_articles_details',
+            ['kind' => 1],
+            ['id' => $mainVariation->getId()]
+        );
     }
 
     /**
