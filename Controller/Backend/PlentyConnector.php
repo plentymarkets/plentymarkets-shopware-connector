@@ -234,11 +234,16 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         $client = $this->container->get('plentmarkets_adapter.client');
 
         $data = [];
-        foreach ($client->request('GET', 'orders/referrers') as $origin) {
-            $data[] = [
-                'id' => $origin['id'],
-                'name' => $origin['name'],
-            ];
+
+        try {
+            foreach ($client->request('GET', 'orders/referrers') as $origin) {
+                $data[] = [
+                    'id' => $origin['id'],
+                    'name' => $origin['name'],
+                ];
+            }
+        } catch (Exception $exception) {
+            // fail silently
         }
 
         $this->View()->assign([
@@ -268,11 +273,15 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
             ],
         ];
 
-        foreach ($client->request('GET', 'stockmanagement/warehouses') as $origin) {
-            $data[] = [
-                'id' => $origin['id'],
-                'name' => $origin['name'],
-            ];
+        try {
+            foreach ($client->request('GET', 'stockmanagement/warehouses') as $origin) {
+                $data[] = [
+                    'id' => $origin['id'],
+                    'name' => $origin['name'],
+                ];
+            }
+        } catch (Exception $exception) {
+            // fail silently
         }
 
         $this->View()->assign([
