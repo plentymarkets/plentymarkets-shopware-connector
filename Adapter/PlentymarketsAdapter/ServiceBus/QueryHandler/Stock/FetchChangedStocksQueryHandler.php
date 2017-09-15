@@ -90,33 +90,36 @@ class FetchChangedStocksQueryHandler implements QueryHandlerInterface
             return;
         }
 
-        $elements = $this->client->getIterator('items/variations', [
-            'with' => 'stock',
-            'id' => implode(',', $variationIdentifiers),
-        ]);
+        $variationIdentifierGroups = array_chunk($variationIdentifiers, 50);
+        foreach ($variationIdentifierGroups as $variationIdentifierGroup) {
+            $elements = $this->client->getIterator('items/variations', [
+                'with' => 'stock',
+                'id' => implode(',', $variationIdentifierGroup),
+            ]);
 
-        $this->outputHandler->startProgressBar(count($elements));
+            $this->outputHandler->startProgressBar(count($elements));
 
-        foreach ($elements as $element) {
-            try {
-                $result = $this->responseParser->parse($element);
-            } catch (Exception $exception) {
-                $this->logger->error($exception->getMessage());
+            foreach ($elements as $element) {
+                try {
+                    $result = $this->responseParser->parse($element);
+                } catch (Exception $exception) {
+                    $this->logger->error($exception->getMessage());
 
-                $result = null;
+                    $result = null;
+                }
+
+                if (empty($result)) {
+                    $result = [];
+                }
+
+                $result = array_filter($result);
+
+                foreach ($result as $parsedElement) {
+                    yield $parsedElement;
+                }
+
+                $this->outputHandler->advanceProgressBar();
             }
-
-            if (empty($result)) {
-                $result = [];
-            }
-
-            $result = array_filter($result);
-
-            foreach ($result as $parsedElement) {
-                yield $parsedElement;
-            }
-
-            $this->outputHandler->advanceProgressBar();
         }
 
         $this->outputHandler->finishProgressBar();
