@@ -34,11 +34,6 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     private $logger;
 
     /**
-     * @var OrderResource
-     */
-    private $orderResource;
-
-    /**
      * @var AttributeDataPersisterInterface
      */
     private $attributePersister;
@@ -48,18 +43,15 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
      *
      * @param IdentityServiceInterface        $identityService
      * @param LoggerInterface                 $logger
-     * @param OrderResource                   $orderResource
      * @param AttributeDataPersisterInterface $attributePersister
      */
     public function __construct(
         IdentityServiceInterface $identityService,
         LoggerInterface $logger,
-        OrderResource $orderResource,
         AttributeDataPersisterInterface $attributePersister
     ) {
         $this->identityService = $identityService;
         $this->logger = $logger;
-        $this->orderResource = $orderResource;
         $this->attributePersister = $attributePersister;
     }
 
@@ -133,14 +125,15 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             $this->logger->notice('payment status not mapped', ['order' => $order]);
         }
 
-        $orderModel = $this->orderResource->update($orderIdentity->getAdapterIdentifier(), $params);
+        $resource = $this->getOrderResource();
+        $orderModel = $resource->update($orderIdentity->getAdapterIdentifier(), $params);
 
         $this->attributePersister->saveOrderAttributes(
             $orderModel,
             $order->getAttributes()
         );
 
-        return false;
+        return true;
     }
 
     /**
@@ -178,5 +171,16 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         $attributes[] = $shippingProvider;
 
         $order->setAttributes($attributes);
+    }
+
+    /**
+     * @return OrderResource
+     */
+    private function getOrderResource()
+    {
+        // without this reset the entitymanager sometimes the status is not found correctly.
+        Shopware()->Container()->reset('models');
+
+        return Manager::getResource('Order');
     }
 }
