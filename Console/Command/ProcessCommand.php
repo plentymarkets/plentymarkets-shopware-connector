@@ -109,6 +109,8 @@ class ProcessCommand extends ShopwareCommand
         try {
             if ($objectIdentifier) {
                 $queryType = QueryType::ONE;
+
+                BacklogCommandHandlerMiddleware::$active = false;
             } else {
                 $queryType = $all ? QueryType::ALL : QueryType::CHANGED;
             }
