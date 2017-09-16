@@ -100,6 +100,7 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
             $this->entityManager->persist($parent);
 
             $this->entityManager->flush();
+            $this->entityManager->clear();
         }
 
         if (null === $identity) {
@@ -152,6 +153,7 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
 
         $this->entityManager->persist($album);
         $this->entityManager->flush();
+        $this->entityManager->clear();
 
         $this->identityService->create(
             $mediaCategory->getIdentifier(),

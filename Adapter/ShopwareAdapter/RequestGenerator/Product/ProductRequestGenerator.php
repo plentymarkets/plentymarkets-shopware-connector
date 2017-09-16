@@ -267,6 +267,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
 
             $this->entityManager->persist($propertyGroup);
             $this->entityManager->flush();
+            $this->entityManager->clear();
         }
 
         $result = [];

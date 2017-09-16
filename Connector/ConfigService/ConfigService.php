@@ -114,5 +114,6 @@ class ConfigService implements ConfigServiceInterface
 
         $this->entityManager->persist($element);
         $this->entityManager->flush($element);
+        $this->entityManager->clear();
     }
 }

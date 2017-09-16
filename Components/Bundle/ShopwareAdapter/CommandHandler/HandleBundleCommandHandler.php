@@ -162,6 +162,7 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
 
         $this->entityManager->persist($bundleModel);
         $this->entityManager->flush();
+        $this->entityManager->clear();
 
         return true;
     }

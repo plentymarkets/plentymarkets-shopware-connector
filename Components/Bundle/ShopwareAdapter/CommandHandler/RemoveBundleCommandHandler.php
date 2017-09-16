@@ -114,6 +114,7 @@ class RemoveBundleCommandHandler implements CommandHandlerInterface
 
         $this->entityManager->persist($bundleModel);
         $this->entityManager->flush();
+        $this->entityManager->clear();
 
         $identities = $this->identityService->findBy([
             'objectIdentifier' => $identifier,

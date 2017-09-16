@@ -28,10 +28,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - only product properties which have the flag "searchable" set to true are now imported
 - set order item type to TYPE_UNASSIGEND_VARIATION for plentymarkets if no variation could be found
 - better error handling for all query handlers
-- removed all yields in favour of the new progressbar
+- added a new progressbar to every query 
 - removed a undefinied notice when parsing prices
 - only warehouses of type sales will be used for stock calculation
 - optimize plentymarkets api client error handling
+- Removed all separate commands and queries in favour of a generalized command and query
 
 ## [3.0.0]
 ### Fixed

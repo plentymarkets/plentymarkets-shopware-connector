@@ -4,6 +4,7 @@ namespace PlentyConnector;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use PlentyConnector\Connector\BacklogService\Model\Backlog;
 use PlentyConnector\Connector\ConfigService\Model\Config;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
@@ -401,7 +402,7 @@ class PlentyConnector extends Plugin
                 $query = 'DROP TABLE IF EXISTS ?';
 
                 $connection->query($query, [$table]);
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 // fail silently
             }
         }
