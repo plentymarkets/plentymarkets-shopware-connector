@@ -118,7 +118,7 @@ class CleanupService implements CleanupServiceInterface
         $definitions = $this->getDefinitions();
 
         foreach ($definitions as $definition) {
-            if ($this->error) {
+            if ($this->hasErrors()) {
                 continue;
             }
 
@@ -133,21 +133,15 @@ class CleanupService implements CleanupServiceInterface
     }
 
     /**
-     * @param null|string $objectType
-     *
      * @return null|Definition[]
      */
-    private function getDefinitions($objectType = null)
+    private function getDefinitions()
     {
         if (null === count($this->definitions)) {
             return [];
         }
 
-        $definitions = array_filter($this->definitions, function (Definition $definition) use ($objectType) {
-            return strtolower($definition->getObjectType()) === strtolower($objectType) || null === $objectType;
-        });
-
-        return $definitions;
+        return $this->definitions;
     }
 
     /**
@@ -161,32 +155,42 @@ class CleanupService implements CleanupServiceInterface
     private function collectObjectIdentifiers(Definition $definition)
     {
         $this->outputHandler->writeLine(sprintf(
-            'loading data for definition: Type: %s, %s -> %s',
+            'checking transfer objects for existence: Type: %s, %s -> %s',
             $definition->getObjectType(),
-            $definition->getOriginAdapterName(),
-            $definition->getDestinationAdapterName()
+            $definition->getDestinationAdapterName(),
+            $definition->getOriginAdapterName()
         ));
 
-        /**
-         * @var TransferObjectInterface[] $objects
-         */
-        $objects = $this->serviceBus->handle($this->queryFactory->create(
-            $definition->getOriginAdapterName(),
-            $definition->getObjectType(),
-            QueryType::ALL
-        ));
+        $identities = $this->identityService->findBy([
+            'adapterName' => $definition->getDestinationAdapterName(),
+            'objectType' => $definition->getObjectType(),
+        ]);
 
-        if (empty($objects)) {
-            return false;
+        $this->outputHandler->startProgressBar(count($identities));
+
+        foreach ($identities as $identity) {
+            /**
+             * @var TransferObjectInterface[] $transferObjects
+             */
+            $transferObjects = $this->serviceBus->handle($this->queryFactory->create(
+                $definition->getOriginAdapterName(),
+                $definition->getObjectType(),
+                QueryType::ONE,
+                $identity->getObjectIdentifier()
+            ));
+
+            foreach ($transferObjects as $transferObject) {
+                $this->elements[] = [
+                    'objectIdentifier' => $transferObject->getIdentifier(),
+                    'adapterName' => $definition->getDestinationAdapterName(),
+                    'type' => $transferObject->getType(),
+                ];
+            }
+
+            $this->outputHandler->advanceProgressBar();
         }
 
-        foreach ($objects as $transferObject) {
-            $this->elements[] = [
-                'adapterIdentifier' => $transferObject->getIdentifier(),
-                'adapterName' => $definition->getDestinationAdapterName(),
-                'type' => $transferObject->getType(),
-            ];
-        }
+        $this->outputHandler->finishProgressBar();
 
         return true;
     }
@@ -252,7 +256,7 @@ class CleanupService implements CleanupServiceInterface
      */
     private function findOrphanedIdentitiesByGroup(array $group)
     {
-        $identifiers = array_column($group, 'adapterIdentifier');
+        $identifiers = array_column($group, 'objectIdentifier');
 
         $allIdentities = $this->identityService->findBy([
             'adapterName' => $group[0]['adapterName'],
