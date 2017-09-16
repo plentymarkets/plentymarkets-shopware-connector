@@ -8,6 +8,7 @@ use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\HandleCommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\Variation\HandleVariationCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
+use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Variant;
@@ -80,6 +81,16 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
          * @var Variation              $variation
          */
         $variation = $command->getTransferObject();
+
+        $productIdentitiy = $this->identityService->findOneBy([
+            'objectIdentifier' => $variation->getProductIdentifier(),
+            'objectType' => Product::TYPE,
+            'adapterName' => ShopwareAdapter::NAME,
+        ]);
+
+        if (null === $productIdentitiy) {
+            return false;
+        }
 
         $variationParams = $this->variationRequestGenerator->generate($variation);
         $variantRepository = $this->entityManager->getRepository(Detail::class);
