@@ -102,6 +102,7 @@ class HandleStockCommandHandler implements CommandHandlerInterface
 
         $this->entityManager->persist($variation);
         $this->entityManager->flush();
+        $this->entityManager->clear();
 
         return true;
     }
