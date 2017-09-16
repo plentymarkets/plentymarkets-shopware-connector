@@ -80,7 +80,6 @@ class FetchChangedBundlesQueryHandler implements QueryHandlerInterface
 
         $this->outputHandler->startProgressBar(count($elements));
 
-        $parsedElements = [];
         foreach ($elements as $element) {
             try {
                 $result = $this->responseParser->parse($element);
@@ -90,21 +89,20 @@ class FetchChangedBundlesQueryHandler implements QueryHandlerInterface
                 $result = null;
             }
 
-            $this->outputHandler->advanceProgressBar();
-
             if (empty($result)) {
-                continue;
+                $result = [];
             }
 
             $parsedElements = array_filter($result);
 
             foreach ($parsedElements as $parsedElement) {
-                $parsedElements[] = $parsedElement;
+                yield $parsedElement;
             }
+
+            $this->outputHandler->advanceProgressBar();
         }
 
         $this->outputHandler->finishProgressBar();
-
-        return $parsedElements;
+        $this->setChangedDateTime($currentDateTime);
     }
 }
