@@ -39,7 +39,8 @@ class BacklogService implements BacklogServiceInterface
      */
     public function enqueue(CommandInterface $command)
     {
-        $hash = sha1(serialize($command));
+        $serializedCommand = serialize($command);
+        $hash = md5($serializedCommand);
 
         if ($this->entryExists($hash)) {
             return;
@@ -51,6 +52,7 @@ class BacklogService implements BacklogServiceInterface
 
         $this->entityManager->persist($backlog);
         $this->entityManager->flush();
+        $this->entityManager->clear();
     }
 
     /**
@@ -69,6 +71,7 @@ class BacklogService implements BacklogServiceInterface
         try {
             $this->entityManager->remove($backlog);
             $this->entityManager->flush();
+            $this->entityManager->clear();
         } catch (\Exception $exception) {
             // fail silently
         }
