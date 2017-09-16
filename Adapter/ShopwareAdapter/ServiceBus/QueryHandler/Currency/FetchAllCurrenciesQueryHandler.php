@@ -8,6 +8,7 @@ use Doctrine\ORM\Query;
 use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\TransferObject\Currency\Currency;
 use Shopware\Models\Shop\Currency as CurrencyModel;
 use ShopwareAdapter\ResponseParser\Currency\CurrencyResponseParserInterface;

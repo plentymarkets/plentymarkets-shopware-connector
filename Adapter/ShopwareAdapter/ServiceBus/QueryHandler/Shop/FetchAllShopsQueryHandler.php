@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use Shopware\Models\Dispatch\Repository;
 use Shopware\Models\Shop\Shop as ShopModel;
