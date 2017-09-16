@@ -136,17 +136,22 @@ class VariationResponseParser implements VariationResponseParserInterface
 
         $result = [];
         $first = true;
+
         foreach ($variations as $variation) {
+            $productIdentitiy = $this->identityService->findOneBy([
+                'adapterIdentifier' => (string) $product['id'],
+                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType' => Product::TYPE,
+            ]);
+
+            if (null === $productIdentitiy) {
+                continue;
+            }
+
             $identity = $this->identityService->findOneOrCreate(
                 (string) $variation['id'],
                 PlentymarketsAdapter::NAME,
                 Variation::TYPE
-            );
-
-            $productIdentitiy = $this->identityService->findOneOrCreate(
-                (string) $product['id'],
-                PlentymarketsAdapter::NAME,
-                Product::TYPE
             );
 
             $variationObject = new Variation();

@@ -112,9 +112,13 @@ class ProductResponseParser implements ProductResponseParserInterface
             Product::TYPE
         );
 
-        $possibleElements = $this->variationResponseParser->parse($product);
+        $candidatesForProcessing = $this->variationResponseParser->parse($product);
 
-        $variations = array_filter($possibleElements, function (TransferObjectInterface $object) {
+        if (empty($candidatesForProcessing)) {
+            return [];
+        }
+
+        $variations = array_filter($candidatesForProcessing, function (TransferObjectInterface $object) {
             return $object instanceof Variation;
         });
 
@@ -147,7 +151,7 @@ class ProductResponseParser implements ProductResponseParserInterface
 
         $result[$productObject->getIdentifier()] = $productObject;
 
-        return array_merge($result, $possibleElements);
+        return array_merge($result, $candidatesForProcessing);
     }
 
     /**
