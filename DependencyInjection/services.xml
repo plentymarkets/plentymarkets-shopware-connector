@@ -382,129 +382,9 @@
 
         <service id="plenty_connector.query_factory" class="PlentyConnector\Connector\ServiceBus\QueryFactory\QueryFactory" />
 
-        <!-- query generator -->
-
-        <service id="plenty_connector.query_generator.category" class="PlentyConnector\Connector\ServiceBus\QueryGenerator\Category\CategoryQueryGenerator">
-            <tag name="plenty_connector.query_generator" />
-        </service>
-
-        <service id="plenty_connector.query_generator.country" class="PlentyConnector\Connector\ServiceBus\QueryGenerator\Country\CountryQueryGenerator">
-            <tag name="plenty_connector.query_generator" />
-        </service>
-
-        <service id="plenty_connector.query_generator.currency" class="PlentyConnector\Connector\ServiceBus\QueryGenerator\Currency\CurrencyQueryGenerator">
-            <tag name="plenty_connector.query_generator" />
-        </service>
-
-        <service id="plenty_connector.query_generator.customer_group" class="PlentyConnector\Connector\ServiceBus\QueryGenerator\CustomerGroup\CustomerGroupQueryGenerator">
-            <tag name="plenty_connector.query_generator" />
-        </service>
-
-        <service id="plenty_connector.query_generator.language" class="PlentyConnector\Connector\ServiceBus\QueryGenerator\Language\LanguageQueryGenerator">
-            <tag name="plenty_connector.query_generator" />
-        </service>
-
-        <service id="plenty_connector.query_generator.manufacturer" class="PlentyConnector\Connector\ServiceBus\QueryGenerator\Manufacturer\ManufacturerQueryGenerator">
-            <tag name="plenty_connector.query_generator" />
-        </service>
-
-        <service id="plenty_connector.query_generator.media" class="PlentyConnector\Connector\ServiceBus\QueryGenerator\Media\MediaQueryGenerator">
-            <tag name="plenty_connector.query_generator" />
-        </service>
-
-        <service id="plenty_connector.query_generator.media_category" class="PlentyConnector\Connector\ServiceBus\QueryGenerator\MediaCategory\MediaCategoryQueryGenerator">
-            <tag name="plenty_connector.query_generator" />
-        </service>
-
-        <service id="plenty_connector.query_generator.order" class="PlentyConnector\Connector\ServiceBus\QueryGenerator\Order\OrderQueryGenerator">
-            <tag name="plenty_connector.query_generator" />
-        </service>
-
-        <service id="plenty_connector.query_generator.order_status" class="PlentyConnector\Connector\ServiceBus\QueryGenerator\OrderStatus\OrderStatusQueryGenerator">
-            <tag name="plenty_connector.query_generator" />
-        </service>
-
-        <service id="plenty_connector.query_generator.payment" class="PlentyConnector\Connector\ServiceBus\QueryGenerator\Payment\PaymentQueryGenerator">
-            <tag name="plenty_connector.query_generator" />
-        </service>
-
-        <service id="plenty_connector.query_generator.payment_method" class="PlentyConnector\Connector\ServiceBus\QueryGenerator\PaymentMethod\PaymentMethodQueryGenerator">
-            <tag name="plenty_connector.query_generator" />
-        </service>
-
-        <service id="plenty_connector.query_generator.payment_status" class="PlentyConnector\Connector\ServiceBus\QueryGenerator\PaymentStatus\PaymentStatusQueryGenerator">
-            <tag name="plenty_connector.query_generator" />
-        </service>
-
-        <service id="plenty_connector.query_generator.product" class="PlentyConnector\Connector\ServiceBus\QueryGenerator\Product\ProductQueryGenerator">
-            <tag name="plenty_connector.query_generator" />
-        </service>
-
-        <service id="plenty_connector.query_generator.shipping_profile" class="PlentyConnector\Connector\ServiceBus\QueryGenerator\ShippingProfile\ShippingProfileQueryGenerator">
-            <tag name="plenty_connector.query_generator" />
-        </service>
-
-        <service id="plenty_connector.query_generator.shop" class="PlentyConnector\Connector\ServiceBus\QueryGenerator\Shop\ShopQueryGenerator">
-            <tag name="plenty_connector.query_generator" />
-        </service>
-
-        <service id="plenty_connector.query_generator.stock" class="PlentyConnector\Connector\ServiceBus\QueryGenerator\Stock\StockQueryGenerator">
-            <tag name="plenty_connector.query_generator" />
-        </service>
-
-        <service id="plenty_connector.query_generator.unit" class="PlentyConnector\Connector\ServiceBus\QueryGenerator\Unit\UnitQueryGenerator">
-            <tag name="plenty_connector.query_generator" />
-        </service>
-
-        <service id="plenty_connector.query_generator.variation" class="PlentyConnector\Connector\ServiceBus\QueryGenerator\Variation\VariationQueryGenerator">
-            <tag name="plenty_connector.query_generator" />
-        </service>
-
-        <service id="plenty_connector.query_generator.vat_rate" class="PlentyConnector\Connector\ServiceBus\QueryGenerator\VatRate\VatRateQueryGenerator">
-            <tag name="plenty_connector.query_generator" />
-        </service>
-
         <!-- command Factory -->
 
         <service id="plenty_connector.command_factory" class="PlentyConnector\Connector\ServiceBus\CommandFactory\CommandFactory" />
-
-        <!-- command generator -->
-
-        <service id="plenty_connector.command_generator.category" class="PlentyConnector\Connector\ServiceBus\CommandGenerator\Category\CategoryCommandGenerator">
-            <tag name="plenty_connector.command_generator" />
-        </service>
-
-        <service id="plenty_connector.command_generator.manufacturer" class="PlentyConnector\Connector\ServiceBus\CommandGenerator\Manufacturer\ManufacturerCommandGenerator">
-            <tag name="plenty_connector.command_generator" />
-        </service>
-
-        <service id="plenty_connector.command_generator.media" class="PlentyConnector\Connector\ServiceBus\CommandGenerator\Media\MediaCommandGenerator">
-            <tag name="plenty_connector.command_generator" />
-        </service>
-
-        <service id="plenty_connector.command_generator.media_category" class="PlentyConnector\Connector\ServiceBus\CommandGenerator\MediaCategory\MediaCategoryCommandGenerator">
-            <tag name="plenty_connector.command_generator" />
-        </service>
-
-        <service id="plenty_connector.command_generator.payment" class="PlentyConnector\Connector\ServiceBus\CommandGenerator\Payment\PaymentCommandGenerator">
-            <tag name="plenty_connector.command_generator" />
-        </service>
-
-        <service id="plenty_connector.command_generator.product" class="PlentyConnector\Connector\ServiceBus\CommandGenerator\Product\ProductCommandGenerator">
-            <tag name="plenty_connector.command_generator" />
-        </service>
-
-        <service id="plenty_connector.command_generator.order" class="PlentyConnector\Connector\ServiceBus\CommandGenerator\Order\OrderCommandGenerator">
-            <tag name="plenty_connector.command_generator" />
-        </service>
-
-        <service id="plenty_connector.command_generator.stock" class="PlentyConnector\Connector\ServiceBus\CommandGenerator\Stock\StockCommandGenerator">
-            <tag name="plenty_connector.command_generator" />
-        </service>
-
-        <service id="plenty_connector.command_generator.variation" class="PlentyConnector\Connector\ServiceBus\CommandGenerator\Variation\VariationCommandGenerator">
-            <tag name="plenty_connector.command_generator" />
-        </service>
 
         <!-- validator service -->
 
@@ -660,6 +540,7 @@
 
         <service id="plenty_connector.backlog_service.backlog_command_handler_middleware" class="PlentyConnector\Connector\BacklogService\Middleware\BacklogCommandHandlerMiddleware">
             <argument type="service" id="plenty_connector.backlog_service" />
+            <argument type="service" id="plenty_connector.logger" />
         </service>
 
         <!-- service Bus -->
