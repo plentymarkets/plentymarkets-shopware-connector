@@ -70,17 +70,13 @@ class FetchAllStocksQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $elements = $this->client->getIterator('stockmanagement/stock');
+        $elements = $this->client->getIterator('items/variations', [
+            'with' => 'stock'
+        ]);
 
-        $groupedStock = [];
-        foreach ($elements as $stock) {
-            $groupedStock[$stock['variationId']]['id'] = $stock['variationId'];
-            $groupedStock[$stock['variationId']]['stock'][] = $stock;
-        }
+        $this->outputHandler->startProgressBar(count($elements));
 
-        $this->outputHandler->startProgressBar(count($groupedStock));
-
-        foreach ($groupedStock as $element) {
+        foreach ($elements as $element) {
             try {
                 $result = $this->responseParser->parse($element);
             } catch (Exception $exception) {

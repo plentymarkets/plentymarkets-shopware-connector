@@ -84,6 +84,8 @@ class FetchChangedStocksQueryHandler implements QueryHandlerInterface
         $variationIdentifiers = [];
         foreach ($stocks as $stock) {
             $variationIdentifiers[$stock['variationId']] = $stock['variationId'];
+
+            unset($stock);
         }
 
         if (empty($variationIdentifiers)) {
