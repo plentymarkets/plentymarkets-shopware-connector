@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Order\OrderItem\OrderItem;
 use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
-use PlentymarketsAdapter\ResponseParser\GetAttributeTrait;
+use ShopwareAdapter\ResponseParser\GetAttributeTrait;
 use ShopwareAdapter\ResponseParser\OrderItem\Exception\UnsupportedVatRateException;
 use ShopwareAdapter\ShopwareAdapter;
 
