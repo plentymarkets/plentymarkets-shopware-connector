@@ -85,8 +85,6 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
                 $result = null;
             }
 
-            $this->outputHandler->advanceProgressBar();
-
             if (empty($result)) {
                 $result = [];
             }
