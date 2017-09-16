@@ -73,12 +73,20 @@ class OutputHandler implements OutputHandlerInterface
             return;
         }
 
+        if (null === $this->progressBar) {
+            return;
+        }
+
         $this->progressBar->advance();
     }
 
     public function finishProgressBar()
     {
         if (!$this->isEnabled()) {
+            return;
+        }
+
+        if (null === $this->progressBar) {
             return;
         }
 
