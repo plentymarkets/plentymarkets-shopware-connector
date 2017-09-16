@@ -2,12 +2,14 @@
 
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Order;
 
-use PlentyConnector\Connector\ServiceBus\Query\Order\FetchAllOrdersQuery;
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
+use PlentyConnector\Connector\TransferObject\Order\Order;
 use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ReadApi\Order\Order;
+use PlentymarketsAdapter\ReadApi\Order\Order as OrderApi;
 use PlentymarketsAdapter\ResponseParser\Order\OrderResponseParserInterface;
 use Psr\Log\LoggerInterface;
 
@@ -17,7 +19,7 @@ use Psr\Log\LoggerInterface;
 class FetchAllOrdersQueryHandler implements QueryHandlerInterface
 {
     /**
-     * @var Order
+     * @var OrderApi
      */
     private $api;
 
@@ -39,13 +41,13 @@ class FetchAllOrdersQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllOrdersQueryHandler constructor.
      *
-     * @param Order                        $api
+     * @param OrderApi                     $api
      * @param OrderResponseParserInterface $responseParser
      * @param LoggerInterface              $logger
      * @param OutputHandlerInterface       $outputHandler
      */
     public function __construct(
-        Order $api,
+        OrderApi $api,
         OrderResponseParserInterface $responseParser,
         LoggerInterface $logger,
         OutputHandlerInterface $outputHandler
@@ -61,8 +63,10 @@ class FetchAllOrdersQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchAllOrdersQuery &&
-            $query->getAdapterName() === PlentymarketsAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === PlentymarketsAdapter::NAME &&
+            $query->getObjectType() === Order::TYPE &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**

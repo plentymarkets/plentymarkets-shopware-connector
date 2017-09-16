@@ -2,9 +2,11 @@
 
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Language;
 
-use PlentyConnector\Connector\ServiceBus\Query\Language\FetchAllLanguagesQuery;
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
+use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentymarketsAdapter\Helper\LanguageHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Language\LanguageResponseParserInterface;
@@ -43,8 +45,10 @@ class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchAllLanguagesQuery &&
-            $query->getAdapterName() === PlentymarketsAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === PlentymarketsAdapter::NAME &&
+            $query->getObjectType() === Language::TYPE &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**

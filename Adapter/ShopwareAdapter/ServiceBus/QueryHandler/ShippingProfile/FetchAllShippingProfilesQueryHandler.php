@@ -3,9 +3,11 @@
 namespace ShopwareAdapter\ServiceBus\QueryHandler\ShippingProfile;
 
 use Doctrine\ORM\EntityManagerInterface;
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
-use PlentyConnector\Connector\ServiceBus\Query\ShippingProfile\FetchAllShippingProfilesQuery;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
+use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 use Shopware\Models\Dispatch\Dispatch;
 use Shopware\Models\Dispatch\Repository;
 use ShopwareAdapter\ResponseParser\ShippingProfile\ShippingProfileResponseParserInterface;
@@ -45,8 +47,10 @@ class FetchAllShippingProfilesQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchAllShippingProfilesQuery &&
-            $query->getAdapterName() === ShopwareAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === ShopwareAdapter::NAME &&
+            $query->getObjectType() === ShippingProfile::TYPE &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**

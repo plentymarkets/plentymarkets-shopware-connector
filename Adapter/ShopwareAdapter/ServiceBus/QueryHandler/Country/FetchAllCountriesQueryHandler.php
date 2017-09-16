@@ -5,10 +5,11 @@ namespace ShopwareAdapter\ServiceBus\QueryHandler\Country;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
-use PlentyConnector\Connector\ServiceBus\Query\Country\FetchAllCountriesQuery;
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
-use Shopware\Models\Country\Country;
+use PlentyConnector\Connector\TransferObject\Country\Country;
+use Shopware\Models\Country\Country as CountryModel;
 use ShopwareAdapter\ResponseParser\Country\CountryResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
@@ -37,7 +38,7 @@ class FetchAllCountriesQueryHandler implements QueryHandlerInterface
         EntityManagerInterface $entityManager,
         CountryResponseParserInterface $responseParser
     ) {
-        $this->repository = $entityManager->getRepository(Country::class);
+        $this->repository = $entityManager->getRepository(CountryModel::class);
         $this->responseParser = $responseParser;
     }
 
@@ -46,8 +47,10 @@ class FetchAllCountriesQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchAllCountriesQuery &&
-            $query->getAdapterName() === ShopwareAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === ShopwareAdapter::NAME &&
+            $query->getObjectType() === Country::TYPE &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**

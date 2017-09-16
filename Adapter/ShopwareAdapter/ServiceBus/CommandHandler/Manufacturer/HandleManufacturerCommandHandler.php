@@ -5,9 +5,9 @@ namespace ShopwareAdapter\ServiceBus\CommandHandler\Manufacturer;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
-use PlentyConnector\Connector\ServiceBus\Command\HandleCommandInterface;
-use PlentyConnector\Connector\ServiceBus\Command\Manufacturer\HandleManufacturerCommand;
+use PlentyConnector\Connector\ServiceBus\Command\TransferObjectCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 use PlentyConnector\Connector\TransferObject\Media\Media;
 use Shopware\Components\Api\Exception\NotFoundException as ManufacturerNotFoundException;
@@ -57,20 +57,23 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
      */
     public function supports(CommandInterface $command)
     {
-        return $command instanceof HandleManufacturerCommand &&
-            $command->getAdapterName() === ShopwareAdapter::NAME;
+        return $command instanceof TransferObjectCommand &&
+            $command->getAdapterName() === ShopwareAdapter::NAME &&
+            $command->getObjectType() === Manufacturer::TYPE &&
+            $command->getCommandType() === CommandType::HANDLE;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @param TransferObjectCommand $command
      */
     public function handle(CommandInterface $command)
     {
         /**
-         * @var HandleCommandInterface $command
-         * @var Manufacturer           $manufacturer
+         * @var Manufacturer $manufacturer
          */
-        $manufacturer = $command->getTransferObject();
+        $manufacturer = $command->getPayload();
 
         $params = [
             'name' => $manufacturer->getName(),

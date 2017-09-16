@@ -5,9 +5,9 @@ namespace ShopwareAdapter\ServiceBus\CommandHandler\MediaCategory;
 use Doctrine\ORM\EntityManagerInterface;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
-use PlentyConnector\Connector\ServiceBus\Command\HandleCommandInterface;
-use PlentyConnector\Connector\ServiceBus\Command\MediaCategory\HandleMediaCategoryCommand;
+use PlentyConnector\Connector\ServiceBus\Command\TransferObjectCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
 use Shopware\Models\Media\Album;
 use Shopware\Models\Media\Settings;
@@ -45,20 +45,23 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
      */
     public function supports(CommandInterface $command)
     {
-        return $command instanceof HandleMediaCategoryCommand &&
-            $command->getAdapterName() === ShopwareAdapter::NAME;
+        return $command instanceof TransferObjectCommand &&
+            $command->getAdapterName() === ShopwareAdapter::NAME &&
+            $command->getObjectType() === MediaCategory::TYPE &&
+            $command->getCommandType() === CommandType::HANDLE;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @param TransferObjectCommand $command
      */
     public function handle(CommandInterface $command)
     {
         /**
-         * @var HandleCommandInterface $command
-         * @var MediaCategory          $mediaCategory
+         * @var MediaCategory $mediaCategory
          */
-        $mediaCategory = $command->getTransferObject();
+        $mediaCategory = $command->getPayload();
 
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => (string) $mediaCategory->getIdentifier(),

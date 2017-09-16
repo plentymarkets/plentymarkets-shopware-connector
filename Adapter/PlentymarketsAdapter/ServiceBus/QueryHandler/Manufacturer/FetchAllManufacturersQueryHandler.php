@@ -2,9 +2,11 @@
 
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Manufacturer;
 
-use PlentyConnector\Connector\ServiceBus\Query\Manufacturer\FetchAllManufacturersQuery;
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
+use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
@@ -61,8 +63,10 @@ class FetchAllManufacturersQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchAllManufacturersQuery &&
-            $query->getAdapterName() === PlentymarketsAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === PlentymarketsAdapter::NAME &&
+            $query->getObjectType() === Manufacturer::TYPE &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**

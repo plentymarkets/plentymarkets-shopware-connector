@@ -5,9 +5,11 @@ namespace ShopwareAdapter\ServiceBus\QueryHandler\CustomerGroup;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
-use PlentyConnector\Connector\ServiceBus\Query\CustomerGroup\FetchAllCustomerGroupsQuery;
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
+use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
 use Shopware\Models\Customer\Group;
 use ShopwareAdapter\ResponseParser\CustomerGroup\CustomerGroupResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
@@ -46,8 +48,10 @@ class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchAllCustomerGroupsQuery &&
-            $query->getAdapterName() === ShopwareAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === ShopwareAdapter::NAME &&
+            $query->getObjectType() === CustomerGroup::TYPE &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**

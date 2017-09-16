@@ -3,9 +3,11 @@
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Stock;
 
 use InvalidArgumentException;
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
-use PlentyConnector\Connector\ServiceBus\Query\Stock\FetchStockQuery;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
+use PlentyConnector\Connector\TransferObject\Product\Stock\Stock;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 
 /**
@@ -18,8 +20,10 @@ class FetchStockQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchStockQuery &&
-            $query->getAdapterName() === PlentymarketsAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === PlentymarketsAdapter::NAME &&
+            $query->getObjectType() === Stock::TYPE &&
+            $query->getQueryType() === QueryType::ONE;
     }
 
     /**

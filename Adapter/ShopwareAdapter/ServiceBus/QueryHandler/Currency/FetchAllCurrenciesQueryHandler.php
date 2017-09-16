@@ -5,10 +5,11 @@ namespace ShopwareAdapter\ServiceBus\QueryHandler\Currency;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
-use PlentyConnector\Connector\ServiceBus\Query\Currency\FetchAllCurrenciesQuery;
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
-use Shopware\Models\Shop\Currency;
+use PlentyConnector\Connector\TransferObject\Currency\Currency;
+use Shopware\Models\Shop\Currency as CurrencyModel;
 use ShopwareAdapter\ResponseParser\Currency\CurrencyResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
@@ -37,7 +38,7 @@ class FetchAllCurrenciesQueryHandler implements QueryHandlerInterface
         EntityManagerInterface $entityManager,
         CurrencyResponseParserInterface $responseParser
     ) {
-        $this->repository = $entityManager->getRepository(Currency::class);
+        $this->repository = $entityManager->getRepository(CurrencyModel::class);
         $this->responseParser = $responseParser;
     }
 
@@ -46,8 +47,10 @@ class FetchAllCurrenciesQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchAllCurrenciesQuery &&
-            $query->getAdapterName() === ShopwareAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === ShopwareAdapter::NAME &&
+            $query->getObjectType() === Currency::TYPE &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**

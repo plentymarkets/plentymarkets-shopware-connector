@@ -2,9 +2,11 @@
 
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Product;
 
-use PlentyConnector\Connector\ServiceBus\Query\Product\FetchAllProductsQuery;
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
+use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Item;
@@ -61,8 +63,10 @@ class FetchAllProductsQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchAllProductsQuery &&
-            $query->getAdapterName() === PlentymarketsAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === PlentymarketsAdapter::NAME &&
+            $query->getObjectType() === Product::TYPE &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**

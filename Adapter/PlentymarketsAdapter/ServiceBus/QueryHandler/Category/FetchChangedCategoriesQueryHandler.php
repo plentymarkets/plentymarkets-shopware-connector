@@ -2,12 +2,14 @@
 
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Category;
 
-use PlentyConnector\Connector\ServiceBus\Query\Category\FetchChangedCategoriesQuery;
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
+use PlentyConnector\Connector\TransferObject\Category\Category;
 use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ReadApi\Category\Category;
+use PlentymarketsAdapter\ReadApi\Category\Category as CategoryApi;
 use PlentymarketsAdapter\ResponseParser\Category\CategoryResponseParserInterface;
 use PlentymarketsAdapter\ServiceBus\ChangedDateTimeTrait;
 use Psr\Log\LoggerInterface;
@@ -20,7 +22,7 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
     use ChangedDateTimeTrait;
 
     /**
-     * @var Category
+     * @var CategoryApi
      */
     private $categoryApi;
 
@@ -42,13 +44,13 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
     /**
      * FetchChangedCategoriesQueryHandler constructor.
      *
-     * @param Category                        $categoryApi
+     * @param CategoryApi                     $categoryApi
      * @param CategoryResponseParserInterface $responseParser
      * @param LoggerInterface                 $logger
      * @param OutputHandlerInterface          $outputHandler
      */
     public function __construct(
-        Category $categoryApi,
+        CategoryApi $categoryApi,
         CategoryResponseParserInterface $responseParser,
         LoggerInterface $logger,
         OutputHandlerInterface $outputHandler
@@ -64,8 +66,10 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchChangedCategoriesQuery &&
-            $query->getAdapterName() === PlentymarketsAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === PlentymarketsAdapter::NAME &&
+            $query->getObjectType() === Category::TYPE &&
+            $query->getQueryType() === QueryType::CHANGED;
     }
 
     /**

@@ -5,10 +5,11 @@ namespace ShopwareAdapter\ServiceBus\CommandHandler\MediaCategory;
 use Doctrine\ORM\EntityManagerInterface;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
-use PlentyConnector\Connector\ServiceBus\Command\MediaCategory\RemoveMediaCategoryCommand;
-use PlentyConnector\Connector\ServiceBus\Command\RemoveCommandInterface;
+use PlentyConnector\Connector\ServiceBus\Command\TransferObjectCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\TransferObject\Media\Media;
+use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Psr\Log\LoggerInterface;
 use Shopware\Models\Media\Album;
@@ -56,19 +57,20 @@ class RemoveMediaCategoryCommandHandler implements CommandHandlerInterface
      */
     public function supports(CommandInterface $command)
     {
-        return $command instanceof RemoveMediaCategoryCommand &&
-            $command->getAdapterName() === ShopwareAdapter::NAME;
+        return $command instanceof TransferObjectCommand &&
+            $command->getAdapterName() === ShopwareAdapter::NAME &&
+            $command->getObjectType() === MediaCategory::TYPE &&
+            $command->getCommandType() === CommandType::REMOVE;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @param TransferObjectCommand $command
      */
     public function handle(CommandInterface $command)
     {
-        /**
-         * @var RemoveCommandInterface $command
-         */
-        $identifier = $command->getObjectIdentifier();
+        $identifier = $command->getPayload();
 
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => (string) $identifier,

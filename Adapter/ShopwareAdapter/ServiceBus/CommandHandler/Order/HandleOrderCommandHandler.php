@@ -5,8 +5,9 @@ namespace ShopwareAdapter\ServiceBus\CommandHandler\Order;
 use DateTime;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
-use PlentyConnector\Connector\ServiceBus\Command\Order\HandleOrderCommand;
+use PlentyConnector\Connector\ServiceBus\Command\TransferObjectCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\TransferObject\Order\Order;
 use PlentyConnector\Connector\TransferObject\Order\Package\Package;
 use PlentyConnector\Connector\TransferObject\OrderStatus\OrderStatus;
@@ -60,20 +61,23 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
      */
     public function supports(CommandInterface $command)
     {
-        return $command instanceof HandleOrderCommand &&
-            $command->getAdapterName() === ShopwareAdapter::NAME;
+        return $command instanceof TransferObjectCommand &&
+            $command->getAdapterName() === ShopwareAdapter::NAME &&
+            $command->getObjectType() === Order::TYPE &&
+            $command->getCommandType() === CommandType::HANDLE;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @param TransferObjectCommand $command
      */
     public function handle(CommandInterface $command)
     {
         /**
-         * @var HandleOrderCommand $command
-         * @var Order              $order
+         * @var Order $order
          */
-        $order = $command->getTransferObject();
+        $order = $command->getPayload();
 
         $orderIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $order->getIdentifier(),

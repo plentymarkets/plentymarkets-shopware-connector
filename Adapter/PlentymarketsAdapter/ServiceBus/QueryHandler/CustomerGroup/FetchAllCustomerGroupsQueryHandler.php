@@ -2,9 +2,11 @@
 
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\CustomerGroup;
 
-use PlentyConnector\Connector\ServiceBus\Query\CustomerGroup\FetchAllCustomerGroupsQuery;
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
+use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\CustomerGroup\CustomerGroupResponseParserInterface;
@@ -43,8 +45,10 @@ class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchAllCustomerGroupsQuery &&
-            $query->getAdapterName() === PlentymarketsAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === PlentymarketsAdapter::NAME &&
+            $query->getObjectType() === CustomerGroup::TYPE &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**

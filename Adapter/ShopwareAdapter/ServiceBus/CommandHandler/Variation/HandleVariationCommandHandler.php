@@ -5,9 +5,9 @@ namespace ShopwareAdapter\ServiceBus\CommandHandler\Variation;
 use Doctrine\ORM\EntityManagerInterface;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
-use PlentyConnector\Connector\ServiceBus\Command\HandleCommandInterface;
-use PlentyConnector\Connector\ServiceBus\Command\Variation\HandleVariationCommand;
+use PlentyConnector\Connector\ServiceBus\Command\TransferObjectCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
 use Shopware\Components\Api\Manager;
@@ -67,20 +67,23 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
      */
     public function supports(CommandInterface $command)
     {
-        return $command instanceof HandleVariationCommand &&
-            $command->getAdapterName() === ShopwareAdapter::NAME;
+        return $command instanceof TransferObjectCommand &&
+            $command->getAdapterName() === ShopwareAdapter::NAME &&
+            $command->getObjectType() === Variation::TYPE &&
+            $command->getCommandType() === CommandType::HANDLE;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @param TransferObjectCommand $command
      */
     public function handle(CommandInterface $command)
     {
         /**
-         * @var HandleCommandInterface $command
-         * @var Variation              $variation
+         * @var Variation $variation
          */
-        $variation = $command->getTransferObject();
+        $variation = $command->getPayload();
 
         $productIdentitiy = $this->identityService->findOneBy([
             'objectIdentifier' => $variation->getProductIdentifier(),

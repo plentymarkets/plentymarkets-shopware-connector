@@ -5,9 +5,9 @@ namespace ShopwareAdapter\ServiceBus\CommandHandler\Product;
 use Doctrine\ORM\EntityManagerInterface;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
-use PlentyConnector\Connector\ServiceBus\Command\HandleCommandInterface;
-use PlentyConnector\Connector\ServiceBus\Command\Product\HandleProductCommand;
+use PlentyConnector\Connector\ServiceBus\Command\TransferObjectCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\TransferObject\Product\Product;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Article;
@@ -84,20 +84,23 @@ class HandleProductCommandHandler implements CommandHandlerInterface
      */
     public function supports(CommandInterface $command)
     {
-        return $command instanceof HandleProductCommand &&
-            $command->getAdapterName() === ShopwareAdapter::NAME;
+        return $command instanceof TransferObjectCommand &&
+            $command->getAdapterName() === ShopwareAdapter::NAME &&
+            $command->getObjectType() === Product::TYPE &&
+            $command->getCommandType() === CommandType::HANDLE;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @param TransferObjectCommand $command
      */
     public function handle(CommandInterface $command)
     {
         /**
-         * @var HandleCommandInterface $command
-         * @var Product                $product
+         * @var Product $product
          */
-        $product = $command->getTransferObject();
+        $product = $command->getPayload();
 
         $params = $this->productRequestGenerator->generate($product);
         $variantRepository = $this->entityManager->getRepository(Detail::class);
@@ -152,7 +155,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param Detail    $mainVariation
+     * @param Detail $mainVariation
      */
     private function correctMainDetailAssignment(Detail $mainVariation)
     {

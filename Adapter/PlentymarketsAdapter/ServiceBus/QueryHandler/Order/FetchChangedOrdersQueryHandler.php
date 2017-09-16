@@ -2,12 +2,14 @@
 
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Order;
 
-use PlentyConnector\Connector\ServiceBus\Query\Order\FetchChangedOrdersQuery;
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
+use PlentyConnector\Connector\TransferObject\Order\Order;
 use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ReadApi\Order\Order;
+use PlentymarketsAdapter\ReadApi\Order\Order as OrderApi;
 use PlentymarketsAdapter\ResponseParser\Order\OrderResponseParserInterface;
 use PlentymarketsAdapter\ServiceBus\ChangedDateTimeTrait;
 use Psr\Log\LoggerInterface;
@@ -20,7 +22,7 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
     use ChangedDateTimeTrait;
 
     /**
-     * @var Order
+     * @var OrderApi
      */
     private $api;
 
@@ -42,13 +44,13 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
     /**
      * FetchChangedOrdersQueryHandler constructor.
      *
-     * @param Order                        $api
+     * @param OrderApi                     $api
      * @param OrderResponseParserInterface $responseParser
      * @param LoggerInterface              $logger
      * @param OutputHandlerInterface       $outputHandler
      */
     public function __construct(
-        Order $api,
+        OrderApi $api,
         OrderResponseParserInterface $responseParser,
         LoggerInterface $logger,
         OutputHandlerInterface $outputHandler
@@ -64,8 +66,10 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchChangedOrdersQuery &&
-            $query->getAdapterName() === PlentymarketsAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === PlentymarketsAdapter::NAME &&
+            $query->getObjectType() === Order::TYPE &&
+            $query->getQueryType() === QueryType::CHANGED;
     }
 
     /**

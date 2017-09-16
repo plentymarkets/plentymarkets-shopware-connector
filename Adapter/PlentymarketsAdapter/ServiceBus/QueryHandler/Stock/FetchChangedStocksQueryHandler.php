@@ -2,9 +2,11 @@
 
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Stock;
 
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
-use PlentyConnector\Connector\ServiceBus\Query\Stock\FetchChangedStocksQuery;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
+use PlentyConnector\Connector\TransferObject\Product\Stock\Stock;
 use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
@@ -64,8 +66,10 @@ class FetchChangedStocksQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchChangedStocksQuery &&
-            $query->getAdapterName() === PlentymarketsAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === PlentymarketsAdapter::NAME &&
+            $query->getObjectType() === Stock::TYPE &&
+            $query->getQueryType() === QueryType::CHANGED;
     }
 
     /**
@@ -79,6 +83,7 @@ class FetchChangedStocksQueryHandler implements QueryHandlerInterface
         $stocks = $this->client->getIterator('stockmanagement/stock', [
             'updatedAtFrom' => $lastCangedTime->format(DATE_W3C),
             'updatedAtTo' => $currentDateTime->format(DATE_W3C),
+            'columns' => ['variationId'],
         ]);
 
         $variationIdentifiers = [];
@@ -88,9 +93,7 @@ class FetchChangedStocksQueryHandler implements QueryHandlerInterface
             unset($stock);
         }
 
-        if (empty($variationIdentifiers)) {
-            return;
-        }
+        $this->outputHandler->startProgressBar(count($variationIdentifiers));
 
         $variationIdentifierGroups = array_chunk($variationIdentifiers, 50);
         foreach ($variationIdentifierGroups as $variationIdentifierGroup) {
@@ -98,8 +101,6 @@ class FetchChangedStocksQueryHandler implements QueryHandlerInterface
                 'with' => 'stock',
                 'id' => implode(',', $variationIdentifierGroup),
             ]);
-
-            $this->outputHandler->startProgressBar(count($elements));
 
             foreach ($elements as $element) {
                 try {

@@ -2,9 +2,11 @@
 
 namespace ShopwareAdapter\ServiceBus\QueryHandler\Payment;
 
-use PlentyConnector\Connector\ServiceBus\Query\Payment\FetchChangedPaymentsQuery;
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
+use PlentyConnector\Connector\TransferObject\Payment\Payment;
 use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use Psr\Log\LoggerInterface;
 use ShopwareAdapter\DataProvider\Order\OrderDataProviderInterface;
@@ -61,8 +63,10 @@ class FetchChangedPaymentsQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchChangedPaymentsQuery &&
-            $query->getAdapterName() === ShopwareAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === ShopwareAdapter::NAME &&
+            $query->getObjectType() === Payment::TYPE &&
+            $query->getQueryType() === QueryType::CHANGED;
     }
 
     /**

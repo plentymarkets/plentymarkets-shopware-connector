@@ -4,13 +4,14 @@ namespace PlentyConnector\Components\Bundle\ShopwareAdapter\CommandHandler;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
-use PlentyConnector\Components\Bundle\Command\HandleBundleCommand;
 use PlentyConnector\Components\Bundle\Helper\BundleHelper;
 use PlentyConnector\Components\Bundle\TransferObject\Bundle;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
+use PlentyConnector\Connector\ServiceBus\Command\TransferObjectCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
 use PlentyConnector\Connector\TransferObject\Product\Price\Price;
 use PlentyConnector\Connector\TransferObject\Product\Product;
@@ -66,20 +67,23 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
      */
     public function supports(CommandInterface $command)
     {
-        return $command instanceof HandleBundleCommand &&
-            $command->getAdapterName() === ShopwareAdapter::NAME;
+        return $command instanceof TransferObjectCommand &&
+            $command->getAdapterName() === ShopwareAdapter::NAME &&
+            $command->getObjectType() === Bundle::TYPE &&
+            $command->getCommandType() === CommandType::HANDLE;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @param TransferObjectCommand $command
      */
     public function handle(CommandInterface $command)
     {
         /**
-         * @var HandleBundleCommand $command
-         * @var Bundle              $bundle
+         * @var Bundle $bundle
          */
-        $bundle = $command->getTransferObject();
+        $bundle = $command->getPayload();
 
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => (string) $bundle->getIdentifier(),

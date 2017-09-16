@@ -7,10 +7,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use InvalidArgumentException;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException as IdentityNotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\ServiceBus\Command\Category\HandleCategoryCommand;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
-use PlentyConnector\Connector\ServiceBus\Command\HandleCommandInterface;
+use PlentyConnector\Connector\ServiceBus\Command\TransferObjectCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\TransferObject\Category\Category;
 use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentyConnector\Connector\TransferObject\Media\Media;
@@ -90,20 +90,23 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
      */
     public function supports(CommandInterface $command)
     {
-        return $command instanceof HandleCategoryCommand &&
-            $command->getAdapterName() === ShopwareAdapter::NAME;
+        return $command instanceof TransferObjectCommand &&
+            $command->getAdapterName() === ShopwareAdapter::NAME &&
+            $command->getObjectType() === Category::TYPE &&
+            $command->getCommandType() === CommandType::HANDLE;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @var TransferObjectCommand $command
      */
     public function handle(CommandInterface $command)
     {
         /**
-         * @var HandleCommandInterface $command
-         * @var Category               $category
+         * @var Category $category
          */
-        $category = $command->getTransferObject();
+        $category = $command->getPayload();
 
         $validIdentities = [];
         foreach ($category->getShopIdentifiers() as $shopIdentifier) {

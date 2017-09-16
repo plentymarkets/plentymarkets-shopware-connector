@@ -2,9 +2,11 @@
 
 namespace ShopwareAdapter\ServiceBus\QueryHandler\Order;
 
-use PlentyConnector\Connector\ServiceBus\Query\Order\FetchAllOrdersQuery;
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
+use PlentyConnector\Connector\TransferObject\Order\Order;
 use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use Psr\Log\LoggerInterface;
 use ShopwareAdapter\DataProvider\Order\OrderDataProviderInterface;
@@ -61,8 +63,10 @@ class FetchAllOrdersQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchAllOrdersQuery &&
-            $query->getAdapterName() === ShopwareAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === ShopwareAdapter::NAME &&
+            $query->getObjectType() === Order::TYPE &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**

@@ -3,9 +3,11 @@
 namespace PlentyConnector\Components\Bundle\PlentymarketsAdapter\QueryHandler;
 
 use PlentyConnector\Components\Bundle\PlentymarketsAdapter\ResponseParser\BundleResponseParser;
-use PlentyConnector\Components\Bundle\Query\FetchChangedBundlesQuery;
+use PlentyConnector\Components\Bundle\TransferObject\Bundle;
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Item;
@@ -64,8 +66,10 @@ class FetchChangedBundlesQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchChangedBundlesQuery &&
-            $query->getAdapterName() === PlentymarketsAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === PlentymarketsAdapter::NAME &&
+            $query->getObjectType() === Bundle::TYPE &&
+            $query->getQueryType() === QueryType::CHANGED;
     }
 
     /**

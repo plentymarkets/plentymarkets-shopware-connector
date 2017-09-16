@@ -4,9 +4,9 @@ namespace PlentymarketsAdapter\ServiceBus\CommandHandler\Payment;
 
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
-use PlentyConnector\Connector\ServiceBus\Command\HandleCommandInterface;
-use PlentyConnector\Connector\ServiceBus\Command\Payment\HandlePaymentCommand;
+use PlentyConnector\Connector\ServiceBus\Command\TransferObjectCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\TransferObject\Order\Order;
 use PlentyConnector\Connector\TransferObject\Payment\Payment;
 use PlentymarketsAdapter\Client\ClientInterface;
@@ -64,20 +64,23 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
      */
     public function supports(CommandInterface $command)
     {
-        return $command instanceof HandlePaymentCommand &&
-            $command->getAdapterName() === PlentymarketsAdapter::NAME;
+        return $command instanceof TransferObjectCommand &&
+            $command->getAdapterName() === PlentymarketsAdapter::NAME &&
+            $command->getObjectType() === Payment::TYPE &&
+            $command->getCommandType() === CommandType::HANDLE;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @var TransferObjectCommand $command
      */
     public function handle(CommandInterface $command)
     {
         /**
-         * @var HandleCommandInterface $command
-         * @var Payment                $payment
+         * @var Payment $payment
          */
-        $payment = $command->getTransferObject();
+        $payment = $command->getPayload();
 
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => $payment->getIdentifier(),

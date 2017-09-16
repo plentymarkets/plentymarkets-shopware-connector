@@ -3,10 +3,10 @@
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Category;
 
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\ServiceBus\Command\Category\RemoveCategoryCommand;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
-use PlentyConnector\Connector\ServiceBus\Command\RemoveCommandInterface;
+use PlentyConnector\Connector\ServiceBus\Command\TransferObjectCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\TransferObject\Category\Category;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Psr\Log\LoggerInterface;
@@ -49,19 +49,20 @@ class RemoveCategoryCommandHandler implements CommandHandlerInterface
      */
     public function supports(CommandInterface $command)
     {
-        return $command instanceof RemoveCategoryCommand &&
-            $command->getAdapterName() === ShopwareAdapter::NAME;
+        return $command instanceof TransferObjectCommand &&
+            $command->getAdapterName() === ShopwareAdapter::NAME &&
+            $command->getObjectType() === Category::TYPE &&
+            $command->getCommandType() === CommandType::REMOVE;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @param TransferObjectCommand $command
      */
     public function handle(CommandInterface $command)
     {
-        /**
-         * @var RemoveCommandInterface $command
-         */
-        $identifier = $command->getObjectIdentifier();
+        $identifier = $command->getPayload();
 
         $identities = $this->identityService->findBy([
             'objectIdentifier' => (string) $identifier,

@@ -3,9 +3,11 @@
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\MediaCategory;
 
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
-use PlentyConnector\Connector\ServiceBus\Query\MediaCategory\FetchChangedMediaCategoriesQuery;
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
+use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
 use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use PlentymarketsAdapter\Helper\MediaCategoryHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
@@ -70,8 +72,10 @@ class FetchChangedMediaCategoriesQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchChangedMediaCategoriesQuery &&
-            $query->getAdapterName() === PlentymarketsAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === PlentymarketsAdapter::NAME &&
+            $query->getObjectType() === MediaCategory::TYPE &&
+            $query->getQueryType() === QueryType::CHANGED;
     }
 
     /**

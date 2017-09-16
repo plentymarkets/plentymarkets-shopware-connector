@@ -5,9 +5,11 @@ namespace ShopwareAdapter\ServiceBus\QueryHandler\OrderStatus;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
-use PlentyConnector\Connector\ServiceBus\Query\OrderStatus\FetchAllOrderStatusesQuery;
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
+use PlentyConnector\Connector\TransferObject\OrderStatus\OrderStatus;
 use Shopware\Models\Order\Status;
 use ShopwareAdapter\ResponseParser\OrderStatus\OrderStatusResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
@@ -46,8 +48,10 @@ class FetchAllOrderStatusesQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchAllOrderStatusesQuery &&
-            $query->getAdapterName() === ShopwareAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === ShopwareAdapter::NAME &&
+            $query->getObjectType() === OrderStatus::TYPE &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**

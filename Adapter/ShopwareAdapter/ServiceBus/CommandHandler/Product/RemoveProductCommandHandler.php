@@ -5,9 +5,9 @@ namespace ShopwareAdapter\ServiceBus\CommandHandler\Product;
 use Exception;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
-use PlentyConnector\Connector\ServiceBus\Command\Product\RemoveProductCommand;
-use PlentyConnector\Connector\ServiceBus\Command\RemoveCommandInterface;
+use PlentyConnector\Connector\ServiceBus\Command\TransferObjectCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Psr\Log\LoggerInterface;
@@ -49,19 +49,20 @@ class RemoveProductCommandHandler implements CommandHandlerInterface
      */
     public function supports(CommandInterface $command)
     {
-        return $command instanceof RemoveProductCommand &&
-            $command->getAdapterName() === ShopwareAdapter::NAME;
+        return $command instanceof TransferObjectCommand &&
+            $command->getAdapterName() === ShopwareAdapter::NAME &&
+            $command->getObjectType() === Product::TYPE &&
+            $command->getCommandType() === CommandType::REMOVE;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @param TransferObjectCommand $command
      */
     public function handle(CommandInterface $command)
     {
-        /**
-         * @var RemoveCommandInterface $command
-         */
-        $identifier = $command->getObjectIdentifier();
+        $identifier = $command->getPayload();
 
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => (string) $identifier,

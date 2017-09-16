@@ -4,9 +4,9 @@ namespace ShopwareAdapter\ServiceBus\CommandHandler\Media;
 
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
-use PlentyConnector\Connector\ServiceBus\Command\HandleCommandInterface;
-use PlentyConnector\Connector\ServiceBus\Command\Media\HandleMediaCommand;
+use PlentyConnector\Connector\ServiceBus\Command\TransferObjectCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\TransferObject\Media\Media;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Shopware\Components\Api\Exception\NotFoundException as MediaNotFoundException;
@@ -76,20 +76,23 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
      */
     public function supports(CommandInterface $command)
     {
-        return $command instanceof HandleMediaCommand &&
-            $command->getAdapterName() === ShopwareAdapter::NAME;
+        return $command instanceof TransferObjectCommand &&
+            $command->getAdapterName() === ShopwareAdapter::NAME &&
+            $command->getObjectType() === Media::TYPE &&
+            $command->getCommandType() === CommandType::HANDLE;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @param TransferObjectCommand $command
      */
     public function handle(CommandInterface $command)
     {
         /**
-         * @var HandleCommandInterface $command
-         * @var Media                  $media
+         * @var Media $media
          */
-        $media = $command->getTransferObject();
+        $media = $command->getPayload();
 
         if ($media->getHash() === $this->mediaDataProvider->getMediaHashForMediaObject($media)) {
             return true;

@@ -39,8 +39,8 @@
             <argument>%plenty_connector.transfer_object.bundle%</argument>
             <argument>10</argument>
 
-            <tag name="plenty_connector.cleanup_definition" />
             <tag name="plenty_connector.connector_definition" />
+            <tag name="plenty_connector.cleanup_definition" />
         </service>
 
         <!-- Validator -->
@@ -53,11 +53,7 @@
             <tag name="plenty_connector.validator" />
         </service>
 
-        <!-- Query -->
-
-        <service id="plenty_connector.components.bundle.query_generator.bundle" class="PlentyConnector\Components\Bundle\QueryGenerator\BundleQueryGenerator">
-            <tag name="plenty_connector.query_generator" />
-        </service>
+        <!-- query handler -->
 
         <service id="plenty_connector.components.bundle.query_handler.fetch_all_bundles" class="PlentyConnector\Components\Bundle\PlentymarketsAdapter\QueryHandler\FetchAllBundlesQueryHandler">
             <argument type="service" id="plentmarkets_adapter.read_api.item" />
@@ -86,11 +82,7 @@
             <tag name="plenty_connector.query_handler" />
         </service>
 
-        <!-- Command -->
-
-        <service id="plenty_connector.components.bundle.command_generator.bundle" class="PlentyConnector\Components\Bundle\CommandGenerator\BundleCommandGenerator">
-            <tag name="plenty_connector.command_generator" />
-        </service>
+        <!-- command handler -->
 
         <service id="plenty_connector.components.bundle.command_handler.handle_bundle" class="PlentyConnector\Components\Bundle\ShopwareAdapter\CommandHandler\HandleBundleCommandHandler">
             <argument type="service" id="plenty_connector.identity_service" />
