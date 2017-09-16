@@ -45,14 +45,14 @@ class CleanupService implements CleanupServiceInterface
     private $identityService;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @var OutputHandlerInterface
      */
     private $outputHandler;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * @var Definition[]
@@ -80,23 +80,23 @@ class CleanupService implements CleanupServiceInterface
      * @param QueryFactoryInterface    $queryFactory
      * @param CommandFactoryInterface  $commandFactory
      * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface          $logger
      * @param OutputHandlerInterface   $outputHandler
+     * @param LoggerInterface          $logger
      */
     public function __construct(
         ServiceBusInterface $serviceBus,
         QueryFactoryInterface $queryFactory,
         CommandFactoryInterface $commandFactory,
         IdentityServiceInterface $identityService,
-        LoggerInterface $logger,
-        OutputHandlerInterface $outputHandler
+        OutputHandlerInterface $outputHandler,
+        LoggerInterface $logger
     ) {
         $this->serviceBus = $serviceBus;
         $this->queryFactory = $queryFactory;
         $this->commandFactory = $commandFactory;
         $this->identityService = $identityService;
-        $this->logger = $logger;
         $this->outputHandler = $outputHandler;
+        $this->logger = $logger;
     }
 
     /**
