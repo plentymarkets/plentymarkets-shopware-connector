@@ -2,6 +2,7 @@
 
 namespace PlentymarketsAdapter\ResponseParser\Manufacturer;
 
+use Exception;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 use PlentymarketsAdapter\Helper\MediaCategoryHelper;
@@ -74,13 +75,14 @@ class ManufacturerResponseParser implements ManufacturerResponseParserInterface
                     'alternateName' => $entry['name'],
                 ]);
 
-                if (null !== $media) {
-                    $manufacturer->setLogoIdentifier($media->getIdentifier());
+                $manufacturer->setLogoIdentifier($media->getIdentifier());
 
-                    $result[] = $media;
-                }
-            } catch (\Exception $exception) {
-                $this->logger->notice('manufacturer logo was ignored', ['name' => $entry['name']]);
+                $result[] = $media;
+            } catch (Exception $exception) {
+                $this->logger->notice('error while processing manufacturer logo', [
+                    'name' => $entry['name'],
+                    'url' => $entry['logo'],
+                ]);
             }
         }
 

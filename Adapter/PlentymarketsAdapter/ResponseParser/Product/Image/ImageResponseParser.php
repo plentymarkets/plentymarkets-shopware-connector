@@ -2,6 +2,7 @@
 
 namespace PlentymarketsAdapter\ResponseParser\Product\Image;
 
+use Exception;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentyConnector\Connector\TransferObject\Product\Image\Image;
@@ -10,6 +11,7 @@ use PlentyConnector\Connector\ValueObject\Translation\Translation;
 use PlentymarketsAdapter\Helper\MediaCategoryHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Media\MediaResponseParserInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class ImageResponseParser
@@ -27,17 +29,25 @@ class ImageResponseParser implements ImageResponseParserInterface
     private $mediaResponseParser;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * ImageResponseParser constructor.
      *
      * @param IdentityServiceInterface     $identityService
      * @param MediaResponseParserInterface $mediaResponseParser
+     * @param LoggerInterface              $logger
      */
     public function __construct(
         IdentityServiceInterface $identityService,
-        MediaResponseParserInterface $mediaResponseParser
+        MediaResponseParserInterface $mediaResponseParser,
+        LoggerInterface $logger
     ) {
         $this->identityService = $identityService;
         $this->mediaResponseParser = $mediaResponseParser;
+        $this->logger = $logger;
     }
 
     /**
@@ -45,60 +55,65 @@ class ImageResponseParser implements ImageResponseParserInterface
      * @param array $texts
      * @param array $result
      *
-     * @return Image
+     * @return null|Image
      */
     public function parseImage(array $entry, array $texts, array &$result)
     {
-        if (!empty($entry['names'][0]['name'])) {
-            $name = $entry['names'][0]['name'];
-        } else {
-            $name = $texts[0]['name1'];
-        }
-
-        $alternate = $name;
-        if (!empty($entry['names'][0]['alternate'])) {
-            $alternate = $entry['names'][0]['alternate'];
-        }
-
-        $media = $this->mediaResponseParser->parse([
-            'mediaCategory' => MediaCategoryHelper::PRODUCT,
-            'link' => $entry['url'],
-            'name' => $name,
-            'hash' => $entry['md5Checksum'],
-            'alternateName' => $alternate,
-            'translations' => $this->getMediaTranslations($entry, $texts),
-        ]);
-
-        if (null === $media) {
-            return null;
-        }
-
-        $result[$media->getIdentifier()] = $media;
-
-        $linkedShops = array_filter($entry['availabilities'], function (array $availabilitiy) {
-            return $availabilitiy['type'] === 'mandant';
-        });
-
-        $shopIdentifiers = array_map(function ($shop) {
-            $shopIdentity = $this->identityService->findOneBy([
-                'adapterIdentifier' => (string) $shop['value'],
-                'adapterName' => PlentymarketsAdapter::NAME,
-                'objectType' => Shop::TYPE,
-            ]);
-
-            if (null === $shopIdentity) {
-                return null;
+        try {
+            if (!empty($entry['names'][0]['name'])) {
+                $name = $entry['names'][0]['name'];
+            } else {
+                $name = $texts[0]['name1'];
             }
 
-            return $shopIdentity->getObjectIdentifier();
-        }, $linkedShops);
+            $alternate = $name;
+            if (!empty($entry['names'][0]['alternate'])) {
+                $alternate = $entry['names'][0]['alternate'];
+            }
 
-        $image = new Image();
-        $image->setMediaIdentifier($media->getIdentifier());
-        $image->setShopIdentifiers(array_filter($shopIdentifiers));
-        $image->setPosition((int) $entry['position']);
+            $media = $this->mediaResponseParser->parse([
+                'mediaCategory' => MediaCategoryHelper::PRODUCT,
+                'link' => $entry['url'],
+                'name' => $name,
+                'hash' => $entry['md5Checksum'],
+                'alternateName' => $alternate,
+                'translations' => $this->getMediaTranslations($entry, $texts),
+            ]);
 
-        return $image;
+            $result[$media->getIdentifier()] = $media;
+
+            $linkedShops = array_filter($entry['availabilities'], function (array $availabilitiy) {
+                return $availabilitiy['type'] === 'mandant';
+            });
+
+            $shopIdentifiers = array_map(function ($shop) {
+                $shopIdentity = $this->identityService->findOneBy([
+                    'adapterIdentifier' => (string) $shop['value'],
+                    'adapterName' => PlentymarketsAdapter::NAME,
+                    'objectType' => Shop::TYPE,
+                ]);
+
+                if (null === $shopIdentity) {
+                    return null;
+                }
+
+                return $shopIdentity->getObjectIdentifier();
+            }, $linkedShops);
+
+            $image = new Image();
+            $image->setMediaIdentifier($media->getIdentifier());
+            $image->setShopIdentifiers(array_filter($shopIdentifiers));
+            $image->setPosition((int) $entry['position']);
+
+            return $image;
+        } catch (Exception $exception) {
+            $this->logger->notice('error when parsing product image', [
+                'name' => $entry['name'],
+                'url' => $entry['url'],
+            ]);
+        }
+
+        return null;
     }
 
     /**

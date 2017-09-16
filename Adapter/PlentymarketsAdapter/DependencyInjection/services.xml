@@ -132,6 +132,7 @@
         <service id="plentmarkets_adapter.response_parser.image" class="PlentymarketsAdapter\ResponseParser\Product\Image\ImageResponseParser">
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plentmarkets_adapter.response_parser.media" />
+            <argument type="service" id="plenty_connector.logger" />
         </service>
 
         <service id="plentmarkets_adapter.response_parser.language" class="PlentymarketsAdapter\ResponseParser\Language\LanguageResponseParser">
@@ -249,7 +250,6 @@
             <argument type="service" id="plentmarkets_adapter.response_parser.category" />
             <argument type="service" id="plentmarkets_adapter.helper.language" />
             <argument type="service" id="plenty_connector.identity_service" />
-            <argument type="service" id="plenty_connector.logger" />
 
             <tag name="plenty_connector.query_handler" />
         </service>

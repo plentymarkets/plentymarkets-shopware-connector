@@ -220,17 +220,19 @@ class CategoryResponseParser implements CategoryResponseParserInterface
         }
 
         foreach ($images as $image) {
-            $media = $this->mediaResponseParser->parse([
-                'mediaCategory' => MediaCategoryHelper::CATEGORY,
-                'link' => $this->getBaseUrl() . 'documents/' . $image,
-                'name' => $detail['name'],
-                'alternateName' => $detail['name'],
-            ]);
+            try {
+                $media = $this->mediaResponseParser->parse([
+                    'mediaCategory' => MediaCategoryHelper::CATEGORY,
+                    'link' => $this->getBaseUrl() . 'documents/' . $image,
+                    'name' => $detail['name'],
+                    'alternateName' => $detail['name'],
+                ]);
 
-            if (null !== $media) {
                 $result[] = $media;
 
                 $imageIdentifiers[] = $media->getIdentifier();
+            } catch (Exception $exception) {
+                $this->logger->notice('error while processing category image', ['name' => $detail['name']]);
             }
         }
 
