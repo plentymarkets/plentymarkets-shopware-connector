@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [unreleased]
+## [4.0.0]
 ### Added
 - configurable item configurator set type
 - configurable variation number field
@@ -33,6 +33,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - only warehouses of type sales will be used for stock calculation
 - optimize plentymarkets api client error handling
 - Removed all separate commands and queries in favour of a generalized command and query
+
+### Changed
+- removed the obsolete process order cronjob
 
 ## [3.0.0]
 ### Fixed
