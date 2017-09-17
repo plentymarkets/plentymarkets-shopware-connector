@@ -200,6 +200,10 @@ class PlentyConnector extends Plugin
             $this->clearLastChangedConfigEntries();
         }
 
+        if ($this->updateNeeded($context, '4.0.0') && $this->updatePossible($context, '2.0.0')) {
+            $this->clearLastChangedConfigEntries();
+        }
+
         parent::update($context);
     }
 
