@@ -43,7 +43,7 @@ class Client implements ClientInterface
     /**
      * Client constructor.
      *
-     * @param GuzzleClientInterface $connection
+     * @param GuzzleClientInterface  $connection
      * @param ConfigServiceInterface $config
      */
     public function __construct(
