@@ -13,6 +13,7 @@ use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\ValueObject\Definition\Definition;
+use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 
@@ -56,9 +57,10 @@ class ConnectorTest extends TestCase
         $definition->method('getPriority')->willReturn(0);
         $definition->method('isActive')->willReturn(true);
 
+        $outputHandler = $this->createMock(OutputHandlerInterface::class);
         $logger = $this->createMock(LoggerInterface::class);
 
-        $connector = new Connector($serviceBus, $queryFactory, $commandFactory, $logger);
+        $connector = new Connector($serviceBus, $queryFactory, $commandFactory, $outputHandler, $logger);
         $connector->addDefinition($definition);
         $connector->handle(QueryType::ALL, 'TestType');
     }
@@ -101,9 +103,10 @@ class ConnectorTest extends TestCase
         $definition->method('getPriority')->willReturn(0);
         $definition->method('isActive')->willReturn(true);
 
+        $outputHandler = $this->createMock(OutputHandlerInterface::class);
         $logger = $this->createMock(LoggerInterface::class);
 
-        $connector = new Connector($serviceBus, $queryFactory, $commandFactory, $logger);
+        $connector = new Connector($serviceBus, $queryFactory, $commandFactory, $outputHandler, $logger);
         $connector->addDefinition($definition);
         $connector->handle(QueryType::ONE, 'TestType', $uuid);
     }
@@ -143,9 +146,10 @@ class ConnectorTest extends TestCase
         $definition->method('getPriority')->willReturn(0);
         $definition->method('isActive')->willReturn(true);
 
+        $outputHandler = $this->createMock(OutputHandlerInterface::class);
         $logger = $this->createMock(LoggerInterface::class);
 
-        $connector = new Connector($serviceBus, $queryFactory, $commandFactory, $logger);
+        $connector = new Connector($serviceBus, $queryFactory, $commandFactory, $outputHandler, $logger);
         $connector->addDefinition($definition);
         $connector->handle(QueryType::CHANGED, 'TestType');
     }

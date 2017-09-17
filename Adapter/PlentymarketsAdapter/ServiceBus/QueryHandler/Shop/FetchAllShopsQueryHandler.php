@@ -2,9 +2,11 @@
 
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Shop;
 
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
-use PlentyConnector\Connector\ServiceBus\Query\Shop\FetchAllShopsQuery;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
+use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Shop\ShopResponseParserInterface;
@@ -43,8 +45,10 @@ class FetchAllShopsQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchAllShopsQuery &&
-            $query->getAdapterName() === PlentymarketsAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === PlentymarketsAdapter::NAME &&
+            $query->getObjectType() === Shop::TYPE &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**
@@ -52,10 +56,16 @@ class FetchAllShopsQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $shops = array_map(function ($shop) {
-            return $this->responseParser->parse($shop);
-        }, $this->client->request('GET', 'webstores'));
+        $elements = $this->client->request('GET', 'webstores');
 
-        return array_filter($shops);
+        foreach ($elements as $element) {
+            $result = $this->responseParser->parse($element);
+
+            if (null === $result) {
+                continue;
+            }
+
+            yield $result;
+        }
     }
 }

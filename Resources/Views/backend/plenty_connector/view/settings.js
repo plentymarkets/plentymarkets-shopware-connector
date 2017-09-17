@@ -187,8 +187,16 @@ Ext.define('Shopware.apps.PlentyConnector.view.Settings', {
                         selectOnFocus: true,
                         displayField: 'name',
                         valueField: 'id',
-                        value: 0,
                         store: Ext.create('Shopware.apps.PlentyConnector.store.additional.ItemWarehouse').load()
+                    },
+                    {
+                        xtype: 'checkbox',
+                        fieldLabel: '{s name=plentyconnector/view/settings/additional/item_notification/label}{/s}',
+                        boxLabel: '{s name=plentyconnector/view/settings/additional/item_notification/boxLabel}{/s}',
+                        uncheckedValue: 0,
+                        inputValue: 1,
+                        anchor: '100%',
+                        name: 'item_notification'
                     }
                 ]
             }

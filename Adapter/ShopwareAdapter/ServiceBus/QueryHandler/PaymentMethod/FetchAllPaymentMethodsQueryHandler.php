@@ -3,9 +3,11 @@
 namespace ShopwareAdapter\ServiceBus\QueryHandler\PaymentMethod;
 
 use Doctrine\ORM\EntityManagerInterface;
-use PlentyConnector\Connector\ServiceBus\Query\PaymentMethod\FetchAllPaymentMethodsQuery;
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
+use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod;
 use Shopware\Models\Payment\Payment;
 use Shopware\Models\Payment\Repository;
 use ShopwareAdapter\ResponseParser\PaymentMethod\PaymentMethodResponseParserInterface;
@@ -45,8 +47,10 @@ class FetchAllPaymentMethodsQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchAllPaymentMethodsQuery &&
-            $query->getAdapterName() === ShopwareAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === ShopwareAdapter::NAME &&
+            $query->getObjectType() === PaymentMethod::TYPE &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**
@@ -54,12 +58,16 @@ class FetchAllPaymentMethodsQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $objectQuery = $this->repository->getActivePaymentsQuery();
+        $elements = $this->repository->getActivePaymentsQuery()->getArrayResult();
 
-        $paymentMethods = array_map(function ($paymentMethod) {
-            return $this->responseParser->parse($paymentMethod);
-        }, $objectQuery->getArrayResult());
+        foreach ($elements as $element) {
+            $result = $this->responseParser->parse($element);
 
-        return array_filter($paymentMethods);
+            if (null === $result) {
+                continue;
+            }
+
+            yield $result;
+        }
     }
 }

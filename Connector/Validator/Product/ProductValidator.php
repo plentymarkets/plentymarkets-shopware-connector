@@ -8,7 +8,6 @@ use PlentyConnector\Connector\TransferObject\Product\Image\Image;
 use PlentyConnector\Connector\TransferObject\Product\LinkedProduct\LinkedProduct;
 use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\Connector\TransferObject\Product\Property\Property;
-use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
@@ -40,6 +39,7 @@ class ProductValidator implements ValidatorInterface
 
         Assertion::string($object->getNumber(), null, 'product.number');
         Assertion::notBlank($object->getNumber(), null, 'product.number');
+        Assertion::regex($object->getNumber(), '/^[a-zA-Z0-9-_.]+$/', null, 'product.number');
 
         Assertion::boolean($object->isActive(), null, 'product.active');
 
@@ -53,8 +53,6 @@ class ProductValidator implements ValidatorInterface
 
         Assertion::allIsInstanceOf($object->getImages(), Image::class, null, 'product.images');
 
-        Assertion::allIsInstanceOf($object->getVariations(), Variation::class, null, 'product.variations');
-
         Assertion::uuid($object->getVatRateIdentifier(), null, 'product.vatRateIdentifier');
 
         Assertion::boolean($object->hasStockLimitation(), null, 'product.stockLimitation');
@@ -67,12 +65,14 @@ class ProductValidator implements ValidatorInterface
         Assertion::string($object->getMetaDescription(), null, 'product.metaDescription');
         Assertion::string($object->getMetaKeywords(), null, 'product.metaKeywords');
         Assertion::string($object->getMetaRobots(), null, 'product.metaRobots');
-        Assertion::inArray($object->getMetaRobots(), [
+
+        $allowedMetaRobots = [
             'INDEX, FOLLOW',
             'NOINDEX, FOLLOW',
             'INDEX, NOFOLLOW',
             'NOINDEX, NOFOLLOW',
-        ], null, 'product.metaRobots');
+        ];
+        Assertion::inArray($object->getMetaRobots(), $allowedMetaRobots, null, 'product.metaRobots');
 
         Assertion::allIsInstanceOf($object->getLinkedProducts(), LinkedProduct::class, null, 'product.linkedProducts');
 
@@ -87,10 +87,6 @@ class ProductValidator implements ValidatorInterface
 
         Assertion::allIsInstanceOf($object->getAttributes(), Attribute::class, null, 'product.attributes');
 
-        $mainVariation = array_filter($object->getVariations(), function (Variation $variation) {
-            return $variation->isMain();
-        });
-
-        Assertion::notEmpty($mainVariation, 'No main variation found.', 'product.variations');
+        Assertion::allIsInstanceOf($object->getVariantConfiguration(), Property::class, null, 'product.variantConfiguration');
     }
 }

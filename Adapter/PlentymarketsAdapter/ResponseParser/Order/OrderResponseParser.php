@@ -93,6 +93,16 @@ class OrderResponseParser implements OrderResponseParserInterface
      */
     public function parse(array $entry)
     {
+        $identity = $this->identityService->findOneBy([
+            'adapterIdentifier' => (string) $entry['id'],
+            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType' => Order::TYPE,
+        ]);
+
+        if (!$identity) {
+            return [];
+        }
+
         $shopIdentity = $this->identityService->findOneBy([
             'adapterIdentifier' => (string) $entry['plentyId'],
             'adapterName' => PlentymarketsAdapter::NAME,
@@ -115,88 +125,70 @@ class OrderResponseParser implements OrderResponseParserInterface
             return [];
         }
 
-        $identity = $this->identityService->findOneOrCreate(
-            (string) $entry['id'],
-            PlentymarketsAdapter::NAME,
-            Order::TYPE
-        );
-
-        $isMappedOrderIdentity = $this->identityService->isMapppedIdentity(
-            $identity->getObjectIdentifier(),
-            $identity->getObjectType(),
-            $identity->getAdapterName()
-        );
-
-        if (!$isMappedOrderIdentity) {
-            return [];
-        }
-
         $orderNumber = $this->getOrdernumber($entry);
         if (null === $orderNumber) {
-            $this->logger->notice('no order number found');
-
             return [];
         }
 
         $shippingProfileIdentity = $this->getShippingProfileIdentity($entry);
         if (null === $shippingProfileIdentity) {
-            $this->logger->notice('no shipping profile found');
+            $this->logger->notice('no shipping profile found', ['entry' => $entry]);
 
             return [];
         }
 
         $currencyIdentity = $this->getCurrencyIdentity($entry);
         if (null === $currencyIdentity) {
-            $this->logger->notice('no currency found');
+            $this->logger->notice('no currency found', ['entry' => $entry]);
 
             return [];
         }
 
         $paymentMethodIdentity = $this->getPaymentMethodIdentity($entry);
         if (null === $paymentMethodIdentity) {
-            $this->logger->notice('no payment method found');
+            $this->logger->notice('no payment method found', ['entry' => $entry]);
 
             return [];
         }
 
         $paymentStatusIdentity = $this->getPaymentStatusIdentity($entry);
         if (null === $paymentStatusIdentity) {
-            $this->logger->notice('no payment status found');
+            $this->logger->notice('no payment status found', ['entry' => $entry]);
 
             return [];
         }
 
         $oderStatusIdentity = $this->getOrderStatusIdentity($entry);
         if (null === $oderStatusIdentity) {
-            $this->logger->notice('no order status found');
+            $this->logger->notice('no order status found', ['entry' => $entry]);
 
             return [];
         }
 
         $entry['customerData'] = $this->getCustomerData($entry);
         if (empty($entry['customerData'])) {
-            $this->logger->notice('no customer found');
+            $this->logger->notice('no customer found', ['entry' => $entry]);
 
             return [];
         }
 
         $entry['billingAddressData'] = $this->getBillingAddressData($entry);
         if (empty($entry['billingAddressData'])) {
-            $this->logger->notice('no billing address found');
+            $this->logger->notice('no billing address found', ['entry' => $entry]);
 
             return [];
         }
 
         $entry['shippingAddressData'] = $this->getShippingAddressData($entry);
         if (empty($entry['shippingAddressData'])) {
-            $this->logger->notice('no shipping address found');
+            $this->logger->notice('no shipping address found', ['entry' => $entry]);
 
             return [];
         }
 
         $customer = $this->getCustomer($entry);
         if (null === $customer) {
-            $this->logger->notice('no customer found');
+            $this->logger->notice('no customer found', ['entry' => $entry]);
 
             return [];
         }
@@ -240,7 +232,7 @@ class OrderResponseParser implements OrderResponseParserInterface
 
         $billingAddress = array_shift($billingAddress);
 
-        return $this->addressApi->find($billingAddress['addressId']);
+        return $this->addressApi->find((int) $billingAddress['addressId']);
     }
 
     /**
@@ -260,7 +252,7 @@ class OrderResponseParser implements OrderResponseParserInterface
 
         $shippingAddress = array_shift($shippingAddress);
 
-        return $this->addressApi->find($shippingAddress['addressId']);
+        return $this->addressApi->find((int) $shippingAddress['addressId']);
     }
 
     /**
@@ -376,14 +368,11 @@ class OrderResponseParser implements OrderResponseParserInterface
         $customer->setType(Customer::TYPE_NORMAL);
         $customer->setNumber($entry['customerData']['number']);
         $customer->setEmail($this->getMail($entry));
-        $customer->setNewsletter(false);
         $customer->setLanguageIdentifier($languageIdentity->getObjectIdentifier());
         $customer->setCustomerGroupIdentifier($cutomerGroupIdentity->getObjectIdentifier());
         $customer->setSalutation($entry['customerData']['gender'] === 'male' ? Customer::SALUTATION_MR : Customer::SALUTATION_MS);
-        $customer->setTitle(null);
         $customer->setFirstname($entry['customerData']['firstName']);
         $customer->setLastname($entry['customerData']['lastName']);
-        $customer->setBirthday(null);
         $customer->setPhoneNumber($this->getPhoneNumber($entry));
         $customer->setMobilePhoneNumber($this->getMobilePhoneNumber($entry));
         $customer->setShopIdentifier($shopIdentity->getObjectIdentifier());
@@ -546,9 +535,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         if (!empty($date)) {
             $date = array_shift($date);
 
-            $timezone = new \DateTimeZone('UTC');
-
-            return DateTimeImmutable::createFromFormat(DATE_W3C, $date['date'], $timezone);
+            return DateTimeImmutable::createFromFormat(DATE_W3C, $date['date']);
         }
 
         return null;
@@ -725,12 +712,9 @@ class OrderResponseParser implements OrderResponseParserInterface
             if (!empty($shippingDate)) {
                 $shippingDate = array_shift($shippingDate);
 
-                $timezone = new \DateTimeZone('UTC');
-
                 $package->setShippingTime(DateTimeImmutable::createFromFormat(
                     DATE_ATOM,
-                    $shippingDate['date'],
-                    $timezone
+                    $shippingDate['date']
                 ));
             }
 

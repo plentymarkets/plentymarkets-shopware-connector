@@ -2,9 +2,11 @@
 
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\OrderStatus;
 
-use PlentyConnector\Connector\ServiceBus\Query\OrderStatus\FetchAllOrderStatusesQuery;
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
+use PlentyConnector\Connector\TransferObject\OrderStatus\OrderStatus;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\OrderStatus\OrderStatusResponseParserInterface;
@@ -43,8 +45,10 @@ class FetchAllOrderStatusesQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchAllOrderStatusesQuery &&
-            $query->getAdapterName() === PlentymarketsAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === PlentymarketsAdapter::NAME &&
+            $query->getObjectType() === OrderStatus::class &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**
@@ -52,13 +56,16 @@ class FetchAllOrderStatusesQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $status = $this->client->getIterator('orders/statuses', ['with' => 'names']);
+        $elements = $this->client->getIterator('orders/statuses', ['with' => 'names']);
 
-        $result = [];
-        foreach ($status as $orderStatus) {
-            $result[] = $this->responseParser->parse($orderStatus);
+        foreach ($elements as $element) {
+            $result = $this->responseParser->parse($element);
+
+            if (null === $result) {
+                continue;
+            }
+
+            yield $result;
         }
-
-        return array_filter($result);
     }
 }

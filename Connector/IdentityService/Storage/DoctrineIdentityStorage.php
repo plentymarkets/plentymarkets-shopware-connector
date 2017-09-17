@@ -91,6 +91,7 @@ class DoctrineIdentityStorage implements IdentityStorageInterface
 
         $this->entityManager->persist($model);
         $this->entityManager->flush();
+        $this->entityManager->clear();
 
         return true;
     }
@@ -113,6 +114,7 @@ class DoctrineIdentityStorage implements IdentityStorageInterface
 
         $this->entityManager->remove($result);
         $this->entityManager->flush();
+        $this->entityManager->clear();
 
         return true;
     }

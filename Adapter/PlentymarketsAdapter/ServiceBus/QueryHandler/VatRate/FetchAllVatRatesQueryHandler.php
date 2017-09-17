@@ -2,9 +2,11 @@
 
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\VatRate;
 
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
-use PlentyConnector\Connector\ServiceBus\Query\VatRate\FetchAllVatRatesQuery;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
+use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\VatRate\VatRateResponseParserInterface;
@@ -43,8 +45,10 @@ class FetchAllVatRatesQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchAllVatRatesQuery &&
-            $query->getAdapterName() === PlentymarketsAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === PlentymarketsAdapter::NAME &&
+            $query->getObjectType() === VatRate::TYPE &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**
@@ -54,15 +58,19 @@ class FetchAllVatRatesQueryHandler implements QueryHandlerInterface
     {
         $defaultConfiguration = $this->client->request('GET', 'vat/standard');
 
-        $vatRates = [];
+        $elements = [];
         foreach ($defaultConfiguration['vatRates'] as $rate) {
-            $vatRates[$rate['id']] = $rate;
+            $elements[$rate['id']] = $rate;
         }
 
-        $vatRates = array_map(function ($vatRate) {
-            return $this->responseParser->parse($vatRate);
-        }, $vatRates);
+        foreach ($elements as $element) {
+            $result = $this->responseParser->parse($element);
 
-        return array_filter($vatRates);
+            if (null === $result) {
+                continue;
+            }
+
+            yield $result;
+        }
     }
 }

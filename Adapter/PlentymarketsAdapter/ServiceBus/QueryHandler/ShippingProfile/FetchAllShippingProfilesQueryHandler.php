@@ -2,9 +2,11 @@
 
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\ShippingProfile;
 
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
-use PlentyConnector\Connector\ServiceBus\Query\ShippingProfile\FetchAllShippingProfilesQuery;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
+use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\ShippingProfile\ShippingProfileResponseParserInterface;
@@ -43,8 +45,10 @@ class FetchAllShippingProfilesQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchAllShippingProfilesQuery &&
-            $query->getAdapterName() === PlentymarketsAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === PlentymarketsAdapter::NAME &&
+            $query->getObjectType() === ShippingProfile::TYPE &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**
@@ -52,10 +56,16 @@ class FetchAllShippingProfilesQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $shippingProfiles = array_map(function ($shippingProfile) {
-            return $this->responseParser->parse($shippingProfile);
-        }, $this->client->request('GET', 'orders/shipping/presets'));
+        $elements = $this->client->request('GET', 'orders/shipping/presets');
 
-        return array_filter($shippingProfiles);
+        foreach ($elements as $element) {
+            $result = $this->responseParser->parse($element);
+
+            if (null === $result) {
+                continue;
+            }
+
+            yield $result;
+        }
     }
 }

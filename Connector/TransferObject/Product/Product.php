@@ -8,7 +8,6 @@ use PlentyConnector\Connector\TransferObject\AttributableInterface;
 use PlentyConnector\Connector\TransferObject\Product\Image\Image;
 use PlentyConnector\Connector\TransferObject\Product\LinkedProduct\LinkedProduct;
 use PlentyConnector\Connector\TransferObject\Product\Property\Property;
-use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
 use PlentyConnector\Connector\TransferObject\TranslateableInterface;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
@@ -71,11 +70,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
      * @var Image[]
      */
     private $images = [];
-
-    /**
-     * @var Variation[]
-     */
-    private $variations = [];
 
     /**
      * @var string
@@ -156,6 +150,11 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
      * @var Attribute[]
      */
     private $attributes = [];
+
+    /**
+     * @var Property[]
+     */
+    private $variantConfiguration;
 
     /**
      * {@inheritdoc}
@@ -323,22 +322,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     public function setImages($images)
     {
         $this->images = $images;
-    }
-
-    /**
-     * @return Variation[]
-     */
-    public function getVariations()
-    {
-        return $this->variations;
-    }
-
-    /**
-     * @param Variation[] $variations
-     */
-    public function setVariations(array $variations)
-    {
-        $this->variations = $variations;
     }
 
     /**
@@ -595,5 +578,21 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     public function setAttributes(array $attributes)
     {
         $this->attributes = $attributes;
+    }
+
+    /**
+     * @return Property[]
+     */
+    public function getVariantConfiguration()
+    {
+        return $this->variantConfiguration;
+    }
+
+    /**
+     * @param Property[] $variantConfiguration
+     */
+    public function setVariantConfiguration(array $variantConfiguration = [])
+    {
+        $this->variantConfiguration = $variantConfiguration;
     }
 }

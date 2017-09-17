@@ -5,7 +5,7 @@ namespace ShopwareAdapter\RequestGenerator\Product\ConfiguratorSet;
 use PlentyConnector\Connector\TransferObject\Product\Product;
 
 /**
- * Interface PaymentRequestGeneratorInterface
+ * Interface ConfiguratorSetRequestGeneratorInterface
  */
 interface ConfiguratorSetRequestGeneratorInterface
 {

@@ -2,9 +2,11 @@
 
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Language;
 
-use PlentyConnector\Connector\ServiceBus\Query\Language\FetchAllLanguagesQuery;
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
+use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentymarketsAdapter\Helper\LanguageHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Language\LanguageResponseParserInterface;
@@ -43,8 +45,10 @@ class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchAllLanguagesQuery &&
-            $query->getAdapterName() === PlentymarketsAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === PlentymarketsAdapter::NAME &&
+            $query->getObjectType() === Language::TYPE &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**
@@ -52,10 +56,16 @@ class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $languages = array_map(function ($language) {
-            return $this->responseParser->parse($language);
-        }, $this->languageHelper->getLanguages());
+        $elements = $this->languageHelper->getLanguages();
 
-        return array_filter($languages);
+        foreach ($elements as $element) {
+            $result = $this->responseParser->parse($element);
+
+            if (null === $result) {
+                continue;
+            }
+
+            yield $result;
+        }
     }
 }

@@ -4,7 +4,6 @@ namespace PlentyConnector\Connector\Logger;
 
 use Exception;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
-use PlentyConnector\Connector\ServiceBus\Event\EventInterface;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use Psr\Log\LoggerInterface;
@@ -107,10 +106,6 @@ class ClassNameFormatter implements ClassNameFormatterInterface
             return 'Query';
         }
 
-        if ($command instanceof EventInterface) {
-            return 'Query';
-        }
-
         return 'Undefined';
     }
 
@@ -131,14 +126,11 @@ class ClassNameFormatter implements ClassNameFormatterInterface
      */
     private function getPayload($command)
     {
-        if (!($command instanceof CommandInterface)
-            && !($command instanceof QueryInterface)
-            && !($command instanceof EventInterface)
-        ) {
+        if (!($command instanceof CommandInterface) && !($command instanceof QueryInterface)) {
             return [];
         }
 
-        $payload = $command->getPayload();
+        $payload = $command->toArray();
 
         return $this->preparePayload($payload);
     }

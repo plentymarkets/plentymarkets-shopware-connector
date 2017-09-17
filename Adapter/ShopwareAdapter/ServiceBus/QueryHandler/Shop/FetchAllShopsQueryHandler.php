@@ -3,11 +3,13 @@
 namespace ShopwareAdapter\ServiceBus\QueryHandler\Shop;
 
 use Doctrine\ORM\EntityManagerInterface;
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
-use PlentyConnector\Connector\ServiceBus\Query\Shop\FetchAllShopsQuery;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
+use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use Shopware\Models\Dispatch\Repository;
-use Shopware\Models\Shop\Shop;
+use Shopware\Models\Shop\Shop as ShopModel;
 use ShopwareAdapter\ResponseParser\Shop\ShopResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
@@ -36,7 +38,7 @@ class FetchAllShopsQueryHandler implements QueryHandlerInterface
         EntityManagerInterface $entityManager,
         ShopResponseParserInterface $responseParser
     ) {
-        $this->repository = $entityManager->getRepository(Shop::class);
+        $this->repository = $entityManager->getRepository(ShopModel::class);
         $this->responseParser = $responseParser;
     }
 
@@ -45,8 +47,10 @@ class FetchAllShopsQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchAllShopsQuery &&
-            $query->getAdapterName() === ShopwareAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === ShopwareAdapter::NAME &&
+            $query->getObjectType() === Shop::TYPE &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**
@@ -54,12 +58,16 @@ class FetchAllShopsQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $objectQuery = $this->repository->getListQuery(['active' => true], ['id' => 'ASC']);
+        $elements = $this->repository->getListQuery(['active' => true], ['id' => 'ASC'])->getArrayResult();
 
-        $shops = array_map(function ($shop) {
-            return $this->responseParser->parse($shop);
-        }, $objectQuery->getArrayResult());
+        foreach ($elements as $element) {
+            $result = $this->responseParser->parse($element);
 
-        return array_filter($shops);
+            if (null === $result) {
+                continue;
+            }
+
+            yield $result;
+        }
     }
 }

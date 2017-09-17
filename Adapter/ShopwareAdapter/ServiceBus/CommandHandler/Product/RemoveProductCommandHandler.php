@@ -2,16 +2,17 @@
 
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Product;
 
+use Exception;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
-use PlentyConnector\Connector\ServiceBus\Command\Product\RemoveProductCommand;
-use PlentyConnector\Connector\ServiceBus\Command\RemoveCommandInterface;
+use PlentyConnector\Connector\ServiceBus\Command\TransferObjectCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Psr\Log\LoggerInterface;
-use Shopware\Components\Api\Exception\NotFoundException;
-use Shopware\Components\Api\Resource\Article as ArticleResource;
+use Shopware\Components\Api\Manager;
+use Shopware\Components\Api\Resource\Article;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -19,11 +20,6 @@ use ShopwareAdapter\ShopwareAdapter;
  */
 class RemoveProductCommandHandler implements CommandHandlerInterface
 {
-    /**
-     * @var ArticleResource
-     */
-    private $resource;
-
     /**
      * @var IdentityServiceInterface
      */
@@ -37,16 +33,13 @@ class RemoveProductCommandHandler implements CommandHandlerInterface
     /**
      * RemoveProductCommandHandler constructor.
      *
-     * @param ArticleResource          $resource
      * @param IdentityServiceInterface $identityService
      * @param LoggerInterface          $logger
      */
     public function __construct(
-        ArticleResource $resource,
         IdentityServiceInterface $identityService,
         LoggerInterface $logger
     ) {
-        $this->resource = $resource;
         $this->identityService = $identityService;
         $this->logger = $logger;
     }
@@ -56,19 +49,20 @@ class RemoveProductCommandHandler implements CommandHandlerInterface
      */
     public function supports(CommandInterface $command)
     {
-        return $command instanceof RemoveProductCommand &&
-            $command->getAdapterName() === ShopwareAdapter::NAME;
+        return $command instanceof TransferObjectCommand &&
+            $command->getAdapterName() === ShopwareAdapter::NAME &&
+            $command->getObjectType() === Product::TYPE &&
+            $command->getCommandType() === CommandType::REMOVE;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @param TransferObjectCommand $command
      */
     public function handle(CommandInterface $command)
     {
-        /**
-         * @var RemoveCommandInterface $command
-         */
-        $identifier = $command->getObjectIdentifier();
+        $identifier = $command->getPayload();
 
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => (string) $identifier,
@@ -83,8 +77,9 @@ class RemoveProductCommandHandler implements CommandHandlerInterface
         }
 
         try {
-            $this->resource->delete($identity->getAdapterIdentifier());
-        } catch (NotFoundException $exception) {
+            $resource = $this->getArticleResource();
+            $resource->delete($identity->getAdapterIdentifier());
+        } catch (Exception $exception) {
             $this->logger->notice('identity removed but the object was not found', ['command' => $command]);
         }
 
@@ -97,5 +92,15 @@ class RemoveProductCommandHandler implements CommandHandlerInterface
         });
 
         return true;
+    }
+
+    /**
+     * @return Article
+     */
+    private function getArticleResource()
+    {
+        Shopware()->Container()->reset('models');
+
+        return Manager::getResource('Article');
     }
 }

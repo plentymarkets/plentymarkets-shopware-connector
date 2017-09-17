@@ -3,14 +3,15 @@
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Category;
 
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\ServiceBus\Command\Category\RemoveCategoryCommand;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
-use PlentyConnector\Connector\ServiceBus\Command\RemoveCommandInterface;
+use PlentyConnector\Connector\ServiceBus\Command\TransferObjectCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\TransferObject\Category\Category;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Psr\Log\LoggerInterface;
 use Shopware\Components\Api\Exception\NotFoundException;
+use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Category as CategoryResource;
 use ShopwareAdapter\ShopwareAdapter;
 
@@ -19,11 +20,6 @@ use ShopwareAdapter\ShopwareAdapter;
  */
 class RemoveCategoryCommandHandler implements CommandHandlerInterface
 {
-    /**
-     * @var CategoryResource
-     */
-    private $resource;
-
     /**
      * @var IdentityServiceInterface
      */
@@ -37,16 +33,13 @@ class RemoveCategoryCommandHandler implements CommandHandlerInterface
     /**
      * RemoveCategoryCommandHandler constructor.
      *
-     * @param CategoryResource         $resource
      * @param IdentityServiceInterface $identityService
      * @param LoggerInterface          $logger
      */
     public function __construct(
-        CategoryResource $resource,
         IdentityServiceInterface $identityService,
         LoggerInterface $logger
     ) {
-        $this->resource = $resource;
         $this->identityService = $identityService;
         $this->logger = $logger;
     }
@@ -56,19 +49,20 @@ class RemoveCategoryCommandHandler implements CommandHandlerInterface
      */
     public function supports(CommandInterface $command)
     {
-        return $command instanceof RemoveCategoryCommand &&
-            $command->getAdapterName() === ShopwareAdapter::NAME;
+        return $command instanceof TransferObjectCommand &&
+            $command->getAdapterName() === ShopwareAdapter::NAME &&
+            $command->getObjectType() === Category::TYPE &&
+            $command->getCommandType() === CommandType::REMOVE;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @param TransferObjectCommand $command
      */
     public function handle(CommandInterface $command)
     {
-        /**
-         * @var RemoveCommandInterface $command
-         */
-        $identifier = $command->getObjectIdentifier();
+        $identifier = $command->getPayload();
 
         $identities = $this->identityService->findBy([
             'objectIdentifier' => (string) $identifier,
@@ -83,8 +77,10 @@ class RemoveCategoryCommandHandler implements CommandHandlerInterface
         }
 
         array_walk($identities, function (Identity $identity) use ($command) {
+            $resource = $this->getCategoryResource();
+
             try {
-                $this->resource->delete($identity->getAdapterIdentifier());
+                $resource->delete($identity->getAdapterIdentifier());
             } catch (NotFoundException $exception) {
                 $this->logger->notice('identity removed but the object was not found', ['command' => $command]);
             }
@@ -93,5 +89,16 @@ class RemoveCategoryCommandHandler implements CommandHandlerInterface
         });
 
         return true;
+    }
+
+    /**
+     * @return CategoryResource
+     */
+    private function getCategoryResource()
+    {
+        // without this reset the entitymanager sometimes the album is not found correctly.
+        Shopware()->Container()->reset('models');
+
+        return Manager::getResource('Category');
     }
 }

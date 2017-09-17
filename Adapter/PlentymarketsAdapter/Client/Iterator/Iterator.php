@@ -3,13 +3,15 @@
 namespace PlentymarketsAdapter\Client\Iterator;
 
 use Assert\Assertion;
+use Closure;
+use Countable;
 use Iterator as BaseIterator;
 use PlentymarketsAdapter\Client\Client;
 
 /**
  * Class Iterator
  */
-class Iterator implements BaseIterator
+class Iterator implements BaseIterator, Countable
 {
     /**
      * @var Client
@@ -34,7 +36,7 @@ class Iterator implements BaseIterator
     /**
      * @var array
      */
-    private $page = [];
+    private $data = [];
 
     /**
      * @var array
@@ -42,24 +44,36 @@ class Iterator implements BaseIterator
     private $criteria;
 
     /**
-     * @var
+     * @var string
      */
     private $path;
 
     /**
+     * @var Closure
+     */
+    private $prepareFunction;
+
+    /**
+     * @var bool
+     */
+    private $isLastPage = false;
+
+    /**
      * ResourceIterator constructor.
      *
-     * @param string $path
-     * @param Client $client
-     * @param array  $criteria
+     * @param string       $path
+     * @param Client       $client
+     * @param array        $criteria
+     * @param null|Closure $prepareFunction
      */
-    public function __construct($path, Client $client, array $criteria = [])
+    public function __construct($path, Client $client, array $criteria = [], Closure $prepareFunction = null)
     {
         Assertion::string($path);
 
         $this->client = $client;
         $this->criteria = $criteria;
         $this->path = $path;
+        $this->prepareFunction = $prepareFunction;
     }
 
     /**
@@ -67,7 +81,11 @@ class Iterator implements BaseIterator
      */
     public function current()
     {
-        return $this->page[$this->index];
+        $element = $this->data[$this->index];
+
+        unset($this->data[$this->index]);
+
+        return $element;
     }
 
     /**
@@ -77,7 +95,7 @@ class Iterator implements BaseIterator
     {
         ++$this->index;
 
-        if (!$this->valid()) {
+        if (!$this->isLastPage && !$this->valid()) {
             $this->offset += $this->limit;
 
             $this->loadPage($this->criteria, $this->limit, $this->offset);
@@ -89,7 +107,7 @@ class Iterator implements BaseIterator
      */
     public function valid()
     {
-        return array_key_exists($this->index, $this->page);
+        return array_key_exists($this->index, $this->data);
     }
 
     /**
@@ -105,10 +123,18 @@ class Iterator implements BaseIterator
      */
     public function rewind()
     {
-        $this->loadPage($this->criteria, $this->limit, 0);
+        $this->loadPage($this->criteria, $this->limit);
 
         $this->offset = 0;
         $this->index = 0;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function count()
+    {
+        return $this->client->getTotal($this->path, $this->criteria);
     }
 
     /**
@@ -120,8 +146,16 @@ class Iterator implements BaseIterator
     {
         $result = $this->client->request('GET', $this->path, $criteria, $limit, $offset);
 
+        if (null !== $this->prepareFunction) {
+            $result = call_user_func($this->prepareFunction, $result);
+        }
+
+        if (count($result) !== $this->limit) {
+            $this->isLastPage = true;
+        }
+
         foreach ($result as $key => $item) {
-            $this->page[$this->index + $key] = $item;
+            $this->data[$this->index + $key] = $item;
         }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace PlentymarketsAdapter\ResponseParser\Media;
 
+use Exception;
 use PlentyConnector\Connector\TransferObject\Media\Media;
 
 /**
@@ -12,7 +13,9 @@ interface MediaResponseParserInterface
     /**
      * @param array $entry
      *
-     * @return null|Media
+     * @throws Exception
+     *
+     * @return Media
      */
     public function parse(array $entry);
 }

@@ -3,6 +3,7 @@
 namespace PlentyConnector\Console\OutputHandler;
 
 use Assert\Assertion;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -28,6 +29,16 @@ class OutputHandler implements OutputHandlerInterface
     private $style;
 
     /**
+     * @var int
+     */
+    private $verbosity;
+
+    /**
+     * @var ProgressBar
+     */
+    private $progressBar;
+
+    /**
      * @param InputInterface  $input
      * @param OutputInterface $output
      */
@@ -36,6 +47,7 @@ class OutputHandler implements OutputHandlerInterface
         $this->output = $output;
         $this->input = $input;
 
+        $this->verbosity = $output->getVerbosity();
         $this->style = new SymfonyStyle($input, $output);
     }
 
@@ -44,41 +56,51 @@ class OutputHandler implements OutputHandlerInterface
      */
     public function startProgressBar($count)
     {
-        if (null === $this->output) {
+        if (!$this->isEnabled()) {
             return;
         }
 
         Assertion::integer($count);
-        Assertion::greaterThan($count, 0);
 
-        $this->style->newLine();
-        $this->style->progressStart($count);
+        $this->progressBar = $this->style->createProgressBar($count);
+        $this->progressBar->setFormat('debug');
+        $this->progressBar->start();
     }
 
     public function advanceProgressBar()
     {
-        if (null === $this->output) {
+        if (!$this->isEnabled()) {
             return;
         }
 
-        $this->style->progressAdvance();
+        if (null === $this->progressBar) {
+            return;
+        }
+
+        $this->progressBar->advance();
     }
 
     public function finishProgressBar()
     {
-        if (null === $this->output) {
+        if (!$this->isEnabled()) {
             return;
         }
 
-        $this->style->progressFinish();
+        if (null === $this->progressBar) {
+            return;
+        }
+
+        $this->progressBar->finish();
+        $this->progressBar = null;
+        $this->style->newLine(2);
     }
 
     /**
      * @param string $messages
      */
-    public function writeLine($messages)
+    public function writeLine($messages = '')
     {
-        if (null === $this->output) {
+        if (!$this->isEnabled()) {
             return;
         }
 
@@ -93,10 +115,26 @@ class OutputHandler implements OutputHandlerInterface
      */
     public function createTable(array $headers, array $rows)
     {
-        if (null === $this->output) {
+        if (!$this->isEnabled()) {
             return;
         }
 
         $this->style->table($headers, $rows);
+    }
+
+    /**
+     * @return bool
+     */
+    private function isEnabled()
+    {
+        if (null === $this->output) {
+            return false;
+        }
+
+        if ($this->verbosity > OutputInterface::VERBOSITY_NORMAL) {
+            return false;
+        }
+
+        return true;
     }
 }

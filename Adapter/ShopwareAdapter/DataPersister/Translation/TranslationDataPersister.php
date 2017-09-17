@@ -85,9 +85,9 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
             $translatedProduct = $this->translationHelper->translate($languageIdentifier, $product);
 
             $languageIdentity = $this->identityService->findOneBy([
-                'adapterName' => ShopwareAdapter::NAME,
-                'objectType' => Language::TYPE,
                 'objectIdentifier' => $languageIdentifier,
+                'objectType' => Language::TYPE,
+                'adapterName' => ShopwareAdapter::NAME,
             ]);
 
             if (null === $languageIdentity) {
@@ -146,9 +146,9 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
             $translatedPropertyValue = $this->translationHelper->translate($languageIdentifier, $value);
 
             $languageIdentity = $this->identityService->findOneBy([
-                'adapterName' => ShopwareAdapter::NAME,
-                'objectType' => Language::TYPE,
                 'objectIdentifier' => $languageIdentifier,
+                'objectType' => Language::TYPE,
+                'adapterName' => ShopwareAdapter::NAME,
             ]);
 
             if (null === $languageIdentity) {
@@ -186,9 +186,9 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
             $translatedProperty = $this->translationHelper->translate($languageIdentifier, $property);
 
             $languageIdentity = $this->identityService->findOneBy([
-                'adapterName' => ShopwareAdapter::NAME,
-                'objectType' => Language::TYPE,
                 'objectIdentifier' => $languageIdentifier,
+                'objectType' => Language::TYPE,
+                'adapterName' => ShopwareAdapter::NAME,
             ]);
 
             if (null === $languageIdentity) {

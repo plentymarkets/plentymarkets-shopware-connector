@@ -38,8 +38,8 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
      * OrderItemRequestGenerator constructor.
      *
      * @param IdentityServiceInterface $identityService
-     * @param ClientInterface $client
-     * @param ConfigServiceInterface $config
+     * @param ClientInterface          $client
+     * @param ConfigServiceInterface   $config
      */
     public function __construct(
         IdentityServiceInterface $identityService,
@@ -104,18 +104,12 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
         $itemParams['typeId'] = $typeId;
         $itemParams['quantity'] = $orderItem->getQuantity();
 
-        if (null !== $shippingProfileIdentity) {
-            $itemParams['shippingProfileId'] = $shippingProfileIdentity->getAdapterIdentifier();
-        }
-
         if (!empty($orderItem->getNumber())) {
             $itemParams['itemVariationId'] = $this->getVariationIdentifier($orderItem);
-        } else {
-            $itemParams['itemVariationId'] = 0;
         }
 
-        if ($orderItem->getType() === OrderItem::TYPE_PRODUCT && null === $orderItem->getNumber()) {
-            $itemParams['typeId'] = 9;
+        if ($typeId === 1 && empty($itemParams['itemVariationId'])) {
+            $itemParams['typeId'] = 9; // TYPE_UNASSIGEND_VARIATION;
         }
 
         if (null !== $orderItem->getVatRateIdentifier()) {
@@ -147,10 +141,12 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
             $itemParams['properties'] = [
                 [
                     'typeId' => 2,
-                    'value' => $shippingProfileIdentity->getAdapterIdentifier(),
+                    'value' => (string) $shippingProfileIdentity->getAdapterIdentifier(),
                 ],
             ];
         }
+
+        $itemParams['referrerId'] = $this->config->get('order_origin', 1);
 
         $itemParams['orderProperties'] = [];
 

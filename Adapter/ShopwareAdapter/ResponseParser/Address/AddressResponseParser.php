@@ -7,7 +7,7 @@ use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Country\Country;
 use PlentyConnector\Connector\TransferObject\Order\Address\Address;
 use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
-use PlentymarketsAdapter\ResponseParser\GetAttributeTrait;
+use ShopwareAdapter\ResponseParser\GetAttributeTrait;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -66,8 +66,11 @@ class AddressResponseParser implements AddressResponseParserInterface
             'city' => $entry['city'],
             'countryIdentifier' => $countryIdentitiy->getObjectIdentifier(),
             'vatId' => !empty($entry['vatId']) ? $entry['vatId'] : null,
-            'attributes' => $this->getAttributes($entry['attribute']),
         ];
+
+        if (!empty($entry['attribute'])) {
+            $params['attributes'] = $this->getAttributes($entry['attribute']);
+        }
 
         if (!empty($entry['department'])) {
             $params['department'] = $entry['department'];

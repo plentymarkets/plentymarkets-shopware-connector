@@ -4,6 +4,8 @@ namespace PlentyConnector;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
+use PlentyConnector\Connector\BacklogService\Model\Backlog;
 use PlentyConnector\Connector\ConfigService\Model\Config;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\IdentityService\Model\Identity;
@@ -13,7 +15,6 @@ use PlentyConnector\DependencyInjection\CompilerPass\CleanupDefinitionCompilerPa
 use PlentyConnector\DependencyInjection\CompilerPass\CommandGeneratorCompilerPass;
 use PlentyConnector\DependencyInjection\CompilerPass\CommandHandlerCompilerPass;
 use PlentyConnector\DependencyInjection\CompilerPass\ConnectorDefinitionCompilerPass;
-use PlentyConnector\DependencyInjection\CompilerPass\EventHandlerCompilerPass;
 use PlentyConnector\DependencyInjection\CompilerPass\MappingDefinitionCompilerPass;
 use PlentyConnector\DependencyInjection\CompilerPass\QueryGeneratorCompilerPass;
 use PlentyConnector\DependencyInjection\CompilerPass\QueryHandlerCompilerPass;
@@ -48,6 +49,7 @@ class PlentyConnector extends Plugin
     const CRONJOB_SYNCHRONIZE = 'Synchronize';
     const CRONJOB_SYNCHRONIZE_ORDERS = 'SynchronizeOrders';
     const CRONJOB_CLEANUP = 'Cleanup';
+    const CRONJOB_BACKLOG = 'ProcessBacklog';
 
     /**
      * List of all permissions
@@ -63,14 +65,15 @@ class PlentyConnector extends Plugin
     public static $models = [
         Config::class,
         Identity::class,
+        Backlog::class,
     ];
 
     /**
      * List of all cronjobs
      */
     public static $cronjobs = [
-        self::CRONJOB_SYNCHRONIZE => 300,
-        self::CRONJOB_SYNCHRONIZE_ORDERS => 300,
+        self::CRONJOB_SYNCHRONIZE => 60,
+        self::CRONJOB_BACKLOG => 60,
         self::CRONJOB_CLEANUP => 86400,
     ];
 
@@ -100,7 +103,6 @@ class PlentyConnector extends Plugin
         $container->addCompilerPass(new CommandGeneratorCompilerPass());
         $container->addCompilerPass(new CommandHandlerCompilerPass());
         $container->addCompilerPass(new ConnectorDefinitionCompilerPass());
-        $container->addCompilerPass(new EventHandlerCompilerPass());
         $container->addCompilerPass(new MappingDefinitionCompilerPass());
         $container->addCompilerPass(new QueryGeneratorCompilerPass());
         $container->addCompilerPass(new QueryHandlerCompilerPass());
@@ -399,7 +401,7 @@ class PlentyConnector extends Plugin
                 $query = 'DROP TABLE IF EXISTS ?';
 
                 $connection->query($query, [$table]);
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 // fail silently
             }
         }

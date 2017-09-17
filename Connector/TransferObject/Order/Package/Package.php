@@ -30,9 +30,7 @@ class Package extends AbstractValueObject
      */
     public function __construct()
     {
-        $timezone = new \DateTimeZone('UTC');
-
-        $this->shippingTime = new DateTimeImmutable('now', $timezone);
+        $this->shippingTime = new DateTimeImmutable('now');
     }
 
     /**

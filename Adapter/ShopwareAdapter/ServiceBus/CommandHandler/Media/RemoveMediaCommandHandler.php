@@ -4,13 +4,14 @@ namespace ShopwareAdapter\ServiceBus\CommandHandler\Media;
 
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
-use PlentyConnector\Connector\ServiceBus\Command\Media\RemoveMediaCommand;
-use PlentyConnector\Connector\ServiceBus\Command\RemoveCommandInterface;
+use PlentyConnector\Connector\ServiceBus\Command\TransferObjectCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\TransferObject\Media\Media;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Psr\Log\LoggerInterface;
 use Shopware\Components\Api\Exception\NotFoundException;
+use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Media as MediaResource;
 use ShopwareAdapter\ShopwareAdapter;
 
@@ -19,11 +20,6 @@ use ShopwareAdapter\ShopwareAdapter;
  */
 class RemoveMediaCommandHandler implements CommandHandlerInterface
 {
-    /**
-     * @var MediaResource
-     */
-    private $resource;
-
     /**
      * @var IdentityServiceInterface
      */
@@ -37,16 +33,13 @@ class RemoveMediaCommandHandler implements CommandHandlerInterface
     /**
      * RemoveMediaCommandHandler constructor.
      *
-     * @param MediaResource            $resource
      * @param IdentityServiceInterface $identityService
      * @param LoggerInterface          $logger
      */
     public function __construct(
-        MediaResource $resource,
         IdentityServiceInterface $identityService,
         LoggerInterface $logger
     ) {
-        $this->resource = $resource;
         $this->identityService = $identityService;
         $this->logger = $logger;
     }
@@ -56,19 +49,20 @@ class RemoveMediaCommandHandler implements CommandHandlerInterface
      */
     public function supports(CommandInterface $command)
     {
-        return $command instanceof RemoveMediaCommand &&
-            $command->getAdapterName() === ShopwareAdapter::NAME;
+        return $command instanceof TransferObjectCommand &&
+            $command->getAdapterName() === ShopwareAdapter::NAME &&
+            $command->getObjectType() === Media::TYPE &&
+            $command->getCommandType() === CommandType::REMOVE;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @param TransferObjectCommand $command
      */
     public function handle(CommandInterface $command)
     {
-        /**
-         * @var RemoveCommandInterface $command
-         */
-        $identifier = $command->getObjectIdentifier();
+        $identifier = $command->getPayload();
 
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => (string) $identifier,
@@ -83,7 +77,8 @@ class RemoveMediaCommandHandler implements CommandHandlerInterface
         }
 
         try {
-            $this->resource->delete($identity->getAdapterIdentifier());
+            $resource = $this->getMediaResource();
+            $resource->delete($identity->getAdapterIdentifier());
         } catch (NotFoundException $exception) {
             $this->logger->notice('identity removed but the object was not found', ['command' => $command]);
         }
@@ -97,5 +92,16 @@ class RemoveMediaCommandHandler implements CommandHandlerInterface
         });
 
         return true;
+    }
+
+    /**
+     * @return MediaResource
+     */
+    private function getMediaResource()
+    {
+        // without this reset the entitymanager sometimes the album is not found correctly.
+        Shopware()->Container()->reset('models');
+
+        return Manager::getResource('Media');
     }
 }

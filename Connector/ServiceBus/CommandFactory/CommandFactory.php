@@ -3,9 +3,8 @@
 namespace PlentyConnector\Connector\ServiceBus\CommandFactory;
 
 use Assert\Assertion;
+use PlentyConnector\Connector\ServiceBus\Command\TransferObjectCommand;
 use PlentyConnector\Connector\ServiceBus\CommandFactory\Exception\MissingCommandException;
-use PlentyConnector\Connector\ServiceBus\CommandFactory\Exception\MissingCommandGeneratorException;
-use PlentyConnector\Connector\ServiceBus\CommandGenerator\CommandGeneratorInterface;
 use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
@@ -14,19 +13,6 @@ use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
  */
 class CommandFactory implements CommandFactoryInterface
 {
-    /**
-     * @var CommandGeneratorInterface[]
-     */
-    private $generators = [];
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addGenerator(CommandGeneratorInterface $generator)
-    {
-        $this->generators[] = $generator;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -44,28 +30,15 @@ class CommandFactory implements CommandFactoryInterface
             Assertion::uuid($payload);
         }
 
-        /**
-         * @var CommandGeneratorInterface[] $generators
-         */
-        $generators = array_filter($this->generators, function (CommandGeneratorInterface $generator) use ($objectType) {
-            return $generator->supports($objectType);
-        });
-
-        $generator = array_shift($generators);
-
-        if (null === $generator) {
-            throw MissingCommandGeneratorException::fromObjectData($objectType, $commandType);
-        }
-
         $command = null;
 
         switch ($commandType) {
             case CommandType::HANDLE:
-                $command = $generator->generateHandleCommand($adapterName, $payload);
+                $command = new TransferObjectCommand($adapterName, $objectType, $commandType, $payload);
 
                 break;
             case CommandType::REMOVE:
-                $command = $generator->generateRemoveCommand($adapterName, $payload);
+                $command = new TransferObjectCommand($adapterName, $objectType, $commandType, $payload);
 
                 break;
         }

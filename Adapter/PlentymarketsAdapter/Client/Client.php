@@ -3,10 +3,10 @@
 namespace PlentymarketsAdapter\Client;
 
 use Assert\Assertion;
-use GuzzleHttp\Client as GuzzleClient;
+use Closure;
+use Exception;
 use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\ServerException;
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentymarketsAdapter\Client\Exception\InvalidCredentialsException;
@@ -43,11 +43,11 @@ class Client implements ClientInterface
     /**
      * Client constructor.
      *
-     * @param GuzzleClient           $connection
+     * @param GuzzleClientInterface  $connection
      * @param ConfigServiceInterface $config
      */
     public function __construct(
-        GuzzleClient $connection,
+        GuzzleClientInterface $connection,
         ConfigServiceInterface $config
     ) {
         $this->connection = $connection;
@@ -57,9 +57,9 @@ class Client implements ClientInterface
     /**
      * {@inheritdoc}
      */
-    public function getIterator($path, array $criteria = [])
+    public function getIterator($path, array $criteria = [], Closure $prepareFunction = null)
     {
-        return new Iterator($path, $this, $criteria);
+        return new Iterator($path, $this, $criteria, $prepareFunction);
     }
 
     /**
@@ -85,8 +85,6 @@ class Client implements ClientInterface
     }
 
     /**
-     * TODO: simplify login handling.
-     *
      * {@inheritdoc}
      */
     public function request($method, $path, array $params = [], $limit = null, $offset = null, array $options = [])
@@ -116,10 +114,14 @@ class Client implements ClientInterface
         try {
             $response = $this->connection->send($request);
 
+            if (null === $response) {
+                throw InvalidResponseException::fromParams($method, $path, $options);
+            }
+
             $body = $response->getBody();
 
             if (null === $body) {
-                // throw
+                throw InvalidResponseException::fromParams($method, $path, $options);
             }
 
             $result = json_decode($body->getContents(), true);
@@ -143,7 +145,7 @@ class Client implements ClientInterface
 
             return $result;
         } catch (ClientException $exception) {
-            if ($exception->hasResponse() && $exception->getResponse()->getStatusCode() === 401 && !$this->isLoginRequired($path) && $this->accessToken != null) {
+            if ($this->accessToken !== null && !$this->isLoginRequired($path) && null !== $exception->getResponse() && $exception->getResponse()->getStatusCode() === 401) {
                 // retry with fresh accessToken
                 $this->accessToken = null;
 
@@ -160,18 +162,8 @@ class Client implements ClientInterface
             }
 
             throw $exception;
-        } catch (InvalidResponseException $exception) {
-            if ($retries < 3) {
-                sleep(10);
-
-                ++$retries;
-
-                return $this->request($method, $path, $params, $limit, $offset);
-            }
-
-            throw $exception;
         } catch (ServerException $exception) {
-            if ($exception->hasResponse() && $exception->getResponse()->getStatusCode() === 503 && $retries < 3) {
+            if ($retries < 3 && $exception->hasResponse() && $exception->getResponse()->getStatusCode() === 503) {
                 sleep(10);
 
                 ++$retries;
@@ -189,12 +181,16 @@ class Client implements ClientInterface
             }
 
             throw $exception;
-        } catch (ConnectException $exception) {
-            sleep(10);
+        } catch (Exception $exception) {
+            if ($retries < 3) {
+                sleep(10);
 
-            ++$retries;
+                ++$retries;
 
-            return $this->request($method, $path, $params, $limit, $offset);
+                return $this->request($method, $path, $params, $limit, $offset);
+            }
+
+            throw $exception;
         }
     }
 
@@ -222,7 +218,7 @@ class Client implements ClientInterface
     private function login()
     {
         if (null === $this->config->get('rest_username') || null === $this->config->get('rest_password')) {
-            throw new InvalidCredentialsException();
+            throw new InvalidCredentialsException('invalid creddentials');
         }
 
         $login = $this->request('POST', 'login', [
@@ -266,13 +262,13 @@ class Client implements ClientInterface
      */
     private function getPage($limit, $offset)
     {
-        $page = 1;
+        $page = 1.0;
 
         if (null !== $offset) {
-            $page = (int) (floor($offset / $limit) + 1);
+            $page = (floor($offset / $limit) + 1);
         }
 
-        return $page;
+        return (int) $page;
     }
 
     /**
@@ -296,7 +292,7 @@ class Client implements ClientInterface
     }
 
     /**
-     * @param $url
+     * @param string $url
      *
      * @throws InvalidCredentialsException
      *
@@ -305,7 +301,7 @@ class Client implements ClientInterface
     private function getBaseUri($url)
     {
         if (null === $url) {
-            throw new InvalidCredentialsException();
+            throw new InvalidCredentialsException('invalid creddentials');
         }
 
         $parts = parse_url($url);

@@ -3,19 +3,33 @@
 namespace PlentyConnector\Connector\TransferObject\Product\Variation;
 
 use DateTimeImmutable;
+use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 use PlentyConnector\Connector\TransferObject\AttributableInterface;
 use PlentyConnector\Connector\TransferObject\Product\Barcode\Barcode;
 use PlentyConnector\Connector\TransferObject\Product\Image\Image;
 use PlentyConnector\Connector\TransferObject\Product\Price\Price;
 use PlentyConnector\Connector\TransferObject\Product\Property\Property;
-use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
 /**
  * Class Variation.
  */
-class Variation extends AbstractValueObject implements AttributableInterface
+class Variation extends AbstractTransferObject implements AttributableInterface
 {
+    const TYPE = 'Variation';
+
+    /**
+     * Identifier of the object.
+     *
+     * @var string
+     */
+    private $identifier = '';
+
+    /**
+     * @var string
+     */
+    private $productIdentifier = '';
+
     /**
      * @var bool
      */
@@ -27,14 +41,14 @@ class Variation extends AbstractValueObject implements AttributableInterface
     private $isMain = false;
 
     /**
-     * @var float
+     * @var string
      */
-    private $stock = 0;
+    private $number = '';
 
     /**
      * @var string
      */
-    private $number = '';
+    private $name = '';
 
     /**
      * @var int
@@ -137,6 +151,46 @@ class Variation extends AbstractValueObject implements AttributableInterface
     private $attributes = [];
 
     /**
+     * {@inheritdoc}
+     */
+    public function getType()
+    {
+        return self::TYPE;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdentifier()
+    {
+        return $this->identifier;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProductIdentifier()
+    {
+        return $this->productIdentifier;
+    }
+
+    /**
+     * @param string $productIdentifier
+     */
+    public function setProductIdentifier($productIdentifier)
+    {
+        $this->productIdentifier = $productIdentifier;
+    }
+
+    /**
+     * @param string $identifier
+     */
+    public function setIdentifier($identifier)
+    {
+        $this->identifier = $identifier;
+    }
+
+    /**
      * @return bool
      */
     public function getActive()
@@ -169,22 +223,6 @@ class Variation extends AbstractValueObject implements AttributableInterface
     }
 
     /**
-     * @return float
-     */
-    public function getStock()
-    {
-        return $this->stock;
-    }
-
-    /**
-     * @param float $stock
-     */
-    public function setStock($stock)
-    {
-        $this->stock = $stock;
-    }
-
-    /**
      * @return string
      */
     public function getNumber()
@@ -198,6 +236,22 @@ class Variation extends AbstractValueObject implements AttributableInterface
     public function setNumber($number)
     {
         $this->number = $number;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
     }
 
     /**

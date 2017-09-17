@@ -131,10 +131,15 @@ class MappingService implements MappingServiceInterface
             $objects = [];
         }
 
-        $objects = array_filter($objects, function (TransferObjectInterface $object) use ($definition) {
-            return $object->getType() === $definition->getObjectType();
-        });
+        $result = [];
+        foreach ($objects as $object) {
+            if ($object->getType() !== $definition->getObjectType()) {
+                continue;
+            }
 
-        return $objects;
+            $result[] = $object;
+        }
+
+        return $result;
     }
 }

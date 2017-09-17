@@ -2,13 +2,17 @@
 
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Manufacturer;
 
-use PlentyConnector\Connector\ServiceBus\Query\Manufacturer\FetchChangedManufacturersQuery;
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
+use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
+use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Manufacturer\ManufacturerResponseParserInterface;
 use PlentymarketsAdapter\ServiceBus\ChangedDateTimeTrait;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class FetchChangedManufacturersQueryHandler.
@@ -25,20 +29,36 @@ class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
     /**
      * @var ManufacturerResponseParserInterface
      */
-    private $manufacturerResponseParser;
+    private $responseParser;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var OutputHandlerInterface
+     */
+    private $outputHandler;
 
     /**
      * FetchChangedManufacturersQueryHandler constructor.
      *
      * @param ClientInterface                     $client
-     * @param ManufacturerResponseParserInterface $manufacturerResponseParser
+     * @param ManufacturerResponseParserInterface $responseParser
+     * @param LoggerInterface                     $logger
+     * @param OutputHandlerInterface              $outputHandler
      */
     public function __construct(
         ClientInterface $client,
-        ManufacturerResponseParserInterface $manufacturerResponseParser
+        ManufacturerResponseParserInterface $responseParser,
+        LoggerInterface $logger,
+        OutputHandlerInterface $outputHandler
     ) {
         $this->client = $client;
-        $this->manufacturerResponseParser = $manufacturerResponseParser;
+        $this->responseParser = $responseParser;
+        $this->logger = $logger;
+        $this->outputHandler = $outputHandler;
     }
 
     /**
@@ -46,8 +66,10 @@ class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchChangedManufacturersQuery &&
-            $query->getAdapterName() === PlentymarketsAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === PlentymarketsAdapter::NAME &&
+            $query->getObjectType() === Manufacturer::TYPE &&
+            $query->getQueryType() === QueryType::CHANGED;
     }
 
     /**
@@ -56,30 +78,37 @@ class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
     public function handle(QueryInterface $query)
     {
         $lastCangedTime = $this->getChangedDateTime();
-
         $currentDateTime = $this->getCurrentDateTime();
-        $oldTimestamp = $lastCangedTime->format(DATE_W3C);
 
-        $criteria = [
-            'updatedAt' => $oldTimestamp,
-        ];
+        $elements = $this->client->getIterator('items/manufacturers', [
+            'updatedAt' => $lastCangedTime->format(DATE_W3C),
+        ]);
 
-        $manufacturers = $this->client->getIterator('items/manufacturers', $criteria);
+        $this->outputHandler->startProgressBar(count($elements));
 
-        foreach ($manufacturers as $element) {
-            $result = $this->manufacturerResponseParser->parse($element);
+        foreach ($elements as $element) {
+            try {
+                $result = $this->responseParser->parse($element);
+            } catch (Exception $exception) {
+                $this->logger->error($exception->getMessage());
+
+                $result = null;
+            }
 
             if (empty($result)) {
-                continue;
+                $result = [];
             }
 
-            $parsedElements = array_filter($result);
+            $result = array_filter($result);
 
-            foreach ($parsedElements as $parsedElement) {
+            foreach ($result as $parsedElement) {
                 yield $parsedElement;
             }
+
+            $this->outputHandler->advanceProgressBar();
         }
 
+        $this->outputHandler->finishProgressBar();
         $this->setChangedDateTime($currentDateTime);
     }
 }

@@ -3,12 +3,12 @@
 namespace PlentyConnector\Components\Bundle\PlentymarketsAdapter\QueryHandler;
 
 use PlentyConnector\Components\Bundle\PlentymarketsAdapter\ResponseParser\BundleResponseParserInterface;
-use PlentyConnector\Components\Bundle\Query\FetchBundleQuery;
 use PlentyConnector\Components\Bundle\TransferObject\Bundle;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\ServiceBus\Query\FetchQueryInterface;
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Item;
 use PlentymarketsAdapter\ReadApi\Item\Variation;
@@ -63,20 +63,21 @@ class FetchBundleQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchBundleQuery &&
-            $query->getAdapterName() === PlentymarketsAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === PlentymarketsAdapter::NAME &&
+            $query->getObjectType() === Bundle::TYPE &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @param FetchTransferObjectQuery $query
      */
     public function handle(QueryInterface $query)
     {
-        /**
-         * @var FetchQueryInterface $query
-         */
         $identity = $this->identityService->findOneBy([
-            'objectIdentifier' => $query->getIdentifier(),
+            'objectIdentifier' => $query->getObjectIdentifier(),
             'objectType' => Bundle::TYPE,
             'adapterName' => PlentymarketsAdapter::NAME,
         ]);

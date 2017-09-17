@@ -4,12 +4,13 @@ namespace ShopwareAdapter\ServiceBus\CommandHandler\Media;
 
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
-use PlentyConnector\Connector\ServiceBus\Command\HandleCommandInterface;
-use PlentyConnector\Connector\ServiceBus\Command\Media\HandleMediaCommand;
+use PlentyConnector\Connector\ServiceBus\Command\TransferObjectCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\TransferObject\Media\Media;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Shopware\Components\Api\Exception\NotFoundException as MediaNotFoundException;
+use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Media as MediaResource;
 use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
 use ShopwareAdapter\DataProvider\Media\MediaDataProviderInterface;
@@ -22,11 +23,6 @@ use ShopwareAdapter\ShopwareAdapter;
  */
 class HandleMediaCommandHandler implements CommandHandlerInterface
 {
-    /**
-     * @var MediaResource
-     */
-    private $resource;
-
     /**
      * @var IdentityServiceInterface
      */
@@ -55,7 +51,6 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
     /**
      * HandleMediaCommandHandler constructor.
      *
-     * @param MediaResource                   $resource
      * @param IdentityServiceInterface        $identityService
      * @param MediaRequestGeneratorInterface  $mediaRequestGenerator
      * @param MediaDataProviderInterface      $mediaDataProvider
@@ -63,14 +58,12 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
      * @param AttributeDataPersisterInterface $attributePersister
      */
     public function __construct(
-        MediaResource $resource,
         IdentityServiceInterface $identityService,
         MediaRequestGeneratorInterface $mediaRequestGenerator,
         MediaDataProviderInterface $mediaDataProvider,
         AttributeHelper $attributeHelper,
         AttributeDataPersisterInterface $attributePersister
     ) {
-        $this->resource = $resource;
         $this->identityService = $identityService;
         $this->mediaRequestGenerator = $mediaRequestGenerator;
         $this->mediaDataProvider = $mediaDataProvider;
@@ -83,20 +76,23 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
      */
     public function supports(CommandInterface $command)
     {
-        return $command instanceof HandleMediaCommand &&
-            $command->getAdapterName() === ShopwareAdapter::NAME;
+        return $command instanceof TransferObjectCommand &&
+            $command->getAdapterName() === ShopwareAdapter::NAME &&
+            $command->getObjectType() === Media::TYPE &&
+            $command->getCommandType() === CommandType::HANDLE;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @param TransferObjectCommand $command
      */
     public function handle(CommandInterface $command)
     {
         /**
-         * @var HandleCommandInterface $command
-         * @var Media                  $media
+         * @var Media $media
          */
-        $media = $command->getTransferObject();
+        $media = $command->getPayload();
 
         if ($media->getHash() === $this->mediaDataProvider->getMediaHashForMediaObject($media)) {
             return true;
@@ -113,9 +109,11 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
             'adapterName' => ShopwareAdapter::NAME,
         ]);
 
+        $resource = $this->getMediaResource();
+
         if (null !== $identity) {
             try {
-                $this->resource->delete($identity->getAdapterIdentifier());
+                $resource->delete($identity->getAdapterIdentifier());
             } catch (MediaNotFoundException $exception) {
                 // fail silently
             }
@@ -133,7 +131,7 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
         }
 
         $params = $this->mediaRequestGenerator->generate($media);
-        $mediaModel = $this->resource->create($params);
+        $mediaModel = $resource->create($params);
 
         $this->identityService->create(
             $media->getIdentifier(),
@@ -148,5 +146,16 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
         );
 
         return true;
+    }
+
+    /**
+     * @return MediaResource
+     */
+    private function getMediaResource()
+    {
+        // without this reset the entitymanager sometimes the album is not found correctly.
+        Shopware()->Container()->reset('models');
+
+        return Manager::getResource('Media');
     }
 }

@@ -2,9 +2,13 @@
 
 namespace ShopwareAdapter\ServiceBus\QueryHandler\Order;
 
-use PlentyConnector\Connector\ServiceBus\Query\Order\FetchAllOrdersQuery;
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
+use PlentyConnector\Connector\TransferObject\Order\Order;
+use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
+use Psr\Log\LoggerInterface;
 use ShopwareAdapter\DataProvider\Order\OrderDataProviderInterface;
 use ShopwareAdapter\ResponseParser\Order\OrderResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
@@ -25,15 +29,33 @@ class FetchAllOrdersQueryHandler implements QueryHandlerInterface
     private $dataProvider;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var OutputHandlerInterface
+     */
+    private $outputHandler;
+
+    /**
      * FetchAllOrdersQueryHandler constructor.
      *
      * @param OrderResponseParserInterface $responseParser
      * @param OrderDataProviderInterface   $dataProvider
+     * @param LoggerInterface              $logger
+     * @param OutputHandlerInterface       $outputHandler
      */
-    public function __construct(OrderResponseParserInterface $responseParser, OrderDataProviderInterface $dataProvider)
-    {
+    public function __construct(
+        OrderResponseParserInterface $responseParser,
+        OrderDataProviderInterface $dataProvider,
+        LoggerInterface $logger,
+        OutputHandlerInterface $outputHandler
+    ) {
         $this->responseParser = $responseParser;
         $this->dataProvider = $dataProvider;
+        $this->logger = $logger;
+        $this->outputHandler = $outputHandler;
     }
 
     /**
@@ -41,8 +63,10 @@ class FetchAllOrdersQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchAllOrdersQuery &&
-            $query->getAdapterName() === ShopwareAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === ShopwareAdapter::NAME &&
+            $query->getObjectType() === Order::TYPE &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**
@@ -50,22 +74,34 @@ class FetchAllOrdersQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $orders = $this->dataProvider->getOpenOrders();
+        $elements = $this->dataProvider->getOpenOrders();
 
-        foreach ($orders as $order) {
-            $order = $this->dataProvider->getOrderDetails($order['id']);
+        $this->outputHandler->startProgressBar(count($elements));
 
-            $result = $this->responseParser->parse($order);
+        foreach ($elements as $element) {
+            $element = $this->dataProvider->getOrderDetails($element['id']);
+
+            try {
+                $result = $this->responseParser->parse($element);
+            } catch (Exception $exception) {
+                $this->logger->error($exception->getMessage());
+
+                $result = null;
+            }
 
             if (empty($result)) {
-                continue;
+                $result = [];
             }
 
-            $parsedElements = array_filter($result);
+            $result = array_filter($result);
 
-            foreach ($parsedElements as $parsedElement) {
+            foreach ($result as $parsedElement) {
                 yield $parsedElement;
             }
+
+            $this->outputHandler->advanceProgressBar();
         }
+
+        $this->outputHandler->finishProgressBar();
     }
 }

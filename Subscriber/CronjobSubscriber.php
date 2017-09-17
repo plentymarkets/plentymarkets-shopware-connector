@@ -5,10 +5,11 @@ namespace PlentyConnector\Subscriber;
 use Enlight\Event\SubscriberInterface;
 use Enlight_Components_Cron_EventArgs as Args;
 use Exception;
+use PlentyConnector\Connector\BacklogService\BacklogServiceInterface;
 use PlentyConnector\Connector\CleanupService\CleanupServiceInterface;
 use PlentyConnector\Connector\ConnectorInterface;
 use PlentyConnector\Connector\ServiceBus\QueryType;
-use PlentyConnector\Connector\TransferObject\Order\Order;
+use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use PlentyConnector\PlentyConnector;
 use Psr\Log\LoggerInterface;
 
@@ -28,6 +29,16 @@ class CronjobSubscriber implements SubscriberInterface
     private $cleanupService;
 
     /**
+     * @var BacklogServiceInterface
+     */
+    private $backlogService;
+
+    /**
+     * @var ServiceBusInterface
+     */
+    private $serviceBus;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -37,15 +48,21 @@ class CronjobSubscriber implements SubscriberInterface
      *
      * @param ConnectorInterface      $connector
      * @param CleanupServiceInterface $cleanupService
+     * @param BacklogServiceInterface $backlogService
+     * @param ServiceBusInterface     $serviceBus
      * @param LoggerInterface         $logger
      */
     public function __construct(
         ConnectorInterface $connector,
         CleanupServiceInterface $cleanupService,
+        BacklogServiceInterface $backlogService,
+        ServiceBusInterface $serviceBus,
         LoggerInterface $logger
     ) {
         $this->connector = $connector;
         $this->cleanupService = $cleanupService;
+        $this->backlogService = $backlogService;
+        $this->serviceBus = $serviceBus;
         $this->logger = $logger;
     }
 
@@ -56,8 +73,8 @@ class CronjobSubscriber implements SubscriberInterface
     {
         return [
             'Shopware_CronJob_PlentyConnector' . PlentyConnector::CRONJOB_SYNCHRONIZE => 'onRunCronjobSynchronize',
-            'Shopware_CronJob_PlentyConnector' . PlentyConnector::CRONJOB_SYNCHRONIZE_ORDERS => 'onRunCronjobSynchronizeOrders',
             'Shopware_CronJob_PlentyConnector' . PlentyConnector::CRONJOB_CLEANUP => 'onRunCronjobCleanup',
+            'Shopware_CronJob_PlentyConnector' . PlentyConnector::CRONJOB_BACKLOG => 'onRunCronjobProcessBacklog',
         ];
     }
 
@@ -84,10 +101,15 @@ class CronjobSubscriber implements SubscriberInterface
      *
      * @return bool
      */
-    public function onRunCronjobSynchronizeOrders(Args $args)
+    public function onRunCronjobProcessBacklog(Args $args)
     {
         try {
-            $this->connector->handle(QueryType::CHANGED, Order::TYPE);
+            $counter = 0;
+            while ($counter < 200 && $command = $this->backlogService->dequeue()) {
+                ++$counter;
+
+                $this->serviceBus->handle($command);
+            }
         } catch (Exception $exception) {
             $this->logger->error($exception->getMessage());
         }

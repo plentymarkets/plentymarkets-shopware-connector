@@ -3,7 +3,7 @@
 namespace ShopwareAdapter\DataProvider\CustomerGroup;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Shopware\Components\Model\ModelRepository;
+use Doctrine\ORM\EntityRepository;
 use Shopware\Models\Customer\Group;
 
 /**
@@ -12,7 +12,7 @@ use Shopware\Models\Customer\Group;
 class CustomerGroupDataProvider implements CustomerGroupDataProviderInterface
 {
     /**
-     * @var ModelRepository
+     * @var EntityRepository
      */
     private $repository;
 

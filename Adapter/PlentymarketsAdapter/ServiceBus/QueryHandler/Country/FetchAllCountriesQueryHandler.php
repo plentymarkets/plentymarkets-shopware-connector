@@ -2,9 +2,11 @@
 
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Country;
 
-use PlentyConnector\Connector\ServiceBus\Query\Country\FetchAllCountriesQuery;
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
+use PlentyConnector\Connector\TransferObject\Country\Country;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Country\CountryResponseParserInterface;
@@ -43,8 +45,10 @@ class FetchAllCountriesQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchAllCountriesQuery &&
-            $query->getAdapterName() === PlentymarketsAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === PlentymarketsAdapter::NAME &&
+            $query->getObjectType() === Country::TYPE &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**
@@ -52,10 +56,16 @@ class FetchAllCountriesQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $countries = array_map(function ($country) {
-            return $this->responseParser->parse($country);
-        }, $this->client->request('GET', 'orders/shipping/countries'));
+        $elements = $this->client->request('GET', 'orders/shipping/countries');
 
-        return array_filter($countries);
+        foreach ($elements as $element) {
+            $result = $this->responseParser->parse($element);
+
+            if (null === $result) {
+                continue;
+            }
+
+            yield $result;
+        }
     }
 }

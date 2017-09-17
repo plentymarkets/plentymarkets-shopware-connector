@@ -1,0 +1,408 @@
+<?php
+
+namespace ShopwareAdapter\RequestGenerator\Product;
+
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
+use InvalidArgumentException;
+use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
+use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
+use PlentyConnector\Connector\TransferObject\Category\Category;
+use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
+use PlentyConnector\Connector\TransferObject\Media\Media;
+use PlentyConnector\Connector\TransferObject\Product\LinkedProduct\LinkedProduct;
+use PlentyConnector\Connector\TransferObject\Product\Product;
+use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
+use PlentyConnector\Connector\TransferObject\Shop\Shop;
+use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
+use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
+use Psr\Log\LoggerInterface;
+use Shopware\Models\Article\Article;
+use Shopware\Models\Category\Category as CategoryModel;
+use Shopware\Models\Property\Group as GroupModel;
+use Shopware\Models\Shop\Shop as ShopModel;
+use ShopwareAdapter\RequestGenerator\Product\ConfiguratorSet\ConfiguratorSetRequestGeneratorInterface;
+use ShopwareAdapter\ShopwareAdapter;
+
+/**
+ * Class ProductRequestGenerator
+ */
+class ProductRequestGenerator implements ProductRequestGeneratorInterface
+{
+    /**
+     * @var IdentityServiceInterface
+     */
+    private $identityService;
+
+    /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+
+    /**
+     * @var ConfiguratorSetRequestGeneratorInterface
+     */
+    private $configuratorSetRequestGenerator;
+
+    /**
+     * @var ConfigServiceInterface
+     */
+    private $config;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * ProductRequestGenerator constructor.
+     *
+     * @param IdentityServiceInterface                 $identityService
+     * @param EntityManagerInterface                   $entityManager
+     * @param ConfiguratorSetRequestGeneratorInterface $configuratorSetRequestGenerator
+     * @param ConfigServiceInterface                   $config
+     * @param LoggerInterface                          $logger
+     */
+    public function __construct(
+        IdentityServiceInterface $identityService,
+        EntityManagerInterface $entityManager,
+        ConfiguratorSetRequestGeneratorInterface $configuratorSetRequestGenerator,
+        ConfigServiceInterface $config,
+        LoggerInterface $logger
+    ) {
+        $this->identityService = $identityService;
+        $this->entityManager = $entityManager;
+        $this->configuratorSetRequestGenerator = $configuratorSetRequestGenerator;
+        $this->config = $config;
+        $this->logger = $logger;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function generate(Product $product)
+    {
+        $this->addShippingProfilesAsAttributes($product);
+
+        $shopIdentifiers = array_filter($product->getShopIdentifiers(), function ($identifier) {
+            $shopIdentity = $this->identityService->findOneBy([
+                'objectIdentifier' => $identifier,
+                'objectType' => Shop::TYPE,
+                'adapterName' => ShopwareAdapter::NAME,
+            ]);
+
+            return null !== $shopIdentity;
+        });
+
+        if (empty($shopIdentifiers)) {
+            return false;
+        }
+
+        $vatIdentity = $this->identityService->findOneBy([
+            'objectIdentifier' => $product->getVatRateIdentifier(),
+            'objectType' => VatRate::TYPE,
+            'adapterName' => ShopwareAdapter::NAME,
+        ]);
+
+        if (null === $vatIdentity) {
+            throw new InvalidArgumentException('vat rate not mapped - ' . $product->getVatRateIdentifier());
+        }
+
+        $manufacturerIdentity = $this->identityService->findOneBy([
+            'adapterName' => ShopwareAdapter::NAME,
+            'objectType' => Manufacturer::TYPE,
+            'objectIdentifier' => $product->getManufacturerIdentifier(),
+        ]);
+
+        if (null === $manufacturerIdentity) {
+            throw new InvalidArgumentException('manufacturer is missing - ' . $product->getManufacturerIdentifier());
+        }
+
+        $propertyData = $this->getPropertyData($product);
+
+        $params = [
+            'filterGroupId' => $propertyData['filterGroupId'],
+            'propertyValues' => $propertyData['propertyValues'],
+            'mainDetail' => [
+                'number' => $product->getNumber(),
+            ],
+            'availableFrom' => $product->getAvailableFrom(),
+            'availableTo' => $product->getAvailableTo(),
+            'name' => $product->getName(),
+            'description' => $product->getMetaDescription(),
+            'descriptionLong' => !empty($product->getLongDescription()) ? $product->getLongDescription() : $product->getDescription(),
+            'categories' => $this->getCategories($product),
+            'seoCategories' => $this->getSeoCategories($product),
+            'taxId' => $vatIdentity->getAdapterIdentifier(),
+            'lastStock' => $product->hasStockLimitation(),
+            'notification' => (int) $this->config->get('item_notification', 0),
+            'active' => $product->isActive(),
+            'images' => $this->getImages($product),
+            'similar' => $this->getLinkedProducts($product),
+            'related' => $this->getLinkedProducts($product, LinkedProduct::TYPE_ACCESSORY),
+            'metaTitle' => $product->getMetaTitle(),
+            'keywords' => $product->getMetaKeywords(),
+            'supplierId' => $manufacturerIdentity->getAdapterIdentifier(),
+            '__options_categories' => ['replace' => true],
+            '__options_seoCategories' => ['replace' => true],
+            '__options_similar' => ['replace' => true],
+            '__options_related' => ['replace' => true],
+            '__options_prices' => ['replace' => true],
+            '__options_images' => ['replace' => true],
+        ];
+
+        $configuratorSet = $this->configuratorSetRequestGenerator->generate($product);
+        if (!empty($configuratorSet)) {
+            $params['configuratorSet'] = $configuratorSet;
+        }
+
+        return $params;
+    }
+
+    /**
+     * @param Product $product
+     */
+    private function addShippingProfilesAsAttributes(Product $product)
+    {
+        foreach ($product->getShippingProfileIdentifiers() as $identifier) {
+            $profileIdentity = $this->identityService->findOneBy([
+                'objectIdentifier' => $identifier,
+                'objectType' => ShippingProfile::TYPE,
+                'adapterName' => ShopwareAdapter::NAME,
+            ]);
+
+            if (null === $profileIdentity) {
+                continue;
+            }
+
+            $attributes = $product->getAttributes();
+
+            $existingAttributes = array_filter($attributes, function (Attribute $attribute) use ($profileIdentity) {
+                return $attribute->getKey() === 'shippingProfile' . $profileIdentity->getAdapterIdentifier();
+            });
+
+            if (!empty($existingAttributes)) {
+                $this->logger->notice('shippingProfile is not a allowed attribute key');
+
+                continue;
+            }
+
+            $attributes[] = Attribute::fromArray([
+                'key' => 'shippingProfile' . $profileIdentity->getAdapterIdentifier(),
+                'value' => $profileIdentity->getObjectIdentifier(),
+            ]);
+
+            $product->setAttributes($attributes);
+        }
+    }
+
+    /**
+     * @param Product $product
+     * @param int     $type
+     *
+     * @return array
+     */
+    private function getLinkedProducts(Product $product, $type = LinkedProduct::TYPE_SIMILAR)
+    {
+        $result = [];
+
+        foreach ($product->getLinkedProducts() as $linkedProduct) {
+            if ($linkedProduct->getType() === $type) {
+                $productIdentity = $this->identityService->findOneBy([
+                    'objectIdentifier' => $linkedProduct->getProductIdentifier(),
+                    'objectType' => Product::TYPE,
+                    'adapterName' => ShopwareAdapter::NAME,
+                ]);
+
+                if (null === $productIdentity) {
+                    continue;
+                }
+
+                /**
+                 * @var EntityRepository $productRepository
+                 */
+                $productRepository = $this->entityManager->getRepository(Article::class);
+
+                $productExists = $productRepository->find($productIdentity->getAdapterIdentifier());
+
+                if (!$productExists) {
+                    continue;
+                }
+
+                $result[$productIdentity->getAdapterIdentifier()] = [
+                    'id' => $productIdentity->getAdapterIdentifier(),
+                    'number' => null,
+                    'position' => $linkedProduct->getPosition(),
+                    'cross' => false,
+                ];
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param Product $product
+     *
+     * @return array
+     */
+    private function getPropertyData(Product $product)
+    {
+        /**
+         * @var EntityRepository $groupRepository
+         */
+        $groupRepository = $this->entityManager->getRepository(GroupModel::class);
+
+        /**
+         * @var Group $propertyGroup
+         */
+        $propertyGroup = $groupRepository->findOneBy(['name' => 'PlentyConnector']);
+
+        if (null === $propertyGroup) {
+            $propertyGroup = new GroupModel();
+            $propertyGroup->setName('PlentyConnector');
+            $propertyGroup->setPosition(1);
+            $propertyGroup->setComparable(true);
+            $propertyGroup->setSortMode(true);
+
+            $this->entityManager->persist($propertyGroup);
+            $this->entityManager->flush();
+            $this->entityManager->clear();
+        }
+
+        $result = [];
+        $result['filterGroupId'] = $propertyGroup->getId();
+        $result['propertyValues'] = [];
+
+        foreach ($product->getProperties() as $property) {
+            foreach ($property->getValues() as $value) {
+                $result['propertyValues'][] = [
+                    'option' => [
+                        'name' => $property->getName(),
+                    ],
+                    'value' => $value->getValue(),
+                ];
+            }
+        }
+
+        return $result;
+    }
+
+    private function getImages(Product $product)
+    {
+        $images = [];
+        foreach ($product->getImages() as $image) {
+            $shopIdentifiers = array_filter($image->getShopIdentifiers(), function ($shop) {
+                $identity = $this->identityService->findOneBy([
+                    'objectIdentifier' => (string) $shop,
+                    'objectType' => Shop::TYPE,
+                    'adapterName' => ShopwareAdapter::NAME,
+                ]);
+
+                return $identity !== null;
+            });
+
+            if (empty($shopIdentifiers)) {
+                continue;
+            }
+
+            $imageIdentity = $this->identityService->findOneBy([
+                'objectIdentifier' => $image->getMediaIdentifier(),
+                'objectType' => Media::TYPE,
+                'adapterName' => ShopwareAdapter::NAME,
+            ]);
+
+            if (null === $imageIdentity) {
+                $this->logger->notice('image is missing - ' . $image->getMediaIdentifier());
+
+                return false;
+            }
+
+            $images[] = [
+                'mediaId' => $imageIdentity->getAdapterIdentifier(),
+                'position' => $image->getPosition(),
+            ];
+        }
+
+        return $images;
+    }
+
+    private function getCategories(Product $product)
+    {
+        /**
+         * @var EntityRepository $categoryRepository
+         */
+        $categoryRepository = $this->entityManager->getRepository(CategoryModel::class);
+
+        $categories = [];
+        foreach ($product->getCategoryIdentifiers() as $categoryIdentifier) {
+            $categoryIdentities = $this->identityService->findBy([
+                'objectIdentifier' => $categoryIdentifier,
+                'objectType' => Category::TYPE,
+                'adapterName' => ShopwareAdapter::NAME,
+            ]);
+
+            foreach ($categoryIdentities as $categoryIdentity) {
+                $category = $categoryRepository->find($categoryIdentity->getAdapterIdentifier());
+
+                if (null === $category) {
+                    continue;
+                }
+
+                $categories[] = [
+                    'id' => $categoryIdentity->getAdapterIdentifier(),
+                ];
+            }
+        }
+
+        return $categories;
+    }
+
+    private function getSeoCategories(Product $product)
+    {
+        /**
+         * @var EntityRepository $categoryRepository
+         */
+        $categoryRepository = $this->entityManager->getRepository(CategoryModel::class);
+
+        /**
+         * @var EntityRepository $shopRepository
+         */
+        $shopRepository = $this->entityManager->getRepository(ShopModel::class);
+
+        $seoCategories = [];
+        foreach ($product->getDefaultCategoryIdentifiers() as $categoryIdentifier) {
+            $categoryIdentities = $this->identityService->findBy([
+                'objectIdentifier' => $categoryIdentifier,
+                'objectType' => Category::TYPE,
+                'adapterName' => ShopwareAdapter::NAME,
+            ]);
+
+            foreach ($categoryIdentities as $categoryIdentity) {
+                $category = $categoryRepository->find($categoryIdentity->getAdapterIdentifier());
+
+                if (null === $category) {
+                    continue;
+                }
+
+                $parents = array_reverse(array_filter(explode('|', $category->getPath())));
+
+                /**
+                 * @var ShopModel[] $shops
+                 */
+                $shops = $shopRepository->findBy([
+                    'categoryId' => array_shift($parents),
+                ]);
+
+                foreach ($shops as $shop) {
+                    $seoCategories[] = [
+                        'categoryId' => $categoryIdentity->getAdapterIdentifier(),
+                        'shopId' => $shop->getId(),
+                    ];
+                }
+            }
+        }
+
+        return $seoCategories;
+    }
+}

@@ -1,7 +1,7 @@
 language: php
 
 php:
-  - 7.0
+  - 7.1
 
 sudo: false
 
@@ -12,11 +12,11 @@ services:
 
 env:
   matrix:
-    - SHOPWARE_VERSION="5.2"
+    - SHOPWARE_VERSION="5.3"
   global:
     - PLUGIN_NAME=PlentyConnector
-    - SHOPWARE_DIRECTORY=${HOME}/shopware
-    - PLUGIN_DIRECTORY=${SHOPWARE_DIRECTORY}/custom/plugins
+    - SHOPWARE_DIRECTORY="${HOME}/shopware"
+    - PLUGIN_DIRECTORY="${SHOPWARE_DIRECTORY}/custom/plugins"
 
 cache:
    directories:

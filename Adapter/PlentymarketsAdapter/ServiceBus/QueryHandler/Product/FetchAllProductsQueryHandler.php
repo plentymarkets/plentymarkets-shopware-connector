@@ -2,12 +2,16 @@
 
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Product;
 
-use PlentyConnector\Connector\ServiceBus\Query\Product\FetchAllProductsQuery;
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
+use PlentyConnector\Connector\TransferObject\Product\Product;
+use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Item;
 use PlentymarketsAdapter\ResponseParser\Product\ProductResponseParserInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class FetchAllProductsQueryHandler.
@@ -25,17 +29,33 @@ class FetchAllProductsQueryHandler implements QueryHandlerInterface
     private $responseParser;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var OutputHandlerInterface
+     */
+    private $outputHandler;
+
+    /**
      * FetchAllProductsQueryHandler constructor.
      *
      * @param Item                           $itemApi
      * @param ProductResponseParserInterface $responseParser
+     * @param LoggerInterface                $logger
+     * @param OutputHandlerInterface         $outputHandler
      */
     public function __construct(
         Item $itemApi,
-        ProductResponseParserInterface $responseParser
+        ProductResponseParserInterface $responseParser,
+        LoggerInterface $logger,
+        OutputHandlerInterface $outputHandler
     ) {
         $this->itemApi = $itemApi;
         $this->responseParser = $responseParser;
+        $this->logger = $logger;
+        $this->outputHandler = $outputHandler;
     }
 
     /**
@@ -43,8 +63,10 @@ class FetchAllProductsQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchAllProductsQuery &&
-            $query->getAdapterName() === PlentymarketsAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === PlentymarketsAdapter::NAME &&
+            $query->getObjectType() === Product::TYPE &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**
@@ -52,20 +74,32 @@ class FetchAllProductsQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $products = $this->itemApi->findAll();
+        $elements = $this->itemApi->findAll();
 
-        foreach ($products as $element) {
-            $result = $this->responseParser->parse($element);
+        $this->outputHandler->startProgressBar(count($elements));
+
+        foreach ($elements as $element) {
+            try {
+                $result = $this->responseParser->parse($element);
+            } catch (Exception $exception) {
+                $this->logger->error($exception->getMessage());
+
+                $result = null;
+            }
 
             if (empty($result)) {
-                continue;
+                $result = [];
             }
 
-            $parsedElements = array_filter($result);
+            $result = array_filter($result);
 
-            foreach ($parsedElements as $parsedElement) {
+            foreach ($result as $parsedElement) {
                 yield $parsedElement;
             }
+
+            $this->outputHandler->advanceProgressBar();
         }
+
+        $this->outputHandler->finishProgressBar();
     }
 }

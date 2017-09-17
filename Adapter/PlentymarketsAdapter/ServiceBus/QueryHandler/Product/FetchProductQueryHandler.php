@@ -3,10 +3,10 @@
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Product;
 
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\ServiceBus\Query\FetchQueryInterface;
-use PlentyConnector\Connector\ServiceBus\Query\Product\FetchProductQuery;
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Item;
@@ -54,20 +54,21 @@ class FetchProductQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchProductQuery &&
-            $query->getAdapterName() === PlentymarketsAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === PlentymarketsAdapter::NAME &&
+            $query->getObjectType() === Product::TYPE &&
+            $query->getQueryType() === QueryType::ONE;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @param FetchTransferObjectQuery $query
      */
     public function handle(QueryInterface $query)
     {
-        /**
-         * @var FetchQueryInterface $query
-         */
         $identity = $this->identityService->findOneBy([
-            'objectIdentifier' => $query->getIdentifier(),
+            'objectIdentifier' => $query->getObjectIdentifier(),
             'objectType' => Product::TYPE,
             'adapterName' => PlentymarketsAdapter::NAME,
         ]);

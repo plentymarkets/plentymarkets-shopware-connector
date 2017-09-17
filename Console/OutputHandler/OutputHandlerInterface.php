@@ -36,11 +36,11 @@ interface OutputHandlerInterface
     public function finishProgressBar();
 
     /**
-     * Write
+     * Write a new line
      *
      * @param string $messages
      */
-    public function writeLine($messages);
+    public function writeLine($messages = '');
 
     /**
      * @param array $headers

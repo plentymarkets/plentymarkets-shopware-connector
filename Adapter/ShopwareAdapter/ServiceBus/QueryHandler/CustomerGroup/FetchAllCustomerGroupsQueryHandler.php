@@ -3,11 +3,13 @@
 namespace ShopwareAdapter\ServiceBus\QueryHandler\CustomerGroup;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
-use PlentyConnector\Connector\ServiceBus\Query\CustomerGroup\FetchAllCustomerGroupsQuery;
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
-use Shopware\Components\Model\ModelRepository;
+use PlentyConnector\Connector\ServiceBus\QueryType;
+use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
 use Shopware\Models\Customer\Group;
 use ShopwareAdapter\ResponseParser\CustomerGroup\CustomerGroupResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
@@ -18,7 +20,7 @@ use ShopwareAdapter\ShopwareAdapter;
 class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
 {
     /**
-     * @var ModelRepository
+     * @var EntityRepository
      */
     private $repository;
 
@@ -46,8 +48,10 @@ class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchAllCustomerGroupsQuery &&
-            $query->getAdapterName() === ShopwareAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === ShopwareAdapter::NAME &&
+            $query->getObjectType() === CustomerGroup::TYPE &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**
@@ -55,13 +59,17 @@ class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $objectQuery = $this->createCustomerGroupsQuery();
+        $elements = $this->createCustomerGroupsQuery()->getArrayResult();
 
-        $customerGroups = array_map(function ($group) {
-            return $this->responseParser->parse($group);
-        }, $objectQuery->getArrayResult());
+        foreach ($elements as $element) {
+            $result = $this->responseParser->parse($element);
 
-        return array_filter($customerGroups);
+            if (null === $result) {
+                continue;
+            }
+
+            yield $result;
+        }
     }
 
     /**

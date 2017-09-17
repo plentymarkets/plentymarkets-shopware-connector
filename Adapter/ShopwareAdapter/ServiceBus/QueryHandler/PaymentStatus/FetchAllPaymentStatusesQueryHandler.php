@@ -3,11 +3,13 @@
 namespace ShopwareAdapter\ServiceBus\QueryHandler\PaymentStatus;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
-use PlentyConnector\Connector\ServiceBus\Query\PaymentStatus\FetchAllPaymentStatusesQuery;
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
-use Shopware\Components\Model\ModelRepository;
+use PlentyConnector\Connector\ServiceBus\QueryType;
+use PlentyConnector\Connector\TransferObject\PaymentStatus\PaymentStatus;
 use Shopware\Models\Order\Status;
 use ShopwareAdapter\ResponseParser\PaymentStatus\PaymentStatusResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
@@ -18,7 +20,7 @@ use ShopwareAdapter\ShopwareAdapter;
 class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
 {
     /**
-     * @var ModelRepository
+     * @var EntityRepository
      */
     private $repository;
 
@@ -46,8 +48,10 @@ class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchAllPaymentStatusesQuery &&
-            $query->getAdapterName() === ShopwareAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === ShopwareAdapter::NAME &&
+            $query->getObjectType() === PaymentStatus::TYPE &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**
@@ -55,13 +59,17 @@ class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $objectQuery = $this->createPaymentStatusQuery();
+        $elements = $this->createPaymentStatusQuery()->getArrayResult();
 
-        $paymentStatuses = array_map(function ($status) {
-            return $this->responseParser->parse($status);
-        }, $objectQuery->getArrayResult());
+        foreach ($elements as $element) {
+            $result = $this->responseParser->parse($element);
 
-        return array_filter($paymentStatuses);
+            if (null === $result) {
+                continue;
+            }
+
+            yield $result;
+        }
     }
 
     /**

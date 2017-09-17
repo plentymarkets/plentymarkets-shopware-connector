@@ -3,10 +3,10 @@
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\MediaCategory;
 
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\ServiceBus\Query\FetchQueryInterface;
-use PlentyConnector\Connector\ServiceBus\Query\Manufacturer\FetchManufacturerQuery;
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
 use PlentymarketsAdapter\Helper\MediaCategoryHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
@@ -54,8 +54,10 @@ class FetchMediaCategoryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchManufacturerQuery &&
-            $query->getAdapterName() === PlentymarketsAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === PlentymarketsAdapter::NAME &&
+            $query->getObjectType() === MediaCategory::TYPE &&
+            $query->getQueryType() === QueryType::ONE;
     }
 
     /**
@@ -64,12 +66,12 @@ class FetchMediaCategoryHandler implements QueryHandlerInterface
     public function handle(QueryInterface $query)
     {
         /**
-         * @var FetchQueryInterface $query
+         * @var FetchTransferObjectQuery $query
          */
         $result = [];
 
         $identity = $this->identityService->findOneBy([
-            'objectIdentifier' => $query->getIdentifier(),
+            'objectIdentifier' => $query->getObjectIdentifier(),
             'objectType' => MediaCategory::TYPE,
             'adapterName' => PlentymarketsAdapter::NAME,
         ]);

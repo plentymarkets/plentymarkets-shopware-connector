@@ -3,11 +3,13 @@
 namespace ShopwareAdapter\ServiceBus\QueryHandler\Language;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
-use PlentyConnector\Connector\ServiceBus\Query\Language\FetchAllLanguagesQuery;
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
-use Shopware\Components\Model\ModelRepository;
+use PlentyConnector\Connector\ServiceBus\QueryType;
+use PlentyConnector\Connector\TransferObject\Language\Language;
 use Shopware\Models\Shop\Locale;
 use ShopwareAdapter\ResponseParser\Language\LanguageResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
@@ -18,7 +20,7 @@ use ShopwareAdapter\ShopwareAdapter;
 class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
 {
     /**
-     * @var ModelRepository
+     * @var EntityRepository
      */
     private $repository;
 
@@ -46,8 +48,10 @@ class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchAllLanguagesQuery &&
-            $query->getAdapterName() === ShopwareAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === ShopwareAdapter::NAME &&
+            $query->getObjectType() === Language::TYPE &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**
@@ -55,13 +59,17 @@ class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $objectQuery = $this->createLocalesQuery();
+        $elements = $this->createLocalesQuery()->getArrayResult();
 
-        $languages = array_map(function ($language) {
-            return $this->responseParser->parse($language);
-        }, $objectQuery->getArrayResult());
+        foreach ($elements as $element) {
+            $result = $this->responseParser->parse($element);
 
-        return array_filter($languages);
+            if (null === $result) {
+                continue;
+            }
+
+            yield $result;
+        }
     }
 
     /**

@@ -4,11 +4,12 @@ namespace ShopwareAdapter\ServiceBus\QueryHandler\Payment;
 
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Query\FetchQueryInterface;
-use PlentyConnector\Connector\ServiceBus\Query\Payment\FetchPaymentQuery;
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\TransferObject\Payment\Payment;
-use Shopware\Components\Api\Resource\Order as OrderResource;
+use ShopwareAdapter\DataProvider\Order\OrderDataProviderInterface;
 use ShopwareAdapter\ResponseParser\Payment\PaymentResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
@@ -28,25 +29,25 @@ class FetchPaymentQueryHandler implements QueryHandlerInterface
     private $identityService;
 
     /**
-     * @var OrderResource
+     * @var OrderDataProviderInterface
      */
-    private $orderResource;
+    private $dataProvider;
 
     /**
      * FetchPaymentQueryHandler constructor.
      *
      * @param PaymentResponseParserInterface $responseParser
      * @param IdentityServiceInterface       $identityService
-     * @param OrderResource                  $orderResource
+     * @param OrderDataProviderInterface     $dataProvider
      */
     public function __construct(
         PaymentResponseParserInterface $responseParser,
         IdentityServiceInterface $identityService,
-        OrderResource $orderResource
+        OrderDataProviderInterface $dataProvider
     ) {
         $this->responseParser = $responseParser;
         $this->identityService = $identityService;
-        $this->orderResource = $orderResource;
+        $this->dataProvider = $dataProvider;
     }
 
     /**
@@ -54,12 +55,16 @@ class FetchPaymentQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchPaymentQuery &&
-            $query->getAdapterName() === ShopwareAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === ShopwareAdapter::NAME &&
+            $query->getObjectType() === Payment::TYPE &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @param FetchTransferObjectQuery $query
      */
     public function handle(QueryInterface $query)
     {
@@ -76,8 +81,7 @@ class FetchPaymentQueryHandler implements QueryHandlerInterface
             return [];
         }
 
-        $order = $this->orderResource->getOne($identity->getAdapterIdentifier());
-
+        $order = $this->dataProvider->getOrderDetails($identity->getAdapterIdentifier());
         $order = $this->responseParser->parse($order);
 
         return array_filter($order);

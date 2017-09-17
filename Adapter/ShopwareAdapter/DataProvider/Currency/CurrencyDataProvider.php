@@ -3,7 +3,7 @@
 namespace ShopwareAdapter\DataProvider\Currency;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Shopware\Components\Model\ModelRepository;
+use Doctrine\ORM\EntityRepository;
 use Shopware\Models\Shop\Currency;
 
 /**
@@ -34,7 +34,7 @@ class CurrencyDataProvider implements CurrencyDataProviderInterface
     public function getCurrencyIdentifierByCode($code)
     {
         /**
-         * @var ModelRepository $currencyRepository
+         * @var EntityRepository $currencyRepository
          */
         $currencyRepository = $this->entityManager->getRepository(Currency::class);
 

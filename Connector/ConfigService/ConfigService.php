@@ -45,7 +45,11 @@ class ConfigService implements ConfigServiceInterface
      */
     public function getAll()
     {
-        $containerParameters = $this->container->getParameter('shopware.plenty_connector');
+        $containerParameters = [];
+
+        if ($this->container->hasParameter('shopware.plenty_connector')) {
+            $containerParameters = $this->container->getParameter('shopware.plenty_connector');
+        }
 
         /**
          * @var Config[] $configElements
@@ -110,5 +114,6 @@ class ConfigService implements ConfigServiceInterface
 
         $this->entityManager->persist($element);
         $this->entityManager->flush($element);
+        $this->entityManager->clear();
     }
 }

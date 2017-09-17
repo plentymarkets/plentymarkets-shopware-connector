@@ -3,12 +3,14 @@
 namespace ShopwareAdapter\ServiceBus\QueryHandler\Unit;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
-use PlentyConnector\Connector\ServiceBus\Query\Unit\FetchAllUnitsQuery;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
-use Shopware\Components\Model\ModelRepository;
-use Shopware\Models\Article\Unit;
+use PlentyConnector\Connector\ServiceBus\QueryType;
+use PlentyConnector\Connector\TransferObject\Unit\Unit;
+use Shopware\Models\Article\Unit as UnitModel;
 use ShopwareAdapter\ResponseParser\Unit\UnitResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
@@ -18,7 +20,7 @@ use ShopwareAdapter\ShopwareAdapter;
 class FetchAllUnitsQueryHandler implements QueryHandlerInterface
 {
     /**
-     * @var ModelRepository
+     * @var EntityRepository
      */
     private $repository;
 
@@ -37,7 +39,7 @@ class FetchAllUnitsQueryHandler implements QueryHandlerInterface
         EntityManagerInterface $entityManager,
         UnitResponseParserInterface $responseParser
     ) {
-        $this->repository = $entityManager->getRepository(Unit::class);
+        $this->repository = $entityManager->getRepository(UnitModel::class);
         $this->responseParser = $responseParser;
     }
 
@@ -46,8 +48,10 @@ class FetchAllUnitsQueryHandler implements QueryHandlerInterface
      */
     public function supports(QueryInterface $query)
     {
-        return $query instanceof FetchAllUnitsQuery &&
-            $query->getAdapterName() === ShopwareAdapter::NAME;
+        return $query instanceof FetchTransferObjectQuery &&
+            $query->getAdapterName() === ShopwareAdapter::NAME &&
+            $query->getObjectType() === Unit::TYPE &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**
@@ -55,13 +59,17 @@ class FetchAllUnitsQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $objectQuery = $this->createUnitsQuery();
+        $elements = $this->createUnitsQuery()->getArrayResult();
 
-        $units = array_map(function ($unit) {
-            return $this->responseParser->parse($unit);
-        }, $objectQuery->getArrayResult());
+        foreach ($elements as $element) {
+            $result = $this->responseParser->parse($element);
 
-        return array_filter($units);
+            if (null === $result) {
+                continue;
+            }
+
+            yield $result;
+        }
     }
 
     /**

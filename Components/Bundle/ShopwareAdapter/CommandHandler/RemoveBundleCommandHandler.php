@@ -3,16 +3,18 @@
 namespace PlentyConnector\Components\Bundle\ShopwareAdapter\CommandHandler;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use PlentyConnector\Components\Bundle\Command\RemoveBundleCommand;
 use PlentyConnector\Components\Bundle\Helper\BundleHelper;
 use PlentyConnector\Components\Bundle\TransferObject\Bundle;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
+use PlentyConnector\Connector\ServiceBus\Command\TransferObjectCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Psr\Log\LoggerInterface;
 use Shopware\CustomModels\Bundle\Bundle as BundleModel;
-use Shopware\CustomModels\Bundle\Repository as BundleRepository;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -65,21 +67,23 @@ class RemoveBundleCommandHandler implements CommandHandlerInterface
      */
     public function supports(CommandInterface $command)
     {
-        return $command instanceof RemoveBundleCommand &&
-            $command->getAdapterName() === ShopwareAdapter::NAME;
+        return $command instanceof TransferObjectCommand &&
+            $command->getAdapterName() === ShopwareAdapter::NAME &&
+            $command->getObjectType() === Bundle::TYPE &&
+            $command->getCommandType() === CommandType::REMOVE;
     }
 
     /**
      * {@inheritdoc}
      *
-     * @throws \Exception
+     * @param TransferObjectCommand $command
      */
     public function handle(CommandInterface $command)
     {
         /**
          * @var RemoveBundleCommand $command
          */
-        $identifier = $command->getObjectIdentifier();
+        $identifier = $command->getPayload();
 
         $this->bundleHelper->registerBundleModels();
 
@@ -96,7 +100,7 @@ class RemoveBundleCommandHandler implements CommandHandlerInterface
         }
 
         /**
-         * @var BundleRepository $repository
+         * @var EntityRepository $repository
          */
         $repository = $this->entityManager->getRepository(BundleModel::class);
 
@@ -110,6 +114,7 @@ class RemoveBundleCommandHandler implements CommandHandlerInterface
 
         $this->entityManager->persist($bundleModel);
         $this->entityManager->flush();
+        $this->entityManager->clear();
 
         $identities = $this->identityService->findBy([
             'objectIdentifier' => $identifier,

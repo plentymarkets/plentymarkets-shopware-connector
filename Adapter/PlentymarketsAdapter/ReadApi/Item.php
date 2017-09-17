@@ -4,6 +4,7 @@ namespace PlentymarketsAdapter\ReadApi;
 
 use DateTimeImmutable;
 use PlentymarketsAdapter\Client\Client;
+use PlentymarketsAdapter\Client\Iterator\Iterator;
 use PlentymarketsAdapter\Helper\LanguageHelper;
 use PlentymarketsAdapter\ReadApi\Item\Variation;
 
@@ -46,35 +47,33 @@ class Item extends ApiAbstract
             'with' => 'itemProperties.valueTexts,itemCrossSelling',
         ]);
 
-        $this->addAdditionalData($result);
+        $result['variations'] = $this->itemsVariationsApi->findBy(['itemId' => $result['id']]);
 
         return $result;
     }
 
     /**
-     * @return \Generator
+     * @return Iterator
      */
     public function findAll()
     {
         $languageHelper = new LanguageHelper();
 
-        $result = $this->client->getIterator('items', [
+        return $this->client->getIterator('items', [
             'lang' => $languageHelper->getLanguagesQueryString(),
             'with' => 'itemProperties.valueTexts,itemCrossSelling',
-        ]);
+        ], function ($elements) {
+            $this->addAdditionalData($elements);
 
-        foreach ($result as $element) {
-            $this->addAdditionalData($element);
-
-            yield $element;
-        }
+            return $elements;
+        });
     }
 
     /**
      * @param $startTimestamp
      * @param $endTimestamp
      *
-     * @return \Generator
+     * @return Iterator
      */
     public function findChanged(DateTimeImmutable $startTimestamp, DateTimeImmutable $endTimestamp)
     {
@@ -83,24 +82,34 @@ class Item extends ApiAbstract
 
         $languageHelper = new LanguageHelper();
 
-        $result = $this->client->getIterator('items', [
+        return $this->client->getIterator('items', [
             'lang' => $languageHelper->getLanguagesQueryString(),
             'updatedBetween' => $start . ',' . $end,
             'with' => 'itemProperties.valueTexts,itemCrossSelling',
-        ]);
+        ], function ($elements) {
+            $this->addAdditionalData($elements);
 
-        foreach ($result as $element) {
-            $this->addAdditionalData($element);
-
-            yield $element;
-        }
+            return $elements;
+        });
     }
 
     /**
-     * @param array $element
+     * @param array $elements
      */
-    private function addAdditionalData(array &$element)
+    private function addAdditionalData(array &$elements)
     {
-        $element['variations'] = $this->itemsVariationsApi->findBy(['itemId' => $element['id']]);
+        if (empty($elements)) {
+            return;
+        }
+
+        $items = array_column($elements, 'id');
+
+        $variations = $this->itemsVariationsApi->findBy(['itemId' => implode(',', $items)]);
+
+        foreach ($elements as $key => $element) {
+            $elements[$key]['variations'] = array_filter($variations, function (array $variation) use ($element) {
+                return $element['id'] === $variation['itemId'];
+            });
+        }
     }
 }

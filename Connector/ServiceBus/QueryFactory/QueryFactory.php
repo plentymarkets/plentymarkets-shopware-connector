@@ -3,9 +3,8 @@
 namespace PlentyConnector\Connector\ServiceBus\QueryFactory;
 
 use Assert\Assertion;
+use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\QueryFactory\Exception\MissingQueryException;
-use PlentyConnector\Connector\ServiceBus\QueryFactory\Exception\MissingQueryGeneratorException;
-use PlentyConnector\Connector\ServiceBus\QueryGenerator\QueryGeneratorInterface;
 use PlentyConnector\Connector\ServiceBus\QueryType;
 
 /**
@@ -13,19 +12,6 @@ use PlentyConnector\Connector\ServiceBus\QueryType;
  */
 class QueryFactory implements QueryFactoryInterface
 {
-    /**
-     * @var QueryGeneratorInterface[]
-     */
-    private $generators = [];
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addGenerator(QueryGeneratorInterface $generator)
-    {
-        $this->generators[] = $generator;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -39,32 +25,19 @@ class QueryFactory implements QueryFactoryInterface
             Assertion::uuid($payload);
         }
 
-        /**
-         * @var QueryGeneratorInterface[] $generators
-         */
-        $generators = array_filter($this->generators, function (QueryGeneratorInterface $generator) use ($objectType) {
-            return $generator->supports($objectType);
-        });
-
-        $generator = array_shift($generators);
-
-        if (null === $generator) {
-            throw MissingQueryGeneratorException::fromObjectData($objectType, $queryType);
-        }
-
         $query = null;
 
         switch ($queryType) {
             case QueryType::ONE:
-                $query = $generator->generateFetchQuery($adapterName, $payload);
+                $query = new FetchTransferObjectQuery($adapterName, $objectType, $queryType, $payload);
 
                 break;
             case QueryType::CHANGED:
-                $query = $generator->generateFetchChangedQuery($adapterName);
+                $query = new FetchTransferObjectQuery($adapterName, $objectType, $queryType);
 
                 break;
             case QueryType::ALL:
-                $query = $generator->generateFetchAllQuery($adapterName);
+                $query = new FetchTransferObjectQuery($adapterName, $objectType, $queryType);
 
                 break;
         }

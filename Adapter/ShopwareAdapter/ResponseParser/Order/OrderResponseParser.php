@@ -18,13 +18,13 @@ use PlentyConnector\Connector\TransferObject\PaymentStatus\PaymentStatus;
 use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
-use PlentymarketsAdapter\ResponseParser\GetAttributeTrait;
 use Psr\Log\LoggerInterface;
 use Shopware\Models\Tax\Repository;
 use Shopware\Models\Tax\Tax;
 use ShopwareAdapter\DataProvider\Currency\CurrencyDataProviderInterface;
 use ShopwareAdapter\ResponseParser\Address\AddressResponseParserInterface;
 use ShopwareAdapter\ResponseParser\Customer\CustomerResponseParserInterface;
+use ShopwareAdapter\ResponseParser\GetAttributeTrait;
 use ShopwareAdapter\ResponseParser\OrderItem\Exception\UnsupportedVatRateException;
 use ShopwareAdapter\ResponseParser\OrderItem\OrderItemResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
@@ -137,7 +137,20 @@ class OrderResponseParser implements OrderResponseParserInterface
 
         $orderItems[] = $this->getShippingCosts($entry, $taxFree);
 
+        if (empty($entry['billing'])) {
+            $this->logger->notice('empty order billing address - order: ' . $entry['number']);
+
+            return [];
+        }
+
         $billingAddress = $this->orderAddressParser->parse($entry['billing']);
+
+        if (empty($entry['shipping'])) {
+            $this->logger->notice('empty order shipping address - order: ' . $entry['number']);
+
+            return [];
+        }
+
         $shippingAddress = $this->orderAddressParser->parse($entry['shipping']);
 
         $customer = $this->customerParser->parse($entry['customer']);
@@ -162,7 +175,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         ]);
 
         if (null === $shippingProfileIdentity) {
-            $this->logger->notice('no shipping profile was selected for order: ' . $entry['number']);
+            $this->logger->error('no shipping profile was selected for order: ' . $entry['number']);
 
             return [];
         }

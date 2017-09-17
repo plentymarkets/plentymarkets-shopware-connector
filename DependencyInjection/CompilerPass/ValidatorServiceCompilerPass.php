@@ -12,9 +12,7 @@ use Symfony\Component\DependencyInjection\Reference;
 class ValidatorServiceCompilerPass implements CompilerPassInterface
 {
     /**
-     * @param ContainerBuilder $container
-     *
-     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
+     * {@inheritdoc}
      */
     public function process(ContainerBuilder $container)
     {

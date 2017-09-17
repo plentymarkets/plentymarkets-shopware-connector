@@ -5,18 +5,12 @@ namespace PlentyConnector\Connector\ServiceBus\CommandFactory;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\CommandFactory\Exception\MissingCommandException;
 use PlentyConnector\Connector\ServiceBus\CommandFactory\Exception\MissingCommandGeneratorException;
-use PlentyConnector\Connector\ServiceBus\CommandGenerator\CommandGeneratorInterface;
 
 /**
  * Class CommandFactoryInterface.
  */
 interface CommandFactoryInterface
 {
-    /**
-     * @param CommandGeneratorInterface $generator
-     */
-    public function addGenerator(CommandGeneratorInterface $generator);
-
     /**
      * @param string $adapterName
      * @param string $objectType

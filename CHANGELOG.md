@@ -2,20 +2,40 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [unreleased]
+## [4.0.0]
 ### Added
 - configurable item configurator set type
 - configurable variation number field
 - configurable order origin (referrer)
 - configurable item warehouse for item stock calculation
+- configurable item notification settings
+- separate stock import logic
+- added a progressbar for all commandline operations
+- commands will be added to a new backlog for later processing
+- added a backlog processing command and cronjob
 
 ### Fixed
 - optimized the update path for versions before 2.0
 - fix for products not able to persist due too detached entities
+- the field order origin (Auftragsherkunft) was ignored and the default was used
+- the orer shipping profile was ignored and a default was used
 
 ### Changed
 - use the whole media data for the hash creation, this enforces changes also when media text fields change
 - restructure the backend snippets
+- separated the variations from products
+- separated stock informations from variations
+- only product properties which have the flag "searchable" set to true are now imported
+- set order item type to TYPE_UNASSIGEND_VARIATION for plentymarkets if no variation could be found
+- better error handling for all query handlers
+- added a new progressbar to every query 
+- removed a undefinied notice when parsing prices
+- only warehouses of type sales will be used for stock calculation
+- optimize plentymarkets api client error handling
+- Removed all separate commands and queries in favour of a generalized command and query
+
+### Changed
+- removed the obsolete process order cronjob
 
 ## [3.0.0]
 ### Fixed
