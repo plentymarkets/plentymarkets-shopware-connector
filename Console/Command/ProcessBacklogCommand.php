@@ -8,6 +8,7 @@ use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use Psr\Log\LoggerInterface;
 use Shopware\Commands\ShopwareCommand;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -65,6 +66,12 @@ class ProcessBacklogCommand extends ShopwareCommand
     {
         $this->setName('plentyconnector:process:backlog');
         $this->setDescription('process command backlog');
+        $this->addArgument(
+            'amount',
+            InputArgument::OPTIONAL,
+            'Amount of backlog elements to be processed',
+            200
+        );
     }
 
     /**
@@ -76,12 +83,13 @@ class ProcessBacklogCommand extends ShopwareCommand
             $this->logger->pushHandler(new ConsoleHandler($output));
         }
 
+        $amount = (int) $input->getArgument('amount');
         $counter = 0;
 
         $this->outputHandler->initialize($input, $output);
-        $this->outputHandler->startProgressBar(50);
+        $this->outputHandler->startProgressBar($amount);
 
-        while ($counter < 50 && $command = $this->backlogService->dequeue()) {
+        while ($counter < $amount && $command = $this->backlogService->dequeue()) {
             ++$counter;
 
             $this->serviceBus->handle($command);
