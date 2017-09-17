@@ -4,6 +4,7 @@ namespace PlentyConnector\Connector\BacklogService;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Exception;
 use PlentyConnector\Connector\BacklogService\Command\HandleBacklogElementCommand;
 use PlentyConnector\Connector\BacklogService\Model\Backlog;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
@@ -60,21 +61,28 @@ class BacklogService implements BacklogServiceInterface
      */
     public function dequeue()
     {
-        $backlog = $this->repository->findOneBy([], [
-            'time' => 'ASC',
-        ]);
+        $this->entityManager->getConnection()->beginTransaction();
 
-        if (null === $backlog) {
+        try {
+            $backlog = $this->repository->findOneBy([], [
+                'time' => 'ASC',
+            ]);
+
+            if (null === $backlog) {
+                return null;
+            }
+
+            $this->entityManager->remove($backlog);
+            $this->entityManager->flush();
+
+            $this->entityManager->getConnection()->commit();
+        } catch (Exception $exception) {
+            $this->entityManager->getConnection()->rollBack();
+
             return null;
         }
 
-        try {
-            $this->entityManager->remove($backlog);
-            $this->entityManager->flush();
-            $this->entityManager->clear();
-        } catch (\Exception $exception) {
-            // fail silently
-        }
+        $this->entityManager->clear();
 
         $command = $backlog->getPayload();
 
