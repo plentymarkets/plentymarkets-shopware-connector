@@ -72,9 +72,8 @@ class PlentyConnector extends Plugin
      * List of all cronjobs
      */
     public static $cronjobs = [
-        self::CRONJOB_SYNCHRONIZE => 300,
-        self::CRONJOB_SYNCHRONIZE_ORDERS => 300,
-        self::CRONJOB_BACKLOG => 300,
+        self::CRONJOB_SYNCHRONIZE => 60,
+        self::CRONJOB_BACKLOG => 60,
         self::CRONJOB_CLEANUP => 86400,
     ];
 

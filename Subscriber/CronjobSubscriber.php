@@ -10,8 +10,6 @@ use PlentyConnector\Connector\CleanupService\CleanupServiceInterface;
 use PlentyConnector\Connector\ConnectorInterface;
 use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
-use PlentyConnector\Connector\TransferObject\Order\Order;
-use PlentyConnector\Connector\TransferObject\Payment\Payment;
 use PlentyConnector\PlentyConnector;
 use Psr\Log\LoggerInterface;
 
@@ -75,7 +73,6 @@ class CronjobSubscriber implements SubscriberInterface
     {
         return [
             'Shopware_CronJob_PlentyConnector' . PlentyConnector::CRONJOB_SYNCHRONIZE => 'onRunCronjobSynchronize',
-            'Shopware_CronJob_PlentyConnector' . PlentyConnector::CRONJOB_SYNCHRONIZE_ORDERS => 'onRunCronjobSynchronizeOrders',
             'Shopware_CronJob_PlentyConnector' . PlentyConnector::CRONJOB_CLEANUP => 'onRunCronjobCleanup',
             'Shopware_CronJob_PlentyConnector' . PlentyConnector::CRONJOB_BACKLOG => 'onRunCronjobProcessBacklog',
         ];
@@ -104,30 +101,11 @@ class CronjobSubscriber implements SubscriberInterface
      *
      * @return bool
      */
-    public function onRunCronjobSynchronizeOrders(Args $args)
-    {
-        try {
-            $this->connector->handle(QueryType::CHANGED, Order::TYPE);
-            $this->connector->handle(QueryType::CHANGED, Payment::TYPE);
-        } catch (Exception $exception) {
-            $this->logger->error($exception->getMessage());
-        }
-
-        $args->setReturn(true);
-
-        return true;
-    }
-
-    /**
-     * @param Args $args
-     *
-     * @return bool
-     */
     public function onRunCronjobProcessBacklog(Args $args)
     {
         try {
             $counter = 0;
-            while ($counter < 50 && $command = $this->backlogService->dequeue()) {
+            while ($counter < 200 && $command = $this->backlogService->dequeue()) {
                 ++$counter;
 
                 $this->serviceBus->handle($command);
