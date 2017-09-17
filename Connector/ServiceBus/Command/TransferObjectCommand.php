@@ -5,7 +5,6 @@ namespace PlentyConnector\Connector\ServiceBus\Command;
 use Assert\Assertion;
 use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
-use Webmozart\Assert\Assert;
 
 /**
  * Class TransferObjectCommand
@@ -47,11 +46,11 @@ class TransferObjectCommand implements CommandInterface
         Assertion::inArray($commandType, CommandType::getAllTypes());
 
         if ($commandType === CommandType::HANDLE) {
-            Assert::isInstanceOf($payload, TransferObjectInterface::class);
+            Assertion::isInstanceOf($payload, TransferObjectInterface::class);
         }
 
         if ($commandType === CommandType::REMOVE) {
-            Assert::uuid($payload);
+            Assertion::uuid($payload);
         }
 
         $this->adapterName = $adapterName;
