@@ -5,7 +5,6 @@ namespace PlentymarketsAdapter\Client;
 use Assert\Assertion;
 use Closure;
 use Exception;
-use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
@@ -44,11 +43,11 @@ class Client implements ClientInterface
     /**
      * Client constructor.
      *
-     * @param GuzzleClient           $connection
+     * @param GuzzleClientInterface $connection
      * @param ConfigServiceInterface $config
      */
     public function __construct(
-        GuzzleClient $connection,
+        GuzzleClientInterface $connection,
         ConfigServiceInterface $config
     ) {
         $this->connection = $connection;
@@ -114,6 +113,10 @@ class Client implements ClientInterface
 
         try {
             $response = $this->connection->send($request);
+
+            if (null === $response) {
+                throw InvalidResponseException::fromParams($method, $path, $options);
+            }
 
             $body = $response->getBody();
 
