@@ -18,4 +18,11 @@ interface BacklogServiceInterface
      * @return CommandInterface
      */
     public function dequeue();
+
+    /**
+     * Returns an array of informations about the queue
+     *
+     * @return array
+     */
+    public function getInfo();
 }

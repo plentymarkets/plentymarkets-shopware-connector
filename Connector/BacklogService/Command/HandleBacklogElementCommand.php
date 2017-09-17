@@ -35,18 +35,10 @@ class HandleBacklogElementCommand implements CommandInterface
     /**
      * @return array
      */
-    public function getPayload()
+    public function toArray()
     {
         return [
             'command' => $this->command,
         ];
-    }
-
-    /**
-     * @param array $payload
-     */
-    public function setPayload(array $payload)
-    {
-        $this->command = $payload['command'];
     }
 }

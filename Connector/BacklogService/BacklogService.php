@@ -110,4 +110,26 @@ class BacklogService implements BacklogServiceInterface
 
         return false;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getInfo()
+    {
+        $amount = $this->getEnqueuedAmount();
+
+        return [
+            'amount_enqueued' => $amount,
+        ];
+    }
+
+    /**
+     * @return int
+     */
+    private function getEnqueuedAmount()
+    {
+        $query = 'SELECT count(id) FROM plenty_backlog';
+
+        return (int) $this->entityManager->getConnection()->query($query)->fetchColumn();
+    }
 }

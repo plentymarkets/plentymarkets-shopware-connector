@@ -15,7 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Command to manually process definitions.
  */
-class ProcessBacklogCommand extends ShopwareCommand
+class BacklogProcessCommand extends ShopwareCommand
 {
     /**
      * @var ServiceBusInterface
@@ -38,7 +38,7 @@ class ProcessBacklogCommand extends ShopwareCommand
     private $outputHandler;
 
     /**
-     * ProcessBacklogCommand constructor.
+     * BacklogProcessCommand constructor.
      *
      * @param ServiceBusInterface    $serviceBus
      * @param BacklogService         $backlogService
@@ -64,7 +64,7 @@ class ProcessBacklogCommand extends ShopwareCommand
      */
     protected function configure()
     {
-        $this->setName('plentyconnector:process:backlog');
+        $this->setName('plentyconnector:backlog:process');
         $this->setDescription('process command backlog');
         $this->addArgument(
             'amount',

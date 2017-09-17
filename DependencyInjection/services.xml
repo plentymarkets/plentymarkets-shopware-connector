@@ -330,7 +330,7 @@
 
         <!-- console -->
 
-        <service id="plenty_connector.console.command.cleanup" class="PlentyConnector\Console\Command\CleanupCommand">
+        <service id="plenty_connector.console.command.cleanup_command" class="PlentyConnector\Console\Command\CleanupCommand">
             <argument type="service" id="plenty_connector.cleanup_service" />
             <argument type="service" id="plenty_connector.logger" />
             <argument type="service" id="plenty_connector.console.output_handler" />
@@ -338,7 +338,7 @@
             <tag name="console.command" />
         </service>
 
-        <service id="plenty_connector.console.command.mapping" class="PlentyConnector\Console\Command\MappingCommand">
+        <service id="plenty_connector.console.command.mapping_command" class="PlentyConnector\Console\Command\MappingCommand">
             <argument type="service" id="plenty_connector.mapping_service" />
             <argument type="service" id="plenty_connector.logger" />
             <argument type="service" id="plenty_connector.console.output_handler" />
@@ -346,7 +346,7 @@
             <tag name="console.command" />
         </service>
 
-        <service id="plenty_connector.console.command.process" class="PlentyConnector\Console\Command\ProcessCommand">
+        <service id="plenty_connector.console.command.process_command" class="PlentyConnector\Console\Command\ProcessCommand">
             <argument type="service" id="plenty_connector.connector" />
             <argument type="service" id="plenty_connector.logger" />
             <argument type="service" id="plenty_connector.console.output_handler" />
@@ -354,10 +354,17 @@
             <tag name="console.command" />
         </service>
 
-        <service id="plenty_connector.console.command.process_backlog" class="PlentyConnector\Console\Command\ProcessBacklogCommand">
+        <service id="plenty_connector.console.command.backlog_process_command" class="PlentyConnector\Console\Command\BacklogProcessCommand">
             <argument type="service" id="plenty_connector.service_bus" />
             <argument type="service" id="plenty_connector.backlog_service" />
             <argument type="service" id="plenty_connector.logger" />
+            <argument type="service" id="plenty_connector.console.output_handler" />
+
+            <tag name="console.command" />
+        </service>
+
+        <service id="plenty_connector.console.command.backlog_info_command" class="PlentyConnector\Console\Command\BacklogInfoCommand">
+            <argument type="service" id="plenty_connector.backlog_service" />
             <argument type="service" id="plenty_connector.console.output_handler" />
 
             <tag name="console.command" />

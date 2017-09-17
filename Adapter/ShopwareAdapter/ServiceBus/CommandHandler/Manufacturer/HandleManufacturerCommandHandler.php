@@ -2,7 +2,6 @@
 
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Manufacturer;
 
-use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\TransferObjectCommand;
@@ -90,13 +89,11 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
                 'adapterName' => ShopwareAdapter::NAME,
             ]);
 
-            if (null === $mediaIdentity) {
-                throw new NotFoundException('Missing Media for Adapter');
+            if (null !== $mediaIdentity) {
+                $params['image'] = [
+                    'mediaId' => $mediaIdentity->getAdapterIdentifier(),
+                ];
             }
-
-            $params['image'] = [
-                'mediaId' => $mediaIdentity->getAdapterIdentifier(),
-            ];
         }
 
         $identity = $this->identityService->findOneBy([
