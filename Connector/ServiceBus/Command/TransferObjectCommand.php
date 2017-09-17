@@ -5,7 +5,6 @@ namespace PlentyConnector\Connector\ServiceBus\Command;
 use Assert\Assertion;
 use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
-use Webmozart\Assert\Assert;
 
 /**
  * Class TransferObjectCommand
