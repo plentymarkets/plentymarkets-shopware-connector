@@ -3,12 +3,8 @@
 namespace PlentyConnector\Console\Command;
 
 use PlentyConnector\Connector\BacklogService\BacklogService;
-use PlentyConnector\Connector\Logger\ConsoleHandler;
-use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
-use Psr\Log\LoggerInterface;
 use Shopware\Commands\ShopwareCommand;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -30,7 +26,7 @@ class BacklogInfoCommand extends ShopwareCommand
     /**
      * BacklogInfoCommand constructor.
      *
-     * @param BacklogService $backlogService
+     * @param BacklogService         $backlogService
      * @param OutputHandlerInterface $outputHandler
      */
     public function __construct(
@@ -62,7 +58,7 @@ class BacklogInfoCommand extends ShopwareCommand
         $info = $this->backlogService->getInfo();
 
         $this->outputHandler->createTable(['info', 'value'], [
-            ['amount enqueued', $info['amount_enqueued']]
+            ['amount enqueued', $info['amount_enqueued']],
         ]);
     }
 }
