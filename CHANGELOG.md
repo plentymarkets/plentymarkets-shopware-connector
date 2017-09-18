@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.0.3]
+### Fixed
+- processing of sepa payments was not possible
+
 ## [4.0.2]
 ### Fixed
 - missing use statement when handling order updates
@@ -43,7 +47,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - optimize plentymarkets api client error handling
 - Removed all separate commands and queries in favour of a generalized command and query
 
-### Changed
+### Removed
 - removed the obsolete process order cronjob
 
 ## [3.0.0]

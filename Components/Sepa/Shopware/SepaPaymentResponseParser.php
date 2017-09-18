@@ -4,6 +4,7 @@ namespace PlentyConnector\Components\Sepa\Shopware;
 
 use Assert\Assertion;
 use Doctrine\ORM\EntityRepository;
+use InvalidArgumentException;
 use PlentyConnector\Components\Sepa\PaymentData\SepaPaymentData;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Currency\Currency;
@@ -109,7 +110,13 @@ class SepaPaymentResponseParser implements PaymentResponseParserInterface
          */
         $currencyRepository = Shopware()->Models()->getRepository(CurrencyModel::class);
 
-        return $currencyRepository->findOneBy(['currency' => $currency])->getId();
+        $object = $currencyRepository->findOneBy(['currency' => $currency]);
+
+        if (null === $object) {
+            throw new InvalidArgumentException('could not find currency model by currency: ' . $currency);
+        }
+
+        return $object->getId();
     }
 
     /**

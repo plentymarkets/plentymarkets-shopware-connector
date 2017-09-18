@@ -32,15 +32,11 @@ class PayPalInstallmentRequestGenerator implements PaymentRequestGeneratorInterf
     public function generate(Payment $payment)
     {
         $paymentParams = $this->parentRequestGenerator->generate($payment);
+        $data = $payment->getPaymentData();
 
-        if (!($payment->getPaymentData() instanceof PayPalInstallmentPaymentData)) {
+        if (!($data instanceof PayPalInstallmentPaymentData)) {
             return $paymentParams;
         }
-
-        /**
-         * @var PayPalInstallmentPaymentData $data
-         */
-        $data = $payment->getPaymentData();
 
         $paymentParams['property'][] = [
             'typeId' => 22,

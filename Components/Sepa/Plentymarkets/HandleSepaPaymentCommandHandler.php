@@ -6,9 +6,9 @@ use PlentyConnector\Components\Sepa\PaymentData\SepaPaymentData;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
-use PlentyConnector\Connector\ServiceBus\Command\HandleCommandInterface;
-use PlentyConnector\Connector\ServiceBus\Command\Payment\HandlePaymentCommand;
+use PlentyConnector\Connector\ServiceBus\Command\TransferObjectCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
+use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\TransferObject\Order\Order;
 use PlentyConnector\Connector\TransferObject\Payment\Payment;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
@@ -57,22 +57,30 @@ class HandleSepaPaymentCommandHandler implements CommandHandlerInterface
      */
     public function supports(CommandInterface $command)
     {
-        return $command instanceof HandlePaymentCommand &&
-            $command->getAdapterName() === PlentymarketsAdapter::NAME;
+        return $command instanceof TransferObjectCommand &&
+            $command->getAdapterName() === PlentymarketsAdapter::NAME &&
+            $command->getObjectType() === Payment::TYPE &&
+            $command->getCommandType() === CommandType::HANDLE;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @var TransferObjectCommand $command
      */
     public function handle(CommandInterface $command)
     {
         /**
-         * @var HandleCommandInterface $command
-         * @var Payment                $payment
+         * @var Payment $payment
          */
-        $payment = $command->getTransferObject();
+        $payment = $command->getPayload();
 
-        if (!($payment->getPaymentData() instanceof SepaPaymentData)) {
+        /**
+         * @var SepaPaymentData $data
+         */
+        $data = $payment->getPaymentData();
+
+        if (!($data instanceof SepaPaymentData)) {
             return $this->parentCommandHandler->handle($command);
         }
 
@@ -101,11 +109,6 @@ class HandleSepaPaymentCommandHandler implements CommandHandlerInterface
         if (null === $contactId) {
             throw new NotFoundException('could not find contact for bank account handling - ' . $payment->getOrderIdentifer());
         }
-
-        /**
-         * @var SepaPaymentData $data
-         */
-        $data = $payment->getPaymentData();
 
         $bankAccounts = $this->client->request('GET', 'accounts/contacts/' . $contactId . '/banks');
 
