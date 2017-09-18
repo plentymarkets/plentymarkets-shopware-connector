@@ -14,6 +14,7 @@ use PlentyConnector\Connector\TransferObject\OrderStatus\OrderStatus;
 use PlentyConnector\Connector\TransferObject\PaymentStatus\PaymentStatus;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use Psr\Log\LoggerInterface;
+use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Order as OrderResource;
 use Shopware\Models\Order\Status;
 use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
