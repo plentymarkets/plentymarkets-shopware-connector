@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.0.2]
+### Fixed
+- missing use statement when handling order updates
+
 ## [4.0.1]
 ### Fixed
 - a wrong assert class was used when creating the transfer object command
