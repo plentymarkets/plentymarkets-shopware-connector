@@ -32,15 +32,11 @@ class PayPalPlusInvoiceRequestGenerator implements PaymentRequestGeneratorInterf
     public function generate(Payment $payment)
     {
         $paymentParams = $this->parentRequestGenerator->generate($payment);
+        $data = $payment->getPaymentData();
 
-        if (!($payment->getPaymentData() instanceof PayPalPlusInvoicePaymentData)) {
+        if (!($data instanceof PayPalPlusInvoicePaymentData)) {
             return $paymentParams;
         }
-
-        /**
-         * @var PayPalPlusInvoicePaymentData $data
-         */
-        $data = $payment->getPaymentData();
 
         $paymentParams['property'][] = [
             'typeId' => 22,
