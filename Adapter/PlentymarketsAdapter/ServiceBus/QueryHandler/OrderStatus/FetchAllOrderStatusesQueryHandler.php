@@ -47,7 +47,7 @@ class FetchAllOrderStatusesQueryHandler implements QueryHandlerInterface
     {
         return $query instanceof FetchTransferObjectQuery &&
             $query->getAdapterName() === PlentymarketsAdapter::NAME &&
-            $query->getObjectType() === OrderStatus::class &&
+            $query->getObjectType() === OrderStatus::TYPE &&
             $query->getQueryType() === QueryType::ALL;
     }
 
