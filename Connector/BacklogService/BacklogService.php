@@ -69,6 +69,7 @@ class BacklogService implements BacklogServiceInterface
             ]);
 
             if (null === $backlog) {
+                $this->entityManager->getConnection()->close();
                 return null;
             }
 
