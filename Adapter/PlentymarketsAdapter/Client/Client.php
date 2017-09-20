@@ -7,7 +7,6 @@ use Closure;
 use Exception;
 use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ServerException;
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentymarketsAdapter\Client\Exception\InvalidCredentialsException;
 use PlentymarketsAdapter\Client\Exception\InvalidResponseException;
@@ -154,25 +153,6 @@ class Client implements ClientInterface
 
             if ($exception->hasResponse() && $exception->getResponse()) {
                 throw new ClientException(
-                    $exception->getMessage() . ' - ' . $exception->getResponse()->getBody(),
-                    $exception->getRequest(),
-                    $exception->getResponse(),
-                    $exception->getPrevious()
-                );
-            }
-
-            throw $exception;
-        } catch (ServerException $exception) {
-            if ($retries < 3 && $exception->hasResponse() && $exception->getResponse()->getStatusCode() === 503) {
-                sleep(10);
-
-                ++$retries;
-
-                return $this->request($method, $path, $params, $limit, $offset);
-            }
-
-            if ($exception->hasResponse() && $exception->getResponse()) {
-                throw new ServerException(
                     $exception->getMessage() . ' - ' . $exception->getResponse()->getBody(),
                     $exception->getRequest(),
                     $exception->getResponse(),
