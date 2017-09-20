@@ -84,6 +84,18 @@ class BacklogService implements BacklogServiceInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getInfo()
+    {
+        $amount = $this->getEnqueuedAmount();
+
+        return [
+            'amount_enqueued' => $amount,
+        ];
+    }
+
+    /**
      * @param Backlog $backlog
      *
      * @return bool
@@ -104,18 +116,6 @@ class BacklogService implements BacklogServiceInterface
         }
 
         return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getInfo()
-    {
-        $amount = $this->getEnqueuedAmount();
-
-        return [
-            'amount_enqueued' => $amount,
-        ];
     }
 
     /**
