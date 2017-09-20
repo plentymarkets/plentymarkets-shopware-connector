@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [4.0.4]
+### Added
+- prepayment is now mapped correctly
+
 ### Fixed
 - settings could not be saved in some shopware versions
 
