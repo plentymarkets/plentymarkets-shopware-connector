@@ -204,6 +204,10 @@ class PlentyConnector extends Plugin
             $this->clearLastChangedConfigEntries();
         }
 
+        if ($this->updateNeeded($context, '4.0.4') && $this->updatePossible($context, '2.0.0')) {
+            $this->updateBacklogTable();
+        }
+
         parent::update($context);
     }
 
@@ -363,6 +367,20 @@ class PlentyConnector extends Plugin
         }
 
         $entityManager->flush();
+    }
+
+    private function updateBacklogTable()
+    {
+        /**
+         * @var Connection $connection
+         */
+        $connection = $this->container->get('dbal_connection');
+
+        $query = 'UPDATE plenty_backlog SET status = :statusNew WHERE status = :statusOld';
+        $connection->executeQuery($query, [
+            ':statusNew' => Backlog::STATUS_OPEN,
+            ':statusOld' => '',
+        ]);
     }
 
     private function clearOldDatabaseTables()

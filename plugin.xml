@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <plugin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/5.2/engine/Shopware/Components/Plugin/schema/plugin.xsd">
+    <label>plentymarkets Shopware Connector</label>
     <label lang="de">plentymarkets Shopware Connector</label>
-    <label lang="en">plentymarkets Shopware Connector</label>
 
-    <version>4.0.3</version>
+    <version>4.0.4</version>
     <copyright>(c) plentymarkets GmbH</copyright>
     <link>https://www.plentymarkets.eu/</link>
     <author>arvatis media GmbH</author>
