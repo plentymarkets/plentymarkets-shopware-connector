@@ -64,7 +64,7 @@ Ext.define('Shopware.apps.PlentyConnector.controller.Settings', {
                 if (response.success) {
                     Shopware.Notification.createGrowlMessage('{s name=plentyconnector/controller/settings/settings_saved_title}{/s}', '{s name=plentyconnector/controller/settings/settings_saved_message}{/s}');
                 } else {
-                    Shopware.Notification.createGrowlMessage('{s name=plentyconnector/controller/settings/settings_notsaved_title}{/s}', '{s name=plentyconnector/controller/settings/settings_nosaved_message}{/s}');
+                    Shopware.Notification.createGrowlMessage('{s name=plentyconnector/controller/settings/settings_notsaved_title}{/s}', '{s name=plentyconnector/controller/settings/settings_notsaved_message}{/s}');
                 }
             }
         });

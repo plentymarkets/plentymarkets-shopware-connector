@@ -174,7 +174,7 @@ Ext.define('Shopware.apps.PlentyConnector.view.Settings', {
                         selectOnFocus: true,
                         displayField: 'name',
                         valueField: 'id',
-                        valie: '0.00',
+                        value: '0.00',
                         store: Ext.create('Shopware.apps.PlentyConnector.store.additional.OrderOrigin').load()
                     },
                     {
@@ -186,7 +186,7 @@ Ext.define('Shopware.apps.PlentyConnector.view.Settings', {
                         selectOnFocus: true,
                         displayField: 'name',
                         valueField: 'id',
-                        valie: 0,
+                        value: 0,
                         store: Ext.create('Shopware.apps.PlentyConnector.store.additional.ItemWarehouse').load()
                     },
                     {
