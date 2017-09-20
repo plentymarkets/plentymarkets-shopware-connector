@@ -2,7 +2,7 @@
 
 namespace ShopwareAdapter\ResponseParser\OrderItem;
 
-use Doctrine\ORM\EntityManagerInterface;
+use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Order\OrderItem\OrderItem;
 use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
@@ -23,22 +23,12 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
     private $identityService;
 
     /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
-
-    /**
      * OrderItemResponseParser constructor.
      *
      * @param IdentityServiceInterface $identityService
-     * @param EntityManagerInterface   $entityManager
      */
-    public function __construct(
-        IdentityServiceInterface $identityService,
-        EntityManagerInterface $entityManager
-    ) {
+    public function __construct(IdentityServiceInterface $identityService) {
         $this->identityService = $identityService;
-        $this->entityManager = $entityManager;
     }
 
     /**
@@ -84,7 +74,7 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
         ]);
 
         if (null === $vatRateIdentity) {
-            throw new UnsupportedVatRateException();
+            throw new NotFoundException('missing vat rate identity ');
         }
 
         return $vatRateIdentity->getObjectIdentifier();
