@@ -61,16 +61,37 @@ class BacklogService implements BacklogServiceInterface
      */
     public function dequeue()
     {
-        $this->entityManager->getConnection()->beginTransaction();
+        $backlog = $this->repository->findOneBy([], [
+            'time' => 'ASC',
+        ]);
 
+        if (null === $backlog) {
+            return null;
+        }
+
+        if (!$this->removeBacklogElement($backlog)) {
+            return null;
+        }
+
+        $command = $backlog->getPayload();
+        $this->entityManager->clear();
+
+        if ($command instanceof CommandInterface) {
+            return new HandleBacklogElementCommand($command);
+        }
+
+        return null;
+    }
+
+    /**
+     * @param Backlog $backlog
+     *
+     * @return bool
+     */
+    private function removeBacklogElement(Backlog $backlog)
+    {
         try {
-            $backlog = $this->repository->findOneBy([], [
-                'time' => 'ASC',
-            ]);
-
-            if (null === $backlog) {
-                return null;
-            }
+            $this->entityManager->getConnection()->beginTransaction();
 
             $this->entityManager->remove($backlog);
             $this->entityManager->flush();
@@ -79,18 +100,10 @@ class BacklogService implements BacklogServiceInterface
         } catch (Exception $exception) {
             $this->entityManager->getConnection()->rollBack();
 
-            return null;
+            return false;
         }
 
-        $this->entityManager->clear();
-
-        $command = $backlog->getPayload();
-
-        if ($command instanceof CommandInterface) {
-            return new HandleBacklogElementCommand($command);
-        }
-
-        return null;
+        return true;
     }
 
     /**
