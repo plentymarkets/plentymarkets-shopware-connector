@@ -146,7 +146,7 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
             ];
         }
 
-        $itemParams['referrerId'] = $this->config->get('order_origin', 1);
+        $itemParams['referrerId'] = $this->config->get('order_origin', '0.00');
 
         $itemParams['orderProperties'] = [];
 

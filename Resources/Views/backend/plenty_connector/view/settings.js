@@ -169,24 +169,24 @@ Ext.define('Shopware.apps.PlentyConnector.view.Settings', {
                         xtype: 'combobox',
                         fieldLabel: '{s name=plentyconnector/view/settings/additional/order_origin/label}{/s}',
                         name: 'order_origin',
-                        allowBlank: false,
                         editable: false,
                         triggerAction: 'all',
                         selectOnFocus: true,
                         displayField: 'name',
                         valueField: 'id',
+                        valie: '0.00',
                         store: Ext.create('Shopware.apps.PlentyConnector.store.additional.OrderOrigin').load()
                     },
                     {
                         xtype: 'combobox',
                         fieldLabel: '{s name=plentyconnector/view/settings/additional/item_warehouse/label}{/s}',
                         name: 'item_warehouse',
-                        allowBlank: false,
                         editable: false,
                         triggerAction: 'all',
                         selectOnFocus: true,
                         displayField: 'name',
                         valueField: 'id',
+                        valie: 0,
                         store: Ext.create('Shopware.apps.PlentyConnector.store.additional.ItemWarehouse').load()
                     },
                     {
