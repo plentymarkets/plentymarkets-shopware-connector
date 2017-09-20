@@ -7,7 +7,6 @@ use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Order\OrderItem\OrderItem;
 use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
 use ShopwareAdapter\ResponseParser\GetAttributeTrait;
-use ShopwareAdapter\ResponseParser\OrderItem\Exception\UnsupportedVatRateException;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -57,7 +56,7 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
     /**
      * @param array $entry
      *
-     * @throws UnsupportedVatRateException
+     * @throws NotFoundException
      *
      * @return null|string
      */
