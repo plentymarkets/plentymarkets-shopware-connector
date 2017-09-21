@@ -15,7 +15,7 @@ interface BacklogServiceInterface
     public function enqueue(CommandInterface $command);
 
     /**
-     * @return CommandInterface
+     * @return null|CommandInterface
      */
     public function dequeue();
 

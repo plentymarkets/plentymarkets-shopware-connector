@@ -2,12 +2,15 @@
 
 namespace PlentyConnector\Connector\BacklogService;
 
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Exception;
+use PDO;
 use PlentyConnector\Connector\BacklogService\Command\HandleBacklogElementCommand;
 use PlentyConnector\Connector\BacklogService\Model\Backlog;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class BacklogService
@@ -20,19 +23,34 @@ class BacklogService implements BacklogServiceInterface
     private $entityManager;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @var EntityRepository
      */
     private $repository;
 
     /**
+     * @var Connection
+     */
+    private $connection;
+
+    /**
      * BacklogService constructor.
      *
      * @param EntityManagerInterface $entityManager
+     * @param LoggerInterface        $logger
      */
-    public function __construct(EntityManagerInterface $entityManager)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        LoggerInterface $logger
+    ) {
         $this->entityManager = $entityManager;
+        $this->logger = $logger;
         $this->repository = $entityManager->getRepository(Backlog::class);
+        $this->connection = $entityManager->getConnection();
     }
 
     /**
@@ -49,6 +67,7 @@ class BacklogService implements BacklogServiceInterface
 
         $backlog = new Backlog();
         $backlog->setPayload($command);
+        $backlog->setStatus(Backlog::STATUS_OPEN);
         $backlog->setHash($hash);
 
         $this->entityManager->persist($backlog);
@@ -61,36 +80,44 @@ class BacklogService implements BacklogServiceInterface
      */
     public function dequeue()
     {
-        $this->entityManager->getConnection()->beginTransaction();
-
         try {
-            $backlog = $this->repository->findOneBy([], [
-                'time' => 'ASC',
-            ]);
+            $selectQuery = 'SELECT * FROM plenty_backlog WHERE status = :status ORDER BY `time` ASC, `id` ASC LIMIT 1';
+            $selectParams = [':status' => Backlog::STATUS_OPEN];
+            $backlog = $this->connection->executeQuery($selectQuery, $selectParams)->fetch(PDO::FETCH_ASSOC);
 
-            if (null === $backlog) {
+            if ($backlog === false) {
                 return null;
             }
 
-            $this->entityManager->remove($backlog);
-            $this->entityManager->flush();
+            $updateQuery = 'UPDATE plenty_backlog SET status = :status WHERE id = :id';
+            $affectedRows = $this->connection->executeUpdate($updateQuery, [
+                ':id' => $backlog['id'],
+                ':status' => Backlog::STATUS_PROCESSED,
+            ]);
 
-            $this->entityManager->getConnection()->commit();
+            if ($affectedRows !== 1) {
+                return null;
+            }
+
+            $deleteQuery = 'DELETE FROM plenty_backlog WHERE id = :id';
+            $affectedRows = $this->connection->executeUpdate($deleteQuery, [':id' => $backlog['id']]);
+
+            if ($affectedRows !== 1) {
+                return null;
+            }
+
+            $command = unserialize($backlog['payload']);
+
+            if (!($command instanceof CommandInterface)) {
+                return null;
+            }
+
+            return new HandleBacklogElementCommand($command);
         } catch (Exception $exception) {
-            $this->entityManager->getConnection()->rollBack();
+            $this->logger->error($exception->getMessage());
 
             return null;
         }
-
-        $this->entityManager->clear();
-
-        $command = $backlog->getPayload();
-
-        if ($command instanceof CommandInterface) {
-            return new HandleBacklogElementCommand($command);
-        }
-
-        return null;
     }
 
     /**
@@ -130,6 +157,6 @@ class BacklogService implements BacklogServiceInterface
     {
         $query = 'SELECT count(id) FROM plenty_backlog';
 
-        return (int) $this->entityManager->getConnection()->query($query)->fetchColumn();
+        return (int) $this->connection->query($query)->fetchColumn();
     }
 }

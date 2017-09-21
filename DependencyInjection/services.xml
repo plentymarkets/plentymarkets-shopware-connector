@@ -543,6 +543,7 @@
 
         <service id="plenty_connector.backlog_service" class="PlentyConnector\Connector\BacklogService\BacklogService">
             <argument type="service" id="models" />
+            <argument type="service" id="plenty_connector.logger" />
         </service>
 
         <service id="plenty_connector.backlog_service.backlog_command_handler_middleware" class="PlentyConnector\Connector\BacklogService\Middleware\BacklogCommandHandlerMiddleware">

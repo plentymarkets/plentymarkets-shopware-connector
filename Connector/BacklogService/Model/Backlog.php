@@ -17,6 +17,9 @@ use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
  */
 class Backlog
 {
+    const STATUS_OPEN = 'open';
+    const STATUS_PROCESSED = 'processed';
+
     /**
      * @var int
      *
@@ -34,6 +37,15 @@ class Backlog
      * @ORM\Column(name="payload", type="object", nullable=false)
      */
     private $payload;
+
+    /**
+     * status of entry (open, processed)
+     *
+     * @var string
+     *
+     * @ORM\Column(name="status", type="string", nullable=false)
+     */
+    private $status;
 
     /**
      * time of insertion
@@ -59,6 +71,7 @@ class Backlog
     public function __construct()
     {
         $this->time = new DateTimeImmutable('now');
+        $this->status = self::STATUS_OPEN;
     }
 
     /**
@@ -83,6 +96,22 @@ class Backlog
     public function setPayload($payload)
     {
         $this->payload = $payload;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param string $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
     }
 
     /**
