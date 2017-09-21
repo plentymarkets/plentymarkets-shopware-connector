@@ -96,11 +96,11 @@ class StockResponseParser implements StockResponseParserInterface
                 return $warehouse['typeId'] === self::SALES_WAREHOUSE;
             });
 
-            $warehouses = array_column($warehouses, 'typeId');
+            $warehouses = array_column($warehouses, 'id');
         }
 
         foreach ($variation['stock'] as $stock) {
-            if (in_array($stock['warehouseId'], $warehouses, true)) {
+            if (!in_array($stock['warehouseId'], $warehouses, true)) {
                 continue;
             }
 

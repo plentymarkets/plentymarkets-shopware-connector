@@ -8,6 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - settings could not be saved in some shopware versions
+- warehouse selection for item stock calculation was using the wrong identifier
 
 ### Changed
 - client will retry on 500 errors, too
