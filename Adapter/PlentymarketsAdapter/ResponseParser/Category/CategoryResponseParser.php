@@ -228,7 +228,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
                     'alternateName' => $detail['name'],
                 ]);
 
-                $result[] = $media;
+                $result[$media->getIdentifier()] = $media;
 
                 $imageIdentifiers[] = $media->getIdentifier();
             } catch (Exception $exception) {
