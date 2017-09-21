@@ -26,7 +26,8 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
      *
      * @param IdentityServiceInterface $identityService
      */
-    public function __construct(IdentityServiceInterface $identityService) {
+    public function __construct(IdentityServiceInterface $identityService)
+    {
         $this->identityService = $identityService;
     }
 
