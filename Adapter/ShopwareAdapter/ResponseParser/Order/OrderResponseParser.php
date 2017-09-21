@@ -100,56 +100,6 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
-     * @param array $entry
-     *
-     * @return bool
-     */
-    private function isValidOrder(array $entry)
-    {
-        $shopIdentity = $this->identityService->findOneOrThrow(
-            (string) $entry['shopId'],
-            ShopwareAdapter::NAME,
-            Shop::TYPE
-        );
-
-        $isMappedIdentity = $this->identityService->isMapppedIdentity(
-            $shopIdentity->getObjectIdentifier(),
-            $shopIdentity->getObjectType(),
-            $shopIdentity->getAdapterName()
-        );
-
-        if (!$isMappedIdentity) {
-            return false;
-        }
-
-        if (empty($entry['billing'])) {
-            $this->logger->warning('empty order billing address - order: ' . $entry['number']);
-
-            return false;
-        }
-
-        if (empty($entry['shipping'])) {
-            $this->logger->warning('empty order shipping address - order: ' . $entry['number']);
-
-            return false;
-        }
-
-        $shippingProfileIdentity = $this->identityService->findOneBy([
-            'adapterIdentifier' => (string) $entry['dispatchId'],
-            'adapterName' => ShopwareAdapter::NAME,
-            'objectType' => ShippingProfile::TYPE,
-        ]);
-
-        if (null === $shippingProfileIdentity) {
-            $this->logger->warning('no shipping profile was selected for order: ' . $entry['number']);
-
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function parse(array $entry)
@@ -160,7 +110,7 @@ class OrderResponseParser implements OrderResponseParserInterface
 
         $taxFree = ($entry['net'] || $entry['taxFree']);
 
-        $orderItems = array_filter(array_map(function ($orderItem) use ($taxFree) {
+        $orderItems = array_filter(array_map(function (array $orderItem) use ($taxFree) {
             return $this->orderItemResponseParser->parse($orderItem, $taxFree);
         }, $this->prepareOrderItems($entry['details'])));
 
@@ -220,6 +170,56 @@ class OrderResponseParser implements OrderResponseParserInterface
         $order->setShopIdentifier($shopIdentifier);
 
         return [$order];
+    }
+
+    /**
+     * @param array $entry
+     *
+     * @return bool
+     */
+    private function isValidOrder(array $entry)
+    {
+        $shopIdentity = $this->identityService->findOneOrThrow(
+            (string) $entry['shopId'],
+            ShopwareAdapter::NAME,
+            Shop::TYPE
+        );
+
+        $isMappedIdentity = $this->identityService->isMapppedIdentity(
+            $shopIdentity->getObjectIdentifier(),
+            $shopIdentity->getObjectType(),
+            $shopIdentity->getAdapterName()
+        );
+
+        if (!$isMappedIdentity) {
+            return false;
+        }
+
+        if (empty($entry['billing'])) {
+            $this->logger->warning('empty order billing address - order: ' . $entry['number']);
+
+            return false;
+        }
+
+        if (empty($entry['shipping'])) {
+            $this->logger->warning('empty order shipping address - order: ' . $entry['number']);
+
+            return false;
+        }
+
+        $shippingProfileIdentity = $this->identityService->findOneBy([
+            'adapterIdentifier' => (string) $entry['dispatchId'],
+            'adapterName' => ShopwareAdapter::NAME,
+            'objectType' => ShippingProfile::TYPE,
+        ]);
+
+        if (null === $shippingProfileIdentity) {
+            $this->logger->warning('no shipping profile was selected for order: ' . $entry['number']);
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -359,7 +359,7 @@ class OrderResponseParser implements OrderResponseParserInterface
      * @param array $entry
      * @param bool  $taxFree
      *
-     * @return null|OrderItem
+     * @return OrderItem
      */
     private function getShippingCosts(array $entry, $taxFree = false)
     {
