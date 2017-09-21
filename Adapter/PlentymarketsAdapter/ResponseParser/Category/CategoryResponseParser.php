@@ -65,13 +65,13 @@ class CategoryResponseParser implements CategoryResponseParserInterface
     public function parse(array $entry)
     {
         if (empty($entry['details'])) {
-            $this->logger->notice('category without details');
+            $this->logger->warning('category without details');
 
             return [];
         }
 
         if ($entry['right'] !== 'all') {
-            $this->logger->notice('unsupported category rights');
+            $this->logger->warning('unsupported category rights');
 
             return [];
         }
@@ -90,7 +90,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
             ]);
 
             if (null === $parentIdentity) {
-                $this->logger->notice('parent category was not found', ['category' => $categoryIdentity->getObjectIdentifier()]);
+                $this->logger->warning('parent category was not found', ['category' => $categoryIdentity->getObjectIdentifier()]);
 
                 return [];
             }
@@ -139,32 +139,28 @@ class CategoryResponseParser implements CategoryResponseParserInterface
         }));
 
         if (empty($validDetails)) {
-            $this->logger->notice('no valid category translation found, using default');
-
             $validDetails = $entry['details'];
         }
 
         $result = [];
 
-        $result[] = Category::fromArray([
-            'identifier' => $categoryIdentity->getObjectIdentifier(),
-            'name' => $validDetails['0']['name'],
-            'active' => true,
-            'parentIdentifier' => $parentCategoryIdentifier,
-            'shopIdentifiers' => $shopIdentifiers,
-            'imageIdentifiers' => $this->getImages($validDetails['0'], $result),
-            'position' => (int) $validDetails['0']['position'],
-            'description' => $validDetails['0']['shortDescription'],
-            'longDescription' => $validDetails['0']['description'],
-            'metaTitle' => $validDetails['0']['metaTitle'],
-            'metaDescription' => $validDetails['0']['metaDescription'],
-            'metaKeywords' => $validDetails['0']['metaKeywords'],
-            'metaRobots' => $this->getMetaRobots($validDetails['0']['metaRobots']),
-            'translations' => $this->getTranslations($validDetails, $result),
-            'attributes' => [],
-        ]);
+        $category = new Category();
+        $category->setIdentifier($categoryIdentity->getObjectIdentifier());
+        $category->setParentIdentifier($parentCategoryIdentifier);
+        $category->setShopIdentifiers($shopIdentifiers);
+        $category->setImageIdentifiers($this->getImages($validDetails['0'], $result));
+        $category->setName($validDetails['0']['name']);
+        $category->setActive(true);
+        $category->setPosition((int) $validDetails['0']['position']);
+        $category->setDescription($validDetails['0']['shortDescription']);
+        $category->setLongDescription($validDetails['0']['description']);
+        $category->setMetaTitle($validDetails['0']['metaTitle']);
+        $category->setMetaDescription($validDetails['0']['metaDescription']);
+        $category->setMetaKeywords($validDetails['0']['metaKeywords']);
+        $category->setMetaRobots($this->getMetaRobots($validDetails['0']['metaRobots']));
+        $category->setTranslations($this->getTranslations($validDetails, $result));
 
-        return $result;
+        return array_merge($result, [$category]);
     }
 
     /**
