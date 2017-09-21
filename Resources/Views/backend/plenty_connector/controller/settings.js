@@ -35,10 +35,9 @@ Ext.define('Shopware.apps.PlentyConnector.controller.Settings', {
                 response = Ext.decode(response.responseText);
 
                 if (response.success) {
-                    Shopware.Notification.createGrowlMessage('{s name=plentyconnector/controller/settings/datavalid1}{/s}', '{s name=plentyconnector/controller/settings/datavalid2}{/s}');
-                }
-                else {
-                    Shopware.Notification.createGrowlMessage('{s name=plentyconnector/controller/settings/datainvalid1}{/s}', '{s name=plentyconnector/controller/settings/datainvalid2}{/s}');
+                    Shopware.Notification.createGrowlMessage('{s name=plentyconnector/controller/settings/valid_creddentials_title}{/s}', '{s name=plentyconnector/controller/settings/valid_creddentials_message}{/s}');
+                } else {
+                    Shopware.Notification.createGrowlMessage('{s name=plentyconnector/controller/settings/invalid_creddentials_title}{/s}', '{s name=plentyconnector/controller/settings/invalid_creddentials_message}{/s}');
                 }
             }
         });
@@ -47,13 +46,26 @@ Ext.define('Shopware.apps.PlentyConnector.controller.Settings', {
     onSave: function (view) {
         view.setLoading(true);
 
-        view.getForm().updateRecord(view.settings);
+        var params = {};
+        var form = view.getForm();
 
-        view.settings.save({
-            callback: function (data, operation) {
-                view.loadRecord(data);
+        form.getFields().each(function (field) {
+            params[field.getName()] = field.getValue();
+        });
+
+        Ext.Ajax.request({
+            url: '{url action=saveSettings}',
+            params: params,
+            success: function (response) {
                 view.setLoading(false);
-                Shopware.Notification.createGrowlMessage('{s name=plentyconnector/controller/settings1}{/s}', '{s name=plentyconnector/controller/settings2}{/s}');
+
+                response = Ext.decode(response.responseText);
+
+                if (response.success) {
+                    Shopware.Notification.createGrowlMessage('{s name=plentyconnector/controller/settings/settings_saved_title}{/s}', '{s name=plentyconnector/controller/settings/settings_saved_message}{/s}');
+                } else {
+                    Shopware.Notification.createGrowlMessage('{s name=plentyconnector/controller/settings/settings_notsaved_title}{/s}', '{s name=plentyconnector/controller/settings/settings_notsaved_message}{/s}');
+                }
             }
         });
     }

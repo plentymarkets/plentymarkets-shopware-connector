@@ -46,9 +46,7 @@ Ext.define('Shopware.apps.PlentyConnector.model.Settings', {
         type: 'ajax',
 
         api: {
-            read: '{url action=readSettings}',
-            update: '{url action=saveSettings}',
-            delete: '{url action=deleteSettings}'
+            read: '{url action=readSettings}'
         },
 
         reader: {

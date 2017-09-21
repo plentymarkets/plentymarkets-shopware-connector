@@ -31,6 +31,11 @@ class PaymentMethodResponseParser implements PaymentMethodResponseParserInterfac
      */
     public function parse(array $entry)
     {
+        // https://forum.plentymarkets.com/t/paymentmethods-fehlen-im-payment-methods-response/69372/8
+        if ($entry['id'] === 6000) {
+            $entry['id'] = 0;
+        }
+
         $identity = $this->identityService->findOneOrCreate(
             (string) $entry['id'],
             PlentymarketsAdapter::NAME,
