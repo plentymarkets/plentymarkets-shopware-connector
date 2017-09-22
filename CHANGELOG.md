@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [5.0.0]
+### Added
+- added a reference amout calculator to calculate the right base content
+
 ### Changed
 - renamed the PlentymarketsAdapter services from plentmarkets_adapter to plentymarkets_adapter
 
