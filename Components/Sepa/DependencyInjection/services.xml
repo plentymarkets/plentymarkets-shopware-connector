@@ -17,7 +17,7 @@
 
         <service id="plenty_connector.components.sepa.payment_command_handler" class="PlentyConnector\Components\Sepa\Plentymarkets\HandleSepaPaymentCommandHandler" decorates="plentymarkets_adapter.command_handler.handle_payment" public="false">
             <argument type="service" id="plenty_connector.components.sepa.payment_command_handler.inner" />
-            <argument type="service" id="plentmarkets_adapter.client" />
+            <argument type="service" id="plentymarkets_adapter.client" />
             <argument type="service" id="plenty_connector.identity_service" />
         </service>
     </services>

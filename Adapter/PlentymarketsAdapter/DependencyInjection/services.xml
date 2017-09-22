@@ -10,226 +10,238 @@
 
         <!-- Client -->
 
-        <service id="plentmarkets_adapter.client" class="PlentymarketsAdapter\Client\Client">
+        <service id="plentymarkets_adapter.client" class="PlentymarketsAdapter\Client\Client">
             <argument type="service" id="plentymarkets_adapter.http_client" />
             <argument type="service" id="plenty_connector.config" />
         </service>
 
         <!-- ReadApi -->
 
-        <service id="plentmarkets_adapter.read_api.item" class="PlentymarketsAdapter\ReadApi\Item">
-            <argument type="service" id="plentmarkets_adapter.client" />
-            <argument type="service" id="plentmarkets_adapter.read_api.item.variant" />
+        <service id="plentymarkets_adapter.read_api.item" class="PlentymarketsAdapter\ReadApi\Item">
+            <argument type="service" id="plentymarkets_adapter.client" />
+            <argument type="service" id="plentymarkets_adapter.read_api.item.variant" />
+            <argument type="service" id="plentymarkets_adapter.helper.language" />
         </service>
 
-        <service id="plentmarkets_adapter.read_api.item.attribute" class="PlentymarketsAdapter\ReadApi\Item\Attribute">
-            <argument type="service" id="plentmarkets_adapter.client" />
+        <service id="plentymarkets_adapter.read_api.item.attribute" class="PlentymarketsAdapter\ReadApi\Item\Attribute">
+            <argument type="service" id="plentymarkets_adapter.client" />
         </service>
 
-        <service id="plentmarkets_adapter.read_api.item.attribute.value" class="PlentymarketsAdapter\ReadApi\Item\Attribute\Value">
-            <argument type="service" id="plentmarkets_adapter.client" />
+        <service id="plentymarkets_adapter.read_api.item.attribute.value" class="PlentymarketsAdapter\ReadApi\Item\Attribute\Value">
+            <argument type="service" id="plentymarkets_adapter.client" />
         </service>
 
-        <service id="plentmarkets_adapter.read_api.item.availability" class="PlentymarketsAdapter\ReadApi\Availability">
-            <argument type="service" id="plentmarkets_adapter.client" />
+        <service id="plentymarkets_adapter.read_api.item.availability" class="PlentymarketsAdapter\ReadApi\Availability">
+            <argument type="service" id="plentymarkets_adapter.client" />
         </service>
 
-        <service id="plentmarkets_adapter.read_api.item.barcode" class="PlentymarketsAdapter\ReadApi\Item\Barcode">
-            <argument type="service" id="plentmarkets_adapter.client" />
+        <service id="plentymarkets_adapter.read_api.item.barcode" class="PlentymarketsAdapter\ReadApi\Item\Barcode">
+            <argument type="service" id="plentymarkets_adapter.client" />
         </service>
 
-        <service id="plentmarkets_adapter.read_api.item.variant" class="PlentymarketsAdapter\ReadApi\Item\Variation">
-            <argument type="service" id="plentmarkets_adapter.client" />
+        <service id="plentymarkets_adapter.read_api.item.unit" class="PlentymarketsAdapter\ReadApi\Item\Unit">
+            <argument type="service" id="plentymarkets_adapter.client" />
         </service>
 
-        <service id="plentmarkets_adapter.read_api.comment" class="PlentymarketsAdapter\ReadApi\Comment\Comment">
-            <argument type="service" id="plentmarkets_adapter.client" />
+        <service id="plentymarkets_adapter.read_api.item.variant" class="PlentymarketsAdapter\ReadApi\Item\Variation">
+            <argument type="service" id="plentymarkets_adapter.client" />
         </service>
 
-        <service id="plentmarkets_adapter.read_api.order" class="PlentymarketsAdapter\ReadApi\Order\Order">
-            <argument type="service" id="plentmarkets_adapter.client" />
+        <service id="plentymarkets_adapter.read_api.comment" class="PlentymarketsAdapter\ReadApi\Comment\Comment">
+            <argument type="service" id="plentymarkets_adapter.client" />
         </service>
 
-        <service id="plentmarkets_adapter.read_api.customer" class="PlentymarketsAdapter\ReadApi\Customer\Customer">
-            <argument type="service" id="plentmarkets_adapter.client" />
+        <service id="plentymarkets_adapter.read_api.order" class="PlentymarketsAdapter\ReadApi\Order\Order">
+            <argument type="service" id="plentymarkets_adapter.client" />
         </service>
 
-        <service id="plentmarkets_adapter.read_api.address" class="PlentymarketsAdapter\ReadApi\Address\Address">
-            <argument type="service" id="plentmarkets_adapter.client" />
+        <service id="plentymarkets_adapter.read_api.customer" class="PlentymarketsAdapter\ReadApi\Customer\Customer">
+            <argument type="service" id="plentymarkets_adapter.client" />
         </service>
 
-        <service id="plentmarkets_adapter.read_api.webstore" class="PlentymarketsAdapter\ReadApi\Webstore">
-            <argument type="service" id="plentmarkets_adapter.client" />
+        <service id="plentymarkets_adapter.read_api.address" class="PlentymarketsAdapter\ReadApi\Address\Address">
+            <argument type="service" id="plentymarkets_adapter.client" />
         </service>
 
-        <service id="plentmarkets_adapter.read_api.cateogry" class="PlentymarketsAdapter\ReadApi\Category\Category">
-            <argument type="service" id="plentmarkets_adapter.client" />
+        <service id="plentymarkets_adapter.read_api.webstore" class="PlentymarketsAdapter\ReadApi\Webstore">
+            <argument type="service" id="plentymarkets_adapter.client" />
         </service>
 
-        <service id="plentmarkets_adapter.read_api.sales_price" class="PlentymarketsAdapter\ReadApi\Item\SalesPrice">
-            <argument type="service" id="plentmarkets_adapter.client" />
+        <service id="plentymarkets_adapter.read_api.cateogry" class="PlentymarketsAdapter\ReadApi\Category\Category">
+            <argument type="service" id="plentymarkets_adapter.client" />
+            <argument type="service" id="plentymarkets_adapter.helper.language" />
         </service>
 
-        <service id="plentmarkets_adapter.read_api.contact_class" class="PlentymarketsAdapter\ReadApi\Account\ContactClass">
-            <argument type="service" id="plentmarkets_adapter.client" />
+        <service id="plentymarkets_adapter.read_api.sales_price" class="PlentymarketsAdapter\ReadApi\Item\SalesPrice">
+            <argument type="service" id="plentymarkets_adapter.client" />
+        </service>
+
+        <service id="plentymarkets_adapter.read_api.contact_class" class="PlentymarketsAdapter\ReadApi\Account\ContactClass">
+            <argument type="service" id="plentymarkets_adapter.client" />
         </service>
 
         <!-- Helpers -->
 
-        <service id="plentmarkets_adapter.helper.language" class="PlentymarketsAdapter\Helper\LanguageHelper" />
+        <service id="plentymarkets_adapter.helper.language" class="PlentymarketsAdapter\Helper\LanguageHelper" />
 
-        <service id="plentmarkets_adapter.helper.media_category" class="PlentymarketsAdapter\Helper\MediaCategoryHelper" />
+        <service id="plentymarkets_adapter.helper.media_category" class="PlentymarketsAdapter\Helper\MediaCategoryHelper" />
+
+        <service id="plentymarkets_adapter.helper.reference_amount_calculator" class="PlentymarketsAdapter\Helper\ReferenceAmountCalculator">
+            <argument type="service" id="plentymarkets_adapter.read_api.item.unit" />
+        </service>
 
         <!-- Request Generator -->
 
-        <service id="plentmarkets_adapter.request_generator.address" class="PlentymarketsAdapter\RequestGenerator\Order\Address\AddressRequestGenerator">
+        <service id="plentymarkets_adapter.request_generator.address" class="PlentymarketsAdapter\RequestGenerator\Order\Address\AddressRequestGenerator">
             <argument type="service" id="plenty_connector.identity_service" />
         </service>
 
-        <service id="plentmarkets_adapter.request_generator.order" class="PlentymarketsAdapter\RequestGenerator\Order\OrderRequestGenerator">
+        <service id="plentymarkets_adapter.request_generator.order" class="PlentymarketsAdapter\RequestGenerator\Order\OrderRequestGenerator">
             <argument type="service" id="plenty_connector.identity_service" />
-            <argument type="service" id="plentmarkets_adapter.client" />
-            <argument type="service" id="plentmarkets_adapter.request_generator.order_item" />
-            <argument type="service" id="plentmarkets_adapter.request_generator.customer" />
-            <argument type="service" id="plentmarkets_adapter.request_generator.address" />
+            <argument type="service" id="plentymarkets_adapter.client" />
+            <argument type="service" id="plentymarkets_adapter.request_generator.order_item" />
+            <argument type="service" id="plentymarkets_adapter.request_generator.customer" />
+            <argument type="service" id="plentymarkets_adapter.request_generator.address" />
         </service>
 
-        <service id="plentmarkets_adapter.request_generator.order_item" class="PlentymarketsAdapter\RequestGenerator\Order\OrderItem\OrderItemRequestGenerator">
+        <service id="plentymarkets_adapter.request_generator.order_item" class="PlentymarketsAdapter\RequestGenerator\Order\OrderItem\OrderItemRequestGenerator">
             <argument type="service" id="plenty_connector.identity_service" />
-            <argument type="service" id="plentmarkets_adapter.client" />
+            <argument type="service" id="plentymarkets_adapter.client" />
             <argument type="service" id="plenty_connector.config" />
         </service>
 
-        <service id="plentmarkets_adapter.request_generator.customer" class="PlentymarketsAdapter\RequestGenerator\Order\Customer\CustomerRequestGenerator">
+        <service id="plentymarkets_adapter.request_generator.customer" class="PlentymarketsAdapter\RequestGenerator\Order\Customer\CustomerRequestGenerator">
             <argument type="service" id="plenty_connector.identity_service" />
         </service>
 
-        <service id="plentmarkets_adapter.request_generator.payment" class="PlentymarketsAdapter\RequestGenerator\Payment\PaymentRequestGenerator">
+        <service id="plentymarkets_adapter.request_generator.payment" class="PlentymarketsAdapter\RequestGenerator\Payment\PaymentRequestGenerator">
             <argument type="service" id="plenty_connector.identity_service" />
         </service>
 
         <!-- Response Parser -->
 
-        <service id="plentmarkets_adapter.response_parser.category" class="PlentymarketsAdapter\ResponseParser\Category\CategoryResponseParser">
+        <service id="plentymarkets_adapter.response_parser.category" class="PlentymarketsAdapter\ResponseParser\Category\CategoryResponseParser">
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plenty_connector.config" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.media" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.media" />
             <argument type="service" id="plenty_connector.logger" />
         </service>
 
-        <service id="plentmarkets_adapter.response_parser.country" class="PlentymarketsAdapter\ResponseParser\Country\CountryResponseParser">
+        <service id="plentymarkets_adapter.response_parser.country" class="PlentymarketsAdapter\ResponseParser\Country\CountryResponseParser">
             <argument type="service" id="plenty_connector.identity_service" />
         </service>
 
-        <service id="plentmarkets_adapter.response_parser.currency" class="PlentymarketsAdapter\ResponseParser\Currency\CurrencyResponseParser">
+        <service id="plentymarkets_adapter.response_parser.currency" class="PlentymarketsAdapter\ResponseParser\Currency\CurrencyResponseParser">
             <argument type="service" id="plenty_connector.identity_service" />
         </service>
 
-        <service id="plentmarkets_adapter.response_parser.customer_group" class="PlentymarketsAdapter\ResponseParser\CustomerGroup\CustomerGroupResponseParser">
+        <service id="plentymarkets_adapter.response_parser.customer_group" class="PlentymarketsAdapter\ResponseParser\CustomerGroup\CustomerGroupResponseParser">
             <argument type="service" id="plenty_connector.identity_service" />
         </service>
 
-        <service id="plentmarkets_adapter.response_parser.image" class="PlentymarketsAdapter\ResponseParser\Product\Image\ImageResponseParser">
+        <service id="plentymarkets_adapter.response_parser.image" class="PlentymarketsAdapter\ResponseParser\Product\Image\ImageResponseParser">
             <argument type="service" id="plenty_connector.identity_service" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.media" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.media" />
             <argument type="service" id="plenty_connector.logger" />
         </service>
 
-        <service id="plentmarkets_adapter.response_parser.language" class="PlentymarketsAdapter\ResponseParser\Language\LanguageResponseParser">
+        <service id="plentymarkets_adapter.response_parser.language" class="PlentymarketsAdapter\ResponseParser\Language\LanguageResponseParser">
             <argument type="service" id="plenty_connector.identity_service" />
         </service>
 
-        <service id="plentmarkets_adapter.response_parser.manufacturer" class="PlentymarketsAdapter\ResponseParser\Manufacturer\ManufacturerResponseParser">
+        <service id="plentymarkets_adapter.response_parser.manufacturer" class="PlentymarketsAdapter\ResponseParser\Manufacturer\ManufacturerResponseParser">
             <argument type="service" id="plenty_connector.identity_service" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.media" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.media" />
             <argument type="service" id="plenty_connector.logger" />
         </service>
 
-        <service id="plentmarkets_adapter.response_parser.media" class="PlentymarketsAdapter\ResponseParser\Media\MediaResponseParser">
+        <service id="plentymarkets_adapter.response_parser.media" class="PlentymarketsAdapter\ResponseParser\Media\MediaResponseParser">
             <argument type="service" id="plenty_connector.identity_service" />
-            <argument type="service" id="plentmarkets_adapter.helper.media_category" />
+            <argument type="service" id="plentymarkets_adapter.helper.media_category" />
             <argument type="service" id="plenty_connector.logger" />
         </service>
 
-        <service id="plentmarkets_adapter.response_parser.media_category" class="PlentymarketsAdapter\ResponseParser\MediaCategory\MediaCategoryResponseParser">
+        <service id="plentymarkets_adapter.response_parser.media_category" class="PlentymarketsAdapter\ResponseParser\MediaCategory\MediaCategoryResponseParser">
             <argument type="service" id="plenty_connector.identity_service" />
         </service>
 
-        <service id="plentmarkets_adapter.response_parser.order" class="PlentymarketsAdapter\ResponseParser\Order\OrderResponseParser">
-            <argument type="service" id="plenty_connector.identity_service" />
-            <argument type="service" id="plenty_connector.logger" />
-            <argument type="service" id="plentmarkets_adapter.read_api.address" />
-            <argument type="service" id="plentmarkets_adapter.read_api.customer" />
-            <argument type="service" id="plentmarkets_adapter.read_api.comment" />
-            <argument type="service" id="plentmarkets_adapter.client" />
-        </service>
-
-        <service id="plentmarkets_adapter.response_parser.order_status" class="PlentymarketsAdapter\ResponseParser\OrderStatus\OrderStatusResponseParser">
-            <argument type="service" id="plenty_connector.identity_service" />
-        </service>
-
-        <service id="plentmarkets_adapter.response_parser.payment_method" class="PlentymarketsAdapter\ResponseParser\PaymentMethod\PaymentMethodResponseParser">
-            <argument type="service" id="plenty_connector.identity_service" />
-        </service>
-
-        <service id="plentmarkets_adapter.response_parser.payment_status" class="PlentymarketsAdapter\ResponseParser\PaymentStatus\PaymentStatusResponseParser">
-            <argument type="service" id="plenty_connector.identity_service" />
-        </service>
-
-        <service id="plentmarkets_adapter.response_parser.product" class="PlentymarketsAdapter\ResponseParser\Product\ProductResponseParser">
+        <service id="plentymarkets_adapter.response_parser.order" class="PlentymarketsAdapter\ResponseParser\Order\OrderResponseParser">
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plenty_connector.logger" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.image" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.variation" />
-            <argument type="service" id="plentmarkets_adapter.client" />
+            <argument type="service" id="plentymarkets_adapter.read_api.address" />
+            <argument type="service" id="plentymarkets_adapter.read_api.customer" />
+            <argument type="service" id="plentymarkets_adapter.read_api.comment" />
+            <argument type="service" id="plentymarkets_adapter.client" />
         </service>
 
-        <service id="plentmarkets_adapter.response_parser.product.price" class="PlentymarketsAdapter\ResponseParser\Product\Price\PriceResponseParser">
+        <service id="plentymarkets_adapter.response_parser.order_status" class="PlentymarketsAdapter\ResponseParser\OrderStatus\OrderStatusResponseParser">
             <argument type="service" id="plenty_connector.identity_service" />
-            <argument type="service" id="plentmarkets_adapter.read_api.sales_price" />
-            <argument type="service" id="plentmarkets_adapter.read_api.contact_class" />
+        </service>
+
+        <service id="plentymarkets_adapter.response_parser.payment_method" class="PlentymarketsAdapter\ResponseParser\PaymentMethod\PaymentMethodResponseParser">
+            <argument type="service" id="plenty_connector.identity_service" />
+        </service>
+
+        <service id="plentymarkets_adapter.response_parser.payment_status" class="PlentymarketsAdapter\ResponseParser\PaymentStatus\PaymentStatusResponseParser">
+            <argument type="service" id="plenty_connector.identity_service" />
+        </service>
+
+        <service id="plentymarkets_adapter.response_parser.product" class="PlentymarketsAdapter\ResponseParser\Product\ProductResponseParser">
+            <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="plenty_connector.logger" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.image" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.variation" />
+            <argument type="service" id="plentymarkets_adapter.client" />
+        </service>
+
+        <service id="plentymarkets_adapter.response_parser.product.price" class="PlentymarketsAdapter\ResponseParser\Product\Price\PriceResponseParser">
+            <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="plentymarkets_adapter.read_api.sales_price" />
+            <argument type="service" id="plentymarkets_adapter.read_api.contact_class" />
             <argument type="service" id="plenty_connector.logger" />
         </service>
 
-        <service id="plentmarkets_adapter.response_parser.shipping_profile" class="PlentymarketsAdapter\ResponseParser\ShippingProfile\ShippingProfileResponseParser">
+        <service id="plentymarkets_adapter.response_parser.shipping_profile" class="PlentymarketsAdapter\ResponseParser\ShippingProfile\ShippingProfileResponseParser">
             <argument type="service" id="plenty_connector.identity_service" />
         </service>
 
-        <service id="plentmarkets_adapter.response_parser.shop" class="PlentymarketsAdapter\ResponseParser\Shop\ShopResponseParser">
+        <service id="plentymarkets_adapter.response_parser.shop" class="PlentymarketsAdapter\ResponseParser\Shop\ShopResponseParser">
             <argument type="service" id="plenty_connector.identity_service" />
         </service>
 
-        <service id="plentmarkets_adapter.response_parser.stock" class="PlentymarketsAdapter\ResponseParser\Product\Stock\StockResponseParser">
+        <service id="plentymarkets_adapter.response_parser.stock" class="PlentymarketsAdapter\ResponseParser\Product\Stock\StockResponseParser">
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plenty_connector.config" />
-            <argument type="service" id="plentmarkets_adapter.client" />
+            <argument type="service" id="plentymarkets_adapter.client" />
         </service>
 
-        <service id="plentmarkets_adapter.response_parser.unit" class="PlentymarketsAdapter\ResponseParser\Unit\UnitResponseParser">
+        <service id="plentymarkets_adapter.response_parser.unit" class="PlentymarketsAdapter\ResponseParser\Unit\UnitResponseParser">
             <argument type="service" id="plenty_connector.identity_service" />
         </service>
 
-        <service id="plentmarkets_adapter.response_parser.variation" class="PlentymarketsAdapter\ResponseParser\Product\Variation\VariationResponseParser">
+        <service id="plentymarkets_adapter.response_parser.variation" class="PlentymarketsAdapter\ResponseParser\Product\Variation\VariationResponseParser">
             <argument type="service" id="plenty_connector.identity_service" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.product.price" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.image" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.stock" />
-            <argument type="service" id="plentmarkets_adapter.read_api.item.availability" />
-            <argument type="service" id="plentmarkets_adapter.read_api.item.attribute" />
-            <argument type="service" id="plentmarkets_adapter.read_api.item.attribute.value" />
-            <argument type="service" id="plentmarkets_adapter.read_api.item.barcode" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.product.price" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.image" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.stock" />
+            <argument type="service" id="plentymarkets_adapter.read_api.item.availability" />
+            <argument type="service" id="plentymarkets_adapter.read_api.item.attribute" />
+            <argument type="service" id="plentymarkets_adapter.read_api.item.attribute.value" />
+            <argument type="service" id="plentymarkets_adapter.read_api.item.barcode" />
+            <argument type="service" id="plentymarkets_adapter.helper.reference_amount_calculator" />
+
             <argument type="service" id="plenty_connector.config" />
         </service>
 
-        <service id="plentmarkets_adapter.response_parser.vat_rate" class="PlentymarketsAdapter\ResponseParser\VatRate\VatRateResponseParser">
+        <service id="plentymarkets_adapter.response_parser.vat_rate" class="PlentymarketsAdapter\ResponseParser\VatRate\VatRateResponseParser">
             <argument type="service" id="plenty_connector.identity_service" />
         </service>
 
         <!-- Category query handlers -->
 
         <service id="plentymarkets_adapter.query_handler.fetch_all_categories" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Category\FetchAllCategoriesQueryHandler">
-            <argument type="service" id="plentmarkets_adapter.read_api.cateogry" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.category" />
+            <argument type="service" id="plentymarkets_adapter.read_api.cateogry" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.category" />
             <argument type="service" id="plenty_connector.logger" />
             <argument type="service" id="plenty_connector.console.output_handler" />
 
@@ -237,8 +249,8 @@
         </service>
 
         <service id="plentymarkets_adapter.query_handler.fetch_changed_categories" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Category\FetchChangedCategoriesQueryHandler">
-            <argument type="service" id="plentmarkets_adapter.read_api.cateogry" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.category" />
+            <argument type="service" id="plentymarkets_adapter.read_api.cateogry" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.category" />
             <argument type="service" id="plenty_connector.logger" />
             <argument type="service" id="plenty_connector.console.output_handler" />
 
@@ -246,9 +258,9 @@
         </service>
 
         <service id="plentymarkets_adapter.query_handler.fetch_category" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Category\FetchCategoryQueryHandler">
-            <argument type="service" id="plentmarkets_adapter.client" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.category" />
-            <argument type="service" id="plentmarkets_adapter.helper.language" />
+            <argument type="service" id="plentymarkets_adapter.client" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.category" />
+            <argument type="service" id="plentymarkets_adapter.helper.language" />
             <argument type="service" id="plenty_connector.identity_service" />
 
             <tag name="plenty_connector.query_handler" />
@@ -257,8 +269,8 @@
         <!-- Manufacturer query handlers -->
 
         <service id="plentymarkets_adapter.query_handler.fetch_all_manufacturers" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Manufacturer\FetchAllManufacturersQueryHandler">
-            <argument type="service" id="plentmarkets_adapter.client" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.manufacturer" />
+            <argument type="service" id="plentymarkets_adapter.client" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.manufacturer" />
             <argument type="service" id="plenty_connector.logger" />
             <argument type="service" id="plenty_connector.console.output_handler" />
 
@@ -266,8 +278,8 @@
         </service>
 
         <service id="plentymarkets_adapter.query_handler.fetch_changed_manufacturers" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Manufacturer\FetchChangedManufacturersQueryHandler">
-            <argument type="service" id="plentmarkets_adapter.client" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.manufacturer" />
+            <argument type="service" id="plentymarkets_adapter.client" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.manufacturer" />
             <argument type="service" id="plenty_connector.logger" />
             <argument type="service" id="plenty_connector.console.output_handler" />
 
@@ -275,8 +287,8 @@
         </service>
 
         <service id="plentymarkets_adapter.query_handler.fetch_manufacturer" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Manufacturer\FetchManufacturerQueryHandler">
-            <argument type="service" id="plentmarkets_adapter.client" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.manufacturer" />
+            <argument type="service" id="plentymarkets_adapter.client" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.manufacturer" />
             <argument type="service" id="plenty_connector.identity_service" />
 
             <tag name="plenty_connector.query_handler" />
@@ -285,8 +297,8 @@
         <!-- Order query handlers -->
 
         <service id="plentymarkets_adapter.query_handler.fetch_all_orders" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Order\FetchAllOrdersQueryHandler">
-            <argument type="service" id="plentmarkets_adapter.read_api.order" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.order" />
+            <argument type="service" id="plentymarkets_adapter.read_api.order" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.order" />
             <argument type="service" id="plenty_connector.logger" />
             <argument type="service" id="plenty_connector.console.output_handler" />
 
@@ -294,8 +306,8 @@
         </service>
 
         <service id="plentymarkets_adapter.query_handler.fetch_changed_orders" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Order\FetchChangedOrdersQueryHandler">
-            <argument type="service" id="plentmarkets_adapter.read_api.order" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.order" />
+            <argument type="service" id="plentymarkets_adapter.read_api.order" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.order" />
             <argument type="service" id="plenty_connector.logger" />
             <argument type="service" id="plenty_connector.console.output_handler" />
 
@@ -303,9 +315,9 @@
         </service>
 
         <service id="plentymarkets_adapter.query_handler.fetch_order" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Order\FetchOrderQueryHandler">
-            <argument type="service" id="plentmarkets_adapter.read_api.order" />
+            <argument type="service" id="plentymarkets_adapter.read_api.order" />
             <argument type="service" id="plenty_connector.identity_service" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.order" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.order" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
@@ -313,8 +325,8 @@
         <!-- Media cateogry query handlers -->
 
         <service id="plentymarkets_adapter.query_handler.fetch_all_media_categories" class="PlentymarketsAdapter\ServiceBus\QueryHandler\MediaCategory\FetchAllMediaCategoriesQueryHandler">
-            <argument type="service" id="plentmarkets_adapter.helper.media_category" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.media_category" />
+            <argument type="service" id="plentymarkets_adapter.helper.media_category" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.media_category" />
             <argument type="service" id="plenty_connector.logger" />
             <argument type="service" id="plenty_connector.console.output_handler" />
 
@@ -323,8 +335,8 @@
 
         <service id="plentymarkets_adapter.query_handler.fetch_changed_media_categories" class="PlentymarketsAdapter\ServiceBus\QueryHandler\MediaCategory\FetchChangedMediaCategoriesQueryHandler">
             <argument type="service" id="plenty_connector.config" />
-            <argument type="service" id="plentmarkets_adapter.helper.media_category" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.media_category" />
+            <argument type="service" id="plentymarkets_adapter.helper.media_category" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.media_category" />
             <argument type="service" id="plenty_connector.logger" />
             <argument type="service" id="plenty_connector.console.output_handler" />
 
@@ -333,8 +345,8 @@
 
         <service id="plentymarkets_adapter.query_handler.fetch_media_category" class="PlentymarketsAdapter\ServiceBus\QueryHandler\MediaCategory\FetchMediaCategoryHandler">
             <argument type="service" id="plenty_connector.identity_service" />
-            <argument type="service" id="plentmarkets_adapter.helper.media_category" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.media_category" />
+            <argument type="service" id="plentymarkets_adapter.helper.media_category" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.media_category" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
@@ -342,8 +354,8 @@
         <!-- Product query handlers -->
 
         <service id="plentymarkets_adapter.query_handler.fetch_all_products" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Product\FetchAllProductsQueryHandler">
-            <argument type="service" id="plentmarkets_adapter.read_api.item" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.product" />
+            <argument type="service" id="plentymarkets_adapter.read_api.item" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.product" />
             <argument type="service" id="plenty_connector.logger" />
             <argument type="service" id="plenty_connector.console.output_handler" />
 
@@ -351,8 +363,8 @@
         </service>
 
         <service id="plentymarkets_adapter.query_handler.fetch_changed_products" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Product\FetchChangedProductsQueryHandler">
-            <argument type="service" id="plentmarkets_adapter.read_api.item" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.product" />
+            <argument type="service" id="plentymarkets_adapter.read_api.item" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.product" />
             <argument type="service" id="plenty_connector.logger" />
             <argument type="service" id="plenty_connector.console.output_handler" />
 
@@ -360,9 +372,9 @@
         </service>
 
         <service id="plentymarkets_adapter.query_handler.fetch_product" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Product\FetchProductQueryHandler">
-            <argument type="service" id="plentmarkets_adapter.read_api.item" />
+            <argument type="service" id="plentymarkets_adapter.read_api.item" />
             <argument type="service" id="plenty_connector.identity_service" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.product" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.product" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
@@ -370,8 +382,8 @@
         <!-- Stock query handlers -->
 
         <service id="plentymarkets_adapter.query_handler.fetch_all_stocks" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Stock\FetchAllStocksQueryHandler">
-            <argument type="service" id="plentmarkets_adapter.client" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.stock" />
+            <argument type="service" id="plentymarkets_adapter.client" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.stock" />
             <argument type="service" id="plenty_connector.logger" />
             <argument type="service" id="plenty_connector.console.output_handler" />
 
@@ -379,8 +391,8 @@
         </service>
 
         <service id="plentymarkets_adapter.query_handler.fetch_changed_stocks" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Stock\FetchChangedStocksQueryHandler">
-            <argument type="service" id="plentmarkets_adapter.client" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.stock" />
+            <argument type="service" id="plentymarkets_adapter.client" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.stock" />
             <argument type="service" id="plenty_connector.logger" />
             <argument type="service" id="plenty_connector.console.output_handler" />
 
@@ -394,78 +406,78 @@
         <!-- Mapping query handlers -->
 
         <service id="plentymarkets_adapter.query_handler.fetch_all_countries" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Country\FetchAllCountriesQueryHandler">
-            <argument type="service" id="plentmarkets_adapter.client" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.country" />
+            <argument type="service" id="plentymarkets_adapter.client" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.country" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
 
         <service id="plentymarkets_adapter.query_handler.fetch_all_currencies" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Currency\FetchAllCurrenciesQueryHandler">
-            <argument type="service" id="plentmarkets_adapter.client" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.currency" />
+            <argument type="service" id="plentymarkets_adapter.client" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.currency" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
 
         <service id="plentymarkets_adapter.query_handler.fetch_all_custoemr_groups" class="PlentymarketsAdapter\ServiceBus\QueryHandler\CustomerGroup\FetchAllCustomerGroupsQueryHandler">
-            <argument type="service" id="plentmarkets_adapter.client" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.customer_group" />
+            <argument type="service" id="plentymarkets_adapter.client" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.customer_group" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
 
         <service id="plentymarkets_adapter.query_handler.fetch_all_languages" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Language\FetchAllLanguagesQueryHandler">
-            <argument type="service" id="plentmarkets_adapter.response_parser.language" />
-            <argument type="service" id="plentmarkets_adapter.helper.language" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.language" />
+            <argument type="service" id="plentymarkets_adapter.helper.language" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
 
         <service id="plentymarkets_adapter.query_handler.fetch_all_order_statuses" class="PlentymarketsAdapter\ServiceBus\QueryHandler\OrderStatus\FetchAllOrderStatusesQueryHandler">
-            <argument type="service" id="plentmarkets_adapter.client" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.order_status" />
+            <argument type="service" id="plentymarkets_adapter.client" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.order_status" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
 
         <service id="plentymarkets_adapter.query_handler.fetch_all_payment_methods" class="PlentymarketsAdapter\ServiceBus\QueryHandler\PaymentMethod\FetchAllPaymentMethodsQueryHandler">
-            <argument type="service" id="plentmarkets_adapter.client" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.payment_method" />
+            <argument type="service" id="plentymarkets_adapter.client" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.payment_method" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
 
         <service id="plentymarkets_adapter.query_handler.fetch_all_payment_statuses" class="PlentymarketsAdapter\ServiceBus\QueryHandler\PaymentStatus\FetchAllPaymentStatusesQueryHandler">
-            <argument type="service" id="plentmarkets_adapter.client" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.payment_status" />
+            <argument type="service" id="plentymarkets_adapter.client" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.payment_status" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
 
         <service id="plentymarkets_adapter.query_handler.fetch_all_shipping_profiles" class="PlentymarketsAdapter\ServiceBus\QueryHandler\ShippingProfile\FetchAllShippingProfilesQueryHandler">
-            <argument type="service" id="plentmarkets_adapter.client" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.shipping_profile" />
+            <argument type="service" id="plentymarkets_adapter.client" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.shipping_profile" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
 
         <service id="plentymarkets_adapter.query_handler.fetch_all_shops" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Shop\FetchAllShopsQueryHandler">
-            <argument type="service" id="plentmarkets_adapter.client" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.shop" />
+            <argument type="service" id="plentymarkets_adapter.client" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.shop" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
 
         <service id="plentymarkets_adapter.query_handler.fetch_all_units" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Unit\FetchAllUnitsQueryHandler">
-            <argument type="service" id="plentmarkets_adapter.client" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.unit" />
+            <argument type="service" id="plentymarkets_adapter.read_api.item.unit" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.unit" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
 
         <service id="plentymarkets_adapter.query_handler.fetch_all_vat_rates" class="PlentymarketsAdapter\ServiceBus\QueryHandler\VatRate\FetchAllVatRatesQueryHandler">
-            <argument type="service" id="plentmarkets_adapter.client" />
-            <argument type="service" id="plentmarkets_adapter.response_parser.vat_rate" />
+            <argument type="service" id="plentymarkets_adapter.client" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.vat_rate" />
 
             <tag name="plenty_connector.query_handler" />
         </service>
@@ -473,9 +485,9 @@
         <!-- Order Command Handlers -->
 
         <service id="plentymarkets_adapter.command_handler.handle_order" class="PlentymarketsAdapter\ServiceBus\CommandHandler\Order\HandleOrderCommandHandler">
-            <argument type="service" id="plentmarkets_adapter.client" />
+            <argument type="service" id="plentymarkets_adapter.client" />
             <argument type="service" id="plenty_connector.identity_service" />
-            <argument type="service" id="plentmarkets_adapter.request_generator.order" />
+            <argument type="service" id="plentymarkets_adapter.request_generator.order" />
 
             <tag name="plenty_connector.command_handler" />
         </service>
@@ -483,9 +495,9 @@
         <!-- Payment Command Handlers -->
 
         <service id="plentymarkets_adapter.command_handler.handle_payment" class="PlentymarketsAdapter\ServiceBus\CommandHandler\Payment\HandlePaymentCommandHandler">
-            <argument type="service" id="plentmarkets_adapter.client" />
+            <argument type="service" id="plentymarkets_adapter.client" />
             <argument type="service" id="plenty_connector.identity_service" />
-            <argument type="service" id="plentmarkets_adapter.request_generator.payment" />
+            <argument type="service" id="plentymarkets_adapter.request_generator.payment" />
             <argument type="service" id="plenty_connector.logger" />
 
             <tag name="plenty_connector.command_handler" />
