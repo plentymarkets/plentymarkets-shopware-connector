@@ -93,9 +93,8 @@ class VariationRequestGenerator implements VariationRequestGeneratorInterface
             'maxPurchase' => $variation->getMaximumOrderQuantity(),
         ];
 
-        if (null !== $variation->getReleaseDate()) {
-            $releaseData = $variation->getReleaseDate();
-
+        $releaseData = $variation->getReleaseDate();
+        if (null !== $releaseData) {
             $shopwareVariation['releaseDate'] = $releaseData->format(DATE_W3C);
         }
 
