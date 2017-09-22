@@ -20,8 +20,6 @@
         <service id="plentymarkets_adapter.read_api.item" class="PlentymarketsAdapter\ReadApi\Item">
             <argument type="service" id="plentymarkets_adapter.client" />
             <argument type="service" id="plentymarkets_adapter.read_api.item.variant" />
-            <argument type="service" id="plentymarkets_adapter.read_api.item.shipping_profile" />
-            <argument type="service" id="plentymarkets_adapter.read_api.item.image" />
             <argument type="service" id="plentymarkets_adapter.helper.language" />
         </service>
 
@@ -39,15 +37,6 @@
 
         <service id="plentymarkets_adapter.read_api.item.barcode" class="PlentymarketsAdapter\ReadApi\Item\Barcode">
             <argument type="service" id="plentymarkets_adapter.client" />
-        </service>
-
-        <service id="plentymarkets_adapter.read_api.item.image" class="PlentymarketsAdapter\ReadApi\Item\Image">
-            <argument type="service" id="plentymarkets_adapter.client" />
-        </service>
-
-        <service id="plentymarkets_adapter.read_api.item.shipping_profile" class="PlentymarketsAdapter\ReadApi\Item\ShippingProfile">
-            <argument type="service" id="plentymarkets_adapter.client" />
-            <argument type="service" id="plentymarkets_adapter.helper.language" />
         </service>
 
         <service id="plentymarkets_adapter.read_api.item.unit" class="PlentymarketsAdapter\ReadApi\Item\Unit">

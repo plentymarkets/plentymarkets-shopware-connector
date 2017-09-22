@@ -6,8 +6,6 @@ use DateTimeImmutable;
 use PlentymarketsAdapter\Client\Client;
 use PlentymarketsAdapter\Client\Iterator\Iterator;
 use PlentymarketsAdapter\Helper\LanguageHelperInterface;
-use PlentymarketsAdapter\ReadApi\Item\Image as ImageApi;
-use PlentymarketsAdapter\ReadApi\Item\ShippingProfile as ShippingProfileApi;
 use PlentymarketsAdapter\ReadApi\Item\Variation as VariationApi;
 
 /**
@@ -21,16 +19,6 @@ class Item extends ApiAbstract
     private $itemsVariationsApi;
 
     /**
-     * @var ShippingProfileApi
-     */
-    private $itemsItemShippingProfilesApi;
-
-    /**
-     * @var ImageApi
-     */
-    private $itemsImagesApi;
-
-    /**
      * @var LanguageHelperInterface
      */
     private $languageHelper;
@@ -40,22 +28,16 @@ class Item extends ApiAbstract
      *
      * @param Client                  $client
      * @param VariationApi            $itemsVariationsApi
-     * @param ShippingProfileApi      $itemShippingProfilesApi
-     * @param ImageApi                $itemsImagesApi
      * @param LanguageHelperInterface $languageHelper
      */
     public function __construct(
         Client $client,
         VariationApi $itemsVariationsApi,
-        ShippingProfileApi $itemShippingProfilesApi,
-        ImageApi $itemsImagesApi,
         LanguageHelperInterface $languageHelper
     ) {
         parent::__construct($client);
 
         $this->itemsVariationsApi = $itemsVariationsApi;
-        $this->itemsItemShippingProfilesApi = $itemShippingProfilesApi;
-        $this->itemsImagesApi = $itemsImagesApi;
         $this->languageHelper = $languageHelper;
     }
 
@@ -72,8 +54,8 @@ class Item extends ApiAbstract
         ]);
 
         $result['variations'] = $this->itemsVariationsApi->findBy(['itemId' => $result['id']]);
-        $result['shippingProfiles'] = $this->itemsItemShippingProfilesApi->find($result['id']);
-        $result['images'] = $this->itemsImagesApi->findAll($result['id']);
+        $result['shippingProfiles'] = $this->getProductShippingProfiles($result['id']);
+        $result['images'] = $this->getProductImages($result['id']);
 
         return $result;
     }
@@ -86,7 +68,7 @@ class Item extends ApiAbstract
         return $this->client->getIterator('items', [
             'lang' => $this->languageHelper->getLanguagesQueryString(),
             'with' => 'itemProperties.valueTexts,itemCrossSelling',
-        ], function ($elements) {
+        ], function (array $elements) {
             $this->addAdditionalData($elements);
 
             return $elements;
@@ -108,7 +90,7 @@ class Item extends ApiAbstract
             'lang' => $this->languageHelper->getLanguagesQueryString(),
             'updatedBetween' => $start . ',' . $end,
             'with' => 'itemProperties.valueTexts,itemCrossSelling',
-        ], function ($elements) {
+        ], function (array $elements) {
             $this->addAdditionalData($elements);
 
             return $elements;
@@ -133,8 +115,31 @@ class Item extends ApiAbstract
                 return $element['id'] === $variation['itemId'];
             });
 
-            $elements[$key]['shippingProfiles'] = $this->itemsItemShippingProfilesApi->find($element['id']);
-            $elements[$key]['images'] = $this->itemsImagesApi->findAll($element['id']);
+            $elements[$key]['shippingProfiles'] = $this->getProductShippingProfiles($element['id']);
+            $elements[$key]['images'] = $this->getProductImages($element['id']);
         }
+    }
+
+    /**
+     * @param integer $id
+     *
+     * @return array
+     */
+    private function getProductImages($id)
+    {
+        return $this->client->request('GET', 'items/' . $id . '/images');
+    }
+
+    /**
+     * @param integer $id
+     *
+     * @return array
+     */
+    private function getProductShippingProfiles($id)
+    {
+        return $this->client->request('GET', 'items/' . $id . '/item_shipping_profiles', [
+            'with' => 'names',
+            'lang' => $this->languageHelper->getLanguagesQueryString(),
+        ]);
     }
 }
