@@ -31,7 +31,6 @@ class ReferenceAmountCalculatorTest extends TestCase
         $this->calculator = new ReferenceAmountCalculator($unitApi);
     }
 
-
     /**
      * @return array
      */
@@ -41,7 +40,7 @@ class ReferenceAmountCalculatorTest extends TestCase
             [['unit' => ['unitId' => 3, 'content' => 100]], 100],
             [['unit' => ['unitId' => 3, 'content' => 250]], 100],
             [['unit' => ['unitId' => 3, 'content' => 251]], 1000],
-            [['unit' => ['unitId' => 3, 'content' => 1100]], 1000]
+            [['unit' => ['unitId' => 3, 'content' => 1100]], 1000],
         ];
     }
 
