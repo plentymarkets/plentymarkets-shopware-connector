@@ -3,7 +3,8 @@
 namespace PlentymarketsAdapter\ReadApi\Category;
 
 use DateTimeImmutable;
-use PlentymarketsAdapter\Helper\LanguageHelper;
+use PlentymarketsAdapter\Client\ClientInterface;
+use PlentymarketsAdapter\Helper\LanguageHelperInterface;
 use PlentymarketsAdapter\ReadApi\ApiAbstract;
 
 /**
@@ -12,18 +13,36 @@ use PlentymarketsAdapter\ReadApi\ApiAbstract;
 class Category extends ApiAbstract
 {
     /**
+     * @var LanguageHelperInterface
+     */
+    private $languageHelper;
+
+    /**
+     * Category constructor.
+     *
+     * @param ClientInterface         $client
+     * @param LanguageHelperInterface $languageHelper
+     */
+    public function __construct(
+        ClientInterface $client,
+        LanguageHelperInterface $languageHelper
+    ) {
+        parent::__construct($client);
+
+        $this->languageHelper = $languageHelper;
+    }
+
+    /**
      * @param $categoryId
      *
      * @return array
      */
     public function findOne($categoryId)
     {
-        $languageHelper = new LanguageHelper();
-
         return $this->client->request('GET', 'categories/' . $categoryId, [
             'with' => 'details,clients',
             'type' => 'item',
-            'lang' => $languageHelper->getLanguagesQueryString(),
+            'lang' => $this->languageHelper->getLanguagesQueryString(),
         ]);
     }
 
@@ -32,12 +51,10 @@ class Category extends ApiAbstract
      */
     public function findAll()
     {
-        $languageHelper = new LanguageHelper();
-
         $elements = iterator_to_array($this->client->getIterator('categories', [
             'with' => 'details,clients',
             'type' => 'item',
-            'lang' => $languageHelper->getLanguagesQueryString(),
+            'lang' => $this->languageHelper->getLanguagesQueryString(),
         ]));
 
         $this->sortCategories($elements);
@@ -53,13 +70,11 @@ class Category extends ApiAbstract
      */
     public function findChanged(DateTimeImmutable $startTimestamp, DateTimeImmutable $endTimestamp)
     {
-        $languageHelper = new LanguageHelper();
-
         $elements = iterator_to_array($this->client->getIterator('categories', [
             'with' => 'details,clients',
             'type' => 'item',
             'updatedAt' => $startTimestamp->format(DATE_W3C),
-            'lang' => $languageHelper->getLanguagesQueryString(),
+            'lang' => $this->languageHelper->getLanguagesQueryString(),
         ]));
 
         $this->sortCategories($elements);

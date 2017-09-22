@@ -5,7 +5,7 @@ namespace PlentymarketsAdapter\ReadApi;
 use DateTimeImmutable;
 use PlentymarketsAdapter\Client\Client;
 use PlentymarketsAdapter\Client\Iterator\Iterator;
-use PlentymarketsAdapter\Helper\LanguageHelper;
+use PlentymarketsAdapter\Helper\LanguageHelperInterface;
 use PlentymarketsAdapter\ReadApi\Item\Variation;
 
 /**
@@ -19,18 +19,26 @@ class Item extends ApiAbstract
     private $itemsVariationsApi;
 
     /**
+     * @var LanguageHelperInterface
+     */
+    private $languageHelper;
+
+    /**
      * Item constructor.
      *
-     * @param Client    $client
-     * @param Variation $itemsVariationsApi
+     * @param Client                  $client
+     * @param Variation               $itemsVariationsApi
+     * @param LanguageHelperInterface $languageHelper
      */
     public function __construct(
         Client $client,
-        Variation $itemsVariationsApi
+        Variation $itemsVariationsApi,
+        LanguageHelperInterface $languageHelper
     ) {
         parent::__construct($client);
 
         $this->itemsVariationsApi = $itemsVariationsApi;
+        $this->languageHelper = $languageHelper;
     }
 
     /**
@@ -40,10 +48,8 @@ class Item extends ApiAbstract
      */
     public function findOne($productId)
     {
-        $languageHelper = new LanguageHelper();
-
         $result = $this->client->request('GET', 'items/' . $productId, [
-            'lang' => $languageHelper->getLanguagesQueryString(),
+            'lang' => $this->languageHelper->getLanguagesQueryString(),
             'with' => 'itemProperties.valueTexts,itemCrossSelling',
         ]);
 
@@ -57,10 +63,8 @@ class Item extends ApiAbstract
      */
     public function findAll()
     {
-        $languageHelper = new LanguageHelper();
-
         return $this->client->getIterator('items', [
-            'lang' => $languageHelper->getLanguagesQueryString(),
+            'lang' => $this->languageHelper->getLanguagesQueryString(),
             'with' => 'itemProperties.valueTexts,itemCrossSelling',
         ], function ($elements) {
             $this->addAdditionalData($elements);
@@ -80,10 +84,8 @@ class Item extends ApiAbstract
         $start = $startTimestamp->format(DATE_W3C);
         $end = $endTimestamp->format(DATE_W3C);
 
-        $languageHelper = new LanguageHelper();
-
         return $this->client->getIterator('items', [
-            'lang' => $languageHelper->getLanguagesQueryString(),
+            'lang' => $this->languageHelper->getLanguagesQueryString(),
             'updatedBetween' => $start . ',' . $end,
             'with' => 'itemProperties.valueTexts,itemCrossSelling',
         ], function ($elements) {

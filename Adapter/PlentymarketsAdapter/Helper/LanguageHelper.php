@@ -5,13 +5,10 @@ namespace PlentymarketsAdapter\Helper;
 /**
  * Class LanguageHelper
  */
-class LanguageHelper
+class LanguageHelper implements LanguageHelperInterface
 {
     /**
-     * Returns a list of all supported languages from plentymarkets
-     * source: https://developers.plentymarkets.com/rest-doc/introduction#languages
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getLanguages()
     {
@@ -96,7 +93,7 @@ class LanguageHelper
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getLanguagesQueryString()
     {
