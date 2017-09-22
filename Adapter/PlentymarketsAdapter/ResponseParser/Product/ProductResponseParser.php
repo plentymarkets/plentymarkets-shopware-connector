@@ -50,7 +50,6 @@ class ProductResponseParser implements ProductResponseParserInterface
      */
     private $variationResponseParser;
 
-    private $itemsImagesApi;
     private $itemsVariationsVariationPropertiesApi;
     private $itemsPropertiesSelectionsApi;
     private $itemsPropertiesNamesApi;
@@ -77,7 +76,6 @@ class ProductResponseParser implements ProductResponseParserInterface
         $this->variationResponseParser = $variationResponseParser;
 
         //TODO: inject when refactoring this class
-        $this->itemsImagesApi = new \PlentymarketsAdapter\ReadApi\Item\Image($client);
         $this->itemsVariationsVariationPropertiesApi = new \PlentymarketsAdapter\ReadApi\Item\Variation\Property($client);
         $this->itemsPropertiesSelectionsApi = new\PlentymarketsAdapter\ReadApi\Item\Property\Selection($client);
         $this->itemsPropertiesNamesApi = new \PlentymarketsAdapter\ReadApi\Item\Property\Name($client);
@@ -264,10 +262,8 @@ class ProductResponseParser implements ProductResponseParserInterface
      */
     private function getImages(array $product, array $texts, array &$result)
     {
-        $entries = $this->itemsImagesApi->findAll($product['id']);
-
         $images = [];
-        foreach ($entries as $entry) {
+        foreach ($product['images'] as $entry) {
             $images[] = $this->imageResponseParser->parseImage($entry, $texts, $result);
         }
 

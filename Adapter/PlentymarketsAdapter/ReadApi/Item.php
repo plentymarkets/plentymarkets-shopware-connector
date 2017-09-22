@@ -6,6 +6,7 @@ use DateTimeImmutable;
 use PlentymarketsAdapter\Client\Client;
 use PlentymarketsAdapter\Client\Iterator\Iterator;
 use PlentymarketsAdapter\Helper\LanguageHelperInterface;
+use PlentymarketsAdapter\ReadApi\Item\Image as ImageApi;
 use PlentymarketsAdapter\ReadApi\Item\ShippingProfile as ShippingProfileApi;
 use PlentymarketsAdapter\ReadApi\Item\Variation as VariationApi;
 
@@ -25,6 +26,11 @@ class Item extends ApiAbstract
     private $itemsItemShippingProfilesApi;
 
     /**
+     * @var ImageApi
+     */
+    private $itemsImagesApi;
+
+    /**
      * @var LanguageHelperInterface
      */
     private $languageHelper;
@@ -35,18 +41,21 @@ class Item extends ApiAbstract
      * @param Client                  $client
      * @param VariationApi            $itemsVariationsApi
      * @param ShippingProfileApi      $itemShippingProfilesApi
+     * @param ImageApi                $itemsImagesApi
      * @param LanguageHelperInterface $languageHelper
      */
     public function __construct(
         Client $client,
         VariationApi $itemsVariationsApi,
         ShippingProfileApi $itemShippingProfilesApi,
+        ImageApi $itemsImagesApi,
         LanguageHelperInterface $languageHelper
     ) {
         parent::__construct($client);
 
         $this->itemsVariationsApi = $itemsVariationsApi;
         $this->itemsItemShippingProfilesApi = $itemShippingProfilesApi;
+        $this->itemsImagesApi = $itemsImagesApi;
         $this->languageHelper = $languageHelper;
     }
 
@@ -64,6 +73,7 @@ class Item extends ApiAbstract
 
         $result['variations'] = $this->itemsVariationsApi->findBy(['itemId' => $result['id']]);
         $result['shippingProfiles'] = $this->itemsItemShippingProfilesApi->find($result['id']);
+        $result['images'] = $this->itemsImagesApi->findAll($result['id']);
 
         return $result;
     }
@@ -124,6 +134,7 @@ class Item extends ApiAbstract
             });
 
             $elements[$key]['shippingProfiles'] = $this->itemsItemShippingProfilesApi->find($element['id']);
+            $elements[$key]['images'] = $this->itemsImagesApi->findAll($element['id']);
         }
     }
 }
