@@ -1,6 +1,6 @@
 <?php
 
-namespace PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\OrderItem;
+namespace PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\Payment;
 
 use PlentyConnector\Connector\TransferObject\Payment\Payment;
 use PlentyConnector\Connector\Validator\Order\Payment\PaymentValidator;
