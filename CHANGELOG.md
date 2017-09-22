@@ -5,6 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [5.0.0]
 ### Added
 - added a reference amout calculator to calculate the right base content
+- transfer item short description as attribute to shopware
 
 ### Changed
 - renamed the PlentymarketsAdapter services from plentmarkets_adapter to plentymarkets_adapter

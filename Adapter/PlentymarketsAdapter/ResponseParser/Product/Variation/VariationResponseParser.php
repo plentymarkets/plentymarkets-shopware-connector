@@ -254,7 +254,7 @@ class VariationResponseParser implements VariationResponseParserInterface
      *
      * @throws NotFoundException
      *
-     * @return string
+     * @return null|string
      */
     private function getUnitIdentifier(array $variation)
     {
@@ -472,6 +472,43 @@ class VariationResponseParser implements VariationResponseParserInterface
             ]);
         }
 
+        $attributes[] = $this->getShortDescriptionAsAttribute($product);
+
         return $attributes;
+    }
+
+    /**
+     * @param array $product
+     *
+     * @return Attribute
+     */
+    private function getShortDescriptionAsAttribute(array $product)
+    {
+        $translations = [];
+
+        foreach ($product['texts'] as $text) {
+            $languageIdentifier = $this->identityService->findOneBy([
+                'adapterIdentifier' => $text['lang'],
+                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType' => Language::TYPE,
+            ]);
+
+            if (null === $languageIdentifier) {
+                continue;
+            }
+
+            $translations[] = Translation::fromArray([
+                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                'property' => 'value',
+                'value' => $text['shortDescription'],
+            ]);
+        }
+
+        $attribute = new Attribute();
+        $attribute->setKey('shortDescription');
+        $attribute->setValue((string) $product['texts'][0]['shortDescription']);
+        $attribute->setTranslations($translations);
+
+        return $attribute;
     }
 }
