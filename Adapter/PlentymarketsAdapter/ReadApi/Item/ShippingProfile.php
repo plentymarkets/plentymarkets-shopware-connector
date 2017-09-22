@@ -36,7 +36,7 @@ class ShippingProfile extends ApiAbstract
      *
      * @return array
      */
-    public function findOne($productId)
+    public function find($productId)
     {
         return $this->client->request('GET', 'items/' . $productId . '/item_shipping_profiles', [
             'with' => 'names',

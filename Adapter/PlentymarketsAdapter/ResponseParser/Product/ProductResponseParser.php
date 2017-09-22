@@ -50,7 +50,6 @@ class ProductResponseParser implements ProductResponseParserInterface
      */
     private $variationResponseParser;
 
-    private $itemsItemShippingProfilesApi;
     private $itemsImagesApi;
     private $itemsVariationsVariationPropertiesApi;
     private $itemsPropertiesSelectionsApi;
@@ -78,7 +77,6 @@ class ProductResponseParser implements ProductResponseParserInterface
         $this->variationResponseParser = $variationResponseParser;
 
         //TODO: inject when refactoring this class
-        $this->itemsItemShippingProfilesApi = new \PlentymarketsAdapter\ReadApi\Item\ShippingProfile($client);
         $this->itemsImagesApi = new \PlentymarketsAdapter\ReadApi\Item\Image($client);
         $this->itemsVariationsVariationPropertiesApi = new \PlentymarketsAdapter\ReadApi\Item\Variation\Property($client);
         $this->itemsPropertiesSelectionsApi = new\PlentymarketsAdapter\ReadApi\Item\Property\Selection($client);
@@ -239,10 +237,8 @@ class ProductResponseParser implements ProductResponseParserInterface
      */
     private function getShippingProfiles(array $product)
     {
-        $productShippingProfiles = $this->itemsItemShippingProfilesApi->findOne($product['id']);
-
         $shippingProfiles = [];
-        foreach ($productShippingProfiles as $profile) {
+        foreach ($product['shippingProfiles'] as $profile) {
             $profileIdentity = $this->identityService->findOneBy([
                 'adapterIdentifier' => (string) $profile['profileId'],
                 'adapterName' => PlentymarketsAdapter::NAME,

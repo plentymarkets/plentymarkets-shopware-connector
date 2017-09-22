@@ -6,7 +6,8 @@ use DateTimeImmutable;
 use PlentymarketsAdapter\Client\Client;
 use PlentymarketsAdapter\Client\Iterator\Iterator;
 use PlentymarketsAdapter\Helper\LanguageHelperInterface;
-use PlentymarketsAdapter\ReadApi\Item\Variation;
+use PlentymarketsAdapter\ReadApi\Item\ShippingProfile as ShippingProfileApi;
+use PlentymarketsAdapter\ReadApi\Item\Variation as VariationApi;
 
 /**
  * Class Item
@@ -14,9 +15,14 @@ use PlentymarketsAdapter\ReadApi\Item\Variation;
 class Item extends ApiAbstract
 {
     /**
-     * @var Variation
+     * @var VariationApi
      */
     private $itemsVariationsApi;
+
+    /**
+     * @var ShippingProfileApi
+     */
+    private $itemsItemShippingProfilesApi;
 
     /**
      * @var LanguageHelperInterface
@@ -27,17 +33,20 @@ class Item extends ApiAbstract
      * Item constructor.
      *
      * @param Client                  $client
-     * @param Variation               $itemsVariationsApi
+     * @param VariationApi            $itemsVariationsApi
+     * @param ShippingProfileApi      $itemShippingProfilesApi
      * @param LanguageHelperInterface $languageHelper
      */
     public function __construct(
         Client $client,
-        Variation $itemsVariationsApi,
+        VariationApi $itemsVariationsApi,
+        ShippingProfileApi $itemShippingProfilesApi,
         LanguageHelperInterface $languageHelper
     ) {
         parent::__construct($client);
 
         $this->itemsVariationsApi = $itemsVariationsApi;
+        $this->itemsItemShippingProfilesApi = $itemShippingProfilesApi;
         $this->languageHelper = $languageHelper;
     }
 
@@ -54,6 +63,7 @@ class Item extends ApiAbstract
         ]);
 
         $result['variations'] = $this->itemsVariationsApi->findBy(['itemId' => $result['id']]);
+        $result['shippingProfiles'] = $this->itemsItemShippingProfilesApi->find($result['id']);
 
         return $result;
     }
@@ -112,6 +122,8 @@ class Item extends ApiAbstract
             $elements[$key]['variations'] = array_filter($variations, function (array $variation) use ($element) {
                 return $element['id'] === $variation['itemId'];
             });
+
+            $elements[$key]['shippingProfiles'] = $this->itemsItemShippingProfilesApi->find($element['id']);
         }
     }
 }

@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [5.0.0]
+### Changed
+- renamed the PlentymarketsAdapter services from plentmarkets_adapter to plentymarkets_adapter
+
 ## [4.0.4]
 ### Added
 - prepayment is now mapped correctly

@@ -33,7 +33,7 @@ class ReferenceAmountCalculator implements ReferenceAmountCalculatorInterface
 
         'MTR' => ['base' => 'MTR', 'conversion' => 1], // metre
         'CMT' => ['base' => 'MTR', 'conversion' => 0.01], // centimetre
-        'MMT' => ['base' => 'MTR', 'conversion' => 0.001], // centimetre
+        'MMT' => ['base' => 'MTR', 'conversion' => 0.001], // millimetre
     ];
 
     /**
@@ -55,18 +55,36 @@ class ReferenceAmountCalculator implements ReferenceAmountCalculatorInterface
      */
     public function calculate(array $variation)
     {
-        /**
-         * 1 Kilogramm,
-         * 1 Liter,
-         * 1 Kubikmeter,
-         * 1 Meter oder
-         * 1 Quadratmeter der Ware.
-         *
-         * Bei Waren, deren Nenngewicht oder Nennvolumen üblicherweise 250 Gramm oder Milliliter
-         * nicht übersteigt,  dürfen als Mengeneinheit für den Grundpreis
-         * 100 Gramm oder Milliliter verwendet werden.
-         */
+        $variationUnit = $this->getUnitOfVariation($variation);
+
+        if (null === $variationUnit) {
+            return 1.0;
+        }
+
+        $modifier = self::$convertionMatrix[$variationUnit]['conversion'];
+
+        $content = $variation['unit']['content'] * $modifier;
+
+        if ($content <= 0.25) {
+            return 0.1 / $modifier;
+        }
 
         return 1.0;
+    }
+
+    /**
+     * @param array $variation
+     *
+     * @return null|string
+     */
+    private function getUnitOfVariation(array $variation)
+    {
+        foreach (self::$units as $unit) {
+            if ((int) $unit['id'] === (int) $variation['unit']['unitId']) {
+                return $unit['unitOfMeasurement'];
+            }
+        }
+
+        return null;
     }
 }
