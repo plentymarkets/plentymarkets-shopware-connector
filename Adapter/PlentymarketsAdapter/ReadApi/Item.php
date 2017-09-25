@@ -121,7 +121,7 @@ class Item extends ApiAbstract
     }
 
     /**
-     * @param integer $id
+     * @param int $id
      *
      * @return array
      */
@@ -131,7 +131,7 @@ class Item extends ApiAbstract
     }
 
     /**
-     * @param integer $id
+     * @param int $id
      *
      * @return array
      */
