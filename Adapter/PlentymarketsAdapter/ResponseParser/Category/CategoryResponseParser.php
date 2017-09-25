@@ -153,7 +153,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
             'parentIdentifier' => $parentCategoryIdentifier,
             'shopIdentifiers' => $shopIdentifiers,
             'imageIdentifiers' => $this->getImages($validDetails['0'], $result),
-            'position' => $validDetails['0']['position'],
+            'position' => (int) $validDetails['0']['position'],
             'description' => $validDetails['0']['shortDescription'],
             'longDescription' => $validDetails['0']['description'],
             'metaTitle' => $validDetails['0']['metaTitle'],

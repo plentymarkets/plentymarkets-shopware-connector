@@ -36,7 +36,6 @@ class CategoryValidator implements ValidatorInterface
         Assertion::allUuid($object->getImageIdentifiers(), null, 'category.imageIdentifiers');
 
         Assertion::integer($object->getPosition(), null, 'category.position');
-        Assertion::greaterOrEqualThan($object->getPosition(), 0, null, 'category.position');
 
         Assertion::string($object->getDescription(), null, 'category.description');
         Assertion::string($object->getLongDescription(), null, 'category.longDescription');
