@@ -18,22 +18,22 @@ class ReferenceAmountCalculator implements ReferenceAmountCalculatorInterface
      * @var array
      */
     private static $convertionMatrix = [
-        'KGM' => ['base' => 'KGM', 'conversion' => 1], // kilogram
-        'GRM' => ['base' => 'KGM', 'conversion' => 0.001], // gram
-        'MGM' => ['base' => 'KGM', 'conversion' => 0.000001], // milligram
+        'KGM' => ['conversion' => 1], // kilogram
+        'GRM' => ['conversion' => 0.001], // gram
+        'MGM' => ['conversion' => 0.000001], // milligram
 
-        'LTR' => ['base' => 'LTR', 'conversion' => 1], // liter
-        'MLT' => ['base' => 'LTR', 'conversion' => 0.001], // millilitre
+        'LTR' => ['conversion' => 1], // liter
+        'MLT' => ['conversion' => 0.001], // millilitre
 
-        'MTQ' => ['base' => 'MTQ', 'conversion' => 1], // cubic metre
-        'CMQ' => ['base' => 'MTQ', 'conversion' => 0.0001], // cubic centimetre
+        'MTQ' => ['conversion' => 1], // cubic metre
+        'CMQ' => ['conversion' => 0.0001], // cubic centimetre
 
-        'MTK' => ['base' => 'MTK', 'conversion' => 1], // square metre
-        'CMK' => ['base' => 'MTK', 'conversion' => 0.0001], // square centimetre
+        'MTK' => ['conversion' => 1], // square metre
+        'CMK' => ['conversion' => 0.0001], // square centimetre
 
-        'MTR' => ['base' => 'MTR', 'conversion' => 1], // metre
-        'CMT' => ['base' => 'MTR', 'conversion' => 0.01], // centimetre
-        'MMT' => ['base' => 'MTR', 'conversion' => 0.001], // millimetre
+        'MTR' => ['conversion' => 1], // metre
+        'CMT' => ['conversion' => 0.01], // centimetre
+        'MMT' => ['conversion' => 0.001], // millimetre
     ];
 
     /**
