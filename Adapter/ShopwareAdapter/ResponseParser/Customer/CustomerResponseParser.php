@@ -41,8 +41,8 @@ class CustomerResponseParser implements CustomerResponseParserInterface
      * CustomerResponseParser constructor.
      *
      * @param IdentityServiceInterface $identityService
-     * @param EntityManagerInterface $entityManager
-     * @param LoggerInterface $logger
+     * @param EntityManagerInterface   $entityManager
+     * @param LoggerInterface          $logger
      */
     public function __construct(
         IdentityServiceInterface $identityService,
@@ -52,56 +52,6 @@ class CustomerResponseParser implements CustomerResponseParserInterface
         $this->identityService = $identityService;
         $this->entityManager = $entityManager;
         $this->logger = $logger;
-    }
-
-    /**
-     * @param array $entry
-     *
-     * @return null|GroupModel
-     */
-    private function getCustomerGroup(array $entry)
-    {
-        /**
-         * @var EntityRepository $customerGroupRepository
-         */
-        $customerGroupRepository = $this->entityManager->getRepository(GroupModel::class);
-
-        /**
-         * @var GroupModel $customerGroup
-         */
-        $customerGroup = $customerGroupRepository->findOneBy(['key' => $entry['groupKey']]);
-
-        return $customerGroup;
-    }
-
-    /**
-     * @param array $entry
-     *
-     * @return null|string
-     */
-    private function getLanguageIdentifier(array $entry)
-    {
-        /**
-         * @var Repository $shopRepository
-         */
-        $shopRepository = $this->entityManager->getRepository(ShopModel::class);
-
-        /**
-         * @var ShopModel $shop
-         */
-        $customerShop = $shopRepository->find($entry['languageId']);
-
-        if (null === $customerShop) {
-            return null;
-        }
-
-        $languageIdentifier = $this->getIdentifier((string) $customerShop->getLocale()->getId(), Language::TYPE);
-
-        if (null === $languageIdentifier) {
-            return null;
-        }
-
-        return $languageIdentifier;
     }
 
     /**
@@ -179,6 +129,56 @@ class CustomerResponseParser implements CustomerResponseParserInterface
         }
 
         return $customer;
+    }
+
+    /**
+     * @param array $entry
+     *
+     * @return null|GroupModel
+     */
+    private function getCustomerGroup(array $entry)
+    {
+        /**
+         * @var EntityRepository $customerGroupRepository
+         */
+        $customerGroupRepository = $this->entityManager->getRepository(GroupModel::class);
+
+        /**
+         * @var GroupModel $customerGroup
+         */
+        $customerGroup = $customerGroupRepository->findOneBy(['key' => $entry['groupKey']]);
+
+        return $customerGroup;
+    }
+
+    /**
+     * @param array $entry
+     *
+     * @return null|string
+     */
+    private function getLanguageIdentifier(array $entry)
+    {
+        /**
+         * @var Repository $shopRepository
+         */
+        $shopRepository = $this->entityManager->getRepository(ShopModel::class);
+
+        /**
+         * @var ShopModel $shop
+         */
+        $customerShop = $shopRepository->find($entry['languageId']);
+
+        if (null === $customerShop) {
+            return null;
+        }
+
+        $languageIdentifier = $this->getIdentifier((string) $customerShop->getLocale()->getId(), Language::TYPE);
+
+        if (null === $languageIdentifier) {
+            return null;
+        }
+
+        return $languageIdentifier;
     }
 
     /**
