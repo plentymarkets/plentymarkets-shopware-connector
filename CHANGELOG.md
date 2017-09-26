@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.0.6]
+### Fixed
+- wrong customer langauge was used when parsing orders
+
 ## [4.0.5]
 ### Fixed
 - force category position to integer

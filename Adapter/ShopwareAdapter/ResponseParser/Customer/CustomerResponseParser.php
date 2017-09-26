@@ -10,8 +10,11 @@ use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
 use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
+use Psr\Log\LoggerInterface;
 use Shopware\Models\Customer\Group as GroupModel;
 use Shopware\Models\Newsletter\Address;
+use Shopware\Models\Shop\Repository;
+use Shopware\Models\Shop\Shop as ShopModel;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
@@ -30,17 +33,75 @@ class CustomerResponseParser implements CustomerResponseParserInterface
     private $entityManager;
 
     /**
-     * CountryResponseParser constructor.
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * CustomerResponseParser constructor.
      *
      * @param IdentityServiceInterface $identityService
-     * @param EntityManagerInterface   $entityManager
+     * @param EntityManagerInterface $entityManager
+     * @param LoggerInterface $logger
      */
     public function __construct(
         IdentityServiceInterface $identityService,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        LoggerInterface $logger
     ) {
         $this->identityService = $identityService;
         $this->entityManager = $entityManager;
+        $this->logger = $logger;
+    }
+
+    /**
+     * @param array $entry
+     *
+     * @return null|GroupModel
+     */
+    private function getCustomerGroup(array $entry)
+    {
+        /**
+         * @var EntityRepository $customerGroupRepository
+         */
+        $customerGroupRepository = $this->entityManager->getRepository(GroupModel::class);
+
+        /**
+         * @var GroupModel $customerGroup
+         */
+        $customerGroup = $customerGroupRepository->findOneBy(['key' => $entry['groupKey']]);
+
+        return $customerGroup;
+    }
+
+    /**
+     * @param array $entry
+     *
+     * @return null|string
+     */
+    private function getLanguageIdentifier(array $entry)
+    {
+        /**
+         * @var Repository $shopRepository
+         */
+        $shopRepository = $this->entityManager->getRepository(ShopModel::class);
+
+        /**
+         * @var ShopModel $shop
+         */
+        $customerShop = $shopRepository->find($entry['languageId']);
+
+        if (null === $customerShop) {
+            return null;
+        }
+
+        $languageIdentifier = $this->getIdentifier((string) $customerShop->getLocale()->getId(), Language::TYPE);
+
+        if (null === $languageIdentifier) {
+            return null;
+        }
+
+        return $languageIdentifier;
     }
 
     /**
@@ -51,17 +112,20 @@ class CustomerResponseParser implements CustomerResponseParserInterface
         $entry['salutation'] = strtolower($entry['salutation']);
 
         $shopIdentifier = $this->getIdentifier((string) $entry['shopId'], Shop::TYPE);
-        $languageIdentifier = $this->getIdentifier((string) $entry['languageId'], Language::TYPE);
 
-        /**
-         * @var EntityRepository $customerGroupRepository
-         */
-        $customerGroupRepository = $this->entityManager->getRepository(GroupModel::class);
+        $languageIdentifier = $this->getLanguageIdentifier($entry);
+        if (null === $languageIdentifier) {
+            $this->logger->warning('no customer language found');
 
-        /**
-         * @var GroupModel $customerGroup
-         */
-        $customerGroup = $customerGroupRepository->findOneBy(['key' => $entry['groupKey']]);
+            return null;
+        }
+
+        $customerGroup = $this->getCustomerGroup($entry);
+        if (null === $customerGroup) {
+            $this->logger->warning('no customer group found');
+
+            return null;
+        }
 
         $customerGroupIdentifier = $this->getIdentifier((string) $customerGroup->getId(), CustomerGroup::TYPE);
 
