@@ -6,8 +6,11 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
 use PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\ResponseParserTest;
+use Psr\Log\LoggerInterface;
 use Shopware\Models\Customer\Group;
 use Shopware\Models\Newsletter\Address;
+use Shopware\Models\Shop\Locale;
+use Shopware\Models\Shop\Shop;
 use ShopwareAdapter\ResponseParser\Address\AddressResponseParser;
 use ShopwareAdapter\ResponseParser\Customer\CustomerResponseParser;
 
@@ -39,14 +42,26 @@ class CustomerResponseParserTest extends ResponseParserTest
         $newsletterRepository = $this->createMock(EntityRepository::class);
         $newsletterRepository->expects($this->any())->method('findOneBy')->with(['email' => 'mustermann@b2b.de'])->willReturn($address);
 
+        $locale = $this->createMock(Locale::class);
+        $locale->expects($this->any())->method('getId')->willReturn(1);
+
+        $shop = $this->createMock(Shop::class);
+        $shop->expects($this->any())->method('getLocale')->willReturn($locale);
+
+        $shopRepository = $this->createMock(EntityRepository::class);
+        $shopRepository->expects($this->any())->method('find')->willReturn($shop);
+
         $entityManager = $this->createMock(EntityManagerInterface::class);
-        $entityManager->expects($this->at(0))->method('getRepository')->willReturn($groupRepository);
-        $entityManager->expects($this->at(1))->method('getRepository')->willReturn($newsletterRepository);
+        $entityManager->expects($this->at(0))->method('getRepository')->willReturn($shopRepository);
+        $entityManager->expects($this->at(1))->method('getRepository')->willReturn($groupRepository);
+        $entityManager->expects($this->at(2))->method('getRepository')->willReturn($newsletterRepository);
+
+        $logger = $this->createMock(LoggerInterface::class);
 
         /**
          * @var AddressResponseParser $parser
          */
-        $this->responseParser = new CustomerResponseParser($this->identityService, $entityManager);
+        $this->responseParser = new CustomerResponseParser($this->identityService, $entityManager, $logger);
     }
 
     public function testCustomerParsing()
