@@ -58,7 +58,7 @@ class FetchPaymentQueryHandler implements QueryHandlerInterface
         return $query instanceof FetchTransferObjectQuery &&
             $query->getAdapterName() === ShopwareAdapter::NAME &&
             $query->getObjectType() === Payment::TYPE &&
-            $query->getQueryType() === QueryType::ALL;
+            $query->getQueryType() === QueryType::ONE;
     }
 
     /**
@@ -72,7 +72,7 @@ class FetchPaymentQueryHandler implements QueryHandlerInterface
          * @var FetchQueryInterface $event
          */
         $identity = $this->identityService->findOneBy([
-            'objectIdentifier' => $query->getPayload(),
+            'objectIdentifier' => $query->getObjectIdentifier(),
             'objectType' => Payment::TYPE,
             'adapterName' => ShopwareAdapter::NAME,
         ]);
