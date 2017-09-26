@@ -88,7 +88,7 @@ class AddressResponseParser implements AddressResponseParserInterface
             $params['additional'] = $entry['additionalAddressLine1'];
         }
 
-        if (!empty($entry['phone'])) {
+        if (isset($entry['phone']) && !empty(trim($entry['phone']))) {
             $params['phoneNumber'] = $entry['phone'];
         }
 
