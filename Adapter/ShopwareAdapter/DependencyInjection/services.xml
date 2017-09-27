@@ -106,7 +106,6 @@
 
         <service id="shopware_adapter.response_parser.order_item" class="ShopwareAdapter\ResponseParser\OrderItem\OrderItemResponseParser">
             <argument type="service" id="plenty_connector.identity_service" />
-            <argument type="service" id="models" />
         </service>
 
         <service id="shopware_adapter.response_parser.order_status" class="ShopwareAdapter\ResponseParser\OrderStatus\OrderStatusResponseParser">

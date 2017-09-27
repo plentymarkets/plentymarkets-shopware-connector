@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [unreleased]
+### Changed
+- optimized the hash generation for media files
+
 ## [4.0.6]
 ### Fixed
 - wrong customer langauge was used when parsing orders
