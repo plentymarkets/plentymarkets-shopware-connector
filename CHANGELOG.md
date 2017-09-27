@@ -10,6 +10,15 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - renamed the PlentymarketsAdapter services from plentmarkets_adapter to plentymarkets_adapter
 
+## [4.0.6]
+### Fixed
+- wrong customer langauge was used when parsing orders
+- processing a single payment via commandline was not possible
+
+## [4.0.5]
+### Fixed
+- force category position to integer
+
 ## [4.0.4]
 ### Added
 - prepayment is now mapped correctly

@@ -115,6 +115,7 @@
         <service id="shopware_adapter.response_parser.customer" class="ShopwareAdapter\ResponseParser\Customer\CustomerResponseParser">
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="models" />
+            <argument type="service" id="plenty_connector.logger" />
         </service>
 
         <service id="shopware_adapter.response_parser.address" class="ShopwareAdapter\ResponseParser\Address\AddressResponseParser">
