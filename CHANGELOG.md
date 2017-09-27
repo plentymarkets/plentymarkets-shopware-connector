@@ -6,6 +6,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - added a missing use statement in CategoryResponseParser
 
+### Changed
+- optimized the hash generation for media files
+
 ## [4.0.6]
 ### Fixed
 - wrong customer langauge was used when parsing orders
