@@ -7,7 +7,7 @@ use InvalidArgumentException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Media\Media;
 use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
-use PlentymarketsAdapter\Helper\MediaCategoryHelper;
+use PlentymarketsAdapter\Helper\MediaCategoryHelperInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 
 /**
@@ -21,7 +21,7 @@ class MediaResponseParser implements MediaResponseParserInterface
     private $identityService;
 
     /**
-     * @var MediaCategoryHelper
+     * @var MediaCategoryHelperInterface
      */
     private $categoryHelper;
 

@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
+### Fixed
+- added a missing use statement in CategoryResponseParser
+
 ### Changed
 - optimized the hash generation for media files
 
