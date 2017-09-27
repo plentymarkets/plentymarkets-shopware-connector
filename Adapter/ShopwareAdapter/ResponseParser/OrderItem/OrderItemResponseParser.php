@@ -2,7 +2,6 @@
 
 namespace ShopwareAdapter\ResponseParser\OrderItem;
 
-use Doctrine\ORM\EntityManagerInterface;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Order\OrderItem\OrderItem;
 use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
