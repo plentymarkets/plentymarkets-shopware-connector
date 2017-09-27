@@ -7,7 +7,7 @@ use InvalidArgumentException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Media\Media;
 use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
-use PlentymarketsAdapter\Helper\MediaCategoryHelperInterface;
+use PlentymarketsAdapter\Helper\MediaCategoryHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 
 /**
@@ -21,19 +21,19 @@ class MediaResponseParser implements MediaResponseParserInterface
     private $identityService;
 
     /**
-     * @var MediaCategoryHelperInterface
+     * @var MediaCategoryHelper
      */
     private $categoryHelper;
 
     /**
      * MediaResponseParser constructor.
      *
-     * @param IdentityServiceInterface     $identityService
-     * @param MediaCategoryHelperInterface $categoryHelper
+     * @param IdentityServiceInterface $identityService
+     * @param MediaCategoryHelper      $categoryHelper
      */
     public function __construct(
         IdentityServiceInterface $identityService,
-        MediaCategoryHelperInterface $categoryHelper
+        MediaCategoryHelper $categoryHelper
     ) {
         $this->identityService = $identityService;
         $this->categoryHelper = $categoryHelper;
