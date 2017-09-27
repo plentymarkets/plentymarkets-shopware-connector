@@ -8,6 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - optimized the hash generation for media files
+- order item types for discounts and surcharges changed from product to discount and surcharge
 
 ## [4.0.6]
 ### Fixed
