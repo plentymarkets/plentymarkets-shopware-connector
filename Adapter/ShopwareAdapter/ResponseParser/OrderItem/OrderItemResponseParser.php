@@ -23,22 +23,13 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
     private $identityService;
 
     /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
-
-    /**
      * OrderItemResponseParser constructor.
      *
      * @param IdentityServiceInterface $identityService
-     * @param EntityManagerInterface   $entityManager
      */
-    public function __construct(
-        IdentityServiceInterface $identityService,
-        EntityManagerInterface $entityManager
-    ) {
+    public function __construct(IdentityServiceInterface $identityService)
+    {
         $this->identityService = $identityService;
-        $this->entityManager = $entityManager;
     }
 
     /**
