@@ -10,6 +10,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - renamed the PlentymarketsAdapter services from plentmarkets_adapter to plentymarkets_adapter
 
+## [unreleased]
+### Changed
+- optimized the hash generation for media files
+
 ## [4.0.6]
 ### Fixed
 - wrong customer langauge was used when parsing orders

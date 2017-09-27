@@ -158,7 +158,6 @@
         <service id="plentymarkets_adapter.response_parser.media" class="PlentymarketsAdapter\ResponseParser\Media\MediaResponseParser">
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plentymarkets_adapter.helper.media_category" />
-            <argument type="service" id="plenty_connector.logger" />
         </service>
 
         <service id="plentymarkets_adapter.response_parser.media_category" class="PlentymarketsAdapter\ResponseParser\MediaCategory\MediaCategoryResponseParser">

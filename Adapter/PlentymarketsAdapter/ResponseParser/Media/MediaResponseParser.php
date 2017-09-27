@@ -88,6 +88,8 @@ class MediaResponseParser implements MediaResponseParserInterface
             $entry['mediaCategoryIdentifier'] = null;
         }
 
+        $entry['hash'] = sha1(json_encode($entry)); // include all fields when computing the hash
+
         $identity = $this->identityService->findOneOrCreate(
             (string) $entry['hash'],
             PlentymarketsAdapter::NAME,
@@ -99,7 +101,7 @@ class MediaResponseParser implements MediaResponseParserInterface
         $media->setMediaCategoryIdentifier($entry['mediaCategoryIdentifier']);
         $media->setLink($entry['link']);
         $media->setFilename($entry['filename']);
-        $media->setHash(sha1(json_encode($entry))); // include fields when computing the hash
+        $media->setHash($entry['hash']);
         $media->setName($entry['name']);
         $media->setAlternateName($entry['alternateName']);
         $media->setTranslations($entry['translations']);
