@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [unreleased]
+### Fixed
+- added a missing use statement in CategoryResponseParser
+
+
 ## [4.0.6]
 ### Fixed
 - wrong customer langauge was used when parsing orders
