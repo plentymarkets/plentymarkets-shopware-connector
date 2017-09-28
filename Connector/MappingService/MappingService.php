@@ -3,8 +3,6 @@
 namespace PlentyConnector\Connector\MappingService;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\ServiceBus\QueryFactory\Exception\MissingQueryException;
-use PlentyConnector\Connector\ServiceBus\QueryFactory\Exception\MissingQueryGeneratorException;
 use PlentyConnector\Connector\ServiceBus\QueryFactory\QueryFactoryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
@@ -111,9 +109,6 @@ class MappingService implements MappingServiceInterface
     /**
      * @param Definition $definition
      * @param string     $adapterName
-     *
-     * @throws MissingQueryGeneratorException
-     * @throws MissingQueryException
      *
      * @return TransferObjectInterface[]
      */
