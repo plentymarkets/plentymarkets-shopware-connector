@@ -10,6 +10,7 @@ use Psr\Log\LoggerInterface;
 use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 
 /**
  * Command to manually process definitions.
@@ -72,9 +73,10 @@ class CleanupCommand extends ShopwareCommand
 
         try {
             $this->cleanupService->cleanup();
+        } catch (Throwable $exception) {
+            $this->logger->error($exception->getMessage());
         } catch (Exception $exception) {
             $this->logger->error($exception->getMessage());
-            $this->logger->error($exception->getTraceAsString());
         }
     }
 }
