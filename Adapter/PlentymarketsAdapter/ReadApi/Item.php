@@ -53,6 +53,10 @@ class Item extends ApiAbstract
             'with' => 'itemProperties.valueTexts,itemCrossSelling',
         ]);
 
+        if (empty($result)) {
+            return $result;
+        }
+
         $result['variations'] = $this->itemsVariationsApi->findBy(['itemId' => $result['id']]);
         $result['shippingProfiles'] = $this->getProductShippingProfiles($result['id']);
         $result['images'] = $this->getProductImages($result['id']);
