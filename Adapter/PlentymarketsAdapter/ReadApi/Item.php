@@ -24,6 +24,11 @@ class Item extends ApiAbstract
     private $languageHelper;
 
     /**
+     * @var string
+     */
+    private $includes = 'itemProperties.valueTexts,itemCrossSelling,itemImages';
+
+    /**
      * Item constructor.
      *
      * @param Client                  $client
@@ -50,7 +55,7 @@ class Item extends ApiAbstract
     {
         $result = $this->client->request('GET', 'items/' . $productId, [
             'lang' => $this->languageHelper->getLanguagesQueryString(),
-            'with' => 'itemProperties.valueTexts,itemCrossSelling',
+            'with' => $this->includes,
         ]);
 
         if (empty($result)) {
@@ -59,7 +64,6 @@ class Item extends ApiAbstract
 
         $result['variations'] = $this->itemsVariationsApi->findBy(['itemId' => $result['id']]);
         $result['shippingProfiles'] = $this->getProductShippingProfiles($result['id']);
-        $result['images'] = $this->getProductImages($result['id']);
 
         return $result;
     }
@@ -71,7 +75,7 @@ class Item extends ApiAbstract
     {
         return $this->client->getIterator('items', [
             'lang' => $this->languageHelper->getLanguagesQueryString(),
-            'with' => 'itemProperties.valueTexts,itemCrossSelling',
+            'with' => $this->includes,
         ], function (array $elements) {
             $this->addAdditionalData($elements);
 
@@ -93,7 +97,7 @@ class Item extends ApiAbstract
         return $this->client->getIterator('items', [
             'lang' => $this->languageHelper->getLanguagesQueryString(),
             'updatedBetween' => $start . ',' . $end,
-            'with' => 'itemProperties.valueTexts,itemCrossSelling',
+            'with' => $this->includes,
         ], function (array $elements) {
             $this->addAdditionalData($elements);
 
@@ -120,18 +124,7 @@ class Item extends ApiAbstract
             });
 
             $elements[$key]['shippingProfiles'] = $this->getProductShippingProfiles($element['id']);
-            $elements[$key]['images'] = $this->getProductImages($element['id']);
         }
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return array
-     */
-    private function getProductImages($id)
-    {
-        return $this->client->request('GET', 'items/' . $id . '/images');
     }
 
     /**
