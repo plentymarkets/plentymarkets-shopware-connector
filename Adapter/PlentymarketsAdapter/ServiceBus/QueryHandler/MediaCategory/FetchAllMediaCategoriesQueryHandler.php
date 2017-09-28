@@ -8,7 +8,7 @@ use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
 use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
 use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
-use PlentymarketsAdapter\Helper\MediaCategoryHelper;
+use PlentymarketsAdapter\Helper\MediaCategoryHelperInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\MediaCategory\MediaCategoryResponseParserInterface;
 use Psr\Log\LoggerInterface;
@@ -19,7 +19,7 @@ use Psr\Log\LoggerInterface;
 class FetchAllMediaCategoriesQueryHandler implements QueryHandlerInterface
 {
     /**
-     * @var MediaCategoryHelper
+     * @var MediaCategoryHelperInterface
      */
     private $mediaCategoryHelper;
 
@@ -41,13 +41,13 @@ class FetchAllMediaCategoriesQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllMediaCategoriesQueryHandler constructor.
      *
-     * @param MediaCategoryHelper                  $mediaCategoryHelper
+     * @param MediaCategoryHelperInterface         $mediaCategoryHelper
      * @param MediaCategoryResponseParserInterface $responseParser
      * @param LoggerInterface                      $logger
      * @param OutputHandlerInterface               $outputHandler
      */
     public function __construct(
-        MediaCategoryHelper $mediaCategoryHelper,
+        MediaCategoryHelperInterface $mediaCategoryHelper,
         MediaCategoryResponseParserInterface $responseParser,
         LoggerInterface $logger,
         OutputHandlerInterface $outputHandler

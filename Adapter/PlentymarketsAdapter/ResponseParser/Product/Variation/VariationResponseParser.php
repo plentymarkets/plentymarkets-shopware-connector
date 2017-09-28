@@ -15,8 +15,8 @@ use PlentyConnector\Connector\TransferObject\Product\Property\Value\Value;
 use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\TransferObject\Unit\Unit;
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
+use PlentymarketsAdapter\Helper\ReferenceAmountCalculatorInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Availability as AvailabilityApi;
 use PlentymarketsAdapter\ReadApi\Item\Attribute as AttributeApi;
@@ -72,6 +72,11 @@ class VariationResponseParser implements VariationResponseParserInterface
     private $itemBarcodeApi;
 
     /**
+     * @var ReferenceAmountCalculatorInterface
+     */
+    private $referenceAmountCalculator;
+
+    /**
      * @var ConfigServiceInterface
      */
     private $config;
@@ -79,15 +84,16 @@ class VariationResponseParser implements VariationResponseParserInterface
     /**
      * VariationResponseParser constructor.
      *
-     * @param IdentityServiceInterface     $identityService
-     * @param PriceResponseParserInterface $priceResponseParser
-     * @param ImageResponseParserInterface $imageResponseParser
-     * @param StockResponseParserInterface $stockResponseParser
-     * @param AvailabilityApi              $availabilitiesApi
-     * @param AttributeApi                 $itemAttributesApi
-     * @param AttributeValueApi            $itemAttributesValuesApi
-     * @param BarcodeApi                   $itemBarcodeApi
-     * @param ConfigServiceInterface       $config
+     * @param IdentityServiceInterface           $identityService
+     * @param PriceResponseParserInterface       $priceResponseParser
+     * @param ImageResponseParserInterface       $imageResponseParser
+     * @param StockResponseParserInterface       $stockResponseParser
+     * @param AvailabilityApi                    $availabilitiesApi
+     * @param AttributeApi                       $itemAttributesApi
+     * @param AttributeValueApi                  $itemAttributesValuesApi
+     * @param BarcodeApi                         $itemBarcodeApi
+     * @param ReferenceAmountCalculatorInterface $referenceAmountCalculator
+     * @param ConfigServiceInterface             $config
      */
     public function __construct(
         IdentityServiceInterface $identityService,
@@ -98,6 +104,7 @@ class VariationResponseParser implements VariationResponseParserInterface
         AttributeApi $itemAttributesApi,
         AttributeValueApi $itemAttributesValuesApi,
         BarcodeApi $itemBarcodeApi,
+        ReferenceAmountCalculatorInterface $referenceAmountCalculator,
         ConfigServiceInterface $config
     ) {
         $this->identityService = $identityService;
@@ -108,6 +115,7 @@ class VariationResponseParser implements VariationResponseParserInterface
         $this->itemAttributesApi = $itemAttributesApi;
         $this->itemAttributesValuesApi = $itemAttributesValuesApi;
         $this->itemBarcodeApi = $itemBarcodeApi;
+        $this->referenceAmountCalculator = $referenceAmountCalculator;
         $this->config = $config;
     }
 
@@ -168,7 +176,7 @@ class VariationResponseParser implements VariationResponseParserInterface
             $variationObject->setPurchasePrice((float) $variation['purchasePrice']);
             $variationObject->setUnitIdentifier($this->getUnitIdentifier($variation));
             $variationObject->setContent((float) $variation['unit']['content']);
-            $variationObject->setReferenceAmount(1.0);
+            $variationObject->setReferenceAmount($this->referenceAmountCalculator->calculate($variation));
             $variationObject->setMaximumOrderQuantity((float) $variation['maximumOrderQuantity']);
             $variationObject->setMinimumOrderQuantity((float) $variation['minimumOrderQuantity']);
             $variationObject->setIntervalOrderQuantity((float) $variation['intervalOrderQuantity']);
@@ -178,7 +186,6 @@ class VariationResponseParser implements VariationResponseParserInterface
             $variationObject->setHeight((int) $variation['heightMM']);
             $variationObject->setLength((int) $variation['lengthMM']);
             $variationObject->setWeight((int) $variation['weightNetG']);
-            $variationObject->setAttributes($this->getAttributes($product));
             $variationObject->setProperties($this->getVariationProperties($variation));
 
             $result[$variationObject->getIdentifier()] = $variationObject;
@@ -245,7 +252,7 @@ class VariationResponseParser implements VariationResponseParserInterface
      *
      * @throws NotFoundException
      *
-     * @return string
+     * @return null|string
      */
     private function getUnitIdentifier(array $variation)
     {
@@ -443,26 +450,5 @@ class VariationResponseParser implements VariationResponseParserInterface
         }
 
         return $translations;
-    }
-
-    /**
-     * @param array $product
-     *
-     * @return Attribute[]
-     */
-    private function getAttributes(array $product)
-    {
-        $attributes = [];
-
-        for ($i = 0; $i < 20; ++$i) {
-            $key = 'free' . ($i + 1);
-
-            $attributes[] = Attribute::fromArray([
-                'key' => $key,
-                'value' => (string) $product[$key],
-            ]);
-        }
-
-        return $attributes;
     }
 }

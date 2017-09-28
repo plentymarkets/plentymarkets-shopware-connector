@@ -12,6 +12,7 @@ use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use PlentyConnector\PlentyConnector;
 use Psr\Log\LoggerInterface;
+use Throwable;
 
 /**
  * Class CronjobSubscriber
@@ -87,6 +88,8 @@ class CronjobSubscriber implements SubscriberInterface
     {
         try {
             $this->connector->handle(QueryType::CHANGED);
+        } catch (Throwable $exception) {
+            $this->logger->error($exception->getMessage());
         } catch (Exception $exception) {
             $this->logger->error($exception->getMessage());
         }
@@ -110,6 +113,8 @@ class CronjobSubscriber implements SubscriberInterface
 
                 $this->serviceBus->handle($command);
             }
+        } catch (Throwable $exception) {
+            $this->logger->error($exception->getMessage());
         } catch (Exception $exception) {
             $this->logger->error($exception->getMessage());
         }
@@ -128,6 +133,8 @@ class CronjobSubscriber implements SubscriberInterface
     {
         try {
             $this->cleanupService->cleanup();
+        } catch (Throwable $exception) {
+            $this->logger->error($exception->getMessage());
         } catch (Exception $exception) {
             $this->logger->error($exception->getMessage());
         }

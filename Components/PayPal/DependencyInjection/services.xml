@@ -17,7 +17,7 @@
             <argument type="service" id="dbal_connection" />
         </service>
 
-        <service id="plenty_connector.components.paypal.invoice.request_generator" class="PlentyConnector\Components\PayPal\Plentymarkets\PayPalPlusInvoiceRequestGenerator" decorates="plentmarkets_adapter.request_generator.payment" public="false">
+        <service id="plenty_connector.components.paypal.invoice.request_generator" class="PlentyConnector\Components\PayPal\Plentymarkets\PayPalPlusInvoiceRequestGenerator" decorates="plentymarkets_adapter.request_generator.payment" public="false">
             <argument type="service" id="plenty_connector.components.paypal.invoice.request_generator.inner" />
         </service>
 
@@ -32,7 +32,7 @@
             <argument type="service" id="dbal_connection" />
         </service>
 
-        <service id="plenty_connector.components.paypal.installment.request_generator" class="PlentyConnector\Components\PayPal\Plentymarkets\PayPalInstallmentRequestGenerator" decorates="plentmarkets_adapter.request_generator.payment" public="false">
+        <service id="plenty_connector.components.paypal.installment.request_generator" class="PlentyConnector\Components\PayPal\Plentymarkets\PayPalInstallmentRequestGenerator" decorates="plentymarkets_adapter.request_generator.payment" public="false">
             <argument type="service" id="plenty_connector.components.paypal.installment.request_generator.inner" />
         </service>
     </services>

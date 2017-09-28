@@ -11,6 +11,7 @@ use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 
 /**
  * Command to manually process definitions.
@@ -84,16 +85,23 @@ class BacklogProcessCommand extends ShopwareCommand
         }
 
         $amount = (int) $input->getArgument('amount');
-        $counter = 0;
 
         $this->outputHandler->initialize($input, $output);
         $this->outputHandler->startProgressBar($amount);
 
-        while ($counter < $amount && $command = $this->backlogService->dequeue()) {
-            ++$counter;
+        try {
+            $counter = 0;
 
-            $this->serviceBus->handle($command);
-            $this->outputHandler->advanceProgressBar();
+            while ($counter < $amount && $command = $this->backlogService->dequeue()) {
+                ++$counter;
+
+                $this->serviceBus->handle($command);
+                $this->outputHandler->advanceProgressBar();
+            }
+        } catch (Throwable $exception) {
+            $this->logger->error($exception->getMessage());
+        } catch (Exception $exception) {
+            $this->logger->error($exception->getMessage());
         }
 
         $this->outputHandler->finishProgressBar();

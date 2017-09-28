@@ -9,7 +9,7 @@ use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
 use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\TransferObject\Category\Category;
 use PlentymarketsAdapter\Client\ClientInterface;
-use PlentymarketsAdapter\Helper\LanguageHelper;
+use PlentymarketsAdapter\Helper\LanguageHelperInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Category\CategoryResponseParserInterface;
 
@@ -29,7 +29,7 @@ class FetchCategoryQueryHandler implements QueryHandlerInterface
     private $categoryResponseParser;
 
     /**
-     * @var LanguageHelper
+     * @var LanguageHelperInterface
      */
     private $languageHelper;
 
@@ -43,13 +43,13 @@ class FetchCategoryQueryHandler implements QueryHandlerInterface
      *
      * @param ClientInterface                 $client
      * @param CategoryResponseParserInterface $categoryResponseParser
-     * @param LanguageHelper                  $languageHelper
+     * @param LanguageHelperInterface         $languageHelper
      * @param IdentityServiceInterface        $identityService
      */
     public function __construct(
         ClientInterface $client,
         CategoryResponseParserInterface $categoryResponseParser,
-        LanguageHelper $languageHelper,
+        LanguageHelperInterface $languageHelper,
         IdentityServiceInterface $identityService
     ) {
         $this->client = $client;

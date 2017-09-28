@@ -18,6 +18,7 @@ use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
+use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
@@ -50,8 +51,6 @@ class ProductResponseParser implements ProductResponseParserInterface
      */
     private $variationResponseParser;
 
-    private $itemsItemShippingProfilesApi;
-    private $itemsImagesApi;
     private $itemsVariationsVariationPropertiesApi;
     private $itemsPropertiesSelectionsApi;
     private $itemsPropertiesNamesApi;
@@ -78,8 +77,6 @@ class ProductResponseParser implements ProductResponseParserInterface
         $this->variationResponseParser = $variationResponseParser;
 
         //TODO: inject when refactoring this class
-        $this->itemsItemShippingProfilesApi = new \PlentymarketsAdapter\ReadApi\Item\ShippingProfile($client);
-        $this->itemsImagesApi = new \PlentymarketsAdapter\ReadApi\Item\Image($client);
         $this->itemsVariationsVariationPropertiesApi = new \PlentymarketsAdapter\ReadApi\Item\Variation\Property($client);
         $this->itemsPropertiesSelectionsApi = new\PlentymarketsAdapter\ReadApi\Item\Property\Selection($client);
         $this->itemsPropertiesNamesApi = new \PlentymarketsAdapter\ReadApi\Item\Property\Name($client);
@@ -147,11 +144,33 @@ class ProductResponseParser implements ProductResponseParserInterface
         $productObject->setTranslations($this->getProductTranslations($product['texts']));
         $productObject->setAvailableFrom($this->getAvailableFrom($mainVariation));
         $productObject->setAvailableTo($this->getAvailableTo($mainVariation));
+        $productObject->setAttributes($this->getAttributes($product));
         $productObject->setVariantConfiguration($this->getVariantConfiguration($variations));
 
         $result[$productObject->getIdentifier()] = $productObject;
 
+        $candidatesForProcessing = $this->addProductAttributesToVariation($productObject, $candidatesForProcessing);
+
         return array_merge($result, $candidatesForProcessing);
+    }
+
+    /**
+     * @param Product                   $product
+     * @param TransferObjectInterface[] $candidatesForProcessing
+     *
+     * @return TransferObjectInterface[]
+     */
+    private function addProductAttributesToVariation(Product $product, array $candidatesForProcessing = [])
+    {
+        return array_map(function (TransferObjectInterface $object) use ($product) {
+            if (!($object instanceof Variation)) {
+                return $object;
+            }
+
+            $object->setAttributes(array_merge($object->getAttributes(), $product->getAttributes()));
+
+            return $object;
+        }, $candidatesForProcessing);
     }
 
     /**
@@ -239,10 +258,8 @@ class ProductResponseParser implements ProductResponseParserInterface
      */
     private function getShippingProfiles(array $product)
     {
-        $productShippingProfiles = $this->itemsItemShippingProfilesApi->findOne($product['id']);
-
         $shippingProfiles = [];
-        foreach ($productShippingProfiles as $profile) {
+        foreach ($product['shippingProfiles'] as $profile) {
             $profileIdentity = $this->identityService->findOneBy([
                 'adapterIdentifier' => (string) $profile['profileId'],
                 'adapterName' => PlentymarketsAdapter::NAME,
@@ -268,10 +285,8 @@ class ProductResponseParser implements ProductResponseParserInterface
      */
     private function getImages(array $product, array $texts, array &$result)
     {
-        $entries = $this->itemsImagesApi->findAll($product['id']);
-
         $images = [];
-        foreach ($entries as $entry) {
+        foreach ($product['itemImages'] as $entry) {
             $images[] = $this->imageResponseParser->parseImage($entry, $texts, $result);
         }
 
@@ -700,5 +715,67 @@ class ProductResponseParser implements ProductResponseParserInterface
         $variation = array_shift($variations);
 
         return $variation->getNumber();
+    }
+
+    /**
+     * @param array $product
+     *
+     * @return Attribute[]
+     */
+    private function getAttributes(array $product)
+    {
+        $attributes = [];
+
+        for ($i = 0; $i < 20; ++$i) {
+            $key = 'free' . ($i + 1);
+
+            if (!array_key_exists($key, $product)) {
+                continue;
+            }
+
+            $attributes[] = Attribute::fromArray([
+                'key' => $key,
+                'value' => (string) $product[$key],
+            ]);
+        }
+
+        $attributes[] = $this->getShortDescriptionAsAttribute($product);
+
+        return $attributes;
+    }
+
+    /**
+     * @param array $product
+     *
+     * @return Attribute
+     */
+    private function getShortDescriptionAsAttribute(array $product)
+    {
+        $translations = [];
+
+        foreach ($product['texts'] as $text) {
+            $languageIdentifier = $this->identityService->findOneBy([
+                'adapterIdentifier' => $text['lang'],
+                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType' => Language::TYPE,
+            ]);
+
+            if (null === $languageIdentifier) {
+                continue;
+            }
+
+            $translations[] = Translation::fromArray([
+                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                'property' => 'value',
+                'value' => $text['shortDescription'],
+            ]);
+        }
+
+        $attribute = new Attribute();
+        $attribute->setKey('shortDescription');
+        $attribute->setValue((string) $product['texts'][0]['shortDescription']);
+        $attribute->setTranslations($translations);
+
+        return $attribute;
     }
 }

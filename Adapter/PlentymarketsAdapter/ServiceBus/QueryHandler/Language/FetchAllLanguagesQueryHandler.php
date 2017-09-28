@@ -7,7 +7,7 @@ use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
 use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\TransferObject\Language\Language;
-use PlentymarketsAdapter\Helper\LanguageHelper;
+use PlentymarketsAdapter\Helper\LanguageHelperInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Language\LanguageResponseParserInterface;
 
@@ -22,7 +22,7 @@ class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
     private $responseParser;
 
     /**
-     * @var LanguageHelper
+     * @var LanguageHelperInterface
      */
     private $languageHelper;
 
@@ -30,11 +30,11 @@ class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
      * FetchAllLanguagesQueryHandler constructor.
      *
      * @param LanguageResponseParserInterface $responseParser
-     * @param LanguageHelper                  $languageHelper
+     * @param LanguageHelperInterface         $languageHelper
      */
     public function __construct(
         LanguageResponseParserInterface $responseParser,
-        LanguageHelper $languageHelper
+        LanguageHelperInterface $languageHelper
     ) {
         $this->responseParser = $responseParser;
         $this->languageHelper = $languageHelper;

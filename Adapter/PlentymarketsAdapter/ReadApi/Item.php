@@ -5,8 +5,8 @@ namespace PlentymarketsAdapter\ReadApi;
 use DateTimeImmutable;
 use PlentymarketsAdapter\Client\Client;
 use PlentymarketsAdapter\Client\Iterator\Iterator;
-use PlentymarketsAdapter\Helper\LanguageHelper;
-use PlentymarketsAdapter\ReadApi\Item\Variation;
+use PlentymarketsAdapter\Helper\LanguageHelperInterface;
+use PlentymarketsAdapter\ReadApi\Item\Variation as VariationApi;
 
 /**
  * Class Item
@@ -14,23 +14,36 @@ use PlentymarketsAdapter\ReadApi\Item\Variation;
 class Item extends ApiAbstract
 {
     /**
-     * @var Variation
+     * @var VariationApi
      */
     private $itemsVariationsApi;
 
     /**
+     * @var LanguageHelperInterface
+     */
+    private $languageHelper;
+
+    /**
+     * @var string
+     */
+    private $includes = 'itemProperties.valueTexts,itemCrossSelling,itemImages';
+
+    /**
      * Item constructor.
      *
-     * @param Client    $client
-     * @param Variation $itemsVariationsApi
+     * @param Client                  $client
+     * @param VariationApi            $itemsVariationsApi
+     * @param LanguageHelperInterface $languageHelper
      */
     public function __construct(
         Client $client,
-        Variation $itemsVariationsApi
+        VariationApi $itemsVariationsApi,
+        LanguageHelperInterface $languageHelper
     ) {
         parent::__construct($client);
 
         $this->itemsVariationsApi = $itemsVariationsApi;
+        $this->languageHelper = $languageHelper;
     }
 
     /**
@@ -40,14 +53,17 @@ class Item extends ApiAbstract
      */
     public function findOne($productId)
     {
-        $languageHelper = new LanguageHelper();
-
         $result = $this->client->request('GET', 'items/' . $productId, [
-            'lang' => $languageHelper->getLanguagesQueryString(),
-            'with' => 'itemProperties.valueTexts,itemCrossSelling',
+            'lang' => $this->languageHelper->getLanguagesQueryString(),
+            'with' => $this->includes,
         ]);
 
+        if (empty($result)) {
+            return $result;
+        }
+
         $result['variations'] = $this->itemsVariationsApi->findBy(['itemId' => $result['id']]);
+        $result['shippingProfiles'] = $this->getProductShippingProfiles($result['id']);
 
         return $result;
     }
@@ -57,12 +73,10 @@ class Item extends ApiAbstract
      */
     public function findAll()
     {
-        $languageHelper = new LanguageHelper();
-
         return $this->client->getIterator('items', [
-            'lang' => $languageHelper->getLanguagesQueryString(),
-            'with' => 'itemProperties.valueTexts,itemCrossSelling',
-        ], function ($elements) {
+            'lang' => $this->languageHelper->getLanguagesQueryString(),
+            'with' => $this->includes,
+        ], function (array $elements) {
             $this->addAdditionalData($elements);
 
             return $elements;
@@ -80,13 +94,11 @@ class Item extends ApiAbstract
         $start = $startTimestamp->format(DATE_W3C);
         $end = $endTimestamp->format(DATE_W3C);
 
-        $languageHelper = new LanguageHelper();
-
         return $this->client->getIterator('items', [
-            'lang' => $languageHelper->getLanguagesQueryString(),
+            'lang' => $this->languageHelper->getLanguagesQueryString(),
             'updatedBetween' => $start . ',' . $end,
-            'with' => 'itemProperties.valueTexts,itemCrossSelling',
-        ], function ($elements) {
+            'with' => $this->includes,
+        ], function (array $elements) {
             $this->addAdditionalData($elements);
 
             return $elements;
@@ -110,6 +122,21 @@ class Item extends ApiAbstract
             $elements[$key]['variations'] = array_filter($variations, function (array $variation) use ($element) {
                 return $element['id'] === $variation['itemId'];
             });
+
+            $elements[$key]['shippingProfiles'] = $this->getProductShippingProfiles($element['id']);
         }
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return array
+     */
+    private function getProductShippingProfiles($id)
+    {
+        return $this->client->request('GET', 'items/' . $id . '/item_shipping_profiles', [
+            'with' => 'names',
+            'lang' => $this->languageHelper->getLanguagesQueryString(),
+        ]);
     }
 }

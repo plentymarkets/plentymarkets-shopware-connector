@@ -7,8 +7,8 @@ use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
 use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\TransferObject\Unit\Unit;
-use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
+use PlentymarketsAdapter\ReadApi\Item\Unit as UnitApi;
 use PlentymarketsAdapter\ResponseParser\Unit\UnitResponseParserInterface;
 
 /**
@@ -17,9 +17,9 @@ use PlentymarketsAdapter\ResponseParser\Unit\UnitResponseParserInterface;
 class FetchAllUnitsQueryHandler implements QueryHandlerInterface
 {
     /**
-     * @var ClientInterface
+     * @var UnitApi
      */
-    private $client;
+    private $unitApi;
 
     /**
      * @var UnitResponseParserInterface
@@ -29,14 +29,12 @@ class FetchAllUnitsQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllUnitsQueryHandler constructor.
      *
-     * @param ClientInterface             $client
+     * @param UnitApi                     $unitApi
      * @param UnitResponseParserInterface $responseParser
      */
-    public function __construct(
-        ClientInterface $client,
-        UnitResponseParserInterface $responseParser
-    ) {
-        $this->client = $client;
+    public function __construct(UnitApi $unitApi, UnitResponseParserInterface $responseParser)
+    {
+        $this->unitApi = $unitApi;
         $this->responseParser = $responseParser;
     }
 
@@ -56,7 +54,7 @@ class FetchAllUnitsQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $elements = $this->client->getIterator('items/units');
+        $elements = $this->unitApi->findAll();
 
         foreach ($elements as $element) {
             $result = $this->responseParser->parse($element);

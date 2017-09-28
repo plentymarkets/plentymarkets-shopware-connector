@@ -78,6 +78,10 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
             'adapterName' => ShopwareAdapter::NAME,
         ]);
 
+        if (null === $productIdentity) {
+            return;
+        }
+
         foreach ($this->translationHelper->getLanguageIdentifiers($product) as $languageIdentifier) {
             /**
              * @var Product $translatedProduct

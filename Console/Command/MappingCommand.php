@@ -12,6 +12,7 @@ use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 
 /**
  * Command to manually process definitions.
@@ -122,9 +123,10 @@ class MappingCommand extends ShopwareCommand
 
                 $this->outputHandler->createTable($headers, $rows);
             }
+        } catch (Throwable $exception) {
+            $this->logger->error($exception->getMessage());
         } catch (Exception $exception) {
             $this->logger->error($exception->getMessage());
-            $this->logger->error($exception->getTraceAsString());
         }
     }
 }

@@ -42,7 +42,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         /**
          * @var ClientInterface $client
          */
-        $client = $this->container->get('plentmarkets_adapter.client');
+        $client = $this->container->get('plentymarkets_adapter.client');
 
         $params = [
             'username' => $this->Request()->get('rest_username'),
@@ -231,7 +231,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         /**
          * @var ClientInterface $client
          */
-        $client = $this->container->get('plentmarkets_adapter.client');
+        $client = $this->container->get('plentymarkets_adapter.client');
 
         $data = [];
 
@@ -257,7 +257,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         /**
          * @var ClientInterface $client
          */
-        $client = $this->container->get('plentmarkets_adapter.client');
+        $client = $this->container->get('plentymarkets_adapter.client');
 
         /**
          * @var Shopware_Components_Snippet_Manager $snippetManager

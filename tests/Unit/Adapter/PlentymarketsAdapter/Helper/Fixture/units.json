@@ -1,0 +1,1042 @@
+[
+    {
+        "id": 1,
+        "position": 1,
+        "unitOfMeasurement": "C62",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 1,
+                "lang": "de",
+                "name": "St\u00fcck"
+            },
+            {
+                "unitId": 1,
+                "lang": "en",
+                "name": "piece"
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "position": 2,
+        "unitOfMeasurement": "KGM",
+        "isDecimalPlacesAllowed": true,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 2,
+                "lang": "de",
+                "name": "Kilogramm"
+            },
+            {
+                "unitId": 2,
+                "lang": "en",
+                "name": "kilogram"
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "position": 3,
+        "unitOfMeasurement": "GRM",
+        "isDecimalPlacesAllowed": true,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 3,
+                "lang": "de",
+                "name": "Gramm"
+            },
+            {
+                "unitId": 3,
+                "lang": "en",
+                "name": "gram"
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "position": 4,
+        "unitOfMeasurement": "MGM",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 4,
+                "lang": "de",
+                "name": "Milligramm"
+            },
+            {
+                "unitId": 4,
+                "lang": "en",
+                "name": "milligram"
+            }
+        ]
+    },
+    {
+        "id": 5,
+        "position": 5,
+        "unitOfMeasurement": "LTR",
+        "isDecimalPlacesAllowed": true,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 5,
+                "lang": "de",
+                "name": "Liter"
+            },
+            {
+                "unitId": 5,
+                "lang": "en",
+                "name": "liter"
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "position": 6,
+        "unitOfMeasurement": "DPC",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 6,
+                "lang": "de",
+                "name": "12 St\u00fcck"
+            },
+            {
+                "unitId": 6,
+                "lang": "en",
+                "name": "dozen piece"
+            }
+        ]
+    },
+    {
+        "id": 7,
+        "position": 7,
+        "unitOfMeasurement": "OP",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 7,
+                "lang": "de",
+                "name": "2er Pack"
+            },
+            {
+                "unitId": 7,
+                "lang": "en",
+                "name": "two pack"
+            }
+        ]
+    },
+    {
+        "id": 8,
+        "position": 8,
+        "unitOfMeasurement": "BL",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 8,
+                "lang": "de",
+                "name": "Ballen"
+            },
+            {
+                "unitId": 8,
+                "lang": "en",
+                "name": "bale"
+            }
+        ]
+    },
+    {
+        "id": 9,
+        "position": 9,
+        "unitOfMeasurement": "DI",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 9,
+                "lang": "de",
+                "name": "Beh\u00e4lter"
+            },
+            {
+                "unitId": 9,
+                "lang": "en",
+                "name": "dispenser"
+            }
+        ]
+    },
+    {
+        "id": 10,
+        "position": 10,
+        "unitOfMeasurement": "BG",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 10,
+                "lang": "de",
+                "name": "Beutel"
+            },
+            {
+                "unitId": 10,
+                "lang": "en",
+                "name": "bag"
+            }
+        ]
+    },
+    {
+        "id": 11,
+        "position": 11,
+        "unitOfMeasurement": "ST",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 11,
+                "lang": "de",
+                "name": "Blatt"
+            },
+            {
+                "unitId": 11,
+                "lang": "en",
+                "name": "sheet"
+            }
+        ]
+    },
+    {
+        "id": 12,
+        "position": 12,
+        "unitOfMeasurement": "D64",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 12,
+                "lang": "de",
+                "name": "Block"
+            },
+            {
+                "unitId": 12,
+                "lang": "en",
+                "name": "block"
+            }
+        ]
+    },
+    {
+        "id": 13,
+        "position": 13,
+        "unitOfMeasurement": "PD",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 13,
+                "lang": "de",
+                "name": "Block"
+            },
+            {
+                "unitId": 13,
+                "lang": "en",
+                "name": "pad"
+            }
+        ]
+    },
+    {
+        "id": 14,
+        "position": 14,
+        "unitOfMeasurement": "QR",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 14,
+                "lang": "de",
+                "name": "Bogen"
+            },
+            {
+                "unitId": 14,
+                "lang": "en",
+                "name": "Quire"
+            }
+        ]
+    },
+    {
+        "id": 15,
+        "position": 15,
+        "unitOfMeasurement": "BX",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 15,
+                "lang": "de",
+                "name": "Box"
+            },
+            {
+                "unitId": 15,
+                "lang": "en",
+                "name": "box"
+            }
+        ]
+    },
+    {
+        "id": 16,
+        "position": 16,
+        "unitOfMeasurement": "CL",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 16,
+                "lang": "de",
+                "name": "Bund"
+            },
+            {
+                "unitId": 16,
+                "lang": "en",
+                "name": "coil"
+            }
+        ]
+    },
+    {
+        "id": 17,
+        "position": 17,
+        "unitOfMeasurement": "CH",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 17,
+                "lang": "de",
+                "name": "Container"
+            },
+            {
+                "unitId": 17,
+                "lang": "en",
+                "name": "container"
+            }
+        ]
+    },
+    {
+        "id": 18,
+        "position": 18,
+        "unitOfMeasurement": "TN",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 18,
+                "lang": "de",
+                "name": "Dose"
+            },
+            {
+                "unitId": 18,
+                "lang": "en",
+                "name": "tin"
+            }
+        ]
+    },
+    {
+        "id": 19,
+        "position": 19,
+        "unitOfMeasurement": "CA",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 19,
+                "lang": "de",
+                "name": "Dose\/B\u00fcchse"
+            },
+            {
+                "unitId": 19,
+                "lang": "en",
+                "name": "can"
+            }
+        ]
+    },
+    {
+        "id": 20,
+        "position": 20,
+        "unitOfMeasurement": "DZN",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 20,
+                "lang": "de",
+                "name": "Dutzend"
+            },
+            {
+                "unitId": 20,
+                "lang": "en",
+                "name": "dozen"
+            }
+        ]
+    },
+    {
+        "id": 21,
+        "position": 21,
+        "unitOfMeasurement": "BJ",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 21,
+                "lang": "de",
+                "name": "Eimer"
+            },
+            {
+                "unitId": 21,
+                "lang": "en",
+                "name": "bucket"
+            }
+        ]
+    },
+    {
+        "id": 22,
+        "position": 22,
+        "unitOfMeasurement": "CS",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 22,
+                "lang": "de",
+                "name": "Etui"
+            },
+            {
+                "unitId": 22,
+                "lang": "en",
+                "name": "case"
+            }
+        ]
+    },
+    {
+        "id": 23,
+        "position": 23,
+        "unitOfMeasurement": "Z3",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 23,
+                "lang": "de",
+                "name": "Fass"
+            },
+            {
+                "unitId": 23,
+                "lang": "en",
+                "name": "cask"
+            }
+        ]
+    },
+    {
+        "id": 24,
+        "position": 24,
+        "unitOfMeasurement": "BO",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 24,
+                "lang": "de",
+                "name": "Flasche"
+            },
+            {
+                "unitId": 24,
+                "lang": "en",
+                "name": "bottle"
+            }
+        ]
+    },
+    {
+        "id": 25,
+        "position": 25,
+        "unitOfMeasurement": "OZA",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 25,
+                "lang": "de",
+                "name": "Fl\u00fcssigunze"
+            },
+            {
+                "unitId": 25,
+                "lang": "en",
+                "name": "fluid ounce"
+            }
+        ]
+    },
+    {
+        "id": 26,
+        "position": 26,
+        "unitOfMeasurement": "JR",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 26,
+                "lang": "de",
+                "name": "Glas\/Gef\u00e4\u00df"
+            },
+            {
+                "unitId": 26,
+                "lang": "en",
+                "name": "jar"
+            }
+        ]
+    },
+    {
+        "id": 27,
+        "position": 27,
+        "unitOfMeasurement": "CG",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 27,
+                "lang": "de",
+                "name": "Karton"
+            },
+            {
+                "unitId": 27,
+                "lang": "en",
+                "name": "card"
+            }
+        ]
+    },
+    {
+        "id": 28,
+        "position": 28,
+        "unitOfMeasurement": "CT",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 28,
+                "lang": "de",
+                "name": "Kartonage"
+            },
+            {
+                "unitId": 28,
+                "lang": "en",
+                "name": "carton"
+            }
+        ]
+    },
+    {
+        "id": 29,
+        "position": 29,
+        "unitOfMeasurement": "KT",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 29,
+                "lang": "de",
+                "name": "Kit"
+            },
+            {
+                "unitId": 29,
+                "lang": "en",
+                "name": "kit"
+            }
+        ]
+    },
+    {
+        "id": 30,
+        "position": 30,
+        "unitOfMeasurement": "AA",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 30,
+                "lang": "de",
+                "name": "Kn\u00e4uel"
+            },
+            {
+                "unitId": 30,
+                "lang": "en",
+                "name": "ball"
+            }
+        ]
+    },
+    {
+        "id": 31,
+        "position": 31,
+        "unitOfMeasurement": "MTR",
+        "isDecimalPlacesAllowed": true,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 31,
+                "lang": "de",
+                "name": "Meter"
+            },
+            {
+                "unitId": 31,
+                "lang": "en",
+                "name": "meter"
+            }
+        ]
+    },
+    {
+        "id": 32,
+        "position": 32,
+        "unitOfMeasurement": "MLT",
+        "isDecimalPlacesAllowed": true,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 32,
+                "lang": "de",
+                "name": "Milliliter"
+            },
+            {
+                "unitId": 32,
+                "lang": "en",
+                "name": "milliliter"
+            }
+        ]
+    },
+    {
+        "id": 33,
+        "position": 33,
+        "unitOfMeasurement": "MMT",
+        "isDecimalPlacesAllowed": true,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 33,
+                "lang": "de",
+                "name": "Millimeter"
+            },
+            {
+                "unitId": 33,
+                "lang": "en",
+                "name": "millimeter"
+            }
+        ]
+    },
+    {
+        "id": 34,
+        "position": 34,
+        "unitOfMeasurement": "PR",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 34,
+                "lang": "de",
+                "name": "Paar"
+            },
+            {
+                "unitId": 34,
+                "lang": "en",
+                "name": "pair"
+            }
+        ]
+    },
+    {
+        "id": 35,
+        "position": 35,
+        "unitOfMeasurement": "PA",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 35,
+                "lang": "de",
+                "name": "P\u00e4ckchen"
+            },
+            {
+                "unitId": 35,
+                "lang": "en",
+                "name": "packet"
+            }
+        ]
+    },
+    {
+        "id": 36,
+        "position": 36,
+        "unitOfMeasurement": "PK",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 36,
+                "lang": "de",
+                "name": "Paket"
+            },
+            {
+                "unitId": 36,
+                "lang": "en",
+                "name": "pack"
+            }
+        ]
+    },
+    {
+        "id": 37,
+        "position": 37,
+        "unitOfMeasurement": "D97",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 37,
+                "lang": "de",
+                "name": "Palette"
+            },
+            {
+                "unitId": 37,
+                "lang": "en",
+                "name": "pallet"
+            }
+        ]
+    },
+    {
+        "id": 38,
+        "position": 38,
+        "unitOfMeasurement": "MTK",
+        "isDecimalPlacesAllowed": true,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 38,
+                "lang": "de",
+                "name": "Quadratmeter"
+            },
+            {
+                "unitId": 38,
+                "lang": "en",
+                "name": "square meter"
+            }
+        ]
+    },
+    {
+        "id": 39,
+        "position": 39,
+        "unitOfMeasurement": "CMK",
+        "isDecimalPlacesAllowed": true,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 39,
+                "lang": "de",
+                "name": "Quadratzentimeter"
+            },
+            {
+                "unitId": 39,
+                "lang": "en",
+                "name": "square centimeter"
+            }
+        ]
+    },
+    {
+        "id": 40,
+        "position": 40,
+        "unitOfMeasurement": "MMK",
+        "isDecimalPlacesAllowed": true,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 40,
+                "lang": "de",
+                "name": "Quadratmillimeter"
+            },
+            {
+                "unitId": 40,
+                "lang": "en",
+                "name": "square millimeter"
+            }
+        ]
+    },
+    {
+        "id": 41,
+        "position": 41,
+        "unitOfMeasurement": "SCM",
+        "isDecimalPlacesAllowed": true,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 41,
+                "lang": "de",
+                "name": "Quadratzentimeter (kein Standard!)"
+            },
+            {
+                "unitId": 41,
+                "lang": "en",
+                "name": "square centimeter (not standard!)"
+            }
+        ]
+    },
+    {
+        "id": 42,
+        "position": 42,
+        "unitOfMeasurement": "SMM",
+        "isDecimalPlacesAllowed": true,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 42,
+                "lang": "de",
+                "name": "Quadratmillimeter (kein Standard!)"
+            },
+            {
+                "unitId": 42,
+                "lang": "en",
+                "name": "square millimeter (not standard!)"
+            }
+        ]
+    },
+    {
+        "id": 43,
+        "position": 43,
+        "unitOfMeasurement": "RO",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 43,
+                "lang": "de",
+                "name": "Rolle"
+            },
+            {
+                "unitId": 43,
+                "lang": "en",
+                "name": "roll"
+            }
+        ]
+    },
+    {
+        "id": 44,
+        "position": 44,
+        "unitOfMeasurement": "SA",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 44,
+                "lang": "de",
+                "name": "Sack"
+            },
+            {
+                "unitId": 44,
+                "lang": "en",
+                "name": "sack"
+            }
+        ]
+    },
+    {
+        "id": 45,
+        "position": 45,
+        "unitOfMeasurement": "SET",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 45,
+                "lang": "de",
+                "name": "Satz"
+            },
+            {
+                "unitId": 45,
+                "lang": "en",
+                "name": "set"
+            }
+        ]
+    },
+    {
+        "id": 46,
+        "position": 46,
+        "unitOfMeasurement": "RL",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 46,
+                "lang": "de",
+                "name": "Spule"
+            },
+            {
+                "unitId": 46,
+                "lang": "en",
+                "name": "reel"
+            }
+        ]
+    },
+    {
+        "id": 47,
+        "position": 47,
+        "unitOfMeasurement": "EA",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 47,
+                "lang": "de",
+                "name": "St\u00fcck"
+            },
+            {
+                "unitId": 47,
+                "lang": "en",
+                "name": "each"
+            }
+        ]
+    },
+    {
+        "id": 48,
+        "position": 48,
+        "unitOfMeasurement": "TU",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 48,
+                "lang": "de",
+                "name": "Tube\/Rohr"
+            },
+            {
+                "unitId": 48,
+                "lang": "en",
+                "name": "tube"
+            }
+        ]
+    },
+    {
+        "id": 49,
+        "position": 49,
+        "unitOfMeasurement": "OZ",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 49,
+                "lang": "de",
+                "name": "Unze"
+            },
+            {
+                "unitId": 49,
+                "lang": "en",
+                "name": "ounce"
+            }
+        ]
+    },
+    {
+        "id": 50,
+        "position": 50,
+        "unitOfMeasurement": "WE",
+        "isDecimalPlacesAllowed": false,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 50,
+                "lang": "de",
+                "name": "Wascheinheit"
+            },
+            {
+                "unitId": 50,
+                "lang": "en",
+                "name": "washing unit"
+            }
+        ]
+    },
+    {
+        "id": 51,
+        "position": 51,
+        "unitOfMeasurement": "CMT",
+        "isDecimalPlacesAllowed": true,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 51,
+                "lang": "de",
+                "name": "Zentimeter"
+            },
+            {
+                "unitId": 51,
+                "lang": "en",
+                "name": "centimeter"
+            }
+        ]
+    },
+    {
+        "id": 52,
+        "position": 52,
+        "unitOfMeasurement": "INH",
+        "isDecimalPlacesAllowed": true,
+        "updatedAt": "2017-09-07T09:31:48+02:00",
+        "createdAt": "2017-09-07T09:31:48+02:00",
+        "names": [
+            {
+                "unitId": 52,
+                "lang": "de",
+                "name": "Zoll"
+            },
+            {
+                "unitId": 52,
+                "lang": "en",
+                "name": "inch"
+            }
+        ]
+    }
+]

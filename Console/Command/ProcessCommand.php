@@ -14,6 +14,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 
 /**
  * Command to manually process definitions.
@@ -116,9 +117,10 @@ class ProcessCommand extends ShopwareCommand
             }
 
             $this->connector->handle($queryType, $objectType, $objectIdentifier);
+        } catch (Throwable $exception) {
+            $this->logger->error($exception->getMessage());
         } catch (Exception $exception) {
             $this->logger->error($exception->getMessage());
-            $this->logger->error($exception->getTraceAsString());
         }
     }
 

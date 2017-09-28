@@ -25,7 +25,6 @@ use ShopwareAdapter\DataProvider\Currency\CurrencyDataProviderInterface;
 use ShopwareAdapter\ResponseParser\Address\AddressResponseParserInterface;
 use ShopwareAdapter\ResponseParser\Customer\CustomerResponseParserInterface;
 use ShopwareAdapter\ResponseParser\GetAttributeTrait;
-use ShopwareAdapter\ResponseParser\OrderItem\Exception\UnsupportedVatRateException;
 use ShopwareAdapter\ResponseParser\OrderItem\OrderItemResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
@@ -105,6 +104,81 @@ class OrderResponseParser implements OrderResponseParserInterface
      */
     public function parse(array $entry)
     {
+        if (!$this->isValidOrder($entry)) {
+            return [];
+        }
+
+        $taxFree = ($entry['net'] || $entry['taxFree']);
+
+        $orderItems = array_filter(array_map(function (array $orderItem) use ($taxFree) {
+            return $this->orderItemResponseParser->parse($orderItem, $taxFree);
+        }, $this->prepareOrderItems($entry['details'])));
+
+        $orderItems[] = $this->getShippingCosts($entry, $taxFree);
+
+        $billingAddress = $this->orderAddressParser->parse($entry['billing']);
+        $shippingAddress = $this->orderAddressParser->parse($entry['shipping']);
+
+        if (null === $billingAddress || null === $shippingAddress) {
+            $this->logger->warning('could not parse address,  order: ' . $entry['number']);
+
+            return [];
+        }
+
+        $customer = $this->customerParser->parse($entry['customer']);
+
+        if (null === $customer) {
+            $this->logger->warning('could not parse customer,  order: ' . $entry['number']);
+
+            return [];
+        }
+
+        $customer->setMobilePhoneNumber($billingAddress->getMobilePhoneNumber());
+        $customer->setPhoneNumber($billingAddress->getPhoneNumber());
+
+        $orderStatusIdentifier = $this->getConnectorIdentifier($entry['orderStatusId'], OrderStatus::TYPE);
+        $paymentStatusIdentifier = $this->getConnectorIdentifier($entry['paymentStatusId'], PaymentStatus::TYPE);
+        $paymentMethodIdentifier = $this->getConnectorIdentifier($entry['paymentId'], PaymentMethod::TYPE);
+        $shippingProfileIdentifier = $this->getConnectorIdentifier($entry['dispatchId'], ShippingProfile::TYPE);
+        $shopIdentifier = $this->getConnectorIdentifier($entry['shopId'], Shop::TYPE);
+
+        $shopwareCurrencyIdentifier = $this->currencyDataProvider->getCurrencyIdentifierByCode($entry['currency']);
+        $currencyIdentifier = $this->getConnectorIdentifier($shopwareCurrencyIdentifier, Currency::TYPE);
+
+        $orderIdentity = $this->identityService->findOneOrCreate(
+            (string) $entry['id'],
+            ShopwareAdapter::NAME,
+            Order::TYPE
+        );
+
+        $order = new Order();
+        $order->setIdentifier($orderIdentity->getObjectIdentifier());
+        $order->setOrderNumber($entry['number']);
+        $order->setOrderItems($orderItems);
+        $order->setAttributes($this->getAttributes($entry['attribute']));
+        $order->setBillingAddress($billingAddress);
+        $order->setShippingAddress($shippingAddress);
+        $order->setComments($this->getComments($entry));
+        $order->setCustomer($customer);
+        $order->setOrderTime(DateTimeImmutable::createFromMutable($entry['orderTime']));
+        $order->setOrderType(Order::TYPE_ORDER);
+        $order->setOrderStatusIdentifier($orderStatusIdentifier);
+        $order->setPaymentStatusIdentifier($paymentStatusIdentifier);
+        $order->setPaymentMethodIdentifier($paymentMethodIdentifier);
+        $order->setShippingProfileIdentifier($shippingProfileIdentifier);
+        $order->setCurrencyIdentifier($currencyIdentifier);
+        $order->setShopIdentifier($shopIdentifier);
+
+        return [$order];
+    }
+
+    /**
+     * @param array $entry
+     *
+     * @return bool
+     */
+    private function isValidOrder(array $entry)
+    {
         $shopIdentity = $this->identityService->findOneOrThrow(
             (string) $entry['shopId'],
             ShopwareAdapter::NAME,
@@ -118,55 +192,20 @@ class OrderResponseParser implements OrderResponseParserInterface
         );
 
         if (!$isMappedIdentity) {
-            return [];
+            return false;
         }
-
-        $taxFree = ($entry['net'] || $entry['taxFree']);
-
-        $entry['details'] = $this->prepareOrderItems($entry['details']);
-
-        try {
-            $orderItems = array_filter(array_map(function ($orderItem) use ($taxFree) {
-                return $this->orderItemResponseParser->parse($orderItem, $taxFree);
-            }, $entry['details']));
-        } catch (UnsupportedVatRateException $exception) {
-            $this->logger->notice('unsupported vat rate - order: ' . $entry['number']);
-
-            return [];
-        }
-
-        $orderItems[] = $this->getShippingCosts($entry, $taxFree);
 
         if (empty($entry['billing'])) {
-            $this->logger->notice('empty order billing address - order: ' . $entry['number']);
+            $this->logger->warning('empty order billing address - order: ' . $entry['number']);
 
-            return [];
+            return false;
         }
-
-        $billingAddress = $this->orderAddressParser->parse($entry['billing']);
 
         if (empty($entry['shipping'])) {
-            $this->logger->notice('empty order shipping address - order: ' . $entry['number']);
+            $this->logger->warning('empty order shipping address - order: ' . $entry['number']);
 
-            return [];
+            return false;
         }
-
-        $shippingAddress = $this->orderAddressParser->parse($entry['shipping']);
-
-        $customer = $this->customerParser->parse($entry['customer']);
-
-        $customer->setMobilePhoneNumber($billingAddress->getMobilePhoneNumber());
-        $customer->setPhoneNumber($billingAddress->getPhoneNumber());
-
-        $orderIdentifier = $this->identityService->findOneOrCreate(
-            (string) $entry['id'],
-            ShopwareAdapter::NAME,
-            Order::TYPE
-        )->getObjectIdentifier();
-
-        $orderStatusIdentifier = $this->getConnectorIdentifier($entry['orderStatusId'], OrderStatus::TYPE);
-        $paymentStatusIdentifier = $this->getConnectorIdentifier($entry['paymentStatusId'], PaymentStatus::TYPE);
-        $paymentMethodIdentifier = $this->getConnectorIdentifier($entry['paymentId'], PaymentMethod::TYPE);
 
         $shippingProfileIdentity = $this->identityService->findOneBy([
             'adapterIdentifier' => (string) $entry['dispatchId'],
@@ -175,34 +214,12 @@ class OrderResponseParser implements OrderResponseParserInterface
         ]);
 
         if (null === $shippingProfileIdentity) {
-            $this->logger->error('no shipping profile was selected for order: ' . $entry['number']);
+            $this->logger->warning('no shipping profile was selected for order: ' . $entry['number']);
 
-            return [];
+            return false;
         }
 
-        $shopwareCurrencyIdentifier = $this->currencyDataProvider->getCurrencyIdentifierByCode($entry['currency']);
-        $currencyIdentifier = $this->getConnectorIdentifier($shopwareCurrencyIdentifier, Currency::TYPE);
-
-        $order = Order::fromArray([
-            'orderNumber' => $entry['number'],
-            'orderItems' => $orderItems,
-            'attributes' => $this->getAttributes($entry['attribute']),
-            'billingAddress' => $billingAddress,
-            'shippingAddress' => $shippingAddress,
-            'comments' => $this->getComments($entry),
-            'customer' => $customer,
-            'orderTime' => DateTimeImmutable::createFromMutable($entry['orderTime']),
-            'orderType' => Order::TYPE_ORDER,
-            'identifier' => $orderIdentifier,
-            'orderStatusIdentifier' => $orderStatusIdentifier,
-            'paymentStatusIdentifier' => $paymentStatusIdentifier,
-            'paymentMethodIdentifier' => $paymentMethodIdentifier,
-            'shippingProfileIdentifier' => $shippingProfileIdentity->getObjectIdentifier(),
-            'currencyIdentifier' => $currencyIdentifier,
-            'shopIdentifier' => $shopIdentity->getObjectIdentifier(),
-        ]);
-
-        return [$order];
+        return true;
     }
 
     /**
@@ -342,7 +359,7 @@ class OrderResponseParser implements OrderResponseParserInterface
      * @param array $entry
      * @param bool  $taxFree
      *
-     * @return null|OrderItem
+     * @return OrderItem
      */
     private function getShippingCosts(array $entry, $taxFree = false)
     {

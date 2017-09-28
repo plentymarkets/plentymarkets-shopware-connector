@@ -5,11 +5,7 @@ namespace PlentyConnector\Connector\CleanupService;
 use PlentyConnector\Connector\CleanupService\CallbackLogHandler\CallbackLogHandler;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\CommandFactory\CommandFactoryInterface;
-use PlentyConnector\Connector\ServiceBus\CommandFactory\Exception\MissingCommandException;
-use PlentyConnector\Connector\ServiceBus\CommandFactory\Exception\MissingCommandGeneratorException;
 use PlentyConnector\Connector\ServiceBus\CommandType;
-use PlentyConnector\Connector\ServiceBus\QueryFactory\Exception\MissingQueryException;
-use PlentyConnector\Connector\ServiceBus\QueryFactory\Exception\MissingQueryGeneratorException;
 use PlentyConnector\Connector\ServiceBus\QueryFactory\QueryFactoryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
@@ -147,9 +143,6 @@ class CleanupService implements CleanupServiceInterface
     /**
      * @param Definition $definition
      *
-     * @throws MissingQueryException
-     * @throws MissingQueryGeneratorException
-     *
      * @return bool
      */
     private function collectObjectIdentifiers(Definition $definition)
@@ -161,45 +154,32 @@ class CleanupService implements CleanupServiceInterface
             $definition->getOriginAdapterName()
         ));
 
-        $identities = $this->identityService->findBy([
-            'adapterName' => $definition->getDestinationAdapterName(),
-            'objectType' => $definition->getObjectType(),
-        ]);
+        /**
+         * @var TransferObjectInterface[] $objects
+         */
+        $objects = $this->serviceBus->handle($this->queryFactory->create(
+            $definition->getOriginAdapterName(),
+            $definition->getObjectType(),
+            QueryType::ALL
+        ));
 
-        $this->outputHandler->startProgressBar(count($identities));
-
-        foreach ($identities as $identity) {
-            /**
-             * @var TransferObjectInterface[] $transferObjects
-             */
-            $transferObjects = $this->serviceBus->handle($this->queryFactory->create(
-                $definition->getOriginAdapterName(),
-                $definition->getObjectType(),
-                QueryType::ONE,
-                $identity->getObjectIdentifier()
-            ));
-
-            foreach ($transferObjects as $transferObject) {
-                $this->elements[] = [
-                    'objectIdentifier' => $transferObject->getIdentifier(),
-                    'adapterName' => $definition->getDestinationAdapterName(),
-                    'type' => $transferObject->getType(),
-                ];
-            }
-
-            $this->outputHandler->advanceProgressBar();
+        if (empty($objects)) {
+            return false;
         }
 
-        $this->outputHandler->finishProgressBar();
+        foreach ($objects as $transferObject) {
+            $this->elements[] = [
+                'objectIdentifier' => $transferObject->getIdentifier(),
+                'adapterName' => $definition->getDestinationAdapterName(),
+                'type' => $transferObject->getType(),
+            ];
+        }
 
         return true;
     }
 
     /**
      * @param Definition $definition
-     *
-     * @throws MissingCommandException
-     * @throws MissingCommandGeneratorException
      */
     private function removeAllElements(Definition $definition)
     {

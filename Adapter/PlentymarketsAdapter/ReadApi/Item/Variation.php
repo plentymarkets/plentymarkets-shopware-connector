@@ -9,7 +9,7 @@ use PlentymarketsAdapter\ReadApi\ApiAbstract;
  */
 class Variation extends ApiAbstract
 {
-    private $includes = 'variationClients,variationSalesPrices,variationCategories,variationDefaultCategory,unit,variationAttributeValues,variationBarcodes,images,stock';
+    private $includes = 'variationClients,variationSalesPrices,variationCategories,variationDefaultCategory,unit,variationAttributeValues,variationBarcodes,images,stock,variationProperties';
 
     /**
      * @param array $criteria
