@@ -2,6 +2,7 @@
 
 namespace PlentymarketsAdapter\ResponseParser\Category;
 
+use Exception;
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Category\Category;

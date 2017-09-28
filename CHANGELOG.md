@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [5.0.0]
+## [unreleased]
 ### Added
 - added a reference amout calculator to calculate the right base content
 - transfer item short description as attribute to shopware
@@ -10,9 +10,17 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - renamed the PlentymarketsAdapter services from plentmarkets_adapter to plentymarkets_adapter
 
-## [unreleased]
+## [4.0.8]
+### Fixed
+- added a missing use statement in plentys media response parser
+
+## [4.0.7]
+### Fixed
+- added a missing use statement in CategoryResponseParser
+
 ### Changed
 - optimized the hash generation for media files
+- order item types for discounts and surcharges changed from product to discount and surcharge
 
 ## [4.0.6]
 ### Fixed

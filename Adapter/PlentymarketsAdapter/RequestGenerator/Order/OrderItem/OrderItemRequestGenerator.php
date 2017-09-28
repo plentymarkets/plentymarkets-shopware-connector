@@ -81,13 +81,13 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
         if ($orderItem->getType() === OrderItem::TYPE_PRODUCT) {
             $typeId = 1;
         } elseif ($orderItem->getType() === OrderItem::TYPE_DISCOUNT) {
-            $typeId = 1;
+            $typeId = 4;
         } elseif ($orderItem->getType() === OrderItem::TYPE_VOUCHER) {
             $typeId = 4;
         } elseif ($orderItem->getType() === OrderItem::TYPE_COUPON) {
             $typeId = 5;
         } elseif ($orderItem->getType() === OrderItem::TYPE_PAYMENT_SURCHARGE) {
-            $typeId = 1;
+            $typeId = 7;
         } elseif ($orderItem->getType() === OrderItem::TYPE_SHIPPING_COSTS) {
             $typeId = 6;
         } else {
