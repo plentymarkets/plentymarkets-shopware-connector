@@ -155,7 +155,7 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * @param Product $product
+     * @param Product                   $product
      * @param TransferObjectInterface[] $candidatesForProcessing
      *
      * @return TransferObjectInterface[]
