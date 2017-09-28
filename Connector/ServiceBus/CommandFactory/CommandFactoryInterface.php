@@ -4,7 +4,6 @@ namespace PlentyConnector\Connector\ServiceBus\CommandFactory;
 
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\CommandFactory\Exception\MissingCommandException;
-use PlentyConnector\Connector\ServiceBus\CommandFactory\Exception\MissingCommandGeneratorException;
 
 /**
  * Class CommandFactoryInterface.
@@ -17,7 +16,6 @@ interface CommandFactoryInterface
      * @param string $commandType
      * @param mixed  $payload
      *
-     * @throws MissingCommandGeneratorException
      * @throws MissingCommandException
      *
      * @return CommandInterface
