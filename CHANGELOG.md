@@ -7,6 +7,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - added a reference amount calculator to calculate the right base content
 - transfer item short description as attribute to shopware
 
+### Fixed
+- use correct shop id when parsing shopware orders
+
 ### Changed
 - optimized the item query performance
 - better error handling for commands and cronjobs
