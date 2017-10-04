@@ -6,6 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - added a reference amount calculator to calculate the right base content
 - transfer item short description as attribute to shopware
+- convert gram to kg (item weight)
 
 ### Changed
 - optimized the item query performance
