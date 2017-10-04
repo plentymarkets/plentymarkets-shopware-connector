@@ -185,7 +185,7 @@ class VariationResponseParser implements VariationResponseParserInterface
             $variationObject->setWidth((int) $variation['widthMM']);
             $variationObject->setHeight((int) $variation['heightMM']);
             $variationObject->setLength((int) $variation['lengthMM']);
-            $variationObject->setWeight((int) $variation['weightNetG']);
+            $variationObject->setWeight(($variation['weightNetG']/1000));
             $variationObject->setProperties($this->getVariationProperties($variation));
 
             $result[$variationObject->getIdentifier()] = $variationObject;
