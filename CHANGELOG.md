@@ -8,6 +8,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - transfer item short description as attribute to shopware
 - convert gram to kg (item weight)
 
+### Fixed
+- use correct shop id when parsing shopware orders
+
 ### Changed
 - optimized the item query performance
 - better error handling for commands and cronjobs
