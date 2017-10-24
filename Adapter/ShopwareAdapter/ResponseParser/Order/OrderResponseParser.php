@@ -140,7 +140,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         $paymentStatusIdentifier = $this->getConnectorIdentifier($entry['paymentStatusId'], PaymentStatus::TYPE);
         $paymentMethodIdentifier = $this->getConnectorIdentifier($entry['paymentId'], PaymentMethod::TYPE);
         $shippingProfileIdentifier = $this->getConnectorIdentifier($entry['dispatchId'], ShippingProfile::TYPE);
-        $shopIdentifier = $this->getConnectorIdentifier($entry['language'], Shop::TYPE);
+        $shopIdentifier = $this->getConnectorIdentifier($entry['languageSubShop']['id'], Shop::TYPE);
 
         $shopwareCurrencyIdentifier = $this->currencyDataProvider->getCurrencyIdentifierByCode($entry['currency']);
         $currencyIdentifier = $this->getConnectorIdentifier($shopwareCurrencyIdentifier, Currency::TYPE);
@@ -180,7 +180,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     private function isValidOrder(array $entry)
     {
         $shopIdentity = $this->identityService->findOneOrThrow(
-            (string) $entry['language'],
+            (string) $entry['languageSubShop']['id'],
             ShopwareAdapter::NAME,
             Shop::TYPE
         );
