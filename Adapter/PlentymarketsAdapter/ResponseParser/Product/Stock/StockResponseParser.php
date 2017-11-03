@@ -84,7 +84,8 @@ class StockResponseParser implements StockResponseParserInterface
      */
     private function getStock($variation)
     {
-        $summedStocks = 0;
+		$minStock = 0;
+        $arrayStocks = [];
         $itemWarehouse = (int) $this->config->get('item_warehouse', 0);
 
         static $warehouses;
@@ -109,10 +110,23 @@ class StockResponseParser implements StockResponseParserInterface
             }
 
             if (array_key_exists('netStock', $stock)) {
-                $summedStocks += $stock['netStock'];
+				$arrayStocks[] = $stock['netStock'];
             }
         }
-
-        return (float) $summedStocks;
-    }
+			
+		//Paketartikel
+		if($variation['bundleType'] == 'bundle') {
+			$minStock = min($arrayStocks);
+			return (float) $minStock;
+			
+		} else {
+			foreach ($variation['stock'] as $stock) {
+				if($stock['variationId'] == $variation['id']) {
+					return (float) $stock['netStock'];
+				}
+			}
+		}
+	
+		
+	}
 }
