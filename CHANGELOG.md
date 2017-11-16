@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - added a reference amount calculator to calculate the right base content
 - transfer item short description as attribute to shopware
 - convert gram to kg (item weight)
+- get correct category translations
 
 ### Fixed
 - use correct shop id when parsing shopware orders
