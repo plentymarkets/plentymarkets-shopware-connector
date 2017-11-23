@@ -77,7 +77,7 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
      */
     public function generate(Order $order)
     {
-        if ($order->getOrderType() !== Order::TYPE_ORDER) {
+        if (Order::TYPE_ORDER !== $order->getOrderType()) {
             throw new RuntimeException('Unsupported order type');
         }
 
@@ -174,7 +174,7 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
         ];
 
         $vouchers = array_filter($order->getOrderItems(), function (OrderItem $item) {
-            return $item->getType() === OrderItem::TYPE_VOUCHER;
+            return OrderItem::TYPE_VOUCHER === $item->getType();
         });
 
         $voucher = null;
@@ -243,7 +243,7 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
         }
 
         $possibleCustomers = array_filter($customerResult, function ($entry) {
-            return !isset($entry['singleAccess']) || $entry['singleAccess'] === false;
+            return !isset($entry['singleAccess']) || false === $entry['singleAccess'];
         });
 
         if (empty($possibleCustomers)) {
@@ -264,7 +264,7 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
 
         $plentyCustomer = false;
 
-        if ($customer->getType() === Customer::TYPE_NORMAL) {
+        if (Customer::TYPE_NORMAL === $customer->getType()) {
             $plentyCustomer = $this->findCustomer($customer->getEmail());
         }
 

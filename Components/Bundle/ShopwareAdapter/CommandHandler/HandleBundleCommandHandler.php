@@ -68,9 +68,9 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
     public function supports(CommandInterface $command)
     {
         return $command instanceof TransferObjectCommand &&
-            $command->getAdapterName() === ShopwareAdapter::NAME &&
-            $command->getObjectType() === Bundle::TYPE &&
-            $command->getCommandType() === CommandType::HANDLE;
+            ShopwareAdapter::NAME === $command->getAdapterName() &&
+            Bundle::TYPE === $command->getObjectType() &&
+            CommandType::HANDLE === $command->getCommandType();
     }
 
     /**

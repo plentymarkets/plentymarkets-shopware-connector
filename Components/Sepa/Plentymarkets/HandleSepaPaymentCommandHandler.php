@@ -58,9 +58,9 @@ class HandleSepaPaymentCommandHandler implements CommandHandlerInterface
     public function supports(CommandInterface $command)
     {
         return $command instanceof TransferObjectCommand &&
-            $command->getAdapterName() === PlentymarketsAdapter::NAME &&
-            $command->getObjectType() === Payment::TYPE &&
-            $command->getCommandType() === CommandType::HANDLE;
+            PlentymarketsAdapter::NAME === $command->getAdapterName() &&
+            Payment::TYPE === $command->getObjectType() &&
+            CommandType::HANDLE === $command->getCommandType();
     }
 
     /**
@@ -160,7 +160,7 @@ class HandleSepaPaymentCommandHandler implements CommandHandlerInterface
         $order = $this->client->request('GET', 'orders/' . $orderIdentity->getAdapterIdentifier());
 
         $relations = array_filter($order['relations'], function (array $relation) {
-            return $relation['referenceType'] === 'contact';
+            return 'contact' === $relation['referenceType'];
         });
 
         if (empty($relations)) {

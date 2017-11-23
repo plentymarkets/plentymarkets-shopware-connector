@@ -67,9 +67,9 @@ class FetchChangedProductsQueryHandler implements QueryHandlerInterface
     public function supports(QueryInterface $query)
     {
         return $query instanceof FetchTransferObjectQuery &&
-            $query->getAdapterName() === PlentymarketsAdapter::NAME &&
-            $query->getObjectType() === Product::TYPE &&
-            $query->getQueryType() === QueryType::CHANGED;
+            PlentymarketsAdapter::NAME === $query->getAdapterName() &&
+            Product::TYPE === $query->getObjectType() &&
+            QueryType::CHANGED === $query->getQueryType();
     }
 
     /**

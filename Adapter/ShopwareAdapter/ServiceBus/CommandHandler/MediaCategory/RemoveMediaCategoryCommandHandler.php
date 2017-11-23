@@ -58,9 +58,9 @@ class RemoveMediaCategoryCommandHandler implements CommandHandlerInterface
     public function supports(CommandInterface $command)
     {
         return $command instanceof TransferObjectCommand &&
-            $command->getAdapterName() === ShopwareAdapter::NAME &&
-            $command->getObjectType() === MediaCategory::TYPE &&
-            $command->getCommandType() === CommandType::REMOVE;
+            ShopwareAdapter::NAME === $command->getAdapterName() &&
+            MediaCategory::TYPE === $command->getObjectType() &&
+            CommandType::REMOVE === $command->getCommandType();
     }
 
     /**

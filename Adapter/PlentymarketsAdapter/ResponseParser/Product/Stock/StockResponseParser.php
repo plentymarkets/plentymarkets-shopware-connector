@@ -93,7 +93,7 @@ class StockResponseParser implements StockResponseParserInterface
             $warehouses = $this->client->request('GET', 'stockmanagement/warehouses');
 
             $warehouses = array_filter($warehouses, function (array $warehouse) {
-                return $warehouse['typeId'] === self::SALES_WAREHOUSE;
+                return self::SALES_WAREHOUSE === $warehouse['typeId'];
             });
 
             $warehouses = array_column($warehouses, 'id');
@@ -104,7 +104,7 @@ class StockResponseParser implements StockResponseParserInterface
                 continue;
             }
 
-            if ($itemWarehouse !== 0 && $stock['warehouseId'] !== $itemWarehouse) {
+            if (0 !== $itemWarehouse && $stock['warehouseId'] !== $itemWarehouse) {
                 continue;
             }
 

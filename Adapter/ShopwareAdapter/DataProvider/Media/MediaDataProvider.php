@@ -80,7 +80,7 @@ class MediaDataProvider implements MediaDataProviderInterface
         }
 
         foreach ($attributes as $key => $value) {
-            if ($key !== 'plenty_connector_hash') {
+            if ('plenty_connector_hash' !== $key) {
                 continue;
             }
 

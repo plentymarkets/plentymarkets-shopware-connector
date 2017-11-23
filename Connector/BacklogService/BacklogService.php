@@ -85,7 +85,7 @@ class BacklogService implements BacklogServiceInterface
             $selectParams = [':status' => Backlog::STATUS_OPEN];
             $backlog = $this->connection->executeQuery($selectQuery, $selectParams)->fetch(PDO::FETCH_ASSOC);
 
-            if ($backlog === false) {
+            if (false === $backlog) {
                 return null;
             }
 
@@ -95,14 +95,14 @@ class BacklogService implements BacklogServiceInterface
                 ':status' => Backlog::STATUS_PROCESSED,
             ]);
 
-            if ($affectedRows !== 1) {
+            if (1 !== $affectedRows) {
                 return null;
             }
 
             $deleteQuery = 'DELETE FROM plenty_backlog WHERE id = :id';
             $affectedRows = $this->connection->executeUpdate($deleteQuery, [':id' => $backlog['id']]);
 
-            if ($affectedRows !== 1) {
+            if (1 !== $affectedRows) {
                 return null;
             }
 

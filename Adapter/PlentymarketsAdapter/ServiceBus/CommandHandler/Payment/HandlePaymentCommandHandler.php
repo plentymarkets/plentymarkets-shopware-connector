@@ -65,9 +65,9 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
     public function supports(CommandInterface $command)
     {
         return $command instanceof TransferObjectCommand &&
-            $command->getAdapterName() === PlentymarketsAdapter::NAME &&
-            $command->getObjectType() === Payment::TYPE &&
-            $command->getCommandType() === CommandType::HANDLE;
+            PlentymarketsAdapter::NAME === $command->getAdapterName() &&
+            Payment::TYPE === $command->getObjectType() &&
+            CommandType::HANDLE === $command->getCommandType();
     }
 
     /**

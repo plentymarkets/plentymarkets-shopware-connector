@@ -299,7 +299,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
                     'adapterName' => ShopwareAdapter::NAME,
                 ]);
 
-                return $identity !== null;
+                return null !== $identity;
             });
 
             if (empty($shopIdentifiers)) {

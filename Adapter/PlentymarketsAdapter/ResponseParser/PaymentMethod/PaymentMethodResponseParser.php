@@ -32,7 +32,7 @@ class PaymentMethodResponseParser implements PaymentMethodResponseParserInterfac
     public function parse(array $entry)
     {
         // https://forum.plentymarkets.com/t/paymentmethods-fehlen-im-payment-methods-response/69372/8
-        if ($entry['id'] === 6000) {
+        if (6000 === $entry['id']) {
             $entry['id'] = 0;
         }
 

@@ -66,7 +66,7 @@ class BundleResponseParser implements BundleResponseParserInterface
     public function parse(array $product)
     {
         $bundleVariations = array_filter($product['variations'], function (array $variation) {
-            return $variation['bundleType'] === 'bundle';
+            return 'bundle' === $variation['bundleType'];
         });
 
         if (empty($bundleVariations)) {

@@ -55,9 +55,9 @@ class FetchMediaCategoryHandler implements QueryHandlerInterface
     public function supports(QueryInterface $query)
     {
         return $query instanceof FetchTransferObjectQuery &&
-            $query->getAdapterName() === PlentymarketsAdapter::NAME &&
-            $query->getObjectType() === MediaCategory::TYPE &&
-            $query->getQueryType() === QueryType::ONE;
+            PlentymarketsAdapter::NAME === $query->getAdapterName() &&
+            MediaCategory::TYPE === $query->getObjectType() &&
+            QueryType::ONE === $query->getQueryType();
     }
 
     /**

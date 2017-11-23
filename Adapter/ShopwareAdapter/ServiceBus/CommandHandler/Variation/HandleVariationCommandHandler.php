@@ -68,9 +68,9 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
     public function supports(CommandInterface $command)
     {
         return $command instanceof TransferObjectCommand &&
-            $command->getAdapterName() === ShopwareAdapter::NAME &&
-            $command->getObjectType() === Variation::TYPE &&
-            $command->getCommandType() === CommandType::HANDLE;
+            ShopwareAdapter::NAME === $command->getAdapterName() &&
+            Variation::TYPE === $command->getObjectType() &&
+            CommandType::HANDLE === $command->getCommandType();
     }
 
     /**

@@ -78,17 +78,17 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
 
         $itemParams = [];
 
-        if ($orderItem->getType() === OrderItem::TYPE_PRODUCT) {
+        if (OrderItem::TYPE_PRODUCT === $orderItem->getType()) {
             $typeId = 1;
-        } elseif ($orderItem->getType() === OrderItem::TYPE_DISCOUNT) {
+        } elseif (OrderItem::TYPE_DISCOUNT === $orderItem->getType()) {
             $typeId = 4;
-        } elseif ($orderItem->getType() === OrderItem::TYPE_VOUCHER) {
+        } elseif (OrderItem::TYPE_VOUCHER === $orderItem->getType()) {
             $typeId = 4;
-        } elseif ($orderItem->getType() === OrderItem::TYPE_COUPON) {
+        } elseif (OrderItem::TYPE_COUPON === $orderItem->getType()) {
             $typeId = 5;
-        } elseif ($orderItem->getType() === OrderItem::TYPE_PAYMENT_SURCHARGE) {
+        } elseif (OrderItem::TYPE_PAYMENT_SURCHARGE === $orderItem->getType()) {
             $typeId = 7;
-        } elseif ($orderItem->getType() === OrderItem::TYPE_SHIPPING_COSTS) {
+        } elseif (OrderItem::TYPE_SHIPPING_COSTS === $orderItem->getType()) {
             $typeId = 6;
         } else {
             throw new RuntimeException('unsupported type');
@@ -108,7 +108,7 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
             $itemParams['itemVariationId'] = $this->getVariationIdentifier($orderItem);
         }
 
-        if ($typeId === 1 && empty($itemParams['itemVariationId'])) {
+        if (1 === $typeId && empty($itemParams['itemVariationId'])) {
             $itemParams['typeId'] = 9; // TYPE_UNASSIGEND_VARIATION;
         }
 
@@ -160,7 +160,7 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
      */
     private function getVariationIdentifier(OrderItem $orderItem)
     {
-        if ($this->config->get('variation_number_field', 'number') === 'number') {
+        if ('number' === $this->config->get('variation_number_field', 'number')) {
             return $this->getVariationIdentifierFromNumber($orderItem->getNumber());
         }
 
@@ -210,6 +210,6 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
      */
     private function isCouponItem(OrderItem $orderItem)
     {
-        return $orderItem->getType() === OrderItem::TYPE_VOUCHER || $orderItem->getType() === OrderItem::TYPE_COUPON;
+        return OrderItem::TYPE_VOUCHER === $orderItem->getType() || OrderItem::TYPE_COUPON === $orderItem->getType();
     }
 }

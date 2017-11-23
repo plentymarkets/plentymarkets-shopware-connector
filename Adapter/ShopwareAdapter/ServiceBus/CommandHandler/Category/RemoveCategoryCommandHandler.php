@@ -50,9 +50,9 @@ class RemoveCategoryCommandHandler implements CommandHandlerInterface
     public function supports(CommandInterface $command)
     {
         return $command instanceof TransferObjectCommand &&
-            $command->getAdapterName() === ShopwareAdapter::NAME &&
-            $command->getObjectType() === Category::TYPE &&
-            $command->getCommandType() === CommandType::REMOVE;
+            ShopwareAdapter::NAME === $command->getAdapterName() &&
+            Category::TYPE === $command->getObjectType() &&
+            CommandType::REMOVE === $command->getCommandType();
     }
 
     /**

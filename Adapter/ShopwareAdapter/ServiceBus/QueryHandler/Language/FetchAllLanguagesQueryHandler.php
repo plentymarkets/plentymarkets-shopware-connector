@@ -49,9 +49,9 @@ class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
     public function supports(QueryInterface $query)
     {
         return $query instanceof FetchTransferObjectQuery &&
-            $query->getAdapterName() === ShopwareAdapter::NAME &&
-            $query->getObjectType() === Language::TYPE &&
-            $query->getQueryType() === QueryType::ALL;
+            ShopwareAdapter::NAME === $query->getAdapterName() &&
+            Language::TYPE === $query->getObjectType() &&
+            QueryType::ALL === $query->getQueryType();
     }
 
     /**

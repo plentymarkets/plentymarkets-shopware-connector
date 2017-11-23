@@ -64,9 +64,9 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
     public function supports(QueryInterface $query)
     {
         return $query instanceof FetchTransferObjectQuery &&
-            $query->getAdapterName() === ShopwareAdapter::NAME &&
-            $query->getObjectType() === Order::TYPE &&
-            $query->getQueryType() === QueryType::CHANGED;
+            ShopwareAdapter::NAME === $query->getAdapterName() &&
+            Order::TYPE === $query->getObjectType() &&
+            QueryType::CHANGED === $query->getQueryType();
     }
 
     /**

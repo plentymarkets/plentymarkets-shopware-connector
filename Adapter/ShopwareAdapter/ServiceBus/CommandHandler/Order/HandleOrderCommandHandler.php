@@ -63,9 +63,9 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     public function supports(CommandInterface $command)
     {
         return $command instanceof TransferObjectCommand &&
-            $command->getAdapterName() === ShopwareAdapter::NAME &&
-            $command->getObjectType() === Order::TYPE &&
-            $command->getCommandType() === CommandType::HANDLE;
+            ShopwareAdapter::NAME === $command->getAdapterName() &&
+            Order::TYPE === $command->getObjectType() &&
+            CommandType::HANDLE === $command->getCommandType();
     }
 
     /**
@@ -123,7 +123,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         if (null !== $paymentStatusIdentity) {
             $params['paymentStatusId'] = $paymentStatusIdentity->getAdapterIdentifier();
 
-            if ((int) $paymentStatusIdentity->getAdapterIdentifier() === Status::PAYMENT_STATE_COMPLETELY_PAID) {
+            if (Status::PAYMENT_STATE_COMPLETELY_PAID === (int) $paymentStatusIdentity->getAdapterIdentifier()) {
                 $params['cleareddate'] = new DateTime('now');
             }
         } else {

@@ -22,11 +22,11 @@ class CommandFactory implements CommandFactoryInterface
         Assertion::string($objectType);
         Assertion::inArray($commandType, CommandType::getAllTypes());
 
-        if ($commandType === CommandType::HANDLE) {
+        if (CommandType::HANDLE === $commandType) {
             Assertion::isInstanceOf($payload, TransferObjectInterface::class);
         }
 
-        if ($commandType === CommandType::REMOVE) {
+        if (CommandType::REMOVE === $commandType) {
             Assertion::uuid($payload);
         }
 

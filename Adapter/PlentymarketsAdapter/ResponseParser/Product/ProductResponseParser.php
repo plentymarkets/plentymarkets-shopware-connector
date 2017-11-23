@@ -197,7 +197,7 @@ class ProductResponseParser implements ProductResponseParserInterface
     private function getMainVariation(array $variations)
     {
         $mainVariation = array_filter($variations, function ($varation) {
-            return $varation['isMain'] === true;
+            return true === $varation['isMain'];
         });
 
         if (empty($mainVariation)) {
@@ -424,11 +424,11 @@ class ProductResponseParser implements ProductResponseParserInterface
         $result = [];
 
         foreach ($product['itemCrossSelling'] as $linkedProduct) {
-            if ($linkedProduct['relationship'] === 'Similar') {
+            if ('Similar' === $linkedProduct['relationship']) {
                 $type = LinkedProduct::TYPE_SIMILAR;
-            } elseif ($linkedProduct['relationship'] === 'Accessory') {
+            } elseif ('Accessory' === $linkedProduct['relationship']) {
                 $type = LinkedProduct::TYPE_ACCESSORY;
-            } elseif ($linkedProduct['relationship'] === 'ReplacementPart') {
+            } elseif ('ReplacementPart' === $linkedProduct['relationship']) {
                 $type = LinkedProduct::TYPE_REPLACEMENT;
             } else {
                 continue;

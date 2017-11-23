@@ -48,9 +48,9 @@ class FetchAllShippingProfilesQueryHandler implements QueryHandlerInterface
     public function supports(QueryInterface $query)
     {
         return $query instanceof FetchTransferObjectQuery &&
-            $query->getAdapterName() === ShopwareAdapter::NAME &&
-            $query->getObjectType() === ShippingProfile::TYPE &&
-            $query->getQueryType() === QueryType::ALL;
+            ShopwareAdapter::NAME === $query->getAdapterName() &&
+            ShippingProfile::TYPE === $query->getObjectType() &&
+            QueryType::ALL === $query->getQueryType();
     }
 
     /**

@@ -44,7 +44,7 @@ class FetchTransferObjectQuery implements QueryInterface
         Assertion::string($objectType);
         Assertion::inArray($queryType, QueryType::getAllTypes());
 
-        if ($queryType === QueryType::ONE) {
+        if (QueryType::ONE === $queryType) {
             Assertion::notBlank($objectIdentifier);
             Assertion::uuid($objectIdentifier);
         }

@@ -49,9 +49,9 @@ class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
     public function supports(QueryInterface $query)
     {
         return $query instanceof FetchTransferObjectQuery &&
-            $query->getAdapterName() === ShopwareAdapter::NAME &&
-            $query->getObjectType() === CustomerGroup::TYPE &&
-            $query->getQueryType() === QueryType::ALL;
+            ShopwareAdapter::NAME === $query->getAdapterName() &&
+            CustomerGroup::TYPE === $query->getObjectType() &&
+            QueryType::ALL === $query->getQueryType();
     }
 
     /**

@@ -75,7 +75,7 @@ class PriceResponseParser implements PriceResponseParserInterface
                 continue;
             }
 
-            if ($customerGroup === 'default') {
+            if ('default' === $customerGroup) {
                 $customerGroup = null;
             }
 
@@ -168,7 +168,7 @@ class PriceResponseParser implements PriceResponseParserInterface
 
             $from = (float) $priceConfiguration['minimumOrderQuantity'];
 
-            if (count($customerClasses) === 1 && $customerClasses[0]['customerClassId'] === -1) {
+            if (1 === count($customerClasses) && $customerClasses[0]['customerClassId'] === -1) {
                 foreach ($customerGroups as $group) {
                     $customerGroupIdentity = $this->identityService->findOneBy([
                         'adapterIdentifier' => $group,

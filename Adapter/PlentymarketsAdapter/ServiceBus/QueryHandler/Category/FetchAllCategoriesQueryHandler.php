@@ -64,9 +64,9 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
     public function supports(QueryInterface $query)
     {
         return $query instanceof FetchTransferObjectQuery &&
-            $query->getAdapterName() === PlentymarketsAdapter::NAME &&
-            $query->getObjectType() === Category::TYPE &&
-            $query->getQueryType() === QueryType::ALL;
+            PlentymarketsAdapter::NAME === $query->getAdapterName() &&
+            Category::TYPE === $query->getObjectType() &&
+            QueryType::ALL === $query->getQueryType();
     }
 
     /**
