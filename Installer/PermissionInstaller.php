@@ -92,7 +92,7 @@ class PermissionInstaller implements InstallerInterface
             return;
         }
 
-        array_walk($orphanedPrivileges, function (Privilege $privilege) {
+        array_walk($orphanedPrivileges, function (ShopwarePrivilege $privilege) {
             $this->em->remove($privilege);
         });
 
