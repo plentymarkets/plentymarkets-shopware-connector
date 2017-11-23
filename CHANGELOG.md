@@ -6,6 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 ### Fixed
+- error handling when parsing order addresses
 
 ### Changed
 
