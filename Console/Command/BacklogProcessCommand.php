@@ -2,6 +2,7 @@
 
 namespace PlentyConnector\Console\Command;
 
+use Exception;
 use PlentyConnector\Connector\BacklogService\BacklogService;
 use PlentyConnector\Connector\Logger\ConsoleHandler;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
