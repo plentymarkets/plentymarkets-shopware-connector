@@ -115,7 +115,7 @@ class Comment extends ApiAbstract
     {
         $result = [];
         foreach ($criteria as $key => $criterion) {
-            if ('referenceType' === $key || 'referenceValue' === $key) {
+            if ($key === 'referenceType' || $key === 'referenceValue') {
                 continue;
             }
 

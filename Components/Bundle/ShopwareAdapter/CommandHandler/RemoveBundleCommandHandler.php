@@ -68,9 +68,9 @@ class RemoveBundleCommandHandler implements CommandHandlerInterface
     public function supports(CommandInterface $command)
     {
         return $command instanceof TransferObjectCommand &&
-            ShopwareAdapter::NAME === $command->getAdapterName() &&
-            Bundle::TYPE === $command->getObjectType() &&
-            CommandType::REMOVE === $command->getCommandType();
+            $command->getAdapterName() === ShopwareAdapter::NAME &&
+            $command->getObjectType() === Bundle::TYPE &&
+            $command->getCommandType() === CommandType::REMOVE;
     }
 
     /**

@@ -195,7 +195,7 @@ class OrderResponseParser implements OrderResponseParserInterface
 
         $order = new Order();
         $order->setIdentifier($identity->getObjectIdentifier());
-        $order->setOrderType(1 === $entry['typeId'] ? Order::TYPE_ORDER : Order::TYPE_OFFER);
+        $order->setOrderType($entry['typeId'] === 1 ? Order::TYPE_ORDER : Order::TYPE_OFFER);
         $order->setOrderNumber($orderNumber);
         $order->setOrderTime($this->getOrderTime($entry));
         $order->setCustomer($customer);
@@ -223,7 +223,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     private function getBillingAddressData(array $entry)
     {
         $billingAddress = array_filter($entry['addressRelations'], function (array $address) {
-            return 1 === $address['typeId'];
+            return $address['typeId'] === 1;
         });
 
         if (empty($billingAddress)) {
@@ -243,7 +243,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     private function getShippingAddressData(array $entry)
     {
         $shippingAddress = array_filter($entry['addressRelations'], function (array $address) {
-            return 2 === $address['typeId'];
+            return $address['typeId'] === 2;
         });
 
         if (empty($shippingAddress)) {
@@ -263,7 +263,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     private function getCustomerData(array $entry)
     {
         $relations = array_filter($entry['relations'], function (array $relation) {
-            return 'contact' === $relation['referenceType'];
+            return $relation['referenceType'] === 'contact';
         });
 
         if (empty($relations)) {
@@ -283,7 +283,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     private function getOrdernumber(array $entry)
     {
         $property = array_filter($entry['properties'], function (array $property) {
-            return 7 === $property['typeId'];
+            return $property['typeId'] === 7;
         });
 
         if (!empty($property)) {
@@ -303,7 +303,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     private function getLanguageIdentity(array $entry)
     {
         $property = array_filter($entry['properties'], function (array $property) {
-            return 6 === $property['typeId'];
+            return $property['typeId'] === 6;
         });
 
         if (!empty($property)) {
@@ -463,7 +463,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     private function getPaymentMethodIdentity(array $entry)
     {
         $property = array_filter($entry['properties'], function (array $property) {
-            return 3 === $property['typeId'];
+            return $property['typeId'] === 3;
         });
 
         if (!empty($property)) {
@@ -489,7 +489,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     private function getPaymentStatusIdentity(array $entry)
     {
         $property = array_filter($entry['properties'], function (array $property) {
-            return 4 === $property['typeId'];
+            return $property['typeId'] === 4;
         });
 
         if (!empty($property)) {
@@ -529,7 +529,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     private function getOrderTime(array $entry)
     {
         $date = array_filter($entry['dates'], function (array $property) {
-            return 2 === $property['typeId'];
+            return $property['typeId'] === 2;
         });
 
         if (!empty($date)) {
@@ -627,7 +627,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     private function getPhoneNumber(array $entry)
     {
         $options = array_filter($entry['customerData']['options'], function (array $option) {
-            return 1 === $option['typeId'] && 4 === $option['subTypeId'];
+            return $option['typeId'] === 1 && $option['subTypeId'] === 4;
         });
 
         if (!empty($options)) {
@@ -647,7 +647,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     private function getMobilePhoneNumber(array $entry)
     {
         $options = array_filter($entry['customerData']['options'], function (array $option) {
-            return 1 === $option['typeId'] && 2 === $option['subTypeId'];
+            return $option['typeId'] === 1 && $option['subTypeId'] === 2;
         });
 
         if (!empty($options)) {
@@ -671,7 +671,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         }
 
         $options = array_filter($entry['billingAddressData']['options'], function (array $option) {
-            return 5 === $option['typeId'];
+            return $option['typeId'] === 5;
         });
 
         if (empty($options)) {
@@ -700,7 +700,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         $numbers = $this->client->request('GET', 'orders/' . $entry['id'] . '/packagenumbers');
 
         $shippingDate = array_filter($entry['dates'], function (array $date) {
-            return 8 === $date['typeId'];
+            return $date['typeId'] === 8;
         });
 
         $result = [];

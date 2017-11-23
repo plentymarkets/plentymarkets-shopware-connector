@@ -49,9 +49,9 @@ class FetchAllVatRatesQueryHandler implements QueryHandlerInterface
     public function supports(QueryInterface $query)
     {
         return $query instanceof FetchTransferObjectQuery &&
-            ShopwareAdapter::NAME === $query->getAdapterName() &&
-            VatRate::TYPE === $query->getObjectType() &&
-            QueryType::ALL === $query->getQueryType();
+            $query->getAdapterName() === ShopwareAdapter::NAME &&
+            $query->getObjectType() === VatRate::TYPE &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**

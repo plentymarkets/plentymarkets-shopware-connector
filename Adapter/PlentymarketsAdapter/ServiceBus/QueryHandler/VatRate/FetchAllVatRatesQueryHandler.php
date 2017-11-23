@@ -46,9 +46,9 @@ class FetchAllVatRatesQueryHandler implements QueryHandlerInterface
     public function supports(QueryInterface $query)
     {
         return $query instanceof FetchTransferObjectQuery &&
-            PlentymarketsAdapter::NAME === $query->getAdapterName() &&
-            VatRate::TYPE === $query->getObjectType() &&
-            QueryType::ALL === $query->getQueryType();
+            $query->getAdapterName() === PlentymarketsAdapter::NAME &&
+            $query->getObjectType() === VatRate::TYPE &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**

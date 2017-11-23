@@ -208,7 +208,7 @@ class VariationResponseParser implements VariationResponseParserInterface
      */
     private function getVariationNumber(array $element)
     {
-        if ('number' === $this->config->get('variation_number_field', 'number')) {
+        if ($this->config->get('variation_number_field', 'number') === 'number') {
             return (string) $element['number'];
         }
 

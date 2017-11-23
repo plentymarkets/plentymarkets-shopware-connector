@@ -144,7 +144,7 @@ class Client implements ClientInterface
 
             return $result;
         } catch (ClientException $exception) {
-            if (null !== $this->accessToken && !$this->isLoginRequired($path) && null !== $exception->getResponse() && 401 === $exception->getResponse()->getStatusCode()) {
+            if ($this->accessToken !== null && !$this->isLoginRequired($path) && null !== $exception->getResponse() && $exception->getResponse()->getStatusCode() === 401) {
                 // retry with fresh accessToken
                 $this->accessToken = null;
 
@@ -181,7 +181,7 @@ class Client implements ClientInterface
      */
     private function isLoginRequired($path)
     {
-        if ('login' === $path) {
+        if ($path === 'login') {
             return false;
         }
 
@@ -318,7 +318,7 @@ class Client implements ClientInterface
             $params['page'] = $options['page'];
         }
 
-        if ('GET' === $method) {
+        if ($method === 'GET') {
             $requestOptions['query'] = $params;
         } else {
             $requestOptions['json'] = $params;
@@ -356,7 +356,7 @@ class Client implements ClientInterface
             'user-agent' => $this->getUserAgent(),
         ];
 
-        if ('login' !== $path) {
+        if ($path !== 'login') {
             $headers['Authorization'] = 'Bearer ' . $this->accessToken;
         }
 

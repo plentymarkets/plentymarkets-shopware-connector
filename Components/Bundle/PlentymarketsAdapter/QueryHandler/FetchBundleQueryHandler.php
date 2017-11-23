@@ -64,9 +64,9 @@ class FetchBundleQueryHandler implements QueryHandlerInterface
     public function supports(QueryInterface $query)
     {
         return $query instanceof FetchTransferObjectQuery &&
-            PlentymarketsAdapter::NAME === $query->getAdapterName() &&
-            Bundle::TYPE === $query->getObjectType() &&
-            QueryType::ALL === $query->getQueryType();
+            $query->getAdapterName() === PlentymarketsAdapter::NAME &&
+            $query->getObjectType() === Bundle::TYPE &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**

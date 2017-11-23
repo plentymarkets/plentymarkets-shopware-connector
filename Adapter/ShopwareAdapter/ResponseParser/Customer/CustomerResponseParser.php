@@ -79,9 +79,9 @@ class CustomerResponseParser implements CustomerResponseParserInterface
 
         $customerGroupIdentifier = $this->getIdentifier((string) $customerGroup->getId(), CustomerGroup::TYPE);
 
-        if ('mr' === $entry['salutation']) {
+        if ($entry['salutation'] === 'mr') {
             $salutation = Customer::SALUTATION_MR;
-        } elseif ('ms' === $entry['salutation']) {
+        } elseif ($entry['salutation'] === 'ms') {
             $salutation = Customer::SALUTATION_MS;
         } else {
             $salutation = Customer::SALUTATION_FIRM;
@@ -120,7 +120,7 @@ class CustomerResponseParser implements CustomerResponseParserInterface
         $newsletterRepository = $this->entityManager->getRepository(Address::class);
         $newsletter = $newsletterRepository->findOneBy(['email' => $entry['email']]);
 
-        if (null !== $newsletter) {
+        if ($newsletter !== null) {
             $customer->setNewsletter(true);
 
             if (null !== $newsletter->getAdded()) {

@@ -55,9 +55,9 @@ class FetchOrderQueryHandler implements QueryHandlerInterface
     public function supports(QueryInterface $query)
     {
         return $query instanceof FetchTransferObjectQuery &&
-            PlentymarketsAdapter::NAME === $query->getAdapterName() &&
-            Order::TYPE === $query->getObjectType() &&
-            QueryType::ONE === $query->getQueryType();
+            $query->getAdapterName() === PlentymarketsAdapter::NAME &&
+            $query->getObjectType() === Order::TYPE &&
+            $query->getQueryType() === QueryType::ONE;
     }
 
     /**

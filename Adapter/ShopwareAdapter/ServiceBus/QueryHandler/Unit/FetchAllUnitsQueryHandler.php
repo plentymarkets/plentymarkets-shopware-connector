@@ -49,9 +49,9 @@ class FetchAllUnitsQueryHandler implements QueryHandlerInterface
     public function supports(QueryInterface $query)
     {
         return $query instanceof FetchTransferObjectQuery &&
-            ShopwareAdapter::NAME === $query->getAdapterName() &&
-            Unit::TYPE === $query->getObjectType() &&
-            QueryType::ALL === $query->getQueryType();
+            $query->getAdapterName() === ShopwareAdapter::NAME &&
+            $query->getObjectType() === Unit::TYPE &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**

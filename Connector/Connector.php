@@ -93,7 +93,7 @@ class Connector implements ConnectorInterface
         Assertion::inArray($queryType, QueryType::getAllTypes());
         Assertion::nullOrString($objectType);
 
-        if (QueryType::ONE === $queryType) {
+        if ($queryType === QueryType::ONE) {
             Assertion::notNull($identifier);
             Assertion::uuid($identifier);
         }

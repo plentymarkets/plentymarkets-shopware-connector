@@ -21,7 +21,7 @@ class QueryFactory implements QueryFactoryInterface
         Assertion::string($objectType);
         Assertion::inArray($queryType, QueryType::getAllTypes());
 
-        if (QueryType::ONE === $queryType) {
+        if ($queryType === QueryType::ONE) {
             Assertion::uuid($payload);
         }
 

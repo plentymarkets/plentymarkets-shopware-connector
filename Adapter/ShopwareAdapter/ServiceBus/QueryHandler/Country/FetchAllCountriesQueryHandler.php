@@ -49,9 +49,9 @@ class FetchAllCountriesQueryHandler implements QueryHandlerInterface
     public function supports(QueryInterface $query)
     {
         return $query instanceof FetchTransferObjectQuery &&
-            ShopwareAdapter::NAME === $query->getAdapterName() &&
-            Country::TYPE === $query->getObjectType() &&
-            QueryType::ALL === $query->getQueryType();
+            $query->getAdapterName() === ShopwareAdapter::NAME &&
+            $query->getObjectType() === Country::TYPE &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**

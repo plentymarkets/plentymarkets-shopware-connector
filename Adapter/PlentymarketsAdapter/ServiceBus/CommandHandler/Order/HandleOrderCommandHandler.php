@@ -59,9 +59,9 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     public function supports(CommandInterface $command)
     {
         return $command instanceof TransferObjectCommand &&
-            PlentymarketsAdapter::NAME === $command->getAdapterName() &&
-            Order::TYPE === $command->getObjectType() &&
-            CommandType::HANDLE === $command->getCommandType();
+            $command->getAdapterName() === PlentymarketsAdapter::NAME &&
+            $command->getObjectType() === Order::TYPE &&
+            $command->getCommandType() === CommandType::HANDLE;
     }
 
     /**
@@ -82,7 +82,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             'adapterName' => PlentymarketsAdapter::NAME,
         ]);
 
-        if (null !== $identity) {
+        if ($identity !== null) {
             return true;
         }
 
@@ -177,10 +177,10 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
                 'referenceType' => 'order',
                 'referenceValue' => $orderIdentity->getAdapterIdentifier(),
                 'text' => $comment->getComment(),
-                'isVisibleForContact' => Comment::TYPE_CUSTOMER === $comment->getType(),
+                'isVisibleForContact' => $comment->getType() === Comment::TYPE_CUSTOMER,
             ];
 
-            if (Comment::TYPE_INTERNAL === $comment->getType()) {
+            if ($comment->getType() === Comment::TYPE_INTERNAL) {
                 $commentParams['userId'] = $this->getUserId();
             }
 

@@ -107,7 +107,7 @@ class VariationRequestGenerator implements VariationRequestGeneratorInterface
          * @var Barcode[] $barcodes
          */
         $barcodes = array_filter($variation->getBarcodes(), function (Barcode $barcode) {
-            return Barcode::TYPE_GTIN13 === $barcode->getType();
+            return $barcode->getType() === Barcode::TYPE_GTIN13;
         });
 
         if (!empty($barcodes)) {
@@ -179,7 +179,7 @@ class VariationRequestGenerator implements VariationRequestGeneratorInterface
                     'adapterName' => ShopwareAdapter::NAME,
                 ]);
 
-                return null !== $identity;
+                return $identity !== null;
             });
 
             if (empty($shopIdentifiers)) {

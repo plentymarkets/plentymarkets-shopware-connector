@@ -46,9 +46,9 @@ class FetchAllShippingProfilesQueryHandler implements QueryHandlerInterface
     public function supports(QueryInterface $query)
     {
         return $query instanceof FetchTransferObjectQuery &&
-            PlentymarketsAdapter::NAME === $query->getAdapterName() &&
-            ShippingProfile::TYPE === $query->getObjectType() &&
-            QueryType::ALL === $query->getQueryType();
+            $query->getAdapterName() === PlentymarketsAdapter::NAME &&
+            $query->getObjectType() === ShippingProfile::TYPE &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**

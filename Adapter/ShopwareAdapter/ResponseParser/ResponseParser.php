@@ -131,7 +131,7 @@ class ResponseParser implements ResponseParserInterface
             'adapterName' => ShopwareAdapter::NAME,
         ]);
 
-        if (null === $identity) {
+        if ($identity === null) {
             // TODO add proper exception
             throw new \Exception();
         }

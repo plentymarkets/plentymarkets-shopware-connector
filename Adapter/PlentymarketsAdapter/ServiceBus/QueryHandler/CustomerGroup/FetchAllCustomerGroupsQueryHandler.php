@@ -46,9 +46,9 @@ class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
     public function supports(QueryInterface $query)
     {
         return $query instanceof FetchTransferObjectQuery &&
-            PlentymarketsAdapter::NAME === $query->getAdapterName() &&
-            CustomerGroup::TYPE === $query->getObjectType() &&
-            QueryType::ALL === $query->getQueryType();
+            $query->getAdapterName() === PlentymarketsAdapter::NAME &&
+            $query->getObjectType() === CustomerGroup::TYPE &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**

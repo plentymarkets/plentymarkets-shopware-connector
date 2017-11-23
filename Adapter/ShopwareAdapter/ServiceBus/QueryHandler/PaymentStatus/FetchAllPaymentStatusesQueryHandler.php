@@ -49,9 +49,9 @@ class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
     public function supports(QueryInterface $query)
     {
         return $query instanceof FetchTransferObjectQuery &&
-            ShopwareAdapter::NAME === $query->getAdapterName() &&
-            PaymentStatus::TYPE === $query->getObjectType() &&
-            QueryType::ALL === $query->getQueryType();
+            $query->getAdapterName() === ShopwareAdapter::NAME &&
+            $query->getObjectType() === PaymentStatus::TYPE &&
+            $query->getQueryType() === QueryType::ALL;
     }
 
     /**

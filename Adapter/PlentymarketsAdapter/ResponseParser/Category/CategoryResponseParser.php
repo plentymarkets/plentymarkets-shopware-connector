@@ -71,7 +71,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
             return [];
         }
 
-        if ('all' !== $entry['right']) {
+        if ($entry['right'] !== 'all') {
             $this->logger->warning('unsupported category rights');
 
             return [];
@@ -121,7 +121,8 @@ class CategoryResponseParser implements CategoryResponseParserInterface
         }
 
         foreach ($entry['details'] as $key => $detail) {
-            $isDefaultPlentyId = 0 === $key;
+
+            $isDefaultPlentyId = $key === 0;
             $isPlentyIdEnabled = in_array($entry['details'][$key]['plentyId'], array_column($entry['clients'], 'plentyId'));
             if (!$isPlentyIdEnabled && !$isDefaultPlentyId) {
                 unset($entry['details'][$key]);
