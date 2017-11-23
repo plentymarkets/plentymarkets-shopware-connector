@@ -164,36 +164,46 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
      */
     private function addShippingProfilesAsAttributes(Product $product)
     {
+        $allProfileIdentities = $this->identityService->findBy([
+			'objectType' => ShippingProfile::TYPE,
+            'adapterName' => ShopwareAdapter::NAME,
+		]);
+        
+        $shippingAttributes = [];
+		foreach($allProfileIdentities as $identity){
+			$shippingAttributes['shippingProfile' . $identity->getAdapterIdentifier()] = '';		
+		}
+        
         foreach ($product->getShippingProfileIdentifiers() as $identifier) {
             $profileIdentity = $this->identityService->findOneBy([
                 'objectIdentifier' => $identifier,
                 'objectType' => ShippingProfile::TYPE,
                 'adapterName' => ShopwareAdapter::NAME,
             ]);
-
             if (null === $profileIdentity) {
                 continue;
             }
-
             $attributes = $product->getAttributes();
-
             $existingAttributes = array_filter($attributes, function (Attribute $attribute) use ($profileIdentity) {
                 return $attribute->getKey() === 'shippingProfile' . $profileIdentity->getAdapterIdentifier();
             });
-
             if (!empty($existingAttributes)) {
                 $this->logger->notice('shippingProfile is not a allowed attribute key');
-
                 continue;
             }
-
-            $attributes[] = Attribute::fromArray([
-                'key' => 'shippingProfile' . $profileIdentity->getAdapterIdentifier(),
-                'value' => $profileIdentity->getObjectIdentifier(),
-            ]);
-
-            $product->setAttributes($attributes);
+            
+            $shippingAttributes['shippingProfile' . $profileIdentity->getAdapterIdentifier()] = $profileIdentity->getObjectIdentifier();
+            
         }
+        
+        foreach( $shippingAttributes as $key=>$value){
+            $attributes[] = Attribute::fromArray([
+                'key' => $key,
+                'value' => $value,
+            ]);
+        }
+        
+        $product->setAttributes($attributes);
     }
 
     /**
