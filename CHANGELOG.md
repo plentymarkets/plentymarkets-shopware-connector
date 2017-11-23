@@ -18,6 +18,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - use correct shop id when parsing shopware orders
+- reset unused SW attributes for shipping profiles
 
 ### Changed
 - optimized the item query performance
