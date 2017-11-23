@@ -107,6 +107,10 @@ class StockResponseParser implements StockResponseParserInterface
             if ($itemWarehouse !== 0 && $stock['warehouseId'] !== $itemWarehouse) {
                 continue;
             }
+            
+            if ($stock['variationId'] !== $variation['id']) {
+				continue;
+			}
 
             if (array_key_exists('netStock', $stock)) {
                 $summedStocks += $stock['netStock'];
