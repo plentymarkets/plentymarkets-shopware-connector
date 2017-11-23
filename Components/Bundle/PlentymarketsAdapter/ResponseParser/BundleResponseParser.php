@@ -5,6 +5,7 @@ namespace PlentyConnector\Components\Bundle\PlentymarketsAdapter\ResponseParser;
 use DateTimeImmutable;
 use PlentyConnector\Components\Bundle\TransferObject\Bundle;
 use PlentyConnector\Components\Bundle\TransferObject\BundleProduct\BundleProduct;
+use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentyConnector\Connector\TransferObject\Product\Product;

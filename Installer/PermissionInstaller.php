@@ -2,6 +2,7 @@
 
 namespace PlentyConnector\Installer;
 
+use Doctrine\ORM\EntityRepository;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;

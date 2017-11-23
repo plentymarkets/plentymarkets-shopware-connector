@@ -2,6 +2,7 @@
 
 namespace PlentyConnector\Connector\BacklogService\Model;
 
+use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;

@@ -2,6 +2,7 @@
 
 namespace ShopwareAdapter\DataPersister\Attribute;
 
+use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Supplier;
 use Shopware\Models\Category\Category;

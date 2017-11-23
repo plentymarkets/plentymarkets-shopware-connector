@@ -2,6 +2,7 @@
 
 namespace PlentyConnector\Components\Bundle\PlentymarketsAdapter\QueryHandler;
 
+use Exception;
 use PlentyConnector\Components\Bundle\PlentymarketsAdapter\ResponseParser\BundleResponseParser;
 use PlentyConnector\Components\Bundle\TransferObject\Bundle;
 use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;

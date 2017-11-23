@@ -3,7 +3,7 @@
 namespace PlentyConnector\Connector\ServiceBus\ValidatorMiddleware;
 
 use League\Tactician\Middleware;
-use PlentyConnector\Connector\ServiceBus\Command\HandleCommandInterface;
+use PlentyConnector\Connector\ServiceBus\Command\TransferObjectCommand;
 use PlentyConnector\Connector\ValidatorService\ValidatorServiceInterface;
 
 /**
@@ -34,7 +34,7 @@ class ValidatorMiddleware implements Middleware
      */
     public function execute($command, callable $next)
     {
-        if (!($command instanceof HandleCommandInterface)) {
+        if (!($command instanceof TransferObjectCommand)) {
             return $next($command);
         }
 

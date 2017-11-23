@@ -4,6 +4,7 @@ namespace ShopwareAdapter\DataProvider\Currency;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use InvalidArgumentException;
 use Shopware\Models\Shop\Currency;
 
 /**
