@@ -119,9 +119,9 @@ class StockResponseParser implements StockResponseParserInterface
         }
 
         if ($variation['bundleType'] === 'bundle') {
-            return max($arrayStocks);
+            return (float) max($arrayStocks);
         }
 
-        return array_sum($arrayStocks);
+        return (float) array_sum($arrayStocks);
     }
 }
