@@ -77,16 +77,15 @@ class StockResponseParser implements StockResponseParserInterface
         return [$stock];
     }
 
-    /**
+  /**
      * @param $variation
      *
      * @return float
      */
     private function getStock($variation)
     {
-		$minStock = 0;
         $arrayStocks = [];
-        $itemWarehouse = (int) $this->config->get('item_warehouse', 0);
+        $itemWarehouse = (int)$this->config->get('item_warehouse', 0);
 
         static $warehouses;
 
@@ -101,6 +100,7 @@ class StockResponseParser implements StockResponseParserInterface
         }
 
         foreach ($variation['stock'] as $stock) {
+
             if (!in_array($stock['warehouseId'], $warehouses, true)) {
                 continue;
             }
@@ -109,24 +109,19 @@ class StockResponseParser implements StockResponseParserInterface
                 continue;
             }
 
-            if (array_key_exists('netStock', $stock)) {
-				$arrayStocks[] = $stock['netStock'];
+            if ($stock['variationId'] !== $variation['id']) {
+                continue;
+            }
+
+            if ($variation['bundleType'] === 'bundle') {
+                $arrayStocks[] = $stock['netStock'];
             }
         }
-			
-		//Paketartikel
-		if($variation['bundleType'] == 'bundle') {
-			$minStock = min($arrayStocks);
-			return (float) $minStock;
-			
-		} else {
-			foreach ($variation['stock'] as $stock) {
-				if($stock['variationId'] == $variation['id']) {
-					return (float) $stock['netStock'];
-				}
-			}
-		}
-	
-		
-	}
+
+        if ($variation['bundleType'] === 'bundle') {
+            return max($arrayStocks);
+        }
+
+        return array_sum($arrayStocks);
+    }
 }
