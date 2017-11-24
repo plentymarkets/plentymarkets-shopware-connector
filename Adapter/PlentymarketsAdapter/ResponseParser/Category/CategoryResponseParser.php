@@ -121,6 +121,14 @@ class CategoryResponseParser implements CategoryResponseParserInterface
         }
 
         foreach ($entry['details'] as $key => $detail) {
+
+            $isDefaultPlentyId = $key === 0;
+            $isPlentyIdEnabled = in_array($entry['details'][$key]['plentyId'], array_column($entry['clients'], 'plentyId'));
+            if (!$isPlentyIdEnabled && !$isDefaultPlentyId) {
+                unset($entry['details'][$key]);
+                continue;
+            }
+
             $entry['details'][$key]['shortDescription'] = $entry['details']['0']['shortDescription'];
             $entry['details'][$key]['position'] = $entry['details']['0']['position'];
             $entry['details'][$key]['image'] = $entry['details']['0']['image'];
