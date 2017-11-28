@@ -2,6 +2,7 @@
 
 namespace PlentymarketsAdapter\RequestGenerator\Order\Address;
 
+use Exception;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Country\Country;
 use PlentyConnector\Connector\TransferObject\Order\Address\Address;
