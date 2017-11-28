@@ -77,7 +77,7 @@ class StockResponseParser implements StockResponseParserInterface
         return [$stock];
     }
 
-  /**
+ /**
      * @param $variation
      *
      * @return float
@@ -113,15 +113,9 @@ class StockResponseParser implements StockResponseParserInterface
                 continue;
             }
 
-            if ($variation['bundleType'] === 'bundle') {
-                $arrayStocks[] = $stock['netStock'];
-            }
+            $arrayStocks[] = $stock['netStock'];
         }
 
-        if ($variation['bundleType'] === 'bundle') {
-            return (float) max($arrayStocks);
-        }
-
-        return (float) array_sum($arrayStocks);
+        return (float)array_sum($arrayStocks);
     }
 }
