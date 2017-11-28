@@ -348,7 +348,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
             $translations[] = Translation::fromArray([
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
                 'property' => 'plentyId',
-                'value' => $detail['plentyId']
+                'value' => $detail['plentyId'],
             ]);
         }
 
