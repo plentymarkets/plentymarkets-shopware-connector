@@ -6,7 +6,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 ### Fixed
--Bundle stock fix (@marcmanusch)
+- Bundle stock fix (@marcmanusch)
+- use correct tax when transferring order to plenty
 
 ### Changed
 
