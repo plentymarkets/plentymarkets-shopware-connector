@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - error handling when parsing order addresses
+- Bundle stock fix (@marcmanusch)
+- use correct tax when transferring order to plenty
 
 ### Changed
 
