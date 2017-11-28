@@ -344,6 +344,12 @@ class CategoryResponseParser implements CategoryResponseParserInterface
                 'property' => 'metaRobots',
                 'value' => $this->getMetaRobots($detail['metaRobots']),
             ]);
+
+            $translations[] = Translation::fromArray([
+                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                'property' => 'plentyId',
+                'value' => $detail['plentyId'],
+            ]);
         }
 
         return $translations;
