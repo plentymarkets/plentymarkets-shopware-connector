@@ -6,6 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 ### Fixed
+- use correct tax when transferring order to plenty
 
 ### Changed
 
