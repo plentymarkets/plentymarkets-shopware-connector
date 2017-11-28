@@ -84,7 +84,7 @@ class StockResponseParser implements StockResponseParserInterface
      */
     private function getStock($variation)
     {
-        $summedStocks = 0;
+        $arrayStocks = [];
         $itemWarehouse = (int) $this->config->get('item_warehouse', 0);
 
         static $warehouses;
@@ -108,11 +108,13 @@ class StockResponseParser implements StockResponseParserInterface
                 continue;
             }
 
-            if (array_key_exists('netStock', $stock)) {
-                $summedStocks += $stock['netStock'];
+            if ($stock['variationId'] !== $variation['id']) {
+                continue;
             }
+
+            $arrayStocks[] = $stock['netStock'];
         }
 
-        return (float) $summedStocks;
+        return (float) array_sum($arrayStocks);
     }
 }
