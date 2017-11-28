@@ -20,6 +20,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - use correct shop id when parsing shopware orders
+- added support for variation bundle stocks
 
 ### Changed
 - optimized the item query performance
