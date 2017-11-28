@@ -10,9 +10,14 @@ use PlentymarketsAdapter\ReadApi\Item\Unit as UnitApi;
 class ReferenceAmountCalculator implements ReferenceAmountCalculatorInterface
 {
     /**
+     * @var UnitApi
+     */
+    private $itemUnitApi;
+
+    /**
      * @var array
      */
-    private static $units;
+    private static $units = [];
 
     /**
      * @var array
@@ -43,9 +48,7 @@ class ReferenceAmountCalculator implements ReferenceAmountCalculatorInterface
      */
     public function __construct(UnitApi $itemUnitApi)
     {
-        self::$units = array_filter($itemUnitApi->findAll(), function (array $unit) {
-            return array_key_exists($unit['unitOfMeasurement'], self::$convertionMatrix);
-        });
+        $this->itemUnitApi = $itemUnitApi;
     }
 
     /**
@@ -55,6 +58,12 @@ class ReferenceAmountCalculator implements ReferenceAmountCalculatorInterface
      */
     public function calculate(array $variation)
     {
+        if (empty(self::$units)) {
+            self::$units = array_filter($this->itemUnitApi->findAll(), function (array $unit) {
+                return array_key_exists($unit['unitOfMeasurement'], self::$convertionMatrix);
+            });
+        }
+
         $variationUnit = $this->getUnitOfVariation($variation);
 
         if (null === $variationUnit) {
