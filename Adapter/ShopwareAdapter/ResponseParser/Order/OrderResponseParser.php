@@ -255,7 +255,7 @@ class OrderResponseParser implements OrderResponseParserInterface
 
             if ($isNet) {
                 $priceNet = $orderItem['price'];
-                $orderItem['price'] = round($priceNet + (($priceNet / 100) * $orderItem['taxRate']));
+                $orderItem['price'] = $priceNet + (($priceNet / 100) * $orderItem['taxRate']);
             }
         }
 
