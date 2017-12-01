@@ -121,11 +121,11 @@ class CategoryResponseParser implements CategoryResponseParserInterface
         }
 
         foreach ($entry['details'] as $key => $detail) {
-
             $isDefaultPlentyId = $key === 0;
             $isPlentyIdEnabled = in_array($entry['details'][$key]['plentyId'], array_column($entry['clients'], 'plentyId'));
             if (!$isPlentyIdEnabled && !$isDefaultPlentyId) {
                 unset($entry['details'][$key]);
+
                 continue;
             }
 
@@ -348,7 +348,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
             $translations[] = Translation::fromArray([
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
                 'property' => 'plentyId',
-                'value' => $detail['plentyId']
+                'value' => $detail['plentyId'],
             ]);
         }
 
