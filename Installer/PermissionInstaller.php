@@ -2,6 +2,7 @@
 
 namespace PlentyConnector\Installer;
 
+use Doctrine\ORM\EntityRepository;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
@@ -91,7 +92,7 @@ class PermissionInstaller implements InstallerInterface
             return;
         }
 
-        array_walk($orphanedPrivileges, function (Privilege $privilege) {
+        array_walk($orphanedPrivileges, function (ShopwarePrivilege $privilege) {
             $this->em->remove($privilege);
         });
 
