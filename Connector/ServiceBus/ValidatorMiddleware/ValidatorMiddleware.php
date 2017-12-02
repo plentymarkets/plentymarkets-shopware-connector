@@ -38,7 +38,7 @@ class ValidatorMiddleware implements Middleware
             return $next($command);
         }
 
-        $object = $command->getTransferObject();
+        $object = $command->getPayload();
 
         $this->validator->validate($object);
 
