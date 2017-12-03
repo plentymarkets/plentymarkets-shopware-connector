@@ -57,7 +57,7 @@ trait ChangedDateTimeTrait
      */
     private function getKey()
     {
-        $ref = new ReflectionClass(get_called_class());
+        $ref = new ReflectionClass(static::class);
 
         return ShopwareAdapter::NAME . '.' . $ref->getShortName() . '.LastChangeDateTime';
     }
