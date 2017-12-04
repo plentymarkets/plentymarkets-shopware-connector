@@ -100,7 +100,6 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
             $this->entityManager->persist($parent);
 
             $this->entityManager->flush();
-            $this->entityManager->clear();
         }
 
         if (null === $identity) {
