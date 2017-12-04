@@ -10,6 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Bundle stock fix (@marcmanusch)
 - use correct tax when transferring order to plenty
 - error by mediaCategory create
+- valid variation weight
 
 ### Changed
 - set the product inactive if the main variation is inactive, too
