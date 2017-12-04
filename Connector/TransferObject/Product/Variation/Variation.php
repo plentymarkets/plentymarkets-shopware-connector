@@ -138,7 +138,7 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     /**
      * @var float
      */
-    private $weight = 0;
+    private $weight = 0.0;
 
     /**
      * @var Property[]
