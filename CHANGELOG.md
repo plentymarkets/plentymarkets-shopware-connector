@@ -11,6 +11,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - use correct tax when transferring order to plenty
 
 ### Changed
+- set the product inactive if the main variation is inactive, too
 
 ## [4.1.0]
 ### Added
