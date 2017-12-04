@@ -12,6 +12,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - error by mediaCategory create
 
 ### Changed
+- set the product inactive if the main variation is inactive, too
 
 ## [4.1.0]
 ### Added
