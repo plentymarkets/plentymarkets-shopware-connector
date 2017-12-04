@@ -103,6 +103,10 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
             $this->entityManager->clear();
         }
 
+        $parent = $albumRepository->findOneBy([
+            'name' => 'PlentyConnector',
+        ]);
+
         if (null === $identity) {
             $this->createNewAlbum($mediaCategory, $parent, $parentSettings);
 
