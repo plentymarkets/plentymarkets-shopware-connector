@@ -675,7 +675,7 @@ class ProductResponseParser implements ProductResponseParserInterface
 
     /**
      * @param Variation[] $variations
-     * @param array $mainVariation
+     * @param array       $mainVariation
      *
      * @return bool
      */
