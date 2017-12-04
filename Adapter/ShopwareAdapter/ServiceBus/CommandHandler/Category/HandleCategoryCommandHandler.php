@@ -4,6 +4,7 @@ namespace ShopwareAdapter\ServiceBus\CommandHandler\Category;
 
 use DeepCopy\DeepCopy;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use InvalidArgumentException;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException as IdentityNotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
@@ -382,7 +383,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             ]);
 
             return (bool) $attribute;
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return false;
         }
     }

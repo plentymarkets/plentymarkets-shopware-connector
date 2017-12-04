@@ -56,37 +56,6 @@ class Comment extends ApiAbstract
     }
 
     /**
-     * @param $params
-     *
-     * @return array
-     */
-    public function create($params)
-    {
-        throw new \Exception('not implemented yet');
-    }
-
-    /**
-     * @param $id
-     * @param $params
-     *
-     * @return array
-     */
-    public function update($id, $params)
-    {
-        throw new \Exception('not implemented yet');
-    }
-
-    /**
-     * @param $id
-     *
-     * @return bool
-     */
-    public function delete($id)
-    {
-        throw new \Exception('not implemented yet');
-    }
-
-    /**
      * @param array $criteria
      *
      * @return string
