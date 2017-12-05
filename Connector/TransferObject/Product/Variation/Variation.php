@@ -136,9 +136,9 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     private $length = 0;
 
     /**
-     * @var int
+     * @var float
      */
-    private $weight = 0;
+    private $weight = 0.0;
 
     /**
      * @var Property[]
@@ -527,7 +527,7 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getWeight()
     {
@@ -535,7 +535,7 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     }
 
     /**
-     * @param int $weight
+     * @param float $weight
      */
     public function setWeight($weight)
     {
