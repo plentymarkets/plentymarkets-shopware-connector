@@ -37,8 +37,8 @@ class ConfigService implements ConfigServiceInterface
     public function __construct(EntityManagerInterface $entityManager, ContainerInterface $container)
     {
         $this->entityManager = $entityManager;
-        $this->repository = $entityManager->getRepository(Config::class);
-        $this->container = $container;
+        $this->repository    = $entityManager->getRepository(Config::class);
+        $this->container     = $container;
     }
 
     /**

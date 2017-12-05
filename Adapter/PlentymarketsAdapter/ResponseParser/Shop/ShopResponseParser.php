@@ -43,7 +43,7 @@ class ShopResponseParser implements ShopResponseParserInterface
 
         return Shop::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => empty($entry['name']) ? $entry['type'] : $entry['name'],
+            'name'       => empty($entry['name']) ? $entry['type'] : $entry['name'],
         ]);
     }
 }

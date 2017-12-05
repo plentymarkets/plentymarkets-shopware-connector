@@ -41,7 +41,7 @@ class RemoveProductCommandHandler implements CommandHandlerInterface
         LoggerInterface $logger
     ) {
         $this->identityService = $identityService;
-        $this->logger = $logger;
+        $this->logger          = $logger;
     }
 
     /**
@@ -66,8 +66,8 @@ class RemoveProductCommandHandler implements CommandHandlerInterface
 
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => (string) $identifier,
-            'objectType' => Product::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => Product::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         if (null === $identity) {

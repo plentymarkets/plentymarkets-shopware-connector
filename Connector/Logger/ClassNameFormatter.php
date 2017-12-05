@@ -46,10 +46,10 @@ class ClassNameFormatter implements ClassNameFormatterInterface
         $commandSucceededLevel = LogLevel::DEBUG,
         $commandFailedLevel = LogLevel::ERROR
     ) {
-        $this->logger = $logger;
-        $this->commandReceivedLevel = $commandReceivedLevel;
+        $this->logger                = $logger;
+        $this->commandReceivedLevel  = $commandReceivedLevel;
         $this->commandSucceededLevel = $commandSucceededLevel;
-        $this->commandFailedLevel = $commandFailedLevel;
+        $this->commandFailedLevel    = $commandFailedLevel;
     }
 
     /**
@@ -152,7 +152,7 @@ class ClassNameFormatter implements ClassNameFormatterInterface
     }
 
     /**
-     * @param mixed  $command
+     * @param mixed $command
      *
      * @return string
      */
@@ -172,7 +172,7 @@ class ClassNameFormatter implements ClassNameFormatterInterface
     }
 
     /**
-     * @param mixed  $command
+     * @param mixed $command
      *
      * @return string
      */

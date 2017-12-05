@@ -71,10 +71,10 @@ class Category extends ApiAbstract
     public function findChanged(DateTimeImmutable $startTimestamp, DateTimeImmutable $endTimestamp)
     {
         $elements = iterator_to_array($this->client->getIterator('categories', [
-            'with' => 'details,clients',
-            'type' => 'item',
+            'with'      => 'details,clients',
+            'type'      => 'item',
             'updatedAt' => $startTimestamp->format(DATE_W3C),
-            'lang' => $this->languageHelper->getLanguagesQueryString(),
+            'lang'      => $this->languageHelper->getLanguagesQueryString(),
         ]));
 
         $this->sortCategories($elements);

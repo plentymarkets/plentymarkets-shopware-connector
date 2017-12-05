@@ -52,8 +52,8 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         LoggerInterface $logger,
         AttributeDataPersisterInterface $attributePersister
     ) {
-        $this->identityService = $identityService;
-        $this->logger = $logger;
+        $this->identityService    = $identityService;
+        $this->logger             = $logger;
         $this->attributePersister = $attributePersister;
     }
 
@@ -82,8 +82,8 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
 
         $orderIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $order->getIdentifier(),
-            'objectType' => Order::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => Order::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         if (null === $orderIdentity) {
@@ -104,8 +104,8 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
 
         $orderStatusIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $order->getOrderStatusIdentifier(),
-            'objectType' => OrderStatus::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => OrderStatus::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         if (null !== $orderStatusIdentity) {
@@ -116,8 +116,8 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
 
         $paymentStatusIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $order->getPaymentStatusIdentifier(),
-            'objectType' => PaymentStatus::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => PaymentStatus::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         if (null !== $paymentStatusIdentity) {
@@ -130,7 +130,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             $this->logger->notice('payment status not mapped', ['order' => $order]);
         }
 
-        $resource = $this->getOrderResource();
+        $resource   = $this->getOrderResource();
         $orderModel = $resource->update($orderIdentity->getAdapterIdentifier(), $params);
 
         $this->attributePersister->saveOrderAttributes(

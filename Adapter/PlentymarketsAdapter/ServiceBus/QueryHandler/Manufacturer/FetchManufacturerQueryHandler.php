@@ -44,9 +44,9 @@ class FetchManufacturerQueryHandler implements QueryHandlerInterface
         ManufacturerResponseParserInterface $manufacturerResponseParser,
         IdentityServiceInterface $identityService
     ) {
-        $this->client = $client;
+        $this->client                     = $client;
         $this->manufacturerResponseParser = $manufacturerResponseParser;
-        $this->identityService = $identityService;
+        $this->identityService            = $identityService;
     }
 
     /**
@@ -69,8 +69,8 @@ class FetchManufacturerQueryHandler implements QueryHandlerInterface
     {
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => $query->getObjectIdentifier(),
-            'objectType' => Manufacturer::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => Manufacturer::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         if (null === $identity) {

@@ -54,7 +54,7 @@ class QueryHandlerMiddleware implements Middleware
         /**
          * @var QueryHandlerInterface $handler
          */
-        $handler = array_shift($handlers);
+        $handler  = array_shift($handlers);
         $response = $handler->handle($query);
 
         if (null !== $response) {

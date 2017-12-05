@@ -71,15 +71,15 @@ class ProductResponseParser implements ProductResponseParserInterface
         VariationResponseParserInterface $variationResponseParser,
         ClientInterface $client
     ) {
-        $this->identityService = $identityService;
-        $this->logger = $logger;
-        $this->imageResponseParser = $imageResponseParser;
+        $this->identityService         = $identityService;
+        $this->logger                  = $logger;
+        $this->imageResponseParser     = $imageResponseParser;
         $this->variationResponseParser = $variationResponseParser;
 
         //TODO: inject when refactoring this class
         $this->itemsVariationsVariationPropertiesApi = new \PlentymarketsAdapter\ReadApi\Item\Variation\Property($client);
-        $this->itemsPropertiesSelectionsApi = new\PlentymarketsAdapter\ReadApi\Item\Property\Selection($client);
-        $this->itemsPropertiesNamesApi = new \PlentymarketsAdapter\ReadApi\Item\Property\Name($client);
+        $this->itemsPropertiesSelectionsApi          = new\PlentymarketsAdapter\ReadApi\Item\Property\Selection($client);
+        $this->itemsPropertiesNamesApi               = new \PlentymarketsAdapter\ReadApi\Item\Property\Name($client);
     }
 
     /**
@@ -218,8 +218,8 @@ class ProductResponseParser implements ProductResponseParserInterface
     {
         $vatRateIdentity = $this->identityService->findOneBy([
             'adapterIdentifier' => $variation['vatId'],
-            'adapterName' => PlentymarketsAdapter::NAME,
-            'objectType' => VatRate::TYPE,
+            'adapterName'       => PlentymarketsAdapter::NAME,
+            'objectType'        => VatRate::TYPE,
         ]);
 
         if (null === $vatRateIdentity) {
@@ -262,8 +262,8 @@ class ProductResponseParser implements ProductResponseParserInterface
         foreach ($product['shippingProfiles'] as $profile) {
             $profileIdentity = $this->identityService->findOneBy([
                 'adapterIdentifier' => (string) $profile['profileId'],
-                'adapterName' => PlentymarketsAdapter::NAME,
-                'objectType' => ShippingProfile::TYPE,
+                'adapterName'       => PlentymarketsAdapter::NAME,
+                'objectType'        => ShippingProfile::TYPE,
             ]);
 
             if (null === $profileIdentity) {
@@ -305,8 +305,8 @@ class ProductResponseParser implements ProductResponseParserInterface
         foreach ($mainVariation['variationDefaultCategory'] as $category) {
             $categoryIdentity = $this->identityService->findOneBy([
                 'adapterIdentifier' => (string) $category['branchId'],
-                'adapterName' => PlentymarketsAdapter::NAME,
-                'objectType' => Category::TYPE,
+                'adapterName'       => PlentymarketsAdapter::NAME,
+                'objectType'        => Category::TYPE,
             ]);
 
             if (null === $categoryIdentity) {
@@ -333,8 +333,8 @@ class ProductResponseParser implements ProductResponseParserInterface
         foreach ($texts as $text) {
             $languageIdentifier = $this->identityService->findOneBy([
                 'adapterIdentifier' => $text['lang'],
-                'adapterName' => PlentymarketsAdapter::NAME,
-                'objectType' => Language::TYPE,
+                'adapterName'       => PlentymarketsAdapter::NAME,
+                'objectType'        => Language::TYPE,
             ]);
 
             if (null === $languageIdentifier) {
@@ -343,44 +343,44 @@ class ProductResponseParser implements ProductResponseParserInterface
 
             $translations[] = Translation::fromArray([
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                'property' => 'name',
-                'value' => $text['name1'],
+                'property'           => 'name',
+                'value'              => $text['name1'],
             ]);
 
             $translations[] = Translation::fromArray([
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                'property' => 'description',
-                'value' => $text['shortDescription'],
+                'property'           => 'description',
+                'value'              => $text['shortDescription'],
             ]);
 
             $translations[] = Translation::fromArray([
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                'property' => 'longDescription',
-                'value' => $text['description'],
+                'property'           => 'longDescription',
+                'value'              => $text['description'],
             ]);
 
             $translations[] = Translation::fromArray([
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                'property' => 'technicalDescription',
-                'value' => $text['technicalData'],
+                'property'           => 'technicalDescription',
+                'value'              => $text['technicalData'],
             ]);
 
             $translations[] = Translation::fromArray([
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                'property' => 'metaTitle',
-                'value' => $text['name1'],
+                'property'           => 'metaTitle',
+                'value'              => $text['name1'],
             ]);
 
             $translations[] = Translation::fromArray([
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                'property' => 'metaDescription',
-                'value' => $text['metaDescription'],
+                'property'           => 'metaDescription',
+                'value'              => $text['metaDescription'],
             ]);
 
             $translations[] = Translation::fromArray([
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                'property' => 'metaKeywords',
-                'value' => $text['keywords'],
+                'property'           => 'metaKeywords',
+                'value'              => $text['keywords'],
             ]);
         }
 
@@ -398,8 +398,8 @@ class ProductResponseParser implements ProductResponseParserInterface
         foreach ($mainVariation['variationCategories'] as $category) {
             $categoryIdentity = $this->identityService->findOneBy([
                 'adapterIdentifier' => (string) $category['categoryId'],
-                'adapterName' => PlentymarketsAdapter::NAME,
-                'objectType' => Category::TYPE,
+                'adapterName'       => PlentymarketsAdapter::NAME,
+                'objectType'        => Category::TYPE,
             ]);
 
             if (null === $categoryIdentity) {
@@ -436,8 +436,8 @@ class ProductResponseParser implements ProductResponseParserInterface
 
             $productIdentity = $this->identityService->findOneBy([
                 'adapterIdentifier' => $linkedProduct['crossItemId'],
-                'adapterName' => PlentymarketsAdapter::NAME,
-                'objectType' => Product::TYPE,
+                'adapterName'       => PlentymarketsAdapter::NAME,
+                'objectType'        => Product::TYPE,
             ]);
 
             if (null === $productIdentity) {
@@ -447,7 +447,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             }
 
             $result[] = LinkedProduct::fromArray([
-                'type' => $type,
+                'type'              => $type,
                 'productIdentifier' => $productIdentity->getObjectIdentifier(),
             ]);
         }
@@ -488,8 +488,8 @@ class ProductResponseParser implements ProductResponseParserInterface
             foreach ($propertyName as $name) {
                 $languageIdentifier = $this->identityService->findOneBy([
                     'adapterIdentifier' => $name['lang'],
-                    'adapterName' => PlentymarketsAdapter::NAME,
-                    'objectType' => Language::TYPE,
+                    'adapterName'       => PlentymarketsAdapter::NAME,
+                    'objectType'        => Language::TYPE,
                 ]);
 
                 if (null === $languageIdentifier) {
@@ -498,8 +498,8 @@ class ProductResponseParser implements ProductResponseParserInterface
 
                 $translations[] = Translation::fromArray([
                     'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                    'property' => 'name',
-                    'value' => $name['name'],
+                    'property'           => 'name',
+                    'value'              => $name['name'],
                 ]);
             }
 
@@ -514,8 +514,8 @@ class ProductResponseParser implements ProductResponseParserInterface
                 foreach ($property['valueTexts'] as $name) {
                     $languageIdentifier = $this->identityService->findOneBy([
                         'adapterIdentifier' => $name['lang'],
-                        'adapterName' => PlentymarketsAdapter::NAME,
-                        'objectType' => Language::TYPE,
+                        'adapterName'       => PlentymarketsAdapter::NAME,
+                        'objectType'        => Language::TYPE,
                     ]);
 
                     if (null === $languageIdentifier) {
@@ -524,13 +524,13 @@ class ProductResponseParser implements ProductResponseParserInterface
 
                     $valueTranslations[] = Translation::fromArray([
                         'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                        'property' => 'value',
-                        'value' => $name['value'],
+                        'property'           => 'value',
+                        'value'              => $name['value'],
                     ]);
                 }
 
                 $values[] = Value::fromArray([
-                    'value' => (string) $property['valueTexts'][0]['value'],
+                    'value'        => (string) $property['valueTexts'][0]['value'],
                     'translations' => $valueTranslations,
                 ]);
             } elseif ($property['property']['valueType'] === 'int') {
@@ -564,20 +564,20 @@ class ProductResponseParser implements ProductResponseParserInterface
                     $selection = $this->itemsPropertiesSelectionsApi->findOne($property['propertyId']);
 
                     foreach ($selection as $element) {
-                        $selections[$property['propertyId']][$element['id']] = $element;
+                        $selections[$property['propertyId']][$element['id']]                 = $element;
                         $selections[$property['propertyId']][$element['id']]['translations'] = [];
 
                         $languageIdentifier = $this->identityService->findOneBy([
                             'adapterIdentifier' => $element['lang'],
-                            'adapterName' => PlentymarketsAdapter::NAME,
-                            'objectType' => Language::TYPE,
+                            'adapterName'       => PlentymarketsAdapter::NAME,
+                            'objectType'        => Language::TYPE,
                         ]);
 
                         if (null !== $languageIdentifier) {
                             $translation = Translation::fromArray([
                                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                                'property' => 'value',
-                                'value' => $element['name'],
+                                'property'           => 'value',
+                                'value'              => $element['name'],
                             ]);
 
                             $selections[$property['propertyId']][$element['id']]['translations'] = [$translation];
@@ -592,14 +592,14 @@ class ProductResponseParser implements ProductResponseParserInterface
                 }
 
                 $values[] = Value::fromArray([
-                    'value' => $selectionValue,
+                    'value'        => $selectionValue,
                     'translations' => $selections[$property['propertyId']][$property['propertySelectionId']]['translations'],
                 ]);
             }
 
             $result[] = Property::fromArray([
-                'name' => $propertyName[0]['name'],
-                'values' => $values,
+                'name'         => $propertyName[0]['name'],
+                'values'       => $values,
                 'translations' => $translations,
             ]);
         }
@@ -619,8 +619,8 @@ class ProductResponseParser implements ProductResponseParserInterface
         foreach ($mainVariation['variationClients'] as $client) {
             $identity = $this->identityService->findOneBy([
                 'adapterIdentifier' => $client['plentyId'],
-                'adapterName' => PlentymarketsAdapter::NAME,
-                'objectType' => Shop::TYPE,
+                'adapterName'       => PlentymarketsAdapter::NAME,
+                'objectType'        => Shop::TYPE,
             ]);
 
             if (null === $identity) {
@@ -739,7 +739,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             }
 
             $attributes[] = Attribute::fromArray([
-                'key' => $key,
+                'key'   => $key,
                 'value' => (string) $product[$key],
             ]);
         }
@@ -761,8 +761,8 @@ class ProductResponseParser implements ProductResponseParserInterface
         foreach ($product['texts'] as $text) {
             $languageIdentifier = $this->identityService->findOneBy([
                 'adapterIdentifier' => $text['lang'],
-                'adapterName' => PlentymarketsAdapter::NAME,
-                'objectType' => Language::TYPE,
+                'adapterName'       => PlentymarketsAdapter::NAME,
+                'objectType'        => Language::TYPE,
             ]);
 
             if (null === $languageIdentifier) {
@@ -771,8 +771,8 @@ class ProductResponseParser implements ProductResponseParserInterface
 
             $translations[] = Translation::fromArray([
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                'property' => 'value',
-                'value' => $text['shortDescription'],
+                'property'           => 'value',
+                'value'              => $text['shortDescription'],
             ]);
         }
 

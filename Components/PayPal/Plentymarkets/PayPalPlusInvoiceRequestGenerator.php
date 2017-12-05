@@ -32,7 +32,7 @@ class PayPalPlusInvoiceRequestGenerator implements PaymentRequestGeneratorInterf
     public function generate(Payment $payment)
     {
         $paymentParams = $this->parentRequestGenerator->generate($payment);
-        $data = $payment->getPaymentData();
+        $data          = $payment->getPaymentData();
 
         if (!($data instanceof PayPalPlusInvoicePaymentData)) {
             return $paymentParams;
@@ -40,12 +40,12 @@ class PayPalPlusInvoiceRequestGenerator implements PaymentRequestGeneratorInterf
 
         $paymentParams['property'][] = [
             'typeId' => 22,
-            'value' => json_encode([
-                'accountHolder' => $data->getAccountHolderName(),
-                'bankName' => $data->getBankName(),
-                'bic' => $data->getBankIdentifierCode(),
-                'iban' => $data->getInternationalBankAccountNumber(),
-                'paymentDue' => $data->getPaymentDueDate()->format(DATE_W3C),
+            'value'  => json_encode([
+                'accountHolder'   => $data->getAccountHolderName(),
+                'bankName'        => $data->getBankName(),
+                'bic'             => $data->getBankIdentifierCode(),
+                'iban'            => $data->getInternationalBankAccountNumber(),
+                'paymentDue'      => $data->getPaymentDueDate()->format(DATE_W3C),
                 'referenceNumber' => $data->getReferenceNumber(),
             ]),
         ];

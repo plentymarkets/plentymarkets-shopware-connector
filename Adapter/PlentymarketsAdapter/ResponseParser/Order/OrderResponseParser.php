@@ -81,11 +81,11 @@ class OrderResponseParser implements OrderResponseParserInterface
         ClientInterface $client
     ) {
         $this->identityService = $identityService;
-        $this->logger = $logger;
-        $this->addressApi = $addressApi;
-        $this->customerApi = $customerApi;
-        $this->commentApi = $commentApi;
-        $this->client = $client;
+        $this->logger          = $logger;
+        $this->addressApi      = $addressApi;
+        $this->customerApi     = $customerApi;
+        $this->commentApi      = $commentApi;
+        $this->client          = $client;
     }
 
     /**
@@ -95,8 +95,8 @@ class OrderResponseParser implements OrderResponseParserInterface
     {
         $identity = $this->identityService->findOneBy([
             'adapterIdentifier' => (string) $entry['id'],
-            'adapterName' => PlentymarketsAdapter::NAME,
-            'objectType' => Order::TYPE,
+            'adapterName'       => PlentymarketsAdapter::NAME,
+            'objectType'        => Order::TYPE,
         ]);
 
         if (!$identity) {
@@ -105,8 +105,8 @@ class OrderResponseParser implements OrderResponseParserInterface
 
         $shopIdentity = $this->identityService->findOneBy([
             'adapterIdentifier' => (string) $entry['plentyId'],
-            'adapterName' => PlentymarketsAdapter::NAME,
-            'objectType' => Shop::TYPE,
+            'adapterName'       => PlentymarketsAdapter::NAME,
+            'objectType'        => Shop::TYPE,
         ]);
 
         if (null === $shopIdentity) {
@@ -311,8 +311,8 @@ class OrderResponseParser implements OrderResponseParserInterface
 
             $identity = $this->identityService->findOneBy([
                 'adapterIdentifier' => (string) $property['value'],
-                'adapterName' => PlentymarketsAdapter::NAME,
-                'objectType' => Language::TYPE,
+                'adapterName'       => PlentymarketsAdapter::NAME,
+                'objectType'        => Language::TYPE,
             ]);
 
             return $identity;
@@ -329,7 +329,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     private function getComments(array $entry)
     {
         $comments = $this->commentApi->findBy([
-            'referenceType' => 'order',
+            'referenceType'  => 'order',
             'referenceValue' => $entry['id'],
         ]);
 
@@ -389,8 +389,8 @@ class OrderResponseParser implements OrderResponseParserInterface
     {
         return $this->identityService->findOneBy([
             'adapterIdentifier' => (string) $plentyCustomer['plentyId'],
-            'adapterName' => PlentymarketsAdapter::NAME,
-            'objectType' => Shop::TYPE,
+            'adapterName'       => PlentymarketsAdapter::NAME,
+            'objectType'        => Shop::TYPE,
         ]);
     }
 
@@ -403,8 +403,8 @@ class OrderResponseParser implements OrderResponseParserInterface
     {
         return $this->identityService->findOneBy([
             'adapterIdentifier' => (string) $plentyCustomer['classId'],
-            'adapterName' => PlentymarketsAdapter::NAME,
-            'objectType' => CustomerGroup::TYPE,
+            'adapterName'       => PlentymarketsAdapter::NAME,
+            'objectType'        => CustomerGroup::TYPE,
         ]);
     }
 
@@ -425,8 +425,8 @@ class OrderResponseParser implements OrderResponseParserInterface
 
             $identity = $this->identityService->findOneBy([
                 'adapterIdentifier' => (string) $shippingProfile,
-                'adapterName' => PlentymarketsAdapter::NAME,
-                'objectType' => ShippingProfile::TYPE,
+                'adapterName'       => PlentymarketsAdapter::NAME,
+                'objectType'        => ShippingProfile::TYPE,
             ]);
 
             return $identity;
@@ -450,8 +450,8 @@ class OrderResponseParser implements OrderResponseParserInterface
 
         return $this->identityService->findOneBy([
             'adapterIdentifier' => (string) $amount['currency'],
-            'adapterName' => PlentymarketsAdapter::NAME,
-            'objectType' => Currency::TYPE,
+            'adapterName'       => PlentymarketsAdapter::NAME,
+            'objectType'        => Currency::TYPE,
         ]);
     }
 
@@ -471,8 +471,8 @@ class OrderResponseParser implements OrderResponseParserInterface
 
             $identity = $this->identityService->findOneBy([
                 'adapterIdentifier' => (string) $property['value'],
-                'adapterName' => PlentymarketsAdapter::NAME,
-                'objectType' => PaymentMethod::TYPE,
+                'adapterName'       => PlentymarketsAdapter::NAME,
+                'objectType'        => PaymentMethod::TYPE,
             ]);
 
             return $identity;
@@ -497,8 +497,8 @@ class OrderResponseParser implements OrderResponseParserInterface
 
             $identity = $this->identityService->findOneBy([
                 'adapterIdentifier' => 2, //(string) $property['value'],
-                'adapterName' => PlentymarketsAdapter::NAME,
-                'objectType' => PaymentStatus::TYPE,
+                'adapterName'       => PlentymarketsAdapter::NAME,
+                'objectType'        => PaymentStatus::TYPE,
             ]);
 
             return $identity;
@@ -516,8 +516,8 @@ class OrderResponseParser implements OrderResponseParserInterface
     {
         return $this->identityService->findOneBy([
             'adapterIdentifier' => (string) $entry['statusId'],
-            'adapterName' => PlentymarketsAdapter::NAME,
-            'objectType' => OrderStatus::TYPE,
+            'adapterName'       => PlentymarketsAdapter::NAME,
+            'objectType'        => OrderStatus::TYPE,
         ]);
     }
 
@@ -554,8 +554,8 @@ class OrderResponseParser implements OrderResponseParserInterface
 
         $countryIdentity = $this->identityService->findOneBy([
             'adapterIdentifier' => (string) $entry['billingAddressData']['countryId'],
-            'adapterName' => PlentymarketsAdapter::NAME,
-            'objectType' => Country::TYPE,
+            'adapterName'       => PlentymarketsAdapter::NAME,
+            'objectType'        => Country::TYPE,
         ]);
 
         if (null === $countryIdentity) {
@@ -593,8 +593,8 @@ class OrderResponseParser implements OrderResponseParserInterface
 
         $countryIdentity = $this->identityService->findOneBy([
             'adapterIdentifier' => (string) $entry['shippingAddressData']['countryId'],
-            'adapterName' => PlentymarketsAdapter::NAME,
-            'objectType' => Country::TYPE,
+            'adapterName'       => PlentymarketsAdapter::NAME,
+            'objectType'        => Country::TYPE,
         ]);
 
         if (null === $countryIdentity) {

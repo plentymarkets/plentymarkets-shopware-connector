@@ -43,7 +43,7 @@ class Item extends ApiAbstract
         parent::__construct($client);
 
         $this->itemsVariationsApi = $itemsVariationsApi;
-        $this->languageHelper = $languageHelper;
+        $this->languageHelper     = $languageHelper;
     }
 
     /**
@@ -62,7 +62,7 @@ class Item extends ApiAbstract
             return $result;
         }
 
-        $result['variations'] = $this->itemsVariationsApi->findBy(['itemId' => $result['id']]);
+        $result['variations']       = $this->itemsVariationsApi->findBy(['itemId' => $result['id']]);
         $result['shippingProfiles'] = $this->getProductShippingProfiles($result['id']);
 
         return $result;
@@ -92,12 +92,12 @@ class Item extends ApiAbstract
     public function findChanged(DateTimeImmutable $startTimestamp, DateTimeImmutable $endTimestamp)
     {
         $start = $startTimestamp->format(DATE_W3C);
-        $end = $endTimestamp->format(DATE_W3C);
+        $end   = $endTimestamp->format(DATE_W3C);
 
         return $this->client->getIterator('items', [
-            'lang' => $this->languageHelper->getLanguagesQueryString(),
+            'lang'           => $this->languageHelper->getLanguagesQueryString(),
             'updatedBetween' => $start . ',' . $end,
-            'with' => $this->includes,
+            'with'           => $this->includes,
         ], function (array $elements) {
             $this->addAdditionalData($elements);
 

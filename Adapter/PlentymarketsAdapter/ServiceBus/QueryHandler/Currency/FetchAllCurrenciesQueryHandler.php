@@ -36,7 +36,7 @@ class FetchAllCurrenciesQueryHandler implements QueryHandlerInterface
         ClientInterface $client,
         CurrencyResponseParserInterface $responseParser
     ) {
-        $this->client = $client;
+        $this->client         = $client;
         $this->responseParser = $responseParser;
     }
 

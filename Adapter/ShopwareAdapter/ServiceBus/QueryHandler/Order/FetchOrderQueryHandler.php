@@ -44,9 +44,9 @@ class FetchOrderQueryHandler implements QueryHandlerInterface
         IdentityServiceInterface $identityService,
         OrderDataProviderInterface $dataProvider
     ) {
-        $this->responseParser = $responseParser;
+        $this->responseParser  = $responseParser;
         $this->identityService = $identityService;
-        $this->dataProvider = $dataProvider;
+        $this->dataProvider    = $dataProvider;
     }
 
     /**
@@ -69,8 +69,8 @@ class FetchOrderQueryHandler implements QueryHandlerInterface
     {
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => $query->getObjectIdentifier(),
-            'objectType' => Order::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => Order::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         if (null === $identity) {

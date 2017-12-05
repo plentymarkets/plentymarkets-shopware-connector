@@ -33,7 +33,7 @@ class CronjobInstaller implements InstallerInterface
     public function __construct(Connection $connection, array $cronjobs)
     {
         $this->connection = $connection;
-        $this->cronjobs = $cronjobs;
+        $this->cronjobs   = $cronjobs;
     }
 
     /**
@@ -98,20 +98,20 @@ class CronjobInstaller implements InstallerInterface
     private function addCronjob($name, $interval, $pluginIdentifier)
     {
         $data = [
-            'name' => 'PlentyConnector ' . $name,
-            'action' => 'Shopware_CronJob_PlentyConnector' . $name,
-            'next' => new DateTime(),
-            'start' => null,
-            '`interval`' => $interval,
-            'active' => true,
+            'name'             => 'PlentyConnector ' . $name,
+            'action'           => 'Shopware_CronJob_PlentyConnector' . $name,
+            'next'             => new DateTime(),
+            'start'            => null,
+            '`interval`'       => $interval,
+            'active'           => true,
             'disable_on_error' => true,
-            'end' => new DateTime(),
-            'pluginID' => $pluginIdentifier,
+            'end'              => new DateTime(),
+            'pluginID'         => $pluginIdentifier,
         ];
 
         $types = [
             'next' => 'datetime',
-            'end' => 'datetime',
+            'end'  => 'datetime',
         ];
 
         $this->connection->insert('s_crontab', $data, $types);

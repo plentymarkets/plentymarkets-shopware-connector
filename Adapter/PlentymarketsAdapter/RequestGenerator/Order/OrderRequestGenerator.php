@@ -65,11 +65,11 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
         CustomerRequestGeneratorInterface $customerRequestGenerator,
         AddressRequestGeneratorInterface $addressReuqestGenerator
     ) {
-        $this->identityService = $identityService;
-        $this->client = $client;
+        $this->identityService           = $identityService;
+        $this->client                    = $client;
         $this->orderItemRequestGenerator = $orderItemRequestGenerator;
-        $this->customerRequestGenerator = $customerRequestGenerator;
-        $this->addressReuqestGenerator = $addressReuqestGenerator;
+        $this->customerRequestGenerator  = $customerRequestGenerator;
+        $this->addressReuqestGenerator   = $addressReuqestGenerator;
     }
 
     /**
@@ -83,8 +83,8 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
 
         $shopIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $order->getShopIdentifier(),
-            'objectType' => Shop::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => Shop::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         if (null === $shopIdentity) {
@@ -93,8 +93,8 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
 
         $languageIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $order->getCustomer()->getLanguageIdentifier(),
-            'objectType' => Language::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => Language::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         if (null === $languageIdentity) {
@@ -102,7 +102,7 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
         }
 
         $params = [
-            'typeId' => 1,
+            'typeId'   => 1,
             'plentyId' => $shopIdentity->getAdapterIdentifier(),
         ];
 
@@ -111,8 +111,8 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
         $params['relations'] = [
             [
                 'referenceType' => 'contact',
-                'referenceId' => $plentyCustomer['id'],
-                'relation' => 'receiver',
+                'referenceId'   => $plentyCustomer['id'],
+                'relation'      => 'receiver',
             ],
         ];
 
@@ -121,7 +121,7 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
         $billingAddress = $this->createAddress($order->getBillingAddress(), $order, $plentyCustomer, 1);
         if (!empty($billingAddress)) {
             $params['addressRelations'][] = [
-                'typeId' => 1,
+                'typeId'    => 1,
                 'addressId' => $billingAddress['id'],
             ];
         }
@@ -129,15 +129,15 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
         $shippingAddress = $this->createAddress($order->getShippingAddress(), $order, $plentyCustomer, 2);
         if (!empty($shippingAddress)) {
             $params['addressRelations'][] = [
-                'typeId' => 2,
+                'typeId'    => 2,
                 'addressId' => $shippingAddress['id'],
             ];
         }
 
         $paymentMethodIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $order->getPaymentMethodIdentifier(),
-            'objectType' => PaymentMethod::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => PaymentMethod::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         if (null === $paymentMethodIdentity) {
@@ -146,8 +146,8 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
 
         $shippingProfileIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $order->getShippingProfileIdentifier(),
-            'objectType' => ShippingProfile::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => ShippingProfile::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         if (null === $shippingProfileIdentity) {
@@ -157,19 +157,19 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
         $params['properties'] = [
             [
                 'typeId' => 6,
-                'value' => (string) $languageIdentity->getAdapterIdentifier(),
+                'value'  => (string) $languageIdentity->getAdapterIdentifier(),
             ],
             [
                 'typeId' => 7,
-                'value' => (string) $order->getOrderNumber(),
+                'value'  => (string) $order->getOrderNumber(),
             ],
             [
                 'typeId' => 3,
-                'value' => (string) $paymentMethodIdentity->getAdapterIdentifier(),
+                'value'  => (string) $paymentMethodIdentity->getAdapterIdentifier(),
             ],
             [
                 'typeId' => 2,
-                'value' => (string) $shippingProfileIdentity->getAdapterIdentifier(),
+                'value'  => (string) $shippingProfileIdentity->getAdapterIdentifier(),
             ],
         ];
 
@@ -188,19 +188,19 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
         if (null !== $voucher) {
             $params['properties'][] = [
                 'typeId' => 18,
-                'value' => (string) $voucher->getNumber(),
+                'value'  => (string) $voucher->getNumber(),
             ];
 
             $params['properties'][] = [
                 'typeId' => 19,
-                'value' => 'fixed',
+                'value'  => 'fixed',
             ];
         }
 
         $params['dates'] = [
             [
                 'typeId' => 2,
-                'date' => $order->getOrderTime()->format(DATE_W3C),
+                'date'   => $order->getOrderTime()->format(DATE_W3C),
             ],
         ];
 

@@ -50,8 +50,8 @@ class CustomerResponseParser implements CustomerResponseParserInterface
         LoggerInterface $logger
     ) {
         $this->identityService = $identityService;
-        $this->entityManager = $entityManager;
-        $this->logger = $logger;
+        $this->entityManager   = $entityManager;
+        $this->logger          = $logger;
     }
 
     /**
@@ -118,7 +118,7 @@ class CustomerResponseParser implements CustomerResponseParserInterface
          * @var EntityRepository $newsletterRepository
          */
         $newsletterRepository = $this->entityManager->getRepository(Address::class);
-        $newsletter = $newsletterRepository->findOneBy(['email' => $entry['email']]);
+        $newsletter           = $newsletterRepository->findOneBy(['email' => $entry['email']]);
 
         if ($newsletter !== null) {
             $customer->setNewsletter(true);

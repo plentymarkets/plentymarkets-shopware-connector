@@ -40,16 +40,16 @@ require __DIR__ . '/autoload.php';
  */
 class PlentyConnector extends Plugin
 {
-    const PERMISSION_READ = 'read';
+    const PERMISSION_READ  = 'read';
     const PERMISSION_WRITE = 'write';
 
     /**
      * List of all cronjobs
      */
-    const CRONJOB_SYNCHRONIZE = 'Synchronize';
+    const CRONJOB_SYNCHRONIZE        = 'Synchronize';
     const CRONJOB_SYNCHRONIZE_ORDERS = 'SynchronizeOrders';
-    const CRONJOB_CLEANUP = 'Cleanup';
-    const CRONJOB_BACKLOG = 'ProcessBacklog';
+    const CRONJOB_CLEANUP            = 'Cleanup';
+    const CRONJOB_BACKLOG            = 'ProcessBacklog';
 
     /**
      * List of all permissions
@@ -73,8 +73,8 @@ class PlentyConnector extends Plugin
      */
     public static $cronjobs = [
         self::CRONJOB_SYNCHRONIZE => 60,
-        self::CRONJOB_BACKLOG => 60,
-        self::CRONJOB_CLEANUP => 86400,
+        self::CRONJOB_BACKLOG     => 60,
+        self::CRONJOB_CLEANUP     => 86400,
     ];
 
     /**
@@ -294,7 +294,7 @@ class PlentyConnector extends Plugin
 
     /**
      * @param UpdateContext $context
-     * @param string $targetVersion
+     * @param string        $targetVersion
      *
      * @return bool
      */
@@ -305,7 +305,7 @@ class PlentyConnector extends Plugin
 
     /**
      * @param UpdateContext $context
-     * @param string $targetVersion
+     * @param string        $targetVersion
      *
      * @return bool
      */
@@ -353,7 +353,7 @@ class PlentyConnector extends Plugin
          * @var EntityManagerInterface $entityManager
          */
         $entityManager = $this->container->get('models');
-        $repository = $entityManager->getRepository(Config::class);
+        $repository    = $entityManager->getRepository(Config::class);
 
         /**
          * @var Config $element
@@ -431,7 +431,7 @@ class PlentyConnector extends Plugin
 
     /**
      * @param ContainerBuilder $container
-     * @param string $filename
+     * @param string           $filename
      */
     private function loadFile(ContainerBuilder $container, $filename)
     {

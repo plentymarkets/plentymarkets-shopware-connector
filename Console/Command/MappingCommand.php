@@ -47,8 +47,8 @@ class MappingCommand extends ShopwareCommand
         OutputHandlerInterface $outputHandler
     ) {
         $this->mappingService = $mappingService;
-        $this->logger = $logger;
-        $this->outputHandler = $outputHandler;
+        $this->logger         = $logger;
+        $this->outputHandler  = $outputHandler;
 
         parent::__construct();
     }

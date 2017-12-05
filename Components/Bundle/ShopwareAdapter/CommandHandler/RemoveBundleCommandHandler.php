@@ -57,9 +57,9 @@ class RemoveBundleCommandHandler implements CommandHandlerInterface
         LoggerInterface $logger
     ) {
         $this->identityService = $identityService;
-        $this->entityManager = $entityManager;
-        $this->bundleHelper = $bundleHelper;
-        $this->logger = $logger;
+        $this->entityManager   = $entityManager;
+        $this->bundleHelper    = $bundleHelper;
+        $this->logger          = $logger;
     }
 
     /**
@@ -89,8 +89,8 @@ class RemoveBundleCommandHandler implements CommandHandlerInterface
 
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => (string) $identifier,
-            'objectType' => Bundle::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => Bundle::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         if (null === $identity) {

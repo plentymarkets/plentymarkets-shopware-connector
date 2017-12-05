@@ -52,10 +52,10 @@ class FetchCategoryQueryHandler implements QueryHandlerInterface
         LanguageHelperInterface $languageHelper,
         IdentityServiceInterface $identityService
     ) {
-        $this->client = $client;
+        $this->client                 = $client;
         $this->categoryResponseParser = $categoryResponseParser;
-        $this->languageHelper = $languageHelper;
-        $this->identityService = $identityService;
+        $this->languageHelper         = $languageHelper;
+        $this->identityService        = $identityService;
     }
 
     /**
@@ -78,8 +78,8 @@ class FetchCategoryQueryHandler implements QueryHandlerInterface
     {
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => $query->getObjectIdentifier(),
-            'objectType' => Category::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => Category::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         if (null === $identity) {

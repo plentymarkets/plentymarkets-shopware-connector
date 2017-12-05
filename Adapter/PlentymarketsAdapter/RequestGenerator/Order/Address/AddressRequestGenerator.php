@@ -38,8 +38,8 @@ class AddressRequestGenerator implements AddressRequestGeneratorInterface
     {
         $countryIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $address->getCountryIdentifier(),
-            'objectType' => Country::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => Country::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         if (null === $countryIdentity) {
@@ -59,24 +59,24 @@ class AddressRequestGenerator implements AddressRequestGeneratorInterface
         }
 
         $params = [
-            'name1' => trim($address->getCompany() . ' ' . $address->getDepartment()),
-            'name2' => $address->getFirstname(),
-            'name3' => $address->getLastname(),
+            'name1'      => trim($address->getCompany() . ' ' . $address->getDepartment()),
+            'name2'      => $address->getFirstname(),
+            'name3'      => $address->getLastname(),
             'postalCode' => $address->getPostalCode(),
-            'town' => $address->getCity(),
-            'countryId' => $countryIdentity->getAdapterIdentifier(),
-            'typeId' => $addressType,
+            'town'       => $address->getCity(),
+            'countryId'  => $countryIdentity->getAdapterIdentifier(),
+            'typeId'     => $addressType,
         ];
 
         if (0 === strcasecmp($address1, 'Packstation')) {
             $params = array_merge($params, [
                 'isPackstation' => true,
-                'address1' => 'PACKSTATION',
-                'address2' => $address2,
-                'options' => [
+                'address1'      => 'PACKSTATION',
+                'address2'      => $address2,
+                'options'       => [
                     [
                         'typeId' => 5,
-                        'value' => $order->getCustomer()->getEmail(),
+                        'value'  => $order->getCustomer()->getEmail(),
                     ],
                 ],
             ]);
@@ -84,18 +84,18 @@ class AddressRequestGenerator implements AddressRequestGeneratorInterface
             if (null !== $address->getAdditional()) {
                 $params['options'][] = [
                     'typeId' => 6,
-                    'value' => $address->getAdditional(),
+                    'value'  => $address->getAdditional(),
                 ];
             }
         } elseif (0 === strcasecmp($address1, 'Postfiliale')) {
             $params = array_merge($params, [
                 'isPostfiliale' => true,
-                'address1' => 'POSTFILIALE',
-                'address2' => $address2,
-                'options' => [
+                'address1'      => 'POSTFILIALE',
+                'address2'      => $address2,
+                'options'       => [
                     [
                         'typeId' => 5,
-                        'value' => $order->getCustomer()->getEmail(),
+                        'value'  => $order->getCustomer()->getEmail(),
                     ],
                 ],
             ]);
@@ -103,7 +103,7 @@ class AddressRequestGenerator implements AddressRequestGeneratorInterface
             if (null !== $address->getAdditional()) {
                 $params['options'][] = [
                     'typeId' => 6,
-                    'value' => $address->getAdditional(),
+                    'value'  => $address->getAdditional(),
                 ];
             }
         } else {
@@ -112,10 +112,10 @@ class AddressRequestGenerator implements AddressRequestGeneratorInterface
                 'address2' => $address2,
                 'address3' => $address->getAdditional(),
                 'address4' => $address3,
-                'options' => [
+                'options'  => [
                     [
                         'typeId' => 5,
-                        'value' => $order->getCustomer()->getEmail(),
+                        'value'  => $order->getCustomer()->getEmail(),
                     ],
                 ],
             ]);
@@ -124,7 +124,7 @@ class AddressRequestGenerator implements AddressRequestGeneratorInterface
         if (null !== $order->getCustomer()->getPhoneNumber()) {
             $params['options'][] = [
                 'typeId' => 4,
-                'value' => $order->getCustomer()->getPhoneNumber(),
+                'value'  => $order->getCustomer()->getPhoneNumber(),
             ];
         }
 

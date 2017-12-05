@@ -8,6 +8,8 @@ enabled:
   - phpdoc_order
   - short_array_syntax
   - concat_with_spaces
+  - align_double_arrow
+  - align_equals
 
 disabled:
   - concat_without_spaces

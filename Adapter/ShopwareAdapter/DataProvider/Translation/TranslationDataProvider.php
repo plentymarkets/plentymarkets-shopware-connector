@@ -38,7 +38,7 @@ class TranslationDataProvider implements TranslationDataProviderInterface
      */
     public function __construct(EntityManagerInterface $entityManager)
     {
-        $this->shopRepository = $entityManager->getRepository(ShopModel::class);
+        $this->shopRepository          = $entityManager->getRepository(ShopModel::class);
         $this->propertyGroupRepository = $entityManager->getRepository(PropertyGroupModel::class);
         $this->propertyValueRepository = $entityManager->getRepository(PropertyValueModel::class);
     }

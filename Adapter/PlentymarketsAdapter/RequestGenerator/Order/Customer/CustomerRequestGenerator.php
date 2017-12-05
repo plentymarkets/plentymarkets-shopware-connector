@@ -38,8 +38,8 @@ class CustomerRequestGenerator implements CustomerRequestGeneratorInterface
     {
         $shopIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $order->getShopIdentifier(),
-            'objectType' => Shop::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => Shop::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         if (null === $shopIdentity) {
@@ -48,8 +48,8 @@ class CustomerRequestGenerator implements CustomerRequestGeneratorInterface
 
         $languageIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $customer->getLanguageIdentifier(),
-            'objectType' => Language::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => Language::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         if (null === $languageIdentity) {
@@ -58,23 +58,23 @@ class CustomerRequestGenerator implements CustomerRequestGeneratorInterface
 
         $customerGroupIdentitiy = $this->identityService->findOneBy([
             'objectIdentifier' => $customer->getCustomerGroupIdentifier(),
-            'objectType' => CustomerGroup::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => CustomerGroup::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         $customerParams = [
-            'number' => $customer->getNumber(),
-            'typeId' => 1,
-            'firstName' => $customer->getFirstname(),
-            'lastName' => $customer->getLastname(),
-            'gender' => $customer->getSalutation() === Customer::SALUTATION_MR ? 'male' : 'female',
-            'lang' => $languageIdentity->getAdapterIdentifier(),
-            'singleAccess' => $customer->getType() === Customer::TYPE_GUEST,
-            'plentyId' => $shopIdentity->getAdapterIdentifier(),
+            'number'                => $customer->getNumber(),
+            'typeId'                => 1,
+            'firstName'             => $customer->getFirstname(),
+            'lastName'              => $customer->getLastname(),
+            'gender'                => $customer->getSalutation() === Customer::SALUTATION_MR ? 'male' : 'female',
+            'lang'                  => $languageIdentity->getAdapterIdentifier(),
+            'singleAccess'          => $customer->getType() === Customer::TYPE_GUEST,
+            'plentyId'              => $shopIdentity->getAdapterIdentifier(),
             'newsletterAllowanceAt' => '',
-            'lastOrderAt' => $order->getOrderTime()->format(DATE_W3C),
-            'options' => [],
-            'referrerId' => 1,
+            'lastOrderAt'           => $order->getOrderTime()->format(DATE_W3C),
+            'options'               => [],
+            'referrerId'            => 1,
         ];
 
         if (null !== $customerGroupIdentitiy) {
@@ -95,28 +95,28 @@ class CustomerRequestGenerator implements CustomerRequestGeneratorInterface
 
         if (null !== $customer->getPhoneNumber()) {
             $customerParams['options'][] = [
-                'typeId' => 1,
+                'typeId'    => 1,
                 'subTypeId' => 4,
-                'value' => $customer->getPhoneNumber(),
-                'priority' => 0,
+                'value'     => $customer->getPhoneNumber(),
+                'priority'  => 0,
             ];
         }
 
         if (null !== $customer->getMobilePhoneNumber()) {
             $customerParams['options'][] = [
-                'typeId' => 1,
+                'typeId'    => 1,
                 'subTypeId' => 2,
-                'value' => $customer->getMobilePhoneNumber(),
-                'priority' => 0,
+                'value'     => $customer->getMobilePhoneNumber(),
+                'priority'  => 0,
             ];
         }
 
         if (!empty($customer->getEmail())) {
             $customerParams['options'][] = [
-                'typeId' => 2,
+                'typeId'    => 2,
                 'subTypeId' => 4,
-                'value' => $customer->getEmail(),
-                'priority' => 0,
+                'value'     => $customer->getEmail(),
+                'priority'  => 0,
             ];
         }
 

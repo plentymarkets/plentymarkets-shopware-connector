@@ -51,10 +51,10 @@ class PriceResponseParser implements PriceResponseParserInterface
         ContactClass $itemsAccountsContacsClasses,
         LoggerInterface $logger
     ) {
-        $this->identityService = $identityService;
-        $this->itemsSalesPricesApi = $itemsSalesPricesApi;
+        $this->identityService             = $identityService;
+        $this->itemsSalesPricesApi         = $itemsSalesPricesApi;
         $this->itemsAccountsContacsClasses = $itemsAccountsContacsClasses;
-        $this->logger = $logger;
+        $this->logger                      = $logger;
     }
 
     /**
@@ -172,8 +172,8 @@ class PriceResponseParser implements PriceResponseParserInterface
                 foreach ($customerGroups as $group) {
                     $customerGroupIdentity = $this->identityService->findOneBy([
                         'adapterIdentifier' => $group,
-                        'adapterName' => PlentymarketsAdapter::NAME,
-                        'objectType' => CustomerGroup::TYPE,
+                        'adapterName'       => PlentymarketsAdapter::NAME,
+                        'objectType'        => CustomerGroup::TYPE,
                     ]);
 
                     if (null === $customerGroupIdentity) {
@@ -183,7 +183,7 @@ class PriceResponseParser implements PriceResponseParserInterface
                     $customerGroup = $customerGroupIdentity->getObjectIdentifier();
 
                     $temporaryPrices[$customerGroup][$priceConfiguration['type']][$from] = [
-                        'from' => $from,
+                        'from'  => $from,
                         'price' => (float) $price['price'],
                     ];
                 }
@@ -191,8 +191,8 @@ class PriceResponseParser implements PriceResponseParserInterface
                 foreach ($customerClasses as $group) {
                     $customerGroupIdentity = $this->identityService->findOneBy([
                         'adapterIdentifier' => $group['customerClassId'],
-                        'adapterName' => PlentymarketsAdapter::NAME,
-                        'objectType' => CustomerGroup::TYPE,
+                        'adapterName'       => PlentymarketsAdapter::NAME,
+                        'objectType'        => CustomerGroup::TYPE,
                     ]);
 
                     if (null === $customerGroupIdentity) {
@@ -202,7 +202,7 @@ class PriceResponseParser implements PriceResponseParserInterface
                     $customerGroup = $customerGroupIdentity->getObjectIdentifier();
 
                     $temporaryPrices[$customerGroup][$priceConfiguration['type']][$from] = [
-                        'from' => $from,
+                        'from'  => $from,
                         'price' => (float) $price['price'],
                     ];
                 }
@@ -226,7 +226,7 @@ class PriceResponseParser implements PriceResponseParserInterface
 
             $shopIdentities = $this->identityService->findBy([
                 'adapterName' => PlentymarketsAdapter::NAME,
-                'objectType' => Shop::TYPE,
+                'objectType'  => Shop::TYPE,
             ]);
 
             $shopIdentities = array_filter($shopIdentities, function (Identity $identity) {

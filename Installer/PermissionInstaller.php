@@ -50,9 +50,9 @@ class PermissionInstaller implements InstallerInterface
         array $permissions
     ) {
         $this->entityManager = $entityManager;
-        $this->repository = $this->entityManager->getRepository(ShopwareResource::class);
-        $this->acl = $acl;
-        $this->permissions = $permissions;
+        $this->repository    = $this->entityManager->getRepository(ShopwareResource::class);
+        $this->acl           = $acl;
+        $this->permissions   = $permissions;
     }
 
     /**

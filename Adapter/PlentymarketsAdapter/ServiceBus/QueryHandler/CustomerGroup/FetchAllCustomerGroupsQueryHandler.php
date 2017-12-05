@@ -36,7 +36,7 @@ class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
         ClientInterface $client,
         CustomerGroupResponseParserInterface $responseParser
     ) {
-        $this->client = $client;
+        $this->client         = $client;
         $this->responseParser = $responseParser;
     }
 

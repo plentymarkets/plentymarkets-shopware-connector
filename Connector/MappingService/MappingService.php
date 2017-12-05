@@ -49,8 +49,8 @@ class MappingService implements MappingServiceInterface
         ValidatorServiceInterface $validator
     ) {
         $this->queryFactory = $queryFactory;
-        $this->serviceBus = $serviceBus;
-        $this->validator = $validator;
+        $this->serviceBus   = $serviceBus;
+        $this->validator    = $validator;
     }
 
     /**
@@ -68,16 +68,16 @@ class MappingService implements MappingServiceInterface
     {
         Assertion::nullOrString($objectType);
 
-        $result = [];
+        $result      = [];
         $definitions = $this->getDefinitions($objectType);
 
         array_walk($definitions, function (Definition $definition) use (&$result) {
             $mapping = Mapping::fromArray([
-                'originAdapterName' => $definition->getOriginAdapterName(),
-                'originTransferObjects' => $this->query($definition, $definition->getOriginAdapterName()),
-                'destinationAdapterName' => $definition->getDestinationAdapterName(),
+                'originAdapterName'          => $definition->getOriginAdapterName(),
+                'originTransferObjects'      => $this->query($definition, $definition->getOriginAdapterName()),
+                'destinationAdapterName'     => $definition->getDestinationAdapterName(),
                 'destinationTransferObjects' => $this->query($definition, $definition->getDestinationAdapterName()),
-                'objectType' => $definition->getObjectType(),
+                'objectType'                 => $definition->getObjectType(),
             ]);
 
             $this->validator->validate($mapping);

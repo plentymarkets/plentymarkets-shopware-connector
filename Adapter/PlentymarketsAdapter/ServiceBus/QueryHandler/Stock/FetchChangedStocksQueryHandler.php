@@ -56,10 +56,10 @@ class FetchChangedStocksQueryHandler implements QueryHandlerInterface
         LoggerInterface $logger,
         OutputHandlerInterface $outputHandler
     ) {
-        $this->client = $client;
+        $this->client         = $client;
         $this->responseParser = $responseParser;
-        $this->logger = $logger;
-        $this->outputHandler = $outputHandler;
+        $this->logger         = $logger;
+        $this->outputHandler  = $outputHandler;
     }
 
     /**
@@ -78,13 +78,13 @@ class FetchChangedStocksQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $lastCangedTime = $this->getChangedDateTime();
+        $lastCangedTime  = $this->getChangedDateTime();
         $currentDateTime = $this->getCurrentDateTime();
 
         $stocks = $this->client->getIterator('stockmanagement/stock', [
             'updatedAtFrom' => $lastCangedTime->format(DATE_W3C),
-            'updatedAtTo' => $currentDateTime->format(DATE_W3C),
-            'columns' => ['variationId'],
+            'updatedAtTo'   => $currentDateTime->format(DATE_W3C),
+            'columns'       => ['variationId'],
         ]);
 
         $variationIdentifiers = [];
@@ -100,7 +100,7 @@ class FetchChangedStocksQueryHandler implements QueryHandlerInterface
         foreach ($variationIdentifierGroups as $variationIdentifierGroup) {
             $elements = $this->client->getIterator('items/variations', [
                 'with' => 'stock',
-                'id' => implode(',', $variationIdentifierGroup),
+                'id'   => implode(',', $variationIdentifierGroup),
             ]);
 
             foreach ($elements as $element) {

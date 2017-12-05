@@ -54,9 +54,9 @@ class FetchAllMediaCategoriesQueryHandler implements QueryHandlerInterface
         OutputHandlerInterface $outputHandler
     ) {
         $this->mediaCategoryHelper = $mediaCategoryHelper;
-        $this->responseParser = $responseParser;
-        $this->logger = $logger;
-        $this->outputHandler = $outputHandler;
+        $this->responseParser      = $responseParser;
+        $this->logger              = $logger;
+        $this->outputHandler       = $outputHandler;
     }
 
     /**

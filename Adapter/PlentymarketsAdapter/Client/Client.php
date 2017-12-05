@@ -50,7 +50,7 @@ class Client implements ClientInterface
         ConfigServiceInterface $config
     ) {
         $this->connection = $connection;
-        $this->config = $config;
+        $this->config     = $config;
     }
 
     /**
@@ -104,8 +104,8 @@ class Client implements ClientInterface
 
         $method = strtoupper($method);
 
-        $options = $this->getOptions($limit, $offset, $options);
-        $url = $this->getUrl($path, $options);
+        $options        = $this->getOptions($limit, $offset, $options);
+        $url            = $this->getUrl($path, $options);
         $requestOptions = $this->getRequestOptions($method, $path, $params, $options);
 
         $request = $this->connection->createRequest($method, $url, $requestOptions);
@@ -206,7 +206,7 @@ class Client implements ClientInterface
             'password' => $this->config->get('rest_password'),
         ]);
 
-        $this->accessToken = $login['accessToken'];
+        $this->accessToken  = $login['accessToken'];
         $this->refreshToken = $login['refreshToken'];
     }
 
@@ -352,8 +352,8 @@ class Client implements ClientInterface
     {
         $headers = [
             'Content-Type' => 'application/json',
-            'Accept' => 'application/x.plentymarkets.v1+json',
-            'user-agent' => $this->getUserAgent(),
+            'Accept'       => 'application/x.plentymarkets.v1+json',
+            'user-agent'   => $this->getUserAgent(),
         ];
 
         if ($path !== 'login') {

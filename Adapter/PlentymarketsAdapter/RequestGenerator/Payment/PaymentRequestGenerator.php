@@ -36,8 +36,8 @@ class PaymentRequestGenerator implements PaymentRequestGeneratorInterface
     {
         $paymentMethodIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $payment->getPaymentMethodIdentifier(),
-            'objectType' => PaymentMethod::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => PaymentMethod::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         if (null === $paymentMethodIdentity) {
@@ -46,8 +46,8 @@ class PaymentRequestGenerator implements PaymentRequestGeneratorInterface
 
         $currencyIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $payment->getCurrencyIdentifier(),
-            'objectType' => Currency::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => Currency::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         if (null === $currencyIdentity) {
@@ -55,31 +55,31 @@ class PaymentRequestGenerator implements PaymentRequestGeneratorInterface
         }
 
         $paymentParams = [
-            'amount' => $payment->getAmount(),
-            'exchangeRatio' => 1,
-            'mopId' => $paymentMethodIdentity->getAdapterIdentifier(),
-            'currency' => $currencyIdentity->getAdapterIdentifier(),
-            'type' => 'credit',
+            'amount'          => $payment->getAmount(),
+            'exchangeRatio'   => 1,
+            'mopId'           => $paymentMethodIdentity->getAdapterIdentifier(),
+            'currency'        => $currencyIdentity->getAdapterIdentifier(),
+            'type'            => 'credit',
             'transactionType' => 2,
-            'status' => 2,
+            'status'          => 2,
         ];
 
         $paymentParams['properties'] = [
             [
                 'typeId' => 23,
-                'value' => 4,
+                'value'  => 4,
             ],
             [
                 'typeId' => 11,
-                'value' => $payment->getAccountHolder(),
+                'value'  => $payment->getAccountHolder(),
             ],
             [
                 'typeId' => 1,
-                'value' => $payment->getTransactionReference(),
+                'value'  => $payment->getTransactionReference(),
             ],
             [
                 'typeId' => 3,
-                'value' => $payment->getTransactionReference(),
+                'value'  => $payment->getTransactionReference(),
             ],
         ];
 

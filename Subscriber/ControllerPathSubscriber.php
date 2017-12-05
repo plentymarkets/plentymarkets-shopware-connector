@@ -25,7 +25,7 @@ class ControllerPathSubscriber implements SubscriberInterface
      * ControllerPath constructor.
      *
      * @param Enlight_Template_Manager $template
-     * @param string $pluginDir
+     * @param string                   $pluginDir
      */
     public function __construct(Enlight_Template_Manager $template, $pluginDir)
     {
@@ -52,6 +52,6 @@ class ControllerPathSubscriber implements SubscriberInterface
     {
         $this->template->addTemplateDir($this->pluginDir . '/Resources/views/');
 
-        return $this->pluginDir.'/Controller/Backend/PlentyConnector.php';
+        return $this->pluginDir . '/Controller/Backend/PlentyConnector.php';
     }
 }

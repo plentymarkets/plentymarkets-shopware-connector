@@ -47,8 +47,8 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
         ConfigServiceInterface $config
     ) {
         $this->identityService = $identityService;
-        $this->client = $client;
-        $this->config = $config;
+        $this->client          = $client;
+        $this->config          = $config;
     }
 
     /**
@@ -58,8 +58,8 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
     {
         $shippingProfileIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $order->getShippingProfileIdentifier(),
-            'objectType' => ShippingProfile::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => ShippingProfile::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         if (null === $shippingProfileIdentity) {
@@ -68,8 +68,8 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
 
         $currencyIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $order->getCurrencyIdentifier(),
-            'objectType' => Currency::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => Currency::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         if (null === $currencyIdentity) {
@@ -101,7 +101,7 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
             $itemParams['orderItemName'] = $orderItem->getName();
         }
 
-        $itemParams['typeId'] = $typeId;
+        $itemParams['typeId']   = $typeId;
         $itemParams['quantity'] = $orderItem->getQuantity();
 
         if (!empty($orderItem->getNumber())) {
@@ -115,8 +115,8 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
         if (null !== $orderItem->getVatRateIdentifier()) {
             $vatRateIdentity = $this->identityService->findOneBy([
                 'objectIdentifier' => $orderItem->getVatRateIdentifier(),
-                'objectType' => VatRate::TYPE,
-                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType'       => VatRate::TYPE,
+                'adapterName'      => PlentymarketsAdapter::NAME,
             ]);
 
             if (null === $vatRateIdentity) {
@@ -124,15 +124,15 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
             }
 
             $itemParams['countryVatId'] = 1;
-            $itemParams['vatField'] = $vatRateIdentity->getAdapterIdentifier();
+            $itemParams['vatField']     = $vatRateIdentity->getAdapterIdentifier();
         } else {
             $itemParams['countryVatId'] = 1;
-            $itemParams['vatRate'] = 0;
+            $itemParams['vatRate']      = 0;
         }
 
         $itemParams['amounts'] = [
             [
-                'currency' => $currencyIdentity->getAdapterIdentifier(),
+                'currency'           => $currencyIdentity->getAdapterIdentifier(),
                 'priceOriginalGross' => $orderItem->getPrice(),
             ],
         ];
@@ -141,7 +141,7 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
             $itemParams['properties'] = [
                 [
                     'typeId' => 2,
-                    'value' => (string) $shippingProfileIdentity->getAdapterIdentifier(),
+                    'value'  => (string) $shippingProfileIdentity->getAdapterIdentifier(),
                 ],
             ];
         }

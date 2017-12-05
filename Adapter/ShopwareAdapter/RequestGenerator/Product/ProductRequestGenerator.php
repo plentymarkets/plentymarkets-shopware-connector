@@ -70,11 +70,11 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
         ConfigServiceInterface $config,
         LoggerInterface $logger
     ) {
-        $this->identityService = $identityService;
-        $this->entityManager = $entityManager;
+        $this->identityService                 = $identityService;
+        $this->entityManager                   = $entityManager;
         $this->configuratorSetRequestGenerator = $configuratorSetRequestGenerator;
-        $this->config = $config;
-        $this->logger = $logger;
+        $this->config                          = $config;
+        $this->logger                          = $logger;
     }
 
     /**
@@ -87,8 +87,8 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
         $shopIdentifiers = array_filter($product->getShopIdentifiers(), function ($identifier) {
             $shopIdentity = $this->identityService->findOneBy([
                 'objectIdentifier' => $identifier,
-                'objectType' => Shop::TYPE,
-                'adapterName' => ShopwareAdapter::NAME,
+                'objectType'       => Shop::TYPE,
+                'adapterName'      => ShopwareAdapter::NAME,
             ]);
 
             return null !== $shopIdentity;
@@ -100,8 +100,8 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
 
         $vatIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $product->getVatRateIdentifier(),
-            'objectType' => VatRate::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => VatRate::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         if (null === $vatIdentity) {
@@ -109,8 +109,8 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
         }
 
         $manufacturerIdentity = $this->identityService->findOneBy([
-            'adapterName' => ShopwareAdapter::NAME,
-            'objectType' => Manufacturer::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
+            'objectType'       => Manufacturer::TYPE,
             'objectIdentifier' => $product->getManufacturerIdentifier(),
         ]);
 
@@ -121,34 +121,34 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
         $propertyData = $this->getPropertyData($product);
 
         $params = [
-            'filterGroupId' => $propertyData['filterGroupId'],
+            'filterGroupId'  => $propertyData['filterGroupId'],
             'propertyValues' => $propertyData['propertyValues'],
-            'mainDetail' => [
+            'mainDetail'     => [
                 'number' => $product->getNumber(),
             ],
-            'availableFrom' => $product->getAvailableFrom(),
-            'availableTo' => $product->getAvailableTo(),
-            'name' => $product->getName(),
-            'description' => $product->getMetaDescription(),
-            'descriptionLong' => !empty($product->getLongDescription()) ? $product->getLongDescription() : $product->getDescription(),
-            'categories' => $this->getCategories($product),
-            'seoCategories' => $this->getSeoCategories($product),
-            'taxId' => $vatIdentity->getAdapterIdentifier(),
-            'lastStock' => $product->hasStockLimitation(),
-            'notification' => (int) $this->config->get('item_notification', 0),
-            'active' => $product->isActive(),
-            'images' => $this->getImages($product),
-            'similar' => $this->getLinkedProducts($product),
-            'related' => $this->getLinkedProducts($product, LinkedProduct::TYPE_ACCESSORY),
-            'metaTitle' => $product->getMetaTitle(),
-            'keywords' => $product->getMetaKeywords(),
-            'supplierId' => $manufacturerIdentity->getAdapterIdentifier(),
-            '__options_categories' => ['replace' => true],
+            'availableFrom'           => $product->getAvailableFrom(),
+            'availableTo'             => $product->getAvailableTo(),
+            'name'                    => $product->getName(),
+            'description'             => $product->getMetaDescription(),
+            'descriptionLong'         => !empty($product->getLongDescription()) ? $product->getLongDescription() : $product->getDescription(),
+            'categories'              => $this->getCategories($product),
+            'seoCategories'           => $this->getSeoCategories($product),
+            'taxId'                   => $vatIdentity->getAdapterIdentifier(),
+            'lastStock'               => $product->hasStockLimitation(),
+            'notification'            => (int) $this->config->get('item_notification', 0),
+            'active'                  => $product->isActive(),
+            'images'                  => $this->getImages($product),
+            'similar'                 => $this->getLinkedProducts($product),
+            'related'                 => $this->getLinkedProducts($product, LinkedProduct::TYPE_ACCESSORY),
+            'metaTitle'               => $product->getMetaTitle(),
+            'keywords'                => $product->getMetaKeywords(),
+            'supplierId'              => $manufacturerIdentity->getAdapterIdentifier(),
+            '__options_categories'    => ['replace' => true],
             '__options_seoCategories' => ['replace' => true],
-            '__options_similar' => ['replace' => true],
-            '__options_related' => ['replace' => true],
-            '__options_prices' => ['replace' => true],
-            '__options_images' => ['replace' => true],
+            '__options_similar'       => ['replace' => true],
+            '__options_related'       => ['replace' => true],
+            '__options_prices'        => ['replace' => true],
+            '__options_images'        => ['replace' => true],
         ];
 
         $configuratorSet = $this->configuratorSetRequestGenerator->generate($product);
@@ -167,8 +167,8 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
         foreach ($product->getShippingProfileIdentifiers() as $identifier) {
             $profileIdentity = $this->identityService->findOneBy([
                 'objectIdentifier' => $identifier,
-                'objectType' => ShippingProfile::TYPE,
-                'adapterName' => ShopwareAdapter::NAME,
+                'objectType'       => ShippingProfile::TYPE,
+                'adapterName'      => ShopwareAdapter::NAME,
             ]);
 
             if (null === $profileIdentity) {
@@ -188,7 +188,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
             }
 
             $attributes[] = Attribute::fromArray([
-                'key' => 'shippingProfile' . $profileIdentity->getAdapterIdentifier(),
+                'key'   => 'shippingProfile' . $profileIdentity->getAdapterIdentifier(),
                 'value' => $profileIdentity->getObjectIdentifier(),
             ]);
 
@@ -210,8 +210,8 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
             if ($linkedProduct->getType() === $type) {
                 $productIdentity = $this->identityService->findOneBy([
                     'objectIdentifier' => $linkedProduct->getProductIdentifier(),
-                    'objectType' => Product::TYPE,
-                    'adapterName' => ShopwareAdapter::NAME,
+                    'objectType'       => Product::TYPE,
+                    'adapterName'      => ShopwareAdapter::NAME,
                 ]);
 
                 if (null === $productIdentity) {
@@ -230,10 +230,10 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
                 }
 
                 $result[$productIdentity->getAdapterIdentifier()] = [
-                    'id' => $productIdentity->getAdapterIdentifier(),
-                    'number' => null,
+                    'id'       => $productIdentity->getAdapterIdentifier(),
+                    'number'   => null,
                     'position' => $linkedProduct->getPosition(),
-                    'cross' => false,
+                    'cross'    => false,
                 ];
             }
         }
@@ -270,8 +270,8 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
             $this->entityManager->clear();
         }
 
-        $result = [];
-        $result['filterGroupId'] = $propertyGroup->getId();
+        $result                   = [];
+        $result['filterGroupId']  = $propertyGroup->getId();
         $result['propertyValues'] = [];
 
         foreach ($product->getProperties() as $property) {
@@ -295,8 +295,8 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
             $shopIdentifiers = array_filter($image->getShopIdentifiers(), function ($shop) {
                 $identity = $this->identityService->findOneBy([
                     'objectIdentifier' => (string) $shop,
-                    'objectType' => Shop::TYPE,
-                    'adapterName' => ShopwareAdapter::NAME,
+                    'objectType'       => Shop::TYPE,
+                    'adapterName'      => ShopwareAdapter::NAME,
                 ]);
 
                 return $identity !== null;
@@ -308,8 +308,8 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
 
             $imageIdentity = $this->identityService->findOneBy([
                 'objectIdentifier' => $image->getMediaIdentifier(),
-                'objectType' => Media::TYPE,
-                'adapterName' => ShopwareAdapter::NAME,
+                'objectType'       => Media::TYPE,
+                'adapterName'      => ShopwareAdapter::NAME,
             ]);
 
             if (null === $imageIdentity) {
@@ -319,7 +319,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
             }
 
             $images[] = [
-                'mediaId' => $imageIdentity->getAdapterIdentifier(),
+                'mediaId'  => $imageIdentity->getAdapterIdentifier(),
                 'position' => $image->getPosition(),
             ];
         }
@@ -338,8 +338,8 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
         foreach ($product->getCategoryIdentifiers() as $categoryIdentifier) {
             $categoryIdentities = $this->identityService->findBy([
                 'objectIdentifier' => $categoryIdentifier,
-                'objectType' => Category::TYPE,
-                'adapterName' => ShopwareAdapter::NAME,
+                'objectType'       => Category::TYPE,
+                'adapterName'      => ShopwareAdapter::NAME,
             ]);
 
             foreach ($categoryIdentities as $categoryIdentity) {
@@ -374,8 +374,8 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
         foreach ($product->getDefaultCategoryIdentifiers() as $categoryIdentifier) {
             $categoryIdentities = $this->identityService->findBy([
                 'objectIdentifier' => $categoryIdentifier,
-                'objectType' => Category::TYPE,
-                'adapterName' => ShopwareAdapter::NAME,
+                'objectType'       => Category::TYPE,
+                'adapterName'      => ShopwareAdapter::NAME,
             ]);
 
             foreach ($categoryIdentities as $categoryIdentity) {
@@ -397,7 +397,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
                 foreach ($shops as $shop) {
                     $seoCategories[] = [
                         'categoryId' => $categoryIdentity->getAdapterIdentifier(),
-                        'shopId' => $shop->getId(),
+                        'shopId'     => $shop->getId(),
                     ];
                 }
             }

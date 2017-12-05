@@ -38,7 +38,7 @@ class FetchAllOrderStatusesQueryHandler implements QueryHandlerInterface
         EntityManagerInterface $entityManager,
         OrderStatusResponseParserInterface $responseParser
     ) {
-        $this->entityManager = $entityManager;
+        $this->entityManager  = $entityManager;
         $this->responseParser = $responseParser;
     }
 

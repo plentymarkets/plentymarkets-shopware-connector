@@ -54,7 +54,7 @@ class AttributeHelper implements AttributeHelperInterface
         $attribute->setValue($fieldValue);
 
         if ($object instanceof TranslateableInterface) {
-            $translations = $object->getTranslations();
+            $translations    = $object->getTranslations();
             $newTranslations = [];
 
             foreach ($translations as $translation) {

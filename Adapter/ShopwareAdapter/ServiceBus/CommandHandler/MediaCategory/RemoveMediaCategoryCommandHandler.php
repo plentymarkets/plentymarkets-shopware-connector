@@ -47,9 +47,9 @@ class RemoveMediaCategoryCommandHandler implements CommandHandlerInterface
         IdentityServiceInterface $identityService,
         LoggerInterface $logger
     ) {
-        $this->entityManager = $entityManager;
+        $this->entityManager   = $entityManager;
         $this->identityService = $identityService;
-        $this->logger = $logger;
+        $this->logger          = $logger;
     }
 
     /**
@@ -74,8 +74,8 @@ class RemoveMediaCategoryCommandHandler implements CommandHandlerInterface
 
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => (string) $identifier,
-            'objectType' => Media::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => Media::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         if (null === $identity) {

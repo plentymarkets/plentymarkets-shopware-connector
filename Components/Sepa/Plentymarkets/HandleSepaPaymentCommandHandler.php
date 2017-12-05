@@ -48,8 +48,8 @@ class HandleSepaPaymentCommandHandler implements CommandHandlerInterface
         IdentityServiceInterface $identityService
     ) {
         $this->parentCommandHandler = $parentCommandHandler;
-        $this->client = $client;
-        $this->identityService = $identityService;
+        $this->client               = $client;
+        $this->identityService      = $identityService;
     }
 
     /**
@@ -86,8 +86,8 @@ class HandleSepaPaymentCommandHandler implements CommandHandlerInterface
 
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => $payment->getIdentifier(),
-            'objectType' => Payment::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => Payment::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         if (null !== $identity) {
@@ -96,8 +96,8 @@ class HandleSepaPaymentCommandHandler implements CommandHandlerInterface
 
         $orderIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $payment->getOrderIdentifer(),
-            'objectType' => Order::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => Order::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         if (null === $orderIdentity) {
@@ -132,10 +132,10 @@ class HandleSepaPaymentCommandHandler implements CommandHandlerInterface
         $sepaPaymentDataParams = [
             'lastUpdateBy' => 'import',
             'accountOwner' => $data->getAccountOwner(),
-            'iban' => $data->getIban(),
-            'bic' => $data->getBic(),
-            'orderId' => $orderIdentity->getAdapterIdentifier(),
-            'contactId' => $contactId,
+            'iban'         => $data->getIban(),
+            'bic'          => $data->getBic(),
+            'orderId'      => $orderIdentity->getAdapterIdentifier(),
+            'contactId'    => $contactId,
         ];
 
         $paymentResult = $this->client->request('POST', 'accounts/contacts/banks', $sepaPaymentDataParams);

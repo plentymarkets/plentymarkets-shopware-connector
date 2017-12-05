@@ -38,7 +38,7 @@ class FetchAllShopsQueryHandler implements QueryHandlerInterface
         EntityManagerInterface $entityManager,
         ShopResponseParserInterface $responseParser
     ) {
-        $this->repository = $entityManager->getRepository(ShopModel::class);
+        $this->repository     = $entityManager->getRepository(ShopModel::class);
         $this->responseParser = $responseParser;
     }
 

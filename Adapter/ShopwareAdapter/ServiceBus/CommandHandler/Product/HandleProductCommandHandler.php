@@ -71,12 +71,12 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         TranslationDataPersisterInterface $translationDataPersister,
         EntityManagerInterface $entityManager
     ) {
-        $this->identityService = $identityService;
-        $this->attributeHelper = $attributeHelper;
-        $this->attributeDataPersister = $attributeDataPersister;
-        $this->productRequestGenerator = $productRequestGenerator;
+        $this->identityService          = $identityService;
+        $this->attributeHelper          = $attributeHelper;
+        $this->attributeDataPersister   = $attributeDataPersister;
+        $this->productRequestGenerator  = $productRequestGenerator;
         $this->translationDataPersister = $translationDataPersister;
-        $this->entityManager = $entityManager;
+        $this->entityManager            = $entityManager;
     }
 
     /**
@@ -109,7 +109,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         }
 
         $variantRepository = $this->entityManager->getRepository(Detail::class);
-        $mainVariation = $variantRepository->findOneBy(['number' => $product->getNumber()]);
+        $mainVariation     = $variantRepository->findOneBy(['number' => $product->getNumber()]);
 
         $resouce = $this->getArticleResource();
 
@@ -123,8 +123,8 @@ class HandleProductCommandHandler implements CommandHandlerInterface
 
         $identities = $this->identityService->findBy([
             'objectIdentifier' => $product->getIdentifier(),
-            'objectType' => Product::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => Product::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         $foundIdentity = false;
@@ -167,19 +167,19 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         $this->entityManager->getConnection()->update(
             's_articles',
             ['main_detail_id' => $mainVariation->getId()],
-            ['id' => $mainVariation->getArticle()->getId()]
+            ['id'             => $mainVariation->getArticle()->getId()]
         );
 
         $this->entityManager->getConnection()->update(
             's_articles_details',
-            ['kind' => 2],
+            ['kind'      => 2],
             ['articleID' => $mainVariation->getArticle()->getId()]
         );
 
         $this->entityManager->getConnection()->update(
             's_articles_details',
             ['kind' => 1],
-            ['id' => $mainVariation->getId()]
+            ['id'   => $mainVariation->getId()]
         );
     }
 

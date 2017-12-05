@@ -56,10 +56,10 @@ class FetchChangedBundlesQueryHandler implements QueryHandlerInterface
         LoggerInterface $logger,
         OutputHandlerInterface $outputHandler
     ) {
-        $this->itemApi = $itemApi;
+        $this->itemApi        = $itemApi;
         $this->responseParser = $responseParser;
-        $this->logger = $logger;
-        $this->outputHandler = $outputHandler;
+        $this->logger         = $logger;
+        $this->outputHandler  = $outputHandler;
     }
 
     /**
@@ -78,7 +78,7 @@ class FetchChangedBundlesQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $lastCangedTime = $this->getChangedDateTime();
+        $lastCangedTime  = $this->getChangedDateTime();
         $currentDateTime = $this->getCurrentDateTime();
 
         $elements = $this->itemApi->findChanged($lastCangedTime, $currentDateTime);

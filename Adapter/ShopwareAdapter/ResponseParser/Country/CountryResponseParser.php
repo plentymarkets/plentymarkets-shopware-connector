@@ -39,7 +39,7 @@ class CountryResponseParser implements CountryResponseParserInterface
 
         return Country::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => $entry['name'],
+            'name'       => $entry['name'],
         ]);
     }
 }

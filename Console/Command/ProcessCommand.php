@@ -48,8 +48,8 @@ class ProcessCommand extends ShopwareCommand
         LoggerInterface $logger,
         OutputHandlerInterface $outputHandler
     ) {
-        $this->connector = $connector;
-        $this->logger = $logger;
+        $this->connector     = $connector;
+        $this->logger        = $logger;
         $this->outputHandler = $outputHandler;
 
         parent::__construct();
@@ -98,7 +98,7 @@ class ProcessCommand extends ShopwareCommand
             BacklogCommandHandlerMiddleware::$active = false;
         }
 
-        $objectType = $input->getArgument('objectType');
+        $objectType       = $input->getArgument('objectType');
         $objectIdentifier = $input->getArgument('objectIdentifier');
 
         if (method_exists($this->logger, 'pushHandler')) {

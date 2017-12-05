@@ -107,16 +107,16 @@ class VariationResponseParser implements VariationResponseParserInterface
         ReferenceAmountCalculatorInterface $referenceAmountCalculator,
         ConfigServiceInterface $config
     ) {
-        $this->identityService = $identityService;
-        $this->priceResponseParser = $priceResponseParser;
-        $this->imageResponseParser = $imageResponseParser;
-        $this->stockResponseParser = $stockResponseParser;
-        $this->availabilitiesApi = $availabilitiesApi;
-        $this->itemAttributesApi = $itemAttributesApi;
-        $this->itemAttributesValuesApi = $itemAttributesValuesApi;
-        $this->itemBarcodeApi = $itemBarcodeApi;
+        $this->identityService           = $identityService;
+        $this->priceResponseParser       = $priceResponseParser;
+        $this->imageResponseParser       = $imageResponseParser;
+        $this->stockResponseParser       = $stockResponseParser;
+        $this->availabilitiesApi         = $availabilitiesApi;
+        $this->itemAttributesApi         = $itemAttributesApi;
+        $this->itemAttributesValuesApi   = $itemAttributesValuesApi;
+        $this->itemBarcodeApi            = $itemBarcodeApi;
         $this->referenceAmountCalculator = $referenceAmountCalculator;
-        $this->config = $config;
+        $this->config                    = $config;
     }
 
     /**
@@ -143,13 +143,13 @@ class VariationResponseParser implements VariationResponseParserInterface
         });
 
         $result = [];
-        $first = true;
+        $first  = true;
 
         foreach ($variations as $variation) {
             $productIdentitiy = $this->identityService->findOneBy([
                 'adapterIdentifier' => (string) $product['id'],
-                'adapterName' => PlentymarketsAdapter::NAME,
-                'objectType' => Product::TYPE,
+                'adapterName'       => PlentymarketsAdapter::NAME,
+                'objectType'        => Product::TYPE,
             ]);
 
             if (null === $productIdentitiy) {
@@ -263,8 +263,8 @@ class VariationResponseParser implements VariationResponseParserInterface
         // Unit
         $unitIdentity = $this->identityService->findOneBy([
             'adapterIdentifier' => (string) $variation['unit']['unitId'],
-            'adapterName' => PlentymarketsAdapter::NAME,
-            'objectType' => Unit::TYPE,
+            'adapterName'       => PlentymarketsAdapter::NAME,
+            'objectType'        => Unit::TYPE,
         ]);
 
         if (null === $unitIdentity) {
@@ -318,10 +318,10 @@ class VariationResponseParser implements VariationResponseParserInterface
 
             foreach ($systemBarcodes as $systemBarcode) {
                 $typeMapping = [
-                    'GTIN_13' => Barcode::TYPE_GTIN13,
+                    'GTIN_13'  => Barcode::TYPE_GTIN13,
                     'GTIN_128' => Barcode::TYPE_GTIN128,
-                    'UPC' => Barcode::TYPE_UPC,
-                    'ISBN' => Barcode::TYPE_ISBN,
+                    'UPC'      => Barcode::TYPE_UPC,
+                    'ISBN'     => Barcode::TYPE_ISBN,
                 ];
 
                 if (array_key_exists($systemBarcode['type'], $typeMapping)) {
@@ -375,16 +375,16 @@ class VariationResponseParser implements VariationResponseParserInterface
             }
 
             $propertyNames = $attributes[$attributeValue['attributeId']]['attributeNames'];
-            $valueNames = $attributes[$attributeValue['attributeId']]['values'][$attributeValue['valueId']]['valueNames'];
+            $valueNames    = $attributes[$attributeValue['attributeId']]['values'][$attributeValue['valueId']]['valueNames'];
 
             $value = Value::fromArray([
-                'value' => $valueNames[0]['name'],
+                'value'        => $valueNames[0]['name'],
                 'translations' => $this->getVariationPropertyValueTranslations($valueNames),
             ]);
 
             $result[] = Property::fromArray([
-                'name' => $propertyNames[0]['name'],
-                'values' => [$value],
+                'name'         => $propertyNames[0]['name'],
+                'values'       => [$value],
                 'translations' => $this->getVariationPropertyTranslations($propertyNames),
             ]);
         }
@@ -404,8 +404,8 @@ class VariationResponseParser implements VariationResponseParserInterface
         foreach ($names as $name) {
             $languageIdentifier = $this->identityService->findOneBy([
                 'adapterIdentifier' => $name['lang'],
-                'adapterName' => PlentymarketsAdapter::NAME,
-                'objectType' => Language::TYPE,
+                'adapterName'       => PlentymarketsAdapter::NAME,
+                'objectType'        => Language::TYPE,
             ]);
 
             if (null === $languageIdentifier) {
@@ -414,8 +414,8 @@ class VariationResponseParser implements VariationResponseParserInterface
 
             $translations[] = Translation::fromArray([
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                'property' => 'value',
-                'value' => $name['name'],
+                'property'           => 'value',
+                'value'              => $name['name'],
             ]);
         }
 
@@ -434,8 +434,8 @@ class VariationResponseParser implements VariationResponseParserInterface
         foreach ($names as $name) {
             $languageIdentifier = $this->identityService->findOneBy([
                 'adapterIdentifier' => $name['lang'],
-                'adapterName' => PlentymarketsAdapter::NAME,
-                'objectType' => Language::TYPE,
+                'adapterName'       => PlentymarketsAdapter::NAME,
+                'objectType'        => Language::TYPE,
             ]);
 
             if (null === $languageIdentifier) {
@@ -444,8 +444,8 @@ class VariationResponseParser implements VariationResponseParserInterface
 
             $translations[] = Translation::fromArray([
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                'property' => 'name',
-                'value' => $name['name'],
+                'property'           => 'name',
+                'value'              => $name['name'],
             ]);
         }
 

@@ -72,10 +72,10 @@ class Identity
      */
     public function __construct($objectIdentifier, $objectType, $adapterIdentifier, $adapterName)
     {
-        $this->objectIdentifier = $objectIdentifier;
-        $this->objectType = $objectType;
+        $this->objectIdentifier  = $objectIdentifier;
+        $this->objectType        = $objectType;
         $this->adapterIdentifier = $adapterIdentifier;
-        $this->adapterName = $adapterName;
+        $this->adapterName       = $adapterName;
     }
 
     /**

@@ -48,8 +48,8 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         IdentityServiceInterface $identityService,
         OrderRequestGeneratorInterface $orderRequestGeneretor
     ) {
-        $this->client = $client;
-        $this->identityService = $identityService;
+        $this->client                = $client;
+        $this->identityService       = $identityService;
         $this->orderRequestGeneretor = $orderRequestGeneretor;
     }
 
@@ -78,8 +78,8 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
 
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => $order->getIdentifier(),
-            'objectType' => Order::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => Order::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         if ($identity !== null) {
@@ -132,8 +132,8 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     {
         $shopIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $order->getShopIdentifier(),
-            'objectType' => Shop::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => Shop::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         if (null === $shopIdentity) {
@@ -164,8 +164,8 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     {
         $orderIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $order->getIdentifier(),
-            'objectType' => Order::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => Order::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         if (null === $orderIdentity) {
@@ -174,9 +174,9 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
 
         foreach ($order->getComments() as $comment) {
             $commentParams = [
-                'referenceType' => 'order',
-                'referenceValue' => $orderIdentity->getAdapterIdentifier(),
-                'text' => $comment->getComment(),
+                'referenceType'       => 'order',
+                'referenceValue'      => $orderIdentity->getAdapterIdentifier(),
+                'text'                => $comment->getComment(),
                 'isVisibleForContact' => $comment->getType() === Comment::TYPE_CUSTOMER,
             ];
 

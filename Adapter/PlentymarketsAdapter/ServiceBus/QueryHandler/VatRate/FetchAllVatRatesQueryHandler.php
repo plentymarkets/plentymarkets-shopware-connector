@@ -36,7 +36,7 @@ class FetchAllVatRatesQueryHandler implements QueryHandlerInterface
         ClientInterface $client,
         VatRateResponseParserInterface $responseParser
     ) {
-        $this->client = $client;
+        $this->client         = $client;
         $this->responseParser = $responseParser;
     }
 

@@ -52,10 +52,10 @@ class FetchBundleQueryHandler implements QueryHandlerInterface
         IdentityServiceInterface $identityService,
         BundleResponseParserInterface $responseParser
     ) {
-        $this->itemApi = $itemApi;
-        $this->variationApi = $variationApi;
+        $this->itemApi         = $itemApi;
+        $this->variationApi    = $variationApi;
         $this->identityService = $identityService;
-        $this->responseParser = $responseParser;
+        $this->responseParser  = $responseParser;
     }
 
     /**
@@ -78,8 +78,8 @@ class FetchBundleQueryHandler implements QueryHandlerInterface
     {
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => $query->getObjectIdentifier(),
-            'objectType' => Bundle::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => Bundle::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         if (null === $identity) {

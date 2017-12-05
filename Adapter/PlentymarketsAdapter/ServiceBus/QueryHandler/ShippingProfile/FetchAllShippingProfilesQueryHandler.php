@@ -36,7 +36,7 @@ class FetchAllShippingProfilesQueryHandler implements QueryHandlerInterface
         ClientInterface $client,
         ShippingProfileResponseParserInterface $responseParser
     ) {
-        $this->client = $client;
+        $this->client         = $client;
         $this->responseParser = $responseParser;
     }
 

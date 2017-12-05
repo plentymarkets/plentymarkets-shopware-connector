@@ -28,7 +28,7 @@ class ConnectorTest extends TestCase
         $testElement->expects($this->once())->method('getType')->willReturn('TestType');
 
         $command = $this->createMock(CommandInterface::class);
-        $query = $this->createMock(QueryInterface::class);
+        $query   = $this->createMock(QueryInterface::class);
 
         $serviceBus = $this->createMock(ServiceBusInterface::class);
         $serviceBus->method('handle')
@@ -58,7 +58,7 @@ class ConnectorTest extends TestCase
         $definition->method('isActive')->willReturn(true);
 
         $outputHandler = $this->createMock(OutputHandlerInterface::class);
-        $logger = $this->createMock(LoggerInterface::class);
+        $logger        = $this->createMock(LoggerInterface::class);
 
         $connector = new Connector($serviceBus, $queryFactory, $commandFactory, $outputHandler, $logger);
         $connector->addDefinition($definition);
@@ -73,7 +73,7 @@ class ConnectorTest extends TestCase
         $testElement->expects($this->once())->method('getType')->willReturn('TestType');
 
         $command = $this->createMock(CommandInterface::class);
-        $query = $this->createMock(QueryInterface::class);
+        $query   = $this->createMock(QueryInterface::class);
 
         $serviceBus = $this->createMock(ServiceBusInterface::class);
         $serviceBus->method('handle')
@@ -104,7 +104,7 @@ class ConnectorTest extends TestCase
         $definition->method('isActive')->willReturn(true);
 
         $outputHandler = $this->createMock(OutputHandlerInterface::class);
-        $logger = $this->createMock(LoggerInterface::class);
+        $logger        = $this->createMock(LoggerInterface::class);
 
         $connector = new Connector($serviceBus, $queryFactory, $commandFactory, $outputHandler, $logger);
         $connector->addDefinition($definition);
@@ -117,7 +117,7 @@ class ConnectorTest extends TestCase
         $testElement->expects($this->once())->method('getType')->willReturn('TestType');
 
         $command = $this->createMock(CommandInterface::class);
-        $query = $this->createMock(QueryInterface::class);
+        $query   = $this->createMock(QueryInterface::class);
 
         $serviceBus = $this->createMock(ServiceBusInterface::class);
         $serviceBus->method('handle')
@@ -147,7 +147,7 @@ class ConnectorTest extends TestCase
         $definition->method('isActive')->willReturn(true);
 
         $outputHandler = $this->createMock(OutputHandlerInterface::class);
-        $logger = $this->createMock(LoggerInterface::class);
+        $logger        = $this->createMock(LoggerInterface::class);
 
         $connector = new Connector($serviceBus, $queryFactory, $commandFactory, $outputHandler, $logger);
         $connector->addDefinition($definition);

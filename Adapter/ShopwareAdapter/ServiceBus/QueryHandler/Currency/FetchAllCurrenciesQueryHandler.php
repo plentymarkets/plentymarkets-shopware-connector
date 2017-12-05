@@ -38,7 +38,7 @@ class FetchAllCurrenciesQueryHandler implements QueryHandlerInterface
         EntityManagerInterface $entityManager,
         CurrencyResponseParserInterface $responseParser
     ) {
-        $this->entityManager = $entityManager;
+        $this->entityManager  = $entityManager;
         $this->responseParser = $responseParser;
     }
 

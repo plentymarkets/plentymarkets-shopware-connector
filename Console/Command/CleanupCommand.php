@@ -45,8 +45,8 @@ class CleanupCommand extends ShopwareCommand
         OutputHandlerInterface $outputHandler
     ) {
         $this->cleanupService = $cleanupService;
-        $this->logger = $logger;
-        $this->outputHandler = $outputHandler;
+        $this->logger         = $logger;
+        $this->outputHandler  = $outputHandler;
 
         parent::__construct();
     }

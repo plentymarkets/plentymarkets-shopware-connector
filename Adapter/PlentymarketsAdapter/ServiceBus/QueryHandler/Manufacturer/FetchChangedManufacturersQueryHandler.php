@@ -56,10 +56,10 @@ class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
         LoggerInterface $logger,
         OutputHandlerInterface $outputHandler
     ) {
-        $this->client = $client;
+        $this->client         = $client;
         $this->responseParser = $responseParser;
-        $this->logger = $logger;
-        $this->outputHandler = $outputHandler;
+        $this->logger         = $logger;
+        $this->outputHandler  = $outputHandler;
     }
 
     /**
@@ -78,7 +78,7 @@ class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $lastCangedTime = $this->getChangedDateTime();
+        $lastCangedTime  = $this->getChangedDateTime();
         $currentDateTime = $this->getCurrentDateTime();
 
         $elements = $this->client->getIterator('items/manufacturers', [

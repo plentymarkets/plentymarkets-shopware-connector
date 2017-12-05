@@ -39,7 +39,7 @@ class VariationRequestGenerator implements VariationRequestGeneratorInterface
         IdentityServiceInterface $identityService,
         CustomerGroupDataProviderInterface $customerGroupDataProvider
     ) {
-        $this->identityService = $identityService;
+        $this->identityService           = $identityService;
         $this->customerGroupDataProvider = $customerGroupDataProvider;
     }
 
@@ -50,8 +50,8 @@ class VariationRequestGenerator implements VariationRequestGeneratorInterface
     {
         $unitIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $variation->getUnitIdentifier(),
-            'objectType' => Unit::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => Unit::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         if (null === $unitIdentity) {
@@ -60,8 +60,8 @@ class VariationRequestGenerator implements VariationRequestGeneratorInterface
 
         $productIdentitiy = $this->identityService->findOneBy([
             'objectIdentifier' => $variation->getProductIdentifier(),
-            'objectType' => Product::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => Product::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         if (null === $productIdentitiy) {
@@ -69,28 +69,28 @@ class VariationRequestGenerator implements VariationRequestGeneratorInterface
         }
 
         $shopwareVariation = [
-            'articleId' => $productIdentitiy->getAdapterIdentifier(),
-            'number' => $variation->getNumber(),
-            'position' => $variation->getPosition(),
-            'unitId' => $unitIdentity->getAdapterIdentifier(),
-            'active' => $variation->getActive(),
-            'kind' => $variation->isMain() ? 1 : 2,
-            'isMain' => $variation->isMain(),
-            'standard' => $variation->isMain(),
-            'shippingtime' => $variation->getShippingTime(),
-            'prices' => $this->getPrices($variation),
+            'articleId'      => $productIdentitiy->getAdapterIdentifier(),
+            'number'         => $variation->getNumber(),
+            'position'       => $variation->getPosition(),
+            'unitId'         => $unitIdentity->getAdapterIdentifier(),
+            'active'         => $variation->getActive(),
+            'kind'           => $variation->isMain() ? 1 : 2,
+            'isMain'         => $variation->isMain(),
+            'standard'       => $variation->isMain(),
+            'shippingtime'   => $variation->getShippingTime(),
+            'prices'         => $this->getPrices($variation),
             'supplierNumber' => $variation->getModel(),
-            'purchasePrice' => $variation->getPurchasePrice(),
-            'weight' => $variation->getWeight(),
-            'len' => $variation->getLength(),
-            'height' => $variation->getHeight(),
-            'width' => $variation->getWidth(),
-            'images' => $this->getImages($variation),
-            'purchaseUnit' => $variation->getContent(),
-            'referenceUnit' => $variation->getReferenceAmount(),
-            'minPurchase' => $variation->getMinimumOrderQuantity(),
-            'purchaseSteps' => $variation->getIntervalOrderQuantity(),
-            'maxPurchase' => $variation->getMaximumOrderQuantity(),
+            'purchasePrice'  => $variation->getPurchasePrice(),
+            'weight'         => $variation->getWeight(),
+            'len'            => $variation->getLength(),
+            'height'         => $variation->getHeight(),
+            'width'          => $variation->getWidth(),
+            'images'         => $this->getImages($variation),
+            'purchaseUnit'   => $variation->getContent(),
+            'referenceUnit'  => $variation->getReferenceAmount(),
+            'minPurchase'    => $variation->getMinimumOrderQuantity(),
+            'purchaseSteps'  => $variation->getIntervalOrderQuantity(),
+            'maxPurchase'    => $variation->getMaximumOrderQuantity(),
         ];
 
         $releaseData = $variation->getReleaseDate();
@@ -134,8 +134,8 @@ class VariationRequestGenerator implements VariationRequestGeneratorInterface
             } else {
                 $customerGroupIdentity = $this->identityService->findOneBy([
                     'objectIdentifier' => $price->getCustomerGroupIdentifier(),
-                    'objectType' => CustomerGroup::TYPE,
-                    'adapterName' => ShopwareAdapter::NAME,
+                    'objectType'       => CustomerGroup::TYPE,
+                    'adapterName'      => ShopwareAdapter::NAME,
                 ]);
 
                 if (null === $customerGroupIdentity) {
@@ -153,10 +153,10 @@ class VariationRequestGenerator implements VariationRequestGeneratorInterface
 
             $prices[] = [
                 'customerGroupKey' => $customerGroupKey,
-                'price' => $price->getPrice(),
-                'pseudoPrice' => $price->getPseudoPrice(),
-                'from' => $price->getFromAmount(),
-                'to' => $price->getToAmount(),
+                'price'            => $price->getPrice(),
+                'pseudoPrice'      => $price->getPseudoPrice(),
+                'from'             => $price->getFromAmount(),
+                'to'               => $price->getToAmount(),
             ];
         }
 
@@ -175,8 +175,8 @@ class VariationRequestGenerator implements VariationRequestGeneratorInterface
             $shopIdentifiers = array_filter($image->getShopIdentifiers(), function ($shop) {
                 $identity = $this->identityService->findOneBy([
                     'objectIdentifier' => (string) $shop,
-                    'objectType' => Shop::TYPE,
-                    'adapterName' => ShopwareAdapter::NAME,
+                    'objectType'       => Shop::TYPE,
+                    'adapterName'      => ShopwareAdapter::NAME,
                 ]);
 
                 return $identity !== null;
@@ -188,8 +188,8 @@ class VariationRequestGenerator implements VariationRequestGeneratorInterface
 
             $imageIdentity = $this->identityService->findOneBy([
                 'objectIdentifier' => $image->getMediaIdentifier(),
-                'objectType' => Media::TYPE,
-                'adapterName' => ShopwareAdapter::NAME,
+                'objectType'       => Media::TYPE,
+                'adapterName'      => ShopwareAdapter::NAME,
             ]);
 
             if (null === $imageIdentity) {
@@ -197,7 +197,7 @@ class VariationRequestGenerator implements VariationRequestGeneratorInterface
             }
 
             $images[] = [
-                'mediaId' => $imageIdentity->getAdapterIdentifier(),
+                'mediaId'  => $imageIdentity->getAdapterIdentifier(),
                 'position' => $image->getPosition(),
             ];
         }
@@ -216,10 +216,10 @@ class VariationRequestGenerator implements VariationRequestGeneratorInterface
         foreach ($variation->getProperties() as $property) {
             foreach ($property->getValues() as $value) {
                 $configuratorOptions[] = [
-                    'groupId' => null,
-                    'group' => $property->getName(),
+                    'groupId'  => null,
+                    'group'    => $property->getName(),
                     'optionId' => null,
-                    'option' => $value->getValue(),
+                    'option'   => $value->getValue(),
                 ];
             }
         }

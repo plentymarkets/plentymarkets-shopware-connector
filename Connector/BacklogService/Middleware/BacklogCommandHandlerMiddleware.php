@@ -41,7 +41,7 @@ class BacklogCommandHandlerMiddleware implements Middleware
     public function __construct(BacklogServiceInterface $backlogService, LoggerInterface $logger)
     {
         $this->backlogService = $backlogService;
-        $this->logger = $logger;
+        $this->logger         = $logger;
     }
 
     /**
@@ -79,7 +79,7 @@ class BacklogCommandHandlerMiddleware implements Middleware
 
         if ($command instanceof TransferObjectCommand) {
             $context['adapterName'] = $command->getAdapterName();
-            $context['objectType'] = $command->getObjectType();
+            $context['objectType']  = $command->getObjectType();
             $context['commandType'] = $command->getCommandType();
 
             if ($command->getPayload() instanceof TransferObjectInterface) {

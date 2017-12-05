@@ -44,7 +44,7 @@ class PaymentMethodResponseParser implements PaymentMethodResponseParserInterfac
 
         return PaymentMethod::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => $entry['name'],
+            'name'       => $entry['name'],
         ]);
     }
 }

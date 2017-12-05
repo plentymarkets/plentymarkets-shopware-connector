@@ -47,8 +47,8 @@ class HandleStockCommandHandler implements CommandHandlerInterface
         LoggerInterface $logger
     ) {
         $this->identityService = $identityService;
-        $this->entityManager = $entityManager;
-        $this->logger = $logger;
+        $this->entityManager   = $entityManager;
+        $this->logger          = $logger;
     }
 
     /**
@@ -76,8 +76,8 @@ class HandleStockCommandHandler implements CommandHandlerInterface
 
         $variationIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $stock->getVariationIdentifier(),
-            'objectType' => Variation::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => Variation::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         if (null === $variationIdentity) {
@@ -93,7 +93,7 @@ class HandleStockCommandHandler implements CommandHandlerInterface
         );
 
         $variationRespository = $this->entityManager->getRepository(Detail::class);
-        $variation = $variationRespository->find($variationIdentity->getAdapterIdentifier());
+        $variation            = $variationRespository->find($variationIdentity->getAdapterIdentifier());
 
         if (null === $variation) {
             $this->logger->notice('could not find variation - ' . $stock->getVariationIdentifier());

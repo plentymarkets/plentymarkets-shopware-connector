@@ -36,7 +36,7 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
      */
     public function __construct(EntityManagerInterface $entityManager, IdentityServiceInterface $identityService)
     {
-        $this->entityManager = $entityManager;
+        $this->entityManager   = $entityManager;
         $this->identityService = $identityService;
     }
 
@@ -65,11 +65,11 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
 
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => (string) $mediaCategory->getIdentifier(),
-            'objectType' => MediaCategory::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => MediaCategory::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
-        $albumRepository = $this->entityManager->getRepository(Album::class);
+        $albumRepository    = $this->entityManager->getRepository(Album::class);
         $settingsRepository = $this->entityManager->getRepository(Settings::class);
 
         $parent = $albumRepository->findOneBy([
@@ -131,7 +131,7 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
     {
         $connection = $this->entityManager->getConnection();
 
-        $query = 'SELECT max(position) FROM s_media_album WHERE parentId = ?';
+        $query    = 'SELECT max(position) FROM s_media_album WHERE parentId = ?';
         $position = $connection->fetchColumn($query, [$parent->getId()]);
 
         $album = new Album();

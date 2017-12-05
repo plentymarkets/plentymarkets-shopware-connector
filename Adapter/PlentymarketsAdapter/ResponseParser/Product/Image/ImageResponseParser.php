@@ -45,9 +45,9 @@ class ImageResponseParser implements ImageResponseParserInterface
         MediaResponseParserInterface $mediaResponseParser,
         LoggerInterface $logger
     ) {
-        $this->identityService = $identityService;
+        $this->identityService     = $identityService;
         $this->mediaResponseParser = $mediaResponseParser;
-        $this->logger = $logger;
+        $this->logger              = $logger;
     }
 
     /**
@@ -73,11 +73,11 @@ class ImageResponseParser implements ImageResponseParserInterface
 
             $media = $this->mediaResponseParser->parse([
                 'mediaCategory' => MediaCategoryHelper::PRODUCT,
-                'link' => $entry['url'],
-                'name' => $name,
-                'hash' => $entry['md5Checksum'],
+                'link'          => $entry['url'],
+                'name'          => $name,
+                'hash'          => $entry['md5Checksum'],
                 'alternateName' => $alternate,
-                'translations' => $this->getMediaTranslations($entry, $texts),
+                'translations'  => $this->getMediaTranslations($entry, $texts),
             ]);
 
             $result[$media->getIdentifier()] = $media;
@@ -89,8 +89,8 @@ class ImageResponseParser implements ImageResponseParserInterface
             $shopIdentifiers = array_map(function ($shop) {
                 $shopIdentity = $this->identityService->findOneBy([
                     'adapterIdentifier' => (string) $shop['value'],
-                    'adapterName' => PlentymarketsAdapter::NAME,
-                    'objectType' => Shop::TYPE,
+                    'adapterName'       => PlentymarketsAdapter::NAME,
+                    'objectType'        => Shop::TYPE,
                 ]);
 
                 if (null === $shopIdentity) {
@@ -109,7 +109,7 @@ class ImageResponseParser implements ImageResponseParserInterface
         } catch (Exception $exception) {
             $this->logger->notice('error when parsing product image', [
                 'name' => $entry['name'],
-                'url' => $entry['url'],
+                'url'  => $entry['url'],
             ]);
         }
 
@@ -129,8 +129,8 @@ class ImageResponseParser implements ImageResponseParserInterface
         foreach ($image['names'] as $text) {
             $languageIdentifier = $this->identityService->findOneBy([
                 'adapterIdentifier' => $text['lang'],
-                'adapterName' => PlentymarketsAdapter::NAME,
-                'objectType' => Language::TYPE,
+                'adapterName'       => PlentymarketsAdapter::NAME,
+                'objectType'        => Language::TYPE,
             ]);
 
             if (null === $languageIdentifier) {
@@ -151,8 +151,8 @@ class ImageResponseParser implements ImageResponseParserInterface
 
             $translations[] = Translation::fromArray([
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                'property' => 'name',
-                'value' => $name,
+                'property'           => 'name',
+                'value'              => $name,
             ]);
 
             if (!empty($text['alternate'])) {
@@ -169,8 +169,8 @@ class ImageResponseParser implements ImageResponseParserInterface
 
             $translations[] = Translation::fromArray([
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                'property' => 'alternateName',
-                'value' => $alternate,
+                'property'           => 'alternateName',
+                'value'              => $alternate,
             ]);
         }
 

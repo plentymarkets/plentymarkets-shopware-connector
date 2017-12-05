@@ -18,7 +18,7 @@ use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
  */
 class Backlog
 {
-    const STATUS_OPEN = 'open';
+    const STATUS_OPEN      = 'open';
     const STATUS_PROCESSED = 'processed';
 
     /**
@@ -71,7 +71,7 @@ class Backlog
      */
     public function __construct()
     {
-        $this->time = new DateTimeImmutable('now');
+        $this->time   = new DateTimeImmutable('now');
         $this->status = self::STATUS_OPEN;
     }
 

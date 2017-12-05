@@ -38,7 +38,7 @@ class FetchAllVatRatesQueryHandler implements QueryHandlerInterface
         EntityManagerInterface $entityManager,
         VatRateResponseParserInterface $responseParser
     ) {
-        $this->entityManager = $entityManager;
+        $this->entityManager  = $entityManager;
         $this->responseParser = $responseParser;
     }
 

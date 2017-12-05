@@ -38,7 +38,7 @@ class FetchAllUnitsQueryHandler implements QueryHandlerInterface
         EntityManagerInterface $entityManager,
         UnitResponseParserInterface $responseParser
     ) {
-        $this->entityManager = $entityManager;
+        $this->entityManager  = $entityManager;
         $this->responseParser = $responseParser;
     }
 

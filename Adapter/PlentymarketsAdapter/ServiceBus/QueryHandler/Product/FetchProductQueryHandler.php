@@ -44,9 +44,9 @@ class FetchProductQueryHandler implements QueryHandlerInterface
         IdentityServiceInterface $identityService,
         ProductResponseParserInterface $responseParser
     ) {
-        $this->itemApi = $itemApi;
+        $this->itemApi         = $itemApi;
         $this->identityService = $identityService;
-        $this->responseParser = $responseParser;
+        $this->responseParser  = $responseParser;
     }
 
     /**
@@ -69,8 +69,8 @@ class FetchProductQueryHandler implements QueryHandlerInterface
     {
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => $query->getObjectIdentifier(),
-            'objectType' => Product::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => Product::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         if (null === $identity) {

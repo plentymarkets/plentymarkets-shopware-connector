@@ -42,7 +42,7 @@ class UnitResponseParser implements UnitResponseParserInterface
 
         return Unit::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => $name,
+            'name'       => $name,
         ]);
     }
 }

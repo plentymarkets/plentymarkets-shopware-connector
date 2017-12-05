@@ -56,10 +56,10 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
         EntityManagerInterface $entityManager,
         AttributeDataPersisterInterface $attributeDataPersister
     ) {
-        $this->identityService = $identityService;
+        $this->identityService           = $identityService;
         $this->variationRequestGenerator = $variationRequestGenerator;
-        $this->entityManager = $entityManager;
-        $this->attributeDataPersister = $attributeDataPersister;
+        $this->entityManager             = $entityManager;
+        $this->attributeDataPersister    = $attributeDataPersister;
     }
 
     /**
@@ -87,17 +87,17 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
 
         $productIdentitiy = $this->identityService->findOneBy([
             'objectIdentifier' => $variation->getProductIdentifier(),
-            'objectType' => Product::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => Product::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         if (null === $productIdentitiy) {
             return false;
         }
 
-        $variationParams = $this->variationRequestGenerator->generate($variation);
+        $variationParams   = $this->variationRequestGenerator->generate($variation);
         $variantRepository = $this->entityManager->getRepository(Detail::class);
-        $variant = $variantRepository->findOneBy(['number' => $variation->getNumber()]);
+        $variant           = $variantRepository->findOneBy(['number' => $variation->getNumber()]);
 
         $resource = $this->getVariationResource();
 
@@ -109,8 +109,8 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
 
         $identities = $this->identityService->findBy([
             'objectIdentifier' => $variation->getIdentifier(),
-            'objectType' => Variation::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => Variation::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         $foundIdentity = false;
@@ -156,7 +156,7 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
         $this->entityManager->getConnection()->update(
             's_articles',
             ['main_detail_id' => $variant->getId()],
-            ['id' => $variant->getArticle()->getId()]
+            ['id'             => $variant->getArticle()->getId()]
         );
     }
 

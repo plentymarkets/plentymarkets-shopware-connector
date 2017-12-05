@@ -64,11 +64,11 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
         AttributeHelper $attributeHelper,
         AttributeDataPersisterInterface $attributePersister
     ) {
-        $this->identityService = $identityService;
+        $this->identityService       = $identityService;
         $this->mediaRequestGenerator = $mediaRequestGenerator;
-        $this->mediaDataProvider = $mediaDataProvider;
-        $this->attributeHelper = $attributeHelper;
-        $this->attributePersister = $attributePersister;
+        $this->mediaDataProvider     = $mediaDataProvider;
+        $this->attributeHelper       = $attributeHelper;
+        $this->attributePersister    = $attributePersister;
     }
 
     /**
@@ -105,8 +105,8 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
 
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => (string) $media->getIdentifier(),
-            'objectType' => Media::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => Media::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         $resource = $this->getMediaResource();
@@ -119,10 +119,10 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
             }
 
             $identities = $this->identityService->findBy([
-                'objectIdentifier' => $identity->getObjectIdentifier(),
-                'objectType' => Media::TYPE,
+                'objectIdentifier'  => $identity->getObjectIdentifier(),
+                'objectType'        => Media::TYPE,
                 'adapterIdentifier' => $identity->getAdapterIdentifier(),
-                'adapterName' => $identity->getAdapterName(),
+                'adapterName'       => $identity->getAdapterName(),
             ]);
 
             array_walk($identities, function (Identity $identity) {
@@ -130,7 +130,7 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
             });
         }
 
-        $params = $this->mediaRequestGenerator->generate($media);
+        $params     = $this->mediaRequestGenerator->generate($media);
         $mediaModel = $resource->create($params);
 
         $this->identityService->create(

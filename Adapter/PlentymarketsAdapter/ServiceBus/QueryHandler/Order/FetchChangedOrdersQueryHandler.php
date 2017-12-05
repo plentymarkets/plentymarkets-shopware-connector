@@ -56,10 +56,10 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
         LoggerInterface $logger,
         OutputHandlerInterface $outputHandler
     ) {
-        $this->api = $api;
+        $this->api            = $api;
         $this->responseParser = $responseParser;
-        $this->logger = $logger;
-        $this->outputHandler = $outputHandler;
+        $this->logger         = $logger;
+        $this->outputHandler  = $outputHandler;
     }
 
     /**
@@ -78,12 +78,12 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $lastCangedTime = $this->getChangedDateTime();
+        $lastCangedTime  = $this->getChangedDateTime();
         $currentDateTime = $this->getCurrentDateTime();
 
         $criteria = [
             'updatedAtFrom' => $lastCangedTime->format(DATE_W3C),
-            'updatedAtTo' => $currentDateTime->format(DATE_W3C),
+            'updatedAtTo'   => $currentDateTime->format(DATE_W3C),
         ];
 
         $elements = $this->api->findBy($criteria);

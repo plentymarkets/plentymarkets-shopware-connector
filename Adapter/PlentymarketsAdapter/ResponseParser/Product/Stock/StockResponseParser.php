@@ -44,8 +44,8 @@ class StockResponseParser implements StockResponseParserInterface
         ClientInterface $client
     ) {
         $this->identityService = $identityService;
-        $this->config = $config;
-        $this->client = $client;
+        $this->config          = $config;
+        $this->client          = $client;
     }
 
     /**
@@ -55,8 +55,8 @@ class StockResponseParser implements StockResponseParserInterface
     {
         $variationIdentity = $this->identityService->findOneBy([
             'adapterIdentifier' => (string) $variation['id'],
-            'adapterName' => PlentymarketsAdapter::NAME,
-            'objectType' => Variation::TYPE,
+            'adapterName'       => PlentymarketsAdapter::NAME,
+            'objectType'        => Variation::TYPE,
         ]);
 
         if (null === $variationIdentity) {
@@ -84,7 +84,7 @@ class StockResponseParser implements StockResponseParserInterface
      */
     private function getStock($variation)
     {
-        $arrayStocks = [];
+        $arrayStocks   = [];
         $itemWarehouse = (int) $this->config->get('item_warehouse', 0);
 
         static $warehouses;

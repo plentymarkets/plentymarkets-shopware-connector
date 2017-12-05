@@ -69,8 +69,8 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
 
         $vatRateIdentity = $this->identityService->findOneBy([
             'adapterIdentifier' => (string) $entry['taxId'],
-            'adapterName' => ShopwareAdapter::NAME,
-            'objectType' => VatRate::TYPE,
+            'adapterName'       => ShopwareAdapter::NAME,
+            'objectType'        => VatRate::TYPE,
         ]);
 
         if (null === $vatRateIdentity) {
@@ -92,13 +92,13 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
          * @var OrderItem $orderItem
          */
         $orderItem = OrderItem::fromArray([
-            'type' => OrderItem::TYPE_PRODUCT,
-            'quantity' => (float) $entry['quantity'],
-            'name' => $entry['articleName'],
-            'number' => $entry['articleNumber'],
-            'price' => (float) $entry['price'],
+            'type'              => OrderItem::TYPE_PRODUCT,
+            'quantity'          => (float) $entry['quantity'],
+            'name'              => $entry['articleName'],
+            'number'            => $entry['articleNumber'],
+            'price'             => (float) $entry['price'],
             'vatRateIdentifier' => $taxFree ? null : $this->getVatRateIdentifier($entry),
-            'attributes' => $this->getAttributes($entry['attribute']),
+            'attributes'        => $this->getAttributes($entry['attribute']),
         ]);
 
         return $orderItem;
@@ -116,13 +116,13 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
          * @var OrderItem $orderItem
          */
         $orderItem = OrderItem::fromArray([
-            'type' => OrderItem::TYPE_DISCOUNT,
-            'quantity' => (float) $entry['quantity'],
-            'name' => $entry['articleName'],
-            'number' => $entry['articleNumber'],
-            'price' => (float) $entry['price'],
+            'type'              => OrderItem::TYPE_DISCOUNT,
+            'quantity'          => (float) $entry['quantity'],
+            'name'              => $entry['articleName'],
+            'number'            => $entry['articleNumber'],
+            'price'             => (float) $entry['price'],
             'vatRateIdentifier' => $taxFree ? null : $this->getVatRateIdentifier($entry),
-            'attributes' => $this->getAttributes($entry['attribute']),
+            'attributes'        => $this->getAttributes($entry['attribute']),
         ]);
 
         return $orderItem;
@@ -140,13 +140,13 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
          * @var OrderItem $orderItem
          */
         $orderItem = OrderItem::fromArray([
-            'type' => OrderItem::TYPE_PAYMENT_SURCHARGE,
-            'quantity' => (float) $entry['quantity'],
-            'name' => $entry['articleName'],
-            'number' => $entry['articleNumber'],
-            'price' => (float) $entry['price'],
+            'type'              => OrderItem::TYPE_PAYMENT_SURCHARGE,
+            'quantity'          => (float) $entry['quantity'],
+            'name'              => $entry['articleName'],
+            'number'            => $entry['articleNumber'],
+            'price'             => (float) $entry['price'],
             'vatRateIdentifier' => $taxFree ? null : $this->getVatRateIdentifier($entry),
-            'attributes' => $this->getAttributes($entry['attribute']),
+            'attributes'        => $this->getAttributes($entry['attribute']),
         ]);
 
         return $orderItem;
@@ -164,13 +164,13 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
          * @var OrderItem $orderItem
          */
         $orderItem = OrderItem::fromArray([
-            'type' => OrderItem::TYPE_VOUCHER,
-            'quantity' => (float) $entry['quantity'],
-            'name' => $entry['articleName'],
-            'number' => $entry['articleNumber'],
-            'price' => (float) $entry['price'],
+            'type'              => OrderItem::TYPE_VOUCHER,
+            'quantity'          => (float) $entry['quantity'],
+            'name'              => $entry['articleName'],
+            'number'            => $entry['articleNumber'],
+            'price'             => (float) $entry['price'],
             'vatRateIdentifier' => $taxFree ? null : $this->getVatRateIdentifier($entry),
-            'attributes' => $this->getAttributes($entry['attribute']),
+            'attributes'        => $this->getAttributes($entry['attribute']),
         ]);
 
         return $orderItem;

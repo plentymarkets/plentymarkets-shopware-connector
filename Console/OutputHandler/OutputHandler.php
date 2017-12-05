@@ -45,10 +45,10 @@ class OutputHandler implements OutputHandlerInterface
     public function initialize(InputInterface $input, OutputInterface $output)
     {
         $this->output = $output;
-        $this->input = $input;
+        $this->input  = $input;
 
         $this->verbosity = $output->getVerbosity();
-        $this->style = new SymfonyStyle($input, $output);
+        $this->style     = new SymfonyStyle($input, $output);
     }
 
     /**

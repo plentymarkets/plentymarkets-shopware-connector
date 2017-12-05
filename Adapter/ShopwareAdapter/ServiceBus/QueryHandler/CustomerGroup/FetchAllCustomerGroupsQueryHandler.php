@@ -38,7 +38,7 @@ class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
         EntityManagerInterface $entityManager,
         CustomerGroupResponseParserInterface $responseParser
     ) {
-        $this->entityManager = $entityManager;
+        $this->entityManager  = $entityManager;
         $this->responseParser = $responseParser;
     }
 

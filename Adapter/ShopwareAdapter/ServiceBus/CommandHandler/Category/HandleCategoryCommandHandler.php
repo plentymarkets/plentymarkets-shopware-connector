@@ -78,11 +78,11 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         EntityManagerInterface $entityManager,
         AttributeDataPersisterInterface $attributePersister
     ) {
-        $this->identityService = $identityService;
-        $this->translationHelper = $translationHelper;
-        $this->entityManager = $entityManager;
+        $this->identityService    = $identityService;
+        $this->translationHelper  = $translationHelper;
+        $this->entityManager      = $entityManager;
         $this->categoryRepository = $entityManager->getRepository(CategoryModel::class);
-        $this->shopRepository = $entityManager->getRepository(ShopModel::class);
+        $this->shopRepository     = $entityManager->getRepository(ShopModel::class);
         $this->attributePersister = $attributePersister;
     }
 
@@ -113,8 +113,8 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         foreach ($category->getShopIdentifiers() as $shopIdentifier) {
             $shopIdentities = $this->identityService->findBy([
                 'objectIdentifier' => (string) $shopIdentifier,
-                'objectType' => Shop::TYPE,
-                'adapterName' => ShopwareAdapter::NAME,
+                'objectType'       => Shop::TYPE,
+                'adapterName'      => ShopwareAdapter::NAME,
             ]);
 
             if (empty($shopIdentities)) {
@@ -128,7 +128,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
                     continue;
                 }
 
-                $identifier = $identity->getObjectIdentifier();
+                $identifier                   = $identity->getObjectIdentifier();
                 $validIdentities[$identifier] = $identifier;
             }
         }
@@ -157,12 +157,12 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         }
 
         $attributes[] = Attribute::fromArray([
-            'key' => 'shopIdentifier',
+            'key'   => 'shopIdentifier',
             'value' => $shopIdentity->getAdapterIdentifier(),
         ]);
 
         $attributes[] = Attribute::fromArray([
-            'key' => 'metaRobots',
+            'key'   => 'metaRobots',
             'value' => $category->getMetaRobots(),
         ]);
 
@@ -182,7 +182,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     {
         $deepCopy = new DeepCopy();
         $category = $deepCopy->copy($category);
-        $shop = $this->shopRepository->find($shopIdentity->getAdapterIdentifier());
+        $shop     = $this->shopRepository->find($shopIdentity->getAdapterIdentifier());
 
         if (null === $shop) {
             return null;
@@ -198,8 +198,8 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
 
         $languageIdentity = $this->identityService->findOneBy([
             'adapterIdentifier' => (string) $shopLocale->getId(),
-            'adapterName' => ShopwareAdapter::NAME,
-            'objectType' => Language::TYPE,
+            'adapterName'       => ShopwareAdapter::NAME,
+            'objectType'        => Language::TYPE,
         ]);
 
         if (null !== $languageIdentity) {
@@ -224,8 +224,8 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         } else {
             $parentCategoryIdentities = $this->identityService->findBy([
                 'objectIdentifier' => (string) $category->getParentIdentifier(),
-                'objectType' => Category::TYPE,
-                'adapterName' => ShopwareAdapter::NAME,
+                'objectType'       => Category::TYPE,
+                'adapterName'      => ShopwareAdapter::NAME,
             ]);
 
             $possibleIdentities = array_filter($parentCategoryIdentities, function (Identity $identity) use ($shopIdentity) {
@@ -249,8 +249,8 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
 
         $categoryIdentities = $this->identityService->findBy([
             'objectIdentifier' => $category->getIdentifier(),
-            'objectType' => Category::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => Category::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         $possibleIdentities = array_filter($categoryIdentities, function (Identity $identity) use ($shopIdentity) {
@@ -289,25 +289,25 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         }
 
         $params = [
-            'active' => $category->getActive(),
-            'position' => $category->getPosition(),
-            'name' => $category->getName(),
-            'parent' => $parentCategory,
-            'metaTitle' => $category->getMetaTitle(),
-            'metaKeywords' => $category->getMetaKeywords(),
+            'active'          => $category->getActive(),
+            'position'        => $category->getPosition(),
+            'name'            => $category->getName(),
+            'parent'          => $parentCategory,
+            'metaTitle'       => $category->getMetaTitle(),
+            'metaKeywords'    => $category->getMetaKeywords(),
             'metaDescription' => $category->getMetaDescription(),
-            'cmsHeadline' => $category->getDescription(),
-            'cmsText' => $category->getLongDescription(),
+            'cmsHeadline'     => $category->getDescription(),
+            'cmsText'         => $category->getLongDescription(),
         ];
 
         if (!empty($category->getImageIdentifiers())) {
             $mediaIdentifiers = $category->getImageIdentifiers();
-            $mediaIdentifier = array_shift($mediaIdentifiers);
+            $mediaIdentifier  = array_shift($mediaIdentifiers);
 
             $mediaIdentity = $this->identityService->findOneBy([
                 'objectIdentifier' => (string) $mediaIdentifier,
-                'objectType' => Media::TYPE,
-                'adapterName' => ShopwareAdapter::NAME,
+                'objectType'       => Media::TYPE,
+                'adapterName'      => ShopwareAdapter::NAME,
             ]);
 
             if (null === $mediaIdentity) {
@@ -354,7 +354,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     private function findExistingCategory(Category $category, $parentCategory)
     {
         $existingCategory = $this->categoryRepository->findOneBy([
-            'name' => $category->getName(),
+            'name'     => $category->getName(),
             'parentId' => $parentCategory,
         ]);
 
@@ -376,7 +376,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         $connection = $this->entityManager->getConnection();
 
         try {
-            $query = 'SELECT categoryID FROM s_categories_attributes WHERE categoryID = ? AND plenty_connector_shop_identifier = ?';
+            $query     = 'SELECT categoryID FROM s_categories_attributes WHERE categoryID = ? AND plenty_connector_shop_identifier = ?';
             $attribute = $connection->fetchColumn($query, [
                 $categoryIdentity->getAdapterIdentifier(),
                 $shopIdentity->getAdapterIdentifier(),
@@ -396,8 +396,8 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     {
         $categoryIdentities = $this->identityService->findBy([
             'objectIdentifier' => $category->getIdentifier(),
-            'objectType' => Category::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => Category::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         foreach ($categoryIdentities as $identity) {
@@ -416,7 +416,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             }
 
             $params = [
-                'name' => $category->getName(),
+                'name'   => $category->getName(),
                 'active' => false,
             ];
 

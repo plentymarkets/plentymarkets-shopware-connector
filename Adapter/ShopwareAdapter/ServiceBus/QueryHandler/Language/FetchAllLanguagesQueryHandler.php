@@ -38,7 +38,7 @@ class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
         EntityManagerInterface $entityManager,
         LanguageResponseParserInterface $responseParser
     ) {
-        $this->entityManager = $entityManager;
+        $this->entityManager  = $entityManager;
         $this->responseParser = $responseParser;
     }
 

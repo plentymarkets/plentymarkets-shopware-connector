@@ -47,11 +47,11 @@ class ConsoleHandler extends AbstractProcessingHandler implements EventSubscribe
      * @var array
      */
     private $verbosityLevelMap = [
-        OutputInterface::VERBOSITY_QUIET => Logger::ERROR,
-        OutputInterface::VERBOSITY_NORMAL => Logger::WARNING,
-        OutputInterface::VERBOSITY_VERBOSE => Logger::NOTICE,
+        OutputInterface::VERBOSITY_QUIET        => Logger::ERROR,
+        OutputInterface::VERBOSITY_NORMAL       => Logger::WARNING,
+        OutputInterface::VERBOSITY_VERBOSE      => Logger::NOTICE,
         OutputInterface::VERBOSITY_VERY_VERBOSE => Logger::INFO,
-        OutputInterface::VERBOSITY_DEBUG => Logger::DEBUG,
+        OutputInterface::VERBOSITY_DEBUG        => Logger::DEBUG,
     ];
 
     /**
@@ -80,7 +80,7 @@ class ConsoleHandler extends AbstractProcessingHandler implements EventSubscribe
     public static function getSubscribedEvents()
     {
         return [
-            ConsoleEvents::COMMAND => ['onCommand', 255],
+            ConsoleEvents::COMMAND   => ['onCommand', 255],
             ConsoleEvents::TERMINATE => ['onTerminate', -255],
         ];
     }

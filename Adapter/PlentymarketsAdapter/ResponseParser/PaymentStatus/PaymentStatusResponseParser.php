@@ -43,7 +43,7 @@ class PaymentStatusResponseParser implements PaymentStatusResponseParserInterfac
 
         return PaymentStatus::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => $this->getName($entry),
+            'name'       => $this->getName($entry),
         ]);
     }
 

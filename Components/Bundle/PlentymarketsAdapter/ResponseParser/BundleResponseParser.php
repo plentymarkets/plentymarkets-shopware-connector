@@ -55,10 +55,10 @@ class BundleResponseParser implements BundleResponseParserInterface
         ClientInterface $client,
         LoggerInterface $logger
     ) {
-        $this->identityService = $identityService;
+        $this->identityService     = $identityService;
         $this->priceResponseParser = $priceResponseParser;
-        $this->client = $client;
-        $this->logger = $logger;
+        $this->client              = $client;
+        $this->logger              = $logger;
     }
 
     /**
@@ -94,8 +94,8 @@ class BundleResponseParser implements BundleResponseParserInterface
     {
         $vatRateIdentity = $this->identityService->findOneBy([
             'adapterIdentifier' => $variation['vatId'],
-            'adapterName' => PlentymarketsAdapter::NAME,
-            'objectType' => VatRate::TYPE,
+            'adapterName'       => PlentymarketsAdapter::NAME,
+            'objectType'        => VatRate::TYPE,
         ]);
 
         if (null === $vatRateIdentity) {
@@ -121,8 +121,8 @@ class BundleResponseParser implements BundleResponseParserInterface
 
         $productIdentity = $this->identityService->findOneBy([
             'adapterIdentifier' => (string) $product['id'],
-            'adapterName' => PlentymarketsAdapter::NAME,
-            'objectType' => Product::TYPE,
+            'adapterName'       => PlentymarketsAdapter::NAME,
+            'objectType'        => Product::TYPE,
         ]);
 
         if (null === $productIdentity) {
@@ -188,8 +188,8 @@ class BundleResponseParser implements BundleResponseParserInterface
         foreach ($product['texts'] as $text) {
             $languageIdentifier = $this->identityService->findOneBy([
                 'adapterIdentifier' => $text['lang'],
-                'adapterName' => PlentymarketsAdapter::NAME,
-                'objectType' => Language::TYPE,
+                'adapterName'       => PlentymarketsAdapter::NAME,
+                'objectType'        => Language::TYPE,
             ]);
 
             if (null === $languageIdentifier) {
@@ -198,8 +198,8 @@ class BundleResponseParser implements BundleResponseParserInterface
 
             $translations[] = Translation::fromArray([
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                'property' => 'name',
-                'value' => $text['name1'],
+                'property'           => 'name',
+                'value'              => $text['name1'],
             ]);
         }
 
@@ -211,7 +211,7 @@ class BundleResponseParser implements BundleResponseParserInterface
      */
     private function addProductNumberToResponse(array &$elements)
     {
-        $ids = implode(',', array_column($elements, 'componentVariationId'));
+        $ids        = implode(',', array_column($elements, 'componentVariationId'));
         $variations = $this->client->request('GET', 'items/variations', ['id' => $ids]);
 
         foreach ($elements as &$element) {
@@ -236,7 +236,7 @@ class BundleResponseParser implements BundleResponseParserInterface
      */
     private function getBundleProducts(array $variation)
     {
-        $url = 'items/' . $variation['itemId'] . '/variations/' . $variation['id'] . '/variation_bundles';
+        $url      = 'items/' . $variation['itemId'] . '/variations/' . $variation['id'] . '/variation_bundles';
         $elements = $this->client->request('GET', $url);
 
         $this->addProductNumberToResponse($elements);

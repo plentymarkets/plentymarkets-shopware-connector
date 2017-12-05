@@ -45,7 +45,7 @@ class ValidatorService implements ValidatorServiceInterface
             });
 
             $parents[] = $object;
-            $methods = get_class_methods($object);
+            $methods   = get_class_methods($object);
 
             $methods = array_filter($methods, function ($method) {
                 return 0 === stripos($method, 'get');

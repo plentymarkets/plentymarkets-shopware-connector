@@ -38,7 +38,7 @@ class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
         EntityManagerInterface $entityManager,
         PaymentStatusResponseParserInterface $responseParser
     ) {
-        $this->entityManager = $entityManager;
+        $this->entityManager  = $entityManager;
         $this->responseParser = $responseParser;
     }
 

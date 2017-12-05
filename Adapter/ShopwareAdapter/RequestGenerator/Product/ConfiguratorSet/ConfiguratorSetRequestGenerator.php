@@ -48,8 +48,8 @@ class ConfiguratorSetRequestGenerator implements ConfiguratorSetRequestGenerator
         }
 
         return [
-            'name' => $product->getName(),
-            'type' => (int) $this->config->get('product_configurator_type', 0),
+            'name'   => $product->getName(),
+            'type'   => (int) $this->config->get('product_configurator_type', 0),
             'groups' => $groups,
         ];
     }

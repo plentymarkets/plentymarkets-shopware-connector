@@ -39,7 +39,7 @@ class MediaCategoryResponseParser implements MediaCategoryResponseParserInterfac
 
         return MediaCategory::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => (string) $entry['name'],
+            'name'       => (string) $entry['name'],
         ]);
     }
 }

@@ -90,13 +90,13 @@ class OrderResponseParser implements OrderResponseParserInterface
         CurrencyDataProviderInterface $currencyDataProvider,
         LoggerInterface $logger
     ) {
-        $this->identityService = $identityService;
-        $this->entityManager = $entityManager;
+        $this->identityService         = $identityService;
+        $this->entityManager           = $entityManager;
         $this->orderItemResponseParser = $orderItemResponseParser;
-        $this->orderAddressParser = $orderAddressParser;
-        $this->customerParser = $customerParser;
-        $this->currencyDataProvider = $currencyDataProvider;
-        $this->logger = $logger;
+        $this->orderAddressParser      = $orderAddressParser;
+        $this->customerParser          = $customerParser;
+        $this->currencyDataProvider    = $currencyDataProvider;
+        $this->logger                  = $logger;
     }
 
     /**
@@ -116,7 +116,7 @@ class OrderResponseParser implements OrderResponseParserInterface
 
         $orderItems[] = $this->getShippingCosts($entry, $taxFree);
 
-        $billingAddress = $this->orderAddressParser->parse($entry['billing']);
+        $billingAddress  = $this->orderAddressParser->parse($entry['billing']);
         $shippingAddress = $this->orderAddressParser->parse($entry['shipping']);
 
         if (null === $billingAddress || null === $shippingAddress) {
@@ -136,14 +136,14 @@ class OrderResponseParser implements OrderResponseParserInterface
         $customer->setMobilePhoneNumber($billingAddress->getMobilePhoneNumber());
         $customer->setPhoneNumber($billingAddress->getPhoneNumber());
 
-        $orderStatusIdentifier = $this->getConnectorIdentifier($entry['orderStatusId'], OrderStatus::TYPE);
-        $paymentStatusIdentifier = $this->getConnectorIdentifier($entry['paymentStatusId'], PaymentStatus::TYPE);
-        $paymentMethodIdentifier = $this->getConnectorIdentifier($entry['paymentId'], PaymentMethod::TYPE);
+        $orderStatusIdentifier     = $this->getConnectorIdentifier($entry['orderStatusId'], OrderStatus::TYPE);
+        $paymentStatusIdentifier   = $this->getConnectorIdentifier($entry['paymentStatusId'], PaymentStatus::TYPE);
+        $paymentMethodIdentifier   = $this->getConnectorIdentifier($entry['paymentId'], PaymentMethod::TYPE);
         $shippingProfileIdentifier = $this->getConnectorIdentifier($entry['dispatchId'], ShippingProfile::TYPE);
-        $shopIdentifier = $this->getConnectorIdentifier($entry['languageSubShop']['id'], Shop::TYPE);
+        $shopIdentifier            = $this->getConnectorIdentifier($entry['languageSubShop']['id'], Shop::TYPE);
 
         $shopwareCurrencyIdentifier = $this->currencyDataProvider->getCurrencyIdentifierByCode($entry['currency']);
-        $currencyIdentifier = $this->getConnectorIdentifier($shopwareCurrencyIdentifier, Currency::TYPE);
+        $currencyIdentifier         = $this->getConnectorIdentifier($shopwareCurrencyIdentifier, Currency::TYPE);
 
         $orderIdentity = $this->identityService->findOneOrCreate(
             (string) $entry['id'],
@@ -209,8 +209,8 @@ class OrderResponseParser implements OrderResponseParserInterface
 
         $shippingProfileIdentity = $this->identityService->findOneBy([
             'adapterIdentifier' => (string) $entry['dispatchId'],
-            'adapterName' => ShopwareAdapter::NAME,
-            'objectType' => ShippingProfile::TYPE,
+            'adapterName'       => ShopwareAdapter::NAME,
+            'objectType'        => ShippingProfile::TYPE,
         ]);
 
         if (null === $shippingProfileIdentity) {
@@ -254,7 +254,7 @@ class OrderResponseParser implements OrderResponseParserInterface
             }
 
             if ($isNet) {
-                $priceNet = $orderItem['price'];
+                $priceNet           = $orderItem['price'];
                 $orderItem['price'] = $priceNet + (($priceNet / 100) * $orderItem['taxRate']);
             }
         }
@@ -321,8 +321,8 @@ class OrderResponseParser implements OrderResponseParserInterface
         if ($entry['dispatch']['taxCalculation'] > 0) {
             $identity = $this->identityService->findOneBy([
                 'adapterIdentifier' => (string) $entry['dispatch']['taxCalculation'],
-                'adapterName' => ShopwareAdapter::NAME,
-                'objectType' => VatRate::TYPE,
+                'adapterName'       => ShopwareAdapter::NAME,
+                'objectType'        => VatRate::TYPE,
             ]);
 
             if (null === $identity) {
@@ -332,7 +332,7 @@ class OrderResponseParser implements OrderResponseParserInterface
             return $identity->getObjectIdentifier();
         }
 
-        $maxTaxRate = 0;
+        $maxTaxRate           = 0;
         $maxTaxRateIdentifier = 0;
 
         foreach ($entry['details'] as $orderItem) {
@@ -344,14 +344,14 @@ class OrderResponseParser implements OrderResponseParserInterface
                 continue;
             }
 
-            $maxTaxRate = $orderItem['taxRate'];
+            $maxTaxRate           = $orderItem['taxRate'];
             $maxTaxRateIdentifier = $orderItem['taxId'];
         }
 
         $identity = $this->identityService->findOneBy([
             'adapterIdentifier' => (string) $maxTaxRateIdentifier,
-            'adapterName' => ShopwareAdapter::NAME,
-            'objectType' => VatRate::TYPE,
+            'adapterName'       => ShopwareAdapter::NAME,
+            'objectType'        => VatRate::TYPE,
         ]);
 
         if (null === $identity) {
@@ -370,10 +370,10 @@ class OrderResponseParser implements OrderResponseParserInterface
     private function getShippingCosts(array $entry, $taxFree = false)
     {
         if ($taxFree) {
-            $shippingCosts = (float) $entry['invoiceShippingNet'];
+            $shippingCosts     = (float) $entry['invoiceShippingNet'];
             $vatRateIdentifier = null;
         } else {
-            $shippingCosts = (float) $entry['invoiceShipping'];
+            $shippingCosts     = (float) $entry['invoiceShipping'];
             $vatRateIdentifier = $this->getShippingCostsVatRateIdentifier($entry);
         }
 

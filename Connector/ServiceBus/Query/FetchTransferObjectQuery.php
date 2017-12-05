@@ -33,9 +33,9 @@ class FetchTransferObjectQuery implements QueryInterface
     /**
      * FetchTransferObjectQuery constructor.
      *
-     * @param string $adapterName
-     * @param string $objectType
-     * @param string $queryType
+     * @param string      $adapterName
+     * @param string      $objectType
+     * @param string      $queryType
      * @param null|string $objectIdentifier
      */
     public function __construct($adapterName, $objectType, $queryType, $objectIdentifier = null)
@@ -49,9 +49,9 @@ class FetchTransferObjectQuery implements QueryInterface
             Assertion::uuid($objectIdentifier);
         }
 
-        $this->objectType = $objectType;
-        $this->adapterName = $adapterName;
-        $this->queryType = $queryType;
+        $this->objectType       = $objectType;
+        $this->adapterName      = $adapterName;
+        $this->queryType        = $queryType;
         $this->objectIdentifier = $objectIdentifier;
     }
 
@@ -93,9 +93,9 @@ class FetchTransferObjectQuery implements QueryInterface
     public function toArray()
     {
         return [
-            'adapterName' => $this->adapterName,
-            'objectType' => $this->objectType,
-            'queryType' => $this->queryType,
+            'adapterName'      => $this->adapterName,
+            'objectType'       => $this->objectType,
+            'queryType'        => $this->queryType,
             'objectIdentifier' => $this->objectIdentifier,
         ];
     }

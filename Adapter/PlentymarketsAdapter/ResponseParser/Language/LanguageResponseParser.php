@@ -39,7 +39,7 @@ class LanguageResponseParser implements LanguageResponseParserInterface
 
         return Language::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => $entry['name'],
+            'name'       => $entry['name'],
         ]);
     }
 }
