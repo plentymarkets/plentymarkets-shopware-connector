@@ -141,8 +141,6 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     /**
      * @param Category $category
      * @param Identity $shopIdentity
-     *
-     * @throws InvalidArgumentException
      */
     private function prepareCategory(Category $category, Identity $shopIdentity)
     {
@@ -172,9 +170,6 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     /**
      * @param Category $category
      * @param Identity $shopIdentity
-     *
-     * @throws NotFoundException
-     * @throws IdentityNotFoundException
      *
      * @return null|Identity
      */

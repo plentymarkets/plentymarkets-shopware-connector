@@ -34,9 +34,6 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         $this->addAclPermission('syncItem', PlentyConnector::PERMISSION_WRITE, 'Insufficient Permissions');
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testApiCredentialsAction()
     {
         /**
@@ -70,9 +67,6 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         ]);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function saveSettingsAction()
     {
         /**
@@ -90,9 +84,6 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         ]);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function getSettingsListAction()
     {
         /**
@@ -106,9 +97,6 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         ]);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function getMappingInformationAction()
     {
         /**
@@ -155,9 +143,6 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         ]);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function updateIdentitiesAction()
     {
         $updates = json_decode($this->request->getRawBody(), true);

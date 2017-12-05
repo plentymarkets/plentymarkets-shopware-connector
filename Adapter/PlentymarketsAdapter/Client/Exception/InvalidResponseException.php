@@ -10,9 +10,9 @@ use Exception;
 class InvalidResponseException extends Exception
 {
     /**
-     * @param $method
-     * @param $path
-     * @param $options
+     * @param string $method
+     * @param string $path
+     * @param array  $options
      *
      * @return InvalidResponseException
      */

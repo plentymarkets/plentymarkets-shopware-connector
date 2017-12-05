@@ -263,11 +263,11 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
-     * @param $entry
+     * @param array $entry
      *
      * @return Comment[]
      */
-    private function getComments($entry)
+    private function getComments(array $entry)
     {
         $comments = [];
 
@@ -307,8 +307,6 @@ class OrderResponseParser implements OrderResponseParserInterface
 
     /**
      * @param array $entry
-     *
-     * @throws NotFoundException
      *
      * @return string|null
      */

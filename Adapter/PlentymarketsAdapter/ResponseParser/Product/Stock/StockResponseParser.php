@@ -78,11 +78,11 @@ class StockResponseParser implements StockResponseParserInterface
     }
 
     /**
-     * @param $variation
+     * @param array $variation
      *
      * @return float
      */
-    private function getStock($variation)
+    private function getStock(array $variation)
     {
         $arrayStocks   = [];
         $itemWarehouse = (int) $this->config->get('item_warehouse', 0);

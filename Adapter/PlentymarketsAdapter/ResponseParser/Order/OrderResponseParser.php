@@ -218,7 +218,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     /**
      * @param array $entry
      *
-     * @return array
+     * @return null|array
      */
     private function getBillingAddressData(array $entry)
     {
@@ -238,7 +238,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     /**
      * @param array $entry
      *
-     * @return array
+     * @return null|array
      */
     private function getShippingAddressData(array $entry)
     {
@@ -258,7 +258,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     /**
      * @param array $entry
      *
-     * @return array
+     * @return null|array
      */
     private function getCustomerData(array $entry)
     {
@@ -348,11 +348,14 @@ class OrderResponseParser implements OrderResponseParserInterface
     /**
      * @param array $entry
      *
-     * @return Customer
+     * @return null|Customer
      */
     private function getCustomer(array $entry)
     {
         $languageIdentity = $this->getLanguageIdentity($entry);
+        if (null === $languageIdentity) {
+            return null;
+        }
 
         $cutomerGroupIdentity = $this->getCustomerGroupIdentity($entry['customerData']);
         if (null === $cutomerGroupIdentity) {
@@ -544,7 +547,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     /**
      * @param array $entry
      *
-     * @return Address
+     * @return null|Address
      */
     private function getBillingAddress(array $entry)
     {
@@ -741,7 +744,6 @@ class OrderResponseParser implements OrderResponseParserInterface
             $orderItem->setName($item['orderItemName']);
             $orderItem->setNumber($number);
             $orderItem->setPrice($this->getOrderItemPrice($item));
-            $orderItem->setVatRateIdentifier($this->getVatRateIdentifier($entry));
             $orderItem->setAttributes([]);
 
             $result[] = $orderItem;
@@ -764,16 +766,6 @@ class OrderResponseParser implements OrderResponseParserInterface
         }
 
         return $price;
-    }
-
-    /**
-     * @param array $item
-     *
-     * @return string
-     */
-    private function getVatRateIdentifier(array $item)
-    {
-        return null;
     }
 
     /**

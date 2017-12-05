@@ -173,7 +173,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
     }
 
     /**
-     * @param $plentyId
+     * @param int $plentyId
      *
      * @return null|Identity
      */
@@ -206,7 +206,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
 
     /**
      * @param array $detail
-     * @param $result
+     * @param array $result
      *
      * @return array
      */
@@ -255,7 +255,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
     }
 
     /**
-     * @param $metaRobots
+     * @param string $metaRobots
      *
      * @return string
      */
@@ -278,7 +278,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
 
     /**
      * @param array $details
-     * @param $result
+     * @param array $result
      *
      * @return Translation[]
      */

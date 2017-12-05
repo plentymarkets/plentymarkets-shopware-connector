@@ -83,9 +83,7 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * @param array $product
-     *
-     * @return TransferObjectInterface[]
+     * {@inheritdoc}
      */
     public function parse(array $product)
     {
@@ -210,8 +208,6 @@ class ProductResponseParser implements ProductResponseParserInterface
     /**
      * @param array $variation
      *
-     * @throws NotFoundException
-     *
      * @return string
      */
     private function getVatRateIdentifier(array $variation)
@@ -231,8 +227,6 @@ class ProductResponseParser implements ProductResponseParserInterface
 
     /**
      * @param array $product
-     *
-     * @throws NotFoundException
      *
      * @return string
      */
@@ -415,7 +409,7 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * @param $product
+     * @param array $product
      *
      * @return LinkedProduct[]
      */
@@ -456,7 +450,7 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * @param $mainVariation
+     * @param array $mainVariation
      *
      * @return Property[]
      */

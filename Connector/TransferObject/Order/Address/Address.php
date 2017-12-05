@@ -319,7 +319,7 @@ class Address extends AbstractValueObject implements AttributableInterface
     }
 
     /**
-     * @param string null|$mobilePhoneNumber
+     * @param string|null $mobilePhoneNumber
      */
     public function setMobilePhoneNumber($mobilePhoneNumber = null)
     {

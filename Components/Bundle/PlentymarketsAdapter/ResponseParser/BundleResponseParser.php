@@ -86,8 +86,6 @@ class BundleResponseParser implements BundleResponseParserInterface
     /**
      * @param array $variation
      *
-     * @throws NotFoundException
-     *
      * @return string
      */
     private function getVatRateIdentifier(array $variation)

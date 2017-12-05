@@ -102,8 +102,6 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     /**
      * @param Order $order
      *
-     * @throws NotFoundException
-     *
      * @return bool
      */
     private function handleOrder(Order $order)
@@ -123,8 +121,6 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
 
     /**
      * @param Order $order
-     *
-     * @throws NotFoundException
      *
      * @return bool
      */
@@ -157,8 +153,6 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
 
     /**
      * @param Order $order
-     *
-     * @throws NotFoundException
      */
     private function handleComments(Order $order)
     {
@@ -189,8 +183,6 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @throws RuntimeException
-     *
      * @return int
      */
     private function getUserId()

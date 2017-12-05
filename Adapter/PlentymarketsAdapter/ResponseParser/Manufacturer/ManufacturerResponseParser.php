@@ -66,6 +66,8 @@ class ManufacturerResponseParser implements ManufacturerResponseParserInterface
             $manufacturer->setLink($entry['url']);
         }
 
+        $result = [];
+
         if (!empty($entry['logo'])) {
             try {
                 $media = $this->mediaResponseParser->parse([

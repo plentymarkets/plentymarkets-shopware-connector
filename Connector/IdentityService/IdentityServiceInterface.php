@@ -2,7 +2,6 @@
 
 namespace PlentyConnector\Connector\IdentityService;
 
-use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 
 /**
@@ -48,8 +47,6 @@ interface IdentityServiceInterface
      * @param string $adapterName
      * @param string $objectType
      *
-     * @throws NotFoundException
-     *
      * @return Identity
      */
     public function findOneOrThrow($adapterIdentifier, $adapterName, $objectType);
@@ -67,9 +64,9 @@ interface IdentityServiceInterface
     public function exists(array $criteria = []);
 
     /**
-     * @param $objectIdentifier
-     * @param $objectType
-     * @param $adapterName
+     * @param string $objectIdentifier
+     * @param string $objectType
+     * @param string $adapterName
      *
      * @return bool
      */

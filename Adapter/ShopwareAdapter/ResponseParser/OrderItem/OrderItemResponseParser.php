@@ -57,8 +57,6 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
     /**
      * @param array $entry
      *
-     * @throws NotFoundException
-     *
      * @return null|string
      */
     private function getVatRateIdentifier(array $entry)

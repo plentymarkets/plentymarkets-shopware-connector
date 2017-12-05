@@ -10,9 +10,9 @@ use PlentymarketsAdapter\ReadApi\ApiAbstract;
 class ValueName extends ApiAbstract
 {
     /**
-     * @param $attributeId
+     * @param int $attributeId
      *
-     * @return mixed
+     * @return array
      */
     public function findOne($attributeId)
     {

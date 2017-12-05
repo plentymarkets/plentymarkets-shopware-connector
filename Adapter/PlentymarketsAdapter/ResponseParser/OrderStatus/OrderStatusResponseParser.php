@@ -48,11 +48,11 @@ class OrderStatusResponseParser implements OrderStatusResponseParserInterface
     }
 
     /**
-     * @param $entry
+     * @param array $entry
      *
      * @return string
      */
-    private function getName($entry)
+    private function getName(array $entry)
     {
         if (empty($entry['names'])) {
             return $entry['id'];

@@ -5,6 +5,7 @@ namespace ShopwareAdapter\ResponseParser\Customer;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use InvalidArgumentException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
 use PlentyConnector\Connector\TransferObject\Language\Language;
@@ -182,7 +183,7 @@ class CustomerResponseParser implements CustomerResponseParserInterface
     }
 
     /**
-     * @param int
+     * @param int $shopwareId
      *
      * @return int
      */
@@ -196,7 +197,7 @@ class CustomerResponseParser implements CustomerResponseParserInterface
                 return Customer::TYPE_GUEST;
         }
 
-        throw new \InvalidArgumentException('Unknown customer type ' . $shopwareId);
+        throw new InvalidArgumentException('Unknown customer type ' . $shopwareId);
     }
 
     /**

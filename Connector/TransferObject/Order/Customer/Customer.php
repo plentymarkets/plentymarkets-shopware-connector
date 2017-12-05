@@ -357,7 +357,7 @@ class Customer extends AbstractValueObject
     }
 
     /**
-     * @param $name
+     * @param string $name
      *
      * @return array
      */

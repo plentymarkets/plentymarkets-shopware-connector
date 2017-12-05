@@ -170,8 +170,6 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
     /**
      * @param Bundle $bundle
      *
-     * @throws NotFoundException
-     *
      * @return ArticleModel
      */
     private function getArticle(Bundle $bundle)

@@ -250,8 +250,6 @@ class VariationResponseParser implements VariationResponseParserInterface
     /**
      * @param array $variation
      *
-     * @throws NotFoundException
-     *
      * @return null|string
      */
     private function getUnitIdentifier(array $variation)
@@ -348,7 +346,7 @@ class VariationResponseParser implements VariationResponseParserInterface
     }
 
     /**
-     * @param $variation
+     * @param array $variation
      *
      * @return Property[]
      */

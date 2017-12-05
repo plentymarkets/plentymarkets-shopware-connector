@@ -198,7 +198,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
 
     /**
      * @param Product $product
-     * @param int     $type
+     * @param string  $type
      *
      * @return array
      */
@@ -254,7 +254,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
         $groupRepository = $this->entityManager->getRepository(GroupModel::class);
 
         /**
-         * @var Group $propertyGroup
+         * @var GroupModel $propertyGroup
          */
         $propertyGroup = $groupRepository->findOneBy(['name' => 'PlentyConnector']);
 

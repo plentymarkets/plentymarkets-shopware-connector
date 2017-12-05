@@ -13,6 +13,7 @@ use Shopware\Models\Shop\Locale;
 use Shopware\Models\Shop\Shop;
 use ShopwareAdapter\ResponseParser\Address\AddressResponseParser;
 use ShopwareAdapter\ResponseParser\Customer\CustomerResponseParser;
+use ShopwareAdapter\ResponseParser\Customer\CustomerResponseParserInterface;
 
 /**
  * Class CustomerResponseParserTest
@@ -22,7 +23,7 @@ use ShopwareAdapter\ResponseParser\Customer\CustomerResponseParser;
 class CustomerResponseParserTest extends ResponseParserTest
 {
     /**
-     * @var AddressResponseParser
+     * @var CustomerResponseParserInterface
      */
     private $responseParser;
 

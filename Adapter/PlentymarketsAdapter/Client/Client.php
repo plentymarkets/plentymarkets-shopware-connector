@@ -175,7 +175,7 @@ class Client implements ClientInterface
     }
 
     /**
-     * @param $path
+     * @param string $path
      *
      * @return bool
      */
@@ -192,9 +192,6 @@ class Client implements ClientInterface
         return true;
     }
 
-    /**
-     * @throws InvalidCredentialsException
-     */
     private function login()
     {
         if (null === $this->config->get('rest_username') || null === $this->config->get('rest_password')) {
@@ -211,8 +208,8 @@ class Client implements ClientInterface
     }
 
     /**
-     * @param $limit
-     * @param $offset
+     * @param int   $limit
+     * @param int   $offset
      * @param array $options
      *
      * @return array
@@ -273,8 +270,6 @@ class Client implements ClientInterface
 
     /**
      * @param string $url
-     *
-     * @throws InvalidCredentialsException
      *
      * @return string
      */

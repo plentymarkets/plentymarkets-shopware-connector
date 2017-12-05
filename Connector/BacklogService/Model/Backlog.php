@@ -92,9 +92,9 @@ class Backlog
     }
 
     /**
-     * @param $payload
+     * @param CommandInterface $payload
      */
-    public function setPayload($payload)
+    public function setPayload(CommandInterface $payload)
     {
         $this->payload = $payload;
     }
