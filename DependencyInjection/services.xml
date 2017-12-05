@@ -72,7 +72,8 @@
         <!-- subscriber -->
 
         <service id="plenty_connector.subscriber.controller_path" class="PlentyConnector\Subscriber\ControllerPathSubscriber">
-            <argument type="service" id="service_container" />
+            <argument type="service" id="template" />
+            <argument>%plenty_connector.plugin_dir%</argument>
 
             <tag name="shopware.event_subscriber" />
         </service>

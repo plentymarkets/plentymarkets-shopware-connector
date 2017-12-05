@@ -2,8 +2,8 @@
 
 namespace PlentyConnector\Connector\BacklogService\Model;
 
-use DateTime;
 use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 
@@ -51,7 +51,7 @@ class Backlog
     /**
      * time of insertion
      *
-     * @var DateTime
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="time", type="datetime", nullable=false)
      */
@@ -116,7 +116,7 @@ class Backlog
     }
 
     /**
-     * @return DateTime
+     * @return DateTimeInterface
      */
     public function getTime()
     {

@@ -9,9 +9,9 @@ use PlentyConnector\Connector\ValueObject\AbstractValueObject;
  */
 class LinkedProduct extends AbstractValueObject
 {
-    const TYPE_ACCESSORY = 1;
-    const TYPE_REPLACEMENT = 2;
-    const TYPE_SIMILAR = 3;
+    const TYPE_ACCESSORY = 'accessory';
+    const TYPE_REPLACEMENT = 'replacement';
+    const TYPE_SIMILAR = 'similar';
 
     /**
      * @var string
@@ -29,7 +29,7 @@ class LinkedProduct extends AbstractValueObject
     private $productIdentifier = '';
 
     /**
-     * @return int
+     * @return string
      */
     public function getType()
     {
@@ -37,7 +37,7 @@ class LinkedProduct extends AbstractValueObject
     }
 
     /**
-     * @param int $type
+     * @param string $type
      */
     public function setType($type)
     {

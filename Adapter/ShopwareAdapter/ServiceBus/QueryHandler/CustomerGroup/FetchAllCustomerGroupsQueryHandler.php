@@ -3,14 +3,13 @@
 namespace ShopwareAdapter\ServiceBus\QueryHandler\CustomerGroup;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
 use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
-use Shopware\Models\Customer\Group;
+use Shopware\Models\Customer\Group as GroupModel;
 use ShopwareAdapter\ResponseParser\CustomerGroup\CustomerGroupResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
@@ -20,9 +19,9 @@ use ShopwareAdapter\ShopwareAdapter;
 class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
 {
     /**
-     * @var EntityRepository
+     * @var EntityManagerInterface
      */
-    private $repository;
+    private $entityManager;
 
     /**
      * @var CustomerGroupResponseParserInterface
@@ -39,7 +38,7 @@ class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
         EntityManagerInterface $entityManager,
         CustomerGroupResponseParserInterface $responseParser
     ) {
-        $this->repository = $entityManager->getRepository(Group::class);
+        $this->entityManager = $entityManager;
         $this->responseParser = $responseParser;
     }
 
@@ -77,7 +76,8 @@ class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
      */
     private function createCustomerGroupsQuery()
     {
-        $queryBuilder = $this->repository->createQueryBuilder('groups');
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $queryBuilder->from(GroupModel::class, 'groups');
         $queryBuilder->select([
             'groups.id as id',
             'groups.name as name',

@@ -8,7 +8,7 @@ use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
 use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
-use Shopware\Models\Dispatch\Repository;
+use Shopware\Models\Shop\Repository as ShopRepository;
 use Shopware\Models\Shop\Shop as ShopModel;
 use ShopwareAdapter\ResponseParser\Shop\ShopResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
@@ -19,7 +19,7 @@ use ShopwareAdapter\ShopwareAdapter;
 class FetchAllShopsQueryHandler implements QueryHandlerInterface
 {
     /**
-     * @var Repository
+     * @var ShopRepository
      */
     private $repository;
 

@@ -3,7 +3,6 @@
 namespace ShopwareAdapter\ServiceBus\QueryHandler\OrderStatus;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
@@ -20,9 +19,9 @@ use ShopwareAdapter\ShopwareAdapter;
 class FetchAllOrderStatusesQueryHandler implements QueryHandlerInterface
 {
     /**
-     * @var EntityRepository
+     * @var EntityManagerInterface
      */
-    private $repository;
+    private $entityManager;
 
     /**
      * @var OrderStatusResponseParserInterface
@@ -39,7 +38,7 @@ class FetchAllOrderStatusesQueryHandler implements QueryHandlerInterface
         EntityManagerInterface $entityManager,
         OrderStatusResponseParserInterface $responseParser
     ) {
-        $this->repository = $entityManager->getRepository(Status::class);
+        $this->entityManager = $entityManager;
         $this->responseParser = $responseParser;
     }
 
@@ -77,7 +76,8 @@ class FetchAllOrderStatusesQueryHandler implements QueryHandlerInterface
      */
     private function createOrderStatusQuery()
     {
-        $queryBuilder = $this->repository->createQueryBuilder('status');
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $queryBuilder->from(Status::class, 'status');
         $queryBuilder->select([
             'status.id as id',
             'status.name as name',

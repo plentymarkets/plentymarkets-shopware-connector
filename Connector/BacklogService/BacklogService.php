@@ -2,9 +2,9 @@
 
 namespace PlentyConnector\Connector\BacklogService;
 
+use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use Exception;
 use PDO;
 use PlentyConnector\Connector\BacklogService\Command\HandleBacklogElementCommand;
@@ -29,7 +29,7 @@ class BacklogService implements BacklogServiceInterface
     private $logger;
 
     /**
-     * @var EntityRepository
+     * @var ObjectRepository
      */
     private $repository;
 

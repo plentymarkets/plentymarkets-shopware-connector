@@ -95,7 +95,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
         });
 
         if (empty($shopIdentifiers)) {
-            return false;
+            return null;
         }
 
         $vatIdentity = $this->identityService->findOneBy([

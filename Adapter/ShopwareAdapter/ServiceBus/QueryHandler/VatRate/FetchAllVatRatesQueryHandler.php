@@ -3,7 +3,6 @@
 namespace ShopwareAdapter\ServiceBus\QueryHandler\VatRate;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
@@ -20,9 +19,9 @@ use ShopwareAdapter\ShopwareAdapter;
 class FetchAllVatRatesQueryHandler implements QueryHandlerInterface
 {
     /**
-     * @var EntityRepository
+     * @var EntityManagerInterface
      */
-    private $repository;
+    private $entityManager;
 
     /**
      * @var VatRateResponseParserInterface
@@ -39,7 +38,7 @@ class FetchAllVatRatesQueryHandler implements QueryHandlerInterface
         EntityManagerInterface $entityManager,
         VatRateResponseParserInterface $responseParser
     ) {
-        $this->repository = $entityManager->getRepository(Tax::class);
+        $this->entityManager = $entityManager;
         $this->responseParser = $responseParser;
     }
 
@@ -77,7 +76,8 @@ class FetchAllVatRatesQueryHandler implements QueryHandlerInterface
      */
     private function createTaxQuery()
     {
-        $queryBuilder = $this->repository->createQueryBuilder('taxes');
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $queryBuilder->from(Tax::class, 'taxes');
         $queryBuilder->select([
             'taxes.id as id',
             'taxes.name as name',

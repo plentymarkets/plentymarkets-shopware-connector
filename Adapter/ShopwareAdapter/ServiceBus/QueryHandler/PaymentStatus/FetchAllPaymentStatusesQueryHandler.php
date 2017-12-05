@@ -3,7 +3,6 @@
 namespace ShopwareAdapter\ServiceBus\QueryHandler\PaymentStatus;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
@@ -20,9 +19,9 @@ use ShopwareAdapter\ShopwareAdapter;
 class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
 {
     /**
-     * @var EntityRepository
+     * @var EntityManagerInterface
      */
-    private $repository;
+    private $entityManager;
 
     /**
      * @var PaymentStatusResponseParserInterface
@@ -32,14 +31,14 @@ class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
     /**
      * FetchAllPaymentStatusesQueryHandler constructor.
      *
-     * @param EntityManagerInterface               $entityManager  ,
+     * @param EntityManagerInterface               $entityManager
      * @param PaymentStatusResponseParserInterface $responseParser
      */
     public function __construct(
         EntityManagerInterface $entityManager,
         PaymentStatusResponseParserInterface $responseParser
     ) {
-        $this->repository = $entityManager->getRepository(Status::class);
+        $this->entityManager = $entityManager;
         $this->responseParser = $responseParser;
     }
 
@@ -77,7 +76,8 @@ class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
      */
     private function createPaymentStatusQuery()
     {
-        $queryBuilder = $this->repository->createQueryBuilder('status');
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $queryBuilder->from(Status::class, 'status');
         $queryBuilder->select([
             'status.id as id',
             'status.name as name',

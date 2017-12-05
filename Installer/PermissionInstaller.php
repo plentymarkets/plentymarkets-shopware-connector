@@ -2,8 +2,8 @@
 
 namespace PlentyConnector\Installer;
 
-use Doctrine\ORM\EntityRepository;
-use Shopware\Components\Model\ModelManager;
+use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
 use Shopware\Components\Plugin\Context\UpdateContext;
@@ -18,12 +18,12 @@ use Shopware_Components_Acl;
 class PermissionInstaller implements InstallerInterface
 {
     /**
-     * @var ModelManager
+     * @var EntityManagerInterface
      */
-    private $em;
+    private $entityManager;
 
     /**
-     * @var EntityRepository
+     * @var ObjectRepository
      */
     private $repository;
 
@@ -40,14 +40,17 @@ class PermissionInstaller implements InstallerInterface
     /**
      * CronjobSyncronizer constructor.
      *
-     * @param ModelManager            $em
+     * @param EntityManagerInterface  $entityManager
      * @param Shopware_Components_Acl $acl
      * @param array                   $permissions
      */
-    public function __construct(ModelManager $em, Shopware_Components_Acl $acl, array $permissions)
-    {
-        $this->em = $em;
-        $this->repository = $this->em->getRepository(ShopwareResource::class);
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        Shopware_Components_Acl $acl,
+        array $permissions
+    ) {
+        $this->entityManager = $entityManager;
+        $this->repository = $this->entityManager->getRepository(ShopwareResource::class);
         $this->acl = $acl;
         $this->permissions = $permissions;
     }
@@ -93,10 +96,10 @@ class PermissionInstaller implements InstallerInterface
         }
 
         array_walk($orphanedPrivileges, function (ShopwarePrivilege $privilege) {
-            $this->em->remove($privilege);
+            $this->entityManager->remove($privilege);
         });
 
-        $this->em->flush();
+        $this->entityManager->flush();
     }
 
     /**
@@ -118,7 +121,7 @@ class PermissionInstaller implements InstallerInterface
     }
 
     /**
-     * @param $resourceName
+     * @param string $resourceName
      *
      * @return ShopwareResource
      */
@@ -130,8 +133,6 @@ class PermissionInstaller implements InstallerInterface
     /**
      * @param Plugin $plugin
      * @param array  $permissions
-     *
-     * @throws Enlight_Exception
      */
     private function createResource(Plugin $plugin, array $permissions)
     {

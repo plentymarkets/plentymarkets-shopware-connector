@@ -294,9 +294,9 @@ class PlentyConnector extends Plugin
 
     /**
      * @param UpdateContext $context
-     * @param $targetVersion
+     * @param string $targetVersion
      *
-     * @return mixed
+     * @return bool
      */
     private function updateNeeded(UpdateContext $context, $targetVersion)
     {
@@ -305,9 +305,9 @@ class PlentyConnector extends Plugin
 
     /**
      * @param UpdateContext $context
-     * @param $targetVersion
+     * @param string $targetVersion
      *
-     * @return mixed
+     * @return bool
      */
     private function updatePossible(UpdateContext $context, $targetVersion)
     {
@@ -431,7 +431,7 @@ class PlentyConnector extends Plugin
 
     /**
      * @param ContainerBuilder $container
-     * @param $filename
+     * @param string $filename
      */
     private function loadFile(ContainerBuilder $container, $filename)
     {

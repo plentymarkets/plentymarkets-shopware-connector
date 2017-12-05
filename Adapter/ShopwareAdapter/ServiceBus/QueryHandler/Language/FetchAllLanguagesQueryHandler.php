@@ -3,14 +3,13 @@
 namespace ShopwareAdapter\ServiceBus\QueryHandler\Language;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
 use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\TransferObject\Language\Language;
-use Shopware\Models\Shop\Locale;
+use Shopware\Models\Shop\Locale as LocaleModel;
 use ShopwareAdapter\ResponseParser\Language\LanguageResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
@@ -20,9 +19,9 @@ use ShopwareAdapter\ShopwareAdapter;
 class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
 {
     /**
-     * @var EntityRepository
+     * @var EntityManagerInterface
      */
-    private $repository;
+    private $entityManager;
 
     /**
      * @var LanguageResponseParserInterface
@@ -39,7 +38,7 @@ class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
         EntityManagerInterface $entityManager,
         LanguageResponseParserInterface $responseParser
     ) {
-        $this->repository = $entityManager->getRepository(Locale::class);
+        $this->entityManager = $entityManager;
         $this->responseParser = $responseParser;
     }
 
@@ -77,7 +76,8 @@ class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
      */
     private function createLocalesQuery()
     {
-        $queryBuilder = $this->repository->createQueryBuilder('locales');
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $queryBuilder->from(LocaleModel::class, 'locales');
         $queryBuilder->select([
             'locales.id as id',
             'locales.language as name',

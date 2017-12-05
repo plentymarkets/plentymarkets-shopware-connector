@@ -34,7 +34,7 @@ class OutputHandler implements OutputHandlerInterface
     private $verbosity;
 
     /**
-     * @var ProgressBar
+     * @var ProgressBar|null
      */
     private $progressBar;
 
