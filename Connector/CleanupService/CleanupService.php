@@ -133,7 +133,7 @@ class CleanupService implements CleanupServiceInterface
      */
     private function getDefinitions()
     {
-        if (null === count($this->definitions)) {
+        if (empty($this->definitions)) {
             return [];
         }
 

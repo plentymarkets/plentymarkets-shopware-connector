@@ -123,7 +123,7 @@ class PermissionInstaller implements InstallerInterface
     /**
      * @param string $resourceName
      *
-     * @return ShopwareResource
+     * @return ShopwareResource|null
      */
     private function getResource($resourceName)
     {

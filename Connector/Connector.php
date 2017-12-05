@@ -100,10 +100,6 @@ class Connector implements ConnectorInterface
 
         $definitions = $this->getDefinitions($objectType);
 
-        if (null === $definitions) {
-            $definitions = [];
-        }
-
         if (empty($definitions)) {
             $this->logger->notice('No definitions found');
         }
@@ -134,7 +130,7 @@ class Connector implements ConnectorInterface
      */
     private function getDefinitions($objectType = null)
     {
-        if (null === count($this->definitions)) {
+        if (empty($this->definitions)) {
             return [];
         }
 

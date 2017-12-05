@@ -166,7 +166,7 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
                 'optionValue'      => $translatedPropertyValue->getValue(),
             ];
 
-            $this->writeTranslations('propertyvalue', (int) $propertyValueModel->getId(), $translation);
+            $this->writeTranslations('propertyvalue', $propertyValueModel->getId(), $translation);
         }
     }
 

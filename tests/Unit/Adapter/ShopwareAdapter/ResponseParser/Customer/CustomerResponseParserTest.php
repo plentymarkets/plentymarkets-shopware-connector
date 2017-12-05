@@ -68,7 +68,7 @@ class CustomerResponseParserTest extends ResponseParserTest
     public function testCustomerParsing()
     {
         /**
-         * @var Customer $customer
+         * @var Customer|null $customer
          */
         $customer = $this->responseParser->parse(self::$orderData['customer']);
 

@@ -95,7 +95,7 @@ class MappingService implements MappingServiceInterface
      */
     private function getDefinitions($objectType = null)
     {
-        if (null === count($this->definitions)) {
+        if (empty($this->definitions)) {
             return [];
         }
 

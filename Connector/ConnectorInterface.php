@@ -15,7 +15,7 @@ interface ConnectorInterface
     public function addDefinition(Definition $definition);
 
     /**
-     * @param int         $queryType
+     * @param string      $queryType
      * @param null|string $objectType
      * @param null|string $identifier
      */

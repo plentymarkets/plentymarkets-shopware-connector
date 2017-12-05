@@ -34,9 +34,9 @@ interface IdentityServiceInterface
     public function create($objectIdentifier, $objectType, $adapterIdentifier, $adapterName);
 
     /**
-     * @param string $adapterIdentifier
-     * @param string $adapterName
-     * @param string $objectType
+     * @param string|int $adapterIdentifier
+     * @param string     $adapterName
+     * @param string     $objectType
      *
      * @return Identity
      */
