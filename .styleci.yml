@@ -18,3 +18,4 @@ disabled:
   - phpdoc_var_without_name
   - yoda_style
   - unalign_double_arrow
+  - unalign_equals
