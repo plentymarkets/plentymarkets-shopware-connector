@@ -92,8 +92,17 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
             return true;
         }
 
-        if ($this->isExistingPayment($payment)) {
-            $this->logger->notice('payment with the same transaction id already exists.');
+        $plentyPayments = $this->fetchPlentyPayment($payment->getTransactionReference());
+        if ($plentyPayments && isset($plentyPayments[0]['id'])) {
+            $this->logger->notice('payment with the same transaction id "' . $plentyPayments[0]['id'] . '" already exists.');
+            $this->identityService->findOneOrCreate(
+                $payment->getIdentifier(),
+                Payment::TYPE,
+                (string) $plentyPayments[0]['id'],
+                PlentymarketsAdapter::NAME
+            );
+
+            return true;
         }
 
         $orderIdentity = $this->identityService->findOneBy([
@@ -132,9 +141,9 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
      *
      * @return bool
      */
-    private function isExistingPayment(Payment $payment)
+    private function fetchPlentyPayment($transactionReference)
     {
-        $url = 'payments/property/1/' . $payment->getTransactionReference();
+        $url = 'payments/property/1/' . $transactionReference;
         $payments = $this->client->request('GET', $url);
 
         if (empty($payments)) {
@@ -145,6 +154,6 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
             return !$payment['deleted'];
         });
 
-        return !empty($payments);
+        return $payments;
     }
 }
