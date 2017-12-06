@@ -8,6 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 ### Changed
+- Category content will not be overwritten by default plenty ID
 
 ## [4.2.0]
 ### Added
