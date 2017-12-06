@@ -6,6 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 ### Fixed
+- don't transfer payment to plenty when payment with same transaction id exists
 - error handling when parsing order addresses
 - Bundle stock fix (@marcmanusch)
 - use correct tax when transferring order to plenty
