@@ -128,13 +128,6 @@ class CategoryResponseParser implements CategoryResponseParserInterface
 
                 continue;
             }
-
-            $entry['details'][$key]['shortDescription'] = $entry['details']['0']['shortDescription'];
-            $entry['details'][$key]['position'] = $entry['details']['0']['position'];
-            $entry['details'][$key]['image'] = $entry['details']['0']['image'];
-            $entry['details'][$key]['imagePath'] = $entry['details']['0']['imagePath'];
-            $entry['details'][$key]['image2'] = $entry['details']['0']['image2'];
-            $entry['details'][$key]['image2Path'] = $entry['details']['0']['image2Path'];
         }
 
         $validDetails = array_values(array_filter($entry['details'], function (array $detail) {
