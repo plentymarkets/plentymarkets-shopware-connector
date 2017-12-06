@@ -106,7 +106,7 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
 
         $paymentResult = $this->findOrCreatePlentyPayment($payment);
 
-        if ($orderIdentity->getAdapterIdentifier() == $paymentResult['order']['id']) {
+        if ($orderIdentity->getAdapterIdentifier() == $paymentResult['order']['orderId']) {
             return true;
         }
         $this->client->request(
@@ -127,7 +127,7 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
         $plentyPayments = $this->fetchPlentyPayments($payment->getTransactionReference());
         $paymentResult = $plentyPayments[0];
         if ($plentyPayments) {
-            $this->logger->notice('payment with the same transaction id "' . $plentyPayments['id'] . '" already exists.');
+            $this->logger->debug('payment with the same transaction id "' . $paymentResult['id'] . '" already exists.');
         } else {
             $paymentResult = $this->createPlentyPayment($payment);
         }
