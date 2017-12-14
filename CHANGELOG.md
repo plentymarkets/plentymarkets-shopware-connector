@@ -6,6 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 ### Fixed
+- don't transfer payment to plenty when payment with same transaction id exists
 
 ### Changed
 - Category content will not be overwritten by default plenty ID
