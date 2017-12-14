@@ -41,14 +41,18 @@ require __DIR__ . '/autoload.php';
 class PlentyConnector extends Plugin
 {
     const PERMISSION_READ = 'read';
+
     const PERMISSION_WRITE = 'write';
 
     /**
      * List of all cronjobs
      */
     const CRONJOB_SYNCHRONIZE = 'Synchronize';
+
     const CRONJOB_SYNCHRONIZE_ORDERS = 'SynchronizeOrders';
+
     const CRONJOB_CLEANUP = 'Cleanup';
+
     const CRONJOB_BACKLOG = 'ProcessBacklog';
 
     /**

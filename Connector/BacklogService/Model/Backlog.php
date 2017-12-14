@@ -19,6 +19,7 @@ use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 class Backlog
 {
     const STATUS_OPEN = 'open';
+
     const STATUS_PROCESSED = 'processed';
 
     /**
