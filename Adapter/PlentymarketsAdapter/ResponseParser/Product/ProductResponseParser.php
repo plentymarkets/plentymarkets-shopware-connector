@@ -52,7 +52,9 @@ class ProductResponseParser implements ProductResponseParserInterface
     private $variationResponseParser;
 
     private $itemsVariationsVariationPropertiesApi;
+
     private $itemsPropertiesSelectionsApi;
+
     private $itemsPropertiesNamesApi;
 
     /**

@@ -12,10 +12,15 @@ use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 class OrderItem extends AbstractValueObject implements AttributableInterface
 {
     const TYPE_PRODUCT = 1;
+
     const TYPE_VOUCHER = 2;
+
     const TYPE_COUPON = 3;
+
     const TYPE_DISCOUNT = 4;
+
     const TYPE_PAYMENT_SURCHARGE = 5;
+
     const TYPE_SHIPPING_COSTS = 6;
 
     /**

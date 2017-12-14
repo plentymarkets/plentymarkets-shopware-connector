@@ -10,7 +10,9 @@ use ReflectionClass;
 final class QueryType
 {
     const ALL = 'all';
+
     const CHANGED = 'changed';
+
     const ONE = 'one';
 
     /**
