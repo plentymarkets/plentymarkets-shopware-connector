@@ -6,6 +6,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 ### Fixed
+
+### Changed
+
+## [4.2.1]
+### Added
+
+### Fixed
 - don't transfer payment to plenty when payment with same transaction id exists
 
 ### Changed
