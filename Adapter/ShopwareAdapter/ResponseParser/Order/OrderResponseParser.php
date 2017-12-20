@@ -112,7 +112,7 @@ class OrderResponseParser implements OrderResponseParserInterface
 
         $orderItems = array_filter(array_map(function (array $orderItem) use ($taxFree) {
             return $this->orderItemResponseParser->parse($orderItem, $taxFree);
-        }, $this->prepareOrderItems($entry['details'], $entry['net'])));
+        }, $this->prepareOrderItems($entry['details'], (bool) $entry['net'])));
 
         $orderItems[] = $this->getShippingCosts($entry, $taxFree);
 
