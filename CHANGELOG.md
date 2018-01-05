@@ -9,7 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - prepareOrderItems validation fix
 
 ### Changed
-- Process priority (orders first)
+- the new sequence is now order and payments then product related data
 
 ## [4.2.1]
 ### Added
