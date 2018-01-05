@@ -6,9 +6,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 ### Fixed
-- prepareOrderItems validation fix 
+- prepareOrderItems validation fix
 
 ### Changed
+- Process priority (orders first)
 
 ## [4.2.1]
 ### Added
