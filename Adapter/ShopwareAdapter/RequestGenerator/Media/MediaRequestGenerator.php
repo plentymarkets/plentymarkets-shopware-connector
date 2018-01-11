@@ -34,7 +34,7 @@ class MediaRequestGenerator implements MediaRequestGeneratorInterface
         $params = [
             'album' => Album::ALBUM_ARTICLE,
             'file' => $media->getLink(),
-            'description' => $media->getName() ?: $media->getFilename(),
+            'description' => $media->getAlternateName() ?: $media->getName() ?: $media->getFilename(),
         ];
 
         if (null !== $media->getMediaCategoryIdentifier()) {
