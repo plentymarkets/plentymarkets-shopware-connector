@@ -7,7 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - prepareOrderItems validation fix 
-- alternate media text fix
+- import alternate media text as name if is set
 
 ### Changed
 
