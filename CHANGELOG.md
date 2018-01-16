@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - prepareOrderItems validation fix 
+- only transfer variations if has valid clientid
 
 ### Changed
 
