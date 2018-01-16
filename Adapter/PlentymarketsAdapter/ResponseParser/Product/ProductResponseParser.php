@@ -105,7 +105,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             return [];
         }
 
-        foreach ($product['variations'] AS $val => $key) {
+        foreach ($product['variations'] as $val => $key) {
             $variantShopIdentifiers = $this->getShopIdentifiers($key);
             if (empty($variantShopIdentifiers)) {
                 unset($product['variations'][$val]);
