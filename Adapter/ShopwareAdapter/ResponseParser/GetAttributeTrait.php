@@ -23,9 +23,15 @@ trait GetAttributeTrait
                 continue;
             }
 
+            if ($value instanceof \DateTime) {
+                $strValue = $value->format('Y-m-d H:i:s');
+            } else {
+                $strValue = (string) $value;
+            }
+
             $attribute = new Attribute();
             $attribute->setKey((string) $key);
-            $attribute->setValue((string) $value);
+            $attribute->setValue($strValue);
 
             $attributes[] = $attribute;
         }
