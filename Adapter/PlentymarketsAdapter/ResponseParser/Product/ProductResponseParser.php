@@ -105,6 +105,13 @@ class ProductResponseParser implements ProductResponseParserInterface
             return [];
         }
 
+        foreach ($product['variations'] as $val => $key) {
+            $variantShopIdentifiers = $this->getShopIdentifiers($key);
+            if (empty($variantShopIdentifiers)) {
+                unset($product['variations'][$val]);
+            }
+        }
+
         $identity = $this->identityService->findOneOrCreate(
             (string) $product['id'],
             PlentymarketsAdapter::NAME,
