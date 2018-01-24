@@ -14,10 +14,10 @@ use PlentyConnector\Connector\Translation\TranslationHelperInterface;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Article;
 use Shopware\Models\Article\Detail;
-use Shopware\Models\Shop\Repository as ShopRepository;
 use Shopware\Models\Shop\Shop as ShopModel;
 use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
 use ShopwareAdapter\DataPersister\Translation\TranslationDataPersisterInterface;
+use ShopwareAdapter\DataProvider\Shop\ShopDataProviderInterface;
 use ShopwareAdapter\Helper\AttributeHelper;
 use ShopwareAdapter\RequestGenerator\Product\ProductRequestGeneratorInterface;
 use ShopwareAdapter\ShopwareAdapter;
@@ -58,35 +58,37 @@ class HandleProductCommandHandler implements CommandHandlerInterface
     private $translationDataPersister;
 
     /**
+     * @var ShopDataProviderInterface
+     */
+    private $shopDataProvider;
+
+    /**
      * @var EntityManagerInterface
      */
     private $entityManager;
-
-    /**
-     * @var ShopRepository
-     */
-    private $shopRepository;
 
 
     /**
      * HandleProductCommandHandler constructor.
      *
+     * @param EntityManagerInterface $entityManager
      * @param IdentityServiceInterface $identityService
      * @param TranslationHelperInterface $translationHelper
      * @param AttributeHelper $attributeHelper
      * @param AttributeDataPersisterInterface $attributeDataPersister
      * @param ProductRequestGeneratorInterface $productRequestGenerator
      * @param TranslationDataPersisterInterface $translationDataPersister
-     * @param EntityManagerInterface $entityManager
+     * @param ShopDataProviderInterface $shopDataProvider
      */
     public function __construct(
+        EntityManagerInterface $entityManager,
         IdentityServiceInterface $identityService,
         TranslationHelperInterface $translationHelper,
         AttributeHelper $attributeHelper,
         AttributeDataPersisterInterface $attributeDataPersister,
         ProductRequestGeneratorInterface $productRequestGenerator,
         TranslationDataPersisterInterface $translationDataPersister,
-        EntityManagerInterface $entityManager
+        ShopDataProviderInterface $shopDataProvider
     ) {
         $this->identityService = $identityService;
         $this->translationHelper = $translationHelper;
@@ -95,7 +97,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         $this->productRequestGenerator = $productRequestGenerator;
         $this->translationDataPersister = $translationDataPersister;
         $this->entityManager = $entityManager;
-        $this->shopRepository = $entityManager->getRepository(ShopModel::class);
+        $this->shopDataProvider = $shopDataProvider;
     }
 
     /**
@@ -119,7 +121,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         /**
          * @var ShopModel $shop
          */
-        $shop = $this->shopRepository->findOneBy(['default' => 1]);
+        $shop = $this->shopDataProvider->getDefaultShopLocaleIdentitiy();
 
         $languageIdentity = $this->identityService->findOneBy([
             'adapterIdentifier' => (string) $shop->getLocale()->getId(),

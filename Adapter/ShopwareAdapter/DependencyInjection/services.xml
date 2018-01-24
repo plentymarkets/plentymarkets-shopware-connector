@@ -20,7 +20,6 @@
             <argument type="service" id="models" />
         </service>
 
-
         <service id="shopware_adapter.data_provider.media" class="ShopwareAdapter\DataProvider\Media\MediaDataProvider">
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="shopware_attribute.data_loader" />
@@ -29,6 +28,10 @@
         <service id="shopware_adapter.data_provider.order" class="ShopwareAdapter\DataProvider\Order\OrderDataProvider">
             <argument type="service" id="dbal_connection" />
             <argument type="service" id="shopware_adapter.shopware_resource.order" />
+        </service>
+
+        <service id="shopware_adapter.data_provider.shop" class="ShopwareAdapter\DataProvider\Shop\ShopDataProvider">
+            <argument type="service" id="models" />
         </service>
 
         <!-- Data Persister -->
@@ -252,13 +255,14 @@
         <!-- Product command handlers -->
 
         <service id="shopware_adapter.command_handler.handle_product" class="ShopwareAdapter\ServiceBus\CommandHandler\Product\HandleProductCommandHandler">
+            <argument type="service" id="models" />
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plenty_connector.translation_helper" />
             <argument type="service" id="shopware_adapter.attribute_helper" />
             <argument type="service" id="shopware_adapter.data_persister.attribute" />
             <argument type="service" id="shopware_adapter.request_generator.product" />
             <argument type="service" id="shopware_adapter.data_persister.translation" />
-            <argument type="service" id="models" />
+            <argument type="service" id="shopware_adapter.data_provider.shop" />
 
             <tag name="plenty_connector.command_handler" />
         </service>
