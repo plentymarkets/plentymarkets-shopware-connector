@@ -67,18 +67,17 @@ class HandleProductCommandHandler implements CommandHandlerInterface
      */
     private $entityManager;
 
-
     /**
      * HandleProductCommandHandler constructor.
      *
-     * @param EntityManagerInterface $entityManager
-     * @param IdentityServiceInterface $identityService
-     * @param TranslationHelperInterface $translationHelper
-     * @param AttributeHelper $attributeHelper
-     * @param AttributeDataPersisterInterface $attributeDataPersister
-     * @param ProductRequestGeneratorInterface $productRequestGenerator
+     * @param EntityManagerInterface            $entityManager
+     * @param IdentityServiceInterface          $identityService
+     * @param TranslationHelperInterface        $translationHelper
+     * @param AttributeHelper                   $attributeHelper
+     * @param AttributeDataPersisterInterface   $attributeDataPersister
+     * @param ProductRequestGeneratorInterface  $productRequestGenerator
      * @param TranslationDataPersisterInterface $translationDataPersister
-     * @param ShopDataProviderInterface $shopDataProvider
+     * @param ShopDataProviderInterface         $shopDataProvider
      */
     public function __construct(
         EntityManagerInterface $entityManager,

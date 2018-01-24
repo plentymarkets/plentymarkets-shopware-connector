@@ -13,6 +13,4 @@ interface ShopDataProviderInterface
      * @return ShopModel
      */
     public function getDefaultShopLocaleIdentitiy();
-
-
 }
