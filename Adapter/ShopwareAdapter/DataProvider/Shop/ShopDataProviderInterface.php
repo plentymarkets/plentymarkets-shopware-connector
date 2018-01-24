@@ -12,5 +12,5 @@ interface ShopDataProviderInterface
     /**
      * @return ShopModel
      */
-    public function getDefaultShopLocaleIdentitiy();
+    public function getDefaultShop();
 }

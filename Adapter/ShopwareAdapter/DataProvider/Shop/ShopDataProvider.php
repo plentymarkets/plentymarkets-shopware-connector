@@ -29,7 +29,7 @@ class ShopDataProvider implements ShopDataProviderInterface
     /**
      * @return ShopModel
      */
-    public function getDefaultShopLocaleIdentitiy()
+    public function getDefaultShop()
     {
         return $this->shopRepository->findoneBy(['default' => 1]);
     }

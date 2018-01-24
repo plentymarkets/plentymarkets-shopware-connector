@@ -117,13 +117,10 @@ class HandleProductCommandHandler implements CommandHandlerInterface
      */
     public function handle(CommandInterface $command)
     {
-        /**
-         * @var ShopModel $shop
-         */
-        $shop = $this->shopDataProvider->getDefaultShopLocaleIdentitiy();
+        $shopLocaleId = $this->shopDataProvider->getDefaultShop()->getLocale()->getId();
 
         $languageIdentity = $this->identityService->findOneBy([
-            'adapterIdentifier' => (string) $shop->getLocale()->getId(),
+            'adapterIdentifier' => (string) $shopLocaleId,
             'adapterName' => ShopwareAdapter::NAME,
             'objectType' => Language::TYPE,
         ]);
