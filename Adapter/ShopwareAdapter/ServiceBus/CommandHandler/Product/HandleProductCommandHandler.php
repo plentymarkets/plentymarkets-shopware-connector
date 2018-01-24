@@ -8,10 +8,14 @@ use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\TransferObjectCommand;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\ServiceBus\CommandType;
+use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentyConnector\Connector\TransferObject\Product\Product;
+use PlentyConnector\Connector\Translation\TranslationHelperInterface;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Article;
 use Shopware\Models\Article\Detail;
+use Shopware\Models\Shop\Repository as ShopRepository;
+use Shopware\Models\Shop\Shop as ShopModel;
 use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
 use ShopwareAdapter\DataPersister\Translation\TranslationDataPersisterInterface;
 use ShopwareAdapter\Helper\AttributeHelper;
@@ -27,6 +31,11 @@ class HandleProductCommandHandler implements CommandHandlerInterface
      * @var IdentityServiceInterface
      */
     private $identityService;
+
+    /**
+     * @var TranslationHelperInterface
+     */
+    private $translationHelper;
 
     /**
      * @var AttributeHelper
@@ -54,17 +63,25 @@ class HandleProductCommandHandler implements CommandHandlerInterface
     private $entityManager;
 
     /**
+     * @var ShopRepository
+     */
+    private $shopRepository;
+
+
+    /**
      * HandleProductCommandHandler constructor.
      *
-     * @param IdentityServiceInterface          $identityService
-     * @param AttributeHelper                   $attributeHelper
-     * @param AttributeDataPersisterInterface   $attributeDataPersister
-     * @param ProductRequestGeneratorInterface  $productRequestGenerator
+     * @param IdentityServiceInterface $identityService
+     * @param TranslationHelperInterface $translationHelper
+     * @param AttributeHelper $attributeHelper
+     * @param AttributeDataPersisterInterface $attributeDataPersister
+     * @param ProductRequestGeneratorInterface $productRequestGenerator
      * @param TranslationDataPersisterInterface $translationDataPersister
-     * @param EntityManagerInterface            $entityManager
+     * @param EntityManagerInterface $entityManager
      */
     public function __construct(
         IdentityServiceInterface $identityService,
+        TranslationHelperInterface $translationHelper,
         AttributeHelper $attributeHelper,
         AttributeDataPersisterInterface $attributeDataPersister,
         ProductRequestGeneratorInterface $productRequestGenerator,
@@ -72,11 +89,13 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         EntityManagerInterface $entityManager
     ) {
         $this->identityService = $identityService;
+        $this->translationHelper = $translationHelper;
         $this->attributeHelper = $attributeHelper;
         $this->attributeDataPersister = $attributeDataPersister;
         $this->productRequestGenerator = $productRequestGenerator;
         $this->translationDataPersister = $translationDataPersister;
         $this->entityManager = $entityManager;
+        $this->shopRepository = $entityManager->getRepository(ShopModel::class);
     }
 
     /**
@@ -98,9 +117,31 @@ class HandleProductCommandHandler implements CommandHandlerInterface
     public function handle(CommandInterface $command)
     {
         /**
+         * @var ShopModel $shop
+         */
+        $shop = $this->shopRepository->findOneBy(['default' => 1]);
+
+        $languageIdentity = $this->identityService->findOneBy([
+            'adapterIdentifier' => (string) $shop->getLocale()->getId(),
+            'adapterName' => ShopwareAdapter::NAME,
+            'objectType' => Language::TYPE,
+        ]);
+
+        /**
          * @var Product $product
          */
         $product = $command->getPayload();
+
+        if (null !== $languageIdentity) {
+            /**
+             * @var Product $translated
+             */
+            $translated = $this->translationHelper->translate($languageIdentity->getObjectIdentifier(), $product);
+
+            if (null !== $translated) {
+                $product = $translated;
+            }
+        }
 
         $params = $this->productRequestGenerator->generate($product);
         $variantRepository = $this->entityManager->getRepository(Detail::class);

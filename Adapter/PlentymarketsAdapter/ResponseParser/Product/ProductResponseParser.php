@@ -25,10 +25,6 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Product\Image\ImageResponseParserInterface;
 use PlentymarketsAdapter\ResponseParser\Product\Variation\VariationResponseParserInterface;
 use Psr\Log\LoggerInterface;
-use Shopware\Components\Model\ModelManager;
-use Shopware\Models\Shop\Repository as ShopRepository;
-use Shopware\Models\Shop\Shop as SwShop;
-use ShopwareAdapter\ShopwareAdapter;
 
 /**
  * Class ProductResponseParser.
@@ -62,11 +58,6 @@ class ProductResponseParser implements ProductResponseParserInterface
     private $itemsPropertiesNamesApi;
 
     /**
-     * @var ModelManager
-     */
-    private $entityManager;
-
-    /**
      * ProductResponseParser constructor.
      *
      * @param IdentityServiceInterface         $identityService
@@ -74,15 +65,13 @@ class ProductResponseParser implements ProductResponseParserInterface
      * @param ImageResponseParserInterface     $imageResponseParser
      * @param VariationResponseParserInterface $variationResponseParser
      * @param ClientInterface                  $client
-     * @param ModelManager                     $entityManager
      */
     public function __construct(
         IdentityServiceInterface $identityService,
         LoggerInterface $logger,
         ImageResponseParserInterface $imageResponseParser,
         VariationResponseParserInterface $variationResponseParser,
-        ClientInterface $client,
-        ModelManager $entityManager
+        ClientInterface $client
     ) {
         $this->identityService = $identityService;
         $this->logger = $logger;
@@ -90,12 +79,9 @@ class ProductResponseParser implements ProductResponseParserInterface
         $this->variationResponseParser = $variationResponseParser;
 
         //TODO: inject when refactoring this class
-        $this->itemsVariationsVariationPropertiesApi = new \PlentymarketsAdapter\ReadApi\Item\Variation\Property(
-            $client
-        );
+        $this->itemsVariationsVariationPropertiesApi = new \PlentymarketsAdapter\ReadApi\Item\Variation\Property($client);
         $this->itemsPropertiesSelectionsApi = new\PlentymarketsAdapter\ReadApi\Item\Property\Selection($client);
         $this->itemsPropertiesNamesApi = new \PlentymarketsAdapter\ReadApi\Item\Property\Name($client);
-        $this->entityManager = $entityManager;
     }
 
     /**
@@ -138,18 +124,13 @@ class ProductResponseParser implements ProductResponseParserInterface
             return [];
         }
 
-        $variations = array_filter(
-            $candidatesForProcessing,
-            function (TransferObjectInterface $object) {
-                return $object instanceof Variation;
-            }
-        );
-
-        $mainLang = $this->getMainLanguage($product['texts']);
+        $variations = array_filter($candidatesForProcessing, function (TransferObjectInterface $object) {
+            return $object instanceof Variation;
+        });
 
         $productObject = new Product();
         $productObject->setIdentifier($identity->getObjectIdentifier());
-        $productObject->setName((string) $product['texts'][$mainLang]['name1']);
+        $productObject->setName((string) $product['texts'][0]['name1']);
         $productObject->setActive($this->getActive($variations, $mainVariation));
         $productObject->setNumber($this->getProductNumber($variations));
         $productObject->setShopIdentifiers($shopIdentifiers);
@@ -160,12 +141,12 @@ class ProductResponseParser implements ProductResponseParserInterface
         $productObject->setImages($this->getImages($product, $product['texts'], $result));
         $productObject->setVatRateIdentifier($this->getVatRateIdentifier($mainVariation));
         $productObject->setStockLimitation($this->getStockLimitation($product));
-        $productObject->setDescription((string) $product['texts'][$mainLang]['shortDescription']);
-        $productObject->setLongDescription((string) $product['texts'][$mainLang]['description']);
-        $productObject->setTechnicalDescription((string) $product['texts'][$mainLang]['technicalData']);
-        $productObject->setMetaTitle((string) $product['texts'][$mainLang]['name1']);
-        $productObject->setMetaDescription((string) $product['texts'][$mainLang]['metaDescription']);
-        $productObject->setMetaKeywords((string) $product['texts'][$mainLang]['keywords']);
+        $productObject->setDescription((string) $product['texts'][0]['shortDescription']);
+        $productObject->setLongDescription((string) $product['texts'][0]['description']);
+        $productObject->setTechnicalDescription((string) $product['texts'][0]['technicalData']);
+        $productObject->setMetaTitle((string) $product['texts'][0]['name1']);
+        $productObject->setMetaDescription((string) $product['texts'][0]['metaDescription']);
+        $productObject->setMetaKeywords((string) $product['texts'][0]['keywords']);
         $productObject->setMetaRobots('INDEX, FOLLOW');
         $productObject->setLinkedProducts($this->getLinkedProducts($product));
         $productObject->setProperties($this->getProperties($mainVariation));
@@ -190,18 +171,15 @@ class ProductResponseParser implements ProductResponseParserInterface
      */
     private function addProductAttributesToVariation(Product $product, array $candidatesForProcessing = [])
     {
-        return array_map(
-            function (TransferObjectInterface $object) use ($product) {
-                if (!($object instanceof Variation)) {
-                    return $object;
-                }
-
-                $object->setAttributes(array_merge($object->getAttributes(), $product->getAttributes()));
-
+        return array_map(function (TransferObjectInterface $object) use ($product) {
+            if (!($object instanceof Variation)) {
                 return $object;
-            },
-            $candidatesForProcessing
-        );
+            }
+
+            $object->setAttributes(array_merge($object->getAttributes(), $product->getAttributes()));
+
+            return $object;
+        }, $candidatesForProcessing);
     }
 
     /**
@@ -227,57 +205,15 @@ class ProductResponseParser implements ProductResponseParserInterface
      */
     private function getMainVariation(array $variations)
     {
-        $mainVariation = array_filter(
-            $variations,
-            function ($varation) {
-                return $varation['isMain'] === true;
-            }
-        );
+        $mainVariation = array_filter($variations, function ($varation) {
+            return $varation['isMain'] === true;
+        });
 
         if (empty($mainVariation)) {
             return [];
         }
 
         return array_shift($mainVariation);
-    }
-
-    private function getMainLanguage($texts)
-    {
-        /**
-         * @var ShopRepository $repository
-         * @var SwShop         $shop
-         */
-        $repository = $this->entityManager->getRepository(SwShop::class);
-        $shop = $repository->getDefault();
-
-        $mainLanguageIdentifier = $this->identityService->findOneBy(
-            [
-                'adapterIdentifier' => $shop->getLocale()->getId(),
-                'adapterName' => ShopwareAdapter::NAME,
-                'objectType' => Language::TYPE,
-            ]
-        );
-
-        if (null === $mainLanguageIdentifier->getObjectIdentifier()) {
-            return 0;
-        }
-
-        foreach ($texts as $key => $text) {
-            $languageIdentifier = $this->identityService->findOneBy(
-                [
-                    'adapterIdentifier' => $text['lang'],
-                    'adapterName' => PlentymarketsAdapter::NAME,
-                    'objectType' => Language::TYPE,
-                ]
-            );
-
-            if (null === $languageIdentifier ||
-                $mainLanguageIdentifier->getObjectIdentifier() !== $languageIdentifier->getObjectIdentifier()) {
-                continue;
-            }
-
-            return $key;
-        }
     }
 
     /**
@@ -289,13 +225,11 @@ class ProductResponseParser implements ProductResponseParserInterface
      */
     private function getVatRateIdentifier(array $variation)
     {
-        $vatRateIdentity = $this->identityService->findOneBy(
-            [
-                'adapterIdentifier' => $variation['vatId'],
-                'adapterName' => PlentymarketsAdapter::NAME,
-                'objectType' => VatRate::TYPE,
-            ]
-        );
+        $vatRateIdentity = $this->identityService->findOneBy([
+            'adapterIdentifier' => $variation['vatId'],
+            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType' => VatRate::TYPE,
+        ]);
 
         if (null === $vatRateIdentity) {
             throw new NotFoundException('missing mapping for vat rate');
@@ -335,13 +269,11 @@ class ProductResponseParser implements ProductResponseParserInterface
     {
         $shippingProfiles = [];
         foreach ($product['shippingProfiles'] as $profile) {
-            $profileIdentity = $this->identityService->findOneBy(
-                [
-                    'adapterIdentifier' => (string) $profile['profileId'],
-                    'adapterName' => PlentymarketsAdapter::NAME,
-                    'objectType' => ShippingProfile::TYPE,
-                ]
-            );
+            $profileIdentity = $this->identityService->findOneBy([
+                'adapterIdentifier' => (string) $profile['profileId'],
+                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType' => ShippingProfile::TYPE,
+            ]);
 
             if (null === $profileIdentity) {
                 continue;
@@ -380,13 +312,11 @@ class ProductResponseParser implements ProductResponseParserInterface
         $defaultCategories = [];
 
         foreach ($mainVariation['variationDefaultCategory'] as $category) {
-            $categoryIdentity = $this->identityService->findOneBy(
-                [
-                    'adapterIdentifier' => (string) $category['branchId'],
-                    'adapterName' => PlentymarketsAdapter::NAME,
-                    'objectType' => Category::TYPE,
-                ]
-            );
+            $categoryIdentity = $this->identityService->findOneBy([
+                'adapterIdentifier' => (string) $category['branchId'],
+                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType' => Category::TYPE,
+            ]);
 
             if (null === $categoryIdentity) {
                 $this->logger->notice('missing mapping for category', ['category' => $category]);
@@ -410,73 +340,57 @@ class ProductResponseParser implements ProductResponseParserInterface
         $translations = [];
 
         foreach ($texts as $text) {
-            $languageIdentifier = $this->identityService->findOneBy(
-                [
-                    'adapterIdentifier' => $text['lang'],
-                    'adapterName' => PlentymarketsAdapter::NAME,
-                    'objectType' => Language::TYPE,
-                ]
-            );
+            $languageIdentifier = $this->identityService->findOneBy([
+                'adapterIdentifier' => $text['lang'],
+                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType' => Language::TYPE,
+            ]);
 
             if (null === $languageIdentifier) {
                 continue;
             }
 
-            $translations[] = Translation::fromArray(
-                [
-                    'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                    'property' => 'name',
-                    'value' => $text['name1'],
-                ]
-            );
+            $translations[] = Translation::fromArray([
+                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                'property' => 'name',
+                'value' => $text['name1'],
+            ]);
 
-            $translations[] = Translation::fromArray(
-                [
-                    'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                    'property' => 'description',
-                    'value' => $text['shortDescription'],
-                ]
-            );
+            $translations[] = Translation::fromArray([
+                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                'property' => 'description',
+                'value' => $text['shortDescription'],
+            ]);
 
-            $translations[] = Translation::fromArray(
-                [
-                    'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                    'property' => 'longDescription',
-                    'value' => $text['description'],
-                ]
-            );
+            $translations[] = Translation::fromArray([
+                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                'property' => 'longDescription',
+                'value' => $text['description'],
+            ]);
 
-            $translations[] = Translation::fromArray(
-                [
-                    'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                    'property' => 'technicalDescription',
-                    'value' => $text['technicalData'],
-                ]
-            );
+            $translations[] = Translation::fromArray([
+                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                'property' => 'technicalDescription',
+                'value' => $text['technicalData'],
+            ]);
 
-            $translations[] = Translation::fromArray(
-                [
-                    'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                    'property' => 'metaTitle',
-                    'value' => $text['name1'],
-                ]
-            );
+            $translations[] = Translation::fromArray([
+                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                'property' => 'metaTitle',
+                'value' => $text['name1'],
+            ]);
 
-            $translations[] = Translation::fromArray(
-                [
-                    'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                    'property' => 'metaDescription',
-                    'value' => $text['metaDescription'],
-                ]
-            );
+            $translations[] = Translation::fromArray([
+                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                'property' => 'metaDescription',
+                'value' => $text['metaDescription'],
+            ]);
 
-            $translations[] = Translation::fromArray(
-                [
-                    'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                    'property' => 'metaKeywords',
-                    'value' => $text['keywords'],
-                ]
-            );
+            $translations[] = Translation::fromArray([
+                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                'property' => 'metaKeywords',
+                'value' => $text['keywords'],
+            ]);
         }
 
         return $translations;
@@ -491,13 +405,11 @@ class ProductResponseParser implements ProductResponseParserInterface
     {
         $categories = [];
         foreach ($mainVariation['variationCategories'] as $category) {
-            $categoryIdentity = $this->identityService->findOneBy(
-                [
-                    'adapterIdentifier' => (string) $category['categoryId'],
-                    'adapterName' => PlentymarketsAdapter::NAME,
-                    'objectType' => Category::TYPE,
-                ]
-            );
+            $categoryIdentity = $this->identityService->findOneBy([
+                'adapterIdentifier' => (string) $category['categoryId'],
+                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType' => Category::TYPE,
+            ]);
 
             if (null === $categoryIdentity) {
                 $this->logger->notice('missing mapping for category', ['category' => $category]);
@@ -531,13 +443,11 @@ class ProductResponseParser implements ProductResponseParserInterface
                 continue;
             }
 
-            $productIdentity = $this->identityService->findOneBy(
-                [
-                    'adapterIdentifier' => $linkedProduct['crossItemId'],
-                    'adapterName' => PlentymarketsAdapter::NAME,
-                    'objectType' => Product::TYPE,
-                ]
-            );
+            $productIdentity = $this->identityService->findOneBy([
+                'adapterIdentifier' => $linkedProduct['crossItemId'],
+                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType' => Product::TYPE,
+            ]);
 
             if (null === $productIdentity) {
                 $this->logger->notice('linked product not found', ['linkedProduct' => $linkedProduct]);
@@ -545,12 +455,10 @@ class ProductResponseParser implements ProductResponseParserInterface
                 continue;
             }
 
-            $result[] = LinkedProduct::fromArray(
-                [
-                    'type' => $type,
-                    'productIdentifier' => $productIdentity->getObjectIdentifier(),
-                ]
-            );
+            $result[] = LinkedProduct::fromArray([
+                'type' => $type,
+                'productIdentifier' => $productIdentity->getObjectIdentifier(),
+            ]);
         }
 
         return $result;
@@ -587,25 +495,21 @@ class ProductResponseParser implements ProductResponseParserInterface
 
             $translations = [];
             foreach ($propertyName as $name) {
-                $languageIdentifier = $this->identityService->findOneBy(
-                    [
-                        'adapterIdentifier' => $name['lang'],
-                        'adapterName' => PlentymarketsAdapter::NAME,
-                        'objectType' => Language::TYPE,
-                    ]
-                );
+                $languageIdentifier = $this->identityService->findOneBy([
+                    'adapterIdentifier' => $name['lang'],
+                    'adapterName' => PlentymarketsAdapter::NAME,
+                    'objectType' => Language::TYPE,
+                ]);
 
                 if (null === $languageIdentifier) {
                     continue;
                 }
 
-                $translations[] = Translation::fromArray(
-                    [
-                        'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                        'property' => 'name',
-                        'value' => $name['name'],
-                    ]
-                );
+                $translations[] = Translation::fromArray([
+                    'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                    'property' => 'name',
+                    'value' => $name['name'],
+                ]);
             }
 
             $values = [];
@@ -617,53 +521,43 @@ class ProductResponseParser implements ProductResponseParserInterface
 
                 $valueTranslations = [];
                 foreach ($property['valueTexts'] as $name) {
-                    $languageIdentifier = $this->identityService->findOneBy(
-                        [
-                            'adapterIdentifier' => $name['lang'],
-                            'adapterName' => PlentymarketsAdapter::NAME,
-                            'objectType' => Language::TYPE,
-                        ]
-                    );
+                    $languageIdentifier = $this->identityService->findOneBy([
+                        'adapterIdentifier' => $name['lang'],
+                        'adapterName' => PlentymarketsAdapter::NAME,
+                        'objectType' => Language::TYPE,
+                    ]);
 
                     if (null === $languageIdentifier) {
                         continue;
                     }
 
-                    $valueTranslations[] = Translation::fromArray(
-                        [
-                            'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                            'property' => 'value',
-                            'value' => $name['value'],
-                        ]
-                    );
+                    $valueTranslations[] = Translation::fromArray([
+                        'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                        'property' => 'value',
+                        'value' => $name['value'],
+                    ]);
                 }
 
-                $values[] = Value::fromArray(
-                    [
-                        'value' => (string) $property['valueTexts'][0]['value'],
-                        'translations' => $valueTranslations,
-                    ]
-                );
+                $values[] = Value::fromArray([
+                    'value' => (string) $property['valueTexts'][0]['value'],
+                    'translations' => $valueTranslations,
+                ]);
             } elseif ($property['property']['valueType'] === 'int') {
                 if (null === $property['valueInt']) {
                     continue;
                 }
 
-                $values[] = Value::fromArray(
-                    [
-                        'value' => (string) $property['valueInt'],
-                    ]
-                );
+                $values[] = Value::fromArray([
+                    'value' => (string) $property['valueInt'],
+                ]);
             } elseif ($property['property']['valueType'] === 'float') {
                 if (null === $property['valueFloat']) {
                     continue;
                 }
 
-                $values[] = Value::fromArray(
-                    [
-                        'value' => (string) $property['valueFloat'],
-                    ]
-                );
+                $values[] = Value::fromArray([
+                    'value' => (string) $property['valueFloat'],
+                ]);
             } elseif ($property['property']['valueType'] === 'file') {
                 $this->logger->notice('file properties are not supported', ['variation', $mainVariation['id']]);
 
@@ -682,22 +576,18 @@ class ProductResponseParser implements ProductResponseParserInterface
                         $selections[$property['propertyId']][$element['id']] = $element;
                         $selections[$property['propertyId']][$element['id']]['translations'] = [];
 
-                        $languageIdentifier = $this->identityService->findOneBy(
-                            [
-                                'adapterIdentifier' => $element['lang'],
-                                'adapterName' => PlentymarketsAdapter::NAME,
-                                'objectType' => Language::TYPE,
-                            ]
-                        );
+                        $languageIdentifier = $this->identityService->findOneBy([
+                            'adapterIdentifier' => $element['lang'],
+                            'adapterName' => PlentymarketsAdapter::NAME,
+                            'objectType' => Language::TYPE,
+                        ]);
 
                         if (null !== $languageIdentifier) {
-                            $translation = Translation::fromArray(
-                                [
-                                    'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                                    'property' => 'value',
-                                    'value' => $element['name'],
-                                ]
-                            );
+                            $translation = Translation::fromArray([
+                                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                                'property' => 'value',
+                                'value' => $element['name'],
+                            ]);
 
                             $selections[$property['propertyId']][$element['id']]['translations'] = [$translation];
                         }
@@ -710,21 +600,17 @@ class ProductResponseParser implements ProductResponseParserInterface
                     continue;
                 }
 
-                $values[] = Value::fromArray(
-                    [
-                        'value' => $selectionValue,
-                        'translations' => $selections[$property['propertyId']][$property['propertySelectionId']]['translations'],
-                    ]
-                );
+                $values[] = Value::fromArray([
+                    'value' => $selectionValue,
+                    'translations' => $selections[$property['propertyId']][$property['propertySelectionId']]['translations'],
+                ]);
             }
 
-            $result[] = Property::fromArray(
-                [
-                    'name' => $propertyName[0]['name'],
-                    'values' => $values,
-                    'translations' => $translations,
-                ]
-            );
+            $result[] = Property::fromArray([
+                'name' => $propertyName[0]['name'],
+                'values' => $values,
+                'translations' => $translations,
+            ]);
         }
 
         return $result;
@@ -740,13 +626,11 @@ class ProductResponseParser implements ProductResponseParserInterface
         $identifiers = [];
 
         foreach ($mainVariation['variationClients'] as $client) {
-            $identity = $this->identityService->findOneBy(
-                [
-                    'adapterIdentifier' => $client['plentyId'],
-                    'adapterName' => PlentymarketsAdapter::NAME,
-                    'objectType' => Shop::TYPE,
-                ]
-            );
+            $identity = $this->identityService->findOneBy([
+                'adapterIdentifier' => $client['plentyId'],
+                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType' => Shop::TYPE,
+            ]);
 
             if (null === $identity) {
                 $this->logger->notice('shop not found', $client);
@@ -863,12 +747,10 @@ class ProductResponseParser implements ProductResponseParserInterface
                 continue;
             }
 
-            $attributes[] = Attribute::fromArray(
-                [
-                    'key' => $key,
-                    'value' => (string) $product[$key],
-                ]
-            );
+            $attributes[] = Attribute::fromArray([
+                'key' => $key,
+                'value' => (string) $product[$key],
+            ]);
         }
 
         $attributes[] = $this->getShortDescriptionAsAttribute($product);
@@ -886,25 +768,21 @@ class ProductResponseParser implements ProductResponseParserInterface
         $translations = [];
 
         foreach ($product['texts'] as $text) {
-            $languageIdentifier = $this->identityService->findOneBy(
-                [
-                    'adapterIdentifier' => $text['lang'],
-                    'adapterName' => PlentymarketsAdapter::NAME,
-                    'objectType' => Language::TYPE,
-                ]
-            );
+            $languageIdentifier = $this->identityService->findOneBy([
+                'adapterIdentifier' => $text['lang'],
+                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType' => Language::TYPE,
+            ]);
 
             if (null === $languageIdentifier) {
                 continue;
             }
 
-            $translations[] = Translation::fromArray(
-                [
-                    'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                    'property' => 'value',
-                    'value' => $text['shortDescription'],
-                ]
-            );
+            $translations[] = Translation::fromArray([
+                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                'property' => 'value',
+                'value' => $text['shortDescription'],
+            ]);
         }
 
         $attribute = new Attribute();

@@ -191,7 +191,6 @@
             <argument type="service" id="plentymarkets_adapter.response_parser.image" />
             <argument type="service" id="plentymarkets_adapter.response_parser.variation" />
             <argument type="service" id="plentymarkets_adapter.client" />
-            <argument type="service" id="models" />
         </service>
 
         <service id="plentymarkets_adapter.response_parser.product.price" class="PlentymarketsAdapter\ResponseParser\Product\Price\PriceResponseParser">
