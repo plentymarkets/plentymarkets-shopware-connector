@@ -48,7 +48,7 @@ class OrderStatusResponseParser implements OrderStatusResponseParserInterface
     }
 
     /**
-     * @param $entry
+     * @param array $entry
      *
      * @return string
      */

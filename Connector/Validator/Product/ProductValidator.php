@@ -18,7 +18,7 @@ use PlentyConnector\Connector\ValueObject\Translation\Translation;
 class ProductValidator implements ValidatorInterface
 {
     /**
-     * @param $object
+     * @param mixed $object
      *
      * @return bool
      */

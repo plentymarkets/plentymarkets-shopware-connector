@@ -11,6 +11,7 @@ use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use Psr\Log\LoggerInterface;
+use Shopware\Models\Customer\Customer as CustomerModel;
 use Shopware\Models\Customer\Group as GroupModel;
 use Shopware\Models\Newsletter\Address;
 use Shopware\Models\Shop\Repository;
@@ -182,17 +183,17 @@ class CustomerResponseParser implements CustomerResponseParserInterface
     }
 
     /**
-     * @param int
+     * @param int $shopwareId
      *
      * @return int
      */
     private function getCustomerTypeId($shopwareId)
     {
         switch ($shopwareId) {
-            case \Shopware\Models\Customer\Customer::ACCOUNT_MODE_CUSTOMER:
+            case CustomerModel::ACCOUNT_MODE_CUSTOMER:
                 return Customer::TYPE_NORMAL;
 
-            case \Shopware\Models\Customer\Customer::ACCOUNT_MODE_FAST_LOGIN:
+            case CustomerModel::ACCOUNT_MODE_FAST_LOGIN:
                 return Customer::TYPE_GUEST;
         }
 

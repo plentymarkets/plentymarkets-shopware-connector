@@ -67,9 +67,9 @@ interface IdentityServiceInterface
     public function exists(array $criteria = []);
 
     /**
-     * @param $objectIdentifier
-     * @param $objectType
-     * @param $adapterName
+     * @param string $objectIdentifier
+     * @param string $objectType
+     * @param string $adapterName
      *
      * @return bool
      */

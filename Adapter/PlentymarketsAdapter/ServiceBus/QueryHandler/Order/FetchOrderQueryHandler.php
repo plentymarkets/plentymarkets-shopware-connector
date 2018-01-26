@@ -18,7 +18,7 @@ use PlentymarketsAdapter\ResponseParser\Order\OrderResponseParserInterface;
 class FetchOrderQueryHandler implements QueryHandlerInterface
 {
     /**
-     * @var Order
+     * @var OrderApi
      */
     private $api;
 

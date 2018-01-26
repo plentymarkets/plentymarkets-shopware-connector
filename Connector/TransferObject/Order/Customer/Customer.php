@@ -11,13 +11,10 @@ use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 class Customer extends AbstractValueObject
 {
     const TYPE_NORMAL = 1;
-
     const TYPE_GUEST = 2;
 
     const SALUTATION_MR = 1;
-
     const SALUTATION_MS = 2;
-
     const SALUTATION_FIRM = 3;
 
     /**
@@ -360,7 +357,7 @@ class Customer extends AbstractValueObject
     }
 
     /**
-     * @param $name
+     * @param string $name
      *
      * @return array
      */

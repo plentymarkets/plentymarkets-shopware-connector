@@ -27,10 +27,10 @@ class ShopDataProvider implements ShopDataProviderInterface
     }
 
     /**
-     * @return ShopModel
+     * {@inheritdoc}
      */
     public function getDefaultShop()
     {
-        return $this->shopRepository->findoneBy(['default' => 1]);
+        return $this->shopRepository->findOneBy(['default' => 1]);
     }
 }

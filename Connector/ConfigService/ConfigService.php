@@ -6,6 +6,7 @@ use DateTime;
 use DateTimeImmutable;
 use Exception;
 use PlentyConnector\Connector\ConfigService\Model\Config;
+use PlentyConnector\Connector\ConfigService\Model\ConfigRepository;
 use Shopware\Components\Model\ModelManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -20,7 +21,7 @@ class ConfigService implements ConfigServiceInterface
     private $entityManager;
 
     /**
-     * @var ModelManager
+     * @var ConfigRepository
      */
     private $repository;
 

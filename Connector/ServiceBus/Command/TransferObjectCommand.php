@@ -35,7 +35,7 @@ class TransferObjectCommand implements CommandInterface
      * TransferObjectCommand constructor.
      *
      * @param string $adapterName
-     * @param $objectType
+     * @param string $objectType
      * @param string                         $commandType
      * @param TransferObjectInterface|string $payload
      */

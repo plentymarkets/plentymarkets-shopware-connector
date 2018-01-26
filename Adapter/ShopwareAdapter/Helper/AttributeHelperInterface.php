@@ -11,7 +11,7 @@ interface AttributeHelperInterface
 {
     /**
      * @param AttributableInterface $object
-     * @param $fieldName
+     * @param string $fieldName
      */
     public function addFieldAsAttribute(AttributableInterface $object, $fieldName);
 }

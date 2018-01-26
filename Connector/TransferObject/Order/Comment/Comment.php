@@ -12,7 +12,6 @@ use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 class Comment extends AbstractValueObject implements AttributableInterface
 {
     const TYPE_INTERNAL = 1;
-
     const TYPE_CUSTOMER = 2;
 
     /**

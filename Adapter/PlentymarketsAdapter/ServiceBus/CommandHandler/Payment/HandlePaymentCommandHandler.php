@@ -124,13 +124,15 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
      */
     private function findOrCreatePlentyPayment(Payment $payment)
     {
-        $plentyPayments = $this->fetchPlentyPayments($payment->getTransactionReference());
+        $plentyPayments = $this->fetchPlentyPayments($payment);
         $paymentResult = $plentyPayments[0];
+
         if ($plentyPayments) {
             $this->logger->debug('payment with the same transaction id "' . $paymentResult['id'] . '" already exists.');
         } else {
             $paymentResult = $this->createPlentyPayment($payment);
         }
+
         $this->identityService->create(
             $payment->getIdentifier(),
             Payment::TYPE,
@@ -146,9 +148,9 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
      *
      * @return bool
      */
-    private function fetchPlentyPayments($transactionReference)
+    private function fetchPlentyPayments($payment)
     {
-        $url = 'payments/property/1/' . $transactionReference;
+        $url = 'payments/property/1/' . $payment->getTransactionReference();
         $payments = $this->client->request('GET', $url);
 
         if (empty($payments)) {

@@ -10,7 +10,6 @@ use ReflectionClass;
 final class CommandType
 {
     const HANDLE = 'handle';
-
     const REMOVE = 'remove';
 
     /**

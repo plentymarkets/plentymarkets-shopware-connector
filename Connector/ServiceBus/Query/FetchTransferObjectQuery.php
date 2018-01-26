@@ -33,9 +33,9 @@ class FetchTransferObjectQuery implements QueryInterface
     /**
      * FetchTransferObjectQuery constructor.
      *
-     * @param $adapterName
-     * @param $objectType
-     * @param $queryType
+     * @param string $adapterName
+     * @param string $objectType
+     * @param string $queryType
      * @param null $objectIdentifier
      */
     public function __construct($adapterName, $objectType, $queryType, $objectIdentifier = null)

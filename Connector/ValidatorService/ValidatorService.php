@@ -62,13 +62,13 @@ class ValidatorService implements ValidatorServiceInterface
 
                         $this->validate($item, $parents);
                     }
-                }
+                } else {
+                    if (!$this->canBeValidated($result)) {
+                        continue;
+                    }
 
-                if (!$this->canBeValidated($result)) {
-                    continue;
+                    $this->validate($result, $parents);
                 }
-
-                $this->validate($result, $parents);
             }
         } catch (InvalidArgumentException $exception) {
             throw InvalidDataException::fromObject($object, $exception->getMessage(), $exception->getPropertyPath(), $parents);
@@ -76,7 +76,7 @@ class ValidatorService implements ValidatorServiceInterface
     }
 
     /**
-     * @param $value
+     * @param mixed $value
      *
      * @return bool
      */

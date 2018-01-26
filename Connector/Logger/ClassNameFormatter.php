@@ -92,7 +92,7 @@ class ClassNameFormatter implements ClassNameFormatterInterface
     }
 
     /**
-     * @param $command
+     * @param mixed $command
      *
      * @return string
      */
@@ -110,7 +110,7 @@ class ClassNameFormatter implements ClassNameFormatterInterface
     }
 
     /**
-     * @param $command
+     * @param mixed $command
      *
      * @return string
      */
@@ -120,7 +120,7 @@ class ClassNameFormatter implements ClassNameFormatterInterface
     }
 
     /**
-     * @param $command
+     * @param mixed $command
      *
      * @return array
      */
@@ -152,7 +152,7 @@ class ClassNameFormatter implements ClassNameFormatterInterface
     }
 
     /**
-     * @param $command
+     * @param mixed $command
      *
      * @return string
      */
@@ -162,7 +162,7 @@ class ClassNameFormatter implements ClassNameFormatterInterface
     }
 
     /**
-     * @param $command
+     * @param mixed $command
      *
      * @return string
      */
@@ -172,7 +172,7 @@ class ClassNameFormatter implements ClassNameFormatterInterface
     }
 
     /**
-     * @param $command
+     * @param mixed $command
      *
      * @return string
      */

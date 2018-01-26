@@ -263,7 +263,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
-     * @param $entry
+     * @param array $entry
      *
      * @return Comment[]
      */

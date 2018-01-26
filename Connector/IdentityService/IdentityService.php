@@ -172,11 +172,7 @@ class IdentityService implements IdentityServiceInterface
     }
 
     /**
-     * @param $objectIdentifier
-     * @param $objectType
-     * @param $adapterName
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function isMapppedIdentity($objectIdentifier, $objectType, $adapterName)
     {

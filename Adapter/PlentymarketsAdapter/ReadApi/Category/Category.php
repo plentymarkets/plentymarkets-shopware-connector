@@ -33,7 +33,7 @@ class Category extends ApiAbstract
     }
 
     /**
-     * @param $categoryId
+     * @param int $categoryId
      *
      * @return array
      */
