@@ -52,7 +52,9 @@ class ProductResponseParser implements ProductResponseParserInterface
     private $variationResponseParser;
 
     private $itemsVariationsVariationPropertiesApi;
+
     private $itemsPropertiesSelectionsApi;
+
     private $itemsPropertiesNamesApi;
 
     /**
@@ -99,6 +101,13 @@ class ProductResponseParser implements ProductResponseParserInterface
 
         if (empty($shopIdentifiers)) {
             return [];
+        }
+
+        foreach ($product['variations'] as $val => $key) {
+            $variantShopIdentifiers = $this->getShopIdentifiers($key);
+            if (empty($variantShopIdentifiers)) {
+                unset($product['variations'][$val]);
+            }
         }
 
         $identity = $this->identityService->findOneOrCreate(

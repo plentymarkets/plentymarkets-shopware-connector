@@ -142,10 +142,6 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
             foreach ($bundleModel->getArticles() as $article) {
                 $this->entityManager->remove($article);
             }
-
-            foreach ($bundleModel->getCustomerGroups() as $customerGroup) {
-                $this->entityManager->remove($customerGroup);
-            }
         }
 
         $bundleModel->setName($bundle->getName());

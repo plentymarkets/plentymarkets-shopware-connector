@@ -3,7 +3,7 @@ This Document should give a brief overview how and where the connector handels e
 
 
 ## Reading Phase
-During the reading phase of the connector, errors with different levels could potentially occour. 
+During the reading phase of the connector, errors with different levels could occur. 
 
 ### Exceptions / Warnings
 The corresponding object can not be processed.
@@ -13,11 +13,11 @@ The corresponding object will be processed, but the data in question will be ski
 
 ### No Message
 Some Settings could lead to an exclusion of an object. These conditions will not be logged as they are part of
-the adapter domain
+the adapter domain.
 
 
-## Persiting Phase
-During the write phase errors can also occour, but will be kept at a bare minimum.
+## Persisting Phase
+Errors can also occur during the write phase. Throwing exceptions will be avoided at all cost.
 
 ### Exceptions / Warnings
 The corresponding object can not be processed.

@@ -6,6 +6,30 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 ### Fixed
+- prepareOrderItems validation fix 
+- only transfer variations with valid clientid
+- import alternate media text as name if is set
+- import correct main translation
+- use correct item tax when transferring order to plenty
+
+### Changed
+- changed the sequence in which the definitions are processed, orders and payments are now fetched first.
+- reset unused Shopware attributes for shipping profiles
+- handle Shopware's DateTime attributes correctly
+
+## [4.2.1]
+### Added
+
+### Fixed
+- don't transfer payment to plenty when payment with same transaction id exists
+
+### Changed
+- Category content will not be overwritten by default plenty ID
+
+## [4.2.0]
+### Added
+
+### Fixed
 - error handling when parsing order addresses
 - Bundle stock fix (@marcmanusch)
 - use correct tax when transferring order to plenty

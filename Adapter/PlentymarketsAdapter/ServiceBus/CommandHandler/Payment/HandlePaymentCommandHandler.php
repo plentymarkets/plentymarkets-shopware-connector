@@ -92,10 +92,6 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
             return true;
         }
 
-        if ($this->isExistingPayment($payment)) {
-            $this->logger->notice('payment with the same transaction id already exists.');
-        }
-
         $orderIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $payment->getOrderIdentifer(),
             'objectType'       => Order::TYPE,
@@ -108,17 +104,11 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
             return false;
         }
 
-        $params = $this->requestGenerator->generate($payment);
+        $paymentResult = $this->findOrCreatePlentyPayment($payment);
 
-        $paymentResult = $this->client->request('POST', 'payments', $params);
-
-        $this->identityService->create(
-            $payment->getIdentifier(),
-            Payment::TYPE,
-            (string) $paymentResult['id'],
-            PlentymarketsAdapter::NAME
-        );
-
+        if ($orderIdentity->getAdapterIdentifier() == $paymentResult['order']['orderId']) {
+            return true;
+        }
         $this->client->request(
             'POST',
             'payment/' . $paymentResult['id'] . '/order/' . $orderIdentity->getAdapterIdentifier()
@@ -130,11 +120,35 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
     /**
      * @param Payment $payment
      *
+     * @return array
+     */
+    private function findOrCreatePlentyPayment(Payment $payment)
+    {
+        $plentyPayments = $this->fetchPlentyPayments($payment->getTransactionReference());
+        $paymentResult = $plentyPayments[0];
+        if ($plentyPayments) {
+            $this->logger->debug('payment with the same transaction id "' . $paymentResult['id'] . '" already exists.');
+        } else {
+            $paymentResult = $this->createPlentyPayment($payment);
+        }
+        $this->identityService->create(
+            $payment->getIdentifier(),
+            Payment::TYPE,
+            (string) $paymentResult['id'],
+            PlentymarketsAdapter::NAME
+        );
+
+        return $paymentResult;
+    }
+
+    /**
+     * @param Payment $payment
+     *
      * @return bool
      */
-    private function isExistingPayment(Payment $payment)
+    private function fetchPlentyPayments($transactionReference)
     {
-        $url      = 'payments/property/1/' . $payment->getTransactionReference();
+        $url = 'payments/property/1/' . $transactionReference;
         $payments = $this->client->request('GET', $url);
 
         if (empty($payments)) {
@@ -145,6 +159,20 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
             return !$payment['deleted'];
         });
 
-        return !empty($payments);
+        return $payments;
+    }
+
+    /**
+     * @param Payment $payment
+     *
+     * @return array
+     */
+    private function createPlentyPayment(Payment $payment)
+    {
+        $params = $this->requestGenerator->generate($payment);
+
+        $paymentResult = $this->client->request('POST', 'payments', $params);
+
+        return $paymentResult;
     }
 }

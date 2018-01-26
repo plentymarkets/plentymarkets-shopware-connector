@@ -171,7 +171,7 @@
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.transfer_object.order%</argument>
-            <argument>40</argument>
+            <argument>130</argument>
 
             <tag name="plenty_connector.connector_definition" />
         </service>
@@ -182,7 +182,7 @@
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.order%</argument>
-            <argument>30</argument>
+            <argument>120</argument>
 
             <tag name="plenty_connector.connector_definition" />
         </service>
@@ -193,7 +193,7 @@
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.transfer_object.payment%</argument>
-            <argument>20</argument>
+            <argument>110</argument>
 
             <tag name="plenty_connector.connector_definition" />
         </service>

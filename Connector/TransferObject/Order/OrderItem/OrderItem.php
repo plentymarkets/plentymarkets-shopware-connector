@@ -17,7 +17,7 @@ class OrderItem extends AbstractValueObject implements AttributableInterface
     const TYPE_DISCOUNT          = 4;
     const TYPE_PAYMENT_SURCHARGE = 5;
     const TYPE_SHIPPING_COSTS    = 6;
-
+  
     /**
      * @var int
      */
