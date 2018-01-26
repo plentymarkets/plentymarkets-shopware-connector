@@ -13,7 +13,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - use correct item tax when transferring order to plenty
 
 ### Changed
-- the new sequence is now order and payments then product related data
+- changed the sequence in which the definitions are processed, orders and payments are now fetched first.
 
 ## [4.2.1]
 ### Added
