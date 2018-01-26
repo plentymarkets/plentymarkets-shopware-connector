@@ -2,6 +2,7 @@
 
 namespace ShopwareAdapter\ResponseParser;
 
+use DateTimeInterface;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
 /**
@@ -23,7 +24,7 @@ trait GetAttributeTrait
                 continue;
             }
 
-            if ($value instanceof \DateTime) {
+            if ($value instanceof DateTimeInterface) {
                 $strValue = $value->format('Y-m-d H:i:s');
             } else {
                 $strValue = (string) $value;
