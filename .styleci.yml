@@ -15,3 +15,4 @@ disabled:
   - phpdoc_to_comment
   - phpdoc_var_without_name
   - yoda_style
+  - const_separation
