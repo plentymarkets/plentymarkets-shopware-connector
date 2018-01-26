@@ -14,6 +14,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - changed the sequence in which the definitions are processed, orders and payments are now fetched first.
+- reset unused Shopware attributes for shipping profiles
 
 ## [4.2.1]
 ### Added
@@ -46,7 +47,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - use correct shop id when parsing shopware orders
-- reset unused SW attributes for shipping profiles
 
 ### Changed
 - optimized the item query performance
