@@ -230,7 +230,7 @@ class OrderResponseParser implements OrderResponseParserInterface
      */
     private function prepareOrderItems(array $orderItems, $isNet)
     {
-        foreach ($orderItems as $key => $orderItem) {
+        foreach ($orderItems as $key => &$orderItem) {
             if (empty($orderItem['taxId'])) {
                 if (empty($orderItem['taxRate'])) {
                     continue;

@@ -7,9 +7,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - prepareOrderItems validation fix 
+- only transfer variations with valid clientid
 - import alternate media text as name if is set
+- import correct main translation
+- use correct item tax when transferring order to plenty
 
 ### Changed
+- changed the sequence in which the definitions are processed, orders and payments are now fetched first.
 
 ## [4.2.1]
 ### Added
