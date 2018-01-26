@@ -6,7 +6,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 ### Fixed
-- prepareOrderItems validation fix
+- prepareOrderItems validation fix 
+- only transfer variations with valid clientid
+- import alternate media text as name if is set
+- import correct main translation
+- use correct item tax when transferring order to plenty
 
 ### Changed
 - the new sequence is now order and payments then product related data
