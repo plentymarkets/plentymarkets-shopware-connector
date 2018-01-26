@@ -211,8 +211,8 @@ class Client implements ClientInterface
     }
 
     /**
-     * @param int $limit
-     * @param int $offset
+     * @param int   $limit
+     * @param int   $offset
      * @param array $options
      *
      * @return array

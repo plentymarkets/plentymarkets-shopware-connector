@@ -55,7 +55,7 @@ class ReferenceAmountCalculatorTest extends TestCase
 
     /**
      * @param array $variation
-     * @param double $expectedValue
+     * @param float $expectedValue
      *
      * @dataProvider dataProvider
      */

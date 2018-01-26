@@ -12,7 +12,7 @@ class InvalidResponseException extends Exception
     /**
      * @param string $method
      * @param string $path
-     * @param array $options
+     * @param array  $options
      *
      * @return InvalidResponseException
      */
