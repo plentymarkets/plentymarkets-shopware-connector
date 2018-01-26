@@ -32,7 +32,7 @@ class PayPalInstallmentRequestGenerator implements PaymentRequestGeneratorInterf
     public function generate(Payment $payment)
     {
         $paymentParams = $this->parentRequestGenerator->generate($payment);
-        $data = $payment->getPaymentData();
+        $data          = $payment->getPaymentData();
 
         if (!($data instanceof PayPalInstallmentPaymentData)) {
             return $paymentParams;
@@ -40,9 +40,9 @@ class PayPalInstallmentRequestGenerator implements PaymentRequestGeneratorInterf
 
         $paymentParams['property'][] = [
             'typeId' => 22,
-            'value' => json_encode([
-                'currency' => $data->getCurrency(),
-                'financingCosts' => $data->getFinancingCosts(),
+            'value'  => json_encode([
+                'currency'                   => $data->getCurrency(),
+                'financingCosts'             => $data->getFinancingCosts(),
                 'totalCostsIncludeFinancing' => $data->getTotalCostsIncludeFinancing(),
             ]),
         ];

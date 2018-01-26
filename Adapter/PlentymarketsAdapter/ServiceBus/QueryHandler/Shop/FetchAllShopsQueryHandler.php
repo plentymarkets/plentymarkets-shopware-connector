@@ -36,7 +36,7 @@ class FetchAllShopsQueryHandler implements QueryHandlerInterface
         ClientInterface $client,
         ShopResponseParserInterface $responseParser
     ) {
-        $this->client = $client;
+        $this->client         = $client;
         $this->responseParser = $responseParser;
     }
 

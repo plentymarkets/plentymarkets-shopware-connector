@@ -38,7 +38,7 @@ class FetchAllPaymentMethodsQueryHandler implements QueryHandlerInterface
         EntityManagerInterface $entityManager,
         PaymentMethodResponseParserInterface $responseParser
     ) {
-        $this->repository = $entityManager->getRepository(Payment::class);
+        $this->repository     = $entityManager->getRepository(Payment::class);
         $this->responseParser = $responseParser;
     }
 

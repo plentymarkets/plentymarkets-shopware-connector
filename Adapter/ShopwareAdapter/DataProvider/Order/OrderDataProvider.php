@@ -29,7 +29,7 @@ class OrderDataProvider implements OrderDataProviderInterface
      */
     public function __construct(Connection $connection, OrderResource $orderResource)
     {
-        $this->connection = $connection;
+        $this->connection    = $connection;
         $this->orderResource = $orderResource;
     }
 
@@ -40,9 +40,9 @@ class OrderDataProvider implements OrderDataProviderInterface
     {
         $filter = [
             [
-                'property' => 'status',
+                'property'   => 'status',
                 'expression' => '=',
-                'value' => Status::ORDER_STATE_OPEN,
+                'value'      => Status::ORDER_STATE_OPEN,
             ],
         ];
 

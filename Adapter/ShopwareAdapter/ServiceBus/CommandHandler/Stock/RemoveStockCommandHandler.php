@@ -38,7 +38,7 @@ class RemoveStockCommandHandler implements CommandHandlerInterface
         LoggerInterface $logger
     ) {
         $this->identityService = $identityService;
-        $this->logger = $logger;
+        $this->logger          = $logger;
     }
 
     /**
@@ -63,8 +63,8 @@ class RemoveStockCommandHandler implements CommandHandlerInterface
 
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => (string) $identifier,
-            'objectType' => Stock::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => Stock::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         if (null === $identity) {

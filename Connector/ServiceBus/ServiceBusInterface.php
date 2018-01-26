@@ -8,9 +8,9 @@ namespace PlentyConnector\Connector\ServiceBus;
 interface ServiceBusInterface
 {
     /**
-     * @param $object
+     * @param mixed $object
      *
-     * @return object
+     * @return mixed
      */
     public function handle($object);
 }

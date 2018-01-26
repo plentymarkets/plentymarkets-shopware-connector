@@ -32,6 +32,17 @@ class ReferenceAmountCalculatorTest extends TestCase
     }
 
     /**
+     * @param array $variation
+     * @param float $expectedValue
+     *
+     * @dataProvider dataProvider
+     */
+    public function testReferenceAmountCalculation(array $variation, $expectedValue)
+    {
+        $this->assertEquals($expectedValue, $this->calculator->calculate($variation));
+    }
+
+    /**
      * @return array
      */
     public function dataProvider()
@@ -51,16 +62,5 @@ class ReferenceAmountCalculatorTest extends TestCase
 
             [['unit' => ['unitId' => 0, 'content' => 0.1]], 1.0],
         ];
-    }
-
-    /**
-     * @param array $variation
-     * @param $expectedValue
-     *
-     * @dataProvider dataProvider
-     */
-    public function testReferenceAmountCalculation(array $variation, $expectedValue)
-    {
-        $this->assertEquals($expectedValue, $this->calculator->calculate($variation));
     }
 }

@@ -3,7 +3,6 @@
 namespace ShopwareAdapter\ServiceBus\QueryHandler\Unit;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
@@ -20,9 +19,9 @@ use ShopwareAdapter\ShopwareAdapter;
 class FetchAllUnitsQueryHandler implements QueryHandlerInterface
 {
     /**
-     * @var EntityRepository
+     * @var EntityManagerInterface
      */
-    private $repository;
+    private $entityManager;
 
     /**
      * @var UnitResponseParserInterface
@@ -39,7 +38,7 @@ class FetchAllUnitsQueryHandler implements QueryHandlerInterface
         EntityManagerInterface $entityManager,
         UnitResponseParserInterface $responseParser
     ) {
-        $this->repository = $entityManager->getRepository(UnitModel::class);
+        $this->entityManager  = $entityManager;
         $this->responseParser = $responseParser;
     }
 
@@ -77,7 +76,8 @@ class FetchAllUnitsQueryHandler implements QueryHandlerInterface
      */
     private function createUnitsQuery()
     {
-        $queryBuilder = $this->repository->createQueryBuilder('units');
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $queryBuilder->from(UnitModel::class, 'units');
         $queryBuilder->select([
             'units.id as id',
             'units.name as name',

@@ -15,10 +15,15 @@ return PhpCsFixer\Config::create()
         'yoda_style' => false,
         'phpdoc_summary' => false,
         'phpdoc_to_comment' => false,
+        'yoda_style' => false,
         'phpdoc_var_without_name' => false,
-        'blank_line_after_opening_tag' => false,
         'concat_space' => ['spacing' => 'one'],
-        'array_syntax' => ['syntax' => 'short']
+        'array_syntax' => ['syntax' => 'short'],
+        'no_multiline_whitespace_before_semicolons' => true,
+        'binary_operator_spaces' => ['operators' => [
+            '=>' => 'align',
+            '=' => 'align'
+        ]],
     ])
     ->setFinder($finder)
 ;

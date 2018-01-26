@@ -39,7 +39,7 @@ class CustomerGroupResponseParser implements CustomerGroupResponseParserInterfac
 
         return CustomerGroup::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => $entry['name'],
+            'name'       => $entry['name'],
         ]);
     }
 }

@@ -61,11 +61,11 @@ class FetchChangedMediaCategoriesQueryHandler implements QueryHandlerInterface
         LoggerInterface $logger,
         OutputHandlerInterface $outputHandler
     ) {
-        $this->config = $config;
+        $this->config              = $config;
         $this->mediaCategoryHelper = $mediaCategoryHelper;
-        $this->responseParser = $responseParser;
-        $this->logger = $logger;
-        $this->outputHandler = $outputHandler;
+        $this->responseParser      = $responseParser;
+        $this->logger              = $logger;
+        $this->outputHandler       = $outputHandler;
     }
 
     /**
@@ -85,7 +85,7 @@ class FetchChangedMediaCategoriesQueryHandler implements QueryHandlerInterface
     public function handle(QueryInterface $query)
     {
         $elements = [];
-        $synced = $this->config->get('PlentymarketsAdapter.MediaCategoriesSynched');
+        $synced   = $this->config->get('PlentymarketsAdapter.MediaCategoriesSynched');
 
         if (null === $synced) {
             $elements = $this->mediaCategoryHelper->getCategories();

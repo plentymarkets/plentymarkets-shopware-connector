@@ -53,10 +53,10 @@ class BacklogProcessCommand extends ShopwareCommand
         LoggerInterface $logger,
         OutputHandlerInterface $outputHandler
     ) {
-        $this->serviceBus = $serviceBus;
+        $this->serviceBus     = $serviceBus;
         $this->backlogService = $backlogService;
-        $this->logger = $logger;
-        $this->outputHandler = $outputHandler;
+        $this->logger         = $logger;
+        $this->outputHandler  = $outputHandler;
 
         parent::__construct();
     }

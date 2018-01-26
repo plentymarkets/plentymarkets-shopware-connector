@@ -53,10 +53,10 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
         PaymentRequestGeneratorInterface $requestGenerator,
         LoggerInterface $logger
     ) {
-        $this->client = $client;
-        $this->identityService = $identityService;
+        $this->client           = $client;
+        $this->identityService  = $identityService;
         $this->requestGenerator = $requestGenerator;
-        $this->logger = $logger;
+        $this->logger           = $logger;
     }
 
     /**
@@ -84,8 +84,8 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
 
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => $payment->getIdentifier(),
-            'objectType' => Payment::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => Payment::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         if (null !== $identity) {
@@ -94,8 +94,8 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
 
         $orderIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $payment->getOrderIdentifer(),
-            'objectType' => Order::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => Order::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         if (null === $orderIdentity) {

@@ -37,10 +37,10 @@ class DefinitionFactory
     public function factory($originAdapterName, $destinationAdapterName, $objectType, $priority = null)
     {
         $definition = Definition::fromArray([
-            'originAdapterName' => $originAdapterName,
+            'originAdapterName'      => $originAdapterName,
             'destinationAdapterName' => $destinationAdapterName,
-            'objectType' => $objectType,
-            'priority' => $priority,
+            'objectType'             => $objectType,
+            'priority'               => $priority,
         ]);
 
         $this->validator->validate($definition);

@@ -54,9 +54,9 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
         OutputHandlerInterface $outputHandler
     ) {
         $this->responseParser = $responseParser;
-        $this->dataProvider = $dataProvider;
-        $this->logger = $logger;
-        $this->outputHandler = $outputHandler;
+        $this->dataProvider   = $dataProvider;
+        $this->logger         = $logger;
+        $this->outputHandler  = $outputHandler;
     }
 
     /**

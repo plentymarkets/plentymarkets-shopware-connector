@@ -39,7 +39,7 @@ class VatRateResponseParser implements VatRateResponseParserInterface
 
         return VatRate::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => $entry['name'],
+            'name'       => $entry['name'],
         ]);
     }
 }

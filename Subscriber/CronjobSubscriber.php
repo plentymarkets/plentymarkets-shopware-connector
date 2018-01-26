@@ -60,11 +60,11 @@ class CronjobSubscriber implements SubscriberInterface
         ServiceBusInterface $serviceBus,
         LoggerInterface $logger
     ) {
-        $this->connector = $connector;
+        $this->connector      = $connector;
         $this->cleanupService = $cleanupService;
         $this->backlogService = $backlogService;
-        $this->serviceBus = $serviceBus;
-        $this->logger = $logger;
+        $this->serviceBus     = $serviceBus;
+        $this->logger         = $logger;
     }
 
     /**
@@ -74,8 +74,8 @@ class CronjobSubscriber implements SubscriberInterface
     {
         return [
             'Shopware_CronJob_PlentyConnector' . PlentyConnector::CRONJOB_SYNCHRONIZE => 'onRunCronjobSynchronize',
-            'Shopware_CronJob_PlentyConnector' . PlentyConnector::CRONJOB_CLEANUP => 'onRunCronjobCleanup',
-            'Shopware_CronJob_PlentyConnector' . PlentyConnector::CRONJOB_BACKLOG => 'onRunCronjobProcessBacklog',
+            'Shopware_CronJob_PlentyConnector' . PlentyConnector::CRONJOB_CLEANUP     => 'onRunCronjobCleanup',
+            'Shopware_CronJob_PlentyConnector' . PlentyConnector::CRONJOB_BACKLOG     => 'onRunCronjobProcessBacklog',
         ];
     }
 

@@ -34,8 +34,8 @@ class TransferObjectCommand implements CommandInterface
     /**
      * TransferObjectCommand constructor.
      *
-     * @param string $adapterName
-     * @param $objectType
+     * @param string                         $adapterName
+     * @param string                         $objectType
      * @param string                         $commandType
      * @param TransferObjectInterface|string $payload
      */
@@ -54,9 +54,9 @@ class TransferObjectCommand implements CommandInterface
         }
 
         $this->adapterName = $adapterName;
-        $this->objectType = $objectType;
+        $this->objectType  = $objectType;
         $this->commandType = $commandType;
-        $this->payload = $payload;
+        $this->payload     = $payload;
     }
 
     /**
@@ -98,9 +98,9 @@ class TransferObjectCommand implements CommandInterface
     {
         return [
             'adapterName' => $this->adapterName,
-            'objectType' => $this->objectType,
+            'objectType'  => $this->objectType,
             'commandType' => $this->commandType,
-            'payload' => $this->payload,
+            'payload'     => $this->payload,
         ];
     }
 }

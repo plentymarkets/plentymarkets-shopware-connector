@@ -9,11 +9,9 @@ use ReflectionClass;
  */
 final class QueryType
 {
-    const ALL = 'all';
-
+    const ALL     = 'all';
     const CHANGED = 'changed';
-
-    const ONE = 'one';
+    const ONE     = 'one';
 
     /**
      * @return array

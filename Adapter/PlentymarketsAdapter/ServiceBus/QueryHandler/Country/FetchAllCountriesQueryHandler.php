@@ -36,7 +36,7 @@ class FetchAllCountriesQueryHandler implements QueryHandlerInterface
         ClientInterface $client,
         CountryResponseParserInterface $responseParser
     ) {
-        $this->client = $client;
+        $this->client         = $client;
         $this->responseParser = $responseParser;
     }
 

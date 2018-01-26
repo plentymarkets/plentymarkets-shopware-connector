@@ -56,10 +56,10 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
         LoggerInterface $logger,
         OutputHandlerInterface $outputHandler
     ) {
-        $this->categoryApi = $categoryApi;
+        $this->categoryApi    = $categoryApi;
         $this->responseParser = $responseParser;
-        $this->logger = $logger;
-        $this->outputHandler = $outputHandler;
+        $this->logger         = $logger;
+        $this->outputHandler  = $outputHandler;
     }
 
     /**
@@ -78,7 +78,7 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $lastCangedTime = $this->getChangedDateTime();
+        $lastCangedTime  = $this->getChangedDateTime();
         $currentDateTime = $this->getCurrentDateTime();
 
         $elements = $this->categoryApi->findChanged($lastCangedTime, $currentDateTime);

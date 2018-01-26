@@ -38,7 +38,7 @@ class FetchAllShippingProfilesQueryHandler implements QueryHandlerInterface
         EntityManagerInterface $entityManager,
         ShippingProfileResponseParserInterface $responseParser
     ) {
-        $this->repository = $entityManager->getRepository(Dispatch::class);
+        $this->repository     = $entityManager->getRepository(Dispatch::class);
         $this->responseParser = $responseParser;
     }
 

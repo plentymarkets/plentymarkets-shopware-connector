@@ -53,10 +53,10 @@ class FetchAllManufacturersQueryHandler implements QueryHandlerInterface
         LoggerInterface $logger,
         OutputHandlerInterface $outputHandler
     ) {
-        $this->client = $client;
+        $this->client         = $client;
         $this->responseParser = $responseParser;
-        $this->logger = $logger;
-        $this->outputHandler = $outputHandler;
+        $this->logger         = $logger;
+        $this->outputHandler  = $outputHandler;
     }
 
     /**

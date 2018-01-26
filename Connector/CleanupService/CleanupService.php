@@ -87,12 +87,12 @@ class CleanupService implements CleanupServiceInterface
         OutputHandlerInterface $outputHandler,
         LoggerInterface $logger
     ) {
-        $this->serviceBus = $serviceBus;
-        $this->queryFactory = $queryFactory;
-        $this->commandFactory = $commandFactory;
+        $this->serviceBus      = $serviceBus;
+        $this->queryFactory    = $queryFactory;
+        $this->commandFactory  = $commandFactory;
         $this->identityService = $identityService;
-        $this->outputHandler = $outputHandler;
-        $this->logger = $logger;
+        $this->outputHandler   = $outputHandler;
+        $this->logger          = $logger;
     }
 
     /**
@@ -133,7 +133,7 @@ class CleanupService implements CleanupServiceInterface
      */
     private function getDefinitions()
     {
-        if (null === count($this->definitions)) {
+        if (empty($this->definitions)) {
             return [];
         }
 
@@ -170,8 +170,8 @@ class CleanupService implements CleanupServiceInterface
         foreach ($objects as $transferObject) {
             $this->elements[] = [
                 'objectIdentifier' => $transferObject->getIdentifier(),
-                'adapterName' => $definition->getDestinationAdapterName(),
-                'type' => $transferObject->getType(),
+                'adapterName'      => $definition->getDestinationAdapterName(),
+                'type'             => $transferObject->getType(),
             ];
         }
 
@@ -196,7 +196,7 @@ class CleanupService implements CleanupServiceInterface
 
         $allIdentities = $this->identityService->findBy([
             'adapterName' => $definition->getDestinationAdapterName(),
-            'objectType' => $definition->getObjectType(),
+            'objectType'  => $definition->getObjectType(),
         ]);
 
         $this->outputHandler->startProgressBar(count($allIdentities));
@@ -240,7 +240,7 @@ class CleanupService implements CleanupServiceInterface
 
         $allIdentities = $this->identityService->findBy([
             'adapterName' => $group[0]['adapterName'],
-            'objectType' => $group[0]['type'],
+            'objectType'  => $group[0]['type'],
         ]);
 
         return array_filter($allIdentities, function (Identity $identity) use ($identifiers) {

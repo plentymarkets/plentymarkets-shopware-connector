@@ -39,7 +39,7 @@ class ShopResponseParser implements ShopResponseParserInterface
 
         return Shop::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => $entry['name'],
+            'name'       => $entry['name'],
         ]);
     }
 }

@@ -42,7 +42,7 @@ class SepaPaymentResponseParser implements PaymentResponseParserInterface
         IdentityServiceInterface $identityService
     ) {
         $this->parentResponseParser = $parentResponseParser;
-        $this->identityService = $identityService;
+        $this->identityService      = $identityService;
     }
 
     /**

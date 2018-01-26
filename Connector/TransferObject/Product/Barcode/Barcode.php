@@ -9,13 +9,10 @@ use PlentyConnector\Connector\ValueObject\AbstractValueObject;
  */
 class Barcode extends AbstractValueObject
 {
-    const TYPE_GTIN13 = 1;
-
+    const TYPE_GTIN13  = 1;
     const TYPE_GTIN128 = 2;
-
-    const TYPE_UPC = 3;
-
-    const TYPE_ISBN = 4;
+    const TYPE_UPC     = 3;
+    const TYPE_ISBN    = 4;
 
     /**
      * @var int

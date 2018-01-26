@@ -31,7 +31,7 @@ class OrderItemResponseParserTest extends ResponseParserTest
     public function testOrderItemParsing()
     {
         /**
-         * @var OrderItem $orderItem
+         * @var OrderItem|null $orderItem
          */
         $orderItem = $this->responseParser->parse(self::$orderData['details'][0]);
 

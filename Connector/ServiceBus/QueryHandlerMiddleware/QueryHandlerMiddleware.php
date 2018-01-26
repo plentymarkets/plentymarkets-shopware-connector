@@ -29,8 +29,6 @@ class QueryHandlerMiddleware implements Middleware
      * @param QueryInterface $query
      * @param callable       $next
      *
-     * @throws NotFoundException
-     *
      * @return mixed
      */
     public function execute($query, callable $next)
@@ -54,10 +52,10 @@ class QueryHandlerMiddleware implements Middleware
         /**
          * @var QueryHandlerInterface $handler
          */
-        $handler = array_shift($handlers);
+        $handler  = array_shift($handlers);
         $response = $handler->handle($query);
 
-        if (null !== $response) {
+        if (!empty($response)) {
             return $response;
         }
 

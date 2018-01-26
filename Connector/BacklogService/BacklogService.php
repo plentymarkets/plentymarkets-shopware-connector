@@ -2,9 +2,9 @@
 
 namespace PlentyConnector\Connector\BacklogService;
 
+use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use Exception;
 use PDO;
 use PlentyConnector\Connector\BacklogService\Command\HandleBacklogElementCommand;
@@ -29,7 +29,7 @@ class BacklogService implements BacklogServiceInterface
     private $logger;
 
     /**
-     * @var EntityRepository
+     * @var ObjectRepository
      */
     private $repository;
 
@@ -49,9 +49,9 @@ class BacklogService implements BacklogServiceInterface
         LoggerInterface $logger
     ) {
         $this->entityManager = $entityManager;
-        $this->logger = $logger;
-        $this->repository = $entityManager->getRepository(Backlog::class);
-        $this->connection = $entityManager->getConnection();
+        $this->logger        = $logger;
+        $this->repository    = $entityManager->getRepository(Backlog::class);
+        $this->connection    = $entityManager->getConnection();
     }
 
     /**
@@ -60,7 +60,7 @@ class BacklogService implements BacklogServiceInterface
     public function enqueue(CommandInterface $command)
     {
         $serializedCommand = serialize($command);
-        $hash = md5($serializedCommand);
+        $hash              = md5($serializedCommand);
 
         if ($this->entryExists($hash)) {
             return;
@@ -82,17 +82,17 @@ class BacklogService implements BacklogServiceInterface
     public function dequeue()
     {
         try {
-            $selectQuery = 'SELECT * FROM plenty_backlog WHERE status = :status ORDER BY `time` ASC, `id` ASC LIMIT 1';
+            $selectQuery  = 'SELECT * FROM plenty_backlog WHERE status = :status ORDER BY `time` ASC, `id` ASC LIMIT 1';
             $selectParams = [':status' => Backlog::STATUS_OPEN];
-            $backlog = $this->connection->executeQuery($selectQuery, $selectParams)->fetch(PDO::FETCH_ASSOC);
+            $backlog      = $this->connection->executeQuery($selectQuery, $selectParams)->fetch(PDO::FETCH_ASSOC);
 
             if ($backlog === false) {
                 return null;
             }
 
-            $updateQuery = 'UPDATE plenty_backlog SET status = :status WHERE id = :id';
+            $updateQuery  = 'UPDATE plenty_backlog SET status = :status WHERE id = :id';
             $affectedRows = $this->connection->executeUpdate($updateQuery, [
-                ':id' => $backlog['id'],
+                ':id'     => $backlog['id'],
                 ':status' => Backlog::STATUS_PROCESSED,
             ]);
 
@@ -100,7 +100,7 @@ class BacklogService implements BacklogServiceInterface
                 return null;
             }
 
-            $deleteQuery = 'DELETE FROM plenty_backlog WHERE id = :id';
+            $deleteQuery  = 'DELETE FROM plenty_backlog WHERE id = :id';
             $affectedRows = $this->connection->executeUpdate($deleteQuery, [':id' => $backlog['id']]);
 
             if ($affectedRows !== 1) {

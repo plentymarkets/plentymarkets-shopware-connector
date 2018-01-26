@@ -46,9 +46,9 @@ class RemoveManufacturerCommandHandler implements CommandHandlerInterface
         IdentityServiceInterface $identityService,
         LoggerInterface $logger
     ) {
-        $this->resource = $resource;
+        $this->resource        = $resource;
         $this->identityService = $identityService;
-        $this->logger = $logger;
+        $this->logger          = $logger;
     }
 
     /**
@@ -73,8 +73,8 @@ class RemoveManufacturerCommandHandler implements CommandHandlerInterface
 
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => (string) $identifier,
-            'objectType' => Manufacturer::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => Manufacturer::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         if (null === $identity) {

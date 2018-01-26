@@ -18,7 +18,7 @@ class SalesPrice extends ApiAbstract
     }
 
     /**
-     * @param $priceId
+     * @param int $priceId
      *
      * @return array
      */

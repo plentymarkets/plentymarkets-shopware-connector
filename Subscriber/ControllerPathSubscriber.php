@@ -4,10 +4,7 @@ namespace PlentyConnector\Subscriber;
 
 use Enlight\Event\SubscriberInterface;
 use Enlight_Event_EventArgs;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
-use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
+use Enlight_Template_Manager;
 
 /**
  * Class ControllerPath
@@ -15,18 +12,25 @@ use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 class ControllerPathSubscriber implements SubscriberInterface
 {
     /**
-     * @var ContainerInterface
+     * @var Enlight_Template_Manager
      */
-    private $container;
+    private $template;
 
     /**
-     * ControllerPathSubscriber constructor.
-     *
-     * @param ContainerInterface $container
+     * @var string
      */
-    public function __construct(ContainerInterface $container)
+    private $pluginDir;
+
+    /**
+     * ControllerPath constructor.
+     *
+     * @param Enlight_Template_Manager $template
+     * @param string                   $pluginDir
+     */
+    public function __construct(Enlight_Template_Manager $template, $pluginDir)
     {
-        $this->container = $container;
+        $this->template  = $template;
+        $this->pluginDir = $pluginDir;
     }
 
     /**
@@ -42,20 +46,12 @@ class ControllerPathSubscriber implements SubscriberInterface
     /**
      * @param Enlight_Event_EventArgs $args
      *
-     * @throws InvalidArgumentException
-     * @throws ServiceNotFoundException
-     * @throws ServiceCircularReferenceException
-     *
      * @return string
      */
     public function onControllerBackendPlentyConnector(Enlight_Event_EventArgs $args)
     {
-        $basePath = $this->container->getParameter('plenty_connector.plugin_dir');
+        $this->template->addTemplateDir($this->pluginDir . '/Resources/views/');
 
-        $this->container->get('template')->addTemplateDir(
-            $basePath . '/Resources/Views/'
-        );
-
-        return $basePath . '/Controller/Backend/PlentyConnector.php';
+        return $this->pluginDir . '/Controller/Backend/PlentyConnector.php';
     }
 }

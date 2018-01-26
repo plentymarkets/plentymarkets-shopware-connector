@@ -10,7 +10,7 @@ use PlentymarketsAdapter\ReadApi\ApiAbstract;
 class Name extends ApiAbstract
 {
     /**
-     * @param $propertyId
+     * @param int $propertyId
      *
      * @return array
      */

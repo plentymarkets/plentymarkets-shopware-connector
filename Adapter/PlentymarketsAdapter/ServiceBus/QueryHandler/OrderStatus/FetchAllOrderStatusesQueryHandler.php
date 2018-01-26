@@ -36,7 +36,7 @@ class FetchAllOrderStatusesQueryHandler implements QueryHandlerInterface
         ClientInterface $client,
         OrderStatusResponseParserInterface $responseParser
     ) {
-        $this->client = $client;
+        $this->client         = $client;
         $this->responseParser = $responseParser;
     }
 

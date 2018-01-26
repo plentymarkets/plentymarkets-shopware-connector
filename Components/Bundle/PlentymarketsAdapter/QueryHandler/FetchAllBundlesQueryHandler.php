@@ -52,10 +52,10 @@ class FetchAllBundlesQueryHandler implements QueryHandlerInterface
         LoggerInterface $logger,
         OutputHandlerInterface $outputHandler
     ) {
-        $this->itemApi = $itemApi;
+        $this->itemApi        = $itemApi;
         $this->responseParser = $responseParser;
-        $this->logger = $logger;
-        $this->outputHandler = $outputHandler;
+        $this->logger         = $logger;
+        $this->outputHandler  = $outputHandler;
     }
 
     /**

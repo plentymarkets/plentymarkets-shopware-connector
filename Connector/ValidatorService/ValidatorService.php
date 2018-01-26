@@ -45,17 +45,20 @@ class ValidatorService implements ValidatorServiceInterface
             });
 
             $parents[] = $object;
-            $methods = get_class_methods($object);
+            $methods   = get_class_methods($object);
 
             $methods = array_filter($methods, function ($method) {
                 return 0 === stripos($method, 'get');
             });
 
             foreach ($methods as $method) {
-                $result = $object->$method();
+                /**
+                 * @var mixed $methodResult
+                 */
+                $methodResult = $object->$method();
 
-                if (is_array($result)) {
-                    foreach ($result as $item) {
+                if (is_array($methodResult)) {
+                    foreach ($methodResult as $item) {
                         if (!$this->canBeValidated($item)) {
                             continue;
                         }
@@ -64,11 +67,11 @@ class ValidatorService implements ValidatorServiceInterface
                     }
                 }
 
-                if (!$this->canBeValidated($result)) {
+                if (!$this->canBeValidated($methodResult)) {
                     continue;
                 }
 
-                $this->validate($result, $parents);
+                $this->validate($methodResult, $parents);
             }
         } catch (InvalidArgumentException $exception) {
             throw InvalidDataException::fromObject($object, $exception->getMessage(), $exception->getPropertyPath(), $parents);
@@ -76,7 +79,7 @@ class ValidatorService implements ValidatorServiceInterface
     }
 
     /**
-     * @param $value
+     * @param TransferObjectInterface|ValueObjectInterface $value
      *
      * @return bool
      */

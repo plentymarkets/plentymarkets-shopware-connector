@@ -4,7 +4,6 @@ namespace PlentyConnector\Installer;
 
 use DateTime;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception\InvalidArgumentException;
 use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
 use Shopware\Components\Plugin\Context\UpdateContext;
@@ -33,13 +32,11 @@ class CronjobInstaller implements InstallerInterface
     public function __construct(Connection $connection, array $cronjobs)
     {
         $this->connection = $connection;
-        $this->cronjobs = $cronjobs;
+        $this->cronjobs   = $cronjobs;
     }
 
     /**
      * @param InstallContext $context
-     *
-     * @throws InvalidArgumentException
      */
     public function install(InstallContext $context)
     {
@@ -52,8 +49,6 @@ class CronjobInstaller implements InstallerInterface
 
     /**
      * @param UpdateContext $context
-     *
-     * @throws InvalidArgumentException
      */
     public function update(UpdateContext $context)
     {
@@ -66,8 +61,6 @@ class CronjobInstaller implements InstallerInterface
 
     /**
      * @param UninstallContext $context
-     *
-     * @throws InvalidArgumentException
      */
     public function uninstall(UninstallContext $context)
     {
@@ -76,8 +69,6 @@ class CronjobInstaller implements InstallerInterface
 
     /**
      * @param null|int $pluginIdentifier
-     *
-     * @throws InvalidArgumentException
      */
     private function removeCronjobs($pluginIdentifier = null)
     {
@@ -98,20 +89,20 @@ class CronjobInstaller implements InstallerInterface
     private function addCronjob($name, $interval, $pluginIdentifier)
     {
         $data = [
-            'name' => 'PlentyConnector ' . $name,
-            'action' => 'Shopware_CronJob_PlentyConnector' . $name,
-            'next' => new DateTime(),
-            'start' => null,
-            '`interval`' => $interval,
-            'active' => true,
+            'name'             => 'PlentyConnector ' . $name,
+            'action'           => 'Shopware_CronJob_PlentyConnector' . $name,
+            'next'             => new DateTime(),
+            'start'            => null,
+            '`interval`'       => $interval,
+            'active'           => true,
             'disable_on_error' => true,
-            'end' => new DateTime(),
-            'pluginID' => $pluginIdentifier,
+            'end'              => new DateTime(),
+            'pluginID'         => $pluginIdentifier,
         ];
 
         $types = [
             'next' => 'datetime',
-            'end' => 'datetime',
+            'end'  => 'datetime',
         ];
 
         $this->connection->insert('s_crontab', $data, $types);

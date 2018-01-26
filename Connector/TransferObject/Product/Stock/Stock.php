@@ -77,7 +77,7 @@ class Stock extends AbstractTransferObject
     }
 
     /**
-     * @param mixed float
+     * @param float $stock
      */
     public function setStock($stock)
     {

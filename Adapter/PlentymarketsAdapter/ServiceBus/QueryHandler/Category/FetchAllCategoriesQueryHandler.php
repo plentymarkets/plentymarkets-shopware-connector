@@ -53,10 +53,10 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
         LoggerInterface $logger,
         OutputHandlerInterface $outputHandler
     ) {
-        $this->categoryApi = $categoryApi;
+        $this->categoryApi    = $categoryApi;
         $this->responseParser = $responseParser;
-        $this->logger = $logger;
-        $this->outputHandler = $outputHandler;
+        $this->logger         = $logger;
+        $this->outputHandler  = $outputHandler;
     }
 
     /**

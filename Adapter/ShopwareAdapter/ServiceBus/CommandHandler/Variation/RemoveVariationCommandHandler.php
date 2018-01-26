@@ -39,7 +39,7 @@ class RemoveVariationCommandHandler implements CommandHandlerInterface
     public function __construct(IdentityServiceInterface $identityService, LoggerInterface $logger)
     {
         $this->identityService = $identityService;
-        $this->logger = $logger;
+        $this->logger          = $logger;
     }
 
     /**
@@ -64,8 +64,8 @@ class RemoveVariationCommandHandler implements CommandHandlerInterface
 
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => (string) $identifier,
-            'objectType' => Variation::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => Variation::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         if (null === $identity) {

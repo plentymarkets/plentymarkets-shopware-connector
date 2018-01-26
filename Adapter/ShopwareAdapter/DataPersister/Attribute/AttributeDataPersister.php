@@ -51,8 +51,8 @@ class AttributeDataPersister implements AttributeDataPersisterInterface
         ModelManager $entityManager,
         ShopwareDataPersister $shopwareDataPersister
     ) {
-        $this->attributeService = $attributeService;
-        $this->entityManager = $entityManager;
+        $this->attributeService      = $attributeService;
+        $this->entityManager         = $entityManager;
         $this->shopwareDataPersister = $shopwareDataPersister;
     }
 
@@ -155,10 +155,10 @@ class AttributeDataPersister implements AttributeDataPersisterInterface
                 $key,
                 TypeMapping::TYPE_TEXT,
                 [
-                    'label' => 'PlentyConnector ' . $attribute->getKey(),
+                    'label'            => 'PlentyConnector ' . $attribute->getKey(),
                     'displayInBackend' => true,
-                    'translatable' => true,
-                    'custom' => true,
+                    'translatable'     => true,
+                    'custom'           => true,
                 ]
             );
 

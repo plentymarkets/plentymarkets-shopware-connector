@@ -39,7 +39,7 @@ class ShippingProfileResponseParser implements ShippingProfileResponseParserInte
 
         return ShippingProfile::fromArray([
             'identifier' => $identity->getObjectIdentifier(),
-            'name' => $entry['name'],
+            'name'       => $entry['name'],
         ]);
     }
 }

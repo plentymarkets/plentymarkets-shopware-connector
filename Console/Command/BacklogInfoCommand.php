@@ -34,7 +34,7 @@ class BacklogInfoCommand extends ShopwareCommand
         OutputHandlerInterface $outputHandler
     ) {
         $this->backlogService = $backlogService;
-        $this->outputHandler = $outputHandler;
+        $this->outputHandler  = $outputHandler;
 
         parent::__construct();
     }

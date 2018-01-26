@@ -3,7 +3,6 @@
 namespace ShopwareAdapter\ServiceBus\QueryHandler\Country;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
@@ -20,9 +19,9 @@ use ShopwareAdapter\ShopwareAdapter;
 class FetchAllCountriesQueryHandler implements QueryHandlerInterface
 {
     /**
-     * @var EntityRepository
+     * @var EntityManagerInterface
      */
-    private $repository;
+    private $entityManager;
 
     /**
      * @var CountryResponseParserInterface
@@ -39,7 +38,7 @@ class FetchAllCountriesQueryHandler implements QueryHandlerInterface
         EntityManagerInterface $entityManager,
         CountryResponseParserInterface $responseParser
     ) {
-        $this->repository = $entityManager->getRepository(CountryModel::class);
+        $this->entityManager  = $entityManager;
         $this->responseParser = $responseParser;
     }
 
@@ -77,7 +76,8 @@ class FetchAllCountriesQueryHandler implements QueryHandlerInterface
      */
     private function createCurrenciesQuery()
     {
-        $queryBuilder = $this->repository->createQueryBuilder('countries');
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $queryBuilder->from(CountryModel::class, 'countries');
         $queryBuilder->select([
             'countries.id as id',
             'countries.name as name',

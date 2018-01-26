@@ -2,8 +2,8 @@
 
 namespace PlentyConnector\Connector\BacklogService\Model;
 
-use DateTime;
 use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 
@@ -18,8 +18,7 @@ use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
  */
 class Backlog
 {
-    const STATUS_OPEN = 'open';
-
+    const STATUS_OPEN      = 'open';
     const STATUS_PROCESSED = 'processed';
 
     /**
@@ -52,7 +51,7 @@ class Backlog
     /**
      * time of insertion
      *
-     * @var DateTime
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="time", type="datetime", nullable=false)
      */
@@ -72,7 +71,7 @@ class Backlog
      */
     public function __construct()
     {
-        $this->time = new DateTimeImmutable('now');
+        $this->time   = new DateTimeImmutable('now');
         $this->status = self::STATUS_OPEN;
     }
 
@@ -93,9 +92,9 @@ class Backlog
     }
 
     /**
-     * @param $payload
+     * @param CommandInterface $payload
      */
-    public function setPayload($payload)
+    public function setPayload(CommandInterface $payload)
     {
         $this->payload = $payload;
     }
@@ -117,7 +116,7 @@ class Backlog
     }
 
     /**
-     * @return DateTime
+     * @return DateTimeInterface
      */
     public function getTime()
     {

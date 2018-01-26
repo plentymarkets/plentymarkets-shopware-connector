@@ -33,7 +33,7 @@ class MediaDataProvider implements MediaDataProviderInterface
     public function __construct(IdentityServiceInterface $identityService, DataLoader $dataLoader)
     {
         $this->identityService = $identityService;
-        $this->dataLoader = $dataLoader;
+        $this->dataLoader      = $dataLoader;
     }
 
     /**
@@ -45,8 +45,8 @@ class MediaDataProvider implements MediaDataProviderInterface
     {
         $mediaCategoryIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $media->getMediaCategoryIdentifier(),
-            'objectType' => MediaCategory::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => MediaCategory::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         if (null === $mediaCategoryIdentity) {
@@ -65,8 +65,8 @@ class MediaDataProvider implements MediaDataProviderInterface
     {
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => (string) $media->getIdentifier(),
-            'objectType' => Media::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => Media::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         if (null === $identity) {

@@ -38,7 +38,7 @@ class PaymentResponseParser implements PaymentResponseParserInterface
         IdentityServiceInterface $identityService,
         CurrencyDataProviderInterface $currencyDataProvider
     ) {
-        $this->identityService = $identityService;
+        $this->identityService      = $identityService;
         $this->currencyDataProvider = $currencyDataProvider;
     }
 
@@ -78,7 +78,7 @@ class PaymentResponseParser implements PaymentResponseParserInterface
         }
 
         $shopwareCurrencyIdentifier = $this->currencyDataProvider->getCurrencyIdentifierByCode($element['currency']);
-        $currencyIdentifier = $this->getConnectorIdentifier($shopwareCurrencyIdentifier, Currency::TYPE);
+        $currencyIdentifier         = $this->getConnectorIdentifier($shopwareCurrencyIdentifier, Currency::TYPE);
 
         $payment = new Payment();
         $payment->setIdentifier($paymentIdentifier);
@@ -118,7 +118,7 @@ class PaymentResponseParser implements PaymentResponseParserInterface
     private function getAccountHolder(array $element)
     {
         $firstName = !empty($element['billing']['firstName']) ? $element['billing']['firstName'] : '';
-        $lastName = !empty($element['billing']['lastName']) ? $element['billing']['lastName'] : '';
+        $lastName  = !empty($element['billing']['lastName']) ? $element['billing']['lastName'] : '';
 
         return trim(sprintf('%s %s', $firstName, $lastName));
     }

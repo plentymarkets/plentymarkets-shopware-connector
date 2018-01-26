@@ -39,7 +39,7 @@ class TranslationHelper implements TranslationHelperInterface
     public function translate($languageIdentifier, TranslateableInterface $object)
     {
         $deepCopy = new DeepCopy();
-        $object = $deepCopy->copy($object);
+        $object   = $deepCopy->copy($object);
 
         /**
          * @var Translation[] $translations

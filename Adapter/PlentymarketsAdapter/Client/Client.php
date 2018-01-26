@@ -50,7 +50,7 @@ class Client implements ClientInterface
         ConfigServiceInterface $config
     ) {
         $this->connection = $connection;
-        $this->config = $config;
+        $this->config     = $config;
     }
 
     /**
@@ -104,8 +104,8 @@ class Client implements ClientInterface
 
         $method = strtoupper($method);
 
-        $options = $this->getOptions($limit, $offset, $options);
-        $url = $this->getUrl($path, $options);
+        $options        = $this->getOptions($limit, $offset, $options);
+        $url            = $this->getUrl($path, $options);
         $requestOptions = $this->getRequestOptions($method, $path, $params, $options);
 
         $request = $this->connection->createRequest($method, $url, $requestOptions);
@@ -175,7 +175,7 @@ class Client implements ClientInterface
     }
 
     /**
-     * @param $path
+     * @param string $path
      *
      * @return bool
      */
@@ -192,9 +192,6 @@ class Client implements ClientInterface
         return true;
     }
 
-    /**
-     * @throws InvalidCredentialsException
-     */
     private function login()
     {
         if (null === $this->config->get('rest_username') || null === $this->config->get('rest_password')) {
@@ -206,13 +203,13 @@ class Client implements ClientInterface
             'password' => $this->config->get('rest_password'),
         ]);
 
-        $this->accessToken = $login['accessToken'];
+        $this->accessToken  = $login['accessToken'];
         $this->refreshToken = $login['refreshToken'];
     }
 
     /**
-     * @param $limit
-     * @param $offset
+     * @param int   $limit
+     * @param int   $offset
      * @param array $options
      *
      * @return array
@@ -273,8 +270,6 @@ class Client implements ClientInterface
 
     /**
      * @param string $url
-     *
-     * @throws InvalidCredentialsException
      *
      * @return string
      */
@@ -352,8 +347,8 @@ class Client implements ClientInterface
     {
         $headers = [
             'Content-Type' => 'application/json',
-            'Accept' => 'application/x.plentymarkets.v1+json',
-            'user-agent' => $this->getUserAgent(),
+            'Accept'       => 'application/x.plentymarkets.v1+json',
+            'user-agent'   => $this->getUserAgent(),
         ];
 
         if ($path !== 'login') {

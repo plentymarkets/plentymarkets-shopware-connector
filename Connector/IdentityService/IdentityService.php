@@ -34,7 +34,7 @@ class IdentityService implements IdentityServiceInterface
         IdentityStorageInterface $storage,
         ValidatorServiceInterface $validator
     ) {
-        $this->storage = $storage;
+        $this->storage   = $storage;
         $this->validator = $validator;
     }
 
@@ -51,9 +51,9 @@ class IdentityService implements IdentityServiceInterface
         Assertion::notBlank($objectType);
 
         $identity = $this->findOneBy([
-            'objectType' => $objectType,
+            'objectType'        => $objectType,
             'adapterIdentifier' => $adapterIdentifier,
-            'adapterName' => $adapterName,
+            'adapterName'       => $adapterName,
         ]);
 
         if (null === $identity) {
@@ -79,9 +79,9 @@ class IdentityService implements IdentityServiceInterface
         Assertion::notBlank($objectType);
 
         $identity = $this->findOneBy([
-            'objectType' => $objectType,
+            'objectType'        => $objectType,
             'adapterIdentifier' => $adapterIdentifier,
-            'adapterName' => $adapterName,
+            'adapterName'       => $adapterName,
         ]);
 
         if (null === $identity) {
@@ -172,17 +172,13 @@ class IdentityService implements IdentityServiceInterface
     }
 
     /**
-     * @param $objectIdentifier
-     * @param $objectType
-     * @param $adapterName
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function isMapppedIdentity($objectIdentifier, $objectType, $adapterName)
     {
         $identities = $this->findBy([
             'objectIdentifier' => $objectIdentifier,
-            'objectType' => $objectType,
+            'objectType'       => $objectType,
         ]);
 
         $otherIdentities = array_filter($identities, function (Identity $identity) use ($adapterName) {

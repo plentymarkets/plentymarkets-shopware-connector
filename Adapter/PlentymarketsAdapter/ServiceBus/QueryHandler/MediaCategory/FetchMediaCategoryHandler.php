@@ -44,9 +44,9 @@ class FetchMediaCategoryHandler implements QueryHandlerInterface
         MediaCategoryHelperInterface $mediaCategoryHelper,
         MediaCategoryResponseParserInterface $responseParser
     ) {
-        $this->identityService = $identityService;
+        $this->identityService     = $identityService;
         $this->mediaCategoryHelper = $mediaCategoryHelper;
-        $this->responseParser = $responseParser;
+        $this->responseParser      = $responseParser;
     }
 
     /**
@@ -72,8 +72,8 @@ class FetchMediaCategoryHandler implements QueryHandlerInterface
 
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => $query->getObjectIdentifier(),
-            'objectType' => MediaCategory::TYPE,
-            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType'       => MediaCategory::TYPE,
+            'adapterName'      => PlentymarketsAdapter::NAME,
         ]);
 
         if (null === $identity) {

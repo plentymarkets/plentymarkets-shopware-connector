@@ -34,7 +34,7 @@ class PayPalPlusInvoicePaymentResponseParser implements PaymentResponseParserInt
         Connection $connection
     ) {
         $this->parentResponseParser = $parentResponseParser;
-        $this->connection = $connection;
+        $this->connection           = $connection;
     }
 
     /**

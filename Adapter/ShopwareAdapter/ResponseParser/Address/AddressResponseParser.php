@@ -41,8 +41,8 @@ class AddressResponseParser implements AddressResponseParserInterface
 
         $countryIdentitiy = $this->identityService->findOneBy([
             'adapterIdentifier' => $entry['country']['id'],
-            'adapterName' => ShopwareAdapter::NAME,
-            'objectType' => Country::TYPE,
+            'adapterName'       => ShopwareAdapter::NAME,
+            'objectType'        => Country::TYPE,
         ]);
 
         if (null === $countryIdentitiy) {
@@ -58,14 +58,14 @@ class AddressResponseParser implements AddressResponseParserInterface
         }
 
         $params = [
-            'salutation' => $salutation,
-            'firstname' => $entry['firstName'],
-            'lastname' => $entry['lastName'],
-            'street' => $entry['street'],
-            'postalCode' => $entry['zipCode'],
-            'city' => $entry['city'],
+            'salutation'        => $salutation,
+            'firstname'         => $entry['firstName'],
+            'lastname'          => $entry['lastName'],
+            'street'            => $entry['street'],
+            'postalCode'        => $entry['zipCode'],
+            'city'              => $entry['city'],
             'countryIdentifier' => $countryIdentitiy->getObjectIdentifier(),
-            'vatId' => !empty($entry['vatId']) ? $entry['vatId'] : null,
+            'vatId'             => !empty($entry['vatId']) ? $entry['vatId'] : null,
         ];
 
         if (!empty($entry['attribute'])) {

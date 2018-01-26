@@ -28,8 +28,7 @@ class AttributeHelper implements AttributeHelperInterface
     }
 
     /**
-     * @param AttributableInterface $object
-     * @param $fieldName
+     * {@inheritdoc}
      */
     public function addFieldAsAttribute(AttributableInterface $object, $fieldName)
     {
@@ -54,7 +53,7 @@ class AttributeHelper implements AttributeHelperInterface
         $attribute->setValue($fieldValue);
 
         if ($object instanceof TranslateableInterface) {
-            $translations = $object->getTranslations();
+            $translations    = $object->getTranslations();
             $newTranslations = [];
 
             foreach ($translations as $translation) {

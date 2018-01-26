@@ -58,8 +58,8 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
         BundleHelper $bundleHelper
     ) {
         $this->identityService = $identityService;
-        $this->entityManager = $entityManager;
-        $this->bundleHelper = $bundleHelper;
+        $this->entityManager   = $entityManager;
+        $this->bundleHelper    = $bundleHelper;
     }
 
     /**
@@ -87,8 +87,8 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
 
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => (string) $bundle->getIdentifier(),
-            'objectType' => Bundle::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => Bundle::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         $this->bundleHelper->registerBundleModels();
@@ -166,8 +166,6 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
     /**
      * @param Bundle $bundle
      *
-     * @throws NotFoundException
-     *
      * @return ArticleModel
      */
     private function getArticle(Bundle $bundle)
@@ -179,8 +177,8 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
 
         $productIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $bundle->getProductIdentifier(),
-            'objectType' => Product::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => Product::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         if (null === $productIdentity) {
@@ -214,8 +212,8 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
 
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => (string) $price->getCustomerGroupIdentifier(),
-            'objectType' => CustomerGroup::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => CustomerGroup::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         if (null === $identity) {

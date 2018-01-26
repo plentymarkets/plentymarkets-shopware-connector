@@ -27,7 +27,7 @@ class ValidatorMiddleware implements Middleware
     }
 
     /**
-     * @param $command
+     * @param mixed    $command
      * @param callable $next
      *
      * @return mixed

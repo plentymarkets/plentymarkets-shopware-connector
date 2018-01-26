@@ -34,7 +34,7 @@ class FetchAllUnitsQueryHandler implements QueryHandlerInterface
      */
     public function __construct(UnitApi $unitApi, UnitResponseParserInterface $responseParser)
     {
-        $this->unitApi = $unitApi;
+        $this->unitApi        = $unitApi;
         $this->responseParser = $responseParser;
     }
 

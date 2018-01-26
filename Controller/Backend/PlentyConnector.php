@@ -34,9 +34,6 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         $this->addAclPermission('syncItem', PlentyConnector::PERMISSION_WRITE, 'Insufficient Permissions');
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testApiCredentialsAction()
     {
         /**
@@ -70,9 +67,6 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         ]);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function saveSettingsAction()
     {
         /**
@@ -86,13 +80,10 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
 
         $this->View()->assign([
             'success' => true,
-            'data' => $this->Request()->getParams(),
+            'data'    => $this->Request()->getParams(),
         ]);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function getSettingsListAction()
     {
         /**
@@ -102,13 +93,10 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
 
         $this->View()->assign([
             'success' => true,
-            'data' => $config->getAll(),
+            'data'    => $config->getAll(),
         ]);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function getMappingInformationAction()
     {
         /**
@@ -136,28 +124,25 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
 
             return [
                 'identifier' => $object->getIdentifier(),
-                'type' => $object->getType(),
-                'name' => $name,
+                'type'       => $object->getType(),
+                'name'       => $name,
             ];
         };
 
         $this->View()->assign([
             'success' => true,
-            'data' => array_map(function (Mapping $mapping) use ($transferObjectMapping) {
+            'data'    => array_map(function (Mapping $mapping) use ($transferObjectMapping) {
                 return [
-                    'originAdapterName' => $mapping->getOriginAdapterName(),
-                    'destinationAdapterName' => $mapping->getDestinationAdapterName(),
-                    'originTransferObjects' => array_map($transferObjectMapping, $mapping->getOriginTransferObjects()),
+                    'originAdapterName'          => $mapping->getOriginAdapterName(),
+                    'destinationAdapterName'     => $mapping->getDestinationAdapterName(),
+                    'originTransferObjects'      => array_map($transferObjectMapping, $mapping->getOriginTransferObjects()),
                     'destinationTransferObjects' => array_map($transferObjectMapping, $mapping->getDestinationTransferObjects()),
-                    'objectType' => $mapping->getObjectType(),
+                    'objectType'                 => $mapping->getObjectType(),
                 ];
             }, $mappingInformation),
         ]);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function updateIdentitiesAction()
     {
         $updates = json_decode($this->request->getRawBody(), true);
@@ -175,15 +160,15 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
             foreach ($updates as $key => $update) {
                 $remove = $update['remove'];
 
-                $objectType = $update['objectType'];
+                $objectType             = $update['objectType'];
                 $destinationAdapterName = $update['adapterName'];
-                $destinationIdentifier = $update['identifier'];
-                $originIdentifier = $update['originIdentifier'];
+                $destinationIdentifier  = $update['identifier'];
+                $originIdentifier       = $update['originIdentifier'];
 
                 $oldDestinationIdentity = $identityService->findOneBy([
                     'objectIdentifier' => $destinationIdentifier,
-                    'objectType' => $objectType,
-                    'adapterName' => $destinationAdapterName,
+                    'objectType'       => $objectType,
+                    'adapterName'      => $destinationAdapterName,
                 ]);
 
                 if (null === $oldDestinationIdentity) {
@@ -209,14 +194,14 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
                 $updates[$key]['identifier'] = $newIdentifier;
                 if ($remove) {
                     $updates[$key]['originAdapterName'] = null;
-                    $updates[$key]['originIdentifier'] = null;
-                    $updates[$key]['remove'] = false;
+                    $updates[$key]['originIdentifier']  = null;
+                    $updates[$key]['remove']            = false;
                 }
             }
 
             $this->View()->assign([
                 'success' => true,
-                'data' => $updates,
+                'data'    => $updates,
             ]);
         } catch (Exception $exception) {
             $this->View()->assign([
@@ -238,7 +223,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         try {
             foreach ($client->request('GET', 'orders/referrers') as $origin) {
                 $data[] = [
-                    'id' => $origin['id'],
+                    'id'   => $origin['id'],
                     'name' => $origin['name'],
                 ];
             }
@@ -248,7 +233,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
 
         $this->View()->assign([
             'success' => true,
-            'data' => $data,
+            'data'    => $data,
         ]);
     }
 
@@ -263,12 +248,12 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
          * @var Shopware_Components_Snippet_Manager $snippetManager
          */
         $snippetManager = $this->container->get('snippets');
-        $namespace = 'backend/plentyconnector/main';
-        $snippet = 'plentyconnector/view/settings/additional/item_warehouse/virtualWarehouse';
+        $namespace      = 'backend/plentyconnector/main';
+        $snippet        = 'plentyconnector/view/settings/additional/item_warehouse/virtualWarehouse';
 
         $data = [
             [
-                'id' => 0,
+                'id'   => 0,
                 'name' => $snippetManager->getNamespace($namespace)->get($snippet),
             ],
         ];
@@ -276,7 +261,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         try {
             foreach ($client->request('GET', 'stockmanagement/warehouses') as $origin) {
                 $data[] = [
-                    'id' => $origin['id'],
+                    'id'   => $origin['id'],
                     'name' => $origin['name'],
                 ];
             }
@@ -286,7 +271,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
 
         $this->View()->assign([
             'success' => true,
-            'data' => $data,
+            'data'    => $data,
         ]);
     }
 

@@ -8,7 +8,7 @@ namespace ShopwareAdapter\DataProvider\Currency;
 interface CurrencyDataProviderInterface
 {
     /**
-     * @param $code
+     * @param string $code
      *
      * @return int
      */

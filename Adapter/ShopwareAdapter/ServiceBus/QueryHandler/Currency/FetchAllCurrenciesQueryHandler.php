@@ -3,7 +3,6 @@
 namespace ShopwareAdapter\ServiceBus\QueryHandler\Currency;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
@@ -20,9 +19,9 @@ use ShopwareAdapter\ShopwareAdapter;
 class FetchAllCurrenciesQueryHandler implements QueryHandlerInterface
 {
     /**
-     * @var EntityRepository
+     * @var EntityManagerInterface
      */
-    private $repository;
+    private $entityManager;
 
     /**
      * @var CurrencyResponseParserInterface
@@ -39,7 +38,7 @@ class FetchAllCurrenciesQueryHandler implements QueryHandlerInterface
         EntityManagerInterface $entityManager,
         CurrencyResponseParserInterface $responseParser
     ) {
-        $this->repository = $entityManager->getRepository(CurrencyModel::class);
+        $this->entityManager  = $entityManager;
         $this->responseParser = $responseParser;
     }
 
@@ -77,7 +76,8 @@ class FetchAllCurrenciesQueryHandler implements QueryHandlerInterface
      */
     private function createCurrenciesQuery()
     {
-        $queryBuilder = $this->repository->createQueryBuilder('currencies');
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $queryBuilder->from(CurrencyModel::class, 'currencies');
         $queryBuilder->select([
             'currencies.id as id',
             'currencies.name as name',

@@ -54,10 +54,10 @@ class CategoryResponseParser implements CategoryResponseParserInterface
         MediaResponseParserInterface $mediaResponseParser,
         LoggerInterface $logger
     ) {
-        $this->identityService = $identityService;
-        $this->config = $config;
+        $this->identityService     = $identityService;
+        $this->config              = $config;
         $this->mediaResponseParser = $mediaResponseParser;
-        $this->logger = $logger;
+        $this->logger              = $logger;
     }
 
     /**
@@ -86,8 +86,8 @@ class CategoryResponseParser implements CategoryResponseParserInterface
         if (null !== $entry['parentCategoryId']) {
             $parentIdentity = $this->identityService->findOneBy([
                 'adapterIdentifier' => (string) $entry['parentCategoryId'],
-                'adapterName' => PlentymarketsAdapter::NAME,
-                'objectType' => Category::TYPE,
+                'adapterName'       => PlentymarketsAdapter::NAME,
+                'objectType'        => Category::TYPE,
             ]);
 
             if (null === $parentIdentity) {
@@ -166,7 +166,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
     }
 
     /**
-     * @param $plentyId
+     * @param int $plentyId
      *
      * @return null|Identity
      */
@@ -174,8 +174,8 @@ class CategoryResponseParser implements CategoryResponseParserInterface
     {
         $identity = $this->identityService->findOneBy([
             'adapterIdentifier' => (string) $plentyId,
-            'adapterName' => PlentymarketsAdapter::NAME,
-            'objectType' => Shop::TYPE,
+            'adapterName'       => PlentymarketsAdapter::NAME,
+            'objectType'        => Shop::TYPE,
         ]);
 
         if (null === $identity) {
@@ -199,7 +199,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
 
     /**
      * @param array $detail
-     * @param $result
+     * @param array $result
      *
      * @return array
      */
@@ -221,8 +221,8 @@ class CategoryResponseParser implements CategoryResponseParserInterface
             try {
                 $media = $this->mediaResponseParser->parse([
                     'mediaCategory' => MediaCategoryHelper::CATEGORY,
-                    'link' => $this->getBaseUrl() . 'documents/' . $image,
-                    'name' => $detail['name'],
+                    'link'          => $this->getBaseUrl() . 'documents/' . $image,
+                    'name'          => $detail['name'],
                     'alternateName' => $detail['name'],
                 ]);
 
@@ -248,17 +248,17 @@ class CategoryResponseParser implements CategoryResponseParserInterface
     }
 
     /**
-     * @param $metaRobots
+     * @param string $metaRobots
      *
      * @return string
      */
     private function getMetaRobots($metaRobots)
     {
         $robotsMap = [
-            'ALL' => 'INDEX, FOLLOW',
-            'INDEX' => 'INDEX, FOLLOW',
-            'NOFOLLOW' => 'INDEX, NOFOLLOW',
-            'NOINDEX' => 'NOINDEX, FOLLOW',
+            'ALL'               => 'INDEX, FOLLOW',
+            'INDEX'             => 'INDEX, FOLLOW',
+            'NOFOLLOW'          => 'INDEX, NOFOLLOW',
+            'NOINDEX'           => 'NOINDEX, FOLLOW',
             'NOINDEX, NOFOLLOW' => 'NOINDEX, NOFOLLOW',
         ];
 
@@ -271,7 +271,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
 
     /**
      * @param array $details
-     * @param $result
+     * @param array $result
      *
      * @return Translation[]
      */
@@ -282,8 +282,8 @@ class CategoryResponseParser implements CategoryResponseParserInterface
         foreach ($details as $detail) {
             $languageIdentifier = $this->identityService->findOneBy([
                 'adapterIdentifier' => $detail['lang'],
-                'adapterName' => PlentymarketsAdapter::NAME,
-                'objectType' => Language::TYPE,
+                'adapterName'       => PlentymarketsAdapter::NAME,
+                'objectType'        => Language::TYPE,
             ]);
 
             if (null === $languageIdentifier) {
@@ -292,56 +292,56 @@ class CategoryResponseParser implements CategoryResponseParserInterface
 
             $translations[] = Translation::fromArray([
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                'property' => 'imageIdentifiers',
-                'value' => $this->getImages($detail, $result),
+                'property'           => 'imageIdentifiers',
+                'value'              => $this->getImages($detail, $result),
             ]);
 
             $translations[] = Translation::fromArray([
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                'property' => 'name',
-                'value' => $detail['name'],
+                'property'           => 'name',
+                'value'              => $detail['name'],
             ]);
 
             $translations[] = Translation::fromArray([
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                'property' => 'description',
-                'value' => $detail['shortDescription'],
+                'property'           => 'description',
+                'value'              => $detail['shortDescription'],
             ]);
 
             $translations[] = Translation::fromArray([
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                'property' => 'longDescription',
-                'value' => $detail['description'],
+                'property'           => 'longDescription',
+                'value'              => $detail['description'],
             ]);
 
             $translations[] = Translation::fromArray([
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                'property' => 'metaTitle',
-                'value' => $detail['metaTitle'],
+                'property'           => 'metaTitle',
+                'value'              => $detail['metaTitle'],
             ]);
 
             $translations[] = Translation::fromArray([
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                'property' => 'metaDescription',
-                'value' => $detail['metaDescription'],
+                'property'           => 'metaDescription',
+                'value'              => $detail['metaDescription'],
             ]);
 
             $translations[] = Translation::fromArray([
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                'property' => 'metaKeywords',
-                'value' => $detail['metaKeywords'],
+                'property'           => 'metaKeywords',
+                'value'              => $detail['metaKeywords'],
             ]);
 
             $translations[] = Translation::fromArray([
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                'property' => 'metaRobots',
-                'value' => $this->getMetaRobots($detail['metaRobots']),
+                'property'           => 'metaRobots',
+                'value'              => $this->getMetaRobots($detail['metaRobots']),
             ]);
 
             $translations[] = Translation::fromArray([
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                'property' => 'plentyId',
-                'value' => $detail['plentyId'],
+                'property'           => 'plentyId',
+                'value'              => $detail['plentyId'],
             ]);
         }
 

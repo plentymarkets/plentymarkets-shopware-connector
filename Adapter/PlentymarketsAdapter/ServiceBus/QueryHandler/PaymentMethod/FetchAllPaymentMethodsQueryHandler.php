@@ -36,7 +36,7 @@ class FetchAllPaymentMethodsQueryHandler implements QueryHandlerInterface
         ClientInterface $client,
         PaymentMethodResponseParserInterface $responseParser
     ) {
-        $this->client = $client;
+        $this->client         = $client;
         $this->responseParser = $responseParser;
     }
 

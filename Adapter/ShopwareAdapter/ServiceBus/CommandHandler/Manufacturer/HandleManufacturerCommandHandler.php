@@ -46,8 +46,8 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
         IdentityServiceInterface $identityService,
         AttributeDataPersisterInterface $attributePersister
     ) {
-        $this->resource = $resource;
-        $this->identityService = $identityService;
+        $this->resource           = $resource;
+        $this->identityService    = $identityService;
         $this->attributePersister = $attributePersister;
     }
 
@@ -85,8 +85,8 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
         if (null !== $manufacturer->getLogoIdentifier()) {
             $mediaIdentity = $this->identityService->findOneBy([
                 'objectIdentifier' => (string) $manufacturer->getLogoIdentifier(),
-                'objectType' => Media::TYPE,
-                'adapterName' => ShopwareAdapter::NAME,
+                'objectType'       => Media::TYPE,
+                'adapterName'      => ShopwareAdapter::NAME,
             ]);
 
             if (null !== $mediaIdentity) {
@@ -98,8 +98,8 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
 
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => (string) $manufacturer->getIdentifier(),
-            'objectType' => Manufacturer::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => Manufacturer::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         if (null === $identity) {

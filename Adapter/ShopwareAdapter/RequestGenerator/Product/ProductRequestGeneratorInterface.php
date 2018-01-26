@@ -12,7 +12,7 @@ interface ProductRequestGeneratorInterface
     /**
      * @param Product $product
      *
-     * @return array
+     * @return array|null
      */
     public function generate(Product $product);
 }

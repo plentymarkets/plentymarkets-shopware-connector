@@ -2,8 +2,8 @@
 
 namespace PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\Customer;
 
+use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
 use PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\ResponseParserTest;
 use Psr\Log\LoggerInterface;
@@ -13,6 +13,7 @@ use Shopware\Models\Shop\Locale;
 use Shopware\Models\Shop\Shop;
 use ShopwareAdapter\ResponseParser\Address\AddressResponseParser;
 use ShopwareAdapter\ResponseParser\Customer\CustomerResponseParser;
+use ShopwareAdapter\ResponseParser\Customer\CustomerResponseParserInterface;
 
 /**
  * Class CustomerResponseParserTest
@@ -22,7 +23,7 @@ use ShopwareAdapter\ResponseParser\Customer\CustomerResponseParser;
 class CustomerResponseParserTest extends ResponseParserTest
 {
     /**
-     * @var AddressResponseParser
+     * @var CustomerResponseParserInterface
      */
     private $responseParser;
 
@@ -33,13 +34,13 @@ class CustomerResponseParserTest extends ResponseParserTest
         $customerGroup = $this->createMock(Group::class);
         $customerGroup->expects($this->any())->method('getId')->willReturn(1);
 
-        $groupRepository = $this->createMock(EntityRepository::class);
+        $groupRepository = $this->createMock(ObjectRepository::class);
         $groupRepository->expects($this->any())->method('findOneBy')->with(['key' => 'H'])->willReturn($customerGroup);
 
         $address = $this->createMock(Address::class);
         $address->expects($this->any())->method('getAdded')->willReturn(new \DateTime());
 
-        $newsletterRepository = $this->createMock(EntityRepository::class);
+        $newsletterRepository = $this->createMock(ObjectRepository::class);
         $newsletterRepository->expects($this->any())->method('findOneBy')->with(['email' => 'mustermann@b2b.de'])->willReturn($address);
 
         $locale = $this->createMock(Locale::class);
@@ -48,7 +49,7 @@ class CustomerResponseParserTest extends ResponseParserTest
         $shop = $this->createMock(Shop::class);
         $shop->expects($this->any())->method('getLocale')->willReturn($locale);
 
-        $shopRepository = $this->createMock(EntityRepository::class);
+        $shopRepository = $this->createMock(ObjectRepository::class);
         $shopRepository->expects($this->any())->method('find')->willReturn($shop);
 
         $entityManager = $this->createMock(EntityManagerInterface::class);
@@ -67,7 +68,7 @@ class CustomerResponseParserTest extends ResponseParserTest
     public function testCustomerParsing()
     {
         /**
-         * @var Customer $customer
+         * @var Customer|null $customer
          */
         $customer = $this->responseParser->parse(self::$orderData['customer']);
 

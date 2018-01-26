@@ -13,10 +13,8 @@ use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
  */
 class Address extends AbstractValueObject implements AttributableInterface
 {
-    const SALUTATION_MR = 1;
-
-    const SALUTATION_MS = 2;
-
+    const SALUTATION_MR   = 1;
+    const SALUTATION_MS   = 2;
     const SALUTATION_FIRM = 3;
 
     /**
@@ -321,7 +319,7 @@ class Address extends AbstractValueObject implements AttributableInterface
     }
 
     /**
-     * @param string null|$mobilePhoneNumber
+     * @param string|null $mobilePhoneNumber
      */
     public function setMobilePhoneNumber($mobilePhoneNumber = null)
     {

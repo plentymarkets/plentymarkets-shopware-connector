@@ -45,9 +45,9 @@ class FetchPaymentQueryHandler implements QueryHandlerInterface
         IdentityServiceInterface $identityService,
         OrderDataProviderInterface $dataProvider
     ) {
-        $this->responseParser = $responseParser;
+        $this->responseParser  = $responseParser;
         $this->identityService = $identityService;
-        $this->dataProvider = $dataProvider;
+        $this->dataProvider    = $dataProvider;
     }
 
     /**
@@ -73,8 +73,8 @@ class FetchPaymentQueryHandler implements QueryHandlerInterface
          */
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => $query->getObjectIdentifier(),
-            'objectType' => Payment::TYPE,
-            'adapterName' => ShopwareAdapter::NAME,
+            'objectType'       => Payment::TYPE,
+            'adapterName'      => ShopwareAdapter::NAME,
         ]);
 
         if (null === $identity) {

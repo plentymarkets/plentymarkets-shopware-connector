@@ -36,7 +36,7 @@ class MediaResponseParser implements MediaResponseParserInterface
         MediaCategoryHelper $categoryHelper
     ) {
         $this->identityService = $identityService;
-        $this->categoryHelper = $categoryHelper;
+        $this->categoryHelper  = $categoryHelper;
     }
 
     /**

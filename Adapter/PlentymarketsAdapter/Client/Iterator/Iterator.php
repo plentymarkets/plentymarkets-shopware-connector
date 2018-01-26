@@ -70,9 +70,9 @@ class Iterator implements BaseIterator, Countable
     {
         Assertion::string($path);
 
-        $this->client = $client;
-        $this->criteria = $criteria;
-        $this->path = $path;
+        $this->client          = $client;
+        $this->criteria        = $criteria;
+        $this->path            = $path;
         $this->prepareFunction = $prepareFunction;
     }
 
@@ -126,7 +126,7 @@ class Iterator implements BaseIterator, Countable
         $this->loadPage($this->criteria, $this->limit);
 
         $this->offset = 0;
-        $this->index = 0;
+        $this->index  = 0;
     }
 
     /**

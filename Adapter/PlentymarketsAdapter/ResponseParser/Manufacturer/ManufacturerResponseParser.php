@@ -42,9 +42,9 @@ class ManufacturerResponseParser implements ManufacturerResponseParserInterface
         MediaResponseParserInterface $mediaResponseParser,
         LoggerInterface $logger
     ) {
-        $this->identityService = $identityService;
+        $this->identityService     = $identityService;
         $this->mediaResponseParser = $mediaResponseParser;
-        $this->logger = $logger;
+        $this->logger              = $logger;
     }
 
     /**
@@ -66,12 +66,14 @@ class ManufacturerResponseParser implements ManufacturerResponseParserInterface
             $manufacturer->setLink($entry['url']);
         }
 
+        $result = [];
+
         if (!empty($entry['logo'])) {
             try {
                 $media = $this->mediaResponseParser->parse([
                     'mediaCategory' => MediaCategoryHelper::MANUFACTURER,
-                    'link' => $entry['logo'],
-                    'name' => $entry['name'],
+                    'link'          => $entry['logo'],
+                    'name'          => $entry['name'],
                     'alternateName' => $entry['name'],
                 ]);
 
@@ -81,7 +83,7 @@ class ManufacturerResponseParser implements ManufacturerResponseParserInterface
             } catch (Exception $exception) {
                 $this->logger->notice('error while processing manufacturer logo', [
                     'name' => $entry['name'],
-                    'url' => $entry['logo'],
+                    'url'  => $entry['logo'],
                 ]);
             }
         }

@@ -5,6 +5,7 @@ namespace ShopwareAdapter\ResponseParser\Customer;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use InvalidArgumentException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
 use PlentyConnector\Connector\TransferObject\Language\Language;
@@ -50,8 +51,8 @@ class CustomerResponseParser implements CustomerResponseParserInterface
         LoggerInterface $logger
     ) {
         $this->identityService = $identityService;
-        $this->entityManager = $entityManager;
-        $this->logger = $logger;
+        $this->entityManager   = $entityManager;
+        $this->logger          = $logger;
     }
 
     /**
@@ -118,7 +119,7 @@ class CustomerResponseParser implements CustomerResponseParserInterface
          * @var EntityRepository $newsletterRepository
          */
         $newsletterRepository = $this->entityManager->getRepository(Address::class);
-        $newsletter = $newsletterRepository->findOneBy(['email' => $entry['email']]);
+        $newsletter           = $newsletterRepository->findOneBy(['email' => $entry['email']]);
 
         if ($newsletter !== null) {
             $customer->setNewsletter(true);
@@ -182,7 +183,7 @@ class CustomerResponseParser implements CustomerResponseParserInterface
     }
 
     /**
-     * @param int
+     * @param int $shopwareId
      *
      * @return int
      */
@@ -196,7 +197,7 @@ class CustomerResponseParser implements CustomerResponseParserInterface
                 return Customer::TYPE_GUEST;
         }
 
-        throw new \InvalidArgumentException('Unknown customer type ' . $shopwareId);
+        throw new InvalidArgumentException('Unknown customer type ' . $shopwareId);
     }
 
     /**
