@@ -7,6 +7,7 @@ use PlentyConnector\Components\Bundle\TransferObject\BundleProduct\BundleProduct
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 use PlentyConnector\Connector\TransferObject\Product\Price\Price;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
+use PlentyConnector\Connector\ValueObject\Translation\Translation;
 
 /**
  * Class Bundle

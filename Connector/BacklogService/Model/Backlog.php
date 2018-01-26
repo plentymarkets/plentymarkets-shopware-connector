@@ -2,6 +2,7 @@
 
 namespace PlentyConnector\Connector\BacklogService\Model;
 
+use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
@@ -18,6 +19,7 @@ use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 class Backlog
 {
     const STATUS_OPEN = 'open';
+
     const STATUS_PROCESSED = 'processed';
 
     /**

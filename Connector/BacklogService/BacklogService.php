@@ -11,6 +11,7 @@ use PlentyConnector\Connector\BacklogService\Command\HandleBacklogElementCommand
 use PlentyConnector\Connector\BacklogService\Model\Backlog;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use Psr\Log\LoggerInterface;
+use Throwable;
 
 /**
  * Class BacklogService
@@ -113,11 +114,13 @@ class BacklogService implements BacklogServiceInterface
             }
 
             return new HandleBacklogElementCommand($command);
+        } catch (Throwable $exception) {
+            $this->logger->error($exception->getMessage());
         } catch (Exception $exception) {
             $this->logger->error($exception->getMessage());
-
-            return null;
         }
+
+        return null;
     }
 
     /**

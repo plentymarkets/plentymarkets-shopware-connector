@@ -52,7 +52,9 @@ class ProductResponseParser implements ProductResponseParserInterface
     private $variationResponseParser;
 
     private $itemsVariationsVariationPropertiesApi;
+
     private $itemsPropertiesSelectionsApi;
+
     private $itemsPropertiesNamesApi;
 
     /**
@@ -103,6 +105,13 @@ class ProductResponseParser implements ProductResponseParserInterface
             return [];
         }
 
+        foreach ($product['variations'] as $val => $key) {
+            $variantShopIdentifiers = $this->getShopIdentifiers($key);
+            if (empty($variantShopIdentifiers)) {
+                unset($product['variations'][$val]);
+            }
+        }
+
         $identity = $this->identityService->findOneOrCreate(
             (string) $product['id'],
             PlentymarketsAdapter::NAME,
@@ -122,7 +131,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         $productObject = new Product();
         $productObject->setIdentifier($identity->getObjectIdentifier());
         $productObject->setName((string) $product['texts'][0]['name1']);
-        $productObject->setActive($this->getActive($variations));
+        $productObject->setActive($this->getActive($variations, $mainVariation));
         $productObject->setNumber($this->getProductNumber($variations));
         $productObject->setShopIdentifiers($shopIdentifiers);
         $productObject->setManufacturerIdentifier($this->getManufacturerIdentifier($product));
@@ -675,11 +684,16 @@ class ProductResponseParser implements ProductResponseParserInterface
 
     /**
      * @param Variation[] $variations
+     * @param array       $mainVariation
      *
      * @return bool
      */
-    private function getActive(array $variations = [])
+    private function getActive(array $variations = [], array $mainVariation)
     {
+        if (!$mainVariation['isActive']) {
+            return false;
+        }
+
         foreach ($variations as $variation) {
             if ($variation->getActive()) {
                 return true;

@@ -56,7 +56,7 @@ class VariationValidator implements ValidatorInterface
         Assertion::integer($object->getWidth(), null, 'product.variation.width');
         Assertion::integer($object->getHeight(), null, 'product.variation.height');
         Assertion::integer($object->getLength(), null, 'product.variation.length');
-        Assertion::integer($object->getWeight(), null, 'product.variation.weight');
+        Assertion::float($object->getWeight(), null, 'product.variation.weight');
         Assertion::allIsInstanceOf($object->getProperties(), Property::class, null, 'product.variation.properties');
         Assertion::allIsInstanceOf($object->getAttributes(), Attribute::class, null, 'product.variation.attributes');
     }

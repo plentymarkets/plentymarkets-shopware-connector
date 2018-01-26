@@ -2,6 +2,7 @@
 
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Product;
 
+use Exception;
 use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;

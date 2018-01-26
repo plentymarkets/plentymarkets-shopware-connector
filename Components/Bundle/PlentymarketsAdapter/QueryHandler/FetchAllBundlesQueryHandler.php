@@ -81,7 +81,7 @@ class FetchAllBundlesQueryHandler implements QueryHandlerInterface
         foreach ($elements as $element) {
             try {
                 $result = $this->responseParser->parse($element);
-            } catch (Exception $exception) {
+            } catch (\Exception $exception) {
                 $this->logger->error($exception->getMessage());
 
                 $result = null;

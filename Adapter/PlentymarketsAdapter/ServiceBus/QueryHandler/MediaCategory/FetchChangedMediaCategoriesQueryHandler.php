@@ -2,6 +2,7 @@
 
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\MediaCategory;
 
+use Exception;
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;

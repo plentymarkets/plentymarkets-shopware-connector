@@ -3,8 +3,8 @@
 namespace PlentyConnector\Connector\IdentityService\Storage;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use PlentyConnector\Connector\IdentityService\Model\Identity as IdentityModel;
-use PlentyConnector\Connector\IdentityService\Model\IdentityRepository;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 
 /**
@@ -18,7 +18,7 @@ class DoctrineIdentityStorage implements IdentityStorageInterface
     private $entityManager;
 
     /**
-     * @var IdentityRepository
+     * @var EntityRepository
      */
     private $identityRepository;
 

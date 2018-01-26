@@ -112,7 +112,7 @@ class OrderResponseParser implements OrderResponseParserInterface
 
         $orderItems = array_filter(array_map(function (array $orderItem) use ($taxFree) {
             return $this->orderItemResponseParser->parse($orderItem, $taxFree);
-        }, $this->prepareOrderItems($entry['details'], $entry['net'])));
+        }, $this->prepareOrderItems($entry['details'], (bool) $entry['net'])));
 
         $orderItems[] = $this->getShippingCosts($entry, $taxFree);
 
@@ -228,9 +228,9 @@ class OrderResponseParser implements OrderResponseParserInterface
      *
      * @return array
      */
-    private function prepareOrderItems(array $orderItems, bool $isNet)
+    private function prepareOrderItems(array $orderItems, $isNet)
     {
-        foreach ($orderItems as $key => $orderItem) {
+        foreach ($orderItems as $key => &$orderItem) {
             if (empty($orderItem['taxId'])) {
                 if (empty($orderItem['taxRate'])) {
                     continue;
@@ -255,7 +255,7 @@ class OrderResponseParser implements OrderResponseParserInterface
 
             if ($isNet) {
                 $priceNet = $orderItem['price'];
-                $orderItem['price'] = round($priceNet + (($priceNet / 100) * $orderItem['taxRate']));
+                $orderItem['price'] = $priceNet + (($priceNet / 100) * $orderItem['taxRate']);
             }
         }
 
