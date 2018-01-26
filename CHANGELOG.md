@@ -15,6 +15,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - changed the sequence in which the definitions are processed, orders and payments are now fetched first.
 - reset unused Shopware attributes for shipping profiles
+- handle Shopware's DateTime attributes correctly
 
 ## [4.2.1]
 ### Added
