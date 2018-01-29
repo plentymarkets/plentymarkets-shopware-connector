@@ -230,7 +230,7 @@ class OrderResponseParser implements OrderResponseParserInterface
      */
     private function prepareOrderItems(array $orderItems, $isNet)
     {
-        foreach ($orderItems as $key => &$orderItem) {
+        foreach ($orderItems as $key => $orderItem) {
             if (empty($orderItem['taxId'])) {
                 if (empty($orderItem['taxRate'])) {
                     continue;
@@ -254,8 +254,7 @@ class OrderResponseParser implements OrderResponseParserInterface
             }
 
             if ($isNet) {
-                $priceNet = $orderItem['price'];
-                $orderItem['price'] = $priceNet + (($priceNet / 100) * $orderItem['taxRate']);
+                $orderItems[$key]['price'] = $orderItem['price'] + (($orderItem['price'] / 100) * $orderItem['taxRate']);
             }
         }
 
