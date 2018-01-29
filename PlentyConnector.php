@@ -41,18 +41,14 @@ require __DIR__ . '/autoload.php';
 class PlentyConnector extends Plugin
 {
     const PERMISSION_READ = 'read';
-
     const PERMISSION_WRITE = 'write';
 
     /**
      * List of all cronjobs
      */
     const CRONJOB_SYNCHRONIZE = 'Synchronize';
-
     const CRONJOB_SYNCHRONIZE_ORDERS = 'SynchronizeOrders';
-
     const CRONJOB_CLEANUP = 'Cleanup';
-
     const CRONJOB_BACKLOG = 'ProcessBacklog';
 
     /**
@@ -298,7 +294,7 @@ class PlentyConnector extends Plugin
 
     /**
      * @param UpdateContext $context
-     * @param $targetVersion
+     * @param string        $targetVersion
      *
      * @return mixed
      */
@@ -309,7 +305,7 @@ class PlentyConnector extends Plugin
 
     /**
      * @param UpdateContext $context
-     * @param $targetVersion
+     * @param string        $targetVersion
      *
      * @return mixed
      */
@@ -435,7 +431,7 @@ class PlentyConnector extends Plugin
 
     /**
      * @param ContainerBuilder $container
-     * @param $filename
+     * @param string           $filename
      */
     private function loadFile(ContainerBuilder $container, $filename)
     {

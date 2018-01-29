@@ -18,9 +18,7 @@ use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 class Order extends AbstractTransferObject implements AttributableInterface
 {
     const TYPE = 'Order';
-
     const TYPE_ORDER = 1;
-
     const TYPE_OFFER = 2;
 
     /**

@@ -110,7 +110,7 @@ class Manufacturer extends AbstractTransferObject
     }
 
     /**
-     * @return mixed
+     * @return Attribute[]
      */
     public function getAttributes()
     {
@@ -118,7 +118,7 @@ class Manufacturer extends AbstractTransferObject
     }
 
     /**
-     * @param mixed $attributes
+     * @param array $attributes
      */
     public function setAttributes(array $attributes)
     {

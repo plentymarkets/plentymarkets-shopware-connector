@@ -22,6 +22,9 @@ use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
+use PlentymarketsAdapter\ReadApi\Item\Property\Name as NameApi;
+use PlentymarketsAdapter\ReadApi\Item\Property\Selection as SelectionApi;
+use PlentymarketsAdapter\ReadApi\Item\Variation\Property as PropertyApi;
 use PlentymarketsAdapter\ResponseParser\Product\Image\ImageResponseParserInterface;
 use PlentymarketsAdapter\ResponseParser\Product\Variation\VariationResponseParserInterface;
 use Psr\Log\LoggerInterface;
@@ -51,10 +54,19 @@ class ProductResponseParser implements ProductResponseParserInterface
      */
     private $variationResponseParser;
 
+    /**
+     * @var PropertyApi
+     */
     private $itemsVariationsVariationPropertiesApi;
 
+    /**
+     * @var SelectionApi
+     */
     private $itemsPropertiesSelectionsApi;
 
+    /**
+     * @var NameApi
+     */
     private $itemsPropertiesNamesApi;
 
     /**
@@ -79,9 +91,9 @@ class ProductResponseParser implements ProductResponseParserInterface
         $this->variationResponseParser = $variationResponseParser;
 
         //TODO: inject when refactoring this class
-        $this->itemsVariationsVariationPropertiesApi = new \PlentymarketsAdapter\ReadApi\Item\Variation\Property($client);
-        $this->itemsPropertiesSelectionsApi = new\PlentymarketsAdapter\ReadApi\Item\Property\Selection($client);
-        $this->itemsPropertiesNamesApi = new \PlentymarketsAdapter\ReadApi\Item\Property\Name($client);
+        $this->itemsVariationsVariationPropertiesApi = new PropertyApi($client);
+        $this->itemsPropertiesSelectionsApi = new SelectionApi($client);
+        $this->itemsPropertiesNamesApi = new NameApi($client);
     }
 
     /**
@@ -424,7 +436,7 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * @param $product
+     * @param array $product
      *
      * @return LinkedProduct[]
      */
@@ -465,7 +477,7 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * @param $mainVariation
+     * @param array $mainVariation
      *
      * @return Property[]
      */

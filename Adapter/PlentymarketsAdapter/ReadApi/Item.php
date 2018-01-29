@@ -47,7 +47,7 @@ class Item extends ApiAbstract
     }
 
     /**
-     * @param $productId
+     * @param int $productId
      *
      * @return array
      */
@@ -84,8 +84,8 @@ class Item extends ApiAbstract
     }
 
     /**
-     * @param $startTimestamp
-     * @param $endTimestamp
+     * @param DateTimeImmutable $startTimestamp
+     * @param DateTimeImmutable $endTimestamp
      *
      * @return Iterator
      */

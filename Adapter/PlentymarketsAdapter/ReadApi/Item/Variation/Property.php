@@ -10,8 +10,8 @@ use PlentymarketsAdapter\ReadApi\ApiAbstract;
 class Property extends ApiAbstract
 {
     /**
-     * @param $productId
-     * @param $variationId
+     * @param int $productId
+     * @param int $variationId
      *
      * @return mixed
      */

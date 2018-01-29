@@ -48,7 +48,7 @@ class PaymentStatusResponseParser implements PaymentStatusResponseParserInterfac
     }
 
     /**
-     * @param $entry
+     * @param array $entry
      *
      * @return string
      */

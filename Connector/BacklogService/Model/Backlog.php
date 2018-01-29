@@ -19,7 +19,6 @@ use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 class Backlog
 {
     const STATUS_OPEN = 'open';
-
     const STATUS_PROCESSED = 'processed';
 
     /**
@@ -93,9 +92,9 @@ class Backlog
     }
 
     /**
-     * @param $payload
+     * @param CommandInterface $payload
      */
-    public function setPayload($payload)
+    public function setPayload(CommandInterface $payload)
     {
         $this->payload = $payload;
     }

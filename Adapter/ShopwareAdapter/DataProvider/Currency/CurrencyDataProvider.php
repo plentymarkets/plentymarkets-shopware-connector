@@ -28,9 +28,7 @@ class CurrencyDataProvider implements CurrencyDataProviderInterface
     }
 
     /**
-     * @param $code
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public function getCurrencyIdentifierByCode($code)
     {

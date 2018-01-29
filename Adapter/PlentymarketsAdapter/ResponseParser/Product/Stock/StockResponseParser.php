@@ -78,7 +78,7 @@ class StockResponseParser implements StockResponseParserInterface
     }
 
     /**
-     * @param $variation
+     * @param array $variation
      *
      * @return float
      */

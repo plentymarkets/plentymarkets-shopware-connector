@@ -175,7 +175,7 @@ class Client implements ClientInterface
     }
 
     /**
-     * @param $path
+     * @param string $path
      *
      * @return bool
      */
@@ -211,8 +211,8 @@ class Client implements ClientInterface
     }
 
     /**
-     * @param $limit
-     * @param $offset
+     * @param int   $limit
+     * @param int   $offset
      * @param array $options
      *
      * @return array

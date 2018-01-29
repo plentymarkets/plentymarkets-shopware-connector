@@ -10,7 +10,7 @@ use PlentymarketsAdapter\ReadApi\ApiAbstract;
 class Value extends ApiAbstract
 {
     /**
-     * @param $attributeId
+     * @param int $attributeId
      *
      * @return array
      */

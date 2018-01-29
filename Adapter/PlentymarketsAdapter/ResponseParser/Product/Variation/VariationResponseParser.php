@@ -348,7 +348,7 @@ class VariationResponseParser implements VariationResponseParserInterface
     }
 
     /**
-     * @param $variation
+     * @param array $variation
      *
      * @return Property[]
      */

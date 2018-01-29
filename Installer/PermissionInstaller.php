@@ -118,7 +118,7 @@ class PermissionInstaller implements InstallerInterface
     }
 
     /**
-     * @param $resourceName
+     * @param string $resourceName
      *
      * @return ShopwareResource
      */
@@ -130,8 +130,6 @@ class PermissionInstaller implements InstallerInterface
     /**
      * @param Plugin $plugin
      * @param array  $permissions
-     *
-     * @throws Enlight_Exception
      */
     private function createResource(Plugin $plugin, array $permissions)
     {

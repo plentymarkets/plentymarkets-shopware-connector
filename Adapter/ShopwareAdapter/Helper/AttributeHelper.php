@@ -28,8 +28,7 @@ class AttributeHelper implements AttributeHelperInterface
     }
 
     /**
-     * @param AttributableInterface $object
-     * @param $fieldName
+     * {@inheritdoc}
      */
     public function addFieldAsAttribute(AttributableInterface $object, $fieldName)
     {
