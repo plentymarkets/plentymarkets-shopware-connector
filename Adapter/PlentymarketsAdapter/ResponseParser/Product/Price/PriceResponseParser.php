@@ -285,7 +285,7 @@ class PriceResponseParser implements PriceResponseParserInterface
         }
 
         if (isset($priceArray['specialOffer'][$price->getFromAmount()])) {
-            $specialPrice = $priceArray['specialOffer'][$price->getFromAmount()];
+            $specialPrice = $priceArray['specialOffer'][$price->getFromAmount()]['price'];
 
             if (0.0 === $price->getPseudoPrice() && $specialPrice < $price->getPrice()) {
                 $price->setPseudoPrice($price->getPrice());
