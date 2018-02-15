@@ -17,7 +17,7 @@ class MediaCategoryResponseParser implements MediaCategoryResponseParserInterfac
     private $identityService;
 
     /**
-     * OrderStatusResponseParser constructor.
+     * MediaCategoryResponseParser constructor.
      *
      * @param IdentityServiceInterface $identityService
      */
