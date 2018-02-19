@@ -4,7 +4,6 @@ namespace PlentyConnector\Components\Bundle\ShopwareAdapter\CommandHandler;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use PlentyConnector\Components\Bundle\Command\RemoveBundleCommand;
 use PlentyConnector\Components\Bundle\Helper\BundleHelper;
 use PlentyConnector\Components\Bundle\TransferObject\Bundle;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
@@ -14,7 +13,7 @@ use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Psr\Log\LoggerInterface;
-use Shopware\CustomModels\Bundle\Bundle as BundleModel;
+use SwagBundle\Models\Bundle as BundleModel;
 use ShopwareAdapter\ShopwareAdapter;
 
 /**
