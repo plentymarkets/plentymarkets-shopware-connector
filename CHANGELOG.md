@@ -13,6 +13,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - use correct item tax when transferring order to plenty
 - prevent the import of pseudoprices that are equal to the usual price 
 - check existing plugin in custom plugin directory
+- set bundles as required for swagbundle plugin (5.X)
 
 ### Changed
 - changed the sequence in which the definitions are processed, orders and payments are now fetched first.

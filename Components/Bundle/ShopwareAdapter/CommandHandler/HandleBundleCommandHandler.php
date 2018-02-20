@@ -16,14 +16,11 @@ use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
 use PlentyConnector\Connector\TransferObject\Product\Price\Price;
-use PlentyConnector\Connector\TransferObject\Product\Product;
 use SwagBundle\Models\Article;
 use SwagBundle\Models\Bundle as BundleModel;
 use SwagBundle\Models\Price as PriceModel;
 use SwagBundle\Models\Repository as BundleRepository;
-use Shopware\Models\Article\Article as ArticleModel;
 use Shopware\Models\Article\Detail as DetailModel;
-use Shopware\Models\Article\Repository as ArticleRepository;
 use Shopware\Models\Customer\Group as GroupModel;
 use ShopwareAdapter\ShopwareAdapter;
 
@@ -255,10 +252,12 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
                 continue;
             }
 
+            $netPrice = $price->getPrice() * (100 / ($bundleModel->getArticle()->getTax()->getTax() + 100));
+
             $priceModel = new PriceModel();
             $priceModel->setBundle($bundleModel);
             $priceModel->setCustomerGroup($group);
-            $priceModel->setPrice($price->getPrice());
+            $priceModel->setPrice($netPrice);
             $this->entityManager->persist($priceModel);
             $prices[] = $priceModel;
         }
@@ -278,7 +277,6 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
 
         $result = [];
         foreach ($bundle->getBundleProducts() as $bundleProduct) {
-
             if ($mainVariant->getNumber() === $bundleProduct->getNumber()) {
                 continue;
             }
@@ -339,5 +337,4 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
 
         return $detail->getInStock();
     }
-
 }

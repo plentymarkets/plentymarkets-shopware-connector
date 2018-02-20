@@ -79,9 +79,6 @@ class RemoveBundleCommandHandler implements CommandHandlerInterface
      */
     public function handle(CommandInterface $command)
     {
-        /**
-         * @var RemoveBundleCommand $command
-         */
         $identifier = $command->getPayload();
 
         $this->bundleHelper->registerBundleModels();
