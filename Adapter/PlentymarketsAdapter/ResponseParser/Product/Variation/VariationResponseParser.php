@@ -452,7 +452,6 @@ class VariationResponseParser implements VariationResponseParserInterface
         return $translations;
     }
 
-
     /**
      * @param array $variation
      *
