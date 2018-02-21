@@ -466,6 +466,6 @@ class VariationResponseParser implements VariationResponseParserInterface
             $weight = $variation['weightG'];
         }
 
-        return (float)($weight / 1000);
+        return (float) ($weight / 1000);
     }
 }
