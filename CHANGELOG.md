@@ -11,7 +11,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - import alternate media text as name if is set
 - import correct main translation
 - use correct item tax when transferring order to plenty
-- prevent the import of pseudoprices that are equal to the usual price 
+- prevent the import of pseudoprices that are equal to the usual price (@jppeter)
+- fix of orderstatus and paymentstatus mapping (@smxvh)
 
 ### Changed
 - changed the sequence in which the definitions are processed, orders and payments are now fetched first.
