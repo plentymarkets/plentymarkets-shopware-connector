@@ -64,10 +64,6 @@ class PaymentStatusResponseParser implements PaymentStatusResponseParserInterfac
 
         $names = $entry['names'];
 
-        if (isset($names['backendName'])) {
-            $names = array_filter(array_column($names, 'backendName'));
-        }
-
         if (!empty($names)) {
             return array_shift($names);
         }
