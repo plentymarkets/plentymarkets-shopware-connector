@@ -31,7 +31,6 @@ class OrderStatusResponseParser implements OrderStatusResponseParserInterface
      */
     public function parse(array $entry)
     {
-        // Fix of id-statusId
         if (empty($entry['id'])) {
             $entry['id'] = $entry['statusId'];
         }
@@ -63,7 +62,6 @@ class OrderStatusResponseParser implements OrderStatusResponseParserInterface
             return $entry['id'];
         }
 
-        // Fix of missing attribute backendName in response.
         $names = $entry['names'];
 
         if (isset($names['backendName'])) {
