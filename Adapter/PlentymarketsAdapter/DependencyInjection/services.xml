@@ -90,7 +90,7 @@
             <argument type="service" id="plentymarkets_adapter.read_api.item.unit" />
         </service>
 
-        <service id="plentymarkets_adapter.helper.variation_helper" class="PlentymarketsAdapter\Helper\VariationHelper" >
+        <service id="plentymarkets_adapter.helper.variation" class="PlentymarketsAdapter\Helper\VariationHelper" >
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plenty_connector.logger" />
         </service>
@@ -195,7 +195,7 @@
             <argument type="service" id="plenty_connector.logger" />
             <argument type="service" id="plentymarkets_adapter.response_parser.image" />
             <argument type="service" id="plentymarkets_adapter.response_parser.variation" />
-            <argument type="service" id="plentymarkets_adapter.helper.variation_helper" />
+            <argument type="service" id="plentymarkets_adapter.helper.variation" />
             <argument type="service" id="plentymarkets_adapter.client" />
         </service>
 
