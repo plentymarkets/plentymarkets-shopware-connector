@@ -81,7 +81,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      * @param LoggerInterface                  $logger
      * @param ImageResponseParserInterface     $imageResponseParser
      * @param VariationResponseParserInterface $variationResponseParser
-     * @param VariationHelperInterface    $shopIdentifier
+     * @param VariationHelperInterface         $shopIdentifier
      * @param ClientInterface                  $client
      */
     public function __construct(
