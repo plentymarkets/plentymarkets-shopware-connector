@@ -118,10 +118,6 @@ class CleanupService implements CleanupServiceInterface
                 continue;
             }
 
-            if ($definition->getObjectType() !== 'Bundle') {
-                continue;
-            }
-
             $foundElements = $this->collectObjectIdentifiers($definition);
 
             if (!$foundElements) {
