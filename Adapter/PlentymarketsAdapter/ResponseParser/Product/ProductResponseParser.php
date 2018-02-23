@@ -70,7 +70,7 @@ class ProductResponseParser implements ProductResponseParserInterface
     private $itemsPropertiesNamesApi;
 
     /**
-     * @var VariationHelperInterface $variationHelper
+     * @var VariationHelperInterface
      */
     private $variationHelper;
 
