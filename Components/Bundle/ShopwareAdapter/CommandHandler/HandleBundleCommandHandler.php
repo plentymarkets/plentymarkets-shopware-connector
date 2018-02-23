@@ -5,7 +5,6 @@ namespace PlentyConnector\Components\Bundle\ShopwareAdapter\CommandHandler;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use Psr\Log\LoggerInterface;
 use PlentyConnector\Components\Bundle\Helper\BundleHelper;
 use PlentyConnector\Components\Bundle\TransferObject\Bundle;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
@@ -16,13 +15,14 @@ use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
 use PlentyConnector\Connector\TransferObject\Product\Price\Price;
+use Psr\Log\LoggerInterface;
+use Shopware\Models\Article\Detail as DetailModel;
+use Shopware\Models\Customer\Group as GroupModel;
+use ShopwareAdapter\ShopwareAdapter;
 use SwagBundle\Models\Article;
 use SwagBundle\Models\Bundle as BundleModel;
 use SwagBundle\Models\Price as PriceModel;
 use SwagBundle\Models\Repository as BundleRepository;
-use Shopware\Models\Article\Detail as DetailModel;
-use Shopware\Models\Customer\Group as GroupModel;
-use ShopwareAdapter\ShopwareAdapter;
 
 /**
  * Class HandleBundleCommandHandler.
@@ -53,8 +53,8 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
      * HandleBundleCommandHandler constructor.
      *
      * @param IdentityServiceInterface $identityService
-     * @param EntityManagerInterface $entityManager
-     * @param BundleHelper $bundleHelper
+     * @param EntityManagerInterface   $entityManager
+     * @param BundleHelper             $bundleHelper
      */
     public function __construct(
         IdentityServiceInterface $identityService,
@@ -93,7 +93,7 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
 
         $identity = $this->identityService->findOneBy(
             [
-                'objectIdentifier' => (string)$bundle->getIdentifier(),
+                'objectIdentifier' => (string) $bundle->getIdentifier(),
                 'objectType' => Bundle::TYPE,
                 'adapterName' => ShopwareAdapter::NAME,
             ]
@@ -113,7 +113,7 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
                 $identity = $this->identityService->create(
                     $bundle->getIdentifier(),
                     Bundle::TYPE,
-                    (string)$existingBundle->getId(),
+                    (string) $existingBundle->getId(),
                     ShopwareAdapter::NAME
                 );
             }
@@ -203,7 +203,7 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
 
         $identity = $this->identityService->findOneBy(
             [
-                'objectIdentifier' => (string)$price->getCustomerGroupIdentifier(),
+                'objectIdentifier' => (string) $price->getCustomerGroupIdentifier(),
                 'objectType' => CustomerGroup::TYPE,
                 'adapterName' => ShopwareAdapter::NAME,
             ]
@@ -266,9 +266,10 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param Bundle $bundle
+     * @param Bundle      $bundle
      * @param BundleModel $bundleModel
      * @param DetailModel $mainVariant
+     *
      * @return ArrayCollection
      */
     private function getArticles(Bundle $bundle, BundleModel $bundleModel, DetailModel $mainVariant)
@@ -284,7 +285,7 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
             $detail = $repository->findOneBy(['number' => $bundleProduct->getNumber()]);
 
             if (null === $detail) {
-                $this->logger->error('bundle product not found => number: '.$bundleProduct->getNumber());
+                $this->logger->error('bundle product not found => number: ' . $bundleProduct->getNumber());
                 continue;
             }
 
@@ -303,8 +304,10 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
 
     /**
      * @param Bundle $bundle
-     * @return null|DetailModel
+     *
      * @throws NotFoundException
+     *
+     * @return null|DetailModel
      */
     private function getMainVariant(Bundle $bundle)
     {
@@ -324,6 +327,7 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
 
     /**
      * @param $bundleNumber
+     *
      * @return int
      */
     private function getBundleStock($bundleNumber)

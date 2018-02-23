@@ -77,7 +77,6 @@ class BundleResponseParser implements BundleResponseParserInterface
         $bundles = [];
 
         foreach ($bundleVariations as $bundle) {
-
             if (empty($bundle['variationClients'])) {
                 continue;
             }

@@ -13,8 +13,8 @@ use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Psr\Log\LoggerInterface;
-use SwagBundle\Models\Bundle as BundleModel;
 use ShopwareAdapter\ShopwareAdapter;
+use SwagBundle\Models\Bundle as BundleModel;
 
 /**
  * Class RemoveBundleCommandHandler.
@@ -104,7 +104,6 @@ class RemoveBundleCommandHandler implements CommandHandlerInterface
          * @var BundleModel $bundleModel
          */
         $bundleModel = $repository->find($identity->getAdapterIdentifier());
-
 
         if (null === $bundleModel) {
             $this->logger->notice('identity removed but the object was not found', ['command' => $command]);
