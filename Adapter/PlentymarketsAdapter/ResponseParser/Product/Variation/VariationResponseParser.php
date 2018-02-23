@@ -185,7 +185,7 @@ class VariationResponseParser implements VariationResponseParserInterface
             $variationObject->setWidth((int) $variation['widthMM']);
             $variationObject->setHeight((int) $variation['heightMM']);
             $variationObject->setLength((int) $variation['lengthMM']);
-            $variationObject->setWeight((float) ($variation['weightNetG'] / 1000));
+            $variationObject->setWeight($this->getVariationWeight($variation));
             $variationObject->setProperties($this->getVariationProperties($variation));
 
             $result[$variationObject->getIdentifier()] = $variationObject;
@@ -450,5 +450,21 @@ class VariationResponseParser implements VariationResponseParserInterface
         }
 
         return $translations;
+    }
+
+    /**
+     * @param array $variation
+     *
+     * @return float
+     */
+    private function getVariationWeight(array $variation)
+    {
+        if ($variation['weightNetG'] > 0) {
+            $weight = $variation['weightNetG'];
+        } else {
+            $weight = $variation['weightG'];
+        }
+
+        return (float) ($weight / 1000);
     }
 }

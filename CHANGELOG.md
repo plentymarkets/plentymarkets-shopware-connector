@@ -4,6 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
 ### Added
+- fallback for the import of the weight (@jppeter)
 
 ### Fixed
 - prepareOrderItems validation fix 
@@ -11,9 +12,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - import alternate media text as name if is set
 - import correct main translation
 - use correct item tax when transferring order to plenty
-- prevent the import of pseudoprices that are equal to the usual price 
-- check existing plugin in custom plugin directory
-- set bundles as required for swagbundle plugin (5.X)
+- prevent the import of pseudoprices that are equal to the usual price (@jppeter)
+- fix of orderstatus and paymentstatus mapping (@smxvh)
 
 ### Changed
 - changed the sequence in which the definitions are processed, orders and payments are now fetched first.
