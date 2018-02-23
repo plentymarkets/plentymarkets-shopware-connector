@@ -2,10 +2,11 @@
 
 namespace PlentymarketsAdapter\Helper;
 
-use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
+use PlentyConnector\Connector\TransferObject\Shop\Shop;
+use PlentymarketsAdapter\PlentymarketsAdapter;
 use Psr\Log\LoggerInterface;
+
 /**
  * Class ShopIdentifierHelper
  */
@@ -23,8 +24,9 @@ class ShopIdentifierHelper implements ShopIdentifierHelperInterface
 
     /**
      * ShopIdentifierHelper constructor.
+     *
      * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface $logger
+     * @param LoggerInterface          $logger
      */
     public function __construct(IdentityServiceInterface $identityService, LoggerInterface $logger)
     {

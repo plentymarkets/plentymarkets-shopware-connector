@@ -20,8 +20,8 @@ use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
 use PlentymarketsAdapter\Client\ClientInterface;
-use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\Helper\ShopIdentifierHelperInterface;
+use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Item\Property\Name as NameApi;
 use PlentymarketsAdapter\ReadApi\Item\Property\Selection as SelectionApi;
 use PlentymarketsAdapter\ReadApi\Item\Variation\Property as PropertyApi;
@@ -73,7 +73,6 @@ class ProductResponseParser implements ProductResponseParserInterface
      * @var ShopIdentifierHelperInterface $shopIdentifier
      */
     private $shopIdentifier;
-
 
     /**
      * ProductResponseParser constructor.
