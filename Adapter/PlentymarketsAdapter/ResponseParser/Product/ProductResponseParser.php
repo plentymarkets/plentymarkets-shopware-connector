@@ -70,9 +70,9 @@ class ProductResponseParser implements ProductResponseParserInterface
     private $itemsPropertiesNamesApi;
 
     /**
-     * @var VariationHelperInterface $shopIdentifier
+     * @var VariationHelperInterface $variationHelper
      */
-    private $shopIdentifier;
+    private $variationHelper;
 
     /**
      * ProductResponseParser constructor.
@@ -81,7 +81,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      * @param LoggerInterface                  $logger
      * @param ImageResponseParserInterface     $imageResponseParser
      * @param VariationResponseParserInterface $variationResponseParser
-     * @param VariationHelperInterface         $shopIdentifier
+     * @param VariationHelperInterface         $variationHelper
      * @param ClientInterface                  $client
      */
     public function __construct(
@@ -89,14 +89,14 @@ class ProductResponseParser implements ProductResponseParserInterface
         LoggerInterface $logger,
         ImageResponseParserInterface $imageResponseParser,
         VariationResponseParserInterface $variationResponseParser,
-        VariationHelperInterface $shopIdentifier,
+        VariationHelperInterface $variationHelper,
         ClientInterface $client
     ) {
         $this->identityService = $identityService;
         $this->logger = $logger;
         $this->imageResponseParser = $imageResponseParser;
         $this->variationResponseParser = $variationResponseParser;
-        $this->shopIdentifier = $shopIdentifier;
+        $this->variationHelper = $variationHelper;
 
         //TODO: inject when refactoring this class
         $this->itemsVariationsVariationPropertiesApi = new PropertyApi($client);
@@ -119,14 +119,14 @@ class ProductResponseParser implements ProductResponseParserInterface
             return [];
         }
 
-        $shopIdentifiers = $this->shopIdentifier->getShopIdentifiers($mainVariation);
+        $shopIdentifiers = $this->variationHelper->getShopIdentifiers($mainVariation);
 
         if (empty($shopIdentifiers)) {
             return [];
         }
 
         foreach ($product['variations'] as $val => $key) {
-            $variantShopIdentifiers = $this->shopIdentifier->getShopIdentifiers($key);
+            $variantShopIdentifiers = $this->variationHelper->getShopIdentifiers($key);
             if (empty($variantShopIdentifiers)) {
                 unset($product['variations'][$val]);
             }
