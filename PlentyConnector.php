@@ -275,7 +275,6 @@ class PlentyConnector extends Plugin
 
         foreach ($plugins as $pluginName) {
             foreach ($folders as $folder) {
-
                 if (file_exists($folder . $pluginName)) {
                     return true;
                 }

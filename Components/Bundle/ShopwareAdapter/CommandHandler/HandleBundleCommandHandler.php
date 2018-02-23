@@ -30,6 +30,11 @@ use SwagBundle\Models\Repository as BundleRepository;
 class HandleBundleCommandHandler implements CommandHandlerInterface
 {
     /**
+     * @var bool
+     */
+    private $active;
+
+    /**
      * @var IdentityServiceInterface
      */
     private $identityService;
@@ -168,11 +173,12 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
 
         $mainArticle = $mainVariant->getArticle();
 
+        $this->active = $mainArticle->getActive();
+
         $bundleModel->setName($bundle->getName());
         $bundleModel->setValidFrom($bundle->getAvailableFrom());
         $bundleModel->setValidTo($bundle->getAvailableTo());
         $bundleModel->setLimited($bundle->hasStockLimitation());
-        $bundleModel->setActive($mainArticle->getActive());
         $bundleModel->setQuantity($this->getBundleStock($bundle->getNumber()));
         $bundleModel->setNumber($bundle->getNumber());
         $bundleModel->setArticle($mainArticle);
@@ -180,6 +186,7 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
         $bundleModel->setPrices($this->getPrices($bundle, $bundleModel));
         $bundleModel->setPosition($bundle->getPosition($bundle));
         $bundleModel->setArticles($this->getArticles($bundle, $bundleModel, $mainVariant));
+        $bundleModel->setActive($this->active);
 
         $this->entityManager->persist($bundleModel);
         $this->entityManager->flush();
@@ -286,6 +293,7 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
 
             if (null === $detail) {
                 $this->logger->error('bundle product not found => number: ' . $bundleProduct->getNumber());
+                $this->active = false;
                 continue;
             }
 

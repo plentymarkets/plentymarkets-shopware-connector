@@ -25,6 +25,7 @@
         <service id="plenty_connector_components_bundle.bundle_response_parser" class="PlentyConnector\Components\Bundle\PlentymarketsAdapter\ResponseParser\BundleResponseParser">
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plentymarkets_adapter.response_parser.product.price" />
+            <argument type="service" id="plentymarkets_adapter.helper.variation" />
             <argument type="service" id="plentymarkets_adapter.client" />
             <argument type="service" id="plenty_connector.logger" />
         </service>

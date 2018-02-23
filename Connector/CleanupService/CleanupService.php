@@ -170,7 +170,6 @@ class CleanupService implements CleanupServiceInterface
         }
 
         foreach ($objects as $transferObject) {
-
             if (false === $found) {
                 $found = true;
             }
@@ -185,6 +184,7 @@ class CleanupService implements CleanupServiceInterface
         if (false === $found) {
             return false;
         }
+
         return true;
     }
 
