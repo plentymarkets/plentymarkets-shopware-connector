@@ -20,7 +20,7 @@ use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
 use PlentymarketsAdapter\Client\ClientInterface;
-use PlentymarketsAdapter\Helper\ShopIdentifierHelperInterface;
+use PlentymarketsAdapter\Helper\VariationHelperInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Item\Property\Name as NameApi;
 use PlentymarketsAdapter\ReadApi\Item\Property\Selection as SelectionApi;
@@ -70,7 +70,7 @@ class ProductResponseParser implements ProductResponseParserInterface
     private $itemsPropertiesNamesApi;
 
     /**
-     * @var ShopIdentifierHelperInterface $shopIdentifier
+     * @var VariationHelperInterface $shopIdentifier
      */
     private $shopIdentifier;
 
@@ -81,7 +81,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      * @param LoggerInterface                  $logger
      * @param ImageResponseParserInterface     $imageResponseParser
      * @param VariationResponseParserInterface $variationResponseParser
-     * @param ShopIdentifierHelperInterface    $shopIdentifier
+     * @param VariationHelperInterface    $shopIdentifier
      * @param ClientInterface                  $client
      */
     public function __construct(
@@ -89,7 +89,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         LoggerInterface $logger,
         ImageResponseParserInterface $imageResponseParser,
         VariationResponseParserInterface $variationResponseParser,
-        ShopIdentifierHelperInterface $shopIdentifier,
+        VariationHelperInterface $shopIdentifier,
         ClientInterface $client
     ) {
         $this->identityService = $identityService;

@@ -3,9 +3,9 @@
 namespace PlentymarketsAdapter\Helper;
 
 /**
- * Interface ShopIdentifierHelperInterface
+ * Interface VariationHelperInterface
  */
-interface ShopIdentifierHelperInterface
+interface VariationHelperInterface
 {
     /**
      * @param array $variation

@@ -8,9 +8,9 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class ShopIdentifierHelper
+ * Class VariationHelper
  */
-class ShopIdentifierHelper implements ShopIdentifierHelperInterface
+class VariationHelper implements VariationHelperInterface
 {
     /**
      * @var IdentityServiceInterface
@@ -23,7 +23,7 @@ class ShopIdentifierHelper implements ShopIdentifierHelperInterface
     private $logger;
 
     /**
-     * ShopIdentifierHelper constructor.
+     * VariationHelper constructor.
      *
      * @param IdentityServiceInterface $identityService
      * @param LoggerInterface          $logger
