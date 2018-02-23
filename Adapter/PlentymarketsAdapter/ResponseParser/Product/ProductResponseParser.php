@@ -15,12 +15,12 @@ use PlentyConnector\Connector\TransferObject\Product\Property\Property;
 use PlentyConnector\Connector\TransferObject\Product\Property\Value\Value;
 use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
 use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
-use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
 use PlentymarketsAdapter\Client\ClientInterface;
+use PlentymarketsAdapter\Helper\VariationHelperInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Item\Property\Name as NameApi;
 use PlentymarketsAdapter\ReadApi\Item\Property\Selection as SelectionApi;
@@ -70,12 +70,18 @@ class ProductResponseParser implements ProductResponseParserInterface
     private $itemsPropertiesNamesApi;
 
     /**
+     * @var VariationHelperInterface
+     */
+    private $variationHelper;
+
+    /**
      * ProductResponseParser constructor.
      *
      * @param IdentityServiceInterface         $identityService
      * @param LoggerInterface                  $logger
      * @param ImageResponseParserInterface     $imageResponseParser
      * @param VariationResponseParserInterface $variationResponseParser
+     * @param VariationHelperInterface         $variationHelper
      * @param ClientInterface                  $client
      */
     public function __construct(
@@ -83,12 +89,14 @@ class ProductResponseParser implements ProductResponseParserInterface
         LoggerInterface $logger,
         ImageResponseParserInterface $imageResponseParser,
         VariationResponseParserInterface $variationResponseParser,
+        VariationHelperInterface $variationHelper,
         ClientInterface $client
     ) {
         $this->identityService = $identityService;
         $this->logger = $logger;
         $this->imageResponseParser = $imageResponseParser;
         $this->variationResponseParser = $variationResponseParser;
+        $this->variationHelper = $variationHelper;
 
         //TODO: inject when refactoring this class
         $this->itemsVariationsVariationPropertiesApi = new PropertyApi($client);
@@ -111,14 +119,14 @@ class ProductResponseParser implements ProductResponseParserInterface
             return [];
         }
 
-        $shopIdentifiers = $this->getShopIdentifiers($mainVariation);
+        $shopIdentifiers = $this->variationHelper->getShopIdentifiers($mainVariation);
 
         if (empty($shopIdentifiers)) {
             return [];
         }
 
         foreach ($product['variations'] as $val => $key) {
-            $variantShopIdentifiers = $this->getShopIdentifiers($key);
+            $variantShopIdentifiers = $this->variationHelper->getShopIdentifiers($key);
             if (empty($variantShopIdentifiers)) {
                 unset($product['variations'][$val]);
             }
@@ -626,44 +634,6 @@ class ProductResponseParser implements ProductResponseParserInterface
         }
 
         return $result;
-    }
-
-    /**
-     * @param array $mainVariation
-     *
-     * @return array
-     */
-    private function getShopIdentifiers(array $mainVariation)
-    {
-        $identifiers = [];
-
-        foreach ($mainVariation['variationClients'] as $client) {
-            $identity = $this->identityService->findOneBy([
-                'adapterIdentifier' => $client['plentyId'],
-                'adapterName' => PlentymarketsAdapter::NAME,
-                'objectType' => Shop::TYPE,
-            ]);
-
-            if (null === $identity) {
-                $this->logger->notice('shop not found', $client);
-
-                continue;
-            }
-
-            $isMappedIdentity = $this->identityService->isMapppedIdentity(
-                $identity->getObjectIdentifier(),
-                $identity->getObjectType(),
-                $identity->getAdapterName()
-            );
-
-            if (!$isMappedIdentity) {
-                continue;
-            }
-
-            $identifiers[] = $identity->getObjectIdentifier();
-        }
-
-        return $identifiers;
     }
 
     /**
