@@ -100,7 +100,11 @@ class RemoveBundleCommandHandler implements CommandHandlerInterface
          */
         $repository = $this->entityManager->getRepository(BundleModel::class);
 
+        /**
+         * @var BundleModel $bundleModel
+         */
         $bundleModel = $repository->find($identity->getAdapterIdentifier());
+
 
         if (null === $bundleModel) {
             $this->logger->notice('identity removed but the object was not found', ['command' => $command]);
@@ -108,9 +112,8 @@ class RemoveBundleCommandHandler implements CommandHandlerInterface
             return false;
         }
 
-        $this->entityManager->persist($bundleModel);
+        $this->entityManager->remove($bundleModel);
         $this->entityManager->flush();
-        $this->entityManager->clear();
 
         $identities = $this->identityService->findBy([
             'objectIdentifier' => $identifier,

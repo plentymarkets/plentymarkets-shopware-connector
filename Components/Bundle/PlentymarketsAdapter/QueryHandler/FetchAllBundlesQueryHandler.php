@@ -2,7 +2,8 @@
 
 namespace PlentyConnector\Components\Bundle\PlentymarketsAdapter\QueryHandler;
 
-use PlentyConnector\Components\Bundle\PlentymarketsAdapter\ResponseParser\BundleResponseParser;
+use Exception;
+use PlentyConnector\Components\Bundle\PlentymarketsAdapter\ResponseParser\BundleResponseParserInterface;
 use PlentyConnector\Components\Bundle\TransferObject\Bundle;
 use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
@@ -42,13 +43,13 @@ class FetchAllBundlesQueryHandler implements QueryHandlerInterface
      * FetchAllBundlesQueryHandler constructor.
      *
      * @param Item                   $itemApi
-     * @param BundleResponseParser   $responseParser
+     * @param BundleResponseParserInterface   $responseParser
      * @param LoggerInterface        $logger
      * @param OutputHandlerInterface $outputHandler
      */
     public function __construct(
         Item $itemApi,
-        BundleResponseParser $responseParser,
+        BundleResponseParserInterface $responseParser,
         LoggerInterface $logger,
         OutputHandlerInterface $outputHandler
     ) {
@@ -81,7 +82,7 @@ class FetchAllBundlesQueryHandler implements QueryHandlerInterface
         foreach ($elements as $element) {
             try {
                 $result = $this->responseParser->parse($element);
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 $this->logger->error($exception->getMessage());
 
                 $result = null;
@@ -91,9 +92,9 @@ class FetchAllBundlesQueryHandler implements QueryHandlerInterface
                 $result = [];
             }
 
-            $parsedElements = array_filter($result);
+            $result = array_filter($result);
 
-            foreach ($parsedElements as $parsedElement) {
+            foreach ($result as $parsedElement) {
                 yield $parsedElement;
             }
 

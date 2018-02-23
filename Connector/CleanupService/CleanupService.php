@@ -118,6 +118,10 @@ class CleanupService implements CleanupServiceInterface
                 continue;
             }
 
+            if ($definition->getObjectType() !== 'Bundle') {
+                continue;
+            }
+
             $foundElements = $this->collectObjectIdentifiers($definition);
 
             if (!$foundElements) {
@@ -163,11 +167,18 @@ class CleanupService implements CleanupServiceInterface
             QueryType::ALL
         ));
 
+        $found = false;
+
         if (empty($objects)) {
             return false;
         }
 
         foreach ($objects as $transferObject) {
+
+            if (false === $found) {
+                $found = true;
+            }
+
             $this->elements[] = [
                 'objectIdentifier' => $transferObject->getIdentifier(),
                 'adapterName' => $definition->getDestinationAdapterName(),
@@ -175,6 +186,9 @@ class CleanupService implements CleanupServiceInterface
             ];
         }
 
+        if (false === $found) {
+            return false;
+        }
         return true;
     }
 
