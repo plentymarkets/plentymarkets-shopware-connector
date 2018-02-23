@@ -294,6 +294,7 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
             if (null === $detail) {
                 $this->logger->error('bundle product not found => number: ' . $bundleProduct->getNumber());
                 $this->active = false;
+
                 continue;
             }
 
