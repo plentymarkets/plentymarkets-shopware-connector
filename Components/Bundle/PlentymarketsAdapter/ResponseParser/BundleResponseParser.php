@@ -12,6 +12,7 @@ use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
 use PlentymarketsAdapter\Client\ClientInterface;
+use PlentymarketsAdapter\Helper\VariationHelperInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Product\Price\PriceResponseParserInterface;
 use Psr\Log\LoggerInterface;
@@ -42,16 +43,23 @@ class BundleResponseParser implements BundleResponseParserInterface
     private $logger;
 
     /**
+     * @var VariationHelperInterface
+     */
+    private $variationHelper;
+
+    /**
      * BundleResponseParser constructor.
      *
      * @param IdentityServiceInterface     $identityService
      * @param PriceResponseParserInterface $priceResponseParser
+     * @param VariationHelperInterface     $variationHelper
      * @param ClientInterface              $client
      * @param LoggerInterface              $logger
      */
     public function __construct(
         IdentityServiceInterface $identityService,
         PriceResponseParserInterface $priceResponseParser,
+        VariationHelperInterface $variationHelper,
         ClientInterface $client,
         LoggerInterface $logger
     ) {
@@ -59,6 +67,7 @@ class BundleResponseParser implements BundleResponseParserInterface
         $this->priceResponseParser = $priceResponseParser;
         $this->client = $client;
         $this->logger = $logger;
+        $this->variationHelper = $variationHelper;
     }
 
     /**
@@ -77,6 +86,10 @@ class BundleResponseParser implements BundleResponseParserInterface
         $bundles = [];
 
         foreach ($bundleVariations as $bundle) {
+            if (empty($this->variationHelper->getShopIdentifiers($bundle))) {
+                continue;
+            }
+
             $bundles[] = $this->parseBundle($bundle, $product);
         }
 

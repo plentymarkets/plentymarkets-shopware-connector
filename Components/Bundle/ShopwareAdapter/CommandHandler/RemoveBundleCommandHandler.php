@@ -4,7 +4,6 @@ namespace PlentyConnector\Components\Bundle\ShopwareAdapter\CommandHandler;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use PlentyConnector\Components\Bundle\Command\RemoveBundleCommand;
 use PlentyConnector\Components\Bundle\Helper\BundleHelper;
 use PlentyConnector\Components\Bundle\TransferObject\Bundle;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
@@ -14,8 +13,8 @@ use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Psr\Log\LoggerInterface;
-use Shopware\CustomModels\Bundle\Bundle as BundleModel;
 use ShopwareAdapter\ShopwareAdapter;
+use SwagBundle\Models\Bundle as BundleModel;
 
 /**
  * Class RemoveBundleCommandHandler.
@@ -80,9 +79,6 @@ class RemoveBundleCommandHandler implements CommandHandlerInterface
      */
     public function handle(CommandInterface $command)
     {
-        /**
-         * @var RemoveBundleCommand $command
-         */
         $identifier = $command->getPayload();
 
         $this->bundleHelper->registerBundleModels();
@@ -104,6 +100,9 @@ class RemoveBundleCommandHandler implements CommandHandlerInterface
          */
         $repository = $this->entityManager->getRepository(BundleModel::class);
 
+        /**
+         * @var BundleModel $bundleModel
+         */
         $bundleModel = $repository->find($identity->getAdapterIdentifier());
 
         if (null === $bundleModel) {
@@ -112,9 +111,8 @@ class RemoveBundleCommandHandler implements CommandHandlerInterface
             return false;
         }
 
-        $this->entityManager->persist($bundleModel);
+        $this->entityManager->remove($bundleModel);
         $this->entityManager->flush();
-        $this->entityManager->clear();
 
         $identities = $this->identityService->findBy([
             'objectIdentifier' => $identifier,
