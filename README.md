@@ -29,7 +29,7 @@
 * cd Shopware
 * ./bin/console sw:plugin:refresh
 * ./bin/console sw:plugin:install --activate PlentyConnector
-* ./var/cache/clear_cache.sh
+* ./bin/console sw:cache:clear
 
 **Configure Plugin**
 * visit yourshopwaredomain/backend
