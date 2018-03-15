@@ -73,13 +73,13 @@ class OrderResponseParser implements OrderResponseParserInterface
     /**
      * OrderResponseParser constructor.
      *
-     * @param IdentityServiceInterface         $identityService
-     * @param EntityManagerInterface           $entityManager
+     * @param IdentityServiceInterface $identityService
+     * @param EntityManagerInterface $entityManager
      * @param OrderItemResponseParserInterface $orderItemResponseParser
-     * @param AddressResponseParserInterface   $orderAddressParser
-     * @param CustomerResponseParserInterface  $customerParser
-     * @param CurrencyDataProviderInterface    $currencyDataProvider
-     * @param LoggerInterface                  $logger
+     * @param AddressResponseParserInterface $orderAddressParser
+     * @param CustomerResponseParserInterface $customerParser
+     * @param CurrencyDataProviderInterface $currencyDataProvider
+     * @param LoggerInterface $logger
      */
     public function __construct(
         IdentityServiceInterface $identityService,
@@ -108,11 +108,16 @@ class OrderResponseParser implements OrderResponseParserInterface
             return [];
         }
 
-        $taxFree = ($entry['taxFree']);
+        $taxFree = $entry['taxFree'];
 
-        $orderItems = array_filter(array_map(function (array $orderItem) use ($taxFree) {
-            return $this->orderItemResponseParser->parse($orderItem, $taxFree);
-        }, $this->prepareOrderItems($entry['details'], (bool) $entry['net'])));
+        $orderItems = array_filter(
+            array_map(
+                function (array $orderItem) use ($taxFree) {
+                    return $this->orderItemResponseParser->parse($orderItem, $taxFree);
+                },
+                $entry['details']
+            )
+        );
 
         $orderItems[] = $this->getShippingCosts($entry, $taxFree);
 
@@ -146,7 +151,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         $currencyIdentifier = $this->getConnectorIdentifier($shopwareCurrencyIdentifier, Currency::TYPE);
 
         $orderIdentity = $this->identityService->findOneOrCreate(
-            (string) $entry['id'],
+            (string)$entry['id'],
             ShopwareAdapter::NAME,
             Order::TYPE
         );
@@ -180,7 +185,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     private function isValidOrder(array $entry)
     {
         $shopIdentity = $this->identityService->findOneOrThrow(
-            (string) $entry['languageSubShop']['id'],
+            (string)$entry['languageSubShop']['id'],
             ShopwareAdapter::NAME,
             Shop::TYPE
         );
@@ -208,7 +213,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         }
 
         $shippingProfileIdentity = $this->identityService->findOneBy([
-            'adapterIdentifier' => (string) $entry['dispatchId'],
+            'adapterIdentifier' => (string)$entry['dispatchId'],
             'adapterName' => ShopwareAdapter::NAME,
             'objectType' => ShippingProfile::TYPE,
         ]);
@@ -220,45 +225,6 @@ class OrderResponseParser implements OrderResponseParserInterface
         }
 
         return true;
-    }
-
-    /**
-     * @param array $orderItems
-     * @param bool  $isNet
-     *
-     * @return array
-     */
-    private function prepareOrderItems(array $orderItems, $isNet)
-    {
-        foreach ($orderItems as $key => $orderItem) {
-            if (empty($orderItem['taxId'])) {
-                if (empty($orderItem['taxRate'])) {
-                    continue;
-                }
-
-                /**
-                 * @var Repository $repository
-                 */
-                $repository = $this->entityManager->getRepository(Tax::class);
-
-                /**
-                 * @var Tax $taxModel
-                 */
-                $taxModel = $repository->findOneBy(['tax' => $orderItem['taxRate']]);
-
-                if (null === $taxModel) {
-                    throw new InvalidArgumentException('no matching tax rate found - ' . $orderItem['taxRate']);
-                }
-
-                $orderItems[$key]['taxId'] = $taxModel->getId();
-            }
-
-            if ($isNet) {
-                $orderItems[$key]['price'] = $orderItem['price'] + (($orderItem['price'] / 100) * $orderItem['taxRate']);
-            }
-        }
-
-        return $orderItems;
     }
 
     /**
@@ -288,7 +254,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
-     * @param int    $entry
+     * @param int $entry
      * @param string $type
      *
      * @return string
@@ -298,7 +264,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         Assertion::integerish($entry);
 
         return $this->identityService->findOneOrThrow(
-            (string) $entry,
+            (string)$entry,
             ShopwareAdapter::NAME,
             $type
         )->getObjectIdentifier();
@@ -319,7 +285,7 @@ class OrderResponseParser implements OrderResponseParserInterface
 
         if ($entry['dispatch']['taxCalculation'] > 0) {
             $identity = $this->identityService->findOneBy([
-                'adapterIdentifier' => (string) $entry['dispatch']['taxCalculation'],
+                'adapterIdentifier' => (string)$entry['dispatch']['taxCalculation'],
                 'adapterName' => ShopwareAdapter::NAME,
                 'objectType' => VatRate::TYPE,
             ]);
@@ -348,7 +314,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         }
 
         $identity = $this->identityService->findOneBy([
-            'adapterIdentifier' => (string) $maxTaxRateIdentifier,
+            'adapterIdentifier' => (string)$maxTaxRateIdentifier,
             'adapterName' => ShopwareAdapter::NAME,
             'objectType' => VatRate::TYPE,
         ]);
@@ -362,17 +328,17 @@ class OrderResponseParser implements OrderResponseParserInterface
 
     /**
      * @param array $entry
-     * @param bool  $taxFree
+     * @param bool $taxFree
      *
      * @return OrderItem
      */
     private function getShippingCosts(array $entry, $taxFree = false)
     {
         if ($taxFree) {
-            $shippingCosts = (float) $entry['invoiceShippingNet'];
-            $vatRateIdentifier = null;
+            $shippingCosts = (float)$entry['invoiceShippingNet'];
+            $vatRateIdentifier = null; // TODO: Use 0% tax class?
         } else {
-            $shippingCosts = (float) $entry['invoiceShipping'];
+            $shippingCosts = (float)$entry['invoiceShipping'];
             $vatRateIdentifier = $this->getShippingCostsVatRateIdentifier($entry);
         }
 
