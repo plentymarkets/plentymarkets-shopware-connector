@@ -5,7 +5,7 @@ namespace ShopwareAdapter\ResponseParser\Order;
 use Assert\Assertion;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
-use InvalidArgumentException;
+use Doctrine\ORM\EntityRepository;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Currency\Currency;
@@ -19,7 +19,6 @@ use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
 use Psr\Log\LoggerInterface;
-use Shopware\Models\Tax\Repository;
 use Shopware\Models\Tax\Tax;
 use ShopwareAdapter\DataProvider\Currency\CurrencyDataProviderInterface;
 use ShopwareAdapter\ResponseParser\Address\AddressResponseParserInterface;
@@ -71,6 +70,11 @@ class OrderResponseParser implements OrderResponseParserInterface
     private $logger;
 
     /**
+     * @var EntityRepository
+     */
+    private $taxRepository;
+
+    /**
      * OrderResponseParser constructor.
      *
      * @param IdentityServiceInterface $identityService
@@ -80,6 +84,7 @@ class OrderResponseParser implements OrderResponseParserInterface
      * @param CustomerResponseParserInterface $customerParser
      * @param CurrencyDataProviderInterface $currencyDataProvider
      * @param LoggerInterface $logger
+     * @param EntityRepository $taxRepository
      */
     public function __construct(
         IdentityServiceInterface $identityService,
@@ -88,7 +93,8 @@ class OrderResponseParser implements OrderResponseParserInterface
         AddressResponseParserInterface $orderAddressParser,
         CustomerResponseParserInterface $customerParser,
         CurrencyDataProviderInterface $currencyDataProvider,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        EntityRepository $taxRepository
     ) {
         $this->identityService = $identityService;
         $this->entityManager = $entityManager;
@@ -97,6 +103,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         $this->customerParser = $customerParser;
         $this->currencyDataProvider = $currencyDataProvider;
         $this->logger = $logger;
+        $this->taxRepository = $taxRepository;
     }
 
     /**
@@ -151,7 +158,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         $currencyIdentifier = $this->getConnectorIdentifier($shopwareCurrencyIdentifier, Currency::TYPE);
 
         $orderIdentity = $this->identityService->findOneOrCreate(
-            (string)$entry['id'],
+            (string) $entry['id'],
             ShopwareAdapter::NAME,
             Order::TYPE
         );
@@ -185,7 +192,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     private function isValidOrder(array $entry)
     {
         $shopIdentity = $this->identityService->findOneOrThrow(
-            (string)$entry['languageSubShop']['id'],
+            (string) $entry['languageSubShop']['id'],
             ShopwareAdapter::NAME,
             Shop::TYPE
         );
@@ -213,7 +220,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         }
 
         $shippingProfileIdentity = $this->identityService->findOneBy([
-            'adapterIdentifier' => (string)$entry['dispatchId'],
+            'adapterIdentifier' => (string) $entry['dispatchId'],
             'adapterName' => ShopwareAdapter::NAME,
             'objectType' => ShippingProfile::TYPE,
         ]);
@@ -264,7 +271,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         Assertion::integerish($entry);
 
         return $this->identityService->findOneOrThrow(
-            (string)$entry,
+            (string) $entry,
             ShopwareAdapter::NAME,
             $type
         )->getObjectIdentifier();
@@ -279,48 +286,25 @@ class OrderResponseParser implements OrderResponseParserInterface
      */
     private function getShippingCostsVatRateIdentifier(array $entry)
     {
-        if (!isset($entry['dispatch']['taxCalculation'])) {
-            return null;
-        }
+        $taxRateId = $this->getMaxTaxRateFromOrderItems($entry);
+        /**
+         * @var Tax $taxModel
+         */
+        $taxModel = $this->taxRepository->findOneBy(['tax' => $taxRateId]);
 
-        if ($entry['dispatch']['taxCalculation'] > 0) {
-            $identity = $this->identityService->findOneBy([
-                'adapterIdentifier' => (string)$entry['dispatch']['taxCalculation'],
-                'adapterName' => ShopwareAdapter::NAME,
-                'objectType' => VatRate::TYPE,
-            ]);
-
-            if (null === $identity) {
-                throw new NotFoundException('tax rate of shipping costs not found - ' . $entry['dispatch']['taxCalculation']);
-            }
-
-            return $identity->getObjectIdentifier();
-        }
-
-        $maxTaxRate = 0;
-        $maxTaxRateIdentifier = 0;
-
-        foreach ($entry['details'] as $orderItem) {
-            if (empty($orderItem['taxId'])) {
-                continue;
-            }
-
-            if ($orderItem['taxRate'] < $maxTaxRate) {
-                continue;
-            }
-
-            $maxTaxRate = $orderItem['taxRate'];
-            $maxTaxRateIdentifier = $orderItem['taxId'];
+        $taxRateId = $taxModel->getId();
+        if (isset($entry['dispatch']['taxCalculation']) && $entry['dispatch']['taxCalculation'] > 0) {
+            $taxRateId = $entry['dispatch']['taxCalculation'];
         }
 
         $identity = $this->identityService->findOneBy([
-            'adapterIdentifier' => (string)$maxTaxRateIdentifier,
+            'adapterIdentifier' => (string) $taxRateId,
             'adapterName' => ShopwareAdapter::NAME,
             'objectType' => VatRate::TYPE,
         ]);
 
         if (null === $identity) {
-            throw new NotFoundException('missing tax rate mapping - ' . $maxTaxRateIdentifier);
+            throw new NotFoundException('missing tax rate mapping - ' . $taxRateId);
         }
 
         return $identity->getObjectIdentifier();
@@ -334,13 +318,8 @@ class OrderResponseParser implements OrderResponseParserInterface
      */
     private function getShippingCosts(array $entry, $taxFree = false)
     {
-        if ($taxFree) {
-            $shippingCosts = (float)$entry['invoiceShippingNet'];
-            $vatRateIdentifier = null; // TODO: Use 0% tax class?
-        } else {
-            $shippingCosts = (float)$entry['invoiceShipping'];
-            $vatRateIdentifier = $this->getShippingCostsVatRateIdentifier($entry);
-        }
+        $shippingCosts = $this->getShippingAmount($entry, $taxFree);
+        $vatRateIdentifier = $this->getShippingCostsVatRateIdentifier($entry);
 
         $orderItem = new OrderItem();
         $orderItem->setType(OrderItem::TYPE_SHIPPING_COSTS);
@@ -351,5 +330,32 @@ class OrderResponseParser implements OrderResponseParserInterface
         $orderItem->setVatRateIdentifier($vatRateIdentifier);
 
         return $orderItem;
+    }
+
+    /**
+     * @param array $entry
+     * @param $maxTaxRate
+     *
+     * @return float
+     */
+    private function getMaxTaxRateFromOrderItems(array $entry)
+    {
+        return max(array_column($entry['details'], 'taxRate'));
+    }
+
+    /**
+     * @param array $entry
+     * @param $taxFree
+     *
+     * @return float
+     */
+    private function getShippingAmount(array $entry, $taxFree)
+    {
+        return $taxFree ?
+            $entry['shippingAmountNet'] + (
+                ($entry['shippingAmountNet'] / 100) *
+                $this->getMaxTaxRateFromOrderItems($entry)
+            ) :
+            (float) $entry['shippingAmount'];
     }
 }

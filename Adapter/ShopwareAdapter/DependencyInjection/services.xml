@@ -109,6 +109,7 @@
             <argument type="service" id="shopware_adapter.response_parser.customer" />
             <argument type="service" id="shopware_adapter.data_provider.currency" />
             <argument type="service" id="plenty_connector.logger" />
+            <argument type="service" id="shopware.tax_repository" />
         </service>
 
         <service id="shopware_adapter.response_parser.order_item" class="ShopwareAdapter\ResponseParser\OrderItem\OrderItemResponseParser">

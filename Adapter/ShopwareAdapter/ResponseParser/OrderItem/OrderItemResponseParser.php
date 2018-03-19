@@ -36,7 +36,7 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
      * OrderItemResponseParser constructor.
      *
      * @param IdentityServiceInterface $identityService
-     * @param Repository $taxRepository
+     * @param EntityRepository $taxRepository
      */
     public function __construct(IdentityServiceInterface $identityService, EntityRepository $taxRepository)
     {
@@ -57,7 +57,7 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
             'quantity' => (float)$entry['quantity'],
             'name' => $entry['articleName'],
             'number' => $entry['articleNumber'],
-            'price' => $entry['price'],
+            'price' => $this->getPrice($entry, $taxFree),
             'vatRateIdentifier' => $this->getVatRateIdentifier($entry, $taxFree),
             'attributes' => $this->getAttributes($entry['attribute']),
         ]);
@@ -74,10 +74,6 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
      */
     private function getVatRateIdentifier(array $entry, $taxFree)
     {
-        if ($taxFree) {
-            $entry['taxRate'] = 0.; // Workaround for taxRate always beeing 19 %
-        }
-
         /**
          * @var Tax $taxModel
          */
@@ -93,6 +89,7 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
             'adapterIdentifier' => (string)$entry['taxId'],
             'adapterName' => ShopwareAdapter::NAME,
             'objectType' => VatRate::TYPE,
+
         ]);
 
         if (null === $vatRateIdentity) {
@@ -119,5 +116,16 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
             default:
                 return OrderItem::TYPE_PRODUCT;
         }
+    }
+
+    /**
+     * @param array $entry
+     * @param $taxFree
+     * @return float|int|mixed
+     */
+    private function getPrice(array $entry, $taxFree)
+    {
+        return $taxFree ? $entry['price'] + (($entry['price'] / 100) * $entry['taxRate']) :
+            (float)$entry['price'];
     }
 }
