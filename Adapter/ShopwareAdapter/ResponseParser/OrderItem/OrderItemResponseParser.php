@@ -54,7 +54,7 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
          */
         $orderItem = OrderItem::fromArray([
             'type' => $this->getItemType($entry['mode']),
-            'quantity' => (float)$entry['quantity'],
+            'quantity' => (float) $entry['quantity'],
             'name' => $entry['articleName'],
             'number' => $entry['articleNumber'],
             'price' => $this->getPrice($entry, $taxFree),
@@ -86,10 +86,9 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
         $entry['taxId'] = $taxModel->getId();
 
         $vatRateIdentity = $this->identityService->findOneBy([
-            'adapterIdentifier' => (string)$entry['taxId'],
+            'adapterIdentifier' => (string) $entry['taxId'],
             'adapterName' => ShopwareAdapter::NAME,
             'objectType' => VatRate::TYPE,
-
         ]);
 
         if (null === $vatRateIdentity) {
@@ -121,11 +120,12 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
     /**
      * @param array $entry
      * @param $taxFree
+     *
      * @return float|int|mixed
      */
     private function getPrice(array $entry, $taxFree)
     {
         return $taxFree ? $entry['price'] + (($entry['price'] / 100) * $entry['taxRate']) :
-            (float)$entry['price'];
+            (float) $entry['price'];
     }
 }

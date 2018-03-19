@@ -352,10 +352,10 @@ class OrderResponseParser implements OrderResponseParserInterface
     private function getShippingAmount(array $entry, $taxFree)
     {
         return $taxFree ?
-            $entry['shippingAmountNet'] + (
-                ($entry['shippingAmountNet'] / 100) *
+            $entry['invoiceShippingNet'] + (
+                ($entry['invoiceShippingNet'] / 100) *
                 $this->getMaxTaxRateFromOrderItems($entry)
             ) :
-            (float) $entry['shippingAmount'];
+            (float) $entry['invoiceShipping'];
     }
 }
