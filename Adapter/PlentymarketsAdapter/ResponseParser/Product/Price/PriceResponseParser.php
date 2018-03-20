@@ -137,7 +137,7 @@ class PriceResponseParser implements PriceResponseParserInterface
     private function checkIfOriginIsInReferrers($orderOrigin, $referrers)
     {
         foreach ($referrers as $referrer) {
-           if ($referrer['salesPriceId'] == $orderOrigin) {
+           if ($referrer['referrerId'] == $orderOrigin) {
                return true;
            }
         }
