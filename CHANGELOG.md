@@ -5,6 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [unreleased]
 ### Added
 - fallback for the import of the weight (@jppeter)
+- optional origin-check for price-import (@jppeter)
 
 ### Fixed
 - prepareOrderItems validation fix 
