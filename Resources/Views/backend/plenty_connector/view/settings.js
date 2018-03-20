@@ -178,6 +178,15 @@ Ext.define('Shopware.apps.PlentyConnector.view.Settings', {
                         store: Ext.create('Shopware.apps.PlentyConnector.store.additional.OrderOrigin').load()
                     },
                     {
+                        xtype: 'checkbox',
+                        fieldLabel: '{s name=plentyconnector/view/settings/additional/check_price_origin/label}{/s}',
+                        boxLabel: '{s name=plentyconnector/view/settings/additional/check_price_origin/boxLabel}{/s}',
+                        uncheckedValue: 0,
+                        inputValue: 1,
+                        anchor: '100%',
+                        name: 'check_price_origin'
+                    },
+                    {
                         xtype: 'combobox',
                         fieldLabel: '{s name=plentyconnector/view/settings/additional/item_warehouse/label}{/s}',
                         name: 'item_warehouse',

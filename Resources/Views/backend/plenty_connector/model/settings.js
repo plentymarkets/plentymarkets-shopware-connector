@@ -32,6 +32,10 @@ Ext.define('Shopware.apps.PlentyConnector.model.Settings', {
             type: 'integer'
         },
         {
+            name: 'check_price_origin',
+            type: 'integer'
+        },
+        {
             name: 'item_warehouse',
             type: 'integer'
         },
