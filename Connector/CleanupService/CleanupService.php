@@ -163,16 +163,26 @@ class CleanupService implements CleanupServiceInterface
             QueryType::ALL
         ));
 
+        $found = false;
+
         if (empty($objects)) {
             return false;
         }
 
         foreach ($objects as $transferObject) {
+            if (false === $found) {
+                $found = true;
+            }
+
             $this->elements[] = [
                 'objectIdentifier' => $transferObject->getIdentifier(),
                 'adapterName' => $definition->getDestinationAdapterName(),
                 'type' => $transferObject->getType(),
             ];
+        }
+
+        if (false === $found) {
+            return false;
         }
 
         return true;
