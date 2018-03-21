@@ -34,7 +34,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     /**
      * @var OrderRequestGeneratorInterface
      */
-    private $orderRequestGeneretor;
+    private $orderRequestGenerator;
 
     /**
      * HandleOrderCommandHandler constructor.
@@ -50,7 +50,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     ) {
         $this->client = $client;
         $this->identityService = $identityService;
-        $this->orderRequestGeneretor = $orderRequestGeneretor;
+        $this->orderRequestGenerator = $orderRequestGeneretor;
     }
 
     /**
@@ -108,7 +108,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
      */
     private function handleOrder(Order $order)
     {
-        $params = $this->orderRequestGeneretor->generate($order);
+        $params = $this->orderRequestGenerator->generate($order);
         $result = $this->client->request('post', 'orders', $params);
 
         $this->identityService->create(
