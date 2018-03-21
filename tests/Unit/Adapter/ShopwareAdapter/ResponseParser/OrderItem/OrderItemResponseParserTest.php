@@ -5,6 +5,7 @@ namespace PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\Orde
 use PlentyConnector\Connector\TransferObject\Order\OrderItem\OrderItem;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\ResponseParserTest;
+use Shopware\Models\Tax\Tax;
 use ShopwareAdapter\ResponseParser\OrderItem\OrderItemResponseParser;
 
 /**
@@ -23,8 +24,9 @@ class OrderItemResponseParserTest extends ResponseParserTest
     {
         parent::setUp();
 
-        $this->responseParser = $parser = new OrderItemResponseParser(
-            $this->identityService
+        $this->responseParser = new OrderItemResponseParser(
+            $this->identityService,
+            Shopware()->Models()->getRepository(Tax::class)
         );
     }
 

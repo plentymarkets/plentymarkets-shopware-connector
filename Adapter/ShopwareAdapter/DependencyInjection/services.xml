@@ -3,8 +3,12 @@
 <container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <!-- Misc Components -->
+        <service id="shopware_adapter.shopware_translation_component" class="Shopware_Components_Translation"/>
 
-        <service id="shopware_adapter.shopware_translation_component" class="Shopware_Components_Translation" />
+        <service id="shopware.tax_repository" class="Shopware\Models\Tax\Repository">
+            <factory service="models" method="getRepository"/>
+            <argument type="string">Shopware\Models\Tax\Tax</argument>
+        </service>
 
         <!-- Data Provider -->
 
@@ -105,10 +109,12 @@
             <argument type="service" id="shopware_adapter.response_parser.customer" />
             <argument type="service" id="shopware_adapter.data_provider.currency" />
             <argument type="service" id="plenty_connector.logger" />
+            <argument type="service" id="shopware.tax_repository" />
         </service>
 
         <service id="shopware_adapter.response_parser.order_item" class="ShopwareAdapter\ResponseParser\OrderItem\OrderItemResponseParser">
             <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="shopware.tax_repository" />
         </service>
 
         <service id="shopware_adapter.response_parser.order_status" class="ShopwareAdapter\ResponseParser\OrderStatus\OrderStatusResponseParser">
