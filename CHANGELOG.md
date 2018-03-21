@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [unreleased]
+## [4.3.0]
 ### Added
 - fallback for the import of the weight (@jppeter)
 
@@ -15,11 +15,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - use correct item tax when transferring order to plenty
 - prevent the import of pseudoprices that are equal to the usual price (@jppeter)
 - fix of orderstatus and paymentstatus mapping (@smxvh)
+- fix bundle import (swagbundle 5.X.X required)
 
 ### Changed
 - changed the sequence in which the definitions are processed, orders and payments are now fetched first.
 - reset unused Shopware attributes for shipping profiles
 - handle Shopware's DateTime attributes correctly
+- sw 5.3.x required
 
 ## [4.2.1]
 ### Added
