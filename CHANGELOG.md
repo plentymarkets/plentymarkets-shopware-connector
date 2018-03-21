@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - fallback for the import of the weight (@jppeter)
 
 ### Fixed
+- fix tax calculation issue for third country zero tax orders
 - prepareOrderItems validation fix 
 - only transfer variations with valid clientid
 - import alternate media text as name if is set
