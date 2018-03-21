@@ -36,7 +36,7 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
      * OrderItemResponseParser constructor.
      *
      * @param IdentityServiceInterface $identityService
-     * @param EntityRepository $taxRepository
+     * @param EntityRepository         $taxRepository
      */
     public function __construct(IdentityServiceInterface $identityService, EntityRepository $taxRepository)
     {

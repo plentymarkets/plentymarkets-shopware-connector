@@ -138,7 +138,6 @@ class OrderItem extends AbstractValueObject implements AttributableInterface
     /**
      * @param float $price
      */
-
     public function setPrice($price)
     {
         $this->price = $price;
