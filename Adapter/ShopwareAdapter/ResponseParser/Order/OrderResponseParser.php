@@ -115,7 +115,7 @@ class OrderResponseParser implements OrderResponseParserInterface
             return [];
         }
 
-        $taxFree = $entry['taxFree'];
+        $taxFree = $entry['taxFree'] || $entry['net'];
 
         $orderItems = array_filter(
             array_map(
@@ -126,7 +126,7 @@ class OrderResponseParser implements OrderResponseParserInterface
             )
         );
 
-        $orderItems[] = $this->getShippingCosts($entry, $taxFree);
+        $orderItems[] = $this->getShippingCosts($entry);
 
         $billingAddress = $this->orderAddressParser->parse($entry['billing']);
         $shippingAddress = $this->orderAddressParser->parse($entry['shipping']);
@@ -316,9 +316,9 @@ class OrderResponseParser implements OrderResponseParserInterface
      *
      * @return OrderItem
      */
-    private function getShippingCosts(array $entry, $taxFree = false)
+    private function getShippingCosts(array $entry)
     {
-        $shippingCosts = $this->getShippingAmount($entry, $taxFree);
+        $shippingCosts = $this->getShippingAmount($entry);
         $vatRateIdentifier = $this->getShippingCostsVatRateIdentifier($entry);
 
         $orderItem = new OrderItem();
@@ -349,13 +349,13 @@ class OrderResponseParser implements OrderResponseParserInterface
      *
      * @return float
      */
-    private function getShippingAmount(array $entry, $taxFree)
+    private function getShippingAmount(array $entry)
     {
-        return $taxFree ?
-            $entry['invoiceShippingNet'] + (
-                ($entry['invoiceShippingNet'] / 100) *
-                $this->getMaxTaxRateFromOrderItems($entry)
-            ) :
-            (float) $entry['invoiceShipping'];
+        $isShippingBruttoAndNettoSame = 1 === $entry['taxFree'] && $entry['taxFree'] == $entry['net'];
+        if ($isShippingBruttoAndNettoSame) {
+            return $entry['invoiceShippingNet'] + $entry['invoiceShippingNet'] * $this->getMaxTaxRateFromOrderItems($entry) / 100;
+        }
+
+        return (float) $entry['invoiceShipping'];
     }
 }
