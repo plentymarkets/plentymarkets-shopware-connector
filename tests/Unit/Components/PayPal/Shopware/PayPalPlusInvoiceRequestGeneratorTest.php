@@ -36,7 +36,7 @@ class PayPalPlusInvoiceRequestGeneratorTest extends TestCase
         $paymentData->setAmountCurrency('EUR');
         $paymentData->setAmountValue(805.00);
         $paymentData->setBankIdentifierCode('DE36120700888000129228');
-        $paymentData->setBankName('Deutsche Bank	');
+        $paymentData->setBankName('Deutsche Bank');
         $paymentData->setInstructionType('PAY_UPON_INVOICE');
         $paymentData->setBankIdentifierCode('DEUTDEDBPAL');
         $paymentData->setPaymentDueDate(new DateTimeImmutable('2018-04-25 00:00:00'));
