@@ -46,7 +46,7 @@ abstract class ResponseParserTest extends TestCase
         $identityService->expects($this->any())->method('findOneBy')->willReturn($identity);
         $identityService->expects($this->any())->method('findOneOrThrow')->willReturn($identity);
         $identityService->expects($this->any())->method('findOneOrCreate')->willReturn($identity);
-        $identityService->expects($this->any())->method('isMapppedIdentity')->willReturn(true);
+        $identityService->expects($this->any())->method('isMappedIdentity')->willReturn(true);
 
         $this->identityService = $identityService;
     }

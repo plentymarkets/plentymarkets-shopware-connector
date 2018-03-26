@@ -115,7 +115,7 @@ class OrderResponseParser implements OrderResponseParserInterface
             return [];
         }
 
-        $isMappedShopIdentity = $this->identityService->isMapppedIdentity(
+        $isMappedShopIdentity = $this->identityService->isMappedIdentity(
             $shopIdentity->getObjectIdentifier(),
             $shopIdentity->getObjectType(),
             $shopIdentity->getAdapterName()

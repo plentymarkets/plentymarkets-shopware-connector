@@ -230,7 +230,7 @@ class PriceResponseParser implements PriceResponseParserInterface
             ]);
 
             $shopIdentities = array_filter($shopIdentities, function (Identity $identity) {
-                $isMappedIdentity = $this->identityService->isMapppedIdentity(
+                $isMappedIdentity = $this->identityService->isMappedIdentity(
                     $identity->getObjectIdentifier(),
                     $identity->getObjectType(),
                     $identity->getAdapterName()
