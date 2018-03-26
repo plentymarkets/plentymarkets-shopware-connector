@@ -741,7 +741,6 @@ class OrderResponseParser implements OrderResponseParserInterface
             $orderItem->setName($item['orderItemName']);
             $orderItem->setNumber($number);
             $orderItem->setPrice($this->getOrderItemPrice($item));
-            $orderItem->setVatRateIdentifier($this->getVatRateIdentifier($entry));
             $orderItem->setAttributes([]);
 
             $result[] = $orderItem;
@@ -764,16 +763,6 @@ class OrderResponseParser implements OrderResponseParserInterface
         }
 
         return $price;
-    }
-
-    /**
-     * @param array $item
-     *
-     * @return string
-     */
-    private function getVatRateIdentifier(array $item)
-    {
-        return null;
     }
 
     /**
