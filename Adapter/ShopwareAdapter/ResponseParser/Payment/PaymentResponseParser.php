@@ -67,7 +67,7 @@ class PaymentResponseParser implements PaymentResponseParserInterface
             Shop::TYPE
         );
 
-        $isMappedIdentity = $this->identityService->isMapppedIdentity(
+        $isMappedIdentity = $this->identityService->isMappedIdentity(
             $shopIdentity->getObjectIdentifier(),
             $shopIdentity->getObjectType(),
             $shopIdentity->getAdapterName()

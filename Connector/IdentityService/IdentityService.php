@@ -174,7 +174,7 @@ class IdentityService implements IdentityServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function isMapppedIdentity($objectIdentifier, $objectType, $adapterName)
+    public function isMappedIdentity($objectIdentifier, $objectType, $adapterName)
     {
         $identities = $this->findBy([
             'objectIdentifier' => $objectIdentifier,
