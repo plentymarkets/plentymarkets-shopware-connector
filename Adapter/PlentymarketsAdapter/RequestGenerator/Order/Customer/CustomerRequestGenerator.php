@@ -67,7 +67,7 @@ class CustomerRequestGenerator implements CustomerRequestGeneratorInterface
             'typeId' => 1,
             'firstName' => $customer->getFirstname(),
             'lastName' => $customer->getLastname(),
-            'gender' => $customer->getSalutation() === Customer::SALUTATION_MR ? 'male' : 'female',
+            'gender' => $customer->getGender() === Customer::GENDER_MALE ? 'male' : 'female',
             'lang' => $languageIdentity->getAdapterIdentifier(),
             'singleAccess' => $customer->getType() === Customer::TYPE_GUEST,
             'plentyId' => $shopIdentity->getAdapterIdentifier(),

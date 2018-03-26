@@ -36,7 +36,7 @@ class CustomerValidator implements ValidatorInterface
 
         Assertion::uuid($object->getCustomerGroupIdentifier(), 'order.customer.customerGroupIdentifier');
 
-        Assertion::inArray($object->getSalutation(), $object->getSalutations(), 'order.customer.salutation');
+        Assertion::inArray($object->getGender(), $object->getGenders(), 'order.customer.gender');
 
         Assertion::nullOrNotBlank($object->getTitle(), 'order.customer.title');
 

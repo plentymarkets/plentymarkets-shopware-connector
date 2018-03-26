@@ -81,11 +81,11 @@ class CustomerResponseParser implements CustomerResponseParserInterface
         $customerGroupIdentifier = $this->getIdentifier((string) $customerGroup->getId(), CustomerGroup::TYPE);
 
         if ($entry['salutation'] === 'mr') {
-            $salutation = Customer::SALUTATION_MR;
+            $gender = Customer::GENDER_MALE;
         } elseif ($entry['salutation'] === 'ms') {
-            $salutation = Customer::SALUTATION_MS;
+            $gender = Customer::GENDER_FEMALE;
         } else {
-            $salutation = Customer::SALUTATION_FIRM;
+            $gender = null;
         }
 
         if (empty($entry['birthday'])) {
@@ -109,7 +109,7 @@ class CustomerResponseParser implements CustomerResponseParserInterface
         $customer->setFirstname($entry['firstname']);
         $customer->setLastname($entry['lastname']);
         $customer->setNumber($entry['number']);
-        $customer->setSalutation($salutation);
+        $customer->setGender($gender);
         $customer->setTitle($entry['title']);
         $customer->setShopIdentifier($shopIdentifier);
         $customer->setLanguageIdentifier($languageIdentifier);
