@@ -85,7 +85,7 @@ class CustomerResponseParser implements CustomerResponseParserInterface
         } elseif ($entry['salutation'] === 'ms') {
             $gender = Customer::GENDER_FEMALE;
         } else {
-            $gender = NULL;
+            $gender = null;
         }
 
         if (empty($entry['birthday'])) {

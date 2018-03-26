@@ -240,9 +240,7 @@ class Customer extends AbstractValueObject
      */
     public function getGenders()
     {
-        $reflection = new \ReflectionClass(__CLASS__);
-
-        return $reflection->getConstants();
+        return $this->getConstantsByName('GENDER');
     }
 
     /**

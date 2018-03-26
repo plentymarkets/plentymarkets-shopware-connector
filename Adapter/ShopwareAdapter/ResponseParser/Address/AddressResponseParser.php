@@ -54,7 +54,7 @@ class AddressResponseParser implements AddressResponseParserInterface
         } elseif ($entry['salutation'] === 'ms') {
             $gender = Customer::GENDER_FEMALE;
         } else {
-            $gender = NULL;
+            $gender = null;
         }
 
         $params = [
