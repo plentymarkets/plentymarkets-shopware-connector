@@ -13,9 +13,8 @@ class Customer extends AbstractValueObject
     const TYPE_NORMAL = 1;
     const TYPE_GUEST = 2;
 
-    const SALUTATION_MR = 1;
-    const SALUTATION_MS = 2;
-    const SALUTATION_FIRM = 3;
+    const GENDER_MALE = 'male';
+    const GENDER_FEMALE = 'female';
 
     /**
      * @var int
@@ -53,9 +52,9 @@ class Customer extends AbstractValueObject
     private $customerGroupIdentifier = '';
 
     /**
-     * @var int
+     * @var string
      */
-    private $salutation = self::SALUTATION_MR;
+    private $gender = self::GENDER_MALE;
 
     /**
      * @var null|string
@@ -221,27 +220,29 @@ class Customer extends AbstractValueObject
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getSalutation()
+    public function getGender()
     {
-        return $this->salutation;
+        return $this->gender;
     }
 
     /**
-     * @param int $salutation
+     * @param string $gender
      */
-    public function setSalutation($salutation)
+    public function setGender($gender)
     {
-        $this->salutation = $salutation;
+        $this->gender = $gender;
     }
 
     /**
      * @return array
      */
-    public function getSalutations()
+    public function getGenders()
     {
-        return $this->getConstantsByName('SALUTATION');
+        $reflection = new \ReflectionClass(__CLASS__);
+
+        return $reflection->getConstants();
     }
 
     /**

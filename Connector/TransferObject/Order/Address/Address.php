@@ -13,9 +13,8 @@ use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
  */
 class Address extends AbstractValueObject implements AttributableInterface
 {
-    const SALUTATION_MR = 1;
-    const SALUTATION_MS = 2;
-    const SALUTATION_FIRM = 3;
+    const GENDER_MALE = 'male';
+    const GENDER_FEMALE = 'female';
 
     /**
      * @var null|string
@@ -28,9 +27,9 @@ class Address extends AbstractValueObject implements AttributableInterface
     private $department;
 
     /**
-     * @var int
+     * @var string
      */
-    private $salutation = self::SALUTATION_MR;
+    private $gender = self::GENDER_MALE;
 
     /**
      * @var null|string
@@ -125,29 +124,29 @@ class Address extends AbstractValueObject implements AttributableInterface
     }
 
     /**
-     * @return int
-     */
-    public function getSalutation()
-    {
-        return $this->salutation;
-    }
-
-    /**
-     * @param int $salutation
-     */
-    public function setSalutation($salutation)
-    {
-        $this->salutation = $salutation;
-    }
-
-    /**
      * @return array
      */
-    public function getSalutations()
+    public function getGenders()
     {
         $reflection = new \ReflectionClass(__CLASS__);
 
         return $reflection->getConstants();
+    }
+
+    /**
+     * @return string
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
+     * @param string $gender
+     */
+    public function setGender($gender)
+    {
+        $this->gender = $gender;
     }
 
     /**
