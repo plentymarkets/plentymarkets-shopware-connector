@@ -63,7 +63,7 @@ class AddressResponseParserTest extends ResponseParserTest
         self::assertSame('Einkauf', $address->getDepartment());
         self::assertSame('Händler', $address->getFirstname());
         self::assertSame('Kundengruppe-Netto', $address->getLastname());
-        self::assertSame(Customer::SALUTATION_MR, $address->getSalutation());
+        self::assertSame(Customer::GENDER_MALE, $address->getGender());
         self::assertSame('Musterweg 1', $address->getStreet());
         self::assertNull($address->getTitle());
         self::assertNull($address->getVatId());

@@ -84,7 +84,7 @@ class CustomerResponseParserTest extends ResponseParserTest
         self::assertSame('Kundengruppe-Netto', $customer->getLastname());
         self::assertTrue($customer->getNewsletter());
         self::assertSame('20003', $customer->getNumber());
-        self::assertSame(Customer::SALUTATION_MR, $customer->getSalutation());
+        self::assertSame(Customer::GENDER_MALE, $customer->getGender());
         self::assertNull($customer->getTitle());
     }
 }

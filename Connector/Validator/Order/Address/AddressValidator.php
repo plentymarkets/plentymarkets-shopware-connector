@@ -27,7 +27,7 @@ class AddressValidator implements ValidatorInterface
     {
         Assertion::nullOrNotBlank($object->getCompany(), null, 'order.address.company');
         Assertion::nullOrNotBlank($object->getDepartment(), null, 'order.address.department');
-        Assertion::inArray($object->getSalutation(), $object->getSalutations(), null, 'order.address.saluation');
+        Assertion::inArray($object->getGender(), $object->getGenders(), null, 'order.address.gender');
         Assertion::nullOrNotBlank($object->getTitle(), null, 'order.address.title');
         Assertion::nullOrNotBlank($object->getFirstname(), null, 'order.address.firstname');
         Assertion::nullOrNotBlank($object->getLastname(), null, 'order.address.lastname');

@@ -50,15 +50,15 @@ class AddressResponseParser implements AddressResponseParserInterface
         }
 
         if ($entry['salutation'] === 'mr') {
-            $salutation = Customer::SALUTATION_MR;
+            $gender = Customer::GENDER_MALE;
         } elseif ($entry['salutation'] === 'ms') {
-            $salutation = Customer::SALUTATION_MS;
+            $gender = Customer::GENDER_FEMALE;
         } else {
-            $salutation = Customer::SALUTATION_FIRM;
+            $gender = null;
         }
 
         $params = [
-            'salutation' => $salutation,
+            'gender' => $gender,
             'firstname' => $entry['firstName'],
             'lastname' => $entry['lastName'],
             'street' => $entry['street'],

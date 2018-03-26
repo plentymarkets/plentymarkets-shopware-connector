@@ -115,7 +115,7 @@ class OrderResponseParser implements OrderResponseParserInterface
             return [];
         }
 
-        $isMappedShopIdentity = $this->identityService->isMapppedIdentity(
+        $isMappedShopIdentity = $this->identityService->isMappedIdentity(
             $shopIdentity->getObjectIdentifier(),
             $shopIdentity->getObjectType(),
             $shopIdentity->getAdapterName()
@@ -370,7 +370,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         $customer->setEmail($this->getMail($entry));
         $customer->setLanguageIdentifier($languageIdentity->getObjectIdentifier());
         $customer->setCustomerGroupIdentifier($cutomerGroupIdentity->getObjectIdentifier());
-        $customer->setSalutation($entry['customerData']['gender'] === 'male' ? Customer::SALUTATION_MR : Customer::SALUTATION_MS);
+        $customer->setGender($entry['customerData']['gender'] === 'male' ? Customer::GENDER_MALE : Customer::GENDER_FEMALE);
         $customer->setFirstname($entry['customerData']['firstName']);
         $customer->setLastname($entry['customerData']['lastName']);
         $customer->setPhoneNumber($this->getPhoneNumber($entry));
@@ -567,7 +567,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         $street = $entry['billingAddressData']['address1'] . ' ' . $entry['billingAddressData']['address2'] . ' ' . $entry['billingAddressData']['address3'];
 
         $address = new Address();
-        $address->setSalutation(1);
+        $address->setGender(Customer::GENDER_MALE);
         $address->setFirstname($entry['billingAddressData']['name2']);
         $address->setLastname($entry['billingAddressData']['name3']);
         $address->setStreet(trim($street));
@@ -606,7 +606,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         $street = $entry['shippingAddressData']['address1'] . ' ' . $entry['shippingAddressData']['address2'] . ' ' . $entry['shippingAddressData']['address3'];
 
         $address = new Address();
-        $address->setSalutation(1);
+        $address->setGender(Customer::GENDER_MALE);
         $address->setFirstname($entry['shippingAddressData']['name2']);
         $address->setLastname($entry['shippingAddressData']['name3']);
         $address->setStreet(trim($street));
