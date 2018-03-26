@@ -16,7 +16,7 @@ class PayPalPlusInvoiceRequestGeneratorTest extends TestCase
 {
     /**
      * @param Payment $payment
-     * @param array $expectedResponse
+     * @param array   $expectedResponse
      *
      * @dataProvider dataProvider
      */
@@ -58,10 +58,10 @@ class PayPalPlusInvoiceRequestGeneratorTest extends TestCase
                             'iban' => $paymentData->getInternationalBankAccountNumber(),
                             'paymentDue' => $paymentData->getPaymentDueDate()->format(DATE_W3C),
                             'referenceNumber' => $paymentData->getReferenceNumber(),
-                        ])
-                    ]
-                ]
-            ]
+                        ]),
+                    ],
+                ],
+            ],
         ];
     }
 }

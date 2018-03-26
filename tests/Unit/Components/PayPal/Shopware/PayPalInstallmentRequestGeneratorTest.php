@@ -2,13 +2,9 @@
 
 namespace PlentyConnector\tests\Unit\Components\PayPal\Shopware;
 
-use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use PlentyConnector\Components\PayPal\PaymentData\PayPalInstallmentPaymentData;
-use PlentyConnector\Components\PayPal\PaymentData\PayPalPlusInvoicePaymentData;
 use PlentyConnector\Components\PayPal\Plentymarkets\PayPalInstallmentRequestGenerator;
-use PlentyConnector\Components\PayPal\Plentymarkets\PayPalPlusInvoiceRequestGenerator;
-use PlentyConnector\Components\PayPal\Shopware\PayPalInstallmentPaymentResponseParser;
 use PlentyConnector\Connector\TransferObject\Payment\Payment;
 use PlentymarketsAdapter\RequestGenerator\Payment\PaymentRequestGenerator;
 
@@ -19,7 +15,7 @@ class PayPalInstallmentRequestGeneratorTest extends TestCase
 {
     /**
      * @param Payment $payment
-     * @param array $expectedResponse
+     * @param array   $expectedResponse
      *
      * @dataProvider dataProvider
      */
@@ -52,10 +48,10 @@ class PayPalInstallmentRequestGeneratorTest extends TestCase
                             'currency' => $paymentData->getCurrency(),
                             'financingCosts' => $paymentData->getFinancingCosts(),
                             'totalCostsIncludeFinancing' => $paymentData->getTotalCostsIncludeFinancing(),
-                        ])
-                    ]
-                ]
-            ]
+                        ]),
+                    ],
+                ],
+            ],
         ];
     }
 }
