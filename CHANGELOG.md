@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [unreleased]
+### Changed
+- corrected the name of the isMappedIdentity function of the IdentityService
+
 ## [4.3.0]
 ### Added
 - fallback for the import of the weight (@jppeter)
@@ -24,8 +28,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - sw 5.3.x required
 
 ## [4.2.1]
-### Added
-
 ### Fixed
 - don't transfer payment to plenty when payment with same transaction id exists
 
@@ -33,8 +35,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Category content will not be overwritten by default plenty ID
 
 ## [4.2.0]
-### Added
-
 ### Fixed
 - error handling when parsing order addresses
 - Bundle stock fix (@marcmanusch)
