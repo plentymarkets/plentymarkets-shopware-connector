@@ -73,5 +73,5 @@ interface IdentityServiceInterface
      *
      * @return bool
      */
-    public function isMapppedIdentity($objectIdentifier, $objectType, $adapterName);
+    public function isMappedIdentity($objectIdentifier, $objectType, $adapterName);
 }

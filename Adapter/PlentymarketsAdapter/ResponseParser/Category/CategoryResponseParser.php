@@ -184,7 +184,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
             return null;
         }
 
-        $isMappedIdentity = $this->identityService->isMapppedIdentity(
+        $isMappedIdentity = $this->identityService->isMappedIdentity(
             $identity->getObjectIdentifier(),
             $identity->getObjectType(),
             $identity->getAdapterName()

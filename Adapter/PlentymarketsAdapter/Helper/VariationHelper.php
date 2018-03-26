@@ -56,7 +56,7 @@ class VariationHelper implements VariationHelperInterface
                 continue;
             }
 
-            $isMappedIdentity = $this->identityService->isMapppedIdentity(
+            $isMappedIdentity = $this->identityService->isMappedIdentity(
                 $identity->getObjectIdentifier(),
                 $identity->getObjectType(),
                 $identity->getAdapterName()
