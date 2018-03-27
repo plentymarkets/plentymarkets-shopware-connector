@@ -32,7 +32,7 @@ class PayPalPlusInvoiceRequestGeneratorTest extends TestCase
     public function dataProvider()
     {
         $paymentData = new PayPalPlusInvoicePaymentData();
-        $paymentData->setAccountHolderName('PayPal Europe	');
+        $paymentData->setAccountHolderName('PayPal Europe');
         $paymentData->setAmountCurrency('EUR');
         $paymentData->setAmountValue(805.00);
         $paymentData->setBankIdentifierCode('DE36120700888000129228');
