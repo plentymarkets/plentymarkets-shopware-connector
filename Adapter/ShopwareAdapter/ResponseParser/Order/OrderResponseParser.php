@@ -4,7 +4,6 @@ namespace ShopwareAdapter\ResponseParser\Order;
 
 use Assert\Assertion;
 use DateTimeImmutable;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
@@ -40,11 +39,6 @@ class OrderResponseParser implements OrderResponseParserInterface
     private $identityService;
 
     /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
-
-    /**
      * @var OrderItemResponseParserInterface
      */
     private $orderItemResponseParser;
@@ -78,7 +72,6 @@ class OrderResponseParser implements OrderResponseParserInterface
      * OrderResponseParser constructor.
      *
      * @param IdentityServiceInterface         $identityService
-     * @param EntityManagerInterface           $entityManager
      * @param OrderItemResponseParserInterface $orderItemResponseParser
      * @param AddressResponseParserInterface   $orderAddressParser
      * @param CustomerResponseParserInterface  $customerParser
@@ -88,7 +81,6 @@ class OrderResponseParser implements OrderResponseParserInterface
      */
     public function __construct(
         IdentityServiceInterface $identityService,
-        EntityManagerInterface $entityManager,
         OrderItemResponseParserInterface $orderItemResponseParser,
         AddressResponseParserInterface $orderAddressParser,
         CustomerResponseParserInterface $customerParser,
@@ -97,7 +89,6 @@ class OrderResponseParser implements OrderResponseParserInterface
         EntityRepository $taxRepository
     ) {
         $this->identityService = $identityService;
-        $this->entityManager = $entityManager;
         $this->orderItemResponseParser = $orderItemResponseParser;
         $this->orderAddressParser = $orderAddressParser;
         $this->customerParser = $customerParser;
@@ -213,6 +204,12 @@ class OrderResponseParser implements OrderResponseParserInterface
             return false;
         }
 
+        if (empty($entry['details'])) {
+            $this->logger->warning('empty order positions - order: ' . $entry['number']);
+
+            return false;
+        }
+
         if (empty($entry['shipping'])) {
             $this->logger->warning('empty order shipping address - order: ' . $entry['number']);
 
@@ -287,6 +284,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     private function getShippingCostsVatRateIdentifier(array $entry)
     {
         $taxRateId = $this->getMaxTaxRateFromOrderItems($entry);
+
         /**
          * @var Tax $taxModel
          */
@@ -312,7 +310,6 @@ class OrderResponseParser implements OrderResponseParserInterface
 
     /**
      * @param array $entry
-     * @param bool  $taxFree
      *
      * @return OrderItem
      */
@@ -334,7 +331,6 @@ class OrderResponseParser implements OrderResponseParserInterface
 
     /**
      * @param array $entry
-     * @param $maxTaxRate
      *
      * @return float
      */
@@ -345,7 +341,6 @@ class OrderResponseParser implements OrderResponseParserInterface
 
     /**
      * @param array $entry
-     * @param $taxFree
      *
      * @return float
      */

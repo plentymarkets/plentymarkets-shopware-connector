@@ -23,7 +23,7 @@ class PaymentRequestGeneratorTest extends RequestGeneratorTest
     {
         parent::setUp();
 
-        $this->requestGenerator = $parser = new PaymentRequestGenerator(
+        $this->requestGenerator = new PaymentRequestGenerator(
             $this->identityService
         );
     }

@@ -38,7 +38,7 @@ class PayPalPlusInvoiceRequestGenerator implements PaymentRequestGeneratorInterf
             return $paymentParams;
         }
 
-        $paymentParams['property'][] = [
+        $paymentParams['properties'][] = [
             'typeId' => 22,
             'value' => json_encode([
                 'accountHolder' => $data->getAccountHolderName(),

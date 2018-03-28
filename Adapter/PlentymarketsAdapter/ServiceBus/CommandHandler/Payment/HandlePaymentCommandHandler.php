@@ -106,9 +106,10 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
 
         $paymentResult = $this->findOrCreatePlentyPayment($payment);
 
-        if ($orderIdentity->getAdapterIdentifier() == $paymentResult['order']['orderId']) {
+        if ((int) $orderIdentity->getAdapterIdentifier() === (int) $paymentResult['order']['orderId']) {
             return true;
         }
+
         $this->client->request(
             'POST',
             'payment/' . $paymentResult['id'] . '/order/' . $orderIdentity->getAdapterIdentifier()
@@ -173,8 +174,6 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
     {
         $params = $this->requestGenerator->generate($payment);
 
-        $paymentResult = $this->client->request('POST', 'payments', $params);
-
-        return $paymentResult;
+        return $this->client->request('POST', 'payments', $params);
     }
 }

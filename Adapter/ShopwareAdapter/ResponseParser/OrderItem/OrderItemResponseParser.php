@@ -49,6 +49,10 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
      */
     public function parse(array $entry, $taxFree = false)
     {
+        if (empty($entry['attribute'])) {
+            $entry['attribute'] = [];
+        }
+
         /**
          * @var OrderItem $orderItem
          */
@@ -67,8 +71,7 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
 
     /**
      * @param array $entry
-     *
-     * @throws NotFoundException
+     * @param bool  $taxFree
      *
      * @return null|string
      */
