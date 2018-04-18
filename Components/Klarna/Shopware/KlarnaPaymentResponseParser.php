@@ -5,11 +5,9 @@ namespace PlentyConnector\Components\Klarna\Shopware;
 use Doctrine\DBAL\Connection;
 use Exception;
 use PlentyConnector\Components\Klarna\PaymentData\KlarnaPaymentData;
-use PlentyConnector\Connector\TransferObject\Currency\Currency;
-use PlentyConnector\Connector\TransferObject\Order\Order;
+use
 use PlentyConnector\Connector\TransferObject\Payment\Payment;
-use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod;
-use PlentyConnector\Connector\TransferObject\Shop\Shop;
+
 use ShopwareAdapter\ResponseParser\Payment\PaymentResponseParserInterface;
 
 /**
@@ -46,6 +44,7 @@ class KlarnaPaymentResponseParser implements PaymentResponseParserInterface
     {
         $payments = $this->parentResponseParser->parse($element);
 
+        $klarnaService = \Shopware_Plugins_Frontend_SwagPaymentKlarnaKpm_Bootstrap::class;
         $klarnaShopId = $this->getKlarnaShopId($element['number']);
 
         if (!$klarnaShopId) {
@@ -123,5 +122,40 @@ class KlarnaPaymentResponseParser implements PaymentResponseParserInterface
         } catch (Exception $exception) {
             return false;
         }
+    }
+
+    /**
+     * @param null $merchantId
+     * @param null $sharedSecret
+     * @return Klarna
+     */
+    public function getService($merchantId = null, $sharedSecret = null)
+    {
+        /** @var Klarna $k */
+        $k = $this->Application()->KlarnaService();
+        $k->setVersion($this->buildKlarnaVersion($k));
+
+        $dbConfig = $this->Application()->Db()->getConfig();
+        $k->config(
+            !empty($merchantId) ? $merchantId : $this->Config()->get('merchantId'),
+            !empty($sharedSecret) ? $sharedSecret : $this->Config()->get('sharedSecret'),
+            KlarnaCountry::DE,
+            KlarnaLanguage::DE,
+            KlarnaCurrency::EUR, // Set it later
+            $this->Config()->get('testDrive') ? Klarna::BETA : Klarna::LIVE,
+            'pdo',
+            [
+                'dbTable' => 's_klarna_pclasses',
+                'dbName' => $dbConfig['dbname'],
+                'pdo' => $this->Application()->Db()->getConnection()
+            ]
+        );
+
+        if ($this->Config()->get('testDrive')) {
+            $k->setActivateInfo('flags', KlarnaFlags::TEST_MODE | KlarnaFlags::RSRV_SEND_BY_EMAIL);
+        } else {
+            $k->setActivateInfo('flags', KlarnaFlags::RSRV_SEND_BY_EMAIL);
+        }
+        return $k;
     }
 }
