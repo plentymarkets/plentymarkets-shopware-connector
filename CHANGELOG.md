@@ -3,10 +3,9 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
-### Added
-
 ### Fixed
 - fix salutation in order an customer
+- paypal invoice and paypal installment payment data was discarded, the data is now transfered correctly
 
 ### Changed
 - corrected the name of the isMappedIdentity function of the IdentityService

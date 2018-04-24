@@ -129,6 +129,13 @@ class AddressRequestGenerator implements AddressRequestGeneratorInterface
             ];
         }
 
+        if (null !== $address->getVatId()) {
+            $params['options'][] = [
+                'typeId' => 1,
+                'value' => $address->getVatId(),
+            ];
+        }
+
         return $params;
     }
 }
