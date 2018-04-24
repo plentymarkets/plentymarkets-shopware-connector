@@ -132,14 +132,15 @@ class PriceResponseParser implements PriceResponseParserInterface
     /**
      * @param $orderOrigin
      * @param $referrers
+     *
      * @return bool
      */
     private function checkIfOriginIsInReferrers($orderOrigin, $referrers)
     {
         foreach ($referrers as $referrer) {
-           if ($referrer['referrerId'] == $orderOrigin) {
-               return true;
-           }
+            if ($referrer['referrerId'] == $orderOrigin) {
+                return true;
+            }
         }
 
         return false;
@@ -182,21 +183,19 @@ class PriceResponseParser implements PriceResponseParserInterface
         $temporaryPrices = [];
 
         foreach ($variationSalesPrices as $price) {
-
             $priceConfiguration = array_filter($priceConfigurations, function ($configuration) use ($price) {
-
                 // shall we check for the configured origin?
                 list($checkOrigin, $orderOrigin) = $this->getOriginConfig();
 
-                if($checkOrigin) {
-                    if($this->checkIfOriginIsInReferrers($orderOrigin, $configuration['referrers'])) {
+                if ($checkOrigin) {
+                    if ($this->checkIfOriginIsInReferrers($orderOrigin, $configuration['referrers'])) {
                         return $configuration['id'] === $price['salesPriceId'];
-                    } else {
-                        return false;
                     }
-                } else {
-                    return $configuration['id'] === $price['salesPriceId'];
+
+                    return false;
                 }
+
+                return $configuration['id'] === $price['salesPriceId'];
             });
 
             if (empty($priceConfiguration)) {
