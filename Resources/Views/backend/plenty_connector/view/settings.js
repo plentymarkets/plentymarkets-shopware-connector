@@ -206,6 +206,16 @@ Ext.define('Shopware.apps.PlentyConnector.view.Settings', {
                         inputValue: 1,
                         anchor: '100%',
                         name: 'item_notification'
+                    },
+                    {
+                        xtype: 'checkbox',
+                        fieldLabel: '{s name=plentyconnector/view/settings/additional/item_bundle/label}{/s}',
+                        boxLabel: '{s name=plentyconnector/view/settings/additional/item_bundle/boxLabel}{/s}',
+                        uncheckedValue: 0,
+                        helpText: '{s name=plentyconnector/view/settings/additional/item_bundle/helpText}{/s}',
+                        inputValue: 1,
+                        anchor: '100%',
+                        name: 'item_bundle'
                     }
                 ]
             }

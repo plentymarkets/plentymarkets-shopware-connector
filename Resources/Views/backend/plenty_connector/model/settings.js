@@ -42,6 +42,10 @@ Ext.define('Shopware.apps.PlentyConnector.model.Settings', {
         {
             name: 'item_notification',
             type: 'integer'
+        },
+        {
+            name: 'item_bundle',
+            type: 'integer'
         }
         // {block name="backend/plentyconnector/model/settings/fields"}{/block}
     ],
