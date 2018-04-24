@@ -3,7 +3,6 @@
 namespace PlentyConnector\Connector;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentyConnector\Connector\ServiceBus\CommandFactory\CommandFactoryInterface;
 use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\ServiceBus\QueryFactory\QueryFactoryInterface;
@@ -50,11 +49,6 @@ class Connector implements ConnectorInterface
     private $logger;
 
     /**
-     * @var ConfigServiceInterface
-     */
-    private $config;
-
-    /**
      * Connector constructor.
      *
      * @param ServiceBusInterface     $serviceBus
@@ -62,22 +56,19 @@ class Connector implements ConnectorInterface
      * @param CommandFactoryInterface $commandFactory
      * @param OutputHandlerInterface  $outputHandler
      * @param LoggerInterface         $logger
-     * @param ConfigServiceInterface $config
      */
     public function __construct(
         ServiceBusInterface $serviceBus,
         QueryFactoryInterface $queryFactory,
         CommandFactoryInterface $commandFactory,
         OutputHandlerInterface $outputHandler,
-        LoggerInterface $logger,
-        ConfigServiceInterface $config
+        LoggerInterface $logger
     ) {
         $this->serviceBus = $serviceBus;
         $this->queryFactory = $queryFactory;
         $this->commandFactory = $commandFactory;
         $this->outputHandler = $outputHandler;
         $this->logger = $logger;
-        $this->config = $config;
     }
 
     /**
@@ -117,13 +108,7 @@ class Connector implements ConnectorInterface
             $this->logger->notice('No definitions found');
         }
 
-        $considerSwagBundlePlugin = $this->config->get('item_bundle', 1);
-        array_walk($definitions, function (Definition $definition) use ($considerSwagBundlePlugin, $queryType, $identifier) {
-
-            if (!$considerSwagBundlePlugin && 'Bundle' === $definition->getObjectType()) {
-                return;
-            }
-
+        array_walk($definitions, function (Definition $definition) use ($queryType, $identifier) {
             $this->handleDefinition($definition, $queryType, $identifier);
         });
     }

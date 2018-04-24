@@ -95,7 +95,6 @@
             <argument type="service" id="plenty_connector.command_factory" />
             <argument type="service" id="plenty_connector.console.output_handler" />
             <argument type="service" id="plenty_connector.logger" />
-            <argument type="service" id="plenty_connector.config" />
         </service>
 
         <!-- definition factory -->
