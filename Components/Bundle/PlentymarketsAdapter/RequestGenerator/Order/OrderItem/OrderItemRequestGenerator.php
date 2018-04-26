@@ -31,8 +31,7 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
     public function __construct(
         OrderItemRequestGeneratorInterface $parentOrderItemRequestGenerator,
         Connection $connection
-    )
-    {
+    ) {
         $this->parentOrderItemRequestGenerator = $parentOrderItemRequestGenerator;
         $this->connection = $connection;
     }
@@ -44,43 +43,34 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
      */
     public function generate(OrderItem $orderItem, Order $order)
     {
-        $itemParams = $this->parentOrderItemRequestGenerator->generate($orderItem , $order);
+        $itemParams = $this->parentOrderItemRequestGenerator->generate($orderItem, $order);
 
-        foreach ($orderItem->getAttributes() as $attribute) {
-
-            if (!$attribute->getKey() === 'bundlePackageId' && !$attribute->getValue()) {
-                continue;
-            }
-
-            if (!$this->isBundle($orderItem)) {
-                $itemParams['typeId'] = 3;
-                $itemParams['amounts'][0]['priceOriginalGross'] = 0;
-                $itemParams['referrerId'] = 423555545;
-
-            }else{
-                $itemParams['typeId'] = 2;
-                $itemParams['orderItemName'] = '[BUNDLE] ' . $itemParams['orderItemName'];
-            }
+        if (!$this->getBundle($orderItem->getNumber())) {
+            return $itemParams;
         }
+
+       //$itemParams['orderItemName'] = '[Bundle] ' . $itemParams['orderItemName'];
 
         return $itemParams;
     }
 
     /**
-     * @param OrderItem $orderItem
+     * @param int $articleNumber
      *
-     * @return bool
+     * @return array|false
      */
-    private function isBundle(OrderItem $orderItem)
+    private function getBundle($articleNumber)
     {
         try {
-            $query = 'SELECT * FROM s_articles_bundles WHERE ordernumber = ?';
+            $query = 'SELECT * FROM s_articles_bundles AS bundle 
+                      LEFT JOIN s_articles_bundles_prices AS bundlePrice
+                      ON bundle.id = bundlePrice.bundle_id
+                      WHERE ordernumber = ?
+                      AND bundlePrice.customer_group_id = 1';
 
-            return $this->connection->fetchColumn($query, [$orderItem->getNumber()]);
+            return $this->connection->fetchAll($query, [$articleNumber]);
         } catch (Exception $exception) {
             return false;
         }
-
-        return $orderItem->getType() === OrderItem::TYPE_VOUCHER || $orderItem->getType() === OrderItem::TYPE_COUPON;
     }
 }

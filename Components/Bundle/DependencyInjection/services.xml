@@ -30,14 +30,14 @@
             <argument type="service" id="plenty_connector.logger" />
         </service>
 
-
         <service id="plenty_connector_components_bundle.components.order.order_item.order_item _request_generator" class="PlentyConnector\Components\Bundle\PlentymarketsAdapter\RequestGenerator\Order\OrderItem\OrderItemRequestGenerator" decorates="plentymarkets_adapter.request_generator.order_item" public="false">
             <argument type="service" id="plenty_connector_components_bundle.components.order.order_item.order_item _request_generator.inner" />
+            <argument type="service" id="dbal_connection" />
         </service>
 
         <service id="plenty_connector_components_bundle.order_response_parser" class="PlentyConnector\Components\Bundle\ShopwareAdapter\ResponseParser\Order\OrderResponseParser" decorates="shopware_adapter.response_parser.order" public="false">
             <argument type="service" id="plenty_connector_components_bundle.order_response_parser.inner" />
-
+            <argument type="service" id="dbal_connection" />
         </service>
 
         <!-- Request Generator -->
