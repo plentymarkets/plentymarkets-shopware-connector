@@ -2,10 +2,8 @@
 
 namespace PlentyConnector\Components\Bundle\ShopwareAdapter\ResponseParser\Order;
 
-use Exception;
-use ShopwareAdapter\ResponseParser\Order\OrderResponseParserInterface;
 use Doctrine\DBAL\Connection;
-
+use ShopwareAdapter\ResponseParser\Order\OrderResponseParserInterface;
 
 /**
  * Class OrderResponseParser
@@ -24,8 +22,9 @@ class OrderResponseParser implements OrderResponseParserInterface
 
     /**
      * OrderResponseParser constructor.
+     *
      * @param OrderResponseParserInterface $parentOrderResponseParser
-     * @param Connection $connection
+     * @param Connection                   $connection
      */
     public function __construct(
         OrderResponseParserInterface $parentOrderResponseParser,
@@ -35,14 +34,12 @@ class OrderResponseParser implements OrderResponseParserInterface
         $this->connection = $connection;
     }
 
-
     /**
      * {@inheritdoc}
      */
     public function parse(array $entry)
     {
         foreach ($entry['details'] as $key => $item) {
-
             if (null === $item['attribute']['bundlePackageId']) {
                 continue;
             }
@@ -52,12 +49,8 @@ class OrderResponseParser implements OrderResponseParserInterface
                 continue;
             }
             $entry['details'][$key]['bundle'] = 1;
-
         }
 
-        $order = $this->parentOrderResponseParser->parse($entry);
-
-        return $order;
+        return $this->parentOrderResponseParser->parse($entry);
     }
-
 }
