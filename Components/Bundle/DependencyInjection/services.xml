@@ -32,7 +32,6 @@
 
         <service id="plenty_connector_components_bundle.response_parser.order" class="PlentyConnector\Components\Bundle\ShopwareAdapter\ResponseParser\Order\OrderResponseParser" decorates="shopware_adapter.response_parser.order" public="false">
             <argument type="service" id="plenty_connector_components_bundle.response_parser.order.inner" />
-            <argument type="service" id="dbal_connection" />
         </service>
 
         <!-- Request Gernerator -->

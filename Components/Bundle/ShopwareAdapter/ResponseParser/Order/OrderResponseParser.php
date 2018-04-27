@@ -2,7 +2,6 @@
 
 namespace PlentyConnector\Components\Bundle\ShopwareAdapter\ResponseParser\Order;
 
-use Doctrine\DBAL\Connection;
 use ShopwareAdapter\ResponseParser\Order\OrderResponseParserInterface;
 
 /**
@@ -16,22 +15,14 @@ class OrderResponseParser implements OrderResponseParserInterface
     private $parentOrderResponseParser;
 
     /**
-     * @var Connection
-     */
-    private $connection;
-
-    /**
      * OrderResponseParser constructor.
      *
      * @param OrderResponseParserInterface $parentOrderResponseParser
-     * @param Connection                   $connection
      */
     public function __construct(
-        OrderResponseParserInterface $parentOrderResponseParser,
-        Connection $connection
+        OrderResponseParserInterface $parentOrderResponseParser
     ) {
         $this->parentOrderResponseParser = $parentOrderResponseParser;
-        $this->connection = $connection;
     }
 
     /**
@@ -46,6 +37,7 @@ class OrderResponseParser implements OrderResponseParserInterface
 
             if ($item['mode'] !== 10) {
                 unset($entry['details'][$key]);
+
                 continue;
             }
             $entry['details'][$key]['bundle'] = 1;
