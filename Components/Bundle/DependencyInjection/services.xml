@@ -42,7 +42,6 @@
             <argument type="service" id="dbal_connection" />
         </service>
 
-
         <!-- Definition -->
 
         <service id="plenty_connector.connector_definition.bundle" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
