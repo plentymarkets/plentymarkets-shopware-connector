@@ -87,7 +87,7 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
          */
         $taxModel = Shopware()->Models()->getRepository(Tax::class)->find($vatIdentity->getAdapterIdentifier());
 
-        $itemParams['orderItemName'] = '[Bundle] ' . $bundle[0]['name'];
+        $itemParams['orderItemName'] = $bundle[0]['name'];
 
         $itemParams['amounts'][0]['priceOriginalGross'] = $bundle[0]['price'] * (1 + ($taxModel->getTax() / 100));
 
