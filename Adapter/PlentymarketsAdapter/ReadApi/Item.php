@@ -154,5 +154,4 @@ class Item extends ApiAbstract
             'lang' => $this->languageHelper->getLanguagesQueryString(),
         ]);
     }
-
 }
