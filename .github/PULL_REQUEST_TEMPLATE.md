@@ -1,11 +1,7 @@
 | Q                         | A
 | ------------------------- | ---
 | issue or Enhancement      | issue|Enhancement
-| BC breaks?                | no|yes
-| Deprecations?             | no|yes
 | Changelog updated?        | no|yes
-| Tests exists and pass?    | yes/no
-| Related tickets           | fixes #X, partially #Y, mentioned in #Z
 | License                   | MIT
 
 
@@ -14,29 +10,6 @@
 Explain what the changes in this PR do.
 
 
-#### Why?
-
-Which problem does the PR fix? (remove this section if you linked an issue above)
-
-
-#### Example Usage
-
-``` php
-// If you added new features, show examples of how to use them here
-// (remove this section if not a new feature)
-
-$foo = new Foo();
-
-// Now we can do
-$foo->doSomething();
-```
-
-
 #### Checklist
 
 - [ ] Updated CHANGELOG.md to describe BC breaks / deprecations | new feature | bugfix
-
-
-#### To Do
-
-- [ ] If the PR is not complete but you want to discuss the approach, list what remains to be done here
