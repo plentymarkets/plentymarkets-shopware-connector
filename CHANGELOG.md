@@ -10,6 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - corrected the name of the isMappedIdentity function of the IdentityService
 - corrected the order export with bundles
+- get only visible variations of mapped plentymarkets clients
 
 ## [4.3.0]
 ### Added
