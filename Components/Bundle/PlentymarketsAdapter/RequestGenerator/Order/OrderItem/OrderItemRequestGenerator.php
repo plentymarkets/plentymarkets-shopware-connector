@@ -124,7 +124,7 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
 
             return $this->entityManager->getConnection()->fetchArray($query, [
                 ':articleNumber' => $articleNumber,
-                ':customerGroupId' => $customerGroupId
+                ':customerGroupId' => $customerGroupId,
             ]);
         } catch (Exception $exception) {
             return [];
