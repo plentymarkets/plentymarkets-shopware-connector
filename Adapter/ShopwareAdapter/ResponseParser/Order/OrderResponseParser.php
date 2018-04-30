@@ -277,8 +277,6 @@ class OrderResponseParser implements OrderResponseParserInterface
     /**
      * @param array $entry
      *
-     * @throws NotFoundException
-     *
      * @return string
      */
     private function getShippingCostsVatRateIdentifier(array $entry)

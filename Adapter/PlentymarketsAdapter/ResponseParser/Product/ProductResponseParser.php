@@ -239,8 +239,6 @@ class ProductResponseParser implements ProductResponseParserInterface
     /**
      * @param array $variation
      *
-     * @throws NotFoundException
-     *
      * @return string
      */
     private function getVatRateIdentifier(array $variation)
@@ -260,8 +258,6 @@ class ProductResponseParser implements ProductResponseParserInterface
 
     /**
      * @param array $product
-     *
-     * @throws NotFoundException
      *
      * @return string
      */
