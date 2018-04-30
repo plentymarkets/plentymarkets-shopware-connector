@@ -95,7 +95,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
         });
 
         if (empty($shopIdentifiers)) {
-            return false;
+            return [];
         }
 
         $vatIdentity = $this->identityService->findOneBy([
@@ -152,6 +152,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
         ];
 
         $configuratorSet = $this->configuratorSetRequestGenerator->generate($product);
+
         if (!empty($configuratorSet)) {
             $params['configuratorSet'] = $configuratorSet;
         }
@@ -277,7 +278,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
             $propertyGroup->setName('PlentyConnector');
             $propertyGroup->setPosition(1);
             $propertyGroup->setComparable(true);
-            $propertyGroup->setSortMode(true);
+            $propertyGroup->setSortMode(1);
 
             $this->entityManager->persist($propertyGroup);
             $this->entityManager->flush();
@@ -393,6 +394,9 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
             ]);
 
             foreach ($categoryIdentities as $categoryIdentity) {
+                /**
+                 * @var CategoryModel|null $category
+                 */
                 $category = $categoryRepository->find($categoryIdentity->getAdapterIdentifier());
 
                 if (null === $category) {

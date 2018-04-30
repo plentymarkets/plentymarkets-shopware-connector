@@ -24,14 +24,14 @@ interface TranslationDataProviderInterface
     /**
      * @param Property $property
      *
-     * @return OptionModel
+     * @return OptionModel|null
      */
     public function getPropertyOptionByName(Property $property);
 
     /**
      * @param Value $value
      *
-     * @return ValueModel
+     * @return ValueModel|null
      */
     public function getPropertyValueByValue(Value $value);
 }

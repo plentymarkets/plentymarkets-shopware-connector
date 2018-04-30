@@ -141,7 +141,16 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         }
 
         $params = $this->productRequestGenerator->generate($product);
+
+        if (empty($params)) {
+            return false;
+        }
+
         $variantRepository = $this->entityManager->getRepository(Detail::class);
+
+        /**
+         * @var Detail|null $mainVariation
+         */
         $mainVariation = $variantRepository->findOneBy(['number' => $product->getNumber()]);
 
         $resouce = $this->getArticleResource();

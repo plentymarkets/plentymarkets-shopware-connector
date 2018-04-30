@@ -76,6 +76,9 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
             'name' => 'PlentyConnector',
         ]);
 
+        /**
+         * @var Settings|null $parentSettings
+         */
         $parentSettings = $settingsRepository->findOneBy([
             'albumId' => Album::ALBUM_ARTICLE,
         ]);
@@ -108,6 +111,9 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
             return true;
         }
 
+        /**
+         * @var Album|null $album
+         */
         $album = $albumRepository->find($identity->getAdapterIdentifier());
 
         if (null !== $album) {
