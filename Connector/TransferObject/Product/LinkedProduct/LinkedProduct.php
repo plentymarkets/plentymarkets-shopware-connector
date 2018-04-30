@@ -3,15 +3,16 @@
 namespace PlentyConnector\Connector\TransferObject\Product\LinkedProduct;
 
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
+use ReflectionClass;
 
 /**
  * Class LinkedProduct
  */
 class LinkedProduct extends AbstractValueObject
 {
-    const TYPE_ACCESSORY = 1;
-    const TYPE_REPLACEMENT = 2;
-    const TYPE_SIMILAR = 3;
+    const TYPE_ACCESSORY = 'accessory';
+    const TYPE_REPLACEMENT = 'replacement';
+    const TYPE_SIMILAR = 'similar';
 
     /**
      * @var string
@@ -29,7 +30,7 @@ class LinkedProduct extends AbstractValueObject
     private $productIdentifier = '';
 
     /**
-     * @return int
+     * @return string
      */
     public function getType()
     {
@@ -37,7 +38,7 @@ class LinkedProduct extends AbstractValueObject
     }
 
     /**
-     * @param int $type
+     * @param string $type
      */
     public function setType($type)
     {
@@ -49,7 +50,7 @@ class LinkedProduct extends AbstractValueObject
      */
     public function getTypes()
     {
-        $reflection = new \ReflectionClass(__CLASS__);
+        $reflection = new ReflectionClass(__CLASS__);
 
         return $reflection->getConstants();
     }
