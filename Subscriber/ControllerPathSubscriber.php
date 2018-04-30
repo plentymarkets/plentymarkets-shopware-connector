@@ -3,7 +3,6 @@
 namespace PlentyConnector\Subscriber;
 
 use Enlight\Event\SubscriberInterface;
-use Enlight_Controller_ActionEventArgs;
 use Enlight_Event_EventArgs;
 use Enlight_Template_Manager;
 
