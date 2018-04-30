@@ -3,6 +3,7 @@
 namespace PlentyConnector\Components\Bundle\PlentymarketsAdapter\RequestGenerator\Order\OrderItem;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
@@ -12,7 +13,6 @@ use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
 use PlentymarketsAdapter\RequestGenerator\Order\OrderItem\OrderItemRequestGeneratorInterface;
 use Shopware\Models\Tax\Tax;
 use ShopwareAdapter\ShopwareAdapter;
-use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Class OrderItemRequestGenerator
@@ -117,7 +117,7 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
                       WHERE bundle.ordernumber = :articleNumber
                       AND bundlePrice.customer_group_id = :customerGroupId';
 
-            return $this->connection->fetchAll($query, [':articleNumber' =>$articleNumber, ':customerGroupId' => $customerGroupId]);
+            return $this->connection->fetchAll($query, [':articleNumber' => $articleNumber, ':customerGroupId' => $customerGroupId]);
         } catch (Exception $exception) {
             return [];
         }
