@@ -12,12 +12,18 @@ use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
 use PlentymarketsAdapter\RequestGenerator\Order\OrderItem\OrderItemRequestGeneratorInterface;
 use Shopware\Models\Tax\Tax;
 use ShopwareAdapter\ShopwareAdapter;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Class OrderItemRequestGenerator
  */
 class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
 {
+    /**
+     * @var EntityRepository
+     */
+    private $repository;
+
     /**
      * @var IdentityServiceInterface
      */
@@ -36,15 +42,18 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
     /**
      * OrderItemRequestGenerator constructor.
      *
+     * @param EntityManagerInterface             $entityManager
      * @param IdentityServiceInterface           $identityService
      * @param OrderItemRequestGeneratorInterface $parentOrderItemRequestGenerator
      * @param Connection                         $connection
      */
     public function __construct(
+        EntityManagerInterface $entityManager,
         IdentityServiceInterface $identityService,
         OrderItemRequestGeneratorInterface $parentOrderItemRequestGenerator,
         Connection $connection
     ) {
+        $this->repository = $entityManager->getRepository(Tax::class);
         $this->identityService = $identityService;
         $this->parentOrderItemRequestGenerator = $parentOrderItemRequestGenerator;
         $this->connection = $connection;
@@ -70,7 +79,7 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
 
         $bundle = $this->getBundle($orderItem->getNumber(), $customerGroupIdentity->getAdapterIdentifier());
 
-        if (!$bundle) {
+        if (empty($bundle)) {
             return $itemParams;
         }
 
@@ -85,7 +94,7 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
         /**
          * @var Tax $taxModel
          */
-        $taxModel = Shopware()->Models()->getRepository(Tax::class)->find($vatIdentity->getAdapterIdentifier());
+        $taxModel = $this->repository->find($vatIdentity->getAdapterIdentifier());
 
         $itemParams['orderItemName'] = $bundle[0]['name'];
 
@@ -97,7 +106,7 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
     /**
      * @param int $articleNumber
      *
-     * @return array|false
+     * @return array
      */
     private function getBundle($articleNumber, $customerGroupId)
     {
@@ -105,12 +114,12 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
             $query = 'SELECT * FROM s_articles_bundles AS bundle 
                       LEFT JOIN s_articles_bundles_prices AS bundlePrice
                       ON bundle.id = bundlePrice.bundle_id
-                      WHERE bundle.ordernumber = ?
-                      AND bundlePrice.customer_group_id = ?';
+                      WHERE bundle.ordernumber = :articleNumber
+                      AND bundlePrice.customer_group_id = :customerGroupId';
 
-            return $this->connection->fetchAll($query, [$articleNumber, $customerGroupId]);
+            return $this->connection->fetchAll($query, [':articleNumber' =>$articleNumber, ':customerGroupId' => $customerGroupId]);
         } catch (Exception $exception) {
-            return false;
+            return [];
         }
     }
 }

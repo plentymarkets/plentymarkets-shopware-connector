@@ -31,7 +31,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     public function parse(array $entry)
     {
         foreach ($entry['details'] as $key => $item) {
-            if (null === $item['attribute']['bundlePackageId']) {
+            if (!isset($item['attribute']['bundlePackageId'])) {
                 continue;
             }
 
@@ -40,6 +40,7 @@ class OrderResponseParser implements OrderResponseParserInterface
 
                 continue;
             }
+
             $entry['details'][$key]['bundle'] = 1;
         }
 

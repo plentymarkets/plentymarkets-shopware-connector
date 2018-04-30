@@ -37,6 +37,7 @@
         <!-- Request Gernerator -->
 
         <service id="plenty_connector_components_bundle.request_generator.order_item" class="PlentyConnector\Components\Bundle\PlentymarketsAdapter\RequestGenerator\Order\OrderItem\OrderItemRequestGenerator" decorates="plentymarkets_adapter.request_generator.order_item" public="false">
+            <argument type="service" id="models" />
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plenty_connector_components_bundle.request_generator.order_item.inner" />
             <argument type="service" id="dbal_connection" />
