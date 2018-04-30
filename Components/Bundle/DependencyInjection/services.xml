@@ -40,7 +40,6 @@
             <argument type="service" id="models" />
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plenty_connector_components_bundle.request_generator.order_item.inner" />
-            <argument type="service" id="dbal_connection" />
         </service>
 
         <!-- Definition -->
