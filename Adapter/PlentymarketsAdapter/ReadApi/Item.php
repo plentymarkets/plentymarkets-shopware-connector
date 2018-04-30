@@ -37,9 +37,9 @@ class Item extends ApiAbstract
     /**
      * Item constructor.
      *
-     * @param Client                  $client
-     * @param VariationApi            $itemsVariationsApi
-     * @param LanguageHelperInterface $languageHelper
+     * @param Client                   $client
+     * @param VariationApi             $itemsVariationsApi
+     * @param LanguageHelperInterface  $languageHelper
      * @param VariationHelperInterface $variationHelper
      */
     public function __construct(
@@ -73,7 +73,7 @@ class Item extends ApiAbstract
 
         $result['variations'] = $this->itemsVariationsApi->findBy([
             'itemId' => $result['id'],
-            'plentyId' => implode(',', $this->variationHelper->getMappedPlentyClientIds())
+            'plentyId' => implode(',', $this->variationHelper->getMappedPlentyClientIds()),
         ]);
         $result['shippingProfiles'] = $this->getProductShippingProfiles($result['id']);
 
@@ -130,7 +130,7 @@ class Item extends ApiAbstract
 
         $variations = $this->itemsVariationsApi->findBy([
             'itemId' => implode(',', $items),
-            'plentyId' => implode(',', $this->variationHelper->getMappedPlentyClientIds())
+            'plentyId' => implode(',', $this->variationHelper->getMappedPlentyClientIds()),
         ]);
 
         foreach ($elements as $key => $element) {

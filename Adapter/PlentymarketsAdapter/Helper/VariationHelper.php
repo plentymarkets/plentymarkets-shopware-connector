@@ -63,7 +63,6 @@ class VariationHelper implements VariationHelperInterface
             );
 
             if (!$isMappedIdentity) {
-
                 continue;
             }
 
@@ -92,7 +91,6 @@ class VariationHelper implements VariationHelperInterface
         $clientIds = [];
 
         foreach ($identities as $identity) {
-
             $isMappedIdentity = $this->identityService->isMappedIdentity(
                 $identity->getObjectIdentifier(),
                 $identity->getObjectType(),
@@ -100,7 +98,6 @@ class VariationHelper implements VariationHelperInterface
             );
 
             if (!$isMappedIdentity) {
-
                 continue;
             }
 
@@ -109,5 +106,4 @@ class VariationHelper implements VariationHelperInterface
 
         return $clientIds;
     }
-
 }
