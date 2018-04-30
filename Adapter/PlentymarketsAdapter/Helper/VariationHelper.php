@@ -63,6 +63,7 @@ class VariationHelper implements VariationHelperInterface
             );
 
             if (!$isMappedIdentity) {
+
                 continue;
             }
 
@@ -71,4 +72,42 @@ class VariationHelper implements VariationHelperInterface
 
         return $identifiers;
     }
+
+    /**
+     * @return array
+     */
+    public function getMappedPlentyClientIds()
+    {
+        $identities = $this->identityService->findBy([
+            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType' => Shop::TYPE,
+        ]);
+
+        if (!isset($identities)) {
+            $this->logger->notice('no plentyIds found');
+
+            return [];
+        }
+
+        $clientIds = [];
+
+        foreach ($identities as $identity) {
+
+            $isMappedIdentity = $this->identityService->isMappedIdentity(
+                $identity->getObjectIdentifier(),
+                $identity->getObjectType(),
+                $identity->getAdapterName()
+            );
+
+            if (!$isMappedIdentity) {
+
+                continue;
+            }
+
+            $clientIds[] = $identity->getAdapterIdentifier();
+        }
+
+        return $clientIds;
+    }
+
 }
