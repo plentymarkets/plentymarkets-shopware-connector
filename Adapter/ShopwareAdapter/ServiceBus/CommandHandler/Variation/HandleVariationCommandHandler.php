@@ -97,6 +97,10 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
 
         $variationParams = $this->variationRequestGenerator->generate($variation);
         $variantRepository = $this->entityManager->getRepository(Detail::class);
+
+        /**
+         * @var Detail|null $variant
+         */
         $variant = $variantRepository->findOneBy(['number' => $variation->getNumber()]);
 
         $resource = $this->getVariationResource();

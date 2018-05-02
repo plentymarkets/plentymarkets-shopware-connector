@@ -25,7 +25,7 @@ class FetchAllBundlesQueryHandler implements QueryHandlerInterface
     private $itemApi;
 
     /**
-     * @var BundleResponseParser
+     * @var BundleResponseParserInterface
      */
     private $responseParser;
 

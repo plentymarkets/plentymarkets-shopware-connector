@@ -5,6 +5,7 @@ namespace PlentyConnector\Connector\TransferObject\Order\Address;
 use PlentyConnector\Connector\TransferObject\AttributableInterface;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
+use ReflectionClass;
 
 /**
  * TOOD: camelCase
@@ -128,7 +129,7 @@ class Address extends AbstractValueObject implements AttributableInterface
      */
     public function getGenders()
     {
-        $reflection = new \ReflectionClass(__CLASS__);
+        $reflection = new ReflectionClass(__CLASS__);
 
         return $reflection->getConstants();
     }

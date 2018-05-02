@@ -58,6 +58,7 @@ class ConfigService implements ConfigServiceInterface
         $configElements = $this->repository->findAll();
 
         $result = [];
+
         foreach ($configElements as $element) {
             $result[$element->getName()] = $element->getValue();
         }
@@ -78,6 +79,9 @@ class ConfigService implements ConfigServiceInterface
             }
         }
 
+        /**
+         * @var Config|null $element
+         */
         $element = $this->repository->findOneBy([
             'name' => $key,
         ]);
@@ -94,6 +98,9 @@ class ConfigService implements ConfigServiceInterface
      */
     public function set($key, $value)
     {
+        /**
+         * @var Config|null $element
+         */
         $element = $this->repository->findOneBy([
             'name' => $key,
         ]);

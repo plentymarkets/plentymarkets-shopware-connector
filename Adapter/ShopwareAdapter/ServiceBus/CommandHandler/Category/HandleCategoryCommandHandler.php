@@ -141,8 +141,6 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     /**
      * @param Category $category
      * @param Identity $shopIdentity
-     *
-     * @throws InvalidArgumentException
      */
     private function prepareCategory(Category $category, Identity $shopIdentity)
     {
@@ -173,15 +171,16 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
      * @param Category $category
      * @param Identity $shopIdentity
      *
-     * @throws NotFoundException
-     * @throws IdentityNotFoundException
-     *
      * @return null|Identity
      */
     private function handleCategory(Category $category, Identity $shopIdentity)
     {
         $deepCopy = new DeepCopy();
         $category = $deepCopy->copy($category);
+
+        /**
+         * @var ShopModel|null $shop
+         */
         $shop = $this->shopRepository->find($shopIdentity->getAdapterIdentifier());
 
         if (null === $shop) {
@@ -376,10 +375,16 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         $connection = $this->entityManager->getConnection();
 
         try {
-            $query = 'SELECT categoryID FROM s_categories_attributes WHERE categoryID = ? AND plenty_connector_shop_identifier = ?';
+            $query = '
+                SELECT categoryID 
+                FROM s_categories_attributes 
+                WHERE categoryID = :category 
+                AND plenty_connector_shop_identifier = :identifier
+            ';
+
             $attribute = $connection->fetchColumn($query, [
-                $categoryIdentity->getAdapterIdentifier(),
-                $shopIdentity->getAdapterIdentifier(),
+                ':category' => $categoryIdentity->getAdapterIdentifier(),
+                ':identifier' => $shopIdentity->getAdapterIdentifier(),
             ]);
 
             return (bool) $attribute;

@@ -3,6 +3,7 @@
 namespace PlentyConnector\Connector\TransferObject\Product\Barcode;
 
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
+use ReflectionClass;
 
 /**
  * Class Barcode
@@ -45,7 +46,7 @@ class Barcode extends AbstractValueObject
      */
     public function getTypes()
     {
-        $reflection = new \ReflectionClass(__CLASS__);
+        $reflection = new ReflectionClass(__CLASS__);
 
         return $reflection->getConstants();
     }

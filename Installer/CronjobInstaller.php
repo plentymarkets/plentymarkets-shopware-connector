@@ -4,7 +4,6 @@ namespace PlentyConnector\Installer;
 
 use DateTime;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception\InvalidArgumentException;
 use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
 use Shopware\Components\Plugin\Context\UpdateContext;
@@ -38,8 +37,6 @@ class CronjobInstaller implements InstallerInterface
 
     /**
      * @param InstallContext $context
-     *
-     * @throws InvalidArgumentException
      */
     public function install(InstallContext $context)
     {
@@ -52,8 +49,6 @@ class CronjobInstaller implements InstallerInterface
 
     /**
      * @param UpdateContext $context
-     *
-     * @throws InvalidArgumentException
      */
     public function update(UpdateContext $context)
     {
@@ -66,8 +61,6 @@ class CronjobInstaller implements InstallerInterface
 
     /**
      * @param UninstallContext $context
-     *
-     * @throws InvalidArgumentException
      */
     public function uninstall(UninstallContext $context)
     {
@@ -76,8 +69,6 @@ class CronjobInstaller implements InstallerInterface
 
     /**
      * @param null|int $pluginIdentifier
-     *
-     * @throws InvalidArgumentException
      */
     private function removeCronjobs($pluginIdentifier = null)
     {

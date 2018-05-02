@@ -14,7 +14,7 @@ class Value extends AbstractValueObject implements TranslateableInterface
     /**
      * @var string
      */
-    private $value = [];
+    private $value = '';
 
     /**
      * @var Translation[]

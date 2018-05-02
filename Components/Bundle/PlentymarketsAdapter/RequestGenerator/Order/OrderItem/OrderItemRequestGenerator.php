@@ -92,6 +92,10 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
          * @var Repository $taxRepository
          */
         $taxRepository = $this->entityManager->getRepository(Tax::class);
+
+        /**
+         * @var Tax|null $taxModel
+         */
         $taxModel = $taxRepository->find($vatIdentity->getAdapterIdentifier());
 
         if (null === $taxModel) {
@@ -107,7 +111,7 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
 
     /**
      * @param int $articleNumber
-     * @param $customerGroupId
+     * @param int $customerGroupId
      *
      * @return array
      */
