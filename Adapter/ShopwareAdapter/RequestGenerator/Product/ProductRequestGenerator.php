@@ -30,7 +30,6 @@ use ShopwareAdapter\ShopwareAdapter;
  */
 class ProductRequestGenerator implements ProductRequestGeneratorInterface
 {
-
     use ChangedDateTimeTrait;
 
     /**
