@@ -23,12 +23,17 @@ use Shopware\Models\Property\Group as GroupModel;
 use Shopware\Models\Shop\Shop as ShopModel;
 use ShopwareAdapter\RequestGenerator\Product\ConfiguratorSet\ConfiguratorSetRequestGeneratorInterface;
 use ShopwareAdapter\ShopwareAdapter;
+use PlentymarketsAdapter\ServiceBus\ChangedDateTimeTrait;
+
 
 /**
  * Class ProductRequestGenerator
  */
 class ProductRequestGenerator implements ProductRequestGeneratorInterface
 {
+
+    use ChangedDateTimeTrait;
+
     /**
      * @var IdentityServiceInterface
      */
@@ -119,6 +124,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
         }
 
         $propertyData = $this->getPropertyData($product);
+        $currentDateTime = $this->getCurrentDateTime();
 
         $params = [
             'filterGroupId' => $propertyData['filterGroupId'],
@@ -142,6 +148,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
             'related' => $this->getLinkedProducts($product, LinkedProduct::TYPE_ACCESSORY),
             'metaTitle' => $product->getMetaTitle(),
             'keywords' => $product->getMetaKeywords(),
+            'changed' => $currentDateTime->format('Y-m-d H:i:s'),
             'supplierId' => $manufacturerIdentity->getAdapterIdentifier(),
             '__options_categories' => ['replace' => true],
             '__options_seoCategories' => ['replace' => true],
