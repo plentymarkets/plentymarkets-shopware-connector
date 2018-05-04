@@ -50,7 +50,7 @@ class MediaResponseParser implements MediaResponseParserInterface
             $entry['filename'] = basename($entry['link']);
         }
 
-        if (!array_key_exists('hash', $entry)) {
+        if (!array_key_exists('hash', $entry) || empty($entry['hash'])) {
             $entry['hash'] = @sha1_file($entry['link']);
         }
 
