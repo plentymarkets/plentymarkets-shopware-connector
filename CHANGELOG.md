@@ -6,7 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - fix salutation in order an customer
 - paypal invoice and paypal installment payment data was discarded, the data is now transfered correctly
-- import images without hash
+- import images without md5Checksum and use filename for adapterIdentifier hash generation
 
 ### Changed
 - corrected the name of the isMappedIdentity function of the IdentityService
