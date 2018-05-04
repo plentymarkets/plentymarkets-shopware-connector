@@ -2,6 +2,7 @@
 
 namespace ShopwareAdapter\RequestGenerator\Product;
 
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use InvalidArgumentException;
@@ -142,6 +143,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
             'related' => $this->getLinkedProducts($product, LinkedProduct::TYPE_ACCESSORY),
             'metaTitle' => $product->getMetaTitle(),
             'keywords' => $product->getMetaKeywords(),
+            'changed' => (new DateTime('now'))->format('Y-m-d H:i:s'),
             'supplierId' => $manufacturerIdentity->getAdapterIdentifier(),
             '__options_categories' => ['replace' => true],
             '__options_seoCategories' => ['replace' => true],
