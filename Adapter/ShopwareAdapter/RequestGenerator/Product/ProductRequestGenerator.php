@@ -2,6 +2,7 @@
 
 namespace ShopwareAdapter\RequestGenerator\Product;
 
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use InvalidArgumentException;
@@ -16,7 +17,6 @@ use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
-use DateTime;
 use Psr\Log\LoggerInterface;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Category\Category as CategoryModel;
