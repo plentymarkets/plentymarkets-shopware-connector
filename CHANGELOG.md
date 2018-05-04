@@ -9,7 +9,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - automatically set changed date time field for products
 - import images without md5Checksum and use filename for adapterIdentifier hash generation
 
-
 ### Changed
 - corrected the name of the isMappedIdentity function of the IdentityService
 - corrected the order export with bundles
