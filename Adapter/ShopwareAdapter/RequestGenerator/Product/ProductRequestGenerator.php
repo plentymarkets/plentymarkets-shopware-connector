@@ -16,7 +16,7 @@ use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
-use PlentymarketsAdapter\ServiceBus\ChangedDateTimeTrait;
+use DateTime;
 use Psr\Log\LoggerInterface;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Category\Category as CategoryModel;
@@ -30,8 +30,6 @@ use ShopwareAdapter\ShopwareAdapter;
  */
 class ProductRequestGenerator implements ProductRequestGeneratorInterface
 {
-    use ChangedDateTimeTrait;
-
     /**
      * @var IdentityServiceInterface
      */
@@ -122,7 +120,6 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
         }
 
         $propertyData = $this->getPropertyData($product);
-        $currentDateTime = $this->getCurrentDateTime();
 
         $params = [
             'filterGroupId' => $propertyData['filterGroupId'],
@@ -146,7 +143,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
             'related' => $this->getLinkedProducts($product, LinkedProduct::TYPE_ACCESSORY),
             'metaTitle' => $product->getMetaTitle(),
             'keywords' => $product->getMetaKeywords(),
-            'changed' => $currentDateTime->format('Y-m-d H:i:s'),
+            'changed' => (new DateTime('now'))->format('Y-m-d H:i:s'),
             'supplierId' => $manufacturerIdentity->getAdapterIdentifier(),
             '__options_categories' => ['replace' => true],
             '__options_seoCategories' => ['replace' => true],
