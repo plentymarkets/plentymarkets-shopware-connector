@@ -39,6 +39,7 @@ class CategoryValidator implements ValidatorInterface
 
         Assertion::string($object->getDescription(), null, 'category.description');
         Assertion::string($object->getLongDescription(), null, 'category.longDescription');
+        Assertion::string($object->getLongDescription2(), null, 'category.longDescription2');
 
         Assertion::string($object->getMetaTitle(), null, 'category.metaTitle');
         Assertion::string($object->getMetaDescription(), null, 'category.metaDescription');

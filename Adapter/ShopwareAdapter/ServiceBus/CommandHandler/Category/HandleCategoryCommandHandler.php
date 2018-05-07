@@ -164,6 +164,11 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             'value' => $category->getMetaRobots(),
         ]);
 
+        $attributes[] = Attribute::fromArray([
+            'key' => 'longDescription2',
+            'value' => $category->getLongDescription2(),
+        ]);
+
         $category->setAttributes($attributes);
     }
 

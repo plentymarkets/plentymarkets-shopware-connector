@@ -156,6 +156,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
         $category->setPosition((int) $validDetails['0']['position']);
         $category->setDescription($validDetails['0']['shortDescription']);
         $category->setLongDescription($validDetails['0']['description']);
+        $category->setLongDescription2($validDetails['0']['description2']);
         $category->setMetaTitle($validDetails['0']['metaTitle']);
         $category->setMetaDescription($validDetails['0']['metaDescription']);
         $category->setMetaKeywords($validDetails['0']['metaKeywords']);
@@ -312,6 +313,12 @@ class CategoryResponseParser implements CategoryResponseParserInterface
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
                 'property' => 'longDescription',
                 'value' => $detail['description'],
+            ]);
+
+            $translations[] = Translation::fromArray([
+                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                'property' => 'longDescription2',
+                'value' => $detail['description2'],
             ]);
 
             $translations[] = Translation::fromArray([
