@@ -318,12 +318,6 @@ class CategoryResponseParser implements CategoryResponseParserInterface
 
             $translations[] = Translation::fromArray([
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                'property' => 'secondCategoryDescription',
-                'value' => $detail['description2'],
-            ]);
-
-            $translations[] = Translation::fromArray([
-                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
                 'property' => 'metaTitle',
                 'value' => $detail['metaTitle'],
             ]);
