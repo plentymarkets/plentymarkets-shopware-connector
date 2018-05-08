@@ -3,7 +3,6 @@
 namespace ShopwareAdapter\ServiceBus\QueryHandler\Payment;
 
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\ServiceBus\Query\FetchQueryInterface;
 use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
@@ -68,9 +67,6 @@ class FetchPaymentQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        /**
-         * @var FetchQueryInterface $event
-         */
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => $query->getObjectIdentifier(),
             'objectType' => Payment::TYPE,

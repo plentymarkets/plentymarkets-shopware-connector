@@ -2,7 +2,6 @@
 
 namespace PlentyConnector\Connector\MappingService;
 
-use PlentyConnector\Connector\ServiceBus\QueryFactory\Exception\MissingQueryException;
 use PlentyConnector\Connector\ValueObject\Definition\Definition;
 use PlentyConnector\Connector\ValueObject\Mapping\Mapping;
 
@@ -18,8 +17,6 @@ interface MappingServiceInterface
 
     /**
      * @param null $objectType
-     *
-     * @throws MissingQueryException
      *
      * @return Mapping[]
      */

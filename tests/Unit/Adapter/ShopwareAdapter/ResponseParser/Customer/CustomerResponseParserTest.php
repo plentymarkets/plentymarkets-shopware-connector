@@ -2,6 +2,7 @@
 
 namespace PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\Customer;
 
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
@@ -37,7 +38,7 @@ class CustomerResponseParserTest extends ResponseParserTest
         $groupRepository->expects($this->any())->method('findOneBy')->with(['key' => 'H'])->willReturn($customerGroup);
 
         $address = $this->createMock(Address::class);
-        $address->expects($this->any())->method('getAdded')->willReturn(new \DateTime());
+        $address->expects($this->any())->method('getAdded')->willReturn(new DateTime());
 
         $newsletterRepository = $this->createMock(EntityRepository::class);
         $newsletterRepository->expects($this->any())->method('findOneBy')->with(['email' => 'mustermann@b2b.de'])->willReturn($address);

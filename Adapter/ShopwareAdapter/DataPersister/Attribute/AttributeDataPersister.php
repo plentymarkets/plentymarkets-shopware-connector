@@ -178,7 +178,7 @@ class AttributeDataPersister implements AttributeDataPersisterInterface
         foreach ($attributes as $attribute) {
             $key = $this->getAttributeKey($attribute);
 
-            $result[$key] = (string) $attribute->getValue();
+            $result[$key] = $attribute->getValue();
         }
 
         return $result;

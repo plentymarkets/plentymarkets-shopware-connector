@@ -37,6 +37,9 @@ class CurrencyDataProvider implements CurrencyDataProviderInterface
          */
         $currencyRepository = $this->entityManager->getRepository(Currency::class);
 
+        /**
+         * @var Currency|null $currencyModel
+         */
         $currencyModel = $currencyRepository->findOneBy(['currency' => $code]);
 
         if (null === $currencyModel) {

@@ -314,8 +314,6 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
     /**
      * @param Bundle $bundle
      *
-     * @throws NotFoundException
-     *
      * @return null|DetailModel
      */
     private function getMainVariant(Bundle $bundle)

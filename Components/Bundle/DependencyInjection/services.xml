@@ -30,6 +30,18 @@
             <argument type="service" id="plenty_connector.logger" />
         </service>
 
+        <service id="plenty_connector_components_bundle.response_parser.order" class="PlentyConnector\Components\Bundle\ShopwareAdapter\ResponseParser\Order\OrderResponseParser" decorates="shopware_adapter.response_parser.order" public="false">
+            <argument type="service" id="plenty_connector_components_bundle.response_parser.order.inner" />
+        </service>
+
+        <!-- Request Gernerator -->
+
+        <service id="plenty_connector_components_bundle.request_generator.order_item" class="PlentyConnector\Components\Bundle\PlentymarketsAdapter\RequestGenerator\Order\OrderItem\OrderItemRequestGenerator" decorates="plentymarkets_adapter.request_generator.order_item" public="false">
+            <argument type="service" id="models" />
+            <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="plenty_connector_components_bundle.request_generator.order_item.inner" />
+        </service>
+
         <!-- Definition -->
 
         <service id="plenty_connector.connector_definition.bundle" class="PlentyConnector\Connector\ValueObject\Definition\Definition">

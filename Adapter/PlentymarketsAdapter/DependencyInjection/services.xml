@@ -21,6 +21,7 @@
             <argument type="service" id="plentymarkets_adapter.client" />
             <argument type="service" id="plentymarkets_adapter.read_api.item.variant" />
             <argument type="service" id="plentymarkets_adapter.helper.language" />
+            <argument type="service" id="plentymarkets_adapter.helper.variation" />
         </service>
 
         <service id="plentymarkets_adapter.read_api.item.attribute" class="PlentymarketsAdapter\ReadApi\Item\Attribute">
