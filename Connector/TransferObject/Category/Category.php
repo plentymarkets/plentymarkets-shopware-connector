@@ -63,6 +63,11 @@ class Category extends AbstractTransferObject implements TranslateableInterface,
     /**
      * @var string
      */
+    private $longDescription2 = '';
+
+    /**
+     * @var string
+     */
     private $metaTitle = '';
 
     /**
@@ -244,6 +249,22 @@ class Category extends AbstractTransferObject implements TranslateableInterface,
     public function setLongDescription($longDescription)
     {
         $this->longDescription = $longDescription;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLongDescription2()
+    {
+        return $this->longDescription2;
+    }
+
+    /**
+     * @param string $longDescription2
+     */
+    public function setLongDescription2($longDescription2)
+    {
+        $this->longDescription2 = $longDescription2;
     }
 
     /**
