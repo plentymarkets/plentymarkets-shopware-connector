@@ -8,6 +8,7 @@ use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Category\Category;
 use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
+use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
 use PlentymarketsAdapter\Helper\MediaCategoryHelper;
@@ -161,6 +162,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
         $category->setMetaKeywords($validDetails['0']['metaKeywords']);
         $category->setMetaRobots($this->getMetaRobots($validDetails['0']['metaRobots']));
         $category->setTranslations($this->getTranslations($validDetails, $result));
+        $category->setAttributes($this->getAttributes($validDetails));
 
         return array_merge($result, [$category]);
     }
@@ -316,6 +318,12 @@ class CategoryResponseParser implements CategoryResponseParserInterface
 
             $translations[] = Translation::fromArray([
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                'property' => 'secondCategoryDescription',
+                'value' => $detail['description2'],
+            ]);
+
+            $translations[] = Translation::fromArray([
+                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
                 'property' => 'metaTitle',
                 'value' => $detail['metaTitle'],
             ]);
@@ -346,5 +354,54 @@ class CategoryResponseParser implements CategoryResponseParserInterface
         }
 
         return $translations;
+    }
+
+    /**
+     * @param array $details
+     *
+     * @return Attribute[]
+     */
+    private function getAttributes(array $details)
+    {
+        $attributes = [];
+
+        $attributes[] = $this->getSecondCategoryDescriptionAsAttribute($details);
+
+        return $attributes;
+    }
+
+    /**
+     * @param array $categoryDetails
+     *
+     * @return Attribute
+     */
+    private function getSecondCategoryDescriptionAsAttribute($categoryDetails)
+    {
+        $translations = [];
+
+        foreach ($categoryDetails as $categoryDetail) {
+            $languageIdentifier = $this->identityService->findOneBy([
+                'adapterIdentifier' => $categoryDetail['lang'],
+                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType' => Language::TYPE,
+            ]);
+
+            if (null === $languageIdentifier) {
+                continue;
+            }
+
+            $translations[] = Translation::fromArray([
+                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                'property' => 'value',
+                'value' => $categoryDetail['description2'],
+            ]);
+        }
+
+        $attribute = new Attribute();
+        $attribute->setKey('secondCategoryDescription');
+        $attribute->setValue((string) $categoryDetails[0]['description2']);
+        $attribute->setTranslations($translations);
+
+        return $attribute;
     }
 }

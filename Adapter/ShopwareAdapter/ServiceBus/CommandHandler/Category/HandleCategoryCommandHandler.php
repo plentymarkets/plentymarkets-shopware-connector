@@ -203,12 +203,18 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
 
         if (null !== $languageIdentity) {
             /**
-             * @var Category $translated
+             * @var Category $translatedCategory
              */
-            $translated = $this->translationHelper->translate($languageIdentity->getObjectIdentifier(), $category);
+            $translatedCategory = $this->translationHelper->translate($languageIdentity->getObjectIdentifier(), $category);
+            $translatedAttributes = [];
 
-            if (null !== $translated) {
-                $category = $translated;
+            if (null !== $translatedCategory) {
+                foreach ($translatedCategory->getAttributes() as $attribute) {
+                    $translatedAttributes[] = $this->translationHelper->translate($languageIdentity->getObjectIdentifier(), $attribute);
+                }
+                $translatedCategory->setAttributes($translatedAttributes);
+
+                $category = $translatedCategory;
             }
         }
 
