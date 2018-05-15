@@ -19,5 +19,6 @@
             <tag name="plenty_connector.validator" />
         </service>
 
+
     </services>
 </container>

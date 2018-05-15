@@ -6,7 +6,7 @@ use PlentyConnector\Connector\TransferObject\Payment\PaymentData\PaymentDataInte
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 
 /**
- * Class SepaPaymentData
+ * Class KlarnaPaymentData
  */
 class KlarnaPaymentData extends AbstractValueObject implements PaymentDataInterface
 {

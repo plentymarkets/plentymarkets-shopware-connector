@@ -5,9 +5,7 @@ namespace PlentyConnector\Components\Klarna\Shopware;
 use Doctrine\DBAL\Connection;
 use Exception;
 use PlentyConnector\Components\Klarna\PaymentData\KlarnaPaymentData;
-use
 use PlentyConnector\Connector\TransferObject\Payment\Payment;
-
 use ShopwareAdapter\ResponseParser\Payment\PaymentResponseParserInterface;
 
 /**
@@ -15,6 +13,56 @@ use ShopwareAdapter\ResponseParser\Payment\PaymentResponseParserInterface;
  */
 class KlarnaPaymentResponseParser implements PaymentResponseParserInterface
 {
+    /**
+     * Country constant for Austria (AT).<br>
+     * ISO3166_AT
+     *
+     * @var int
+     */
+    const AT = 15;
+
+    /**
+     * ISO3166_DK
+     *
+     * @var int
+     */
+    const DK = 59;
+
+    /**
+     * ISO3166_FI
+     *
+     * @var int
+     */
+    const FI = 73;
+
+    /**
+     * ISO3166_DE
+     *
+     * @var int
+     */
+    const DE = 81;
+
+    /**
+     * ISO3166_NL
+     *
+     * @var int
+     */
+    const NL = 154;
+
+    /**
+     * ISO3166_NO
+     *
+     * @var int
+     */
+    const NO = 164;
+
+    /**
+     * ISO3166_SE
+     *
+     * @var int
+     */
+    const SE = 209;
+
     /**
      * @var PaymentResponseParserInterface
      */
@@ -27,7 +75,7 @@ class KlarnaPaymentResponseParser implements PaymentResponseParserInterface
 
     /**
      * @param PaymentResponseParserInterface $parentResponseParser
-     * @param Connection $connection
+     * @param Connection                     $connection
      */
     public function __construct(
         PaymentResponseParserInterface $parentResponseParser,
@@ -44,22 +92,12 @@ class KlarnaPaymentResponseParser implements PaymentResponseParserInterface
     {
         $payments = $this->parentResponseParser->parse($element);
 
-        $klarnaService = \Shopware_Plugins_Frontend_SwagPaymentKlarnaKpm_Bootstrap::class;
-        $klarnaShopId = $this->getKlarnaShopId($element['number']);
-
-        if (!$klarnaShopId) {
-            return $payments;
-        }
-
-        $pClassId = $this->getKlarnaPclassId($element['number']);
-        $transactionId = $this->getKlarnaTransactionId($element['number']);
-
         foreach ($payments as $payment) {
             if (!($payment instanceof Payment)) {
                 continue;
             }
 
-            $this->addPKlarnaPaymentData($payment, $klarnaShopId, $pClassId, $transactionId);
+            $this->addKlarnaPaymentData($payment, $element);
         }
 
         return $payments;
@@ -67,95 +105,75 @@ class KlarnaPaymentResponseParser implements PaymentResponseParserInterface
 
     /**
      * @param Payment $payment
-     * @param string $klarnaShopId
-     * @param string $pClassId
-     * @param string $transactionId
+     * @param array   $element
      */
-    private function addPKlarnaPaymentData(Payment $payment, $klarnaShopId, $pClassId, $transactionId)
+    private function addKlarnaPaymentData(Payment $payment, array $element)
     {
+        if ('created' !== $element['attribute']['swagKlarnaStatus']) {
+            return;
+        }
+
+        $klarnaConfig = Shopware()->Container()->get('shopware.plugin.cached_config_reader')->getByPluginName('SwagPaymentKlarnaKpm');
+        $klarnaShopId = $klarnaConfig['merchantId'];
+
         $paymentData = new KlarnaPaymentData();
+        $paymentData->setPclassId(-1);
+
+        if ('klarna_account' === $element['payment']['name']) {
+            $paymentData->setPclassId($this->getKlarnaPclassId($klarnaShopId, $element['billing']['country']['iso']));
+        }
+
         $paymentData->setShopId($klarnaShopId);
+        $paymentData->setTransactionId($element['transactionId']);
 
         $payment->setPaymentData($paymentData);
     }
 
     /**
      * @param string $ordernumber
+     *
      * @return string|bool
      */
-    private function getKlarnaShopId($ordernumber)
+    private function getKlarnaPclassId($klarnaShopId, $countryIso)
     {
         try {
-            $query = 'SELECT eid FROM s_klarna_pclasses WHERE eid = 11700';
+            $query = 'SELECT id FROM s_klarna_pclasses 
+                      WHERE eid = :klarnaShopId 
+                      AND country = :country';
 
-            return $this->connection->fetchColumn($query, [$ordernumber]);
+            return $this->connection->fetchColumn($query, [
+                'klarnaShopId' => $klarnaShopId,
+                'country' => $this->getKlarnaCountryId($countryIso), ]
+            );
         } catch (Exception $exception) {
             return false;
         }
     }
 
     /**
-     * @param string $ordernumber
-     * @return string|bool
+     * @param $country
+     *
+     * @return int
      */
-    private function getKlarnaPclassId($ordernumber)
+    private function getKlarnaCountryId($country)
     {
-        try {
-            $query = 'SELECT pclassid FROM Pi_klarna_payment_pclass WHERE ordernumber = ?';
-
-            return $this->connection->fetchColumn($query, [$ordernumber]);
-        } catch (Exception $exception) {
-            return false;
+        switch ($country) {
+            case 'DE':
+                return KlarnaPaymentResponseParser::DE;
+            case 'AT':
+                return KlarnaPaymentResponseParser::AT;
+            case 'DK':
+                return KlarnaPaymentResponseParser::DK;
+            case 'FI':
+                return KlarnaPaymentResponseParser::FI;
+            case 'NL':
+                return KlarnaPaymentResponseParser::NL;
+            case 'NO':
+                return KlarnaPaymentResponseParser::NO;
+            case 'SE':
+                return KlarnaPaymentResponseParser::SE;
+            default:
+                return 0;
         }
-    }
-
-    /**
-     * @param string $ordernumber
-     * @return string|bool
-     */
-    private function getKlarnaTransactionId($ordernumber)
-    {
-        try {
-            $query = 'SELECT transactionid FROM Pi_klarna_payment_order_data WHERE order_number = ?';
-
-            return $this->connection->fetchColumn($query, [$ordernumber]);
-        } catch (Exception $exception) {
-            return false;
-        }
-    }
-
-    /**
-     * @param null $merchantId
-     * @param null $sharedSecret
-     * @return Klarna
-     */
-    public function getService($merchantId = null, $sharedSecret = null)
-    {
-        /** @var Klarna $k */
-        $k = $this->Application()->KlarnaService();
-        $k->setVersion($this->buildKlarnaVersion($k));
-
-        $dbConfig = $this->Application()->Db()->getConfig();
-        $k->config(
-            !empty($merchantId) ? $merchantId : $this->Config()->get('merchantId'),
-            !empty($sharedSecret) ? $sharedSecret : $this->Config()->get('sharedSecret'),
-            KlarnaCountry::DE,
-            KlarnaLanguage::DE,
-            KlarnaCurrency::EUR, // Set it later
-            $this->Config()->get('testDrive') ? Klarna::BETA : Klarna::LIVE,
-            'pdo',
-            [
-                'dbTable' => 's_klarna_pclasses',
-                'dbName' => $dbConfig['dbname'],
-                'pdo' => $this->Application()->Db()->getConnection()
-            ]
-        );
-
-        if ($this->Config()->get('testDrive')) {
-            $k->setActivateInfo('flags', KlarnaFlags::TEST_MODE | KlarnaFlags::RSRV_SEND_BY_EMAIL);
-        } else {
-            $k->setActivateInfo('flags', KlarnaFlags::RSRV_SEND_BY_EMAIL);
-        }
-        return $k;
     }
 }

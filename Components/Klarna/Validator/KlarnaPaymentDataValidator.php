@@ -25,5 +25,7 @@ class KlarnaPaymentDataValidator implements ValidatorInterface
     public function validate($object)
     {
         Assertion::string($object->getShopId(), null, 'components.klarna.shopid');
+        Assertion::string($object->getTransactionId(), null, 'components.klarna.transactionid');
+        Assertion::string($object->getPclassId(), null, 'components.klarna.pclassid');
     }
 }

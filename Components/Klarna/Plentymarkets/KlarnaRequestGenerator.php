@@ -39,8 +39,8 @@ class KlarnaRequestGenerator implements PaymentRequestGeneratorInterface
         }
 
         $paymentParams['property'][] = [
-            'typeId' => 1,
-            'value' => $data->getShopId()
+            'typeId' => 2,
+            'value' => $data->getTransactionId() . '_' . $data->getPclassId() . '_' . $data->getShopId(),
         ];
 
         return $paymentParams;
