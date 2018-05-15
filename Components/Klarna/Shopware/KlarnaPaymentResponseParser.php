@@ -14,7 +14,6 @@ use ShopwareAdapter\ResponseParser\Payment\PaymentResponseParserInterface;
 class KlarnaPaymentResponseParser implements PaymentResponseParserInterface
 {
     /**
-     * Country constant for Austria (AT).<br>
      * ISO3166_AT
      *
      * @var int
@@ -117,7 +116,7 @@ class KlarnaPaymentResponseParser implements PaymentResponseParserInterface
         $klarnaShopId = $klarnaConfig['merchantId'];
 
         $paymentData = new KlarnaPaymentData();
-        $paymentData->setPclassId(-1);
+        $paymentData->setPclassId('-1');
 
         if ('klarna_account' === $element['payment']['name']) {
             $paymentData->setPclassId($this->getKlarnaPclassId($klarnaShopId, $element['billing']['country']['iso']));
@@ -132,7 +131,7 @@ class KlarnaPaymentResponseParser implements PaymentResponseParserInterface
     /**
      * @param string $ordernumber
      *
-     * @return string|bool
+     * @return string
      */
     private function getKlarnaPclassId($klarnaShopId, $countryIso)
     {
@@ -146,7 +145,7 @@ class KlarnaPaymentResponseParser implements PaymentResponseParserInterface
                 'country' => $this->getKlarnaCountryId($countryIso), ]
             );
         } catch (Exception $exception) {
-            return false;
+            return '';
         }
     }
 
