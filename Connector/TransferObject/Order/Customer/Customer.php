@@ -4,6 +4,7 @@ namespace PlentyConnector\Connector\TransferObject\Order\Customer;
 
 use DateTimeImmutable;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
+use ReflectionClass;
 
 /**
  * Class Customer
@@ -362,7 +363,7 @@ class Customer extends AbstractValueObject
      */
     private function getConstantsByName($name)
     {
-        $reflection = new \ReflectionClass(__CLASS__);
+        $reflection = new ReflectionClass(__CLASS__);
 
         $constants = $reflection->getConstants();
 

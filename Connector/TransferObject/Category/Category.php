@@ -38,7 +38,7 @@ class Category extends AbstractTransferObject implements TranslateableInterface,
     /**
      * @var array
      */
-    private $shopIdentifiers = '';
+    private $shopIdentifiers = [];
 
     /**
      * @var array

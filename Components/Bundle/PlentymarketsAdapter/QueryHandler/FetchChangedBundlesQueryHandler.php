@@ -3,7 +3,7 @@
 namespace PlentyConnector\Components\Bundle\PlentymarketsAdapter\QueryHandler;
 
 use Exception;
-use PlentyConnector\Components\Bundle\PlentymarketsAdapter\ResponseParser\BundleResponseParser;
+use PlentyConnector\Components\Bundle\PlentymarketsAdapter\ResponseParser\BundleResponseParserInterface;
 use PlentyConnector\Components\Bundle\TransferObject\Bundle;
 use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
@@ -28,7 +28,7 @@ class FetchChangedBundlesQueryHandler implements QueryHandlerInterface
     private $itemApi;
 
     /**
-     * @var BundleResponseParser
+     * @var BundleResponseParserInterface
      */
     private $responseParser;
 
@@ -45,14 +45,14 @@ class FetchChangedBundlesQueryHandler implements QueryHandlerInterface
     /**
      * FetchChangedBundlesQueryHandler constructor.
      *
-     * @param Item                   $itemApi
-     * @param BundleResponseParser   $responseParser
-     * @param LoggerInterface        $logger
-     * @param OutputHandlerInterface $outputHandler
+     * @param Item                          $itemApi
+     * @param BundleResponseParserInterface $responseParser
+     * @param LoggerInterface               $logger
+     * @param OutputHandlerInterface        $outputHandler
      */
     public function __construct(
         Item $itemApi,
-        BundleResponseParser $responseParser,
+        BundleResponseParserInterface $responseParser,
         LoggerInterface $logger,
         OutputHandlerInterface $outputHandler
     ) {

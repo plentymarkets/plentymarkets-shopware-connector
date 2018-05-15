@@ -3,7 +3,6 @@
 namespace PlentyConnector\Connector\BacklogService\Model;
 
 use DateTime;
-use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 
@@ -71,7 +70,7 @@ class Backlog
      */
     public function __construct()
     {
-        $this->time = new DateTimeImmutable('now');
+        $this->time = new DateTime('now');
         $this->status = self::STATUS_OPEN;
     }
 
@@ -121,6 +120,14 @@ class Backlog
     public function getTime()
     {
         return $this->time;
+    }
+
+    /**
+     * @param DateTime $time
+     */
+    public function setTime(DateTime $time)
+    {
+        $this->time = $time;
     }
 
     /**

@@ -118,7 +118,7 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
                 $translation[$key] = $translatedAttribute->getValue();
             }
 
-            $this->writeTranslations('article', $productIdentity->getAdapterIdentifier(), $translation);
+            $this->writeTranslations('article', (int) $productIdentity->getAdapterIdentifier(), $translation);
         }
 
         foreach ($product->getProperties() as $property) {
@@ -166,7 +166,7 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
                 'optionValue' => $translatedPropertyValue->getValue(),
             ];
 
-            $this->writeTranslations('propertyvalue', (int) $propertyValueModel->getId(), $translation);
+            $this->writeTranslations('propertyvalue', $propertyValueModel->getId(), $translation);
         }
     }
 
@@ -206,7 +206,7 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
                 'optionName' => $translatedProperty->getName(),
             ];
 
-            $this->writeTranslations('propertyoption', (int) $propertyOptionModel->getId(), $translation);
+            $this->writeTranslations('propertyoption', $propertyOptionModel->getId(), $translation);
         }
     }
 

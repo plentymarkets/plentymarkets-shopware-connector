@@ -31,6 +31,9 @@ class CustomerGroupDataProvider implements CustomerGroupDataProviderInterface
      */
     public function getCustomerGroupKeyByShopwareIdentifier($identifier)
     {
+        /**
+         * @var Group|null $group
+         */
         $group = $this->repository->find($identifier);
 
         if (null === $group) {

@@ -199,8 +199,6 @@ class OrderResponseParser implements OrderResponseParserInterface
         $order->setOrderNumber($orderNumber);
         $order->setOrderTime($this->getOrderTime($entry));
         $order->setCustomer($customer);
-        $order->setBillingAddress($this->getBillingAddress($entry));
-        $order->setShippingAddress($this->getShippingAddress($entry));
         $order->setOrderItems($this->getOrderItems($entry));
         $order->setShopIdentifier($shopIdentity->getObjectIdentifier());
         $order->setCurrencyIdentifier($currencyIdentity->getObjectIdentifier());
@@ -211,6 +209,16 @@ class OrderResponseParser implements OrderResponseParserInterface
         $order->setComments($this->getComments($entry));
         $order->setPackages($this->getPackages($entry));
         $order->setAttributes([]);
+
+        $billingAddress = $this->getBillingAddress($entry);
+        if (null !== $billingAddress) {
+            $order->setBillingAddress($billingAddress);
+        }
+
+        $shippingAddress = $this->getShippingAddress($entry);
+        if (null !== $shippingAddress) {
+            $order->setShippingAddress($shippingAddress);
+        }
 
         return [$order];
     }
@@ -227,7 +235,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         });
 
         if (empty($billingAddress)) {
-            return null;
+            return [];
         }
 
         $billingAddress = array_shift($billingAddress);
@@ -247,7 +255,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         });
 
         if (empty($shippingAddress)) {
-            return null;
+            return [];
         }
 
         $shippingAddress = array_shift($shippingAddress);
@@ -267,7 +275,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         });
 
         if (empty($relations)) {
-            return null;
+            return [];
         }
 
         $relation = array_shift($relations);
@@ -348,19 +356,37 @@ class OrderResponseParser implements OrderResponseParserInterface
     /**
      * @param array $entry
      *
-     * @return Customer
+     * @return Customer|null
      */
     private function getCustomer(array $entry)
     {
         $languageIdentity = $this->getLanguageIdentity($entry);
 
+        if (null === $languageIdentity) {
+            $this->logger->info('language of customer not found', [
+                'entry' => $entry,
+            ]);
+
+            return null;
+        }
+
         $cutomerGroupIdentity = $this->getCustomerGroupIdentity($entry['customerData']);
+
         if (null === $cutomerGroupIdentity) {
+            $this->logger->info('customer group not found', [
+                'entry' => $entry,
+            ]);
+
             return null;
         }
 
         $shopIdentity = $this->getShopIdentity($entry['customerData']);
+
         if (null === $shopIdentity) {
+            $this->logger->info('customer shop not found', [
+                'entry' => $entry,
+            ]);
+
             return null;
         }
 
@@ -524,7 +550,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     /**
      * @param array $entry
      *
-     * @return DateTimeImmutable|null
+     * @return DateTimeImmutable
      */
     private function getOrderTime(array $entry)
     {
@@ -538,13 +564,13 @@ class OrderResponseParser implements OrderResponseParserInterface
             return DateTimeImmutable::createFromFormat(DATE_W3C, $date['date']);
         }
 
-        return null;
+        return new DateTimeImmutable();
     }
 
     /**
      * @param array $entry
      *
-     * @return Address
+     * @return Address|null
      */
     private function getBillingAddress(array $entry)
     {
@@ -684,13 +710,6 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
-     * Der Versanddienstleister wird nicht mehr im Auftrag gespeichert. Es wird nur noch das Versandprofil als
-     * OrderProperty gespeichert. Willst du den Dienstleister wissen, musst du das Versandprofil selbst laden:
-     * REST: https://developers.plentymarkets.com/rest-doc/order_shipping_profile/details#get-a-shipping-profile
-     * Plugins: https://developers.plentymarkets.com/api-doc/Order#element_132
-     * Darin hast du das Feld parcelServiceId, das ist die ID des Versanddienstleisters
-     * (https://developers.plentymarkets.com/api-doc/order#order_models_parcelservicepreset)
-     *
      * @param array $entry
      *
      * @return Package[]

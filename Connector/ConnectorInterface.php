@@ -2,8 +2,6 @@
 
 namespace PlentyConnector\Connector;
 
-use PlentyConnector\Connector\Exception\MissingCommandException;
-use PlentyConnector\Connector\Exception\MissingQueryException;
 use PlentyConnector\Connector\ValueObject\Definition\Definition;
 
 /**
@@ -20,9 +18,6 @@ interface ConnectorInterface
      * @param int         $queryType
      * @param null|string $objectType
      * @param null|string $identifier
-     *
-     * @throws MissingQueryException
-     * @throws MissingCommandException
      */
     public function handle($queryType, $objectType = null, $identifier = null);
 }

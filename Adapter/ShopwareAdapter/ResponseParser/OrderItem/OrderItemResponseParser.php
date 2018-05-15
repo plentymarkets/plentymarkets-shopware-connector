@@ -3,6 +3,7 @@
 namespace ShopwareAdapter\ResponseParser\OrderItem;
 
 use Doctrine\ORM\EntityRepository;
+use InvalidArgumentException;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Order\OrderItem\OrderItem;
@@ -49,6 +50,10 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
      */
     public function parse(array $entry, $taxFree = false)
     {
+        if (empty($entry['attribute'])) {
+            $entry['attribute'] = [];
+        }
+
         /**
          * @var OrderItem $orderItem
          */
@@ -67,20 +72,19 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
 
     /**
      * @param array $entry
-     *
-     * @throws NotFoundException
+     * @param bool  $taxFree
      *
      * @return null|string
      */
     private function getVatRateIdentifier(array $entry, $taxFree)
     {
         /**
-         * @var Tax $taxModel
+         * @var Tax|null $taxModel
          */
         $taxModel = $this->taxRepository->findOneBy(['tax' => $entry['taxRate']]);
 
         if (null === $taxModel) {
-            throw new \InvalidArgumentException('no matching tax rate found - ' . $entry['taxRate']);
+            throw new InvalidArgumentException('no matching tax rate found - ' . $entry['taxRate']);
         }
 
         $entry['taxId'] = $taxModel->getId();
@@ -119,7 +123,7 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
 
     /**
      * @param array $entry
-     * @param $taxFree
+     * @param bool  $taxFree
      *
      * @return float|int|mixed
      */

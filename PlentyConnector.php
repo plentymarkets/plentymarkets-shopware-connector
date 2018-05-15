@@ -257,8 +257,6 @@ class PlentyConnector extends Plugin
 
     /**
      * @param ActivateContext $context
-     *
-     * @throws \RuntimeException
      */
     public function activate(ActivateContext $context)
     {

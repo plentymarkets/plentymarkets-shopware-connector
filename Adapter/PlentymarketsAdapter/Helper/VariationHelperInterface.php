@@ -13,4 +13,9 @@ interface VariationHelperInterface
      * @return array
      */
     public function getShopIdentifiers(array $variation);
+
+    /**
+     * @return array
+     */
+    public function getMappedPlentyClientIds();
 }

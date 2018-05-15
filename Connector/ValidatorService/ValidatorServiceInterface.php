@@ -19,8 +19,6 @@ interface ValidatorServiceInterface
     /**
      * @param TransferObjectInterface|ValueObjectInterface     $object
      * @param TransferObjectInterface[]|ValueObjectInterface[] $parents
-     *
-     * @throws InvalidDataException
      */
     public function validate($object, array $parents = []);
 }
