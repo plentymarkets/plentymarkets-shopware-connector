@@ -2,7 +2,6 @@
 
 namespace PlentyConnector\Connector\IdentityService;
 
-use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 
 /**
@@ -47,8 +46,6 @@ interface IdentityServiceInterface
      * @param string $adapterIdentifier
      * @param string $adapterName
      * @param string $objectType
-     *
-     * @throws NotFoundException
      *
      * @return Identity
      */

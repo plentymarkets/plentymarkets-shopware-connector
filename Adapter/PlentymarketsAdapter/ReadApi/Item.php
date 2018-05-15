@@ -6,6 +6,7 @@ use DateTimeImmutable;
 use PlentymarketsAdapter\Client\Client;
 use PlentymarketsAdapter\Client\Iterator\Iterator;
 use PlentymarketsAdapter\Helper\LanguageHelperInterface;
+use PlentymarketsAdapter\Helper\VariationHelperInterface;
 use PlentymarketsAdapter\ReadApi\Item\Variation as VariationApi;
 
 /**
@@ -24,6 +25,11 @@ class Item extends ApiAbstract
     private $languageHelper;
 
     /**
+     * @var VariationHelperInterface
+     */
+    private $variationHelper;
+
+    /**
      * @var string
      */
     private $includes = 'itemProperties.valueTexts,itemCrossSelling,itemImages';
@@ -31,19 +37,22 @@ class Item extends ApiAbstract
     /**
      * Item constructor.
      *
-     * @param Client                  $client
-     * @param VariationApi            $itemsVariationsApi
-     * @param LanguageHelperInterface $languageHelper
+     * @param Client                   $client
+     * @param VariationApi             $itemsVariationsApi
+     * @param LanguageHelperInterface  $languageHelper
+     * @param VariationHelperInterface $variationHelper
      */
     public function __construct(
         Client $client,
         VariationApi $itemsVariationsApi,
-        LanguageHelperInterface $languageHelper
+        LanguageHelperInterface $languageHelper,
+        VariationHelperInterface $variationHelper
     ) {
         parent::__construct($client);
 
         $this->itemsVariationsApi = $itemsVariationsApi;
         $this->languageHelper = $languageHelper;
+        $this->variationHelper = $variationHelper;
     }
 
     /**
@@ -62,7 +71,10 @@ class Item extends ApiAbstract
             return $result;
         }
 
-        $result['variations'] = $this->itemsVariationsApi->findBy(['itemId' => $result['id']]);
+        $result['variations'] = $this->itemsVariationsApi->findBy([
+            'itemId' => $result['id'],
+            'plentyId' => implode(',', $this->variationHelper->getMappedPlentyClientIds()),
+        ]);
         $result['shippingProfiles'] = $this->getProductShippingProfiles($result['id']);
 
         return $result;
@@ -116,7 +128,10 @@ class Item extends ApiAbstract
 
         $items = array_column($elements, 'id');
 
-        $variations = $this->itemsVariationsApi->findBy(['itemId' => implode(',', $items)]);
+        $variations = $this->itemsVariationsApi->findBy([
+            'itemId' => implode(',', $items),
+            'plentyId' => implode(',', $this->variationHelper->getMappedPlentyClientIds()),
+        ]);
 
         foreach ($elements as $key => $element) {
             $elements[$key]['variations'] = array_filter($variations, function (array $variation) use ($element) {

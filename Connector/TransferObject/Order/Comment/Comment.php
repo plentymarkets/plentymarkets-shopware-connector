@@ -5,6 +5,7 @@ namespace PlentyConnector\Connector\TransferObject\Order\Comment;
 use PlentyConnector\Connector\TransferObject\AttributableInterface;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
+use ReflectionClass;
 
 /**
  * Class Comment
@@ -82,7 +83,7 @@ class Comment extends AbstractValueObject implements AttributableInterface
      */
     public function getTypes()
     {
-        $reflection = new \ReflectionClass(__CLASS__);
+        $reflection = new ReflectionClass(__CLASS__);
 
         return $reflection->getConstants();
     }

@@ -110,13 +110,16 @@ class SepaPaymentResponseParser implements PaymentResponseParserInterface
          */
         $currencyRepository = Shopware()->Models()->getRepository(CurrencyModel::class);
 
-        $object = $currencyRepository->findOneBy(['currency' => $currency]);
+        /**
+         * @var CurrencyModel|null $model
+         */
+        $model = $currencyRepository->findOneBy(['currency' => $currency]);
 
-        if (null === $object) {
+        if (null === $model) {
             throw new InvalidArgumentException('could not find currency model by currency: ' . $currency);
         }
 
-        return $object->getId();
+        return $model->getId();
     }
 
     /**

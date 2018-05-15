@@ -11,6 +11,7 @@ use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
 use PlentyConnector\Connector\TransferObject\Order\OrderItem\OrderItem;
 use PlentyConnector\Connector\TransferObject\Order\Package\Package;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
+use ReflectionClass;
 
 /**
  * Class Order.
@@ -161,7 +162,7 @@ class Order extends AbstractTransferObject implements AttributableInterface
      */
     public function getOrderTypes()
     {
-        $reflection = new \ReflectionClass(__CLASS__);
+        $reflection = new ReflectionClass(__CLASS__);
 
         return $reflection->getConstants();
     }

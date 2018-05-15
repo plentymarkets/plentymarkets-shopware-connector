@@ -21,9 +21,9 @@ class Package extends AbstractValueObject
     private $shippingCode = '';
 
     /**
-     * @var null{string
+     * @var null|string
      */
-    private $shippingProvider = null;
+    private $shippingProvider;
 
     /**
      * Package constructor.
