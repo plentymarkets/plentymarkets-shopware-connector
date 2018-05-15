@@ -159,19 +159,19 @@ class KlarnaPaymentResponseParser implements PaymentResponseParserInterface
     {
         switch ($country) {
             case 'DE':
-                return KlarnaPaymentResponseParser::DE;
+                return self::DE;
             case 'AT':
-                return KlarnaPaymentResponseParser::AT;
+                return self::AT;
             case 'DK':
-                return KlarnaPaymentResponseParser::DK;
+                return self::DK;
             case 'FI':
-                return KlarnaPaymentResponseParser::FI;
+                return self::FI;
             case 'NL':
-                return KlarnaPaymentResponseParser::NL;
+                return self::NL;
             case 'NO':
-                return KlarnaPaymentResponseParser::NO;
+                return self::NO;
             case 'SE':
-                return KlarnaPaymentResponseParser::SE;
+                return self::SE;
             default:
                 return 0;
         }
