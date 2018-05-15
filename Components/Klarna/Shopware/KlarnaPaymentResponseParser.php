@@ -129,8 +129,8 @@ class KlarnaPaymentResponseParser implements PaymentResponseParserInterface
     }
 
     /**
-     * @param string $ordernumber
-     *
+     * @param $klarnaShopId
+     * @param $countryIso
      * @return string
      */
     private function getKlarnaPclassId($klarnaShopId, $countryIso)
