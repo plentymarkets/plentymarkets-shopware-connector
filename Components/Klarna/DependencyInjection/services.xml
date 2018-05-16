@@ -9,6 +9,7 @@
         <service id="plenty_connector.components.klarna.payment_response_parser" class="PlentyConnector\Components\Klarna\Shopware\KlarnaPaymentResponseParser" decorates="shopware_adapter.response_parser.payment" public="false">
             <argument type="service" id="plenty_connector.components.klarna.payment_response_parser.inner" />
             <argument type="service" id="dbal_connection" />
+            <argument type="service" id="shopware.plugin.cached_config_reader" />
         </service>
 
         <service id="plenty_connector.components.klarna.request_generator" class="PlentyConnector\Components\Klarna\Plentymarkets\KlarnaRequestGenerator" decorates="plentymarkets_adapter.request_generator.payment" public="false">

@@ -7,7 +7,7 @@ use PlentyConnector\Connector\TransferObject\Payment\Payment;
 use PlentymarketsAdapter\RequestGenerator\Payment\PaymentRequestGeneratorInterface;
 
 /**
- * Class KlarnaInstallmentRequestGenerator
+ * Class KlarnaRequestGenerator
  */
 class KlarnaRequestGenerator implements PaymentRequestGeneratorInterface
 {
@@ -17,7 +17,7 @@ class KlarnaRequestGenerator implements PaymentRequestGeneratorInterface
     private $parentRequestGenerator;
 
     /**
-     * KlarnaInstallmentRequestGenerator constructor.
+     * KlarnaRequestGenerator constructor.
      *
      * @param PaymentRequestGeneratorInterface $parentRequestGenerator
      */
@@ -38,7 +38,7 @@ class KlarnaRequestGenerator implements PaymentRequestGeneratorInterface
             return $paymentParams;
         }
 
-        $paymentParams['property'][] = [
+        $paymentParams['properties'][] = [
             'typeId' => 2,
             'value' => $data->getTransactionId() . '_' . $data->getPclassId() . '_' . $data->getShopId(),
         ];

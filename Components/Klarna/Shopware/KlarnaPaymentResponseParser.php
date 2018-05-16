@@ -6,6 +6,7 @@ use Doctrine\DBAL\Connection;
 use Exception;
 use PlentyConnector\Components\Klarna\PaymentData\KlarnaPaymentData;
 use PlentyConnector\Connector\TransferObject\Payment\Payment;
+use Shopware\Components\Plugin\CachedConfigReader;
 use ShopwareAdapter\ResponseParser\Payment\PaymentResponseParserInterface;
 
 /**
@@ -73,15 +74,25 @@ class KlarnaPaymentResponseParser implements PaymentResponseParserInterface
     private $connection;
 
     /**
+     * @var CachedConfigReader
+     */
+    private $configReader;
+
+    /**
+     * KlarnaPaymentResponseParser constructor.
      * @param PaymentResponseParserInterface $parentResponseParser
-     * @param Connection                     $connection
+     * @param Connection $connection
+     * @param CachedConfigReader $configReader
      */
     public function __construct(
         PaymentResponseParserInterface $parentResponseParser,
-        Connection $connection
+        Connection $connection,
+        CachedConfigReader $configReader
     ) {
         $this->parentResponseParser = $parentResponseParser;
         $this->connection = $connection;
+        $this->configReader = $configReader;
+
     }
 
     /**
@@ -108,11 +119,11 @@ class KlarnaPaymentResponseParser implements PaymentResponseParserInterface
      */
     private function addKlarnaPaymentData(Payment $payment, array $element)
     {
-        if ('created' !== $element['attribute']['swagKlarnaStatus']) {
+        if ('payment_klarna_kpm' !== $element['payment']['action']) {
             return;
         }
 
-        $klarnaConfig = Shopware()->Container()->get('shopware.plugin.cached_config_reader')->getByPluginName('SwagPaymentKlarnaKpm');
+        $klarnaConfig = $this->configReader->getByPluginName('SwagPaymentKlarnaKpm');
         $klarnaShopId = $klarnaConfig['merchantId'];
 
         $paymentData = new KlarnaPaymentData();
