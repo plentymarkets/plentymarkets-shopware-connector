@@ -80,6 +80,7 @@ class KlarnaPaymentResponseParser implements PaymentResponseParserInterface
 
     /**
      * KlarnaPaymentResponseParser constructor.
+     *
      * @param PaymentResponseParserInterface $parentResponseParser
      * @param Connection                     $connection
      * @param CachedConfigReader             $configReader
