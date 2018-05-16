@@ -93,7 +93,6 @@ class KlarnaPaymentResponseParser implements PaymentResponseParserInterface
         $this->parentResponseParser = $parentResponseParser;
         $this->connection = $connection;
         $this->configReader = $configReader;
-
     }
 
     /**
