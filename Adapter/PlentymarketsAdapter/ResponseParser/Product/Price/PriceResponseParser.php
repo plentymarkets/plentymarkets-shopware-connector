@@ -2,7 +2,7 @@
 
 namespace PlentymarketsAdapter\ResponseParser\Product\Price;
 
-use PlentyConnector\Connector\ConfigService\ConfigService;
+use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
 use PlentyConnector\Connector\TransferObject\Product\Price\Price;
@@ -39,23 +39,31 @@ class PriceResponseParser implements PriceResponseParserInterface
     private $logger;
 
     /**
+     * @var ConfigServiceInterface
+     */
+    private $configService;
+
+    /**
      * PriceResponseParser constructor.
      *
      * @param IdentityServiceInterface $identityService
      * @param SalesPrice               $itemsSalesPricesApi
      * @param ContactClass             $itemsAccountsContacsClasses
      * @param LoggerInterface          $logger
+     * @param ConfigServiceInterface   $configService
      */
     public function __construct(
         IdentityServiceInterface $identityService,
         SalesPrice $itemsSalesPricesApi,
         ContactClass $itemsAccountsContacsClasses,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ConfigServiceInterface $configService
     ) {
         $this->identityService = $identityService;
         $this->itemsSalesPricesApi = $itemsSalesPricesApi;
         $this->itemsAccountsContacsClasses = $itemsAccountsContacsClasses;
         $this->logger = $logger;
+        $this->configService = $configService;
     }
 
     /**
@@ -80,7 +88,7 @@ class PriceResponseParser implements PriceResponseParserInterface
                 $customerGroup = null;
             }
 
-            foreach ($priceArray['default'] as $salesPrice) {
+            foreach ((array) $priceArray['default'] as $salesPrice) {
                 $priceObject = new Price();
                 $priceObject->setPrice($salesPrice['price']);
                 $priceObject->setCustomerGroupIdentifier($customerGroup);
@@ -131,32 +139,19 @@ class PriceResponseParser implements PriceResponseParserInterface
 
     /**
      * @param $orderOrigin
-     * @param $referrers
+     * @param array $referrers
      *
      * @return bool
      */
-    private function checkIfOriginIsInReferrers($orderOrigin, $referrers)
+    private function checkIfOriginIsInReferrers($orderOrigin, array $referrers)
     {
         foreach ($referrers as $referrer) {
-            if ($referrer['referrerId'] == $orderOrigin) {
+            if ($referrer['referrerId'] === $orderOrigin) {
                 return true;
             }
         }
 
         return false;
-    }
-
-    /**
-     * @return array
-     */
-    private function getOriginConfig()
-    {
-        /** @var ConfigService $config */
-        $config = Shopware()->Container()->get('plenty_connector.config');
-        $checkOrigin = $config->get('check_price_origin', false);
-        $orderOrigin = $config->get('order_origin');
-
-        return [$checkOrigin, $orderOrigin];
     }
 
     /**
@@ -183,30 +178,16 @@ class PriceResponseParser implements PriceResponseParserInterface
         $temporaryPrices = [];
 
         foreach ($variationSalesPrices as $price) {
-            $priceConfiguration = array_filter($priceConfigurations, function ($configuration) use ($price) {
-                // shall we check for the configured origin?
-                list($checkOrigin, $orderOrigin) = $this->getOriginConfig();
-
-                if ($checkOrigin) {
-                    if ($this->checkIfOriginIsInReferrers($orderOrigin, $configuration['referrers'])) {
-                        return $configuration['id'] === $price['salesPriceId'];
-                    }
-
-                    return false;
-                }
-
-                return $configuration['id'] === $price['salesPriceId'];
-            });
+            $priceConfiguration = $this->filterPriceConfiguration($priceConfigurations, $price);
 
             if (empty($priceConfiguration)) {
                 // no price configuration found, skip price
+
                 continue;
             }
 
             $priceConfiguration = array_shift($priceConfiguration);
-
             $customerClasses = (array) $priceConfiguration['customerClasses'];
-
             $from = (float) $priceConfiguration['minimumOrderQuantity'];
 
             if (count($customerClasses) === 1 && $customerClasses[0]['customerClassId'] === -1) {
@@ -293,7 +274,7 @@ class PriceResponseParser implements PriceResponseParserInterface
             $priceConfigurations = array_filter($priceConfigurations,
                 function ($priceConfiguration) use ($shopIdentities) {
                     foreach ($shopIdentities as $identity) {
-                        foreach ($priceConfiguration['clients'] as $client) {
+                        foreach ((array) $priceConfiguration['clients'] as $client) {
                             if ($client['plentyId'] === -1 || $identity->getAdapterIdentifier() === (string) $client['plentyId']) {
                                 return true;
                             }
@@ -334,5 +315,33 @@ class PriceResponseParser implements PriceResponseParserInterface
 
             $price->setPrice($priceArray['specialOffer'][$price->getFromAmount()]['price']);
         }
+    }
+
+    /**
+     * @param array $priceConfigurations
+     * @param array $price
+     *
+     * @return array
+     */
+    private function filterPriceConfiguration($priceConfigurations, $price)
+    {
+        $checkOrigin = (bool) $this->configService->get('check_price_origin', false);
+        $orderOrigin = (int) $this->configService->get('order_origin');
+
+        $priceConfiguration = array_filter($priceConfigurations, function ($configuration) use ($price) {
+            return $configuration['id'] === $price['salesPriceId'];
+        });
+
+        if ($checkOrigin) {
+            $priceConfiguration = array_filter($priceConfiguration, function ($configuration) use ($price, $orderOrigin) {
+                if ($this->checkIfOriginIsInReferrers($orderOrigin, (array) $configuration['referrers'])) {
+                    return $configuration['id'] === $price['salesPriceId'];
+                }
+
+                return false;
+            });
+        }
+
+        return $priceConfiguration;
     }
 }
