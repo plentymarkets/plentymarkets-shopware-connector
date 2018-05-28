@@ -49,9 +49,9 @@ class AddressResponseParser implements AddressResponseParserInterface
             throw new NotFoundException('country mapping missing - ' . json_encode($entry));
         }
 
-        if ($entry['salutation'] === 'mr') {
+        if ($entry['salutation'] === 'mr' || $entry['salutation'] === 'herr') {
             $gender = Customer::GENDER_MALE;
-        } elseif ($entry['salutation'] === 'ms') {
+        } elseif ($entry['salutation'] === 'ms' || $entry['salutation'] === 'frau') {
             $gender = Customer::GENDER_FEMALE;
         } else {
             $gender = null;
