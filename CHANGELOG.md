@@ -20,6 +20,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [4.3.0]
 ### Added
 - fallback for the import of the weight (@jppeter)
+- optional origin-check for price-import (@jppeter)
 
 ### Fixed
 - fix tax calculation issue for third country zero tax orders

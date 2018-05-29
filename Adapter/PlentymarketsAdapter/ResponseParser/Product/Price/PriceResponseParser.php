@@ -2,6 +2,7 @@
 
 namespace PlentymarketsAdapter\ResponseParser\Product\Price;
 
+use PlentyConnector\Connector\ConfigService\ConfigService;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
 use PlentyConnector\Connector\TransferObject\Product\Price\Price;
@@ -129,6 +130,36 @@ class PriceResponseParser implements PriceResponseParserInterface
     }
 
     /**
+     * @param $orderOrigin
+     * @param $referrers
+     *
+     * @return bool
+     */
+    private function checkIfOriginIsInReferrers($orderOrigin, $referrers)
+    {
+        foreach ($referrers as $referrer) {
+            if ($referrer['referrerId'] == $orderOrigin) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return array
+     */
+    private function getOriginConfig()
+    {
+        /** @var ConfigService $config */
+        $config = Shopware()->Container()->get('plenty_connector.config');
+        $checkOrigin = $config->get('check_price_origin', false);
+        $orderOrigin = $config->get('order_origin');
+
+        return [$checkOrigin, $orderOrigin];
+    }
+
+    /**
      * @param array $variationSalesPrices
      *
      * @return array
@@ -153,12 +184,22 @@ class PriceResponseParser implements PriceResponseParserInterface
 
         foreach ($variationSalesPrices as $price) {
             $priceConfiguration = array_filter($priceConfigurations, function ($configuration) use ($price) {
+                // shall we check for the configured origin?
+                list($checkOrigin, $orderOrigin) = $this->getOriginConfig();
+
+                if ($checkOrigin) {
+                    if ($this->checkIfOriginIsInReferrers($orderOrigin, $configuration['referrers'])) {
+                        return $configuration['id'] === $price['salesPriceId'];
+                    }
+
+                    return false;
+                }
+
                 return $configuration['id'] === $price['salesPriceId'];
             });
 
             if (empty($priceConfiguration)) {
                 // no price configuration found, skip price
-
                 continue;
             }
 
