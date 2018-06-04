@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
+### Added
+- transfer category description 2 as attribute to shopware
+
 ### Fixed
 - fix salutation in order an customer
 - paypal invoice and paypal installment payment data was discarded, the data is now transfered correctly
