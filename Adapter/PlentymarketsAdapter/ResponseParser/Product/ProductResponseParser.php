@@ -35,12 +35,10 @@ use Psr\Log\LoggerInterface;
  */
 class ProductResponseParser implements ProductResponseParserInterface
 {
-
     /**
      * @var ConfigServiceInterface
      */
-   private $configService;
-
+    private $configService;
 
     /**
      * @var IdentityServiceInterface
@@ -679,7 +677,6 @@ class ProductResponseParser implements ProductResponseParserInterface
      */
     private function getActive(array $variations = [], array $mainVariation)
     {
-
         $checkInactiveMainVariation = json_decode($this->configService->get('check_active_main_variation'));
 
         if (!$mainVariation['isActive'] && !$checkInactiveMainVariation) {
