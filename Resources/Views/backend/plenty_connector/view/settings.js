@@ -206,6 +206,14 @@ Ext.define('Shopware.apps.PlentyConnector.view.Settings', {
                         inputValue: 1,
                         anchor: '100%',
                         name: 'item_notification'
+                    },
+                    {
+                        xtype: 'checkbox',
+                        fieldLabel: '{s name=plentyconnector/view/settings/additional/check_active_main_variation/label}{/s}',
+                        uncheckedValue: 0,
+                        inputValue: 1,
+                        anchor: '100%',
+                        name: 'check_active_main_variation'
                     }
                 ]
             }

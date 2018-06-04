@@ -3,6 +3,7 @@
 namespace PlentymarketsAdapter\ResponseParser\Product;
 
 use DateTimeImmutable;
+use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Category\Category;
@@ -34,6 +35,13 @@ use Psr\Log\LoggerInterface;
  */
 class ProductResponseParser implements ProductResponseParserInterface
 {
+
+    /**
+     * @var ConfigServiceInterface
+     */
+   private $configService;
+
+
     /**
      * @var IdentityServiceInterface
      */
@@ -77,6 +85,7 @@ class ProductResponseParser implements ProductResponseParserInterface
     /**
      * ProductResponseParser constructor.
      *
+     * @param ConfigServiceInterface           $configService
      * @param IdentityServiceInterface         $identityService
      * @param LoggerInterface                  $logger
      * @param ImageResponseParserInterface     $imageResponseParser
@@ -85,6 +94,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      * @param ClientInterface                  $client
      */
     public function __construct(
+        ConfigServiceInterface $configService,
         IdentityServiceInterface $identityService,
         LoggerInterface $logger,
         ImageResponseParserInterface $imageResponseParser,
@@ -92,6 +102,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         VariationHelperInterface $variationHelper,
         ClientInterface $client
     ) {
+        $this->configService = $configService;
         $this->identityService = $identityService;
         $this->logger = $logger;
         $this->imageResponseParser = $imageResponseParser;
@@ -668,7 +679,10 @@ class ProductResponseParser implements ProductResponseParserInterface
      */
     private function getActive(array $variations = [], array $mainVariation)
     {
-        if (!$mainVariation['isActive']) {
+
+        $checkInactiveMainVariation = json_decode($this->configService->get('check_active_main_variation'));
+
+        if (!$mainVariation['isActive'] && !$checkInactiveMainVariation) {
             return false;
         }
 
