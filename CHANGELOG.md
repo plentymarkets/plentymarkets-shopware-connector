@@ -11,6 +11,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - paypal invoice and paypal installment payment data was discarded, the data is now transfered correctly
 - automatically set changed date time field for products
 - import images without md5Checksum and use filename for adapterIdentifier hash generation
+- optional origin-check for price-import (@jppeter)
 
 ### Changed
 - corrected the name of the isMappedIdentity function of the IdentityService

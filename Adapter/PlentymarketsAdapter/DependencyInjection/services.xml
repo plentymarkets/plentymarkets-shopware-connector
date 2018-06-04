@@ -205,6 +205,7 @@
             <argument type="service" id="plentymarkets_adapter.read_api.sales_price" />
             <argument type="service" id="plentymarkets_adapter.read_api.contact_class" />
             <argument type="service" id="plenty_connector.logger" />
+            <argument type="service" id="plenty_connector.config" />
         </service>
 
         <service id="plentymarkets_adapter.response_parser.shipping_profile" class="PlentymarketsAdapter\ResponseParser\ShippingProfile\ShippingProfileResponseParser">
