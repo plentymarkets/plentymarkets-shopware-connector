@@ -5,6 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [unreleased]
 ### Added
 - transfer category description 2 as attribute to shopware
+- optional check if mainvariation is active
 
 ### Fixed
 - fix salutation in order an customer

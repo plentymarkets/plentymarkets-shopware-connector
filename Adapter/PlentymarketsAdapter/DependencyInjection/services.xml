@@ -192,6 +192,7 @@
         </service>
 
         <service id="plentymarkets_adapter.response_parser.product" class="PlentymarketsAdapter\ResponseParser\Product\ProductResponseParser">
+            <argument type="service" id="plenty_connector.config" />
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plenty_connector.logger" />
             <argument type="service" id="plentymarkets_adapter.response_parser.image" />

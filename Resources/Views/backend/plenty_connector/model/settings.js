@@ -33,7 +33,7 @@ Ext.define('Shopware.apps.PlentyConnector.model.Settings', {
         },
         {
             name: 'check_price_origin',
-            type: 'integer'
+            type: 'boolean'
         },
         {
             name: 'item_warehouse',
@@ -41,7 +41,11 @@ Ext.define('Shopware.apps.PlentyConnector.model.Settings', {
         },
         {
             name: 'item_notification',
-            type: 'integer'
+            type: 'boolean'
+        },
+        {
+            name: 'check_active_main_variation',
+            type: 'boolean'
         }
         // {block name="backend/plentyconnector/model/settings/fields"}{/block}
     ],
