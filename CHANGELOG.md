@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [unreleased]
+## [4.4.0]
 ### Added
 - transfer category description 2 as attribute to shopware
 - optional check if mainvariation is active
