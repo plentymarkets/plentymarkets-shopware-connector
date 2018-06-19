@@ -384,6 +384,7 @@ class VariationResponseParser implements VariationResponseParserInterface
                 'name' => $propertyNames[0]['name'],
                 'values' => [$value],
                 'translations' => $this->getVariationPropertyTranslations($propertyNames),
+                'type' => $attributeValue['attribute']['typeOfSelectionInOnlineStore'],
             ]);
         }
 

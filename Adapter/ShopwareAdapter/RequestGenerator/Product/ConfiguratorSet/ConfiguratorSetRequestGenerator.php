@@ -10,6 +10,10 @@ use PlentyConnector\Connector\TransferObject\Product\Product;
  */
 class ConfiguratorSetRequestGenerator implements ConfiguratorSetRequestGeneratorInterface
 {
+    const STANDARD = 0;
+    const DROP_DOWN = 1;
+    const IMAGE = 2;
+
     /**
      * @var ConfigServiceInterface
      */
@@ -31,6 +35,8 @@ class ConfiguratorSetRequestGenerator implements ConfiguratorSetRequestGenerator
     public function generate(Product $product)
     {
         $groups = [];
+        $plentyConfiguratorType = 'default';
+
         foreach ($product->getVariantConfiguration() as $property) {
             $propertyName = $property->getName();
 
@@ -41,15 +47,36 @@ class ConfiguratorSetRequestGenerator implements ConfiguratorSetRequestGenerator
 
                 $groups[$propertyName]['options'][$propertyValue]['name'] = $propertyValue;
             }
+
+            if ($plentyConfiguratorType !== 'default' && $plentyConfiguratorType !== $property->getType()) {
+                $plentyConfiguratorType = 'default';
+                continue;
+            }
+
+            $plentyConfiguratorType = $property->getType();
         }
 
         if (empty($groups)) {
             return [];
         }
 
+        $type = (int) $this->config->get('product_configurator_type', 0);
+
+        switch ($plentyConfiguratorType) {
+            case 'box':
+                $type = self::STANDARD;
+                break;
+            case 'dropdown':
+                $type = self::DROP_DOWN;
+                break;
+            case 'image':
+                $type = self::IMAGE;
+                break;
+        }
+
         return [
             'name' => $product->getName(),
-            'type' => (int) $this->config->get('product_configurator_type', 0),
+            'type' => $type,
             'groups' => $groups,
         ];
     }

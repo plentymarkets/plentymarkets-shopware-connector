@@ -28,6 +28,11 @@ class Property extends AbstractValueObject implements TranslateableInterface
     private $translations = [];
 
     /**
+     * @var string
+     */
+    private $type = '';
+
+    /**
      * @return string
      */
     public function getName()
@@ -73,5 +78,21 @@ class Property extends AbstractValueObject implements TranslateableInterface
     public function setTranslations(array $translations)
     {
         $this->translations = $translations;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
     }
 }
