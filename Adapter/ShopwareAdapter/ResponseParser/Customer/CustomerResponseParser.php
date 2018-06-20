@@ -81,9 +81,9 @@ class CustomerResponseParser implements CustomerResponseParserInterface
 
         $customerGroupIdentifier = $this->getIdentifier((string) $customerGroup->getId(), CustomerGroup::TYPE);
 
-        if ($entry['salutation'] === 'mr') {
+        if ($entry['salutation'] === 'mr' || $entry['salutation'] === 'herr') {
             $gender = Customer::GENDER_MALE;
-        } elseif ($entry['salutation'] === 'ms') {
+        } elseif ($entry['salutation'] === 'ms' || $entry['salutation'] === 'frau') {
             $gender = Customer::GENDER_FEMALE;
         } else {
             $gender = null;
