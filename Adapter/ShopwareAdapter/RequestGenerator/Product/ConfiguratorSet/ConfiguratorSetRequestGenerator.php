@@ -10,10 +10,6 @@ use PlentyConnector\Connector\TransferObject\Product\Product;
  */
 class ConfiguratorSetRequestGenerator implements ConfiguratorSetRequestGeneratorInterface
 {
-    const STANDARD = 0;
-    const DROP_DOWN = 1;
-    const IMAGE = 2;
-
     /**
      * @var ConfigServiceInterface
      */
@@ -64,13 +60,13 @@ class ConfiguratorSetRequestGenerator implements ConfiguratorSetRequestGenerator
 
         switch ($plentyConfiguratorType) {
             case 'box':
-                $type = self::STANDARD;
+                $type = 0;
                 break;
             case 'dropdown':
-                $type = self::DROP_DOWN;
+                $type = 1;
                 break;
             case 'image':
-                $type = self::IMAGE;
+                $type = 2;
                 break;
         }
 
