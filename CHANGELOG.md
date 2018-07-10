@@ -10,6 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - fixed cdn problem (images have disappeared)
+- fixed search for an existing
 
 ### Changed
 
@@ -19,7 +20,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - optional check if mainvariation is active
 
 ### Fixed
-- fix salutation in order an customer
+- fix salutation in order and customer
 - paypal invoice and paypal installment payment data was discarded, the data is now transfered correctly
 - automatically set changed date time field for products
 - import images without md5Checksum and use filename for adapterIdentifier hash generation
