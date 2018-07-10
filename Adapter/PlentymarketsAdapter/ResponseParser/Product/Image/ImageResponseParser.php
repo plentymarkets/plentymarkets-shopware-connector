@@ -73,7 +73,9 @@ class ImageResponseParser implements ImageResponseParserInterface
 
             $media = $this->mediaResponseParser->parse([
                 'mediaCategory' => MediaCategoryHelper::PRODUCT,
+                'id' => $entry['id'],
                 'link' => $entry['url'],
+                'filename' => $entry['cleanImageName'],
                 'name' => $name,
                 'hash' => $entry['md5Checksum'],
                 'alternateName' => $alternate,
