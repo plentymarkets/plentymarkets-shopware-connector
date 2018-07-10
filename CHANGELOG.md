@@ -13,7 +13,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
-
 ## [4.4.0]
 ### Added
 - transfer category description 2 as attribute to shopware
