@@ -243,7 +243,7 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
         }
 
         $possibleCustomers = array_filter($customerResult, function ($entry) {
-            return !isset($entry['singleAccess']) || $entry['singleAccess'] === false;
+            return $entry['singleAccess'] !== '1';
         });
 
         if (empty($possibleCustomers)) {
