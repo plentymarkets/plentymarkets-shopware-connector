@@ -72,9 +72,9 @@ class ManufacturerResponseParser implements ManufacturerResponseParserInterface
             try {
                 $media = $this->mediaResponseParser->parse([
                     'mediaCategory' => MediaCategoryHelper::MANUFACTURER,
+                    'id' => $entry['id'],
                     'link' => $entry['logo'],
                     'name' => $entry['name'],
-                    'id' => $entry['id'],
                     'alternateName' => $entry['name'],
                 ]);
 
