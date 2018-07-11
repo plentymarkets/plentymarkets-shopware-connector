@@ -3,14 +3,28 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
+## warning ##
+- complete product import necessary after update, otherwise images will be removed by cleanup cron!
+
 ### Added
-- transfer category description 2 as attribute to shopware
 
 ### Fixed
-- fix salutation in order an customer
+- fixed cdn problem (images have disappeared)
+- fixed search for an existing
+
+### Changed
+
+## [4.4.0]
+### Added
+- transfer category description 2 as attribute to shopware
+- optional check if mainvariation is active
+
+### Fixed
+- fix salutation in order and customer
 - paypal invoice and paypal installment payment data was discarded, the data is now transfered correctly
 - automatically set changed date time field for products
 - import images without md5Checksum and use filename for adapterIdentifier hash generation
+- optional origin-check for price-import (@jppeter)
 
 ### Changed
 - corrected the name of the isMappedIdentity function of the IdentityService

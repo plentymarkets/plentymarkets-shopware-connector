@@ -89,9 +89,7 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
      */
     public function handle(CommandInterface $command)
     {
-        /**
-         * @var Media $media
-         */
+        /** @var Media $media */
         $media = $command->getPayload();
 
         if ($media->getHash() === $this->mediaDataProvider->getMediaHashForMediaObject($media)) {

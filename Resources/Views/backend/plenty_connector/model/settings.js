@@ -32,12 +32,20 @@ Ext.define('Shopware.apps.PlentyConnector.model.Settings', {
             type: 'integer'
         },
         {
+            name: 'check_price_origin',
+            type: 'boolean'
+        },
+        {
             name: 'item_warehouse',
             type: 'integer'
         },
         {
             name: 'item_notification',
-            type: 'integer'
+            type: 'boolean'
+        },
+        {
+            name: 'check_active_main_variation',
+            type: 'boolean'
         }
         // {block name="backend/plentyconnector/model/settings/fields"}{/block}
     ],
