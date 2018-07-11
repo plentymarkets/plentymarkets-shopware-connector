@@ -74,6 +74,7 @@ class ManufacturerResponseParser implements ManufacturerResponseParserInterface
                     'mediaCategory' => MediaCategoryHelper::MANUFACTURER,
                     'link' => $entry['logo'],
                     'name' => $entry['name'],
+                    'id' => $entry['id'],
                     'alternateName' => $entry['name'],
                 ]);
 
