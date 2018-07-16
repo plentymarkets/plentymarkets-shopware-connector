@@ -2,11 +2,9 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [unreleased]
+## [4.5.0]
 ## warning ##
 - complete product import necessary after update, otherwise images will be removed by cleanup cron!
-
-### Added
 
 ### Fixed
 - fixed cdn problem (images have disappeared)
