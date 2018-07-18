@@ -223,6 +223,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
             try {
                 $media = $this->mediaResponseParser->parse([
                     'mediaCategory' => MediaCategoryHelper::CATEGORY,
+                    'id' => sha1(json_encode($image)),
                     'link' => $this->getBaseUrl() . 'documents/' . $image,
                     'name' => $detail['name'],
                     'alternateName' => $detail['name'],
