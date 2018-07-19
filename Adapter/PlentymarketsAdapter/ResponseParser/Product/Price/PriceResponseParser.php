@@ -325,14 +325,13 @@ class PriceResponseParser implements PriceResponseParserInterface
      */
     private function filterPriceConfiguration($priceConfigurations, $price)
     {
-        $checkOrigin = (bool) $this->configService->get('check_price_origin', false);
         $orderOrigin = (int) $this->configService->get('order_origin');
 
         $priceConfiguration = array_filter($priceConfigurations, function ($configuration) use ($price) {
             return $configuration['id'] === $price['salesPriceId'];
         });
 
-        if ($checkOrigin) {
+        if ('true' === $this->configService->get('check_price_origin')) {
             $priceConfiguration = array_filter($priceConfiguration, function ($configuration) use ($price, $orderOrigin) {
                 if ($this->checkIfOriginIsInReferrers($orderOrigin, (array) $configuration['referrers'])) {
                     return $configuration['id'] === $price['salesPriceId'];
