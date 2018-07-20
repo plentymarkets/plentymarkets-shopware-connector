@@ -4,10 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
 ### Fixed
+- paymentstatus is set correctly
 - fixed category image import
 - fixed price origin configuration 
-
-### Changed
 
 ## [4.5.0]
 ## warning ##

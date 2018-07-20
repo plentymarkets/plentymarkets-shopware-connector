@@ -522,7 +522,7 @@ class OrderResponseParser implements OrderResponseParserInterface
             //$property = array_shift($property);
 
             $identity = $this->identityService->findOneBy([
-                'adapterIdentifier' => 2, //(string) $property['value'],
+                'adapterIdentifier' => (string) $entry['statusId'],
                 'adapterName' => PlentymarketsAdapter::NAME,
                 'objectType' => PaymentStatus::TYPE,
             ]);
