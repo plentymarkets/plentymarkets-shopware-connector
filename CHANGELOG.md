@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [unreleased]
+### Fixed
+- paymentstatus is set correctly
+
 ## [4.5.0]
 ## warning ##
 - complete product import necessary after update, otherwise images will be removed by cleanup cron!
