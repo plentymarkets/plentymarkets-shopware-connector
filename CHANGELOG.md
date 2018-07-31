@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [unreleased]
+## [4.5.1]
 ### Fixed
 - paymentstatus is set correctly
 - fixed category image import
