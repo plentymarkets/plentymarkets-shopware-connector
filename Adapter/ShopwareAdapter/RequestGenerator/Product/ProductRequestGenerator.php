@@ -136,7 +136,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
             'seoCategories' => $this->getSeoCategories($product),
             'taxId' => $vatIdentity->getAdapterIdentifier(),
             'lastStock' => $product->hasStockLimitation(),
-            'notification' => (int) $this->config->get('item_notification', 0),
+            'notification' => $this->config->get('item_notification') === 'true' ? 1 : 0,
             'active' => $product->isActive(),
             'images' => $this->getImages($product),
             'similar' => $this->getLinkedProducts($product),
