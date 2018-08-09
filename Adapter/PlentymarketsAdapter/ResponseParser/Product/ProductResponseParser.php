@@ -25,7 +25,6 @@ use PlentymarketsAdapter\Helper\VariationHelperInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Item\Property\Name as NameApi;
 use PlentymarketsAdapter\ReadApi\Item\Property\Selection as SelectionApi;
-use PlentymarketsAdapter\ReadApi\Item\Variation\Property as PropertyApi;
 use PlentymarketsAdapter\ResponseParser\Product\Image\ImageResponseParserInterface;
 use PlentymarketsAdapter\ResponseParser\Product\Variation\VariationResponseParserInterface;
 use Psr\Log\LoggerInterface;
@@ -59,11 +58,6 @@ class ProductResponseParser implements ProductResponseParserInterface
      * @var VariationResponseParserInterface
      */
     private $variationResponseParser;
-
-    /**
-     * @var PropertyApi
-     */
-    private $itemsVariationsVariationPropertiesApi;
 
     /**
      * @var SelectionApi
@@ -108,7 +102,6 @@ class ProductResponseParser implements ProductResponseParserInterface
         $this->variationHelper = $variationHelper;
 
         //TODO: inject when refactoring this class
-        $this->itemsVariationsVariationPropertiesApi = new PropertyApi($client);
         $this->itemsPropertiesSelectionsApi = new SelectionApi($client);
         $this->itemsPropertiesNamesApi = new NameApi($client);
     }
@@ -498,10 +491,7 @@ class ProductResponseParser implements ProductResponseParserInterface
     {
         $result = [];
 
-        $properties = $this->itemsVariationsVariationPropertiesApi->findOne(
-            $mainVariation['itemId'],
-            $mainVariation['id']
-        );
+        $properties = $mainVariation['variationProperties'];
 
         static $propertyNames;
 
@@ -540,12 +530,12 @@ class ProductResponseParser implements ProductResponseParserInterface
             $values = [];
 
             if ($property['property']['valueType'] === 'text') {
-                if (empty($property['valueTexts'][0]['value'])) {
+                if (empty($property['names'][0]['value'])) {
                     continue;
                 }
 
                 $valueTranslations = [];
-                foreach ($property['valueTexts'] as $name) {
+                foreach ($property['names'] as $name) {
                     $languageIdentifier = $this->identityService->findOneBy([
                         'adapterIdentifier' => $name['lang'],
                         'adapterName' => PlentymarketsAdapter::NAME,
@@ -564,7 +554,7 @@ class ProductResponseParser implements ProductResponseParserInterface
                 }
 
                 $values[] = Value::fromArray([
-                    'value' => (string) $property['valueTexts'][0]['value'],
+                    'value' => (string) $property['names'][0]['value'],
                     'translations' => $valueTranslations,
                 ]);
             } elseif ($property['property']['valueType'] === 'int') {

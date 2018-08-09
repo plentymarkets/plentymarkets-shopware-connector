@@ -7,6 +7,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - paypal installment validation error
 - item notification is set correctly
 
+### Changed
+- removed properties rest call in productresponseparser
+
 ## [4.5.1]
 ### Fixed
 - paymentstatus is set correctly
