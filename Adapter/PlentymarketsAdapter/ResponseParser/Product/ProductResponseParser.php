@@ -20,11 +20,8 @@ use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
-use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\Helper\VariationHelperInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ReadApi\Item\Property\Name as NameApi;
-use PlentymarketsAdapter\ReadApi\Item\Property\Selection as SelectionApi;
 use PlentymarketsAdapter\ResponseParser\Product\Image\ImageResponseParserInterface;
 use PlentymarketsAdapter\ResponseParser\Product\Variation\VariationResponseParserInterface;
 use Psr\Log\LoggerInterface;
@@ -60,16 +57,6 @@ class ProductResponseParser implements ProductResponseParserInterface
     private $variationResponseParser;
 
     /**
-     * @var SelectionApi
-     */
-    private $itemsPropertiesSelectionsApi;
-
-    /**
-     * @var NameApi
-     */
-    private $itemsPropertiesNamesApi;
-
-    /**
      * @var VariationHelperInterface
      */
     private $variationHelper;
@@ -83,7 +70,6 @@ class ProductResponseParser implements ProductResponseParserInterface
      * @param ImageResponseParserInterface     $imageResponseParser
      * @param VariationResponseParserInterface $variationResponseParser
      * @param VariationHelperInterface         $variationHelper
-     * @param ClientInterface                  $client
      */
     public function __construct(
         ConfigServiceInterface $configService,
@@ -91,8 +77,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         LoggerInterface $logger,
         ImageResponseParserInterface $imageResponseParser,
         VariationResponseParserInterface $variationResponseParser,
-        VariationHelperInterface $variationHelper,
-        ClientInterface $client
+        VariationHelperInterface $variationHelper
     ) {
         $this->configService = $configService;
         $this->identityService = $identityService;
@@ -100,10 +85,6 @@ class ProductResponseParser implements ProductResponseParserInterface
         $this->imageResponseParser = $imageResponseParser;
         $this->variationResponseParser = $variationResponseParser;
         $this->variationHelper = $variationHelper;
-
-        //TODO: inject when refactoring this class
-        $this->itemsPropertiesSelectionsApi = new SelectionApi($client);
-        $this->itemsPropertiesNamesApi = new NameApi($client);
     }
 
     /**
@@ -493,41 +474,13 @@ class ProductResponseParser implements ProductResponseParserInterface
 
         $properties = $mainVariation['variationProperties'];
 
-        static $propertyNames;
-
         foreach ($properties as $property) {
             if (!$property['property']['isSearchable']) {
                 continue;
             }
 
-            if (!isset($propertyNames[$property['property']['id']])) {
-                $propertyName = $this->itemsPropertiesNamesApi->findOne($property['property']['id']);
-
-                $propertyNames[$property['property']['id']] = $propertyName;
-            } else {
-                $propertyName = $propertyNames[$property['property']['id']];
-            }
-
-            $translations = [];
-            foreach ($propertyName as $name) {
-                $languageIdentifier = $this->identityService->findOneBy([
-                    'adapterIdentifier' => $name['lang'],
-                    'adapterName' => PlentymarketsAdapter::NAME,
-                    'objectType' => Language::TYPE,
-                ]);
-
-                if (null === $languageIdentifier) {
-                    continue;
-                }
-
-                $translations[] = Translation::fromArray([
-                    'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                    'property' => 'name',
-                    'value' => $name['name'],
-                ]);
-            }
-
             $values = [];
+            $translations = [];
 
             if ($property['property']['valueType'] === 'text') {
                 if (empty($property['names'][0]['value'])) {
@@ -535,6 +488,7 @@ class ProductResponseParser implements ProductResponseParserInterface
                 }
 
                 $valueTranslations = [];
+
                 foreach ($property['names'] as $name) {
                     $languageIdentifier = $this->identityService->findOneBy([
                         'adapterIdentifier' => $name['lang'],
@@ -546,6 +500,12 @@ class ProductResponseParser implements ProductResponseParserInterface
                         continue;
                     }
 
+                    $translations[] = Translation::fromArray([
+                        'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                        'property' => 'name',
+                        'value' => $property['property']['backendName'],
+                    ]);
+
                     $valueTranslations[] = Translation::fromArray([
                         'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
                         'property' => 'value',
@@ -554,29 +514,9 @@ class ProductResponseParser implements ProductResponseParserInterface
                 }
 
                 $values[] = Value::fromArray([
-                    'value' => (string) $property['names'][0]['value'],
-                    'translations' => $valueTranslations,
+                    'value' => (string) $property['names'][0]['value']
                 ]);
-            } elseif ($property['property']['valueType'] === 'int') {
-                if (null === $property['valueInt']) {
-                    continue;
-                }
 
-                $values[] = Value::fromArray([
-                    'value' => (string) $property['valueInt'],
-                ]);
-            } elseif ($property['property']['valueType'] === 'float') {
-                if (null === $property['valueFloat']) {
-                    continue;
-                }
-
-                $values[] = Value::fromArray([
-                    'value' => (string) $property['valueFloat'],
-                ]);
-            } elseif ($property['property']['valueType'] === 'file') {
-                $this->logger->notice('file properties are not supported', ['variation', $mainVariation['id']]);
-
-                continue;
             } elseif ($property['property']['valueType'] === 'selection') {
                 static $selections;
 
@@ -585,7 +525,7 @@ class ProductResponseParser implements ProductResponseParserInterface
                 }
 
                 if (!isset($selections[$property['propertyId']])) {
-                    $selection = $this->itemsPropertiesSelectionsApi->findOne($property['propertyId']);
+                    $selection = $property['propertySelection'];
 
                     foreach ($selection as $element) {
                         $selections[$property['propertyId']][$element['id']] = $element;
@@ -619,10 +559,30 @@ class ProductResponseParser implements ProductResponseParserInterface
                     'value' => $selectionValue,
                     'translations' => $selections[$property['propertyId']][$property['propertySelectionId']]['translations'],
                 ]);
+            } elseif ($property['property']['valueType'] === 'int') {
+                if (null === $property['valueInt']) {
+                    continue;
+                }
+
+                $values[] = Value::fromArray([
+                    'value' => (string) $property['valueInt'],
+                ]);
+            } elseif ($property['property']['valueType'] === 'float') {
+                if (null === $property['valueFloat']) {
+                    continue;
+                }
+
+                $values[] = Value::fromArray([
+                    'value' => (string) $property['valueFloat'],
+                ]);
+            } elseif ($property['property']['valueType'] === 'file') {
+                $this->logger->notice('file properties are not supported', ['variation', $mainVariation['id']]);
+
+                continue;
             }
 
             $result[] = Property::fromArray([
-                'name' => $propertyName[0]['name'],
+                'name' => $property['property']['backendName'],
                 'values' => $values,
                 'translations' => $translations,
             ]);
