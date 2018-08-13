@@ -267,7 +267,7 @@ class ProductResponseParser implements ProductResponseParserInterface
     private function getShippingProfiles(array $product)
     {
         $shippingProfiles = [];
-        foreach ($product['shippingProfiles'] as $profile) {
+        foreach ($product['itemShippingProfiles'] as $profile) {
             $profileIdentity = $this->identityService->findOneBy([
                 'adapterIdentifier' => (string) $profile['profileId'],
                 'adapterName' => PlentymarketsAdapter::NAME,

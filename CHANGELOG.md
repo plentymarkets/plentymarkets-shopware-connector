@@ -8,6 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - item notification is set correctly
 
 ### Changed
+- removed shipping profiles rest call in item read api
 - removed properties rest call in productresponseparser
 
 ## [4.5.1]
