@@ -441,21 +441,20 @@ class OrderResponseParser implements OrderResponseParserInterface
      */
     private function getShippingProfileIdentity(array $entry)
     {
-        $shippingProfiles = [];
-        foreach ($entry['orderItems'] as $item) {
-            $shippingProfiles[] = $item['shippingProfileId'];
-        }
+        foreach ($entry['properties'] as $orderProperty) {
+            if ($orderProperty['typeId'] !== 2) {
+                continue;
+            }
 
-        if (!empty($shippingProfiles)) {
-            $shippingProfile = array_shift($shippingProfiles);
+            if (!empty($orderProperty['value'])) {
+                $identity = $this->identityService->findOneBy([
+                    'adapterIdentifier' => (string) $orderProperty['value'],
+                    'adapterName' => PlentymarketsAdapter::NAME,
+                    'objectType' => ShippingProfile::TYPE,
+                ]);
 
-            $identity = $this->identityService->findOneBy([
-                'adapterIdentifier' => (string) $shippingProfile,
-                'adapterName' => PlentymarketsAdapter::NAME,
-                'objectType' => ShippingProfile::TYPE,
-            ]);
-
-            return $identity;
+                return $identity;
+            }
         }
 
         return null;

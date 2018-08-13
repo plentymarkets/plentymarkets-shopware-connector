@@ -6,6 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - paypal installment validation error
 - item notification is set correctly
+- order status is set correctly
 
 ## [4.5.1]
 ### Fixed
