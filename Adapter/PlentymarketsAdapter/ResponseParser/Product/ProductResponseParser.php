@@ -514,51 +514,44 @@ class ProductResponseParser implements ProductResponseParserInterface
                 }
 
                 $values[] = Value::fromArray([
-                    'value' => (string) $property['names'][0]['value']
+                    'value' => (string) $property['names'][0]['value'],
+                    'translations' => $valueTranslations,
                 ]);
-
             } elseif ($property['property']['valueType'] === 'selection') {
-                static $selections;
-
                 if (null === $property['propertySelectionId']) {
                     continue;
                 }
 
-                if (!isset($selections[$property['propertyId']])) {
-                    $selection = $property['propertySelection'];
+                $valueTranslations = [];
 
-                    foreach ($selection as $element) {
-                        $selections[$property['propertyId']][$element['id']] = $element;
-                        $selections[$property['propertyId']][$element['id']]['translations'] = [];
-
-                        $languageIdentifier = $this->identityService->findOneBy([
-                            'adapterIdentifier' => $element['lang'],
+                foreach ($property['propertySelection'] as $selection) {
+                    $languageIdentifier = $this->identityService->findOneBy([
+                            'adapterIdentifier' => $selection['lang'],
                             'adapterName' => PlentymarketsAdapter::NAME,
                             'objectType' => Language::TYPE,
                         ]);
 
-                        if (null !== $languageIdentifier) {
-                            $translation = Translation::fromArray([
-                                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                                'property' => 'value',
-                                'value' => $element['name'],
-                            ]);
-
-                            $selections[$property['propertyId']][$element['id']]['translations'] = [$translation];
-                        }
+                    if (null === $languageIdentifier) {
+                        continue;
                     }
-                }
 
-                $selectionValue = (string) $selections[$property['propertyId']][$property['propertySelectionId']]['name'];
+                    $translations[] = Translation::fromArray([
+                            'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                            'property' => 'name',
+                            'value' => $property['property']['backendName'],
+                        ]);
 
-                if (empty($selectionValue)) {
-                    continue;
+                    $valueTranslations[] = Translation::fromArray([
+                            'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                            'property' => 'value',
+                            'value' => $selection['name'],
+                        ]);
                 }
 
                 $values[] = Value::fromArray([
-                    'value' => $selectionValue,
-                    'translations' => $selections[$property['propertyId']][$property['propertySelectionId']]['translations'],
-                ]);
+                        'value' => (string) $property['propertySelection'][0]['name'],
+                        'translations' => $valueTranslations,
+                    ]);
             } elseif ($property['property']['valueType'] === 'int') {
                 if (null === $property['valueInt']) {
                     continue;
@@ -577,7 +570,6 @@ class ProductResponseParser implements ProductResponseParserInterface
                 ]);
             } elseif ($property['property']['valueType'] === 'file') {
                 $this->logger->notice('file properties are not supported', ['variation', $mainVariation['id']]);
-
                 continue;
             }
 
