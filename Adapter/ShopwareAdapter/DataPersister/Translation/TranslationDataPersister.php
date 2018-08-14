@@ -122,62 +122,37 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
         }
 
         foreach ($product->getProperties() as $property) {
-            $this->writePropertyGroupTranslations($property);
+            $this->writeGroupTranslations($property, 'propertyoption');
 
             foreach ($property->getValues() as $value) {
-                $this->writePropertyValueTranslations($value);
+                $this->writeValueTranslations($value, 'propertyvalue');
             }
         }
-    }
 
-    /**
-     * @param Value $value
-     */
-    private function writePropertyValueTranslations(Value $value)
-    {
-        $propertyValueModel = $this->dataProvider->getPropertyValueByValue($value);
+        foreach ($product->getVariantConfiguration() as $variantConfiguration) {
+            $this->writeGroupTranslations($variantConfiguration, 'configuratorgroup');
 
-        if (null === $propertyValueModel) {
-            $this->logger->notice('property value not found - ' . $value->getValue());
-
-            return;
-        }
-
-        foreach ($this->translationHelper->getLanguageIdentifiers($value) as $languageIdentifier) {
-            /**
-             * @var Value $translatedPropertyValue
-             */
-            $translatedPropertyValue = $this->translationHelper->translate($languageIdentifier, $value);
-
-            $languageIdentity = $this->identityService->findOneBy([
-                'objectIdentifier' => $languageIdentifier,
-                'objectType' => Language::TYPE,
-                'adapterName' => ShopwareAdapter::NAME,
-            ]);
-
-            if (null === $languageIdentity) {
-                $this->logger->notice('language not mapped - ' . $languageIdentifier);
-
-                continue;
+            foreach ($variantConfiguration->getValues() as $value) {
+                $this->writeValueTranslations($value, 'configuratoroption');
             }
-
-            $translation = [
-                'languageIdentity' => $languageIdentity,
-                'optionValue' => $translatedPropertyValue->getValue(),
-            ];
-
-            $this->writeTranslations('propertyvalue', $propertyValueModel->getId(), $translation);
         }
     }
 
     /**
      * @param Property $property
+     * @param string   $type
      */
-    private function writePropertyGroupTranslations(Property $property)
+    private function writeGroupTranslations(Property $property, $type)
     {
-        $propertyOptionModel = $this->dataProvider->getPropertyOptionByName($property);
+        $groupModel = null;
 
-        if (null === $propertyOptionModel) {
+        if ($type === 'propertyoption') {
+            $groupModel = $this->dataProvider->getPropertyOptionByName($property);
+        } elseif ($type === 'configuratorgroup') {
+            $groupModel = $this->dataProvider->getConfigurationGroupByName($property);
+        }
+
+        if (null === $groupModel) {
             $this->logger->notice('property option not found - ' . $property->getName());
 
             return;
@@ -201,12 +176,73 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
                 continue;
             }
 
-            $translation = [
-                'languageIdentity' => $languageIdentity,
-                'optionName' => $translatedProperty->getName(),
-            ];
+            if ($type === 'propertyoption') {
+                $translation = [
+                    'languageIdentity' => $languageIdentity,
+                    'optionName' => $translatedProperty->getName(),
+                ];
+            } elseif ($type === 'configuratorgroup') {
+                $translation = [
+                    'languageIdentity' => $languageIdentity,
+                    'name' => $translatedProperty->getName(),
+                ];
+            }
 
-            $this->writeTranslations('propertyoption', $propertyOptionModel->getId(), $translation);
+            $this->writeTranslations($type, $groupModel->getId(), $translation);
+        }
+    }
+
+    /**
+     * @param Value  $value
+     * @param string $type
+     */
+    private function writeValueTranslations(Value $value, $type)
+    {
+        $valueModel = null;
+
+        if ($type === 'propertyvalue') {
+            $valueModel = $this->dataProvider->getPropertyValueByValue($value);
+        } elseif ($type === 'configuratoroption') {
+            $valueModel = $this->dataProvider->getConfigurationOptionByName($value);
+        }
+
+        if (null === $valueModel) {
+            $this->logger->notice('property value not found - ' . $value->getValue());
+
+            return;
+        }
+
+        foreach ($this->translationHelper->getLanguageIdentifiers($value) as $languageIdentifier) {
+            /**
+             * @var Value $translatedPropertyValue
+             */
+            $translatedPropertyValue = $this->translationHelper->translate($languageIdentifier, $value);
+
+            $languageIdentity = $this->identityService->findOneBy([
+                'objectIdentifier' => $languageIdentifier,
+                'objectType' => Language::TYPE,
+                'adapterName' => ShopwareAdapter::NAME,
+            ]);
+
+            if (null === $languageIdentity) {
+                $this->logger->notice('language not mapped - ' . $languageIdentifier);
+
+                continue;
+            }
+
+            if ($type === 'propertyvalue') {
+                $translation = [
+                    'languageIdentity' => $languageIdentity,
+                    'optionValue' => $translatedPropertyValue->getValue(),
+                ];
+            } elseif ($type === 'configuratoroption') {
+                $translation = [
+                    'languageIdentity' => $languageIdentity,
+                    'name' => $translatedPropertyValue->getValue(),
+                ];
+            }
+
+            $this->writeTranslations($type, $valueModel->getId(), $translation);
         }
     }
 
