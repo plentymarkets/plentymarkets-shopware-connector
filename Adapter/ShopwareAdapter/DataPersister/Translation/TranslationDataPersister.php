@@ -114,8 +114,9 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
                  */
                 $translatedAttribute = $this->translationHelper->translate($languageIdentifier, $attribute);
 
-                $key = 'plentyConnector' . ucfirst($attribute->getKey());
-                $translation[$key] = $translatedAttribute->getValue();
+                $key = '__attribute_plenty_connector' . ucfirst($attribute->getKey());
+                $attribute_key = strtolower(preg_replace('/[A-Z]/', '_\\0', lcfirst($key)));
+                $translation[$attribute_key] = $translatedAttribute->getValue();
             }
 
             $this->writeTranslations('article', (int) $productIdentity->getAdapterIdentifier(), $translation);
