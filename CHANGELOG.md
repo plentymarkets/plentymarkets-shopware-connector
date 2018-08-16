@@ -5,6 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [unreleased]
 ### Changed
 - translated variation configurator 
+- reference amount will not be scaled down
 
 ## [4.6.0]
 ### Fixed
