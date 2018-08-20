@@ -22,8 +22,6 @@ use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ReadApi\Address\Address as AddressApi;
-use PlentymarketsAdapter\ReadApi\Comment\Comment as CommentApi;
 use PlentymarketsAdapter\ReadApi\Customer\Customer as CustomerApi;
 use Psr\Log\LoggerInterface;
 
@@ -43,19 +41,9 @@ class OrderResponseParser implements OrderResponseParserInterface
     private $logger;
 
     /**
-     * @var AddressApi
-     */
-    private $addressApi;
-
-    /**
      * @var CustomerApi
      */
     private $customerApi;
-
-    /**
-     * @var CommentApi
-     */
-    private $commentApi;
 
     /**
      * @var ClientInterface
@@ -67,24 +55,18 @@ class OrderResponseParser implements OrderResponseParserInterface
      *
      * @param IdentityServiceInterface $identityService
      * @param LoggerInterface          $logger
-     * @param AddressApi               $addressApi
      * @param CustomerApi              $customerApi
-     * @param CommentApi               $commentApi
      * @param ClientInterface          $client
      */
     public function __construct(
         IdentityServiceInterface $identityService,
         LoggerInterface $logger,
-        AddressApi $addressApi,
         CustomerApi $customerApi,
-        CommentApi $commentApi,
         ClientInterface $client
     ) {
         $this->identityService = $identityService;
         $this->logger = $logger;
-        $this->addressApi = $addressApi;
         $this->customerApi = $customerApi;
-        $this->commentApi = $commentApi;
         $this->client = $client;
     }
 
@@ -230,17 +212,15 @@ class OrderResponseParser implements OrderResponseParserInterface
      */
     private function getBillingAddressData(array $entry)
     {
-        $billingAddress = array_filter($entry['addressRelations'], function (array $address) {
-            return $address['typeId'] === 1;
+        $billingAddress = array_filter($entry['addresses'], function (array $address) {
+            return $address['pivot']['typeId'] === 1;
         });
 
         if (empty($billingAddress)) {
             return [];
         }
 
-        $billingAddress = array_shift($billingAddress);
-
-        return $this->addressApi->find((int) $billingAddress['addressId']);
+        return array_shift($billingAddress);
     }
 
     /**
@@ -250,17 +230,15 @@ class OrderResponseParser implements OrderResponseParserInterface
      */
     private function getShippingAddressData(array $entry)
     {
-        $shippingAddress = array_filter($entry['addressRelations'], function (array $address) {
-            return $address['typeId'] === 2;
+        $shippingAddress = array_filter($entry['addresses'], function (array $address) {
+            return $address['pivot']['typeId'] === 2;
         });
 
         if (empty($shippingAddress)) {
             return [];
         }
 
-        $shippingAddress = array_shift($shippingAddress);
-
-        return $this->addressApi->find((int) $shippingAddress['addressId']);
+        return array_shift($shippingAddress);
     }
 
     /**
@@ -336,13 +314,8 @@ class OrderResponseParser implements OrderResponseParserInterface
      */
     private function getComments(array $entry)
     {
-        $comments = $this->commentApi->findBy([
-            'referenceType' => 'order',
-            'referenceValue' => $entry['id'],
-        ]);
-
         $result = [];
-        foreach ($comments as $data) {
+        foreach ($entry['comments'] as $data) {
             $comment = new Comment();
             $comment->setComment((string) $data['text']);
             $comment->setType($data['text'] ? Comment::TYPE_CUSTOMER : Comment::TYPE_INTERNAL);
