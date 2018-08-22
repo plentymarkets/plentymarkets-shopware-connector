@@ -72,6 +72,12 @@ class ReferenceAmountCalculator implements ReferenceAmountCalculatorInterface
 
         $modifier = self::$convertionMatrix[$variationUnit]['conversion'];
 
+        $content = $variation['unit']['content'] * $modifier;
+
+        if ($content <= 0.25 && 5 !== $variation['unit']['unitId']) {
+            return 0.1 / $modifier;
+        }
+
         return 1.0 / $modifier;
     }
 

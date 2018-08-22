@@ -38,11 +38,12 @@ class ReferenceAmountCalculatorTest extends TestCase
     {
         return [
             [['unit' => ['unitId' => 3, 'content' => 100]], 100],
-            [['unit' => ['unitId' => 3, 'content' => 250]], 1000],
+            [['unit' => ['unitId' => 3, 'content' => 250]], 100],
             [['unit' => ['unitId' => 3, 'content' => 251]], 1000],
             [['unit' => ['unitId' => 3, 'content' => 1100]], 1000],
             [['unit' => ['unitId' => 3, 'content' => 1050]], 1000],
 
+            [['unit' => ['unitId' => 2, 'content' => 0.25]], 1.0],
             [['unit' => ['unitId' => 2, 'content' => 0.254]], 1.0],
             [['unit' => ['unitId' => 2, 'content' => 0.254]], 1.0],
 
