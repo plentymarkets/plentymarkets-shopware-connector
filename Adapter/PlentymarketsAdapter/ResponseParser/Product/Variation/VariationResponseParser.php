@@ -358,14 +358,14 @@ class VariationResponseParser implements VariationResponseParserInterface
         foreach ($variation['variationAttributeValues'] as $attributeValue) {
             if (!isset($attributes[$attributeValue['attributeId']])) {
                 $attributes[$attributeValue['attributeId']] = $this->itemAttributesApi->findOne($attributeValue['attributeId']);
+            }
 
-                $attributes[$attributeValue['attributeId']]['values'] = [];
+            $attributes[$attributeValue['attributeId']]['values'] = [];
 
-                $values = $this->itemAttributesValuesApi->findOne($attributeValue['attributeId']);
+            $values = $this->itemAttributesValuesApi->findOne($attributeValue['attributeId']);
 
-                foreach ($values as $value) {
-                    $attributes[$attributeValue['attributeId']]['values'][$value['id']] = $value;
-                }
+            foreach ($values as $value) {
+                $attributes[$attributeValue['attributeId']]['values'][$value['id']] = $value;
             }
 
             if (!isset($attributes[$attributeValue['attributeId']]['values'][$attributeValue['valueId']]['valueNames'])) {

@@ -17,7 +17,7 @@ class Value extends ApiAbstract
     public function findOne($attributeId)
     {
         return iterator_to_array($this->client->getIterator('items/attributes/' . $attributeId . '/values', [
-            'with' => 'names',
+            'with' => 'names,attribute',
         ]));
     }
 }

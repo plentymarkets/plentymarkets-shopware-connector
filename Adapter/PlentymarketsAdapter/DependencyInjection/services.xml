@@ -48,19 +48,11 @@
             <argument type="service" id="plentymarkets_adapter.client" />
         </service>
 
-        <service id="plentymarkets_adapter.read_api.comment" class="PlentymarketsAdapter\ReadApi\Comment\Comment">
-            <argument type="service" id="plentymarkets_adapter.client" />
-        </service>
-
         <service id="plentymarkets_adapter.read_api.order" class="PlentymarketsAdapter\ReadApi\Order\Order">
             <argument type="service" id="plentymarkets_adapter.client" />
         </service>
 
         <service id="plentymarkets_adapter.read_api.customer" class="PlentymarketsAdapter\ReadApi\Customer\Customer">
-            <argument type="service" id="plentymarkets_adapter.client" />
-        </service>
-
-        <service id="plentymarkets_adapter.read_api.address" class="PlentymarketsAdapter\ReadApi\Address\Address">
             <argument type="service" id="plentymarkets_adapter.client" />
         </service>
 
@@ -173,9 +165,7 @@
         <service id="plentymarkets_adapter.response_parser.order" class="PlentymarketsAdapter\ResponseParser\Order\OrderResponseParser">
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plenty_connector.logger" />
-            <argument type="service" id="plentymarkets_adapter.read_api.address" />
             <argument type="service" id="plentymarkets_adapter.read_api.customer" />
-            <argument type="service" id="plentymarkets_adapter.read_api.comment" />
             <argument type="service" id="plentymarkets_adapter.client" />
         </service>
 
