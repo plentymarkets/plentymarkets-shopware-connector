@@ -20,7 +20,6 @@ use PlentymarketsAdapter\Helper\ReferenceAmountCalculatorInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Availability as AvailabilityApi;
 use PlentymarketsAdapter\ReadApi\Item\Attribute as AttributeApi;
-use PlentymarketsAdapter\ReadApi\Item\Attribute\Value as AttributeValueApi;
 use PlentymarketsAdapter\ReadApi\Item\Barcode as BarcodeApi;
 use PlentymarketsAdapter\ResponseParser\Product\Image\ImageResponseParserInterface;
 use PlentymarketsAdapter\ResponseParser\Product\Price\PriceResponseParserInterface;
@@ -62,11 +61,6 @@ class VariationResponseParser implements VariationResponseParserInterface
     private $itemAttributesApi;
 
     /**
-     * @var AttributeValueApi
-     */
-    private $itemAttributesValuesApi;
-
-    /**
      * @var BarcodeApi
      */
     private $itemBarcodeApi;
@@ -90,7 +84,6 @@ class VariationResponseParser implements VariationResponseParserInterface
      * @param StockResponseParserInterface       $stockResponseParser
      * @param AvailabilityApi                    $availabilitiesApi
      * @param AttributeApi                       $itemAttributesApi
-     * @param AttributeValueApi                  $itemAttributesValuesApi
      * @param BarcodeApi                         $itemBarcodeApi
      * @param ReferenceAmountCalculatorInterface $referenceAmountCalculator
      * @param ConfigServiceInterface             $config
@@ -102,7 +95,6 @@ class VariationResponseParser implements VariationResponseParserInterface
         StockResponseParserInterface $stockResponseParser,
         AvailabilityApi $availabilitiesApi,
         AttributeApi $itemAttributesApi,
-        AttributeValueApi $itemAttributesValuesApi,
         BarcodeApi $itemBarcodeApi,
         ReferenceAmountCalculatorInterface $referenceAmountCalculator,
         ConfigServiceInterface $config
@@ -113,7 +105,6 @@ class VariationResponseParser implements VariationResponseParserInterface
         $this->stockResponseParser = $stockResponseParser;
         $this->availabilitiesApi = $availabilitiesApi;
         $this->itemAttributesApi = $itemAttributesApi;
-        $this->itemAttributesValuesApi = $itemAttributesValuesApi;
         $this->itemBarcodeApi = $itemBarcodeApi;
         $this->referenceAmountCalculator = $referenceAmountCalculator;
         $this->config = $config;
@@ -360,9 +351,9 @@ class VariationResponseParser implements VariationResponseParserInterface
                 $attributes[$attributeValue['attributeId']] = $this->itemAttributesApi->findOne($attributeValue['attributeId']);
             }
 
-            $attributes[$attributeValue['attributeId']]['values'] = [];
+            $values = $attributes[$attributeValue['attributeId']]['values'];
 
-            $values = $this->itemAttributesValuesApi->findOne($attributeValue['attributeId']);
+            $attributes[$attributeValue['attributeId']]['values'] = [];
 
             foreach ($values as $value) {
                 $attributes[$attributeValue['attributeId']]['values'][$value['id']] = $value;
