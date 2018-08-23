@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## unpublished
+- add item properties with type "empty"
+
 ## [4.6.0]
 ### Fixed
 - paypal installment validation error
