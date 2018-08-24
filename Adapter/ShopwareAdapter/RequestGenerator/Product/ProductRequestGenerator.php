@@ -415,6 +415,10 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
                 ]);
 
                 foreach ($shops as $shop) {
+                    if (in_array($shop->getId(), array_column($seoCategories, 'shopId'))) {
+						continue;
+					}
+                    
                     $seoCategories[] = [
                         'categoryId' => $categoryIdentity->getAdapterIdentifier(),
                         'shopId' => $shop->getId(),
