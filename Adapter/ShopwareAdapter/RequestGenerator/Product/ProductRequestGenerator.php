@@ -54,6 +54,11 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
      * @var LoggerInterface
      */
     private $logger;
+    
+    /**
+	 * @var categories
+	 */
+	private $categories;
 
     /**
      * ProductRequestGenerator constructor.
@@ -344,14 +349,43 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
         return $images;
     }
 
-    private function getCategories(Product $product)
+private function getCategories(Product $product)
     {
         /**
          * @var EntityRepository $categoryRepository
          */
         $categoryRepository = $this->entityManager->getRepository(CategoryModel::class);
+		
+		/**
+         * @var EntityRepository $shopRepository
+         */
+        $shopRepository = $this->entityManager->getRepository(ShopModel::class);
+		
+		$shopCategories = [];
+		
+		foreach ($product->getShopIdentifiers() as $shopIdentifier) {
+			$identity = $this->identityService->findOneBy([
+                    'objectIdentifier' => (string) $shopIdentifier,
+                    'objectType' => Shop::TYPE,
+                    'adapterName' => ShopwareAdapter::NAME,
+            ]);
+			
+			if ($identity === null) {
+				continue;
+			}
 
-        $categories = [];
+            /**
+             * @var ShopModel[] $shop
+             */
+            $shop = $shopRepository->getById($identity->getAdapterIdentifier());
+			
+			if ($shop !== null) {			
+				$shopCategories[] = $shop->getCategory()->getId();
+			}
+		}
+
+        $this->categories = [];
+		
         foreach ($product->getCategoryIdentifiers() as $categoryIdentifier) {
             $categoryIdentities = $this->identityService->findBy([
                 'objectIdentifier' => $categoryIdentifier,
@@ -360,19 +394,30 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
             ]);
 
             foreach ($categoryIdentities as $categoryIdentity) {
+				if (in_array($categoryIdentity->getAdapterIdentifier(), array_column($this->categories, 'id'))) {
+					continue;
+				}
+			
                 $category = $categoryRepository->find($categoryIdentity->getAdapterIdentifier());
 
                 if (null === $category) {
                     continue;
                 }
+				
+				$parents = array_reverse(array_filter(explode('|', $category->getPath())));
+				$parentCategoryId = $parents[0];
+				
+				if (!in_array($parentCategoryId, $shopCategories)) {
+					continue;
+				}
 
-                $categories[] = [
+                $this->categories[] = [
                     'id' => $categoryIdentity->getAdapterIdentifier(),
                 ];
             }
         }
 
-        return $categories;
+        return $this->categories;
     }
 
     private function getSeoCategories(Product $product)
@@ -396,9 +441,13 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
             ]);
 
             foreach ($categoryIdentities as $categoryIdentity) {
+				if (!in_array($categoryIdentity->getAdapterIdentifier(), array_column($this->categories, 'id'))) {
+					continue;
+				}
+				
                 /**
                  * @var CategoryModel|null $category
-                 */
+                 */				 
                 $category = $categoryRepository->find($categoryIdentity->getAdapterIdentifier());
 
                 if (null === $category) {
@@ -415,6 +464,10 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
                 ]);
 
                 foreach ($shops as $shop) {
+					if (in_array($shop->getId(), array_column($seoCategories, 'shopId'))) {
+						continue;
+					}
+					
                     $seoCategories[] = [
                         'categoryId' => $categoryIdentity->getAdapterIdentifier(),
                         'shopId' => $shop->getId(),
