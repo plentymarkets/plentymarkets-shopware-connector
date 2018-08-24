@@ -54,11 +54,11 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
      * @var LoggerInterface
      */
     private $logger;
-    
+
     /**
-	 * @var categories
-	 */
-	private $categories;
+     * @var categories
+     */
+    private $categories;
 
     /**
      * ProductRequestGenerator constructor.
@@ -349,43 +349,43 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
         return $images;
     }
 
-private function getCategories(Product $product)
+    private function getCategories(Product $product)
     {
         /**
          * @var EntityRepository $categoryRepository
          */
         $categoryRepository = $this->entityManager->getRepository(CategoryModel::class);
-		
-		/**
+
+        /**
          * @var EntityRepository $shopRepository
          */
         $shopRepository = $this->entityManager->getRepository(ShopModel::class);
-		
-		$shopCategories = [];
-		
-		foreach ($product->getShopIdentifiers() as $shopIdentifier) {
-			$identity = $this->identityService->findOneBy([
+
+        $shopCategories = [];
+
+        foreach ($product->getShopIdentifiers() as $shopIdentifier) {
+            $identity = $this->identityService->findOneBy([
                     'objectIdentifier' => (string) $shopIdentifier,
                     'objectType' => Shop::TYPE,
                     'adapterName' => ShopwareAdapter::NAME,
             ]);
-			
-			if ($identity === null) {
-				continue;
-			}
+
+            if ($identity === null) {
+                continue;
+            }
 
             /**
              * @var ShopModel[] $shop
              */
             $shop = $shopRepository->getById($identity->getAdapterIdentifier());
-			
-			if ($shop !== null) {			
-				$shopCategories[] = $shop->getCategory()->getId();
-			}
-		}
+
+            if ($shop !== null) {
+                $shopCategories[] = $shop->getCategory()->getId();
+            }
+        }
 
         $this->categories = [];
-		
+
         foreach ($product->getCategoryIdentifiers() as $categoryIdentifier) {
             $categoryIdentities = $this->identityService->findBy([
                 'objectIdentifier' => $categoryIdentifier,
@@ -394,22 +394,22 @@ private function getCategories(Product $product)
             ]);
 
             foreach ($categoryIdentities as $categoryIdentity) {
-				if (in_array($categoryIdentity->getAdapterIdentifier(), array_column($this->categories, 'id'))) {
-					continue;
-				}
-			
+                if (in_array($categoryIdentity->getAdapterIdentifier(), array_column($this->categories, 'id'))) {
+                    continue;
+                }
+
                 $category = $categoryRepository->find($categoryIdentity->getAdapterIdentifier());
 
                 if (null === $category) {
                     continue;
                 }
-				
-				$parents = array_reverse(array_filter(explode('|', $category->getPath())));
-				$parentCategoryId = $parents[0];
-				
-				if (!in_array($parentCategoryId, $shopCategories)) {
-					continue;
-				}
+
+                $parents = array_reverse(array_filter(explode('|', $category->getPath())));
+                $parentCategoryId = $parents[0];
+
+                if (!in_array($parentCategoryId, $shopCategories)) {
+                    continue;
+                }
 
                 $this->categories[] = [
                     'id' => $categoryIdentity->getAdapterIdentifier(),
@@ -441,13 +441,13 @@ private function getCategories(Product $product)
             ]);
 
             foreach ($categoryIdentities as $categoryIdentity) {
-				if (!in_array($categoryIdentity->getAdapterIdentifier(), array_column($this->categories, 'id'))) {
-					continue;
-				}
-				
+                if (!in_array($categoryIdentity->getAdapterIdentifier(), array_column($this->categories, 'id'))) {
+                    continue;
+                }
+
                 /**
                  * @var CategoryModel|null $category
-                 */				 
+                 */
                 $category = $categoryRepository->find($categoryIdentity->getAdapterIdentifier());
 
                 if (null === $category) {
@@ -464,10 +464,10 @@ private function getCategories(Product $product)
                 ]);
 
                 foreach ($shops as $shop) {
-					if (in_array($shop->getId(), array_column($seoCategories, 'shopId'))) {
-						continue;
-					}
-					
+                    if (in_array($shop->getId(), array_column($seoCategories, 'shopId'))) {
+                        continue;
+                    }
+
                     $seoCategories[] = [
                         'categoryId' => $categoryIdentity->getAdapterIdentifier(),
                         'shopId' => $shop->getId(),
