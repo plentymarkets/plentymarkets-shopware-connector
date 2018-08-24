@@ -20,13 +20,13 @@ use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
+use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\Helper\VariationHelperInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ResponseParser\Product\Image\ImageResponseParserInterface;
-use PlentymarketsAdapter\ResponseParser\Product\Variation\VariationResponseParserInterface;
-use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\ReadApi\Item\Property\Group as PropertyGroupApi;
 use PlentymarketsAdapter\ReadApi\Item\Property\Name as PropertyNameApi;
+use PlentymarketsAdapter\ResponseParser\Product\Image\ImageResponseParserInterface;
+use PlentymarketsAdapter\ResponseParser\Product\Variation\VariationResponseParserInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -63,13 +63,13 @@ class ProductResponseParser implements ProductResponseParserInterface
      * @var VariationHelperInterface
      */
     private $variationHelper;
-	
-	/**
+
+    /**
      * @var PropertyGroupApi
      */
     private $itemsPropertiesGroupNamesApi;
-	
-	/**
+
+    /**
      * @var PropertyNameApi
      */
     private $itemsPropertiesNamesApi;
@@ -83,7 +83,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      * @param ImageResponseParserInterface     $imageResponseParser
      * @param VariationResponseParserInterface $variationResponseParser
      * @param VariationHelperInterface         $variationHelper
-	 * @param ClientInterface                  $client
+     * @param ClientInterface                  $client
      */
     public function __construct(
         ConfigServiceInterface $configService,
@@ -92,7 +92,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         ImageResponseParserInterface $imageResponseParser,
         VariationResponseParserInterface $variationResponseParser,
         VariationHelperInterface $variationHelper,
-		ClientInterface $client
+        ClientInterface $client
     ) {
         $this->configService = $configService;
         $this->identityService = $identityService;
@@ -100,9 +100,9 @@ class ProductResponseParser implements ProductResponseParserInterface
         $this->imageResponseParser = $imageResponseParser;
         $this->variationResponseParser = $variationResponseParser;
         $this->variationHelper = $variationHelper;
-		
-		$this->itemsPropertiesGroupsNamesApi = new PropertyGroupApi($client);
-		$this->itemsPropertiesNamesApi = new PropertyNameApi($client);
+
+        $this->itemsPropertiesGroupsNamesApi = new PropertyGroupApi($client);
+        $this->itemsPropertiesNamesApi = new PropertyNameApi($client);
     }
 
     /**
@@ -496,22 +496,22 @@ class ProductResponseParser implements ProductResponseParserInterface
             if (!$property['property']['isSearchable']) {
                 continue;
             }
-			
-			$backendName = $property['property']['backendName'];
+
+            $backendName = $property['property']['backendName'];
 
             $values = [];
             $translations = [];
-			
-			if ($property['property']['valueType'] === 'empty') {
-				$propertyGroupNames = $this->itemsPropertiesGroupsNamesApi->findOne($property['property']['propertyGroupId']);
-				
-				if (empty($propertyGroupNames[0]['name'])) {
+
+            if ($property['property']['valueType'] === 'empty') {
+                $propertyGroupNames = $this->itemsPropertiesGroupsNamesApi->findOne($property['property']['propertyGroupId']);
+
+                if (empty($propertyGroupNames[0]['name'])) {
                     continue;
                 }
-				
-				$backendName = $propertyGroupNames[0]['name'];
-				
-				foreach ($propertyGroupNames as $name) {
+
+                $backendName = $propertyGroupNames[0]['name'];
+
+                foreach ($propertyGroupNames as $name) {
                     $languageIdentifier = $this->identityService->findOneBy([
                         'adapterIdentifier' => $name['lang'],
                         'adapterName' => PlentymarketsAdapter::NAME,
@@ -528,10 +528,10 @@ class ProductResponseParser implements ProductResponseParserInterface
                         'value' => $name['name'],
                     ]);
                 }
-				
-				$propertyNames = $this->itemsPropertiesNamesApi->findOne($property['property']['id']);
-				
-				foreach ($propertyNames as $name) {
+
+                $propertyNames = $this->itemsPropertiesNamesApi->findOne($property['property']['id']);
+
+                foreach ($propertyNames as $name) {
                     $languageIdentifier = $this->identityService->findOneBy([
                         'adapterIdentifier' => $name['lang'],
                         'adapterName' => PlentymarketsAdapter::NAME,
@@ -552,7 +552,7 @@ class ProductResponseParser implements ProductResponseParserInterface
                 $values[] = Value::fromArray([
                     'value' => (string) $property['property']['backendName'],
                     'translations' => $valueTranslations,
-                ]);				
+                ]);
             } elseif ($property['property']['valueType'] === 'text') {
                 if (empty($property['names'][0]['value'])) {
                     continue;
