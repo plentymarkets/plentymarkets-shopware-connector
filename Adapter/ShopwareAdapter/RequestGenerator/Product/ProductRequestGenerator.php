@@ -405,7 +405,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
                 }
 
                 $parents = array_reverse(array_filter(explode('|', $category->getPath())));
-                $parentCategoryId = $parents[0];
+                $parentCategoryId = array_shift($parents);
 
                 if (!in_array($parentCategoryId, $shopCategories)) {
                     continue;
