@@ -147,6 +147,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         $productObject->setDescription((string) $product['texts'][0]['shortDescription']);
         $productObject->setLongDescription((string) $product['texts'][0]['description']);
         $productObject->setTechnicalDescription((string) $product['texts'][0]['technicalData']);
+        $productObject->setAgeRestriction((string) $product['ageRestriction']);
         $productObject->setMetaTitle((string) $product['texts'][0]['name1']);
         $productObject->setMetaDescription((string) $product['texts'][0]['metaDescription']);
         $productObject->setMetaKeywords((string) $product['texts'][0]['keywords']);

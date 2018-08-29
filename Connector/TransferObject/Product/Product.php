@@ -99,6 +99,11 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     /**
      * @var string
      */
+    private $ageRestriction = '';
+
+    /**
+     * @var string
+     */
     private $metaTitle = '';
 
     /**
@@ -402,6 +407,22 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     public function setTechnicalDescription($technicalDescription)
     {
         $this->technicalDescription = $technicalDescription;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAgeRestriction()
+    {
+        return $this->ageRestriction;
+    }
+
+    /**
+     * @param string $ageRestriction
+     */
+    public function setAgeRestriction($ageRestriction)
+    {
+        $this->ageRestriction = $ageRestriction;
     }
 
     /**

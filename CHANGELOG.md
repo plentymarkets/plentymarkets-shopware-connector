@@ -9,6 +9,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - translated short and technical description 
 - removed comment and address rest call
 
+### Added
+- transfer age restriction as attribute to shopware
+
 ## [4.6.0]
 ### Fixed
 - paypal installment validation error
