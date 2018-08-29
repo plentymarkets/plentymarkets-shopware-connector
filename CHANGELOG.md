@@ -8,6 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - reference amount will not be scaled down
 - translated short and technical description 
 - removed comment and address rest call
+- set position of variation configuration values (groups, options)
 
 ## [4.6.0]
 ### Fixed
