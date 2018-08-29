@@ -373,15 +373,19 @@ class VariationResponseParser implements VariationResponseParserInterface
             }
 
             $propertyNames = $attributes[$attributeValue['attributeId']]['attributeNames'];
+            $propertyPosition = $attributes[$attributeValue['attributeId']]['position'];
             $valueNames = $attributes[$attributeValue['attributeId']]['values'][$attributeValue['valueId']]['valueNames'];
+            $valuePosition = $attributes[$attributeValue['attributeId']]['values'][$attributeValue['valueId']]['position'];
 
             $value = Value::fromArray([
                 'value' => $valueNames[0]['name'],
+                'position' => $propertyPosition,
                 'translations' => $this->getVariationPropertyValueTranslations($valueNames),
             ]);
 
             $result[] = Property::fromArray([
                 'name' => $propertyNames[0]['name'],
+                'position' => $valuePosition,
                 'values' => [$value],
                 'translations' => $this->getVariationPropertyTranslations($propertyNames),
             ]);
