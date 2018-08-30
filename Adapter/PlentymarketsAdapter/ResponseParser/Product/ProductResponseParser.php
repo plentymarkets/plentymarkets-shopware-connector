@@ -146,7 +146,6 @@ class ProductResponseParser implements ProductResponseParserInterface
         $productObject->setStockLimitation($this->getStockLimitation($product));
         $productObject->setDescription((string) $product['texts'][0]['shortDescription']);
         $productObject->setLongDescription((string) $product['texts'][0]['description']);
-        $productObject->setTechnicalDescription((string) $product['texts'][0]['technicalData']);
         $productObject->setMetaTitle((string) $product['texts'][0]['name1']);
         $productObject->setMetaDescription((string) $product['texts'][0]['metaDescription']);
         $productObject->setMetaKeywords((string) $product['texts'][0]['keywords']);
@@ -365,12 +364,6 @@ class ProductResponseParser implements ProductResponseParserInterface
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
                 'property' => 'longDescription',
                 'value' => $text['description'],
-            ]);
-
-            $translations[] = Translation::fromArray([
-                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                'property' => 'technicalDescription',
-                'value' => $text['technicalData'],
             ]);
 
             $translations[] = Translation::fromArray([
@@ -685,6 +678,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         }
 
         $attributes[] = $this->getShortDescriptionAsAttribute($product);
+        $attributes[] = $this->getTechnicalDataAsAttribute($product);
 
         return $attributes;
     }
@@ -719,6 +713,41 @@ class ProductResponseParser implements ProductResponseParserInterface
         $attribute = new Attribute();
         $attribute->setKey('shortDescription');
         $attribute->setValue((string) $product['texts'][0]['shortDescription']);
+        $attribute->setTranslations($translations);
+
+        return $attribute;
+    }
+
+    /**
+     * @param array $product
+     *
+     * @return Attribute
+     */
+    private function getTechnicalDataAsAttribute(array $product)
+    {
+        $translations = [];
+
+        foreach ($product['texts'] as $text) {
+            $languageIdentifier = $this->identityService->findOneBy([
+                'adapterIdentifier' => $text['lang'],
+                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType' => Language::TYPE,
+            ]);
+
+            if (null === $languageIdentifier) {
+                continue;
+            }
+
+            $translations[] = Translation::fromArray([
+                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                'property' => 'value',
+                'value' => $text['technicalData'],
+            ]);
+        }
+
+        $attribute = new Attribute();
+        $attribute->setKey('technicalDescription');
+        $attribute->setValue((string) $product['texts'][0]['technicalData']);
         $attribute->setTranslations($translations);
 
         return $attribute;
