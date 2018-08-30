@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
+### Fixed
+- fixed technicalDescription translations (@lacodimizer)
+
 ### Changed
 - translated variation configurator 
 - reference amount will not be scaled down

@@ -59,8 +59,6 @@ class ProductValidator implements ValidatorInterface
 
         Assertion::string($object->getDescription(), null, 'product.description');
         Assertion::string($object->getLongDescription(), null, 'product.longDescription');
-        Assertion::string($object->getTechnicalDescription(), null, 'product.technicalDescription');
-        Assertion::string($object->getAgeRestriction(), null, 'product.ageRestriction');
 
         Assertion::string($object->getMetaTitle(), null, 'product.metaTitle');
         Assertion::string($object->getMetaDescription(), null, 'product.metaDescription');

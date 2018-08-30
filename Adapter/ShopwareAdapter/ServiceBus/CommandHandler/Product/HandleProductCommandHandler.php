@@ -189,9 +189,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             );
         }
 
-        $this->attributeHelper->addFieldAsAttribute($product, 'technicalDescription');
-        $this->attributeHelper->addFieldAsAttribute($product, 'ageRestriction');
-
         $this->attributeDataPersister->saveProductDetailAttributes(
             $productModel->getMainDetail(),
             $product->getAttributes()
