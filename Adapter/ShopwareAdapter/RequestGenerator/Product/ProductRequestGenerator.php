@@ -20,7 +20,9 @@ use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use Psr\Log\LoggerInterface;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Category\Category as CategoryModel;
+use Shopware\Models\Category\Repository as CategoryRepository;
 use Shopware\Models\Property\Group as GroupModel;
+use Shopware\Models\Shop\Repository as ShopRepository;
 use Shopware\Models\Shop\Shop as ShopModel;
 use ShopwareAdapter\RequestGenerator\Product\ConfiguratorSet\ConfiguratorSetRequestGeneratorInterface;
 use ShopwareAdapter\ShopwareAdapter;
@@ -310,6 +312,11 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
         return $result;
     }
 
+    /**
+     * @param Product $product
+     *
+     * @return array|bool
+     */
     private function getImages(Product $product)
     {
         $images = [];
@@ -349,15 +356,20 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
         return $images;
     }
 
+    /**
+     * @param Product $product
+     *
+     * @return array
+     */
     private function getCategories(Product $product)
     {
         /**
-         * @var EntityRepository $categoryRepository
+         * @var CategoryRepository $categoryRepository
          */
         $categoryRepository = $this->entityManager->getRepository(CategoryModel::class);
 
         /**
-         * @var EntityRepository $shopRepository
+         * @var ShopRepository $shopRepository
          */
         $shopRepository = $this->entityManager->getRepository(ShopModel::class);
 
@@ -375,7 +387,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
             }
 
             /**
-             * @var ShopModel[] $shop
+             * @var ShopModel $shop
              */
             $shop = $shopRepository->getById($identity->getAdapterIdentifier());
 
@@ -423,12 +435,12 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
     private function getSeoCategories(Product $product)
     {
         /**
-         * @var EntityRepository $categoryRepository
+         * @var CategoryRepository $categoryRepository
          */
         $categoryRepository = $this->entityManager->getRepository(CategoryModel::class);
 
         /**
-         * @var EntityRepository $shopRepository
+         * @var ShopRepository $shopRepository
          */
         $shopRepository = $this->entityManager->getRepository(ShopModel::class);
 
