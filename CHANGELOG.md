@@ -5,6 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [unreleased]
 ### Fixed
 - fixed technicalDescription translations (@lacodimizer)
+- the media category sync was called multiple times instead of only one time
 
 ### Changed
 - translated variation configurator 
