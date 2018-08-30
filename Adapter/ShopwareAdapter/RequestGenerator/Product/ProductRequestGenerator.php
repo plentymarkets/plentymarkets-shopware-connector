@@ -20,7 +20,9 @@ use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use Psr\Log\LoggerInterface;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Category\Category as CategoryModel;
+use Shopware\Models\Category\Repository as CategoryRepository;
 use Shopware\Models\Property\Group as GroupModel;
+use Shopware\Models\Shop\Repository as ShopRepository;
 use Shopware\Models\Shop\Shop as ShopModel;
 use ShopwareAdapter\RequestGenerator\Product\ConfiguratorSet\ConfiguratorSetRequestGeneratorInterface;
 use ShopwareAdapter\ShopwareAdapter;
@@ -54,6 +56,11 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
      * @var LoggerInterface
      */
     private $logger;
+
+    /**
+     * @var categories
+     */
+    private $categories;
 
     /**
      * ProductRequestGenerator constructor.
@@ -305,6 +312,11 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
         return $result;
     }
 
+    /**
+     * @param Product $product
+     *
+     * @return array|bool
+     */
     private function getImages(Product $product)
     {
         $images = [];
@@ -344,14 +356,48 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
         return $images;
     }
 
+    /**
+     * @param Product $product
+     *
+     * @return array
+     */
     private function getCategories(Product $product)
     {
         /**
-         * @var EntityRepository $categoryRepository
+         * @var CategoryRepository $categoryRepository
          */
         $categoryRepository = $this->entityManager->getRepository(CategoryModel::class);
 
-        $categories = [];
+        /**
+         * @var ShopRepository $shopRepository
+         */
+        $shopRepository = $this->entityManager->getRepository(ShopModel::class);
+
+        $shopCategories = [];
+
+        foreach ($product->getShopIdentifiers() as $shopIdentifier) {
+            $identity = $this->identityService->findOneBy([
+                    'objectIdentifier' => (string) $shopIdentifier,
+                    'objectType' => Shop::TYPE,
+                    'adapterName' => ShopwareAdapter::NAME,
+            ]);
+
+            if ($identity === null) {
+                continue;
+            }
+
+            /**
+             * @var ShopModel $shop
+             */
+            $shop = $shopRepository->getById($identity->getAdapterIdentifier());
+
+            if ($shop !== null) {
+                $shopCategories[] = $shop->getCategory()->getId();
+            }
+        }
+
+        $this->categories = [];
+
         foreach ($product->getCategoryIdentifiers() as $categoryIdentifier) {
             $categoryIdentities = $this->identityService->findBy([
                 'objectIdentifier' => $categoryIdentifier,
@@ -360,30 +406,41 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
             ]);
 
             foreach ($categoryIdentities as $categoryIdentity) {
+                if (in_array($categoryIdentity->getAdapterIdentifier(), array_column($this->categories, 'id'))) {
+                    continue;
+                }
+
                 $category = $categoryRepository->find($categoryIdentity->getAdapterIdentifier());
 
                 if (null === $category) {
                     continue;
                 }
 
-                $categories[] = [
+                $parents = array_reverse(array_filter(explode('|', $category->getPath())));
+                $parentCategoryId = array_shift($parents);
+
+                if (!in_array($parentCategoryId, $shopCategories)) {
+                    continue;
+                }
+
+                $this->categories[] = [
                     'id' => $categoryIdentity->getAdapterIdentifier(),
                 ];
             }
         }
 
-        return $categories;
+        return $this->categories;
     }
 
     private function getSeoCategories(Product $product)
     {
         /**
-         * @var EntityRepository $categoryRepository
+         * @var CategoryRepository $categoryRepository
          */
         $categoryRepository = $this->entityManager->getRepository(CategoryModel::class);
 
         /**
-         * @var EntityRepository $shopRepository
+         * @var ShopRepository $shopRepository
          */
         $shopRepository = $this->entityManager->getRepository(ShopModel::class);
 
@@ -396,6 +453,10 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
             ]);
 
             foreach ($categoryIdentities as $categoryIdentity) {
+                if (!in_array($categoryIdentity->getAdapterIdentifier(), array_column($this->categories, 'id'))) {
+                    continue;
+                }
+
                 /**
                  * @var CategoryModel|null $category
                  */
