@@ -3,11 +3,18 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
+### Fixed
+- fixed technicalDescription translations (@lacodimizer)
+- the media category sync was called multiple times instead of only one time
+
 ### Changed
 - translated variation configurator 
 - reference amount will not be scaled down
 - translated short and technical description 
 - removed comment and address rest call
+
+### Added
+- transfer age restriction as attribute to shopware
 
 ## [4.6.0]
 ### Fixed

@@ -189,8 +189,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             );
         }
 
-        $this->attributeHelper->addFieldAsAttribute($product, 'technicalDescription');
-
         $this->attributeDataPersister->saveProductDetailAttributes(
             $productModel->getMainDetail(),
             $product->getAttributes()

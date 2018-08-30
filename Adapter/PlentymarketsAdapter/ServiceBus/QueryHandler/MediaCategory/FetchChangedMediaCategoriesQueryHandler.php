@@ -2,6 +2,7 @@
 
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\MediaCategory;
 
+use DateTime;
 use Exception;
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
@@ -89,6 +90,8 @@ class FetchChangedMediaCategoriesQueryHandler implements QueryHandlerInterface
 
         if (null === $synced) {
             $elements = $this->mediaCategoryHelper->getCategories();
+
+            $this->config->set('PlentymarketsAdapter.MediaCategoriesSynched', new DateTime());
         }
 
         $this->outputHandler->startProgressBar(count($elements));
