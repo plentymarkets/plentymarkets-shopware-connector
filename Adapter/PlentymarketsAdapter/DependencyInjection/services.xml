@@ -28,10 +28,6 @@
             <argument type="service" id="plentymarkets_adapter.client" />
         </service>
 
-        <service id="plentymarkets_adapter.read_api.item.attribute.value" class="PlentymarketsAdapter\ReadApi\Item\Attribute\Value">
-            <argument type="service" id="plentymarkets_adapter.client" />
-        </service>
-
         <service id="plentymarkets_adapter.read_api.item.availability" class="PlentymarketsAdapter\ReadApi\Availability">
             <argument type="service" id="plentymarkets_adapter.client" />
         </service>
@@ -48,19 +44,11 @@
             <argument type="service" id="plentymarkets_adapter.client" />
         </service>
 
-        <service id="plentymarkets_adapter.read_api.comment" class="PlentymarketsAdapter\ReadApi\Comment\Comment">
-            <argument type="service" id="plentymarkets_adapter.client" />
-        </service>
-
         <service id="plentymarkets_adapter.read_api.order" class="PlentymarketsAdapter\ReadApi\Order\Order">
             <argument type="service" id="plentymarkets_adapter.client" />
         </service>
 
         <service id="plentymarkets_adapter.read_api.customer" class="PlentymarketsAdapter\ReadApi\Customer\Customer">
-            <argument type="service" id="plentymarkets_adapter.client" />
-        </service>
-
-        <service id="plentymarkets_adapter.read_api.address" class="PlentymarketsAdapter\ReadApi\Address\Address">
             <argument type="service" id="plentymarkets_adapter.client" />
         </service>
 
@@ -173,9 +161,7 @@
         <service id="plentymarkets_adapter.response_parser.order" class="PlentymarketsAdapter\ResponseParser\Order\OrderResponseParser">
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plenty_connector.logger" />
-            <argument type="service" id="plentymarkets_adapter.read_api.address" />
             <argument type="service" id="plentymarkets_adapter.read_api.customer" />
-            <argument type="service" id="plentymarkets_adapter.read_api.comment" />
             <argument type="service" id="plentymarkets_adapter.client" />
         </service>
 
@@ -234,7 +220,6 @@
             <argument type="service" id="plentymarkets_adapter.response_parser.stock" />
             <argument type="service" id="plentymarkets_adapter.read_api.item.availability" />
             <argument type="service" id="plentymarkets_adapter.read_api.item.attribute" />
-            <argument type="service" id="plentymarkets_adapter.read_api.item.attribute.value" />
             <argument type="service" id="plentymarkets_adapter.read_api.item.barcode" />
             <argument type="service" id="plentymarkets_adapter.helper.reference_amount_calculator" />
 
