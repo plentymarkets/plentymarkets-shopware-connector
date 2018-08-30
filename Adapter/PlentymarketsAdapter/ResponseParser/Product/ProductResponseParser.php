@@ -3,6 +3,7 @@
 namespace PlentymarketsAdapter\ResponseParser\Product;
 
 use DateTimeImmutable;
+use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Category\Category;
@@ -19,12 +20,8 @@ use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
-use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\Helper\VariationHelperInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ReadApi\Item\Property\Name as NameApi;
-use PlentymarketsAdapter\ReadApi\Item\Property\Selection as SelectionApi;
-use PlentymarketsAdapter\ReadApi\Item\Variation\Property as PropertyApi;
 use PlentymarketsAdapter\ResponseParser\Product\Image\ImageResponseParserInterface;
 use PlentymarketsAdapter\ResponseParser\Product\Variation\VariationResponseParserInterface;
 use Psr\Log\LoggerInterface;
@@ -34,6 +31,11 @@ use Psr\Log\LoggerInterface;
  */
 class ProductResponseParser implements ProductResponseParserInterface
 {
+    /**
+     * @var ConfigServiceInterface
+     */
+    private $configService;
+
     /**
      * @var IdentityServiceInterface
      */
@@ -55,21 +57,6 @@ class ProductResponseParser implements ProductResponseParserInterface
     private $variationResponseParser;
 
     /**
-     * @var PropertyApi
-     */
-    private $itemsVariationsVariationPropertiesApi;
-
-    /**
-     * @var SelectionApi
-     */
-    private $itemsPropertiesSelectionsApi;
-
-    /**
-     * @var NameApi
-     */
-    private $itemsPropertiesNamesApi;
-
-    /**
      * @var VariationHelperInterface
      */
     private $variationHelper;
@@ -77,31 +64,27 @@ class ProductResponseParser implements ProductResponseParserInterface
     /**
      * ProductResponseParser constructor.
      *
+     * @param ConfigServiceInterface           $configService
      * @param IdentityServiceInterface         $identityService
      * @param LoggerInterface                  $logger
      * @param ImageResponseParserInterface     $imageResponseParser
      * @param VariationResponseParserInterface $variationResponseParser
      * @param VariationHelperInterface         $variationHelper
-     * @param ClientInterface                  $client
      */
     public function __construct(
+        ConfigServiceInterface $configService,
         IdentityServiceInterface $identityService,
         LoggerInterface $logger,
         ImageResponseParserInterface $imageResponseParser,
         VariationResponseParserInterface $variationResponseParser,
-        VariationHelperInterface $variationHelper,
-        ClientInterface $client
+        VariationHelperInterface $variationHelper
     ) {
+        $this->configService = $configService;
         $this->identityService = $identityService;
         $this->logger = $logger;
         $this->imageResponseParser = $imageResponseParser;
         $this->variationResponseParser = $variationResponseParser;
         $this->variationHelper = $variationHelper;
-
-        //TODO: inject when refactoring this class
-        $this->itemsVariationsVariationPropertiesApi = new PropertyApi($client);
-        $this->itemsPropertiesSelectionsApi = new SelectionApi($client);
-        $this->itemsPropertiesNamesApi = new NameApi($client);
     }
 
     /**
@@ -163,7 +146,6 @@ class ProductResponseParser implements ProductResponseParserInterface
         $productObject->setStockLimitation($this->getStockLimitation($product));
         $productObject->setDescription((string) $product['texts'][0]['shortDescription']);
         $productObject->setLongDescription((string) $product['texts'][0]['description']);
-        $productObject->setTechnicalDescription((string) $product['texts'][0]['technicalData']);
         $productObject->setMetaTitle((string) $product['texts'][0]['name1']);
         $productObject->setMetaDescription((string) $product['texts'][0]['metaDescription']);
         $productObject->setMetaKeywords((string) $product['texts'][0]['keywords']);
@@ -284,7 +266,7 @@ class ProductResponseParser implements ProductResponseParserInterface
     private function getShippingProfiles(array $product)
     {
         $shippingProfiles = [];
-        foreach ($product['shippingProfiles'] as $profile) {
+        foreach ($product['itemShippingProfiles'] as $profile) {
             $profileIdentity = $this->identityService->findOneBy([
                 'adapterIdentifier' => (string) $profile['profileId'],
                 'adapterName' => PlentymarketsAdapter::NAME,
@@ -386,12 +368,6 @@ class ProductResponseParser implements ProductResponseParserInterface
 
             $translations[] = Translation::fromArray([
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                'property' => 'technicalDescription',
-                'value' => $text['technicalData'],
-            ]);
-
-            $translations[] = Translation::fromArray([
-                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
                 'property' => 'metaTitle',
                 'value' => $text['name1'],
             ]);
@@ -489,54 +465,24 @@ class ProductResponseParser implements ProductResponseParserInterface
     {
         $result = [];
 
-        $properties = $this->itemsVariationsVariationPropertiesApi->findOne(
-            $mainVariation['itemId'],
-            $mainVariation['id']
-        );
-
-        static $propertyNames;
+        $properties = $mainVariation['variationProperties'];
 
         foreach ($properties as $property) {
             if (!$property['property']['isSearchable']) {
                 continue;
             }
 
-            if (!isset($propertyNames[$property['property']['id']])) {
-                $propertyName = $this->itemsPropertiesNamesApi->findOne($property['property']['id']);
-
-                $propertyNames[$property['property']['id']] = $propertyName;
-            } else {
-                $propertyName = $propertyNames[$property['property']['id']];
-            }
-
-            $translations = [];
-            foreach ($propertyName as $name) {
-                $languageIdentifier = $this->identityService->findOneBy([
-                    'adapterIdentifier' => $name['lang'],
-                    'adapterName' => PlentymarketsAdapter::NAME,
-                    'objectType' => Language::TYPE,
-                ]);
-
-                if (null === $languageIdentifier) {
-                    continue;
-                }
-
-                $translations[] = Translation::fromArray([
-                    'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                    'property' => 'name',
-                    'value' => $name['name'],
-                ]);
-            }
-
             $values = [];
+            $translations = [];
 
             if ($property['property']['valueType'] === 'text') {
-                if (empty($property['valueTexts'][0]['value'])) {
+                if (empty($property['names'][0]['value'])) {
                     continue;
                 }
 
                 $valueTranslations = [];
-                foreach ($property['valueTexts'] as $name) {
+
+                foreach ($property['names'] as $name) {
                     $languageIdentifier = $this->identityService->findOneBy([
                         'adapterIdentifier' => $name['lang'],
                         'adapterName' => PlentymarketsAdapter::NAME,
@@ -547,6 +493,12 @@ class ProductResponseParser implements ProductResponseParserInterface
                         continue;
                     }
 
+                    $translations[] = Translation::fromArray([
+                        'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                        'property' => 'name',
+                        'value' => $property['property']['backendName'],
+                    ]);
+
                     $valueTranslations[] = Translation::fromArray([
                         'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
                         'property' => 'value',
@@ -555,9 +507,44 @@ class ProductResponseParser implements ProductResponseParserInterface
                 }
 
                 $values[] = Value::fromArray([
-                    'value' => (string) $property['valueTexts'][0]['value'],
+                    'value' => (string) $property['names'][0]['value'],
                     'translations' => $valueTranslations,
                 ]);
+            } elseif ($property['property']['valueType'] === 'selection') {
+                if (null === $property['propertySelectionId']) {
+                    continue;
+                }
+
+                $valueTranslations = [];
+
+                foreach ($property['propertySelection'] as $selection) {
+                    $languageIdentifier = $this->identityService->findOneBy([
+                            'adapterIdentifier' => $selection['lang'],
+                            'adapterName' => PlentymarketsAdapter::NAME,
+                            'objectType' => Language::TYPE,
+                        ]);
+
+                    if (null === $languageIdentifier) {
+                        continue;
+                    }
+
+                    $translations[] = Translation::fromArray([
+                            'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                            'property' => 'name',
+                            'value' => $property['property']['backendName'],
+                        ]);
+
+                    $valueTranslations[] = Translation::fromArray([
+                            'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                            'property' => 'value',
+                            'value' => $selection['name'],
+                        ]);
+                }
+
+                $values[] = Value::fromArray([
+                        'value' => (string) $property['propertySelection'][0]['name'],
+                        'translations' => $valueTranslations,
+                    ]);
             } elseif ($property['property']['valueType'] === 'int') {
                 if (null === $property['valueInt']) {
                     continue;
@@ -576,54 +563,11 @@ class ProductResponseParser implements ProductResponseParserInterface
                 ]);
             } elseif ($property['property']['valueType'] === 'file') {
                 $this->logger->notice('file properties are not supported', ['variation', $mainVariation['id']]);
-
                 continue;
-            } elseif ($property['property']['valueType'] === 'selection') {
-                static $selections;
-
-                if (null === $property['propertySelectionId']) {
-                    continue;
-                }
-
-                if (!isset($selections[$property['propertyId']])) {
-                    $selection = $this->itemsPropertiesSelectionsApi->findOne($property['propertyId']);
-
-                    foreach ($selection as $element) {
-                        $selections[$property['propertyId']][$element['id']] = $element;
-                        $selections[$property['propertyId']][$element['id']]['translations'] = [];
-
-                        $languageIdentifier = $this->identityService->findOneBy([
-                            'adapterIdentifier' => $element['lang'],
-                            'adapterName' => PlentymarketsAdapter::NAME,
-                            'objectType' => Language::TYPE,
-                        ]);
-
-                        if (null !== $languageIdentifier) {
-                            $translation = Translation::fromArray([
-                                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                                'property' => 'value',
-                                'value' => $element['name'],
-                            ]);
-
-                            $selections[$property['propertyId']][$element['id']]['translations'] = [$translation];
-                        }
-                    }
-                }
-
-                $selectionValue = (string) $selections[$property['propertyId']][$property['propertySelectionId']]['name'];
-
-                if (empty($selectionValue)) {
-                    continue;
-                }
-
-                $values[] = Value::fromArray([
-                    'value' => $selectionValue,
-                    'translations' => $selections[$property['propertyId']][$property['propertySelectionId']]['translations'],
-                ]);
             }
 
             $result[] = Property::fromArray([
-                'name' => $propertyName[0]['name'],
+                'name' => $property['property']['backendName'],
                 'values' => $values,
                 'translations' => $translations,
             ]);
@@ -668,7 +612,9 @@ class ProductResponseParser implements ProductResponseParserInterface
      */
     private function getActive(array $variations = [], array $mainVariation)
     {
-        if (!$mainVariation['isActive']) {
+        $checkInactiveMainVariation = json_decode($this->configService->get('check_active_main_variation'));
+
+        if (!$mainVariation['isActive'] && !$checkInactiveMainVariation) {
             return false;
         }
 
@@ -732,6 +678,8 @@ class ProductResponseParser implements ProductResponseParserInterface
         }
 
         $attributes[] = $this->getShortDescriptionAsAttribute($product);
+        $attributes[] = $this->getTechnicalDataAsAttribute($product);
+        $attributes[] = $this->getAgeRestrictionAsAttribute($product);
 
         return $attributes;
     }
@@ -767,6 +715,55 @@ class ProductResponseParser implements ProductResponseParserInterface
         $attribute->setKey('shortDescription');
         $attribute->setValue((string) $product['texts'][0]['shortDescription']);
         $attribute->setTranslations($translations);
+
+        return $attribute;
+    }
+
+    /**
+     * @param array $product
+     *
+     * @return Attribute
+     */
+    private function getTechnicalDataAsAttribute(array $product)
+    {
+        $translations = [];
+
+        foreach ($product['texts'] as $text) {
+            $languageIdentifier = $this->identityService->findOneBy([
+                'adapterIdentifier' => $text['lang'],
+                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType' => Language::TYPE,
+            ]);
+
+            if (null === $languageIdentifier) {
+                continue;
+            }
+
+            $translations[] = Translation::fromArray([
+                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                'property' => 'value',
+                'value' => $text['technicalData'],
+            ]);
+        }
+
+        $attribute = new Attribute();
+        $attribute->setKey('technicalDescription');
+        $attribute->setValue((string) $product['texts'][0]['technicalData']);
+        $attribute->setTranslations($translations);
+
+        return $attribute;
+    }
+
+    /**
+     * @param array $product
+     *
+     * @return Attribute
+     */
+    private function getAgeRestrictionAsAttribute(array $product)
+    {
+        $attribute = new Attribute();
+        $attribute->setKey('ageRestriction');
+        $attribute->setValue((string) $product['ageRestriction']);
 
         return $attribute;
     }

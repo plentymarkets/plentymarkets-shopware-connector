@@ -84,8 +84,8 @@ class PayPalInstallmentPaymentResponseParser implements PaymentResponseParserInt
 
         $paymentData = new PayPalInstallmentPaymentData();
         $paymentData->setCurrency($element['currency']);
-        $paymentData->setFinancingCosts($data['feeAmount']);
-        $paymentData->setTotalCostsIncludeFinancing($data['totalCost']);
+        $paymentData->setFinancingCosts((float) $data['feeAmount']);
+        $paymentData->setTotalCostsIncludeFinancing((float) $data['totalCost']);
 
         $payment->setPaymentData($paymentData);
     }

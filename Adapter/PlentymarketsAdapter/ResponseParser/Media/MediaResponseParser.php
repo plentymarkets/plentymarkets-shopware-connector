@@ -3,7 +3,6 @@
 namespace PlentymarketsAdapter\ResponseParser\Media;
 
 use Assert\Assertion;
-use InvalidArgumentException;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Media\Media;
 use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
@@ -50,14 +49,6 @@ class MediaResponseParser implements MediaResponseParserInterface
             $entry['filename'] = basename($entry['link']);
         }
 
-        if (!array_key_exists('hash', $entry) || empty($entry['hash'])) {
-            $entry['hash'] = @sha1_file($entry['link']);
-        }
-
-        if (empty($entry['hash'])) {
-            throw new InvalidArgumentException('');
-        }
-
         if (empty($entry['name'])) {
             $entry['name'] = null;
         }
@@ -91,7 +82,7 @@ class MediaResponseParser implements MediaResponseParserInterface
         $entry['hash'] = sha1(json_encode($entry)); // include all fields when computing the hash
 
         $identity = $this->identityService->findOneOrCreate(
-            (string) $entry['hash'],
+            (string) $entry['id'],
             PlentymarketsAdapter::NAME,
             Media::TYPE
         );

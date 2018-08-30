@@ -4,11 +4,55 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
 ### Fixed
-- fix salutation in order an customer
+- fixed technicalDescription translations (@lacodimizer)
+- the media category sync was called multiple times instead of only one time
+
+### Changed
+- translated variation configurator 
+- reference amount will not be scaled down
+- translated short and technical description 
+- removed comment and address rest call
+
+### Added
+- transfer age restriction as attribute to shopware
+
+## [4.6.0]
+### Fixed
+- paypal installment validation error
+- item notification is set correctly
+- order status is set correctly
+
+### Changed
+- removed shipping profiles rest call in item read api
+- removed properties rest call in productresponseparser
+
+## [4.5.1]
+### Fixed
+- paymentstatus is set correctly
+- fixed category image import
+- fixed price origin configuration 
+
+## [4.5.0]
+## warning ##
+- complete product import necessary after update, otherwise images will be removed by cleanup cron!
+
+### Fixed
+- fixed cdn problem (images have disappeared)
+- fixed search for an existing
+
+### Changed
+
+## [4.4.0]
+### Added
+- transfer category description 2 as attribute to shopware
+- optional check if mainvariation is active
+
+### Fixed
+- fix salutation in order and customer
 - paypal invoice and paypal installment payment data was discarded, the data is now transfered correctly
 - automatically set changed date time field for products
 - import images without md5Checksum and use filename for adapterIdentifier hash generation
-- the media category sync was called multiple times instead of only one time
+- optional origin-check for price-import (@jppeter)
 
 ### Changed
 - corrected the name of the isMappedIdentity function of the IdentityService

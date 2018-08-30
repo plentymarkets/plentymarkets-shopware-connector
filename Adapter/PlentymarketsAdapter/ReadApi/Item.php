@@ -32,7 +32,7 @@ class Item extends ApiAbstract
     /**
      * @var string
      */
-    private $includes = 'itemProperties.valueTexts,itemCrossSelling,itemImages';
+    private $includes = 'itemProperties.valueTexts,itemCrossSelling,itemImages,itemShippingProfiles';
 
     /**
      * Item constructor.
@@ -75,7 +75,6 @@ class Item extends ApiAbstract
             'itemId' => $result['id'],
             'plentyId' => implode(',', $this->variationHelper->getMappedPlentyClientIds()),
         ]);
-        $result['shippingProfiles'] = $this->getProductShippingProfiles($result['id']);
 
         return $result;
     }
@@ -137,21 +136,6 @@ class Item extends ApiAbstract
             $elements[$key]['variations'] = array_filter($variations, function (array $variation) use ($element) {
                 return $element['id'] === $variation['itemId'];
             });
-
-            $elements[$key]['shippingProfiles'] = $this->getProductShippingProfiles($element['id']);
         }
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return array
-     */
-    private function getProductShippingProfiles($id)
-    {
-        return $this->client->request('GET', 'items/' . $id . '/item_shipping_profiles', [
-            'with' => 'names',
-            'lang' => $this->languageHelper->getLanguagesQueryString(),
-        ]);
     }
 }

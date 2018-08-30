@@ -95,6 +95,10 @@ class PlentyConnector extends Plugin
             $this->loadFile($container, __DIR__ . '/Components/PayPal/DependencyInjection/services.xml');
         }
 
+        if ($this->pluginExists($container, ['SwagPaymentKlarnaKpm'])) {
+            $this->loadFile($container, __DIR__ . '/Components/Klarna/DependencyInjection/services.xml');
+        }
+
         if ($this->pluginExists($container, ['SwagBundle'])) {
             $this->loadFile($container, __DIR__ . '/Components/Bundle/DependencyInjection/services.xml');
         }
