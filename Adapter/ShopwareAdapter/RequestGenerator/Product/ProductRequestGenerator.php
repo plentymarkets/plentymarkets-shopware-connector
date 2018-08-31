@@ -145,6 +145,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
             'lastStock' => $product->hasStockLimitation(),
             'notification' => $this->config->get('item_notification') === 'true' ? 1 : 0,
             'active' => $product->isActive(),
+            'highlight' => $product->getHighlight() === 3 ? 1 : 0,
             'images' => $this->getImages($product),
             'similar' => $this->getLinkedProducts($product),
             'related' => $this->getLinkedProducts($product, LinkedProduct::TYPE_ACCESSORY),
