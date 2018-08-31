@@ -370,13 +370,13 @@ class VariationResponseParser implements VariationResponseParserInterface
 
             $value = Value::fromArray([
                 'value' => $valueNames[0]['name'],
-                'position' => $propertyPosition,
+                'position' => $valuePosition,
                 'translations' => $this->getVariationPropertyValueTranslations($valueNames),
             ]);
 
             $result[] = Property::fromArray([
                 'name' => $propertyNames[0]['name'],
-                'position' => $valuePosition,
+                'position' => $propertyPosition,
                 'values' => [$value],
                 'translations' => $this->getVariationPropertyTranslations($propertyNames),
             ]);
