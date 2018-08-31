@@ -37,6 +37,11 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     private $number = '';
 
     /**
+     * @var integer
+     */
+    private $highlight = false;
+
+    /**
      * @var bool
      */
     private $active = false;
@@ -221,6 +226,22 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     public function setActive($active)
     {
         $this->active = $active;
+    }
+
+    /**
+     * @return int
+     */
+    public function getHighlight()
+    {
+        return $this->highlight;
+    }
+
+    /**
+     * @param int $highlight
+     */
+    public function setHighlight($highlight)
+    {
+        $this->highlight = $highlight;
     }
 
     /**

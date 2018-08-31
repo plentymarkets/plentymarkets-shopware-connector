@@ -15,6 +15,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 - transfer age restriction as attribute to shopware
+- transfer top seller badge to shopware
 
 ## [4.6.0]
 ### Fixed
