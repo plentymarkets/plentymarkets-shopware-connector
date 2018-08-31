@@ -6,6 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - fixed technicalDescription translations (@lacodimizer)
 - the media category sync was called multiple times instead of only one time
+- skip order without customer
 
 ### Changed
 - translated variation configurator 
