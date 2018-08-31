@@ -128,6 +128,12 @@ class OrderResponseParser implements OrderResponseParserInterface
             return [];
         }
 
+        if (null === $entry['customer']) {
+            $this->logger->warning('could not find customer,  order: ' . $entry['number']);
+
+            return [];
+        }
+
         $customer = $this->customerParser->parse($entry['customer']);
 
         if (null === $customer) {
