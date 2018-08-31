@@ -6,7 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - fixed technicalDescription translations (@lacodimizer)
 - fixed mandant shop product activation (@lacodimizer)
-- fixed duplicate product seo categories 
+- fixed duplicate product seo categories (@lacodimizer)
 - the media category sync was called multiple times instead of only one time (@jochenmanz)
 - skip order without customer
 
