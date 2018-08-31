@@ -12,6 +12,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - reference amount will not be scaled down
 - translated short and technical description 
 - removed comment and address rest call
+- add position of variation configurations
 
 ### Added
 - transfer age restriction as attribute to shopware

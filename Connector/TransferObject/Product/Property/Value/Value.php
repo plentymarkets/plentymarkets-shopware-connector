@@ -17,6 +17,11 @@ class Value extends AbstractValueObject implements TranslateableInterface
     private $value = '';
 
     /**
+     * @var int
+     */
+    private $position = 0;
+
+    /**
      * @var Translation[]
      */
     private $translations = [];
@@ -35,6 +40,22 @@ class Value extends AbstractValueObject implements TranslateableInterface
     public function setValue($value)
     {
         $this->value = $value;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * @param int position
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
     }
 
     /**
