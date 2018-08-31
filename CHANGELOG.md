@@ -5,7 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [unreleased]
 ### Fixed
 - fixed technicalDescription translations (@lacodimizer)
-- the media category sync was called multiple times instead of only one time
+- fixed mandant shop product activation (@lacodimizer)
+- fixed duplicate product seo categories (@lacodimizer)
+- the media category sync was called multiple times instead of only one time (@jochenmanz)
 - skip order without customer
 
 ### Changed
@@ -17,6 +19,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - transfer age restriction as attribute to shopware
 - transfer top seller badge to shopware
+- add product configuration positions of the groups and their values (@lacodimizer)
 
 ## [4.6.0]
 ### Fixed
