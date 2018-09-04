@@ -43,6 +43,8 @@ class ProductValidator implements ValidatorInterface
 
         Assertion::boolean($object->isActive(), null, 'product.active');
 
+        Assertion::integer($object->getHighlight(), null, 'product.highlight');
+
         Assertion::allUuid($object->getShopIdentifiers(), null, 'product.shopIdentifiers');
 
         Assertion::uuid($object->getManufacturerIdentifier(), null, 'product.manufacturerIdentifier');
@@ -59,7 +61,6 @@ class ProductValidator implements ValidatorInterface
 
         Assertion::string($object->getDescription(), null, 'product.description');
         Assertion::string($object->getLongDescription(), null, 'product.longDescription');
-        Assertion::string($object->getTechnicalDescription(), null, 'product.technicalDescription');
 
         Assertion::string($object->getMetaTitle(), null, 'product.metaTitle');
         Assertion::string($object->getMetaDescription(), null, 'product.metaDescription');
