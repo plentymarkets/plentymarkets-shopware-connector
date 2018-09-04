@@ -92,7 +92,7 @@ class HandleStockCommandHandler implements CommandHandlerInterface
         $variationRespository = $this->entityManager->getRepository(Detail::class);
 
         /**
-         * @var Detail|null $variation
+         * @var null|Detail $variation
          */
         $variation = $variationRespository->find($variationIdentity->getAdapterIdentifier());
 

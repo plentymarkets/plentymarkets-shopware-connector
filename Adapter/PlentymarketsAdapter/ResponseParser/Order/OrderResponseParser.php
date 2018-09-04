@@ -292,13 +292,11 @@ class OrderResponseParser implements OrderResponseParserInterface
         if (!empty($property)) {
             $property = array_shift($property);
 
-            $identity = $this->identityService->findOneBy([
+            return $this->identityService->findOneBy([
                 'adapterIdentifier' => (string) $property['value'],
                 'adapterName' => PlentymarketsAdapter::NAME,
                 'objectType' => Language::TYPE,
             ]);
-
-            return $identity;
         }
 
         return null;
@@ -326,7 +324,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     /**
      * @param array $entry
      *
-     * @return Customer|null
+     * @return null|Customer
      */
     private function getCustomer(array $entry)
     {
@@ -417,13 +415,11 @@ class OrderResponseParser implements OrderResponseParserInterface
             }
 
             if (!empty($orderProperty['value'])) {
-                $identity = $this->identityService->findOneBy([
+                return $this->identityService->findOneBy([
                     'adapterIdentifier' => (string) $orderProperty['value'],
                     'adapterName' => PlentymarketsAdapter::NAME,
                     'objectType' => ShippingProfile::TYPE,
                 ]);
-
-                return $identity;
             }
         }
 
@@ -464,13 +460,11 @@ class OrderResponseParser implements OrderResponseParserInterface
         if (!empty($property)) {
             $property = array_shift($property);
 
-            $identity = $this->identityService->findOneBy([
+            return $this->identityService->findOneBy([
                 'adapterIdentifier' => (string) $property['value'],
                 'adapterName' => PlentymarketsAdapter::NAME,
                 'objectType' => PaymentMethod::TYPE,
             ]);
-
-            return $identity;
         }
 
         return null;
@@ -490,13 +484,11 @@ class OrderResponseParser implements OrderResponseParserInterface
         if (!empty($property)) {
             //$property = array_shift($property);
 
-            $identity = $this->identityService->findOneBy([
+            return $this->identityService->findOneBy([
                 'adapterIdentifier' => (string) $entry['statusId'],
                 'adapterName' => PlentymarketsAdapter::NAME,
                 'objectType' => PaymentStatus::TYPE,
             ]);
-
-            return $identity;
         }
 
         return null;
@@ -539,7 +531,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     /**
      * @param array $entry
      *
-     * @return Address|null
+     * @return null|Address
      */
     private function getBillingAddress(array $entry)
     {

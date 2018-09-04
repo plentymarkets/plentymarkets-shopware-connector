@@ -24,7 +24,7 @@ class TransferObjectCommand implements CommandInterface
     private $commandType;
 
     /**
-     * @var TransferObjectInterface|string
+     * @var string|TransferObjectInterface
      */
     private $payload;
 
@@ -34,7 +34,7 @@ class TransferObjectCommand implements CommandInterface
      * @param string                         $adapterName
      * @param string                         $objectType
      * @param string                         $commandType
-     * @param TransferObjectInterface|string $payload
+     * @param string|TransferObjectInterface $payload
      */
     public function __construct($adapterName, $objectType, $commandType, $payload)
     {
@@ -81,7 +81,7 @@ class TransferObjectCommand implements CommandInterface
     }
 
     /**
-     * @return TransferObjectInterface|string
+     * @return string|TransferObjectInterface
      */
     public function getPayload()
     {

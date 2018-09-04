@@ -457,7 +457,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
                 }
 
                 /**
-                 * @var CategoryModel|null $category
+                 * @var null|CategoryModel $category
                  */
                 $category = $categoryRepository->find($categoryIdentity->getAdapterIdentifier());
 

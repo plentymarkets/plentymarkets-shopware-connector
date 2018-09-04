@@ -176,7 +176,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         $category = $deepCopy->copy($category);
 
         /**
-         * @var ShopModel|null $shop
+         * @var null|ShopModel $shop
          */
         $shop = $this->shopRepository->find($shopIdentity->getAdapterIdentifier());
 

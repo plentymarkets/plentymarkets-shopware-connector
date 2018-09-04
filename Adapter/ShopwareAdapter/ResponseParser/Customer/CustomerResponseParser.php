@@ -119,7 +119,7 @@ class CustomerResponseParser implements CustomerResponseParserInterface
         $newsletterRepository = $this->entityManager->getRepository(Address::class);
 
         /**
-         * @var Address|null $newsletter
+         * @var null|Address $newsletter
          */
         $newsletter = $newsletterRepository->findOneBy(['email' => $entry['email']]);
 
@@ -149,9 +149,7 @@ class CustomerResponseParser implements CustomerResponseParserInterface
         /**
          * @var GroupModel $customerGroup
          */
-        $customerGroup = $customerGroupRepository->findOneBy(['key' => $entry['groupKey']]);
-
-        return $customerGroup;
+        return $customerGroupRepository->findOneBy(['key' => $entry['groupKey']]);
     }
 
     /**
@@ -167,7 +165,7 @@ class CustomerResponseParser implements CustomerResponseParserInterface
         $shopRepository = $this->entityManager->getRepository(ShopModel::class);
 
         /**
-         * @var ShopModel|null $customerShop
+         * @var null|ShopModel $customerShop
          */
         $customerShop = $shopRepository->find($entry['languageId']);
 

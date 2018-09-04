@@ -91,7 +91,7 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
         $taxRepository = $this->entityManager->getRepository(Tax::class);
 
         /**
-         * @var Tax|null $taxModel
+         * @var null|Tax $taxModel
          */
         $taxModel = $taxRepository->find($vatIdentity->getAdapterIdentifier());
 

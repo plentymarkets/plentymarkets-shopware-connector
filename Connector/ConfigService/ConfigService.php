@@ -77,7 +77,7 @@ class ConfigService implements ConfigServiceInterface
         }
 
         /**
-         * @var Config|null $element
+         * @var null|Config $element
          */
         $element = $this->repository->findOneBy([
             'name' => $key,
@@ -96,7 +96,7 @@ class ConfigService implements ConfigServiceInterface
     public function set($key, $value)
     {
         /**
-         * @var Config|null $element
+         * @var null|Config $element
          */
         $element = $this->repository->findOneBy([
             'name' => $key,

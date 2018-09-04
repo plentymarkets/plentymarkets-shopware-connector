@@ -108,7 +108,7 @@ class SepaPaymentResponseParser implements PaymentResponseParserInterface
         $currencyRepository = Shopware()->Models()->getRepository(CurrencyModel::class);
 
         /**
-         * @var CurrencyModel|null $model
+         * @var null|CurrencyModel $model
          */
         $model = $currencyRepository->findOneBy(['currency' => $currency]);
 
