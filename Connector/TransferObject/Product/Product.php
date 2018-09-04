@@ -5,6 +5,7 @@ namespace PlentyConnector\Connector\TransferObject\Product;
 use DateTimeImmutable;
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 use PlentyConnector\Connector\TransferObject\AttributableInterface;
+use PlentyConnector\Connector\TransferObject\Product\Badge\Badge;
 use PlentyConnector\Connector\TransferObject\Product\Image\Image;
 use PlentyConnector\Connector\TransferObject\Product\LinkedProduct\LinkedProduct;
 use PlentyConnector\Connector\TransferObject\Product\Property\Property;
@@ -35,11 +36,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
      * @var string
      */
     private $number = '';
-
-    /**
-     * @var integer
-     */
-    private $highlight = false;
 
     /**
      * @var bool
@@ -157,6 +153,11 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     private $variantConfiguration;
 
     /**
+     * @var Badge[]
+     */
+    private $badges = [];
+
+    /**
      * {@inheritdoc}
      */
     public function getType()
@@ -173,7 +174,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     }
 
     /**
-     * @param string $identifier
+     * {@inheritdoc}
      */
     public function setIdentifier($identifier)
     {
@@ -226,22 +227,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     public function setActive($active)
     {
         $this->active = $active;
-    }
-
-    /**
-     * @return int
-     */
-    public function getHighlight()
-    {
-        return $this->highlight;
-    }
-
-    /**
-     * @param int $highlight
-     */
-    public function setHighlight($highlight)
-    {
-        $this->highlight = $highlight;
     }
 
     /**
@@ -594,5 +579,21 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     public function setVariantConfiguration(array $variantConfiguration = [])
     {
         $this->variantConfiguration = $variantConfiguration;
+    }
+
+    /**
+     * @return Badge[]
+     */
+    public function getBadges()
+    {
+        return $this->badges;
+    }
+
+    /**
+     * @param Badge[] $badges
+     */
+    public function setBadges(array $badges = [])
+    {
+        $this->badges = $badges;
     }
 }
