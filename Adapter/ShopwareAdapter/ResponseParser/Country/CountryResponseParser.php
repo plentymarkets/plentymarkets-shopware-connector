@@ -6,9 +6,6 @@ use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Country\Country;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class CountryResponseParser
- */
 class CountryResponseParser implements CountryResponseParserInterface
 {
     /**

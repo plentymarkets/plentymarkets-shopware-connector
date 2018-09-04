@@ -15,9 +15,6 @@ use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Category as CategoryResource;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class RemoveCategoryCommandHandler.
- */
 class RemoveCategoryCommandHandler implements CommandHandlerInterface
 {
     /**

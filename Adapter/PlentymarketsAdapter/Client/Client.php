@@ -88,7 +88,7 @@ class Client implements ClientInterface
      */
     public function request($method, $path, array $params = [], $limit = null, $offset = null, array $options = [])
     {
-        static $retries;
+        static $retries = 0;
 
         if (null === $retries) {
             $retries = 0;
@@ -143,26 +143,12 @@ class Client implements ClientInterface
             $retries = 0;
 
             return $result;
-        } catch (ClientException $exception) {
-            if ($this->accessToken !== null && !$this->isLoginRequired($path) && null !== $exception->getResponse() && $exception->getResponse()->getStatusCode() === 401) {
-                // retry with fresh accessToken
-                $this->accessToken = null;
-
-                return $this->request($method, $path, $params, $limit, $offset);
-            }
-
-            if ($exception->hasResponse() && $exception->getResponse()) {
-                throw new ClientException(
-                    $exception->getMessage() . ' - ' . $exception->getResponse()->getBody(),
-                    $exception->getRequest(),
-                    $exception->getResponse(),
-                    $exception->getPrevious()
-                );
-            }
-
-            throw $exception;
         } catch (Exception $exception) {
-            if ($retries < 3) {
+            if ($retries < 4) {
+                if ($this->isLoginExpired($exception)) {
+                    $this->accessToken = null;
+                }
+
                 sleep(10);
 
                 ++$retries;
@@ -281,6 +267,10 @@ class Client implements ClientInterface
 
         $parts = parse_url($url);
 
+        if (empty($parts['scheme'])) {
+            $parts['scheme'] = 'http';
+        }
+
         return sprintf('%s://%s/%s/', $parts['scheme'], $parts['host'], 'rest');
     }
 
@@ -364,5 +354,23 @@ class Client implements ClientInterface
     private function getUserAgent()
     {
         return 'Shopware/PlentyConnector/2.0/Rest/v1';
+    }
+
+    /**
+     * @param Exception $exception
+     *
+     * @return bool
+     */
+    private function isLoginExpired($exception)
+    {
+        if (!($exception instanceof ClientException)) {
+            return false;
+        }
+
+        if ($exception->getResponse()->getStatusCode() !== 401) {
+            return false;
+        }
+
+        return true;
     }
 }

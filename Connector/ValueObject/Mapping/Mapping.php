@@ -5,9 +5,6 @@ namespace PlentyConnector\Connector\ValueObject\Mapping;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 
-/**
- * Class Mapping
- */
 class Mapping extends AbstractValueObject
 {
     /**

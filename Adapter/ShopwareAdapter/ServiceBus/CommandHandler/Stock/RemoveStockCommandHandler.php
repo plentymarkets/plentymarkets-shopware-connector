@@ -12,9 +12,6 @@ use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Psr\Log\LoggerInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class RemoveStockCommandHandler.
- */
 class RemoveStockCommandHandler implements CommandHandlerInterface
 {
     /**

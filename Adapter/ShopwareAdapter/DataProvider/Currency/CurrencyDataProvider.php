@@ -7,9 +7,6 @@ use Doctrine\ORM\EntityRepository;
 use InvalidArgumentException;
 use Shopware\Models\Shop\Currency;
 
-/**
- * Class CurrencyDataProvider
- */
 class CurrencyDataProvider implements CurrencyDataProviderInterface
 {
     /**

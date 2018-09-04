@@ -6,9 +6,6 @@ use Assert\Assertion;
 use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
-/**
- * Class TransferObjectCommand
- */
 class TransferObjectCommand implements CommandInterface
 {
     /**

@@ -10,9 +10,6 @@ use PlentyConnector\Connector\ConfigService\Model\ConfigRepository;
 use Shopware\Components\Model\ModelManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-/**
- * Class ConfigService.
- */
 class ConfigService implements ConfigServiceInterface
 {
     /**

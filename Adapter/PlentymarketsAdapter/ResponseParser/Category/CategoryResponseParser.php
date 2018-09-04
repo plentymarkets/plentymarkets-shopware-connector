@@ -16,9 +16,6 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Media\MediaResponseParserInterface;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class CategoryResponseParser
- */
 class CategoryResponseParser implements CategoryResponseParserInterface
 {
     /**

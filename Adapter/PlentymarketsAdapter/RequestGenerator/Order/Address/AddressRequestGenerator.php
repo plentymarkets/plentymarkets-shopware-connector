@@ -11,9 +11,6 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use RuntimeException;
 use VIISON\AddressSplitter\AddressSplitter;
 
-/**
- * Class AddressRequestGenerator
- */
 class AddressRequestGenerator implements AddressRequestGeneratorInterface
 {
     /**

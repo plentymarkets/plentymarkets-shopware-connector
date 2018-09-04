@@ -11,9 +11,6 @@ use PlentymarketsAdapter\Helper\LanguageHelperInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Language\LanguageResponseParserInterface;
 
-/**
- * Class FetchAllLanguagesQueryHandler
- */
 class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
 {
     /**

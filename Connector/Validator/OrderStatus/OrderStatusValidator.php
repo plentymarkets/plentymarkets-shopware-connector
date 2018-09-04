@@ -6,9 +6,6 @@ use Assert\Assertion;
 use PlentyConnector\Connector\TransferObject\OrderStatus\OrderStatus;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 
-/**
- * Class OrderStatusValidator
- */
 class OrderStatusValidator implements ValidatorInterface
 {
     /**

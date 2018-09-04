@@ -4,9 +4,6 @@ namespace PlentyConnector\Connector\TransferObject\Product\Image;
 
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 
-/**
- * Class Image
- */
 class Image extends AbstractValueObject
 {
     /**

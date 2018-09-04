@@ -14,9 +14,6 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\RequestGenerator\Payment\PaymentRequestGeneratorInterface;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class HandlePaymentCommandHandler.
- */
 class HandlePaymentCommandHandler implements CommandHandlerInterface
 {
     /**

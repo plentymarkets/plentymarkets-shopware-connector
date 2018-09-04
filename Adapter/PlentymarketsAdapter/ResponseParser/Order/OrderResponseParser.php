@@ -25,9 +25,6 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Customer\Customer as CustomerApi;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class OrderResponseParser
- */
 class OrderResponseParser implements OrderResponseParserInterface
 {
     /**

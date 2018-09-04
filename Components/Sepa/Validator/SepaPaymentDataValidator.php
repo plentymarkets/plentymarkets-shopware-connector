@@ -6,9 +6,6 @@ use Assert\Assertion;
 use PlentyConnector\Components\Sepa\PaymentData\SepaPaymentData;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 
-/**
- * Class SepaPaymentDataValidator
- */
 class SepaPaymentDataValidator implements ValidatorInterface
 {
     /**

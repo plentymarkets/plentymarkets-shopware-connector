@@ -15,9 +15,6 @@ use Psr\Log\LoggerInterface;
 use Shopware\Models\Media\Album;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class RemoveMediaCategoryCommandHandler.
- */
 class RemoveMediaCategoryCommandHandler implements CommandHandlerInterface
 {
     /**

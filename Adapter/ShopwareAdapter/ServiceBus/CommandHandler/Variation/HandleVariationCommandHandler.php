@@ -17,9 +17,6 @@ use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
 use ShopwareAdapter\RequestGenerator\Product\Variation\VariationRequestGeneratorInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class HandleVariationCommandHandler.
- */
 class HandleVariationCommandHandler implements CommandHandlerInterface
 {
     /**

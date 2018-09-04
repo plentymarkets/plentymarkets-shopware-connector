@@ -8,9 +8,6 @@ use PlentyConnector\Connector\Validator\ValidatorInterface;
 use PlentyConnector\Connector\ValidatorService\Exception\InvalidDataException;
 use PlentyConnector\Connector\ValueObject\ValueObjectInterface;
 
-/**
- * Class ValidatorService
- */
 class ValidatorService implements ValidatorServiceInterface
 {
     /**

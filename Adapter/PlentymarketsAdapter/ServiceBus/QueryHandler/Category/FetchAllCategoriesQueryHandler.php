@@ -14,9 +14,6 @@ use PlentymarketsAdapter\ReadApi\Category\Category as CategoryApi;
 use PlentymarketsAdapter\ResponseParser\Category\CategoryResponseParserInterface;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class FetchAllCategoriesQueryHandler
- */
 class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
 {
     /**

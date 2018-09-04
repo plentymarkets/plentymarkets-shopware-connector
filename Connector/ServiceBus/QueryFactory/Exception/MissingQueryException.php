@@ -4,9 +4,6 @@ namespace PlentyConnector\Connector\ServiceBus\QueryFactory\Exception;
 
 use InvalidArgumentException;
 
-/**
- * Class MissingQueryException
- */
 class MissingQueryException extends InvalidArgumentException
 {
     /**

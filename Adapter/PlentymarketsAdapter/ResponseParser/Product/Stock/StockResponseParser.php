@@ -9,9 +9,6 @@ use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 
-/**
- * Class StockResponseParser
- */
 class StockResponseParser implements StockResponseParserInterface
 {
     const SALES_WAREHOUSE = 0;

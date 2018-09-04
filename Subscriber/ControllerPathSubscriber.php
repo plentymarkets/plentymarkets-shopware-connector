@@ -6,9 +6,6 @@ use Enlight\Event\SubscriberInterface;
 use Enlight_Event_EventArgs;
 use Enlight_Template_Manager;
 
-/**
- * Class ControllerPath
- */
 class ControllerPathSubscriber implements SubscriberInterface
 {
     /**

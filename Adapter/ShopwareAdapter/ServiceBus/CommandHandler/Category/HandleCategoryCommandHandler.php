@@ -29,9 +29,6 @@ use Shopware\Models\Shop\Shop as ShopModel;
 use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class HandleCategoryCommandHandler.
- */
 class HandleCategoryCommandHandler implements CommandHandlerInterface
 {
     /**

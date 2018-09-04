@@ -6,9 +6,6 @@ use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Currency\Currency;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 
-/**
- * Class CurrencyResponseParser
- */
 class CurrencyResponseParser implements CurrencyResponseParserInterface
 {
     /**

@@ -8,9 +8,6 @@ use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
 use Shopware\Components\Plugin\Context\UpdateContext;
 
-/**
- * Class CronjobInstaller
- */
 class CronjobInstaller implements InstallerInterface
 {
     /**

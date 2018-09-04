@@ -8,9 +8,6 @@ use PlentyConnector\Connector\TransferObject\TranslateableInterface;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
 
-/**
- * Class Media
- */
 class Media extends AbstractTransferObject implements TranslateableInterface, AttributableInterface
 {
     const TYPE = 'Media';
@@ -79,7 +76,7 @@ class Media extends AbstractTransferObject implements TranslateableInterface, At
     }
 
     /**
-     * @param string $identifier
+     * {@inheritdoc}
      */
     public function setIdentifier($identifier)
     {

@@ -14,9 +14,6 @@ use Psr\Log\LoggerInterface;
 use Shopware\Models\Article\Detail;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class HandleStockCommandHandler.
- */
 class HandleStockCommandHandler implements CommandHandlerInterface
 {
     /**

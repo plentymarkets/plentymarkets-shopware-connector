@@ -15,9 +15,6 @@ use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 
-/**
- * Class HandleSepaPaymentCommandHandler.
- */
 class HandleSepaPaymentCommandHandler implements CommandHandlerInterface
 {
     /**

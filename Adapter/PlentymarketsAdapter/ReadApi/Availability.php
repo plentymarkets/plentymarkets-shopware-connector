@@ -2,9 +2,6 @@
 
 namespace PlentymarketsAdapter\ReadApi;
 
-/**
- * Class Availability
- */
 class Availability extends ApiAbstract
 {
     /**

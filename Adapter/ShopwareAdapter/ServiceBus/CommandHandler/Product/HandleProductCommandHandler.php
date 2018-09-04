@@ -21,9 +21,6 @@ use ShopwareAdapter\Helper\AttributeHelper;
 use ShopwareAdapter\RequestGenerator\Product\ProductRequestGeneratorInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class HandleProductCommandHandler.
- */
 class HandleProductCommandHandler implements CommandHandlerInterface
 {
     /**

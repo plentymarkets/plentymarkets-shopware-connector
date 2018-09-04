@@ -14,9 +14,6 @@ use Shopware\Models\Customer\Group;
 use ShopwareAdapter\ResponseParser\CustomerGroup\CustomerGroupResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class FetchAllCustomerGroupsQueryHandler
- */
 class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
 {
     /**

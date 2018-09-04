@@ -27,9 +27,6 @@ use PlentymarketsAdapter\ResponseParser\Product\Image\ImageResponseParserInterfa
 use PlentymarketsAdapter\ResponseParser\Product\Variation\VariationResponseParserInterface;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class ProductResponseParser.
- */
 class ProductResponseParser implements ProductResponseParserInterface
 {
     /**

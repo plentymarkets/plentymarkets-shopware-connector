@@ -6,9 +6,6 @@ use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 
-/**
- * Class CustomerGroupResponseParser
- */
 class CustomerGroupResponseParser implements CustomerGroupResponseParserInterface
 {
     /**

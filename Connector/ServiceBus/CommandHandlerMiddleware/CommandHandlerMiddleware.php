@@ -7,9 +7,6 @@ use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\ServiceBus\CommandHandlerMiddleware\Exception\NotFoundException;
 
-/**
- * Class CommandHandlerMiddleware.
- */
 class CommandHandlerMiddleware implements Middleware
 {
     /**

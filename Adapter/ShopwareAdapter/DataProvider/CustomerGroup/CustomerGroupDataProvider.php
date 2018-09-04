@@ -6,9 +6,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Shopware\Models\Customer\Group;
 
-/**
- * Class CustomerGroupDataProvider
- */
 class CustomerGroupDataProvider implements CustomerGroupDataProviderInterface
 {
     /**

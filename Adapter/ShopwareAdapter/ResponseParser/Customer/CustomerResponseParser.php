@@ -19,9 +19,6 @@ use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop as ShopModel;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class CustomerResponseParser
- */
 class CustomerResponseParser implements CustomerResponseParserInterface
 {
     /**

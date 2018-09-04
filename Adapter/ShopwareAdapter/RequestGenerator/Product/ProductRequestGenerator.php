@@ -28,9 +28,6 @@ use Shopware\Models\Shop\Shop as ShopModel;
 use ShopwareAdapter\RequestGenerator\Product\ConfiguratorSet\ConfiguratorSetRequestGeneratorInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class ProductRequestGenerator
- */
 class ProductRequestGenerator implements ProductRequestGeneratorInterface
 {
     /**

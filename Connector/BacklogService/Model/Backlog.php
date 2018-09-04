@@ -65,9 +65,6 @@ class Backlog
      */
     private $hash;
 
-    /**
-     * Backlog constructor.
-     */
     public function __construct()
     {
         $this->time = new DateTime('now');

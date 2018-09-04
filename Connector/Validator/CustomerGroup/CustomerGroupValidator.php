@@ -6,9 +6,6 @@ use Assert\Assertion;
 use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 
-/**
- * Class CustomerGroupValidator
- */
 class CustomerGroupValidator implements ValidatorInterface
 {
     /**

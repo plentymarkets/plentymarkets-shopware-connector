@@ -4,12 +4,8 @@ namespace PlentyConnector\Connector\Validator\Product\Badge;
 
 use Assert\Assertion;
 use PlentyConnector\Connector\TransferObject\Product\Badge\Badge;
-use PlentyConnector\Connector\TransferObject\Product\Barcode\Barcode;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 
-/**
- * Class BadgeValidator
- */
 class BadgeValidator implements ValidatorInterface
 {
     /**

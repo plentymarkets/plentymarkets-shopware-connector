@@ -4,9 +4,6 @@ namespace PlentymarketsAdapter;
 
 use PlentyConnector\Adapter\AdapterInterface;
 
-/**
- * Class  PlentymarketsAdapter.
- */
 class PlentymarketsAdapter implements AdapterInterface
 {
     const NAME = 'PlentymarketsAdapter';

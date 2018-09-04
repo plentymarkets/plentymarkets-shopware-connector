@@ -15,9 +15,6 @@ use Shopware\Models\Tax\Repository;
 use Shopware\Models\Tax\Tax;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class OrderItemRequestGenerator
- */
 class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
 {
     /**

@@ -14,9 +14,6 @@ use Shopware\Models\Article\Unit as UnitModel;
 use ShopwareAdapter\ResponseParser\Unit\UnitResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class FetchAllUnitsQueryHandler
- */
 class FetchAllUnitsQueryHandler implements QueryHandlerInterface
 {
     /**

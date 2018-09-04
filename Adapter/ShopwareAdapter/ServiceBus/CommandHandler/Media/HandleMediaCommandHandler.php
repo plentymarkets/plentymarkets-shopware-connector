@@ -18,9 +18,6 @@ use ShopwareAdapter\Helper\AttributeHelper;
 use ShopwareAdapter\RequestGenerator\Media\MediaRequestGeneratorInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class HandleMediaCommandHandler.
- */
 class HandleMediaCommandHandler implements CommandHandlerInterface
 {
     /**

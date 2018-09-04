@@ -13,9 +13,6 @@ use Shopware\Models\Media\Album;
 use Shopware\Models\Media\Settings;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class HandleMediaCategoryCommandHandler.
- */
 class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
 {
     /**

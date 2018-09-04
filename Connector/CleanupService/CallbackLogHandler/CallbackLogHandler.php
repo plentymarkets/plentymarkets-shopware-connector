@@ -6,9 +6,6 @@ use Closure;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
 
-/**
- * Class CallbackLogHandler
- */
 class CallbackLogHandler extends AbstractProcessingHandler
 {
     /**

@@ -7,9 +7,6 @@ use DateTimeImmutable;
 use PlentyConnector\Components\PayPal\PaymentData\PayPalPlusInvoicePaymentData;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 
-/**
- * Class PayPalPlusInvoicePaymentDataValidator
- */
 class PayPalPlusInvoicePaymentDataValidator implements ValidatorInterface
 {
     /**

@@ -12,9 +12,6 @@ use ShopwareAdapter\DataProvider\Order\OrderDataProviderInterface;
 use ShopwareAdapter\ResponseParser\Order\OrderResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class FetchOrderQueryHandler
- */
 class FetchOrderQueryHandler implements QueryHandlerInterface
 {
     /**

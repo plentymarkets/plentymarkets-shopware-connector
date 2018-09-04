@@ -7,9 +7,6 @@ use PlentyConnector\Connector\TransferObject\TranslateableInterface;
 use PlentyConnector\Connector\ValidatorService\ValidatorServiceInterface;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
-/**
- * Class AttributeHelper
- */
 class AttributeHelper implements AttributeHelperInterface
 {
     /**

@@ -12,9 +12,6 @@ use Shopware\Models\Tax\Tax;
 use ShopwareAdapter\ResponseParser\GetAttributeTrait;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class OrderItemResponseParser
- */
 class OrderItemResponseParser implements OrderItemResponseParserInterface
 {
     use GetAttributeTrait;

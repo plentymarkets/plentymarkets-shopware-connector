@@ -13,9 +13,6 @@ use PlentyConnector\Connector\TransferObject\TranslateableInterface;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
 
-/**
- * Class Product.
- */
 class Product extends AbstractTransferObject implements TranslateableInterface, AttributableInterface
 {
     const TYPE = 'Product';
