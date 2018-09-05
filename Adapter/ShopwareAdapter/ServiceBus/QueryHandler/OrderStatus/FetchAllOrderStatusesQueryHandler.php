@@ -14,9 +14,6 @@ use Shopware\Models\Order\Status;
 use ShopwareAdapter\ResponseParser\OrderStatus\OrderStatusResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class FetchAllOrderStatusesQueryHandler
- */
 class FetchAllOrderStatusesQueryHandler implements QueryHandlerInterface
 {
     /**

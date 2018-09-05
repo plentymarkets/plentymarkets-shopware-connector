@@ -4,9 +4,6 @@ namespace ShopwareAdapter\Helper;
 
 use PlentyConnector\Connector\TransferObject\AttributableInterface;
 
-/**
- * Class AttributeHelperInterface
- */
 interface AttributeHelperInterface
 {
     /**

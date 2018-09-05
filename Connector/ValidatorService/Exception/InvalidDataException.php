@@ -5,9 +5,6 @@ namespace PlentyConnector\Connector\ValidatorService\Exception;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\ValueObject\ValueObjectInterface;
 
-/**
- * Class InvalidDataException
- */
 class InvalidDataException extends \Exception
 {
     /**

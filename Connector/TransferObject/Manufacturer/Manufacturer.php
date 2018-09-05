@@ -5,9 +5,6 @@ namespace PlentyConnector\Connector\TransferObject\Manufacturer;
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
-/**
- * Class TransferObjects.
- */
 class Manufacturer extends AbstractTransferObject
 {
     const TYPE = 'Manufacturer';
@@ -54,7 +51,7 @@ class Manufacturer extends AbstractTransferObject
     }
 
     /**
-     * @param string $identifier
+     * {@inheritdoc}
      */
     public function setIdentifier($identifier)
     {

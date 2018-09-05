@@ -11,9 +11,6 @@ use PlentyConnector\Connector\ValidatorService\ValidatorServiceInterface;
 use PlentyConnector\Connector\ValueObject\Definition\Definition;
 use PlentyConnector\Connector\ValueObject\Mapping\Mapping;
 
-/**
- * Class MappingService.
- */
 class MappingService implements MappingServiceInterface
 {
     /**

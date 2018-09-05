@@ -8,9 +8,6 @@ use Countable;
 use Iterator as BaseIterator;
 use PlentymarketsAdapter\Client\Client;
 
-/**
- * Class Iterator
- */
 class Iterator implements BaseIterator, Countable
 {
     /**

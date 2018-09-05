@@ -12,9 +12,6 @@ use PlentyConnector\Connector\Validator\ValidatorInterface;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
 
-/**
- * Class ProductValidator
- */
 class ProductValidator implements ValidatorInterface
 {
     /**
@@ -42,8 +39,6 @@ class ProductValidator implements ValidatorInterface
         Assertion::regex($object->getNumber(), '/^[a-zA-Z0-9-_.]+$/', null, 'product.number');
 
         Assertion::boolean($object->isActive(), null, 'product.active');
-
-        Assertion::integer($object->getHighlight(), null, 'product.highlight');
 
         Assertion::allUuid($object->getShopIdentifiers(), null, 'product.shopIdentifiers');
 

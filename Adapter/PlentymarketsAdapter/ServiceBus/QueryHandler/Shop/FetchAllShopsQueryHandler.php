@@ -11,9 +11,6 @@ use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Shop\ShopResponseParserInterface;
 
-/**
- * Class FetchAllShopsQueryHandler
- */
 class FetchAllShopsQueryHandler implements QueryHandlerInterface
 {
     /**

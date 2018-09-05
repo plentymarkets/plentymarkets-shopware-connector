@@ -4,9 +4,6 @@ namespace PlentyConnector\Connector\ValueObject\Identity;
 
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 
-/**
- * Class Identity.
- */
 class Identity extends AbstractValueObject
 {
     /**

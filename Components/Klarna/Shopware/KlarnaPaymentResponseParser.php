@@ -9,9 +9,6 @@ use PlentyConnector\Connector\TransferObject\Payment\Payment;
 use Shopware\Components\Plugin\CachedConfigReader;
 use ShopwareAdapter\ResponseParser\Payment\PaymentResponseParserInterface;
 
-/**
- * Class KlarnaPaymentResponseParser
- */
 class KlarnaPaymentResponseParser implements PaymentResponseParserInterface
 {
     /**

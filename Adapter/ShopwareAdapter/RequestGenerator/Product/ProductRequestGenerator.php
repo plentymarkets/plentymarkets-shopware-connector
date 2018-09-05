@@ -11,6 +11,7 @@ use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Category\Category;
 use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 use PlentyConnector\Connector\TransferObject\Media\Media;
+use PlentyConnector\Connector\TransferObject\Product\Badge\Badge;
 use PlentyConnector\Connector\TransferObject\Product\LinkedProduct\LinkedProduct;
 use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
@@ -27,9 +28,6 @@ use Shopware\Models\Shop\Shop as ShopModel;
 use ShopwareAdapter\RequestGenerator\Product\ConfiguratorSet\ConfiguratorSetRequestGeneratorInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class ProductRequestGenerator
- */
 class ProductRequestGenerator implements ProductRequestGeneratorInterface
 {
     /**
@@ -58,7 +56,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
     private $logger;
 
     /**
-     * @var categories
+     * @var array
      */
     private $categories;
 
@@ -145,7 +143,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
             'lastStock' => $product->hasStockLimitation(),
             'notification' => $this->config->get('item_notification') === 'true' ? 1 : 0,
             'active' => $product->isActive(),
-            'highlight' => $product->getHighlight() === 3 ? 1 : 0,
+            'highlight' => $this->getHighlightFlag($product),
             'images' => $this->getImages($product),
             'similar' => $this->getLinkedProducts($product),
             'related' => $this->getLinkedProducts($product, LinkedProduct::TYPE_ACCESSORY),
@@ -223,7 +221,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
 
     /**
      * @param Product $product
-     * @param int     $type
+     * @param string  $type
      *
      * @return array
      */
@@ -407,7 +405,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
             ]);
 
             foreach ($categoryIdentities as $categoryIdentity) {
-                if (in_array($categoryIdentity->getAdapterIdentifier(), array_column($this->categories, 'id'))) {
+                if (in_array($categoryIdentity->getAdapterIdentifier(), array_column($this->categories, 'id'), true)) {
                     continue;
                 }
 
@@ -420,7 +418,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
                 $parents = array_reverse(array_filter(explode('|', $category->getPath())));
                 $parentCategoryId = array_shift($parents);
 
-                if (!in_array($parentCategoryId, $shopCategories)) {
+                if (!in_array($parentCategoryId, $shopCategories, true)) {
                     continue;
                 }
 
@@ -454,12 +452,12 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
             ]);
 
             foreach ($categoryIdentities as $categoryIdentity) {
-                if (!in_array($categoryIdentity->getAdapterIdentifier(), array_column($this->categories, 'id'))) {
+                if (!in_array($categoryIdentity->getAdapterIdentifier(), array_column($this->categories, 'id'), true)) {
                     continue;
                 }
 
                 /**
-                 * @var CategoryModel|null $category
+                 * @var null|CategoryModel $category
                  */
                 $category = $categoryRepository->find($categoryIdentity->getAdapterIdentifier());
 
@@ -477,7 +475,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
                 ]);
 
                 foreach ($shops as $shop) {
-                    if (in_array($shop->getId(), array_column($seoCategories, 'shopId'))) {
+                    if (in_array($shop->getId(), array_column($seoCategories, 'shopId'), true)) {
                         continue;
                     }
 
@@ -490,5 +488,21 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
         }
 
         return $seoCategories;
+    }
+
+    /**
+     * @param Product $product
+     *
+     * @return int
+     */
+    private function getHighlightFlag(Product $product)
+    {
+        foreach ($product->getBadges() as $badge) {
+            if ($badge->getType() === Badge::TYPE_HIGHLIGHT) {
+                return 1;
+            }
+        }
+
+        return 0;
     }
 }

@@ -4,9 +4,6 @@ namespace PlentyConnector\Connector\TransferObject\CustomerGroup;
 
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 
-/**
- * Class CustomerGroup
- */
 class CustomerGroup extends AbstractTransferObject
 {
     const TYPE = 'CustomerGroup';
@@ -38,7 +35,7 @@ class CustomerGroup extends AbstractTransferObject
     }
 
     /**
-     * @param string $identifier
+     * {@inheritdoc}
      */
     public function setIdentifier($identifier)
     {

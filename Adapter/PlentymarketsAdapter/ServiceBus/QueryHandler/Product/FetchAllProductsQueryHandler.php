@@ -14,9 +14,6 @@ use PlentymarketsAdapter\ReadApi\Item;
 use PlentymarketsAdapter\ResponseParser\Product\ProductResponseParserInterface;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class FetchAllProductsQueryHandler.
- */
 class FetchAllProductsQueryHandler implements QueryHandlerInterface
 {
     /**

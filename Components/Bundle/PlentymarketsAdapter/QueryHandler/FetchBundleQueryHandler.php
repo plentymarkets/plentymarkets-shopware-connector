@@ -13,9 +13,6 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Item;
 use PlentymarketsAdapter\ReadApi\Item\Variation;
 
-/**
- * Class FetchBundleQueryHandler.
- */
 class FetchBundleQueryHandler implements QueryHandlerInterface
 {
     /**

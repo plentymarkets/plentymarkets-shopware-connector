@@ -5,9 +5,6 @@ namespace ShopwareAdapter\ResponseParser;
 use DateTimeInterface;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
-/**
- * Class GetAttributeTrait
- */
 trait GetAttributeTrait
 {
     /**

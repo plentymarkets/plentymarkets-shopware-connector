@@ -6,9 +6,6 @@ use Assert\Assertion;
 use PlentyConnector\Components\PayPal\PaymentData\PayPalInstallmentPaymentData;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 
-/**
- * Class PayPalInstallmentPaymentDataValidator
- */
 class PayPalInstallmentPaymentDataValidator implements ValidatorInterface
 {
     /**

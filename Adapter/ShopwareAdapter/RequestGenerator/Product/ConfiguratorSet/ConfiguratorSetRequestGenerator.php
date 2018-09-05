@@ -5,9 +5,6 @@ namespace ShopwareAdapter\RequestGenerator\Product\ConfiguratorSet;
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentyConnector\Connector\TransferObject\Product\Product;
 
-/**
- * Class ConfiguratorSetRequestGenerator
- */
 class ConfiguratorSetRequestGenerator implements ConfiguratorSetRequestGeneratorInterface
 {
     /**

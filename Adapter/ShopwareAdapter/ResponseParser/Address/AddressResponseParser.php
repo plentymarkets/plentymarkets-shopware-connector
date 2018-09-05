@@ -10,9 +10,6 @@ use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
 use ShopwareAdapter\ResponseParser\GetAttributeTrait;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class AddressResponseParser
- */
 class AddressResponseParser implements AddressResponseParserInterface
 {
     use GetAttributeTrait;

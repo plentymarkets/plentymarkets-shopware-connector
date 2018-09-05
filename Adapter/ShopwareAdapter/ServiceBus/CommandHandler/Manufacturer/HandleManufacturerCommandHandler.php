@@ -14,9 +14,6 @@ use Shopware\Components\Api\Resource\Manufacturer as ManufacturerResource;
 use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class HandleManufacturerCommandHandler.
- */
 class HandleManufacturerCommandHandler implements CommandHandlerInterface
 {
     /**

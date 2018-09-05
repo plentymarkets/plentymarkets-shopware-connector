@@ -11,9 +11,6 @@ use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\PaymentMethod\PaymentMethodResponseParserInterface;
 
-/**
- * Class FetchAllPaymentMethodsQueryHandler
- */
 class FetchAllPaymentMethodsQueryHandler implements QueryHandlerInterface
 {
     /**

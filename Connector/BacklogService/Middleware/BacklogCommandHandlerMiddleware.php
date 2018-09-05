@@ -10,9 +10,6 @@ use PlentyConnector\Connector\ServiceBus\Command\TransferObjectCommand;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class BacklogCommandHandler
- */
 class BacklogCommandHandlerMiddleware implements Middleware
 {
     /**

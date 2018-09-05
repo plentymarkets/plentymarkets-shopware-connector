@@ -2,9 +2,6 @@
 
 namespace PlentyConnector\Connector\ServiceBus;
 
-/**
- * Interface ServiceBusInterface.
- */
 interface ServiceBusInterface
 {
     /**

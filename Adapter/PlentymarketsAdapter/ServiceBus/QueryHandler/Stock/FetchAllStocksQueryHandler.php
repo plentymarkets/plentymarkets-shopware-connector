@@ -14,9 +14,6 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Product\Stock\StockResponseParserInterface;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class FetchAllStocksQueryHandler
- */
 class FetchAllStocksQueryHandler implements QueryHandlerInterface
 {
     /**

@@ -7,9 +7,6 @@ use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 use PlentyConnector\Connector\ValueObject\Mapping\Mapping;
 
-/**
- * Class MappingValidator
- */
 class MappingValidator implements ValidatorInterface
 {
     /**

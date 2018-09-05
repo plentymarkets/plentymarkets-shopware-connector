@@ -16,9 +16,6 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\RequestGenerator\Order\OrderRequestGeneratorInterface;
 use RuntimeException;
 
-/**
- * Class HandleOrderCommandHandler.
- */
 class HandleOrderCommandHandler implements CommandHandlerInterface
 {
     /**

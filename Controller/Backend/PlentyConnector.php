@@ -9,9 +9,6 @@ use PlentyConnector\PlentyConnector;
 use PlentymarketsAdapter\Client\ClientInterface;
 use Ramsey\Uuid\Uuid;
 
-/**
- * Class Shopware_Controllers_Backend_PlentyConnector
- */
 class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_Backend_ExtJs
 {
     public function initAcl()

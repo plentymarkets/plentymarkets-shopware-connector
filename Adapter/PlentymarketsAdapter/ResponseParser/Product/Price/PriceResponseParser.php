@@ -13,9 +13,6 @@ use PlentymarketsAdapter\ReadApi\Account\ContactClass;
 use PlentymarketsAdapter\ReadApi\Item\SalesPrice;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class PriceResponseParser
- */
 class PriceResponseParser implements PriceResponseParserInterface
 {
     /**

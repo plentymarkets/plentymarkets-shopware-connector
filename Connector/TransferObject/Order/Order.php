@@ -13,9 +13,6 @@ use PlentyConnector\Connector\TransferObject\Order\Package\Package;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use ReflectionClass;
 
-/**
- * Class Order.
- */
 class Order extends AbstractTransferObject implements AttributableInterface
 {
     const TYPE = 'Order';
@@ -109,9 +106,6 @@ class Order extends AbstractTransferObject implements AttributableInterface
      */
     private $attributes = [];
 
-    /**
-     * Order constructor.
-     */
     public function __construct()
     {
         $this->orderTime = new DateTimeImmutable('now');
@@ -134,7 +128,7 @@ class Order extends AbstractTransferObject implements AttributableInterface
     }
 
     /**
-     * @param string $identifier
+     * {@inheritdoc}
      */
     public function setIdentifier($identifier)
     {

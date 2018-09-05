@@ -9,9 +9,6 @@ use PlentymarketsAdapter\Helper\LanguageHelperInterface;
 use PlentymarketsAdapter\Helper\VariationHelperInterface;
 use PlentymarketsAdapter\ReadApi\Item\Variation as VariationApi;
 
-/**
- * Class Item
- */
 class Item extends ApiAbstract
 {
     /**

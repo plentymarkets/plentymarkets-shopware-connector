@@ -26,9 +26,6 @@ use ShopwareAdapter\ResponseParser\GetAttributeTrait;
 use ShopwareAdapter\ResponseParser\OrderItem\OrderItemResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class OrderResponseParser
- */
 class OrderResponseParser implements OrderResponseParserInterface
 {
     use GetAttributeTrait;

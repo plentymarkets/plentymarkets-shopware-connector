@@ -12,9 +12,6 @@ use Shopware\Models\User\Privilege as ShopwarePrivilege;
 use Shopware\Models\User\Resource as ShopwareResource;
 use Shopware_Components_Acl;
 
-/**
- * Class PermissionInstaller
- */
 class PermissionInstaller implements InstallerInterface
 {
     /**

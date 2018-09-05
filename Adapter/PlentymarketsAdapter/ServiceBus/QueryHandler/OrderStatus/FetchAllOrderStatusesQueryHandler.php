@@ -11,9 +11,6 @@ use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\OrderStatus\OrderStatusResponseParserInterface;
 
-/**
- * Class FetchAllOrderStatusesQueryHandler
- */
 class FetchAllOrderStatusesQueryHandler implements QueryHandlerInterface
 {
     /**

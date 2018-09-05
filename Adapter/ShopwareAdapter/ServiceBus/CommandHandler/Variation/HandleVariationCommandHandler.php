@@ -17,9 +17,6 @@ use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
 use ShopwareAdapter\RequestGenerator\Product\Variation\VariationRequestGeneratorInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class HandleVariationCommandHandler.
- */
 class HandleVariationCommandHandler implements CommandHandlerInterface
 {
     /**
@@ -99,7 +96,7 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
         $variantRepository = $this->entityManager->getRepository(Detail::class);
 
         /**
-         * @var Detail|null $variant
+         * @var null|Detail $variant
          */
         $variant = $variantRepository->findOneBy(['number' => $variation->getNumber()]);
 

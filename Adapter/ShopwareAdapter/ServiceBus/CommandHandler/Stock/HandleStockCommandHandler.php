@@ -14,9 +14,6 @@ use Psr\Log\LoggerInterface;
 use Shopware\Models\Article\Detail;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class HandleStockCommandHandler.
- */
 class HandleStockCommandHandler implements CommandHandlerInterface
 {
     /**
@@ -95,7 +92,7 @@ class HandleStockCommandHandler implements CommandHandlerInterface
         $variationRespository = $this->entityManager->getRepository(Detail::class);
 
         /**
-         * @var Detail|null $variation
+         * @var null|Detail $variation
          */
         $variation = $variationRespository->find($variationIdentity->getAdapterIdentifier());
 

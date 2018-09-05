@@ -13,9 +13,6 @@ use PlentymarketsAdapter\Helper\LanguageHelperInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Category\CategoryResponseParserInterface;
 
-/**
- * Class FetchCategoryQueryHandler
- */
 class FetchCategoryQueryHandler implements QueryHandlerInterface
 {
     /**

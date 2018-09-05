@@ -26,28 +26,28 @@ interface TranslationDataProviderInterface
     /**
      * @param Property $property
      *
-     * @return OptionModel|null
+     * @return null|OptionModel
      */
     public function getPropertyOptionByName(Property $property);
 
     /**
      * @param Value $value
      *
-     * @return ValueModel|null
+     * @return null|ValueModel
      */
     public function getPropertyValueByValue(Value $value);
 
     /**
      * @param Property $property
      *
-     * @return ConfiguratorGroupModel|null
+     * @return null|ConfiguratorGroupModel
      */
     public function getConfigurationGroupByName(Property $property);
 
     /**
      * @param Value $value
      *
-     * @return ConfiguratorOptionModel|null
+     * @return null|ConfiguratorOptionModel
      */
     public function getConfigurationOptionByName(Value $value);
 }

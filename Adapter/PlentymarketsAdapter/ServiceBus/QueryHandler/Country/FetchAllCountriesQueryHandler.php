@@ -11,9 +11,6 @@ use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Country\CountryResponseParserInterface;
 
-/**
- * Class FetchAllCountriesQueryHandler
- */
 class FetchAllCountriesQueryHandler implements QueryHandlerInterface
 {
     /**

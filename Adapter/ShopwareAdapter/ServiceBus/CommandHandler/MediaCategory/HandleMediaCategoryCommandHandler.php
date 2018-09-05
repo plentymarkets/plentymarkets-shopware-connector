@@ -13,9 +13,6 @@ use Shopware\Models\Media\Album;
 use Shopware\Models\Media\Settings;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class HandleMediaCategoryCommandHandler.
- */
 class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
 {
     /**
@@ -77,7 +74,7 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
         ]);
 
         /**
-         * @var Settings|null $parentSettings
+         * @var null|Settings $parentSettings
          */
         $parentSettings = $settingsRepository->findOneBy([
             'albumId' => Album::ALBUM_ARTICLE,
@@ -112,7 +109,7 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
         }
 
         /**
-         * @var Album|null $album
+         * @var null|Album $album
          */
         $album = $albumRepository->find($identity->getAdapterIdentifier());
 

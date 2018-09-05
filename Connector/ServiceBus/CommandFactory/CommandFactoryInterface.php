@@ -4,9 +4,6 @@ namespace PlentyConnector\Connector\ServiceBus\CommandFactory;
 
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 
-/**
- * Class CommandFactoryInterface.
- */
 interface CommandFactoryInterface
 {
     /**

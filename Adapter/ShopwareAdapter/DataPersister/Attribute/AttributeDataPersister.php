@@ -14,9 +14,6 @@ use Shopware\Models\Category\Category;
 use Shopware\Models\Media\Media;
 use Shopware\Models\Order\Order;
 
-/**
- * Class AttributeDataPersister
- */
 class AttributeDataPersister implements AttributeDataPersisterInterface
 {
     /**

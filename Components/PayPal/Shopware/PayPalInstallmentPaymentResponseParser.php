@@ -7,9 +7,6 @@ use PlentyConnector\Components\PayPal\PaymentData\PayPalInstallmentPaymentData;
 use PlentyConnector\Connector\TransferObject\Payment\Payment;
 use ShopwareAdapter\ResponseParser\Payment\PaymentResponseParserInterface;
 
-/**
- * Class PayPalInstallmentPaymentResponseParser
- */
 class PayPalInstallmentPaymentResponseParser implements PaymentResponseParserInterface
 {
     /**

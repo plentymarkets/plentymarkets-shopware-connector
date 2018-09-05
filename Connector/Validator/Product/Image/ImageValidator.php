@@ -6,9 +6,6 @@ use Assert\Assertion;
 use PlentyConnector\Connector\TransferObject\Product\Image\Image;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 
-/**
- * Class ImageValidator
- */
 class ImageValidator implements ValidatorInterface
 {
     /**

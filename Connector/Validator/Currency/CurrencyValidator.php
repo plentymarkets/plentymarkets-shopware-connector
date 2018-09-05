@@ -6,9 +6,6 @@ use Assert\Assertion;
 use PlentyConnector\Connector\TransferObject\Currency\Currency;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 
-/**
- * Class CurrencyValidator
- */
 class CurrencyValidator implements ValidatorInterface
 {
     /**

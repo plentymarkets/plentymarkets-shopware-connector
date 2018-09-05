@@ -2,9 +2,6 @@
 
 namespace PlentymarketsAdapter\ReadApi;
 
-/**
- * Class Webstore
- */
 class Webstore extends ApiAbstract
 {
     /**

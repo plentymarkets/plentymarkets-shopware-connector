@@ -7,9 +7,6 @@ use PlentyConnector\Connector\TransferObject\AttributableInterface;
 use PlentyConnector\Connector\TransferObject\Payment\PaymentData\PaymentDataInterface;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
-/**
- * Class Payment
- */
 class Payment extends AbstractTransferObject implements AttributableInterface
 {
     const TYPE = 'Payment';
@@ -75,9 +72,7 @@ class Payment extends AbstractTransferObject implements AttributableInterface
     }
 
     /**
-     * return a uuid.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getIdentifier()
     {
@@ -85,7 +80,7 @@ class Payment extends AbstractTransferObject implements AttributableInterface
     }
 
     /**
-     * @param string $identifier
+     * {@inheritdoc}
      */
     public function setIdentifier($identifier)
     {

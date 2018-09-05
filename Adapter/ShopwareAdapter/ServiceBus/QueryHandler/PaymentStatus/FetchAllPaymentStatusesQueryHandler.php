@@ -14,9 +14,6 @@ use Shopware\Models\Order\Status;
 use ShopwareAdapter\ResponseParser\PaymentStatus\PaymentStatusResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class FetchAllPaymentStatusesQueryHandler
- */
 class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
 {
     /**

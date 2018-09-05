@@ -15,9 +15,6 @@ use PlentymarketsAdapter\ResponseParser\Order\OrderResponseParserInterface;
 use PlentymarketsAdapter\ServiceBus\ChangedDateTimeTrait;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class FetchChangedOrdersQueryHandler
- */
 class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
 {
     use ChangedDateTimeTrait;

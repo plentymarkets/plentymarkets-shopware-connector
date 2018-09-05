@@ -6,9 +6,6 @@ use DeepCopy\DeepCopy;
 use PlentyConnector\Connector\TransferObject\TranslateableInterface;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
 
-/**
- * Class TranslationHelper
- */
 class TranslationHelper implements TranslationHelperInterface
 {
     /**

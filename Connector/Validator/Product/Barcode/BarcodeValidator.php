@@ -6,9 +6,6 @@ use Assert\Assertion;
 use PlentyConnector\Connector\TransferObject\Product\Barcode\Barcode;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 
-/**
- * Class BarcodeValidator
- */
 class BarcodeValidator implements ValidatorInterface
 {
     /**

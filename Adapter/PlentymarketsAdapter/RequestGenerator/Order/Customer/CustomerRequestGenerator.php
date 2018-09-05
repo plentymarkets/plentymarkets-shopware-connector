@@ -11,9 +11,6 @@ use PlentyConnector\Connector\TransferObject\Order\Order;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 
-/**
- * Class CustomerRequestGenerator
- */
 class CustomerRequestGenerator implements CustomerRequestGeneratorInterface
 {
     /**
