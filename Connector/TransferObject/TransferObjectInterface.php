@@ -22,6 +22,13 @@ interface TransferObjectInterface
     public function getIdentifier();
 
     /**
+     * set a uuid.
+     *
+     * @param string $identifier
+     */
+    public function setIdentifier($identifier);
+
+    /**
      * return the unique type of the object.
      *
      * @return string
