@@ -19,9 +19,6 @@ use PlentymarketsAdapter\RequestGenerator\Order\Customer\CustomerRequestGenerato
 use PlentymarketsAdapter\RequestGenerator\Order\OrderItem\OrderItemRequestGeneratorInterface;
 use RuntimeException;
 
-/**
- * Class OrderRequestGenerator
- */
 class OrderRequestGenerator implements OrderRequestGeneratorInterface
 {
     /**

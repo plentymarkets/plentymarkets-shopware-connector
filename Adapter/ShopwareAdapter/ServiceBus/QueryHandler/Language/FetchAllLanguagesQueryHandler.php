@@ -14,9 +14,6 @@ use Shopware\Models\Shop\Locale;
 use ShopwareAdapter\ResponseParser\Language\LanguageResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class FetchAllLanguagesQueryHandler
- */
 class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
 {
     /**

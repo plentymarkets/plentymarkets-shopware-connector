@@ -11,9 +11,6 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Item\Unit as UnitApi;
 use PlentymarketsAdapter\ResponseParser\Unit\UnitResponseParserInterface;
 
-/**
- * Class FetchAllUnitsQueryHandler
- */
 class FetchAllUnitsQueryHandler implements QueryHandlerInterface
 {
     /**

@@ -4,9 +4,6 @@ namespace PlentyConnector\Connector\TransferObject\Language;
 
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 
-/**
- * Class Language
- */
 class Language extends AbstractTransferObject
 {
     const TYPE = 'Language';
@@ -38,7 +35,7 @@ class Language extends AbstractTransferObject
     }
 
     /**
-     * @param string $identifier
+     * {@inheritdoc}
      */
     public function setIdentifier($identifier)
     {

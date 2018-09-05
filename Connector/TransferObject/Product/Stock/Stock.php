@@ -4,9 +4,6 @@ namespace PlentyConnector\Connector\TransferObject\Product\Stock;
 
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 
-/**
- * Class Product.
- */
 class Stock extends AbstractTransferObject
 {
     const TYPE = 'Stock';
@@ -45,7 +42,7 @@ class Stock extends AbstractTransferObject
     }
 
     /**
-     * @param string $identifier
+     * {@inheritdoc}
      */
     public function setIdentifier($identifier)
     {

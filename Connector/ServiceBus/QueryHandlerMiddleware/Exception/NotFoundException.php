@@ -5,9 +5,6 @@ namespace PlentyConnector\Connector\ServiceBus\QueryHandlerMiddleware\Exception;
 use Exception;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 
-/**
- * Class NotFoundException.
- */
 class NotFoundException extends Exception
 {
     /**

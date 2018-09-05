@@ -15,9 +15,6 @@ use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Article;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class RemoveProductCommandHandler.
- */
 class RemoveProductCommandHandler implements CommandHandlerInterface
 {
     /**

@@ -8,9 +8,6 @@ use PlentyConnector\Connector\TransferObject\Product\Property\Value\Value;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
 
-/**
- * Class PropertyValidator
- */
 class PropertyValidator implements ValidatorInterface
 {
     /**

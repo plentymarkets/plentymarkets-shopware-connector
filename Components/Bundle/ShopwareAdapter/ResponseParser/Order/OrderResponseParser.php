@@ -4,9 +4,6 @@ namespace PlentyConnector\Components\Bundle\ShopwareAdapter\ResponseParser\Order
 
 use ShopwareAdapter\ResponseParser\Order\OrderResponseParserInterface;
 
-/**
- * Class OrderResponseParser
- */
 class OrderResponseParser implements OrderResponseParserInterface
 {
     /**

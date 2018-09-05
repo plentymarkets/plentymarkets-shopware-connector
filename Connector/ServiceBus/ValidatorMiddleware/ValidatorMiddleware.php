@@ -6,9 +6,6 @@ use League\Tactician\Middleware;
 use PlentyConnector\Connector\ServiceBus\Command\TransferObjectCommand;
 use PlentyConnector\Connector\ValidatorService\ValidatorServiceInterface;
 
-/**
- * Class ValidatorMiddleware.
- */
 class ValidatorMiddleware implements Middleware
 {
     /**

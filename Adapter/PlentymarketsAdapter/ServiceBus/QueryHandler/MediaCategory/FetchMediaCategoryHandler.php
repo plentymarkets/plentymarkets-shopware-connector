@@ -12,9 +12,6 @@ use PlentymarketsAdapter\Helper\MediaCategoryHelperInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\MediaCategory\MediaCategoryResponseParserInterface;
 
-/**
- * Class FetchMediaCategoryHandler
- */
 class FetchMediaCategoryHandler implements QueryHandlerInterface
 {
     /**

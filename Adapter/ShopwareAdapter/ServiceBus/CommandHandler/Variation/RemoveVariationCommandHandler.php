@@ -15,9 +15,6 @@ use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Variant;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class RemoveVariationCommandHandler.
- */
 class RemoveVariationCommandHandler implements CommandHandlerInterface
 {
     /**

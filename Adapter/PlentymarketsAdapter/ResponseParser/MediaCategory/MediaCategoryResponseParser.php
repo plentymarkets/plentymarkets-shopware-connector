@@ -6,9 +6,6 @@ use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 
-/**
- * Class MediaCategoryResponseParser
- */
 class MediaCategoryResponseParser implements MediaCategoryResponseParserInterface
 {
     /**

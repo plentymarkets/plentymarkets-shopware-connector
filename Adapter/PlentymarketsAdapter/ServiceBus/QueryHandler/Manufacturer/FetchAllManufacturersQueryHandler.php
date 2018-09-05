@@ -14,9 +14,6 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Manufacturer\ManufacturerResponseParserInterface;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class FetchAllManufacturersQueryHandler
- */
 class FetchAllManufacturersQueryHandler implements QueryHandlerInterface
 {
     /**

@@ -11,9 +11,6 @@ use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Currency\CurrencyResponseParserInterface;
 
-/**
- * Class FetchAllCurrenciesQueryHandler
- */
 class FetchAllCurrenciesQueryHandler implements QueryHandlerInterface
 {
     /**

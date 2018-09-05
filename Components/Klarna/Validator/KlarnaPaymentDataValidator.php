@@ -6,9 +6,6 @@ use Assert\Assertion;
 use PlentyConnector\Components\Klarna\PaymentData\KlarnaPaymentData;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 
-/**
- * Class KlarnaPaymentDataValidator
- */
 class KlarnaPaymentDataValidator implements ValidatorInterface
 {
     /**

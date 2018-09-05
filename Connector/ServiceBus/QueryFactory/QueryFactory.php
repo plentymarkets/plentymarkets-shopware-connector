@@ -7,9 +7,6 @@ use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\QueryFactory\Exception\MissingQueryException;
 use PlentyConnector\Connector\ServiceBus\QueryType;
 
-/**
- * Class QueryFactory.
- */
 class QueryFactory implements QueryFactoryInterface
 {
     /**

@@ -11,9 +11,6 @@ use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\ShippingProfile\ShippingProfileResponseParserInterface;
 
-/**
- * Class FetchAllShippingProfilesQueryHandler
- */
 class FetchAllShippingProfilesQueryHandler implements QueryHandlerInterface
 {
     /**

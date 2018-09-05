@@ -7,9 +7,6 @@ use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
-/**
- * Class ManufacturerValidator
- */
 class ManufacturerValidator implements ValidatorInterface
 {
     /**

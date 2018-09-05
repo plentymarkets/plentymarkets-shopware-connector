@@ -12,9 +12,6 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Order\Order as OrderApi;
 use PlentymarketsAdapter\ResponseParser\Order\OrderResponseParserInterface;
 
-/**
- * Class FetchOrderQueryHandler
- */
 class FetchOrderQueryHandler implements QueryHandlerInterface
 {
     /**

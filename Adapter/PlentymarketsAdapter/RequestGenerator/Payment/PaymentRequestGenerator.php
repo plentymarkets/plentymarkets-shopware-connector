@@ -9,9 +9,6 @@ use PlentyConnector\Connector\TransferObject\Payment\Payment;
 use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 
-/**
- * Class PaymentRequestGenerator
- */
 class PaymentRequestGenerator implements PaymentRequestGeneratorInterface
 {
     /**

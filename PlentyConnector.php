@@ -35,9 +35,6 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 require __DIR__ . '/autoload.php';
 
-/**
- * Class PlentyConnector.
- */
 class PlentyConnector extends Plugin
 {
     const PERMISSION_READ = 'read';

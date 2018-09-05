@@ -5,9 +5,6 @@ namespace PlentyConnector\Components\PayPal\PaymentData;
 use PlentyConnector\Connector\TransferObject\Payment\PaymentData\PaymentDataInterface;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 
-/**
- * Class PayPalInstallmentPaymentData
- */
 class PayPalInstallmentPaymentData extends AbstractValueObject implements PaymentDataInterface
 {
     /**

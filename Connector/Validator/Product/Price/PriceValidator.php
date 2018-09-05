@@ -6,9 +6,6 @@ use Assert\Assertion;
 use PlentyConnector\Connector\TransferObject\Product\Price\Price;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 
-/**
- * Class PriceValidator
- */
 class PriceValidator implements ValidatorInterface
 {
     /**

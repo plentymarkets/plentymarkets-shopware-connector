@@ -2,9 +2,6 @@
 
 namespace PlentyConnector\Connector\ServiceBus\Command;
 
-/**
- * Class CommandInterface.
- */
 interface CommandInterface
 {
     /**

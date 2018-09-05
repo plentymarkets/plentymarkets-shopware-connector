@@ -4,9 +4,6 @@ namespace PlentymarketsAdapter\Client\Exception;
 
 use Exception;
 
-/**
- * Class InvalidResponseException
- */
 class InvalidResponseException extends Exception
 {
     /**

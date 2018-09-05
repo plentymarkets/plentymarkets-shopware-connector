@@ -8,9 +8,6 @@ use PlentyConnector\Connector\ServiceBus\CommandFactory\Exception\MissingCommand
 use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
-/**
- * Class CommandFactoryInterface.
- */
 class CommandFactory implements CommandFactoryInterface
 {
     /**

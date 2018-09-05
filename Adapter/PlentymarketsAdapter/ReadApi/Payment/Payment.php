@@ -5,9 +5,6 @@ namespace PlentymarketsAdapter\ReadApi\Payment;
 use PlentymarketsAdapter\Client\Iterator\Iterator;
 use PlentymarketsAdapter\ReadApi\ApiAbstract;
 
-/**
- * Class Payment
- */
 class Payment extends ApiAbstract
 {
     /**

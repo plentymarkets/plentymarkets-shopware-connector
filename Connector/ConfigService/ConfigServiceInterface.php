@@ -2,9 +2,6 @@
 
 namespace PlentyConnector\Connector\ConfigService;
 
-/**
- * Interface ConfigServiceInterface.
- */
 interface ConfigServiceInterface
 {
     /**

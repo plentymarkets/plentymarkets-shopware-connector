@@ -14,9 +14,6 @@ use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Resource\Manufacturer as ManufacturerResource;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class RemoveManufacturerCommandHandler.
- */
 class RemoveManufacturerCommandHandler implements CommandHandlerInterface
 {
     /**

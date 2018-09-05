@@ -10,9 +10,6 @@ use PlentyConnector\Connector\ConfigService\Model\ConfigRepository;
 use Shopware\Components\Model\ModelManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-/**
- * Class ConfigService.
- */
 class ConfigService implements ConfigServiceInterface
 {
     /**
@@ -80,7 +77,7 @@ class ConfigService implements ConfigServiceInterface
         }
 
         /**
-         * @var Config|null $element
+         * @var null|Config $element
          */
         $element = $this->repository->findOneBy([
             'name' => $key,
@@ -99,7 +96,7 @@ class ConfigService implements ConfigServiceInterface
     public function set($key, $value)
     {
         /**
-         * @var Config|null $element
+         * @var null|Config $element
          */
         $element = $this->repository->findOneBy([
             'name' => $key,

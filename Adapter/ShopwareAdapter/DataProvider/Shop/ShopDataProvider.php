@@ -6,9 +6,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Shopware\Models\Shop\Shop as ShopModel;
 
-/**
- * Class TranslationDataProvider
- */
 class ShopDataProvider implements ShopDataProviderInterface
 {
     /**

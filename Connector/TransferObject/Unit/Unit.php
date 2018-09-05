@@ -4,9 +4,6 @@ namespace PlentyConnector\Connector\TransferObject\Unit;
 
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 
-/**
- * Class Unit
- */
 class Unit extends AbstractTransferObject
 {
     const TYPE = 'Unit';
@@ -38,7 +35,7 @@ class Unit extends AbstractTransferObject
     }
 
     /**
-     * @param string $identifier
+     * {@inheritdoc}
      */
     public function setIdentifier($identifier)
     {

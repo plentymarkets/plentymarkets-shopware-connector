@@ -4,9 +4,6 @@ namespace PlentyConnector\Connector\TransferObject\PaymentMethod;
 
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 
-/**
- * Class PaymentMethod.
- */
 class PaymentMethod extends AbstractTransferObject
 {
     const TYPE = 'PaymentMethod';
@@ -38,7 +35,7 @@ class PaymentMethod extends AbstractTransferObject
     }
 
     /**
-     * @param string $identifier
+     * {@inheritdoc}
      */
     public function setIdentifier($identifier)
     {

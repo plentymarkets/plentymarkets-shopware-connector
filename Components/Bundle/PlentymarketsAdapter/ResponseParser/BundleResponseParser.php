@@ -17,9 +17,6 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Product\Price\PriceResponseParserInterface;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class BundleResponseParser
- */
 class BundleResponseParser implements BundleResponseParserInterface
 {
     /**

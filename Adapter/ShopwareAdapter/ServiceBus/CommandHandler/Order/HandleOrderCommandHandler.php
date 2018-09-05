@@ -20,9 +20,6 @@ use Shopware\Models\Order\Status;
 use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class HandleOrderCommandHandler.
- */
 class HandleOrderCommandHandler implements CommandHandlerInterface
 {
     /**

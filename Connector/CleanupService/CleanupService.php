@@ -15,9 +15,6 @@ use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class CleanupService.
- */
 class CleanupService implements CleanupServiceInterface
 {
     /**

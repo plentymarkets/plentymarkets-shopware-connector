@@ -7,9 +7,6 @@ use PlentyConnector\Connector\IdentityService\IdentityService;
 use PlentyConnector\Connector\IdentityService\Model\Identity;
 use Ramsey\Uuid\Uuid;
 
-/**
- * Class ResponseParserTest
- */
 abstract class ResponseParserTest extends TestCase
 {
     /**

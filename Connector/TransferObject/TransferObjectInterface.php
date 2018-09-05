@@ -2,9 +2,6 @@
 
 namespace PlentyConnector\Connector\TransferObject;
 
-/**
- * Class TransferObjectInterface.
- */
 interface TransferObjectInterface
 {
     /**

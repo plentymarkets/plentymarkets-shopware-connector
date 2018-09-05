@@ -9,7 +9,7 @@ use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 /**
  * Class Backlog.
  *
- * @ORM\Entity()
+ * @ORM\Entity
  * @ORM\Table(name="plenty_backlog", indexes={
  *     @ORM\Index(name="hash_idx", columns={"hash"}),
  *     @ORM\Index(name="time_idx", columns={"time"})
@@ -65,9 +65,6 @@ class Backlog
      */
     private $hash;
 
-    /**
-     * Backlog constructor.
-     */
     public function __construct()
     {
         $this->time = new DateTime('now');

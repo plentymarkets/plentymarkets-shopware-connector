@@ -5,9 +5,6 @@ namespace PlentymarketsAdapter\Client;
 use Closure;
 use PlentymarketsAdapter\Client\Iterator\Iterator;
 
-/**
- * Interface ClientInterface.
- */
 interface ClientInterface
 {
     /**

@@ -10,9 +10,6 @@ use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\TransferObject\Product\Stock\Stock;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 
-/**
- * Class FetchStockQueryHandler.
- */
 class FetchStockQueryHandler implements QueryHandlerInterface
 {
     /**

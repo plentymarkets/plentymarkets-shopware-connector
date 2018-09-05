@@ -28,9 +28,6 @@ use Shopware\Models\Shop\Shop as ShopModel;
 use ShopwareAdapter\RequestGenerator\Product\ConfiguratorSet\ConfiguratorSetRequestGeneratorInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class ProductRequestGenerator
- */
 class ProductRequestGenerator implements ProductRequestGeneratorInterface
 {
     /**
@@ -460,7 +457,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
                 }
 
                 /**
-                 * @var CategoryModel|null $category
+                 * @var null|CategoryModel $category
                  */
                 $category = $categoryRepository->find($categoryIdentity->getAdapterIdentifier());
 

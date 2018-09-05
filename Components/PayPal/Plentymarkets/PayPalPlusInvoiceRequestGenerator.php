@@ -6,9 +6,6 @@ use PlentyConnector\Components\PayPal\PaymentData\PayPalPlusInvoicePaymentData;
 use PlentyConnector\Connector\TransferObject\Payment\Payment;
 use PlentymarketsAdapter\RequestGenerator\Payment\PaymentRequestGeneratorInterface;
 
-/**
- * Class PayPalPlusInvoiceRequestGenerator
- */
 class PayPalPlusInvoiceRequestGenerator implements PaymentRequestGeneratorInterface
 {
     /**

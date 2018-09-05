@@ -6,9 +6,6 @@ use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 
-/**
- * Class ShippingProfileResponseParser
- */
 class ShippingProfileResponseParser implements ShippingProfileResponseParserInterface
 {
     /**

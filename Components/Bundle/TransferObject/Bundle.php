@@ -9,9 +9,6 @@ use PlentyConnector\Connector\TransferObject\Product\Price\Price;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
 
-/**
- * Class Bundle
- */
 class Bundle extends AbstractTransferObject
 {
     const TYPE = 'Bundle';

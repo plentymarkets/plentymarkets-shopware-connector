@@ -4,9 +4,6 @@ namespace PlentyConnector\Connector\TransferObject\Country;
 
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 
-/**
- * Class Country
- */
 class Country extends AbstractTransferObject
 {
     const TYPE = 'Country';
@@ -38,7 +35,7 @@ class Country extends AbstractTransferObject
     }
 
     /**
-     * @param string $identifier
+     * {@inheritdoc}
      */
     public function setIdentifier($identifier)
     {

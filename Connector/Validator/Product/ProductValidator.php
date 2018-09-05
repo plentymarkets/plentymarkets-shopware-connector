@@ -12,9 +12,6 @@ use PlentyConnector\Connector\Validator\ValidatorInterface;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
 
-/**
- * Class ProductValidator
- */
 class ProductValidator implements ValidatorInterface
 {
     /**

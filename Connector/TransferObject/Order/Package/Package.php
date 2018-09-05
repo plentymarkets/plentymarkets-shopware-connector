@@ -5,9 +5,6 @@ namespace PlentyConnector\Connector\TransferObject\Order\Package;
 use DateTimeImmutable;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 
-/**
- * Class Package
- */
 class Package extends AbstractValueObject
 {
     /**
@@ -25,9 +22,6 @@ class Package extends AbstractValueObject
      */
     private $shippingProvider;
 
-    /**
-     * Package constructor.
-     */
     public function __construct()
     {
         $this->shippingTime = new DateTimeImmutable('now');

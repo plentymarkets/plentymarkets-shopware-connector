@@ -4,9 +4,6 @@ namespace PlentyConnector\Connector\BacklogService\Command;
 
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 
-/**
- * Class HandleBacklogElementCommand
- */
 class HandleBacklogElementCommand implements CommandInterface
 {
     /**

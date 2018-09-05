@@ -13,9 +13,6 @@ use Shopware\Models\Payment\Repository;
 use ShopwareAdapter\ResponseParser\PaymentMethod\PaymentMethodResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class FetchAllPaymentMethodsQueryHandler
- */
 class FetchAllPaymentMethodsQueryHandler implements QueryHandlerInterface
 {
     /**

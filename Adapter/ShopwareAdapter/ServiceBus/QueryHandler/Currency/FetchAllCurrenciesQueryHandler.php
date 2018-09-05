@@ -14,9 +14,6 @@ use Shopware\Models\Shop\Currency as CurrencyModel;
 use ShopwareAdapter\ResponseParser\Currency\CurrencyResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class FetchAllCurrenciesQueryHandler
- */
 class FetchAllCurrenciesQueryHandler implements QueryHandlerInterface
 {
     /**

@@ -6,9 +6,6 @@ use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class PaymentMethodResponseParser
- */
 class PaymentMethodResponseParser implements PaymentMethodResponseParserInterface
 {
     /**
