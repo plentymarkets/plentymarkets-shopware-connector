@@ -2,9 +2,6 @@
 
 namespace PlentyConnector\Adapter;
 
-/**
- * Interface AdapterInterface.
- */
 interface AdapterInterface
 {
     /**

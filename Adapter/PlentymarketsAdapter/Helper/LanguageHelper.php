@@ -2,9 +2,6 @@
 
 namespace PlentymarketsAdapter\Helper;
 
-/**
- * Class LanguageHelper
- */
 class LanguageHelper implements LanguageHelperInterface
 {
     /**

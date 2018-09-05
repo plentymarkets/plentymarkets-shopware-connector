@@ -21,9 +21,6 @@ use ShopwareAdapter\Helper\AttributeHelper;
 use ShopwareAdapter\RequestGenerator\Product\ProductRequestGeneratorInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class HandleProductCommandHandler.
- */
 class HandleProductCommandHandler implements CommandHandlerInterface
 {
     /**
@@ -149,7 +146,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         $variantRepository = $this->entityManager->getRepository(Detail::class);
 
         /**
-         * @var Detail|null $mainVariation
+         * @var null|Detail $mainVariation
          */
         $mainVariation = $variantRepository->findOneBy(['number' => $product->getNumber()]);
 

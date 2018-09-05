@@ -6,9 +6,6 @@ use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 
-/**
- * Class VatRateResponseParser
- */
 class VatRateResponseParser implements VatRateResponseParserInterface
 {
     /**

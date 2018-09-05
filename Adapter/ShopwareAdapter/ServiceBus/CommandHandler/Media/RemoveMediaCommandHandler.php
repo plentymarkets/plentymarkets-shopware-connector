@@ -15,9 +15,6 @@ use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Media as MediaResource;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class RemoveMediaCommandHandler.
- */
 class RemoveMediaCommandHandler implements CommandHandlerInterface
 {
     /**

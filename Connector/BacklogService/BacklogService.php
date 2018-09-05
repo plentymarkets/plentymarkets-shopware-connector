@@ -13,9 +13,6 @@ use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
-/**
- * Class BacklogService
- */
 class BacklogService implements BacklogServiceInterface
 {
     /**

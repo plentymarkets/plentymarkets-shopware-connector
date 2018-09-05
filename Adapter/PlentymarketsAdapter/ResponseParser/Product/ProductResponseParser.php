@@ -9,6 +9,7 @@ use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Category\Category;
 use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
+use PlentyConnector\Connector\TransferObject\Product\Badge\Badge;
 use PlentyConnector\Connector\TransferObject\Product\Image\Image;
 use PlentyConnector\Connector\TransferObject\Product\LinkedProduct\LinkedProduct;
 use PlentyConnector\Connector\TransferObject\Product\Product;
@@ -26,9 +27,6 @@ use PlentymarketsAdapter\ResponseParser\Product\Image\ImageResponseParserInterfa
 use PlentymarketsAdapter\ResponseParser\Product\Variation\VariationResponseParserInterface;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class ProductResponseParser.
- */
 class ProductResponseParser implements ProductResponseParserInterface
 {
     /**
@@ -136,7 +134,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         $productObject->setName((string) $product['texts'][0]['name1']);
         $productObject->setActive($this->getActive($variations, $mainVariation));
         $productObject->setNumber($this->getProductNumber($variations));
-        $productObject->setHighlight($product['storeSpecial']);
+        $productObject->setBadges($this->getBadges($product));
         $productObject->setShopIdentifiers($shopIdentifiers);
         $productObject->setManufacturerIdentifier($this->getManufacturerIdentifier($product));
         $productObject->setCategoryIdentifiers($this->getCategories($mainVariation));
@@ -767,5 +765,22 @@ class ProductResponseParser implements ProductResponseParserInterface
         $attribute->setValue((string) $product['ageRestriction']);
 
         return $attribute;
+    }
+
+    /**
+     * @param array $product
+     *
+     * @return Badge[]
+     */
+    private function getBadges(array $product)
+    {
+        if ($product['storeSpecial'] === 3) {
+            $badge = new Badge();
+            $badge->setType(Badge::TYPE_HIGHLIGHT);
+
+            return [$badge];
+        }
+
+        return [];
     }
 }

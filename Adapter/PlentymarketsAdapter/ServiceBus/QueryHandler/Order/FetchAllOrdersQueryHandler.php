@@ -14,9 +14,6 @@ use PlentymarketsAdapter\ReadApi\Order\Order as OrderApi;
 use PlentymarketsAdapter\ResponseParser\Order\OrderResponseParserInterface;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class FetchAllOrdersQueryHandler
- */
 class FetchAllOrdersQueryHandler implements QueryHandlerInterface
 {
     /**

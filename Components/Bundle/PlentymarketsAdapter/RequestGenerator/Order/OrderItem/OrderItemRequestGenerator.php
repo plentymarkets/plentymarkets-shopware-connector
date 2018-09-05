@@ -15,9 +15,6 @@ use Shopware\Models\Tax\Repository;
 use Shopware\Models\Tax\Tax;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class OrderItemRequestGenerator
- */
 class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
 {
     /**
@@ -94,7 +91,7 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
         $taxRepository = $this->entityManager->getRepository(Tax::class);
 
         /**
-         * @var Tax|null $taxModel
+         * @var null|Tax $taxModel
          */
         $taxModel = $taxRepository->find($vatIdentity->getAdapterIdentifier());
 

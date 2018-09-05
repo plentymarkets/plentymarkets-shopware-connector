@@ -13,9 +13,6 @@ use Shopware\Models\Dispatch\Repository;
 use ShopwareAdapter\ResponseParser\ShippingProfile\ShippingProfileResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class FetchAllShippingProfilesQueryHandler
- */
 class FetchAllShippingProfilesQueryHandler implements QueryHandlerInterface
 {
     /**

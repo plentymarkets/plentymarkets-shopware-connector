@@ -14,9 +14,6 @@ use PlentyConnector\Connector\TransferObject\Unit\Unit;
 use ShopwareAdapter\DataProvider\CustomerGroup\CustomerGroupDataProviderInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class VariationRequestGenerator
- */
 class VariationRequestGenerator implements VariationRequestGeneratorInterface
 {
     /**

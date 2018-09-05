@@ -6,9 +6,6 @@ use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class CustomerGroupResponseParser
- */
 class CustomerGroupResponseParser implements CustomerGroupResponseParserInterface
 {
     /**

@@ -5,9 +5,6 @@ namespace PlentyConnector\Connector\ServiceBus\QueryHandler;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
-/**
- * Interface QueryHandlerInterface.
- */
 interface QueryHandlerInterface
 {
     /**

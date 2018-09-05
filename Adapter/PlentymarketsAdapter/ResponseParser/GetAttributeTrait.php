@@ -4,9 +4,6 @@ namespace PlentymarketsAdapter\ResponseParser;
 
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
-/**
- * Class GetAttributeTrait
- */
 trait GetAttributeTrait
 {
     /**

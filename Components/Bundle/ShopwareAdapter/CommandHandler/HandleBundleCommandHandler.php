@@ -24,9 +24,6 @@ use SwagBundle\Models\Bundle as BundleModel;
 use SwagBundle\Models\Price as PriceModel;
 use SwagBundle\Models\Repository as BundleRepository;
 
-/**
- * Class HandleBundleCommandHandler.
- */
 class HandleBundleCommandHandler implements CommandHandlerInterface
 {
     /**

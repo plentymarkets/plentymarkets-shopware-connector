@@ -5,9 +5,6 @@ namespace PlentyConnector\Connector\ServiceBus\Query;
 use Assert\Assertion;
 use PlentyConnector\Connector\ServiceBus\QueryType;
 
-/**
- * Class FetchTransferObjectQuery
- */
 class FetchTransferObjectQuery implements QueryInterface
 {
     /**

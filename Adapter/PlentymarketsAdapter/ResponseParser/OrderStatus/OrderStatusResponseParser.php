@@ -6,9 +6,6 @@ use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\OrderStatus\OrderStatus;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 
-/**
- * Class OrderStatusResponseParser
- */
 class OrderStatusResponseParser implements OrderStatusResponseParserInterface
 {
     /**

@@ -7,9 +7,6 @@ use Doctrine\ORM\EntityRepository;
 use PlentyConnector\Connector\IdentityService\Model\Identity as IdentityModel;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 
-/**
- * Class DoctrineIdentityStorage.
- */
 class DoctrineIdentityStorage implements IdentityStorageInterface
 {
     /**

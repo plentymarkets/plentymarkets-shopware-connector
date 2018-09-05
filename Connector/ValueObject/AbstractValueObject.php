@@ -2,9 +2,6 @@
 
 namespace PlentyConnector\Connector\ValueObject;
 
-/**
- * Class AbstractValueObject
- */
 abstract class AbstractValueObject implements ValueObjectInterface
 {
     /**

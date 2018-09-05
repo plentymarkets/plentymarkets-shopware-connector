@@ -4,9 +4,6 @@ namespace PlentyConnector\Connector\TransferObject\OrderStatus;
 
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 
-/**
- * Class OrderStatus
- */
 class OrderStatus extends AbstractTransferObject
 {
     const TYPE = 'OrderStatus';
@@ -38,7 +35,7 @@ class OrderStatus extends AbstractTransferObject
     }
 
     /**
-     * @param string $identifier
+     * {@inheritdoc}
      */
     public function setIdentifier($identifier)
     {

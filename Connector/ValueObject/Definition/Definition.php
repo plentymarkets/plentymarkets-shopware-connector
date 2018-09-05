@@ -4,9 +4,6 @@ namespace PlentyConnector\Connector\ValueObject\Definition;
 
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 
-/**
- * Class Definition.
- */
 class Definition extends AbstractValueObject
 {
     /**

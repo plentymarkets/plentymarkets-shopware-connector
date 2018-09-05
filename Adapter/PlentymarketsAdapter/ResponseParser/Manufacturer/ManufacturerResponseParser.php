@@ -10,9 +10,6 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Media\MediaResponseParserInterface;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class ManufacturerResponseParser
- */
 class ManufacturerResponseParser implements ManufacturerResponseParserInterface
 {
     /**

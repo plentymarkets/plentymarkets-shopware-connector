@@ -6,9 +6,6 @@ use Assert\Assertion;
 use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 
-/**
- * Class LanguageValidator
- */
 class LanguageValidator implements ValidatorInterface
 {
     /**

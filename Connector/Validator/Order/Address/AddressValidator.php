@@ -7,9 +7,6 @@ use PlentyConnector\Connector\TransferObject\Order\Address\Address;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
-/**
- * Class AddressValidator
- */
 class AddressValidator implements ValidatorInterface
 {
     /**

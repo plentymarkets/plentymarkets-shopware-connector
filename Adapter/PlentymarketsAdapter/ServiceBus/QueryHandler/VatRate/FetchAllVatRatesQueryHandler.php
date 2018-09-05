@@ -11,9 +11,6 @@ use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\VatRate\VatRateResponseParserInterface;
 
-/**
- * Class FetchAllVatRatesQueryHandler
- */
 class FetchAllVatRatesQueryHandler implements QueryHandlerInterface
 {
     /**

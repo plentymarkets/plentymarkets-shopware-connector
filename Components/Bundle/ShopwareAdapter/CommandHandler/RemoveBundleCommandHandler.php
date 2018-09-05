@@ -16,9 +16,6 @@ use Psr\Log\LoggerInterface;
 use ShopwareAdapter\ShopwareAdapter;
 use SwagBundle\Models\Bundle as BundleModel;
 
-/**
- * Class RemoveBundleCommandHandler.
- */
 class RemoveBundleCommandHandler implements CommandHandlerInterface
 {
     /**

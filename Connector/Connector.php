@@ -13,9 +13,6 @@ use PlentyConnector\Connector\ValueObject\Definition\Definition;
 use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class Connector.
- */
 class Connector implements ConnectorInterface
 {
     /**

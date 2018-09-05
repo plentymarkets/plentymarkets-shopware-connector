@@ -7,9 +7,6 @@ use PlentyConnector\Connector\TransferObject\Order\OrderItem\OrderItem;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
-/**
- * Class OrderItemValidator
- */
 class OrderItemValidator implements ValidatorInterface
 {
     /**

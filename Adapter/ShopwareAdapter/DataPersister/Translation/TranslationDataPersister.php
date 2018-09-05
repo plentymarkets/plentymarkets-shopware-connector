@@ -14,9 +14,6 @@ use Shopware_Components_Translation;
 use ShopwareAdapter\DataProvider\Translation\TranslationDataProviderInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class TranslationDataPersister
- */
 class TranslationDataPersister implements TranslationDataPersisterInterface
 {
     /**

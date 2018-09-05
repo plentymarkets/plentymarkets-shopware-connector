@@ -4,9 +4,6 @@ namespace PlentymarketsAdapter\Helper;
 
 use PlentymarketsAdapter\ReadApi\Item\Unit as UnitApi;
 
-/**
- * Class ReferenceAmountCalculator
- */
 class ReferenceAmountCalculator implements ReferenceAmountCalculatorInterface
 {
     /**

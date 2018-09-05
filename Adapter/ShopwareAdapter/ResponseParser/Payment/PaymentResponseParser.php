@@ -13,9 +13,6 @@ use Shopware\Models\Order\Status;
 use ShopwareAdapter\DataProvider\Currency\CurrencyDataProviderInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class PaymentResponseParser
- */
 class PaymentResponseParser implements PaymentResponseParserInterface
 {
     /**

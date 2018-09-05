@@ -12,9 +12,6 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Item;
 use PlentymarketsAdapter\ResponseParser\Product\ProductResponseParserInterface;
 
-/**
- * Class FetchProductQueryHandler.
- */
 class FetchProductQueryHandler implements QueryHandlerInterface
 {
     /**

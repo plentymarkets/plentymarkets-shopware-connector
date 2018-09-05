@@ -14,9 +14,6 @@ use Shopware\Models\Country\Country as CountryModel;
 use ShopwareAdapter\ResponseParser\Country\CountryResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class FetchAllCountriesQueryHandler
- */
 class FetchAllCountriesQueryHandler implements QueryHandlerInterface
 {
     /**

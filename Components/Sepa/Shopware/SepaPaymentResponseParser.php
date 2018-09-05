@@ -16,9 +16,6 @@ use Shopware\Models\Shop\Currency as CurrencyModel;
 use ShopwareAdapter\ResponseParser\Payment\PaymentResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class SepaPaymentResponseParser
- */
 class SepaPaymentResponseParser implements PaymentResponseParserInterface
 {
     /**
@@ -111,7 +108,7 @@ class SepaPaymentResponseParser implements PaymentResponseParserInterface
         $currencyRepository = Shopware()->Models()->getRepository(CurrencyModel::class);
 
         /**
-         * @var CurrencyModel|null $model
+         * @var null|CurrencyModel $model
          */
         $model = $currencyRepository->findOneBy(['currency' => $currency]);
 

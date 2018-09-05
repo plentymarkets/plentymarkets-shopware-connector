@@ -9,9 +9,6 @@ use PlentyConnector\Connector\ValidatorService\ValidatorServiceInterface;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Ramsey\Uuid\Uuid;
 
-/**
- * Class IdentityService.
- */
 class IdentityService implements IdentityServiceInterface
 {
     /**

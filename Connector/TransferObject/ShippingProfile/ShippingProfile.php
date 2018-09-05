@@ -4,9 +4,6 @@ namespace PlentyConnector\Connector\TransferObject\ShippingProfile;
 
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 
-/**
- * Class ShippingProfile.
- */
 class ShippingProfile extends AbstractTransferObject
 {
     const TYPE = 'ShippingProfile';
@@ -38,7 +35,7 @@ class ShippingProfile extends AbstractTransferObject
     }
 
     /**
-     * @param string $identifier
+     * {@inheritdoc}
      */
     public function setIdentifier($identifier)
     {

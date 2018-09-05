@@ -14,9 +14,6 @@ use PlentyConnector\PlentyConnector;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
-/**
- * Class CronjobSubscriber
- */
 class CronjobSubscriber implements SubscriberInterface
 {
     /**

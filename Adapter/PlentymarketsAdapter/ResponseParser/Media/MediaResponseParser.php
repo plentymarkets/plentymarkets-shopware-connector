@@ -9,9 +9,6 @@ use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
 use PlentymarketsAdapter\Helper\MediaCategoryHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 
-/**
- * Class MediaResponseParser
- */
 class MediaResponseParser implements MediaResponseParserInterface
 {
     /**

@@ -6,9 +6,6 @@ use PlentyConnector\Components\Klarna\PaymentData\KlarnaPaymentData;
 use PlentyConnector\Connector\TransferObject\Payment\Payment;
 use PlentymarketsAdapter\RequestGenerator\Payment\PaymentRequestGeneratorInterface;
 
-/**
- * Class KlarnaRequestGenerator
- */
 class KlarnaRequestGenerator implements PaymentRequestGeneratorInterface
 {
     /**

@@ -9,9 +9,6 @@ use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
 use Shopware\Bundle\AttributeBundle\Service\DataLoader;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class MediaDataProvider
- */
 class MediaDataProvider implements MediaDataProviderInterface
 {
     /**

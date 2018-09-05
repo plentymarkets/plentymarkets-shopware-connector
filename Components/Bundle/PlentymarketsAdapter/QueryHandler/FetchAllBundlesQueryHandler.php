@@ -14,9 +14,6 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Item;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class FetchAllBundlesQueryHandler.
- */
 class FetchAllBundlesQueryHandler implements QueryHandlerInterface
 {
     /**

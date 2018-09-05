@@ -12,9 +12,6 @@ use ShopwareAdapter\DataProvider\Order\OrderDataProviderInterface;
 use ShopwareAdapter\ResponseParser\Payment\PaymentResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class FetchPaymentQueryHandler
- */
 class FetchPaymentQueryHandler implements QueryHandlerInterface
 {
     /**

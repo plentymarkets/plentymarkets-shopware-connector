@@ -6,9 +6,6 @@ use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Language\Language;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class LanguageResponseParser
- */
 class LanguageResponseParser implements LanguageResponseParserInterface
 {
     /**

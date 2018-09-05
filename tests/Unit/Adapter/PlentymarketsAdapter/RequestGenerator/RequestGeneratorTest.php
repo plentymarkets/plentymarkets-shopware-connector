@@ -7,9 +7,6 @@ use PlentyConnector\Connector\IdentityService\IdentityService;
 use PlentyConnector\Connector\IdentityService\Model\Identity;
 use Ramsey\Uuid\Uuid;
 
-/**
- * Class RequestGeneratorTest
- */
 abstract class RequestGeneratorTest extends TestCase
 {
     /**

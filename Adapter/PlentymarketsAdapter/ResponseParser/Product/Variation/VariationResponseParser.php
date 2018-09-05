@@ -25,9 +25,6 @@ use PlentymarketsAdapter\ResponseParser\Product\Image\ImageResponseParserInterfa
 use PlentymarketsAdapter\ResponseParser\Product\Price\PriceResponseParserInterface;
 use PlentymarketsAdapter\ResponseParser\Product\Stock\StockResponseParserInterface;
 
-/**
- * Class VariationResponseParser
- */
 class VariationResponseParser implements VariationResponseParserInterface
 {
     /**

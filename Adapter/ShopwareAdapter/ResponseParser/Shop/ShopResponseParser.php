@@ -6,9 +6,6 @@ use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class ShopResponseParser
- */
 class ShopResponseParser implements ShopResponseParserInterface
 {
     /**

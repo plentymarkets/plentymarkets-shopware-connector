@@ -11,9 +11,6 @@ use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\CustomerGroup\CustomerGroupResponseParserInterface;
 
-/**
- * Class FetchAllCustomerGroupsQueryHandler
- */
 class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
 {
     /**

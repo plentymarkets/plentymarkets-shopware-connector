@@ -4,9 +4,6 @@ namespace PlentyConnector\Connector\ServiceBus\QueryFactory;
 
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 
-/**
- * Class QueryFactoryInterface.
- */
 interface QueryFactoryInterface
 {
     /**

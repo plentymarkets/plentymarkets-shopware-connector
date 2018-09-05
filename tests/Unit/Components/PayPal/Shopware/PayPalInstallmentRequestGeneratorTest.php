@@ -8,9 +8,6 @@ use PlentyConnector\Components\PayPal\Plentymarkets\PayPalInstallmentRequestGene
 use PlentyConnector\Connector\TransferObject\Payment\Payment;
 use PlentymarketsAdapter\RequestGenerator\Payment\PaymentRequestGenerator;
 
-/**
- * Class PayPalPlusInstallmentRequestGeneratorTest
- */
 class PayPalInstallmentRequestGeneratorTest extends TestCase
 {
     /**

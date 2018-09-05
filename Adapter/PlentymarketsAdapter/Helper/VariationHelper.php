@@ -7,9 +7,6 @@ use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class VariationHelper
- */
 class VariationHelper implements VariationHelperInterface
 {
     /**

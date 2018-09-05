@@ -4,9 +4,6 @@ namespace PlentyConnector\Connector\ServiceBus\CommandFactory\Exception;
 
 use InvalidArgumentException;
 
-/**
- * Class MissingCommandException
- */
 class MissingCommandException extends InvalidArgumentException
 {
     /**
