@@ -23,7 +23,6 @@ class FetchAllPaymentMethodsQueryHandler implements QueryHandlerInterface
      */
     private $responseParser;
 
-
     public function __construct(
         ClientInterface $client,
         PaymentMethodResponseParserInterface $responseParser

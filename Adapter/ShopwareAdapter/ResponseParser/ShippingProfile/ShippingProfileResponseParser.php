@@ -13,7 +13,6 @@ class ShippingProfileResponseParser implements ShippingProfileResponseParserInte
      */
     private $identityService;
 
-
     public function __construct(IdentityServiceInterface $identityService)
     {
         $this->identityService = $identityService;

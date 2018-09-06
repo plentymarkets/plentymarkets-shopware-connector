@@ -23,7 +23,6 @@ class FetchAllVatRatesQueryHandler implements QueryHandlerInterface
      */
     private $responseParser;
 
-
     public function __construct(
         ClientInterface $client,
         VatRateResponseParserInterface $responseParser

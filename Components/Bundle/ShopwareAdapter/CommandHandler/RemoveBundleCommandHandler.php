@@ -38,7 +38,6 @@ class RemoveBundleCommandHandler implements CommandHandlerInterface
      */
     private $logger;
 
-
     public function __construct(
         IdentityServiceInterface $identityService,
         EntityManagerInterface $entityManager,

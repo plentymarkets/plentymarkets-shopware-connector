@@ -42,6 +42,7 @@ class FetchChangedMediaCategoriesQueryHandler implements QueryHandlerInterface
      * @var OutputHandlerInterface
      */
     private $outputHandler;
+
     public function __construct(
         ConfigServiceInterface $config,
         MediaCategoryHelperInterface $mediaCategoryHelper,

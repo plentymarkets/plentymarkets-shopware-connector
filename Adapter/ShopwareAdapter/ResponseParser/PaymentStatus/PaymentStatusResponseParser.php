@@ -13,7 +13,6 @@ class PaymentStatusResponseParser implements PaymentStatusResponseParserInterfac
      */
     private $identityService;
 
-
     public function __construct(IdentityServiceInterface $identityService)
     {
         $this->identityService = $identityService;
