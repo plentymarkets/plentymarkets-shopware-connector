@@ -66,9 +66,9 @@ class CleanupCommand extends ShopwareCommand
 
         try {
             $this->cleanupService->cleanup();
-        } catch (Throwable $exception) {
-            $this->logger->error($exception->getMessage());
         } catch (Exception $exception) {
+            $this->logger->error($exception->getMessage());
+        } catch (Throwable $exception) {
             $this->logger->error($exception->getMessage());
         }
     }

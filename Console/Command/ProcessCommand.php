@@ -110,9 +110,9 @@ class ProcessCommand extends ShopwareCommand
             }
 
             $this->connector->handle($queryType, $objectType, $objectIdentifier);
-        } catch (Throwable $exception) {
-            $this->logger->error($exception->getMessage());
         } catch (Exception $exception) {
+            $this->logger->error($exception->getMessage());
+        } catch (Throwable $exception) {
             $this->logger->error($exception->getMessage());
         }
     }

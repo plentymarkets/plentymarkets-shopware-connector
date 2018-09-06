@@ -28,7 +28,7 @@ class Definition extends AbstractValueObject
     private $objectType = '';
 
     /**
-     * Definition priority. Higher priority means earlier processing of the definition
+     * Definition priority. Higher priority means earlier processing of the definition and transfer objects
      *
      * @var int
      */
