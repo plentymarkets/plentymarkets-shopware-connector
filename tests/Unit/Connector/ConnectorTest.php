@@ -44,6 +44,7 @@ class ConnectorTest extends TestCase
             'TestDestinationAdapter',
             'TestType',
             CommandType::HANDLE,
+            0,
             $testElement
         )->willReturn($command);
 
@@ -90,6 +91,7 @@ class ConnectorTest extends TestCase
             'TestDestinationAdapter',
             'TestType',
             CommandType::HANDLE,
+            0,
             $testElement
         )->willReturn($command);
 
@@ -133,6 +135,7 @@ class ConnectorTest extends TestCase
             'TestDestinationAdapter',
             'TestType',
             CommandType::HANDLE,
+            0,
             $testElement
         )->willReturn($command);
 

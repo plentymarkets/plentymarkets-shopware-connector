@@ -30,8 +30,8 @@
         }
     },
     "scripts": {
-        "test": "phpunit -c tests/ --colors=always",
-        "test-unit": "phpunit -c tests/phpunit_unit.xml --colors=always"
+        "test": "./vendor/bin/phpunit -c tests/ --colors=always",
+        "test-unit": "./vendor/bin/phpunit -c tests/phpunit_unit.xml --colors=always"
     },
     "extra": {
         "installer-name": "PlentyConnector"
