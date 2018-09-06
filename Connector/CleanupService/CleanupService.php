@@ -203,7 +203,7 @@ class CleanupService implements CleanupServiceInterface
                 $definition->getDestinationAdapterName(),
                 $definition->getObjectType(),
                 CommandType::REMOVE,
-                0,
+                -100,
                 $identity->getObjectIdentifier()
             ));
 
