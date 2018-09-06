@@ -55,6 +55,12 @@ class Iterator implements BaseIterator, Countable
      */
     private $isLastPage = false;
 
+    /**
+     * @param string       $path
+     * @param Client       $client
+     * @param array        $criteria
+     * @param null|Closure $prepareFunction
+     */
     public function __construct($path, Client $client, array $criteria = [], Closure $prepareFunction = null)
     {
         Assertion::string($path);
