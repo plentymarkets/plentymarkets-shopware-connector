@@ -19,12 +19,10 @@ class ControllerPathSubscriber implements SubscriberInterface
     private $pluginDirectory;
 
     /**
-     * ControllerPathSubscriber constructor.
-     *
      * @param Enlight_Template_Manager $template
      * @param string                   $pluginDirectory
      */
-    public function __construct(Enlight_Template_Manager $template, string $pluginDirectory)
+    public function __construct(Enlight_Template_Manager $template, $pluginDirectory)
     {
         $this->template = $template;
         $this->pluginDirectory = $pluginDirectory;

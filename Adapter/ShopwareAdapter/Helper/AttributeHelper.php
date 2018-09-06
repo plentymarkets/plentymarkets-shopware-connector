@@ -14,11 +14,6 @@ class AttributeHelper implements AttributeHelperInterface
      */
     private $validator;
 
-    /**
-     * AttributeHelper constructor.
-     *
-     * @param ValidatorServiceInterface $validator
-     */
     public function __construct(ValidatorServiceInterface $validator)
     {
         $this->validator = $validator;

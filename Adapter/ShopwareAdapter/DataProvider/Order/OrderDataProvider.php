@@ -18,12 +18,6 @@ class OrderDataProvider implements OrderDataProviderInterface
      */
     private $orderResource;
 
-    /**
-     * OrderDataProvider constructor.
-     *
-     * @param Connection    $connection
-     * @param OrderResource $orderResource
-     */
     public function __construct(Connection $connection, OrderResource $orderResource)
     {
         $this->connection = $connection;

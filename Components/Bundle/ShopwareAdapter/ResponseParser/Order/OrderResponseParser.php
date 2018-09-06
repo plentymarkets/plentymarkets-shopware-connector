@@ -11,11 +11,6 @@ class OrderResponseParser implements OrderResponseParserInterface
      */
     private $parentOrderResponseParser;
 
-    /**
-     * OrderResponseParser constructor.
-     *
-     * @param OrderResponseParserInterface $parentOrderResponseParser
-     */
     public function __construct(OrderResponseParserInterface $parentOrderResponseParser)
     {
         $this->parentOrderResponseParser = $parentOrderResponseParser;

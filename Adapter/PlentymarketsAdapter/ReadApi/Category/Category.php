@@ -14,12 +14,6 @@ class Category extends ApiAbstract
      */
     private $languageHelper;
 
-    /**
-     * Category constructor.
-     *
-     * @param ClientInterface         $client
-     * @param LanguageHelperInterface $languageHelper
-     */
     public function __construct(
         ClientInterface $client,
         LanguageHelperInterface $languageHelper

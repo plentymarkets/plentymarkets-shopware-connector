@@ -13,11 +13,6 @@ class PayPalInstallmentRequestGenerator implements PaymentRequestGeneratorInterf
      */
     private $parentRequestGenerator;
 
-    /**
-     * PayPalInstallmentRequestGenerator constructor.
-     *
-     * @param PaymentRequestGeneratorInterface $parentRequestGenerator
-     */
     public function __construct(PaymentRequestGeneratorInterface $parentRequestGenerator)
     {
         $this->parentRequestGenerator = $parentRequestGenerator;

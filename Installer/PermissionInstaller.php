@@ -34,13 +34,6 @@ class PermissionInstaller implements InstallerInterface
      */
     private $permissions;
 
-    /**
-     * CronjobSyncronizer constructor.
-     *
-     * @param ModelManager            $em
-     * @param Shopware_Components_Acl $acl
-     * @param array                   $permissions
-     */
     public function __construct(ModelManager $em, Shopware_Components_Acl $acl, array $permissions)
     {
         $this->em = $em;

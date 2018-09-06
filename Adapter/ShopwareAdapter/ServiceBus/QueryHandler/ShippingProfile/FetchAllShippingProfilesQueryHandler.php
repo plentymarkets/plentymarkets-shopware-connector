@@ -25,12 +25,6 @@ class FetchAllShippingProfilesQueryHandler implements QueryHandlerInterface
      */
     private $responseParser;
 
-    /**
-     * FetchAllShippingProfilesQueryHandler constructor.
-     *
-     * @param EntityManagerInterface                 $entityManager
-     * @param ShippingProfileResponseParserInterface $responseParser
-     */
     public function __construct(
         EntityManagerInterface $entityManager,
         ShippingProfileResponseParserInterface $responseParser

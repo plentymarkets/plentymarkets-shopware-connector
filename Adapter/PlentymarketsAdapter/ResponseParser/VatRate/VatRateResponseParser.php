@@ -13,11 +13,6 @@ class VatRateResponseParser implements VatRateResponseParserInterface
      */
     private $identityService;
 
-    /**
-     * VatRateResponseParser constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     */
     public function __construct(IdentityServiceInterface $identityService)
     {
         $this->identityService = $identityService;

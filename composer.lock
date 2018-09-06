@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0ed7aa1e1e93fc5372be0893e538ad39",
+    "content-hash": "47a35cd88e4bb62339abb36391b870a9",
     "packages": [
         {
             "name": "composer/installers",
@@ -1901,8 +1901,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "viison/address-splitter": 20,
-        "roave/security-advisories": 20
+        "roave/security-advisories": 20,
+        "viison/address-splitter": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

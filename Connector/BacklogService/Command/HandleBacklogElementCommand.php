@@ -11,11 +11,6 @@ class HandleBacklogElementCommand implements CommandInterface
      */
     private $command;
 
-    /**
-     * HandleBacklogElementCommand constructor.
-     *
-     * @param CommandInterface $command
-     */
     public function __construct(CommandInterface $command)
     {
         $this->command = $command;

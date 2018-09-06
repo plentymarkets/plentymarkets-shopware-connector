@@ -13,11 +13,6 @@ class CountryResponseParser implements CountryResponseParserInterface
      */
     private $identityService;
 
-    /**
-     * CountryResponseParser constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     */
     public function __construct(IdentityServiceInterface $identityService)
     {
         $this->identityService = $identityService;

@@ -13,11 +13,6 @@ class PayPalPlusInvoiceRequestGenerator implements PaymentRequestGeneratorInterf
      */
     private $parentRequestGenerator;
 
-    /**
-     * PayPalPlusInvoiceRequestGenerator constructor.
-     *
-     * @param PaymentRequestGeneratorInterface $parentRequestGenerator
-     */
     public function __construct(PaymentRequestGeneratorInterface $parentRequestGenerator)
     {
         $this->parentRequestGenerator = $parentRequestGenerator;

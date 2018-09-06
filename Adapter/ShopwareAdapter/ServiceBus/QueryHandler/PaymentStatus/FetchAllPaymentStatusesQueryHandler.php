@@ -26,12 +26,6 @@ class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
      */
     private $responseParser;
 
-    /**
-     * FetchAllPaymentStatusesQueryHandler constructor.
-     *
-     * @param EntityManagerInterface               $entityManager  ,
-     * @param PaymentStatusResponseParserInterface $responseParser
-     */
     public function __construct(
         EntityManagerInterface $entityManager,
         PaymentStatusResponseParserInterface $responseParser

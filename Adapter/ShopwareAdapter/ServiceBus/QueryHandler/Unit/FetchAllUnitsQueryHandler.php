@@ -26,12 +26,6 @@ class FetchAllUnitsQueryHandler implements QueryHandlerInterface
      */
     private $responseParser;
 
-    /**
-     * FetchAllUnitsQueryHandler constructor.
-     *
-     * @param EntityManagerInterface      $entityManager
-     * @param UnitResponseParserInterface $responseParser
-     */
     public function __construct(
         EntityManagerInterface $entityManager,
         UnitResponseParserInterface $responseParser

@@ -18,11 +18,6 @@ class CustomerRequestGenerator implements CustomerRequestGeneratorInterface
      */
     private $identityService;
 
-    /**
-     * CustomerRequestGenerator constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     */
     public function __construct(IdentityServiceInterface $identityService)
     {
         $this->identityService = $identityService;

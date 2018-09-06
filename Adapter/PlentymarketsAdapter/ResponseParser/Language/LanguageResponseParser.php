@@ -13,11 +13,6 @@ class LanguageResponseParser implements LanguageResponseParserInterface
      */
     private $identityService;
 
-    /**
-     * LanguageResponseParser constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     */
     public function __construct(IdentityServiceInterface $identityService)
     {
         $this->identityService = $identityService;
