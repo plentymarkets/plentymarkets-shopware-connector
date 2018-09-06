@@ -27,12 +27,6 @@ class RemoveCategoryCommandHandler implements CommandHandlerInterface
      */
     private $logger;
 
-    /**
-     * RemoveCategoryCommandHandler constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface          $logger
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         LoggerInterface $logger

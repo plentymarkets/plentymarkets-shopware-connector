@@ -24,12 +24,6 @@ class RemoveStockCommandHandler implements CommandHandlerInterface
      */
     private $logger;
 
-    /**
-     * HandleStockCommandHandler constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface          $logger
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         LoggerInterface $logger

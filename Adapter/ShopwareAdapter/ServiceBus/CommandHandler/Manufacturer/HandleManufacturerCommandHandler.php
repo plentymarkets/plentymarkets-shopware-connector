@@ -31,13 +31,6 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
      */
     private $attributePersister;
 
-    /**
-     * HandleManufacturerCommandHandler constructor.
-     *
-     * @param ManufacturerResource            $resource
-     * @param IdentityServiceInterface        $identityService
-     * @param AttributeDataPersisterInterface $attributePersister
-     */
     public function __construct(
         ManufacturerResource $resource,
         IdentityServiceInterface $identityService,

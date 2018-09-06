@@ -36,14 +36,6 @@ class FetchAllCategoriesQueryHandler implements QueryHandlerInterface
      */
     private $outputHandler;
 
-    /**
-     * FetchAllCategoriesQueryHandler constructor.
-     *
-     * @param CategoryApi                     $categoryApi
-     * @param CategoryResponseParserInterface $responseParser
-     * @param LoggerInterface                 $logger
-     * @param OutputHandlerInterface          $outputHandler
-     */
     public function __construct(
         CategoryApi $categoryApi,
         CategoryResponseParserInterface $responseParser,

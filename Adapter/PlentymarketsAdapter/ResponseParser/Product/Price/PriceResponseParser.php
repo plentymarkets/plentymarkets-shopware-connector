@@ -40,15 +40,6 @@ class PriceResponseParser implements PriceResponseParserInterface
      */
     private $configService;
 
-    /**
-     * PriceResponseParser constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     * @param SalesPrice               $itemsSalesPricesApi
-     * @param ContactClass             $itemsAccountsContacsClasses
-     * @param LoggerInterface          $logger
-     * @param ConfigServiceInterface   $configService
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         SalesPrice $itemsSalesPricesApi,

@@ -39,14 +39,6 @@ class FetchChangedProductsQueryHandler implements QueryHandlerInterface
      */
     private $outputHandler;
 
-    /**
-     * FetchChangedProductsQueryHandler constructor.
-     *
-     * @param Item                           $itemApi
-     * @param ProductResponseParserInterface $responseParser
-     * @param LoggerInterface                $logger
-     * @param OutputHandlerInterface         $outputHandler
-     */
     public function __construct(
         Item $itemApi,
         ProductResponseParserInterface $responseParser,

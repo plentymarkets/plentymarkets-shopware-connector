@@ -65,17 +65,6 @@ class OrderResponseParser implements OrderResponseParserInterface
      */
     private $taxRepository;
 
-    /**
-     * OrderResponseParser constructor.
-     *
-     * @param IdentityServiceInterface         $identityService
-     * @param OrderItemResponseParserInterface $orderItemResponseParser
-     * @param AddressResponseParserInterface   $orderAddressParser
-     * @param CustomerResponseParserInterface  $customerParser
-     * @param CurrencyDataProviderInterface    $currencyDataProvider
-     * @param LoggerInterface                  $logger
-     * @param EntityRepository                 $taxRepository
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         OrderItemResponseParserInterface $orderItemResponseParser,

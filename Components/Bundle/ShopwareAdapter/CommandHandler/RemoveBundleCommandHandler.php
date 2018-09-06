@@ -38,14 +38,7 @@ class RemoveBundleCommandHandler implements CommandHandlerInterface
      */
     private $logger;
 
-    /**
-     * RemoveBundleCommandHandler constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     * @param EntityManagerInterface   $entityManager
-     * @param BundleHelper             $bundleHelper
-     * @param LoggerInterface          $logger
-     */
+
     public function __construct(
         IdentityServiceInterface $identityService,
         EntityManagerInterface $entityManager,

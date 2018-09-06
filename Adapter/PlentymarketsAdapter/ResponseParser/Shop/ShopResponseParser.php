@@ -13,11 +13,6 @@ class ShopResponseParser implements ShopResponseParserInterface
      */
     private $identityService;
 
-    /**
-     * ShopResponseParser constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     */
     public function __construct(IdentityServiceInterface $identityService)
     {
         $this->identityService = $identityService;

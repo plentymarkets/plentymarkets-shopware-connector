@@ -13,11 +13,7 @@ class MediaRequestGenerator implements MediaRequestGeneratorInterface
      */
     private $dataProvider;
 
-    /**
-     * MediaRequestGenerator constructor.
-     *
-     * @param MediaDataProviderInterface $dataProvider
-     */
+
     public function __construct(MediaDataProviderInterface $dataProvider)
     {
         $this->dataProvider = $dataProvider;

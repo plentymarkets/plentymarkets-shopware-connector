@@ -21,12 +21,6 @@ class DatabaseInstaller implements InstallerInterface
      */
     private $models = [];
 
-    /**
-     * DatabaseInstaller constructor.
-     *
-     * @param ModelManager $entitiyManager
-     * @param array        $models
-     */
     public function __construct(ModelManager $entitiyManager, array $models)
     {
         $this->schemaTool = new SchemaTool($entitiyManager);

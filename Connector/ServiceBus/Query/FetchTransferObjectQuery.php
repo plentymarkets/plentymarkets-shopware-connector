@@ -27,14 +27,6 @@ class FetchTransferObjectQuery implements QueryInterface
      */
     private $objectIdentifier;
 
-    /**
-     * FetchTransferObjectQuery constructor.
-     *
-     * @param string $adapterName
-     * @param string $objectType
-     * @param string $queryType
-     * @param null   $objectIdentifier
-     */
     public function __construct($adapterName, $objectType, $queryType, $objectIdentifier = null)
     {
         Assertion::string($adapterName);

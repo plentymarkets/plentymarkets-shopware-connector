@@ -39,14 +39,6 @@ class BacklogProcessCommand extends ShopwareCommand
      */
     private $outputHandler;
 
-    /**
-     * BacklogProcessCommand constructor.
-     *
-     * @param ServiceBusInterface    $serviceBus
-     * @param BacklogService         $backlogService
-     * @param LoggerInterface        $logger
-     * @param OutputHandlerInterface $outputHandler
-     */
     public function __construct(
         ServiceBusInterface $serviceBus,
         BacklogService $backlogService,

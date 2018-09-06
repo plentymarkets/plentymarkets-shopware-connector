@@ -12,11 +12,6 @@ class ConfiguratorSetRequestGenerator implements ConfiguratorSetRequestGenerator
      */
     private $config;
 
-    /**
-     * ConfiguratorSetRequestGenerator constructor.
-     *
-     * @param ConfigServiceInterface $config
-     */
     public function __construct(ConfigServiceInterface $config)
     {
         $this->config = $config;

@@ -36,14 +36,6 @@ class FetchAllManufacturersQueryHandler implements QueryHandlerInterface
      */
     private $outputHandler;
 
-    /**
-     * FetchAllManufacturersQueryHandler constructor.
-     *
-     * @param ClientInterface                     $client
-     * @param ManufacturerResponseParserInterface $responseParser
-     * @param LoggerInterface                     $logger
-     * @param OutputHandlerInterface              $outputHandler
-     */
     public function __construct(
         ClientInterface $client,
         ManufacturerResponseParserInterface $responseParser,

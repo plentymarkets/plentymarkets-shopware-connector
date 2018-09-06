@@ -28,14 +28,6 @@ class TransferObjectCommand implements CommandInterface
      */
     private $payload;
 
-    /**
-     * TransferObjectCommand constructor.
-     *
-     * @param string                         $adapterName
-     * @param string                         $objectType
-     * @param string                         $commandType
-     * @param string|TransferObjectInterface $payload
-     */
     public function __construct($adapterName, $objectType, $commandType, $payload)
     {
         Assertion::string($adapterName);

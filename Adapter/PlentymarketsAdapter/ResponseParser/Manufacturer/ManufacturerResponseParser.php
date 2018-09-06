@@ -27,13 +27,6 @@ class ManufacturerResponseParser implements ManufacturerResponseParserInterface
      */
     private $logger;
 
-    /**
-     * ManufacturerResponseParser constructor.
-     *
-     * @param IdentityServiceInterface     $identityService
-     * @param MediaResponseParserInterface $mediaResponseParser
-     * @param LoggerInterface              $logger
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         MediaResponseParserInterface $mediaResponseParser,

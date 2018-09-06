@@ -13,11 +13,6 @@ class UnitResponseParser implements UnitResponseParserInterface
      */
     private $identityService;
 
-    /**
-     * UnitResponseParser constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     */
     public function __construct(IdentityServiceInterface $identityService)
     {
         $this->identityService = $identityService;

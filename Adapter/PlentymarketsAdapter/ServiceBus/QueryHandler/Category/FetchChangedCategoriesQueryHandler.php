@@ -39,14 +39,6 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
      */
     private $outputHandler;
 
-    /**
-     * FetchChangedCategoriesQueryHandler constructor.
-     *
-     * @param CategoryApi                     $categoryApi
-     * @param CategoryResponseParserInterface $responseParser
-     * @param LoggerInterface                 $logger
-     * @param OutputHandlerInterface          $outputHandler
-     */
     public function __construct(
         CategoryApi $categoryApi,
         CategoryResponseParserInterface $responseParser,

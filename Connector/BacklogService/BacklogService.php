@@ -35,12 +35,6 @@ class BacklogService implements BacklogServiceInterface
      */
     private $connection;
 
-    /**
-     * BacklogService constructor.
-     *
-     * @param EntityManagerInterface $entityManager
-     * @param LoggerInterface        $logger
-     */
     public function __construct(
         EntityManagerInterface $entityManager,
         LoggerInterface $logger

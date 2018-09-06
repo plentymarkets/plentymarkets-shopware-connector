@@ -26,12 +26,6 @@ class VariationRequestGenerator implements VariationRequestGeneratorInterface
      */
     private $customerGroupDataProvider;
 
-    /**
-     * VariationRequestGenerator constructor.
-     *
-     * @param IdentityServiceInterface           $identityService
-     * @param CustomerGroupDataProviderInterface $customerGroupDataProvider
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         CustomerGroupDataProviderInterface $customerGroupDataProvider

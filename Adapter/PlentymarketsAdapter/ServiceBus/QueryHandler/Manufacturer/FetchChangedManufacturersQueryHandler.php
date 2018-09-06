@@ -39,14 +39,7 @@ class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
      */
     private $outputHandler;
 
-    /**
-     * FetchChangedManufacturersQueryHandler constructor.
-     *
-     * @param ClientInterface                     $client
-     * @param ManufacturerResponseParserInterface $responseParser
-     * @param LoggerInterface                     $logger
-     * @param OutputHandlerInterface              $outputHandler
-     */
+
     public function __construct(
         ClientInterface $client,
         ManufacturerResponseParserInterface $responseParser,

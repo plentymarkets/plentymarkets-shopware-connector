@@ -61,14 +61,6 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
      */
     private $attributePersister;
 
-    /**
-     * HandleCategoryCommandHandler constructor.
-     *
-     * @param IdentityServiceInterface        $identityService
-     * @param TranslationHelperInterface      $translationHelper
-     * @param EntityManagerInterface          $entityManager
-     * @param AttributeDataPersisterInterface $attributePersister
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         TranslationHelperInterface $translationHelper,

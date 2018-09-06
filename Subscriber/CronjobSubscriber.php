@@ -41,15 +41,6 @@ class CronjobSubscriber implements SubscriberInterface
      */
     private $logger;
 
-    /**
-     * CronjobSubscriber constructor.
-     *
-     * @param ConnectorInterface      $connector
-     * @param CleanupServiceInterface $cleanupService
-     * @param BacklogServiceInterface $backlogService
-     * @param ServiceBusInterface     $serviceBus
-     * @param LoggerInterface         $logger
-     */
     public function __construct(
         ConnectorInterface $connector,
         CleanupServiceInterface $cleanupService,

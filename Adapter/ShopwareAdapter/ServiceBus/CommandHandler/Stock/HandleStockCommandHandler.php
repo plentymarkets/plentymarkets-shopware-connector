@@ -31,13 +31,6 @@ class HandleStockCommandHandler implements CommandHandlerInterface
      */
     private $logger;
 
-    /**
-     * HandleStockCommandHandler constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     * @param EntityManagerInterface   $entityManager
-     * @param LoggerInterface          $logger
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         EntityManagerInterface $entityManager,

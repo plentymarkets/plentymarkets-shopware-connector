@@ -34,13 +34,6 @@ class MappingCommand extends ShopwareCommand
      */
     private $outputHandler;
 
-    /**
-     * MappingCommand constructor.
-     *
-     * @param MappingServiceInterface $mappingService
-     * @param LoggerInterface         $logger
-     * @param OutputHandlerInterface  $outputHandler
-     */
     public function __construct(
         MappingServiceInterface $mappingService,
         LoggerInterface $logger,

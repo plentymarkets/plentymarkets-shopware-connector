@@ -32,13 +32,6 @@ class CleanupCommand extends ShopwareCommand
      */
     private $outputHandler;
 
-    /**
-     * CleanupCommand constructor.
-     *
-     * @param CleanupServiceInterface $cleanupService
-     * @param LoggerInterface         $logger
-     * @param OutputHandlerInterface  $outputHandler
-     */
     public function __construct(
         CleanupServiceInterface $cleanupService,
         LoggerInterface $logger,

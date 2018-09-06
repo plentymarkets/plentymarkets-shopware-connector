@@ -25,12 +25,6 @@ class PaymentResponseParser implements PaymentResponseParserInterface
      */
     private $currencyDataProvider;
 
-    /**
-     * PaymentResponseParser constructor.
-     *
-     * @param IdentityServiceInterface      $identityService
-     * @param CurrencyDataProviderInterface $currencyDataProvider
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         CurrencyDataProviderInterface $currencyDataProvider

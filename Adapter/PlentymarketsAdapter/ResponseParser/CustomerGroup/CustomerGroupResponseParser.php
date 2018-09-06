@@ -13,11 +13,6 @@ class CustomerGroupResponseParser implements CustomerGroupResponseParserInterfac
      */
     private $identityService;
 
-    /**
-     * CustomerGroupResponseParser constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     */
     public function __construct(IdentityServiceInterface $identityService)
     {
         $this->identityService = $identityService;

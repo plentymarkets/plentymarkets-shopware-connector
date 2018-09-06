@@ -39,14 +39,6 @@ class FetchChangedStocksQueryHandler implements QueryHandlerInterface
      */
     private $outputHandler;
 
-    /**
-     * FetchChangedStocksQueryHandler constructor.
-     *
-     * @param ClientInterface              $client
-     * @param StockResponseParserInterface $responseParser
-     * @param LoggerInterface              $logger
-     * @param OutputHandlerInterface       $outputHandler
-     */
     public function __construct(
         ClientInterface $client,
         StockResponseParserInterface $responseParser,
