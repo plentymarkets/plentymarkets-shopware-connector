@@ -5,52 +5,38 @@ namespace PlentymarketsAdapter\Client;
 use Assert\Assertion;
 use Closure;
 use Exception;
-use GuzzleHttp\ClientInterface as GuzzleClientInterface;
-use GuzzleHttp\Exception\ClientException;
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentymarketsAdapter\Client\Exception\InvalidCredentialsException;
 use PlentymarketsAdapter\Client\Exception\InvalidResponseException;
+use PlentymarketsAdapter\Client\Exception\LimitReachedException;
+use PlentymarketsAdapter\Client\Exception\LoginExpiredException;
 use PlentymarketsAdapter\Client\Iterator\Iterator;
+use Psr\Log\LoggerInterface;
+use RuntimeException;
 
-/**
- * RepsonseModifier example.
- *
- * Class Client
- */
 class Client implements ClientInterface
 {
-    /**
-     * @var GuzzleClientInterface
-     */
-    private $connection;
-
     /**
      * @var ConfigServiceInterface
      */
     private $config;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @var null|string
      */
     private $accessToken;
 
-    /**
-     * @var null|string
-     */
-    private $refreshToken;
-
-    /**
-     * Client constructor.
-     *
-     * @param GuzzleClientInterface  $connection
-     * @param ConfigServiceInterface $config
-     */
     public function __construct(
-        GuzzleClientInterface $connection,
-        ConfigServiceInterface $config
+        ConfigServiceInterface $config,
+        LoggerInterface $logger
     ) {
-        $this->connection = $connection;
         $this->config = $config;
+        $this->logger = $logger;
     }
 
     /**
@@ -102,68 +88,46 @@ class Client implements ClientInterface
             $this->login();
         }
 
-        $method = strtoupper($method);
-
-        $options = $this->getOptions($limit, $offset, $options);
-        $url = $this->getUrl($path, $options);
-        $requestOptions = $this->getRequestOptions($method, $path, $params, $options);
-
-        $request = $this->connection->createRequest($method, $url, $requestOptions);
-
         try {
-            $response = $this->connection->send($request);
+            $requestUrl = $this->getUrl($path, $options);
+
+            if ($path !== 'login') {
+              /*  for ($i = 0; $i < 300; ++$i) {
+                    $this->curlRequest($requestUrl, $method, $path, $params, $limit, $offset);
+                }*/
+            }
+
+            $response = $this->curlRequest($requestUrl, $method, $path, $params, $limit, $offset);
 
             if (null === $response) {
                 throw InvalidResponseException::fromParams($method, $path, $options);
             }
 
-            $body = $response->getBody();
-
-            if (null === $body) {
-                throw InvalidResponseException::fromParams($method, $path, $options);
-            }
-
-            $result = json_decode($body->getContents(), true);
-
-            if (null === $result) {
-                throw InvalidResponseException::fromParams($method, $path, $options);
-            }
-
-            if (!$options['plainResponse']) {
+            if (!array_key_exists('plainResponse', $options) || !$options['plainResponse']) {
                 // Hack to check if the right page is returned from the api
-                if (array_key_exists('page', $result) && $result['page'] !== $this->getPage($limit, $offset)) {
-                    $result['entries'] = [];
+                if (array_key_exists('page', $response) && $response['page'] !== $this->getPage($limit, $offset)) {
+                    $response['entries'] = [];
                 }
 
-                if (array_key_exists('entries', $result)) {
-                    $result = $result['entries'];
+                if (array_key_exists('entries', $response)) {
+                    $response = $response['entries'];
                 }
             }
 
             $retries = 0;
 
-            return $result;
-        } catch (ClientException $exception) {
-            if ($this->accessToken !== null && !$this->isLoginRequired($path) && null !== $exception->getResponse() && $exception->getResponse()->getStatusCode() === 401) {
-                // retry with fresh accessToken
-                $this->accessToken = null;
-
-                return $this->request($method, $path, $params, $limit, $offset);
-            }
-
-            if ($exception->hasResponse() && $exception->getResponse()) {
-                throw new ClientException(
-                    $exception->getMessage() . ' - ' . $exception->getResponse()->getBody(),
-                    $exception->getRequest(),
-                    $exception->getResponse(),
-                    $exception->getPrevious()
-                );
-            }
-
-            throw $exception;
+            return $response;
         } catch (Exception $exception) {
-            if ($retries < 3) {
-                sleep(10);
+            if ($retries < 4) {
+                if ($exception instanceof LoginExpiredException) {
+                    $this->accessToken = null;
+                }
+
+                if ($exception instanceof LimitReachedException) {
+                    sleep($exception->getRetryAfter());
+                } else {
+                    sleep(10);
+                }
 
                 ++$retries;
 
@@ -174,6 +138,66 @@ class Client implements ClientInterface
         }
     }
 
+    private function curlRequest($requestUrl, $method, $path, $params, $limit, $offset)
+    {
+        $curl = curl_init();
+
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_USERAGENT, $this->getUserAgent());
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $this->getHeaders($path));
+        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 60);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 60);
+
+        // Retry-After: -1536195196
+        $headers = [];
+        curl_setopt($curl, CURLOPT_HEADERFUNCTION, function ($curl, $header) use (&$headers) {
+            $headers[] = $header;
+
+            return strlen($header);
+        });
+
+        if (null !== $limit) {
+            $params['itemsPerPage'] = (int) $limit;
+        }
+
+        if (null !== $offset) {
+            $params['page'] = $this->getPage($limit, $offset);
+        }
+
+        $method = strtoupper($method);
+        if ($method === 'POST') {
+            curl_setopt($curl, CURLOPT_POST, true);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params, JSON_PRETTY_PRINT));
+        } elseif ($method === 'GET') {
+            $requestUrl = $requestUrl . '?' . http_build_query($params);
+        }
+
+        curl_setopt($curl, CURLOPT_URL, $requestUrl);
+
+        $response = curl_exec($curl);
+        $info = curl_getinfo($curl);
+        $errno = curl_errno($curl);
+
+        if ($errno !== CURLE_OK) {
+            throw new RuntimeException('client error');
+        }
+
+        if ($info['http_code'] === 200) {
+            return json_decode($response, true);
+        }
+
+        if ($info['http_code'] === 401) {
+            throw new LoginExpiredException();
+        }
+
+        if ($info['http_code'] === 429) {
+            throw new LimitReachedException(20);
+        }
+
+        throw new RuntimeException('client error');
+    }
+
     /**
      * @param string $path
      *
@@ -181,7 +205,7 @@ class Client implements ClientInterface
      */
     private function isLoginRequired($path)
     {
-        if ($path === 'login') {
+        if ('login' === $path) {
             return false;
         }
 
@@ -204,31 +228,6 @@ class Client implements ClientInterface
         ]);
 
         $this->accessToken = $login['accessToken'];
-        $this->refreshToken = $login['refreshToken'];
-    }
-
-    /**
-     * @param int   $limit
-     * @param int   $offset
-     * @param array $options
-     *
-     * @return array
-     */
-    private function getOptions($limit, $offset, array $options)
-    {
-        if (!array_key_exists('plainResponse', $options)) {
-            $options['plainResponse'] = false;
-        }
-
-        if (null !== $limit) {
-            $options['itemsPerPage'] = (int) $limit;
-        }
-
-        if (null !== $offset) {
-            $options['page'] = $this->getPage($limit, $offset);
-        }
-
-        return $options;
     }
 
     /**
@@ -281,61 +280,11 @@ class Client implements ClientInterface
 
         $parts = parse_url($url);
 
+        if (empty($parts['scheme'])) {
+            $parts['scheme'] = 'http';
+        }
+
         return sprintf('%s://%s/%s/', $parts['scheme'], $parts['host'], 'rest');
-    }
-
-    /**
-     * @param string $method
-     * @param string $path
-     * @param array  $params
-     * @param array  $options
-     *
-     * @return array
-     */
-    private function getRequestOptions($method, $path, array $params, array $options)
-    {
-        Assertion::string($method);
-        Assertion::inArray($method, [
-            'POST',
-            'PUT',
-            'DELETE',
-            'GET',
-        ]);
-        Assertion::isArray($params);
-
-        $requestOptions = [];
-
-        if (array_key_exists('itemsPerPage', $options)) {
-            $params['itemsPerPage'] = $options['itemsPerPage'];
-        }
-
-        if (array_key_exists('page', $options)) {
-            $params['page'] = $options['page'];
-        }
-
-        if ($method === 'GET') {
-            $requestOptions['query'] = $params;
-        } else {
-            $requestOptions['json'] = $params;
-        }
-
-        if (!array_key_exists('headers', $options)) {
-            $requestOptions['headers'] = $this->getHeaders($path);
-        }
-
-        if (!array_key_exists('connect_timeout', $options)) {
-            $requestOptions['connect_timeout'] = 30;
-        }
-
-        if (!array_key_exists('timeout', $options)) {
-            $requestOptions['timeout'] = 60;
-        }
-
-        if (!array_key_exists('exceptions', $options)) {
-            $requestOptions['exceptions'] = true;
-        }
-
-        return $requestOptions;
     }
 
     /**
@@ -346,13 +295,14 @@ class Client implements ClientInterface
     private function getHeaders($path)
     {
         $headers = [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/x.plentymarkets.v1+json',
-            'user-agent' => $this->getUserAgent(),
+            'Content-Type: application/json',
+            'Accept: application/x.plentymarkets.v1+json',
+            'cache-control: no-cache',
+            'user-agent: ' . $this->getUserAgent(),
         ];
 
-        if ($path !== 'login') {
-            $headers['Authorization'] = 'Bearer ' . $this->accessToken;
+        if ('login' !== $path) {
+            $headers[] = 'Authorization: Bearer ' . $this->accessToken;
         }
 
         return $headers;
