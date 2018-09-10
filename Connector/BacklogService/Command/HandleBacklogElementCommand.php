@@ -33,4 +33,12 @@ class HandleBacklogElementCommand implements CommandInterface
             'command' => $this->command,
         ];
     }
+
+    /**
+     * @return int
+     */
+    public function getPriority()
+    {
+        return 0;
+    }
 }

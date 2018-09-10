@@ -13,11 +13,12 @@ class CommandFactory implements CommandFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function create($adapterName, $objectType, $commandType, $payload = null)
+    public function create($adapterName, $objectType, $commandType, $priority, $payload)
     {
         Assertion::string($adapterName);
         Assertion::string($objectType);
         Assertion::inArray($commandType, CommandType::getAllTypes());
+        Assertion::integer($priority);
 
         if ($commandType === CommandType::HANDLE) {
             Assertion::isInstanceOf($payload, TransferObjectInterface::class);
@@ -31,11 +32,11 @@ class CommandFactory implements CommandFactoryInterface
 
         switch ($commandType) {
             case CommandType::HANDLE:
-                $command = new TransferObjectCommand($adapterName, $objectType, $commandType, $payload);
+                $command = new TransferObjectCommand($adapterName, $objectType, $commandType, $priority, $payload);
 
                 break;
             case CommandType::REMOVE:
-                $command = new TransferObjectCommand($adapterName, $objectType, $commandType, $payload);
+                $command = new TransferObjectCommand($adapterName, $objectType, $commandType, $priority, $payload);
 
                 break;
         }

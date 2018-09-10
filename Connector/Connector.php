@@ -166,6 +166,7 @@ class Connector implements ConnectorInterface
                 $definition->getDestinationAdapterName(),
                 $object->getType(),
                 CommandType::HANDLE,
+                $definition->getPriority(),
                 $object
             ));
         }

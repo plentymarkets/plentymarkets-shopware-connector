@@ -116,9 +116,9 @@ class MappingCommand extends ShopwareCommand
 
                 $this->outputHandler->createTable($headers, $rows);
             }
-        } catch (Throwable $exception) {
-            $this->logger->error($exception->getMessage());
         } catch (Exception $exception) {
+            $this->logger->error($exception->getMessage());
+        } catch (Throwable $exception) {
             $this->logger->error($exception->getMessage());
         }
     }

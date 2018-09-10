@@ -48,6 +48,15 @@ class Backlog
     private $status;
 
     /**
+     * priority of the entry
+     *
+     * @var int
+     *
+     * @ORM\Column(name="priority", type="integer", nullable=false, options={"default": 0})
+     */
+    private $priority = 0;
+
+    /**
      * time of insertion
      *
      * @var DateTime
@@ -109,6 +118,22 @@ class Backlog
     public function setStatus($status)
     {
         $this->status = $status;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPriority()
+    {
+        return $this->priority;
+    }
+
+    /**
+     * @param int $priority
+     */
+    public function setPriority($priority)
+    {
+        $this->priority = $priority;
     }
 
     /**
