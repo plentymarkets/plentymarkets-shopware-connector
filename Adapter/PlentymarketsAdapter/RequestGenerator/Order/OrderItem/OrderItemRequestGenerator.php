@@ -14,9 +14,6 @@ use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use RuntimeException;
 
-/**
- * Class OrderItemRequestGenerator
- */
 class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
 {
     /**
@@ -34,13 +31,6 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
      */
     private $config;
 
-    /**
-     * OrderItemRequestGenerator constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     * @param ClientInterface          $client
-     * @param ConfigServiceInterface   $config
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         ClientInterface $client,

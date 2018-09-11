@@ -39,14 +39,6 @@ class BacklogProcessCommand extends ShopwareCommand
      */
     private $outputHandler;
 
-    /**
-     * BacklogProcessCommand constructor.
-     *
-     * @param ServiceBusInterface    $serviceBus
-     * @param BacklogService         $backlogService
-     * @param LoggerInterface        $logger
-     * @param OutputHandlerInterface $outputHandler
-     */
     public function __construct(
         ServiceBusInterface $serviceBus,
         BacklogService $backlogService,
@@ -99,9 +91,9 @@ class BacklogProcessCommand extends ShopwareCommand
                 $this->serviceBus->handle($command);
                 $this->outputHandler->advanceProgressBar();
             }
-        } catch (Throwable $exception) {
-            $this->logger->error($exception->getMessage());
         } catch (Exception $exception) {
+            $this->logger->error($exception->getMessage());
+        } catch (Throwable $exception) {
             $this->logger->error($exception->getMessage());
         }
 

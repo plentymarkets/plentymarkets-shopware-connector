@@ -7,9 +7,6 @@ use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use ReflectionClass;
 
-/**
- * Class ChangedDateTimeTrait.
- */
 trait ChangedDateTimeTrait
 {
     /**

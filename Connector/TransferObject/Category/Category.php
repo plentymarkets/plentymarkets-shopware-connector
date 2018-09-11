@@ -8,9 +8,6 @@ use PlentyConnector\Connector\TransferObject\TranslateableInterface;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
 
-/**
- * Class Category
- */
 class Category extends AbstractTransferObject implements TranslateableInterface, AttributableInterface
 {
     const TYPE = 'Category';
@@ -107,7 +104,7 @@ class Category extends AbstractTransferObject implements TranslateableInterface,
     }
 
     /**
-     * @param string $identifier
+     * {@inheritdoc}
      */
     public function setIdentifier($identifier)
     {

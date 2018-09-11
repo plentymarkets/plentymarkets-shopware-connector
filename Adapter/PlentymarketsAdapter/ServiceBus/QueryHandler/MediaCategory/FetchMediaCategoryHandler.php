@@ -12,9 +12,6 @@ use PlentymarketsAdapter\Helper\MediaCategoryHelperInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\MediaCategory\MediaCategoryResponseParserInterface;
 
-/**
- * Class FetchMediaCategoryHandler
- */
 class FetchMediaCategoryHandler implements QueryHandlerInterface
 {
     /**
@@ -32,13 +29,6 @@ class FetchMediaCategoryHandler implements QueryHandlerInterface
      */
     private $responseParser;
 
-    /**
-     * FetchMediaCategoryHandler constructor.
-     *
-     * @param IdentityServiceInterface             $identityService
-     * @param MediaCategoryHelperInterface         $mediaCategoryHelper
-     * @param MediaCategoryResponseParserInterface $responseParser
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         MediaCategoryHelperInterface $mediaCategoryHelper,

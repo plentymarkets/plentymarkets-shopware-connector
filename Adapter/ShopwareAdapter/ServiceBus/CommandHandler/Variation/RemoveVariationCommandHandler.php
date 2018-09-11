@@ -15,9 +15,6 @@ use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Variant;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class RemoveVariationCommandHandler.
- */
 class RemoveVariationCommandHandler implements CommandHandlerInterface
 {
     /**
@@ -30,14 +27,10 @@ class RemoveVariationCommandHandler implements CommandHandlerInterface
      */
     private $logger;
 
-    /**
-     * RemoveVariationCommandHandler constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface          $logger
-     */
-    public function __construct(IdentityServiceInterface $identityService, LoggerInterface $logger)
-    {
+    public function __construct(
+        IdentityServiceInterface $identityService,
+        LoggerInterface $logger
+    ) {
         $this->identityService = $identityService;
         $this->logger = $logger;
     }

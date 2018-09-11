@@ -24,9 +24,6 @@ use SwagBundle\Models\Bundle as BundleModel;
 use SwagBundle\Models\Price as PriceModel;
 use SwagBundle\Models\Repository as BundleRepository;
 
-/**
- * Class HandleBundleCommandHandler.
- */
 class HandleBundleCommandHandler implements CommandHandlerInterface
 {
     /**
@@ -54,13 +51,6 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
      */
     private $logger;
 
-    /**
-     * HandleBundleCommandHandler constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     * @param EntityManagerInterface   $entityManager
-     * @param BundleHelper             $bundleHelper
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         EntityManagerInterface $entityManager,

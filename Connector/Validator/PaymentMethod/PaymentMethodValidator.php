@@ -6,9 +6,6 @@ use Assert\Assertion;
 use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 
-/**
- * Class PaymentMethodValidator
- */
 class PaymentMethodValidator implements ValidatorInterface
 {
     /**

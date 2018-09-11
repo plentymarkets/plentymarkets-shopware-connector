@@ -11,9 +11,6 @@ use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\CustomerGroup\CustomerGroupResponseParserInterface;
 
-/**
- * Class FetchAllCustomerGroupsQueryHandler
- */
 class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
 {
     /**
@@ -26,12 +23,6 @@ class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
      */
     private $responseParser;
 
-    /**
-     * FetchAllCustomerGroupsQueryHandler constructor.
-     *
-     * @param ClientInterface                      $client
-     * @param CustomerGroupResponseParserInterface $responseParser
-     */
     public function __construct(
         ClientInterface $client,
         CustomerGroupResponseParserInterface $responseParser

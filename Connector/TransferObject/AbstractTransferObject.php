@@ -2,9 +2,6 @@
 
 namespace PlentyConnector\Connector\TransferObject;
 
-/**
- * Class AbstractTransferObject
- */
 abstract class AbstractTransferObject implements TransferObjectInterface
 {
     /**

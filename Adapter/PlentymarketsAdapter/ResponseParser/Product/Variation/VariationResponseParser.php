@@ -20,15 +20,11 @@ use PlentymarketsAdapter\Helper\ReferenceAmountCalculatorInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Availability as AvailabilityApi;
 use PlentymarketsAdapter\ReadApi\Item\Attribute as AttributeApi;
-use PlentymarketsAdapter\ReadApi\Item\Attribute\Value as AttributeValueApi;
 use PlentymarketsAdapter\ReadApi\Item\Barcode as BarcodeApi;
 use PlentymarketsAdapter\ResponseParser\Product\Image\ImageResponseParserInterface;
 use PlentymarketsAdapter\ResponseParser\Product\Price\PriceResponseParserInterface;
 use PlentymarketsAdapter\ResponseParser\Product\Stock\StockResponseParserInterface;
 
-/**
- * Class VariationResponseParser
- */
 class VariationResponseParser implements VariationResponseParserInterface
 {
     /**
@@ -62,11 +58,6 @@ class VariationResponseParser implements VariationResponseParserInterface
     private $itemAttributesApi;
 
     /**
-     * @var AttributeValueApi
-     */
-    private $itemAttributesValuesApi;
-
-    /**
      * @var BarcodeApi
      */
     private $itemBarcodeApi;
@@ -81,20 +72,6 @@ class VariationResponseParser implements VariationResponseParserInterface
      */
     private $config;
 
-    /**
-     * VariationResponseParser constructor.
-     *
-     * @param IdentityServiceInterface           $identityService
-     * @param PriceResponseParserInterface       $priceResponseParser
-     * @param ImageResponseParserInterface       $imageResponseParser
-     * @param StockResponseParserInterface       $stockResponseParser
-     * @param AvailabilityApi                    $availabilitiesApi
-     * @param AttributeApi                       $itemAttributesApi
-     * @param AttributeValueApi                  $itemAttributesValuesApi
-     * @param BarcodeApi                         $itemBarcodeApi
-     * @param ReferenceAmountCalculatorInterface $referenceAmountCalculator
-     * @param ConfigServiceInterface             $config
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         PriceResponseParserInterface $priceResponseParser,
@@ -102,7 +79,6 @@ class VariationResponseParser implements VariationResponseParserInterface
         StockResponseParserInterface $stockResponseParser,
         AvailabilityApi $availabilitiesApi,
         AttributeApi $itemAttributesApi,
-        AttributeValueApi $itemAttributesValuesApi,
         BarcodeApi $itemBarcodeApi,
         ReferenceAmountCalculatorInterface $referenceAmountCalculator,
         ConfigServiceInterface $config
@@ -113,7 +89,6 @@ class VariationResponseParser implements VariationResponseParserInterface
         $this->stockResponseParser = $stockResponseParser;
         $this->availabilitiesApi = $availabilitiesApi;
         $this->itemAttributesApi = $itemAttributesApi;
-        $this->itemAttributesValuesApi = $itemAttributesValuesApi;
         $this->itemBarcodeApi = $itemBarcodeApi;
         $this->referenceAmountCalculator = $referenceAmountCalculator;
         $this->config = $config;
@@ -360,9 +335,9 @@ class VariationResponseParser implements VariationResponseParserInterface
                 $attributes[$attributeValue['attributeId']] = $this->itemAttributesApi->findOne($attributeValue['attributeId']);
             }
 
-            $attributes[$attributeValue['attributeId']]['values'] = [];
+            $values = $attributes[$attributeValue['attributeId']]['values'];
 
-            $values = $this->itemAttributesValuesApi->findOne($attributeValue['attributeId']);
+            $attributes[$attributeValue['attributeId']]['values'] = [];
 
             foreach ($values as $value) {
                 $attributes[$attributeValue['attributeId']]['values'][$value['id']] = $value;
@@ -373,15 +348,19 @@ class VariationResponseParser implements VariationResponseParserInterface
             }
 
             $propertyNames = $attributes[$attributeValue['attributeId']]['attributeNames'];
+            $propertyPosition = $attributes[$attributeValue['attributeId']]['position'];
             $valueNames = $attributes[$attributeValue['attributeId']]['values'][$attributeValue['valueId']]['valueNames'];
+            $valuePosition = $attributes[$attributeValue['attributeId']]['values'][$attributeValue['valueId']]['position'];
 
             $value = Value::fromArray([
                 'value' => $valueNames[0]['name'],
+                'position' => $valuePosition,
                 'translations' => $this->getVariationPropertyValueTranslations($valueNames),
             ]);
 
             $result[] = Property::fromArray([
                 'name' => $propertyNames[0]['name'],
+                'position' => $propertyPosition,
                 'values' => [$value],
                 'translations' => $this->getVariationPropertyTranslations($propertyNames),
             ]);

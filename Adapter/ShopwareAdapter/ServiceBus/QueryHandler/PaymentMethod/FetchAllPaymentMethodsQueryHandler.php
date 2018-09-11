@@ -13,9 +13,6 @@ use Shopware\Models\Payment\Repository;
 use ShopwareAdapter\ResponseParser\PaymentMethod\PaymentMethodResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class FetchAllPaymentMethodsQueryHandler
- */
 class FetchAllPaymentMethodsQueryHandler implements QueryHandlerInterface
 {
     /**
@@ -28,12 +25,6 @@ class FetchAllPaymentMethodsQueryHandler implements QueryHandlerInterface
      */
     private $responseParser;
 
-    /**
-     * FetchAllPaymentMethodsQueryHandler constructor.
-     *
-     * @param EntityManagerInterface               $entityManager
-     * @param PaymentMethodResponseParserInterface $responseParser
-     */
     public function __construct(
         EntityManagerInterface $entityManager,
         PaymentMethodResponseParserInterface $responseParser

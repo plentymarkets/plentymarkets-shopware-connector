@@ -8,9 +8,6 @@ use Countable;
 use Iterator as BaseIterator;
 use PlentymarketsAdapter\Client\Client;
 
-/**
- * Class Iterator
- */
 class Iterator implements BaseIterator, Countable
 {
     /**
@@ -59,8 +56,6 @@ class Iterator implements BaseIterator, Countable
     private $isLastPage = false;
 
     /**
-     * ResourceIterator constructor.
-     *
      * @param string       $path
      * @param Client       $client
      * @param array        $criteria

@@ -6,9 +6,6 @@ use PHPUnit\Framework\TestCase;
 use PlentymarketsAdapter\Helper\ReferenceAmountCalculator;
 use PlentymarketsAdapter\ReadApi\Item\Unit;
 
-/**
- * Class ReferenceAmountCalculatorTest
- */
 class ReferenceAmountCalculatorTest extends TestCase
 {
     /**

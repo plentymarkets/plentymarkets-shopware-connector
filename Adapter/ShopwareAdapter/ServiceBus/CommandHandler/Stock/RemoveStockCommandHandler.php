@@ -12,9 +12,6 @@ use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Psr\Log\LoggerInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class RemoveStockCommandHandler.
- */
 class RemoveStockCommandHandler implements CommandHandlerInterface
 {
     /**
@@ -27,12 +24,6 @@ class RemoveStockCommandHandler implements CommandHandlerInterface
      */
     private $logger;
 
-    /**
-     * HandleStockCommandHandler constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface          $logger
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         LoggerInterface $logger

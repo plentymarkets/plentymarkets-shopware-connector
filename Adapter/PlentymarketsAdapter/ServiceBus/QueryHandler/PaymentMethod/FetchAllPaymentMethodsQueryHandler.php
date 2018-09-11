@@ -11,9 +11,6 @@ use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\PaymentMethod\PaymentMethodResponseParserInterface;
 
-/**
- * Class FetchAllPaymentMethodsQueryHandler
- */
 class FetchAllPaymentMethodsQueryHandler implements QueryHandlerInterface
 {
     /**
@@ -26,12 +23,6 @@ class FetchAllPaymentMethodsQueryHandler implements QueryHandlerInterface
      */
     private $responseParser;
 
-    /**
-     * FetchAllPaymentMethodsQueryHandler constructor.
-     *
-     * @param ClientInterface                      $client
-     * @param PaymentMethodResponseParserInterface $responseParser
-     */
     public function __construct(
         ClientInterface $client,
         PaymentMethodResponseParserInterface $responseParser

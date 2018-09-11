@@ -8,9 +8,6 @@ use PlentyConnector\Connector\Validator\ValidatorInterface;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
 
-/**
- * Class MediaValidator
- */
 class MediaValidator implements ValidatorInterface
 {
     /**

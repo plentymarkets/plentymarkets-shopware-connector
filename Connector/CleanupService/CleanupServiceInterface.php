@@ -4,9 +4,6 @@ namespace PlentyConnector\Connector\CleanupService;
 
 use PlentyConnector\Connector\ValueObject\Definition\Definition;
 
-/**
- * Interface CleanupServiceInterface.
- */
 interface CleanupServiceInterface
 {
     /**

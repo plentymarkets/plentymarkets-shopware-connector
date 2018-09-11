@@ -16,9 +16,6 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\RequestGenerator\Order\OrderRequestGeneratorInterface;
 use RuntimeException;
 
-/**
- * Class HandleOrderCommandHandler.
- */
 class HandleOrderCommandHandler implements CommandHandlerInterface
 {
     /**
@@ -36,13 +33,6 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
      */
     private $orderRequestGenerator;
 
-    /**
-     * HandleOrderCommandHandler constructor.
-     *
-     * @param ClientInterface                $client
-     * @param IdentityServiceInterface       $identityService
-     * @param OrderRequestGeneratorInterface $orderRequestGeneretor
-     */
     public function __construct(
         ClientInterface $client,
         IdentityServiceInterface $identityService,

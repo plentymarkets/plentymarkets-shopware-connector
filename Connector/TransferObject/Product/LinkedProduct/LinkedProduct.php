@@ -5,9 +5,6 @@ namespace PlentyConnector\Connector\TransferObject\Product\LinkedProduct;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 use ReflectionClass;
 
-/**
- * Class LinkedProduct
- */
 class LinkedProduct extends AbstractValueObject
 {
     const TYPE_ACCESSORY = 'accessory';

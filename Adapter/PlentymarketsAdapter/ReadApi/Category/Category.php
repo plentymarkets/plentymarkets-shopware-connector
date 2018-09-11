@@ -7,9 +7,6 @@ use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\Helper\LanguageHelperInterface;
 use PlentymarketsAdapter\ReadApi\ApiAbstract;
 
-/**
- * Class Item
- */
 class Category extends ApiAbstract
 {
     /**
@@ -17,12 +14,6 @@ class Category extends ApiAbstract
      */
     private $languageHelper;
 
-    /**
-     * Category constructor.
-     *
-     * @param ClientInterface         $client
-     * @param LanguageHelperInterface $languageHelper
-     */
     public function __construct(
         ClientInterface $client,
         LanguageHelperInterface $languageHelper

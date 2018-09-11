@@ -17,9 +17,6 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Product\Price\PriceResponseParserInterface;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class BundleResponseParser
- */
 class BundleResponseParser implements BundleResponseParserInterface
 {
     /**
@@ -47,15 +44,6 @@ class BundleResponseParser implements BundleResponseParserInterface
      */
     private $variationHelper;
 
-    /**
-     * BundleResponseParser constructor.
-     *
-     * @param IdentityServiceInterface     $identityService
-     * @param PriceResponseParserInterface $priceResponseParser
-     * @param VariationHelperInterface     $variationHelper
-     * @param ClientInterface              $client
-     * @param LoggerInterface              $logger
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         PriceResponseParserInterface $priceResponseParser,

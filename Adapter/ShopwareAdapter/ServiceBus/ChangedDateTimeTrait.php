@@ -7,9 +7,6 @@ use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use ReflectionClass;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class ChangedDateTimeTrait.
- */
 trait ChangedDateTimeTrait
 {
     /**

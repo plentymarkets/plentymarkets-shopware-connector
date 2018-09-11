@@ -7,9 +7,6 @@ use PlentyConnector\Connector\TransferObject\TranslateableInterface;
 use PlentyConnector\Connector\ValidatorService\ValidatorServiceInterface;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
-/**
- * Class AttributeHelper
- */
 class AttributeHelper implements AttributeHelperInterface
 {
     /**
@@ -17,11 +14,6 @@ class AttributeHelper implements AttributeHelperInterface
      */
     private $validator;
 
-    /**
-     * AttributeHelper constructor.
-     *
-     * @param ValidatorServiceInterface $validator
-     */
     public function __construct(ValidatorServiceInterface $validator)
     {
         $this->validator = $validator;

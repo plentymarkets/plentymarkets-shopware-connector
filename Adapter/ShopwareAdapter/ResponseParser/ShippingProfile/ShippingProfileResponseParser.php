@@ -6,9 +6,6 @@ use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class ShippingProfileResponseParser
- */
 class ShippingProfileResponseParser implements ShippingProfileResponseParserInterface
 {
     /**
@@ -16,11 +13,6 @@ class ShippingProfileResponseParser implements ShippingProfileResponseParserInte
      */
     private $identityService;
 
-    /**
-     * ShippingProfileResponseParser constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     */
     public function __construct(IdentityServiceInterface $identityService)
     {
         $this->identityService = $identityService;

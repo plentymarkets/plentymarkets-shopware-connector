@@ -13,9 +13,6 @@ use Shopware\Models\Shop\Shop as ShopModel;
 use ShopwareAdapter\ResponseParser\Shop\ShopResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class FetchAllShopsQueryHandler
- */
 class FetchAllShopsQueryHandler implements QueryHandlerInterface
 {
     /**
@@ -28,12 +25,6 @@ class FetchAllShopsQueryHandler implements QueryHandlerInterface
      */
     private $responseParser;
 
-    /**
-     * FetchAllShopsQueryHandler constructor.
-     *
-     * @param EntityManagerInterface      $entityManager
-     * @param ShopResponseParserInterface $responseParser
-     */
     public function __construct(
         EntityManagerInterface $entityManager,
         ShopResponseParserInterface $responseParser

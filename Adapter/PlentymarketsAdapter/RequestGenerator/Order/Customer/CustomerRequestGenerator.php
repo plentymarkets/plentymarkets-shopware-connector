@@ -11,9 +11,6 @@ use PlentyConnector\Connector\TransferObject\Order\Order;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 
-/**
- * Class CustomerRequestGenerator
- */
 class CustomerRequestGenerator implements CustomerRequestGeneratorInterface
 {
     /**
@@ -21,11 +18,6 @@ class CustomerRequestGenerator implements CustomerRequestGeneratorInterface
      */
     private $identityService;
 
-    /**
-     * CustomerRequestGenerator constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     */
     public function __construct(IdentityServiceInterface $identityService)
     {
         $this->identityService = $identityService;

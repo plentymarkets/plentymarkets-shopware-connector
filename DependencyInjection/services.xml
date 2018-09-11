@@ -488,6 +488,10 @@
             <tag name="plenty_connector.validator" />
         </service>
 
+        <service id="plenty_connector.validator.product.badge" class="PlentyConnector\Connector\Validator\Product\Badge\BadgeValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
         <service id="plenty_connector.validator.product.barcode" class="PlentyConnector\Connector\Validator\Product\Barcode\BarcodeValidator">
             <tag name="plenty_connector.validator" />
         </service>

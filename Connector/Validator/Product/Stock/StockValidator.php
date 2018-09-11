@@ -6,9 +6,6 @@ use Assert\Assertion;
 use PlentyConnector\Connector\TransferObject\Product\Stock\Stock;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 
-/**
- * Class StockValidator
- */
 class StockValidator implements ValidatorInterface
 {
     /**

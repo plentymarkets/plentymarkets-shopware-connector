@@ -4,9 +4,6 @@ namespace PlentyConnector\Connector\TransferObject\Product\Price;
 
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 
-/**
- * Class Price.
- */
 class Price extends AbstractValueObject
 {
     /**

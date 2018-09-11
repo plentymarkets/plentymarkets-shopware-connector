@@ -4,9 +4,6 @@ namespace PlentyConnector\Connector\TransferObject\VatRate;
 
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 
-/**
- * Class VatRate
- */
 class VatRate extends AbstractTransferObject
 {
     const TYPE = 'VatRate';
@@ -38,7 +35,7 @@ class VatRate extends AbstractTransferObject
     }
 
     /**
-     * @param string $identifier
+     * {@inheritdoc}
      */
     public function setIdentifier($identifier)
     {

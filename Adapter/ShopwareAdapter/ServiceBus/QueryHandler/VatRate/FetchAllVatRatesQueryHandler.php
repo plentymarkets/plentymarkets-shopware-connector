@@ -14,9 +14,6 @@ use Shopware\Models\Tax\Tax;
 use ShopwareAdapter\ResponseParser\VatRate\VatRateResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class FetchAllVatRatesQueryHandler
- */
 class FetchAllVatRatesQueryHandler implements QueryHandlerInterface
 {
     /**
@@ -29,12 +26,6 @@ class FetchAllVatRatesQueryHandler implements QueryHandlerInterface
      */
     private $responseParser;
 
-    /**
-     * FetchAllVatRatesQueryHandler constructor.
-     *
-     * @param EntityManagerInterface         $entityManager
-     * @param VatRateResponseParserInterface $responseParser
-     */
     public function __construct(
         EntityManagerInterface $entityManager,
         VatRateResponseParserInterface $responseParser

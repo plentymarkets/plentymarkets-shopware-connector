@@ -17,9 +17,6 @@ use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 
-/**
- * Class ConnectorTest
- */
 class ConnectorTest extends TestCase
 {
     public function test_handle_single_definition_fetch_all()
@@ -47,6 +44,7 @@ class ConnectorTest extends TestCase
             'TestDestinationAdapter',
             'TestType',
             CommandType::HANDLE,
+            0,
             $testElement
         )->willReturn($command);
 
@@ -93,6 +91,7 @@ class ConnectorTest extends TestCase
             'TestDestinationAdapter',
             'TestType',
             CommandType::HANDLE,
+            0,
             $testElement
         )->willReturn($command);
 
@@ -136,6 +135,7 @@ class ConnectorTest extends TestCase
             'TestDestinationAdapter',
             'TestType',
             CommandType::HANDLE,
+            0,
             $testElement
         )->willReturn($command);
 

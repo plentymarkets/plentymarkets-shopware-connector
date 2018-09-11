@@ -2,6 +2,7 @@
 
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\MediaCategory;
 
+use DateTime;
 use Exception;
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
@@ -15,9 +16,6 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\MediaCategory\MediaCategoryResponseParserInterface;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class FetchChangedMediaCategoriesQueryHandler.
- */
 class FetchChangedMediaCategoriesQueryHandler implements QueryHandlerInterface
 {
     /**
@@ -45,15 +43,6 @@ class FetchChangedMediaCategoriesQueryHandler implements QueryHandlerInterface
      */
     private $outputHandler;
 
-    /**
-     * FetchChangedMediaCategoriesQueryHandler constructor.
-     *
-     * @param ConfigServiceInterface               $config
-     * @param MediaCategoryHelperInterface         $mediaCategoryHelper
-     * @param MediaCategoryResponseParserInterface $responseParser
-     * @param LoggerInterface                      $logger
-     * @param OutputHandlerInterface               $outputHandler
-     */
     public function __construct(
         ConfigServiceInterface $config,
         MediaCategoryHelperInterface $mediaCategoryHelper,
@@ -89,6 +78,8 @@ class FetchChangedMediaCategoriesQueryHandler implements QueryHandlerInterface
 
         if (null === $synced) {
             $elements = $this->mediaCategoryHelper->getCategories();
+
+            $this->config->set('PlentymarketsAdapter.MediaCategoriesSynched', new DateTime());
         }
 
         $this->outputHandler->startProgressBar(count($elements));

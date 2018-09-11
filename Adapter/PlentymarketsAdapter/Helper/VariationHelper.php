@@ -7,9 +7,6 @@ use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class VariationHelper
- */
 class VariationHelper implements VariationHelperInterface
 {
     /**
@@ -22,12 +19,6 @@ class VariationHelper implements VariationHelperInterface
      */
     private $logger;
 
-    /**
-     * VariationHelper constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface          $logger
-     */
     public function __construct(IdentityServiceInterface $identityService, LoggerInterface $logger)
     {
         $this->identityService = $identityService;
@@ -43,7 +34,7 @@ class VariationHelper implements VariationHelperInterface
     {
         $identifiers = [];
 
-        foreach ($variation['variationClients'] as $client) {
+        foreach ((array) $variation['variationClients'] as $client) {
             $identity = $this->identityService->findOneBy([
                 'adapterIdentifier' => $client['plentyId'],
                 'adapterName' => PlentymarketsAdapter::NAME,
@@ -82,7 +73,7 @@ class VariationHelper implements VariationHelperInterface
             'objectType' => Shop::TYPE,
         ]);
 
-        if (!isset($identities)) {
+        if (empty($identities)) {
             $this->logger->notice('no plentyIds found');
 
             return [];

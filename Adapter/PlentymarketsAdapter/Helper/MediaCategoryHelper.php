@@ -2,9 +2,6 @@
 
 namespace PlentymarketsAdapter\Helper;
 
-/**
- * Class MediaCategoryHelper
- */
 class MediaCategoryHelper implements MediaCategoryHelperInterface
 {
     const MANUFACTURER = 1;

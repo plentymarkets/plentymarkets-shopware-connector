@@ -6,9 +6,6 @@ use DateTimeImmutable;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 use ReflectionClass;
 
-/**
- * Class Customer
- */
 class Customer extends AbstractValueObject
 {
     const TYPE_NORMAL = 1;
@@ -92,9 +89,6 @@ class Customer extends AbstractValueObject
      */
     private $shopIdentifier = '';
 
-    /**
-     * Customer constructor.
-     */
     public function __construct()
     {
         $this->birthday = new DateTimeImmutable('now');

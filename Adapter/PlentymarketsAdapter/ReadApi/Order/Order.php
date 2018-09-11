@@ -5,15 +5,12 @@ namespace PlentymarketsAdapter\ReadApi\Order;
 use PlentymarketsAdapter\Client\Iterator\Iterator;
 use PlentymarketsAdapter\ReadApi\ApiAbstract;
 
-/**
- * Class Order
- */
 class Order extends ApiAbstract
 {
     /**
      * @var array
      */
-    private $includes = ['addresses', 'relations', 'addresses', 'comments', ];
+    private $includes = ['addresses', 'relations', 'addresses', 'comments'];
 
     /**
      * @param int $id

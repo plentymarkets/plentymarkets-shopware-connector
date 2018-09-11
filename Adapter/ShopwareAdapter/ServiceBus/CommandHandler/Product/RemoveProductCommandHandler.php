@@ -15,9 +15,6 @@ use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Article;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class RemoveProductCommandHandler.
- */
 class RemoveProductCommandHandler implements CommandHandlerInterface
 {
     /**
@@ -30,12 +27,6 @@ class RemoveProductCommandHandler implements CommandHandlerInterface
      */
     private $logger;
 
-    /**
-     * RemoveProductCommandHandler constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface          $logger
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         LoggerInterface $logger

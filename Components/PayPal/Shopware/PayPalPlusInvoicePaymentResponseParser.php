@@ -8,9 +8,6 @@ use PlentyConnector\Components\PayPal\PaymentData\PayPalPlusInvoicePaymentData;
 use PlentyConnector\Connector\TransferObject\Payment\Payment;
 use ShopwareAdapter\ResponseParser\Payment\PaymentResponseParserInterface;
 
-/**
- * Class PayPalPlusInvoicePaymentResponseParser
- */
 class PayPalPlusInvoicePaymentResponseParser implements PaymentResponseParserInterface
 {
     /**
@@ -23,12 +20,6 @@ class PayPalPlusInvoicePaymentResponseParser implements PaymentResponseParserInt
      */
     private $connection;
 
-    /**
-     * PayPalPlusInvoicePaymentResponseParser constructor.
-     *
-     * @param PaymentResponseParserInterface $parentResponseParser
-     * @param Connection                     $connection
-     */
     public function __construct(
         PaymentResponseParserInterface $parentResponseParser,
         Connection $connection

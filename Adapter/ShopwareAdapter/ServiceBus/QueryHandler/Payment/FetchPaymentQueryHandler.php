@@ -12,9 +12,6 @@ use ShopwareAdapter\DataProvider\Order\OrderDataProviderInterface;
 use ShopwareAdapter\ResponseParser\Payment\PaymentResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class FetchPaymentQueryHandler
- */
 class FetchPaymentQueryHandler implements QueryHandlerInterface
 {
     /**
@@ -32,13 +29,6 @@ class FetchPaymentQueryHandler implements QueryHandlerInterface
      */
     private $dataProvider;
 
-    /**
-     * FetchPaymentQueryHandler constructor.
-     *
-     * @param PaymentResponseParserInterface $responseParser
-     * @param IdentityServiceInterface       $identityService
-     * @param OrderDataProviderInterface     $dataProvider
-     */
     public function __construct(
         PaymentResponseParserInterface $responseParser,
         IdentityServiceInterface $identityService,

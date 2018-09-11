@@ -13,9 +13,6 @@ use PlentyConnector\Connector\ValueObject\Definition\Definition;
 use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class Connector.
- */
 class Connector implements ConnectorInterface
 {
     /**
@@ -48,15 +45,6 @@ class Connector implements ConnectorInterface
      */
     private $logger;
 
-    /**
-     * Connector constructor.
-     *
-     * @param ServiceBusInterface     $serviceBus
-     * @param QueryFactoryInterface   $queryFactory
-     * @param CommandFactoryInterface $commandFactory
-     * @param OutputHandlerInterface  $outputHandler
-     * @param LoggerInterface         $logger
-     */
     public function __construct(
         ServiceBusInterface $serviceBus,
         QueryFactoryInterface $queryFactory,
@@ -178,6 +166,7 @@ class Connector implements ConnectorInterface
                 $definition->getDestinationAdapterName(),
                 $object->getType(),
                 CommandType::HANDLE,
+                $definition->getPriority(),
                 $object
             ));
         }

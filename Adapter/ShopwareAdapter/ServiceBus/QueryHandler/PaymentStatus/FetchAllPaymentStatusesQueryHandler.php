@@ -14,9 +14,6 @@ use Shopware\Models\Order\Status;
 use ShopwareAdapter\ResponseParser\PaymentStatus\PaymentStatusResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class FetchAllPaymentStatusesQueryHandler
- */
 class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
 {
     /**
@@ -29,12 +26,6 @@ class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
      */
     private $responseParser;
 
-    /**
-     * FetchAllPaymentStatusesQueryHandler constructor.
-     *
-     * @param EntityManagerInterface               $entityManager  ,
-     * @param PaymentStatusResponseParserInterface $responseParser
-     */
     public function __construct(
         EntityManagerInterface $entityManager,
         PaymentStatusResponseParserInterface $responseParser

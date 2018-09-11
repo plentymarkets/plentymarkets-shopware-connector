@@ -18,9 +18,6 @@ use ShopwareAdapter\Helper\AttributeHelper;
 use ShopwareAdapter\RequestGenerator\Media\MediaRequestGeneratorInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class HandleMediaCommandHandler.
- */
 class HandleMediaCommandHandler implements CommandHandlerInterface
 {
     /**
@@ -48,15 +45,6 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
      */
     private $attributePersister;
 
-    /**
-     * HandleMediaCommandHandler constructor.
-     *
-     * @param IdentityServiceInterface        $identityService
-     * @param MediaRequestGeneratorInterface  $mediaRequestGenerator
-     * @param MediaDataProviderInterface      $mediaDataProvider
-     * @param AttributeHelper                 $attributeHelper
-     * @param AttributeDataPersisterInterface $attributePersister
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         MediaRequestGeneratorInterface $mediaRequestGenerator,

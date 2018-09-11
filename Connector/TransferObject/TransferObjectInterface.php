@@ -2,9 +2,6 @@
 
 namespace PlentyConnector\Connector\TransferObject;
 
-/**
- * Class TransferObjectInterface.
- */
 interface TransferObjectInterface
 {
     /**
@@ -20,6 +17,13 @@ interface TransferObjectInterface
      * @return string
      */
     public function getIdentifier();
+
+    /**
+     * set a uuid.
+     *
+     * @param string $identifier
+     */
+    public function setIdentifier($identifier);
 
     /**
      * return the unique type of the object.

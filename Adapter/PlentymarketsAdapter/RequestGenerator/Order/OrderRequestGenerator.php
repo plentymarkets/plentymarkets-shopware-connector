@@ -19,9 +19,6 @@ use PlentymarketsAdapter\RequestGenerator\Order\Customer\CustomerRequestGenerato
 use PlentymarketsAdapter\RequestGenerator\Order\OrderItem\OrderItemRequestGeneratorInterface;
 use RuntimeException;
 
-/**
- * Class OrderRequestGenerator
- */
 class OrderRequestGenerator implements OrderRequestGeneratorInterface
 {
     /**
@@ -49,15 +46,6 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
      */
     private $addressReuqestGenerator;
 
-    /**
-     * OrderRequestGenerator constructor.
-     *
-     * @param IdentityServiceInterface           $identityService
-     * @param ClientInterface                    $client
-     * @param OrderItemRequestGeneratorInterface $orderItemRequestGenerator
-     * @param CustomerRequestGeneratorInterface  $customerRequestGenerator
-     * @param AddressRequestGeneratorInterface   $addressReuqestGenerator
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         ClientInterface $client,

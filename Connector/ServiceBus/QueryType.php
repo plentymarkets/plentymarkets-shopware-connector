@@ -4,9 +4,6 @@ namespace PlentyConnector\Connector\ServiceBus;
 
 use ReflectionClass;
 
-/**
- * Class QueryType
- */
 final class QueryType
 {
     const ALL = 'all';
