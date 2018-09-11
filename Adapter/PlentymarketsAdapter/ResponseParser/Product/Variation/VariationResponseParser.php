@@ -162,6 +162,7 @@ class VariationResponseParser implements VariationResponseParserInterface
             $variationObject->setLength((int) $variation['lengthMM']);
             $variationObject->setWeight($this->getVariationWeight($variation));
             $variationObject->setProperties($this->getVariationProperties($variation));
+            $variationObject->setStock($this->getStocks($variation));
 
             $result[$variationObject->getIdentifier()] = $variationObject;
 
@@ -443,5 +444,15 @@ class VariationResponseParser implements VariationResponseParserInterface
         }
 
         return (float) ($weight / 1000);
+    }
+
+    /**
+     * @param array $variation
+     *
+     * @return array stocks
+     */
+    private function getStocks(array $variation)
+    {
+        return $variation['stock'];
     }
 }
