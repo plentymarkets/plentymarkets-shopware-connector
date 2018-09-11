@@ -223,7 +223,7 @@ class Client implements ClientInterface
         ]);
 
         if (empty($login['accessToken'])) {
-            throw new InvalidResponseException()
+            throw new RuntimeException('could not read access token from login response');
         }
 
         $this->accessToken = $login['accessToken'];
@@ -316,6 +316,8 @@ class Client implements ClientInterface
     }
 
     /**
+     * TODO: Debugging verbessern und Limit exceptions behandeln
+     *
      * @param Throwable|Exception $exception
      * @param string              $method
      * @param string$path
@@ -377,6 +379,8 @@ class Client implements ClientInterface
     }
 
     /**
+     * TODO: je nach limit reached eine andere Aktion durchführen: retry in after oder harte exception
+     *
      * @param array $headers
      */
     private function handeRateLimits(array $headers)
