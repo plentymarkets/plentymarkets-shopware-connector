@@ -27,12 +27,6 @@ class RemoveMediaCommandHandler implements CommandHandlerInterface
      */
     private $logger;
 
-    /**
-     * RemoveMediaCommandHandler constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface          $logger
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         LoggerInterface $logger

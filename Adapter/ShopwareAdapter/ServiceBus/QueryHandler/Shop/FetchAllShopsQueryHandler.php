@@ -25,12 +25,6 @@ class FetchAllShopsQueryHandler implements QueryHandlerInterface
      */
     private $responseParser;
 
-    /**
-     * FetchAllShopsQueryHandler constructor.
-     *
-     * @param EntityManagerInterface      $entityManager
-     * @param ShopResponseParserInterface $responseParser
-     */
     public function __construct(
         EntityManagerInterface $entityManager,
         ShopResponseParserInterface $responseParser

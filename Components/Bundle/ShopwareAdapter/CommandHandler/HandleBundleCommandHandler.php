@@ -51,13 +51,6 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
      */
     private $logger;
 
-    /**
-     * HandleBundleCommandHandler constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     * @param EntityManagerInterface   $entityManager
-     * @param BundleHelper             $bundleHelper
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         EntityManagerInterface $entityManager,

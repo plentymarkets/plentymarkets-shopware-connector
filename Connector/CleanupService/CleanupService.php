@@ -66,16 +66,6 @@ class CleanupService implements CleanupServiceInterface
      */
     private $error = false;
 
-    /**
-     * CleanupService constructor.
-     *
-     * @param ServiceBusInterface      $serviceBus
-     * @param QueryFactoryInterface    $queryFactory
-     * @param CommandFactoryInterface  $commandFactory
-     * @param IdentityServiceInterface $identityService
-     * @param OutputHandlerInterface   $outputHandler
-     * @param LoggerInterface          $logger
-     */
     public function __construct(
         ServiceBusInterface $serviceBus,
         QueryFactoryInterface $queryFactory,
@@ -213,6 +203,7 @@ class CleanupService implements CleanupServiceInterface
                 $definition->getDestinationAdapterName(),
                 $definition->getObjectType(),
                 CommandType::REMOVE,
+                -100,
                 $identity->getObjectIdentifier()
             ));
 
@@ -283,6 +274,7 @@ class CleanupService implements CleanupServiceInterface
                     $group[0]['adapterName'],
                     $group[0]['type'],
                     CommandType::REMOVE,
+                    -100,
                     $identity->getObjectIdentifier()
                 ));
 

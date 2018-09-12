@@ -47,14 +47,6 @@ class OrderResponseParser implements OrderResponseParserInterface
      */
     private $client;
 
-    /**
-     * OrderResponseParser constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface          $logger
-     * @param CustomerApi              $customerApi
-     * @param ClientInterface          $client
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         LoggerInterface $logger,

@@ -26,12 +26,6 @@ class FetchAllCountriesQueryHandler implements QueryHandlerInterface
      */
     private $responseParser;
 
-    /**
-     * FetchAllCountriesQueryHandler constructor.
-     *
-     * @param EntityManagerInterface         $entityManager
-     * @param CountryResponseParserInterface $responseParser
-     */
     public function __construct(
         EntityManagerInterface $entityManager,
         CountryResponseParserInterface $responseParser

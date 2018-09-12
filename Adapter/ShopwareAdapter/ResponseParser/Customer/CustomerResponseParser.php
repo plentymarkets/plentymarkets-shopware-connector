@@ -36,13 +36,6 @@ class CustomerResponseParser implements CustomerResponseParserInterface
      */
     private $logger;
 
-    /**
-     * CustomerResponseParser constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     * @param EntityManagerInterface   $entityManager
-     * @param LoggerInterface          $logger
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         EntityManagerInterface $entityManager,

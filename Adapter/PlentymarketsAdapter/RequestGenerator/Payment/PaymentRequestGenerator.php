@@ -16,11 +16,6 @@ class PaymentRequestGenerator implements PaymentRequestGeneratorInterface
      */
     private $identityService;
 
-    /**
-     * PaymentRequestGenerator constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     */
     public function __construct(IdentityServiceInterface $identityService)
     {
         $this->identityService = $identityService;

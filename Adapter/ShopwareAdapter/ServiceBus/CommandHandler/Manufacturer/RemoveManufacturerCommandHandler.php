@@ -31,13 +31,6 @@ class RemoveManufacturerCommandHandler implements CommandHandlerInterface
      */
     private $logger;
 
-    /**
-     * RemoveManufacturerCommandHandler constructor.
-     *
-     * @param ManufacturerResource     $resource
-     * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface          $logger
-     */
     public function __construct(
         ManufacturerResource $resource,
         IdentityServiceInterface $identityService,

@@ -28,12 +28,6 @@ class SepaPaymentResponseParser implements PaymentResponseParserInterface
      */
     private $identityService;
 
-    /**
-     * SepaPaymentResponseParser constructor.
-     *
-     * @param PaymentResponseParserInterface $parentResponseParser
-     * @param IdentityServiceInterface       $identityService
-     */
     public function __construct(
         PaymentResponseParserInterface $parentResponseParser,
         IdentityServiceInterface $identityService

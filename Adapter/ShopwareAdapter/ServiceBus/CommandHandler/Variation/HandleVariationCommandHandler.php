@@ -39,14 +39,6 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
      */
     private $attributeDataPersister;
 
-    /**
-     * HandleVariationCommandHandler constructor.
-     *
-     * @param IdentityServiceInterface           $identityService
-     * @param VariationRequestGeneratorInterface $variationRequestGenerator
-     * @param EntityManagerInterface             $entityManager
-     * @param AttributeDataPersisterInterface    $attributeDataPersister
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         VariationRequestGeneratorInterface $variationRequestGenerator,

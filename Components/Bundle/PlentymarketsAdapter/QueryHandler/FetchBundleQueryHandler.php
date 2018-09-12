@@ -35,14 +35,6 @@ class FetchBundleQueryHandler implements QueryHandlerInterface
      */
     private $responseParser;
 
-    /**
-     * FetchBundleQueryHandler constructor.
-     *
-     * @param Item                          $itemApi
-     * @param Variation                     $variationApi
-     * @param IdentityServiceInterface      $identityService
-     * @param BundleResponseParserInterface $responseParser
-     */
     public function __construct(
         Item $itemApi,
         Variation $variationApi,

@@ -26,12 +26,6 @@ class FetchAllCurrenciesQueryHandler implements QueryHandlerInterface
      */
     private $responseParser;
 
-    /**
-     * FetchAllCurrenciesQueryHandler constructor.
-     *
-     * @param EntityManagerInterface          $entityManager
-     * @param CurrencyResponseParserInterface $responseParser
-     */
     public function __construct(
         EntityManagerInterface $entityManager,
         CurrencyResponseParserInterface $responseParser

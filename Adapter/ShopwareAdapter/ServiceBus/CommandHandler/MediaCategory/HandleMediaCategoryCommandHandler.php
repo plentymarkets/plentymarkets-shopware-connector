@@ -25,12 +25,6 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
      */
     private $identityService;
 
-    /**
-     * HandleMediaCategoryCommandHandler constructor.
-     *
-     * @param EntityManagerInterface   $entityManager
-     * @param IdentityServiceInterface $identityService
-     */
     public function __construct(EntityManagerInterface $entityManager, IdentityServiceInterface $identityService)
     {
         $this->entityManager = $entityManager;

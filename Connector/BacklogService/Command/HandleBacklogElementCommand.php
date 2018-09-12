@@ -11,11 +11,6 @@ class HandleBacklogElementCommand implements CommandInterface
      */
     private $command;
 
-    /**
-     * HandleBacklogElementCommand constructor.
-     *
-     * @param CommandInterface $command
-     */
     public function __construct(CommandInterface $command)
     {
         $this->command = $command;
@@ -37,5 +32,13 @@ class HandleBacklogElementCommand implements CommandInterface
         return [
             'command' => $this->command,
         ];
+    }
+
+    /**
+     * @return int
+     */
+    public function getPriority()
+    {
+        return 0;
     }
 }

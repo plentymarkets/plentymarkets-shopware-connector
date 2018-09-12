@@ -36,14 +36,6 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
      */
     private $logger;
 
-    /**
-     * HandlePaymentCommandHandler constructor.
-     *
-     * @param ClientInterface                  $client
-     * @param IdentityServiceInterface         $identityService
-     * @param PaymentRequestGeneratorInterface $requestGenerator
-     * @param LoggerInterface                  $logger
-     */
     public function __construct(
         ClientInterface $client,
         IdentityServiceInterface $identityService,

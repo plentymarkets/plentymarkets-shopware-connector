@@ -32,13 +32,6 @@ class CleanupCommand extends ShopwareCommand
      */
     private $outputHandler;
 
-    /**
-     * CleanupCommand constructor.
-     *
-     * @param CleanupServiceInterface $cleanupService
-     * @param LoggerInterface         $logger
-     * @param OutputHandlerInterface  $outputHandler
-     */
     public function __construct(
         CleanupServiceInterface $cleanupService,
         LoggerInterface $logger,
@@ -73,9 +66,9 @@ class CleanupCommand extends ShopwareCommand
 
         try {
             $this->cleanupService->cleanup();
-        } catch (Throwable $exception) {
-            $this->logger->error($exception->getMessage());
         } catch (Exception $exception) {
+            $this->logger->error($exception->getMessage());
+        } catch (Throwable $exception) {
             $this->logger->error($exception->getMessage());
         }
     }

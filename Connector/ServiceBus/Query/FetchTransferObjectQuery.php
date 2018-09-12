@@ -28,8 +28,6 @@ class FetchTransferObjectQuery implements QueryInterface
     private $objectIdentifier;
 
     /**
-     * FetchTransferObjectQuery constructor.
-     *
      * @param string $adapterName
      * @param string $objectType
      * @param string $queryType

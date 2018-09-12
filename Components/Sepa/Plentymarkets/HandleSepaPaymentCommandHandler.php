@@ -32,13 +32,6 @@ class HandleSepaPaymentCommandHandler implements CommandHandlerInterface
      */
     private $identityService;
 
-    /**
-     * HandleSepaPaymentCommandHandler constructor.
-     *
-     * @param CommandHandlerInterface  $parentCommandHandler
-     * @param ClientInterface          $client
-     * @param IdentityServiceInterface $identityService
-     */
     public function __construct(
         CommandHandlerInterface $parentCommandHandler,
         ClientInterface $client,

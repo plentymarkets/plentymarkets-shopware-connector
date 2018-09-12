@@ -36,14 +36,6 @@ class FetchAllPaymentsQueryHandler implements QueryHandlerInterface
      */
     private $outputHandler;
 
-    /**
-     * FetchAllPaymentsQueryHandler constructor.
-     *
-     * @param PaymentResponseParserInterface $responseParser
-     * @param OrderDataProviderInterface     $dataProvider
-     * @param LoggerInterface                $logger
-     * @param OutputHandlerInterface         $outputHandler
-     */
     public function __construct(
         PaymentResponseParserInterface $responseParser,
         OrderDataProviderInterface $dataProvider,

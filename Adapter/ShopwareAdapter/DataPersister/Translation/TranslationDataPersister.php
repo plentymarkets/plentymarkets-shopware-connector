@@ -41,15 +41,6 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
      */
     private $shopwareTranslationManager;
 
-    /**
-     * TranslationHelper constructor.
-     *
-     * @param IdentityServiceInterface         $identityService
-     * @param LoggerInterface                  $logger
-     * @param TranslationDataProviderInterface $dataProvider
-     * @param TranslationHelperInterface       $translationHelper
-     * @param Shopware_Components_Translation  $shopwareTranslationManager
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         LoggerInterface $logger,

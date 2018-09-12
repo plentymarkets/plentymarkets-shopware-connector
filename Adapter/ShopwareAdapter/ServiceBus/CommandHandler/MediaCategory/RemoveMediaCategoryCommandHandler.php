@@ -32,13 +32,6 @@ class RemoveMediaCategoryCommandHandler implements CommandHandlerInterface
      */
     private $logger;
 
-    /**
-     * HandleMediaCategoryCommandHandler constructor.
-     *
-     * @param EntityManagerInterface   $entityManager
-     * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface          $logger
-     */
     public function __construct(
         EntityManagerInterface $entityManager,
         IdentityServiceInterface $identityService,

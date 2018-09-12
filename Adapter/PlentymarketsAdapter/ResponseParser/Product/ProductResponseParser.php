@@ -59,16 +59,6 @@ class ProductResponseParser implements ProductResponseParserInterface
      */
     private $variationHelper;
 
-    /**
-     * ProductResponseParser constructor.
-     *
-     * @param ConfigServiceInterface           $configService
-     * @param IdentityServiceInterface         $identityService
-     * @param LoggerInterface                  $logger
-     * @param ImageResponseParserInterface     $imageResponseParser
-     * @param VariationResponseParserInterface $variationResponseParser
-     * @param VariationHelperInterface         $variationHelper
-     */
     public function __construct(
         ConfigServiceInterface $configService,
         IdentityServiceInterface $identityService,

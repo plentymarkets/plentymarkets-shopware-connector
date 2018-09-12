@@ -13,11 +13,6 @@ class DefinitionFactory
      */
     private $validator;
 
-    /**
-     * DefinitionFactory constructor.
-     *
-     * @param ValidatorServiceInterface $validator
-     */
     public function __construct(ValidatorServiceInterface $validator)
     {
         $this->validator = $validator;

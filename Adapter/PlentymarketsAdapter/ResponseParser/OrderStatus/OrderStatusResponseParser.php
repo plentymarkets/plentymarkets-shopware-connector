@@ -13,11 +13,6 @@ class OrderStatusResponseParser implements OrderStatusResponseParserInterface
      */
     private $identityService;
 
-    /**
-     * OrderStatusResponseParser constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     */
     public function __construct(IdentityServiceInterface $identityService)
     {
         $this->identityService = $identityService;

@@ -38,11 +38,6 @@ class ReferenceAmountCalculator implements ReferenceAmountCalculatorInterface
         'MMT' => ['conversion' => 0.001], // millimetre
     ];
 
-    /**
-     * ReferenceAmountCalculator constructor.
-     *
-     * @param UnitApi $itemUnitApi
-     */
     public function __construct(UnitApi $itemUnitApi)
     {
         $this->itemUnitApi = $itemUnitApi;

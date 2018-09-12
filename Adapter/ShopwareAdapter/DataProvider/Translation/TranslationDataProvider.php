@@ -40,11 +40,6 @@ class TranslationDataProvider implements TranslationDataProviderInterface
      */
     private $configurationValueRepository;
 
-    /**
-     * TranslationDataProvider constructor.
-     *
-     * @param EntityManagerInterface $entityManager
-     */
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->shopRepository = $entityManager->getRepository(ShopModel::class);
