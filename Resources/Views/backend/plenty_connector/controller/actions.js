@@ -2,33 +2,33 @@
 // {block name=backend/plentyconnector/controller/actions}
 
 Ext.define('Shopware.apps.PlentyConnector.controller.Actions', {
-    extend: 'Ext.app.Controller',
+	extend: 'Ext.app.Controller',
 
-    init: function () {
-        var me = this;
+	init: function () {
+		var me = this;
 
-        me.control({
-            'plentymarkets-view-actions': {
-                syncItem: me.onSyncItem
-            }
-        });
+		me.control({
+			'plentymarkets-view-actions': {
+				syncItem: me.onSyncItem
+			}
+		});
 
-        me.callParent(arguments);
-    },
+		me.callParent(arguments);
+	},
 
-    onSyncItem: function (view) {
+	onSyncItem: function (view) {
 		view.setLoading(true);
-		
-        var form = view.getForm();
+
+		var form = view.getForm();
 		var itemId = form.findField("item_id").getValue();
 		var message = '{s name=plentyconnector/controller/actions/item_import/confirm_text}{/s}'
-		
+
 		Ext.Msg.confirm('{s name=plentyconnector/controller/actions/item_import/confirm_title}{/s}', message, function (button) {
 			if (button === 'no') {
 				view.setLoading(false);
 				return;
 			}
-			
+
 			Ext.Ajax.request({
 				url: '{url action=syncItem}',
 				params: {
@@ -42,11 +42,11 @@ Ext.define('Shopware.apps.PlentyConnector.controller.Actions', {
 					if (response.success) {
 						Shopware.Notification.createGrowlMessage('{s name=plentyconnector/controller/actions/item_import}{/s}', '{s name=plentyconnector/controller/actions/item_import/success}{/s}');
 					} else {
-						Shopware.Notification.createGrowlMessage('{s name=plentyconnector/controller/actions/item_import}{/s}', '{s name=plentyconnector/controller/actions/item_import/failed}{/s}');
+						Shopware.Notification.createGrowlMessage('{s name=plentyconnector/controller/actions/item_import}{/s}', '{s name=plentyconnector/controller/actions/item_import/failed}{/s} ' + response.message);
 					}
 				}
 			});
 		});
-    }
+	}
 });
 // {/block}

@@ -278,7 +278,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         $success = false;
         $itemId = (int) $this->Request()->get('item_id');
 
-        if (!is_int($itemId)) {
+        if (!empty($itemId)) {
             return;
         }
 
@@ -315,12 +315,14 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
 
             $success = true;
         } catch (Throwable $exception) {
+			$message = $exception->getMessage();
         } catch (Exception $exception) {
+			$message = $exception->getMessage();
         }
 
         $this->View()->assign([
                 'success' => $success,
-                'data' => '',
+                'message' => $message,
         ]);
     }
 
