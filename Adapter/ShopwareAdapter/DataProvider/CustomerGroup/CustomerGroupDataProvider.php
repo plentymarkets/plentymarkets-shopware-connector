@@ -13,11 +13,6 @@ class CustomerGroupDataProvider implements CustomerGroupDataProviderInterface
      */
     private $repository;
 
-    /**
-     * CustomerGroupDataProvider constructor.
-     *
-     * @param EntityManagerInterface $entityManager
-     */
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->repository = $entityManager->getRepository(Group::class);

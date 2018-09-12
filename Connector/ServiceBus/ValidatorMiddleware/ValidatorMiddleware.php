@@ -13,11 +13,6 @@ class ValidatorMiddleware implements Middleware
      */
     private $validator;
 
-    /**
-     * ValidatorMiddleware constructor.
-     *
-     * @param ValidatorServiceInterface $validator
-     */
     public function __construct(ValidatorServiceInterface $validator)
     {
         $this->validator = $validator;

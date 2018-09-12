@@ -13,11 +13,6 @@ class ShopDataProvider implements ShopDataProviderInterface
      */
     private $shopRepository;
 
-    /**
-     * TranslationDataProvider constructor.
-     *
-     * @param EntityManagerInterface $entityManager
-     */
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->shopRepository = $entityManager->getRepository(ShopModel::class);

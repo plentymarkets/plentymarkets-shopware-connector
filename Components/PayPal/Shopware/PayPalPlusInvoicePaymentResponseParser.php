@@ -20,12 +20,6 @@ class PayPalPlusInvoicePaymentResponseParser implements PaymentResponseParserInt
      */
     private $connection;
 
-    /**
-     * PayPalPlusInvoicePaymentResponseParser constructor.
-     *
-     * @param PaymentResponseParserInterface $parentResponseParser
-     * @param Connection                     $connection
-     */
     public function __construct(
         PaymentResponseParserInterface $parentResponseParser,
         Connection $connection

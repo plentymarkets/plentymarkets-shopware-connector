@@ -13,11 +13,6 @@ class CurrencyResponseParser implements CurrencyResponseParserInterface
      */
     private $identityService;
 
-    /**
-     * CurrencyResponseParser constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     */
     public function __construct(IdentityServiceInterface $identityService)
     {
         $this->identityService = $identityService;

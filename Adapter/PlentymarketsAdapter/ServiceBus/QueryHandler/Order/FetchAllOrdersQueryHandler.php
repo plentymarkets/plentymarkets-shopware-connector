@@ -36,14 +36,6 @@ class FetchAllOrdersQueryHandler implements QueryHandlerInterface
      */
     private $outputHandler;
 
-    /**
-     * FetchAllOrdersQueryHandler constructor.
-     *
-     * @param OrderApi                     $api
-     * @param OrderResponseParserInterface $responseParser
-     * @param LoggerInterface              $logger
-     * @param OutputHandlerInterface       $outputHandler
-     */
     public function __construct(
         OrderApi $api,
         OrderResponseParserInterface $responseParser,

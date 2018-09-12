@@ -34,13 +34,6 @@ class MappingCommand extends ShopwareCommand
      */
     private $outputHandler;
 
-    /**
-     * MappingCommand constructor.
-     *
-     * @param MappingServiceInterface $mappingService
-     * @param LoggerInterface         $logger
-     * @param OutputHandlerInterface  $outputHandler
-     */
     public function __construct(
         MappingServiceInterface $mappingService,
         LoggerInterface $logger,
@@ -123,9 +116,9 @@ class MappingCommand extends ShopwareCommand
 
                 $this->outputHandler->createTable($headers, $rows);
             }
-        } catch (Throwable $exception) {
-            $this->logger->error($exception->getMessage());
         } catch (Exception $exception) {
+            $this->logger->error($exception->getMessage());
+        } catch (Throwable $exception) {
             $this->logger->error($exception->getMessage());
         }
     }

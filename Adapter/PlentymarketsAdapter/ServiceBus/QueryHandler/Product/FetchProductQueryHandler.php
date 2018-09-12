@@ -29,13 +29,6 @@ class FetchProductQueryHandler implements QueryHandlerInterface
      */
     private $responseParser;
 
-    /**
-     * FetchProductQueryHandler constructor.
-     *
-     * @param Item                           $itemApi
-     * @param IdentityServiceInterface       $identityService
-     * @param ProductResponseParserInterface $responseParser
-     */
     public function __construct(
         Item $itemApi,
         IdentityServiceInterface $identityService,

@@ -24,23 +24,28 @@ class TransferObjectCommand implements CommandInterface
     private $commandType;
 
     /**
+     * @var int
+     */
+    private $priority;
+
+    /**
      * @var string|TransferObjectInterface
      */
     private $payload;
 
     /**
-     * TransferObjectCommand constructor.
-     *
      * @param string                         $adapterName
      * @param string                         $objectType
      * @param string                         $commandType
+     * @param int                            $priority
      * @param string|TransferObjectInterface $payload
      */
-    public function __construct($adapterName, $objectType, $commandType, $payload)
+    public function __construct($adapterName, $objectType, $commandType, $priority, $payload)
     {
         Assertion::string($adapterName);
         Assertion::string($objectType);
         Assertion::inArray($commandType, CommandType::getAllTypes());
+        Assertion::integer($priority);
 
         if ($commandType === CommandType::HANDLE) {
             Assertion::isInstanceOf($payload, TransferObjectInterface::class);
@@ -53,6 +58,7 @@ class TransferObjectCommand implements CommandInterface
         $this->adapterName = $adapterName;
         $this->objectType = $objectType;
         $this->commandType = $commandType;
+        $this->priority = $priority;
         $this->payload = $payload;
     }
 
@@ -81,6 +87,14 @@ class TransferObjectCommand implements CommandInterface
     }
 
     /**
+     * @return int
+     */
+    public function getPriority()
+    {
+        return $this->priority;
+    }
+
+    /**
      * @return string|TransferObjectInterface
      */
     public function getPayload()
@@ -97,6 +111,7 @@ class TransferObjectCommand implements CommandInterface
             'adapterName' => $this->adapterName,
             'objectType' => $this->objectType,
             'commandType' => $this->commandType,
+            'priority' => $this->priority,
             'payload' => $this->payload,
         ];
     }

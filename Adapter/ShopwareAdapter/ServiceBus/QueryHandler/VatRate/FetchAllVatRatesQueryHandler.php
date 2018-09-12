@@ -26,12 +26,6 @@ class FetchAllVatRatesQueryHandler implements QueryHandlerInterface
      */
     private $responseParser;
 
-    /**
-     * FetchAllVatRatesQueryHandler constructor.
-     *
-     * @param EntityManagerInterface         $entityManager
-     * @param VatRateResponseParserInterface $responseParser
-     */
     public function __construct(
         EntityManagerInterface $entityManager,
         VatRateResponseParserInterface $responseParser

@@ -26,12 +26,6 @@ class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
      */
     private $responseParser;
 
-    /**
-     * FetchAllCustomerGroupsQueryHandler constructor.
-     *
-     * @param EntityManagerInterface               $entityManager
-     * @param CustomerGroupResponseParserInterface $responseParser
-     */
     public function __construct(
         EntityManagerInterface $entityManager,
         CustomerGroupResponseParserInterface $responseParser

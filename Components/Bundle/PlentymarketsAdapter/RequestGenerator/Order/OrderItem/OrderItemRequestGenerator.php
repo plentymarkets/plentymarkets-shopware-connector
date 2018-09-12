@@ -32,13 +32,6 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
      */
     private $parentOrderItemRequestGenerator;
 
-    /**
-     * OrderItemRequestGenerator constructor.
-     *
-     * @param EntityManagerInterface             $entityManager
-     * @param IdentityServiceInterface           $identityService
-     * @param OrderItemRequestGeneratorInterface $parentOrderItemRequestGenerator
-     */
     public function __construct(
         EntityManagerInterface $entityManager,
         IdentityServiceInterface $identityService,

@@ -11,11 +11,6 @@ abstract class ApiAbstract
      */
     protected $client;
 
-    /**
-     * ApiAbstract constructor.
-     *
-     * @param ClientInterface $client
-     */
     public function __construct(ClientInterface $client)
     {
         $this->client = $client;

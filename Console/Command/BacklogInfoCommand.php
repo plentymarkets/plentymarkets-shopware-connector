@@ -23,12 +23,6 @@ class BacklogInfoCommand extends ShopwareCommand
      */
     private $outputHandler;
 
-    /**
-     * BacklogInfoCommand constructor.
-     *
-     * @param BacklogService         $backlogService
-     * @param OutputHandlerInterface $outputHandler
-     */
     public function __construct(
         BacklogService $backlogService,
         OutputHandlerInterface $outputHandler

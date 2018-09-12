@@ -35,12 +35,6 @@ class BacklogService implements BacklogServiceInterface
      */
     private $connection;
 
-    /**
-     * BacklogService constructor.
-     *
-     * @param EntityManagerInterface $entityManager
-     * @param LoggerInterface        $logger
-     */
     public function __construct(
         EntityManagerInterface $entityManager,
         LoggerInterface $logger
@@ -66,6 +60,7 @@ class BacklogService implements BacklogServiceInterface
         $backlog = new Backlog();
         $backlog->setPayload($command);
         $backlog->setStatus(Backlog::STATUS_OPEN);
+        $backlog->setPriority($command->getPriority());
         $backlog->setHash($hash);
 
         $this->entityManager->persist($backlog);
@@ -79,7 +74,7 @@ class BacklogService implements BacklogServiceInterface
     public function dequeue()
     {
         try {
-            $selectQuery = 'SELECT * FROM plenty_backlog WHERE status = :status ORDER BY `time` ASC, `id` ASC LIMIT 1';
+            $selectQuery = 'SELECT * FROM plenty_backlog WHERE `status` = :status ORDER BY `priority` DESC, `id` ASC LIMIT 1';
             $selectParams = [':status' => Backlog::STATUS_OPEN];
             $backlog = $this->connection->executeQuery($selectQuery, $selectParams)->fetch(PDO::FETCH_ASSOC);
 
@@ -87,7 +82,7 @@ class BacklogService implements BacklogServiceInterface
                 return null;
             }
 
-            $updateQuery = 'UPDATE plenty_backlog SET status = :status WHERE id = :id';
+            $updateQuery = 'UPDATE plenty_backlog SET `status` = :status WHERE `id` = :id';
             $affectedRows = $this->connection->executeUpdate($updateQuery, [
                 ':id' => $backlog['id'],
                 ':status' => Backlog::STATUS_PROCESSED,
@@ -97,7 +92,7 @@ class BacklogService implements BacklogServiceInterface
                 return null;
             }
 
-            $deleteQuery = 'DELETE FROM plenty_backlog WHERE id = :id';
+            $deleteQuery = 'DELETE FROM plenty_backlog WHERE `id` = :id';
             $affectedRows = $this->connection->executeUpdate($deleteQuery, [':id' => $backlog['id']]);
 
             if ($affectedRows !== 1) {
@@ -111,9 +106,9 @@ class BacklogService implements BacklogServiceInterface
             }
 
             return new HandleBacklogElementCommand($command);
-        } catch (Throwable $exception) {
-            $this->logger->error($exception->getMessage());
         } catch (Exception $exception) {
+            $this->logger->error($exception->getMessage());
+        } catch (Throwable $exception) {
             $this->logger->error($exception->getMessage());
         }
 

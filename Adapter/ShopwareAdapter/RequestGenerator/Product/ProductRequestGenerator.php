@@ -60,15 +60,6 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
      */
     private $categories;
 
-    /**
-     * ProductRequestGenerator constructor.
-     *
-     * @param IdentityServiceInterface                 $identityService
-     * @param EntityManagerInterface                   $entityManager
-     * @param ConfiguratorSetRequestGeneratorInterface $configuratorSetRequestGenerator
-     * @param ConfigServiceInterface                   $config
-     * @param LoggerInterface                          $logger
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         EntityManagerInterface $entityManager,
@@ -412,13 +403,6 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
                 $category = $categoryRepository->find($categoryIdentity->getAdapterIdentifier());
 
                 if (null === $category) {
-                    continue;
-                }
-
-                $parents = array_reverse(array_filter(explode('|', $category->getPath())));
-                $parentCategoryId = array_shift($parents);
-
-                if (!in_array($parentCategoryId, $shopCategories, true)) {
                     continue;
                 }
 

@@ -27,12 +27,6 @@ class RemoveProductCommandHandler implements CommandHandlerInterface
      */
     private $logger;
 
-    /**
-     * RemoveProductCommandHandler constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface          $logger
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         LoggerInterface $logger

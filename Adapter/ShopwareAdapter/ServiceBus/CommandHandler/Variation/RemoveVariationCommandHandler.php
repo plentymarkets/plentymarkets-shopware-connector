@@ -27,14 +27,10 @@ class RemoveVariationCommandHandler implements CommandHandlerInterface
      */
     private $logger;
 
-    /**
-     * RemoveVariationCommandHandler constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface          $logger
-     */
-    public function __construct(IdentityServiceInterface $identityService, LoggerInterface $logger)
-    {
+    public function __construct(
+        IdentityServiceInterface $identityService,
+        LoggerInterface $logger
+    ) {
         $this->identityService = $identityService;
         $this->logger = $logger;
     }

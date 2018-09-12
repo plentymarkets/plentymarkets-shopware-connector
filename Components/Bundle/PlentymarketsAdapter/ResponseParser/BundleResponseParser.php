@@ -44,15 +44,6 @@ class BundleResponseParser implements BundleResponseParserInterface
      */
     private $variationHelper;
 
-    /**
-     * BundleResponseParser constructor.
-     *
-     * @param IdentityServiceInterface     $identityService
-     * @param PriceResponseParserInterface $priceResponseParser
-     * @param VariationHelperInterface     $variationHelper
-     * @param ClientInterface              $client
-     * @param LoggerInterface              $logger
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         PriceResponseParserInterface $priceResponseParser,

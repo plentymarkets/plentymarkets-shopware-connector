@@ -30,13 +30,6 @@ class ImageResponseParser implements ImageResponseParserInterface
      */
     private $logger;
 
-    /**
-     * ImageResponseParser constructor.
-     *
-     * @param IdentityServiceInterface     $identityService
-     * @param MediaResponseParserInterface $mediaResponseParser
-     * @param LoggerInterface              $logger
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         MediaResponseParserInterface $mediaResponseParser,

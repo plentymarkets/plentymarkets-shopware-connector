@@ -23,12 +23,6 @@ class FetchAllOrderStatusesQueryHandler implements QueryHandlerInterface
      */
     private $responseParser;
 
-    /**
-     * OrderStatusResponseParserInterface constructor.
-     *
-     * @param ClientInterface                    $client
-     * @param OrderStatusResponseParserInterface $responseParser
-     */
     public function __construct(
         ClientInterface $client,
         OrderStatusResponseParserInterface $responseParser

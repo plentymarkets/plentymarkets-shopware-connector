@@ -56,8 +56,6 @@ class Iterator implements BaseIterator, Countable
     private $isLastPage = false;
 
     /**
-     * ResourceIterator constructor.
-     *
      * @param string       $path
      * @param Client       $client
      * @param array        $criteria

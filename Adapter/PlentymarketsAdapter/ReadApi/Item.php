@@ -31,14 +31,6 @@ class Item extends ApiAbstract
      */
     private $includes = 'itemProperties.valueTexts,itemCrossSelling,itemImages,itemShippingProfiles';
 
-    /**
-     * Item constructor.
-     *
-     * @param Client                   $client
-     * @param VariationApi             $itemsVariationsApi
-     * @param LanguageHelperInterface  $languageHelper
-     * @param VariationHelperInterface $variationHelper
-     */
     public function __construct(
         Client $client,
         VariationApi $itemsVariationsApi,
