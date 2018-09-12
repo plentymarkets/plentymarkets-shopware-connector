@@ -326,6 +326,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 - transfer age restriction as attribute to shopware
+- add item properties with type "empty"
 
 ## [4.6.0]
 ### Fixed
