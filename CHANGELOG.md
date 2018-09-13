@@ -9,6 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - fixed duplicate product seo categories (@lacodimizer)
 - the media category sync was called multiple times instead of only one time (@jochenmanz)
 - skip order without customer
+- set correct bundle position
 
 ### Changed
 - translated variation configurator 
