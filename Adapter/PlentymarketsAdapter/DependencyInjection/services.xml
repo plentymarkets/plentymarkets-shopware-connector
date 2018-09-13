@@ -72,7 +72,7 @@
         <!-- Helpers -->
 
         <service id="plentymarkets_adapter.helper.language" class="PlentymarketsAdapter\Helper\LanguageHelper">
-	    <argument type="service" id="plenty_connector.identity_service" />
+	        <argument type="service" id="plenty_connector.identity_service" />
         </service>
 
         <service id="plentymarkets_adapter.helper.media_category" class="PlentymarketsAdapter\Helper\MediaCategoryHelper" />
