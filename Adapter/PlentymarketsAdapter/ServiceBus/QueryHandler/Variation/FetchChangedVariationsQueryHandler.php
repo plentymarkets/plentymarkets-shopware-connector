@@ -10,8 +10,11 @@ use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
 use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
+use PlentymarketsAdapter\ReadApi\Item;
 use PlentymarketsAdapter\ReadApi\Item\Variation as VariationApi;
-use PlentymarketsAdapter\ResponseParser\Variation\VariationResponseParserInterface;
+use PlentymarketsAdapter\ResponseParser\Product\ProductResponseParser;
+use PlentymarketsAdapter\ResponseParser\Product\ProductResponseParserInterface;
+use PlentymarketsAdapter\ResponseParser\Product\Variation\VariationResponseParserInterface;
 use PlentymarketsAdapter\ServiceBus\ChangedDateTimeTrait;
 use Psr\Log\LoggerInterface;
 
@@ -20,7 +23,7 @@ class FetchChangedVariationsQueryHandler implements QueryHandlerInterface
     use ChangedDateTimeTrait;
 
     /**
-     * @var VariationApi
+     * @var Item
      */
     private $api;
 
@@ -40,7 +43,7 @@ class FetchChangedVariationsQueryHandler implements QueryHandlerInterface
     private $outputHandler;
 
     public function __construct(
-        VariationApi $api,
+        Item $api,
         VariationResponseParserInterface $responseParser,
         LoggerInterface $logger,
         OutputHandlerInterface $outputHandler

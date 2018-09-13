@@ -106,6 +106,28 @@ class Item extends ApiAbstract
     }
 
     /**
+     * @param DateTimeImmutable $startTimestamp
+     * @param DateTimeImmutable $endTimestamp
+     *
+     * @return Iterator
+     */
+    public function findChangedVariation(DateTimeImmutable $startTimestamp, DateTimeImmutable $endTimestamp)
+    {
+        $start = $startTimestamp->format(DATE_W3C);
+        $end = $endTimestamp->format(DATE_W3C);
+
+        return $this->client->getIterator('items', [
+            'lang' => $this->languageHelper->getLanguagesQueryString(),
+            'variationUpdatedBetween' => $start . ',' . $end,
+            'with' => $this->includes,
+        ], function (array $elements) {
+            $this->addAdditionalData($elements);
+
+            return $elements;
+        });
+    }
+
+    /**
      * @param array $elements
      */
     private function addAdditionalData(array &$elements)
