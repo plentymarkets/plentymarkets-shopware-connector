@@ -134,7 +134,7 @@ class BundleResponseParser implements BundleResponseParserInterface
         $bundle->setIdentifier($identity->getObjectIdentifier());
         $bundle->setName($product['texts'][0]['name1']);
         $bundle->setNumber($variation['number']);
-        $bundle->setPosition($product['position']);
+        $bundle->setPosition($variation['position']);
         $bundle->setStockLimitation((bool) $variation['stockLimitation']);
         $bundle->setPrices($this->priceResponseParser->parse($variation));
         $bundle->setVatRateIdentifier($this->getVatRateIdentifier($variation));
