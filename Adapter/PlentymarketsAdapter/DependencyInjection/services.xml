@@ -42,6 +42,7 @@
 
         <service id="plentymarkets_adapter.read_api.item.variant" class="PlentymarketsAdapter\ReadApi\Item\Variation">
             <argument type="service" id="plentymarkets_adapter.client" />
+            <argument type="service" id="plentymarkets_adapter.helper.language" />
         </service>
 
         <service id="plentymarkets_adapter.read_api.order" class="PlentymarketsAdapter\ReadApi\Order\Order">
@@ -367,6 +368,32 @@
         </service>
 
         <service id="plentymarkets_adapter.query_handler.fetch_product" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Product\FetchProductQueryHandler">
+            <argument type="service" id="plentymarkets_adapter.read_api.item" />
+            <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.product" />
+
+            <tag name="plenty_connector.query_handler" />
+        </service>
+
+        <service id="plentymarkets_adapter.query_handler.fetch_all_variation" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Variation\FetchAllVariationsQueryHandler">
+            <argument type="service" id="plentymarkets_adapter.read_api.item" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.product" />
+            <argument type="service" id="plenty_connector.logger" />
+            <argument type="service" id="plenty_connector.console.output_handler" />
+
+            <tag name="plenty_connector.query_handler" />
+        </service>
+
+        <service id="plentymarkets_adapter.query_handler.fetch_changed_variations" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Variation\FetchChangedVariationsQueryHandler">
+            <argument type="service" id="plentymarkets_adapter.read_api.item.variant" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.variation" />
+            <argument type="service" id="plenty_connector.logger" />
+            <argument type="service" id="plenty_connector.console.output_handler" />
+
+            <tag name="plenty_connector.query_handler" />
+        </service>
+
+        <service id="plentymarkets_adapter.query_handler.fetch_variation" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Variation\FetchVariationQueryHandler">
             <argument type="service" id="plentymarkets_adapter.read_api.item" />
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plentymarkets_adapter.response_parser.product" />

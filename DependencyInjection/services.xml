@@ -23,6 +23,7 @@
         <parameter key="plenty_connector.transfer_object.payment_method" type="constant">PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod::TYPE</parameter>
         <parameter key="plenty_connector.transfer_object.payment_status" type="constant">PlentyConnector\Connector\TransferObject\PaymentStatus\PaymentStatus::TYPE</parameter>
         <parameter key="plenty_connector.transfer_object.product" type="constant">PlentyConnector\Connector\TransferObject\Product\Product::TYPE</parameter>
+        <parameter key="plenty_connector.transfer_object.variation" type="constant">PlentyConnector\Connector\TransferObject\Product\Variation\Variation::TYPE</parameter>
         <parameter key="plenty_connector.transfer_object.shipping_profile" type="constant">PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile::TYPE</parameter>
         <parameter key="plenty_connector.transfer_object.shop" type="constant">PlentyConnector\Connector\TransferObject\Shop\Shop::TYPE</parameter>
         <parameter key="plenty_connector.transfer_object.stock" type="constant">PlentyConnector\Connector\TransferObject\Product\Stock\Stock::TYPE</parameter>
@@ -148,6 +149,18 @@
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.product%</argument>
+            <argument>60</argument>
+
+            <tag name="plenty_connector.connector_definition" />
+            <tag name="plenty_connector.cleanup_definition" />
+        </service>
+
+        <service id="plenty_connector.connector_definition.variation" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
+            <factory service="plenty_connector.definition_factory" method="factory" />
+
+            <argument>%plenty_connector.adapter.plentymarkets%</argument>
+            <argument>%plenty_connector.adapter.shopware%</argument>
+            <argument>%plenty_connector.transfer_object.variation%</argument>
             <argument>60</argument>
 
             <tag name="plenty_connector.connector_definition" />
