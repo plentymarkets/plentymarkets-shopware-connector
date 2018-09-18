@@ -10,6 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - the media category sync was called multiple times instead of only one time (@jochenmanz)
 - skip order without customer
 - set correct bundle position
+- fix product meta title and meta description translation
 
 ### Changed
 - translated variation configurator 
