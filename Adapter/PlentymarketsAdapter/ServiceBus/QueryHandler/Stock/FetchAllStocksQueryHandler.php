@@ -14,9 +14,6 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Product\Stock\StockResponseParserInterface;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class FetchAllStocksQueryHandler
- */
 class FetchAllStocksQueryHandler implements QueryHandlerInterface
 {
     /**
@@ -39,14 +36,6 @@ class FetchAllStocksQueryHandler implements QueryHandlerInterface
      */
     private $outputHandler;
 
-    /**
-     * FetchAllStocksQueryHandler constructor.
-     *
-     * @param ClientInterface              $client
-     * @param StockResponseParserInterface $responseParser
-     * @param LoggerInterface              $logger
-     * @param OutputHandlerInterface       $outputHandler
-     */
     public function __construct(
         ClientInterface $client,
         StockResponseParserInterface $responseParser,

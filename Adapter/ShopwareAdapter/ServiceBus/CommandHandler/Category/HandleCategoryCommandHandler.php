@@ -29,9 +29,6 @@ use Shopware\Models\Shop\Shop as ShopModel;
 use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class HandleCategoryCommandHandler.
- */
 class HandleCategoryCommandHandler implements CommandHandlerInterface
 {
     /**
@@ -64,14 +61,6 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
      */
     private $attributePersister;
 
-    /**
-     * HandleCategoryCommandHandler constructor.
-     *
-     * @param IdentityServiceInterface        $identityService
-     * @param TranslationHelperInterface      $translationHelper
-     * @param EntityManagerInterface          $entityManager
-     * @param AttributeDataPersisterInterface $attributePersister
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         TranslationHelperInterface $translationHelper,
@@ -179,7 +168,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         $category = $deepCopy->copy($category);
 
         /**
-         * @var ShopModel|null $shop
+         * @var null|ShopModel $shop
          */
         $shop = $this->shopRepository->find($shopIdentity->getAdapterIdentifier());
 

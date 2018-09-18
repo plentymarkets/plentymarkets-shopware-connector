@@ -7,15 +7,17 @@ use PlentyConnector\Connector\TransferObject\TranslateableInterface;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
 
-/**
- * Class Property
- */
 class Property extends AbstractValueObject implements TranslateableInterface
 {
     /**
      * @var string
      */
     private $name = '';
+
+    /**
+     * @var int
+     */
+    private $position = 0;
 
     /**
      * @var Value[]
@@ -41,6 +43,22 @@ class Property extends AbstractValueObject implements TranslateableInterface
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * @param int position
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
     }
 
     /**

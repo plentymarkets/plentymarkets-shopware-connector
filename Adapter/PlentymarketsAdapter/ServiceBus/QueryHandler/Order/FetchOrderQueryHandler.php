@@ -12,9 +12,6 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Order\Order as OrderApi;
 use PlentymarketsAdapter\ResponseParser\Order\OrderResponseParserInterface;
 
-/**
- * Class FetchOrderQueryHandler
- */
 class FetchOrderQueryHandler implements QueryHandlerInterface
 {
     /**
@@ -32,13 +29,6 @@ class FetchOrderQueryHandler implements QueryHandlerInterface
      */
     private $responseParser;
 
-    /**
-     * FetchAllOrdersQueryHandler constructor.
-     *
-     * @param OrderApi                     $api
-     * @param IdentityServiceInterface     $identityService
-     * @param OrderResponseParserInterface $responseParser
-     */
     public function __construct(
         OrderApi $api,
         IdentityServiceInterface $identityService,

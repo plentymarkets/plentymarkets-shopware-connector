@@ -13,9 +13,6 @@ use Shopware\Models\Property\Option as PropertyGroupModel;
 use Shopware\Models\Property\Value as PropertyValueModel;
 use Shopware\Models\Shop\Shop as ShopModel;
 
-/**
- * Class TranslationDataProvider
- */
 class TranslationDataProvider implements TranslationDataProviderInterface
 {
     /**
@@ -43,11 +40,6 @@ class TranslationDataProvider implements TranslationDataProviderInterface
      */
     private $configurationValueRepository;
 
-    /**
-     * TranslationDataProvider constructor.
-     *
-     * @param EntityManagerInterface $entityManager
-     */
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->shopRepository = $entityManager->getRepository(ShopModel::class);

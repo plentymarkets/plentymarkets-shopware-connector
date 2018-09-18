@@ -11,9 +11,6 @@ use PlentymarketsAdapter\Helper\LanguageHelperInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Language\LanguageResponseParserInterface;
 
-/**
- * Class FetchAllLanguagesQueryHandler
- */
 class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
 {
     /**
@@ -26,12 +23,6 @@ class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
      */
     private $languageHelper;
 
-    /**
-     * FetchAllLanguagesQueryHandler constructor.
-     *
-     * @param LanguageResponseParserInterface $responseParser
-     * @param LanguageHelperInterface         $languageHelper
-     */
     public function __construct(
         LanguageResponseParserInterface $responseParser,
         LanguageHelperInterface $languageHelper

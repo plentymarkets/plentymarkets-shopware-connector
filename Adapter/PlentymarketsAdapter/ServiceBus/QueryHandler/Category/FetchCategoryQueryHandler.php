@@ -13,9 +13,6 @@ use PlentymarketsAdapter\Helper\LanguageHelperInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Category\CategoryResponseParserInterface;
 
-/**
- * Class FetchCategoryQueryHandler
- */
 class FetchCategoryQueryHandler implements QueryHandlerInterface
 {
     /**
@@ -38,14 +35,6 @@ class FetchCategoryQueryHandler implements QueryHandlerInterface
      */
     private $identityService;
 
-    /**
-     * FetchCategoryQueryHandler constructor.
-     *
-     * @param ClientInterface                 $client
-     * @param CategoryResponseParserInterface $categoryResponseParser
-     * @param LanguageHelperInterface         $languageHelper
-     * @param IdentityServiceInterface        $identityService
-     */
     public function __construct(
         ClientInterface $client,
         CategoryResponseParserInterface $categoryResponseParser,

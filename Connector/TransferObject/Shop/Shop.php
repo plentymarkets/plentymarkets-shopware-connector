@@ -4,9 +4,6 @@ namespace PlentyConnector\Connector\TransferObject\Shop;
 
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 
-/**
- * Class Shop
- */
 class Shop extends AbstractTransferObject
 {
     const TYPE = 'Shop';
@@ -38,7 +35,7 @@ class Shop extends AbstractTransferObject
     }
 
     /**
-     * @param string $identifier
+     * {@inheritdoc}
      */
     public function setIdentifier($identifier)
     {

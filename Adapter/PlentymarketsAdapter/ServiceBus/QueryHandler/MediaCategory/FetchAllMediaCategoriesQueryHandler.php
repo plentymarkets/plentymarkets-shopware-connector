@@ -14,9 +14,6 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\MediaCategory\MediaCategoryResponseParserInterface;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class FetchAllMediaCategoriesQueryHandler
- */
 class FetchAllMediaCategoriesQueryHandler implements QueryHandlerInterface
 {
     /**
@@ -39,14 +36,6 @@ class FetchAllMediaCategoriesQueryHandler implements QueryHandlerInterface
      */
     private $outputHandler;
 
-    /**
-     * FetchAllMediaCategoriesQueryHandler constructor.
-     *
-     * @param MediaCategoryHelperInterface         $mediaCategoryHelper
-     * @param MediaCategoryResponseParserInterface $responseParser
-     * @param LoggerInterface                      $logger
-     * @param OutputHandlerInterface               $outputHandler
-     */
     public function __construct(
         MediaCategoryHelperInterface $mediaCategoryHelper,
         MediaCategoryResponseParserInterface $responseParser,

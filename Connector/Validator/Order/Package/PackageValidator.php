@@ -6,9 +6,6 @@ use Assert\Assertion;
 use PlentyConnector\Connector\TransferObject\Order\Package\Package;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 
-/**
- * Class PackageValidator
- */
 class PackageValidator implements ValidatorInterface
 {
     /**

@@ -11,9 +11,6 @@ use PlentyConnector\Connector\ValidatorService\ValidatorServiceInterface;
 use PlentyConnector\Connector\ValueObject\Definition\Definition;
 use PlentyConnector\Connector\ValueObject\Mapping\Mapping;
 
-/**
- * Class MappingService.
- */
 class MappingService implements MappingServiceInterface
 {
     /**
@@ -36,13 +33,6 @@ class MappingService implements MappingServiceInterface
      */
     private $validator;
 
-    /**
-     * MappingService constructor.
-     *
-     * @param QueryFactoryInterface     $queryFactory
-     * @param ServiceBusInterface       $serviceBus
-     * @param ValidatorServiceInterface $validator
-     */
     public function __construct(
         QueryFactoryInterface $queryFactory,
         ServiceBusInterface $serviceBus,

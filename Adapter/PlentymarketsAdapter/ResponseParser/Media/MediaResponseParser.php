@@ -9,9 +9,6 @@ use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
 use PlentymarketsAdapter\Helper\MediaCategoryHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 
-/**
- * Class MediaResponseParser
- */
 class MediaResponseParser implements MediaResponseParserInterface
 {
     /**
@@ -24,12 +21,6 @@ class MediaResponseParser implements MediaResponseParserInterface
      */
     private $categoryHelper;
 
-    /**
-     * MediaResponseParser constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     * @param MediaCategoryHelper      $categoryHelper
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         MediaCategoryHelper $categoryHelper

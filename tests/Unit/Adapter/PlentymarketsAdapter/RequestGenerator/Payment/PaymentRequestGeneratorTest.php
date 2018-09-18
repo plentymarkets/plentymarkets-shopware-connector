@@ -7,9 +7,6 @@ use PlentyConnector\tests\Unit\Adapter\PlentymarketsAdapter\RequestGenerator\Req
 use PlentymarketsAdapter\RequestGenerator\Payment\PaymentRequestGenerator;
 use Ramsey\Uuid\Uuid;
 
-/**
- * Class PaymentRequestGeneratorTest
- */
 class PaymentRequestGeneratorTest extends RequestGeneratorTest
 {
     /**

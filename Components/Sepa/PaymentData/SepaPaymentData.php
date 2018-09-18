@@ -5,9 +5,6 @@ namespace PlentyConnector\Components\Sepa\PaymentData;
 use PlentyConnector\Connector\TransferObject\Payment\PaymentData\PaymentDataInterface;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 
-/**
- * Class SepaPaymentData
- */
 class SepaPaymentData extends AbstractValueObject implements PaymentDataInterface
 {
     /**

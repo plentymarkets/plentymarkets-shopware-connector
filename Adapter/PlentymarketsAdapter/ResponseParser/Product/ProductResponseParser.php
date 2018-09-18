@@ -9,6 +9,7 @@ use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Category\Category;
 use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
+use PlentyConnector\Connector\TransferObject\Product\Badge\Badge;
 use PlentyConnector\Connector\TransferObject\Product\Image\Image;
 use PlentyConnector\Connector\TransferObject\Product\LinkedProduct\LinkedProduct;
 use PlentyConnector\Connector\TransferObject\Product\Product;
@@ -20,15 +21,15 @@ use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
+use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\Helper\VariationHelperInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
+use PlentymarketsAdapter\ReadApi\Item\Property\Group as PropertyGroupApi;
+use PlentymarketsAdapter\ReadApi\Item\Property\Name as PropertyNameApi;
 use PlentymarketsAdapter\ResponseParser\Product\Image\ImageResponseParserInterface;
 use PlentymarketsAdapter\ResponseParser\Product\Variation\VariationResponseParserInterface;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class ProductResponseParser.
- */
 class ProductResponseParser implements ProductResponseParserInterface
 {
     /**
@@ -62,22 +63,23 @@ class ProductResponseParser implements ProductResponseParserInterface
     private $variationHelper;
 
     /**
-     * ProductResponseParser constructor.
-     *
-     * @param ConfigServiceInterface           $configService
-     * @param IdentityServiceInterface         $identityService
-     * @param LoggerInterface                  $logger
-     * @param ImageResponseParserInterface     $imageResponseParser
-     * @param VariationResponseParserInterface $variationResponseParser
-     * @param VariationHelperInterface         $variationHelper
+     * @var PropertyGroupApi
      */
+    private $itemsPropertiesGroupNamesApi;
+
+    /**
+     * @var PropertyNameApi
+     */
+    private $itemsPropertiesNamesApi;
+
     public function __construct(
         ConfigServiceInterface $configService,
         IdentityServiceInterface $identityService,
         LoggerInterface $logger,
         ImageResponseParserInterface $imageResponseParser,
         VariationResponseParserInterface $variationResponseParser,
-        VariationHelperInterface $variationHelper
+        VariationHelperInterface $variationHelper,
+        ClientInterface $client
     ) {
         $this->configService = $configService;
         $this->identityService = $identityService;
@@ -85,6 +87,9 @@ class ProductResponseParser implements ProductResponseParserInterface
         $this->imageResponseParser = $imageResponseParser;
         $this->variationResponseParser = $variationResponseParser;
         $this->variationHelper = $variationHelper;
+
+        $this->itemsPropertiesGroupsNamesApi = new PropertyGroupApi($client);
+        $this->itemsPropertiesNamesApi = new PropertyNameApi($client);
     }
 
     /**
@@ -136,6 +141,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         $productObject->setName((string) $product['texts'][0]['name1']);
         $productObject->setActive($this->getActive($variations, $mainVariation));
         $productObject->setNumber($this->getProductNumber($variations));
+        $productObject->setBadges($this->getBadges($product));
         $productObject->setShopIdentifiers($shopIdentifiers);
         $productObject->setManufacturerIdentifier($this->getManufacturerIdentifier($product));
         $productObject->setCategoryIdentifiers($this->getCategories($mainVariation));
@@ -146,7 +152,6 @@ class ProductResponseParser implements ProductResponseParserInterface
         $productObject->setStockLimitation($this->getStockLimitation($product));
         $productObject->setDescription((string) $product['texts'][0]['shortDescription']);
         $productObject->setLongDescription((string) $product['texts'][0]['description']);
-        $productObject->setTechnicalDescription((string) $product['texts'][0]['technicalData']);
         $productObject->setMetaTitle((string) $product['texts'][0]['name1']);
         $productObject->setMetaDescription((string) $product['texts'][0]['metaDescription']);
         $productObject->setMetaKeywords((string) $product['texts'][0]['keywords']);
@@ -369,12 +374,6 @@ class ProductResponseParser implements ProductResponseParserInterface
 
             $translations[] = Translation::fromArray([
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                'property' => 'technicalDescription',
-                'value' => $text['technicalData'],
-            ]);
-
-            $translations[] = Translation::fromArray([
-                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
                 'property' => 'metaTitle',
                 'value' => $text['name1'],
             ]);
@@ -479,10 +478,63 @@ class ProductResponseParser implements ProductResponseParserInterface
                 continue;
             }
 
+            $backendName = $property['property']['backendName'];
+
             $values = [];
             $translations = [];
 
-            if ($property['property']['valueType'] === 'text') {
+            if ($property['property']['valueType'] === 'empty') {
+                $propertyGroupNames = $this->itemsPropertiesGroupsNamesApi->findOne($property['property']['propertyGroupId']);
+
+                if (empty($propertyGroupNames[0]['name'])) {
+                    continue;
+                }
+
+                $backendName = $propertyGroupNames[0]['name'];
+
+                foreach ($propertyGroupNames as $name) {
+                    $languageIdentifier = $this->identityService->findOneBy([
+                        'adapterIdentifier' => $name['lang'],
+                        'adapterName' => PlentymarketsAdapter::NAME,
+                        'objectType' => Language::TYPE,
+                    ]);
+
+                    if (null === $languageIdentifier) {
+                        continue;
+                    }
+
+                    $translations[] = Translation::fromArray([
+                        'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                        'property' => 'name',
+                        'value' => $name['name'],
+                    ]);
+                }
+
+                $propertyNames = $this->itemsPropertiesNamesApi->findOne($property['property']['id']);
+
+                foreach ($propertyNames as $name) {
+                    $languageIdentifier = $this->identityService->findOneBy([
+                        'adapterIdentifier' => $name['lang'],
+                        'adapterName' => PlentymarketsAdapter::NAME,
+                        'objectType' => Language::TYPE,
+                    ]);
+
+                    if (null === $languageIdentifier) {
+                        continue;
+                    }
+
+                    $valueTranslations[] = Translation::fromArray([
+                        'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                        'property' => 'value',
+                        'value' => $name['name'],
+                    ]);
+                }
+
+                $values[] = Value::fromArray([
+                    'value' => (string) $property['property']['backendName'],
+                    'translations' => $valueTranslations,
+                ]);
+            } elseif ($property['property']['valueType'] === 'text') {
                 if (empty($property['names'][0]['value'])) {
                     continue;
                 }
@@ -574,7 +626,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             }
 
             $result[] = Property::fromArray([
-                'name' => $property['property']['backendName'],
+                'name' => $backendName,
                 'values' => $values,
                 'translations' => $translations,
             ]);
@@ -685,6 +737,8 @@ class ProductResponseParser implements ProductResponseParserInterface
         }
 
         $attributes[] = $this->getShortDescriptionAsAttribute($product);
+        $attributes[] = $this->getTechnicalDataAsAttribute($product);
+        $attributes[] = $this->getAgeRestrictionAsAttribute($product);
 
         return $attributes;
     }
@@ -722,5 +776,71 @@ class ProductResponseParser implements ProductResponseParserInterface
         $attribute->setTranslations($translations);
 
         return $attribute;
+    }
+
+    /**
+     * @param array $product
+     *
+     * @return Attribute
+     */
+    private function getTechnicalDataAsAttribute(array $product)
+    {
+        $translations = [];
+
+        foreach ($product['texts'] as $text) {
+            $languageIdentifier = $this->identityService->findOneBy([
+                'adapterIdentifier' => $text['lang'],
+                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType' => Language::TYPE,
+            ]);
+
+            if (null === $languageIdentifier) {
+                continue;
+            }
+
+            $translations[] = Translation::fromArray([
+                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                'property' => 'value',
+                'value' => $text['technicalData'],
+            ]);
+        }
+
+        $attribute = new Attribute();
+        $attribute->setKey('technicalDescription');
+        $attribute->setValue((string) $product['texts'][0]['technicalData']);
+        $attribute->setTranslations($translations);
+
+        return $attribute;
+    }
+
+    /**
+     * @param array $product
+     *
+     * @return Attribute
+     */
+    private function getAgeRestrictionAsAttribute(array $product)
+    {
+        $attribute = new Attribute();
+        $attribute->setKey('ageRestriction');
+        $attribute->setValue((string) $product['ageRestriction']);
+
+        return $attribute;
+    }
+
+    /**
+     * @param array $product
+     *
+     * @return Badge[]
+     */
+    private function getBadges(array $product)
+    {
+        if ($product['storeSpecial'] === 3) {
+            $badge = new Badge();
+            $badge->setType(Badge::TYPE_HIGHLIGHT);
+
+            return [$badge];
+        }
+
+        return [];
     }
 }

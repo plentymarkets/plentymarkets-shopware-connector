@@ -7,9 +7,6 @@ use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use ReflectionClass;
 
-/**
- * Class Comment
- */
 class Comment extends AbstractValueObject implements AttributableInterface
 {
     const TYPE_INTERNAL = 1;

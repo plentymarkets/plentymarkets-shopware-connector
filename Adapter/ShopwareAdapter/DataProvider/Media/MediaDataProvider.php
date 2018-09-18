@@ -9,9 +9,6 @@ use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
 use Shopware\Bundle\AttributeBundle\Service\DataLoader;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class MediaDataProvider
- */
 class MediaDataProvider implements MediaDataProviderInterface
 {
     /**
@@ -24,12 +21,6 @@ class MediaDataProvider implements MediaDataProviderInterface
      */
     private $dataLoader;
 
-    /**
-     * MediaDataProvider constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     * @param DataLoader               $dataLoader
-     */
     public function __construct(IdentityServiceInterface $identityService, DataLoader $dataLoader)
     {
         $this->identityService = $identityService;

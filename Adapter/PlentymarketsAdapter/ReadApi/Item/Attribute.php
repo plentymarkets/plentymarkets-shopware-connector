@@ -4,12 +4,9 @@ namespace PlentymarketsAdapter\ReadApi\Item;
 
 use PlentymarketsAdapter\ReadApi\ApiAbstract;
 
-/**
- * Class Attribute
- */
 class Attribute extends ApiAbstract
 {
-    private $includes = 'names,values';
+    private $includes = 'names,values.valueNames';
 
     /**
      * @param int $attributeId

@@ -11,9 +11,6 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Item\Unit as UnitApi;
 use PlentymarketsAdapter\ResponseParser\Unit\UnitResponseParserInterface;
 
-/**
- * Class FetchAllUnitsQueryHandler
- */
 class FetchAllUnitsQueryHandler implements QueryHandlerInterface
 {
     /**
@@ -26,12 +23,6 @@ class FetchAllUnitsQueryHandler implements QueryHandlerInterface
      */
     private $responseParser;
 
-    /**
-     * FetchAllUnitsQueryHandler constructor.
-     *
-     * @param UnitApi                     $unitApi
-     * @param UnitResponseParserInterface $responseParser
-     */
     public function __construct(UnitApi $unitApi, UnitResponseParserInterface $responseParser)
     {
         $this->unitApi = $unitApi;

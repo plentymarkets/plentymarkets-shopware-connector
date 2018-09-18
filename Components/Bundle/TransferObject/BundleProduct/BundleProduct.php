@@ -5,9 +5,6 @@ namespace PlentyConnector\Components\Bundle\TransferObject\BundleProduct;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
-/**
- * Class Product
- */
 class BundleProduct extends AbstractValueObject
 {
     /**

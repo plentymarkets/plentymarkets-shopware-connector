@@ -28,10 +28,6 @@
             <argument type="service" id="plentymarkets_adapter.client" />
         </service>
 
-        <service id="plentymarkets_adapter.read_api.item.attribute.value" class="PlentymarketsAdapter\ReadApi\Item\Attribute\Value">
-            <argument type="service" id="plentymarkets_adapter.client" />
-        </service>
-
         <service id="plentymarkets_adapter.read_api.item.availability" class="PlentymarketsAdapter\ReadApi\Availability">
             <argument type="service" id="plentymarkets_adapter.client" />
         </service>
@@ -75,7 +71,9 @@
 
         <!-- Helpers -->
 
-        <service id="plentymarkets_adapter.helper.language" class="PlentymarketsAdapter\Helper\LanguageHelper" />
+        <service id="plentymarkets_adapter.helper.language" class="PlentymarketsAdapter\Helper\LanguageHelper">
+	        <argument type="service" id="plenty_connector.identity_service" />
+        </service>
 
         <service id="plentymarkets_adapter.helper.media_category" class="PlentymarketsAdapter\Helper\MediaCategoryHelper" />
 
@@ -188,6 +186,7 @@
             <argument type="service" id="plentymarkets_adapter.response_parser.image" />
             <argument type="service" id="plentymarkets_adapter.response_parser.variation" />
             <argument type="service" id="plentymarkets_adapter.helper.variation" />
+            <argument type="service" id="plentymarkets_adapter.client" />
         </service>
 
         <service id="plentymarkets_adapter.response_parser.product.price" class="PlentymarketsAdapter\ResponseParser\Product\Price\PriceResponseParser">
@@ -223,7 +222,6 @@
             <argument type="service" id="plentymarkets_adapter.response_parser.stock" />
             <argument type="service" id="plentymarkets_adapter.read_api.item.availability" />
             <argument type="service" id="plentymarkets_adapter.read_api.item.attribute" />
-            <argument type="service" id="plentymarkets_adapter.read_api.item.attribute.value" />
             <argument type="service" id="plentymarkets_adapter.read_api.item.barcode" />
             <argument type="service" id="plentymarkets_adapter.helper.reference_amount_calculator" />
 

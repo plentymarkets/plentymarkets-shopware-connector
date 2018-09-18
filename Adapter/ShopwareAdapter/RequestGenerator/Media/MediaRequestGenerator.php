@@ -6,9 +6,6 @@ use PlentyConnector\Connector\TransferObject\Media\Media;
 use Shopware\Models\Media\Album;
 use ShopwareAdapter\DataProvider\Media\MediaDataProviderInterface;
 
-/**
- * Class MediaRequestGenerator
- */
 class MediaRequestGenerator implements MediaRequestGeneratorInterface
 {
     /**
@@ -16,11 +13,6 @@ class MediaRequestGenerator implements MediaRequestGeneratorInterface
      */
     private $dataProvider;
 
-    /**
-     * MediaRequestGenerator constructor.
-     *
-     * @param MediaDataProviderInterface $dataProvider
-     */
     public function __construct(MediaDataProviderInterface $dataProvider)
     {
         $this->dataProvider = $dataProvider;

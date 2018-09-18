@@ -6,9 +6,6 @@ use League\Tactician\Middleware;
 use PlentyConnector\Connector\ServiceBus\Command\TransferObjectCommand;
 use PlentyConnector\Connector\ValidatorService\ValidatorServiceInterface;
 
-/**
- * Class ValidatorMiddleware.
- */
 class ValidatorMiddleware implements Middleware
 {
     /**
@@ -16,11 +13,6 @@ class ValidatorMiddleware implements Middleware
      */
     private $validator;
 
-    /**
-     * ValidatorMiddleware constructor.
-     *
-     * @param ValidatorServiceInterface $validator
-     */
     public function __construct(ValidatorServiceInterface $validator)
     {
         $this->validator = $validator;

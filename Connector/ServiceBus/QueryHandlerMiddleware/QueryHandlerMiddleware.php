@@ -7,9 +7,6 @@ use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandlerMiddleware\Exception\NotFoundException;
 
-/**
- * Class QueryHandlerMiddleware.
- */
 class QueryHandlerMiddleware implements Middleware
 {
     /**

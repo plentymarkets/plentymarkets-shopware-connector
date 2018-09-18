@@ -5,9 +5,6 @@ namespace PlentyConnector\Connector\Logger;
 use Exception;
 use League\Tactician\Middleware;
 
-/**
- * Class LoggerMiddleware
- */
 class LoggerMiddleware implements Middleware
 {
     /**

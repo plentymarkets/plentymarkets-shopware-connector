@@ -6,9 +6,6 @@ use Doctrine\DBAL\Connection;
 use Shopware\Components\Api\Resource\Order as OrderResource;
 use Shopware\Models\Order\Status;
 
-/**
- * Class OrderDataProvider
- */
 class OrderDataProvider implements OrderDataProviderInterface
 {
     /**
@@ -21,12 +18,6 @@ class OrderDataProvider implements OrderDataProviderInterface
      */
     private $orderResource;
 
-    /**
-     * OrderDataProvider constructor.
-     *
-     * @param Connection    $connection
-     * @param OrderResource $orderResource
-     */
     public function __construct(Connection $connection, OrderResource $orderResource)
     {
         $this->connection = $connection;

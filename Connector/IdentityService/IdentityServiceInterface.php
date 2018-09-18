@@ -4,9 +4,6 @@ namespace PlentyConnector\Connector\IdentityService;
 
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 
-/**
- * Interface IdentityServiceInterface.
- */
 interface IdentityServiceInterface
 {
     /**

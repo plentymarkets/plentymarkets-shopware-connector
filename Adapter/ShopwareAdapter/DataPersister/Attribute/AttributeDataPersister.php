@@ -14,9 +14,6 @@ use Shopware\Models\Category\Category;
 use Shopware\Models\Media\Media;
 use Shopware\Models\Order\Order;
 
-/**
- * Class AttributeDataPersister
- */
 class AttributeDataPersister implements AttributeDataPersisterInterface
 {
     /**
@@ -39,13 +36,6 @@ class AttributeDataPersister implements AttributeDataPersisterInterface
      */
     private $prefix = 'plenty_connector_';
 
-    /**
-     * AttributeDataPersister constructor.
-     *
-     * @param CrudService           $attributeService
-     * @param ModelManager          $entityManager
-     * @param ShopwareDataPersister $shopwareDataPersister
-     */
     public function __construct(
         CrudService $attributeService,
         ModelManager $entityManager,

@@ -26,9 +26,6 @@ use ShopwareAdapter\ResponseParser\GetAttributeTrait;
 use ShopwareAdapter\ResponseParser\OrderItem\OrderItemResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class OrderResponseParser
- */
 class OrderResponseParser implements OrderResponseParserInterface
 {
     use GetAttributeTrait;
@@ -68,17 +65,6 @@ class OrderResponseParser implements OrderResponseParserInterface
      */
     private $taxRepository;
 
-    /**
-     * OrderResponseParser constructor.
-     *
-     * @param IdentityServiceInterface         $identityService
-     * @param OrderItemResponseParserInterface $orderItemResponseParser
-     * @param AddressResponseParserInterface   $orderAddressParser
-     * @param CustomerResponseParserInterface  $customerParser
-     * @param CurrencyDataProviderInterface    $currencyDataProvider
-     * @param LoggerInterface                  $logger
-     * @param EntityRepository                 $taxRepository
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         OrderItemResponseParserInterface $orderItemResponseParser,
@@ -124,6 +110,12 @@ class OrderResponseParser implements OrderResponseParserInterface
 
         if (null === $billingAddress || null === $shippingAddress) {
             $this->logger->warning('could not parse address,  order: ' . $entry['number']);
+
+            return [];
+        }
+
+        if (null === $entry['customer']) {
+            $this->logger->warning('could not find customer,  order: ' . $entry['number']);
 
             return [];
         }

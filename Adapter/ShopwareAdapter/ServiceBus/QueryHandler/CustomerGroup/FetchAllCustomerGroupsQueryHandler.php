@@ -14,9 +14,6 @@ use Shopware\Models\Customer\Group;
 use ShopwareAdapter\ResponseParser\CustomerGroup\CustomerGroupResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class FetchAllCustomerGroupsQueryHandler
- */
 class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
 {
     /**
@@ -29,12 +26,6 @@ class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
      */
     private $responseParser;
 
-    /**
-     * FetchAllCustomerGroupsQueryHandler constructor.
-     *
-     * @param EntityManagerInterface               $entityManager
-     * @param CustomerGroupResponseParserInterface $responseParser
-     */
     public function __construct(
         EntityManagerInterface $entityManager,
         CustomerGroupResponseParserInterface $responseParser

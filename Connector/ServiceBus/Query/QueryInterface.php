@@ -2,9 +2,6 @@
 
 namespace PlentyConnector\Connector\ServiceBus\Query;
 
-/**
- * Class QueryInterface.
- */
 interface QueryInterface
 {
     /**

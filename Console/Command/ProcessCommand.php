@@ -36,13 +36,6 @@ class ProcessCommand extends ShopwareCommand
      */
     private $outputHandler;
 
-    /**
-     * ProcessCommand constructor.
-     *
-     * @param ConnectorInterface     $connector
-     * @param LoggerInterface        $logger
-     * @param OutputHandlerInterface $outputHandler
-     */
     public function __construct(
         ConnectorInterface $connector,
         LoggerInterface $logger,
@@ -117,9 +110,9 @@ class ProcessCommand extends ShopwareCommand
             }
 
             $this->connector->handle($queryType, $objectType, $objectIdentifier);
-        } catch (Throwable $exception) {
-            $this->logger->error($exception->getMessage());
         } catch (Exception $exception) {
+            $this->logger->error($exception->getMessage());
+        } catch (Throwable $exception) {
             $this->logger->error($exception->getMessage());
         }
     }

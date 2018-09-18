@@ -4,9 +4,6 @@ namespace PlentymarketsAdapter\ReadApi\Customer;
 
 use PlentymarketsAdapter\ReadApi\ApiAbstract;
 
-/**
- * Class Customer
- */
 class Customer extends ApiAbstract
 {
     /**

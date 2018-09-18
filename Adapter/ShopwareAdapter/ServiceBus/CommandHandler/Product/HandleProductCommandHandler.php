@@ -21,9 +21,6 @@ use ShopwareAdapter\Helper\AttributeHelper;
 use ShopwareAdapter\RequestGenerator\Product\ProductRequestGeneratorInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class HandleProductCommandHandler.
- */
 class HandleProductCommandHandler implements CommandHandlerInterface
 {
     /**
@@ -66,18 +63,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
      */
     private $entityManager;
 
-    /**
-     * HandleProductCommandHandler constructor.
-     *
-     * @param EntityManagerInterface            $entityManager
-     * @param IdentityServiceInterface          $identityService
-     * @param TranslationHelperInterface        $translationHelper
-     * @param AttributeHelper                   $attributeHelper
-     * @param AttributeDataPersisterInterface   $attributeDataPersister
-     * @param ProductRequestGeneratorInterface  $productRequestGenerator
-     * @param TranslationDataPersisterInterface $translationDataPersister
-     * @param ShopDataProviderInterface         $shopDataProvider
-     */
     public function __construct(
         EntityManagerInterface $entityManager,
         IdentityServiceInterface $identityService,
@@ -149,7 +134,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         $variantRepository = $this->entityManager->getRepository(Detail::class);
 
         /**
-         * @var Detail|null $mainVariation
+         * @var null|Detail $mainVariation
          */
         $mainVariation = $variantRepository->findOneBy(['number' => $product->getNumber()]);
 
@@ -188,8 +173,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 ShopwareAdapter::NAME
             );
         }
-
-        $this->attributeHelper->addFieldAsAttribute($product, 'technicalDescription');
 
         $this->attributeDataPersister->saveProductDetailAttributes(
             $productModel->getMainDetail(),

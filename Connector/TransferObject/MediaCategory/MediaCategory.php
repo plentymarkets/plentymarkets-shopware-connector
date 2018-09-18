@@ -4,9 +4,6 @@ namespace PlentyConnector\Connector\TransferObject\MediaCategory;
 
 use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
 
-/**
- * Class MediaCategory
- */
 class MediaCategory extends AbstractTransferObject
 {
     const TYPE = 'MediaCategory';
@@ -38,7 +35,7 @@ class MediaCategory extends AbstractTransferObject
     }
 
     /**
-     * @param string $identifier
+     * {@inheritdoc}
      */
     public function setIdentifier($identifier)
     {

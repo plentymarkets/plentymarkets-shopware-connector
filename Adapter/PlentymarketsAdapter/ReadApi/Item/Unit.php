@@ -4,9 +4,6 @@ namespace PlentymarketsAdapter\ReadApi\Item;
 
 use PlentymarketsAdapter\ReadApi\ApiAbstract;
 
-/**
- * Class Unit
- */
 class Unit extends ApiAbstract
 {
     /**

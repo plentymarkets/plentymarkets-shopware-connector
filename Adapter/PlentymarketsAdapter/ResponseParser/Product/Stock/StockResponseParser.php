@@ -9,9 +9,6 @@ use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 
-/**
- * Class StockResponseParser
- */
 class StockResponseParser implements StockResponseParserInterface
 {
     const SALES_WAREHOUSE = 0;
@@ -31,13 +28,6 @@ class StockResponseParser implements StockResponseParserInterface
      */
     private $client;
 
-    /**
-     * StockResponseParser constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     * @param ConfigServiceInterface   $config
-     * @param ClientInterface          $client
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         ConfigServiceInterface $config,

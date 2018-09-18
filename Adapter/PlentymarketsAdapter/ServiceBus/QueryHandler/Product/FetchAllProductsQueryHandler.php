@@ -14,9 +14,6 @@ use PlentymarketsAdapter\ReadApi\Item;
 use PlentymarketsAdapter\ResponseParser\Product\ProductResponseParserInterface;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class FetchAllProductsQueryHandler.
- */
 class FetchAllProductsQueryHandler implements QueryHandlerInterface
 {
     /**
@@ -39,14 +36,6 @@ class FetchAllProductsQueryHandler implements QueryHandlerInterface
      */
     private $outputHandler;
 
-    /**
-     * FetchAllProductsQueryHandler constructor.
-     *
-     * @param Item                           $itemApi
-     * @param ProductResponseParserInterface $responseParser
-     * @param LoggerInterface                $logger
-     * @param OutputHandlerInterface         $outputHandler
-     */
     public function __construct(
         Item $itemApi,
         ProductResponseParserInterface $responseParser,

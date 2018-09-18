@@ -6,9 +6,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Shopware\Models\Customer\Group;
 
-/**
- * Class CustomerGroupDataProvider
- */
 class CustomerGroupDataProvider implements CustomerGroupDataProviderInterface
 {
     /**
@@ -16,11 +13,6 @@ class CustomerGroupDataProvider implements CustomerGroupDataProviderInterface
      */
     private $repository;
 
-    /**
-     * CustomerGroupDataProvider constructor.
-     *
-     * @param EntityManagerInterface $entityManager
-     */
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->repository = $entityManager->getRepository(Group::class);
@@ -32,7 +24,7 @@ class CustomerGroupDataProvider implements CustomerGroupDataProviderInterface
     public function getCustomerGroupKeyByShopwareIdentifier($identifier)
     {
         /**
-         * @var Group|null $group
+         * @var null|Group $group
          */
         $group = $this->repository->find($identifier);
 

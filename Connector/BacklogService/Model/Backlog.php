@@ -9,7 +9,7 @@ use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 /**
  * Class Backlog.
  *
- * @ORM\Entity()
+ * @ORM\Entity
  * @ORM\Table(name="plenty_backlog", indexes={
  *     @ORM\Index(name="hash_idx", columns={"hash"}),
  *     @ORM\Index(name="time_idx", columns={"time"})
@@ -48,6 +48,15 @@ class Backlog
     private $status;
 
     /**
+     * priority of the entry
+     *
+     * @var int
+     *
+     * @ORM\Column(name="priority", type="integer", nullable=false, options={"default": 0})
+     */
+    private $priority = 0;
+
+    /**
      * time of insertion
      *
      * @var DateTime
@@ -65,9 +74,6 @@ class Backlog
      */
     private $hash;
 
-    /**
-     * Backlog constructor.
-     */
     public function __construct()
     {
         $this->time = new DateTime('now');
@@ -112,6 +118,22 @@ class Backlog
     public function setStatus($status)
     {
         $this->status = $status;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPriority()
+    {
+        return $this->priority;
+    }
+
+    /**
+     * @param int $priority
+     */
+    public function setPriority($priority)
+    {
+        $this->priority = $priority;
     }
 
     /**

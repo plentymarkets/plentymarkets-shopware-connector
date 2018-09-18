@@ -4,9 +4,6 @@ namespace PlentyConnector\Connector;
 
 use PlentyConnector\Connector\ValueObject\Definition\Definition;
 
-/**
- * Interface ConnectorInterface.
- */
 interface ConnectorInterface
 {
     /**

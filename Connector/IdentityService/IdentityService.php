@@ -9,9 +9,6 @@ use PlentyConnector\Connector\ValidatorService\ValidatorServiceInterface;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Ramsey\Uuid\Uuid;
 
-/**
- * Class IdentityService.
- */
 class IdentityService implements IdentityServiceInterface
 {
     /**
@@ -24,12 +21,6 @@ class IdentityService implements IdentityServiceInterface
      */
     private $validator;
 
-    /**
-     * IdentityService constructor.
-     *
-     * @param IdentityStorageInterface  $storage
-     * @param ValidatorServiceInterface $validator
-     */
     public function __construct(
         IdentityStorageInterface $storage,
         ValidatorServiceInterface $validator

@@ -6,9 +6,6 @@ use Assert\Assertion;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 
-/**
- * Class IdentityValidator
- */
 class IdentityValidator implements ValidatorInterface
 {
     /**

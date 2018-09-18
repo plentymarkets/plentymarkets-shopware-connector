@@ -14,9 +14,6 @@ use PlentyConnector\Connector\TransferObject\Unit\Unit;
 use ShopwareAdapter\DataProvider\CustomerGroup\CustomerGroupDataProviderInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class VariationRequestGenerator
- */
 class VariationRequestGenerator implements VariationRequestGeneratorInterface
 {
     /**
@@ -29,12 +26,6 @@ class VariationRequestGenerator implements VariationRequestGeneratorInterface
      */
     private $customerGroupDataProvider;
 
-    /**
-     * VariationRequestGenerator constructor.
-     *
-     * @param IdentityServiceInterface           $identityService
-     * @param CustomerGroupDataProviderInterface $customerGroupDataProvider
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         CustomerGroupDataProviderInterface $customerGroupDataProvider
