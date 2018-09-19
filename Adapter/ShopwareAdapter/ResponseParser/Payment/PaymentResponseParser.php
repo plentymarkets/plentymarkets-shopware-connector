@@ -13,9 +13,6 @@ use Shopware\Models\Order\Status;
 use ShopwareAdapter\DataProvider\Currency\CurrencyDataProviderInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class PaymentResponseParser
- */
 class PaymentResponseParser implements PaymentResponseParserInterface
 {
     /**
@@ -28,12 +25,6 @@ class PaymentResponseParser implements PaymentResponseParserInterface
      */
     private $currencyDataProvider;
 
-    /**
-     * PaymentResponseParser constructor.
-     *
-     * @param IdentityServiceInterface      $identityService
-     * @param CurrencyDataProviderInterface $currencyDataProvider
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         CurrencyDataProviderInterface $currencyDataProvider

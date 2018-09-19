@@ -15,9 +15,6 @@ use Psr\Log\LoggerInterface;
 use Shopware\Models\Media\Album;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class RemoveMediaCategoryCommandHandler.
- */
 class RemoveMediaCategoryCommandHandler implements CommandHandlerInterface
 {
     /**
@@ -35,13 +32,6 @@ class RemoveMediaCategoryCommandHandler implements CommandHandlerInterface
      */
     private $logger;
 
-    /**
-     * HandleMediaCategoryCommandHandler constructor.
-     *
-     * @param EntityManagerInterface   $entityManager
-     * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface          $logger
-     */
     public function __construct(
         EntityManagerInterface $entityManager,
         IdentityServiceInterface $identityService,

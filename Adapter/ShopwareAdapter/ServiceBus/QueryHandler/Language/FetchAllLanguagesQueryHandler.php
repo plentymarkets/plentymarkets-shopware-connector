@@ -14,9 +14,6 @@ use Shopware\Models\Shop\Locale;
 use ShopwareAdapter\ResponseParser\Language\LanguageResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class FetchAllLanguagesQueryHandler
- */
 class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
 {
     /**
@@ -29,12 +26,6 @@ class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
      */
     private $responseParser;
 
-    /**
-     * FetchAllLanguagesQueryHandler constructor.
-     *
-     * @param EntityManagerInterface          $entityManager
-     * @param LanguageResponseParserInterface $responseParser
-     */
     public function __construct(
         EntityManagerInterface $entityManager,
         LanguageResponseParserInterface $responseParser

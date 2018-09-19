@@ -15,9 +15,6 @@ use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Category as CategoryResource;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class RemoveCategoryCommandHandler.
- */
 class RemoveCategoryCommandHandler implements CommandHandlerInterface
 {
     /**
@@ -30,12 +27,6 @@ class RemoveCategoryCommandHandler implements CommandHandlerInterface
      */
     private $logger;
 
-    /**
-     * RemoveCategoryCommandHandler constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     * @param LoggerInterface          $logger
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         LoggerInterface $logger

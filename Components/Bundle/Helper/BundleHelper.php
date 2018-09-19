@@ -5,9 +5,6 @@ namespace PlentyConnector\Components\Bundle\Helper;
 use Enlight_Plugin_PluginManager;
 use SwagBundle\Models\Bundle as BundleModel;
 
-/**
- * Class BundleHelper
- */
 class BundleHelper
 {
     /**
@@ -15,11 +12,6 @@ class BundleHelper
      */
     private $pluginManager;
 
-    /**
-     * BundleHelper constructor.
-     *
-     * @param Enlight_Plugin_PluginManager $pluginManager
-     */
     public function __construct(Enlight_Plugin_PluginManager $pluginManager)
     {
         $this->pluginManager = $pluginManager;

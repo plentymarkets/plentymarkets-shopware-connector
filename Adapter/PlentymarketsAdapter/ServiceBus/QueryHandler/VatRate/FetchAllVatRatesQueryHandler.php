@@ -11,9 +11,6 @@ use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\VatRate\VatRateResponseParserInterface;
 
-/**
- * Class FetchAllVatRatesQueryHandler
- */
 class FetchAllVatRatesQueryHandler implements QueryHandlerInterface
 {
     /**
@@ -26,12 +23,6 @@ class FetchAllVatRatesQueryHandler implements QueryHandlerInterface
      */
     private $responseParser;
 
-    /**
-     * FetchAllVatRatesQueryHandler constructor.
-     *
-     * @param ClientInterface                $client
-     * @param VatRateResponseParserInterface $responseParser
-     */
     public function __construct(
         ClientInterface $client,
         VatRateResponseParserInterface $responseParser

@@ -6,9 +6,6 @@ use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class CustomerGroupResponseParser
- */
 class CustomerGroupResponseParser implements CustomerGroupResponseParserInterface
 {
     /**
@@ -16,11 +13,6 @@ class CustomerGroupResponseParser implements CustomerGroupResponseParserInterfac
      */
     private $identityService;
 
-    /**
-     * CustomerGroupResponseParser constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     */
     public function __construct(IdentityServiceInterface $identityService)
     {
         $this->identityService = $identityService;

@@ -6,9 +6,6 @@ use PlentyConnector\Connector\ValidatorService\ValidatorServiceInterface;
 use PlentyConnector\Connector\ValueObject\Definition\Definition;
 use PlentyConnector\Connector\ValueObject\ValueObjectInterface;
 
-/**
- * Class DefinitionFactory
- */
 class DefinitionFactory
 {
     /**
@@ -16,11 +13,6 @@ class DefinitionFactory
      */
     private $validator;
 
-    /**
-     * DefinitionFactory constructor.
-     *
-     * @param ValidatorServiceInterface $validator
-     */
     public function __construct(ValidatorServiceInterface $validator)
     {
         $this->validator = $validator;

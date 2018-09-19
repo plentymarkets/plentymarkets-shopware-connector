@@ -6,9 +6,6 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
-/**
- * Class ValidatorServiceCompilerPass.
- */
 class ValidatorServiceCompilerPass implements CompilerPassInterface
 {
     /**

@@ -6,9 +6,6 @@ use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\OrderStatus\OrderStatus;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 
-/**
- * Class OrderStatusResponseParser
- */
 class OrderStatusResponseParser implements OrderStatusResponseParserInterface
 {
     /**
@@ -16,11 +13,6 @@ class OrderStatusResponseParser implements OrderStatusResponseParserInterface
      */
     private $identityService;
 
-    /**
-     * OrderStatusResponseParser constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     */
     public function __construct(IdentityServiceInterface $identityService)
     {
         $this->identityService = $identityService;

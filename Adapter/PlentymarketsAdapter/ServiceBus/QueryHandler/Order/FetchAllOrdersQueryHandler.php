@@ -14,9 +14,6 @@ use PlentymarketsAdapter\ReadApi\Order\Order as OrderApi;
 use PlentymarketsAdapter\ResponseParser\Order\OrderResponseParserInterface;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class FetchAllOrdersQueryHandler
- */
 class FetchAllOrdersQueryHandler implements QueryHandlerInterface
 {
     /**
@@ -39,14 +36,6 @@ class FetchAllOrdersQueryHandler implements QueryHandlerInterface
      */
     private $outputHandler;
 
-    /**
-     * FetchAllOrdersQueryHandler constructor.
-     *
-     * @param OrderApi                     $api
-     * @param OrderResponseParserInterface $responseParser
-     * @param LoggerInterface              $logger
-     * @param OutputHandlerInterface       $outputHandler
-     */
     public function __construct(
         OrderApi $api,
         OrderResponseParserInterface $responseParser,

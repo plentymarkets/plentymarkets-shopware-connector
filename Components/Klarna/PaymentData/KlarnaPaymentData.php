@@ -5,9 +5,6 @@ namespace PlentyConnector\Components\Klarna\PaymentData;
 use PlentyConnector\Connector\TransferObject\Payment\PaymentData\PaymentDataInterface;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 
-/**
- * Class KlarnaPaymentData
- */
 class KlarnaPaymentData extends AbstractValueObject implements PaymentDataInterface
 {
     /**

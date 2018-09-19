@@ -14,9 +14,6 @@ use Shopware\Models\Shop\Currency as CurrencyModel;
 use ShopwareAdapter\ResponseParser\Currency\CurrencyResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class FetchAllCurrenciesQueryHandler
- */
 class FetchAllCurrenciesQueryHandler implements QueryHandlerInterface
 {
     /**
@@ -29,12 +26,6 @@ class FetchAllCurrenciesQueryHandler implements QueryHandlerInterface
      */
     private $responseParser;
 
-    /**
-     * FetchAllCurrenciesQueryHandler constructor.
-     *
-     * @param EntityManagerInterface          $entityManager
-     * @param CurrencyResponseParserInterface $responseParser
-     */
     public function __construct(
         EntityManagerInterface $entityManager,
         CurrencyResponseParserInterface $responseParser

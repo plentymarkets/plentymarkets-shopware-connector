@@ -15,9 +15,6 @@ use PlentymarketsAdapter\ResponseParser\Product\Stock\StockResponseParserInterfa
 use PlentymarketsAdapter\ServiceBus\ChangedDateTimeTrait;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class FetchChangedStocksQueryHandler.
- */
 class FetchChangedStocksQueryHandler implements QueryHandlerInterface
 {
     use ChangedDateTimeTrait;
@@ -42,14 +39,6 @@ class FetchChangedStocksQueryHandler implements QueryHandlerInterface
      */
     private $outputHandler;
 
-    /**
-     * FetchChangedStocksQueryHandler constructor.
-     *
-     * @param ClientInterface              $client
-     * @param StockResponseParserInterface $responseParser
-     * @param LoggerInterface              $logger
-     * @param OutputHandlerInterface       $outputHandler
-     */
     public function __construct(
         ClientInterface $client,
         StockResponseParserInterface $responseParser,

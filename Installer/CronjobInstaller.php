@@ -8,9 +8,6 @@ use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
 use Shopware\Components\Plugin\Context\UpdateContext;
 
-/**
- * Class CronjobInstaller
- */
 class CronjobInstaller implements InstallerInterface
 {
     /**
@@ -23,12 +20,6 @@ class CronjobInstaller implements InstallerInterface
      */
     private $cronjobs;
 
-    /**
-     * DatabaseInstaller constructor.
-     *
-     * @param Connection $connection
-     * @param array      $cronjobs
-     */
     public function __construct(Connection $connection, array $cronjobs)
     {
         $this->connection = $connection;

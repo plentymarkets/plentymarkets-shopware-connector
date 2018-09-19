@@ -13,9 +13,6 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Media\MediaResponseParserInterface;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class ImageResponseParser
- */
 class ImageResponseParser implements ImageResponseParserInterface
 {
     /**
@@ -33,13 +30,6 @@ class ImageResponseParser implements ImageResponseParserInterface
      */
     private $logger;
 
-    /**
-     * ImageResponseParser constructor.
-     *
-     * @param IdentityServiceInterface     $identityService
-     * @param MediaResponseParserInterface $mediaResponseParser
-     * @param LoggerInterface              $logger
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         MediaResponseParserInterface $mediaResponseParser,

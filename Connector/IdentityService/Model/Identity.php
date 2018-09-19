@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Class Identity.
  *
- * @ORM\Entity()
+ * @ORM\Entity
  * @ORM\Table(name="plenty_identity", indexes={
  *     @ORM\Index(name="objectIdentifier_idx", columns={"objectIdentifier"}),
  *     @ORM\Index(name="objectType_idx", columns={"objectType"}),
@@ -62,14 +62,6 @@ class Identity
      */
     private $adapterName;
 
-    /**
-     * Identity constructor.
-     *
-     * @param string $objectIdentifier
-     * @param string $objectType
-     * @param string $adapterIdentifier
-     * @param string $adapterName
-     */
     public function __construct($objectIdentifier, $objectType, $adapterIdentifier, $adapterName)
     {
         $this->objectIdentifier = $objectIdentifier;

@@ -12,9 +12,6 @@ use Shopware\Models\Tax\Tax;
 use ShopwareAdapter\ResponseParser\GetAttributeTrait;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class OrderItemResponseParser
- */
 class OrderItemResponseParser implements OrderItemResponseParserInterface
 {
     use GetAttributeTrait;
@@ -33,12 +30,6 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
      */
     private $identityService;
 
-    /**
-     * OrderItemResponseParser constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     * @param EntityRepository         $taxRepository
-     */
     public function __construct(IdentityServiceInterface $identityService, EntityRepository $taxRepository)
     {
         $this->identityService = $identityService;
@@ -57,7 +48,7 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
         /**
          * @var OrderItem $orderItem
          */
-        $orderItem = OrderItem::fromArray([
+        return OrderItem::fromArray([
             'type' => $this->getItemType($entry['mode']),
             'quantity' => (float) $entry['quantity'],
             'name' => $entry['articleName'],
@@ -66,8 +57,6 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
             'vatRateIdentifier' => $this->getVatRateIdentifier($entry, $taxFree),
             'attributes' => $this->getAttributes($entry['attribute']),
         ]);
-
-        return $orderItem;
     }
 
     /**
@@ -79,7 +68,7 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
     private function getVatRateIdentifier(array $entry, $taxFree)
     {
         /**
-         * @var Tax|null $taxModel
+         * @var null|Tax $taxModel
          */
         $taxModel = $this->taxRepository->findOneBy(['tax' => $entry['taxRate']]);
 

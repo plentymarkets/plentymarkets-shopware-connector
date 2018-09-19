@@ -6,9 +6,6 @@ use Assert\Assertion;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 use PlentyConnector\Connector\ValueObject\Translation\Translation;
 
-/**
- * Class TranslationValidator
- */
 class TranslationValidator implements ValidatorInterface
 {
     /**

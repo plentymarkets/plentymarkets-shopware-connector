@@ -6,9 +6,6 @@ use Assert\Assertion;
 use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 
-/**
- * Class MediaCategoryValidator
- */
 class MediaCategoryValidator implements ValidatorInterface
 {
     public function supports($object)

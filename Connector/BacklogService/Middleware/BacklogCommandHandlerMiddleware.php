@@ -10,9 +10,6 @@ use PlentyConnector\Connector\ServiceBus\Command\TransferObjectCommand;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class BacklogCommandHandler
- */
 class BacklogCommandHandlerMiddleware implements Middleware
 {
     /**
@@ -32,12 +29,6 @@ class BacklogCommandHandlerMiddleware implements Middleware
      */
     private $logger;
 
-    /**
-     * BacklogCommandHandlerMiddleware constructor.
-     *
-     * @param BacklogServiceInterface $backlogService
-     * @param LoggerInterface         $logger
-     */
     public function __construct(BacklogServiceInterface $backlogService, LoggerInterface $logger)
     {
         $this->backlogService = $backlogService;

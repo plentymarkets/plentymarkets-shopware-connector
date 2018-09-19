@@ -4,9 +4,6 @@ namespace PlentymarketsAdapter\Helper;
 
 use PlentymarketsAdapter\ReadApi\Item\Unit as UnitApi;
 
-/**
- * Class ReferenceAmountCalculator
- */
 class ReferenceAmountCalculator implements ReferenceAmountCalculatorInterface
 {
     /**
@@ -41,11 +38,6 @@ class ReferenceAmountCalculator implements ReferenceAmountCalculatorInterface
         'MMT' => ['conversion' => 0.001], // millimetre
     ];
 
-    /**
-     * ReferenceAmountCalculator constructor.
-     *
-     * @param UnitApi $itemUnitApi
-     */
     public function __construct(UnitApi $itemUnitApi)
     {
         $this->itemUnitApi = $itemUnitApi;

@@ -11,9 +11,6 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use RuntimeException;
 use VIISON\AddressSplitter\AddressSplitter;
 
-/**
- * Class AddressRequestGenerator
- */
 class AddressRequestGenerator implements AddressRequestGeneratorInterface
 {
     /**
@@ -21,11 +18,6 @@ class AddressRequestGenerator implements AddressRequestGeneratorInterface
      */
     private $identityService;
 
-    /**
-     * AddressRequestGenerator constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     */
     public function __construct(IdentityServiceInterface $identityService)
     {
         $this->identityService = $identityService;

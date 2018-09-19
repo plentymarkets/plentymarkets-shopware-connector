@@ -7,9 +7,6 @@ use Doctrine\ORM\EntityRepository;
 use InvalidArgumentException;
 use Shopware\Models\Shop\Currency;
 
-/**
- * Class CurrencyDataProvider
- */
 class CurrencyDataProvider implements CurrencyDataProviderInterface
 {
     /**
@@ -17,11 +14,6 @@ class CurrencyDataProvider implements CurrencyDataProviderInterface
      */
     private $entityManager;
 
-    /**
-     * CurrencyDataProvider constructor.
-     *
-     * @param EntityManagerInterface $entityManager
-     */
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
@@ -38,7 +30,7 @@ class CurrencyDataProvider implements CurrencyDataProviderInterface
         $currencyRepository = $this->entityManager->getRepository(Currency::class);
 
         /**
-         * @var Currency|null $currencyModel
+         * @var null|Currency $currencyModel
          */
         $currencyModel = $currencyRepository->findOneBy(['currency' => $code]);
 

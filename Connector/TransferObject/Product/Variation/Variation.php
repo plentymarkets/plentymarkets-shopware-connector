@@ -11,9 +11,6 @@ use PlentyConnector\Connector\TransferObject\Product\Price\Price;
 use PlentyConnector\Connector\TransferObject\Product\Property\Property;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
-/**
- * Class Variation.
- */
 class Variation extends AbstractTransferObject implements AttributableInterface
 {
     const TYPE = 'Variation';
@@ -183,7 +180,7 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     }
 
     /**
-     * @param string $identifier
+     * {@inheritdoc}
      */
     public function setIdentifier($identifier)
     {

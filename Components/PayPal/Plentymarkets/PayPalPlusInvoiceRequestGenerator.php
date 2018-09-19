@@ -6,9 +6,6 @@ use PlentyConnector\Components\PayPal\PaymentData\PayPalPlusInvoicePaymentData;
 use PlentyConnector\Connector\TransferObject\Payment\Payment;
 use PlentymarketsAdapter\RequestGenerator\Payment\PaymentRequestGeneratorInterface;
 
-/**
- * Class PayPalPlusInvoiceRequestGenerator
- */
 class PayPalPlusInvoiceRequestGenerator implements PaymentRequestGeneratorInterface
 {
     /**
@@ -16,11 +13,6 @@ class PayPalPlusInvoiceRequestGenerator implements PaymentRequestGeneratorInterf
      */
     private $parentRequestGenerator;
 
-    /**
-     * PayPalPlusInvoiceRequestGenerator constructor.
-     *
-     * @param PaymentRequestGeneratorInterface $parentRequestGenerator
-     */
     public function __construct(PaymentRequestGeneratorInterface $parentRequestGenerator)
     {
         $this->parentRequestGenerator = $parentRequestGenerator;

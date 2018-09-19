@@ -6,9 +6,6 @@ use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 
-/**
- * Class LanguageResponseParser
- */
 class LanguageResponseParser implements LanguageResponseParserInterface
 {
     /**
@@ -16,11 +13,6 @@ class LanguageResponseParser implements LanguageResponseParserInterface
      */
     private $identityService;
 
-    /**
-     * LanguageResponseParser constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     */
     public function __construct(IdentityServiceInterface $identityService)
     {
         $this->identityService = $identityService;

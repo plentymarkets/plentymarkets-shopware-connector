@@ -6,9 +6,6 @@ use Assert\Assertion;
 use PlentyConnector\Connector\TransferObject\Country\Country;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 
-/**
- * Class CountryValidator
- */
 class CountryValidator implements ValidatorInterface
 {
     /**

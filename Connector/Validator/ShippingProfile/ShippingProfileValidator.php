@@ -6,9 +6,6 @@ use Assert\Assertion;
 use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 
-/**
- * Class ShippingProfileValidator
- */
 class ShippingProfileValidator implements ValidatorInterface
 {
     /**

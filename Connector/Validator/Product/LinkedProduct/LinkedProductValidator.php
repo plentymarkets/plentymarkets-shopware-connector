@@ -6,9 +6,6 @@ use Assert\Assertion;
 use PlentyConnector\Connector\TransferObject\Product\LinkedProduct\LinkedProduct;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 
-/**
- * Class LinkedProductValidator
- */
 class LinkedProductValidator implements ValidatorInterface
 {
     /**

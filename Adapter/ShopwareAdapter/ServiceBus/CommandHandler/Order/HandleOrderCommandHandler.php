@@ -20,9 +20,6 @@ use Shopware\Models\Order\Status;
 use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class HandleOrderCommandHandler.
- */
 class HandleOrderCommandHandler implements CommandHandlerInterface
 {
     /**
@@ -40,13 +37,6 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
      */
     private $attributePersister;
 
-    /**
-     * HandleOrderCommandHandler constructor.
-     *
-     * @param IdentityServiceInterface        $identityService
-     * @param LoggerInterface                 $logger
-     * @param AttributeDataPersisterInterface $attributePersister
-     */
     public function __construct(
         IdentityServiceInterface $identityService,
         LoggerInterface $logger,

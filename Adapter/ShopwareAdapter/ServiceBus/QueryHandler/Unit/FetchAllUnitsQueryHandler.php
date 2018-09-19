@@ -14,9 +14,6 @@ use Shopware\Models\Article\Unit as UnitModel;
 use ShopwareAdapter\ResponseParser\Unit\UnitResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class FetchAllUnitsQueryHandler
- */
 class FetchAllUnitsQueryHandler implements QueryHandlerInterface
 {
     /**
@@ -29,12 +26,6 @@ class FetchAllUnitsQueryHandler implements QueryHandlerInterface
      */
     private $responseParser;
 
-    /**
-     * FetchAllUnitsQueryHandler constructor.
-     *
-     * @param EntityManagerInterface      $entityManager
-     * @param UnitResponseParserInterface $responseParser
-     */
     public function __construct(
         EntityManagerInterface $entityManager,
         UnitResponseParserInterface $responseParser

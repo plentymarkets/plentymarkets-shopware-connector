@@ -4,9 +4,6 @@ namespace PlentyConnector\Connector\IdentityService\Storage;
 
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 
-/**
- * Interface IdentityStorageInterface.
- */
 interface IdentityStorageInterface
 {
     /**

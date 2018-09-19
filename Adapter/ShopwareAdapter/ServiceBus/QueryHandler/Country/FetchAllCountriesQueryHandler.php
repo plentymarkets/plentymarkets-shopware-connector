@@ -14,9 +14,6 @@ use Shopware\Models\Country\Country as CountryModel;
 use ShopwareAdapter\ResponseParser\Country\CountryResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
-/**
- * Class FetchAllCountriesQueryHandler
- */
 class FetchAllCountriesQueryHandler implements QueryHandlerInterface
 {
     /**
@@ -29,12 +26,6 @@ class FetchAllCountriesQueryHandler implements QueryHandlerInterface
      */
     private $responseParser;
 
-    /**
-     * FetchAllCountriesQueryHandler constructor.
-     *
-     * @param EntityManagerInterface         $entityManager
-     * @param CountryResponseParserInterface $responseParser
-     */
     public function __construct(
         EntityManagerInterface $entityManager,
         CountryResponseParserInterface $responseParser

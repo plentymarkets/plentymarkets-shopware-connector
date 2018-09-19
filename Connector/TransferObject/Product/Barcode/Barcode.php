@@ -5,9 +5,6 @@ namespace PlentyConnector\Connector\TransferObject\Product\Barcode;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 use ReflectionClass;
 
-/**
- * Class Barcode
- */
 class Barcode extends AbstractValueObject
 {
     const TYPE_GTIN13 = 1;

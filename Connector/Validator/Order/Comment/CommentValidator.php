@@ -7,9 +7,6 @@ use PlentyConnector\Connector\TransferObject\Order\Comment\Comment;
 use PlentyConnector\Connector\Validator\ValidatorInterface;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
-/**
- * Class CommentValidator
- */
 class CommentValidator implements ValidatorInterface
 {
     /**

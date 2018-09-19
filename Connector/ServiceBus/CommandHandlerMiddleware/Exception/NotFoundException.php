@@ -5,9 +5,6 @@ namespace PlentyConnector\Connector\ServiceBus\CommandHandlerMiddleware\Exceptio
 use Exception;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 
-/**
- * Class NotFoundException.
- */
 class NotFoundException extends Exception
 {
     /**

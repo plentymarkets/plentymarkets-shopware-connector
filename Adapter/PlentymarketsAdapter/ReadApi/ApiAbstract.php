@@ -4,9 +4,6 @@ namespace PlentymarketsAdapter\ReadApi;
 
 use PlentymarketsAdapter\Client\ClientInterface;
 
-/**
- * Class ApiAbstract
- */
 abstract class ApiAbstract
 {
     /**
@@ -14,11 +11,6 @@ abstract class ApiAbstract
      */
     protected $client;
 
-    /**
-     * ApiAbstract constructor.
-     *
-     * @param ClientInterface $client
-     */
     public function __construct(ClientInterface $client)
     {
         $this->client = $client;
