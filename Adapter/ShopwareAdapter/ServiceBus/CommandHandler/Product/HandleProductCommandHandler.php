@@ -66,18 +66,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
      */
     private $entityManager;
 
-    /**
-     * HandleProductCommandHandler constructor.
-     *
-     * @param EntityManagerInterface            $entityManager
-     * @param IdentityServiceInterface          $identityService
-     * @param TranslationHelperInterface        $translationHelper
-     * @param AttributeHelper                   $attributeHelper
-     * @param AttributeDataPersisterInterface   $attributeDataPersister
-     * @param ProductRequestGeneratorInterface  $productRequestGenerator
-     * @param TranslationDataPersisterInterface $translationDataPersister
-     * @param ShopDataProviderInterface         $shopDataProvider
-     */
     public function __construct(
         EntityManagerInterface $entityManager,
         IdentityServiceInterface $identityService,
@@ -146,47 +134,35 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             return false;
         }
 
-        $variantRepository = $this->entityManager->getRepository(Detail::class);
-
-        /**
-         * @var Detail|null $mainVariation
-         */
-        $mainVariation = $variantRepository->findOneBy(['number' => $product->getNumber()]);
-
         $resouce = $this->getArticleResource();
 
-        if (null === $mainVariation) {
-            $productModel = $resouce->create($params);
-        } else {
-            $this->correctMainDetailAssignment($mainVariation);
-
-            $productModel = $resouce->update($mainVariation->getArticleId(), $params);
-        }
-
-        $identities = $this->identityService->findBy([
+        $productIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $product->getIdentifier(),
             'objectType' => Product::TYPE,
             'adapterName' => ShopwareAdapter::NAME,
         ]);
 
-        $foundIdentity = false;
-        foreach ($identities as $identity) {
-            if ($identity->getAdapterIdentifier() === (string) $productModel->getId()) {
-                $foundIdentity = true;
+        if (null === $productIdentity) {
+            $productModel = $resouce->create($params);
 
-                continue;
-            }
-
-            $this->identityService->remove($identity);
-        }
-
-        if (!$foundIdentity) {
             $this->identityService->create(
                 $product->getIdentifier(),
                 Product::TYPE,
                 (string) $productModel->getId(),
                 ShopwareAdapter::NAME
             );
+        } else {
+			$variantRepository = $this->entityManager->getRepository(Detail::class);
+            /**
+             * @var Detail|null $mainVariation
+             */
+            $mainVariation = $variantRepository->findOneBy(['number' => $product->getNumber()]);
+
+            if (null !== $mainVariation) {
+                $this->correctMainDetailAssignment($mainVariation);
+            }
+
+            $productModel = $resouce->update($productIdentity->getAdapterIdentifier(), $params);
         }
 
         $this->attributeHelper->addFieldAsAttribute($product, 'technicalDescription');
