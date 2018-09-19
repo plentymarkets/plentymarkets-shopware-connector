@@ -213,8 +213,8 @@ class ProductResponseParser implements ProductResponseParserInterface
      */
     private function getMainVariation(array $variations)
     {
-        $mainVariation = array_filter($variations, function ($varation) {
-            return $varation['isMain'] === true;
+        $mainVariation = array_filter($variations, function ($variation) {
+            return $variation['isMain'] === true;
         });
 
         if (empty($mainVariation)) {
