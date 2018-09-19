@@ -148,6 +148,11 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     private $attributes = [];
 
     /**
+     * @var int $stock
+     */
+    private $stock = 0;
+
+    /**
      * {@inheritdoc}
      */
     public function getType()
@@ -569,5 +574,30 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     public function setAttributes(array $attributes)
     {
         $this->attributes = $attributes;
+    }
+
+    /**
+     * @param array $stocks
+     *
+     * @return int netStock
+     */
+    public function setStock(array $stocks)
+    {
+        $itemWarehouse = (int)Shopware()->Db()
+            ->fetchOne("SELECT value from plenty_config WHERE name = 'item_warehouse'");
+
+        foreach ($stocks as $stock){
+            if (((int)$stock['warehouseId'] == $itemWarehouse) || $itemWarehouse == 0) {
+                $this->stock = (int)$stock['netStock'];
+            }
+        }
+    }
+
+    /**
+     * @return int $stock
+     */
+    public function getStock()
+    {
+        return $this->stock;
     }
 }

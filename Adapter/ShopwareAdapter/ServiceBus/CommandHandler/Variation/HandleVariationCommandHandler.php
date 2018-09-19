@@ -95,6 +95,14 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
         $resource = $this->getVariationResource();
 
         if (null === $variant) {
+            $importArticleWithoutStock = Shopware()->Db()
+                ->fetchOne("SELECT value from plenty_config WHERE name = 'import_article_without_stock'")
+                === 'true' ? true : false;
+
+            if ($importArticleWithoutStock && (int)$variation->getStock() < 1) {
+                return false;
+            }
+
             $variant = $resource->create($variationParams);
         } else {
             $variant = $resource->update($variant->getId(), $variationParams);
