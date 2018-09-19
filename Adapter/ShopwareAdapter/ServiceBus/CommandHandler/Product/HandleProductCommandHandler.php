@@ -139,8 +139,20 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             'adapterName' => ShopwareAdapter::NAME,
         ]);
 
+        $variantRepository = $this->entityManager->getRepository(Detail::class);
+
+        /**
+         * @var Detail|null $mainVariation
+         */
+        $mainVariation = $variantRepository->findOneBy(['number' => $product->getNumber()]);
+
         if (null === $productIdentity) {
-            $productModel = $resouce->create($params);
+            if (null === $mainVariation) {
+                $productModel = $resouce->create($params);
+            } else {
+                $this->correctMainDetailAssignment($mainVariation);
+                $resouce->update($productIdentity->getAdapterIdentifier(), $params);
+            }
 
             $this->identityService->create(
                 $product->getIdentifier(),
@@ -149,13 +161,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 ShopwareAdapter::NAME
             );
         } else {
-            $variantRepository = $this->entityManager->getRepository(Detail::class);
-
-            /**
-             * @var Detail|null $mainVariation
-             */
-            $mainVariation = $variantRepository->findOneBy(['number' => $product->getNumber()]);
-
             if (null !== $mainVariation) {
                 $this->correctMainDetailAssignment($mainVariation);
             }
