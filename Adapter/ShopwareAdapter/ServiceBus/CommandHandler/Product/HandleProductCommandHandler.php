@@ -149,8 +149,8 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 ShopwareAdapter::NAME
             );
         } else {
-			      $variantRepository = $this->entityManager->getRepository(Detail::class);
-          
+            $variantRepository = $this->entityManager->getRepository(Detail::class);
+
             /**
              * @var Detail|null $mainVariation
              */
