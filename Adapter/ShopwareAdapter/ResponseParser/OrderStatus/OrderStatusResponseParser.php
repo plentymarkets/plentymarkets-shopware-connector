@@ -31,8 +31,6 @@ class OrderStatusResponseParser implements OrderStatusResponseParserInterface
 
         if (!empty($entry['name'])) {
             $name = $entry['name'];
-        } elseif (!empty($entry['description'])) {
-            $name = $entry['description'];
         } else {
             $name = $entry['id'];
         }
