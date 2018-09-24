@@ -140,7 +140,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         $productObject->setIdentifier($identity->getObjectIdentifier());
         $productObject->setName((string) $product['texts'][0]['name1']);
         $productObject->setActive($this->getActive($variations, $mainVariation));
-        $productObject->setNumber($this->getProductNumber($variations));
+        $productObject->setNumber($this->getProductNumber($mainVariation));
         $productObject->setBadges($this->getBadges($product));
         $productObject->setShopIdentifiers($shopIdentifiers);
         $productObject->setManufacturerIdentifier($this->getManufacturerIdentifier($product));
@@ -213,8 +213,8 @@ class ProductResponseParser implements ProductResponseParserInterface
      */
     private function getMainVariation(array $variations)
     {
-        $mainVariation = array_filter($variations, function ($varation) {
-            return $varation['isMain'] === true;
+        $mainVariation = array_filter($variations, function ($variation) {
+            return $variation['isMain'] === true;
         });
 
         if (empty($mainVariation)) {
@@ -703,15 +703,17 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * @param Variation[] $variations
+     * @param array mainVariation
      *
      * @return string
      */
-    private function getProductNumber(array $variations = [])
+    private function getProductNumber(array $mainVariation)
     {
-        $variation = array_shift($variations);
+        if ($this->config->get('variation_number_field', 'number') === 'number') {
+            return (string) $mainVariation['number'];
+        }
 
-        return $variation->getNumber();
+        return (string) $mainVariation['id'];
     }
 
     /**
