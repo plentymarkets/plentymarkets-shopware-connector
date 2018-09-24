@@ -709,7 +709,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      */
     private function getProductNumber(array $mainVariation)
     {
-        if ($this->config->get('variation_number_field', 'number') === 'number') {
+        if ($this->configService->get('variation_number_field', 'number') === 'number') {
             return (string) $mainVariation['number'];
         }
 
