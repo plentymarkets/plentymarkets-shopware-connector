@@ -1,12 +1,16 @@
 <?php
 
+use PlentyConnector\Connector\BacklogService\Middleware\BacklogCommandHandlerMiddleware;
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentyConnector\Connector\IdentityService\IdentityService;
 use PlentyConnector\Connector\MappingService\MappingServiceInterface;
+use PlentyConnector\Connector\ServiceBus\QueryType;
+use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\ValueObject\Mapping\Mapping;
 use PlentyConnector\PlentyConnector;
 use PlentymarketsAdapter\Client\ClientInterface;
+use PlentymarketsAdapter\PlentymarketsAdapter;
 use Ramsey\Uuid\Uuid;
 
 class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_Backend_ExtJs
@@ -266,6 +270,59 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         $this->View()->assign([
             'success' => true,
             'data' => $data,
+        ]);
+    }
+
+    public function syncItemAction()
+    {
+        $success = false;
+        $itemId = (int) $this->Request()->get('item_id');
+
+        if (!empty($itemId)) {
+            return;
+        }
+
+        try {
+            /**
+             * @var IdentityService $identityService
+             */
+            $identityService = $this->container->get('plenty_connector.identity_service');
+
+            /**
+             * @var Connector $connector
+             */
+            $connector = $this->container->get('plenty_connector.connector');
+
+            /**
+             * @var ClientInterface $client
+             */
+            $client = $this->container->get('plentymarkets_adapter.client');
+
+            try {
+                $plentyItem = $client->request('GET', 'items/' . $itemId);
+            } catch (Exception $exception) {
+                return;
+            }
+
+            $productIdentity = $identityService->findOneOrCreate(
+                (string) $itemId,
+                PlentymarketsAdapter::NAME,
+                Product::TYPE
+            );
+
+            BacklogCommandHandlerMiddleware::$active = false;
+            $connector->handle(QueryType::ONE, Product::TYPE, $productIdentity->getObjectIdentifier());
+
+            $success = true;
+        } catch (Throwable $exception) {
+			$message = $exception->getMessage();
+        } catch (Exception $exception) {
+			$message = $exception->getMessage();
+        }
+
+        $this->View()->assign([
+                'success' => $success,
+                'message' => $message,
         ]);
     }
 

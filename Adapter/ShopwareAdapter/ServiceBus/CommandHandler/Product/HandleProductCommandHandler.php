@@ -131,47 +131,41 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             return false;
         }
 
-        $variantRepository = $this->entityManager->getRepository(Detail::class);
-
-        /**
-         * @var null|Detail $mainVariation
-         */
-        $mainVariation = $variantRepository->findOneBy(['number' => $product->getNumber()]);
-
         $resouce = $this->getArticleResource();
 
-        if (null === $mainVariation) {
-            $productModel = $resouce->create($params);
-        } else {
-            $this->correctMainDetailAssignment($mainVariation);
-
-            $productModel = $resouce->update($mainVariation->getArticleId(), $params);
-        }
-
-        $identities = $this->identityService->findBy([
+        $productIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $product->getIdentifier(),
             'objectType' => Product::TYPE,
             'adapterName' => ShopwareAdapter::NAME,
         ]);
 
-        $foundIdentity = false;
-        foreach ($identities as $identity) {
-            if ($identity->getAdapterIdentifier() === (string) $productModel->getId()) {
-                $foundIdentity = true;
+        $variantRepository = $this->entityManager->getRepository(Detail::class);
 
-                continue;
+        /**
+         * @var Detail|null $mainVariation
+         */
+        $mainVariation = $variantRepository->findOneBy(['number' => $product->getNumber()]);
+
+        if (null === $productIdentity) {
+            if (null === $mainVariation) {
+                $productModel = $resouce->create($params);
+            } else {
+                $this->correctMainDetailAssignment($mainVariation);
+                $resouce->update($productIdentity->getAdapterIdentifier(), $params);
             }
 
-            $this->identityService->remove($identity);
-        }
-
-        if (!$foundIdentity) {
             $this->identityService->create(
                 $product->getIdentifier(),
                 Product::TYPE,
                 (string) $productModel->getId(),
                 ShopwareAdapter::NAME
             );
+        } else {
+            if (null !== $mainVariation) {
+                $this->correctMainDetailAssignment($mainVariation);
+            }
+
+            $productModel = $resouce->update($productIdentity->getAdapterIdentifier(), $params);
         }
 
         $this->attributeDataPersister->saveProductDetailAttributes(

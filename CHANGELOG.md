@@ -11,6 +11,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - skip order without customer
 - set correct bundle position
 - fix product meta title and meta description translation
+- fix product duplicates
 
 ### Changed
 - translated variation configurator 
@@ -22,6 +23,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - transfer age restriction as attribute to shopware
 - transfer top seller badge to shopware
 - add product configuration positions of the groups and their values (@lacodimizer)
+- add item sync into the backend gui (@lacodimizer)
 - handle commands are now prioritised according to their definitions priority
 
 ## [4.6.0]
