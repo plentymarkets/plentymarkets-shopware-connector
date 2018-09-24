@@ -2,7 +2,9 @@
 
 use PlentyConnector\Connector\BacklogService\Middleware\BacklogCommandHandlerMiddleware;
 use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
+use PlentyConnector\Connector\ConnectorInterface;
 use PlentyConnector\Connector\IdentityService\IdentityService;
+use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\MappingService\MappingServiceInterface;
 use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\TransferObject\Product\Product;
@@ -242,17 +244,12 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
          */
         $client = $this->container->get('plentymarkets_adapter.client');
 
-        /**
-         * @var Shopware_Components_Snippet_Manager $snippetManager
-         */
-        $snippetManager = $this->container->get('snippets');
-        $namespace = 'backend/plentyconnector/main';
-        $snippet = 'plentyconnector/view/settings/additional/item_warehouse/virtualWarehouse';
-
         $data = [
             [
                 'id' => 0,
-                'name' => $snippetManager->getNamespace($namespace)->get($snippet),
+                'name' => $this->getTranslation(
+                    'plentyconnector/view/settings/additional/item_warehouse/virtualWarehouse'
+                ),
             ],
         ];
 
@@ -275,21 +272,25 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
 
     public function syncItemAction()
     {
-        $success = false;
         $itemId = (int) $this->Request()->get('item_id');
 
-        if (!empty($itemId)) {
+        if (empty($itemId)) {
+            $this->View()->assign([
+                'success' => false,
+                'message' => $this->getTranslation('plentyconnector/controller/actions/item_import/missing_item_id'),
+            ]);
+
             return;
         }
 
         try {
             /**
-             * @var IdentityService $identityService
+             * @var IdentityServiceInterface $identityService
              */
             $identityService = $this->container->get('plenty_connector.identity_service');
 
             /**
-             * @var Connector $connector
+             * @var ConnectorInterface $connector
              */
             $connector = $this->container->get('plenty_connector.connector');
 
@@ -299,8 +300,13 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
             $client = $this->container->get('plentymarkets_adapter.client');
 
             try {
-                $plentyItem = $client->request('GET', 'items/' . $itemId);
+                $client->request('GET', 'items/' . $itemId);
             } catch (Exception $exception) {
+                $this->View()->assign([
+                    'success' => false,
+                    'message' => $this->getTranslation('plentyconnector/controller/actions/item_import/item_not_found'),
+                ]);
+
                 return;
             }
 
@@ -311,19 +317,24 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
             );
 
             BacklogCommandHandlerMiddleware::$active = false;
+
             $connector->handle(QueryType::ONE, Product::TYPE, $productIdentity->getObjectIdentifier());
 
-            $success = true;
-        } catch (Throwable $exception) {
-			$message = $exception->getMessage();
+            $this->View()->assign([
+                'success' => true,
+                'message' => '',
+            ]);
         } catch (Exception $exception) {
-			$message = $exception->getMessage();
+            $this->View()->assign([
+                'success' => false,
+                'message' => $exception->getMessage(),
+            ]);
+        } catch (Throwable $exception) {
+            $this->View()->assign([
+                'success' => false,
+                'message' => $exception->getMessage(),
+            ]);
         }
-
-        $this->View()->assign([
-                'success' => $success,
-                'message' => $message,
-        ]);
     }
 
     private function cleanParameters(array $params)
@@ -346,5 +357,21 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         }
 
         return $result;
+    }
+
+    /**
+     * @param string $snippet
+     *
+     * @return string
+     */
+    private function getTranslation($snippet)
+    {
+        /**
+         * @var Shopware_Components_Snippet_Manager $snippetManager
+         */
+        $snippetManager = $this->container->get('snippets');
+        $namespace = 'backend/plentyconnector/main';
+
+        return $snippetManager->getNamespace($namespace)->get($snippet);
     }
 }
