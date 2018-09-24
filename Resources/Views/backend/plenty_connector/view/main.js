@@ -29,11 +29,17 @@ Ext.define('Shopware.apps.PlentyConnector.view.Main', {
             main: me
         });
         me.sf.on('activate', me.sf.build);
+		
+		me.ac = Ext.widget('plentymarkets-view-actions', {
+			main: me
+		});
+		me.ac.on('activate', me.ac.build);
 
         me.tabpanel = Ext.create('Ext.tab.Panel', {
             items: [me.sf, {
                 xtype: 'plentymarkets-view-mapping-main'
-            }]
+            },
+			me.ac]
         });
 
         me.add(me.tabpanel);
