@@ -11,6 +11,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - skip order without customer
 - set correct bundle position
 - fix product meta title and meta description translation
+- fix product duplicates
 
 ### Changed
 - translated variation configurator 
