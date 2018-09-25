@@ -5,9 +5,6 @@ namespace PlentyConnector\Connector\TransferObject\Product\Badge;
 use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 use ReflectionClass;
 
-/**
- * Class Barcode
- */
 class Badge extends AbstractValueObject
 {
     const TYPE_HIGHLIGHT = 'highlight';

@@ -151,7 +151,7 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
             return !$payment['deleted'];
         });
 
-        return $payments;
+        return !empty($payments);
     }
 
     /**

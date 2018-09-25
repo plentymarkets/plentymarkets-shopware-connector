@@ -11,11 +11,6 @@ use PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\ResponsePa
 use Ramsey\Uuid\Uuid;
 use ShopwareAdapter\ResponseParser\Address\AddressResponseParser;
 
-/**
- * Class AddressResponseParserTest
- *
- * @group ResponseParser
- */
 class AddressResponseParserTest extends ResponseParserTest
 {
     /**

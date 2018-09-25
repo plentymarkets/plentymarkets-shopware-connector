@@ -12,11 +12,6 @@ use PlentymarketsAdapter\Client\Exception\InvalidCredentialsException;
 use PlentymarketsAdapter\Client\Exception\InvalidResponseException;
 use PlentymarketsAdapter\Client\Iterator\Iterator;
 
-/**
- * RepsonseModifier example.
- *
- * Class Client
- */
 class Client implements ClientInterface
 {
     /**

@@ -7,8 +7,6 @@ use Doctrine\ORM\Mapping as ORM;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 
 /**
- * Class Backlog.
- *
  * @ORM\Entity
  * @ORM\Table(name="plenty_backlog", indexes={
  *     @ORM\Index(name="hash_idx", columns={"hash"}),

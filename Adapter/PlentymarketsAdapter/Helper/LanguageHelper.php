@@ -6,9 +6,6 @@ use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 
-/**
- * Class LanguageHelper
- */
 class LanguageHelper implements LanguageHelperInterface
 {
     /**
