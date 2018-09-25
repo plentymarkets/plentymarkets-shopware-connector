@@ -8,11 +8,6 @@ use PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\ResponsePa
 use Shopware\Models\Tax\Tax;
 use ShopwareAdapter\ResponseParser\OrderItem\OrderItemResponseParser;
 
-/**
- * Class OrderItemResponseParserTest
- *
- * @group ResponseParser
- */
 class OrderItemResponseParserTest extends ResponseParserTest
 {
     /**

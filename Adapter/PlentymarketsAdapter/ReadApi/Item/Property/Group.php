@@ -4,9 +4,6 @@ namespace PlentymarketsAdapter\ReadApi\Item\Property;
 
 use PlentymarketsAdapter\ReadApi\ApiAbstract;
 
-/**
- * Class Group
- */
 class Group extends ApiAbstract
 {
     /**
