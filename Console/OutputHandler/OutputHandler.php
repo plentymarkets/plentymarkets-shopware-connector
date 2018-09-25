@@ -88,7 +88,6 @@ class OutputHandler implements OutputHandlerInterface
         }
 
         $this->progressBar->finish();
-        $this->progressBar = null;
         $this->style->newLine(2);
     }
 

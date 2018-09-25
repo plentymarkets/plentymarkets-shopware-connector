@@ -151,7 +151,8 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 $productModel = $resouce->create($params);
             } else {
                 $this->correctMainDetailAssignment($mainVariation);
-                $resouce->update($productIdentity->getAdapterIdentifier(), $params);
+
+                $productModel = $resouce->update($mainVariation->getArticleId(), $params);
             }
 
             $this->identityService->create(

@@ -174,7 +174,7 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
         $bundleModel->setArticle($mainArticle);
         $bundleModel->setCustomerGroups($this->getCustomerGroups($bundle));
         $bundleModel->setPrices($this->getPrices($bundle, $bundleModel));
-        $bundleModel->setPosition($bundle->getPosition($bundle));
+        $bundleModel->setPosition($bundle->getPosition());
         $bundleModel->setArticles($this->getArticles($bundle, $bundleModel, $mainVariant));
         $bundleModel->setActive($this->active);
 
@@ -323,7 +323,7 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param $bundleNumber
+     * @param string $bundleNumber
      *
      * @return int
      */

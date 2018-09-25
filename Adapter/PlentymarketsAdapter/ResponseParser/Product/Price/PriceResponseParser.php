@@ -126,8 +126,8 @@ class PriceResponseParser implements PriceResponseParserInterface
     }
 
     /**
-     * @param $orderOrigin
-     * @param array $referrers
+     * @param string $orderOrigin
+     * @param array  $referrers
      *
      * @return bool
      */

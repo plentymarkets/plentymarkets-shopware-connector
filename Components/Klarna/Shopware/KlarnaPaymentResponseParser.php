@@ -130,8 +130,8 @@ class KlarnaPaymentResponseParser implements PaymentResponseParserInterface
     }
 
     /**
-     * @param $klarnaShopId
-     * @param $countryIso
+     * @param string $klarnaShopId
+     * @param string $countryIso
      *
      * @return string
      */
@@ -152,7 +152,7 @@ class KlarnaPaymentResponseParser implements PaymentResponseParserInterface
     }
 
     /**
-     * @param $country
+     * @param string $country
      *
      * @return int
      */

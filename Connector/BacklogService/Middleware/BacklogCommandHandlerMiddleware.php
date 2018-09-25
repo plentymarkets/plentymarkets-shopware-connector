@@ -45,7 +45,7 @@ class BacklogCommandHandlerMiddleware implements Middleware
         }
 
         if ($command instanceof HandleBacklogElementCommand) {
-            $command = $command->getCommand();
+            $command = $command->getPayload();
 
             return $next($command);
         }

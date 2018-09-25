@@ -15,11 +15,6 @@ use Shopware\Models\Shop\Shop;
 use ShopwareAdapter\ResponseParser\Address\AddressResponseParser;
 use ShopwareAdapter\ResponseParser\Customer\CustomerResponseParser;
 
-/**
- * Class CustomerResponseParserTest
- *
- * @group ResponseParser
- */
 class CustomerResponseParserTest extends ResponseParserTest
 {
     /**

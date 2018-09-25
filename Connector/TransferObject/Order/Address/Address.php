@@ -7,11 +7,6 @@ use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use ReflectionClass;
 
-/**
- * TOOD: camelCase
- *
- * Class Address
- */
 class Address extends AbstractValueObject implements AttributableInterface
 {
     const GENDER_MALE = 'male';
