@@ -179,6 +179,10 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
                 ];
             }
 
+            if (empty($translation)) {
+                continue;
+            }
+
             $this->writeTranslations($type, $groupModel->getId(), $translation);
         }
     }
@@ -231,6 +235,10 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
                     'languageIdentity' => $languageIdentity,
                     'name' => $translatedPropertyValue->getValue(),
                 ];
+            }
+
+            if (empty($translation)) {
+                continue;
             }
 
             $this->writeTranslations($type, $valueModel->getId(), $translation);

@@ -17,15 +17,7 @@ class HandleBacklogElementCommand implements CommandInterface
     }
 
     /**
-     * @return CommandInterface
-     */
-    public function getCommand()
-    {
-        return $this->command;
-    }
-
-    /**
-     * @return array
+     * {@inheritdoc}
      */
     public function toArray()
     {
@@ -35,10 +27,18 @@ class HandleBacklogElementCommand implements CommandInterface
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getPriority()
     {
         return 0;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPayload()
+    {
+        return $this->command;
     }
 }

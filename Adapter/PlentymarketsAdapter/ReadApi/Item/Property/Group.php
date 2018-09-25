@@ -10,7 +10,7 @@ use PlentymarketsAdapter\ReadApi\ApiAbstract;
 class Group extends ApiAbstract
 {
     /**
-     * @param int $propertyId
+     * @param int $propertyGroupId
      *
      * @return array
      */

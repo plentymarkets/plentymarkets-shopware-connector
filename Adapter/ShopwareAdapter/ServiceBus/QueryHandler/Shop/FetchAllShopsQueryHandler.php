@@ -8,7 +8,7 @@ use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
 use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\TransferObject\Shop\Shop;
-use Shopware\Models\Dispatch\Repository;
+use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop as ShopModel;
 use ShopwareAdapter\ResponseParser\Shop\ShopResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
