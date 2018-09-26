@@ -12,6 +12,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - set correct bundle position
 - fix product meta title and meta description translation
 - fix product duplicates
+- fix services.xml for shopware 5.5.x
 
 ### Changed
 - translated variation configurator 
