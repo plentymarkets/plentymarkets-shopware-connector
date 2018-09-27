@@ -127,7 +127,7 @@ class FetchChangedStocksQueryHandler implements QueryHandlerInterface
 
             $stockBacklog[$stock['variationId']] = $stock['variationId'];
 
-            if (count($stockBacklog) % 10 === 0) {
+            if (count($stockBacklog) % 50 === 0) {
                 yield $stockBacklog;
 
                 $stockBacklog = [];
