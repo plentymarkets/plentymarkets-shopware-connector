@@ -140,7 +140,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         $productObject->setIdentifier($identity->getObjectIdentifier());
         $productObject->setName((string) $product['texts'][0]['name1']);
         $productObject->setActive($this->getActive($variations, $mainVariation));
-        $productObject->setNumber($this->getProductNumber($mainVariation));
+        $productObject->setNumber($this->getProductNumber($variations));
         $productObject->setBadges($this->getBadges($product));
         $productObject->setShopIdentifiers($shopIdentifiers);
         $productObject->setManufacturerIdentifier($this->getManufacturerIdentifier($product));
@@ -363,7 +363,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             $translations[] = Translation::fromArray([
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
                 'property' => 'description',
-                'value' => $text['shortDescription'],
+                'value' => $text['metaDescription'],
             ]);
 
             $translations[] = Translation::fromArray([
@@ -376,12 +376,6 @@ class ProductResponseParser implements ProductResponseParserInterface
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
                 'property' => 'metaTitle',
                 'value' => $text['name1'],
-            ]);
-
-            $translations[] = Translation::fromArray([
-                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                'property' => 'metaDescription',
-                'value' => $text['metaDescription'],
             ]);
 
             $translations[] = Translation::fromArray([
@@ -705,17 +699,15 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * @param array $mainVariation
+     * @param Variation[] $variations
      *
      * @return string
      */
-    private function getProductNumber(array $mainVariation)
+    private function getProductNumber(array $variations = [])
     {
-        if ($this->configService->get('variation_number_field', 'number') === 'number') {
-            return (string) $mainVariation['number'];
-        }
+        $variation = array_shift($variations);
 
-        return (string) $mainVariation['id'];
+        return $variation->getNumber();
     }
 
     /**

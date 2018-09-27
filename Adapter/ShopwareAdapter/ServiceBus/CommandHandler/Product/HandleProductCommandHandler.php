@@ -131,7 +131,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             return false;
         }
 
-        $resouce = $this->getArticleResource();
+        $resource = $this->getArticleResource();
 
         $productIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $product->getIdentifier(),
@@ -148,11 +148,10 @@ class HandleProductCommandHandler implements CommandHandlerInterface
 
         if (null === $productIdentity) {
             if (null === $mainVariation) {
-                $productModel = $resouce->create($params);
+                $productModel = $resource->create($params);
             } else {
                 $this->correctMainDetailAssignment($mainVariation);
-
-                $productModel = $resouce->update($mainVariation->getArticleId(), $params);
+                $productModel = $resource->update($mainVariation->getArticleId(), $params);
             }
 
             $this->identityService->create(
@@ -162,11 +161,20 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 ShopwareAdapter::NAME
             );
         } else {
-            if (null !== $mainVariation) {
-                $this->correctMainDetailAssignment($mainVariation);
-            }
+            if (null === $mainVariation) {
+                $this->identityService->remove($productIdentity);
+                $productModel = $resource->create($params);
 
-            $productModel = $resouce->update($productIdentity->getAdapterIdentifier(), $params);
+                $this->identityService->create(
+                    $product->getIdentifier(),
+                    Product::TYPE,
+                    (string) $productModel->getId(),
+                    ShopwareAdapter::NAME
+                );
+            } else {
+                $this->correctMainDetailAssignment($mainVariation);
+                $productModel = $resource->update($mainVariation->getArticleId(), $params);
+            }
         }
 
         $this->attributeDataPersister->saveProductDetailAttributes(
