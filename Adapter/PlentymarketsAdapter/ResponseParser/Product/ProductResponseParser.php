@@ -363,7 +363,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             $translations[] = Translation::fromArray([
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
                 'property' => 'description',
-                'value' => $text['shortDescription'],
+                'value' => $text['metaDescription'],
             ]);
 
             $translations[] = Translation::fromArray([
@@ -376,12 +376,6 @@ class ProductResponseParser implements ProductResponseParserInterface
                 'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
                 'property' => 'metaTitle',
                 'value' => $text['name1'],
-            ]);
-
-            $translations[] = Translation::fromArray([
-                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                'property' => 'metaDescription',
-                'value' => $text['metaDescription'],
             ]);
 
             $translations[] = Translation::fromArray([
