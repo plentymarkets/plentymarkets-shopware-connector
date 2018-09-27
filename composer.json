@@ -18,12 +18,12 @@
         "myclabs/deep-copy": "^1.6",
         "league/tactician": "^1.0"
     },
-    "suggest": {
-        "ramsey/uuid": "Needed to generate UUID's for each transfer object, provided by shopware"
-    },
     "require-dev": {
         "phpunit/phpunit": "^5.0",
         "friendsofphp/php-cs-fixer": "^2.0"
+    },
+    "suggest": {
+        "ramsey/uuid": "Needed to generate UUID's for each transfer object, provided by shopware"
     },
     "autoload": {
         "psr-4": {
