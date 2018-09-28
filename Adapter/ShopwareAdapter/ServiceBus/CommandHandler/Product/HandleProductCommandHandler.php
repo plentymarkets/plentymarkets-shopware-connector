@@ -14,10 +14,10 @@ use PlentyConnector\Connector\Translation\TranslationHelperInterface;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Article;
 use Shopware\Models\Article\Detail;
+use Shopware\Models\Article\Repository;
 use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
 use ShopwareAdapter\DataPersister\Translation\TranslationDataPersisterInterface;
 use ShopwareAdapter\DataProvider\Shop\ShopDataProviderInterface;
-use ShopwareAdapter\Helper\AttributeHelper;
 use ShopwareAdapter\RequestGenerator\Product\ProductRequestGeneratorInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
@@ -32,11 +32,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
      * @var TranslationHelperInterface
      */
     private $translationHelper;
-
-    /**
-     * @var AttributeHelper
-     */
-    private $attributeHelper;
 
     /**
      * @var AttributeDataPersisterInterface
@@ -67,7 +62,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         EntityManagerInterface $entityManager,
         IdentityServiceInterface $identityService,
         TranslationHelperInterface $translationHelper,
-        AttributeHelper $attributeHelper,
         AttributeDataPersisterInterface $attributeDataPersister,
         ProductRequestGeneratorInterface $productRequestGenerator,
         TranslationDataPersisterInterface $translationDataPersister,
@@ -75,7 +69,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
     ) {
         $this->identityService = $identityService;
         $this->translationHelper = $translationHelper;
-        $this->attributeHelper = $attributeHelper;
         $this->attributeDataPersister = $attributeDataPersister;
         $this->productRequestGenerator = $productRequestGenerator;
         $this->translationDataPersister = $translationDataPersister;
@@ -146,6 +139,10 @@ class HandleProductCommandHandler implements CommandHandlerInterface
          */
         $mainVariation = $variantRepository->findOneBy(['number' => $product->getNumber()]);
 
+        if (null === $mainVariation) {
+            $mainVariation = $this->getExistingVariation($product->getVariantNumbers(), $variantRepository);
+        }
+
         if (null === $productIdentity) {
             if (null === $mainVariation) {
                 $productModel = $resource->create($params);
@@ -160,21 +157,19 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 (string) $productModel->getId(),
                 ShopwareAdapter::NAME
             );
-        } else {
-            if (null === $mainVariation) {
-                $this->identityService->remove($productIdentity);
-                $productModel = $resource->create($params);
+        } elseif (null === $mainVariation) {
+            $this->identityService->remove($productIdentity);
+            $productModel = $resource->create($params);
 
-                $this->identityService->create(
-                    $product->getIdentifier(),
-                    Product::TYPE,
-                    (string) $productModel->getId(),
-                    ShopwareAdapter::NAME
-                );
-            } else {
-                $this->correctMainDetailAssignment($mainVariation);
-                $productModel = $resource->update($mainVariation->getArticleId(), $params);
-            }
+            $this->identityService->create(
+                $product->getIdentifier(),
+                Product::TYPE,
+                (string) $productModel->getId(),
+                ShopwareAdapter::NAME
+            );
+        } else {
+            $this->correctMainDetailAssignment($mainVariation);
+            $productModel = $resource->update($mainVariation->getArticleId(), $params);
         }
 
         $this->attributeDataPersister->saveProductDetailAttributes(
@@ -221,5 +216,27 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         Shopware()->Container()->reset('models');
 
         return Manager::getResource('Article');
+    }
+
+    /**
+     * @param array      $variantNumbers
+     * @param Repository $variantRepository $variantRepository
+     *
+     * @return null|Detail
+     */
+    private function getExistingVariation(array $variantNumbers, $variantRepository)
+    {
+        foreach ($variantNumbers as $variantNumber) {
+            /**
+             * @var Detail $variant
+             */
+            $variant = $variantRepository->findOneBy(['number' => $variantNumber]);
+
+            if (null !== $variant) {
+                return $variant;
+            }
+        }
+
+        return null;
     }
 }
