@@ -123,6 +123,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
             'mainDetail' => [
                 'number' => $product->getNumber(),
             ],
+            '$variantNumbers' => $product->getVariantNumbers(),
             'availableFrom' => $product->getAvailableFrom(),
             'availableTo' => $product->getAvailableTo(),
             'name' => $product->getName(),

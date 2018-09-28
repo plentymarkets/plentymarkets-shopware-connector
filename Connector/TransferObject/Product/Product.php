@@ -35,6 +35,11 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     private $number = '';
 
     /**
+     * @var array
+     */
+    private $variantNumbers = [];
+
+    /**
      * @var bool
      */
     private $active = false;
@@ -208,6 +213,22 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     public function setNumber($number)
     {
         $this->number = $number;
+    }
+
+    /**
+     * @return array
+     */
+    public function getVariantNumbers()
+    {
+        return $this->variantNumbers;
+    }
+
+    /**
+     * @param array $variantNumbers
+     */
+    public function setVariantNumbers($variantNumbers)
+    {
+        $this->variantNumbers = $variantNumbers;
     }
 
     /**

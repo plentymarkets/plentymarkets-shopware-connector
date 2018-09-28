@@ -263,7 +263,6 @@
             <argument type="service" id="models" />
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plenty_connector.translation_helper" />
-            <argument type="service" id="shopware_adapter.attribute_helper" />
             <argument type="service" id="shopware_adapter.data_persister.attribute" />
             <argument type="service" id="shopware_adapter.request_generator.product" />
             <argument type="service" id="shopware_adapter.data_persister.translation" />

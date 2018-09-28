@@ -136,11 +136,21 @@ class ProductResponseParser implements ProductResponseParserInterface
             return $object instanceof Variation;
         });
 
+        $variantNumbers = [];
+
+        /**
+         * @var Variation $variation
+         */
+        foreach ($variations as $variation) {
+            $variantNumbers[] = $variation->getNumber();
+        }
+
         $productObject = new Product();
         $productObject->setIdentifier($identity->getObjectIdentifier());
         $productObject->setName((string) $product['texts'][0]['name1']);
         $productObject->setActive($this->getActive($variations, $mainVariation));
         $productObject->setNumber($this->getProductNumber($variations));
+        $productObject->setVariantNumbers($variantNumbers);
         $productObject->setBadges($this->getBadges($product));
         $productObject->setShopIdentifiers($shopIdentifiers);
         $productObject->setManufacturerIdentifier($this->getManufacturerIdentifier($product));
