@@ -10,6 +10,7 @@ use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
+use Psr\Log\LoggerInterface;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Variant;
 use Shopware\Models\Article\Detail;
@@ -39,16 +40,23 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
      */
     private $attributeDataPersister;
 
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
     public function __construct(
         IdentityServiceInterface $identityService,
         VariationRequestGeneratorInterface $variationRequestGenerator,
         EntityManagerInterface $entityManager,
-        AttributeDataPersisterInterface $attributeDataPersister
+        AttributeDataPersisterInterface $attributeDataPersister,
+        LoggerInterface $logger
     ) {
         $this->identityService = $identityService;
         $this->variationRequestGenerator = $variationRequestGenerator;
         $this->entityManager = $entityManager;
         $this->attributeDataPersister = $attributeDataPersister;
+        $this->logger = $logger;
     }
 
     /**
@@ -97,6 +105,20 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
         if (null === $variant) {
             $variant = $resource->create($variationParams);
         } else {
+            // migrating variation from one product to the correct connector handeled product
+            if ((int) $productIdentitiy->getAdapterIdentifier() !== $variant->getArticleId()) {
+                $this->entityManager->getConnection()->update(
+                    's_articles_details',
+                    ['articleID' => $productIdentitiy->getAdapterIdentifier()],
+                    ['id' => $variant->getId()]
+                );
+
+                $this->logger->notice('migrated variation from existing product to connector handeled product.', [
+                    'variation' => $variation->getNumber(),
+                    'oldProduct' => $variant->getArticleId(),
+                ]);
+            }
+
             $variant = $resource->update($variant->getId(), $variationParams);
         }
 

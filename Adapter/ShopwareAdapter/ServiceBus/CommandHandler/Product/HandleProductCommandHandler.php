@@ -144,6 +144,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 $productModel = $articleResource->create($params);
             } else {
                 $this->correctMainDetailAssignment($mainVariation);
+
                 $productModel = $articleResource->update($mainVariation->getArticleId(), $params);
             }
 
