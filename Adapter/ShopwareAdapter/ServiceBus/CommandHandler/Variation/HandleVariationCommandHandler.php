@@ -10,6 +10,7 @@ use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
+use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Psr\Log\LoggerInterface;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Variant;
@@ -92,66 +93,54 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
             return false;
         }
 
-        $variationParams = $this->variationRequestGenerator->generate($variation);
-        $variantRepository = $this->entityManager->getRepository(Detail::class);
-
-        /**
-         * @var null|Detail $variant
-         */
-        $variant = $variantRepository->findOneBy(['number' => $variation->getNumber()]);
-
-        $resource = $this->getVariationResource();
-
-        if (null === $variant) {
-            $variant = $resource->create($variationParams);
-        } else {
-            // migrating variation from one product to the correct connector handeled product
-            if ((int) $productIdentitiy->getAdapterIdentifier() !== $variant->getArticleId()) {
-                $this->entityManager->getConnection()->update(
-                    's_articles_details',
-                    ['articleID' => $productIdentitiy->getAdapterIdentifier()],
-                    ['id' => $variant->getId()]
-                );
-
-                $this->logger->notice('migrated variation from existing product to connector handeled product.', [
-                    'variation' => $variation->getNumber(),
-                    'oldProduct' => $variant->getArticleId(),
-                ]);
-            }
-
-            $variant = $resource->update($variant->getId(), $variationParams);
-        }
-
-        $identities = $this->identityService->findBy([
+        $variationIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $variation->getIdentifier(),
             'objectType' => Variation::TYPE,
             'adapterName' => ShopwareAdapter::NAME,
         ]);
 
-        $foundIdentity = false;
-        foreach ($identities as $identity) {
-            if ($identity->getAdapterIdentifier() === (string) $variant->getId()) {
-                $foundIdentity = true;
+        $variationResource = $this->getVariationResource();
+        $variationParams = $this->variationRequestGenerator->generate($variation);
+        $variantRepository = $this->entityManager->getRepository(Detail::class);
 
-                continue;
+        /**
+         * @var null|Detail $variationModel
+         */
+        $variationModel = $variantRepository->findOneBy(['number' => $variation->getNumber()]);
+
+        $this->handleVariationProductMigration($variationModel, $productIdentitiy, $variation);
+
+        if (null === $variationIdentity) {
+            if (null === $variationModel) {
+                $variationModel = $variationResource->create($variationParams);
+            } else {
+                $variationModel = $variationResource->update(
+                    $variationModel->getId(),
+                    $variationParams
+                );
             }
 
-            $this->identityService->remove($identity);
-        }
-
-        if (!$foundIdentity) {
             $this->identityService->create(
                 $variation->getIdentifier(),
                 Variation::TYPE,
-                (string) $variant->getId(),
+                (string) $variationModel->getId(),
                 ShopwareAdapter::NAME
             );
+        } else {
+            if (null === $variationModel) {
+                $variationModel = $variationResource->create($variationParams);
+            } else {
+                $variationModel = $variationResource->update(
+                    $variationIdentity->getAdapterIdentifier(),
+                    $variationParams
+                );
+            }
         }
 
-        $this->correctMainDetailAssignment($variant, $variation);
+        $this->correctMainDetailAssignment($variationModel, $variation);
 
         $this->attributeDataPersister->saveProductDetailAttributes(
-            $variant,
+            $variationModel,
             $variation->getAttributes()
         );
 
@@ -184,5 +173,35 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
         Shopware()->Container()->reset('models');
 
         return Manager::getResource('Variant');
+    }
+
+    /**
+     * migrating variation from one product to the correct connector handeled product
+     *
+     * @param Detail|null $variationModel
+     * @param Identity    $productIdentitiy
+     * @param Variation   $variation
+     */
+    private function handleVariationProductMigration($variationModel, $productIdentitiy, $variation)
+    {
+        if (null === $variationModel) {
+            return;
+        }
+
+        if ((int) $productIdentitiy->getAdapterIdentifier() === $variationModel->getArticleId()) {
+            return;
+        }
+
+        $this->entityManager->getConnection()->update(
+            's_articles_details',
+            ['articleID' => $productIdentitiy->getAdapterIdentifier()],
+            ['id' => $variationModel->getId()]
+        );
+
+        $this->logger->notice('migrated variation from existing product to connector handeled product.', [
+            'variation' => $variation->getNumber(),
+            'old product id' => $variationModel->getArticleId(),
+            'new product id' => $productIdentitiy->getAdapterIdentifier(),
+        ]);
     }
 }
