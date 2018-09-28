@@ -130,6 +130,12 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
             if (null === $variationModel) {
                 $variationModel = $variationResource->create($variationParams);
             } else {
+                // remove orphaned and now duplicate variation in case of number changes
+                if ($variationModel->getId() !== (int) $variationIdentity->getAdapterIdentifier()) {
+                    $this->entityManager->remove($variationModel);
+                    $this->entityManager->flush();
+                }
+
                 $variationModel = $variationResource->update(
                     $variationIdentity->getAdapterIdentifier(),
                     $variationParams
