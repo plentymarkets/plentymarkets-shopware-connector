@@ -10,6 +10,7 @@ use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\TransferObject\Product\Stock\Stock;
 use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
+use PlentymarketsAdapter\Client\Iterator\Iterator;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Product\Stock\StockResponseParserInterface;
 use PlentymarketsAdapter\ServiceBus\ChangedDateTimeTrait;
@@ -76,17 +77,13 @@ class FetchChangedStocksQueryHandler implements QueryHandlerInterface
             'columns' => ['variationId'],
         ]);
 
-        $variationIdentifiers = [];
-        foreach ($stocks as $stock) {
-            $variationIdentifiers[$stock['variationId']] = $stock['variationId'];
+        $this->outputHandler->startProgressBar(count($stocks));
 
-            unset($stock);
-        }
+        foreach ($this->getAffectedVariations($stocks) as $variationIdentifierGroup) {
+            if (empty($variationIdentifierGroup)) {
+                continue;
+            }
 
-        $this->outputHandler->startProgressBar(count($variationIdentifiers));
-
-        $variationIdentifierGroups = array_chunk($variationIdentifiers, 50);
-        foreach ($variationIdentifierGroups as $variationIdentifierGroup) {
             $elements = $this->client->getIterator('items/variations', [
                 'with' => 'stock',
                 'id' => implode(',', $variationIdentifierGroup),
@@ -117,5 +114,26 @@ class FetchChangedStocksQueryHandler implements QueryHandlerInterface
 
         $this->outputHandler->finishProgressBar();
         $this->setChangedDateTime($currentDateTime);
+    }
+
+    private function getAffectedVariations(Iterator $stocks)
+    {
+        $stockBacklog = [];
+
+        foreach ($stocks as $stock) {
+            if (isset($stockBacklog[$stock['variationId']])) {
+                continue;
+            }
+
+            $stockBacklog[$stock['variationId']] = $stock['variationId'];
+
+            if (count($stockBacklog) % 50 === 0) {
+                yield $stockBacklog;
+
+                $stockBacklog = [];
+            }
+        }
+
+        yield $stockBacklog;
     }
 }
