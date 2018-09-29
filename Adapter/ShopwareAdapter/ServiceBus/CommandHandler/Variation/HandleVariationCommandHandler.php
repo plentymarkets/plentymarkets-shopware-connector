@@ -151,7 +151,7 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
             );
         }
 
-        $this->handleVariationProductMigration($variationModel, $productIdentitiy, $variation);
+        $this->correctProductAssignment($variationModel, $productIdentitiy);
         $this->correctMainDetailAssignment($variationModel, $variation);
 
         $this->attributeDataPersister->saveProductDetailAttributes(
@@ -195,15 +195,14 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
      *
      * @param Detail|null $variationModel
      * @param Identity    $productIdentitiy
-     * @param Variation   $variation
      */
-    private function handleVariationProductMigration($variationModel, $productIdentitiy, $variation)
+    private function correctProductAssignment($variationModel, $productIdentitiy)
     {
         if (null === $variationModel) {
             return;
         }
 
-        if ((int) $productIdentitiy->getAdapterIdentifier() === $variationModel->getArticleId()) {
+        if ((int) $productIdentitiy->getAdapterIdentifier() === $variationModel->getArticle()->getId()) {
             return;
         }
 
@@ -214,9 +213,9 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
         );
 
         $this->logger->notice('migrated variation from existing product to connector handeled product.', [
-            'variation' => $variation->getNumber(),
-            'old product id' => $variationModel->getArticleId(),
-            'new product id' => $productIdentitiy->getAdapterIdentifier(),
+            'variation' => $variationModel->getNumber(),
+            'old shopware product id' => $variationModel->getArticle()->getId(),
+            'new shopware product id' => $productIdentitiy->getAdapterIdentifier(),
         ]);
     }
 }
