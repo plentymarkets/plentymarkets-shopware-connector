@@ -42,7 +42,6 @@
 
         <service id="plentymarkets_adapter.read_api.item.variant" class="PlentymarketsAdapter\ReadApi\Item\Variation">
             <argument type="service" id="plentymarkets_adapter.client" />
-            <argument type="service" id="plentymarkets_adapter.helper.language" />
         </service>
 
         <service id="plentymarkets_adapter.read_api.order" class="PlentymarketsAdapter\ReadApi\Order\Order">
