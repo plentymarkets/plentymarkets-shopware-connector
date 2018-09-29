@@ -135,7 +135,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         $variationRepository = $this->entityManager->getRepository(Detail::class);
 
         /**
-         * @var Detail|null $mainVariation
+         * @var null|Detail $mainVariation
          */
         $mainVariation = $variationRepository->findOneBy(['number' => $product->getNumber()]);
 
