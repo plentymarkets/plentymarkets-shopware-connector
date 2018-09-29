@@ -132,12 +132,12 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             'adapterName' => ShopwareAdapter::NAME,
         ]);
 
-        $variantRepository = $this->entityManager->getRepository(Detail::class);
+        $variationRepository = $this->entityManager->getRepository(Detail::class);
 
         /**
          * @var Detail|null $mainVariation
          */
-        $mainVariation = $variantRepository->findOneBy(['number' => $product->getNumber()]);
+        $mainVariation = $variationRepository->findOneBy(['number' => $product->getNumber()]);
 
         if (null === $productIdentity) {
             if (null === $mainVariation) {

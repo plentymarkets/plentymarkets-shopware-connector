@@ -101,13 +101,13 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
 
         $variationResource = $this->getVariationResource();
         $variationParams = $this->variationRequestGenerator->generate($variation);
-        $variantRepository = $this->entityManager->getRepository(Detail::class);
+        $variationRepository = $this->entityManager->getRepository(Detail::class);
 
         if (null === $variationIdentity) {
             /**
              * @var null|Detail $variationModel
              */
-            $variationModel = $variantRepository->findOneBy(['number' => $variation->getNumber()]);
+            $variationModel = $variationRepository->findOneBy(['number' => $variation->getNumber()]);
 
             if (null === $variationModel) {
                 $variationModel = $variationResource->create($variationParams);
@@ -128,10 +128,10 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
             /**
              * @var null|Detail $variationModel
              */
-            $variationModel = $variantRepository->find($variationIdentity->getAdapterIdentifier());
+            $variationModel = $variationRepository->find($variationIdentity->getAdapterIdentifier());
 
             if (null === $variationModel) {
-                $variationModel = $variantRepository->findOneBy(['number' => $variation->getNumber()]);
+                $variationModel = $variationRepository->findOneBy(['number' => $variation->getNumber()]);
             }
 
             if (null === $variationModel) {
@@ -163,10 +163,10 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param Detail    $variant
+     * @param Detail    $variationModel
      * @param Variation $variation
      */
-    private function correctMainDetailAssignment(Detail $variant, Variation $variation)
+    private function correctMainDetailAssignment(Detail $variationModel, Variation $variation)
     {
         if (!$variation->isMain()) {
             return;
@@ -174,8 +174,8 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
 
         $this->entityManager->getConnection()->update(
             's_articles',
-            ['main_detail_id' => $variant->getId()],
-            ['id' => $variant->getArticle()->getId()]
+            ['main_detail_id' => $variationModel->getId()],
+            ['id' => $variationModel->getArticle()->getId()]
         );
     }
 

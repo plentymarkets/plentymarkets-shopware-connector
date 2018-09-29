@@ -107,20 +107,6 @@ class ProductResponseParser implements ProductResponseParserInterface
             return [];
         }
 
-        $shopIdentifiers = $this->variationHelper->getShopIdentifiers($mainVariation);
-
-        if (empty($shopIdentifiers)) {
-            return [];
-        }
-
-        foreach ($product['variations'] as $val => $key) {
-            $variantShopIdentifiers = $this->variationHelper->getShopIdentifiers($key);
-
-            if (empty($variantShopIdentifiers)) {
-                unset($product['variations'][$val]);
-            }
-        }
-
         $identity = $this->identityService->findOneOrCreate(
             (string) $product['id'],
             PlentymarketsAdapter::NAME,
@@ -143,7 +129,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         $productObject->setActive($this->getActive($variations, $mainVariation));
         $productObject->setNumber($this->getProductNumber($variations));
         $productObject->setBadges($this->getBadges($product));
-        $productObject->setShopIdentifiers($shopIdentifiers);
+        $productObject->setShopIdentifiers($this->variationHelper->getShopIdentifiers($mainVariation));
         $productObject->setManufacturerIdentifier($this->getManufacturerIdentifier($product));
         $productObject->setCategoryIdentifiers($this->getCategories($mainVariation));
         $productObject->setDefaultCategoryIdentifiers($this->getDafaultCategories($mainVariation));
