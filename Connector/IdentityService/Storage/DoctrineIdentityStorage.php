@@ -32,7 +32,7 @@ class DoctrineIdentityStorage implements IdentityStorageInterface
     public function findOneBy(array $criteria = [])
     {
         /**
-         * @var IdentityModel|null
+         * @var null|IdentityModel
          */
         $result = $this->identityRepository->findOneBy($criteria);
 

@@ -193,7 +193,7 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
     /**
      * migrating variation from one product to the correct connector handeled product
      *
-     * @param Detail|null $variationModel
+     * @param null|Detail $variationModel
      * @param Identity    $productIdentitiy
      */
     private function correctProductAssignment($variationModel, $productIdentitiy)
