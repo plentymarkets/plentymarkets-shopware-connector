@@ -23,6 +23,14 @@ class Badge extends AbstractValueObject
     }
 
     /**
+     * @param string $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
+    /**
      * @return array
      */
     public function getTypes()
@@ -30,13 +38,5 @@ class Badge extends AbstractValueObject
         $reflection = new ReflectionClass(__CLASS__);
 
         return $reflection->getConstants();
-    }
-
-    /**
-     * @param string $type
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
     }
 }

@@ -164,6 +164,14 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function setIdentifier($identifier)
+    {
+        $this->identifier = $identifier;
+    }
+
+    /**
      * @return string
      */
     public function getProductIdentifier()
@@ -177,14 +185,6 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     public function setProductIdentifier($productIdentifier)
     {
         $this->productIdentifier = $productIdentifier;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setIdentifier($identifier)
-    {
-        $this->identifier = $identifier;
     }
 
     /**
