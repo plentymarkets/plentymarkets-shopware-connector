@@ -24,7 +24,8 @@ class IdentityService implements IdentityServiceInterface
     public function __construct(
         IdentityStorageInterface $storage,
         ValidatorServiceInterface $validator
-    ) {
+    )
+    {
         $this->storage = $storage;
         $this->validator = $validator;
     }
@@ -81,7 +82,7 @@ class IdentityService implements IdentityServiceInterface
             $identity = $this->create(
                 $objectIdentifier,
                 $objectType,
-                (string) $adapterIdentifier,
+                (string)$adapterIdentifier,
                 $adapterName
             );
         }
@@ -141,6 +142,15 @@ class IdentityService implements IdentityServiceInterface
         });
 
         return $identities;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function update(Identity $identity, array $params = [])
+    {
+        $this->validator->validate($identity);
+        $this->storage->update($identity, $params);
     }
 
     /**

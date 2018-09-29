@@ -103,14 +103,12 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
         $variationParams = $this->variationRequestGenerator->generate($variation);
         $variantRepository = $this->entityManager->getRepository(Detail::class);
 
-        /**
-         * @var null|Detail $variationModel
-         */
-        $variationModel = $variantRepository->findOneBy(['number' => $variation->getNumber()]);
-
-        $this->handleVariationProductMigration($variationModel, $productIdentitiy, $variation);
-
         if (null === $variationIdentity) {
+            /**
+             * @var null|Detail $variationModel
+             */
+            $variationModel = $variantRepository->findOneBy(['number' => $variation->getNumber()]);
+
             if (null === $variationModel) {
                 $variationModel = $variationResource->create($variationParams);
             } else {
@@ -127,22 +125,33 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
                 ShopwareAdapter::NAME
             );
         } else {
+            /**
+             * @var null|Detail $variationModel
+             */
+            $variationModel = $variantRepository->find($variationIdentity->getAdapterIdentifier());
+
+            if (null === $variationModel) {
+                $variationModel = $variantRepository->findOneBy(['number' => $variation->getNumber()]);
+            }
+
             if (null === $variationModel) {
                 $variationModel = $variationResource->create($variationParams);
             } else {
-                // remove orphaned and now duplicate variation in case of number changes
-                if ($variationModel->getId() !== (int) $variationIdentity->getAdapterIdentifier()) {
-                    $this->entityManager->remove($variationModel);
-                    $this->entityManager->flush();
-                }
-
                 $variationModel = $variationResource->update(
-                    $variationIdentity->getAdapterIdentifier(),
+                    $variationModel->getId(),
                     $variationParams
                 );
             }
+
+            $this->identityService->update(
+                $variationIdentity,
+                [
+                    'adapterIdentifier' => (string) $variationModel->getId(),
+                ]
+            );
         }
 
+        $this->handleVariationProductMigration($variationModel, $productIdentitiy, $variation);
         $this->correctMainDetailAssignment($variationModel, $variation);
 
         $this->attributeDataPersister->saveProductDetailAttributes(

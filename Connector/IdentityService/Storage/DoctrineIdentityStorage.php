@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use PlentyConnector\Connector\IdentityService\Model\Identity as IdentityModel;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
+use RuntimeException;
 
 class DoctrineIdentityStorage implements IdentityStorageInterface
 {
@@ -30,15 +31,13 @@ class DoctrineIdentityStorage implements IdentityStorageInterface
      */
     public function findOneBy(array $criteria = [])
     {
-        $identity = null;
-
         /**
-         * @var IdentityModel
+         * @var IdentityModel|null
          */
         $result = $this->identityRepository->findOneBy($criteria);
 
         if (null !== $result) {
-            $identity = Identity::fromArray([
+            return Identity::fromArray([
                 'objectIdentifier' => $result->getObjectIdentifier(),
                 'objectType' => $result->getObjectType(),
                 'adapterIdentifier' => $result->getAdapterIdentifier(),
@@ -46,7 +45,7 @@ class DoctrineIdentityStorage implements IdentityStorageInterface
             ]);
         }
 
-        return $identity;
+        return null;
     }
 
     /**
@@ -83,9 +82,43 @@ class DoctrineIdentityStorage implements IdentityStorageInterface
 
         $this->entityManager->persist($model);
         $this->entityManager->flush();
-        $this->entityManager->clear();
+    }
 
-        return true;
+    /**
+     * {@inheritdoc}
+     */
+    public function update(Identity $identity, array $params = [])
+    {
+        $model = $this->identityRepository->findOneBy([
+            'objectIdentifier' => $identity->getObjectIdentifier(),
+        ]);
+
+        if (null === $model) {
+            throw new RuntimeException('could not find identity for update');
+        }
+
+        if (!empty($params['objectIdentifier'])) {
+            $model->setObjectIdentifier($params['objectIdentifier']);
+        }
+        if (!empty($params['objectType'])) {
+            $model->setAdapterName($params['objectType']);
+        }
+        if (!empty($params['adapterIdentifier'])) {
+            $model->setAdapterIdentifier($params['adapterIdentifier']);
+        }
+        if (!empty($params['adapterName'])) {
+            $model->setObjectType($params['adapterName']);
+        }
+
+        $this->entityManager->persist($model);
+        $this->entityManager->flush();
+
+        return Identity::fromArray([
+            'objectIdentifier' => $model->getObjectIdentifier(),
+            'objectType' => $model->getObjectType(),
+            'adapterIdentifier' => $model->getAdapterIdentifier(),
+            'adapterName' => $model->getAdapterName(),
+        ]);
     }
 
     /**
@@ -93,21 +126,18 @@ class DoctrineIdentityStorage implements IdentityStorageInterface
      */
     public function remove(Identity $identity)
     {
-        $result = $this->identityRepository->findOneBy([
+        $model = $this->identityRepository->findOneBy([
             'adapterIdentifier' => $identity->getAdapterIdentifier(),
             'adapterName' => $identity->getAdapterName(),
             'objectIdentifier' => $identity->getObjectIdentifier(),
             'objectType' => $identity->getObjectType(),
         ]);
 
-        if (null === $result) {
-            return false;
+        if (null === $model) {
+            return;
         }
 
-        $this->entityManager->remove($result);
+        $this->entityManager->remove($model);
         $this->entityManager->flush();
-        $this->entityManager->clear();
-
-        return true;
     }
 }

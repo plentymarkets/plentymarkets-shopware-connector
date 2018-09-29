@@ -180,15 +180,13 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
                     return;
                 }
 
-                $destinationAdapterIdentifier = $oldDestinationIdentity->getAdapterIdentifier();
-                $identityService->remove($oldDestinationIdentity);
-
                 $newIdentifier = $remove ? Uuid::uuid4()->toString() : $originIdentifier;
-                $identityService->create(
-                    $newIdentifier,
-                    $objectType,
-                    $destinationAdapterIdentifier,
-                    $destinationAdapterName
+
+                $identityService->update(
+                    $oldDestinationIdentity,
+                    [
+                        'objectIdentifier' => $newIdentifier,
+                    ]
                 );
 
                 $updates[$key]['identifier'] = $newIdentifier;
