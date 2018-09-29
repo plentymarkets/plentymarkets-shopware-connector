@@ -14,8 +14,6 @@ class LanguageHelper implements LanguageHelperInterface
     private $identityService;
 
     /**
-     * LanguageHelper constructor.
-     *
      * @param IdentityServiceInterface $identityService
      */
     public function __construct(

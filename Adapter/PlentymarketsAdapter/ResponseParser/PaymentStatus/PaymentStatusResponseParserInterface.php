@@ -4,9 +4,6 @@ namespace PlentymarketsAdapter\ResponseParser\PaymentStatus;
 
 use PlentyConnector\Connector\TransferObject\PaymentStatus\PaymentStatus;
 
-/**
- * Interface PaymentStatusResponseParserInterface
- */
 interface PaymentStatusResponseParserInterface
 {
     /**

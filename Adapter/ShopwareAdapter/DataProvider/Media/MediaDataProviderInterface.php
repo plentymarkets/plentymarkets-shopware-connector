@@ -4,9 +4,6 @@ namespace ShopwareAdapter\DataProvider\Media;
 
 use PlentyConnector\Connector\TransferObject\Media\Media;
 
-/**
- * Interface MediaDataProviderInterface
- */
 interface MediaDataProviderInterface
 {
     /**

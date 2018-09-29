@@ -11,9 +11,6 @@ use Shopware\Models\Property\Option as OptionModel;
 use Shopware\Models\Property\Value as ValueModel;
 use Shopware\Models\Shop\Shop as ShopModel;
 
-/**
- * Interface TranslationDataProviderInterface
- */
 interface TranslationDataProviderInterface
 {
     /**

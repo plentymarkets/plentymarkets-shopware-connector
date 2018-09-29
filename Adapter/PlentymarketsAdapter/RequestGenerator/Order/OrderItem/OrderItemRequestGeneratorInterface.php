@@ -5,9 +5,6 @@ namespace PlentymarketsAdapter\RequestGenerator\Order\OrderItem;
 use PlentyConnector\Connector\TransferObject\Order\Order;
 use PlentyConnector\Connector\TransferObject\Order\OrderItem\OrderItem;
 
-/**
- * Interface OrderItemRequestGeneratorInterface
- */
 interface OrderItemRequestGeneratorInterface
 {
     /**
