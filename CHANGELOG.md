@@ -10,17 +10,22 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - the media category sync was called multiple times instead of only one time (@jochenmanz)
 - skip order without customer
 - set correct bundle position
+- fix product meta title and meta description translation
+- fix product duplicates
+- fix services.xml for shopware 5.5.x
 
 ### Changed
 - translated variation configurator 
 - reference amount will not be scaled down
 - translated short and technical description 
 - removed comment and address rest call
+- optimized the stock handling performance
 
 ### Added
 - transfer age restriction as attribute to shopware
 - transfer top seller badge to shopware
 - add product configuration positions of the groups and their values (@lacodimizer)
+- add item sync into the backend gui (@lacodimizer)
 - handle commands are now prioritised according to their definitions priority
 
 ## [4.6.0]

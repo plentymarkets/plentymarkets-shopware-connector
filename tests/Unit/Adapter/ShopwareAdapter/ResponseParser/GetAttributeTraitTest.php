@@ -6,11 +6,6 @@ use PHPUnit\Framework\TestCase;
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentymarketsAdapter\ResponseParser\GetAttributeTrait;
 
-/**
- * Class GetAttributeTraitTest
- *
- * @group ResponseParser
- */
 class GetAttributeTraitTest extends TestCase
 {
     use GetAttributeTrait;

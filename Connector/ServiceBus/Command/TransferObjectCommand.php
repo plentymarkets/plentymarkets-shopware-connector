@@ -87,7 +87,7 @@ class TransferObjectCommand implements CommandInterface
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getPriority()
     {
@@ -95,7 +95,7 @@ class TransferObjectCommand implements CommandInterface
     }
 
     /**
-     * @return string|TransferObjectInterface
+     * {@inheritdoc}
      */
     public function getPayload()
     {
@@ -103,7 +103,7 @@ class TransferObjectCommand implements CommandInterface
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function toArray()
     {

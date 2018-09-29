@@ -48,7 +48,7 @@ class Value extends AbstractValueObject implements TranslateableInterface
     }
 
     /**
-     * @param int position
+     * @param int $position
      */
     public function setPosition($position)
     {

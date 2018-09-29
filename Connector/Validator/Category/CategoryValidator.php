@@ -28,7 +28,8 @@ class CategoryValidator implements ValidatorInterface
         Assertion::string($object->getName(), null, 'category.name');
 
         Assertion::nullOrUuid($object->getParentIdentifier(), null, 'category.parentIdentifier');
-        Assertion::allUuid($object->getShopIdentifiers(), null, 'category.parentIdentifiers');
+        Assertion::allUuid($object->getShopIdentifiers(), null, 'category.shopIdentifiers');
+        Assertion::nullOrUuid($object->getParentIdentifier(), null, 'category.parentIdentifier');
 
         Assertion::allUuid($object->getImageIdentifiers(), null, 'category.imageIdentifiers');
 

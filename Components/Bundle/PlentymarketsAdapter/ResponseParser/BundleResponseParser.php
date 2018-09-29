@@ -108,7 +108,7 @@ class BundleResponseParser implements BundleResponseParserInterface
      * @param array $variation
      * @param array $product
      *
-     * @return Bundle
+     * @return null|Bundle
      */
     private function parseBundle(array $variation, array $product)
     {
