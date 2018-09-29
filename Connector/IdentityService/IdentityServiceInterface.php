@@ -55,7 +55,7 @@ interface IdentityServiceInterface
 
     /**
      * @param Identity $identity
-     * @param array $params
+     * @param array    $params
      */
     public function update(Identity $identity, array $params = []);
 

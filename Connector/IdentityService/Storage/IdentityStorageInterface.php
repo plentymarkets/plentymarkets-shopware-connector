@@ -27,7 +27,7 @@ interface IdentityStorageInterface
 
     /**
      * @param Identity $identity
-     * @param array $params
+     * @param array    $params
      *
      * @return null|Identity
      */

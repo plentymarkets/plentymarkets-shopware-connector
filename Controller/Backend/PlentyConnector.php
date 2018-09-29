@@ -201,7 +201,6 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
                 'success' => true,
                 'data' => $updates,
             ]);
-
         } catch (Exception $exception) {
             $this->View()->assign([
                 'success' => false,

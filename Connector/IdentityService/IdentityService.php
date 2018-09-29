@@ -24,8 +24,7 @@ class IdentityService implements IdentityServiceInterface
     public function __construct(
         IdentityStorageInterface $storage,
         ValidatorServiceInterface $validator
-    )
-    {
+    ) {
         $this->storage = $storage;
         $this->validator = $validator;
     }
@@ -82,7 +81,7 @@ class IdentityService implements IdentityServiceInterface
             $identity = $this->create(
                 $objectIdentifier,
                 $objectType,
-                (string)$adapterIdentifier,
+                (string) $adapterIdentifier,
                 $adapterName
             );
         }
