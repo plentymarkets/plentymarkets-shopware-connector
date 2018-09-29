@@ -27,9 +27,14 @@ class Item extends ApiAbstract
     private $variationHelper;
 
     /**
-     * @var string
+     * @var array
      */
-    private $includes = 'itemProperties.valueTexts,itemCrossSelling,itemImages,itemShippingProfiles';
+    private $includes = [
+        'itemProperties.valueTexts',
+        'itemCrossSelling',
+        'itemImages',
+        'itemShippingProfiles',
+    ];
 
     public function __construct(
         Client $client,
@@ -53,7 +58,7 @@ class Item extends ApiAbstract
     {
         $result = $this->client->request('GET', 'items/' . $productId, [
             'lang' => $this->languageHelper->getLanguagesQueryString(),
-            'with' => $this->includes,
+            'with' => implode(',', $this->includes),
         ]);
 
         if (empty($result)) {
@@ -75,7 +80,7 @@ class Item extends ApiAbstract
     {
         return $this->client->getIterator('items', [
             'lang' => $this->languageHelper->getLanguagesQueryString(),
-            'with' => $this->includes,
+            'with' => implode(',', $this->includes),
         ], function (array $elements) {
             $this->addAdditionalData($elements);
 
@@ -97,7 +102,7 @@ class Item extends ApiAbstract
         return $this->client->getIterator('items', [
             'lang' => $this->languageHelper->getLanguagesQueryString(),
             'updatedBetween' => $start . ',' . $end,
-            'with' => $this->includes,
+            'with' => implode(',', $this->includes),
         ], function (array $elements) {
             $this->addAdditionalData($elements);
 
@@ -111,7 +116,7 @@ class Item extends ApiAbstract
      *
      * @return Iterator
      */
-    public function findChangedVariation(DateTimeImmutable $startTimestamp, DateTimeImmutable $endTimestamp)
+    public function findChangedVariations(DateTimeImmutable $startTimestamp, DateTimeImmutable $endTimestamp)
     {
         $start = $startTimestamp->format(DATE_W3C);
         $end = $endTimestamp->format(DATE_W3C);
@@ -119,7 +124,7 @@ class Item extends ApiAbstract
         return $this->client->getIterator('items', [
             'lang' => $this->languageHelper->getLanguagesQueryString(),
             'variationUpdatedBetween' => $start . ',' . $end,
-            'with' => $this->includes,
+            'with' => implode(',', $this->includes),
         ], function (array $elements) {
             $this->addAdditionalData($elements);
 

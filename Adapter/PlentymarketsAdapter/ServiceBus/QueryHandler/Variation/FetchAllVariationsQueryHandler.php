@@ -7,12 +7,11 @@ use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
 use PlentyConnector\Connector\ServiceBus\QueryType;
-use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
 use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Item;
-use PlentymarketsAdapter\ResponseParser\Product\ProductResponseParserInterface;
+use PlentymarketsAdapter\ResponseParser\Product\Variation\VariationResponseParserInterface;
 use Psr\Log\LoggerInterface;
 
 class FetchAllVariationsQueryHandler implements QueryHandlerInterface
@@ -23,30 +22,30 @@ class FetchAllVariationsQueryHandler implements QueryHandlerInterface
     private $itemApi;
 
     /**
-     * @var ProductResponseParserInterface
+     * @var VariationResponseParserInterface
      */
     private $responseParser;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
 
     /**
      * @var OutputHandlerInterface
      */
     private $outputHandler;
 
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
     public function __construct(
         Item $itemApi,
-        ProductResponseParserInterface $responseParser,
-        LoggerInterface $logger,
-        OutputHandlerInterface $outputHandler
+        VariationResponseParserInterface $responseParser,
+        OutputHandlerInterface $outputHandler,
+        LoggerInterface $logger
     ) {
         $this->itemApi = $itemApi;
         $this->responseParser = $responseParser;
-        $this->logger = $logger;
         $this->outputHandler = $outputHandler;
+        $this->logger = $logger;
     }
 
     /**

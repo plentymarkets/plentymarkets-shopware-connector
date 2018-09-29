@@ -11,9 +11,6 @@ use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
 use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Item;
-use PlentymarketsAdapter\ReadApi\Item\Variation as VariationApi;
-use PlentymarketsAdapter\ResponseParser\Product\ProductResponseParser;
-use PlentymarketsAdapter\ResponseParser\Product\ProductResponseParserInterface;
 use PlentymarketsAdapter\ResponseParser\Product\Variation\VariationResponseParserInterface;
 use PlentymarketsAdapter\ServiceBus\ChangedDateTimeTrait;
 use Psr\Log\LoggerInterface;
@@ -33,25 +30,25 @@ class FetchChangedVariationsQueryHandler implements QueryHandlerInterface
     private $responseParser;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @var OutputHandlerInterface
      */
     private $outputHandler;
 
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
     public function __construct(
         Item $api,
         VariationResponseParserInterface $responseParser,
-        LoggerInterface $logger,
-        OutputHandlerInterface $outputHandler
+        OutputHandlerInterface $outputHandler,
+        LoggerInterface $logger
     ) {
         $this->api = $api;
         $this->responseParser = $responseParser;
-        $this->logger = $logger;
         $this->outputHandler = $outputHandler;
+        $this->logger = $logger;
     }
 
     /**
@@ -73,7 +70,7 @@ class FetchChangedVariationsQueryHandler implements QueryHandlerInterface
         $lastCangedTime = $this->getChangedDateTime();
         $currentDateTime = $this->getCurrentDateTime();
 
-        $elements = $this->api->findChangedVariation($lastCangedTime, $currentDateTime);
+        $elements = $this->api->findChangedVariations($lastCangedTime, $currentDateTime);
 
         $this->outputHandler->startProgressBar(count($elements));
 

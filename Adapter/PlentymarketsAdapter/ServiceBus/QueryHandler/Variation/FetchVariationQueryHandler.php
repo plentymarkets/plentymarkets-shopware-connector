@@ -7,18 +7,23 @@ use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
 use PlentyConnector\Connector\ServiceBus\QueryType;
-use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ReadApi\Item;
-use PlentymarketsAdapter\ResponseParser\Product\ProductResponseParserInterface;
+use PlentymarketsAdapter\ReadApi\Item as ItemApi;
+use PlentymarketsAdapter\ReadApi\Item\Variation as VariationApi;
+use PlentymarketsAdapter\ResponseParser\Product\Variation\VariationResponseParserInterface;
 
 class FetchVariationQueryHandler implements QueryHandlerInterface
 {
     /**
-     * @var Item
+     * @var ItemApi
      */
     private $itemApi;
+
+    /**
+     * @var VariationApi
+     */
+    private $variationApi;
 
     /**
      * @var IdentityServiceInterface
@@ -26,16 +31,18 @@ class FetchVariationQueryHandler implements QueryHandlerInterface
     private $identityService;
 
     /**
-     * @var ProductResponseParserInterface
+     * @var VariationResponseParserInterface
      */
     private $responseParser;
 
     public function __construct(
-        Item $itemApi,
+        ItemApi $itemApi,
+        VariationApi $variationApi,
         IdentityServiceInterface $identityService,
-        ProductResponseParserInterface $responseParser
+        VariationResponseParserInterface $responseParser
     ) {
         $this->itemApi = $itemApi;
+        $this->variationApi = $variationApi;
         $this->identityService = $identityService;
         $this->responseParser = $responseParser;
     }
@@ -60,7 +67,7 @@ class FetchVariationQueryHandler implements QueryHandlerInterface
     {
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => $query->getObjectIdentifier(),
-            'objectType' => Product::TYPE,
+            'objectType' => Variation::TYPE,
             'adapterName' => PlentymarketsAdapter::NAME,
         ]);
 
@@ -68,7 +75,17 @@ class FetchVariationQueryHandler implements QueryHandlerInterface
             return [];
         }
 
-        $product = $this->itemApi->findOne($identity->getAdapterIdentifier());
+        $variation = $this->variationApi->findBy([
+            'id' => $identity->getAdapterIdentifier(),
+        ]);
+
+        if (empty($variation)) {
+            return [];
+        }
+
+        $variation = array_shift($variation);
+
+        $product = $this->itemApi->findOne($variation['itemId']);
 
         $result = $this->responseParser->parse($product);
 
