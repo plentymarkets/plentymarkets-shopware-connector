@@ -18,7 +18,7 @@ interface ClassNameFormatterInterface
      * @param object $command
      * @param mixed  $returnValue
      */
-    public function logCommandSucceeded($command, $returnValue);
+    public function logCommandProcessed($command, $returnValue);
 
     /**
      * @param object    $command
