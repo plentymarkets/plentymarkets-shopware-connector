@@ -11,6 +11,7 @@ use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\Connector\Translation\TranslationHelperInterface;
+use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Article;
 use Shopware\Components\Api\Resource\Variant;
@@ -155,27 +156,40 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 ShopwareAdapter::NAME
             );
         } else {
-            if (null === $mainVariation) {
-                $variationResource = $this->getVariationResource();
+            try {
+                $productModel = $articleResource->getOne($productIdentity->getAdapterIdentifier());
 
-                $mainVariation = $variationResource->create([
-                    'articleId' => $productIdentity->getAdapterIdentifier(),
-                    'number' => $product->getNumber(),
-                    'active' => true,
-                ]);
+                if (null === $mainVariation) {
+                    $variationResource = $this->getVariationResource();
+
+                    $mainVariation = $variationResource->create([
+                        'articleId' => $productIdentity->getAdapterIdentifier(),
+                        'number' => $product->getNumber(),
+                        'active' => true,
+                    ]);
+                }
+
+                $this->correctMainDetailAssignment($mainVariation);
+                $productModel = $articleResource->update($productModel->getId(), $params);
+
+            } catch (NotFoundException $exception) {
+                $productModel = $articleResource->create($params);
+
+                $this->identityService->update(
+                    $productIdentity,
+                    [
+                        'adapterIdentifier' => (string) $productModel->getId(),
+                    ]
+                );
             }
 
-            $this->correctMainDetailAssignment($mainVariation);
-
-            $productModel = $articleResource->update($productIdentity->getAdapterIdentifier(), $params);
-        }
-
-        $this->attributeDataPersister->saveProductDetailAttributes(
+            $this->attributeDataPersister->saveProductDetailAttributes(
             $productModel->getMainDetail(),
             $product->getAttributes()
         );
 
-        $this->translationDataPersister->writeProductTranslations($product);
+            $this->translationDataPersister->writeProductTranslations($product);
+        }
 
         return true;
     }

@@ -91,6 +91,9 @@ class DoctrineIdentityStorage implements IdentityStorageInterface
     {
         $model = $this->identityRepository->findOneBy([
             'objectIdentifier' => $identity->getObjectIdentifier(),
+            'objectType' => $identity->getObjectType(),
+            'adapterIdentifier' => $identity->getAdapterIdentifier(),
+            'adapterName' => $identity->getAdapterName(),
         ]);
 
         if (null === $model) {
