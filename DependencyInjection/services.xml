@@ -209,6 +209,7 @@
             <argument>10</argument>
 
             <tag name="plenty_connector.connector_definition" />
+            <tag name="plenty_connector.cleanup_definition" />
         </service>
 
         <!-- cleanup Service -->
