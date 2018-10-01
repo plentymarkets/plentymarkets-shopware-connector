@@ -107,16 +107,37 @@
 
         <!-- connector definitions -->
 
-        <service id="plenty_connector.connector_definition.category" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
+        <service id="plenty_connector.connector_definition.export_order" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
+            <factory service="plenty_connector.definition_factory" method="factory" />
+
+            <argument>%plenty_connector.adapter.shopware%</argument>
+            <argument>%plenty_connector.adapter.plentymarkets%</argument>
+            <argument>%plenty_connector.transfer_object.order%</argument>
+            <argument>90</argument>
+
+            <tag name="plenty_connector.connector_definition" />
+        </service>
+
+        <service id="plenty_connector.connector_definition.import_order" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
             <factory service="plenty_connector.definition_factory" method="factory" />
 
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
-            <argument>%plenty_connector.transfer_object.category%</argument>
+            <argument>%plenty_connector.transfer_object.order%</argument>
             <argument>80</argument>
 
             <tag name="plenty_connector.connector_definition" />
-            <tag name="plenty_connector.cleanup_definition" />
+        </service>
+
+        <service id="plenty_connector.connector_definition.payment" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
+            <factory service="plenty_connector.definition_factory" method="factory" />
+
+            <argument>%plenty_connector.adapter.shopware%</argument>
+            <argument>%plenty_connector.adapter.plentymarkets%</argument>
+            <argument>%plenty_connector.transfer_object.payment%</argument>
+            <argument>70</argument>
+
+            <tag name="plenty_connector.connector_definition" />
         </service>
 
         <service id="plenty_connector.connector_definition.media_category" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
@@ -125,7 +146,19 @@
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.media_category%</argument>
-            <argument>100</argument>
+            <argument>60</argument>
+
+            <tag name="plenty_connector.connector_definition" />
+            <tag name="plenty_connector.cleanup_definition" />
+        </service>
+
+        <service id="plenty_connector.connector_definition.category" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
+            <factory service="plenty_connector.definition_factory" method="factory" />
+
+            <argument>%plenty_connector.adapter.plentymarkets%</argument>
+            <argument>%plenty_connector.adapter.shopware%</argument>
+            <argument>%plenty_connector.transfer_object.category%</argument>
+            <argument>50</argument>
 
             <tag name="plenty_connector.connector_definition" />
             <tag name="plenty_connector.cleanup_definition" />
@@ -137,7 +170,7 @@
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.manufacturer%</argument>
-            <argument>70</argument>
+            <argument>40</argument>
 
             <tag name="plenty_connector.connector_definition" />
             <tag name="plenty_connector.cleanup_definition" />
@@ -149,7 +182,7 @@
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.product%</argument>
-            <argument>60</argument>
+            <argument>30</argument>
 
             <tag name="plenty_connector.connector_definition" />
             <tag name="plenty_connector.cleanup_definition" />
@@ -161,7 +194,7 @@
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.variation%</argument>
-            <argument>60</argument>
+            <argument>20</argument>
 
             <tag name="plenty_connector.connector_definition" />
             <tag name="plenty_connector.cleanup_definition" />
@@ -173,40 +206,7 @@
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.stock%</argument>
-            <argument>50</argument>
-
-            <tag name="plenty_connector.connector_definition" />
-        </service>
-
-        <service id="plenty_connector.connector_definition.export_order" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
-            <factory service="plenty_connector.definition_factory" method="factory" />
-
-            <argument>%plenty_connector.adapter.shopware%</argument>
-            <argument>%plenty_connector.adapter.plentymarkets%</argument>
-            <argument>%plenty_connector.transfer_object.order%</argument>
-            <argument>130</argument>
-
-            <tag name="plenty_connector.connector_definition" />
-        </service>
-
-        <service id="plenty_connector.connector_definition.import_order" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
-            <factory service="plenty_connector.definition_factory" method="factory" />
-
-            <argument>%plenty_connector.adapter.plentymarkets%</argument>
-            <argument>%plenty_connector.adapter.shopware%</argument>
-            <argument>%plenty_connector.transfer_object.order%</argument>
-            <argument>120</argument>
-
-            <tag name="plenty_connector.connector_definition" />
-        </service>
-
-        <service id="plenty_connector.connector_definition.payment" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
-            <factory service="plenty_connector.definition_factory" method="factory" />
-
-            <argument>%plenty_connector.adapter.shopware%</argument>
-            <argument>%plenty_connector.adapter.plentymarkets%</argument>
-            <argument>%plenty_connector.transfer_object.payment%</argument>
-            <argument>110</argument>
+            <argument>10</argument>
 
             <tag name="plenty_connector.connector_definition" />
         </service>
