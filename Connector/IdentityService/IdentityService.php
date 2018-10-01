@@ -146,6 +146,15 @@ class IdentityService implements IdentityServiceInterface
     /**
      * {@inheritdoc}
      */
+    public function update(Identity $identity, array $params = [])
+    {
+        $this->validator->validate($identity);
+        $this->storage->update($identity, $params);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function remove(Identity $identity)
     {
         $this->validator->validate($identity);

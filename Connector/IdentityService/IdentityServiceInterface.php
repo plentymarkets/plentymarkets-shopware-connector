@@ -54,6 +54,12 @@ interface IdentityServiceInterface
     public function remove(Identity $identity);
 
     /**
+     * @param Identity $identity
+     * @param array    $params
+     */
+    public function update(Identity $identity, array $params = []);
+
+    /**
      * @param array $criteria
      *
      * @return bool
