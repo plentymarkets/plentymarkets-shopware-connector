@@ -3,7 +3,6 @@
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Variation;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\Command\TransferObjectCommand;
@@ -12,8 +11,6 @@ use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Psr\Log\LoggerInterface;
-use Shopware\Components\Api\Manager;
-use Shopware\Components\Api\Resource\Variant;
 use Shopware\Models\Article\Detail;
 use ShopwareAdapter\ShopwareAdapter;
 
