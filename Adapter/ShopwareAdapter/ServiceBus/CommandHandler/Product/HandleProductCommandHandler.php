@@ -11,6 +11,7 @@ use PlentyConnector\Connector\ServiceBus\CommandType;
 use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\Connector\Translation\TranslationHelperInterface;
+use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Article;
 use Shopware\Components\Api\Resource\Variant;
@@ -156,13 +157,27 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             );
         } else {
             if (null === $mainVariation) {
-                $variationResource = $this->getVariationResource();
+                try {
+                    $articleResource->getOne($productIdentity->getAdapterIdentifier());
+                } catch (NotFoundException $exception) {
+                    $productModel = $articleResource->create($params);
 
-                $mainVariation = $variationResource->create([
-                    'articleId' => $productIdentity->getAdapterIdentifier(),
-                    'number' => $product->getNumber(),
-                    'active' => true,
-                ]);
+                    $this->identityService->update(
+                        $productIdentity,
+                        [
+                            'adapterIdentifier' => $productModel->getId(),
+                            'adapterName' => ShopwareAdapter::NAME,
+                        ]
+                    );
+                } finally {
+                    $variationResource = $this->getVariationResource();
+
+                    $mainVariation = $variationResource->create([
+                        'articleId' => $productIdentity->getAdapterIdentifier(),
+                        'number' => $product->getNumber(),
+                        'active' => true,
+                    ]);
+                }
             }
 
             $this->correctMainDetailAssignment($mainVariation);
