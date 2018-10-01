@@ -2,6 +2,7 @@
 
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Variation;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
@@ -13,6 +14,7 @@ use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Psr\Log\LoggerInterface;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Variant;
+use Shopware\Models\Article\Detail;
 use ShopwareAdapter\ShopwareAdapter;
 
 class RemoveVariationCommandHandler implements CommandHandlerInterface
@@ -23,15 +25,22 @@ class RemoveVariationCommandHandler implements CommandHandlerInterface
     private $identityService;
 
     /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
 
     public function __construct(
         IdentityServiceInterface $identityService,
+        EntityManagerInterface $entityManager,
         LoggerInterface $logger
     ) {
         $this->identityService = $identityService;
+        $this->entityManager = $entityManager;
         $this->logger = $logger;
     }
 
@@ -67,10 +76,13 @@ class RemoveVariationCommandHandler implements CommandHandlerInterface
             return false;
         }
 
-        try {
-            $resource = $this->getVariationResource();
-            $resource->delete($identity->getAdapterIdentifier());
-        } catch (Exception $exception) {
+        $repository = $this->entityManager->getRepository(Detail::class);
+        $variation = $repository->find($identity->getAdapterIdentifier());
+
+        if (null !== $variation) {
+            $this->entityManager->remove($variation);
+            $this->entityManager->flush();
+        } else {
             $this->logger->notice('identity removed but the object was not found', ['command' => $command]);
         }
 
@@ -83,16 +95,5 @@ class RemoveVariationCommandHandler implements CommandHandlerInterface
         });
 
         return true;
-    }
-
-    /**
-     * @return Variant
-     */
-    private function getVariationResource()
-    {
-        // without this reset the entitymanager sometimes the album is not found correctly.
-        Shopware()->Container()->reset('models');
-
-        return Manager::getResource('Variant');
     }
 }
