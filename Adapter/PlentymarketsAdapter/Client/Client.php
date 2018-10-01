@@ -35,8 +35,6 @@ class Client implements ClientInterface
     private $refreshToken;
 
     /**
-     * Client constructor.
-     *
      * @param GuzzleClientInterface  $connection
      * @param ConfigServiceInterface $config
      */

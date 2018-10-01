@@ -4,9 +4,6 @@ namespace ShopwareAdapter\ResponseParser\Payment;
 
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
-/**
- * Interface PaymentResponseParserInterface
- */
 interface PaymentResponseParserInterface
 {
     /**

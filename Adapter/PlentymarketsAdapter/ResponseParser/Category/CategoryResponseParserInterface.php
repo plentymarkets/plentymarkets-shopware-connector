@@ -4,9 +4,6 @@ namespace PlentymarketsAdapter\ResponseParser\Category;
 
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
-/**
- * Interface CategoryResponseParserInterface
- */
 interface CategoryResponseParserInterface
 {
     /**

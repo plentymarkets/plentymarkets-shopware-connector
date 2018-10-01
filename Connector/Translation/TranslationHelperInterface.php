@@ -4,9 +4,6 @@ namespace PlentyConnector\Connector\Translation;
 
 use PlentyConnector\Connector\TransferObject\TranslateableInterface;
 
-/**
- * Interface TranslationHelperInterface
- */
 interface TranslationHelperInterface
 {
     /**

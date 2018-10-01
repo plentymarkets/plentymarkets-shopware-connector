@@ -4,9 +4,6 @@ namespace ShopwareAdapter\ResponseParser\ShippingProfile;
 
 use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 
-/**
- * Interface ShippingProfileResponseParserInterface
- */
 interface ShippingProfileResponseParserInterface
 {
     /**

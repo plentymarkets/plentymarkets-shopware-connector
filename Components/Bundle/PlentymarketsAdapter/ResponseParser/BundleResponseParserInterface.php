@@ -2,9 +2,6 @@
 
 namespace PlentyConnector\Components\Bundle\PlentymarketsAdapter\ResponseParser;
 
-/**
- * Interface BundleResponseParserInterface
- */
 interface BundleResponseParserInterface
 {
     /**

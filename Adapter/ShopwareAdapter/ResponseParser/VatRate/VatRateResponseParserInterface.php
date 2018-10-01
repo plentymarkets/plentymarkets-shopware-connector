@@ -4,9 +4,6 @@ namespace ShopwareAdapter\ResponseParser\VatRate;
 
 use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
 
-/**
- * Interface VatRateResponseParserInterface
- */
 interface VatRateResponseParserInterface
 {
     /**

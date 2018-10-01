@@ -2,9 +2,6 @@
 
 namespace ShopwareAdapter\DataProvider\Currency;
 
-/**
- * Interface CurrencyDataProviderInterface
- */
 interface CurrencyDataProviderInterface
 {
     /**

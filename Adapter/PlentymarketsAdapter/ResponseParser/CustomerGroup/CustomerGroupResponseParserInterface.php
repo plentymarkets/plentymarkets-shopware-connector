@@ -4,9 +4,6 @@ namespace PlentymarketsAdapter\ResponseParser\CustomerGroup;
 
 use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
 
-/**
- * Interface CustomerGroupResponseParserInterface
- */
 interface CustomerGroupResponseParserInterface
 {
     /**

@@ -4,9 +4,6 @@ namespace PlentyConnector\Connector\TransferObject;
 
 use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 
-/**
- * Interface AttributableInterface
- */
 interface AttributableInterface
 {
     /**
