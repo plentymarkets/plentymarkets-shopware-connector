@@ -170,8 +170,8 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 }
 
                 $this->correctMainDetailAssignment($mainVariation);
-
                 $productModel = $articleResource->update($productModel->getId(), $params);
+
             } catch (NotFoundException $exception) {
                 $productModel = $articleResource->create($params);
 
