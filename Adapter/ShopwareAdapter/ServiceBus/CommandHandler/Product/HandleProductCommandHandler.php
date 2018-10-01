@@ -15,6 +15,7 @@ use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Article;
 use Shopware\Components\Api\Resource\Variant;
+use Shopware\Models\Article\Article as ArticleModel;
 use Shopware\Models\Article\Detail;
 use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
 use ShopwareAdapter\DataPersister\Translation\TranslationDataPersisterInterface;
@@ -157,7 +158,9 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             );
         } else {
             try {
-                $productModel = $articleResource->getOne($productIdentity->getAdapterIdentifier());
+                $articleRepository = $this->entityManager->getRepository(ArticleModel::class);
+
+                $productModel = $articleRepository->find($productIdentity->getAdapterIdentifier());
 
                 if (null === $mainVariation) {
                     $variationResource = $this->getVariationResource();
