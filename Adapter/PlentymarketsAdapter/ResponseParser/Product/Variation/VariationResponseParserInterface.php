@@ -4,9 +4,6 @@ namespace PlentymarketsAdapter\ResponseParser\Product\Variation;
 
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
-/**
- * Interface VariationResponseParserInterface
- */
 interface VariationResponseParserInterface
 {
     /**

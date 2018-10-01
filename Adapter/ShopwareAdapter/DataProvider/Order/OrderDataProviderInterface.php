@@ -2,9 +2,6 @@
 
 namespace ShopwareAdapter\DataProvider\Order;
 
-/**
- * Interface OrderDataProviderInterface
- */
 interface OrderDataProviderInterface
 {
     /**

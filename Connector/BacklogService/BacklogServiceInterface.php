@@ -4,9 +4,6 @@ namespace PlentyConnector\Connector\BacklogService;
 
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 
-/**
- * Interface BacklogServiceInterface
- */
 interface BacklogServiceInterface
 {
     /**

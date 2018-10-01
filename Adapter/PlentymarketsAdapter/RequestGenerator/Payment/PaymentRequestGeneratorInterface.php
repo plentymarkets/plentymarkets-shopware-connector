@@ -4,9 +4,6 @@ namespace PlentymarketsAdapter\RequestGenerator\Payment;
 
 use PlentyConnector\Connector\TransferObject\Payment\Payment;
 
-/**
- * Interface PaymentRequestGeneratorInterface
- */
 interface PaymentRequestGeneratorInterface
 {
     /**

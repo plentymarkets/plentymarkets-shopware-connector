@@ -4,9 +4,6 @@ namespace ShopwareAdapter\DataPersister\Translation;
 
 use PlentyConnector\Connector\TransferObject\Product\Product;
 
-/**
- * Interface TranslationDataPersisterInterface
- */
 interface TranslationDataPersisterInterface
 {
     /**

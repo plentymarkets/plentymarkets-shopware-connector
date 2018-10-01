@@ -4,9 +4,6 @@ namespace ShopwareAdapter\ResponseParser\Order;
 
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 
-/**
- * Interface OrderResponseParserInterface
- */
 interface OrderResponseParserInterface
 {
     /**

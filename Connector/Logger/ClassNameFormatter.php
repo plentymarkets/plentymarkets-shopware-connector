@@ -66,9 +66,9 @@ class ClassNameFormatter implements ClassNameFormatterInterface
     /**
      * {@inheritdoc}
      */
-    public function logCommandSucceeded($command, $returnValue)
+    public function logCommandProcessed($command, $returnValue)
     {
-        $message = $this->getSucceededMessage($command);
+        $message = $this->getProcessedMessage($command);
         $payload = $this->getPayload($command);
 
         $this->logger->log($this->commandSucceededLevel, $message, $payload);
@@ -166,9 +166,9 @@ class ClassNameFormatter implements ClassNameFormatterInterface
      *
      * @return string
      */
-    private function getSucceededMessage($command)
+    private function getProcessedMessage($command)
     {
-        return $this->getType($command) . ' succeeded: ' . $this->getClassName($command);
+        return $this->getType($command) . ' processed: ' . $this->getClassName($command);
     }
 
     /**
