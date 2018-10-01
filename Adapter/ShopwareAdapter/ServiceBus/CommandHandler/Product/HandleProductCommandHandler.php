@@ -156,20 +156,10 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 ShopwareAdapter::NAME
             );
         } else {
-            if (null === $mainVariation) {
-                try {
-                    $articleResource->getOne($productIdentity->getAdapterIdentifier());
-                } catch (NotFoundException $exception) {
-                    $productModel = $articleResource->create($params);
+            try {
+                $productModel = $articleResource->getOne($productIdentity->getAdapterIdentifier());
 
-                    $this->identityService->update(
-                        $productIdentity,
-                        [
-                            'adapterIdentifier' => $productModel->getId(),
-                            'adapterName' => ShopwareAdapter::NAME,
-                        ]
-                    );
-                } finally {
+                if (null === $mainVariation) {
                     $variationResource = $this->getVariationResource();
 
                     $mainVariation = $variationResource->create([
@@ -178,19 +168,28 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                         'active' => true,
                     ]);
                 }
+
+                $this->correctMainDetailAssignment($mainVariation);
+
+                $productModel = $articleResource->update($productModel->getId(), $params);
+            } catch (NotFoundException $exception) {
+                $productModel = $articleResource->create($params);
+
+                $this->identityService->update(
+                    $productIdentity,
+                    [
+                        'adapterIdentifier' => (string) $productModel->getId(),
+                    ]
+                );
             }
 
-            $this->correctMainDetailAssignment($mainVariation);
-
-            $productModel = $articleResource->update($productIdentity->getAdapterIdentifier(), $params);
-        }
-
-        $this->attributeDataPersister->saveProductDetailAttributes(
+            $this->attributeDataPersister->saveProductDetailAttributes(
             $productModel->getMainDetail(),
             $product->getAttributes()
         );
 
-        $this->translationDataPersister->writeProductTranslations($product);
+            $this->translationDataPersister->writeProductTranslations($product);
+        }
 
         return true;
     }
