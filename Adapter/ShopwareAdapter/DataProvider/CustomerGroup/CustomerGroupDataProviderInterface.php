@@ -2,9 +2,6 @@
 
 namespace ShopwareAdapter\DataProvider\CustomerGroup;
 
-/**
- * Interface CustomerGroupDataProviderInterface
- */
 interface CustomerGroupDataProviderInterface
 {
     /**

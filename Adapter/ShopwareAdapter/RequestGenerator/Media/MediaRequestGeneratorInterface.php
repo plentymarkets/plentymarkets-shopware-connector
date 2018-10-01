@@ -4,9 +4,6 @@ namespace ShopwareAdapter\RequestGenerator\Media;
 
 use PlentyConnector\Connector\TransferObject\Media\Media;
 
-/**
- * Interface MediaRequestGeneratorInterface
- */
 interface MediaRequestGeneratorInterface
 {
     /**

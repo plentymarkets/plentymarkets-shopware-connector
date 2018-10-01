@@ -2,9 +2,6 @@
 
 namespace PlentymarketsAdapter\ResponseParser\Product\Image;
 
-/**
- * Interface ImageResponseParserInterface
- */
 interface ImageResponseParserInterface
 {
     /**

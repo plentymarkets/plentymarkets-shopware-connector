@@ -9,9 +9,6 @@ use Shopware\Models\Category\Category;
 use Shopware\Models\Media\Media;
 use Shopware\Models\Order\Order;
 
-/**
- * Interface AttributeDataPersisterInterface
- */
 interface AttributeDataPersisterInterface
 {
     /**

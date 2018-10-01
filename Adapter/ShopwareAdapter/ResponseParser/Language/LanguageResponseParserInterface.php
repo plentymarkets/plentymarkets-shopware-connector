@@ -4,9 +4,6 @@ namespace ShopwareAdapter\ResponseParser\Language;
 
 use PlentyConnector\Connector\TransferObject\Language\Language;
 
-/**
- * Interface LanguageResponseParserInterface
- */
 interface LanguageResponseParserInterface
 {
     /**

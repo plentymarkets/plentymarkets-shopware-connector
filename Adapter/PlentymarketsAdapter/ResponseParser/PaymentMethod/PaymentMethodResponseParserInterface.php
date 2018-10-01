@@ -4,9 +4,6 @@ namespace PlentymarketsAdapter\ResponseParser\PaymentMethod;
 
 use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod;
 
-/**
- * Interface PaymentMethodResponseParserInterface
- */
 interface PaymentMethodResponseParserInterface
 {
     /**

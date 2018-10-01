@@ -4,9 +4,6 @@ namespace PlentymarketsAdapter\ResponseParser\MediaCategory;
 
 use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
 
-/**
- * Interface MediaCategoryResponseParserInterface
- */
 interface MediaCategoryResponseParserInterface
 {
     /**
