@@ -13,11 +13,11 @@ use PlentyConnector\Connector\TransferObject\Product\Product;
 use PlentyConnector\Connector\Translation\TranslationHelperInterface;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Article;
+use Shopware\Components\Api\Resource\Variant;
 use Shopware\Models\Article\Detail;
 use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
 use ShopwareAdapter\DataPersister\Translation\TranslationDataPersisterInterface;
 use ShopwareAdapter\DataProvider\Shop\ShopDataProviderInterface;
-use ShopwareAdapter\Helper\AttributeHelper;
 use ShopwareAdapter\RequestGenerator\Product\ProductRequestGeneratorInterface;
 use ShopwareAdapter\ShopwareAdapter;
 
@@ -32,11 +32,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
      * @var TranslationHelperInterface
      */
     private $translationHelper;
-
-    /**
-     * @var AttributeHelper
-     */
-    private $attributeHelper;
 
     /**
      * @var AttributeDataPersisterInterface
@@ -67,7 +62,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         EntityManagerInterface $entityManager,
         IdentityServiceInterface $identityService,
         TranslationHelperInterface $translationHelper,
-        AttributeHelper $attributeHelper,
         AttributeDataPersisterInterface $attributeDataPersister,
         ProductRequestGeneratorInterface $productRequestGenerator,
         TranslationDataPersisterInterface $translationDataPersister,
@@ -75,7 +69,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
     ) {
         $this->identityService = $identityService;
         $this->translationHelper = $translationHelper;
-        $this->attributeHelper = $attributeHelper;
         $this->attributeDataPersister = $attributeDataPersister;
         $this->productRequestGenerator = $productRequestGenerator;
         $this->translationDataPersister = $translationDataPersister;
@@ -131,7 +124,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             return false;
         }
 
-        $resource = $this->getArticleResource();
+        $articleResource = $this->getArticleResource();
 
         $productIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $product->getIdentifier(),
@@ -139,19 +132,20 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             'adapterName' => ShopwareAdapter::NAME,
         ]);
 
-        $variantRepository = $this->entityManager->getRepository(Detail::class);
+        $variationRepository = $this->entityManager->getRepository(Detail::class);
 
         /**
          * @var null|Detail $mainVariation
          */
-        $mainVariation = $variantRepository->findOneBy(['number' => $product->getNumber()]);
+        $mainVariation = $variationRepository->findOneBy(['number' => $product->getNumber()]);
 
         if (null === $productIdentity) {
             if (null === $mainVariation) {
-                $productModel = $resource->create($params);
+                $productModel = $articleResource->create($params);
             } else {
                 $this->correctMainDetailAssignment($mainVariation);
-                $productModel = $resource->update($mainVariation->getArticleId(), $params);
+
+                $productModel = $articleResource->update($mainVariation->getArticleId(), $params);
             }
 
             $this->identityService->create(
@@ -162,19 +156,18 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             );
         } else {
             if (null === $mainVariation) {
-                $this->identityService->remove($productIdentity);
-                $productModel = $resource->create($params);
+                $variationResource = $this->getVariationResource();
 
-                $this->identityService->create(
-                    $product->getIdentifier(),
-                    Product::TYPE,
-                    (string) $productModel->getId(),
-                    ShopwareAdapter::NAME
-                );
-            } else {
-                $this->correctMainDetailAssignment($mainVariation);
-                $productModel = $resource->update($mainVariation->getArticleId(), $params);
+                $mainVariation = $variationResource->create([
+                    'articleId' => $productIdentity->getAdapterIdentifier(),
+                    'number' => $product->getNumber(),
+                    'active' => true,
+                ]);
             }
+
+            $this->correctMainDetailAssignment($mainVariation);
+
+            $productModel = $articleResource->update($productIdentity->getAdapterIdentifier(), $params);
         }
 
         $this->attributeDataPersister->saveProductDetailAttributes(
@@ -221,5 +214,13 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         Shopware()->Container()->reset('models');
 
         return Manager::getResource('Article');
+    }
+
+    /**
+     * @return Variant
+     */
+    private function getVariationResource()
+    {
+        return Manager::getResource('Variant');
     }
 }
