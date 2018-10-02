@@ -15,7 +15,6 @@
         "roave/security-advisories": "dev-master",
         "viison/address-splitter": "dev-master",
         "composer/installers": "^1.0",
-        "myclabs/deep-copy": "^1.6",
         "league/tactician": "^1.0"
     },
     "require-dev": {
@@ -23,7 +22,8 @@
         "friendsofphp/php-cs-fixer": "^2.0"
     },
     "suggest": {
-        "ramsey/uuid": "Needed to generate UUID's for each transfer object, provided by shopware"
+        "ramsey/uuid": "Needed to generate UUID's for each transfer object - provided by shopware",
+        "myclabs/deep-copy": "Needed to ensure a transfer object can be translated correctly - provided by shopware"
     },
     "autoload": {
         "psr-4": {
