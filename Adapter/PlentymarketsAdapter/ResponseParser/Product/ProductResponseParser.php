@@ -464,7 +464,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             $values = [];
             $translations = [];
 
-            if ($property['property']['valueType'] === 'empty') {
+            if ($property['property']['valueType'] === 'empty' && null !== $property['property']['propertyGroupId']) {
                 $propertyGroupNames = $this->itemsPropertiesGroupsNamesApi->findOne($property['property']['propertyGroupId']);
 
                 if (empty($propertyGroupNames[0]['name'])) {
