@@ -21,6 +21,6 @@ class BadgeValidator implements ValidatorInterface
      */
     public function validate($object)
     {
-        Assertion::inArray($object->getType(), $object->getTypes(), null, 'product.barcode.type');
+        Assertion::inArray($object->getType(), $object->getTypes(), null, 'product.badge.type');
     }
 }
