@@ -22,7 +22,7 @@ class Client implements ClientInterface
     /**
      * @var ConfigServiceInterface
      */
-    private $config;
+    private $configService;
 
     /**
      * @var null|string
@@ -36,14 +36,14 @@ class Client implements ClientInterface
 
     /**
      * @param GuzzleClientInterface  $connection
-     * @param ConfigServiceInterface $config
+     * @param ConfigServiceInterface $configService
      */
     public function __construct(
         GuzzleClientInterface $connection,
-        ConfigServiceInterface $config
+        ConfigServiceInterface $configService
     ) {
         $this->connection = $connection;
-        $this->config = $config;
+        $this->configService = $configService;
     }
 
     /**
@@ -187,13 +187,13 @@ class Client implements ClientInterface
 
     private function login()
     {
-        if (null === $this->config->get('rest_username') || null === $this->config->get('rest_password')) {
+        if (null === $this->configService->get('rest_username') || null === $this->configService->get('rest_password')) {
             throw new InvalidCredentialsException('invalid creddentials');
         }
 
         $login = $this->request('POST', 'login', [
-            'username' => $this->config->get('rest_username'),
-            'password' => $this->config->get('rest_password'),
+            'username' => $this->configService->get('rest_username'),
+            'password' => $this->configService->get('rest_password'),
         ]);
 
         $this->accessToken = $login['accessToken'];
@@ -253,7 +253,7 @@ class Client implements ClientInterface
         Assertion::notBlank($path);
 
         if (!array_key_exists('base_uri', $options)) {
-            $base_uri = $this->getBaseUri($this->config->get('rest_url'));
+            $base_uri = $this->getBaseUri($this->configService->get('rest_url'));
         } else {
             $base_uri = $this->getBaseUri($options['base_uri']);
         }

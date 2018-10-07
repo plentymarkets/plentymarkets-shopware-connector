@@ -7,18 +7,18 @@ use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use PlentyConnector\Connector\BacklogService\Model\Backlog;
 use PlentyConnector\Connector\ConfigService\Model\Config;
+use PlentyConnector\Connector\DependencyInjection\CompilerPass\CleanupDefinitionCompilerPass;
+use PlentyConnector\Connector\DependencyInjection\CompilerPass\CommandGeneratorCompilerPass;
+use PlentyConnector\Connector\DependencyInjection\CompilerPass\CommandHandlerCompilerPass;
+use PlentyConnector\Connector\DependencyInjection\CompilerPass\ConnectorDefinitionCompilerPass;
+use PlentyConnector\Connector\DependencyInjection\CompilerPass\MappingDefinitionCompilerPass;
+use PlentyConnector\Connector\DependencyInjection\CompilerPass\QueryGeneratorCompilerPass;
+use PlentyConnector\Connector\DependencyInjection\CompilerPass\QueryHandlerCompilerPass;
+use PlentyConnector\Connector\DependencyInjection\CompilerPass\ValidatorServiceCompilerPass;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\IdentityService\Model\Identity;
 use PlentyConnector\Connector\TransferObject\Category\Category;
 use PlentyConnector\Connector\TransferObject\PaymentStatus\PaymentStatus;
-use PlentyConnector\DependencyInjection\CompilerPass\CleanupDefinitionCompilerPass;
-use PlentyConnector\DependencyInjection\CompilerPass\CommandGeneratorCompilerPass;
-use PlentyConnector\DependencyInjection\CompilerPass\CommandHandlerCompilerPass;
-use PlentyConnector\DependencyInjection\CompilerPass\ConnectorDefinitionCompilerPass;
-use PlentyConnector\DependencyInjection\CompilerPass\MappingDefinitionCompilerPass;
-use PlentyConnector\DependencyInjection\CompilerPass\QueryGeneratorCompilerPass;
-use PlentyConnector\DependencyInjection\CompilerPass\QueryHandlerCompilerPass;
-use PlentyConnector\DependencyInjection\CompilerPass\ValidatorServiceCompilerPass;
 use PlentyConnector\Installer\CronjobInstaller;
 use PlentyConnector\Installer\DatabaseInstaller;
 use PlentyConnector\Installer\PermissionInstaller;
@@ -82,6 +82,11 @@ class PlentyConnector extends Plugin
         $container->setParameter('plenty_connector.plugin_dir', $this->getPath());
 
         $this->loadFile($container, __DIR__ . '/DependencyInjection/services.xml');
+        $this->loadFile($container, __DIR__ . '/DependencyInjection/definitions.xml');
+
+        $this->loadFile($container, __DIR__ . '/Connector/DependencyInjection/services.xml');
+        $this->loadFile($container, __DIR__ . '/Connector/DependencyInjection/commands.xml');
+        $this->loadFile($container, __DIR__ . '/Connector/DependencyInjection/validators.xml');
 
         $this->loadFile($container, __DIR__ . '/Adapter/ShopwareAdapter/DependencyInjection/services.xml');
         $this->loadFile($container, __DIR__ . '/Adapter/PlentymarketsAdapter/DependencyInjection/services.xml');

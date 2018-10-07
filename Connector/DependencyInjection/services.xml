@@ -1,0 +1,150 @@
+<?xml version="1.0" ?>
+
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <!-- logger -->
+
+        <service id="plenty_connector.logger.handler" class="Monolog\Handler\RotatingFileHandler" public="false">
+            <argument>%kernel.logs_dir%/plentyconnector_%kernel.environment%.log</argument>
+            <argument>14</argument>
+
+            <call method="pushProcessor">
+                <argument type="service" id="monolog.processor.uid" />
+            </call>
+        </service>
+
+        <service id="plenty_connector.logger.psr3processor" class="Monolog\Processor\PsrLogMessageProcessor" public="false" />
+
+        <service id="plenty_connector.logger" class="Monolog\Logger">
+            <argument>plentyconnector</argument>
+
+            <call method="pushHandler">
+                <argument type="service" id="plenty_connector.logger.handler" />
+            </call>
+
+            <call method="pushProcessor">
+                <argument type="service" id="plenty_connector.logger.psr3processor" />
+            </call>
+        </service>
+
+        <!-- config -->
+
+        <service id="plenty_connector.config" class="PlentyConnector\Connector\ConfigService\ConfigService">
+            <argument type="service" id="models" />
+        </service>
+
+        <!-- translation Helper -->
+
+        <service id="plenty_connector.translation_helper" class="PlentyConnector\Connector\Translation\TranslationHelper" />
+
+        <!-- connector -->
+
+        <service id="plenty_connector.connector" class="PlentyConnector\Connector\Connector">
+            <argument type="service" id="plenty_connector.service_bus" />
+            <argument type="service" id="plenty_connector.query_factory" />
+            <argument type="service" id="plenty_connector.command_factory" />
+            <argument type="service" id="plenty_connector.console.output_handler" />
+            <argument type="service" id="plenty_connector.definition_provider" />
+            <argument type="service" id="plenty_connector.logger" />
+        </service>
+
+        <!-- definition factory -->
+
+        <service id="plenty_connector.definition_factory" class="PlentyConnector\Connector\DefinitionFactory\DefinitionFactory">
+            <argument type="service" id="plenty_connector.validator_service" />
+        </service>
+
+        <!-- definition Provider -->
+
+        <service id="plenty_connector.definition_provider" class="PlentyConnector\Connector\DefinitionProvider\DefinitionProvider" />
+
+        <!-- cleanup Service -->
+
+        <service id="plenty_connector.cleanup_service" class="PlentyConnector\Connector\CleanupService\CleanupService">
+            <argument type="service" id="plenty_connector.service_bus" />
+            <argument type="service" id="plenty_connector.query_factory" />
+            <argument type="service" id="plenty_connector.command_factory" />
+            <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="plenty_connector.console.output_handler" />
+            <argument type="service" id="plenty_connector.definition_provider" />
+            <argument type="service" id="plenty_connector.logger" />
+        </service>
+
+        <!-- mapping Service -->
+
+        <service id="plenty_connector.mapping_service" class="PlentyConnector\Connector\MappingService\MappingService">
+            <argument type="service" id="plenty_connector.query_factory" />
+            <argument type="service" id="plenty_connector.service_bus" />
+            <argument type="service" id="plenty_connector.validator_service" />
+            <argument type="service" id="plenty_connector.definition_provider" />
+            <argument type="service" id="plenty_connector.logger" />
+        </service>
+
+        <!-- identity Service -->
+
+        <service id="plenty_connector.identity_storage" class="PlentyConnector\Connector\IdentityService\Storage\DoctrineIdentityStorage">
+            <argument type="service" id="models" />
+        </service>
+
+        <service id="plenty_connector.identity_service" class="PlentyConnector\Connector\IdentityService\IdentityService">
+            <argument type="service" id="plenty_connector.identity_storage" />
+            <argument type="service" id="plenty_connector.validator_service" />
+        </service>
+
+        <!-- query Factory -->
+
+        <service id="plenty_connector.query_factory" class="PlentyConnector\Connector\ServiceBus\QueryFactory\QueryFactory" />
+
+        <!-- command Factory -->
+
+        <service id="plenty_connector.command_factory" class="PlentyConnector\Connector\ServiceBus\CommandFactory\CommandFactory" />
+
+        <!-- validator service -->
+
+        <service id="plenty_connector.validator_service" class="PlentyConnector\Connector\ValidatorService\ValidatorService" />
+
+        <!-- backlog -->
+
+        <service id="plenty_connector.backlog_service" class="PlentyConnector\Connector\BacklogService\BacklogService">
+            <argument type="service" id="models" />
+            <argument type="service" id="plenty_connector.logger" />
+        </service>
+
+        <service id="plenty_connector.backlog_service.backlog_command_handler_middleware" class="PlentyConnector\Connector\BacklogService\Middleware\BacklogCommandHandlerMiddleware">
+            <argument type="service" id="plenty_connector.backlog_service" />
+            <argument type="service" id="plenty_connector.logger" />
+        </service>
+
+        <!-- service Bus -->
+
+        <service id="plenty_connector.command_bus.command_handler_middleware" class="PlentyConnector\Connector\ServiceBus\CommandHandlerMiddleware\CommandHandlerMiddleware" />
+        <service id="plenty_connector.query_bus.query_handler_middleware" class="PlentyConnector\Connector\ServiceBus\QueryHandlerMiddleware\QueryHandlerMiddleware" />
+
+        <service id="plenty_connector.service_bus.validator_middleware" class="PlentyConnector\Connector\ServiceBus\ValidatorMiddleware\ValidatorMiddleware">
+            <argument type="service" id="plenty_connector.validator_service" />
+        </service>
+
+        <service id="plenty_connector.service_bus.class_name_formatter" class="PlentyConnector\Connector\Logger\ClassNameFormatter">
+            <argument type="service" id="plenty_connector.logger" />
+        </service>
+
+        <service id="plenty_connector.service_bus.logger_middleware" class="PlentyConnector\Connector\Logger\LoggerMiddleware">
+            <argument type="service" id="plenty_connector.service_bus.class_name_formatter" />
+        </service>
+
+        <service id="plenty_connector.service_bus_factory" class="PlentyConnector\Connector\ServiceBus\ServiceBusFactory" />
+
+        <service id="plenty_connector.service_bus" class="PlentyConnector\Connector\ServiceBus\ServiceBus">
+            <factory service="plenty_connector.service_bus_factory" method="factory" />
+
+            <argument type="service" id="plenty_connector.backlog_service.backlog_command_handler_middleware" />
+            <argument type="service" id="plenty_connector.service_bus.logger_middleware" />
+            <argument type="service" id="plenty_connector.service_bus.validator_middleware" />
+            <argument type="service" id="plenty_connector.command_bus.command_handler_middleware" />
+            <argument type="service" id="plenty_connector.query_bus.query_handler_middleware" />
+        </service>
+    </services>
+</container>

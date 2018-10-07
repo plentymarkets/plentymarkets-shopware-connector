@@ -26,7 +26,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
     /**
      * @var ConfigServiceInterface
      */
-    private $config;
+    private $configService;
 
     /**
      * @var MediaResponseParserInterface
@@ -40,12 +40,12 @@ class CategoryResponseParser implements CategoryResponseParserInterface
 
     public function __construct(
         IdentityServiceInterface $identityService,
-        ConfigServiceInterface $config,
+        ConfigServiceInterface $configService,
         MediaResponseParserInterface $mediaResponseParser,
         LoggerInterface $logger
     ) {
         $this->identityService = $identityService;
-        $this->config = $config;
+        $this->configService = $configService;
         $this->mediaResponseParser = $mediaResponseParser;
         $this->logger = $logger;
     }
@@ -234,7 +234,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
      */
     private function getBaseUrl()
     {
-        $parts = parse_url($this->config->get('rest_url'));
+        $parts = parse_url($this->configService->get('rest_url'));
 
         return sprintf('%s://%s/', $parts['scheme'], $parts['host']);
     }

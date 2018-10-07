@@ -4,9 +4,8 @@ namespace PlentyConnector\Connector\DefinitionFactory;
 
 use PlentyConnector\Connector\ValidatorService\ValidatorServiceInterface;
 use PlentyConnector\Connector\ValueObject\Definition\Definition;
-use PlentyConnector\Connector\ValueObject\ValueObjectInterface;
 
-class DefinitionFactory
+class DefinitionFactory implements DefinitionFactoryInterface
 {
     /**
      * @var ValidatorServiceInterface
@@ -19,12 +18,7 @@ class DefinitionFactory
     }
 
     /**
-     * @param string   $originAdapterName
-     * @param string   $destinationAdapterName
-     * @param string   $objectType
-     * @param null|int $priority
-     *
-     * @return ValueObjectInterface
+     * {@inheritdoc}
      */
     public function factory($originAdapterName, $destinationAdapterName, $objectType, $priority = null)
     {

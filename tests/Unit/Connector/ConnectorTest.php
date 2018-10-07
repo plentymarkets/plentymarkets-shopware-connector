@@ -4,6 +4,7 @@ namespace PlentyConnector\tests\Unit\Connector;
 
 use PHPUnit\Framework\TestCase;
 use PlentyConnector\Connector\Connector;
+use PlentyConnector\Connector\Console\OutputHandler\OutputHandlerInterface;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\CommandFactory\CommandFactoryInterface;
 use PlentyConnector\Connector\ServiceBus\CommandType;
@@ -13,7 +14,6 @@ use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\ValueObject\Definition\Definition;
-use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 

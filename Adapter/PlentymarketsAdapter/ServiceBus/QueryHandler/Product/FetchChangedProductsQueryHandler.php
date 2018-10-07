@@ -3,12 +3,12 @@
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Product;
 
 use Exception;
+use PlentyConnector\Connector\Console\OutputHandler\OutputHandlerInterface;
 use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
 use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
 use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
 use PlentyConnector\Connector\ServiceBus\QueryType;
 use PlentyConnector\Connector\TransferObject\Product\Product;
-use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Item;
 use PlentymarketsAdapter\ResponseParser\Product\ProductResponseParserInterface;

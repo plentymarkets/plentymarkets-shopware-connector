@@ -1,17 +1,14 @@
 <?php
 
-namespace PlentyConnector\Console\Command;
+namespace PlentyConnector\Connector\Console\Command;
 
 use PlentyConnector\Connector\BacklogService\BacklogService;
-use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
-use Shopware\Commands\ShopwareCommand;
+use PlentyConnector\Connector\Console\OutputHandler\OutputHandlerInterface;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * Command to manually process definitions.
- */
-class BacklogInfoCommand extends ShopwareCommand
+class BacklogInfoCommand extends Command
 {
     /**
      * @var BacklogService

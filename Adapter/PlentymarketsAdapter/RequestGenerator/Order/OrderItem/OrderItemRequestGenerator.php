@@ -29,16 +29,16 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
     /**
      * @var ConfigServiceInterface
      */
-    private $config;
+    private $configService;
 
     public function __construct(
         IdentityServiceInterface $identityService,
         ClientInterface $client,
-        ConfigServiceInterface $config
+        ConfigServiceInterface $configService
     ) {
         $this->identityService = $identityService;
         $this->client = $client;
-        $this->config = $config;
+        $this->configService = $configService;
     }
 
     /**
@@ -136,7 +136,7 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
             ];
         }
 
-        $itemParams['referrerId'] = $this->config->get('order_origin', '0.00');
+        $itemParams['referrerId'] = $this->configService->get('order_origin', '0.00');
 
         $itemParams['orderProperties'] = [];
 
@@ -150,7 +150,7 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
      */
     private function getVariationIdentifier(OrderItem $orderItem)
     {
-        if ($this->config->get('variation_number_field', 'number') === 'number') {
+        if ($this->configService->get('variation_number_field', 'number') === 'number') {
             return $this->getVariationIdentifierFromNumber($orderItem->getNumber());
         }
 

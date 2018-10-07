@@ -1,25 +1,22 @@
 <?php
 
-namespace PlentyConnector\Console\Command;
+namespace PlentyConnector\Connector\Console\Command;
 
 use Exception;
 use PlentyConnector\Connector\BacklogService\Middleware\BacklogCommandHandlerMiddleware;
 use PlentyConnector\Connector\ConnectorInterface;
+use PlentyConnector\Connector\Console\OutputHandler\OutputHandlerInterface;
 use PlentyConnector\Connector\Logger\ConsoleHandler;
 use PlentyConnector\Connector\ServiceBus\QueryType;
-use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use Psr\Log\LoggerInterface;
-use Shopware\Commands\ShopwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
 
-/**
- * Command to manually process definitions.
- */
-class ProcessCommand extends ShopwareCommand
+class ProcessCommand extends Command
 {
     /**
      * @var ConnectorInterface
@@ -27,23 +24,23 @@ class ProcessCommand extends ShopwareCommand
     private $connector;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @var OutputHandlerInterface
      */
     private $outputHandler;
 
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
     public function __construct(
         ConnectorInterface $connector,
-        LoggerInterface $logger,
-        OutputHandlerInterface $outputHandler
+        OutputHandlerInterface $outputHandler,
+        LoggerInterface $logger
     ) {
         $this->connector = $connector;
-        $this->logger = $logger;
         $this->outputHandler = $outputHandler;
+        $this->logger = $logger;
 
         parent::__construct();
     }

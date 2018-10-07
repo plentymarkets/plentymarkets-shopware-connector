@@ -1,6 +1,6 @@
 <?php
 
-namespace PlentyConnector\DependencyInjection\CompilerPass;
+namespace PlentyConnector\Connector\DependencyInjection\CompilerPass;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -13,16 +13,16 @@ class MappingDefinitionCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->has('plenty_connector.mapping_service')) {
+        if (!$container->has('plenty_connector.definition_provider')) {
             return;
         }
 
-        $definition = $container->findDefinition('plenty_connector.mapping_service');
+        $definition = $container->findDefinition('plenty_connector.definition_provider');
 
         $taggedServices = $container->findTaggedServiceIds('plenty_connector.mapping_definition');
 
         foreach ($taggedServices as $id => $tags) {
-            $definition->addMethodCall('addDefinition', [new Reference($id)]);
+            $definition->addMethodCall('addMappingDefinition', [new Reference($id)]);
         }
     }
 }

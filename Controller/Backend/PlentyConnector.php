@@ -70,12 +70,12 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
     public function saveSettingsAction()
     {
         /**
-         * @var ConfigServiceInterface $config
+         * @var ConfigServiceInterface $configService
          */
-        $config = $this->container->get('plenty_connector.config');
+        $configService = $this->container->get('plenty_connector.config');
 
         foreach ($this->cleanParameters($this->Request()->getParams()) as $key => $value) {
-            $config->set($key, $value);
+            $configService->set($key, $value);
         }
 
         $this->View()->assign([
@@ -87,13 +87,13 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
     public function getSettingsListAction()
     {
         /**
-         * @var ConfigServiceInterface $config
+         * @var ConfigServiceInterface $configService
          */
-        $config = $this->container->get('plenty_connector.config');
+        $configService = $this->container->get('plenty_connector.config');
 
         $this->View()->assign([
             'success' => true,
-            'data' => $config->getAll(),
+            'data' => $configService->getAll(),
         ]);
     }
 

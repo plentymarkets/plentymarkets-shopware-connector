@@ -3,6 +3,8 @@
 namespace PlentyConnector\Connector\CleanupService;
 
 use PlentyConnector\Connector\CleanupService\CallbackLogHandler\CallbackLogHandler;
+use PlentyConnector\Connector\Console\OutputHandler\OutputHandlerInterface;
+use PlentyConnector\Connector\DefinitionProvider\DefinitionProviderInterface;
 use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
 use PlentyConnector\Connector\ServiceBus\CommandFactory\CommandFactoryInterface;
 use PlentyConnector\Connector\ServiceBus\CommandType;
@@ -12,7 +14,6 @@ use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use PlentyConnector\Connector\ValueObject\Definition\Definition;
 use PlentyConnector\Connector\ValueObject\Identity\Identity;
-use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use Psr\Log\LoggerInterface;
 
 class CleanupService implements CleanupServiceInterface
@@ -43,14 +44,14 @@ class CleanupService implements CleanupServiceInterface
     private $outputHandler;
 
     /**
+     * @var DefinitionProviderInterface
+     */
+    private $definitionProvider;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
-
-    /**
-     * @var Definition[]
-     */
-    private $definitions;
 
     /**
      * Array of all the found elements
@@ -72,6 +73,7 @@ class CleanupService implements CleanupServiceInterface
         CommandFactoryInterface $commandFactory,
         IdentityServiceInterface $identityService,
         OutputHandlerInterface $outputHandler,
+        DefinitionProviderInterface $definitionProvider,
         LoggerInterface $logger
     ) {
         $this->serviceBus = $serviceBus;
@@ -79,26 +81,23 @@ class CleanupService implements CleanupServiceInterface
         $this->commandFactory = $commandFactory;
         $this->identityService = $identityService;
         $this->outputHandler = $outputHandler;
+        $this->definitionProvider = $definitionProvider;
         $this->logger = $logger;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addDefinition(Definition $definition)
-    {
-        $this->definitions[] = $definition;
     }
 
     public function cleanup()
     {
         if (method_exists($this->logger, 'pushHandler')) {
-            $this->logger->pushHandler(new CallbackLogHandler(function (array $record) {
+            $this->logger->pushHandler(new CallbackLogHandler(function () {
                 $this->error = true;
             }));
         }
 
-        $definitions = $this->getDefinitions();
+        $definitions = $this->definitionProvider->getCleanupDefinitions();
+
+        if (empty($definitions)) {
+            $this->logger->notice('No cleanup definition found');
+        }
 
         foreach ($definitions as $definition) {
             if ($this->hasErrors()) {
@@ -113,18 +112,6 @@ class CleanupService implements CleanupServiceInterface
         }
 
         $this->removeOrphanedElements();
-    }
-
-    /**
-     * @return null|Definition[]
-     */
-    private function getDefinitions()
-    {
-        if (null === count($this->definitions)) {
-            return [];
-        }
-
-        return $this->definitions;
     }
 
     /**
@@ -168,11 +155,7 @@ class CleanupService implements CleanupServiceInterface
             ];
         }
 
-        if (false === $found) {
-            return false;
-        }
-
-        return true;
+        return !(false === $found);
     }
 
     /**

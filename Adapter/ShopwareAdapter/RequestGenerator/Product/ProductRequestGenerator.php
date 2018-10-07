@@ -48,7 +48,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
     /**
      * @var ConfigServiceInterface
      */
-    private $config;
+    private $configService;
 
     /**
      * @var LoggerInterface
@@ -64,13 +64,13 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
         IdentityServiceInterface $identityService,
         EntityManagerInterface $entityManager,
         ConfiguratorSetRequestGeneratorInterface $configuratorSetRequestGenerator,
-        ConfigServiceInterface $config,
+        ConfigServiceInterface $configService,
         LoggerInterface $logger
     ) {
         $this->identityService = $identityService;
         $this->entityManager = $entityManager;
         $this->configuratorSetRequestGenerator = $configuratorSetRequestGenerator;
-        $this->config = $config;
+        $this->configService = $configService;
         $this->logger = $logger;
     }
 
@@ -132,7 +132,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
             'seoCategories' => $this->getSeoCategories($product),
             'taxId' => $vatIdentity->getAdapterIdentifier(),
             'lastStock' => $product->hasStockLimitation(),
-            'notification' => $this->config->get('item_notification') === 'true' ? 1 : 0,
+            'notification' => $this->configService->get('item_notification') === 'true' ? 1 : 0,
             'active' => $product->isActive(),
             'highlight' => $this->getHighlightFlag($product),
             'images' => $this->getImages($product),

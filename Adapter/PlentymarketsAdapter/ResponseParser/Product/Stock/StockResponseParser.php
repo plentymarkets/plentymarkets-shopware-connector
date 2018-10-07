@@ -21,7 +21,7 @@ class StockResponseParser implements StockResponseParserInterface
     /**
      * @var ConfigServiceInterface
      */
-    private $config;
+    private $configService;
 
     /**
      * @var ClientInterface
@@ -30,11 +30,11 @@ class StockResponseParser implements StockResponseParserInterface
 
     public function __construct(
         IdentityServiceInterface $identityService,
-        ConfigServiceInterface $config,
+        ConfigServiceInterface $configService,
         ClientInterface $client
     ) {
         $this->identityService = $identityService;
-        $this->config = $config;
+        $this->configService = $configService;
         $this->client = $client;
     }
 
@@ -75,7 +75,7 @@ class StockResponseParser implements StockResponseParserInterface
     private function getStock($variation)
     {
         $arrayStocks = [];
-        $itemWarehouse = (int) $this->config->get('item_warehouse', 0);
+        $itemWarehouse = (int) $this->configService->get('item_warehouse', 0);
 
         static $warehouses;
 

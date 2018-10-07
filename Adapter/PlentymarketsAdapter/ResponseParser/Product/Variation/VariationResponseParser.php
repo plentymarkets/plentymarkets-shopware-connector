@@ -70,7 +70,7 @@ class VariationResponseParser implements VariationResponseParserInterface
     /**
      * @var ConfigServiceInterface
      */
-    private $config;
+    private $configService;
 
     public function __construct(
         IdentityServiceInterface $identityService,
@@ -81,7 +81,7 @@ class VariationResponseParser implements VariationResponseParserInterface
         AttributeApi $itemAttributesApi,
         BarcodeApi $itemBarcodeApi,
         ReferenceAmountCalculatorInterface $referenceAmountCalculator,
-        ConfigServiceInterface $config
+        ConfigServiceInterface $configService
     ) {
         $this->identityService = $identityService;
         $this->priceResponseParser = $priceResponseParser;
@@ -91,7 +91,7 @@ class VariationResponseParser implements VariationResponseParserInterface
         $this->itemAttributesApi = $itemAttributesApi;
         $this->itemBarcodeApi = $itemBarcodeApi;
         $this->referenceAmountCalculator = $referenceAmountCalculator;
-        $this->config = $config;
+        $this->configService = $configService;
     }
 
     /**
@@ -183,7 +183,7 @@ class VariationResponseParser implements VariationResponseParserInterface
      */
     private function getVariationNumber(array $element)
     {
-        if ($this->config->get('variation_number_field', 'number') === 'number') {
+        if ($this->configService->get('variation_number_field', 'number') === 'number') {
             return (string) $element['number'];
         }
 
@@ -215,7 +215,7 @@ class VariationResponseParser implements VariationResponseParserInterface
     {
         $images = [];
 
-        foreach ($variation['images'] as $entry) {
+        foreach ((array) $variation['images'] as $entry) {
             $images[] = $this->imageResponseParser->parseImage($entry, $texts, $result);
         }
 
@@ -330,7 +330,7 @@ class VariationResponseParser implements VariationResponseParserInterface
         static $attributes;
 
         $result = [];
-        foreach ($variation['variationAttributeValues'] as $attributeValue) {
+        foreach ((array) $variation['variationAttributeValues'] as $attributeValue) {
             if (!isset($attributes[$attributeValue['attributeId']])) {
                 $attributes[$attributeValue['attributeId']] = $this->itemAttributesApi->findOne($attributeValue['attributeId']);
             }
@@ -339,7 +339,7 @@ class VariationResponseParser implements VariationResponseParserInterface
 
             $attributes[$attributeValue['attributeId']]['values'] = [];
 
-            foreach ($values as $value) {
+            foreach ((array) $values as $value) {
                 $attributes[$attributeValue['attributeId']]['values'][$value['id']] = $value;
             }
 
