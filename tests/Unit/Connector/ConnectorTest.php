@@ -5,6 +5,7 @@ namespace PlentyConnector\tests\Unit\Connector;
 use PHPUnit\Framework\TestCase;
 use PlentyConnector\Connector\Connector;
 use PlentyConnector\Connector\Console\OutputHandler\OutputHandlerInterface;
+use PlentyConnector\Connector\DefinitionProvider\DefinitionProvider;
 use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use PlentyConnector\Connector\ServiceBus\CommandFactory\CommandFactoryInterface;
 use PlentyConnector\Connector\ServiceBus\CommandType;
@@ -55,11 +56,21 @@ class ConnectorTest extends TestCase
         $definition->method('getPriority')->willReturn(0);
         $definition->method('isActive')->willReturn(true);
 
+        $definitionProvider = new DefinitionProvider();
+        $definitionProvider->addConnectorDefinition($definition);
+
         $outputHandler = $this->createMock(OutputHandlerInterface::class);
         $logger = $this->createMock(LoggerInterface::class);
 
-        $connector = new Connector($serviceBus, $queryFactory, $commandFactory, $outputHandler, $logger);
-        $connector->addDefinition($definition);
+        $connector = new Connector(
+            $serviceBus,
+            $queryFactory,
+            $commandFactory,
+            $outputHandler,
+            $definitionProvider,
+            $logger
+        );
+
         $connector->handle(QueryType::ALL, 'TestType');
     }
 
@@ -102,11 +113,21 @@ class ConnectorTest extends TestCase
         $definition->method('getPriority')->willReturn(0);
         $definition->method('isActive')->willReturn(true);
 
+        $definitionProvider = new DefinitionProvider();
+        $definitionProvider->addConnectorDefinition($definition);
+
         $outputHandler = $this->createMock(OutputHandlerInterface::class);
         $logger = $this->createMock(LoggerInterface::class);
 
-        $connector = new Connector($serviceBus, $queryFactory, $commandFactory, $outputHandler, $logger);
-        $connector->addDefinition($definition);
+        $connector = new Connector(
+            $serviceBus,
+            $queryFactory,
+            $commandFactory,
+            $outputHandler,
+            $definitionProvider,
+            $logger
+        );
+
         $connector->handle(QueryType::ONE, 'TestType', $uuid);
     }
 
@@ -146,11 +167,21 @@ class ConnectorTest extends TestCase
         $definition->method('getPriority')->willReturn(0);
         $definition->method('isActive')->willReturn(true);
 
+        $definitionProvider = new DefinitionProvider();
+        $definitionProvider->addConnectorDefinition($definition);
+
         $outputHandler = $this->createMock(OutputHandlerInterface::class);
         $logger = $this->createMock(LoggerInterface::class);
 
-        $connector = new Connector($serviceBus, $queryFactory, $commandFactory, $outputHandler, $logger);
-        $connector->addDefinition($definition);
+        $connector = new Connector(
+            $serviceBus,
+            $queryFactory,
+            $commandFactory,
+            $outputHandler,
+            $definitionProvider,
+            $logger
+        );
+
         $connector->handle(QueryType::CHANGED, 'TestType');
     }
 }
