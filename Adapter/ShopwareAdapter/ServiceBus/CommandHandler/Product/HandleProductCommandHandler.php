@@ -186,9 +186,9 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             }
 
             $this->attributeDataPersister->saveProductDetailAttributes(
-            $productModel->getMainDetail(),
-            $product->getAttributes()
-        );
+                $productModel->getMainDetail(),
+                $product->getAttributes()
+            );
 
             $this->translationDataPersister->writeProductTranslations($product);
         }
