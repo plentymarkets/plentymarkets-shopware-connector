@@ -23,6 +23,8 @@ class ConfiguratorSetRequestGenerator implements ConfiguratorSetRequestGenerator
     public function generate(Product $product)
     {
         $groups = [];
+        $plentyConfiguratorType = 'default';
+
         foreach ($product->getVariantConfiguration() as $property) {
             $propertyName = $property->getName();
 
@@ -35,15 +37,36 @@ class ConfiguratorSetRequestGenerator implements ConfiguratorSetRequestGenerator
                 $groups[$propertyName]['options'][$propertyValue]['name'] = $propertyValue;
                 $groups[$propertyName]['options'][$propertyValue]['position'] = $value->getPosition();
             }
+
+            if ($plentyConfiguratorType !== 'default' && $plentyConfiguratorType !== $property->getType()) {
+                $plentyConfiguratorType = 'default';
+                continue;
+            }
+
+            $plentyConfiguratorType = $property->getType();
         }
 
         if (empty($groups)) {
             return [];
         }
 
+        $type = (int) $this->config->get('product_configurator_type', 0);
+
+        switch ($plentyConfiguratorType) {
+            case 'box':
+                $type = 0;
+                break;
+            case 'dropdown':
+                $type = 1;
+                break;
+            case 'image':
+                $type = 2;
+                break;
+        }
+
         return [
             'name' => $product->getName(),
-            'type' => (int) $this->config->get('product_configurator_type', 0),
+            'type' => $type,
             'groups' => $groups,
         ];
     }
