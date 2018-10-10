@@ -1,19 +1,19 @@
 <?php
 
-namespace PlentyConnector\Connector\Console\Command;
+namespace SystemConnector\Console\Command;
 
 use Exception;
-use PlentyConnector\Connector\BacklogService\Middleware\BacklogCommandHandlerMiddleware;
-use PlentyConnector\Connector\ConnectorInterface;
-use PlentyConnector\Connector\Console\OutputHandler\OutputHandlerInterface;
-use PlentyConnector\Connector\Logger\ConsoleHandler;
-use PlentyConnector\Connector\ServiceBus\QueryType;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use SystemConnector\BacklogService\Middleware\BacklogCommandHandlerMiddleware;
+use SystemConnector\ConnectorInterface;
+use SystemConnector\Console\OutputHandler\OutputHandlerInterface;
+use SystemConnector\Logger\ConsoleHandler;
+use SystemConnector\ServiceBus\QueryType;
 use Throwable;
 
 class ProcessCommand extends Command

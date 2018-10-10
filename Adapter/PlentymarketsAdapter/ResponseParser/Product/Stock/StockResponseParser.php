@@ -2,12 +2,12 @@
 
 namespace PlentymarketsAdapter\ResponseParser\Product\Stock;
 
-use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\Product\Stock\Stock;
-use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
+use SystemConnector\ConfigService\ConfigServiceInterface;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\Product\Stock\Stock;
+use SystemConnector\TransferObject\Product\Variation\Variation;
 
 class StockResponseParser implements StockResponseParserInterface
 {

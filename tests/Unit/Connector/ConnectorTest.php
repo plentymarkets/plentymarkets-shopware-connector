@@ -3,20 +3,20 @@
 namespace PlentyConnector\tests\Unit\Connector;
 
 use PHPUnit\Framework\TestCase;
-use PlentyConnector\Connector\Connector;
-use PlentyConnector\Connector\Console\OutputHandler\OutputHandlerInterface;
-use PlentyConnector\Connector\DefinitionProvider\DefinitionProvider;
-use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
-use PlentyConnector\Connector\ServiceBus\CommandFactory\CommandFactoryInterface;
-use PlentyConnector\Connector\ServiceBus\CommandType;
-use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
-use PlentyConnector\Connector\ServiceBus\QueryFactory\QueryFactoryInterface;
-use PlentyConnector\Connector\ServiceBus\QueryType;
-use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
-use PlentyConnector\Connector\ValueObject\Definition\Definition;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
+use SystemConnector\Connector;
+use SystemConnector\Console\OutputHandler\OutputHandlerInterface;
+use SystemConnector\DefinitionProvider\DefinitionProvider;
+use SystemConnector\ServiceBus\Command\CommandInterface;
+use SystemConnector\ServiceBus\CommandFactory\CommandFactoryInterface;
+use SystemConnector\ServiceBus\CommandType;
+use SystemConnector\ServiceBus\Query\QueryInterface;
+use SystemConnector\ServiceBus\QueryFactory\QueryFactoryInterface;
+use SystemConnector\ServiceBus\QueryType;
+use SystemConnector\ServiceBus\ServiceBusInterface;
+use SystemConnector\TransferObject\TransferObjectInterface;
+use SystemConnector\ValueObject\Definition\Definition;
 
 class ConnectorTest extends TestCase
 {

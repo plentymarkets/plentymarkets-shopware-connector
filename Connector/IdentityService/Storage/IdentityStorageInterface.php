@@ -1,8 +1,8 @@
 <?php
 
-namespace PlentyConnector\Connector\IdentityService\Storage;
+namespace SystemConnector\IdentityService\Storage;
 
-use PlentyConnector\Connector\ValueObject\Identity\Identity;
+use SystemConnector\ValueObject\Identity\Identity;
 
 interface IdentityStorageInterface
 {

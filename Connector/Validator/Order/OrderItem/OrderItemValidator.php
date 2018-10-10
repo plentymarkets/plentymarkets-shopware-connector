@@ -1,11 +1,11 @@
 <?php
 
-namespace PlentyConnector\Connector\Validator\Order\OrderItem;
+namespace SystemConnector\Validator\Order\OrderItem;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\Order\OrderItem\OrderItem;
-use PlentyConnector\Connector\Validator\ValidatorInterface;
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
+use SystemConnector\TransferObject\Order\OrderItem\OrderItem;
+use SystemConnector\Validator\ValidatorInterface;
+use SystemConnector\ValueObject\Attribute\Attribute;
 
 class OrderItemValidator implements ValidatorInterface
 {

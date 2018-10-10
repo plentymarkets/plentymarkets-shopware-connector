@@ -1,17 +1,17 @@
 <?php
 
-namespace PlentyConnector\Connector\Console\Command;
+namespace SystemConnector\Console\Command;
 
 use Exception;
-use PlentyConnector\Connector\Console\OutputHandler\OutputHandlerInterface;
-use PlentyConnector\Connector\Logger\ConsoleHandler;
-use PlentyConnector\Connector\MappingService\MappingServiceInterface;
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use SystemConnector\Console\OutputHandler\OutputHandlerInterface;
+use SystemConnector\Logger\ConsoleHandler;
+use SystemConnector\MappingService\MappingServiceInterface;
+use SystemConnector\TransferObject\TransferObjectInterface;
 use Throwable;
 
 class MappingCommand extends Command

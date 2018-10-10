@@ -1,20 +1,20 @@
 <?php
 
-namespace PlentyConnector\Connector\CleanupService;
+namespace SystemConnector\CleanupService;
 
-use PlentyConnector\Connector\CleanupService\CallbackLogHandler\CallbackLogHandler;
-use PlentyConnector\Connector\Console\OutputHandler\OutputHandlerInterface;
-use PlentyConnector\Connector\DefinitionProvider\DefinitionProviderInterface;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\ServiceBus\CommandFactory\CommandFactoryInterface;
-use PlentyConnector\Connector\ServiceBus\CommandType;
-use PlentyConnector\Connector\ServiceBus\QueryFactory\QueryFactoryInterface;
-use PlentyConnector\Connector\ServiceBus\QueryType;
-use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
-use PlentyConnector\Connector\ValueObject\Definition\Definition;
-use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Psr\Log\LoggerInterface;
+use SystemConnector\CleanupService\CallbackLogHandler\CallbackLogHandler;
+use SystemConnector\Console\OutputHandler\OutputHandlerInterface;
+use SystemConnector\DefinitionProvider\DefinitionProviderInterface;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\ServiceBus\CommandFactory\CommandFactoryInterface;
+use SystemConnector\ServiceBus\CommandType;
+use SystemConnector\ServiceBus\QueryFactory\QueryFactoryInterface;
+use SystemConnector\ServiceBus\QueryType;
+use SystemConnector\ServiceBus\ServiceBusInterface;
+use SystemConnector\TransferObject\TransferObjectInterface;
+use SystemConnector\ValueObject\Definition\Definition;
+use SystemConnector\ValueObject\Identity\Identity;
 
 class CleanupService implements CleanupServiceInterface
 {

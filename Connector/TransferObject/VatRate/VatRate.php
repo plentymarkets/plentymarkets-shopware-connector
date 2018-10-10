@@ -1,8 +1,8 @@
 <?php
 
-namespace PlentyConnector\Connector\TransferObject\VatRate;
+namespace SystemConnector\TransferObject\VatRate;
 
-use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
+use SystemConnector\TransferObject\AbstractTransferObject;
 
 class VatRate extends AbstractTransferObject
 {

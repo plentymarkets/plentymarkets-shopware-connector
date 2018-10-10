@@ -2,14 +2,14 @@
 
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Currency;
 
-use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
-use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
-use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
-use PlentyConnector\Connector\ServiceBus\QueryType;
-use PlentyConnector\Connector\TransferObject\Currency\Currency;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Currency\CurrencyResponseParserInterface;
+use SystemConnector\ServiceBus\Query\FetchTransferObjectQuery;
+use SystemConnector\ServiceBus\Query\QueryInterface;
+use SystemConnector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use SystemConnector\ServiceBus\QueryType;
+use SystemConnector\TransferObject\Currency\Currency;
 
 class FetchAllCurrenciesQueryHandler implements QueryHandlerInterface
 {

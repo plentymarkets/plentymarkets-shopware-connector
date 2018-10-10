@@ -1,8 +1,8 @@
 <?php
 
-namespace PlentyConnector\Connector\ServiceBus\CommandFactory;
+namespace SystemConnector\ServiceBus\CommandFactory;
 
-use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
+use SystemConnector\ServiceBus\Command\CommandInterface;
 
 interface CommandFactoryInterface
 {

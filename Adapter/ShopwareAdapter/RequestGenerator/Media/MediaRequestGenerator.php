@@ -2,9 +2,9 @@
 
 namespace ShopwareAdapter\RequestGenerator\Media;
 
-use PlentyConnector\Connector\TransferObject\Media\Media;
 use Shopware\Models\Media\Album;
 use ShopwareAdapter\DataProvider\Media\MediaDataProviderInterface;
+use SystemConnector\TransferObject\Media\Media;
 
 class MediaRequestGenerator implements MediaRequestGeneratorInterface
 {

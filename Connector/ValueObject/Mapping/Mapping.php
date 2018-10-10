@@ -1,9 +1,9 @@
 <?php
 
-namespace PlentyConnector\Connector\ValueObject\Mapping;
+namespace SystemConnector\ValueObject\Mapping;
 
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
-use PlentyConnector\Connector\ValueObject\AbstractValueObject;
+use SystemConnector\TransferObject\TransferObjectInterface;
+use SystemConnector\ValueObject\AbstractValueObject;
 
 class Mapping extends AbstractValueObject
 {

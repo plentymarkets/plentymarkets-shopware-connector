@@ -1,6 +1,6 @@
 <?php
 
-namespace PlentyConnector\Connector\CleanupService;
+namespace SystemConnector\CleanupService;
 
 interface CleanupServiceInterface
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace PlentyConnector\Connector\DefinitionFactory;
+namespace SystemConnector\DefinitionFactory;
 
-use PlentyConnector\Connector\ValueObject\ValueObjectInterface;
+use SystemConnector\ValueObject\ValueObjectInterface;
 
 interface DefinitionFactoryInterface
 {

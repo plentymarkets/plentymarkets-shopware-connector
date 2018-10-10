@@ -1,8 +1,8 @@
 <?php
 
-namespace PlentyConnector\Connector\TransferObject\Product\Stock;
+namespace SystemConnector\TransferObject\Product\Stock;
 
-use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
+use SystemConnector\TransferObject\AbstractTransferObject;
 
 class Stock extends AbstractTransferObject
 {

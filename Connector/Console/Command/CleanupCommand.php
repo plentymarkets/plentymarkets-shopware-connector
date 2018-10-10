@@ -1,15 +1,15 @@
 <?php
 
-namespace PlentyConnector\Connector\Console\Command;
+namespace SystemConnector\Console\Command;
 
 use Exception;
-use PlentyConnector\Connector\CleanupService\CleanupServiceInterface;
-use PlentyConnector\Connector\Console\OutputHandler\OutputHandlerInterface;
-use PlentyConnector\Connector\Logger\ConsoleHandler;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use SystemConnector\CleanupService\CleanupServiceInterface;
+use SystemConnector\Console\OutputHandler\OutputHandlerInterface;
+use SystemConnector\Logger\ConsoleHandler;
 use Throwable;
 
 class CleanupCommand extends Command

@@ -1,8 +1,8 @@
 <?php
 
-namespace PlentyConnector\Connector\TransferObject\Currency;
+namespace SystemConnector\TransferObject\Currency;
 
-use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
+use SystemConnector\TransferObject\AbstractTransferObject;
 
 class Currency extends AbstractTransferObject
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace PlentyConnector\Connector\DefinitionProvider;
+namespace SystemConnector\DefinitionProvider;
 
-use PlentyConnector\Connector\ValueObject\Definition\Definition;
+use SystemConnector\ValueObject\Definition\Definition;
 
 interface DefinitionProviderInterface
 {

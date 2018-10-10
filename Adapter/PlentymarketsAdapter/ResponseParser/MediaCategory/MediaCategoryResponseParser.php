@@ -2,9 +2,9 @@
 
 namespace PlentymarketsAdapter\ResponseParser\MediaCategory;
 
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
 use PlentymarketsAdapter\PlentymarketsAdapter;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\MediaCategory\MediaCategory;
 
 class MediaCategoryResponseParser implements MediaCategoryResponseParserInterface
 {

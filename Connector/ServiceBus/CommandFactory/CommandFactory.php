@@ -1,12 +1,12 @@
 <?php
 
-namespace PlentyConnector\Connector\ServiceBus\CommandFactory;
+namespace SystemConnector\ServiceBus\CommandFactory;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\ServiceBus\Command\TransferObjectCommand;
-use PlentyConnector\Connector\ServiceBus\CommandFactory\Exception\MissingCommandException;
-use PlentyConnector\Connector\ServiceBus\CommandType;
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
+use SystemConnector\ServiceBus\Command\TransferObjectCommand;
+use SystemConnector\ServiceBus\CommandFactory\Exception\MissingCommandException;
+use SystemConnector\ServiceBus\CommandType;
+use SystemConnector\TransferObject\TransferObjectInterface;
 
 class CommandFactory implements CommandFactoryInterface
 {

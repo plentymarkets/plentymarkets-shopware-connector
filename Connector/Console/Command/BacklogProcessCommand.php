@@ -1,17 +1,17 @@
 <?php
 
-namespace PlentyConnector\Connector\Console\Command;
+namespace SystemConnector\Console\Command;
 
 use Exception;
-use PlentyConnector\Connector\BacklogService\BacklogService;
-use PlentyConnector\Connector\Console\OutputHandler\OutputHandlerInterface;
-use PlentyConnector\Connector\Logger\ConsoleHandler;
-use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use SystemConnector\BacklogService\BacklogService;
+use SystemConnector\Console\OutputHandler\OutputHandlerInterface;
+use SystemConnector\Logger\ConsoleHandler;
+use SystemConnector\ServiceBus\ServiceBusInterface;
 use Throwable;
 
 class BacklogProcessCommand extends Command

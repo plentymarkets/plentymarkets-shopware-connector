@@ -1,14 +1,14 @@
 <?php
 
-namespace PlentyConnector\Connector\BacklogService\Middleware;
+namespace SystemConnector\BacklogService\Middleware;
 
 use League\Tactician\Middleware;
-use PlentyConnector\Connector\BacklogService\BacklogServiceInterface;
-use PlentyConnector\Connector\BacklogService\Command\HandleBacklogElementCommand;
-use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
-use PlentyConnector\Connector\ServiceBus\Command\TransferObjectCommand;
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use Psr\Log\LoggerInterface;
+use SystemConnector\BacklogService\BacklogServiceInterface;
+use SystemConnector\BacklogService\Command\HandleBacklogElementCommand;
+use SystemConnector\ServiceBus\Command\CommandInterface;
+use SystemConnector\ServiceBus\Command\TransferObjectCommand;
+use SystemConnector\TransferObject\TransferObjectInterface;
 
 class BacklogCommandHandlerMiddleware implements Middleware
 {

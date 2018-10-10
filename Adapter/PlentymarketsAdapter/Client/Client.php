@@ -7,10 +7,10 @@ use Closure;
 use Exception;
 use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 use GuzzleHttp\Exception\ClientException;
-use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentymarketsAdapter\Client\Exception\InvalidCredentialsException;
 use PlentymarketsAdapter\Client\Exception\InvalidResponseException;
 use PlentymarketsAdapter\Client\Iterator\Iterator;
+use SystemConnector\ConfigService\ConfigServiceInterface;
 
 class Client implements ClientInterface
 {

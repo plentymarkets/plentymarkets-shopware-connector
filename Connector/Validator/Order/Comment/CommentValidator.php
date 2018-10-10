@@ -1,11 +1,11 @@
 <?php
 
-namespace PlentyConnector\Connector\Validator\Order\Comment;
+namespace SystemConnector\Validator\Order\Comment;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\Order\Comment\Comment;
-use PlentyConnector\Connector\Validator\ValidatorInterface;
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
+use SystemConnector\TransferObject\Order\Comment\Comment;
+use SystemConnector\Validator\ValidatorInterface;
+use SystemConnector\ValueObject\Attribute\Attribute;
 
 class CommentValidator implements ValidatorInterface
 {

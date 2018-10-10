@@ -1,8 +1,8 @@
 <?php
 
-namespace PlentyConnector\Connector\TransferObject\CustomerGroup;
+namespace SystemConnector\TransferObject\CustomerGroup;
 
-use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
+use SystemConnector\TransferObject\AbstractTransferObject;
 
 class CustomerGroup extends AbstractTransferObject
 {

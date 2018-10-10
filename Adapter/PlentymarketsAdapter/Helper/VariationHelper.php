@@ -2,10 +2,10 @@
 
 namespace PlentymarketsAdapter\Helper;
 
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use Psr\Log\LoggerInterface;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\Shop\Shop;
 
 class VariationHelper implements VariationHelperInterface
 {

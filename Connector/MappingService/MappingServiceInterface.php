@@ -1,8 +1,8 @@
 <?php
 
-namespace PlentyConnector\Connector\MappingService;
+namespace SystemConnector\MappingService;
 
-use PlentyConnector\Connector\ValueObject\Mapping\Mapping;
+use SystemConnector\ValueObject\Mapping\Mapping;
 
 interface MappingServiceInterface
 {

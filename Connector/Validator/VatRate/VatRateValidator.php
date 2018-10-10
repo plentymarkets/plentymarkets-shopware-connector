@@ -1,10 +1,10 @@
 <?php
 
-namespace PlentyConnector\Connector\Validator\VatRate;
+namespace SystemConnector\Validator\VatRate;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
-use PlentyConnector\Connector\Validator\ValidatorInterface;
+use SystemConnector\TransferObject\VatRate\VatRate;
+use SystemConnector\Validator\ValidatorInterface;
 
 class VatRateValidator implements ValidatorInterface
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace PlentyConnector\Connector\ConfigService;
+namespace SystemConnector\ConfigService;
 
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
-use PlentyConnector\Connector\ConfigService\Model\Config;
-use PlentyConnector\Connector\ConfigService\Model\ConfigRepository;
+use SystemConnector\ConfigService\Model\Config;
+use SystemConnector\ConfigService\Model\ConfigRepository;
 
 class ConfigService implements ConfigServiceInterface
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace PlentyConnector\Connector\Console\OutputHandler;
+namespace SystemConnector\Console\OutputHandler;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

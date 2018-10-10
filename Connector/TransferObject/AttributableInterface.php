@@ -1,8 +1,8 @@
 <?php
 
-namespace PlentyConnector\Connector\TransferObject;
+namespace SystemConnector\TransferObject;
 
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
+use SystemConnector\ValueObject\Attribute\Attribute;
 
 interface AttributableInterface
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace PlentyConnector\Connector\Validator\Unit;
+namespace SystemConnector\Validator\Unit;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\Unit\Unit;
-use PlentyConnector\Connector\Validator\ValidatorInterface;
+use SystemConnector\TransferObject\Unit\Unit;
+use SystemConnector\Validator\ValidatorInterface;
 
 class UnitValidator implements ValidatorInterface
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace PlentyConnector\Connector\BacklogService\Model;
+namespace SystemConnector\BacklogService\Model;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
+use SystemConnector\ServiceBus\Command\CommandInterface;
 
 /**
  * @ORM\Entity

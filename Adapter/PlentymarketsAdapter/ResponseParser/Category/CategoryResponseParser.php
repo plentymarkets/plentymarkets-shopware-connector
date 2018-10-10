@@ -3,18 +3,18 @@
 namespace PlentymarketsAdapter\ResponseParser\Category;
 
 use Exception;
-use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\Category\Category;
-use PlentyConnector\Connector\TransferObject\Language\Language;
-use PlentyConnector\Connector\TransferObject\Shop\Shop;
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
-use PlentyConnector\Connector\ValueObject\Identity\Identity;
-use PlentyConnector\Connector\ValueObject\Translation\Translation;
 use PlentymarketsAdapter\Helper\MediaCategoryHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Media\MediaResponseParserInterface;
 use Psr\Log\LoggerInterface;
+use SystemConnector\ConfigService\ConfigServiceInterface;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\Category\Category;
+use SystemConnector\TransferObject\Language\Language;
+use SystemConnector\TransferObject\Shop\Shop;
+use SystemConnector\ValueObject\Attribute\Attribute;
+use SystemConnector\ValueObject\Identity\Identity;
+use SystemConnector\ValueObject\Translation\Translation;
 
 class CategoryResponseParser implements CategoryResponseParserInterface
 {

@@ -1,17 +1,17 @@
 <?php
 
-namespace PlentyConnector\Connector\MappingService;
+namespace SystemConnector\MappingService;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\DefinitionProvider\DefinitionProviderInterface;
-use PlentyConnector\Connector\ServiceBus\QueryFactory\QueryFactoryInterface;
-use PlentyConnector\Connector\ServiceBus\QueryType;
-use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
-use PlentyConnector\Connector\ValidatorService\ValidatorServiceInterface;
-use PlentyConnector\Connector\ValueObject\Definition\Definition;
-use PlentyConnector\Connector\ValueObject\Mapping\Mapping;
 use Psr\Log\LoggerInterface;
+use SystemConnector\DefinitionProvider\DefinitionProviderInterface;
+use SystemConnector\ServiceBus\QueryFactory\QueryFactoryInterface;
+use SystemConnector\ServiceBus\QueryType;
+use SystemConnector\ServiceBus\ServiceBusInterface;
+use SystemConnector\TransferObject\TransferObjectInterface;
+use SystemConnector\ValidatorService\ValidatorServiceInterface;
+use SystemConnector\ValueObject\Definition\Definition;
+use SystemConnector\ValueObject\Mapping\Mapping;
 
 class MappingService implements MappingServiceInterface
 {

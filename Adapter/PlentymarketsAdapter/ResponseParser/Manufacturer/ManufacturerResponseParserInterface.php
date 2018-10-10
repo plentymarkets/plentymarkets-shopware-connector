@@ -2,7 +2,7 @@
 
 namespace PlentymarketsAdapter\ResponseParser\Manufacturer;
 
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
+use SystemConnector\TransferObject\TransferObjectInterface;
 
 interface ManufacturerResponseParserInterface
 {

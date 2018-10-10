@@ -1,12 +1,12 @@
 <?php
 
-namespace PlentyConnector\Connector\Console\Command;
+namespace SystemConnector\Console\Command;
 
-use PlentyConnector\Connector\BacklogService\BacklogService;
-use PlentyConnector\Connector\Console\OutputHandler\OutputHandlerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use SystemConnector\BacklogService\BacklogService;
+use SystemConnector\Console\OutputHandler\OutputHandlerInterface;
 
 class BacklogInfoCommand extends Command
 {

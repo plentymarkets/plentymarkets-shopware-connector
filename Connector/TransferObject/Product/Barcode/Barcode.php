@@ -1,9 +1,9 @@
 <?php
 
-namespace PlentyConnector\Connector\TransferObject\Product\Barcode;
+namespace SystemConnector\TransferObject\Product\Barcode;
 
-use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 use ReflectionClass;
+use SystemConnector\ValueObject\AbstractValueObject;
 
 class Barcode extends AbstractValueObject
 {

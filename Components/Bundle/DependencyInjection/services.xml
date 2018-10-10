@@ -44,7 +44,7 @@
 
         <!-- Definition -->
 
-        <service id="plenty_connector.connector_definition.bundle" class="PlentyConnector\Connector\ValueObject\Definition\Definition">
+        <service id="plenty_connector.connector_definition.bundle" class="SystemConnector\ValueObject\Definition\Definition">
             <factory service="plenty_connector.definition_factory" method="factory" />
 
             <argument>%plenty_connector.adapter.plentymarkets%</argument>

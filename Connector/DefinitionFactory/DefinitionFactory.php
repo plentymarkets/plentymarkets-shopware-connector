@@ -1,9 +1,9 @@
 <?php
 
-namespace PlentyConnector\Connector\DefinitionFactory;
+namespace SystemConnector\DefinitionFactory;
 
-use PlentyConnector\Connector\ValidatorService\ValidatorServiceInterface;
-use PlentyConnector\Connector\ValueObject\Definition\Definition;
+use SystemConnector\ValidatorService\ValidatorServiceInterface;
+use SystemConnector\ValueObject\Definition\Definition;
 
 class DefinitionFactory implements DefinitionFactoryInterface
 {

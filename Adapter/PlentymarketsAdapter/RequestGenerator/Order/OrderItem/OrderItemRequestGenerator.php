@@ -2,17 +2,17 @@
 
 namespace PlentymarketsAdapter\RequestGenerator\Order\OrderItem;
 
-use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
-use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\Currency\Currency;
-use PlentyConnector\Connector\TransferObject\Order\Order;
-use PlentyConnector\Connector\TransferObject\Order\OrderItem\OrderItem;
-use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
-use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use RuntimeException;
+use SystemConnector\ConfigService\ConfigServiceInterface;
+use SystemConnector\IdentityService\Exception\NotFoundException;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\Currency\Currency;
+use SystemConnector\TransferObject\Order\Order;
+use SystemConnector\TransferObject\Order\OrderItem\OrderItem;
+use SystemConnector\TransferObject\ShippingProfile\ShippingProfile;
+use SystemConnector\TransferObject\VatRate\VatRate;
 
 class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
 {

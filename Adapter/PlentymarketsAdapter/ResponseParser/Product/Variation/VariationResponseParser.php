@@ -3,19 +3,6 @@
 namespace PlentymarketsAdapter\ResponseParser\Product\Variation;
 
 use DateTimeImmutable;
-use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
-use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\Language\Language;
-use PlentyConnector\Connector\TransferObject\Product\Barcode\Barcode;
-use PlentyConnector\Connector\TransferObject\Product\Image\Image;
-use PlentyConnector\Connector\TransferObject\Product\Product;
-use PlentyConnector\Connector\TransferObject\Product\Property\Property;
-use PlentyConnector\Connector\TransferObject\Product\Property\Value\Value;
-use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
-use PlentyConnector\Connector\TransferObject\Unit\Unit;
-use PlentyConnector\Connector\ValueObject\Translation\Translation;
 use PlentymarketsAdapter\Helper\ReferenceAmountCalculatorInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Availability as AvailabilityApi;
@@ -24,6 +11,19 @@ use PlentymarketsAdapter\ReadApi\Item\Barcode as BarcodeApi;
 use PlentymarketsAdapter\ResponseParser\Product\Image\ImageResponseParserInterface;
 use PlentymarketsAdapter\ResponseParser\Product\Price\PriceResponseParserInterface;
 use PlentymarketsAdapter\ResponseParser\Product\Stock\StockResponseParserInterface;
+use SystemConnector\ConfigService\ConfigServiceInterface;
+use SystemConnector\IdentityService\Exception\NotFoundException;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\Language\Language;
+use SystemConnector\TransferObject\Product\Barcode\Barcode;
+use SystemConnector\TransferObject\Product\Image\Image;
+use SystemConnector\TransferObject\Product\Product;
+use SystemConnector\TransferObject\Product\Property\Property;
+use SystemConnector\TransferObject\Product\Property\Value\Value;
+use SystemConnector\TransferObject\Product\Variation\Variation;
+use SystemConnector\TransferObject\TransferObjectInterface;
+use SystemConnector\TransferObject\Unit\Unit;
+use SystemConnector\ValueObject\Translation\Translation;
 
 class VariationResponseParser implements VariationResponseParserInterface
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace PlentyConnector\Connector\ConfigService\Model;
+namespace SystemConnector\ConfigService\Model;
 
 use Doctrine\ORM\EntityRepository;
 

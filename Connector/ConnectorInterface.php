@@ -1,6 +1,6 @@
 <?php
 
-namespace PlentyConnector\Connector;
+namespace SystemConnector;
 
 interface ConnectorInterface
 {

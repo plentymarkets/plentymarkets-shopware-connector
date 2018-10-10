@@ -3,9 +3,9 @@
 namespace ShopwareAdapter\ServiceBus;
 
 use DateTimeImmutable;
-use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use ReflectionClass;
 use ShopwareAdapter\ShopwareAdapter;
+use SystemConnector\ConfigService\ConfigServiceInterface;
 
 trait ChangedDateTimeTrait
 {

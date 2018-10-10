@@ -2,8 +2,8 @@
 
 namespace ShopwareAdapter\RequestGenerator\Product\ConfiguratorSet;
 
-use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
-use PlentyConnector\Connector\TransferObject\Product\Product;
+use SystemConnector\ConfigService\ConfigServiceInterface;
+use SystemConnector\TransferObject\Product\Product;
 
 class ConfiguratorSetRequestGenerator implements ConfiguratorSetRequestGeneratorInterface
 {

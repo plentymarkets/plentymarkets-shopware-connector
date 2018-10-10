@@ -3,9 +3,9 @@
 namespace PlentymarketsAdapter\ServiceBus;
 
 use DateTimeImmutable;
-use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use ReflectionClass;
+use SystemConnector\ConfigService\ConfigServiceInterface;
 
 trait ChangedDateTimeTrait
 {
