@@ -12,12 +12,12 @@
     "homepage": "https://github.com/plentymarkets/plentymarkets-shopware-connector",
     "require": {
         "php": "^5.6.4||^7.0",
-        "roave/security-advisories": "dev-master",
         "viison/address-splitter": "dev-master",
         "composer/installers": "^1.0",
         "league/tactician": "^1.0"
     },
     "require-dev": {
+        "roave/security-advisories": "dev-master",
         "phpunit/phpunit": "^5.0",
         "friendsofphp/php-cs-fixer": "^2.0"
     },
