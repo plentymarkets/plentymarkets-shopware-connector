@@ -23,7 +23,7 @@ env:
 
 cache:
    directories:
-     - ${HOME}/.composer/cache/files
+     - ${HOME}/.composer
 
 install:
   - composer install
@@ -39,4 +39,5 @@ before_script:
   - cd ${PLUGIN_DIRECTORY}/${PLUGIN_NAME}
 
 script:
+  - composer cs
   - composer test

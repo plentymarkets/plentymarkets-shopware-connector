@@ -19,7 +19,7 @@
     "require-dev": {
         "roave/security-advisories": "dev-master",
         "phpunit/phpunit": "^5.0",
-        "friendsofphp/php-cs-fixer": "^2.0"
+        "k10r/codestyle": "^1.0"
     },
     "suggest": {
         "ramsey/uuid": "Needed to generate UUID's for each transfer object - provided by shopware",
@@ -40,7 +40,7 @@
     "scripts": {
         "test": "./vendor/bin/phpunit -c tests/ --colors=always",
         "test-unit": "./vendor/bin/phpunit -c tests/phpunit_unit.xml --colors=always",
-        "cs": "./vendor/bin/php-cs-fixer fix -vvv"
+        "cs": "./vendor/bin/php-cs-fixer fix --show-progress=dots --verbose"
     },
     "extra": {
         "installer-name": "PlentyConnector"
