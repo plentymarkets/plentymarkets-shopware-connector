@@ -124,8 +124,8 @@ class CleanupService implements CleanupServiceInterface
         $this->outputHandler->writeLine(sprintf(
             'checking transfer objects for existence: Type: %s, %s -> %s',
             $definition->getObjectType(),
-            $definition->getDestinationAdapterName(),
-            $definition->getOriginAdapterName()
+            $definition->getOriginAdapterName(),
+            $definition->getDestinationAdapterName()
         ));
 
         /**
