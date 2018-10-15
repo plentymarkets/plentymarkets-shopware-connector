@@ -79,7 +79,7 @@ class FetchAllStocksQueryHandler implements QueryHandlerInterface
                 $this->logger->error($exception->getMessage());
             }
 
-            if ($stock === null) {
+            if ($stock !== null) {
                 yield $stock;
             }
         }
