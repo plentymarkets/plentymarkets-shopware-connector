@@ -1,19 +1,19 @@
 <?php
 
-use PlentyConnector\Connector\BacklogService\Middleware\BacklogCommandHandlerMiddleware;
-use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
-use PlentyConnector\Connector\ConnectorInterface;
-use PlentyConnector\Connector\IdentityService\IdentityService;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\MappingService\MappingServiceInterface;
-use PlentyConnector\Connector\ServiceBus\QueryType;
-use PlentyConnector\Connector\TransferObject\Product\Product;
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
-use PlentyConnector\Connector\ValueObject\Mapping\Mapping;
 use PlentyConnector\PlentyConnector;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use Ramsey\Uuid\Uuid;
+use SystemConnector\BacklogService\Middleware\BacklogCommandHandlerMiddleware;
+use SystemConnector\ConfigService\ConfigServiceInterface;
+use SystemConnector\ConnectorInterface;
+use SystemConnector\IdentityService\IdentityService;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\MappingService\MappingServiceInterface;
+use SystemConnector\ServiceBus\QueryType;
+use SystemConnector\TransferObject\Product\Product;
+use SystemConnector\TransferObject\TransferObjectInterface;
+use SystemConnector\ValueObject\Mapping\Mapping;
 
 class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_Backend_ExtJs
 {
@@ -70,12 +70,12 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
     public function saveSettingsAction()
     {
         /**
-         * @var ConfigServiceInterface $config
+         * @var ConfigServiceInterface $configService
          */
-        $config = $this->container->get('plenty_connector.config');
+        $configService = $this->container->get('plenty_connector.config');
 
         foreach ($this->cleanParameters($this->Request()->getParams()) as $key => $value) {
-            $config->set($key, $value);
+            $configService->set($key, $value);
         }
 
         $this->View()->assign([
@@ -87,13 +87,13 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
     public function getSettingsListAction()
     {
         /**
-         * @var ConfigServiceInterface $config
+         * @var ConfigServiceInterface $configService
          */
-        $config = $this->container->get('plenty_connector.config');
+        $configService = $this->container->get('plenty_connector.config');
 
         $this->View()->assign([
             'success' => true,
-            'data' => $config->getAll(),
+            'data' => $configService->getAll(),
         ]);
     }
 

@@ -2,7 +2,7 @@
 
 namespace PlentymarketsAdapter\ResponseParser\CustomerGroup;
 
-use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
+use SystemConnector\TransferObject\CustomerGroup\CustomerGroup;
 
 interface CustomerGroupResponseParserInterface
 {

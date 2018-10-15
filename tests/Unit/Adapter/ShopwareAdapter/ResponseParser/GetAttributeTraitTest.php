@@ -3,8 +3,8 @@
 namespace PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser;
 
 use PHPUnit\Framework\TestCase;
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentymarketsAdapter\ResponseParser\GetAttributeTrait;
+use SystemConnector\ValueObject\Attribute\Attribute;
 
 class GetAttributeTraitTest extends TestCase
 {

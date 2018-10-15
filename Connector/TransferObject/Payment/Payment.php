@@ -1,11 +1,11 @@
 <?php
 
-namespace PlentyConnector\Connector\TransferObject\Payment;
+namespace SystemConnector\TransferObject\Payment;
 
-use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
-use PlentyConnector\Connector\TransferObject\AttributableInterface;
-use PlentyConnector\Connector\TransferObject\Payment\PaymentData\PaymentDataInterface;
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
+use SystemConnector\TransferObject\AbstractTransferObject;
+use SystemConnector\TransferObject\AttributableInterface;
+use SystemConnector\TransferObject\Payment\PaymentData\PaymentDataInterface;
+use SystemConnector\ValueObject\Attribute\Attribute;
 
 class Payment extends AbstractTransferObject implements AttributableInterface
 {

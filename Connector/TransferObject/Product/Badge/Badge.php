@@ -1,9 +1,9 @@
 <?php
 
-namespace PlentyConnector\Connector\TransferObject\Product\Badge;
+namespace SystemConnector\TransferObject\Product\Badge;
 
-use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 use ReflectionClass;
+use SystemConnector\ValueObject\AbstractValueObject;
 
 class Badge extends AbstractValueObject
 {

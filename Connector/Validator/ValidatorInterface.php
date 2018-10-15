@@ -1,9 +1,9 @@
 <?php
 
-namespace PlentyConnector\Connector\Validator;
+namespace SystemConnector\Validator;
 
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
-use PlentyConnector\Connector\ValueObject\ValueObjectInterface;
+use SystemConnector\TransferObject\TransferObjectInterface;
+use SystemConnector\ValueObject\ValueObjectInterface;
 
 interface ValidatorInterface
 {

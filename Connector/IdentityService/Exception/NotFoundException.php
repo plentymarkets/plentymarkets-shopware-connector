@@ -1,6 +1,6 @@
 <?php
 
-namespace PlentyConnector\Connector\IdentityService\Exception;
+namespace SystemConnector\IdentityService\Exception;
 
 use Exception;
 

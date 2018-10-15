@@ -2,7 +2,7 @@
 
 namespace ShopwareAdapter\ResponseParser\Address;
 
-use PlentyConnector\Connector\TransferObject\Order\Address\Address;
+use SystemConnector\TransferObject\Order\Address\Address;
 
 interface AddressResponseParserInterface
 {

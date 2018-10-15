@@ -2,14 +2,14 @@
 
 namespace PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\Address;
 
-use PlentyConnector\Connector\IdentityService\IdentityService;
-use PlentyConnector\Connector\IdentityService\Model\Identity;
-use PlentyConnector\Connector\TransferObject\Order\Address\Address;
-use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\ResponseParserTest;
 use Ramsey\Uuid\Uuid;
 use ShopwareAdapter\ResponseParser\Address\AddressResponseParser;
+use SystemConnector\IdentityService\IdentityService;
+use SystemConnector\IdentityService\Model\Identity;
+use SystemConnector\TransferObject\Order\Address\Address;
+use SystemConnector\TransferObject\Order\Customer\Customer;
+use SystemConnector\ValueObject\Attribute\Attribute;
 
 class AddressResponseParserTest extends ResponseParserTest
 {

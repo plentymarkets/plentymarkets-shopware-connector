@@ -1,23 +1,20 @@
 <?php
 
-namespace PlentyConnector\Console\Command;
+namespace SystemConnector\Console\Command;
 
 use Exception;
-use PlentyConnector\Connector\BacklogService\BacklogService;
-use PlentyConnector\Connector\Logger\ConsoleHandler;
-use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
-use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use Psr\Log\LoggerInterface;
-use Shopware\Commands\ShopwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use SystemConnector\BacklogService\BacklogService;
+use SystemConnector\Console\OutputHandler\OutputHandlerInterface;
+use SystemConnector\Logger\ConsoleHandler;
+use SystemConnector\ServiceBus\ServiceBusInterface;
 use Throwable;
 
-/**
- * Command to manually process definitions.
- */
-class BacklogProcessCommand extends ShopwareCommand
+class BacklogProcessCommand extends Command
 {
     /**
      * @var ServiceBusInterface

@@ -1,6 +1,6 @@
 <?php
 
-namespace PlentyConnector\Connector\TransferObject;
+namespace SystemConnector\TransferObject;
 
 abstract class AbstractTransferObject implements TransferObjectInterface
 {

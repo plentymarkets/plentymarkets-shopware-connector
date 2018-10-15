@@ -3,12 +3,12 @@
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Stock;
 
 use InvalidArgumentException;
-use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
-use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
-use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
-use PlentyConnector\Connector\ServiceBus\QueryType;
-use PlentyConnector\Connector\TransferObject\Product\Stock\Stock;
 use PlentymarketsAdapter\PlentymarketsAdapter;
+use SystemConnector\ServiceBus\Query\FetchTransferObjectQuery;
+use SystemConnector\ServiceBus\Query\QueryInterface;
+use SystemConnector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use SystemConnector\ServiceBus\QueryType;
+use SystemConnector\TransferObject\Product\Stock\Stock;
 
 class FetchStockQueryHandler implements QueryHandlerInterface
 {

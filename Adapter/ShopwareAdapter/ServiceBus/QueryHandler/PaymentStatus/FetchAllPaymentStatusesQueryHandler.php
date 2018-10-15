@@ -5,14 +5,14 @@ namespace ShopwareAdapter\ServiceBus\QueryHandler\PaymentStatus;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
-use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
-use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
-use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
-use PlentyConnector\Connector\ServiceBus\QueryType;
-use PlentyConnector\Connector\TransferObject\PaymentStatus\PaymentStatus;
 use Shopware\Models\Order\Status;
 use ShopwareAdapter\ResponseParser\PaymentStatus\PaymentStatusResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
+use SystemConnector\ServiceBus\Query\FetchTransferObjectQuery;
+use SystemConnector\ServiceBus\Query\QueryInterface;
+use SystemConnector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use SystemConnector\ServiceBus\QueryType;
+use SystemConnector\TransferObject\PaymentStatus\PaymentStatus;
 
 class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
 {

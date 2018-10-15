@@ -1,8 +1,8 @@
 <?php
 
-namespace PlentyConnector\Connector\BacklogService\Command;
+namespace SystemConnector\BacklogService\Command;
 
-use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
+use SystemConnector\ServiceBus\Command\CommandInterface;
 
 class HandleBacklogElementCommand implements CommandInterface
 {

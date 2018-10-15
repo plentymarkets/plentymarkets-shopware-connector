@@ -3,11 +3,11 @@
 namespace PlentymarketsAdapter\ResponseParser\Media;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\Media\Media;
-use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
 use PlentymarketsAdapter\Helper\MediaCategoryHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\Media\Media;
+use SystemConnector\TransferObject\MediaCategory\MediaCategory;
 
 class MediaResponseParser implements MediaResponseParserInterface
 {

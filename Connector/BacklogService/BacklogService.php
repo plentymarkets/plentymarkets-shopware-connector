@@ -1,16 +1,16 @@
 <?php
 
-namespace PlentyConnector\Connector\BacklogService;
+namespace SystemConnector\BacklogService;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Exception;
 use PDO;
-use PlentyConnector\Connector\BacklogService\Command\HandleBacklogElementCommand;
-use PlentyConnector\Connector\BacklogService\Model\Backlog;
-use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
 use Psr\Log\LoggerInterface;
+use SystemConnector\BacklogService\Command\HandleBacklogElementCommand;
+use SystemConnector\BacklogService\Model\Backlog;
+use SystemConnector\ServiceBus\Command\CommandInterface;
 use Throwable;
 
 class BacklogService implements BacklogServiceInterface

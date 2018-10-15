@@ -3,7 +3,7 @@
 namespace ShopwareAdapter\ResponseParser;
 
 use DateTimeInterface;
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
+use SystemConnector\ValueObject\Attribute\Attribute;
 
 trait GetAttributeTrait
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace PlentyConnector\Connector\CleanupService\CallbackLogHandler;
+namespace SystemConnector\CleanupService\CallbackLogHandler;
 
 use Closure;
 use Monolog\Handler\AbstractProcessingHandler;

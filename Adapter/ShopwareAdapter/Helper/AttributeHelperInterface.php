@@ -2,7 +2,7 @@
 
 namespace ShopwareAdapter\Helper;
 
-use PlentyConnector\Connector\TransferObject\AttributableInterface;
+use SystemConnector\TransferObject\AttributableInterface;
 
 interface AttributeHelperInterface
 {

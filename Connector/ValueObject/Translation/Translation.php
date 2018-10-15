@@ -1,8 +1,8 @@
 <?php
 
-namespace PlentyConnector\Connector\ValueObject\Translation;
+namespace SystemConnector\ValueObject\Translation;
 
-use PlentyConnector\Connector\ValueObject\AbstractValueObject;
+use SystemConnector\ValueObject\AbstractValueObject;
 
 class Translation extends AbstractValueObject
 {

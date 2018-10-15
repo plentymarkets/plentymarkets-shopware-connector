@@ -2,19 +2,19 @@
 
 namespace ShopwareAdapter\RequestGenerator\Product\ConfiguratorSet;
 
-use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
-use PlentyConnector\Connector\TransferObject\Product\Product;
+use SystemConnector\ConfigService\ConfigServiceInterface;
+use SystemConnector\TransferObject\Product\Product;
 
 class ConfiguratorSetRequestGenerator implements ConfiguratorSetRequestGeneratorInterface
 {
     /**
      * @var ConfigServiceInterface
      */
-    private $config;
+    private $configService;
 
-    public function __construct(ConfigServiceInterface $config)
+    public function __construct(ConfigServiceInterface $configService)
     {
-        $this->config = $config;
+        $this->configService = $configService;
     }
 
     /**
@@ -43,7 +43,7 @@ class ConfiguratorSetRequestGenerator implements ConfiguratorSetRequestGenerator
 
         return [
             'name' => $product->getName(),
-            'type' => (int) $this->config->get('product_configurator_type', 0),
+            'type' => (int) $this->configService->get('product_configurator_type', 0),
             'groups' => $groups,
         ];
     }

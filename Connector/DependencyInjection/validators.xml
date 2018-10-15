@@ -1,0 +1,154 @@
+<?xml version="1.0" ?>
+
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <!-- validators -->
+
+        <service id="plenty_connector.validator.attribute" class="SystemConnector\Validator\Attribute\AttributeValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.category" class="SystemConnector\Validator\Category\CategoryValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.country" class="SystemConnector\Validator\Country\CountryValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.customer_group" class="SystemConnector\Validator\CustomerGroup\CustomerGroupValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.definition" class="SystemConnector\Validator\Definition\DefinitionValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.identity" class="SystemConnector\Validator\Identity\IdentityValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.language" class="SystemConnector\Validator\Language\LanguageValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.manufacturer" class="SystemConnector\Validator\Manufacturer\ManufacturerValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.mapping" class="SystemConnector\Validator\Mapping\MappingValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.media" class="SystemConnector\Validator\Media\MediaValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.media_category" class="SystemConnector\Validator\MediaCategory\MediaCategoryValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.order" class="SystemConnector\Validator\Order\OrderValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.order.address" class="SystemConnector\Validator\Order\Address\AddressValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.order.customer" class="SystemConnector\Validator\Order\Customer\CustomerValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.order.comment" class="SystemConnector\Validator\Order\Comment\CommentValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.order.order_item" class="SystemConnector\Validator\Order\OrderItem\OrderItemValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.order.package" class="SystemConnector\Validator\Order\Package\PackageValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.order.payment" class="SystemConnector\Validator\Order\Payment\PaymentValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.order_status" class="SystemConnector\Validator\OrderStatus\OrderStatusValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.payment_method" class="SystemConnector\Validator\PaymentMethod\PaymentMethodValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.payment_status" class="SystemConnector\Validator\PaymentStatus\PaymentStatusValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.product" class="SystemConnector\Validator\Product\ProductValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.product.badge" class="SystemConnector\Validator\Product\Badge\BadgeValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.product.barcode" class="SystemConnector\Validator\Product\Barcode\BarcodeValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.product.image" class="SystemConnector\Validator\Product\Image\ImageValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.product.linked_product" class="SystemConnector\Validator\Product\LinkedProduct\LinkedProductValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.product.price" class="SystemConnector\Validator\Product\Price\PriceValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.product.property" class="SystemConnector\Validator\Product\Property\PropertyValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.product.property.value" class="SystemConnector\Validator\Product\Property\Value\ValueValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.product.variation" class="SystemConnector\Validator\Product\Variation\VariationValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.shipping_profile" class="SystemConnector\Validator\ShippingProfile\ShippingProfileValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.shop" class="SystemConnector\Validator\Shop\ShopValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.stock" class="SystemConnector\Validator\Product\Stock\StockValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.translation" class="SystemConnector\Validator\Translation\TranslationValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.unit" class="SystemConnector\Validator\Unit\UnitValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.validator.vat_rate" class="SystemConnector\Validator\VatRate\VatRateValidator">
+            <tag name="plenty_connector.validator" />
+        </service>
+    </services>
+</container>

@@ -1,9 +1,9 @@
 <?php
 
-namespace PlentyConnector\Connector\ServiceBus\Query;
+namespace SystemConnector\ServiceBus\Query;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\ServiceBus\QueryType;
+use SystemConnector\ServiceBus\QueryType;
 
 class FetchTransferObjectQuery implements QueryInterface
 {
