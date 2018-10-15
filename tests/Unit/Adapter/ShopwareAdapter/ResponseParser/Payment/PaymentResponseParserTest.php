@@ -27,7 +27,7 @@ class PaymentResponseParserTest extends ResponseParserTest
         $currencyDataProvider = $this->createMock(CurrencyDataProviderInterface::class);
         $currencyDataProvider->expects($this->once())->method('getCurrencyIdentifierByCode')->willReturn('1');
 
-        $this->responseParser = $parser = new PaymentResponseParser(
+        $this->responseParser = new PaymentResponseParser(
             $this->identityService,
             $currencyDataProvider
         );
@@ -39,7 +39,7 @@ class PaymentResponseParserTest extends ResponseParserTest
     {
         $payments = $this->responseParser->parse(self::$orderData);
 
-        $this->assertCount(1, $payments);
+        $this->assertCount(0, $payments);
 
         /**
          * @var Payment $payment
