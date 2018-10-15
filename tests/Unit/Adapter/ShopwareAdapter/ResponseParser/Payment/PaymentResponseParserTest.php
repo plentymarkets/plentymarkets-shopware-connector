@@ -40,16 +40,5 @@ class PaymentResponseParserTest extends ResponseParserTest
         $payments = $this->responseParser->parse(self::$orderData);
 
         $this->assertCount(0, $payments);
-
-        /**
-         * @var Payment $payment
-         */
-        $payment = array_shift($payments);
-
-        self::assertInstanceOf(Payment::class, $payment);
-        self::assertEquals(998.56, $payment->getAmount());
-        self::assertEquals('transactionId', $payment->getTransactionReference());
-
-        $this->validator->validate($payment);
     }
 }
