@@ -365,23 +365,25 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
         $shopCategories = [];
 
         foreach ($product->getShopIdentifiers() as $shopIdentifier) {
-            $identity = $this->identityService->findOneBy([
+            $identities = $this->identityService->findBy([
                     'objectIdentifier' => (string) $shopIdentifier,
                     'objectType' => Shop::TYPE,
                     'adapterName' => ShopwareAdapter::NAME,
             ]);
 
-            if ($identity === null) {
+            if ($identities === null) {
                 continue;
             }
 
-            /**
-             * @var ShopModel $shop
-             */
-            $shop = $shopRepository->getById($identity->getAdapterIdentifier());
+            foreach ($identities as $identity) {
+                /**
+                 * @var ShopModel $shop
+                 */
+                $shop = $shopRepository->getById($identity->getAdapterIdentifier());
 
-            if ($shop !== null) {
-                $shopCategories[] = $shop->getCategory()->getId();
+                if ($shop !== null) {
+                    $shopCategories[] = $shop->getCategory()->getId();
+                }
             }
         }
 
@@ -402,6 +404,13 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
                 $category = $categoryRepository->find($categoryIdentity->getAdapterIdentifier());
 
                 if (null === $category) {
+                    continue;
+                }
+
+                $parents = array_reverse(array_filter(explode('|', $category->getPath())));
+                $parentCategoryId = array_shift($parents);
+
+                if (!in_array($parentCategoryId, $shopCategories)) {
                     continue;
                 }
 
