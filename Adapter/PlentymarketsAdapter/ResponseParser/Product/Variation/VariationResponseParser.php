@@ -163,12 +163,14 @@ class VariationResponseParser implements VariationResponseParserInterface
             $variationObject->setWeight($this->getVariationWeight($variation));
             $variationObject->setProperties($this->getVariationProperties($variation));
 
-            $result[$variationObject->getIdentifier()] = $variationObject;
+            $stockObject = $this->stockResponseParser->parse($variation);
 
-            $possibleElements = $this->stockResponseParser->parse($variation);
-            foreach ($possibleElements as $element) {
-                $result[$element->getIdentifier()] = $element;
+            if (!$this->config->get('import_variations_without_stock', true) && empty($stockObject->getStock())) {
+                continue;
             }
+
+            $result[$variationObject->getIdentifier()] = $variationObject;
+            $result[$stockObject->getIdentifier()] = $stockObject;
 
             $first = false;
         }
