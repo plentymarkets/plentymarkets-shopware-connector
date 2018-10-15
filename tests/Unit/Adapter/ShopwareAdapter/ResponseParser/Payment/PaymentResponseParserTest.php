@@ -5,7 +5,6 @@ namespace PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\Paym
 use PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\ResponseParserTest;
 use ShopwareAdapter\DataProvider\Currency\CurrencyDataProviderInterface;
 use ShopwareAdapter\ResponseParser\Payment\PaymentResponseParser;
-use SystemConnector\TransferObject\Payment\Payment;
 use SystemConnector\Validator\Order\Payment\PaymentValidator;
 
 class PaymentResponseParserTest extends ResponseParserTest
@@ -25,7 +24,6 @@ class PaymentResponseParserTest extends ResponseParserTest
         parent::setUp();
 
         $currencyDataProvider = $this->createMock(CurrencyDataProviderInterface::class);
-        $currencyDataProvider->expects($this->once())->method('getCurrencyIdentifierByCode')->willReturn('1');
 
         $this->responseParser = new PaymentResponseParser(
             $this->identityService,
