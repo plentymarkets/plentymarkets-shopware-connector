@@ -1,8 +1,8 @@
 <?php
 
-namespace PlentyConnector\Connector\ValueObject\Definition;
+namespace SystemConnector\ValueObject\Definition;
 
-use PlentyConnector\Connector\ValueObject\AbstractValueObject;
+use SystemConnector\ValueObject\AbstractValueObject;
 
 class Definition extends AbstractValueObject
 {

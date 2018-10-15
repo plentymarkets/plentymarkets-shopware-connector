@@ -1,16 +1,16 @@
 <?php
 
-namespace PlentyConnector\Connector\Validator\Order;
+namespace SystemConnector\Validator\Order;
 
 use Assert\Assertion;
 use DateTimeImmutable;
-use PlentyConnector\Connector\TransferObject\Order\Address\Address;
-use PlentyConnector\Connector\TransferObject\Order\Comment\Comment;
-use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
-use PlentyConnector\Connector\TransferObject\Order\Order;
-use PlentyConnector\Connector\TransferObject\Order\OrderItem\OrderItem;
-use PlentyConnector\Connector\Validator\ValidatorInterface;
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
+use SystemConnector\TransferObject\Order\Address\Address;
+use SystemConnector\TransferObject\Order\Comment\Comment;
+use SystemConnector\TransferObject\Order\Customer\Customer;
+use SystemConnector\TransferObject\Order\Order;
+use SystemConnector\TransferObject\Order\OrderItem\OrderItem;
+use SystemConnector\Validator\ValidatorInterface;
+use SystemConnector\ValueObject\Attribute\Attribute;
 
 class OrderValidator implements ValidatorInterface
 {

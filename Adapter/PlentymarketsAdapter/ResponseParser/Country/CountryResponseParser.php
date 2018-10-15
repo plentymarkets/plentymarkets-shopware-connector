@@ -2,9 +2,9 @@
 
 namespace PlentymarketsAdapter\ResponseParser\Country;
 
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\Country\Country;
 use PlentymarketsAdapter\PlentymarketsAdapter;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\Country\Country;
 
 class CountryResponseParser implements CountryResponseParserInterface
 {

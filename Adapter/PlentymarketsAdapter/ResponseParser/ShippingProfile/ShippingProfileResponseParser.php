@@ -2,9 +2,9 @@
 
 namespace PlentymarketsAdapter\ResponseParser\ShippingProfile;
 
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
 use PlentymarketsAdapter\PlentymarketsAdapter;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\ShippingProfile\ShippingProfile;
 
 class ShippingProfileResponseParser implements ShippingProfileResponseParserInterface
 {

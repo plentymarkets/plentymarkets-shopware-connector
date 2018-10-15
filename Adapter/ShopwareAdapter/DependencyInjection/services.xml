@@ -293,6 +293,7 @@
 
         <service id="shopware_adapter.command_handler.remove_variation" class="ShopwareAdapter\ServiceBus\CommandHandler\Variation\RemoveVariationCommandHandler">
             <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="models" />
             <argument type="service" id="plenty_connector.logger" />
 
             <tag name="plenty_connector.command_handler" />

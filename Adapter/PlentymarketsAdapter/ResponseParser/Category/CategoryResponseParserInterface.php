@@ -2,7 +2,7 @@
 
 namespace PlentymarketsAdapter\ResponseParser\Category;
 
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
+use SystemConnector\TransferObject\TransferObjectInterface;
 
 interface CategoryResponseParserInterface
 {

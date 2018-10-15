@@ -5,20 +5,6 @@ namespace PlentyConnector;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use PlentyConnector\Connector\BacklogService\Model\Backlog;
-use PlentyConnector\Connector\ConfigService\Model\Config;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\IdentityService\Model\Identity;
-use PlentyConnector\Connector\TransferObject\Category\Category;
-use PlentyConnector\Connector\TransferObject\PaymentStatus\PaymentStatus;
-use PlentyConnector\DependencyInjection\CompilerPass\CleanupDefinitionCompilerPass;
-use PlentyConnector\DependencyInjection\CompilerPass\CommandGeneratorCompilerPass;
-use PlentyConnector\DependencyInjection\CompilerPass\CommandHandlerCompilerPass;
-use PlentyConnector\DependencyInjection\CompilerPass\ConnectorDefinitionCompilerPass;
-use PlentyConnector\DependencyInjection\CompilerPass\MappingDefinitionCompilerPass;
-use PlentyConnector\DependencyInjection\CompilerPass\QueryGeneratorCompilerPass;
-use PlentyConnector\DependencyInjection\CompilerPass\QueryHandlerCompilerPass;
-use PlentyConnector\DependencyInjection\CompilerPass\ValidatorServiceCompilerPass;
 use PlentyConnector\Installer\CronjobInstaller;
 use PlentyConnector\Installer\DatabaseInstaller;
 use PlentyConnector\Installer\PermissionInstaller;
@@ -32,6 +18,20 @@ use Shopware_Components_Acl;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use SystemConnector\BacklogService\Model\Backlog;
+use SystemConnector\ConfigService\Model\Config;
+use SystemConnector\DependencyInjection\CompilerPass\CleanupDefinitionCompilerPass;
+use SystemConnector\DependencyInjection\CompilerPass\CommandGeneratorCompilerPass;
+use SystemConnector\DependencyInjection\CompilerPass\CommandHandlerCompilerPass;
+use SystemConnector\DependencyInjection\CompilerPass\ConnectorDefinitionCompilerPass;
+use SystemConnector\DependencyInjection\CompilerPass\MappingDefinitionCompilerPass;
+use SystemConnector\DependencyInjection\CompilerPass\QueryGeneratorCompilerPass;
+use SystemConnector\DependencyInjection\CompilerPass\QueryHandlerCompilerPass;
+use SystemConnector\DependencyInjection\CompilerPass\ValidatorServiceCompilerPass;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\IdentityService\Model\Identity;
+use SystemConnector\TransferObject\Category\Category;
+use SystemConnector\TransferObject\PaymentStatus\PaymentStatus;
 
 require __DIR__ . '/autoload.php';
 
@@ -82,6 +82,11 @@ class PlentyConnector extends Plugin
         $container->setParameter('plenty_connector.plugin_dir', $this->getPath());
 
         $this->loadFile($container, __DIR__ . '/DependencyInjection/services.xml');
+        $this->loadFile($container, __DIR__ . '/DependencyInjection/definitions.xml');
+
+        $this->loadFile($container, __DIR__ . '/Connector/DependencyInjection/services.xml');
+        $this->loadFile($container, __DIR__ . '/Connector/DependencyInjection/commands.xml');
+        $this->loadFile($container, __DIR__ . '/Connector/DependencyInjection/validators.xml');
 
         $this->loadFile($container, __DIR__ . '/Adapter/ShopwareAdapter/DependencyInjection/services.xml');
         $this->loadFile($container, __DIR__ . '/Adapter/PlentymarketsAdapter/DependencyInjection/services.xml');

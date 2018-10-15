@@ -5,13 +5,13 @@ namespace PlentyConnector\Subscriber;
 use Enlight\Event\SubscriberInterface;
 use Enlight_Components_Cron_EventArgs as Args;
 use Exception;
-use PlentyConnector\Connector\BacklogService\BacklogServiceInterface;
-use PlentyConnector\Connector\CleanupService\CleanupServiceInterface;
-use PlentyConnector\Connector\ConnectorInterface;
-use PlentyConnector\Connector\ServiceBus\QueryType;
-use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
 use PlentyConnector\PlentyConnector;
 use Psr\Log\LoggerInterface;
+use SystemConnector\BacklogService\BacklogServiceInterface;
+use SystemConnector\CleanupService\CleanupServiceInterface;
+use SystemConnector\ConnectorInterface;
+use SystemConnector\ServiceBus\QueryType;
+use SystemConnector\ServiceBus\ServiceBusInterface;
 use Throwable;
 
 class CronjobSubscriber implements SubscriberInterface

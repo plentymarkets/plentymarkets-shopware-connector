@@ -3,8 +3,8 @@
 namespace PlentyConnector\Components\PayPal\Plentymarkets;
 
 use PlentyConnector\Components\PayPal\PaymentData\PayPalInstallmentPaymentData;
-use PlentyConnector\Connector\TransferObject\Payment\Payment;
 use PlentymarketsAdapter\RequestGenerator\Payment\PaymentRequestGeneratorInterface;
+use SystemConnector\TransferObject\Payment\Payment;
 
 class PayPalInstallmentRequestGenerator implements PaymentRequestGeneratorInterface
 {

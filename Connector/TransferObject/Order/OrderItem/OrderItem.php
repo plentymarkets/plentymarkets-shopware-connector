@@ -1,11 +1,11 @@
 <?php
 
-namespace PlentyConnector\Connector\TransferObject\Order\OrderItem;
+namespace SystemConnector\TransferObject\Order\OrderItem;
 
-use PlentyConnector\Connector\TransferObject\AttributableInterface;
-use PlentyConnector\Connector\ValueObject\AbstractValueObject;
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use ReflectionClass;
+use SystemConnector\TransferObject\AttributableInterface;
+use SystemConnector\ValueObject\AbstractValueObject;
+use SystemConnector\ValueObject\Attribute\Attribute;
 
 class OrderItem extends AbstractValueObject implements AttributableInterface
 {

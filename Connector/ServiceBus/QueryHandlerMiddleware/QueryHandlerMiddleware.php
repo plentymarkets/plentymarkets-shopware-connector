@@ -1,11 +1,11 @@
 <?php
 
-namespace PlentyConnector\Connector\ServiceBus\QueryHandlerMiddleware;
+namespace SystemConnector\ServiceBus\QueryHandlerMiddleware;
 
 use League\Tactician\Middleware;
-use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
-use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
-use PlentyConnector\Connector\ServiceBus\QueryHandlerMiddleware\Exception\NotFoundException;
+use SystemConnector\ServiceBus\Query\QueryInterface;
+use SystemConnector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use SystemConnector\ServiceBus\QueryHandlerMiddleware\Exception\NotFoundException;
 
 class QueryHandlerMiddleware implements Middleware
 {

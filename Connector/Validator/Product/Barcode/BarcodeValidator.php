@@ -1,10 +1,10 @@
 <?php
 
-namespace PlentyConnector\Connector\Validator\Product\Barcode;
+namespace SystemConnector\Validator\Product\Barcode;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\Product\Barcode\Barcode;
-use PlentyConnector\Connector\Validator\ValidatorInterface;
+use SystemConnector\TransferObject\Product\Barcode\Barcode;
+use SystemConnector\Validator\ValidatorInterface;
 
 class BarcodeValidator implements ValidatorInterface
 {

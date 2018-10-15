@@ -5,17 +5,17 @@ namespace PlentyConnector\Components\Bundle\PlentymarketsAdapter\ResponseParser;
 use DateTimeImmutable;
 use PlentyConnector\Components\Bundle\TransferObject\Bundle;
 use PlentyConnector\Components\Bundle\TransferObject\BundleProduct\BundleProduct;
-use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\Language\Language;
-use PlentyConnector\Connector\TransferObject\Product\Product;
-use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
-use PlentyConnector\Connector\ValueObject\Translation\Translation;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\Helper\VariationHelperInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Product\Price\PriceResponseParserInterface;
 use Psr\Log\LoggerInterface;
+use SystemConnector\IdentityService\Exception\NotFoundException;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\Language\Language;
+use SystemConnector\TransferObject\Product\Product;
+use SystemConnector\TransferObject\VatRate\VatRate;
+use SystemConnector\ValueObject\Translation\Translation;
 
 class BundleResponseParser implements BundleResponseParserInterface
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace PlentyConnector\Connector\Validator\Order\Package;
+namespace SystemConnector\Validator\Order\Package;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\Order\Package\Package;
-use PlentyConnector\Connector\Validator\ValidatorInterface;
+use SystemConnector\TransferObject\Order\Package\Package;
+use SystemConnector\Validator\ValidatorInterface;
 
 class PackageValidator implements ValidatorInterface
 {

@@ -3,15 +3,15 @@
 namespace ShopwareAdapter\ResponseParser\Payment;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\Currency\Currency;
-use PlentyConnector\Connector\TransferObject\Order\Order;
-use PlentyConnector\Connector\TransferObject\Payment\Payment;
-use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod;
-use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use Shopware\Models\Order\Status;
 use ShopwareAdapter\DataProvider\Currency\CurrencyDataProviderInterface;
 use ShopwareAdapter\ShopwareAdapter;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\Currency\Currency;
+use SystemConnector\TransferObject\Order\Order;
+use SystemConnector\TransferObject\Payment\Payment;
+use SystemConnector\TransferObject\PaymentMethod\PaymentMethod;
+use SystemConnector\TransferObject\Shop\Shop;
 
 class PaymentResponseParser implements PaymentResponseParserInterface
 {
@@ -42,7 +42,17 @@ class PaymentResponseParser implements PaymentResponseParserInterface
             (string) $element['id'],
             ShopwareAdapter::NAME,
             Payment::TYPE
-        )->getObjectIdentifier();
+        );
+
+        $isMappedPaymentIdentity = $this->identityService->isMappedIdentity(
+            $paymentIdentifier->getObjectIdentifier(),
+            $paymentIdentifier->getObjectType(),
+            $paymentIdentifier->getAdapterName()
+        );
+
+        if ($isMappedPaymentIdentity) {
+            return [];
+        }
 
         if (empty($element['paymentStatus'])) {
             return [];
@@ -58,13 +68,13 @@ class PaymentResponseParser implements PaymentResponseParserInterface
             Shop::TYPE
         );
 
-        $isMappedIdentity = $this->identityService->isMappedIdentity(
+        $isMappedShopIdentity = $this->identityService->isMappedIdentity(
             $shopIdentity->getObjectIdentifier(),
             $shopIdentity->getObjectType(),
             $shopIdentity->getAdapterName()
         );
 
-        if (!$isMappedIdentity) {
+        if (!$isMappedShopIdentity) {
             return [];
         }
 
@@ -72,7 +82,7 @@ class PaymentResponseParser implements PaymentResponseParserInterface
         $currencyIdentifier = $this->getConnectorIdentifier($shopwareCurrencyIdentifier, Currency::TYPE);
 
         $payment = new Payment();
-        $payment->setIdentifier($paymentIdentifier);
+        $payment->setIdentifier($paymentIdentifier->getObjectIdentifier());
         $payment->setShopIdentifier($shopIdentity->getObjectIdentifier());
         $payment->setOrderIdentifer($this->getConnectorIdentifier($element['id'], Order::TYPE));
         $payment->setAmount($element['invoiceAmount']);

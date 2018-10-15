@@ -3,8 +3,8 @@
 namespace PlentyConnector\Components\Klarna\Plentymarkets;
 
 use PlentyConnector\Components\Klarna\PaymentData\KlarnaPaymentData;
-use PlentyConnector\Connector\TransferObject\Payment\Payment;
 use PlentymarketsAdapter\RequestGenerator\Payment\PaymentRequestGeneratorInterface;
+use SystemConnector\TransferObject\Payment\Payment;
 
 class KlarnaRequestGenerator implements PaymentRequestGeneratorInterface
 {

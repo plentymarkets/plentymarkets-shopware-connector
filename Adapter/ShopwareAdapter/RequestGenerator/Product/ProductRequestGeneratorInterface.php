@@ -2,7 +2,7 @@
 
 namespace ShopwareAdapter\RequestGenerator\Product;
 
-use PlentyConnector\Connector\TransferObject\Product\Product;
+use SystemConnector\TransferObject\Product\Product;
 
 interface ProductRequestGeneratorInterface
 {

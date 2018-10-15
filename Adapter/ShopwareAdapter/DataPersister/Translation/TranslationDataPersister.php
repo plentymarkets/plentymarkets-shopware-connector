@@ -2,18 +2,18 @@
 
 namespace ShopwareAdapter\DataPersister\Translation;
 
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\Category\Category;
-use PlentyConnector\Connector\TransferObject\Language\Language;
-use PlentyConnector\Connector\TransferObject\Product\Product;
-use PlentyConnector\Connector\TransferObject\Product\Property\Property;
-use PlentyConnector\Connector\TransferObject\Product\Property\Value\Value;
-use PlentyConnector\Connector\Translation\TranslationHelperInterface;
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use Psr\Log\LoggerInterface;
 use Shopware_Components_Translation;
 use ShopwareAdapter\DataProvider\Translation\TranslationDataProviderInterface;
 use ShopwareAdapter\ShopwareAdapter;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\Category\Category;
+use SystemConnector\TransferObject\Language\Language;
+use SystemConnector\TransferObject\Product\Product;
+use SystemConnector\TransferObject\Product\Property\Property;
+use SystemConnector\TransferObject\Product\Property\Value\Value;
+use SystemConnector\Translation\TranslationHelperInterface;
+use SystemConnector\ValueObject\Attribute\Attribute;
 
 class TranslationDataPersister implements TranslationDataPersisterInterface
 {

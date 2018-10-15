@@ -13,6 +13,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - fix product meta title and meta description translation
 - fix product duplicates
 - fix services.xml for shopware 5.5.x
+- fix don't write already transfered payments and orders into backlog
 
 ### Changed
 - translated variation configurator 
@@ -20,6 +21,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - translated short and technical description 
 - removed comment and address rest call
 - optimized the stock handling performance
+- restructured the services.xml files
 
 ### Added
 - transfer age restriction as attribute to shopware
@@ -27,6 +29,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - add product configuration positions of the groups and their values (@lacodimizer)
 - add item sync into the backend gui (@lacodimizer)
 - handle commands are now prioritised according to their definitions priority
+- added a new services.xml for the connector core
+- introduced a DefinitionProvider to store and handle definitions
 
 ## [4.6.0]
 ### Fixed

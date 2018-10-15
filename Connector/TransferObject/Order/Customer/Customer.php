@@ -1,10 +1,10 @@
 <?php
 
-namespace PlentyConnector\Connector\TransferObject\Order\Customer;
+namespace SystemConnector\TransferObject\Order\Customer;
 
 use DateTimeImmutable;
-use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 use ReflectionClass;
+use SystemConnector\ValueObject\AbstractValueObject;
 
 class Customer extends AbstractValueObject
 {

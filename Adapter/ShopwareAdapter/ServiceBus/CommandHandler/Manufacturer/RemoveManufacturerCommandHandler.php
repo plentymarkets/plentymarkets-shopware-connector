@@ -2,17 +2,17 @@
 
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Manufacturer;
 
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
-use PlentyConnector\Connector\ServiceBus\Command\TransferObjectCommand;
-use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
-use PlentyConnector\Connector\ServiceBus\CommandType;
-use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
-use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Psr\Log\LoggerInterface;
 use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Resource\Manufacturer as ManufacturerResource;
 use ShopwareAdapter\ShopwareAdapter;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\ServiceBus\Command\CommandInterface;
+use SystemConnector\ServiceBus\Command\TransferObjectCommand;
+use SystemConnector\ServiceBus\CommandHandler\CommandHandlerInterface;
+use SystemConnector\ServiceBus\CommandType;
+use SystemConnector\TransferObject\Manufacturer\Manufacturer;
+use SystemConnector\ValueObject\Identity\Identity;
 
 class RemoveManufacturerCommandHandler implements CommandHandlerInterface
 {

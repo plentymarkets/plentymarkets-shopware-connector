@@ -3,27 +3,27 @@
 namespace PlentymarketsAdapter\ResponseParser\Order;
 
 use DateTimeImmutable;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\Country\Country;
-use PlentyConnector\Connector\TransferObject\Currency\Currency;
-use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
-use PlentyConnector\Connector\TransferObject\Language\Language;
-use PlentyConnector\Connector\TransferObject\Order\Address\Address;
-use PlentyConnector\Connector\TransferObject\Order\Comment\Comment;
-use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
-use PlentyConnector\Connector\TransferObject\Order\Order;
-use PlentyConnector\Connector\TransferObject\Order\OrderItem\OrderItem;
-use PlentyConnector\Connector\TransferObject\Order\Package\Package;
-use PlentyConnector\Connector\TransferObject\OrderStatus\OrderStatus;
-use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod;
-use PlentyConnector\Connector\TransferObject\PaymentStatus\PaymentStatus;
-use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
-use PlentyConnector\Connector\TransferObject\Shop\Shop;
-use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Customer\Customer as CustomerApi;
 use Psr\Log\LoggerInterface;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\Country\Country;
+use SystemConnector\TransferObject\Currency\Currency;
+use SystemConnector\TransferObject\CustomerGroup\CustomerGroup;
+use SystemConnector\TransferObject\Language\Language;
+use SystemConnector\TransferObject\Order\Address\Address;
+use SystemConnector\TransferObject\Order\Comment\Comment;
+use SystemConnector\TransferObject\Order\Customer\Customer;
+use SystemConnector\TransferObject\Order\Order;
+use SystemConnector\TransferObject\Order\OrderItem\OrderItem;
+use SystemConnector\TransferObject\Order\Package\Package;
+use SystemConnector\TransferObject\OrderStatus\OrderStatus;
+use SystemConnector\TransferObject\PaymentMethod\PaymentMethod;
+use SystemConnector\TransferObject\PaymentStatus\PaymentStatus;
+use SystemConnector\TransferObject\ShippingProfile\ShippingProfile;
+use SystemConnector\TransferObject\Shop\Shop;
+use SystemConnector\ValueObject\Identity\Identity;
 
 class OrderResponseParser implements OrderResponseParserInterface
 {

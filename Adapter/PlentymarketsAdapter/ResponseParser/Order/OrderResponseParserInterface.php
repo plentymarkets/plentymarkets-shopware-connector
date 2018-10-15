@@ -2,7 +2,7 @@
 
 namespace PlentymarketsAdapter\ResponseParser\Order;
 
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
+use SystemConnector\TransferObject\TransferObjectInterface;
 
 interface OrderResponseParserInterface
 {

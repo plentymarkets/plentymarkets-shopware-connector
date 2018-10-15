@@ -1,11 +1,11 @@
 <?php
 
-namespace PlentyConnector\Connector\ServiceBus\CommandHandlerMiddleware;
+namespace SystemConnector\ServiceBus\CommandHandlerMiddleware;
 
 use League\Tactician\Middleware;
-use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
-use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
-use PlentyConnector\Connector\ServiceBus\CommandHandlerMiddleware\Exception\NotFoundException;
+use SystemConnector\ServiceBus\Command\CommandInterface;
+use SystemConnector\ServiceBus\CommandHandler\CommandHandlerInterface;
+use SystemConnector\ServiceBus\CommandHandlerMiddleware\Exception\NotFoundException;
 
 class CommandHandlerMiddleware implements Middleware
 {

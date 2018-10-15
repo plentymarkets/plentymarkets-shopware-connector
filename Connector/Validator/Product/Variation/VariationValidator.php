@@ -1,16 +1,16 @@
 <?php
 
-namespace PlentyConnector\Connector\Validator\Product\Variation;
+namespace SystemConnector\Validator\Product\Variation;
 
 use Assert\Assertion;
 use DateTimeImmutable;
-use PlentyConnector\Connector\TransferObject\Product\Barcode\Barcode;
-use PlentyConnector\Connector\TransferObject\Product\Image\Image;
-use PlentyConnector\Connector\TransferObject\Product\Price\Price;
-use PlentyConnector\Connector\TransferObject\Product\Property\Property;
-use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
-use PlentyConnector\Connector\Validator\ValidatorInterface;
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
+use SystemConnector\TransferObject\Product\Barcode\Barcode;
+use SystemConnector\TransferObject\Product\Image\Image;
+use SystemConnector\TransferObject\Product\Price\Price;
+use SystemConnector\TransferObject\Product\Property\Property;
+use SystemConnector\TransferObject\Product\Variation\Variation;
+use SystemConnector\Validator\ValidatorInterface;
+use SystemConnector\ValueObject\Attribute\Attribute;
 
 class VariationValidator implements ValidatorInterface
 {

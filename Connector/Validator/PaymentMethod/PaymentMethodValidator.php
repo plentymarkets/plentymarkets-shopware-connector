@@ -1,10 +1,10 @@
 <?php
 
-namespace PlentyConnector\Connector\Validator\PaymentMethod;
+namespace SystemConnector\Validator\PaymentMethod;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod;
-use PlentyConnector\Connector\Validator\ValidatorInterface;
+use SystemConnector\TransferObject\PaymentMethod\PaymentMethod;
+use SystemConnector\Validator\ValidatorInterface;
 
 class PaymentMethodValidator implements ValidatorInterface
 {

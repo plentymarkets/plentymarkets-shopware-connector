@@ -1,8 +1,8 @@
 <?php
 
-namespace PlentyConnector\Connector\IdentityService;
+namespace SystemConnector\IdentityService;
 
-use PlentyConnector\Connector\ValueObject\Identity\Identity;
+use SystemConnector\ValueObject\Identity\Identity;
 
 interface IdentityServiceInterface
 {

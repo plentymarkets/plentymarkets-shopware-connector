@@ -1,11 +1,11 @@
 <?php
 
-namespace PlentyConnector\Connector\Validator\Product\Property\Value;
+namespace SystemConnector\Validator\Product\Property\Value;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\Product\Property\Value\Value;
-use PlentyConnector\Connector\Validator\ValidatorInterface;
-use PlentyConnector\Connector\ValueObject\Translation\Translation;
+use SystemConnector\TransferObject\Product\Property\Value\Value;
+use SystemConnector\Validator\ValidatorInterface;
+use SystemConnector\ValueObject\Translation\Translation;
 
 class ValueValidator implements ValidatorInterface
 {

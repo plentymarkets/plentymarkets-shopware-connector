@@ -2,9 +2,9 @@
 
 namespace PlentymarketsAdapter\Helper;
 
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\Language\Language;
 use PlentymarketsAdapter\PlentymarketsAdapter;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\Language\Language;
 
 class LanguageHelper implements LanguageHelperInterface
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace PlentyConnector\Console\OutputHandler;
+namespace SystemConnector\Console\OutputHandler;
 
 use Assert\Assertion;
 use Symfony\Component\Console\Helper\ProgressBar;

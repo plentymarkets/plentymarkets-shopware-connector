@@ -1,10 +1,10 @@
 <?php
 
-namespace PlentyConnector\Connector\ValueObject\Attribute;
+namespace SystemConnector\ValueObject\Attribute;
 
-use PlentyConnector\Connector\TransferObject\TranslateableInterface;
-use PlentyConnector\Connector\ValueObject\AbstractValueObject;
-use PlentyConnector\Connector\ValueObject\Translation\Translation;
+use SystemConnector\TransferObject\TranslateableInterface;
+use SystemConnector\ValueObject\AbstractValueObject;
+use SystemConnector\ValueObject\Translation\Translation;
 
 class Attribute extends AbstractValueObject implements TranslateableInterface
 {

@@ -2,7 +2,7 @@
 
 namespace PlentymarketsAdapter\ResponseParser;
 
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
+use SystemConnector\ValueObject\Attribute\Attribute;
 
 trait GetAttributeTrait
 {

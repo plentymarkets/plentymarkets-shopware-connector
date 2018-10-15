@@ -1,6 +1,6 @@
 <?php
 
-namespace PlentyConnector\DependencyInjection\CompilerPass;
+namespace SystemConnector\DependencyInjection\CompilerPass;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

@@ -1,19 +1,17 @@
 <?php
 
-namespace PlentyConnector\Connector\ConfigService;
+namespace SystemConnector\ConfigService;
 
 use DateTime;
 use DateTimeImmutable;
-use Exception;
-use PlentyConnector\Connector\ConfigService\Model\Config;
-use PlentyConnector\Connector\ConfigService\Model\ConfigRepository;
-use Shopware\Components\Model\ModelManager;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Doctrine\ORM\EntityManagerInterface;
+use SystemConnector\ConfigService\Model\Config;
+use SystemConnector\ConfigService\Model\ConfigRepository;
 
 class ConfigService implements ConfigServiceInterface
 {
     /**
-     * @var ModelManager
+     * @var EntityManagerInterface
      */
     private $entityManager;
 
@@ -23,19 +21,12 @@ class ConfigService implements ConfigServiceInterface
     private $repository;
 
     /**
-     * @var ContainerInterface
+     * @param EntityManagerInterface $entityManager
      */
-    private $container;
-
-    /**
-     * @param ModelManager       $entityManager
-     * @param ContainerInterface $container
-     */
-    public function __construct(ModelManager $entityManager, ContainerInterface $container)
+    public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
         $this->repository = $entityManager->getRepository(Config::class);
-        $this->container = $container;
     }
 
     /**
@@ -43,12 +34,6 @@ class ConfigService implements ConfigServiceInterface
      */
     public function getAll()
     {
-        $containerParameters = [];
-
-        if ($this->container->hasParameter('shopware.plenty_connector')) {
-            $containerParameters = $this->container->getParameter('shopware.plenty_connector');
-        }
-
         /**
          * @var Config[] $configElements
          */
@@ -60,7 +45,7 @@ class ConfigService implements ConfigServiceInterface
             $result[$element->getName()] = $element->getValue();
         }
 
-        return array_merge($result, $containerParameters);
+        return array_merge($result);
     }
 
     /**
@@ -68,14 +53,6 @@ class ConfigService implements ConfigServiceInterface
      */
     public function get($key, $default = null)
     {
-        if ($this->container->hasParameter('shopware.plenty_connector.' . $key)) {
-            try {
-                return $this->container->getParameter('shopware.plenty_connector.' . $key);
-            } catch (Exception $exception) {
-                // fail silently
-            }
-        }
-
         /**
          * @var null|Config $element
          */
@@ -118,7 +95,7 @@ class ConfigService implements ConfigServiceInterface
         $element->setValue($value);
 
         $this->entityManager->persist($element);
-        $this->entityManager->flush($element);
+        $this->entityManager->flush();
         $this->entityManager->clear();
     }
 }

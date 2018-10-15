@@ -1,21 +1,18 @@
 <?php
 
-namespace PlentyConnector\Console\Command;
+namespace SystemConnector\Console\Command;
 
 use Exception;
-use PlentyConnector\Connector\CleanupService\CleanupServiceInterface;
-use PlentyConnector\Connector\Logger\ConsoleHandler;
-use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use Psr\Log\LoggerInterface;
-use Shopware\Commands\ShopwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use SystemConnector\CleanupService\CleanupServiceInterface;
+use SystemConnector\Console\OutputHandler\OutputHandlerInterface;
+use SystemConnector\Logger\ConsoleHandler;
 use Throwable;
 
-/**
- * Command to manually process definitions.
- */
-class CleanupCommand extends ShopwareCommand
+class CleanupCommand extends Command
 {
     /**
      * @var CleanupServiceInterface
@@ -23,23 +20,23 @@ class CleanupCommand extends ShopwareCommand
     private $cleanupService;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @var OutputHandlerInterface
      */
     private $outputHandler;
 
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
     public function __construct(
         CleanupServiceInterface $cleanupService,
-        LoggerInterface $logger,
-        OutputHandlerInterface $outputHandler
+        OutputHandlerInterface $outputHandler,
+        LoggerInterface $logger
     ) {
         $this->cleanupService = $cleanupService;
-        $this->logger = $logger;
         $this->outputHandler = $outputHandler;
+        $this->logger = $logger;
 
         parent::__construct();
     }

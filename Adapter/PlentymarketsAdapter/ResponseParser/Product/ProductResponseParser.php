@@ -3,24 +3,6 @@
 namespace PlentymarketsAdapter\ResponseParser\Product;
 
 use DateTimeImmutable;
-use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
-use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\Category\Category;
-use PlentyConnector\Connector\TransferObject\Language\Language;
-use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
-use PlentyConnector\Connector\TransferObject\Product\Badge\Badge;
-use PlentyConnector\Connector\TransferObject\Product\Image\Image;
-use PlentyConnector\Connector\TransferObject\Product\LinkedProduct\LinkedProduct;
-use PlentyConnector\Connector\TransferObject\Product\Product;
-use PlentyConnector\Connector\TransferObject\Product\Property\Property;
-use PlentyConnector\Connector\TransferObject\Product\Property\Value\Value;
-use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
-use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
-use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
-use PlentyConnector\Connector\ValueObject\Translation\Translation;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\Helper\VariationHelperInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
@@ -29,6 +11,24 @@ use PlentymarketsAdapter\ReadApi\Item\Property\Name as PropertyNameApi;
 use PlentymarketsAdapter\ResponseParser\Product\Image\ImageResponseParserInterface;
 use PlentymarketsAdapter\ResponseParser\Product\Variation\VariationResponseParserInterface;
 use Psr\Log\LoggerInterface;
+use SystemConnector\ConfigService\ConfigServiceInterface;
+use SystemConnector\IdentityService\Exception\NotFoundException;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\Category\Category;
+use SystemConnector\TransferObject\Language\Language;
+use SystemConnector\TransferObject\Manufacturer\Manufacturer;
+use SystemConnector\TransferObject\Product\Badge\Badge;
+use SystemConnector\TransferObject\Product\Image\Image;
+use SystemConnector\TransferObject\Product\LinkedProduct\LinkedProduct;
+use SystemConnector\TransferObject\Product\Product;
+use SystemConnector\TransferObject\Product\Property\Property;
+use SystemConnector\TransferObject\Product\Property\Value\Value;
+use SystemConnector\TransferObject\Product\Variation\Variation;
+use SystemConnector\TransferObject\ShippingProfile\ShippingProfile;
+use SystemConnector\TransferObject\TransferObjectInterface;
+use SystemConnector\TransferObject\VatRate\VatRate;
+use SystemConnector\ValueObject\Attribute\Attribute;
+use SystemConnector\ValueObject\Translation\Translation;
 
 class ProductResponseParser implements ProductResponseParserInterface
 {
@@ -464,7 +464,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             $values = [];
             $translations = [];
 
-            if ($property['property']['valueType'] === 'empty') {
+            if ($property['property']['valueType'] === 'empty' && null !== $property['property']['propertyGroupId']) {
                 $propertyGroupNames = $this->itemsPropertiesGroupsNamesApi->findOne($property['property']['propertyGroupId']);
 
                 if (empty($propertyGroupNames[0]['name'])) {

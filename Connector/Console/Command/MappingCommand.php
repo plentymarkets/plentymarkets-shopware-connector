@@ -1,23 +1,20 @@
 <?php
 
-namespace PlentyConnector\Console\Command;
+namespace SystemConnector\Console\Command;
 
 use Exception;
-use PlentyConnector\Connector\Logger\ConsoleHandler;
-use PlentyConnector\Connector\MappingService\MappingServiceInterface;
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
-use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use Psr\Log\LoggerInterface;
-use Shopware\Commands\ShopwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use SystemConnector\Console\OutputHandler\OutputHandlerInterface;
+use SystemConnector\Logger\ConsoleHandler;
+use SystemConnector\MappingService\MappingServiceInterface;
+use SystemConnector\TransferObject\TransferObjectInterface;
 use Throwable;
 
-/**
- * Command to manually process definitions.
- */
-class MappingCommand extends ShopwareCommand
+class MappingCommand extends Command
 {
     /**
      * @var MappingServiceInterface
@@ -25,23 +22,23 @@ class MappingCommand extends ShopwareCommand
     private $mappingService;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @var OutputHandlerInterface
      */
     private $outputHandler;
 
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
     public function __construct(
         MappingServiceInterface $mappingService,
-        LoggerInterface $logger,
-        OutputHandlerInterface $outputHandler
+        OutputHandlerInterface $outputHandler,
+        LoggerInterface $logger
     ) {
         $this->mappingService = $mappingService;
-        $this->logger = $logger;
         $this->outputHandler = $outputHandler;
+        $this->logger = $logger;
 
         parent::__construct();
     }

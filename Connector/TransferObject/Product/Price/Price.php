@@ -1,8 +1,8 @@
 <?php
 
-namespace PlentyConnector\Connector\TransferObject\Product\Price;
+namespace SystemConnector\TransferObject\Product\Price;
 
-use PlentyConnector\Connector\ValueObject\AbstractValueObject;
+use SystemConnector\ValueObject\AbstractValueObject;
 
 class Price extends AbstractValueObject
 {

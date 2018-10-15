@@ -2,9 +2,9 @@
 
 namespace ShopwareAdapter\ResponseParser\Language;
 
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\Language\Language;
 use ShopwareAdapter\ShopwareAdapter;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\Language\Language;
 
 class LanguageResponseParser implements LanguageResponseParserInterface
 {

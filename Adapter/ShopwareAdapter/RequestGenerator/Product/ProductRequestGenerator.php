@@ -6,18 +6,6 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use InvalidArgumentException;
-use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\Category\Category;
-use PlentyConnector\Connector\TransferObject\Manufacturer\Manufacturer;
-use PlentyConnector\Connector\TransferObject\Media\Media;
-use PlentyConnector\Connector\TransferObject\Product\Badge\Badge;
-use PlentyConnector\Connector\TransferObject\Product\LinkedProduct\LinkedProduct;
-use PlentyConnector\Connector\TransferObject\Product\Product;
-use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
-use PlentyConnector\Connector\TransferObject\Shop\Shop;
-use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use Psr\Log\LoggerInterface;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Category\Category as CategoryModel;
@@ -27,6 +15,18 @@ use Shopware\Models\Shop\Repository as ShopRepository;
 use Shopware\Models\Shop\Shop as ShopModel;
 use ShopwareAdapter\RequestGenerator\Product\ConfiguratorSet\ConfiguratorSetRequestGeneratorInterface;
 use ShopwareAdapter\ShopwareAdapter;
+use SystemConnector\ConfigService\ConfigServiceInterface;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\Category\Category;
+use SystemConnector\TransferObject\Manufacturer\Manufacturer;
+use SystemConnector\TransferObject\Media\Media;
+use SystemConnector\TransferObject\Product\Badge\Badge;
+use SystemConnector\TransferObject\Product\LinkedProduct\LinkedProduct;
+use SystemConnector\TransferObject\Product\Product;
+use SystemConnector\TransferObject\ShippingProfile\ShippingProfile;
+use SystemConnector\TransferObject\Shop\Shop;
+use SystemConnector\TransferObject\VatRate\VatRate;
+use SystemConnector\ValueObject\Attribute\Attribute;
 
 class ProductRequestGenerator implements ProductRequestGeneratorInterface
 {
@@ -48,7 +48,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
     /**
      * @var ConfigServiceInterface
      */
-    private $config;
+    private $configService;
 
     /**
      * @var LoggerInterface
@@ -64,13 +64,13 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
         IdentityServiceInterface $identityService,
         EntityManagerInterface $entityManager,
         ConfiguratorSetRequestGeneratorInterface $configuratorSetRequestGenerator,
-        ConfigServiceInterface $config,
+        ConfigServiceInterface $configService,
         LoggerInterface $logger
     ) {
         $this->identityService = $identityService;
         $this->entityManager = $entityManager;
         $this->configuratorSetRequestGenerator = $configuratorSetRequestGenerator;
-        $this->config = $config;
+        $this->configService = $configService;
         $this->logger = $logger;
     }
 
@@ -132,7 +132,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
             'seoCategories' => $this->getSeoCategories($product),
             'taxId' => $vatIdentity->getAdapterIdentifier(),
             'lastStock' => $product->hasStockLimitation(),
-            'notification' => $this->config->get('item_notification') === 'true' ? 1 : 0,
+            'notification' => $this->configService->get('item_notification') === 'true' ? 1 : 0,
             'active' => $product->isActive(),
             'highlight' => $this->getHighlightFlag($product),
             'images' => $this->getImages($product),
@@ -146,7 +146,6 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
             '__options_seoCategories' => ['replace' => true],
             '__options_similar' => ['replace' => true],
             '__options_related' => ['replace' => true],
-            '__options_prices' => ['replace' => true],
             '__options_images' => ['replace' => true],
         ];
 

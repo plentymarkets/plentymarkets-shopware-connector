@@ -3,8 +3,8 @@
 namespace PlentyConnector\Components\PayPal\PaymentData;
 
 use DateTimeImmutable;
-use PlentyConnector\Connector\TransferObject\Payment\PaymentData\PaymentDataInterface;
-use PlentyConnector\Connector\ValueObject\AbstractValueObject;
+use SystemConnector\TransferObject\Payment\PaymentData\PaymentDataInterface;
+use SystemConnector\ValueObject\AbstractValueObject;
 
 class PayPalPlusInvoicePaymentData extends AbstractValueObject implements PaymentDataInterface
 {

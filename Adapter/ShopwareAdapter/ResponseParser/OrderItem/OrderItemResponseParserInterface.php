@@ -2,7 +2,7 @@
 
 namespace ShopwareAdapter\ResponseParser\OrderItem;
 
-use PlentyConnector\Connector\TransferObject\Order\OrderItem\OrderItem;
+use SystemConnector\TransferObject\Order\OrderItem\OrderItem;
 
 interface OrderItemResponseParserInterface
 {

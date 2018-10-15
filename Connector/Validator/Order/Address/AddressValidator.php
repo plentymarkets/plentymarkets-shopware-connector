@@ -1,11 +1,11 @@
 <?php
 
-namespace PlentyConnector\Connector\Validator\Order\Address;
+namespace SystemConnector\Validator\Order\Address;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\Order\Address\Address;
-use PlentyConnector\Connector\Validator\ValidatorInterface;
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
+use SystemConnector\TransferObject\Order\Address\Address;
+use SystemConnector\Validator\ValidatorInterface;
+use SystemConnector\ValueObject\Attribute\Attribute;
 
 class AddressValidator implements ValidatorInterface
 {
