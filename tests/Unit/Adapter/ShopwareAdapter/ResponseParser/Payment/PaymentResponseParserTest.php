@@ -2,11 +2,11 @@
 
 namespace PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\Payment;
 
-use PlentyConnector\Connector\TransferObject\Payment\Payment;
-use PlentyConnector\Connector\Validator\Order\Payment\PaymentValidator;
 use PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\ResponseParserTest;
 use ShopwareAdapter\DataProvider\Currency\CurrencyDataProviderInterface;
 use ShopwareAdapter\ResponseParser\Payment\PaymentResponseParser;
+use SystemConnector\TransferObject\Payment\Payment;
+use SystemConnector\Validator\Order\Payment\PaymentValidator;
 
 class PaymentResponseParserTest extends ResponseParserTest
 {

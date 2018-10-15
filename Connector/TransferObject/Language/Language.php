@@ -1,8 +1,8 @@
 <?php
 
-namespace PlentyConnector\Connector\TransferObject\Language;
+namespace SystemConnector\TransferObject\Language;
 
-use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
+use SystemConnector\TransferObject\AbstractTransferObject;
 
 class Language extends AbstractTransferObject
 {

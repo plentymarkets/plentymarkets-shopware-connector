@@ -2,7 +2,7 @@
 
 namespace PlentymarketsAdapter\ResponseParser\Unit;
 
-use PlentyConnector\Connector\TransferObject\Unit\Unit;
+use SystemConnector\TransferObject\Unit\Unit;
 
 interface UnitResponseParserInterface
 {

@@ -2,8 +2,8 @@
 
 namespace PlentyConnector\Components\Klarna\PaymentData;
 
-use PlentyConnector\Connector\TransferObject\Payment\PaymentData\PaymentDataInterface;
-use PlentyConnector\Connector\ValueObject\AbstractValueObject;
+use SystemConnector\TransferObject\Payment\PaymentData\PaymentDataInterface;
+use SystemConnector\ValueObject\AbstractValueObject;
 
 class KlarnaPaymentData extends AbstractValueObject implements PaymentDataInterface
 {

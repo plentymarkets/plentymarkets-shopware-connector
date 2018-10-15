@@ -1,10 +1,10 @@
 <?php
 
-namespace PlentyConnector\Connector\ServiceBus\Command;
+namespace SystemConnector\ServiceBus\Command;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\ServiceBus\CommandType;
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
+use SystemConnector\ServiceBus\CommandType;
+use SystemConnector\TransferObject\TransferObjectInterface;
 
 class TransferObjectCommand implements CommandInterface
 {

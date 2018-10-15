@@ -2,7 +2,7 @@
 
 namespace ShopwareAdapter\RequestGenerator\Product\ConfiguratorSet;
 
-use PlentyConnector\Connector\TransferObject\Product\Product;
+use SystemConnector\TransferObject\Product\Product;
 
 interface ConfiguratorSetRequestGeneratorInterface
 {

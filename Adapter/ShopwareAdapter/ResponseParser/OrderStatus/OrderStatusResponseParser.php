@@ -2,9 +2,9 @@
 
 namespace ShopwareAdapter\ResponseParser\OrderStatus;
 
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\OrderStatus\OrderStatus;
 use ShopwareAdapter\ShopwareAdapter;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\OrderStatus\OrderStatus;
 
 class OrderStatusResponseParser implements OrderStatusResponseParserInterface
 {

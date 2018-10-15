@@ -1,10 +1,10 @@
 <?php
 
-namespace PlentyConnector\Connector\Validator\Currency;
+namespace SystemConnector\Validator\Currency;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\Currency\Currency;
-use PlentyConnector\Connector\Validator\ValidatorInterface;
+use SystemConnector\TransferObject\Currency\Currency;
+use SystemConnector\Validator\ValidatorInterface;
 
 class CurrencyValidator implements ValidatorInterface
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace PlentyConnector\Connector\Validator\Country;
+namespace SystemConnector\Validator\Country;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\Country\Country;
-use PlentyConnector\Connector\Validator\ValidatorInterface;
+use SystemConnector\TransferObject\Country\Country;
+use SystemConnector\Validator\ValidatorInterface;
 
 class CountryValidator implements ValidatorInterface
 {

@@ -2,9 +2,9 @@
 
 namespace ShopwareAdapter\ResponseParser\Unit;
 
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\Unit\Unit;
 use ShopwareAdapter\ShopwareAdapter;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\Unit\Unit;
 
 class UnitResponseParser implements UnitResponseParserInterface
 {

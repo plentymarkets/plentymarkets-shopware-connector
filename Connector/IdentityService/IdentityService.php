@@ -1,13 +1,13 @@
 <?php
 
-namespace PlentyConnector\Connector\IdentityService;
+namespace SystemConnector\IdentityService;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
-use PlentyConnector\Connector\IdentityService\Storage\IdentityStorageInterface;
-use PlentyConnector\Connector\ValidatorService\ValidatorServiceInterface;
-use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Ramsey\Uuid\Uuid;
+use SystemConnector\IdentityService\Exception\NotFoundException;
+use SystemConnector\IdentityService\Storage\IdentityStorageInterface;
+use SystemConnector\ValidatorService\ValidatorServiceInterface;
+use SystemConnector\ValueObject\Identity\Identity;
 
 class IdentityService implements IdentityServiceInterface
 {

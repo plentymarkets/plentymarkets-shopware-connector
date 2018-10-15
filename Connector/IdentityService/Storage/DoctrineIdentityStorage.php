@@ -1,12 +1,12 @@
 <?php
 
-namespace PlentyConnector\Connector\IdentityService\Storage;
+namespace SystemConnector\IdentityService\Storage;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use PlentyConnector\Connector\IdentityService\Model\Identity as IdentityModel;
-use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use RuntimeException;
+use SystemConnector\IdentityService\Model\Identity as IdentityModel;
+use SystemConnector\ValueObject\Identity\Identity;
 
 class DoctrineIdentityStorage implements IdentityStorageInterface
 {

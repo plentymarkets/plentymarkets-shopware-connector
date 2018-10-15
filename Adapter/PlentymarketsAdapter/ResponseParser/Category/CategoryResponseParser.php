@@ -3,18 +3,18 @@
 namespace PlentymarketsAdapter\ResponseParser\Category;
 
 use Exception;
-use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\Category\Category;
-use PlentyConnector\Connector\TransferObject\Language\Language;
-use PlentyConnector\Connector\TransferObject\Shop\Shop;
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
-use PlentyConnector\Connector\ValueObject\Identity\Identity;
-use PlentyConnector\Connector\ValueObject\Translation\Translation;
 use PlentymarketsAdapter\Helper\MediaCategoryHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Media\MediaResponseParserInterface;
 use Psr\Log\LoggerInterface;
+use SystemConnector\ConfigService\ConfigServiceInterface;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\Category\Category;
+use SystemConnector\TransferObject\Language\Language;
+use SystemConnector\TransferObject\Shop\Shop;
+use SystemConnector\ValueObject\Attribute\Attribute;
+use SystemConnector\ValueObject\Identity\Identity;
+use SystemConnector\ValueObject\Translation\Translation;
 
 class CategoryResponseParser implements CategoryResponseParserInterface
 {
@@ -26,7 +26,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
     /**
      * @var ConfigServiceInterface
      */
-    private $config;
+    private $configService;
 
     /**
      * @var MediaResponseParserInterface
@@ -40,12 +40,12 @@ class CategoryResponseParser implements CategoryResponseParserInterface
 
     public function __construct(
         IdentityServiceInterface $identityService,
-        ConfigServiceInterface $config,
+        ConfigServiceInterface $configService,
         MediaResponseParserInterface $mediaResponseParser,
         LoggerInterface $logger
     ) {
         $this->identityService = $identityService;
-        $this->config = $config;
+        $this->configService = $configService;
         $this->mediaResponseParser = $mediaResponseParser;
         $this->logger = $logger;
     }
@@ -234,7 +234,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
      */
     private function getBaseUrl()
     {
-        $parts = parse_url($this->config->get('rest_url'));
+        $parts = parse_url($this->configService->get('rest_url'));
 
         return sprintf('%s://%s/', $parts['scheme'], $parts['host']);
     }

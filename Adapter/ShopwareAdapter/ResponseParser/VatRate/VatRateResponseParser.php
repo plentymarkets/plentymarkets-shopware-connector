@@ -2,9 +2,9 @@
 
 namespace ShopwareAdapter\ResponseParser\VatRate;
 
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
 use ShopwareAdapter\ShopwareAdapter;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\VatRate\VatRate;
 
 class VatRateResponseParser implements VatRateResponseParserInterface
 {

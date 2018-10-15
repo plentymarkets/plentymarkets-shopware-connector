@@ -4,10 +4,10 @@ namespace PlentyConnector\Components\Bundle\TransferObject;
 
 use DateTimeImmutable;
 use PlentyConnector\Components\Bundle\TransferObject\BundleProduct\BundleProduct;
-use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
-use PlentyConnector\Connector\TransferObject\Product\Price\Price;
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
-use PlentyConnector\Connector\ValueObject\Translation\Translation;
+use SystemConnector\TransferObject\AbstractTransferObject;
+use SystemConnector\TransferObject\Product\Price\Price;
+use SystemConnector\ValueObject\Attribute\Attribute;
+use SystemConnector\ValueObject\Translation\Translation;
 
 class Bundle extends AbstractTransferObject
 {

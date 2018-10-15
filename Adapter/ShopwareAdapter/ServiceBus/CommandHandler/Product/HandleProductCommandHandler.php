@@ -3,14 +3,6 @@
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Product;
 
 use Doctrine\ORM\EntityManagerInterface;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
-use PlentyConnector\Connector\ServiceBus\Command\TransferObjectCommand;
-use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
-use PlentyConnector\Connector\ServiceBus\CommandType;
-use PlentyConnector\Connector\TransferObject\Language\Language;
-use PlentyConnector\Connector\TransferObject\Product\Product;
-use PlentyConnector\Connector\Translation\TranslationHelperInterface;
 use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Article;
@@ -22,6 +14,14 @@ use ShopwareAdapter\DataPersister\Translation\TranslationDataPersisterInterface;
 use ShopwareAdapter\DataProvider\Shop\ShopDataProviderInterface;
 use ShopwareAdapter\RequestGenerator\Product\ProductRequestGeneratorInterface;
 use ShopwareAdapter\ShopwareAdapter;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\ServiceBus\Command\CommandInterface;
+use SystemConnector\ServiceBus\Command\TransferObjectCommand;
+use SystemConnector\ServiceBus\CommandHandler\CommandHandlerInterface;
+use SystemConnector\ServiceBus\CommandType;
+use SystemConnector\TransferObject\Language\Language;
+use SystemConnector\TransferObject\Product\Product;
+use SystemConnector\Translation\TranslationHelperInterface;
 
 class HandleProductCommandHandler implements CommandHandlerInterface
 {
@@ -186,9 +186,9 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             }
 
             $this->attributeDataPersister->saveProductDetailAttributes(
-            $productModel->getMainDetail(),
-            $product->getAttributes()
-        );
+                $productModel->getMainDetail(),
+                $product->getAttributes()
+            );
 
             $this->translationDataPersister->writeProductTranslations($product);
         }

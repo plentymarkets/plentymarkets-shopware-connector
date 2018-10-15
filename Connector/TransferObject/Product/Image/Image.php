@@ -1,8 +1,8 @@
 <?php
 
-namespace PlentyConnector\Connector\TransferObject\Product\Image;
+namespace SystemConnector\TransferObject\Product\Image;
 
-use PlentyConnector\Connector\ValueObject\AbstractValueObject;
+use SystemConnector\ValueObject\AbstractValueObject;
 
 class Image extends AbstractValueObject
 {

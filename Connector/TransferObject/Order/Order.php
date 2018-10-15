@@ -1,17 +1,17 @@
 <?php
 
-namespace PlentyConnector\Connector\TransferObject\Order;
+namespace SystemConnector\TransferObject\Order;
 
 use DateTimeImmutable;
-use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
-use PlentyConnector\Connector\TransferObject\AttributableInterface;
-use PlentyConnector\Connector\TransferObject\Order\Address\Address;
-use PlentyConnector\Connector\TransferObject\Order\Comment\Comment;
-use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
-use PlentyConnector\Connector\TransferObject\Order\OrderItem\OrderItem;
-use PlentyConnector\Connector\TransferObject\Order\Package\Package;
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use ReflectionClass;
+use SystemConnector\TransferObject\AbstractTransferObject;
+use SystemConnector\TransferObject\AttributableInterface;
+use SystemConnector\TransferObject\Order\Address\Address;
+use SystemConnector\TransferObject\Order\Comment\Comment;
+use SystemConnector\TransferObject\Order\Customer\Customer;
+use SystemConnector\TransferObject\Order\OrderItem\OrderItem;
+use SystemConnector\TransferObject\Order\Package\Package;
+use SystemConnector\ValueObject\Attribute\Attribute;
 
 class Order extends AbstractTransferObject implements AttributableInterface
 {

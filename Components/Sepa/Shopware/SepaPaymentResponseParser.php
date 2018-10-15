@@ -6,15 +6,15 @@ use Assert\Assertion;
 use Doctrine\ORM\EntityRepository;
 use InvalidArgumentException;
 use PlentyConnector\Components\Sepa\PaymentData\SepaPaymentData;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\Currency\Currency;
-use PlentyConnector\Connector\TransferObject\Order\Order;
-use PlentyConnector\Connector\TransferObject\Payment\Payment;
-use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod;
-use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use Shopware\Models\Shop\Currency as CurrencyModel;
 use ShopwareAdapter\ResponseParser\Payment\PaymentResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\Currency\Currency;
+use SystemConnector\TransferObject\Order\Order;
+use SystemConnector\TransferObject\Payment\Payment;
+use SystemConnector\TransferObject\PaymentMethod\PaymentMethod;
+use SystemConnector\TransferObject\Shop\Shop;
 
 class SepaPaymentResponseParser implements PaymentResponseParserInterface
 {

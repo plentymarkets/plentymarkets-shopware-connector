@@ -2,8 +2,8 @@
 
 namespace PlentyConnector\Components\Bundle\TransferObject\BundleProduct;
 
-use PlentyConnector\Connector\ValueObject\AbstractValueObject;
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
+use SystemConnector\ValueObject\AbstractValueObject;
+use SystemConnector\ValueObject\Attribute\Attribute;
 
 class BundleProduct extends AbstractValueObject
 {

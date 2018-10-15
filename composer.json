@@ -12,22 +12,27 @@
     "homepage": "https://github.com/plentymarkets/plentymarkets-shopware-connector",
     "require": {
         "php": "^5.6.4||^7.0",
-        "roave/security-advisories": "dev-master",
         "viison/address-splitter": "dev-master",
         "composer/installers": "^1.0",
         "league/tactician": "^1.0"
     },
     "require-dev": {
+        "roave/security-advisories": "dev-master",
         "phpunit/phpunit": "^5.0",
-        "friendsofphp/php-cs-fixer": "^2.0"
+        "k10r/codestyle": "^1.0"
     },
     "suggest": {
         "ramsey/uuid": "Needed to generate UUID's for each transfer object - provided by shopware",
-        "myclabs/deep-copy": "Needed to ensure a transfer object can be translated correctly - provided by shopware"
+        "myclabs/deep-copy": "Needed to ensure a transfer object can be translated correctly - provided by shopware",
+        "monolog/monolog": "Needed to provide logging functionality - provided by shopware",
+        "symfony/console": "Dependency of all console commands - provided by shopware",
+        "doctrine/orm": "Needed for the BacklogService and the DoctrineIdentityStorage - provided by shopware",
+        "beberlei/assert": "Needed for all validations and various other places - provided by shopware"
     },
     "autoload": {
         "psr-4": {
             "PlentyConnector\\": "",
+            "SystemConnector\\": "Connector",
             "PlentymarketsAdapter\\": "Adapter\\PlentymarketsAdapter",
             "ShopwareAdapter\\": "Adapter\\ShopwareAdapter"
         }
@@ -35,7 +40,7 @@
     "scripts": {
         "test": "./vendor/bin/phpunit -c tests/ --colors=always",
         "test-unit": "./vendor/bin/phpunit -c tests/phpunit_unit.xml --colors=always",
-        "cs": "./vendor/bin/php-cs-fixer fix -vvv"
+        "cs": "./vendor/bin/php-cs-fixer fix --show-progress=dots --verbose"
     },
     "extra": {
         "installer-name": "PlentyConnector"

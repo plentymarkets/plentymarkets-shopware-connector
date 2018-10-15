@@ -2,9 +2,9 @@
 
 namespace PlentymarketsAdapter\ResponseParser\PaymentMethod;
 
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod;
 use PlentymarketsAdapter\PlentymarketsAdapter;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\PaymentMethod\PaymentMethod;
 
 class PaymentMethodResponseParser implements PaymentMethodResponseParserInterface
 {

@@ -2,17 +2,17 @@
 
 namespace ShopwareAdapter\RequestGenerator\Product\Variation;
 
-use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
-use PlentyConnector\Connector\TransferObject\Media\Media;
-use PlentyConnector\Connector\TransferObject\Product\Barcode\Barcode;
-use PlentyConnector\Connector\TransferObject\Product\Product;
-use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
-use PlentyConnector\Connector\TransferObject\Shop\Shop;
-use PlentyConnector\Connector\TransferObject\Unit\Unit;
 use ShopwareAdapter\DataProvider\CustomerGroup\CustomerGroupDataProviderInterface;
 use ShopwareAdapter\ShopwareAdapter;
+use SystemConnector\IdentityService\Exception\NotFoundException;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\CustomerGroup\CustomerGroup;
+use SystemConnector\TransferObject\Media\Media;
+use SystemConnector\TransferObject\Product\Barcode\Barcode;
+use SystemConnector\TransferObject\Product\Product;
+use SystemConnector\TransferObject\Product\Variation\Variation;
+use SystemConnector\TransferObject\Shop\Shop;
+use SystemConnector\TransferObject\Unit\Unit;
 
 class VariationRequestGenerator implements VariationRequestGeneratorInterface
 {
@@ -82,6 +82,8 @@ class VariationRequestGenerator implements VariationRequestGeneratorInterface
             'minPurchase' => $variation->getMinimumOrderQuantity(),
             'purchaseSteps' => $variation->getIntervalOrderQuantity(),
             'maxPurchase' => $variation->getMaximumOrderQuantity(),
+            '__options_prices' => ['replace' => true],
+            '__options_images' => ['replace' => true],
         ];
 
         $releaseData = $variation->getReleaseDate();

@@ -6,10 +6,10 @@ use Assert\Assertion;
 use DateTimeImmutable;
 use PlentyConnector\Components\Bundle\TransferObject\Bundle;
 use PlentyConnector\Components\Bundle\TransferObject\BundleProduct\BundleProduct;
-use PlentyConnector\Connector\TransferObject\Product\Price\Price;
-use PlentyConnector\Connector\Validator\ValidatorInterface;
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
-use PlentyConnector\Connector\ValueObject\Translation\Translation;
+use SystemConnector\TransferObject\Product\Price\Price;
+use SystemConnector\Validator\ValidatorInterface;
+use SystemConnector\ValueObject\Attribute\Attribute;
+use SystemConnector\ValueObject\Translation\Translation;
 
 class BundleValidator implements ValidatorInterface
 {

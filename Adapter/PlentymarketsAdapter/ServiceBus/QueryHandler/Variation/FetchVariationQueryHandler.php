@@ -2,16 +2,16 @@
 
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Variation;
 
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
-use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
-use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
-use PlentyConnector\Connector\ServiceBus\QueryType;
-use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Item as ItemApi;
 use PlentymarketsAdapter\ReadApi\Item\Variation as VariationApi;
 use PlentymarketsAdapter\ResponseParser\Product\Variation\VariationResponseParserInterface;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\ServiceBus\Query\FetchTransferObjectQuery;
+use SystemConnector\ServiceBus\Query\QueryInterface;
+use SystemConnector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use SystemConnector\ServiceBus\QueryType;
+use SystemConnector\TransferObject\Product\Variation\Variation;
 
 class FetchVariationQueryHandler implements QueryHandlerInterface
 {

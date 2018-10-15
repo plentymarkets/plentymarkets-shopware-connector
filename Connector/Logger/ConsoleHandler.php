@@ -1,6 +1,6 @@
 <?php
 
-namespace PlentyConnector\Connector\Logger;
+namespace SystemConnector\Logger;
 
 /**
  * This file is part of the Symfony package.

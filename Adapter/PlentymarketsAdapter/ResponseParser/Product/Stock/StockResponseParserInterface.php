@@ -2,7 +2,7 @@
 
 namespace PlentymarketsAdapter\ResponseParser\Product\Stock;
 
-use PlentyConnector\Connector\TransferObject\Product\Stock\Stock;
+use SystemConnector\TransferObject\Product\Stock\Stock;
 
 interface StockResponseParserInterface
 {

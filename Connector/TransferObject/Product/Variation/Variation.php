@@ -1,15 +1,15 @@
 <?php
 
-namespace PlentyConnector\Connector\TransferObject\Product\Variation;
+namespace SystemConnector\TransferObject\Product\Variation;
 
 use DateTimeImmutable;
-use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
-use PlentyConnector\Connector\TransferObject\AttributableInterface;
-use PlentyConnector\Connector\TransferObject\Product\Barcode\Barcode;
-use PlentyConnector\Connector\TransferObject\Product\Image\Image;
-use PlentyConnector\Connector\TransferObject\Product\Price\Price;
-use PlentyConnector\Connector\TransferObject\Product\Property\Property;
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
+use SystemConnector\TransferObject\AbstractTransferObject;
+use SystemConnector\TransferObject\AttributableInterface;
+use SystemConnector\TransferObject\Product\Barcode\Barcode;
+use SystemConnector\TransferObject\Product\Image\Image;
+use SystemConnector\TransferObject\Product\Price\Price;
+use SystemConnector\TransferObject\Product\Property\Property;
+use SystemConnector\ValueObject\Attribute\Attribute;
 
 class Variation extends AbstractTransferObject implements AttributableInterface
 {

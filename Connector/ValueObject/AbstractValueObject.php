@@ -1,6 +1,6 @@
 <?php
 
-namespace PlentyConnector\Connector\ValueObject;
+namespace SystemConnector\ValueObject;
 
 abstract class AbstractValueObject implements ValueObjectInterface
 {

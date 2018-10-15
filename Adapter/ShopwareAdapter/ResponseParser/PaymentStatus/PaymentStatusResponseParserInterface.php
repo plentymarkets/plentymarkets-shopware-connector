@@ -2,7 +2,7 @@
 
 namespace ShopwareAdapter\ResponseParser\PaymentStatus;
 
-use PlentyConnector\Connector\TransferObject\PaymentStatus\PaymentStatus;
+use SystemConnector\TransferObject\PaymentStatus\PaymentStatus;
 
 interface PaymentStatusResponseParserInterface
 {

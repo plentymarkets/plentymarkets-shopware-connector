@@ -1,10 +1,10 @@
 <?php
 
-namespace PlentyConnector\Connector\Validator\Language;
+namespace SystemConnector\Validator\Language;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\Language\Language;
-use PlentyConnector\Connector\Validator\ValidatorInterface;
+use SystemConnector\TransferObject\Language\Language;
+use SystemConnector\Validator\ValidatorInterface;
 
 class LanguageValidator implements ValidatorInterface
 {

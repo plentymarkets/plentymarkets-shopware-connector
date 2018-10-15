@@ -2,7 +2,7 @@
 
 namespace PlentymarketsAdapter\ResponseParser\Product\Price;
 
-use PlentyConnector\Connector\TransferObject\Product\Price\Price;
+use SystemConnector\TransferObject\Product\Price\Price;
 
 interface PriceResponseParserInterface
 {
