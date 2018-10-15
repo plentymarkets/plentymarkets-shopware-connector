@@ -71,25 +71,17 @@ class FetchAllStocksQueryHandler implements QueryHandlerInterface
         $this->outputHandler->startProgressBar(count($elements));
 
         foreach ($elements as $element) {
+            $stock = null;
+
             try {
-                $result = $this->responseParser->parse($element);
+                $stock = $this->responseParser->parse($element);
             } catch (Exception $exception) {
                 $this->logger->error($exception->getMessage());
-
-                $result = null;
             }
 
-            if (empty($result)) {
-                $result = [];
+            if ($stock === null) {
+                yield $stock;
             }
-
-            $result = array_filter($result);
-
-            foreach ($result as $parsedElement) {
-                yield $parsedElement;
-            }
-
-            $this->outputHandler->advanceProgressBar();
         }
 
         $this->outputHandler->finishProgressBar();

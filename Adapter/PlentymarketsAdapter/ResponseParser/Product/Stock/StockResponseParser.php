@@ -50,7 +50,7 @@ class StockResponseParser implements StockResponseParserInterface
         ]);
 
         if (null === $variationIdentity) {
-            return [];
+            return null;
         }
 
         $stockIdentity = $this->identityService->findOneOrCreate(

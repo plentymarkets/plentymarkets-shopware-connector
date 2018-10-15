@@ -9,7 +9,7 @@ interface StockResponseParserInterface
     /**
      * @param array $variation
      *
-     * @return Stock
+     * @return null|Stock
      */
     public function parse(array $variation);
 }

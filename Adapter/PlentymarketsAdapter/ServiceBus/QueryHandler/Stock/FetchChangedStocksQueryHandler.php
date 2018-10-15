@@ -90,22 +90,16 @@ class FetchChangedStocksQueryHandler implements QueryHandlerInterface
             ]);
 
             foreach ($elements as $element) {
+                $stock = null;
+
                 try {
-                    $result = $this->responseParser->parse($element);
+                    $stock = $this->responseParser->parse($element);
                 } catch (Exception $exception) {
                     $this->logger->error($exception->getMessage());
-
-                    $result = null;
                 }
 
-                if (empty($result)) {
-                    $result = [];
-                }
-
-                $result = array_filter($result);
-
-                foreach ($result as $parsedElement) {
-                    yield $parsedElement;
+                if ($stock === null) {
+                    yield $stock;
                 }
 
                 $this->outputHandler->advanceProgressBar();
