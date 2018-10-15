@@ -64,7 +64,7 @@ class StockResponseParser implements StockResponseParserInterface
         $stock->setVariationIdentifier($variationIdentity->getObjectIdentifier());
         $stock->setStock($this->getStock($variation));
 
-        return [$stock];
+        return $stock;
     }
 
     /**

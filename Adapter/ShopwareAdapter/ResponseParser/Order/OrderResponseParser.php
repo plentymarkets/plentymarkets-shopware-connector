@@ -146,6 +146,16 @@ class OrderResponseParser implements OrderResponseParserInterface
             Order::TYPE
         );
 
+        $isMappedOrderIdentity = $this->identityService->isMappedIdentity(
+            $orderIdentity->getObjectIdentifier(),
+            $orderIdentity->getObjectType(),
+            $orderIdentity->getAdapterName()
+        );
+
+        if ($isMappedOrderIdentity) {
+            return [];
+        }
+
         $order = new Order();
         $order->setIdentifier($orderIdentity->getObjectIdentifier());
         $order->setOrderNumber($entry['number']);

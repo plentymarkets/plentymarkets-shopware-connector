@@ -13,6 +13,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - fix product meta title and meta description translation
 - fix product duplicates
 - fix services.xml for shopware 5.5.x
+- fix don't write already transfered payments and orders into backlog
 
 ### Changed
 - translated variation configurator 

@@ -5,7 +5,6 @@ namespace PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\Paym
 use PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\ResponseParserTest;
 use ShopwareAdapter\DataProvider\Currency\CurrencyDataProviderInterface;
 use ShopwareAdapter\ResponseParser\Payment\PaymentResponseParser;
-use SystemConnector\TransferObject\Payment\Payment;
 use SystemConnector\Validator\Order\Payment\PaymentValidator;
 
 class PaymentResponseParserTest extends ResponseParserTest
@@ -25,9 +24,8 @@ class PaymentResponseParserTest extends ResponseParserTest
         parent::setUp();
 
         $currencyDataProvider = $this->createMock(CurrencyDataProviderInterface::class);
-        $currencyDataProvider->expects($this->once())->method('getCurrencyIdentifierByCode')->willReturn('1');
 
-        $this->responseParser = $parser = new PaymentResponseParser(
+        $this->responseParser = new PaymentResponseParser(
             $this->identityService,
             $currencyDataProvider
         );
@@ -39,17 +37,6 @@ class PaymentResponseParserTest extends ResponseParserTest
     {
         $payments = $this->responseParser->parse(self::$orderData);
 
-        $this->assertCount(1, $payments);
-
-        /**
-         * @var Payment $payment
-         */
-        $payment = array_shift($payments);
-
-        self::assertInstanceOf(Payment::class, $payment);
-        self::assertEquals(998.56, $payment->getAmount());
-        self::assertEquals('transactionId', $payment->getTransactionReference());
-
-        $this->validator->validate($payment);
+        $this->assertCount(0, $payments);
     }
 }
