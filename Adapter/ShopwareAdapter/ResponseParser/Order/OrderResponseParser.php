@@ -146,6 +146,10 @@ class OrderResponseParser implements OrderResponseParserInterface
             Order::TYPE
         );
 
+        if ($this->identityService->isMappedIdentity($orderIdentity->getObjectIdentifier(), Order::TYPE, ShopwareAdapter::NAME)) {
+            return [];
+        }
+
         $order = new Order();
         $order->setIdentifier($orderIdentity->getObjectIdentifier());
         $order->setOrderNumber($entry['number']);

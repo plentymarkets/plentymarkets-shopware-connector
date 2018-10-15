@@ -42,7 +42,11 @@ class PaymentResponseParser implements PaymentResponseParserInterface
             (string) $element['id'],
             ShopwareAdapter::NAME,
             Payment::TYPE
-        )->getObjectIdentifier();
+        );
+
+        if ($this->identityService->isMappedIdentity($paymentIdentifier->getObjectIdentifier(), Payment::TYPE, ShopwareAdapter::NAME)) {
+            return [];
+        }
 
         if (empty($element['paymentStatus'])) {
             return [];
@@ -58,21 +62,11 @@ class PaymentResponseParser implements PaymentResponseParserInterface
             Shop::TYPE
         );
 
-        $isMappedIdentity = $this->identityService->isMappedIdentity(
-            $shopIdentity->getObjectIdentifier(),
-            $shopIdentity->getObjectType(),
-            $shopIdentity->getAdapterName()
-        );
-
-        if (!$isMappedIdentity) {
-            return [];
-        }
-
         $shopwareCurrencyIdentifier = $this->currencyDataProvider->getCurrencyIdentifierByCode($element['currency']);
         $currencyIdentifier = $this->getConnectorIdentifier($shopwareCurrencyIdentifier, Currency::TYPE);
 
         $payment = new Payment();
-        $payment->setIdentifier($paymentIdentifier);
+        $payment->setIdentifier($paymentIdentifier->getObjectIdentifier());
         $payment->setShopIdentifier($shopIdentity->getObjectIdentifier());
         $payment->setOrderIdentifer($this->getConnectorIdentifier($element['id'], Order::TYPE));
         $payment->setAmount($element['invoiceAmount']);
