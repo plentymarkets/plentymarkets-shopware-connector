@@ -39,8 +39,9 @@
     },
     "scripts": {
         "test": "./vendor/bin/phpunit -c tests/ --colors=always",
-        "test-unit": "./vendor/bin/phpunit -c tests/phpunit_unit.xml --colors=always",
-        "cs": "./vendor/bin/php-cs-fixer fix --show-progress=dots --verbose"
+        "cs": "./vendor/bin/php-cs-fixer fix --show-progress=dots --verbose",
+        "test-travis": "./vendor/bin/phpunit -c tests/ --colors=always",
+        "cs-travis": "./vendor/bin/php-cs-fixer fix --dry-run --show-progress=dots --verbose --stop-on-violation"
     },
     "extra": {
         "installer-name": "PlentyConnector"
