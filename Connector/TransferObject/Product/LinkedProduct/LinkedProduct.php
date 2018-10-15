@@ -1,9 +1,9 @@
 <?php
 
-namespace PlentyConnector\Connector\TransferObject\Product\LinkedProduct;
+namespace SystemConnector\TransferObject\Product\LinkedProduct;
 
-use PlentyConnector\Connector\ValueObject\AbstractValueObject;
 use ReflectionClass;
+use SystemConnector\ValueObject\AbstractValueObject;
 
 class LinkedProduct extends AbstractValueObject
 {

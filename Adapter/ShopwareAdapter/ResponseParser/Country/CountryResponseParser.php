@@ -2,9 +2,9 @@
 
 namespace ShopwareAdapter\ResponseParser\Country;
 
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\Country\Country;
 use ShopwareAdapter\ShopwareAdapter;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\Country\Country;
 
 class CountryResponseParser implements CountryResponseParserInterface
 {

@@ -2,8 +2,8 @@
 
 namespace PlentymarketsAdapter\RequestGenerator\Order\Address;
 
-use PlentyConnector\Connector\TransferObject\Order\Address\Address;
-use PlentyConnector\Connector\TransferObject\Order\Order;
+use SystemConnector\TransferObject\Order\Address\Address;
+use SystemConnector\TransferObject\Order\Order;
 
 interface AddressRequestGeneratorInterface
 {

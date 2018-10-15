@@ -1,6 +1,6 @@
 <?php
 
-namespace PlentyConnector\Connector\ServiceBus\Command;
+namespace SystemConnector\ServiceBus\Command;
 
 interface CommandInterface
 {

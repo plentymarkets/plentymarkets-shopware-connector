@@ -2,10 +2,10 @@
 
 namespace ShopwareAdapter\Helper;
 
-use PlentyConnector\Connector\TransferObject\AttributableInterface;
-use PlentyConnector\Connector\TransferObject\TranslateableInterface;
-use PlentyConnector\Connector\ValidatorService\ValidatorServiceInterface;
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
+use SystemConnector\TransferObject\AttributableInterface;
+use SystemConnector\TransferObject\TranslateableInterface;
+use SystemConnector\ValidatorService\ValidatorServiceInterface;
+use SystemConnector\ValueObject\Attribute\Attribute;
 
 class AttributeHelper implements AttributeHelperInterface
 {

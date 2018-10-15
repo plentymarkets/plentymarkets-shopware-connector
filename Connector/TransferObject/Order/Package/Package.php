@@ -1,9 +1,9 @@
 <?php
 
-namespace PlentyConnector\Connector\TransferObject\Order\Package;
+namespace SystemConnector\TransferObject\Order\Package;
 
 use DateTimeImmutable;
-use PlentyConnector\Connector\ValueObject\AbstractValueObject;
+use SystemConnector\ValueObject\AbstractValueObject;
 
 class Package extends AbstractValueObject
 {

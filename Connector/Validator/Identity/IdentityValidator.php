@@ -1,10 +1,10 @@
 <?php
 
-namespace PlentyConnector\Connector\Validator\Identity;
+namespace SystemConnector\Validator\Identity;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\Validator\ValidatorInterface;
-use PlentyConnector\Connector\ValueObject\Identity\Identity;
+use SystemConnector\Validator\ValidatorInterface;
+use SystemConnector\ValueObject\Identity\Identity;
 
 class IdentityValidator implements ValidatorInterface
 {

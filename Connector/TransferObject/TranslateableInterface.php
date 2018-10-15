@@ -1,8 +1,8 @@
 <?php
 
-namespace PlentyConnector\Connector\TransferObject;
+namespace SystemConnector\TransferObject;
 
-use PlentyConnector\Connector\ValueObject\Translation\Translation;
+use SystemConnector\ValueObject\Translation\Translation;
 
 interface TranslateableInterface
 {

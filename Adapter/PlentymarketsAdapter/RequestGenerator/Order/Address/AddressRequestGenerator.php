@@ -3,12 +3,12 @@
 namespace PlentymarketsAdapter\RequestGenerator\Order\Address;
 
 use Exception;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\Country\Country;
-use PlentyConnector\Connector\TransferObject\Order\Address\Address;
-use PlentyConnector\Connector\TransferObject\Order\Order;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use RuntimeException;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\Country\Country;
+use SystemConnector\TransferObject\Order\Address\Address;
+use SystemConnector\TransferObject\Order\Order;
 use VIISON\AddressSplitter\AddressSplitter;
 
 class AddressRequestGenerator implements AddressRequestGeneratorInterface

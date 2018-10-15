@@ -2,7 +2,7 @@
 
 namespace ShopwareAdapter\ResponseParser\ShippingProfile;
 
-use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
+use SystemConnector\TransferObject\ShippingProfile\ShippingProfile;
 
 interface ShippingProfileResponseParserInterface
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace PlentyConnector\Connector\TransferObject\ShippingProfile;
+namespace SystemConnector\TransferObject\ShippingProfile;
 
-use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
+use SystemConnector\TransferObject\AbstractTransferObject;
 
 class ShippingProfile extends AbstractTransferObject
 {

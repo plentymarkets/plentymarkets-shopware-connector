@@ -2,12 +2,12 @@
 
 namespace ShopwareAdapter\DataProvider\Media;
 
-use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\Media\Media;
-use PlentyConnector\Connector\TransferObject\MediaCategory\MediaCategory;
 use Shopware\Bundle\AttributeBundle\Service\DataLoader;
 use ShopwareAdapter\ShopwareAdapter;
+use SystemConnector\IdentityService\Exception\NotFoundException;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\Media\Media;
+use SystemConnector\TransferObject\MediaCategory\MediaCategory;
 
 class MediaDataProvider implements MediaDataProviderInterface
 {

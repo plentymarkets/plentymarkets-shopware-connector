@@ -1,6 +1,6 @@
 <?php
 
-namespace PlentyConnector\Connector\ServiceBus;
+namespace SystemConnector\ServiceBus;
 
 use ReflectionClass;
 

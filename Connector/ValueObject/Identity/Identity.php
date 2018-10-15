@@ -1,8 +1,8 @@
 <?php
 
-namespace PlentyConnector\Connector\ValueObject\Identity;
+namespace SystemConnector\ValueObject\Identity;
 
-use PlentyConnector\Connector\ValueObject\AbstractValueObject;
+use SystemConnector\ValueObject\AbstractValueObject;
 
 class Identity extends AbstractValueObject
 {

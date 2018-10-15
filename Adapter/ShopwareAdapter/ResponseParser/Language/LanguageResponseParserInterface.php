@@ -2,7 +2,7 @@
 
 namespace ShopwareAdapter\ResponseParser\Language;
 
-use PlentyConnector\Connector\TransferObject\Language\Language;
+use SystemConnector\TransferObject\Language\Language;
 
 interface LanguageResponseParserInterface
 {

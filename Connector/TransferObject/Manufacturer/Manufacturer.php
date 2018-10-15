@@ -1,9 +1,9 @@
 <?php
 
-namespace PlentyConnector\Connector\TransferObject\Manufacturer;
+namespace SystemConnector\TransferObject\Manufacturer;
 
-use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
+use SystemConnector\TransferObject\AbstractTransferObject;
+use SystemConnector\ValueObject\Attribute\Attribute;
 
 class Manufacturer extends AbstractTransferObject
 {

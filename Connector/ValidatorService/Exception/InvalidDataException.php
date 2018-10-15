@@ -1,9 +1,9 @@
 <?php
 
-namespace PlentyConnector\Connector\ValidatorService\Exception;
+namespace SystemConnector\ValidatorService\Exception;
 
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
-use PlentyConnector\Connector\ValueObject\ValueObjectInterface;
+use SystemConnector\TransferObject\TransferObjectInterface;
+use SystemConnector\ValueObject\ValueObjectInterface;
 
 class InvalidDataException extends \Exception
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace PlentyConnector\Connector\Logger;
+namespace SystemConnector\Logger;
 
 use Monolog\Formatter\LineFormatter;
 use Monolog\Logger;
