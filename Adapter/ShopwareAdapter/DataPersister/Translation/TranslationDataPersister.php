@@ -7,6 +7,7 @@ use Shopware_Components_Translation;
 use ShopwareAdapter\DataProvider\Translation\TranslationDataProviderInterface;
 use ShopwareAdapter\ShopwareAdapter;
 use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\Category\Category;
 use SystemConnector\TransferObject\Language\Language;
 use SystemConnector\TransferObject\Product\Product;
 use SystemConnector\TransferObject\Product\Property\Property;
@@ -89,7 +90,6 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
             }
 
             $translation = [
-                'languageIdentity' => $languageIdentity,
                 'name' => $translatedProduct->getName(),
                 'description' => $translatedProduct->getDescription(),
                 'descriptionLong' => $translatedProduct->getLongDescription(),
@@ -256,6 +256,63 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
 
         foreach ($shops as $shop) {
             $this->shopwareTranslationManager->write($shop->getId(), $type, $primaryKey, $translation);
+        }
+    }
+
+    /**
+     * @param Category $category
+     */
+    public function writeCategoryTranslations(Category $category)
+    {
+        $categoryIdentity = $this->identityService->findOneBy([
+            'objectIdentifier' => $category->getIdentifier(),
+            'objectType' => Category::TYPE,
+            'adapterName' => ShopwareAdapter::NAME,
+        ]);
+
+        if (null === $categoryIdentity) {
+            return;
+        }
+
+        foreach ($this->translationHelper->getLanguageIdentifiers($category) as $languageIdentifier) {
+            /**
+             * @var Category $translatedCategory
+             */
+            $translatedCategory = $this->translationHelper->translate($languageIdentifier, $category);
+
+            $languageIdentity = $this->identityService->findOneBy([
+                'objectIdentifier' => $languageIdentifier,
+                'objectType' => Language::TYPE,
+                'adapterName' => ShopwareAdapter::NAME,
+            ]);
+
+            if (null === $languageIdentity) {
+                $this->logger->notice('language not mapped - ' . $languageIdentifier);
+
+                continue;
+            }
+
+            $translation = [
+                'name' => $translatedCategory->getName(),
+                'metaTitle' => $translatedCategory->getMetaTitle(),
+                'metaKeywords' => $translatedCategory->getMetaKeywords(),
+                'metaDescription' => $translatedCategory->getMetaDescription(),
+                'cmsHeadline' => $translatedCategory->getDescription(),
+                'cmsText' => $translatedCategory->getLongDescription(),
+            ];
+
+            foreach ($category->getAttributes() as $attribute) {
+                /**
+                 * @var Attribute $translatedAttribute
+                 */
+                $translatedAttribute = $this->translationHelper->translate($languageIdentifier, $attribute);
+
+                $key = '__attribute_plenty_connector' . ucfirst($attribute->getKey());
+                $attribute_key = strtolower(preg_replace('/[A-Z]/', '_\\0', lcfirst($key)));
+                $translation[$attribute_key] = $translatedAttribute->getValue();
+            }
+
+            $this->writeTranslations('category', (int) $categoryIdentity->getAdapterIdentifier(), $translation);
         }
     }
 }

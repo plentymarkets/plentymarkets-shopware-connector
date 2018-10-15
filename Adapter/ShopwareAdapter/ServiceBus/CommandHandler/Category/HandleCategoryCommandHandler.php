@@ -14,6 +14,7 @@ use Shopware\Models\Category\Repository as CategoryRepository;
 use Shopware\Models\Shop\Repository as ShopRepository;
 use Shopware\Models\Shop\Shop as ShopModel;
 use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
+use ShopwareAdapter\DataPersister\Translation\TranslationDataPersisterInterface;
 use ShopwareAdapter\ShopwareAdapter;
 use SystemConnector\IdentityService\Exception\NotFoundException as IdentityNotFoundException;
 use SystemConnector\IdentityService\IdentityServiceInterface;
@@ -47,6 +48,16 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     private $entityManager;
 
     /**
+     * @var AttributeDataPersisterInterface
+     */
+    private $attributePersister;
+
+    /**
+     * @var TranslationDataPersisterInterface
+     */
+    private $translationDataPersister;
+
+    /**
      * @var CategoryRepository
      */
     private $categoryRepository;
@@ -56,23 +67,20 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
      */
     private $shopRepository;
 
-    /**
-     * @var AttributeDataPersisterInterface
-     */
-    private $attributePersister;
-
     public function __construct(
         IdentityServiceInterface $identityService,
         TranslationHelperInterface $translationHelper,
         EntityManagerInterface $entityManager,
-        AttributeDataPersisterInterface $attributePersister
+        AttributeDataPersisterInterface $attributePersister,
+        TranslationDataPersisterInterface $translationDataPersister
     ) {
         $this->identityService = $identityService;
         $this->translationHelper = $translationHelper;
         $this->entityManager = $entityManager;
+        $this->attributePersister = $attributePersister;
+        $this->translationDataPersister = $translationDataPersister;
         $this->categoryRepository = $entityManager->getRepository(CategoryModel::class);
         $this->shopRepository = $entityManager->getRepository(ShopModel::class);
-        $this->attributePersister = $attributePersister;
     }
 
     /**
@@ -335,6 +343,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         }
 
         $this->attributePersister->saveCategoryAttributes($categoryModel, $category->getAttributes());
+        $this->translationDataPersister->writeCategoryTranslations($category);
 
         return $categoryIdentity;
     }
