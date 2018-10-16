@@ -163,6 +163,7 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
             }
 
             $translation = [
+                'languageIdentity' => $languageIdentity,
                 'name' => $translatedCategory->getName(),
                 'metaTitle' => $translatedCategory->getMetaTitle(),
                 'metaKeywords' => $translatedCategory->getMetaKeywords(),
