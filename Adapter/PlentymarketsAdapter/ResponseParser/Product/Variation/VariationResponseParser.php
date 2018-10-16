@@ -169,7 +169,9 @@ class VariationResponseParser implements VariationResponseParserInterface
                 continue;
             }
 
-            if (!$this->configService->get('import_variations_without_stock', true) && empty($stockObject->getStock())) {
+            $importVariationsWithoutStock = json_decode($this->configService->get('import_variations_without_stock', true));
+
+            if (!$importVariationsWithoutStock && empty($stockObject->getStock())) {
                 continue;
             }
 
