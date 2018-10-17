@@ -2,7 +2,6 @@
 
 namespace PlentyConnector;
 
-use DateInterval;
 use DateTimeImmutable;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
