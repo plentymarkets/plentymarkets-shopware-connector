@@ -216,7 +216,7 @@ class PlentyConnector extends Plugin
             $this->updateBacklogTable();
         }
 
-        if ($this->updateNeeded($context, '5.0.0') && $this->updatePossible($context, '4.0.4')) {
+        if ($this->updateNeeded($context, '5.0.0') && $this->updatePossible($context, '4.0.0')) {
             $this->modifyLastChangedConfigEntries('-1 week');
             $this->clearBacklogTable();
         }
