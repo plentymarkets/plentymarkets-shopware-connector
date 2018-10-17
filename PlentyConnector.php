@@ -217,7 +217,7 @@ class PlentyConnector extends Plugin
         }
 
         if ($this->updateNeeded($context, '5.0.0') && $this->updatePossible($context, '4.0.0')) {
-            $this->reduceLastChangedConfigEntries('P7D');
+            $this->reduceLastChangedConfigEntries('-1 week');
             $this->clearBacklogTable();
         }
 
@@ -404,8 +404,9 @@ class PlentyConnector extends Plugin
             if (false === stripos($element->getName(), 'LastChangeDateTime')) {
                 continue;
             }
-            $date = new DateTimeImmutable($element->getValue());
-            $element->setValue($date->sub(new DateInterval($diff)));
+
+            $date = new DateTimeImmutable();
+            $element->setValue($date->modify($diff)->format(DATE_W3C));
 
             $entityManager->persist($element);
         }
