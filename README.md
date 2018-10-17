@@ -9,7 +9,7 @@
 ## Requirements
 
 * plentymarkets version >= 7.0
-* shopware version >= 5.3
+* shopware version >= 5.4
 * shell access
 * cronjobs
 * active plentymarkets webshop
