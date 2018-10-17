@@ -101,6 +101,14 @@ class ProductResponseParser implements ProductResponseParserInterface
     {
         $result = [];
 
+        if (empty($product['texts'])) {
+            $this->logger->notice('the product has no text fieds and will be skipped', [
+                'product id' => $product['id'],
+            ]);
+
+            return [];
+        }
+
         $mainVariation = $this->getMainVariation($product['variations']);
 
         if (empty($mainVariation)) {
@@ -652,11 +660,11 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return bool
      */
-    private function getActive(array $variations = [], array $mainVariation)
+    private function getActive(array $variations, array $mainVariation)
     {
         $checkInactiveMainVariation = json_decode($this->configService->get('check_active_main_variation'));
 
-        if (!$mainVariation['isActive'] && !$checkInactiveMainVariation) {
+        if (!$checkInactiveMainVariation && !$mainVariation['isActive']) {
             return false;
         }
 

@@ -421,7 +421,7 @@
             <tag name="plenty_connector.query_handler" />
         </service>
 
-        <service id="plentymarkets_adapter.query_handler.fetch_stocks" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Stock\FetchStockQueryHandler">
+        <service id="plentymarkets_adapter.query_handler.fetch_stock" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Stock\FetchStockQueryHandler">
            <tag name="plenty_connector.query_handler" />
         </service>
 
