@@ -216,8 +216,8 @@ class PlentyConnector extends Plugin
             $this->updateBacklogTable();
         }
 
-        if ($this->updateNeeded($context, '5.0.0') && $this->updatePossible($context, '4.0.0')) {
-            $this->reduceLastChangedConfigEntries('-1 week');
+        if ($this->updateNeeded($context, '5.0.0') && $this->updatePossible($context, '4.0.4')) {
+            $this->modifyLastChangedConfigEntries('-1 week');
             $this->clearBacklogTable();
         }
 
@@ -389,7 +389,7 @@ class PlentyConnector extends Plugin
      *
      * @throws Exception
      */
-    private function reduceLastChangedConfigEntries($diff)
+    private function modifyLastChangedConfigEntries($diff)
     {
         /**
          * @var EntityManagerInterface $entityManager
