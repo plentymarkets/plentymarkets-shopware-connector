@@ -96,6 +96,7 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
                 'metaTitle' => $translatedProduct->getMetaTitle(),
                 'metaDescription' => $translatedProduct->getMetaDescription(),
                 'keywords' => $translatedProduct->getMetaKeywords(),
+                'languageIdentity' => $languageIdentity,
             ];
 
             foreach ($product->getAttributes() as $attribute) {
