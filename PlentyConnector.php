@@ -2,6 +2,7 @@
 
 namespace PlentyConnector;
 
+use DateTimeImmutable;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -214,6 +215,11 @@ class PlentyConnector extends Plugin
             $this->updateBacklogTable();
         }
 
+        if ($this->updateNeeded($context, '5.0.0') && $this->updatePossible($context, '4.0.0')) {
+            $this->modifyLastChangedConfigEntries('-1 week');
+            $this->clearBacklogTable();
+        }
+
         parent::update($context);
     }
 
@@ -375,6 +381,47 @@ class PlentyConnector extends Plugin
         }
 
         $entityManager->flush();
+    }
+
+    /**
+     * @param string $diff
+     *
+     * @throws Exception
+     */
+    private function modifyLastChangedConfigEntries($diff)
+    {
+        /**
+         * @var EntityManagerInterface $entityManager
+         */
+        $entityManager = $this->container->get('models');
+        $repository = $entityManager->getRepository(Config::class);
+
+        /**
+         * @var Config $element
+         */
+        foreach ($repository->findAll() as $element) {
+            if (false === stripos($element->getName(), 'LastChangeDateTime')) {
+                continue;
+            }
+
+            $date = new DateTimeImmutable();
+            $element->setValue($date->modify($diff)->format(DATE_W3C));
+
+            $entityManager->persist($element);
+        }
+
+        $entityManager->flush();
+    }
+
+    private function clearBacklogTable()
+    {
+        /**
+         * @var Connection $connection
+         */
+        $connection = $this->container->get('dbal_connection');
+
+        $query = 'TRUNCATE plenty_backlog';
+        $connection->executeQuery($query);
     }
 
     private function updateBacklogTable()
