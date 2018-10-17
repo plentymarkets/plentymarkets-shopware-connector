@@ -90,6 +90,7 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
             }
 
             $translation = [
+                'languageIdentity' => $languageIdentity,
                 'name' => $translatedProduct->getName(),
                 'description' => $translatedProduct->getDescription(),
                 'descriptionLong' => $translatedProduct->getLongDescription(),
