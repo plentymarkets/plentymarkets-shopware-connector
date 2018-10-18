@@ -2,7 +2,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [unreleased]
+## [## [unreleased]]
+### Fixed
+
+### Changed
+
+### Added
+
+## [## [5.0.0]]
 ### Fixed
 - fixed technicalDescription translations (@lacodimizer)
 - fixed mandant shop product activation (@lacodimizer)
