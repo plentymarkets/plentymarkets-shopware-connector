@@ -218,6 +218,7 @@ class PlentyConnector extends Plugin
         if ($this->updateNeeded($context, '5.0.0') && $this->updatePossible($context, '4.0.0')) {
             $this->modifyLastChangedConfigEntries('-1 week');
             $this->clearBacklogTable();
+            $this->repairTranslationTable();
         }
 
         parent::update($context);
@@ -435,6 +436,21 @@ class PlentyConnector extends Plugin
         $connection->executeQuery($query, [
             ':statusNew' => Backlog::STATUS_OPEN,
             ':statusOld' => '',
+        ]);
+    }
+
+    private function repairTranslationTable()
+    {
+        /**
+         * @var Connection $connection
+         */
+        $connection = $this->container->get('dbal_connection');
+
+        $query = 'UPDATE s_core_translations SET objectdata = REPLACE(objectdata, :pathOld, :pathNew)';
+
+        $connection->executeQuery($query, [
+            ':pathOld' => 'PlentyConnector\Connector',
+            ':pathNew' => 'SystemConnector',
         ]);
     }
 
