@@ -448,10 +448,35 @@ class PlentyConnector extends Plugin
 
         $query = 'UPDATE s_core_translations SET objectdata = REPLACE(objectdata, :pathOld, :pathNew)';
 
-        $connection->executeQuery($query, [
-            ':pathOld' => 'PlentyConnector\Connector',
-            ':pathNew' => 'SystemConnector',
-        ]);
+        $data = [
+            [
+                'pathOld' => 'O:55:"PlentyConnector\Connector\ValueObject\Identity\Identity',
+                'pathNew' => 'O:45:"SystemConnector\ValueObject\Identity\Identity',
+            ],
+            [
+                'pathOld' => 's:67:" PlentyConnector\Connector\ValueObject\Identity\Identity',
+                'pathNew' => 's:57:" SystemConnector\ValueObject\Identity\Identity',
+            ],
+            [
+                'pathOld' => 's:68:" PlentyConnector\Connector\ValueObject\Identity\Identity',
+                'pathNew' => 's:58:" SystemConnector\ValueObject\Identity\Identity',
+            ],
+            [
+                'pathOld' => 's:73:" PlentyConnector\Connector\ValueObject\Identity\Identity',
+                'pathNew' => 's:63:" SystemConnector\ValueObject\Identity\Identity',
+            ],
+            [
+                'pathOld' => 's:74:" PlentyConnector\Connector\ValueObject\Identity\Identity',
+                'pathNew' => 's:64:" SystemConnector\ValueObject\Identity\Identity',
+            ],
+        ];
+        foreach ($data as $datum) {
+            $connection->executeQuery($query, [
+                ':pathOld' => $datum['pathOld'],
+                ':pathNew' => $datum['pathNew'],
+            ]);
+        }
+
     }
 
     private function clearOldDatabaseTables()
