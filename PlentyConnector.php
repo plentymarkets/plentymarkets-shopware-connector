@@ -470,13 +470,13 @@ class PlentyConnector extends Plugin
                 'pathNew' => 's:64:" SystemConnector\ValueObject\Identity\Identity',
             ],
         ];
+
         foreach ($data as $datum) {
             $connection->executeQuery($query, [
                 ':pathOld' => $datum['pathOld'],
                 ':pathNew' => $datum['pathNew'],
             ]);
         }
-
     }
 
     private function clearOldDatabaseTables()
