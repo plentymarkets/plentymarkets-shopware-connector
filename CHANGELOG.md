@@ -29,7 +29,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - removed comment and address rest call
 - optimized the stock handling performance
 - restructured the services.xml files
-- changed the core connector namespace to SystemConnector (product synchronize necessary)
+- changed the core connector namespace to SystemConnector
 
 ### Added
 - transfer age restriction as attribute to shopware
