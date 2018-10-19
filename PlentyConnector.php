@@ -218,6 +218,7 @@ class PlentyConnector extends Plugin
         if ($this->updateNeeded($context, '5.0.0') && $this->updatePossible($context, '4.0.0')) {
             $this->modifyLastChangedConfigEntries('-1 week');
             $this->clearBacklogTable();
+            $this->repairTranslationTable();
         }
 
         parent::update($context);
@@ -436,6 +437,46 @@ class PlentyConnector extends Plugin
             ':statusNew' => Backlog::STATUS_OPEN,
             ':statusOld' => '',
         ]);
+    }
+
+    private function repairTranslationTable()
+    {
+        /**
+         * @var Connection $connection
+         */
+        $connection = $this->container->get('dbal_connection');
+
+        $query = 'UPDATE s_core_translations SET objectdata = REPLACE(objectdata, :pathOld, :pathNew)';
+
+        $data = [
+            [
+                'pathOld' => 'O:55:"PlentyConnector\Connector\ValueObject\Identity\Identity',
+                'pathNew' => 'O:45:"SystemConnector\ValueObject\Identity\Identity',
+            ],
+            [
+                'pathOld' => 's:67:" PlentyConnector\Connector\ValueObject\Identity\Identity',
+                'pathNew' => 's:57:" SystemConnector\ValueObject\Identity\Identity',
+            ],
+            [
+                'pathOld' => 's:68:" PlentyConnector\Connector\ValueObject\Identity\Identity',
+                'pathNew' => 's:58:" SystemConnector\ValueObject\Identity\Identity',
+            ],
+            [
+                'pathOld' => 's:73:" PlentyConnector\Connector\ValueObject\Identity\Identity',
+                'pathNew' => 's:63:" SystemConnector\ValueObject\Identity\Identity',
+            ],
+            [
+                'pathOld' => 's:74:" PlentyConnector\Connector\ValueObject\Identity\Identity',
+                'pathNew' => 's:64:" SystemConnector\ValueObject\Identity\Identity',
+            ],
+        ];
+
+        foreach ($data as $datum) {
+            $connection->executeQuery($query, [
+                ':pathOld' => $datum['pathOld'],
+                ':pathNew' => $datum['pathNew'],
+            ]);
+        }
     }
 
     private function clearOldDatabaseTables()
