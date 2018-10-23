@@ -62,6 +62,10 @@ class PaymentResponseParser implements PaymentResponseParserInterface
             return [];
         }
 
+        if (empty($element['transactionId'])) {
+            $element['transactionId'] = $paymentIdentifier->getObjectIdentifier();
+        }
+
         $shopIdentity = $this->identityService->findOneOrThrow(
             (string) $element['shopId'],
             ShopwareAdapter::NAME,
