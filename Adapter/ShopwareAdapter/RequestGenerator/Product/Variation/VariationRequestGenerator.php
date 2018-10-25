@@ -67,6 +67,7 @@ class VariationRequestGenerator implements VariationRequestGeneratorInterface
             'active' => $variation->getActive(),
             'kind' => $variation->isMain() ? 1 : 2,
             'isMain' => $variation->isMain(),
+            'lastStock' => $variation->hasStockLimitation(),
             'standard' => $variation->isMain(),
             'shippingtime' => $variation->getShippingTime(),
             'prices' => $this->getPrices($variation),
