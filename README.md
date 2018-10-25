@@ -10,6 +10,7 @@
 
 * plentymarkets version >= 7.0
 * shopware version >= 5.4
+* php >= 7.0
 * shell access
 * cronjobs
 * active plentymarkets webshop

@@ -14,6 +14,7 @@ use SystemConnector\TransferObject\Product\Property\Property;
 use SystemConnector\TransferObject\Product\Property\Value\Value;
 use SystemConnector\Translation\TranslationHelperInterface;
 use SystemConnector\ValueObject\Attribute\Attribute;
+use SystemConnector\ValueObject\Identity\Identity;
 
 class TranslationDataPersister implements TranslationDataPersisterInterface
 {
@@ -90,7 +91,6 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
             }
 
             $translation = [
-                'languageIdentity' => $languageIdentity,
                 'name' => $translatedProduct->getName(),
                 'description' => $translatedProduct->getDescription(),
                 'descriptionLong' => $translatedProduct->getLongDescription(),
@@ -110,7 +110,12 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
                 $translation[$attribute_key] = $translatedAttribute->getValue();
             }
 
-            $this->writeTranslations('article', (int) $productIdentity->getAdapterIdentifier(), $translation);
+            $this->writeTranslations(
+                'article',
+                (int) $productIdentity->getAdapterIdentifier(),
+                $translation,
+                $languageIdentity
+            );
         }
 
         foreach ($product->getProperties() as $property) {
@@ -164,7 +169,6 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
             }
 
             $translation = [
-                'languageIdentity' => $languageIdentity,
                 'name' => $translatedCategory->getName(),
                 'metaTitle' => $translatedCategory->getMetaTitle(),
                 'metaKeywords' => $translatedCategory->getMetaKeywords(),
@@ -184,7 +188,12 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
                 $translation[$attribute_key] = $translatedAttribute->getValue();
             }
 
-            $this->writeTranslations('category', (int) $categoryIdentity->getAdapterIdentifier(), $translation);
+            $this->writeTranslations(
+                'category',
+                (int) $categoryIdentity->getAdapterIdentifier(),
+                $translation,
+                $languageIdentity
+            );
         }
     }
 
@@ -228,12 +237,10 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
 
             if ($type === 'propertyoption') {
                 $translation = [
-                    'languageIdentity' => $languageIdentity,
                     'optionName' => $translatedProperty->getName(),
                 ];
             } elseif ($type === 'configuratorgroup') {
                 $translation = [
-                    'languageIdentity' => $languageIdentity,
                     'name' => $translatedProperty->getName(),
                 ];
             }
@@ -242,7 +249,12 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
                 continue;
             }
 
-            $this->writeTranslations($type, $groupModel->getId(), $translation);
+            $this->writeTranslations(
+                $type,
+                $groupModel->getId(),
+                $translation,
+                $languageIdentity
+            );
         }
     }
 
@@ -286,12 +298,10 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
 
             if ($type === 'propertyvalue') {
                 $translation = [
-                    'languageIdentity' => $languageIdentity,
                     'optionValue' => $translatedPropertyValue->getValue(),
                 ];
             } elseif ($type === 'configuratoroption') {
                 $translation = [
-                    'languageIdentity' => $languageIdentity,
                     'name' => $translatedPropertyValue->getValue(),
                 ];
             }
@@ -300,21 +310,32 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
                 continue;
             }
 
-            $this->writeTranslations($type, $valueModel->getId(), $translation);
+            $this->writeTranslations(
+                $type,
+                $valueModel->getId(),
+                $translation,
+                $languageIdentity
+            );
         }
     }
 
     /**
-     * @param string $type
-     * @param int    $primaryKey
-     * @param array  $translation
+     * @param string   $type
+     * @param int      $primaryKey
+     * @param array    $translation
+     * @param Identity $languageIdentity
      */
-    private function writeTranslations($type, $primaryKey, array $translation)
+    private function writeTranslations($type, $primaryKey, array $translation, Identity $languageIdentity)
     {
-        $shops = $this->dataProvider->getShopsByLocaleIdentitiy($translation['languageIdentity']);
+        $shops = $this->dataProvider->getShopsByLocaleIdentitiy($languageIdentity);
 
         foreach ($shops as $shop) {
-            $this->shopwareTranslationManager->write($shop->getId(), $type, $primaryKey, $translation);
+            $this->shopwareTranslationManager->write(
+                $shop->getId(),
+                $type,
+                $primaryKey,
+                $translation
+            );
         }
     }
 }

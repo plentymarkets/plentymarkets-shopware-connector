@@ -2,7 +2,15 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [unreleased]
+## [## [unreleased]]
+### Fixed
+- transfer payment information without a real transactionid if needed
+
+### Changed
+
+### Added
+
+## [## [5.0.0]]
 ### Fixed
 - fixed technicalDescription translations (@lacodimizer)
 - fixed mandant shop product activation (@lacodimizer)
@@ -22,7 +30,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - removed comment and address rest call
 - optimized the stock handling performance
 - restructured the services.xml files
-- changed the core connector namespace to SystemConnector
+- changed the core connector namespace to SystemConnector (@jochenmanz)
 
 ### Added
 - transfer age restriction as attribute to shopware

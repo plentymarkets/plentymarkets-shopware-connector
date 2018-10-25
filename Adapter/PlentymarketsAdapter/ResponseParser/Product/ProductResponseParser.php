@@ -131,6 +131,10 @@ class ProductResponseParser implements ProductResponseParserInterface
             return $object instanceof Variation;
         });
 
+        if (empty($variations)) {
+            return [];
+        }
+
         $productObject = new Product();
         $productObject->setIdentifier($identity->getObjectIdentifier());
         $productObject->setName((string) $product['texts'][0]['name1']);

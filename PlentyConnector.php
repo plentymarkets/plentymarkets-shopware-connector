@@ -2,6 +2,7 @@
 
 namespace PlentyConnector;
 
+use DateTimeImmutable;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -214,6 +215,12 @@ class PlentyConnector extends Plugin
             $this->updateBacklogTable();
         }
 
+        if ($this->updateNeeded($context, '5.0.0') && $this->updatePossible($context, '4.0.0')) {
+            $this->modifyLastChangedConfigEntries('-1 week');
+            $this->clearBacklogTable();
+            $this->repairTranslationTable();
+        }
+
         parent::update($context);
     }
 
@@ -377,6 +384,47 @@ class PlentyConnector extends Plugin
         $entityManager->flush();
     }
 
+    /**
+     * @param string $diff
+     *
+     * @throws Exception
+     */
+    private function modifyLastChangedConfigEntries($diff)
+    {
+        /**
+         * @var EntityManagerInterface $entityManager
+         */
+        $entityManager = $this->container->get('models');
+        $repository = $entityManager->getRepository(Config::class);
+
+        /**
+         * @var Config $element
+         */
+        foreach ($repository->findAll() as $element) {
+            if (false === stripos($element->getName(), 'LastChangeDateTime')) {
+                continue;
+            }
+
+            $date = new DateTimeImmutable();
+            $element->setValue($date->modify($diff)->format(DATE_W3C));
+
+            $entityManager->persist($element);
+        }
+
+        $entityManager->flush();
+    }
+
+    private function clearBacklogTable()
+    {
+        /**
+         * @var Connection $connection
+         */
+        $connection = $this->container->get('dbal_connection');
+
+        $query = 'TRUNCATE plenty_backlog';
+        $connection->executeQuery($query);
+    }
+
     private function updateBacklogTable()
     {
         /**
@@ -389,6 +437,46 @@ class PlentyConnector extends Plugin
             ':statusNew' => Backlog::STATUS_OPEN,
             ':statusOld' => '',
         ]);
+    }
+
+    private function repairTranslationTable()
+    {
+        /**
+         * @var Connection $connection
+         */
+        $connection = $this->container->get('dbal_connection');
+
+        $query = 'UPDATE s_core_translations SET objectdata = REPLACE(objectdata, :pathOld, :pathNew)';
+
+        $data = [
+            [
+                'pathOld' => 'O:55:"PlentyConnector\Connector\ValueObject\Identity\Identity',
+                'pathNew' => 'O:45:"SystemConnector\ValueObject\Identity\Identity',
+            ],
+            [
+                'pathOld' => 's:67:" PlentyConnector\Connector\ValueObject\Identity\Identity',
+                'pathNew' => 's:57:" SystemConnector\ValueObject\Identity\Identity',
+            ],
+            [
+                'pathOld' => 's:68:" PlentyConnector\Connector\ValueObject\Identity\Identity',
+                'pathNew' => 's:58:" SystemConnector\ValueObject\Identity\Identity',
+            ],
+            [
+                'pathOld' => 's:73:" PlentyConnector\Connector\ValueObject\Identity\Identity',
+                'pathNew' => 's:63:" SystemConnector\ValueObject\Identity\Identity',
+            ],
+            [
+                'pathOld' => 's:74:" PlentyConnector\Connector\ValueObject\Identity\Identity',
+                'pathNew' => 's:64:" SystemConnector\ValueObject\Identity\Identity',
+            ],
+        ];
+
+        foreach ($data as $datum) {
+            $connection->executeQuery($query, [
+                ':pathOld' => $datum['pathOld'],
+                ':pathNew' => $datum['pathNew'],
+            ]);
+        }
     }
 
     private function clearOldDatabaseTables()
