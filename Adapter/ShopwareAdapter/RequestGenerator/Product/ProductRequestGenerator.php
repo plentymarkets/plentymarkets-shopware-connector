@@ -379,7 +379,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
                 /**
                  * @var ShopModel $shop
                  */
-                $shop = $shopRepository->getById($identity->getAdapterIdentifier());
+                $shop = $shopRepository->find($identity->getAdapterIdentifier());
 
                 if ($shop !== null) {
                     $shopCategories[] = $shop->getCategory()->getId();

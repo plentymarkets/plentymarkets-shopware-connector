@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - transfer payment information without a real transactionid if needed
 
 ### Changed
+- sepa payment informations are now transfered even without a account holder (@jkrzefski)
 
 ### Added
 
