@@ -197,12 +197,12 @@ class ProductResponseParser implements ProductResponseParserInterface
     private function getStockLimitation(array $product)
     {
         foreach ($product['variations'] as $variation) {
-            if ($variation['stockLimitation']) {
-                return true;
+            if (!$variation['stockLimitation']) {
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 
     /**

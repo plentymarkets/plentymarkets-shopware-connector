@@ -143,6 +143,7 @@ class VariationResponseParser implements VariationResponseParserInterface
             $variationObject->setActive((bool) $variation['isActive']);
             $variationObject->setIsMain($first);
             $variationObject->setNumber($this->getVariationNumber($variation));
+            $variationObject->setStockLimitation($this->getStockLimitation($variation));
             $variationObject->setBarcodes($this->getBarcodes($variation));
             $variationObject->setPosition((int) $variation['position']);
             $variationObject->setModel((string) $variation['model']);
@@ -451,5 +452,19 @@ class VariationResponseParser implements VariationResponseParserInterface
         }
 
         return (float) ($weight / 1000);
+    }
+
+    /**
+     * @param array $variation
+     *
+     * @return bool
+     */
+    private function getStockLimitation(array $variation)
+    {
+        if ($variation['stockLimitation']) {
+            return true;
+        }
+
+        return false;
     }
 }

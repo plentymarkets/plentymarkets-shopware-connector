@@ -5,8 +5,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [## [unreleased]]
 ### Fixed
 - transfer payment information without a real transactionid if needed
+- fix last stock for variations (sw >= 5.4.x)
 
 ### Changed
+- sepa payment informations are now transfered even without a account holder (@jkrzefski)
 
 ### Added
 
