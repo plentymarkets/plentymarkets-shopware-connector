@@ -93,6 +93,11 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     private $referenceAmount = 0.0;
 
     /**
+     * @var bool
+     */
+    private $stockLimitation = false;
+
+    /**
      * @var float
      */
     private $maximumOrderQuantity;
@@ -393,6 +398,22 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     public function setReferenceAmount($referenceAmount)
     {
         $this->referenceAmount = $referenceAmount;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasStockLimitation()
+    {
+        return $this->stockLimitation;
+    }
+
+    /**
+     * @param bool $stockLimitation
+     */
+    public function setStockLimitation($stockLimitation)
+    {
+        $this->stockLimitation = $stockLimitation;
     }
 
     /**
