@@ -143,10 +143,6 @@ class SepaPaymentResponseParser implements PaymentResponseParserInterface
 
         $paymentInstance = array_shift($element['paymentInstances']);
 
-        if (empty($paymentInstance['accountHolder'])) {
-            return false;
-        }
-
         if (empty($paymentInstance['iban'])) {
             return false;
         }
