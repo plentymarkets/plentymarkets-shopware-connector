@@ -45,6 +45,7 @@ class VariationValidator implements ValidatorInterface
         Assertion::float($object->getContent(), null, 'product.variation.content');
         Assertion::nullOrUuid($object->getUnitIdentifier(), null, 'product.variation.unitIdentifier');
         Assertion::float($object->getReferenceAmount(), null, 'product.variation.referenceAmount');
+        Assertion::boolean($object->hasStockLimitation(), null, 'product.variation.stockLimitation');
         Assertion::float($object->getMaximumOrderQuantity(), null, 'product.variation.maximumOrderQuantity');
         Assertion::float($object->getMinimumOrderQuantity(), null, 'product.variation.minimumOrderQuantity');
         Assertion::float($object->getIntervalOrderQuantity(), null, 'product.variation.intervalOrderQuantity');
