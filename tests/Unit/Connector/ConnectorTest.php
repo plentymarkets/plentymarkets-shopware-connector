@@ -50,9 +50,9 @@ class ConnectorTest extends TestCase
         )->willReturn($command);
 
         $definition = $this->createMock(Definition::class);
-        $definition->expects($this->any())->method('getOriginAdapterName')->willReturn('TestOriginAdapter');
-        $definition->expects($this->any())->method('getDestinationAdapterName')->willReturn('TestDestinationAdapter');
-        $definition->expects($this->any())->method('getObjectType')->willReturn('TestType');
+        $definition->method('getOriginAdapterName')->willReturn('TestOriginAdapter');
+        $definition->method('getDestinationAdapterName')->willReturn('TestDestinationAdapter');
+        $definition->method('getObjectType')->willReturn('TestType');
         $definition->method('getPriority')->willReturn(0);
         $definition->method('isActive')->willReturn(true);
 
@@ -107,9 +107,9 @@ class ConnectorTest extends TestCase
         )->willReturn($command);
 
         $definition = $this->createMock(Definition::class);
-        $definition->expects($this->any())->method('getOriginAdapterName')->willReturn('TestOriginAdapter');
-        $definition->expects($this->any())->method('getDestinationAdapterName')->willReturn('TestDestinationAdapter');
-        $definition->expects($this->any())->method('getObjectType')->willReturn('TestType');
+        $definition->method('getOriginAdapterName')->willReturn('TestOriginAdapter');
+        $definition->method('getDestinationAdapterName')->willReturn('TestDestinationAdapter');
+        $definition->method('getObjectType')->willReturn('TestType');
         $definition->method('getPriority')->willReturn(0);
         $definition->method('isActive')->willReturn(true);
 
@@ -161,9 +161,9 @@ class ConnectorTest extends TestCase
         )->willReturn($command);
 
         $definition = $this->createMock(Definition::class);
-        $definition->expects($this->any())->method('getOriginAdapterName')->willReturn('TestOriginAdapter');
-        $definition->expects($this->any())->method('getDestinationAdapterName')->willReturn('TestDestinationAdapter');
-        $definition->expects($this->any())->method('getObjectType')->willReturn('TestType');
+        $definition->method('getOriginAdapterName')->willReturn('TestOriginAdapter');
+        $definition->method('getDestinationAdapterName')->willReturn('TestDestinationAdapter');
+        $definition->method('getObjectType')->willReturn('TestType');
         $definition->method('getPriority')->willReturn(0);
         $definition->method('isActive')->willReturn(true);
 
