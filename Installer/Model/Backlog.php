@@ -1,6 +1,6 @@
 <?php
 
-namespace SystemConnector\BacklogService\Model;
+namespace PlentyConnector\Installer\Model;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;

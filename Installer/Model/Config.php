@@ -1,12 +1,14 @@
 <?php
 
-namespace SystemConnector\ConfigService\Model;
+namespace PlentyConnector\Installer\Model;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="plenty_config")
+ * @ORM\Table(name="plenty_config", indexes={
+ *     @ORM\Index(name="name_idx", columns={"name"})
+ * })
  */
 class Config
 {
