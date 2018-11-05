@@ -2,18 +2,15 @@
 
 namespace ShopwareAdapter\DataProvider\Translation;
 
-use PlentyConnector\Connector\TransferObject\Product\Property\Property;
-use PlentyConnector\Connector\TransferObject\Product\Property\Value\Value;
-use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Shopware\Models\Article\Configurator\Group as ConfiguratorGroupModel;
 use Shopware\Models\Article\Configurator\Option as ConfiguratorOptionModel;
 use Shopware\Models\Property\Option as OptionModel;
 use Shopware\Models\Property\Value as ValueModel;
 use Shopware\Models\Shop\Shop as ShopModel;
+use SystemConnector\TransferObject\Product\Property\Property;
+use SystemConnector\TransferObject\Product\Property\Value\Value;
+use SystemConnector\ValueObject\Identity\Identity;
 
-/**
- * Interface TranslationDataProviderInterface
- */
 interface TranslationDataProviderInterface
 {
     /**

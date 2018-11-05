@@ -1,10 +1,10 @@
 <?php
 
-namespace PlentyConnector\Connector\ServiceBus\ValidatorMiddleware;
+namespace SystemConnector\ServiceBus\ValidatorMiddleware;
 
 use League\Tactician\Middleware;
-use PlentyConnector\Connector\ServiceBus\Command\TransferObjectCommand;
-use PlentyConnector\Connector\ValidatorService\ValidatorServiceInterface;
+use SystemConnector\ServiceBus\Command\TransferObjectCommand;
+use SystemConnector\ValidatorService\ValidatorServiceInterface;
 
 class ValidatorMiddleware implements Middleware
 {

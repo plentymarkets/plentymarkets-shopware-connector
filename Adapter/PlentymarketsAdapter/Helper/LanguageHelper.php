@@ -2,8 +2,26 @@
 
 namespace PlentymarketsAdapter\Helper;
 
+use PlentymarketsAdapter\PlentymarketsAdapter;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\Language\Language;
+
 class LanguageHelper implements LanguageHelperInterface
 {
+    /**
+     * @var IdentityServiceInterface
+     */
+    private $identityService;
+
+    /**
+     * @param IdentityServiceInterface $identityService
+     */
+    public function __construct(
+        IdentityServiceInterface $identityService
+    ) {
+        $this->identityService = $identityService;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -94,6 +112,30 @@ class LanguageHelper implements LanguageHelperInterface
      */
     public function getLanguagesQueryString()
     {
-        return implode(',', array_column($this->getLanguages(), 'id'));
+        $languages = [];
+
+        foreach ($this->getLanguages() as $language) {
+            $languageIdentity = $this->identityService->findOneBy([
+                'adapterIdentifier' => (string) $language['id'],
+                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType' => Language::TYPE,
+            ]);
+
+            if ($languageIdentity === null) {
+                continue;
+            }
+
+            $isMapped = $this->identityService->isMappedIdentity(
+                $languageIdentity->getObjectIdentifier(),
+                Language::TYPE,
+                PlentymarketsAdapter::NAME
+            );
+
+            if ($isMapped) {
+                $languages[] = $language['id'];
+            }
+        }
+
+        return implode(',', $languages);
     }
 }

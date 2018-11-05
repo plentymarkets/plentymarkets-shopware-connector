@@ -1,13 +1,13 @@
 <?php
 
-namespace PlentyConnector\Connector\TransferObject;
+namespace SystemConnector\TransferObject;
 
 abstract class AbstractTransferObject implements TransferObjectInterface
 {
     /**
      * @param array $params
      *
-     * @return TransferObjectInterface
+     * @return $this
      */
     public static function fromArray(array $params = [])
     {

@@ -2,9 +2,9 @@
 
 namespace PlentymarketsAdapter\ResponseParser\CustomerGroup;
 
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
 use PlentymarketsAdapter\PlentymarketsAdapter;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\CustomerGroup\CustomerGroup;
 
 class CustomerGroupResponseParser implements CustomerGroupResponseParserInterface
 {

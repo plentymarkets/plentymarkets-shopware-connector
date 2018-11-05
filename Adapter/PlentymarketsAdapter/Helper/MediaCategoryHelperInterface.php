@@ -2,9 +2,6 @@
 
 namespace PlentymarketsAdapter\Helper;
 
-/**
- * Interface MediaCategoryHelperInterface
- */
 interface MediaCategoryHelperInterface
 {
     /**

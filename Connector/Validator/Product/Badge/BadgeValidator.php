@@ -1,14 +1,11 @@
 <?php
 
-namespace PlentyConnector\Connector\Validator\Product\Badge;
+namespace SystemConnector\Validator\Product\Badge;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\Product\Badge\Badge;
-use PlentyConnector\Connector\Validator\ValidatorInterface;
+use SystemConnector\TransferObject\Product\Badge\Badge;
+use SystemConnector\Validator\ValidatorInterface;
 
-/**
- * Class BadgeValidator
- */
 class BadgeValidator implements ValidatorInterface
 {
     /**
@@ -24,6 +21,6 @@ class BadgeValidator implements ValidatorInterface
      */
     public function validate($object)
     {
-        Assertion::inArray($object->getType(), $object->getTypes(), null, 'product.barcode.type');
+        Assertion::inArray($object->getType(), $object->getTypes(), null, 'product.badge.type');
     }
 }

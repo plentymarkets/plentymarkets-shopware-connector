@@ -1,10 +1,10 @@
 <?php
 
-namespace PlentyConnector\Connector\Validator\Shop;
+namespace SystemConnector\Validator\Shop;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\Shop\Shop;
-use PlentyConnector\Connector\Validator\ValidatorInterface;
+use SystemConnector\TransferObject\Shop\Shop;
+use SystemConnector\Validator\ValidatorInterface;
 
 class ShopValidator implements ValidatorInterface
 {

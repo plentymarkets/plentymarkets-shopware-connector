@@ -1,8 +1,8 @@
 <?php
 
-namespace PlentyConnector\Connector\TransferObject\MediaCategory;
+namespace SystemConnector\TransferObject\MediaCategory;
 
-use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
+use SystemConnector\TransferObject\AbstractTransferObject;
 
 class MediaCategory extends AbstractTransferObject
 {

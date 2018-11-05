@@ -18,4 +18,4 @@ Thumbs.db
 nbproject
 .idea
 vendor
-
+.php_cs.cache

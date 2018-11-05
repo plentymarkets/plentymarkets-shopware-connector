@@ -46,6 +46,10 @@ Ext.define('Shopware.apps.PlentyConnector.model.Settings', {
         {
             name: 'check_active_main_variation',
             type: 'boolean'
+        },
+        {
+            name: 'import_variations_without_stock',
+            type: 'boolean'
         }
         // {block name="backend/plentyconnector/model/settings/fields"}{/block}
     ],

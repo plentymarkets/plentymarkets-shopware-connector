@@ -1,8 +1,8 @@
 <?php
 
-namespace PlentyConnector\Connector\TransferObject\PaymentMethod;
+namespace SystemConnector\TransferObject\PaymentMethod;
 
-use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
+use SystemConnector\TransferObject\AbstractTransferObject;
 
 class PaymentMethod extends AbstractTransferObject
 {

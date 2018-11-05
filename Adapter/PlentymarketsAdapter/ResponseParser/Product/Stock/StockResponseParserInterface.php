@@ -2,17 +2,14 @@
 
 namespace PlentymarketsAdapter\ResponseParser\Product\Stock;
 
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
+use SystemConnector\TransferObject\Product\Stock\Stock;
 
-/**
- * Interface StockResponseParserInterface
- */
 interface StockResponseParserInterface
 {
     /**
      * @param array $variation
      *
-     * @return TransferObjectInterface[]
+     * @return null|Stock
      */
     public function parse(array $variation);
 }

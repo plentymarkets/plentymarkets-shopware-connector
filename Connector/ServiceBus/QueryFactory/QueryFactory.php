@@ -1,11 +1,11 @@
 <?php
 
-namespace PlentyConnector\Connector\ServiceBus\QueryFactory;
+namespace SystemConnector\ServiceBus\QueryFactory;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
-use PlentyConnector\Connector\ServiceBus\QueryFactory\Exception\MissingQueryException;
-use PlentyConnector\Connector\ServiceBus\QueryType;
+use SystemConnector\ServiceBus\Query\FetchTransferObjectQuery;
+use SystemConnector\ServiceBus\QueryFactory\Exception\MissingQueryException;
+use SystemConnector\ServiceBus\QueryType;
 
 class QueryFactory implements QueryFactoryInterface
 {

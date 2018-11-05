@@ -1,15 +1,15 @@
 <?php
 
-namespace PlentyConnector\Connector\TransferObject\Product\Variation;
+namespace SystemConnector\TransferObject\Product\Variation;
 
 use DateTimeImmutable;
-use PlentyConnector\Connector\TransferObject\AbstractTransferObject;
-use PlentyConnector\Connector\TransferObject\AttributableInterface;
-use PlentyConnector\Connector\TransferObject\Product\Barcode\Barcode;
-use PlentyConnector\Connector\TransferObject\Product\Image\Image;
-use PlentyConnector\Connector\TransferObject\Product\Price\Price;
-use PlentyConnector\Connector\TransferObject\Product\Property\Property;
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
+use SystemConnector\TransferObject\AbstractTransferObject;
+use SystemConnector\TransferObject\AttributableInterface;
+use SystemConnector\TransferObject\Product\Barcode\Barcode;
+use SystemConnector\TransferObject\Product\Image\Image;
+use SystemConnector\TransferObject\Product\Price\Price;
+use SystemConnector\TransferObject\Product\Property\Property;
+use SystemConnector\ValueObject\Attribute\Attribute;
 
 class Variation extends AbstractTransferObject implements AttributableInterface
 {
@@ -93,6 +93,11 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     private $referenceAmount = 0.0;
 
     /**
+     * @var bool
+     */
+    private $stockLimitation = false;
+
+    /**
      * @var float
      */
     private $maximumOrderQuantity;
@@ -164,6 +169,14 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function setIdentifier($identifier)
+    {
+        $this->identifier = $identifier;
+    }
+
+    /**
      * @return string
      */
     public function getProductIdentifier()
@@ -177,14 +190,6 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     public function setProductIdentifier($productIdentifier)
     {
         $this->productIdentifier = $productIdentifier;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setIdentifier($identifier)
-    {
-        $this->identifier = $identifier;
     }
 
     /**
@@ -393,6 +398,22 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     public function setReferenceAmount($referenceAmount)
     {
         $this->referenceAmount = $referenceAmount;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasStockLimitation()
+    {
+        return $this->stockLimitation;
+    }
+
+    /**
+     * @param bool $stockLimitation
+     */
+    public function setStockLimitation($stockLimitation)
+    {
+        $this->stockLimitation = $stockLimitation;
     }
 
     /**

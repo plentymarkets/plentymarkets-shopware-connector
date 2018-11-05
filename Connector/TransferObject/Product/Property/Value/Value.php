@@ -1,10 +1,10 @@
 <?php
 
-namespace PlentyConnector\Connector\TransferObject\Product\Property\Value;
+namespace SystemConnector\TransferObject\Product\Property\Value;
 
-use PlentyConnector\Connector\TransferObject\TranslateableInterface;
-use PlentyConnector\Connector\ValueObject\AbstractValueObject;
-use PlentyConnector\Connector\ValueObject\Translation\Translation;
+use SystemConnector\TransferObject\TranslateableInterface;
+use SystemConnector\ValueObject\AbstractValueObject;
+use SystemConnector\ValueObject\Translation\Translation;
 
 class Value extends AbstractValueObject implements TranslateableInterface
 {
@@ -48,7 +48,7 @@ class Value extends AbstractValueObject implements TranslateableInterface
     }
 
     /**
-     * @param int position
+     * @param int $position
      */
     public function setPosition($position)
     {

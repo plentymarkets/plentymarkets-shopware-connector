@@ -6,11 +6,6 @@ use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use InvalidArgumentException;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
-use PlentyConnector\Connector\TransferObject\Language\Language;
-use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
-use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use Psr\Log\LoggerInterface;
 use Shopware\Models\Customer\Customer as CustomerModel;
 use Shopware\Models\Customer\Group as GroupModel;
@@ -18,6 +13,11 @@ use Shopware\Models\Newsletter\Address;
 use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop as ShopModel;
 use ShopwareAdapter\ShopwareAdapter;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\CustomerGroup\CustomerGroup;
+use SystemConnector\TransferObject\Language\Language;
+use SystemConnector\TransferObject\Order\Customer\Customer;
+use SystemConnector\TransferObject\Shop\Shop;
 
 class CustomerResponseParser implements CustomerResponseParserInterface
 {

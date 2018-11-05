@@ -1,10 +1,7 @@
 <?php
 
-namespace PlentyConnector\Connector\ValueObject;
+namespace SystemConnector\ValueObject;
 
-/**
- * Interface ValueObjectInterface
- */
 interface ValueObjectInterface
 {
     /**

@@ -6,19 +6,6 @@ use DeepCopy\DeepCopy;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use InvalidArgumentException;
-use PlentyConnector\Connector\IdentityService\Exception\NotFoundException as IdentityNotFoundException;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
-use PlentyConnector\Connector\ServiceBus\Command\TransferObjectCommand;
-use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
-use PlentyConnector\Connector\ServiceBus\CommandType;
-use PlentyConnector\Connector\TransferObject\Category\Category;
-use PlentyConnector\Connector\TransferObject\Language\Language;
-use PlentyConnector\Connector\TransferObject\Media\Media;
-use PlentyConnector\Connector\TransferObject\Shop\Shop;
-use PlentyConnector\Connector\Translation\TranslationHelperInterface;
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
-use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Category as CategoryResource;
@@ -27,7 +14,21 @@ use Shopware\Models\Category\Repository as CategoryRepository;
 use Shopware\Models\Shop\Repository as ShopRepository;
 use Shopware\Models\Shop\Shop as ShopModel;
 use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
+use ShopwareAdapter\DataPersister\Translation\TranslationDataPersisterInterface;
 use ShopwareAdapter\ShopwareAdapter;
+use SystemConnector\IdentityService\Exception\NotFoundException as IdentityNotFoundException;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\ServiceBus\Command\CommandInterface;
+use SystemConnector\ServiceBus\Command\TransferObjectCommand;
+use SystemConnector\ServiceBus\CommandHandler\CommandHandlerInterface;
+use SystemConnector\ServiceBus\CommandType;
+use SystemConnector\TransferObject\Category\Category;
+use SystemConnector\TransferObject\Language\Language;
+use SystemConnector\TransferObject\Media\Media;
+use SystemConnector\TransferObject\Shop\Shop;
+use SystemConnector\Translation\TranslationHelperInterface;
+use SystemConnector\ValueObject\Attribute\Attribute;
+use SystemConnector\ValueObject\Identity\Identity;
 
 class HandleCategoryCommandHandler implements CommandHandlerInterface
 {
@@ -47,6 +48,16 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     private $entityManager;
 
     /**
+     * @var AttributeDataPersisterInterface
+     */
+    private $attributePersister;
+
+    /**
+     * @var TranslationDataPersisterInterface
+     */
+    private $translationDataPersister;
+
+    /**
      * @var CategoryRepository
      */
     private $categoryRepository;
@@ -56,23 +67,20 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
      */
     private $shopRepository;
 
-    /**
-     * @var AttributeDataPersisterInterface
-     */
-    private $attributePersister;
-
     public function __construct(
         IdentityServiceInterface $identityService,
         TranslationHelperInterface $translationHelper,
         EntityManagerInterface $entityManager,
-        AttributeDataPersisterInterface $attributePersister
+        AttributeDataPersisterInterface $attributePersister,
+        TranslationDataPersisterInterface $translationDataPersister
     ) {
         $this->identityService = $identityService;
         $this->translationHelper = $translationHelper;
         $this->entityManager = $entityManager;
+        $this->attributePersister = $attributePersister;
+        $this->translationDataPersister = $translationDataPersister;
         $this->categoryRepository = $entityManager->getRepository(CategoryModel::class);
         $this->shopRepository = $entityManager->getRepository(ShopModel::class);
-        $this->attributePersister = $attributePersister;
     }
 
     /**
@@ -335,6 +343,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         }
 
         $this->attributePersister->saveCategoryAttributes($categoryModel, $category->getAttributes());
+        $this->translationDataPersister->writeCategoryTranslations($category);
 
         return $categoryIdentity;
     }

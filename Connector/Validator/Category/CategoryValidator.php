@@ -1,12 +1,12 @@
 <?php
 
-namespace PlentyConnector\Connector\Validator\Category;
+namespace SystemConnector\Validator\Category;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\Category\Category;
-use PlentyConnector\Connector\Validator\ValidatorInterface;
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
-use PlentyConnector\Connector\ValueObject\Translation\Translation;
+use SystemConnector\TransferObject\Category\Category;
+use SystemConnector\Validator\ValidatorInterface;
+use SystemConnector\ValueObject\Attribute\Attribute;
+use SystemConnector\ValueObject\Translation\Translation;
 
 class CategoryValidator implements ValidatorInterface
 {
@@ -28,7 +28,8 @@ class CategoryValidator implements ValidatorInterface
         Assertion::string($object->getName(), null, 'category.name');
 
         Assertion::nullOrUuid($object->getParentIdentifier(), null, 'category.parentIdentifier');
-        Assertion::allUuid($object->getShopIdentifiers(), null, 'category.parentIdentifiers');
+        Assertion::allUuid($object->getShopIdentifiers(), null, 'category.shopIdentifiers');
+        Assertion::nullOrUuid($object->getParentIdentifier(), null, 'category.parentIdentifier');
 
         Assertion::allUuid($object->getImageIdentifiers(), null, 'category.imageIdentifiers');
 

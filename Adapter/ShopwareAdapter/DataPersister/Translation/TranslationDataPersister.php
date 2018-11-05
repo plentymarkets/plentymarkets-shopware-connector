@@ -2,17 +2,19 @@
 
 namespace ShopwareAdapter\DataPersister\Translation;
 
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\Language\Language;
-use PlentyConnector\Connector\TransferObject\Product\Product;
-use PlentyConnector\Connector\TransferObject\Product\Property\Property;
-use PlentyConnector\Connector\TransferObject\Product\Property\Value\Value;
-use PlentyConnector\Connector\Translation\TranslationHelperInterface;
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use Psr\Log\LoggerInterface;
 use Shopware_Components_Translation;
 use ShopwareAdapter\DataProvider\Translation\TranslationDataProviderInterface;
 use ShopwareAdapter\ShopwareAdapter;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\Category\Category;
+use SystemConnector\TransferObject\Language\Language;
+use SystemConnector\TransferObject\Product\Product;
+use SystemConnector\TransferObject\Product\Property\Property;
+use SystemConnector\TransferObject\Product\Property\Value\Value;
+use SystemConnector\Translation\TranslationHelperInterface;
+use SystemConnector\ValueObject\Attribute\Attribute;
+use SystemConnector\ValueObject\Identity\Identity;
 
 class TranslationDataPersister implements TranslationDataPersisterInterface
 {
@@ -89,10 +91,11 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
             }
 
             $translation = [
-                'languageIdentity' => $languageIdentity,
                 'name' => $translatedProduct->getName(),
                 'description' => $translatedProduct->getDescription(),
                 'descriptionLong' => $translatedProduct->getLongDescription(),
+                'metaTitle' => $translatedProduct->getMetaTitle(),
+                'metaDescription' => $translatedProduct->getMetaDescription(),
                 'keywords' => $translatedProduct->getMetaKeywords(),
             ];
 
@@ -107,7 +110,12 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
                 $translation[$attribute_key] = $translatedAttribute->getValue();
             }
 
-            $this->writeTranslations('article', (int) $productIdentity->getAdapterIdentifier(), $translation);
+            $this->writeTranslations(
+                'article',
+                (int) $productIdentity->getAdapterIdentifier(),
+                $translation,
+                $languageIdentity
+            );
         }
 
         foreach ($product->getProperties() as $property) {
@@ -124,6 +132,68 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
             foreach ($variantConfiguration->getValues() as $value) {
                 $this->writeValueTranslations($value, 'configuratoroption');
             }
+        }
+    }
+
+    /**
+     * @param Category $category
+     */
+    public function writeCategoryTranslations(Category $category)
+    {
+        $categoryIdentity = $this->identityService->findOneBy([
+            'objectIdentifier' => $category->getIdentifier(),
+            'objectType' => Category::TYPE,
+            'adapterName' => ShopwareAdapter::NAME,
+        ]);
+
+        if (null === $categoryIdentity) {
+            return;
+        }
+
+        foreach ($this->translationHelper->getLanguageIdentifiers($category) as $languageIdentifier) {
+            /**
+             * @var Category $translatedCategory
+             */
+            $translatedCategory = $this->translationHelper->translate($languageIdentifier, $category);
+
+            $languageIdentity = $this->identityService->findOneBy([
+                'objectIdentifier' => $languageIdentifier,
+                'objectType' => Language::TYPE,
+                'adapterName' => ShopwareAdapter::NAME,
+            ]);
+
+            if (null === $languageIdentity) {
+                $this->logger->notice('language not mapped - ' . $languageIdentifier);
+
+                continue;
+            }
+
+            $translation = [
+                'name' => $translatedCategory->getName(),
+                'metaTitle' => $translatedCategory->getMetaTitle(),
+                'metaKeywords' => $translatedCategory->getMetaKeywords(),
+                'metaDescription' => $translatedCategory->getMetaDescription(),
+                'cmsHeadline' => $translatedCategory->getDescription(),
+                'cmsText' => $translatedCategory->getLongDescription(),
+            ];
+
+            foreach ($category->getAttributes() as $attribute) {
+                /**
+                 * @var Attribute $translatedAttribute
+                 */
+                $translatedAttribute = $this->translationHelper->translate($languageIdentifier, $attribute);
+
+                $key = '__attribute_plenty_connector' . ucfirst($attribute->getKey());
+                $attribute_key = strtolower(preg_replace('/[A-Z]/', '_\\0', lcfirst($key)));
+                $translation[$attribute_key] = $translatedAttribute->getValue();
+            }
+
+            $this->writeTranslations(
+                'category',
+                (int) $categoryIdentity->getAdapterIdentifier(),
+                $translation,
+                $languageIdentity
+            );
         }
     }
 
@@ -167,17 +237,24 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
 
             if ($type === 'propertyoption') {
                 $translation = [
-                    'languageIdentity' => $languageIdentity,
                     'optionName' => $translatedProperty->getName(),
                 ];
             } elseif ($type === 'configuratorgroup') {
                 $translation = [
-                    'languageIdentity' => $languageIdentity,
                     'name' => $translatedProperty->getName(),
                 ];
             }
 
-            $this->writeTranslations($type, $groupModel->getId(), $translation);
+            if (empty($translation)) {
+                continue;
+            }
+
+            $this->writeTranslations(
+                $type,
+                $groupModel->getId(),
+                $translation,
+                $languageIdentity
+            );
         }
     }
 
@@ -221,31 +298,44 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
 
             if ($type === 'propertyvalue') {
                 $translation = [
-                    'languageIdentity' => $languageIdentity,
                     'optionValue' => $translatedPropertyValue->getValue(),
                 ];
             } elseif ($type === 'configuratoroption') {
                 $translation = [
-                    'languageIdentity' => $languageIdentity,
                     'name' => $translatedPropertyValue->getValue(),
                 ];
             }
 
-            $this->writeTranslations($type, $valueModel->getId(), $translation);
+            if (empty($translation)) {
+                continue;
+            }
+
+            $this->writeTranslations(
+                $type,
+                $valueModel->getId(),
+                $translation,
+                $languageIdentity
+            );
         }
     }
 
     /**
-     * @param string $type
-     * @param int    $primaryKey
-     * @param array  $translation
+     * @param string   $type
+     * @param int      $primaryKey
+     * @param array    $translation
+     * @param Identity $languageIdentity
      */
-    private function writeTranslations($type, $primaryKey, array $translation)
+    private function writeTranslations($type, $primaryKey, array $translation, Identity $languageIdentity)
     {
-        $shops = $this->dataProvider->getShopsByLocaleIdentitiy($translation['languageIdentity']);
+        $shops = $this->dataProvider->getShopsByLocaleIdentitiy($languageIdentity);
 
         foreach ($shops as $shop) {
-            $this->shopwareTranslationManager->write($shop->getId(), $type, $primaryKey, $translation);
+            $this->shopwareTranslationManager->write(
+                $shop->getId(),
+                $type,
+                $primaryKey,
+                $translation
+            );
         }
     }
 }

@@ -1,13 +1,10 @@
 <?php
 
-namespace PlentyConnector\Console\OutputHandler;
+namespace SystemConnector\Console\OutputHandler;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * Interface OutputHandlerInterface
- */
 interface OutputHandlerInterface
 {
     /**

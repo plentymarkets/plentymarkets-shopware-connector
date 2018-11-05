@@ -2,9 +2,9 @@
 
 namespace ShopwareAdapter\ResponseParser\PaymentStatus;
 
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\PaymentStatus\PaymentStatus;
 use ShopwareAdapter\ShopwareAdapter;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\PaymentStatus\PaymentStatus;
 
 class PaymentStatusResponseParser implements PaymentStatusResponseParserInterface
 {
@@ -31,8 +31,6 @@ class PaymentStatusResponseParser implements PaymentStatusResponseParserInterfac
 
         if (!empty($entry['name'])) {
             $name = $entry['name'];
-        } elseif (!empty($entry['description'])) {
-            $name = $entry['description'];
         } else {
             $name = $entry['id'];
         }

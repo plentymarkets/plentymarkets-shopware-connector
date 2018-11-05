@@ -5,7 +5,6 @@ namespace PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\Cust
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
 use PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\ResponseParserTest;
 use Psr\Log\LoggerInterface;
 use Shopware\Models\Customer\Group;
@@ -14,12 +13,8 @@ use Shopware\Models\Shop\Locale;
 use Shopware\Models\Shop\Shop;
 use ShopwareAdapter\ResponseParser\Address\AddressResponseParser;
 use ShopwareAdapter\ResponseParser\Customer\CustomerResponseParser;
+use SystemConnector\TransferObject\Order\Customer\Customer;
 
-/**
- * Class CustomerResponseParserTest
- *
- * @group ResponseParser
- */
 class CustomerResponseParserTest extends ResponseParserTest
 {
     /**

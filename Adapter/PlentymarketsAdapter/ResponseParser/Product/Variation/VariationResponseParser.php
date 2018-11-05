@@ -3,19 +3,6 @@
 namespace PlentymarketsAdapter\ResponseParser\Product\Variation;
 
 use DateTimeImmutable;
-use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
-use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\Language\Language;
-use PlentyConnector\Connector\TransferObject\Product\Barcode\Barcode;
-use PlentyConnector\Connector\TransferObject\Product\Image\Image;
-use PlentyConnector\Connector\TransferObject\Product\Product;
-use PlentyConnector\Connector\TransferObject\Product\Property\Property;
-use PlentyConnector\Connector\TransferObject\Product\Property\Value\Value;
-use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
-use PlentyConnector\Connector\TransferObject\Unit\Unit;
-use PlentyConnector\Connector\ValueObject\Translation\Translation;
 use PlentymarketsAdapter\Helper\ReferenceAmountCalculatorInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Availability as AvailabilityApi;
@@ -24,6 +11,19 @@ use PlentymarketsAdapter\ReadApi\Item\Barcode as BarcodeApi;
 use PlentymarketsAdapter\ResponseParser\Product\Image\ImageResponseParserInterface;
 use PlentymarketsAdapter\ResponseParser\Product\Price\PriceResponseParserInterface;
 use PlentymarketsAdapter\ResponseParser\Product\Stock\StockResponseParserInterface;
+use SystemConnector\ConfigService\ConfigServiceInterface;
+use SystemConnector\IdentityService\Exception\NotFoundException;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\Language\Language;
+use SystemConnector\TransferObject\Product\Barcode\Barcode;
+use SystemConnector\TransferObject\Product\Image\Image;
+use SystemConnector\TransferObject\Product\Product;
+use SystemConnector\TransferObject\Product\Property\Property;
+use SystemConnector\TransferObject\Product\Property\Value\Value;
+use SystemConnector\TransferObject\Product\Variation\Variation;
+use SystemConnector\TransferObject\TransferObjectInterface;
+use SystemConnector\TransferObject\Unit\Unit;
+use SystemConnector\ValueObject\Translation\Translation;
 
 class VariationResponseParser implements VariationResponseParserInterface
 {
@@ -70,7 +70,7 @@ class VariationResponseParser implements VariationResponseParserInterface
     /**
      * @var ConfigServiceInterface
      */
-    private $config;
+    private $configService;
 
     public function __construct(
         IdentityServiceInterface $identityService,
@@ -81,7 +81,7 @@ class VariationResponseParser implements VariationResponseParserInterface
         AttributeApi $itemAttributesApi,
         BarcodeApi $itemBarcodeApi,
         ReferenceAmountCalculatorInterface $referenceAmountCalculator,
-        ConfigServiceInterface $config
+        ConfigServiceInterface $configService
     ) {
         $this->identityService = $identityService;
         $this->priceResponseParser = $priceResponseParser;
@@ -91,7 +91,7 @@ class VariationResponseParser implements VariationResponseParserInterface
         $this->itemAttributesApi = $itemAttributesApi;
         $this->itemBarcodeApi = $itemBarcodeApi;
         $this->referenceAmountCalculator = $referenceAmountCalculator;
-        $this->config = $config;
+        $this->configService = $configService;
     }
 
     /**
@@ -143,6 +143,7 @@ class VariationResponseParser implements VariationResponseParserInterface
             $variationObject->setActive((bool) $variation['isActive']);
             $variationObject->setIsMain($first);
             $variationObject->setNumber($this->getVariationNumber($variation));
+            $variationObject->setStockLimitation($this->getStockLimitation($variation));
             $variationObject->setBarcodes($this->getBarcodes($variation));
             $variationObject->setPosition((int) $variation['position']);
             $variationObject->setModel((string) $variation['model']);
@@ -163,12 +164,20 @@ class VariationResponseParser implements VariationResponseParserInterface
             $variationObject->setWeight($this->getVariationWeight($variation));
             $variationObject->setProperties($this->getVariationProperties($variation));
 
-            $result[$variationObject->getIdentifier()] = $variationObject;
+            $stockObject = $this->stockResponseParser->parse($variation);
 
-            $possibleElements = $this->stockResponseParser->parse($variation);
-            foreach ($possibleElements as $element) {
-                $result[$element->getIdentifier()] = $element;
+            if (null === $stockObject) {
+                continue;
             }
+
+            $importVariationsWithoutStock = json_decode($this->configService->get('import_variations_without_stock', true));
+
+            if (!$importVariationsWithoutStock && empty($stockObject->getStock())) {
+                continue;
+            }
+
+            $result[$variationObject->getIdentifier()] = $variationObject;
+            $result[$stockObject->getIdentifier()] = $stockObject;
 
             $first = false;
         }
@@ -183,7 +192,7 @@ class VariationResponseParser implements VariationResponseParserInterface
      */
     private function getVariationNumber(array $element)
     {
-        if ($this->config->get('variation_number_field', 'number') === 'number') {
+        if ($this->configService->get('variation_number_field', 'number') === 'number') {
             return (string) $element['number'];
         }
 
@@ -215,7 +224,7 @@ class VariationResponseParser implements VariationResponseParserInterface
     {
         $images = [];
 
-        foreach ($variation['images'] as $entry) {
+        foreach ((array) $variation['images'] as $entry) {
             $images[] = $this->imageResponseParser->parseImage($entry, $texts, $result);
         }
 
@@ -330,7 +339,7 @@ class VariationResponseParser implements VariationResponseParserInterface
         static $attributes;
 
         $result = [];
-        foreach ($variation['variationAttributeValues'] as $attributeValue) {
+        foreach ((array) $variation['variationAttributeValues'] as $attributeValue) {
             if (!isset($attributes[$attributeValue['attributeId']])) {
                 $attributes[$attributeValue['attributeId']] = $this->itemAttributesApi->findOne($attributeValue['attributeId']);
             }
@@ -339,7 +348,7 @@ class VariationResponseParser implements VariationResponseParserInterface
 
             $attributes[$attributeValue['attributeId']]['values'] = [];
 
-            foreach ($values as $value) {
+            foreach ((array) $values as $value) {
                 $attributes[$attributeValue['attributeId']]['values'][$value['id']] = $value;
             }
 
@@ -443,5 +452,19 @@ class VariationResponseParser implements VariationResponseParserInterface
         }
 
         return (float) ($weight / 1000);
+    }
+
+    /**
+     * @param array $variation
+     *
+     * @return bool
+     */
+    private function getStockLimitation(array $variation)
+    {
+        if ($variation['stockLimitation']) {
+            return true;
+        }
+
+        return false;
     }
 }

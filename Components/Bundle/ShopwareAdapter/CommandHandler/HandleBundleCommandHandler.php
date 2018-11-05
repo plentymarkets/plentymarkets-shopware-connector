@@ -7,14 +7,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use PlentyConnector\Components\Bundle\Helper\BundleHelper;
 use PlentyConnector\Components\Bundle\TransferObject\Bundle;
-use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
-use PlentyConnector\Connector\ServiceBus\Command\TransferObjectCommand;
-use PlentyConnector\Connector\ServiceBus\CommandHandler\CommandHandlerInterface;
-use PlentyConnector\Connector\ServiceBus\CommandType;
-use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
-use PlentyConnector\Connector\TransferObject\Product\Price\Price;
 use Psr\Log\LoggerInterface;
 use Shopware\Models\Article\Detail as DetailModel;
 use Shopware\Models\Customer\Group as GroupModel;
@@ -23,6 +15,14 @@ use SwagBundle\Models\Article;
 use SwagBundle\Models\Bundle as BundleModel;
 use SwagBundle\Models\Price as PriceModel;
 use SwagBundle\Models\Repository as BundleRepository;
+use SystemConnector\IdentityService\Exception\NotFoundException;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\ServiceBus\Command\CommandInterface;
+use SystemConnector\ServiceBus\Command\TransferObjectCommand;
+use SystemConnector\ServiceBus\CommandHandler\CommandHandlerInterface;
+use SystemConnector\ServiceBus\CommandType;
+use SystemConnector\TransferObject\CustomerGroup\CustomerGroup;
+use SystemConnector\TransferObject\Product\Price\Price;
 
 class HandleBundleCommandHandler implements CommandHandlerInterface
 {
@@ -174,7 +174,7 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
         $bundleModel->setArticle($mainArticle);
         $bundleModel->setCustomerGroups($this->getCustomerGroups($bundle));
         $bundleModel->setPrices($this->getPrices($bundle, $bundleModel));
-        $bundleModel->setPosition($bundle->getPosition($bundle));
+        $bundleModel->setPosition($bundle->getPosition());
         $bundleModel->setArticles($this->getArticles($bundle, $bundleModel, $mainVariant));
         $bundleModel->setActive($this->active);
 
@@ -323,7 +323,7 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param $bundleNumber
+     * @param string $bundleNumber
      *
      * @return int
      */

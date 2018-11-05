@@ -1,8 +1,8 @@
 <?php
 
-namespace PlentyConnector\Connector\IdentityService;
+namespace SystemConnector\IdentityService;
 
-use PlentyConnector\Connector\ValueObject\Identity\Identity;
+use SystemConnector\ValueObject\Identity\Identity;
 
 interface IdentityServiceInterface
 {
@@ -52,6 +52,12 @@ interface IdentityServiceInterface
      * @param Identity $identity
      */
     public function remove(Identity $identity);
+
+    /**
+     * @param Identity $identity
+     * @param array    $params
+     */
+    public function update(Identity $identity, array $params = []);
 
     /**
      * @param array $criteria

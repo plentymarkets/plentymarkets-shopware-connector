@@ -2,9 +2,9 @@
 
 namespace PlentymarketsAdapter\ResponseParser\Unit;
 
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\Unit\Unit;
 use PlentymarketsAdapter\PlentymarketsAdapter;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\Unit\Unit;
 
 class UnitResponseParser implements UnitResponseParserInterface
 {

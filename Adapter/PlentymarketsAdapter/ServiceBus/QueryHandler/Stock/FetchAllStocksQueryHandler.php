@@ -3,16 +3,16 @@
 namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Stock;
 
 use Exception;
-use PlentyConnector\Connector\ServiceBus\Query\FetchTransferObjectQuery;
-use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
-use PlentyConnector\Connector\ServiceBus\QueryHandler\QueryHandlerInterface;
-use PlentyConnector\Connector\ServiceBus\QueryType;
-use PlentyConnector\Connector\TransferObject\Product\Stock\Stock;
-use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use PlentymarketsAdapter\Client\ClientInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Product\Stock\StockResponseParserInterface;
 use Psr\Log\LoggerInterface;
+use SystemConnector\Console\OutputHandler\OutputHandlerInterface;
+use SystemConnector\ServiceBus\Query\FetchTransferObjectQuery;
+use SystemConnector\ServiceBus\Query\QueryInterface;
+use SystemConnector\ServiceBus\QueryHandler\QueryHandlerInterface;
+use SystemConnector\ServiceBus\QueryType;
+use SystemConnector\TransferObject\Product\Stock\Stock;
 
 class FetchAllStocksQueryHandler implements QueryHandlerInterface
 {
@@ -71,25 +71,17 @@ class FetchAllStocksQueryHandler implements QueryHandlerInterface
         $this->outputHandler->startProgressBar(count($elements));
 
         foreach ($elements as $element) {
+            $stock = null;
+
             try {
-                $result = $this->responseParser->parse($element);
+                $stock = $this->responseParser->parse($element);
             } catch (Exception $exception) {
                 $this->logger->error($exception->getMessage());
-
-                $result = null;
             }
 
-            if (empty($result)) {
-                $result = [];
+            if ($stock !== null) {
+                yield $stock;
             }
-
-            $result = array_filter($result);
-
-            foreach ($result as $parsedElement) {
-                yield $parsedElement;
-            }
-
-            $this->outputHandler->advanceProgressBar();
         }
 
         $this->outputHandler->finishProgressBar();

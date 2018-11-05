@@ -1,14 +1,12 @@
 <?php
 
-namespace PlentyConnector\Connector\BacklogService\Model;
+namespace SystemConnector\BacklogService\Model;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
+use SystemConnector\ServiceBus\Command\CommandInterface;
 
 /**
- * Class Backlog.
- *
  * @ORM\Entity
  * @ORM\Table(name="plenty_backlog", indexes={
  *     @ORM\Index(name="hash_idx", columns={"hash"}),
@@ -46,6 +44,15 @@ class Backlog
      * @ORM\Column(name="status", type="string", nullable=false)
      */
     private $status;
+
+    /**
+     * priority of the entry
+     *
+     * @var int
+     *
+     * @ORM\Column(name="priority", type="integer", nullable=false, options={"default": 0})
+     */
+    private $priority = 0;
 
     /**
      * time of insertion
@@ -109,6 +116,22 @@ class Backlog
     public function setStatus($status)
     {
         $this->status = $status;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPriority()
+    {
+        return $this->priority;
+    }
+
+    /**
+     * @param int $priority
+     */
+    public function setPriority($priority)
+    {
+        $this->priority = $priority;
     }
 
     /**

@@ -2,6 +2,7 @@ language: php
 
 php:
   - 7.1
+  - 7.2
 
 sudo: false
 
@@ -12,7 +13,9 @@ services:
 
 env:
   matrix:
-    - SHOPWARE_VERSION="5.3"
+    - SHOPWARE_VERSION="5.4"
+    - SHOPWARE_VERSION="5.5"
+
   global:
     - PLUGIN_NAME=PlentyConnector
     - SHOPWARE_DIRECTORY="${HOME}/shopware"
@@ -20,7 +23,7 @@ env:
 
 cache:
    directories:
-     - ${HOME}/.composer/cache/files
+     - ${HOME}/.composer
 
 install:
   - composer install
@@ -36,9 +39,5 @@ before_script:
   - cd ${PLUGIN_DIRECTORY}/${PLUGIN_NAME}
 
 script:
-  - composer test
-
-notifications:
-  email: false
-  slack:
-    secure: RYu2D/DuaTjXoXL/uqGR7yHSfCV9d267sNiHbFUGec1LBWs77ZsaZq40pNHcscPv7Zk4TEbBiUfDAkKeAShkJX0DcYAm5SxwHgfNC2710PqoESEXrAJPb76CkZmO/Y9PVGENX8vy8D7CGO9BipCOjVv5HyRQ+p0sfQ8z5Th6oRs=
+  - composer cs-travis
+  - composer test-travis

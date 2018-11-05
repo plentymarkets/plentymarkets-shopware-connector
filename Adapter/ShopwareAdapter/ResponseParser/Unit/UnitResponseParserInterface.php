@@ -2,11 +2,8 @@
 
 namespace ShopwareAdapter\ResponseParser\Unit;
 
-use PlentyConnector\Connector\TransferObject\Unit\Unit;
+use SystemConnector\TransferObject\Unit\Unit;
 
-/**
- * Interface UnitResponseParserInterface
- */
 interface UnitResponseParserInterface
 {
     /**

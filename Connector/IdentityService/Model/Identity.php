@@ -1,12 +1,10 @@
 <?php
 
-namespace PlentyConnector\Connector\IdentityService\Model;
+namespace SystemConnector\IdentityService\Model;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class Identity.
- *
  * @ORM\Entity
  * @ORM\Table(name="plenty_identity", indexes={
  *     @ORM\Index(name="objectIdentifier_idx", columns={"objectIdentifier"}),

@@ -1,10 +1,10 @@
 <?php
 
-namespace PlentyConnector\Connector\Validator\CustomerGroup;
+namespace SystemConnector\Validator\CustomerGroup;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
-use PlentyConnector\Connector\Validator\ValidatorInterface;
+use SystemConnector\TransferObject\CustomerGroup\CustomerGroup;
+use SystemConnector\Validator\ValidatorInterface;
 
 class CustomerGroupValidator implements ValidatorInterface
 {

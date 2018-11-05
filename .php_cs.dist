@@ -3,22 +3,41 @@
 $finder = PhpCsFixer\Finder::create()->in(__DIR__);
 
 return PhpCsFixer\Config::create()
-    ->setUsingCache(false)
+    ->setUsingCache(true)
     ->setRules([
         '@PSR2' => true,
         '@Symfony' => true,
-        'no_useless_else' => true,
-        'no_useless_return' => true,
-        'ordered_class_elements' => true,
-        'ordered_imports' => true,
-        'phpdoc_order' => true,
-        'yoda_style' => false,
-        'phpdoc_summary' => false,
-        'phpdoc_to_comment' => false,
-        'phpdoc_var_without_name' => false,
-        'blank_line_after_opening_tag' => false,
-        'concat_space' => ['spacing' => 'one'],
-        'array_syntax' => ['syntax' => 'short']
+        '@DoctrineAnnotation' => true,
+        'no_useless_else'                           => true,
+        'no_useless_return'                         => true,
+        'ordered_class_elements'                    => true,
+        'ordered_imports'                           => true,
+        'phpdoc_order'                              => true,
+        'ternary_to_null_coalescing'                => true,
+        'phpdoc_summary'                            => false,
+        'phpdoc_to_comment'                         => false,
+        'phpdoc_types_order'                        => true,
+        'return_assignment'                         => true,
+        'phpdoc_align'                              => true,
+        'yoda_style'                                => false,
+        'phpdoc_var_without_name'                   => false,
+        'no_multiline_whitespace_before_semicolons' => true,
+        'concat_space'                              => [
+            'spacing' => 'one',
+        ],
+        'array_syntax' => [
+            'syntax' => 'short',
+        ],
+        'visibility_required' => [
+            'property',
+            'method',
+        ],
+         'binary_operator_spaces' => [
+            'operators' => [
+                '=>' => 'single_space',
+                '='  => 'single_space',
+            ],
+        ],
     ])
     ->setFinder($finder)
 ;

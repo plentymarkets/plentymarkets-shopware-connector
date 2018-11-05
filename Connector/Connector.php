@@ -1,25 +1,21 @@
 <?php
 
-namespace PlentyConnector\Connector;
+namespace SystemConnector;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\ServiceBus\CommandFactory\CommandFactoryInterface;
-use PlentyConnector\Connector\ServiceBus\CommandType;
-use PlentyConnector\Connector\ServiceBus\QueryFactory\QueryFactoryInterface;
-use PlentyConnector\Connector\ServiceBus\QueryType;
-use PlentyConnector\Connector\ServiceBus\ServiceBusInterface;
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
-use PlentyConnector\Connector\ValueObject\Definition\Definition;
-use PlentyConnector\Console\OutputHandler\OutputHandlerInterface;
 use Psr\Log\LoggerInterface;
+use SystemConnector\Console\OutputHandler\OutputHandlerInterface;
+use SystemConnector\DefinitionProvider\DefinitionProviderInterface;
+use SystemConnector\ServiceBus\CommandFactory\CommandFactoryInterface;
+use SystemConnector\ServiceBus\CommandType;
+use SystemConnector\ServiceBus\QueryFactory\QueryFactoryInterface;
+use SystemConnector\ServiceBus\QueryType;
+use SystemConnector\ServiceBus\ServiceBusInterface;
+use SystemConnector\TransferObject\TransferObjectInterface;
+use SystemConnector\ValueObject\Definition\Definition;
 
 class Connector implements ConnectorInterface
 {
-    /**
-     * @var null|Definition[]
-     */
-    private $definitions = [];
-
     /**
      * @var ServiceBusInterface
      */
@@ -41,6 +37,11 @@ class Connector implements ConnectorInterface
     private $outputHandler;
 
     /**
+     * @var DefinitionProviderInterface
+     */
+    private $definitionProvider;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -50,27 +51,15 @@ class Connector implements ConnectorInterface
         QueryFactoryInterface $queryFactory,
         CommandFactoryInterface $commandFactory,
         OutputHandlerInterface $outputHandler,
+        DefinitionProviderInterface $definitionProvider,
         LoggerInterface $logger
     ) {
         $this->serviceBus = $serviceBus;
         $this->queryFactory = $queryFactory;
         $this->commandFactory = $commandFactory;
         $this->outputHandler = $outputHandler;
+        $this->definitionProvider = $definitionProvider;
         $this->logger = $logger;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addDefinition(Definition $definition)
-    {
-        if (!$definition->isActive()) {
-            return;
-        }
-
-        $this->definitions[] = $definition;
-
-        $this->sortDefinitions();
     }
 
     /**
@@ -86,51 +75,15 @@ class Connector implements ConnectorInterface
             Assertion::uuid($identifier);
         }
 
-        $definitions = $this->getDefinitions($objectType);
-
-        if (null === $definitions) {
-            $definitions = [];
-        }
+        $definitions = $this->definitionProvider->getConnectorDefinitions($objectType);
 
         if (empty($definitions)) {
-            $this->logger->notice('No definitions found');
+            $this->logger->notice('No connectordefinition found');
         }
 
         array_walk($definitions, function (Definition $definition) use ($queryType, $identifier) {
             $this->handleDefinition($definition, $queryType, $identifier);
         });
-    }
-
-    /**
-     *  sort definitions by priority. Highest priority needs to be on top of the array
-     */
-    private function sortDefinitions()
-    {
-        usort($this->definitions, function (Definition $definitionLeft, Definition $definitionRight) {
-            if ($definitionLeft->getPriority() === $definitionRight->getPriority()) {
-                return 0;
-            }
-
-            return ($definitionLeft->getPriority() > $definitionRight->getPriority()) ? -1 : 1;
-        });
-    }
-
-    /**
-     * @param null $objectType
-     *
-     * @return Definition[]
-     */
-    private function getDefinitions($objectType = null)
-    {
-        if (null === count($this->definitions)) {
-            return [];
-        }
-
-        $definitions = array_filter($this->definitions, function (Definition $definition) use ($objectType) {
-            return strtolower($definition->getObjectType()) === strtolower($objectType) || null === $objectType;
-        });
-
-        return $definitions;
     }
 
     /**
@@ -166,6 +119,7 @@ class Connector implements ConnectorInterface
                 $definition->getDestinationAdapterName(),
                 $object->getType(),
                 CommandType::HANDLE,
+                $definition->getPriority(),
                 $object
             ));
         }

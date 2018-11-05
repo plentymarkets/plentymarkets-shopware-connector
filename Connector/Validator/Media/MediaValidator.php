@@ -1,12 +1,12 @@
 <?php
 
-namespace PlentyConnector\Connector\Validator\Media;
+namespace SystemConnector\Validator\Media;
 
 use Assert\Assertion;
-use PlentyConnector\Connector\TransferObject\Media\Media;
-use PlentyConnector\Connector\Validator\ValidatorInterface;
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
-use PlentyConnector\Connector\ValueObject\Translation\Translation;
+use SystemConnector\TransferObject\Media\Media;
+use SystemConnector\Validator\ValidatorInterface;
+use SystemConnector\ValueObject\Attribute\Attribute;
+use SystemConnector\ValueObject\Translation\Translation;
 
 class MediaValidator implements ValidatorInterface
 {

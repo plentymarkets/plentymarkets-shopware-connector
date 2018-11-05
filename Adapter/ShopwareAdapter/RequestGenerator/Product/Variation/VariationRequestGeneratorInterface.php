@@ -2,11 +2,8 @@
 
 namespace ShopwareAdapter\RequestGenerator\Product\Variation;
 
-use PlentyConnector\Connector\TransferObject\Product\Variation\Variation;
+use SystemConnector\TransferObject\Product\Variation\Variation;
 
-/**
- * Interface VariationRequestGeneratorInterface
- */
 interface VariationRequestGeneratorInterface
 {
     /**

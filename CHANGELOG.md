@@ -2,24 +2,46 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [unreleased]
+## [## [unreleased]]
+### Fixed
+- transfer payment information without a real transactionid if needed
+- fix last stock for variations (sw >= 5.4.x)
+
+### Changed
+- sepa payment informations are now transfered even without a account holder (@jkrzefski)
+
+### Added
+
+## [## [5.0.0]]
 ### Fixed
 - fixed technicalDescription translations (@lacodimizer)
 - fixed mandant shop product activation (@lacodimizer)
 - fixed duplicate product seo categories (@lacodimizer)
 - the media category sync was called multiple times instead of only one time (@jochenmanz)
 - skip order without customer
+- set correct bundle position
+- fix product meta title and meta description translation
+- fix product duplicates
+- fix services.xml for shopware 5.5.x
+- fix don't write already transfered payments and orders into backlog
 
 ### Changed
 - translated variation configurator 
 - reference amount will not be scaled down
 - translated short and technical description 
 - removed comment and address rest call
+- optimized the stock handling performance
+- restructured the services.xml files
+- changed the core connector namespace to SystemConnector (@jochenmanz)
 
 ### Added
 - transfer age restriction as attribute to shopware
 - transfer top seller badge to shopware
 - add product configuration positions of the groups and their values (@lacodimizer)
+- add item sync into the backend gui (@lacodimizer)
+- handle commands are now prioritised according to their definitions priority
+- added a new services.xml for the connector core
+- introduced a DefinitionProvider to store and handle definitions
 
 ## [4.6.0]
 ### Fixed
@@ -325,6 +347,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 - transfer age restriction as attribute to shopware
+- add item properties with type "empty"
 
 ## [4.6.0]
 ### Fixed

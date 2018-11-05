@@ -1,12 +1,9 @@
 <?php
 
-namespace PlentyConnector\Connector\Translation;
+namespace SystemConnector\Translation;
 
-use PlentyConnector\Connector\TransferObject\TranslateableInterface;
+use SystemConnector\TransferObject\TranslateableInterface;
 
-/**
- * Interface TranslationHelperInterface
- */
 interface TranslationHelperInterface
 {
     /**

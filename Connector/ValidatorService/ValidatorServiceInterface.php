@@ -1,14 +1,11 @@
 <?php
 
-namespace PlentyConnector\Connector\ValidatorService;
+namespace SystemConnector\ValidatorService;
 
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
-use PlentyConnector\Connector\Validator\ValidatorInterface;
-use PlentyConnector\Connector\ValueObject\ValueObjectInterface;
+use SystemConnector\TransferObject\TransferObjectInterface;
+use SystemConnector\Validator\ValidatorInterface;
+use SystemConnector\ValueObject\ValueObjectInterface;
 
-/**
- * Interface ValidatorServiceInterface
- */
 interface ValidatorServiceInterface
 {
     /**

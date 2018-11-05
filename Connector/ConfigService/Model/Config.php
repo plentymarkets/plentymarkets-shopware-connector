@@ -1,13 +1,10 @@
 <?php
 
-namespace PlentyConnector\Connector\ConfigService\Model;
+namespace SystemConnector\ConfigService\Model;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class Config.
- *
- *
  * @ORM\Entity(repositoryClass="ConfigRepository")
  * @ORM\Table(name="plenty_config")
  */

@@ -1,12 +1,9 @@
 <?php
 
-namespace PlentyConnector\Connector\BacklogService;
+namespace SystemConnector\BacklogService;
 
-use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
+use SystemConnector\ServiceBus\Command\CommandInterface;
 
-/**
- * Interface BacklogServiceInterface
- */
 interface BacklogServiceInterface
 {
     /**

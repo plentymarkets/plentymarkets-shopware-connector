@@ -2,16 +2,16 @@
 
 namespace PlentymarketsAdapter\ResponseParser\Product\Price;
 
-use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\CustomerGroup\CustomerGroup;
-use PlentyConnector\Connector\TransferObject\Product\Price\Price;
-use PlentyConnector\Connector\TransferObject\Shop\Shop;
-use PlentyConnector\Connector\ValueObject\Identity\Identity;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Account\ContactClass;
 use PlentymarketsAdapter\ReadApi\Item\SalesPrice;
 use Psr\Log\LoggerInterface;
+use SystemConnector\ConfigService\ConfigServiceInterface;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\CustomerGroup\CustomerGroup;
+use SystemConnector\TransferObject\Product\Price\Price;
+use SystemConnector\TransferObject\Shop\Shop;
+use SystemConnector\ValueObject\Identity\Identity;
 
 class PriceResponseParser implements PriceResponseParserInterface
 {
@@ -126,8 +126,8 @@ class PriceResponseParser implements PriceResponseParserInterface
     }
 
     /**
-     * @param $orderOrigin
-     * @param array $referrers
+     * @param string $orderOrigin
+     * @param array  $referrers
      *
      * @return bool
      */

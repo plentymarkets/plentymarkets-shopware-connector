@@ -2,11 +2,8 @@
 
 namespace PlentymarketsAdapter\ResponseParser\Country;
 
-use PlentyConnector\Connector\TransferObject\Country\Country;
+use SystemConnector\TransferObject\Country\Country;
 
-/**
- * Interface CountryResponseParserInterface
- */
 interface CountryResponseParserInterface
 {
     /**

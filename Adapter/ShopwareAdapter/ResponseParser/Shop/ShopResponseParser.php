@@ -2,9 +2,9 @@
 
 namespace ShopwareAdapter\ResponseParser\Shop;
 
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\Shop\Shop;
 use ShopwareAdapter\ShopwareAdapter;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\Shop\Shop;
 
 class ShopResponseParser implements ShopResponseParserInterface
 {

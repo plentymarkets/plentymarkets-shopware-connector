@@ -71,7 +71,9 @@
 
         <!-- Helpers -->
 
-        <service id="plentymarkets_adapter.helper.language" class="PlentymarketsAdapter\Helper\LanguageHelper" />
+        <service id="plentymarkets_adapter.helper.language" class="PlentymarketsAdapter\Helper\LanguageHelper">
+	        <argument type="service" id="plenty_connector.identity_service" />
+        </service>
 
         <service id="plentymarkets_adapter.helper.media_category" class="PlentymarketsAdapter\Helper\MediaCategoryHelper" />
 
@@ -184,6 +186,7 @@
             <argument type="service" id="plentymarkets_adapter.response_parser.image" />
             <argument type="service" id="plentymarkets_adapter.response_parser.variation" />
             <argument type="service" id="plentymarkets_adapter.helper.variation" />
+            <argument type="service" id="plentymarkets_adapter.client" />
         </service>
 
         <service id="plentymarkets_adapter.response_parser.product.price" class="PlentymarketsAdapter\ResponseParser\Product\Price\PriceResponseParser">
@@ -371,6 +374,33 @@
             <tag name="plenty_connector.query_handler" />
         </service>
 
+        <service id="plentymarkets_adapter.query_handler.fetch_all_variation" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Variation\FetchAllVariationsQueryHandler">
+            <argument type="service" id="plentymarkets_adapter.read_api.item" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.variation" />
+            <argument type="service" id="plenty_connector.console.output_handler" />
+            <argument type="service" id="plenty_connector.logger" />
+
+            <tag name="plenty_connector.query_handler" />
+        </service>
+
+        <service id="plentymarkets_adapter.query_handler.fetch_changed_variations" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Variation\FetchChangedVariationsQueryHandler">
+            <argument type="service" id="plentymarkets_adapter.read_api.item" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.variation" />
+            <argument type="service" id="plenty_connector.console.output_handler" />
+            <argument type="service" id="plenty_connector.logger" />
+
+            <tag name="plenty_connector.query_handler" />
+        </service>
+
+        <service id="plentymarkets_adapter.query_handler.fetch_variation" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Variation\FetchVariationQueryHandler">
+            <argument type="service" id="plentymarkets_adapter.read_api.item" />
+            <argument type="service" id="plentymarkets_adapter.read_api.item.variant" />
+            <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="plentymarkets_adapter.response_parser.variation" />
+
+            <tag name="plenty_connector.query_handler" />
+        </service>
+
         <!-- Stock query handlers -->
 
         <service id="plentymarkets_adapter.query_handler.fetch_all_stocks" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Stock\FetchAllStocksQueryHandler">
@@ -391,7 +421,7 @@
             <tag name="plenty_connector.query_handler" />
         </service>
 
-        <service id="plentymarkets_adapter.query_handler.fetch_stocks" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Stock\FetchStockQueryHandler">
+        <service id="plentymarkets_adapter.query_handler.fetch_stock" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Stock\FetchStockQueryHandler">
            <tag name="plenty_connector.query_handler" />
         </service>
 

@@ -1,13 +1,13 @@
 <?php
 
-namespace PlentyConnector\Connector\Logger;
+namespace SystemConnector\Logger;
 
 use Exception;
-use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
-use PlentyConnector\Connector\ServiceBus\Query\QueryInterface;
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
+use SystemConnector\ServiceBus\Command\CommandInterface;
+use SystemConnector\ServiceBus\Query\QueryInterface;
+use SystemConnector\TransferObject\TransferObjectInterface;
 
 /**
  * Returns log messages only dump the Command & Exception's class names.
@@ -66,9 +66,9 @@ class ClassNameFormatter implements ClassNameFormatterInterface
     /**
      * {@inheritdoc}
      */
-    public function logCommandSucceeded($command, $returnValue)
+    public function logCommandProcessed($command, $returnValue)
     {
-        $message = $this->getSucceededMessage($command);
+        $message = $this->getProcessedMessage($command);
         $payload = $this->getPayload($command);
 
         $this->logger->log($this->commandSucceededLevel, $message, $payload);
@@ -166,9 +166,9 @@ class ClassNameFormatter implements ClassNameFormatterInterface
      *
      * @return string
      */
-    private function getSucceededMessage($command)
+    private function getProcessedMessage($command)
     {
-        return $this->getType($command) . ' succeeded: ' . $this->getClassName($command);
+        return $this->getType($command) . ' processed: ' . $this->getClassName($command);
     }
 
     /**

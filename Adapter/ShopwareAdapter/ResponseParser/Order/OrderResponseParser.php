@@ -5,18 +5,6 @@ namespace ShopwareAdapter\ResponseParser\Order;
 use Assert\Assertion;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityRepository;
-use PlentyConnector\Connector\IdentityService\Exception\NotFoundException;
-use PlentyConnector\Connector\IdentityService\IdentityServiceInterface;
-use PlentyConnector\Connector\TransferObject\Currency\Currency;
-use PlentyConnector\Connector\TransferObject\Order\Comment\Comment;
-use PlentyConnector\Connector\TransferObject\Order\Order;
-use PlentyConnector\Connector\TransferObject\Order\OrderItem\OrderItem;
-use PlentyConnector\Connector\TransferObject\OrderStatus\OrderStatus;
-use PlentyConnector\Connector\TransferObject\PaymentMethod\PaymentMethod;
-use PlentyConnector\Connector\TransferObject\PaymentStatus\PaymentStatus;
-use PlentyConnector\Connector\TransferObject\ShippingProfile\ShippingProfile;
-use PlentyConnector\Connector\TransferObject\Shop\Shop;
-use PlentyConnector\Connector\TransferObject\VatRate\VatRate;
 use Psr\Log\LoggerInterface;
 use Shopware\Models\Tax\Tax;
 use ShopwareAdapter\DataProvider\Currency\CurrencyDataProviderInterface;
@@ -25,6 +13,18 @@ use ShopwareAdapter\ResponseParser\Customer\CustomerResponseParserInterface;
 use ShopwareAdapter\ResponseParser\GetAttributeTrait;
 use ShopwareAdapter\ResponseParser\OrderItem\OrderItemResponseParserInterface;
 use ShopwareAdapter\ShopwareAdapter;
+use SystemConnector\IdentityService\Exception\NotFoundException;
+use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\Currency\Currency;
+use SystemConnector\TransferObject\Order\Comment\Comment;
+use SystemConnector\TransferObject\Order\Order;
+use SystemConnector\TransferObject\Order\OrderItem\OrderItem;
+use SystemConnector\TransferObject\OrderStatus\OrderStatus;
+use SystemConnector\TransferObject\PaymentMethod\PaymentMethod;
+use SystemConnector\TransferObject\PaymentStatus\PaymentStatus;
+use SystemConnector\TransferObject\ShippingProfile\ShippingProfile;
+use SystemConnector\TransferObject\Shop\Shop;
+use SystemConnector\TransferObject\VatRate\VatRate;
 
 class OrderResponseParser implements OrderResponseParserInterface
 {
@@ -145,6 +145,16 @@ class OrderResponseParser implements OrderResponseParserInterface
             ShopwareAdapter::NAME,
             Order::TYPE
         );
+
+        $isMappedOrderIdentity = $this->identityService->isMappedIdentity(
+            $orderIdentity->getObjectIdentifier(),
+            $orderIdentity->getObjectType(),
+            $orderIdentity->getAdapterName()
+        );
+
+        if ($isMappedOrderIdentity) {
+            return [];
+        }
 
         $order = new Order();
         $order->setIdentifier($orderIdentity->getObjectIdentifier());

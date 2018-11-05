@@ -1,8 +1,8 @@
 <?php
 
-namespace PlentyConnector\Connector\BacklogService\Command;
+namespace SystemConnector\BacklogService\Command;
 
-use PlentyConnector\Connector\ServiceBus\Command\CommandInterface;
+use SystemConnector\ServiceBus\Command\CommandInterface;
 
 class HandleBacklogElementCommand implements CommandInterface
 {
@@ -17,20 +17,28 @@ class HandleBacklogElementCommand implements CommandInterface
     }
 
     /**
-     * @return CommandInterface
-     */
-    public function getCommand()
-    {
-        return $this->command;
-    }
-
-    /**
-     * @return array
+     * {@inheritdoc}
      */
     public function toArray()
     {
         return [
             'command' => $this->command,
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPriority()
+    {
+        return 0;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPayload()
+    {
+        return $this->command;
     }
 }

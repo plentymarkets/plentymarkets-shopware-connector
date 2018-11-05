@@ -6,7 +6,13 @@ use PlentymarketsAdapter\ReadApi\ApiAbstract;
 
 class Attribute extends ApiAbstract
 {
-    private $includes = 'names,values.valueNames';
+    /**
+     * @var array
+     */
+    private $includes = [
+        'names',
+        'values.valueNames',
+    ];
 
     /**
      * @param int $attributeId
@@ -16,7 +22,7 @@ class Attribute extends ApiAbstract
     public function findOne($attributeId)
     {
         return $this->client->request('GET', 'items/attributes/' . $attributeId, [
-            'with' => $this->includes,
+            'with' => implode(',', $this->includes),
         ]);
     }
 
@@ -26,7 +32,7 @@ class Attribute extends ApiAbstract
     public function findAll()
     {
         return iterator_to_array($this->client->getIterator('items/attributes/', [
-            'with' => $this->includes,
+            'with' => implode(',', $this->includes),
         ]));
     }
 }

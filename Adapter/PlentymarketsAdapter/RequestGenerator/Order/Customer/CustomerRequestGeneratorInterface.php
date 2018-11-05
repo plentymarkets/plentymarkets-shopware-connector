@@ -2,12 +2,9 @@
 
 namespace PlentymarketsAdapter\RequestGenerator\Order\Customer;
 
-use PlentyConnector\Connector\TransferObject\Order\Customer\Customer;
-use PlentyConnector\Connector\TransferObject\Order\Order;
+use SystemConnector\TransferObject\Order\Customer\Customer;
+use SystemConnector\TransferObject\Order\Order;
 
-/**
- * Interface CustomerRequestGeneratorInterface
- */
 interface CustomerRequestGeneratorInterface
 {
     /**

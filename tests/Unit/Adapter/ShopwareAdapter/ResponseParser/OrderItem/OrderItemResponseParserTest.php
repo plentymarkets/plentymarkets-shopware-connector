@@ -2,17 +2,12 @@
 
 namespace PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\OrderItem;
 
-use PlentyConnector\Connector\TransferObject\Order\OrderItem\OrderItem;
-use PlentyConnector\Connector\ValueObject\Attribute\Attribute;
 use PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\ResponseParserTest;
 use Shopware\Models\Tax\Tax;
 use ShopwareAdapter\ResponseParser\OrderItem\OrderItemResponseParser;
+use SystemConnector\TransferObject\Order\OrderItem\OrderItem;
+use SystemConnector\ValueObject\Attribute\Attribute;
 
-/**
- * Class OrderItemResponseParserTest
- *
- * @group ResponseParser
- */
 class OrderItemResponseParserTest extends ResponseParserTest
 {
     /**

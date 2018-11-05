@@ -1,13 +1,13 @@
 <?php
 
-namespace PlentyConnector\Connector\ValueObject;
+namespace SystemConnector\ValueObject;
 
 abstract class AbstractValueObject implements ValueObjectInterface
 {
     /**
      * @param array $params
      *
-     * @return ValueObjectInterface
+     * @return $this
      */
     public static function fromArray(array $params = [])
     {

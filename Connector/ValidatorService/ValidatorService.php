@@ -1,12 +1,12 @@
 <?php
 
-namespace PlentyConnector\Connector\ValidatorService;
+namespace SystemConnector\ValidatorService;
 
 use Assert\InvalidArgumentException;
-use PlentyConnector\Connector\TransferObject\TransferObjectInterface;
-use PlentyConnector\Connector\Validator\ValidatorInterface;
-use PlentyConnector\Connector\ValidatorService\Exception\InvalidDataException;
-use PlentyConnector\Connector\ValueObject\ValueObjectInterface;
+use SystemConnector\TransferObject\TransferObjectInterface;
+use SystemConnector\Validator\ValidatorInterface;
+use SystemConnector\ValidatorService\Exception\InvalidDataException;
+use SystemConnector\ValueObject\ValueObjectInterface;
 
 class ValidatorService implements ValidatorServiceInterface
 {

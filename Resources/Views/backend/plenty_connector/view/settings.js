@@ -210,10 +210,21 @@ Ext.define('Shopware.apps.PlentyConnector.view.Settings', {
                     {
                         xtype: 'checkbox',
                         fieldLabel: '{s name=plentyconnector/view/settings/additional/check_active_main_variation/label}{/s}',
+                        boxLabel: '{s name=plentyconnector/view/settings/additional/check_active_main_variation/boxLabel}{/s}',
                         uncheckedValue: 0,
                         inputValue: 1,
                         anchor: '100%',
                         name: 'check_active_main_variation'
+                    },
+                    {
+                        xtype: 'checkbox',
+                        fieldLabel: '{s name=plentyconnector/view/settings/additional/import_variations_without_stock/label}{/s}',
+                        boxLabel: '{s name=plentyconnector/view/settings/additional/import_variations_without_stock/boxLabel}{/s}',
+                        uncheckedValue: 0,
+                        inputValue: 1,
+                        checked: true,
+                        anchor: '100%',
+                        name: 'import_variations_without_stock'
                     }
                 ]
             }
