@@ -16,11 +16,11 @@ class ValidatorService implements ValidatorServiceInterface
     public $validators = [];
 
     /**
-     * @param ValidatorInterface $validator
+     * @param ValidatorInterface[] $validators
      */
-    public function addValidator(ValidatorInterface $validator)
+    public function __construct($validators)
     {
-        $this->validators[] = $validator;
+        $this->validators = iterator_to_array($validators);
     }
 
     /**

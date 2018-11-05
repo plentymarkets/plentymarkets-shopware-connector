@@ -53,7 +53,7 @@ class DatabaseConfigServiceStorage implements ConfigServiceStorageInterface
     /**
      * {@inheritdoc}
      */
-    public function get($name, $default = null)
+    public function get($name)
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->from($this->table, 'config');
@@ -66,7 +66,7 @@ class DatabaseConfigServiceStorage implements ConfigServiceStorageInterface
         $configValue = $queryBuilder->execute()->fetchColumn();
 
         if (!$configValue) {
-            return $default;
+            return null;
         }
 
         return $configValue;
@@ -92,7 +92,7 @@ class DatabaseConfigServiceStorage implements ConfigServiceStorageInterface
         );
 
         if (empty($affectedRows)) {
-            $this->connection->insert($this->table,[
+            $this->connection->insert($this->table, [
                 'name' => $name,
                 'value' => $value,
             ]);

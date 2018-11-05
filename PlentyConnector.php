@@ -19,16 +19,9 @@ use Shopware_Components_Acl;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use SystemConnector\BacklogService\BacklogService;
 use SystemConnector\BacklogService\Model\Backlog;
 use SystemConnector\ConfigService\Model\Config;
-use SystemConnector\DependencyInjection\CompilerPass\CleanupDefinitionCompilerPass;
-use SystemConnector\DependencyInjection\CompilerPass\CommandGeneratorCompilerPass;
-use SystemConnector\DependencyInjection\CompilerPass\CommandHandlerCompilerPass;
-use SystemConnector\DependencyInjection\CompilerPass\ConnectorDefinitionCompilerPass;
-use SystemConnector\DependencyInjection\CompilerPass\MappingDefinitionCompilerPass;
-use SystemConnector\DependencyInjection\CompilerPass\QueryGeneratorCompilerPass;
-use SystemConnector\DependencyInjection\CompilerPass\QueryHandlerCompilerPass;
-use SystemConnector\DependencyInjection\CompilerPass\ValidatorServiceCompilerPass;
 use SystemConnector\IdentityService\IdentityServiceInterface;
 use SystemConnector\IdentityService\Model\Identity;
 use SystemConnector\TransferObject\Category\Category;
@@ -105,15 +98,6 @@ class PlentyConnector extends Plugin
         if ($this->pluginExists($container, ['SwagBundle'])) {
             $this->loadFile($container, __DIR__ . '/Components/Bundle/DependencyInjection/services.xml');
         }
-
-        $container->addCompilerPass(new CleanupDefinitionCompilerPass());
-        $container->addCompilerPass(new CommandGeneratorCompilerPass());
-        $container->addCompilerPass(new CommandHandlerCompilerPass());
-        $container->addCompilerPass(new ConnectorDefinitionCompilerPass());
-        $container->addCompilerPass(new MappingDefinitionCompilerPass());
-        $container->addCompilerPass(new QueryGeneratorCompilerPass());
-        $container->addCompilerPass(new QueryHandlerCompilerPass());
-        $container->addCompilerPass(new ValidatorServiceCompilerPass());
 
         parent::build($container);
     }
@@ -434,7 +418,7 @@ class PlentyConnector extends Plugin
 
         $query = 'UPDATE plenty_backlog SET status = :statusNew WHERE status = :statusOld';
         $connection->executeQuery($query, [
-            ':statusNew' => Backlog::STATUS_OPEN,
+            ':statusNew' => BacklogService::STATUS_OPEN,
             ':statusOld' => '',
         ]);
     }

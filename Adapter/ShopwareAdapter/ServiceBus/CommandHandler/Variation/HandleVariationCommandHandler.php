@@ -118,7 +118,7 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
                 );
             }
 
-            $this->identityService->create(
+            $this->identityService->insert(
                 $variation->getIdentifier(),
                 Variation::TYPE,
                 (string) $variationModel->getId(),

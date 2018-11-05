@@ -15,11 +15,10 @@ interface ConfigServiceStorageInterface
      * Returns the given config element for that key. Default if it doenst exist.
      *
      * @param string $name
-     * @param mixed  $default
      *
-     * @return mixed
+     * @return null|string
      */
-    public function get($name, $default = null);
+    public function get($name);
 
     /**
      * Sets the config key to the given value.

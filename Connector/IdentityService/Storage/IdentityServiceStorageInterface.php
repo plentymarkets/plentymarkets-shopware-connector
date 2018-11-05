@@ -23,7 +23,7 @@ interface IdentityServiceStorageInterface
     /**
      * @param Identity $identity
      */
-    public function persist(Identity $identity);
+    public function insert(Identity $identity);
 
     /**
      * @param Identity $identity

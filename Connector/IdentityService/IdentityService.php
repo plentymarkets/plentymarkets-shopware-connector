@@ -3,38 +3,31 @@
 namespace SystemConnector\IdentityService;
 
 use Assert\Assertion;
-use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 use SystemConnector\IdentityService\Exception\NotFoundException;
 use SystemConnector\IdentityService\Storage\IdentityServiceStorageInterface;
 use SystemConnector\ValidatorService\ValidatorServiceInterface;
 use SystemConnector\ValueObject\Identity\Identity;
+use Traversable;
 
 class IdentityService implements IdentityServiceInterface
 {
     /**
-     * @var IdentityServiceStorageInterface
+     * @var IdentityServiceStorageInterface[]
      */
-    private $storage;
+    private $storages;
 
     /**
      * @var ValidatorServiceInterface
      */
     private $validator;
 
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
     public function __construct(
-        IdentityServiceStorageInterface $storage,
-        ValidatorServiceInterface $validator,
-        LoggerInterface $logger
+        Traversable $storage,
+        ValidatorServiceInterface $validator
     ) {
-        $this->storage = $storage;
+        $this->storages = iterator_to_array($storage);
         $this->validator = $validator;
-        $this->logger = $logger;
     }
 
     /**
@@ -90,7 +83,7 @@ class IdentityService implements IdentityServiceInterface
         if (null === $identity) {
             $objectIdentifier = Uuid::uuid4()->toString();
 
-            $identity = $this->create(
+            $identity = $this->insert(
                 $objectIdentifier,
                 $objectType,
                 (string) $adapterIdentifier,
@@ -110,16 +103,22 @@ class IdentityService implements IdentityServiceInterface
     {
         Assertion::isArray($criteria);
 
-        $identity = $this->storage->findOneBy($criteria);
-        $this->validator->validate($identity);
+        $storage = reset($this->storages);
+        $identity = $storage->findOneBy($criteria);
 
-        return $identity;
+        if ($identity !== null) {
+            $this->validator->validate($identity);
+
+            return $identity;
+        }
+
+        return null;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function create($objectIdentifier, $objectType, $adapterIdentifier, $adapterName)
+    public function insert($objectIdentifier, $objectType, $adapterIdentifier, $adapterName)
     {
         /**
          * @var Identity $identity
@@ -132,7 +131,9 @@ class IdentityService implements IdentityServiceInterface
         ]);
 
         $this->validator->validate($identity);
-        $this->storage->persist($identity);
+
+        $storage = reset($this->storages);
+        $storage->insert($identity);
 
         return $identity;
     }
@@ -144,7 +145,8 @@ class IdentityService implements IdentityServiceInterface
     {
         Assertion::isArray($criteria);
 
-        $identities = $this->storage->findBy($criteria);
+        $storage = reset($this->storages);
+        $identities = $storage->findBy($criteria);
 
         array_walk($identities, function (Identity $identity) {
             $this->validator->validate($identity);
@@ -159,7 +161,9 @@ class IdentityService implements IdentityServiceInterface
     public function update(Identity $identity, array $params = [])
     {
         $this->validator->validate($identity);
-        $this->storage->update($identity, $params);
+
+        $storage = reset($this->storages);
+        $storage->update($identity, $params);
     }
 
     /**
@@ -168,7 +172,9 @@ class IdentityService implements IdentityServiceInterface
     public function remove(Identity $identity)
     {
         $this->validator->validate($identity);
-        $this->storage->remove($identity);
+
+        $storage = reset($this->storages);
+        $storage->remove($identity);
     }
 
     /**

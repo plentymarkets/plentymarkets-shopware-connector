@@ -7,6 +7,9 @@ use SystemConnector\ServiceBus\Command\CommandInterface;
 
 interface BacklogServiceInterface
 {
+    const STATUS_OPEN = 'open';
+    const STATUS_PROCESSED = 'processed';
+
     /**
      * enqueues a command to the backlog
      *

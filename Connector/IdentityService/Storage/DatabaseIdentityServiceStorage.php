@@ -93,7 +93,7 @@ class DatabaseIdentityServiceStorage implements IdentityServiceStorageInterface
     /**
      * {@inheritdoc}
      */
-    public function persist(Identity $identity)
+    public function insert(Identity $identity)
     {
         $this->connection->insert($this->table, [
             'adapterIdentifier' => $identity->getAdapterIdentifier(),
@@ -108,23 +108,27 @@ class DatabaseIdentityServiceStorage implements IdentityServiceStorageInterface
      */
     public function update(Identity $identity, array $params = [])
     {
-        $affectedRows = $this->connection->update($this->table, $params, [
+        $this->connection->update($this->table, $params, [
             'adapterIdentifier' => $identity->getAdapterIdentifier(),
             'adapterName' => $identity->getAdapterName(),
             'objectIdentifier' => $identity->getObjectIdentifier(),
             'objectType' => $identity->getObjectType(),
         ]);
 
-        if (empty($affectedRows)) {
-            return null;
+        if (!empty($params['objectIdentifier'])) {
+            $identity->setObjectIdentifier($params['objectIdentifier']);
+        }
+        if (!empty($params['objectType'])) {
+            $identity->setAdapterName($params['objectType']);
+        }
+        if (!empty($params['adapterIdentifier'])) {
+            $identity->setAdapterIdentifier($params['adapterIdentifier']);
+        }
+        if (!empty($params['adapterName'])) {
+            $identity->setObjectType($params['adapterName']);
         }
 
-        return Identity::fromArray([
-            'objectIdentifier' => $params['objectIdentifier'],
-            'objectType' => $params['objectType'],
-            'adapterIdentifier' => $params['adapterIdentifier'],
-            'adapterName' => $params['adapterName'],
-        ]);
+        return $identity;
     }
 
     /**

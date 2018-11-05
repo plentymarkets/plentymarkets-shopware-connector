@@ -33,8 +33,7 @@
         <!-- config -->
 
         <service id="plenty_connector.config_service" class="SystemConnector\ConfigService\ConfigService">
-            <argument type="service" id="plenty_connector.config_service_storage" />
-            <argument type="service" id="plenty_connector.logger" />
+            <argument type="tagged" tag="plenty_connector.config_storage" />
         </service>
 
         <!-- translation Helper -->
@@ -60,7 +59,11 @@
 
         <!-- definition Provider -->
 
-        <service id="plenty_connector.definition_provider" class="SystemConnector\DefinitionProvider\DefinitionProvider" />
+        <service id="plenty_connector.definition_provider" class="SystemConnector\DefinitionProvider\DefinitionProvider">
+            <argument type="tagged" tag="plenty_connector.connector_definition" />
+            <argument type="tagged" tag="plenty_connector.mapping_definition" />
+            <argument type="tagged" tag="plenty_connector.cleanup_definition" />
+        </service>
 
         <!-- cleanup Service -->
 
@@ -87,9 +90,8 @@
         <!-- identity Service -->
 
         <service id="plenty_connector.identity_service" class="SystemConnector\IdentityService\IdentityService">
-            <argument type="service" id="plenty_connector.identity_service_storage" />
+            <argument type="tagged" tag="plenty_connector.identity_storage" />
             <argument type="service" id="plenty_connector.validator_service" />
-            <argument type="service" id="plenty_connector.logger" />
         </service>
 
         <!-- query Factory -->
@@ -102,13 +104,14 @@
 
         <!-- validator service -->
 
-        <service id="plenty_connector.validator_service" class="SystemConnector\ValidatorService\ValidatorService" />
+        <service id="plenty_connector.validator_service" class="SystemConnector\ValidatorService\ValidatorService">
+            <argument type="tagged" tag="plenty_connector.validator" />
+        </service>
 
         <!-- backlog -->
 
         <service id="plenty_connector.backlog_service" class="SystemConnector\BacklogService\BacklogService">
-            <argument type="service" id="plenty_connector.backlog_service_storage" />
-            <argument type="service" id="plenty_connector.logger" />
+            <argument type="tagged" tag="plenty_connector.backlog_storage" />
         </service>
 
         <service id="plenty_connector.backlog_service.backlog_command_handler_middleware" class="SystemConnector\BacklogService\Middleware\BacklogCommandHandlerMiddleware">
@@ -118,8 +121,13 @@
 
         <!-- service Bus -->
 
-        <service id="plenty_connector.command_bus.command_handler_middleware" class="SystemConnector\ServiceBus\CommandHandlerMiddleware\CommandHandlerMiddleware" />
-        <service id="plenty_connector.query_bus.query_handler_middleware" class="SystemConnector\ServiceBus\QueryHandlerMiddleware\QueryHandlerMiddleware" />
+        <service id="plenty_connector.command_bus.command_handler_middleware" class="SystemConnector\ServiceBus\CommandHandlerMiddleware\CommandHandlerMiddleware">
+            <argument type="tagged" tag="plenty_connector.command_handler" />
+        </service>
+
+        <service id="plenty_connector.query_bus.query_handler_middleware" class="SystemConnector\ServiceBus\QueryHandlerMiddleware\QueryHandlerMiddleware">
+            <argument type="tagged" tag="plenty_connector.query_handler" />
+        </service>
 
         <service id="plenty_connector.service_bus.validator_middleware" class="SystemConnector\ServiceBus\ValidatorMiddleware\ValidatorMiddleware">
             <argument type="service" id="plenty_connector.validator_service" />

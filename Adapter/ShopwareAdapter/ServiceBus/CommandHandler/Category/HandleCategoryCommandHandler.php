@@ -281,7 +281,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             $existingCategory = $this->findExistingCategory($category, $parentCategory);
 
             if (null !== $existingCategory) {
-                $categoryIdentity = $this->identityService->create(
+                $categoryIdentity = $this->identityService->insert(
                     (string) $category->getIdentifier(),
                     Category::TYPE,
                     (string) $existingCategory,
@@ -332,7 +332,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         if (null === $categoryIdentity) {
             $categoryModel = $resource->create($params);
 
-            $categoryIdentity = $this->identityService->create(
+            $categoryIdentity = $this->identityService->insert(
                 (string) $category->getIdentifier(),
                 Category::TYPE,
                 (string) $categoryModel->getId(),

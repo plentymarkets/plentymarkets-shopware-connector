@@ -96,7 +96,7 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
             $existingManufacturer = $this->findExistingManufacturer($manufacturer);
 
             if (null !== $existingManufacturer) {
-                $identity = $this->identityService->create(
+                $identity = $this->identityService->insert(
                     (string) $manufacturer->getIdentifier(),
                     Manufacturer::TYPE,
                     (string) $existingManufacturer['id'],
@@ -118,7 +118,7 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
         if (null === $identity) {
             $manufacturerModel = $this->resource->create($params);
 
-            $this->identityService->create(
+            $this->identityService->insert(
                 (string) $manufacturer->getIdentifier(),
                 Manufacturer::TYPE,
                 (string) $manufacturerModel->getId(),

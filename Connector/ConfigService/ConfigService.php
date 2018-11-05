@@ -2,29 +2,19 @@
 
 namespace SystemConnector\ConfigService;
 
-use Exception;
-use Psr\Log\LoggerInterface;
 use SystemConnector\ConfigService\Storage\ConfigServiceStorageInterface;
-use Throwable;
+use Traversable;
 
 class ConfigService implements ConfigServiceInterface
 {
     /**
-     * @var ConfigServiceStorageInterface
+     * @var ConfigServiceStorageInterface[]
      */
-    private $storage;
+    private $storages;
 
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    public function __construct(
-        ConfigServiceStorageInterface $storage,
-        LoggerInterface $logger
-    ) {
-        $this->storage = $storage;
-        $this->logger = $logger;
+    public function __construct(Traversable $storage)
+    {
+        $this->storages = iterator_to_array($storage);
     }
 
     /**
@@ -32,15 +22,9 @@ class ConfigService implements ConfigServiceInterface
      */
     public function getAll()
     {
-        try {
-            return $this->storage->getAll();
-        } catch (Exception $exception) {
-            $this->logger->error($exception->getMessage());
-        } catch (Throwable $exception) {
-            $this->logger->error($exception->getMessage());
-        }
+        $storage = reset($this->storages);
 
-        return [];
+        return $storage->getAll();
     }
 
     /**
@@ -48,15 +32,15 @@ class ConfigService implements ConfigServiceInterface
      */
     public function get($key, $default = null)
     {
-        try {
-            return $this->storage->get($key, $default);
-        } catch (Exception $exception) {
-            $this->logger->error($exception->getMessage());
-        } catch (Throwable $exception) {
-            $this->logger->error($exception->getMessage());
+        $storage = reset($this->storages);
+
+        $result = $storage->get($key);
+
+        if ($result !== null) {
+            return $result;
         }
 
-        return '';
+        return $default;
     }
 
     /**
@@ -64,12 +48,8 @@ class ConfigService implements ConfigServiceInterface
      */
     public function set($key, $value)
     {
-        try {
-            $this->storage->set($key, $value);
-        } catch (Exception $exception) {
-            $this->logger->error($exception->getMessage());
-        } catch (Throwable $exception) {
-            $this->logger->error($exception->getMessage());
-        }
+        $storage = reset($this->storages);
+
+        $storage->set($key, $value);
     }
 }

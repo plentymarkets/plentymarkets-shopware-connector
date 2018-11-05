@@ -2,33 +2,20 @@
 
 namespace SystemConnector\BacklogService;
 
-use Exception;
-use Psr\Log\LoggerInterface;
 use SystemConnector\BacklogService\Storage\BacklogServiceStorageInterface;
 use SystemConnector\ServiceBus\Command\CommandInterface;
-use Throwable;
+use Traversable;
 
 class BacklogService implements BacklogServiceInterface
 {
-    const STATUS_OPEN = 'open';
-    const STATUS_PROCESSED = 'processed';
-
     /**
-     * @var LoggerInterface
+     * @var BacklogServiceStorageInterface[]
      */
-    private $logger;
+    private $storages;
 
-    /**
-     * @var BacklogServiceStorageInterface
-     */
-    private $storage;
-
-    public function __construct(
-        BacklogServiceStorageInterface $storage,
-        LoggerInterface $logger
-    ) {
-        $this->storage = $storage;
-        $this->logger = $logger;
+    public function __construct(Traversable $storage)
+    {
+        $this->storages = iterator_to_array($storage);
     }
 
     /**
@@ -36,13 +23,9 @@ class BacklogService implements BacklogServiceInterface
      */
     public function enqueue(CommandInterface $command)
     {
-        try {
-            $this->storage->enqueue($command);
-        } catch (Exception $exception) {
-            $this->logger->error($exception->getMessage());
-        } catch (Throwable $exception) {
-            $this->logger->error($exception->getMessage());
-        }
+        $storage = reset($this->storages);
+
+        $storage->enqueue($command);
     }
 
     /**
@@ -50,15 +33,9 @@ class BacklogService implements BacklogServiceInterface
      */
     public function dequeue()
     {
-        try {
-            return $this->storage->dequeue();
-        } catch (Exception $exception) {
-            $this->logger->error($exception->getMessage());
-        } catch (Throwable $exception) {
-            $this->logger->error($exception->getMessage());
-        }
+        $storage = reset($this->storages);
 
-        return null;
+        return $storage->dequeue();
     }
 
     /**
@@ -66,14 +43,8 @@ class BacklogService implements BacklogServiceInterface
      */
     public function getInfo()
     {
-        try {
-            return $this->storage->getInfo();
-        } catch (Exception $exception) {
-            $this->logger->error($exception->getMessage());
-        } catch (Throwable $exception) {
-            $this->logger->error($exception->getMessage());
-        }
+        $storage = reset($this->storages);
 
-        return [];
+        return $storage->getInfo();
     }
 }

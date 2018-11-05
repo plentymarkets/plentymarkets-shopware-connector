@@ -109,7 +109,7 @@ class HandleSepaPaymentCommandHandler implements CommandHandlerInterface
         if (!empty($possibleBankAccounts)) {
             $possibleBankAccounts = array_shift($possibleBankAccounts);
 
-            $this->identityService->create(
+            $this->identityService->insert(
                 $payment->getIdentifier(),
                 Payment::TYPE,
                 (string) $possibleBankAccounts['id'],
@@ -130,7 +130,7 @@ class HandleSepaPaymentCommandHandler implements CommandHandlerInterface
 
         $paymentResult = $this->client->request('POST', 'accounts/contacts/banks', $sepaPaymentDataParams);
 
-        $this->identityService->create(
+        $this->identityService->insert(
             $payment->getIdentifier(),
             Payment::TYPE,
             (string) $paymentResult['id'],
