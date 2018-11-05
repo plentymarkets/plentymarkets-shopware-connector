@@ -5,7 +5,6 @@ namespace PlentymarketsAdapter\Client;
 use Assert\Assertion;
 use Closure;
 use Exception;
-use PlentyConnector\Connector\ConfigService\ConfigServiceInterface;
 use PlentymarketsAdapter\Client\Exception\InvalidCredentialsException;
 use PlentymarketsAdapter\Client\Exception\InvalidResponseException;
 use PlentymarketsAdapter\Client\Exception\LimitReachedException;
@@ -13,6 +12,7 @@ use PlentymarketsAdapter\Client\Exception\LoginExpiredException;
 use PlentymarketsAdapter\Client\Iterator\Iterator;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
+use SystemConnector\ConfigService\ConfigServiceInterface;
 use Throwable;
 
 class Client implements ClientInterface
@@ -20,7 +20,7 @@ class Client implements ClientInterface
     /**
      * @var ConfigServiceInterface
      */
-    private $config;
+    private $configService;
 
     /**
      * @var LoggerInterface
@@ -45,7 +45,7 @@ class Client implements ClientInterface
         ConfigServiceInterface $config,
         LoggerInterface $logger
     ) {
-        $this->config = $config;
+        $this->configService = $config;
         $this->logger = $logger;
     }
 
@@ -96,12 +96,6 @@ class Client implements ClientInterface
             $requestUrl = $this->getUrl($path, $options);
             $response = $this->curlRequest($requestUrl, $method, $path, $params, $limit, $offset);
 
-
-            for ($i = 0; $i < 400; ++$i) {
-                $this->curlRequest($requestUrl, $method, $path, $params, $limit, $offset);
-            }
-
-
             if (null === $response) {
                 throw InvalidResponseException::fromParams($method, $path, $options);
             }
@@ -137,13 +131,10 @@ class Client implements ClientInterface
         curl_setopt($curl, CURLOPT_TIMEOUT, 60);
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 60);
 
-        // Retry-After: -1536195196
         $headers = [];
         curl_setopt($curl, CURLOPT_HEADERFUNCTION, function ($curl, $header) use (&$headers) {
-            $length = strlen($header);
-
             if (stripos($header, 'X-Plenty') === false) {
-                return $length;
+                return strlen($header);
             }
 
             $name = substr($header, 0, strpos($header, ':'));
@@ -151,7 +142,7 @@ class Client implements ClientInterface
 
             $headers[$name] = (int) trim($value);
 
-            return $length;
+            return strlen($header);
         });
 
         if (null !== $limit) {
@@ -187,7 +178,17 @@ class Client implements ClientInterface
         }
 
         if ($info['http_code'] === 200) {
-            return json_decode($response, true);
+            $json = json_decode($response, true);
+
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw InvalidResponseException::fromParams(
+                    $method,
+                    $path,
+                    $params
+                );
+            }
+
+            return $json;
         }
 
         throw new RuntimeException('client error');
@@ -213,13 +214,13 @@ class Client implements ClientInterface
 
     private function login()
     {
-        if (null === $this->config->get('rest_username') || null === $this->config->get('rest_password')) {
+        if (null === $this->configService->get('rest_username') || null === $this->configService->get('rest_password')) {
             throw new InvalidCredentialsException('invalid creddentials');
         }
 
         $login = $this->request('POST', 'login', [
-            'username' => $this->config->get('rest_username'),
-            'password' => $this->config->get('rest_password'),
+            'username' => $this->configService->get('rest_username'),
+            'password' => $this->configService->get('rest_password'),
         ]);
 
         if (empty($login['accessToken'])) {
@@ -258,7 +259,7 @@ class Client implements ClientInterface
         Assertion::notBlank($path);
 
         if (!isset($options['base_uri'])) {
-            $base_uri = $this->getBaseUri($this->config->get('rest_url'));
+            $base_uri = $this->getBaseUri($this->configService->get('rest_url'));
         } else {
             $base_uri = $this->getBaseUri($options['base_uri']);
         }
@@ -316,18 +317,16 @@ class Client implements ClientInterface
     }
 
     /**
-     * TODO: Debugging verbessern und Limit exceptions behandeln
-     *
-     * @param Throwable|Exception $exception
-     * @param string              $method
-     * @param string$path
-     * @param array $params
-     * @param int   $limit
-     * @param int   $offset
+     * @param Throwable $exception
+     * @param string    $method
+     * @param string    $path
+     * @param array     $params
+     * @param int       $limit
+     * @param int       $offset
      *
      * @return array
      */
-    private function handleRequestException($exception, $method, $path, $params, $limit, $offset)
+    private function handleRequestException(Throwable $exception, $method, $path, array $params, $limit, $offset)
     {
         if ($this->retries >= 4) {
             $this->retries = 0;
@@ -335,18 +334,22 @@ class Client implements ClientInterface
             throw $exception;
         }
 
-        $this->retries++;
+        ++$this->retries;
 
         if ($exception instanceof LoginExpiredException) {
             $this->accessToken = null;
         }
 
         if ($exception instanceof LimitReachedException) {
-            $this->logger->debug(
-                sprintf('rate limit reached, retrying in %s seconds', $exception->getRetryAfter())
-            );
+            if ($exception->getRetryAfter() > 60 * 15) {
+                $this->logger->error('rate limit reached and retry after value is too high, aborting');
+            } else {
+                $this->logger->warning(
+                    sprintf('rate limit reached, retrying in %s seconds', $exception->getRetryAfter())
+                );
 
-            sleep($exception->getRetryAfter());
+                sleep($exception->getRetryAfter());
+            }
         } else {
             sleep(10);
         }
@@ -365,7 +368,7 @@ class Client implements ClientInterface
     private function prepareResponse($limit, $offset, array $options, array $response)
     {
         if (!isset($options['plainResponse']) || !$options['plainResponse']) {
-            // Hack to check if the right page is returned from the api
+            // Hack to ensure that the correct page is returned from the api
             if (isset($response['page']) && $response['page'] !== $this->getPage($limit, $offset)) {
                 $response['entries'] = [];
             }
@@ -379,8 +382,6 @@ class Client implements ClientInterface
     }
 
     /**
-     * TODO: je nach limit reached eine andere Aktion durchführen: retry in after oder harte exception
-     *
      * @param array $headers
      */
     private function handeRateLimits(array $headers)
@@ -394,7 +395,9 @@ class Client implements ClientInterface
         $retryAfter = 0;
 
         foreach ($limitHeaders as $header) {
-            if (!isset($headers[$header . '-Calls-Left']) || $headers[$header . '-Calls-Left'] > 0) {
+            $callsLeftHeader = $header . '-Calls-Left';
+
+            if (!isset($headers[$callsLeftHeader]) || $headers[$callsLeftHeader] > 0) {
                 continue;
             }
 
