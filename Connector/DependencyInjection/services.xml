@@ -32,8 +32,9 @@
 
         <!-- config -->
 
-        <service id="plenty_connector.config" class="SystemConnector\ConfigService\ConfigService">
-            <argument type="service" id="models" />
+        <service id="plenty_connector.config_service" class="SystemConnector\ConfigService\ConfigService">
+            <argument type="service" id="plenty_connector.config_service_storage" />
+            <argument type="service" id="plenty_connector.logger" />
         </service>
 
         <!-- translation Helper -->
@@ -85,13 +86,10 @@
 
         <!-- identity Service -->
 
-        <service id="plenty_connector.identity_storage" class="SystemConnector\IdentityService\Storage\DoctrineIdentityStorage">
-            <argument type="service" id="models" />
-        </service>
-
         <service id="plenty_connector.identity_service" class="SystemConnector\IdentityService\IdentityService">
-            <argument type="service" id="plenty_connector.identity_storage" />
+            <argument type="service" id="plenty_connector.identity_service_storage" />
             <argument type="service" id="plenty_connector.validator_service" />
+            <argument type="service" id="plenty_connector.logger" />
         </service>
 
         <!-- query Factory -->
@@ -109,7 +107,7 @@
         <!-- backlog -->
 
         <service id="plenty_connector.backlog_service" class="SystemConnector\BacklogService\BacklogService">
-            <argument type="service" id="models" />
+            <argument type="service" id="plenty_connector.backlog_service_storage" />
             <argument type="service" id="plenty_connector.logger" />
         </service>
 

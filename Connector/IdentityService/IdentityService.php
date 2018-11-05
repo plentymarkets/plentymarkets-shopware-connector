@@ -3,16 +3,17 @@
 namespace SystemConnector\IdentityService;
 
 use Assert\Assertion;
+use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 use SystemConnector\IdentityService\Exception\NotFoundException;
-use SystemConnector\IdentityService\Storage\IdentityStorageInterface;
+use SystemConnector\IdentityService\Storage\IdentityServiceStorageInterface;
 use SystemConnector\ValidatorService\ValidatorServiceInterface;
 use SystemConnector\ValueObject\Identity\Identity;
 
 class IdentityService implements IdentityServiceInterface
 {
     /**
-     * @var IdentityStorageInterface
+     * @var IdentityServiceStorageInterface
      */
     private $storage;
 
@@ -21,12 +22,19 @@ class IdentityService implements IdentityServiceInterface
      */
     private $validator;
 
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
     public function __construct(
-        IdentityStorageInterface $storage,
-        ValidatorServiceInterface $validator
+        IdentityServiceStorageInterface $storage,
+        ValidatorServiceInterface $validator,
+        LoggerInterface $logger
     ) {
         $this->storage = $storage;
         $this->validator = $validator;
+        $this->logger = $logger;
     }
 
     /**
@@ -48,8 +56,12 @@ class IdentityService implements IdentityServiceInterface
         ]);
 
         if (null === $identity) {
-            throw new NotFoundException(sprintf('Could not find identity for %s with identifier %s in %s.', $objectType,
-                $adapterIdentifier, $adapterName));
+            throw new NotFoundException(printf(
+                'Could not find identity for %s with identifier %s in %s.',
+                $objectType,
+                $adapterIdentifier,
+                $adapterName
+            ));
         }
 
         $this->validator->validate($identity);
@@ -109,17 +121,15 @@ class IdentityService implements IdentityServiceInterface
      */
     public function create($objectIdentifier, $objectType, $adapterIdentifier, $adapterName)
     {
-        $params = compact(
-            'objectIdentifier',
-            'objectType',
-            'adapterIdentifier',
-            'adapterName'
-        );
-
         /**
          * @var Identity $identity
          */
-        $identity = Identity::fromArray($params);
+        $identity = Identity::fromArray([
+            'objectIdentifier' => $objectIdentifier,
+            'objectType' => $objectType,
+            'adapterIdentifier' => $adapterIdentifier,
+            'adapterName' => $adapterName,
+        ]);
 
         $this->validator->validate($identity);
         $this->storage->persist($identity);

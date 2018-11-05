@@ -1,11 +1,11 @@
 <?php
 
-namespace SystemConnector\BacklogService;
+namespace SystemConnector\BacklogService\Storage;
 
 use SystemConnector\BacklogService\Command\HandleBacklogElementCommand;
 use SystemConnector\ServiceBus\Command\CommandInterface;
 
-interface BacklogServiceInterface
+interface BacklogServiceStorageInterface
 {
     /**
      * enqueues a command to the backlog

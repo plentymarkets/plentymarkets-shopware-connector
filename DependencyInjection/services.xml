@@ -23,5 +23,22 @@
 
             <tag name="shopware.event_subscriber" />
         </service>
+
+        <!-- Storage Services -->
+
+        <service id="plenty_connector.identity_service_storage" class="SystemConnector\IdentityService\Storage\DatabaseIdentityServiceStorage">
+            <argument type="service" id="dbal_connection" />
+            <argument type="string">plenty_identity</argument>
+        </service>
+
+        <service id="plenty_connector.backlog_service_storage" class="SystemConnector\BacklogService\Storage\DatabaseBacklogServiceStorage">
+            <argument type="service" id="dbal_connection" />
+            <argument type="string">plenty_backlog</argument>
+        </service>
+
+        <service id="plenty_connector.config_service_storage" class="SystemConnector\ConfigService\Storage\DatabaseConfigServiceStorage">
+            <argument type="service" id="dbal_connection" />
+            <argument type="string">plenty_config</argument>
+        </service>
     </services>
 </container>

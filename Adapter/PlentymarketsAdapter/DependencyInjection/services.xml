@@ -12,7 +12,7 @@
 
         <service id="plentymarkets_adapter.client" class="PlentymarketsAdapter\Client\Client">
             <argument type="service" id="plentymarkets_adapter.http_client" />
-            <argument type="service" id="plenty_connector.config" />
+            <argument type="service" id="plenty_connector.config_service" />
         </service>
 
         <!-- ReadApi -->
@@ -103,7 +103,7 @@
         <service id="plentymarkets_adapter.request_generator.order_item" class="PlentymarketsAdapter\RequestGenerator\Order\OrderItem\OrderItemRequestGenerator">
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plentymarkets_adapter.client" />
-            <argument type="service" id="plenty_connector.config" />
+            <argument type="service" id="plenty_connector.config_service" />
         </service>
 
         <service id="plentymarkets_adapter.request_generator.customer" class="PlentymarketsAdapter\RequestGenerator\Order\Customer\CustomerRequestGenerator">
@@ -118,7 +118,7 @@
 
         <service id="plentymarkets_adapter.response_parser.category" class="PlentymarketsAdapter\ResponseParser\Category\CategoryResponseParser">
             <argument type="service" id="plenty_connector.identity_service" />
-            <argument type="service" id="plenty_connector.config" />
+            <argument type="service" id="plenty_connector.config_service" />
             <argument type="service" id="plentymarkets_adapter.response_parser.media" />
             <argument type="service" id="plenty_connector.logger" />
         </service>
@@ -180,7 +180,7 @@
         </service>
 
         <service id="plentymarkets_adapter.response_parser.product" class="PlentymarketsAdapter\ResponseParser\Product\ProductResponseParser">
-            <argument type="service" id="plenty_connector.config" />
+            <argument type="service" id="plenty_connector.config_service" />
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plenty_connector.logger" />
             <argument type="service" id="plentymarkets_adapter.response_parser.image" />
@@ -194,7 +194,7 @@
             <argument type="service" id="plentymarkets_adapter.read_api.sales_price" />
             <argument type="service" id="plentymarkets_adapter.read_api.contact_class" />
             <argument type="service" id="plenty_connector.logger" />
-            <argument type="service" id="plenty_connector.config" />
+            <argument type="service" id="plenty_connector.config_service" />
         </service>
 
         <service id="plentymarkets_adapter.response_parser.shipping_profile" class="PlentymarketsAdapter\ResponseParser\ShippingProfile\ShippingProfileResponseParser">
@@ -207,7 +207,7 @@
 
         <service id="plentymarkets_adapter.response_parser.stock" class="PlentymarketsAdapter\ResponseParser\Product\Stock\StockResponseParser">
             <argument type="service" id="plenty_connector.identity_service" />
-            <argument type="service" id="plenty_connector.config" />
+            <argument type="service" id="plenty_connector.config_service" />
             <argument type="service" id="plentymarkets_adapter.client" />
         </service>
 
@@ -225,7 +225,7 @@
             <argument type="service" id="plentymarkets_adapter.read_api.item.barcode" />
             <argument type="service" id="plentymarkets_adapter.helper.reference_amount_calculator" />
 
-            <argument type="service" id="plenty_connector.config" />
+            <argument type="service" id="plenty_connector.config_service" />
         </service>
 
         <service id="plentymarkets_adapter.response_parser.vat_rate" class="PlentymarketsAdapter\ResponseParser\VatRate\VatRateResponseParser">
@@ -329,7 +329,7 @@
         </service>
 
         <service id="plentymarkets_adapter.query_handler.fetch_changed_media_categories" class="PlentymarketsAdapter\ServiceBus\QueryHandler\MediaCategory\FetchChangedMediaCategoriesQueryHandler">
-            <argument type="service" id="plenty_connector.config" />
+            <argument type="service" id="plenty_connector.config_service" />
             <argument type="service" id="plentymarkets_adapter.helper.media_category" />
             <argument type="service" id="plentymarkets_adapter.response_parser.media_category" />
             <argument type="service" id="plenty_connector.logger" />

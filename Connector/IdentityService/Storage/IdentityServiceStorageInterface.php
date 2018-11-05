@@ -4,7 +4,7 @@ namespace SystemConnector\IdentityService\Storage;
 
 use SystemConnector\ValueObject\Identity\Identity;
 
-interface IdentityStorageInterface
+interface IdentityServiceStorageInterface
 {
     /**
      * @param array $criteria

@@ -220,7 +220,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             return [];
         }
 
-        return array_shift($mainVariation);
+        return reset($mainVariation);
     }
 
     /**
@@ -704,7 +704,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      */
     private function getProductNumber(array $variations = [])
     {
-        $variation = array_shift($variations);
+        $variation = reset($variations);
 
         return $variation->getNumber();
     }
@@ -734,6 +734,8 @@ class ProductResponseParser implements ProductResponseParserInterface
         $attributes[] = $this->getShortDescriptionAsAttribute($product);
         $attributes[] = $this->getTechnicalDataAsAttribute($product);
         $attributes[] = $this->getAgeRestrictionAsAttribute($product);
+        $attributes[] = $this->getSecondProductNameAsAttribute($product);
+        $attributes[] = $this->getThirdProductNameAsAttribute($product);
 
         return $attributes;
     }
@@ -803,6 +805,76 @@ class ProductResponseParser implements ProductResponseParserInterface
         $attribute = new Attribute();
         $attribute->setKey('technicalDescription');
         $attribute->setValue((string) $product['texts'][0]['technicalData']);
+        $attribute->setTranslations($translations);
+
+        return $attribute;
+    }
+
+    /**
+     * @param array $product
+     *
+     * @return Attribute
+     */
+    private function getSecondProductNameAsAttribute(array $product)
+    {
+        $translations = [];
+
+        foreach ($product['texts'] as $text) {
+            $languageIdentifier = $this->identityService->findOneBy([
+                'adapterIdentifier' => $text['lang'],
+                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType' => Language::TYPE,
+            ]);
+
+            if (null === $languageIdentifier) {
+                continue;
+            }
+
+            $translations[] = Translation::fromArray([
+                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                'property' => 'value',
+                'value' => $text['name2'],
+            ]);
+        }
+
+        $attribute = new Attribute();
+        $attribute->setKey('secondProductName');
+        $attribute->setValue((string) $product['texts'][0]['name2']);
+        $attribute->setTranslations($translations);
+
+        return $attribute;
+    }
+
+    /**
+     * @param array $product
+     *
+     * @return Attribute
+     */
+    private function getThirdProductNameAsAttribute(array $product)
+    {
+        $translations = [];
+
+        foreach ($product['texts'] as $text) {
+            $languageIdentifier = $this->identityService->findOneBy([
+                'adapterIdentifier' => $text['lang'],
+                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType' => Language::TYPE,
+            ]);
+
+            if (null === $languageIdentifier) {
+                continue;
+            }
+
+            $translations[] = Translation::fromArray([
+                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                'property' => 'value',
+                'value' => $text['name3'],
+            ]);
+        }
+
+        $attribute = new Attribute();
+        $attribute->setKey('thirdProductName');
+        $attribute->setValue((string) $product['texts'][0]['name3']);
         $attribute->setTranslations($translations);
 
         return $attribute;

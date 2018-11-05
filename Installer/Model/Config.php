@@ -5,7 +5,7 @@ namespace SystemConnector\ConfigService\Model;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="ConfigRepository")
+ * @ORM\Entity
  * @ORM\Table(name="plenty_config")
  */
 class Config
@@ -13,8 +13,8 @@ class Config
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

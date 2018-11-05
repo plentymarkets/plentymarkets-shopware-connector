@@ -66,12 +66,12 @@
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="models" />
             <argument type="service" id="shopware_adapter.request_generator.product.configurator_set" />
-            <argument type="service" id="plenty_connector.config" />
+            <argument type="service" id="plenty_connector.config_service" />
             <argument type="service" id="plenty_connector.logger" />
         </service>
 
         <service id="shopware_adapter.request_generator.product.configurator_set" class="ShopwareAdapter\RequestGenerator\Product\ConfiguratorSet\ConfiguratorSetRequestGenerator">
-            <argument type="service" id="plenty_connector.config" />
+            <argument type="service" id="plenty_connector.config_service" />
         </service>
 
         <service id="shopware_adapter.request_generator.product.variation" class="ShopwareAdapter\RequestGenerator\Product\Variation\VariationRequestGenerator">

@@ -2,31 +2,29 @@
 
 namespace SystemConnector\ConfigService;
 
-use DateTime;
-use DateTimeImmutable;
-use Doctrine\ORM\EntityManagerInterface;
-use SystemConnector\ConfigService\Model\Config;
-use SystemConnector\ConfigService\Model\ConfigRepository;
+use Exception;
+use Psr\Log\LoggerInterface;
+use SystemConnector\ConfigService\Storage\ConfigServiceStorageInterface;
+use Throwable;
 
 class ConfigService implements ConfigServiceInterface
 {
     /**
-     * @var EntityManagerInterface
+     * @var ConfigServiceStorageInterface
      */
-    private $entityManager;
+    private $storage;
 
     /**
-     * @var ConfigRepository
+     * @var LoggerInterface
      */
-    private $repository;
+    private $logger;
 
-    /**
-     * @param EntityManagerInterface $entityManager
-     */
-    public function __construct(EntityManagerInterface $entityManager)
-    {
-        $this->entityManager = $entityManager;
-        $this->repository = $entityManager->getRepository(Config::class);
+    public function __construct(
+        ConfigServiceStorageInterface $storage,
+        LoggerInterface $logger
+    ) {
+        $this->storage = $storage;
+        $this->logger = $logger;
     }
 
     /**
@@ -34,18 +32,15 @@ class ConfigService implements ConfigServiceInterface
      */
     public function getAll()
     {
-        /**
-         * @var Config[] $configElements
-         */
-        $configElements = $this->repository->findAll();
-
-        $result = [];
-
-        foreach ($configElements as $element) {
-            $result[$element->getName()] = $element->getValue();
+        try {
+            return $this->storage->getAll();
+        } catch (Exception $exception) {
+            $this->logger->error($exception->getMessage());
+        } catch (Throwable $exception) {
+            $this->logger->error($exception->getMessage());
         }
 
-        return array_merge($result);
+        return [];
     }
 
     /**
@@ -53,18 +48,15 @@ class ConfigService implements ConfigServiceInterface
      */
     public function get($key, $default = null)
     {
-        /**
-         * @var null|Config $element
-         */
-        $element = $this->repository->findOneBy([
-            'name' => $key,
-        ]);
-
-        if (null === $element) {
-            return $default;
+        try {
+            return $this->storage->get($key, $default);
+        } catch (Exception $exception) {
+            $this->logger->error($exception->getMessage());
+        } catch (Throwable $exception) {
+            $this->logger->error($exception->getMessage());
         }
 
-        return $element->getValue();
+        return '';
     }
 
     /**
@@ -72,30 +64,12 @@ class ConfigService implements ConfigServiceInterface
      */
     public function set($key, $value)
     {
-        /**
-         * @var null|Config $element
-         */
-        $element = $this->repository->findOneBy([
-            'name' => $key,
-        ]);
-
-        if (null === $element) {
-            $element = new Config();
-            $element->setName($key);
+        try {
+            $this->storage->set($key, $value);
+        } catch (Exception $exception) {
+            $this->logger->error($exception->getMessage());
+        } catch (Throwable $exception) {
+            $this->logger->error($exception->getMessage());
         }
-
-        if ($value instanceof DateTime || $value instanceof DateTimeImmutable) {
-            $value = $value->format(DATE_W3C);
-        }
-
-        if ($element->getValue() === $value) {
-            return;
-        }
-
-        $element->setValue($value);
-
-        $this->entityManager->persist($element);
-        $this->entityManager->flush();
-        $this->entityManager->clear();
     }
 }

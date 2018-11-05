@@ -15,9 +15,6 @@ use SystemConnector\ServiceBus\Command\CommandInterface;
  */
 class Backlog
 {
-    const STATUS_OPEN = 'open';
-    const STATUS_PROCESSED = 'processed';
-
     /**
      * @var int
      *

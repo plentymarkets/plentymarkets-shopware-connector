@@ -72,7 +72,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         /**
          * @var ConfigServiceInterface $configService
          */
-        $configService = $this->container->get('plenty_connector.config');
+        $configService = $this->container->get('plenty_connector.config_service');
 
         foreach ($this->cleanParameters($this->Request()->getParams()) as $key => $value) {
             $configService->set($key, $value);
@@ -89,7 +89,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         /**
          * @var ConfigServiceInterface $configService
          */
-        $configService = $this->container->get('plenty_connector.config');
+        $configService = $this->container->get('plenty_connector.config_service');
 
         $this->View()->assign([
             'success' => true,
