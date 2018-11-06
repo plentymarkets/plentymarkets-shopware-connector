@@ -9,12 +9,12 @@ use Traversable;
 class BacklogService implements BacklogServiceInterface
 {
     /**
-     * @var Traversable|BacklogServiceStorageInterface[]
+     * @var BacklogServiceStorageInterface[]|Traversable
      */
     private $storages;
 
     /**
-     * @param Traversable|BacklogServiceStorageInterface[] $storage
+     * @param BacklogServiceStorageInterface[]|Traversable $storage
      */
     public function __construct(Traversable $storage)
     {

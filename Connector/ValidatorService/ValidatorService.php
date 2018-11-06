@@ -3,7 +3,6 @@
 namespace SystemConnector\ValidatorService;
 
 use Assert\InvalidArgumentException;
-use phpDocumentor\Reflection\Types\Iterable_;
 use SystemConnector\TransferObject\TransferObjectInterface;
 use SystemConnector\Validator\ValidatorInterface;
 use SystemConnector\ValidatorService\Exception\InvalidDataException;

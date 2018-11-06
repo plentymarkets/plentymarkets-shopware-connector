@@ -13,7 +13,7 @@ use Traversable;
 class IdentityService implements IdentityServiceInterface
 {
     /**
-     * @var Traversable|IdentityServiceStorageInterface[]
+     * @var IdentityServiceStorageInterface[]|Traversable
      */
     private $storages;
 
@@ -23,8 +23,8 @@ class IdentityService implements IdentityServiceInterface
     private $validator;
 
     /**
-     * @param Traversable|IdentityServiceStorageInterface[] $storage
-     * @param ValidatorServiceInterface $validator
+     * @param IdentityServiceStorageInterface[]|Traversable $storage
+     * @param ValidatorServiceInterface                     $validator
      */
     public function __construct(
         Traversable $storage,
