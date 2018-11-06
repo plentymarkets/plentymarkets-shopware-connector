@@ -56,8 +56,7 @@ class ConnectorTest extends TestCase
         $definition->method('getPriority')->willReturn(0);
         $definition->method('isActive')->willReturn(true);
 
-        $definitionProvider = new DefinitionProvider();
-        $definitionProvider->addConnectorDefinition($definition);
+        $definitionProvider = new DefinitionProvider([$definition], [], []);
 
         $outputHandler = $this->createMock(OutputHandlerInterface::class);
         $logger = $this->createMock(LoggerInterface::class);
@@ -113,8 +112,7 @@ class ConnectorTest extends TestCase
         $definition->method('getPriority')->willReturn(0);
         $definition->method('isActive')->willReturn(true);
 
-        $definitionProvider = new DefinitionProvider();
-        $definitionProvider->addConnectorDefinition($definition);
+        $definitionProvider = new DefinitionProvider([$definition], [], []);
 
         $outputHandler = $this->createMock(OutputHandlerInterface::class);
         $logger = $this->createMock(LoggerInterface::class);
@@ -167,8 +165,7 @@ class ConnectorTest extends TestCase
         $definition->method('getPriority')->willReturn(0);
         $definition->method('isActive')->willReturn(true);
 
-        $definitionProvider = new DefinitionProvider();
-        $definitionProvider->addConnectorDefinition($definition);
+        $definitionProvider = new DefinitionProvider([$definition], [], []);
 
         $outputHandler = $this->createMock(OutputHandlerInterface::class);
         $logger = $this->createMock(LoggerInterface::class);

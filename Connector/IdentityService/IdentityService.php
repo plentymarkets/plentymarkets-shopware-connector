@@ -162,8 +162,27 @@ class IdentityService implements IdentityServiceInterface
     {
         $this->validator->validate($identity);
 
+        $newIdentity = clone $identity;
+
+        if (!empty($params['objectIdentifier'])) {
+            $newIdentity->setObjectIdentifier($params['objectIdentifier']);
+        }
+        if (!empty($params['objectType'])) {
+            $newIdentity->setAdapterName($params['objectType']);
+        }
+        if (!empty($params['adapterIdentifier'])) {
+            $newIdentity->setAdapterIdentifier($params['adapterIdentifier']);
+        }
+        if (!empty($params['adapterName'])) {
+            $newIdentity->setObjectType($params['adapterName']);
+        }
+
+        $this->validator->validate($newIdentity);
+
         $storage = reset($this->storages);
         $storage->update($identity, $params);
+
+        return $newIdentity;
     }
 
     /**

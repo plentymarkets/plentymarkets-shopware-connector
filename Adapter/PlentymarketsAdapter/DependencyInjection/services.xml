@@ -11,8 +11,8 @@
         <!-- Client -->
 
         <service id="plentymarkets_adapter.client" class="PlentymarketsAdapter\Client\Client">
-            <argument type="service" id="plentymarkets_adapter.http_client" />
             <argument type="service" id="plenty_connector.config_service" />
+            <argument type="service" id="plenty_connector.logger" />
         </service>
 
         <!-- ReadApi -->

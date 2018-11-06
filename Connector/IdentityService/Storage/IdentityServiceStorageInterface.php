@@ -28,10 +28,8 @@ interface IdentityServiceStorageInterface
     /**
      * @param Identity $identity
      * @param array    $params
-     *
-     * @return null|Identity
      */
-    public function update(Identity $identity, array $params = []);
+    public function update(Identity $identity, array $data = []);
 
     /**
      * @param Identity $identity

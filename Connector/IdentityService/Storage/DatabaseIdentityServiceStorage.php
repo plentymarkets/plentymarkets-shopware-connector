@@ -106,29 +106,14 @@ class DatabaseIdentityServiceStorage implements IdentityServiceStorageInterface
     /**
      * {@inheritdoc}
      */
-    public function update(Identity $identity, array $params = [])
+    public function update(Identity $identity, array $data = [])
     {
-        $this->connection->update($this->table, $params, [
+        $this->connection->update($this->table, $data, [
             'adapterIdentifier' => $identity->getAdapterIdentifier(),
             'adapterName' => $identity->getAdapterName(),
             'objectIdentifier' => $identity->getObjectIdentifier(),
             'objectType' => $identity->getObjectType(),
         ]);
-
-        if (!empty($params['objectIdentifier'])) {
-            $identity->setObjectIdentifier($params['objectIdentifier']);
-        }
-        if (!empty($params['objectType'])) {
-            $identity->setAdapterName($params['objectType']);
-        }
-        if (!empty($params['adapterIdentifier'])) {
-            $identity->setAdapterIdentifier($params['adapterIdentifier']);
-        }
-        if (!empty($params['adapterName'])) {
-            $identity->setObjectType($params['adapterName']);
-        }
-
-        return $identity;
     }
 
     /**
