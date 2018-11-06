@@ -9,10 +9,13 @@ use Traversable;
 class BacklogService implements BacklogServiceInterface
 {
     /**
-     * @var BacklogServiceStorageInterface[]
+     * @var Traversable|BacklogServiceStorageInterface[]
      */
     private $storages;
 
+    /**
+     * @param Traversable|BacklogServiceStorageInterface[] $storage
+     */
     public function __construct(Traversable $storage)
     {
         $this->storages = iterator_to_array($storage);

@@ -2,6 +2,7 @@
 
 namespace PlentyConnector\tests\Unit\Connector;
 
+use ArrayIterator;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
@@ -56,7 +57,11 @@ class ConnectorTest extends TestCase
         $definition->method('getPriority')->willReturn(0);
         $definition->method('isActive')->willReturn(true);
 
-        $definitionProvider = new DefinitionProvider([$definition], [], []);
+        $definitionProvider = new DefinitionProvider(
+            new ArrayIterator([$definition]),
+            new ArrayIterator(),
+            new ArrayIterator()
+        );
 
         $outputHandler = $this->createMock(OutputHandlerInterface::class);
         $logger = $this->createMock(LoggerInterface::class);
@@ -112,7 +117,11 @@ class ConnectorTest extends TestCase
         $definition->method('getPriority')->willReturn(0);
         $definition->method('isActive')->willReturn(true);
 
-        $definitionProvider = new DefinitionProvider([$definition], [], []);
+        $definitionProvider = new DefinitionProvider(
+            new ArrayIterator([$definition]),
+            new ArrayIterator(),
+            new ArrayIterator()
+        );
 
         $outputHandler = $this->createMock(OutputHandlerInterface::class);
         $logger = $this->createMock(LoggerInterface::class);
@@ -165,7 +174,11 @@ class ConnectorTest extends TestCase
         $definition->method('getPriority')->willReturn(0);
         $definition->method('isActive')->willReturn(true);
 
-        $definitionProvider = new DefinitionProvider([$definition], [], []);
+        $definitionProvider = new DefinitionProvider(
+            new ArrayIterator([$definition]),
+            new ArrayIterator(),
+            new ArrayIterator()
+        );
 
         $outputHandler = $this->createMock(OutputHandlerInterface::class);
         $logger = $this->createMock(LoggerInterface::class);

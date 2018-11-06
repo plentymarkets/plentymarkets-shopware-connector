@@ -13,7 +13,6 @@ services:
 
 env:
   matrix:
-    - SHOPWARE_VERSION="5.4"
     - SHOPWARE_VERSION="5.5"
 
   global:

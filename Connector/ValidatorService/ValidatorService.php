@@ -3,22 +3,25 @@
 namespace SystemConnector\ValidatorService;
 
 use Assert\InvalidArgumentException;
+use phpDocumentor\Reflection\Types\Iterable_;
 use SystemConnector\TransferObject\TransferObjectInterface;
 use SystemConnector\Validator\ValidatorInterface;
 use SystemConnector\ValidatorService\Exception\InvalidDataException;
 use SystemConnector\ValueObject\ValueObjectInterface;
+use Traversable;
+use function is_array;
 
 class ValidatorService implements ValidatorServiceInterface
 {
     /**
-     * @var ValidatorInterface[]
+     * @var Traversable|ValidatorInterface[]
      */
     public $validators = [];
 
     /**
-     * @param ValidatorInterface[] $validators
+     * @param Traversable|ValidatorInterface[] $validators
      */
-    public function __construct($validators)
+    public function __construct(Traversable $validators)
     {
         $this->validators = iterator_to_array($validators);
     }
