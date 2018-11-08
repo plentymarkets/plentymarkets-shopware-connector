@@ -4,6 +4,7 @@ namespace SystemConnector\BacklogService\Storage;
 
 use DateTime;
 use Doctrine\DBAL\Connection;
+use PDO;
 use SystemConnector\BacklogService\BacklogService;
 use SystemConnector\BacklogService\Command\HandleBacklogElementCommand;
 use SystemConnector\ServiceBus\Command\CommandInterface;
@@ -54,12 +55,16 @@ class DatabaseBacklogServiceStorage implements BacklogServiceStorageInterface
      */
     public function dequeue()
     {
-        $selectQuery = 'SELECT * FROM :table WHERE `status` = :status ORDER BY `priority` DESC, `id` ASC LIMIT 1';
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $queryBuilder->from($this->table, 'backlog');
+        $queryBuilder->andWhere('backlog.status = :status');
+        $queryBuilder->setParameter(':status', BacklogService::STATUS_OPEN);
+        $queryBuilder->addOrderBy('priority', 'DESC');
+        $queryBuilder->addOrderBy('id', 'ASC');
+        $queryBuilder->setMaxResults(1);
+        $queryBuilder->select('*');
 
-        $backlog = $this->connection->fetchAssoc($selectQuery, [
-            ':table' => $this->table,
-            ':status' => BacklogService::STATUS_OPEN,
-        ]);
+        $backlog = $queryBuilder->execute()->fetch(PDO::FETCH_ASSOC);
 
         if (empty($backlog)) {
             return null;
@@ -80,14 +85,18 @@ class DatabaseBacklogServiceStorage implements BacklogServiceStorageInterface
         }
 
         $affectedRows = $this->connection->delete($this->table, [
-            ':id' => $backlog['id'],
+            'id' => $backlog['id'],
         ]);
 
         if ($affectedRows !== 1) {
             return null;
         }
 
-        $command = unserialize($backlog['payload']);
+        $command = unserialize($backlog['payload'], [
+            'allowed_classes' => [
+                CommandInterface::class,
+            ],
+        ]);
 
         if (!($command instanceof CommandInterface)) {
             return null;
@@ -115,12 +124,14 @@ class DatabaseBacklogServiceStorage implements BacklogServiceStorageInterface
      */
     private function entryExists($hash)
     {
-        $query = 'SELECT id FROM :table WHERE hash = :hash';
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $queryBuilder->from($this->table, 'backlog');
+        $queryBuilder->andWhere('backlog.hash = :hash');
+        $queryBuilder->setParameter(':hash', $hash);
+        $queryBuilder->setMaxResults(1);
+        $queryBuilder->select('backlog.id');
 
-        $backlog = $this->connection->fetchAssoc($query, [
-            ':table' => $this->table,
-            ':hash' => $hash,
-        ]);
+        $backlog = $queryBuilder->execute()->fetch(PDO::FETCH_ASSOC);
 
         if (!empty($backlog)) {
             return true;
@@ -134,10 +145,10 @@ class DatabaseBacklogServiceStorage implements BacklogServiceStorageInterface
      */
     private function getEnqueuedAmount()
     {
-        $query = 'SELECT count(id) FROM :table';
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $queryBuilder->from($this->table, 'backlog');
+        $queryBuilder->select('count(backlog.id) as count');
 
-        return (int) $this->connection->fetchColumn($query, [
-            ':table' => $this->table,
-        ]);
+        return $queryBuilder->execute()->fetchColumn();
     }
 }
