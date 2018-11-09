@@ -149,6 +149,6 @@ class DatabaseBacklogServiceStorage implements BacklogServiceStorageInterface
         $queryBuilder->from($this->table, 'backlog');
         $queryBuilder->select('count(backlog.id) as count');
 
-        return $queryBuilder->execute()->fetchColumn();
+        return $queryBuilder->execute()->fetch(PDO::FETCH_COLUMN);
     }
 }

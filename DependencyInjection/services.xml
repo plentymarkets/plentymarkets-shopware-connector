@@ -7,14 +7,14 @@
     <services>
         <!-- subscriber -->
 
-        <service id="plenty_connector.subscriber.controller_path" class="PlentyConnector\Subscriber\ControllerPathSubscriber">
+        <service id="plenty_connector.subscriber.controller_path" class="PlentyConnector\Subscriber\ControllerPathSubscriber" public="true">
             <argument type="service" id="template" />
             <argument>%plenty_connector.plugin_dir%</argument>
 
             <tag name="shopware.event_subscriber" />
         </service>
 
-        <service id="plenty_connector.subscriber.cronjob" class="PlentyConnector\Subscriber\CronjobSubscriber">
+        <service id="plenty_connector.subscriber.cronjob" class="PlentyConnector\Subscriber\CronjobSubscriber" public="true">
             <argument type="service" id="plenty_connector.connector" />
             <argument type="service" id="plenty_connector.cleanup_service" />
             <argument type="service" id="plenty_connector.backlog_service" />
@@ -26,21 +26,21 @@
 
         <!-- Storage Services -->
 
-        <service id="plenty_connector.database_identity_storage" class="SystemConnector\IdentityService\Storage\DatabaseIdentityServiceStorage">
+        <service id="plenty_connector.database_identity_storage" class="SystemConnector\IdentityService\Storage\DatabaseIdentityServiceStorage" public="false">
             <argument type="service" id="dbal_connection" />
             <argument type="string">plenty_identity</argument>
 
             <tag name="plenty_connector.identity_storage" />
         </service>
 
-        <service id="plenty_connector.database_backlog_storage" class="SystemConnector\BacklogService\Storage\DatabaseBacklogServiceStorage">
+        <service id="plenty_connector.database_backlog_storage" class="SystemConnector\BacklogService\Storage\DatabaseBacklogServiceStorage" public="false">
             <argument type="service" id="dbal_connection" />
             <argument type="string">plenty_backlog</argument>
 
             <tag name="plenty_connector.backlog_storage" />
         </service>
 
-        <service id="plenty_connector.database_config_storage" class="SystemConnector\ConfigService\Storage\DatabaseConfigServiceStorage">
+        <service id="plenty_connector.database_config_storage" class="SystemConnector\ConfigService\Storage\DatabaseConfigServiceStorage" public="false">
             <argument type="service" id="dbal_connection" />
             <argument type="string">plenty_config</argument>
 

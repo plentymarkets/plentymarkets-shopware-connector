@@ -6,7 +6,7 @@
     <!-- Services -->
 
     <services>
-        <service id="plenty_connector.payment.sepa.validator" class="PlentyConnector\Components\Sepa\Validator\SepaPaymentDataValidator">
+        <service id="plenty_connector.payment.sepa.validator" class="PlentyConnector\Components\Sepa\Validator\SepaPaymentDataValidator" public="false">
             <tag name="plenty_connector.validator" />
         </service>
 
