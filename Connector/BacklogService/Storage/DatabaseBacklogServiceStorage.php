@@ -93,10 +93,8 @@ class DatabaseBacklogServiceStorage implements BacklogServiceStorageInterface
         }
 
         $command = unserialize($backlog['payload'], [
-            'allowed_classes' => [
-                CommandInterface::class,
-            ],
-        ]);
+            'allowed_classes' => true]
+        );
 
         if (!($command instanceof CommandInterface)) {
             return null;
