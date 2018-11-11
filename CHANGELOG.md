@@ -46,6 +46,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - handle commands are now prioritised according to their definitions priority
 - added a new services.xml for the connector core
 - introduced a DefinitionProvider to store and handle definitions
+- added multiple product properties (@lacodimizer)
 
 ## [4.6.0]
 ### Fixed
