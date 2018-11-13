@@ -28,6 +28,5 @@ class PayPalUnifiedInstallmentPaymentDataValidator implements ValidatorInterface
         Assertion::integer($object->getTerm(), null, 'components.paypal.unified.installment.term');
 
         Assertion::float($object->getMonthlyPayment(), null, 'components.paypal.unified.installment.monthlyPayment');
-
     }
 }
