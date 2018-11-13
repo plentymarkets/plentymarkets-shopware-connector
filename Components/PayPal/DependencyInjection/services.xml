@@ -8,7 +8,7 @@
     <services>
         <!-- PayPal Plus Invoice -->
 
-        <service id="plenty_connector.components.paypal.invoice_validator" class="PlentyConnector\Components\PayPal\Validator\PayPalPlusInvoicePaymentDataValidator">
+        <service id="plenty_connector.components.paypal.invoice_validator" class="PlentyConnector\Components\PayPal\Validator\PayPalPlusInvoicePaymentDataValidator" public="false">
             <tag name="plenty_connector.validator" />
         </service>
 
@@ -23,7 +23,7 @@
 
         <!-- PayPal Installment -->
 
-        <service id="plenty_connector.components.paypal.installment_validator" class="PlentyConnector\Components\PayPal\Validator\PayPalInstallmentPaymentDataValidator">
+        <service id="plenty_connector.components.paypal.installment_validator" class="PlentyConnector\Components\PayPal\Validator\PayPalInstallmentPaymentDataValidator" public="false">
             <tag name="plenty_connector.validator" />
         </service>
 

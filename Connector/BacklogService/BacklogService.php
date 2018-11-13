@@ -2,47 +2,23 @@
 
 namespace SystemConnector\BacklogService;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
-use Exception;
-use PDO;
-use Psr\Log\LoggerInterface;
-use SystemConnector\BacklogService\Command\HandleBacklogElementCommand;
-use SystemConnector\BacklogService\Model\Backlog;
+use SystemConnector\BacklogService\Storage\BacklogServiceStorageInterface;
 use SystemConnector\ServiceBus\Command\CommandInterface;
-use Throwable;
+use Traversable;
 
 class BacklogService implements BacklogServiceInterface
 {
     /**
-     * @var EntityManagerInterface
+     * @var BacklogServiceStorageInterface[]|Traversable
      */
-    private $entityManager;
+    private $storages;
 
     /**
-     * @var LoggerInterface
+     * @param BacklogServiceStorageInterface[]|Traversable $storage
      */
-    private $logger;
-
-    /**
-     * @var EntityRepository
-     */
-    private $repository;
-
-    /**
-     * @var Connection
-     */
-    private $connection;
-
-    public function __construct(
-        EntityManagerInterface $entityManager,
-        LoggerInterface $logger
-    ) {
-        $this->entityManager = $entityManager;
-        $this->logger = $logger;
-        $this->repository = $entityManager->getRepository(Backlog::class);
-        $this->connection = $entityManager->getConnection();
+    public function __construct(Traversable $storage)
+    {
+        $this->storages = iterator_to_array($storage);
     }
 
     /**
@@ -50,22 +26,9 @@ class BacklogService implements BacklogServiceInterface
      */
     public function enqueue(CommandInterface $command)
     {
-        $serializedCommand = serialize($command);
-        $hash = md5($serializedCommand);
+        $storage = reset($this->storages);
 
-        if ($this->entryExists($hash)) {
-            return;
-        }
-
-        $backlog = new Backlog();
-        $backlog->setPayload($command);
-        $backlog->setStatus(Backlog::STATUS_OPEN);
-        $backlog->setPriority($command->getPriority());
-        $backlog->setHash($hash);
-
-        $this->entityManager->persist($backlog);
-        $this->entityManager->flush();
-        $this->entityManager->clear();
+        $storage->enqueue($command);
     }
 
     /**
@@ -73,46 +36,9 @@ class BacklogService implements BacklogServiceInterface
      */
     public function dequeue()
     {
-        try {
-            $selectQuery = 'SELECT * FROM plenty_backlog WHERE `status` = :status ORDER BY `priority` DESC, `id` ASC LIMIT 1';
-            $selectParams = [':status' => Backlog::STATUS_OPEN];
-            $backlog = $this->connection->executeQuery($selectQuery, $selectParams)->fetch(PDO::FETCH_ASSOC);
+        $storage = reset($this->storages);
 
-            if ($backlog === false) {
-                return null;
-            }
-
-            $updateQuery = 'UPDATE plenty_backlog SET `status` = :status WHERE `id` = :id';
-            $affectedRows = $this->connection->executeUpdate($updateQuery, [
-                ':id' => $backlog['id'],
-                ':status' => Backlog::STATUS_PROCESSED,
-            ]);
-
-            if ($affectedRows !== 1) {
-                return null;
-            }
-
-            $deleteQuery = 'DELETE FROM plenty_backlog WHERE `id` = :id';
-            $affectedRows = $this->connection->executeUpdate($deleteQuery, [':id' => $backlog['id']]);
-
-            if ($affectedRows !== 1) {
-                return null;
-            }
-
-            $command = unserialize($backlog['payload']);
-
-            if (!($command instanceof CommandInterface)) {
-                return null;
-            }
-
-            return new HandleBacklogElementCommand($command);
-        } catch (Exception $exception) {
-            $this->logger->error($exception->getMessage());
-        } catch (Throwable $exception) {
-            $this->logger->error($exception->getMessage());
-        }
-
-        return null;
+        return $storage->dequeue();
     }
 
     /**
@@ -120,38 +46,8 @@ class BacklogService implements BacklogServiceInterface
      */
     public function getInfo()
     {
-        $amount = $this->getEnqueuedAmount();
+        $storage = reset($this->storages);
 
-        return [
-            'amount_enqueued' => $amount,
-        ];
-    }
-
-    /**
-     * @param string $hash
-     *
-     * @return bool
-     */
-    private function entryExists($hash)
-    {
-        $backlog = $this->repository->findOneBy([
-            'hash' => $hash,
-        ]);
-
-        if (!empty($backlog)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * @return int
-     */
-    private function getEnqueuedAmount()
-    {
-        $query = 'SELECT count(id) FROM plenty_backlog';
-
-        return (int) $this->connection->query($query)->fetchColumn();
+        return $storage->getInfo();
     }
 }

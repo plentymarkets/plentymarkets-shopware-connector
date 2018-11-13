@@ -6,20 +6,21 @@ use League\Tactician\Middleware;
 use SystemConnector\ServiceBus\Query\QueryInterface;
 use SystemConnector\ServiceBus\QueryHandler\QueryHandlerInterface;
 use SystemConnector\ServiceBus\QueryHandlerMiddleware\Exception\NotFoundException;
+use Traversable;
 
 class QueryHandlerMiddleware implements Middleware
 {
     /**
-     * @var QueryHandlerInterface[]
+     * @var QueryHandlerInterface[]|Traversable
      */
     private $handlers;
 
     /**
-     * @param QueryHandlerInterface $handler
+     * @param QueryHandlerInterface[]|Traversable $handlers
      */
-    public function addHandler(QueryHandlerInterface $handler)
+    public function __construct(Traversable $handlers)
     {
-        $this->handlers[] = $handler;
+        $this->handlers = iterator_to_array($handlers);
     }
 
     /**

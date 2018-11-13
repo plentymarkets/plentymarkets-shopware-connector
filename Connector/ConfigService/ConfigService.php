@@ -2,31 +2,19 @@
 
 namespace SystemConnector\ConfigService;
 
-use DateTime;
-use DateTimeImmutable;
-use Doctrine\ORM\EntityManagerInterface;
-use SystemConnector\ConfigService\Model\Config;
-use SystemConnector\ConfigService\Model\ConfigRepository;
+use SystemConnector\ConfigService\Storage\ConfigServiceStorageInterface;
+use Traversable;
 
 class ConfigService implements ConfigServiceInterface
 {
     /**
-     * @var EntityManagerInterface
+     * @var ConfigServiceStorageInterface[]
      */
-    private $entityManager;
+    private $storages;
 
-    /**
-     * @var ConfigRepository
-     */
-    private $repository;
-
-    /**
-     * @param EntityManagerInterface $entityManager
-     */
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(Traversable $storage)
     {
-        $this->entityManager = $entityManager;
-        $this->repository = $entityManager->getRepository(Config::class);
+        $this->storages = iterator_to_array($storage);
     }
 
     /**
@@ -34,18 +22,9 @@ class ConfigService implements ConfigServiceInterface
      */
     public function getAll()
     {
-        /**
-         * @var Config[] $configElements
-         */
-        $configElements = $this->repository->findAll();
+        $storage = reset($this->storages);
 
-        $result = [];
-
-        foreach ($configElements as $element) {
-            $result[$element->getName()] = $element->getValue();
-        }
-
-        return array_merge($result);
+        return $storage->getAll();
     }
 
     /**
@@ -53,18 +32,15 @@ class ConfigService implements ConfigServiceInterface
      */
     public function get($key, $default = null)
     {
-        /**
-         * @var null|Config $element
-         */
-        $element = $this->repository->findOneBy([
-            'name' => $key,
-        ]);
+        $storage = reset($this->storages);
 
-        if (null === $element) {
-            return $default;
+        $result = $storage->get($key);
+
+        if ($result !== null) {
+            return $result;
         }
 
-        return $element->getValue();
+        return $default;
     }
 
     /**
@@ -72,30 +48,8 @@ class ConfigService implements ConfigServiceInterface
      */
     public function set($key, $value)
     {
-        /**
-         * @var null|Config $element
-         */
-        $element = $this->repository->findOneBy([
-            'name' => $key,
-        ]);
+        $storage = reset($this->storages);
 
-        if (null === $element) {
-            $element = new Config();
-            $element->setName($key);
-        }
-
-        if ($value instanceof DateTime || $value instanceof DateTimeImmutable) {
-            $value = $value->format(DATE_W3C);
-        }
-
-        if ($element->getValue() === $value) {
-            return;
-        }
-
-        $element->setValue($value);
-
-        $this->entityManager->persist($element);
-        $this->entityManager->flush();
-        $this->entityManager->clear();
+        $storage->set($key, $value);
     }
 }

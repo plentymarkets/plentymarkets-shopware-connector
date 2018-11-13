@@ -14,11 +14,6 @@ interface DefinitionProviderInterface
     public function getConnectorDefinitions($objectType = null);
 
     /**
-     * @param Definition $definition
-     */
-    public function addConnectorDefinition(Definition $definition);
-
-    /**
      * @param null $objectType
      *
      * @return Definition[]
@@ -26,17 +21,7 @@ interface DefinitionProviderInterface
     public function getMappingDefinitions($objectType = null);
 
     /**
-     * @param Definition $definition
-     */
-    public function addMappingDefinition(Definition $definition);
-
-    /**
      * @return Definition[]
      */
     public function getCleanupDefinitions();
-
-    /**
-     * @param Definition $definition
-     */
-    public function addCleanupDefinition(Definition $definition);
 }

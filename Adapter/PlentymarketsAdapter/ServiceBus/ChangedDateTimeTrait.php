@@ -17,7 +17,7 @@ trait ChangedDateTimeTrait
         /**
          * @var ConfigServiceInterface $configService
          */
-        $configService = Shopware()->Container()->get('plenty_connector.config');
+        $configService = Shopware()->Container()->get('plenty_connector.config_service');
 
         $lastRun = $configService->get($this->getKey());
 
@@ -36,7 +36,7 @@ trait ChangedDateTimeTrait
         /**
          * @var ConfigServiceInterface $configService
          */
-        $configService = Shopware()->Container()->get('plenty_connector.config');
+        $configService = Shopware()->Container()->get('plenty_connector.config_service');
 
         $configService->set($this->getKey(), $dateTime);
     }

@@ -150,7 +150,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 $productModel = $articleResource->update($mainVariation->getArticleId(), $params);
             }
 
-            $this->identityService->create(
+            $this->identityService->insert(
                 $product->getIdentifier(),
                 Product::TYPE,
                 (string) $productModel->getId(),

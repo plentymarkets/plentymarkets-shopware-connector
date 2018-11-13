@@ -4,7 +4,7 @@ namespace SystemConnector\IdentityService\Storage;
 
 use SystemConnector\ValueObject\Identity\Identity;
 
-interface IdentityStorageInterface
+interface IdentityServiceStorageInterface
 {
     /**
      * @param array $criteria
@@ -23,15 +23,13 @@ interface IdentityStorageInterface
     /**
      * @param Identity $identity
      */
-    public function persist(Identity $identity);
+    public function insert(Identity $identity);
 
     /**
      * @param Identity $identity
      * @param array    $params
-     *
-     * @return null|Identity
      */
-    public function update(Identity $identity, array $params = []);
+    public function update(Identity $identity, array $data = []);
 
     /**
      * @param Identity $identity

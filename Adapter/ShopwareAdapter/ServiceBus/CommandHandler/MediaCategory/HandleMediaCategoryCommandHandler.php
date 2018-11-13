@@ -151,7 +151,7 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
         $this->entityManager->flush();
         $this->entityManager->clear();
 
-        $this->identityService->create(
+        $this->identityService->insert(
             $mediaCategory->getIdentifier(),
             MediaCategory::TYPE,
             (string) $album->getId(),

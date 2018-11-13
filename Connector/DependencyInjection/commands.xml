@@ -7,7 +7,7 @@
     <services>
         <!-- console -->
 
-        <service id="plenty_connector.console.command.cleanup_command" class="SystemConnector\Console\Command\CleanupCommand">
+        <service id="plenty_connector.console.command.cleanup_command" class="SystemConnector\Console\Command\CleanupCommand" public="false">
             <argument type="service" id="plenty_connector.cleanup_service" />
             <argument type="service" id="plenty_connector.console.output_handler" />
             <argument type="service" id="plenty_connector.logger" />
@@ -15,7 +15,7 @@
             <tag name="console.command" command="plentyconnector:cleanup" />
         </service>
 
-        <service id="plenty_connector.console.command.mapping_command" class="SystemConnector\Console\Command\MappingCommand">
+        <service id="plenty_connector.console.command.mapping_command" class="SystemConnector\Console\Command\MappingCommand" public="false">
             <argument type="service" id="plenty_connector.mapping_service" />
             <argument type="service" id="plenty_connector.console.output_handler" />
             <argument type="service" id="plenty_connector.logger" />
@@ -23,7 +23,7 @@
             <tag name="console.command" command="plentyconnector:mapping" />
         </service>
 
-        <service id="plenty_connector.console.command.process_command" class="SystemConnector\Console\Command\ProcessCommand">
+        <service id="plenty_connector.console.command.process_command" class="SystemConnector\Console\Command\ProcessCommand" public="false">
             <argument type="service" id="plenty_connector.connector" />
             <argument type="service" id="plenty_connector.console.output_handler" />
             <argument type="service" id="plenty_connector.logger" />
@@ -31,7 +31,7 @@
             <tag name="console.command" command="plentyconnector:process" />
         </service>
 
-        <service id="plenty_connector.console.command.backlog_process_command" class="SystemConnector\Console\Command\BacklogProcessCommand">
+        <service id="plenty_connector.console.command.backlog_process_command" class="SystemConnector\Console\Command\BacklogProcessCommand" public="false">
             <argument type="service" id="plenty_connector.service_bus" />
             <argument type="service" id="plenty_connector.backlog_service" />
             <argument type="service" id="plenty_connector.logger" />
@@ -40,7 +40,7 @@
             <tag name="console.command" command="plentyconnector:backlog:process" />
         </service>
 
-        <service id="plenty_connector.console.command.backlog_info_command" class="SystemConnector\Console\Command\BacklogInfoCommand">
+        <service id="plenty_connector.console.command.backlog_info_command" class="SystemConnector\Console\Command\BacklogInfoCommand" public="false">
             <argument type="service" id="plenty_connector.backlog_service" />
             <argument type="service" id="plenty_connector.console.output_handler" />
 
@@ -49,6 +49,6 @@
 
         <!-- output handler -->
 
-        <service id="plenty_connector.console.output_handler" class="SystemConnector\Console\OutputHandler\OutputHandler" />
+        <service id="plenty_connector.console.output_handler" class="SystemConnector\Console\OutputHandler\OutputHandler" public="false" />
     </services>
 </container>

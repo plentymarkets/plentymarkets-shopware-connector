@@ -7,20 +7,22 @@ use SystemConnector\TransferObject\TransferObjectInterface;
 use SystemConnector\Validator\ValidatorInterface;
 use SystemConnector\ValidatorService\Exception\InvalidDataException;
 use SystemConnector\ValueObject\ValueObjectInterface;
+use Traversable;
+use function is_array;
 
 class ValidatorService implements ValidatorServiceInterface
 {
     /**
-     * @var ValidatorInterface[]
+     * @var Traversable|ValidatorInterface[]
      */
     public $validators = [];
 
     /**
-     * @param ValidatorInterface $validator
+     * @param Traversable|ValidatorInterface[] $validators
      */
-    public function addValidator(ValidatorInterface $validator)
+    public function __construct(Traversable $validators)
     {
-        $this->validators[] = $validator;
+        $this->validators = iterator_to_array($validators);
     }
 
     /**

@@ -22,7 +22,7 @@
 
         <!-- Reponse Parser -->
 
-        <service id="plenty_connector_components_bundle.bundle_response_parser" class="PlentyConnector\Components\Bundle\PlentymarketsAdapter\ResponseParser\BundleResponseParser">
+        <service id="plenty_connector_components_bundle.bundle_response_parser" class="PlentyConnector\Components\Bundle\PlentymarketsAdapter\ResponseParser\BundleResponseParser" public="false">
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="plentymarkets_adapter.response_parser.product.price" />
             <argument type="service" id="plentymarkets_adapter.helper.variation" />
@@ -44,7 +44,7 @@
 
         <!-- Definition -->
 
-        <service id="plenty_connector.connector_definition.bundle" class="SystemConnector\ValueObject\Definition\Definition">
+        <service id="plenty_connector.connector_definition.bundle" class="SystemConnector\ValueObject\Definition\Definition" public="false">
             <factory service="plenty_connector.definition_factory" method="factory" />
 
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
@@ -58,17 +58,17 @@
 
         <!-- Validator -->
 
-        <service id="plenty_connector.components.bundle.bundle_validator" class="PlentyConnector\Components\Bundle\Validator\BundleValidator">
+        <service id="plenty_connector.components.bundle.bundle_validator" class="PlentyConnector\Components\Bundle\Validator\BundleValidator" public="false">
             <tag name="plenty_connector.validator" />
         </service>
 
-        <service id="plenty_connector.components.bundle.bundle_product_validator" class="PlentyConnector\Components\Bundle\Validator\BundleProduct\BundleProductValidator">
+        <service id="plenty_connector.components.bundle.bundle_product_validator" class="PlentyConnector\Components\Bundle\Validator\BundleProduct\BundleProductValidator" public="false">
             <tag name="plenty_connector.validator" />
         </service>
 
         <!-- query handler -->
 
-        <service id="plenty_connector.components.bundle.query_handler.fetch_all_bundles" class="PlentyConnector\Components\Bundle\PlentymarketsAdapter\QueryHandler\FetchAllBundlesQueryHandler">
+        <service id="plenty_connector.components.bundle.query_handler.fetch_all_bundles" class="PlentyConnector\Components\Bundle\PlentymarketsAdapter\QueryHandler\FetchAllBundlesQueryHandler" public="false">
             <argument type="service" id="plentymarkets_adapter.read_api.item" />
             <argument type="service" id="plenty_connector_components_bundle.bundle_response_parser" />
             <argument type="service" id="plenty_connector.logger" />
@@ -77,7 +77,7 @@
             <tag name="plenty_connector.query_handler" />
         </service>
 
-        <service id="plenty_connector.components.bundle.query_handler.fetch_changed_bundles" class="PlentyConnector\Components\Bundle\PlentymarketsAdapter\QueryHandler\FetchChangedBundlesQueryHandler">
+        <service id="plenty_connector.components.bundle.query_handler.fetch_changed_bundles" class="PlentyConnector\Components\Bundle\PlentymarketsAdapter\QueryHandler\FetchChangedBundlesQueryHandler" public="false">
             <argument type="service" id="plentymarkets_adapter.read_api.item" />
             <argument type="service" id="plenty_connector_components_bundle.bundle_response_parser" />
             <argument type="service" id="plenty_connector.logger" />
@@ -86,7 +86,7 @@
             <tag name="plenty_connector.query_handler" />
         </service>
 
-        <service id="plenty_connector.components.bundle.query_handler.fetch_bundle" class="PlentyConnector\Components\Bundle\PlentymarketsAdapter\QueryHandler\FetchBundleQueryHandler">
+        <service id="plenty_connector.components.bundle.query_handler.fetch_bundle" class="PlentyConnector\Components\Bundle\PlentymarketsAdapter\QueryHandler\FetchBundleQueryHandler" public="false">
             <argument type="service" id="plentymarkets_adapter.read_api.item" />
             <argument type="service" id="plentymarkets_adapter.read_api.item.variant" />
             <argument type="service" id="plenty_connector.identity_service" />
@@ -97,7 +97,7 @@
 
         <!-- command handler -->
 
-        <service id="plenty_connector.components.bundle.command_handler.handle_bundle" class="PlentyConnector\Components\Bundle\ShopwareAdapter\CommandHandler\HandleBundleCommandHandler">
+        <service id="plenty_connector.components.bundle.command_handler.handle_bundle" class="PlentyConnector\Components\Bundle\ShopwareAdapter\CommandHandler\HandleBundleCommandHandler" public="false">
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="models" />
             <argument type="service" id="plenty_connector.components.bundle.helper" />
@@ -106,7 +106,7 @@
             <tag name="plenty_connector.command_handler" />
         </service>
 
-        <service id="plenty_connector.components.bundle.command_handler.remove_bundle" class="PlentyConnector\Components\Bundle\ShopwareAdapter\CommandHandler\RemoveBundleCommandHandler">
+        <service id="plenty_connector.components.bundle.command_handler.remove_bundle" class="PlentyConnector\Components\Bundle\ShopwareAdapter\CommandHandler\RemoveBundleCommandHandler" public="false">
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="models" />
             <argument type="service" id="plenty_connector.components.bundle.helper" />

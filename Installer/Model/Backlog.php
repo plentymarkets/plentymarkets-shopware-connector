@@ -1,6 +1,6 @@
 <?php
 
-namespace SystemConnector\BacklogService\Model;
+namespace PlentyConnector\Installer\Model;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
@@ -15,9 +15,6 @@ use SystemConnector\ServiceBus\Command\CommandInterface;
  */
 class Backlog
 {
-    const STATUS_OPEN = 'open';
-    const STATUS_PROCESSED = 'processed';
-
     /**
      * @var int
      *
