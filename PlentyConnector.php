@@ -87,7 +87,7 @@ class PlentyConnector extends Plugin
 
         $this->loadFile($container, __DIR__ . '/Components/Sepa/DependencyInjection/services.xml');
 
-        if ($this->pluginExists($container, ['SwagPaymentPaypal', 'SwagPaymentPayPalInstallments', 'SwagPaymentPaypalPlus'])) {
+        if ($this->pluginExists($container, ['SwagPaymentPaypal', 'SwagPaymentPayPalInstallments', 'SwagPaymentPaypalPlus', 'SwagPaymentPayPalUnified'])) {
             $this->loadFile($container, __DIR__ . '/Components/PayPal/DependencyInjection/services.xml');
         }
 
