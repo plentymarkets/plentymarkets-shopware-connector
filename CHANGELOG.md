@@ -15,6 +15,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - extracted all database operations in the BacklogService into a own storage class (@jochenmanz)
 
 ### Added
+- paypal unified plugin integration
 
 ## [## [5.0.0]]
 ### Fixed
