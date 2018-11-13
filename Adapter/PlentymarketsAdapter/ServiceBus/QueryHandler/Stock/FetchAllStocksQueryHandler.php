@@ -82,6 +82,8 @@ class FetchAllStocksQueryHandler implements QueryHandlerInterface
             if ($stock !== null) {
                 yield $stock;
             }
+
+            $this->outputHandler->advanceProgressBar();
         }
 
         $this->outputHandler->finishProgressBar();
