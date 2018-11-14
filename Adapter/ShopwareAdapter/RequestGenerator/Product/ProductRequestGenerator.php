@@ -408,7 +408,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
                 }
 
                 $extractedCategoryPath = array_filter(explode('|', $category->getPath()));
-				$matchedShopCategories = array_intersect($extractedCategoryPath, $shopCategories);
+                $matchedShopCategories = array_intersect($extractedCategoryPath, $shopCategories);
 
                 if (empty($matchedShopCategories)) {
                     continue;
