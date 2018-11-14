@@ -2,6 +2,7 @@
 
 namespace PlentyConnector\tests\Unit\Connector;
 
+use ArrayIterator;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
@@ -50,14 +51,17 @@ class ConnectorTest extends TestCase
         )->willReturn($command);
 
         $definition = $this->createMock(Definition::class);
-        $definition->expects($this->any())->method('getOriginAdapterName')->willReturn('TestOriginAdapter');
-        $definition->expects($this->any())->method('getDestinationAdapterName')->willReturn('TestDestinationAdapter');
-        $definition->expects($this->any())->method('getObjectType')->willReturn('TestType');
+        $definition->method('getOriginAdapterName')->willReturn('TestOriginAdapter');
+        $definition->method('getDestinationAdapterName')->willReturn('TestDestinationAdapter');
+        $definition->method('getObjectType')->willReturn('TestType');
         $definition->method('getPriority')->willReturn(0);
         $definition->method('isActive')->willReturn(true);
 
-        $definitionProvider = new DefinitionProvider();
-        $definitionProvider->addConnectorDefinition($definition);
+        $definitionProvider = new DefinitionProvider(
+            new ArrayIterator([$definition]),
+            new ArrayIterator(),
+            new ArrayIterator()
+        );
 
         $outputHandler = $this->createMock(OutputHandlerInterface::class);
         $logger = $this->createMock(LoggerInterface::class);
@@ -107,14 +111,17 @@ class ConnectorTest extends TestCase
         )->willReturn($command);
 
         $definition = $this->createMock(Definition::class);
-        $definition->expects($this->any())->method('getOriginAdapterName')->willReturn('TestOriginAdapter');
-        $definition->expects($this->any())->method('getDestinationAdapterName')->willReturn('TestDestinationAdapter');
-        $definition->expects($this->any())->method('getObjectType')->willReturn('TestType');
+        $definition->method('getOriginAdapterName')->willReturn('TestOriginAdapter');
+        $definition->method('getDestinationAdapterName')->willReturn('TestDestinationAdapter');
+        $definition->method('getObjectType')->willReturn('TestType');
         $definition->method('getPriority')->willReturn(0);
         $definition->method('isActive')->willReturn(true);
 
-        $definitionProvider = new DefinitionProvider();
-        $definitionProvider->addConnectorDefinition($definition);
+        $definitionProvider = new DefinitionProvider(
+            new ArrayIterator([$definition]),
+            new ArrayIterator(),
+            new ArrayIterator()
+        );
 
         $outputHandler = $this->createMock(OutputHandlerInterface::class);
         $logger = $this->createMock(LoggerInterface::class);
@@ -161,14 +168,17 @@ class ConnectorTest extends TestCase
         )->willReturn($command);
 
         $definition = $this->createMock(Definition::class);
-        $definition->expects($this->any())->method('getOriginAdapterName')->willReturn('TestOriginAdapter');
-        $definition->expects($this->any())->method('getDestinationAdapterName')->willReturn('TestDestinationAdapter');
-        $definition->expects($this->any())->method('getObjectType')->willReturn('TestType');
+        $definition->method('getOriginAdapterName')->willReturn('TestOriginAdapter');
+        $definition->method('getDestinationAdapterName')->willReturn('TestDestinationAdapter');
+        $definition->method('getObjectType')->willReturn('TestType');
         $definition->method('getPriority')->willReturn(0);
         $definition->method('isActive')->willReturn(true);
 
-        $definitionProvider = new DefinitionProvider();
-        $definitionProvider->addConnectorDefinition($definition);
+        $definitionProvider = new DefinitionProvider(
+            new ArrayIterator([$definition]),
+            new ArrayIterator(),
+            new ArrayIterator()
+        );
 
         $outputHandler = $this->createMock(OutputHandlerInterface::class);
         $logger = $this->createMock(LoggerInterface::class);

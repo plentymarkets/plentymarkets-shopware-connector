@@ -8,7 +8,7 @@
     <services>
         <!-- PayPal Plus Invoice -->
 
-        <service id="plenty_connector.components.paypal.invoice_validator" class="PlentyConnector\Components\PayPal\Validator\PayPalPlusInvoicePaymentDataValidator">
+        <service id="plenty_connector.components.paypal.invoice_validator" class="PlentyConnector\Components\PayPal\Validator\PayPalPlusInvoicePaymentDataValidator" public="false">
             <tag name="plenty_connector.validator" />
         </service>
 
@@ -23,7 +23,7 @@
 
         <!-- PayPal Installment -->
 
-        <service id="plenty_connector.components.paypal.installment_validator" class="PlentyConnector\Components\PayPal\Validator\PayPalInstallmentPaymentDataValidator">
+        <service id="plenty_connector.components.paypal.installment_validator" class="PlentyConnector\Components\PayPal\Validator\PayPalInstallmentPaymentDataValidator" public="false">
             <tag name="plenty_connector.validator" />
         </service>
 
@@ -35,5 +35,21 @@
         <service id="plenty_connector.components.paypal.installment.request_generator" class="PlentyConnector\Components\PayPal\Plentymarkets\PayPalInstallmentRequestGenerator" decorates="plentymarkets_adapter.request_generator.payment" public="false">
             <argument type="service" id="plenty_connector.components.paypal.installment.request_generator.inner" />
         </service>
+
+        <!-- PayPal Unified -->
+
+        <service id="plenty_connector.components.paypal.unified_validator" class="PlentyConnector\Components\PayPal\Validator\PayPalUnifiedPaymentDataValidator" public="false">
+            <tag name="plenty_connector.validator" />
+        </service>
+
+        <service id="plenty_connector.components.paypal.unified.payment_response_parser" class="PlentyConnector\Components\PayPal\Shopware\PayPalUnifiedPaymentResponseParser" decorates="shopware_adapter.response_parser.payment" public="false">
+            <argument type="service" id="plenty_connector.components.paypal.unified.payment_response_parser.inner" />
+            <argument type="service" id="dbal_connection" />
+        </service>
+
+        <service id="plenty_connector.components.paypal.unified.request_generator" class="PlentyConnector\Components\PayPal\Plentymarkets\PayPalUnifiedRequestGenerator" decorates="plentymarkets_adapter.request_generator.payment" public="false">
+            <argument type="service" id="plenty_connector.components.paypal.unified.request_generator.inner" />
+        </service>
+
     </services>
 </container>

@@ -105,7 +105,7 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
             $existingBundle = $repository->findOneBy(['number' => $bundle->getNumber()]);
 
             if (null !== $existingBundle) {
-                $identity = $this->identityService->create(
+                $identity = $this->identityService->insert(
                     $bundle->getIdentifier(),
                     Bundle::TYPE,
                     (string) $existingBundle->getId(),

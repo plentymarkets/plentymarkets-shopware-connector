@@ -119,7 +119,7 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
         $params = $this->mediaRequestGenerator->generate($media);
         $mediaModel = $resource->create($params);
 
-        $this->identityService->create(
+        $this->identityService->insert(
             $media->getIdentifier(),
             Media::TYPE,
             (string) $mediaModel->getId(),

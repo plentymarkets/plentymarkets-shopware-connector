@@ -23,7 +23,7 @@ class ReferenceAmountCalculatorTest extends TestCase
         $units = json_decode(file_get_contents(__DIR__ . '/Fixture/units.json'), true);
 
         $unitApi = $this->createMock(Unit::class);
-        $unitApi->expects($this->any())->method('findAll')->willReturn($units);
+        $unitApi->method('findAll')->willReturn($units);
 
         $this->calculator = new ReferenceAmountCalculator($unitApi);
     }

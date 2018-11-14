@@ -28,7 +28,7 @@ interface IdentityServiceInterface
      *
      * @return Identity
      */
-    public function create($objectIdentifier, $objectType, $adapterIdentifier, $adapterName);
+    public function insert($objectIdentifier, $objectType, $adapterIdentifier, $adapterName);
 
     /**
      * @param string $adapterIdentifier

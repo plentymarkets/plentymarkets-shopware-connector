@@ -99,7 +99,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         $params = $this->orderRequestGenerator->generate($order);
         $result = $this->client->request('post', 'orders', $params);
 
-        $this->identityService->create(
+        $this->identityService->insert(
             $order->getIdentifier(),
             Order::TYPE,
             (string) $result['id'],

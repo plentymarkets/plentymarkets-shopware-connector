@@ -16,7 +16,7 @@
             <argument type="service" id="plenty_connector.components.klarna.request_generator.inner" />
         </service>
 
-        <service id="plenty_connector.components.klarna.validator" class="PlentyConnector\Components\Klarna\Validator\KlarnaPaymentDataValidator">
+        <service id="plenty_connector.components.klarna.validator" class="PlentyConnector\Components\Klarna\Validator\KlarnaPaymentDataValidator" public="false">
             <tag name="plenty_connector.validator" />
         </service>
 

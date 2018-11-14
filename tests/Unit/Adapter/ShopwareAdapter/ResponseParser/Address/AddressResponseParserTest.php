@@ -6,10 +6,10 @@ use PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\ResponsePa
 use Ramsey\Uuid\Uuid;
 use ShopwareAdapter\ResponseParser\Address\AddressResponseParser;
 use SystemConnector\IdentityService\IdentityService;
-use SystemConnector\IdentityService\Model\Identity;
 use SystemConnector\TransferObject\Order\Address\Address;
 use SystemConnector\TransferObject\Order\Customer\Customer;
 use SystemConnector\ValueObject\Attribute\Attribute;
+use SystemConnector\ValueObject\Identity\Identity;
 
 class AddressResponseParserTest extends ResponseParserTest
 {
@@ -30,13 +30,13 @@ class AddressResponseParserTest extends ResponseParserTest
         $this->countyIdentifier = Uuid::uuid4()->toString();
 
         $identity = $this->createMock(Identity::class);
-        $identity->expects($this->any())->method('getObjectIdentifier')->willReturn($this->countyIdentifier);
+        $identity->method('getObjectIdentifier')->willReturn($this->countyIdentifier);
 
         /**
          * @var IdentityService|\PHPUnit_Framework_MockObject_MockObject $identityService
          */
         $identityService = $this->createMock(IdentityService::class);
-        $identityService->expects($this->any())->method('findOneBy')->willReturn($identity);
+        $identityService->method('findOneBy')->willReturn($identity);
 
         /**
          * @var AddressResponseParser $parser

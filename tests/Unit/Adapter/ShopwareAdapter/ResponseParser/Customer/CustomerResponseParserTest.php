@@ -27,25 +27,25 @@ class CustomerResponseParserTest extends ResponseParserTest
         parent::setUp();
 
         $customerGroup = $this->createMock(Group::class);
-        $customerGroup->expects($this->any())->method('getId')->willReturn(1);
+        $customerGroup->method('getId')->willReturn(1);
 
         $groupRepository = $this->createMock(EntityRepository::class);
-        $groupRepository->expects($this->any())->method('findOneBy')->with(['key' => 'H'])->willReturn($customerGroup);
+        $groupRepository->method('findOneBy')->with(['key' => 'H'])->willReturn($customerGroup);
 
         $address = $this->createMock(Address::class);
-        $address->expects($this->any())->method('getAdded')->willReturn(new DateTime());
+        $address->method('getAdded')->willReturn(new DateTime());
 
         $newsletterRepository = $this->createMock(EntityRepository::class);
-        $newsletterRepository->expects($this->any())->method('findOneBy')->with(['email' => 'mustermann@b2b.de'])->willReturn($address);
+        $newsletterRepository->method('findOneBy')->with(['email' => 'mustermann@b2b.de'])->willReturn($address);
 
         $locale = $this->createMock(Locale::class);
-        $locale->expects($this->any())->method('getId')->willReturn(1);
+        $locale->method('getId')->willReturn(1);
 
         $shop = $this->createMock(Shop::class);
-        $shop->expects($this->any())->method('getLocale')->willReturn($locale);
+        $shop->method('getLocale')->willReturn($locale);
 
         $shopRepository = $this->createMock(EntityRepository::class);
-        $shopRepository->expects($this->any())->method('find')->willReturn($shop);
+        $shopRepository->method('find')->willReturn($shop);
 
         $entityManager = $this->createMock(EntityManagerInterface::class);
         $entityManager->expects($this->at(0))->method('getRepository')->willReturn($shopRepository);

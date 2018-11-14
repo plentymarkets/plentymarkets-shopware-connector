@@ -1,15 +1,12 @@
 <?php
 
-namespace SystemConnector\BacklogService;
+namespace SystemConnector\BacklogService\Storage;
 
 use SystemConnector\BacklogService\Command\HandleBacklogElementCommand;
 use SystemConnector\ServiceBus\Command\CommandInterface;
 
-interface BacklogServiceInterface
+interface BacklogServiceStorageInterface
 {
-    const STATUS_OPEN = 'open';
-    const STATUS_PROCESSED = 'processed';
-
     /**
      * enqueues a command to the backlog
      *

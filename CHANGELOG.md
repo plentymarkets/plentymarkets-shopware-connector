@@ -9,8 +9,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - sepa payment informations are now transfered even without a account holder (@jkrzefski)
+- raised the minimal shopware version to 5.5 (@jochenmanz)
+- extracted all database operations in the IdentityService into a own storage class (@jochenmanz)
+- extracted all database operations in the ConfigService into a own storage class (@jochenmanz)
+- extracted all database operations in the BacklogService into a own storage class (@jochenmanz)
 
 ### Added
+- paypal unified plugin integration
 
 ## [## [5.0.0]]
 ### Fixed

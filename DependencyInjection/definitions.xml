@@ -34,7 +34,7 @@
     <services>
         <!-- connector definitions -->
 
-        <service id="plenty_connector.connector_definition.export_order" class="SystemConnector\ValueObject\Definition\Definition">
+        <service id="plenty_connector.connector_definition.export_order" class="SystemConnector\ValueObject\Definition\Definition" public="false">
             <factory service="plenty_connector.definition_factory" method="factory" />
 
             <argument>%plenty_connector.adapter.shopware%</argument>
@@ -45,7 +45,7 @@
             <tag name="plenty_connector.connector_definition" />
         </service>
 
-        <service id="plenty_connector.connector_definition.import_order" class="SystemConnector\ValueObject\Definition\Definition">
+        <service id="plenty_connector.connector_definition.import_order" class="SystemConnector\ValueObject\Definition\Definition" public="false">
             <factory service="plenty_connector.definition_factory" method="factory" />
 
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
@@ -56,7 +56,7 @@
             <tag name="plenty_connector.connector_definition" />
         </service>
 
-        <service id="plenty_connector.connector_definition.payment" class="SystemConnector\ValueObject\Definition\Definition">
+        <service id="plenty_connector.connector_definition.payment" class="SystemConnector\ValueObject\Definition\Definition" public="false">
             <factory service="plenty_connector.definition_factory" method="factory" />
 
             <argument>%plenty_connector.adapter.shopware%</argument>
@@ -67,7 +67,7 @@
             <tag name="plenty_connector.connector_definition" />
         </service>
 
-        <service id="plenty_connector.connector_definition.media_category" class="SystemConnector\ValueObject\Definition\Definition">
+        <service id="plenty_connector.connector_definition.media_category" class="SystemConnector\ValueObject\Definition\Definition" public="false">
             <factory service="plenty_connector.definition_factory" method="factory" />
 
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
@@ -79,7 +79,7 @@
             <tag name="plenty_connector.cleanup_definition" />
         </service>
 
-        <service id="plenty_connector.connector_definition.category" class="SystemConnector\ValueObject\Definition\Definition">
+        <service id="plenty_connector.connector_definition.category" class="SystemConnector\ValueObject\Definition\Definition" public="false">
             <factory service="plenty_connector.definition_factory" method="factory" />
 
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
@@ -91,7 +91,7 @@
             <tag name="plenty_connector.cleanup_definition" />
         </service>
 
-        <service id="plenty_connector.connector_definition.manufacturer" class="SystemConnector\ValueObject\Definition\Definition">
+        <service id="plenty_connector.connector_definition.manufacturer" class="SystemConnector\ValueObject\Definition\Definition" public="false">
             <factory service="plenty_connector.definition_factory" method="factory" />
 
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
@@ -103,7 +103,7 @@
             <tag name="plenty_connector.cleanup_definition" />
         </service>
 
-        <service id="plenty_connector.connector_definition.product" class="SystemConnector\ValueObject\Definition\Definition">
+        <service id="plenty_connector.connector_definition.product" class="SystemConnector\ValueObject\Definition\Definition" public="false">
             <factory service="plenty_connector.definition_factory" method="factory" />
 
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
@@ -115,7 +115,7 @@
             <tag name="plenty_connector.cleanup_definition" />
         </service>
 
-        <service id="plenty_connector.connector_definition.variation" class="SystemConnector\ValueObject\Definition\Definition">
+        <service id="plenty_connector.connector_definition.variation" class="SystemConnector\ValueObject\Definition\Definition" public="false">
             <factory service="plenty_connector.definition_factory" method="factory" />
 
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
@@ -127,7 +127,7 @@
             <tag name="plenty_connector.cleanup_definition" />
         </service>
 
-        <service id="plenty_connector.connector_definition.stock" class="SystemConnector\ValueObject\Definition\Definition">
+        <service id="plenty_connector.connector_definition.stock" class="SystemConnector\ValueObject\Definition\Definition" public="false">
             <factory service="plenty_connector.definition_factory" method="factory" />
 
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
@@ -141,7 +141,7 @@
 
         <!-- mapping definitions -->
 
-        <service id="plenty_connector.mapping_definition.country" class="SystemConnector\ValueObject\Definition\Definition">
+        <service id="plenty_connector.mapping_definition.country" class="SystemConnector\ValueObject\Definition\Definition" public="false">
             <factory service="plenty_connector.definition_factory" method="factory" />
 
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
@@ -151,7 +151,7 @@
             <tag name="plenty_connector.mapping_definition" />
         </service>
 
-        <service id="plenty_connector.mapping_definition.currency" class="SystemConnector\ValueObject\Definition\Definition">
+        <service id="plenty_connector.mapping_definition.currency" class="SystemConnector\ValueObject\Definition\Definition" public="false">
             <factory service="plenty_connector.definition_factory" method="factory" />
 
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
@@ -161,7 +161,7 @@
             <tag name="plenty_connector.mapping_definition" />
         </service>
 
-        <service id="plenty_connector.mapping_definition.customer_group" class="SystemConnector\ValueObject\Definition\Definition">
+        <service id="plenty_connector.mapping_definition.customer_group" class="SystemConnector\ValueObject\Definition\Definition" public="false">
             <factory service="plenty_connector.definition_factory" method="factory" />
 
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
@@ -171,7 +171,7 @@
             <tag name="plenty_connector.mapping_definition" />
         </service>
 
-        <service id="plenty_connector.mapping_definition.language" class="SystemConnector\ValueObject\Definition\Definition">
+        <service id="plenty_connector.mapping_definition.language" class="SystemConnector\ValueObject\Definition\Definition" public="false">
             <factory service="plenty_connector.definition_factory" method="factory" />
 
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
@@ -181,7 +181,7 @@
             <tag name="plenty_connector.mapping_definition" />
         </service>
 
-        <service id="plenty_connector.mapping_definition.payment_method" class="SystemConnector\ValueObject\Definition\Definition">
+        <service id="plenty_connector.mapping_definition.payment_method" class="SystemConnector\ValueObject\Definition\Definition" public="false">
             <factory service="plenty_connector.definition_factory" method="factory" />
 
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
@@ -191,7 +191,7 @@
             <tag name="plenty_connector.mapping_definition" />
         </service>
 
-        <service id="plenty_connector.mapping_definition.shipping_profile" class="SystemConnector\ValueObject\Definition\Definition">
+        <service id="plenty_connector.mapping_definition.shipping_profile" class="SystemConnector\ValueObject\Definition\Definition" public="false">
             <factory service="plenty_connector.definition_factory" method="factory" />
 
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
@@ -201,7 +201,7 @@
             <tag name="plenty_connector.mapping_definition" />
         </service>
 
-        <service id="plenty_connector.mapping_definition.shop" class="SystemConnector\ValueObject\Definition\Definition">
+        <service id="plenty_connector.mapping_definition.shop" class="SystemConnector\ValueObject\Definition\Definition" public="false">
             <factory service="plenty_connector.definition_factory" method="factory" />
 
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
@@ -211,7 +211,7 @@
             <tag name="plenty_connector.mapping_definition" />
         </service>
 
-        <service id="plenty_connector.mapping_definition.payment_status" class="SystemConnector\ValueObject\Definition\Definition">
+        <service id="plenty_connector.mapping_definition.payment_status" class="SystemConnector\ValueObject\Definition\Definition" public="false">
             <factory service="plenty_connector.definition_factory" method="factory" />
 
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
@@ -221,7 +221,7 @@
             <tag name="plenty_connector.mapping_definition" />
         </service>
 
-        <service id="plenty_connector.mapping_definition.order_status" class="SystemConnector\ValueObject\Definition\Definition">
+        <service id="plenty_connector.mapping_definition.order_status" class="SystemConnector\ValueObject\Definition\Definition" public="false">
             <factory service="plenty_connector.definition_factory" method="factory" />
 
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
@@ -231,7 +231,7 @@
             <tag name="plenty_connector.mapping_definition" />
         </service>
 
-        <service id="plenty_connector.mapping_definition.unit" class="SystemConnector\ValueObject\Definition\Definition">
+        <service id="plenty_connector.mapping_definition.unit" class="SystemConnector\ValueObject\Definition\Definition" public="false">
             <factory service="plenty_connector.definition_factory" method="factory" />
 
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
@@ -241,7 +241,7 @@
             <tag name="plenty_connector.mapping_definition" />
         </service>
 
-        <service id="plenty_connector.mapping_definition.vat_rate" class="SystemConnector\ValueObject\Definition\Definition">
+        <service id="plenty_connector.mapping_definition.vat_rate" class="SystemConnector\ValueObject\Definition\Definition" public="false">
             <factory service="plenty_connector.definition_factory" method="factory" />
 
             <argument>%plenty_connector.adapter.plentymarkets%</argument>

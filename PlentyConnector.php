@@ -8,6 +8,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use PlentyConnector\Installer\CronjobInstaller;
 use PlentyConnector\Installer\DatabaseInstaller;
+use PlentyConnector\Installer\Model\Backlog;
+use PlentyConnector\Installer\Model\Config;
+use PlentyConnector\Installer\Model\Identity;
 use PlentyConnector\Installer\PermissionInstaller;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin;
@@ -19,18 +22,8 @@ use Shopware_Components_Acl;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
-use SystemConnector\BacklogService\Model\Backlog;
-use SystemConnector\ConfigService\Model\Config;
-use SystemConnector\DependencyInjection\CompilerPass\CleanupDefinitionCompilerPass;
-use SystemConnector\DependencyInjection\CompilerPass\CommandGeneratorCompilerPass;
-use SystemConnector\DependencyInjection\CompilerPass\CommandHandlerCompilerPass;
-use SystemConnector\DependencyInjection\CompilerPass\ConnectorDefinitionCompilerPass;
-use SystemConnector\DependencyInjection\CompilerPass\MappingDefinitionCompilerPass;
-use SystemConnector\DependencyInjection\CompilerPass\QueryGeneratorCompilerPass;
-use SystemConnector\DependencyInjection\CompilerPass\QueryHandlerCompilerPass;
-use SystemConnector\DependencyInjection\CompilerPass\ValidatorServiceCompilerPass;
+use SystemConnector\BacklogService\BacklogService;
 use SystemConnector\IdentityService\IdentityServiceInterface;
-use SystemConnector\IdentityService\Model\Identity;
 use SystemConnector\TransferObject\Category\Category;
 use SystemConnector\TransferObject\PaymentStatus\PaymentStatus;
 
@@ -94,7 +87,7 @@ class PlentyConnector extends Plugin
 
         $this->loadFile($container, __DIR__ . '/Components/Sepa/DependencyInjection/services.xml');
 
-        if ($this->pluginExists($container, ['SwagPaymentPaypal', 'SwagPaymentPayPalInstallments', 'SwagPaymentPaypalPlus'])) {
+        if ($this->pluginExists($container, ['SwagPaymentPaypal', 'SwagPaymentPayPalInstallments', 'SwagPaymentPaypalPlus', 'SwagPaymentPayPalUnified'])) {
             $this->loadFile($container, __DIR__ . '/Components/PayPal/DependencyInjection/services.xml');
         }
 
@@ -105,15 +98,6 @@ class PlentyConnector extends Plugin
         if ($this->pluginExists($container, ['SwagBundle'])) {
             $this->loadFile($container, __DIR__ . '/Components/Bundle/DependencyInjection/services.xml');
         }
-
-        $container->addCompilerPass(new CleanupDefinitionCompilerPass());
-        $container->addCompilerPass(new CommandGeneratorCompilerPass());
-        $container->addCompilerPass(new CommandHandlerCompilerPass());
-        $container->addCompilerPass(new ConnectorDefinitionCompilerPass());
-        $container->addCompilerPass(new MappingDefinitionCompilerPass());
-        $container->addCompilerPass(new QueryGeneratorCompilerPass());
-        $container->addCompilerPass(new QueryHandlerCompilerPass());
-        $container->addCompilerPass(new ValidatorServiceCompilerPass());
 
         parent::build($container);
     }
@@ -434,7 +418,7 @@ class PlentyConnector extends Plugin
 
         $query = 'UPDATE plenty_backlog SET status = :statusNew WHERE status = :statusOld';
         $connection->executeQuery($query, [
-            ':statusNew' => Backlog::STATUS_OPEN,
+            ':statusNew' => BacklogService::STATUS_OPEN,
             ':statusOld' => '',
         ]);
     }

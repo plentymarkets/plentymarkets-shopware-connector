@@ -123,7 +123,7 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
             $paymentResult = $this->createPlentyPayment($payment);
         }
 
-        $this->identityService->create(
+        $this->identityService->insert(
             $payment->getIdentifier(),
             Payment::TYPE,
             (string) $paymentResult['id'],

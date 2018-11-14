@@ -1,6 +1,6 @@
 <?php
 
-namespace SystemConnector\IdentityService\Model;
+namespace PlentyConnector\Installer\Model;
 
 use Doctrine\ORM\Mapping as ORM;
 
