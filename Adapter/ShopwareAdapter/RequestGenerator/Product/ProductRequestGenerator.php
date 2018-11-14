@@ -407,11 +407,10 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
                     continue;
                 }
 
-                $relatedShopCategories = array_filter(explode('|', $category->getPath()), function ($category) {
-					return (!empty($category) && in_array($category, $shopCategories));
-				});
+                $extractedCategoryPath = array_filter(explode('|', $category->getPath()));
+				$matchedShopCategories = array_intersect($extractedCategoryPath, $shopCategories);
 
-                if (empty($relatedShopCategories)) {
+                if (empty($matchedShopCategories)) {
                     continue;
                 }
 
