@@ -95,12 +95,19 @@ class CronjobSubscriber implements SubscriberInterface
     public function onRunCronjobProcessBacklog(Args $args)
     {
         try {
-            $counter = 0;
-            while ($counter < 200 && $command = $this->backlogService->dequeue()) {
-                ++$counter;
+            $entries = $this->backlogService->getInfo();
 
-                $this->serviceBus->handle($command);
-            }
+            do {
+                $counter = 0;
+
+                while ($counter < 200 && $command = $this->backlogService->dequeue()) {
+                    ++$counter;
+
+                    $this->serviceBus->handle($command);
+                }
+
+                $entries = $this->backlogService->getInfo();
+            } while ($entries['amount_enqueued'] > 0);
         } catch (Exception $exception) {
             $this->logger->error($exception->getMessage());
         } catch (Throwable $exception) {

@@ -15,6 +15,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - extracted all database operations in the IdentityService into a own storage class (@jochenmanz)
 - extracted all database operations in the ConfigService into a own storage class (@jochenmanz)
 - extracted all database operations in the BacklogService into a own storage class (@jochenmanz)
+- change blacklog process cronjob to a loop, if entries exists after the normal 200 processing entries
 
 ### Added
 - paypal unified plugin integration
