@@ -666,9 +666,9 @@ class ProductResponseParser implements ProductResponseParserInterface
      */
     private function getActive(array $variations, array $mainVariation)
     {
-        $checkInactiveMainVariation = json_decode($this->configService->get('check_active_main_variation'));
+        $checkActiveMainVariation = json_decode($this->configService->get('check_active_main_variation'));
 
-        if (!$checkInactiveMainVariation && !$mainVariation['isActive']) {
+        if ($checkActiveMainVariation && !$mainVariation['isActive']) {
             return false;
         }
 
