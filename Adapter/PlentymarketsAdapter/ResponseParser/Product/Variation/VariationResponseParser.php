@@ -199,7 +199,7 @@ class VariationResponseParser implements VariationResponseParserInterface
         $mainVariationNumber = $this->variationHelper->getMainVariationNumber($variations, $mainVariation);
 
         foreach ($variations as &$variation) {
-            if ($variation->getNumber() == $mainVariationNumber) {
+            if ($variation->getNumber() === $mainVariationNumber) {
                 $variation->setIsMain(true);
 
                 $checkActiveMainVariation = json_decode($this->configService->get('check_active_main_variation'));
