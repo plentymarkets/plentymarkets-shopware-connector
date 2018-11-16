@@ -163,6 +163,7 @@ class VariationHelper implements VariationHelperInterface
 
             return $mainVariationNumber;
         }
+
         foreach ($variations as $variation) {
             if ($variation->getActive()) {
                 return $variation->getNumber();
