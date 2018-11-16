@@ -137,11 +137,11 @@ class VariationHelper implements VariationHelperInterface
         $mainVariationNumber = false;
         $found = false;
 
+        $mainVariationNumber = (string) $mainVariation['id'];
+
         if ($this->configService->get('variation_number_field', 'number') === 'number') {
             $mainVariationNumber = (string) $mainVariation['number'];
         }
-
-        $mainVariationNumber = (string) $mainVariation['id'];
 
         foreach ($variations as $variation) {
             if ($variation->getNumber() === $mainVariationNumber) {
