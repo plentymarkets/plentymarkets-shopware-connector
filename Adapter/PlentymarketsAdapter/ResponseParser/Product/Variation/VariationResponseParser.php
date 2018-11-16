@@ -4,6 +4,7 @@ namespace PlentymarketsAdapter\ResponseParser\Product\Variation;
 
 use DateTimeImmutable;
 use PlentymarketsAdapter\Helper\ReferenceAmountCalculatorInterface;
+use PlentymarketsAdapter\Helper\VariationHelperInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Availability as AvailabilityApi;
 use PlentymarketsAdapter\ReadApi\Item\Attribute as AttributeApi;
@@ -68,6 +69,11 @@ class VariationResponseParser implements VariationResponseParserInterface
     private $referenceAmountCalculator;
 
     /**
+     * @var VariationHelperInterface
+     */
+    private $variationHelper;
+
+    /**
      * @var ConfigServiceInterface
      */
     private $configService;
@@ -81,6 +87,7 @@ class VariationResponseParser implements VariationResponseParserInterface
         AttributeApi $itemAttributesApi,
         BarcodeApi $itemBarcodeApi,
         ReferenceAmountCalculatorInterface $referenceAmountCalculator,
+        VariationHelperInterface $variationHelper,
         ConfigServiceInterface $configService
     ) {
         $this->identityService = $identityService;
@@ -91,6 +98,7 @@ class VariationResponseParser implements VariationResponseParserInterface
         $this->itemAttributesApi = $itemAttributesApi;
         $this->itemBarcodeApi = $itemBarcodeApi;
         $this->referenceAmountCalculator = $referenceAmountCalculator;
+        $this->variationHelper = $variationHelper;
         $this->configService = $configService;
     }
 
@@ -101,7 +109,23 @@ class VariationResponseParser implements VariationResponseParserInterface
      */
     public function parse(array $product)
     {
+        $productIdentitiy = $this->identityService->findOneBy([
+            'adapterIdentifier' => (string) $product['id'],
+            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType' => Product::TYPE,
+        ]);
+
+        if (null === $productIdentitiy) {
+            return [];
+        }
+
         $variations = $product['variations'];
+
+        $mainVariation = $this->variationHelper->getMainVariation($variations);
+
+        if (empty($mainVariation)) {
+            return [];
+        }
 
         if (count($variations) > 1) {
             $variations = array_filter($variations, function (array $variation) {
@@ -118,19 +142,8 @@ class VariationResponseParser implements VariationResponseParserInterface
         });
 
         $result = [];
-        $first = true;
 
         foreach ($variations as $variation) {
-            $productIdentitiy = $this->identityService->findOneBy([
-                'adapterIdentifier' => (string) $product['id'],
-                'adapterName' => PlentymarketsAdapter::NAME,
-                'objectType' => Product::TYPE,
-            ]);
-
-            if (null === $productIdentitiy) {
-                continue;
-            }
-
             $identity = $this->identityService->findOneOrCreate(
                 (string) $variation['id'],
                 PlentymarketsAdapter::NAME,
@@ -141,7 +154,6 @@ class VariationResponseParser implements VariationResponseParserInterface
             $variationObject->setIdentifier($identity->getObjectIdentifier());
             $variationObject->setProductIdentifier($productIdentitiy->getObjectIdentifier());
             $variationObject->setActive((bool) $variation['isActive']);
-            $variationObject->setIsMain($first);
             $variationObject->setNumber($this->getVariationNumber($variation));
             $variationObject->setStockLimitation($this->getStockLimitation($variation));
             $variationObject->setBarcodes($this->getBarcodes($variation));
@@ -178,8 +190,26 @@ class VariationResponseParser implements VariationResponseParserInterface
 
             $result[$variationObject->getIdentifier()] = $variationObject;
             $result[$stockObject->getIdentifier()] = $stockObject;
+        }
 
-            $first = false;
+        $variations = array_filter($result, function (TransferObjectInterface $object) {
+            return $object instanceof Variation;
+        });
+
+        $mainVariationNumber = $this->variationHelper->getMainVariationNumber($variations, $mainVariation);
+
+        foreach ($variations as &$variation) {
+            if ($variation->getNumber() == $mainVariationNumber) {
+                $variation->setIsMain(true);
+
+                $checkActiveMainVariation = json_decode($this->configService->get('check_active_main_variation'));
+
+                if ($checkActiveMainVariation && !$mainVariation['isActive']) {
+                    $variation->setActive(false);
+                }
+
+                break;
+            }
         }
 
         return $result;
