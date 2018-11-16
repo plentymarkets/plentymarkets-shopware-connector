@@ -6,7 +6,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - transfer payment information without a real transactionid if needed
 - fix last stock for variations (sw >= 5.4.x)
+- fix product category relations, if the shop category is not directly behind the shopware root category
+- fix config for checking inactive main variation (note: if the config was set and the main variation is inactive, the product will be set inactive. if the the config is not active, the product will be active, if >= one variation is active)
 - fix product main variation relation ship
+- fix product active state on variation sync
 
 ### Changed
 - sepa payment informations are now transfered even without a account holder (@jkrzefski)
