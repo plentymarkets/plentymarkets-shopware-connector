@@ -17,6 +17,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - extracted all database operations in the IdentityService into a own storage class (@jochenmanz)
 - extracted all database operations in the ConfigService into a own storage class (@jochenmanz)
 - extracted all database operations in the BacklogService into a own storage class (@jochenmanz)
+- change product edit date time if the variation sync updates variations of an product
 
 ### Added
 - paypal unified plugin integration
