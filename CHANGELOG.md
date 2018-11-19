@@ -10,6 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - fix config for checking inactive main variation (note: if the config was set and the main variation is inactive, the product will be set inactive. if the the config is not active, the product will be active, if >= one variation is active)
 - fix product main variation relation ship
 - fix product active state on variation sync
+- fix variation sync with wrong product association like images
 
 ### Changed
 - sepa payment informations are now transfered even without a account holder (@jkrzefski)
