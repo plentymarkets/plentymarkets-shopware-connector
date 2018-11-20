@@ -20,6 +20,7 @@
             <argument type="service" id="plenty_connector.backlog_service" />
             <argument type="service" id="plenty_connector.service_bus" />
             <argument type="service" id="plenty_connector.logger" />
+			<argument type="service" id="dbal_connection" />
 
             <tag name="shopware.event_subscriber" />
         </service>
