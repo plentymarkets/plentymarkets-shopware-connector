@@ -8,6 +8,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - fix last stock for variations (sw >= 5.4.x)
 - fix product category relations, if the shop category is not directly behind the shopware root category
 - fix config for checking inactive main variation (note: if the config was set and the main variation is inactive, the product will be set inactive. if the the config is not active, the product will be active, if >= one variation is active)
+- fix product main variation relation ship
+- fix product active state on variation sync
+- fix variation sync with wrong product association like images
 
 ### Changed
 - sepa payment informations are now transfered even without a account holder (@jkrzefski)
@@ -16,6 +19,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - extracted all database operations in the ConfigService into a own storage class (@jochenmanz)
 - extracted all database operations in the BacklogService into a own storage class (@jochenmanz)
 - change cronjob scheduler to run not parallel cronjobs to avoid errors
+- change product edit date time if the variation sync updates variations of an product
+
 
 ### Added
 - paypal unified plugin integration

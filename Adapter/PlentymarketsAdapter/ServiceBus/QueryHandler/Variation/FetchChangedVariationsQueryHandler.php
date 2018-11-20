@@ -5,7 +5,7 @@ namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Variation;
 use Exception;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Item;
-use PlentymarketsAdapter\ResponseParser\Product\Variation\VariationResponseParserInterface;
+use PlentymarketsAdapter\ResponseParser\Product\ProductResponseParserInterface;
 use PlentymarketsAdapter\ServiceBus\ChangedDateTimeTrait;
 use Psr\Log\LoggerInterface;
 use SystemConnector\Console\OutputHandler\OutputHandlerInterface;
@@ -25,7 +25,7 @@ class FetchChangedVariationsQueryHandler implements QueryHandlerInterface
     private $api;
 
     /**
-     * @var VariationResponseParserInterface
+     * @var ProductResponseParserInterface
      */
     private $responseParser;
 
@@ -41,7 +41,7 @@ class FetchChangedVariationsQueryHandler implements QueryHandlerInterface
 
     public function __construct(
         Item $api,
-        VariationResponseParserInterface $responseParser,
+        ProductResponseParserInterface $responseParser,
         OutputHandlerInterface $outputHandler,
         LoggerInterface $logger
     ) {
