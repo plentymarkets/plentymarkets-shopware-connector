@@ -21,9 +21,9 @@ class Stock extends AbstractTransferObject
     private $variationIdentifier = '';
 
     /**
-     * @var float
+     * @var int
      */
-    private $stock = 0.0;
+    private $stock = 0;
 
     /**
      * {@inheritdoc}
@@ -66,7 +66,7 @@ class Stock extends AbstractTransferObject
     }
 
     /**
-     * @return float
+     * @return int
      */
     public function getStock()
     {
@@ -74,7 +74,7 @@ class Stock extends AbstractTransferObject
     }
 
     /**
-     * @param float $stock
+     * @param int $stock
      */
     public function setStock($stock)
     {

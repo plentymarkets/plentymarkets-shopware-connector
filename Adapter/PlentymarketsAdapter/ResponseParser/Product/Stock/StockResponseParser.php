@@ -105,6 +105,6 @@ class StockResponseParser implements StockResponseParserInterface
             $arrayStocks[] = $stock['netStock'];
         }
 
-        return (float) array_sum($arrayStocks);
+        return (int) array_sum($arrayStocks);
     }
 }

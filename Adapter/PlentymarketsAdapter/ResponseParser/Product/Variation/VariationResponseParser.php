@@ -150,12 +150,25 @@ class VariationResponseParser implements VariationResponseParserInterface
                 Variation::TYPE
             );
 
+            $stockObject = $this->stockResponseParser->parse($variation);
+
+            if (null === $stockObject) {
+                continue;
+            }
+
+            $importVariationsWithoutStock = json_decode($this->configService->get('import_variations_without_stock', true));
+
+            if (!$importVariationsWithoutStock && empty($stockObject->getStock())) {
+                continue;
+            }
+
             $variationObject = new Variation();
             $variationObject->setIdentifier($identity->getObjectIdentifier());
             $variationObject->setProductIdentifier($productIdentitiy->getObjectIdentifier());
             $variationObject->setActive((bool) $variation['isActive']);
             $variationObject->setNumber($this->getVariationNumber($variation));
             $variationObject->setStockLimitation($this->getStockLimitation($variation));
+            $variationObject->setInStock($stockObject->getStock());
             $variationObject->setBarcodes($this->getBarcodes($variation));
             $variationObject->setPosition((int) $variation['position']);
             $variationObject->setModel((string) $variation['model']);
@@ -176,20 +189,7 @@ class VariationResponseParser implements VariationResponseParserInterface
             $variationObject->setWeight($this->getVariationWeight($variation));
             $variationObject->setProperties($this->getVariationProperties($variation));
 
-            $stockObject = $this->stockResponseParser->parse($variation);
-
-            if (null === $stockObject) {
-                continue;
-            }
-
-            $importVariationsWithoutStock = json_decode($this->configService->get('import_variations_without_stock', true));
-
-            if (!$importVariationsWithoutStock && empty($stockObject->getStock())) {
-                continue;
-            }
-
             $result[$variationObject->getIdentifier()] = $variationObject;
-            $result[$stockObject->getIdentifier()] = $stockObject;
         }
 
         $variations = array_filter($result, function (TransferObjectInterface $object) {

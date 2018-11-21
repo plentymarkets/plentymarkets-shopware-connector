@@ -20,6 +20,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - extracted all database operations in the BacklogService into a own storage class (@jochenmanz)
 - change cronjob scheduler to run not parallel cronjobs to avoid errors (@lacodimizer)
 - change product edit date time if the variation sync updates variations of an product (@lacodimizer)
+- change variation handling to set the stock directly and not over a additionally stock transfer object handling to optimize the performance (@lacodimizer)
 
 ### Added
 - paypal unified plugin integration

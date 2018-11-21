@@ -23,6 +23,6 @@ class StockValidator implements ValidatorInterface
     {
         Assertion::uuid($object->getIdentifier(), null, 'product.variation.stock.identifier');
         Assertion::uuid($object->getVariationIdentifier(), null, 'product.variation.stock.variationIdentifier');
-        Assertion::float($object->getStock(), null, 'product.variation.stock.stock');
+        Assertion::integer($object->getStock(), null, 'product.variation.stock.stock');
     }
 }

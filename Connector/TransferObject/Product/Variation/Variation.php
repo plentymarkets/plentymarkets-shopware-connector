@@ -98,6 +98,11 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     private $stockLimitation = false;
 
     /**
+     * @var int
+     */
+    private $inStock = 0;
+
+    /**
      * @var float
      */
     private $maximumOrderQuantity;
@@ -414,6 +419,22 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     public function setStockLimitation($stockLimitation)
     {
         $this->stockLimitation = $stockLimitation;
+    }
+
+    /**
+     * @return int
+     */
+    public function getInStock()
+    {
+        return $this->inStock;
+    }
+
+    /**
+     * @param int $inStock
+     */
+    public function setInStock($inStock)
+    {
+        $this->inStock = $inStock;
     }
 
     /**
