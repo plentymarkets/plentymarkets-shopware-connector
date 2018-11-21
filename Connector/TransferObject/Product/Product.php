@@ -75,11 +75,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     private $vatRateIdentifier = '';
 
     /**
-     * @var bool
-     */
-    private $stockLimitation = false;
-
-    /**
      * @var string
      */
     private $description = '';
@@ -336,22 +331,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     public function setVatRateIdentifier($vatRateIdentifier)
     {
         $this->vatRateIdentifier = $vatRateIdentifier;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasStockLimitation()
-    {
-        return $this->stockLimitation;
-    }
-
-    /**
-     * @param bool $stockLimitation
-     */
-    public function setStockLimitation($stockLimitation)
-    {
-        $this->stockLimitation = $stockLimitation;
     }
 
     /**
