@@ -4,6 +4,7 @@ namespace PlentymarketsAdapter\Helper;
 
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use Psr\Log\LoggerInterface;
+use SystemConnector\ConfigService\ConfigServiceInterface;
 use SystemConnector\IdentityService\IdentityServiceInterface;
 use SystemConnector\TransferObject\Shop\Shop;
 
@@ -19,10 +20,19 @@ class VariationHelper implements VariationHelperInterface
      */
     private $logger;
 
-    public function __construct(IdentityServiceInterface $identityService, LoggerInterface $logger)
-    {
+    /**
+     * @var ConfigServiceInterface
+     */
+    private $configService;
+
+    public function __construct(
+        IdentityServiceInterface $identityService,
+        LoggerInterface $logger,
+        ConfigServiceInterface $configService
+    ) {
         $this->identityService = $identityService;
         $this->logger = $logger;
+        $this->configService = $configService;
     }
 
     /**
@@ -96,5 +106,72 @@ class VariationHelper implements VariationHelperInterface
         }
 
         return $clientIds;
+    }
+
+    /**
+     * @param array $variations
+     *
+     * @return array
+     */
+    public function getMainVariation(array $variations)
+    {
+        $mainVariation = array_filter($variations, function ($variation) {
+            return $variation['isMain'] === true;
+        });
+
+        if (empty($mainVariation)) {
+            return [];
+        }
+
+        return reset($mainVariation);
+    }
+
+    /**
+     * @param Variation[] $variations
+     * @param array       $mainVariation
+     *
+     * @return string
+     */
+    public function getMainVariationNumber(array $variations = [], array $mainVariation)
+    {
+        $mainVariationNumber = false;
+        $found = false;
+
+        $mainVariationNumber = (string) $mainVariation['id'];
+
+        if ($this->configService->get('variation_number_field', 'number') === 'number') {
+            $mainVariationNumber = (string) $mainVariation['number'];
+        }
+
+        foreach ($variations as $variation) {
+            if ($variation->getNumber() === $mainVariationNumber) {
+                $found = true;
+                break;
+            }
+        }
+
+        if ($found) {
+            $checkActiveMainVariation = json_decode($this->configService->get('check_active_main_variation'));
+
+            if (!$checkActiveMainVariation && !$mainVariation['isActive']) {
+                foreach ($variations as $variation) {
+                    if ($variation->getActive()) {
+                        return $variation->getNumber();
+                    }
+                }
+            }
+
+            return $mainVariationNumber;
+        }
+
+        foreach ($variations as $variation) {
+            if ($variation->getActive()) {
+                return $variation->getNumber();
+            }
+        }
+
+        $variation = reset($variations);
+
+        return $variation->getNumber();
     }
 }
