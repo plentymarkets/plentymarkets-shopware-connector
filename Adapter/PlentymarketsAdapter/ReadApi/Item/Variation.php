@@ -19,7 +19,7 @@ class Variation extends ApiAbstract
         'variationBarcodes',
         'images',
         'stock',
-        'variationProperties',
+        'properties',
     ];
 
     /**
