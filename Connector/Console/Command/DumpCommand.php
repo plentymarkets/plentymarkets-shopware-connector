@@ -80,6 +80,7 @@ class DumpCommand extends Command
             return;
         }
 
+        $i = 1;
         $definitions = $this->definitionProvider->getConnectorDefinitions($identity->getObjectType());
 
         foreach ($definitions as $definition) {
@@ -91,7 +92,9 @@ class DumpCommand extends Command
             ));
 
             foreach ($result as $item) {
-                $output->writeln(json_encode($item, JSON_PRETTY_PRINT));
+                $this->outputHandler->writeLine();
+                $this->outputHandler->writeLine(sprintf('TransferObject %s:',  $i++));
+                $this->outputHandler->writeLine(json_encode($item, JSON_PRETTY_PRINT));
             }
         }
     }
