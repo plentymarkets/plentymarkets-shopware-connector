@@ -109,7 +109,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             return [];
         }
 
-        $mainVariation = $this->getMainVariation($product['variations']);
+        $mainVariation = $this->variationHelper->getMainVariation($product['variations']);
 
         if (empty($mainVariation)) {
             return [];
@@ -139,7 +139,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         $productObject->setIdentifier($identity->getObjectIdentifier());
         $productObject->setName((string) $product['texts'][0]['name1']);
         $productObject->setActive($this->getActive($variations, $mainVariation));
-        $productObject->setNumber($this->getProductNumber($variations));
+        $productObject->setNumber($this->variationHelper->getMainVariationNumber($variations, $mainVariation));
         $productObject->setBadges($this->getBadges($product));
         $productObject->setShopIdentifiers($this->variationHelper->getShopIdentifiers($mainVariation));
         $productObject->setManufacturerIdentifier($this->getManufacturerIdentifier($product));
@@ -203,24 +203,6 @@ class ProductResponseParser implements ProductResponseParserInterface
         }
 
         return true;
-    }
-
-    /**
-     * @param array $variations
-     *
-     * @return array
-     */
-    private function getMainVariation(array $variations)
-    {
-        $mainVariation = array_filter($variations, function ($variation) {
-            return $variation['isMain'] === true;
-        });
-
-        if (empty($mainVariation)) {
-            return [];
-        }
-
-        return reset($mainVariation);
     }
 
     /**
@@ -695,18 +677,6 @@ class ProductResponseParser implements ProductResponseParserInterface
         }
 
         return $properties;
-    }
-
-    /**
-     * @param Variation[] $variations
-     *
-     * @return string
-     */
-    private function getProductNumber(array $variations = [])
-    {
-        $variation = reset($variations);
-
-        return $variation->getNumber();
     }
 
     /**

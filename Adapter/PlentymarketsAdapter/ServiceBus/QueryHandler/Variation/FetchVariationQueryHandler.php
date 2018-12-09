@@ -5,7 +5,7 @@ namespace PlentymarketsAdapter\ServiceBus\QueryHandler\Variation;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Item as ItemApi;
 use PlentymarketsAdapter\ReadApi\Item\Variation as VariationApi;
-use PlentymarketsAdapter\ResponseParser\Product\Variation\VariationResponseParserInterface;
+use PlentymarketsAdapter\ResponseParser\Product\ProductResponseParserInterface;
 use SystemConnector\IdentityService\IdentityServiceInterface;
 use SystemConnector\ServiceBus\Query\FetchTransferObjectQuery;
 use SystemConnector\ServiceBus\Query\QueryInterface;
@@ -31,7 +31,7 @@ class FetchVariationQueryHandler implements QueryHandlerInterface
     private $identityService;
 
     /**
-     * @var VariationResponseParserInterface
+     * @var ProductResponseParserInterface
      */
     private $responseParser;
 
@@ -39,7 +39,7 @@ class FetchVariationQueryHandler implements QueryHandlerInterface
         ItemApi $itemApi,
         VariationApi $variationApi,
         IdentityServiceInterface $identityService,
-        VariationResponseParserInterface $responseParser
+        ProductResponseParserInterface $responseParser
     ) {
         $this->itemApi = $itemApi;
         $this->variationApi = $variationApi;

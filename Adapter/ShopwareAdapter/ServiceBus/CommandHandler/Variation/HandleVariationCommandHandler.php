@@ -2,6 +2,7 @@
 
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Variation;
 
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Shopware\Components\Api\Manager;
@@ -174,7 +175,11 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
 
         $this->entityManager->getConnection()->update(
             's_articles',
-            ['main_detail_id' => $variationModel->getId()],
+            [
+                'main_detail_id' => $variationModel->getId(),
+                'active' => $variation->getActive(),
+                'changetime' => (new DateTime('now'))->format('Y-m-d H:i:s'),
+            ],
             ['id' => $variationModel->getArticle()->getId()]
         );
     }
