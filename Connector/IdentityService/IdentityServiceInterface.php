@@ -2,7 +2,7 @@
 
 namespace SystemConnector\IdentityService;
 
-use SystemConnector\ValueObject\Identity\Identity;
+use SystemConnector\IdentityService\Struct\Identity;
 
 interface IdentityServiceInterface
 {

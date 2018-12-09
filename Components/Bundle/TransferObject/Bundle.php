@@ -335,4 +335,28 @@ class Bundle extends AbstractTransferObject
     {
         $this->translations = $translations;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassProperties()
+    {
+        return [
+            'identifier' => $this->getIdentifier(),
+            'active' => $this->isActive(),
+            'productIdentifier' => $this->getProductIdentifier(),
+            'name' => $this->getName(),
+            'number' => $this->getNumber(),
+            'position' => $this->getPosition(),
+            'stock' => $this->getStock(),
+            'stockLimitation' => $this->hasStockLimitation(),
+            'prices' => $this->getPrices(),
+            'vatRateIdentifier' => $this->getVatRateIdentifier(),
+            'availableFrom' => $this->getAvailableFrom(),
+            'availableTo' => $this->getAvailableTo(),
+            'bundleProducts' => $this->getBundleProducts(),
+            'attributes' => $this->getAttributes(),
+            'translations' => $this->getTranslations(),
+        ];
+    }
 }

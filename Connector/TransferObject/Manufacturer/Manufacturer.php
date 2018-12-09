@@ -121,4 +121,18 @@ class Manufacturer extends AbstractTransferObject
     {
         $this->attributes = $attributes;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassProperties()
+    {
+        return [
+            'identifier' => $this->getIdentifier(),
+            'name' => $this->getName(),
+            'logoIdentifier' => $this->getLogoIdentifier(),
+            'link' => $this->getLink(),
+            'attributes' => $this->getAttributes(),
+        ];
+    }
 }

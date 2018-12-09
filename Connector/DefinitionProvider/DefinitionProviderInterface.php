@@ -2,7 +2,7 @@
 
 namespace SystemConnector\DefinitionProvider;
 
-use SystemConnector\ValueObject\Definition\Definition;
+use SystemConnector\DefinitionProvider\Struct\Definition;
 
 interface DefinitionProviderInterface
 {

@@ -9,6 +9,7 @@ use Ramsey\Uuid\Uuid;
 use SystemConnector\Connector;
 use SystemConnector\Console\OutputHandler\OutputHandlerInterface;
 use SystemConnector\DefinitionProvider\DefinitionProvider;
+use SystemConnector\DefinitionProvider\Struct\Definition;
 use SystemConnector\ServiceBus\Command\CommandInterface;
 use SystemConnector\ServiceBus\CommandFactory\CommandFactoryInterface;
 use SystemConnector\ServiceBus\CommandType;
@@ -17,7 +18,6 @@ use SystemConnector\ServiceBus\QueryFactory\QueryFactoryInterface;
 use SystemConnector\ServiceBus\QueryType;
 use SystemConnector\ServiceBus\ServiceBusInterface;
 use SystemConnector\TransferObject\TransferObjectInterface;
-use SystemConnector\ValueObject\Definition\Definition;
 
 class ConnectorTest extends TestCase
 {

@@ -591,4 +591,40 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     {
         $this->attributes = $attributes;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassProperties()
+    {
+        return [
+            'identifier' => $this->getIdentifier(),
+            'productIdentifier' => $this->getProductIdentifier(),
+            'active' => $this->getActive(),
+            'main' => $this->isMain(),
+            'number' => $this->getNumber(),
+            'name' => $this->getName(),
+            'position' => $this->getPosition(),
+            'barcodes' => $this->getBarcodes(),
+            'model' => $this->getModel(),
+            'images' => $this->getImages(),
+            'prices' => $this->getPrices(),
+            'purchasePrice' => $this->getPurchasePrice(),
+            'unitIdentifier' => $this->getUnitIdentifier(),
+            'content' => $this->getContent(),
+            'referenceAmount' => $this->getReferenceAmount(),
+            'stockLimitation' => $this->hasStockLimitation(),
+            'maximumOrderQuantity' => $this->getMaximumOrderQuantity(),
+            'minimumOrderQuantity' => $this->getMinimumOrderQuantity(),
+            'intervalOrderQuantity' => $this->getIntervalOrderQuantity(),
+            'shippingTime' => $this->getShippingTime(),
+            'releaseDate' => $this->getReleaseDate(),
+            'width' => $this->getWidth(),
+            'height' => $this->getHeight(),
+            'length' => $this->getLength(),
+            'weight' => $this->getWeight(),
+            'properties' => $this->getProperties(),
+            'attributes' => $this->getAttributes(),
+        ];
+    }
 }

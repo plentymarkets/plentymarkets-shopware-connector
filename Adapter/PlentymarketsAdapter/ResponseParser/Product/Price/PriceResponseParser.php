@@ -8,10 +8,10 @@ use PlentymarketsAdapter\ReadApi\Item\SalesPrice;
 use Psr\Log\LoggerInterface;
 use SystemConnector\ConfigService\ConfigServiceInterface;
 use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\IdentityService\Struct\Identity;
 use SystemConnector\TransferObject\CustomerGroup\CustomerGroup;
 use SystemConnector\TransferObject\Product\Price\Price;
 use SystemConnector\TransferObject\Shop\Shop;
-use SystemConnector\ValueObject\Identity\Identity;
 
 class PriceResponseParser implements PriceResponseParserInterface
 {

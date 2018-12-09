@@ -57,4 +57,15 @@ class Shop extends AbstractTransferObject
     {
         $this->name = $name;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassProperties()
+    {
+        return [
+            'identifier' => $this->getIdentifier(),
+            'name' => $this->getName(),
+        ];
+    }
 }

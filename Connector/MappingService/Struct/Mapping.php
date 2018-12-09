@@ -1,11 +1,10 @@
 <?php
 
-namespace SystemConnector\ValueObject\Mapping;
+namespace SystemConnector\MappingService\Struct;
 
 use SystemConnector\TransferObject\TransferObjectInterface;
-use SystemConnector\ValueObject\AbstractValueObject;
 
-class Mapping extends AbstractValueObject
+class Mapping
 {
     /**
      * origin adapter name.

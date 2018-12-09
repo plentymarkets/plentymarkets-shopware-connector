@@ -70,4 +70,16 @@ class Attribute extends AbstractValueObject implements TranslateableInterface
     {
         $this->translations = $translations;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassProperties()
+    {
+        return [
+            'key' => $this->getKey(),
+            'value' => $this->getValue(),
+            'translations' => $this->getTranslations(),
+        ];
+    }
 }

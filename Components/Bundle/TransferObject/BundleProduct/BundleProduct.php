@@ -90,4 +90,17 @@ class BundleProduct extends AbstractValueObject
     {
         $this->attributes = $attributes;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassProperties()
+    {
+        return [
+            'number' => $this->getNumber(),
+            'amount' => $this->getAmount(),
+            'position' => $this->getPosition(),
+            'attributes' => $this->getAttributes(),
+        ];
+    }
 }

@@ -9,12 +9,12 @@ use SystemConnector\ValueObject\Attribute\Attribute;
 
 class OrderItem extends AbstractValueObject implements AttributableInterface
 {
-    const TYPE_PRODUCT = 1;
-    const TYPE_VOUCHER = 2;
-    const TYPE_COUPON = 3;
-    const TYPE_DISCOUNT = 4;
-    const TYPE_PAYMENT_SURCHARGE = 5;
-    const TYPE_SHIPPING_COSTS = 6;
+    const TYPE_PRODUCT = 'product';
+    const TYPE_VOUCHER = 'voucher';
+    const TYPE_COUPON = 'coupon';
+    const TYPE_DISCOUNT = 'discount';
+    const TYPE_PAYMENT_SURCHARGE = 'payment_surcharge';
+    const TYPE_SHIPPING_COSTS = 'shipping_costs';
 
     /**
      * @var int
@@ -52,7 +52,7 @@ class OrderItem extends AbstractValueObject implements AttributableInterface
     private $attributes = [];
 
     /**
-     * @return int
+     * @return string
      */
     public function getType()
     {
@@ -60,7 +60,7 @@ class OrderItem extends AbstractValueObject implements AttributableInterface
     }
 
     /**
-     * @param int $type
+     * @param string $type
      */
     public function setType($type)
     {
@@ -171,5 +171,21 @@ class OrderItem extends AbstractValueObject implements AttributableInterface
     public function setAttributes(array $attributes)
     {
         $this->attributes = $attributes;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassProperties()
+    {
+        return [
+            'type' => $this->getType(),
+            'quantity' => $this->getQuantity(),
+            'name' => $this->getName(),
+            'number' => $this->getNumber(),
+            'price' => $this->getPrice(),
+            'vatRateIdentifier' => $this->getVatRateIdentifier(),
+            'attributes' => $this->getAttributes(),
+        ];
     }
 }

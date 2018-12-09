@@ -2,7 +2,9 @@
 
 namespace SystemConnector\ValueObject;
 
-abstract class AbstractValueObject implements ValueObjectInterface
+use JsonSerializable;
+
+abstract class AbstractValueObject implements ValueObjectInterface, JsonSerializable
 {
     /**
      * @param array $params
@@ -22,5 +24,18 @@ abstract class AbstractValueObject implements ValueObjectInterface
         }
 
         return $object;
+    }
+
+    abstract public function getClassProperties();
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'class' => static::class,
+            'properties' => $this->getClassProperties(),
+        ];
     }
 }

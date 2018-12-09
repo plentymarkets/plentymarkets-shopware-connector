@@ -16,8 +16,6 @@ use SystemConnector\ValueObject\Attribute\Attribute;
 class Order extends AbstractTransferObject implements AttributableInterface
 {
     const TYPE = 'Order';
-    const TYPE_ORDER = 1;
-    const TYPE_OFFER = 2;
 
     /**
      * Identifier of the object.
@@ -25,11 +23,6 @@ class Order extends AbstractTransferObject implements AttributableInterface
      * @var string
      */
     private $identifier = '';
-
-    /**
-     * @var int
-     */
-    private $orderType = self::TYPE_ORDER;
 
     /**
      * @var string
@@ -133,22 +126,6 @@ class Order extends AbstractTransferObject implements AttributableInterface
     public function setIdentifier($identifier)
     {
         $this->identifier = $identifier;
-    }
-
-    /**
-     * @return int
-     */
-    public function getOrderType()
-    {
-        return $this->orderType;
-    }
-
-    /**
-     * @param int $orderType
-     */
-    public function setOrderType($orderType)
-    {
-        $this->orderType = $orderType;
     }
 
     /**
@@ -399,5 +376,30 @@ class Order extends AbstractTransferObject implements AttributableInterface
     public function setAttributes(array $attributes)
     {
         $this->attributes = $attributes;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassProperties()
+    {
+        return [
+            'identifier' => $this->getIdentifier(),
+            'orderNumber' => $this->getOrderNumber(),
+            'orderTime' => $this->getOrderTime(),
+            'customer' => $this->getCustomer(),
+            'billingAddress' => $this->getBillingAddress(),
+            'shoppingAddress' => $this->getShippingAddress(),
+            'orderItems' => $this->getOrderItems(),
+            'shopIdentifier' => $this->getShopIdentifier(),
+            'currentyIdentifier' => $this->getCurrencyIdentifier(),
+            'orderStatusIdentifier' => $this->getOrderStatusIdentifier(),
+            'paymentStatusIdentifier' => $this->getPaymentStatusIdentifier(),
+            'paymentMethodIdentifier' => $this->getPaymentMethodIdentifier(),
+            'shippingProfileIdentifier' => $this->getShippingProfileIdentifier(),
+            'comments' => $this->getComments(),
+            'packages' => $this->getPackages(),
+            'attributes' => $this->getAttributes(),
+        ];
     }
 }

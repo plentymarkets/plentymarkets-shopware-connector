@@ -5,13 +5,13 @@ namespace SystemConnector\MappingService;
 use Assert\Assertion;
 use Psr\Log\LoggerInterface;
 use SystemConnector\DefinitionProvider\DefinitionProviderInterface;
+use SystemConnector\DefinitionProvider\Struct\Definition;
+use SystemConnector\MappingService\Struct\Mapping;
 use SystemConnector\ServiceBus\QueryFactory\QueryFactoryInterface;
 use SystemConnector\ServiceBus\QueryType;
 use SystemConnector\ServiceBus\ServiceBusInterface;
 use SystemConnector\TransferObject\TransferObjectInterface;
 use SystemConnector\ValidatorService\ValidatorServiceInterface;
-use SystemConnector\ValueObject\Definition\Definition;
-use SystemConnector\ValueObject\Mapping\Mapping;
 
 class MappingService implements MappingServiceInterface
 {

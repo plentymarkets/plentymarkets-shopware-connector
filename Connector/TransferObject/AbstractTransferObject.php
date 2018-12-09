@@ -2,7 +2,9 @@
 
 namespace SystemConnector\TransferObject;
 
-abstract class AbstractTransferObject implements TransferObjectInterface
+use JsonSerializable;
+
+abstract class AbstractTransferObject implements TransferObjectInterface, JsonSerializable
 {
     /**
      * @param array $params
@@ -22,5 +24,18 @@ abstract class AbstractTransferObject implements TransferObjectInterface
         }
 
         return $object;
+    }
+
+    abstract public function getClassProperties();
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'class' => static::class,
+            'properties' => $this->getClassProperties(),
+        ];
     }
 }

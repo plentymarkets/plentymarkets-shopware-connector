@@ -230,4 +230,23 @@ class Payment extends AbstractTransferObject implements AttributableInterface
     {
         $this->attributes = $attributes;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassProperties()
+    {
+        return [
+            'identifier' => $this->getIdentifier(),
+            'orderIdentifier' => $this->getOrderIdentifer(),
+            'amount' => $this->getAmount(),
+            'shopIdentifier' => $this->getShopIdentifier(),
+            'currencyIdentifier' => $this->getCurrencyIdentifier(),
+            'paymentMethodIdentifier' => $this->getPaymentMethodIdentifier(),
+            'transactionReference' => $this->getTransactionReference(),
+            'accountHolder' => $this->getAccountHolder(),
+            'paymentData' => $this->getPaymentData(),
+            'attributes' => $this->getAttributes(),
+        ];
+    }
 }

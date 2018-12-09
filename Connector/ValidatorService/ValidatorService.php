@@ -3,10 +3,8 @@
 namespace SystemConnector\ValidatorService;
 
 use Assert\InvalidArgumentException;
-use SystemConnector\TransferObject\TransferObjectInterface;
 use SystemConnector\Validator\ValidatorInterface;
 use SystemConnector\ValidatorService\Exception\InvalidDataException;
-use SystemConnector\ValueObject\ValueObjectInterface;
 use Traversable;
 use function is_array;
 
@@ -30,10 +28,6 @@ class ValidatorService implements ValidatorServiceInterface
      */
     public function validate($object, array $parents = [])
     {
-        if (!$this->canBeValidated($object)) {
-            return;
-        }
-
         $validators = array_filter($this->validators, function (ValidatorInterface $validator) use ($object) {
             return $validator->supports($object);
         });
@@ -46,6 +40,10 @@ class ValidatorService implements ValidatorServiceInterface
             $parents[] = $object;
             $methods = get_class_methods($object);
 
+            if (empty($methods)) {
+                return;
+            }
+
             $methods = array_filter($methods, function ($method) {
                 return 0 === stripos($method, 'get');
             });
@@ -55,40 +53,14 @@ class ValidatorService implements ValidatorServiceInterface
 
                 if (is_array($result)) {
                     foreach ($result as $item) {
-                        if (!$this->canBeValidated($item)) {
-                            continue;
-                        }
-
                         $this->validate($item, $parents);
                     }
                 } else {
-                    if (!$this->canBeValidated($result)) {
-                        continue;
-                    }
-
                     $this->validate($result, $parents);
                 }
             }
         } catch (InvalidArgumentException $exception) {
             throw InvalidDataException::fromObject($object, $exception->getMessage(), $exception->getPropertyPath(), $parents);
         }
-    }
-
-    /**
-     * @param mixed $value
-     *
-     * @return bool
-     */
-    private function canBeValidated($value)
-    {
-        if ($value instanceof TransferObjectInterface) {
-            return true;
-        }
-
-        if ($value instanceof ValueObjectInterface) {
-            return true;
-        }
-
-        return false;
     }
 }
