@@ -5,7 +5,7 @@ namespace PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 use SystemConnector\IdentityService\IdentityService;
-use SystemConnector\ValueObject\Identity\Identity;
+use SystemConnector\IdentityService\Struct\Identity;
 
 abstract class ResponseParserTest extends TestCase
 {

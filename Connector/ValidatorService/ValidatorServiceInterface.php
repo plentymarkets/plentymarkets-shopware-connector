@@ -2,14 +2,11 @@
 
 namespace SystemConnector\ValidatorService;
 
-use SystemConnector\TransferObject\TransferObjectInterface;
-use SystemConnector\ValueObject\ValueObjectInterface;
-
 interface ValidatorServiceInterface
 {
     /**
-     * @param TransferObjectInterface|ValueObjectInterface     $object
-     * @param TransferObjectInterface[]|ValueObjectInterface[] $parents
+     * @param mixed   $object
+     * @param mixed[] $parents
      */
     public function validate($object, array $parents = []);
 }

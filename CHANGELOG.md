@@ -23,6 +23,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 - paypal unified plugin integration
+- added a dump command for debugging purpose
 
 ## [## [5.0.0]]
 ### Fixed

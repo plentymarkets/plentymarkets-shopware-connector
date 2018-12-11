@@ -69,4 +69,16 @@ class PayPalInstallmentPaymentData extends AbstractValueObject implements Paymen
     {
         $this->totalCostsIncludeFinancing = $totalCostsIncludeFinancing;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassProperties()
+    {
+        return [
+            'currency' => $this->getCurrency(),
+            'financingCosts' => $this->getFinancingCosts(),
+            'totalCostsIncludeFinancing' => $this->getTotalCostsIncludeFinancing(),
+        ];
+    }
 }

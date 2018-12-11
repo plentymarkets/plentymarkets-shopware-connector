@@ -3,9 +3,9 @@
 namespace SystemConnector\Validator\Mapping;
 
 use Assert\Assertion;
+use SystemConnector\MappingService\Struct\Mapping;
 use SystemConnector\TransferObject\TransferObjectInterface;
 use SystemConnector\Validator\ValidatorInterface;
-use SystemConnector\ValueObject\Mapping\Mapping;
 
 class MappingValidator implements ValidatorInterface
 {

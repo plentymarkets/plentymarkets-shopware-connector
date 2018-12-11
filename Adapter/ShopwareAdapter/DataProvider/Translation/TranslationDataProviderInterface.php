@@ -7,9 +7,9 @@ use Shopware\Models\Article\Configurator\Option as ConfiguratorOptionModel;
 use Shopware\Models\Property\Option as OptionModel;
 use Shopware\Models\Property\Value as ValueModel;
 use Shopware\Models\Shop\Shop as ShopModel;
+use SystemConnector\IdentityService\Struct\Identity;
 use SystemConnector\TransferObject\Product\Property\Property;
 use SystemConnector\TransferObject\Product\Property\Value\Value;
-use SystemConnector\ValueObject\Identity\Identity;
 
 interface TranslationDataProviderInterface
 {

@@ -154,4 +154,20 @@ class PayPalUnifiedPaymentData extends AbstractValueObject implements PaymentDat
     {
         $this->due_date = $due_date;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassProperties()
+    {
+        return [
+            'reference' => $this->getReference(),
+            'bank_name' => $this->getBankName(),
+            'account_holder' => $this->getAccountHolder(),
+            'iban' => $this->getIban(),
+            'bic' => $this->getBic(),
+            'amount' => $this->getAmount(),
+            'due_date' => $this->getDueDate(),
+        ];
+    }
 }

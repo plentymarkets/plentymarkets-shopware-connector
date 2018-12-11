@@ -210,4 +210,22 @@ class Media extends AbstractTransferObject implements TranslateableInterface, At
     {
         $this->attributes = $attributes;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassProperties()
+    {
+        return [
+            'identifier' => $this->getIdentifier(),
+            'mediaCategoryIdentifier' => $this->getMediaCategoryIdentifier(),
+            'link' => $this->getLink(),
+            'filename' => $this->getFilename(),
+            'hash' => $this->getHash(),
+            'name' => $this->getName(),
+            'alternateName' => $this->getAlternateName(),
+            'translations' => $this->getTranslations(),
+            'attributes' => $this->getAttributes(),
+        ];
+    }
 }

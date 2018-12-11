@@ -1,6 +1,6 @@
 <?php
 
-namespace SystemConnector\ValueObject\Identity;
+namespace SystemConnector\IdentityService\Struct;
 
 use SystemConnector\ValueObject\AbstractValueObject;
 
@@ -96,5 +96,18 @@ class Identity extends AbstractValueObject
     public function setAdapterName($adapterName)
     {
         $this->adapterName = $adapterName;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassProperties()
+    {
+        return [
+            'objectIdentifier' => $this->getObjectIdentifier(),
+            'objectType' => $this->getObjectType(),
+            'adapterIdentifier' => $this->getAdapterIdentifier(),
+            'adapterName' => $this->getAdapterName(),
+        ];
     }
 }

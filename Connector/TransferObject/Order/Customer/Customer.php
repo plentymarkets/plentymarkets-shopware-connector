@@ -8,8 +8,8 @@ use SystemConnector\ValueObject\AbstractValueObject;
 
 class Customer extends AbstractValueObject
 {
-    const TYPE_NORMAL = 1;
-    const TYPE_GUEST = 2;
+    const TYPE_NORMAL = 'normal';
+    const TYPE_GUEST = 'guest';
 
     const GENDER_MALE = 'male';
     const GENDER_FEMALE = 'female';
@@ -348,6 +348,30 @@ class Customer extends AbstractValueObject
     public function setShopIdentifier($shopIdentifier)
     {
         $this->shopIdentifier = $shopIdentifier;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassProperties()
+    {
+        return [
+            'type' => $this->getType(),
+            'number' => $this->getNumber(),
+            'email' => $this->getEmail(),
+            'newsletter' => $this->getNewsletter(),
+            'newsletterAgreementDate' => $this->getNewsletterAgreementDate(),
+            'languageIdentifier' => $this->getLanguageIdentifier(),
+            'customerGroupIdentifier' => $this->getCustomerGroupIdentifier(),
+            'gender' => $this->getGender(),
+            'title' => $this->getTitle(),
+            'firstname' => $this->getFirstname(),
+            'lastname' => $this->getLastname(),
+            'birthday' => $this->getBirthday(),
+            'phoneNumber' => $this->getPhoneNumber(),
+            'mobilePhoneNumber' => $this->getMobilePhoneNumber(),
+            'shopIdentifier' => $this->getShopIdentifier(),
+        ];
     }
 
     /**

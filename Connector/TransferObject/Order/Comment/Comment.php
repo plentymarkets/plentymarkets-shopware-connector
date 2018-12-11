@@ -9,8 +9,8 @@ use SystemConnector\ValueObject\Attribute\Attribute;
 
 class Comment extends AbstractValueObject implements AttributableInterface
 {
-    const TYPE_INTERNAL = 1;
-    const TYPE_CUSTOMER = 2;
+    const TYPE_INTERNAL = 'internal';
+    const TYPE_CUSTOMER = 'customer';
 
     /**
      * @var int
@@ -28,7 +28,7 @@ class Comment extends AbstractValueObject implements AttributableInterface
     private $attributes = [];
 
     /**
-     * @return int
+     * @return string
      */
     public function getType()
     {
@@ -36,7 +36,7 @@ class Comment extends AbstractValueObject implements AttributableInterface
     }
 
     /**
-     * @param int $type
+     * @param string $type
      */
     public function setType($type)
     {
@@ -83,5 +83,17 @@ class Comment extends AbstractValueObject implements AttributableInterface
         $reflection = new ReflectionClass(__CLASS__);
 
         return $reflection->getConstants();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassProperties()
+    {
+        return [
+            'type' => $this->getType(),
+            'comment' => $this->getComment(),
+            'attributes' => $this->getAttributes(),
+        ];
     }
 }

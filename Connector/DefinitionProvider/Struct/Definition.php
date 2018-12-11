@@ -1,10 +1,8 @@
 <?php
 
-namespace SystemConnector\ValueObject\Definition;
+namespace SystemConnector\DefinitionProvider\Struct;
 
-use SystemConnector\ValueObject\AbstractValueObject;
-
-class Definition extends AbstractValueObject
+class Definition
 {
     /**
      * origin adapter name.
