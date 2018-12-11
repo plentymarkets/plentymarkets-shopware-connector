@@ -93,7 +93,7 @@ class DumpCommand extends Command
 
             foreach ($result as $item) {
                 $this->outputHandler->writeLine();
-                $this->outputHandler->writeLine(sprintf('TransferObject %s:',  $i++));
+                $this->outputHandler->writeLine(sprintf('TransferObject %s:', $i++));
                 $this->outputHandler->writeLine(json_encode($item, JSON_PRETTY_PRINT));
             }
         }
