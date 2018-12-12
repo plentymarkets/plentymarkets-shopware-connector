@@ -68,4 +68,16 @@ class Translation extends AbstractValueObject
     {
         $this->value = $value;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassProperties()
+    {
+        return [
+            'languageIdentifier' => $this->getLanguageIdentifier(),
+            'property' => $this->getProperty(),
+            'value' => $this->getValue(),
+        ];
+    }
 }

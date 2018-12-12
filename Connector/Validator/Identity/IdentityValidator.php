@@ -3,8 +3,8 @@
 namespace SystemConnector\Validator\Identity;
 
 use Assert\Assertion;
+use SystemConnector\IdentityService\Struct\Identity;
 use SystemConnector\Validator\ValidatorInterface;
-use SystemConnector\ValueObject\Identity\Identity;
 
 class IdentityValidator implements ValidatorInterface
 {

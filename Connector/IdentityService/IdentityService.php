@@ -6,8 +6,8 @@ use Assert\Assertion;
 use Ramsey\Uuid\Uuid;
 use SystemConnector\IdentityService\Exception\NotFoundException;
 use SystemConnector\IdentityService\Storage\IdentityServiceStorageInterface;
+use SystemConnector\IdentityService\Struct\Identity;
 use SystemConnector\ValidatorService\ValidatorServiceInterface;
-use SystemConnector\ValueObject\Identity\Identity;
 use Traversable;
 
 class IdentityService implements IdentityServiceInterface

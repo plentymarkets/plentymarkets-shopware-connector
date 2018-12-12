@@ -3,7 +3,7 @@
 namespace SystemConnector\IdentityService\Storage;
 
 use Doctrine\DBAL\Connection;
-use SystemConnector\ValueObject\Identity\Identity;
+use SystemConnector\IdentityService\Struct\Identity;
 
 class DatabaseIdentityServiceStorage implements IdentityServiceStorageInterface
 {

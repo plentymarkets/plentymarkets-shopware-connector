@@ -336,4 +336,28 @@ class Address extends AbstractValueObject implements AttributableInterface
     {
         $this->attributes = $attributes;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassProperties()
+    {
+        return [
+            'company' => $this->getCompany(),
+            'department' => $this->getDepartment(),
+            'gender' => $this->getGender(),
+            'title' => $this->getTitle(),
+            'firstname' => $this->getFirstname(),
+            'lastname' => $this->getLastname(),
+            'street' => $this->getStreet(),
+            'additional' => $this->getAdditional(),
+            'postalCode' => $this->getPostalCode(),
+            'city' => $this->getCity(),
+            'countryIdentifier' => $this->getCountryIdentifier(),
+            'vatId' => $this->getVatId(),
+            'phoneNumber' => $this->getPhoneNumber(),
+            'mobilePhoneNumber' => $this->getMobilePhoneNumber(),
+            'attributes' => $this->getAttributes(),
+        ];
+    }
 }

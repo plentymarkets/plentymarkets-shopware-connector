@@ -338,4 +338,28 @@ class Category extends AbstractTransferObject implements TranslateableInterface,
     {
         $this->attributes = $attributes;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassProperties()
+    {
+        return [
+            'identifier' => $this->getIdentifier(),
+            'name' => $this->getName(),
+            'active' => $this->getActive(),
+            'parentIdentifiers' => $this->getParentIdentifier(),
+            'shopIdentifiers' => $this->getShopIdentifiers(),
+            'imageIdentifiers' => $this->getImageIdentifiers(),
+            'position' => $this->getPosition(),
+            'description' => $this->getDescription(),
+            'longDescription' => $this->getLongDescription(),
+            'metaTitle' => $this->getMetaTitle(),
+            'metaDescription' => $this->getMetaDescription(),
+            'metaKeywords' => $this->getMetaKeywords(),
+            'metaRobots' => $this->getMetaRobots(),
+            'translations' => $this->getTranslations(),
+            'attributes' => $this->getAttributes(),
+        ];
+    }
 }

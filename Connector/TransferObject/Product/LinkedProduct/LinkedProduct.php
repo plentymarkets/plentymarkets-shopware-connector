@@ -83,4 +83,16 @@ class LinkedProduct extends AbstractValueObject
     {
         $this->productIdentifier = $productIdentifier;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassProperties()
+    {
+        return [
+            'type' => $this->getType(),
+            'position' => $this->getPosition(),
+            'productIdentifier' => $this->getProductIdentifier(),
+        ];
+    }
 }

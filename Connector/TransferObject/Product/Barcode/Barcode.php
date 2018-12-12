@@ -63,4 +63,15 @@ class Barcode extends AbstractValueObject
     {
         $this->code = $code;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassProperties()
+    {
+        return [
+            'type' => $this->getType(),
+            'code' => $this->getCode(),
+        ];
+    }
 }

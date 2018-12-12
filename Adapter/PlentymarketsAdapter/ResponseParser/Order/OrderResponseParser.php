@@ -8,6 +8,7 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ReadApi\Customer\Customer as CustomerApi;
 use Psr\Log\LoggerInterface;
 use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\IdentityService\Struct\Identity;
 use SystemConnector\TransferObject\Country\Country;
 use SystemConnector\TransferObject\Currency\Currency;
 use SystemConnector\TransferObject\CustomerGroup\CustomerGroup;
@@ -23,7 +24,6 @@ use SystemConnector\TransferObject\PaymentMethod\PaymentMethod;
 use SystemConnector\TransferObject\PaymentStatus\PaymentStatus;
 use SystemConnector\TransferObject\ShippingProfile\ShippingProfile;
 use SystemConnector\TransferObject\Shop\Shop;
-use SystemConnector\ValueObject\Identity\Identity;
 
 class OrderResponseParser implements OrderResponseParserInterface
 {
@@ -166,7 +166,6 @@ class OrderResponseParser implements OrderResponseParserInterface
 
         $order = new Order();
         $order->setIdentifier($identity->getObjectIdentifier());
-        $order->setOrderType($entry['typeId'] === 1 ? Order::TYPE_ORDER : Order::TYPE_OFFER);
         $order->setOrderNumber($orderNumber);
         $order->setOrderTime($this->getOrderTime($entry));
         $order->setCustomer($customer);

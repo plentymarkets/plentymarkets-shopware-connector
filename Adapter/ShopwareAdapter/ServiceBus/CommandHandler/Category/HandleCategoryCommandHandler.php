@@ -18,6 +18,7 @@ use ShopwareAdapter\DataPersister\Translation\TranslationDataPersisterInterface;
 use ShopwareAdapter\ShopwareAdapter;
 use SystemConnector\IdentityService\Exception\NotFoundException as IdentityNotFoundException;
 use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\IdentityService\Struct\Identity;
 use SystemConnector\ServiceBus\Command\CommandInterface;
 use SystemConnector\ServiceBus\Command\TransferObjectCommand;
 use SystemConnector\ServiceBus\CommandHandler\CommandHandlerInterface;
@@ -28,7 +29,6 @@ use SystemConnector\TransferObject\Media\Media;
 use SystemConnector\TransferObject\Shop\Shop;
 use SystemConnector\Translation\TranslationHelperInterface;
 use SystemConnector\ValueObject\Attribute\Attribute;
-use SystemConnector\ValueObject\Identity\Identity;
 
 class HandleCategoryCommandHandler implements CommandHandlerInterface
 {

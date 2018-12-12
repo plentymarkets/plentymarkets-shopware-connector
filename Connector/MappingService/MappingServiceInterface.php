@@ -2,7 +2,7 @@
 
 namespace SystemConnector\MappingService;
 
-use SystemConnector\ValueObject\Mapping\Mapping;
+use SystemConnector\MappingService\Struct\Mapping;
 
 interface MappingServiceInterface
 {

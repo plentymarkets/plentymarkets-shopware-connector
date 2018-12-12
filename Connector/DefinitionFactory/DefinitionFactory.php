@@ -2,8 +2,8 @@
 
 namespace SystemConnector\DefinitionFactory;
 
+use SystemConnector\DefinitionProvider\Struct\Definition;
 use SystemConnector\ValidatorService\ValidatorServiceInterface;
-use SystemConnector\ValueObject\Definition\Definition;
 
 class DefinitionFactory implements DefinitionFactoryInterface
 {
@@ -22,12 +22,11 @@ class DefinitionFactory implements DefinitionFactoryInterface
      */
     public function factory($originAdapterName, $destinationAdapterName, $objectType, $priority = null)
     {
-        $definition = Definition::fromArray([
-            'originAdapterName' => $originAdapterName,
-            'destinationAdapterName' => $destinationAdapterName,
-            'objectType' => $objectType,
-            'priority' => $priority,
-        ]);
+        $definition = new Definition();
+        $definition->setOriginAdapterName($originAdapterName);
+        $definition->setDestinationAdapterName($destinationAdapterName);
+        $definition->setObjectType($objectType);
+        $definition->setPriority($priority);
 
         $this->validator->validate($definition);
 

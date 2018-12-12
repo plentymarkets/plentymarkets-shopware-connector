@@ -5,12 +5,12 @@ namespace ShopwareAdapter\ServiceBus\CommandHandler\Stock;
 use Psr\Log\LoggerInterface;
 use ShopwareAdapter\ShopwareAdapter;
 use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\IdentityService\Struct\Identity;
 use SystemConnector\ServiceBus\Command\CommandInterface;
 use SystemConnector\ServiceBus\Command\TransferObjectCommand;
 use SystemConnector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use SystemConnector\ServiceBus\CommandType;
 use SystemConnector\TransferObject\Product\Stock\Stock;
-use SystemConnector\ValueObject\Identity\Identity;
 
 class RemoveStockCommandHandler implements CommandHandlerInterface
 {

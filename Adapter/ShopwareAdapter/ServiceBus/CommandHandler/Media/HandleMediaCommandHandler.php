@@ -11,12 +11,12 @@ use ShopwareAdapter\Helper\AttributeHelper;
 use ShopwareAdapter\RequestGenerator\Media\MediaRequestGeneratorInterface;
 use ShopwareAdapter\ShopwareAdapter;
 use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\IdentityService\Struct\Identity;
 use SystemConnector\ServiceBus\Command\CommandInterface;
 use SystemConnector\ServiceBus\Command\TransferObjectCommand;
 use SystemConnector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use SystemConnector\ServiceBus\CommandType;
 use SystemConnector\TransferObject\Media\Media;
-use SystemConnector\ValueObject\Identity\Identity;
 
 class HandleMediaCommandHandler implements CommandHandlerInterface
 {

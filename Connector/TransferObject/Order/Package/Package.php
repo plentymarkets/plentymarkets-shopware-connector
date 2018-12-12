@@ -74,4 +74,16 @@ class Package extends AbstractValueObject
     {
         $this->shippingProvider = $shippingProvider;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassProperties()
+    {
+        return [
+            'shippingTime' => $this->getShippingTime(),
+            'shippingCode' => $this->getShippingCode(),
+            'shippingProvider' => $this->getShippingProvider(),
+        ];
+    }
 }

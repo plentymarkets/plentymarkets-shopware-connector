@@ -593,4 +593,38 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     {
         $this->badges = $badges;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassProperties()
+    {
+        return [
+            'identifier' => $this->getIdentifier(),
+            'name' => $this->getName(),
+            'active' => $this->isActive(),
+            'shopIdentifiers' => $this->getShopIdentifiers(),
+            'manufacturerIdentifier' => $this->getManufacturerIdentifier(),
+            'categoryIdentifiers' => $this->getCategoryIdentifiers(),
+            'defaultCategoryIdentifiers' => $this->getDefaultCategoryIdentifiers(),
+            'shippingProfileIdentifiers' => $this->getShippingProfileIdentifiers(),
+            'vatRateIdentifier' => $this->getVatRateIdentifier(),
+            'stockLimitation' => $this->hasStockLimitation(),
+            'description' => $this->getDescription(),
+            'longDescription' => $this->getLongDescription(),
+            'metaTitle' => $this->getMetaTitle(),
+            'metaDescription' => $this->getMetaDescription(),
+            'metaKeywords' => $this->getMetaKeywords(),
+            'metaRobots' => $this->getMetaRobots(),
+            'linkedProducts' => $this->getLinkedProducts(),
+            'documents' => $this->getDocuments(),
+            'properties' => $this->getProperties(),
+            'availableFrom' => $this->getAvailableFrom(),
+            'availableTo' => $this->getAvailableTo(),
+            'variantConfiguration' => $this->getVariantConfiguration(),
+            'badges' => $this->getBadges(),
+            'translations' => $this->getTranslations(),
+            'attributes' => $this->getAttributes(),
+        ];
+    }
 }

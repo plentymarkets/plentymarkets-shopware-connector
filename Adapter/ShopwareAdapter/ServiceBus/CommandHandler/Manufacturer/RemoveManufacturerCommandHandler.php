@@ -7,12 +7,12 @@ use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Resource\Manufacturer as ManufacturerResource;
 use ShopwareAdapter\ShopwareAdapter;
 use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\IdentityService\Struct\Identity;
 use SystemConnector\ServiceBus\Command\CommandInterface;
 use SystemConnector\ServiceBus\Command\TransferObjectCommand;
 use SystemConnector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use SystemConnector\ServiceBus\CommandType;
 use SystemConnector\TransferObject\Manufacturer\Manufacturer;
-use SystemConnector\ValueObject\Identity\Identity;
 
 class RemoveManufacturerCommandHandler implements CommandHandlerInterface
 {

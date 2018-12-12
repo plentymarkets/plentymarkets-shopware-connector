@@ -5,7 +5,7 @@ namespace PlentyConnector\tests\Unit\Adapter\PlentymarketsAdapter\RequestGenerat
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 use SystemConnector\IdentityService\IdentityService;
-use SystemConnector\ValueObject\Identity\Identity;
+use SystemConnector\IdentityService\Struct\Identity;
 
 abstract class RequestGeneratorTest extends TestCase
 {

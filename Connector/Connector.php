@@ -6,13 +6,13 @@ use Assert\Assertion;
 use Psr\Log\LoggerInterface;
 use SystemConnector\Console\OutputHandler\OutputHandlerInterface;
 use SystemConnector\DefinitionProvider\DefinitionProviderInterface;
+use SystemConnector\DefinitionProvider\Struct\Definition;
 use SystemConnector\ServiceBus\CommandFactory\CommandFactoryInterface;
 use SystemConnector\ServiceBus\CommandType;
 use SystemConnector\ServiceBus\QueryFactory\QueryFactoryInterface;
 use SystemConnector\ServiceBus\QueryType;
 use SystemConnector\ServiceBus\ServiceBusInterface;
 use SystemConnector\TransferObject\TransferObjectInterface;
-use SystemConnector\ValueObject\Definition\Definition;
 
 class Connector implements ConnectorInterface
 {
