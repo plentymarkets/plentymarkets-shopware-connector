@@ -84,7 +84,7 @@ class CronjobSubscriber implements SubscriberInterface
     {
         $cronjobState = $this->checkCronjobState(['Shopware_CronJob_PlentyConnector' . PlentyConnector::CRONJOB_BACKLOG]);
 
-        if (!$cronjobState) {
+        if ($cronjobState) {
             try {
                 $this->connector->handle(QueryType::CHANGED);
             } catch (Exception $exception) {
@@ -108,7 +108,7 @@ class CronjobSubscriber implements SubscriberInterface
     {
         $cronjobState = $this->checkCronjobState(['Shopware_CronJob_PlentyConnector' . PlentyConnector::CRONJOB_SYNCHRONIZE]);
 
-        if (!$cronjobState) {
+        if ($cronjobState) {
             try {
                 $counter = 0;
                 while ($counter < 200 && $command = $this->backlogService->dequeue()) {
@@ -137,7 +137,7 @@ class CronjobSubscriber implements SubscriberInterface
     {
         $cronjobState = $this->checkCronjobState(['Shopware_CronJob_PlentyConnector' . PlentyConnector::CRONJOB_BACKLOG, 'Shopware_CronJob_PlentyConnector' . PlentyConnector::CRONJOB_SYNCHRONIZE]);
 
-        if (!$cronjobState) {
+        if ($cronjobState) {
             try {
                 $this->cleanupService->cleanup();
             } catch (Exception $exception) {
@@ -164,7 +164,7 @@ class CronjobSubscriber implements SubscriberInterface
         }
 
         foreach ($cronjobs as $cronjob) {
-            $state = $this->connection->fetchOne('SELECT active FROM `s_crontab` WHERE action = ?', [$cronjob]);
+            $state = $this->connection->fetchColumn('SELECT active FROM `s_crontab` WHERE action = ?', [$cronjob]);
 
             if ($state) {
                 return true;
