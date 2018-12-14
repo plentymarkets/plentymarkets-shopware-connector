@@ -7,6 +7,7 @@ use Shopware_Components_Translation;
 use ShopwareAdapter\DataProvider\Translation\TranslationDataProviderInterface;
 use ShopwareAdapter\ShopwareAdapter;
 use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\IdentityService\Struct\Identity;
 use SystemConnector\TransferObject\Category\Category;
 use SystemConnector\TransferObject\Language\Language;
 use SystemConnector\TransferObject\Product\Product;
@@ -14,7 +15,6 @@ use SystemConnector\TransferObject\Product\Property\Property;
 use SystemConnector\TransferObject\Product\Property\Value\Value;
 use SystemConnector\Translation\TranslationHelperInterface;
 use SystemConnector\ValueObject\Attribute\Attribute;
-use SystemConnector\ValueObject\Identity\Identity;
 
 class TranslationDataPersister implements TranslationDataPersisterInterface
 {

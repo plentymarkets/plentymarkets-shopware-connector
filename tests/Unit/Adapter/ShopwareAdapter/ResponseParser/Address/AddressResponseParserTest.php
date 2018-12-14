@@ -6,10 +6,10 @@ use PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\ResponsePa
 use Ramsey\Uuid\Uuid;
 use ShopwareAdapter\ResponseParser\Address\AddressResponseParser;
 use SystemConnector\IdentityService\IdentityService;
+use SystemConnector\IdentityService\Struct\Identity;
 use SystemConnector\TransferObject\Order\Address\Address;
 use SystemConnector\TransferObject\Order\Customer\Customer;
 use SystemConnector\ValueObject\Attribute\Attribute;
-use SystemConnector\ValueObject\Identity\Identity;
 
 class AddressResponseParserTest extends ResponseParserTest
 {

@@ -69,4 +69,16 @@ class KlarnaPaymentData extends AbstractValueObject implements PaymentDataInterf
     {
         $this->transactionId = $transactionId;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassProperties()
+    {
+        return [
+            'shopId' => $this->getShopId(),
+            'pclassId' => $this->getPclassId(),
+            'transactionId' => $this->getTransactionId(),
+        ];
+    }
 }

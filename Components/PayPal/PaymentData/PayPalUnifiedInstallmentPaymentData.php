@@ -90,4 +90,17 @@ class PayPalUnifiedInstallmentPaymentData extends AbstractValueObject implements
     {
         $this->monthly_payment = $monthly_payment;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassProperties()
+    {
+        return [
+            'fee_amount' => $this->getFeeAmount(),
+            'total_cost' => $this->getTotalCost(),
+            'term' => $this->getTerm(),
+            'monthly_payment' => $this->getMonthlyPayment(),
+        ];
+    }
 }

@@ -110,4 +110,18 @@ class Price extends AbstractValueObject
     {
         $this->toAmount = $toAmount;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassProperties()
+    {
+        return [
+            'price' => $this->getPrice(),
+            'pseudoPrice' => $this->getPseudoPrice(),
+            'customerGroupIdentifier' => $this->getCustomerGroupIdentifier(),
+            'fromAmount' => $this->getFromAmount(),
+            'toAmount' => $this->getToAmount(),
+        ];
+    }
 }

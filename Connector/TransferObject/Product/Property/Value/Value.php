@@ -70,4 +70,16 @@ class Value extends AbstractValueObject implements TranslateableInterface
     {
         $this->translations = $translations;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassProperties()
+    {
+        return [
+            'value' => $this->getValue(),
+            'position' => $this->getPosition(),
+            'translations' => $this->getTranslations(),
+        ];
+    }
 }

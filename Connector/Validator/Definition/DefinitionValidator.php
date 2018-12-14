@@ -3,8 +3,8 @@
 namespace SystemConnector\Validator\Definition;
 
 use Assert\Assertion;
+use SystemConnector\DefinitionProvider\Struct\Definition;
 use SystemConnector\Validator\ValidatorInterface;
-use SystemConnector\ValueObject\Definition\Definition;
 
 class DefinitionValidator implements ValidatorInterface
 {

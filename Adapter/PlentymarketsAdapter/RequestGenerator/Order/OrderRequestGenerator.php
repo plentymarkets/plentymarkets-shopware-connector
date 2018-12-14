@@ -7,7 +7,6 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\RequestGenerator\Order\Address\AddressRequestGeneratorInterface;
 use PlentymarketsAdapter\RequestGenerator\Order\Customer\CustomerRequestGeneratorInterface;
 use PlentymarketsAdapter\RequestGenerator\Order\OrderItem\OrderItemRequestGeneratorInterface;
-use RuntimeException;
 use SystemConnector\IdentityService\Exception\NotFoundException;
 use SystemConnector\IdentityService\IdentityServiceInterface;
 use SystemConnector\TransferObject\Language\Language;
@@ -65,10 +64,6 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
      */
     public function generate(Order $order)
     {
-        if ($order->getOrderType() !== Order::TYPE_ORDER) {
-            throw new RuntimeException('Unsupported order type');
-        }
-
         $shopIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $order->getShopIdentifier(),
             'objectType' => Shop::TYPE,

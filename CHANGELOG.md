@@ -11,6 +11,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - fix product main variation relation ship (@lacodimizer)
 - fix product active state on variation sync(@lacodimizer)
 - fix variation sync with wrong product association like images (@lacodimizer)
+- retrieve variation properties
 
 ### Changed
 - sepa payment informations are now transfered even without a account holder (@jkrzefski)
@@ -23,6 +24,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 - paypal unified plugin integration
+- added a dump command for debugging purpose
 
 ## [## [5.0.0]]
 ### Fixed

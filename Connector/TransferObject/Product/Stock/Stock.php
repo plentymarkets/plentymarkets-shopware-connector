@@ -80,4 +80,16 @@ class Stock extends AbstractTransferObject
     {
         $this->stock = $stock;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassProperties()
+    {
+        return [
+            'identifier' => $this->getIdentifier(),
+            'variationIdentifier' => $this->getVariationIdentifier(),
+            'stock' => $this->getStock(),
+        ];
+    }
 }

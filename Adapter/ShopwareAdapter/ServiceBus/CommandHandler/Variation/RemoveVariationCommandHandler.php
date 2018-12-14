@@ -7,12 +7,12 @@ use Psr\Log\LoggerInterface;
 use Shopware\Models\Article\Detail;
 use ShopwareAdapter\ShopwareAdapter;
 use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\IdentityService\Struct\Identity;
 use SystemConnector\ServiceBus\Command\CommandInterface;
 use SystemConnector\ServiceBus\Command\TransferObjectCommand;
 use SystemConnector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use SystemConnector\ServiceBus\CommandType;
 use SystemConnector\TransferObject\Product\Variation\Variation;
-use SystemConnector\ValueObject\Identity\Identity;
 
 class RemoveVariationCommandHandler implements CommandHandlerInterface
 {

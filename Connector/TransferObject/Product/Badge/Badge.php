@@ -39,4 +39,15 @@ class Badge extends AbstractValueObject
 
         return $reflection->getConstants();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassProperties()
+    {
+        return [
+            'class' => self::class,
+            'type' => $this->getType(),
+        ];
+    }
 }

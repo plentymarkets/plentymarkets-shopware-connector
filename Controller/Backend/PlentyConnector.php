@@ -10,10 +10,10 @@ use SystemConnector\ConnectorInterface;
 use SystemConnector\IdentityService\IdentityService;
 use SystemConnector\IdentityService\IdentityServiceInterface;
 use SystemConnector\MappingService\MappingServiceInterface;
+use SystemConnector\MappingService\Struct\Mapping;
 use SystemConnector\ServiceBus\QueryType;
 use SystemConnector\TransferObject\Product\Product;
 use SystemConnector\TransferObject\TransferObjectInterface;
-use SystemConnector\ValueObject\Mapping\Mapping;
 
 class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_Backend_ExtJs
 {

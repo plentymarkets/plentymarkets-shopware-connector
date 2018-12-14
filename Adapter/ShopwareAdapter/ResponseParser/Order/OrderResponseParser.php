@@ -166,7 +166,6 @@ class OrderResponseParser implements OrderResponseParserInterface
         $order->setComments($this->getComments($entry));
         $order->setCustomer($customer);
         $order->setOrderTime(DateTimeImmutable::createFromMutable($entry['orderTime']));
-        $order->setOrderType(Order::TYPE_ORDER);
         $order->setOrderStatusIdentifier($orderStatusIdentifier);
         $order->setPaymentStatusIdentifier($paymentStatusIdentifier);
         $order->setPaymentMethodIdentifier($paymentMethodIdentifier);

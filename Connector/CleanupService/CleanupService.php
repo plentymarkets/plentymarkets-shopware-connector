@@ -6,15 +6,15 @@ use Psr\Log\LoggerInterface;
 use SystemConnector\CleanupService\CallbackLogHandler\CallbackLogHandler;
 use SystemConnector\Console\OutputHandler\OutputHandlerInterface;
 use SystemConnector\DefinitionProvider\DefinitionProviderInterface;
+use SystemConnector\DefinitionProvider\Struct\Definition;
 use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\IdentityService\Struct\Identity;
 use SystemConnector\ServiceBus\CommandFactory\CommandFactoryInterface;
 use SystemConnector\ServiceBus\CommandType;
 use SystemConnector\ServiceBus\QueryFactory\QueryFactoryInterface;
 use SystemConnector\ServiceBus\QueryType;
 use SystemConnector\ServiceBus\ServiceBusInterface;
 use SystemConnector\TransferObject\TransferObjectInterface;
-use SystemConnector\ValueObject\Definition\Definition;
-use SystemConnector\ValueObject\Identity\Identity;
 
 class CleanupService implements CleanupServiceInterface
 {

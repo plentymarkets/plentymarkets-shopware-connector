@@ -8,12 +8,12 @@ use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Article;
 use ShopwareAdapter\ShopwareAdapter;
 use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\IdentityService\Struct\Identity;
 use SystemConnector\ServiceBus\Command\CommandInterface;
 use SystemConnector\ServiceBus\Command\TransferObjectCommand;
 use SystemConnector\ServiceBus\CommandHandler\CommandHandlerInterface;
 use SystemConnector\ServiceBus\CommandType;
 use SystemConnector\TransferObject\Product\Product;
-use SystemConnector\ValueObject\Identity\Identity;
 
 class RemoveProductCommandHandler implements CommandHandlerInterface
 {

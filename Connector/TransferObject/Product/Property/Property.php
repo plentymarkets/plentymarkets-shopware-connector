@@ -92,4 +92,17 @@ class Property extends AbstractValueObject implements TranslateableInterface
     {
         $this->translations = $translations;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassProperties()
+    {
+        return [
+            'name' => $this->getName(),
+            'position' => $this->getPosition(),
+            'values' => $this->getValues(),
+            'translations' => $this->getTranslations(),
+        ];
+    }
 }

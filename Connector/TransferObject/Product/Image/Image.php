@@ -68,4 +68,16 @@ class Image extends AbstractValueObject
     {
         $this->position = $position;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassProperties()
+    {
+        return [
+            'mediaIdentifier' => $this->getMediaIdentifier(),
+            'shopIdentifiers' => $this->getShopIdentifiers(),
+            'position' => $this->getPosition(),
+        ];
+    }
 }

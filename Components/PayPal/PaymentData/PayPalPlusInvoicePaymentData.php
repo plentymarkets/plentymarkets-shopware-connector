@@ -196,4 +196,22 @@ class PayPalPlusInvoicePaymentData extends AbstractValueObject implements Paymen
     {
         $this->payment_due_date = $payment_due_date;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassProperties()
+    {
+        return [
+            'reference_number' => $this->getReferenceNumber(),
+            'instruction_type' => $this->getInstructionType(),
+            'bank_name' => $this->getBankName(),
+            'account_holder_name' => $this->getAccountHolderName(),
+            'international_bank_account_number' => $this->getInternationalBankAccountNumber(),
+            'bank_identifier_code' => $this->getBankIdentifierCode(),
+            'amountValue' => $this->getAmountValue(),
+            'amount_currency' => $this->getAmountCurrency(),
+            'payment_due_date' => $this->getPaymentDueDate(),
+        ];
+    }
 }

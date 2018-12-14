@@ -69,4 +69,16 @@ class SepaPaymentData extends AbstractValueObject implements PaymentDataInterfac
     {
         $this->bic = $bic;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassProperties()
+    {
+        return [
+            'accountOwner' => $this->getAccountOwner(),
+            'iban' => $this->getIban(),
+            'bic' => $this->getBic(),
+        ];
+    }
 }
