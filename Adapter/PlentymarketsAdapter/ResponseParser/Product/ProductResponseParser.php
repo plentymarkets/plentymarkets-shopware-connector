@@ -446,7 +446,7 @@ class ProductResponseParser implements ProductResponseParserInterface
     {
         $result = [];
 
-        $properties = $mainVariation['variationProperties'];
+        $properties = $mainVariation['properties'];
 
         foreach ($properties as $property) {
             if (!$property['property']['isSearchable']) {
