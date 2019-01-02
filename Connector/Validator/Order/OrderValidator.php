@@ -28,7 +28,6 @@ class OrderValidator implements ValidatorInterface
     public function validate($object)
     {
         Assertion::uuid($object->getIdentifier(), null, 'order.identifier');
-        Assertion::inArray($object->getOrderType(), $object->getOrderTypes(), null, 'order.orderType');
         Assertion::string($object->getOrderNumber(), null, 'order.orderNumber');
         Assertion::notBlank($object->getOrderNumber(), null, 'order.orderNumber');
         Assertion::isInstanceOf($object->getOrderTime(), DateTimeImmutable::class, null, 'order.orderTime');
