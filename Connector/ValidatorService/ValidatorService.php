@@ -3,6 +3,7 @@
 namespace SystemConnector\ValidatorService;
 
 use Assert\InvalidArgumentException;
+use DateTimeZone;
 use SystemConnector\Validator\ValidatorInterface;
 use SystemConnector\ValidatorService\Exception\InvalidDataException;
 use Traversable;
@@ -49,6 +50,10 @@ class ValidatorService implements ValidatorServiceInterface
             });
 
             foreach ($methods as $method) {
+                if ($object instanceof DateTimeZone) {
+                    continue;
+                }
+
                 $result = $object->$method();
 
                 if (is_array($result)) {
