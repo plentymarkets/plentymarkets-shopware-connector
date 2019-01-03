@@ -77,21 +77,28 @@ class DatabaseConfigServiceStorage implements ConfigServiceStorageInterface
      */
     public function set($name, $value)
     {
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $queryBuilder->from($this->table, 'config')
+            ->select(['config.name'])
+            ->where('config.name = :name')
+            ->setParameter(':name', $name);
+        $configElement = $queryBuilder->execute()->fetchColumn();
+
         if ($value instanceof DateTimeInterface) {
             $value = $value->format(DATE_W3C);
         }
 
-        $affectedRows = $this->connection->update(
-            $this->table,
-            [
-                'value' => $value,
-            ],
-            [
-                'name' => $name,
-            ]
-        );
-
-        if (empty($affectedRows)) {
+        if (!empty($configElement)) {
+            $this->connection->update(
+                $this->table,
+                [
+                    'value' => $value,
+                ],
+                [
+                    'name' => $name,
+                ]
+            );
+        } else {
             $this->connection->insert($this->table, [
                 'name' => $name,
                 'value' => $value,

@@ -13,6 +13,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - fix variation sync with wrong product association like images (@lacodimizer)
 - retrieve variation properties
 - order validation warning 
+- duplicated config entries 
 
 ### Changed
 - sepa payment informations are now transfered even without a account holder (@jkrzefski)
