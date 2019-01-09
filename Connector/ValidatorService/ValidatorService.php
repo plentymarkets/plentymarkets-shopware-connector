@@ -4,7 +4,6 @@ namespace SystemConnector\ValidatorService;
 
 use Assert\InvalidArgumentException;
 use DateTimeZone;
-use SystemConnector\TransferObject\Product\Badge\Badge;
 use SystemConnector\Validator\ValidatorInterface;
 use SystemConnector\ValidatorService\Exception\InvalidDataException;
 use Traversable;
@@ -51,7 +50,7 @@ class ValidatorService implements ValidatorServiceInterface
             });
 
             foreach ($methods as $method) {
-                if ($object instanceof DateTimeZone || $object instanceof Badge) {
+                if ($object instanceof DateTimeZone) {
                     continue;
                 }
 
