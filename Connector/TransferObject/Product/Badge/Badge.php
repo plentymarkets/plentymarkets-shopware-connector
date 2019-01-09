@@ -46,7 +46,7 @@ class Badge extends AbstractValueObject
     public function getClassProperties()
     {
         return [
-            'type' => $this->getType()
+            'type' => $this->getType(),
         ];
     }
 }
