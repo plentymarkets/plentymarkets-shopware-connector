@@ -137,9 +137,8 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
 
     /**
      * @param Category $category
-     * @param Identity $shopIdentity
      */
-    private function prepareCategory(Category $category, Identity $shopIdentity)
+    private function prepareCategory(Category $category)
     {
         $attributes = $category->getAttributes();
 
@@ -171,7 +170,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             return null;
         }
 
-        $this->prepareCategory($category, $shopIdentity);
+        $this->prepareCategory($category);
 
         $mainCategory = $shop->getCategory();
 
