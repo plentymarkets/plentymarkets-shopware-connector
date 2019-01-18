@@ -127,7 +127,7 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
 
             $bundleModel->setDisplayGlobal(true);
             $bundleModel->setSells(0);
-            $bundleModel->setCreated('now');
+            $bundleModel->setCreated();
             $bundleModel->setType(1);
             $bundleModel->setDiscountType('abs');
             $bundleModel->setQuantity(0);
@@ -235,7 +235,8 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param Bundle $bundle
+     * @param Bundle      $bundle
+     * @param BundleModel $bundleModel
      *
      * @return ArrayCollection
      */
@@ -304,7 +305,9 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
     /**
      * @param Bundle $bundle
      *
-     * @return null|DetailModel
+     * @throws NotFoundException
+     *
+     * @return null|object
      */
     private function getMainVariant(Bundle $bundle)
     {
@@ -320,6 +323,8 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
 
             return $detail;
         }
+
+        return null;
     }
 
     /**

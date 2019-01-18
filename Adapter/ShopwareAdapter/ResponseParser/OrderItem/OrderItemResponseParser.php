@@ -61,11 +61,10 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
 
     /**
      * @param array $entry
-     * @param bool  $taxFree
      *
      * @return null|string
      */
-    private function getVatRateIdentifier(array $entry, $taxFree)
+    private function getVatRateIdentifier(array $entry)
     {
         /**
          * @var null|Tax $taxModel

@@ -127,14 +127,13 @@ class VariationHelper implements VariationHelperInterface
     }
 
     /**
-     * @param Variation[] $variations
-     * @param array       $mainVariation
+     * @param array $mainVariation
+     * @param array $variations
      *
      * @return string
      */
-    public function getMainVariationNumber(array $variations = [], array $mainVariation)
+    public function getMainVariationNumber(array $mainVariation, array $variations = [])
     {
-        $mainVariationNumber = false;
         $found = false;
 
         $mainVariationNumber = (string) $mainVariation['id'];

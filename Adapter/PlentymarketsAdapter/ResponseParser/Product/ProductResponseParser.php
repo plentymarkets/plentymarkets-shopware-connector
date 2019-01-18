@@ -139,7 +139,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         $productObject->setIdentifier($identity->getObjectIdentifier());
         $productObject->setName((string) $product['texts'][0]['name1']);
         $productObject->setActive($this->getActive($variations, $mainVariation));
-        $productObject->setNumber($this->variationHelper->getMainVariationNumber($variations, $mainVariation));
+        $productObject->setNumber($this->variationHelper->getMainVariationNumber($mainVariation, $variations));
         $productObject->setBadges($this->getBadges($product));
         $productObject->setShopIdentifiers($this->variationHelper->getShopIdentifiers($mainVariation));
         $productObject->setManufacturerIdentifier($this->getManufacturerIdentifier($product));

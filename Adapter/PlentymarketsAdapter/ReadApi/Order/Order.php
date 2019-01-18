@@ -10,7 +10,7 @@ class Order extends ApiAbstract
     /**
      * @var array
      */
-    private $includes = [
+    private static $includes = [
         'addresses',
         'relations',
         'addresses',
