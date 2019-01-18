@@ -27,7 +27,9 @@ interface IdentityServiceStorageInterface
 
     /**
      * @param Identity $identity
-     * @param array    $params
+     * @param array    $data
+     *
+     * @return mixed
      */
     public function update(Identity $identity, array $data = []);
 

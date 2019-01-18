@@ -9,7 +9,7 @@ class Variation extends ApiAbstract
     /**
      * @var array
      */
-    private $includes = [
+    private static $includes = [
         'variationClients',
         'variationSalesPrices',
         'variationCategories',
