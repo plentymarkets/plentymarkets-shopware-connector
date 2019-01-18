@@ -670,13 +670,13 @@ class ProductResponseParser implements ProductResponseParserInterface
      */
     private function getVariantConfiguration(array $variations = [])
     {
-        $properties = [];
+        $properties = [[]];
 
         foreach ($variations as $variation) {
-            $properties = array_merge($properties, $variation->getProperties());
+            $properties[] = $variation->getProperties();
         }
 
-        return $properties;
+        return array_merge(...$properties);
     }
 
     /**
