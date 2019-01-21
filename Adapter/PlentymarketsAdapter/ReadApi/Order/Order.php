@@ -25,7 +25,7 @@ class Order extends ApiAbstract
     public function find($id)
     {
         $criteria = [
-            'with' => $this->includes,
+            'with' => self::$includes,
         ];
 
         return $this->client->request('GET', 'orders/' . $id, $criteria);
@@ -39,7 +39,7 @@ class Order extends ApiAbstract
     public function findAll(array $criteria = [])
     {
         $criteria = array_merge($criteria, [
-            'with' => $this->includes,
+            'with' => self::$includes,
         ]);
 
         return $this->client->getIterator('orders', $criteria);
@@ -53,7 +53,7 @@ class Order extends ApiAbstract
     public function findBy(array $criteria = [])
     {
         $criteria = array_merge($criteria, [
-            'with' => $this->includes,
+            'with' => self::$includes,
         ]);
 
         return $this->client->getIterator('orders', $criteria);
