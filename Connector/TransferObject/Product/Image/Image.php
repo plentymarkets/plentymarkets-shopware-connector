@@ -2,9 +2,11 @@
 
 namespace SystemConnector\TransferObject\Product\Image;
 
+use SystemConnector\TransferObject\TranslateableInterface;
 use SystemConnector\ValueObject\AbstractValueObject;
+use SystemConnector\ValueObject\Translation\Translation;
 
-class Image extends AbstractValueObject
+class Image extends AbstractValueObject implements TranslateableInterface
 {
     /**
      * @var string
@@ -20,6 +22,11 @@ class Image extends AbstractValueObject
      * @var int
      */
     private $position = 0;
+
+    /**
+     * @var Translation[]
+     */
+    private $translations = [];
 
     /**
      * @return mixed
@@ -67,6 +74,22 @@ class Image extends AbstractValueObject
     public function setPosition($position)
     {
         $this->position = $position;
+    }
+
+    /**
+     * @return Translation[]
+     */
+    public function getTranslations()
+    {
+        return $this->translations;
+    }
+
+    /**
+     * @param Translation[] $translations
+     */
+    public function setTranslations(array $translations)
+    {
+        $this->translations = $translations;
     }
 
     /**

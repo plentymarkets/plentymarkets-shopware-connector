@@ -10,11 +10,14 @@ use SystemConnector\IdentityService\IdentityServiceInterface;
 use SystemConnector\IdentityService\Struct\Identity;
 use SystemConnector\TransferObject\Category\Category;
 use SystemConnector\TransferObject\Language\Language;
+use SystemConnector\TransferObject\Product\Image\Image;
 use SystemConnector\TransferObject\Product\Product;
 use SystemConnector\TransferObject\Product\Property\Property;
 use SystemConnector\TransferObject\Product\Property\Value\Value;
 use SystemConnector\Translation\TranslationHelperInterface;
 use SystemConnector\ValueObject\Attribute\Attribute;
+use SystemConnector\TransferObject\Media\Media;
+
 
 class TranslationDataPersister implements TranslationDataPersisterInterface
 {
@@ -132,6 +135,10 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
             foreach ($variantConfiguration->getValues() as $value) {
                 $this->writeValueTranslations($value, 'configuratoroption');
             }
+        }
+
+        foreach ($product->getImages() as $articleImage) {
+            $this->writeMediaTranslations($articleImage, $productIdentity->getAdapterIdentifier());
         }
     }
 
@@ -312,6 +319,53 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
 
             $this->writeTranslations(
                 $type,
+                $valueModel->getId(),
+                $translation,
+                $languageIdentity
+            );
+        }
+    }
+
+    /**
+     * @param Image $imageTransferObject
+     * @param $articleId
+     */
+    private function writeMediaTranslations($imageTransferObject, $articleId)
+    {
+        $mediaIdentity = $this->identityService->findOneBy([
+            'objectIdentifier' => $imageTransferObject->getMediaIdentifier(),
+            'objectType' => Media::TYPE,
+            'adapterName' => ShopwareAdapter::NAME,
+        ]);
+
+        $articleImage = $this->dataProvider->getArticleImage($mediaIdentity, $articleId);
+
+        foreach ($this->translationHelper->getLanguageIdentifiers($imageTransferObject) as $languageIdentifier) {
+            /**
+             * @var Value $translatedPropertyValue
+             */
+            $translatedMedia = $this->translationHelper->translate($languageIdentifier, $articleImage);
+
+            $languageIdentity = $this->identityService->findOneBy([
+                'objectIdentifier' => $languageIdentifier,
+                'objectType' => Language::TYPE,
+                'adapterName' => ShopwareAdapter::NAME,
+            ]);
+
+            if (null === $languageIdentity) {
+                $this->logger->notice('language not mapped - ' . $languageIdentifier);
+
+                continue;
+            }
+
+            $translation = ['name' => $translatedMedia->getTranslations()];
+
+            if (empty($translation)) {
+                continue;
+            }
+
+            $this->writeTranslations(
+                'articleimage',
                 $valueModel->getId(),
                 $translation,
                 $languageIdentity
