@@ -24,6 +24,11 @@ class Image extends AbstractValueObject implements TranslateableInterface
     private $position = 0;
 
     /**
+     * @var string
+     */
+    private $name;
+
+    /**
      * @var Translation[]
      */
     private $translations = [];
@@ -74,6 +79,22 @@ class Image extends AbstractValueObject implements TranslateableInterface
     public function setPosition($position)
     {
         $this->position = $position;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
     }
 
     /**

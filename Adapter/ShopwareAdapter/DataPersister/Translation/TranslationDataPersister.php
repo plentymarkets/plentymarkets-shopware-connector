@@ -14,6 +14,7 @@ use SystemConnector\TransferObject\Product\Image\Image;
 use SystemConnector\TransferObject\Product\Product;
 use SystemConnector\TransferObject\Product\Property\Property;
 use SystemConnector\TransferObject\Product\Property\Value\Value;
+use SystemConnector\TransferObject\TranslateableInterface;
 use SystemConnector\Translation\TranslationHelperInterface;
 use SystemConnector\ValueObject\Attribute\Attribute;
 use SystemConnector\TransferObject\Media\Media;
@@ -338,13 +339,23 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
             'adapterName' => ShopwareAdapter::NAME,
         ]);
 
+        if (null === $mediaIdentity) {
+            $this->logger->notice('image not mapped - ' . $imageTransferObject->getMediaIdentifier());
+            return;
+        }
+
         $articleImage = $this->dataProvider->getArticleImage($mediaIdentity, $articleId);
+
+        if (null === $articleImage) {
+            $this->logger->notice('image not found - ' . $mediaIdentity->getObjectIdentifier());
+            return;
+        }
 
         foreach ($this->translationHelper->getLanguageIdentifiers($imageTransferObject) as $languageIdentifier) {
             /**
-             * @var Value $translatedPropertyValue
+             * @var TranslateableInterface $translatedMedia
              */
-            $translatedMedia = $this->translationHelper->translate($languageIdentifier, $articleImage);
+            $translatedMedia = $this->translationHelper->translate($languageIdentifier, $imageTransferObject);
 
             $languageIdentity = $this->identityService->findOneBy([
                 'objectIdentifier' => $languageIdentifier,
@@ -358,7 +369,7 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
                 continue;
             }
 
-            $translation = ['name' => $translatedMedia->getTranslations()];
+            $translation = ['description' => $translatedMedia->getName()];
 
             if (empty($translation)) {
                 continue;
@@ -366,7 +377,7 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
 
             $this->writeTranslations(
                 'articleimage',
-                $valueModel->getId(),
+                $articleImage->getId(),
                 $translation,
                 $languageIdentity
             );
