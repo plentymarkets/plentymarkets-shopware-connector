@@ -353,7 +353,7 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
 
         foreach ($this->translationHelper->getLanguageIdentifiers($imageTransferObject) as $languageIdentifier) {
             /**
-             * @var TranslateableInterface $translatedMedia
+             * @var Image $translatedMedia
              */
             $translatedMedia = $this->translationHelper->translate($languageIdentifier, $imageTransferObject);
 
