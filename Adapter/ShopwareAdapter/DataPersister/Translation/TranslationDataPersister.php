@@ -14,7 +14,6 @@ use SystemConnector\TransferObject\Product\Image\Image;
 use SystemConnector\TransferObject\Product\Product;
 use SystemConnector\TransferObject\Product\Property\Property;
 use SystemConnector\TransferObject\Product\Property\Value\Value;
-use SystemConnector\TransferObject\TranslateableInterface;
 use SystemConnector\Translation\TranslationHelperInterface;
 use SystemConnector\ValueObject\Attribute\Attribute;
 use SystemConnector\TransferObject\Media\Media;
@@ -385,6 +384,22 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
     }
 
     /**
+     * @param Image $image
+     */
+    public function deleteMediaTranslation(\Shopware\Models\Article\Image $image)
+    {
+
+
+
+            $this->deleteTranslations(
+                'articleimage',
+                $image->ge->getId(),
+                $languageIdentity
+            );
+        }
+    }
+
+    /**
      * @param string   $type
      * @param int      $primaryKey
      * @param array    $translation
@@ -400,6 +415,24 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
                 $type,
                 $primaryKey,
                 $translation
+            );
+        }
+    }
+
+    /**
+     * @param string   $type
+     * @param int      $primaryKey
+     * @param Identity $languageIdentity
+     */
+    private function deleteTranslations($type, $primaryKey, Identity $languageIdentity)
+    {
+        $shops = $this->dataProvider->getShopsByLocaleIdentitiy($languageIdentity);
+
+        foreach ($shops as $shop) {
+            $this->shopwareTranslationManager->delete(
+                $shop->getId(),
+                $type,
+                $primaryKey
             );
         }
     }

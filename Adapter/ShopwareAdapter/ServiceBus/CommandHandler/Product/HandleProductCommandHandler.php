@@ -172,6 +172,9 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                     ]);
                 }
 
+                foreach ( $mainVariation->getImages()->getValues() as $imageValues) {
+                }
+
                 $this->correctMainDetailAssignment($mainVariation);
                 $productModel = $articleResource->update($productModel->getId(), $params);
             } catch (NotFoundException $exception) {
