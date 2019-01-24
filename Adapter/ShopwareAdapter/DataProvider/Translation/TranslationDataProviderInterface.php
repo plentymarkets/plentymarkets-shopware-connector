@@ -52,6 +52,7 @@ interface TranslationDataProviderInterface
     /**
      * @param Identity $mediaIdentity
      * @param $articleId
+     *
      * @return Image
      */
     public function getArticleImage(Identity $mediaIdentity, $articleId);

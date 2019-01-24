@@ -98,6 +98,7 @@ class ImageResponseParser implements ImageResponseParserInterface
             $image->setPosition((int) $entry['position']);
             $image->setName($name);
             $image->setTranslations($media->getTranslations());
+
             return $image;
         } catch (Exception $exception) {
             $this->logger->notice('error when parsing product image', [

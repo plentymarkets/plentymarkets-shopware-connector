@@ -9,6 +9,7 @@ use Shopware\Components\Api\Resource\Article;
 use Shopware\Components\Api\Resource\Variant;
 use Shopware\Models\Article\Article as ArticleModel;
 use Shopware\Models\Article\Detail;
+use Shopware\Models\Article\Image;
 use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
 use ShopwareAdapter\DataPersister\Translation\TranslationDataPersisterInterface;
 use ShopwareAdapter\DataProvider\Shop\ShopDataProviderInterface;
@@ -172,7 +173,10 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                     ]);
                 }
 
-                foreach ( $mainVariation->getImages()->getValues() as $imageValues) {
+                foreach ($productModel->getImages() as $image) {
+                    if (null !== $image) {
+                        $this->removeMediaTranslation($image);
+                    }
                 }
 
                 $this->correctMainDetailAssignment($mainVariation);
@@ -241,5 +245,16 @@ class HandleProductCommandHandler implements CommandHandlerInterface
     private function getVariationResource()
     {
         return Manager::getResource('Variant');
+    }
+
+    /**
+     * @param Image $image
+     */
+    private function removeMediaTranslation(Image $image)
+    {
+        $this->entityManager->getConnection()->delete(
+            's_core_translations',
+            ['objectkey' => $image->getId()]
+        );
     }
 }
