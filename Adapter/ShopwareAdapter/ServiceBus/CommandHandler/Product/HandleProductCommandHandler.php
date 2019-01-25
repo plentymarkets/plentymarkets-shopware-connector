@@ -148,6 +148,13 @@ class HandleProductCommandHandler implements CommandHandlerInterface
             } else {
                 $this->correctMainDetailAssignment($mainVariation);
 
+
+                foreach ($mainVariation->getImages() as $image) {
+                    if (null !== $image) {
+                        $this->translationDataPersister->removeMediaTranslation($image);
+                    }
+                }
+
                 $productModel = $articleResource->update($mainVariation->getArticleId(), $params);
             }
 
@@ -175,7 +182,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
 
                 foreach ($productModel->getImages() as $image) {
                     if (null !== $image) {
-                        $this->removeMediaTranslation($image);
+                        $this->translationDataPersister->removeMediaTranslation($image);
                     }
                 }
 
@@ -245,16 +252,5 @@ class HandleProductCommandHandler implements CommandHandlerInterface
     private function getVariationResource()
     {
         return Manager::getResource('Variant');
-    }
-
-    /**
-     * @param Image $image
-     */
-    private function removeMediaTranslation(Image $image)
-    {
-        $this->entityManager->getConnection()->delete(
-            's_core_translations',
-            ['objectkey' => $image->getId()]
-        );
     }
 }

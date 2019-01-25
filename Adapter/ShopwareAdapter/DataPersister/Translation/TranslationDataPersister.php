@@ -2,7 +2,9 @@
 
 namespace ShopwareAdapter\DataPersister\Translation;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use Shopware\Models\Article\Image as ArticleImage;
 use Shopware_Components_Translation;
 use ShopwareAdapter\DataProvider\Translation\TranslationDataProviderInterface;
 use ShopwareAdapter\ShopwareAdapter;
@@ -45,18 +47,25 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
      */
     private $shopwareTranslationManager;
 
+    /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+
     public function __construct(
         IdentityServiceInterface $identityService,
         LoggerInterface $logger,
         TranslationDataProviderInterface $dataProvider,
         TranslationHelperInterface $translationHelper,
-        Shopware_Components_Translation $shopwareTranslationManager
+        Shopware_Components_Translation $shopwareTranslationManager,
+        EntityManagerInterface $entityManager
     ) {
         $this->identityService = $identityService;
         $this->logger = $logger;
         $this->dataProvider = $dataProvider;
         $this->translationHelper = $translationHelper;
         $this->shopwareTranslationManager = $shopwareTranslationManager;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -382,6 +391,19 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
                 $languageIdentity
             );
         }
+    }
+
+    /**
+     * @param Image $image
+     */
+    public function removeMediaTranslation(ArticleImage $image)
+    {
+        $this->entityManager->getConnection()->delete(
+            's_core_translations',
+            ['objectkey' => $image->getId()],
+            ['objecttype' => 'articleimage']
+
+        );
     }
 
     /**
