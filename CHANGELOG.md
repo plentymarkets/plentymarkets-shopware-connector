@@ -6,6 +6,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - fix category sync if more then one shop has the same root category (@lacodimizer)
 
+### Added
+- article image translation (@Pfabeck)
+
 ## [## [5.1.0]]
 ### Fixed
 - transfer payment information without a real transactionid if needed

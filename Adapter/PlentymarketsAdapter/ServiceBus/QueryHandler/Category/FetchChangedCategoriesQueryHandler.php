@@ -70,7 +70,7 @@ class FetchChangedCategoriesQueryHandler implements QueryHandlerInterface
         $lastCangedTime = $this->getChangedDateTime();
         $currentDateTime = $this->getCurrentDateTime();
 
-        $elements = $this->categoryApi->findChanged($lastCangedTime, $currentDateTime);
+        $elements = $this->categoryApi->findChanged($lastCangedTime);
 
         $this->outputHandler->startProgressBar(count($elements));
 
