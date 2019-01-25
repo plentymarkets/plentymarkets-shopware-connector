@@ -213,6 +213,18 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
     }
 
     /**
+     * @param Image $image
+     */
+    public function removeMediaTranslation(ArticleImage $image)
+    {
+        $this->entityManager->getConnection()->delete(
+            's_core_translations',
+            ['objectkey' => $image->getId()],
+            ['objecttype' => 'articleimage']
+        );
+    }
+
+    /**
      * @param Property $property
      * @param string   $type
      */
@@ -391,19 +403,6 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
                 $languageIdentity
             );
         }
-    }
-
-    /**
-     * @param Image $image
-     */
-    public function removeMediaTranslation(ArticleImage $image)
-    {
-        $this->entityManager->getConnection()->delete(
-            's_core_translations',
-            ['objectkey' => $image->getId()],
-            ['objecttype' => 'articleimage']
-
-        );
     }
 
     /**

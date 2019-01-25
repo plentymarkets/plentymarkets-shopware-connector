@@ -9,7 +9,6 @@ use Shopware\Components\Api\Resource\Article;
 use Shopware\Components\Api\Resource\Variant;
 use Shopware\Models\Article\Article as ArticleModel;
 use Shopware\Models\Article\Detail;
-use Shopware\Models\Article\Image;
 use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
 use ShopwareAdapter\DataPersister\Translation\TranslationDataPersisterInterface;
 use ShopwareAdapter\DataProvider\Shop\ShopDataProviderInterface;
@@ -147,7 +146,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                 $productModel = $articleResource->create($params);
             } else {
                 $this->correctMainDetailAssignment($mainVariation);
-
 
                 foreach ($mainVariation->getImages() as $image) {
                     if (null !== $image) {
