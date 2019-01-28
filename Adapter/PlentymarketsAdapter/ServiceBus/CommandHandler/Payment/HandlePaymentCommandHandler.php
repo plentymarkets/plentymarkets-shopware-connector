@@ -115,9 +115,9 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
     private function findOrCreatePlentyPayment(Payment $payment)
     {
         $plentyPayments = $this->fetchPlentyPayments($payment);
-        $paymentResult = $plentyPayments[0];
 
         if ($plentyPayments) {
+            $paymentResult = $plentyPayments[0];
             $this->logger->debug('payment with the same transaction id "' . $paymentResult['id'] . '" already exists.');
         } else {
             $paymentResult = $this->createPlentyPayment($payment);
