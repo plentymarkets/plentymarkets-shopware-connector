@@ -13,6 +13,11 @@ class AmazonPayPaymentData extends AbstractValueObject implements PaymentDataInt
     private $transactionId;
 
     /**
+     * @var string
+     */
+    private $key;
+
+    /**
      * @return string
      */
     public function getTransactionId()
@@ -29,12 +34,29 @@ class AmazonPayPaymentData extends AbstractValueObject implements PaymentDataInt
     }
 
     /**
+     * @return string
+     */
+    public function getKey()
+    {
+        return $this->key;
+    }
+
+    /**
+     * @param string $key
+     */
+    public function setKey($key)
+    {
+        $this->key = $key;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getClassProperties()
     {
         return [
-            'currency' => $this->getTransactionId(),
+            'transactionId' => $this->getTransactionId(),
+            'key' => $this->getKey(),
         ];
     }
 }

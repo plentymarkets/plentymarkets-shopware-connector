@@ -5,8 +5,8 @@ namespace PlentyConnector\Components\AmazonPay\Shopware;
 use Doctrine\DBAL\Connection;
 use Exception;
 use PlentyConnector\Components\AmazonPay\PaymentData\AmazonPayPaymentData;
-use PlentyConnector\Components\PayPal\PaymentData\PayPalInstallmentPaymentData;
 use ShopwareAdapter\ResponseParser\Payment\PaymentResponseParserInterface;
+use SystemConnector\ConfigService\ConfigServiceInterface;
 use SystemConnector\TransferObject\Payment\Payment;
 
 class AmazonPayPaymentResponseParser implements PaymentResponseParserInterface
@@ -21,12 +21,20 @@ class AmazonPayPaymentResponseParser implements PaymentResponseParserInterface
      */
     private $connection;
 
+    /**
+     * @var ConfigServiceInterface
+     */
+    private $configService;
+
     public function __construct(
         PaymentResponseParserInterface $parentResponseParser,
-        Connection $connection
+        Connection $connection,
+        ConfigServiceInterface $configService
+
     ) {
         $this->parentResponseParser = $parentResponseParser;
         $this->connection = $connection;
+        $this->configService = $configService;
     }
 
     /**
@@ -76,6 +84,7 @@ class AmazonPayPaymentResponseParser implements PaymentResponseParserInterface
 
         $paymentData = new AmazonPayPaymentData();
         $paymentData->setTransactionId($data['bestit_amazon_authorization_id']);
+        $paymentData->setKey($this->configService->get('rest_password'));
 
         $payment->setPaymentData($paymentData);
     }

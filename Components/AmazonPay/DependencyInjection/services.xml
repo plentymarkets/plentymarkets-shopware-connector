@@ -9,16 +9,17 @@
         <service id="plenty_connector.components.amazon_pay.payment_response_parser" class="PlentyConnector\Components\AmazonPay\Shopware\AmazonPayPaymentResponseParser" decorates="shopware_adapter.response_parser.payment" public="false">
             <argument type="service" id="plenty_connector.components.amazon_pay.payment_response_parser.inner" />
             <argument type="service" id="dbal_connection" />
+            <argument type="service" id="plenty_connector.config_service" />
         </service>
 
         <service id="plenty_connector.components.amazon_pay.invoice_validator" class="PlentyConnector\Components\AmazonPay\Validator\AmazonPayPaymentDataValidator" public="false">
             <tag name="plenty_connector.validator" />
         </service>
 
-        <service id="plenty_connector.components.amazon_pay.request_generator" class="PlentyConnector\Components\AmazonPay\Plentymarkets\AmazonPayRequestGenerator" decorates="plentymarkets_adapter.request_generator.payment" public="false">
-            <argument type="service" id="plenty_connector.components.amazon_pay.request_generator.inner" />
+        <service id="plenty_connector.components.amazon_pay.payment_command_handler" class="PlentyConnector\Components\AmazonPay\Plentymarkets\HandleAmazonPayPaymentCommandHandler" decorates="plentymarkets_adapter.command_handler.handle_payment" public="false">
+            <argument type="service" id="plenty_connector.components.amazon_pay.payment_command_handler.inner" />
+            <argument type="service" id="plentymarkets_adapter.client" />
             <argument type="service" id="plenty_connector.identity_service" />
         </service>
-
     </services>
 </container>
