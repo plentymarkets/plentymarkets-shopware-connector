@@ -121,7 +121,7 @@
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.variation%</argument>
-            <argument>20</argument>
+            <argument>30</argument>
 
             <tag name="plenty_connector.connector_definition" />
             <tag name="plenty_connector.cleanup_definition" />
