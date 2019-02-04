@@ -198,6 +198,9 @@ class VariationResponseParser implements VariationResponseParserInterface
 
         $mainVariationNumber = $this->variationHelper->getMainVariationNumber($mainVariation, $variations);
 
+        /**
+         * @var Variation $variation
+         */
         foreach ($variations as &$variation) {
             if ($variation->getNumber() === $mainVariationNumber) {
                 $variation->setIsMain(true);
