@@ -83,7 +83,7 @@ class AmazonPayPaymentResponseParser implements PaymentResponseParserInterface
         }
 
         $paymentData = new AmazonPayPaymentData();
-        $paymentData->setTransactionId($data['bestit_amazon_authorization_id']);
+        $paymentData->setTransactionId($element['transactionId']);
         $paymentData->setKey($this->configService->get('rest_password'));
 
         $payment->setPaymentData($paymentData);
