@@ -86,10 +86,10 @@ class HandleAmazonPayPaymentCommandHandler implements CommandHandlerInterface
         $amazonPayDataParams = [
             'key' => $data->getKey(),
             'order_reference_id' => $data->getTransactionId(),
-            'order_id' => $orderIdentity->getAdapterIdentifier()
+            'order_id' => $orderIdentity->getAdapterIdentifier(),
         ];
 
-        $this->client->request('POST', 'amazon-shopware-connect', $amazonPayDataParams,null,null, ['foreign' => true]);
+        $this->client->request('POST', 'amazon-shopware-connect', $amazonPayDataParams, null, null, ['foreign' => true]);
 
         return true;
     }

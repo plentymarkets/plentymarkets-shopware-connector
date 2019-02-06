@@ -30,7 +30,6 @@ class AmazonPayPaymentResponseParser implements PaymentResponseParserInterface
         PaymentResponseParserInterface $parentResponseParser,
         Connection $connection,
         ConfigServiceInterface $configService
-
     ) {
         $this->parentResponseParser = $parentResponseParser;
         $this->connection = $connection;
@@ -49,8 +48,8 @@ class AmazonPayPaymentResponseParser implements PaymentResponseParserInterface
                 continue;
             }
             $this->addAmazonPay($payment, $element);
-
         }
+
         return $payments;
     }
 
