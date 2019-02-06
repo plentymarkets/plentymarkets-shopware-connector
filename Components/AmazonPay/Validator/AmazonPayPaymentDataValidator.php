@@ -3,7 +3,7 @@
 namespace PlentyConnector\Components\AmazonPay\Validator;
 
 use Assert\Assertion;
-use PlentyConnector\Components\PayPal\PaymentData\PayPalInstallmentPaymentData;
+use PlentyConnector\Components\AmazonPay\PaymentData\AmazonPayPaymentData;
 use SystemConnector\Validator\ValidatorInterface;
 
 class AmazonPayPaymentDataValidator implements ValidatorInterface
@@ -13,19 +13,15 @@ class AmazonPayPaymentDataValidator implements ValidatorInterface
      */
     public function supports($object)
     {
-        return $object instanceof PayPalInstallmentPaymentData;
+        return $object instanceof AmazonPayPaymentData;
     }
 
     /**
-     * @param PayPalInstallmentPaymentData $object
+     * @param AmazonPayPaymentData $object
      */
     public function validate($object)
     {
-        Assertion::string($object->getCurrency(), null, 'components.paypal.installment.currency');
-        Assertion::notBlank($object->getCurrency(), null, 'components.paypal.installment.currency');
-
-        Assertion::float($object->getFinancingCosts(), null, 'components.paypal.installment.financingCosts');
-
-        Assertion::float($object->getTotalCostsIncludeFinancing(), null, 'components.paypal.installment.totalCostsIncludeFinancing');
+        Assertion::string($object->getTransactionId(), null, 'components.amazon_pay.transaction');
+        Assertion::string($object->getKey(), null, 'components.amazon_pay.key');
     }
 }
