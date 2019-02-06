@@ -94,8 +94,6 @@ class PlentyConnector extends Plugin
         if ($this->pluginExists($container, ['BestitAmazonPay'])) {
             $this->loadFile($container, __DIR__ . '/Components/AmazonPay/DependencyInjection/services.xml');
         }
-        $this->loadFile($container, __DIR__ . '/Components/AmazonPay/DependencyInjection/services.xml');
-
 
         if ($this->pluginExists($container, ['SwagPaymentKlarnaKpm'])) {
             $this->loadFile($container, __DIR__ . '/Components/Klarna/DependencyInjection/services.xml');
