@@ -91,6 +91,12 @@ class DumpCommand extends Command
                 $input->getArgument('identifier')
             ));
 
+            if (!$result) {
+                $this->outputHandler->writeLine('could not find TransferObject');
+
+                continue;
+            }
+
             foreach ($result as $item) {
                 $this->outputHandler->writeLine();
                 $this->outputHandler->writeLine(sprintf('TransferObject %s:', $i++));

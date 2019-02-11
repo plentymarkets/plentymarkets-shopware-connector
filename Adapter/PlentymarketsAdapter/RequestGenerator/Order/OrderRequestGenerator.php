@@ -101,7 +101,7 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
 
         $params['addressRelations'] = [];
 
-        $billingAddress = $this->createAddress($order->getBillingAddress(), $order, $plentyCustomer, 1);
+        $billingAddress = $this->createAddress($order->getBillingAddress(), $order, $plentyCustomer);
         if (!empty($billingAddress)) {
             $params['addressRelations'][] = [
                 'typeId' => 1,

@@ -4,6 +4,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [## [unreleased]]
 ### Fixed
+- fix category sync if more then one shop has the same root category (@lacodimizer)
+
+### Added
+- article image translation (@Pfabeck)
+
+## [## [5.1.0]]
+### Fixed
 - transfer payment information without a real transactionid if needed
 - fix last stock for variations (sw >= 5.4.x)
 - fix product category relations, if the shop category is not directly behind the shopware root category (@lacodimizer)
@@ -12,6 +19,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - fix product active state on variation sync(@lacodimizer)
 - fix variation sync with wrong product association like images (@lacodimizer)
 - retrieve variation properties
+- order validation warning 
+- duplicated config entries 
 
 ### Changed
 - sepa payment informations are now transfered even without a account holder (@jkrzefski)

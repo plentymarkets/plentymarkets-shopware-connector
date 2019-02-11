@@ -70,13 +70,12 @@ class MappingService implements MappingServiceInterface
         $result = [];
 
         foreach ($definitions as $definition) {
-            $mapping = Mapping::fromArray([
-                'originAdapterName' => $definition->getOriginAdapterName(),
-                'originTransferObjects' => $this->query($definition, $definition->getOriginAdapterName()),
-                'destinationAdapterName' => $definition->getDestinationAdapterName(),
-                'destinationTransferObjects' => $this->query($definition, $definition->getDestinationAdapterName()),
-                'objectType' => $definition->getObjectType(),
-            ]);
+            $mapping = new Mapping();
+            $mapping->setOriginAdapterName($definition->getOriginAdapterName());
+            $mapping->setOriginTransferObjects($this->query($definition, $definition->getOriginAdapterName()));
+            $mapping->setDestinationAdapterName($definition->getDestinationAdapterName());
+            $mapping->setDestinationTransferObjects($this->query($definition, $definition->getDestinationAdapterName()));
+            $mapping->setObjectType($definition->getObjectType());
 
             $this->validator->validate($mapping);
 

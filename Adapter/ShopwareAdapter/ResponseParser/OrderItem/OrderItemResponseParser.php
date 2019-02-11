@@ -54,18 +54,17 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
             'name' => $entry['articleName'],
             'number' => $entry['articleNumber'],
             'price' => $this->getPrice($entry, $taxFree),
-            'vatRateIdentifier' => $this->getVatRateIdentifier($entry, $taxFree),
+            'vatRateIdentifier' => $this->getVatRateIdentifier($entry),
             'attributes' => $this->getAttributes($entry['attribute']),
         ]);
     }
 
     /**
      * @param array $entry
-     * @param bool  $taxFree
      *
      * @return null|string
      */
-    private function getVatRateIdentifier(array $entry, $taxFree)
+    private function getVatRateIdentifier(array $entry)
     {
         /**
          * @var null|Tax $taxModel

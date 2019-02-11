@@ -196,7 +196,7 @@ class VariationResponseParser implements VariationResponseParserInterface
             return $object instanceof Variation;
         });
 
-        $mainVariationNumber = $this->variationHelper->getMainVariationNumber($variations, $mainVariation);
+        $mainVariationNumber = $this->variationHelper->getMainVariationNumber($mainVariation, $variations);
 
         foreach ($variations as &$variation) {
             if ($variation->getNumber() === $mainVariationNumber) {
