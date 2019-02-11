@@ -169,8 +169,6 @@ class VariationHelper implements VariationHelperInterface
             }
         }
 
-        $variation = reset($variations);
-
-        return $variation->getNumber();
+        return $mainVariationNumber;
     }
 }
