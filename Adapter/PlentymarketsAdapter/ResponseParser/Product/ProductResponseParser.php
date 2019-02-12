@@ -160,6 +160,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         $productObject->setTranslations($this->getProductTranslations($product['texts']));
         $productObject->setAvailableFrom($this->getAvailableFrom($mainVariation));
         $productObject->setAvailableTo($this->getAvailableTo($mainVariation));
+        $productObject->setCreatedAt($this->getCreatedAt($mainVariation));
         $productObject->setAttributes($this->getAttributes($product));
         $productObject->setVariantConfiguration($this->getVariantConfiguration($variations));
 
@@ -635,6 +636,20 @@ class ProductResponseParser implements ProductResponseParserInterface
     {
         if (!empty($mainVariation['availableUntil'])) {
             return new DateTimeImmutable($mainVariation['availableUntil']);
+        }
+
+        return null;
+    }
+
+    /**
+     * @param array $mainVariation
+     *
+     * @return null|DateTimeImmutable
+     */
+    private function getCreatedAt(array $mainVariation)
+    {
+        if (!empty($mainVariation['createdAt'])) {
+            return new DateTimeImmutable($mainVariation['createdAt']);
         }
 
         return null;

@@ -140,6 +140,11 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     private $availableTo;
 
     /**
+     * @var null|DateTimeImmutable
+     */
+    private $createdAt;
+
+    /**
      * @var Attribute[]
      */
     private $attributes = [];
@@ -544,6 +549,22 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     public function setAvailableTo(DateTimeImmutable $availableTo = null)
     {
         $this->availableTo = $availableTo;
+    }
+
+    /**
+     * @return null|DateTimeImmutable
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param null|DateTimeImmutable $createdAt
+     */
+    public function setCreatedAt(DateTimeImmutable $createdAt = null)
+    {
+        $this->createdAt = $createdAt;
     }
 
     /**
