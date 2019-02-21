@@ -6,6 +6,8 @@ use PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\ResponsePa
 use ShopwareAdapter\DataProvider\Currency\CurrencyDataProviderInterface;
 use ShopwareAdapter\ResponseParser\Payment\PaymentResponseParser;
 use SystemConnector\Validator\Order\Payment\PaymentValidator;
+use Psr\Log\LoggerInterface;
+
 
 class PaymentResponseParserTest extends ResponseParserTest
 {
@@ -19,6 +21,11 @@ class PaymentResponseParserTest extends ResponseParserTest
      */
     private $validator;
 
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
     protected function setUp()
     {
         parent::setUp();
@@ -27,7 +34,8 @@ class PaymentResponseParserTest extends ResponseParserTest
 
         $this->responseParser = new PaymentResponseParser(
             $this->identityService,
-            $currencyDataProvider
+            $currencyDataProvider,
+            $this->logger
         );
 
         $this->validator = new PaymentValidator();
