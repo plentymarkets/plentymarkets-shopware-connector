@@ -134,6 +134,7 @@
         <service id="shopware_adapter.response_parser.payment" class="ShopwareAdapter\ResponseParser\Payment\PaymentResponseParser" public="false">
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="shopware_adapter.data_provider.currency" />
+            <argument type="service" id="plenty_connector.logger" />
         </service>
 
         <service id="shopware_adapter.response_parser.payment_method" class="ShopwareAdapter\ResponseParser\PaymentMethod\PaymentMethodResponseParser" public="false">

@@ -6,6 +6,7 @@ use Assert\Assertion;
 use Shopware\Models\Order\Status;
 use ShopwareAdapter\DataProvider\Currency\CurrencyDataProviderInterface;
 use ShopwareAdapter\ShopwareAdapter;
+use Psr\Log\LoggerInterface;
 use SystemConnector\IdentityService\IdentityServiceInterface;
 use SystemConnector\TransferObject\Currency\Currency;
 use SystemConnector\TransferObject\Order\Order;
@@ -25,12 +26,20 @@ class PaymentResponseParser implements PaymentResponseParserInterface
      */
     private $currencyDataProvider;
 
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
     public function __construct(
         IdentityServiceInterface $identityService,
-        CurrencyDataProviderInterface $currencyDataProvider
+        CurrencyDataProviderInterface $currencyDataProvider,
+        LoggerInterface $logger
+
     ) {
         $this->identityService = $identityService;
         $this->currencyDataProvider = $currencyDataProvider;
+        $this->logger = $logger;
     }
 
     /**
@@ -51,6 +60,7 @@ class PaymentResponseParser implements PaymentResponseParserInterface
         );
 
         if ($isMappedPaymentIdentity) {
+            $this->logger->notice('paymentidentity' . $paymentIdentifier->getObjectIdentifier() . ' ist not mapped');
             return [];
         }
 
@@ -79,6 +89,7 @@ class PaymentResponseParser implements PaymentResponseParserInterface
         );
 
         if (!$isMappedShopIdentity) {
+            $this->logger->warning('shopidentity' . $shopIdentity->getObjectIdentifier() . ' ist not mapped');
             return [];
         }
 
