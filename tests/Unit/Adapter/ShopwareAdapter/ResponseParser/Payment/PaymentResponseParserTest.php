@@ -20,11 +20,6 @@ class PaymentResponseParserTest extends ResponseParserTest
      */
     private $validator;
 
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
     protected function setUp()
     {
         parent::setUp();
