@@ -3,11 +3,10 @@
 namespace PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\Payment;
 
 use PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\ResponseParserTest;
+use Psr\Log\LoggerInterface;
 use ShopwareAdapter\DataProvider\Currency\CurrencyDataProviderInterface;
 use ShopwareAdapter\ResponseParser\Payment\PaymentResponseParser;
 use SystemConnector\Validator\Order\Payment\PaymentValidator;
-use Psr\Log\LoggerInterface;
-
 
 class PaymentResponseParserTest extends ResponseParserTest
 {
@@ -32,10 +31,12 @@ class PaymentResponseParserTest extends ResponseParserTest
 
         $currencyDataProvider = $this->createMock(CurrencyDataProviderInterface::class);
 
+        $logger = $this->createMock(LoggerInterface::class);
+
         $this->responseParser = new PaymentResponseParser(
             $this->identityService,
             $currencyDataProvider,
-            $this->logger
+            $logger
         );
 
         $this->validator = new PaymentValidator();
