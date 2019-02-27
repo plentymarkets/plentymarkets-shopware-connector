@@ -6,6 +6,8 @@ use SystemConnector\ValueObject\AbstractValueObject;
 
 class Price extends AbstractValueObject
 {
+    const TYPE = 'Price';
+
     /**
      * @var float
      */
