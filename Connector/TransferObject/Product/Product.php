@@ -75,11 +75,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     private $vatRateIdentifier = '';
 
     /**
-     * @var bool
-     */
-    private $stockLimitation = false;
-
-    /**
      * @var string
      */
     private $description = '';
@@ -138,6 +133,11 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
      * @var null|DateTimeImmutable
      */
     private $availableTo;
+
+    /**
+     * @var null|DateTimeImmutable
+     */
+    private $createdAt;
 
     /**
      * @var Attribute[]
@@ -339,22 +339,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     }
 
     /**
-     * @return bool
-     */
-    public function hasStockLimitation()
-    {
-        return $this->stockLimitation;
-    }
-
-    /**
-     * @param bool $stockLimitation
-     */
-    public function setStockLimitation($stockLimitation)
-    {
-        $this->stockLimitation = $stockLimitation;
-    }
-
-    /**
      * @return string
      */
     public function getDescription()
@@ -547,6 +531,22 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     }
 
     /**
+     * @return null|DateTimeImmutable
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param null|DateTimeImmutable $createdAt
+     */
+    public function setCreatedAt(DateTimeImmutable $createdAt = null)
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
      * @return Attribute[]
      */
     public function getAttributes()
@@ -609,7 +609,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
             'defaultCategoryIdentifiers' => $this->getDefaultCategoryIdentifiers(),
             'shippingProfileIdentifiers' => $this->getShippingProfileIdentifiers(),
             'vatRateIdentifier' => $this->getVatRateIdentifier(),
-            'stockLimitation' => $this->hasStockLimitation(),
             'description' => $this->getDescription(),
             'longDescription' => $this->getLongDescription(),
             'metaTitle' => $this->getMetaTitle(),

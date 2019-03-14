@@ -494,7 +494,7 @@ class VariationResponseParser implements VariationResponseParserInterface
      */
     private function getStockLimitation(array $variation)
     {
-        if ($variation['stockLimitation']) {
+        if ($variation['stockLimitation'] == 1) {
             return true;
         }
 

@@ -148,7 +148,6 @@ class ProductResponseParser implements ProductResponseParserInterface
         $productObject->setShippingProfileIdentifiers($this->getShippingProfiles($product));
         $productObject->setImages($this->getImages($product, $product['texts'], $result));
         $productObject->setVatRateIdentifier($this->getVatRateIdentifier($mainVariation));
-        $productObject->setStockLimitation($this->getStockLimitation($product));
         $productObject->setDescription((string) $product['texts'][0]['shortDescription']);
         $productObject->setLongDescription((string) $product['texts'][0]['description']);
         $productObject->setMetaTitle((string) $product['texts'][0]['name1']);
@@ -160,6 +159,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         $productObject->setTranslations($this->getProductTranslations($product['texts']));
         $productObject->setAvailableFrom($this->getAvailableFrom($mainVariation));
         $productObject->setAvailableTo($this->getAvailableTo($mainVariation));
+        $productObject->setCreatedAt($this->getCreatedAt($mainVariation));
         $productObject->setAttributes($this->getAttributes($product));
         $productObject->setVariantConfiguration($this->getVariantConfiguration($variations));
 
@@ -187,22 +187,6 @@ class ProductResponseParser implements ProductResponseParserInterface
 
             return $object;
         }, $candidatesForProcessing);
-    }
-
-    /**
-     * @param array $product
-     *
-     * @return bool
-     */
-    private function getStockLimitation(array $product)
-    {
-        foreach ($product['variations'] as $variation) {
-            if (!$variation['stockLimitation']) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     /**
@@ -635,6 +619,20 @@ class ProductResponseParser implements ProductResponseParserInterface
     {
         if (!empty($mainVariation['availableUntil'])) {
             return new DateTimeImmutable($mainVariation['availableUntil']);
+        }
+
+        return null;
+    }
+
+    /**
+     * @param array $mainVariation
+     *
+     * @return null|DateTimeImmutable
+     */
+    private function getCreatedAt(array $mainVariation)
+    {
+        if (!empty($mainVariation['createdAt'])) {
+            return new DateTimeImmutable($mainVariation['createdAt']);
         }
 
         return null;
