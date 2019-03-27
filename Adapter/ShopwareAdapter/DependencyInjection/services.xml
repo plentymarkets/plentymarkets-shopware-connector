@@ -318,6 +318,22 @@
             <tag name="plenty_connector.command_handler" />
         </service>
 
+        <!-- Price command handlers -->
+
+        <service id="shopware_adapter.command_handler.handle_price" class="ShopwareAdapter\ServiceBus\CommandHandler\Price\HandlePriceCommandHandler" public="false">
+            <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="models" />
+            <argument type="service" id="plenty_connector.logger" />
+
+            <tag name="plenty_connector.command_handler" />
+        </service>
+
+        <service id="shopware_adapter.command_handler.remove_price" class="ShopwareAdapter\ServiceBus\CommandHandler\Price\RemovePriceCommandHandler" public="false">
+            <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="plenty_connector.logger" />
+
+            <tag name="plenty_connector.command_handler" />
+        </service>
 
         <!-- Order query handlers -->
 

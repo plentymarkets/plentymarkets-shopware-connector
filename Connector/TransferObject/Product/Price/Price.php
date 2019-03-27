@@ -2,11 +2,23 @@
 
 namespace SystemConnector\TransferObject\Product\Price;
 
-use SystemConnector\ValueObject\AbstractValueObject;
+use SystemConnector\TransferObject\AbstractTransferObject;
 
-class Price extends AbstractValueObject
+class Price extends AbstractTransferObject
 {
     const TYPE = 'Price';
+
+    /**
+     * Identifier of the object.
+     *
+     * @var string
+     */
+    private $identifier = '';
+
+    /**
+     * @var string
+     */
+    private $variationIdentifier = '';
 
     /**
      * @var float
@@ -32,6 +44,46 @@ class Price extends AbstractValueObject
      * @var null|float
      */
     private $toAmount;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getType()
+    {
+        return self::TYPE;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdentifier()
+    {
+        return $this->identifier;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setIdentifier($identifier)
+    {
+        $this->identifier = $identifier;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVariationIdentifier()
+    {
+        return $this->variationIdentifier;
+    }
+
+    /**
+     * @param string $variationIdentifier
+     */
+    public function setVariationIdentifier($variationIdentifier)
+    {
+        $this->variationIdentifier = $variationIdentifier;
+    }
 
     /**
      * @return float

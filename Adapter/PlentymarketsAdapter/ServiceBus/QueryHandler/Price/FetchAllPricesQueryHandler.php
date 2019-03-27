@@ -64,22 +64,39 @@ class FetchAllPricesQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $elements = $this->client->getIterator('/rest/items/variations/variation_sales_prices');
+        $elements = $this->client->getIterator('items/variations/variation_sales_prices');
 
         $this->outputHandler->startProgressBar(count($elements));
 
+        $prices = [];
+
         foreach ($elements as $element) {
-            $price = null;
+
+            if (empty($prices) || $prices['id'] === $element['variationId']) {
+                $prices['id'] = $element['variationId'];
+                $prices['variationSalesPrices'][] = $element;
+                continue;
+            }
 
             try {
-                $price = $this->responseParser->parse($element);
+                $price = $this->responseParser->parse($prices);
             } catch (Exception $exception) {
                 $this->logger->error($exception->getMessage());
             }
 
-            if ($price !== null) {
-                yield $price;
+            if (empty($price)) {
+                $price = [];
             }
+
+            $price = array_filter($price);
+
+            foreach ($price as $parsedElement) {
+                yield $parsedElement;
+            }
+
+            unset($prices);
+            $prices['id'] = $element['variationId'];
+            $prices['variationSalesPrices'][] = $element;
 
             $this->outputHandler->advanceProgressBar();
         }
