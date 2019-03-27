@@ -2,13 +2,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [## [5.1.1]]
+## [## [5.2.0]]
 ### Fixed
 - fix category sync if more then one shop has the same root category (@lacodimizer)
 - fix getNumber() on boolean bug (@Pfabeck)
 
 ### Added
 - article image translation (@Pfabeck)
+- amazonPay by BestIT integration (@Pfabeck)
 
 ## [## [5.1.0]]
 ### Fixed

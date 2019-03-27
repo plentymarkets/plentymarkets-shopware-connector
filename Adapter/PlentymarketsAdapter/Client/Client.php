@@ -258,8 +258,10 @@ class Client implements ClientInterface
         Assertion::string($path);
         Assertion::notBlank($path);
 
-        if (!isset($options['base_uri'])) {
+        if (!isset($options['base_uri']) && !isset($options['foreign'])) {
             $base_uri = $this->getBaseUri($this->configService->get('rest_url'));
+        } elseif ($options['foreign']) {
+            $base_uri = str_replace('/rest', '', $this->getBaseUri($this->configService->get('rest_url')));
         } else {
             $base_uri = $this->getBaseUri($options['base_uri']);
         }

@@ -225,6 +225,13 @@ Ext.define('Shopware.apps.PlentyConnector.view.Settings', {
                         checked: true,
                         anchor: '100%',
                         name: 'import_variations_without_stock'
+                    },
+                    {
+                        xtype: 'textfield',
+                        fieldLabel: '{s name=plentyconnector/view/settings/amazon_pay_key}{/s}',
+                        name: 'amazonPayKey',
+                        allowBlank: true,
+                        inputType: 'password'
                     }
                 ]
             }
