@@ -89,8 +89,9 @@ class PriceResponseParser implements PriceResponseParserInterface
             }
 
             foreach ((array) $priceArray['default'] as $salesPrice) {
+
                 $priceIdentity = $this->identityService->findOneOrCreate(
-                    (string) $salesPrice['groupId'] . '-' . $salesPrice['salesPriceId'],
+                    $variation['id'] . '-' . $salesPrice['groupId'],
                     PlentymarketsAdapter::NAME,
                     Price::TYPE
                 );

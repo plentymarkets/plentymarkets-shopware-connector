@@ -79,18 +79,18 @@ class FetchAllPricesQueryHandler implements QueryHandlerInterface
             }
 
             try {
-                $price = $this->responseParser->parse($prices);
+                $prices = $this->responseParser->parse($prices);
             } catch (Exception $exception) {
                 $this->logger->error($exception->getMessage());
             }
 
-            if (empty($price)) {
-                $price = [];
+            if (empty($prices)) {
+                $prices = [];
             }
 
-            $price = array_filter($price);
+            $prices = array_filter($prices);
 
-            foreach ($price as $parsedElement) {
+            foreach ($prices as $parsedElement) {
                 yield $parsedElement;
             }
 
