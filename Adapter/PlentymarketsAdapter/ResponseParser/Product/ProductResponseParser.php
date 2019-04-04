@@ -872,7 +872,7 @@ class ProductResponseParser implements ProductResponseParserInterface
     {
         $attribute = new Attribute();
         $attribute->setKey('articleId');
-        $attribute->setValue($product['id']);
+        $attribute->setValue((string) $product['id']);
 
         return $attribute;
     }
