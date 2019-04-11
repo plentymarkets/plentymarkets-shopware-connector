@@ -4,10 +4,8 @@ namespace ShopwareAdapter\ServiceBus\CommandHandler\Price;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
-use Shopware\Components\Api\Manager;
 use Shopware\Models\Article\Detail;
-use Shopware\Models\Article\Price as SwPrice;
-use Shopware\Models\Customer\Group;
+use Shopware\Models\Article\Price as variantPrice;
 use ShopwareAdapter\DataProvider\CustomerGroup\CustomerGroupDataProviderInterface;
 use ShopwareAdapter\ShopwareAdapter;
 use SystemConnector\IdentityService\IdentityServiceInterface;
@@ -19,7 +17,6 @@ use SystemConnector\ServiceBus\CommandType;
 use SystemConnector\TransferObject\CustomerGroup\CustomerGroup;
 use SystemConnector\TransferObject\Product\Price\Price;
 use SystemConnector\TransferObject\Product\Variation\Variation;
-use Shopware\Components\Api\Resource\Variant;
 
 
 class HandlePriceCommandHandler implements CommandHandlerInterface
@@ -79,15 +76,6 @@ class HandlePriceCommandHandler implements CommandHandlerInterface
          */
         $price = $command->getPayload();
 
-            /**
-             * @var Identity $priceIdentity
-             */
-            $priceIdentity = $this->identityService->findBy([
-                'objectIdentifier' => $price->getIdentifier(),
-                'objectType' => Price::TYPE,
-                'adapterName' => ShopwareAdapter::NAME
-            ]);
-
         $customerGroupIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $price->getCustomerGroupIdentifier(),
             'objectType' => CustomerGroup::TYPE,
@@ -100,9 +88,15 @@ class HandlePriceCommandHandler implements CommandHandlerInterface
             return false;
         }
 
-        $customerGroupKey = $this->customerGroupDataProvider->getCustomerGroupKeyByShopwareIdentifier(
+        $customerGroup = $this->customerGroupDataProvider->getCustomerGroupByShopwareIdentifier(
             $customerGroupIdentity->getAdapterIdentifier()
         );
+
+        if (null === $customerGroup) {
+            $this->logger->notice('could not find variation CustomerGroup - ' . $customerGroupIdentity->getAdapterIdentifier());
+
+            return false;
+        }
 
         $variationIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $price->getVariationIdentifier(),
@@ -116,60 +110,101 @@ class HandlePriceCommandHandler implements CommandHandlerInterface
             return false;
         }
 
-            if (empty($priceIdentity)) {
+        /**
+         * @var Identity $priceIdentity
+         */
+        $identity = $this->identityService->findOneBy([
+            'objectIdentifier' => $price->getIdentifier(),
+            'objectType' => Price::TYPE,
+            'adapterName' => ShopwareAdapter::NAME
+        ]);
+        $repository = $this->entityManager->getRepository(variantPrice::class);
 
-                $priceRespository = $this->entityManager->getRepository(SwPrice::class);
+        if (null !== $identity) {
+            /**
+             * @var null|variantPrice $variantPrice
+             */
+            $variantPrice = $repository->findOneBy(
+                [
+                    'id' => $identity->getAdapterIdentifier()
+                ]
+            );
 
-                /**
-                 * @var null|Detail $variation
-                 */
-                $swPrice = $priceRespository->findOneBy([
-                    'articleDetailsId' => $variationIdentity->getAdapterIdentifier(),
-                    'customerGroupKey' => $customerGroupKey
-                ]);
-
-                if (null === $swPrice) {
-                    $this->logger->notice('could not find price - ' . $price->getIdentifier());
+            if (null === $variantPrice) {
+                $variantPrice = $repository->findOneBy(
+                    [
+                        'articleDetailsId' => $variationIdentity->getAdapterIdentifier(),
+                        'customerGroupKey' => $customerGroup->getKey()
+                    ]
+                );
+                if (null === $variantPrice) {
+                    $this->logger->notice('could not find Price with identity - ' . $identity->getAdapterIdentifier());
 
                     return false;
                 }
 
-                $this->identityService->insert(
-                    $price->getIdentifier(),
-                    Price::TYPE,
-                    (string) $swPrice->getId(),
-                    ShopwareAdapter::NAME
+                $this->identityService->update(
+                    $identity,
+                    [
+                        'adapterIdentifier' => (string) $variantPrice->getId(),
+                    ]
                 );
-            }else{
-                $priceRespository = $this->entityManager->getRepository(SwPrice::class);
-
             }
 
-        $variationResource = $this->getVariationResource();
-        $variationParams['prices'][] = [
-            'customerGroupKey' => $customerGroupKey,
-            'price' => $price->getPrice(),
-            'pseudoPrice' => $price->getPseudoPrice(),
-            'from' => $price->getFromAmount(),
-            'to' => $price->getToAmount(),
-        ];
+            $variantPrice->setPrice($price->getPrice());
+            $variantPrice->setPseudoPrice($price->getPseudoPrice());
+            $variantPrice->setCustomerGroup($customerGroup);
+            $variantPrice->setFrom($price->getFromAmount());
+            $variantPrice->setTo($price->getToAmount());
 
-        $variationResource->update(
-            $variationIdentity->getAdapterIdentifier(),
-            $variationParams
-        );
+            $this->entityManager->persist($variantPrice);
+            $this->entityManager->flush();
+            $this->entityManager->clear();
 
             return true;
         }
 
-    /**
-     * @return Variant
-     */
-    private function getVariationResource()
-    {
-        // without this reset the entitymanager sometimes the album is not found correctly.
-        Shopware()->Container()->reset('models');
+        /**
+         * @var null|variantPrice $swPrice
+         */
+        $variantPrice = $repository->findOneBy(
+            [
+                'articleDetailsId' => $variationIdentity->getAdapterIdentifier(),
+                'customerGroupKey' => $customerGroup->getKey()
+            ]
+        );
 
-        return Manager::getResource('Variant');
+        if (null === $variantPrice) {
+            $detailRepository = $this->entityManager->getRepository(Detail::class);
+            $variation = $detailRepository->find($variationIdentity->getAdapterIdentifier());
+
+            if (null === $detailRepository) {
+                $this->logger->notice('could not find variation with identity - ' . $variationIdentity->getAdapterIdentifier());
+
+                return false;
+            }
+
+            $variantPrice = new variantPrice();
+            $variantPrice->setDetail($variation);
+            $variantPrice->setArticle($variation->getArticle());
+        }
+
+        $variantPrice->setPrice($price->getPrice());
+        $variantPrice->setPseudoPrice($price->getPseudoPrice());
+        $variantPrice->setCustomerGroup($customerGroup);
+        $variantPrice->setFrom($price->getFromAmount());
+        $variantPrice->setTo( $price->getToAmount());
+
+        $this->entityManager->persist($variantPrice);
+        $this->entityManager->flush();
+        $this->entityManager->clear();
+
+        $this->identityService->findOneOrCreate(
+            (string) $variantPrice->getId(),
+            ShopwareAdapter::NAME,
+            Price::TYPE
+        );
+
+        return true;
     }
 }

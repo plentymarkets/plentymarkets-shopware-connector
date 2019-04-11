@@ -54,7 +54,7 @@ class RemovePriceCommandHandler implements CommandHandlerInterface
 
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => (string) $identifier,
-            'objectType' => Stock::TYPE,
+            'objectType' => Price::TYPE,
             'adapterName' => ShopwareAdapter::NAME,
         ]);
 
