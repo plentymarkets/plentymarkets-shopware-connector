@@ -704,7 +704,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         $attributes[] = $this->getAgeRestrictionAsAttribute($product);
         $attributes[] = $this->getSecondProductNameAsAttribute($product);
         $attributes[] = $this->getThirdProductNameAsAttribute($product);
-        $attributes[] = $this->getArticleId($product);
+        $attributes[] = $this->getItemIdAsAttribute($product);
 
         return $attributes;
     }
@@ -868,10 +868,10 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return Attribute
      */
-    private function getArticleId(array $product)
+    private function getArticleIdAsAttribute(array $product)
     {
         $attribute = new Attribute();
-        $attribute->setKey('articleId');
+        $attribute->setKey('itemId');
         $attribute->setValue((string) $product['id']);
 
         return $attribute;
