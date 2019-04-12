@@ -2,14 +2,11 @@
 
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Price;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
-use Shopware\Models\Article\Detail;
-use Shopware\Models\Article\Price as variantPrice;
+use Shopware\Components\Api\Manager;
 use ShopwareAdapter\DataProvider\CustomerGroup\CustomerGroupDataProviderInterface;
 use ShopwareAdapter\ShopwareAdapter;
 use SystemConnector\IdentityService\IdentityServiceInterface;
-use SystemConnector\IdentityService\Struct\Identity;
 use SystemConnector\ServiceBus\Command\CommandInterface;
 use SystemConnector\ServiceBus\Command\TransferObjectCommand;
 use SystemConnector\ServiceBus\CommandHandler\CommandHandlerInterface;
@@ -27,11 +24,6 @@ class HandlePriceCommandHandler implements CommandHandlerInterface
     private $identityService;
 
     /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
-
-    /**
      * @var CustomerGroupDataProviderInterface
      */
     private $customerGroupDataProvider;
@@ -43,12 +35,10 @@ class HandlePriceCommandHandler implements CommandHandlerInterface
 
     public function __construct(
         IdentityServiceInterface $identityService,
-        EntityManagerInterface $entityManager,
         CustomerGroupDataProviderInterface $customerGroupDataProvider,
         LoggerInterface $logger
     ) {
         $this->identityService = $identityService;
-        $this->entityManager = $entityManager;
         $this->customerGroupDataProvider = $customerGroupDataProvider;
         $this->logger = $logger;
     }
@@ -88,7 +78,7 @@ class HandlePriceCommandHandler implements CommandHandlerInterface
             return false;
         }
 
-        $customerGroup = $this->customerGroupDataProvider->getCustomerGroupByShopwareIdentifier(
+        $customerGroup = $this->customerGroupDataProvider->getCustomerGroupKeyByShopwareIdentifier(
             $customerGroupIdentity->getAdapterIdentifier()
         );
 
@@ -110,101 +100,21 @@ class HandlePriceCommandHandler implements CommandHandlerInterface
             return false;
         }
 
-        /**
-         * @var Identity $priceIdentity
-         */
-        $identity = $this->identityService->findOneBy([
-            'objectIdentifier' => $price->getIdentifier(),
-            'objectType' => Price::TYPE,
-            'adapterName' => ShopwareAdapter::NAME
-        ]);
-        $repository = $this->entityManager->getRepository(variantPrice::class);
+        $resource = Manager::getResource('Variant');
+        $params['__options_prices'] = ['replace' => true];
+        $params['prices'][] = [
+            'customerGroupKey' => $customerGroup,
+            'price' => $price->getPrice(),
+            'pseudoPrice' => $price->getPseudoPrice(),
+            'from' => $price->getFromAmount(),
+            'to' => $price->getToAmount(),
+        ];
 
-        if (null !== $identity) {
-            /**
-             * @var null|variantPrice $variantPrice
-             */
-            $variantPrice = $repository->findOneBy(
-                [
-                    'id' => $identity->getAdapterIdentifier()
-                ]
+            $resource->update(
+                $variationIdentity->getAdapterIdentifier(),
+                $params
             );
-
-            if (null === $variantPrice) {
-                $variantPrice = $repository->findOneBy(
-                    [
-                        'articleDetailsId' => $variationIdentity->getAdapterIdentifier(),
-                        'customerGroupKey' => $customerGroup->getKey()
-                    ]
-                );
-                if (null === $variantPrice) {
-                    $this->logger->notice('could not find Price with identity - ' . $identity->getAdapterIdentifier());
-
-                    return false;
-                }
-
-                $this->identityService->update(
-                    $identity,
-                    [
-                        'adapterIdentifier' => (string) $variantPrice->getId(),
-                    ]
-                );
-            }
-
-            $variantPrice->setPrice($price->getPrice());
-            $variantPrice->setPseudoPrice($price->getPseudoPrice());
-            $variantPrice->setCustomerGroup($customerGroup);
-            $variantPrice->setFrom($price->getFromAmount());
-            $variantPrice->setTo($price->getToAmount());
-
-            $this->entityManager->persist($variantPrice);
-            $this->entityManager->flush();
-            $this->entityManager->clear();
 
             return true;
         }
-
-        /**
-         * @var null|variantPrice $swPrice
-         */
-        $variantPrice = $repository->findOneBy(
-            [
-                'articleDetailsId' => $variationIdentity->getAdapterIdentifier(),
-                'customerGroupKey' => $customerGroup->getKey()
-            ]
-        );
-
-        if (null === $variantPrice) {
-            $detailRepository = $this->entityManager->getRepository(Detail::class);
-            $variation = $detailRepository->find($variationIdentity->getAdapterIdentifier());
-
-            if (null === $detailRepository) {
-                $this->logger->notice('could not find variation with identity - ' . $variationIdentity->getAdapterIdentifier());
-
-                return false;
-            }
-
-            $variantPrice = new variantPrice();
-            $variantPrice->setDetail($variation);
-            $variantPrice->setArticle($variation->getArticle());
-        }
-
-        $variantPrice->setPrice($price->getPrice());
-        $variantPrice->setPseudoPrice($price->getPseudoPrice());
-        $variantPrice->setCustomerGroup($customerGroup);
-        $variantPrice->setFrom($price->getFromAmount());
-        $variantPrice->setTo( $price->getToAmount());
-
-        $this->entityManager->persist($variantPrice);
-        $this->entityManager->flush();
-        $this->entityManager->clear();
-
-        $this->identityService->findOneOrCreate(
-            (string) $variantPrice->getId(),
-            ShopwareAdapter::NAME,
-            Price::TYPE
-        );
-
-        return true;
-    }
 }

@@ -90,14 +90,7 @@ class PriceResponseParser implements PriceResponseParserInterface
 
             foreach ((array) $priceArray['default'] as $salesPrice) {
 
-                $priceIdentity = $this->identityService->findOneOrCreate(
-                    $variation['id'] . '-' . $salesPrice['groupId'],
-                    PlentymarketsAdapter::NAME,
-                    Price::TYPE
-                );
-
                 $priceObject = new Price();
-                $priceObject->setIdentifier($priceIdentity->getObjectIdentifier());
                 $priceObject->setPrice($salesPrice['price']);
                 $priceObject->setCustomerGroupIdentifier($customerGroup);
                 $priceObject->setFromAmount($salesPrice['from']);

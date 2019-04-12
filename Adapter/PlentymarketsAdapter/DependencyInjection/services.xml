@@ -438,19 +438,6 @@
             <tag name="plenty_connector.query_handler" />
         </service>
 
-        <service id="plentymarkets_adapter.query_handler.fetch_changed_prices" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Price\FetchChangedPricesQueryHandler" public="false">
-            <argument type="service" id="plentymarkets_adapter.client" />
-            <argument type="service" id="plentymarkets_adapter.response_parser.product.price" />
-            <argument type="service" id="plenty_connector.logger" />
-            <argument type="service" id="plenty_connector.console.output_handler" />
-
-            <tag name="plenty_connector.query_handler" />
-        </service>
-
-        <service id="plentymarkets_adapter.query_handler.fetch_price" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Price\FetchPriceQueryHandler" public="false">
-            <tag name="plenty_connector.query_handler" />
-        </service>
-
         <!-- Mapping query handlers -->
 
         <service id="plentymarkets_adapter.query_handler.fetch_all_countries" class="PlentymarketsAdapter\ServiceBus\QueryHandler\Country\FetchAllCountriesQueryHandler" public="false">
