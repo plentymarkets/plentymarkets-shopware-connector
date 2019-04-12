@@ -101,7 +101,7 @@ class HandlePriceCommandHandler implements CommandHandlerInterface
         }
 
         $resource = Manager::getResource('Variant');
-        $params['__options_prices'] = ['replace' => true];
+        $params['__options_prices'] = ['replace' => false];
         $params['prices'][] = [
             'customerGroupKey' => $customerGroup,
             'price' => $price->getPrice(),
