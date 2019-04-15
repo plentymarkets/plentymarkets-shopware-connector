@@ -868,7 +868,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return Attribute
      */
-    private function getArticleIdAsAttribute(array $product)
+    private function getItemIdAsAttribute(array $product)
     {
         $attribute = new Attribute();
         $attribute->setKey('itemId');

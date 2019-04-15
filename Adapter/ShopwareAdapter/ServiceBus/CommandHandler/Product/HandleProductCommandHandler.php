@@ -141,6 +141,10 @@ class HandleProductCommandHandler implements CommandHandlerInterface
          */
         $mainVariation = $variationRepository->findOneBy(['number' => $product->getNumber()]);
 
+        if (null === $mainVariation && null !== $productIdentity) {
+            $mainVariation = $variationRepository->findOneBy(['articleId' => $productIdentity->getAdapterIdentifier(), 'kind' => 1]);
+        }
+
         if (null === $productIdentity) {
             if (null === $mainVariation) {
                 $productModel = $articleResource->create($params);
