@@ -6,6 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - fix category sync if more then one shop has the same root category (@lacodimizer)
 - fix getNumber() on boolean bug (@Pfabeck)
+- fix error after changed mainvariationnumber (@Pfabeck)
 
 ### Added
 - article image translation (@Pfabeck)
