@@ -160,7 +160,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         $productObject->setAvailableFrom($this->getAvailableFrom($mainVariation));
         $productObject->setAvailableTo($this->getAvailableTo($mainVariation));
         $productObject->setCreatedAt($this->getCreatedAt($mainVariation));
-        $productObject->setAttributes($this->getAttributes($product));
+        $productObject->setAttributes($this->getAttributes($product, $mainVariation));
         $productObject->setVariantConfiguration($this->getVariantConfiguration($variations));
 
         $result[$productObject->getIdentifier()] = $productObject;
@@ -679,10 +679,11 @@ class ProductResponseParser implements ProductResponseParserInterface
 
     /**
      * @param array $product
+     * @param array $mainVariation
      *
      * @return Attribute[]
      */
-    private function getAttributes(array $product)
+    private function getAttributes(array $product, array $mainVariation)
     {
         $attributes = [];
 
@@ -705,6 +706,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         $attributes[] = $this->getSecondProductNameAsAttribute($product);
         $attributes[] = $this->getThirdProductNameAsAttribute($product);
         $attributes[] = $this->getItemIdAsAttribute($product);
+        $attributes[] = $this->getAvailabilityAsAttribute($product, $mainVariation);
 
         return $attributes;
     }
@@ -873,6 +875,21 @@ class ProductResponseParser implements ProductResponseParserInterface
         $attribute = new Attribute();
         $attribute->setKey('itemId');
         $attribute->setValue((string) $product['id']);
+
+        return $attribute;
+    }
+
+    /**
+     * @param array $product
+     * @param array $mainVariation
+     *
+     * @return Attribute
+     */
+    private function getAvailabilityAsAttribute(array $product, array $mainVariation)
+    {
+        $attribute = new Attribute();
+        $attribute->setKey('availability');
+        $attribute->setValue((string) $mainVariation['availability']);
 
         return $attribute;
     }
