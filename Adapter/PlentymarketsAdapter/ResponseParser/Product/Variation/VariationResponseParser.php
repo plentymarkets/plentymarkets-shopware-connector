@@ -175,6 +175,7 @@ class VariationResponseParser implements VariationResponseParserInterface
             $variationObject->setLength((int) $variation['lengthMM']);
             $variationObject->setWeight($this->getVariationWeight($variation));
             $variationObject->setProperties($this->getVariationProperties($variation));
+            $variationObject->setAttributes($this->getVariationAttributes($variation));
 
             $stockObject = $this->stockResponseParser->parse($variation);
 
@@ -409,6 +410,33 @@ class VariationResponseParser implements VariationResponseParserInterface
         }
 
         return $result;
+    }
+
+    /**
+     * @param array $variation
+     *
+     * @return Attribute[]
+     */
+    private function getVariationAttributes(array $variation) {
+        $attributes = [];
+
+        $attributes[] = $this->getAvailabilityAsAttribute($variation);
+
+        return $attributes;
+    }
+
+    /**
+     * @param array $variation
+     *
+     * @return Attribute
+     */
+    private function getAvailabilityAsAttribute(array $variation)
+    {
+        $attribute = new Attribute();
+        $attribute->setKey('availability');
+        $attribute->setValue((string) $variation['availability']);
+
+        return $attribute;
     }
 
     /**
