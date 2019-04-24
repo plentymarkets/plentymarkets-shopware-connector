@@ -21,13 +21,13 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
 
     /**
      * DecoratedOrderItemResponseParser constructor.
+     *
      * @param OrderItemResponseParserInterface $parentOrderItemResponseParser
-     * @param ModelManager $modelManager
+     * @param ModelManager                     $modelManager
      */
     public function __construct(
         OrderItemResponseParserInterface $parentOrderItemResponseParser,
         ModelManager $modelManager
-
     ) {
         $this->parentOrderItemResponseParser = $parentOrderItemResponseParser;
         $this->modelManager = $modelManager;
@@ -39,7 +39,6 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
     public function parse(array $entry, $taxFree = false)
     {
         if (\ShopwareAdapter\ResponseParser\OrderItem\OrderItemResponseParser::ITEM_TYPE_ID_SURCHARGE === $entry['mode']) {
-
             if (null !== $this->modelManager->getRepository(Value::class)->findOneBy(['ordernumber' => $entry['articleNumber']]) ||
                 null !== $this->modelManager->getRepository(Option::class)->findOneBy(['ordernumber' => $entry['articleNumber']])
             ) {
