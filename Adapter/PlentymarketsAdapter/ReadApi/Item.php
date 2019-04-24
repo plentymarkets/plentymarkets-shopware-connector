@@ -30,7 +30,6 @@ class Item extends ApiAbstract
      * @var array
      */
     private static $includes = [
-        'itemProperties.valueTexts',
         'itemCrossSelling',
         'itemImages',
         'itemShippingProfiles',
