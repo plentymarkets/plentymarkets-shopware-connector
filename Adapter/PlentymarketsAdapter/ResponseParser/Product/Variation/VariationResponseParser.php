@@ -25,6 +25,7 @@ use SystemConnector\TransferObject\Product\Variation\Variation;
 use SystemConnector\TransferObject\TransferObjectInterface;
 use SystemConnector\TransferObject\Unit\Unit;
 use SystemConnector\ValueObject\Translation\Translation;
+use SystemConnector\ValueObject\Attribute\Attribute;
 
 class VariationResponseParser implements VariationResponseParserInterface
 {
