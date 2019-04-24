@@ -24,8 +24,8 @@ use SystemConnector\TransferObject\Product\Property\Value\Value;
 use SystemConnector\TransferObject\Product\Variation\Variation;
 use SystemConnector\TransferObject\TransferObjectInterface;
 use SystemConnector\TransferObject\Unit\Unit;
-use SystemConnector\ValueObject\Translation\Translation;
 use SystemConnector\ValueObject\Attribute\Attribute;
+use SystemConnector\ValueObject\Translation\Translation;
 
 class VariationResponseParser implements VariationResponseParserInterface
 {
@@ -418,7 +418,8 @@ class VariationResponseParser implements VariationResponseParserInterface
      *
      * @return Attribute[]
      */
-    private function getVariationAttributes(array $variation) {
+    private function getVariationAttributes(array $variation)
+    {
         $attributes = [];
 
         $attributes[] = $this->getAvailabilityAsAttribute($variation);
