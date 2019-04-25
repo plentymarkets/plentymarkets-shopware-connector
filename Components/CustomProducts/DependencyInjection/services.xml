@@ -6,7 +6,7 @@
 
     <services>
 
-        <service id="plenty_connector_components_custom_products.response_parser.order_item" class="PlentyConnector\Components\CustomProducts\ShopwareAdapter\ResponseParser\Order\OrderItemResponseParser" decorates="shopware_adapter.response_parser.order_item" public="false">
+        <service id="plenty_connector_components_custom_products.response_parser.order_item" class="PlentyConnector\Components\CustomProducts\ShopwareAdapter\ResponseParser\Order\DecoratedOrderItemResponseParser" decorates="shopware_adapter.response_parser.order_item" public="false">
             <argument type="service" id="plenty_connector_components_custom_products.response_parser.order_item.inner" />
             <argument type="service" id="models" />
         </service>

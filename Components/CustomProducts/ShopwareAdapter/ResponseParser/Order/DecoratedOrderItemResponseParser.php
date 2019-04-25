@@ -3,11 +3,13 @@
 namespace PlentyConnector\Components\CustomProducts\ShopwareAdapter\ResponseParser\Order;
 
 use Shopware\Components\Model\ModelManager;
+use ShopwareAdapter\ResponseParser\OrderItem\OrderItemResponseParser;
 use ShopwareAdapter\ResponseParser\OrderItem\OrderItemResponseParserInterface;
 use SwagCustomProducts\Models\Option;
 use SwagCustomProducts\Models\Value;
+use SystemConnector\TransferObject\Order\OrderItem\OrderItem;
 
-class OrderItemResponseParser implements OrderItemResponseParserInterface
+class DecoratedOrderItemResponseParser implements OrderItemResponseParserInterface
 {
     /**
      * @var OrderItemResponseParserInterface
@@ -38,11 +40,11 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
      */
     public function parse(array $entry, $taxFree = false)
     {
-        if (\ShopwareAdapter\ResponseParser\OrderItem\OrderItemResponseParser::ITEM_TYPE_ID_SURCHARGE === $entry['mode']) {
+        if (OrderItemResponseParser::ITEM_TYPE_ID_SURCHARGE === $entry['mode']) {
             if (null !== $this->modelManager->getRepository(Value::class)->findOneBy(['ordernumber' => $entry['articleNumber']]) ||
                 null !== $this->modelManager->getRepository(Option::class)->findOneBy(['ordernumber' => $entry['articleNumber']])
             ) {
-                $entry['mode'] = 1;
+                $entry['mode'] = OrderItem::TYPE_PRODUCT;
             }
         }
 
