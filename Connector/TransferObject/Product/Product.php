@@ -17,7 +17,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
 {
     const TYPE = 'Product';
     const MULTIPACK = 'multiPack';
-    
+
     /**
      * Identifier of the object.
      *
