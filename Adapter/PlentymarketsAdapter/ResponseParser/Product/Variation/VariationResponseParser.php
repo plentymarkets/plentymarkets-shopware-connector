@@ -127,6 +127,12 @@ class VariationResponseParser implements VariationResponseParserInterface
             return [];
         }
 
+        if (Product::MULTIPACK === $product['itemType']) {
+            $variations = array_filter($variations, function (array $variation) {
+                return $variation['isMain'];
+            });
+        }
+
         if (count($variations) > 1) {
             $variations = array_filter($variations, function (array $variation) {
                 return !empty($variation['variationAttributeValues']);

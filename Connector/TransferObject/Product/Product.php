@@ -16,7 +16,8 @@ use SystemConnector\ValueObject\Translation\Translation;
 class Product extends AbstractTransferObject implements TranslateableInterface, AttributableInterface
 {
     const TYPE = 'Product';
-
+    const MULTIPACK = 'multiPack';
+    
     /**
      * Identifier of the object.
      *
