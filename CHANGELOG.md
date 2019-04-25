@@ -11,6 +11,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - article image translation (@Pfabeck)
 - amazonPay by BestIT integration (@Pfabeck)
+- export custom products options as order items (@Pfabeck)
 
 ## [## [5.1.0]]
 ### Fixed
