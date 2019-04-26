@@ -21,7 +21,8 @@ class OrderItemResponseParserTest extends ResponseParserTest
 
         $this->responseParser = new OrderItemResponseParser(
             $this->identityService,
-            Shopware()->Models()->getRepository(Tax::class)
+            Shopware()->Models()->getRepository(Tax::class),
+            Shopware()->Container()->get('plenty_connector.config_service')
         );
     }
 
