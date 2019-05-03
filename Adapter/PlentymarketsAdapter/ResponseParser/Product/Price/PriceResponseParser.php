@@ -79,7 +79,6 @@ class PriceResponseParser implements PriceResponseParserInterface
          */
         $prices = [];
         foreach ($temporaryPrices as $customerGroup => $priceArray) {
-
             if (!isset($priceArray['default'])) {
                 continue;
             }
@@ -89,9 +88,15 @@ class PriceResponseParser implements PriceResponseParserInterface
             }
 
             foreach ((array) $priceArray['default'] as $salesPrice) {
+                $priceIdentity = $this->identityService->findOneOrCreate(
+                    $variation['id'] . '-' . $salesPrice['groupId'],
+                    PlentymarketsAdapter::NAME,
+                    Price::TYPE
+                );
 
                 $priceObject = new Price();
                 $priceObject->setPrice($salesPrice['price']);
+                $priceObject->setIdentifier($priceIdentity->getObjectIdentifier());
                 $priceObject->setCustomerGroupIdentifier($customerGroup);
                 $priceObject->setFromAmount($salesPrice['from']);
                 $priceObject->setVariationIdentifier($variationIdentity->getObjectIdentifier());
@@ -210,7 +215,7 @@ class PriceResponseParser implements PriceResponseParserInterface
                         'salesPriceId' => (int) $price['salesPriceId'],
                         'from' => $from,
                         'price' => (float) $price['price'],
-                        'groupId' => (float) $group
+                        'groupId' => (float) $group,
                     ];
                 }
             } else {
@@ -231,7 +236,7 @@ class PriceResponseParser implements PriceResponseParserInterface
                         'salesPriceId' => (int) $price['salesPriceId'],
                         'from' => $from,
                         'price' => (float) $price['price'],
-                        'groupId' => (float) $group
+                        'groupId' => (float) $group,
                     ];
                 }
             }

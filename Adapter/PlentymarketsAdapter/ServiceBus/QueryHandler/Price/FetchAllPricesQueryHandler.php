@@ -71,7 +71,6 @@ class FetchAllPricesQueryHandler implements QueryHandlerInterface
         $prices = [];
 
         foreach ($elements as $element) {
-
             if (empty($prices) || $prices['id'] === $element['variationId']) {
                 $prices['id'] = $element['variationId'];
                 $prices['variationSalesPrices'][] = $element;

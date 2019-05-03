@@ -8,7 +8,6 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Product\Price\PriceResponseParserInterface;
 use PlentymarketsAdapter\ServiceBus\ChangedDateTimeTrait;
 use Psr\Log\LoggerInterface;
-
 use SystemConnector\Console\OutputHandler\OutputHandlerInterface;
 use SystemConnector\ServiceBus\Query\FetchTransferObjectQuery;
 use SystemConnector\ServiceBus\Query\QueryInterface;
@@ -72,8 +71,7 @@ class FetchChangedPricesQueryHandler implements QueryHandlerInterface
         $currentDateTime = $this->getCurrentDateTime();
 
         $elements = $this->client->getIterator('items/variations/variation_sales_prices', [
-            'updatedAtFrom' => $lastCangedTime->format(DATE_W3C),
-            'updatedAtTo' => $currentDateTime->format(DATE_W3C)
+            'updatedAt' => $lastCangedTime->format(DATE_W3C),
         ]);
 
         $this->outputHandler->startProgressBar(count($elements));
@@ -81,7 +79,6 @@ class FetchChangedPricesQueryHandler implements QueryHandlerInterface
         $prices = [];
 
         foreach ($elements as $element) {
-
             if (empty($prices) || $prices['id'] === $element['variationId']) {
                 $prices['id'] = $element['variationId'];
                 $prices['variationSalesPrices'][] = $element;
@@ -109,7 +106,6 @@ class FetchChangedPricesQueryHandler implements QueryHandlerInterface
             $prices['variationSalesPrices'][] = $element;
 
             $this->outputHandler->advanceProgressBar();
-
         }
 
         $this->outputHandler->finishProgressBar();
