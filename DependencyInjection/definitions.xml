@@ -27,6 +27,7 @@
         <parameter key="plenty_connector.transfer_object.shipping_profile" type="constant">SystemConnector\TransferObject\ShippingProfile\ShippingProfile::TYPE</parameter>
         <parameter key="plenty_connector.transfer_object.shop" type="constant">SystemConnector\TransferObject\Shop\Shop::TYPE</parameter>
         <parameter key="plenty_connector.transfer_object.stock" type="constant">SystemConnector\TransferObject\Product\Stock\Stock::TYPE</parameter>
+        <parameter key="plenty_connector.transfer_object.price" type="constant">SystemConnector\TransferObject\Product\Price\Price::TYPE</parameter>
         <parameter key="plenty_connector.transfer_object.unit" type="constant">SystemConnector\TransferObject\Unit\Unit::TYPE</parameter>
         <parameter key="plenty_connector.transfer_object.vat_rate" type="constant">SystemConnector\TransferObject\VatRate\VatRate::TYPE</parameter>
     </parameters>
@@ -134,6 +135,18 @@
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.stock%</argument>
             <argument>10</argument>
+
+            <tag name="plenty_connector.connector_definition" />
+            <tag name="plenty_connector.cleanup_definition" />
+        </service>
+
+        <service id="plenty_connector.connector_definition.price" class="SystemConnector\DefinitionProvider\Struct\Definition" public="false">
+            <factory service="plenty_connector.definition_factory" method="factory" />
+
+            <argument>%plenty_connector.adapter.plentymarkets%</argument>
+            <argument>%plenty_connector.adapter.shopware%</argument>
+            <argument>%plenty_connector.transfer_object.price%</argument>
+            <argument>100</argument>
 
             <tag name="plenty_connector.connector_definition" />
             <tag name="plenty_connector.cleanup_definition" />

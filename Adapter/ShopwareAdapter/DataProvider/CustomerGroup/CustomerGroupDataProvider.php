@@ -34,4 +34,21 @@ class CustomerGroupDataProvider implements CustomerGroupDataProviderInterface
 
         return $group->getKey();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCustomerGroupByShopwareIdentifier($identifier)
+    {
+        /**
+         * @var null|Group $group
+         */
+        $group = $this->repository->find($identifier);
+
+        if (null === $group) {
+            return null;
+        }
+
+        return $group;
+    }
 }

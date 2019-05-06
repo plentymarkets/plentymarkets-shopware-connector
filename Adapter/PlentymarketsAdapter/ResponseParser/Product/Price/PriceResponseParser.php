@@ -11,6 +11,7 @@ use SystemConnector\IdentityService\IdentityServiceInterface;
 use SystemConnector\IdentityService\Struct\Identity;
 use SystemConnector\TransferObject\CustomerGroup\CustomerGroup;
 use SystemConnector\TransferObject\Product\Price\Price;
+use SystemConnector\TransferObject\Product\Variation\Variation;
 use SystemConnector\TransferObject\Shop\Shop;
 
 class PriceResponseParser implements PriceResponseParserInterface
@@ -63,6 +64,16 @@ class PriceResponseParser implements PriceResponseParserInterface
     {
         $temporaryPrices = $this->getPricesAsSortedArray($variation['variationSalesPrices']);
 
+        $variationIdentity = $this->identityService->findOneBy([
+            'adapterIdentifier' => (string) $variation['id'],
+            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType' => Variation::TYPE,
+        ]);
+
+        if (null === $variationIdentity) {
+            return null;
+        }
+
         /**
          * @var Price[] $prices
          */
@@ -77,10 +88,18 @@ class PriceResponseParser implements PriceResponseParserInterface
             }
 
             foreach ((array) $priceArray['default'] as $salesPrice) {
+                $priceIdentity = $this->identityService->findOneOrCreate(
+                    $variation['id'] . '-' . $salesPrice['groupId'],
+                    PlentymarketsAdapter::NAME,
+                    Price::TYPE
+                );
+
                 $priceObject = new Price();
                 $priceObject->setPrice($salesPrice['price']);
+                $priceObject->setIdentifier($priceIdentity->getObjectIdentifier());
                 $priceObject->setCustomerGroupIdentifier($customerGroup);
                 $priceObject->setFromAmount($salesPrice['from']);
+                $priceObject->setVariationIdentifier($variationIdentity->getObjectIdentifier());
 
                 $this->addPseudoPrice($priceObject, $priceArray);
 
@@ -193,8 +212,10 @@ class PriceResponseParser implements PriceResponseParserInterface
                     $customerGroup = $customerGroupIdentity->getObjectIdentifier();
 
                     $temporaryPrices[$customerGroup][$priceConfiguration['type']][$from] = [
+                        'salesPriceId' => (int) $price['salesPriceId'],
                         'from' => $from,
                         'price' => (float) $price['price'],
+                        'groupId' => (float) $group,
                     ];
                 }
             } else {
@@ -212,8 +233,10 @@ class PriceResponseParser implements PriceResponseParserInterface
                     $customerGroup = $customerGroupIdentity->getObjectIdentifier();
 
                     $temporaryPrices[$customerGroup][$priceConfiguration['type']][$from] = [
+                        'salesPriceId' => (int) $price['salesPriceId'],
                         'from' => $from,
                         'price' => (float) $price['price'],
+                        'groupId' => (float) $group,
                     ];
                 }
             }
