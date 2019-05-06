@@ -146,7 +146,7 @@
             <argument>%plenty_connector.adapter.plentymarkets%</argument>
             <argument>%plenty_connector.adapter.shopware%</argument>
             <argument>%plenty_connector.transfer_object.price%</argument>
-            <argument>100</argument>
+            <argument>10</argument>
 
             <tag name="plenty_connector.connector_definition" />
             <tag name="plenty_connector.cleanup_definition" />
