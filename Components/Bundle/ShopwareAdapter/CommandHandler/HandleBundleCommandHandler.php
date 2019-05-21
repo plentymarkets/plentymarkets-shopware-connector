@@ -13,7 +13,7 @@ use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Customer\Group;
 use ShopwareAdapter\ShopwareAdapter;
-use SwagBundle\Models\Article as BundleItems;
+use SwagBundle\Models\Article as BundleItem;
 use SwagBundle\Models\Bundle as SwagBundle;
 use SwagBundle\Models\Price as PriceModel;
 use SystemConnector\IdentityService\Exception\NotFoundException;
@@ -316,9 +316,9 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
             }
 
             /**
-             * @var BundleItems $product
+             * @var BundleItem $product
              */
-            $product = new Article();
+            $product = new BundleItem();
             $product->setQuantity($bundleProduct->getAmount());
             $product->setArticleDetail($detail);
             $product->setPosition($bundleProduct->getPosition());
