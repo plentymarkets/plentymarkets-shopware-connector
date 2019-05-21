@@ -64,10 +64,11 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
 
     /**
      * HandleBundleCommandHandler constructor.
+     *
      * @param IdentityServiceInterface $identityService
-     * @param EntityManagerInterface $entityManager
-     * @param BundleHelper $bundleHelper
-     * @param LoggerInterface $logger
+     * @param EntityManagerInterface   $entityManager
+     * @param BundleHelper             $bundleHelper
+     * @param LoggerInterface          $logger
      */
     public function __construct(
         IdentityServiceInterface $identityService,
