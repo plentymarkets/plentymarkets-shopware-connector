@@ -4,17 +4,18 @@ namespace PlentyConnector\Components\Bundle\ShopwareAdapter\CommandHandler;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Exception;
 use PlentyConnector\Components\Bundle\Helper\BundleHelper;
 use PlentyConnector\Components\Bundle\TransferObject\Bundle;
 use Psr\Log\LoggerInterface;
-use Shopware\Models\Article\Detail as DetailModel;
-use Shopware\Models\Customer\Group as GroupModel;
+use Shopware\Models\Article\Article;
+use Shopware\Models\Article\Detail;
+use Shopware\Models\Customer\Group;
 use ShopwareAdapter\ShopwareAdapter;
-use SwagBundle\Models\Article;
-use SwagBundle\Models\Bundle as BundleModel;
-use SwagBundle\Models\Price as PriceModel;
-use SwagBundle\Models\Repository as BundleRepository;
+use SwagBundle\Models\Article as BundleItem;
+use SwagBundle\Models\Bundle as SwagBundle;
+use SwagBundle\Models\Price as BundlePrice;
 use SystemConnector\IdentityService\Exception\NotFoundException;
 use SystemConnector\IdentityService\IdentityServiceInterface;
 use SystemConnector\ServiceBus\Command\CommandInterface;
@@ -42,6 +43,16 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
     private $entityManager;
 
     /**
+     * @var EntityRepository
+     */
+    private $detailRepository;
+
+    /**
+     * @var EntityRepository
+     */
+    private $bundleRepository;
+
+    /**
      * @var BundleHelper
      */
     private $bundleHelper;
@@ -51,6 +62,14 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
      */
     private $logger;
 
+    /**
+     * HandleBundleCommandHandler constructor.
+     *
+     * @param IdentityServiceInterface $identityService
+     * @param EntityManagerInterface   $entityManager
+     * @param BundleHelper             $bundleHelper
+     * @param LoggerInterface          $logger
+     */
     public function __construct(
         IdentityServiceInterface $identityService,
         EntityManagerInterface $entityManager,
@@ -59,6 +78,8 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
     ) {
         $this->identityService = $identityService;
         $this->entityManager = $entityManager;
+        $this->detailRepository = $entityManager->getRepository(Detail::class);
+        $this->bundleRepository = $entityManager->getRepository(SwagBundle::class);
         $this->bundleHelper = $bundleHelper;
         $this->logger = $logger;
     }
@@ -96,13 +117,11 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
 
         $this->bundleHelper->registerBundleModels();
 
-        /**
-         * @var BundleRepository $repository
-         */
-        $repository = $this->entityManager->getRepository(BundleModel::class);
-
         if (null === $identity) {
-            $existingBundle = $repository->findOneBy(['number' => $bundle->getNumber()]);
+            /**
+             * @var SwagBundle $existingBundle
+             */
+            $existingBundle = $this->bundleRepository->findOneBy(['number' => $bundle->getNumber()]);
 
             if (null !== $existingBundle) {
                 $identity = $this->identityService->insert(
@@ -113,7 +132,10 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
                 );
             }
         } else {
-            $existingBundle = $repository->find($identity->getAdapterIdentifier());
+            /**
+             * @var SwagBundle $existingBundle
+             */
+            $existingBundle = $this->bundleRepository->find($identity->getAdapterIdentifier());
 
             if (null === $existingBundle) {
                 $this->identityService->remove($identity);
@@ -123,26 +145,26 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
         }
 
         if (null === $identity) {
-            $bundleModel = new BundleModel();
-
-            $bundleModel->setDisplayGlobal(true);
-            $bundleModel->setSells(0);
-            $bundleModel->setCreated();
-            $bundleModel->setType(1);
-            $bundleModel->setDiscountType('abs');
-            $bundleModel->setQuantity(0);
-            $bundleModel->setShowName(false);
+            $swagBundle = new SwagBundle();
+            $swagBundle->setDisplayGlobal(true);
+            $swagBundle->setSells(0);
+            $swagBundle->setCreated();
+            $swagBundle->setType(1);
+            $swagBundle->setDiscountType('abs');
+            $swagBundle->setQuantity(0);
+            $swagBundle->setShowName(false);
+            $swagBundle->setDisplayDelivery(2);
         } else {
             /**
-             * @var BundleModel $bundleModel
+             * @var SwagBundle $swagBundle
              */
-            $bundleModel = $repository->find($identity->getAdapterIdentifier());
+            $swagBundle = $this->bundleRepository->find($identity->getAdapterIdentifier());
 
-            foreach ($bundleModel->getPrices() as $price) {
+            foreach ($swagBundle->getPrices() as $price) {
                 $this->entityManager->remove($price);
             }
 
-            foreach ($bundleModel->getArticles() as $article) {
+            foreach ($swagBundle->getArticles() as $article) {
                 $this->entityManager->remove($article);
             }
 
@@ -150,6 +172,9 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
         }
 
         try {
+            /**
+             * @var Detail $mainVariant
+             */
             $mainVariant = $this->getMainVariant($bundle);
         } catch (Exception $exception) {
             $this->logger->error($exception->getMessage());
@@ -161,26 +186,27 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
             return false;
         }
 
+        /**
+         * @var Article $mainArticle
+         */
         $mainArticle = $mainVariant->getArticle();
 
-        $this->active = $mainArticle->getActive();
+        $swagBundle->setName($bundle->getName());
+        $swagBundle->setValidFrom($bundle->getAvailableFrom());
+        $swagBundle->setValidTo($bundle->getAvailableTo());
+        $swagBundle->setLimited($bundle->hasStockLimitation());
+        $swagBundle->setQuantity($this->getBundleStock($bundle->getNumber()));
+        $swagBundle->setNumber($bundle->getNumber());
+        $swagBundle->setArticle($mainArticle);
+        $swagBundle->setCustomerGroups($this->getCustomerGroups($bundle));
+        $swagBundle->setPrices($this->getPrices($bundle, $swagBundle));
+        $swagBundle->setPosition($bundle->getPosition());
+        $swagBundle->setArticles($this->getArticles($bundle, $swagBundle, $mainVariant));
+        $swagBundle->setActive($mainArticle->getActive());
+        $swagBundle->setLimitedDetails([$mainVariant]);
 
-        $bundleModel->setName($bundle->getName());
-        $bundleModel->setValidFrom($bundle->getAvailableFrom());
-        $bundleModel->setValidTo($bundle->getAvailableTo());
-        $bundleModel->setLimited($bundle->hasStockLimitation());
-        $bundleModel->setQuantity($this->getBundleStock($bundle->getNumber()));
-        $bundleModel->setNumber($bundle->getNumber());
-        $bundleModel->setArticle($mainArticle);
-        $bundleModel->setCustomerGroups($this->getCustomerGroups($bundle));
-        $bundleModel->setPrices($this->getPrices($bundle, $bundleModel));
-        $bundleModel->setPosition($bundle->getPosition());
-        $bundleModel->setArticles($this->getArticles($bundle, $bundleModel, $mainVariant));
-        $bundleModel->setActive($this->active);
-
-        $this->entityManager->persist($bundleModel);
+        $this->entityManager->persist($swagBundle);
         $this->entityManager->flush();
-        $this->entityManager->clear();
 
         return true;
     }
@@ -188,11 +214,11 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
     /**
      * @param Price $price
      *
-     * @return null|GroupModel
+     * @return null|Group
      */
     private function getCustomerGroupFromPrice(Price $price)
     {
-        $repository = $this->entityManager->getRepository(GroupModel::class);
+        $repository = $this->entityManager->getRepository(Group::class);
 
         if (null === $price->getCustomerGroupIdentifier()) {
             return $repository->findOneBy(['key' => 'EK']);
@@ -235,12 +261,12 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param Bundle      $bundle
-     * @param BundleModel $bundleModel
+     * @param Bundle     $bundle
+     * @param SwagBundle $bundleModel
      *
      * @return ArrayCollection
      */
-    private function getPrices(Bundle $bundle, BundleModel $bundleModel)
+    private function getPrices(Bundle $bundle, SwagBundle $bundleModel)
     {
         $prices = [];
         foreach ($bundle->getPrices() as $price) {
@@ -252,7 +278,7 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
 
             $netPrice = $price->getPrice() * (100 / ($bundleModel->getArticle()->getTax()->getTax() + 100));
 
-            $priceModel = new PriceModel();
+            $priceModel = new BundlePrice();
             $priceModel->setBundle($bundleModel);
             $priceModel->setCustomerGroup($group);
             $priceModel->setPrice($netPrice);
@@ -264,23 +290,24 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param Bundle      $bundle
-     * @param BundleModel $bundleModel
-     * @param DetailModel $mainVariant
+     * @param Bundle     $bundle
+     * @param SwagBundle $bundleModel
+     * @param Detail     $mainVariant
      *
      * @return ArrayCollection
      */
-    private function getArticles(Bundle $bundle, BundleModel $bundleModel, DetailModel $mainVariant)
+    private function getArticles(Bundle $bundle, SwagBundle $bundleModel, Detail $mainVariant)
     {
-        $repository = $this->entityManager->getRepository(DetailModel::class);
-
         $result = [];
         foreach ($bundle->getBundleProducts() as $bundleProduct) {
             if ($mainVariant->getNumber() === $bundleProduct->getNumber()) {
                 continue;
             }
 
-            $detail = $repository->findOneBy(['number' => $bundleProduct->getNumber()]);
+            /**
+             * @var Detail $detail
+             */
+            $detail = $this->detailRepository->findOneBy(['number' => $bundleProduct->getNumber()]);
 
             if (null === $detail) {
                 $this->logger->error('bundle product not found => number: ' . $bundleProduct->getNumber());
@@ -289,7 +316,10 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
                 continue;
             }
 
-            $product = new Article();
+            /**
+             * @var BundleItem $product
+             */
+            $product = new BundleItem();
             $product->setQuantity($bundleProduct->getAmount());
             $product->setArticleDetail($detail);
             $product->setPosition($bundleProduct->getPosition());
@@ -307,14 +337,15 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
      *
      * @throws NotFoundException
      *
-     * @return null|object
+     * @return null|Detail
      */
     private function getMainVariant(Bundle $bundle)
     {
-        $repository = $this->entityManager->getRepository(DetailModel::class);
-
+        /**
+         * @var Detail $detail
+         */
         foreach ($bundle->getBundleProducts() as $bundleProduct) {
-            $detail = $repository->findOneBy(['number' => $bundleProduct->getNumber()]);
+            $detail = $this->detailRepository->findOneBy(['number' => $bundleProduct->getNumber()]);
 
             if (null === $detail) {
                 throw new NotFoundException('bundle main product not found');
@@ -334,8 +365,10 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
      */
     private function getBundleStock($bundleNumber)
     {
-        $repository = $this->entityManager->getRepository(DetailModel::class);
-        $detail = $repository->findOneBy(['number' => $bundleNumber]);
+        /**
+         * @var Detail $detail
+         */
+        $detail = $this->detailRepository->findOneBy(['number' => $bundleNumber]);
 
         if (null === $detail) {
             return 0;
