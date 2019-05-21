@@ -15,6 +15,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - export custom products options as order items (@Pfabeck)
 - transmit surcharge as item option (@Pfabeck)
 - separate price import logic (@Pfabeck)
+- bundle variation limit (@Pfabeck)
 
 ## [## [5.1.0]]
 ### Fixed
