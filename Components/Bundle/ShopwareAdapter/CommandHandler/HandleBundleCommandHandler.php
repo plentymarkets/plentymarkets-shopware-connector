@@ -15,7 +15,7 @@ use Shopware\Models\Customer\Group;
 use ShopwareAdapter\ShopwareAdapter;
 use SwagBundle\Models\Article as BundleItem;
 use SwagBundle\Models\Bundle as SwagBundle;
-use SwagBundle\Models\Price as PriceModel;
+use SwagBundle\Models\Price as BundlePrice;
 use SystemConnector\IdentityService\Exception\NotFoundException;
 use SystemConnector\IdentityService\IdentityServiceInterface;
 use SystemConnector\ServiceBus\Command\CommandInterface;
@@ -277,7 +277,7 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
 
             $netPrice = $price->getPrice() * (100 / ($bundleModel->getArticle()->getTax()->getTax() + 100));
 
-            $priceModel = new PriceModel();
+            $priceModel = new BundlePrice();
             $priceModel->setBundle($bundleModel);
             $priceModel->setCustomerGroup($group);
             $priceModel->setPrice($netPrice);
