@@ -215,6 +215,7 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
 
     /**
      * @param ArticleImage $image
+     *
      * @throws InvalidArgumentException
      */
     public function removeMediaTranslation(ArticleImage $image)
