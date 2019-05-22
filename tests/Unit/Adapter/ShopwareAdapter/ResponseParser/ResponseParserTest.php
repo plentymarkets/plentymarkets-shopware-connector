@@ -3,6 +3,7 @@
 namespace PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_MockObject_MockObject;
 use Ramsey\Uuid\Uuid;
 use SystemConnector\IdentityService\IdentityService;
 use SystemConnector\IdentityService\Struct\Identity;
@@ -37,7 +38,7 @@ abstract class ResponseParserTest extends TestCase
         $identity->method('getObjectIdentifier')->willReturn($this->objectIdentifier);
 
         /**
-         * @var IdentityService|\PHPUnit_Framework_MockObject_MockObject $identityService
+         * @var IdentityService|PHPUnit_Framework_MockObject_MockObject $identityService
          */
         $identityService = $this->createMock(IdentityService::class);
         $identityService->method('findOneBy')->willReturn($identity);
