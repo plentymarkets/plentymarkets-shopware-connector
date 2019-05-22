@@ -4,7 +4,7 @@ namespace SystemConnector\TransferObject;
 
 use SystemConnector\ValueObject\Translation\Translation;
 
-interface TranslateableInterface
+interface TranslatableInterface
 {
     /**
      * @return Translation[]

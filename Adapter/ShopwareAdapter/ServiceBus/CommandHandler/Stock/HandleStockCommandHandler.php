@@ -82,12 +82,12 @@ class HandleStockCommandHandler implements CommandHandlerInterface
             Stock::TYPE
         );
 
-        $variationRespository = $this->entityManager->getRepository(Detail::class);
+        $variationRepository = $this->entityManager->getRepository(Detail::class);
 
         /**
          * @var null|Detail $variation
          */
-        $variation = $variationRespository->find($variationIdentity->getAdapterIdentifier());
+        $variation = $variationRepository->find($variationIdentity->getAdapterIdentifier());
 
         if (null === $variation) {
             $this->logger->notice('could not find variation - ' . $stock->getVariationIdentifier());

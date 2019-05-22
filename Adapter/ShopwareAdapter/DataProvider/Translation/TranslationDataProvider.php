@@ -59,7 +59,7 @@ class TranslationDataProvider implements TranslationDataProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getShopsByLocaleIdentitiy(Identity $identity)
+    public function getShopsByLocaleIdentity(Identity $identity)
     {
         return $this->shopRepository->findBy([
             'locale' => $identity->getAdapterIdentifier(),

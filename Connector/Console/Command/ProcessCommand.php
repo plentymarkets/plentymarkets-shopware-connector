@@ -51,7 +51,7 @@ class ProcessCommand extends Command
     protected function configure()
     {
         $this->setName('plentyconnector:process');
-        $this->setDescription('process definitons');
+        $this->setDescription('process definitions');
         $this->setHelp($this->getHelpText());
         $this->addArgument(
             'objectType',

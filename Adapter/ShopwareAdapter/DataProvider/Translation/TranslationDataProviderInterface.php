@@ -19,7 +19,7 @@ interface TranslationDataProviderInterface
      *
      * @return ShopModel[]
      */
-    public function getShopsByLocaleIdentitiy(Identity $identity);
+    public function getShopsByLocaleIdentity(Identity $identity);
 
     /**
      * @param Property $property

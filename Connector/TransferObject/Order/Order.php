@@ -392,7 +392,7 @@ class Order extends AbstractTransferObject implements AttributableInterface
             'shoppingAddress' => $this->getShippingAddress(),
             'orderItems' => $this->getOrderItems(),
             'shopIdentifier' => $this->getShopIdentifier(),
-            'currentyIdentifier' => $this->getCurrencyIdentifier(),
+            'currencyIdentifier' => $this->getCurrencyIdentifier(),
             'orderStatusIdentifier' => $this->getOrderStatusIdentifier(),
             'paymentStatusIdentifier' => $this->getPaymentStatusIdentifier(),
             'paymentMethodIdentifier' => $this->getPaymentMethodIdentifier(),

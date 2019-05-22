@@ -1,5 +1,5 @@
 # Error Handling
-This Document should give a brief overview how and where the connector handels errors
+This Document should give a brief overview how and where the connector handles errors
 
 ## Reading Phase
 During the reading phase of the connector, errors with different levels could occur. 

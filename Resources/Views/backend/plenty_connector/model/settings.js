@@ -18,7 +18,7 @@ Ext.define('Shopware.apps.PlentyConnector.model.Settings', {
             name: 'rest_password',
             type: 'string'
         },
-        // aditional settings
+        // additional settings
         {
             name: 'product_configurator_type',
             type: 'integer'

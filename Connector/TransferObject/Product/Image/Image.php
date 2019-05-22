@@ -2,11 +2,11 @@
 
 namespace SystemConnector\TransferObject\Product\Image;
 
-use SystemConnector\TransferObject\TranslateableInterface;
+use SystemConnector\TransferObject\TranslatableInterface;
 use SystemConnector\ValueObject\AbstractValueObject;
 use SystemConnector\ValueObject\Translation\Translation;
 
-class Image extends AbstractValueObject implements TranslateableInterface
+class Image extends AbstractValueObject implements TranslatableInterface
 {
     /**
      * @var string

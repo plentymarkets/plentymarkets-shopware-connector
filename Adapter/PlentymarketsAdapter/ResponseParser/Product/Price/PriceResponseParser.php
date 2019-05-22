@@ -29,7 +29,7 @@ class PriceResponseParser implements PriceResponseParserInterface
     /**
      * @var ContactClass
      */
-    private $itemsAccountsContacsClasses;
+    private $itemsAccountsContactClasses;
 
     /**
      * @var LoggerInterface
@@ -44,13 +44,13 @@ class PriceResponseParser implements PriceResponseParserInterface
     public function __construct(
         IdentityServiceInterface $identityService,
         SalesPrice $itemsSalesPricesApi,
-        ContactClass $itemsAccountsContacsClasses,
+        ContactClass $itemsAccountsContactClasses,
         LoggerInterface $logger,
         ConfigServiceInterface $configService
     ) {
         $this->identityService = $identityService;
         $this->itemsSalesPricesApi = $itemsSalesPricesApi;
-        $this->itemsAccountsContacsClasses = $itemsAccountsContacsClasses;
+        $this->itemsAccountsContactClasses = $itemsAccountsContactClasses;
         $this->logger = $logger;
         $this->configService = $configService;
     }
@@ -120,12 +120,12 @@ class PriceResponseParser implements PriceResponseParserInterface
                 continue;
             }
 
-            usort($possibleScalePrices, function (Price $possibleScalePriceLeft, Price $possibleScalePriceright) {
-                if ($possibleScalePriceLeft->getFromAmount() === $possibleScalePriceright->getFromAmount()) {
+            usort($possibleScalePrices, function (Price $possibleScalePriceLeft, Price $possibleScalePriceRight) {
+                if ($possibleScalePriceLeft->getFromAmount() === $possibleScalePriceRight->getFromAmount()) {
                     return 0;
                 }
 
-                if ($possibleScalePriceLeft->getFromAmount() > $possibleScalePriceright->getFromAmount()) {
+                if ($possibleScalePriceLeft->getFromAmount() > $possibleScalePriceRight->getFromAmount()) {
                     return 1;
                 }
 
@@ -179,7 +179,7 @@ class PriceResponseParser implements PriceResponseParserInterface
         static $customerGroups;
 
         if (null === $customerGroups) {
-            $customerGroups = array_keys($this->itemsAccountsContacsClasses->findAll());
+            $customerGroups = array_keys($this->itemsAccountsContactClasses->findAll());
         }
 
         $temporaryPrices = [];

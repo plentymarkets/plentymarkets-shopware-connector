@@ -84,13 +84,13 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
          */
         $variation = $command->getPayload();
 
-        $productIdentitiy = $this->identityService->findOneBy([
+        $productIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $variation->getProductIdentifier(),
             'objectType' => Product::TYPE,
             'adapterName' => ShopwareAdapter::NAME,
         ]);
 
-        if (null === $productIdentitiy) {
+        if (null === $productIdentity) {
             return false;
         }
 
@@ -152,7 +152,7 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
             );
         }
 
-        $this->correctProductAssignment($variationModel, $productIdentitiy);
+        $this->correctProductAssignment($variationModel, $productIdentity);
         $this->correctMainDetailAssignment($variationModel, $variation);
 
         $this->attributeDataPersister->saveProductDetailAttributes(
@@ -196,31 +196,31 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * migrating variation from one product to the correct connector handeled product
+     * migrating variation from one product to the correct connector handled product
      *
      * @param null|Detail $variationModel
-     * @param Identity    $productIdentitiy
+     * @param Identity    $productIdentity
      */
-    private function correctProductAssignment($variationModel, $productIdentitiy)
+    private function correctProductAssignment($variationModel, $productIdentity)
     {
         if (null === $variationModel) {
             return;
         }
 
-        if ((int) $productIdentitiy->getAdapterIdentifier() === $variationModel->getArticle()->getId()) {
+        if ((int) $productIdentity->getAdapterIdentifier() === $variationModel->getArticle()->getId()) {
             return;
         }
 
         $this->entityManager->getConnection()->update(
             's_articles_details',
-            ['articleID' => $productIdentitiy->getAdapterIdentifier()],
+            ['articleID' => $productIdentity->getAdapterIdentifier()],
             ['id' => $variationModel->getId()]
         );
 
-        $this->logger->notice('migrated variation from existing product to connector handeled product.', [
+        $this->logger->notice('migrated variation from existing product to connector handled product.', [
             'variation' => $variationModel->getNumber(),
             'old shopware product id' => $variationModel->getArticle()->getId(),
-            'new shopware product id' => $productIdentitiy->getAdapterIdentifier(),
+            'new shopware product id' => $productIdentity->getAdapterIdentifier(),
         ]);
     }
 }
