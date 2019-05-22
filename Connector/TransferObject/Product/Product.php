@@ -9,11 +9,11 @@ use SystemConnector\TransferObject\Product\Badge\Badge;
 use SystemConnector\TransferObject\Product\Image\Image;
 use SystemConnector\TransferObject\Product\LinkedProduct\LinkedProduct;
 use SystemConnector\TransferObject\Product\Property\Property;
-use SystemConnector\TransferObject\TranslateableInterface;
+use SystemConnector\TransferObject\TranslatableInterface;
 use SystemConnector\ValueObject\Attribute\Attribute;
 use SystemConnector\ValueObject\Translation\Translation;
 
-class Product extends AbstractTransferObject implements TranslateableInterface, AttributableInterface
+class Product extends AbstractTransferObject implements TranslatableInterface, AttributableInterface
 {
     const TYPE = 'Product';
     const MULTIPACK = 'multiPack';

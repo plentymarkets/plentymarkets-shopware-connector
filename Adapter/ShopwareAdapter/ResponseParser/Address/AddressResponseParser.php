@@ -31,13 +31,13 @@ class AddressResponseParser implements AddressResponseParserInterface
     {
         $entry['salutation'] = strtolower($entry['salutation']);
 
-        $countryIdentitiy = $this->identityService->findOneBy([
+        $countryIdentity = $this->identityService->findOneBy([
             'adapterIdentifier' => $entry['country']['id'],
             'adapterName' => ShopwareAdapter::NAME,
             'objectType' => Country::TYPE,
         ]);
 
-        if (null === $countryIdentitiy) {
+        if (null === $countryIdentity) {
             throw new NotFoundException('country mapping missing - ' . json_encode($entry));
         }
 
@@ -56,7 +56,7 @@ class AddressResponseParser implements AddressResponseParserInterface
             'street' => $entry['street'],
             'postalCode' => $entry['zipCode'],
             'city' => $entry['city'],
-            'countryIdentifier' => $countryIdentitiy->getObjectIdentifier(),
+            'countryIdentifier' => $countryIdentity->getObjectIdentifier(),
             'vatId' => !empty($entry['vatId']) ? $entry['vatId'] : null,
         ];
 

@@ -43,20 +43,20 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
     /**
      * @var AddressRequestGeneratorInterface
      */
-    private $addressReuqestGenerator;
+    private $addressRequestGenerator;
 
     public function __construct(
         IdentityServiceInterface $identityService,
         ClientInterface $client,
         OrderItemRequestGeneratorInterface $orderItemRequestGenerator,
         CustomerRequestGeneratorInterface $customerRequestGenerator,
-        AddressRequestGeneratorInterface $addressReuqestGenerator
+        AddressRequestGeneratorInterface $addressRequestGenerator
     ) {
         $this->identityService = $identityService;
         $this->client = $client;
         $this->orderItemRequestGenerator = $orderItemRequestGenerator;
         $this->customerRequestGenerator = $customerRequestGenerator;
-        $this->addressReuqestGenerator = $addressReuqestGenerator;
+        $this->addressRequestGenerator = $addressRequestGenerator;
     }
 
     /**
@@ -205,7 +205,7 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
      */
     private function createAddress(Address $address, Order $order, array $plentyCustomer, $addressType = 1)
     {
-        $params = $this->addressReuqestGenerator->generate($address, $order, $addressType);
+        $params = $this->addressRequestGenerator->generate($address, $order, $addressType);
 
         return $this->client->request('POST', 'accounts/contacts/' . $plentyCustomer['id'] . '/addresses', $params);
     }

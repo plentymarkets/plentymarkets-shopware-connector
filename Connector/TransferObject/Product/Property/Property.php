@@ -3,11 +3,11 @@
 namespace SystemConnector\TransferObject\Product\Property;
 
 use SystemConnector\TransferObject\Product\Property\Value\Value;
-use SystemConnector\TransferObject\TranslateableInterface;
+use SystemConnector\TransferObject\TranslatableInterface;
 use SystemConnector\ValueObject\AbstractValueObject;
 use SystemConnector\ValueObject\Translation\Translation;
 
-class Property extends AbstractValueObject implements TranslateableInterface
+class Property extends AbstractValueObject implements TranslatableInterface
 {
     /**
      * @var string

@@ -47,7 +47,7 @@ class CategoryValidator implements ValidatorInterface
             'NOINDEX, FOLLOW',
             'INDEX, NOFOLLOW',
             'NOINDEX, NOFOLLOW',
-        ], null, 'category.metaTobots');
+        ], null, 'category.metaRobots');
 
         Assertion::allIsInstanceOf($object->getTranslations(), Translation::class, null, 'category.translations');
         Assertion::allIsInstanceOf($object->getAttributes(), Attribute::class, null, 'category.attributes');

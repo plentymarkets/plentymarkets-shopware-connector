@@ -82,7 +82,7 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
         }
 
         $orderIdentity = $this->identityService->findOneBy([
-            'objectIdentifier' => $payment->getOrderIdentifer(),
+            'objectIdentifier' => $payment->getOrderIdentifier(),
             'objectType' => Order::TYPE,
             'adapterName' => PlentymarketsAdapter::NAME,
         ]);

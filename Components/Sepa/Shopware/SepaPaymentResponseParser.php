@@ -51,7 +51,7 @@ class SepaPaymentResponseParser implements PaymentResponseParserInterface
             $identifier = $this->getIdentifier($element['id'], Payment::TYPE);
 
             $payment = new Payment();
-            $payment->setOrderIdentifer($this->getIdentifier($element['id'], Order::TYPE));
+            $payment->setOrderIdentifier($this->getIdentifier($element['id'], Order::TYPE));
             $payment->setIdentifier($identifier);
             $payment->setShopIdentifier($this->getIdentifier($element['shopId'], Shop::TYPE));
             $payment->setTransactionReference($identifier);

@@ -67,11 +67,11 @@ class FetchChangedPricesQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $lastCangedTime = $this->getChangedDateTime();
+        $lastChangedTime = $this->getChangedDateTime();
         $currentDateTime = $this->getCurrentDateTime();
 
         $elements = $this->client->getIterator('items/variations/variation_sales_prices', [
-            'updatedAt' => $lastCangedTime->format(DATE_W3C),
+            'updatedAt' => $lastChangedTime->format(DATE_W3C),
         ]);
 
         $this->outputHandler->startProgressBar(count($elements));

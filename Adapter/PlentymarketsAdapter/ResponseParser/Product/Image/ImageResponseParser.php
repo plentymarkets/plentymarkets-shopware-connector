@@ -74,8 +74,8 @@ class ImageResponseParser implements ImageResponseParserInterface
 
             $result[$media->getIdentifier()] = $media;
 
-            $linkedShops = array_filter($entry['availabilities'], function (array $availabilitiy) {
-                return $availabilitiy['type'] === 'mandant';
+            $linkedShops = array_filter($entry['availabilities'], function (array $availability) {
+                return $availability['type'] === 'mandant';
             });
 
             $shopIdentifiers = array_map(function ($shop) {

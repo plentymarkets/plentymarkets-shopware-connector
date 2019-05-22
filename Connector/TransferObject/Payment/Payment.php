@@ -19,7 +19,7 @@ class Payment extends AbstractTransferObject implements AttributableInterface
     /**
      * @var string
      */
-    private $orderIdentifer;
+    private $orderIdentifier;
 
     /**
      * @var float
@@ -90,17 +90,17 @@ class Payment extends AbstractTransferObject implements AttributableInterface
     /**
      * @return string
      */
-    public function getOrderIdentifer()
+    public function getOrderIdentifier()
     {
-        return $this->orderIdentifer;
+        return $this->orderIdentifier;
     }
 
     /**
-     * @param string $orderIdentifer
+     * @param string $orderIdentifier
      */
-    public function setOrderIdentifer($orderIdentifer)
+    public function setOrderIdentifier($orderIdentifier)
     {
-        $this->orderIdentifer = $orderIdentifer;
+        $this->orderIdentifier = $orderIdentifier;
     }
 
     /**
@@ -238,7 +238,7 @@ class Payment extends AbstractTransferObject implements AttributableInterface
     {
         return [
             'identifier' => $this->getIdentifier(),
-            'orderIdentifier' => $this->getOrderIdentifer(),
+            'orderIdentifier' => $this->getOrderIdentifier(),
             'amount' => $this->getAmount(),
             'shopIdentifier' => $this->getShopIdentifier(),
             'currencyIdentifier' => $this->getCurrencyIdentifier(),

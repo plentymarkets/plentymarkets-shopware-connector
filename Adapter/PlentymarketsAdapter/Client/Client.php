@@ -171,7 +171,7 @@ class Client implements ClientInterface
             throw new RuntimeException('curl client error:' . $errno);
         }
 
-        $this->handeRateLimits($headers);
+        $this->handelRateLimits($headers);
 
         if ($info['http_code'] === 401) {
             throw new LoginExpiredException();
@@ -215,7 +215,7 @@ class Client implements ClientInterface
     private function login()
     {
         if (null === $this->configService->get('rest_username') || null === $this->configService->get('rest_password')) {
-            throw new InvalidCredentialsException('invalid creddentials');
+            throw new InvalidCredentialsException('invalid credentials');
         }
 
         $login = $this->request('POST', 'login', [
@@ -277,7 +277,7 @@ class Client implements ClientInterface
     private function getBaseUri($url)
     {
         if (null === $url) {
-            throw new InvalidCredentialsException('invalid creddentials');
+            throw new InvalidCredentialsException('invalid credentials');
         }
 
         $parts = parse_url($url);
@@ -386,7 +386,7 @@ class Client implements ClientInterface
     /**
      * @param array $headers
      */
-    private function handeRateLimits(array $headers)
+    private function handelRateLimits(array $headers)
     {
         $limitHeaders = [
             'X-Plenty-Global-Long-Period',

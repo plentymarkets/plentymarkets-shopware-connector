@@ -9,7 +9,7 @@ use Monolog\Logger;
 class CallbackLogHandler extends AbstractProcessingHandler
 {
     /**
-     * The clousure which will be called if an error message was logged
+     * The closure which will be called if an error message was logged
      *
      * @var Closure
      */

@@ -175,7 +175,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         $mainCategory = $shop->getCategory();
 
         if (null === $mainCategory) {
-            throw new InvalidArgumentException('shop without main cateogry assignment');
+            throw new InvalidArgumentException('shop without main category assignment');
         }
 
         $shopLocale = $shop->getLocale();

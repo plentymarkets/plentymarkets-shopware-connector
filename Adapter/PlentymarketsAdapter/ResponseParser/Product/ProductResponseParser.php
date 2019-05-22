@@ -102,7 +102,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         $result = [];
 
         if (empty($product['texts'])) {
-            $this->logger->notice('the product has no text fieds and will be skipped', [
+            $this->logger->notice('the product has no text fields and will be skipped', [
                 'product id' => $product['id'],
             ]);
 
@@ -144,7 +144,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         $productObject->setShopIdentifiers($this->variationHelper->getShopIdentifiers($mainVariation));
         $productObject->setManufacturerIdentifier($this->getManufacturerIdentifier($product));
         $productObject->setCategoryIdentifiers($this->getCategories($mainVariation));
-        $productObject->setDefaultCategoryIdentifiers($this->getDafaultCategories($mainVariation));
+        $productObject->setDefaultCategoryIdentifiers($this->getDefaultCategories($mainVariation));
         $productObject->setShippingProfileIdentifiers($this->getShippingProfiles($product));
         $productObject->setImages($this->getImages($product, $product['texts'], $result));
         $productObject->setVatRateIdentifier($this->getVatRateIdentifier($mainVariation));
@@ -273,10 +273,9 @@ class ProductResponseParser implements ProductResponseParserInterface
 
     /**
      * @param array $mainVariation
-     *
      * @return array
      */
-    private function getDafaultCategories(array $mainVariation)
+    private function getDefaultCategories(array $mainVariation)
     {
         $defaultCategories = [];
 

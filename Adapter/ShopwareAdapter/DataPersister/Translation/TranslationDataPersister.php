@@ -413,7 +413,7 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
      */
     private function writeTranslations($type, $primaryKey, array $translation, Identity $languageIdentity)
     {
-        $shops = $this->dataProvider->getShopsByLocaleIdentitiy($languageIdentity);
+        $shops = $this->dataProvider->getShopsByLocaleIdentity($languageIdentity);
 
         foreach ($shops as $shop) {
             $this->shopwareTranslationManager->write(

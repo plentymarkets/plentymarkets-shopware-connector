@@ -74,13 +74,13 @@ class HandleAmazonPayPaymentCommandHandler implements CommandHandlerInterface
         }
 
         $orderIdentity = $this->identityService->findOneBy([
-            'objectIdentifier' => $payment->getOrderIdentifer(),
+            'objectIdentifier' => $payment->getOrderIdentifier(),
             'objectType' => Order::TYPE,
             'adapterName' => PlentymarketsAdapter::NAME,
         ]);
 
         if (null === $orderIdentity) {
-            throw new NotFoundException('could not find order for amazon payment handling - ' . $payment->getOrderIdentifer());
+            throw new NotFoundException('could not find order for amazon payment handling - ' . $payment->getOrderIdentifier());
         }
 
         $amazonPayDataParams = [

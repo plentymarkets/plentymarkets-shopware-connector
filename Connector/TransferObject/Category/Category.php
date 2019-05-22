@@ -4,11 +4,11 @@ namespace SystemConnector\TransferObject\Category;
 
 use SystemConnector\TransferObject\AbstractTransferObject;
 use SystemConnector\TransferObject\AttributableInterface;
-use SystemConnector\TransferObject\TranslateableInterface;
+use SystemConnector\TransferObject\TranslatableInterface;
 use SystemConnector\ValueObject\Attribute\Attribute;
 use SystemConnector\ValueObject\Translation\Translation;
 
-class Category extends AbstractTransferObject implements TranslateableInterface, AttributableInterface
+class Category extends AbstractTransferObject implements TranslatableInterface, AttributableInterface
 {
     const TYPE = 'Category';
 
