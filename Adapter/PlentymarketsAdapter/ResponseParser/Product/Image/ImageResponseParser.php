@@ -102,6 +102,7 @@ class ImageResponseParser implements ImageResponseParserInterface
             return $image;
         } catch (Exception $exception) {
             $this->logger->notice('error when parsing product image', [
+                'message' => $exception->getMessage(),
                 'id' => $entry['id'],
                 'url' => $entry['url'],
             ]);
