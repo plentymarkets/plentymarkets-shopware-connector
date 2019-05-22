@@ -2,6 +2,7 @@
 
 namespace ShopwareAdapter\DataPersister\Translation;
 
+use Doctrine\DBAL\Exception\InvalidArgumentException;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Shopware\Models\Article\Image as ArticleImage;
@@ -213,7 +214,9 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
     }
 
     /**
-     * @param Image $image
+     * @param ArticleImage $image
+     *
+     * @throws InvalidArgumentException
      */
     public function removeMediaTranslation(ArticleImage $image)
     {

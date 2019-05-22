@@ -2,10 +2,11 @@
 
 namespace SystemConnector\ValidatorService\Exception;
 
+use Exception;
 use SystemConnector\TransferObject\TransferObjectInterface;
 use SystemConnector\ValueObject\ValueObjectInterface;
 
-class InvalidDataException extends \Exception
+class InvalidDataException extends Exception
 {
     /**
      * @param TransferObjectInterface|ValueObjectInterface $object
