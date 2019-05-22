@@ -273,6 +273,7 @@ class ProductResponseParser implements ProductResponseParserInterface
 
     /**
      * @param array $mainVariation
+     *
      * @return array
      */
     private function getDefaultCategories(array $mainVariation)
