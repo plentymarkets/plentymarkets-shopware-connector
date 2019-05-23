@@ -10,10 +10,10 @@ interface LanguageHelperInterface
      *
      * @return array
      */
-    public function getLanguages();
+    public function getLanguages(): array;
 
     /**
      * @return string
      */
-    public function getLanguagesQueryString();
+    public function getLanguagesQueryString() :string;
 }

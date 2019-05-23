@@ -9,9 +9,9 @@ class MediaCategoryHelper implements MediaCategoryHelperInterface
     const CATEGORY = 3;
 
     /**
-     * {@inheritdoc}
+     * @return array
      */
-    public function getCategories()
+    public function getCategories() :array
     {
         return [
             $this::MANUFACTURER => [

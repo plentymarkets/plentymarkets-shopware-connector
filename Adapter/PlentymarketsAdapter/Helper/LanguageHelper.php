@@ -23,9 +23,9 @@ class LanguageHelper implements LanguageHelperInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return array
      */
-    public function getLanguages()
+    public function getLanguages() :array
     {
         return [
             [
@@ -108,9 +108,9 @@ class LanguageHelper implements LanguageHelperInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
-    public function getLanguagesQueryString()
+    public function getLanguagesQueryString() :string
     {
         $languages = [];
 

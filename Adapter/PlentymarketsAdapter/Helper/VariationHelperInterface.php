@@ -9,19 +9,19 @@ interface VariationHelperInterface
      *
      * @return array
      */
-    public function getShopIdentifiers(array $variation);
+    public function getShopIdentifiers(array $variation) :array;
 
     /**
      * @return array
      */
-    public function getMappedPlentyClientIds();
+    public function getMappedPlentyClientIds() :array;
 
     /**
      * @param array $variations
      *
      * @return array
      */
-    public function getMainVariation(array $variations);
+    public function getMainVariation(array $variations) :array;
 
     /**
      * @param array $mainVariation
@@ -29,5 +29,5 @@ interface VariationHelperInterface
      *
      * @return string
      */
-    public function getMainVariationNumber(array $mainVariation, array $variations = []);
+    public function getMainVariationNumber(array $mainVariation, array $variations = []) :string;
 }

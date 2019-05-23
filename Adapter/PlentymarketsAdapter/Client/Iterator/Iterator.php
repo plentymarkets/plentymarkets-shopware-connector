@@ -3,6 +3,7 @@
 namespace PlentymarketsAdapter\Client\Iterator;
 
 use Assert\Assertion;
+use Assert\AssertionFailedException;
 use Closure;
 use Countable;
 use Iterator as BaseIterator;
@@ -56,10 +57,12 @@ class Iterator implements BaseIterator, Countable
     private $isLastPage = false;
 
     /**
-     * @param string       $path
+     * @param $path
      * @param Client       $client
      * @param array        $criteria
      * @param null|Closure $prepareFunction
+     *
+     * @throws AssertionFailedException
      */
     public function __construct($path, Client $client, array $criteria = [], Closure $prepareFunction = null)
     {

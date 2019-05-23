@@ -8,31 +8,31 @@ use PlentymarketsAdapter\Client\Iterator\Iterator;
 interface ClientInterface
 {
     /**
-     * @param string   $method
-     * @param string   $path
-     * @param array    $params
-     * @param null|int $limit
-     * @param null|int $offset
-     * @param array    $options
+     * @param $method
+     * @param $path
+     * @param array $params
+     * @param null  $limit
+     * @param null  $offset
+     * @param array $options
      *
      * @return array
      */
-    public function request($method, $path, array $params = [], $limit = null, $offset = null, array $options = []);
+    public function request($method, $path, array $params = [], $limit = null, $offset = null, array $options = []) :array;
 
     /**
-     * @param string       $path
+     * @param $path
      * @param array        $criteria
      * @param null|Closure $prepareFunction
      *
      * @return Iterator
      */
-    public function getIterator($path, array $criteria = [], Closure $prepareFunction = null);
+    public function getIterator($path, array $criteria = [], Closure $prepareFunction = null): Iterator;
 
     /**
-     * @param string $path
-     * @param array  $criteria
+     * @param $path
+     * @param array $criteria
      *
      * @return int
      */
-    public function getTotal($path, array $criteria = []);
+    public function getTotal($path, array $criteria = []): int;
 }
