@@ -105,14 +105,16 @@ class VariationResponseParser implements VariationResponseParserInterface
 
     /**
      * @param array $product
-     * @return array
+     *
      * @throws NotFoundException
+     *
+     * @return array
      */
     public function parse(array $product): array
     {
         $productIdentity = $this->identityService->findOneBy(
             [
-                'adapterIdentifier' => (string)$product['id'],
+                'adapterIdentifier' => (string) $product['id'],
                 'adapterName' => PlentymarketsAdapter::NAME,
                 'objectType' => Product::TYPE,
             ]
@@ -151,11 +153,11 @@ class VariationResponseParser implements VariationResponseParserInterface
         usort(
             $variations,
             static function (array $a, array $b) {
-                if ((int)$a['position'] === (int)$b['position']) {
+                if ((int) $a['position'] === (int) $b['position']) {
                     return 0;
                 }
 
-                return ((int)$a['position'] < (int)$b['position']) ? -1 : 1;
+                return ((int) $a['position'] < (int) $b['position']) ? -1 : 1;
             }
         );
 
@@ -163,7 +165,7 @@ class VariationResponseParser implements VariationResponseParserInterface
 
         foreach ($variations as $variation) {
             $identity = $this->identityService->findOneOrCreate(
-                (string)$variation['id'],
+                (string) $variation['id'],
                 PlentymarketsAdapter::NAME,
                 Variation::TYPE
             );
@@ -171,26 +173,26 @@ class VariationResponseParser implements VariationResponseParserInterface
             $variationObject = new Variation();
             $variationObject->setIdentifier($identity->getObjectIdentifier());
             $variationObject->setProductIdentifier($productIdentity->getObjectIdentifier());
-            $variationObject->setActive((bool)$variation['isActive']);
+            $variationObject->setActive((bool) $variation['isActive']);
             $variationObject->setNumber($this->getVariationNumber($variation));
             $variationObject->setStockLimitation($variation['stockLimitation'] === 1);
             $variationObject->setBarcodes($this->getBarcodes($variation));
-            $variationObject->setPosition((int)$variation['position']);
-            $variationObject->setModel((string)$variation['model']);
+            $variationObject->setPosition((int) $variation['position']);
+            $variationObject->setModel((string) $variation['model']);
             $variationObject->setImages($this->getVariationImages($product['texts'], $variation, $result));
             $variationObject->setPrices($this->priceResponseParser->parse($variation));
-            $variationObject->setPurchasePrice((float)$variation['purchasePrice']);
+            $variationObject->setPurchasePrice((float) $variation['purchasePrice']);
             $variationObject->setUnitIdentifier($this->getUnitIdentifier($variation));
-            $variationObject->setContent((float)$variation['unit']['content']);
+            $variationObject->setContent((float) $variation['unit']['content']);
             $variationObject->setReferenceAmount($this->referenceAmountCalculator->calculate($variation));
-            $variationObject->setMaximumOrderQuantity((float)$variation['maximumOrderQuantity']);
-            $variationObject->setMinimumOrderQuantity((float)$variation['minimumOrderQuantity']);
-            $variationObject->setIntervalOrderQuantity((float)$variation['intervalOrderQuantity']);
+            $variationObject->setMaximumOrderQuantity((float) $variation['maximumOrderQuantity']);
+            $variationObject->setMinimumOrderQuantity((float) $variation['minimumOrderQuantity']);
+            $variationObject->setIntervalOrderQuantity((float) $variation['intervalOrderQuantity']);
             $variationObject->setReleaseDate($this->getReleaseDate($variation));
             $variationObject->setShippingTime($this->getShippingTime($variation));
-            $variationObject->setWidth((int)$variation['widthMM']);
-            $variationObject->setHeight((int)$variation['heightMM']);
-            $variationObject->setLength((int)$variation['lengthMM']);
+            $variationObject->setWidth((int) $variation['widthMM']);
+            $variationObject->setHeight((int) $variation['heightMM']);
+            $variationObject->setLength((int) $variation['lengthMM']);
             $variationObject->setWeight($this->getVariationWeight($variation));
             $variationObject->setProperties($this->getVariationProperties($variation));
 
@@ -250,15 +252,16 @@ class VariationResponseParser implements VariationResponseParserInterface
     private function getVariationNumber(array $element): string
     {
         if ($this->configService->get('variation_number_field', 'number') === 'number') {
-            return (string)$element['number'];
+            return (string) $element['number'];
         }
 
-        return (string)$element['id'];
+        return (string) $element['id'];
     }
 
     /**
      * @param array $variation
-     * @return DateTimeImmutable|null
+     *
+     * @return null|DateTimeImmutable
      */
     private function getReleaseDate(array $variation)
     {
@@ -280,7 +283,7 @@ class VariationResponseParser implements VariationResponseParserInterface
     {
         $images = [];
 
-        foreach ((array)$variation['images'] as $entry) {
+        foreach ((array) $variation['images'] as $entry) {
             $images[] = $this->imageResponseParser->parseImage($entry, $texts, $result);
         }
 
@@ -289,8 +292,10 @@ class VariationResponseParser implements VariationResponseParserInterface
 
     /**
      * @param array $variation
-     * @return string|null
+     *
      * @throws NotFoundException
+     *
+     * @return null|string
      */
     private function getUnitIdentifier(array $variation)
     {
@@ -301,7 +306,7 @@ class VariationResponseParser implements VariationResponseParserInterface
         // Unit
         $unitIdentity = $this->identityService->findOneBy(
             [
-                'adapterIdentifier' => (string)$variation['unit']['unitId'],
+                'adapterIdentifier' => (string) $variation['unit']['unitId'],
                 'adapterName' => PlentymarketsAdapter::NAME,
                 'objectType' => Unit::TYPE,
             ]
@@ -344,7 +349,7 @@ class VariationResponseParser implements VariationResponseParserInterface
             return 0;
         }
 
-        return (int)$shippingConfiguration['averageDays'];
+        return (int) $shippingConfiguration['averageDays'];
     }
 
     /**
@@ -406,7 +411,7 @@ class VariationResponseParser implements VariationResponseParserInterface
         static $attributes;
 
         $result = [];
-        foreach ((array)$variation['variationAttributeValues'] as $attributeValue) {
+        foreach ((array) $variation['variationAttributeValues'] as $attributeValue) {
             if (!isset($attributes[$attributeValue['attributeId']])) {
                 $attributes[$attributeValue['attributeId']] = $this->itemAttributesApi->findOne(
                     $attributeValue['attributeId']
@@ -417,7 +422,7 @@ class VariationResponseParser implements VariationResponseParserInterface
 
             $attributes[$attributeValue['attributeId']]['values'] = [];
 
-            foreach ((array)$values as $value) {
+            foreach ((array) $values as $value) {
                 $attributes[$attributeValue['attributeId']]['values'][$value['id']] = $value;
             }
 
@@ -532,6 +537,6 @@ class VariationResponseParser implements VariationResponseParserInterface
             $weight = $variation['weightG'];
         }
 
-        return (float)($weight / 1000);
+        return (float) ($weight / 1000);
     }
 }
