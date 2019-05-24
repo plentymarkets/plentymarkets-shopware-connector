@@ -3,6 +3,9 @@
 namespace ShopwareAdapter\DataPersister\Attribute;
 
 use Assert\Assertion;
+use Assert\AssertionFailedException;
+use Exception;
+use Psr\Log\LoggerInterface;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\AttributeBundle\Service\DataPersister as ShopwareDataPersister;
 use Shopware\Bundle\AttributeBundle\Service\TypeMapping;
@@ -27,6 +30,11 @@ class AttributeDataPersister implements AttributeDataPersisterInterface
     private $entityManager;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @var ShopwareDataPersister
      */
     private $shopwareDataPersister;
@@ -39,10 +47,12 @@ class AttributeDataPersister implements AttributeDataPersisterInterface
     public function __construct(
         CrudService $attributeService,
         ModelManager $entityManager,
+        LoggerInterface $logger,
         ShopwareDataPersister $shopwareDataPersister
     ) {
         $this->attributeService = $attributeService;
         $this->entityManager = $entityManager;
+        $this->logger = $logger;
         $this->shopwareDataPersister = $shopwareDataPersister;
     }
 
@@ -87,15 +97,29 @@ class AttributeDataPersister implements AttributeDataPersisterInterface
     }
 
     /**
-     * @param int         $identifier
-     * @param string      $table
-     * @param Attribute[] $attributes
+     * @param $identifier
+     * @param $table
+     * @param array $attributes
      */
     private function saveAttributes($identifier, $table, array $attributes = [])
     {
-        Assertion::integer($identifier);
-        Assertion::allIsInstanceOf($attributes, Attribute::class);
-        Assertion::notBlank($table);
+        try {
+            Assertion::integer($identifier);
+        } catch (AssertionFailedException $e) {
+            $this->logger->warning($e->getMessage());
+        }
+
+        try {
+            Assertion::allIsInstanceOf($attributes, Attribute::class);
+        } catch (Exception $e) {
+            $this->logger->warning($e->getMessage());
+        }
+
+        try {
+            Assertion::notBlank($table);
+        } catch (AssertionFailedException $e) {
+            $this->logger->warning($e->getMessage());
+        }
 
         if (empty($attributes)) {
             return;
@@ -105,11 +129,15 @@ class AttributeDataPersister implements AttributeDataPersisterInterface
             $this->prepareAttribute($attribute, $table);
         });
 
-        $this->shopwareDataPersister->persist(
-            $this->getAttributesAsArray($attributes),
-            $table,
-            $identifier
-        );
+        try {
+            $this->shopwareDataPersister->persist(
+                $this->getAttributesAsArray($attributes),
+                $table,
+                $identifier
+            );
+        } catch (Exception $e) {
+            $this->logger->warning($e->getMessage());
+        }
     }
 
     /**
@@ -117,7 +145,7 @@ class AttributeDataPersister implements AttributeDataPersisterInterface
      *
      * @return string
      */
-    private function getAttributeKey(Attribute $attribute)
+    private function getAttributeKey(Attribute $attribute): string
     {
         $key = iconv('UTF-8', 'ASCII//TRANSLIT', $attribute->getKey());
 
@@ -128,7 +156,10 @@ class AttributeDataPersister implements AttributeDataPersisterInterface
 
     /**
      * @param Attribute $attribute
-     * @param string    $table
+     * @param $table
+     *
+     * @throws Exception
+     * @throws Exception
      */
     private function prepareAttribute(Attribute $attribute, $table)
     {
@@ -161,7 +192,7 @@ class AttributeDataPersister implements AttributeDataPersisterInterface
      *
      * @return array
      */
-    private function getAttributesAsArray(array $attributes = [])
+    private function getAttributesAsArray(array $attributes = []): array
     {
         $result = [];
 

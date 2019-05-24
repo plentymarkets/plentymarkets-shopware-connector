@@ -120,7 +120,7 @@ class DatabaseBacklogServiceStorage implements BacklogServiceStorageInterface
      *
      * @return bool
      */
-    private function entryExists($hash)
+    private function entryExists($hash): bool
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->from($this->table, 'backlog');
@@ -141,7 +141,7 @@ class DatabaseBacklogServiceStorage implements BacklogServiceStorageInterface
     /**
      * @return int
      */
-    private function getEnqueuedAmount()
+    private function getEnqueuedAmount(): int
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->from($this->table, 'backlog');

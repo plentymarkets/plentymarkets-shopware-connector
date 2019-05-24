@@ -52,7 +52,7 @@ class Stock extends AbstractTransferObject
     /**
      * @return string
      */
-    public function getVariationIdentifier()
+    public function getVariationIdentifier(): string
     {
         return $this->variationIdentifier;
     }
@@ -68,7 +68,7 @@ class Stock extends AbstractTransferObject
     /**
      * @return float
      */
-    public function getStock()
+    public function getStock(): float
     {
         return $this->stock;
     }

@@ -71,7 +71,7 @@ class Identity
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -79,7 +79,7 @@ class Identity
     /**
      * @return string
      */
-    public function getObjectIdentifier()
+    public function getObjectIdentifier(): string
     {
         return $this->objectIdentifier;
     }
@@ -95,7 +95,7 @@ class Identity
     /**
      * @return string
      */
-    public function getObjectType()
+    public function getObjectType(): string
     {
         return $this->objectType;
     }
@@ -111,7 +111,7 @@ class Identity
     /**
      * @return string
      */
-    public function getAdapterIdentifier()
+    public function getAdapterIdentifier(): string
     {
         return $this->adapterIdentifier;
     }
@@ -127,7 +127,7 @@ class Identity
     /**
      * @return string
      */
-    public function getAdapterName()
+    public function getAdapterName(): string
     {
         return $this->adapterName;
     }

@@ -72,7 +72,7 @@ class CronjobSubscriber implements SubscriberInterface
      *
      * @return bool
      */
-    public function onRunCronjobSynchronize(Args $args)
+    public function onRunCronjobSynchronize(Args $args): bool
     {
         try {
             $this->connector->handle(QueryType::CHANGED);
@@ -92,7 +92,7 @@ class CronjobSubscriber implements SubscriberInterface
      *
      * @return bool
      */
-    public function onRunCronjobProcessBacklog(Args $args)
+    public function onRunCronjobProcessBacklog(Args $args): bool
     {
         try {
             $counter = 0;
@@ -117,7 +117,7 @@ class CronjobSubscriber implements SubscriberInterface
      *
      * @return bool
      */
-    public function onRunCronjobCleanup(Args $args)
+    public function onRunCronjobCleanup(Args $args): bool
     {
         try {
             $this->cleanupService->cleanup();

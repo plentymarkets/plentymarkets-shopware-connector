@@ -19,7 +19,7 @@ interface TranslationDataProviderInterface
      *
      * @return ShopModel[]
      */
-    public function getShopsByLocaleIdentity(Identity $identity);
+    public function getShopsByLocaleIdentity(Identity $identity): array;
 
     /**
      * @param Property $property
@@ -55,5 +55,5 @@ interface TranslationDataProviderInterface
      *
      * @return Image
      */
-    public function getArticleImage(Identity $mediaIdentity, $articleId);
+    public function getArticleImage(Identity $mediaIdentity, $articleId): Image;
 }

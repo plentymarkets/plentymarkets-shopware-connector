@@ -96,7 +96,7 @@ class ClassNameFormatter implements ClassNameFormatterInterface
      *
      * @return string
      */
-    private function getType($command)
+    private function getType($command): string
     {
         if ($command instanceof CommandInterface) {
             return 'Command';
@@ -114,7 +114,7 @@ class ClassNameFormatter implements ClassNameFormatterInterface
      *
      * @return string
      */
-    private function getClassName($command)
+    private function getClassName($command): string
     {
         return substr(strrchr(get_class($command), '\\'), 1);
     }
@@ -124,7 +124,7 @@ class ClassNameFormatter implements ClassNameFormatterInterface
      *
      * @return array
      */
-    private function getPayload($command)
+    private function getPayload($command): array
     {
         if (!($command instanceof CommandInterface) && !($command instanceof QueryInterface)) {
             return [];
@@ -140,15 +140,16 @@ class ClassNameFormatter implements ClassNameFormatterInterface
      *
      * @return array
      */
-    private function preparePayload(array $payload)
+    private function preparePayload(array $payload): array
     {
-        return array_map(function ($payload) {
-            if (!($payload instanceof TransferObjectInterface)) {
-                return $payload;
-            }
+        return array_map(
+            static function ($payload) {
+                if (!($payload instanceof TransferObjectInterface)) {
+                    return $payload;
+                }
 
-            return $payload->getIdentifier();
-        }, $payload);
+                return $payload->getIdentifier();
+            }, $payload);
     }
 
     /**
@@ -156,7 +157,7 @@ class ClassNameFormatter implements ClassNameFormatterInterface
      *
      * @return string
      */
-    private function getReceivedMessage($command)
+    private function getReceivedMessage($command): string
     {
         return $this->getType($command) . ' received: ' . $this->getClassName($command);
     }
@@ -166,7 +167,7 @@ class ClassNameFormatter implements ClassNameFormatterInterface
      *
      * @return string
      */
-    private function getProcessedMessage($command)
+    private function getProcessedMessage($command): string
     {
         return $this->getType($command) . ' processed: ' . $this->getClassName($command);
     }
@@ -176,7 +177,7 @@ class ClassNameFormatter implements ClassNameFormatterInterface
      *
      * @return string
      */
-    private function getFailedMessage($command)
+    private function getFailedMessage($command): string
     {
         return $this->getType($command) . ' failed: ' . $this->getClassName($command);
     }

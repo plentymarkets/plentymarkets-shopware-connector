@@ -45,7 +45,7 @@ class ShippingProfile extends AbstractTransferObject
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }

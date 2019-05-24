@@ -220,7 +220,7 @@ class IdentityService implements IdentityServiceInterface
             'objectType' => $objectType,
         ]);
 
-        $otherIdentities = array_filter($identities, function (Identity $identity) use ($adapterName) {
+        $otherIdentities = array_filter($identities, static function (Identity $identity) use ($adapterName) {
             return $identity->getAdapterName() !== $adapterName;
         });
 

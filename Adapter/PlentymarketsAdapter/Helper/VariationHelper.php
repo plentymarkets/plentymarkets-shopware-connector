@@ -40,7 +40,7 @@ class VariationHelper implements VariationHelperInterface
      *
      * @return array
      */
-    public function getShopIdentifiers(array $variation) :array
+    public function getShopIdentifiers(array $variation): array
     {
         $identifiers = [];
 
@@ -76,7 +76,7 @@ class VariationHelper implements VariationHelperInterface
     /**
      * @return array
      */
-    public function getMappedPlentyClientIds() :array
+    public function getMappedPlentyClientIds(): array
     {
         $identities = $this->identityService->findBy([
             'adapterName' => PlentymarketsAdapter::NAME,
@@ -113,7 +113,7 @@ class VariationHelper implements VariationHelperInterface
      *
      * @return array
      */
-    public function getMainVariation(array $variations) :array
+    public function getMainVariation(array $variations): array
     {
         $mainVariation = array_filter($variations, static function ($variation) {
             return $variation['isMain'] === true;
@@ -132,7 +132,7 @@ class VariationHelper implements VariationHelperInterface
      *
      * @return string
      */
-    public function getMainVariationNumber(array $mainVariation, array $variations = []) :string
+    public function getMainVariationNumber(array $mainVariation, array $variations = []): string
     {
         $found = false;
 
@@ -150,7 +150,7 @@ class VariationHelper implements VariationHelperInterface
         }
 
         if ($found) {
-            $checkActiveMainVariation = json_decode($this->configService->get('check_active_main_variation'),512);
+            $checkActiveMainVariation = json_decode($this->configService->get('check_active_main_variation'), 512);
 
             if (!$checkActiveMainVariation && !$mainVariation['isActive']) {
                 foreach ($variations as $variation) {

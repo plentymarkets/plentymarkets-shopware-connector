@@ -9,6 +9,7 @@ use Shopware\Models\Article\Configurator\Option;
 use Shopware\Models\Article\Image;
 use Shopware\Models\Property\Option as PropertyGroupModel;
 use Shopware\Models\Property\Value as PropertyValueModel;
+use Shopware\Models\Shop\Shop;
 use Shopware\Models\Shop\Shop as ShopModel;
 use SystemConnector\IdentityService\Struct\Identity;
 use SystemConnector\TransferObject\Product\Property\Property;
@@ -57,9 +58,11 @@ class TranslationDataProvider implements TranslationDataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param Identity $identity
+     *
+     * @return Shop[]
      */
-    public function getShopsByLocaleIdentity(Identity $identity)
+    public function getShopsByLocaleIdentity(Identity $identity): array
     {
         return $this->shopRepository->findBy([
             'locale' => $identity->getAdapterIdentifier(),
@@ -109,7 +112,7 @@ class TranslationDataProvider implements TranslationDataProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getArticleImage(Identity $mediaIdentity, $articleId)
+    public function getArticleImage(Identity $mediaIdentity, $articleId): Image
     {
         return $this->articleImageRepository->findOneBy([
             'articleId' => $articleId,

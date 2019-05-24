@@ -15,5 +15,5 @@ interface LanguageHelperInterface
     /**
      * @return string
      */
-    public function getLanguagesQueryString() :string;
+    public function getLanguagesQueryString(): string;
 }

@@ -17,7 +17,7 @@ class Badge extends AbstractValueObject
     /**
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
@@ -33,7 +33,7 @@ class Badge extends AbstractValueObject
     /**
      * @return array
      */
-    public function getTypes()
+    public function getTypes(): array
     {
         $reflection = new ReflectionClass(__CLASS__);
 

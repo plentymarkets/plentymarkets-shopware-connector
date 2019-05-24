@@ -102,7 +102,7 @@ class HandleSepaPaymentCommandHandler implements CommandHandlerInterface
 
         $bankAccounts = $this->client->request('GET', 'accounts/contacts/' . $contactId . '/banks');
 
-        $possibleBankAccounts = array_filter($bankAccounts, function (array $bankAccount) use ($data, $orderIdentity) {
+        $possibleBankAccounts = array_filter($bankAccounts, static function (array $bankAccount) use ($data, $orderIdentity) {
             return $bankAccount['iban'] === $data->getIban() && $bankAccount['orderId'] === (int) $orderIdentity->getAdapterIdentifier();
         });
 
@@ -149,7 +149,7 @@ class HandleSepaPaymentCommandHandler implements CommandHandlerInterface
     {
         $order = $this->client->request('GET', 'orders/' . $orderIdentity->getAdapterIdentifier());
 
-        $relations = array_filter($order['relations'], function (array $relation) {
+        $relations = array_filter($order['relations'], static function (array $relation) {
             return $relation['referenceType'] === 'contact';
         });
 

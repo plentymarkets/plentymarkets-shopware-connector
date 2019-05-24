@@ -64,7 +64,7 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(CommandInterface $command)
+    public function supports(CommandInterface $command): bool
     {
         return $command instanceof TransferObjectCommand &&
             $command->getAdapterName() === ShopwareAdapter::NAME &&
@@ -77,7 +77,7 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
      *
      * @param TransferObjectCommand $command
      */
-    public function handle(CommandInterface $command)
+    public function handle(CommandInterface $command): bool
     {
         /**
          * @var Variation $variation
@@ -187,7 +187,7 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
     /**
      * @return Variant
      */
-    private function getVariationResource()
+    private function getVariationResource(): Variant
     {
         // without this reset the entitymanager sometimes the album is not found correctly.
         Shopware()->Container()->reset('models');

@@ -41,7 +41,7 @@ class TranslationHelper implements TranslationHelperInterface
         /**
          * @var Translation[] $translations
          */
-        $translations = array_filter($object->getTranslations(), function (Translation $translation) use ($languageIdentifier) {
+        $translations = array_filter($object->getTranslations(), static function (Translation $translation) use ($languageIdentifier) {
             return $translation->getLanguageIdentifier() === $languageIdentifier;
         });
 

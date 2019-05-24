@@ -244,7 +244,7 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
      *
      * @return ArrayCollection
      */
-    private function getCustomerGroups(Bundle $bundle)
+    private function getCustomerGroups(Bundle $bundle): ArrayCollection
     {
         $result = [];
         foreach ($bundle->getPrices() as $price) {
@@ -266,7 +266,7 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
      *
      * @return ArrayCollection
      */
-    private function getPrices(Bundle $bundle, SwagBundle $bundleModel)
+    private function getPrices(Bundle $bundle, SwagBundle $bundleModel): ArrayCollection
     {
         $prices = [];
         foreach ($bundle->getPrices() as $price) {
@@ -296,7 +296,7 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
      *
      * @return ArrayCollection
      */
-    private function getArticles(Bundle $bundle, SwagBundle $bundleModel, Detail $mainVariant)
+    private function getArticles(Bundle $bundle, SwagBundle $bundleModel, Detail $mainVariant): ArrayCollection
     {
         $result = [];
         foreach ($bundle->getBundleProducts() as $bundleProduct) {
@@ -363,7 +363,7 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
      *
      * @return int
      */
-    private function getBundleStock($bundleNumber)
+    private function getBundleStock($bundleNumber): int
     {
         /**
          * @var Detail $detail

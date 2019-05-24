@@ -34,7 +34,7 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(CommandInterface $command)
+    public function supports(CommandInterface $command): bool
     {
         return $command instanceof TransferObjectCommand &&
             $command->getAdapterName() === ShopwareAdapter::NAME &&
@@ -47,7 +47,7 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
      *
      * @param TransferObjectCommand $command
      */
-    public function handle(CommandInterface $command)
+    public function handle(CommandInterface $command): bool
     {
         /**
          * @var MediaCategory $mediaCategory
@@ -74,7 +74,7 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
             'albumId' => Album::ALBUM_ARTICLE,
         ]);
 
-        if (null === $parent) {
+        if (null === $parent && null !== $parentSettings) {
             $parent = new Album();
             $parent->setName('PlentyConnector');
             $parent->setPosition(10);

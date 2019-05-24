@@ -31,7 +31,7 @@ class ReferenceAmountCalculatorTest extends TestCase
     /**
      * @return array
      */
-    public function dataProvider()
+    public function dataProvider(): array
     {
         return [
             [['unit' => ['unitId' => 3, 'content' => 100]], 100],

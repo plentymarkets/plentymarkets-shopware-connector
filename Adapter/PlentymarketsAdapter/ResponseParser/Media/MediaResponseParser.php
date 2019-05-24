@@ -3,6 +3,7 @@
 namespace PlentymarketsAdapter\ResponseParser\Media;
 
 use Assert\Assertion;
+use Assert\AssertionFailedException;
 use PlentymarketsAdapter\Helper\MediaCategoryHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;
 use SystemConnector\IdentityService\IdentityServiceInterface;
@@ -31,8 +32,10 @@ class MediaResponseParser implements MediaResponseParserInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws AssertionFailedException
      */
-    public function parse(array $entry)
+    public function parse(array $entry): Media
     {
         Assertion::url($entry['link']);
 

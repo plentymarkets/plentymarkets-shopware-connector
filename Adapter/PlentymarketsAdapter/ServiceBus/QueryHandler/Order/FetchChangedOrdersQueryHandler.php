@@ -54,7 +54,7 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(QueryInterface $query)
+    public function supports(QueryInterface $query): bool
     {
         return $query instanceof FetchTransferObjectQuery &&
             $query->getAdapterName() === PlentymarketsAdapter::NAME &&
@@ -94,9 +94,7 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
 
             $result = array_filter($result);
 
-            foreach ($result as $parsedElement) {
-                yield $parsedElement;
-            }
+            yield from $result;
 
             $this->outputHandler->advanceProgressBar();
         }

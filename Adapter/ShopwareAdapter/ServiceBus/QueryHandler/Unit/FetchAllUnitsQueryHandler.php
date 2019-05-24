@@ -37,7 +37,7 @@ class FetchAllUnitsQueryHandler implements QueryHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(QueryInterface $query)
+    public function supports(QueryInterface $query): bool
     {
         return $query instanceof FetchTransferObjectQuery &&
             $query->getAdapterName() === ShopwareAdapter::NAME &&
@@ -66,7 +66,7 @@ class FetchAllUnitsQueryHandler implements QueryHandlerInterface
     /**
      * @return Query
      */
-    private function createUnitsQuery()
+    private function createUnitsQuery(): Query
     {
         $queryBuilder = $this->repository->createQueryBuilder('units');
         $queryBuilder->select([

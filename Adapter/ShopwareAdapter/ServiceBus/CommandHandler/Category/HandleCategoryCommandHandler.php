@@ -6,7 +6,10 @@ use DeepCopy\DeepCopy;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use InvalidArgumentException;
+use Shopware\Components\Api\Exception\CustomValidationException;
 use Shopware\Components\Api\Exception\NotFoundException;
+use Shopware\Components\Api\Exception\ParameterMissingException;
+use Shopware\Components\Api\Exception\ValidationException;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Category as CategoryResource;
 use Shopware\Models\Category\Category as CategoryModel;
@@ -43,11 +46,6 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     private $translationHelper;
 
     /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
-
-    /**
      * @var AttributeDataPersisterInterface
      */
     private $attributePersister;
@@ -76,7 +74,6 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     ) {
         $this->identityService = $identityService;
         $this->translationHelper = $translationHelper;
-        $this->entityManager = $entityManager;
         $this->attributePersister = $attributePersister;
         $this->translationDataPersister = $translationDataPersister;
         $this->categoryRepository = $entityManager->getRepository(CategoryModel::class);
@@ -86,7 +83,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(CommandInterface $command)
+    public function supports(CommandInterface $command): bool
     {
         return $command instanceof TransferObjectCommand &&
             $command->getAdapterName() === ShopwareAdapter::NAME &&
@@ -95,11 +92,14 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param CommandInterface $command
      *
-     * @var TransferObjectCommand $command
+     * @throws IdentityNotFoundException
+     * @throws IdentityNotFoundException
+     *
+     * @return bool
      */
-    public function handle(CommandInterface $command)
+    public function handle(CommandInterface $command): bool
     {
         /**
          * @var Category $category
@@ -153,6 +153,16 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     /**
      * @param Category $category
      * @param Identity $shopIdentity
+     *
+     * @throws IdentityNotFoundException
+     * @throws NotFoundException
+     * @throws CustomValidationException
+     * @throws ParameterMissingException
+     * @throws ValidationException
+     * @throws ValidationException
+     * @throws ParameterMissingException
+     * @throws IdentityNotFoundException
+     * @throws ParameterMissingException
      *
      * @return null|Identity
      */
@@ -371,7 +381,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
 
             $extractedCategoryPath = array_filter(explode('|', $existingCategory->getPath()));
 
-            if (in_array($shopMainCategory->getId(), $extractedCategoryPath)) {
+            if (in_array($shopMainCategory->getId(), $extractedCategoryPath, true)) {
                 return true;
             }
 
@@ -384,6 +394,12 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     /**
      * @param Category $category
      * @param array    $validIdentities
+     *
+     * @throws CustomValidationException
+     * @throws NotFoundException
+     * @throws ParameterMissingException
+     * @throws ValidationException
+     * @throws ParameterMissingException
      */
     private function handleOrphanedCategories(Category $category, array $validIdentities = [])
     {
@@ -420,7 +436,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     /**
      * @return CategoryResource
      */
-    private function getCategoryResource()
+    private function getCategoryResource(): CategoryResource
     {
         // without this reset the entitymanager sometimes the album is not found correctly.
         Shopware()->Container()->reset('models');

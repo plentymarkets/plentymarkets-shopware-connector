@@ -12,7 +12,7 @@ trait ChangedDateTimeTrait
     /**
      * @return DateTimeImmutable
      */
-    public function getChangedDateTime()
+    public function getChangedDateTime(): DateTimeImmutable
     {
         /**
          * @var ConfigServiceInterface $configService
@@ -44,7 +44,7 @@ trait ChangedDateTimeTrait
     /**
      * @return DateTimeImmutable
      */
-    public function getCurrentDateTime()
+    public function getCurrentDateTime(): DateTimeImmutable
     {
         return new DateTimeImmutable('now');
     }
@@ -52,7 +52,7 @@ trait ChangedDateTimeTrait
     /**
      * @return string
      */
-    private function getKey()
+    private function getKey(): string
     {
         $ref = new ReflectionClass(static::class);
 

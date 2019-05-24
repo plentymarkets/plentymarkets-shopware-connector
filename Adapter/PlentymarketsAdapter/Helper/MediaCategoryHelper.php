@@ -11,7 +11,7 @@ class MediaCategoryHelper implements MediaCategoryHelperInterface
     /**
      * @return array
      */
-    public function getCategories() :array
+    public function getCategories(): array
     {
         return [
             $this::MANUFACTURER => [

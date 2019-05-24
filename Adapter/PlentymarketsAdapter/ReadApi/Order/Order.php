@@ -22,7 +22,7 @@ class Order extends ApiAbstract
      *
      * @return array
      */
-    public function find($id)
+    public function find($id): array
     {
         $criteria = [
             'with' => self::$includes,
@@ -36,7 +36,7 @@ class Order extends ApiAbstract
      *
      * @return Iterator
      */
-    public function findAll(array $criteria = [])
+    public function findAll(array $criteria = []): Iterator
     {
         $criteria = array_merge($criteria, [
             'with' => self::$includes,
@@ -50,7 +50,7 @@ class Order extends ApiAbstract
      *
      * @return Iterator
      */
-    public function findBy(array $criteria = [])
+    public function findBy(array $criteria = []): Iterator
     {
         $criteria = array_merge($criteria, [
             'with' => self::$includes,
@@ -64,7 +64,7 @@ class Order extends ApiAbstract
      *
      * @return array
      */
-    public function findOneBy(array $criteria = [])
+    public function findOneBy(array $criteria = []): array
     {
         $result = iterator_to_array($this->findBy($criteria));
 

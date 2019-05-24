@@ -115,7 +115,7 @@ class Bundle extends AbstractTransferObject
     /**
      * @return bool
      */
-    public function isActive()
+    public function isActive(): bool
     {
         return $this->active;
     }
@@ -131,7 +131,7 @@ class Bundle extends AbstractTransferObject
     /**
      * @return string
      */
-    public function getProductIdentifier()
+    public function getProductIdentifier(): string
     {
         return $this->productIdentifier;
     }
@@ -147,7 +147,7 @@ class Bundle extends AbstractTransferObject
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -163,7 +163,7 @@ class Bundle extends AbstractTransferObject
     /**
      * @return string
      */
-    public function getNumber()
+    public function getNumber(): string
     {
         return $this->number;
     }
@@ -179,7 +179,7 @@ class Bundle extends AbstractTransferObject
     /**
      * @return int
      */
-    public function getPosition()
+    public function getPosition(): int
     {
         return $this->position;
     }
@@ -195,7 +195,7 @@ class Bundle extends AbstractTransferObject
     /**
      * @return float
      */
-    public function getStock()
+    public function getStock(): float
     {
         return $this->stock;
     }
@@ -211,7 +211,7 @@ class Bundle extends AbstractTransferObject
     /**
      * @return bool
      */
-    public function hasStockLimitation()
+    public function hasStockLimitation(): bool
     {
         return $this->stockLimitation;
     }
@@ -227,7 +227,7 @@ class Bundle extends AbstractTransferObject
     /**
      * @return Price[]
      */
-    public function getPrices()
+    public function getPrices(): array
     {
         return $this->prices;
     }
@@ -243,7 +243,7 @@ class Bundle extends AbstractTransferObject
     /**
      * @return string
      */
-    public function getVatRateIdentifier()
+    public function getVatRateIdentifier(): string
     {
         return $this->vatRateIdentifier;
     }
@@ -291,7 +291,7 @@ class Bundle extends AbstractTransferObject
     /**
      * @return BundleProduct[]
      */
-    public function getBundleProducts()
+    public function getBundleProducts(): array
     {
         return $this->bundleProducts;
     }
@@ -307,7 +307,7 @@ class Bundle extends AbstractTransferObject
     /**
      * @return Attribute[]
      */
-    public function getAttributes()
+    public function getAttributes(): array
     {
         return $this->attributes;
     }
@@ -323,7 +323,7 @@ class Bundle extends AbstractTransferObject
     /**
      * @return Translation[]
      */
-    public function getTranslations()
+    public function getTranslations(): array
     {
         return $this->translations;
     }

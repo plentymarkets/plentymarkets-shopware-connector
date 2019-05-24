@@ -60,7 +60,7 @@ class PriceResponseParser implements PriceResponseParserInterface
      *
      * @return Price[]
      */
-    public function parse(array $variation)
+    public function parse(array $variation): array
     {
         $temporaryPrices = $this->getPricesAsSortedArray($variation['variationSalesPrices']);
 
@@ -111,7 +111,7 @@ class PriceResponseParser implements PriceResponseParserInterface
             /**
              * @var Price[] $possibleScalePrices
              */
-            $possibleScalePrices = array_filter($prices, function (Price $possiblePrice) use ($price) {
+            $possibleScalePrices = array_filter($prices, static function (Price $possiblePrice) use ($price) {
                 return $possiblePrice->getCustomerGroupIdentifier() === $price->getCustomerGroupIdentifier() &&
                     spl_object_hash($price) !== spl_object_hash($possiblePrice);
             });
@@ -120,7 +120,7 @@ class PriceResponseParser implements PriceResponseParserInterface
                 continue;
             }
 
-            usort($possibleScalePrices, function (Price $possibleScalePriceLeft, Price $possibleScalePriceRight) {
+            usort($possibleScalePrices, static function (Price $possibleScalePriceLeft, Price $possibleScalePriceRight) {
                 if ($possibleScalePriceLeft->getFromAmount() === $possibleScalePriceRight->getFromAmount()) {
                     return 0;
                 }
@@ -150,7 +150,7 @@ class PriceResponseParser implements PriceResponseParserInterface
      *
      * @return bool
      */
-    private function checkIfOriginIsInReferrers($orderOrigin, array $referrers)
+    private function checkIfOriginIsInReferrers($orderOrigin, array $referrers): bool
     {
         foreach ($referrers as $referrer) {
             if (in_array($referrer['referrerId'], [-1, $orderOrigin], true)) {
@@ -166,7 +166,7 @@ class PriceResponseParser implements PriceResponseParserInterface
      *
      * @return array
      */
-    private function getPricesAsSortedArray(array $variationSalesPrices = [])
+    private function getPricesAsSortedArray(array $variationSalesPrices = []): array
     {
         $priceConfigurations = $this->getPriceConfigurations();
 
@@ -250,7 +250,7 @@ class PriceResponseParser implements PriceResponseParserInterface
      *
      * @return array
      */
-    private function getPriceConfigurations()
+    private function getPriceConfigurations(): array
     {
         static $priceConfigurations;
 
@@ -283,7 +283,7 @@ class PriceResponseParser implements PriceResponseParserInterface
             }
 
             $priceConfigurations = array_filter($priceConfigurations,
-                function ($priceConfiguration) use ($shopIdentities) {
+                static function ($priceConfiguration) use ($shopIdentities) {
                     foreach ($shopIdentities as $identity) {
                         foreach ((array) $priceConfiguration['clients'] as $client) {
                             if ($client['plentyId'] === -1 || $identity->getAdapterIdentifier() === (string) $client['plentyId']) {
@@ -334,11 +334,11 @@ class PriceResponseParser implements PriceResponseParserInterface
      *
      * @return array
      */
-    private function filterPriceConfiguration($priceConfigurations, $price)
+    private function filterPriceConfiguration($priceConfigurations, $price): array
     {
         $orderOrigin = (int) $this->configService->get('order_origin');
 
-        $priceConfiguration = array_filter($priceConfigurations, function ($configuration) use ($price) {
+        $priceConfiguration = array_filter($priceConfigurations, static function ($configuration) use ($price) {
             return $configuration['id'] === $price['salesPriceId'];
         });
 

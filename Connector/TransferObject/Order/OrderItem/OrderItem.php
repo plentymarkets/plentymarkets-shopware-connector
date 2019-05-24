@@ -54,7 +54,7 @@ class OrderItem extends AbstractValueObject implements AttributableInterface
     /**
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
@@ -70,7 +70,7 @@ class OrderItem extends AbstractValueObject implements AttributableInterface
     /**
      * @return array
      */
-    public function getTypes()
+    public function getTypes(): array
     {
         $reflection = new ReflectionClass(__CLASS__);
 
@@ -80,7 +80,7 @@ class OrderItem extends AbstractValueObject implements AttributableInterface
     /**
      * @return float
      */
-    public function getQuantity()
+    public function getQuantity(): float
     {
         return $this->quantity;
     }
@@ -96,7 +96,7 @@ class OrderItem extends AbstractValueObject implements AttributableInterface
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -112,7 +112,7 @@ class OrderItem extends AbstractValueObject implements AttributableInterface
     /**
      * @return string
      */
-    public function getNumber()
+    public function getNumber(): string
     {
         return $this->number;
     }
@@ -128,7 +128,7 @@ class OrderItem extends AbstractValueObject implements AttributableInterface
     /**
      * @return float
      */
-    public function getPrice()
+    public function getPrice(): float
     {
         return $this->price;
     }

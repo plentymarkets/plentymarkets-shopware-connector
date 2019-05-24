@@ -43,7 +43,7 @@ class ControllerPathSubscriber implements SubscriberInterface
      *
      * @return string
      */
-    public function onControllerBackendPlentyConnector(Enlight_Event_EventArgs $args)
+    public function onControllerBackendPlentyConnector(Enlight_Event_EventArgs $args): string
     {
         $this->template->addTemplateDir(
             $this->pluginDirectory . '/Resources/Views/'

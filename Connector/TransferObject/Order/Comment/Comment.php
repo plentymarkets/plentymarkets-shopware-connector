@@ -30,7 +30,7 @@ class Comment extends AbstractValueObject implements AttributableInterface
     /**
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
@@ -46,7 +46,7 @@ class Comment extends AbstractValueObject implements AttributableInterface
     /**
      * @return string
      */
-    public function getComment()
+    public function getComment(): string
     {
         return $this->comment;
     }
@@ -78,7 +78,7 @@ class Comment extends AbstractValueObject implements AttributableInterface
     /**
      * @return array
      */
-    public function getTypes()
+    public function getTypes(): array
     {
         $reflection = new ReflectionClass(__CLASS__);
 

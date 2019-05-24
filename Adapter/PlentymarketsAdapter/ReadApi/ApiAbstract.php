@@ -21,7 +21,7 @@ abstract class ApiAbstract
      *
      * @return ClientInterface
      */
-    public function getClient()
+    public function getClient(): ClientInterface
     {
         return $this->client;
     }

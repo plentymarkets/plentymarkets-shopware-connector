@@ -29,12 +29,12 @@ class ValidatorService implements ValidatorServiceInterface
      */
     public function validate($object, array $parents = [])
     {
-        $validators = array_filter($this->validators, function (ValidatorInterface $validator) use ($object) {
+        $validators = array_filter($this->validators, static function (ValidatorInterface $validator) use ($object) {
             return $validator->supports($object);
         });
 
         try {
-            array_walk($validators, function (ValidatorInterface $validator) use ($object) {
+            array_walk($validators, static function (ValidatorInterface $validator) use ($object) {
                 $validator->validate($object);
             });
 
@@ -45,7 +45,7 @@ class ValidatorService implements ValidatorServiceInterface
                 return;
             }
 
-            $methods = array_filter($methods, function ($method) {
+            $methods = array_filter($methods, static function ($method) {
                 return 0 === stripos($method, 'get');
             });
 

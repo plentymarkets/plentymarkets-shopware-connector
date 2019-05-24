@@ -25,9 +25,9 @@ class OrderDataProvider implements OrderDataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return array
      */
-    public function getOpenOrders()
+    public function getOpenOrders(): array
     {
         $filter = [
             [
@@ -45,7 +45,7 @@ class OrderDataProvider implements OrderDataProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getOrderDetails($identifier)
+    public function getOrderDetails($identifier): array
     {
         $order = $this->orderResource->getOne($identifier);
 
@@ -59,7 +59,7 @@ class OrderDataProvider implements OrderDataProviderInterface
      *
      * @return int
      */
-    private function getCorrectSubShopIdentifier($orderIdentifier)
+    private function getCorrectSubShopIdentifier($orderIdentifier): int
     {
         return $this->connection->fetchColumn('SELECT language FROM s_order WHERE id = ?', [$orderIdentifier]);
     }
@@ -69,7 +69,7 @@ class OrderDataProvider implements OrderDataProviderInterface
      *
      * @return array
      */
-    private function removeOrphanedShopArray(array $order)
+    private function removeOrphanedShopArray(array $order): array
     {
         unset($order['shop']);
 

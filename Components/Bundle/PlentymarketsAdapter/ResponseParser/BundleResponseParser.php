@@ -63,7 +63,7 @@ class BundleResponseParser implements BundleResponseParserInterface
      */
     public function parse(array $product)
     {
-        $bundleVariations = array_filter($product['variations'], function (array $variation) {
+        $bundleVariations = array_filter($product['variations'], static function (array $variation) {
             return $variation['bundleType'] === 'bundle';
         });
 
@@ -89,7 +89,7 @@ class BundleResponseParser implements BundleResponseParserInterface
      *
      * @return string
      */
-    private function getVatRateIdentifier(array $variation)
+    private function getVatRateIdentifier(array $variation): string
     {
         $vatRateIdentity = $this->identityService->findOneBy([
             'adapterIdentifier' => $variation['vatId'],
@@ -180,7 +180,7 @@ class BundleResponseParser implements BundleResponseParserInterface
      *
      * @return Translation[]
      */
-    private function getTranslations(array $product)
+    private function getTranslations(array $product): array
     {
         $translations = [];
 
@@ -214,7 +214,7 @@ class BundleResponseParser implements BundleResponseParserInterface
         $variations = $this->client->request('GET', 'items/variations', ['id' => $ids]);
 
         foreach ($elements as &$element) {
-            $matchedVariations = array_filter($variations, function (array $variation) use ($element) {
+            $matchedVariations = array_filter($variations, static function (array $variation) use ($element) {
                 return (int) $element['componentVariationId'] === (int) $variation['id'];
             });
 
@@ -233,7 +233,7 @@ class BundleResponseParser implements BundleResponseParserInterface
      *
      * @return BundleProduct[]
      */
-    private function getBundleProducts(array $variation)
+    private function getBundleProducts(array $variation): array
     {
         $url = 'items/' . $variation['itemId'] . '/variations/' . $variation['id'] . '/variation_bundles';
         $elements = $this->client->request('GET', $url);

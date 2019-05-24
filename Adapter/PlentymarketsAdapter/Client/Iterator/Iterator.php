@@ -8,6 +8,8 @@ use Closure;
 use Countable;
 use Iterator as BaseIterator;
 use PlentymarketsAdapter\Client\Client;
+use PlentymarketsAdapter\Client\Exception\InvalidCredentialsException;
+use Throwable;
 
 class Iterator implements BaseIterator, Countable
 {
@@ -128,9 +130,13 @@ class Iterator implements BaseIterator, Countable
     }
 
     /**
-     * {@inheritdoc}
+     * @throws AssertionFailedException
+     * @throws InvalidCredentialsException
+     * @throws Throwable
+     *
+     * @return int
      */
-    public function count()
+    public function count(): int
     {
         return $this->client->getTotal($this->path, $this->criteria);
     }

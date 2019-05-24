@@ -11,5 +11,5 @@ interface OrderRequestGeneratorInterface
      *
      * @return array
      */
-    public function generate(Order $order);
+    public function generate(Order $order): array;
 }

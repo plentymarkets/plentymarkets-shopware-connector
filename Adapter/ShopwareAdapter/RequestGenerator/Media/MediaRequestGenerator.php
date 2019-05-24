@@ -21,7 +21,7 @@ class MediaRequestGenerator implements MediaRequestGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generate(Media $media)
+    public function generate(Media $media): array
     {
         $params = [
             'album' => Album::ALBUM_ARTICLE,

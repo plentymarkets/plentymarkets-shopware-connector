@@ -53,7 +53,7 @@ class FetchTransferObjectQuery implements QueryInterface
     /**
      * @return string
      */
-    public function getAdapterName()
+    public function getAdapterName(): string
     {
         return $this->adapterName;
     }
@@ -61,7 +61,7 @@ class FetchTransferObjectQuery implements QueryInterface
     /**
      * @return string
      */
-    public function getObjectType()
+    public function getObjectType(): string
     {
         return $this->objectType;
     }
@@ -69,7 +69,7 @@ class FetchTransferObjectQuery implements QueryInterface
     /**
      * @return string
      */
-    public function getQueryType()
+    public function getQueryType(): string
     {
         return $this->queryType;
     }

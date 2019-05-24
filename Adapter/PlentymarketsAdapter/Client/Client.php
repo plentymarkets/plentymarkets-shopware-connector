@@ -107,7 +107,7 @@ class Client implements ClientInterface
      *
      * @return array
      */
-    public function request($method, $path, array $params = [], $limit = null, $offset = null, array $options = []) :array
+    public function request($method, $path, array $params = [], $limit = null, $offset = null, array $options = []): array
     {
         Assertion::nullOrInteger($limit);
         Assertion::nullOrInteger($offset);

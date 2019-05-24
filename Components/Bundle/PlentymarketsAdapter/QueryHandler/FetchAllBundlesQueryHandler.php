@@ -83,9 +83,7 @@ class FetchAllBundlesQueryHandler implements QueryHandlerInterface
 
             $result = array_filter($result);
 
-            foreach ($result as $parsedElement) {
-                yield $parsedElement;
-            }
+            yield from $result;
 
             $this->outputHandler->advanceProgressBar();
         }

@@ -37,7 +37,7 @@ class FetchAllCountriesQueryHandler implements QueryHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(QueryInterface $query)
+    public function supports(QueryInterface $query): bool
     {
         return $query instanceof FetchTransferObjectQuery &&
             $query->getAdapterName() === ShopwareAdapter::NAME &&
@@ -66,7 +66,7 @@ class FetchAllCountriesQueryHandler implements QueryHandlerInterface
     /**
      * @return Query
      */
-    private function createCurrenciesQuery()
+    private function createCurrenciesQuery(): Query
     {
         $queryBuilder = $this->repository->createQueryBuilder('countries');
         $queryBuilder->select([

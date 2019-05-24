@@ -115,7 +115,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
             return;
         }
 
-        $transferObjectMapping = function (TransferObjectInterface $object) {
+        $transferObjectMapping = static function (TransferObjectInterface $object) {
             if (method_exists($object, 'getName')) {
                 $name = $object->getName();
             } else {
@@ -131,15 +131,16 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
 
         $this->View()->assign([
             'success' => true,
-            'data' => array_map(function (Mapping $mapping) use ($transferObjectMapping) {
-                return [
+            'data' => array_map(
+                static function (Mapping $mapping) use ($transferObjectMapping) {
+                    return [
                     'originAdapterName' => $mapping->getOriginAdapterName(),
                     'destinationAdapterName' => $mapping->getDestinationAdapterName(),
                     'originTransferObjects' => array_map($transferObjectMapping, $mapping->getOriginTransferObjects()),
                     'destinationTransferObjects' => array_map($transferObjectMapping, $mapping->getDestinationTransferObjects()),
                     'objectType' => $mapping->getObjectType(),
                 ];
-            }, $mappingInformation),
+                }, $mappingInformation),
         ]);
     }
 
@@ -340,7 +341,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
         }
     }
 
-    private function cleanParameters(array $params)
+    private function cleanParameters(array $params): array
     {
         $result = [];
 
@@ -367,7 +368,7 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
      *
      * @return string
      */
-    private function getTranslation($snippet)
+    private function getTranslation($snippet): string
     {
         /**
          * @var Shopware_Components_Snippet_Manager $snippetManager

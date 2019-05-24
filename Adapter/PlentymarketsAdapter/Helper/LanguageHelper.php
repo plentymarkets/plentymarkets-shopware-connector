@@ -25,7 +25,7 @@ class LanguageHelper implements LanguageHelperInterface
     /**
      * @return array
      */
-    public function getLanguages() :array
+    public function getLanguages(): array
     {
         return [
             [
@@ -110,7 +110,7 @@ class LanguageHelper implements LanguageHelperInterface
     /**
      * @return string
      */
-    public function getLanguagesQueryString() :string
+    public function getLanguagesQueryString(): string
     {
         $languages = [];
 

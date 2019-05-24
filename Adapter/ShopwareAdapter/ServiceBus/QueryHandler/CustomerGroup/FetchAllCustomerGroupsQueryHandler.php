@@ -37,7 +37,7 @@ class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(QueryInterface $query)
+    public function supports(QueryInterface $query): bool
     {
         return $query instanceof FetchTransferObjectQuery &&
             $query->getAdapterName() === ShopwareAdapter::NAME &&
@@ -66,7 +66,7 @@ class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
     /**
      * @return Query
      */
-    private function createCustomerGroupsQuery()
+    private function createCustomerGroupsQuery(): Query
     {
         $queryBuilder = $this->repository->createQueryBuilder('groups');
         $queryBuilder->select([

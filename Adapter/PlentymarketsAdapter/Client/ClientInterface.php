@@ -17,7 +17,7 @@ interface ClientInterface
      *
      * @return array
      */
-    public function request($method, $path, array $params = [], $limit = null, $offset = null, array $options = []) :array;
+    public function request($method, $path, array $params = [], $limit = null, $offset = null, array $options = []): array;
 
     /**
      * @param $path

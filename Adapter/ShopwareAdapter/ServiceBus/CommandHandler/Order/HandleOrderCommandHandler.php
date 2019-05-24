@@ -48,9 +48,11 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param CommandInterface $command
+     *
+     * @return bool
      */
-    public function supports(CommandInterface $command)
+    public function supports(CommandInterface $command): bool
     {
         return $command instanceof TransferObjectCommand &&
             $command->getAdapterName() === ShopwareAdapter::NAME &&
@@ -63,7 +65,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
      *
      * @param TransferObjectCommand $command
      */
-    public function handle(CommandInterface $command)
+    public function handle(CommandInterface $command): bool
     {
         /**
          * @var Order $order
@@ -171,7 +173,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     /**
      * @return OrderResource
      */
-    private function getOrderResource()
+    private function getOrderResource(): OrderResource
     {
         // without this reset the entitymanager sometimes the status is not found correctly.
         Shopware()->Container()->reset('models');

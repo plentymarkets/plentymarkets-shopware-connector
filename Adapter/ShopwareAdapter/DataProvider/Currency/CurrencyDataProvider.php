@@ -22,7 +22,7 @@ class CurrencyDataProvider implements CurrencyDataProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getCurrencyIdentifierByCode($code)
+    public function getCurrencyIdentifierByCode($code): int
     {
         /**
          * @var EntityRepository $currencyRepository

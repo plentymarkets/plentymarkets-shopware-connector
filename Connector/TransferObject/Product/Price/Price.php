@@ -72,7 +72,7 @@ class Price extends AbstractTransferObject
     /**
      * @return string
      */
-    public function getVariationIdentifier()
+    public function getVariationIdentifier(): string
     {
         return $this->variationIdentifier;
     }
@@ -88,7 +88,7 @@ class Price extends AbstractTransferObject
     /**
      * @return float
      */
-    public function getPrice()
+    public function getPrice(): float
     {
         return $this->price;
     }
@@ -104,7 +104,7 @@ class Price extends AbstractTransferObject
     /**
      * @return float
      */
-    public function getPseudoPrice()
+    public function getPseudoPrice(): float
     {
         return $this->pseudoPrice;
     }
@@ -136,7 +136,7 @@ class Price extends AbstractTransferObject
     /**
      * @return float
      */
-    public function getFromAmount()
+    public function getFromAmount(): float
     {
         return $this->fromAmount;
     }
@@ -152,7 +152,7 @@ class Price extends AbstractTransferObject
     /**
      * @return float
      */
-    public function getToAmount()
+    public function getToAmount(): float
     {
         return $this->toAmount;
     }

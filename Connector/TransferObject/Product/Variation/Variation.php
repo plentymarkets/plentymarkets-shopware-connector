@@ -179,7 +179,7 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     /**
      * @return string
      */
-    public function getProductIdentifier()
+    public function getProductIdentifier(): string
     {
         return $this->productIdentifier;
     }
@@ -195,7 +195,7 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     /**
      * @return bool
      */
-    public function getActive()
+    public function getActive(): bool
     {
         return $this->active;
     }
@@ -211,7 +211,7 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     /**
      * @return bool
      */
-    public function isMain()
+    public function isMain(): bool
     {
         return $this->isMain;
     }
@@ -227,7 +227,7 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     /**
      * @return string
      */
-    public function getNumber()
+    public function getNumber(): string
     {
         return $this->number;
     }
@@ -243,7 +243,7 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -259,7 +259,7 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     /**
      * @return int
      */
-    public function getPosition()
+    public function getPosition(): int
     {
         return $this->position;
     }
@@ -275,7 +275,7 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     /**
      * @return Barcode[]
      */
-    public function getBarcodes()
+    public function getBarcodes(): array
     {
         return $this->barcodes;
     }
@@ -291,7 +291,7 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     /**
      * @return string
      */
-    public function getModel()
+    public function getModel(): string
     {
         return $this->model;
     }
@@ -307,7 +307,7 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     /**
      * @return Image[]
      */
-    public function getImages()
+    public function getImages(): array
     {
         return $this->images;
     }
@@ -323,7 +323,7 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     /**
      * @return Price[]
      */
-    public function getPrices()
+    public function getPrices(): array
     {
         return $this->prices;
     }
@@ -339,7 +339,7 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     /**
      * @return float
      */
-    public function getPurchasePrice()
+    public function getPurchasePrice(): float
     {
         return $this->purchasePrice;
     }
@@ -355,7 +355,7 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     /**
      * @return string
      */
-    public function getUnitIdentifier()
+    public function getUnitIdentifier(): string
     {
         return $this->unitIdentifier;
     }
@@ -371,7 +371,7 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     /**
      * @return float
      */
-    public function getContent()
+    public function getContent(): float
     {
         return $this->content;
     }
@@ -387,7 +387,7 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     /**
      * @return float
      */
-    public function getReferenceAmount()
+    public function getReferenceAmount(): float
     {
         return $this->referenceAmount;
     }
@@ -403,7 +403,7 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     /**
      * @return bool
      */
-    public function hasStockLimitation()
+    public function hasStockLimitation(): bool
     {
         return $this->stockLimitation;
     }
@@ -419,7 +419,7 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     /**
      * @return float
      */
-    public function getMaximumOrderQuantity()
+    public function getMaximumOrderQuantity(): float
     {
         return $this->maximumOrderQuantity;
     }
@@ -435,7 +435,7 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     /**
      * @return float
      */
-    public function getMinimumOrderQuantity()
+    public function getMinimumOrderQuantity(): float
     {
         return $this->minimumOrderQuantity;
     }
@@ -451,7 +451,7 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     /**
      * @return float
      */
-    public function getIntervalOrderQuantity()
+    public function getIntervalOrderQuantity(): float
     {
         return $this->intervalOrderQuantity;
     }
@@ -467,7 +467,7 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     /**
      * @return int
      */
-    public function getShippingTime()
+    public function getShippingTime(): int
     {
         return $this->shippingTime;
     }
@@ -499,7 +499,7 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     /**
      * @return int
      */
-    public function getWidth()
+    public function getWidth(): int
     {
         return $this->width;
     }
@@ -515,7 +515,7 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     /**
      * @return int
      */
-    public function getHeight()
+    public function getHeight(): int
     {
         return $this->height;
     }
@@ -531,7 +531,7 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     /**
      * @return int
      */
-    public function getLength()
+    public function getLength(): int
     {
         return $this->length;
     }
@@ -547,7 +547,7 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     /**
      * @return float
      */
-    public function getWeight()
+    public function getWeight(): float
     {
         return $this->weight;
     }
@@ -563,7 +563,7 @@ class Variation extends AbstractTransferObject implements AttributableInterface
     /**
      * @return Property[]
      */
-    public function getProperties()
+    public function getProperties(): array
     {
         return $this->properties;
     }

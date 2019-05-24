@@ -9,5 +9,5 @@ interface ReferenceAmountCalculatorInterface
      *
      * @return float
      */
-    public function calculate(array $variation) :float;
+    public function calculate(array $variation): float;
 }

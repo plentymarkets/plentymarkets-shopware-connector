@@ -12,7 +12,7 @@ class NotFoundException extends Exception
      *
      * @return self
      */
-    public static function fromCommand(CommandInterface $command)
+    public static function fromCommand(CommandInterface $command): self
     {
         $name = substr(strrchr(get_class($command), '\\'), 1);
 

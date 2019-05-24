@@ -81,7 +81,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(CommandInterface $command)
+    public function supports(CommandInterface $command): bool
     {
         return $command instanceof TransferObjectCommand &&
             $command->getAdapterName() === ShopwareAdapter::NAME &&
@@ -94,7 +94,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
      *
      * @param TransferObjectCommand $command
      */
-    public function handle(CommandInterface $command)
+    public function handle(CommandInterface $command): bool
     {
         $shopLocaleId = $this->shopDataProvider->getDefaultShop()->getLocale()->getId();
 
@@ -239,7 +239,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
     /**
      * @return Article
      */
-    private function getArticleResource()
+    private function getArticleResource(): Article
     {
         // without this reset the entitymanager will write the models in the wrong order, leading
         // to an s_articles_details.articleID cannot be null exception from the dbal driver.
@@ -251,7 +251,7 @@ class HandleProductCommandHandler implements CommandHandlerInterface
     /**
      * @return Variant
      */
-    private function getVariationResource()
+    private function getVariationResource(): Variant
     {
         return Manager::getResource('Variant');
     }

@@ -91,7 +91,7 @@ class MappingService implements MappingServiceInterface
      *
      * @return TransferObjectInterface[]
      */
-    private function query(Definition $definition, $adapterName)
+    private function query(Definition $definition, $adapterName): array
     {
         $originQuery = $this->queryFactory->create(
             $adapterName,

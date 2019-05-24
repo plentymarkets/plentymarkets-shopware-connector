@@ -61,7 +61,7 @@ class Manufacturer extends AbstractTransferObject
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -77,7 +77,7 @@ class Manufacturer extends AbstractTransferObject
     /**
      * @return string
      */
-    public function getLogoIdentifier()
+    public function getLogoIdentifier(): string
     {
         return $this->logoIdentifier;
     }
@@ -93,7 +93,7 @@ class Manufacturer extends AbstractTransferObject
     /**
      * @return string
      */
-    public function getLink()
+    public function getLink(): string
     {
         return $this->link;
     }
@@ -109,7 +109,7 @@ class Manufacturer extends AbstractTransferObject
     /**
      * @return Attribute[]
      */
-    public function getAttributes()
+    public function getAttributes(): array
     {
         return $this->attributes;
     }

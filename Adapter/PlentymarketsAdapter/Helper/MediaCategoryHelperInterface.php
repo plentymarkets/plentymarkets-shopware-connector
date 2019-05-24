@@ -7,5 +7,5 @@ interface MediaCategoryHelperInterface
     /**
      * @return array
      */
-    public function getCategories() :array;
+    public function getCategories(): array;
 }

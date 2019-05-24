@@ -89,9 +89,7 @@ class FetchChangedBundlesQueryHandler implements QueryHandlerInterface
 
             $parsedElements = array_filter($result);
 
-            foreach ($parsedElements as $parsedElement) {
-                yield $parsedElement;
-            }
+            yield from $parsedElements;
 
             $this->outputHandler->advanceProgressBar();
         }
