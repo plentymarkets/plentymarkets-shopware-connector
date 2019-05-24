@@ -87,7 +87,7 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(CommandInterface $command)
+    public function supports(CommandInterface $command) :bool
     {
         return $command instanceof TransferObjectCommand &&
             $command->getAdapterName() === ShopwareAdapter::NAME &&
@@ -100,7 +100,7 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
      *
      * @param TransferObjectCommand $command
      */
-    public function handle(CommandInterface $command)
+    public function handle(CommandInterface $command) :bool
     {
         /**
          * @var Bundle $bundle
@@ -109,7 +109,7 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
 
         $identity = $this->identityService->findOneBy(
             [
-                'objectIdentifier' => (string) $bundle->getIdentifier(),
+                'objectIdentifier' => $bundle->getIdentifier(),
                 'objectType' => Bundle::TYPE,
                 'adapterName' => ShopwareAdapter::NAME,
             ]

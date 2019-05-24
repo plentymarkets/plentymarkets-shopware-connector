@@ -91,7 +91,7 @@ class Bundle extends AbstractTransferObject
     /**
      * {@inheritdoc}
      */
-    public function getType()
+    public function getType() :string
     {
         return self::TYPE;
     }
@@ -99,7 +99,7 @@ class Bundle extends AbstractTransferObject
     /**
      * @return string
      */
-    public function getIdentifier()
+    public function getIdentifier() :string
     {
         return $this->identifier;
     }

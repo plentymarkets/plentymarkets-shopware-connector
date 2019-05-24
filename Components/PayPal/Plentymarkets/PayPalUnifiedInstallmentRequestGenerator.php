@@ -21,7 +21,7 @@ class PayPalUnifiedInstallmentRequestGenerator implements PaymentRequestGenerato
     /**
      * {@inheritdoc}
      */
-    public function generate(Payment $payment)
+    public function generate(Payment $payment) :array
     {
         $paymentParams = $this->parentRequestGenerator->generate($payment);
         $data = $payment->getPaymentData();

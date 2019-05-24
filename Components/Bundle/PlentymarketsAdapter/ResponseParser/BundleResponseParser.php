@@ -61,7 +61,7 @@ class BundleResponseParser implements BundleResponseParserInterface
     /**
      * {@inheritdoc}
      */
-    public function parse(array $product)
+    public function parse(array $product) :array
     {
         $bundleVariations = array_filter($product['variations'], static function (array $variation) {
             return $variation['bundleType'] === 'bundle';

@@ -31,7 +31,7 @@ class PayPalInstallmentPaymentResponseParser implements PaymentResponseParserInt
     /**
      * {@inheritdoc}
      */
-    public function parse(array $element)
+    public function parse(array $element) :array
     {
         $payments = $this->parentResponseParser->parse($element);
 

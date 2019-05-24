@@ -45,7 +45,7 @@ class HandleSepaPaymentCommandHandler implements CommandHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(CommandInterface $command)
+    public function supports(CommandInterface $command) :bool
     {
         return $command instanceof TransferObjectCommand &&
             $command->getAdapterName() === PlentymarketsAdapter::NAME &&
@@ -58,7 +58,7 @@ class HandleSepaPaymentCommandHandler implements CommandHandlerInterface
      *
      * @var TransferObjectCommand $command
      */
-    public function handle(CommandInterface $command)
+    public function handle(CommandInterface $command) :bool
     {
         /**
          * @var Payment $payment

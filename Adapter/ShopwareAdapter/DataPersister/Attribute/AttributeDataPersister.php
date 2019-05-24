@@ -3,7 +3,6 @@
 namespace ShopwareAdapter\DataPersister\Attribute;
 
 use Assert\Assertion;
-use Assert\AssertionFailedException;
 use Exception;
 use Psr\Log\LoggerInterface;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
@@ -103,23 +102,9 @@ class AttributeDataPersister implements AttributeDataPersisterInterface
      */
     private function saveAttributes($identifier, $table, array $attributes = [])
     {
-        try {
             Assertion::integer($identifier);
-        } catch (AssertionFailedException $e) {
-            $this->logger->warning($e->getMessage());
-        }
-
-        try {
             Assertion::allIsInstanceOf($attributes, Attribute::class);
-        } catch (Exception $e) {
-            $this->logger->warning($e->getMessage());
-        }
-
-        try {
             Assertion::notBlank($table);
-        } catch (AssertionFailedException $e) {
-            $this->logger->warning($e->getMessage());
-        }
 
         if (empty($attributes)) {
             return;
