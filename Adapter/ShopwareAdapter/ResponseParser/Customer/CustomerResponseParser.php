@@ -176,11 +176,10 @@ class CustomerResponseParser implements CustomerResponseParserInterface
     }
 
     /**
-     * @param int $shopwareId
-     *
-     * @return int
+     * @param $shopwareId
+     * @return string
      */
-    private function getCustomerTypeId($shopwareId): int
+    private function getCustomerTypeId($shopwareId) :string
     {
         switch ($shopwareId) {
             case CustomerModel::ACCOUNT_MODE_CUSTOMER:

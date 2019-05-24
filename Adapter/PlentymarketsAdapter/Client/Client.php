@@ -161,7 +161,7 @@ class Client implements ClientInterface
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 60);
 
         $headers = [];
-        curl_setopt($curl, CURLOPT_HEADERFUNCTION, static function ($header) use (&$headers) {
+        curl_setopt($curl, CURLOPT_HEADERFUNCTION, static function ($curl, $header) use (&$headers) {
             if (stripos($header, 'X-Plenty') === false) {
                 return strlen($header);
             }
