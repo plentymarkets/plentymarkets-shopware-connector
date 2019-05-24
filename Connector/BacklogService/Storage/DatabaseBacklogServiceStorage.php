@@ -106,7 +106,7 @@ class DatabaseBacklogServiceStorage implements BacklogServiceStorageInterface
     /**
      * {@inheritdoc}
      */
-    public function getInfo()
+    public function getInfo() :array
     {
         $amount = $this->getEnqueuedAmount();
 

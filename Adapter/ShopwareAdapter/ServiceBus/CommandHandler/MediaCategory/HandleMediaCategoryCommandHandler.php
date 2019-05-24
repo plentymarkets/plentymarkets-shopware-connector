@@ -55,7 +55,7 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
         $mediaCategory = $command->getPayload();
 
         $identity = $this->identityService->findOneBy([
-            'objectIdentifier' => (string) $mediaCategory->getIdentifier(),
+            'objectIdentifier' => $mediaCategory->getIdentifier(),
             'objectType' => MediaCategory::TYPE,
             'adapterName' => ShopwareAdapter::NAME,
         ]);

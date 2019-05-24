@@ -2,17 +2,16 @@
 
 namespace SystemConnector\DefinitionFactory;
 
-use SystemConnector\ValueObject\ValueObjectInterface;
+use SystemConnector\DefinitionProvider\Struct\Definition;
 
 interface DefinitionFactoryInterface
 {
     /**
-     * @param string   $originAdapterName
-     * @param string   $destinationAdapterName
-     * @param string   $objectType
-     * @param null|int $priority
-     *
-     * @return ValueObjectInterface
+     * @param $originAdapterName
+     * @param $destinationAdapterName
+     * @param $objectType
+     * @param null $priority
+     * @return Definition
      */
-    public function factory($originAdapterName, $destinationAdapterName, $objectType, $priority = null);
+    public function factory($originAdapterName, $destinationAdapterName, $objectType, $priority = null) :Definition;
 }

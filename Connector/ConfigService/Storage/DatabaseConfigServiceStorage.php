@@ -30,7 +30,7 @@ class DatabaseConfigServiceStorage implements ConfigServiceStorageInterface
     /**
      * {@inheritdoc}
      */
-    public function getAll()
+    public function getAll() :array
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->from($this->table, 'config');

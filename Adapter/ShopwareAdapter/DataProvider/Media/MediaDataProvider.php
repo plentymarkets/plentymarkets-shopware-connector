@@ -60,7 +60,7 @@ class MediaDataProvider implements MediaDataProviderInterface
     public function getMediaHashForMediaObject(Media $media): string
     {
         $identity = $this->identityService->findOneBy([
-            'objectIdentifier' => (string) $media->getIdentifier(),
+            'objectIdentifier' => $media->getIdentifier(),
             'objectType' => Media::TYPE,
             'adapterName' => ShopwareAdapter::NAME,
         ]);

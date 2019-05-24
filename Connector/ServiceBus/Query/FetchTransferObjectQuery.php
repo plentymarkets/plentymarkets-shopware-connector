@@ -85,7 +85,7 @@ class FetchTransferObjectQuery implements QueryInterface
     /**
      * @return array
      */
-    public function toArray()
+    public function toArray() :array
     {
         return [
             'adapterName' => $this->adapterName,

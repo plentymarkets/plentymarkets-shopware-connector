@@ -2,7 +2,6 @@
 
 namespace PlentymarketsAdapter\ResponseParser\Category;
 
-use Assert\Assertion;
 use Exception;
 use PlentymarketsAdapter\Helper\MediaCategoryHelper;
 use PlentymarketsAdapter\PlentymarketsAdapter;

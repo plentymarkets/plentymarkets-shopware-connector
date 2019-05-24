@@ -11,7 +11,7 @@ abstract class AbstractValueObject implements ValueObjectInterface, JsonSerializ
      *
      * @return $this
      */
-    public static function fromArray(array $params = [])
+    public static function fromArray(array $params = []) :ValueObjectInterface
     {
         $object = new static();
 

@@ -95,7 +95,7 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
         }
 
         $identity = $this->identityService->findOneBy([
-            'objectIdentifier' => (string) $manufacturer->getIdentifier(),
+            'objectIdentifier' => $manufacturer->getIdentifier(),
             'objectType' => Manufacturer::TYPE,
             'adapterName' => ShopwareAdapter::NAME,
         ]);
@@ -105,7 +105,7 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
 
             if (null !== $existingManufacturer) {
                 $identity = $this->identityService->insert(
-                    (string) $manufacturer->getIdentifier(),
+                    $manufacturer->getIdentifier(),
                     Manufacturer::TYPE,
                     (string) $existingManufacturer['id'],
                     ShopwareAdapter::NAME
@@ -127,7 +127,7 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
             $manufacturerModel = $this->resource->create($params);
 
             $this->identityService->insert(
-                (string) $manufacturer->getIdentifier(),
+                $manufacturer->getIdentifier(),
                 Manufacturer::TYPE,
                 (string) $manufacturerModel->getId(),
                 ShopwareAdapter::NAME

@@ -12,7 +12,7 @@ interface QueryHandlerInterface
      *
      * @return bool
      */
-    public function supports(QueryInterface $query);
+    public function supports(QueryInterface $query) :bool;
 
     /**
      * @param QueryInterface $query

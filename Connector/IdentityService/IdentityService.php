@@ -37,7 +37,7 @@ class IdentityService implements IdentityServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function findOneOrThrow($adapterIdentifier, $adapterName, $objectType)
+    public function findOneOrThrow($adapterIdentifier, $adapterName, $objectType) :Identity
     {
         Assertion::string($adapterIdentifier);
         Assertion::notBlank($adapterIdentifier);
@@ -69,7 +69,7 @@ class IdentityService implements IdentityServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function findOneOrCreate($adapterIdentifier, $adapterName, $objectType)
+    public function findOneOrCreate($adapterIdentifier, $adapterName, $objectType) :Identity
     {
         Assertion::string($adapterIdentifier);
         Assertion::notBlank($adapterIdentifier);
@@ -122,7 +122,7 @@ class IdentityService implements IdentityServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function insert($objectIdentifier, $objectType, $adapterIdentifier, $adapterName)
+    public function insert($objectIdentifier, $objectType, $adapterIdentifier, $adapterName) :Identity
     {
         /**
          * @var Identity $identity
@@ -162,7 +162,7 @@ class IdentityService implements IdentityServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function update(Identity $identity, array $params = [])
+    public function update(Identity $identity, array $params = []) :Identity
     {
         $this->validator->validate($identity);
 
@@ -203,7 +203,7 @@ class IdentityService implements IdentityServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function exists(array $criteria = [])
+    public function exists(array $criteria = []) :bool
     {
         $identity = $this->findOneBy($criteria);
 
@@ -213,7 +213,7 @@ class IdentityService implements IdentityServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function isMappedIdentity($objectIdentifier, $objectType, $adapterName)
+    public function isMappedIdentity($objectIdentifier, $objectType, $adapterName) :bool
     {
         $identities = $this->findBy([
             'objectIdentifier' => $objectIdentifier,

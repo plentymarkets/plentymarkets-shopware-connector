@@ -158,7 +158,7 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
     /**
      * {@inheritdoc}
      */
-    public function getType()
+    public function getType() :string
     {
         return self::TYPE;
     }
@@ -166,7 +166,7 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
     /**
      * @return string
      */
-    public function getIdentifier()
+    public function getIdentifier() :string
     {
         return $this->identifier;
     }
@@ -486,7 +486,7 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
     /**
      * @return Translation[]
      */
-    public function getTranslations()
+    public function getTranslations() :array
     {
         return $this->translations;
     }
@@ -550,7 +550,7 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
     /**
      * @return Attribute[]
      */
-    public function getAttributes()
+    public function getAttributes() :array
     {
         return $this->attributes;
     }

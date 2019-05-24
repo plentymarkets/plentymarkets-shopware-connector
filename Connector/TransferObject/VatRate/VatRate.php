@@ -21,7 +21,7 @@ class VatRate extends AbstractTransferObject
     /**
      * {@inheritdoc}
      */
-    public function getType()
+    public function getType() :string
     {
         return self::TYPE;
     }
@@ -29,7 +29,7 @@ class VatRate extends AbstractTransferObject
     /**
      * {@inheritdoc}
      */
-    public function getIdentifier()
+    public function getIdentifier() :string
     {
         return $this->identifier;
     }

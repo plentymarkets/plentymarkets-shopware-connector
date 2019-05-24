@@ -278,7 +278,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
 
             if (null !== $existingCategory) {
                 $categoryIdentity = $this->identityService->insert(
-                    (string) $category->getIdentifier(),
+                    $category->getIdentifier(),
                     Category::TYPE,
                     (string) $existingCategory,
                     ShopwareAdapter::NAME
@@ -329,7 +329,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             $categoryModel = $resource->create($params);
 
             $categoryIdentity = $this->identityService->insert(
-                (string) $category->getIdentifier(),
+                $category->getIdentifier(),
                 Category::TYPE,
                 (string) $categoryModel->getId(),
                 ShopwareAdapter::NAME

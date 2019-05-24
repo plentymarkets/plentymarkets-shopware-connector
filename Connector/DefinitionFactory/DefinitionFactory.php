@@ -20,7 +20,7 @@ class DefinitionFactory implements DefinitionFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function factory($originAdapterName, $destinationAdapterName, $objectType, $priority = null)
+    public function factory($originAdapterName, $destinationAdapterName, $objectType, $priority = null) :Definition
     {
         $definition = new Definition();
         $definition->setOriginAdapterName($originAdapterName);

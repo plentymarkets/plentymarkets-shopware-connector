@@ -97,7 +97,7 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
         $this->attributeHelper->addFieldAsAttribute($media, 'hash');
 
         $identity = $this->identityService->findOneBy([
-            'objectIdentifier' => (string) $media->getIdentifier(),
+            'objectIdentifier' => $media->getIdentifier(),
             'objectType' => Media::TYPE,
             'adapterName' => ShopwareAdapter::NAME,
         ]);

@@ -20,7 +20,7 @@ class ConfigService implements ConfigServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getAll()
+    public function getAll() :array
     {
         $storage = reset($this->storages);
 

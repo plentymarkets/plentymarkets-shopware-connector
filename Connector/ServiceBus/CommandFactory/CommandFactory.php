@@ -3,6 +3,7 @@
 namespace SystemConnector\ServiceBus\CommandFactory;
 
 use Assert\Assertion;
+use SystemConnector\ServiceBus\Command\CommandInterface;
 use SystemConnector\ServiceBus\Command\TransferObjectCommand;
 use SystemConnector\ServiceBus\CommandFactory\Exception\MissingCommandException;
 use SystemConnector\ServiceBus\CommandType;
@@ -13,7 +14,7 @@ class CommandFactory implements CommandFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function create($adapterName, $objectType, $commandType, $priority, $payload)
+    public function create($adapterName, $objectType, $commandType, $priority, $payload) :CommandInterface
     {
         Assertion::string($adapterName);
         Assertion::string($objectType);

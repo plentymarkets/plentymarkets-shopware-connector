@@ -17,7 +17,7 @@ class VariationValidator implements ValidatorInterface
     /**
      * {@inheritdoc}
      */
-    public function supports($object)
+    public function supports($object) :bool
     {
         return $object instanceof Variation;
     }

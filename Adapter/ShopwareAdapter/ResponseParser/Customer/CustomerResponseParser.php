@@ -120,7 +120,7 @@ class CustomerResponseParser implements CustomerResponseParserInterface
             $customer->setNewsletter(true);
 
             if (null !== $newsletter->getAdded()) {
-                $customer->setNewsletterAgreementDate(DateTimeImmutable::createFromMutable($newsletter->getAdded()));
+                $customer->setNewsletterAgreementDate($newsletter->getAdded()());
             }
         }
 
@@ -142,7 +142,9 @@ class CustomerResponseParser implements CustomerResponseParserInterface
         /**
          * @var GroupModel $customerGroup
          */
-        return $customerGroupRepository->findOneBy(['key' => $entry['groupKey']]);
+        $customerGroup = $customerGroupRepository->findOneBy(['key' => $entry['groupKey']]);
+
+        return $customerGroup;
     }
 
     /**

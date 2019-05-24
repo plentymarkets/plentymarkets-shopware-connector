@@ -31,7 +31,7 @@ class ControllerPathSubscriber implements SubscriberInterface
     /**
      * {@inheritdoc9
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents() :array
     {
         return [
             'Enlight_Controller_Dispatcher_ControllerPath_Backend_PlentyConnector' => 'onControllerBackendPlentyConnector',

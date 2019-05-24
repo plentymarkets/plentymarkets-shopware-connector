@@ -107,7 +107,7 @@ class Order extends AbstractTransferObject implements AttributableInterface
     /**
      * {@inheritdoc}
      */
-    public function getType()
+    public function getType() :string
     {
         return self::TYPE;
     }
@@ -115,7 +115,7 @@ class Order extends AbstractTransferObject implements AttributableInterface
     /**
      * {@inheritdoc}
      */
-    public function getIdentifier()
+    public function getIdentifier() :string
     {
         return $this->identifier;
     }
@@ -365,7 +365,7 @@ class Order extends AbstractTransferObject implements AttributableInterface
     /**
      * @return Attribute[]
      */
-    public function getAttributes()
+    public function getAttributes() :array
     {
         return $this->attributes;
     }

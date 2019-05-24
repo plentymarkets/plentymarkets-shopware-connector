@@ -9,5 +9,5 @@ interface ValueObjectInterface
      *
      * @return ValueObjectInterface
      */
-    public static function fromArray(array $params = []);
+    public static function fromArray(array $params = []) :ValueObjectInterface;
 }

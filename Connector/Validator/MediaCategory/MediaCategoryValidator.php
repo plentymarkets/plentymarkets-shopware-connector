@@ -8,7 +8,7 @@ use SystemConnector\Validator\ValidatorInterface;
 
 class MediaCategoryValidator implements ValidatorInterface
 {
-    public function supports($object)
+    public function supports($object) :bool
     {
         return $object instanceof MediaCategory;
     }

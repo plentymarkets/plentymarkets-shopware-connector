@@ -26,5 +26,5 @@ interface BacklogServiceStorageInterface
      *
      * @return array
      */
-    public function getInfo();
+    public function getInfo() :array;
 }

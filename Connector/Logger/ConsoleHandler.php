@@ -75,7 +75,7 @@ class ConsoleHandler extends AbstractProcessingHandler implements EventSubscribe
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents() :array
     {
         return [
             ConsoleEvents::COMMAND => ['onCommand', 255],
@@ -86,7 +86,7 @@ class ConsoleHandler extends AbstractProcessingHandler implements EventSubscribe
     /**
      * {@inheritdoc}
      */
-    public function isHandling(array $record)
+    public function isHandling(array $record) :bool
     {
         return $this->updateLevel() && parent::isHandling($record);
     }
@@ -94,7 +94,7 @@ class ConsoleHandler extends AbstractProcessingHandler implements EventSubscribe
     /**
      * {@inheritdoc}
      */
-    public function handle(array $record)
+    public function handle(array $record) :bool
     {
         // we have to update the logging level each time because the verbosity of the
         // console output might have changed in the meantime (it is not immutable)

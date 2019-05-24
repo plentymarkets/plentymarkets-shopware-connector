@@ -172,7 +172,7 @@ class HandlePriceCommandHandler implements CommandHandlerInterface
         }
 
         $this->identityService->insert(
-            (string) $price->getIdentifier(),
+            $price->getIdentifier(),
             Price::TYPE,
             (string) $variantPrice->getId(),
             ShopwareAdapter::NAME
