@@ -103,15 +103,15 @@ class Customer extends AbstractValueObject
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getType(): int
+    public function getType(): string
     {
         return $this->type;
     }
 
     /**
-     * @param int $type
+     * @param string $type
      */
     public function setType($type)
     {

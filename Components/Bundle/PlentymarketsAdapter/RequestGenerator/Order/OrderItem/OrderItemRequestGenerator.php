@@ -116,12 +116,17 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
                 AND bundlePrice.customer_group_id = :customerGroupId
             ';
 
-            return $this->entityManager->getConnection()->fetchAssoc($query, [
+            $bundle = $this->entityManager->getConnection()->fetchAssoc($query, [
                 ':articleNumber' => $articleNumber,
                 ':customerGroupId' => $customerGroupId,
             ]);
         } catch (Exception $exception) {
             return [];
         }
+
+        if ($bundle) {
+            return $bundle;
+        }
+        return [];
     }
 }
