@@ -110,9 +110,9 @@ class PermissionInstaller implements InstallerInterface
     /**
      * @param string $resourceName
      *
-     * @return ShopwareResource
+     * @return null|ShopwareResource
      */
-    private function getResource($resourceName): ShopwareResource
+    private function getResource($resourceName)
     {
         return $this->repository->findOneBy(['name' => $resourceName]);
     }
