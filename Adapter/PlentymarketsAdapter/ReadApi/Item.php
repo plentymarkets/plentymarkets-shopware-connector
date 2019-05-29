@@ -7,6 +7,11 @@ use PlentymarketsAdapter\Client\Client;
 use PlentymarketsAdapter\Client\Iterator\Iterator;
 use PlentymarketsAdapter\Helper\LanguageHelperInterface;
 use PlentymarketsAdapter\Helper\VariationHelperInterface;
+use PlentymarketsAdapter\ReadApi\Availability as AvailabilityApi;
+use PlentymarketsAdapter\ReadApi\Item\Attribute as AttributeApi;
+use PlentymarketsAdapter\ReadApi\Item\Barcode as BarcodeApi;
+use PlentymarketsAdapter\ReadApi\Item\Property\Group as PropertyGroupApi;
+use PlentymarketsAdapter\ReadApi\Item\Property\Name as PropertyNameApi;
 use PlentymarketsAdapter\ReadApi\Item\Variation as VariationApi;
 
 class Item extends ApiAbstract
@@ -26,11 +31,20 @@ class Item extends ApiAbstract
      */
     private $variationHelper;
 
+    private $attributes = [];
+
+    private $barcodes = [];
+
+    private $propertyGroups = [];
+
+    private $propertyNames = [];
+
+    private $availabilities = [];
+
     /**
      * @var array
      */
     private $includes = [
-        'itemProperties.valueTexts',
         'itemCrossSelling',
         'itemImages',
         'itemShippingProfiles',
@@ -38,15 +52,20 @@ class Item extends ApiAbstract
 
     public function __construct(
         Client $client,
-        VariationApi $itemsVariationsApi,
         LanguageHelperInterface $languageHelper,
         VariationHelperInterface $variationHelper
     ) {
         parent::__construct($client);
 
-        $this->itemsVariationsApi = $itemsVariationsApi;
         $this->languageHelper = $languageHelper;
         $this->variationHelper = $variationHelper;
+
+        $this->itemsVariationsApi = new VariationApi($client);
+        $this->itemsPropertyGroupsApi = new PropertyGroupApi($client);
+        $this->itemsPropertyNamesApi = new PropertyNameApi($client);
+        $this->availabilitiesApi = new AvailabilityApi($client);
+        $this->itemAttributesApi = new AttributeApi($client);
+        $this->itemBarcodeApi = new BarcodeApi($client);
     }
 
     /**
@@ -152,6 +171,57 @@ class Item extends ApiAbstract
             $elements[$key]['variations'] = array_filter($variations, function (array $variation) use ($element) {
                 return $element['id'] === $variation['itemId'];
             });
+
+            $elements[$key]['__attributes'] = $this->getAttributes();
+            $elements[$key]['__barcodes'] = $this->getBarcodes();
+            $elements[$key]['__propertyGroups'] = $this->getPropertyGroups();
+            $elements[$key]['__properties'] = $this->getProperties();
+            $elements[$key]['__availabilities'] = $this->availabilitiesApi->findAll();
         }
+    }
+
+    private function getAttributes()
+    {
+        if (empty($this->attributes)) {
+            $this->attributes = $this->itemAttributesApi->findAll();
+        }
+
+        return $this->attributes;
+    }
+
+    private function getBarcodes()
+    {
+        if (empty($this->barcodes)) {
+            $this->barcodes = $this->itemBarcodeApi->findAll();
+        }
+
+        return $this->barcodes;
+    }
+
+    private function getPropertyGroups()
+    {
+        if (empty($this->propertyGroups)) {
+            $this->propertyGroups = $this->itemsPropertyGroupsApi->findAll();
+        }
+
+        return $this->propertyGroups;
+    }
+
+    private function getProperties()
+    {
+        if (empty($this->properties)) {
+            $this->properties = $this->itemsPropertyNamesApi->findAll();
+        }
+
+        return $this->properties;
+    }
+
+    private function getAvailabilities()
+    {
+        if (empty($this->availabilities)) {
+            $this->availabilities = $this->availabilitiesApi->findAll();
+        }
+
+        return $this->availabilities;
     }
 }
