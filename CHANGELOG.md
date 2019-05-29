@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [## not released]
+### Changed
+- optimize performance of item sync (@lacodimizer)
+
 ## [## [5.1.0]]
 ### Fixed
 - transfer payment information without a real transactionid if needed
