@@ -44,7 +44,7 @@ class Bundle extends AbstractTransferObject
     private $position = 0;
 
     /**
-     * @var float
+     * @var int
      */
     private $stock = 0;
 
@@ -193,15 +193,15 @@ class Bundle extends AbstractTransferObject
     }
 
     /**
-     * @return float
+     * @return int
      */
-    public function getStock(): float
+    public function getStock(): int
     {
         return $this->stock;
     }
 
     /**
-     * @param float $stock
+     * @param int $stock
      */
     public function setStock($stock)
     {

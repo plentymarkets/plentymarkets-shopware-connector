@@ -77,7 +77,7 @@ class Manufacturer extends AbstractTransferObject
     /**
      * @return string
      */
-    public function getLogoIdentifier(): string
+    public function getLogoIdentifier()
     {
         return $this->logoIdentifier;
     }
@@ -91,9 +91,9 @@ class Manufacturer extends AbstractTransferObject
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getLink(): string
+    public function getLink()
     {
         return $this->link;
     }

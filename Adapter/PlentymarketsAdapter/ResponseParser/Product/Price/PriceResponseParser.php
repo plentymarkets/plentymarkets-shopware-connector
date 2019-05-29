@@ -71,7 +71,7 @@ class PriceResponseParser implements PriceResponseParserInterface
         ]);
 
         if (null === $variationIdentity) {
-            return null;
+            return [];
         }
 
         /**

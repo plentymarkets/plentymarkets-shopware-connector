@@ -150,9 +150,9 @@ class Price extends AbstractTransferObject
     }
 
     /**
-     * @return float
+     * @return null|float
      */
-    public function getToAmount(): float
+    public function getToAmount()
     {
         return $this->toAmount;
     }
