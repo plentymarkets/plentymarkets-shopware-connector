@@ -4,6 +4,7 @@ namespace ShopwareAdapter\DataProvider\Translation;
 
 use Shopware\Models\Article\Configurator\Group as ConfiguratorGroupModel;
 use Shopware\Models\Article\Configurator\Option as ConfiguratorOptionModel;
+use Shopware\Models\Article\Image;
 use Shopware\Models\Property\Option as OptionModel;
 use Shopware\Models\Property\Value as ValueModel;
 use Shopware\Models\Shop\Shop as ShopModel;
@@ -18,7 +19,7 @@ interface TranslationDataProviderInterface
      *
      * @return ShopModel[]
      */
-    public function getShopsByLocaleIdentitiy(Identity $identity);
+    public function getShopsByLocaleIdentity(Identity $identity);
 
     /**
      * @param Property $property
@@ -47,4 +48,12 @@ interface TranslationDataProviderInterface
      * @return null|ConfiguratorOptionModel
      */
     public function getConfigurationOptionByName(Value $value);
+
+    /**
+     * @param Identity $mediaIdentity
+     * @param $articleId
+     *
+     * @return Image
+     */
+    public function getArticleImage(Identity $mediaIdentity, $articleId);
 }

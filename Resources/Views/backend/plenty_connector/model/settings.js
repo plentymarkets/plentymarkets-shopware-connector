@@ -18,7 +18,7 @@ Ext.define('Shopware.apps.PlentyConnector.model.Settings', {
             name: 'rest_password',
             type: 'string'
         },
-        // aditional settings
+        // additional settings
         {
             name: 'product_configurator_type',
             type: 'integer'
@@ -50,6 +50,11 @@ Ext.define('Shopware.apps.PlentyConnector.model.Settings', {
         {
             name: 'import_variations_without_stock',
             type: 'boolean'
+        }
+        ,
+        {
+            name: 'amazon_pay_key',
+            type: 'string'
         }
         // {block name="backend/plentyconnector/model/settings/fields"}{/block}
     ],

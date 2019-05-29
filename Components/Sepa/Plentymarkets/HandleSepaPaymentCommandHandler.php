@@ -85,19 +85,19 @@ class HandleSepaPaymentCommandHandler implements CommandHandlerInterface
         }
 
         $orderIdentity = $this->identityService->findOneBy([
-            'objectIdentifier' => $payment->getOrderIdentifer(),
+            'objectIdentifier' => $payment->getOrderIdentifier(),
             'objectType' => Order::TYPE,
             'adapterName' => PlentymarketsAdapter::NAME,
         ]);
 
         if (null === $orderIdentity) {
-            throw new NotFoundException('could not find order for bank account handling - ' . $payment->getOrderIdentifer());
+            throw new NotFoundException('could not find order for bank account handling - ' . $payment->getOrderIdentifier());
         }
 
         $contactId = $this->getContactIdentifier($orderIdentity);
 
         if (null === $contactId) {
-            throw new NotFoundException('could not find contact for bank account handling - ' . $payment->getOrderIdentifer());
+            throw new NotFoundException('could not find contact for bank account handling - ' . $payment->getOrderIdentifier());
         }
 
         $bankAccounts = $this->client->request('GET', 'accounts/contacts/' . $contactId . '/banks');

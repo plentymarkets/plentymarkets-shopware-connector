@@ -47,7 +47,7 @@ class PayPalUnifiedInstallmentPaymentResponseParser implements PaymentResponsePa
     }
 
     /**
-     * @param string $ordernumber
+     * @param $paymentId
      *
      * @return array|bool
      */

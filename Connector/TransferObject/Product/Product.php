@@ -9,13 +9,14 @@ use SystemConnector\TransferObject\Product\Badge\Badge;
 use SystemConnector\TransferObject\Product\Image\Image;
 use SystemConnector\TransferObject\Product\LinkedProduct\LinkedProduct;
 use SystemConnector\TransferObject\Product\Property\Property;
-use SystemConnector\TransferObject\TranslateableInterface;
+use SystemConnector\TransferObject\TranslatableInterface;
 use SystemConnector\ValueObject\Attribute\Attribute;
 use SystemConnector\ValueObject\Translation\Translation;
 
-class Product extends AbstractTransferObject implements TranslateableInterface, AttributableInterface
+class Product extends AbstractTransferObject implements TranslatableInterface, AttributableInterface
 {
     const TYPE = 'Product';
+    const MULTIPACK = 'multiPack';
 
     /**
      * Identifier of the object.
@@ -73,11 +74,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
      * @var string
      */
     private $vatRateIdentifier = '';
-
-    /**
-     * @var bool
-     */
-    private $stockLimitation = false;
 
     /**
      * @var string
@@ -138,6 +134,11 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
      * @var null|DateTimeImmutable
      */
     private $availableTo;
+
+    /**
+     * @var null|DateTimeImmutable
+     */
+    private $createdAt;
 
     /**
      * @var Attribute[]
@@ -339,22 +340,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     }
 
     /**
-     * @return bool
-     */
-    public function hasStockLimitation()
-    {
-        return $this->stockLimitation;
-    }
-
-    /**
-     * @param bool $stockLimitation
-     */
-    public function setStockLimitation($stockLimitation)
-    {
-        $this->stockLimitation = $stockLimitation;
-    }
-
-    /**
      * @return string
      */
     public function getDescription()
@@ -547,6 +532,22 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     }
 
     /**
+     * @return null|DateTimeImmutable
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param null|DateTimeImmutable $createdAt
+     */
+    public function setCreatedAt(DateTimeImmutable $createdAt = null)
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
      * @return Attribute[]
      */
     public function getAttributes()
@@ -609,7 +610,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
             'defaultCategoryIdentifiers' => $this->getDefaultCategoryIdentifiers(),
             'shippingProfileIdentifiers' => $this->getShippingProfileIdentifiers(),
             'vatRateIdentifier' => $this->getVatRateIdentifier(),
-            'stockLimitation' => $this->hasStockLimitation(),
             'description' => $this->getDescription(),
             'longDescription' => $this->getLongDescription(),
             'metaTitle' => $this->getMetaTitle(),

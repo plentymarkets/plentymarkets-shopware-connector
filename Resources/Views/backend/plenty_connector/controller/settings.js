@@ -35,9 +35,9 @@ Ext.define('Shopware.apps.PlentyConnector.controller.Settings', {
                 response = Ext.decode(response.responseText);
 
                 if (response.success) {
-                    Shopware.Notification.createGrowlMessage('{s name=plentyconnector/controller/settings/valid_creddentials_title}{/s}', '{s name=plentyconnector/controller/settings/valid_creddentials_message}{/s}');
+                    Shopware.Notification.createGrowlMessage('{s name=plentyconnector/controller/settings/valid_credentials_title}{/s}', '{s name=plentyconnector/controller/settings/valid_credentials_message}{/s}');
                 } else {
-                    Shopware.Notification.createGrowlMessage('{s name=plentyconnector/controller/settings/invalid_creddentials_title}{/s}', '{s name=plentyconnector/controller/settings/invalid_creddentials_message}{/s}');
+                    Shopware.Notification.createGrowlMessage('{s name=plentyconnector/controller/settings/invalid_credentials_title}{/s}', '{s name=plentyconnector/controller/settings/invalid_credentials_message}{/s}');
                 }
             }
         });
@@ -64,7 +64,7 @@ Ext.define('Shopware.apps.PlentyConnector.controller.Settings', {
                 if (response.success) {
                     Shopware.Notification.createGrowlMessage('{s name=plentyconnector/controller/settings/settings_saved_title}{/s}', '{s name=plentyconnector/controller/settings/settings_saved_message}{/s}');
                 } else {
-                    Shopware.Notification.createGrowlMessage('{s name=plentyconnector/controller/settings/settings_notsaved_title}{/s}', '{s name=plentyconnector/controller/settings/settings_notsaved_message}{/s}');
+                    Shopware.Notification.createGrowlMessage('{s name=plentyconnector/controller/settings/settings_not_saved_title}{/s}', '{s name=plentyconnector/controller/settings/settings_not_saved_message}{/s}');
                 }
             }
         });

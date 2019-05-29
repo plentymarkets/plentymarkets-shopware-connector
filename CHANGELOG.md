@@ -2,9 +2,25 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [## not released]
+## [## [unreleased]]
 ### Changed
 - optimize performance of item sync (@lacodimizer)
+
+## [## [5.2.0]]
+### Fixed
+- fix category sync if more then one shop has the same root category (@lacodimizer)
+- fix getNumber() on boolean bug (@Pfabeck)
+- fix error after changed mainvariationnumber (@Pfabeck)
+- fix multipack articles (@Pfabeck)
+- fix price referrer (@Pfabeck)
+
+### Added
+- article image translation (@Pfabeck)
+- amazonPay by BestIT integration (@Pfabeck)
+- export custom products options as order items (@Pfabeck)
+- transmit surcharge as item option (@Pfabeck)
+- separate price import logic (@Pfabeck)
+- bundle variation limit (@Pfabeck)
 
 ## [## [5.1.0]]
 ### Fixed

@@ -2,7 +2,10 @@
 
 namespace ShopwareAdapter\DataPersister\Translation;
 
+use Doctrine\DBAL\Exception\InvalidArgumentException;
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use Shopware\Models\Article\Image as ArticleImage;
 use Shopware_Components_Translation;
 use ShopwareAdapter\DataProvider\Translation\TranslationDataProviderInterface;
 use ShopwareAdapter\ShopwareAdapter;
@@ -10,6 +13,8 @@ use SystemConnector\IdentityService\IdentityServiceInterface;
 use SystemConnector\IdentityService\Struct\Identity;
 use SystemConnector\TransferObject\Category\Category;
 use SystemConnector\TransferObject\Language\Language;
+use SystemConnector\TransferObject\Media\Media;
+use SystemConnector\TransferObject\Product\Image\Image;
 use SystemConnector\TransferObject\Product\Product;
 use SystemConnector\TransferObject\Product\Property\Property;
 use SystemConnector\TransferObject\Product\Property\Value\Value;
@@ -43,18 +48,25 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
      */
     private $shopwareTranslationManager;
 
+    /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+
     public function __construct(
         IdentityServiceInterface $identityService,
         LoggerInterface $logger,
         TranslationDataProviderInterface $dataProvider,
         TranslationHelperInterface $translationHelper,
-        Shopware_Components_Translation $shopwareTranslationManager
+        Shopware_Components_Translation $shopwareTranslationManager,
+        EntityManagerInterface $entityManager
     ) {
         $this->identityService = $identityService;
         $this->logger = $logger;
         $this->dataProvider = $dataProvider;
         $this->translationHelper = $translationHelper;
         $this->shopwareTranslationManager = $shopwareTranslationManager;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -133,6 +145,10 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
                 $this->writeValueTranslations($value, 'configuratoroption');
             }
         }
+
+        foreach ($product->getImages() as $articleImage) {
+            $this->writeMediaTranslations($articleImage, $productIdentity->getAdapterIdentifier());
+        }
     }
 
     /**
@@ -195,6 +211,20 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
                 $languageIdentity
             );
         }
+    }
+
+    /**
+     * @param ArticleImage $image
+     *
+     * @throws InvalidArgumentException
+     */
+    public function removeMediaTranslation(ArticleImage $image)
+    {
+        $this->entityManager->getConnection()->delete(
+            's_core_translations',
+            ['objectkey' => $image->getId()],
+            ['objecttype' => 'articleimage']
+        );
     }
 
     /**
@@ -320,6 +350,65 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
     }
 
     /**
+     * @param Image $imageTransferObject
+     * @param $articleId
+     */
+    private function writeMediaTranslations($imageTransferObject, $articleId)
+    {
+        $mediaIdentity = $this->identityService->findOneBy([
+            'objectIdentifier' => $imageTransferObject->getMediaIdentifier(),
+            'objectType' => Media::TYPE,
+            'adapterName' => ShopwareAdapter::NAME,
+        ]);
+
+        if (null === $mediaIdentity) {
+            $this->logger->notice('image not mapped - ' . $imageTransferObject->getMediaIdentifier());
+
+            return;
+        }
+
+        $articleImage = $this->dataProvider->getArticleImage($mediaIdentity, $articleId);
+
+        if (null === $articleImage) {
+            $this->logger->notice('image not found - ' . $mediaIdentity->getObjectIdentifier());
+
+            return;
+        }
+
+        foreach ($this->translationHelper->getLanguageIdentifiers($imageTransferObject) as $languageIdentifier) {
+            /**
+             * @var Image $translatedMedia
+             */
+            $translatedMedia = $this->translationHelper->translate($languageIdentifier, $imageTransferObject);
+
+            $languageIdentity = $this->identityService->findOneBy([
+                'objectIdentifier' => $languageIdentifier,
+                'objectType' => Language::TYPE,
+                'adapterName' => ShopwareAdapter::NAME,
+            ]);
+
+            if (null === $languageIdentity) {
+                $this->logger->notice('language not mapped - ' . $languageIdentifier);
+
+                continue;
+            }
+
+            $translation = ['description' => $translatedMedia->getName()];
+
+            if (empty($translation)) {
+                continue;
+            }
+
+            $this->writeTranslations(
+                'articleimage',
+                $articleImage->getId(),
+                $translation,
+                $languageIdentity
+            );
+        }
+    }
+
+    /**
      * @param string   $type
      * @param int      $primaryKey
      * @param array    $translation
@@ -327,7 +416,7 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
      */
     private function writeTranslations($type, $primaryKey, array $translation, Identity $languageIdentity)
     {
-        $shops = $this->dataProvider->getShopsByLocaleIdentitiy($languageIdentity);
+        $shops = $this->dataProvider->getShopsByLocaleIdentity($languageIdentity);
 
         foreach ($shops as $shop) {
             $this->shopwareTranslationManager->write(

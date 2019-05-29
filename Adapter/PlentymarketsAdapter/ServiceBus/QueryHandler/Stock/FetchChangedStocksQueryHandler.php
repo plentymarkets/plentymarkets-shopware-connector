@@ -68,11 +68,11 @@ class FetchChangedStocksQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $lastCangedTime = $this->getChangedDateTime();
+        $lastChangedTime = $this->getChangedDateTime();
         $currentDateTime = $this->getCurrentDateTime();
 
         $stocks = $this->client->getIterator('stockmanagement/stock', [
-            'updatedAtFrom' => $lastCangedTime->format(DATE_W3C),
+            'updatedAtFrom' => $lastChangedTime->format(DATE_W3C),
             'updatedAtTo' => $currentDateTime->format(DATE_W3C),
             'columns' => ['variationId'],
         ]);

@@ -55,11 +55,10 @@ class Category extends ApiAbstract
 
     /**
      * @param DateTimeImmutable $startTimestamp
-     * @param DateTimeImmutable $endTimestamp
      *
      * @return array
      */
-    public function findChanged(DateTimeImmutable $startTimestamp, DateTimeImmutable $endTimestamp)
+    public function findChanged(DateTimeImmutable $startTimestamp)
     {
         $elements = iterator_to_array($this->client->getIterator('categories', [
             'with' => 'details,clients',

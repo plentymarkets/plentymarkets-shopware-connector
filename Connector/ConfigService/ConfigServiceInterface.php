@@ -12,7 +12,7 @@ interface ConfigServiceInterface
     public function getAll();
 
     /**
-     * Returns the given config element for that key. Default if it doenst exist.
+     * Returns the given config element for that key. Default if it doesnt exist.
      *
      * @param string $key
      * @param mixed  $default

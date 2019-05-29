@@ -67,10 +67,10 @@ class FetchChangedProductsQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $lastCangedTime = $this->getChangedDateTime();
+        $lastChangedTime = $this->getChangedDateTime();
         $currentDateTime = $this->getCurrentDateTime();
 
-        $elements = $this->itemApi->findChanged($lastCangedTime, $currentDateTime);
+        $elements = $this->itemApi->findChanged($lastChangedTime, $currentDateTime);
 
         $this->outputHandler->startProgressBar(count($elements));
 

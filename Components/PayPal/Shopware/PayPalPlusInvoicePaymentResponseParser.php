@@ -4,6 +4,7 @@ namespace PlentyConnector\Components\PayPal\Shopware;
 
 use DateTimeImmutable;
 use Doctrine\DBAL\Connection;
+use Exception;
 use PlentyConnector\Components\PayPal\PaymentData\PayPalPlusInvoicePaymentData;
 use ShopwareAdapter\ResponseParser\Payment\PaymentResponseParserInterface;
 use SystemConnector\TransferObject\Payment\Payment;
@@ -57,7 +58,7 @@ class PayPalPlusInvoicePaymentResponseParser implements PaymentResponseParserInt
             $query = 'SELECT * FROM s_payment_paypal_plus_payment_instruction WHERE ordernumber = ?';
 
             return $this->connection->fetchAssoc($query, [$ordernumber]);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return false;
         }
     }

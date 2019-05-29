@@ -36,11 +36,11 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     public function __construct(
         ClientInterface $client,
         IdentityServiceInterface $identityService,
-        OrderRequestGeneratorInterface $orderRequestGeneretor
+        OrderRequestGeneratorInterface $orderRequestGenerator
     ) {
         $this->client = $client;
         $this->identityService = $identityService;
-        $this->orderRequestGenerator = $orderRequestGeneretor;
+        $this->orderRequestGenerator = $orderRequestGenerator;
     }
 
     /**

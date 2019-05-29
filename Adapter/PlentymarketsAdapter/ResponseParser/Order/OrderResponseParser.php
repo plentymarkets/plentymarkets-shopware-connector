@@ -329,9 +329,9 @@ class OrderResponseParser implements OrderResponseParserInterface
             return null;
         }
 
-        $cutomerGroupIdentity = $this->getCustomerGroupIdentity($entry['customerData']);
+        $customerGroupIdentity = $this->getCustomerGroupIdentity($entry['customerData']);
 
-        if (null === $cutomerGroupIdentity) {
+        if (null === $customerGroupIdentity) {
             $this->logger->info('customer group not found', [
                 'entry' => $entry,
             ]);
@@ -354,7 +354,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         $customer->setNumber($entry['customerData']['number']);
         $customer->setEmail($this->getMail($entry));
         $customer->setLanguageIdentifier($languageIdentity->getObjectIdentifier());
-        $customer->setCustomerGroupIdentifier($cutomerGroupIdentity->getObjectIdentifier());
+        $customer->setCustomerGroupIdentifier($customerGroupIdentity->getObjectIdentifier());
         $customer->setGender($entry['customerData']['gender'] === 'male' ? Customer::GENDER_MALE : Customer::GENDER_FEMALE);
         $customer->setFirstname($entry['customerData']['firstName']);
         $customer->setLastname($entry['customerData']['lastName']);

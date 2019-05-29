@@ -2,6 +2,7 @@
 
 namespace PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\Address;
 
+use PHPUnit_Framework_MockObject_MockObject;
 use PlentyConnector\tests\Unit\Adapter\ShopwareAdapter\ResponseParser\ResponseParserTest;
 use Ramsey\Uuid\Uuid;
 use ShopwareAdapter\ResponseParser\Address\AddressResponseParser;
@@ -33,7 +34,7 @@ class AddressResponseParserTest extends ResponseParserTest
         $identity->method('getObjectIdentifier')->willReturn($this->countyIdentifier);
 
         /**
-         * @var IdentityService|\PHPUnit_Framework_MockObject_MockObject $identityService
+         * @var IdentityService|PHPUnit_Framework_MockObject_MockObject $identityService
          */
         $identityService = $this->createMock(IdentityService::class);
         $identityService->method('findOneBy')->willReturn($identity);

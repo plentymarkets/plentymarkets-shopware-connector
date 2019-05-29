@@ -9,7 +9,7 @@ class Variation extends ApiAbstract
     /**
      * @var array
      */
-    private $includes = [
+    private static $includes = [
         'variationClients',
         'variationSalesPrices',
         'variationCategories',
@@ -31,7 +31,7 @@ class Variation extends ApiAbstract
     public function findBy(array $criteria)
     {
         $params = array_merge($criteria, [
-            'with' => implode(',', $this->includes),
+            'with' => implode(',', self::$includes),
         ]);
 
         return iterator_to_array($this->client->getIterator('items/variations', $params));

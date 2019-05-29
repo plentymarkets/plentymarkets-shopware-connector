@@ -137,24 +137,10 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
 
     /**
      * @param Category $category
-     * @param Identity $shopIdentity
      */
-    private function prepareCategory(Category $category, Identity $shopIdentity)
+    private function prepareCategory(Category $category)
     {
         $attributes = $category->getAttributes();
-
-        $shopAttribute = array_filter($attributes, function (Attribute $attribute) {
-            return 'shopIdentifier' === $attribute->getKey();
-        });
-
-        if (!empty($shopAttribute)) {
-            throw new InvalidArgumentException('shopIdentifier is not a allowed attribute key');
-        }
-
-        $attributes[] = Attribute::fromArray([
-            'key' => 'shopIdentifier',
-            'value' => $shopIdentity->getAdapterIdentifier(),
-        ]);
 
         $attributes[] = Attribute::fromArray([
             'key' => 'metaRobots',
@@ -184,7 +170,13 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             return null;
         }
 
-        $this->prepareCategory($category, $shopIdentity);
+        $this->prepareCategory($category);
+
+        $mainCategory = $shop->getCategory();
+
+        if (null === $mainCategory) {
+            throw new InvalidArgumentException('shop without main category assignment');
+        }
 
         $shopLocale = $shop->getLocale();
 
@@ -216,12 +208,6 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         }
 
         if (null === $category->getParentIdentifier()) {
-            $mainCategory = $shop->getCategory();
-
-            if (null === $mainCategory) {
-                throw new InvalidArgumentException('shop without main cateogry assignment');
-            }
-
             $parentCategory = $mainCategory->getId();
         } else {
             $parentCategoryIdentities = $this->identityService->findBy([
@@ -230,8 +216,8 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
                 'adapterName' => ShopwareAdapter::NAME,
             ]);
 
-            $possibleIdentities = array_filter($parentCategoryIdentities, function (Identity $identity) use ($shopIdentity) {
-                return $this->validIdentity($identity, $shopIdentity);
+            $possibleIdentities = array_filter($parentCategoryIdentities, function (Identity $identity) use ($mainCategory) {
+                return $this->validIdentity($identity, $mainCategory);
             });
 
             $parentCategoryIdentity = null;
@@ -255,8 +241,8 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             'adapterName' => ShopwareAdapter::NAME,
         ]);
 
-        $possibleIdentities = array_filter($categoryIdentities, function (Identity $identity) use ($shopIdentity) {
-            return $this->validIdentity($identity, $shopIdentity);
+        $possibleIdentities = array_filter($categoryIdentities, function (Identity $identity) use ($mainCategory) {
+            return $this->validIdentity($identity, $mainCategory);
         });
 
         $categoryIdentity = null;
@@ -369,29 +355,27 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param Identity $categoryIdentity
-     * @param Identity $shopIdentity
+     * @param Identity      $categoryIdentity
+     * @param CategoryModel $shopMainCategory
      *
      * @return bool
      */
-    private function validIdentity(Identity $categoryIdentity, Identity $shopIdentity)
+    private function validIdentity(Identity $categoryIdentity, CategoryModel $shopMainCategory)
     {
-        $connection = $this->entityManager->getConnection();
-
         try {
-            $query = '
-                SELECT categoryID 
-                FROM s_categories_attributes 
-                WHERE categoryID = :category 
-                AND plenty_connector_shop_identifier = :identifier
-            ';
+            $existingCategory = $this->categoryRepository->find($categoryIdentity->getAdapterIdentifier());
 
-            $attribute = $connection->fetchColumn($query, [
-                ':category' => $categoryIdentity->getAdapterIdentifier(),
-                ':identifier' => $shopIdentity->getAdapterIdentifier(),
-            ]);
+            if (null === $existingCategory) {
+                return false;
+            }
 
-            return (bool) $attribute;
+            $extractedCategoryPath = array_filter(explode('|', $existingCategory->getPath()));
+
+            if (in_array($shopMainCategory->getId(), $extractedCategoryPath)) {
+                return true;
+            }
+
+            return false;
         } catch (Exception $exception) {
             return false;
         }

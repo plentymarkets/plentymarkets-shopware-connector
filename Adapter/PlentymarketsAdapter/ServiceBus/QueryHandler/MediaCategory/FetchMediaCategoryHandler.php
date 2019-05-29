@@ -70,10 +70,10 @@ class FetchMediaCategoryHandler implements QueryHandlerInterface
             return [];
         }
 
-        $caegories = $this->mediaCategoryHelper->getCategories();
+        $categories = $this->mediaCategoryHelper->getCategories();
 
-        if (array_key_exists($identity->getAdapterIdentifier(), $caegories)) {
-            $result[] = $this->responseParser->parse($caegories[$identity->getAdapterIdentifier()]);
+        if (array_key_exists($identity->getAdapterIdentifier(), $categories)) {
+            $result[] = $this->responseParser->parse($categories[$identity->getAdapterIdentifier()]);
         }
 
         return array_filter($result);

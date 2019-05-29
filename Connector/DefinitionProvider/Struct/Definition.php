@@ -33,7 +33,7 @@ class Definition
     private $priority = 0;
 
     /**
-     * active/deactive flag. Can be used to decorate definitions and disable them completly
+     * active/deactivate flag. Can be used to decorate definitions and disable them completely
      *
      * @var bool
      */

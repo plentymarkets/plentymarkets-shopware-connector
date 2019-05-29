@@ -57,7 +57,7 @@ class ClassNameFormatter implements ClassNameFormatterInterface
      */
     public function logCommandReceived($command)
     {
-        $message = $this->getRecievedMessage($command);
+        $message = $this->getReceivedMessage($command);
         $payload = $this->getPayload($command);
 
         $this->logger->log($this->commandReceivedLevel, $message, $payload);
@@ -156,7 +156,7 @@ class ClassNameFormatter implements ClassNameFormatterInterface
      *
      * @return string
      */
-    private function getRecievedMessage($command)
+    private function getReceivedMessage($command)
     {
         return $this->getType($command) . ' received: ' . $this->getClassName($command);
     }

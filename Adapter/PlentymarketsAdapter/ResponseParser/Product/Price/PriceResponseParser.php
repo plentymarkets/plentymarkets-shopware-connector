@@ -11,6 +11,7 @@ use SystemConnector\IdentityService\IdentityServiceInterface;
 use SystemConnector\IdentityService\Struct\Identity;
 use SystemConnector\TransferObject\CustomerGroup\CustomerGroup;
 use SystemConnector\TransferObject\Product\Price\Price;
+use SystemConnector\TransferObject\Product\Variation\Variation;
 use SystemConnector\TransferObject\Shop\Shop;
 
 class PriceResponseParser implements PriceResponseParserInterface
@@ -28,7 +29,7 @@ class PriceResponseParser implements PriceResponseParserInterface
     /**
      * @var ContactClass
      */
-    private $itemsAccountsContacsClasses;
+    private $itemsAccountsContactClasses;
 
     /**
      * @var LoggerInterface
@@ -43,13 +44,13 @@ class PriceResponseParser implements PriceResponseParserInterface
     public function __construct(
         IdentityServiceInterface $identityService,
         SalesPrice $itemsSalesPricesApi,
-        ContactClass $itemsAccountsContacsClasses,
+        ContactClass $itemsAccountsContactClasses,
         LoggerInterface $logger,
         ConfigServiceInterface $configService
     ) {
         $this->identityService = $identityService;
         $this->itemsSalesPricesApi = $itemsSalesPricesApi;
-        $this->itemsAccountsContacsClasses = $itemsAccountsContacsClasses;
+        $this->itemsAccountsContactClasses = $itemsAccountsContactClasses;
         $this->logger = $logger;
         $this->configService = $configService;
     }
@@ -62,6 +63,16 @@ class PriceResponseParser implements PriceResponseParserInterface
     public function parse(array $variation)
     {
         $temporaryPrices = $this->getPricesAsSortedArray($variation['variationSalesPrices']);
+
+        $variationIdentity = $this->identityService->findOneBy([
+            'adapterIdentifier' => (string) $variation['id'],
+            'adapterName' => PlentymarketsAdapter::NAME,
+            'objectType' => Variation::TYPE,
+        ]);
+
+        if (null === $variationIdentity) {
+            return null;
+        }
 
         /**
          * @var Price[] $prices
@@ -77,10 +88,18 @@ class PriceResponseParser implements PriceResponseParserInterface
             }
 
             foreach ((array) $priceArray['default'] as $salesPrice) {
+                $priceIdentity = $this->identityService->findOneOrCreate(
+                    $variation['id'] . '-' . $salesPrice['groupId'],
+                    PlentymarketsAdapter::NAME,
+                    Price::TYPE
+                );
+
                 $priceObject = new Price();
                 $priceObject->setPrice($salesPrice['price']);
+                $priceObject->setIdentifier($priceIdentity->getObjectIdentifier());
                 $priceObject->setCustomerGroupIdentifier($customerGroup);
                 $priceObject->setFromAmount($salesPrice['from']);
+                $priceObject->setVariationIdentifier($variationIdentity->getObjectIdentifier());
 
                 $this->addPseudoPrice($priceObject, $priceArray);
 
@@ -101,12 +120,12 @@ class PriceResponseParser implements PriceResponseParserInterface
                 continue;
             }
 
-            usort($possibleScalePrices, function (Price $possibleScalePriceLeft, Price $possibleScalePriceright) {
-                if ($possibleScalePriceLeft->getFromAmount() === $possibleScalePriceright->getFromAmount()) {
+            usort($possibleScalePrices, function (Price $possibleScalePriceLeft, Price $possibleScalePriceRight) {
+                if ($possibleScalePriceLeft->getFromAmount() === $possibleScalePriceRight->getFromAmount()) {
                     return 0;
                 }
 
-                if ($possibleScalePriceLeft->getFromAmount() > $possibleScalePriceright->getFromAmount()) {
+                if ($possibleScalePriceLeft->getFromAmount() > $possibleScalePriceRight->getFromAmount()) {
                     return 1;
                 }
 
@@ -126,15 +145,15 @@ class PriceResponseParser implements PriceResponseParserInterface
     }
 
     /**
-     * @param string $orderOrigin
-     * @param array  $referrers
+     * @param int   $orderOrigin
+     * @param array $referrers
      *
      * @return bool
      */
     private function checkIfOriginIsInReferrers($orderOrigin, array $referrers)
     {
         foreach ($referrers as $referrer) {
-            if ($referrer['referrerId'] === $orderOrigin) {
+            if (in_array($referrer['referrerId'], [-1, $orderOrigin], true)) {
                 return true;
             }
         }
@@ -160,7 +179,7 @@ class PriceResponseParser implements PriceResponseParserInterface
         static $customerGroups;
 
         if (null === $customerGroups) {
-            $customerGroups = array_keys($this->itemsAccountsContacsClasses->findAll());
+            $customerGroups = array_keys($this->itemsAccountsContactClasses->findAll());
         }
 
         $temporaryPrices = [];
@@ -193,8 +212,10 @@ class PriceResponseParser implements PriceResponseParserInterface
                     $customerGroup = $customerGroupIdentity->getObjectIdentifier();
 
                     $temporaryPrices[$customerGroup][$priceConfiguration['type']][$from] = [
+                        'salesPriceId' => (int) $price['salesPriceId'],
                         'from' => $from,
                         'price' => (float) $price['price'],
+                        'groupId' => (float) $group,
                     ];
                 }
             } else {
@@ -212,8 +233,10 @@ class PriceResponseParser implements PriceResponseParserInterface
                     $customerGroup = $customerGroupIdentity->getObjectIdentifier();
 
                     $temporaryPrices[$customerGroup][$priceConfiguration['type']][$from] = [
+                        'salesPriceId' => (int) $price['salesPriceId'],
                         'from' => $from,
                         'price' => (float) $price['price'],
+                        'groupId' => (float) $group,
                     ];
                 }
             }
