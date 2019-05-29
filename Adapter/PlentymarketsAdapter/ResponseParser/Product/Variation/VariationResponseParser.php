@@ -132,7 +132,7 @@ class VariationResponseParser implements VariationResponseParserInterface
             $variationObject->setActive((bool) $variation['isActive']);
             $variationObject->setNumber($this->getVariationNumber($variation));
             $variationObject->setStockLimitation($this->getStockLimitation($variation));
-            $variationObject->setBarcodes($this->getBarcodes($variation));
+            $variationObject->setBarcodes($this->getBarcodes($product['__barcodes'], $variation));
             $variationObject->setPosition((int) $variation['position']);
             $variationObject->setModel((string) $variation['model']);
             $variationObject->setImages($this->getVariationImages($product['texts'], $variation, $result));
