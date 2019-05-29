@@ -176,7 +176,7 @@ class Item extends ApiAbstract
             $elements[$key]['__barcodes'] = $this->getBarcodes();
             $elements[$key]['__propertyGroups'] = $this->getPropertyGroups();
             $elements[$key]['__properties'] = $this->getProperties();
-            $elements[$key]['__availabilities'] = $this->availabilitiesApi->findAll();
+            $elements[$key]['__availabilities'] = $this->getAvailabilities();
         }
     }
 
