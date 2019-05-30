@@ -141,11 +141,21 @@ class HandleProductCommandHandler implements CommandHandlerInterface
          */
         $mainVariation = $variationRepository->findOneBy(['number' => $product->getNumber()]);
 
+        if (null === $mainVariation && null !== $productIdentity) {
+            $mainVariation = $variationRepository->findOneBy(['articleId' => $productIdentity->getAdapterIdentifier(), 'kind' => 1]);
+        }
+
         if (null === $productIdentity) {
             if (null === $mainVariation) {
                 $productModel = $articleResource->create($params);
             } else {
                 $this->correctMainDetailAssignment($mainVariation);
+
+                foreach ($mainVariation->getImages() as $image) {
+                    if (null !== $image) {
+                        $this->translationDataPersister->removeMediaTranslation($image);
+                    }
+                }
 
                 $productModel = $articleResource->update($mainVariation->getArticleId(), $params);
             }
@@ -170,6 +180,12 @@ class HandleProductCommandHandler implements CommandHandlerInterface
                         'number' => $product->getNumber(),
                         'active' => true,
                     ]);
+                }
+
+                foreach ($productModel->getImages() as $image) {
+                    if (null !== $image) {
+                        $this->translationDataPersister->removeMediaTranslation($image);
+                    }
                 }
 
                 $this->correctMainDetailAssignment($mainVariation);

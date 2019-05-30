@@ -2,11 +2,11 @@
 
 namespace SystemConnector\ValueObject\Attribute;
 
-use SystemConnector\TransferObject\TranslateableInterface;
+use SystemConnector\TransferObject\TranslatableInterface;
 use SystemConnector\ValueObject\AbstractValueObject;
 use SystemConnector\ValueObject\Translation\Translation;
 
-class Attribute extends AbstractValueObject implements TranslateableInterface
+class Attribute extends AbstractValueObject implements TranslatableInterface
 {
     /**
      * @var string

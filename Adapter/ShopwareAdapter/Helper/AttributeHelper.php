@@ -3,7 +3,7 @@
 namespace ShopwareAdapter\Helper;
 
 use SystemConnector\TransferObject\AttributableInterface;
-use SystemConnector\TransferObject\TranslateableInterface;
+use SystemConnector\TransferObject\TranslatableInterface;
 use SystemConnector\ValidatorService\ValidatorServiceInterface;
 use SystemConnector\ValueObject\Attribute\Attribute;
 
@@ -44,7 +44,7 @@ class AttributeHelper implements AttributeHelperInterface
         $attribute->setKey($fieldName);
         $attribute->setValue($fieldValue);
 
-        if ($object instanceof TranslateableInterface) {
+        if ($object instanceof TranslatableInterface) {
             $translations = $object->getTranslations();
             $newTranslations = [];
 

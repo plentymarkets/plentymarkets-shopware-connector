@@ -225,6 +225,23 @@ Ext.define('Shopware.apps.PlentyConnector.view.Settings', {
                         checked: true,
                         anchor: '100%',
                         name: 'import_variations_without_stock'
+                    },
+                    {
+                        xtype: 'checkbox',
+                        fieldLabel: '{s name=plentyconnector/view/settings/additional/surcharge_as_product/label}{/s}',
+                        boxLabel: '{s name=plentyconnector/view/settings/additional/surcharge_as_product/boxLabel}{/s}',
+                        uncheckedValue: 0,
+                        inputValue: 1,
+                        checked: false,
+                        anchor: '100%',
+                        name: 'surcharge_as_product'
+                    },
+                    {
+                        xtype: 'textfield',
+                        fieldLabel: '{s name=plentyconnector/view/settings/amazon_pay_key}{/s}',
+                        name: 'amazon_pay_key',
+                        allowBlank: true,
+                        inputType: 'password'
                     }
                 ]
             }

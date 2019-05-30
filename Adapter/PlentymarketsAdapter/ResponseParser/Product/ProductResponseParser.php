@@ -102,7 +102,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         $result = [];
 
         if (empty($product['texts'])) {
-            $this->logger->notice('the product has no text fieds and will be skipped', [
+            $this->logger->notice('the product has no text fields and will be skipped', [
                 'product id' => $product['id'],
             ]);
 
@@ -139,16 +139,15 @@ class ProductResponseParser implements ProductResponseParserInterface
         $productObject->setIdentifier($identity->getObjectIdentifier());
         $productObject->setName((string) $product['texts'][0]['name1']);
         $productObject->setActive($this->getActive($variations, $mainVariation));
-        $productObject->setNumber($this->variationHelper->getMainVariationNumber($variations, $mainVariation));
+        $productObject->setNumber($this->variationHelper->getMainVariationNumber($mainVariation, $variations));
         $productObject->setBadges($this->getBadges($product));
         $productObject->setShopIdentifiers($this->variationHelper->getShopIdentifiers($mainVariation));
         $productObject->setManufacturerIdentifier($this->getManufacturerIdentifier($product));
         $productObject->setCategoryIdentifiers($this->getCategories($mainVariation));
-        $productObject->setDefaultCategoryIdentifiers($this->getDafaultCategories($mainVariation));
+        $productObject->setDefaultCategoryIdentifiers($this->getDefaultCategories($mainVariation));
         $productObject->setShippingProfileIdentifiers($this->getShippingProfiles($product));
         $productObject->setImages($this->getImages($product, $product['texts'], $result));
         $productObject->setVatRateIdentifier($this->getVatRateIdentifier($mainVariation));
-        $productObject->setStockLimitation($this->getStockLimitation($product));
         $productObject->setDescription((string) $product['texts'][0]['shortDescription']);
         $productObject->setLongDescription((string) $product['texts'][0]['description']);
         $productObject->setMetaTitle((string) $product['texts'][0]['name1']);
@@ -160,6 +159,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         $productObject->setTranslations($this->getProductTranslations($product['texts']));
         $productObject->setAvailableFrom($this->getAvailableFrom($mainVariation));
         $productObject->setAvailableTo($this->getAvailableTo($mainVariation));
+        $productObject->setCreatedAt($this->getCreatedAt($mainVariation));
         $productObject->setAttributes($this->getAttributes($product));
         $productObject->setVariantConfiguration($this->getVariantConfiguration($variations));
 
@@ -187,22 +187,6 @@ class ProductResponseParser implements ProductResponseParserInterface
 
             return $object;
         }, $candidatesForProcessing);
-    }
-
-    /**
-     * @param array $product
-     *
-     * @return bool
-     */
-    private function getStockLimitation(array $product)
-    {
-        foreach ($product['variations'] as $variation) {
-            if (!$variation['stockLimitation']) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     /**
@@ -292,7 +276,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return array
      */
-    private function getDafaultCategories(array $mainVariation)
+    private function getDefaultCategories(array $mainVariation)
     {
         $defaultCategories = [];
 
@@ -641,6 +625,20 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
+     * @param array $mainVariation
+     *
+     * @return null|DateTimeImmutable
+     */
+    private function getCreatedAt(array $mainVariation)
+    {
+        if (!empty($mainVariation['createdAt'])) {
+            return new DateTimeImmutable($mainVariation['createdAt']);
+        }
+
+        return null;
+    }
+
+    /**
      * @param Variation[] $variations
      * @param array       $mainVariation
      *
@@ -670,13 +668,13 @@ class ProductResponseParser implements ProductResponseParserInterface
      */
     private function getVariantConfiguration(array $variations = [])
     {
-        $properties = [];
+        $properties = [[]];
 
         foreach ($variations as $variation) {
-            $properties = array_merge($properties, $variation->getProperties());
+            $properties[] = $variation->getProperties();
         }
 
-        return $properties;
+        return array_merge(...$properties);
     }
 
     /**
@@ -706,6 +704,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         $attributes[] = $this->getAgeRestrictionAsAttribute($product);
         $attributes[] = $this->getSecondProductNameAsAttribute($product);
         $attributes[] = $this->getThirdProductNameAsAttribute($product);
+        $attributes[] = $this->getItemIdAsAttribute($product);
 
         return $attributes;
     }
@@ -860,6 +859,20 @@ class ProductResponseParser implements ProductResponseParserInterface
         $attribute = new Attribute();
         $attribute->setKey('ageRestriction');
         $attribute->setValue((string) $product['ageRestriction']);
+
+        return $attribute;
+    }
+
+    /**
+     * @param array $product
+     *
+     * @return Attribute
+     */
+    private function getItemIdAsAttribute(array $product)
+    {
+        $attribute = new Attribute();
+        $attribute->setKey('itemId');
+        $attribute->setValue((string) $product['id']);
 
         return $attribute;
     }

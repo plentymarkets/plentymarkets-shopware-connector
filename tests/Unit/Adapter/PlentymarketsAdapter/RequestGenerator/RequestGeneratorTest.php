@@ -3,6 +3,7 @@
 namespace PlentyConnector\tests\Unit\Adapter\PlentymarketsAdapter\RequestGenerator;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_MockObject_MockObject;
 use Ramsey\Uuid\Uuid;
 use SystemConnector\IdentityService\IdentityService;
 use SystemConnector\IdentityService\Struct\Identity;
@@ -28,7 +29,7 @@ abstract class RequestGeneratorTest extends TestCase
         $identity->method('getAdapterIdentifier')->willReturn('1');
 
         /**
-         * @var IdentityService|\PHPUnit_Framework_MockObject_MockObject $identityService
+         * @var IdentityService|PHPUnit_Framework_MockObject_MockObject $identityService
          */
         $identityService = $this->createMock(IdentityService::class);
         $identityService->method('findOneBy')->willReturn($identity);

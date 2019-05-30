@@ -2,7 +2,6 @@
 
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Media;
 
-use Shopware\Components\Api\Exception\NotFoundException as MediaNotFoundException;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Media as MediaResource;
 use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
@@ -11,7 +10,6 @@ use ShopwareAdapter\Helper\AttributeHelper;
 use ShopwareAdapter\RequestGenerator\Media\MediaRequestGeneratorInterface;
 use ShopwareAdapter\ShopwareAdapter;
 use SystemConnector\IdentityService\IdentityServiceInterface;
-use SystemConnector\IdentityService\Struct\Identity;
 use SystemConnector\ServiceBus\Command\CommandInterface;
 use SystemConnector\ServiceBus\Command\TransferObjectCommand;
 use SystemConnector\ServiceBus\CommandHandler\CommandHandlerInterface;
@@ -96,34 +94,24 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
         ]);
 
         $resource = $this->getMediaResource();
+        $params = $this->mediaRequestGenerator->generate($media);
 
         if (null !== $identity) {
-            try {
-                $resource->delete($identity->getAdapterIdentifier());
-            } catch (MediaNotFoundException $exception) {
-                // fail silently
-            }
+            $mediaModel = $resource->update($identity->getAdapterIdentifier(), $params);
+        } else {
+            $mediaModel = $resource->create($params);
 
-            $identities = $this->identityService->findBy([
-                'objectIdentifier' => $identity->getObjectIdentifier(),
-                'objectType' => Media::TYPE,
-                'adapterIdentifier' => $identity->getAdapterIdentifier(),
-                'adapterName' => $identity->getAdapterName(),
-            ]);
-
-            array_walk($identities, function (Identity $identity) {
-                $this->identityService->remove($identity);
-            });
+            $this->identityService->create(
+                $media->getIdentifier(),
+                Media::TYPE,
+                (string) $mediaModel->getId(),
+                ShopwareAdapter::NAME
+            );
         }
 
-        $params = $this->mediaRequestGenerator->generate($media);
-        $mediaModel = $resource->create($params);
-
-        $this->identityService->insert(
-            $media->getIdentifier(),
-            Media::TYPE,
-            (string) $mediaModel->getId(),
-            ShopwareAdapter::NAME
+        $this->attributePersister->saveMediaAttributes(
+            $mediaModel,
+            $media->getAttributes()
         );
 
         $this->attributePersister->saveMediaAttributes(

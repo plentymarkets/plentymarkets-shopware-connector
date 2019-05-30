@@ -48,7 +48,7 @@ class CustomerRequestGenerator implements CustomerRequestGeneratorInterface
             throw new NotFoundException('language not found - ' . $customer->getLanguageIdentifier());
         }
 
-        $customerGroupIdentitiy = $this->identityService->findOneBy([
+        $customerGroupIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $customer->getCustomerGroupIdentifier(),
             'objectType' => CustomerGroup::TYPE,
             'adapterName' => PlentymarketsAdapter::NAME,
@@ -69,8 +69,8 @@ class CustomerRequestGenerator implements CustomerRequestGeneratorInterface
             'referrerId' => 1,
         ];
 
-        if (null !== $customerGroupIdentitiy) {
-            $customerParams['classId'] = (int) $customerGroupIdentitiy->getAdapterIdentifier();
+        if (null !== $customerGroupIdentity) {
+            $customerParams['classId'] = (int) $customerGroupIdentity->getAdapterIdentifier();
         }
 
         if (null !== $customer->getBirthday()) {

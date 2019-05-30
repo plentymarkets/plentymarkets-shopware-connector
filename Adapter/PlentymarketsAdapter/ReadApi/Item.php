@@ -29,7 +29,7 @@ class Item extends ApiAbstract
     /**
      * @var array
      */
-    private $includes = [
+    private static $includes = [
         'itemProperties.valueTexts',
         'itemCrossSelling',
         'itemImages',
@@ -58,7 +58,7 @@ class Item extends ApiAbstract
     {
         $result = $this->client->request('GET', 'items/' . $productId, [
             'lang' => $this->languageHelper->getLanguagesQueryString(),
-            'with' => implode(',', $this->includes),
+            'with' => implode(',', self::$includes),
         ]);
 
         if (empty($result)) {
@@ -80,7 +80,7 @@ class Item extends ApiAbstract
     {
         return $this->client->getIterator('items', [
             'lang' => $this->languageHelper->getLanguagesQueryString(),
-            'with' => implode(',', $this->includes),
+            'with' => implode(',', self::$includes),
         ], function (array $elements) {
             $this->addAdditionalData($elements);
 
@@ -102,7 +102,7 @@ class Item extends ApiAbstract
         return $this->client->getIterator('items', [
             'lang' => $this->languageHelper->getLanguagesQueryString(),
             'updatedBetween' => $start . ',' . $end,
-            'with' => implode(',', $this->includes),
+            'with' => implode(',', self::$includes),
         ], function (array $elements) {
             $this->addAdditionalData($elements);
 
@@ -124,7 +124,7 @@ class Item extends ApiAbstract
         return $this->client->getIterator('items', [
             'lang' => $this->languageHelper->getLanguagesQueryString(),
             'variationUpdatedBetween' => $start . ',' . $end,
-            'with' => implode(',', $this->includes),
+            'with' => implode(',', self::$includes),
         ], function (array $elements) {
             $this->addAdditionalData($elements);
 

@@ -4,11 +4,11 @@ namespace SystemConnector\TransferObject\Media;
 
 use SystemConnector\TransferObject\AbstractTransferObject;
 use SystemConnector\TransferObject\AttributableInterface;
-use SystemConnector\TransferObject\TranslateableInterface;
+use SystemConnector\TransferObject\TranslatableInterface;
 use SystemConnector\ValueObject\Attribute\Attribute;
 use SystemConnector\ValueObject\Translation\Translation;
 
-class Media extends AbstractTransferObject implements TranslateableInterface, AttributableInterface
+class Media extends AbstractTransferObject implements TranslatableInterface, AttributableInterface
 {
     const TYPE = 'Media';
 

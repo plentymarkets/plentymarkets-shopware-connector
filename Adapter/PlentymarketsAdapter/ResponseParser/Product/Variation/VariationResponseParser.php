@@ -109,13 +109,13 @@ class VariationResponseParser implements VariationResponseParserInterface
      */
     public function parse(array $product)
     {
-        $productIdentitiy = $this->identityService->findOneBy([
+        $productIdentity = $this->identityService->findOneBy([
             'adapterIdentifier' => (string) $product['id'],
             'adapterName' => PlentymarketsAdapter::NAME,
             'objectType' => Product::TYPE,
         ]);
 
-        if (null === $productIdentitiy) {
+        if (null === $productIdentity) {
             return [];
         }
 
@@ -125,6 +125,12 @@ class VariationResponseParser implements VariationResponseParserInterface
 
         if (empty($mainVariation)) {
             return [];
+        }
+
+        if (Product::MULTIPACK === $product['itemType']) {
+            $variations = array_filter($variations, function (array $variation) {
+                return $variation['isMain'];
+            });
         }
 
         if (count($variations) > 1) {
@@ -152,7 +158,7 @@ class VariationResponseParser implements VariationResponseParserInterface
 
             $variationObject = new Variation();
             $variationObject->setIdentifier($identity->getObjectIdentifier());
-            $variationObject->setProductIdentifier($productIdentitiy->getObjectIdentifier());
+            $variationObject->setProductIdentifier($productIdentity->getObjectIdentifier());
             $variationObject->setActive((bool) $variation['isActive']);
             $variationObject->setNumber($this->getVariationNumber($variation));
             $variationObject->setStockLimitation($this->getStockLimitation($variation));
@@ -196,8 +202,11 @@ class VariationResponseParser implements VariationResponseParserInterface
             return $object instanceof Variation;
         });
 
-        $mainVariationNumber = $this->variationHelper->getMainVariationNumber($variations, $mainVariation);
+        $mainVariationNumber = $this->variationHelper->getMainVariationNumber($mainVariation, $variations);
 
+        /**
+         * @var Variation $variation
+         */
         foreach ($variations as &$variation) {
             if ($variation->getNumber() === $mainVariationNumber) {
                 $variation->setIsMain(true);
@@ -491,7 +500,7 @@ class VariationResponseParser implements VariationResponseParserInterface
      */
     private function getStockLimitation(array $variation)
     {
-        if ($variation['stockLimitation']) {
+        if ($variation['stockLimitation'] === 1) {
             return true;
         }
 

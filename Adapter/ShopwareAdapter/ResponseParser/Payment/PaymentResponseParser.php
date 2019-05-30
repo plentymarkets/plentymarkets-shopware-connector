@@ -3,6 +3,7 @@
 namespace ShopwareAdapter\ResponseParser\Payment;
 
 use Assert\Assertion;
+use Psr\Log\LoggerInterface;
 use Shopware\Models\Order\Status;
 use ShopwareAdapter\DataProvider\Currency\CurrencyDataProviderInterface;
 use ShopwareAdapter\ShopwareAdapter;
@@ -25,12 +26,19 @@ class PaymentResponseParser implements PaymentResponseParserInterface
      */
     private $currencyDataProvider;
 
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
     public function __construct(
         IdentityServiceInterface $identityService,
-        CurrencyDataProviderInterface $currencyDataProvider
+        CurrencyDataProviderInterface $currencyDataProvider,
+        LoggerInterface $logger
     ) {
         $this->identityService = $identityService;
         $this->currencyDataProvider = $currencyDataProvider;
+        $this->logger = $logger;
     }
 
     /**
@@ -51,6 +59,8 @@ class PaymentResponseParser implements PaymentResponseParserInterface
         );
 
         if ($isMappedPaymentIdentity) {
+            $this->logger->notice('paymentidentity' . $paymentIdentifier->getObjectIdentifier() . ' ist not mapped');
+
             return [];
         }
 
@@ -79,6 +89,8 @@ class PaymentResponseParser implements PaymentResponseParserInterface
         );
 
         if (!$isMappedShopIdentity) {
+            $this->logger->warning('shopidentity' . $shopIdentity->getObjectIdentifier() . ' ist not mapped');
+
             return [];
         }
 
@@ -88,7 +100,7 @@ class PaymentResponseParser implements PaymentResponseParserInterface
         $payment = new Payment();
         $payment->setIdentifier($paymentIdentifier->getObjectIdentifier());
         $payment->setShopIdentifier($shopIdentity->getObjectIdentifier());
-        $payment->setOrderIdentifer($this->getConnectorIdentifier($element['id'], Order::TYPE));
+        $payment->setOrderIdentifier($this->getConnectorIdentifier($element['id'], Order::TYPE));
         $payment->setAmount($element['invoiceAmount']);
         $payment->setAccountHolder($this->getAccountHolder($element));
         $payment->setCurrencyIdentifier($currencyIdentifier);

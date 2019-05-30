@@ -84,7 +84,7 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
             throw new RuntimeException('unsupported type');
         }
 
-        // orderItemName should contain specific coupon number, to allow futher analysis
+        // orderItemName should contain specific coupon number, to allow further analysis
         if ($this->isCouponItem($orderItem)) {
             $itemParams['orderItemName'] = $orderItem->getNumber();
         } else {
@@ -99,7 +99,7 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
         }
 
         if ($typeId === 1 && empty($itemParams['itemVariationId'])) {
-            $itemParams['typeId'] = 9; // TYPE_UNASSIGEND_VARIATION;
+            $itemParams['typeId'] = 9; // TYPE_UNASSIGNED_VARIATION;
         }
 
         if (null !== $orderItem->getVatRateIdentifier()) {
