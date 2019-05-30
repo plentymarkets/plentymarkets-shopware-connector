@@ -2,6 +2,7 @@
 
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Media;
 
+use Shopware\Components\Api\Exception\NotFoundException as MediaNotFoundException;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Media as MediaResource;
 use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
@@ -97,7 +98,11 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
         $params = $this->mediaRequestGenerator->generate($media);
 
         if (null !== $identity) {
-            $mediaModel = $resource->update($identity->getAdapterIdentifier(), $params);
+            try {
+                $mediaModel = $resource->update($identity->getAdapterIdentifier(), $params);
+            } catch (MediaNotFoundException $exception) {
+                $mediaModel = $resource->create($params);
+            }
         } else {
             $mediaModel = $resource->create($params);
 
