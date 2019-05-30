@@ -90,6 +90,12 @@ class Item extends ApiAbstract
             'plentyId' => implode(',', $this->variationHelper->getMappedPlentyClientIds()),
         ]);
 
+        $result['__attributes'] = $this->getAttributes();
+        $result['__barcodes'] = $this->getBarcodes();
+        $result['__propertyGroups'] = $this->getPropertyGroups();
+        $result['__properties'] = $this->getProperties();
+        $result['__availabilities'] = $this->getAvailabilities();
+
         return $result;
     }
 
