@@ -102,11 +102,18 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
                 $mediaModel = $resource->update($identity->getAdapterIdentifier(), $params);
             } catch (MediaNotFoundException $exception) {
                 $mediaModel = $resource->create($params);
+
+                $this->identityService->update(
+                $identity,
+                    [
+                        'adapterIdentifier' => (string) $mediaModel->getId(),
+                    ]
+                );
             }
         } else {
             $mediaModel = $resource->create($params);
 
-            $this->identityService->create(
+            $this->identityService->insert(
                 $media->getIdentifier(),
                 Media::TYPE,
                 (string) $mediaModel->getId(),
