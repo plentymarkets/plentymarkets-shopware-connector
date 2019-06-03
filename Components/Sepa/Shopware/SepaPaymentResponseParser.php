@@ -37,7 +37,8 @@ class SepaPaymentResponseParser implements PaymentResponseParserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $element
+     * @return array
      */
     public function parse(array $element) :array
     {
