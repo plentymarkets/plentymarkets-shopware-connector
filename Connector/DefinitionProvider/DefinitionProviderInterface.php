@@ -11,17 +11,17 @@ interface DefinitionProviderInterface
      *
      * @return Definition[]
      */
-    public function getConnectorDefinitions($objectType = null);
+    public function getConnectorDefinitions($objectType = null): array;
 
     /**
      * @param null $objectType
      *
      * @return Definition[]
      */
-    public function getMappingDefinitions($objectType = null);
+    public function getMappingDefinitions($objectType = null): array;
 
     /**
      * @return Definition[]
      */
-    public function getCleanupDefinitions();
+    public function getCleanupDefinitions(): array;
 }

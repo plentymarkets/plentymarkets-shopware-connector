@@ -11,7 +11,7 @@ class Name extends ApiAbstract
      *
      * @return array
      */
-    public function findOne($propertyId)
+    public function findOne($propertyId): array
     {
         return $this->client->request('GET', 'items/properties/' . $propertyId . '/names');
     }

@@ -3,10 +3,13 @@
 namespace PlentymarketsAdapter\Client\Iterator;
 
 use Assert\Assertion;
+use Assert\AssertionFailedException;
 use Closure;
 use Countable;
 use Iterator as BaseIterator;
 use PlentymarketsAdapter\Client\Client;
+use PlentymarketsAdapter\Client\Exception\InvalidCredentialsException;
+use Throwable;
 
 class Iterator implements BaseIterator, Countable
 {
@@ -56,10 +59,12 @@ class Iterator implements BaseIterator, Countable
     private $isLastPage = false;
 
     /**
-     * @param string       $path
+     * @param $path
      * @param Client       $client
      * @param array        $criteria
      * @param null|Closure $prepareFunction
+     *
+     * @throws AssertionFailedException
      */
     public function __construct($path, Client $client, array $criteria = [], Closure $prepareFunction = null)
     {
@@ -125,9 +130,13 @@ class Iterator implements BaseIterator, Countable
     }
 
     /**
-     * {@inheritdoc}
+     * @throws AssertionFailedException
+     * @throws InvalidCredentialsException
+     * @throws Throwable
+     *
+     * @return int
      */
-    public function count()
+    public function count(): int
     {
         return $this->client->getTotal($this->path, $this->criteria);
     }

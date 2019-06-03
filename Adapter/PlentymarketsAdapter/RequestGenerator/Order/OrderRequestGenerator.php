@@ -61,8 +61,13 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws NotFoundException
+     * @throws NotFoundException
+     * @throws NotFoundException
+     * @throws NotFoundException
      */
-    public function generate(Order $order)
+    public function generate(Order $order): array
     {
         $shopIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $order->getShopIdentifier(),
@@ -140,23 +145,23 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
         $params['properties'] = [
             [
                 'typeId' => 6,
-                'value' => (string) $languageIdentity->getAdapterIdentifier(),
+                'value' => $languageIdentity->getAdapterIdentifier(),
             ],
             [
                 'typeId' => 7,
-                'value' => (string) $order->getOrderNumber(),
+                'value' => $order->getOrderNumber(),
             ],
             [
                 'typeId' => 3,
-                'value' => (string) $paymentMethodIdentity->getAdapterIdentifier(),
+                'value' => $paymentMethodIdentity->getAdapterIdentifier(),
             ],
             [
                 'typeId' => 2,
-                'value' => (string) $shippingProfileIdentity->getAdapterIdentifier(),
+                'value' => $shippingProfileIdentity->getAdapterIdentifier(),
             ],
         ];
 
-        $vouchers = array_filter($order->getOrderItems(), function (OrderItem $item) {
+        $vouchers = array_filter($order->getOrderItems(), static function (OrderItem $item) {
             return $item->getType() === OrderItem::TYPE_VOUCHER;
         });
 
@@ -171,7 +176,7 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
         if (null !== $voucher) {
             $params['properties'][] = [
                 'typeId' => 18,
-                'value' => (string) $voucher->getNumber(),
+                'value' => $voucher->getNumber(),
             ];
 
             $params['properties'][] = [
@@ -203,7 +208,7 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
      *
      * @return array
      */
-    private function createAddress(Address $address, Order $order, array $plentyCustomer, $addressType = 1)
+    private function createAddress(Address $address, Order $order, array $plentyCustomer, $addressType = 1): array
     {
         $params = $this->addressRequestGenerator->generate($address, $order, $addressType);
 
@@ -225,7 +230,7 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
             return null;
         }
 
-        $possibleCustomers = array_filter($customerResult, function ($entry) {
+        $possibleCustomers = array_filter($customerResult, static function ($entry) {
             return $entry['singleAccess'] !== '1';
         });
 

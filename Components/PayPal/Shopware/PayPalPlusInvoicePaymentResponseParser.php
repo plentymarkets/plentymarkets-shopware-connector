@@ -32,7 +32,7 @@ class PayPalPlusInvoicePaymentResponseParser implements PaymentResponseParserInt
     /**
      * {@inheritdoc}
      */
-    public function parse(array $element)
+    public function parse(array $element): array
     {
         $payments = $this->parentResponseParser->parse($element);
 
@@ -80,7 +80,7 @@ class PayPalPlusInvoicePaymentResponseParser implements PaymentResponseParserInt
         $paymentData->setAmountValue($data['amount_value']);
         $paymentData->setBankIdentifierCode($data['bank_identifier_code']);
         $paymentData->setInternationalBankAccountNumber($data['international_bank_account_number']);
-        $paymentData->setAccountHolderName($data['account_holder_name']);
+        $paymentData->setAccountHolderName((string) $data['account_holder_name']);
         $paymentData->setBankName($data['bank_name']);
         $paymentData->setInstructionType($data['instruction_type']);
         $paymentData->setReferenceNumber($data['reference_number']);

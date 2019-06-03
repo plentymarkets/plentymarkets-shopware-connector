@@ -12,7 +12,7 @@ class MissingQueryException extends InvalidArgumentException
      *
      * @return MissingQueryException
      */
-    public static function fromObjectData($objectType, $queryType)
+    public static function fromObjectData($objectType, $queryType): MissingQueryException
     {
         $message = 'No matching query found! type: ' . $objectType . ' queryType: ' . $queryType;
 

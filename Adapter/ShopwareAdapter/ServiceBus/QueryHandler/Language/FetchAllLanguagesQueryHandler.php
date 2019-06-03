@@ -37,7 +37,7 @@ class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(QueryInterface $query)
+    public function supports(QueryInterface $query): bool
     {
         return $query instanceof FetchTransferObjectQuery &&
             $query->getAdapterName() === ShopwareAdapter::NAME &&
@@ -66,7 +66,7 @@ class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
     /**
      * @return Query
      */
-    private function createLocalesQuery()
+    private function createLocalesQuery(): Query
     {
         $queryBuilder = $this->repository->createQueryBuilder('locales');
         $queryBuilder->select([

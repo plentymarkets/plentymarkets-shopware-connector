@@ -20,6 +20,7 @@ use SystemConnector\TransferObject\Product\Property\Property;
 use SystemConnector\TransferObject\Product\Property\Value\Value;
 use SystemConnector\Translation\TranslationHelperInterface;
 use SystemConnector\ValueObject\Attribute\Attribute;
+use Zend_Db_Adapter_Exception;
 
 class TranslationDataPersister implements TranslationDataPersisterInterface
 {
@@ -413,6 +414,8 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
      * @param int      $primaryKey
      * @param array    $translation
      * @param Identity $languageIdentity
+     *
+     * @throws Zend_Db_Adapter_Exception
      */
     private function writeTranslations($type, $primaryKey, array $translation, Identity $languageIdentity)
     {

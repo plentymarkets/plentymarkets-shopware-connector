@@ -11,7 +11,7 @@ class ImageValidator implements ValidatorInterface
     /**
      * {@inheritdoc}
      */
-    public function supports($object)
+    public function supports($object): bool
     {
         return $object instanceof Image;
     }
@@ -22,7 +22,7 @@ class ImageValidator implements ValidatorInterface
     public function validate($object)
     {
         Assertion::uuid($object->getMediaIdentifier(), null, 'product.image.mediaIdentifier');
-        Assertion::allUuid($object->getShopIdentifiers(), null, 'product.image.shopIdentifiers');
+        Assertion::isArray($object->getShopIdentifiers(), null, 'product.image.shopIdentifiers');
         Assertion::integer($object->getPosition(), null, 'product.image.position');
         Assertion::greaterOrEqualThan($object->getPosition(), 0, null, 'product.image.position');
     }

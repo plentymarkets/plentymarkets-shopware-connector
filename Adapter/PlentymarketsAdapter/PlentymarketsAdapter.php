@@ -9,9 +9,9 @@ class PlentymarketsAdapter implements AdapterInterface
     const NAME = 'PlentymarketsAdapter';
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return self::NAME;
     }

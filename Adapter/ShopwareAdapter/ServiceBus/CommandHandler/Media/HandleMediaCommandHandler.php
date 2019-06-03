@@ -3,6 +3,8 @@
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Media;
 
 use Shopware\Components\Api\Exception\NotFoundException as MediaNotFoundException;
+use Shopware\Components\Api\Exception\ParameterMissingException;
+use Shopware\Components\Api\Exception\ValidationException;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Media as MediaResource;
 use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
@@ -62,7 +64,7 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(CommandInterface $command)
+    public function supports(CommandInterface $command): bool
     {
         return $command instanceof TransferObjectCommand &&
             $command->getAdapterName() === ShopwareAdapter::NAME &&
@@ -71,11 +73,16 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param CommandInterface $command
      *
-     * @param TransferObjectCommand $command
+     * @throws ParameterMissingException
+     * @throws ValidationException
+     * @throws ValidationException
+     * @throws ParameterMissingException
+     *
+     * @return bool
      */
-    public function handle(CommandInterface $command)
+    public function handle(CommandInterface $command): bool
     {
         /** @var Media $media */
         $media = $command->getPayload();
@@ -90,7 +97,7 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
         $this->attributeHelper->addFieldAsAttribute($media, 'hash');
 
         $identity = $this->identityService->findOneBy([
-            'objectIdentifier' => (string) $media->getIdentifier(),
+            'objectIdentifier' => $media->getIdentifier(),
             'objectType' => Media::TYPE,
             'adapterName' => ShopwareAdapter::NAME,
         ]);
@@ -137,7 +144,7 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
     /**
      * @return MediaResource
      */
-    private function getMediaResource()
+    private function getMediaResource(): MediaResource
     {
         // without this reset the entitymanager sometimes the album is not found correctly.
         Shopware()->Container()->reset('models');

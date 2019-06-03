@@ -38,7 +38,7 @@ class PaymentRequestGeneratorTest extends RequestGeneratorTest
         $this->assertArraySubset($expectedRequest, $request);
     }
 
-    public function getPaymentObjects()
+    public function getPaymentObjects(): array
     {
         $payment = new Payment();
         $payment->setIdentifier(Uuid::uuid4()->toString());

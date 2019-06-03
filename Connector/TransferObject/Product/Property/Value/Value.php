@@ -26,7 +26,7 @@ class Value extends AbstractValueObject implements TranslatableInterface
     /**
      * @return string
      */
-    public function getValue()
+    public function getValue(): string
     {
         return $this->value;
     }
@@ -42,7 +42,7 @@ class Value extends AbstractValueObject implements TranslatableInterface
     /**
      * @return int
      */
-    public function getPosition()
+    public function getPosition(): int
     {
         return $this->position;
     }
@@ -58,7 +58,7 @@ class Value extends AbstractValueObject implements TranslatableInterface
     /**
      * @return Translation[]
      */
-    public function getTranslations()
+    public function getTranslations(): array
     {
         return $this->translations;
     }

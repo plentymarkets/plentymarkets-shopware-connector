@@ -62,7 +62,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     /**
      * {@inheritdoc}
      */
-    public function parse(array $entry)
+    public function parse(array $entry): array
     {
         $identity = $this->identityService->findOneBy([
             'adapterIdentifier' => (string) $entry['id'],
@@ -198,9 +198,9 @@ class OrderResponseParser implements OrderResponseParserInterface
      *
      * @return array
      */
-    private function getBillingAddressData(array $entry)
+    private function getBillingAddressData(array $entry): array
     {
-        $billingAddress = array_filter($entry['addresses'], function (array $address) {
+        $billingAddress = array_filter($entry['addresses'], static function (array $address) {
             return $address['pivot']['typeId'] === 1;
         });
 
@@ -216,9 +216,9 @@ class OrderResponseParser implements OrderResponseParserInterface
      *
      * @return array
      */
-    private function getShippingAddressData(array $entry)
+    private function getShippingAddressData(array $entry): array
     {
-        $shippingAddress = array_filter($entry['addresses'], function (array $address) {
+        $shippingAddress = array_filter($entry['addresses'], static function (array $address) {
             return $address['pivot']['typeId'] === 2;
         });
 
@@ -234,9 +234,9 @@ class OrderResponseParser implements OrderResponseParserInterface
      *
      * @return array
      */
-    private function getCustomerData(array $entry)
+    private function getCustomerData(array $entry): array
     {
-        $relations = array_filter($entry['relations'], function (array $relation) {
+        $relations = array_filter($entry['relations'], static function (array $relation) {
             return $relation['referenceType'] === 'contact';
         });
 
@@ -256,7 +256,7 @@ class OrderResponseParser implements OrderResponseParserInterface
      */
     private function getOrdernumber(array $entry)
     {
-        $property = array_filter($entry['properties'], function (array $property) {
+        $property = array_filter($entry['properties'], static function (array $property) {
             return $property['typeId'] === 7;
         });
 
@@ -276,7 +276,7 @@ class OrderResponseParser implements OrderResponseParserInterface
      */
     private function getLanguageIdentity(array $entry)
     {
-        $property = array_filter($entry['properties'], function (array $property) {
+        $property = array_filter($entry['properties'], static function (array $property) {
             return $property['typeId'] === 6;
         });
 
@@ -298,7 +298,7 @@ class OrderResponseParser implements OrderResponseParserInterface
      *
      * @return Comment[]
      */
-    private function getComments(array $entry)
+    private function getComments(array $entry): array
     {
         $result = [];
         foreach ($entry['comments'] as $data) {
@@ -370,7 +370,7 @@ class OrderResponseParser implements OrderResponseParserInterface
      *
      * @return Identity
      */
-    private function getShopIdentity(array $plentyCustomer)
+    private function getShopIdentity(array $plentyCustomer): Identity
     {
         return $this->identityService->findOneBy([
             'adapterIdentifier' => (string) $plentyCustomer['plentyId'],
@@ -384,7 +384,7 @@ class OrderResponseParser implements OrderResponseParserInterface
      *
      * @return Identity
      */
-    private function getCustomerGroupIdentity(array $plentyCustomer)
+    private function getCustomerGroupIdentity(array $plentyCustomer): Identity
     {
         return $this->identityService->findOneBy([
             'adapterIdentifier' => (string) $plentyCustomer['classId'],
@@ -444,7 +444,7 @@ class OrderResponseParser implements OrderResponseParserInterface
      */
     private function getPaymentMethodIdentity(array $entry)
     {
-        $property = array_filter($entry['properties'], function (array $property) {
+        $property = array_filter($entry['properties'], static function (array $property) {
             return $property['typeId'] === 3;
         });
 
@@ -468,7 +468,7 @@ class OrderResponseParser implements OrderResponseParserInterface
      */
     private function getPaymentStatusIdentity(array $entry)
     {
-        $property = array_filter($entry['properties'], function (array $property) {
+        $property = array_filter($entry['properties'], static function (array $property) {
             return $property['typeId'] === 4;
         });
 
@@ -504,9 +504,9 @@ class OrderResponseParser implements OrderResponseParserInterface
      *
      * @return DateTimeImmutable
      */
-    private function getOrderTime(array $entry)
+    private function getOrderTime(array $entry): DateTimeImmutable
     {
-        $date = array_filter($entry['dates'], function (array $property) {
+        $date = array_filter($entry['dates'], static function (array $property) {
             return $property['typeId'] === 2;
         });
 
@@ -604,7 +604,7 @@ class OrderResponseParser implements OrderResponseParserInterface
      */
     private function getPhoneNumber(array $entry)
     {
-        $options = array_filter($entry['customerData']['options'], function (array $option) {
+        $options = array_filter($entry['customerData']['options'], static function (array $option) {
             return $option['typeId'] === 1 && $option['subTypeId'] === 4;
         });
 
@@ -624,7 +624,7 @@ class OrderResponseParser implements OrderResponseParserInterface
      */
     private function getMobilePhoneNumber(array $entry)
     {
-        $options = array_filter($entry['customerData']['options'], function (array $option) {
+        $options = array_filter($entry['customerData']['options'], static function (array $option) {
             return $option['typeId'] === 1 && $option['subTypeId'] === 2;
         });
 
@@ -648,7 +648,7 @@ class OrderResponseParser implements OrderResponseParserInterface
             return null;
         }
 
-        $options = array_filter($entry['billingAddressData']['options'], function (array $option) {
+        $options = array_filter($entry['billingAddressData']['options'], static function (array $option) {
             return $option['typeId'] === 5;
         });
 
@@ -666,11 +666,11 @@ class OrderResponseParser implements OrderResponseParserInterface
      *
      * @return Package[]
      */
-    private function getPackages(array $entry)
+    private function getPackages(array $entry): array
     {
         $numbers = $this->client->request('GET', 'orders/' . $entry['id'] . '/packagenumbers');
 
-        $shippingDate = array_filter($entry['dates'], function (array $date) {
+        $shippingDate = array_filter($entry['dates'], static function (array $date) {
             return $date['typeId'] === 8;
         });
 
@@ -700,7 +700,7 @@ class OrderResponseParser implements OrderResponseParserInterface
      *
      * @return OrderItem[]
      */
-    private function getOrderItems(array $entry)
+    private function getOrderItems(array $entry): array
     {
         $result = [];
 
@@ -725,7 +725,7 @@ class OrderResponseParser implements OrderResponseParserInterface
      *
      * @return float
      */
-    private function getOrderItemPrice(array $item)
+    private function getOrderItemPrice(array $item): float
     {
         $price = 0.0;
 
@@ -741,7 +741,7 @@ class OrderResponseParser implements OrderResponseParserInterface
      *
      * @return string
      */
-    private function getNumberFromVariation($variationId)
+    private function getNumberFromVariation($variationId): string
     {
         static $variations;
 

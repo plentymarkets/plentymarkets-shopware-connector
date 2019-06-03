@@ -14,5 +14,5 @@ interface QueryFactoryInterface
      *
      * @return QueryInterface
      */
-    public function create($adapterName, $objectType, $queryType, $payload = null);
+    public function create($adapterName, $objectType, $queryType, $payload = null): QueryInterface;
 }

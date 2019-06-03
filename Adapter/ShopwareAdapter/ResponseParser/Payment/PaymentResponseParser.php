@@ -3,6 +3,7 @@
 namespace ShopwareAdapter\ResponseParser\Payment;
 
 use Assert\Assertion;
+use Assert\AssertionFailedException;
 use Psr\Log\LoggerInterface;
 use Shopware\Models\Order\Status;
 use ShopwareAdapter\DataProvider\Currency\CurrencyDataProviderInterface;
@@ -44,7 +45,7 @@ class PaymentResponseParser implements PaymentResponseParserInterface
     /**
      * {@inheritdoc}
      */
-    public function parse(array $element)
+    public function parse(array $element): array
     {
         $paymentIdentifier = $this->identityService->findOneOrCreate(
             (string) $element['id'],
@@ -114,9 +115,11 @@ class PaymentResponseParser implements PaymentResponseParserInterface
      * @param int    $entry
      * @param string $type
      *
+     * @throws AssertionFailedException
+     *
      * @return string
      */
-    private function getConnectorIdentifier($entry, $type)
+    private function getConnectorIdentifier($entry, $type): string
     {
         Assertion::integerish($entry);
 
@@ -132,7 +135,7 @@ class PaymentResponseParser implements PaymentResponseParserInterface
      *
      * @return string
      */
-    private function getAccountHolder(array $element)
+    private function getAccountHolder(array $element): string
     {
         $firstName = !empty($element['billing']['firstName']) ? $element['billing']['firstName'] : '';
         $lastName = !empty($element['billing']['lastName']) ? $element['billing']['lastName'] : '';

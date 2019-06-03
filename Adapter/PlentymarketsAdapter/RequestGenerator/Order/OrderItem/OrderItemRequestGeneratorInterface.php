@@ -13,5 +13,5 @@ interface OrderItemRequestGeneratorInterface
      *
      * @return array
      */
-    public function generate(OrderItem $orderItem, Order $order);
+    public function generate(OrderItem $orderItem, Order $order): array;
 }

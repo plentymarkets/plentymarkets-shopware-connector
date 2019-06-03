@@ -11,5 +11,5 @@ interface PriceResponseParserInterface
      *
      * @return Price[]
      */
-    public function parse(array $variation);
+    public function parse(array $variation): array;
 }

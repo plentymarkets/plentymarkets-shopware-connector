@@ -32,7 +32,7 @@ class PayPalPlusInvoiceRequestGeneratorTest extends TestCase
         $paymentData->setAccountHolderName('PayPal Europe');
         $paymentData->setAmountCurrency('EUR');
         $paymentData->setAmountValue(805.00);
-        $paymentData->setBankIdentifierCode('DE36120700888000129228');
+        $paymentData->setInternationalBankAccountNumber('DE36120700888000129228');
         $paymentData->setBankName('Deutsche Bank');
         $paymentData->setInstructionType('PAY_UPON_INVOICE');
         $paymentData->setBankIdentifierCode('DEUTDEDBPAL');

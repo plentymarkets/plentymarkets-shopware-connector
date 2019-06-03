@@ -25,7 +25,7 @@ class SepaPaymentData extends AbstractValueObject implements PaymentDataInterfac
     /**
      * @return string
      */
-    public function getAccountOwner()
+    public function getAccountOwner(): string
     {
         return $this->accountOwner;
     }
@@ -41,7 +41,7 @@ class SepaPaymentData extends AbstractValueObject implements PaymentDataInterfac
     /**
      * @return string
      */
-    public function getIban()
+    public function getIban(): string
     {
         return $this->iban;
     }

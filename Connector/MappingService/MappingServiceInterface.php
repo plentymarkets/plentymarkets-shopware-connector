@@ -11,5 +11,5 @@ interface MappingServiceInterface
      *
      * @return Mapping[]
      */
-    public function getMappingInformation($objectType = null);
+    public function getMappingInformation($objectType = null): array;
 }

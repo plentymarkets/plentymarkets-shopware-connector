@@ -12,7 +12,7 @@ class MissingCommandException extends InvalidArgumentException
      *
      * @return self
      */
-    public static function fromObjectData($objectType, $commandType)
+    public static function fromObjectData($objectType, $commandType): self
     {
         $message = 'No matching command found! type: ' . $objectType . ' queryType: ' . $commandType;
 

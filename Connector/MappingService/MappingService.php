@@ -57,7 +57,7 @@ class MappingService implements MappingServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getMappingInformation($objectType = null)
+    public function getMappingInformation($objectType = null): array
     {
         Assertion::nullOrString($objectType);
 
@@ -91,7 +91,7 @@ class MappingService implements MappingServiceInterface
      *
      * @return TransferObjectInterface[]
      */
-    private function query(Definition $definition, $adapterName)
+    private function query(Definition $definition, $adapterName): array
     {
         $originQuery = $this->queryFactory->create(
             $adapterName,

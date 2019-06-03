@@ -12,7 +12,7 @@ class Payment extends ApiAbstract
      *
      * @return array
      */
-    public function find($id)
+    public function find($id): array
     {
         return $this->client->request('GET', 'payments/' . $id);
     }
@@ -22,7 +22,7 @@ class Payment extends ApiAbstract
      *
      * @return Iterator
      */
-    public function findAll(array $criteria = [])
+    public function findAll(array $criteria = []): Iterator
     {
         return $this->client->getIterator('payments', $criteria);
     }
@@ -32,7 +32,7 @@ class Payment extends ApiAbstract
      *
      * @return Iterator
      */
-    public function findBy(array $criteria = [])
+    public function findBy(array $criteria = []): Iterator
     {
         return $this->client->getIterator('payments', $criteria);
     }
@@ -42,11 +42,11 @@ class Payment extends ApiAbstract
      *
      * @return array
      */
-    public function findOneBy(array $criteria = [])
+    public function findOneBy(array $criteria = []): array
     {
-        $result = $this->findBy($criteria);
+        $result = iterator_to_array($this->findBy($criteria));
 
-        if (!empty($result)) {
+        if (null !== $result) {
             $result = array_shift($result);
         }
 

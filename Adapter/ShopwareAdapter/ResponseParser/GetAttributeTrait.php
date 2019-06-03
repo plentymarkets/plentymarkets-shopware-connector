@@ -12,7 +12,7 @@ trait GetAttributeTrait
      *
      * @return Attribute[]
      */
-    private function getAttributes(array $attributeData)
+    private function getAttributes(array $attributeData): array
     {
         $attributes = [];
 

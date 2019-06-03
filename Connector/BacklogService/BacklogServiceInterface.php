@@ -29,5 +29,5 @@ interface BacklogServiceInterface
      *
      * @return array
      */
-    public function getInfo();
+    public function getInfo(): array;
 }

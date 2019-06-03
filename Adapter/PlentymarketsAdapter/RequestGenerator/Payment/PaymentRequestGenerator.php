@@ -23,8 +23,11 @@ class PaymentRequestGenerator implements PaymentRequestGeneratorInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws NotFoundException
+     * @throws NotFoundException
      */
-    public function generate(Payment $payment)
+    public function generate(Payment $payment): array
     {
         $paymentMethodIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $payment->getPaymentMethodIdentifier(),

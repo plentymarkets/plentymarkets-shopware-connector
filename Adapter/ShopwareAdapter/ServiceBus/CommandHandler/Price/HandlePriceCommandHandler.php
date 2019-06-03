@@ -56,7 +56,7 @@ class HandlePriceCommandHandler implements CommandHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(CommandInterface $command)
+    public function supports(CommandInterface $command): bool
     {
         return $command instanceof TransferObjectCommand &&
             $command->getAdapterName() === ShopwareAdapter::NAME &&
@@ -69,7 +69,7 @@ class HandlePriceCommandHandler implements CommandHandlerInterface
      *
      * @param TransferObjectCommand $command
      */
-    public function handle(CommandInterface $command)
+    public function handle(CommandInterface $command): bool
     {
         /**
          * @var Price $price
@@ -172,7 +172,7 @@ class HandlePriceCommandHandler implements CommandHandlerInterface
         }
 
         $this->identityService->insert(
-            (string) $price->getIdentifier(),
+            $price->getIdentifier(),
             Price::TYPE,
             (string) $variantPrice->getId(),
             ShopwareAdapter::NAME

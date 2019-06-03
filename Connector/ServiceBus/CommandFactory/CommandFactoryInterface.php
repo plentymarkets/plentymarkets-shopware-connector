@@ -15,5 +15,5 @@ interface CommandFactoryInterface
      *
      * @return CommandInterface
      */
-    public function create($adapterName, $objectType, $commandType, $priority, $payload);
+    public function create($adapterName, $objectType, $commandType, $priority, $payload): CommandInterface;
 }

@@ -51,7 +51,7 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(CommandInterface $command)
+    public function supports(CommandInterface $command): bool
     {
         return $command instanceof TransferObjectCommand &&
             $command->getAdapterName() === PlentymarketsAdapter::NAME &&
@@ -64,7 +64,7 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
      *
      * @var TransferObjectCommand $command
      */
-    public function handle(CommandInterface $command)
+    public function handle(CommandInterface $command): bool
     {
         /**
          * @var Payment $payment
@@ -112,7 +112,7 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
      *
      * @return array
      */
-    private function findOrCreatePlentyPayment(Payment $payment)
+    private function findOrCreatePlentyPayment(Payment $payment): array
     {
         $plentyPayments = $this->fetchPlentyPayments($payment);
 
@@ -138,7 +138,7 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
      *
      * @return bool
      */
-    private function fetchPlentyPayments($payment)
+    private function fetchPlentyPayments($payment): bool
     {
         $url = 'payments/property/1/' . $payment->getTransactionReference();
         $payments = $this->client->request('GET', $url);
@@ -147,7 +147,7 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
             return false;
         }
 
-        $payments = array_filter($payments, function (array $payment) {
+        $payments = array_filter($payments, static function (array $payment) {
             return !$payment['deleted'];
         });
 
@@ -159,7 +159,7 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
      *
      * @return array
      */
-    private function createPlentyPayment(Payment $payment)
+    private function createPlentyPayment(Payment $payment): array
     {
         $params = $this->requestGenerator->generate($payment);
 

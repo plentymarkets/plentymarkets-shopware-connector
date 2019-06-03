@@ -83,7 +83,7 @@ class MappingCommand extends Command
 
                 $rows = [];
                 foreach ($entry->getOriginTransferObjects() as $object) {
-                    $targetIdentifier = array_filter($entry->getDestinationTransferObjects(), function (TransferObjectInterface $targetObject) use ($object) {
+                    $targetIdentifier = array_filter($entry->getDestinationTransferObjects(), static function (TransferObjectInterface $targetObject) use ($object) {
                         return $object->getIdentifier() === $targetObject->getIdentifier();
                     });
 

@@ -44,7 +44,7 @@ class BacklogService implements BacklogServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getInfo()
+    public function getInfo(): array
     {
         $storage = reset($this->storages);
 

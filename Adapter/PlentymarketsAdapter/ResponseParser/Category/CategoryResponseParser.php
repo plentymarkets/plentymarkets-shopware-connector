@@ -53,7 +53,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
     /**
      * {@inheritdoc}
      */
-    public function parse(array $entry)
+    public function parse(array $entry): array
     {
         if (empty($entry['details'])) {
             $this->logger->warning('category without details');
@@ -106,13 +106,12 @@ class CategoryResponseParser implements CategoryResponseParserInterface
             if (null === $identity) {
                 continue;
             }
-
             $shopIdentifiers[] = $identity->getObjectIdentifier();
         }
 
         foreach ($entry['details'] as $key => $detail) {
             $isDefaultPlentyId = $key === 0;
-            $isPlentyIdEnabled = in_array($entry['details'][$key]['plentyId'], array_column($entry['clients'], 'plentyId'));
+            $isPlentyIdEnabled = in_array($entry['details'][$key]['plentyId'], array_column($entry['clients'], 'plentyId'), true);
             if (!$isPlentyIdEnabled && !$isDefaultPlentyId) {
                 unset($entry['details'][$key]);
 
@@ -194,7 +193,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
      *
      * @return array
      */
-    private function getImages(array $detail, &$result)
+    private function getImages(array $detail, &$result): array
     {
         $imageIdentifiers = [];
 
@@ -232,7 +231,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
     /**
      * @return string
      */
-    private function getBaseUrl()
+    private function getBaseUrl(): string
     {
         $parts = parse_url($this->configService->get('rest_url'));
 
@@ -244,7 +243,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
      *
      * @return string
      */
-    private function getMetaRobots($metaRobots)
+    private function getMetaRobots($metaRobots): string
     {
         $robotsMap = [
             'ALL' => 'INDEX, FOLLOW',
@@ -267,7 +266,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
      *
      * @return Translation[]
      */
-    private function getTranslations(array $details, &$result)
+    private function getTranslations(array $details, &$result): array
     {
         $translations = [];
 
@@ -345,7 +344,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
      *
      * @return Attribute[]
      */
-    private function getAttributes(array $details)
+    private function getAttributes(array $details): array
     {
         $attributes = [];
 
@@ -359,7 +358,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
      *
      * @return Attribute
      */
-    private function getSecondCategoryDescriptionAsAttribute($categoryDetails)
+    private function getSecondCategoryDescriptionAsAttribute($categoryDetails): Attribute
     {
         $translations = [];
 

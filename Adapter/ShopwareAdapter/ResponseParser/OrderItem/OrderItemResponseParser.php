@@ -48,6 +48,8 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws NotFoundException
      */
     public function parse(array $entry, $taxFree = false)
     {
@@ -71,6 +73,8 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
 
     /**
      * @param array $entry
+     *
+     * @throws NotFoundException
      *
      * @return null|string
      */

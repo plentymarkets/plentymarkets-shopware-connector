@@ -30,7 +30,7 @@ class Package extends AbstractValueObject
     /**
      * @return DateTimeImmutable
      */
-    public function getShippingTime()
+    public function getShippingTime(): DateTimeImmutable
     {
         return $this->shippingTime;
     }
@@ -46,7 +46,7 @@ class Package extends AbstractValueObject
     /**
      * @return string
      */
-    public function getShippingCode()
+    public function getShippingCode(): string
     {
         return $this->shippingCode;
     }
