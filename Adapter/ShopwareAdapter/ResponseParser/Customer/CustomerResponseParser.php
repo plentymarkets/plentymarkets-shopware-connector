@@ -120,7 +120,7 @@ class CustomerResponseParser implements CustomerResponseParserInterface
             $customer->setNewsletter(true);
 
             if (null !== $newsletter->getAdded()) {
-                $customer->setNewsletterAgreementDate($newsletter->getAdded()());
+                $customer->setNewsletterAgreementDate($newsletter->getAdded());
             }
         }
 
