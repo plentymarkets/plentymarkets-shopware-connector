@@ -39,7 +39,7 @@ class AmazonPayPaymentResponseParser implements PaymentResponseParserInterface
     /**
      * {@inheritdoc}
      */
-    public function parse(array $element) :array
+    public function parse(array $element): array
     {
         $payments = $this->parentResponseParser->parse($element);
 

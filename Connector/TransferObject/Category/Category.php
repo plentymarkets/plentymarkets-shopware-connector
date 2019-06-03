@@ -90,7 +90,7 @@ class Category extends AbstractTransferObject implements TranslatableInterface, 
     /**
      * {@inheritdoc}
      */
-    public function getType() :string
+    public function getType(): string
     {
         return self::TYPE;
     }
@@ -98,7 +98,7 @@ class Category extends AbstractTransferObject implements TranslatableInterface, 
     /**
      * {@inheritdoc}
      */
-    public function getIdentifier() :string
+    public function getIdentifier(): string
     {
         return $this->identifier;
     }
@@ -310,7 +310,7 @@ class Category extends AbstractTransferObject implements TranslatableInterface, 
     /**
      * @return Translation[]
      */
-    public function getTranslations() :array
+    public function getTranslations(): array
     {
         return $this->translations;
     }
@@ -326,7 +326,7 @@ class Category extends AbstractTransferObject implements TranslatableInterface, 
     /**
      * @return Attribute[]
      */
-    public function getAttributes() :array
+    public function getAttributes(): array
     {
         return $this->attributes;
     }

@@ -19,7 +19,7 @@ class HandleBacklogElementCommand implements CommandInterface
     /**
      * {@inheritdoc}
      */
-    public function toArray() :array
+    public function toArray(): array
     {
         return [
             'command' => $this->command,
@@ -29,7 +29,7 @@ class HandleBacklogElementCommand implements CommandInterface
     /**
      * {@inheritdoc}
      */
-    public function getPriority() :int
+    public function getPriority(): int
     {
         return 0;
     }

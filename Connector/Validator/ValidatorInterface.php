@@ -9,7 +9,7 @@ interface ValidatorInterface
      *
      * @return bool
      */
-    public function supports($object) :bool;
+    public function supports($object): bool;
 
     /**
      * @param mixed $object

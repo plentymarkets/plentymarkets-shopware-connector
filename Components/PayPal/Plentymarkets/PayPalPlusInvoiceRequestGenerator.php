@@ -21,7 +21,7 @@ class PayPalPlusInvoiceRequestGenerator implements PaymentRequestGeneratorInterf
     /**
      * {@inheritdoc}
      */
-    public function generate(Payment $payment) :array
+    public function generate(Payment $payment): array
     {
         $paymentParams = $this->parentRequestGenerator->generate($payment);
         $data = $payment->getPaymentData();

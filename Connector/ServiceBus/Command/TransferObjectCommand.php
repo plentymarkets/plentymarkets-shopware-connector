@@ -89,7 +89,7 @@ class TransferObjectCommand implements CommandInterface
     /**
      * {@inheritdoc}
      */
-    public function getPriority() :int
+    public function getPriority(): int
     {
         return $this->priority;
     }
@@ -105,7 +105,7 @@ class TransferObjectCommand implements CommandInterface
     /**
      * {@inheritdoc}
      */
-    public function toArray() :array
+    public function toArray(): array
     {
         return [
             'adapterName' => $this->adapterName,

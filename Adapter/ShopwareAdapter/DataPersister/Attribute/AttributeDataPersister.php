@@ -102,9 +102,9 @@ class AttributeDataPersister implements AttributeDataPersisterInterface
      */
     private function saveAttributes($identifier, $table, array $attributes = [])
     {
-            Assertion::integer($identifier);
-            Assertion::allIsInstanceOf($attributes, Attribute::class);
-            Assertion::notBlank($table);
+        Assertion::integer($identifier);
+        Assertion::allIsInstanceOf($attributes, Attribute::class);
+        Assertion::notBlank($table);
 
         if (empty($attributes)) {
             return;

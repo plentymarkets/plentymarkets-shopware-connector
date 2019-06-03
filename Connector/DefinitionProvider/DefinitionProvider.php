@@ -43,7 +43,7 @@ class DefinitionProvider implements DefinitionProviderInterface
      *
      * @return Definition[]
      */
-    public function getConnectorDefinitions($objectType = null) :array
+    public function getConnectorDefinitions($objectType = null): array
     {
         return $this->filterMatchingDefinitions($this->connectorDefinitions, $objectType);
     }
@@ -53,7 +53,7 @@ class DefinitionProvider implements DefinitionProviderInterface
      *
      * @return Definition[]
      */
-    public function getMappingDefinitions($objectType = null) :array
+    public function getMappingDefinitions($objectType = null): array
     {
         return $this->filterMatchingDefinitions($this->mappingDefinitions, $objectType);
     }
@@ -61,7 +61,7 @@ class DefinitionProvider implements DefinitionProviderInterface
     /**
      * @return Definition[]
      */
-    public function getCleanupDefinitions() :array
+    public function getCleanupDefinitions(): array
     {
         return $this->cleanupDefinitions;
     }

@@ -87,7 +87,7 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(CommandInterface $command) :bool
+    public function supports(CommandInterface $command): bool
     {
         return $command instanceof TransferObjectCommand &&
             $command->getAdapterName() === ShopwareAdapter::NAME &&
@@ -100,7 +100,7 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
      *
      * @param TransferObjectCommand $command
      */
-    public function handle(CommandInterface $command) :bool
+    public function handle(CommandInterface $command): bool
     {
         /**
          * @var Bundle $bundle

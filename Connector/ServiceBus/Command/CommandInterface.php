@@ -10,7 +10,7 @@ interface CommandInterface
      *
      * @return int
      */
-    public function getPriority() :int;
+    public function getPriority(): int;
 
     /**
      * Actual payload of the command. Possibly a TransferObject, UUID or even a CommandInterface.
@@ -24,5 +24,5 @@ interface CommandInterface
      *
      * @return array
      */
-    public function toArray() :array;
+    public function toArray(): array;
 }

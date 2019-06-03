@@ -31,7 +31,7 @@ class PayPalUnifiedInstallmentPaymentResponseParser implements PaymentResponsePa
     /**
      * {@inheritdoc}
      */
-    public function parse(array $element) :array
+    public function parse(array $element): array
     {
         $payments = $this->parentResponseParser->parse($element);
 

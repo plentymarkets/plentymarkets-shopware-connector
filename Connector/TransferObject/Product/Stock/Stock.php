@@ -28,7 +28,7 @@ class Stock extends AbstractTransferObject
     /**
      * {@inheritdoc}
      */
-    public function getType() :string
+    public function getType(): string
     {
         return self::TYPE;
     }
@@ -36,7 +36,7 @@ class Stock extends AbstractTransferObject
     /**
      * @return string
      */
-    public function getIdentifier() :string
+    public function getIdentifier(): string
     {
         return $this->identifier;
     }

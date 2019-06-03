@@ -66,7 +66,7 @@ class Payment extends AbstractTransferObject implements AttributableInterface
      *
      * @return string
      */
-    public function getType() :string
+    public function getType(): string
     {
         return self::TYPE;
     }
@@ -74,7 +74,7 @@ class Payment extends AbstractTransferObject implements AttributableInterface
     /**
      * {@inheritdoc}
      */
-    public function getIdentifier() :string
+    public function getIdentifier(): string
     {
         return $this->identifier;
     }
@@ -218,7 +218,7 @@ class Payment extends AbstractTransferObject implements AttributableInterface
     /**
      * @return Attribute[]
      */
-    public function getAttributes() :array
+    public function getAttributes(): array
     {
         return $this->attributes;
     }

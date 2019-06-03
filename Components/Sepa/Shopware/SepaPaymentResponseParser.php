@@ -37,10 +37,9 @@ class SepaPaymentResponseParser implements PaymentResponseParserInterface
     }
 
     /**
-     * @param array $element
-     * @return array
+     * {@inheritdoc}
      */
-    public function parse(array $element) :array
+    public function parse(array $element): array
     {
         $payments = $this->parentResponseParser->parse($element);
 

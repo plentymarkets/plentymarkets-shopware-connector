@@ -32,7 +32,7 @@ class PayPalPlusInvoicePaymentResponseParser implements PaymentResponseParserInt
     /**
      * {@inheritdoc}
      */
-    public function parse(array $element) :array
+    public function parse(array $element): array
     {
         $payments = $this->parentResponseParser->parse($element);
 

@@ -11,7 +11,7 @@ abstract class AbstractTransferObject implements TransferObjectInterface, JsonSe
      *
      * @return $this
      */
-    public static function fromArray(array $params = []) :TransferObjectInterface
+    public static function fromArray(array $params = []): TransferObjectInterface
     {
         $object = new static();
 

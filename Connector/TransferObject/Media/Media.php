@@ -62,7 +62,7 @@ class Media extends AbstractTransferObject implements TranslatableInterface, Att
     /**
      * {@inheritdoc}
      */
-    public function getType() :string
+    public function getType(): string
     {
         return self::TYPE;
     }
@@ -70,7 +70,7 @@ class Media extends AbstractTransferObject implements TranslatableInterface, Att
     /**
      * {@inheritdoc}
      */
-    public function getIdentifier() :string
+    public function getIdentifier(): string
     {
         return $this->identifier;
     }
@@ -182,7 +182,7 @@ class Media extends AbstractTransferObject implements TranslatableInterface, Att
     /**
      * @return Translation[]
      */
-    public function getTranslations() :array
+    public function getTranslations(): array
     {
         return $this->translations;
     }
@@ -198,7 +198,7 @@ class Media extends AbstractTransferObject implements TranslatableInterface, Att
     /**
      * @return Attribute[]
      */
-    public function getAttributes() :array
+    public function getAttributes(): array
     {
         return $this->attributes;
     }

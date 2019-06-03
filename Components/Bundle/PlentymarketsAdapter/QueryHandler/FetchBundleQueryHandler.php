@@ -50,7 +50,7 @@ class FetchBundleQueryHandler implements QueryHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(QueryInterface $query) :bool
+    public function supports(QueryInterface $query): bool
     {
         return $query instanceof FetchTransferObjectQuery &&
             $query->getAdapterName() === PlentymarketsAdapter::NAME &&
@@ -63,7 +63,7 @@ class FetchBundleQueryHandler implements QueryHandlerInterface
      *
      * @var FetchTransferObjectQuery $query
      */
-    public function handle(QueryInterface $query) :array
+    public function handle(QueryInterface $query): array
     {
         $identity = $this->identityService->findOneBy([
             'objectIdentifier' => $query->getObjectIdentifier(),

@@ -48,7 +48,7 @@ class Price extends AbstractTransferObject
     /**
      * {@inheritdoc}
      */
-    public function getType() :string
+    public function getType(): string
     {
         return self::TYPE;
     }
@@ -56,7 +56,7 @@ class Price extends AbstractTransferObject
     /**
      * @return string
      */
-    public function getIdentifier() :string
+    public function getIdentifier(): string
     {
         return $this->identifier;
     }

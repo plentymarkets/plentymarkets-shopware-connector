@@ -9,7 +9,7 @@ interface AttributableInterface
     /**
      * @return Attribute[]
      */
-    public function getAttributes() :array;
+    public function getAttributes(): array;
 
     /**
      * @param Attribute[] $attributes

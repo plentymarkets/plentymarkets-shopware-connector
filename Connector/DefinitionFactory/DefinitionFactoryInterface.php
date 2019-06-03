@@ -11,7 +11,8 @@ interface DefinitionFactoryInterface
      * @param $destinationAdapterName
      * @param $objectType
      * @param null $priority
+     *
      * @return Definition
      */
-    public function factory($originAdapterName, $destinationAdapterName, $objectType, $priority = null) :Definition;
+    public function factory($originAdapterName, $destinationAdapterName, $objectType, $priority = null): Definition;
 }

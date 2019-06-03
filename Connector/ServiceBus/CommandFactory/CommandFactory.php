@@ -14,7 +14,7 @@ class CommandFactory implements CommandFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function create($adapterName, $objectType, $commandType, $priority, $payload) :CommandInterface
+    public function create($adapterName, $objectType, $commandType, $priority, $payload): CommandInterface
     {
         Assertion::string($adapterName);
         Assertion::string($objectType);

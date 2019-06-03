@@ -13,7 +13,7 @@ class QueryFactory implements QueryFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function create($adapterName, $objectType, $queryType, $payload = null) :QueryInterface
+    public function create($adapterName, $objectType, $queryType, $payload = null): QueryInterface
     {
         Assertion::string($adapterName);
         Assertion::string($objectType);

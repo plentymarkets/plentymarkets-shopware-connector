@@ -57,7 +57,7 @@ class MappingService implements MappingServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getMappingInformation($objectType = null) :array
+    public function getMappingInformation($objectType = null): array
     {
         Assertion::nullOrString($objectType);
 

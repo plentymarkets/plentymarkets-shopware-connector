@@ -13,7 +13,7 @@ class TranslationHelper implements TranslationHelperInterface
      *
      * @return array
      */
-    public function getLanguageIdentifiers(TranslatableInterface $object) :array
+    public function getLanguageIdentifiers(TranslatableInterface $object): array
     {
         $languages = [];
 
@@ -33,7 +33,7 @@ class TranslationHelper implements TranslationHelperInterface
     /**
      * {@inheritdoc}
      */
-    public function translate($languageIdentifier, TranslatableInterface $object) :TranslatableInterface
+    public function translate($languageIdentifier, TranslatableInterface $object): TranslatableInterface
     {
         $deepCopy = new DeepCopy();
         $object = $deepCopy->copy($object);

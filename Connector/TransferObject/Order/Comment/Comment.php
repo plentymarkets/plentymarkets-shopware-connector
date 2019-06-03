@@ -62,7 +62,7 @@ class Comment extends AbstractValueObject implements AttributableInterface
     /**
      * @return Attribute[]
      */
-    public function getAttributes() :array
+    public function getAttributes(): array
     {
         return $this->attributes;
     }

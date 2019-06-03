@@ -17,7 +17,7 @@ class OrderValidator implements ValidatorInterface
     /**
      * {@inheritdoc}
      */
-    public function supports($object) :bool
+    public function supports($object): bool
     {
         return $object instanceof Order;
     }

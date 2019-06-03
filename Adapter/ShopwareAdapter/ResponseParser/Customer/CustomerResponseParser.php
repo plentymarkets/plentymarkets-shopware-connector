@@ -142,9 +142,7 @@ class CustomerResponseParser implements CustomerResponseParserInterface
         /**
          * @var GroupModel $customerGroup
          */
-        $customerGroup = $customerGroupRepository->findOneBy(['key' => $entry['groupKey']]);
-
-        return $customerGroup;
+        return $customerGroupRepository->findOneBy(['key' => $entry['groupKey']]);
     }
 
     /**
@@ -179,9 +177,10 @@ class CustomerResponseParser implements CustomerResponseParserInterface
 
     /**
      * @param $shopwareId
+     *
      * @return string
      */
-    private function getCustomerTypeId($shopwareId) :string
+    private function getCustomerTypeId($shopwareId): string
     {
         switch ($shopwareId) {
             case CustomerModel::ACCOUNT_MODE_CUSTOMER:

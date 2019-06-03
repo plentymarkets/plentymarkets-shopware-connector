@@ -58,7 +58,7 @@ class CronjobSubscriber implements SubscriberInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedEvents() :array
+    public static function getSubscribedEvents(): array
     {
         return [
             'Shopware_CronJob_PlentyConnector' . PlentyConnector::CRONJOB_SYNCHRONIZE => 'onRunCronjobSynchronize',

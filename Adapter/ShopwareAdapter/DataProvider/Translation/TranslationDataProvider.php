@@ -112,6 +112,7 @@ class TranslationDataProvider implements TranslationDataProviderInterface
     /**
      * @param Identity $mediaIdentity
      * @param $articleId
+     *
      * @return null|Image
      */
     public function getArticleImage(Identity $mediaIdentity, $articleId)

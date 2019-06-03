@@ -9,5 +9,5 @@ interface TranslatableInterface
     /**
      * @return Translation[]
      */
-    public function getTranslations() :array;
+    public function getTranslations(): array;
 }

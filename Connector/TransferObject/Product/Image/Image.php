@@ -100,7 +100,7 @@ class Image extends AbstractValueObject implements TranslatableInterface
     /**
      * @return Translation[]
      */
-    public function getTranslations() :array
+    public function getTranslations(): array
     {
         return $this->translations;
     }

@@ -19,7 +19,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     /**
      * {@inheritdoc}
      */
-    public function parse(array $entry) :array
+    public function parse(array $entry): array
     {
         foreach ($entry['details'] as $key => $item) {
             if (!isset($item['attribute']['bundlePackageId'])) {

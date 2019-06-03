@@ -21,7 +21,7 @@ class Shop extends AbstractTransferObject
     /**
      * {@inheritdoc}
      */
-    public function getType() :string
+    public function getType(): string
     {
         return self::TYPE;
     }
@@ -29,7 +29,7 @@ class Shop extends AbstractTransferObject
     /**
      * {@inheritdoc}
      */
-    public function getIdentifier() :string
+    public function getIdentifier(): string
     {
         return $this->identifier;
     }
