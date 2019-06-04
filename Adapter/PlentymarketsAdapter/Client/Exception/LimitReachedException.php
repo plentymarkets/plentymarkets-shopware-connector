@@ -21,7 +21,7 @@ class LimitReachedException extends Exception
     /**
      * @return int
      */
-    public function getRetryAfter()
+    public function getRetryAfter(): int
     {
         return $this->retryAfter;
     }

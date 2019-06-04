@@ -30,7 +30,7 @@ class PayPalUnifiedInstallmentPaymentData extends AbstractValueObject implements
     /**
      * @return float
      */
-    public function getFeeAmount()
+    public function getFeeAmount(): float
     {
         return $this->fee_amount;
     }
@@ -46,7 +46,7 @@ class PayPalUnifiedInstallmentPaymentData extends AbstractValueObject implements
     /**
      * @return float
      */
-    public function getTotalCost()
+    public function getTotalCost(): float
     {
         return $this->total_cost;
     }
@@ -62,7 +62,7 @@ class PayPalUnifiedInstallmentPaymentData extends AbstractValueObject implements
     /**
      * @return int
      */
-    public function getTerm()
+    public function getTerm(): int
     {
         return $this->term;
     }
@@ -78,7 +78,7 @@ class PayPalUnifiedInstallmentPaymentData extends AbstractValueObject implements
     /**
      * @return float
      */
-    public function getMonthlyPayment()
+    public function getMonthlyPayment(): float
     {
         return $this->monthly_payment;
     }

@@ -107,7 +107,7 @@ class Order extends AbstractTransferObject implements AttributableInterface
     /**
      * {@inheritdoc}
      */
-    public function getType()
+    public function getType(): string
     {
         return self::TYPE;
     }
@@ -115,7 +115,7 @@ class Order extends AbstractTransferObject implements AttributableInterface
     /**
      * {@inheritdoc}
      */
-    public function getIdentifier()
+    public function getIdentifier(): string
     {
         return $this->identifier;
     }
@@ -131,7 +131,7 @@ class Order extends AbstractTransferObject implements AttributableInterface
     /**
      * @return array
      */
-    public function getOrderTypes()
+    public function getOrderTypes(): array
     {
         $reflection = new ReflectionClass(__CLASS__);
 
@@ -141,7 +141,7 @@ class Order extends AbstractTransferObject implements AttributableInterface
     /**
      * @return string
      */
-    public function getOrderNumber()
+    public function getOrderNumber(): string
     {
         return $this->orderNumber;
     }
@@ -157,7 +157,7 @@ class Order extends AbstractTransferObject implements AttributableInterface
     /**
      * @return DateTimeImmutable
      */
-    public function getOrderTime()
+    public function getOrderTime(): DateTimeImmutable
     {
         return $this->orderTime;
     }
@@ -173,7 +173,7 @@ class Order extends AbstractTransferObject implements AttributableInterface
     /**
      * @return Customer
      */
-    public function getCustomer()
+    public function getCustomer(): Customer
     {
         return $this->customer;
     }
@@ -189,7 +189,7 @@ class Order extends AbstractTransferObject implements AttributableInterface
     /**
      * @return Address
      */
-    public function getBillingAddress()
+    public function getBillingAddress(): Address
     {
         return $this->billingAddress;
     }
@@ -205,7 +205,7 @@ class Order extends AbstractTransferObject implements AttributableInterface
     /**
      * @return Address
      */
-    public function getShippingAddress()
+    public function getShippingAddress(): Address
     {
         return $this->shippingAddress;
     }
@@ -221,7 +221,7 @@ class Order extends AbstractTransferObject implements AttributableInterface
     /**
      * @return OrderItem[]
      */
-    public function getOrderItems()
+    public function getOrderItems(): array
     {
         return $this->orderItems;
     }
@@ -237,7 +237,7 @@ class Order extends AbstractTransferObject implements AttributableInterface
     /**
      * @return string
      */
-    public function getShopIdentifier()
+    public function getShopIdentifier(): string
     {
         return $this->shopIdentifier;
     }
@@ -253,7 +253,7 @@ class Order extends AbstractTransferObject implements AttributableInterface
     /**
      * @return string
      */
-    public function getCurrencyIdentifier()
+    public function getCurrencyIdentifier(): string
     {
         return $this->currencyIdentifier;
     }
@@ -269,7 +269,7 @@ class Order extends AbstractTransferObject implements AttributableInterface
     /**
      * @return string
      */
-    public function getOrderStatusIdentifier()
+    public function getOrderStatusIdentifier(): string
     {
         return $this->orderStatusIdentifier;
     }
@@ -285,7 +285,7 @@ class Order extends AbstractTransferObject implements AttributableInterface
     /**
      * @return string
      */
-    public function getPaymentStatusIdentifier()
+    public function getPaymentStatusIdentifier(): string
     {
         return $this->paymentStatusIdentifier;
     }
@@ -301,7 +301,7 @@ class Order extends AbstractTransferObject implements AttributableInterface
     /**
      * @return string
      */
-    public function getPaymentMethodIdentifier()
+    public function getPaymentMethodIdentifier(): string
     {
         return $this->paymentMethodIdentifier;
     }
@@ -317,7 +317,7 @@ class Order extends AbstractTransferObject implements AttributableInterface
     /**
      * @return string
      */
-    public function getShippingProfileIdentifier()
+    public function getShippingProfileIdentifier(): string
     {
         return $this->shippingProfileIdentifier;
     }
@@ -333,7 +333,7 @@ class Order extends AbstractTransferObject implements AttributableInterface
     /**
      * @return Comment[]
      */
-    public function getComments()
+    public function getComments(): array
     {
         return $this->comments;
     }
@@ -349,7 +349,7 @@ class Order extends AbstractTransferObject implements AttributableInterface
     /**
      * @return Package[]
      */
-    public function getPackages()
+    public function getPackages(): array
     {
         return $this->packages;
     }
@@ -365,7 +365,7 @@ class Order extends AbstractTransferObject implements AttributableInterface
     /**
      * @return Attribute[]
      */
-    public function getAttributes()
+    public function getAttributes(): array
     {
         return $this->attributes;
     }

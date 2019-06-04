@@ -9,5 +9,5 @@ interface CurrencyDataProviderInterface
      *
      * @return int
      */
-    public function getCurrencyIdentifierByCode($code);
+    public function getCurrencyIdentifierByCode($code): int;
 }

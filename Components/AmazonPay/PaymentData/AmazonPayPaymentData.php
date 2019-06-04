@@ -20,7 +20,7 @@ class AmazonPayPaymentData extends AbstractValueObject implements PaymentDataInt
     /**
      * @return string
      */
-    public function getTransactionId()
+    public function getTransactionId(): string
     {
         return $this->transactionId;
     }
@@ -36,7 +36,7 @@ class AmazonPayPaymentData extends AbstractValueObject implements PaymentDataInt
     /**
      * @return string
      */
-    public function getKey()
+    public function getKey(): string
     {
         return $this->key;
     }

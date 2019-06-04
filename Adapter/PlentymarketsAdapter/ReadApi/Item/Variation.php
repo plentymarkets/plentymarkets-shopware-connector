@@ -28,7 +28,7 @@ class Variation extends ApiAbstract
      *
      * @return array
      */
-    public function findBy(array $criteria)
+    public function findBy(array $criteria): array
     {
         $params = array_merge($criteria, [
             'with' => implode(',', self::$includes),

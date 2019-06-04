@@ -117,7 +117,7 @@ class ProcessCommand extends Command
     /**
      * @return string
      */
-    private function getHelpText()
+    private function getHelpText(): string
     {
         $examples = [
             'import all products: plentyconnector:process Product --all',

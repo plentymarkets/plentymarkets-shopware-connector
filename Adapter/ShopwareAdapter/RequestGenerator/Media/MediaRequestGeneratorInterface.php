@@ -11,5 +11,5 @@ interface MediaRequestGeneratorInterface
      *
      * @return array
      */
-    public function generate(Media $media);
+    public function generate(Media $media): array;
 }

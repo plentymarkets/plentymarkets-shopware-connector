@@ -30,7 +30,7 @@ class BundleProduct extends AbstractValueObject
     /**
      * @return string
      */
-    public function getNumber()
+    public function getNumber(): string
     {
         return $this->number;
     }
@@ -46,7 +46,7 @@ class BundleProduct extends AbstractValueObject
     /**
      * @return float
      */
-    public function getAmount()
+    public function getAmount(): float
     {
         return $this->amount;
     }
@@ -62,7 +62,7 @@ class BundleProduct extends AbstractValueObject
     /**
      * @return int
      */
-    public function getPosition()
+    public function getPosition(): int
     {
         return $this->position;
     }
@@ -78,7 +78,7 @@ class BundleProduct extends AbstractValueObject
     /**
      * @return Attribute[]
      */
-    public function getAttributes()
+    public function getAttributes(): array
     {
         return $this->attributes;
     }

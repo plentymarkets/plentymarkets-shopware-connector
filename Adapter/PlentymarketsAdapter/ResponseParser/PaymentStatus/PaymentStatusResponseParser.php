@@ -48,7 +48,7 @@ class PaymentStatusResponseParser implements PaymentStatusResponseParserInterfac
      *
      * @return string
      */
-    private function getName($entry)
+    private function getName($entry): string
     {
         if (empty($entry['names'])) {
             return $entry['id'];

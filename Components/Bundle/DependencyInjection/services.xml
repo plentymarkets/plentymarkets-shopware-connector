@@ -16,9 +16,7 @@
 
         <!-- Bundle Helper -->
 
-        <service id="plenty_connector.components.bundle.helper" class="PlentyConnector\Components\Bundle\Helper\BundleHelper">
-            <argument type="service" id="plugins" />
-        </service>
+        <service id="plenty_connector.components.bundle.helper" class="PlentyConnector\Components\Bundle\Helper\BundleHelper" />
 
         <!-- Reponse Parser -->
 

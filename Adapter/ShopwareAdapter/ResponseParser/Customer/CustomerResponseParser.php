@@ -130,9 +130,9 @@ class CustomerResponseParser implements CustomerResponseParserInterface
     /**
      * @param array $entry
      *
-     * @return null|GroupModel
+     * @return GroupModel
      */
-    private function getCustomerGroup(array $entry)
+    private function getCustomerGroup(array $entry): GroupModel
     {
         /**
          * @var EntityRepository $customerGroupRepository
@@ -176,11 +176,11 @@ class CustomerResponseParser implements CustomerResponseParserInterface
     }
 
     /**
-     * @param int $shopwareId
+     * @param $shopwareId
      *
-     * @return int
+     * @return string
      */
-    private function getCustomerTypeId($shopwareId)
+    private function getCustomerTypeId($shopwareId): string
     {
         switch ($shopwareId) {
             case CustomerModel::ACCOUNT_MODE_CUSTOMER:
@@ -199,7 +199,7 @@ class CustomerResponseParser implements CustomerResponseParserInterface
      *
      * @return string
      */
-    private function getIdentifier($entry, $type)
+    private function getIdentifier($entry, $type): string
     {
         return $this->identityService->findOneOrThrow(
             (string) $entry,

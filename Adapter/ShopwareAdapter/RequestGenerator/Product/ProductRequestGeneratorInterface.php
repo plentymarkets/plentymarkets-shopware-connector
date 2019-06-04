@@ -11,5 +11,5 @@ interface ProductRequestGeneratorInterface
      *
      * @return array
      */
-    public function generate(Product $product);
+    public function generate(Product $product): array;
 }

@@ -16,7 +16,7 @@ class InvalidDataException extends Exception
      *
      * @return InvalidDataException
      */
-    public static function fromObject($object, $message, $propertyPath, array $parents = [])
+    public static function fromObject($object, $message, $propertyPath, array $parents = []): InvalidDataException
     {
         $newMessage = '';
 

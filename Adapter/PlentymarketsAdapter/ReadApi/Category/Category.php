@@ -28,7 +28,7 @@ class Category extends ApiAbstract
      *
      * @return array
      */
-    public function findOne($categoryId)
+    public function findOne($categoryId): array
     {
         return $this->client->request('GET', 'categories/' . $categoryId, [
             'with' => 'details,clients',
@@ -40,7 +40,7 @@ class Category extends ApiAbstract
     /**
      * @return array
      */
-    public function findAll()
+    public function findAll(): array
     {
         $elements = iterator_to_array($this->client->getIterator('categories', [
             'with' => 'details,clients',
@@ -58,7 +58,7 @@ class Category extends ApiAbstract
      *
      * @return array
      */
-    public function findChanged(DateTimeImmutable $startTimestamp)
+    public function findChanged(DateTimeImmutable $startTimestamp): array
     {
         $elements = iterator_to_array($this->client->getIterator('categories', [
             'with' => 'details,clients',
@@ -77,7 +77,7 @@ class Category extends ApiAbstract
      */
     private function sortCategories(array &$categories)
     {
-        usort($categories, function ($a, $b) {
+        usort($categories, static function ($a, $b) {
             if (!isset($a['level'], $b['level'])) {
                 return 0;
             }

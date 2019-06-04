@@ -87,7 +87,7 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(CommandInterface $command)
+    public function supports(CommandInterface $command): bool
     {
         return $command instanceof TransferObjectCommand &&
             $command->getAdapterName() === ShopwareAdapter::NAME &&
@@ -100,7 +100,7 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
      *
      * @param TransferObjectCommand $command
      */
-    public function handle(CommandInterface $command)
+    public function handle(CommandInterface $command): bool
     {
         /**
          * @var Bundle $bundle
@@ -109,7 +109,7 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
 
         $identity = $this->identityService->findOneBy(
             [
-                'objectIdentifier' => (string) $bundle->getIdentifier(),
+                'objectIdentifier' => $bundle->getIdentifier(),
                 'objectType' => Bundle::TYPE,
                 'adapterName' => ShopwareAdapter::NAME,
             ]
@@ -244,7 +244,7 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
      *
      * @return ArrayCollection
      */
-    private function getCustomerGroups(Bundle $bundle)
+    private function getCustomerGroups(Bundle $bundle): ArrayCollection
     {
         $result = [];
         foreach ($bundle->getPrices() as $price) {
@@ -266,7 +266,7 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
      *
      * @return ArrayCollection
      */
-    private function getPrices(Bundle $bundle, SwagBundle $bundleModel)
+    private function getPrices(Bundle $bundle, SwagBundle $bundleModel): ArrayCollection
     {
         $prices = [];
         foreach ($bundle->getPrices() as $price) {
@@ -296,7 +296,7 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
      *
      * @return ArrayCollection
      */
-    private function getArticles(Bundle $bundle, SwagBundle $bundleModel, Detail $mainVariant)
+    private function getArticles(Bundle $bundle, SwagBundle $bundleModel, Detail $mainVariant): ArrayCollection
     {
         $result = [];
         foreach ($bundle->getBundleProducts() as $bundleProduct) {
@@ -363,7 +363,7 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
      *
      * @return int
      */
-    private function getBundleStock($bundleNumber)
+    private function getBundleStock($bundleNumber): int
     {
         /**
          * @var Detail $detail

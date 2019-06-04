@@ -19,7 +19,7 @@ class Attribute extends ApiAbstract
      *
      * @return array
      */
-    public function findOne($attributeId)
+    public function findOne($attributeId): array
     {
         return $this->client->request('GET', 'items/attributes/' . $attributeId, [
             'with' => implode(',', $this->includes),
@@ -29,7 +29,7 @@ class Attribute extends ApiAbstract
     /**
      * @return array
      */
-    public function findAll()
+    public function findAll(): array
     {
         return iterator_to_array($this->client->getIterator('items/attributes/', [
             'with' => implode(',', $this->includes),

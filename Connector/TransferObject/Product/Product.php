@@ -158,7 +158,7 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
     /**
      * {@inheritdoc}
      */
-    public function getType()
+    public function getType(): string
     {
         return self::TYPE;
     }
@@ -166,7 +166,7 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
     /**
      * @return string
      */
-    public function getIdentifier()
+    public function getIdentifier(): string
     {
         return $this->identifier;
     }
@@ -182,7 +182,7 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -198,7 +198,7 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
     /**
      * @return string
      */
-    public function getNumber()
+    public function getNumber(): string
     {
         return $this->number;
     }
@@ -214,7 +214,7 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
     /**
      * @return bool
      */
-    public function isActive()
+    public function isActive(): bool
     {
         return $this->active;
     }
@@ -230,7 +230,7 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
     /**
      * @return array
      */
-    public function getShopIdentifiers()
+    public function getShopIdentifiers(): array
     {
         return $this->shopIdentifiers;
     }
@@ -246,7 +246,7 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
     /**
      * @return string
      */
-    public function getManufacturerIdentifier()
+    public function getManufacturerIdentifier(): string
     {
         return $this->manufacturerIdentifier;
     }
@@ -262,7 +262,7 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
     /**
      * @return array
      */
-    public function getCategoryIdentifiers()
+    public function getCategoryIdentifiers(): array
     {
         return $this->categoryIdentifiers;
     }
@@ -278,7 +278,7 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
     /**
      * @return array
      */
-    public function getDefaultCategoryIdentifiers()
+    public function getDefaultCategoryIdentifiers(): array
     {
         return $this->defaultCategoryIdentifiers;
     }
@@ -294,7 +294,7 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
     /**
      * @return array
      */
-    public function getShippingProfileIdentifiers()
+    public function getShippingProfileIdentifiers(): array
     {
         return $this->shippingProfileIdentifiers;
     }
@@ -310,7 +310,7 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
     /**
      * @return Image[]
      */
-    public function getImages()
+    public function getImages(): array
     {
         return $this->images;
     }
@@ -326,7 +326,7 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
     /**
      * @return string
      */
-    public function getVatRateIdentifier()
+    public function getVatRateIdentifier(): string
     {
         return $this->vatRateIdentifier;
     }
@@ -342,7 +342,7 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
     /**
      * @return string
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
@@ -358,7 +358,7 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
     /**
      * @return string
      */
-    public function getLongDescription()
+    public function getLongDescription(): string
     {
         return $this->longDescription;
     }
@@ -374,7 +374,7 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
     /**
      * @return string
      */
-    public function getMetaTitle()
+    public function getMetaTitle(): string
     {
         return $this->metaTitle;
     }
@@ -390,7 +390,7 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
     /**
      * @return string
      */
-    public function getMetaDescription()
+    public function getMetaDescription(): string
     {
         return $this->metaDescription;
     }
@@ -406,7 +406,7 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
     /**
      * @return string
      */
-    public function getMetaKeywords()
+    public function getMetaKeywords(): string
     {
         return $this->metaKeywords;
     }
@@ -422,7 +422,7 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
     /**
      * @return string
      */
-    public function getMetaRobots()
+    public function getMetaRobots(): string
     {
         return $this->metaRobots;
     }
@@ -438,7 +438,7 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
     /**
      * @return LinkedProduct[]
      */
-    public function getLinkedProducts()
+    public function getLinkedProducts(): array
     {
         return $this->linkedProducts;
     }
@@ -454,7 +454,7 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
     /**
      * @return array
      */
-    public function getDocuments()
+    public function getDocuments(): array
     {
         return $this->documents;
     }
@@ -470,7 +470,7 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
     /**
      * @return Property[]
      */
-    public function getProperties()
+    public function getProperties(): array
     {
         return $this->properties;
     }
@@ -486,7 +486,7 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
     /**
      * @return Translation[]
      */
-    public function getTranslations()
+    public function getTranslations(): array
     {
         return $this->translations;
     }
@@ -550,7 +550,7 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
     /**
      * @return Attribute[]
      */
-    public function getAttributes()
+    public function getAttributes(): array
     {
         return $this->attributes;
     }
@@ -566,7 +566,7 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
     /**
      * @return Property[]
      */
-    public function getVariantConfiguration()
+    public function getVariantConfiguration(): array
     {
         return $this->variantConfiguration;
     }
@@ -582,7 +582,7 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
     /**
      * @return Badge[]
      */
-    public function getBadges()
+    public function getBadges(): array
     {
         return $this->badges;
     }

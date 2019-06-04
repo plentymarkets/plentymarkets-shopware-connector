@@ -9,7 +9,7 @@ interface ConfigServiceStorageInterface
      *
      * @return array
      */
-    public function getAll();
+    public function getAll(): array;
 
     /**
      * Returns the given config element for that key. Default if it doesnt exist.

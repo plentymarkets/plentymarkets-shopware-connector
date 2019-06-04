@@ -54,7 +54,7 @@ class Item extends ApiAbstract
      *
      * @return array
      */
-    public function findOne($productId)
+    public function findOne($productId): array
     {
         $result = $this->client->request('GET', 'items/' . $productId, [
             'lang' => $this->languageHelper->getLanguagesQueryString(),
@@ -76,7 +76,7 @@ class Item extends ApiAbstract
     /**
      * @return Iterator
      */
-    public function findAll()
+    public function findAll(): Iterator
     {
         return $this->client->getIterator('items', [
             'lang' => $this->languageHelper->getLanguagesQueryString(),
@@ -94,7 +94,7 @@ class Item extends ApiAbstract
      *
      * @return Iterator
      */
-    public function findChanged(DateTimeImmutable $startTimestamp, DateTimeImmutable $endTimestamp)
+    public function findChanged(DateTimeImmutable $startTimestamp, DateTimeImmutable $endTimestamp): Iterator
     {
         $start = $startTimestamp->format(DATE_W3C);
         $end = $endTimestamp->format(DATE_W3C);
@@ -116,7 +116,7 @@ class Item extends ApiAbstract
      *
      * @return Iterator
      */
-    public function findChangedVariations(DateTimeImmutable $startTimestamp, DateTimeImmutable $endTimestamp)
+    public function findChangedVariations(DateTimeImmutable $startTimestamp, DateTimeImmutable $endTimestamp): Iterator
     {
         $start = $startTimestamp->format(DATE_W3C);
         $end = $endTimestamp->format(DATE_W3C);
@@ -149,7 +149,7 @@ class Item extends ApiAbstract
         ]);
 
         foreach ($elements as $key => $element) {
-            $elements[$key]['variations'] = array_filter($variations, function (array $variation) use ($element) {
+            $elements[$key]['variations'] = array_filter($variations, static function (array $variation) use ($element) {
                 return $element['id'] === $variation['itemId'];
             });
         }

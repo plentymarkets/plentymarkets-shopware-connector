@@ -11,12 +11,12 @@ interface CommandHandlerInterface
      *
      * @return bool
      */
-    public function supports(CommandInterface $command);
+    public function supports(CommandInterface $command): bool;
 
     /**
      * @param CommandInterface $command
      *
      * @return bool
      */
-    public function handle(CommandInterface $command);
+    public function handle(CommandInterface $command): bool;
 }

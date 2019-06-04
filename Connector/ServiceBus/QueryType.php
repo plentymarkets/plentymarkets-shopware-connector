@@ -13,7 +13,7 @@ final class QueryType
     /**
      * @return array
      */
-    public static function getAllTypes()
+    public static function getAllTypes(): array
     {
         $reflection = new ReflectionClass(__CLASS__);
 

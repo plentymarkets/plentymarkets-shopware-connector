@@ -44,7 +44,7 @@ class Mapping
     /**
      * @return string
      */
-    public function getOriginAdapterName()
+    public function getOriginAdapterName(): string
     {
         return $this->originAdapterName;
     }
@@ -60,7 +60,7 @@ class Mapping
     /**
      * @return TransferObjectInterface[]
      */
-    public function getOriginTransferObjects()
+    public function getOriginTransferObjects(): array
     {
         return $this->originTransferObjects;
     }
@@ -76,7 +76,7 @@ class Mapping
     /**
      * @return string
      */
-    public function getDestinationAdapterName()
+    public function getDestinationAdapterName(): string
     {
         return $this->destinationAdapterName;
     }
@@ -92,7 +92,7 @@ class Mapping
     /**
      * @return TransferObjectInterface[]
      */
-    public function getDestinationTransferObjects()
+    public function getDestinationTransferObjects(): array
     {
         return $this->destinationTransferObjects;
     }
@@ -108,7 +108,7 @@ class Mapping
     /**
      * @return string
      */
-    public function getObjectType()
+    public function getObjectType(): string
     {
         return $this->objectType;
     }

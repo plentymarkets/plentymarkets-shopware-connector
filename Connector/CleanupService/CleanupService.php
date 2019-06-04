@@ -119,7 +119,7 @@ class CleanupService implements CleanupServiceInterface
      *
      * @return bool
      */
-    private function collectObjectIdentifiers(Definition $definition)
+    private function collectObjectIdentifiers(Definition $definition): bool
     {
         $this->outputHandler->writeLine(sprintf(
             'checking transfer objects for existence: Type: %s, %s -> %s',
@@ -199,7 +199,7 @@ class CleanupService implements CleanupServiceInterface
     /**
      * @return array
      */
-    private function groupElementsByAdapterAndType()
+    private function groupElementsByAdapterAndType(): array
     {
         $groups = [];
 
@@ -215,7 +215,7 @@ class CleanupService implements CleanupServiceInterface
      *
      * @return Identity[]
      */
-    private function findOrphanedIdentitiesByGroup(array $group)
+    private function findOrphanedIdentitiesByGroup(array $group): array
     {
         $identifiers = array_column($group, 'objectIdentifier');
 
@@ -224,7 +224,7 @@ class CleanupService implements CleanupServiceInterface
             'objectType' => $group[0]['type'],
         ]);
 
-        return array_filter($allIdentities, function (Identity $identity) use ($identifiers) {
+        return array_filter($allIdentities, static function (Identity $identity) use ($identifiers) {
             return !in_array($identity->getObjectIdentifier(), $identifiers, true);
         });
     }
@@ -268,7 +268,7 @@ class CleanupService implements CleanupServiceInterface
         }
     }
 
-    private function hasErrors()
+    private function hasErrors(): bool
     {
         if (!$this->error) {
             return false;

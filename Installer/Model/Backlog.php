@@ -78,7 +78,7 @@ class Backlog
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -86,7 +86,7 @@ class Backlog
     /**
      * @return CommandInterface
      */
-    public function getPayload()
+    public function getPayload(): CommandInterface
     {
         return $this->payload;
     }
@@ -102,7 +102,7 @@ class Backlog
     /**
      * @return string
      */
-    public function getStatus()
+    public function getStatus(): string
     {
         return $this->status;
     }
@@ -118,7 +118,7 @@ class Backlog
     /**
      * @return int
      */
-    public function getPriority()
+    public function getPriority(): int
     {
         return $this->priority;
     }
@@ -134,7 +134,7 @@ class Backlog
     /**
      * @return DateTime
      */
-    public function getTime()
+    public function getTime(): DateTime
     {
         return $this->time;
     }
@@ -150,7 +150,7 @@ class Backlog
     /**
      * @return string
      */
-    public function getHash()
+    public function getHash(): string
     {
         return $this->hash;
     }

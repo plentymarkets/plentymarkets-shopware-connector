@@ -12,7 +12,7 @@ class NotFoundException extends Exception
      *
      * @return self
      */
-    public static function fromQuery(QueryInterface $query)
+    public static function fromQuery(QueryInterface $query): self
     {
         $name = substr(strrchr(get_class($query), '\\'), 1);
 

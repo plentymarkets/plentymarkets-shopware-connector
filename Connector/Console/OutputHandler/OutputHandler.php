@@ -121,7 +121,7 @@ class OutputHandler implements OutputHandlerInterface
     /**
      * @return bool
      */
-    private function isEnabled()
+    private function isEnabled(): bool
     {
         if (null === $this->output) {
             return false;

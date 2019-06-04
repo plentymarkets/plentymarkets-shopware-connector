@@ -54,7 +54,7 @@ class StockResponseParser implements StockResponseParserInterface
         }
 
         $stockIdentity = $this->identityService->findOneOrCreate(
-            (string) $variationIdentity->getAdapterIdentifier(),
+            $variationIdentity->getAdapterIdentifier(),
             PlentymarketsAdapter::NAME,
             Stock::TYPE
         );
@@ -72,7 +72,7 @@ class StockResponseParser implements StockResponseParserInterface
      *
      * @return float
      */
-    private function getStock($variation)
+    private function getStock($variation): float
     {
         $arrayStocks = [];
         $itemWarehouse = (int) $this->configService->get('item_warehouse', 0);
@@ -82,7 +82,7 @@ class StockResponseParser implements StockResponseParserInterface
         if (null === $warehouses) {
             $warehouses = $this->client->request('GET', 'stockmanagement/warehouses');
 
-            $warehouses = array_filter($warehouses, function (array $warehouse) {
+            $warehouses = array_filter($warehouses, static function (array $warehouse) {
                 return $warehouse['typeId'] === self::SALES_WAREHOUSE;
             });
 

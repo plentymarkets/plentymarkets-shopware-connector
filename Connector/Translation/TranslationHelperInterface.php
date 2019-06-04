@@ -11,7 +11,7 @@ interface TranslationHelperInterface
      *
      * @return array
      */
-    public function getLanguageIdentifiers(TranslatableInterface $object);
+    public function getLanguageIdentifiers(TranslatableInterface $object): array;
 
     /**
      * @param string                $languageIdentifier
@@ -19,5 +19,5 @@ interface TranslationHelperInterface
      *
      * @return TranslatableInterface
      */
-    public function translate($languageIdentifier, TranslatableInterface $object);
+    public function translate($languageIdentifier, TranslatableInterface $object): TranslatableInterface;
 }

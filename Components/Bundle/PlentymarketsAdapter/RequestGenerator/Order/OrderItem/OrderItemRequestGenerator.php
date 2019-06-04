@@ -48,7 +48,7 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
      *
      * @return array
      */
-    public function generate(OrderItem $orderItem, Order $order)
+    public function generate(OrderItem $orderItem, Order $order): array
     {
         $itemParams = $this->parentOrderItemRequestGenerator->generate($orderItem, $order);
 
@@ -105,7 +105,7 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
      *
      * @return array
      */
-    private function getBundle($articleNumber, $customerGroupId)
+    private function getBundle($articleNumber, $customerGroupId): array
     {
         try {
             $query = '
@@ -116,12 +116,18 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
                 AND bundlePrice.customer_group_id = :customerGroupId
             ';
 
-            return $this->entityManager->getConnection()->fetchAssoc($query, [
+            $bundle = $this->entityManager->getConnection()->fetchAssoc($query, [
                 ':articleNumber' => $articleNumber,
                 ':customerGroupId' => $customerGroupId,
             ]);
         } catch (Exception $exception) {
             return [];
         }
+
+        if ($bundle) {
+            return $bundle;
+        }
+
+        return [];
     }
 }

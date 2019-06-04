@@ -4,6 +4,7 @@ namespace SystemConnector\ServiceBus\QueryFactory;
 
 use Assert\Assertion;
 use SystemConnector\ServiceBus\Query\FetchTransferObjectQuery;
+use SystemConnector\ServiceBus\Query\QueryInterface;
 use SystemConnector\ServiceBus\QueryFactory\Exception\MissingQueryException;
 use SystemConnector\ServiceBus\QueryType;
 
@@ -12,7 +13,7 @@ class QueryFactory implements QueryFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function create($adapterName, $objectType, $queryType, $payload = null)
+    public function create($adapterName, $objectType, $queryType, $payload = null): QueryInterface
     {
         Assertion::string($adapterName);
         Assertion::string($objectType);
