@@ -133,11 +133,6 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
             $media->getAttributes()
         );
 
-        $this->attributePersister->saveMediaAttributes(
-            $mediaModel,
-            $media->getAttributes()
-        );
-
         return true;
     }
 
