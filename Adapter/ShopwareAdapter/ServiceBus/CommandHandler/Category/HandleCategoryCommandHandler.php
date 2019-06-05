@@ -381,7 +381,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
 
             $extractedCategoryPath = array_filter(explode('|', $existingCategory->getPath()));
 
-            if (in_array($shopMainCategory->getId(), $extractedCategoryPath, true)) {
+            if (in_array($shopMainCategory->getId(), $extractedCategoryPath, false)) {
                 return true;
             }
 
