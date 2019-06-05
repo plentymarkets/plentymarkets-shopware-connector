@@ -244,8 +244,19 @@ Ext.define('Shopware.apps.PlentyConnector.view.Settings', {
                         inputType: 'password'
                     }
                 ]
-            }
+            },
             // {block name="backend/plentyconnector/view/settings/fields"}{/block}
+            {
+                xtype: 'label',
+                text: '{s name=plentyconnector/view/settings/helperLink/text}{/s}',
+                cls: 'x-form-item-label',
+                autoEl: {
+                    tag: 'a',
+                    href: 'https://github.com/arvatis/Psc7Helper',
+                    html: ' plentymarkets Shopware Connector Helper',
+                    target: '_blank'
+                }
+            }
         ];
     }
 });
