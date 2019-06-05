@@ -4,7 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [## [unreleased]]
 ### Changed
-- change media command handler to update media if exists
+- change media command handler to update media if exists (@lacodimizer)
 
 ## [## [5.2.0]]
 ### Fixed
