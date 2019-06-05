@@ -74,7 +74,7 @@ class ImageResponseParser implements ImageResponseParserInterface
 
             $result[$media->getIdentifier()] = $media;
 
-            $linkedShops = array_filter($entry['availabilities'], function (array $availability) {
+            $linkedShops = array_filter($entry['availabilities'], static function (array $availability) {
                 return $availability['type'] === 'mandant';
             });
 
@@ -117,7 +117,7 @@ class ImageResponseParser implements ImageResponseParserInterface
      *
      * @return array
      */
-    private function getMediaTranslations(array $image, array $productTexts)
+    private function getMediaTranslations(array $image, array $productTexts): array
     {
         $translations = [];
 

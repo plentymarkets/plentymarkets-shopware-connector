@@ -18,7 +18,7 @@ class Group extends ApiAbstract
      *
      * @return array
      */
-    public function findOne($propertyGroupId)
+    public function findOne($propertyGroupId): array
     {
         return $this->client->request('GET', 'items/property_groups/' . $propertyGroupId . '/names');
     }

@@ -62,7 +62,7 @@ class Media extends AbstractTransferObject implements TranslatableInterface, Att
     /**
      * {@inheritdoc}
      */
-    public function getType()
+    public function getType(): string
     {
         return self::TYPE;
     }
@@ -70,7 +70,7 @@ class Media extends AbstractTransferObject implements TranslatableInterface, Att
     /**
      * {@inheritdoc}
      */
-    public function getIdentifier()
+    public function getIdentifier(): string
     {
         return $this->identifier;
     }
@@ -86,7 +86,7 @@ class Media extends AbstractTransferObject implements TranslatableInterface, Att
     /**
      * @return string
      */
-    public function getMediaCategoryIdentifier()
+    public function getMediaCategoryIdentifier(): string
     {
         return $this->mediaCategoryIdentifier;
     }
@@ -102,7 +102,7 @@ class Media extends AbstractTransferObject implements TranslatableInterface, Att
     /**
      * @return string
      */
-    public function getLink()
+    public function getLink(): string
     {
         return $this->link;
     }
@@ -118,7 +118,7 @@ class Media extends AbstractTransferObject implements TranslatableInterface, Att
     /**
      * @return string
      */
-    public function getFilename()
+    public function getFilename(): string
     {
         return $this->filename;
     }
@@ -134,7 +134,7 @@ class Media extends AbstractTransferObject implements TranslatableInterface, Att
     /**
      * @return string
      */
-    public function getHash()
+    public function getHash(): string
     {
         return $this->hash;
     }
@@ -182,7 +182,7 @@ class Media extends AbstractTransferObject implements TranslatableInterface, Att
     /**
      * @return Translation[]
      */
-    public function getTranslations()
+    public function getTranslations(): array
     {
         return $this->translations;
     }
@@ -198,7 +198,7 @@ class Media extends AbstractTransferObject implements TranslatableInterface, Att
     /**
      * @return Attribute[]
      */
-    public function getAttributes()
+    public function getAttributes(): array
     {
         return $this->attributes;
     }

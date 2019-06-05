@@ -36,8 +36,11 @@ class VariationRequestGenerator implements VariationRequestGeneratorInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws NotFoundException
+     * @throws NotFoundException
      */
-    public function generate(Variation $variation)
+    public function generate(Variation $variation): array
     {
         $unitIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $variation->getUnitIdentifier(),
@@ -100,7 +103,7 @@ class VariationRequestGenerator implements VariationRequestGeneratorInterface
         /**
          * @var Barcode[] $barcodes
          */
-        $barcodes = array_filter($variation->getBarcodes(), function (Barcode $barcode) {
+        $barcodes = array_filter($variation->getBarcodes(), static function (Barcode $barcode) {
             return $barcode->getType() === Barcode::TYPE_GTIN13;
         });
 
@@ -118,7 +121,7 @@ class VariationRequestGenerator implements VariationRequestGeneratorInterface
      *
      * @return array
      */
-    private function getPrices(Variation $variation)
+    private function getPrices(Variation $variation): array
     {
         $prices = [];
 
@@ -162,7 +165,7 @@ class VariationRequestGenerator implements VariationRequestGeneratorInterface
      *
      * @return array
      */
-    private function getImages(Variation $variation)
+    private function getImages(Variation $variation): array
     {
         $images = [];
         foreach ($variation->getImages() as $image) {
@@ -204,7 +207,7 @@ class VariationRequestGenerator implements VariationRequestGeneratorInterface
      *
      * @return array
      */
-    private function getConfiguratorOptions(Variation $variation)
+    private function getConfiguratorOptions(Variation $variation): array
     {
         $configuratorOptions = [];
         foreach ($variation->getProperties() as $property) {

@@ -11,7 +11,7 @@ class Customer extends ApiAbstract
      *
      * @return array
      */
-    public function find($id)
+    public function find($id): array
     {
         return $this->client->request('GET', 'accounts/contacts/' . $id);
     }
@@ -21,7 +21,7 @@ class Customer extends ApiAbstract
      *
      * @return array
      */
-    public function findAll(array $criteria = [])
+    public function findAll(array $criteria = []): array
     {
         return $this->client->request('GET', 'accounts/contacts', $criteria);
     }
@@ -31,7 +31,7 @@ class Customer extends ApiAbstract
      *
      * @return array
      */
-    public function findBy(array $criteria = [])
+    public function findBy(array $criteria = []): array
     {
         return $this->client->request('GET', 'accounts/contacts', $criteria);
     }
@@ -41,7 +41,7 @@ class Customer extends ApiAbstract
      *
      * @return array
      */
-    public function findOneBy(array $criteria = [])
+    public function findOneBy(array $criteria = []): array
     {
         $result = $this->findBy($criteria);
 

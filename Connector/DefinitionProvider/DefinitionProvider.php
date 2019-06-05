@@ -43,7 +43,7 @@ class DefinitionProvider implements DefinitionProviderInterface
      *
      * @return Definition[]
      */
-    public function getConnectorDefinitions($objectType = null)
+    public function getConnectorDefinitions($objectType = null): array
     {
         return $this->filterMatchingDefinitions($this->connectorDefinitions, $objectType);
     }
@@ -53,7 +53,7 @@ class DefinitionProvider implements DefinitionProviderInterface
      *
      * @return Definition[]
      */
-    public function getMappingDefinitions($objectType = null)
+    public function getMappingDefinitions($objectType = null): array
     {
         return $this->filterMatchingDefinitions($this->mappingDefinitions, $objectType);
     }
@@ -61,7 +61,7 @@ class DefinitionProvider implements DefinitionProviderInterface
     /**
      * @return Definition[]
      */
-    public function getCleanupDefinitions()
+    public function getCleanupDefinitions(): array
     {
         return $this->cleanupDefinitions;
     }
@@ -71,9 +71,9 @@ class DefinitionProvider implements DefinitionProviderInterface
      *
      * @return Definition[]
      */
-    private function filterActiveDefinitions(array $definitions)
+    private function filterActiveDefinitions(array $definitions): array
     {
-        return array_filter($definitions, function (Definition $definition) {
+        return array_filter($definitions, static function (Definition $definition) {
             if (!$definition->isActive()) {
                 return false;
             }
@@ -88,9 +88,9 @@ class DefinitionProvider implements DefinitionProviderInterface
      *
      * @return Definition[]
      */
-    private function filterMatchingDefinitions(array $definitions, $objectType)
+    private function filterMatchingDefinitions(array $definitions, $objectType): array
     {
-        return array_filter($definitions, function (Definition $definition) use ($objectType) {
+        return array_filter($definitions, static function (Definition $definition) use ($objectType) {
             return strtolower($definition->getObjectType()) === strtolower($objectType) || null === $objectType;
         });
     }
@@ -100,9 +100,9 @@ class DefinitionProvider implements DefinitionProviderInterface
      *
      * @return Definition[]
      */
-    private function sortDefinitions(array $definitions)
+    private function sortDefinitions(array $definitions): array
     {
-        usort($definitions, function (Definition $definitionLeft, Definition $definitionRight) {
+        usort($definitions, static function (Definition $definitionLeft, Definition $definitionRight) {
             if ($definitionLeft->getPriority() === $definitionRight->getPriority()) {
                 return 0;
             }

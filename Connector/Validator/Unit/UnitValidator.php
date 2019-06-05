@@ -11,7 +11,7 @@ class UnitValidator implements ValidatorInterface
     /**
      * {@inheritdoc}
      */
-    public function supports($object)
+    public function supports($object): bool
     {
         return $object instanceof Unit;
     }

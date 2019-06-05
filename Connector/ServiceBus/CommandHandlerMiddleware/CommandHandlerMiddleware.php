@@ -36,7 +36,7 @@ class CommandHandlerMiddleware implements Middleware
             return $next($command);
         }
 
-        $handlers = array_filter($this->handlers, function (CommandHandlerInterface $handler) use ($command) {
+        $handlers = array_filter($this->handlers, static function (CommandHandlerInterface $handler) use ($command) {
             return $handler->supports($command);
         });
 

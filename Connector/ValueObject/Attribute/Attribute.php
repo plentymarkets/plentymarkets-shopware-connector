@@ -26,7 +26,7 @@ class Attribute extends AbstractValueObject implements TranslatableInterface
     /**
      * @return string
      */
-    public function getKey()
+    public function getKey(): string
     {
         return $this->key;
     }
@@ -42,7 +42,7 @@ class Attribute extends AbstractValueObject implements TranslatableInterface
     /**
      * @return string
      */
-    public function getValue()
+    public function getValue(): string
     {
         return $this->value;
     }
@@ -58,7 +58,7 @@ class Attribute extends AbstractValueObject implements TranslatableInterface
     /**
      * @return Translation[]
      */
-    public function getTranslations()
+    public function getTranslations(): array
     {
         return $this->translations;
     }

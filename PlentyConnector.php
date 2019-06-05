@@ -272,7 +272,7 @@ class PlentyConnector extends Plugin
      *
      * @return bool
      */
-    private function pluginExists(ContainerBuilder $container, array $plugins)
+    private function pluginExists(ContainerBuilder $container, array $plugins): bool
     {
         $folders = $container->getParameter('shopware.plugin_directories');
 

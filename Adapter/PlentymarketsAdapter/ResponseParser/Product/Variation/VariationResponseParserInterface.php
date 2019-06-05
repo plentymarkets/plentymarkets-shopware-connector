@@ -11,5 +11,5 @@ interface VariationResponseParserInterface
      *
      * @return TransferObjectInterface[]
      */
-    public function parse(array $product);
+    public function parse(array $product): array;
 }

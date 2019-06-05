@@ -4,6 +4,7 @@ namespace ShopwareAdapter\ServiceBus\CommandHandler\Media;
 
 use Psr\Log\LoggerInterface;
 use Shopware\Components\Api\Exception\NotFoundException;
+use Shopware\Components\Api\Exception\ParameterMissingException;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Media as MediaResource;
 use ShopwareAdapter\ShopwareAdapter;
@@ -38,7 +39,7 @@ class RemoveMediaCommandHandler implements CommandHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(CommandInterface $command)
+    public function supports(CommandInterface $command): bool
     {
         return $command instanceof TransferObjectCommand &&
             $command->getAdapterName() === ShopwareAdapter::NAME &&
@@ -50,8 +51,10 @@ class RemoveMediaCommandHandler implements CommandHandlerInterface
      * {@inheritdoc}
      *
      * @param TransferObjectCommand $command
+     *
+     * @throws ParameterMissingException
      */
-    public function handle(CommandInterface $command)
+    public function handle(CommandInterface $command): bool
     {
         $identifier = $command->getPayload();
 
@@ -88,7 +91,7 @@ class RemoveMediaCommandHandler implements CommandHandlerInterface
     /**
      * @return MediaResource
      */
-    private function getMediaResource()
+    private function getMediaResource(): MediaResource
     {
         // without this reset the entitymanager sometimes the album is not found correctly.
         Shopware()->Container()->reset('models');

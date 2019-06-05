@@ -9,5 +9,5 @@ interface ShopDataProviderInterface
     /**
      * @return ShopModel
      */
-    public function getDefaultShop();
+    public function getDefaultShop(): ShopModel;
 }

@@ -9,5 +9,5 @@ interface AdapterInterface
      *
      * @return string
      */
-    public function getName();
+    public function getName(): string;
 }

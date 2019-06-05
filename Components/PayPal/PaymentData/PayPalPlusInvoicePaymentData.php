@@ -56,7 +56,7 @@ class PayPalPlusInvoicePaymentData extends AbstractValueObject implements Paymen
     /**
      * @return string
      */
-    public function getReferenceNumber()
+    public function getReferenceNumber(): string
     {
         return $this->reference_number;
     }
@@ -72,7 +72,7 @@ class PayPalPlusInvoicePaymentData extends AbstractValueObject implements Paymen
     /**
      * @return string
      */
-    public function getInstructionType()
+    public function getInstructionType(): string
     {
         return $this->instruction_type;
     }
@@ -88,7 +88,7 @@ class PayPalPlusInvoicePaymentData extends AbstractValueObject implements Paymen
     /**
      * @return string
      */
-    public function getBankName()
+    public function getBankName(): string
     {
         return $this->bank_name;
     }
@@ -104,7 +104,7 @@ class PayPalPlusInvoicePaymentData extends AbstractValueObject implements Paymen
     /**
      * @return string
      */
-    public function getAccountHolderName()
+    public function getAccountHolderName(): string
     {
         return $this->account_holder_name;
     }
@@ -120,7 +120,7 @@ class PayPalPlusInvoicePaymentData extends AbstractValueObject implements Paymen
     /**
      * @return string
      */
-    public function getInternationalBankAccountNumber()
+    public function getInternationalBankAccountNumber(): string
     {
         return $this->international_bank_account_number;
     }
@@ -136,7 +136,7 @@ class PayPalPlusInvoicePaymentData extends AbstractValueObject implements Paymen
     /**
      * @return string
      */
-    public function getBankIdentifierCode()
+    public function getBankIdentifierCode(): string
     {
         return $this->bank_identifier_code;
     }
@@ -152,7 +152,7 @@ class PayPalPlusInvoicePaymentData extends AbstractValueObject implements Paymen
     /**
      * @return float
      */
-    public function getAmountValue()
+    public function getAmountValue(): float
     {
         return $this->amount_value;
     }
@@ -168,7 +168,7 @@ class PayPalPlusInvoicePaymentData extends AbstractValueObject implements Paymen
     /**
      * @return string
      */
-    public function getAmountCurrency()
+    public function getAmountCurrency(): string
     {
         return $this->amount_currency;
     }
@@ -184,7 +184,7 @@ class PayPalPlusInvoicePaymentData extends AbstractValueObject implements Paymen
     /**
      * @return DateTimeImmutable
      */
-    public function getPaymentDueDate()
+    public function getPaymentDueDate(): DateTimeImmutable
     {
         return $this->payment_due_date;
     }

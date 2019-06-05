@@ -40,7 +40,7 @@ class ManufacturerResponseParser implements ManufacturerResponseParserInterface
     /**
      * {@inheritdoc}
      */
-    public function parse(array $entry)
+    public function parse(array $entry): array
     {
         $identity = $this->identityService->findOneOrCreate(
             (string) $entry['id'],

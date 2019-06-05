@@ -5,6 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [## [unreleased]]
 ### Changed
 - optimize performance of item sync (@lacodimizer)
+- change media command handler to update media if exists (@lacodimizer)
 
 ## [## [5.2.0]]
 ### Fixed

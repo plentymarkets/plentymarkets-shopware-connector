@@ -7,12 +7,12 @@ interface OrderDataProviderInterface
     /**
      * @return array
      */
-    public function getOpenOrders();
+    public function getOpenOrders(): array;
 
     /**
      * @param int $identifier
      *
      * @return array
      */
-    public function getOrderDetails($identifier);
+    public function getOrderDetails($identifier): array;
 }

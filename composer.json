@@ -15,7 +15,8 @@
         "viison/address-splitter": "dev-master",
         "composer/installers": "^1.0",
         "league/tactician": "^1.0",
-        "myclabs/deep-copy": "^1.0"
+        "myclabs/deep-copy": "^1.0",
+        "ext-json": "*"
     },
     "require-dev": {
         "roave/security-advisories": "dev-master",

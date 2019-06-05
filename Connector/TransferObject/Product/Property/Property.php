@@ -32,7 +32,7 @@ class Property extends AbstractValueObject implements TranslatableInterface
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -48,7 +48,7 @@ class Property extends AbstractValueObject implements TranslatableInterface
     /**
      * @return int
      */
-    public function getPosition()
+    public function getPosition(): int
     {
         return $this->position;
     }
@@ -64,7 +64,7 @@ class Property extends AbstractValueObject implements TranslatableInterface
     /**
      * @return Value[]
      */
-    public function getValues()
+    public function getValues(): array
     {
         return $this->values;
     }
@@ -80,7 +80,7 @@ class Property extends AbstractValueObject implements TranslatableInterface
     /**
      * @return Translation[]
      */
-    public function getTranslations()
+    public function getTranslations(): array
     {
         return $this->translations;
     }

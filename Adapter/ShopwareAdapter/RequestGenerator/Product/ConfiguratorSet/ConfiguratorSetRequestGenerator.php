@@ -20,7 +20,7 @@ class ConfiguratorSetRequestGenerator implements ConfiguratorSetRequestGenerator
     /**
      * {@inheritdoc}
      */
-    public function generate(Product $product)
+    public function generate(Product $product): array
     {
         $groups = [];
         foreach ($product->getVariantConfiguration() as $property) {

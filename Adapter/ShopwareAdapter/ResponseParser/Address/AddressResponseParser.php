@@ -25,7 +25,12 @@ class AddressResponseParser implements AddressResponseParserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $entry
+     *
+     * @throws NotFoundException
+     * @throws NotFoundException
+     *
+     * @return null|Address
      */
     public function parse(array $entry)
     {

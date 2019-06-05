@@ -48,10 +48,10 @@ class ReferenceAmountCalculator implements ReferenceAmountCalculatorInterface
      *
      * @return float
      */
-    public function calculate(array $variation)
+    public function calculate(array $variation): float
     {
         if (empty(self::$units)) {
-            self::$units = array_filter($this->itemUnitApi->findAll(), function (array $unit) {
+            self::$units = array_filter($this->itemUnitApi->findAll(), static function (array $unit) {
                 return array_key_exists($unit['unitOfMeasurement'], self::$conversionMatrix);
             });
         }

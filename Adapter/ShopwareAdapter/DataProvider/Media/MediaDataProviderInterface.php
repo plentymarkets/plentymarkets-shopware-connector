@@ -11,12 +11,12 @@ interface MediaDataProviderInterface
      *
      * @return string
      */
-    public function getAlbumIdentifierFromMediaObject(Media $media);
+    public function getAlbumIdentifierFromMediaObject(Media $media): string;
 
     /**
      * @param Media $media
      *
      * @return string
      */
-    public function getMediaHashForMediaObject(Media $media);
+    public function getMediaHashForMediaObject(Media $media): string;
 }

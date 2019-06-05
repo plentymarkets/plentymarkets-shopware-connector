@@ -24,9 +24,14 @@ class CustomerRequestGenerator implements CustomerRequestGeneratorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param Customer $customer
+     * @param Order    $order
+     *
+     * @throws NotFoundException
+     *
+     * @return array
      */
-    public function generate(Customer $customer, Order $order)
+    public function generate(Customer $customer, Order $order): array
     {
         $shopIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $order->getShopIdentifier(),

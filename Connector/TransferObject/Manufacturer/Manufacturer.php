@@ -37,7 +37,7 @@ class Manufacturer extends AbstractTransferObject
     /**
      * {@inheritdoc}
      */
-    public function getType()
+    public function getType(): string
     {
         return self::TYPE;
     }
@@ -45,7 +45,7 @@ class Manufacturer extends AbstractTransferObject
     /**
      * {@inheritdoc}
      */
-    public function getIdentifier()
+    public function getIdentifier(): string
     {
         return $this->identifier;
     }
@@ -61,7 +61,7 @@ class Manufacturer extends AbstractTransferObject
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -91,7 +91,7 @@ class Manufacturer extends AbstractTransferObject
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getLink()
     {
@@ -109,7 +109,7 @@ class Manufacturer extends AbstractTransferObject
     /**
      * @return Attribute[]
      */
-    public function getAttributes()
+    public function getAttributes(): array
     {
         return $this->attributes;
     }

@@ -24,9 +24,13 @@ class AddressRequestGenerator implements AddressRequestGeneratorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param Address $address
+     * @param Order   $order
+     * @param int     $addressType
+     *
+     * @return array
      */
-    public function generate(Address $address, Order $order, $addressType = 0)
+    public function generate(Address $address, Order $order, $addressType = 0): array
     {
         $countryIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $address->getCountryIdentifier(),

@@ -11,5 +11,5 @@ interface CategoryResponseParserInterface
      *
      * @return TransferObjectInterface[]
      */
-    public function parse(array $entry);
+    public function parse(array $entry): array;
 }

@@ -52,7 +52,7 @@ class Image extends AbstractValueObject implements TranslatableInterface
     /**
      * @return array
      */
-    public function getShopIdentifiers()
+    public function getShopIdentifiers(): array
     {
         return $this->shopIdentifiers;
     }
@@ -68,7 +68,7 @@ class Image extends AbstractValueObject implements TranslatableInterface
     /**
      * @return int
      */
-    public function getPosition()
+    public function getPosition(): int
     {
         return $this->position;
     }
@@ -84,7 +84,7 @@ class Image extends AbstractValueObject implements TranslatableInterface
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -100,7 +100,7 @@ class Image extends AbstractValueObject implements TranslatableInterface
     /**
      * @return Translation[]
      */
-    public function getTranslations()
+    public function getTranslations(): array
     {
         return $this->translations;
     }

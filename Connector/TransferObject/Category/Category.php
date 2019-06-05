@@ -90,7 +90,7 @@ class Category extends AbstractTransferObject implements TranslatableInterface, 
     /**
      * {@inheritdoc}
      */
-    public function getType()
+    public function getType(): string
     {
         return self::TYPE;
     }
@@ -98,7 +98,7 @@ class Category extends AbstractTransferObject implements TranslatableInterface, 
     /**
      * {@inheritdoc}
      */
-    public function getIdentifier()
+    public function getIdentifier(): string
     {
         return $this->identifier;
     }
@@ -114,7 +114,7 @@ class Category extends AbstractTransferObject implements TranslatableInterface, 
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -130,7 +130,7 @@ class Category extends AbstractTransferObject implements TranslatableInterface, 
     /**
      * @return bool
      */
-    public function getActive()
+    public function getActive(): bool
     {
         return $this->active;
     }
@@ -162,7 +162,7 @@ class Category extends AbstractTransferObject implements TranslatableInterface, 
     /**
      * @return array
      */
-    public function getShopIdentifiers()
+    public function getShopIdentifiers(): array
     {
         return $this->shopIdentifiers;
     }
@@ -178,7 +178,7 @@ class Category extends AbstractTransferObject implements TranslatableInterface, 
     /**
      * @return array
      */
-    public function getImageIdentifiers()
+    public function getImageIdentifiers(): array
     {
         return $this->imageIdentifiers;
     }
@@ -194,7 +194,7 @@ class Category extends AbstractTransferObject implements TranslatableInterface, 
     /**
      * @return int
      */
-    public function getPosition()
+    public function getPosition(): int
     {
         return $this->position;
     }
@@ -214,7 +214,7 @@ class Category extends AbstractTransferObject implements TranslatableInterface, 
     /**
      * @return string
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
@@ -230,7 +230,7 @@ class Category extends AbstractTransferObject implements TranslatableInterface, 
     /**
      * @return string
      */
-    public function getLongDescription()
+    public function getLongDescription(): string
     {
         return $this->longDescription;
     }
@@ -246,7 +246,7 @@ class Category extends AbstractTransferObject implements TranslatableInterface, 
     /**
      * @return string
      */
-    public function getMetaTitle()
+    public function getMetaTitle(): string
     {
         return $this->metaTitle;
     }
@@ -262,7 +262,7 @@ class Category extends AbstractTransferObject implements TranslatableInterface, 
     /**
      * @return string
      */
-    public function getMetaDescription()
+    public function getMetaDescription(): string
     {
         return $this->metaDescription;
     }
@@ -278,7 +278,7 @@ class Category extends AbstractTransferObject implements TranslatableInterface, 
     /**
      * @return string
      */
-    public function getMetaKeywords()
+    public function getMetaKeywords(): string
     {
         return $this->metaKeywords;
     }
@@ -294,7 +294,7 @@ class Category extends AbstractTransferObject implements TranslatableInterface, 
     /**
      * @return string
      */
-    public function getMetaRobots()
+    public function getMetaRobots(): string
     {
         return $this->metaRobots;
     }
@@ -310,7 +310,7 @@ class Category extends AbstractTransferObject implements TranslatableInterface, 
     /**
      * @return Translation[]
      */
-    public function getTranslations()
+    public function getTranslations(): array
     {
         return $this->translations;
     }
@@ -326,7 +326,7 @@ class Category extends AbstractTransferObject implements TranslatableInterface, 
     /**
      * @return Attribute[]
      */
-    public function getAttributes()
+    public function getAttributes(): array
     {
         return $this->attributes;
     }
