@@ -2,10 +2,6 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [## [unreleased]]
-### Changed
-- change media command handler to update media if exists (@lacodimizer)
-
 ## [## [5.2.0]]
 ### Fixed
 - fix category sync if more then one shop has the same root category (@lacodimizer)
@@ -21,6 +17,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - transmit surcharge as item option (@Pfabeck)
 - separate price import logic (@Pfabeck)
 - bundle variation limit (@Pfabeck)
+
+### Changed
+- change media command handler to update media if exists (@lacodimizer)
 
 ## [## [5.1.0]]
 ### Fixed
