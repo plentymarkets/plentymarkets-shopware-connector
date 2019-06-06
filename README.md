@@ -8,7 +8,7 @@
 
 ## Requirements
 
-* plentymarkets version >= 7.0
+* plentymarkets version >= 7.1
 * shopware version >= 5.5
 * php >= 7.0
 * shell access
