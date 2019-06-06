@@ -252,7 +252,7 @@ Ext.define('Shopware.apps.PlentyConnector.view.Settings', {
                 cls: 'x-form-item-label',
                 autoEl: {
                     tag: 'a',
-                    href: 'https://github.com/arvatis/shopware-psc7-helper-plugin',
+                    href: 'https://github.com/arvatis/Psc7Helper',
                     html: ' plentymarkets Shopware Connector Helper',
                     target: '_blank'
                 }
