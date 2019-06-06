@@ -23,6 +23,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - separate price import logic (@Pfabeck)
 - bundle variation limit (@Pfabeck)
 
+### Changed
+- change media command handler to update media if exists (@lacodimizer)
+
 ## [## [5.1.0]]
 ### Fixed
 - transfer payment information without a real transactionid if needed
