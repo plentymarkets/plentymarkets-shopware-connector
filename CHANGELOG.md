@@ -20,6 +20,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - change media command handler to update media if exists (@lacodimizer)
+- PHP 7.1 required
 
 ## [## [5.1.0]]
 ### Fixed
