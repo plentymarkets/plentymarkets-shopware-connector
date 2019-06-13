@@ -10,6 +10,7 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Product\Image\ImageResponseParserInterface;
 use PlentymarketsAdapter\ResponseParser\Product\Price\PriceResponseParserInterface;
 use PlentymarketsAdapter\ResponseParser\Product\Stock\StockResponseParserInterface;
+use Shopware\Bundle\AttributeBundle\Service\TypeMapping;
 use SystemConnector\ConfigService\ConfigServiceInterface;
 use SystemConnector\IdentityService\Exception\NotFoundException;
 use SystemConnector\IdentityService\IdentityServiceInterface;
@@ -535,10 +536,35 @@ class VariationResponseParser implements VariationResponseParserInterface
             $attribute = new Attribute();
             $attribute->setKey('propertyId' . $property['propertyId']);
             $attribute->setValue($property['relationValues'][0]['value']);
+            $attribute->setType($this->getPropertyType($property['propertyRelation']));
 
             $attributes[] = $attribute;
         }
 
         return $attributes;
+    }
+
+    /**
+     * @param array $propertyRelation
+     *
+     * @return string
+     */
+    private function getPropertyType(array $propertyRelation): string
+    {
+        switch ($propertyRelation['cast']) {
+            case 'shortText':
+                $type = TypeMapping::TYPE_STRING;
+                break;
+            case 'int':
+                $type = TypeMapping::TYPE_INTEGER;
+                break;
+            case 'float':
+                $type = TypeMapping::TYPE_FLOAT;
+                break;
+            default:
+                $type = TypeMapping::TYPE_TEXT;
+        }
+
+        return $type;
     }
 }

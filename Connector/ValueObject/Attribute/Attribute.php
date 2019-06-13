@@ -2,6 +2,7 @@
 
 namespace SystemConnector\ValueObject\Attribute;
 
+use Shopware\Bundle\AttributeBundle\Service\TypeMapping;
 use SystemConnector\TransferObject\TranslatableInterface;
 use SystemConnector\ValueObject\AbstractValueObject;
 use SystemConnector\ValueObject\Translation\Translation;
@@ -17,6 +18,11 @@ class Attribute extends AbstractValueObject implements TranslatableInterface
      * @var string
      */
     private $value = '';
+
+    /**
+     * @var string
+     */
+    private $type = TypeMapping::TYPE_TEXT;
 
     /**
      * @var Translation[]
@@ -53,6 +59,22 @@ class Attribute extends AbstractValueObject implements TranslatableInterface
     public function setValue($value)
     {
         $this->value = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType(string $type)
+    {
+        $this->type = $type;
     }
 
     /**

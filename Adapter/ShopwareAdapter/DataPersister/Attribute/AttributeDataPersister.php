@@ -7,7 +7,6 @@ use Exception;
 use Psr\Log\LoggerInterface;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\AttributeBundle\Service\DataPersister as ShopwareDataPersister;
-use Shopware\Bundle\AttributeBundle\Service\TypeMapping;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Supplier;
@@ -159,7 +158,7 @@ class AttributeDataPersister implements AttributeDataPersisterInterface
             $this->attributeService->update(
                 $table,
                 $key,
-                TypeMapping::TYPE_TEXT,
+                $attribute->getType(),
                 [
                     'label' => 'PlentyConnector ' . $attribute->getKey(),
                     'displayInBackend' => true,
