@@ -116,7 +116,7 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
     {
         $plentyPayments = $this->fetchPlentyPayments($payment);
 
-        if ($plentyPayments) {
+        if (!empty($plentyPayments)) {
             $paymentResult = $plentyPayments[0];
             $this->logger->debug('payment with the same transaction id "' . $paymentResult['id'] . '" already exists.');
         } else {
@@ -136,15 +136,15 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
     /**
      * @param Payment $payment
      *
-     * @return bool
+     * @return array
      */
-    private function fetchPlentyPayments($payment): bool
+    private function fetchPlentyPayments($payment): array
     {
         $url = 'payments/property/1/' . $payment->getTransactionReference();
         $payments = $this->client->request('GET', $url);
 
         if (empty($payments)) {
-            return false;
+            return [];
         }
 
         $payments = array_filter($payments, static function (array $payment) {
