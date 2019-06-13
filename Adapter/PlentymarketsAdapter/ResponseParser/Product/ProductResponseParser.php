@@ -3,12 +3,9 @@
 namespace PlentymarketsAdapter\ResponseParser\Product;
 
 use DateTimeImmutable;
-use Exception;
-use PlentymarketsAdapter\Client\ClientInterface;
+use PlentymarketsAdapter\Helper\PropertyHelperInterface;
 use PlentymarketsAdapter\Helper\VariationHelperInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ReadApi\Item\Property\Group as PropertyGroupApi;
-use PlentymarketsAdapter\ReadApi\Item\Property\Name as PropertyNameApi;
 use PlentymarketsAdapter\ResponseParser\Product\Image\ImageResponseParserInterface;
 use PlentymarketsAdapter\ResponseParser\Product\Variation\VariationResponseParserInterface;
 use Psr\Log\LoggerInterface;
@@ -57,21 +54,15 @@ class ProductResponseParser implements ProductResponseParserInterface
      * @var VariationResponseParserInterface
      */
     private $variationResponseParser;
-
     /**
      * @var VariationHelperInterface
      */
     private $variationHelper;
 
     /**
-     * @var PropertyGroupApi
+     * @var PropertyHelperInterface
      */
-    private $itemsPropertiesGroupsNamesApi;
-
-    /**
-     * @var PropertyNameApi
-     */
-    private $itemsPropertiesNamesApi;
+    private $propertyHelper;
 
     public function __construct(
         ConfigServiceInterface $configService,
@@ -80,7 +71,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         ImageResponseParserInterface $imageResponseParser,
         VariationResponseParserInterface $variationResponseParser,
         VariationHelperInterface $variationHelper,
-        ClientInterface $client
+        PropertyHelperInterface $propertyHelper
     ) {
         $this->configService = $configService;
         $this->identityService = $identityService;
@@ -88,9 +79,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         $this->imageResponseParser = $imageResponseParser;
         $this->variationResponseParser = $variationResponseParser;
         $this->variationHelper = $variationHelper;
-
-        $this->itemsPropertiesGroupsNamesApi = new PropertyGroupApi($client);
-        $this->itemsPropertiesNamesApi = new PropertyNameApi($client);
+        $this->propertyHelper = $propertyHelper;
     }
 
     /**
@@ -159,7 +148,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         $productObject->setMetaKeywords((string) $product['texts'][0]['keywords']);
         $productObject->setMetaRobots('INDEX, FOLLOW');
         $productObject->setLinkedProducts($this->getLinkedProducts($product));
-        $productObject->setProperties($this->getProperties($mainVariation));
+        $productObject->setProperties($this->getProperties($product, $mainVariation));
         $productObject->setTranslations($this->getProductTranslations($product['texts']));
         $productObject->setAvailableFrom($this->getAvailableFrom($mainVariation));
         $productObject->setAvailableTo($this->getAvailableTo($mainVariation));
@@ -435,7 +424,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return Property[]
      */
-    private function getProperties(array $mainVariation): array
+    private function getProperties(array $product, array $mainVariation)
     {
         $result = [];
 
@@ -452,7 +441,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             $translations = [];
 
             if ($property['property']['valueType'] === 'empty' && null !== $property['property']['propertyGroupId']) {
-                $propertyGroupNames = $this->itemsPropertiesGroupsNamesApi->findOne($property['property']['propertyGroupId']);
+                $propertyGroupNames = $this->propertyHelper->getPropertyGroupNamesById($property['property']['propertyGroupId'], $product['__propertyGroups']);
 
                 if (empty($propertyGroupNames[0]['name'])) {
                     continue;
@@ -478,7 +467,7 @@ class ProductResponseParser implements ProductResponseParserInterface
                     ]);
                 }
 
-                $propertyNames = $this->itemsPropertiesNamesApi->findOne($property['property']['id']);
+                $propertyNames = $this->propertyHelper->getPropertyNamesById($property['property']['id'], $product['__properties']);
                 $valueTranslations = [];
 
                 foreach ($propertyNames as $name) {

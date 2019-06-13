@@ -7,9 +7,6 @@ use Exception;
 use PlentymarketsAdapter\Helper\ReferenceAmountCalculatorInterface;
 use PlentymarketsAdapter\Helper\VariationHelperInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ReadApi\Availability as AvailabilityApi;
-use PlentymarketsAdapter\ReadApi\Item\Attribute as AttributeApi;
-use PlentymarketsAdapter\ReadApi\Item\Barcode as BarcodeApi;
 use PlentymarketsAdapter\ResponseParser\Product\Image\ImageResponseParserInterface;
 use PlentymarketsAdapter\ResponseParser\Product\Price\PriceResponseParserInterface;
 use PlentymarketsAdapter\ResponseParser\Product\Stock\StockResponseParserInterface;
@@ -50,21 +47,6 @@ class VariationResponseParser implements VariationResponseParserInterface
     private $stockResponseParser;
 
     /**
-     * @var AvailabilityApi
-     */
-    private $availabilitiesApi;
-
-    /**
-     * @var AttributeApi
-     */
-    private $itemAttributesApi;
-
-    /**
-     * @var BarcodeApi
-     */
-    private $itemBarcodeApi;
-
-    /**
      * @var ReferenceAmountCalculatorInterface
      */
     private $referenceAmountCalculator;
@@ -84,9 +66,6 @@ class VariationResponseParser implements VariationResponseParserInterface
         PriceResponseParserInterface $priceResponseParser,
         ImageResponseParserInterface $imageResponseParser,
         StockResponseParserInterface $stockResponseParser,
-        AvailabilityApi $availabilitiesApi,
-        AttributeApi $itemAttributesApi,
-        BarcodeApi $itemBarcodeApi,
         ReferenceAmountCalculatorInterface $referenceAmountCalculator,
         VariationHelperInterface $variationHelper,
         ConfigServiceInterface $configService
@@ -95,9 +74,6 @@ class VariationResponseParser implements VariationResponseParserInterface
         $this->priceResponseParser = $priceResponseParser;
         $this->imageResponseParser = $imageResponseParser;
         $this->stockResponseParser = $stockResponseParser;
-        $this->availabilitiesApi = $availabilitiesApi;
-        $this->itemAttributesApi = $itemAttributesApi;
-        $this->itemBarcodeApi = $itemBarcodeApi;
         $this->referenceAmountCalculator = $referenceAmountCalculator;
         $this->variationHelper = $variationHelper;
         $this->configService = $configService;
@@ -175,8 +151,8 @@ class VariationResponseParser implements VariationResponseParserInterface
             $variationObject->setProductIdentifier($productIdentity->getObjectIdentifier());
             $variationObject->setActive((bool) $variation['isActive']);
             $variationObject->setNumber($this->getVariationNumber($variation));
-            $variationObject->setStockLimitation($variation['stockLimitation'] === 1);
-            $variationObject->setBarcodes($this->getBarcodes($variation));
+            $variationObject->setStockLimitation($this->getStockLimitation($variation));
+            $variationObject->setBarcodes($this->getBarcodes($product['__barcodes'], $variation));
             $variationObject->setPosition((int) $variation['position']);
             $variationObject->setModel((string) $variation['model']);
             $variationObject->setImages($this->getVariationImages($product['texts'], $variation, $result));
@@ -189,12 +165,12 @@ class VariationResponseParser implements VariationResponseParserInterface
             $variationObject->setMinimumOrderQuantity((float) $variation['minimumOrderQuantity']);
             $variationObject->setIntervalOrderQuantity((float) $variation['intervalOrderQuantity']);
             $variationObject->setReleaseDate($this->getReleaseDate($variation));
-            $variationObject->setShippingTime($this->getShippingTime($variation));
+            $variationObject->setShippingTime($this->getShippingTime($product['__availabilities'], $variation));
             $variationObject->setWidth((int) $variation['widthMM']);
             $variationObject->setHeight((int) $variation['heightMM']);
             $variationObject->setLength((int) $variation['lengthMM']);
             $variationObject->setWeight($this->getVariationWeight($variation));
-            $variationObject->setProperties($this->getVariationProperties($variation));
+            $variationObject->setProperties($this->getVariationProperties($product['__attributes'], $variation));
 
             $stockObject = $this->stockResponseParser->parse($variation);
 
@@ -324,12 +300,12 @@ class VariationResponseParser implements VariationResponseParserInterface
      *
      * @return int
      */
-    private function getShippingTime(array $variation): int
+    private function getShippingTime(array $availabilities, array $variation)
     {
         static $shippingConfigurations;
 
         if (null === $shippingConfigurations) {
-            $shippingConfigurations = $this->availabilitiesApi->findAll();
+            $shippingConfigurations = $availabilities;
         }
 
         $shippingConfiguration = array_filter(
@@ -357,13 +333,11 @@ class VariationResponseParser implements VariationResponseParserInterface
      *
      * @return Barcode[]
      */
-    private function getBarcodes(array $variation): array
+    private function getBarcodes(array $systemBarcodes, array $variation)
     {
         static $barcodeMapping;
 
         if (null === $barcodeMapping) {
-            $systemBarcodes = $this->itemBarcodeApi->findAll();
-
             foreach ($systemBarcodes as $systemBarcode) {
                 $typeMapping = [
                     'GTIN_13' => Barcode::TYPE_GTIN13,
@@ -406,16 +380,16 @@ class VariationResponseParser implements VariationResponseParserInterface
      *
      * @return Property[]
      */
-    private function getVariationProperties(array $variation): array
+    private function getVariationProperties(array $systemAttributes, array $variation)
     {
         static $attributes;
 
         $result = [];
         foreach ((array) $variation['variationAttributeValues'] as $attributeValue) {
             if (!isset($attributes[$attributeValue['attributeId']])) {
-                $attributes[$attributeValue['attributeId']] = $this->itemAttributesApi->findOne(
-                    $attributeValue['attributeId']
-                );
+                $attributes[$attributeValue['attributeId']] = array_values(array_filter($systemAttributes, function (array $attribute) use ($attributeValue) {
+                    return $attributeValue['attributeId'] === $attribute['id'];
+                }))[0];
             }
 
             $values = $attributes[$attributeValue['attributeId']]['values'];

@@ -2,7 +2,6 @@
 <plugin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/5.5/engine/Shopware/Components/Plugin/schema/plugin.xsd">
     <label>plentymarkets Shopware Connector</label>
     <label lang="de">plentymarkets Shopware Connector</label>
-
     <version>5.2.0</version>
     <copyright>(c) plentymarkets GmbH</copyright>
     <link>https://www.plentymarkets.eu/</link>
