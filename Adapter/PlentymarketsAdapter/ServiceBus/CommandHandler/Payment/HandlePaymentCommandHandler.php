@@ -136,9 +136,9 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
     /**
      * @param Payment $payment
      *
-     * @return bool
+     * @return bool|array
      */
-    private function fetchPlentyPayments($payment): bool
+    private function fetchPlentyPayments($payment)
     {
         $url = 'payments/property/1/' . $payment->getTransactionReference();
         $payments = $this->client->request('GET', $url);
