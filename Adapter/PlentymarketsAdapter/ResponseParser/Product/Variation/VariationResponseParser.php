@@ -22,6 +22,7 @@ use SystemConnector\TransferObject\Product\Property\Value\Value;
 use SystemConnector\TransferObject\Product\Variation\Variation;
 use SystemConnector\TransferObject\TransferObjectInterface;
 use SystemConnector\TransferObject\Unit\Unit;
+use SystemConnector\ValueObject\Attribute\Attribute;
 use SystemConnector\ValueObject\Translation\Translation;
 
 class VariationResponseParser implements VariationResponseParserInterface
@@ -151,7 +152,7 @@ class VariationResponseParser implements VariationResponseParserInterface
             $variationObject->setProductIdentifier($productIdentity->getObjectIdentifier());
             $variationObject->setActive((bool) $variation['isActive']);
             $variationObject->setNumber($this->getVariationNumber($variation));
-            $variationObject->setStockLimitation($this->getStockLimitation($variation));
+            $variationObject->setStockLimitation($variation['stockLimitation'] === 1);
             $variationObject->setBarcodes($this->getBarcodes($product['__barcodes'], $variation));
             $variationObject->setPosition((int) $variation['position']);
             $variationObject->setModel((string) $variation['model']);
@@ -171,6 +172,7 @@ class VariationResponseParser implements VariationResponseParserInterface
             $variationObject->setLength((int) $variation['lengthMM']);
             $variationObject->setWeight($this->getVariationWeight($variation));
             $variationObject->setProperties($this->getVariationProperties($product['__attributes'], $variation));
+            $variationObject->setAttributes($this->getPropertiesAsAttribute($variation['properties']));
 
             $stockObject = $this->stockResponseParser->parse($variation);
 
@@ -297,6 +299,7 @@ class VariationResponseParser implements VariationResponseParserInterface
 
     /**
      * @param array $variation
+     * @param array $availabilities
      *
      * @return int
      */
@@ -330,6 +333,7 @@ class VariationResponseParser implements VariationResponseParserInterface
 
     /**
      * @param array $variation
+     * @param array $systemBarcodes
      *
      * @return Barcode[]
      */
@@ -377,6 +381,7 @@ class VariationResponseParser implements VariationResponseParserInterface
 
     /**
      * @param array $variation
+     * @param array $systemAttributes
      *
      * @return Property[]
      */
@@ -512,5 +517,28 @@ class VariationResponseParser implements VariationResponseParserInterface
         }
 
         return (float) ($weight / 1000);
+    }
+
+    /**
+     * @param array $properties
+     *
+     * @return Attribute[]
+     */
+    private function getPropertiesAsAttribute(array $properties): array
+    {
+        $attributes = [];
+
+        /**
+         * @var Attribute $attribute
+         */
+        foreach ($properties as $property) {
+            $attribute = new Attribute();
+            $attribute->setKey('propertyId' . $property['propertyId']);
+            $attribute->setValue($property['relationValues'][0]['value']);
+
+            $attributes[] = $attribute;
+        }
+
+        return $attributes;
     }
 }
