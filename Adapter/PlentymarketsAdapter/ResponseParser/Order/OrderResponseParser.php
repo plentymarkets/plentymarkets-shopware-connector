@@ -761,5 +761,4 @@ class OrderResponseParser implements OrderResponseParserInterface
 
         return $variations[$variationId];
     }
-
 }
