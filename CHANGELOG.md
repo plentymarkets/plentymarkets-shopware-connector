@@ -18,7 +18,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - separate price import logic (@Pfabeck)
 - bundle variation limit (@Pfabeck)
 - variant properties are now transferred as attribute (beta feature) (@Pfabeck)
-- 3rd gender support
+- 3rd gender support (@Pfabeck)
 
 ### Changed
 - change media command handler to update media if exists (@lacodimizer)
