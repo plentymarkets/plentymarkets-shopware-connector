@@ -11,6 +11,7 @@ class Address extends AbstractValueObject implements AttributableInterface
 {
     const GENDER_MALE = 'male';
     const GENDER_FEMALE = 'female';
+    const GENDER_DIVERSE = 'diverse';
 
     /**
      * @var null|string
