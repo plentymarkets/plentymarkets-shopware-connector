@@ -533,7 +533,6 @@ class VariationResponseParser implements VariationResponseParserInterface
          * @var Attribute $attribute
          */
         foreach ($properties as $property) {
-
             if (!isset($property['relationValues'][0])) {
                 continue;
             }
