@@ -60,8 +60,6 @@ class PaymentResponseParser implements PaymentResponseParserInterface
         );
 
         if ($isMappedPaymentIdentity) {
-            $this->logger->notice('paymentidentity' . $paymentIdentifier->getObjectIdentifier() . ' ist not mapped');
-
             return [];
         }
 

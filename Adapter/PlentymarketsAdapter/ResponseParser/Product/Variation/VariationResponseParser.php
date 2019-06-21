@@ -533,6 +533,11 @@ class VariationResponseParser implements VariationResponseParserInterface
          * @var Attribute $attribute
          */
         foreach ($properties as $property) {
+
+            if (!isset($property['relationValues'][0])) {
+                continue;
+            }
+
             $attribute = new Attribute();
             $attribute->setKey('propertyId' . $property['propertyId']);
             $attribute->setValue($property['relationValues'][0]['value']);
