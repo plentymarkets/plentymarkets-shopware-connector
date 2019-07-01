@@ -11,7 +11,7 @@
     ],
     "homepage": "https://github.com/plentymarkets/plentymarkets-shopware-connector",
     "require": {
-        "php": "^7.0",
+        "php": "^7.1",
         "viison/address-splitter": "dev-master",
         "composer/installers": "^1.0",
         "league/tactician": "^1.0",
