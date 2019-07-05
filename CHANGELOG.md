@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [## [unreleased]]
+### Fixed
+
+### Added
+
+### Changed
+- tax handling refactored (@Pfabeck)
+
 ## [## [5.2.0]]
 ### Fixed
 - fix category sync if more then one shop has the same root category (@lacodimizer)

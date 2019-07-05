@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityRepository;
 use Psr\Log\LoggerInterface;
 use Shopware\Models\Tax\Tax;
 use ShopwareAdapter\DataProvider\Currency\CurrencyDataProviderInterface;
+use ShopwareAdapter\DataProvider\Tax\TaxDataProviderInterface;
 use ShopwareAdapter\ResponseParser\Address\AddressResponseParserInterface;
 use ShopwareAdapter\ResponseParser\Customer\CustomerResponseParserInterface;
 use ShopwareAdapter\ResponseParser\GetAttributeTrait;
@@ -57,6 +58,11 @@ class OrderResponseParser implements OrderResponseParserInterface
     private $currencyDataProvider;
 
     /**
+     * @var TaxDataProviderInterface
+     */
+    private $taxDataProvider;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -72,6 +78,8 @@ class OrderResponseParser implements OrderResponseParserInterface
         AddressResponseParserInterface $orderAddressParser,
         CustomerResponseParserInterface $customerParser,
         CurrencyDataProviderInterface $currencyDataProvider,
+        TaxDataProviderInterface $taxDataProvider,
+
         LoggerInterface $logger,
         EntityRepository $taxRepository
     ) {
@@ -80,6 +88,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         $this->orderAddressParser = $orderAddressParser;
         $this->customerParser = $customerParser;
         $this->currencyDataProvider = $currencyDataProvider;
+        $this->taxDataProvider = $taxDataProvider;
         $this->logger = $logger;
         $this->taxRepository = $taxRepository;
     }
@@ -287,14 +296,17 @@ class OrderResponseParser implements OrderResponseParserInterface
      */
     private function getShippingCostsVatRateIdentifier(array $entry): string
     {
-        $taxRateId = $this->getMaxTaxRateFromOrderItems($entry);
-
         /**
          * @var Tax $taxModel
          */
-        $taxModel = $this->taxRepository->findOneBy(['tax' => $taxRateId]);
+        $taxModel = $this->taxDataProvider->getTax($entry['invoiceShippingTaxRate'], null);
+
+        if (null === $taxModel) {
+            $taxModel = $this->taxDataProvider->getTax($entry['invoiceShippingTaxRate'], $entry['billing']['countryId']);
+        }
 
         $taxRateId = $taxModel->getId();
+
         if (isset($entry['dispatch']['taxCalculation']) && $entry['dispatch']['taxCalculation'] > 0) {
             $taxRateId = $entry['dispatch']['taxCalculation'];
         }
@@ -333,16 +345,6 @@ class OrderResponseParser implements OrderResponseParserInterface
         $orderItem->setVatRateIdentifier($vatRateIdentifier);
 
         return $orderItem;
-    }
-
-    /**
-     * @param array $entry
-     *
-     * @return float
-     */
-    private function getMaxTaxRateFromOrderItems(array $entry): float
-    {
-        return max(array_column($entry['details'], 'taxRate'));
     }
 
     /**
