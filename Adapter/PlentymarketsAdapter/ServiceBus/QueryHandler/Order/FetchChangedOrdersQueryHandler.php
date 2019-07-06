@@ -54,7 +54,7 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(QueryInterface $query)
+    public function supports(QueryInterface $query): bool
     {
         return $query instanceof FetchTransferObjectQuery &&
             $query->getAdapterName() === PlentymarketsAdapter::NAME &&
@@ -67,11 +67,11 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $lastCangedTime = $this->getChangedDateTime();
+        $lastChangedTime = $this->getChangedDateTime();
         $currentDateTime = $this->getCurrentDateTime();
 
         $criteria = [
-            'updatedAtFrom' => $lastCangedTime->format(DATE_W3C),
+            'updatedAtFrom' => $lastChangedTime->format(DATE_W3C),
             'updatedAtTo' => $currentDateTime->format(DATE_W3C),
         ];
 
@@ -94,9 +94,7 @@ class FetchChangedOrdersQueryHandler implements QueryHandlerInterface
 
             $result = array_filter($result);
 
-            foreach ($result as $parsedElement) {
-                yield $parsedElement;
-            }
+            yield from $result;
 
             $this->outputHandler->advanceProgressBar();
         }

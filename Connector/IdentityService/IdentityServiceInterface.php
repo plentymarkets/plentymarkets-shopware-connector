@@ -28,7 +28,7 @@ interface IdentityServiceInterface
      *
      * @return Identity
      */
-    public function insert($objectIdentifier, $objectType, $adapterIdentifier, $adapterName);
+    public function insert($objectIdentifier, $objectType, $adapterIdentifier, $adapterName): Identity;
 
     /**
      * @param string $adapterIdentifier
@@ -37,7 +37,7 @@ interface IdentityServiceInterface
      *
      * @return Identity
      */
-    public function findOneOrCreate($adapterIdentifier, $adapterName, $objectType);
+    public function findOneOrCreate($adapterIdentifier, $adapterName, $objectType): Identity;
 
     /**
      * @param string $adapterIdentifier
@@ -46,7 +46,7 @@ interface IdentityServiceInterface
      *
      * @return Identity
      */
-    public function findOneOrThrow($adapterIdentifier, $adapterName, $objectType);
+    public function findOneOrThrow($adapterIdentifier, $adapterName, $objectType): Identity;
 
     /**
      * @param Identity $identity
@@ -64,7 +64,7 @@ interface IdentityServiceInterface
      *
      * @return bool
      */
-    public function exists(array $criteria = []);
+    public function exists(array $criteria = []): bool;
 
     /**
      * @param string $objectIdentifier
@@ -73,5 +73,5 @@ interface IdentityServiceInterface
      *
      * @return bool
      */
-    public function isMappedIdentity($objectIdentifier, $objectType, $adapterName);
+    public function isMappedIdentity($objectIdentifier, $objectType, $adapterName): bool;
 }

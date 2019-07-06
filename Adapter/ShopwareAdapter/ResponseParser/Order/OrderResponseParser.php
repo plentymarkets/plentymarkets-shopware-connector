@@ -3,6 +3,7 @@
 namespace ShopwareAdapter\ResponseParser\Order;
 
 use Assert\Assertion;
+use Assert\AssertionFailedException;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityRepository;
 use Psr\Log\LoggerInterface;
@@ -86,7 +87,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     /**
      * {@inheritdoc}
      */
-    public function parse(array $entry)
+    public function parse(array $entry): array
     {
         if (!$this->isValidOrder($entry)) {
             return [];
@@ -181,7 +182,7 @@ class OrderResponseParser implements OrderResponseParserInterface
      *
      * @return bool
      */
-    private function isValidOrder(array $entry)
+    private function isValidOrder(array $entry): bool
     {
         $shopIdentity = $this->identityService->findOneOrThrow(
             (string) $entry['languageSubShop']['id'],
@@ -237,7 +238,7 @@ class OrderResponseParser implements OrderResponseParserInterface
      *
      * @return Comment[]
      */
-    private function getComments($entry)
+    private function getComments($entry): array
     {
         $comments = [];
 
@@ -262,9 +263,11 @@ class OrderResponseParser implements OrderResponseParserInterface
      * @param int    $entry
      * @param string $type
      *
+     * @throws AssertionFailedException
+     *
      * @return string
      */
-    private function getConnectorIdentifier($entry, $type)
+    private function getConnectorIdentifier($entry, $type): string
     {
         Assertion::integerish($entry);
 
@@ -278,9 +281,11 @@ class OrderResponseParser implements OrderResponseParserInterface
     /**
      * @param array $entry
      *
+     * @throws NotFoundException
+     *
      * @return string
      */
-    private function getShippingCostsVatRateIdentifier(array $entry)
+    private function getShippingCostsVatRateIdentifier(array $entry): string
     {
         $taxRateId = $this->getMaxTaxRateFromOrderItems($entry);
 
@@ -310,9 +315,11 @@ class OrderResponseParser implements OrderResponseParserInterface
     /**
      * @param array $entry
      *
+     * @throws NotFoundException
+     *
      * @return OrderItem
      */
-    private function getShippingCosts(array $entry)
+    private function getShippingCosts(array $entry): OrderItem
     {
         $shippingCosts = $this->getShippingAmount($entry);
         $vatRateIdentifier = $this->getShippingCostsVatRateIdentifier($entry);
@@ -333,7 +340,7 @@ class OrderResponseParser implements OrderResponseParserInterface
      *
      * @return float
      */
-    private function getMaxTaxRateFromOrderItems(array $entry)
+    private function getMaxTaxRateFromOrderItems(array $entry): float
     {
         return max(array_column($entry['details'], 'taxRate'));
     }
@@ -343,9 +350,9 @@ class OrderResponseParser implements OrderResponseParserInterface
      *
      * @return float
      */
-    private function getShippingAmount(array $entry)
+    private function getShippingAmount(array $entry): float
     {
-        $isShippingBruttoAndNettoSame = 1 === $entry['taxFree'] && $entry['taxFree'] == $entry['net'];
+        $isShippingBruttoAndNettoSame = 1 === $entry['taxFree'] && $entry['taxFree'] === $entry['net'];
         if ($isShippingBruttoAndNettoSame) {
             return $entry['invoiceShippingNet'] + $entry['invoiceShippingNet'] * $this->getMaxTaxRateFromOrderItems($entry) / 100;
         }

@@ -11,5 +11,5 @@ interface PaymentRequestGeneratorInterface
      *
      * @return array
      */
-    public function generate(Payment $payment);
+    public function generate(Payment $payment): array;
 }

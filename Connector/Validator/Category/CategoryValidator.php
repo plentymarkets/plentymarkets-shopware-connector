@@ -13,7 +13,7 @@ class CategoryValidator implements ValidatorInterface
     /**
      * {@inheritdoc}
      */
-    public function supports($object)
+    public function supports($object): bool
     {
         return $object instanceof Category;
     }
@@ -28,10 +28,10 @@ class CategoryValidator implements ValidatorInterface
         Assertion::string($object->getName(), null, 'category.name');
 
         Assertion::nullOrUuid($object->getParentIdentifier(), null, 'category.parentIdentifier');
-        Assertion::allUuid($object->getShopIdentifiers(), null, 'category.shopIdentifiers');
+        Assertion::isArray($object->getShopIdentifiers(), null, 'category.shopIdentifiers');
         Assertion::nullOrUuid($object->getParentIdentifier(), null, 'category.parentIdentifier');
 
-        Assertion::allUuid($object->getImageIdentifiers(), null, 'category.imageIdentifiers');
+        Assertion::isArray($object->getImageIdentifiers(), null, 'category.imageIdentifiers');
 
         Assertion::integer($object->getPosition(), null, 'category.position');
 
@@ -47,7 +47,7 @@ class CategoryValidator implements ValidatorInterface
             'NOINDEX, FOLLOW',
             'INDEX, NOFOLLOW',
             'NOINDEX, NOFOLLOW',
-        ], null, 'category.metaTobots');
+        ], null, 'category.metaRobots');
 
         Assertion::allIsInstanceOf($object->getTranslations(), Translation::class, null, 'category.translations');
         Assertion::allIsInstanceOf($object->getAttributes(), Attribute::class, null, 'category.attributes');

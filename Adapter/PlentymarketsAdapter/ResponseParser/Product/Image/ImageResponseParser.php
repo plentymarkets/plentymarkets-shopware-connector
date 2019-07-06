@@ -74,8 +74,8 @@ class ImageResponseParser implements ImageResponseParserInterface
 
             $result[$media->getIdentifier()] = $media;
 
-            $linkedShops = array_filter($entry['availabilities'], function (array $availabilitiy) {
-                return $availabilitiy['type'] === 'mandant';
+            $linkedShops = array_filter($entry['availabilities'], static function (array $availability) {
+                return $availability['type'] === 'mandant';
             });
 
             $shopIdentifiers = array_map(function ($shop) {
@@ -96,10 +96,13 @@ class ImageResponseParser implements ImageResponseParserInterface
             $image->setMediaIdentifier($media->getIdentifier());
             $image->setShopIdentifiers(array_filter($shopIdentifiers));
             $image->setPosition((int) $entry['position']);
+            $image->setName($name);
+            $image->setTranslations($media->getTranslations());
 
             return $image;
         } catch (Exception $exception) {
             $this->logger->notice('error when parsing product image', [
+                'message' => $exception->getMessage(),
                 'id' => $entry['id'],
                 'url' => $entry['url'],
             ]);
@@ -114,7 +117,7 @@ class ImageResponseParser implements ImageResponseParserInterface
      *
      * @return array
      */
-    private function getMediaTranslations(array $image, array $productTexts)
+    private function getMediaTranslations(array $image, array $productTexts): array
     {
         $translations = [];
 

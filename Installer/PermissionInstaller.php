@@ -74,7 +74,7 @@ class PermissionInstaller implements InstallerInterface
     {
         $existingPrivileges = $resource->getPrivileges()->toArray();
 
-        $orphanedPrivileges = array_filter($existingPrivileges, function (ShopwarePrivilege $privilege) use ($permissions) {
+        $orphanedPrivileges = array_filter($existingPrivileges, static function (ShopwarePrivilege $privilege) use ($permissions) {
             return !in_array($privilege->getName(), $permissions, true);
         });
 
@@ -110,7 +110,7 @@ class PermissionInstaller implements InstallerInterface
     /**
      * @param string $resourceName
      *
-     * @return ShopwareResource
+     * @return null|ShopwareResource
      */
     private function getResource($resourceName)
     {
@@ -137,13 +137,14 @@ class PermissionInstaller implements InstallerInterface
      */
     private function synchronizePrivileges(ShopwareResource $resource, array $permissions)
     {
-        $existingPrivileges = array_filter($resource->getPrivileges()->toArray(), function (ShopwarePrivilege $privilege) use ($permissions) {
+        $existingPrivileges = array_filter($resource->getPrivileges()->toArray(), static function (ShopwarePrivilege $privilege) use ($permissions) {
             return in_array($privilege->getName(), $permissions, true);
         });
 
-        $existingPrivileges = array_map(function (ShopwarePrivilege $privilege) {
-            return $privilege->getName();
-        }, $existingPrivileges);
+        $existingPrivileges = array_map(
+            static function (ShopwarePrivilege $privilege) {
+                return $privilege->getName();
+            }, $existingPrivileges);
 
         $newPrivileges = array_diff($permissions, $existingPrivileges);
 

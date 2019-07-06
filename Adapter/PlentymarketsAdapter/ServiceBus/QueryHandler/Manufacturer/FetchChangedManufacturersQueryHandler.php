@@ -54,7 +54,7 @@ class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(QueryInterface $query)
+    public function supports(QueryInterface $query): bool
     {
         return $query instanceof FetchTransferObjectQuery &&
             $query->getAdapterName() === PlentymarketsAdapter::NAME &&
@@ -67,11 +67,11 @@ class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $lastCangedTime = $this->getChangedDateTime();
+        $lastChangedTime = $this->getChangedDateTime();
         $currentDateTime = $this->getCurrentDateTime();
 
         $elements = $this->client->getIterator('items/manufacturers', [
-            'updatedAt' => $lastCangedTime->format(DATE_W3C),
+            'updatedAt' => $lastChangedTime->format(DATE_W3C),
         ]);
 
         $this->outputHandler->startProgressBar(count($elements));
@@ -91,9 +91,7 @@ class FetchChangedManufacturersQueryHandler implements QueryHandlerInterface
 
             $result = array_filter($result);
 
-            foreach ($result as $parsedElement) {
-                yield $parsedElement;
-            }
+            yield from $result;
 
             $this->outputHandler->advanceProgressBar();
         }

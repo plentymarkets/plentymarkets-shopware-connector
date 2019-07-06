@@ -13,7 +13,7 @@ class InvalidResponseException extends Exception
      *
      * @return InvalidResponseException
      */
-    public static function fromParams($method, $path, $options)
+    public static function fromParams($method, $path, $options): InvalidResponseException
     {
         $string = 'The response was null. Method: %s, Path: %s, options: %s';
         $message = sprintf($string, $method, $path, json_encode($options)) . "\n";

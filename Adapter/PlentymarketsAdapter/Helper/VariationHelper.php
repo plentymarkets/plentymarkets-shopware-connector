@@ -40,7 +40,7 @@ class VariationHelper implements VariationHelperInterface
      *
      * @return array
      */
-    public function getShopIdentifiers(array $variation)
+    public function getShopIdentifiers(array $variation): array
     {
         $identifiers = [];
 
@@ -76,7 +76,7 @@ class VariationHelper implements VariationHelperInterface
     /**
      * @return array
      */
-    public function getMappedPlentyClientIds()
+    public function getMappedPlentyClientIds(): array
     {
         $identities = $this->identityService->findBy([
             'adapterName' => PlentymarketsAdapter::NAME,
@@ -113,9 +113,9 @@ class VariationHelper implements VariationHelperInterface
      *
      * @return array
      */
-    public function getMainVariation(array $variations)
+    public function getMainVariation(array $variations): array
     {
-        $mainVariation = array_filter($variations, function ($variation) {
+        $mainVariation = array_filter($variations, static function ($variation) {
             return $variation['isMain'] === true;
         });
 
@@ -127,14 +127,13 @@ class VariationHelper implements VariationHelperInterface
     }
 
     /**
-     * @param Variation[] $variations
-     * @param array       $mainVariation
+     * @param array $mainVariation
+     * @param array $variations
      *
      * @return string
      */
-    public function getMainVariationNumber(array $variations = [], array $mainVariation)
+    public function getMainVariationNumber(array $mainVariation, array $variations = []): string
     {
-        $mainVariationNumber = false;
         $found = false;
 
         $mainVariationNumber = (string) $mainVariation['id'];
@@ -151,7 +150,7 @@ class VariationHelper implements VariationHelperInterface
         }
 
         if ($found) {
-            $checkActiveMainVariation = json_decode($this->configService->get('check_active_main_variation'));
+            $checkActiveMainVariation = json_decode($this->configService->get('check_active_main_variation'), 512);
 
             if (!$checkActiveMainVariation && !$mainVariation['isActive']) {
                 foreach ($variations as $variation) {
@@ -170,8 +169,6 @@ class VariationHelper implements VariationHelperInterface
             }
         }
 
-        $variation = reset($variations);
-
-        return $variation->getNumber();
+        return $mainVariationNumber;
     }
 }

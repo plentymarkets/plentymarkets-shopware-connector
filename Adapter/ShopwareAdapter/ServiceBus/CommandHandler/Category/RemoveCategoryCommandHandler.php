@@ -38,7 +38,7 @@ class RemoveCategoryCommandHandler implements CommandHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(CommandInterface $command)
+    public function supports(CommandInterface $command): bool
     {
         return $command instanceof TransferObjectCommand &&
             $command->getAdapterName() === ShopwareAdapter::NAME &&
@@ -51,7 +51,7 @@ class RemoveCategoryCommandHandler implements CommandHandlerInterface
      *
      * @param TransferObjectCommand $command
      */
-    public function handle(CommandInterface $command)
+    public function handle(CommandInterface $command): bool
     {
         $identifier = $command->getPayload();
 
@@ -85,7 +85,7 @@ class RemoveCategoryCommandHandler implements CommandHandlerInterface
     /**
      * @return CategoryResource
      */
-    private function getCategoryResource()
+    private function getCategoryResource(): CategoryResource
     {
         // without this reset the entitymanager sometimes the album is not found correctly.
         Shopware()->Container()->reset('models');

@@ -24,9 +24,14 @@ class CustomerRequestGenerator implements CustomerRequestGeneratorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param Customer $customer
+     * @param Order    $order
+     *
+     * @throws NotFoundException
+     *
+     * @return array
      */
-    public function generate(Customer $customer, Order $order)
+    public function generate(Customer $customer, Order $order): array
     {
         $shopIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $order->getShopIdentifier(),
@@ -48,7 +53,7 @@ class CustomerRequestGenerator implements CustomerRequestGeneratorInterface
             throw new NotFoundException('language not found - ' . $customer->getLanguageIdentifier());
         }
 
-        $customerGroupIdentitiy = $this->identityService->findOneBy([
+        $customerGroupIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $customer->getCustomerGroupIdentifier(),
             'objectType' => CustomerGroup::TYPE,
             'adapterName' => PlentymarketsAdapter::NAME,
@@ -59,7 +64,7 @@ class CustomerRequestGenerator implements CustomerRequestGeneratorInterface
             'typeId' => 1,
             'firstName' => $customer->getFirstname(),
             'lastName' => $customer->getLastname(),
-            'gender' => $customer->getGender() === Customer::GENDER_MALE ? 'male' : 'female',
+            'gender' => $customer->getGender(),
             'lang' => $languageIdentity->getAdapterIdentifier(),
             'singleAccess' => $customer->getType() === Customer::TYPE_GUEST,
             'plentyId' => $shopIdentity->getAdapterIdentifier(),
@@ -69,8 +74,8 @@ class CustomerRequestGenerator implements CustomerRequestGeneratorInterface
             'referrerId' => 1,
         ];
 
-        if (null !== $customerGroupIdentitiy) {
-            $customerParams['classId'] = (int) $customerGroupIdentitiy->getAdapterIdentifier();
+        if (null !== $customerGroupIdentity) {
+            $customerParams['classId'] = (int) $customerGroupIdentity->getAdapterIdentifier();
         }
 
         if (null !== $customer->getBirthday()) {

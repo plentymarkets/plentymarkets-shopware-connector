@@ -46,11 +46,14 @@
             <argument type="service" id="shopware_adapter.data_provider.translation" />
             <argument type="service" id="plenty_connector.translation_helper" />
             <argument type="service" id="shopware_adapter.shopware_translation_component" />
+            <argument type="service" id="models" />
         </service>
 
         <service id="shopware_adapter.data_persister.attribute" class="ShopwareAdapter\DataPersister\Attribute\AttributeDataPersister" public="false">
             <argument type="service" id="shopware_attribute.crud_service" />
             <argument type="service" id="models" />
+            <argument type="service" id="plenty_connector.logger" />
+
             <argument type="service" id="shopware_attribute.data_persister" />
         </service>
 
@@ -114,6 +117,7 @@
         <service id="shopware_adapter.response_parser.order_item" class="ShopwareAdapter\ResponseParser\OrderItem\OrderItemResponseParser" public="false">
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="shopware.tax_repository" />
+            <argument type="service" id="plenty_connector.config_service" />
         </service>
 
         <service id="shopware_adapter.response_parser.order_status" class="ShopwareAdapter\ResponseParser\OrderStatus\OrderStatusResponseParser" public="false">
@@ -133,6 +137,7 @@
         <service id="shopware_adapter.response_parser.payment" class="ShopwareAdapter\ResponseParser\Payment\PaymentResponseParser" public="false">
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="shopware_adapter.data_provider.currency" />
+            <argument type="service" id="plenty_connector.logger" />
         </service>
 
         <service id="shopware_adapter.response_parser.payment_method" class="ShopwareAdapter\ResponseParser\PaymentMethod\PaymentMethodResponseParser" public="false">
@@ -316,6 +321,16 @@
             <tag name="plenty_connector.command_handler" />
         </service>
 
+        <!-- Price command handlers -->
+
+        <service id="shopware_adapter.command_handler.handle_price" class="ShopwareAdapter\ServiceBus\CommandHandler\Price\HandlePriceCommandHandler" public="false">
+            <argument type="service" id="plenty_connector.identity_service" />
+            <argument type="service" id="models" />
+            <argument type="service" id="shopware_adapter.data_provider.customer_group" />
+            <argument type="service" id="plenty_connector.logger" />
+
+            <tag name="plenty_connector.command_handler" />
+        </service>
 
         <!-- Order query handlers -->
 

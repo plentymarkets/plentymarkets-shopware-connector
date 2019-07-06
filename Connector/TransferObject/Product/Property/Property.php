@@ -3,11 +3,11 @@
 namespace SystemConnector\TransferObject\Product\Property;
 
 use SystemConnector\TransferObject\Product\Property\Value\Value;
-use SystemConnector\TransferObject\TranslateableInterface;
+use SystemConnector\TransferObject\TranslatableInterface;
 use SystemConnector\ValueObject\AbstractValueObject;
 use SystemConnector\ValueObject\Translation\Translation;
 
-class Property extends AbstractValueObject implements TranslateableInterface
+class Property extends AbstractValueObject implements TranslatableInterface
 {
     /**
      * @var string
@@ -32,7 +32,7 @@ class Property extends AbstractValueObject implements TranslateableInterface
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -48,7 +48,7 @@ class Property extends AbstractValueObject implements TranslateableInterface
     /**
      * @return int
      */
-    public function getPosition()
+    public function getPosition(): int
     {
         return $this->position;
     }
@@ -64,7 +64,7 @@ class Property extends AbstractValueObject implements TranslateableInterface
     /**
      * @return Value[]
      */
-    public function getValues()
+    public function getValues(): array
     {
         return $this->values;
     }
@@ -80,7 +80,7 @@ class Property extends AbstractValueObject implements TranslateableInterface
     /**
      * @return Translation[]
      */
-    public function getTranslations()
+    public function getTranslations(): array
     {
         return $this->translations;
     }

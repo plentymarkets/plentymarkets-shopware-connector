@@ -36,17 +36,17 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     public function __construct(
         ClientInterface $client,
         IdentityServiceInterface $identityService,
-        OrderRequestGeneratorInterface $orderRequestGeneretor
+        OrderRequestGeneratorInterface $orderRequestGenerator
     ) {
         $this->client = $client;
         $this->identityService = $identityService;
-        $this->orderRequestGenerator = $orderRequestGeneretor;
+        $this->orderRequestGenerator = $orderRequestGenerator;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function supports(CommandInterface $command)
+    public function supports(CommandInterface $command): bool
     {
         return $command instanceof TransferObjectCommand &&
             $command->getAdapterName() === PlentymarketsAdapter::NAME &&
@@ -55,11 +55,13 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param CommandInterface $command
      *
-     * @var TransferObjectCommand $command
+     * @throws NotFoundException
+     *
+     * @return bool
      */
-    public function handle(CommandInterface $command)
+    public function handle(CommandInterface $command): bool
     {
         /**
          * @var Order $order
@@ -94,7 +96,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
      *
      * @return bool
      */
-    private function handleOrder(Order $order)
+    private function handleOrder(Order $order): bool
     {
         $params = $this->orderRequestGenerator->generate($order);
         $result = $this->client->request('post', 'orders', $params);
@@ -112,9 +114,11 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     /**
      * @param Order $order
      *
+     * @throws NotFoundException
+     *
      * @return bool
      */
-    private function isExistingOrder(Order $order)
+    private function isExistingOrder(Order $order): bool
     {
         $shopIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $order->getShopIdentifier(),
@@ -130,7 +134,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             'externalOrderId' => $order->getOrderNumber(),
         ]);
 
-        $result = array_filter($result, function (array $order) use ($shopIdentity) {
+        $result = array_filter($result, static function (array $order) use ($shopIdentity) {
             return (int) $order['plentyId'] === $shopIdentity->getAdapterIdentifier();
         });
 
@@ -143,6 +147,8 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
 
     /**
      * @param Order $order
+     *
+     * @throws NotFoundException
      */
     private function handleComments(Order $order)
     {
@@ -175,7 +181,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     /**
      * @return int
      */
-    private function getUserId()
+    private function getUserId(): int
     {
         static $user = null;
 

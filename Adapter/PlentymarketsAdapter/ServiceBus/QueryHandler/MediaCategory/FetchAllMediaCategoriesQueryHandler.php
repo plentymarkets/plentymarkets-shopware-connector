@@ -51,7 +51,7 @@ class FetchAllMediaCategoriesQueryHandler implements QueryHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(QueryInterface $query)
+    public function supports(QueryInterface $query): bool
     {
         return $query instanceof FetchTransferObjectQuery &&
             $query->getAdapterName() === PlentymarketsAdapter::NAME &&

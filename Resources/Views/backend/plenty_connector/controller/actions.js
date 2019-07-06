@@ -20,8 +20,7 @@ Ext.define('Shopware.apps.PlentyConnector.controller.Actions', {
 		view.setLoading(true);
 
 		var form = view.getForm();
-		var itemId = form.findField("item_id").getValue();
-		var message = '{s name=plentyconnector/controller/actions/item_import/confirm_text}{/s}'
+		var message = '{s name=plentyconnector/controller/actions/item_import/confirm_text}{/s}';
 
 		Ext.Msg.confirm('{s name=plentyconnector/controller/actions/item_import/confirm_title}{/s}', message, function (button) {
 			if (button === 'no') {

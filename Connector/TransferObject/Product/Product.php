@@ -9,13 +9,14 @@ use SystemConnector\TransferObject\Product\Badge\Badge;
 use SystemConnector\TransferObject\Product\Image\Image;
 use SystemConnector\TransferObject\Product\LinkedProduct\LinkedProduct;
 use SystemConnector\TransferObject\Product\Property\Property;
-use SystemConnector\TransferObject\TranslateableInterface;
+use SystemConnector\TransferObject\TranslatableInterface;
 use SystemConnector\ValueObject\Attribute\Attribute;
 use SystemConnector\ValueObject\Translation\Translation;
 
-class Product extends AbstractTransferObject implements TranslateableInterface, AttributableInterface
+class Product extends AbstractTransferObject implements TranslatableInterface, AttributableInterface
 {
     const TYPE = 'Product';
+    const MULTIPACK = 'multiPack';
 
     /**
      * Identifier of the object.
@@ -73,11 +74,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
      * @var string
      */
     private $vatRateIdentifier = '';
-
-    /**
-     * @var bool
-     */
-    private $stockLimitation = false;
 
     /**
      * @var string
@@ -140,6 +136,11 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     private $availableTo;
 
     /**
+     * @var null|DateTimeImmutable
+     */
+    private $createdAt;
+
+    /**
      * @var Attribute[]
      */
     private $attributes = [];
@@ -157,7 +158,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     /**
      * {@inheritdoc}
      */
-    public function getType()
+    public function getType(): string
     {
         return self::TYPE;
     }
@@ -165,7 +166,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     /**
      * @return string
      */
-    public function getIdentifier()
+    public function getIdentifier(): string
     {
         return $this->identifier;
     }
@@ -181,7 +182,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -197,7 +198,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     /**
      * @return string
      */
-    public function getNumber()
+    public function getNumber(): string
     {
         return $this->number;
     }
@@ -213,7 +214,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     /**
      * @return bool
      */
-    public function isActive()
+    public function isActive(): bool
     {
         return $this->active;
     }
@@ -229,7 +230,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     /**
      * @return array
      */
-    public function getShopIdentifiers()
+    public function getShopIdentifiers(): array
     {
         return $this->shopIdentifiers;
     }
@@ -245,7 +246,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     /**
      * @return string
      */
-    public function getManufacturerIdentifier()
+    public function getManufacturerIdentifier(): string
     {
         return $this->manufacturerIdentifier;
     }
@@ -261,7 +262,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     /**
      * @return array
      */
-    public function getCategoryIdentifiers()
+    public function getCategoryIdentifiers(): array
     {
         return $this->categoryIdentifiers;
     }
@@ -277,7 +278,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     /**
      * @return array
      */
-    public function getDefaultCategoryIdentifiers()
+    public function getDefaultCategoryIdentifiers(): array
     {
         return $this->defaultCategoryIdentifiers;
     }
@@ -293,7 +294,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     /**
      * @return array
      */
-    public function getShippingProfileIdentifiers()
+    public function getShippingProfileIdentifiers(): array
     {
         return $this->shippingProfileIdentifiers;
     }
@@ -309,7 +310,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     /**
      * @return Image[]
      */
-    public function getImages()
+    public function getImages(): array
     {
         return $this->images;
     }
@@ -325,7 +326,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     /**
      * @return string
      */
-    public function getVatRateIdentifier()
+    public function getVatRateIdentifier(): string
     {
         return $this->vatRateIdentifier;
     }
@@ -339,25 +340,9 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     }
 
     /**
-     * @return bool
-     */
-    public function hasStockLimitation()
-    {
-        return $this->stockLimitation;
-    }
-
-    /**
-     * @param bool $stockLimitation
-     */
-    public function setStockLimitation($stockLimitation)
-    {
-        $this->stockLimitation = $stockLimitation;
-    }
-
-    /**
      * @return string
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
@@ -373,7 +358,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     /**
      * @return string
      */
-    public function getLongDescription()
+    public function getLongDescription(): string
     {
         return $this->longDescription;
     }
@@ -389,7 +374,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     /**
      * @return string
      */
-    public function getMetaTitle()
+    public function getMetaTitle(): string
     {
         return $this->metaTitle;
     }
@@ -405,7 +390,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     /**
      * @return string
      */
-    public function getMetaDescription()
+    public function getMetaDescription(): string
     {
         return $this->metaDescription;
     }
@@ -421,7 +406,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     /**
      * @return string
      */
-    public function getMetaKeywords()
+    public function getMetaKeywords(): string
     {
         return $this->metaKeywords;
     }
@@ -437,7 +422,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     /**
      * @return string
      */
-    public function getMetaRobots()
+    public function getMetaRobots(): string
     {
         return $this->metaRobots;
     }
@@ -453,7 +438,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     /**
      * @return LinkedProduct[]
      */
-    public function getLinkedProducts()
+    public function getLinkedProducts(): array
     {
         return $this->linkedProducts;
     }
@@ -469,7 +454,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     /**
      * @return array
      */
-    public function getDocuments()
+    public function getDocuments(): array
     {
         return $this->documents;
     }
@@ -485,7 +470,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     /**
      * @return Property[]
      */
-    public function getProperties()
+    public function getProperties(): array
     {
         return $this->properties;
     }
@@ -501,7 +486,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     /**
      * @return Translation[]
      */
-    public function getTranslations()
+    public function getTranslations(): array
     {
         return $this->translations;
     }
@@ -547,9 +532,25 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     }
 
     /**
+     * @return null|DateTimeImmutable
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param null|DateTimeImmutable $createdAt
+     */
+    public function setCreatedAt(DateTimeImmutable $createdAt = null)
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
      * @return Attribute[]
      */
-    public function getAttributes()
+    public function getAttributes(): array
     {
         return $this->attributes;
     }
@@ -565,7 +566,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     /**
      * @return Property[]
      */
-    public function getVariantConfiguration()
+    public function getVariantConfiguration(): array
     {
         return $this->variantConfiguration;
     }
@@ -581,7 +582,7 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
     /**
      * @return Badge[]
      */
-    public function getBadges()
+    public function getBadges(): array
     {
         return $this->badges;
     }
@@ -609,7 +610,6 @@ class Product extends AbstractTransferObject implements TranslateableInterface, 
             'defaultCategoryIdentifiers' => $this->getDefaultCategoryIdentifiers(),
             'shippingProfileIdentifiers' => $this->getShippingProfileIdentifiers(),
             'vatRateIdentifier' => $this->getVatRateIdentifier(),
-            'stockLimitation' => $this->hasStockLimitation(),
             'description' => $this->getDescription(),
             'longDescription' => $this->getLongDescription(),
             'metaTitle' => $this->getMetaTitle(),

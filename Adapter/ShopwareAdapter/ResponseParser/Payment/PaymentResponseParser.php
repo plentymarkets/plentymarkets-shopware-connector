@@ -3,6 +3,8 @@
 namespace ShopwareAdapter\ResponseParser\Payment;
 
 use Assert\Assertion;
+use Assert\AssertionFailedException;
+use Psr\Log\LoggerInterface;
 use Shopware\Models\Order\Status;
 use ShopwareAdapter\DataProvider\Currency\CurrencyDataProviderInterface;
 use ShopwareAdapter\ShopwareAdapter;
@@ -25,18 +27,25 @@ class PaymentResponseParser implements PaymentResponseParserInterface
      */
     private $currencyDataProvider;
 
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
     public function __construct(
         IdentityServiceInterface $identityService,
-        CurrencyDataProviderInterface $currencyDataProvider
+        CurrencyDataProviderInterface $currencyDataProvider,
+        LoggerInterface $logger
     ) {
         $this->identityService = $identityService;
         $this->currencyDataProvider = $currencyDataProvider;
+        $this->logger = $logger;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function parse(array $element)
+    public function parse(array $element): array
     {
         $paymentIdentifier = $this->identityService->findOneOrCreate(
             (string) $element['id'],
@@ -79,6 +88,8 @@ class PaymentResponseParser implements PaymentResponseParserInterface
         );
 
         if (!$isMappedShopIdentity) {
+            $this->logger->warning('shopidentity' . $shopIdentity->getObjectIdentifier() . ' ist not mapped');
+
             return [];
         }
 
@@ -88,7 +99,7 @@ class PaymentResponseParser implements PaymentResponseParserInterface
         $payment = new Payment();
         $payment->setIdentifier($paymentIdentifier->getObjectIdentifier());
         $payment->setShopIdentifier($shopIdentity->getObjectIdentifier());
-        $payment->setOrderIdentifer($this->getConnectorIdentifier($element['id'], Order::TYPE));
+        $payment->setOrderIdentifier($this->getConnectorIdentifier($element['id'], Order::TYPE));
         $payment->setAmount($element['invoiceAmount']);
         $payment->setAccountHolder($this->getAccountHolder($element));
         $payment->setCurrencyIdentifier($currencyIdentifier);
@@ -102,9 +113,11 @@ class PaymentResponseParser implements PaymentResponseParserInterface
      * @param int    $entry
      * @param string $type
      *
+     * @throws AssertionFailedException
+     *
      * @return string
      */
-    private function getConnectorIdentifier($entry, $type)
+    private function getConnectorIdentifier($entry, $type): string
     {
         Assertion::integerish($entry);
 
@@ -120,7 +133,7 @@ class PaymentResponseParser implements PaymentResponseParserInterface
      *
      * @return string
      */
-    private function getAccountHolder(array $element)
+    private function getAccountHolder(array $element): string
     {
         $firstName = !empty($element['billing']['firstName']) ? $element['billing']['firstName'] : '';
         $lastName = !empty($element['billing']['lastName']) ? $element['billing']['lastName'] : '';

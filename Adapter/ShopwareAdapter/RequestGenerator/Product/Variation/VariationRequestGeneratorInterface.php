@@ -11,5 +11,5 @@ interface VariationRequestGeneratorInterface
      *
      * @return array
      */
-    public function generate(Variation $variation);
+    public function generate(Variation $variation): array;
 }

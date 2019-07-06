@@ -64,7 +64,7 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(CommandInterface $command)
+    public function supports(CommandInterface $command): bool
     {
         return $command instanceof TransferObjectCommand &&
             $command->getAdapterName() === ShopwareAdapter::NAME &&
@@ -77,20 +77,20 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
      *
      * @param TransferObjectCommand $command
      */
-    public function handle(CommandInterface $command)
+    public function handle(CommandInterface $command): bool
     {
         /**
          * @var Variation $variation
          */
         $variation = $command->getPayload();
 
-        $productIdentitiy = $this->identityService->findOneBy([
+        $productIdentity = $this->identityService->findOneBy([
             'objectIdentifier' => $variation->getProductIdentifier(),
             'objectType' => Product::TYPE,
             'adapterName' => ShopwareAdapter::NAME,
         ]);
 
-        if (null === $productIdentitiy) {
+        if (null === $productIdentity) {
             return false;
         }
 
@@ -152,7 +152,7 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
             );
         }
 
-        $this->correctProductAssignment($variationModel, $productIdentitiy);
+        $this->correctProductAssignment($variationModel, $productIdentity);
         $this->correctMainDetailAssignment($variationModel, $variation);
 
         $this->attributeDataPersister->saveProductDetailAttributes(
@@ -187,7 +187,7 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
     /**
      * @return Variant
      */
-    private function getVariationResource()
+    private function getVariationResource(): Variant
     {
         // without this reset the entitymanager sometimes the album is not found correctly.
         Shopware()->Container()->reset('models');
@@ -196,31 +196,31 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * migrating variation from one product to the correct connector handeled product
+     * migrating variation from one product to the correct connector handled product
      *
      * @param null|Detail $variationModel
-     * @param Identity    $productIdentitiy
+     * @param Identity    $productIdentity
      */
-    private function correctProductAssignment($variationModel, $productIdentitiy)
+    private function correctProductAssignment($variationModel, $productIdentity)
     {
         if (null === $variationModel) {
             return;
         }
 
-        if ((int) $productIdentitiy->getAdapterIdentifier() === $variationModel->getArticle()->getId()) {
+        if ((int) $productIdentity->getAdapterIdentifier() === $variationModel->getArticle()->getId()) {
             return;
         }
 
         $this->entityManager->getConnection()->update(
             's_articles_details',
-            ['articleID' => $productIdentitiy->getAdapterIdentifier()],
+            ['articleID' => $productIdentity->getAdapterIdentifier()],
             ['id' => $variationModel->getId()]
         );
 
-        $this->logger->notice('migrated variation from existing product to connector handeled product.', [
+        $this->logger->notice('migrated variation from existing product to connector handled product.', [
             'variation' => $variationModel->getNumber(),
             'old shopware product id' => $variationModel->getArticle()->getId(),
-            'new shopware product id' => $productIdentitiy->getAdapterIdentifier(),
+            'new shopware product id' => $productIdentity->getAdapterIdentifier(),
         ]);
     }
 }

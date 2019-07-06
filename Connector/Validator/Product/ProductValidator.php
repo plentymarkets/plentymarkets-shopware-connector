@@ -19,7 +19,7 @@ class ProductValidator implements ValidatorInterface
      *
      * @return bool
      */
-    public function supports($object)
+    public function supports($object): bool
     {
         return $object instanceof Product;
     }
@@ -40,19 +40,17 @@ class ProductValidator implements ValidatorInterface
 
         Assertion::boolean($object->isActive(), null, 'product.active');
 
-        Assertion::allUuid($object->getShopIdentifiers(), null, 'product.shopIdentifiers');
+        Assertion::isArray($object->getShopIdentifiers(), null, 'product.shopIdentifiers');
 
         Assertion::uuid($object->getManufacturerIdentifier(), null, 'product.manufacturerIdentifier');
 
-        Assertion::allUuid($object->getCategoryIdentifiers(), null, 'product.categoryIdentifiers');
-        Assertion::allUuid($object->getDefaultCategoryIdentifiers(), null, 'product.defaultCategoryIdentifiers');
-        Assertion::allUuid($object->getShippingProfileIdentifiers(), null, 'product.name');
+        Assertion::isArray($object->getCategoryIdentifiers(), null, 'product.categoryIdentifiers');
+        Assertion::isArray($object->getDefaultCategoryIdentifiers(), null, 'product.defaultCategoryIdentifiers');
+        Assertion::isArray($object->getShippingProfileIdentifiers(), null, 'product.name');
 
         Assertion::allIsInstanceOf($object->getImages(), Image::class, null, 'product.images');
 
         Assertion::uuid($object->getVatRateIdentifier(), null, 'product.vatRateIdentifier');
-
-        Assertion::boolean($object->hasStockLimitation(), null, 'product.stockLimitation');
 
         Assertion::string($object->getDescription(), null, 'product.description');
         Assertion::string($object->getLongDescription(), null, 'product.longDescription');
@@ -72,7 +70,7 @@ class ProductValidator implements ValidatorInterface
 
         Assertion::allIsInstanceOf($object->getLinkedProducts(), LinkedProduct::class, null, 'product.linkedProducts');
 
-        Assertion::allUuid($object->getDocuments(), null, 'product.documents');
+        Assertion::isArray($object->getDocuments(), null, 'product.documents');
 
         Assertion::allIsInstanceOf($object->getProperties(), Property::class, null, 'product.properties');
 

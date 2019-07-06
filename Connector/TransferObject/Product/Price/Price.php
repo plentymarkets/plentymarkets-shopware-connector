@@ -2,10 +2,24 @@
 
 namespace SystemConnector\TransferObject\Product\Price;
 
-use SystemConnector\ValueObject\AbstractValueObject;
+use SystemConnector\TransferObject\AbstractTransferObject;
 
-class Price extends AbstractValueObject
+class Price extends AbstractTransferObject
 {
+    const TYPE = 'Price';
+
+    /**
+     * Identifier of the object.
+     *
+     * @var string
+     */
+    private $identifier = '';
+
+    /**
+     * @var string
+     */
+    private $variationIdentifier = '';
+
     /**
      * @var float
      */
@@ -32,9 +46,49 @@ class Price extends AbstractValueObject
     private $toAmount;
 
     /**
+     * {@inheritdoc}
+     */
+    public function getType(): string
+    {
+        return self::TYPE;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdentifier(): string
+    {
+        return $this->identifier;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setIdentifier($identifier)
+    {
+        $this->identifier = $identifier;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVariationIdentifier(): string
+    {
+        return $this->variationIdentifier;
+    }
+
+    /**
+     * @param string $variationIdentifier
+     */
+    public function setVariationIdentifier($variationIdentifier)
+    {
+        $this->variationIdentifier = $variationIdentifier;
+    }
+
+    /**
      * @return float
      */
-    public function getPrice()
+    public function getPrice(): float
     {
         return $this->price;
     }
@@ -50,7 +104,7 @@ class Price extends AbstractValueObject
     /**
      * @return float
      */
-    public function getPseudoPrice()
+    public function getPseudoPrice(): float
     {
         return $this->pseudoPrice;
     }
@@ -82,7 +136,7 @@ class Price extends AbstractValueObject
     /**
      * @return float
      */
-    public function getFromAmount()
+    public function getFromAmount(): float
     {
         return $this->fromAmount;
     }
@@ -96,7 +150,7 @@ class Price extends AbstractValueObject
     }
 
     /**
-     * @return float
+     * @return null|float
      */
     public function getToAmount()
     {

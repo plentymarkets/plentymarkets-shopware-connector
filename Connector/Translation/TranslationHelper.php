@@ -3,17 +3,17 @@
 namespace SystemConnector\Translation;
 
 use DeepCopy\DeepCopy;
-use SystemConnector\TransferObject\TranslateableInterface;
+use SystemConnector\TransferObject\TranslatableInterface;
 use SystemConnector\ValueObject\Translation\Translation;
 
 class TranslationHelper implements TranslationHelperInterface
 {
     /**
-     * @param TranslateableInterface $object
+     * @param TranslatableInterface $object
      *
      * @return array
      */
-    public function getLanguageIdentifiers(TranslateableInterface $object)
+    public function getLanguageIdentifiers(TranslatableInterface $object): array
     {
         $languages = [];
 
@@ -33,7 +33,7 @@ class TranslationHelper implements TranslationHelperInterface
     /**
      * {@inheritdoc}
      */
-    public function translate($languageIdentifier, TranslateableInterface $object)
+    public function translate($languageIdentifier, TranslatableInterface $object): TranslatableInterface
     {
         $deepCopy = new DeepCopy();
         $object = $deepCopy->copy($object);
@@ -41,7 +41,7 @@ class TranslationHelper implements TranslationHelperInterface
         /**
          * @var Translation[] $translations
          */
-        $translations = array_filter($object->getTranslations(), function (Translation $translation) use ($languageIdentifier) {
+        $translations = array_filter($object->getTranslations(), static function (Translation $translation) use ($languageIdentifier) {
             return $translation->getLanguageIdentifier() === $languageIdentifier;
         });
 

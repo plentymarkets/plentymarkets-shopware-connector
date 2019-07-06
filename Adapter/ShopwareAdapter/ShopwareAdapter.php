@@ -11,7 +11,7 @@ class ShopwareAdapter implements AdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return self::NAME;
     }

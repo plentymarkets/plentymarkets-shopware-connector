@@ -9,14 +9,14 @@ interface TransferObjectInterface
      *
      * @return TransferObjectInterface
      */
-    public static function fromArray(array $params = []);
+    public static function fromArray(array $params = []): TransferObjectInterface;
 
     /**
      * return a uuid.
      *
      * @return string
      */
-    public function getIdentifier();
+    public function getIdentifier(): string;
 
     /**
      * set a uuid.
@@ -30,5 +30,5 @@ interface TransferObjectInterface
      *
      * @return string
      */
-    public function getType();
+    public function getType(): string;
 }

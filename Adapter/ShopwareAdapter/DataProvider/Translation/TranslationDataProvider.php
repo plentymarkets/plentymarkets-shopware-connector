@@ -6,8 +6,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Shopware\Models\Article\Configurator\Group;
 use Shopware\Models\Article\Configurator\Option;
+use Shopware\Models\Article\Image;
 use Shopware\Models\Property\Option as PropertyGroupModel;
 use Shopware\Models\Property\Value as PropertyValueModel;
+use Shopware\Models\Shop\Shop;
 use Shopware\Models\Shop\Shop as ShopModel;
 use SystemConnector\IdentityService\Struct\Identity;
 use SystemConnector\TransferObject\Product\Property\Property;
@@ -40,6 +42,11 @@ class TranslationDataProvider implements TranslationDataProviderInterface
      */
     private $configurationValueRepository;
 
+    /**
+     * @var EntityRepository
+     */
+    private $articleImageRepository;
+
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->shopRepository = $entityManager->getRepository(ShopModel::class);
@@ -47,12 +54,15 @@ class TranslationDataProvider implements TranslationDataProviderInterface
         $this->propertyValueRepository = $entityManager->getRepository(PropertyValueModel::class);
         $this->configurationValueRepository = $entityManager->getRepository(Option::class);
         $this->configurationGroupRepository = $entityManager->getRepository(Group::class);
+        $this->articleImageRepository = $entityManager->getRepository(Image::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @param Identity $identity
+     *
+     * @return Shop[]
      */
-    public function getShopsByLocaleIdentitiy(Identity $identity)
+    public function getShopsByLocaleIdentity(Identity $identity): array
     {
         return $this->shopRepository->findBy([
             'locale' => $identity->getAdapterIdentifier(),
@@ -96,6 +106,20 @@ class TranslationDataProvider implements TranslationDataProviderInterface
     {
         return $this->configurationValueRepository->findOneBy([
             'name' => $value->getValue(),
+        ]);
+    }
+
+    /**
+     * @param Identity $mediaIdentity
+     * @param $articleId
+     *
+     * @return null|Image
+     */
+    public function getArticleImage(Identity $mediaIdentity, $articleId)
+    {
+        return $this->articleImageRepository->findOneBy([
+            'articleId' => $articleId,
+            'media' => $mediaIdentity->getAdapterIdentifier(),
         ]);
     }
 }

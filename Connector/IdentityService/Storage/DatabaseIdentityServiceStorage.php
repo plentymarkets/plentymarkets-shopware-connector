@@ -80,14 +80,15 @@ class DatabaseIdentityServiceStorage implements IdentityServiceStorageInterface
 
         $result = $queryBuilder->execute()->fetchAll();
 
-        return array_map(function (array $result) {
-            return Identity::fromArray([
+        return array_map(
+            static function (array $result) {
+                return Identity::fromArray([
                 'objectIdentifier' => $result['objectIdentifier'],
                 'objectType' => $result['objectType'],
                 'adapterIdentifier' => $result['adapterIdentifier'],
                 'adapterName' => $result['adapterName'],
             ]);
-        }, $result);
+            }, $result);
     }
 
     /**

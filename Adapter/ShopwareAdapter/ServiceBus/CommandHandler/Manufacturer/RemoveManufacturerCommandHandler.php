@@ -4,6 +4,7 @@ namespace ShopwareAdapter\ServiceBus\CommandHandler\Manufacturer;
 
 use Psr\Log\LoggerInterface;
 use Shopware\Components\Api\Exception\NotFoundException;
+use Shopware\Components\Api\Exception\ParameterMissingException;
 use Shopware\Components\Api\Resource\Manufacturer as ManufacturerResource;
 use ShopwareAdapter\ShopwareAdapter;
 use SystemConnector\IdentityService\IdentityServiceInterface;
@@ -44,7 +45,7 @@ class RemoveManufacturerCommandHandler implements CommandHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(CommandInterface $command)
+    public function supports(CommandInterface $command): bool
     {
         return $command instanceof TransferObjectCommand &&
             $command->getAdapterName() === ShopwareAdapter::NAME &&
@@ -56,8 +57,10 @@ class RemoveManufacturerCommandHandler implements CommandHandlerInterface
      * {@inheritdoc}
      *
      * @param TransferObjectCommand $command
+     *
+     * @throws ParameterMissingException
      */
-    public function handle(CommandInterface $command)
+    public function handle(CommandInterface $command): bool
     {
         $identifier = $command->getPayload();
 

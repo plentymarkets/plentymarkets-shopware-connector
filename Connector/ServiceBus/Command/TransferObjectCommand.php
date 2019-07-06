@@ -65,7 +65,7 @@ class TransferObjectCommand implements CommandInterface
     /**
      * @return string
      */
-    public function getAdapterName()
+    public function getAdapterName(): string
     {
         return $this->adapterName;
     }
@@ -73,7 +73,7 @@ class TransferObjectCommand implements CommandInterface
     /**
      * @return string
      */
-    public function getObjectType()
+    public function getObjectType(): string
     {
         return $this->objectType;
     }
@@ -81,7 +81,7 @@ class TransferObjectCommand implements CommandInterface
     /**
      * @return string
      */
-    public function getCommandType()
+    public function getCommandType(): string
     {
         return $this->commandType;
     }
@@ -89,7 +89,7 @@ class TransferObjectCommand implements CommandInterface
     /**
      * {@inheritdoc}
      */
-    public function getPriority()
+    public function getPriority(): int
     {
         return $this->priority;
     }
@@ -105,7 +105,7 @@ class TransferObjectCommand implements CommandInterface
     /**
      * {@inheritdoc}
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'adapterName' => $this->adapterName,

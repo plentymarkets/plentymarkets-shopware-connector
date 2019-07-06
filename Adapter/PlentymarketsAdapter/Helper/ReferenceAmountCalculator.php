@@ -19,7 +19,7 @@ class ReferenceAmountCalculator implements ReferenceAmountCalculatorInterface
     /**
      * @var array
      */
-    private static $convertionMatrix = [
+    private static $conversionMatrix = [
         'KGM' => ['conversion' => 1], // kilogram
         'GRM' => ['conversion' => 0.001], // gram
         'MGM' => ['conversion' => 0.000001], // milligram
@@ -48,11 +48,11 @@ class ReferenceAmountCalculator implements ReferenceAmountCalculatorInterface
      *
      * @return float
      */
-    public function calculate(array $variation)
+    public function calculate(array $variation): float
     {
         if (empty(self::$units)) {
-            self::$units = array_filter($this->itemUnitApi->findAll(), function (array $unit) {
-                return array_key_exists($unit['unitOfMeasurement'], self::$convertionMatrix);
+            self::$units = array_filter($this->itemUnitApi->findAll(), static function (array $unit) {
+                return array_key_exists($unit['unitOfMeasurement'], self::$conversionMatrix);
             });
         }
 
@@ -62,7 +62,7 @@ class ReferenceAmountCalculator implements ReferenceAmountCalculatorInterface
             return 1.0;
         }
 
-        $modifier = self::$convertionMatrix[$variationUnit]['conversion'];
+        $modifier = self::$conversionMatrix[$variationUnit]['conversion'];
 
         $content = $variation['unit']['content'] * $modifier;
 

@@ -3,6 +3,7 @@
 namespace PlentyConnector\Components\PayPal\Shopware;
 
 use Doctrine\DBAL\Connection;
+use Exception;
 use PlentyConnector\Components\PayPal\PaymentData\PayPalInstallmentPaymentData;
 use ShopwareAdapter\ResponseParser\Payment\PaymentResponseParserInterface;
 use SystemConnector\TransferObject\Payment\Payment;
@@ -30,7 +31,7 @@ class PayPalInstallmentPaymentResponseParser implements PaymentResponseParserInt
     /**
      * {@inheritdoc}
      */
-    public function parse(array $element)
+    public function parse(array $element): array
     {
         $payments = $this->parentResponseParser->parse($element);
 
@@ -56,7 +57,7 @@ class PayPalInstallmentPaymentResponseParser implements PaymentResponseParserInt
             $query = 'SELECT * FROM s_plugin_paypal_installments_financing WHERE ordernumber = ?';
 
             return $this->connection->fetchAssoc($query, [$ordernumber]);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return false;
         }
     }

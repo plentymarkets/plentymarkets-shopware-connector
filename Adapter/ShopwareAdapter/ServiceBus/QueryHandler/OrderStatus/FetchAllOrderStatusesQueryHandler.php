@@ -37,7 +37,7 @@ class FetchAllOrderStatusesQueryHandler implements QueryHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(QueryInterface $query)
+    public function supports(QueryInterface $query): bool
     {
         return $query instanceof FetchTransferObjectQuery &&
             $query->getAdapterName() === ShopwareAdapter::NAME &&
@@ -66,7 +66,7 @@ class FetchAllOrderStatusesQueryHandler implements QueryHandlerInterface
     /**
      * @return Query
      */
-    private function createOrderStatusQuery()
+    private function createOrderStatusQuery(): Query
     {
         $queryBuilder = $this->repository->createQueryBuilder('status');
         $queryBuilder->select([

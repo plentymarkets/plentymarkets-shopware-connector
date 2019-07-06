@@ -9,7 +9,7 @@ class ContactClass extends ApiAbstract
     /**
      * @return array
      */
-    public function findAll()
+    public function findAll(): array
     {
         return $this->client->request('GET', 'accounts/contacts/classes');
     }

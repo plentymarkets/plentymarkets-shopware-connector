@@ -3,15 +3,14 @@
 namespace PlentymarketsAdapter\ResponseParser\Product\Variation;
 
 use DateTimeImmutable;
+use Exception;
 use PlentymarketsAdapter\Helper\ReferenceAmountCalculatorInterface;
 use PlentymarketsAdapter\Helper\VariationHelperInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ReadApi\Availability as AvailabilityApi;
-use PlentymarketsAdapter\ReadApi\Item\Attribute as AttributeApi;
-use PlentymarketsAdapter\ReadApi\Item\Barcode as BarcodeApi;
 use PlentymarketsAdapter\ResponseParser\Product\Image\ImageResponseParserInterface;
 use PlentymarketsAdapter\ResponseParser\Product\Price\PriceResponseParserInterface;
 use PlentymarketsAdapter\ResponseParser\Product\Stock\StockResponseParserInterface;
+use Shopware\Bundle\AttributeBundle\Service\TypeMapping;
 use SystemConnector\ConfigService\ConfigServiceInterface;
 use SystemConnector\IdentityService\Exception\NotFoundException;
 use SystemConnector\IdentityService\IdentityServiceInterface;
@@ -24,6 +23,7 @@ use SystemConnector\TransferObject\Product\Property\Value\Value;
 use SystemConnector\TransferObject\Product\Variation\Variation;
 use SystemConnector\TransferObject\TransferObjectInterface;
 use SystemConnector\TransferObject\Unit\Unit;
+use SystemConnector\ValueObject\Attribute\Attribute;
 use SystemConnector\ValueObject\Translation\Translation;
 
 class VariationResponseParser implements VariationResponseParserInterface
@@ -49,21 +49,6 @@ class VariationResponseParser implements VariationResponseParserInterface
     private $stockResponseParser;
 
     /**
-     * @var AvailabilityApi
-     */
-    private $availabilitiesApi;
-
-    /**
-     * @var AttributeApi
-     */
-    private $itemAttributesApi;
-
-    /**
-     * @var BarcodeApi
-     */
-    private $itemBarcodeApi;
-
-    /**
      * @var ReferenceAmountCalculatorInterface
      */
     private $referenceAmountCalculator;
@@ -83,9 +68,6 @@ class VariationResponseParser implements VariationResponseParserInterface
         PriceResponseParserInterface $priceResponseParser,
         ImageResponseParserInterface $imageResponseParser,
         StockResponseParserInterface $stockResponseParser,
-        AvailabilityApi $availabilitiesApi,
-        AttributeApi $itemAttributesApi,
-        BarcodeApi $itemBarcodeApi,
         ReferenceAmountCalculatorInterface $referenceAmountCalculator,
         VariationHelperInterface $variationHelper,
         ConfigServiceInterface $configService
@@ -94,9 +76,6 @@ class VariationResponseParser implements VariationResponseParserInterface
         $this->priceResponseParser = $priceResponseParser;
         $this->imageResponseParser = $imageResponseParser;
         $this->stockResponseParser = $stockResponseParser;
-        $this->availabilitiesApi = $availabilitiesApi;
-        $this->itemAttributesApi = $itemAttributesApi;
-        $this->itemBarcodeApi = $itemBarcodeApi;
         $this->referenceAmountCalculator = $referenceAmountCalculator;
         $this->variationHelper = $variationHelper;
         $this->configService = $configService;
@@ -105,17 +84,21 @@ class VariationResponseParser implements VariationResponseParserInterface
     /**
      * @param array $product
      *
-     * @return TransferObjectInterface[]
+     * @throws NotFoundException
+     *
+     * @return array
      */
-    public function parse(array $product)
+    public function parse(array $product): array
     {
-        $productIdentitiy = $this->identityService->findOneBy([
-            'adapterIdentifier' => (string) $product['id'],
-            'adapterName' => PlentymarketsAdapter::NAME,
-            'objectType' => Product::TYPE,
-        ]);
+        $productIdentity = $this->identityService->findOneBy(
+            [
+                'adapterIdentifier' => (string) $product['id'],
+                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType' => Product::TYPE,
+            ]
+        );
 
-        if (null === $productIdentitiy) {
+        if (null === $productIdentity) {
             return [];
         }
 
@@ -127,19 +110,34 @@ class VariationResponseParser implements VariationResponseParserInterface
             return [];
         }
 
-        if (count($variations) > 1) {
-            $variations = array_filter($variations, function (array $variation) {
-                return !empty($variation['variationAttributeValues']);
-            });
+        if (Product::MULTIPACK === $product['itemType']) {
+            $variations = array_filter(
+                $variations,
+                static function (array $variation) {
+                    return $variation['isMain'];
+                }
+            );
         }
 
-        usort($variations, function (array $a, array $b) {
-            if ((int) $a['position'] === (int) $b['position']) {
-                return 0;
-            }
+        if (count($variations) > 1) {
+            $variations = array_filter(
+                $variations,
+                static function (array $variation) {
+                    return !empty($variation['variationAttributeValues']);
+                }
+            );
+        }
 
-            return ((int) $a['position'] < (int) $b['position']) ? -1 : 1;
-        });
+        usort(
+            $variations,
+            static function (array $a, array $b) {
+                if ((int) $a['position'] === (int) $b['position']) {
+                    return 0;
+                }
+
+                return ((int) $a['position'] < (int) $b['position']) ? -1 : 1;
+            }
+        );
 
         $result = [];
 
@@ -152,11 +150,11 @@ class VariationResponseParser implements VariationResponseParserInterface
 
             $variationObject = new Variation();
             $variationObject->setIdentifier($identity->getObjectIdentifier());
-            $variationObject->setProductIdentifier($productIdentitiy->getObjectIdentifier());
+            $variationObject->setProductIdentifier($productIdentity->getObjectIdentifier());
             $variationObject->setActive((bool) $variation['isActive']);
             $variationObject->setNumber($this->getVariationNumber($variation));
-            $variationObject->setStockLimitation($this->getStockLimitation($variation));
-            $variationObject->setBarcodes($this->getBarcodes($variation));
+            $variationObject->setStockLimitation($variation['stockLimitation'] === 1);
+            $variationObject->setBarcodes($this->getBarcodes($product['__barcodes'], $variation));
             $variationObject->setPosition((int) $variation['position']);
             $variationObject->setModel((string) $variation['model']);
             $variationObject->setImages($this->getVariationImages($product['texts'], $variation, $result));
@@ -169,12 +167,13 @@ class VariationResponseParser implements VariationResponseParserInterface
             $variationObject->setMinimumOrderQuantity((float) $variation['minimumOrderQuantity']);
             $variationObject->setIntervalOrderQuantity((float) $variation['intervalOrderQuantity']);
             $variationObject->setReleaseDate($this->getReleaseDate($variation));
-            $variationObject->setShippingTime($this->getShippingTime($variation));
+            $variationObject->setShippingTime($this->getShippingTime($product['__availabilities'], $variation));
             $variationObject->setWidth((int) $variation['widthMM']);
             $variationObject->setHeight((int) $variation['heightMM']);
             $variationObject->setLength((int) $variation['lengthMM']);
             $variationObject->setWeight($this->getVariationWeight($variation));
-            $variationObject->setProperties($this->getVariationProperties($variation));
+            $variationObject->setProperties($this->getVariationProperties($product['__attributes'], $variation));
+            $variationObject->setAttributes($this->getPropertiesAsAttribute($variation['properties']));
 
             $stockObject = $this->stockResponseParser->parse($variation);
 
@@ -182,7 +181,10 @@ class VariationResponseParser implements VariationResponseParserInterface
                 continue;
             }
 
-            $importVariationsWithoutStock = json_decode($this->configService->get('import_variations_without_stock', true));
+            $importVariationsWithoutStock = json_decode(
+                $this->configService->get('import_variations_without_stock', true),
+                512
+            );
 
             if (!$importVariationsWithoutStock && empty($stockObject->getStock())) {
                 continue;
@@ -192,17 +194,23 @@ class VariationResponseParser implements VariationResponseParserInterface
             $result[$stockObject->getIdentifier()] = $stockObject;
         }
 
-        $variations = array_filter($result, function (TransferObjectInterface $object) {
-            return $object instanceof Variation;
-        });
+        $variations = array_filter(
+            $result,
+            static function (TransferObjectInterface $object) {
+                return $object instanceof Variation;
+            }
+        );
 
-        $mainVariationNumber = $this->variationHelper->getMainVariationNumber($variations, $mainVariation);
+        $mainVariationNumber = $this->variationHelper->getMainVariationNumber($mainVariation, $variations);
 
+        /**
+         * @var Variation $variation
+         */
         foreach ($variations as &$variation) {
             if ($variation->getNumber() === $mainVariationNumber) {
                 $variation->setIsMain(true);
 
-                $checkActiveMainVariation = json_decode($this->configService->get('check_active_main_variation'));
+                $checkActiveMainVariation = json_decode($this->configService->get('check_active_main_variation'), 512);
 
                 if ($checkActiveMainVariation && !$mainVariation['isActive']) {
                     $variation->setActive(false);
@@ -220,7 +228,7 @@ class VariationResponseParser implements VariationResponseParserInterface
      *
      * @return string
      */
-    private function getVariationNumber(array $element)
+    private function getVariationNumber(array $element): string
     {
         if ($this->configService->get('variation_number_field', 'number') === 'number') {
             return (string) $element['number'];
@@ -236,11 +244,11 @@ class VariationResponseParser implements VariationResponseParserInterface
      */
     private function getReleaseDate(array $variation)
     {
-        if (null !== $variation['releasedAt']) {
+        try {
             return new DateTimeImmutable($variation['releasedAt']);
+        } catch (Exception $e) {
+            return null;
         }
-
-        return null;
     }
 
     /**
@@ -250,7 +258,7 @@ class VariationResponseParser implements VariationResponseParserInterface
      *
      * @return Image[]
      */
-    private function getVariationImages(array $texts, array $variation, array &$result)
+    private function getVariationImages(array $texts, array $variation, array &$result): array
     {
         $images = [];
 
@@ -264,6 +272,8 @@ class VariationResponseParser implements VariationResponseParserInterface
     /**
      * @param array $variation
      *
+     * @throws NotFoundException
+     *
      * @return null|string
      */
     private function getUnitIdentifier(array $variation)
@@ -273,11 +283,13 @@ class VariationResponseParser implements VariationResponseParserInterface
         }
 
         // Unit
-        $unitIdentity = $this->identityService->findOneBy([
-            'adapterIdentifier' => (string) $variation['unit']['unitId'],
-            'adapterName' => PlentymarketsAdapter::NAME,
-            'objectType' => Unit::TYPE,
-        ]);
+        $unitIdentity = $this->identityService->findOneBy(
+            [
+                'adapterIdentifier' => (string) $variation['unit']['unitId'],
+                'adapterName' => PlentymarketsAdapter::NAME,
+                'objectType' => Unit::TYPE,
+            ]
+        );
 
         if (null === $unitIdentity) {
             throw new NotFoundException('missing mapping for unit');
@@ -288,20 +300,24 @@ class VariationResponseParser implements VariationResponseParserInterface
 
     /**
      * @param array $variation
+     * @param array $availabilities
      *
      * @return int
      */
-    private function getShippingTime(array $variation)
+    private function getShippingTime(array $availabilities, array $variation)
     {
         static $shippingConfigurations;
 
         if (null === $shippingConfigurations) {
-            $shippingConfigurations = $this->availabilitiesApi->findAll();
+            $shippingConfigurations = $availabilities;
         }
 
-        $shippingConfiguration = array_filter($shippingConfigurations, function (array $configuration) use ($variation) {
-            return $configuration['id'] === $variation['availability'];
-        });
+        $shippingConfiguration = array_filter(
+            $shippingConfigurations,
+            static function (array $configuration) use ($variation) {
+                return $configuration['id'] === $variation['availability'];
+            }
+        );
 
         if (empty($shippingConfiguration)) {
             return 0;
@@ -318,16 +334,15 @@ class VariationResponseParser implements VariationResponseParserInterface
 
     /**
      * @param array $variation
+     * @param array $systemBarcodes
      *
      * @return Barcode[]
      */
-    private function getBarcodes(array $variation)
+    private function getBarcodes(array $systemBarcodes, array $variation)
     {
         static $barcodeMapping;
 
         if (null === $barcodeMapping) {
-            $systemBarcodes = $this->itemBarcodeApi->findAll();
-
             foreach ($systemBarcodes as $systemBarcode) {
                 $typeMapping = [
                     'GTIN_13' => Barcode::TYPE_GTIN13,
@@ -344,34 +359,43 @@ class VariationResponseParser implements VariationResponseParserInterface
             $barcodeMapping = array_filter($barcodeMapping);
         }
 
-        $barcodes = array_filter($variation['variationBarcodes'], function (array $barcode) use ($barcodeMapping) {
-            return array_key_exists($barcode['barcodeId'], $barcodeMapping);
-        });
+        $barcodes = array_filter(
+            $variation['variationBarcodes'],
+            static function (array $barcode) use ($barcodeMapping) {
+                return array_key_exists($barcode['barcodeId'], $barcodeMapping);
+            }
+        );
 
-        $barcodes = array_map(function (array $barcode) use ($barcodeMapping) {
-            $barcodeObject = new Barcode();
-            $barcodeObject->setType($barcodeMapping[$barcode['barcodeId']]);
-            $barcodeObject->setCode($barcode['code']);
+        $barcodes = array_map(
+            static function (array $barcode) use ($barcodeMapping) {
+                $barcodeObject = new Barcode();
+                $barcodeObject->setType($barcodeMapping[$barcode['barcodeId']]);
+                $barcodeObject->setCode($barcode['code']);
 
-            return $barcodeObject;
-        }, $barcodes);
+                return $barcodeObject;
+            },
+            $barcodes
+        );
 
         return $barcodes;
     }
 
     /**
      * @param array $variation
+     * @param array $systemAttributes
      *
      * @return Property[]
      */
-    private function getVariationProperties(array $variation)
+    private function getVariationProperties(array $systemAttributes, array $variation)
     {
         static $attributes;
 
         $result = [];
         foreach ((array) $variation['variationAttributeValues'] as $attributeValue) {
             if (!isset($attributes[$attributeValue['attributeId']])) {
-                $attributes[$attributeValue['attributeId']] = $this->itemAttributesApi->findOne($attributeValue['attributeId']);
+                $attributes[$attributeValue['attributeId']] = array_values(array_filter($systemAttributes, function (array $attribute) use ($attributeValue) {
+                    return $attributeValue['attributeId'] === $attribute['id'];
+                }))[0];
             }
 
             $values = $attributes[$attributeValue['attributeId']]['values'];
@@ -391,18 +415,22 @@ class VariationResponseParser implements VariationResponseParserInterface
             $valueNames = $attributes[$attributeValue['attributeId']]['values'][$attributeValue['valueId']]['valueNames'];
             $valuePosition = $attributes[$attributeValue['attributeId']]['values'][$attributeValue['valueId']]['position'];
 
-            $value = Value::fromArray([
-                'value' => $valueNames[0]['name'],
-                'position' => $valuePosition,
-                'translations' => $this->getVariationPropertyValueTranslations($valueNames),
-            ]);
+            $value = Value::fromArray(
+                [
+                    'value' => $valueNames[0]['name'],
+                    'position' => $valuePosition,
+                    'translations' => $this->getVariationPropertyValueTranslations($valueNames),
+                ]
+            );
 
-            $result[] = Property::fromArray([
-                'name' => $propertyNames[0]['name'],
-                'position' => $propertyPosition,
-                'values' => [$value],
-                'translations' => $this->getVariationPropertyTranslations($propertyNames),
-            ]);
+            $result[] = Property::fromArray(
+                [
+                    'name' => $propertyNames[0]['name'],
+                    'position' => $propertyPosition,
+                    'values' => [$value],
+                    'translations' => $this->getVariationPropertyTranslations($propertyNames),
+                ]
+            );
         }
 
         return $result;
@@ -413,26 +441,30 @@ class VariationResponseParser implements VariationResponseParserInterface
      *
      * @return Translation[]
      */
-    private function getVariationPropertyValueTranslations(array $names)
+    private function getVariationPropertyValueTranslations(array $names): array
     {
         $translations = [];
 
         foreach ($names as $name) {
-            $languageIdentifier = $this->identityService->findOneBy([
-                'adapterIdentifier' => $name['lang'],
-                'adapterName' => PlentymarketsAdapter::NAME,
-                'objectType' => Language::TYPE,
-            ]);
+            $languageIdentifier = $this->identityService->findOneBy(
+                [
+                    'adapterIdentifier' => $name['lang'],
+                    'adapterName' => PlentymarketsAdapter::NAME,
+                    'objectType' => Language::TYPE,
+                ]
+            );
 
             if (null === $languageIdentifier) {
                 continue;
             }
 
-            $translations[] = Translation::fromArray([
-                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                'property' => 'value',
-                'value' => $name['name'],
-            ]);
+            $translations[] = Translation::fromArray(
+                [
+                    'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                    'property' => 'value',
+                    'value' => $name['name'],
+                ]
+            );
         }
 
         return $translations;
@@ -443,26 +475,30 @@ class VariationResponseParser implements VariationResponseParserInterface
      *
      * @return Translation[]
      */
-    private function getVariationPropertyTranslations(array $names)
+    private function getVariationPropertyTranslations(array $names): array
     {
         $translations = [];
 
         foreach ($names as $name) {
-            $languageIdentifier = $this->identityService->findOneBy([
-                'adapterIdentifier' => $name['lang'],
-                'adapterName' => PlentymarketsAdapter::NAME,
-                'objectType' => Language::TYPE,
-            ]);
+            $languageIdentifier = $this->identityService->findOneBy(
+                [
+                    'adapterIdentifier' => $name['lang'],
+                    'adapterName' => PlentymarketsAdapter::NAME,
+                    'objectType' => Language::TYPE,
+                ]
+            );
 
             if (null === $languageIdentifier) {
                 continue;
             }
 
-            $translations[] = Translation::fromArray([
-                'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
-                'property' => 'name',
-                'value' => $name['name'],
-            ]);
+            $translations[] = Translation::fromArray(
+                [
+                    'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
+                    'property' => 'name',
+                    'value' => $name['name'],
+                ]
+            );
         }
 
         return $translations;
@@ -473,7 +509,7 @@ class VariationResponseParser implements VariationResponseParserInterface
      *
      * @return float
      */
-    private function getVariationWeight(array $variation)
+    private function getVariationWeight(array $variation): float
     {
         if ($variation['weightNetG'] > 0) {
             $weight = $variation['weightNetG'];
@@ -485,16 +521,54 @@ class VariationResponseParser implements VariationResponseParserInterface
     }
 
     /**
-     * @param array $variation
+     * @param array $properties
      *
-     * @return bool
+     * @return Attribute[]
      */
-    private function getStockLimitation(array $variation)
+    private function getPropertiesAsAttribute(array $properties): array
     {
-        if ($variation['stockLimitation']) {
-            return true;
+        $attributes = [];
+
+        /**
+         * @var Attribute $attribute
+         */
+        foreach ($properties as $property) {
+            if (!isset($property['relationValues'][0])) {
+                continue;
+            }
+
+            $attribute = new Attribute();
+            $attribute->setKey('propertyId' . $property['propertyId']);
+            $attribute->setValue($property['relationValues'][0]['value']);
+            $attribute->setType($this->getPropertyType($property['propertyRelation']));
+
+            $attributes[] = $attribute;
         }
 
-        return false;
+        return $attributes;
+    }
+
+    /**
+     * @param array $propertyRelation
+     *
+     * @return string
+     */
+    private function getPropertyType(array $propertyRelation): string
+    {
+        switch ($propertyRelation['cast']) {
+            case 'shortText':
+                $type = TypeMapping::TYPE_STRING;
+                break;
+            case 'int':
+                $type = TypeMapping::TYPE_INTEGER;
+                break;
+            case 'float':
+                $type = TypeMapping::TYPE_FLOAT;
+                break;
+            default:
+                $type = TypeMapping::TYPE_TEXT;
+        }
+
+        return $type;
     }
 }

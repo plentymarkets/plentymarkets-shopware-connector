@@ -4,11 +4,11 @@ namespace SystemConnector\TransferObject\Media;
 
 use SystemConnector\TransferObject\AbstractTransferObject;
 use SystemConnector\TransferObject\AttributableInterface;
-use SystemConnector\TransferObject\TranslateableInterface;
+use SystemConnector\TransferObject\TranslatableInterface;
 use SystemConnector\ValueObject\Attribute\Attribute;
 use SystemConnector\ValueObject\Translation\Translation;
 
-class Media extends AbstractTransferObject implements TranslateableInterface, AttributableInterface
+class Media extends AbstractTransferObject implements TranslatableInterface, AttributableInterface
 {
     const TYPE = 'Media';
 
@@ -62,7 +62,7 @@ class Media extends AbstractTransferObject implements TranslateableInterface, At
     /**
      * {@inheritdoc}
      */
-    public function getType()
+    public function getType(): string
     {
         return self::TYPE;
     }
@@ -70,7 +70,7 @@ class Media extends AbstractTransferObject implements TranslateableInterface, At
     /**
      * {@inheritdoc}
      */
-    public function getIdentifier()
+    public function getIdentifier(): string
     {
         return $this->identifier;
     }
@@ -86,7 +86,7 @@ class Media extends AbstractTransferObject implements TranslateableInterface, At
     /**
      * @return string
      */
-    public function getMediaCategoryIdentifier()
+    public function getMediaCategoryIdentifier(): string
     {
         return $this->mediaCategoryIdentifier;
     }
@@ -102,7 +102,7 @@ class Media extends AbstractTransferObject implements TranslateableInterface, At
     /**
      * @return string
      */
-    public function getLink()
+    public function getLink(): string
     {
         return $this->link;
     }
@@ -118,7 +118,7 @@ class Media extends AbstractTransferObject implements TranslateableInterface, At
     /**
      * @return string
      */
-    public function getFilename()
+    public function getFilename(): string
     {
         return $this->filename;
     }
@@ -134,7 +134,7 @@ class Media extends AbstractTransferObject implements TranslateableInterface, At
     /**
      * @return string
      */
-    public function getHash()
+    public function getHash(): string
     {
         return $this->hash;
     }
@@ -182,7 +182,7 @@ class Media extends AbstractTransferObject implements TranslateableInterface, At
     /**
      * @return Translation[]
      */
-    public function getTranslations()
+    public function getTranslations(): array
     {
         return $this->translations;
     }
@@ -198,7 +198,7 @@ class Media extends AbstractTransferObject implements TranslateableInterface, At
     /**
      * @return Attribute[]
      */
-    public function getAttributes()
+    public function getAttributes(): array
     {
         return $this->attributes;
     }

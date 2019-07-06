@@ -33,7 +33,7 @@ class Definition
     private $priority = 0;
 
     /**
-     * active/deactive flag. Can be used to decorate definitions and disable them completly
+     * active/deactivate flag. Can be used to decorate definitions and disable them completely
      *
      * @var bool
      */
@@ -42,7 +42,7 @@ class Definition
     /**
      * @return string
      */
-    public function getOriginAdapterName()
+    public function getOriginAdapterName(): string
     {
         return $this->originAdapterName;
     }
@@ -58,7 +58,7 @@ class Definition
     /**
      * @return string
      */
-    public function getDestinationAdapterName()
+    public function getDestinationAdapterName(): string
     {
         return $this->destinationAdapterName;
     }
@@ -74,7 +74,7 @@ class Definition
     /**
      * @return string
      */
-    public function getObjectType()
+    public function getObjectType(): string
     {
         return $this->objectType;
     }
@@ -90,7 +90,7 @@ class Definition
     /**
      * @return int
      */
-    public function getPriority()
+    public function getPriority(): int
     {
         return $this->priority;
     }
@@ -110,7 +110,7 @@ class Definition
     /**
      * @return bool
      */
-    public function isActive()
+    public function isActive(): bool
     {
         return $this->active;
     }

@@ -38,11 +38,11 @@ class PaymentRequestGeneratorTest extends RequestGeneratorTest
         $this->assertArraySubset($expectedRequest, $request);
     }
 
-    public function getPaymentObjects()
+    public function getPaymentObjects(): array
     {
         $payment = new Payment();
         $payment->setIdentifier(Uuid::uuid4()->toString());
-        $payment->setOrderIdentifer(Uuid::uuid4()->toString());
+        $payment->setOrderIdentifier(Uuid::uuid4()->toString());
         $payment->setAmount(200);
         $payment->setShopIdentifier(Uuid::uuid4()->toString());
         $payment->setCurrencyIdentifier(Uuid::uuid4()->toString());

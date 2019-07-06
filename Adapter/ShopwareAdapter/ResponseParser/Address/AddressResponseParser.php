@@ -25,19 +25,24 @@ class AddressResponseParser implements AddressResponseParserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $entry
+     *
+     * @throws NotFoundException
+     * @throws NotFoundException
+     *
+     * @return null|Address
      */
     public function parse(array $entry)
     {
         $entry['salutation'] = strtolower($entry['salutation']);
 
-        $countryIdentitiy = $this->identityService->findOneBy([
+        $countryIdentity = $this->identityService->findOneBy([
             'adapterIdentifier' => $entry['country']['id'],
             'adapterName' => ShopwareAdapter::NAME,
             'objectType' => Country::TYPE,
         ]);
 
-        if (null === $countryIdentitiy) {
+        if (null === $countryIdentity) {
             throw new NotFoundException('country mapping missing - ' . json_encode($entry));
         }
 
@@ -46,7 +51,7 @@ class AddressResponseParser implements AddressResponseParserInterface
         } elseif ($entry['salutation'] === 'ms' || $entry['salutation'] === 'frau') {
             $gender = Customer::GENDER_FEMALE;
         } else {
-            $gender = null;
+            $gender = Customer::GENDER_DIVERSE;
         }
 
         $params = [
@@ -56,7 +61,7 @@ class AddressResponseParser implements AddressResponseParserInterface
             'street' => $entry['street'],
             'postalCode' => $entry['zipCode'],
             'city' => $entry['city'],
-            'countryIdentifier' => $countryIdentitiy->getObjectIdentifier(),
+            'countryIdentifier' => $countryIdentity->getObjectIdentifier(),
             'vatId' => !empty($entry['vatId']) ? $entry['vatId'] : null,
         ];
 

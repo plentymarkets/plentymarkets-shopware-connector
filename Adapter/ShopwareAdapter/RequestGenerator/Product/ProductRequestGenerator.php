@@ -77,7 +77,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generate(Product $product)
+    public function generate(Product $product): array
     {
         $this->addShippingProfilesAsAttributes($product);
 
@@ -131,7 +131,6 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
             'categories' => $this->getCategories($product),
             'seoCategories' => $this->getSeoCategories($product),
             'taxId' => $vatIdentity->getAdapterIdentifier(),
-            'lastStock' => $product->hasStockLimitation(),
             'notification' => $this->configService->get('item_notification') === 'true' ? 1 : 0,
             'active' => $product->isActive(),
             'highlight' => $this->getHighlightFlag($product),
@@ -186,7 +185,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
                 continue;
             }
 
-            $existingAttributes = array_filter($attributes, function (Attribute $attribute) use ($profileIdentity) {
+            $existingAttributes = array_filter($attributes, static function (Attribute $attribute) use ($profileIdentity) {
                 return $attribute->getKey() === 'shippingProfile' . $profileIdentity->getAdapterIdentifier();
             });
 
@@ -215,7 +214,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
      *
      * @return array
      */
-    private function getLinkedProducts(Product $product, $type = LinkedProduct::TYPE_SIMILAR)
+    private function getLinkedProducts(Product $product, $type = LinkedProduct::TYPE_SIMILAR): array
     {
         $result = [];
 
@@ -259,7 +258,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
      *
      * @return array
      */
-    private function getPropertyData(Product $product)
+    private function getPropertyData(Product $product): array
     {
         /**
          * @var EntityRepository $groupRepository
@@ -350,7 +349,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
      *
      * @return array
      */
-    private function getCategories(Product $product)
+    private function getCategories(Product $product): array
     {
         /**
          * @var CategoryRepository $categoryRepository
@@ -423,7 +422,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
         return $this->categories;
     }
 
-    private function getSeoCategories(Product $product)
+    private function getSeoCategories(Product $product): array
     {
         /**
          * @var CategoryRepository $categoryRepository
@@ -487,7 +486,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
      *
      * @return int
      */
-    private function getHighlightFlag(Product $product)
+    private function getHighlightFlag(Product $product): int
     {
         foreach ($product->getBadges() as $badge) {
             if ($badge->getType() === Badge::TYPE_HIGHLIGHT) {

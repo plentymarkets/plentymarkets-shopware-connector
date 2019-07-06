@@ -14,5 +14,5 @@ interface AddressRequestGeneratorInterface
      *
      * @return array
      */
-    public function generate(Address $address, Order $order, $addressType = 0);
+    public function generate(Address $address, Order $order, $addressType = 0): array;
 }

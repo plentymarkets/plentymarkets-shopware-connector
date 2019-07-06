@@ -11,6 +11,7 @@ class Address extends AbstractValueObject implements AttributableInterface
 {
     const GENDER_MALE = 'male';
     const GENDER_FEMALE = 'female';
+    const GENDER_DIVERSE = 'diverse';
 
     /**
      * @var null|string
@@ -122,7 +123,7 @@ class Address extends AbstractValueObject implements AttributableInterface
     /**
      * @return array
      */
-    public function getGenders()
+    public function getGenders(): array
     {
         $reflection = new ReflectionClass(__CLASS__);
 
@@ -132,7 +133,7 @@ class Address extends AbstractValueObject implements AttributableInterface
     /**
      * @return string
      */
-    public function getGender()
+    public function getGender(): string
     {
         return $this->gender;
     }
@@ -228,7 +229,7 @@ class Address extends AbstractValueObject implements AttributableInterface
     /**
      * @return string
      */
-    public function getPostalCode()
+    public function getPostalCode(): string
     {
         return $this->postalCode;
     }
@@ -244,7 +245,7 @@ class Address extends AbstractValueObject implements AttributableInterface
     /**
      * @return string
      */
-    public function getCity()
+    public function getCity(): string
     {
         return $this->city;
     }
@@ -260,7 +261,7 @@ class Address extends AbstractValueObject implements AttributableInterface
     /**
      * @return string
      */
-    public function getCountryIdentifier()
+    public function getCountryIdentifier(): string
     {
         return $this->countryIdentifier;
     }
@@ -324,7 +325,7 @@ class Address extends AbstractValueObject implements AttributableInterface
     /**
      * @return Attribute[]
      */
-    public function getAttributes()
+    public function getAttributes(): array
     {
         return $this->attributes;
     }

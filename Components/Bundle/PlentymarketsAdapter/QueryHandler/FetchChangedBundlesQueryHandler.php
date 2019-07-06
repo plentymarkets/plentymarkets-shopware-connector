@@ -54,7 +54,7 @@ class FetchChangedBundlesQueryHandler implements QueryHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(QueryInterface $query)
+    public function supports(QueryInterface $query): bool
     {
         return $query instanceof FetchTransferObjectQuery &&
             $query->getAdapterName() === PlentymarketsAdapter::NAME &&
@@ -67,10 +67,10 @@ class FetchChangedBundlesQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query)
     {
-        $lastCangedTime = $this->getChangedDateTime();
+        $lastChangedTime = $this->getChangedDateTime();
         $currentDateTime = $this->getCurrentDateTime();
 
-        $elements = $this->itemApi->findChanged($lastCangedTime, $currentDateTime);
+        $elements = $this->itemApi->findChanged($lastChangedTime, $currentDateTime);
 
         $this->outputHandler->startProgressBar(count($elements));
 
@@ -89,9 +89,7 @@ class FetchChangedBundlesQueryHandler implements QueryHandlerInterface
 
             $parsedElements = array_filter($result);
 
-            foreach ($parsedElements as $parsedElement) {
-                yield $parsedElement;
-            }
+            yield from $parsedElements;
 
             $this->outputHandler->advanceProgressBar();
         }

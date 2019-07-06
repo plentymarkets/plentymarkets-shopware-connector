@@ -4,6 +4,7 @@ namespace PlentyConnector\Components\PayPal\Shopware;
 
 use DateTimeImmutable;
 use Doctrine\DBAL\Connection;
+use Exception;
 use PlentyConnector\Components\PayPal\PaymentData\PayPalPlusInvoicePaymentData;
 use ShopwareAdapter\ResponseParser\Payment\PaymentResponseParserInterface;
 use SystemConnector\TransferObject\Payment\Payment;
@@ -31,7 +32,7 @@ class PayPalPlusInvoicePaymentResponseParser implements PaymentResponseParserInt
     /**
      * {@inheritdoc}
      */
-    public function parse(array $element)
+    public function parse(array $element): array
     {
         $payments = $this->parentResponseParser->parse($element);
 
@@ -57,7 +58,7 @@ class PayPalPlusInvoicePaymentResponseParser implements PaymentResponseParserInt
             $query = 'SELECT * FROM s_payment_paypal_plus_payment_instruction WHERE ordernumber = ?';
 
             return $this->connection->fetchAssoc($query, [$ordernumber]);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return false;
         }
     }
@@ -79,7 +80,7 @@ class PayPalPlusInvoicePaymentResponseParser implements PaymentResponseParserInt
         $paymentData->setAmountValue($data['amount_value']);
         $paymentData->setBankIdentifierCode($data['bank_identifier_code']);
         $paymentData->setInternationalBankAccountNumber($data['international_bank_account_number']);
-        $paymentData->setAccountHolderName($data['account_holder_name']);
+        $paymentData->setAccountHolderName((string) $data['account_holder_name']);
         $paymentData->setBankName($data['bank_name']);
         $paymentData->setInstructionType($data['instruction_type']);
         $paymentData->setReferenceNumber($data['reference_number']);

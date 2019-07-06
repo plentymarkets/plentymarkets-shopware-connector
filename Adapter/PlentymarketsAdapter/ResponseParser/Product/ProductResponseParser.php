@@ -3,11 +3,9 @@
 namespace PlentymarketsAdapter\ResponseParser\Product;
 
 use DateTimeImmutable;
-use PlentymarketsAdapter\Client\ClientInterface;
+use PlentymarketsAdapter\Helper\PropertyHelperInterface;
 use PlentymarketsAdapter\Helper\VariationHelperInterface;
 use PlentymarketsAdapter\PlentymarketsAdapter;
-use PlentymarketsAdapter\ReadApi\Item\Property\Group as PropertyGroupApi;
-use PlentymarketsAdapter\ReadApi\Item\Property\Name as PropertyNameApi;
 use PlentymarketsAdapter\ResponseParser\Product\Image\ImageResponseParserInterface;
 use PlentymarketsAdapter\ResponseParser\Product\Variation\VariationResponseParserInterface;
 use Psr\Log\LoggerInterface;
@@ -56,21 +54,15 @@ class ProductResponseParser implements ProductResponseParserInterface
      * @var VariationResponseParserInterface
      */
     private $variationResponseParser;
-
     /**
      * @var VariationHelperInterface
      */
     private $variationHelper;
 
     /**
-     * @var PropertyGroupApi
+     * @var PropertyHelperInterface
      */
-    private $itemsPropertiesGroupsNamesApi;
-
-    /**
-     * @var PropertyNameApi
-     */
-    private $itemsPropertiesNamesApi;
+    private $propertyHelper;
 
     public function __construct(
         ConfigServiceInterface $configService,
@@ -79,7 +71,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         ImageResponseParserInterface $imageResponseParser,
         VariationResponseParserInterface $variationResponseParser,
         VariationHelperInterface $variationHelper,
-        ClientInterface $client
+        PropertyHelperInterface $propertyHelper
     ) {
         $this->configService = $configService;
         $this->identityService = $identityService;
@@ -87,22 +79,23 @@ class ProductResponseParser implements ProductResponseParserInterface
         $this->imageResponseParser = $imageResponseParser;
         $this->variationResponseParser = $variationResponseParser;
         $this->variationHelper = $variationHelper;
-
-        $this->itemsPropertiesGroupsNamesApi = new PropertyGroupApi($client);
-        $this->itemsPropertiesNamesApi = new PropertyNameApi($client);
+        $this->propertyHelper = $propertyHelper;
     }
 
     /**
      * @param array $product
      *
+     * @throws NotFoundException
+     * @throws NotFoundException
+     *
      * @return TransferObjectInterface[]
      */
-    public function parse(array $product)
+    public function parse(array $product): array
     {
         $result = [];
 
         if (empty($product['texts'])) {
-            $this->logger->notice('the product has no text fieds and will be skipped', [
+            $this->logger->notice('the product has no text fields and will be skipped', [
                 'product id' => $product['id'],
             ]);
 
@@ -127,7 +120,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             return [];
         }
 
-        $variations = array_filter($candidatesForProcessing, function (TransferObjectInterface $object) {
+        $variations = array_filter($candidatesForProcessing, static function (TransferObjectInterface $object) {
             return $object instanceof Variation;
         });
 
@@ -139,16 +132,15 @@ class ProductResponseParser implements ProductResponseParserInterface
         $productObject->setIdentifier($identity->getObjectIdentifier());
         $productObject->setName((string) $product['texts'][0]['name1']);
         $productObject->setActive($this->getActive($variations, $mainVariation));
-        $productObject->setNumber($this->variationHelper->getMainVariationNumber($variations, $mainVariation));
+        $productObject->setNumber($this->variationHelper->getMainVariationNumber($mainVariation, $variations));
         $productObject->setBadges($this->getBadges($product));
         $productObject->setShopIdentifiers($this->variationHelper->getShopIdentifiers($mainVariation));
         $productObject->setManufacturerIdentifier($this->getManufacturerIdentifier($product));
         $productObject->setCategoryIdentifiers($this->getCategories($mainVariation));
-        $productObject->setDefaultCategoryIdentifiers($this->getDafaultCategories($mainVariation));
+        $productObject->setDefaultCategoryIdentifiers($this->getDefaultCategories($mainVariation));
         $productObject->setShippingProfileIdentifiers($this->getShippingProfiles($product));
         $productObject->setImages($this->getImages($product, $product['texts'], $result));
         $productObject->setVatRateIdentifier($this->getVatRateIdentifier($mainVariation));
-        $productObject->setStockLimitation($this->getStockLimitation($product));
         $productObject->setDescription((string) $product['texts'][0]['shortDescription']);
         $productObject->setLongDescription((string) $product['texts'][0]['description']);
         $productObject->setMetaTitle((string) $product['texts'][0]['name1']);
@@ -156,10 +148,11 @@ class ProductResponseParser implements ProductResponseParserInterface
         $productObject->setMetaKeywords((string) $product['texts'][0]['keywords']);
         $productObject->setMetaRobots('INDEX, FOLLOW');
         $productObject->setLinkedProducts($this->getLinkedProducts($product));
-        $productObject->setProperties($this->getProperties($mainVariation));
+        $productObject->setProperties($this->getProperties($product, $mainVariation));
         $productObject->setTranslations($this->getProductTranslations($product['texts']));
         $productObject->setAvailableFrom($this->getAvailableFrom($mainVariation));
         $productObject->setAvailableTo($this->getAvailableTo($mainVariation));
+        $productObject->setCreatedAt($this->getCreatedAt($mainVariation));
         $productObject->setAttributes($this->getAttributes($product));
         $productObject->setVariantConfiguration($this->getVariantConfiguration($variations));
 
@@ -176,41 +169,28 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return TransferObjectInterface[]
      */
-    private function addProductAttributesToVariation(Product $product, array $candidatesForProcessing = [])
+    private function addProductAttributesToVariation(Product $product, array $candidatesForProcessing = []): array
     {
-        return array_map(function (TransferObjectInterface $object) use ($product) {
-            if (!($object instanceof Variation)) {
+        return array_map(
+            static function (TransferObjectInterface $object) use ($product) {
+                if (!($object instanceof Variation)) {
+                    return $object;
+                }
+
+                $object->setAttributes(array_merge($object->getAttributes(), $product->getAttributes()));
+
                 return $object;
-            }
-
-            $object->setAttributes(array_merge($object->getAttributes(), $product->getAttributes()));
-
-            return $object;
-        }, $candidatesForProcessing);
-    }
-
-    /**
-     * @param array $product
-     *
-     * @return bool
-     */
-    private function getStockLimitation(array $product)
-    {
-        foreach ($product['variations'] as $variation) {
-            if (!$variation['stockLimitation']) {
-                return false;
-            }
-        }
-
-        return true;
+            }, $candidatesForProcessing);
     }
 
     /**
      * @param array $variation
      *
+     * @throws NotFoundException
+     *
      * @return string
      */
-    private function getVatRateIdentifier(array $variation)
+    private function getVatRateIdentifier(array $variation): string
     {
         $vatRateIdentity = $this->identityService->findOneBy([
             'adapterIdentifier' => $variation['vatId'],
@@ -228,9 +208,11 @@ class ProductResponseParser implements ProductResponseParserInterface
     /**
      * @param array $product
      *
+     * @throws NotFoundException
+     *
      * @return string
      */
-    private function getManufacturerIdentifier(array $product)
+    private function getManufacturerIdentifier(array $product): string
     {
         $manufacturerIdentity = $this->identityService->findOneOrCreate(
             (string) $product['manufacturerId'],
@@ -250,7 +232,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return array
      */
-    private function getShippingProfiles(array $product)
+    private function getShippingProfiles(array $product): array
     {
         $shippingProfiles = [];
         foreach ($product['itemShippingProfiles'] as $profile) {
@@ -277,7 +259,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return Image[]
      */
-    private function getImages(array $product, array $texts, array &$result)
+    private function getImages(array $product, array $texts, array &$result): array
     {
         $images = [];
         foreach ($product['itemImages'] as $entry) {
@@ -292,7 +274,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return array
      */
-    private function getDafaultCategories(array $mainVariation)
+    private function getDefaultCategories(array $mainVariation): array
     {
         $defaultCategories = [];
 
@@ -320,7 +302,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return Translation[]
      */
-    private function getProductTranslations(array $texts)
+    private function getProductTranslations(array $texts): array
     {
         $translations = [];
 
@@ -374,7 +356,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return array
      */
-    private function getCategories(array $mainVariation)
+    private function getCategories(array $mainVariation): array
     {
         $categories = [];
         foreach ($mainVariation['variationCategories'] as $category) {
@@ -401,7 +383,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return LinkedProduct[]
      */
-    private function getLinkedProducts(array $product)
+    private function getLinkedProducts(array $product): array
     {
         $result = [];
 
@@ -442,7 +424,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return Property[]
      */
-    private function getProperties(array $mainVariation)
+    private function getProperties(array $product, array $mainVariation)
     {
         $result = [];
 
@@ -459,7 +441,7 @@ class ProductResponseParser implements ProductResponseParserInterface
             $translations = [];
 
             if ($property['property']['valueType'] === 'empty' && null !== $property['property']['propertyGroupId']) {
-                $propertyGroupNames = $this->itemsPropertiesGroupsNamesApi->findOne($property['property']['propertyGroupId']);
+                $propertyGroupNames = $this->propertyHelper->getPropertyGroupNamesById($property['property']['propertyGroupId'], $product['__propertyGroups']);
 
                 if (empty($propertyGroupNames[0]['name'])) {
                     continue;
@@ -485,7 +467,7 @@ class ProductResponseParser implements ProductResponseParserInterface
                     ]);
                 }
 
-                $propertyNames = $this->itemsPropertiesNamesApi->findOne($property['property']['id']);
+                $propertyNames = $this->propertyHelper->getPropertyNamesById($property['property']['id'], $product['__properties']);
                 $valueTranslations = [];
 
                 foreach ($propertyNames as $name) {
@@ -633,11 +615,25 @@ class ProductResponseParser implements ProductResponseParserInterface
      */
     private function getAvailableTo(array $mainVariation)
     {
-        if (!empty($mainVariation['availableUntil'])) {
+        try {
             return new DateTimeImmutable($mainVariation['availableUntil']);
+        } catch (Exception $e) {
+            return null;
         }
+    }
 
-        return null;
+    /**
+     * @param array $mainVariation
+     *
+     * @return null|DateTimeImmutable
+     */
+    private function getCreatedAt(array $mainVariation)
+    {
+        try {
+            return new DateTimeImmutable($mainVariation['createdAt']);
+        } catch (Exception $e) {
+            return null;
+        }
     }
 
     /**
@@ -646,9 +642,9 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return bool
      */
-    private function getActive(array $variations, array $mainVariation)
+    private function getActive(array $variations, array $mainVariation): bool
     {
-        $checkActiveMainVariation = json_decode($this->configService->get('check_active_main_variation'));
+        $checkActiveMainVariation = json_decode($this->configService->get('check_active_main_variation'), 512);
 
         if ($checkActiveMainVariation && !$mainVariation['isActive']) {
             return false;
@@ -668,15 +664,15 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return Property[]
      */
-    private function getVariantConfiguration(array $variations = [])
+    private function getVariantConfiguration(array $variations = []): array
     {
-        $properties = [];
+        $properties = [[]];
 
         foreach ($variations as $variation) {
-            $properties = array_merge($properties, $variation->getProperties());
+            $properties[] = $variation->getProperties();
         }
 
-        return $properties;
+        return array_merge(...$properties);
     }
 
     /**
@@ -684,7 +680,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return Attribute[]
      */
-    private function getAttributes(array $product)
+    private function getAttributes(array $product): array
     {
         $attributes = [];
 
@@ -706,6 +702,7 @@ class ProductResponseParser implements ProductResponseParserInterface
         $attributes[] = $this->getAgeRestrictionAsAttribute($product);
         $attributes[] = $this->getSecondProductNameAsAttribute($product);
         $attributes[] = $this->getThirdProductNameAsAttribute($product);
+        $attributes[] = $this->getItemIdAsAttribute($product);
 
         return $attributes;
     }
@@ -715,7 +712,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return Attribute
      */
-    private function getShortDescriptionAsAttribute(array $product)
+    private function getShortDescriptionAsAttribute(array $product): Attribute
     {
         $translations = [];
 
@@ -750,7 +747,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return Attribute
      */
-    private function getTechnicalDataAsAttribute(array $product)
+    private function getTechnicalDataAsAttribute(array $product): Attribute
     {
         $translations = [];
 
@@ -785,7 +782,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return Attribute
      */
-    private function getSecondProductNameAsAttribute(array $product)
+    private function getSecondProductNameAsAttribute(array $product): Attribute
     {
         $translations = [];
 
@@ -820,7 +817,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return Attribute
      */
-    private function getThirdProductNameAsAttribute(array $product)
+    private function getThirdProductNameAsAttribute(array $product): Attribute
     {
         $translations = [];
 
@@ -855,7 +852,7 @@ class ProductResponseParser implements ProductResponseParserInterface
      *
      * @return Attribute
      */
-    private function getAgeRestrictionAsAttribute(array $product)
+    private function getAgeRestrictionAsAttribute(array $product): Attribute
     {
         $attribute = new Attribute();
         $attribute->setKey('ageRestriction');
@@ -867,9 +864,23 @@ class ProductResponseParser implements ProductResponseParserInterface
     /**
      * @param array $product
      *
+     * @return Attribute
+     */
+    private function getItemIdAsAttribute(array $product): Attribute
+    {
+        $attribute = new Attribute();
+        $attribute->setKey('itemId');
+        $attribute->setValue((string) $product['id']);
+
+        return $attribute;
+    }
+
+    /**
+     * @param array $product
+     *
      * @return Badge[]
      */
-    private function getBadges(array $product)
+    private function getBadges(array $product): array
     {
         if ($product['storeSpecial'] === 3) {
             $badge = new Badge();

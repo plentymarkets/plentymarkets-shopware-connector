@@ -2,22 +2,22 @@
 
 namespace SystemConnector\Translation;
 
-use SystemConnector\TransferObject\TranslateableInterface;
+use SystemConnector\TransferObject\TranslatableInterface;
 
 interface TranslationHelperInterface
 {
     /**
-     * @param TranslateableInterface $object
+     * @param TranslatableInterface $object
      *
      * @return array
      */
-    public function getLanguageIdentifiers(TranslateableInterface $object);
+    public function getLanguageIdentifiers(TranslatableInterface $object): array;
 
     /**
-     * @param string                 $languageIdentifier
-     * @param TranslateableInterface $object
+     * @param string                $languageIdentifier
+     * @param TranslatableInterface $object
      *
-     * @return TranslateableInterface
+     * @return TranslatableInterface
      */
-    public function translate($languageIdentifier, TranslateableInterface $object);
+    public function translate($languageIdentifier, TranslatableInterface $object): TranslatableInterface;
 }

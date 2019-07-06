@@ -6,7 +6,10 @@ use DeepCopy\DeepCopy;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use InvalidArgumentException;
+use Shopware\Components\Api\Exception\CustomValidationException;
 use Shopware\Components\Api\Exception\NotFoundException;
+use Shopware\Components\Api\Exception\ParameterMissingException;
+use Shopware\Components\Api\Exception\ValidationException;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Category as CategoryResource;
 use Shopware\Models\Category\Category as CategoryModel;
@@ -43,11 +46,6 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     private $translationHelper;
 
     /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
-
-    /**
      * @var AttributeDataPersisterInterface
      */
     private $attributePersister;
@@ -76,7 +74,6 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     ) {
         $this->identityService = $identityService;
         $this->translationHelper = $translationHelper;
-        $this->entityManager = $entityManager;
         $this->attributePersister = $attributePersister;
         $this->translationDataPersister = $translationDataPersister;
         $this->categoryRepository = $entityManager->getRepository(CategoryModel::class);
@@ -86,7 +83,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(CommandInterface $command)
+    public function supports(CommandInterface $command): bool
     {
         return $command instanceof TransferObjectCommand &&
             $command->getAdapterName() === ShopwareAdapter::NAME &&
@@ -95,11 +92,14 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param CommandInterface $command
      *
-     * @var TransferObjectCommand $command
+     * @throws IdentityNotFoundException
+     * @throws IdentityNotFoundException
+     *
+     * @return bool
      */
-    public function handle(CommandInterface $command)
+    public function handle(CommandInterface $command): bool
     {
         /**
          * @var Category $category
@@ -137,24 +137,10 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
 
     /**
      * @param Category $category
-     * @param Identity $shopIdentity
      */
-    private function prepareCategory(Category $category, Identity $shopIdentity)
+    private function prepareCategory(Category $category)
     {
         $attributes = $category->getAttributes();
-
-        $shopAttribute = array_filter($attributes, function (Attribute $attribute) {
-            return 'shopIdentifier' === $attribute->getKey();
-        });
-
-        if (!empty($shopAttribute)) {
-            throw new InvalidArgumentException('shopIdentifier is not a allowed attribute key');
-        }
-
-        $attributes[] = Attribute::fromArray([
-            'key' => 'shopIdentifier',
-            'value' => $shopIdentity->getAdapterIdentifier(),
-        ]);
 
         $attributes[] = Attribute::fromArray([
             'key' => 'metaRobots',
@@ -167,6 +153,16 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     /**
      * @param Category $category
      * @param Identity $shopIdentity
+     *
+     * @throws IdentityNotFoundException
+     * @throws NotFoundException
+     * @throws CustomValidationException
+     * @throws ParameterMissingException
+     * @throws ValidationException
+     * @throws ValidationException
+     * @throws ParameterMissingException
+     * @throws IdentityNotFoundException
+     * @throws ParameterMissingException
      *
      * @return null|Identity
      */
@@ -184,7 +180,13 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             return null;
         }
 
-        $this->prepareCategory($category, $shopIdentity);
+        $this->prepareCategory($category);
+
+        $mainCategory = $shop->getCategory();
+
+        if (null === $mainCategory) {
+            throw new InvalidArgumentException('shop without main category assignment');
+        }
 
         $shopLocale = $shop->getLocale();
 
@@ -216,12 +218,6 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         }
 
         if (null === $category->getParentIdentifier()) {
-            $mainCategory = $shop->getCategory();
-
-            if (null === $mainCategory) {
-                throw new InvalidArgumentException('shop without main cateogry assignment');
-            }
-
             $parentCategory = $mainCategory->getId();
         } else {
             $parentCategoryIdentities = $this->identityService->findBy([
@@ -230,8 +226,8 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
                 'adapterName' => ShopwareAdapter::NAME,
             ]);
 
-            $possibleIdentities = array_filter($parentCategoryIdentities, function (Identity $identity) use ($shopIdentity) {
-                return $this->validIdentity($identity, $shopIdentity);
+            $possibleIdentities = array_filter($parentCategoryIdentities, function (Identity $identity) use ($mainCategory) {
+                return $this->validIdentity($identity, $mainCategory);
             });
 
             $parentCategoryIdentity = null;
@@ -255,8 +251,8 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             'adapterName' => ShopwareAdapter::NAME,
         ]);
 
-        $possibleIdentities = array_filter($categoryIdentities, function (Identity $identity) use ($shopIdentity) {
-            return $this->validIdentity($identity, $shopIdentity);
+        $possibleIdentities = array_filter($categoryIdentities, function (Identity $identity) use ($mainCategory) {
+            return $this->validIdentity($identity, $mainCategory);
         });
 
         $categoryIdentity = null;
@@ -282,7 +278,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
 
             if (null !== $existingCategory) {
                 $categoryIdentity = $this->identityService->insert(
-                    (string) $category->getIdentifier(),
+                    $category->getIdentifier(),
                     Category::TYPE,
                     (string) $existingCategory,
                     ShopwareAdapter::NAME
@@ -333,7 +329,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             $categoryModel = $resource->create($params);
 
             $categoryIdentity = $this->identityService->insert(
-                (string) $category->getIdentifier(),
+                $category->getIdentifier(),
                 Category::TYPE,
                 (string) $categoryModel->getId(),
                 ShopwareAdapter::NAME
@@ -369,29 +365,27 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param Identity $categoryIdentity
-     * @param Identity $shopIdentity
+     * @param Identity      $categoryIdentity
+     * @param CategoryModel $shopMainCategory
      *
      * @return bool
      */
-    private function validIdentity(Identity $categoryIdentity, Identity $shopIdentity)
+    private function validIdentity(Identity $categoryIdentity, CategoryModel $shopMainCategory)
     {
-        $connection = $this->entityManager->getConnection();
-
         try {
-            $query = '
-                SELECT categoryID 
-                FROM s_categories_attributes 
-                WHERE categoryID = :category 
-                AND plenty_connector_shop_identifier = :identifier
-            ';
+            $existingCategory = $this->categoryRepository->find($categoryIdentity->getAdapterIdentifier());
 
-            $attribute = $connection->fetchColumn($query, [
-                ':category' => $categoryIdentity->getAdapterIdentifier(),
-                ':identifier' => $shopIdentity->getAdapterIdentifier(),
-            ]);
+            if (null === $existingCategory) {
+                return false;
+            }
 
-            return (bool) $attribute;
+            $extractedCategoryPath = array_filter(explode('|', $existingCategory->getPath()));
+
+            if (in_array($shopMainCategory->getId(), $extractedCategoryPath, false)) {
+                return true;
+            }
+
+            return false;
         } catch (Exception $exception) {
             return false;
         }
@@ -400,6 +394,12 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     /**
      * @param Category $category
      * @param array    $validIdentities
+     *
+     * @throws CustomValidationException
+     * @throws NotFoundException
+     * @throws ParameterMissingException
+     * @throws ValidationException
+     * @throws ParameterMissingException
      */
     private function handleOrphanedCategories(Category $category, array $validIdentities = [])
     {
@@ -436,7 +436,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     /**
      * @return CategoryResource
      */
-    private function getCategoryResource()
+    private function getCategoryResource(): CategoryResource
     {
         // without this reset the entitymanager sometimes the album is not found correctly.
         Shopware()->Container()->reset('models');

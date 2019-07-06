@@ -46,7 +46,7 @@ class PayPalUnifiedPaymentData extends AbstractValueObject implements PaymentDat
     /**
      * @return string
      */
-    public function getReference()
+    public function getReference(): string
     {
         return $this->reference;
     }
@@ -62,7 +62,7 @@ class PayPalUnifiedPaymentData extends AbstractValueObject implements PaymentDat
     /**
      * @return string
      */
-    public function getBankName()
+    public function getBankName(): string
     {
         return $this->bank_name;
     }
@@ -78,7 +78,7 @@ class PayPalUnifiedPaymentData extends AbstractValueObject implements PaymentDat
     /**
      * @return string
      */
-    public function getAccountHolder()
+    public function getAccountHolder(): string
     {
         return $this->account_holder;
     }
@@ -94,7 +94,7 @@ class PayPalUnifiedPaymentData extends AbstractValueObject implements PaymentDat
     /**
      * @return string
      */
-    public function getIban()
+    public function getIban(): string
     {
         return $this->iban;
     }
@@ -110,7 +110,7 @@ class PayPalUnifiedPaymentData extends AbstractValueObject implements PaymentDat
     /**
      * @return string
      */
-    public function getBic()
+    public function getBic(): string
     {
         return $this->bic;
     }
@@ -126,7 +126,7 @@ class PayPalUnifiedPaymentData extends AbstractValueObject implements PaymentDat
     /**
      * @return float
      */
-    public function getAmount()
+    public function getAmount(): float
     {
         return $this->amount;
     }
@@ -142,7 +142,7 @@ class PayPalUnifiedPaymentData extends AbstractValueObject implements PaymentDat
     /**
      * @return DateTimeImmutable
      */
-    public function getDueDate()
+    public function getDueDate(): DateTimeImmutable
     {
         return $this->due_date;
     }

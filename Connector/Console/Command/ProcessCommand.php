@@ -51,7 +51,7 @@ class ProcessCommand extends Command
     protected function configure()
     {
         $this->setName('plentyconnector:process');
-        $this->setDescription('process definitons');
+        $this->setDescription('process definitions');
         $this->setHelp($this->getHelpText());
         $this->addArgument(
             'objectType',
@@ -117,7 +117,7 @@ class ProcessCommand extends Command
     /**
      * @return string
      */
-    private function getHelpText()
+    private function getHelpText(): string
     {
         $examples = [
             'import all products: plentyconnector:process Product --all',

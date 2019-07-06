@@ -12,7 +12,7 @@ class PaymentValidator implements ValidatorInterface
     /**
      * {@inheritdoc}
      */
-    public function supports($object)
+    public function supports($object): bool
     {
         return $object instanceof Payment;
     }
@@ -27,7 +27,7 @@ class PaymentValidator implements ValidatorInterface
         Assertion::uuid($object->getShopIdentifier(), null, 'payment.shopIdentifier');
         Assertion::uuid($object->getCurrencyIdentifier(), null, 'payment.currencyIdentifier');
         Assertion::uuid($object->getPaymentMethodIdentifier(), null, 'payment.paymentMethodIdentifier');
-        Assertion::uuid($object->getOrderIdentifer(), null, 'payment.paymentIdentifier');
+        Assertion::uuid($object->getOrderIdentifier(), null, 'payment.paymentIdentifier');
         Assertion::string($object->getTransactionReference(), null, 'payment.transactionReference');
         Assertion::string($object->getAccountHolder(), null, 'payment.accountHolder');
         Assertion::notBlank($object->getTransactionReference(), null, 'payment.transactionReference');

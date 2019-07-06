@@ -39,7 +39,7 @@ class SepaPaymentResponseParser implements PaymentResponseParserInterface
     /**
      * {@inheritdoc}
      */
-    public function parse(array $element)
+    public function parse(array $element): array
     {
         $payments = $this->parentResponseParser->parse($element);
 
@@ -51,7 +51,7 @@ class SepaPaymentResponseParser implements PaymentResponseParserInterface
             $identifier = $this->getIdentifier($element['id'], Payment::TYPE);
 
             $payment = new Payment();
-            $payment->setOrderIdentifer($this->getIdentifier($element['id'], Order::TYPE));
+            $payment->setOrderIdentifier($this->getIdentifier($element['id'], Order::TYPE));
             $payment->setIdentifier($identifier);
             $payment->setShopIdentifier($this->getIdentifier($element['shopId'], Shop::TYPE));
             $payment->setTransactionReference($identifier);
@@ -78,7 +78,7 @@ class SepaPaymentResponseParser implements PaymentResponseParserInterface
      *
      * @return string
      */
-    private function getIdentifier($entry, $type)
+    private function getIdentifier($entry, $type): string
     {
         Assertion::integerish($entry);
 
@@ -94,7 +94,7 @@ class SepaPaymentResponseParser implements PaymentResponseParserInterface
      *
      * @return int
      */
-    private function getCurrencyId($currency)
+    private function getCurrencyId($currency): int
     {
         /**
          * @var EntityRepository $currencyRepository
@@ -118,7 +118,7 @@ class SepaPaymentResponseParser implements PaymentResponseParserInterface
      *
      * @return SepaPaymentData
      */
-    private function getSepaPaymentData(array $element)
+    private function getSepaPaymentData(array $element): SepaPaymentData
     {
         $paymentInstance = array_shift($element['paymentInstances']);
 
@@ -135,7 +135,7 @@ class SepaPaymentResponseParser implements PaymentResponseParserInterface
      *
      * @return bool
      */
-    private function hasSepaPaymentInstance(array $element)
+    private function hasSepaPaymentInstance(array $element): bool
     {
         if (empty($element['paymentInstances'])) {
             return false;

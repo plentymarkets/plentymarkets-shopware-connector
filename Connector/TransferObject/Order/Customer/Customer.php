@@ -13,6 +13,7 @@ class Customer extends AbstractValueObject
 
     const GENDER_MALE = 'male';
     const GENDER_FEMALE = 'female';
+    const GENDER_DIVERSE = 'diverse';
 
     /**
      * @var int
@@ -97,21 +98,21 @@ class Customer extends AbstractValueObject
     /**
      * @return array
      */
-    public function getCustomerTypes()
+    public function getCustomerTypes(): array
     {
         return $this->getConstantsByName('TYPE');
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
 
     /**
-     * @param int $type
+     * @param string $type
      */
     public function setType($type)
     {
@@ -121,7 +122,7 @@ class Customer extends AbstractValueObject
     /**
      * @return string
      */
-    public function getNumber()
+    public function getNumber(): string
     {
         return $this->number;
     }
@@ -137,7 +138,7 @@ class Customer extends AbstractValueObject
     /**
      * @return string
      */
-    public function getEmail()
+    public function getEmail(): string
     {
         return $this->email;
     }
@@ -153,7 +154,7 @@ class Customer extends AbstractValueObject
     /**
      * @return bool
      */
-    public function getNewsletter()
+    public function getNewsletter(): bool
     {
         return $this->newsletter;
     }
@@ -185,7 +186,7 @@ class Customer extends AbstractValueObject
     /**
      * @return string
      */
-    public function getLanguageIdentifier()
+    public function getLanguageIdentifier(): string
     {
         return $this->languageIdentifier;
     }
@@ -201,7 +202,7 @@ class Customer extends AbstractValueObject
     /**
      * @return string
      */
-    public function getCustomerGroupIdentifier()
+    public function getCustomerGroupIdentifier(): string
     {
         return $this->customerGroupIdentifier;
     }
@@ -217,7 +218,7 @@ class Customer extends AbstractValueObject
     /**
      * @return string
      */
-    public function getGender()
+    public function getGender(): string
     {
         return $this->gender;
     }
@@ -233,7 +234,7 @@ class Customer extends AbstractValueObject
     /**
      * @return array
      */
-    public function getGenders()
+    public function getGenders(): array
     {
         return $this->getConstantsByName('GENDER');
     }
@@ -337,7 +338,7 @@ class Customer extends AbstractValueObject
     /**
      * @return string
      */
-    public function getShopIdentifier()
+    public function getShopIdentifier(): string
     {
         return $this->shopIdentifier;
     }
@@ -379,7 +380,7 @@ class Customer extends AbstractValueObject
      *
      * @return array
      */
-    private function getConstantsByName($name)
+    private function getConstantsByName($name): array
     {
         $reflection = new ReflectionClass(__CLASS__);
 

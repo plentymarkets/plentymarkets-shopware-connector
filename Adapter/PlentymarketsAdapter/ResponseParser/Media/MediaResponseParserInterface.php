@@ -11,5 +11,5 @@ interface MediaResponseParserInterface
      *
      * @return Media
      */
-    public function parse(array $entry);
+    public function parse(array $entry): Media;
 }
