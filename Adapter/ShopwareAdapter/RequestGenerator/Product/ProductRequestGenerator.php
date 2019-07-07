@@ -341,6 +341,9 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
             ];
         }
 
+        $position = array_column($images, 'position');
+        array_multisort($position, SORT_ASC, $images);
+
         return $images;
     }
 
