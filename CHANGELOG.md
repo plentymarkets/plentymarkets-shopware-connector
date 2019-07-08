@@ -4,6 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [## [unreleased]]
 ### Fixed
+- fix sorting of product images (@lacodimizer)
 
 ### Added
 

@@ -195,7 +195,6 @@ class VariationRequestGenerator implements VariationRequestGeneratorInterface
 
             $images[] = [
                 'mediaId' => $imageIdentity->getAdapterIdentifier(),
-                'position' => $image->getPosition(),
             ];
         }
 
