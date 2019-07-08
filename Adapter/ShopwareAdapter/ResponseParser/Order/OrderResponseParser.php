@@ -356,7 +356,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     {
         $isShippingBruttoAndNettoSame = 1 === $entry['taxFree'] && $entry['taxFree'] === $entry['net'];
         if ($isShippingBruttoAndNettoSame) {
-            return $entry['invoiceShippingNet'] + $entry['invoiceShippingNet'] * $this->getMaxTaxRateFromOrderItems($entry) / 100;
+            return $entry['invoiceShippingNet'] + $entry['invoiceShippingNet'] * $entry['invoiceShippingTaxRate'] / 100;
         }
 
         return (float) $entry['invoiceShipping'];
