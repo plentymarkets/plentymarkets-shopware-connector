@@ -9,6 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 ### Changed
+- tax handling refactored (@Pfabeck)
 
 ## [## [5.2.0]]
 ### Fixed
