@@ -10,6 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - tax handling refactored (@Pfabeck)
+- remove item variation id at vouchers and discounts @jmanz
 
 ## [## [5.2.0]]
 ### Fixed
