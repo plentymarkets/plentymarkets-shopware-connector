@@ -5,7 +5,6 @@ namespace ShopwareAdapter\ResponseParser\Order;
 use Assert\Assertion;
 use Assert\AssertionFailedException;
 use DateTimeImmutable;
-use Doctrine\ORM\EntityRepository;
 use Psr\Log\LoggerInterface;
 use Shopware\Models\Tax\Tax;
 use ShopwareAdapter\DataProvider\Currency\CurrencyDataProviderInterface;
@@ -68,10 +67,16 @@ class OrderResponseParser implements OrderResponseParserInterface
     private $logger;
 
     /**
-     * @var EntityRepository
+     * OrderResponseParser constructor.
+     *
+     * @param IdentityServiceInterface         $identityService
+     * @param OrderItemResponseParserInterface $orderItemResponseParser
+     * @param AddressResponseParserInterface   $orderAddressParser
+     * @param CustomerResponseParserInterface  $customerParser
+     * @param CurrencyDataProviderInterface    $currencyDataProvider
+     * @param TaxDataProviderInterface         $taxDataProvider
+     * @param LoggerInterface                  $logger
      */
-    private $taxRepository;
-
     public function __construct(
         IdentityServiceInterface $identityService,
         OrderItemResponseParserInterface $orderItemResponseParser,
@@ -79,9 +84,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         CustomerResponseParserInterface $customerParser,
         CurrencyDataProviderInterface $currencyDataProvider,
         TaxDataProviderInterface $taxDataProvider,
-
-        LoggerInterface $logger,
-        EntityRepository $taxRepository
+        LoggerInterface $logger
     ) {
         $this->identityService = $identityService;
         $this->orderItemResponseParser = $orderItemResponseParser;
@@ -90,7 +93,6 @@ class OrderResponseParser implements OrderResponseParserInterface
         $this->currencyDataProvider = $currencyDataProvider;
         $this->taxDataProvider = $taxDataProvider;
         $this->logger = $logger;
-        $this->taxRepository = $taxRepository;
     }
 
     /**
@@ -296,6 +298,10 @@ class OrderResponseParser implements OrderResponseParserInterface
      */
     private function getShippingCostsVatRateIdentifier(array $entry): string
     {
+        if (null === $entry['invoiceShippingTaxRate']) {
+            $entry['invoiceShippingTaxRate'] = '0';
+        }
+
         /**
          * @var Tax $taxModel
          */
