@@ -220,7 +220,6 @@ class Client implements ClientInterface
             return $json;
         }
 
-
         throw new RuntimeException('client error: ' . $response);
     }
 
