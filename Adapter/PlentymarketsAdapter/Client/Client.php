@@ -220,7 +220,7 @@ class Client implements ClientInterface
             return $json;
         }
 
-        throw new RuntimeException('client error: ' . $response . ' method:' . $method . ' path:' . $path . ' keys: {' . implode(';' ,array_keys($params)) . '} params: {' . implode(';', $params) . '}');
+        throw new RuntimeException('client error: ' . $response . ' method:' . $method . ' path:' . $path . ' keys: {' . implode(';', array_keys($params)) . '} params: {' . implode(';', $params) . '}');
     }
 
     /**
