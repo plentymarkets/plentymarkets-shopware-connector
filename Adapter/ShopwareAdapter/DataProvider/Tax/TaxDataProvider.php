@@ -31,12 +31,12 @@ class TaxDataProvider implements TaxDataProviderInterface
     }
 
     /**
-     * @param string $rate
-     * @param int    $countryId
+     * @param float $rate
+     * @param int   $countryId
      *
      * @return Tax $taxModel|null
      */
-    public function getTax(string $rate, int $countryId = null)
+    public function getTax(float $rate, int $countryId = null)
     {
         if (null === $countryId) {
             return $this->taxRepository->findOneBy([
@@ -48,7 +48,7 @@ class TaxDataProvider implements TaxDataProviderInterface
          * @var Rule $taxRule
          */
         $taxRule = $this->taxRulesRepository->findOneBy([
-            'tax' => (float) $rate,
+            'tax' => $rate,
             'countryId' => $countryId,
         ]);
 

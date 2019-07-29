@@ -299,16 +299,16 @@ class OrderResponseParser implements OrderResponseParserInterface
     private function getShippingCostsVatRateIdentifier(array $entry): string
     {
         if (null === $entry['invoiceShippingTaxRate']) {
-            $entry['invoiceShippingTaxRate'] = '0';
+            $entry['invoiceShippingTaxRate'] = 0.0;
         }
 
         /**
          * @var Tax $taxModel
          */
-        $taxModel = $this->taxDataProvider->getTax($entry['invoiceShippingTaxRate'], null);
+        $taxModel = $this->taxDataProvider->getTax((float) $entry['invoiceShippingTaxRate'], null);
 
         if (null === $taxModel) {
-            $taxModel = $this->taxDataProvider->getTax($entry['invoiceShippingTaxRate'], $entry['billing']['countryId']);
+            $taxModel = $this->taxDataProvider->getTax((float) $entry['invoiceShippingTaxRate'], $entry['billing']['countryId']);
         }
 
         $taxRateId = $taxModel->getId();
