@@ -54,18 +54,18 @@ class AmazonPayPaymentResponseParser implements PaymentResponseParserInterface
     }
 
     /**
-     * @param string $ordernumber
+     * @param string $orderId
      *
-     * @return array|bool
+     * @return array
      */
-    private function getAmazonPayData($ordernumber)
+    private function getAmazonPayData($orderId): array
     {
         try {
-            $query = 'SELECT * FROM s_order_attributes WHERE orderID = ?';
+            $query = 'SELECT bestit_amazon_authorization_id FROM s_order_attributes WHERE orderID = ?';
 
-            return $this->connection->fetchAssoc($query, [$ordernumber]);
+            return $this->connection->fetchAssoc($query, [$orderId]);
         } catch (Exception $exception) {
-            return false;
+            return [];
         }
     }
 
