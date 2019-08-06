@@ -2,14 +2,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [## [unreleased]]
+## [## [5.2.1]]
 ### Fixed
 - fix sorting of product images (@lacodimizer)
 
-### Added
-
 ### Changed
 - tax handling refactored (@Pfabeck)
+- remove item variation id at vouchers and discounts @jmanz
 
 ## [## [5.2.0]]
 ### Fixed

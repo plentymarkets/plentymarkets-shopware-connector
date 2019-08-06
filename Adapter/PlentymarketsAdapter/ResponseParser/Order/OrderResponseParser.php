@@ -382,9 +382,9 @@ class OrderResponseParser implements OrderResponseParserInterface
     /**
      * @param array $plentyCustomer
      *
-     * @return Identity
+     * @return null|Identity
      */
-    private function getCustomerGroupIdentity(array $plentyCustomer): Identity
+    private function getCustomerGroupIdentity(array $plentyCustomer)
     {
         return $this->identityService->findOneBy([
             'adapterIdentifier' => (string) $plentyCustomer['classId'],

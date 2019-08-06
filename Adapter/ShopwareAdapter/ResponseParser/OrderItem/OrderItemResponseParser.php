@@ -81,11 +81,11 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
      */
     private function getVatRateIdentifier(array $entry, $taxFree): string
     {
-        if ($taxFree) {
+        if ($taxFree || $entry['taxId'] === 0) {
             /**
              * @var null|Tax $taxModel
              */
-            $taxModel = $this->taxRepository->findOneBy(['tax' => $entry['taxRate']]);
+            $taxModel = $this->taxRepository->findOneBy((float) ['tax' => $entry['taxRate']]);
 
             if (null === $taxModel) {
                 throw new InvalidArgumentException('no matching tax rate found - ' . $entry['taxRate']);

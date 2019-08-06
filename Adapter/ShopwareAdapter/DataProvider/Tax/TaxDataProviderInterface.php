@@ -7,10 +7,10 @@ use Shopware\Models\Tax\Tax;
 interface TaxDataProviderInterface
 {
     /**
-     * @param string $rate
-     * @param int    $countryId
+     * @param float $rate
+     * @param int   $countryId
      *
      * @return Tax $taxModel|null
      */
-    public function getTax(string $rate, int $countryId);
+    public function getTax(float $rate, int $countryId);
 }
