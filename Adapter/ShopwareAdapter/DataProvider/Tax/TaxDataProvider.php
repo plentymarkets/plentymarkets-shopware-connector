@@ -38,20 +38,22 @@ class TaxDataProvider implements TaxDataProviderInterface
      */
     public function getTax(float $rate, int $countryId = null)
     {
-        if (null === $countryId) {
-            return $this->taxRepository->findOneBy([
-                'tax' => (float) $rate,
+        if (null !== $countryId) {
+            /**
+             * @var Rule $taxRule
+             */
+            $taxRule = $this->taxRulesRepository->findOneBy([
+                'tax' => $rate,
+                'countryId' => $countryId,
             ]);
+
+            if (null !== $taxRule) {
+                return $taxRule->getGroup();
+            }
         }
 
-        /**
-         * @var Rule $taxRule
-         */
-        $taxRule = $this->taxRulesRepository->findOneBy([
-            'tax' => $rate,
-            'countryId' => $countryId,
+        return $this->taxRepository->findOneBy([
+                'tax' => (float) $rate,
         ]);
-
-        return $taxRule->getGroup();
     }
 }
