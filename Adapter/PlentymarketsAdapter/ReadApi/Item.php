@@ -31,15 +31,15 @@ class Item extends ApiAbstract
      */
     private $variationHelper;
 
-    private $attributes = [];
+    private $attributes = false;
 
-    private $barcodes = [];
+    private $barcodes = false;
 
-    private $propertyGroups = [];
+    private $propertyGroups = false;
 
-    private $properties = [];
+    private $properties = false;
 
-    private $availabilities = [];
+    private $availabilities = false;
 
     /**
      * @var array
