@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [## [5.2.2]]
+### Fixed
+- fixed wrong float cast (@ArvatisJohannes)
+
 ## [## [5.2.1]]
 ### Fixed
 - fix sorting of product images (@lacodimizer)
