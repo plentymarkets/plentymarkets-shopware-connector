@@ -37,7 +37,7 @@ class Item extends ApiAbstract
 
     private $propertyGroups = [];
 
-    private $propertyNames = [];
+    private $properties = [];
 
     private $availabilities = [];
 
@@ -189,7 +189,7 @@ class Item extends ApiAbstract
 
     private function getAttributes()
     {
-        if (empty($this->attributes)) {
+        if (empty($this->attributes) && !is_array($this->attributes)) {
             $this->attributes = $this->itemAttributesApi->findAll();
         }
 
@@ -198,7 +198,7 @@ class Item extends ApiAbstract
 
     private function getBarcodes()
     {
-        if (empty($this->barcodes)) {
+        if (empty($this->barcodes) && !is_array($this->barcodes)) {
             $this->barcodes = $this->itemBarcodeApi->findAll();
         }
 
@@ -207,7 +207,7 @@ class Item extends ApiAbstract
 
     private function getPropertyGroups()
     {
-        if (empty($this->propertyGroups)) {
+        if (empty($this->propertyGroups) && !is_array($this->propertyGroups)) {
             $this->propertyGroups = $this->itemsPropertyGroupsApi->findAll();
         }
 
@@ -216,7 +216,7 @@ class Item extends ApiAbstract
 
     private function getProperties()
     {
-        if (empty($this->properties)) {
+        if (empty($this->properties) && !is_array($this->properties)) {
             $this->properties = $this->itemsPropertyNamesApi->findAll();
         }
 
@@ -225,7 +225,7 @@ class Item extends ApiAbstract
 
     private function getAvailabilities()
     {
-        if (empty($this->availabilities)) {
+        if (empty($this->availabilities) && !is_array($this->availabilities)) {
             $this->availabilities = $this->availabilitiesApi->findAll();
         }
 
