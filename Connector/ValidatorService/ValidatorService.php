@@ -7,7 +7,6 @@ use DateTimeZone;
 use SystemConnector\Validator\ValidatorInterface;
 use SystemConnector\ValidatorService\Exception\InvalidDataException;
 use Traversable;
-use function is_array;
 
 class ValidatorService implements ValidatorServiceInterface
 {
