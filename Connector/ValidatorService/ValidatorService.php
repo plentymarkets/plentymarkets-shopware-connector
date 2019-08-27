@@ -4,7 +4,6 @@ namespace SystemConnector\ValidatorService;
 
 use Assert\InvalidArgumentException;
 use DateTimeZone;
-use function is_array;
 use SystemConnector\Validator\ValidatorInterface;
 use SystemConnector\ValidatorService\Exception\InvalidDataException;
 use Traversable;
