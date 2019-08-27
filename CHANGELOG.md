@@ -5,6 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [## [unreleased]]
 ### Fixed
 - fix handling of important data on item sync (@lacodimizer)
+- fixed wrong float cast (@ArvatisJohannes)
 
 ## [## [5.2.1]]
 ### Fixed
