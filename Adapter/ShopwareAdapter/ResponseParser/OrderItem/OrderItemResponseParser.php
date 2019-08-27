@@ -3,7 +3,6 @@
 namespace ShopwareAdapter\ResponseParser\OrderItem;
 
 use Doctrine\ORM\EntityRepository;
-use InvalidArgumentException;
 use Shopware\Models\Tax\Tax;
 use ShopwareAdapter\ResponseParser\GetAttributeTrait;
 use ShopwareAdapter\ShopwareAdapter;
@@ -88,7 +87,7 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
             $taxModel = $this->taxRepository->findOneBy(['tax' => $entry['taxRate']]);
 
             if (null === $taxModel) {
-                throw new InvalidArgumentException('no matching tax rate found - ' . $entry['taxRate']);
+                throw new NotFoundException('no matching tax rate found - ' . $entry['taxRate']);
             }
 
             $entry['taxId'] = $taxModel->getId();
