@@ -4,6 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [## [unreleased]]
 ### Fixed
+- fix handling of important data on item sync (@lacodimizer)
 - fix tax handling on order export (@lacodimizer)
 - fixed wrong float cast (@ArvatisJohannes)
 
