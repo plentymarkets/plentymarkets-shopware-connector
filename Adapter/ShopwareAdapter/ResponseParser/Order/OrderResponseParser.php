@@ -311,6 +311,10 @@ class OrderResponseParser implements OrderResponseParserInterface
             $taxModel = $this->taxDataProvider->getTax((float) $entry['invoiceShippingTaxRate'], $entry['billing']['countryId']);
         }
 
+        if (null === $taxModel) {
+            throw new NotFoundException('no matching tax rate found - ' . $entry['invoiceShippingTaxRate']);
+        }
+
         $taxRateId = $taxModel->getId();
 
         if (isset($entry['dispatch']['taxCalculation']) && $entry['dispatch']['taxCalculation'] > 0) {
@@ -324,7 +328,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         ]);
 
         if (null === $identity) {
-            throw new NotFoundException('missing tax rate mapping - ' . $taxRateId);
+            throw new NotFoundException('missing vat rate identity for taxId - ' . $taxRateId);
         }
 
         return $identity->getObjectIdentifier();
