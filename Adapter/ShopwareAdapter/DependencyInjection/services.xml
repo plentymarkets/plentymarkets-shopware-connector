@@ -3,7 +3,10 @@
 <container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <!-- Misc Components -->
-        <service id="shopware_adapter.shopware_translation_component" class="Shopware_Components_Translation" />
+        <service id="shopware_adapter.shopware_translation_component" class="Shopware_Components_Translation" >
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="service_container"/>
+        </service>
 
         <service id="shopware.tax_repository" class="Shopware\Models\Tax\Repository">
             <factory service="models" method="getRepository" />

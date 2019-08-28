@@ -130,6 +130,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             }
         }
 
+
         $this->handleOrphanedCategories($category, $validIdentities);
 
         return true;
