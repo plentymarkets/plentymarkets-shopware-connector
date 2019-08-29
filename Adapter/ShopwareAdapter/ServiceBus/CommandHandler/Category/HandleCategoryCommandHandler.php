@@ -136,7 +136,6 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
             }
         }
 
-
         $this->handleOrphanedCategories($category, $validIdentities);
 
         return true;
@@ -333,7 +332,6 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         }
 
         if (null === $categoryIdentity) {
-
             $categoryModel = $this->createOrUpdateCategory(new CategoryModel(), $params);
 
             $categoryIdentity = $this->identityService->insert(
@@ -342,9 +340,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
                 (string) $categoryModel->getId(),
                 ShopwareAdapter::NAME
             );
-
         } else {
-
             /**
              * @var CategoryModel $categoryModel
              */
@@ -450,7 +446,8 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
 
     /**
      * @param CategoryModel $categoryModel
-     * @param array $params
+     * @param array         $params
+     *
      * @return CategoryModel
      */
     private function createOrUpdateCategory(CategoryModel $categoryModel, array $params = []): CategoryModel
