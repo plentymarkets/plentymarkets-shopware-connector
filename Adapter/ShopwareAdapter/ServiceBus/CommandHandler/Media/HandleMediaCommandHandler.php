@@ -5,7 +5,6 @@ namespace ShopwareAdapter\ServiceBus\CommandHandler\Media;
 use Shopware\Components\Api\Exception\NotFoundException as MediaNotFoundException;
 use Shopware\Components\Api\Exception\ParameterMissingException;
 use Shopware\Components\Api\Exception\ValidationException;
-use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Media as MediaResource;
 use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
 use ShopwareAdapter\DataProvider\Media\MediaDataProviderInterface;
@@ -46,18 +45,26 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
      */
     private $attributePersister;
 
+    /**
+     * @var MediaResource
+     */
+    private $mediaResource;
+
     public function __construct(
         IdentityServiceInterface $identityService,
         MediaRequestGeneratorInterface $mediaRequestGenerator,
         MediaDataProviderInterface $mediaDataProvider,
         AttributeHelper $attributeHelper,
-        AttributeDataPersisterInterface $attributePersister
+        AttributeDataPersisterInterface $attributePersister,
+        MediaResource $mediaResource
+
     ) {
         $this->identityService = $identityService;
         $this->mediaRequestGenerator = $mediaRequestGenerator;
         $this->mediaDataProvider = $mediaDataProvider;
         $this->attributeHelper = $attributeHelper;
         $this->attributePersister = $attributePersister;
+        $this->mediaResource = $mediaResource;
     }
 
     /**
@@ -101,14 +108,13 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
             'adapterName' => ShopwareAdapter::NAME,
         ]);
 
-        $resource = $this->getMediaResource();
         $params = $this->mediaRequestGenerator->generate($media);
 
         if (null !== $identity) {
             try {
-                $mediaModel = $resource->update($identity->getAdapterIdentifier(), $params);
+                $mediaModel = $this->mediaResource->update($identity->getAdapterIdentifier(), $params);
             } catch (MediaNotFoundException $exception) {
-                $mediaModel = $resource->create($params);
+                $mediaModel = $this->mediaResource->create($params);
 
                 $this->identityService->update(
                 $identity,
@@ -118,7 +124,7 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
                 );
             }
         } else {
-            $mediaModel = $resource->create($params);
+            $mediaModel = $this->mediaResource->create($params);
 
             $this->identityService->insert(
                 $media->getIdentifier(),
@@ -134,16 +140,5 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
         );
 
         return true;
-    }
-
-    /**
-     * @return MediaResource
-     */
-    private function getMediaResource(): MediaResource
-    {
-        // without this reset the entitymanager sometimes the album is not found correctly.
-        Shopware()->Container()->reset('models');
-
-        return Manager::getResource('Media');
     }
 }
