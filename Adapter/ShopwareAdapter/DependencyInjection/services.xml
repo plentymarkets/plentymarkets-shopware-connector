@@ -235,7 +235,6 @@
             <argument type="service" id="shopware.api.media" />
             <argument type="service" id="models" />
 
-
             <tag name="plenty_connector.command_handler" />
         </service>
 
