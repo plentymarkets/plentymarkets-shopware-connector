@@ -2,9 +2,10 @@
 
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Media;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Shopware\Components\Api\Exception\CustomValidationException;
 use Shopware\Components\Api\Exception\NotFoundException as MediaNotFoundException;
 use Shopware\Components\Api\Exception\ParameterMissingException;
-use Shopware\Components\Api\Exception\ValidationException;
 use Shopware\Components\Api\Resource\Media as MediaResource;
 use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
 use ShopwareAdapter\DataProvider\Media\MediaDataProviderInterface;
@@ -50,14 +51,19 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
      */
     private $mediaResource;
 
+    /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+
     public function __construct(
         IdentityServiceInterface $identityService,
         MediaRequestGeneratorInterface $mediaRequestGenerator,
         MediaDataProviderInterface $mediaDataProvider,
         AttributeHelper $attributeHelper,
         AttributeDataPersisterInterface $attributePersister,
-        MediaResource $mediaResource
-
+        MediaResource $mediaResource,
+        EntityManagerInterface $entityManager
     ) {
         $this->identityService = $identityService;
         $this->mediaRequestGenerator = $mediaRequestGenerator;
@@ -65,6 +71,7 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
         $this->attributeHelper = $attributeHelper;
         $this->attributePersister = $attributePersister;
         $this->mediaResource = $mediaResource;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -82,9 +89,7 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
      * @param CommandInterface $command
      *
      * @throws ParameterMissingException
-     * @throws ValidationException
-     * @throws ValidationException
-     * @throws ParameterMissingException
+     * @throws CustomValidationException
      *
      * @return bool
      */
@@ -113,8 +118,10 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
         if (null !== $identity) {
             try {
                 $mediaModel = $this->mediaResource->update($identity->getAdapterIdentifier(), $params);
+                $this->entityManager->clear();
             } catch (MediaNotFoundException $exception) {
-                $mediaModel = $this->mediaResource->create($params);
+                $mediaModel = $this->mediaResource->internalCreateMediaByFileLink($params['file'], $params['album']);
+                $this->entityManager->flush();
 
                 $this->identityService->update(
                 $identity,
@@ -124,7 +131,8 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
                 );
             }
         } else {
-            $mediaModel = $this->mediaResource->create($params);
+            $mediaModel = $this->mediaResource->internalCreateMediaByFileLink($params['file'], $params['album']);
+            $this->entityManager->flush();
 
             $this->identityService->insert(
                 $media->getIdentifier(),

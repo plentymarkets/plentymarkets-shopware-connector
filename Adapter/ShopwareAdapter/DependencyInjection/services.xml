@@ -233,6 +233,8 @@
             <argument type="service" id="shopware_adapter.attribute_helper" />
             <argument type="service" id="shopware_adapter.data_persister.attribute" />
             <argument type="service" id="shopware.api.media" />
+            <argument type="service" id="models" />
+
 
             <tag name="plenty_connector.command_handler" />
         </service>
