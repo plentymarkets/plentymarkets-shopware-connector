@@ -1,8 +1,8 @@
 language: php
 
 php:
-  - 7.1
   - 7.2
+  - 7.3
 
 sudo: false
 
@@ -13,7 +13,7 @@ services:
 
 env:
   matrix:
-    - SHOPWARE_VERSION="5.5"
+    - SHOPWARE_VERSION="5.6"
 
   global:
     - PLUGIN_NAME=PlentyConnector
