@@ -13,7 +13,7 @@ services:
 
 env:
   matrix:
-    - SHOPWARE_VERSION="5.6"
+    - SHOPWARE_VERSION="5.6.1"
 
   global:
     - PLUGIN_NAME=PlentyConnector
