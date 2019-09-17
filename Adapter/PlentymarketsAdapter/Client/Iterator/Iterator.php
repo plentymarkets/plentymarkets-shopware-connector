@@ -26,7 +26,7 @@ class Iterator implements BaseIterator, Countable
     /**
      * @var int
      */
-    private $limit = 50;
+    private $limit = 100;
 
     /**
      * @var int
