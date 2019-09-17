@@ -146,7 +146,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
              * @var Status $paymentStatus
              */
             $paymentStatus = $this->statusRepository->find($paymentStatusIdentity->getAdapterIdentifier());
-            $orderModel->setOrderStatus($paymentStatus);
+            $orderModel->setPaymentStatus($paymentStatus);
 
             if ((int) $paymentStatusIdentity->getAdapterIdentifier() === Status::PAYMENT_STATE_COMPLETELY_PAID) {
                 $orderModel->setClearedDate(new DateTime('now'));
