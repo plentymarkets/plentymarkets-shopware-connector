@@ -6,6 +6,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - fix cascade persist error on status update (@Pfabeck)
 
+### Changed
+- set iterator limit to 100 (@Pfabeck)
+
+
 ## [## [5.3.0]]
 ### Fixed
 - fix handling of important data on item sync (@lacodimizer)
