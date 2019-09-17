@@ -122,6 +122,9 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             $this->logger->notice('payment status not mapped', ['order' => $order]);
         }
 
+        /*
+         * test
+         */
         $resource = $this->getOrderResource();
         $orderModel = $resource->update($orderIdentity->getAdapterIdentifier(), $params);
 
