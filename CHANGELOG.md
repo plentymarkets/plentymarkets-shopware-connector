@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [## [unreleased]]
+### Fixed
+- fix cascade persist error on status update (@Pfabeck)
+
 ## [## [5.3.0]]
 ### Fixed
 - fix handling of important data on item sync (@lacodimizer)
