@@ -107,7 +107,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
          */
         $orderModel = $this->orderRepository->find($orderIdentity->getAdapterIdentifier());
 
-        if (null === $order) {
+        if (null === $orderModel) {
             return false;
         }
 
