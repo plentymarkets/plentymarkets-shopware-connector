@@ -157,6 +157,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
 
         $this->entityManager->persist($orderModel);
         $this->entityManager->flush();
+        $this->entityManager->clear($orderModel);
 
         $this->attributePersister->saveOrderAttributes(
             $orderModel,
