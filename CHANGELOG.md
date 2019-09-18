@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [## [5.3.2]]
+### Fixed
+- set iterator limit back to 50 (@Pfabeck)
+
+
 ## [## [5.3.1]]
 ### Fixed
 - fix cascade persist error on status update (@Pfabeck)
