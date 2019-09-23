@@ -100,10 +100,12 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
 
         $attributes = $manufacturer->getAttributes();
 
-        /** @var null|Attribute $countryIdentifierAttribute */
-        $countryIdentifierAttribute = array_filter($manufacturer->getAttributes(), function (Attribute $attribute) {
+        /** @var Attribute[] $countryIdentifierAttributes */
+        $countryIdentifierAttributes = array_filter($manufacturer->getAttributes(), function (Attribute $attribute) {
             return $attribute->getKey() === 'countryIdentifier';
-        })[8] ?? null;
+        });
+
+        $countryIdentifierAttribute = array_shift($countryIdentifierAttributes) ;
 
         if (null !== $countryIdentifierAttribute) {
             $countryNameAttribute = $this->getCountryNameAsAttribute($countryIdentifierAttribute->getValue());
