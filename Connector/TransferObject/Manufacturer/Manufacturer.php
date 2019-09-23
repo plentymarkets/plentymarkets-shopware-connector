@@ -3,9 +3,10 @@
 namespace SystemConnector\TransferObject\Manufacturer;
 
 use SystemConnector\TransferObject\AbstractTransferObject;
+use SystemConnector\TransferObject\AttributableInterface;
 use SystemConnector\ValueObject\Attribute\Attribute;
 
-class Manufacturer extends AbstractTransferObject
+class Manufacturer extends AbstractTransferObject implements AttributableInterface
 {
     const TYPE = 'Manufacturer';
 
