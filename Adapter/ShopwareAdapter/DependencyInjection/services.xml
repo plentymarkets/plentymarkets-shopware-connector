@@ -212,6 +212,7 @@
             <argument type="service" id="shopware_adapter.shopware_resource.manufacturer" />
             <argument type="service" id="plenty_connector.identity_service" />
             <argument type="service" id="shopware_adapter.data_persister.attribute" />
+            <argument type="service" id="models" />
 
             <tag name="plenty_connector.command_handler" />
         </service>

@@ -2,10 +2,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [## [unreleased]]
+### Added
+- additional manufacturer information as attributes (@Pfabeck)
+
 ## [## [5.3.2]]
 ### Fixed
 - set iterator limit back to 50 (@Pfabeck)
-
 
 ## [## [5.3.1]]
 ### Fixed
@@ -13,7 +16,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - set iterator limit to 100 (@Pfabeck)
-
 
 ## [## [5.3.0]]
 ### Fixed
