@@ -105,7 +105,7 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
             return $attribute->getKey() === 'countryIdentifier';
         });
 
-        $countryIdentifierAttribute = array_shift($countryIdentifierAttributes) ;
+        $countryIdentifierAttribute = array_shift($countryIdentifierAttributes);
 
         if (null !== $countryIdentifierAttribute) {
             $countryNameAttribute = $this->getCountryNameAsAttribute($countryIdentifierAttribute->getValue());
