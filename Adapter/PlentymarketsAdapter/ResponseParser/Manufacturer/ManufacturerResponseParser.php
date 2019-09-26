@@ -69,6 +69,7 @@ class ManufacturerResponseParser implements ManufacturerResponseParserInterface
             'faxNumber' => $entry['faxNumber'],
             'email' => $entry['email'],
             'comment' => $entry['comment'],
+            'externalName' => $entry['externalName'],
         ];
 
         if (null !== $countryIdentity) {
