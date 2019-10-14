@@ -238,6 +238,13 @@ Ext.define('Shopware.apps.PlentyConnector.view.Settings', {
                     },
                     {
                         xtype: 'textfield',
+                        fieldLabel: '{s name=plentyconnector/view/settings/system_currency/label}{/s}',
+                        name: 'system_currency',
+                        allowBlank: false,
+                        value: 'EUR'
+                    },
+                    {
+                        xtype: 'textfield',
                         fieldLabel: '{s name=plentyconnector/view/settings/amazon_pay_key}{/s}',
                         name: 'amazon_pay_key',
                         allowBlank: true,
