@@ -237,11 +237,15 @@ Ext.define('Shopware.apps.PlentyConnector.view.Settings', {
                         name: 'surcharge_as_product'
                     },
                     {
-                        xtype: 'textfield',
+                        xtype: 'combobox',
                         fieldLabel: '{s name=plentyconnector/view/settings/system_currency/label}{/s}',
                         name: 'system_currency',
-                        allowBlank: false,
-                        value: 'EUR'
+                        editable: false,
+                        triggerAction: 'all',
+                        selectOnFocus: true,
+                        displayField: 'currency',
+                        valueField: 'currency',
+                        store: Ext.create('Shopware.apps.Base.store.Currency').load()
                     },
                     {
                         xtype: 'textfield',
