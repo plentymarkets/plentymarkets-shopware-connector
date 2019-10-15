@@ -5,6 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [## [unreleased]]
 ### Added
 - additional manufacturer information as attributes (@Pfabeck & @ugurkankya)
+- set plentymarkets system currency for payments
 
 ## [## [5.3.2]]
 ### Fixed
