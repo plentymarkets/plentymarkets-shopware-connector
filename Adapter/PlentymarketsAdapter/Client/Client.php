@@ -159,6 +159,7 @@ class Client implements ClientInterface
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($curl, CURLOPT_TIMEOUT, 60);
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 60);
+        curl_setopt($curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
 
         $headers = [];
         curl_setopt($curl, CURLOPT_HEADERFUNCTION, static function ($curl, $header) use (&$headers) {

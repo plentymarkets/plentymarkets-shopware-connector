@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [## [unreleased]]
+### Added
+- curl_setopt($curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4) @florianliebig
+
 ## [## [5.3.3]]
 ### Added
 - additional manufacturer information as attributes (@Pfabeck & @ugurkankya)
