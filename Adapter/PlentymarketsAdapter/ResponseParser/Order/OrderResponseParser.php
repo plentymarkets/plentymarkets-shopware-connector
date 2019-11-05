@@ -681,8 +681,7 @@ class OrderResponseParser implements OrderResponseParserInterface
                 DATE_ATOM,
                 $shippingDate['date']
             );
-        }
-        else{
+        } else {
             $now = new \DateTime();
             $shippingDate = DateTimeImmutable::createFromFormat(
                 DATE_ATOM,
@@ -745,7 +744,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
-     * @param int $variationId
+     * @param $variationId
      *
      * @return string
      */
