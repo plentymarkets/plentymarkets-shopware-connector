@@ -6,6 +6,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - curl_setopt($curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4) @florianliebig
 
+### Fixed
+- set shipping time on multi package order (@Pfabeck)
+- set shipping time equal today if not given (@Pfabeck)
+
 ## [## [5.3.3]]
 ### Added
 - additional manufacturer information as attributes (@Pfabeck & @ugurkankya)

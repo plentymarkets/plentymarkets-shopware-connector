@@ -682,20 +682,27 @@ class OrderResponseParser implements OrderResponseParserInterface
             return $date['typeId'] === 8;
         });
 
+        if (!empty($shippingDate)) {
+            $shippingDate = array_shift($shippingDate);
+
+            $shippingDate = DateTimeImmutable::createFromFormat(
+                DATE_ATOM,
+                $shippingDate['date']
+            );
+        } else {
+            $now = new \DateTime();
+            $shippingDate = DateTimeImmutable::createFromFormat(
+                DATE_ATOM,
+                $now->format(DATE_ATOM)
+            );
+        }
+
         $result = [];
         foreach ($numbers as $number) {
             $package = new Package();
             $package->setShippingCode((string) $number);
             $package->setShippingProvider();
-
-            if (!empty($shippingDate)) {
-                $shippingDate = array_shift($shippingDate);
-
-                $package->setShippingTime(DateTimeImmutable::createFromFormat(
-                    DATE_ATOM,
-                    $shippingDate['date']
-                ));
-            }
+            $package->setShippingTime($shippingDate);
 
             $result[] = $package;
         }
@@ -745,7 +752,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
-     * @param int $variationId
+     * @param $variationId
      *
      * @return string
      */

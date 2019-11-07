@@ -46,7 +46,7 @@ class ProductValidator implements ValidatorInterface
 
         Assertion::isArray($object->getCategoryIdentifiers(), null, 'product.categoryIdentifiers');
         Assertion::isArray($object->getDefaultCategoryIdentifiers(), null, 'product.defaultCategoryIdentifiers');
-        Assertion::isArray($object->getShippingProfileIdentifiers(), null, 'product.name');
+        Assertion::isArray($object->getShippingProfileIdentifiers(), null, 'product.shippingProfileIdentifiers');
 
         Assertion::allIsInstanceOf($object->getImages(), Image::class, null, 'product.images');
 
