@@ -349,6 +349,14 @@ class OrderResponseParser implements OrderResponseParserInterface
             return null;
         }
 
+        if (null === $entry['customerData']['gender']) {
+            $this->logger->info('customer gender not defined', [
+                'customerNumber' => $entry['customerData']['number'],
+            ]);
+
+            return null;
+        }
+
         $customer = new Customer();
         $customer->setType(Customer::TYPE_NORMAL);
         $customer->setNumber($entry['customerData']['number']);
