@@ -3,10 +3,37 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [## [unreleased]]
+### Added
+- curl_setopt($curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4) @florianliebig
+
+### Fixed
+- set shipping time on multi package order (@Pfabeck)
+- set shipping time equal today if not given (@Pfabeck)
+- fixed client for put calls (@Pfabeck)
+
+## [## [5.3.3]]
+### Added
+- additional manufacturer information as attributes (@Pfabeck & @ugurkankya)
+- set plentymarkets system currency for payments @Pfabeck
+
+## [## [5.3.2]]
+### Fixed
+- set iterator limit back to 50 (@Pfabeck)
+
+## [## [5.3.1]]
+### Fixed
+- fix cascade persist error on status update (@Pfabeck)
+
+### Changed
+- set iterator limit to 100 (@Pfabeck)
+
+## [## [5.3.0]]
 ### Fixed
 - fix handling of important data on item sync (@lacodimizer)
 - fix tax handling on order export (@lacodimizer)
 - fixed wrong float cast (@ArvatisJohannes)
+- SW 5.6 required
+- PHP 7.2 required
 
 ## [## [5.2.1]]
 ### Fixed

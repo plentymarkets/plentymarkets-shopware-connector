@@ -8,7 +8,9 @@ use PlentymarketsAdapter\PlentymarketsAdapter;
 use PlentymarketsAdapter\ResponseParser\Media\MediaResponseParserInterface;
 use Psr\Log\LoggerInterface;
 use SystemConnector\IdentityService\IdentityServiceInterface;
+use SystemConnector\TransferObject\Country\Country;
 use SystemConnector\TransferObject\Manufacturer\Manufacturer;
+use SystemConnector\ValueObject\Attribute\Attribute;
 
 class ManufacturerResponseParser implements ManufacturerResponseParserInterface
 {
@@ -52,6 +54,30 @@ class ManufacturerResponseParser implements ManufacturerResponseParserInterface
         $manufacturer->setIdentifier($identity->getObjectIdentifier());
         $manufacturer->setName($entry['name']);
 
+        $countryIdentity = $this->identityService->findOneBy([
+            'adapterIdentifier' => (string) $entry['countryId'],
+            'objectType' => Country::TYPE,
+            'adapterName' => PlentymarketsAdapter::NAME,
+        ]);
+
+        $additionalValues = [
+            'street' => $entry['street'],
+            'houseNo' => $entry['houseNo'],
+            'postcode' => $entry['postcode'],
+            'town' => $entry['town'],
+            'phoneNumber' => $entry['phoneNumber'],
+            'faxNumber' => $entry['faxNumber'],
+            'email' => $entry['email'],
+            'comment' => $entry['comment'],
+            'externalName' => $entry['externalName'],
+        ];
+
+        if (null !== $countryIdentity) {
+            $additionalValues['countryIdentifier'] = $countryIdentity->getObjectIdentifier();
+        }
+
+        $manufacturer->setAttributes($this->setAttributes($additionalValues));
+
         if (!empty($entry['url'])) {
             $manufacturer->setLink($entry['url']);
         }
@@ -82,5 +108,25 @@ class ManufacturerResponseParser implements ManufacturerResponseParserInterface
         $result[] = $manufacturer;
 
         return $result;
+    }
+
+    /**
+     * @param array $additionalValues
+     *
+     * @return Attribute[]
+     */
+    private function setAttributes(array $additionalValues): array
+    {
+        $attributes = [];
+
+        foreach ($additionalValues as $key => $value) {
+            $attribute = new Attribute();
+            $attribute->setKey($key);
+            $attribute->setValue((string) $value);
+
+            $attributes[] = $attribute;
+        }
+
+        return $attributes;
     }
 }

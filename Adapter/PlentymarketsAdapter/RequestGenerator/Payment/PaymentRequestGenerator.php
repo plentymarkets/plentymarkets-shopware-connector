@@ -3,6 +3,7 @@
 namespace PlentymarketsAdapter\RequestGenerator\Payment;
 
 use PlentymarketsAdapter\PlentymarketsAdapter;
+use SystemConnector\ConfigService\ConfigServiceInterface;
 use SystemConnector\IdentityService\Exception\NotFoundException;
 use SystemConnector\IdentityService\IdentityServiceInterface;
 use SystemConnector\TransferObject\Currency\Currency;
@@ -16,9 +17,15 @@ class PaymentRequestGenerator implements PaymentRequestGeneratorInterface
      */
     private $identityService;
 
-    public function __construct(IdentityServiceInterface $identityService)
+    /**
+     * @var ConfigServiceInterface
+     */
+    private $configService;
+
+    public function __construct(IdentityServiceInterface $identityService, ConfigServiceInterface $configService)
     {
         $this->identityService = $identityService;
+        $this->configService = $configService;
     }
 
     /**
@@ -49,6 +56,12 @@ class PaymentRequestGenerator implements PaymentRequestGeneratorInterface
             throw new NotFoundException('currency not mapped');
         }
 
+        $isSystemCurrency = true;
+
+        if ($this->configService->get('system_currency') !== $currencyIdentity->getAdapterIdentifier()) {
+            $isSystemCurrency = false;
+        }
+
         $paymentParams = [
             'amount' => $payment->getAmount(),
             'exchangeRatio' => 1,
@@ -57,6 +70,7 @@ class PaymentRequestGenerator implements PaymentRequestGeneratorInterface
             'type' => 'credit',
             'transactionType' => 2,
             'status' => 2,
+            'isSystemCurrency' => $isSystemCurrency,
         ];
 
         $paymentParams['properties'] = [

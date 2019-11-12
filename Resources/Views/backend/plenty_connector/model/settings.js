@@ -50,8 +50,11 @@ Ext.define('Shopware.apps.PlentyConnector.model.Settings', {
         {
             name: 'import_variations_without_stock',
             type: 'boolean'
-        }
-        ,
+        },
+        {
+            name: 'system_currency',
+            type: 'string'
+        },
         {
             name: 'amazon_pay_key',
             type: 'string'

@@ -77,7 +77,7 @@ class AmazonPayPaymentResponseParser implements PaymentResponseParserInterface
     {
         $data = $this->getAmazonPayData($element['id']);
 
-        if (empty($data) || null === $this->configService->get('amazon_pay_key')) {
+        if (empty($data['bestit_amazon_authorization_id']) || null === $this->configService->get('amazon_pay_key')) {
             return;
         }
 

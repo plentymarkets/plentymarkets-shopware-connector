@@ -159,6 +159,7 @@ class Client implements ClientInterface
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($curl, CURLOPT_TIMEOUT, 60);
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 60);
+        curl_setopt($curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
 
         $headers = [];
         curl_setopt($curl, CURLOPT_HEADERFUNCTION, static function ($curl, $header) use (&$headers) {
@@ -188,6 +189,9 @@ class Client implements ClientInterface
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params, JSON_PRETTY_PRINT));
         } elseif ($method === 'GET') {
             $requestUrl = $requestUrl . '?' . http_build_query($params);
+        } elseif ($method === 'PUT') {
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT');
+            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params, JSON_PRETTY_PRINT));
         }
 
         curl_setopt($curl, CURLOPT_URL, $requestUrl);

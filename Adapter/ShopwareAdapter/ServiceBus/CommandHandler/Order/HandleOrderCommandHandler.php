@@ -3,9 +3,10 @@
 namespace ShopwareAdapter\ServiceBus\CommandHandler\Order;
 
 use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
-use Shopware\Components\Api\Manager;
-use Shopware\Components\Api\Resource\Order as OrderResource;
+use Shopware\Models\Order\Order as OrderModel;
+use Shopware\Models\Order\Repository as OrderRepository;
 use Shopware\Models\Order\Status;
 use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
 use ShopwareAdapter\ShopwareAdapter;
@@ -23,6 +24,21 @@ use SystemConnector\ValueObject\Attribute\Attribute;
 class HandleOrderCommandHandler implements CommandHandlerInterface
 {
     /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+
+    /**
+     * @var OrderRepository
+     */
+    private $orderRepository;
+
+    /**
+     * @var Status
+     */
+    private $statusRepository;
+
+    /**
      * @var IdentityServiceInterface
      */
     private $identityService;
@@ -38,13 +54,17 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     private $attributePersister;
 
     public function __construct(
+        EntityManagerInterface $entityManager,
         IdentityServiceInterface $identityService,
         LoggerInterface $logger,
         AttributeDataPersisterInterface $attributePersister
     ) {
+        $this->entityManager = $entityManager;
         $this->identityService = $identityService;
         $this->logger = $logger;
         $this->attributePersister = $attributePersister;
+        $this->orderRepository = $entityManager->getRepository(OrderModel::class);
+        $this->statusRepository = $entityManager->getRepository(Status::class);
     }
 
     /**
@@ -82,16 +102,21 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
             return false;
         }
 
-        $params = [
-            'details' => [],
-        ];
+        /**
+         * @var OrderModel $orderModel
+         */
+        $orderModel = $this->orderRepository->find($orderIdentity->getAdapterIdentifier());
+
+        if (null === $orderModel) {
+            return false;
+        }
 
         $package = $this->getPackage($order);
 
         if (null !== $package) {
             $this->addShippingProviderAttribute($order, $package);
 
-            $params['trackingCode'] = $package->getShippingCode();
+            $orderModel->setTrackingCode($package->getShippingCode());
         }
 
         $orderStatusIdentity = $this->identityService->findOneBy([
@@ -101,7 +126,11 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         ]);
 
         if (null !== $orderStatusIdentity) {
-            $params['orderStatusId'] = $orderStatusIdentity->getAdapterIdentifier();
+            /**
+             * @var Status $orderStatus
+             */
+            $orderStatus = $this->statusRepository->find($orderStatusIdentity->getAdapterIdentifier());
+            $orderModel->setOrderStatus($orderStatus);
         } else {
             $this->logger->notice('order status not mapped', ['order' => $order]);
         }
@@ -113,17 +142,21 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         ]);
 
         if (null !== $paymentStatusIdentity) {
-            $params['paymentStatusId'] = $paymentStatusIdentity->getAdapterIdentifier();
+            /**
+             * @var Status $paymentStatus
+             */
+            $paymentStatus = $this->statusRepository->find($paymentStatusIdentity->getAdapterIdentifier());
+            $orderModel->setPaymentStatus($paymentStatus);
 
             if ((int) $paymentStatusIdentity->getAdapterIdentifier() === Status::PAYMENT_STATE_COMPLETELY_PAID) {
-                $params['cleareddate'] = new DateTime('now');
+                $orderModel->setClearedDate(new DateTime('now'));
             }
         } else {
             $this->logger->notice('payment status not mapped', ['order' => $order]);
         }
 
-        $resource = $this->getOrderResource();
-        $orderModel = $resource->update($orderIdentity->getAdapterIdentifier(), $params);
+        $this->entityManager->persist($orderModel);
+        $this->entityManager->flush();
 
         $this->attributePersister->saveOrderAttributes(
             $orderModel,
@@ -168,16 +201,5 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         $attributes[] = $shippingProvider;
 
         $order->setAttributes($attributes);
-    }
-
-    /**
-     * @return OrderResource
-     */
-    private function getOrderResource(): OrderResource
-    {
-        // without this reset the entitymanager sometimes the status is not found correctly.
-        Shopware()->Container()->reset('models');
-
-        return Manager::getResource('Order');
     }
 }
