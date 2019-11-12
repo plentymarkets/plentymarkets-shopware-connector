@@ -189,6 +189,9 @@ class Client implements ClientInterface
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params, JSON_PRETTY_PRINT));
         } elseif ($method === 'GET') {
             $requestUrl = $requestUrl . '?' . http_build_query($params);
+        } elseif ($method === 'PUT') {
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT');
+            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params, JSON_PRETTY_PRINT));
         }
 
         curl_setopt($curl, CURLOPT_URL, $requestUrl);

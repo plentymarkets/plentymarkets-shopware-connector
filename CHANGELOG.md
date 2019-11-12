@@ -9,6 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - set shipping time on multi package order (@Pfabeck)
 - set shipping time equal today if not given (@Pfabeck)
+- fixed client for put calls (@Pfabeck)
 
 ## [## [5.3.3]]
 ### Added
