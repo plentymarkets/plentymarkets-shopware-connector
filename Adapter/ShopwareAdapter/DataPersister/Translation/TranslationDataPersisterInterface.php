@@ -5,6 +5,7 @@ namespace ShopwareAdapter\DataPersister\Translation;
 use Shopware\Models\Article\Image;
 use SystemConnector\TransferObject\Category\Category;
 use SystemConnector\TransferObject\Product\Product;
+use SystemConnector\TransferObject\Product\Variation\Variation;
 
 interface TranslationDataPersisterInterface
 {
@@ -12,6 +13,11 @@ interface TranslationDataPersisterInterface
      * @param Product $product
      */
     public function writeProductTranslations(Product $product);
+
+    /**
+     * @param Variation $variation
+     */
+    public function writeProductDetailTranslations(Variation $variation);
 
     /**
      * @param Category $category

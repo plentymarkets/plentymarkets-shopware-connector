@@ -18,6 +18,7 @@ use SystemConnector\TransferObject\Product\Image\Image;
 use SystemConnector\TransferObject\Product\Product;
 use SystemConnector\TransferObject\Product\Property\Property;
 use SystemConnector\TransferObject\Product\Property\Value\Value;
+use SystemConnector\TransferObject\Product\Variation\Variation;
 use SystemConnector\Translation\TranslationHelperInterface;
 use SystemConnector\ValueObject\Attribute\Attribute;
 use Zend_Db_Adapter_Exception;
@@ -149,6 +150,55 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
 
         foreach ($product->getImages() as $articleImage) {
             $this->writeMediaTranslations($articleImage, $productIdentity->getAdapterIdentifier());
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function writeProductDetailTranslations(Variation $variation)
+    {
+        $variationIdentity = $this->identityService->findOneBy([
+            'objectIdentifier' => $variation->getIdentifier(),
+            'objectType' => Variation::TYPE,
+            'adapterName' => ShopwareAdapter::NAME,
+        ]);
+
+        if (null === $variationIdentity) {
+            return;
+        }
+
+        foreach ($this->translationHelper->getLanguageIdentifiers($variation->getAttributes()[0]) as $languageIdentifier) {
+
+            $languageIdentity = $this->identityService->findOneBy([
+                'objectIdentifier' => $languageIdentifier,
+                'objectType' => Language::TYPE,
+                'adapterName' => ShopwareAdapter::NAME,
+            ]);
+
+            if (null === $languageIdentity) {
+                $this->logger->notice('language not mapped - ' . $languageIdentifier);
+
+                continue;
+            }
+
+            foreach ($variation->getAttributes() as $attribute) {
+                /**
+                 * @var Attribute $translatedAttribute
+                 */
+                $translatedAttribute = $this->translationHelper->translate($languageIdentifier, $attribute);
+
+                $key = '__attribute_plenty_connector' . ucfirst($attribute->getKey());
+                $attribute_key = strtolower(preg_replace('/[A-Z]/', '_\\0', lcfirst($key)));
+                $translation[$attribute_key] = $translatedAttribute->getValue();
+            }
+
+            $this->writeTranslations(
+                'variant',
+                (int) $variationIdentity->getAdapterIdentifier(),
+                $translation,
+                $languageIdentity
+            );
         }
     }
 

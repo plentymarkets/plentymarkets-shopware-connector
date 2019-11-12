@@ -458,6 +458,11 @@ class VariationResponseParser implements VariationResponseParserInterface
                 continue;
             }
 
+            if (!array_key_exists('name', $name) && array_key_exists('value', $name) ) {
+
+                $name['name'] = $name['value'];
+            }
+
             $translations[] = Translation::fromArray(
                 [
                     'languageIdentifier' => $languageIdentifier->getObjectIdentifier(),
@@ -541,6 +546,7 @@ class VariationResponseParser implements VariationResponseParserInterface
             $attribute->setKey('propertyId' . $property['propertyId']);
             $attribute->setValue($property['relationValues'][0]['value']);
             $attribute->setType($this->getPropertyType($property['propertyRelation']));
+            $attribute->setTranslations($this->getVariationPropertyValueTranslations($property['relationValues']));
 
             $attributes[] = $attribute;
         }

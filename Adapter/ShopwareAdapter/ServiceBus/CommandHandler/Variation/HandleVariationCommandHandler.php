@@ -9,6 +9,7 @@ use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Variant;
 use Shopware\Models\Article\Detail;
 use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
+use ShopwareAdapter\DataPersister\Translation\TranslationDataPersisterInterface;
 use ShopwareAdapter\RequestGenerator\Product\Variation\VariationRequestGeneratorInterface;
 use ShopwareAdapter\ShopwareAdapter;
 use SystemConnector\IdentityService\IdentityServiceInterface;
@@ -43,6 +44,11 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
     private $attributeDataPersister;
 
     /**
+     * @var TranslationDataPersisterInterface
+     */
+    private $translationDataPersister;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -52,12 +58,14 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
         VariationRequestGeneratorInterface $variationRequestGenerator,
         EntityManagerInterface $entityManager,
         AttributeDataPersisterInterface $attributeDataPersister,
+        TranslationDataPersisterInterface $translationDataPersister,
         LoggerInterface $logger
     ) {
         $this->identityService = $identityService;
         $this->variationRequestGenerator = $variationRequestGenerator;
         $this->entityManager = $entityManager;
         $this->attributeDataPersister = $attributeDataPersister;
+        $this->translationDataPersister = $translationDataPersister;
         $this->logger = $logger;
     }
 
@@ -159,6 +167,8 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
             $variationModel,
             $variation->getAttributes()
         );
+
+        $this->translationDataPersister->writeProductDetailTranslations($variation);
 
         return true;
     }
