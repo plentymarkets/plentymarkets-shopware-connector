@@ -723,12 +723,11 @@ class OrderResponseParser implements OrderResponseParserInterface
             $number = $this->getNumberFromVariation($item['itemVariationId']);
 
             if (empty($number)) {
-
                 $this->logger->info('product not found', [
                     'itemVariationId' => $item['itemVariationId'],
                 ]);
 
-            continue;
+                continue;
             }
 
             $orderItem = new OrderItem();
