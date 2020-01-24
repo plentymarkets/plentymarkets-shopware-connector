@@ -131,7 +131,7 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
         $itemParams['amounts'] = [
             [
                 'currency' => $currencyIdentity->getAdapterIdentifier(),
-                'priceOriginalGross' => $orderItem->getPrice(),
+                'priceOriginalGross' => round($orderItem->getPrice(), 2),
             ],
         ];
 
