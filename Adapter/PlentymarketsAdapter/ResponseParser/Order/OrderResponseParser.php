@@ -720,14 +720,12 @@ class OrderResponseParser implements OrderResponseParserInterface
         $result = [];
 
         foreach ($entry['orderItems'] as $item) {
-
             $number = $this->getNumberFromVariation($item['itemVariationId']);
 
             if (empty($number)) {
                 $this->logger->info('product not found', [
                     'itemVariationId' => $item['itemVariationId'],
                 ]);
-
                 continue;
             }
 
