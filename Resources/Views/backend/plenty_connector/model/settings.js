@@ -58,7 +58,12 @@ Ext.define('Shopware.apps.PlentyConnector.model.Settings', {
         {
             name: 'amazon_pay_key',
             type: 'string'
-        }
+        },
+		{
+			name: 'rest_items_per_page',
+			type: 'integer',
+			defaultValue: 200
+		}
         // {block name="backend/plentyconnector/model/settings/fields"}{/block}
     ],
 

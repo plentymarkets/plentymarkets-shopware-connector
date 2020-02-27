@@ -26,7 +26,7 @@ class Iterator implements BaseIterator, Countable
     /**
      * @var int
      */
-    private $limit = 50;
+    private $limit = 200;
 
     /**
      * @var int
@@ -74,6 +74,8 @@ class Iterator implements BaseIterator, Countable
         $this->criteria = $criteria;
         $this->path = $path;
         $this->prepareFunction = $prepareFunction;
+
+        $this->limit = $this->client->getItemsPerPage();
     }
 
     /**
@@ -152,6 +154,12 @@ class Iterator implements BaseIterator, Countable
 
         if (null !== $this->prepareFunction) {
             $result = call_user_func($this->prepareFunction, $result);
+        }
+
+        $itemsPerPage = $this->client->getItemsPerPage();
+
+        if ($itemsPerPage !== $this->limit) {
+            $this->limit = (int) $itemsPerPage;
         }
 
         if (count($result) !== $this->limit) {

@@ -42,12 +42,19 @@ class Client implements ClientInterface
      */
     private $retries = 0;
 
+    /**
+     * @var int
+     */
+    private $itemsPerPage = 0;
+
     public function __construct(
         ConfigServiceInterface $config,
         LoggerInterface $logger
     ) {
         $this->configService = $config;
         $this->logger = $logger;
+
+        $this->itemsPerPage = (int) $this->configService->get('rest_items_per_page', 100);
     }
 
     /**
@@ -91,6 +98,16 @@ class Client implements ClientInterface
         }
 
         return count($response);
+    }
+
+    /**
+     * get number of items per page
+     *
+     * @return int
+     */
+    public function getItemsPerPage(): int
+    {
+        return $this->itemsPerPage;
     }
 
     /**
@@ -417,6 +434,10 @@ class Client implements ClientInterface
     private function prepareResponse($limit, $offset, array $options, array $response): array
     {
         if (!isset($options['plainResponse']) || !$options['plainResponse']) {
+            if (isset($response['itemsPerPage']) && $response['itemsPerPage'] !== $this->itemsPerPage) {
+                $this->itemsPerPage = $limit = (int) $response['itemsPerPage'];
+            }
+
             // Hack to ensure that the correct page is returned from the api
             if (isset($response['page']) && $response['page'] !== $this->getPage($limit, $offset)) {
                 $response['entries'] = [];
