@@ -186,12 +186,12 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
             }
 
             $translation = [
-                'name' => $translatedCategory->getName(),
-                'metaTitle' => $translatedCategory->getMetaTitle(),
-                'metaKeywords' => $translatedCategory->getMetaKeywords(),
-                'metaDescription' => $translatedCategory->getMetaDescription(),
-                'cmsHeadline' => $translatedCategory->getDescription(),
-                'cmsText' => $translatedCategory->getLongDescription(),
+                'description' => $translatedCategory->getName(),
+                'metatitle' => $translatedCategory->getMetaTitle(),
+                'metakeywords' => $translatedCategory->getMetaKeywords(),
+                'metadescription' => $translatedCategory->getMetaDescription(),
+                'cmsheadline' => $translatedCategory->getDescription(),
+                'cmstext' => $translatedCategory->getLongDescription(),
             ];
 
             foreach ($category->getAttributes() as $attribute) {
