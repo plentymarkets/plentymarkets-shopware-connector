@@ -54,7 +54,7 @@ class Client implements ClientInterface
         $this->configService = $config;
         $this->logger = $logger;
 
-        $this->itemsPerPage = (int) $this->configService->get('rest_items_per_page', 100);
+        $this->itemsPerPage = (int) $this->configService->get('rest_items_per_page', 200);
     }
 
     /**
