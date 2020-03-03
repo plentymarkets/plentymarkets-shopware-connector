@@ -726,7 +726,6 @@ class OrderResponseParser implements OrderResponseParserInterface
                 $this->logger->info('product not found', [
                     'itemVariationId' => $item['itemVariationId'],
                 ]);
-
                 continue;
             }
 
@@ -759,12 +758,7 @@ class OrderResponseParser implements OrderResponseParserInterface
         return $price;
     }
 
-    /**
-     * @param $variationId
-     *
-     * @return string
-     */
-    private function getNumberFromVariation($variationId): string
+    private function getNumberFromVariation($variationId): ?string
     {
         static $variations;
 
@@ -772,7 +766,7 @@ class OrderResponseParser implements OrderResponseParserInterface
             $response = $this->client->request('GET', 'items/variations', ['id' => $variationId]);
 
             if (empty($response)) {
-                return '';
+                return null;
             }
 
             $variation = array_shift($response);
