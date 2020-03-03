@@ -6,6 +6,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - curl_setopt($curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4) @florianliebig
 
+### Changed
+- set iterator limit to 200 (@lacodimizer)
+
 ### Fixed
 - set shipping time on multi package order (@Pfabeck)
 - set shipping time equal today if not given (@Pfabeck)
