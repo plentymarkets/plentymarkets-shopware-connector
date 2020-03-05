@@ -212,9 +212,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         return true;
     }
 
-    /**
-     * @param Detail $mainVariation
-     */
     private function correctMainDetailAssignment(Detail $mainVariation)
     {
         $this->entityManager->getConnection()->update(
@@ -236,9 +233,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         );
     }
 
-    /**
-     * @return Article
-     */
     private function getArticleResource(): Article
     {
         // without this reset the entitymanager will write the models in the wrong order, leading
@@ -248,9 +242,6 @@ class HandleProductCommandHandler implements CommandHandlerInterface
         return Manager::getResource('Article');
     }
 
-    /**
-     * @return Variant
-     */
     private function getVariationResource(): Variant
     {
         return Manager::getResource('Variant');

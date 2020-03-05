@@ -59,9 +59,6 @@ class Manufacturer extends AbstractTransferObject implements AttributableInterfa
         $this->identifier = $identifier;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
@@ -115,9 +112,6 @@ class Manufacturer extends AbstractTransferObject implements AttributableInterfa
         return $this->attributes;
     }
 
-    /**
-     * @param array $attributes
-     */
     public function setAttributes(array $attributes)
     {
         $this->attributes = $attributes;

@@ -6,10 +6,5 @@ use SystemConnector\TransferObject\Media\Media;
 
 interface MediaResponseParserInterface
 {
-    /**
-     * @param array $entry
-     *
-     * @return Media
-     */
     public function parse(array $entry): Media;
 }

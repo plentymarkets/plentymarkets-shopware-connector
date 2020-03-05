@@ -85,9 +85,6 @@ class RemoveProductCommandHandler implements CommandHandlerInterface
         return true;
     }
 
-    /**
-     * @return Article
-     */
     private function getArticleResource(): Article
     {
         Shopware()->Container()->reset('models');

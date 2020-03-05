@@ -35,10 +35,6 @@ class OutputHandler implements OutputHandlerInterface
      */
     private $progressBar;
 
-    /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     */
     public function initialize(InputInterface $input, OutputInterface $output)
     {
         $this->output = $output;
@@ -105,10 +101,6 @@ class OutputHandler implements OutputHandlerInterface
         $this->style->writeln($messages);
     }
 
-    /**
-     * @param array $headers
-     * @param array $rows
-     */
     public function createTable(array $headers, array $rows)
     {
         if (!$this->isEnabled()) {
@@ -118,9 +110,6 @@ class OutputHandler implements OutputHandlerInterface
         $this->style->table($headers, $rows);
     }
 
-    /**
-     * @return bool
-     */
     private function isEnabled(): bool
     {
         if (null === $this->output) {

@@ -68,14 +68,6 @@ class OrderResponseParser implements OrderResponseParserInterface
 
     /**
      * OrderResponseParser constructor.
-     *
-     * @param IdentityServiceInterface         $identityService
-     * @param OrderItemResponseParserInterface $orderItemResponseParser
-     * @param AddressResponseParserInterface   $orderAddressParser
-     * @param CustomerResponseParserInterface  $customerParser
-     * @param CurrencyDataProviderInterface    $currencyDataProvider
-     * @param TaxDataProviderInterface         $taxDataProvider
-     * @param LoggerInterface                  $logger
      */
     public function __construct(
         IdentityServiceInterface $identityService,
@@ -188,11 +180,6 @@ class OrderResponseParser implements OrderResponseParserInterface
         return [$order];
     }
 
-    /**
-     * @param array $entry
-     *
-     * @return bool
-     */
     private function isValidOrder(array $entry): bool
     {
         $shopIdentity = $this->identityService->findOneOrThrow(
@@ -275,8 +262,6 @@ class OrderResponseParser implements OrderResponseParserInterface
      * @param string $type
      *
      * @throws AssertionFailedException
-     *
-     * @return string
      */
     private function getConnectorIdentifier($entry, $type): string
     {
@@ -290,11 +275,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
-     * @param array $entry
-     *
      * @throws NotFoundException
-     *
-     * @return string
      */
     private function getShippingCostsVatRateIdentifier(array $entry): string
     {
@@ -335,11 +316,7 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
-     * @param array $entry
-     *
      * @throws NotFoundException
-     *
-     * @return OrderItem
      */
     private function getShippingCosts(array $entry): OrderItem
     {
@@ -357,11 +334,6 @@ class OrderResponseParser implements OrderResponseParserInterface
         return $orderItem;
     }
 
-    /**
-     * @param array $entry
-     *
-     * @return float
-     */
     private function getShippingAmount(array $entry): float
     {
         $isShippingBruttoAndNettoSame = 1 === $entry['taxFree'] && $entry['taxFree'] === $entry['net'];

@@ -86,12 +86,8 @@ class HandleMediaCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param CommandInterface $command
-     *
      * @throws ParameterMissingException
      * @throws CustomValidationException
-     *
-     * @return bool
      */
     public function handle(CommandInterface $command): bool
     {

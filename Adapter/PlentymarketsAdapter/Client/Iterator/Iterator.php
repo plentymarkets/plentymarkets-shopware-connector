@@ -60,9 +60,6 @@ class Iterator implements BaseIterator, Countable
 
     /**
      * @param $path
-     * @param Client       $client
-     * @param array        $criteria
-     * @param null|Closure $prepareFunction
      *
      * @throws AssertionFailedException
      */
@@ -135,8 +132,6 @@ class Iterator implements BaseIterator, Countable
      * @throws AssertionFailedException
      * @throws InvalidCredentialsException
      * @throws Throwable
-     *
-     * @return int
      */
     public function count(): int
     {
@@ -144,9 +139,8 @@ class Iterator implements BaseIterator, Countable
     }
 
     /**
-     * @param array $criteria
-     * @param int   $limit
-     * @param int   $offset
+     * @param int $limit
+     * @param int $offset
      */
     private function loadPage(array $criteria = [], $limit = 0, $offset = 0)
     {

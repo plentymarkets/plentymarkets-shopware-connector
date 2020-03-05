@@ -7,11 +7,6 @@ use SystemConnector\ServiceBus\Command\CommandInterface;
 
 class NotFoundException extends Exception
 {
-    /**
-     * @param CommandInterface $command
-     *
-     * @return self
-     */
     public static function fromCommand(CommandInterface $command): self
     {
         $name = substr(strrchr(get_class($command), '\\'), 1);

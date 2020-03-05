@@ -35,10 +35,9 @@ class ClassNameFormatter implements ClassNameFormatterInterface
     private $commandFailedLevel;
 
     /**
-     * @param LoggerInterface $logger
-     * @param string          $commandReceivedLevel
-     * @param string          $commandSucceededLevel
-     * @param string          $commandFailedLevel
+     * @param string $commandReceivedLevel
+     * @param string $commandSucceededLevel
+     * @param string $commandFailedLevel
      */
     public function __construct(
         LoggerInterface $logger,
@@ -93,8 +92,6 @@ class ClassNameFormatter implements ClassNameFormatterInterface
 
     /**
      * @param mixed $command
-     *
-     * @return string
      */
     private function getType($command): string
     {
@@ -111,8 +108,6 @@ class ClassNameFormatter implements ClassNameFormatterInterface
 
     /**
      * @param mixed $command
-     *
-     * @return string
      */
     private function getClassName($command): string
     {
@@ -121,8 +116,6 @@ class ClassNameFormatter implements ClassNameFormatterInterface
 
     /**
      * @param mixed $command
-     *
-     * @return array
      */
     private function getPayload($command): array
     {
@@ -135,11 +128,6 @@ class ClassNameFormatter implements ClassNameFormatterInterface
         return $this->preparePayload($payload);
     }
 
-    /**
-     * @param array $payload
-     *
-     * @return array
-     */
     private function preparePayload(array $payload): array
     {
         return array_map(
@@ -154,8 +142,6 @@ class ClassNameFormatter implements ClassNameFormatterInterface
 
     /**
      * @param mixed $command
-     *
-     * @return string
      */
     private function getReceivedMessage($command): string
     {
@@ -164,8 +150,6 @@ class ClassNameFormatter implements ClassNameFormatterInterface
 
     /**
      * @param mixed $command
-     *
-     * @return string
      */
     private function getProcessedMessage($command): string
     {
@@ -174,8 +158,6 @@ class ClassNameFormatter implements ClassNameFormatterInterface
 
     /**
      * @param mixed $command
-     *
-     * @return string
      */
     private function getFailedMessage($command): string
     {

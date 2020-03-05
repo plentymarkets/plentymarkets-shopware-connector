@@ -11,8 +11,6 @@ interface QueryFactoryInterface
      * @param string $objectType
      * @param string $queryType
      * @param mixed  $payload
-     *
-     * @return QueryInterface
      */
     public function create($adapterName, $objectType, $queryType, $payload = null): QueryInterface;
 }

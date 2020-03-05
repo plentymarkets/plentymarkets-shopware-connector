@@ -64,11 +64,6 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
 
     /**
      * HandleBundleCommandHandler constructor.
-     *
-     * @param IdentityServiceInterface $identityService
-     * @param EntityManagerInterface   $entityManager
-     * @param BundleHelper             $bundleHelper
-     * @param LoggerInterface          $logger
      */
     public function __construct(
         IdentityServiceInterface $identityService,
@@ -212,8 +207,6 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param Price $price
-     *
      * @return null|Group
      */
     private function getCustomerGroupFromPrice(Price $price)
@@ -239,11 +232,6 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
         return $repository->find($identity->getAdapterIdentifier());
     }
 
-    /**
-     * @param Bundle $bundle
-     *
-     * @return ArrayCollection
-     */
     private function getCustomerGroups(Bundle $bundle): ArrayCollection
     {
         $result = [];
@@ -260,12 +248,6 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
         return new ArrayCollection($result);
     }
 
-    /**
-     * @param Bundle     $bundle
-     * @param SwagBundle $bundleModel
-     *
-     * @return ArrayCollection
-     */
     private function getPrices(Bundle $bundle, SwagBundle $bundleModel): ArrayCollection
     {
         $prices = [];
@@ -289,13 +271,6 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
         return new ArrayCollection($prices);
     }
 
-    /**
-     * @param Bundle     $bundle
-     * @param SwagBundle $bundleModel
-     * @param Detail     $mainVariant
-     *
-     * @return ArrayCollection
-     */
     private function getArticles(Bundle $bundle, SwagBundle $bundleModel, Detail $mainVariant): ArrayCollection
     {
         $result = [];
@@ -333,8 +308,6 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param Bundle $bundle
-     *
      * @throws NotFoundException
      *
      * @return null|Detail
@@ -360,8 +333,6 @@ class HandleBundleCommandHandler implements CommandHandlerInterface
 
     /**
      * @param string $bundleNumber
-     *
-     * @return int
      */
     private function getBundleStock($bundleNumber): int
     {

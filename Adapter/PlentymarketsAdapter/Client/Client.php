@@ -58,13 +58,9 @@ class Client implements ClientInterface
     }
 
     /**
-     * @param string       $path
-     * @param array        $criteria
-     * @param null|Closure $prepareFunction
+     * @param string $path
      *
      * @throws AssertionFailedException
-     *
-     * @return Iterator
      */
     public function getIterator($path, array $criteria = [], Closure $prepareFunction = null): Iterator
     {
@@ -73,13 +69,10 @@ class Client implements ClientInterface
 
     /**
      * @param string $path
-     * @param array  $criteria
      *
      * @throws AssertionFailedException
      * @throws InvalidCredentialsException
      * @throws Throwable
-     *
-     * @return int
      */
     public function getTotal($path, array $criteria = []): int
     {
@@ -113,16 +106,12 @@ class Client implements ClientInterface
     /**
      * @param string $method
      * @param string $path
-     * @param array  $params
      * @param null   $limit
      * @param null   $offset
-     * @param array  $options
      *
      * @throws AssertionFailedException
      * @throws InvalidCredentialsException
      * @throws Throwable
-     *
-     * @return array
      */
     public function request($method, $path, array $params = [], $limit = null, $offset = null, array $options = []): array
     {
@@ -163,8 +152,6 @@ class Client implements ClientInterface
      * @throws InvalidResponseException
      * @throws LimitReachedException
      * @throws LoginExpiredException
-     *
-     * @return array
      */
     private function curlRequest($requestUrl, $method, $path, $params, $limit, $offset): array
     {
@@ -231,11 +218,7 @@ class Client implements ClientInterface
             $json = json_decode($response, true);
 
             if (json_last_error() !== JSON_ERROR_NONE) {
-                throw InvalidResponseException::fromParams(
-                    $method,
-                    $path,
-                    $params
-                );
+                throw InvalidResponseException::fromParams($method, $path, $params);
             }
 
             return $json;
@@ -246,8 +229,6 @@ class Client implements ClientInterface
 
     /**
      * @param string $path
-     *
-     * @return bool
      */
     private function isLoginRequired($path): bool
     {
@@ -288,8 +269,6 @@ class Client implements ClientInterface
     /**
      * @param int $limit
      * @param int $offset
-     *
-     * @return int
      */
     private function getPage($limit, $offset): int
     {
@@ -304,12 +283,9 @@ class Client implements ClientInterface
 
     /**
      * @param $path
-     * @param array $options
      *
      * @throws AssertionFailedException
      * @throws InvalidCredentialsException
-     *
-     * @return string
      */
     private function getUrl($path, array $options = []): string
     {
@@ -331,8 +307,6 @@ class Client implements ClientInterface
      * @param $url
      *
      * @throws InvalidCredentialsException
-     *
-     * @return string
      */
     private function getBaseUri($url): string
     {
@@ -351,8 +325,6 @@ class Client implements ClientInterface
 
     /**
      * @param string $path
-     *
-     * @return array
      */
     private function getHeaders($path): array
     {
@@ -370,27 +342,20 @@ class Client implements ClientInterface
         return $headers;
     }
 
-    /**
-     * @return string
-     */
     private function getUserAgent(): string
     {
         return 'Shopware/PlentyConnector/2.0/Rest/v1';
     }
 
     /**
-     * @param Throwable $exception
      * @param $method
      * @param $path
-     * @param array $params
      * @param $limit
      * @param $offset
      *
      * @throws AssertionFailedException
      * @throws InvalidCredentialsException
      * @throws Throwable
-     *
-     * @return array
      */
     private function handleRequestException(Throwable $exception, $method, $path, array $params, $limit, $offset): array
     {
@@ -424,12 +389,8 @@ class Client implements ClientInterface
     }
 
     /**
-     * @param int   $limit
-     * @param int   $offset
-     * @param array $options
-     * @param array $response
-     *
-     * @return array
+     * @param int $limit
+     * @param int $offset
      */
     private function prepareResponse($limit, $offset, array $options, array $response): array
     {
@@ -452,8 +413,6 @@ class Client implements ClientInterface
     }
 
     /**
-     * @param array $headers
-     *
      * @throws LimitReachedException
      */
     private function handelRateLimits(array $headers)

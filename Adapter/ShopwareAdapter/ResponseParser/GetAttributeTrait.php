@@ -8,8 +8,6 @@ use SystemConnector\ValueObject\Attribute\Attribute;
 trait GetAttributeTrait
 {
     /**
-     * @param array $attributeData
-     *
      * @return Attribute[]
      */
     private function getAttributes(array $attributeData): array

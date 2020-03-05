@@ -24,7 +24,6 @@ class IdentityService implements IdentityServiceInterface
 
     /**
      * @param IdentityServiceStorageInterface[]|Traversable $storage
-     * @param ValidatorServiceInterface                     $validator
      */
     public function __construct(
         Traversable $storage,
@@ -53,12 +52,7 @@ class IdentityService implements IdentityServiceInterface
         ]);
 
         if (null === $identity) {
-            throw new NotFoundException(printf(
-                'Could not find identity for %s with identifier %s in %s.',
-                $objectType,
-                $adapterIdentifier,
-                $adapterName
-            ));
+            throw new NotFoundException(printf('Could not find identity for %s with identifier %s in %s.', $objectType, $adapterIdentifier, $adapterName));
         }
 
         $this->validator->validate($identity);
