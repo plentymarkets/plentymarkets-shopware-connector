@@ -18,17 +18,12 @@ abstract class ApiAbstract
 
     /**
      * Getter for Client
-     *
-     * @return ClientInterface
      */
     public function getClient(): ClientInterface
     {
         return $this->client;
     }
 
-    /**
-     * @param ClientInterface $client
-     */
     public function setClient(ClientInterface $client)
     {
         $this->client = $client;

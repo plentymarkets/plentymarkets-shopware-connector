@@ -201,12 +201,7 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
     }
 
     /**
-     * @param Address $address
-     * @param Order   $order
-     * @param array   $plentyCustomer
-     * @param int     $addressType
-     *
-     * @return array
+     * @param int $addressType
      */
     private function createAddress(Address $address, Order $order, array $plentyCustomer, $addressType = 1): array
     {
@@ -242,8 +237,6 @@ class OrderRequestGenerator implements OrderRequestGeneratorInterface
     }
 
     /**
-     * @param Order $order
-     *
      * @return array|bool|mixed
      */
     private function handleCustomer(Order $order)

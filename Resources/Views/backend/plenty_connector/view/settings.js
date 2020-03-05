@@ -253,7 +253,32 @@ Ext.define('Shopware.apps.PlentyConnector.view.Settings', {
                         name: 'amazon_pay_key',
                         allowBlank: true,
                         inputType: 'password'
-                    }
+                    },
+					{
+                        xtype: 'combobox',
+                        fieldLabel: '{s name=plentyconnector/view/settings/rest_items_per_page}{/s}',
+                        name: 'rest_items_per_page',
+                        allowBlank: false,
+                        editable: false,
+                        mode: 'local',
+                        value: 100,
+						displayField: 1,
+						valueField: 0,
+                        triggerAction: 'all',
+                        selectOnFocus: true,
+                        store: [
+                            [50, '50'],
+                            [100, '100'],
+                            [150, '150'],
+							[200, '200'],
+							[250, '250'],
+							[300, '300'],
+							[350, '350'],
+							[400, '400'],
+							[450, '450'],
+							[500, '500']
+                        ]
+					}
                 ]
             },
             // {block name="backend/plentyconnector/view/settings/fields"}{/block}

@@ -27,9 +27,6 @@ class BundleProduct extends AbstractValueObject
      */
     private $attributes = [];
 
-    /**
-     * @return string
-     */
     public function getNumber(): string
     {
         return $this->number;
@@ -43,9 +40,6 @@ class BundleProduct extends AbstractValueObject
         $this->number = $number;
     }
 
-    /**
-     * @return float
-     */
     public function getAmount(): float
     {
         return $this->amount;
@@ -59,9 +53,6 @@ class BundleProduct extends AbstractValueObject
         $this->amount = $amount;
     }
 
-    /**
-     * @return int
-     */
     public function getPosition(): int
     {
         return $this->position;

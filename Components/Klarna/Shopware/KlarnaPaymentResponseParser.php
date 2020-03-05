@@ -103,10 +103,6 @@ class KlarnaPaymentResponseParser implements PaymentResponseParserInterface
         return $payments;
     }
 
-    /**
-     * @param Payment $payment
-     * @param array   $element
-     */
     private function addKlarnaPaymentData(Payment $payment, array $element)
     {
         if ('payment_klarna_kpm' !== $element['payment']['action']) {

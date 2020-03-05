@@ -56,8 +56,6 @@ class PriceResponseParser implements PriceResponseParserInterface
     }
 
     /**
-     * @param array $variation
-     *
      * @return Price[]
      */
     public function parse(array $variation): array
@@ -145,10 +143,7 @@ class PriceResponseParser implements PriceResponseParserInterface
     }
 
     /**
-     * @param int   $orderOrigin
-     * @param array $referrers
-     *
-     * @return bool
+     * @param int $orderOrigin
      */
     private function checkIfOriginIsInReferrers($orderOrigin, array $referrers): bool
     {
@@ -161,11 +156,6 @@ class PriceResponseParser implements PriceResponseParserInterface
         return false;
     }
 
-    /**
-     * @param array $variationSalesPrices
-     *
-     * @return array
-     */
     private function getPricesAsSortedArray(array $variationSalesPrices = []): array
     {
         $priceConfigurations = $this->getPriceConfigurations();
@@ -247,8 +237,6 @@ class PriceResponseParser implements PriceResponseParserInterface
 
     /**
      * Returns the matching price configurations.
-     *
-     * @return array
      */
     private function getPriceConfigurations(): array
     {
@@ -304,7 +292,6 @@ class PriceResponseParser implements PriceResponseParserInterface
     }
 
     /**
-     * @param Price $price
      * @param array $priceArray
      */
     private function addPseudoPrice(Price $price, $priceArray)
@@ -331,8 +318,6 @@ class PriceResponseParser implements PriceResponseParserInterface
     /**
      * @param array $priceConfigurations
      * @param array $price
-     *
-     * @return array
      */
     private function filterPriceConfiguration($priceConfigurations, $price): array
     {

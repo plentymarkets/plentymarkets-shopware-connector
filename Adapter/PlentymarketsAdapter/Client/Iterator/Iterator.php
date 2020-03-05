@@ -26,7 +26,7 @@ class Iterator implements BaseIterator, Countable
     /**
      * @var int
      */
-    private $limit = 50;
+    private $limit = 200;
 
     /**
      * @var int
@@ -60,9 +60,6 @@ class Iterator implements BaseIterator, Countable
 
     /**
      * @param $path
-     * @param Client       $client
-     * @param array        $criteria
-     * @param null|Closure $prepareFunction
      *
      * @throws AssertionFailedException
      */
@@ -74,6 +71,8 @@ class Iterator implements BaseIterator, Countable
         $this->criteria = $criteria;
         $this->path = $path;
         $this->prepareFunction = $prepareFunction;
+
+        $this->limit = $this->client->getItemsPerPage();
     }
 
     /**
@@ -133,8 +132,6 @@ class Iterator implements BaseIterator, Countable
      * @throws AssertionFailedException
      * @throws InvalidCredentialsException
      * @throws Throwable
-     *
-     * @return int
      */
     public function count(): int
     {
@@ -142,9 +139,8 @@ class Iterator implements BaseIterator, Countable
     }
 
     /**
-     * @param array $criteria
-     * @param int   $limit
-     * @param int   $offset
+     * @param int $limit
+     * @param int $offset
      */
     private function loadPage(array $criteria = [], $limit = 0, $offset = 0)
     {
@@ -152,6 +148,12 @@ class Iterator implements BaseIterator, Countable
 
         if (null !== $this->prepareFunction) {
             $result = call_user_func($this->prepareFunction, $result);
+        }
+
+        $itemsPerPage = $this->client->getItemsPerPage();
+
+        if ($itemsPerPage !== $this->limit) {
+            $this->limit = (int) $itemsPerPage;
         }
 
         if (count($result) !== $this->limit) {

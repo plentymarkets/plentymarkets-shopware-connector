@@ -68,17 +68,11 @@ class Identity
         $this->adapterName = $adapterName;
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
     public function getObjectIdentifier(): string
     {
         return $this->objectIdentifier;
@@ -92,9 +86,6 @@ class Identity
         $this->objectIdentifier = $objectIdentifier;
     }
 
-    /**
-     * @return string
-     */
     public function getObjectType(): string
     {
         return $this->objectType;
@@ -108,9 +99,6 @@ class Identity
         $this->objectType = $objectType;
     }
 
-    /**
-     * @return string
-     */
     public function getAdapterIdentifier(): string
     {
         return $this->adapterIdentifier;
@@ -124,9 +112,6 @@ class Identity
         $this->adapterIdentifier = $adapterIdentifier;
     }
 
-    /**
-     * @return string
-     */
     public function getAdapterName(): string
     {
         return $this->adapterName;

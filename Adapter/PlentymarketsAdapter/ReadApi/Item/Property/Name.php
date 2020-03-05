@@ -15,8 +15,6 @@ class Name extends ApiAbstract
 
     /**
      * @param int $propertyId
-     *
-     * @return array
      */
     public function findOne($propertyId): array
     {

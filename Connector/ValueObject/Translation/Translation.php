@@ -21,9 +21,6 @@ class Translation extends AbstractValueObject
      */
     private $value;
 
-    /**
-     * @return string
-     */
     public function getLanguageIdentifier(): string
     {
         return $this->languageIdentifier;
@@ -37,9 +34,6 @@ class Translation extends AbstractValueObject
         $this->languageIdentifier = $languageIdentifier;
     }
 
-    /**
-     * @return string
-     */
     public function getProperty(): string
     {
         return $this->property;

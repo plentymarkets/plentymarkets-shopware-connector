@@ -7,8 +7,6 @@ use JsonSerializable;
 abstract class AbstractValueObject implements ValueObjectInterface, JsonSerializable
 {
     /**
-     * @param array $params
-     *
      * @return $this
      */
     public static function fromArray(array $params = []): ValueObjectInterface

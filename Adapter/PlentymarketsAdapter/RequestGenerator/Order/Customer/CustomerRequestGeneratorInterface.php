@@ -7,11 +7,5 @@ use SystemConnector\TransferObject\Order\Order;
 
 interface CustomerRequestGeneratorInterface
 {
-    /**
-     * @param Customer $customer
-     * @param Order    $order
-     *
-     * @return array
-     */
     public function generate(Customer $customer, Order $order): array;
 }

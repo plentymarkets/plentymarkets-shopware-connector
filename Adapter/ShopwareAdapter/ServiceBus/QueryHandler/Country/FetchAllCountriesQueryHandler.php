@@ -63,9 +63,6 @@ class FetchAllCountriesQueryHandler implements QueryHandlerInterface
         }
     }
 
-    /**
-     * @return Query
-     */
     private function createCurrenciesQuery(): Query
     {
         $queryBuilder = $this->repository->createQueryBuilder('countries');
