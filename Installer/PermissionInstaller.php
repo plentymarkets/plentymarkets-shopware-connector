@@ -42,34 +42,21 @@ class PermissionInstaller implements InstallerInterface
         $this->permissions = $permissions;
     }
 
-    /**
-     * @param InstallContext $context
-     */
     public function install(InstallContext $context)
     {
         $this->synchronize($context->getPlugin(), $this->permissions);
     }
 
-    /**
-     * @param UpdateContext $context
-     */
     public function update(UpdateContext $context)
     {
         $this->synchronize($context->getPlugin(), $this->permissions);
     }
 
-    /**
-     * @param UninstallContext $context
-     */
     public function uninstall(UninstallContext $context)
     {
         $this->removePermissions($context);
     }
 
-    /**
-     * @param ShopwareResource $resource
-     * @param array            $permissions
-     */
     protected function removeNotExistingPrivileges(ShopwareResource $resource, array $permissions)
     {
         $existingPrivileges = $resource->getPrivileges()->toArray();
@@ -89,10 +76,6 @@ class PermissionInstaller implements InstallerInterface
         $this->em->flush();
     }
 
-    /**
-     * @param Plugin $plugin
-     * @param array  $permissions
-     */
     private function synchronize(Plugin $plugin, array $permissions)
     {
         $resource = $this->getResource($plugin->getName());
@@ -117,10 +100,6 @@ class PermissionInstaller implements InstallerInterface
         return $this->repository->findOneBy(['name' => $resourceName]);
     }
 
-    /**
-     * @param Plugin $plugin
-     * @param array  $permissions
-     */
     private function createResource(Plugin $plugin, array $permissions)
     {
         $this->acl->createResource(
@@ -131,10 +110,6 @@ class PermissionInstaller implements InstallerInterface
         );
     }
 
-    /**
-     * @param ShopwareResource $resource
-     * @param array            $permissions
-     */
     private function synchronizePrivileges(ShopwareResource $resource, array $permissions)
     {
         $existingPrivileges = array_filter($resource->getPrivileges()->toArray(), static function (ShopwarePrivilege $privilege) use ($permissions) {
@@ -153,9 +128,6 @@ class PermissionInstaller implements InstallerInterface
         });
     }
 
-    /**
-     * @param InstallContext $context
-     */
     private function removePermissions(InstallContext $context)
     {
         $this->acl->deleteResource($context->getPlugin()->getName());

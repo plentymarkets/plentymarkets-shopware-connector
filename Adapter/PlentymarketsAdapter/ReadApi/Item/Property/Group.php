@@ -15,8 +15,6 @@ class Group extends ApiAbstract
 
     /**
      * @param int $propertyGroupId
-     *
-     * @return array
      */
     public function findOne($propertyGroupId): array
     {

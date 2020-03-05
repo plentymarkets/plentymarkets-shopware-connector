@@ -53,9 +53,6 @@ class Price extends AbstractTransferObject
         return self::TYPE;
     }
 
-    /**
-     * @return string
-     */
     public function getIdentifier(): string
     {
         return $this->identifier;
@@ -69,9 +66,6 @@ class Price extends AbstractTransferObject
         $this->identifier = $identifier;
     }
 
-    /**
-     * @return string
-     */
     public function getVariationIdentifier(): string
     {
         return $this->variationIdentifier;
@@ -85,9 +79,6 @@ class Price extends AbstractTransferObject
         $this->variationIdentifier = $variationIdentifier;
     }
 
-    /**
-     * @return float
-     */
     public function getPrice(): float
     {
         return $this->price;
@@ -101,9 +92,6 @@ class Price extends AbstractTransferObject
         $this->price = $price;
     }
 
-    /**
-     * @return float
-     */
     public function getPseudoPrice(): float
     {
         return $this->pseudoPrice;
@@ -133,9 +121,6 @@ class Price extends AbstractTransferObject
         $this->customerGroupIdentifier = $customerGroupIdentifier;
     }
 
-    /**
-     * @return float
-     */
     public function getFromAmount(): float
     {
         return $this->fromAmount;

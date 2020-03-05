@@ -127,11 +127,6 @@ class CustomerResponseParser implements CustomerResponseParserInterface
         return $customer;
     }
 
-    /**
-     * @param array $entry
-     *
-     * @return GroupModel
-     */
     private function getCustomerGroup(array $entry): GroupModel
     {
         /**
@@ -146,8 +141,6 @@ class CustomerResponseParser implements CustomerResponseParserInterface
     }
 
     /**
-     * @param array $entry
-     *
      * @return null|string
      */
     private function getLanguageIdentifier(array $entry)
@@ -177,8 +170,6 @@ class CustomerResponseParser implements CustomerResponseParserInterface
 
     /**
      * @param $shopwareId
-     *
-     * @return string
      */
     private function getCustomerTypeId($shopwareId): string
     {
@@ -196,8 +187,6 @@ class CustomerResponseParser implements CustomerResponseParserInterface
     /**
      * @param string $entry
      * @param string $type
-     *
-     * @return string
      */
     private function getIdentifier($entry, $type): string
     {

@@ -55,8 +55,6 @@ class AmazonPayPaymentResponseParser implements PaymentResponseParserInterface
 
     /**
      * @param string $orderId
-     *
-     * @return array
      */
     private function getAmazonPayData($orderId): array
     {
@@ -69,10 +67,6 @@ class AmazonPayPaymentResponseParser implements PaymentResponseParserInterface
         }
     }
 
-    /**
-     * @param Payment $payment
-     * @param array   $element
-     */
     private function addAmazonPay(Payment $payment, array $element)
     {
         $data = $this->getAmazonPayData($element['id']);

@@ -27,9 +27,6 @@ class PaymentRequestGeneratorTest extends RequestGeneratorTest
 
     /**
      * @dataProvider getPaymentObjects
-     *
-     * @param Payment $payment
-     * @param array   $expectedRequest
      */
     public function testPaymentRequestIsGeneratedCorrectly(Payment $payment, array $expectedRequest)
     {

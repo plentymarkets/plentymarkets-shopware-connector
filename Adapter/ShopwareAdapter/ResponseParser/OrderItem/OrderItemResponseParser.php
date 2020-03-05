@@ -71,12 +71,9 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
     }
 
     /**
-     * @param array $entry
      * @param $taxFree
      *
      * @throws NotFoundException
-     *
-     * @return string
      */
     private function getVatRateIdentifier(array $entry, $taxFree): string
     {
@@ -130,8 +127,7 @@ class OrderItemResponseParser implements OrderItemResponseParserInterface
     }
 
     /**
-     * @param array $entry
-     * @param bool  $taxFree
+     * @param bool $taxFree
      *
      * @return float|int|mixed
      */

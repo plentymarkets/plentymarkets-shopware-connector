@@ -26,9 +26,6 @@ class CronjobInstaller implements InstallerInterface
         $this->cronjobs = $cronjobs;
     }
 
-    /**
-     * @param InstallContext $context
-     */
     public function install(InstallContext $context)
     {
         $this->removeCronjobs();
@@ -38,9 +35,6 @@ class CronjobInstaller implements InstallerInterface
         }
     }
 
-    /**
-     * @param UpdateContext $context
-     */
     public function update(UpdateContext $context)
     {
         $this->removeCronjobs($context->getPlugin()->getId());
@@ -50,9 +44,6 @@ class CronjobInstaller implements InstallerInterface
         }
     }
 
-    /**
-     * @param UninstallContext $context
-     */
     public function uninstall(UninstallContext $context)
     {
         $this->removeCronjobs($context->getPlugin()->getId());

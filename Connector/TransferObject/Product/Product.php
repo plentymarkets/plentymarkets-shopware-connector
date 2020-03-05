@@ -163,9 +163,6 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
         return self::TYPE;
     }
 
-    /**
-     * @return string
-     */
     public function getIdentifier(): string
     {
         return $this->identifier;
@@ -179,9 +176,6 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
         $this->identifier = $identifier;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
@@ -195,9 +189,6 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
         $this->name = $name;
     }
 
-    /**
-     * @return string
-     */
     public function getNumber(): string
     {
         return $this->number;
@@ -211,9 +202,6 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
         $this->number = $number;
     }
 
-    /**
-     * @return bool
-     */
     public function isActive(): bool
     {
         return $this->active;
@@ -227,25 +215,16 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
         $this->active = $active;
     }
 
-    /**
-     * @return array
-     */
     public function getShopIdentifiers(): array
     {
         return $this->shopIdentifiers;
     }
 
-    /**
-     * @param array $shopIdentifiers
-     */
     public function setShopIdentifiers(array $shopIdentifiers)
     {
         $this->shopIdentifiers = $shopIdentifiers;
     }
 
-    /**
-     * @return string
-     */
     public function getManufacturerIdentifier(): string
     {
         return $this->manufacturerIdentifier;
@@ -259,49 +238,31 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
         $this->manufacturerIdentifier = $manufacturerIdentifier;
     }
 
-    /**
-     * @return array
-     */
     public function getCategoryIdentifiers(): array
     {
         return $this->categoryIdentifiers;
     }
 
-    /**
-     * @param array $categoryIdentifiers
-     */
     public function setCategoryIdentifiers(array $categoryIdentifiers)
     {
         $this->categoryIdentifiers = $categoryIdentifiers;
     }
 
-    /**
-     * @return array
-     */
     public function getDefaultCategoryIdentifiers(): array
     {
         return $this->defaultCategoryIdentifiers;
     }
 
-    /**
-     * @param array $defaultCategoryIdentifiers
-     */
     public function setDefaultCategoryIdentifiers(array $defaultCategoryIdentifiers)
     {
         $this->defaultCategoryIdentifiers = $defaultCategoryIdentifiers;
     }
 
-    /**
-     * @return array
-     */
     public function getShippingProfileIdentifiers(): array
     {
         return $this->shippingProfileIdentifiers;
     }
 
-    /**
-     * @param array $shippingProfileIdentifiers
-     */
     public function setShippingProfileIdentifiers(array $shippingProfileIdentifiers)
     {
         $this->shippingProfileIdentifiers = $shippingProfileIdentifiers;
@@ -323,9 +284,6 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
         $this->images = $images;
     }
 
-    /**
-     * @return string
-     */
     public function getVatRateIdentifier(): string
     {
         return $this->vatRateIdentifier;
@@ -339,9 +297,6 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
         $this->vatRateIdentifier = $vatRateIdentifier;
     }
 
-    /**
-     * @return string
-     */
     public function getDescription(): string
     {
         return $this->description;
@@ -355,9 +310,6 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
         $this->description = $description;
     }
 
-    /**
-     * @return string
-     */
     public function getLongDescription(): string
     {
         return $this->longDescription;
@@ -371,9 +323,6 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
         $this->longDescription = $longDescription;
     }
 
-    /**
-     * @return string
-     */
     public function getMetaTitle(): string
     {
         return $this->metaTitle;
@@ -387,9 +336,6 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
         $this->metaTitle = $metaTitle;
     }
 
-    /**
-     * @return string
-     */
     public function getMetaDescription(): string
     {
         return $this->metaDescription;
@@ -403,9 +349,6 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
         $this->metaDescription = $metaDescription;
     }
 
-    /**
-     * @return string
-     */
     public function getMetaKeywords(): string
     {
         return $this->metaKeywords;
@@ -419,9 +362,6 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
         $this->metaKeywords = $metaKeywords;
     }
 
-    /**
-     * @return string
-     */
     public function getMetaRobots(): string
     {
         return $this->metaRobots;
@@ -451,17 +391,11 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
         $this->linkedProducts = $linkedProducts;
     }
 
-    /**
-     * @return array
-     */
     public function getDocuments(): array
     {
         return $this->documents;
     }
 
-    /**
-     * @param array $documents
-     */
     public function setDocuments(array $documents)
     {
         $this->documents = $documents;
@@ -507,9 +441,6 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
         return $this->availableFrom;
     }
 
-    /**
-     * @param null|DateTimeImmutable $availableFrom
-     */
     public function setAvailableFrom(DateTimeImmutable $availableFrom = null)
     {
         $this->availableFrom = $availableFrom;
@@ -523,9 +454,6 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
         return $this->availableTo;
     }
 
-    /**
-     * @param null|DateTimeImmutable $availableTo
-     */
     public function setAvailableTo(DateTimeImmutable $availableTo = null)
     {
         $this->availableTo = $availableTo;
@@ -539,9 +467,6 @@ class Product extends AbstractTransferObject implements TranslatableInterface, A
         return $this->createdAt;
     }
 
-    /**
-     * @param null|DateTimeImmutable $createdAt
-     */
     public function setCreatedAt(DateTimeImmutable $createdAt = null)
     {
         $this->createdAt = $createdAt;

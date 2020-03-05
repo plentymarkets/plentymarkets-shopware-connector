@@ -8,9 +8,6 @@ class MediaCategoryHelper implements MediaCategoryHelperInterface
     const PRODUCT = 2;
     const CATEGORY = 3;
 
-    /**
-     * @return array
-     */
     public function getCategories(): array
     {
         return [

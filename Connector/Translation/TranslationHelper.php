@@ -8,11 +8,6 @@ use SystemConnector\ValueObject\Translation\Translation;
 
 class TranslationHelper implements TranslationHelperInterface
 {
-    /**
-     * @param TranslatableInterface $object
-     *
-     * @return array
-     */
     public function getLanguageIdentifiers(TranslatableInterface $object): array
     {
         $languages = [];

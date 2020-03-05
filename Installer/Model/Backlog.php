@@ -75,33 +75,21 @@ class Backlog
         $this->status = self::STATUS_OPEN;
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return CommandInterface
-     */
     public function getPayload(): CommandInterface
     {
         return $this->payload;
     }
 
-    /**
-     * @param CommandInterface $payload
-     */
     public function setPayload(CommandInterface $payload)
     {
         $this->payload = $payload;
     }
 
-    /**
-     * @return string
-     */
     public function getStatus(): string
     {
         return $this->status;
@@ -115,9 +103,6 @@ class Backlog
         $this->status = $status;
     }
 
-    /**
-     * @return int
-     */
     public function getPriority(): int
     {
         return $this->priority;
@@ -131,25 +116,16 @@ class Backlog
         $this->priority = $priority;
     }
 
-    /**
-     * @return DateTime
-     */
     public function getTime(): DateTime
     {
         return $this->time;
     }
 
-    /**
-     * @param DateTime $time
-     */
     public function setTime(DateTime $time)
     {
         $this->time = $time;
     }
 
-    /**
-     * @return string
-     */
     public function getHash(): string
     {
         return $this->hash;

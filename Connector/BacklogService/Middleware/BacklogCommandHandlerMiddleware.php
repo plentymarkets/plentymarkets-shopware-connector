@@ -61,9 +61,6 @@ class BacklogCommandHandlerMiddleware implements Middleware
         return $next($command);
     }
 
-    /**
-     * @param CommandInterface $command
-     */
     private function logCommandEnqueued(CommandInterface $command)
     {
         $context = [];

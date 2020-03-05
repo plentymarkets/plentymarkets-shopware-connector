@@ -111,8 +111,6 @@ class ManufacturerResponseParser implements ManufacturerResponseParserInterface
     }
 
     /**
-     * @param array $additionalValues
-     *
      * @return Attribute[]
      */
     private function setAttributes(array $additionalValues): array

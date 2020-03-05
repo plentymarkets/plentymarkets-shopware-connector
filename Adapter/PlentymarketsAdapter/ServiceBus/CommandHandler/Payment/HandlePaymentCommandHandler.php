@@ -107,11 +107,6 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
         return true;
     }
 
-    /**
-     * @param Payment $payment
-     *
-     * @return array
-     */
     private function findOrCreatePlentyPayment(Payment $payment): array
     {
         $plentyPayments = $this->fetchPlentyPayments($payment);
@@ -135,8 +130,6 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
 
     /**
      * @param Payment $payment
-     *
-     * @return array
      */
     private function fetchPlentyPayments($payment): array
     {
@@ -154,11 +147,6 @@ class HandlePaymentCommandHandler implements CommandHandlerInterface
         return $payments;
     }
 
-    /**
-     * @param Payment $payment
-     *
-     * @return array
-     */
     private function createPlentyPayment(Payment $payment): array
     {
         $params = $this->requestGenerator->generate($payment);
