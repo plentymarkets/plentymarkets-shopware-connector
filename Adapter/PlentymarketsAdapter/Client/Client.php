@@ -95,8 +95,6 @@ class Client implements ClientInterface
 
     /**
      * get number of items per page
-     *
-     * @return int
      */
     public function getItemsPerPage(): int
     {
