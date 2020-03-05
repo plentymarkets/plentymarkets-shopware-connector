@@ -83,9 +83,6 @@ class Media extends AbstractTransferObject implements TranslatableInterface, Att
         $this->identifier = $identifier;
     }
 
-    /**
-     * @return string
-     */
     public function getMediaCategoryIdentifier(): string
     {
         return $this->mediaCategoryIdentifier;
@@ -99,9 +96,6 @@ class Media extends AbstractTransferObject implements TranslatableInterface, Att
         $this->mediaCategoryIdentifier = $mediaCategoryIdentifier;
     }
 
-    /**
-     * @return string
-     */
     public function getLink(): string
     {
         return $this->link;
@@ -115,9 +109,6 @@ class Media extends AbstractTransferObject implements TranslatableInterface, Att
         $this->link = $link;
     }
 
-    /**
-     * @return string
-     */
     public function getFilename(): string
     {
         return $this->filename;
@@ -131,9 +122,6 @@ class Media extends AbstractTransferObject implements TranslatableInterface, Att
         $this->filename = $filename;
     }
 
-    /**
-     * @return string
-     */
     public function getHash(): string
     {
         return $this->hash;

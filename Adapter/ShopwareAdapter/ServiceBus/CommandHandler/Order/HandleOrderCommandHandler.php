@@ -67,11 +67,6 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         $this->statusRepository = $entityManager->getRepository(Status::class);
     }
 
-    /**
-     * @param CommandInterface $command
-     *
-     * @return bool
-     */
     public function supports(CommandInterface $command): bool
     {
         return $command instanceof TransferObjectCommand &&
@@ -167,8 +162,6 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param Order $order
-     *
      * @return null|Package
      */
     private function getPackage(Order $order)
@@ -182,10 +175,6 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         return array_shift($packages);
     }
 
-    /**
-     * @param Order   $order
-     * @param Package $package
-     */
     private function addShippingProviderAttribute(Order $order, Package $package)
     {
         if (null === $package->getShippingProvider()) {

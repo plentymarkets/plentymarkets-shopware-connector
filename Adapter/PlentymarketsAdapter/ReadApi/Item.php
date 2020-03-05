@@ -71,8 +71,6 @@ class Item extends ApiAbstract
 
     /**
      * @param int $productId
-     *
-     * @return array
      */
     public function findOne($productId): array
     {
@@ -99,9 +97,6 @@ class Item extends ApiAbstract
         return $result;
     }
 
-    /**
-     * @return Iterator
-     */
     public function findAll(): Iterator
     {
         return $this->client->getIterator('items', [
@@ -114,12 +109,6 @@ class Item extends ApiAbstract
         });
     }
 
-    /**
-     * @param DateTimeImmutable $startTimestamp
-     * @param DateTimeImmutable $endTimestamp
-     *
-     * @return Iterator
-     */
     public function findChanged(DateTimeImmutable $startTimestamp, DateTimeImmutable $endTimestamp): Iterator
     {
         $start = $startTimestamp->format(DATE_W3C);
@@ -136,12 +125,6 @@ class Item extends ApiAbstract
         });
     }
 
-    /**
-     * @param DateTimeImmutable $startTimestamp
-     * @param DateTimeImmutable $endTimestamp
-     *
-     * @return Iterator
-     */
     public function findChangedVariations(DateTimeImmutable $startTimestamp, DateTimeImmutable $endTimestamp): Iterator
     {
         $start = $startTimestamp->format(DATE_W3C);
@@ -158,9 +141,6 @@ class Item extends ApiAbstract
         });
     }
 
-    /**
-     * @param array $elements
-     */
     private function addAdditionalData(array &$elements)
     {
         if (empty($elements)) {

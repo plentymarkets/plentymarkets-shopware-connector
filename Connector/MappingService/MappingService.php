@@ -86,8 +86,7 @@ class MappingService implements MappingServiceInterface
     }
 
     /**
-     * @param Definition $definition
-     * @param string     $adapterName
+     * @param string $adapterName
      *
      * @return TransferObjectInterface[]
      */

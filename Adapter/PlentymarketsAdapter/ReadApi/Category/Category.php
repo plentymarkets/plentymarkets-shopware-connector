@@ -25,8 +25,6 @@ class Category extends ApiAbstract
 
     /**
      * @param int $categoryId
-     *
-     * @return array
      */
     public function findOne($categoryId): array
     {
@@ -37,9 +35,6 @@ class Category extends ApiAbstract
         ]);
     }
 
-    /**
-     * @return array
-     */
     public function findAll(): array
     {
         $elements = iterator_to_array($this->client->getIterator('categories', [
@@ -53,11 +48,6 @@ class Category extends ApiAbstract
         return $elements;
     }
 
-    /**
-     * @param DateTimeImmutable $startTimestamp
-     *
-     * @return array
-     */
     public function findChanged(DateTimeImmutable $startTimestamp): array
     {
         $elements = iterator_to_array($this->client->getIterator('categories', [
@@ -72,9 +62,6 @@ class Category extends ApiAbstract
         return $elements;
     }
 
-    /**
-     * @param array $categories
-     */
     private function sortCategories(array &$categories)
     {
         usort($categories, static function ($a, $b) {

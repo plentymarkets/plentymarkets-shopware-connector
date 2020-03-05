@@ -117,8 +117,6 @@ class DatabaseBacklogServiceStorage implements BacklogServiceStorageInterface
 
     /**
      * @param string $hash
-     *
-     * @return bool
      */
     private function entryExists($hash): bool
     {
@@ -138,9 +136,6 @@ class DatabaseBacklogServiceStorage implements BacklogServiceStorageInterface
         return false;
     }
 
-    /**
-     * @return int
-     */
     private function getEnqueuedAmount(): int
     {
         $queryBuilder = $this->connection->createQueryBuilder();

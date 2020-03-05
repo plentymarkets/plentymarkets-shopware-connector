@@ -62,10 +62,6 @@ class PayPalUnifiedInstallmentPaymentResponseParser implements PaymentResponsePa
         }
     }
 
-    /**
-     * @param Payment $payment
-     * @param array   $element
-     */
     private function addPayPalUnifiedInstallment(Payment $payment, array $element)
     {
         $data = $this->getPayPalUnifiedInstallmentData($element['paymentInstances'][0]['id']);

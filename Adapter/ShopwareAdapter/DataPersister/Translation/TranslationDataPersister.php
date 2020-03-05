@@ -152,9 +152,6 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
         }
     }
 
-    /**
-     * @param Category $category
-     */
     public function writeCategoryTranslations(Category $category)
     {
         $categoryIdentity = $this->identityService->findOneBy([
@@ -215,8 +212,6 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
     }
 
     /**
-     * @param ArticleImage $image
-     *
      * @throws InvalidArgumentException
      */
     public function removeMediaTranslation(ArticleImage $image)
@@ -229,8 +224,7 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
     }
 
     /**
-     * @param Property $property
-     * @param string   $type
+     * @param string $type
      */
     private function writeGroupTranslations(Property $property, $type)
     {
@@ -290,7 +284,6 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
     }
 
     /**
-     * @param Value  $value
      * @param string $type
      */
     private function writeValueTranslations(Value $value, $type)
@@ -410,10 +403,8 @@ class TranslationDataPersister implements TranslationDataPersisterInterface
     }
 
     /**
-     * @param string   $type
-     * @param int      $primaryKey
-     * @param array    $translation
-     * @param Identity $languageIdentity
+     * @param string $type
+     * @param int    $primaryKey
      *
      * @throws Zend_Db_Adapter_Exception
      */

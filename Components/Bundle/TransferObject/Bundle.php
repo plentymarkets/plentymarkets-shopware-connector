@@ -96,9 +96,6 @@ class Bundle extends AbstractTransferObject
         return self::TYPE;
     }
 
-    /**
-     * @return string
-     */
     public function getIdentifier(): string
     {
         return $this->identifier;
@@ -112,9 +109,6 @@ class Bundle extends AbstractTransferObject
         $this->identifier = $identifier;
     }
 
-    /**
-     * @return bool
-     */
     public function isActive(): bool
     {
         return $this->active;
@@ -128,9 +122,6 @@ class Bundle extends AbstractTransferObject
         $this->active = $active;
     }
 
-    /**
-     * @return string
-     */
     public function getProductIdentifier(): string
     {
         return $this->productIdentifier;
@@ -144,9 +135,6 @@ class Bundle extends AbstractTransferObject
         $this->productIdentifier = $productIdentifier;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
@@ -160,9 +148,6 @@ class Bundle extends AbstractTransferObject
         $this->name = $name;
     }
 
-    /**
-     * @return string
-     */
     public function getNumber(): string
     {
         return $this->number;
@@ -176,9 +161,6 @@ class Bundle extends AbstractTransferObject
         $this->number = $number;
     }
 
-    /**
-     * @return int
-     */
     public function getPosition(): int
     {
         return $this->position;
@@ -192,9 +174,6 @@ class Bundle extends AbstractTransferObject
         $this->position = $position;
     }
 
-    /**
-     * @return int
-     */
     public function getStock(): int
     {
         return $this->stock;
@@ -208,9 +187,6 @@ class Bundle extends AbstractTransferObject
         $this->stock = $stock;
     }
 
-    /**
-     * @return bool
-     */
     public function hasStockLimitation(): bool
     {
         return $this->stockLimitation;
@@ -240,9 +216,6 @@ class Bundle extends AbstractTransferObject
         $this->prices = $prices;
     }
 
-    /**
-     * @return string
-     */
     public function getVatRateIdentifier(): string
     {
         return $this->vatRateIdentifier;
@@ -264,9 +237,6 @@ class Bundle extends AbstractTransferObject
         return $this->availableFrom;
     }
 
-    /**
-     * @param null|DateTimeImmutable $availableFrom
-     */
     public function setAvailableFrom(DateTimeImmutable $availableFrom = null)
     {
         $this->availableFrom = $availableFrom;
@@ -280,9 +250,6 @@ class Bundle extends AbstractTransferObject
         return $this->availableTo;
     }
 
-    /**
-     * @param null|DateTimeImmutable $availableTo
-     */
     public function setAvailableTo(DateTimeImmutable $availableTo = null)
     {
         $this->availableTo = $availableTo;

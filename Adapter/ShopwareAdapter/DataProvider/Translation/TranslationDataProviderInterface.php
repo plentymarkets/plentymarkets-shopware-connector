@@ -15,42 +15,31 @@ use SystemConnector\TransferObject\Product\Property\Value\Value;
 interface TranslationDataProviderInterface
 {
     /**
-     * @param Identity $identity
-     *
      * @return ShopModel[]
      */
     public function getShopsByLocaleIdentity(Identity $identity): array;
 
     /**
-     * @param Property $property
-     *
      * @return null|OptionModel
      */
     public function getPropertyOptionByName(Property $property);
 
     /**
-     * @param Value $value
-     *
      * @return null|ValueModel
      */
     public function getPropertyValueByValue(Value $value);
 
     /**
-     * @param Property $property
-     *
      * @return null|ConfiguratorGroupModel
      */
     public function getConfigurationGroupByName(Property $property);
 
     /**
-     * @param Value $value
-     *
      * @return null|ConfiguratorOptionModel
      */
     public function getConfigurationOptionByName(Value $value);
 
     /**
-     * @param Identity $mediaIdentity
      * @param $articleId
      *
      * @return null|Image

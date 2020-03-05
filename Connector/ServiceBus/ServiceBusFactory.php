@@ -8,8 +8,6 @@ class ServiceBusFactory
 {
     /**
      * @param Middleware[] $middlewares
-     *
-     * @return ServiceBus
      */
     public function factory(Middleware ...$middlewares): ServiceBus
     {

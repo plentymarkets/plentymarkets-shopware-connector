@@ -10,8 +10,6 @@ class InvalidResponseException extends Exception
      * @param string $method
      * @param string $path
      * @param array  $options
-     *
-     * @return InvalidResponseException
      */
     public static function fromParams($method, $path, $options): InvalidResponseException
     {

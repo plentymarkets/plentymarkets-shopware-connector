@@ -151,11 +151,6 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
         return $itemParams;
     }
 
-    /**
-     * @param OrderItem $orderItem
-     *
-     * @return int
-     */
     private function getVariationIdentifier(OrderItem $orderItem): int
     {
         if ($this->configService->get('variation_number_field', 'number') === 'number') {
@@ -167,8 +162,6 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
 
     /**
      * @param string $identifier
-     *
-     * @return int
      */
     private function getVariationIdentifierByIdentifier($identifier): int
     {
@@ -185,8 +178,6 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
 
     /**
      * @param string $number
-     *
-     * @return int
      */
     private function getVariationIdentifierFromNumber($number): int
     {
@@ -201,11 +192,6 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
         return 0;
     }
 
-    /**
-     * @param OrderItem $orderItem
-     *
-     * @return bool
-     */
     private function isCouponItem(OrderItem $orderItem): bool
     {
         return $orderItem->getType() === OrderItem::TYPE_VOUCHER || $orderItem->getType() === OrderItem::TYPE_COUPON;

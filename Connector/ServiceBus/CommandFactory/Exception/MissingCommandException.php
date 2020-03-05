@@ -9,8 +9,6 @@ class MissingCommandException extends InvalidArgumentException
     /**
      * @param string $objectType
      * @param string $commandType
-     *
-     * @return self
      */
     public static function fromObjectData($objectType, $commandType): self
     {

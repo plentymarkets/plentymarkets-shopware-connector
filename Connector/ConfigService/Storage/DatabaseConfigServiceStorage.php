@@ -18,8 +18,7 @@ class DatabaseConfigServiceStorage implements ConfigServiceStorageInterface
     private $connection;
 
     /**
-     * @param Connection $connection
-     * @param string     $table
+     * @param string $table
      */
     public function __construct(Connection $connection, $table)
     {

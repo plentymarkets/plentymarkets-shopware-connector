@@ -188,10 +188,7 @@ class CategoryResponseParser implements CategoryResponseParserInterface
     }
 
     /**
-     * @param array $detail
      * @param array $result
-     *
-     * @return array
      */
     private function getImages(array $detail, &$result): array
     {
@@ -228,9 +225,6 @@ class CategoryResponseParser implements CategoryResponseParserInterface
         return $imageIdentifiers;
     }
 
-    /**
-     * @return string
-     */
     private function getBaseUrl(): string
     {
         $parts = parse_url($this->configService->get('rest_url'));
@@ -240,8 +234,6 @@ class CategoryResponseParser implements CategoryResponseParserInterface
 
     /**
      * @param string $metaRobots
-     *
-     * @return string
      */
     private function getMetaRobots($metaRobots): string
     {
@@ -261,7 +253,6 @@ class CategoryResponseParser implements CategoryResponseParserInterface
     }
 
     /**
-     * @param array $details
      * @param array $result
      *
      * @return Translation[]
@@ -340,8 +331,6 @@ class CategoryResponseParser implements CategoryResponseParserInterface
     }
 
     /**
-     * @param array $details
-     *
      * @return Attribute[]
      */
     private function getAttributes(array $details): array
@@ -355,8 +344,6 @@ class CategoryResponseParser implements CategoryResponseParserInterface
 
     /**
      * @param array $categoryDetails
-     *
-     * @return Attribute
      */
     private function getSecondCategoryDescriptionAsAttribute($categoryDetails): Attribute
     {

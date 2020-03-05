@@ -32,8 +32,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * - OutputInterface::VERBOSITY_VERY_VERBOSE (-vv) will show all INFO and higher logs
  * - OutputInterface::VERBOSITY_DEBUG (-vvv) will show all DEBUG and higher logs, i.e. all logs
  *
- parameter.
- *
  * @author Tobias Schultze <http://tobion.de>
  */
 class ConsoleHandler extends AbstractProcessingHandler implements EventSubscriberInterface
@@ -104,8 +102,6 @@ class ConsoleHandler extends AbstractProcessingHandler implements EventSubscribe
     /**
      * Before a command is executed, the handler gets activated and the console output
      * is set in order to know where to write the logs.
-     *
-     * @param ConsoleCommandEvent $event
      */
     public function onCommand(ConsoleCommandEvent $event)
     {
@@ -129,8 +125,6 @@ class ConsoleHandler extends AbstractProcessingHandler implements EventSubscribe
 
     /**
      * After a command has been executed, it disables the output.
-     *
-     * @param ConsoleTerminateEvent $event
      */
     public function onTerminate(ConsoleTerminateEvent $event)
     {
