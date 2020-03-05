@@ -82,11 +82,7 @@ class VariationResponseParser implements VariationResponseParserInterface
     }
 
     /**
-     * @param array $product
-     *
      * @throws NotFoundException
-     *
-     * @return array
      */
     public function parse(array $product): array
     {
@@ -223,11 +219,6 @@ class VariationResponseParser implements VariationResponseParserInterface
         return $result;
     }
 
-    /**
-     * @param array $element
-     *
-     * @return string
-     */
     private function getVariationNumber(array $element): string
     {
         if ($this->configService->get('variation_number_field', 'number') === 'number') {
@@ -238,8 +229,6 @@ class VariationResponseParser implements VariationResponseParserInterface
     }
 
     /**
-     * @param array $variation
-     *
      * @return null|DateTimeImmutable
      */
     private function getReleaseDate(array $variation)
@@ -252,10 +241,6 @@ class VariationResponseParser implements VariationResponseParserInterface
     }
 
     /**
-     * @param array $texts
-     * @param array $variation
-     * @param array $result
-     *
      * @return Image[]
      */
     private function getVariationImages(array $texts, array $variation, array &$result): array
@@ -270,8 +255,6 @@ class VariationResponseParser implements VariationResponseParserInterface
     }
 
     /**
-     * @param array $variation
-     *
      * @throws NotFoundException
      *
      * @return null|string
@@ -299,9 +282,6 @@ class VariationResponseParser implements VariationResponseParserInterface
     }
 
     /**
-     * @param array $variation
-     * @param array $availabilities
-     *
      * @return int
      */
     private function getShippingTime(array $availabilities, array $variation)
@@ -333,9 +313,6 @@ class VariationResponseParser implements VariationResponseParserInterface
     }
 
     /**
-     * @param array $variation
-     * @param array $systemBarcodes
-     *
      * @return Barcode[]
      */
     private function getBarcodes(array $systemBarcodes, array $variation)
@@ -381,9 +358,6 @@ class VariationResponseParser implements VariationResponseParserInterface
     }
 
     /**
-     * @param array $variation
-     * @param array $systemAttributes
-     *
      * @return Property[]
      */
     private function getVariationProperties(array $systemAttributes, array $variation)
@@ -437,8 +411,6 @@ class VariationResponseParser implements VariationResponseParserInterface
     }
 
     /**
-     * @param array $names
-     *
      * @return Translation[]
      */
     private function getVariationPropertyValueTranslations(array $names): array
@@ -471,8 +443,6 @@ class VariationResponseParser implements VariationResponseParserInterface
     }
 
     /**
-     * @param array $names
-     *
      * @return Translation[]
      */
     private function getVariationPropertyTranslations(array $names): array
@@ -504,11 +474,6 @@ class VariationResponseParser implements VariationResponseParserInterface
         return $translations;
     }
 
-    /**
-     * @param array $variation
-     *
-     * @return float
-     */
     private function getVariationWeight(array $variation): float
     {
         if ($variation['weightNetG'] > 0) {
@@ -521,8 +486,6 @@ class VariationResponseParser implements VariationResponseParserInterface
     }
 
     /**
-     * @param array $properties
-     *
      * @return Attribute[]
      */
     private function getPropertiesAsAttribute(array $properties): array
@@ -548,11 +511,6 @@ class VariationResponseParser implements VariationResponseParserInterface
         return $attributes;
     }
 
-    /**
-     * @param array $propertyRelation
-     *
-     * @return string
-     */
     private function getPropertyType(array $propertyRelation): string
     {
         switch ($propertyRelation['cast']) {

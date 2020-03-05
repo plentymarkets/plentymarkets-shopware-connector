@@ -5,8 +5,7 @@ namespace PlentymarketsAdapter\Helper;
 class PropertyHelper implements PropertyHelperInterface
 {
     /**
-     * @param int   $propertyGroupId
-     * @param array $propertyGroups
+     * @param int $propertyGroupId
      *
      * @return array
      */
@@ -28,8 +27,7 @@ class PropertyHelper implements PropertyHelperInterface
     }
 
     /**
-     * @param int   $propertyId
-     * @param array $properties
+     * @param int $propertyId
      *
      * @return array
      */

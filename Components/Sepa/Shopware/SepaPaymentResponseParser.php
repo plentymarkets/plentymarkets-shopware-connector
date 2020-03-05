@@ -75,8 +75,6 @@ class SepaPaymentResponseParser implements PaymentResponseParserInterface
     /**
      * @param int    $entry
      * @param string $type
-     *
-     * @return string
      */
     private function getIdentifier($entry, $type): string
     {
@@ -91,8 +89,6 @@ class SepaPaymentResponseParser implements PaymentResponseParserInterface
 
     /**
      * @param string $currency
-     *
-     * @return int
      */
     private function getCurrencyId($currency): int
     {
@@ -113,11 +109,6 @@ class SepaPaymentResponseParser implements PaymentResponseParserInterface
         return $model->getId();
     }
 
-    /**
-     * @param array $element
-     *
-     * @return SepaPaymentData
-     */
     private function getSepaPaymentData(array $element): SepaPaymentData
     {
         $paymentInstance = array_shift($element['paymentInstances']);
@@ -130,11 +121,6 @@ class SepaPaymentResponseParser implements PaymentResponseParserInterface
         return $sepaPaymentData;
     }
 
-    /**
-     * @param array $element
-     *
-     * @return bool
-     */
     private function hasSepaPaymentInstance(array $element): bool
     {
         if (empty($element['paymentInstances'])) {

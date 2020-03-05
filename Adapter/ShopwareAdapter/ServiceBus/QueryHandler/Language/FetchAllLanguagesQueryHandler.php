@@ -63,9 +63,6 @@ class FetchAllLanguagesQueryHandler implements QueryHandlerInterface
         }
     }
 
-    /**
-     * @return Query
-     */
     private function createLocalesQuery(): Query
     {
         $queryBuilder = $this->repository->createQueryBuilder('locales');

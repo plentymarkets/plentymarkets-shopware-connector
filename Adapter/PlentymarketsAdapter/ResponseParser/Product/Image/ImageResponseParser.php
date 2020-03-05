@@ -41,10 +41,6 @@ class ImageResponseParser implements ImageResponseParserInterface
     }
 
     /**
-     * @param array $entry
-     * @param array $texts
-     * @param array $result
-     *
      * @return null|Image
      */
     public function parseImage(array $entry, array $texts, array &$result)
@@ -111,12 +107,6 @@ class ImageResponseParser implements ImageResponseParserInterface
         return null;
     }
 
-    /**
-     * @param array $image
-     * @param array $productTexts
-     *
-     * @return array
-     */
     private function getMediaTranslations(array $image, array $productTexts): array
     {
         $translations = [];

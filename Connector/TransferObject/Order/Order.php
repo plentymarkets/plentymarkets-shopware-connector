@@ -128,9 +128,6 @@ class Order extends AbstractTransferObject implements AttributableInterface
         $this->identifier = $identifier;
     }
 
-    /**
-     * @return array
-     */
     public function getOrderTypes(): array
     {
         $reflection = new ReflectionClass(__CLASS__);
@@ -138,9 +135,6 @@ class Order extends AbstractTransferObject implements AttributableInterface
         return $reflection->getConstants();
     }
 
-    /**
-     * @return string
-     */
     public function getOrderNumber(): string
     {
         return $this->orderNumber;
@@ -154,25 +148,16 @@ class Order extends AbstractTransferObject implements AttributableInterface
         $this->orderNumber = $orderNumber;
     }
 
-    /**
-     * @return DateTimeImmutable
-     */
     public function getOrderTime(): DateTimeImmutable
     {
         return $this->orderTime;
     }
 
-    /**
-     * @param DateTimeImmutable $orderTime
-     */
     public function setOrderTime(DateTimeImmutable $orderTime)
     {
         $this->orderTime = $orderTime;
     }
 
-    /**
-     * @return Customer
-     */
     public function getCustomer(): Customer
     {
         return $this->customer;
@@ -186,33 +171,21 @@ class Order extends AbstractTransferObject implements AttributableInterface
         $this->customer = $customer;
     }
 
-    /**
-     * @return Address
-     */
     public function getBillingAddress(): Address
     {
         return $this->billingAddress;
     }
 
-    /**
-     * @param Address $billingAddress
-     */
     public function setBillingAddress(Address $billingAddress)
     {
         $this->billingAddress = $billingAddress;
     }
 
-    /**
-     * @return Address
-     */
     public function getShippingAddress(): Address
     {
         return $this->shippingAddress;
     }
 
-    /**
-     * @param Address $shippingAddress
-     */
     public function setShippingAddress(Address $shippingAddress)
     {
         $this->shippingAddress = $shippingAddress;
@@ -234,9 +207,6 @@ class Order extends AbstractTransferObject implements AttributableInterface
         $this->orderItems = $orderItems;
     }
 
-    /**
-     * @return string
-     */
     public function getShopIdentifier(): string
     {
         return $this->shopIdentifier;
@@ -250,9 +220,6 @@ class Order extends AbstractTransferObject implements AttributableInterface
         $this->shopIdentifier = $shopIdentifier;
     }
 
-    /**
-     * @return string
-     */
     public function getCurrencyIdentifier(): string
     {
         return $this->currencyIdentifier;
@@ -266,9 +233,6 @@ class Order extends AbstractTransferObject implements AttributableInterface
         $this->currencyIdentifier = $currencyIdentifier;
     }
 
-    /**
-     * @return string
-     */
     public function getOrderStatusIdentifier(): string
     {
         return $this->orderStatusIdentifier;
@@ -282,9 +246,6 @@ class Order extends AbstractTransferObject implements AttributableInterface
         $this->orderStatusIdentifier = $orderStatusIdentifier;
     }
 
-    /**
-     * @return string
-     */
     public function getPaymentStatusIdentifier(): string
     {
         return $this->paymentStatusIdentifier;
@@ -298,9 +259,6 @@ class Order extends AbstractTransferObject implements AttributableInterface
         $this->paymentStatusIdentifier = $paymentStatusIdentifier;
     }
 
-    /**
-     * @return string
-     */
     public function getPaymentMethodIdentifier(): string
     {
         return $this->paymentMethodIdentifier;
@@ -314,9 +272,6 @@ class Order extends AbstractTransferObject implements AttributableInterface
         $this->paymentMethodIdentifier = $paymentMethodIdentifier;
     }
 
-    /**
-     * @return string
-     */
     public function getShippingProfileIdentifier(): string
     {
         return $this->shippingProfileIdentifier;

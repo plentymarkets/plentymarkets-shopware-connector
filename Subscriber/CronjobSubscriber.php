@@ -67,11 +67,6 @@ class CronjobSubscriber implements SubscriberInterface
         ];
     }
 
-    /**
-     * @param Args $args
-     *
-     * @return bool
-     */
     public function onRunCronjobSynchronize(Args $args): bool
     {
         try {
@@ -87,11 +82,6 @@ class CronjobSubscriber implements SubscriberInterface
         return true;
     }
 
-    /**
-     * @param Args $args
-     *
-     * @return bool
-     */
     public function onRunCronjobProcessBacklog(Args $args): bool
     {
         try {
@@ -112,11 +102,6 @@ class CronjobSubscriber implements SubscriberInterface
         return true;
     }
 
-    /**
-     * @param Args $args
-     *
-     * @return bool
-     */
     public function onRunCronjobCleanup(Args $args): bool
     {
         try {

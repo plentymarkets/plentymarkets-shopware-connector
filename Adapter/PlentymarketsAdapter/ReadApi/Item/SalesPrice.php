@@ -6,9 +6,6 @@ use PlentymarketsAdapter\ReadApi\ApiAbstract;
 
 class SalesPrice extends ApiAbstract
 {
-    /**
-     * @return array
-     */
     public function findAll(): array
     {
         return iterator_to_array($this->client->getIterator('items/sales_prices'));
@@ -16,8 +13,6 @@ class SalesPrice extends ApiAbstract
 
     /**
      * @param int $priceId
-     *
-     * @return array
      */
     public function findOne($priceId): array
     {

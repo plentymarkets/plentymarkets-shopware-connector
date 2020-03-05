@@ -119,11 +119,6 @@ class HandleMediaCategoryCommandHandler implements CommandHandlerInterface
         return true;
     }
 
-    /**
-     * @param MediaCategory $mediaCategory
-     * @param Album         $parent
-     * @param Settings      $parentSettings
-     */
     private function createNewAlbum(MediaCategory $mediaCategory, Album $parent, Settings $parentSettings)
     {
         $connection = $this->entityManager->getConnection();

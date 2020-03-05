@@ -12,8 +12,6 @@ interface BacklogServiceInterface
 
     /**
      * enqueues a command to the backlog
-     *
-     * @param CommandInterface $command
      */
     public function enqueue(CommandInterface $command);
 
@@ -26,8 +24,6 @@ interface BacklogServiceInterface
 
     /**
      * Returns an array of informations about the queue
-     *
-     * @return array
      */
     public function getInfo(): array;
 }

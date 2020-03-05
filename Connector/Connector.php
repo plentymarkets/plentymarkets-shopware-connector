@@ -87,7 +87,6 @@ class Connector implements ConnectorInterface
     }
 
     /**
-     * @param Definition  $definition
      * @param int         $queryType
      * @param null|string $identifier
      */

@@ -42,12 +42,6 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
         $this->parentOrderItemRequestGenerator = $parentOrderItemRequestGenerator;
     }
 
-    /**
-     * @param OrderItem $orderItem
-     * @param Order     $order
-     *
-     * @return array
-     */
     public function generate(OrderItem $orderItem, Order $order): array
     {
         $itemParams = $this->parentOrderItemRequestGenerator->generate($orderItem, $order);
@@ -102,8 +96,6 @@ class OrderItemRequestGenerator implements OrderItemRequestGeneratorInterface
     /**
      * @param int $articleNumber
      * @param int $customerGroupId
-     *
-     * @return array
      */
     private function getBundle($articleNumber, $customerGroupId): array
     {

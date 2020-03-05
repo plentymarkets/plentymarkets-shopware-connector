@@ -120,9 +120,6 @@ class Address extends AbstractValueObject implements AttributableInterface
         $this->department = $department;
     }
 
-    /**
-     * @return array
-     */
     public function getGenders(): array
     {
         $reflection = new ReflectionClass(__CLASS__);
@@ -130,9 +127,6 @@ class Address extends AbstractValueObject implements AttributableInterface
         return $reflection->getConstants();
     }
 
-    /**
-     * @return string
-     */
     public function getGender(): string
     {
         return $this->gender;
@@ -226,9 +220,6 @@ class Address extends AbstractValueObject implements AttributableInterface
         $this->street = $street;
     }
 
-    /**
-     * @return string
-     */
     public function getPostalCode(): string
     {
         return $this->postalCode;
@@ -242,9 +233,6 @@ class Address extends AbstractValueObject implements AttributableInterface
         $this->postalCode = $postalCode;
     }
 
-    /**
-     * @return string
-     */
     public function getCity(): string
     {
         return $this->city;
@@ -258,9 +246,6 @@ class Address extends AbstractValueObject implements AttributableInterface
         $this->city = $city;
     }
 
-    /**
-     * @return string
-     */
     public function getCountryIdentifier(): string
     {
         return $this->countryIdentifier;

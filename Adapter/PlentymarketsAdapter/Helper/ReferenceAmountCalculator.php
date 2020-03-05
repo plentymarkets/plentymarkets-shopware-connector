@@ -43,11 +43,6 @@ class ReferenceAmountCalculator implements ReferenceAmountCalculatorInterface
         $this->itemUnitApi = $itemUnitApi;
     }
 
-    /**
-     * @param array $variation
-     *
-     * @return float
-     */
     public function calculate(array $variation): float
     {
         if (empty(self::$units)) {
@@ -74,8 +69,6 @@ class ReferenceAmountCalculator implements ReferenceAmountCalculatorInterface
     }
 
     /**
-     * @param array $variation
-     *
      * @return null|string
      */
     private function getUnitOfVariation(array $variation)

@@ -41,9 +41,6 @@ class Mapping
      */
     private $objectType = '';
 
-    /**
-     * @return string
-     */
     public function getOriginAdapterName(): string
     {
         return $this->originAdapterName;
@@ -73,9 +70,6 @@ class Mapping
         $this->originTransferObjects = $originTransferObjects;
     }
 
-    /**
-     * @return string
-     */
     public function getDestinationAdapterName(): string
     {
         return $this->destinationAdapterName;
@@ -105,9 +99,6 @@ class Mapping
         $this->destinationTransferObjects = $destinationTransferObjects;
     }
 
-    /**
-     * @return string
-     */
     public function getObjectType(): string
     {
         return $this->objectType;

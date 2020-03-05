@@ -365,8 +365,6 @@ class Shopware_Controllers_Backend_PlentyConnector extends Shopware_Controllers_
 
     /**
      * @param string $snippet
-     *
-     * @return string
      */
     private function getTranslation($snippet): string
     {

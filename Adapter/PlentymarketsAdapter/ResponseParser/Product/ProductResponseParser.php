@@ -83,8 +83,6 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * @param array $product
-     *
      * @throws NotFoundException
      * @throws NotFoundException
      *
@@ -164,7 +162,6 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * @param Product                   $product
      * @param TransferObjectInterface[] $candidatesForProcessing
      *
      * @return TransferObjectInterface[]
@@ -184,11 +181,7 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * @param array $variation
-     *
      * @throws NotFoundException
-     *
-     * @return string
      */
     private function getVatRateIdentifier(array $variation): string
     {
@@ -206,11 +199,7 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * @param array $product
-     *
      * @throws NotFoundException
-     *
-     * @return string
      */
     private function getManufacturerIdentifier(array $product): string
     {
@@ -227,11 +216,6 @@ class ProductResponseParser implements ProductResponseParserInterface
         return $manufacturerIdentity->getObjectIdentifier();
     }
 
-    /**
-     * @param array $product
-     *
-     * @return array
-     */
     private function getShippingProfiles(array $product): array
     {
         $shippingProfiles = [];
@@ -253,10 +237,6 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * @param array $product
-     * @param array $texts
-     * @param array $result
-     *
      * @return Image[]
      */
     private function getImages(array $product, array $texts, array &$result): array
@@ -269,11 +249,6 @@ class ProductResponseParser implements ProductResponseParserInterface
         return array_filter($images);
     }
 
-    /**
-     * @param array $mainVariation
-     *
-     * @return array
-     */
     private function getDefaultCategories(array $mainVariation): array
     {
         $defaultCategories = [];
@@ -298,8 +273,6 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * @param array $texts
-     *
      * @return Translation[]
      */
     private function getProductTranslations(array $texts): array
@@ -351,11 +324,6 @@ class ProductResponseParser implements ProductResponseParserInterface
         return $translations;
     }
 
-    /**
-     * @param array $mainVariation
-     *
-     * @return array
-     */
     private function getCategories(array $mainVariation): array
     {
         $categories = [];
@@ -379,8 +347,6 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * @param array $product
-     *
      * @return LinkedProduct[]
      */
     private function getLinkedProducts(array $product): array
@@ -420,8 +386,6 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * @param array $mainVariation
-     *
      * @return Property[]
      */
     private function getProperties(array $product, array $mainVariation)
@@ -595,8 +559,6 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * @param array $mainVariation
-     *
      * @return null|DateTimeImmutable
      */
     private function getAvailableFrom(array $mainVariation)
@@ -609,8 +571,6 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * @param array $mainVariation
-     *
      * @return null|DateTimeImmutable
      */
     private function getAvailableTo(array $mainVariation)
@@ -623,8 +583,6 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * @param array $mainVariation
-     *
      * @return null|DateTimeImmutable
      */
     private function getCreatedAt(array $mainVariation)
@@ -638,9 +596,6 @@ class ProductResponseParser implements ProductResponseParserInterface
 
     /**
      * @param Variation[] $variations
-     * @param array       $mainVariation
-     *
-     * @return bool
      */
     private function getActive(array $variations, array $mainVariation): bool
     {
@@ -676,8 +631,6 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * @param array $product
-     *
      * @return Attribute[]
      */
     private function getAttributes(array $product): array
@@ -707,11 +660,6 @@ class ProductResponseParser implements ProductResponseParserInterface
         return $attributes;
     }
 
-    /**
-     * @param array $product
-     *
-     * @return Attribute
-     */
     private function getShortDescriptionAsAttribute(array $product): Attribute
     {
         $translations = [];
@@ -742,11 +690,6 @@ class ProductResponseParser implements ProductResponseParserInterface
         return $attribute;
     }
 
-    /**
-     * @param array $product
-     *
-     * @return Attribute
-     */
     private function getTechnicalDataAsAttribute(array $product): Attribute
     {
         $translations = [];
@@ -777,11 +720,6 @@ class ProductResponseParser implements ProductResponseParserInterface
         return $attribute;
     }
 
-    /**
-     * @param array $product
-     *
-     * @return Attribute
-     */
     private function getSecondProductNameAsAttribute(array $product): Attribute
     {
         $translations = [];
@@ -812,11 +750,6 @@ class ProductResponseParser implements ProductResponseParserInterface
         return $attribute;
     }
 
-    /**
-     * @param array $product
-     *
-     * @return Attribute
-     */
     private function getThirdProductNameAsAttribute(array $product): Attribute
     {
         $translations = [];
@@ -847,11 +780,6 @@ class ProductResponseParser implements ProductResponseParserInterface
         return $attribute;
     }
 
-    /**
-     * @param array $product
-     *
-     * @return Attribute
-     */
     private function getAgeRestrictionAsAttribute(array $product): Attribute
     {
         $attribute = new Attribute();
@@ -861,11 +789,6 @@ class ProductResponseParser implements ProductResponseParserInterface
         return $attribute;
     }
 
-    /**
-     * @param array $product
-     *
-     * @return Attribute
-     */
     private function getItemIdAsAttribute(array $product): Attribute
     {
         $attribute = new Attribute();
@@ -876,8 +799,6 @@ class ProductResponseParser implements ProductResponseParserInterface
     }
 
     /**
-     * @param array $product
-     *
      * @return Badge[]
      */
     private function getBadges(array $product): array

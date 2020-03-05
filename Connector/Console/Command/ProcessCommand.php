@@ -114,9 +114,6 @@ class ProcessCommand extends Command
         }
     }
 
-    /**
-     * @return string
-     */
     private function getHelpText(): string
     {
         $examples = [

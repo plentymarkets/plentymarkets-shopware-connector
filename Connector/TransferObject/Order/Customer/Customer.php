@@ -95,17 +95,11 @@ class Customer extends AbstractValueObject
         $this->birthday = new DateTimeImmutable('now');
     }
 
-    /**
-     * @return array
-     */
     public function getCustomerTypes(): array
     {
         return $this->getConstantsByName('TYPE');
     }
 
-    /**
-     * @return string
-     */
     public function getType(): string
     {
         return $this->type;
@@ -119,9 +113,6 @@ class Customer extends AbstractValueObject
         $this->type = $type;
     }
 
-    /**
-     * @return string
-     */
     public function getNumber(): string
     {
         return $this->number;
@@ -135,9 +126,6 @@ class Customer extends AbstractValueObject
         $this->number = $number;
     }
 
-    /**
-     * @return string
-     */
     public function getEmail(): string
     {
         return $this->email;
@@ -151,9 +139,6 @@ class Customer extends AbstractValueObject
         $this->email = $email;
     }
 
-    /**
-     * @return bool
-     */
     public function getNewsletter(): bool
     {
         return $this->newsletter;
@@ -175,17 +160,11 @@ class Customer extends AbstractValueObject
         return $this->newsletterAgreementDate;
     }
 
-    /**
-     * @param null|DateTimeImmutable $newsletterAgreementDate
-     */
     public function setNewsletterAgreementDate(DateTimeImmutable $newsletterAgreementDate = null)
     {
         $this->newsletterAgreementDate = $newsletterAgreementDate;
     }
 
-    /**
-     * @return string
-     */
     public function getLanguageIdentifier(): string
     {
         return $this->languageIdentifier;
@@ -199,9 +178,6 @@ class Customer extends AbstractValueObject
         $this->languageIdentifier = $languageIdentifier;
     }
 
-    /**
-     * @return string
-     */
     public function getCustomerGroupIdentifier(): string
     {
         return $this->customerGroupIdentifier;
@@ -215,9 +191,6 @@ class Customer extends AbstractValueObject
         $this->customerGroupIdentifier = $customerGroupIdentifier;
     }
 
-    /**
-     * @return string
-     */
     public function getGender(): string
     {
         return $this->gender;
@@ -231,9 +204,6 @@ class Customer extends AbstractValueObject
         $this->gender = $gender;
     }
 
-    /**
-     * @return array
-     */
     public function getGenders(): array
     {
         return $this->getConstantsByName('GENDER');
@@ -295,9 +265,6 @@ class Customer extends AbstractValueObject
         return $this->birthday;
     }
 
-    /**
-     * @param null|DateTimeImmutable $birthday
-     */
     public function setBirthday(DateTimeImmutable $birthday = null)
     {
         $this->birthday = $birthday;
@@ -335,9 +302,6 @@ class Customer extends AbstractValueObject
         $this->mobilePhoneNumber = $mobilePhoneNumber;
     }
 
-    /**
-     * @return string
-     */
     public function getShopIdentifier(): string
     {
         return $this->shopIdentifier;
@@ -377,8 +341,6 @@ class Customer extends AbstractValueObject
 
     /**
      * @param string $name
-     *
-     * @return array
      */
     private function getConstantsByName($name): array
     {

@@ -116,11 +116,6 @@ class VariationRequestGenerator implements VariationRequestGeneratorInterface
         return $shopwareVariation;
     }
 
-    /**
-     * @param Variation $variation
-     *
-     * @return array
-     */
     private function getPrices(Variation $variation): array
     {
         $prices = [];
@@ -160,11 +155,6 @@ class VariationRequestGenerator implements VariationRequestGeneratorInterface
         return $prices;
     }
 
-    /**
-     * @param Variation $variation
-     *
-     * @return array
-     */
     private function getImages(Variation $variation): array
     {
         $images = [];
@@ -201,11 +191,6 @@ class VariationRequestGenerator implements VariationRequestGeneratorInterface
         return $images;
     }
 
-    /**
-     * @param Variation $variation
-     *
-     * @return array
-     */
     private function getConfiguratorOptions(Variation $variation): array
     {
         $configuratorOptions = [];

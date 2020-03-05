@@ -7,11 +7,6 @@ use SystemConnector\ServiceBus\Query\QueryInterface;
 
 class NotFoundException extends Exception
 {
-    /**
-     * @param QueryInterface $query
-     *
-     * @return self
-     */
     public static function fromQuery(QueryInterface $query): self
     {
         $name = substr(strrchr(get_class($query), '\\'), 1);

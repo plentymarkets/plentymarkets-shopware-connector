@@ -63,9 +63,6 @@ class FetchAllOrderStatusesQueryHandler implements QueryHandlerInterface
         }
     }
 
-    /**
-     * @return Query
-     */
     private function createOrderStatusQuery(): Query
     {
         $queryBuilder = $this->repository->createQueryBuilder('status');

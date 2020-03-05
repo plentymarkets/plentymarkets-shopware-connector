@@ -73,15 +73,11 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param CommandInterface $command
-     *
      * @throws ManufacturerNotFoundException
      * @throws ParameterMissingException
      * @throws ValidationException
      * @throws ValidationException
      * @throws ParameterMissingException
-     *
-     * @return bool
      */
     public function handle(CommandInterface $command): bool
     {
@@ -182,8 +178,6 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param Manufacturer $manufacturer
-     *
      * @return null|array
      */
     private function findExistingManufacturer(Manufacturer $manufacturer)
@@ -199,11 +193,6 @@ class HandleManufacturerCommandHandler implements CommandHandlerInterface
         return array_shift($result['data']);
     }
 
-    /**
-     * @param string $objectIdentifier
-     *
-     * @return null|Attribute
-     */
     private function getCountryNameAsAttribute(string $objectIdentifier): ?Attribute
     {
         $countryIdentity = $this->identityService->findOneBy([

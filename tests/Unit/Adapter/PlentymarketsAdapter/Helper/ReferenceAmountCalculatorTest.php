@@ -28,9 +28,6 @@ class ReferenceAmountCalculatorTest extends TestCase
         $this->calculator = new ReferenceAmountCalculator($unitApi);
     }
 
-    /**
-     * @return array
-     */
     public function dataProvider(): array
     {
         return [
@@ -51,7 +48,6 @@ class ReferenceAmountCalculatorTest extends TestCase
     }
 
     /**
-     * @param array $variation
      * @param float $expectedValue
      *
      * @dataProvider dataProvider

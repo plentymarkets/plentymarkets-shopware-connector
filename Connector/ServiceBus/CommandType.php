@@ -9,9 +9,6 @@ final class CommandType
     const HANDLE = 'handle';
     const REMOVE = 'remove';
 
-    /**
-     * @return array
-     */
     public static function getAllTypes(): array
     {
         $reflection = new ReflectionClass(__CLASS__);

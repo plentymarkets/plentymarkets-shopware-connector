@@ -25,8 +25,6 @@ class AddressResponseParser implements AddressResponseParserInterface
     }
 
     /**
-     * @param array $entry
-     *
      * @throws NotFoundException
      * @throws NotFoundException
      *

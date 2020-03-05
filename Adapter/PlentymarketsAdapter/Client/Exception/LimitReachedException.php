@@ -18,9 +18,6 @@ class LimitReachedException extends Exception
         parent::__construct();
     }
 
-    /**
-     * @return int
-     */
     public function getRetryAfter(): int
     {
         return $this->retryAfter;

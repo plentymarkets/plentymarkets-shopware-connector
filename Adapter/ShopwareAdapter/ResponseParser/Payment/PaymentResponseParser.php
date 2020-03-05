@@ -114,8 +114,6 @@ class PaymentResponseParser implements PaymentResponseParserInterface
      * @param string $type
      *
      * @throws AssertionFailedException
-     *
-     * @return string
      */
     private function getConnectorIdentifier($entry, $type): string
     {
@@ -128,11 +126,6 @@ class PaymentResponseParser implements PaymentResponseParserInterface
         )->getObjectIdentifier();
     }
 
-    /**
-     * @param array $element
-     *
-     * @return string
-     */
     private function getAccountHolder(array $element): string
     {
         $firstName = !empty($element['billing']['firstName']) ? $element['billing']['firstName'] : '';

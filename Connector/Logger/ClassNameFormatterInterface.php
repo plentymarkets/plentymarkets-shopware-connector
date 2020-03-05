@@ -18,8 +18,7 @@ interface ClassNameFormatterInterface
     public function logCommandProcessed($command, $returnValue);
 
     /**
-     * @param mixed     $command
-     * @param Exception $e
+     * @param mixed $command
      */
     public function logCommandFailed($command, Exception $e);
 }

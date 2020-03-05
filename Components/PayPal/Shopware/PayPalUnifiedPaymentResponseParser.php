@@ -63,10 +63,6 @@ class PayPalUnifiedPaymentResponseParser implements PaymentResponseParserInterfa
         }
     }
 
-    /**
-     * @param Payment $payment
-     * @param array   $element
-     */
     private function addPayPalUnifiedData(Payment $payment, array $element)
     {
         $data = $this->getPayPalUnifiedData($element['number']);

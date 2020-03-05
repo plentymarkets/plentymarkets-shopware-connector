@@ -6,8 +6,6 @@ interface ConfigServiceStorageInterface
 {
     /**
      * Returns all config elements as array where the key is the element name.
-     *
-     * @return array
      */
     public function getAll(): array;
 

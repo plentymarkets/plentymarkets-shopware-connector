@@ -39,9 +39,6 @@ class Definition
      */
     private $active = true;
 
-    /**
-     * @return string
-     */
     public function getOriginAdapterName(): string
     {
         return $this->originAdapterName;
@@ -55,9 +52,6 @@ class Definition
         $this->originAdapterName = $originAdapterName;
     }
 
-    /**
-     * @return string
-     */
     public function getDestinationAdapterName(): string
     {
         return $this->destinationAdapterName;
@@ -71,9 +65,6 @@ class Definition
         $this->destinationAdapterName = $destinationAdapterName;
     }
 
-    /**
-     * @return string
-     */
     public function getObjectType(): string
     {
         return $this->objectType;
@@ -87,9 +78,6 @@ class Definition
         $this->objectType = $objectType;
     }
 
-    /**
-     * @return int
-     */
     public function getPriority(): int
     {
         return $this->priority;
@@ -107,9 +95,6 @@ class Definition
         $this->priority = $priority;
     }
 
-    /**
-     * @return bool
-     */
     public function isActive(): bool
     {
         return $this->active;

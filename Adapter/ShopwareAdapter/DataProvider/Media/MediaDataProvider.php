@@ -29,11 +29,7 @@ class MediaDataProvider implements MediaDataProviderInterface
     }
 
     /**
-     * @param Media $media
-     *
      * @throws NotFoundException
-     *
-     * @return string
      */
     public function getAlbumIdentifierFromMediaObject(Media $media): string
     {
@@ -51,11 +47,7 @@ class MediaDataProvider implements MediaDataProviderInterface
     }
 
     /**
-     * @param Media $media
-     *
      * @throws Exception
-     *
-     * @return string
      */
     public function getMediaHashForMediaObject(Media $media): string
     {

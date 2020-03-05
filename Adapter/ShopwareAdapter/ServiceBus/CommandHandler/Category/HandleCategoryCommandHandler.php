@@ -98,12 +98,8 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param CommandInterface $command
-     *
      * @throws IdentityNotFoundException
      * @throws IdentityNotFoundException
-     *
-     * @return bool
      */
     public function handle(CommandInterface $command): bool
     {
@@ -141,9 +137,6 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         return true;
     }
 
-    /**
-     * @param Category $category
-     */
     private function prepareCategory(Category $category)
     {
         $attributes = $category->getAttributes();
@@ -157,9 +150,6 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param Category $category
-     * @param Identity $shopIdentity
-     *
      * @throws IdentityNotFoundException
      * @throws NotFoundException
      * @throws CustomValidationException
@@ -356,8 +346,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param Category $category
-     * @param int      $parentCategory
+     * @param int $parentCategory
      *
      * @return null|int
      */
@@ -376,9 +365,6 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param Identity      $categoryIdentity
-     * @param CategoryModel $shopMainCategory
-     *
      * @return bool
      */
     private function validIdentity(Identity $categoryIdentity, CategoryModel $shopMainCategory)
@@ -403,9 +389,6 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param Category $category
-     * @param array    $validIdentities
-     *
      * @throws CustomValidationException
      * @throws NotFoundException
      * @throws ParameterMissingException
@@ -444,12 +427,6 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         }
     }
 
-    /**
-     * @param CategoryModel $categoryModel
-     * @param array         $params
-     *
-     * @return CategoryModel
-     */
     private function createOrUpdateCategory(CategoryModel $categoryModel, array $params = []): CategoryModel
     {
         /**
@@ -473,9 +450,6 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         return $categoryModel;
     }
 
-    /**
-     * @return CategoryResource
-     */
     private function getCategoryResource(): CategoryResource
     {
         // without this reset the entitymanager sometimes the album is not found correctly.

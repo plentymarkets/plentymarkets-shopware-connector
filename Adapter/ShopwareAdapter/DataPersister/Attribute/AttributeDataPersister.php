@@ -97,7 +97,6 @@ class AttributeDataPersister implements AttributeDataPersisterInterface
     /**
      * @param $identifier
      * @param $table
-     * @param array $attributes
      */
     private function saveAttributes($identifier, $table, array $attributes = [])
     {
@@ -124,11 +123,6 @@ class AttributeDataPersister implements AttributeDataPersisterInterface
         }
     }
 
-    /**
-     * @param Attribute $attribute
-     *
-     * @return string
-     */
     private function getAttributeKey(Attribute $attribute): string
     {
         $key = iconv('UTF-8', 'ASCII//TRANSLIT', $attribute->getKey());
@@ -139,7 +133,6 @@ class AttributeDataPersister implements AttributeDataPersisterInterface
     }
 
     /**
-     * @param Attribute $attribute
      * @param $table
      *
      * @throws Exception
@@ -173,8 +166,6 @@ class AttributeDataPersister implements AttributeDataPersisterInterface
 
     /**
      * @param Attribute[] $attributes
-     *
-     * @return array
      */
     private function getAttributesAsArray(array $attributes = []): array
     {

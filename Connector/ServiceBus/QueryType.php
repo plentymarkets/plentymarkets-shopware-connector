@@ -10,9 +10,6 @@ final class QueryType
     const CHANGED = 'changed';
     const ONE = 'one';
 
-    /**
-     * @return array
-     */
     public static function getAllTypes(): array
     {
         $reflection = new ReflectionClass(__CLASS__);

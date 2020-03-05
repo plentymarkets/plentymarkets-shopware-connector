@@ -88,9 +88,6 @@ class RemoveMediaCommandHandler implements CommandHandlerInterface
         return true;
     }
 
-    /**
-     * @return MediaResource
-     */
     private function getMediaResource(): MediaResource
     {
         // without this reset the entitymanager sometimes the album is not found correctly.

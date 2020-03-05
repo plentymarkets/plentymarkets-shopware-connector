@@ -68,9 +68,6 @@ class PlentyConnector extends Plugin
         self::CRONJOB_CLEANUP => 86400,
     ];
 
-    /**
-     * @param ContainerBuilder $container
-     */
     public function build(ContainerBuilder $container)
     {
         $container->setParameter('plenty_connector.plugin_dir', $this->getPath());
@@ -110,9 +107,6 @@ class PlentyConnector extends Plugin
         parent::build($container);
     }
 
-    /**
-     * @param InstallContext $context
-     */
     public function install(InstallContext $context)
     {
         $this->clearOldDatabaseTables();
@@ -152,9 +146,6 @@ class PlentyConnector extends Plugin
         parent::install($context);
     }
 
-    /**
-     * @param UpdateContext $context
-     */
     public function update(UpdateContext $context)
     {
         if ($this->updateNeeded($context, '2.0.0')) {
@@ -216,9 +207,6 @@ class PlentyConnector extends Plugin
         parent::update($context);
     }
 
-    /**
-     * @param UninstallContext $context
-     */
     public function uninstall(UninstallContext $context)
     {
         /**
@@ -256,9 +244,6 @@ class PlentyConnector extends Plugin
         parent::uninstall($context);
     }
 
-    /**
-     * @param ActivateContext $context
-     */
     public function activate(ActivateContext $context)
     {
         $context->scheduleClearCache(InstallContext::CACHE_LIST_ALL);
@@ -266,12 +251,6 @@ class PlentyConnector extends Plugin
         parent::activate($context);
     }
 
-    /**
-     * @param ContainerBuilder $container
-     * @param array            $plugins
-     *
-     * @return bool
-     */
     private function pluginExists(ContainerBuilder $container, array $plugins): bool
     {
         $folders = $container->getParameter('shopware.plugin_directories');
@@ -300,8 +279,7 @@ class PlentyConnector extends Plugin
     }
 
     /**
-     * @param UpdateContext $context
-     * @param string        $targetVersion
+     * @param string $targetVersion
      *
      * @return mixed
      */
@@ -311,8 +289,7 @@ class PlentyConnector extends Plugin
     }
 
     /**
-     * @param UpdateContext $context
-     * @param string        $targetVersion
+     * @param string $targetVersion
      *
      * @return mixed
      */
@@ -518,8 +495,7 @@ class PlentyConnector extends Plugin
     }
 
     /**
-     * @param ContainerBuilder $container
-     * @param string           $filename
+     * @param string $filename
      */
     private function loadFile(ContainerBuilder $container, $filename)
     {

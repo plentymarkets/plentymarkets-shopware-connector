@@ -50,25 +50,16 @@ class FetchTransferObjectQuery implements QueryInterface
         $this->objectIdentifier = $objectIdentifier;
     }
 
-    /**
-     * @return string
-     */
     public function getAdapterName(): string
     {
         return $this->adapterName;
     }
 
-    /**
-     * @return string
-     */
     public function getObjectType(): string
     {
         return $this->objectType;
     }
 
-    /**
-     * @return string
-     */
     public function getQueryType(): string
     {
         return $this->queryType;
@@ -82,9 +73,6 @@ class FetchTransferObjectQuery implements QueryInterface
         return $this->objectIdentifier;
     }
 
-    /**
-     * @return array
-     */
     public function toArray(): array
     {
         return [

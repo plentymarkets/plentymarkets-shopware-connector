@@ -19,8 +19,7 @@ class ControllerPathSubscriber implements SubscriberInterface
     private $pluginDirectory;
 
     /**
-     * @param Enlight_Template_Manager $template
-     * @param string                   $pluginDirectory
+     * @param string $pluginDirectory
      */
     public function __construct(Enlight_Template_Manager $template, $pluginDirectory)
     {
@@ -38,11 +37,6 @@ class ControllerPathSubscriber implements SubscriberInterface
         ];
     }
 
-    /**
-     * @param Enlight_Event_EventArgs $args
-     *
-     * @return string
-     */
     public function onControllerBackendPlentyConnector(Enlight_Event_EventArgs $args): string
     {
         $this->template->addTemplateDir(

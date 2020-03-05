@@ -163,10 +163,6 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
         return true;
     }
 
-    /**
-     * @param Detail    $variationModel
-     * @param Variation $variation
-     */
     private function correctMainDetailAssignment(Detail $variationModel, Variation $variation)
     {
         if (!$variation->isMain()) {
@@ -184,9 +180,6 @@ class HandleVariationCommandHandler implements CommandHandlerInterface
         );
     }
 
-    /**
-     * @return Variant
-     */
     private function getVariationResource(): Variant
     {
         // without this reset the entitymanager sometimes the album is not found correctly.

@@ -9,9 +9,6 @@ interface OutputHandlerInterface
 {
     /**
      * Initialize the handler. This needs to be done inside each console command
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
      */
     public function initialize(InputInterface $input, OutputInterface $output);
 
@@ -39,9 +36,5 @@ interface OutputHandlerInterface
      */
     public function writeLine($messages = '');
 
-    /**
-     * @param array $headers
-     * @param array $rows
-     */
     public function createTable(array $headers, array $rows);
 }

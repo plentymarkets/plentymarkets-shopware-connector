@@ -12,8 +12,6 @@ interface CommandFactoryInterface
      * @param string $commandType
      * @param int    $priority
      * @param mixed  $payload
-     *
-     * @return CommandInterface
      */
     public function create($adapterName, $objectType, $commandType, $priority, $payload): CommandInterface;
 }

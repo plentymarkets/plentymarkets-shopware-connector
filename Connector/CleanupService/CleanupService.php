@@ -114,11 +114,6 @@ class CleanupService implements CleanupServiceInterface
         $this->removeOrphanedElements();
     }
 
-    /**
-     * @param Definition $definition
-     *
-     * @return bool
-     */
     private function collectObjectIdentifiers(Definition $definition): bool
     {
         $this->outputHandler->writeLine(sprintf(
@@ -158,9 +153,6 @@ class CleanupService implements CleanupServiceInterface
         return !(false === $found);
     }
 
-    /**
-     * @param Definition $definition
-     */
     private function removeAllElements(Definition $definition)
     {
         if ($this->hasErrors()) {
@@ -196,9 +188,6 @@ class CleanupService implements CleanupServiceInterface
         $this->outputHandler->finishProgressBar();
     }
 
-    /**
-     * @return array
-     */
     private function groupElementsByAdapterAndType(): array
     {
         $groups = [];
@@ -211,8 +200,6 @@ class CleanupService implements CleanupServiceInterface
     }
 
     /**
-     * @param array $group
-     *
      * @return Identity[]
      */
     private function findOrphanedIdentitiesByGroup(array $group): array

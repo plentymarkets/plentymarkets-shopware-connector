@@ -193,11 +193,6 @@ class OrderResponseParser implements OrderResponseParserInterface
         return [$order];
     }
 
-    /**
-     * @param array $entry
-     *
-     * @return array
-     */
     private function getBillingAddressData(array $entry): array
     {
         $billingAddress = array_filter($entry['addresses'], static function (array $address) {
@@ -211,11 +206,6 @@ class OrderResponseParser implements OrderResponseParserInterface
         return array_shift($billingAddress);
     }
 
-    /**
-     * @param array $entry
-     *
-     * @return array
-     */
     private function getShippingAddressData(array $entry): array
     {
         $shippingAddress = array_filter($entry['addresses'], static function (array $address) {
@@ -229,11 +219,6 @@ class OrderResponseParser implements OrderResponseParserInterface
         return array_shift($shippingAddress);
     }
 
-    /**
-     * @param array $entry
-     *
-     * @return array
-     */
     private function getCustomerData(array $entry): array
     {
         $relations = array_filter($entry['relations'], static function (array $relation) {
@@ -250,8 +235,6 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
-     * @param array $entry
-     *
      * @return null|string
      */
     private function getOrdernumber(array $entry)
@@ -270,8 +253,6 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
-     * @param array $entry
-     *
      * @return null|Identity
      */
     private function getLanguageIdentity(array $entry)
@@ -294,8 +275,6 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
-     * @param array $entry
-     *
      * @return Comment[]
      */
     private function getComments(array $entry): array
@@ -313,8 +292,6 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
-     * @param array $entry
-     *
      * @return null|Customer
      */
     private function getCustomer(array $entry)
@@ -373,11 +350,6 @@ class OrderResponseParser implements OrderResponseParserInterface
         return $customer;
     }
 
-    /**
-     * @param array $plentyCustomer
-     *
-     * @return Identity
-     */
     private function getShopIdentity(array $plentyCustomer): Identity
     {
         return $this->identityService->findOneBy([
@@ -388,8 +360,6 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
-     * @param array $plentyCustomer
-     *
      * @return null|Identity
      */
     private function getCustomerGroupIdentity(array $plentyCustomer)
@@ -402,8 +372,6 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
-     * @param array $entry
-     *
      * @return null|Identity
      */
     private function getShippingProfileIdentity(array $entry)
@@ -426,8 +394,6 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
-     * @param array $entry
-     *
      * @return null|Identity
      */
     private function getCurrencyIdentity(array $entry)
@@ -446,8 +412,6 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
-     * @param array $entry
-     *
      * @return null|Identity
      */
     private function getPaymentMethodIdentity(array $entry)
@@ -470,8 +434,6 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
-     * @param array $entry
-     *
      * @return null|Identity
      */
     private function getPaymentStatusIdentity(array $entry)
@@ -494,8 +456,6 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
-     * @param array $entry
-     *
      * @return null|Identity
      */
     private function getOrderStatusIdentity(array $entry)
@@ -507,11 +467,6 @@ class OrderResponseParser implements OrderResponseParserInterface
         ]);
     }
 
-    /**
-     * @param array $entry
-     *
-     * @return DateTimeImmutable
-     */
     private function getOrderTime(array $entry): DateTimeImmutable
     {
         $date = array_filter($entry['dates'], static function (array $property) {
@@ -528,8 +483,6 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
-     * @param array $entry
-     *
      * @return null|Address
      */
     private function getBillingAddress(array $entry)
@@ -567,8 +520,6 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
-     * @param array $entry
-     *
      * @return null|Address
      */
     private function getShippingAddress(array $entry)
@@ -606,8 +557,6 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
-     * @param array $entry
-     *
      * @return null|string
      */
     private function getPhoneNumber(array $entry)
@@ -626,8 +575,6 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
-     * @param array $entry
-     *
      * @return null|string
      */
     private function getMobilePhoneNumber(array $entry)
@@ -646,8 +593,6 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
-     * @param array $entry
-     *
      * @return null|string
      */
     private function getMail(array $entry)
@@ -670,8 +615,6 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
-     * @param array $entry
-     *
      * @return Package[]
      */
     private function getPackages(array $entry): array
@@ -711,8 +654,6 @@ class OrderResponseParser implements OrderResponseParserInterface
     }
 
     /**
-     * @param array $entry
-     *
      * @return OrderItem[]
      */
     private function getOrderItems(array $entry): array
@@ -742,11 +683,6 @@ class OrderResponseParser implements OrderResponseParserInterface
         return $result;
     }
 
-    /**
-     * @param array $item
-     *
-     * @return float
-     */
     private function getOrderItemPrice(array $item): float
     {
         $price = 0.0;

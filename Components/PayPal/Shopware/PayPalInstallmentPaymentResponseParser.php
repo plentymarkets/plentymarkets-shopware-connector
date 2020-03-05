@@ -62,10 +62,6 @@ class PayPalInstallmentPaymentResponseParser implements PaymentResponseParserInt
         }
     }
 
-    /**
-     * @param Payment $payment
-     * @param array   $element
-     */
     private function addPayPalInstallment(Payment $payment, array $element)
     {
         $data = $this->getPayPalPlusInstallmentData($element['number']);

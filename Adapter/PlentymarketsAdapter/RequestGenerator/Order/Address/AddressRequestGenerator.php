@@ -24,11 +24,7 @@ class AddressRequestGenerator implements AddressRequestGeneratorInterface
     }
 
     /**
-     * @param Address $address
-     * @param Order   $order
-     * @param int     $addressType
-     *
-     * @return array
+     * @param int $addressType
      */
     public function generate(Address $address, Order $order, $addressType = 0): array
     {

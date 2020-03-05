@@ -6,8 +6,5 @@ use Shopware\Models\Shop\Shop as ShopModel;
 
 interface ShopDataProviderInterface
 {
-    /**
-     * @return ShopModel
-     */
     public function getDefaultShop(): ShopModel;
 }

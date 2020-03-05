@@ -63,10 +63,6 @@ class PayPalPlusInvoicePaymentResponseParser implements PaymentResponseParserInt
         }
     }
 
-    /**
-     * @param Payment $payment
-     * @param array   $element
-     */
     private function addPayPalInvoiceData(Payment $payment, array $element)
     {
         $data = $this->getPayPalPlusInvoiceData($element['number']);

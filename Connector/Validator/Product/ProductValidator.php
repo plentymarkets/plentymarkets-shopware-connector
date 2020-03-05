@@ -16,8 +16,6 @@ class ProductValidator implements ValidatorInterface
 {
     /**
      * @param mixed $object
-     *
-     * @return bool
      */
     public function supports($object): bool
     {

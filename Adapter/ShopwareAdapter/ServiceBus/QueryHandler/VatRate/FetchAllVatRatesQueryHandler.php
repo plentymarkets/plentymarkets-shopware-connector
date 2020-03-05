@@ -63,9 +63,6 @@ class FetchAllVatRatesQueryHandler implements QueryHandlerInterface
         }
     }
 
-    /**
-     * @return Query
-     */
     private function createTaxQuery(): Query
     {
         $queryBuilder = $this->repository->createQueryBuilder('taxes');

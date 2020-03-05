@@ -19,8 +19,6 @@ class Order extends ApiAbstract
 
     /**
      * @param int $id
-     *
-     * @return array
      */
     public function find($id): array
     {
@@ -31,11 +29,6 @@ class Order extends ApiAbstract
         return $this->client->request('GET', 'orders/' . $id, $criteria);
     }
 
-    /**
-     * @param array $criteria
-     *
-     * @return Iterator
-     */
     public function findAll(array $criteria = []): Iterator
     {
         $criteria = array_merge($criteria, [
@@ -45,11 +38,6 @@ class Order extends ApiAbstract
         return $this->client->getIterator('orders', $criteria);
     }
 
-    /**
-     * @param array $criteria
-     *
-     * @return Iterator
-     */
     public function findBy(array $criteria = []): Iterator
     {
         $criteria = array_merge($criteria, [
@@ -59,11 +47,6 @@ class Order extends ApiAbstract
         return $this->client->getIterator('orders', $criteria);
     }
 
-    /**
-     * @param array $criteria
-     *
-     * @return array
-     */
     public function findOneBy(array $criteria = []): array
     {
         $result = iterator_to_array($this->findBy($criteria));

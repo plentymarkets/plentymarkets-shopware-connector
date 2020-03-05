@@ -25,7 +25,6 @@ class QueryHandlerMiddleware implements Middleware
 
     /**
      * @param QueryInterface $query
-     * @param callable       $next
      *
      * @return mixed
      */

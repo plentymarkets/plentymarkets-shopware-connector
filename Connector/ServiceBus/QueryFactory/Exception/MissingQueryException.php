@@ -9,8 +9,6 @@ class MissingQueryException extends InvalidArgumentException
     /**
      * @param string $objectType
      * @param string $queryType
-     *
-     * @return MissingQueryException
      */
     public static function fromObjectData($objectType, $queryType): MissingQueryException
     {

@@ -63,9 +63,6 @@ class FetchAllCustomerGroupsQueryHandler implements QueryHandlerInterface
         }
     }
 
-    /**
-     * @return Query
-     */
     private function createCustomerGroupsQuery(): Query
     {
         $queryBuilder = $this->repository->createQueryBuilder('groups');

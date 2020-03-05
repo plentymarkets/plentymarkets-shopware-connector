@@ -84,11 +84,6 @@ class BundleResponseParser implements BundleResponseParserInterface
         return array_filter($bundles);
     }
 
-    /**
-     * @param array $variation
-     *
-     * @return string
-     */
     private function getVatRateIdentifier(array $variation): string
     {
         $vatRateIdentity = $this->identityService->findOneBy([
@@ -105,9 +100,6 @@ class BundleResponseParser implements BundleResponseParserInterface
     }
 
     /**
-     * @param array $variation
-     * @param array $product
-     *
      * @return null|Bundle
      */
     private function parseBundle(array $variation, array $product)
@@ -148,8 +140,6 @@ class BundleResponseParser implements BundleResponseParserInterface
     }
 
     /**
-     * @param array $mainVariation
-     *
      * @return null|DateTimeImmutable
      */
     private function getAvailableFrom(array $mainVariation)
@@ -162,8 +152,6 @@ class BundleResponseParser implements BundleResponseParserInterface
     }
 
     /**
-     * @param array $mainVariation
-     *
      * @return null|DateTimeImmutable
      */
     private function getAvailableTo(array $mainVariation)
@@ -176,8 +164,6 @@ class BundleResponseParser implements BundleResponseParserInterface
     }
 
     /**
-     * @param array $product
-     *
      * @return Translation[]
      */
     private function getTranslations(array $product): array
@@ -205,9 +191,6 @@ class BundleResponseParser implements BundleResponseParserInterface
         return $translations;
     }
 
-    /**
-     * @param array $elements
-     */
     private function addProductNumberToResponse(array &$elements)
     {
         $ids = implode(',', array_column($elements, 'componentVariationId'));
@@ -229,8 +212,6 @@ class BundleResponseParser implements BundleResponseParserInterface
     }
 
     /**
-     * @param array $variation
-     *
      * @return BundleProduct[]
      */
     private function getBundleProducts(array $variation): array

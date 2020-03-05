@@ -9,9 +9,6 @@ use SystemConnector\ConfigService\ConfigServiceInterface;
 
 trait ChangedDateTimeTrait
 {
-    /**
-     * @return DateTimeImmutable
-     */
     public function getChangedDateTime(): DateTimeImmutable
     {
         /**
@@ -28,9 +25,6 @@ trait ChangedDateTimeTrait
         return DateTimeImmutable::createFromFormat(DATE_W3C, $lastRun);
     }
 
-    /**
-     * @param DateTimeImmutable $dateTime
-     */
     public function setChangedDateTime(DateTimeImmutable $dateTime)
     {
         /**
@@ -41,17 +35,11 @@ trait ChangedDateTimeTrait
         $configService->set($this->getKey(), $dateTime);
     }
 
-    /**
-     * @return DateTimeImmutable
-     */
     public function getCurrentDateTime(): DateTimeImmutable
     {
         return new DateTimeImmutable('now');
     }
 
-    /**
-     * @return string
-     */
     private function getKey(): string
     {
         $ref = new ReflectionClass(static::class);

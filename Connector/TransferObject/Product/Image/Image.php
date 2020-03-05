@@ -49,9 +49,6 @@ class Image extends AbstractValueObject implements TranslatableInterface
         $this->mediaIdentifier = $mediaIdentifier;
     }
 
-    /**
-     * @return array
-     */
     public function getShopIdentifiers(): array
     {
         return $this->shopIdentifiers;
@@ -65,9 +62,6 @@ class Image extends AbstractValueObject implements TranslatableInterface
         $this->shopIdentifiers = $shopIdentifiers;
     }
 
-    /**
-     * @return int
-     */
     public function getPosition(): int
     {
         return $this->position;
@@ -81,9 +75,6 @@ class Image extends AbstractValueObject implements TranslatableInterface
         $this->position = $position;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;

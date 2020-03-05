@@ -111,9 +111,6 @@ class Category extends AbstractTransferObject implements TranslatableInterface, 
         $this->identifier = $identifier;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
@@ -127,9 +124,6 @@ class Category extends AbstractTransferObject implements TranslatableInterface, 
         $this->name = $name;
     }
 
-    /**
-     * @return bool
-     */
     public function getActive(): bool
     {
         return $this->active;
@@ -159,41 +153,26 @@ class Category extends AbstractTransferObject implements TranslatableInterface, 
         $this->parentIdentifier = $parentIdentifier;
     }
 
-    /**
-     * @return array
-     */
     public function getShopIdentifiers(): array
     {
         return $this->shopIdentifiers;
     }
 
-    /**
-     * @param array $shopIdentifiers
-     */
     public function setShopIdentifiers(array $shopIdentifiers = [])
     {
         $this->shopIdentifiers = $shopIdentifiers;
     }
 
-    /**
-     * @return array
-     */
     public function getImageIdentifiers(): array
     {
         return $this->imageIdentifiers;
     }
 
-    /**
-     * @param array $imageIdentifiers
-     */
     public function setImageIdentifiers(array $imageIdentifiers)
     {
         $this->imageIdentifiers = $imageIdentifiers;
     }
 
-    /**
-     * @return int
-     */
     public function getPosition(): int
     {
         return $this->position;
@@ -211,9 +190,6 @@ class Category extends AbstractTransferObject implements TranslatableInterface, 
         $this->position = $position;
     }
 
-    /**
-     * @return string
-     */
     public function getDescription(): string
     {
         return $this->description;
@@ -227,9 +203,6 @@ class Category extends AbstractTransferObject implements TranslatableInterface, 
         $this->description = $description;
     }
 
-    /**
-     * @return string
-     */
     public function getLongDescription(): string
     {
         return $this->longDescription;
@@ -243,9 +216,6 @@ class Category extends AbstractTransferObject implements TranslatableInterface, 
         $this->longDescription = $longDescription;
     }
 
-    /**
-     * @return string
-     */
     public function getMetaTitle(): string
     {
         return $this->metaTitle;
@@ -259,9 +229,6 @@ class Category extends AbstractTransferObject implements TranslatableInterface, 
         $this->metaTitle = $metaTitle;
     }
 
-    /**
-     * @return string
-     */
     public function getMetaDescription(): string
     {
         return $this->metaDescription;
@@ -275,9 +242,6 @@ class Category extends AbstractTransferObject implements TranslatableInterface, 
         $this->metaDescription = $metaDescription;
     }
 
-    /**
-     * @return string
-     */
     public function getMetaKeywords(): string
     {
         return $this->metaKeywords;
@@ -291,9 +255,6 @@ class Category extends AbstractTransferObject implements TranslatableInterface, 
         $this->metaKeywords = $metaKeywords;
     }
 
-    /**
-     * @return string
-     */
     public function getMetaRobots(): string
     {
         return $this->metaRobots;

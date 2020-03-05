@@ -42,9 +42,6 @@ class PaymentMethod extends AbstractTransferObject
         $this->identifier = $identifier;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;

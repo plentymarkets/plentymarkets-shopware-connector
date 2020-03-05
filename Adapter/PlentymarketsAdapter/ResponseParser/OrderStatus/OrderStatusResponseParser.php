@@ -45,8 +45,6 @@ class OrderStatusResponseParser implements OrderStatusResponseParserInterface
 
     /**
      * @param array $entry
-     *
-     * @return string
      */
     private function getName($entry): string
     {
