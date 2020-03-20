@@ -45,8 +45,6 @@ class PaymentStatusResponseParser implements PaymentStatusResponseParserInterfac
 
     /**
      * @param array $entry
-     *
-     * @return string
      */
     private function getName($entry): string
     {

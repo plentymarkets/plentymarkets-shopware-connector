@@ -53,9 +53,6 @@ class PayPalPlusInvoicePaymentData extends AbstractValueObject implements Paymen
      */
     private $payment_due_date;
 
-    /**
-     * @return string
-     */
     public function getReferenceNumber(): string
     {
         return $this->reference_number;
@@ -69,9 +66,6 @@ class PayPalPlusInvoicePaymentData extends AbstractValueObject implements Paymen
         $this->reference_number = $reference_number;
     }
 
-    /**
-     * @return string
-     */
     public function getInstructionType(): string
     {
         return $this->instruction_type;
@@ -85,9 +79,6 @@ class PayPalPlusInvoicePaymentData extends AbstractValueObject implements Paymen
         $this->instruction_type = $instruction_type;
     }
 
-    /**
-     * @return string
-     */
     public function getBankName(): string
     {
         return $this->bank_name;
@@ -101,9 +92,6 @@ class PayPalPlusInvoicePaymentData extends AbstractValueObject implements Paymen
         $this->bank_name = $bank_name;
     }
 
-    /**
-     * @return string
-     */
     public function getAccountHolderName(): string
     {
         return $this->account_holder_name;
@@ -117,9 +105,6 @@ class PayPalPlusInvoicePaymentData extends AbstractValueObject implements Paymen
         $this->account_holder_name = $account_holder_name;
     }
 
-    /**
-     * @return string
-     */
     public function getInternationalBankAccountNumber(): string
     {
         return $this->international_bank_account_number;
@@ -133,9 +118,6 @@ class PayPalPlusInvoicePaymentData extends AbstractValueObject implements Paymen
         $this->international_bank_account_number = $international_bank_account_number;
     }
 
-    /**
-     * @return string
-     */
     public function getBankIdentifierCode(): string
     {
         return $this->bank_identifier_code;
@@ -149,9 +131,6 @@ class PayPalPlusInvoicePaymentData extends AbstractValueObject implements Paymen
         $this->bank_identifier_code = $bank_identifier_code;
     }
 
-    /**
-     * @return float
-     */
     public function getAmountValue(): float
     {
         return $this->amount_value;
@@ -165,9 +144,6 @@ class PayPalPlusInvoicePaymentData extends AbstractValueObject implements Paymen
         $this->amount_value = $amount_value;
     }
 
-    /**
-     * @return string
-     */
     public function getAmountCurrency(): string
     {
         return $this->amount_currency;
@@ -181,17 +157,11 @@ class PayPalPlusInvoicePaymentData extends AbstractValueObject implements Paymen
         $this->amount_currency = $amount_currency;
     }
 
-    /**
-     * @return DateTimeImmutable
-     */
     public function getPaymentDueDate(): DateTimeImmutable
     {
         return $this->payment_due_date;
     }
 
-    /**
-     * @param DateTimeImmutable $payment_due_date
-     */
     public function setPaymentDueDate(DateTimeImmutable $payment_due_date)
     {
         $this->payment_due_date = $payment_due_date;

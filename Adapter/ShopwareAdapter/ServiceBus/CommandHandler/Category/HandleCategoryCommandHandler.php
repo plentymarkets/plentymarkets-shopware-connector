@@ -6,14 +6,12 @@ use DeepCopy\DeepCopy;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use InvalidArgumentException;
-use Shopware\Components\Api\Exception\CustomValidationException;
 use Shopware\Components\Api\Exception\NotFoundException;
-use Shopware\Components\Api\Exception\ParameterMissingException;
-use Shopware\Components\Api\Exception\ValidationException;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Category as CategoryResource;
 use Shopware\Models\Category\Category as CategoryModel;
 use Shopware\Models\Category\Repository as CategoryRepository;
+use Shopware\Models\Media\Media as MediaRepository;
 use Shopware\Models\Shop\Repository as ShopRepository;
 use Shopware\Models\Shop\Shop as ShopModel;
 use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
@@ -66,6 +64,11 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     private $categoryRepository;
 
     /**
+     * @var MediaRepository
+     */
+    private $mediaRepository;
+
+    /**
      * @var ShopRepository
      */
     private $shopRepository;
@@ -84,6 +87,8 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         $this->translationDataPersister = $translationDataPersister;
         $this->categoryRepository = $entityManager->getRepository(CategoryModel::class);
         $this->shopRepository = $entityManager->getRepository(ShopModel::class);
+        $this->mediaRepository = $entityManager->getRepository(MediaRepository::class);
+
     }
 
     /**
@@ -98,12 +103,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param CommandInterface $command
-     *
-     * @throws IdentityNotFoundException
-     * @throws IdentityNotFoundException
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function handle(CommandInterface $command): bool
     {
@@ -141,10 +141,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         return true;
     }
 
-    /**
-     * @param Category $category
-     */
-    private function prepareCategory(Category $category)
+    private function prepareCategory(Category $category): void
     {
         $attributes = $category->getAttributes();
 
@@ -156,23 +153,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         $category->setAttributes($attributes);
     }
 
-    /**
-     * @param Category $category
-     * @param Identity $shopIdentity
-     *
-     * @throws IdentityNotFoundException
-     * @throws NotFoundException
-     * @throws CustomValidationException
-     * @throws ParameterMissingException
-     * @throws ValidationException
-     * @throws ValidationException
-     * @throws ParameterMissingException
-     * @throws IdentityNotFoundException
-     * @throws ParameterMissingException
-     *
-     * @return null|Identity
-     */
-    private function handleCategory(Category $category, Identity $shopIdentity)
+    private function handleCategory(Category $category, Identity $shopIdentity): ?Identity
     {
         $deepCopy = new DeepCopy();
         $category = $deepCopy->copy($category);
@@ -355,13 +336,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         return $categoryIdentity;
     }
 
-    /**
-     * @param Category $category
-     * @param int      $parentCategory
-     *
-     * @return null|int
-     */
-    private function findExistingCategory(Category $category, $parentCategory)
+    private function findExistingCategory(Category $category, $parentCategory): ?int
     {
         $existingCategory = $this->categoryRepository->findOneBy([
             'name' => $category->getName(),
@@ -375,13 +350,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         return $existingCategory->getId();
     }
 
-    /**
-     * @param Identity      $categoryIdentity
-     * @param CategoryModel $shopMainCategory
-     *
-     * @return bool
-     */
-    private function validIdentity(Identity $categoryIdentity, CategoryModel $shopMainCategory)
+    private function validIdentity(Identity $categoryIdentity, CategoryModel $shopMainCategory): bool
     {
         try {
             $existingCategory = $this->categoryRepository->find($categoryIdentity->getAdapterIdentifier());
@@ -402,17 +371,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         }
     }
 
-    /**
-     * @param Category $category
-     * @param array    $validIdentities
-     *
-     * @throws CustomValidationException
-     * @throws NotFoundException
-     * @throws ParameterMissingException
-     * @throws ValidationException
-     * @throws ParameterMissingException
-     */
-    private function handleOrphanedCategories(Category $category, array $validIdentities = [])
+    private function handleOrphanedCategories(Category $category, array $validIdentities = []): void
     {
         $categoryIdentities = $this->identityService->findBy([
             'objectIdentifier' => $category->getIdentifier(),
@@ -444,12 +403,6 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         }
     }
 
-    /**
-     * @param CategoryModel $categoryModel
-     * @param array         $params
-     *
-     * @return CategoryModel
-     */
     private function createOrUpdateCategory(CategoryModel $categoryModel, array $params = []): CategoryModel
     {
         /**
@@ -467,15 +420,20 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         $categoryModel->setCmsHeadline($params['cmsHeadline']);
         $categoryModel->setCmsText($params['cmsText']);
 
+        if (array_key_exists('media', $params)) {
+            $categoryImage = $this->mediaRepository->find($params['media']['mediaId']);
+
+            if (null !== $categoryImage) {
+                $categoryModel->setMedia($categoryImage);
+            }
+        }
+
         $this->entityManager->persist($categoryModel);
         $this->entityManager->flush();
 
         return $categoryModel;
     }
 
-    /**
-     * @return CategoryResource
-     */
     private function getCategoryResource(): CategoryResource
     {
         // without this reset the entitymanager sometimes the album is not found correctly.

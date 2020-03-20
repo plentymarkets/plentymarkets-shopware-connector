@@ -63,9 +63,6 @@ class FetchAllUnitsQueryHandler implements QueryHandlerInterface
         }
     }
 
-    /**
-     * @return Query
-     */
     private function createUnitsQuery(): Query
     {
         $queryBuilder = $this->repository->createQueryBuilder('units');

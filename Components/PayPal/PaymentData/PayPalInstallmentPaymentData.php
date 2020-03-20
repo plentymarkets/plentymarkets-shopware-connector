@@ -22,9 +22,6 @@ class PayPalInstallmentPaymentData extends AbstractValueObject implements Paymen
      */
     private $totalCostsIncludeFinancing;
 
-    /**
-     * @return string
-     */
     public function getCurrency(): string
     {
         return $this->currency;
@@ -38,9 +35,6 @@ class PayPalInstallmentPaymentData extends AbstractValueObject implements Paymen
         $this->currency = $currency;
     }
 
-    /**
-     * @return float
-     */
     public function getFinancingCosts(): float
     {
         return $this->financingCosts;
@@ -54,9 +48,6 @@ class PayPalInstallmentPaymentData extends AbstractValueObject implements Paymen
         $this->financingCosts = $financingCosts;
     }
 
-    /**
-     * @return float
-     */
     public function getTotalCostsIncludeFinancing(): float
     {
         return $this->totalCostsIncludeFinancing;

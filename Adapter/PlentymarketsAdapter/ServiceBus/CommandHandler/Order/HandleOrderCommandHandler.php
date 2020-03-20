@@ -55,11 +55,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param CommandInterface $command
-     *
      * @throws NotFoundException
-     *
-     * @return bool
      */
     public function handle(CommandInterface $command): bool
     {
@@ -91,11 +87,6 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         return true;
     }
 
-    /**
-     * @param Order $order
-     *
-     * @return bool
-     */
     private function handleOrder(Order $order): bool
     {
         $params = $this->orderRequestGenerator->generate($order);
@@ -112,11 +103,7 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param Order $order
-     *
      * @throws NotFoundException
-     *
-     * @return bool
      */
     private function isExistingOrder(Order $order): bool
     {
@@ -146,8 +133,6 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param Order $order
-     *
      * @throws NotFoundException
      */
     private function handleComments(Order $order)
@@ -178,9 +163,6 @@ class HandleOrderCommandHandler implements CommandHandlerInterface
         }
     }
 
-    /**
-     * @return int
-     */
     private function getUserId(): int
     {
         static $user = null;

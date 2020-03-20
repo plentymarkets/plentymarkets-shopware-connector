@@ -69,8 +69,6 @@ class StockResponseParser implements StockResponseParserInterface
 
     /**
      * @param array $variation
-     *
-     * @return float
      */
     private function getStock($variation): float
     {

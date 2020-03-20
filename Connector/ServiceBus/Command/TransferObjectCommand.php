@@ -62,25 +62,16 @@ class TransferObjectCommand implements CommandInterface
         $this->payload = $payload;
     }
 
-    /**
-     * @return string
-     */
     public function getAdapterName(): string
     {
         return $this->adapterName;
     }
 
-    /**
-     * @return string
-     */
     public function getObjectType(): string
     {
         return $this->objectType;
     }
 
-    /**
-     * @return string
-     */
     public function getCommandType(): string
     {
         return $this->commandType;

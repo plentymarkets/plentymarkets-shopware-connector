@@ -22,9 +22,6 @@ class Barcode extends AbstractValueObject
      */
     private $code = '';
 
-    /**
-     * @return int
-     */
     public function getType(): int
     {
         return $this->type;
@@ -38,9 +35,6 @@ class Barcode extends AbstractValueObject
         $this->type = $type;
     }
 
-    /**
-     * @return array
-     */
     public function getTypes(): array
     {
         $reflection = new ReflectionClass(__CLASS__);
@@ -48,9 +42,6 @@ class Barcode extends AbstractValueObject
         return $reflection->getConstants();
     }
 
-    /**
-     * @return string
-     */
     public function getCode(): string
     {
         return $this->code;

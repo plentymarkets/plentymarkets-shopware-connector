@@ -141,8 +141,6 @@ class HandleSepaPaymentCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param Identity $orderIdentity
-     *
      * @return null|int
      */
     private function getContactIdentifier(Identity $orderIdentity)

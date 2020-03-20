@@ -157,9 +157,6 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
         return $params;
     }
 
-    /**
-     * @param Product $product
-     */
     private function addShippingProfilesAsAttributes(Product $product)
     {
         $allProfileIdentities = $this->identityService->findBy([
@@ -209,10 +206,7 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
     }
 
     /**
-     * @param Product $product
-     * @param string  $type
-     *
-     * @return array
+     * @param string $type
      */
     private function getLinkedProducts(Product $product, $type = LinkedProduct::TYPE_SIMILAR): array
     {
@@ -253,11 +247,6 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
         return $result;
     }
 
-    /**
-     * @param Product $product
-     *
-     * @return array
-     */
     private function getPropertyData(Product $product): array
     {
         /**
@@ -301,8 +290,6 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
     }
 
     /**
-     * @param Product $product
-     *
      * @return array|bool
      */
     private function getImages(Product $product)
@@ -347,11 +334,6 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
         return $images;
     }
 
-    /**
-     * @param Product $product
-     *
-     * @return array
-     */
     private function getCategories(Product $product): array
     {
         /**
@@ -484,11 +466,6 @@ class ProductRequestGenerator implements ProductRequestGeneratorInterface
         return $seoCategories;
     }
 
-    /**
-     * @param Product $product
-     *
-     * @return int
-     */
     private function getHighlightFlag(Product $product): int
     {
         foreach ($product->getBadges() as $badge) {

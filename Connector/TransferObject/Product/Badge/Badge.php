@@ -14,9 +14,6 @@ class Badge extends AbstractValueObject
      */
     private $type = self::TYPE_HIGHLIGHT;
 
-    /**
-     * @return string
-     */
     public function getType(): string
     {
         return $this->type;
@@ -30,9 +27,6 @@ class Badge extends AbstractValueObject
         $this->type = $type;
     }
 
-    /**
-     * @return array
-     */
     public function getTypes(): array
     {
         $reflection = new ReflectionClass(__CLASS__);

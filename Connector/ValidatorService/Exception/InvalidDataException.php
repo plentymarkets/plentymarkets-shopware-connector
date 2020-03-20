@@ -12,9 +12,6 @@ class InvalidDataException extends Exception
      * @param TransferObjectInterface|ValueObjectInterface $object
      * @param string                                       $message
      * @param string                                       $propertyPath
-     * @param array                                        $parents
-     *
-     * @return InvalidDataException
      */
     public static function fromObject($object, $message, $propertyPath, array $parents = []): InvalidDataException
     {

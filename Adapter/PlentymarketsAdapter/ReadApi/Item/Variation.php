@@ -23,11 +23,6 @@ class Variation extends ApiAbstract
         'properties',
     ];
 
-    /**
-     * @param array $criteria
-     *
-     * @return array
-     */
     public function findBy(array $criteria): array
     {
         $params = array_merge($criteria, [
