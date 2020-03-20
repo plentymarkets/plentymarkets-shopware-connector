@@ -64,6 +64,11 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     private $categoryRepository;
 
     /**
+     * @var MediaRepository
+     */
+    private $mediaRepository;
+
+    /**
      * @var ShopRepository
      */
     private $shopRepository;
@@ -82,6 +87,8 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         $this->translationDataPersister = $translationDataPersister;
         $this->categoryRepository = $entityManager->getRepository(CategoryModel::class);
         $this->shopRepository = $entityManager->getRepository(ShopModel::class);
+        $this->mediaRepository = $entityManager->getRepository(MediaRepository::class);
+
     }
 
     /**
@@ -414,8 +421,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         $categoryModel->setCmsText($params['cmsText']);
 
         if (array_key_exists('media', $params)) {
-            $mediaRepository = $this->entityManager->getRepository(MediaRepository::class);
-            $categoryImage = $mediaRepository->find($params['media']['mediaId']);
+            $categoryImage = $this->mediaRepository->find($params['media']['mediaId']);
 
             if (null !== $categoryImage) {
                 $categoryModel->setMedia($categoryImage);
