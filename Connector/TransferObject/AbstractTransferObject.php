@@ -7,8 +7,6 @@ use JsonSerializable;
 abstract class AbstractTransferObject implements TransferObjectInterface, JsonSerializable
 {
     /**
-     * @param array $params
-     *
      * @return $this
      */
     public static function fromArray(array $params = []): TransferObjectInterface

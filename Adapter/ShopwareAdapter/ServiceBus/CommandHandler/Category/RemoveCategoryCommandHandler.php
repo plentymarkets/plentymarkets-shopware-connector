@@ -82,9 +82,6 @@ class RemoveCategoryCommandHandler implements CommandHandlerInterface
         return true;
     }
 
-    /**
-     * @return CategoryResource
-     */
     private function getCategoryResource(): CategoryResource
     {
         // without this reset the entitymanager sometimes the album is not found correctly.

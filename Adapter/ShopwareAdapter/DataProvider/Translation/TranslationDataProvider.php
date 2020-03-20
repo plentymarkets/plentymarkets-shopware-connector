@@ -58,8 +58,6 @@ class TranslationDataProvider implements TranslationDataProviderInterface
     }
 
     /**
-     * @param Identity $identity
-     *
      * @return Shop[]
      */
     public function getShopsByLocaleIdentity(Identity $identity): array
@@ -110,7 +108,6 @@ class TranslationDataProvider implements TranslationDataProviderInterface
     }
 
     /**
-     * @param Identity $mediaIdentity
      * @param $articleId
      *
      * @return null|Image

@@ -13,18 +13,12 @@ class LanguageHelper implements LanguageHelperInterface
      */
     private $identityService;
 
-    /**
-     * @param IdentityServiceInterface $identityService
-     */
     public function __construct(
         IdentityServiceInterface $identityService
     ) {
         $this->identityService = $identityService;
     }
 
-    /**
-     * @return array
-     */
     public function getLanguages(): array
     {
         return [
@@ -107,9 +101,6 @@ class LanguageHelper implements LanguageHelperInterface
         ];
     }
 
-    /**
-     * @return string
-     */
     public function getLanguagesQueryString(): string
     {
         $languages = [];

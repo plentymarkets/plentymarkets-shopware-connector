@@ -29,9 +29,6 @@ class Property extends AbstractValueObject implements TranslatableInterface
      */
     private $translations = [];
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
@@ -45,9 +42,6 @@ class Property extends AbstractValueObject implements TranslatableInterface
         $this->name = $name;
     }
 
-    /**
-     * @return int
-     */
     public function getPosition(): int
     {
         return $this->position;

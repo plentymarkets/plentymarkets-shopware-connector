@@ -21,8 +21,6 @@ class TaxDataProvider implements TaxDataProviderInterface
 
     /**
      * TaxDataProvider constructor.
-     *
-     * @param EntityManagerInterface $entityManager
      */
     public function __construct(EntityManagerInterface $entityManager)
     {
@@ -31,8 +29,7 @@ class TaxDataProvider implements TaxDataProviderInterface
     }
 
     /**
-     * @param float $rate
-     * @param int   $countryId
+     * @param int $countryId
      *
      * @return Tax $taxModel|null
      */

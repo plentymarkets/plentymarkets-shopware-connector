@@ -5,16 +5,14 @@ namespace PlentymarketsAdapter\Helper;
 interface PropertyHelperInterface
 {
     /**
-     * @param int   $propertyGroupId
-     * @param array $propertyGroups
+     * @param int $propertyGroupId
      *
      * @return array
      */
     public function getPropertyGroupNamesById($propertyGroupId, array $propertyGroups);
 
     /**
-     * @param int   $propertyId
-     * @param array $properties
+     * @param int $propertyId
      *
      * @return array
      */

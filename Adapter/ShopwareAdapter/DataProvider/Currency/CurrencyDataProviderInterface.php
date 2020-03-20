@@ -6,8 +6,6 @@ interface CurrencyDataProviderInterface
 {
     /**
      * @param string $code
-     *
-     * @return int
      */
     public function getCurrencyIdentifierByCode($code): int;
 }

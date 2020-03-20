@@ -34,9 +34,6 @@ class Identity extends AbstractValueObject
      */
     private $adapterName = '';
 
-    /**
-     * @return string
-     */
     public function getObjectIdentifier(): string
     {
         return $this->objectIdentifier;
@@ -50,9 +47,6 @@ class Identity extends AbstractValueObject
         $this->objectIdentifier = $objectIdentifier;
     }
 
-    /**
-     * @return string
-     */
     public function getObjectType(): string
     {
         return $this->objectType;
@@ -66,9 +60,6 @@ class Identity extends AbstractValueObject
         $this->objectType = $objectType;
     }
 
-    /**
-     * @return string
-     */
     public function getAdapterIdentifier(): string
     {
         return $this->adapterIdentifier;
@@ -82,9 +73,6 @@ class Identity extends AbstractValueObject
         $this->adapterIdentifier = $adapterIdentifier;
     }
 
-    /**
-     * @return string
-     */
     public function getAdapterName(): string
     {
         return $this->adapterName;

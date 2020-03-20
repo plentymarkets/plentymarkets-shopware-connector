@@ -11,9 +11,6 @@ use SystemConnector\TransferObject\Payment\Payment;
 class PayPalInstallmentRequestGeneratorTest extends TestCase
 {
     /**
-     * @param Payment $payment
-     * @param array   $expectedResponse
-     *
      * @dataProvider dataProvider
      */
     public function testGeneratePayPalPlusInvoicePaymentRequest(Payment $payment, array $expectedResponse)

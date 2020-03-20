@@ -26,9 +26,6 @@ class LinkedProduct extends AbstractValueObject
      */
     private $productIdentifier = '';
 
-    /**
-     * @return string
-     */
     public function getType(): string
     {
         return $this->type;
@@ -42,9 +39,6 @@ class LinkedProduct extends AbstractValueObject
         $this->type = $type;
     }
 
-    /**
-     * @return array
-     */
     public function getTypes(): array
     {
         $reflection = new ReflectionClass(__CLASS__);
@@ -52,9 +46,6 @@ class LinkedProduct extends AbstractValueObject
         return $reflection->getConstants();
     }
 
-    /**
-     * @return int
-     */
     public function getPosition(): int
     {
         return $this->position;
@@ -68,9 +59,6 @@ class LinkedProduct extends AbstractValueObject
         $this->position = $position;
     }
 
-    /**
-     * @return string
-     */
     public function getProductIdentifier(): string
     {
         return $this->productIdentifier;

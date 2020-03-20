@@ -63,9 +63,6 @@ class FetchAllPaymentStatusesQueryHandler implements QueryHandlerInterface
         }
     }
 
-    /**
-     * @return Query
-     */
     private function createPaymentStatusQuery(): Query
     {
         $queryBuilder = $this->repository->createQueryBuilder('status');

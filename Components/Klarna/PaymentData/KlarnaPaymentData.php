@@ -22,9 +22,6 @@ class KlarnaPaymentData extends AbstractValueObject implements PaymentDataInterf
      */
     private $transactionId;
 
-    /**
-     * @return string
-     */
     public function getShopId(): string
     {
         return $this->shopId;
@@ -38,9 +35,6 @@ class KlarnaPaymentData extends AbstractValueObject implements PaymentDataInterf
         $this->shopId = $shopId;
     }
 
-    /**
-     * @return string
-     */
     public function getPclassId(): string
     {
         return $this->pclassId;
@@ -54,9 +48,6 @@ class KlarnaPaymentData extends AbstractValueObject implements PaymentDataInterf
         $this->pclassId = $pclassId;
     }
 
-    /**
-     * @return string
-     */
     public function getTransactionId(): string
     {
         return $this->transactionId;

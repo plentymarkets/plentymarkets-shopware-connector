@@ -63,8 +63,6 @@ class Payment extends AbstractTransferObject implements AttributableInterface
 
     /**
      * return the unique type of the object.
-     *
-     * @return string
      */
     public function getType(): string
     {
@@ -87,9 +85,6 @@ class Payment extends AbstractTransferObject implements AttributableInterface
         $this->identifier = $identifier;
     }
 
-    /**
-     * @return string
-     */
     public function getOrderIdentifier(): string
     {
         return $this->orderIdentifier;
@@ -103,9 +98,6 @@ class Payment extends AbstractTransferObject implements AttributableInterface
         $this->orderIdentifier = $orderIdentifier;
     }
 
-    /**
-     * @return float
-     */
     public function getAmount(): float
     {
         return $this->amount;
@@ -119,9 +111,6 @@ class Payment extends AbstractTransferObject implements AttributableInterface
         $this->amount = $amount;
     }
 
-    /**
-     * @return string
-     */
     public function getShopIdentifier(): string
     {
         return $this->shopIdentifier;
@@ -135,9 +124,6 @@ class Payment extends AbstractTransferObject implements AttributableInterface
         $this->shopIdentifier = $shopIdentifier;
     }
 
-    /**
-     * @return string
-     */
     public function getCurrencyIdentifier(): string
     {
         return $this->currencyIdentifier;
@@ -151,9 +137,6 @@ class Payment extends AbstractTransferObject implements AttributableInterface
         $this->currencyIdentifier = $currencyIdentifier;
     }
 
-    /**
-     * @return string
-     */
     public function getPaymentMethodIdentifier(): string
     {
         return $this->paymentMethodIdentifier;
@@ -167,9 +150,6 @@ class Payment extends AbstractTransferObject implements AttributableInterface
         $this->paymentMethodIdentifier = $paymentMethodIdentifier;
     }
 
-    /**
-     * @return string
-     */
     public function getTransactionReference(): string
     {
         return $this->transactionReference;
@@ -183,9 +163,6 @@ class Payment extends AbstractTransferObject implements AttributableInterface
         $this->transactionReference = $transactionReference;
     }
 
-    /**
-     * @return string
-     */
     public function getAccountHolder(): string
     {
         return $this->accountHolder;
@@ -207,9 +184,6 @@ class Payment extends AbstractTransferObject implements AttributableInterface
         return $this->paymentData;
     }
 
-    /**
-     * @param null|PaymentDataInterface $paymentData
-     */
     public function setPaymentData(PaymentDataInterface $paymentData = null)
     {
         $this->paymentData = $paymentData;
