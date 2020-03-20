@@ -14,6 +14,7 @@ use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Category as CategoryResource;
 use Shopware\Models\Category\Category as CategoryModel;
 use Shopware\Models\Category\Repository as CategoryRepository;
+use Shopware\Models\Media\Media as MediaRepository;
 use Shopware\Models\Shop\Repository as ShopRepository;
 use Shopware\Models\Shop\Shop as ShopModel;
 use ShopwareAdapter\DataPersister\Attribute\AttributeDataPersisterInterface;
@@ -98,8 +99,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
     }
 
     /**
-     * @throws IdentityNotFoundException
-     * @throws IdentityNotFoundException
+     * {@inheritdoc}
      */
     public function handle(CommandInterface $command): bool
     {
@@ -137,7 +137,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         return true;
     }
 
-    private function prepareCategory(Category $category)
+    private function prepareCategory(Category $category): void
     {
         $attributes = $category->getAttributes();
 
@@ -149,20 +149,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         $category->setAttributes($attributes);
     }
 
-    /**
-     * @throws IdentityNotFoundException
-     * @throws NotFoundException
-     * @throws CustomValidationException
-     * @throws ParameterMissingException
-     * @throws ValidationException
-     * @throws ValidationException
-     * @throws ParameterMissingException
-     * @throws IdentityNotFoundException
-     * @throws ParameterMissingException
-     *
-     * @return null|Identity
-     */
-    private function handleCategory(Category $category, Identity $shopIdentity)
+    private function handleCategory(Category $category, Identity $shopIdentity): ?Identity
     {
         $deepCopy = new DeepCopy();
         $category = $deepCopy->copy($category);
@@ -345,12 +332,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         return $categoryIdentity;
     }
 
-    /**
-     * @param int $parentCategory
-     *
-     * @return null|int
-     */
-    private function findExistingCategory(Category $category, $parentCategory)
+    private function findExistingCategory(Category $category, $parentCategory): ?int
     {
         $existingCategory = $this->categoryRepository->findOneBy([
             'name' => $category->getName(),
@@ -364,10 +346,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         return $existingCategory->getId();
     }
 
-    /**
-     * @return bool
-     */
-    private function validIdentity(Identity $categoryIdentity, CategoryModel $shopMainCategory)
+    private function validIdentity(Identity $categoryIdentity, CategoryModel $shopMainCategory): bool
     {
         try {
             $existingCategory = $this->categoryRepository->find($categoryIdentity->getAdapterIdentifier());
@@ -388,14 +367,7 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         }
     }
 
-    /**
-     * @throws CustomValidationException
-     * @throws NotFoundException
-     * @throws ParameterMissingException
-     * @throws ValidationException
-     * @throws ParameterMissingException
-     */
-    private function handleOrphanedCategories(Category $category, array $validIdentities = [])
+    private function handleOrphanedCategories(Category $category, array $validIdentities = []): void
     {
         $categoryIdentities = $this->identityService->findBy([
             'objectIdentifier' => $category->getIdentifier(),
@@ -443,6 +415,15 @@ class HandleCategoryCommandHandler implements CommandHandlerInterface
         $categoryModel->setMetaDescription($params['metaDescription']);
         $categoryModel->setCmsHeadline($params['cmsHeadline']);
         $categoryModel->setCmsText($params['cmsText']);
+
+        if (array_key_exists('media', $params)) {
+            $mediaRepository = $this->entityManager->getRepository(MediaRepository::class);
+            $categoryImage = $mediaRepository->find($params['media']['mediaId']);
+
+            if (null !== $categoryImage) {
+                $categoryModel->setMedia($categoryImage);
+            }
+        }
 
         $this->entityManager->persist($categoryModel);
         $this->entityManager->flush();
